@@ -1,0 +1,20 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+
+  .setting {
+    flex: 1;
+  }
+
+  .preview {
+    overflow: hidden;
+    //position: sticky;
+
+    div:first-child{
+      transform: scale(0.4);
+      overflow: hidden;
+      transform-origin: 0 0;
+    }
+  }
+}

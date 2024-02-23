@@ -1,0 +1,32 @@
+<?php
+
+namespace TicketKitten\Service\Common\Ticket;
+
+use InvalidArgumentException;
+use TicketKitten\DomainObjects\Generated\TicketPriceDomainObjectAbstract;
+use TicketKitten\DomainObjects\OrderDomainObject;
+use TicketKitten\DomainObjects\OrderItemDomainObject;
+use TicketKitten\Repository\Interfaces\TicketPriceRepositoryInterface;
+
+readonly class TicketQuantityUpdateService
+{
+    public function __construct(private TicketPriceRepositoryInterface $ticketPriceRepository)
+    {
+    }
+
+    public function updateTicketQuantities(OrderDomainObject $order): void
+    {
+        if (!$order->getOrderItems() === null) {
+            throw new InvalidArgumentException(__('Order has no order items'));
+        }
+
+        /** @var OrderItemDomainObject $orderItem */
+        foreach ($order->getOrderItems() as $orderItem) {
+            $this->ticketPriceRepository->increment(
+                $orderItem->getTicketPriceId(),
+                TicketPriceDomainObjectAbstract::QUANTITY_SOLD,
+                $orderItem->getQuantity()
+            );
+        }
+    }
+}

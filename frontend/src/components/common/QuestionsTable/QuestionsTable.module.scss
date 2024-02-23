@@ -1,0 +1,131 @@
+@import "../../../styles/mixins.scss";
+
+.outer {
+  container-type: inline-size;
+
+  .actions {
+    gap: 15px;
+    display: flex;
+
+    @include respond-below(sm) {
+      flex-direction: column;
+    }
+
+    .hiddenToggle {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+
+      .hiddenCount {
+        font-size: .9em;
+      }
+
+      :global(.mantine-Switch-root) {
+        margin: 0;
+      }
+    }
+  }
+
+  .container {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+
+    @include respond-below(sm, true) {
+      flex-direction: column;
+    }
+
+    .questionsContainer {
+      flex: 1;
+    }
+
+    .previewContainer {
+      flex: 1;
+
+      h3 {
+        margin-bottom: 8px;
+      }
+
+      .previewCard {
+        padding: 20px;
+
+        label {
+          font-weight: 600;
+        }
+
+        h3:last-of-type {
+          margin-top: 20px;
+        }
+
+        .previewForm {
+          position: relative;
+
+          .mask {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+          }
+        }
+      }
+    }
+
+    .defaultQuestionAlert {
+
+    }
+
+    .questions {
+      margin-bottom: 20px;
+
+      .noQuestionsAlert {
+
+      }
+
+      .questionCard {
+        display: flex;
+        padding: 12px;
+        margin-bottom: 12px;
+        overflow: visible;
+        align-items: center;
+
+        &.hidden {
+          opacity: 0.8;
+          padding: 8px;
+        }
+
+        .hiddenIcon {
+          margin-left: 10px;
+        }
+
+        .dragHandle {
+          margin-right: 8px;
+          cursor: move;
+          display: flex;
+        }
+
+        .title {
+          margin-right: 16px;
+          font-weight: 500;
+          text-align: left;
+          flex: 1;
+          display: flex;
+          align-items: center;
+        }
+
+        .options {
+          display: flex;
+          flex-flow: column;
+          align-items: center;
+          justify-content: center;
+          margin-left: 16px;
+          margin-right: 16px;
+        }
+      }
+    }
+  }
+
+}
+
+
+
+

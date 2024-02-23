@@ -1,0 +1,81 @@
+$breakpoints: (
+        'xs': 320px,
+        'sm': 576px,
+        'md': 768px,
+        'lg': 992px,
+        'xl': 1200px,
+        'xxl': 1440px,
+);
+
+// Option to specify if the query should be a container query
+@mixin respond-above($breakpoint, $container-query: false) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    $value: map-get($breakpoints, $breakpoint);
+
+    @if $container-query {
+      // Use container query
+      @container (min-width: #{$value}) {
+        @content;
+      }
+    } @else {
+      // Use media query
+      @media (min-width: $value) {
+        @content;
+      }
+    }
+  } @else {
+    @warn "Unknown breakpoint: #{$breakpoint}.";
+  }
+}
+
+// Option to specify if the query should be a container query
+@mixin respond-below($breakpoint, $container-query: false) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    $value: map-get($breakpoints, $breakpoint) - 1px;
+
+    @if $container-query {
+      // Use container query
+      @container (max-width: #{$value}) {
+        @content;
+      }
+    } @else {
+      // Use media query
+      @media (max-width: $value) {
+        @content;
+      }
+    }
+  } @else {
+    @warn "Unknown breakpoint: #{$breakpoint}.";
+  }
+}
+
+@mixin ellipsis() {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  word-wrap: normal;
+}
+
+@mixin scrollbar() {
+  scrollbar-width: thin;
+  scrollbar-color: var(--tk-secondary) transparent;
+
+  &::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    border-radius: 10px;
+    border: 3px solid transparent;
+  }
+
+  &:hover::-webkit-scrollbar-thumb {
+    background-color: var(--tk-secondary);
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}

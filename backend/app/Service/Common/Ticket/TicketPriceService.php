@@ -1,0 +1,72 @@
+<?php
+
+namespace TicketKitten\Service\Common\Ticket;
+
+use TicketKitten\DomainObjects\Enums\TicketType;
+use TicketKitten\DomainObjects\PromoCodeDomainObject;
+use TicketKitten\DomainObjects\TicketDomainObject;
+use TicketKitten\DomainObjects\TicketPriceDomainObject;
+use TicketKitten\Helper\Currency;
+use TicketKitten\Http\DataTransferObjects\OrderTicketPriceDTO;
+use TicketKitten\Service\Common\Ticket\DTO\PriceDTO;
+
+class TicketPriceService
+{
+    public function getIndividualPrice(
+        TicketDomainObject      $ticket,
+        TicketPriceDomainObject $price,
+        ?PromoCodeDomainObject  $promoCode
+    ): float
+    {
+        return $this->getPrice($ticket, new OrderTicketPriceDTO(
+            quantity: 1,
+            price_id: $price->getId(),
+        ), $promoCode)->price;
+    }
+
+    public function getPrice(
+        TicketDomainObject     $ticket,
+        OrderTicketPriceDTO    $ticketOrderDetail,
+        ?PromoCodeDomainObject $promoCode
+    ): PriceDTO
+    {
+        $price = $this->determineTicketPrice($ticket, $ticketOrderDetail);
+
+        if ($ticket->getType() === TicketType::FREE->name) {
+            return new PriceDTO(0.00);
+        }
+
+        if ($ticket->getType() === TicketType::DONATION->name) {
+            return new PriceDTO($price);
+        }
+
+        if (!$promoCode || !$promoCode->appliesToTicket($ticket)) {
+            return new PriceDTO($price);
+        }
+
+        if ($promoCode->isFixedDiscount()) {
+            $discountPrice = Currency::round($price - $promoCode->getDiscount());
+        } elseif ($promoCode->isPercentageDiscount()) {
+            $discountPrice = Currency::round(
+                $price - ($price * ($promoCode->getDiscount() / 100))
+            );
+        } else {
+            $discountPrice = $price;
+        }
+
+        return new PriceDTO(
+            price: max(0, $discountPrice),
+            price_before_discount: $price
+        );
+    }
+
+    private function determineTicketPrice(TicketDomainObject $ticket, OrderTicketPriceDTO $ticketOrderDetails): float
+    {
+        return match ($ticket->getType()) {
+            TicketType::DONATION->name => max($ticket->getPrice(), $ticketOrderDetails->price),
+            TicketType::PAID->name => $ticket->getPrice(),
+            TicketType::FREE->name => 0.00,
+            TicketType::TIERED->name => $ticket->getPriceById($ticketOrderDetails->price_id)?->getPrice()
+        };
+    }
+}

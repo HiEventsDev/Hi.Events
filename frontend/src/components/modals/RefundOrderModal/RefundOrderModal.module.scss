@@ -1,0 +1,27 @@
+@import "../../../styles/mixins";
+
+.refundSummary {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding: 15px;
+  border-radius: var(--tk-radius-lg);
+  background-color: var(--tk-secondary);
+
+  @include respond-below(md) {
+    flex-direction: column;
+
+    .block {
+      margin-bottom: 10px;
+
+      &:last-of-type {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .title {
+    font-weight: bold;
+  }
+}

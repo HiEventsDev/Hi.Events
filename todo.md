@@ -1,0 +1,53 @@
+- Validation on order finalise
+- Don't return hidden tickets in the public questions response. Or don't return tickets at all
+- Docker prod image
+- Digital Ocean on click setup
+- Sorting - allow desc/asc
+- Move mutations into their own files
+- PDF design
+- Email copy and design
+- Switch to bun.sh
+- confirm all writes are in a transaction
+- handle 404 on the ticket widget
+- update useGetEvent to handle errors / 404s
+- T&Cs on login page
+- Allow automated sale start based on previous tier selling out
+
+## Tables to delete
+
+- account_users
+- order_discount_codes
+- customers
+- attribute_event
+- ticket_attributes
+- order_attributes
+
+P1
+- Manually check payment intent in polling fails - Done
+- Deleting questions - Done
+- Stripe connect - 90% done
+- Homepage charts - 95% done
+- Event dashboard - Done
+- Organizer - Done
+- Sorting tickets and questions - Done
+- Promo code discount type none bug - Done
+- Hidden tickets - Done
+- live event toggle - Done
+- UTC all dates - Done
+- Ticket status ticket list - Done
+- getQuantityRemaining refactor - Done
+- Confirm email on register - Done
+- PDF download
+- Email individual tickets + resend email
+- Export Question Answers - Done
+- Tooltips for mobile
+- Organizer order notifications - Done
+- Cancel order modal cancel button doesn't work - Done
+- Confirm order quantities calculations
+- Event Messaging boxes
+- Hide draft event from public - Done
+
+P3
+- Organizer social handles and meta
+- Multiple requests being made when query param are present
+- Changing an question type could break exports

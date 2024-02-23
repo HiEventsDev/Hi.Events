@@ -1,0 +1,52 @@
+@import "../../../../styles/mixins";
+
+.heading {
+  font-size: 1.7em;
+}
+
+.subHeading {
+  margin-bottom: 10px;
+}
+
+.orderSummaryContainer {
+  padding: var(--tk-spacing-lg);
+  border-radius: var(--tk-radius-lg);
+  background-color: #fff9ff;
+  border: 1px solid #800080;
+}
+
+.orderDetails {
+  display: flex;
+  margin-bottom: 10px;
+  gap: 20px;
+  flex-flow: wrap;
+  place-content: space-between;
+
+  @include respond-below(sm) {
+    gap: 10px;
+  }
+
+  .orderDetail {
+    display: flex;
+    padding: 5px 10px;
+    background: #fff;
+    border-radius: 5px;
+    width: calc(50% - 20px);
+    flex-direction: column;
+
+    @include respond-below(sm) {
+      width: 100%;
+    }
+
+    .orderDetailLabel {
+      color: #9ca3af;
+      font-size: .9em;
+      flex: auto;
+    }
+
+    .orderDetailContent {
+      place-self: flex-start;
+      font-weight: 900;
+    }
+  }
+}

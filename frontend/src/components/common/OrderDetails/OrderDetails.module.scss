@@ -1,0 +1,31 @@
+@import "../../../styles/mixins";
+
+.orderDetails {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap;
+
+  .block {
+    width: 50%;
+    margin-bottom: var(--tk-spacing-md);
+  }
+
+  @include respond-below(md) {
+    flex-direction: column;
+    flex-wrap: nowrap;
+
+    .block {
+      margin-bottom: 10px;
+      width: auto;
+
+      &:last-of-type {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .title {
+    font-weight: bold;
+  }
+}
