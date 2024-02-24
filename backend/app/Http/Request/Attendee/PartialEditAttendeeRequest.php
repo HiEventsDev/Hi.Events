@@ -1,10 +1,10 @@
 <?php
 
-namespace TicketKitten\Http\Request\Attendee;
+namespace HiEvents\Http\Request\Attendee;
 
-use TicketKitten\DomainObjects\Status\AttendeeStatus;
-use TicketKitten\Http\Request\BaseRequest;
-use TicketKitten\Validator\Rules\InsensitiveIn;
+use HiEvents\DomainObjects\Status\AttendeeStatus;
+use HiEvents\Http\Request\BaseRequest;
+use HiEvents\Validator\Rules\InsensitiveIn;
 
 class PartialEditAttendeeRequest extends BaseRequest
 {

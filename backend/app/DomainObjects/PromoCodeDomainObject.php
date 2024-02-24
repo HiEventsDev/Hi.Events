@@ -1,11 +1,11 @@
 <?php
 
-namespace TicketKitten\DomainObjects;
+namespace HiEvents\DomainObjects;
 
 use Carbon\Carbon;
-use TicketKitten\DomainObjects\Enums\PromoCodeDiscountTypeEnum;
-use TicketKitten\DomainObjects\Interfaces\IsSortable;
-use TicketKitten\DomainObjects\SortingAndFiltering\AllowedSorts;
+use HiEvents\DomainObjects\Enums\PromoCodeDiscountTypeEnum;
+use HiEvents\DomainObjects\Interfaces\IsSortable;
+use HiEvents\DomainObjects\SortingAndFiltering\AllowedSorts;
 
 class PromoCodeDomainObject extends Generated\PromoCodeDomainObjectAbstract implements IsSortable
 {

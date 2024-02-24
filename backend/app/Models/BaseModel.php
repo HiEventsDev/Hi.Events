@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace TicketKitten\Models;
+namespace HiEvents\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;

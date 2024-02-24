@@ -1,16 +1,16 @@
 <?php
 
-namespace TicketKitten\Http\Actions\TaxesAndFees;
+namespace HiEvents\Http\Actions\TaxesAndFees;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
-use TicketKitten\DomainObjects\AccountDomainObject;
-use TicketKitten\Exceptions\ResourceNameAlreadyExistsException;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Http\DataTransferObjects\UpsertTaxDTO;
-use TicketKitten\Http\Request\TaxOrFee\CreateTaxOrFeeRequest;
-use TicketKitten\Resources\Tax\TaxAndFeeResource;
-use TicketKitten\Service\Handler\TaxAndFee\CreateTaxOrFeeHandler;
+use HiEvents\DomainObjects\AccountDomainObject;
+use HiEvents\Exceptions\ResourceNameAlreadyExistsException;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\DataTransferObjects\UpsertTaxDTO;
+use HiEvents\Http\Request\TaxOrFee\CreateTaxOrFeeRequest;
+use HiEvents\Resources\Tax\TaxAndFeeResource;
+use HiEvents\Service\Handler\TaxAndFee\CreateTaxOrFeeHandler;
 
 class CreateTaxOrFeeAction extends BaseAction
 {

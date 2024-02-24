@@ -1,10 +1,10 @@
 <?php
 
-namespace TicketKitten\Service\Handler\User;
+namespace HiEvents\Service\Handler\User;
 
 use Psr\Log\LoggerInterface;
-use TicketKitten\DomainObjects\UserDomainObject;
-use TicketKitten\Repository\Interfaces\UserRepositoryInterface;
+use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 
 class CancelEmailChangeHandler
 {

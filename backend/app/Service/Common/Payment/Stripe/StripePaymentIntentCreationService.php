@@ -1,14 +1,14 @@
 <?php
 
-namespace TicketKitten\Service\Common\Payment\Stripe;
+namespace HiEvents\Service\Common\Payment\Stripe;
 
 use Illuminate\Config\Repository;
 use Psr\Log\LoggerInterface;
 use Stripe\Exception\ApiErrorException;
 use Stripe\StripeClient;
-use TicketKitten\Exceptions\Stripe\CreatePaymentIntentFailedException;
-use TicketKitten\Service\Common\Payment\Stripe\DTOs\CreatePaymentIntentRequestDTO;
-use TicketKitten\Service\Common\Payment\Stripe\DTOs\CreatePaymentIntentResponseDTO;
+use HiEvents\Exceptions\Stripe\CreatePaymentIntentFailedException;
+use HiEvents\Service\Common\Payment\Stripe\DTOs\CreatePaymentIntentRequestDTO;
+use HiEvents\Service\Common\Payment\Stripe\DTOs\CreatePaymentIntentResponseDTO;
 
 readonly class StripePaymentIntentCreationService
 {

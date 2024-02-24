@@ -1,10 +1,10 @@
 <?php
 
-namespace TicketKitten\Http\DataTransferObjects;
+namespace HiEvents\Http\DataTransferObjects;
 
-use TicketKitten\DomainObjects\Enums\QuestionBelongsTo;
-use TicketKitten\DomainObjects\Enums\QuestionTypeEnum;
-use TicketKitten\DataTransferObjects\BaseDTO;
+use HiEvents\DomainObjects\Enums\QuestionBelongsTo;
+use HiEvents\DomainObjects\Enums\QuestionTypeEnum;
+use HiEvents\DataTransferObjects\BaseDTO;
 
 class UpsertQuestionDTO extends BaseDTO
 {

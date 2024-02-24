@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace TicketKitten\Http\Actions\Auth;
+namespace HiEvents\Http\Actions\Auth;
 
 use Illuminate\Http\JsonResponse;
-use TicketKitten\Exceptions\UnauthorizedException;
-use TicketKitten\Http\DataTransferObjects\LoginCredentialsDTO;
-use TicketKitten\Http\Request\Auth\LoginRequest;
-use TicketKitten\Http\ResponseCodes;
-use TicketKitten\Service\Handler\Auth\LoginHandler;
+use HiEvents\Exceptions\UnauthorizedException;
+use HiEvents\Http\DataTransferObjects\LoginCredentialsDTO;
+use HiEvents\Http\Request\Auth\LoginRequest;
+use HiEvents\Http\ResponseCodes;
+use HiEvents\Service\Handler\Auth\LoginHandler;
 
 class LoginAction extends BaseAuthAction
 {

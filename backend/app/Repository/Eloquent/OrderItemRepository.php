@@ -1,10 +1,10 @@
 <?php
 
-namespace TicketKitten\Repository\Eloquent;
+namespace HiEvents\Repository\Eloquent;
 
-use TicketKitten\DomainObjects\OrderItemDomainObject;
-use TicketKitten\Models\OrderItem;
-use TicketKitten\Repository\Interfaces\OrderItemRepositoryInterface;
+use HiEvents\DomainObjects\OrderItemDomainObject;
+use HiEvents\Models\OrderItem;
+use HiEvents\Repository\Interfaces\OrderItemRepositoryInterface;
 
 class OrderItemRepository extends BaseRepository implements OrderItemRepositoryInterface
 {

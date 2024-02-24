@@ -1,20 +1,20 @@
 <?php
 
-namespace TicketKitten\Service\Common\Order;
+namespace HiEvents\Service\Common\Order;
 
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\DomainObjects\Generated\OrderDomainObjectAbstract;
-use TicketKitten\DomainObjects\OrderDomainObject;
-use TicketKitten\DomainObjects\OrderItemDomainObject;
-use TicketKitten\DomainObjects\PromoCodeDomainObject;
-use TicketKitten\DomainObjects\Status\OrderStatus;
-use TicketKitten\Helper\IdHelper;
-use TicketKitten\Repository\Interfaces\OrderRepositoryInterface;
-use TicketKitten\Service\Common\Session\SessionIdentifierService;
-use TicketKitten\Service\Common\Tax\TaxAndFeeOrderRollupService;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
+use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\DomainObjects\OrderItemDomainObject;
+use HiEvents\DomainObjects\PromoCodeDomainObject;
+use HiEvents\DomainObjects\Status\OrderStatus;
+use HiEvents\Helper\IdHelper;
+use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
+use HiEvents\Service\Common\Session\SessionIdentifierService;
+use HiEvents\Service\Common\Tax\TaxAndFeeOrderRollupService;
 
 readonly class OrderManagementService
 {

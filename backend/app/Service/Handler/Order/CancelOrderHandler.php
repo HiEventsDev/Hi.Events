@@ -1,16 +1,16 @@
 <?php
 
-namespace TicketKitten\Service\Handler\Order;
+namespace HiEvents\Service\Handler\Order;
 
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Throwable;
-use TicketKitten\DomainObjects\Generated\OrderDomainObjectAbstract;
-use TicketKitten\DomainObjects\OrderDomainObject;
-use TicketKitten\Exceptions\ResourceConflictException;
-use TicketKitten\Http\DataTransferObjects\CancelOrderDTO;
-use TicketKitten\Repository\Interfaces\OrderRepositoryInterface;
-use TicketKitten\Service\Common\Order\OrderCancelService;
+use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
+use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\Exceptions\ResourceConflictException;
+use HiEvents\Http\DataTransferObjects\CancelOrderDTO;
+use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
+use HiEvents\Service\Common\Order\OrderCancelService;
 
 readonly class CancelOrderHandler
 {

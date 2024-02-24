@@ -1,9 +1,9 @@
 <?php
 
-namespace TicketKitten\Service\Handler\Ticket;
+namespace HiEvents\Service\Handler\Ticket;
 
-use TicketKitten\Exceptions\ResourceConflictException;
-use TicketKitten\Repository\Interfaces\TicketRepositoryInterface;
+use HiEvents\Exceptions\ResourceConflictException;
+use HiEvents\Repository\Interfaces\TicketRepositoryInterface;
 
 readonly class SortTicketsHandler
 {

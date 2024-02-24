@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace TicketKitten\Http\Actions\Tickets;
+namespace HiEvents\Http\Actions\Tickets;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 use Throwable;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\Exceptions\CannotChangeTicketTypeException;
-use TicketKitten\Exceptions\InvalidTaxOrFeeIdException;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Http\DataTransferObjects\UpsertTicketDTO;
-use TicketKitten\Http\Request\Ticket\UpsertTicketRequest;
-use TicketKitten\Resources\Ticket\TicketResource;
-use TicketKitten\Service\Handler\Ticket\EditTicketHandler;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\Exceptions\CannotChangeTicketTypeException;
+use HiEvents\Exceptions\InvalidTaxOrFeeIdException;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\DataTransferObjects\UpsertTicketDTO;
+use HiEvents\Http\Request\Ticket\UpsertTicketRequest;
+use HiEvents\Resources\Ticket\TicketResource;
+use HiEvents\Service\Handler\Ticket\EditTicketHandler;
 
 class EditTicketAction extends BaseAction
 {

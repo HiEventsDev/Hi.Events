@@ -2,22 +2,22 @@
 
 declare(strict_types=1);
 
-namespace TicketKitten\Service\Handler\Order;
+namespace HiEvents\Service\Handler\Order;
 
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Validation\UnauthorizedException;
 use Throwable;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\DomainObjects\EventSettingDomainObject;
-use TicketKitten\DomainObjects\Generated\PromoCodeDomainObjectAbstract;
-use TicketKitten\DomainObjects\OrderDomainObject;
-use TicketKitten\DomainObjects\PromoCodeDomainObject;
-use TicketKitten\DomainObjects\Status\EventStatus;
-use TicketKitten\Http\DataTransferObjects\CreateOrderPublicDTO;
-use TicketKitten\Repository\Interfaces\EventRepositoryInterface;
-use TicketKitten\Repository\Interfaces\PromoCodeRepositoryInterface;
-use TicketKitten\Service\Common\Order\OrderItemProcessingService;
-use TicketKitten\Service\Common\Order\OrderManagementService;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventSettingDomainObject;
+use HiEvents\DomainObjects\Generated\PromoCodeDomainObjectAbstract;
+use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\DomainObjects\PromoCodeDomainObject;
+use HiEvents\DomainObjects\Status\EventStatus;
+use HiEvents\Http\DataTransferObjects\CreateOrderPublicDTO;
+use HiEvents\Repository\Interfaces\EventRepositoryInterface;
+use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
+use HiEvents\Service\Common\Order\OrderItemProcessingService;
+use HiEvents\Service\Common\Order\OrderManagementService;
 
 readonly class CreateOrderHandler
 {

@@ -1,16 +1,16 @@
 <?php
 
-namespace TicketKitten\Repository\Eloquent;
+namespace HiEvents\Repository\Eloquent;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
-use TicketKitten\DomainObjects\AttendeeDomainObject;
-use TicketKitten\DomainObjects\Generated\AttendeeDomainObjectAbstract;
-use TicketKitten\DomainObjects\Status\OrderStatus;
-use TicketKitten\Http\DataTransferObjects\QueryParamsDTO;
-use TicketKitten\Models\Attendee;
-use TicketKitten\Repository\Interfaces\AttendeeRepositoryInterface;
+use HiEvents\DomainObjects\AttendeeDomainObject;
+use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
+use HiEvents\DomainObjects\Status\OrderStatus;
+use HiEvents\Http\DataTransferObjects\QueryParamsDTO;
+use HiEvents\Models\Attendee;
+use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 
 class AttendeeRepository extends BaseRepository implements AttendeeRepositoryInterface
 {

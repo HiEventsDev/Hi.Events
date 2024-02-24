@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace TicketKitten\Http\Actions\Tickets;
+namespace HiEvents\Http\Actions\Tickets;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\DomainObjects\TaxAndFeesDomainObject;
-use TicketKitten\DomainObjects\TicketDomainObject;
-use TicketKitten\DomainObjects\TicketPriceDomainObject;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Http\DataTransferObjects\QueryParamsDTO;
-use TicketKitten\Repository\Interfaces\TicketRepositoryInterface;
-use TicketKitten\Resources\Ticket\TicketResource;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\TaxAndFeesDomainObject;
+use HiEvents\DomainObjects\TicketDomainObject;
+use HiEvents\DomainObjects\TicketPriceDomainObject;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\DataTransferObjects\QueryParamsDTO;
+use HiEvents\Repository\Interfaces\TicketRepositoryInterface;
+use HiEvents\Resources\Ticket\TicketResource;
 
 class GetTicketsAction extends BaseAction
 {

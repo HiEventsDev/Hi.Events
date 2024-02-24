@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace TicketKitten\Repository\Eloquent;
+namespace HiEvents\Repository\Eloquent;
 
-use TicketKitten\DomainObjects\OrganizerDomainObject;
-use TicketKitten\Models\Organizer;
-use TicketKitten\Repository\Interfaces\OrganizerRepositoryInterface;
+use HiEvents\DomainObjects\OrganizerDomainObject;
+use HiEvents\Models\Organizer;
+use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
 
 class OrganizerRepository extends BaseRepository implements OrganizerRepositoryInterface
 {

@@ -1,17 +1,17 @@
 <?php
 
-namespace TicketKitten\Service\Handler\Attendee;
+namespace HiEvents\Service\Handler\Attendee;
 
 use Carbon\Carbon;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use TicketKitten\DomainObjects\AttendeeDomainObject;
-use TicketKitten\DomainObjects\Enums\CheckInAction;
-use TicketKitten\DomainObjects\Generated\AttendeeDomainObjectAbstract;
-use TicketKitten\DomainObjects\Status\AttendeeStatus;
-use TicketKitten\Exceptions\CannotCheckInException;
-use TicketKitten\Http\DataTransferObjects\CheckInAttendeeDTO;
-use TicketKitten\Repository\Interfaces\AttendeeRepositoryInterface;
-use TicketKitten\Repository\Interfaces\UserRepositoryInterface;
+use HiEvents\DomainObjects\AttendeeDomainObject;
+use HiEvents\DomainObjects\Enums\CheckInAction;
+use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
+use HiEvents\DomainObjects\Status\AttendeeStatus;
+use HiEvents\Exceptions\CannotCheckInException;
+use HiEvents\Http\DataTransferObjects\CheckInAttendeeDTO;
+use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
+use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 
 readonly class CheckInAttendeeHandler
 {

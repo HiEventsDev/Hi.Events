@@ -1,10 +1,10 @@
 <?php
 
-namespace TicketKitten\Service\Handler\Event;
+namespace HiEvents\Service\Handler\Event;
 
-use TicketKitten\Http\DataTransferObjects\EventStatsRequestDTO;
-use TicketKitten\Http\DataTransferObjects\EventStatsResponseDTO;
-use TicketKitten\Service\Common\Event\EventStatsFetchService;
+use HiEvents\Http\DataTransferObjects\EventStatsRequestDTO;
+use HiEvents\Http\DataTransferObjects\EventStatsResponseDTO;
+use HiEvents\Service\Common\Event\EventStatsFetchService;
 
 readonly class GetEventStatsHandler
 {

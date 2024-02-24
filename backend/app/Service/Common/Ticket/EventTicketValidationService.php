@@ -1,10 +1,10 @@
 <?php
 
-namespace TicketKitten\Service\Common\Ticket;
+namespace HiEvents\Service\Common\Ticket;
 
-use TicketKitten\DomainObjects\TicketDomainObject;
-use TicketKitten\Repository\Interfaces\TicketRepositoryInterface;
-use TicketKitten\Service\Common\Ticket\Exception\UnrecognizedTicketIdException;
+use HiEvents\DomainObjects\TicketDomainObject;
+use HiEvents\Repository\Interfaces\TicketRepositoryInterface;
+use HiEvents\Service\Common\Ticket\Exception\UnrecognizedTicketIdException;
 
 readonly class EventTicketValidationService
 {

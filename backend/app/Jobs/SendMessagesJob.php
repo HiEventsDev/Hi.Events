@@ -1,15 +1,15 @@
 <?php
 
-namespace TicketKitten\Jobs;
+namespace HiEvents\Jobs;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use TicketKitten\Exceptions\UnableToSendMessageException;
-use TicketKitten\Http\DataTransferObjects\SendMessageDTO;
-use TicketKitten\Service\Common\Mail\SendEventEmailMessagesService;
+use HiEvents\Exceptions\UnableToSendMessageException;
+use HiEvents\Http\DataTransferObjects\SendMessageDTO;
+use HiEvents\Service\Common\Mail\SendEventEmailMessagesService;
 
 class SendMessagesJob implements ShouldQueue
 {

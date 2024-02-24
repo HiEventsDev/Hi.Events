@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten\Service\Common\Session;
+namespace HiEvents\Service\Common\Session;
 
 use Illuminate\Http\Request;
 

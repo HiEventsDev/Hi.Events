@@ -1,14 +1,14 @@
 <?php
 
-namespace TicketKitten\Jobs;
+namespace HiEvents\Jobs;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use TicketKitten\DomainObjects\OrderDomainObject;
-use TicketKitten\Service\Common\Mail\SendOrderDetailsService;
+use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\Service\Common\Mail\SendOrderDetailsService;
 
 class SendOrderDetailsEmailJob implements ShouldQueue
 {

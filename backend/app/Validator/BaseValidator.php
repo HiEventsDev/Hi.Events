@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace TicketKitten\Validator;
+namespace HiEvents\Validator;
 
 abstract class BaseValidator
 {

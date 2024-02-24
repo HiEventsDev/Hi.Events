@@ -1,18 +1,18 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Accounts\Stripe;
+namespace HiEvents\Http\Actions\Accounts\Stripe;
 
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
-use TicketKitten\DomainObjects\AccountDomainObject;
-use TicketKitten\DomainObjects\Enums\Role;
-use TicketKitten\Exceptions\CreateStripeConnectAccountFailedException;
-use TicketKitten\Exceptions\CreateStripeConnectAccountLinksFailedException;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Http\DataTransferObjects\CreateStripeConnectAccountDTO;
-use TicketKitten\Resources\Account\Stripe\StripeConnectAccountResponseResource;
-use TicketKitten\Service\Handler\Account\Payment\Stripe\CreateStripeConnectAccountHandler;
+use HiEvents\DomainObjects\AccountDomainObject;
+use HiEvents\DomainObjects\Enums\Role;
+use HiEvents\Exceptions\CreateStripeConnectAccountFailedException;
+use HiEvents\Exceptions\CreateStripeConnectAccountLinksFailedException;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\DataTransferObjects\CreateStripeConnectAccountDTO;
+use HiEvents\Resources\Account\Stripe\StripeConnectAccountResponseResource;
+use HiEvents\Service\Handler\Account\Payment\Stripe\CreateStripeConnectAccountHandler;
 
 
 class CreateStripeConnectAccountAction extends BaseAction

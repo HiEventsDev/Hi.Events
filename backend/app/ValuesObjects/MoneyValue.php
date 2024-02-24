@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten\ValuesObjects;
+namespace HiEvents\ValuesObjects;
 
 use Brick\Math\Exception\MathException;
 use Brick\Math\Exception\NumberFormatException;

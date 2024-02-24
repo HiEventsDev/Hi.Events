@@ -1,14 +1,14 @@
 <?php
 
-namespace TicketKitten\Http\Actions\TaxesAndFees;
+namespace HiEvents\Http\Actions\TaxesAndFees;
 
 use Illuminate\Http\Response;
 use Throwable;
-use TicketKitten\DomainObjects\TaxAndFeesDomainObject;
-use TicketKitten\Exceptions\ResourceConflictException;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Http\DataTransferObjects\DeleteTaxDTO;
-use TicketKitten\Service\Handler\TaxAndFee\DeleteTaxHandler;
+use HiEvents\DomainObjects\TaxAndFeesDomainObject;
+use HiEvents\Exceptions\ResourceConflictException;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\DataTransferObjects\DeleteTaxDTO;
+use HiEvents\Service\Handler\TaxAndFee\DeleteTaxHandler;
 
 class DeleteTaxOrFeeAction extends BaseAction
 {

@@ -1,14 +1,14 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Accounts;
+namespace HiEvents\Http\Actions\Accounts;
 
 use Illuminate\Http\JsonResponse;
-use TicketKitten\DomainObjects\Enums\Role;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Http\DataTransferObjects\UpdateAccountDTO;
-use TicketKitten\Http\Request\Account\UpdateAccountRequest;
-use TicketKitten\Resources\Account\AccountResource;
-use TicketKitten\Service\Handler\Account\UpdateAccountHanlder;
+use HiEvents\DomainObjects\Enums\Role;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\DataTransferObjects\UpdateAccountDTO;
+use HiEvents\Http\Request\Account\UpdateAccountRequest;
+use HiEvents\Resources\Account\AccountResource;
+use HiEvents\Service\Handler\Account\UpdateAccountHanlder;
 
 class UpdateAccountAction extends BaseAction
 {

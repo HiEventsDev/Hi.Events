@@ -1,8 +1,8 @@
 <?php
 
-namespace TicketKitten\Service\Common\Ticket\DTO;
+namespace HiEvents\Service\Common\Ticket\DTO;
 
-use TicketKitten\DataTransferObjects\BaseDTO;
+use HiEvents\DataTransferObjects\BaseDTO;
 
 class PriceDTO extends BaseDTO
 {

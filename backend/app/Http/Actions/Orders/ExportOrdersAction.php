@@ -1,17 +1,17 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Orders;
+namespace HiEvents\Http\Actions\Orders;
 
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use TicketKitten\DomainObjects\Enums\QuestionBelongsTo;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\DomainObjects\QuestionAndAnswerViewDomainObject;
-use TicketKitten\Exports\OrdersExport;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Http\DataTransferObjects\QueryParamsDTO;
-use TicketKitten\Repository\Interfaces\OrderRepositoryInterface;
-use TicketKitten\Repository\Interfaces\QuestionRepositoryInterface;
+use HiEvents\DomainObjects\Enums\QuestionBelongsTo;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\QuestionAndAnswerViewDomainObject;
+use HiEvents\Exports\OrdersExport;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\DataTransferObjects\QueryParamsDTO;
+use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
+use HiEvents\Repository\Interfaces\QuestionRepositoryInterface;
 
 class ExportOrdersAction extends BaseAction
 {

@@ -1,20 +1,20 @@
 <?php
 
-namespace TicketKitten\Service\Common\Payment\Stripe\EventHandlers;
+namespace HiEvents\Service\Common\Payment\Stripe\EventHandlers;
 
 use Illuminate\Database\DatabaseManager;
 use Stripe\PaymentIntent;
 use Throwable;
-use TicketKitten\DomainObjects\Generated\OrderDomainObjectAbstract;
-use TicketKitten\DomainObjects\Generated\StripePaymentDomainObjectAbstract;
-use TicketKitten\DomainObjects\OrderDomainObject;
-use TicketKitten\DomainObjects\OrderItemDomainObject;
-use TicketKitten\DomainObjects\Status\OrderPaymentStatus;
-use TicketKitten\Events\OrderStatusChangedEvent;
-use TicketKitten\Repository\Eloquent\StripePaymentsRepository;
-use TicketKitten\Repository\Eloquent\Value\Relationship;
-use TicketKitten\Repository\Interfaces\OrderRepositoryInterface;
-use TicketKitten\Service\Common\Payment\Stripe\StripePaymentUpdateFromPaymentIntentService;
+use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
+use HiEvents\DomainObjects\Generated\StripePaymentDomainObjectAbstract;
+use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\DomainObjects\OrderItemDomainObject;
+use HiEvents\DomainObjects\Status\OrderPaymentStatus;
+use HiEvents\Events\OrderStatusChangedEvent;
+use HiEvents\Repository\Eloquent\StripePaymentsRepository;
+use HiEvents\Repository\Eloquent\Value\Relationship;
+use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
+use HiEvents\Service\Common\Payment\Stripe\StripePaymentUpdateFromPaymentIntentService;
 
 readonly class PaymentIntentFailedHandler
 {

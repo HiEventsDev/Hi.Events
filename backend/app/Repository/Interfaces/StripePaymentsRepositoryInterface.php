@@ -1,9 +1,9 @@
 <?php
 
-namespace TicketKitten\Repository\Interfaces;
+namespace HiEvents\Repository\Interfaces;
 
-use TicketKitten\DomainObjects\StripePaymentDomainObject;
-use TicketKitten\Repository\Eloquent\BaseRepository;
+use HiEvents\DomainObjects\StripePaymentDomainObject;
+use HiEvents\Repository\Eloquent\BaseRepository;
 
 /**
  * @extends BaseRepository<StripePaymentDomainObject>

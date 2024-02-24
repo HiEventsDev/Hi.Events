@@ -1,12 +1,12 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Users;
+namespace HiEvents\Http\Actions\Users;
 
 use Illuminate\Http\JsonResponse;
-use TicketKitten\DomainObjects\UserDomainObject;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Resources\User\UserResource;
-use TicketKitten\Service\Handler\User\CancelEmailChangeHandler;
+use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Resources\User\UserResource;
+use HiEvents\Service\Handler\User\CancelEmailChangeHandler;
 
 class CancelEmailChangeAction extends BaseAction
 {

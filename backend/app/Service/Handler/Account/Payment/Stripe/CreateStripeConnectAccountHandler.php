@@ -1,19 +1,19 @@
 <?php
 
-namespace TicketKitten\Service\Handler\Account\Payment\Stripe;
+namespace HiEvents\Service\Handler\Account\Payment\Stripe;
 
 use Illuminate\Database\DatabaseManager;
 use Psr\Log\LoggerInterface;
 use Stripe\Account;
 use Stripe\StripeClient;
 use Throwable;
-use TicketKitten\DomainObjects\AccountDomainObject;
-use TicketKitten\Exceptions\CreateStripeConnectAccountFailedException;
-use TicketKitten\Exceptions\CreateStripeConnectAccountLinksFailedException;
-use TicketKitten\Helper\Url;
-use TicketKitten\Http\DataTransferObjects\CreateStripeConnectAccountDTO;
-use TicketKitten\Repository\Interfaces\AccountRepositoryInterface;
-use TicketKitten\Service\Handler\Account\Payment\Stripe\DataTransferObjects\CreateStripeConnectAccountResponse;
+use HiEvents\DomainObjects\AccountDomainObject;
+use HiEvents\Exceptions\CreateStripeConnectAccountFailedException;
+use HiEvents\Exceptions\CreateStripeConnectAccountLinksFailedException;
+use HiEvents\Helper\Url;
+use HiEvents\Http\DataTransferObjects\CreateStripeConnectAccountDTO;
+use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
+use HiEvents\Service\Handler\Account\Payment\Stripe\DataTransferObjects\CreateStripeConnectAccountResponse;
 
 readonly class CreateStripeConnectAccountHandler
 {

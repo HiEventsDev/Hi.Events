@@ -1,9 +1,9 @@
 <?php
 
-namespace TicketKitten\Service\Handler\Event;
+namespace HiEvents\Service\Handler\Event;
 
-use TicketKitten\Service\Common\Event\DTO\EventCheckInStatsResponseDTO;
-use TicketKitten\Service\Common\Event\EventStatsFetchService;
+use HiEvents\Service\Common\Event\DTO\EventCheckInStatsResponseDTO;
+use HiEvents\Service\Common\Event\EventStatsFetchService;
 
 readonly class GetEventCheckInStatsHandler
 {

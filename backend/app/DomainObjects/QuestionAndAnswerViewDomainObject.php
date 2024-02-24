@@ -1,8 +1,8 @@
 <?php
 
-namespace TicketKitten\DomainObjects;
+namespace HiEvents\DomainObjects;
 
-use TicketKitten\DomainObjects\Enums\QuestionTypeEnum;
+use HiEvents\DomainObjects\Enums\QuestionTypeEnum;
 
 /**
  * As this is related to a view, and not a table, this was not auto-generated.

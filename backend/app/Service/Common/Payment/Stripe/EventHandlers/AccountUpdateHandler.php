@@ -1,11 +1,11 @@
 <?php
 
-namespace TicketKitten\Service\Common\Payment\Stripe\EventHandlers;
+namespace HiEvents\Service\Common\Payment\Stripe\EventHandlers;
 
 use Psr\Log\LoggerInterface;
 use Stripe\Account;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use TicketKitten\Repository\Interfaces\AccountRepositoryInterface;
+use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 
 readonly class AccountUpdateHandler
 {

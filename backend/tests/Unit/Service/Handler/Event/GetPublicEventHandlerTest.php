@@ -4,10 +4,10 @@ namespace Tests\Unit\Service\Handler\Event;
 
 use Carbon\Carbon;
 use PHPUnit\Framework\TestCase;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\DomainObjects\TicketDomainObject;
-use TicketKitten\Repository\Interfaces\EventRepositoryInterface;
-use TicketKitten\Service\Handler\Event\GetPublicEventHandler;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\TicketDomainObject;
+use HiEvents\Repository\Interfaces\EventRepositoryInterface;
+use HiEvents\Service\Handler\Event\GetPublicEventHandler;
 
 class GetPublicEventHandlerTest extends TestCase
 {

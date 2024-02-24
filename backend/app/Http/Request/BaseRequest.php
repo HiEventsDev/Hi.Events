@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace TicketKitten\Http\Request;
+namespace HiEvents\Http\Request;
 
 use Illuminate\Foundation\Http\FormRequest;
 

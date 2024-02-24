@@ -1,13 +1,13 @@
 <?php
 
-namespace TicketKitten\Service\Handler\EventSettings;
+namespace HiEvents\Service\Handler\EventSettings;
 
 use Throwable;
-use TicketKitten\DomainObjects\EventSettingDomainObject;
-use TicketKitten\Exceptions\RefundNotPossibleException;
-use TicketKitten\Http\DataTransferObjects\PartialUpdateEventSettingsDTO;
-use TicketKitten\Http\DataTransferObjects\UpdateEventSettingsDTO;
-use TicketKitten\Repository\Interfaces\EventSettingsRepositoryInterface;
+use HiEvents\DomainObjects\EventSettingDomainObject;
+use HiEvents\Exceptions\RefundNotPossibleException;
+use HiEvents\Http\DataTransferObjects\PartialUpdateEventSettingsDTO;
+use HiEvents\Http\DataTransferObjects\UpdateEventSettingsDTO;
+use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 
 readonly class PartialUpdateEventSettingsHandler
 {

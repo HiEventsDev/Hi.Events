@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten\DomainObjects\Status;
+namespace HiEvents\DomainObjects\Status;
 
 enum OrderRefundStatus
 {

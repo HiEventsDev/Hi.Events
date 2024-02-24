@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace TicketKitten\Http\Actions\Events;
+namespace HiEvents\Http\Actions\Events;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\DomainObjects\EventSettingDomainObject;
-use TicketKitten\DomainObjects\ImageDomainObject;
-use TicketKitten\DomainObjects\OrganizerDomainObject;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Http\DataTransferObjects\QueryParamsDTO;
-use TicketKitten\Repository\Eloquent\Value\Relationship;
-use TicketKitten\Repository\Interfaces\EventRepositoryInterface;
-use TicketKitten\Resources\Event\EventResource;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventSettingDomainObject;
+use HiEvents\DomainObjects\ImageDomainObject;
+use HiEvents\DomainObjects\OrganizerDomainObject;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\DataTransferObjects\QueryParamsDTO;
+use HiEvents\Repository\Eloquent\Value\Relationship;
+use HiEvents\Repository\Interfaces\EventRepositoryInterface;
+use HiEvents\Resources\Event\EventResource;
 
 class GetEventsAction extends BaseAction
 {

@@ -1,13 +1,13 @@
 <?php
 
-namespace TicketKitten\Exports;
+namespace HiEvents\Exports;
 
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-use TicketKitten\Resources\PromoCode\PromoCodeResource;
+use HiEvents\Resources\PromoCode\PromoCodeResource;
 
 class PromoCodesExport implements FromCollection, WithHeadings, WithMapping, WithStyles
 {

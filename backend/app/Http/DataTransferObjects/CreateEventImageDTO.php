@@ -1,10 +1,10 @@
 <?php
 
-namespace TicketKitten\Http\DataTransferObjects;
+namespace HiEvents\Http\DataTransferObjects;
 
 use Illuminate\Http\UploadedFile;
-use TicketKitten\DomainObjects\Enums\EventImageType;
-use TicketKitten\DataTransferObjects\BaseDTO;
+use HiEvents\DomainObjects\Enums\EventImageType;
+use HiEvents\DataTransferObjects\BaseDTO;
 
 class CreateEventImageDTO extends BaseDTO
 {

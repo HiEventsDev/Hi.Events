@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace TicketKitten\Repository\Eloquent;
+namespace HiEvents\Repository\Eloquent;
 
-use TicketKitten\DomainObjects\AccountDomainObject;
-use TicketKitten\Models\Account;
-use TicketKitten\Repository\Interfaces\AccountRepositoryInterface;
+use HiEvents\DomainObjects\AccountDomainObject;
+use HiEvents\Models\Account;
+use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 
 class AccountRepository extends BaseRepository implements AccountRepositoryInterface
 {

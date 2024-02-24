@@ -1,12 +1,12 @@
 <?php
 
-namespace TicketKitten\Service\Handler\Question;
+namespace HiEvents\Service\Handler\Question;
 
 use Illuminate\Database\DatabaseManager;
 use Throwable;
-use TicketKitten\Exceptions\CannotDeleteEntityException;
-use TicketKitten\Repository\Interfaces\QuestionAnswerRepositoryInterface;
-use TicketKitten\Repository\Interfaces\QuestionRepositoryInterface;
+use HiEvents\Exceptions\CannotDeleteEntityException;
+use HiEvents\Repository\Interfaces\QuestionAnswerRepositoryInterface;
+use HiEvents\Repository\Interfaces\QuestionRepositoryInterface;
 
 readonly class DeleteQuestionHandler
 {

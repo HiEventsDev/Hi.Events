@@ -1,10 +1,10 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Orders\Payment\Stripe;
+namespace HiEvents\Http\Actions\Orders\Payment\Stripe;
 
 use Illuminate\Http\JsonResponse;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Service\Handler\Order\Payment\Stripe\GetPaymentIntentHandler;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Service\Handler\Order\Payment\Stripe\GetPaymentIntentHandler;
 
 class GetPaymentIntentActionPublic extends BaseAction
 {

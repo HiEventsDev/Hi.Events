@@ -1,14 +1,14 @@
 <?php
 
-namespace TicketKitten\Service\Handler\User;
+namespace HiEvents\Service\Handler\User;
 
 use Psr\Log\LoggerInterface;
-use TicketKitten\DomainObjects\Enums\Role;
-use TicketKitten\DomainObjects\Status\UserStatus;
-use TicketKitten\DomainObjects\UserDomainObject;
-use TicketKitten\Exceptions\CannotUpdateResourceException;
-use TicketKitten\Http\DataTransferObjects\UpdateUserDTO;
-use TicketKitten\Repository\Interfaces\UserRepositoryInterface;
+use HiEvents\DomainObjects\Enums\Role;
+use HiEvents\DomainObjects\Status\UserStatus;
+use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\Exceptions\CannotUpdateResourceException;
+use HiEvents\Http\DataTransferObjects\UpdateUserDTO;
+use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 
 class UpdateUserHandler
 {

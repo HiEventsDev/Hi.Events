@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten\Mail;
+namespace HiEvents\Mail;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

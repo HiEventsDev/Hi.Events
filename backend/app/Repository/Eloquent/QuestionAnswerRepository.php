@@ -1,11 +1,11 @@
 <?php
 
-namespace TicketKitten\Repository\Eloquent;
+namespace HiEvents\Repository\Eloquent;
 
 
-use TicketKitten\DomainObjects\QuestionAnswerDomainObject;
-use TicketKitten\Models\QuestionAnswer;
-use TicketKitten\Repository\Interfaces\QuestionAnswerRepositoryInterface;
+use HiEvents\DomainObjects\QuestionAnswerDomainObject;
+use HiEvents\Models\QuestionAnswer;
+use HiEvents\Repository\Interfaces\QuestionAnswerRepositoryInterface;
 
 class QuestionAnswerRepository extends BaseRepository implements QuestionAnswerRepositoryInterface
 {

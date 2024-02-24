@@ -1,10 +1,10 @@
 <?php
 
-namespace TicketKitten\Exceptions;
+namespace HiEvents\Exceptions;
 
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Throwable;
-use TicketKitten\Http\ResponseCodes;
+use HiEvents\Http\ResponseCodes;
 
 class UnauthorizedException extends AccessDeniedHttpException
 {

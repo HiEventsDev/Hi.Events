@@ -1,9 +1,9 @@
 <?php
 
-namespace TicketKitten\Listeners;
+namespace HiEvents\Listeners;
 
-use TicketKitten\Events\OrderStatusChangedEvent;
-use TicketKitten\Jobs\SendOrderDetailsEmailJob;
+use HiEvents\Events\OrderStatusChangedEvent;
+use HiEvents\Jobs\SendOrderDetailsEmailJob;
 
 readonly class SendOrderDetailsEmailListener
 {

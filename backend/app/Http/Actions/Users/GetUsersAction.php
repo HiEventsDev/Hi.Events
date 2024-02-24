@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace TicketKitten\Http\Actions\Users;
+namespace HiEvents\Http\Actions\Users;
 
 use Illuminate\Http\JsonResponse;
-use TicketKitten\DomainObjects\Enums\Role;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Repository\Interfaces\UserRepositoryInterface;
-use TicketKitten\Resources\User\UserResource;
+use HiEvents\DomainObjects\Enums\Role;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Repository\Interfaces\UserRepositoryInterface;
+use HiEvents\Resources\User\UserResource;
 
 class GetUsersAction extends BaseAction
 {

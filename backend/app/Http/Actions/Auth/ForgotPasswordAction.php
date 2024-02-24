@@ -1,12 +1,12 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Auth;
+namespace HiEvents\Http\Actions\Auth;
 
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Http\Request\Auth\ForgotPasswordRequest;
-use TicketKitten\Service\Handler\Auth\ForgotPasswordHandler;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\Request\Auth\ForgotPasswordRequest;
+use HiEvents\Service\Handler\Auth\ForgotPasswordHandler;
 
 class ForgotPasswordAction extends BaseAction
 {

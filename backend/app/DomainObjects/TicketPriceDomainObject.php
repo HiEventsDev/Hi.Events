@@ -1,10 +1,10 @@
 <?php
 
-namespace TicketKitten\DomainObjects;
+namespace HiEvents\DomainObjects;
 
 use Carbon\Carbon;
 use LogicException;
-use TicketKitten\Helper\Currency;
+use HiEvents\Helper\Currency;
 
 class TicketPriceDomainObject extends Generated\TicketPriceDomainObjectAbstract
 {

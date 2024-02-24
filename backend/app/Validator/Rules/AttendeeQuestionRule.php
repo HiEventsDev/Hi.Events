@@ -1,10 +1,10 @@
 <?php
 
-namespace TicketKitten\Validator\Rules;
+namespace HiEvents\Validator\Rules;
 
 use Illuminate\Support\Collection;
 use Illuminate\Validation\ValidationException;
-use TicketKitten\DomainObjects\QuestionDomainObject;
+use HiEvents\DomainObjects\QuestionDomainObject;
 
 class AttendeeQuestionRule extends BaseQuestionRule
 {

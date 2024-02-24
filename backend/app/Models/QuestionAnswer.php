@@ -1,8 +1,8 @@
 <?php
 
-namespace TicketKitten\Models;
+namespace HiEvents\Models;
 
-use TicketKitten\DomainObjects\Generated\QuestionAnswerDomainObjectAbstract;
+use HiEvents\DomainObjects\Generated\QuestionAnswerDomainObjectAbstract;
 
 class QuestionAnswer extends BaseModel
 {

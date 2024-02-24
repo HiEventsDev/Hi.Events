@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace TicketKitten\Http\Request\Ticket;
+namespace HiEvents\Http\Request\Ticket;
 
 use Illuminate\Validation\Rule;
-use TicketKitten\DomainObjects\Enums\TicketType;
-use TicketKitten\Http\Request\BaseRequest;
-use TicketKitten\Validator\Rules\RulesHelper;
+use HiEvents\DomainObjects\Enums\TicketType;
+use HiEvents\Http\Request\BaseRequest;
+use HiEvents\Validator\Rules\RulesHelper;
 
 class UpsertTicketRequest extends BaseRequest
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace TicketKitten\Events;
+namespace HiEvents\Events;
 
 use Illuminate\Foundation\Events\Dispatchable;
-use TicketKitten\DomainObjects\OrderDomainObject;
+use HiEvents\DomainObjects\OrderDomainObject;
 
 class OrderStatusChangedEvent
 {

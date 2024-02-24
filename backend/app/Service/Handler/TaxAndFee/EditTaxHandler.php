@@ -1,13 +1,13 @@
 <?php
 
-namespace TicketKitten\Service\Handler\TaxAndFee;
+namespace HiEvents\Service\Handler\TaxAndFee;
 
 use Psr\Log\LoggerInterface;
-use TicketKitten\DomainObjects\TaxAndFeesDomainObject;
-use TicketKitten\Exceptions\ResourceNameAlreadyExistsException;
-use TicketKitten\Http\DataTransferObjects\UpsertTaxDTO;
-use TicketKitten\Repository\Interfaces\TaxAndFeeRepositoryInterface;
-use TicketKitten\Service\Common\Tax\DuplicateTaxService;
+use HiEvents\DomainObjects\TaxAndFeesDomainObject;
+use HiEvents\Exceptions\ResourceNameAlreadyExistsException;
+use HiEvents\Http\DataTransferObjects\UpsertTaxDTO;
+use HiEvents\Repository\Interfaces\TaxAndFeeRepositoryInterface;
+use HiEvents\Service\Common\Tax\DuplicateTaxService;
 
 class EditTaxHandler
 {

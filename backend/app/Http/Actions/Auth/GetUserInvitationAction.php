@@ -1,18 +1,18 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Auth;
+namespace HiEvents\Http\Actions\Auth;
 
 use Illuminate\Http\JsonResponse;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use TicketKitten\Exceptions\DecryptionFailedException;
-use TicketKitten\Exceptions\EncryptedPayloadExpiredException;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Http\ResponseCodes;
-use TicketKitten\Repository\Interfaces\UserRepositoryInterface;
-use TicketKitten\Resources\User\UserResource;
-use TicketKitten\Service\Common\EncryptedPayloadService;
+use HiEvents\Exceptions\DecryptionFailedException;
+use HiEvents\Exceptions\EncryptedPayloadExpiredException;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\ResponseCodes;
+use HiEvents\Repository\Interfaces\UserRepositoryInterface;
+use HiEvents\Resources\User\UserResource;
+use HiEvents\Service\Common\EncryptedPayloadService;
 
 class GetUserInvitationAction extends BaseAction
 {

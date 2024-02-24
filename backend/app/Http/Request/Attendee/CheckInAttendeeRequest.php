@@ -1,8 +1,8 @@
 <?php
 
-namespace TicketKitten\Http\Request\Attendee;
+namespace HiEvents\Http\Request\Attendee;
 
-use TicketKitten\Http\Request\BaseRequest;
+use HiEvents\Http\Request\BaseRequest;
 
 class CheckInAttendeeRequest extends BaseRequest
 {

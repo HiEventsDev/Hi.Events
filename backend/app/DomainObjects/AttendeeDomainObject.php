@@ -1,11 +1,11 @@
 <?php
 
-namespace TicketKitten\DomainObjects;
+namespace HiEvents\DomainObjects;
 
 use Illuminate\Support\Collection;
-use TicketKitten\DomainObjects\Interfaces\IsFilterable;
-use TicketKitten\DomainObjects\Interfaces\IsSortable;
-use TicketKitten\DomainObjects\SortingAndFiltering\AllowedSorts;
+use HiEvents\DomainObjects\Interfaces\IsFilterable;
+use HiEvents\DomainObjects\Interfaces\IsSortable;
+use HiEvents\DomainObjects\SortingAndFiltering\AllowedSorts;
 
 class AttendeeDomainObject extends Generated\AttendeeDomainObjectAbstract implements IsSortable, IsFilterable
 {

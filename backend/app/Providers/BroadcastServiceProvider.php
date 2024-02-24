@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten\Providers;
+namespace HiEvents\Providers;
 
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\ServiceProvider;

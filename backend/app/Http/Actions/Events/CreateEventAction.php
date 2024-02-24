@@ -1,16 +1,16 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Events;
+namespace HiEvents\Http\Actions\Events;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 use Throwable;
-use TicketKitten\Exceptions\OrganizerNotFoundException;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Http\DataTransferObjects\CreateEventDTO;
-use TicketKitten\Http\Request\Event\CreateEventRequest;
-use TicketKitten\Resources\Event\EventResource;
-use TicketKitten\Service\Handler\Event\CreateEventHandler;
+use HiEvents\Exceptions\OrganizerNotFoundException;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\DataTransferObjects\CreateEventDTO;
+use HiEvents\Http\Request\Event\CreateEventRequest;
+use HiEvents\Resources\Event\EventResource;
+use HiEvents\Service\Handler\Event\CreateEventHandler;
 
 class CreateEventAction extends BaseAction
 {

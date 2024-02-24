@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace TicketKitten\Http\Actions\Users;
+namespace HiEvents\Http\Actions\Users;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
-use TicketKitten\DomainObjects\Enums\Role;
-use TicketKitten\Exceptions\ResourceConflictException;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Http\DataTransferObjects\CreateUserDTO;
-use TicketKitten\Http\Request\User\CreateUserRequest;
-use TicketKitten\Http\ResponseCodes;
-use TicketKitten\Resources\User\UserResource;
-use TicketKitten\Service\Handler\User\CreateUserHandler;
+use HiEvents\DomainObjects\Enums\Role;
+use HiEvents\Exceptions\ResourceConflictException;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\DataTransferObjects\CreateUserDTO;
+use HiEvents\Http\Request\User\CreateUserRequest;
+use HiEvents\Http\ResponseCodes;
+use HiEvents\Resources\User\UserResource;
+use HiEvents\Service\Handler\User\CreateUserHandler;
 
 class CreateUserAction extends BaseAction
 {

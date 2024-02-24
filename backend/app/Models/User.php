@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace TicketKitten\Models;
+namespace HiEvents\Models;
 
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\MustVerifyEmail;

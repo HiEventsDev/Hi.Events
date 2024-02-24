@@ -1,14 +1,14 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Questions;
+namespace HiEvents\Http\Actions\Questions;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Http\Request\Questions\SortQuestionsRequest;
-use TicketKitten\Service\Handler\Question\SortQuestionsHandler;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\Request\Questions\SortQuestionsRequest;
+use HiEvents\Service\Handler\Question\SortQuestionsHandler;
 
 class SortQuestionsAction extends BaseAction
 {

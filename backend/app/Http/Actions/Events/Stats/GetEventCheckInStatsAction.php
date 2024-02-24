@@ -1,12 +1,12 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Events\Stats;
+namespace HiEvents\Http\Actions\Events\Stats;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Service\Handler\Event\GetEventCheckInStatsHandler;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Service\Handler\Event\GetEventCheckInStatsHandler;
 
 class GetEventCheckInStatsAction extends BaseAction
 {

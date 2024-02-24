@@ -1,16 +1,16 @@
-@php /** @var \TicketKitten\DomainObjects\OrderDomainObject $order */ @endphp
-@php /** @var \TicketKitten\DomainObjects\EventDomainObject $event */ @endphp
+@php /** @var \HiEvents\DomainObjects\OrderDomainObject $order */ @endphp
+@php /** @var \HiEvents\DomainObjects\EventDomainObject $event */ @endphp
 
 <x-mail::message>
-Hello,
+    Hello,
 
-Your order for <b>{{$event->getTitle()}}</b> has been cancelled.
-<br>
-<br>
-Order #: <b>{{$order->getPublicId()}}</b>
-<br>
-<br>
+    Your order for <b>{{$event->getTitle()}}</b> has been cancelled.
+    <br>
+    <br>
+    Order #: <b>{{$order->getPublicId()}}</b>
+    <br>
+    <br>
 
-Thank you,<br>
-{{config('app.name')}}
+    Thank you,<br>
+    {{config('app.name')}}
 </x-mail::message>

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace TicketKitten\Models;
+namespace HiEvents\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use TicketKitten\DomainObjects\Generated\TicketDomainObjectAbstract;
+use HiEvents\DomainObjects\Generated\TicketDomainObjectAbstract;
 
 class Ticket extends BaseModel
 {

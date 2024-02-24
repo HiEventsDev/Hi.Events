@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace TicketKitten\Http\Actions\Accounts;
+namespace HiEvents\Http\Actions\Accounts;
 
 use Illuminate\Http\JsonResponse;
-use TicketKitten\DomainObjects\Enums\Role;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Repository\Interfaces\AccountRepositoryInterface;
-use TicketKitten\Resources\Account\AccountResource;
+use HiEvents\DomainObjects\Enums\Role;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
+use HiEvents\Resources\Account\AccountResource;
 
 class GetAccountAction extends BaseAction
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace TicketKitten\Repository\Interfaces;
+namespace HiEvents\Repository\Interfaces;
 
-use TicketKitten\DomainObjects\EventStatisticDomainObject;
-use TicketKitten\Repository\Eloquent\BaseRepository;
+use HiEvents\DomainObjects\EventStatisticDomainObject;
+use HiEvents\Repository\Eloquent\BaseRepository;
 
 /**
  * @extends BaseRepository<EventStatisticDomainObject>

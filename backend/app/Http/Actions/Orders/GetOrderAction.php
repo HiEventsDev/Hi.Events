@@ -1,14 +1,14 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Orders;
+namespace HiEvents\Http\Actions\Orders;
 
 use Illuminate\Http\JsonResponse;
-use TicketKitten\DomainObjects\AttendeeDomainObject;
-use TicketKitten\DomainObjects\OrderItemDomainObject;
-use TicketKitten\DomainObjects\QuestionAndAnswerViewDomainObject;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Repository\Interfaces\OrderRepositoryInterface;
-use TicketKitten\Resources\Order\OrderResource;
+use HiEvents\DomainObjects\AttendeeDomainObject;
+use HiEvents\DomainObjects\OrderItemDomainObject;
+use HiEvents\DomainObjects\QuestionAndAnswerViewDomainObject;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
+use HiEvents\Resources\Order\OrderResource;
 
 class GetOrderAction extends BaseAction
 {

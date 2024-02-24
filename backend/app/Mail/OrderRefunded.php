@@ -1,12 +1,12 @@
 <?php
 
-namespace TicketKitten\Mail;
+namespace HiEvents\Mail;
 
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\DomainObjects\OrderDomainObject;
-use TicketKitten\ValuesObjects\MoneyValue;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\ValuesObjects\MoneyValue;
 
 /**
  * @uses /backend/resources/views/emails/orders/order-refunded.blade.php

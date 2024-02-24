@@ -1,19 +1,19 @@
 <?php
 
-namespace TicketKitten\Service\Common\Order;
+namespace HiEvents\Service\Common\Order;
 
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
-use TicketKitten\DomainObjects\AttendeeDomainObject;
-use TicketKitten\DomainObjects\OrderDomainObject;
-use TicketKitten\DomainObjects\Status\AttendeeStatus;
-use TicketKitten\DomainObjects\Status\OrderStatus;
-use TicketKitten\Mail\OrderCancelled;
-use TicketKitten\Repository\Interfaces\AttendeeRepositoryInterface;
-use TicketKitten\Repository\Interfaces\EventRepositoryInterface;
-use TicketKitten\Repository\Interfaces\OrderRepositoryInterface;
-use TicketKitten\Service\Common\Ticket\TicketQuantityService;
+use HiEvents\DomainObjects\AttendeeDomainObject;
+use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\DomainObjects\Status\AttendeeStatus;
+use HiEvents\DomainObjects\Status\OrderStatus;
+use HiEvents\Mail\OrderCancelled;
+use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventRepositoryInterface;
+use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
+use HiEvents\Service\Common\Ticket\TicketQuantityService;
 
 readonly class OrderCancelService
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace TicketKitten\Http\DataTransferObjects;
+namespace HiEvents\Http\DataTransferObjects;
 
-use TicketKitten\DomainObjects\Enums\PromoCodeDiscountTypeEnum;
+use HiEvents\DomainObjects\Enums\PromoCodeDiscountTypeEnum;
 
 class UpsertPromoCodeDTO
 {

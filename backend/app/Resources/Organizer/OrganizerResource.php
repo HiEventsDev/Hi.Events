@@ -1,10 +1,10 @@
 <?php
 
-namespace TicketKitten\Resources\Organizer;
+namespace HiEvents\Resources\Organizer;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use TicketKitten\DomainObjects\OrganizerDomainObject;
-use TicketKitten\Resources\Image\ImageResource;
+use HiEvents\DomainObjects\OrganizerDomainObject;
+use HiEvents\Resources\Image\ImageResource;
 
 /**
  * @mixin OrganizerDomainObject

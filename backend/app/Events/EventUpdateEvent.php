@@ -1,9 +1,9 @@
 <?php
 
-namespace TicketKitten\Events;
+namespace HiEvents\Events;
 
 use Illuminate\Foundation\Events\Dispatchable;
-use TicketKitten\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventDomainObject;
 
 class EventUpdateEvent
 {

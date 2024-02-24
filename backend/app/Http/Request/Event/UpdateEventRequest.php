@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace TicketKitten\Http\Request\Event;
+namespace HiEvents\Http\Request\Event;
 
-use TicketKitten\Http\Request\BaseRequest;
-use TicketKitten\Validator\EventRules;
+use HiEvents\Http\Request\BaseRequest;
+use HiEvents\Validator\EventRules;
 
 class UpdateEventRequest extends BaseRequest
 {

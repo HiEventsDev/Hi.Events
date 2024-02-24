@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten;
+namespace HiEvents;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;

@@ -1,16 +1,16 @@
 <?php
 
-namespace TicketKitten\Service\Handler\User;
+namespace HiEvents\Service\Handler\User;
 
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Contracts\Mail\Mailer;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use TicketKitten\DomainObjects\UserDomainObject;
-use TicketKitten\Exceptions\PasswordInvalidException;
-use TicketKitten\Http\DataTransferObjects\UpdateMeDTO;
-use TicketKitten\Mail\ConfirmEmailChangeMail;
-use TicketKitten\Repository\Interfaces\UserRepositoryInterface;
-use TicketKitten\Service\Common\EncryptedPayloadService;
+use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\Exceptions\PasswordInvalidException;
+use HiEvents\Http\DataTransferObjects\UpdateMeDTO;
+use HiEvents\Mail\ConfirmEmailChangeMail;
+use HiEvents\Repository\Interfaces\UserRepositoryInterface;
+use HiEvents\Service\Common\EncryptedPayloadService;
 
 class UpdateMeHandler
 {

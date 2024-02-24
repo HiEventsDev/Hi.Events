@@ -1,11 +1,11 @@
 <?php
 
-namespace TicketKitten\Mail;
+namespace HiEvents\Mail;
 
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\DomainObjects\OrderDomainObject;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\OrderDomainObject;
 
 /**
  * @uses /backend/resources/views/emails/orders/summary.blade.php

@@ -2,21 +2,21 @@
 
 declare(strict_types=1);
 
-namespace TicketKitten\Http\Actions\Accounts;
+namespace HiEvents\Http\Actions\Accounts;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 use Throwable;
-use TicketKitten\Exceptions\EmailAlreadyExists;
-use TicketKitten\Exceptions\UnauthorizedException;
-use TicketKitten\Http\Actions\Auth\BaseAuthAction;
-use TicketKitten\Http\DataTransferObjects\CreateAccountDTO;
-use TicketKitten\Http\DataTransferObjects\LoginCredentialsDTO;
-use TicketKitten\Http\Request\Account\CreateAccountRequest;
-use TicketKitten\Http\ResponseCodes;
-use TicketKitten\Resources\Account\AccountResource;
-use TicketKitten\Service\Handler\Account\CreateAccountHandler;
-use TicketKitten\Service\Handler\Auth\LoginHandler;
+use HiEvents\Exceptions\EmailAlreadyExists;
+use HiEvents\Exceptions\UnauthorizedException;
+use HiEvents\Http\Actions\Auth\BaseAuthAction;
+use HiEvents\Http\DataTransferObjects\CreateAccountDTO;
+use HiEvents\Http\DataTransferObjects\LoginCredentialsDTO;
+use HiEvents\Http\Request\Account\CreateAccountRequest;
+use HiEvents\Http\ResponseCodes;
+use HiEvents\Resources\Account\AccountResource;
+use HiEvents\Service\Handler\Account\CreateAccountHandler;
+use HiEvents\Service\Handler\Auth\LoginHandler;
 
 class CreateAccountAction extends BaseAuthAction
 {

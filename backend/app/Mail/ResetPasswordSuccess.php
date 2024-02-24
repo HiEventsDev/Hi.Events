@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten\Mail;
+namespace HiEvents\Mail;
 
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;

@@ -1,13 +1,13 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Attendees;
+namespace HiEvents\Http\Actions\Attendees;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
-use TicketKitten\DomainObjects\Generated\AttendeeDomainObjectAbstract;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Repository\Interfaces\AttendeeRepositoryInterface;
-use TicketKitten\Resources\Attendee\AttendeeResourcePublic;
+use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
+use HiEvents\Resources\Attendee\AttendeeResourcePublic;
 
 class GetAttendeeActionPublic extends BaseAction
 {

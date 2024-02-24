@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten\DomainObjects\SortingAndFiltering;
+namespace HiEvents\DomainObjects\SortingAndFiltering;
 
 class AllowedSort
 {

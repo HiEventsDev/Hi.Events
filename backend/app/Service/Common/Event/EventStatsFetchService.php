@@ -1,14 +1,14 @@
 <?php
 
-namespace TicketKitten\Service\Common\Event;
+namespace HiEvents\Service\Common\Event;
 
 use Carbon\Carbon;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Collection;
-use TicketKitten\Http\DataTransferObjects\EventDailyStatsResponseDTO;
-use TicketKitten\Http\DataTransferObjects\EventStatsRequestDTO;
-use TicketKitten\Http\DataTransferObjects\EventStatsResponseDTO;
-use TicketKitten\Service\Common\Event\DTO\EventCheckInStatsResponseDTO;
+use HiEvents\Http\DataTransferObjects\EventDailyStatsResponseDTO;
+use HiEvents\Http\DataTransferObjects\EventStatsRequestDTO;
+use HiEvents\Http\DataTransferObjects\EventStatsResponseDTO;
+use HiEvents\Service\Common\Event\DTO\EventCheckInStatsResponseDTO;
 
 readonly class EventStatsFetchService
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace TicketKitten\Service\Handler\Question;
+namespace HiEvents\Service\Handler\Question;
 
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use TicketKitten\Repository\Interfaces\QuestionRepositoryInterface;
+use HiEvents\Repository\Interfaces\QuestionRepositoryInterface;
 
 readonly class SortQuestionsHandler
 {

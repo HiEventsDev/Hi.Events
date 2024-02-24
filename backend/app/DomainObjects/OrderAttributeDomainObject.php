@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten\DomainObjects;
+namespace HiEvents\DomainObjects;
 
 class OrderAttributeDomainObject extends Generated\OrderAttributeDomainObjectAbstract
 {

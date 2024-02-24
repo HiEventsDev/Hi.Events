@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten\Validator\Rules;
+namespace HiEvents\Validator\Rules;
 
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;

@@ -1,16 +1,16 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Attendees;
+namespace HiEvents\Http\Actions\Attendees;
 
 use Illuminate\Http\JsonResponse;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\Exceptions\CannotCheckInException;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Http\DataTransferObjects\CheckInAttendeeDTO;
-use TicketKitten\Http\Request\Attendee\CheckInAttendeeRequest;
-use TicketKitten\Http\ResponseCodes;
-use TicketKitten\Resources\Attendee\AttendeeResource;
-use TicketKitten\Service\Handler\Attendee\CheckInAttendeeHandler;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\Exceptions\CannotCheckInException;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\DataTransferObjects\CheckInAttendeeDTO;
+use HiEvents\Http\Request\Attendee\CheckInAttendeeRequest;
+use HiEvents\Http\ResponseCodes;
+use HiEvents\Resources\Attendee\AttendeeResource;
+use HiEvents\Service\Handler\Attendee\CheckInAttendeeHandler;
 
 class CheckInAttendeeAction extends BaseAction
 {

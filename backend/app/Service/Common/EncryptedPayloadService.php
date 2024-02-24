@@ -1,12 +1,12 @@
 <?php
 
-namespace TicketKitten\Service\Common;
+namespace HiEvents\Service\Common;
 
 use Carbon\Carbon;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Contracts\Encryption\Encrypter;
-use TicketKitten\Exceptions\DecryptionFailedException;
-use TicketKitten\Exceptions\EncryptedPayloadExpiredException;
+use HiEvents\Exceptions\DecryptionFailedException;
+use HiEvents\Exceptions\EncryptedPayloadExpiredException;
 
 class EncryptedPayloadService
 {

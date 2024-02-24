@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten\Providers;
+namespace HiEvents\Providers;
 
 use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\DriverManager;
@@ -11,10 +11,10 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
 use Stripe\StripeClient;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\DomainObjects\OrganizerDomainObject;
-use TicketKitten\Models\Event;
-use TicketKitten\Models\Organizer;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\OrganizerDomainObject;
+use HiEvents\Models\Event;
+use HiEvents\Models\Organizer;
 
 class AppServiceProvider extends ServiceProvider
 {

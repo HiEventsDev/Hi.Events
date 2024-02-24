@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace TicketKitten\Http\Actions\Orders;
+namespace HiEvents\Http\Actions\Orders;
 
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use TicketKitten\Exceptions\ResourceConflictException;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Http\DataTransferObjects\CompleteOrderDTO;
-use TicketKitten\Http\DataTransferObjects\CompleteOrderOrderDTO;
-use TicketKitten\Http\Request\Order\CompleteOrderRequest;
-use TicketKitten\Resources\Order\OrderResourcePublic;
-use TicketKitten\Service\Handler\Order\CompleteOrderHandler;
+use HiEvents\Exceptions\ResourceConflictException;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\DataTransferObjects\CompleteOrderDTO;
+use HiEvents\Http\DataTransferObjects\CompleteOrderOrderDTO;
+use HiEvents\Http\Request\Order\CompleteOrderRequest;
+use HiEvents\Resources\Order\OrderResourcePublic;
+use HiEvents\Service\Handler\Order\CompleteOrderHandler;
 
 class CompleteOrderActionPublic extends BaseAction
 {

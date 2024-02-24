@@ -1,11 +1,11 @@
 <?php
 
-namespace TicketKitten\Service\Common\Auth;
+namespace HiEvents\Service\Common\Auth;
 
 use Illuminate\Auth\AuthManager;
-use TicketKitten\DomainObjects\Interfaces\DomainObjectInterface;
-use TicketKitten\DomainObjects\UserDomainObject;
-use TicketKitten\Models\User;
+use HiEvents\DomainObjects\Interfaces\DomainObjectInterface;
+use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\Models\User;
 
 class AuthUserService
 {

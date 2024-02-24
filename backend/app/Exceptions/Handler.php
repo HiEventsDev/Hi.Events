@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten\Exceptions;
+namespace HiEvents\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;

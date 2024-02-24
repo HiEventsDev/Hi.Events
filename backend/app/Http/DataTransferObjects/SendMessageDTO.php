@@ -1,9 +1,9 @@
 <?php
 
-namespace TicketKitten\Http\DataTransferObjects;
+namespace HiEvents\Http\DataTransferObjects;
 
-use TicketKitten\DomainObjects\Enums\MessageTypeEnum;
-use TicketKitten\DataTransferObjects\BaseDTO;
+use HiEvents\DomainObjects\Enums\MessageTypeEnum;
+use HiEvents\DataTransferObjects\BaseDTO;
 
 class SendMessageDTO extends BaseDTO
 {

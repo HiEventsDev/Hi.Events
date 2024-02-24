@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten\DomainObjects\Interfaces;
+namespace HiEvents\DomainObjects\Interfaces;
 
 interface IsFilterable
 {

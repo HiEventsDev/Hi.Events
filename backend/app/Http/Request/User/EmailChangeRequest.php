@@ -1,8 +1,8 @@
 <?php
 
-namespace TicketKitten\Http\Request\User;
+namespace HiEvents\Http\Request\User;
 
-use TicketKitten\Http\Request\BaseRequest;
+use HiEvents\Http\Request\BaseRequest;
 
 class EmailChangeRequest extends BaseRequest
 {

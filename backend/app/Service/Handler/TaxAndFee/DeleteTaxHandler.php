@@ -1,15 +1,15 @@
 <?php
 
-namespace TicketKitten\Service\Handler\TaxAndFee;
+namespace HiEvents\Service\Handler\TaxAndFee;
 
 use Illuminate\Database\DatabaseManager;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Throwable;
-use TicketKitten\DomainObjects\Generated\TaxAndFeesDomainObjectAbstract;
-use TicketKitten\Exceptions\ResourceConflictException;
-use TicketKitten\Http\DataTransferObjects\DeleteTaxDTO;
-use TicketKitten\Repository\Interfaces\TaxAndFeeRepositoryInterface;
+use HiEvents\DomainObjects\Generated\TaxAndFeesDomainObjectAbstract;
+use HiEvents\Exceptions\ResourceConflictException;
+use HiEvents\Http\DataTransferObjects\DeleteTaxDTO;
+use HiEvents\Repository\Interfaces\TaxAndFeeRepositoryInterface;
 
 readonly class DeleteTaxHandler
 {

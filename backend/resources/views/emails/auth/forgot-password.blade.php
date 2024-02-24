@@ -1,17 +1,17 @@
-@php /** @var \TicketKitten\DomainObjects\UserDomainObject $user */ @endphp
+@php /** @var \HiEvents\DomainObjects\UserDomainObject $user */ @endphp
 @php /** @var string $link */ @endphp
 
 <x-mail::message>
-Hello,
+    Hello,
 
-You have requested to reset your password for your account on {{ config('app.name') }}.
+    You have requested to reset your password for your account on {{ config('app.name') }}.
 
-Please click the link below to reset your password.
+    Please click the link below to reset your password.
 
-<a href="{{ $link }}">Reset Password</a>
+    <a href="{{ $link }}">Reset Password</a>
 
-If you did not request a password reset, please ignore this email or reply to let us know.
+    If you did not request a password reset, please ignore this email or reply to let us know.
 
-Thank you
+    Thank you
 
 </x-mail::message>

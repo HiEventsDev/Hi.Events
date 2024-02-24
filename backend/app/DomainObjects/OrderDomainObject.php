@@ -1,12 +1,12 @@
 <?php
 
-namespace TicketKitten\DomainObjects;
+namespace HiEvents\DomainObjects;
 
 use Illuminate\Support\Collection;
-use TicketKitten\DomainObjects\Interfaces\IsSortable;
-use TicketKitten\DomainObjects\SortingAndFiltering\AllowedSorts;
-use TicketKitten\DomainObjects\Status\OrderPaymentStatus;
-use TicketKitten\DomainObjects\Status\OrderStatus;
+use HiEvents\DomainObjects\Interfaces\IsSortable;
+use HiEvents\DomainObjects\SortingAndFiltering\AllowedSorts;
+use HiEvents\DomainObjects\Status\OrderPaymentStatus;
+use HiEvents\DomainObjects\Status\OrderStatus;
 
 class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements IsSortable
 {

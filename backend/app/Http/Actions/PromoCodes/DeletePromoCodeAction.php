@@ -1,12 +1,12 @@
 <?php
 
-namespace TicketKitten\Http\Actions\PromoCodes;
+namespace HiEvents\Http\Actions\PromoCodes;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Repository\Interfaces\PromoCodeRepositoryInterface;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
 
 class DeletePromoCodeAction extends BaseAction
 {

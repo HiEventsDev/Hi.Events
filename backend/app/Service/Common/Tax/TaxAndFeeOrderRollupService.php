@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten\Service\Common\Tax;
+namespace HiEvents\Service\Common\Tax;
 
 use Illuminate\Support\Collection;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten\Http\Request\Order;
+namespace HiEvents\Http\Request\Order;
 
 use Illuminate\Foundation\Http\FormRequest;
 

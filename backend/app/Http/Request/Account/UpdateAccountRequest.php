@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten\Http\Request\Account;
+namespace HiEvents\Http\Request\Account;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;

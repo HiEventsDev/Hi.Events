@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Auth;
+namespace HiEvents\Http\Actions\Auth;
 
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;

@@ -1,14 +1,14 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Events\Stats;
+namespace HiEvents\Http\Actions\Events\Stats;
 
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Http\DataTransferObjects\EventStatsRequestDTO;
-use TicketKitten\Service\Handler\Event\GetEventStatsHandler;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\DataTransferObjects\EventStatsRequestDTO;
+use HiEvents\Service\Handler\Event\GetEventStatsHandler;
 
 class GetEventStatsAction extends BaseAction
 {

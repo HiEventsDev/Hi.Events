@@ -1,10 +1,10 @@
 <?php
 
-namespace TicketKitten\DomainObjects;
+namespace HiEvents\DomainObjects;
 
-use TicketKitten\DomainObjects\Interfaces\IsSortable;
-use TicketKitten\DomainObjects\SortingAndFiltering\AllowedSorts;
-use TicketKitten\Helper\StringHelper;
+use HiEvents\DomainObjects\Interfaces\IsSortable;
+use HiEvents\DomainObjects\SortingAndFiltering\AllowedSorts;
+use HiEvents\Helper\StringHelper;
 
 class MessageDomainObject extends Generated\MessageDomainObjectAbstract implements IsSortable
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace TicketKitten\Http\DataTransferObjects;
+namespace HiEvents\Http\DataTransferObjects;
 
 use Illuminate\Http\UploadedFile;
-use TicketKitten\DataTransferObjects\BaseDTO;
+use HiEvents\DataTransferObjects\BaseDTO;
 
 class EditOrganizerDTO extends BaseDTO
 {

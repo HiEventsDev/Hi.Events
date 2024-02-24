@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace TicketKitten\Repository\Eloquent;
+namespace HiEvents\Repository\Eloquent;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
-use TicketKitten\DomainObjects\AttendeeDomainObject;
-use TicketKitten\DomainObjects\Generated\OrderDomainObjectAbstract;
-use TicketKitten\DomainObjects\OrderDomainObject;
-use TicketKitten\DomainObjects\OrderItemDomainObject;
-use TicketKitten\DomainObjects\Status\OrderStatus;
-use TicketKitten\Http\DataTransferObjects\QueryParamsDTO;
-use TicketKitten\Models\Order;
-use TicketKitten\Models\OrderItem;
-use TicketKitten\Repository\Interfaces\OrderRepositoryInterface;
+use HiEvents\DomainObjects\AttendeeDomainObject;
+use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
+use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\DomainObjects\OrderItemDomainObject;
+use HiEvents\DomainObjects\Status\OrderStatus;
+use HiEvents\Http\DataTransferObjects\QueryParamsDTO;
+use HiEvents\Models\Order;
+use HiEvents\Models\OrderItem;
+use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 
 class OrderRepository extends BaseRepository implements OrderRepositoryInterface
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace TicketKitten\DomainObjects;
+namespace HiEvents\DomainObjects;
 
 use Illuminate\Support\Collection;
-use TicketKitten\DomainObjects\Enums\QuestionTypeEnum;
+use HiEvents\DomainObjects\Enums\QuestionTypeEnum;
 
 class QuestionDomainObject extends Generated\QuestionDomainObjectAbstract
 {

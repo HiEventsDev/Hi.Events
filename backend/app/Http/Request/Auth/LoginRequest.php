@@ -1,8 +1,8 @@
 <?php
 
-namespace TicketKitten\Http\Request\Auth;
+namespace HiEvents\Http\Request\Auth;
 
-use TicketKitten\Http\Request\BaseRequest;
+use HiEvents\Http\Request\BaseRequest;
 
 class LoginRequest extends BaseRequest
 {

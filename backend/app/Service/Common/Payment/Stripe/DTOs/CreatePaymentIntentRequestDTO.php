@@ -1,9 +1,9 @@
 <?php
 
-namespace TicketKitten\Service\Common\Payment\Stripe\DTOs;
+namespace HiEvents\Service\Common\Payment\Stripe\DTOs;
 
-use TicketKitten\DataTransferObjects\BaseDTO;
-use TicketKitten\DomainObjects\AccountDomainObject;
+use HiEvents\DataTransferObjects\BaseDTO;
+use HiEvents\DomainObjects\AccountDomainObject;
 
 class CreatePaymentIntentRequestDTO extends BaseDTO
 {

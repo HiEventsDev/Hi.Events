@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Artisan;
-use TicketKitten\Service\Common\DomainObjectGenerator\ClassGenerator;
+use HiEvents\Service\Common\DomainObjectGenerator\ClassGenerator;
 
 Artisan::command('generate-domain-objects',
     fn() => app()->make(ClassGenerator::class)->run()

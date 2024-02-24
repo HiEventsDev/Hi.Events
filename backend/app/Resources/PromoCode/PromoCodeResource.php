@@ -1,10 +1,10 @@
 <?php
 
-namespace TicketKitten\Resources\PromoCode;
+namespace HiEvents\Resources\PromoCode;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use TicketKitten\DomainObjects\PromoCodeDomainObject;
+use HiEvents\DomainObjects\PromoCodeDomainObject;
 
 /**
  * @mixin PromoCodeDomainObject

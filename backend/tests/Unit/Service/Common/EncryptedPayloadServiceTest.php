@@ -9,8 +9,8 @@ use Carbon\Carbon;
 use Illuminate\Contracts\Encryption\Encrypter;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
-use TicketKitten\Exceptions\DecryptionFailedException;
-use TicketKitten\Service\Common\EncryptedPayloadService;
+use HiEvents\Exceptions\DecryptionFailedException;
+use HiEvents\Service\Common\EncryptedPayloadService;
 
 class EncryptedPayloadServiceTest extends TestCase
 {

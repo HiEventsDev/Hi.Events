@@ -1,10 +1,10 @@
 <?php
 
-namespace TicketKitten\Service\Handler\User;
+namespace HiEvents\Service\Handler\User;
 
 use Throwable;
-use TicketKitten\Exceptions\DecryptionFailedException;
-use TicketKitten\Service\Common\User\EmailConfirmationService;
+use HiEvents\Exceptions\DecryptionFailedException;
+use HiEvents\Service\Common\User\EmailConfirmationService;
 
 readonly class ConfirmEmailAddressHandler
 {

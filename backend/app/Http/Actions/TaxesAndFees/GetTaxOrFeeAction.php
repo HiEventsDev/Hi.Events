@@ -1,12 +1,12 @@
 <?php
 
-namespace TicketKitten\Http\Actions\TaxesAndFees;
+namespace HiEvents\Http\Actions\TaxesAndFees;
 
 use Illuminate\Http\JsonResponse;
-use TicketKitten\DomainObjects\AccountDomainObject;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Repository\Interfaces\TaxAndFeeRepositoryInterface;
-use TicketKitten\Resources\Tax\TaxAndFeeResource;
+use HiEvents\DomainObjects\AccountDomainObject;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Repository\Interfaces\TaxAndFeeRepositoryInterface;
+use HiEvents\Resources\Tax\TaxAndFeeResource;
 
 class GetTaxOrFeeAction extends BaseAction
 {

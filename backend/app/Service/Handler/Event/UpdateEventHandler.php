@@ -1,19 +1,19 @@
 <?php
 
-namespace TicketKitten\Service\Handler\Event;
+namespace HiEvents\Service\Handler\Event;
 
 use Illuminate\Database\DatabaseManager;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Throwable;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\DomainObjects\Status\OrderStatus;
-use TicketKitten\Events\Dispatcher;
-use TicketKitten\Events\EventUpdateEvent;
-use TicketKitten\Exceptions\CannotChangeCurrencyException;
-use TicketKitten\Helper\DateHelper;
-use TicketKitten\Http\DataTransferObjects\UpdateEventDTO;
-use TicketKitten\Repository\Interfaces\EventRepositoryInterface;
-use TicketKitten\Repository\Interfaces\OrderRepositoryInterface;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\Status\OrderStatus;
+use HiEvents\Events\Dispatcher;
+use HiEvents\Events\EventUpdateEvent;
+use HiEvents\Exceptions\CannotChangeCurrencyException;
+use HiEvents\Helper\DateHelper;
+use HiEvents\Http\DataTransferObjects\UpdateEventDTO;
+use HiEvents\Repository\Interfaces\EventRepositoryInterface;
+use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 
 readonly class UpdateEventHandler
 {

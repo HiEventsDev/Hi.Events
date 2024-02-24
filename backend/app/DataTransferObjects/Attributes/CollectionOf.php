@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten\DataTransferObjects\Attributes;
+namespace HiEvents\DataTransferObjects\Attributes;
 
 use Attribute;
 

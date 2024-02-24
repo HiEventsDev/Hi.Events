@@ -1,14 +1,14 @@
 <?php
 
-namespace TicketKitten\Service\Common\Image;
+namespace HiEvents\Service\Common\Image;
 
 use Illuminate\Config\Repository;
 use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
 use RuntimeException;
-use TicketKitten\DomainObjects\ImageDomainObject;
-use TicketKitten\Repository\Interfaces\ImageRepositoryInterface;
+use HiEvents\DomainObjects\ImageDomainObject;
+use HiEvents\Repository\Interfaces\ImageRepositoryInterface;
 
 readonly class ImageUploadService
 {

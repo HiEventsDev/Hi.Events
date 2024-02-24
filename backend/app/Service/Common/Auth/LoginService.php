@@ -1,13 +1,13 @@
 <?php
 
-namespace TicketKitten\Service\Common\Auth;
+namespace HiEvents\Service\Common\Auth;
 
 use PHPOpenSourceSaver\JWTAuth\JWTAuth;
 use Psr\Log\LoggerInterface;
-use TicketKitten\DomainObjects\Status\UserStatus;
-use TicketKitten\DomainObjects\UserDomainObject;
-use TicketKitten\Exceptions\UnauthorizedException;
-use TicketKitten\Service\Common\Auth\DTO\LoginResponse;
+use HiEvents\DomainObjects\Status\UserStatus;
+use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\Exceptions\UnauthorizedException;
+use HiEvents\Service\Common\Auth\DTO\LoginResponse;
 
 class LoginService
 {

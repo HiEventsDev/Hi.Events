@@ -1,14 +1,14 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Organizers;
+namespace HiEvents\Http\Actions\Organizers;
 
 use Illuminate\Http\JsonResponse;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Http\DataTransferObjects\CreateOrganizerDTO;
-use TicketKitten\Http\Request\Organizer\UpsertOrganizerRequest;
-use TicketKitten\Http\ResponseCodes;
-use TicketKitten\Resources\Organizer\OrganizerResource;
-use TicketKitten\Service\Handler\Organizer\CreateOrganizerHandler;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\DataTransferObjects\CreateOrganizerDTO;
+use HiEvents\Http\Request\Organizer\UpsertOrganizerRequest;
+use HiEvents\Http\ResponseCodes;
+use HiEvents\Resources\Organizer\OrganizerResource;
+use HiEvents\Service\Handler\Organizer\CreateOrganizerHandler;
 
 class CreateOrganizerAction extends BaseAction
 {

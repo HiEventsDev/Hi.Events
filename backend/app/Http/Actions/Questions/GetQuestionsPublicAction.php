@@ -1,14 +1,14 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Questions;
+namespace HiEvents\Http\Actions\Questions;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use TicketKitten\DomainObjects\Generated\QuestionDomainObjectAbstract;
-use TicketKitten\DomainObjects\TicketDomainObject;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Repository\Interfaces\QuestionRepositoryInterface;
-use TicketKitten\Resources\Question\QuestionResourcePublic;
+use HiEvents\DomainObjects\Generated\QuestionDomainObjectAbstract;
+use HiEvents\DomainObjects\TicketDomainObject;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Repository\Interfaces\QuestionRepositoryInterface;
+use HiEvents\Resources\Question\QuestionResourcePublic;
 
 class GetQuestionsPublicAction extends BaseAction
 {

@@ -1,19 +1,19 @@
 <?php
 
-namespace TicketKitten\Service\Handler\Message;
+namespace HiEvents\Service\Handler\Message;
 
 use Carbon\Carbon;
 use HTMLPurifier;
 use Illuminate\Support\Collection;
-use TicketKitten\DomainObjects\MessageDomainObject;
-use TicketKitten\DomainObjects\Status\AttendeeStatus;
-use TicketKitten\DomainObjects\Status\MessageStatus;
-use TicketKitten\Http\DataTransferObjects\SendMessageDTO;
-use TicketKitten\Jobs\SendMessagesJob;
-use TicketKitten\Repository\Interfaces\AttendeeRepositoryInterface;
-use TicketKitten\Repository\Interfaces\MessageRepositoryInterface;
-use TicketKitten\Repository\Interfaces\OrderRepositoryInterface;
-use TicketKitten\Repository\Interfaces\TicketRepositoryInterface;
+use HiEvents\DomainObjects\MessageDomainObject;
+use HiEvents\DomainObjects\Status\AttendeeStatus;
+use HiEvents\DomainObjects\Status\MessageStatus;
+use HiEvents\Http\DataTransferObjects\SendMessageDTO;
+use HiEvents\Jobs\SendMessagesJob;
+use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
+use HiEvents\Repository\Interfaces\MessageRepositoryInterface;
+use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
+use HiEvents\Repository\Interfaces\TicketRepositoryInterface;
 
 readonly class SendMessageHandler
 {

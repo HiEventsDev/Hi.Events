@@ -1,11 +1,11 @@
 <?php
 
-namespace TicketKitten\Http\DataTransferObjects;
+namespace HiEvents\Http\DataTransferObjects;
 
 use Illuminate\Support\Collection;
-use TicketKitten\DataTransferObjects\Attributes\CollectionOf;
-use TicketKitten\DataTransferObjects\BaseDTO;
-use TicketKitten\DomainObjects\Status\EventStatus;
+use HiEvents\DataTransferObjects\Attributes\CollectionOf;
+use HiEvents\DataTransferObjects\BaseDTO;
+use HiEvents\DomainObjects\Status\EventStatus;
 
 class CreateEventDTO extends BaseDTO
 {

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace TicketKitten\Repository\Interfaces;
+namespace HiEvents\Repository\Interfaces;
 
 use Illuminate\Support\Collection;
-use TicketKitten\DomainObjects\UserDomainObject;
-use TicketKitten\Repository\Eloquent\BaseRepository;
+use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\Repository\Eloquent\BaseRepository;
 
 /**
  * @extends BaseRepository<UserDomainObject>

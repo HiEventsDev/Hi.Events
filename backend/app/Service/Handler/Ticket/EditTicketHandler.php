@@ -2,23 +2,23 @@
 
 declare(strict_types=1);
 
-namespace TicketKitten\Service\Handler\Ticket;
+namespace HiEvents\Service\Handler\Ticket;
 
 use Exception;
 use HTMLPurifier;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
-use TicketKitten\DomainObjects\Interfaces\DomainObjectInterface;
-use TicketKitten\DomainObjects\TicketDomainObject;
-use TicketKitten\DomainObjects\TicketPriceDomainObject;
-use TicketKitten\Exceptions\CannotChangeTicketTypeException;
-use TicketKitten\Helper\DateHelper;
-use TicketKitten\Http\DataTransferObjects\UpsertTicketDTO;
-use TicketKitten\Repository\Interfaces\EventRepositoryInterface;
-use TicketKitten\Repository\Interfaces\TicketRepositoryInterface;
-use TicketKitten\Service\Common\Tax\DTO\TaxAndTicketAssociateParams;
-use TicketKitten\Service\Common\Tax\TaxAndTicketAssociationService;
-use TicketKitten\Service\Common\Ticket\TicketPriceUpdateService;
+use HiEvents\DomainObjects\Interfaces\DomainObjectInterface;
+use HiEvents\DomainObjects\TicketDomainObject;
+use HiEvents\DomainObjects\TicketPriceDomainObject;
+use HiEvents\Exceptions\CannotChangeTicketTypeException;
+use HiEvents\Helper\DateHelper;
+use HiEvents\Http\DataTransferObjects\UpsertTicketDTO;
+use HiEvents\Repository\Interfaces\EventRepositoryInterface;
+use HiEvents\Repository\Interfaces\TicketRepositoryInterface;
+use HiEvents\Service\Common\Tax\DTO\TaxAndTicketAssociateParams;
+use HiEvents\Service\Common\Tax\TaxAndTicketAssociationService;
+use HiEvents\Service\Common\Ticket\TicketPriceUpdateService;
 
 readonly class EditTicketHandler
 {

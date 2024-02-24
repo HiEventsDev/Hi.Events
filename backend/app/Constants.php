@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace TicketKitten;
+namespace HiEvents;
 
 final class Constants
 {

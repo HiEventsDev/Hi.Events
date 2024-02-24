@@ -1,14 +1,14 @@
 <?php
 
-namespace TicketKitten\Service\Handler\User;
+namespace HiEvents\Service\Handler\User;
 
-use TicketKitten\DomainObjects\Status\UserStatus;
-use TicketKitten\DomainObjects\UserDomainObject;
-use TicketKitten\Exceptions\ResourceConflictException;
-use TicketKitten\Http\DataTransferObjects\CreateUserDTO;
-use TicketKitten\Repository\Interfaces\AccountRepositoryInterface;
-use TicketKitten\Repository\Interfaces\UserRepositoryInterface;
-use TicketKitten\Service\Common\User\SendUserInvitationService;
+use HiEvents\DomainObjects\Status\UserStatus;
+use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\Exceptions\ResourceConflictException;
+use HiEvents\Http\DataTransferObjects\CreateUserDTO;
+use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
+use HiEvents\Repository\Interfaces\UserRepositoryInterface;
+use HiEvents\Service\Common\User\SendUserInvitationService;
 
 class CreateUserHandler
 {

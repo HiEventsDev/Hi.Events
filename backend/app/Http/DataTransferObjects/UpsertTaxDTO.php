@@ -1,10 +1,10 @@
 <?php
 
-namespace TicketKitten\Http\DataTransferObjects;
+namespace HiEvents\Http\DataTransferObjects;
 
-use TicketKitten\DomainObjects\Enums\TaxCalculationType;
-use TicketKitten\DomainObjects\Enums\TaxType;
-use TicketKitten\DataTransferObjects\BaseDTO;
+use HiEvents\DomainObjects\Enums\TaxCalculationType;
+use HiEvents\DomainObjects\Enums\TaxType;
+use HiEvents\DataTransferObjects\BaseDTO;
 
 class UpsertTaxDTO extends BaseDTO
 {

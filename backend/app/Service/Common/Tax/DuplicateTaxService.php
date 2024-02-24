@@ -1,8 +1,8 @@
 <?php
 
-namespace TicketKitten\Service\Common\Tax;
+namespace HiEvents\Service\Common\Tax;
 
-use TicketKitten\Repository\Interfaces\TaxAndFeeRepositoryInterface;
+use HiEvents\Repository\Interfaces\TaxAndFeeRepositoryInterface;
 
 class DuplicateTaxService
 {

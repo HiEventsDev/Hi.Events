@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten\Service\Common\Tax\DTO;
+namespace HiEvents\Service\Common\Tax\DTO;
 
 class TaxAndTicketAssociateParams
 {

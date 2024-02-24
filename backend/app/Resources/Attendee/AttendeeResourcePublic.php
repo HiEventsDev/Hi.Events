@@ -1,11 +1,11 @@
 <?php
 
-namespace TicketKitten\Resources\Attendee;
+namespace HiEvents\Resources\Attendee;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use TicketKitten\DomainObjects\AttendeeDomainObject;
-use TicketKitten\Resources\Ticket\TicketResourcePublic;
+use HiEvents\DomainObjects\AttendeeDomainObject;
+use HiEvents\Resources\Ticket\TicketResourcePublic;
 
 /**
  * @mixin AttendeeDomainObject

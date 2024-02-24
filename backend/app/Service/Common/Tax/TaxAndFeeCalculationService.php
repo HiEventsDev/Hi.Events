@@ -1,14 +1,14 @@
 <?php
 
-namespace TicketKitten\Service\Common\Tax;
+namespace HiEvents\Service\Common\Tax;
 
 use InvalidArgumentException;
-use TicketKitten\DomainObjects\Enums\TaxCalculationType;
-use TicketKitten\DomainObjects\Enums\TicketType;
-use TicketKitten\DomainObjects\TaxAndFeesDomainObject;
-use TicketKitten\DomainObjects\TicketDomainObject;
-use TicketKitten\DomainObjects\TicketPriceDomainObject;
-use TicketKitten\Service\Common\Tax\DTO\TaxCalculationResponse;
+use HiEvents\DomainObjects\Enums\TaxCalculationType;
+use HiEvents\DomainObjects\Enums\TicketType;
+use HiEvents\DomainObjects\TaxAndFeesDomainObject;
+use HiEvents\DomainObjects\TicketDomainObject;
+use HiEvents\DomainObjects\TicketPriceDomainObject;
+use HiEvents\Service\Common\Tax\DTO\TaxCalculationResponse;
 
 class TaxAndFeeCalculationService
 {

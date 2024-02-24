@@ -1,13 +1,13 @@
 <?php
 
-namespace TicketKitten\DataTransferObjects;
+namespace HiEvents\DataTransferObjects;
 
 use Illuminate\Support\Collection;
 use ReflectionClass;
 use ReflectionProperty;
 use RuntimeException;
 use Throwable;
-use TicketKitten\DataTransferObjects\Attributes\CollectionOf;
+use HiEvents\DataTransferObjects\Attributes\CollectionOf;
 
 abstract class BaseDTO
 {

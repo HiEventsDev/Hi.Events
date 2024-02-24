@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace TicketKitten\Events;
+namespace HiEvents\Events;
 
 use Illuminate\Bus\Dispatcher as QueueDispatcher;
 use Illuminate\Events\Dispatcher as EventDispatcher;

@@ -1,11 +1,11 @@
 <?php
 
-namespace TicketKitten\Http\Request\TaxOrFee;
+namespace HiEvents\Http\Request\TaxOrFee;
 
 use Illuminate\Validation\Rule;
-use TicketKitten\DomainObjects\Enums\TaxCalculationType;
-use TicketKitten\DomainObjects\Enums\TaxType;
-use TicketKitten\Http\Request\BaseRequest;
+use HiEvents\DomainObjects\Enums\TaxCalculationType;
+use HiEvents\DomainObjects\Enums\TaxType;
+use HiEvents\Http\Request\BaseRequest;
 
 class CreateTaxOrFeeRequest extends BaseRequest
 {

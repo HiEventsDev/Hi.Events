@@ -1,9 +1,9 @@
 <?php
 
-namespace TicketKitten\Http\Request\Auth;
+namespace HiEvents\Http\Request\Auth;
 
-use TicketKitten\Http\Request\BaseRequest;
-use TicketKitten\Validator\Rules\RulesHelper;
+use HiEvents\Http\Request\BaseRequest;
+use HiEvents\Validator\Rules\RulesHelper;
 
 class AcceptInvitationRequest extends BaseRequest
 {

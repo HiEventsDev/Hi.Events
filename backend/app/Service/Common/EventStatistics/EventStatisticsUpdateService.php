@@ -1,21 +1,21 @@
 <?php
 
-namespace TicketKitten\Service\Common\EventStatistics;
+namespace HiEvents\Service\Common\EventStatistics;
 
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Carbon;
 use Throwable;
-use TicketKitten\DomainObjects\Generated\PromoCodeDomainObjectAbstract;
-use TicketKitten\DomainObjects\Generated\TicketDomainObjectAbstract;
-use TicketKitten\DomainObjects\OrderDomainObject;
-use TicketKitten\DomainObjects\OrderItemDomainObject;
-use TicketKitten\Exceptions\EventStatisticsVersionMismatchException;
-use TicketKitten\Repository\Interfaces\EventDailyStatisticRepositoryInterface;
-use TicketKitten\Repository\Interfaces\EventStatisticRepositoryInterface;
-use TicketKitten\Repository\Interfaces\OrderRepositoryInterface;
-use TicketKitten\Repository\Interfaces\PromoCodeRepositoryInterface;
-use TicketKitten\Repository\Interfaces\TicketRepositoryInterface;
-use TicketKitten\ValuesObjects\MoneyValue;
+use HiEvents\DomainObjects\Generated\PromoCodeDomainObjectAbstract;
+use HiEvents\DomainObjects\Generated\TicketDomainObjectAbstract;
+use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\DomainObjects\OrderItemDomainObject;
+use HiEvents\Exceptions\EventStatisticsVersionMismatchException;
+use HiEvents\Repository\Interfaces\EventDailyStatisticRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventStatisticRepositoryInterface;
+use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
+use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
+use HiEvents\Repository\Interfaces\TicketRepositoryInterface;
+use HiEvents\ValuesObjects\MoneyValue;
 
 readonly class EventStatisticsUpdateService
 {

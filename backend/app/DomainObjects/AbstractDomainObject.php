@@ -1,11 +1,11 @@
 <?php
 
-namespace TicketKitten\DomainObjects;
+namespace HiEvents\DomainObjects;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
 use InvalidArgumentException;
-use TicketKitten\DomainObjects\Interfaces\DomainObjectInterface;
+use HiEvents\DomainObjects\Interfaces\DomainObjectInterface;
 
 abstract class AbstractDomainObject implements DomainObjectInterface, Arrayable
 {

@@ -1,18 +1,18 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Orders\Payment;
+namespace HiEvents\Http\Actions\Orders\Payment;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 use Stripe\Exception\ApiErrorException;
 use Throwable;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\Exceptions\RefundNotPossibleException;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Http\DataTransferObjects\RefundOrderDTO;
-use TicketKitten\Http\Request\Order\RefundOrderRequest;
-use TicketKitten\Resources\Order\OrderResource;
-use TicketKitten\Service\Handler\Order\Payment\Stripe\RefundOrderHandler;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\Exceptions\RefundNotPossibleException;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\DataTransferObjects\RefundOrderDTO;
+use HiEvents\Http\Request\Order\RefundOrderRequest;
+use HiEvents\Resources\Order\OrderResource;
+use HiEvents\Service\Handler\Order\Payment\Stripe\RefundOrderHandler;
 
 class RefundOrderAction extends BaseAction
 {

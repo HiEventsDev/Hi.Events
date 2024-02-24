@@ -1,15 +1,15 @@
 <?php
 
-namespace TicketKitten\Service\Common\Ticket;
+namespace HiEvents\Service\Common\Ticket;
 
 use Illuminate\Support\Collection;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\DomainObjects\PromoCodeDomainObject;
-use TicketKitten\DomainObjects\TicketDomainObject;
-use TicketKitten\DomainObjects\TicketPriceDomainObject;
-use TicketKitten\Helper\Currency;
-use TicketKitten\Repository\Interfaces\EventRepositoryInterface;
-use TicketKitten\Service\Common\Tax\TaxAndFeeCalculationService;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\PromoCodeDomainObject;
+use HiEvents\DomainObjects\TicketDomainObject;
+use HiEvents\DomainObjects\TicketPriceDomainObject;
+use HiEvents\Helper\Currency;
+use HiEvents\Repository\Interfaces\EventRepositoryInterface;
+use HiEvents\Service\Common\Tax\TaxAndFeeCalculationService;
 
 readonly class TicketFilterService
 {

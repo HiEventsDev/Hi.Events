@@ -1,10 +1,10 @@
 <?php
 
-namespace TicketKitten\Service\Handler\Auth;
+namespace HiEvents\Service\Handler\Auth;
 
-use TicketKitten\DomainObjects\PasswordResetTokenDomainObject;
-use TicketKitten\Exceptions\InvalidPasswordResetTokenException;
-use TicketKitten\Service\Common\Auth\ResetPasswordTokenValidateService;
+use HiEvents\DomainObjects\PasswordResetTokenDomainObject;
+use HiEvents\Exceptions\InvalidPasswordResetTokenException;
+use HiEvents\Service\Common\Auth\ResetPasswordTokenValidateService;
 
 class ValidateResetPasswordTokenHandler
 {

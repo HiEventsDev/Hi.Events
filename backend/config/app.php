@@ -179,14 +179,13 @@ return [
         /*
          * Application Service Providers...
          */
-        \TicketKitten\Providers\AppServiceProvider::class,
-        \TicketKitten\Providers\AuthServiceProvider::class,
+        \HiEvents\Providers\AppServiceProvider::class,
+        \HiEvents\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
-        \TicketKitten\Providers\EventServiceProvider::class,
-        \TicketKitten\Providers\RouteServiceProvider::class,
-        \TicketKitten\Providers\RepositoryServiceProvider::class
+        \HiEvents\Providers\EventServiceProvider::class,
+        \HiEvents\Providers\RouteServiceProvider::class,
+        \HiEvents\Providers\RepositoryServiceProvider::class
 
-//        \TicketKitten\Auth\AuthServiceProvider::class
     ])->toArray(),
 
     /*

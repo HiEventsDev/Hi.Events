@@ -1,9 +1,9 @@
 <?php
 
-namespace TicketKitten\Http\Request\User;
+namespace HiEvents\Http\Request\User;
 
 use Illuminate\Validation\Rules\Password;
-use TicketKitten\Http\Request\BaseRequest;
+use HiEvents\Http\Request\BaseRequest;
 
 class UpdateMeRequest extends BaseRequest
 {

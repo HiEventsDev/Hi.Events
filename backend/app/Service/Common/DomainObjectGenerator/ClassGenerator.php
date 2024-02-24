@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace TicketKitten\Service\Common\DomainObjectGenerator;
+namespace HiEvents\Service\Common\DomainObjectGenerator;
 
 use Doctrine\DBAL\Exception;
 use Nette\PhpGenerator\ClassType;
 use Nette\PhpGenerator\PhpFile;
 use Nette\PhpGenerator\PhpNamespace;
 use Nette\PhpGenerator\PsrPrinter;
-use TicketKitten\DomainObjects\AbstractDomainObject;
-use TicketKitten\Exceptions\NoDefaultValueAvailableForGeneratedDoProperty;
+use HiEvents\DomainObjects\AbstractDomainObject;
+use HiEvents\Exceptions\NoDefaultValueAvailableForGeneratedDoProperty;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\DBAL\Schema\Column;
 use Doctrine\DBAL\Schema\Table;
@@ -24,9 +24,9 @@ class ClassGenerator
 {
     public const NO_TYPE = 'no-type';
 
-    private string $defaultAbstractNamespace = 'TicketKitten\DomainObjects\Generated';
+    private string $defaultAbstractNamespace = 'HiEvents\DomainObjects\Generated';
 
-    private string $defaultConcreteNamespace = 'TicketKitten\DomainObjects';
+    private string $defaultConcreteNamespace = 'HiEvents\DomainObjects';
 
     private string $defaultAbstractModelPath = "DomainObjects/Generated";
 

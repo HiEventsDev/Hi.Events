@@ -1,8 +1,8 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Questions;
+namespace HiEvents\Http\Actions\Questions;
 
-use TicketKitten\Http\Actions\BaseAction;
+use HiEvents\Http\Actions\BaseAction;
 
 class ExportQuestionsAction extends BaseAction
 {

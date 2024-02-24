@@ -1,15 +1,15 @@
 <?php
 
-namespace TicketKitten\Service\Handler\Event;
+namespace HiEvents\Service\Handler\Event;
 
 use Illuminate\Database\DatabaseManager;
 use Psr\Log\LoggerInterface;
 use Throwable;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\Exceptions\AccountNotVerifiedException;
-use TicketKitten\Http\DataTransferObjects\UpdateEventStatusDTO;
-use TicketKitten\Repository\Interfaces\AccountRepositoryInterface;
-use TicketKitten\Repository\Interfaces\EventRepositoryInterface;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\Exceptions\AccountNotVerifiedException;
+use HiEvents\Http\DataTransferObjects\UpdateEventStatusDTO;
+use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 
 readonly class UpdateEventStatusHandler
 {

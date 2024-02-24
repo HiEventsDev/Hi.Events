@@ -1,54 +1,54 @@
-@php use TicketKitten\Helper\Currency @endphp
+@php use HiEvents\Helper\Currency @endphp
 
 @php /** @uses /backend/app/Mail/OrderSummary.php */ @endphp
-@php /** @var \TicketKitten\DomainObjects\OrderDomainObject $order */ @endphp
-@php /** @var \TicketKitten\DomainObjects\EventDomainObject $event */ @endphp
+@php /** @var \HiEvents\DomainObjects\OrderDomainObject $order */ @endphp
+@php /** @var \HiEvents\DomainObjects\EventDomainObject $event */ @endphp
 
 <x-mail::message>
-# You've received a new order! 🎉
+    # You've received a new order! 🎉
 
-<br>
-Congratulations! You've got a new order for <b>{{ $event->getTitle() }}</b>! Please find the details below.
-<br>
-<br>
+    <br>
+    Congratulations! You've got a new order for <b>{{ $event->getTitle() }}</b>! Please find the details below.
+    <br>
+    <br>
 
-Order Name: <b>{{ $order->getFullName() }}</b><br>
-Order Amount: <b>{{ Currency::format($order->getTotalGross(), $event->getCurrency()) }}</b><br>
-Order ID: <b>{{ $order->getPublicId() }}</b>
-<br>
+    Order Name: <b>{{ $order->getFullName() }}</b><br>
+    Order Amount: <b>{{ Currency::format($order->getTotalGross(), $event->getCurrency()) }}</b><br>
+    Order ID: <b>{{ $order->getPublicId() }}</b>
+    <br>
 
 
-<div class="table">
-    <table>
-        <thead>
-        <tr>
-            <td><b>Ticket</b></td>
-            <td><b>Price</b></td>
-            <td><b>Total</b></td>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach ($order->getOrderItems() as $ticket)
+    <div class="table">
+        <table>
+            <thead>
             <tr>
-                <td>
-                    <b>{{ $ticket->getItemName() }} </b> x {{ $ticket->getQuantity()}}
-                </td>
-                <td>{{ Currency::format($ticket->getPrice() * $ticket->getQuantity(), $event->getCurrency()) }} </td>
+                <td><b>Ticket</b></td>
+                <td><b>Price</b></td>
+                <td><b>Total</b></td>
             </tr>
-        @endforeach
-        <tr>
-            <td colspan="3">
-                <b>Total</b>
-            </td>
-            <td>
-                {{ Currency::format($order->getTotalGross(), $event->getCurrency()) }}
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
+            </thead>
+            <tbody>
+            @foreach ($order->getOrderItems() as $ticket)
+                <tr>
+                    <td>
+                        <b>{{ $ticket->getItemName() }} </b> x {{ $ticket->getQuantity()}}
+                    </td>
+                    <td>{{ Currency::format($ticket->getPrice() * $ticket->getQuantity(), $event->getCurrency()) }} </td>
+                </tr>
+            @endforeach
+            <tr>
+                <td colspan="3">
+                    <b>Total</b>
+                </td>
+                <td>
+                    {{ Currency::format($order->getTotalGross(), $event->getCurrency()) }}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
-Best regards,
-<br>
-{{config('app.name')}}
+    Best regards,
+    <br>
+    {{config('app.name')}}
 </x-mail::message>

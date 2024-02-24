@@ -1,13 +1,13 @@
 <?php
 
-namespace TicketKitten\Service\Common\User;
+namespace HiEvents\Service\Common\User;
 
 use Illuminate\Config\Repository;
 use Illuminate\Contracts\Mail\Mailer;
-use TicketKitten\DomainObjects\UserDomainObject;
-use TicketKitten\Helper\Url;
-use TicketKitten\Mail\UserInvited;
-use TicketKitten\Service\Common\EncryptedPayloadService;
+use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\Helper\Url;
+use HiEvents\Mail\UserInvited;
+use HiEvents\Service\Common\EncryptedPayloadService;
 
 class SendUserInvitationService
 {

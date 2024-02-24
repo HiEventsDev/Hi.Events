@@ -1,12 +1,12 @@
 <?php
 
-namespace TicketKitten\Http\DataTransferObjects;
+namespace HiEvents\Http\DataTransferObjects;
 
 use Illuminate\Support\Collection;
-use TicketKitten\DataTransferObjects\Attributes\CollectionOf;
-use TicketKitten\DataTransferObjects\BaseDTO;
-use TicketKitten\DomainObjects\Enums\TicketType;
-use TicketKitten\DomainObjects\Status\TicketStatus;
+use HiEvents\DataTransferObjects\Attributes\CollectionOf;
+use HiEvents\DataTransferObjects\BaseDTO;
+use HiEvents\DomainObjects\Enums\TicketType;
+use HiEvents\DomainObjects\Status\TicketStatus;
 
 class UpsertTicketDTO extends BaseDTO
 {

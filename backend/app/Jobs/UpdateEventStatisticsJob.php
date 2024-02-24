@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten\Jobs;
+namespace HiEvents\Jobs;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -8,9 +8,9 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Throwable;
-use TicketKitten\DomainObjects\OrderDomainObject;
-use TicketKitten\Exceptions\EventStatisticsVersionMismatchException;
-use TicketKitten\Service\Common\EventStatistics\EventStatisticsUpdateService;
+use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\Exceptions\EventStatisticsVersionMismatchException;
+use HiEvents\Service\Common\EventStatistics\EventStatisticsUpdateService;
 
 class UpdateEventStatisticsJob implements ShouldQueue
 {

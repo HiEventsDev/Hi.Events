@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace TicketKitten\Repository\Interfaces;
+namespace HiEvents\Repository\Interfaces;
 
-use TicketKitten\DomainObjects\OrganizerDomainObject;
-use TicketKitten\Repository\Eloquent\BaseRepository;
+use HiEvents\DomainObjects\OrganizerDomainObject;
+use HiEvents\Repository\Eloquent\BaseRepository;
 
 /**
  * @extends BaseRepository<OrganizerDomainObject>

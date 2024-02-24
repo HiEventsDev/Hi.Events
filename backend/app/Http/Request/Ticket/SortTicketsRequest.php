@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten\Http\Request\Ticket;
+namespace HiEvents\Http\Request\Ticket;
 
 use Illuminate\Foundation\Http\FormRequest;
 

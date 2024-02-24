@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten\Models;
+namespace HiEvents\Models;
 
 class PasswordReset extends BaseModel
 {

@@ -2,22 +2,22 @@
 
 declare(strict_types=1);
 
-namespace TicketKitten\Service\Handler\Account;
+namespace HiEvents\Service\Handler\Account;
 
 use Illuminate\Config\Repository;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Hashing\HashManager;
 use NumberFormatter;
 use Throwable;
-use TicketKitten\DomainObjects\AccountDomainObject;
-use TicketKitten\DomainObjects\Enums\Role;
-use TicketKitten\DomainObjects\Status\UserStatus;
-use TicketKitten\Exceptions\EmailAlreadyExists;
-use TicketKitten\Helper\IdHelper;
-use TicketKitten\Http\DataTransferObjects\CreateAccountDTO;
-use TicketKitten\Repository\Interfaces\AccountRepositoryInterface;
-use TicketKitten\Repository\Interfaces\UserRepositoryInterface;
-use TicketKitten\Service\Common\User\EmailConfirmationService;
+use HiEvents\DomainObjects\AccountDomainObject;
+use HiEvents\DomainObjects\Enums\Role;
+use HiEvents\DomainObjects\Status\UserStatus;
+use HiEvents\Exceptions\EmailAlreadyExists;
+use HiEvents\Helper\IdHelper;
+use HiEvents\Http\DataTransferObjects\CreateAccountDTO;
+use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
+use HiEvents\Repository\Interfaces\UserRepositoryInterface;
+use HiEvents\Service\Common\User\EmailConfirmationService;
 
 readonly class CreateAccountHandler
 {

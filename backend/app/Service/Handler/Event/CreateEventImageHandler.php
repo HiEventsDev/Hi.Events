@@ -1,15 +1,15 @@
 <?php
 
-namespace TicketKitten\Service\Handler\Event;
+namespace HiEvents\Service\Handler\Event;
 
 use Illuminate\Database\DatabaseManager;
 use Throwable;
-use TicketKitten\DomainObjects\Enums\EventImageType;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\DomainObjects\ImageDomainObject;
-use TicketKitten\Http\DataTransferObjects\CreateEventImageDTO;
-use TicketKitten\Repository\Interfaces\ImageRepositoryInterface;
-use TicketKitten\Service\Common\Image\ImageUploadService;
+use HiEvents\DomainObjects\Enums\EventImageType;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\ImageDomainObject;
+use HiEvents\Http\DataTransferObjects\CreateEventImageDTO;
+use HiEvents\Repository\Interfaces\ImageRepositoryInterface;
+use HiEvents\Service\Common\Image\ImageUploadService;
 
 readonly class CreateEventImageHandler
 {

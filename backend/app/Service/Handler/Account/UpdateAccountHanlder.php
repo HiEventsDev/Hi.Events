@@ -1,11 +1,11 @@
 <?php
 
-namespace TicketKitten\Service\Handler\Account;
+namespace HiEvents\Service\Handler\Account;
 
 use Psr\Log\LoggerInterface;
-use TicketKitten\DomainObjects\AccountDomainObject;
-use TicketKitten\Http\DataTransferObjects\UpdateAccountDTO;
-use TicketKitten\Repository\Interfaces\AccountRepositoryInterface;
+use HiEvents\DomainObjects\AccountDomainObject;
+use HiEvents\Http\DataTransferObjects\UpdateAccountDTO;
+use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 
 class UpdateAccountHanlder
 {

@@ -1,12 +1,12 @@
 <?php
 
-namespace TicketKitten\Service\Common\Ticket;
+namespace HiEvents\Service\Common\Ticket;
 
 use InvalidArgumentException;
-use TicketKitten\DomainObjects\Generated\TicketPriceDomainObjectAbstract;
-use TicketKitten\DomainObjects\OrderDomainObject;
-use TicketKitten\DomainObjects\OrderItemDomainObject;
-use TicketKitten\Repository\Interfaces\TicketPriceRepositoryInterface;
+use HiEvents\DomainObjects\Generated\TicketPriceDomainObjectAbstract;
+use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\DomainObjects\OrderItemDomainObject;
+use HiEvents\Repository\Interfaces\TicketPriceRepositoryInterface;
 
 readonly class TicketQuantityUpdateService
 {

@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace TicketKitten\Http\Actions\Orders;
+namespace HiEvents\Http\Actions\Orders;
 
 use Illuminate\Http\JsonResponse;
 use Throwable;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Http\DataTransferObjects\CreateOrderPublicDTO;
-use TicketKitten\Http\DataTransferObjects\TicketOrderDetailsDTO;
-use TicketKitten\Http\Request\Order\CreateOrderRequest;
-use TicketKitten\Http\ResponseCodes;
-use TicketKitten\Resources\Order\OrderResourcePublic;
-use TicketKitten\Service\Handler\Order\CreateOrderHandler;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\DataTransferObjects\CreateOrderPublicDTO;
+use HiEvents\Http\DataTransferObjects\TicketOrderDetailsDTO;
+use HiEvents\Http\Request\Order\CreateOrderRequest;
+use HiEvents\Http\ResponseCodes;
+use HiEvents\Resources\Order\OrderResourcePublic;
+use HiEvents\Service\Handler\Order\CreateOrderHandler;
 
 class CreateOrderActionPublic extends BaseAction
 {

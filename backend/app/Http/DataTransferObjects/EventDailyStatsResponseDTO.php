@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten\Http\DataTransferObjects;
+namespace HiEvents\Http\DataTransferObjects;
 
 readonly class EventDailyStatsResponseDTO
 {

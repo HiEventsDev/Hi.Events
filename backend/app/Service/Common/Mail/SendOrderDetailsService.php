@@ -1,21 +1,21 @@
 <?php
 
-namespace TicketKitten\Service\Common\Mail;
+namespace HiEvents\Service\Common\Mail;
 
 use Illuminate\Mail\Mailer;
-use TicketKitten\DomainObjects\AttendeeDomainObject;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\DomainObjects\EventSettingDomainObject;
-use TicketKitten\DomainObjects\OrderDomainObject;
-use TicketKitten\DomainObjects\OrderItemDomainObject;
-use TicketKitten\DomainObjects\OrganizerDomainObject;
-use TicketKitten\Mail\AttendeeTicketMail;
-use TicketKitten\Mail\OrderFailed;
-use TicketKitten\Mail\OrderSummary;
-use TicketKitten\Mail\OrganizerMail\OrderSummaryForOrganizer;
-use TicketKitten\Repository\Eloquent\Value\Relationship;
-use TicketKitten\Repository\Interfaces\EventRepositoryInterface;
-use TicketKitten\Repository\Interfaces\OrderRepositoryInterface;
+use HiEvents\DomainObjects\AttendeeDomainObject;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventSettingDomainObject;
+use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\DomainObjects\OrderItemDomainObject;
+use HiEvents\DomainObjects\OrganizerDomainObject;
+use HiEvents\Mail\AttendeeTicketMail;
+use HiEvents\Mail\OrderFailed;
+use HiEvents\Mail\OrderSummary;
+use HiEvents\Mail\OrganizerMail\OrderSummaryForOrganizer;
+use HiEvents\Repository\Eloquent\Value\Relationship;
+use HiEvents\Repository\Interfaces\EventRepositoryInterface;
+use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 
 readonly class SendOrderDetailsService
 {

@@ -1,18 +1,18 @@
 <?php
 
-namespace TicketKitten\Service\Common\User;
+namespace HiEvents\Service\Common\User;
 
 use Carbon\Carbon;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
-use TicketKitten\DomainObjects\UserDomainObject;
-use TicketKitten\Exceptions\DecryptionFailedException;
-use TicketKitten\Exceptions\EncryptedPayloadExpiredException;
-use TicketKitten\Mail\ConfirmEmailAddressEmail;
-use TicketKitten\Repository\Interfaces\AccountRepositoryInterface;
-use TicketKitten\Repository\Interfaces\UserRepositoryInterface;
-use TicketKitten\Service\Common\EncryptedPayloadService;
+use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\Exceptions\DecryptionFailedException;
+use HiEvents\Exceptions\EncryptedPayloadExpiredException;
+use HiEvents\Mail\ConfirmEmailAddressEmail;
+use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
+use HiEvents\Repository\Interfaces\UserRepositoryInterface;
+use HiEvents\Service\Common\EncryptedPayloadService;
 
 readonly class EmailConfirmationService
 {

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace TicketKitten\Repository\Eloquent;
+namespace HiEvents\Repository\Eloquent;
 
 use Illuminate\Support\Collection;
-use TicketKitten\DomainObjects\Enums\Role;
-use TicketKitten\DomainObjects\UserDomainObject;
-use TicketKitten\Models\User;
-use TicketKitten\Repository\Interfaces\UserRepositoryInterface;
+use HiEvents\DomainObjects\Enums\Role;
+use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\Models\User;
+use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 
 class UserRepository extends BaseRepository implements UserRepositoryInterface
 {

@@ -1,12 +1,12 @@
 <?php
 
-namespace TicketKitten\Resources\Question;
+namespace HiEvents\Resources\Question;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use TicketKitten\DomainObjects\Enums\QuestionTypeEnum;
-use TicketKitten\DomainObjects\QuestionAndAnswerViewDomainObject;
-use TicketKitten\Service\Common\Question\QuestionAnswerFormatter;
+use HiEvents\DomainObjects\Enums\QuestionTypeEnum;
+use HiEvents\DomainObjects\QuestionAndAnswerViewDomainObject;
+use HiEvents\Service\Common\Question\QuestionAnswerFormatter;
 
 /**
  * @mixin QuestionAndAnswerViewDomainObject

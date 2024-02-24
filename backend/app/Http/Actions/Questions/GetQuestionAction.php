@@ -1,17 +1,17 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Questions;
+namespace HiEvents\Http\Actions\Questions;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\DomainObjects\TaxAndFeesDomainObject;
-use TicketKitten\DomainObjects\TicketDomainObject;
-use TicketKitten\DomainObjects\TicketPriceDomainObject;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Repository\Eloquent\Value\Relationship;
-use TicketKitten\Repository\Interfaces\QuestionRepositoryInterface;
-use TicketKitten\Resources\Question\QuestionResource;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\TaxAndFeesDomainObject;
+use HiEvents\DomainObjects\TicketDomainObject;
+use HiEvents\DomainObjects\TicketPriceDomainObject;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Repository\Eloquent\Value\Relationship;
+use HiEvents\Repository\Interfaces\QuestionRepositoryInterface;
+use HiEvents\Resources\Question\QuestionResource;
 
 class GetQuestionAction extends BaseAction
 {

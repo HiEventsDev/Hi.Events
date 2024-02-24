@@ -1,17 +1,17 @@
 <?php
 
-namespace TicketKitten\Service\Common\Payment\Stripe\EventHandlers;
+namespace HiEvents\Service\Common\Payment\Stripe\EventHandlers;
 
 use Brick\Money\Money;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Log\Logger;
 use Stripe\Refund;
 use Throwable;
-use TicketKitten\DomainObjects\Generated\OrderDomainObjectAbstract;
-use TicketKitten\DomainObjects\OrderDomainObject;
-use TicketKitten\DomainObjects\Status\OrderRefundStatus;
-use TicketKitten\Repository\Interfaces\OrderRepositoryInterface;
-use TicketKitten\Repository\Interfaces\StripePaymentsRepositoryInterface;
+use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
+use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\DomainObjects\Status\OrderRefundStatus;
+use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
+use HiEvents\Repository\Interfaces\StripePaymentsRepositoryInterface;
 
 readonly class ChargeRefundUpdatedHandler
 {

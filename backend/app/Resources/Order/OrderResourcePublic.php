@@ -1,12 +1,12 @@
 <?php
 
-namespace TicketKitten\Resources\Order;
+namespace HiEvents\Resources\Order;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use TicketKitten\DomainObjects\OrderDomainObject;
-use TicketKitten\Resources\Attendee\AttendeeResourcePublic;
-use TicketKitten\Resources\BaseResource;
+use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\Resources\Attendee\AttendeeResourcePublic;
+use HiEvents\Resources\BaseResource;
 
 /**
  * @mixin OrderDomainObject

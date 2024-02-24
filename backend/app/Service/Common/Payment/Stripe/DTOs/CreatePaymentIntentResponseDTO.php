@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten\Service\Common\Payment\Stripe\DTOs;
+namespace HiEvents\Service\Common\Payment\Stripe\DTOs;
 
 readonly class CreatePaymentIntentResponseDTO
 {

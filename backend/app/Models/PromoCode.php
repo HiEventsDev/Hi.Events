@@ -1,8 +1,8 @@
 <?php
 
-namespace TicketKitten\Models;
+namespace HiEvents\Models;
 
-use TicketKitten\DomainObjects\Generated\PromoCodeDomainObjectAbstract;
+use HiEvents\DomainObjects\Generated\PromoCodeDomainObjectAbstract;
 
 class PromoCode extends BaseModel
 {

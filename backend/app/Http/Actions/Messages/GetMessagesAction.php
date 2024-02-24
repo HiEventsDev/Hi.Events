@@ -1,17 +1,17 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Messages;
+namespace HiEvents\Http\Actions\Messages;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\DomainObjects\MessageDomainObject;
-use TicketKitten\DomainObjects\UserDomainObject;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Http\DataTransferObjects\QueryParamsDTO;
-use TicketKitten\Repository\Eloquent\Value\Relationship;
-use TicketKitten\Repository\Interfaces\MessageRepositoryInterface;
-use TicketKitten\Resources\Message\MessageResource;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\MessageDomainObject;
+use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\DataTransferObjects\QueryParamsDTO;
+use HiEvents\Repository\Eloquent\Value\Relationship;
+use HiEvents\Repository\Interfaces\MessageRepositoryInterface;
+use HiEvents\Resources\Message\MessageResource;
 
 class GetMessagesAction extends BaseAction
 {

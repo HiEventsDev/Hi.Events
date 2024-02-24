@@ -1,13 +1,13 @@
 <?php
 
-namespace TicketKitten\Resources\Event;
+namespace HiEvents\Resources\Event;
 
 use Illuminate\Http\Request;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\Resources\BaseResource;
-use TicketKitten\Resources\Image\ImageResource;
-use TicketKitten\Resources\Question\QuestionResource;
-use TicketKitten\Resources\Ticket\TicketResourcePublic;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\Resources\BaseResource;
+use HiEvents\Resources\Image\ImageResource;
+use HiEvents\Resources\Question\QuestionResource;
+use HiEvents\Resources\Ticket\TicketResourcePublic;
 
 /**
  * @mixin EventDomainObject

@@ -1,10 +1,10 @@
 <?php
 
-namespace TicketKitten\Repository\Eloquent;
+namespace HiEvents\Repository\Eloquent;
 
-use TicketKitten\DomainObjects\EventDailyStatisticDomainObject;
-use TicketKitten\Models\EventDailyStatistic;
-use TicketKitten\Repository\Interfaces\EventDailyStatisticRepositoryInterface;
+use HiEvents\DomainObjects\EventDailyStatisticDomainObject;
+use HiEvents\Models\EventDailyStatistic;
+use HiEvents\Repository\Interfaces\EventDailyStatisticRepositoryInterface;
 
 class EventDailyStatisticRepository extends BaseRepository implements EventDailyStatisticRepositoryInterface
 {

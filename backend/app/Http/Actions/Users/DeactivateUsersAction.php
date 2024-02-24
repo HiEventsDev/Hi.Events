@@ -1,13 +1,13 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Users;
+namespace HiEvents\Http\Actions\Users;
 
 use Illuminate\Http\Response;
-use TicketKitten\DomainObjects\Enums\Role;
-use TicketKitten\DomainObjects\Status\UserStatus;
-use TicketKitten\DomainObjects\UserDomainObject;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Repository\Interfaces\UserRepositoryInterface;
+use HiEvents\DomainObjects\Enums\Role;
+use HiEvents\DomainObjects\Status\UserStatus;
+use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 
 class DeactivateUsersAction extends BaseAction
 {

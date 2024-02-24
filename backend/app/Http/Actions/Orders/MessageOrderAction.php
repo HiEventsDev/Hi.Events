@@ -1,12 +1,12 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Orders;
+namespace HiEvents\Http\Actions\Orders;
 
 use Illuminate\Http\Response;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Http\Request\Message\SendMessageRequest;
-use TicketKitten\Jobs\SendMessagesJob;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\Request\Message\SendMessageRequest;
+use HiEvents\Jobs\SendMessagesJob;
 
 class MessageOrderAction extends BaseAction
 {

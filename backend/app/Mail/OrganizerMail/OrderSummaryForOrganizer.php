@@ -1,14 +1,14 @@
 <?php
 
-namespace TicketKitten\Mail\OrganizerMail;
+namespace HiEvents\Mail\OrganizerMail;
 
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Support\Str;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\DomainObjects\OrderDomainObject;
-use TicketKitten\Helper\Currency;
-use TicketKitten\Mail\BaseMail;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\Helper\Currency;
+use HiEvents\Mail\BaseMail;
 
 /**
  * @uses /backend/resources/views/emails/orders/organizer/summary-for-organizer.blade.php

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace TicketKitten\Service\Handler\Order;
+namespace HiEvents\Service\Handler\Order;
 
 use Carbon\Carbon;
 use Exception;
@@ -10,29 +10,29 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use RuntimeException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use TicketKitten\DomainObjects\AttendeeDomainObject;
-use TicketKitten\DomainObjects\Generated\AttendeeDomainObjectAbstract;
-use TicketKitten\DomainObjects\Generated\OrderDomainObjectAbstract;
-use TicketKitten\DomainObjects\Generated\TicketPriceDomainObjectAbstract;
-use TicketKitten\DomainObjects\OrderDomainObject;
-use TicketKitten\DomainObjects\OrderItemDomainObject;
-use TicketKitten\DomainObjects\Status\AttendeeStatus;
-use TicketKitten\DomainObjects\Status\OrderPaymentStatus;
-use TicketKitten\DomainObjects\Status\OrderStatus;
-use TicketKitten\DomainObjects\TicketPriceDomainObject;
-use TicketKitten\Events\OrderStatusChangedEvent;
-use TicketKitten\Exceptions\ResourceConflictException;
-use TicketKitten\Helper\IdHelper;
-use TicketKitten\Http\DataTransferObjects\CompleteOrderAttendeeDTO;
-use TicketKitten\Http\DataTransferObjects\CompleteOrderDTO;
-use TicketKitten\Http\DataTransferObjects\CompleteOrderOrderDTO;
-use TicketKitten\Http\DataTransferObjects\OrderQuestionsDTO;
-use TicketKitten\Repository\Interfaces\AttendeeRepositoryInterface;
-use TicketKitten\Repository\Interfaces\OrderRepositoryInterface;
-use TicketKitten\Repository\Interfaces\QuestionAnswerRepositoryInterface;
-use TicketKitten\Repository\Interfaces\TicketPriceRepositoryInterface;
-use TicketKitten\Service\Common\Payment\Stripe\EventHandlers\PaymentIntentSucceededHandler;
-use TicketKitten\Service\Common\Ticket\TicketQuantityUpdateService;
+use HiEvents\DomainObjects\AttendeeDomainObject;
+use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
+use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
+use HiEvents\DomainObjects\Generated\TicketPriceDomainObjectAbstract;
+use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\DomainObjects\OrderItemDomainObject;
+use HiEvents\DomainObjects\Status\AttendeeStatus;
+use HiEvents\DomainObjects\Status\OrderPaymentStatus;
+use HiEvents\DomainObjects\Status\OrderStatus;
+use HiEvents\DomainObjects\TicketPriceDomainObject;
+use HiEvents\Events\OrderStatusChangedEvent;
+use HiEvents\Exceptions\ResourceConflictException;
+use HiEvents\Helper\IdHelper;
+use HiEvents\Http\DataTransferObjects\CompleteOrderAttendeeDTO;
+use HiEvents\Http\DataTransferObjects\CompleteOrderDTO;
+use HiEvents\Http\DataTransferObjects\CompleteOrderOrderDTO;
+use HiEvents\Http\DataTransferObjects\OrderQuestionsDTO;
+use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
+use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
+use HiEvents\Repository\Interfaces\QuestionAnswerRepositoryInterface;
+use HiEvents\Repository\Interfaces\TicketPriceRepositoryInterface;
+use HiEvents\Service\Common\Payment\Stripe\EventHandlers\PaymentIntentSucceededHandler;
+use HiEvents\Service\Common\Ticket\TicketQuantityUpdateService;
 
 /**
  * @todo - Tidy this up

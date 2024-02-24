@@ -1,17 +1,17 @@
 <?php
 
-namespace TicketKitten\Service\Handler\PromoCode;
+namespace HiEvents\Service\Handler\PromoCode;
 
-use TicketKitten\DomainObjects\Enums\PromoCodeDiscountTypeEnum;
-use TicketKitten\DomainObjects\Generated\PromoCodeDomainObjectAbstract;
-use TicketKitten\DomainObjects\PromoCodeDomainObject;
-use TicketKitten\Exceptions\ResourceConflictException;
-use TicketKitten\Helper\DateHelper;
-use TicketKitten\Http\DataTransferObjects\UpsertPromoCodeDTO;
-use TicketKitten\Repository\Interfaces\EventRepositoryInterface;
-use TicketKitten\Repository\Interfaces\PromoCodeRepositoryInterface;
-use TicketKitten\Service\Common\Ticket\EventTicketValidationService;
-use TicketKitten\Service\Common\Ticket\Exception\UnrecognizedTicketIdException;
+use HiEvents\DomainObjects\Enums\PromoCodeDiscountTypeEnum;
+use HiEvents\DomainObjects\Generated\PromoCodeDomainObjectAbstract;
+use HiEvents\DomainObjects\PromoCodeDomainObject;
+use HiEvents\Exceptions\ResourceConflictException;
+use HiEvents\Helper\DateHelper;
+use HiEvents\Http\DataTransferObjects\UpsertPromoCodeDTO;
+use HiEvents\Repository\Interfaces\EventRepositoryInterface;
+use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
+use HiEvents\Service\Common\Ticket\EventTicketValidationService;
+use HiEvents\Service\Common\Ticket\Exception\UnrecognizedTicketIdException;
 
 readonly class UpdatePromoCodeHandler
 {

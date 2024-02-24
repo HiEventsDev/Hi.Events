@@ -1,16 +1,16 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Orders;
+namespace HiEvents\Http\Actions\Orders;
 
 use Illuminate\Http\Response;
 use Illuminate\Mail\Mailer;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\DomainObjects\Generated\OrderDomainObjectAbstract;
-use TicketKitten\DomainObjects\OrderItemDomainObject;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Mail\OrderSummary;
-use TicketKitten\Repository\Interfaces\EventRepositoryInterface;
-use TicketKitten\Repository\Interfaces\OrderRepositoryInterface;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
+use HiEvents\DomainObjects\OrderItemDomainObject;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Mail\OrderSummary;
+use HiEvents\Repository\Interfaces\EventRepositoryInterface;
+use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 
 class ResendOrderConfirmationAction extends BaseAction
 {

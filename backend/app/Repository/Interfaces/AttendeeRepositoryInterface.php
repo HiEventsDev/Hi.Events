@@ -1,11 +1,11 @@
 <?php
 
-namespace TicketKitten\Repository\Interfaces;
+namespace HiEvents\Repository\Interfaces;
 
 use Illuminate\Pagination\LengthAwarePaginator;
-use TicketKitten\DomainObjects\AttendeeDomainObject;
-use TicketKitten\Http\DataTransferObjects\QueryParamsDTO;
-use TicketKitten\Repository\Eloquent\BaseRepository;
+use HiEvents\DomainObjects\AttendeeDomainObject;
+use HiEvents\Http\DataTransferObjects\QueryParamsDTO;
+use HiEvents\Repository\Eloquent\BaseRepository;
 
 /**
  * @extends BaseRepository<AttendeeDomainObject>

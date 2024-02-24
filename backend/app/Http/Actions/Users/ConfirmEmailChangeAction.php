@@ -1,16 +1,16 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Users;
+namespace HiEvents\Http\Actions\Users;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Throwable;
-use TicketKitten\DomainObjects\UserDomainObject;
-use TicketKitten\Exceptions\DecryptionFailedException;
-use TicketKitten\Exceptions\EncryptedPayloadExpiredException;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Resources\User\UserResource;
-use TicketKitten\Service\Handler\User\ConfirmEmailChangeHandler;
+use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\Exceptions\DecryptionFailedException;
+use HiEvents\Exceptions\EncryptedPayloadExpiredException;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Resources\User\UserResource;
+use HiEvents\Service\Handler\User\ConfirmEmailChangeHandler;
 
 class ConfirmEmailChangeAction extends BaseAction
 {

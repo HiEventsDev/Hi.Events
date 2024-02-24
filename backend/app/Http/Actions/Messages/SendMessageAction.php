@@ -1,14 +1,14 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Messages;
+namespace HiEvents\Http\Actions\Messages;
 
 use Illuminate\Http\JsonResponse;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Http\DataTransferObjects\SendMessageDTO;
-use TicketKitten\Http\Request\Message\SendMessageRequest;
-use TicketKitten\Resources\Message\MessageResource;
-use TicketKitten\Service\Handler\Message\SendMessageHandler;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\DataTransferObjects\SendMessageDTO;
+use HiEvents\Http\Request\Message\SendMessageRequest;
+use HiEvents\Resources\Message\MessageResource;
+use HiEvents\Service\Handler\Message\SendMessageHandler;
 
 class SendMessageAction extends BaseAction
 {

@@ -1,12 +1,12 @@
 <?php
 
-namespace TicketKitten\Http\Actions\PromoCodes;
+namespace HiEvents\Http\Actions\PromoCodes;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use TicketKitten\DomainObjects\Generated\PromoCodeDomainObjectAbstract;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Repository\Interfaces\PromoCodeRepositoryInterface;
+use HiEvents\DomainObjects\Generated\PromoCodeDomainObjectAbstract;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
 
 class GetPromoCodePublic extends BaseAction
 {

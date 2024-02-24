@@ -1,10 +1,10 @@
 <?php
 
-namespace TicketKitten\Repository\Eloquent;
+namespace HiEvents\Repository\Eloquent;
 
-use TicketKitten\DomainObjects\TaxAndFeesDomainObject;
-use TicketKitten\Models\TaxAndFee;
-use TicketKitten\Repository\Interfaces\TaxAndFeeRepositoryInterface;
+use HiEvents\DomainObjects\TaxAndFeesDomainObject;
+use HiEvents\Models\TaxAndFee;
+use HiEvents\Repository\Interfaces\TaxAndFeeRepositoryInterface;
 
 class TaxAndFeeRepository extends BaseRepository implements TaxAndFeeRepositoryInterface
 {

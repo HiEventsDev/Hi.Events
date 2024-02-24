@@ -1,17 +1,17 @@
 <?php
 
-namespace TicketKitten\Service\Handler\Ticket;
+namespace HiEvents\Service\Handler\Ticket;
 
 use Illuminate\Database\DatabaseManager;
 use Psr\Log\LoggerInterface;
 use Throwable;
-use TicketKitten\DomainObjects\Generated\AttendeeDomainObjectAbstract;
-use TicketKitten\DomainObjects\Generated\TicketDomainObjectAbstract;
-use TicketKitten\DomainObjects\Generated\TicketPriceDomainObjectAbstract;
-use TicketKitten\Exceptions\CannotDeleteEntityException;
-use TicketKitten\Repository\Interfaces\AttendeeRepositoryInterface;
-use TicketKitten\Repository\Interfaces\TicketPriceRepositoryInterface;
-use TicketKitten\Repository\Interfaces\TicketRepositoryInterface;
+use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
+use HiEvents\DomainObjects\Generated\TicketDomainObjectAbstract;
+use HiEvents\DomainObjects\Generated\TicketPriceDomainObjectAbstract;
+use HiEvents\Exceptions\CannotDeleteEntityException;
+use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
+use HiEvents\Repository\Interfaces\TicketPriceRepositoryInterface;
+use HiEvents\Repository\Interfaces\TicketRepositoryInterface;
 
 readonly class DeleteTicketHandler
 {

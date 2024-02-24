@@ -1,10 +1,10 @@
 <?php
 
-namespace TicketKitten\Repository\Eloquent;
+namespace HiEvents\Repository\Eloquent;
 
-use TicketKitten\DomainObjects\TicketPriceDomainObject;
-use TicketKitten\Models\TicketPrice;
-use TicketKitten\Repository\Interfaces\TicketPriceRepositoryInterface;
+use HiEvents\DomainObjects\TicketPriceDomainObject;
+use HiEvents\Models\TicketPrice;
+use HiEvents\Repository\Interfaces\TicketPriceRepositoryInterface;
 
 class TicketPriceRepository extends BaseRepository implements TicketPriceRepositoryInterface
 {

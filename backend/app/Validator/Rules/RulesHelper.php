@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten\Validator\Rules;
+namespace HiEvents\Validator\Rules;
 
 class RulesHelper
 {

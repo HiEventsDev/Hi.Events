@@ -1,10 +1,10 @@
 <?php
 
-namespace TicketKitten\Repository\Eloquent;
+namespace HiEvents\Repository\Eloquent;
 
-use TicketKitten\DomainObjects\QuestionAndAnswerViewDomainObject;
-use TicketKitten\Models\QuestionAndAnswerView;
-use TicketKitten\Repository\Interfaces\QuestionAndAnswerViewRepositoryInterface;
+use HiEvents\DomainObjects\QuestionAndAnswerViewDomainObject;
+use HiEvents\Models\QuestionAndAnswerView;
+use HiEvents\Repository\Interfaces\QuestionAndAnswerViewRepositoryInterface;
 
 class QuestionAndAnswerViewRepository extends BaseRepository implements QuestionAndAnswerViewRepositoryInterface
 {

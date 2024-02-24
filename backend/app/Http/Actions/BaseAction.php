@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace TicketKitten\Http\Actions;
+namespace HiEvents\Http\Actions;
 
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\JsonResponse;
@@ -12,16 +12,16 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
-use TicketKitten\DomainObjects\Enums\Role;
-use TicketKitten\DomainObjects\Interfaces\DomainObjectInterface;
-use TicketKitten\DomainObjects\Interfaces\IsFilterable;
-use TicketKitten\DomainObjects\Interfaces\IsSortable;
-use TicketKitten\DomainObjects\UserDomainObject;
-use TicketKitten\DataTransferObjects\BaseDTO;
-use TicketKitten\Exceptions\UnauthorizedException;
-use TicketKitten\Http\ResponseCodes;
-use TicketKitten\Resources\BaseResource;
-use TicketKitten\Service\Authorization\IsAuthorizedService;
+use HiEvents\DomainObjects\Enums\Role;
+use HiEvents\DomainObjects\Interfaces\DomainObjectInterface;
+use HiEvents\DomainObjects\Interfaces\IsFilterable;
+use HiEvents\DomainObjects\Interfaces\IsSortable;
+use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\DataTransferObjects\BaseDTO;
+use HiEvents\Exceptions\UnauthorizedException;
+use HiEvents\Http\ResponseCodes;
+use HiEvents\Resources\BaseResource;
+use HiEvents\Service\Authorization\IsAuthorizedService;
 
 abstract class BaseAction extends Controller
 {

@@ -1,12 +1,12 @@
 <?php
 
-namespace TicketKitten\DomainObjects;
+namespace HiEvents\DomainObjects;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-use TicketKitten\DomainObjects\Interfaces\IsSortable;
-use TicketKitten\DomainObjects\SortingAndFiltering\AllowedSorts;
-use TicketKitten\Helper\StringHelper;
+use HiEvents\DomainObjects\Interfaces\IsSortable;
+use HiEvents\DomainObjects\SortingAndFiltering\AllowedSorts;
+use HiEvents\Helper\StringHelper;
 
 class EventDomainObject extends Generated\EventDomainObjectAbstract implements IsSortable
 {

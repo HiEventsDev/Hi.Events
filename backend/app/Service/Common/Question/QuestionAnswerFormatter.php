@@ -1,8 +1,8 @@
 <?php
 
-namespace TicketKitten\Service\Common\Question;
+namespace HiEvents\Service\Common\Question;
 
-use TicketKitten\DomainObjects\Enums\QuestionTypeEnum;
+use HiEvents\DomainObjects\Enums\QuestionTypeEnum;
 
 class QuestionAnswerFormatter
 {

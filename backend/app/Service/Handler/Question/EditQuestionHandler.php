@@ -1,14 +1,14 @@
 <?php
 
-namespace TicketKitten\Service\Handler\Question;
+namespace HiEvents\Service\Handler\Question;
 
 use Illuminate\Support\Facades\DB;
-use TicketKitten\DomainObjects\Generated\QuestionDomainObjectAbstract;
-use TicketKitten\DomainObjects\QuestionDomainObject;
-use TicketKitten\DomainObjects\TicketDomainObject;
-use TicketKitten\Http\DataTransferObjects\UpsertQuestionDTO;
-use TicketKitten\Repository\Eloquent\QuestionRepository;
-use TicketKitten\Repository\Interfaces\QuestionRepositoryInterface;
+use HiEvents\DomainObjects\Generated\QuestionDomainObjectAbstract;
+use HiEvents\DomainObjects\QuestionDomainObject;
+use HiEvents\DomainObjects\TicketDomainObject;
+use HiEvents\Http\DataTransferObjects\UpsertQuestionDTO;
+use HiEvents\Repository\Eloquent\QuestionRepository;
+use HiEvents\Repository\Interfaces\QuestionRepositoryInterface;
 
 readonly class EditQuestionHandler
 {

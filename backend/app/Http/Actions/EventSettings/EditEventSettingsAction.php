@@ -1,14 +1,14 @@
 <?php
 
-namespace TicketKitten\Http\Actions\EventSettings;
+namespace HiEvents\Http\Actions\EventSettings;
 
 use Illuminate\Http\JsonResponse;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Http\DataTransferObjects\UpdateEventSettingsDTO;
-use TicketKitten\Http\Request\EventSettings\UpdateEventSettingsRequest;
-use TicketKitten\Resources\Event\EventSettingsResource;
-use TicketKitten\Service\Handler\EventSettings\UpdateEventSettingsHandler;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\DataTransferObjects\UpdateEventSettingsDTO;
+use HiEvents\Http\Request\EventSettings\UpdateEventSettingsRequest;
+use HiEvents\Resources\Event\EventSettingsResource;
+use HiEvents\Service\Handler\EventSettings\UpdateEventSettingsHandler;
 
 class EditEventSettingsAction extends BaseAction
 {

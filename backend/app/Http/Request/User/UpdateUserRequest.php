@@ -1,12 +1,12 @@
 <?php
 
-namespace TicketKitten\Http\Request\User;
+namespace HiEvents\Http\Request\User;
 
 use Illuminate\Validation\Rule;
-use TicketKitten\DomainObjects\Enums\Role;
-use TicketKitten\DomainObjects\Status\UserStatus;
-use TicketKitten\Http\Request\BaseRequest;
-use TicketKitten\Validator\Rules\RulesHelper;
+use HiEvents\DomainObjects\Enums\Role;
+use HiEvents\DomainObjects\Status\UserStatus;
+use HiEvents\Http\Request\BaseRequest;
+use HiEvents\Validator\Rules\RulesHelper;
 
 class UpdateUserRequest extends BaseRequest
 {

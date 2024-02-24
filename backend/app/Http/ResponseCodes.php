@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten\Http;
+namespace HiEvents\Http;
 
 class ResponseCodes
 {

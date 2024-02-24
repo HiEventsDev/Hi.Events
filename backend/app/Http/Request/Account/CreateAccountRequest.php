@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace TicketKitten\Http\Request\Account;
+namespace HiEvents\Http\Request\Account;
 
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
-use TicketKitten\Http\Request\BaseRequest;
-use TicketKitten\Validator\Rules\RulesHelper;
+use HiEvents\Http\Request\BaseRequest;
+use HiEvents\Validator\Rules\RulesHelper;
 
 class CreateAccountRequest extends BaseRequest
 {

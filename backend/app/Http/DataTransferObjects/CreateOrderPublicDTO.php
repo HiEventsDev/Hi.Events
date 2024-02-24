@@ -1,9 +1,9 @@
 <?php
 
-namespace TicketKitten\Http\DataTransferObjects;
+namespace HiEvents\Http\DataTransferObjects;
 
 use Illuminate\Support\Collection;
-use TicketKitten\DataTransferObjects\BaseDTO;
+use HiEvents\DataTransferObjects\BaseDTO;
 
 class CreateOrderPublicDTO extends BaseDTO
 {

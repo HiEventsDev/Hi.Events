@@ -1,10 +1,10 @@
 <?php
 
-namespace TicketKitten\Resources\Account;
+namespace HiEvents\Resources\Account;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use TicketKitten\DomainObjects\AccountDomainObject;
+use HiEvents\DomainObjects\AccountDomainObject;
 
 /**
  * @mixin AccountDomainObject

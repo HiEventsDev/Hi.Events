@@ -1,8 +1,8 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Events;
+namespace HiEvents\Http\Actions\Events;
 
-use TicketKitten\Http\Actions\BaseAction;
+use HiEvents\Http\Actions\BaseAction;
 
 class DuplicateEventAction extends BaseAction
 {

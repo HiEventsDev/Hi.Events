@@ -1,15 +1,15 @@
 <?php
 
-namespace TicketKitten\Service\Common\Ticket;
+namespace HiEvents\Service\Common\Ticket;
 
 use Illuminate\Support\Collection;
-use TicketKitten\DomainObjects\Enums\TicketType;
-use TicketKitten\DomainObjects\TicketDomainObject;
-use TicketKitten\DomainObjects\TicketPriceDomainObject;
-use TicketKitten\Exceptions\CannotDeleteEntityException;
-use TicketKitten\Http\DataTransferObjects\TicketPriceDTO;
-use TicketKitten\Http\DataTransferObjects\UpsertTicketDTO;
-use TicketKitten\Repository\Eloquent\TicketPriceRepository;
+use HiEvents\DomainObjects\Enums\TicketType;
+use HiEvents\DomainObjects\TicketDomainObject;
+use HiEvents\DomainObjects\TicketPriceDomainObject;
+use HiEvents\Exceptions\CannotDeleteEntityException;
+use HiEvents\Http\DataTransferObjects\TicketPriceDTO;
+use HiEvents\Http\DataTransferObjects\UpsertTicketDTO;
+use HiEvents\Repository\Eloquent\TicketPriceRepository;
 
 readonly class TicketPriceUpdateService
 {

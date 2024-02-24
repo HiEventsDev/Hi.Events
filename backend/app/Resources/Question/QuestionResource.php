@@ -1,11 +1,11 @@
 <?php
 
-namespace TicketKitten\Resources\Question;
+namespace HiEvents\Resources\Question;
 
 use Illuminate\Http\Request;
-use TicketKitten\DomainObjects\QuestionDomainObject;
-use TicketKitten\Resources\BaseResource;
-use TicketKitten\Resources\Ticket\TicketResource;
+use HiEvents\DomainObjects\QuestionDomainObject;
+use HiEvents\Resources\BaseResource;
+use HiEvents\Resources\Ticket\TicketResource;
 
 /**
  * @mixin QuestionDomainObject

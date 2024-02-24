@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten\Helper;
+namespace HiEvents\Helper;
 
 class StringHelper
 {

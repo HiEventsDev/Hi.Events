@@ -1,11 +1,11 @@
 <?php
 
-namespace TicketKitten\Http\Request\Questions;
+namespace HiEvents\Http\Request\Questions;
 
 use Illuminate\Validation\Rule;
-use TicketKitten\DomainObjects\Enums\QuestionBelongsTo;
-use TicketKitten\DomainObjects\Enums\QuestionTypeEnum;
-use TicketKitten\Http\Request\BaseRequest;
+use HiEvents\DomainObjects\Enums\QuestionBelongsTo;
+use HiEvents\DomainObjects\Enums\QuestionTypeEnum;
+use HiEvents\Http\Request\BaseRequest;
 
 class UpsertQuestionRequest extends BaseRequest
 {

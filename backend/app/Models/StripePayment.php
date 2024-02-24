@@ -1,9 +1,9 @@
 <?php
 
-namespace TicketKitten\Models;
+namespace HiEvents\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use TicketKitten\DomainObjects\Generated\StripePaymentDomainObjectAbstract;
+use HiEvents\DomainObjects\Generated\StripePaymentDomainObjectAbstract;
 
 class StripePayment extends BaseModel
 {

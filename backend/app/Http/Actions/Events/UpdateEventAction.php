@@ -1,17 +1,17 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Events;
+namespace HiEvents\Http\Actions\Events;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 use Throwable;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\Exceptions\CannotChangeCurrencyException;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Http\DataTransferObjects\UpdateEventDTO;
-use TicketKitten\Http\Request\Event\UpdateEventRequest;
-use TicketKitten\Resources\Event\EventResource;
-use TicketKitten\Service\Handler\Event\UpdateEventHandler;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\Exceptions\CannotChangeCurrencyException;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\DataTransferObjects\UpdateEventDTO;
+use HiEvents\Http\Request\Event\UpdateEventRequest;
+use HiEvents\Resources\Event\EventResource;
+use HiEvents\Service\Handler\Event\UpdateEventHandler;
 
 class UpdateEventAction extends BaseAction
 {

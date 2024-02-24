@@ -1,9 +1,9 @@
 <?php
 
-namespace TicketKitten\Service\Common\Ticket;
+namespace HiEvents\Service\Common\Ticket;
 
 use Illuminate\Support\Facades\DB;
-use TicketKitten\Repository\Interfaces\TicketPriceRepositoryInterface;
+use HiEvents\Repository\Interfaces\TicketPriceRepositoryInterface;
 
 readonly class TicketQuantityService
 {

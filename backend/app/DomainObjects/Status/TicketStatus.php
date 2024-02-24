@@ -1,8 +1,8 @@
 <?php
 
-namespace TicketKitten\DomainObjects\Status;
+namespace HiEvents\DomainObjects\Status;
 
-use TicketKitten\DomainObjects\Enums\BaseEnum;
+use HiEvents\DomainObjects\Enums\BaseEnum;
 
 enum TicketStatus
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten\Exceptions\Stripe;
+namespace HiEvents\Exceptions\Stripe;
 
 use Exception;
 

@@ -1,14 +1,14 @@
 <?php
 
-namespace TicketKitten\Service\Common\Ticket;
+namespace HiEvents\Service\Common\Ticket;
 
-use TicketKitten\DomainObjects\Enums\TicketType;
-use TicketKitten\DomainObjects\PromoCodeDomainObject;
-use TicketKitten\DomainObjects\TicketDomainObject;
-use TicketKitten\DomainObjects\TicketPriceDomainObject;
-use TicketKitten\Helper\Currency;
-use TicketKitten\Http\DataTransferObjects\OrderTicketPriceDTO;
-use TicketKitten\Service\Common\Ticket\DTO\PriceDTO;
+use HiEvents\DomainObjects\Enums\TicketType;
+use HiEvents\DomainObjects\PromoCodeDomainObject;
+use HiEvents\DomainObjects\TicketDomainObject;
+use HiEvents\DomainObjects\TicketPriceDomainObject;
+use HiEvents\Helper\Currency;
+use HiEvents\Http\DataTransferObjects\OrderTicketPriceDTO;
+use HiEvents\Service\Common\Ticket\DTO\PriceDTO;
 
 class TicketPriceService
 {

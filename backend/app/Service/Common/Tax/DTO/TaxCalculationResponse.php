@@ -1,8 +1,8 @@
 <?php
 
-namespace TicketKitten\Service\Common\Tax\DTO;
+namespace HiEvents\Service\Common\Tax\DTO;
 
-use TicketKitten\DataTransferObjects\BaseDTO;
+use HiEvents\DataTransferObjects\BaseDTO;
 
 class TaxCalculationResponse extends BaseDTO
 {

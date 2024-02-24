@@ -1,15 +1,15 @@
 <?php
 
-namespace TicketKitten\Service\Handler\Organizer;
+namespace HiEvents\Service\Handler\Organizer;
 
 use Illuminate\Database\DatabaseManager;
 use Throwable;
-use TicketKitten\DomainObjects\Enums\OrganizerImageType;
-use TicketKitten\DomainObjects\ImageDomainObject;
-use TicketKitten\DomainObjects\OrganizerDomainObject;
-use TicketKitten\Http\DataTransferObjects\CreateOrganizerDTO;
-use TicketKitten\Repository\Interfaces\OrganizerRepositoryInterface;
-use TicketKitten\Service\Common\Image\ImageUploadService;
+use HiEvents\DomainObjects\Enums\OrganizerImageType;
+use HiEvents\DomainObjects\ImageDomainObject;
+use HiEvents\DomainObjects\OrganizerDomainObject;
+use HiEvents\Http\DataTransferObjects\CreateOrganizerDTO;
+use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
+use HiEvents\Service\Common\Image\ImageUploadService;
 
 readonly class CreateOrganizerHandler
 {

@@ -1,15 +1,15 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Users;
+namespace HiEvents\Http\Actions\Users;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
-use TicketKitten\Exceptions\CannotUpdateResourceException;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Http\DataTransferObjects\UpdateUserDTO;
-use TicketKitten\Http\Request\User\UpdateUserRequest;
-use TicketKitten\Resources\User\UserResource;
-use TicketKitten\Service\Handler\User\UpdateUserHandler;
+use HiEvents\Exceptions\CannotUpdateResourceException;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\DataTransferObjects\UpdateUserDTO;
+use HiEvents\Http\Request\User\UpdateUserRequest;
+use HiEvents\Resources\User\UserResource;
+use HiEvents\Service\Handler\User\UpdateUserHandler;
 
 class UpdateUserAction extends BaseAction
 {

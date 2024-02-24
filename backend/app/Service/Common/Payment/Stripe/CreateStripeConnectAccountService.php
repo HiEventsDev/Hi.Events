@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten\Service\Common\Payment\Stripe;
+namespace HiEvents\Service\Common\Payment\Stripe;
 
 use Stripe\StripeClient;
 

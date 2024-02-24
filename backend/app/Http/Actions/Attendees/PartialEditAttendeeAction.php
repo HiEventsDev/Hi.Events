@@ -1,15 +1,15 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Attendees;
+namespace HiEvents\Http\Actions\Attendees;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Http\Request\Attendee\PartialEditAttendeeRequest;
-use TicketKitten\Repository\Interfaces\AttendeeRepositoryInterface;
-use TicketKitten\Resources\Attendee\AttendeeResource;
-use TicketKitten\Service\Common\Ticket\TicketQuantityService;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\Request\Attendee\PartialEditAttendeeRequest;
+use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
+use HiEvents\Resources\Attendee\AttendeeResource;
+use HiEvents\Service\Common\Ticket\TicketQuantityService;
 
 class PartialEditAttendeeAction extends BaseAction
 {

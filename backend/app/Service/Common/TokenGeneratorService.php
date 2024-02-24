@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten\Service\Common;
+namespace HiEvents\Service\Common;
 
 use Random\Randomizer;
 use InvalidArgumentException;

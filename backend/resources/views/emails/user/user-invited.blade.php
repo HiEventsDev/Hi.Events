@@ -1,16 +1,16 @@
-@php /** @var \TicketKitten\DomainObjects\UserDomainObject $invitedUser */ @endphp
+@php /** @var \HiEvents\DomainObjects\UserDomainObject $invitedUser */ @endphp
 @php /** @var string $inviteLink */ @endphp
 @php /** @var string $appName */ @endphp
 
 <x-mail::message>
-Hi {{ $invitedUser->getFirstName() }},
+    Hi {{ $invitedUser->getFirstName() }},
 
-You've been invited to join {{ $appName }}.
+    You've been invited to join {{ $appName }}.
 
-To accept the invitation, please click the link below:
+    To accept the invitation, please click the link below:
 
-<a href="{{ $inviteLink }}">Accept Invitation</a>
+    <a href="{{ $inviteLink }}">Accept Invitation</a>
 
-Thank you,<br>
-{{ $appName }}
+    Thank you,<br>
+    {{ $appName }}
 </x-mail::message>

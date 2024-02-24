@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace TicketKitten\Repository\Eloquent;
+namespace HiEvents\Repository\Eloquent;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
-use TicketKitten\Constants;
-use TicketKitten\DomainObjects\Generated\TicketDomainObjectAbstract;
-use TicketKitten\DomainObjects\TaxAndFeesDomainObject;
-use TicketKitten\DomainObjects\TicketDomainObject;
-use TicketKitten\Http\DataTransferObjects\QueryParamsDTO;
-use TicketKitten\Models\Ticket;
-use TicketKitten\Repository\Interfaces\TicketRepositoryInterface;
+use HiEvents\Constants;
+use HiEvents\DomainObjects\Generated\TicketDomainObjectAbstract;
+use HiEvents\DomainObjects\TaxAndFeesDomainObject;
+use HiEvents\DomainObjects\TicketDomainObject;
+use HiEvents\Http\DataTransferObjects\QueryParamsDTO;
+use HiEvents\Models\Ticket;
+use HiEvents\Repository\Interfaces\TicketRepositoryInterface;
 
 class TicketRepository extends BaseRepository implements TicketRepositoryInterface
 {

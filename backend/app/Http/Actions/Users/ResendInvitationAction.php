@@ -1,13 +1,13 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Users;
+namespace HiEvents\Http\Actions\Users;
 
 use Illuminate\Http\Response;
-use TicketKitten\DomainObjects\Enums\Role;
-use TicketKitten\DomainObjects\Status\UserStatus;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Repository\Interfaces\UserRepositoryInterface;
-use TicketKitten\Service\Common\User\SendUserInvitationService;
+use HiEvents\DomainObjects\Enums\Role;
+use HiEvents\DomainObjects\Status\UserStatus;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Repository\Interfaces\UserRepositoryInterface;
+use HiEvents\Service\Common\User\SendUserInvitationService;
 
 class ResendInvitationAction extends BaseAction
 {

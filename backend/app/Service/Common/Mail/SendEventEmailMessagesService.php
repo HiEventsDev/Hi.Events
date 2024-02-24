@@ -1,26 +1,26 @@
 <?php
 
-namespace TicketKitten\Service\Common\Mail;
+namespace HiEvents\Service\Common\Mail;
 
 use Illuminate\Mail\Mailer;
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpKernel\Log\Logger;
-use TicketKitten\DomainObjects\AttendeeDomainObject;
-use TicketKitten\DomainObjects\Enums\MessageTypeEnum;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\DomainObjects\OrderDomainObject;
-use TicketKitten\DomainObjects\OrganizerDomainObject;
-use TicketKitten\DomainObjects\Status\AttendeeStatus;
-use TicketKitten\DomainObjects\Status\MessageStatus;
-use TicketKitten\Exceptions\UnableToSendMessageException;
-use TicketKitten\Http\DataTransferObjects\SendMessageDTO;
-use TicketKitten\Mail\EventMessage;
-use TicketKitten\Repository\Eloquent\Value\Relationship;
-use TicketKitten\Repository\Interfaces\AttendeeRepositoryInterface;
-use TicketKitten\Repository\Interfaces\EventRepositoryInterface;
-use TicketKitten\Repository\Interfaces\MessageRepositoryInterface;
-use TicketKitten\Repository\Interfaces\OrderRepositoryInterface;
-use TicketKitten\Repository\Interfaces\UserRepositoryInterface;
+use HiEvents\DomainObjects\AttendeeDomainObject;
+use HiEvents\DomainObjects\Enums\MessageTypeEnum;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\DomainObjects\OrganizerDomainObject;
+use HiEvents\DomainObjects\Status\AttendeeStatus;
+use HiEvents\DomainObjects\Status\MessageStatus;
+use HiEvents\Exceptions\UnableToSendMessageException;
+use HiEvents\Http\DataTransferObjects\SendMessageDTO;
+use HiEvents\Mail\EventMessage;
+use HiEvents\Repository\Eloquent\Value\Relationship;
+use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventRepositoryInterface;
+use HiEvents\Repository\Interfaces\MessageRepositoryInterface;
+use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
+use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 
 readonly class SendEventEmailMessagesService
 {

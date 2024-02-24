@@ -1,14 +1,14 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Common\Webhooks;
+namespace HiEvents\Http\Actions\Common\Webhooks;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Throwable;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Http\DataTransferObjects\StripeWebhookDTO;
-use TicketKitten\Http\ResponseCodes;
-use TicketKitten\Service\Handler\Order\Payment\Stripe\IncomingWebhookHandler;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\DataTransferObjects\StripeWebhookDTO;
+use HiEvents\Http\ResponseCodes;
+use HiEvents\Service\Handler\Order\Payment\Stripe\IncomingWebhookHandler;
 
 class StripeIncomingWebhookAction extends BaseAction
 {

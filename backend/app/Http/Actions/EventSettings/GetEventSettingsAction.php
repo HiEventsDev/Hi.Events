@@ -1,13 +1,13 @@
 <?php
 
-namespace TicketKitten\Http\Actions\EventSettings;
+namespace HiEvents\Http\Actions\EventSettings;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Repository\Interfaces\EventSettingsRepositoryInterface;
-use TicketKitten\Resources\Event\EventSettingsResource;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
+use HiEvents\Resources\Event\EventSettingsResource;
 
 class GetEventSettingsAction extends BaseAction
 {

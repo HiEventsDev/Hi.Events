@@ -1,10 +1,10 @@
 <?php
 
-namespace TicketKitten\Mail;
+namespace HiEvents\Mail;
 
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
-use TicketKitten\DomainObjects\UserDomainObject;
+use HiEvents\DomainObjects\UserDomainObject;
 
 /**
  * @uses /backend/resources/views/emails/user/user-invited.blade.php

@@ -1,14 +1,14 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Tickets;
+namespace HiEvents\Http\Actions\Tickets;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\Exceptions\ResourceConflictException;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Http\Request\Ticket\SortTicketsRequest;
-use TicketKitten\Service\Handler\Ticket\SortTicketsHandler;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\Exceptions\ResourceConflictException;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\Request\Ticket\SortTicketsRequest;
+use HiEvents\Service\Handler\Ticket\SortTicketsHandler;
 
 class SortTicketsAction extends BaseAction
 {

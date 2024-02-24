@@ -1,13 +1,13 @@
 <?php
 
-namespace TicketKitten\DomainObjects;
+namespace HiEvents\DomainObjects;
 
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use LogicException;
-use TicketKitten\DomainObjects\Enums\TicketType;
-use TicketKitten\DomainObjects\Interfaces\IsSortable;
-use TicketKitten\DomainObjects\SortingAndFiltering\AllowedSorts;
+use HiEvents\DomainObjects\Enums\TicketType;
+use HiEvents\DomainObjects\Interfaces\IsSortable;
+use HiEvents\DomainObjects\SortingAndFiltering\AllowedSorts;
 
 class TicketDomainObject extends Generated\TicketDomainObjectAbstract implements IsSortable
 {

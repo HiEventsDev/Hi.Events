@@ -1,8 +1,8 @@
 <?php
 
-namespace TicketKitten\DomainObjects\Interfaces;
+namespace HiEvents\DomainObjects\Interfaces;
 
-use TicketKitten\DomainObjects\SortingAndFiltering\AllowedSorts;
+use HiEvents\DomainObjects\SortingAndFiltering\AllowedSorts;
 
 interface IsSortable
 {

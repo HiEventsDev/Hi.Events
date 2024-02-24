@@ -1,10 +1,10 @@
 <?php
 
-namespace TicketKitten\Http\Request\Message;
+namespace HiEvents\Http\Request\Message;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\In;
-use TicketKitten\DomainObjects\Enums\MessageTypeEnum;
+use HiEvents\DomainObjects\Enums\MessageTypeEnum;
 
 class SendMessageRequest extends FormRequest
 {

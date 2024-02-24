@@ -1,11 +1,11 @@
 <?php
 
-namespace TicketKitten\Service\Handler\Auth;
+namespace HiEvents\Service\Handler\Auth;
 
-use TicketKitten\Http\DataTransferObjects\LoginCredentialsDTO;
-use TicketKitten\Repository\Interfaces\UserRepositoryInterface;
-use TicketKitten\Service\Common\Auth\DTO\LoginResponse;
-use TicketKitten\Service\Common\Auth\LoginService;
+use HiEvents\Http\DataTransferObjects\LoginCredentialsDTO;
+use HiEvents\Repository\Interfaces\UserRepositoryInterface;
+use HiEvents\Service\Common\Auth\DTO\LoginResponse;
+use HiEvents\Service\Common\Auth\LoginService;
 
 class LoginHandler
 {

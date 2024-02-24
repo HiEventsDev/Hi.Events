@@ -1,12 +1,12 @@
 <?php
 
-namespace TicketKitten\Http\Middleware;
+namespace HiEvents\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
-use TicketKitten\Providers\RouteServiceProvider;
+use HiEvents\Providers\RouteServiceProvider;
 
 class RedirectIfAuthenticated
 {

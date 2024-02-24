@@ -1,14 +1,14 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Questions;
+namespace HiEvents\Http\Actions\Questions;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Throwable;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\Exceptions\CannotDeleteEntityException;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Service\Handler\Question\DeleteQuestionHandler;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\Exceptions\CannotDeleteEntityException;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Service\Handler\Question\DeleteQuestionHandler;
 
 class DeleteQuestionAction extends BaseAction
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace TicketKitten\DomainObjects;
+namespace HiEvents\DomainObjects;
 
-use TicketKitten\Helper\Currency;
+use HiEvents\Helper\Currency;
 
 class OrderItemDomainObject extends Generated\OrderItemDomainObjectAbstract
 {

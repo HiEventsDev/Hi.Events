@@ -1,17 +1,17 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Attendees;
+namespace HiEvents\Http\Actions\Attendees;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 use Throwable;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\Exceptions\NoTicketsAvailableException;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Http\DataTransferObjects\EditAttendeeDTO;
-use TicketKitten\Http\Request\Attendee\EditAttendeeRequest;
-use TicketKitten\Resources\Attendee\AttendeeResource;
-use TicketKitten\Service\Handler\Attendee\EditAttendeeHandler;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\Exceptions\NoTicketsAvailableException;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\DataTransferObjects\EditAttendeeDTO;
+use HiEvents\Http\Request\Attendee\EditAttendeeRequest;
+use HiEvents\Resources\Attendee\AttendeeResource;
+use HiEvents\Service\Handler\Attendee\EditAttendeeHandler;
 
 class EditAttendeeAction extends BaseAction
 {

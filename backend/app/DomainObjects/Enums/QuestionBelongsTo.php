@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten\DomainObjects\Enums;
+namespace HiEvents\DomainObjects\Enums;
 
 enum QuestionBelongsTo
 {

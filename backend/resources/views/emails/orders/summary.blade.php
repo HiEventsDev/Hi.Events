@@ -1,23 +1,23 @@
-@php use TicketKitten\Helper\Currency @endphp
+@php use HiEvents\Helper\Currency @endphp
 
 @php /** @uses /backend/app/Mail/OrderSummary.php */ @endphp
-@php /** @var \TicketKitten\DomainObjects\OrderDomainObject $order */ @endphp
-@php /** @var \TicketKitten\DomainObjects\EventDomainObject $event */ @endphp
+@php /** @var \HiEvents\DomainObjects\OrderDomainObject $order */ @endphp
+@php /** @var \HiEvents\DomainObjects\EventDomainObject $event */ @endphp
 
 <x-mail::message>
 # Your Order is Confirmed! 🎉
 <br>
-    Congratulations! Your order for <b>{{ $event->getTitle() }}</b> was successful! Please find your details below.
+Congratulations! Your order for <b>{{ $event->getTitle() }}</b> was successful! Please find your details below.
 <br>
 
 <div class="table">
     <table>
         <thead>
-            <tr>
-                <td><b>Ticket</b></td>
-                <td><b>Price</b></td>
-                <td><b>Total</b></td>
-            </tr>
+        <tr>
+            <td><b>Ticket</b></td>
+            <td><b>Price</b></td>
+            <td><b>Total</b></td>
+        </tr>
         </thead>
         <tbody>
         @foreach ($order->getOrderItems() as $ticket)
@@ -41,13 +41,13 @@
 </div>
 
 <x-mail::button :url="''">
-View Order Summary & Tickets
+    View Order Summary & Tickets
 </x-mail::button>
 
 If you have any questions or need assistance, feel free to reach out to our friendly support team
-at {{ $supportEmail ?? 'hello@ticketkitten.com' }}.
+at {{ $supportEmail ?? 'hello@hi.events' }}.
 
 Best regards,
 <br>
-TicketKitten.com
+{{config('app.name')}}
 </x-mail::message>

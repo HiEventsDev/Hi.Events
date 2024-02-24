@@ -1,21 +1,21 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Orders;
+namespace HiEvents\Http\Actions\Orders;
 
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use TicketKitten\DomainObjects\AttendeeDomainObject;
-use TicketKitten\DomainObjects\OrderItemDomainObject;
-use TicketKitten\DomainObjects\Status\OrderStatus;
-use TicketKitten\DomainObjects\TicketDomainObject;
-use TicketKitten\DomainObjects\TicketPriceDomainObject;
-use TicketKitten\Exceptions\UnauthorizedException;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Models\TicketPrice;
-use TicketKitten\Repository\Eloquent\Value\Relationship;
-use TicketKitten\Repository\Interfaces\OrderRepositoryInterface;
-use TicketKitten\Resources\Order\OrderResourcePublic;
-use TicketKitten\Service\Common\Session\SessionIdentifierService;
+use HiEvents\DomainObjects\AttendeeDomainObject;
+use HiEvents\DomainObjects\OrderItemDomainObject;
+use HiEvents\DomainObjects\Status\OrderStatus;
+use HiEvents\DomainObjects\TicketDomainObject;
+use HiEvents\DomainObjects\TicketPriceDomainObject;
+use HiEvents\Exceptions\UnauthorizedException;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Models\TicketPrice;
+use HiEvents\Repository\Eloquent\Value\Relationship;
+use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
+use HiEvents\Resources\Order\OrderResourcePublic;
+use HiEvents\Service\Common\Session\SessionIdentifierService;
 
 class GetOrderActionPublic extends BaseAction
 {

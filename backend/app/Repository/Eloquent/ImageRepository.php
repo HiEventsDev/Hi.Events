@@ -1,10 +1,10 @@
 <?php
 
-namespace TicketKitten\Repository\Eloquent;
+namespace HiEvents\Repository\Eloquent;
 
-use TicketKitten\DomainObjects\ImageDomainObject;
-use TicketKitten\Models\Image;
-use TicketKitten\Repository\Interfaces\ImageRepositoryInterface;
+use HiEvents\DomainObjects\ImageDomainObject;
+use HiEvents\Models\Image;
+use HiEvents\Repository\Interfaces\ImageRepositoryInterface;
 
 class ImageRepository extends BaseRepository implements ImageRepositoryInterface
 {

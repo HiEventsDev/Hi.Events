@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten\Exports;
+namespace HiEvents\Exports;
 
 use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -11,10 +11,10 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-use TicketKitten\DomainObjects\Enums\QuestionTypeEnum;
-use TicketKitten\DomainObjects\QuestionDomainObject;
-use TicketKitten\Resources\Attendee\AttendeeResource;
-use TicketKitten\Service\Common\Question\QuestionAnswerFormatter;
+use HiEvents\DomainObjects\Enums\QuestionTypeEnum;
+use HiEvents\DomainObjects\QuestionDomainObject;
+use HiEvents\Resources\Attendee\AttendeeResource;
+use HiEvents\Service\Common\Question\QuestionAnswerFormatter;
 
 readonly class AttendeesExport implements FromCollection, WithHeadings, WithMapping, WithStyles
 {

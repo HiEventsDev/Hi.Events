@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace TicketKitten\Http\Request\Order;
+namespace HiEvents\Http\Request\Order;
 
-use TicketKitten\Http\Request\BaseRequest;
-use TicketKitten\Validator\CompleteOrderValidator;
+use HiEvents\Http\Request\BaseRequest;
+use HiEvents\Validator\CompleteOrderValidator;
 
 class CompleteOrderRequest extends BaseRequest
 {

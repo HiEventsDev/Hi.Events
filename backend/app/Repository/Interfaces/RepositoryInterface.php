@@ -1,12 +1,12 @@
 <?php
 
-namespace TicketKitten\Repository\Interfaces;
+namespace HiEvents\Repository\Interfaces;
 
 use Exception;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
-use TicketKitten\DomainObjects\Interfaces\DomainObjectInterface;
+use HiEvents\DomainObjects\Interfaces\DomainObjectInterface;
 
 /**
  * @template T

@@ -1,13 +1,13 @@
 <?php
 
-namespace TicketKitten\Service\Handler\EventSettings;
+namespace HiEvents\Service\Handler\EventSettings;
 
 use HTMLPurifier;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
-use TicketKitten\DomainObjects\EventSettingDomainObject;
-use TicketKitten\Http\DataTransferObjects\UpdateEventSettingsDTO;
-use TicketKitten\Repository\Interfaces\EventSettingsRepositoryInterface;
+use HiEvents\DomainObjects\EventSettingDomainObject;
+use HiEvents\Http\DataTransferObjects\UpdateEventSettingsDTO;
+use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 
 readonly class UpdateEventSettingsHandler
 {

@@ -1,13 +1,13 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Organizers;
+namespace HiEvents\Http\Actions\Organizers;
 
 use Symfony\Component\HttpFoundation\Response;
-use TicketKitten\DomainObjects\ImageDomainObject;
-use TicketKitten\DomainObjects\OrganizerDomainObject;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Repository\Interfaces\OrganizerRepositoryInterface;
-use TicketKitten\Resources\Organizer\OrganizerResource;
+use HiEvents\DomainObjects\ImageDomainObject;
+use HiEvents\DomainObjects\OrganizerDomainObject;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
+use HiEvents\Resources\Organizer\OrganizerResource;
 
 class GetOrganizerAction extends BaseAction
 {

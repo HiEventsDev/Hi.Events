@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten\Service\Handler\Order\Payment\Stripe;
+namespace HiEvents\Service\Handler\Order\Payment\Stripe;
 
 use Illuminate\Log\Logger;
 use JsonException;
@@ -8,12 +8,12 @@ use Stripe\Event;
 use Stripe\Exception\SignatureVerificationException;
 use Stripe\Webhook;
 use Throwable;
-use TicketKitten\Exceptions\CannotAcceptPaymentException;
-use TicketKitten\Http\DataTransferObjects\StripeWebhookDTO;
-use TicketKitten\Service\Common\Payment\Stripe\EventHandlers\AccountUpdateHandler;
-use TicketKitten\Service\Common\Payment\Stripe\EventHandlers\ChargeRefundUpdatedHandler;
-use TicketKitten\Service\Common\Payment\Stripe\EventHandlers\PaymentIntentFailedHandler;
-use TicketKitten\Service\Common\Payment\Stripe\EventHandlers\PaymentIntentSucceededHandler;
+use HiEvents\Exceptions\CannotAcceptPaymentException;
+use HiEvents\Http\DataTransferObjects\StripeWebhookDTO;
+use HiEvents\Service\Common\Payment\Stripe\EventHandlers\AccountUpdateHandler;
+use HiEvents\Service\Common\Payment\Stripe\EventHandlers\ChargeRefundUpdatedHandler;
+use HiEvents\Service\Common\Payment\Stripe\EventHandlers\PaymentIntentFailedHandler;
+use HiEvents\Service\Common\Payment\Stripe\EventHandlers\PaymentIntentSucceededHandler;
 use UnexpectedValueException;
 
 readonly class IncomingWebhookHandler

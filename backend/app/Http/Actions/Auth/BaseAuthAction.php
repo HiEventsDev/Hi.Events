@@ -1,10 +1,10 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Auth;
+namespace HiEvents\Http\Actions\Auth;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cookie;
-use TicketKitten\Http\Actions\BaseAction;
+use HiEvents\Http\Actions\BaseAction;
 
 abstract class BaseAuthAction extends BaseAction
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace TicketKitten\Http\Request\Event;
+namespace HiEvents\Http\Request\Event;
 
 use Illuminate\Validation\Rule;
-use TicketKitten\DomainObjects\Status\EventStatus;
-use TicketKitten\Http\Request\BaseRequest;
+use HiEvents\DomainObjects\Status\EventStatus;
+use HiEvents\Http\Request\BaseRequest;
 
 class UpdateEventStatusRequest extends BaseRequest
 {

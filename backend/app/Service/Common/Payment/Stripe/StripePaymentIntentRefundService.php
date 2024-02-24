@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten\Service\Common\Payment\Stripe;
+namespace HiEvents\Service\Common\Payment\Stripe;
 
 use Brick\Math\Exception\MathException;
 use Illuminate\Config\Repository;
@@ -8,8 +8,8 @@ use RuntimeException;
 use Stripe\Exception\ApiErrorException;
 use Stripe\Refund;
 use Stripe\StripeClient;
-use TicketKitten\DomainObjects\StripePaymentDomainObject;
-use TicketKitten\ValuesObjects\MoneyValue;
+use HiEvents\DomainObjects\StripePaymentDomainObject;
+use HiEvents\ValuesObjects\MoneyValue;
 
 readonly class StripePaymentIntentRefundService
 {

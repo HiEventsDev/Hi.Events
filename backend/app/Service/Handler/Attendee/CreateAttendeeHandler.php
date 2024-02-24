@@ -1,38 +1,38 @@
 <?php
 
-namespace TicketKitten\Service\Handler\Attendee;
+namespace HiEvents\Service\Handler\Attendee;
 
 use Brick\Money\Money;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Throwable;
-use TicketKitten\DomainObjects\AttendeeDomainObject;
-use TicketKitten\DomainObjects\Generated\AttendeeDomainObjectAbstract;
-use TicketKitten\DomainObjects\Generated\OrderDomainObjectAbstract;
-use TicketKitten\DomainObjects\Generated\OrderItemDomainObjectAbstract;
-use TicketKitten\DomainObjects\Generated\TicketDomainObjectAbstract;
-use TicketKitten\DomainObjects\OrderDomainObject;
-use TicketKitten\DomainObjects\OrderItemDomainObject;
-use TicketKitten\DomainObjects\Status\AttendeeStatus;
-use TicketKitten\DomainObjects\Status\OrderPaymentStatus;
-use TicketKitten\DomainObjects\Status\OrderStatus;
-use TicketKitten\DomainObjects\TicketDomainObject;
-use TicketKitten\DomainObjects\TicketPriceDomainObject;
-use TicketKitten\Events\OrderStatusChangedEvent;
-use TicketKitten\Exceptions\InvalidTicketPriceId;
-use TicketKitten\Exceptions\NoTicketsAvailableException;
-use TicketKitten\Helper\IdHelper;
-use TicketKitten\Http\DataTransferObjects\CreateAttendeeDTO;
-use TicketKitten\Http\DataTransferObjects\CreateAttendeeTaxAndFeeDTO;
-use TicketKitten\Repository\Interfaces\AttendeeRepositoryInterface;
-use TicketKitten\Repository\Interfaces\EventRepositoryInterface;
-use TicketKitten\Repository\Interfaces\OrderRepositoryInterface;
-use TicketKitten\Repository\Interfaces\TaxAndFeeRepositoryInterface;
-use TicketKitten\Repository\Interfaces\TicketRepositoryInterface;
-use TicketKitten\Service\Common\Order\OrderManagementService;
-use TicketKitten\Service\Common\Tax\TaxAndFeeRollupService;
-use TicketKitten\Service\Common\Ticket\TicketQuantityService;
+use HiEvents\DomainObjects\AttendeeDomainObject;
+use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
+use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
+use HiEvents\DomainObjects\Generated\OrderItemDomainObjectAbstract;
+use HiEvents\DomainObjects\Generated\TicketDomainObjectAbstract;
+use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\DomainObjects\OrderItemDomainObject;
+use HiEvents\DomainObjects\Status\AttendeeStatus;
+use HiEvents\DomainObjects\Status\OrderPaymentStatus;
+use HiEvents\DomainObjects\Status\OrderStatus;
+use HiEvents\DomainObjects\TicketDomainObject;
+use HiEvents\DomainObjects\TicketPriceDomainObject;
+use HiEvents\Events\OrderStatusChangedEvent;
+use HiEvents\Exceptions\InvalidTicketPriceId;
+use HiEvents\Exceptions\NoTicketsAvailableException;
+use HiEvents\Helper\IdHelper;
+use HiEvents\Http\DataTransferObjects\CreateAttendeeDTO;
+use HiEvents\Http\DataTransferObjects\CreateAttendeeTaxAndFeeDTO;
+use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventRepositoryInterface;
+use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
+use HiEvents\Repository\Interfaces\TaxAndFeeRepositoryInterface;
+use HiEvents\Repository\Interfaces\TicketRepositoryInterface;
+use HiEvents\Service\Common\Order\OrderManagementService;
+use HiEvents\Service\Common\Tax\TaxAndFeeRollupService;
+use HiEvents\Service\Common\Ticket\TicketQuantityService;
 
 readonly class CreateAttendeeHandler
 {

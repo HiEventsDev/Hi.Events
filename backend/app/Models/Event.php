@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace TicketKitten\Models;
+namespace HiEvents\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use TicketKitten\DomainObjects\Generated\EventDomainObjectAbstract;
-use TicketKitten\Models\Traits\HasImages;
+use HiEvents\DomainObjects\Generated\EventDomainObjectAbstract;
+use HiEvents\Models\Traits\HasImages;
 
 class Event extends BaseModel
 {

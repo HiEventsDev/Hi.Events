@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten\Validator;
+namespace HiEvents\Validator;
 
 use Illuminate\Validation\Rule;
 

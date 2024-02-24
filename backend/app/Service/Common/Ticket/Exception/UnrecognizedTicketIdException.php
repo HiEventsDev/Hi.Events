@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten\Service\Common\Ticket\Exception;
+namespace HiEvents\Service\Common\Ticket\Exception;
 
 use Exception;
 

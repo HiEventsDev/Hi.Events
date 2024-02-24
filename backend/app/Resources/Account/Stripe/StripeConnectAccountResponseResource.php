@@ -1,10 +1,10 @@
 <?php
 
-namespace TicketKitten\Resources\Account\Stripe;
+namespace HiEvents\Resources\Account\Stripe;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use TicketKitten\Resources\Account\AccountResource;
-use TicketKitten\Service\Handler\Account\Payment\Stripe\DataTransferObjects\CreateStripeConnectAccountResponse;
+use HiEvents\Resources\Account\AccountResource;
+use HiEvents\Service\Handler\Account\Payment\Stripe\DataTransferObjects\CreateStripeConnectAccountResponse;
 
 /**
  * @mixin CreateStripeConnectAccountResponse

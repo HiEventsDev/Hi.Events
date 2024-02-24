@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten\Http\Middleware;
+namespace HiEvents\Http\Middleware;
 
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
 use Illuminate\Http\Request;

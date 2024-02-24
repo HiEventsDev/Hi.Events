@@ -1,14 +1,14 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Events\Images;
+namespace HiEvents\Http\Actions\Events\Images;
 
 use Illuminate\Http\JsonResponse;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Http\DataTransferObjects\CreateEventImageDTO;
-use TicketKitten\Http\Request\Event\CreateEventImageRequest;
-use TicketKitten\Resources\Image\ImageResource;
-use TicketKitten\Service\Handler\Event\CreateEventImageHandler;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\DataTransferObjects\CreateEventImageDTO;
+use HiEvents\Http\Request\Event\CreateEventImageRequest;
+use HiEvents\Resources\Image\ImageResource;
+use HiEvents\Service\Handler\Event\CreateEventImageHandler;
 
 class CreateEventImageAction extends BaseAction
 {

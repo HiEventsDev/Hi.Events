@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten\Validator\Rules;
+namespace HiEvents\Validator\Rules;
 
 use Closure;
 use Illuminate\Contracts\Validation\DataAwareRule;
@@ -8,10 +8,10 @@ use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Contracts\Validation\ValidatorAwareRule;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\Validator;
-use TicketKitten\DomainObjects\Enums\QuestionTypeEnum;
-use TicketKitten\DomainObjects\QuestionDomainObject;
-use TicketKitten\DomainObjects\TicketDomainObject;
-use TicketKitten\DomainObjects\TicketPriceDomainObject;
+use HiEvents\DomainObjects\Enums\QuestionTypeEnum;
+use HiEvents\DomainObjects\QuestionDomainObject;
+use HiEvents\DomainObjects\TicketDomainObject;
+use HiEvents\DomainObjects\TicketPriceDomainObject;
 
 abstract class BaseQuestionRule implements ValidationRule, DataAwareRule, ValidatorAwareRule
 {

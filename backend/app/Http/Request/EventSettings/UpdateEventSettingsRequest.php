@@ -1,9 +1,9 @@
 <?php
 
-namespace TicketKitten\Http\Request\EventSettings;
+namespace HiEvents\Http\Request\EventSettings;
 
-use TicketKitten\Http\Request\BaseRequest;
-use TicketKitten\Validator\Rules\RulesHelper;
+use HiEvents\Http\Request\BaseRequest;
+use HiEvents\Validator\Rules\RulesHelper;
 
 class UpdateEventSettingsRequest extends BaseRequest
 {

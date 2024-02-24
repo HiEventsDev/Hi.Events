@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten\Http\Middleware;
+namespace HiEvents\Http\Middleware;
 
 use Illuminate\Cookie\Middleware\EncryptCookies as Middleware;
 

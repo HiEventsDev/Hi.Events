@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten\Repository\Interfaces;
+namespace HiEvents\Repository\Interfaces;
 
 interface ImageRepositoryInterface extends RepositoryInterface
 {

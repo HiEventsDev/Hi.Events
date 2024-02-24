@@ -1,10 +1,10 @@
 <?php
 
-namespace TicketKitten\Service\Common\Payment\Stripe;
+namespace HiEvents\Service\Common\Payment\Stripe;
 
 use Stripe\PaymentIntent;
-use TicketKitten\DomainObjects\Generated\StripePaymentDomainObjectAbstract;
-use TicketKitten\Repository\Eloquent\StripePaymentsRepository;
+use HiEvents\DomainObjects\Generated\StripePaymentDomainObjectAbstract;
+use HiEvents\Repository\Eloquent\StripePaymentsRepository;
 
 readonly class StripePaymentUpdateFromPaymentIntentService
 {

@@ -1,12 +1,12 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Events\Images;
+namespace HiEvents\Http\Actions\Events\Images;
 
 use Illuminate\Http\Response;
-use TicketKitten\DomainObjects\Enums\EventImageType;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Repository\Interfaces\ImageRepositoryInterface;
+use HiEvents\DomainObjects\Enums\EventImageType;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Repository\Interfaces\ImageRepositoryInterface;
 
 class DeleteEventImageAction extends BaseAction
 {

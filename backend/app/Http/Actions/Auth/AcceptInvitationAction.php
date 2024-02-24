@@ -1,17 +1,17 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Auth;
+namespace HiEvents\Http\Actions\Auth;
 
 use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use TicketKitten\Exceptions\DecryptionFailedException;
-use TicketKitten\Exceptions\ResourceConflictException;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Http\DataTransferObjects\AcceptInvitationDTO;
-use TicketKitten\Http\Request\Auth\AcceptInvitationRequest;
-use TicketKitten\Http\ResponseCodes;
-use TicketKitten\Service\Handler\Auth\AcceptInvitationHandler;
+use HiEvents\Exceptions\DecryptionFailedException;
+use HiEvents\Exceptions\ResourceConflictException;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\DataTransferObjects\AcceptInvitationDTO;
+use HiEvents\Http\Request\Auth\AcceptInvitationRequest;
+use HiEvents\Http\ResponseCodes;
+use HiEvents\Service\Handler\Auth\AcceptInvitationHandler;
 
 class AcceptInvitationAction extends BaseAction
 {

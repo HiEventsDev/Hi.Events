@@ -1,10 +1,10 @@
 <?php
 
-namespace TicketKitten\Resources\Image;
+namespace HiEvents\Resources\Image;
 
-use TicketKitten\DomainObjects\ImageDomainObject;
-use TicketKitten\Helper\Url;
-use TicketKitten\Resources\BaseResource;
+use HiEvents\DomainObjects\ImageDomainObject;
+use HiEvents\Helper\Url;
+use HiEvents\Resources\BaseResource;
 
 /**
  * @mixin ImageDomainObject

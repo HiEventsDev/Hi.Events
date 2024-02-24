@@ -1,20 +1,20 @@
 <?php
 
-namespace TicketKitten\Service\Authorization;
+namespace HiEvents\Service\Authorization;
 
 use Illuminate\Foundation\Application;
-use TicketKitten\DomainObjects\AccountDomainObject;
-use TicketKitten\DomainObjects\Enums\Role;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\DomainObjects\OrganizerDomainObject;
-use TicketKitten\DomainObjects\TaxAndFeesDomainObject;
-use TicketKitten\DomainObjects\UserDomainObject;
-use TicketKitten\Exceptions\UnauthorizedException;
-use TicketKitten\Repository\Interfaces\AccountRepositoryInterface;
-use TicketKitten\Repository\Interfaces\EventRepositoryInterface;
-use TicketKitten\Repository\Interfaces\OrganizerRepositoryInterface;
-use TicketKitten\Repository\Interfaces\TaxAndFeeRepositoryInterface;
-use TicketKitten\Repository\Interfaces\UserRepositoryInterface;
+use HiEvents\DomainObjects\AccountDomainObject;
+use HiEvents\DomainObjects\Enums\Role;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\OrganizerDomainObject;
+use HiEvents\DomainObjects\TaxAndFeesDomainObject;
+use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\Exceptions\UnauthorizedException;
+use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventRepositoryInterface;
+use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
+use HiEvents\Repository\Interfaces\TaxAndFeeRepositoryInterface;
+use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 
 class IsAuthorizedService
 {

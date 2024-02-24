@@ -1,20 +1,20 @@
 <?php
 
-namespace TicketKitten\Service\Handler\Attendee;
+namespace HiEvents\Service\Handler\Attendee;
 
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Validation\ValidationException;
 use Throwable;
-use TicketKitten\DomainObjects\AttendeeDomainObject;
-use TicketKitten\DomainObjects\Enums\TicketType;
-use TicketKitten\DomainObjects\Generated\AttendeeDomainObjectAbstract;
-use TicketKitten\DomainObjects\Generated\TicketDomainObjectAbstract;
-use TicketKitten\DomainObjects\TicketPriceDomainObject;
-use TicketKitten\Exceptions\NoTicketsAvailableException;
-use TicketKitten\Http\DataTransferObjects\EditAttendeeDTO;
-use TicketKitten\Repository\Interfaces\AttendeeRepositoryInterface;
-use TicketKitten\Repository\Interfaces\TicketRepositoryInterface;
-use TicketKitten\Service\Common\Ticket\TicketQuantityService;
+use HiEvents\DomainObjects\AttendeeDomainObject;
+use HiEvents\DomainObjects\Enums\TicketType;
+use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
+use HiEvents\DomainObjects\Generated\TicketDomainObjectAbstract;
+use HiEvents\DomainObjects\TicketPriceDomainObject;
+use HiEvents\Exceptions\NoTicketsAvailableException;
+use HiEvents\Http\DataTransferObjects\EditAttendeeDTO;
+use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
+use HiEvents\Repository\Interfaces\TicketRepositoryInterface;
+use HiEvents\Service\Common\Ticket\TicketQuantityService;
 
 class EditAttendeeHandler
 {

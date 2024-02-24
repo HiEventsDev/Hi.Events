@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace TicketKitten\Repository\Eloquent;
+namespace HiEvents\Repository\Eloquent;
 
 use BadMethodCallException;
 use Carbon\Carbon;
@@ -14,11 +14,11 @@ use Illuminate\Foundation\Application;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-use TicketKitten\DomainObjects\Interfaces\DomainObjectInterface;
-use TicketKitten\DomainObjects\Interfaces\HasDefaultEagerLoads;
-use TicketKitten\Models\BaseModel;
-use TicketKitten\Repository\Eloquent\Value\Relationship;
-use TicketKitten\Repository\Interfaces\RepositoryInterface;
+use HiEvents\DomainObjects\Interfaces\DomainObjectInterface;
+use HiEvents\DomainObjects\Interfaces\HasDefaultEagerLoads;
+use HiEvents\Models\BaseModel;
+use HiEvents\Repository\Eloquent\Value\Relationship;
+use HiEvents\Repository\Interfaces\RepositoryInterface;
 
 /**
  * @template T

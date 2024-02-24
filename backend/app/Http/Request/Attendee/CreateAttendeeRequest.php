@@ -1,9 +1,9 @@
 <?php
 
-namespace TicketKitten\Http\Request\Attendee;
+namespace HiEvents\Http\Request\Attendee;
 
-use TicketKitten\Http\Request\BaseRequest;
-use TicketKitten\Validator\Rules\RulesHelper;
+use HiEvents\Http\Request\BaseRequest;
+use HiEvents\Validator\Rules\RulesHelper;
 
 class CreateAttendeeRequest extends BaseRequest
 {

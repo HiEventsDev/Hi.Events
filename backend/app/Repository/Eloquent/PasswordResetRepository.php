@@ -1,10 +1,10 @@
 <?php
 
-namespace TicketKitten\Repository\Eloquent;
+namespace HiEvents\Repository\Eloquent;
 
-use TicketKitten\DomainObjects\PasswordResetDomainObject;
-use TicketKitten\Models\PasswordReset;
-use TicketKitten\Repository\Interfaces\PasswordResetRepositoryInterface;
+use HiEvents\DomainObjects\PasswordResetDomainObject;
+use HiEvents\Models\PasswordReset;
+use HiEvents\Repository\Interfaces\PasswordResetRepositoryInterface;
 
 class PasswordResetRepository extends BaseRepository implements PasswordResetRepositoryInterface
 {

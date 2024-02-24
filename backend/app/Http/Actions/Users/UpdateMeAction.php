@@ -1,15 +1,15 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Users;
+namespace HiEvents\Http\Actions\Users;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
-use TicketKitten\Exceptions\PasswordInvalidException;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Http\DataTransferObjects\UpdateMeDTO;
-use TicketKitten\Http\Request\User\UpdateMeRequest;
-use TicketKitten\Resources\User\UserResource;
-use TicketKitten\Service\Handler\User\UpdateMeHandler;
+use HiEvents\Exceptions\PasswordInvalidException;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\DataTransferObjects\UpdateMeDTO;
+use HiEvents\Http\Request\User\UpdateMeRequest;
+use HiEvents\Resources\User\UserResource;
+use HiEvents\Service\Handler\User\UpdateMeHandler;
 
 class UpdateMeAction extends BaseAction
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace TicketKitten\Http\DataTransferObjects;
+namespace HiEvents\Http\DataTransferObjects;
 
 use Illuminate\Support\Collection;
-use TicketKitten\DataTransferObjects\Attributes\CollectionOf;
-use TicketKitten\DataTransferObjects\BaseDTO;
+use HiEvents\DataTransferObjects\Attributes\CollectionOf;
+use HiEvents\DataTransferObjects\BaseDTO;
 
 class CompleteOrderDTO extends BaseDTO
 {

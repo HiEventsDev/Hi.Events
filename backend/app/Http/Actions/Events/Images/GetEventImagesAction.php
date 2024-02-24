@@ -1,13 +1,13 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Events\Images;
+namespace HiEvents\Http\Actions\Events\Images;
 
 use Illuminate\Http\JsonResponse;
-use TicketKitten\DomainObjects\Enums\EventImageType;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Repository\Interfaces\ImageRepositoryInterface;
-use TicketKitten\Resources\Image\ImageResource;
+use HiEvents\DomainObjects\Enums\EventImageType;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Repository\Interfaces\ImageRepositoryInterface;
+use HiEvents\Resources\Image\ImageResource;
 
 class GetEventImagesAction extends BaseAction
 {

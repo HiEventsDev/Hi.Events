@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace TicketKitten\Models;
+namespace HiEvents\Models;
 
 class Account extends BaseModel
 {

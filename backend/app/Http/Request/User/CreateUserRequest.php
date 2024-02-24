@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace TicketKitten\Http\Request\User;
+namespace HiEvents\Http\Request\User;
 
 use Illuminate\Validation\Rule;
-use TicketKitten\DomainObjects\Enums\Role;
-use TicketKitten\Http\Request\BaseRequest;
+use HiEvents\DomainObjects\Enums\Role;
+use HiEvents\Http\Request\BaseRequest;
 
 class CreateUserRequest extends BaseRequest
 {

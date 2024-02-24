@@ -4,8 +4,8 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
-use TicketKitten\Helper\IdHelper;
-use TicketKitten\Models\Order;
+use HiEvents\Helper\IdHelper;
+use HiEvents\Models\Order;
 
 class OrderFactory extends Factory
 {

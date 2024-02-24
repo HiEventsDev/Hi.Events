@@ -1,15 +1,15 @@
 <?php
 
-namespace TicketKitten\Http\Actions\EventSettings;
+namespace HiEvents\Http\Actions\EventSettings;
 
 use Illuminate\Http\JsonResponse;
 use Throwable;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Http\DataTransferObjects\PartialUpdateEventSettingsDTO;
-use TicketKitten\Http\Request\EventSettings\UpdateEventSettingsRequest;
-use TicketKitten\Resources\Event\EventSettingsResource;
-use TicketKitten\Service\Handler\EventSettings\PartialUpdateEventSettingsHandler;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\DataTransferObjects\PartialUpdateEventSettingsDTO;
+use HiEvents\Http\Request\EventSettings\UpdateEventSettingsRequest;
+use HiEvents\Resources\Event\EventSettingsResource;
+use HiEvents\Service\Handler\EventSettings\PartialUpdateEventSettingsHandler;
 
 class PartialEditEventSettingsAction extends BaseAction
 {

@@ -1,25 +1,25 @@
 <?php
 
-namespace TicketKitten\Service\Handler\Order\Payment\Stripe;
+namespace HiEvents\Service\Handler\Order\Payment\Stripe;
 
 use Brick\Math\Exception\MathException;
 use Brick\Math\Exception\NumberFormatException;
 use Brick\Math\Exception\RoundingNecessaryException;
 use Brick\Money\Exception\UnknownCurrencyException;
 use Brick\Money\Money;
-use TicketKitten\DomainObjects\Generated\StripePaymentDomainObjectAbstract;
-use TicketKitten\DomainObjects\OrderItemDomainObject;
-use TicketKitten\DomainObjects\StripePaymentDomainObject;
-use TicketKitten\Exceptions\Stripe\CreatePaymentIntentFailedException;
-use TicketKitten\Exceptions\UnauthorizedException;
-use TicketKitten\Repository\Eloquent\Value\Relationship;
-use TicketKitten\Repository\Interfaces\AccountRepositoryInterface;
-use TicketKitten\Repository\Interfaces\OrderRepositoryInterface;
-use TicketKitten\Repository\Interfaces\StripePaymentsRepositoryInterface;
-use TicketKitten\Service\Common\Payment\Stripe\DTOs\CreatePaymentIntentRequestDTO;
-use TicketKitten\Service\Common\Payment\Stripe\DTOs\CreatePaymentIntentResponseDTO;
-use TicketKitten\Service\Common\Payment\Stripe\StripePaymentIntentCreationService;
-use TicketKitten\Service\Common\Session\SessionIdentifierService;
+use HiEvents\DomainObjects\Generated\StripePaymentDomainObjectAbstract;
+use HiEvents\DomainObjects\OrderItemDomainObject;
+use HiEvents\DomainObjects\StripePaymentDomainObject;
+use HiEvents\Exceptions\Stripe\CreatePaymentIntentFailedException;
+use HiEvents\Exceptions\UnauthorizedException;
+use HiEvents\Repository\Eloquent\Value\Relationship;
+use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
+use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
+use HiEvents\Repository\Interfaces\StripePaymentsRepositoryInterface;
+use HiEvents\Service\Common\Payment\Stripe\DTOs\CreatePaymentIntentRequestDTO;
+use HiEvents\Service\Common\Payment\Stripe\DTOs\CreatePaymentIntentResponseDTO;
+use HiEvents\Service\Common\Payment\Stripe\StripePaymentIntentCreationService;
+use HiEvents\Service\Common\Session\SessionIdentifierService;
 
 readonly class CreatePaymentIntentHandler
 {

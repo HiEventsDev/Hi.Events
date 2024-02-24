@@ -1,11 +1,11 @@
 <?php
 
-namespace TicketKitten\Mail;
+namespace HiEvents\Mail;
 
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\Http\DataTransferObjects\SendMessageDTO;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\Http\DataTransferObjects\SendMessageDTO;
 
 /**
  * @uses /backend/resources/views/emails/event/message.blade.php

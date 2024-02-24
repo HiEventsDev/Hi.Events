@@ -1,12 +1,12 @@
 <?php
 
-namespace TicketKitten\Mail;
+namespace HiEvents\Mail;
 
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Support\Str;
-use TicketKitten\DomainObjects\AttendeeDomainObject;
-use TicketKitten\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\AttendeeDomainObject;
+use HiEvents\DomainObjects\EventDomainObject;
 
 /**
  * @uses /backend/resources/views/emails/orders/attendee-ticket.blade.php

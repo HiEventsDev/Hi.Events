@@ -1,16 +1,16 @@
 <?php
 
-namespace TicketKitten\Repository\Eloquent;
+namespace HiEvents\Repository\Eloquent;
 
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Collection;
-use TicketKitten\DomainObjects\Generated\QuestionDomainObjectAbstract;
-use TicketKitten\DomainObjects\QuestionDomainObject;
-use TicketKitten\Models\Question;
-use TicketKitten\Models\TicketQuestion;
-use TicketKitten\Repository\Interfaces\QuestionRepositoryInterface;
-use TicketKitten\Repository\Interfaces\TicketRepositoryInterface;
+use HiEvents\DomainObjects\Generated\QuestionDomainObjectAbstract;
+use HiEvents\DomainObjects\QuestionDomainObject;
+use HiEvents\Models\Question;
+use HiEvents\Models\TicketQuestion;
+use HiEvents\Repository\Interfaces\QuestionRepositoryInterface;
+use HiEvents\Repository\Interfaces\TicketRepositoryInterface;
 
 class QuestionRepository extends BaseRepository implements QuestionRepositoryInterface
 {

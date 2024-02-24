@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten\Service\Common\Payment\Stripe;
+namespace HiEvents\Service\Common\Payment\Stripe;
 
 use Brick\Math\Exception\MathException;
 use Brick\Math\Exception\NumberFormatException;
@@ -10,11 +10,11 @@ use Illuminate\Contracts\Mail\Mailer;
 use Psr\Log\LoggerInterface;
 use Stripe\Exception\ApiErrorException;
 use Stripe\PaymentIntent;
-use TicketKitten\DomainObjects\OrderDomainObject;
-use TicketKitten\DomainObjects\StripePaymentDomainObject;
-use TicketKitten\Mail\PaymentSuccessButOrderExpiredMail;
-use TicketKitten\Repository\Interfaces\EventRepositoryInterface;
-use TicketKitten\ValuesObjects\MoneyValue;
+use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\DomainObjects\StripePaymentDomainObject;
+use HiEvents\Mail\PaymentSuccessButOrderExpiredMail;
+use HiEvents\Repository\Interfaces\EventRepositoryInterface;
+use HiEvents\ValuesObjects\MoneyValue;
 
 readonly class StripeRefundExpiredOrderService
 {

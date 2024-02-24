@@ -1,18 +1,18 @@
 <?php
 
-namespace TicketKitten\Service\Handler\Order\Payment\Stripe;
+namespace HiEvents\Service\Handler\Order\Payment\Stripe;
 
 use Exception;
 use Psr\Log\LoggerInterface;
 use Stripe\Exception\ApiErrorException;
 use Stripe\StripeClient;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use TicketKitten\DomainObjects\Status\OrderPaymentStatus;
-use TicketKitten\DomainObjects\StripePaymentDomainObject;
-use TicketKitten\Http\DataTransferObjects\StripePaymentIntentPublicDTO;
-use TicketKitten\Repository\Eloquent\Value\Relationship;
-use TicketKitten\Repository\Interfaces\OrderRepositoryInterface;
-use TicketKitten\Service\Common\Payment\Stripe\EventHandlers\PaymentIntentSucceededHandler;
+use HiEvents\DomainObjects\Status\OrderPaymentStatus;
+use HiEvents\DomainObjects\StripePaymentDomainObject;
+use HiEvents\Http\DataTransferObjects\StripePaymentIntentPublicDTO;
+use HiEvents\Repository\Eloquent\Value\Relationship;
+use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
+use HiEvents\Service\Common\Payment\Stripe\EventHandlers\PaymentIntentSucceededHandler;
 
 readonly class GetPaymentIntentHandler
 {

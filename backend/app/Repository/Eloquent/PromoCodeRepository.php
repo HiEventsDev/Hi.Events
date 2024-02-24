@@ -1,14 +1,14 @@
 <?php
 
-namespace TicketKitten\Repository\Eloquent;
+namespace HiEvents\Repository\Eloquent;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
-use TicketKitten\DomainObjects\Generated\PromoCodeDomainObjectAbstract;
-use TicketKitten\DomainObjects\PromoCodeDomainObject;
-use TicketKitten\Http\DataTransferObjects\QueryParamsDTO;
-use TicketKitten\Models\PromoCode;
-use TicketKitten\Repository\Interfaces\PromoCodeRepositoryInterface;
+use HiEvents\DomainObjects\Generated\PromoCodeDomainObjectAbstract;
+use HiEvents\DomainObjects\PromoCodeDomainObject;
+use HiEvents\Http\DataTransferObjects\QueryParamsDTO;
+use HiEvents\Models\PromoCode;
+use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
 
 class PromoCodeRepository extends BaseRepository implements PromoCodeRepositoryInterface
 {

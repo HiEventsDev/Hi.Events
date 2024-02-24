@@ -1,13 +1,13 @@
 <?php
 
-namespace TicketKitten\Resources\Order;
+namespace HiEvents\Resources\Order;
 
 use Illuminate\Http\Request;
-use TicketKitten\DomainObjects\Enums\QuestionBelongsTo;
-use TicketKitten\DomainObjects\OrderDomainObject;
-use TicketKitten\Resources\Attendee\AttendeeResource;
-use TicketKitten\Resources\BaseResource;
-use TicketKitten\Resources\Question\QuestionAnswerViewResource;
+use HiEvents\DomainObjects\Enums\QuestionBelongsTo;
+use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\Resources\Attendee\AttendeeResource;
+use HiEvents\Resources\BaseResource;
+use HiEvents\Resources\Question\QuestionAnswerViewResource;
 
 /**
  * @mixin OrderDomainObject

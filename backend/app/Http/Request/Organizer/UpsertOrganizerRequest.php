@@ -1,9 +1,9 @@
 <?php
 
-namespace TicketKitten\Http\Request\Organizer;
+namespace HiEvents\Http\Request\Organizer;
 
 use Illuminate\Validation\Rule;
-use TicketKitten\Http\Request\BaseRequest;
+use HiEvents\Http\Request\BaseRequest;
 
 class UpsertOrganizerRequest extends BaseRequest
 {

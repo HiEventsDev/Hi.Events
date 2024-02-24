@@ -1,16 +1,16 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Questions;
+namespace HiEvents\Http\Actions\Questions;
 
 use Illuminate\Http\JsonResponse;
-use TicketKitten\DomainObjects\Enums\QuestionBelongsTo;
-use TicketKitten\DomainObjects\Enums\QuestionTypeEnum;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Http\DataTransferObjects\UpsertQuestionDTO;
-use TicketKitten\Http\Request\Questions\UpsertQuestionRequest;
-use TicketKitten\Resources\Question\QuestionResource;
-use TicketKitten\Service\Handler\Question\EditQuestionHandler;
+use HiEvents\DomainObjects\Enums\QuestionBelongsTo;
+use HiEvents\DomainObjects\Enums\QuestionTypeEnum;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\DataTransferObjects\UpsertQuestionDTO;
+use HiEvents\Http\Request\Questions\UpsertQuestionRequest;
+use HiEvents\Resources\Question\QuestionResource;
+use HiEvents\Service\Handler\Question\EditQuestionHandler;
 
 class EditQuestionAction extends BaseAction
 {

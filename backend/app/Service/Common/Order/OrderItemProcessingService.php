@@ -1,23 +1,23 @@
 <?php
 
-namespace TicketKitten\Service\Common\Order;
+namespace HiEvents\Service\Common\Order;
 
 use Illuminate\Support\Collection;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\DomainObjects\Generated\TicketDomainObjectAbstract;
-use TicketKitten\DomainObjects\OrderDomainObject;
-use TicketKitten\DomainObjects\PromoCodeDomainObject;
-use TicketKitten\DomainObjects\TaxAndFeesDomainObject;
-use TicketKitten\DomainObjects\TicketDomainObject;
-use TicketKitten\DomainObjects\TicketPriceDomainObject;
-use TicketKitten\Helper\Currency;
-use TicketKitten\Http\DataTransferObjects\OrderTicketPriceDTO;
-use TicketKitten\Http\DataTransferObjects\TicketOrderDetailsDTO;
-use TicketKitten\Repository\Interfaces\OrderRepositoryInterface;
-use TicketKitten\Repository\Interfaces\TicketRepositoryInterface;
-use TicketKitten\Service\Common\Tax\TaxAndFeeCalculationService;
-use TicketKitten\Service\Common\Ticket\TicketPriceService;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\Generated\TicketDomainObjectAbstract;
+use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\DomainObjects\PromoCodeDomainObject;
+use HiEvents\DomainObjects\TaxAndFeesDomainObject;
+use HiEvents\DomainObjects\TicketDomainObject;
+use HiEvents\DomainObjects\TicketPriceDomainObject;
+use HiEvents\Helper\Currency;
+use HiEvents\Http\DataTransferObjects\OrderTicketPriceDTO;
+use HiEvents\Http\DataTransferObjects\TicketOrderDetailsDTO;
+use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
+use HiEvents\Repository\Interfaces\TicketRepositoryInterface;
+use HiEvents\Service\Common\Tax\TaxAndFeeCalculationService;
+use HiEvents\Service\Common\Ticket\TicketPriceService;
 
 readonly class OrderItemProcessingService
 {

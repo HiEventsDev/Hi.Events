@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace TicketKitten\Http\Request\Order;
+namespace HiEvents\Http\Request\Order;
 
 use Illuminate\Validation\ValidationException;
-use TicketKitten\Http\Request\BaseRequest;
-use TicketKitten\Validator\CreateOrderValidator;
+use HiEvents\Http\Request\BaseRequest;
+use HiEvents\Validator\CreateOrderValidator;
 
 class CreateOrderRequest extends BaseRequest
 {

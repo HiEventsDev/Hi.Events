@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten\Http;
+namespace HiEvents\Http;
 
 use Illuminate\Auth\Middleware\AuthenticateWithBasicAuth;
 use Illuminate\Auth\Middleware\Authorize;
@@ -17,14 +17,14 @@ use Illuminate\Routing\Middleware\ThrottleRequests;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-use TicketKitten\Http\Middleware\Authenticate;
-use TicketKitten\Http\Middleware\EncryptCookies;
-use TicketKitten\Http\Middleware\PreventRequestsDuringMaintenance;
-use TicketKitten\Http\Middleware\RedirectIfAuthenticated;
-use TicketKitten\Http\Middleware\TrimStrings;
-use TicketKitten\Http\Middleware\TrustProxies;
-use TicketKitten\Http\Middleware\ValidateSignature;
-use TicketKitten\Http\Middleware\VerifyCsrfToken;
+use HiEvents\Http\Middleware\Authenticate;
+use HiEvents\Http\Middleware\EncryptCookies;
+use HiEvents\Http\Middleware\PreventRequestsDuringMaintenance;
+use HiEvents\Http\Middleware\RedirectIfAuthenticated;
+use HiEvents\Http\Middleware\TrimStrings;
+use HiEvents\Http\Middleware\TrustProxies;
+use HiEvents\Http\Middleware\ValidateSignature;
+use HiEvents\Http\Middleware\VerifyCsrfToken;
 
 class Kernel extends HttpKernel
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace TicketKitten\Exceptions;
+namespace HiEvents\Exceptions;
 
 use Exception;
 

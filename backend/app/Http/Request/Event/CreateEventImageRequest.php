@@ -1,10 +1,10 @@
 <?php
 
-namespace TicketKitten\Http\Request\Event;
+namespace HiEvents\Http\Request\Event;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use TicketKitten\DomainObjects\Enums\EventImageType;
+use HiEvents\DomainObjects\Enums\EventImageType;
 
 class CreateEventImageRequest extends FormRequest
 {

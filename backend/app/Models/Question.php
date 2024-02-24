@@ -1,9 +1,9 @@
 <?php
 
-namespace TicketKitten\Models;
+namespace HiEvents\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use TicketKitten\DomainObjects\Generated\QuestionDomainObjectAbstract;
+use HiEvents\DomainObjects\Generated\QuestionDomainObjectAbstract;
 
 class Question extends BaseModel
 {

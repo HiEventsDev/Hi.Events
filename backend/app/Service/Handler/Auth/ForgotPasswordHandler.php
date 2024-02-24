@@ -1,16 +1,16 @@
 <?php
 
-namespace TicketKitten\Service\Handler\Auth;
+namespace HiEvents\Service\Handler\Auth;
 
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Mail\Mailer;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Throwable;
-use TicketKitten\Mail\ForgotPassword;
-use TicketKitten\Repository\Interfaces\PasswordResetTokenRepositoryInterface;
-use TicketKitten\Repository\Interfaces\UserRepositoryInterface;
-use TicketKitten\Service\Common\TokenGeneratorService;
+use HiEvents\Mail\ForgotPassword;
+use HiEvents\Repository\Interfaces\PasswordResetTokenRepositoryInterface;
+use HiEvents\Repository\Interfaces\UserRepositoryInterface;
+use HiEvents\Service\Common\TokenGeneratorService;
 
 class ForgotPasswordHandler
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten\Service\Common\Payment\Stripe\EventHandlers;
+namespace HiEvents\Service\Common\Payment\Stripe\EventHandlers;
 
 use Brick\Math\Exception\MathException;
 use Brick\Math\Exception\NumberFormatException;
@@ -11,19 +11,19 @@ use Illuminate\Database\DatabaseManager;
 use Stripe\Exception\ApiErrorException;
 use Stripe\PaymentIntent;
 use Throwable;
-use TicketKitten\DomainObjects\Generated\OrderDomainObjectAbstract;
-use TicketKitten\DomainObjects\Generated\StripePaymentDomainObjectAbstract;
-use TicketKitten\DomainObjects\OrderDomainObject;
-use TicketKitten\DomainObjects\OrderItemDomainObject;
-use TicketKitten\DomainObjects\Status\OrderPaymentStatus;
-use TicketKitten\DomainObjects\Status\OrderStatus;
-use TicketKitten\Events\OrderStatusChangedEvent;
-use TicketKitten\Exceptions\CannotAcceptPaymentException;
-use TicketKitten\Repository\Eloquent\StripePaymentsRepository;
-use TicketKitten\Repository\Eloquent\Value\Relationship;
-use TicketKitten\Repository\Interfaces\OrderRepositoryInterface;
-use TicketKitten\Service\Common\Payment\Stripe\StripeRefundExpiredOrderService;
-use TicketKitten\Service\Common\Ticket\TicketQuantityUpdateService;
+use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
+use HiEvents\DomainObjects\Generated\StripePaymentDomainObjectAbstract;
+use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\DomainObjects\OrderItemDomainObject;
+use HiEvents\DomainObjects\Status\OrderPaymentStatus;
+use HiEvents\DomainObjects\Status\OrderStatus;
+use HiEvents\Events\OrderStatusChangedEvent;
+use HiEvents\Exceptions\CannotAcceptPaymentException;
+use HiEvents\Repository\Eloquent\StripePaymentsRepository;
+use HiEvents\Repository\Eloquent\Value\Relationship;
+use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
+use HiEvents\Service\Common\Payment\Stripe\StripeRefundExpiredOrderService;
+use HiEvents\Service\Common\Ticket\TicketQuantityUpdateService;
 
 readonly class PaymentIntentSucceededHandler
 {

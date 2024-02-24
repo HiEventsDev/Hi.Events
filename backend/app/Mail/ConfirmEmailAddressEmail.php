@@ -1,11 +1,11 @@
 <?php
 
-namespace TicketKitten\Mail;
+namespace HiEvents\Mail;
 
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
-use TicketKitten\DomainObjects\UserDomainObject;
-use TicketKitten\Helper\Url;
+use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\Helper\Url;
 
 /**
  * @uses /backend/resources/views/emails/user/confirm-email-address.blade.php

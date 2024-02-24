@@ -1,11 +1,11 @@
 <?php
 
-namespace TicketKitten\Service\Common\Tax;
+namespace HiEvents\Service\Common\Tax;
 
-namespace TicketKitten\Service\Common\Tax;
+namespace HiEvents\Service\Common\Tax;
 
 use Illuminate\Support\Str;
-use TicketKitten\DomainObjects\TaxAndFeesDomainObject;
+use HiEvents\DomainObjects\TaxAndFeesDomainObject;
 
 class TaxAndFeeRollupService
 {

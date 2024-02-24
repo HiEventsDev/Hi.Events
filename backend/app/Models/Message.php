@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten\Models;
+namespace HiEvents\Models;
 
 use Illuminate\Database\Eloquent\Relations\HasOne;
 

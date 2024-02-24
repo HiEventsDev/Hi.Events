@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten\Exceptions;
+namespace HiEvents\Exceptions;
 
 class CreateStripeConnectAccountFailedException extends BaseException
 {

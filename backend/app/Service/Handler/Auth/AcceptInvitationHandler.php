@@ -1,16 +1,16 @@
 <?php
 
-namespace TicketKitten\Service\Handler\Auth;
+namespace HiEvents\Service\Handler\Auth;
 
 use Illuminate\Contracts\Hashing\Hasher;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use TicketKitten\DomainObjects\Status\UserStatus;
-use TicketKitten\Exceptions\DecryptionFailedException;
-use TicketKitten\Exceptions\EncryptedPayloadExpiredException;
-use TicketKitten\Exceptions\ResourceConflictException;
-use TicketKitten\Http\DataTransferObjects\AcceptInvitationDTO;
-use TicketKitten\Repository\Interfaces\UserRepositoryInterface;
-use TicketKitten\Service\Common\EncryptedPayloadService;
+use HiEvents\DomainObjects\Status\UserStatus;
+use HiEvents\Exceptions\DecryptionFailedException;
+use HiEvents\Exceptions\EncryptedPayloadExpiredException;
+use HiEvents\Exceptions\ResourceConflictException;
+use HiEvents\Http\DataTransferObjects\AcceptInvitationDTO;
+use HiEvents\Repository\Interfaces\UserRepositoryInterface;
+use HiEvents\Service\Common\EncryptedPayloadService;
 
 readonly class AcceptInvitationHandler
 {

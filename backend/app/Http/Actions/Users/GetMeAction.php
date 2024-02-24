@@ -1,10 +1,10 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Users;
+namespace HiEvents\Http\Actions\Users;
 
 use Illuminate\Http\JsonResponse;
-use TicketKitten\Http\Actions\Auth\BaseAuthAction;
-use TicketKitten\Resources\User\UserResource;
+use HiEvents\Http\Actions\Auth\BaseAuthAction;
+use HiEvents\Resources\User\UserResource;
 
 class GetMeAction extends BaseAuthAction
 {

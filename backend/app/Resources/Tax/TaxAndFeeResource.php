@@ -1,9 +1,9 @@
 <?php
 
-namespace TicketKitten\Resources\Tax;
+namespace HiEvents\Resources\Tax;
 
-use TicketKitten\DomainObjects\TaxAndFeesDomainObject;
-use TicketKitten\Resources\BaseResource;
+use HiEvents\DomainObjects\TaxAndFeesDomainObject;
+use HiEvents\Resources\BaseResource;
 
 /**
  * @mixin TaxAndFeesDomainObject

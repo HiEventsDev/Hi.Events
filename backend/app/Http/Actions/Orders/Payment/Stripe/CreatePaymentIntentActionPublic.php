@@ -1,12 +1,12 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Orders\Payment\Stripe;
+namespace HiEvents\Http\Actions\Orders\Payment\Stripe;
 
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use TicketKitten\Exceptions\Stripe\CreatePaymentIntentFailedException;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Service\Handler\Order\Payment\Stripe\CreatePaymentIntentHandler;
+use HiEvents\Exceptions\Stripe\CreatePaymentIntentFailedException;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Service\Handler\Order\Payment\Stripe\CreatePaymentIntentHandler;
 
 class CreatePaymentIntentActionPublic extends BaseAction
 {

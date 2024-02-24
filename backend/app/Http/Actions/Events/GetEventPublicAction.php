@@ -1,14 +1,14 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Events;
+namespace HiEvents\Http\Actions\Events;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use TicketKitten\DomainObjects\Status\EventStatus;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Resources\Event\EventResourcePublic;
-use TicketKitten\Service\Handler\Event\GetPublicEventHandler;
+use HiEvents\DomainObjects\Status\EventStatus;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Resources\Event\EventResourcePublic;
+use HiEvents\Service\Handler\Event\GetPublicEventHandler;
 
 class GetEventPublicAction extends BaseAction
 {

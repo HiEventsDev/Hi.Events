@@ -1,10 +1,10 @@
 <?php
 
-namespace TicketKitten\Repository\Eloquent;
+namespace HiEvents\Repository\Eloquent;
 
-use TicketKitten\DomainObjects\StripePaymentDomainObject;
-use TicketKitten\Models\StripePayment;
-use TicketKitten\Repository\Interfaces\StripePaymentsRepositoryInterface;
+use HiEvents\DomainObjects\StripePaymentDomainObject;
+use HiEvents\Models\StripePayment;
+use HiEvents\Repository\Interfaces\StripePaymentsRepositoryInterface;
 
 class StripePaymentsRepository extends BaseRepository implements StripePaymentsRepositoryInterface
 {

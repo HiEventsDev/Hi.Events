@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten\Service\Handler\Auth;
+namespace HiEvents\Service\Handler\Auth;
 
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Hashing\HashManager;
@@ -8,13 +8,13 @@ use Illuminate\Mail\Mailer;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Throwable;
-use TicketKitten\DomainObjects\UserDomainObject;
-use TicketKitten\Exceptions\PasswordInvalidException;
-use TicketKitten\Http\DataTransferObjects\ResetPasswordDTO;
-use TicketKitten\Mail\ResetPasswordSuccess;
-use TicketKitten\Repository\Interfaces\PasswordResetTokenRepositoryInterface;
-use TicketKitten\Repository\Interfaces\UserRepositoryInterface;
-use TicketKitten\Service\Common\Auth\ResetPasswordTokenValidateService;
+use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\Exceptions\PasswordInvalidException;
+use HiEvents\Http\DataTransferObjects\ResetPasswordDTO;
+use HiEvents\Mail\ResetPasswordSuccess;
+use HiEvents\Repository\Interfaces\PasswordResetTokenRepositoryInterface;
+use HiEvents\Repository\Interfaces\UserRepositoryInterface;
+use HiEvents\Service\Common\Auth\ResetPasswordTokenValidateService;
 
 class ResetPasswordHandler
 {

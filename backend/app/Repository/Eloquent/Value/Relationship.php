@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten\Repository\Eloquent\Value;
+namespace HiEvents\Repository\Eloquent\Value;
 
 readonly class Relationship
 {

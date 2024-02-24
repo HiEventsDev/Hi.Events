@@ -1,10 +1,10 @@
 <?php
 
-namespace TicketKitten\Resources\User;
+namespace HiEvents\Resources\User;
 
 use Illuminate\Http\Request;
-use TicketKitten\DomainObjects\UserDomainObject;
-use TicketKitten\Resources\BaseResource;
+use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\Resources\BaseResource;
 
 /**
  * @mixin UserDomainObject

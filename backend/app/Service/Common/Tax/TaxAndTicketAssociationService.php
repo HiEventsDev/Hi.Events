@@ -1,13 +1,13 @@
 <?php
 
-namespace TicketKitten\Service\Common\Tax;
+namespace HiEvents\Service\Common\Tax;
 
 use Exception;
 use Illuminate\Support\Collection;
-use TicketKitten\Exceptions\InvalidTaxOrFeeIdException;
-use TicketKitten\Repository\Interfaces\TaxAndFeeRepositoryInterface;
-use TicketKitten\Repository\Interfaces\TicketRepositoryInterface;
-use TicketKitten\Service\Common\Tax\DTO\TaxAndTicketAssociateParams;
+use HiEvents\Exceptions\InvalidTaxOrFeeIdException;
+use HiEvents\Repository\Interfaces\TaxAndFeeRepositoryInterface;
+use HiEvents\Repository\Interfaces\TicketRepositoryInterface;
+use HiEvents\Service\Common\Tax\DTO\TaxAndTicketAssociateParams;
 
 readonly class TaxAndTicketAssociationService
 {

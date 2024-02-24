@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten\Service\Handler\Order\Payment\Stripe;
+namespace HiEvents\Service\Handler\Order\Payment\Stripe;
 
 use Brick\Math\Exception\MathException;
 use Brick\Math\Exception\NumberFormatException;
@@ -11,20 +11,20 @@ use Illuminate\Database\DatabaseManager;
 use Stripe\Exception\ApiErrorException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Throwable;
-use TicketKitten\DomainObjects\Generated\OrderDomainObjectAbstract;
-use TicketKitten\DomainObjects\OrderDomainObject;
-use TicketKitten\DomainObjects\Status\OrderRefundStatus;
-use TicketKitten\DomainObjects\StripePaymentDomainObject;
-use TicketKitten\Exceptions\RefundNotPossibleException;
-use TicketKitten\Http\DataTransferObjects\RefundOrderDTO;
-use TicketKitten\Mail\OrderRefunded;
-use TicketKitten\Repository\Eloquent\Value\Relationship;
-use TicketKitten\Repository\Interfaces\EventRepositoryInterface;
-use TicketKitten\Repository\Interfaces\OrderRepositoryInterface;
-use TicketKitten\Service\Common\EventStatistics\EventStatisticsUpdateService;
-use TicketKitten\Service\Common\Order\OrderCancelService;
-use TicketKitten\Service\Common\Payment\Stripe\StripePaymentIntentRefundService;
-use TicketKitten\ValuesObjects\MoneyValue;
+use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
+use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\DomainObjects\Status\OrderRefundStatus;
+use HiEvents\DomainObjects\StripePaymentDomainObject;
+use HiEvents\Exceptions\RefundNotPossibleException;
+use HiEvents\Http\DataTransferObjects\RefundOrderDTO;
+use HiEvents\Mail\OrderRefunded;
+use HiEvents\Repository\Eloquent\Value\Relationship;
+use HiEvents\Repository\Interfaces\EventRepositoryInterface;
+use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
+use HiEvents\Service\Common\EventStatistics\EventStatisticsUpdateService;
+use HiEvents\Service\Common\Order\OrderCancelService;
+use HiEvents\Service\Common\Payment\Stripe\StripePaymentIntentRefundService;
+use HiEvents\ValuesObjects\MoneyValue;
 
 readonly class RefundOrderHandler
 {

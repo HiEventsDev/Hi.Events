@@ -1,15 +1,15 @@
 <?php
 
-namespace TicketKitten\Service\Handler\User;
+namespace HiEvents\Service\Handler\User;
 
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Validation\UnauthorizedException;
 use Psr\Log\LoggerInterface;
 use Throwable;
-use TicketKitten\DomainObjects\UserDomainObject;
-use TicketKitten\Exceptions\DecryptionFailedException;
-use TicketKitten\Repository\Interfaces\UserRepositoryInterface;
-use TicketKitten\Service\Common\EncryptedPayloadService;
+use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\Exceptions\DecryptionFailedException;
+use HiEvents\Repository\Interfaces\UserRepositoryInterface;
+use HiEvents\Service\Common\EncryptedPayloadService;
 
 class ConfirmEmailChangeHandler
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace TicketKitten\Http\Request\Questions;
+namespace HiEvents\Http\Request\Questions;
 
-use TicketKitten\Http\Request\BaseRequest;
+use HiEvents\Http\Request\BaseRequest;
 
 class SortQuestionsRequest extends BaseRequest
 {

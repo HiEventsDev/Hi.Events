@@ -1,12 +1,12 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Organizers;
+namespace HiEvents\Http\Actions\Organizers;
 
 use Illuminate\Http\JsonResponse;
-use TicketKitten\DomainObjects\ImageDomainObject;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Repository\Interfaces\OrganizerRepositoryInterface;
-use TicketKitten\Resources\Organizer\OrganizerResource;
+use HiEvents\DomainObjects\ImageDomainObject;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
+use HiEvents\Resources\Organizer\OrganizerResource;
 
 class GetOrganizersAction extends BaseAction
 {

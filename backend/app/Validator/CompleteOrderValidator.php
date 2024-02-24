@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace TicketKitten\Validator;
+namespace HiEvents\Validator;
 
 use Illuminate\Routing\Route;
-use TicketKitten\DomainObjects\Enums\QuestionBelongsTo;
-use TicketKitten\DomainObjects\Generated\QuestionDomainObjectAbstract;
-use TicketKitten\DomainObjects\Generated\TicketDomainObjectAbstract;
-use TicketKitten\DomainObjects\QuestionDomainObject;
-use TicketKitten\DomainObjects\TicketDomainObject;
-use TicketKitten\DomainObjects\TicketPriceDomainObject;
-use TicketKitten\Repository\Eloquent\Value\Relationship;
-use TicketKitten\Repository\Interfaces\QuestionRepositoryInterface;
-use TicketKitten\Repository\Interfaces\TicketRepositoryInterface;
-use TicketKitten\Validator\Rules\AttendeeQuestionRule;
-use TicketKitten\Validator\Rules\OrderQuestionRule;
+use HiEvents\DomainObjects\Enums\QuestionBelongsTo;
+use HiEvents\DomainObjects\Generated\QuestionDomainObjectAbstract;
+use HiEvents\DomainObjects\Generated\TicketDomainObjectAbstract;
+use HiEvents\DomainObjects\QuestionDomainObject;
+use HiEvents\DomainObjects\TicketDomainObject;
+use HiEvents\DomainObjects\TicketPriceDomainObject;
+use HiEvents\Repository\Eloquent\Value\Relationship;
+use HiEvents\Repository\Interfaces\QuestionRepositoryInterface;
+use HiEvents\Repository\Interfaces\TicketRepositoryInterface;
+use HiEvents\Validator\Rules\AttendeeQuestionRule;
+use HiEvents\Validator\Rules\OrderQuestionRule;
 
 class CompleteOrderValidator extends BaseValidator
 {

@@ -1,12 +1,12 @@
 <?php
 
-namespace TicketKitten\Service\Common\Auth;
+namespace HiEvents\Service\Common\Auth;
 
 use Carbon\Carbon;
 use Illuminate\Config\Repository;
-use TicketKitten\DomainObjects\PasswordResetTokenDomainObject;
-use TicketKitten\Exceptions\InvalidPasswordResetTokenException;
-use TicketKitten\Repository\Interfaces\PasswordResetTokenRepositoryInterface;
+use HiEvents\DomainObjects\PasswordResetTokenDomainObject;
+use HiEvents\Exceptions\InvalidPasswordResetTokenException;
+use HiEvents\Repository\Interfaces\PasswordResetTokenRepositoryInterface;
 
 class ResetPasswordTokenValidateService
 {

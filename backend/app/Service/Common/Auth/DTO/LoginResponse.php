@@ -1,9 +1,9 @@
 <?php
 
-namespace TicketKitten\Service\Common\Auth\DTO;
+namespace HiEvents\Service\Common\Auth\DTO;
 
-use TicketKitten\DomainObjects\UserDomainObject;
-use TicketKitten\DataTransferObjects\BaseDTO;
+use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\DataTransferObjects\BaseDTO;
 
 class LoginResponse extends BaseDTO
 {

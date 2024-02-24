@@ -1,6 +1,6 @@
 <?php
 
-namespace TicketKitten\Exports;
+namespace HiEvents\Exports;
 
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -11,11 +11,11 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-use TicketKitten\DomainObjects\Enums\QuestionTypeEnum;
-use TicketKitten\DomainObjects\OrderDomainObject;
-use TicketKitten\DomainObjects\QuestionDomainObject;
-use TicketKitten\Resources\Order\OrderResource;
-use TicketKitten\Service\Common\Question\QuestionAnswerFormatter;
+use HiEvents\DomainObjects\Enums\QuestionTypeEnum;
+use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\DomainObjects\QuestionDomainObject;
+use HiEvents\Resources\Order\OrderResource;
+use HiEvents\Service\Common\Question\QuestionAnswerFormatter;
 
 class OrdersExport implements FromCollection, WithHeadings, WithMapping, WithStyles
 {

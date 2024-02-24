@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace TicketKitten\Service\Handler\Event;
+namespace HiEvents\Service\Handler\Event;
 
 use Illuminate\Database\DatabaseManager;
 use Throwable;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\DomainObjects\OrganizerDomainObject;
-use TicketKitten\Exceptions\OrganizerNotFoundException;
-use TicketKitten\Helper\DateHelper;
-use TicketKitten\Helper\IdHelper;
-use TicketKitten\Http\DataTransferObjects\AttributesDTO;
-use TicketKitten\Http\DataTransferObjects\CreateEventDTO;
-use TicketKitten\Repository\Interfaces\EventRepositoryInterface;
-use TicketKitten\Repository\Interfaces\EventSettingsRepositoryInterface;
-use TicketKitten\Repository\Interfaces\OrganizerRepositoryInterface;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\OrganizerDomainObject;
+use HiEvents\Exceptions\OrganizerNotFoundException;
+use HiEvents\Helper\DateHelper;
+use HiEvents\Helper\IdHelper;
+use HiEvents\Http\DataTransferObjects\AttributesDTO;
+use HiEvents\Http\DataTransferObjects\CreateEventDTO;
+use HiEvents\Repository\Interfaces\EventRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
+use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
 
 readonly class CreateEventHandler
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace TicketKitten\Models\Traits;
+namespace HiEvents\Models\Traits;
 
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-use TicketKitten\Models\Image;
+use HiEvents\Models\Image;
 
 trait HasImages
 {

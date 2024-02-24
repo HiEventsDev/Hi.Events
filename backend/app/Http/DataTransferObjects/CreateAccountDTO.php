@@ -1,8 +1,8 @@
 <?php
 
-namespace TicketKitten\Http\DataTransferObjects;
+namespace HiEvents\Http\DataTransferObjects;
 
-use TicketKitten\DataTransferObjects\BaseDTO;
+use HiEvents\DataTransferObjects\BaseDTO;
 
 final class CreateAccountDTO extends BaseDTO
 {

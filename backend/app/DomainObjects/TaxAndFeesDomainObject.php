@@ -1,8 +1,8 @@
 <?php
 
-namespace TicketKitten\DomainObjects;
+namespace HiEvents\DomainObjects;
 
-use TicketKitten\DomainObjects\Enums\TaxType;
+use HiEvents\DomainObjects\Enums\TaxType;
 
 class TaxAndFeesDomainObject extends Generated\TaxAndFeesDomainObjectAbstract
 {

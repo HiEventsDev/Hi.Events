@@ -1,8 +1,8 @@
 <?php
 
-namespace TicketKitten\Service\Common\Event\DTO;
+namespace HiEvents\Service\Common\Event\DTO;
 
-use TicketKitten\DataTransferObjects\BaseDTO;
+use HiEvents\DataTransferObjects\BaseDTO;
 
 class EventCheckInStatsResponseDTO extends BaseDTO
 {

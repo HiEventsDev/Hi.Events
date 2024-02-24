@@ -1,9 +1,9 @@
 <?php
 
-namespace TicketKitten\Service\Handler\Account\Payment\Stripe\DataTransferObjects;
+namespace HiEvents\Service\Handler\Account\Payment\Stripe\DataTransferObjects;
 
-use TicketKitten\DataTransferObjects\BaseDTO;
-use TicketKitten\DomainObjects\AccountDomainObject;
+use HiEvents\DataTransferObjects\BaseDTO;
+use HiEvents\DomainObjects\AccountDomainObject;
 
 class CreateStripeConnectAccountResponse extends BaseDTO
 {

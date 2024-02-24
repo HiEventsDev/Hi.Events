@@ -1,8 +1,8 @@
 <?php
 
-namespace TicketKitten\Models;
+namespace HiEvents\Models;
 
-use TicketKitten\Models\Traits\HasImages;
+use HiEvents\Models\Traits\HasImages;
 
 class Organizer extends BaseModel
 {

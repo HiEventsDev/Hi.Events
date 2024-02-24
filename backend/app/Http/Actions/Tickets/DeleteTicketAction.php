@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace TicketKitten\Http\Actions\Tickets;
+namespace HiEvents\Http\Actions\Tickets;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\Exceptions\CannotDeleteEntityException;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Service\Handler\Ticket\DeleteTicketHandler;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\Exceptions\CannotDeleteEntityException;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Service\Handler\Ticket\DeleteTicketHandler;
 
 class DeleteTicketAction extends BaseAction
 {

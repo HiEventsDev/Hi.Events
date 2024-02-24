@@ -1,10 +1,10 @@
 <?php
 
-namespace TicketKitten\Http\Request\PromoCode;
+namespace HiEvents\Http\Request\PromoCode;
 
 use Illuminate\Validation\Rule;
-use TicketKitten\DomainObjects\Enums\PromoCodeDiscountTypeEnum;
-use TicketKitten\Http\Request\BaseRequest;
+use HiEvents\DomainObjects\Enums\PromoCodeDiscountTypeEnum;
+use HiEvents\Http\Request\BaseRequest;
 
 class CreateUpdatePromoCodeRequest extends BaseRequest
 {

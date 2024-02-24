@@ -1,10 +1,10 @@
 <?php
 
-namespace TicketKitten\Resources\Ticket;
+namespace HiEvents\Resources\Ticket;
 
 use Illuminate\Http\Request;
-use TicketKitten\DomainObjects\TicketPriceDomainObject;
-use TicketKitten\Resources\BaseResource;
+use HiEvents\DomainObjects\TicketPriceDomainObject;
+use HiEvents\Resources\BaseResource;
 
 /**
  * @mixin TicketPriceDomainObject

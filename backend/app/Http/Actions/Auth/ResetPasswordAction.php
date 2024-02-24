@@ -1,16 +1,16 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Auth;
+namespace HiEvents\Http\Actions\Auth;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Throwable;
-use TicketKitten\Exceptions\PasswordInvalidException;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Http\DataTransferObjects\ResetPasswordDTO;
-use TicketKitten\Http\Request\Auth\ResetPasswordRequest;
-use TicketKitten\Service\Handler\Auth\ResetPasswordHandler;
+use HiEvents\Exceptions\PasswordInvalidException;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\DataTransferObjects\ResetPasswordDTO;
+use HiEvents\Http\Request\Auth\ResetPasswordRequest;
+use HiEvents\Service\Handler\Auth\ResetPasswordHandler;
 
 class ResetPasswordAction extends BaseAction
 {

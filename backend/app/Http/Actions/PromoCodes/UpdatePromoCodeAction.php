@@ -1,19 +1,19 @@
 <?php
 
-namespace TicketKitten\Http\Actions\PromoCodes;
+namespace HiEvents\Http\Actions\PromoCodes;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
-use TicketKitten\DomainObjects\Enums\PromoCodeDiscountTypeEnum;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\Exceptions\ResourceConflictException;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Http\DataTransferObjects\UpsertPromoCodeDTO;
-use TicketKitten\Http\Request\PromoCode\CreateUpdatePromoCodeRequest;
-use TicketKitten\Http\ResponseCodes;
-use TicketKitten\Resources\PromoCode\PromoCodeResource;
-use TicketKitten\Service\Common\Ticket\Exception\UnrecognizedTicketIdException;
-use TicketKitten\Service\Handler\PromoCode\UpdatePromoCodeHandler;
+use HiEvents\DomainObjects\Enums\PromoCodeDiscountTypeEnum;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\Exceptions\ResourceConflictException;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\DataTransferObjects\UpsertPromoCodeDTO;
+use HiEvents\Http\Request\PromoCode\CreateUpdatePromoCodeRequest;
+use HiEvents\Http\ResponseCodes;
+use HiEvents\Resources\PromoCode\PromoCodeResource;
+use HiEvents\Service\Common\Ticket\Exception\UnrecognizedTicketIdException;
+use HiEvents\Service\Handler\PromoCode\UpdatePromoCodeHandler;
 
 class UpdatePromoCodeAction extends BaseAction
 {

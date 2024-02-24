@@ -1,9 +1,9 @@
 <?php
 
-namespace TicketKitten\Http\DataTransferObjects;
+namespace HiEvents\Http\DataTransferObjects;
 
-use TicketKitten\DomainObjects\Enums\Role;
-use TicketKitten\DataTransferObjects\BaseDTO;
+use HiEvents\DomainObjects\Enums\Role;
+use HiEvents\DataTransferObjects\BaseDTO;
 
 class CreateUserDTO extends BaseDTO
 {

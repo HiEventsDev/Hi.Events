@@ -1,9 +1,9 @@
 <?php
 
-namespace TicketKitten\Resources\Event;
+namespace HiEvents\Resources\Event;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use TicketKitten\DomainObjects\EventSettingDomainObject;
+use HiEvents\DomainObjects\EventSettingDomainObject;
 
 /**
  * @mixin EventSettingDomainObject

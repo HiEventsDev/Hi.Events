@@ -1,16 +1,16 @@
 <?php
 
-namespace TicketKitten\Http\Actions\Events;
+namespace HiEvents\Http\Actions\Events;
 
 use Illuminate\Http\JsonResponse;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\Exceptions\AccountNotVerifiedException;
-use TicketKitten\Http\Actions\BaseAction;
-use TicketKitten\Http\DataTransferObjects\UpdateEventStatusDTO;
-use TicketKitten\Http\Request\Event\UpdateEventStatusRequest;
-use TicketKitten\Http\ResponseCodes;
-use TicketKitten\Resources\Event\EventResource;
-use TicketKitten\Service\Handler\Event\UpdateEventStatusHandler;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\Exceptions\AccountNotVerifiedException;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\DataTransferObjects\UpdateEventStatusDTO;
+use HiEvents\Http\Request\Event\UpdateEventStatusRequest;
+use HiEvents\Http\ResponseCodes;
+use HiEvents\Resources\Event\EventResource;
+use HiEvents\Service\Handler\Event\UpdateEventStatusHandler;
 
 class UpdateEventStatusAction extends BaseAction
 {

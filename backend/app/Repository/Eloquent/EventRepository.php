@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace TicketKitten\Repository\Eloquent;
+namespace HiEvents\Repository\Eloquent;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
-use TicketKitten\DomainObjects\EventDomainObject;
-use TicketKitten\DomainObjects\Generated\EventDomainObjectAbstract;
-use TicketKitten\DomainObjects\Status\OrderStatus;
-use TicketKitten\Http\DataTransferObjects\QueryParamsDTO;
-use TicketKitten\Models\Event;
-use TicketKitten\Repository\Interfaces\EventRepositoryInterface;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\Generated\EventDomainObjectAbstract;
+use HiEvents\DomainObjects\Status\OrderStatus;
+use HiEvents\Http\DataTransferObjects\QueryParamsDTO;
+use HiEvents\Models\Event;
+use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 
 class EventRepository extends BaseRepository implements EventRepositoryInterface
 {

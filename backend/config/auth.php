@@ -66,7 +66,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => \TicketKitten\Models\User::class,
+            'model' => \HiEvents\Models\User::class,
         ],
 
         // 'users' => [

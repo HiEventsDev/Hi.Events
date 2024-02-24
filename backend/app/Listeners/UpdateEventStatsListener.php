@@ -1,9 +1,9 @@
 <?php
 
-namespace TicketKitten\Listeners;
+namespace HiEvents\Listeners;
 
-use TicketKitten\Events\OrderStatusChangedEvent;
-use TicketKitten\Jobs\UpdateEventStatisticsJob;
+use HiEvents\Events\OrderStatusChangedEvent;
+use HiEvents\Jobs\UpdateEventStatisticsJob;
 
 readonly class UpdateEventStatsListener
 {

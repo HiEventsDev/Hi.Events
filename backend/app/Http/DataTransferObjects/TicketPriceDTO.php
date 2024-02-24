@@ -1,9 +1,9 @@
 <?php
 
-namespace TicketKitten\Http\DataTransferObjects;
+namespace HiEvents\Http\DataTransferObjects;
 
-use TicketKitten\DataTransferObjects\BaseDTO;
-use TicketKitten\DomainObjects\Status\TicketStatus;
+use HiEvents\DataTransferObjects\BaseDTO;
+use HiEvents\DomainObjects\Status\TicketStatus;
 
 class TicketPriceDTO extends BaseDTO
 {
