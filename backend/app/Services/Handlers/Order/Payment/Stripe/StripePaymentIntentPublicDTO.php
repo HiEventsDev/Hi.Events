@@ -1,6 +1,6 @@
 <?php
 
-namespace HiEvents\Services\Handlers\Order\DTO;
+namespace HiEvents\Services\Handlers\Order\Payment\Stripe;
 
 use HiEvents\DataTransferObjects\BaseDTO;
 

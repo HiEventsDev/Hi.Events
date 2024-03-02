@@ -7,7 +7,6 @@ use HiEvents\DomainObjects\StripePaymentDomainObject;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Common\Payment\Stripe\EventHandlers\PaymentIntentSucceededHandler;
-use HiEvents\Services\Handlers\Order\DTO\StripePaymentIntentPublicDTO;
 use Psr\Log\LoggerInterface;
 use Stripe\Exception\ApiErrorException;
 use Stripe\StripeClient;

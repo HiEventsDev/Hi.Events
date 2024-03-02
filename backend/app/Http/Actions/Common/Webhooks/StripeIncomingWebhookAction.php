@@ -4,8 +4,8 @@ namespace HiEvents\Http\Actions\Common\Webhooks;
 
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\ResponseCodes;
-use HiEvents\Services\Handlers\Order\DTO\StripeWebhookDTO;
 use HiEvents\Services\Handlers\Order\Payment\Stripe\IncomingWebhookHandler;
+use HiEvents\Services\Handlers\Order\Payment\Stripe\StripeWebhookDTO;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Throwable;

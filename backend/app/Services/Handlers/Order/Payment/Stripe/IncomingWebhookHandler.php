@@ -7,7 +7,6 @@ use HiEvents\Services\Common\Payment\Stripe\EventHandlers\AccountUpdateHandler;
 use HiEvents\Services\Common\Payment\Stripe\EventHandlers\ChargeRefundUpdatedHandler;
 use HiEvents\Services\Common\Payment\Stripe\EventHandlers\PaymentIntentFailedHandler;
 use HiEvents\Services\Common\Payment\Stripe\EventHandlers\PaymentIntentSucceededHandler;
-use HiEvents\Services\Handlers\Order\DTO\StripeWebhookDTO;
 use Illuminate\Log\Logger;
 use JsonException;
 use Stripe\Event;
