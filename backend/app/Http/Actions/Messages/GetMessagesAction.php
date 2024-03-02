@@ -8,7 +8,7 @@ use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\MessageDomainObject;
 use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Http\DataTransferObjects\QueryParamsDTO;
+use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\MessageRepositoryInterface;
 use HiEvents\Resources\Message\MessageResource;

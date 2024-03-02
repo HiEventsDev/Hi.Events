@@ -2,13 +2,13 @@
 
 namespace HiEvents\Http\Actions\Common\Webhooks;
 
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\ResponseCodes;
+use HiEvents\Services\Handlers\Order\DTO\StripeWebhookDTO;
+use HiEvents\Services\Handlers\Order\Payment\Stripe\IncomingWebhookHandler;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Throwable;
-use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Http\DataTransferObjects\StripeWebhookDTO;
-use HiEvents\Http\ResponseCodes;
-use HiEvents\Service\Handler\Order\Payment\Stripe\IncomingWebhookHandler;
 
 class StripeIncomingWebhookAction extends BaseAction
 {

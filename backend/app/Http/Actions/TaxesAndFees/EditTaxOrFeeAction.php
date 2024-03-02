@@ -2,15 +2,15 @@
 
 namespace HiEvents\Http\Actions\TaxesAndFees;
 
-use Illuminate\Http\JsonResponse;
-use Illuminate\Validation\ValidationException;
 use HiEvents\DomainObjects\TaxAndFeesDomainObject;
 use HiEvents\Exceptions\ResourceNameAlreadyExistsException;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Http\DataTransferObjects\UpsertTaxDTO;
 use HiEvents\Http\Request\TaxOrFee\CreateTaxOrFeeRequest;
 use HiEvents\Resources\Tax\TaxAndFeeResource;
-use HiEvents\Service\Handler\TaxAndFee\EditTaxHandler;
+use HiEvents\Services\Handlers\TaxAndFee\DTO\UpsertTaxDTO;
+use HiEvents\Services\Handlers\TaxAndFee\EditTaxHandler;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Validation\ValidationException;
 
 class EditTaxOrFeeAction extends BaseAction
 {

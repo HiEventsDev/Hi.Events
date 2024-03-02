@@ -1,13 +1,13 @@
 <?php
 
-namespace Tests\Unit\Service\Handler\Event;
+namespace Tests\Unit\Services\Handlers\Event;
 
 use Carbon\Carbon;
 use PHPUnit\Framework\TestCase;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\TicketDomainObject;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
-use HiEvents\Service\Handler\Event\GetPublicEventHandler;
+use HiEvents\Services\Handlers\Event\GetPublicEventHandler;
 
 class GetPublicEventHandlerTest extends TestCase
 {

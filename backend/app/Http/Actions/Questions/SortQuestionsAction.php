@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Questions\SortQuestionsRequest;
-use HiEvents\Service\Handler\Question\SortQuestionsHandler;
+use HiEvents\Services\Handlers\Question\SortQuestionsHandler;
 
 class SortQuestionsAction extends BaseAction
 {

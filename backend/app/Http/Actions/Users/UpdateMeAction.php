@@ -2,14 +2,14 @@
 
 namespace HiEvents\Http\Actions\Users;
 
-use Illuminate\Http\JsonResponse;
-use Illuminate\Validation\ValidationException;
 use HiEvents\Exceptions\PasswordInvalidException;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Http\DataTransferObjects\UpdateMeDTO;
 use HiEvents\Http\Request\User\UpdateMeRequest;
 use HiEvents\Resources\User\UserResource;
-use HiEvents\Service\Handler\User\UpdateMeHandler;
+use HiEvents\Services\Handlers\User\DTO\UpdateMeDTO;
+use HiEvents\Services\Handlers\User\UpdateMeHandler;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Validation\ValidationException;
 
 class UpdateMeAction extends BaseAction
 {

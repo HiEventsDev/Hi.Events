@@ -9,7 +9,7 @@ use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Exceptions\DecryptionFailedException;
 use HiEvents\Exceptions\EncryptedPayloadExpiredException;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Service\Handler\User\ConfirmEmailAddressHandler;
+use HiEvents\Services\Handlers\User\ConfirmEmailAddressHandler;
 
 class ConfirmEmailAddressAction extends BaseAction
 {

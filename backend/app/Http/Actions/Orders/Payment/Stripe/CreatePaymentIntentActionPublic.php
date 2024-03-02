@@ -6,7 +6,7 @@ use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use HiEvents\Exceptions\Stripe\CreatePaymentIntentFailedException;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Service\Handler\Order\Payment\Stripe\CreatePaymentIntentHandler;
+use HiEvents\Services\Handlers\Order\Payment\Stripe\CreatePaymentIntentHandler;
 
 class CreatePaymentIntentActionPublic extends BaseAction
 {

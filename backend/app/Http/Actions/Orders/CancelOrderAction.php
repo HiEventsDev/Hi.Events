@@ -2,16 +2,16 @@
 
 namespace HiEvents\Http\Actions\Orders;
 
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
-use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Http\DataTransferObjects\CancelOrderDTO;
 use HiEvents\Resources\Order\OrderResource;
-use HiEvents\Service\Handler\Order\CancelOrderHandler;
+use HiEvents\Services\Handlers\Order\CancelOrderHandler;
+use HiEvents\Services\Handlers\Order\DTO\CancelOrderDTO;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class CancelOrderAction extends BaseAction
 {

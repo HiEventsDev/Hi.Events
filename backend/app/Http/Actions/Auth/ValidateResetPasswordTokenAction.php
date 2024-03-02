@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Throwable;
 use HiEvents\Exceptions\InvalidPasswordResetTokenException;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Service\Handler\Auth\ValidateResetPasswordTokenHandler;
+use HiEvents\Services\Handlers\Auth\ValidateResetPasswordTokenHandler;
 
 class ValidateResetPasswordTokenAction extends BaseAction
 {

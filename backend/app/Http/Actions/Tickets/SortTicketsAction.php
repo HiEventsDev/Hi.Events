@@ -8,7 +8,7 @@ use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Ticket\SortTicketsRequest;
-use HiEvents\Service\Handler\Ticket\SortTicketsHandler;
+use HiEvents\Services\Handlers\Ticket\SortTicketsHandler;
 
 class SortTicketsAction extends BaseAction
 {

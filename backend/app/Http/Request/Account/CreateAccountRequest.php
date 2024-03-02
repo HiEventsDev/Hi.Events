@@ -7,7 +7,7 @@ namespace HiEvents\Http\Request\Account;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 use HiEvents\Http\Request\BaseRequest;
-use HiEvents\Validator\Rules\RulesHelper;
+use HiEvents\Validators\Rules\RulesHelper;
 
 class CreateAccountRequest extends BaseRequest
 {

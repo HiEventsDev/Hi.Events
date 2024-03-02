@@ -6,7 +6,7 @@ use Illuminate\Http\JsonResponse;
 use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Resources\User\UserResource;
-use HiEvents\Service\Handler\User\CancelEmailChangeHandler;
+use HiEvents\Services\Handlers\User\CancelEmailChangeHandler;
 
 class CancelEmailChangeAction extends BaseAction
 {

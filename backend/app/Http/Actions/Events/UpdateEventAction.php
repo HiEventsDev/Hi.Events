@@ -2,16 +2,16 @@
 
 namespace HiEvents\Http\Actions\Events;
 
-use Illuminate\Http\JsonResponse;
-use Illuminate\Validation\ValidationException;
-use Throwable;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Exceptions\CannotChangeCurrencyException;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Http\DataTransferObjects\UpdateEventDTO;
 use HiEvents\Http\Request\Event\UpdateEventRequest;
 use HiEvents\Resources\Event\EventResource;
-use HiEvents\Service\Handler\Event\UpdateEventHandler;
+use HiEvents\Services\Handlers\Event\DTO\UpdateEventDTO;
+use HiEvents\Services\Handlers\Event\UpdateEventHandler;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Validation\ValidationException;
+use Throwable;
 
 class UpdateEventAction extends BaseAction
 {

@@ -9,7 +9,7 @@ use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Attendee\PartialEditAttendeeRequest;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Resources\Attendee\AttendeeResource;
-use HiEvents\Service\Common\Ticket\TicketQuantityService;
+use HiEvents\Services\Common\Ticket\TicketQuantityService;
 
 class PartialEditAttendeeAction extends BaseAction
 {

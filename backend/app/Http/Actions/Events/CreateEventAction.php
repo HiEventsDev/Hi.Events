@@ -2,15 +2,15 @@
 
 namespace HiEvents\Http\Actions\Events;
 
+use HiEvents\Exceptions\OrganizerNotFoundException;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\Request\Event\CreateEventRequest;
+use HiEvents\Resources\Event\EventResource;
+use HiEvents\Services\Handlers\Event\CreateEventHandler;
+use HiEvents\Services\Handlers\Event\DTO\CreateEventDTO;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 use Throwable;
-use HiEvents\Exceptions\OrganizerNotFoundException;
-use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Http\DataTransferObjects\CreateEventDTO;
-use HiEvents\Http\Request\Event\CreateEventRequest;
-use HiEvents\Resources\Event\EventResource;
-use HiEvents\Service\Handler\Event\CreateEventHandler;
 
 class CreateEventAction extends BaseAction
 {

@@ -2,16 +2,16 @@
 
 namespace HiEvents\Http\Actions\Attendees;
 
-use Illuminate\Http\JsonResponse;
-use Illuminate\Validation\ValidationException;
-use Throwable;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Exceptions\NoTicketsAvailableException;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Http\DataTransferObjects\EditAttendeeDTO;
 use HiEvents\Http\Request\Attendee\EditAttendeeRequest;
 use HiEvents\Resources\Attendee\AttendeeResource;
-use HiEvents\Service\Handler\Attendee\EditAttendeeHandler;
+use HiEvents\Services\Handlers\Attendee\DTO\EditAttendeeDTO;
+use HiEvents\Services\Handlers\Attendee\EditAttendeeHandler;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Validation\ValidationException;
+use Throwable;
 
 class EditAttendeeAction extends BaseAction
 {

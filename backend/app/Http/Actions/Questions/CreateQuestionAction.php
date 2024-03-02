@@ -2,15 +2,14 @@
 
 namespace HiEvents\Http\Actions\Questions;
 
-use Illuminate\Http\JsonResponse;
-use HiEvents\DomainObjects\Enums\QuestionBelongsTo;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Http\DataTransferObjects\UpsertQuestionDTO;
 use HiEvents\Http\Request\Questions\UpsertQuestionRequest;
 use HiEvents\Http\ResponseCodes;
 use HiEvents\Resources\Question\QuestionResource;
-use HiEvents\Service\Handler\Question\CreateQuestionHandler;
+use HiEvents\Services\Handlers\Question\CreateQuestionHandler;
+use HiEvents\Services\Handlers\Question\DTO\UpsertQuestionDTO;
+use Illuminate\Http\JsonResponse;
 
 class CreateQuestionAction extends BaseAction
 {

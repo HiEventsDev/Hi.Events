@@ -14,7 +14,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use HiEvents\DomainObjects\Enums\QuestionTypeEnum;
 use HiEvents\DomainObjects\QuestionDomainObject;
 use HiEvents\Resources\Attendee\AttendeeResource;
-use HiEvents\Service\Common\Question\QuestionAnswerFormatter;
+use HiEvents\Services\Common\Question\QuestionAnswerFormatter;
 
 readonly class AttendeesExport implements FromCollection, WithHeadings, WithMapping, WithStyles
 {

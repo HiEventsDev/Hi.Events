@@ -4,7 +4,7 @@ namespace HiEvents\Repository\Interfaces;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use HiEvents\DomainObjects\PromoCodeDomainObject;
-use HiEvents\Http\DataTransferObjects\QueryParamsDTO;
+use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Repository\Eloquent\BaseRepository;
 
 /**

@@ -2,14 +2,14 @@
 
 namespace HiEvents\Http\Actions\EventSettings;
 
-use Illuminate\Http\JsonResponse;
-use Throwable;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Http\DataTransferObjects\PartialUpdateEventSettingsDTO;
 use HiEvents\Http\Request\EventSettings\UpdateEventSettingsRequest;
 use HiEvents\Resources\Event\EventSettingsResource;
-use HiEvents\Service\Handler\EventSettings\PartialUpdateEventSettingsHandler;
+use HiEvents\Services\Handlers\EventSettings\DTO\PartialUpdateEventSettingsDTO;
+use HiEvents\Services\Handlers\EventSettings\PartialUpdateEventSettingsHandler;
+use Illuminate\Http\JsonResponse;
+use Throwable;
 
 class PartialEditEventSettingsAction extends BaseAction
 {

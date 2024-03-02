@@ -2,13 +2,13 @@
 
 namespace HiEvents\Http\Actions\EventSettings;
 
-use Illuminate\Http\JsonResponse;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Http\DataTransferObjects\UpdateEventSettingsDTO;
 use HiEvents\Http\Request\EventSettings\UpdateEventSettingsRequest;
 use HiEvents\Resources\Event\EventSettingsResource;
-use HiEvents\Service\Handler\EventSettings\UpdateEventSettingsHandler;
+use HiEvents\Services\Handlers\EventSettings\DTO\UpdateEventSettingsDTO;
+use HiEvents\Services\Handlers\EventSettings\UpdateEventSettingsHandler;
+use Illuminate\Http\JsonResponse;
 
 class EditEventSettingsAction extends BaseAction
 {

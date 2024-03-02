@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Orders;
 
-use Illuminate\Http\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Http\DataTransferObjects\CompleteOrderDTO;
-use HiEvents\Http\DataTransferObjects\CompleteOrderOrderDTO;
 use HiEvents\Http\Request\Order\CompleteOrderRequest;
 use HiEvents\Resources\Order\OrderResourcePublic;
-use HiEvents\Service\Handler\Order\CompleteOrderHandler;
+use HiEvents\Services\Handlers\Order\CompleteOrderHandler;
+use HiEvents\Services\Handlers\Order\DTO\CompleteOrderDTO;
+use HiEvents\Services\Handlers\Order\DTO\CompleteOrderOrderDTO;
+use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class CompleteOrderActionPublic extends BaseAction
 {

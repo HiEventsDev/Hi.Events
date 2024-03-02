@@ -4,7 +4,7 @@ namespace HiEvents\Http\Request\Attendee;
 
 use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\Http\Request\BaseRequest;
-use HiEvents\Validator\Rules\InsensitiveIn;
+use HiEvents\Validators\Rules\InsensitiveIn;
 
 class PartialEditAttendeeRequest extends BaseRequest
 {

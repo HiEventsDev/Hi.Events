@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\PromoCodeDomainObject;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Http\DataTransferObjects\QueryParamsDTO;
+use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
 use HiEvents\Resources\PromoCode\PromoCodeResource;
 

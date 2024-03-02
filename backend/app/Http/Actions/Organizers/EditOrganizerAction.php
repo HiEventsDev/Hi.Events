@@ -2,14 +2,14 @@
 
 namespace HiEvents\Http\Actions\Organizers;
 
-use Illuminate\Http\JsonResponse;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Http\DataTransferObjects\EditOrganizerDTO;
 use HiEvents\Http\Request\Organizer\UpsertOrganizerRequest;
 use HiEvents\Http\ResponseCodes;
 use HiEvents\Resources\Organizer\OrganizerResource;
-use HiEvents\Service\Handler\Organizer\EditOrganizerHandler;
+use HiEvents\Services\Handlers\Organizer\DTO\EditOrganizerDTO;
+use HiEvents\Services\Handlers\Organizer\EditOrganizerHandler;
+use Illuminate\Http\JsonResponse;
 
 class EditOrganizerAction extends BaseAction
 {

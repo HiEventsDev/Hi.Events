@@ -2,14 +2,14 @@
 
 namespace HiEvents\Http\Actions\Users;
 
-use Illuminate\Http\JsonResponse;
-use Illuminate\Validation\ValidationException;
 use HiEvents\Exceptions\CannotUpdateResourceException;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Http\DataTransferObjects\UpdateUserDTO;
 use HiEvents\Http\Request\User\UpdateUserRequest;
 use HiEvents\Resources\User\UserResource;
-use HiEvents\Service\Handler\User\UpdateUserHandler;
+use HiEvents\Services\Handlers\User\DTO\UpdateUserDTO;
+use HiEvents\Services\Handlers\User\UpdateUserHandler;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Validation\ValidationException;
 
 class UpdateUserAction extends BaseAction
 {

@@ -3,7 +3,7 @@
 namespace HiEvents\Http\Request\EventSettings;
 
 use HiEvents\Http\Request\BaseRequest;
-use HiEvents\Validator\Rules\RulesHelper;
+use HiEvents\Validators\Rules\RulesHelper;
 
 class UpdateEventSettingsRequest extends BaseRequest
 {

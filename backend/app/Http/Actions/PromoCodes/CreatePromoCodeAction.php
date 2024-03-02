@@ -2,18 +2,18 @@
 
 namespace HiEvents\Http\Actions\PromoCodes;
 
-use Illuminate\Http\JsonResponse;
-use Illuminate\Validation\ValidationException;
 use HiEvents\DomainObjects\Enums\PromoCodeDiscountTypeEnum;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Http\DataTransferObjects\UpsertPromoCodeDTO;
 use HiEvents\Http\Request\PromoCode\CreateUpdatePromoCodeRequest;
 use HiEvents\Http\ResponseCodes;
 use HiEvents\Resources\PromoCode\PromoCodeResource;
-use HiEvents\Service\Common\Ticket\Exception\UnrecognizedTicketIdException;
-use HiEvents\Service\Handler\PromoCode\CreatePromoCodeHandler;
+use HiEvents\Services\Common\Ticket\Exception\UnrecognizedTicketIdException;
+use HiEvents\Services\Handlers\PromoCode\CreatePromoCodeHandler;
+use HiEvents\Services\Handlers\PromoCode\DTO\UpsertPromoCodeDTO;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Validation\ValidationException;
 
 class CreatePromoCodeAction extends BaseAction
 {

@@ -2,13 +2,13 @@
 
 namespace HiEvents\Http\Actions\TaxesAndFees;
 
-use Illuminate\Http\Response;
-use Throwable;
 use HiEvents\DomainObjects\TaxAndFeesDomainObject;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Http\DataTransferObjects\DeleteTaxDTO;
-use HiEvents\Service\Handler\TaxAndFee\DeleteTaxHandler;
+use HiEvents\Services\Handlers\TaxAndFee\DeleteTaxHandler;
+use HiEvents\Services\Handlers\TaxAndFee\DTO\DeleteTaxDTO;
+use Illuminate\Http\Response;
+use Throwable;
 
 class DeleteTaxOrFeeAction extends BaseAction
 {

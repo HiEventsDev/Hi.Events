@@ -4,8 +4,8 @@ namespace HiEvents\Http\Actions\Attendees;
 
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Http\DataTransferObjects\ResendAttendeeTicketDTO;
-use HiEvents\Service\Handler\Attendee\ResendAttendeeTicketHandler;
+use HiEvents\Services\Handlers\Attendee\DTO\ResendAttendeeTicketDTO;
+use HiEvents\Services\Handlers\Attendee\ResendAttendeeTicketHandler;
 use Illuminate\Http\Response;
 
 class ResendAttendeeTicketAction extends BaseAction

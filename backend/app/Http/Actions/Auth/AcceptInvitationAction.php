@@ -2,16 +2,16 @@
 
 namespace HiEvents\Http\Actions\Auth;
 
-use Illuminate\Http\Response;
-use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use HiEvents\Exceptions\DecryptionFailedException;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Http\DataTransferObjects\AcceptInvitationDTO;
 use HiEvents\Http\Request\Auth\AcceptInvitationRequest;
 use HiEvents\Http\ResponseCodes;
-use HiEvents\Service\Handler\Auth\AcceptInvitationHandler;
+use HiEvents\Services\Handlers\Auth\AcceptInvitationHandler;
+use HiEvents\Services\Handlers\Auth\DTO\AcceptInvitationDTO;
+use Illuminate\Http\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class AcceptInvitationAction extends BaseAction
 {

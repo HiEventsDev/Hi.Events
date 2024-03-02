@@ -7,7 +7,7 @@ namespace HiEvents\Http\Request\Ticket;
 use Illuminate\Validation\Rule;
 use HiEvents\DomainObjects\Enums\TicketType;
 use HiEvents\Http\Request\BaseRequest;
-use HiEvents\Validator\Rules\RulesHelper;
+use HiEvents\Validators\Rules\RulesHelper;
 
 class UpsertTicketRequest extends BaseRequest
 {

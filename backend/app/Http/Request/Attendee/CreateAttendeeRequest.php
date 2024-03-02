@@ -3,7 +3,7 @@
 namespace HiEvents\Http\Request\Attendee;
 
 use HiEvents\Http\Request\BaseRequest;
-use HiEvents\Validator\Rules\RulesHelper;
+use HiEvents\Validators\Rules\RulesHelper;
 
 class CreateAttendeeRequest extends BaseRequest
 {

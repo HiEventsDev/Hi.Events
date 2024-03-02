@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace HiEvents\Http\Request\Event;
 
 use HiEvents\Http\Request\BaseRequest;
-use HiEvents\Validator\EventRules;
+use HiEvents\Validators\EventRules;
 
 class UpdateEventRequest extends BaseRequest
 {

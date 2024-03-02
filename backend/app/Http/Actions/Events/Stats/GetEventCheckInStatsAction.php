@@ -6,7 +6,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Service\Handler\Event\GetEventCheckInStatsHandler;
+use HiEvents\Services\Handlers\Event\GetEventCheckInStatsHandler;
 
 class GetEventCheckInStatsAction extends BaseAction
 {

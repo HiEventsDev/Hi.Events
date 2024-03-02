@@ -10,7 +10,7 @@ use Illuminate\Support\Collection;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\Generated\EventDomainObjectAbstract;
 use HiEvents\DomainObjects\Status\OrderStatus;
-use HiEvents\Http\DataTransferObjects\QueryParamsDTO;
+use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Models\Event;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 

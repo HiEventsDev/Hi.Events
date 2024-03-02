@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Tickets;
 
-use Illuminate\Http\JsonResponse;
-use Illuminate\Validation\ValidationException;
-use Throwable;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Exceptions\CannotChangeTicketTypeException;
 use HiEvents\Exceptions\InvalidTaxOrFeeIdException;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Http\DataTransferObjects\UpsertTicketDTO;
 use HiEvents\Http\Request\Ticket\UpsertTicketRequest;
 use HiEvents\Resources\Ticket\TicketResource;
-use HiEvents\Service\Handler\Ticket\EditTicketHandler;
+use HiEvents\Services\Handlers\Ticket\DTO\UpsertTicketDTO;
+use HiEvents\Services\Handlers\Ticket\EditTicketHandler;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Validation\ValidationException;
+use Throwable;
 
 class EditTicketAction extends BaseAction
 {

@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
 use HiEvents\DomainObjects\Status\OrderStatus;
-use HiEvents\Http\DataTransferObjects\QueryParamsDTO;
+use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Models\Attendee;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 

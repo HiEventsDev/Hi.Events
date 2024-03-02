@@ -6,7 +6,7 @@ use Illuminate\Http\JsonResponse;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Auth\ForgotPasswordRequest;
-use HiEvents\Service\Handler\Auth\ForgotPasswordHandler;
+use HiEvents\Services\Handlers\Auth\ForgotPasswordHandler;
 
 class ForgotPasswordAction extends BaseAction
 {

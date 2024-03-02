@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Exceptions\CannotDeleteEntityException;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Service\Handler\Ticket\DeleteTicketHandler;
+use HiEvents\Services\Handlers\Ticket\DeleteTicketHandler;
 
 class DeleteTicketAction extends BaseAction
 {

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace HiEvents\Http\Request\Order;
 
 use HiEvents\Http\Request\BaseRequest;
-use HiEvents\Validator\CompleteOrderValidator;
+use HiEvents\Validators\CompleteOrderValidator;
 
 class CompleteOrderRequest extends BaseRequest
 {

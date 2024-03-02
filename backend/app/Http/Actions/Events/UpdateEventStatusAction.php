@@ -2,15 +2,15 @@
 
 namespace HiEvents\Http\Actions\Events;
 
-use Illuminate\Http\JsonResponse;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Exceptions\AccountNotVerifiedException;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Http\DataTransferObjects\UpdateEventStatusDTO;
 use HiEvents\Http\Request\Event\UpdateEventStatusRequest;
 use HiEvents\Http\ResponseCodes;
 use HiEvents\Resources\Event\EventResource;
-use HiEvents\Service\Handler\Event\UpdateEventStatusHandler;
+use HiEvents\Services\Handlers\Event\DTO\UpdateEventStatusDTO;
+use HiEvents\Services\Handlers\Event\UpdateEventStatusHandler;
+use Illuminate\Http\JsonResponse;
 
 class UpdateEventStatusAction extends BaseAction
 {

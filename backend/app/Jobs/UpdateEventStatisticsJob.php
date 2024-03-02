@@ -10,7 +10,7 @@ use Illuminate\Queue\SerializesModels;
 use Throwable;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\Exceptions\EventStatisticsVersionMismatchException;
-use HiEvents\Service\Common\EventStatistics\EventStatisticsUpdateService;
+use HiEvents\Services\Common\EventStatistics\EventStatisticsUpdateService;
 
 class UpdateEventStatisticsJob implements ShouldQueue
 {

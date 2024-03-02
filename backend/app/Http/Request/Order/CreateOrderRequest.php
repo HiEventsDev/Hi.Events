@@ -6,7 +6,7 @@ namespace HiEvents\Http\Request\Order;
 
 use Illuminate\Validation\ValidationException;
 use HiEvents\Http\Request\BaseRequest;
-use HiEvents\Validator\CreateOrderValidator;
+use HiEvents\Validators\CreateOrderValidator;
 
 class CreateOrderRequest extends BaseRequest
 {

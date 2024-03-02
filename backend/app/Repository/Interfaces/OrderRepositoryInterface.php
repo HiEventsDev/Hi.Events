@@ -7,7 +7,7 @@ namespace HiEvents\Repository\Interfaces;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
-use HiEvents\Http\DataTransferObjects\QueryParamsDTO;
+use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Repository\Eloquent\BaseRepository;
 
 /**

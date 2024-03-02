@@ -2,14 +2,14 @@
 
 namespace HiEvents\Jobs;
 
+use HiEvents\Exceptions\UnableToSendMessageException;
+use HiEvents\Services\Common\Mail\SendEventEmailMessagesService;
+use HiEvents\Services\Handlers\Message\DTO\SendMessageDTO;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use HiEvents\Exceptions\UnableToSendMessageException;
-use HiEvents\Http\DataTransferObjects\SendMessageDTO;
-use HiEvents\Service\Common\Mail\SendEventEmailMessagesService;
 
 class SendMessagesJob implements ShouldQueue
 {

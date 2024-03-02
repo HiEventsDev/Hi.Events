@@ -2,13 +2,13 @@
 
 namespace HiEvents\Http\Actions\Messages;
 
-use Illuminate\Http\JsonResponse;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Http\DataTransferObjects\SendMessageDTO;
 use HiEvents\Http\Request\Message\SendMessageRequest;
 use HiEvents\Resources\Message\MessageResource;
-use HiEvents\Service\Handler\Message\SendMessageHandler;
+use HiEvents\Services\Handlers\Message\DTO\SendMessageDTO;
+use HiEvents\Services\Handlers\Message\SendMessageHandler;
+use Illuminate\Http\JsonResponse;
 
 class SendMessageAction extends BaseAction
 {

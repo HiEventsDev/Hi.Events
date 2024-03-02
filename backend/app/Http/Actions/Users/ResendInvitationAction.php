@@ -2,12 +2,12 @@
 
 namespace HiEvents\Http\Actions\Users;
 
-use Illuminate\Http\Response;
 use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\Status\UserStatus;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
-use HiEvents\Service\Common\User\SendUserInvitationService;
+use HiEvents\Services\Common\User\SendUserInvitationService;
+use Illuminate\Http\Response;
 
 class ResendInvitationAction extends BaseAction
 {

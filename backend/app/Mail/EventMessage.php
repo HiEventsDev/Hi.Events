@@ -2,10 +2,10 @@
 
 namespace HiEvents\Mail;
 
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\Services\Handlers\Message\DTO\SendMessageDTO;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
-use HiEvents\DomainObjects\EventDomainObject;
-use HiEvents\Http\DataTransferObjects\SendMessageDTO;
 
 /**
  * @uses /backend/resources/views/emails/event/message.blade.php

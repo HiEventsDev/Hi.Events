@@ -4,7 +4,7 @@ namespace HiEvents\Resources\Account\Stripe;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use HiEvents\Resources\Account\AccountResource;
-use HiEvents\Service\Handler\Account\Payment\Stripe\DataTransferObjects\CreateStripeConnectAccountResponse;
+use HiEvents\Services\Handlers\Account\Payment\Stripe\DataTransferObjects\CreateStripeConnectAccountResponse;
 
 /**
  * @mixin CreateStripeConnectAccountResponse

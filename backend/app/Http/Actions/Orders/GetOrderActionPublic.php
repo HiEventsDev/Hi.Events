@@ -15,7 +15,7 @@ use HiEvents\Models\TicketPrice;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Resources\Order\OrderResourcePublic;
-use HiEvents\Service\Common\Session\SessionIdentifierService;
+use HiEvents\Services\Common\Session\SessionIdentifierService;
 
 class GetOrderActionPublic extends BaseAction
 {

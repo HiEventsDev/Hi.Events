@@ -11,7 +11,7 @@ use HiEvents\Constants;
 use HiEvents\DomainObjects\Generated\TicketDomainObjectAbstract;
 use HiEvents\DomainObjects\TaxAndFeesDomainObject;
 use HiEvents\DomainObjects\TicketDomainObject;
-use HiEvents\Http\DataTransferObjects\QueryParamsDTO;
+use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Models\Ticket;
 use HiEvents\Repository\Interfaces\TicketRepositoryInterface;
 

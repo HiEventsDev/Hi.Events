@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Users;
 
-use Illuminate\Http\JsonResponse;
-use Illuminate\Validation\ValidationException;
 use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Http\DataTransferObjects\CreateUserDTO;
 use HiEvents\Http\Request\User\CreateUserRequest;
 use HiEvents\Http\ResponseCodes;
 use HiEvents\Resources\User\UserResource;
-use HiEvents\Service\Handler\User\CreateUserHandler;
+use HiEvents\Services\Handlers\User\CreateUserHandler;
+use HiEvents\Services\Handlers\User\DTO\CreateUserDTO;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Validation\ValidationException;
 
 class CreateUserAction extends BaseAction
 {

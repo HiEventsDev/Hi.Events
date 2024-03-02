@@ -3,7 +3,7 @@
 namespace HiEvents\Http\Request\Auth;
 
 use HiEvents\Http\Request\BaseRequest;
-use HiEvents\Validator\Rules\RulesHelper;
+use HiEvents\Validators\Rules\RulesHelper;
 
 class AcceptInvitationRequest extends BaseRequest
 {

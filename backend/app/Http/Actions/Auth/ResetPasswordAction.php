@@ -2,15 +2,15 @@
 
 namespace HiEvents\Http\Actions\Auth;
 
+use HiEvents\Exceptions\PasswordInvalidException;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\Request\Auth\ResetPasswordRequest;
+use HiEvents\Services\Handlers\Auth\DTO\ResetPasswordDTO;
+use HiEvents\Services\Handlers\Auth\ResetPasswordHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Throwable;
-use HiEvents\Exceptions\PasswordInvalidException;
-use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Http\DataTransferObjects\ResetPasswordDTO;
-use HiEvents\Http\Request\Auth\ResetPasswordRequest;
-use HiEvents\Service\Handler\Auth\ResetPasswordHandler;
 
 class ResetPasswordAction extends BaseAction
 {

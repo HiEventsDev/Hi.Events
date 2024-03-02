@@ -10,7 +10,7 @@ use HiEvents\Exceptions\DecryptionFailedException;
 use HiEvents\Exceptions\EncryptedPayloadExpiredException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Resources\User\UserResource;
-use HiEvents\Service\Handler\User\ConfirmEmailChangeHandler;
+use HiEvents\Services\Handlers\User\ConfirmEmailChangeHandler;
 
 class ConfirmEmailChangeAction extends BaseAction
 {

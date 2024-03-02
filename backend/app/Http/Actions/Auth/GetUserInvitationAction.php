@@ -12,7 +12,7 @@ use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\ResponseCodes;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Resources\User\UserResource;
-use HiEvents\Service\Common\EncryptedPayloadService;
+use HiEvents\Services\Common\EncryptedPayloadService;
 
 class GetUserInvitationAction extends BaseAction
 {

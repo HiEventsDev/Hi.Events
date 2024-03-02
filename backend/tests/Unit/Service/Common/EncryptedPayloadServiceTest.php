@@ -10,7 +10,7 @@ use Illuminate\Contracts\Encryption\Encrypter;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use HiEvents\Exceptions\DecryptionFailedException;
-use HiEvents\Service\Common\EncryptedPayloadService;
+use HiEvents\Services\Common\EncryptedPayloadService;
 
 class EncryptedPayloadServiceTest extends TestCase
 {

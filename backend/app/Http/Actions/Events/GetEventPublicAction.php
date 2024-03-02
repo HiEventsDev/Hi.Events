@@ -8,7 +8,7 @@ use Illuminate\Http\Response;
 use HiEvents\DomainObjects\Status\EventStatus;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Resources\Event\EventResourcePublic;
-use HiEvents\Service\Handler\Event\GetPublicEventHandler;
+use HiEvents\Services\Handlers\Event\GetPublicEventHandler;
 
 class GetEventPublicAction extends BaseAction
 {

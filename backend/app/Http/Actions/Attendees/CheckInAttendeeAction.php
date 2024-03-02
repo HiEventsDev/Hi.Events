@@ -2,15 +2,15 @@
 
 namespace HiEvents\Http\Actions\Attendees;
 
-use Illuminate\Http\JsonResponse;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Exceptions\CannotCheckInException;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Http\DataTransferObjects\CheckInAttendeeDTO;
 use HiEvents\Http\Request\Attendee\CheckInAttendeeRequest;
 use HiEvents\Http\ResponseCodes;
 use HiEvents\Resources\Attendee\AttendeeResource;
-use HiEvents\Service\Handler\Attendee\CheckInAttendeeHandler;
+use HiEvents\Services\Handlers\Attendee\CheckInAttendeeHandler;
+use HiEvents\Services\Handlers\Attendee\DTO\CheckInAttendeeDTO;
+use Illuminate\Http\JsonResponse;
 
 class CheckInAttendeeAction extends BaseAction
 {

@@ -8,7 +8,7 @@ use Throwable;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Exceptions\CannotDeleteEntityException;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Service\Handler\Question\DeleteQuestionHandler;
+use HiEvents\Services\Handlers\Question\DeleteQuestionHandler;
 
 class DeleteQuestionAction extends BaseAction
 {

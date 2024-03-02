@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Auth;
 
-use Illuminate\Http\JsonResponse;
 use HiEvents\Exceptions\UnauthorizedException;
-use HiEvents\Http\DataTransferObjects\LoginCredentialsDTO;
 use HiEvents\Http\Request\Auth\LoginRequest;
 use HiEvents\Http\ResponseCodes;
-use HiEvents\Service\Handler\Auth\LoginHandler;
+use HiEvents\Services\Handlers\Auth\DTO\LoginCredentialsDTO;
+use HiEvents\Services\Handlers\Auth\LoginHandler;
+use Illuminate\Http\JsonResponse;
 
 class LoginAction extends BaseAuthAction
 {

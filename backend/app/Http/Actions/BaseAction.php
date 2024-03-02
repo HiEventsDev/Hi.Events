@@ -4,6 +4,16 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions;
 
+use HiEvents\DataTransferObjects\BaseDTO;
+use HiEvents\DomainObjects\Enums\Role;
+use HiEvents\DomainObjects\Interfaces\DomainObjectInterface;
+use HiEvents\DomainObjects\Interfaces\IsFilterable;
+use HiEvents\DomainObjects\Interfaces\IsSortable;
+use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\Exceptions\UnauthorizedException;
+use HiEvents\Http\ResponseCodes;
+use HiEvents\Resources\BaseResource;
+use HiEvents\Services\Authorization\IsAuthorizedService;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response as LaravelResponse;
@@ -12,16 +22,6 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
-use HiEvents\DomainObjects\Enums\Role;
-use HiEvents\DomainObjects\Interfaces\DomainObjectInterface;
-use HiEvents\DomainObjects\Interfaces\IsFilterable;
-use HiEvents\DomainObjects\Interfaces\IsSortable;
-use HiEvents\DomainObjects\UserDomainObject;
-use HiEvents\DataTransferObjects\BaseDTO;
-use HiEvents\Exceptions\UnauthorizedException;
-use HiEvents\Http\ResponseCodes;
-use HiEvents\Resources\BaseResource;
-use HiEvents\Service\Authorization\IsAuthorizedService;
 
 abstract class BaseAction extends Controller
 {

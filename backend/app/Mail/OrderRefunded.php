@@ -6,7 +6,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
-use HiEvents\ValuesObjects\MoneyValue;
+use HiEvents\Values\MoneyValue;
 
 /**
  * @uses /backend/resources/views/emails/orders/order-refunded.blade.php

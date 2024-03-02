@@ -3,12 +3,12 @@
 namespace HiEvents\Http\Actions\Events\Stats;
 
 use Carbon\Carbon;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Resources\Json\JsonResource;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Http\DataTransferObjects\EventStatsRequestDTO;
-use HiEvents\Service\Handler\Event\GetEventStatsHandler;
+use HiEvents\Services\Handlers\Event\DTO\EventStatsRequestDTO;
+use HiEvents\Services\Handlers\Event\GetEventStatsHandler;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class GetEventStatsAction extends BaseAction
 {
