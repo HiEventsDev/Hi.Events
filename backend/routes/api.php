@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Routing\Router;
 use HiEvents\Http\Actions\Accounts\CreateAccountAction;
 use HiEvents\Http\Actions\Accounts\GetAccountAction;
 use HiEvents\Http\Actions\Accounts\Stripe\CreateStripeConnectAccountAction;
@@ -13,6 +12,7 @@ use HiEvents\Http\Actions\Attendees\GetAttendeeAction;
 use HiEvents\Http\Actions\Attendees\GetAttendeeActionPublic;
 use HiEvents\Http\Actions\Attendees\GetAttendeesAction;
 use HiEvents\Http\Actions\Attendees\PartialEditAttendeeAction;
+use HiEvents\Http\Actions\Attendees\ResendAttendeeTicketAction;
 use HiEvents\Http\Actions\Auth\AcceptInvitationAction;
 use HiEvents\Http\Actions\Auth\ForgotPasswordAction;
 use HiEvents\Http\Actions\Auth\GetUserInvitationAction;
@@ -89,6 +89,7 @@ use HiEvents\Http\Actions\Users\GetUsersAction;
 use HiEvents\Http\Actions\Users\ResendInvitationAction;
 use HiEvents\Http\Actions\Users\UpdateMeAction;
 use HiEvents\Http\Actions\Users\UpdateUserAction;
+use Illuminate\Routing\Router;
 
 /** @var Router|Router $router */
 $router = app()->get('router');
@@ -164,6 +165,7 @@ $router->middleware(['auth:api'])->group(
         $router->put('/events/{event_id}/attendees/{attendee_id}', EditAttendeeAction::class);
         $router->patch('/events/{event_id}/attendees/{attendee_id}', PartialEditAttendeeAction::class);
         $router->post('/events/{event_id}/attendees/export', ExportAttendeesAction::class);
+        $router->post('/events/{event_id}/attendees/{attendee_public_id}/resend-ticket', ResendAttendeeTicketAction::class);
         $router->post('/events/{event_id}/attendees/{attendee_public_id}/check_in', CheckInAttendeeAction::class);
 
         $router->get('/events/{event_id}/orders', GetOrdersAction::class);

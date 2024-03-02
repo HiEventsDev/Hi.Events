@@ -106,7 +106,7 @@ class CreateOrderValidator extends BaseValidator
 
             if ($ticket->getType() === TicketType::DONATION->name && (!isset($ticketAndQuantities['quantities'][0]['price']) || $ticketAndQuantities['quantities'][0]['price'] < $ticket->getPrice())) {
                 throw ValidationException::withMessages([
-                    'tickets.' . $ticketIndex . '.quantities.0.price' => __('The minimum donation amount is :price', ['price' => Currency::format($ticket->getPrice(), $event->getCurrency())]),
+                    'tickets.' . $ticketIndex . '.quantities.0.price' => __('The minimum amount is :price', ['price' => Currency::format($ticket->getPrice(), $event->getCurrency())]),
                 ]);
             }
 

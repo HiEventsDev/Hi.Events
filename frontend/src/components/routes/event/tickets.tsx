@@ -49,7 +49,11 @@ export const Tickets = () => {
             <TableSkeleton isVisible={!tickets || ticketsQuery.isFetching}/>
 
             {tickets
-                && (<TicketsTable enableSorting={enableSorting} tickets={tickets}/>)}
+                && (<TicketsTable
+                        openCreateModal={openCreateModal}
+                        enableSorting={enableSorting}
+                        tickets={tickets}/>
+                )}
 
             {!!tickets?.length && (
                 <Pagination value={searchParams.pageNumber}

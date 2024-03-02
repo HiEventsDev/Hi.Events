@@ -37,17 +37,21 @@ P1
 - Ticket status ticket list - Done
 - getQuantityRemaining refactor - Done
 - Confirm email on register - Done
-- PDF download
-- Email individual tickets + resend email
+- PDF download - Done
+- Email individual tickets + resend email - Done
 - Export Question Answers - Done
-- Tooltips for mobile
 - Organizer order notifications - Done
 - Cancel order modal cancel button doesn't work - Done
-- Confirm order quantities calculations
-- Event Messaging boxes
+- Event Messaging boxes - Done
 - Hide draft event from public - Done
+- View attendee details modal - Done
+
+- Tooltips for mobile
+- Confirm order quantities calculations
+- Fix attendee question errors
+- Ensure email links are working
 
 P3
 - Organizer social handles and meta
 - Multiple requests being made when query param are present
-- Changing an question type could break exports
+- Changing a question type could break exports

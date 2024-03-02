@@ -1,11 +1,14 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import {RouterProvider} from "react-router-dom";
-import {MantineProvider} from "@mantine/core";
-import {router} from "./router.tsx";
-import {Notifications} from '@mantine/notifications';
-import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
-import {i18n} from "@lingui/core";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { RouterProvider } from "react-router-dom";
+import { MantineProvider } from "@mantine/core";
+import { router } from "./router.tsx";
+import { Notifications } from '@mantine/notifications';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { i18n } from "@lingui/core";
+import { I18nProvider } from "@lingui/react";
+import { ModalsProvider } from "@mantine/modals";
+import { HelmetProvider } from "react-helmet-async";
 
 import '@mantine/core/styles/global.css';
 import '@mantine/core/styles.css';
@@ -14,11 +17,8 @@ import '@mantine/tiptap/styles.css';
 import '@mantine/dropzone/styles.css';
 import '@mantine/charts/styles.css';
 import './styles/global.scss';
-import {I18nProvider} from "@lingui/react";
-import {ModalsProvider} from "@mantine/modals";
-import {HelmetProvider} from "react-helmet-async";
 
-const queryClient: QueryClient = new QueryClient({
+const queryClient = new QueryClient({
     defaultOptions: {
         queries: {
             staleTime: 0,
@@ -29,14 +29,24 @@ const queryClient: QueryClient = new QueryClient({
 });
 
 export async function dynamicActivate(locale: string) {
-    const {messages} = await import(`./locales/${locale}.po`);
+    const { messages } = await import(`./locales/${locale}.po`);
 
     i18n.load(locale, messages);
     i18n.activate(locale);
 }
 
-// todo - this is temporary - We need to auto detect the locale
-dynamicActivate('fr');
+const getSupportedLocale = () => {
+    const supportedLocales = ['es', 'de', 'en', 'fr', 'pt'];
+    const userLocale = navigator.language.split('-')[0]; // Extracting the base language
+
+    if (supportedLocales.includes(userLocale)) {
+        return userLocale;
+    }
+
+    return 'en';
+};
+
+dynamicActivate(getSupportedLocale());
 
 ReactDOM.createRoot(document.getElementById('hievents-root') as HTMLElement).render(
     <React.StrictMode>
@@ -59,7 +69,6 @@ ReactDOM.createRoot(document.getElementById('hievents-root') as HTMLElement).ren
                             ]
                         },
                         primaryColor: "purple",
-                        // eslint-disable-next-line lingui/no-unlocalized-strings
                         fontFamily: "'Varela Round', sans-serif",
                     }}>
                         <ModalsProvider>
@@ -71,4 +80,4 @@ ReactDOM.createRoot(document.getElementById('hievents-root') as HTMLElement).ren
             </I18nProvider>
         </HelmetProvider>
     </React.StrictMode>
-)
+);

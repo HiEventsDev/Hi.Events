@@ -2,14 +2,15 @@ import {t} from "@lingui/macro";
 import {useGetOrderPublic} from "../../../../queries/useGetOrderPublic.ts";
 import {useNavigate, useParams} from "react-router-dom";
 import {useGetEventPublic} from "../../../../queries/useGetEventPublic.ts";
-import {Button} from "@mantine/core";
-import {IconDownload} from "@tabler/icons-react";
 import classes from './OrderSummaryAndTickets.module.scss';
 import {LoadingMask} from "../../../common/LoadingMask";
 import {Ticket} from "../../../../types.ts";
 import {Card} from "../../../common/Card";
 import {AttendeeTicket} from "../../../common/AttendeeTicket";
 import {prettyDate} from "../../../../utilites/dates.ts";
+import {PoweredByFooter} from "../../../common/PoweredByFooter";
+import {Button, Group} from "@mantine/core";
+import {IconPrinter} from "@tabler/icons-react";
 
 export const OrderSummaryAndTickets = () => {
     const {eventId, orderShortId} = useParams();
@@ -27,9 +28,10 @@ export const OrderSummaryAndTickets = () => {
     }
 
     if (order?.payment_status === 'AWAITING_PAYMENT') {
+        // The user should never see this, but just in case
         return (
             <>
-                {t`This order is processing. TODO - a nice image and poll the API`}
+                {t`This order is processing.`}
             </>
         );
     }
@@ -43,9 +45,10 @@ export const OrderSummaryAndTickets = () => {
     }
 
     if (order?.status !== 'COMPLETED') {
+        // A final catch-all for any other status
         return (
             <>
-                {t`This order is processing. TODO - a nice image and poll the API`}
+                {t`This order is processing.`}
             </>
         );
     }
@@ -75,7 +78,26 @@ export const OrderSummaryAndTickets = () => {
                 </div>
             </Card>
 
-            <h2 className={classes.subHeading}>{t`Guests`}</h2>
+            {!!event?.settings?.post_checkout_message && (
+                <div style={{marginTop: '20px'}}>
+                    <Card>
+                        <div dangerouslySetInnerHTML={{__html: event?.settings?.post_checkout_message}}/>
+                    </Card>
+                </div>
+            )}
+
+            <Group justify={'space-between'}>
+                <h2 className={classes.subHeading}>{t`Guests`}</h2>
+                <Button
+                    size={'sm'}
+                    variant={'transparent'}
+                    leftSection={<IconPrinter size={16}/>}
+                    onClick={() => window.open(`/order/${eventId}/${orderShortId}/print`, '_blank')}
+                >
+                    {t`Print All Tickets`}
+                </Button>
+            </Group>
+
             {order.attendees?.map((attendee) => {
                 return (
                     <AttendeeTicket
@@ -87,8 +109,7 @@ export const OrderSummaryAndTickets = () => {
                 );
             })}
 
-            <Button variant={'transparent'} mt={20} size={'sm'} leftSection={<IconDownload/>}
-                    fullWidth>{t`Download Tickets PDF`}</Button>
+            <PoweredByFooter/>
         </>
     );
 }

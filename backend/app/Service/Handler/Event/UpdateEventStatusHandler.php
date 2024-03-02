@@ -42,7 +42,7 @@ readonly class UpdateEventStatusHandler
 
         if ($account->getAccountVerifiedAt() === null) {
             throw new AccountNotVerifiedException(
-                __('You must verify your account before you can update an event\'s status')
+                __('You must verify your account before you can update an event\'s status. Check your email for the verification link.')
             );
         }
 

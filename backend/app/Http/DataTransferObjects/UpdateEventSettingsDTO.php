@@ -11,7 +11,6 @@ class UpdateEventSettingsDTO extends BaseDTO
 
         // event settings
         public readonly int         $event_id,
-        public readonly ?string     $ticket_page_message,
         public readonly ?string     $post_checkout_message,
         public readonly ?string     $pre_checkout_message,
         public readonly ?string     $email_footer_message,

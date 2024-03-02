@@ -15,7 +15,7 @@ interface OrganizerFormProps {
     onCancel?: () => void;
 }
 
-export const OrganizerForm = ({onSuccess, onCancel}: OrganizerFormProps) => {
+export const OrganizerForm = ({onSuccess}: OrganizerFormProps) => {
     const organizerMutation = useCreateOrganizer();
     const {data: account, isFetched: accountFetched} = useGetAccount();
     const form = useForm({
@@ -55,8 +55,8 @@ export const OrganizerForm = ({onSuccess, onCancel}: OrganizerFormProps) => {
                         <TextInput
                             {...form.getInputProps('name')}
                             required
-                            label={t`Name`}
-                            placeholder={t`Awesome Events Ltd.`}
+                            label={t`Organizer Name`}
+                            placeholder={t`Awesome Organizer Ltd.`}
                         />
                         <TextInput
                             {...form.getInputProps('email')}

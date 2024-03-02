@@ -50,7 +50,11 @@ export const PromoCodes = () => {
                 <TableSkeleton isVisible={!promoCodes || !event}/>
 
                 {(promoCodes && event) &&
-                    <PromoCodeTable event={event} promoCodes={promoCodes}/>}
+                    <PromoCodeTable
+                        openCreateModal={openCreateModal}
+                        event={event}
+                        promoCodes={promoCodes}
+                    />}
 
                 {!!promoCodes?.length && (
                     <Pagination

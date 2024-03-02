@@ -181,7 +181,7 @@ export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
 
                 <Switch
                     mt={20}
-                    label={t`Send confirmation email`}
+                    label={t`Send order confirmation and ticket email`}
                     {...form.getInputProps('send_confirmation_email', {type: 'checkbox'})}
                 />
                 <Button type="submit" fullWidth mt="xl" disabled={mutation.isLoading}>

@@ -18,13 +18,16 @@ import {useParams} from "react-router-dom";
 import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {SortableTicket} from "./SortableTicket";
 import {useDragItemsHandler} from "../../../hooks/useDragItemsHandler.ts";
+import {Button} from "@mantine/core";
+import {IconPlus} from "@tabler/icons-react";
 
 interface TicketCardProps {
     tickets: Ticket[];
     enableSorting: boolean;
+    openCreateModal: () => void;
 }
 
-export const TicketsTable = ({tickets, enableSorting = false}: TicketCardProps) => {
+export const TicketsTable = ({tickets, openCreateModal, enableSorting = false}: TicketCardProps) => {
     const {eventId} = useParams();
     const sortTicketsMutation = useSortTickets();
     const {items, setItems, handleDragEnd} = useDragItemsHandler({
@@ -56,7 +59,22 @@ export const TicketsTable = ({tickets, enableSorting = false}: TicketCardProps) 
     }, [tickets]);
 
     if (tickets.length === 0) {
-        return <NoResultsSplash heading={t`No tickets to show`}/>;
+        return <NoResultsSplash
+            heading={t`No tickets to show`}
+            subHeading={(
+                <>
+                    <p>
+                        {t`You'll need at least one ticket to get started. Free, paid or let the user decide what to pay.`}
+                    </p>
+                    <Button
+                        size={'xs'}
+                        leftSection={<IconPlus/>}
+                        color={'green'}
+                        onClick={() => openCreateModal()}>{t`Create a Ticket`}
+                    </Button>
+                </>
+            )}
+        />;
     }
 
     const handleDragStart = (event: any) => {

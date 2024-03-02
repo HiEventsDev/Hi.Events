@@ -11,5 +11,5 @@ final class Constants
      *
      * @var int
      */
-    public const INFINITE = 123456789;
+    public const INFINITE = 123456789101112;
 }

@@ -2,6 +2,7 @@
 
 namespace HiEvents\Service\Common\Mail;
 
+use HiEvents\Service\Common\Attendee\SendAttendeeTicketService;
 use Illuminate\Mail\Mailer;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
@@ -23,6 +24,7 @@ readonly class SendOrderDetailsService
         private EventRepositoryInterface $eventRepository,
         private OrderRepositoryInterface $orderRepository,
         private Mailer                   $mailer,
+        private SendAttendeeTicketService $sendAttendeeTicketService,
     )
     {
     }
@@ -57,7 +59,7 @@ readonly class SendOrderDetailsService
                 continue;
             }
 
-            $this->mailer->to($attendee->getEmail())->send(new AttendeeTicketMail($attendee, $event));
+            $this->sendAttendeeTicketService->send($attendee, $event);
             $sentEmails[] = $attendee->getEmail();
         }
     }

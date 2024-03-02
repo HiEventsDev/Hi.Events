@@ -10,7 +10,6 @@ class UpdateEventSettingsRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'ticket_page_message' => ['string', "nullable"],
             'post_checkout_message' => ['string', "nullable"],
             'pre_checkout_message' => ['string', "nullable"],
             'email_footer_message' => ['string', "nullable"],

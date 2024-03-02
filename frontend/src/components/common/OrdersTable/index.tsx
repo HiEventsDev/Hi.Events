@@ -42,7 +42,14 @@ export const OrdersTable = ({orders, event}: OrdersTableProps) => {
     const resendConfirmationMutation = useResendOrderConfirmation();
 
     if (orders.length === 0) {
-        return <NoResultsSplash heading={t`No orders to show`}/>
+        return <NoResultsSplash
+            heading={t`No orders to show`}
+            subHeading={(
+                <p>
+                    {t`Your orders will appear here once they start rolling in.`}
+                </p>
+            )}
+        />
     }
 
     const handleModalClick = (orderId: IdParam, modal: { open: () => void }) => {

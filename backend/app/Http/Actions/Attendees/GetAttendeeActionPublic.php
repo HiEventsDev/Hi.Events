@@ -2,12 +2,15 @@
 
 namespace HiEvents\Http\Actions\Attendees;
 
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
 use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
+use HiEvents\DomainObjects\TicketDomainObject;
+use HiEvents\DomainObjects\TicketPriceDomainObject;
 use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Resources\Attendee\AttendeeResourcePublic;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
 class GetAttendeeActionPublic extends BaseAction
 {
@@ -23,9 +26,17 @@ class GetAttendeeActionPublic extends BaseAction
      */
     public function __invoke(int $eventId, string $attendeeShortId): JsonResponse|Response
     {
-        $attendee = $this->attendeeRepository->findFirstWhere([
-            AttendeeDomainObjectAbstract::SHORT_ID => $attendeeShortId
-        ]);
+        $attendee = $this->attendeeRepository
+            ->loadRelation(new Relationship(
+                domainObject: TicketDomainObject::class,
+                nested: [
+                    new Relationship(
+                        domainObject: TicketPriceDomainObject::class,
+                    ),
+                ], name: 'ticket'))
+            ->findFirstWhere([
+                AttendeeDomainObjectAbstract::SHORT_ID => $attendeeShortId
+            ]);
 
         if (!$attendee) {
             return $this->notFoundResponse();

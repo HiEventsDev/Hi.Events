@@ -3,7 +3,7 @@ import {Event, PromoCode, PromoCodeDiscountType} from "../../../types.ts";
 import {prettyDate, relativeDate} from "../../../utilites/dates.ts";
 import {Badge, Button, Flex, Group, Menu, Table as MantineTable, Tooltip} from "@mantine/core";
 import {Table, TableHead} from "../Table";
-import {IconCheck, IconCircleOff, IconCopy, IconDotsVertical, IconSend, IconTrash} from "@tabler/icons-react";
+import {IconCheck, IconCircleOff, IconCopy, IconDotsVertical, IconPlus, IconSend, IconTrash} from "@tabler/icons-react";
 import {Currency} from "../Currency";
 import {useClipboard, useDisclosure} from "@mantine/hooks";
 import {showSuccess} from "../../../utilites/notifications.tsx";
@@ -14,9 +14,10 @@ import {NoResultsSplash} from "../NoResultsSplash";
 interface PromoCodeTableProps {
     event: Event,
     promoCodes: PromoCode[],
+    openCreateModal: () => void,
 }
 
-export const PromoCodeTable = ({event, promoCodes}: PromoCodeTableProps) => {
+export const PromoCodeTable = ({event, promoCodes, openCreateModal}: PromoCodeTableProps) => {
     const [promoCodeId, setPromoCodeId] = useState<number | undefined>();
     const [editModalOpen, {open: openEditModal, close: closeEditModal}] = useDisclosure(false);
 
@@ -26,7 +27,22 @@ export const PromoCodeTable = ({event, promoCodes}: PromoCodeTableProps) => {
     };
 
     if (promoCodes.length === 0) {
-        return <NoResultsSplash heading={t`No Promo Codes to show`}/>
+        return <NoResultsSplash
+            heading={t`No Promo Codes to show`}
+            subHeading={(
+                <>
+                    <p>
+                        {t`Promo codes can be used to offer discounts, presale access, or provide special access to your event.`}
+                    </p>
+                    <Button
+                        size={'xs'}
+                        leftSection={<IconPlus/>}
+                        color={'green'}
+                        onClick={() => openCreateModal()}>{t`Create a Promo Code`}
+                    </Button>
+                </>
+            )}
+        />
     }
 
     return (

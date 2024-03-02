@@ -1,11 +1,11 @@
 import {Card} from "../Card";
 import {getAttendeeTicketPrice, getAttendeeTicketTitle} from "../../../utilites/tickets.ts";
-import {Anchor, Button} from "@mantine/core";
+import {Anchor, Button, CopyButton} from "@mantine/core";
 import {formatCurrency} from "../../../utilites/currency.ts";
 import {t} from "@lingui/macro";
 import {prettyDate} from "../../../utilites/dates.ts";
 import QRCode from "react-qr-code";
-import {IconCopy, IconDownload} from "@tabler/icons-react";
+import {IconCopy, IconPrinter} from "@tabler/icons-react";
 import {Attendee, Event, Ticket} from "../../../types.ts";
 import classes from './AttendeeTicket.module.scss';
 
@@ -13,9 +13,10 @@ interface AttendeeTicketProps {
     event: Event;
     attendee: Attendee;
     ticket: Ticket;
+    hideButtons?: boolean;
 }
 
-export const AttendeeTicket = ({attendee, ticket, event}: AttendeeTicketProps) => {
+export const AttendeeTicket = ({attendee, ticket, event, hideButtons = false}: AttendeeTicketProps) => {
     const ticketPrice = getAttendeeTicketPrice(attendee, ticket);
 
     return (
@@ -62,20 +63,30 @@ export const AttendeeTicket = ({attendee, ticket, event}: AttendeeTicketProps) =
                     )}
                     {attendee.status !== 'CANCELLED' && <QRCode value={String(attendee.public_id)}/>}
                 </div>
-                <div className={classes.ticketButtons}>
-                    <Button variant={'transparent'}
-                            size={'sm'}
-                            leftSection={<IconDownload size={18}/>
-                            }>
-                        {t`PDF`}
-                    </Button>
-                    <Button variant={'transparent'}
-                            size={'sm'}
-                            leftSection={<IconCopy size={18}/>
-                            }>{
-                        t`Copy Link`}
-                    </Button>
-                </div>
+
+                {!hideButtons && (
+                    <div className={classes.ticketButtons}>
+                        <Button variant={'transparent'}
+                                size={'sm'}
+                                onClick={() => window.open(`/ticket/${event.id}/${attendee.short_id}/print`, '_blank', 'noopener,noreferrer')}
+                                leftSection={<IconPrinter size={18}/>
+                                }>
+                            {t`Print`}
+                        </Button>
+
+                        <CopyButton value={`${window.location.origin}/ticket/${event.id}/${attendee.short_id}`}>
+                            {({copied, copy}) => (
+                                <Button variant={'transparent'}
+                                        size={'sm'}
+                                        onClick={copy}
+                                        leftSection={<IconCopy size={18}/>
+                                        }>
+                                    {copied ? t`Copied` : t`Copy Link`}
+                                </Button>
+                            )}
+                        </CopyButton>
+                    </div>
+                )}
             </div>
         </Card>
     );

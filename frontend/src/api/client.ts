@@ -11,6 +11,14 @@ const BASE_URL = import.meta.env.VITE_API_URL;
 const LOGIN_PATH = "/auth/login";
 const PREVIOUS_URL_KEY = 'previous_url'; // Key for storing the previous URL
 
+const ALLOWED_UNAUTHENTICATED_PATHS = [
+    'auth/login',
+    'accept-invitation',
+    'register',
+    'forgot-password',
+    'auth'
+];
+
 export const api = axios.create({
     baseURL: BASE_URL,
     headers: {
@@ -38,7 +46,7 @@ api.interceptors.response.use(
     },
     (error) => {
         const { status } = error.response;
-        if ((status === 401 || status === 403) && !window.location.pathname.includes('login')) {
+        if ((status === 401 || status === 403) && !ALLOWED_UNAUTHENTICATED_PATHS.some(path => window.location.pathname.includes(path))) {
             // Store the current URL before redirecting to the login page
             window.localStorage.setItem(PREVIOUS_URL_KEY, window.location.href);
             window.location.replace(LOGIN_PATH);

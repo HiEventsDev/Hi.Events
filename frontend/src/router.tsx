@@ -42,6 +42,8 @@ import {Checkout} from "./components/layouts/Checkout";
 import {HomepageDesigner} from "./components/routes/event/HomepageDesigner";
 import {OrganizerDashboard} from "./components/routes/organizer/OrganizerDashboard";
 import {ConfirmEmailAddress} from "./components/routes/profile/ConfirmEmailAddress";
+import {PrintTicket} from "./components/routes/ticket-widget/PrintTicket";
+import {PrintOrder} from "./components/routes/ticket-widget/PrintOrder";
 
 export const router = createBrowserRouter([
     {
@@ -221,32 +223,6 @@ export const router = createBrowserRouter([
         path: "/event/:eventId/:eventSlug",
         element: <EventHomepage/>,
         errorElement: <ErrorPage/>,
-        children: [
-            {
-                path: "",
-                element: <SelectTickets/>
-            },
-            {
-                path: ":orderShortId/details",
-                element: <CollectInformation/>
-            },
-            {
-                path: ":orderShortId/payment",
-                element: <Payment/>
-            },
-            {
-                path: ":orderShortId/summary",
-                element: <OrderSummaryAndTickets/>
-            },
-            {
-                path: ":orderShortId/payment_return",
-                element: <PaymentReturn/>
-            },
-            {
-                path: ":attendeeShortId/ticket",
-                element: <AttendeeTicketAndInformation/>
-            },
-        ]
     },
     {
         path: "/widget/:eventId",
@@ -280,11 +256,22 @@ export const router = createBrowserRouter([
                 path: ":orderShortId/payment_return",
                 element: <PaymentReturn/>
             },
-            {
-                path: ":attendeeShortId/ticket",
-                element: <AttendeeTicketAndInformation/>
-            },
         ]
+    },
+    {
+        path: "/order/:eventId/:orderShortId/print",
+        element: <PrintOrder/>,
+        errorElement: <ErrorPage/>
+    },
+    {
+        path: "/ticket/:eventId/:attendeeShortId/print",
+        element: <PrintTicket/>,
+        errorElement: <ErrorPage/>
+    },
+    {
+        path: "/ticket/:eventId/:attendeeShortId",
+        element: <AttendeeTicketAndInformation/>,
+        errorElement: <ErrorPage/>
     },
 ], {
     future: {

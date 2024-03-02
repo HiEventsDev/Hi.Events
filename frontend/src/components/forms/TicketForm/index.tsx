@@ -21,6 +21,7 @@ import {
     IconCoins,
     IconCurrencyDollar,
     IconHeartDollar,
+    IconInfoCircle,
     IconTrash,
     IconTrashOff,
 } from "@tabler/icons-react";
@@ -178,7 +179,12 @@ export const TicketForm = ({form, ticket}: TicketFormProps) => {
 
     return (
         <>
-            <div legend={t`Basic Details`}>
+            <div>
+                {Number(ticket?.quantity_sold) > 0 && (
+                    <Alert icon={<IconInfoCircle/>} mb={20} color={'blue'}>
+                        {t`You cannot change the ticket type because there are already tickets sold for this ticket.`}
+                    </Alert>
+                )}
                 <CustomSelect
                     disabled={Number(ticket?.quantity_sold) > 0}
                     label={t`Ticket Type`}

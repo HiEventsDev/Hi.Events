@@ -1,6 +1,6 @@
 import {Anchor, Avatar, Badge, Button, Group, Menu, Table as MantineTable,} from '@mantine/core';
 import {Attendee, MessageType} from "../../../types.ts";
-import {IconDotsVertical, IconPencil, IconSend, IconTrash} from "@tabler/icons-react";
+import {IconDotsVertical, IconPencil, IconPlus, IconSend, IconTrash} from "@tabler/icons-react";
 import {getInitials, getTicketFromEvent} from "../../../utilites/helpers.ts";
 import {Table, TableHead} from "../Table";
 import {useDisclosure} from "@mantine/hooks";
@@ -19,9 +19,10 @@ import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
 
 interface AttendeeTableProps {
     attendees: Attendee[];
+    openCreateModal: () => void;
 }
 
-export const AttendeeTable = ({attendees}: AttendeeTableProps) => {
+export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) => {
     const {eventId} = useParams();
     const [isMessageModalOpen, messageModal] = useDisclosure(false);
     const [isEditModalOpen, editModal] = useDisclosure(false);
@@ -35,7 +36,22 @@ export const AttendeeTable = ({attendees}: AttendeeTableProps) => {
     }
 
     if (attendees.length === 0) {
-        return <NoResultsSplash heading={t`No Attendees to show`}/>
+        return <NoResultsSplash
+            heading={t`No Attendees to show`}
+            subHeading={(
+                <>
+                    <p>
+                        {t`Your attendees will appear here once they have registered for your event. You can also manually add attendees.`}
+                    </p>
+                    <Button
+                        size={'xs'}
+                        leftSection={<IconPlus/>}
+                        color={'green'}
+                        onClick={() => openCreateModal()}>{t`Manually add an Attendee`}
+                    </Button>
+                </>
+            )}
+        />
     }
 
     const handleCancel = (attendee: Attendee) => () => {

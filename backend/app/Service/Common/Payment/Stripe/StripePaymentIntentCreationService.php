@@ -2,13 +2,13 @@
 
 namespace HiEvents\Service\Common\Payment\Stripe;
 
+use HiEvents\Exceptions\Stripe\CreatePaymentIntentFailedException;
+use HiEvents\Service\Common\Payment\Stripe\DTOs\CreatePaymentIntentRequestDTO;
+use HiEvents\Service\Common\Payment\Stripe\DTOs\CreatePaymentIntentResponseDTO;
 use Illuminate\Config\Repository;
 use Psr\Log\LoggerInterface;
 use Stripe\Exception\ApiErrorException;
 use Stripe\StripeClient;
-use HiEvents\Exceptions\Stripe\CreatePaymentIntentFailedException;
-use HiEvents\Service\Common\Payment\Stripe\DTOs\CreatePaymentIntentRequestDTO;
-use HiEvents\Service\Common\Payment\Stripe\DTOs\CreatePaymentIntentResponseDTO;
 
 readonly class StripePaymentIntentCreationService
 {
@@ -58,7 +58,6 @@ readonly class StripePaymentIntentCreationService
                 'automatic_payment_methods' => [
                     'enabled' => true,
                 ],
-                'application_fee_amount' => $this->getApplicationFee($paymentIntentDTO),
             ], $this->getStripeAccountData($paymentIntentDTO));
 
             $this->logger->debug('Stripe payment intent created', [
@@ -92,12 +91,30 @@ readonly class StripePaymentIntentCreationService
         return ceil($paymentIntentDTO->amount * $this->config->get('app.saas_stripe_application_fee_percent') / 100);
     }
 
+    /**
+     * @throws CreatePaymentIntentFailedException
+     */
     private function getStripeAccountData(CreatePaymentIntentRequestDTO $paymentIntentDTO): array
     {
-        if ($this->config->get('app.saas_mode_enabled')) {
-            return ['stripe_account' => $paymentIntentDTO->account->getStripeAccountId()];
+        if (!$this->config->get('app.saas_mode_enabled')) {
+            return [];
         }
 
-        return [];
+        if ($paymentIntentDTO->account->getStripeAccountId() === null) {
+            $this->logger->error(
+                'Stripe Connect account not found for the event organizer, payment intent creation failed.
+                You will need to connect your Stripe account to receive payments.',
+                ['paymentIntentDTO' => $paymentIntentDTO->toArray(['account'])]
+            );
+
+            throw new CreatePaymentIntentFailedException(
+                __('Stripe Connect account not found for the event organizer')
+            );
+        }
+
+        return [
+            'application_fee_amount' => $this->getApplicationFee($paymentIntentDTO),
+            'stripe_account' => $paymentIntentDTO->account->getStripeAccountId()
+        ];
     }
 }

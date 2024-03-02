@@ -38,7 +38,9 @@ export const CreateEvent = () => {
     const eventMutation = useCreateEvent();
     const navigate = useNavigate();
     const {data: organizers, isFetched: organizersFetched} = useGetOrganizers();
-    const {data: events, isFetched: eventsFetched} = useGetEvents();
+    const {data: events, isFetched: eventsFetched} = useGetEvents({
+        pageNumber: 1,
+    });
 
     const handleSubmit = (values: Partial<Event>) => {
         eventMutation.mutate({

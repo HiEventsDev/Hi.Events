@@ -71,7 +71,9 @@ export const Attendees = () => {
 
                 <TableSkeleton isVisible={!attendees || attendeesQuery.isFetching}/>
 
-                {(!!attendees) && <AttendeeTable attendees={attendees}/>}
+                {(!!attendees) && <AttendeeTable openCreateModal={openCreateModal}
+                                                 attendees={attendees}
+                />}
 
                 {!!attendees?.length
                     && <Pagination value={searchParams.pageNumber}

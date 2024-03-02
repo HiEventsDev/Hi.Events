@@ -46,7 +46,7 @@ export const EventHomepage = ({colors, continueButtonText}: EventHomepageProps) 
 
     return (
         <>
-            {(event && eventIsFetched) &&  <EventDocumentHead event={event}/>}
+            {(event && eventIsFetched) && <EventDocumentHead event={event}/>}
             {coverImage && <div className={classes.background} style={{backgroundImage: `url(${coverImage.url})`}}/>}
             <div id={'event-homepage'} style={styleOverrides} className={classes.styleContainer}>
                 <div className={classes.container}>
@@ -73,7 +73,7 @@ export const EventHomepage = ({colors, continueButtonText}: EventHomepageProps) 
                         </div>
                     </div>
                 </div>
-                {/*<Footer/>*/}
+                {/*<PoweredByFooter/>*/}
             </div>
         </>
 

@@ -27,8 +27,6 @@ readonly class UpdateEventSettingsHandler
         return $this->databaseManager->transaction(function () use ($settings) {
             $this->eventSettingsRepository->updateWhere(
                 attributes: [
-                    'ticket_page_message' => $settings->ticket_page_message
-                        ?? $this->purifier->purify($settings->ticket_page_message),
                     'post_checkout_message' => $settings->post_checkout_message
                         ?? $this->purifier->purify($settings->post_checkout_message),
                     'pre_checkout_message' => $settings->pre_checkout_message
@@ -37,7 +35,7 @@ readonly class UpdateEventSettingsHandler
                         ?? $this->purifier->purify($settings->email_footer_message),
                     'reply_to_email' => $settings->reply_to_email,
                     'require_attendee_details' => $settings->require_attendee_details,
-                    'continue_button_text' => $settings->continue_button_text,
+                    'continue_button_text' => trim($settings->continue_button_text),
 
                     'homepage_background_color' => $settings->homepage_background_color,
                     'homepage_primary_color' => $settings->homepage_primary_color,
@@ -46,8 +44,8 @@ readonly class UpdateEventSettingsHandler
                     'homepage_secondary_text_color' => $settings->homepage_secondary_text_color,
 
                     'order_timeout_in_minutes' => $settings->order_timeout_in_minutes,
-                    'website_url' => $settings->website_url,
-                    'maps_url' => $settings->maps_url,
+                    'website_url' => trim($settings->website_url),
+                    'maps_url' => trim($settings->maps_url),
                     'location_details' => $settings->location_details?->toArray(),
                     'is_online_event' => $settings->is_online_event,
                     'online_event_connection_details' => $settings->online_event_connection_details,

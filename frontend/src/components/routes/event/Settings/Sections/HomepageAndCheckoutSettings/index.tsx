@@ -1,5 +1,5 @@
 import {t} from "@lingui/macro";
-import {Button, NumberInput, SimpleGrid, TextInput} from "@mantine/core";
+import {Button, NumberInput} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import {useParams} from "react-router-dom";
 import {useEffect} from "react";
@@ -12,24 +12,35 @@ import {useGetEventSettings} from "../../../../../../queries/useGetEventSettings
 import {Editor} from "../../../../../common/Editor";
 import {HeadingWithDescription} from "../../../../../common/Card/CardHeading";
 
+const isEmptyHtml = (content: string) => {
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = content;
+    const textContent = tempDiv.textContent?.trim();
+    console.log(textContent === '' || textContent === null);
+    return textContent === '' || textContent === null;
+};
+
 export const HomepageAndCheckoutSettings = () => {
     const {eventId} = useParams();
     const eventSettingsQuery = useGetEventSettings(eventId);
     const updateMutation = useUpdateEventSettings();
     const form = useForm({
         initialValues: {
-            ticket_page_message: '',
             pre_checkout_message: '',
             post_checkout_message: '',
             order_timeout_in_minutes: 15,
-        }
+        },
+        transformValues: (values) => ({
+            ...values,
+            pre_checkout_message: isEmptyHtml(values.pre_checkout_message) ? null : values.pre_checkout_message,
+            post_checkout_message: isEmptyHtml(values.post_checkout_message) ? null : values.post_checkout_message,
+        }),
     });
     const formErrorHandle = useFormErrorResponseHandler();
 
     useEffect(() => {
         if (eventSettingsQuery?.isFetched && eventSettingsQuery?.data) {
             form.setValues({
-                ticket_page_message: eventSettingsQuery.data.ticket_page_message,
                 pre_checkout_message: eventSettingsQuery.data.pre_checkout_message,
                 post_checkout_message: eventSettingsQuery.data.post_checkout_message,
                 order_timeout_in_minutes: eventSettingsQuery.data.order_timeout_in_minutes,
@@ -54,44 +65,30 @@ export const HomepageAndCheckoutSettings = () => {
     return (
         <Card>
             <HeadingWithDescription
-                heading={t`Checkout Messaging`}
+                heading={t`Checkout Settings`}
                 description={t`Customize the event homepage and checkout messaging`}
             />
-            <form onSubmit={form.onSubmit(handleSubmit)}>
+            <form onSubmit={form.onSubmit(handleSubmit as any)}>
                 <fieldset disabled={eventSettingsQuery.isLoading || updateMutation.isLoading}>
-                    <Editor
-                        label={t`Ticket page message`}
-                        value={form.values.ticket_page_message || ''}
-                        description={t`This message is how below the `}
-                        onChange={(value) => form.setFieldValue('ticket_page_message', value)}
-                    />
-
                     <Editor
                         label={t`Pre Checkout message`}
                         value={form.values.pre_checkout_message || ''}
-                        description={t`This message is how below the `}
+                        description={t`Shown to the customer before they checkout`}
                         onChange={(value) => form.setFieldValue('pre_checkout_message', value)}
                     />
 
                     <Editor
                         label={t`Post Checkout message`}
                         value={form.values.post_checkout_message || ''}
-                        description={t`This message is how below the `}
+                        description={t`Shown to the customer after they checkout, on the order summary page`}
                         onChange={(value) => form.setFieldValue('post_checkout_message', value)}
                     />
 
-                    <SimpleGrid cols={2}>
-                        <NumberInput
-                            label={t`Order timeout`}
-                            description={t`How many minutes the customer has to complete their order`}
-                            {...form.getInputProps('order_timeout_in_minutes')}
-                        />
-                        <TextInput
-                            label={t`Continue button text`}
-                            description={t`The text to display in the 'Continue' button. Defaults to 'Continue'`}
-                            {...form.getInputProps('continue_button_text')}
-                        />
-                    </SimpleGrid>
+                    <NumberInput
+                        label={t`Order timeout`}
+                        description={t`How many minutes the customer has to complete their order`}
+                        {...form.getInputProps('order_timeout_in_minutes')}
+                    />
 
                     <Button loading={updateMutation.isLoading} type={'submit'}>
                         {t`Save`}

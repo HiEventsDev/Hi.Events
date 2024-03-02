@@ -179,7 +179,7 @@ export const CollectInformation = () => {
     if (order?.status === 'COMPLETED') {
         return (
             <Center>
-                {t`This order has been completed.`} <NavLink
+                {t`This order has already been processed.`} <NavLink
                 to={`/checkout/${eventId}/${orderShortId}/summary`}>
                 {t`View order details`}
             </NavLink>
@@ -303,6 +303,12 @@ export const CollectInformation = () => {
                         </div>
                     );
                 })}
+
+                {!!event?.settings?.pre_checkout_message && (
+                    <Card>
+                        <div dangerouslySetInnerHTML={{__html: event?.settings?.pre_checkout_message}}/>
+                    </Card>
+                )}
 
                 <Group mt="xl">
                     <Button fullWidth loading={mutation.isLoading} type="submit" size="md">

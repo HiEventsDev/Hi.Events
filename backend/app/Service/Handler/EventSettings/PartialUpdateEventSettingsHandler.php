@@ -2,12 +2,12 @@
 
 namespace HiEvents\Service\Handler\EventSettings;
 
-use Throwable;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\Exceptions\RefundNotPossibleException;
 use HiEvents\Http\DataTransferObjects\PartialUpdateEventSettingsDTO;
 use HiEvents\Http\DataTransferObjects\UpdateEventSettingsDTO;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
+use Throwable;
 
 readonly class PartialUpdateEventSettingsHandler
 {
@@ -35,13 +35,18 @@ readonly class PartialUpdateEventSettingsHandler
             UpdateEventSettingsDTO::fromArray([
                 'event_id' => $eventSettingsDTO->event_id,
                 'account_id' => $eventSettingsDTO->account_id,
-                'ticket_page_message' => $eventSettingsDTO->settings['ticket_page_message'] ?? $existingSettings->getTicketPageMessage(),
-                'post_checkout_message' => $eventSettingsDTO->settings['post_checkout_message'] ?? $existingSettings->getPostCheckoutMessage(),
-                'pre_checkout_message' => $eventSettingsDTO->settings['pre_checkout_message'] ?? $existingSettings->getPreCheckoutMessage(),
+                'post_checkout_message' => array_key_exists('post_checkout_message', $eventSettingsDTO->settings)
+                    ? $eventSettingsDTO->settings['post_checkout_message']
+                    : $existingSettings->getPostCheckoutMessage(),
+                'pre_checkout_message' => array_key_exists('pre_checkout_message', $eventSettingsDTO->settings)
+                    ? $eventSettingsDTO->settings['pre_checkout_message']
+                    : $existingSettings->getPreCheckoutMessage(),
                 'email_footer_message' => $eventSettingsDTO->settings['email_footer_message'] ?? $existingSettings->getEmailFooterMessage(),
                 'reply_to_email' => $eventSettingsDTO->settings['reply_to_email'] ?? $existingSettings->getReplyToEmail(),
                 'require_attendee_details' => $eventSettingsDTO->settings['require_attendee_details'] ?? $existingSettings->getRequireAttendeeDetails(),
-                'continue_button_text' => $eventSettingsDTO->settings['continue_button_text'] ?? $existingSettings->getContinueButtonText(),
+                'continue_button_text' => array_key_exists('continue_button_text', $eventSettingsDTO->settings)
+                    ? $eventSettingsDTO->settings['continue_button_text']
+                    : $existingSettings->getContinueButtonText(),
 
                 'homepage_background_color' => $eventSettingsDTO->settings['homepage_background_color'] ?? $existingSettings->getHomepageBackgroundColor(),
                 'homepage_primary_color' => $eventSettingsDTO->settings['homepage_primary_color'] ?? $existingSettings->getHomepagePrimaryColor(),

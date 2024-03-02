@@ -40,6 +40,36 @@ export const EventDashboard = () => {
 
                 <Card className={classes.chartCard}>
                     <div className={classes.chartCardTitle}>
+                        <h2>{t`Ticket Sales`}</h2>
+                        <div className={classes.dateRange}>
+                        <span>
+                            {dateRange}
+                        </span>
+                        </div>
+                    </div>
+                    <AreaChart
+                        h={300}
+                        data={eventStats?.daily_stats.map(stat => ({
+                            date: formatDate(stat.date, 'MMM DD', event.timezone),
+                            orders_created: stat.orders_created,
+                            tickets_sold: stat.tickets_sold,
+                        })) || []}
+                        dataKey="date"
+                        withLegend
+                        legendProps={{verticalAlign: 'bottom', height: 50}}
+
+                        series={[
+                            {name: 'orders_created', color: 'blue.6', label: t`Orders Created`},
+                            {name: 'tickets_sold', color: 'blue.2', label: t`Tickets Sold`},
+                        ]}
+                        curveType="natural"
+                        tickLine="none"
+                        areaChartProps={{syncId: 'events'}}
+                    />
+                </Card>
+
+                <Card className={classes.chartCard}>
+                    <div className={classes.chartCardTitle}>
                         <h2>{t`Revenue`}</h2>
                         <div className={classes.dateRange}>
                         <span>
@@ -66,36 +96,6 @@ export const EventDashboard = () => {
                             {name: 'total_fees', label: t`Total Fees`, color: 'purple.3'},
                             {name: 'total_sales_gross', label: t`Gross Sales`, color: 'grape.5'},
                             {name: 'total_tax', label: t`Total Tax`, color: 'grape.7'},
-                        ]}
-                        curveType="natural"
-                        tickLine="none"
-                        areaChartProps={{syncId: 'events'}}
-                    />
-                </Card>
-
-                <Card className={classes.chartCard}>
-                    <div className={classes.chartCardTitle}>
-                        <h2>{t`Ticket Sales`}</h2>
-                        <div className={classes.dateRange}>
-                        <span>
-                            {dateRange}
-                        </span>
-                        </div>
-                    </div>
-                    <AreaChart
-                        h={300}
-                        data={eventStats?.daily_stats.map(stat => ({
-                            date: formatDate(stat.date, 'MMM DD', event.timezone),
-                            orders_created: stat.orders_created,
-                            tickets_sold: stat.tickets_sold,
-                        })) || []}
-                        dataKey="date"
-                        withLegend
-                        legendProps={{verticalAlign: 'bottom', height: 50}}
-
-                        series={[
-                            {name: 'orders_created', color: 'blue.6', label: t`Orders Created`},
-                            {name: 'tickets_sold', color: 'blue.2', label: t`Tickets Sold`},
                         ]}
                         curveType="natural"
                         tickLine="none"

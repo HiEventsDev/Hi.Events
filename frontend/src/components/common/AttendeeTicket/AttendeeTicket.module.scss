@@ -10,6 +10,16 @@
   padding: 0;
   margin-bottom: 20px;
 
+  @media print {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    margin-bottom: 100px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
   @include respond-below(sm) {
     flex-direction: column-reverse;
   }
