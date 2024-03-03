@@ -247,30 +247,6 @@ export const SelectTickets = (props: SelectTicketsProps) => {
                             )
                         })}
                     </div>
-                    <div className={'hi-promo-code-row'}>
-                        {(!showPromoCodeInput && !promoCode) && (
-                            <Anchor className={'hi-have-a-promo-code-link'}
-                                    onClick={() => setShowPromoCodeInput(true)}>
-                                {t`Have a promo code?`}
-                            </Anchor>
-                        )}
-                        {promoValid && (
-                            <div className={'hi-promo-code-applied'}>
-                                <b>{promoCode}</b> {t`applied`}
-                            </div>
-                        )}
-                        {(!promoValid && showPromoCodeInput) && (
-                            <Group className={'hi-promo-code-input-wrapper'} wrap={'nowrap'} gap={'20px'}>
-                                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                                {/*@ts-ignore*/}
-                                <TextInput onKeyPress={handleApplyPromoCodeKeyPress} mb={0} ref={promoRef}/>
-                                <Button className={'hi-apply-promo-code-button'} variant={'outline'}
-                                        onClick={handleApplyPromoCode}>
-                                    {t`Apply Promo Code`}
-                                </Button>
-                            </Group>
-                        )}
-                    </div>
 
                     <div className={'hi-footer-row'}>
                         {event?.settings?.ticket_page_message && (
@@ -278,13 +254,39 @@ export const SelectTickets = (props: SelectTicketsProps) => {
                                 __html: event.settings.ticket_page_message.replace(/\n/g, '<br/>')
                             }} className={'hi-ticket-page-message'}/>
                         )}
-                        <Button disabled={props.isInPreviewMode} fullWidth className={'hi-continue-button'} type={"submit"}
+                        <Button disabled={props.isInPreviewMode} fullWidth className={'hi-continue-button'}
+                                type={"submit"}
                                 loading={mutation.isLoading}>
                             {props.continueButtonText || event?.settings?.continue_button_text || t`Continue`}
                         </Button>
                     </div>
                 </form>
             )}
+            <div className={'hi-promo-code-row'}>
+                {(!showPromoCodeInput && !promoCode) && (
+                    <Anchor className={'hi-have-a-promo-code-link'}
+                            onClick={() => setShowPromoCodeInput(true)}>
+                        {t`Have a promo code?`}
+                    </Anchor>
+                )}
+                {promoValid && (
+                    <div className={'hi-promo-code-applied'}>
+                        <b>{promoCode}</b> {t`applied`}
+                    </div>
+                )}
+                {(!promoValid && showPromoCodeInput) && (
+                    <Group className={'hi-promo-code-input-wrapper'} wrap={'nowrap'} gap={'20px'}>
+                        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                        {/*@ts-ignore*/}
+                        <TextInput onKeyPress={handleApplyPromoCodeKeyPress} mb={0} ref={promoRef}/>
+                        <Button className={'hi-apply-promo-code-button'} variant={'outline'}
+                                onClick={handleApplyPromoCode}>
+                            {t`Apply Promo Code`}
+                        </Button>
+                    </Group>
+                )}
+            </div>
+
         </div>
     );
 }

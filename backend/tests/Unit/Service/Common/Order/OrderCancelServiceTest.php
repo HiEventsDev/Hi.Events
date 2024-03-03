@@ -10,7 +10,7 @@ use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\TicketRepositoryInterface;
-use HiEvents\Services\Common\Order\OrderCancelService;
+use HiEvents\Services\Domain\Order\OrderCancelService;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Database\DatabaseManager;
 

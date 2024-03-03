@@ -7,7 +7,7 @@ use HiEvents\DomainObjects\ImageDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Repository\Interfaces\ImageRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
-use HiEvents\Services\Common\Image\ImageUploadService;
+use HiEvents\Services\Domain\Image\ImageUploadService;
 use HiEvents\Services\Handlers\Organizer\DTO\EditOrganizerDTO;
 use Illuminate\Database\DatabaseManager;
 use Throwable;

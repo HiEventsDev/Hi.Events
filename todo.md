@@ -51,7 +51,15 @@ P1
 - Fix attendee question errors
 - Ensure email links are working
 
+.hi-promo-code-row  - check css is nested correctly
+
 P3
 - Organizer social handles and meta
 - Multiple requests being made when query param are present
 - Changing a question type could break exports
+
+
+# Set up
+docker-compose up -d
+## set up the database
+docker-compose exec backend php artisan migrate

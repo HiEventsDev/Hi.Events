@@ -6,7 +6,7 @@ use HiEvents\DomainObjects\Enums\EventImageType;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\ImageDomainObject;
 use HiEvents\Repository\Interfaces\ImageRepositoryInterface;
-use HiEvents\Services\Common\Image\ImageUploadService;
+use HiEvents\Services\Domain\Image\ImageUploadService;
 use HiEvents\Services\Handlers\Event\DTO\CreateEventImageDTO;
 use Illuminate\Database\DatabaseManager;
 use Throwable;

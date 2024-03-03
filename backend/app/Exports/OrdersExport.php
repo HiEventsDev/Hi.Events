@@ -15,7 +15,7 @@ use HiEvents\DomainObjects\Enums\QuestionTypeEnum;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\QuestionDomainObject;
 use HiEvents\Resources\Order\OrderResource;
-use HiEvents\Services\Common\Question\QuestionAnswerFormatter;
+use HiEvents\Services\Domain\Question\QuestionAnswerFormatter;
 
 class OrdersExport implements FromCollection, WithHeadings, WithMapping, WithStyles
 {

@@ -15,9 +15,9 @@ use HiEvents\Mail\OrderRefunded;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
-use HiEvents\Services\Common\EventStatistics\EventStatisticsUpdateService;
-use HiEvents\Services\Common\Order\OrderCancelService;
-use HiEvents\Services\Common\Payment\Stripe\StripePaymentIntentRefundService;
+use HiEvents\Services\Domain\EventStatistics\EventStatisticsUpdateService;
+use HiEvents\Services\Domain\Order\OrderCancelService;
+use HiEvents\Services\Domain\Payment\Stripe\StripePaymentIntentRefundService;
 use HiEvents\Services\Handlers\Order\DTO\RefundOrderDTO;
 use HiEvents\Values\MoneyValue;
 use Illuminate\Contracts\Mail\Mailer;
@@ -35,7 +35,6 @@ readonly class RefundOrderHandler
         private Mailer                           $mailer,
         private OrderCancelService               $orderCancelService,
         private DatabaseManager                  $databaseManager,
-        private EventStatisticsUpdateService     $eventStatisticsUpdateService,
     )
     {
     }
@@ -112,11 +111,6 @@ readonly class RefundOrderHandler
 
         $this->validateRefundability($order);
 
-        $this->refundService->refundPayment(
-            amount: $amount,
-            payment: $order->getStripePayment()
-        );
-
         if ($refundOrderDTO->cancel_order) {
             $this->orderCancelService->cancelOrder($order);
         }
@@ -125,7 +119,10 @@ readonly class RefundOrderHandler
             $this->notifyBuyer($order, $event, $amount);
         }
 
-        $this->eventStatisticsUpdateService->updateEventStatsTotalRefunded($order, $amount);
+        $this->refundService->refundPayment(
+            amount: $amount,
+            payment: $order->getStripePayment()
+        );
 
         return $this->markOrderRefundPending($order);
     }

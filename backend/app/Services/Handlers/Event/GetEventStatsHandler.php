@@ -2,7 +2,7 @@
 
 namespace HiEvents\Services\Handlers\Event;
 
-use HiEvents\Services\Common\Event\EventStatsFetchService;
+use HiEvents\Services\Domain\Event\EventStatsFetchService;
 use HiEvents\Services\Handlers\Event\DTO\EventStatsRequestDTO;
 use HiEvents\Services\Handlers\Event\DTO\EventStatsResponseDTO;
 

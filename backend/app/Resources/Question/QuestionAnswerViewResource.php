@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use HiEvents\DomainObjects\Enums\QuestionTypeEnum;
 use HiEvents\DomainObjects\QuestionAndAnswerViewDomainObject;
-use HiEvents\Services\Common\Question\QuestionAnswerFormatter;
+use HiEvents\Services\Domain\Question\QuestionAnswerFormatter;
 
 /**
  * @mixin QuestionAndAnswerViewDomainObject

@@ -8,7 +8,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use HiEvents\DomainObjects\OrderDomainObject;
-use HiEvents\Services\Common\Mail\SendOrderDetailsService;
+use HiEvents\Services\Domain\Mail\SendOrderDetailsService;
 
 class SendOrderDetailsEmailJob implements ShouldQueue
 {

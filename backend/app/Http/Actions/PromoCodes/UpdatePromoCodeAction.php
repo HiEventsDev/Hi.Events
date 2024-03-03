@@ -9,7 +9,7 @@ use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\PromoCode\CreateUpdatePromoCodeRequest;
 use HiEvents\Http\ResponseCodes;
 use HiEvents\Resources\PromoCode\PromoCodeResource;
-use HiEvents\Services\Common\Ticket\Exception\UnrecognizedTicketIdException;
+use HiEvents\Services\Domain\Ticket\Exception\UnrecognizedTicketIdException;
 use HiEvents\Services\Handlers\PromoCode\DTO\UpsertPromoCodeDTO;
 use HiEvents\Services\Handlers\PromoCode\UpdatePromoCodeHandler;
 use Illuminate\Http\JsonResponse;

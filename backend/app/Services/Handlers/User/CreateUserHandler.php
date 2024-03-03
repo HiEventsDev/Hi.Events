@@ -7,7 +7,7 @@ use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
-use HiEvents\Services\Common\User\SendUserInvitationService;
+use HiEvents\Services\Domain\User\SendUserInvitationService;
 use HiEvents\Services\Handlers\User\DTO\CreateUserDTO;
 
 class CreateUserHandler

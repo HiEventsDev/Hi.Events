@@ -6,7 +6,8 @@ use HiEvents\DomainObjects\Status\OrderPaymentStatus;
 use HiEvents\DomainObjects\StripePaymentDomainObject;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
-use HiEvents\Services\Common\Payment\Stripe\EventHandlers\PaymentIntentSucceededHandler;
+use HiEvents\Services\Domain\Payment\Stripe\EventHandlers\PaymentIntentSucceededHandler;
+use HiEvents\Services\Handlers\Order\Payment\Stripe\DTO\StripePaymentIntentPublicDTO;
 use Psr\Log\LoggerInterface;
 use Stripe\Exception\ApiErrorException;
 use Stripe\StripeClient;
@@ -50,7 +51,7 @@ readonly class GetPaymentIntentHandler
                 'payment_intent_id' => $order->getStripePayment()->getPaymentIntentId(),
             ]);
 
-            throw new ResourceNotFoundException('Payment intent not found: ' . $paymentIntent->id);
+            throw new ResourceNotFoundException('Payment intent not found: ' . $e->getMessage());
         }
 
         // If the payment intent is a success and the order's payment status is not received, we manually handle the event here.

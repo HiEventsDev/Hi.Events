@@ -9,6 +9,11 @@ create sequence taxes_and_fees_id_seq;
 create sequence ticket_taxes_and_fees_id_seq
     as integer;
 
+create sequence taxes_and_fees_id_seq1;
+
+create sequence ticket_taxes_and_fees_id_seq1
+    as integer;
+
 create table if not exists migrations
 (
     id        serial,
@@ -375,36 +380,34 @@ create index if not exists promo_codes_applicable_ticket_ids_index
 
 create table if not exists orders
 (
-    id                       bigint generated always as identity,
-    short_id                 varchar(20)                  not null,
-    event_id                 integer                      not null,
-    total_before_additions   numeric(14, 2) default 0.00  not null,
-    total_refunded           numeric(14, 2) default 0.00  not null,
-    total_gross              numeric(14, 2) default 0.00  not null,
-    currency                 varchar(3)                   not null,
-    first_name               varchar(50),
-    last_name                varchar(50),
-    email                    varchar(255),
-    status                   varchar                      not null,
-    payment_status           varchar,
-    refund_status            varchar,
-    reserved_until           timestamp(0),
-    is_manually_created      boolean        default false not null,
-    session_id               varchar(40),
-    public_id                varchar                      not null,
-    point_in_time_data       jsonb,
-    stripe_payment_intent_id varchar(55),
-    stripe_payment_intent    jsonb,
-    payment_gateway          varchar,
-    promo_code_id            integer,
-    promo_code               varchar,
-    address                  jsonb,
-    created_at               timestamp                    not null,
-    updated_at               timestamp,
-    deleted_at               timestamp,
-    taxes_and_fees_rollup    jsonb,
-    total_tax                numeric(14, 2) default 0.00  not null,
-    total_fee                numeric(14, 2) default 0.00  not null,
+    id                     bigint generated always as identity,
+    short_id               varchar(20)                  not null,
+    event_id               integer                      not null,
+    total_before_additions numeric(14, 2) default 0.00  not null,
+    total_refunded         numeric(14, 2) default 0.00  not null,
+    total_gross            numeric(14, 2) default 0.00  not null,
+    currency               varchar(3)                   not null,
+    first_name             varchar(50),
+    last_name              varchar(50),
+    email                  varchar(255),
+    status                 varchar                      not null,
+    payment_status         varchar,
+    refund_status          varchar,
+    reserved_until         timestamp(0),
+    is_manually_created    boolean        default false not null,
+    session_id             varchar(40),
+    public_id              varchar                      not null,
+    point_in_time_data     jsonb,
+    payment_gateway        varchar,
+    promo_code_id          integer,
+    promo_code             varchar,
+    address                jsonb,
+    created_at             timestamp                    not null,
+    updated_at             timestamp,
+    deleted_at             timestamp,
+    taxes_and_fees_rollup  jsonb,
+    total_tax              numeric(14, 2) default 0.00  not null,
+    total_fee              numeric(14, 2) default 0.00  not null,
     primary key (id),
     constraint orders_pk
         unique (public_id),
@@ -540,6 +543,7 @@ create table if not exists event_daily_statistics
     total_fee                    numeric(14, 2) default 0    not null,
     event_id                     bigint                      not null,
     version                      integer        default 0    not null,
+    total_refunded               numeric(14, 2) default 0    not null,
     primary key (id),
     constraint event_daily_statistics_events_id_fk
         foreign key (event_id) references events
@@ -769,13 +773,13 @@ create index if not exists event_settings_event_id_index
 create view question_and_answer_views
         (question_id, event_id, belongs_to, question_type, first_name, last_name, attendee_id, order_id, title,
          answer) as
-SELECT q.id   AS question_id,
+SELECT q.id AS question_id,
        q.event_id,
        q.belongs_to,
        q.type AS question_type,
        a.first_name,
        a.last_name,
-       a.id   AS attendee_id,
+       a.id AS attendee_id,
        qa.order_id,
        q.title,
        qa.answer

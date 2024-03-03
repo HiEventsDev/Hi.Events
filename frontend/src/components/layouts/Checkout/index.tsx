@@ -11,34 +11,26 @@ import {Event, Order} from "../../../types.ts";
 
 const SubTitle = ({order, event}: { order: Order, event: Event }) => {
     const navigate = useNavigate();
+    const orderStatuses: any = {
+        'COMPLETED': t`Order Completed`,
+        'CANCELLED': t`Order Cancelled`,
+        'PAYMENT_FAILED': t`Payment Failed`,
+        'AWAITING_PAYMENT': t`Awaiting Payment`
+    };
 
     if (order?.status === 'RESERVED') {
-        return <Countdown
-            targetDate={order.reserved_until}
-            onExpiry={() => {
-                showSuccess(t`Sorry, your order has expired. Please start a new order.`);
-                navigate(`/event/${event.id}/${event.slug}`);
-            }}
-        />
+        return (
+            <Countdown
+                targetDate={order.reserved_until}
+                onExpiry={() => {
+                    showSuccess(t`Sorry, your order has expired. Please start a new order.`);
+                    navigate(`/event/${event.id}/${event.slug}`);
+                }}
+            />
+        )
     }
 
-    if (order?.status === 'COMPLETED') {
-        return <span>{t`Order Completed`}</span>
-    }
-
-    if (order?.status === 'CANCELLED') {
-        return <span>{t`Order Cancelled`}</span>
-    }
-
-    if (order?.status === 'PAYMENT_FAILED') {
-        return <span>{t`Payment Failed`}</span>
-    }
-
-    if (order?.status === 'AWAITING_PAYMENT') {
-        return <span>{t`Awaiting Payment`}</span>
-    }
-
-    return <></>;
+    return <span className={classes.subTitle}>{orderStatuses[order?.status] || <></>}</span>;
 }
 
 export const Checkout = () => {

@@ -12,7 +12,7 @@ use HiEvents\DomainObjects\TicketPriceDomainObject;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
-use HiEvents\Services\Common\Ticket\TicketFilterService;
+use HiEvents\Services\Domain\Ticket\TicketFilterService;
 
 readonly class GetPublicEventHandler
 {

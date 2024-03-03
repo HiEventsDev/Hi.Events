@@ -5,7 +5,7 @@ namespace HiEvents\Services\Handlers\Ticket\DTO;
 use HiEvents\DataTransferObjects\Attributes\CollectionOf;
 use HiEvents\DataTransferObjects\BaseDTO;
 use HiEvents\DomainObjects\Enums\TicketType;
-use HiEvents\Services\Common\Ticket\DTO\TicketPriceDTO;
+use HiEvents\Services\Domain\Ticket\DTO\TicketPriceDTO;
 use Illuminate\Support\Collection;
 
 class UpsertTicketDTO extends BaseDTO

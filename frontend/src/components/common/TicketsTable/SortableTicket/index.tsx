@@ -121,7 +121,7 @@ export const SortableTicket = ({ticket, enableSorting}: {ticket: Ticket, enableS
                             <div className={classes.title}>
                                 <div className={classes.heading}>{t`Title`}</div>
                                 <Truncate text={ticket.title}
-                                          length={60}/> {ticket.is_hidden_without_promo_code || ticket.is_hidden && (
+                                          length={60}/> {(ticket.is_hidden_without_promo_code || ticket.is_hidden) && (
                                 <Popover>
                                     <Popover.Target>
                                         <IconEyeOff style={{cursor: 'pointer'}} size={14}/>

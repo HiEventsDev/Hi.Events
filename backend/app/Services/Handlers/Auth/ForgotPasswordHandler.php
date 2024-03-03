@@ -2,15 +2,15 @@
 
 namespace HiEvents\Services\Handlers\Auth;
 
+use HiEvents\Mail\ForgotPassword;
+use HiEvents\Repository\Interfaces\PasswordResetTokenRepositoryInterface;
+use HiEvents\Repository\Interfaces\UserRepositoryInterface;
+use HiEvents\Services\Infrastructure\TokenGenerator\TokenGeneratorService;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Mail\Mailer;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Throwable;
-use HiEvents\Mail\ForgotPassword;
-use HiEvents\Repository\Interfaces\PasswordResetTokenRepositoryInterface;
-use HiEvents\Repository\Interfaces\UserRepositoryInterface;
-use HiEvents\Services\Common\TokenGeneratorService;
 
 class ForgotPasswordHandler
 {

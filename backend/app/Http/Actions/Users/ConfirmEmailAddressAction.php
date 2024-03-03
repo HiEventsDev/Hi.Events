@@ -2,14 +2,14 @@
 
 namespace HiEvents\Http\Actions\Users;
 
+use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Services\Handlers\User\ConfirmEmailAddressHandler;
+use HiEvents\Services\Infrastructure\Encyption\Exception\DecryptionFailedException;
+use HiEvents\Services\Infrastructure\Encyption\Exception\EncryptedPayloadExpiredException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Throwable;
-use HiEvents\DomainObjects\UserDomainObject;
-use HiEvents\Exceptions\DecryptionFailedException;
-use HiEvents\Exceptions\EncryptedPayloadExpiredException;
-use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Services\Handlers\User\ConfirmEmailAddressHandler;
 
 class ConfirmEmailAddressAction extends BaseAction
 {

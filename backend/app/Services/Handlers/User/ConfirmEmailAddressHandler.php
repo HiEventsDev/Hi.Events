@@ -2,8 +2,8 @@
 
 namespace HiEvents\Services\Handlers\User;
 
-use HiEvents\Exceptions\DecryptionFailedException;
-use HiEvents\Services\Common\User\EmailConfirmationService;
+use HiEvents\Services\Domain\User\EmailConfirmationService;
+use HiEvents\Services\Infrastructure\Encyption\Exception\DecryptionFailedException;
 use Throwable;
 
 readonly class ConfirmEmailAddressHandler

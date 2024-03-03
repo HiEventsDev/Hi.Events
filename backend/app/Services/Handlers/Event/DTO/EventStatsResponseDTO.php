@@ -4,8 +4,8 @@ namespace HiEvents\Services\Handlers\Event\DTO;
 
 use HiEvents\DataTransferObjects\Attributes\CollectionOf;
 use HiEvents\DataTransferObjects\BaseDTO;
-use HiEvents\Services\Common\Event\DTO\EventCheckInStatsResponseDTO;
-use HiEvents\Services\Common\Event\DTO\EventDailyStatsResponseDTO;
+use HiEvents\Services\Domain\Event\DTO\EventCheckInStatsResponseDTO;
+use HiEvents\Services\Domain\Event\DTO\EventDailyStatsResponseDTO;
 use Illuminate\Support\Collection;
 
 class EventStatsResponseDTO extends BaseDTO

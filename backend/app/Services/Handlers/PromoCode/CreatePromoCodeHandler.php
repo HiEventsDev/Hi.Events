@@ -9,8 +9,8 @@ use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Helper\DateHelper;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
-use HiEvents\Services\Common\Ticket\EventTicketValidationService;
-use HiEvents\Services\Common\Ticket\Exception\UnrecognizedTicketIdException;
+use HiEvents\Services\Domain\Ticket\EventTicketValidationService;
+use HiEvents\Services\Domain\Ticket\Exception\UnrecognizedTicketIdException;
 use HiEvents\Services\Handlers\PromoCode\DTO\UpsertPromoCodeDTO;
 
 readonly class CreatePromoCodeHandler

@@ -6,7 +6,7 @@ use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
-use HiEvents\Services\Common\Order\OrderCancelService;
+use HiEvents\Services\Domain\Order\OrderCancelService;
 use HiEvents\Services\Handlers\Order\DTO\CancelOrderDTO;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Throwable;

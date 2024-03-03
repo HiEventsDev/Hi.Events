@@ -2,15 +2,15 @@
 
 namespace Tests\Unit\Service\Common;
 
-use Illuminate\Contracts\Encryption\DecryptException;
-use Mockery\MockInterface;
-use Tests\TestCase;
 use Carbon\Carbon;
+use HiEvents\Services\Infrastructure\Encyption\EncryptedPayloadService;
+use HiEvents\Services\Infrastructure\Encyption\Exception\DecryptionFailedException;
+use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Contracts\Encryption\Encrypter;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
-use HiEvents\Exceptions\DecryptionFailedException;
-use HiEvents\Services\Common\EncryptedPayloadService;
+use Mockery\MockInterface;
+use Tests\TestCase;
 
 class EncryptedPayloadServiceTest extends TestCase
 {

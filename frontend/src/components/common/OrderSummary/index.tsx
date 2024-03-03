@@ -33,7 +33,6 @@ export const OrderSummary = ({event, order, showFreeWhenZeroTotal = true}: Order
                                     currency={event.currency}
                                     price={item.price * item.quantity}
                                 />
-
                             </div>
                         </div>
                     )
@@ -95,7 +94,7 @@ export const OrderSummary = ({event, order, showFreeWhenZeroTotal = true}: Order
                     <div className={classes.itemValue}>
                         <Currency
                             currency={event.currency}
-                            price={order.total_gross}
+                            price={order.total_gross - order.total_refunded}
                             freeLabel={showFreeWhenZeroTotal ? t`Free` : null}
                         />
                     </div>

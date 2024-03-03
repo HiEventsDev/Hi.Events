@@ -41,10 +41,6 @@ export const PromoCodes = () => {
                         Create
                     </Button>
 
-                    <Button color={'green'} size={'sm'} onClick={() => {
-                    }} rightSection={<IconDownload/>}>
-                        {t`Export`}
-                    </Button>
                 </ToolBar>
 
                 <TableSkeleton isVisible={!promoCodes || !event}/>

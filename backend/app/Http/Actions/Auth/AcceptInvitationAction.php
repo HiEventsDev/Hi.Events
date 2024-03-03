@@ -2,13 +2,13 @@
 
 namespace HiEvents\Http\Actions\Auth;
 
-use HiEvents\Exceptions\DecryptionFailedException;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Auth\AcceptInvitationRequest;
 use HiEvents\Http\ResponseCodes;
 use HiEvents\Services\Handlers\Auth\AcceptInvitationHandler;
 use HiEvents\Services\Handlers\Auth\DTO\AcceptInvitationDTO;
+use HiEvents\Services\Infrastructure\Encyption\Exception\DecryptionFailedException;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;

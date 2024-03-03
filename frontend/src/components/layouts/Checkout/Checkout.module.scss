@@ -5,6 +5,10 @@
   background-color: #3c2b5c05 !important;
   height: 100vh;
 
+  .subTitle {
+    font-size: .95em;
+  }
+
   .mainContent {
     flex: 1;
     border-right: 1px solid #e0e0e0;
@@ -18,8 +22,15 @@
       align-items: center;
       flex-direction: column;
       box-shadow: 0 5px 5px 0 #0000000a;
+      text-align: center;
+
+
 
       h2 {
+        @include respond-below(md) {
+          font-size: 1em;
+        }
+
         margin: 0;
       }
     }

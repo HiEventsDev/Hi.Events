@@ -1,7 +1,7 @@
 <?php
 
+use HiEvents\Services\Infrastructure\DomainObjectGenerator\ClassGenerator;
 use Illuminate\Support\Facades\Artisan;
-use HiEvents\Services\Common\DomainObjectGenerator\ClassGenerator;
 
 Artisan::command('generate-domain-objects',
     fn() => app()->make(ClassGenerator::class)->run()

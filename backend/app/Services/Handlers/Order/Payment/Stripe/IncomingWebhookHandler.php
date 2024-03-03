@@ -3,10 +3,11 @@
 namespace HiEvents\Services\Handlers\Order\Payment\Stripe;
 
 use HiEvents\Exceptions\CannotAcceptPaymentException;
-use HiEvents\Services\Common\Payment\Stripe\EventHandlers\AccountUpdateHandler;
-use HiEvents\Services\Common\Payment\Stripe\EventHandlers\ChargeRefundUpdatedHandler;
-use HiEvents\Services\Common\Payment\Stripe\EventHandlers\PaymentIntentFailedHandler;
-use HiEvents\Services\Common\Payment\Stripe\EventHandlers\PaymentIntentSucceededHandler;
+use HiEvents\Services\Domain\Payment\Stripe\EventHandlers\AccountUpdateHandler;
+use HiEvents\Services\Domain\Payment\Stripe\EventHandlers\ChargeRefundUpdatedHandler;
+use HiEvents\Services\Domain\Payment\Stripe\EventHandlers\PaymentIntentFailedHandler;
+use HiEvents\Services\Domain\Payment\Stripe\EventHandlers\PaymentIntentSucceededHandler;
+use HiEvents\Services\Handlers\Order\Payment\Stripe\DTO\StripeWebhookDTO;
 use Illuminate\Log\Logger;
 use JsonException;
 use Stripe\Event;

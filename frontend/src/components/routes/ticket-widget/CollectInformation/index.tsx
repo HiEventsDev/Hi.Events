@@ -14,6 +14,7 @@ import {t} from "@lingui/macro";
 import {InputGroup} from "../../../common/InputGroup";
 import {Center} from "../../../common/Center";
 import {Card} from "../../../common/Card";
+import {IconCopy} from "@tabler/icons-react";
 
 export const CollectInformation = () => {
     const {eventId, eventSlug, orderShortId} = useParams();
@@ -54,6 +55,22 @@ export const CollectInformation = () => {
             }],
         },
     });
+
+    const copyDetailsToAllAttendees = () => {
+        const updatedAttendees = form.values.attendees.map((attendee) => {
+            return {
+                ...attendee,
+                first_name: form.values.order.first_name,
+                last_name: form.values.order.last_name,
+                email: form.values.order.email,
+            };
+        });
+
+        form.setValues({
+            ...form.values,
+            attendees: updatedAttendees,
+        });
+    }
 
     const mutation = useMutation(
         (orderData: FinaliseOrderPayload) => orderClientPublic.finaliseOrder(Number(eventId), String(orderShortId), orderData),
@@ -243,11 +260,12 @@ export const CollectInformation = () => {
                     />
 
                     {orderQuestions && <CheckoutOrderQuestions form={form} questions={orderQuestions}/>}
-                </Card>
 
-                <h2>
-                    {t`Attendee Details`}
-                </h2>
+                    <Button p={0} ml={0} size={'sm'} variant={'transparent'} leftSection={<IconCopy size={14}/>}
+                            onClick={copyDetailsToAllAttendees}>
+                        {t`Copy details to all attendees`}
+                    </Button>
+                </Card>
 
                 {orderItems?.map(orderItem => {
                     const ticket = tickets?.find(ticket => ticket.id === orderItem.ticket_id);

@@ -5,7 +5,7 @@ namespace HiEvents\Services\Handlers\TaxAndFee;
 use HiEvents\DomainObjects\TaxAndFeesDomainObject;
 use HiEvents\Exceptions\ResourceNameAlreadyExistsException;
 use HiEvents\Repository\Interfaces\TaxAndFeeRepositoryInterface;
-use HiEvents\Services\Common\Tax\DuplicateTaxService;
+use HiEvents\Services\Domain\Tax\DuplicateTaxService;
 use HiEvents\Services\Handlers\TaxAndFee\DTO\UpsertTaxDTO;
 use Psr\Log\LoggerInterface;
 

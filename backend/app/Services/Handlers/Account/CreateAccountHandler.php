@@ -11,7 +11,7 @@ use HiEvents\Exceptions\EmailAlreadyExists;
 use HiEvents\Helper\IdHelper;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
-use HiEvents\Services\Common\User\EmailConfirmationService;
+use HiEvents\Services\Domain\User\EmailConfirmationService;
 use HiEvents\Services\Handlers\Account\DTO\CreateAccountDTO;
 use Illuminate\Config\Repository;
 use Illuminate\Database\DatabaseManager;

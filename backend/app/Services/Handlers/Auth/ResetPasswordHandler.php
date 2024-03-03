@@ -7,7 +7,7 @@ use HiEvents\Exceptions\PasswordInvalidException;
 use HiEvents\Mail\ResetPasswordSuccess;
 use HiEvents\Repository\Interfaces\PasswordResetTokenRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
-use HiEvents\Services\Common\Auth\ResetPasswordTokenValidateService;
+use HiEvents\Services\Domain\Auth\ResetPasswordTokenValidateService;
 use HiEvents\Services\Handlers\Auth\DTO\ResetPasswordDTO;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Hashing\HashManager;

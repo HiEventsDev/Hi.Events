@@ -3,8 +3,8 @@
 namespace HiEvents\Services\Handlers\Auth;
 
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
-use HiEvents\Services\Common\Auth\DTO\LoginResponse;
-use HiEvents\Services\Common\Auth\LoginService;
+use HiEvents\Services\Domain\Auth\DTO\LoginResponse;
+use HiEvents\Services\Domain\Auth\LoginService;
 use HiEvents\Services\Handlers\Auth\DTO\LoginCredentialsDTO;
 
 class LoginHandler

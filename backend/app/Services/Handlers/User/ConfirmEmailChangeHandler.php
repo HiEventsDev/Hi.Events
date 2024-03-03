@@ -2,14 +2,14 @@
 
 namespace HiEvents\Services\Handlers\User;
 
+use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\Repository\Interfaces\UserRepositoryInterface;
+use HiEvents\Services\Infrastructure\Encyption\EncryptedPayloadService;
+use HiEvents\Services\Infrastructure\Encyption\Exception\DecryptionFailedException;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Validation\UnauthorizedException;
 use Psr\Log\LoggerInterface;
 use Throwable;
-use HiEvents\DomainObjects\UserDomainObject;
-use HiEvents\Exceptions\DecryptionFailedException;
-use HiEvents\Repository\Interfaces\UserRepositoryInterface;
-use HiEvents\Services\Common\EncryptedPayloadService;
 
 class ConfirmEmailChangeHandler
 {

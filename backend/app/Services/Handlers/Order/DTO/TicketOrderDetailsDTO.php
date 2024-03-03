@@ -4,7 +4,7 @@ namespace HiEvents\Services\Handlers\Order\DTO;
 
 use HiEvents\DataTransferObjects\Attributes\CollectionOf;
 use HiEvents\DataTransferObjects\BaseDTO;
-use HiEvents\Services\Common\Ticket\DTO\OrderTicketPriceDTO;
+use HiEvents\Services\Domain\Ticket\DTO\OrderTicketPriceDTO;
 use Illuminate\Support\Collection;
 
 class TicketOrderDetailsDTO extends BaseDTO

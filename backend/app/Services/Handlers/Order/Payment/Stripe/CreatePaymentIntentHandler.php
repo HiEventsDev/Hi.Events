@@ -16,10 +16,10 @@ use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\StripePaymentsRepositoryInterface;
-use HiEvents\Services\Common\Payment\Stripe\DTOs\CreatePaymentIntentRequestDTO;
-use HiEvents\Services\Common\Payment\Stripe\DTOs\CreatePaymentIntentResponseDTO;
-use HiEvents\Services\Common\Payment\Stripe\StripePaymentIntentCreationService;
-use HiEvents\Services\Common\Session\SessionIdentifierService;
+use HiEvents\Services\Domain\Payment\Stripe\DTOs\CreatePaymentIntentRequestDTO;
+use HiEvents\Services\Domain\Payment\Stripe\DTOs\CreatePaymentIntentResponseDTO;
+use HiEvents\Services\Domain\Payment\Stripe\StripePaymentIntentCreationService;
+use HiEvents\Services\Domain\Session\SessionIdentifierService;
 
 readonly class CreatePaymentIntentHandler
 {

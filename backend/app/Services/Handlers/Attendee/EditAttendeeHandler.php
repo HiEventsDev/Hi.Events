@@ -10,7 +10,7 @@ use HiEvents\DomainObjects\TicketPriceDomainObject;
 use HiEvents\Exceptions\NoTicketsAvailableException;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\TicketRepositoryInterface;
-use HiEvents\Services\Common\Ticket\TicketQuantityService;
+use HiEvents\Services\Domain\Ticket\TicketQuantityService;
 use HiEvents\Services\Handlers\Attendee\DTO\EditAttendeeDTO;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Validation\ValidationException;

@@ -4,7 +4,7 @@ namespace HiEvents\Services\Handlers\Attendee;
 
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
-use HiEvents\Services\Common\Attendee\SendAttendeeTicketService;
+use HiEvents\Services\Domain\Attendee\SendAttendeeTicketService;
 use HiEvents\Services\Handlers\Attendee\DTO\ResendAttendeeTicketDTO;
 use Psr\Log\LoggerInterface;
 

@@ -2,8 +2,8 @@
 
 namespace HiEvents\Services\Handlers\Event;
 
-use HiEvents\Services\Common\Event\DTO\EventCheckInStatsResponseDTO;
-use HiEvents\Services\Common\Event\EventStatsFetchService;
+use HiEvents\Services\Domain\Event\DTO\EventCheckInStatsResponseDTO;
+use HiEvents\Services\Domain\Event\EventStatsFetchService;
 
 readonly class GetEventCheckInStatsHandler
 {

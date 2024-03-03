@@ -3,12 +3,12 @@
 namespace HiEvents\Services\Handlers\Auth;
 
 use HiEvents\DomainObjects\Status\UserStatus;
-use HiEvents\Exceptions\DecryptionFailedException;
-use HiEvents\Exceptions\EncryptedPayloadExpiredException;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
-use HiEvents\Services\Common\EncryptedPayloadService;
 use HiEvents\Services\Handlers\Auth\DTO\AcceptInvitationDTO;
+use HiEvents\Services\Infrastructure\Encyption\EncryptedPayloadService;
+use HiEvents\Services\Infrastructure\Encyption\Exception\DecryptionFailedException;
+use HiEvents\Services\Infrastructure\Encyption\Exception\EncryptedPayloadExpiredException;
 use Illuminate\Contracts\Hashing\Hasher;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 

@@ -4,7 +4,7 @@ namespace HiEvents\Services\Handlers\Auth;
 
 use HiEvents\DomainObjects\PasswordResetTokenDomainObject;
 use HiEvents\Exceptions\InvalidPasswordResetTokenException;
-use HiEvents\Services\Common\Auth\ResetPasswordTokenValidateService;
+use HiEvents\Services\Domain\Auth\ResetPasswordTokenValidateService;
 
 class ValidateResetPasswordTokenHandler
 {

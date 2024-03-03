@@ -13,7 +13,7 @@ use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Exceptions\UnauthorizedException;
 use HiEvents\Http\ResponseCodes;
 use HiEvents\Resources\BaseResource;
-use HiEvents\Services\Authorization\IsAuthorizedService;
+use HiEvents\Services\Infrastructure\Authorization\IsAuthorizedService;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response as LaravelResponse;

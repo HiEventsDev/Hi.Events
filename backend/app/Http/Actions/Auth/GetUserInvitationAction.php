@@ -2,17 +2,17 @@
 
 namespace HiEvents\Http\Actions\Auth;
 
-use Illuminate\Http\JsonResponse;
-use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use HiEvents\Exceptions\DecryptionFailedException;
-use HiEvents\Exceptions\EncryptedPayloadExpiredException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\ResponseCodes;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Resources\User\UserResource;
-use HiEvents\Services\Common\EncryptedPayloadService;
+use HiEvents\Services\Infrastructure\Encyption\EncryptedPayloadService;
+use HiEvents\Services\Infrastructure\Encyption\Exception\DecryptionFailedException;
+use HiEvents\Services\Infrastructure\Encyption\Exception\EncryptedPayloadExpiredException;
+use Illuminate\Http\JsonResponse;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class GetUserInvitationAction extends BaseAction
 {

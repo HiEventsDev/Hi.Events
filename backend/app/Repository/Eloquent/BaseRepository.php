@@ -304,9 +304,7 @@ abstract class BaseRepository implements RepositoryInterface
             return null;
         }
 
-        $result = $this->hydrateDomainObjectFromModel($model, $domainObjectOverride);
-
-        return $result;
+        return $this->hydrateDomainObjectFromModel($model, $domainObjectOverride);
     }
 
     protected function resetModel(): void

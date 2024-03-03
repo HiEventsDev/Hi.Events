@@ -3,7 +3,7 @@
 namespace HiEvents\Jobs;
 
 use HiEvents\Exceptions\UnableToSendMessageException;
-use HiEvents\Services\Common\Mail\SendEventEmailMessagesService;
+use HiEvents\Services\Domain\Mail\SendEventEmailMessagesService;
 use HiEvents\Services\Handlers\Message\DTO\SendMessageDTO;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
