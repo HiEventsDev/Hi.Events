@@ -39,7 +39,7 @@ export const Payment = () => {
             <Center>
                 <Trans>
                     This order has already been paid. <NavLink
-                    to={`/event/${eventId}/${eventSlug}/${orderShortId}/summary`}>
+                    to={`/checkout/${eventId}/${orderShortId}/summary`}>
                     View order details
                 </NavLink>
                 </Trans>
@@ -51,7 +51,7 @@ export const Payment = () => {
         return (
             <Center>
                 <Trans>
-                    This page has expired. <NavLink to={`/event/${eventId}/${eventSlug}/${orderShortId}/summary`}>
+                    This page has expired. <NavLink to={`/checkout/${eventId}/${orderShortId}/summary`}>
                     View order details
                 </NavLink>
                 </Trans>

@@ -80,14 +80,19 @@ export const OrdersTable = ({orders, event}: OrdersTableProps) => {
                 <Menu.Target>
                     <div className={classes.action}>
                         <div className={classes.mobileAction}>
-                            <Button size={"xs"} variant={"light"}>
-                                {t`Manage`}
-                            </Button>
+                            <ShowForMobile>
+                                <Button size={"xs"} variant={"light"}>
+                                    {t`Manage`}
+                                </Button>
+                            </ShowForMobile>
+
                         </div>
                         <div className={classes.desktopAction}>
-                            <Button size={"xs"} variant={"transparent"}>
-                                <IconDotsVertical/>
-                            </Button>
+                            <ShowForDesktop>
+                                <Button size={"xs"} variant={"transparent"}>
+                                    <IconDotsVertical/>
+                                </Button>
+                            </ShowForDesktop>
                         </div>
                     </div>
                 </Menu.Target>

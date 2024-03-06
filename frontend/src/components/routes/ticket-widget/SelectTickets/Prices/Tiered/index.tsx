@@ -58,9 +58,11 @@ export const TieredPricing = ({ticket, event, form, ticketIndex}: TieredPricingP
                                                 placeholder={'0.00'}
                                                 label={t`Amount`}
                                                 required={true}
-                                                className={'hi-donation-input'}
                                                 w={150}
                                                 mb={0}
+                                                classNames={{
+                                                    input: 'hi-donation-input',
+                                                }}
                                             />
                                         </div>
                                     )}
