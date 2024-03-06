@@ -20,9 +20,9 @@
   }
 
   .sidebar {
-    min-width: 300px;
+    min-width: 350px;
     max-width: 350px;
-    background-color: #ffffffe6;
+    background-color: #ffffff;
     padding: 20px;
     height: calc(100vh - 55px);
     overflow-y: auto;
@@ -47,10 +47,33 @@
     }
   }
 
-  .preview {
+  .previewContainer {
     height: calc(100vh - 55px);
-    overflow-y: auto;
     width: 100%;
+    overflow: hidden;
+
+    .preview {
+      width: 100%;
+      height: 100%;
+      overflow-y: auto;
+    }
+
+    .iframeContainer {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      --scale: 0.65;
+
+      iframe {
+        transform: scale(var(--scale));
+        transform-origin: 0 0;
+        width: calc(100% / var(--scale));
+        height: calc(100% / var(--scale));
+        border: none;
+        position: absolute;
+        inset: 0;
+      }
+    }
 
     h2 {
       display: none;

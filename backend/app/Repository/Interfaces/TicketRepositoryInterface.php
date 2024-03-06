@@ -24,12 +24,6 @@ interface TicketRepositoryInterface extends RepositoryInterface
 
     /**
      * @param int $ticketId
-     * @return int null represents unlimited tickets remaining
-     */
-    public function getQuantityRemaining(int $ticketId): int;
-
-    /**
-     * @param int $ticketId
      * @param int $ticketPriceId
      * @return int
      */

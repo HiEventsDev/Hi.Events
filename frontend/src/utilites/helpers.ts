@@ -5,6 +5,10 @@ export function isNumber(value: any): value is number {
     return typeof value === 'number'
 }
 
+export const isObjectEmpty = (objectName: any) => {
+    return Object.keys(objectName).length === 0
+}
+
 export const pluck = <T, K extends keyof T>(obj: T, keys: K[]): Pick<T, K> => {
     const ret: any = {};
     for (const key of keys) {

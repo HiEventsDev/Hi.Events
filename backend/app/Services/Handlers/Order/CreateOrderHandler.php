@@ -66,7 +66,6 @@ readonly class CreateOrderHandler
         });
     }
 
-
     private function getPromoCode(CreateOrderPublicDTO $createOrderPublicDTO, int $eventId): ?PromoCodeDomainObject
     {
         if ($createOrderPublicDTO->promo_code === null) {
@@ -89,7 +88,7 @@ readonly class CreateOrderHandler
     {
         if ($event->getStatus() !== EventStatus::LIVE->name && !$createOrderPublicDTO->is_user_authenticated) {
             throw new UnauthorizedException(
-                __('The event is not live and the user is not authenticated.')
+                __('This event is not live.')
             );
         }
     }

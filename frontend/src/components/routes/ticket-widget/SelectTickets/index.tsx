@@ -18,7 +18,7 @@ import {showError, showInfo, showSuccess} from "../../../../utilites/notificatio
 import {Event, Ticket} from "../../../../types.ts";
 import {prettyDate, relativeDate} from "../../../../utilites/dates.ts";
 import {IconInfoCircle} from "@tabler/icons-react";
-import {addQueryStringToUrl} from "../../../../utilites/helpers.ts";
+import {addQueryStringToUrl, isObjectEmpty} from "../../../../utilites/helpers.ts";
 import {TieredPricing} from "./Prices/Tiered";
 import classNames from 'classnames';
 
@@ -233,6 +233,18 @@ export const SelectTickets = (props: SelectTicketsProps) => {
                                         />
                                     </div>
 
+                                    {ticket.max_per_order && form.values.tickets && isObjectEmpty(form.errors) && (form.values.tickets[index].quantities.reduce((acc, {quantity}) => acc + Number(quantity), 0) > ticket.max_per_order) && (
+                                        <div className={'hi-ticket-quantity-error'}>
+                                            {t`The maximum numbers number of tickets for Generals is ${ticket.max_per_order}`}
+                                        </div>
+                                    )}
+
+                                    {form.errors[`tickets.${index}`] && (
+                                        <div className={'hi-ticket-quantity-error'}>
+                                            {form.errors[`tickets.${index}`]}
+                                        </div>
+                                    )}
+
                                     {ticket.description && (
                                         <div
                                             className={'hi-ticket-description-row'}>
@@ -278,7 +290,7 @@ export const SelectTickets = (props: SelectTicketsProps) => {
                     <Group className={'hi-promo-code-input-wrapper'} wrap={'nowrap'} gap={'20px'}>
                         {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                         {/*@ts-ignore*/}
-                        <TextInput onKeyPress={handleApplyPromoCodeKeyPress} mb={0} ref={promoRef}/>
+                        <TextInput classNames={{input: 'hi-promo-code-input'}} onKeyPress={handleApplyPromoCodeKeyPress} mb={0} ref={promoRef}/>
                         <Button className={'hi-apply-promo-code-button'} variant={'outline'}
                                 onClick={handleApplyPromoCode}>
                             {t`Apply Promo Code`}

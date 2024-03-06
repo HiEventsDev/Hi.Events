@@ -50,6 +50,7 @@ P1
 - Confirm order quantities calculations
 - Fix attendee question errors
 - Ensure email links are working
+- Min/Max quantity on tickets
 
 .hi-promo-code-row  - check css is nested correctly
 

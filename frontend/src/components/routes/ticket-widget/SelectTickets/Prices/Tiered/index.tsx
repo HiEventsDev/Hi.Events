@@ -1,5 +1,5 @@
 import {Currency, TicketPriceDisplay} from "../../../../../common/Currency";
-import {Event, Ticket, TicketPrice} from "../../../../../../types.ts";
+import {Event, Ticket, TicketPrice, TicketType} from "../../../../../../types.ts";
 import {Group, TextInput, Tooltip} from "@mantine/core";
 import {NumberSelector} from "../../../../../common/NumberSelector";
 import {UseFormReturnType} from "@mantine/form";
@@ -14,7 +14,7 @@ interface TieredPricingProps {
     ticketIndex: number;
 }
 
-const TicketPriceSaleDateMessage = ({price, event}: { price: TicketPrice, event: Event}) => {
+const TicketPriceSaleDateMessage = ({price, event}: { price: TicketPrice, event: Event }) => {
     if (price.is_sold_out) {
         return t`Sold out`;
     }
@@ -78,10 +78,20 @@ export const TieredPricing = ({ticket, event, form, ticketIndex}: TieredPricingP
                             </div>
                             <div className={'hi-ticket-quantity-selector'}>
                                 {(ticket.is_available && price.is_available) && (
-                                    <NumberSelector
-                                        fieldName={`tickets.${ticketIndex}.quantities.${index}.quantity`}
-                                        formInstance={form}
-                                    />
+                                    <>
+                                        <NumberSelector
+                                            className={'hi-ticket-quantity-selector'}
+                                            min={(ticket.type !== TicketType.Tiered ? ticket.min_per_order : 0) || 0}
+                                            max={(ticket.type !== TicketType.Tiered ? ticket.max_per_order : 100) || 100}
+                                            fieldName={`tickets.${ticketIndex}.quantities.${index}.quantity`}
+                                            formInstance={form}
+                                        />
+                                        {form.errors[`tickets.${ticketIndex}.quantities.${index}.quantity`] && (
+                                            <div className={'hi-ticket-quantity-error'}>
+                                                {form.errors[`tickets.${ticketIndex}.quantities.${index}.quantity`]}
+                                            </div>
+                                        )}
+                                    </>
                                 )}
                                 {!price.is_available && <TicketPriceSaleDateMessage price={price} event={event}/>}
                             </div>

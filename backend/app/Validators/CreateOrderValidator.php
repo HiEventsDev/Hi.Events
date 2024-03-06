@@ -4,10 +4,6 @@ declare(strict_types=1);
 
 namespace HiEvents\Validators;
 
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use HiEvents\DomainObjects\Enums\TicketType;
 use HiEvents\DomainObjects\Generated\PromoCodeDomainObjectAbstract;
 use HiEvents\DomainObjects\TicketDomainObject;
@@ -16,16 +12,16 @@ use HiEvents\Helper\Currency;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
 use HiEvents\Repository\Interfaces\TicketRepositoryInterface;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-/**
- * todo -  validate quantity, return better messages
- */
 class CreateOrderValidator extends BaseValidator
 {
     public function __construct(
         private readonly TicketRepositoryInterface    $ticketRepository,
         private readonly PromoCodeRepositoryInterface $promoCodeRepository,
-        private readonly EventRepositoryInterface $eventRepository
+        private readonly EventRepositoryInterface     $eventRepository
     )
     {
     }
@@ -85,14 +81,30 @@ class CreateOrderValidator extends BaseValidator
             }
 
             if (!isset($ticketAndQuantities['ticket_id'])) {
-                $rules[$validationTicketIdKey] = 'required';
-                continue;
+                throw ValidationException::withMessages([
+                    $validationTicketIdKey => __('Ticket ID must be specified'),
+                ]);
             }
 
             /** @var TicketDomainObject $ticket */
             $ticket = $tickets->filter(fn($t) => $t->getId() === $ticketAndQuantities['ticket_id'])->first();
 
-            if (!$ticket || $ticket->getEventId() !== $eventId) {
+            $maxPerOrder = (int)$ticket->getMaxPerOrder() ?: 100; // todo - put these in a config
+            $minPerOrder = (int)$ticket->getMinPerOrder() ?: 1;
+
+            if ($totalQuantity < $minPerOrder) {
+                throw ValidationException::withMessages([
+                    $validationTicketIdKey => __('You must order at least :min tickets', ['min' => $minPerOrder]),
+                ]);
+            }
+
+            if ($totalQuantity > $maxPerOrder) {
+                throw ValidationException::withMessages([
+                    $validationTicketIdKey => __('You can only order a maximum of :max tickets', ['max' => $maxPerOrder]),
+                ]);
+            }
+
+            if ($ticket->getEventId() !== $eventId) {
                 throw new NotFoundHttpException(
                     sprintf('Ticket ID %d not found', $ticketAndQuantities['ticket_id'])
                 );
@@ -116,46 +128,33 @@ class CreateOrderValidator extends BaseValidator
                 ]);
             }
 
-            // todo validate quantity
-//            $maxPerOrder = $this->getMaxPerOrder($ticket);
-//            $minPerOrder = (int)$ticket->getMinPerOrder() ?: self::DEFAULT_MIN_PER_TRANSACTION;
-//
-//            $validationRules[] = "required|integer";
-//            $validationRules[] = "min:$minPerOrder";
-//
-//            if ($maxPerOrder !== Constants::INFINITE) {
-//                $validationRules[] = "max:$maxPerOrder";
-//            }
-//
-//            $rules[$validationQuantityKey] = implode(self::RULE_DELIMITER, $validationRules);
-
             foreach ($ticketAndQuantities['quantities'] as $quantityIndex => $quantityData) {
                 $validationQuantityKey = "tickets.$ticketIndex.quantities.$quantityIndex.quantity";
                 $validationPriceIdKey = "tickets.$ticketIndex.quantities.$quantityIndex.price_id";
 
-                if (!isset($quantityData['price_id'], $quantityData['quantity'])) {
-                    $rules[$validationQuantityKey] = 'required';
-                    $rules[$validationPriceIdKey] = 'required';
-                    continue;
+                if (!isset($quantityData['price_id'])) {
+                    throw ValidationException::withMessages([
+                        $validationQuantityKey => __('Price ID must be specified'),
+                    ]);
+                }
+
+                if (!isset($quantityData['quantity'])) {
+                    throw ValidationException::withMessages([
+                        $validationPriceIdKey => __('Quantity must be specified'),
+                    ]);
                 }
 
                 $validPriceIds = $ticket->getTicketPrices()?->map(fn(TicketPriceDomainObject $price) => $price->getId());
-                $rules[$validationPriceIdKey] = "required|in:" . implode(',', $validPriceIds->toArray());
+                $passedPriceIds = (collect($ticketAndQuantities['quantities'])->pluck('price_id'));
 
-                $validationRules = ["required|integer|min:0"];
-
-                $rules[$validationQuantityKey] = implode('|', $validationRules);
+                if ($passedPriceIds->diff($validPriceIds)->isNotEmpty()) {
+                    throw ValidationException::withMessages([
+                        $validationPriceIdKey => __('Invalid price ID'),
+                    ]);
+                }
             }
         }
 
         return $rules;
-    }
-
-    private function getMaxPerOrder(TicketDomainObject $ticket): int
-    {
-        $quantityRemaining = $this->ticketRepository->getQuantityRemaining($ticket->getId());
-        $maxPerOrder = $ticket->getMaxPerOrder();
-
-        return $maxPerOrder ? min($maxPerOrder, $quantityRemaining) : $quantityRemaining;
     }
 }

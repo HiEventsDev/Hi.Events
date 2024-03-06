@@ -1,5 +1,4 @@
 import classes from './HomepageDesigner.module.scss';
-import {EventHomepage} from "../../../layouts/EventHomepage";
 import {useParams} from "react-router-dom";
 import {useGetEventSettings} from "../../../../queries/useGetEventSettings.ts";
 import {useUpdateEventSettings} from "../../../../mutations/useUpdateEventSettings.ts";
@@ -13,11 +12,13 @@ import {Button, ColorInput, Group, TextInput} from "@mantine/core";
 import {CoverUpload} from "./CoverUpload";
 import {IconHelp} from "@tabler/icons-react";
 import {Tooltip} from "../../../common/Tooltip";
+import {EventHomepage} from "../../../layouts/EventHomepage";
 
 export const HomepageDesigner = () => {
     const {eventId} = useParams();
     const eventSettingsQuery = useGetEventSettings(eventId);
     const updateMutation = useUpdateEventSettings();
+
     const form = useForm({
         initialValues: {
             homepage_background_color: '#fff',
@@ -105,18 +106,21 @@ export const HomepageDesigner = () => {
                     </form>
                 </div>
             </div>
-            <div className={classes.preview}>
+            <div className={classes.previewContainer}>
                 <h2>{t`Homepage Preview`}</h2>
-                <EventHomepage
-                    continueButtonText={form.values.continue_button_text}
-                    colors={{
-                        primary: form.values.homepage_primary_color,
-                        primaryText: form.values.homepage_primary_text_color,
-                        secondary: form.values.homepage_secondary_color,
-                        secondaryText: form.values.homepage_secondary_text_color,
-                        background: form.values.homepage_background_color,
-                    }}
-                />
+                <div className={classes.preview}>
+                    <EventHomepage
+                        continueButtonText={form.values.continue_button_text}
+                        colors={{
+                            primary: form.values.homepage_primary_color,
+                            primaryText: form.values.homepage_primary_text_color,
+                            secondary: form.values.homepage_secondary_color,
+                            secondaryText: form.values.homepage_secondary_text_color,
+                            background: form.values.homepage_background_color,
+                        }}
+                    />
+                </div>
+
             </div>
         </div>
     )

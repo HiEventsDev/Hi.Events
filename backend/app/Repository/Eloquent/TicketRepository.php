@@ -43,44 +43,6 @@ class TicketRepository extends BaseRepository implements TicketRepositoryInterfa
     }
 
     /**
-     * Returns the quantity remaining, taking reserved tickets into account
-     *
-     * @param int $ticketId
-     * @return int
-     * @todo move this to a service
-     *
-     */
-    public function getQuantityRemaining(int $ticketId): int
-    {
-        $query = <<<SQL
-        SELECT
-            COALESCE(tickets.initial_quantity_available, 0) - (
-                tickets.quantity_sold + COALESCE((
-                    SELECT sum(order_items.quantity)
-                    FROM orders
-                    INNER JOIN order_items ON orders.id = order_items.order_id
-                    WHERE order_items.ticket_id = :ticketId
-                    AND orders.status in ('RESERVED')
-                    AND current_timestamp < orders.reserved_until
-                ), 0)
-            ) AS quantity_remaining,
-            tickets.initial_quantity_available IS NULL AS unlimited_tickets_available
-        FROM tickets
-        WHERE tickets.id = :ticketId
-    SQL;
-
-        $result = $this->db->selectOne($query, ['ticketId' => $ticketId]);
-
-        if ($result->unlimited_tickets_available) {
-            return Constants::INFINITE;
-        }
-
-        return (int)$result->quantity_remaining;
-    }
-
-    /**
-     * @todo - fix this
-     *
      * @param int $ticketId
      * @param int $ticketPriceId
      * @return int

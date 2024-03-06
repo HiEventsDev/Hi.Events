@@ -8,6 +8,7 @@ use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Order\CreateOrderRequest;
 use HiEvents\Http\ResponseCodes;
 use HiEvents\Resources\Order\OrderResourcePublic;
+use HiEvents\Services\Domain\Order\OrderCreateRequestValidationService;
 use HiEvents\Services\Handlers\Order\CreateOrderHandler;
 use HiEvents\Services\Handlers\Order\DTO\CreateOrderPublicDTO;
 use HiEvents\Services\Handlers\Order\DTO\TicketOrderDetailsDTO;
@@ -16,11 +17,11 @@ use Throwable;
 
 class CreateOrderActionPublic extends BaseAction
 {
-    private CreateOrderHandler $orderService;
-
-    public function __construct(CreateOrderHandler $orderHandler)
+    public function __construct(
+        private readonly CreateOrderHandler                  $orderHandler,
+        private readonly OrderCreateRequestValidationService $orderCreateRequestValidationService,
+    )
     {
-        $this->orderService = $orderHandler;
     }
 
     /**
@@ -28,7 +29,9 @@ class CreateOrderActionPublic extends BaseAction
      */
     public function __invoke(CreateOrderRequest $request, int $eventId): JsonResponse
     {
-        $order = $this->orderService->handle(
+        $this->orderCreateRequestValidationService->validateRequest($eventId, $request->all());
+
+        $order = $this->orderHandler->handle(
             $eventId,
             CreateOrderPublicDTO::fromArray([
                 'is_user_authenticated' => $this->isUserAuthenticated(),
