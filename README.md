@@ -2,7 +2,6 @@
 
 Welcome to **hi.events**, your go-to open source ticketing solution crafted with the power of Laravel and React. If you're on the hunt for a comprehensive, user-friendly, and customizable ticketing software, you've landed at the right place!
 
-![TicketKitten Logo](path_to_logo.png)
 
 ## 🌟 Features
 
