@@ -26,9 +26,8 @@ export const StatBoxes = () => {
             icon: <IconCash/>
         },
         {
-            number: '0',
+            number: '2,345',
             description: t`Page views`,
-            change: '+0',
             icon: <IconEye/>
         },
         {
