@@ -41,6 +41,8 @@ class EventSettingsResource extends JsonResource
             'allow_search_engine_indexing' => $this->getAllowSearchEngineIndexing(),
 
             'notify_organizer_of_new_orders' => $this->getNotifyOrganizerOfNewOrders(),
+
+            'price_display_mode' => $this->getPriceDisplayMode(),
         ];
     }
 }

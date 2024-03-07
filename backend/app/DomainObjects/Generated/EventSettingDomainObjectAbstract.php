@@ -40,6 +40,7 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     final public const SHOW_SOCIAL_MEDIA_HANDLES = 'show_social_media_handles';
     final public const SEO_KEYWORDS = 'seo_keywords';
     final public const NOTIFY_ORGANIZER_OF_NEW_ORDERS = 'notify_organizer_of_new_orders';
+    final public const PRICE_DISPLAY_MODE = 'price_display_mode';
 
     protected int $id;
     protected int $event_id;
@@ -71,6 +72,7 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     protected ?bool $show_social_media_handles = null;
     protected ?string $seo_keywords = null;
     protected bool $notify_organizer_of_new_orders = true;
+    protected string $price_display_mode = 'inclusive';
 
     public function toArray(): array
     {
@@ -105,6 +107,7 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
                     'show_social_media_handles' => $this->show_social_media_handles ?? null,
                     'seo_keywords' => $this->seo_keywords ?? null,
                     'notify_organizer_of_new_orders' => $this->notify_organizer_of_new_orders ?? null,
+                    'price_display_mode' => $this->price_display_mode ?? null,
                 ];
     }
 
@@ -436,5 +439,16 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     public function getNotifyOrganizerOfNewOrders(): bool
     {
         return $this->notify_organizer_of_new_orders;
+    }
+
+    public function setPriceDisplayMode(string $price_display_mode): self
+    {
+        $this->price_display_mode = $price_display_mode;
+        return $this;
+    }
+
+    public function getPriceDisplayMode(): string
+    {
+        return $this->price_display_mode;
     }
 }

@@ -6,6 +6,7 @@ import {EmailSettings} from "./Sections/EmailSettings";
 import {PageTitle} from "../../../common/PageTitle";
 import {t} from "@lingui/macro";
 import {SeoSettings} from "./Sections/SeoSettings";
+import {MiscSettings} from "./Sections/MiscSettings";
 
 export const Settings = () => {
     return (
@@ -19,6 +20,7 @@ export const Settings = () => {
             <HomepageAndCheckoutSettings/>
             <SeoSettings/>
             <EmailSettings/>
+            <MiscSettings/>
         </PageBody>
     );
 };

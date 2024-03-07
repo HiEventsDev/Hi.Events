@@ -4,6 +4,7 @@ namespace HiEvents\Services\Handlers\EventSettings\DTO;
 
 use HiEvents\DataTransferObjects\AddressDTO;
 use HiEvents\DataTransferObjects\BaseDTO;
+use HiEvents\DomainObjects\Enums\PriceDisplayMode;
 
 class UpdateEventSettingsDTO extends BaseDTO
 {
@@ -39,6 +40,8 @@ class UpdateEventSettingsDTO extends BaseDTO
         public readonly ?bool       $allow_search_engine_indexing = true,
 
         public readonly ?bool       $notify_organizer_of_new_orders = null,
+
+        public readonly ?PriceDisplayMode $price_display_mode = PriceDisplayMode::INCLUSIVE
     )
     {
     }

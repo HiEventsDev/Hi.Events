@@ -2,8 +2,10 @@
 
 namespace HiEvents\Http\Request\EventSettings;
 
+use HiEvents\DomainObjects\Enums\PriceDisplayMode;
 use HiEvents\Http\Request\BaseRequest;
 use HiEvents\Validators\Rules\RulesHelper;
+use Illuminate\Validation\Rule;
 
 class UpdateEventSettingsRequest extends BaseRequest
 {
@@ -46,6 +48,8 @@ class UpdateEventSettingsRequest extends BaseRequest
             'allow_search_engine_indexing' => ['boolean'],
 
             'notify_organizer_of_new_orders' => ['boolean'],
+
+            'price_display_mode' => [Rule::in(PriceDisplayMode::valuesArray())],
         ];
     }
 
@@ -66,6 +70,7 @@ class UpdateEventSettingsRequest extends BaseRequest
             'location_details.zip_or_postal_code.required_with' => __('The zip or postal code field is required'),
             'location_details.country.required_with' => __('The country field is required'),
             'location_details.country.max' => __('The country field should be a 2 character ISO 3166 code'),
+            'price_display_mode.in' => 'The price display mode must be either inclusive or exclusive.',
         ];
     }
 }

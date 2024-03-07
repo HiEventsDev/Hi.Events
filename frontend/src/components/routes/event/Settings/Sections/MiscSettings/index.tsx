@@ -1,5 +1,5 @@
 import {t} from "@lingui/macro";
-import {Button, Switch, TextInput} from "@mantine/core";
+import {Button} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import {useParams} from "react-router-dom";
 import {useEffect} from "react";
@@ -9,18 +9,17 @@ import {showSuccess} from "../../../../../../utilites/notifications.tsx";
 import {useFormErrorResponseHandler} from "../../../../../../hooks/useFormErrorResponseHandler.ts";
 import {useUpdateEventSettings} from "../../../../../../mutations/useUpdateEventSettings.ts";
 import {useGetEventSettings} from "../../../../../../queries/useGetEventSettings.ts";
-import {Editor} from "../../../../../common/Editor";
 import {HeadingWithDescription} from "../../../../../common/Card/CardHeading";
+import {CustomSelect, ItemProps} from "../../../../../common/CustomSelect";
+import {IconCoin, IconCoins} from "@tabler/icons-react";
 
-export const EmailSettings = () => {
+export const MiscSettings = () => {
     const {eventId} = useParams();
     const eventSettingsQuery = useGetEventSettings(eventId);
     const updateMutation = useUpdateEventSettings();
     const form = useForm({
         initialValues: {
-            reply_to_email: '',
-            email_footer_message: '',
-            notify_organizer_of_new_orders: true,
+            price_display_mode: 'EXCLUSIVE'
         }
     });
     const formErrorHandle = useFormErrorResponseHandler();
@@ -28,8 +27,7 @@ export const EmailSettings = () => {
     useEffect(() => {
         if (eventSettingsQuery?.isFetched && eventSettingsQuery?.data) {
             form.setValues({
-                reply_to_email: eventSettingsQuery.data.reply_to_email,
-                email_footer_message: eventSettingsQuery.data.email_footer_message,
+                price_display_mode: eventSettingsQuery.data.price_display_mode,
             });
         }
     }, [eventSettingsQuery.isFetched]);
@@ -40,7 +38,7 @@ export const EmailSettings = () => {
             eventId: eventId,
         }, {
             onSuccess: () => {
-                showSuccess(t`Successfully Updated Email Settings`);
+                showSuccess(t`Successfully Updated Misc Settings`);
             },
             onError: (error) => {
                 formErrorHandle(form, error);
@@ -48,33 +46,41 @@ export const EmailSettings = () => {
         });
     }
 
+    const priceOptions: ItemProps[] = [
+        {
+            icon: <IconCoins/>,
+            label: t`Include tax and fees in the price`,
+            value: 'INCLUSIVE',
+            description: t`The price displayed to the customer will include taxes and fees.`,
+        },
+        {
+            icon: <IconCoin/>,
+            label: t`Show tax and fees separately`,
+            value: 'EXCLUSIVE',
+            description: t`The price displayed to the customer will not include taxes and fees. They will be shown separately`,
+        },
+    ];
+
     return (
         <Card>
             <HeadingWithDescription
-                heading={t`Email & Notification Settings`}
-                description={t`Customize the email and notification settings for this event`}
+                heading={t`Miscellaneous Settings`}
+                description={t`Customize the miscellaneous settings for this event`}
             />
             <form onSubmit={form.onSubmit(handleSubmit)}>
                 <fieldset disabled={eventSettingsQuery.isLoading || updateMutation.isLoading}>
-                    <TextInput
-                        {...form.getInputProps('reply_to_email')}
-                        description={t`This is the email address that will be used as the reply-to address for all emails sent from this event`}
-                        label={t`Reply to email`}
+                    <CustomSelect
+                        optionList={priceOptions}
+                        form={form}
+                        name={'price_display_mode'}
+                        label={t`Price display mode`}
+                        required
                     />
-
-                    <Editor
-                        label={t`Email footer message`}
-                        value={form.values.email_footer_message || ''}
-                        description={t`This message will be included in the footer of all emails sent from this event`}
-                        onChange={(value) => form.setFieldValue('email_footer_message', value)}
-                    />
-
-                    <h3>{t`Notification Settings`}</h3>
-                    <Switch
-                        {...form.getInputProps('notify_organizer_of_new_orders', {type: 'checkbox'})}
-                        label={t`Notify organizer of new orders`}
-                        description={t`If enabled, the organizer will receive an email notification when a new order is placed`}
-                    />
+                    {form.errors['price_display_mode'] && (
+                        <div style={{color: 'red'}}>
+                            {form.errors['price_display_mode']}
+                        </div>
+                    )}
 
                     <Button loading={updateMutation.isLoading} type={'submit'}>
                         {t`Save`}

@@ -73,7 +73,7 @@ export const TieredPricing = ({ticket, event, form, ticketIndex}: TieredPricingP
                                             currency={event?.currency}
                                             className={'hi-price-tier-price-amount'}
                                             freeLabel={price.label}
-                                            taxAndServiceFeeDisplayType={'exclusive'}
+                                            taxAndServiceFeeDisplayType={event?.settings?.price_display_mode}
                                         />
                                     )}
                                 </div>

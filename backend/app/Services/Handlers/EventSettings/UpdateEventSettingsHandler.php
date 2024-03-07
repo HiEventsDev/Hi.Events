@@ -55,6 +55,7 @@ readonly class UpdateEventSettingsHandler
                     'seo_keywords' => $settings->seo_keywords,
                     'allow_search_engine_indexing' => $settings->allow_search_engine_indexing,
                     'notify_organizer_of_new_orders' => $settings->notify_organizer_of_new_orders,
+                    'price_display_mode' => $settings->price_display_mode->name,
                 ],
                 where: [
                     'event_id' => $settings->event_id,

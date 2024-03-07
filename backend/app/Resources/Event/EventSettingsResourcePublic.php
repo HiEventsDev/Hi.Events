@@ -39,6 +39,8 @@ class EventSettingsResourcePublic extends JsonResource
             'seo_description' => $this->getSeoDescription(),
             'seo_keywords' => $this->getSeoKeywords(),
             'allow_search_engine_indexing' => $this->getAllowSearchEngineIndexing(),
+
+            'price_display_mode' => $this->getPriceDisplayMode(),
         ];
     }
 }

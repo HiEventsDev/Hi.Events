@@ -35,14 +35,6 @@ class TaxAndFeeCalculationService
     {
         $this->taxRollupService->resetRollUp();
 
-        if ($ticket->getType() === TicketType::FREE->name) {
-            return new TaxCalculationResponse(
-                feeTotal: 0.00,
-                taxTotal: 0.00,
-                rollUp: $this->taxRollupService->getRollUp()
-            );
-        }
-
         $fees = $ticket->getFees()
             ?->sum(fn($taxOrFee) => $this->calculateFee($taxOrFee, $price, $quantity)) ?: 0.00;
 
