@@ -30,8 +30,7 @@
             iframe.width = '100%';
             iframe.height = '100%';
 
-            let src = `${scriptOrigin}/widget?`;
-            const params = [`id=${encodeURIComponent(eventId)}`]; // Start with the mandatory eventId
+            let src = `${scriptOrigin}/widget/${encodeURIComponent(eventId)}?`;
             Array.from(widget.attributes).forEach(attr => {
                 if (attr.name.startsWith('data-hievents-') && attr.name !== 'data-hievents-id') {
                     const paramName = attr.name.substring(13).replace(/-([a-z])/g, (g) => g[1].toUpperCase());
