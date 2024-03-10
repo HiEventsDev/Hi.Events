@@ -156,3 +156,5 @@ export const ManageProfile = () => {
         </div>
     );
 }
+
+export default ManageProfile;

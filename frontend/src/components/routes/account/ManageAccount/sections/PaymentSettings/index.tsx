@@ -54,7 +54,7 @@ const ConnectStatus = (props: { stripeDetails: StripeConnectDetails }) => {
     );
 };
 
-export const PaymentSettings = () => {
+const PaymentSettings = () => {
     const accountQuery = useGetAccount();
     const stripeDetailsQuery = useCreateOrGetStripeConnectDetails(accountQuery.data?.id);
     const stripeDetails = stripeDetailsQuery.data;
@@ -72,3 +72,5 @@ export const PaymentSettings = () => {
         </>
     );
 };
+
+export default PaymentSettings;

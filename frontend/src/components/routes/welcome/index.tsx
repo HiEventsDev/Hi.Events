@@ -113,7 +113,7 @@ export const CreateEvent = () => {
     );
 }
 
-export const Welcome = () => {
+const Welcome = () => {
     const {data: userData} = useGetMe();
     const organizersQuery = useGetOrganizers();
     const organizers = organizersQuery?.data?.data;
@@ -132,3 +132,5 @@ export const Welcome = () => {
         </>
     )
 }
+
+export default Welcome;

@@ -3,7 +3,7 @@ import classes from "./Auth.module.scss";
 import {t} from "@lingui/macro";
 import {useGetMe} from "../../../queries/useGetMe.ts";
 
-export const AuthLayout = () => {
+const AuthLayout = () => {
     const me = useGetMe();
     if (me.isSuccess) {
         return <Navigate to={'/manage/events'}/>
@@ -20,3 +20,5 @@ export const AuthLayout = () => {
         </main>
     );
 };
+
+export default AuthLayout;

@@ -337,3 +337,5 @@ export const CollectInformation = () => {
         </>
     );
 }
+
+export default CollectInformation;

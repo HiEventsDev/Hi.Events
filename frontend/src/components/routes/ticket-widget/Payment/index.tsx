@@ -11,8 +11,8 @@ import classes from './Payment.module.scss';
 import {useEffect, useState} from "react";
 import {LoadingMask} from "../../../common/LoadingMask";
 
-export const Payment = () => {
-    const {eventId, orderShortId, eventSlug} = useParams();
+const Payment = () => {
+    const {eventId, orderShortId} = useParams();
     const {data: order, isFetched: isOrderFetched} = useGetOrderPublic(eventId, orderShortId);
     const {data: stripeData, isFetched: isStripeFetched} = useCreateStripePaymentIntent(eventId, orderShortId);
     const [stripePromise, setStripePromise] = useState<Promise<Stripe | null>>();
@@ -73,7 +73,7 @@ export const Payment = () => {
             {(isStripeFetched && stripeData?.client_secret && stripePromise) && (
                 <Elements options={{
                     clientSecret: stripeData?.client_secret,
-                    loader:'always',
+                    loader: 'always',
                 }} stripe={stripePromise}>
                     <StripeCheckoutForm/>
                 </Elements>
@@ -81,3 +81,5 @@ export const Payment = () => {
         </div>
     );
 }
+
+export default Payment;

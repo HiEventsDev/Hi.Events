@@ -74,3 +74,5 @@ export const Orders = () => {
         </PageBody>
     );
 };
+
+export default Orders;

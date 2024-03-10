@@ -62,3 +62,5 @@ export const ForgotPassword = () => {
         </Card>
     )
 }
+
+export default ForgotPassword;

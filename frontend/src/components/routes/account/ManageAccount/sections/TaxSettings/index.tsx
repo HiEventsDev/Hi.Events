@@ -26,3 +26,5 @@ export const TaxSettings = () => {
         </>
     );
 };
+
+export default TaxSettings;

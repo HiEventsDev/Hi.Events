@@ -16,3 +16,5 @@ export const Questions = () => {
         </PageBody>
     );
 };
+
+export default Questions;

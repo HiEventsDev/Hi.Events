@@ -113,3 +113,5 @@ export const OrderSummaryAndTickets = () => {
         </>
     );
 }
+
+export default OrderSummaryAndTickets;

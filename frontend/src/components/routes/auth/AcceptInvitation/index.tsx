@@ -11,7 +11,7 @@ import {showError, showSuccess} from "../../../../utilites/notifications.tsx";
 import {AcceptInvitationRequest} from "../../../../types.ts";
 import {Card} from "../../../common/Card";
 
-export const AcceptInvitation = () => {
+const AcceptInvitation = () => {
     const navigate = useNavigate();
     const {token} = useParams();
     const form = useForm({
@@ -114,3 +114,5 @@ export const AcceptInvitation = () => {
         </Card>
     )
 }
+
+export default AcceptInvitation;

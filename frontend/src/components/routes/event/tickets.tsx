@@ -66,3 +66,5 @@ export const Tickets = () => {
         </PageBody>
     );
 };
+
+export default Tickets;

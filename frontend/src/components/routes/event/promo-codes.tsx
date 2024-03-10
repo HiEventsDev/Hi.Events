@@ -7,7 +7,7 @@ import {SearchBarWrapper} from "../../common/SearchBar";
 import {useDisclosure} from "@mantine/hooks";
 import {Pagination} from "../../common/Pagination";
 import {Button} from "@mantine/core";
-import {IconDownload, IconPlus} from "@tabler/icons-react";
+import {IconPlus} from "@tabler/icons-react";
 import {ToolBar} from "../../common/ToolBar";
 import {useGetEventPromoCodes} from "../../../queries/useGetEventPromoCodes.ts";
 import {CreatePromoCodeModal} from "../../modals/CreatePromoCodeModal";
@@ -65,3 +65,5 @@ export const PromoCodes = () => {
         </>
     );
 };
+
+export default PromoCodes;

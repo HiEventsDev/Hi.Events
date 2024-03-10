@@ -10,7 +10,7 @@ import {Card} from "../../../common/Card";
 import classes from "./Login.module.scss";
 import {t, Trans} from "@lingui/macro";
 
-export const Login = () => {
+const Login = () => {
     const form = useForm({
         initialValues: {
             email: '',
@@ -60,3 +60,5 @@ export const Login = () => {
         </>
     )
 }
+
+export default Login;

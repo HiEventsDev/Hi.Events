@@ -9,7 +9,7 @@ import {ResetPasswordRequest} from "../../../../types.ts";
 import {useFormErrorResponseHandler} from "../../../../hooks/useFormErrorResponseHandler.ts";
 import { t } from "@lingui/macro";
 
-export const Index = () => {
+export const ResetPassword = () => {
     const form = useForm({
         initialValues: {
             current_password: '',
@@ -61,3 +61,5 @@ export const Index = () => {
         </>
     )
 }
+
+export default ResetPassword;

@@ -33,7 +33,7 @@ const SubTitle = ({order, event}: { order: Order, event: Event }) => {
     return <span className={classes.subTitle}>{orderStatuses[order?.status] || <></>}</span>;
 }
 
-export const Checkout = () => {
+const Checkout = () => {
     const {eventId, orderShortId} = useParams();
     const {
         data: order,
@@ -78,3 +78,5 @@ export const Checkout = () => {
         </>
     );
 }
+
+export default Checkout;

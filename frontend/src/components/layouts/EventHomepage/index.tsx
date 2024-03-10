@@ -23,7 +23,7 @@ interface EventHomepageProps {
     continueButtonText?: string;
 }
 
-export const EventHomepage = ({colors, continueButtonText}: EventHomepageProps) => {
+const EventHomepage = ({colors, continueButtonText}: EventHomepageProps) => {
     const {eventId} = useParams();
     const {data: event, isFetched: eventIsFetched, error} = useGetEventPublic(eventId);
     const coverImage = event?.images?.find((image) => image.type === 'EVENT_COVER');
@@ -76,6 +76,7 @@ export const EventHomepage = ({colors, continueButtonText}: EventHomepageProps) 
                 {/*<PoweredByFooter/>*/}
             </div>
         </>
-
     );
 }
+
+export default EventHomepage;

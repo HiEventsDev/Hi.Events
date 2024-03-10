@@ -106,3 +106,5 @@ export const EventDashboard = () => {
         </PageBody>
     )
 };
+
+export default EventDashboard;

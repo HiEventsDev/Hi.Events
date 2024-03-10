@@ -12,9 +12,9 @@ import {Button, ColorInput, Group, TextInput} from "@mantine/core";
 import {CoverUpload} from "./CoverUpload";
 import {IconHelp} from "@tabler/icons-react";
 import {Tooltip} from "../../../common/Tooltip";
-import {EventHomepage} from "../../../layouts/EventHomepage";
+import EventHomepage from "../../../layouts/EventHomepage";
 
-export const HomepageDesigner = () => {
+const HomepageDesigner = () => {
     const {eventId} = useParams();
     const eventSettingsQuery = useGetEventSettings(eventId);
     const updateMutation = useUpdateEventSettings();
@@ -124,4 +124,6 @@ export const HomepageDesigner = () => {
             </div>
         </div>
     )
-}
+};
+
+export default HomepageDesigner;

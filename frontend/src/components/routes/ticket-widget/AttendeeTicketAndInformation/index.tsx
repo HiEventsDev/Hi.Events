@@ -28,3 +28,5 @@ export const AttendeeTicketAndInformation = () => {
         </Container>
     )
 }
+
+export default AttendeeTicketAndInformation;

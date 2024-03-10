@@ -17,7 +17,7 @@ import {showError, showSuccess} from "../../../../../../utilites/notifications.t
 import {useDeleteUserInvitation} from "../../../../../../mutations/useDeleteUserInvitation.ts";
 import {LoadingMask} from "../../../../../common/LoadingMask";
 
-export const Users = () => {
+const Users = () => {
     const usersQuery = useGetUsers();
     const resendInvitationMutation = useResendUserInvitation();
     const revokeInvitationMutation = useDeleteUserInvitation();
@@ -166,3 +166,5 @@ export const Users = () => {
         </>
     );
 }
+
+export default Users;

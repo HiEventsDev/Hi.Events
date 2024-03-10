@@ -12,3 +12,5 @@ export const DefaultLayout = () => {
         </>
     );
 }
+
+export default DefaultLayout;

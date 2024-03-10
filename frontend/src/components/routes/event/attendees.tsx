@@ -19,7 +19,7 @@ import {useState} from "react";
 import {t} from "@lingui/macro";
 import {showError} from "../../../utilites/notifications.tsx";
 
-export const Attendees = () => {
+const Attendees = () => {
     const {eventId} = useParams();
     const [searchParams, setSearchParams] = useFilterQueryParamSync();
     const attendeesQuery = useGetAttendees(eventId, searchParams as QueryFilters);
@@ -84,3 +84,5 @@ export const Attendees = () => {
         </>
     );
 };
+
+export default Attendees;

@@ -8,7 +8,7 @@ import {PoweredByFooter} from '../../../common/PoweredByFooter';
 import {t} from '@lingui/macro';
 import {useEffect} from "react";
 
-export const PrintTicket = () => {
+const PrintTicket = () => {
     const {eventId, attendeeShortId} = useParams();
     const {data: event} = useGetEventPublic(eventId);
     const {data: attendee} = useGetAttendeePublic(eventId, String(attendeeShortId));
@@ -37,3 +37,4 @@ export const PrintTicket = () => {
     )
 }
 
+export default PrintTicket;

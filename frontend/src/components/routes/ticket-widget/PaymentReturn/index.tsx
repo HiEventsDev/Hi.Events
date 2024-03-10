@@ -66,3 +66,5 @@ export const PaymentReturn = () => {
         </div>
     );
 }
+
+export default PaymentReturn;

@@ -1,7 +1,9 @@
-export const OrganizerDashboard = () => {
+const OrganizerDashboard = () => {
     return (
         <div>
             OrganizerDashboard
         </div>
     )
 }
+
+export default OrganizerDashboard;

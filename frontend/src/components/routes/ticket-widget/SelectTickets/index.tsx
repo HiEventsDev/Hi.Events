@@ -21,6 +21,7 @@ import {IconInfoCircle} from "@tabler/icons-react";
 import {addQueryStringToUrl, isObjectEmpty} from "../../../../utilites/helpers.ts";
 import {TieredPricing} from "./Prices/Tiered";
 import classNames from 'classnames';
+import '../../../../styles/widget/default.scss';
 
 const TicketAvailabilityMessage = ({ticket, event}: { ticket: Ticket, event: Event }) => {
     if (ticket.is_sold_out) {
@@ -302,3 +303,5 @@ export const SelectTickets = (props: SelectTicketsProps) => {
         </div>
     );
 }
+
+export default SelectTickets;

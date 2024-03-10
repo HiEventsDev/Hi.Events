@@ -6,7 +6,7 @@ import {t} from "@lingui/macro";
 import {useConfirmEmailAddress} from "../../../../mutations/useConfirmEmailAddress";
 import {useEffect} from "react";
 
-export const ConfirmEmailAddress = () => {
+const ConfirmEmailAddress = () => {
     const {token} = useParams();
     const {data: userData, isFetched} = useGetMe();
     const navigate = useNavigate();
@@ -18,7 +18,7 @@ export const ConfirmEmailAddress = () => {
             return;
         }
 
-        confirmEmailAddressMutation.mutate({token: token, userId: userData?.id}, {
+        confirmEmailAddressMutation.mutate({token: (token as string), userId: userData?.id}, {
             onSuccess: () => {
                 showSuccess(t`Successfully confirmed email address`);
                 navigate('/manage/profile');
@@ -37,3 +37,5 @@ export const ConfirmEmailAddress = () => {
         </Card>
     );
 };
+
+export default ConfirmEmailAddress;

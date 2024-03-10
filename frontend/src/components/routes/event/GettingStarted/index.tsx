@@ -12,7 +12,7 @@ import {useGetAccount} from "../../../../queries/useGetAccount.ts";
 import {useUpdateEventStatus} from "../../../../mutations/useUpdateEventStatus.ts";
 import {showError, showSuccess} from "../../../../utilites/notifications.tsx";
 
-export const GettingStarted = () => {
+const GettingStarted = () => {
     const {eventId} = useParams();
     const eventQuery = useGetEvent(eventId);
     const event = eventQuery.data;
@@ -146,3 +146,5 @@ export const GettingStarted = () => {
         </>
     );
 }
+
+export default GettingStarted;

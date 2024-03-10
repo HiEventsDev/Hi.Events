@@ -1,49 +1,5 @@
 import {createBrowserRouter, Navigate} from "react-router-dom";
-import {Login} from "./components/routes/auth/Login";
-import {Register} from "./components/routes/auth/Register";
-import {ForgotPassword} from "./components/routes/auth/ForgotPassword";
-import {Tickets} from "./components/routes/event/tickets.tsx";
-import {Attendees} from "./components/routes/event/attendees.tsx";
-import {Questions} from "./components/routes/event/questions.tsx";
-import {Settings} from "./components/routes/event/Settings";
-import {Dashboard} from "./components/routes/events/Dashboard";
-import {EventDashboard} from "./components/routes/event/EventDashboard";
-import {SelectTickets} from "./components/routes/ticket-widget/SelectTickets";
-import {CollectInformation} from "./components/routes/ticket-widget/CollectInformation";
-import {OrderSummaryAndTickets} from "./components/routes/ticket-widget/OrderSummaryAndTickets";
 import ErrorPage from "./error-page.tsx";
-import {Orders} from "./components/routes/event/orders.tsx";
-import {AuthLayout} from "./components/layouts/AuthLayout";
-import {EventLayout} from "./components/layouts/Event";
-import {Payment} from "./components/routes/ticket-widget/Payment";
-import {PromoCodes} from "./components/routes/event/promo-codes.tsx";
-import {Affiliates} from "./components/routes/event/affiliates.tsx";
-import {CheckIn} from "./components/routes/event/check-in.tsx";
-import {AttendeeTicketAndInformation} from "./components/routes/ticket-widget/AttendeeTicketAndInformation";
-import {PaymentReturn} from "./components/routes/ticket-widget/PaymentReturn";
-import {Messages} from "./components/routes/event/messages.tsx";
-import {ManageAccount} from "./components/routes/account/ManageAccount";
-import {Widget} from "./components/routes/event/widget.tsx";
-import {Index} from "./components/routes/auth/ResetPassword";
-import {DefaultLayout} from "./components/layouts/DefaultLayout";
-import {ManageProfile} from "./components/routes/profile/ManageProfile";
-import {ConfirmEmailChange} from "./components/routes/profile/ConfirmEmailChange";
-import {AccountSettings} from "./components/routes/account/ManageAccount/sections/AccountSettings";
-import {TaxSettings} from "./components/routes/account/ManageAccount/sections/TaxSettings";
-import {EventDefaultsSettings} from "./components/routes/account/ManageAccount/sections/EventDefaultsSettings";
-import {PaymentSettings} from "./components/routes/account/ManageAccount/sections/PaymentSettings";
-import {Users} from "./components/routes/account/ManageAccount/sections/Users";
-import {AcceptInvitation} from "./components/routes/auth/AcceptInvitation";
-import {EventHomepage} from "./components/layouts/EventHomepage";
-import {Welcome} from "./components/routes/welcome";
-import {GettingStarted} from "./components/routes/event/GettingStarted";
-import {TicketWidget} from "./components/layouts/TicketWidget";
-import {Checkout} from "./components/layouts/Checkout";
-import {HomepageDesigner} from "./components/routes/event/HomepageDesigner";
-import {OrganizerDashboard} from "./components/routes/organizer/OrganizerDashboard";
-import {ConfirmEmailAddress} from "./components/routes/profile/ConfirmEmailAddress";
-import {PrintTicket} from "./components/routes/ticket-widget/PrintTicket";
-import {PrintOrder} from "./components/routes/ticket-widget/PrintOrder";
 
 export const router = createBrowserRouter([
     {
@@ -51,226 +7,366 @@ export const router = createBrowserRouter([
         element: <Navigate to={'/manage/events'} replace/>
     },
     {
+        path: "auth",
+        async lazy() {
+            let AuthLayout = await import("./components/layouts/AuthLayout");
+            return {Component: AuthLayout.default};
+        },
+        errorElement: <ErrorPage/>,
+        children: [
+            {
+                path: "login",
+                async lazy() {
+                    let Login = await import("./components/routes/auth/Login");
+                    return {Component: Login.default};
+                }
+            },
+            {
+                path: "register",
+                async lazy() {
+                    let Register = await import("./components/routes/auth/Register");
+                    return {Component: Register.default};
+                }
+            },
+            {
+                path: "forgot-password",
+                async lazy() {
+                    let ForgotPassword = await import("./components/routes/auth/ForgotPassword");
+                    return {Component: ForgotPassword.default};
+                }
+            },
+            {
+                path: "reset-password/:token",
+                async lazy() {
+                    let ResetPassword = await import("./components/routes/auth/ResetPassword");
+                    return {Component: ResetPassword.default};
+                }
+            },
+            {
+                path: "accept-invitation/:token",
+                async lazy() {
+                    let AcceptInvitation = await import("./components/routes/auth/AcceptInvitation");
+                    return {Component: AcceptInvitation.default};
+                }
+            }
+        ]
+    },
+    {
         path: "manage",
         errorElement: <ErrorPage/>,
-        element: <DefaultLayout/>,
+        async lazy() {
+            let DefaultLayout = await import("./components/layouts/DefaultLayout");
+            return {Component: DefaultLayout.default};
+        },
         children: [
             {
                 path: "events",
-                element: <Dashboard/>,
+                async lazy() {
+                    let Dashboard = await import("./components/routes/events/Dashboard");
+                    return {Component: Dashboard.default};
+                }
             },
             {
                 path: "organizer/:organizerId",
-                element: <OrganizerDashboard/>,
+                async lazy() {
+                    let OrganizerDashboard = await import("./components/routes/organizer/OrganizerDashboard");
+                    return {Component: OrganizerDashboard.default};
+                }
             },
             {
                 path: "account",
-                element: <ManageAccount/>,
+                async lazy() {
+                    let ManageAccount = await import("./components/routes/account/ManageAccount");
+                    return {Component: ManageAccount.default};
+                }
             },
             {
                 path: "profile",
-                element: <ManageProfile/>,
+                async lazy() {
+                    let ManageProfile = await import("./components/routes/profile/ManageProfile");
+                    return {Component: ManageProfile.default};
+                }
             },
             {
                 path: "profile/confirm-email-change",
-                element: <ConfirmEmailChange/>,
+                async lazy() {
+                    let ConfirmEmailChange = await import("./components/routes/profile/ConfirmEmailChange");
+                    return {Component: ConfirmEmailChange.default};
+                }
             },
             {
                 path: "profile/confirm-email-address/:token",
-                element: <ConfirmEmailAddress/>,
+                async lazy() {
+                    let ConfirmEmailAddress = await import("./components/routes/profile/ConfirmEmailAddress");
+                    return {Component: ConfirmEmailAddress.default};
+                }
             },
         ]
     },
     {
         path: "welcome",
-        element: <DefaultLayout/>,
+        async lazy() {
+            let Welcome = await import("./components/routes/welcome");
+            return {Component: Welcome.default};
+        },
         errorElement: <ErrorPage/>,
         children: [
             {
                 path: "",
-                element: <Welcome/>,
+                async lazy() {
+                    let Welcome = await import("./components/routes/welcome");
+                    return {Component: Welcome.default};
+                }
             },
         ]
     },
     {
         path: "account",
         errorElement: <ErrorPage/>,
-        element: <DefaultLayout/>,
+        async lazy() {
+            let ManageAccount = await import("./components/routes/account/ManageAccount");
+            return {Component: ManageAccount.default};
+        },
         children: [
             {
                 path: "",
-                element: <ManageAccount/>,
+                async lazy() {
+                    let AccountSettings = await import("./components/routes/account/ManageAccount/sections/AccountSettings");
+                    return {Component: AccountSettings.default};
+                },
                 children: [
                     {
                         path: "settings",
-                        element: <AccountSettings/>,
+                        async lazy() {
+                            let AccountSettings = await import("./components/routes/account/ManageAccount/sections/AccountSettings");
+                            return {Component: AccountSettings.default};
+                        }
                     },
                     {
                         path: "taxes-and-fees",
-                        element: <TaxSettings/>,
+                        async lazy() {
+                            let TaxSettings = await import("./components/routes/account/ManageAccount/sections/TaxSettings");
+                            return {Component: TaxSettings.default};
+                        }
                     },
                     {
                         path: "event-defaults",
-                        element: <EventDefaultsSettings/>,
+                        async lazy() {
+                            let EventDefaultsSettings = await import("./components/routes/account/ManageAccount/sections/EventDefaultsSettings");
+                            return {Component: EventDefaultsSettings.default};
+                        }
                     },
                     {
                         path: "users",
-                        element: <Users/>,
-                    },
-                    {
-                        path: "billing",
-                        element: <PaymentSettings/>,
+                        async lazy() {
+                            let Users = await import("./components/routes/account/ManageAccount/sections/Users");
+                            return {Component: Users.default};
+                        }
                     },
                     {
                         path: "payment",
-                        element: <PaymentSettings/>,
+                        async lazy() {
+                            let PaymentSettings = await import("./components/routes/account/ManageAccount/sections/PaymentSettings");
+                            return {Component: PaymentSettings.default};
+                        }
                     },
                 ]
             },
         ]
     },
     {
-        path: "auth",
-        element: <AuthLayout/>,
-        errorElement: <ErrorPage/>,
-        children: [
-            {
-                path: "login",
-                element: <Login/>,
-            },
-            {
-                path: "register",
-                element: <Register/>,
-            },
-            {
-                path: "forgot-password",
-                element: <ForgotPassword/>,
-            },
-            {
-                path: "reset-password/:token",
-                element: <Index/>,
-            },
-            {
-                path: "accept-invitation/:token",
-                element: <AcceptInvitation/>,
-            }
-        ]
-    },
-    {
         path: "/manage/event/:eventId",
-        element: <EventLayout/>,
+        async lazy() {
+            let EventLayout = await import("./components/layouts/Event");
+            return {Component: EventLayout.default};
+        },
         errorElement: <ErrorPage/>,
         children: [
             {
                 path: "",
-                element: <EventDashboard/>,
+                async lazy() {
+                    let EventDashboard = await import("./components/routes/event/EventDashboard");
+                    return {Component: EventDashboard.default};
+                }
             },
             {
                 path: "dashboard",
-                element: <EventDashboard/>,
+                async lazy() {
+                    let EventDashboard = await import("./components/routes/event/EventDashboard");
+                    return {Component: EventDashboard.default};
+                }
             },
             {
                 path: "tickets",
-                element: <Tickets/>,
+                async lazy() {
+                    let Tickets = await import("./components/routes/event/tickets");
+                    return {Component: Tickets.default};
+                }
             },
             {
                 path: "attendees",
-                element: <Attendees/>,
+                async lazy() {
+                    let Attendees = await import("./components/routes/event/attendees");
+                    return {Component: Attendees.default};
+                }
             },
             {
                 path: "questions",
-                element: <Questions/>,
+                async lazy() {
+                    let Questions = await import("./components/routes/event/questions");
+                    return {Component: Questions.default};
+                }
             },
             {
                 path: "orders",
-                element: <Orders/>,
+                async lazy() {
+                    let Orders = await import("./components/routes/event/orders");
+                    return {Component: Orders.default};
+                }
             },
             {
                 path: "promo-codes",
-                element: <PromoCodes/>,
+                async lazy() {
+                    let PromoCodes = await import("./components/routes/event/promo-codes");
+                    return {Component: PromoCodes.default};
+                }
             },
             {
                 path: "affiliates",
-                element: <Affiliates/>,
+                async lazy() {
+                    let Affiliates = await import("./components/routes/event/affiliates");
+                    return {Component: Affiliates.default};
+                }
             },
             {
                 path: "check-in",
-                element: <CheckIn/>,
+                async lazy() {
+                    let CheckIn = await import("./components/routes/event/check-in");
+                    return {Component: CheckIn.default};
+                }
             },
             {
                 path: "messages",
-                element: <Messages/>,
+                async lazy() {
+                    let Messages = await import("./components/routes/event/messages");
+                    return {Component: Messages.default};
+                }
             },
             {
                 path: "settings",
-                element: <Settings/>,
+                async lazy() {
+                    let Settings = await import("./components/routes/event/Settings");
+                    return {Component: Settings.default};
+                }
             },
             {
                 path: "widget",
-                element: <Widget/>,
+                async lazy() {
+                    let Widget = await import("./components/routes/event/widget");
+                    return {Component: Widget.default};
+                }
             },
             {
                 path: "homepage-designer",
-                element: <HomepageDesigner/>,
+                async lazy() {
+                    let HomepageDesigner = await import("./components/routes/event/HomepageDesigner");
+                    return {Component: HomepageDesigner.default};
+                }
             },
             {
                 path: "getting-started",
-                element: <GettingStarted/>,
+                async lazy() {
+                    let GettingStarted = await import("./components/routes/event/GettingStarted");
+                    return {Component: GettingStarted.default};
+                }
             }
         ]
     },
     {
         path: "/event/:eventId/:eventSlug",
-        element: <EventHomepage/>,
+        async lazy() {
+            let EventHomepage = await import("./components/layouts/EventHomepage");
+            return {Component: EventHomepage.default};
+        },
         errorElement: <ErrorPage/>,
     },
     {
         path: "/widget/:eventId",
-        element: <TicketWidget/>,
+        async lazy() {
+            let TicketWidget = await import("./components/layouts/TicketWidget");
+            return {Component: TicketWidget.default};
+        },
         errorElement: <ErrorPage/>,
         children: [
             {
                 path: "",
-                element: <SelectTickets/>
+                async lazy() {
+                    let SelectTickets = await import("./components/routes/ticket-widget/SelectTickets");
+                    return {Component: SelectTickets.default};
+                }
             },
         ]
     },
     {
         path: "/checkout/:eventId",
-        element: <Checkout/>,
+        async lazy() {
+            let Checkout = await import("./components/layouts/Checkout");
+            return {Component: Checkout.default};
+        },
         errorElement: <ErrorPage/>,
         children: [
             {
                 path: ":orderShortId/details",
-                element: <CollectInformation/>
+                async lazy() {
+                    let CollectInformation = await import("./components/routes/ticket-widget/CollectInformation");
+                    return {Component: CollectInformation.default};
+                }
             },
             {
                 path: ":orderShortId/payment",
-                element: <Payment/>
+                async lazy() {
+                    let Payment = await import("./components/routes/ticket-widget/Payment");
+                    return {Component: Payment.default};
+                }
             },
             {
                 path: ":orderShortId/summary",
-                element: <OrderSummaryAndTickets/>
+                async lazy() {
+                    let OrderSummaryAndTickets = await import("./components/routes/ticket-widget/OrderSummaryAndTickets");
+                    return {Component: OrderSummaryAndTickets.default};
+                }
             },
             {
                 path: ":orderShortId/payment_return",
-                element: <PaymentReturn/>
+                async lazy() {
+                    let PaymentReturn = await import("./components/routes/ticket-widget/PaymentReturn");
+                    return {Component: PaymentReturn.default};
+                }
             },
         ]
     },
     {
         path: "/order/:eventId/:orderShortId/print",
-        element: <PrintOrder/>,
+        async lazy() {
+            let PrintOrder = await import("./components/routes/ticket-widget/PrintOrder");
+            return {Component: PrintOrder.default};
+        },
         errorElement: <ErrorPage/>
     },
     {
         path: "/ticket/:eventId/:attendeeShortId/print",
-        element: <PrintTicket/>,
+        async lazy() {
+            let PrintTicket = await import("./components/routes/ticket-widget/PrintTicket");
+            return {Component: PrintTicket.default};
+        },
         errorElement: <ErrorPage/>
     },
     {
         path: "/ticket/:eventId/:attendeeShortId",
-        element: <AttendeeTicketAndInformation/>,
+        async lazy() {
+            let AttendeeTicketAndInformation = await import("./components/routes/ticket-widget/AttendeeTicketAndInformation");
+            return {Component: AttendeeTicketAndInformation.default};
+        },
         errorElement: <ErrorPage/>
     },
 ], {
@@ -278,3 +374,4 @@ export const router = createBrowserRouter([
         v7_normalizeFormMethod: true,
     }
 });
+

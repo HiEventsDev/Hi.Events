@@ -1,7 +1,9 @@
 import {t} from "@lingui/macro";
 
-export const EventDefaultsSettings = () => {
+const EventDefaultsSettings = () => {
     return (
         <>{t`Event Defaults`}</>
     );
 };
+
+export default EventDefaultsSettings;

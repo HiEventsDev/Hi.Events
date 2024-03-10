@@ -96,6 +96,7 @@ export const AccountSettings = () => {
                 </fieldset>
             </Card>
         </>
-
     );
 }
+
+export default AccountSettings;

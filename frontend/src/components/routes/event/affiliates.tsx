@@ -9,3 +9,5 @@ export const Affiliates = () => {
         </PageBody>
     );
 };
+
+export default Affiliates;

@@ -40,3 +40,5 @@ export const ManageAccount = () => {
         </div>
     );
 };
+
+export default ManageAccount;

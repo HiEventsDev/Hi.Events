@@ -44,3 +44,5 @@ export const PrintOrder = () => {
         </>
     );
 }
+
+export default PrintOrder;

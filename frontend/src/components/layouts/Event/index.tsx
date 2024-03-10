@@ -179,3 +179,5 @@ export const EventLayout = () => {
         </div>
     )
 }
+
+export default EventLayout;

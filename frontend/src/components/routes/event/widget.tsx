@@ -8,3 +8,5 @@ export const Widget = () => {
         </PageBody>
     );
 };
+
+export default Widget;

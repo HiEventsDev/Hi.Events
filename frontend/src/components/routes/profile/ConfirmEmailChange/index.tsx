@@ -63,3 +63,5 @@ export const ConfirmEmailChange = () => {
         </>
     );
 };
+
+export default ConfirmEmailChange;
