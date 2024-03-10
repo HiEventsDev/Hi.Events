@@ -14,7 +14,7 @@ import {useFormErrorResponseHandler} from "../../../../../../hooks/useFormErrorR
 import {Account} from "../../../../../../types.ts";
 import {LoadingMask} from "../../../../../common/LoadingMask";
 
-export const AccountSettings = () => {
+const AccountSettings = () => {
     const form = useForm({
         initialValues: {
             name: '',

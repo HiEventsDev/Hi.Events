@@ -2,7 +2,7 @@ import {Outlet} from "react-router-dom";
 import {Header} from "../../common/Header";
 import {Container} from "@mantine/core";
 
-export const DefaultLayout = () => {
+const DefaultLayout = () => {
     return (
         <>
             <Header/>

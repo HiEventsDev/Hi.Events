@@ -106,8 +106,8 @@ export const router = createBrowserRouter([
     {
         path: "welcome",
         async lazy() {
-            let Welcome = await import("./components/routes/welcome");
-            return {Component: Welcome.default};
+            let DefaultLayout = await import("./components/layouts/DefaultLayout");
+            return {Component: DefaultLayout.default};
         },
         errorElement: <ErrorPage/>,
         children: [
@@ -124,15 +124,15 @@ export const router = createBrowserRouter([
         path: "account",
         errorElement: <ErrorPage/>,
         async lazy() {
-            let ManageAccount = await import("./components/routes/account/ManageAccount");
-            return {Component: ManageAccount.default};
+            let DefaultLayout = await import("./components/layouts/DefaultLayout");
+            return {Component: DefaultLayout.default};
         },
         children: [
             {
                 path: "",
                 async lazy() {
-                    let AccountSettings = await import("./components/routes/account/ManageAccount/sections/AccountSettings");
-                    return {Component: AccountSettings.default};
+                    let ManageAccount = await import("./components/routes/account/ManageAccount");
+                    return {Component: ManageAccount.default};
                 },
                 children: [
                     {
