@@ -37,9 +37,9 @@ export const StatBoxes = () => {
         }
     ];
 
-    const stats = data.map(stat => {
+    const stats = data.map((stat) => {
         return (
-            <Card className={classes.statistic}>
+            <Card className={classes.statistic} key={stat.description}>
                 <div className={classes.leftPanel}>
                     <div className={classes.number}>{stat.number}</div>
                     <div className={classes.description}>{stat.description}</div>

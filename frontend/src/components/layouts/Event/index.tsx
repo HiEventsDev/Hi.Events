@@ -30,7 +30,7 @@ import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {Tooltip} from "../../common/Tooltip";
 import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
 
-export const EventLayout = () => {
+const EventLayout = () => {
     const data = [
         {link: 'getting-started', label: t`Getting Started`, icon: IconStar},
         {label: t`Manage`},
@@ -59,7 +59,7 @@ export const EventLayout = () => {
     const links = data.map((item) => {
         if (!item.link) {
             return (
-                <div className={classes.sectionHeading}>
+                <div className={classes.sectionHeading} key={item.label}>
                     {item.label}
                 </div>
             );
