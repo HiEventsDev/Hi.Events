@@ -2,8 +2,6 @@
 
 namespace HiEvents\Http\Actions\Orders;
 
-use Illuminate\Http\JsonResponse;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\Status\OrderStatus;
@@ -11,11 +9,12 @@ use HiEvents\DomainObjects\TicketDomainObject;
 use HiEvents\DomainObjects\TicketPriceDomainObject;
 use HiEvents\Exceptions\UnauthorizedException;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Models\TicketPrice;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Resources\Order\OrderResourcePublic;
-use HiEvents\Services\Domain\Session\SessionIdentifierService;
+use HiEvents\Services\Infrastructure\Session\SessionIdentifierService;
+use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class GetOrderActionPublic extends BaseAction
 {

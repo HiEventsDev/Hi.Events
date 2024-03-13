@@ -3,8 +3,6 @@
 namespace HiEvents\Services\Domain\Order;
 
 use Carbon\Carbon;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
@@ -13,8 +11,10 @@ use HiEvents\DomainObjects\PromoCodeDomainObject;
 use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Helper\IdHelper;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
-use HiEvents\Services\Domain\Session\SessionIdentifierService;
 use HiEvents\Services\Domain\Tax\TaxAndFeeOrderRollupService;
+use HiEvents\Services\Infrastructure\Session\SessionIdentifierService;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 readonly class OrderManagementService
 {

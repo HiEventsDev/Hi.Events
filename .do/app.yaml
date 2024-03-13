@@ -32,7 +32,7 @@ envs:
     value: "1.5"
   - key: APP_FRONTEND_URL
     scope: RUN_AND_BUILD_TIME
-    value: https://dev.hi.events
+    value: ${APP_URL}
   - key: APP_CDN_URL
     scope: RUN_AND_BUILD_TIME
     value: https://d31hxulcw8spzw.cloudfront.net
@@ -92,28 +92,24 @@ envs:
     scope: RUN_AND_BUILD_TIME
     type: SECRET
     value: EV[1:kzHCAK6w/8muUxfl9XQ++aCgbbPiq9PK:5Hmdbri+Xz6JVzV9FT0nrrqR+ece7Irq3mm/zdzi]
-  - key: DATABASE_URL
-    scope: RUN_AND_BUILD_TIME
-    type: SECRET
-    value: EV[1:uvhzTnbLsGrD44cYaEJG/7D8859pRZqg:Rx2SMn9OvswMolFxTNbtZRMpE/7bMuJrj6ZJ/JHU2cbdqNzeIQjagZMhF+0LBUiR5wmIrO81VxC7IqMMvIg+hw==]
   - key: DB_CONNECTION
     scope: RUN_AND_BUILD_TIME
     value: pgsql
   - key: DB_HOST
     scope: RUN_AND_BUILD_TIME
-    value: ${hi-events-db.HOSTNAME}
+    value: ${hi-events-postgres.HOSTNAME}
   - key: DB_PORT
     scope: RUN_AND_BUILD_TIME
-    value: ${hi-events-db.PORT}
+    value: ${hi-events-postgres.PORT}
   - key: DB_DATABASE
     scope: RUN_AND_BUILD_TIME
-    value: ${hi-events-db.DATABASE}
+    value: ${hi-events-postgres.DATABASE}
   - key: DB_USERNAME
     scope: RUN_AND_BUILD_TIME
-    value: ${hi-events-db.USERNAME}
+    value: ${hi-events-postgres.USERNAME}
   - key: DB_PASSWORD
     scope: RUN_AND_BUILD_TIME
-    value: ${hi-events-db.PASSWORD}
+    value: ${hi-events-postgres.PASSWORD}
   - key: REDIS_HOST
     scope: RUN_AND_BUILD_TIME
     value: ${hi-events-redis.HOSTNAME}
@@ -132,6 +128,9 @@ envs:
   - key: QUEUE_CONNECTION
     scope: RUN_AND_BUILD_TIME
     value: redis
+  - key: DATABASE_URL
+    scope: RUN_AND_BUILD_TIME
+    value: ${hi-events-postgres.DATABASE_URL}
 features:
   - buildpack-stack=ubuntu-22
 ingress:
@@ -187,7 +186,7 @@ static_sites:
     envs:
       - key: VITE_API_URL
         scope: BUILD_TIME
-        value: https://dev.app.hi.events/api
+        value: ${APP_URL}/api
       - key: VITE_STRIPE_PUBLISHABLE_KEY
         scope: BUILD_TIME
         value: pk_test_51Ofu1CJKnXOyGeQuDPUHiZcJxZozRuERiv4vQRBtCscwTbxOL574cxUjAoNRL2YLCumgC5160pl6kvTIiAc9mOeM0058KAWQ55

@@ -19,7 +19,7 @@ use HiEvents\Repository\Interfaces\StripePaymentsRepositoryInterface;
 use HiEvents\Services\Domain\Payment\Stripe\DTOs\CreatePaymentIntentRequestDTO;
 use HiEvents\Services\Domain\Payment\Stripe\DTOs\CreatePaymentIntentResponseDTO;
 use HiEvents\Services\Domain\Payment\Stripe\StripePaymentIntentCreationService;
-use HiEvents\Services\Domain\Session\SessionIdentifierService;
+use HiEvents\Services\Infrastructure\Session\SessionIdentifierService;
 
 readonly class CreatePaymentIntentHandler
 {
