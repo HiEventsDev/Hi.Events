@@ -3,13 +3,15 @@ import {Event, PromoCode, PromoCodeDiscountType} from "../../../types.ts";
 import {prettyDate, relativeDate} from "../../../utilites/dates.ts";
 import {Badge, Button, Flex, Group, Menu, Table as MantineTable, Tooltip} from "@mantine/core";
 import {Table, TableHead} from "../Table";
-import {IconCheck, IconCircleOff, IconCopy, IconDotsVertical, IconPlus, IconSend, IconTrash} from "@tabler/icons-react";
+import {IconCheck, IconCopy, IconDotsVertical, IconPlus, IconSend, IconTrash} from "@tabler/icons-react";
 import {Currency} from "../Currency";
 import {useClipboard, useDisclosure} from "@mantine/hooks";
 import {showSuccess} from "../../../utilites/notifications.tsx";
 import {EditPromoCodeModal} from "../../modals/EditPromoCodeModal";
 import {useState} from "react";
 import {NoResultsSplash} from "../NoResultsSplash";
+import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
+import {useDeletePromoCode} from "../../../mutations/useDeletePromoCode.ts";
 
 interface PromoCodeTableProps {
     event: Event,
@@ -20,11 +22,21 @@ interface PromoCodeTableProps {
 export const PromoCodeTable = ({event, promoCodes, openCreateModal}: PromoCodeTableProps) => {
     const [promoCodeId, setPromoCodeId] = useState<number | undefined>();
     const [editModalOpen, {open: openEditModal, close: closeEditModal}] = useDisclosure(false);
+    const deleteMutation = useDeletePromoCode();
 
     const handleEditModal = (promoCodeId: number | undefined) => {
         setPromoCodeId(promoCodeId);
         openEditModal();
     };
+
+    const handleDeleteCode = (promoCodeId: number) => {
+        confirmationDialog(
+            t`Are you sure you want to delete this promo code?`,
+            () => {
+                deleteMutation.mutate({eventId: event.id, promoCodeId});
+            }, {confirm: t`Delete`, cancel: t`Cancel`}
+        );
+    }
 
     if (promoCodes.length === 0) {
         return <NoResultsSplash
@@ -161,10 +173,12 @@ export const PromoCodeTable = ({event, promoCodes, openCreateModal}: PromoCodeTa
                                                 <Menu.Divider/>
 
                                                 <Menu.Label>{t`Danger zone`}</Menu.Label>
-                                                <Menu.Item color="red" leftSection={<IconTrash
-                                                    size={14}/>}>{t`Delete code`}</Menu.Item>
-                                                <Menu.Item color="red" leftSection={<IconCircleOff
-                                                    size={14}/>}>{t`Disable code`}</Menu.Item>
+                                                <Menu.Item color="red"
+                                                           onClick={() => handleDeleteCode(code?.id as number)}
+                                                           leftSection={<IconTrash size={14}/>}>
+                                                    {t`Delete code`}
+                                                </Menu.Item>
+
                                             </Menu.Dropdown>
                                         </Menu>
                                     </Group>

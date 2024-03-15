@@ -8,14 +8,24 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3955a247-b760-4719-8eb2-a39d5c8d4182" name="Changes" comment="add DO files">
-      <change beforePath="$PROJECT_DIR$/.do/app.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/.do/app.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.do/deploy.template.yaml" beforeDir="false" />
+    <list default="true" id="3955a247-b760-4719-8eb2-a39d5c8d4182" name="Changes" comment="Account for DigitalOcean in session service">
+      <change afterPath="$PROJECT_DIR$/backend/app/Services/Handlers/PromoCode/DTO/DeletePromoCodeDTO.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/app/Services/Handlers/PromoCode/DeletePromoCodeHandler.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/components/common/ErrorLoadingMessage/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/mutations/useDeletePromoCode.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/utilites/urlHelper.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Http/Actions/Orders/GetOrderActionPublic.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Actions/Orders/GetOrderActionPublic.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Services/Domain/Order/OrderManagementService.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Services/Domain/Order/OrderManagementService.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Services/Domain/Session/SessionIdentifierService.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Services/Infrastructure/Session/SessionIdentifierService.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Services/Handlers/Order/Payment/Stripe/CreatePaymentIntentHandler.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Services/Handlers/Order/Payment/Stripe/CreatePaymentIntentHandler.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/Http/Actions/PromoCodes/DeletePromoCodeAction.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Actions/PromoCodes/DeletePromoCodeAction.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/Http/Request/PromoCode/CreateUpdatePromoCodeRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Request/PromoCode/CreateUpdatePromoCodeRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/database/migrations/schema.sql" beforeDir="false" afterPath="$PROJECT_DIR$/backend/database/migrations/schema.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker/.env" beforeDir="false" afterPath="$PROJECT_DIR$/docker/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/api/promo-code.client.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/api/promo-code.client.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/common/EventCard/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/common/EventCard/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/common/PromoCodeTable/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/common/PromoCodeTable/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/layouts/Event/Event.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/layouts/Event/Event.module.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/routes/ticket-widget/SelectTickets/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/routes/ticket-widget/SelectTickets/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/router.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/router.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/utilites/helpers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/utilites/helpers.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,8 +57,8 @@
         <option value="HTML File" />
         <option value="Dockerfile" />
         <option value="SCSS File" />
-        <option value="TypeScript File" />
         <option value="TypeScript JSX File" />
+        <option value="TypeScript File" />
       </list>
     </option>
   </component>
@@ -266,7 +276,7 @@
     "git-widget-placeholder": "main",
     "javascript.nodejs.core.library.configured.version": "20.2.0",
     "javascript.nodejs.core.library.typings.version": "20.2.6",
-    "last_opened_file_path": "/Users/dave/Code/hi.events/.do",
+    "last_opened_file_path": "/Users/dave/Code/hi.events/frontend/src/mutations",
     "list.type.of.created.stylesheet": "SCSS",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -295,10 +305,10 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/frontend/src/mutations" />
       <recent name="$PROJECT_DIR$/.do" />
       <recent name="$PROJECT_DIR$/frontend/public" />
       <recent name="$PROJECT_DIR$/backend/resources/views/emails/orders/organizer" />
-      <recent name="$PROJECT_DIR$/frontend/src/mutations" />
       <recent name="$PROJECT_DIR$/frontend/src/components/routes/profile/ConfirmEmailAddress" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -459,7 +469,7 @@
       <workItem from="1709407532159" duration="72000" />
       <workItem from="1709407610738" duration="51323000" />
       <workItem from="1709873302572" duration="1235000" />
-      <workItem from="1710051759452" duration="33405000" />
+      <workItem from="1710051759452" duration="49013000" />
     </task>
     <task id="LOCAL-00001" summary="lots">
       <created>1686782936185</created>
@@ -523,14 +533,6 @@
       <option name="presentableId" value="LOCAL-00009" />
       <option name="project" value="LOCAL" />
       <updated>1694367607098</updated>
-    </task>
-    <task id="LOCAL-00036" summary="i18n">
-      <option name="closed" value="true" />
-      <created>1707007625445</created>
-      <option name="number" value="00036" />
-      <option name="presentableId" value="LOCAL-00036" />
-      <option name="project" value="LOCAL" />
-      <updated>1707007625445</updated>
     </task>
     <task id="LOCAL-00037" summary="polishing ticket admin">
       <option name="closed" value="true" />
@@ -844,7 +846,15 @@
       <option name="project" value="LOCAL" />
       <updated>1710258620795</updated>
     </task>
-    <option name="localTasksCounter" value="76" />
+    <task id="LOCAL-00076" summary="Account for DigitalOcean in session service">
+      <option name="closed" value="true" />
+      <created>1710303723191</created>
+      <option name="number" value="00076" />
+      <option name="presentableId" value="LOCAL-00076" />
+      <option name="project" value="LOCAL" />
+      <updated>1710303723191</updated>
+    </task>
+    <option name="localTasksCounter" value="77" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -867,7 +877,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/frontend" />
     </ignored-roots>
-    <MESSAGE value="make container relative" />
     <MESSAGE value="style fixes" />
     <MESSAGE value="widget page colors" />
     <MESSAGE value="bug fixes" />
@@ -892,7 +901,8 @@
     <MESSAGE value="remove api prefix" />
     <MESSAGE value="drop attributes" />
     <MESSAGE value="add DO files" />
-    <option name="LAST_COMMIT_MESSAGE" value="add DO files" />
+    <MESSAGE value="Account for DigitalOcean in session service" />
+    <option name="LAST_COMMIT_MESSAGE" value="Account for DigitalOcean in session service" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

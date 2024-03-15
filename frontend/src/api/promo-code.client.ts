@@ -28,6 +28,10 @@ export const promoCodeClient = {
         const response = await api.get<GenericDataResponse<PromoCode>>(`events/${eventId}/promo-codes/${promoCodeId}`);
         return response.data;
     },
+    delete: async (eventId: IdParam, promoCodeId: IdParam) => {
+        const response = await api.delete<GenericDataResponse<PromoCode>>(`events/${eventId}/promo-codes/${promoCodeId}`);
+        return response.data;
+    },
 }
 
 export const promoCodeClientPublic = {

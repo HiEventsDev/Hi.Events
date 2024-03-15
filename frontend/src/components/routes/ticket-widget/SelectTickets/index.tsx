@@ -195,7 +195,9 @@ export const SelectTickets = (props: SelectTicketsProps) => {
         } as React.CSSProperties}>
             {tickets?.length === 0 && (
                 <div className={classNames(['hi-no-tickets'])}>
-                    <h2 className={classNames(['hi-no-tickets-heading'])}>{t`No tickets available`}</h2>
+                    <h2 className={classNames(['hi-no-tickets-heading'])}>
+                        {t`No tickets available`}
+                    </h2>
                     <p className={classNames(['hi-no-tickets-message'])}>
                         {t`There are no tickets available for this event`}
                     </p>
@@ -287,7 +289,7 @@ export const SelectTickets = (props: SelectTicketsProps) => {
                         <b>{promoCode}</b> {t`applied`}
                     </div>
                 )}
-                {(!promoValid && showPromoCodeInput) && (
+                {(!promoValid && showPromoCodeInput && tickets?.length !== 0) && (
                     <Group className={'hi-promo-code-input-wrapper'} wrap={'nowrap'} gap={'20px'}>
                         {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                         {/*@ts-ignore*/}

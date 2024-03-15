@@ -2,26 +2,30 @@
 
 namespace HiEvents\Http\Actions\PromoCodes;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
+use HiEvents\Services\Handlers\PromoCode\DeletePromoCodeHandler;
+use HiEvents\Services\Handlers\PromoCode\DTO\DeletePromoCodeDTO;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class DeletePromoCodeAction extends BaseAction
 {
-    private PromoCodeRepositoryInterface $promoCodeRepository;
-
-    public function __construct(PromoCodeRepositoryInterface $promoCodeRepository)
+    public function __construct(
+        private readonly DeletePromoCodeHandler $deletePromoCodeHandler
+    )
     {
-        $this->promoCodeRepository = $promoCodeRepository;
     }
 
     public function __invoke(Request $request, int $eventId, int $promoCodeId): Response
     {
         $this->isActionAuthorized($eventId, EventDomainObject::class);
 
-        $this->promoCodeRepository->deleteById($promoCodeId);
+        $this->deletePromoCodeHandler->handle(DeletePromoCodeDTO::fromArray([
+            'promo_code_id' => $promoCodeId,
+            'event_id' => $eventId,
+            'user_id' => $request->user()->id,
+        ]));
 
         return $this->noContentResponse();
     }

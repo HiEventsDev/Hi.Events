@@ -89,23 +89,6 @@ create table if not exists accounts
     primary key (id)
 );
 
-create table if not exists account_users
-(
-    id         bigint generated always as identity,
-    first_name varchar(50)  not null,
-    last_name  varchar(50)  not null,
-    email      varchar(255) not null,
-    password   varchar(50)  not null,
-    account_id integer      not null,
-    created_at timestamp    not null,
-    updated_at timestamp    not null,
-    deleted_at timestamp    not null,
-    status     integer,
-    primary key (id),
-    constraint fk_account_users_account_id
-        foreign key (account_id) references accounts
-);
-
 create table if not exists password_resets
 (
     email      varchar(200),

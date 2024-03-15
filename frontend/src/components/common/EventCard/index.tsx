@@ -2,16 +2,19 @@ import {Badge, Button, Group, Menu, Text,} from '@mantine/core';
 import {Event} from "../../../types.ts";
 import classes from "./EventCard.module.scss";
 import {Card} from "../Card";
-import {NavLink} from "react-router-dom";
+import {NavLink, useNavigate} from "react-router-dom";
 import {IconCalendarEvent, IconDotsVertical, IconEye, IconMap, IconSettings, IconUser,} from "@tabler/icons-react";
 import {relativeDate} from "../../../utilites/dates.ts";
 import {t} from "@lingui/macro"
+import {eventHomepageUrl} from "../../../utilites/urlHelper.ts";
 
 interface EventCardProps {
     event: Event;
 }
 
 export function EventCard({event}: EventCardProps) {
+    const navigate = useNavigate();
+
     return (
         <>
             <Card className={classes.card}>
@@ -69,14 +72,14 @@ export function EventCard({event}: EventCardProps) {
                         </Menu.Target>
 
                         <Menu.Dropdown>
-                            <Menu.Item onClick={() => {
-                            }}
-                                       leftSection={<IconEye
-                                           size={14}/>}>{t`View event page`}</Menu.Item>
-                            <Menu.Item onClick={() => {
-                            }}
-                                       leftSection={<IconSettings
-                                           size={14}/>}>{t`Manage event`}</Menu.Item>
+                            <Menu.Item onClick={() => navigate(eventHomepageUrl(event))}
+                                       leftSection={<IconEye size={14}/>}
+                            >
+                                {t`View event page`}
+                            </Menu.Item>
+                            <Menu.Item onClick={() => navigate(`/manage/event/${event.id}`)}
+                                       leftSection={<IconSettings size={14}/>}
+                            >{t`Manage event`}</Menu.Item>
 
                         </Menu.Dropdown>
                     </Menu>

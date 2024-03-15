@@ -283,6 +283,14 @@ export const router = createBrowserRouter([
         ]
     },
     {
+        path: "/e/:eventId/:eventSlug",
+        async lazy() {
+            let EventHomepage = await import("./components/layouts/EventHomepage");
+            return {Component: EventHomepage.default};
+        },
+        errorElement: <ErrorPage/>,
+    },
+    {
         path: "/event/:eventId/:eventSlug",
         async lazy() {
             let EventHomepage = await import("./components/layouts/EventHomepage");

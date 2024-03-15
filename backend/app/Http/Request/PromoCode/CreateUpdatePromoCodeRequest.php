@@ -14,7 +14,7 @@ class CreateUpdatePromoCodeRequest extends BaseRequest
             'code' => 'string|required|max:50',
             'applicable_ticket_ids' => 'array',
             'discount' => [
-                'required',
+                'required_if:discount_type,PERCENTAGE,FIXED',
                 'numeric',
                 'min:0',
                 function ($attribute, $value, $fail) {
