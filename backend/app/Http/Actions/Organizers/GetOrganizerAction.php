@@ -26,7 +26,7 @@ class GetOrganizerAction extends BaseAction
             ->loadRelation(ImageDomainObject::class)
             ->findFirstWhere([
                 'id' => $organizerId,
-                'account_id' => $this->getAuthenticatedUser()->getAccountId()
+                'account_id' => $this->getAuthenticatedAccountId(),
             ]);
 
         if ($organizer === null) {

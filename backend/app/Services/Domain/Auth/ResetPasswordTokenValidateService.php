@@ -3,10 +3,10 @@
 namespace HiEvents\Services\Domain\Auth;
 
 use Carbon\Carbon;
-use Illuminate\Config\Repository;
 use HiEvents\DomainObjects\PasswordResetTokenDomainObject;
 use HiEvents\Exceptions\InvalidPasswordResetTokenException;
 use HiEvents\Repository\Interfaces\PasswordResetTokenRepositoryInterface;
+use Illuminate\Config\Repository;
 
 class ResetPasswordTokenValidateService
 {
@@ -29,11 +29,11 @@ class ResetPasswordTokenValidateService
     {
         $resetToken = $this->passwordResetTokenRepository->findFirstWhere(['token' => $token]);
         if (!$resetToken) {
-            throw new InvalidPasswordResetTokenException('Invalid token');
+            throw new InvalidPasswordResetTokenException(__('Invalid reset token'));
         }
 
         if ($this->isTokenExpired($resetToken->getCreatedAt())) {
-            throw new InvalidPasswordResetTokenException('Expired token');
+            throw new InvalidPasswordResetTokenException(__('Reset token has expired'));
         }
 
         return $resetToken;

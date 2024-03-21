@@ -2,43 +2,59 @@
 
 namespace HiEvents\Services\Handlers\User;
 
+use HiEvents\DomainObjects\AccountUserDomainObject;
 use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\Status\UserStatus;
 use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Exceptions\CannotUpdateResourceException;
+use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Services\Handlers\User\DTO\UpdateUserDTO;
+use Illuminate\Database\DatabaseManager;
 use Psr\Log\LoggerInterface;
+use Throwable;
 
-class UpdateUserHandler
+readonly class UpdateUserHandler
 {
-    private UserRepositoryInterface $userRepository;
-
-    private LoggerInterface $logger;
-
     public function __construct(
-        UserRepositoryInterface $userRepository,
-        LoggerInterface         $logger
+        private UserRepositoryInterface        $userRepository,
+        private LoggerInterface                $logger,
+        private AccountUserRepositoryInterface $accountUserRepository,
+        private DatabaseManager                $databaseManager,
     )
     {
-        $this->userRepository = $userRepository;
-        $this->logger = $logger;
+    }
+
+    /**
+     * @throws CannotUpdateResourceException|Throwable
+     */
+    public function handle(UpdateUserDTO $updateUserData): UserDomainObject
+    {
+        return $this->databaseManager->transaction(function () use ($updateUserData) {
+            return $this->updateUser($updateUserData);
+        });
     }
 
     /**
      * @throws CannotUpdateResourceException
      */
-    public function handle(UpdateUserDTO $updateUserData): UserDomainObject
+    private function updateUser(UpdateUserDTO $updateUserData): UserDomainObject
     {
-        $user = $this->userRepository->findById($updateUserData->id);
+        /** @var AccountUserDomainObject $accountUser */
+        $accountUser = $this->accountUserRepository->findFirstWhere(
+            where: [
+                'user_id' => $updateUserData->id,
+                'account_id' => $updateUserData->account_id,
+            ]
+        );
 
-        if ($updateUserData->role !== Role::ADMIN && $user->getIsAccountOwner()) {
+        if ($updateUserData->role !== Role::ADMIN && $accountUser->getIsAccountOwner()) {
             throw new CannotUpdateResourceException(__(
                 'You cannot update the role of the account owner'
             ));
         }
 
-        if ($updateUserData->status !== UserStatus::ACTIVE && $user->getIsAccountOwner()) {
+        if ($updateUserData->status !== UserStatus::ACTIVE && $accountUser->getIsAccountOwner()) {
             throw new CannotUpdateResourceException(__(
                 'You cannot update the status of the account owner'
             ));
@@ -48,11 +64,19 @@ class UpdateUserHandler
             attributes: [
                 'first_name' => $updateUserData->first_name,
                 'last_name' => $updateUserData->last_name,
+            ],
+            where: [
+                'id' => $updateUserData->id,
+            ]
+        );
+
+        $this->accountUserRepository->updateWhere(
+            attributes: [
                 'role' => $updateUserData->role->name,
                 'status' => $updateUserData->status->name,
             ],
             where: [
-                'id' => $updateUserData->id,
+                'user_id' => $updateUserData->id,
                 'account_id' => $updateUserData->account_id,
             ]
         );
@@ -62,6 +86,9 @@ class UpdateUserHandler
             'updated_by_user_id' => $updateUserData->updated_by_user_id,
         ]);
 
-        return $this->userRepository->findById($updateUserData->id);
+        return $this->userRepository->findByIdAndAccountId(
+            userId: $updateUserData->id,
+            accountId: $updateUserData->account_id
+        );
     }
 }

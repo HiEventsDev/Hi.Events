@@ -22,15 +22,11 @@ class LoginAction extends BaseAuthAction
 
     public function __invoke(LoginRequest $request): JsonResponse
     {
-        $credentials = [
-            'email' => strtolower($request->validated('email')),
-            'password' => $request->validated('password'),
-        ];
-
         try {
             $loginResponse = $this->loginHandler->handle(new LoginCredentialsDTO(
-                email: $credentials['email'],
-                password: $credentials['password'],
+                email: strtolower($request->validated('email')),
+                password: $request->validated('password'),
+                accountId: $request->validated('account_id'),
             ));
         } catch (UnauthorizedException $e) {
             return $this->errorResponse(
@@ -39,6 +35,6 @@ class LoginAction extends BaseAuthAction
             );
         }
 
-        return $this->respondWithToken($loginResponse->token);
+        return $this->respondWithToken($loginResponse->token, $loginResponse->accounts);
     }
 }

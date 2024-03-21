@@ -182,7 +182,7 @@ export const TicketForm = ({form, ticket}: TicketFormProps) => {
             <div>
                 {Number(ticket?.quantity_sold) > 0 && (
                     <Alert icon={<IconInfoCircle/>} mb={20} color={'blue'}>
-                        {t`You cannot change the ticket type because there are already tickets sold for this ticket.`}
+                        {t`You cannot change the ticket type as there are attendees associated with this ticket.`}
                     </Alert>
                 )}
                 <CustomSelect

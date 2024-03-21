@@ -37,7 +37,7 @@ class ConfirmEmailChangeMail extends BaseMail
             markdown: 'emails.user.confirm-email-change',
             with: [
                 'user' => $this->userDomainObject,
-                'link' => sprintf(Url::getFrontEndUrlFromConfig(Url::CONFIRM_EMAIL_ADDRESS), $this->token),
+                'link' => sprintf(Url::getFrontEndUrlFromConfig(Url::CONFIRM_EMAIL_CHANGE), $this->token),
             ]
         );
     }

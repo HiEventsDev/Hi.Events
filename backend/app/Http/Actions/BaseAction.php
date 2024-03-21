@@ -13,6 +13,7 @@ use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Exceptions\UnauthorizedException;
 use HiEvents\Http\ResponseCodes;
 use HiEvents\Resources\BaseResource;
+use HiEvents\Services\Domain\Auth\AuthUserService;
 use HiEvents\Services\Infrastructure\Authorization\IsAuthorizedService;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\JsonResponse;
@@ -130,13 +131,38 @@ abstract class BaseAction extends Controller
         /** @var IsAuthorizedService $authService */
         $authService = app()->make(IsAuthorizedService::class);
 
-        $authService->isActionAuthorized($entityId, $entityType, $this->getAuthenticatedUser(), $minimumRole);
+        $authService->isActionAuthorized(
+            $entityId,
+            $entityType,
+            $this->getAuthenticatedUser(),
+            $this->getAuthenticatedAccountId(),
+            $minimumRole
+        );
     }
 
-    protected function getAuthenticatedUser(bool $failForUnauthenticatedUsers = true): null|UserDomainObject|DomainObjectInterface
+    protected function getAuthenticatedAccountId(): int
     {
         if (Auth::check()) {
-            return UserDomainObject::hydrateFromModel(Auth::user());
+            /** @var AuthUserService $service */
+            $service = app(AuthUserService::class);
+            $accountId =  $service->getAuthenticatedAccountId();
+
+            if ($accountId === null) {
+                throw new UnauthorizedException(__('No account ID found in token'));
+            }
+
+            return $accountId;
+        }
+
+        throw new UnauthorizedException();
+    }
+
+    protected function getAuthenticatedUser(): UserDomainObject|DomainObjectInterface
+    {
+        if (Auth::check()) {
+            /** @var AuthUserService $service */
+            $service = app(AuthUserService::class);
+            return $service->getUser();
         }
 
         throw new UnauthorizedException();

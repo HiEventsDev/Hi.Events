@@ -381,6 +381,7 @@ abstract class BaseRepository implements RepositoryInterface
                     )
                 );
             }
+
             if ($relatedModels instanceof Collection) {
                 $relatedDomainObjects = $relatedModels->map(function ($relatedModel) use ($eagerLoad) {
                     return $this->hydrateDomainObjectFromModel(

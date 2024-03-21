@@ -72,7 +72,7 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     protected ?bool $show_social_media_handles = null;
     protected ?string $seo_keywords = null;
     protected bool $notify_organizer_of_new_orders = true;
-    protected string $price_display_mode = 'inclusive';
+    protected string $price_display_mode = 'INCLUSIVE';
 
     public function toArray(): array
     {

@@ -63,7 +63,7 @@ class AppServiceProvider extends ServiceProvider
                     'driver' => 'pdo_pgsql',
                 ];
 
-                return DriverManager::getConnection($connectionParams, $config)->getSchemaManager();
+                return DriverManager::getConnection($connectionParams, $config)->createSchemaManager();
             }
         );
     }

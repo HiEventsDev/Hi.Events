@@ -3,50 +3,39 @@
 namespace HiEvents\Services\Handlers\User;
 
 use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
+use HiEvents\Services\Handlers\User\DTO\ConfirmEmailChangeDTO;
 use HiEvents\Services\Infrastructure\Encyption\EncryptedPayloadService;
 use HiEvents\Services\Infrastructure\Encyption\Exception\DecryptionFailedException;
 use Illuminate\Database\DatabaseManager;
-use Illuminate\Validation\UnauthorizedException;
 use Psr\Log\LoggerInterface;
 use Throwable;
 
-class ConfirmEmailChangeHandler
+readonly class ConfirmEmailChangeHandler
 {
-    private LoggerInterface $logger;
-
-    private UserRepositoryInterface $userRepository;
-
-    private EncryptedPayloadService $encryptedPayloadService;
-
-    private DatabaseManager $databaseManager;
-
     public function __construct(
-        LoggerInterface         $logger,
-        UserRepositoryInterface $userRepository,
-        EncryptedPayloadService $encryptedPayloadService,
-        DatabaseManager         $databaseManager,
+        private LoggerInterface         $logger,
+        private UserRepositoryInterface $userRepository,
+        private EncryptedPayloadService $encryptedPayloadService,
+        private DatabaseManager         $databaseManager,
     )
     {
-        $this->logger = $logger;
-        $this->userRepository = $userRepository;
-        $this->encryptedPayloadService = $encryptedPayloadService;
-        $this->databaseManager = $databaseManager;
     }
 
     /**
      * @throws DecryptionFailedException|Throwable
      */
-    public function handle(string $token, int $authUserId): UserDomainObject
+    public function handle(ConfirmEmailChangeDTO $data): UserDomainObject
     {
-        return $this->databaseManager->transaction(function () use ($token, $authUserId) {
-            ['id' => $userId] = $this->encryptedPayloadService->decryptPayload($token);
+        return $this->databaseManager->transaction(function () use ($data) {
+            ['id' => $userId] = $this->encryptedPayloadService->decryptPayload($data->token);
 
-            if ($userId !== $authUserId) {
-                throw new UnauthorizedException();
+            $user = $this->userRepository->findByIdAndAccountId($userId, $data->accountId);
+
+            if ($user->getPendingEmail() === null) {
+                throw new ResourceConflictException(__('No email change pending'));
             }
-
-            $user = $this->userRepository->findById($userId);
 
             $this->userRepository->updateWhere(
                 attributes: [
@@ -64,7 +53,7 @@ class ConfirmEmailChangeHandler
                 'new_email' => $user->getPendingEmail(),
             ]);
 
-            return $this->userRepository->findById($userId);
+            return $this->userRepository->findByIdAndAccountId($userId, $data->accountId);
         });
     }
 }

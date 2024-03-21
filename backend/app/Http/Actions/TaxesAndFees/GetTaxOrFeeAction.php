@@ -22,7 +22,7 @@ class GetTaxOrFeeAction extends BaseAction
         $this->isActionAuthorized($accountId, AccountDomainObject::class);
 
         $tax = $this->taxAndFeeRepository->findWhere([
-            'account_id' => $this->getAuthenticatedUser()->getAccountId()
+            'account_id' => $this->getAuthenticatedAccountId(),
         ]);
 
         return $this->resourceResponse(TaxAndFeeResource::class, $tax);

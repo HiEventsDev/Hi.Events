@@ -3,6 +3,7 @@
 namespace HiEvents\Services\Handlers\User;
 
 use HiEvents\Services\Domain\User\EmailConfirmationService;
+use HiEvents\Services\Handlers\User\DTO\ConfirmEmailChangeDTO;
 use HiEvents\Services\Infrastructure\Encyption\Exception\DecryptionFailedException;
 use Throwable;
 
@@ -17,8 +18,8 @@ readonly class ConfirmEmailAddressHandler
     /**
      * @throws DecryptionFailedException|Throwable
      */
-    public function handle(string $token): void
+    public function handle(ConfirmEmailChangeDTO $data): void
     {
-        $this->emailConfirmationService->confirmEmailAddress($token);
+        $this->emailConfirmationService->confirmEmailAddress($data->token, $data->accountId);
     }
 }

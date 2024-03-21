@@ -26,7 +26,7 @@ class UpdateAccountAction extends BaseAction
         $authUser = $this->getAuthenticatedUser();
 
         $payload = array_merge($request->validated(), [
-            'account_id' => $authUser->getAccountId(),
+            'account_id' => $this->getAuthenticatedAccountId(),
             'updated_by_user_id' => $authUser->getId(),
         ]);
 

@@ -14,18 +14,18 @@ use HiEvents\Services\Handlers\User\CreateUserHandler;
 use HiEvents\Services\Handlers\User\DTO\CreateUserDTO;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
+use Throwable;
 
 class CreateUserAction extends BaseAction
 {
-    private CreateUserHandler $createUserHandler;
-
-    public function __construct(CreateUserHandler $createUserHandler)
+    public function __construct(
+        private readonly CreateUserHandler $createUserHandler
+    )
     {
-        $this->createUserHandler = $createUserHandler;
     }
 
     /**
-     * @throws ValidationException
+     * @throws ValidationException|Throwable
      */
     public function __invoke(CreateUserRequest $request): JsonResponse
     {
@@ -33,7 +33,7 @@ class CreateUserAction extends BaseAction
 
         $data = array_merge($request->validated(), [
             'invited_by' => $this->getAuthenticatedUser()->getId(),
-            'account_id' => $this->getAuthenticatedUser()->getAccountId(),
+            'account_id' => $this->getAuthenticatedAccountId(),
         ]);
 
         try {

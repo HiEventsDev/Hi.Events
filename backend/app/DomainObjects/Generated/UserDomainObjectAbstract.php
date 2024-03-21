@@ -11,9 +11,6 @@ abstract class UserDomainObjectAbstract extends \HiEvents\DomainObjects\Abstract
     final public const SINGULAR_NAME = 'user';
     final public const PLURAL_NAME = 'users';
     final public const ID = 'id';
-    final public const ACCOUNT_ID = 'account_id';
-    final public const ROLE_ID = 'role_id';
-    final public const INVITED_BY = 'invited_by';
     final public const EMAIL = 'email';
     final public const EMAIL_VERIFIED_AT = 'email_verified_at';
     final public const PASSWORD = 'password';
@@ -25,15 +22,8 @@ abstract class UserDomainObjectAbstract extends \HiEvents\DomainObjects\Abstract
     final public const LAST_NAME = 'last_name';
     final public const PENDING_EMAIL = 'pending_email';
     final public const TIMEZONE = 'timezone';
-    final public const STATUS = 'status';
-    final public const ROLE = 'role';
-    final public const LAST_LOGIN_AT = 'last_login_at';
-    final public const IS_ACCOUNT_OWNER = 'is_account_owner';
 
     protected int $id;
-    protected int $account_id;
-    protected ?int $role_id = null;
-    protected ?int $invited_by = null;
     protected string $email;
     protected ?string $email_verified_at = null;
     protected string $password;
@@ -45,18 +35,11 @@ abstract class UserDomainObjectAbstract extends \HiEvents\DomainObjects\Abstract
     protected ?string $last_name = null;
     protected ?string $pending_email = null;
     protected string $timezone;
-    protected string $status;
-    protected string $role;
-    protected ?string $last_login_at = null;
-    protected bool $is_account_owner = false;
 
     public function toArray(): array
     {
         return [
                     'id' => $this->id ?? null,
-                    'account_id' => $this->account_id ?? null,
-                    'role_id' => $this->role_id ?? null,
-                    'invited_by' => $this->invited_by ?? null,
                     'email' => $this->email ?? null,
                     'email_verified_at' => $this->email_verified_at ?? null,
                     'password' => $this->password ?? null,
@@ -68,10 +51,6 @@ abstract class UserDomainObjectAbstract extends \HiEvents\DomainObjects\Abstract
                     'last_name' => $this->last_name ?? null,
                     'pending_email' => $this->pending_email ?? null,
                     'timezone' => $this->timezone ?? null,
-                    'status' => $this->status ?? null,
-                    'role' => $this->role ?? null,
-                    'last_login_at' => $this->last_login_at ?? null,
-                    'is_account_owner' => $this->is_account_owner ?? null,
                 ];
     }
 
@@ -84,39 +63,6 @@ abstract class UserDomainObjectAbstract extends \HiEvents\DomainObjects\Abstract
     public function getId(): int
     {
         return $this->id;
-    }
-
-    public function setAccountId(int $account_id): self
-    {
-        $this->account_id = $account_id;
-        return $this;
-    }
-
-    public function getAccountId(): int
-    {
-        return $this->account_id;
-    }
-
-    public function setRoleId(?int $role_id): self
-    {
-        $this->role_id = $role_id;
-        return $this;
-    }
-
-    public function getRoleId(): ?int
-    {
-        return $this->role_id;
-    }
-
-    public function setInvitedBy(?int $invited_by): self
-    {
-        $this->invited_by = $invited_by;
-        return $this;
-    }
-
-    public function getInvitedBy(): ?int
-    {
-        return $this->invited_by;
     }
 
     public function setEmail(string $email): self
@@ -238,49 +184,5 @@ abstract class UserDomainObjectAbstract extends \HiEvents\DomainObjects\Abstract
     public function getTimezone(): string
     {
         return $this->timezone;
-    }
-
-    public function setStatus(string $status): self
-    {
-        $this->status = $status;
-        return $this;
-    }
-
-    public function getStatus(): string
-    {
-        return $this->status;
-    }
-
-    public function setRole(string $role): self
-    {
-        $this->role = $role;
-        return $this;
-    }
-
-    public function getRole(): string
-    {
-        return $this->role;
-    }
-
-    public function setLastLoginAt(?string $last_login_at): self
-    {
-        $this->last_login_at = $last_login_at;
-        return $this;
-    }
-
-    public function getLastLoginAt(): ?string
-    {
-        return $this->last_login_at;
-    }
-
-    public function setIsAccountOwner(bool $is_account_owner): self
-    {
-        $this->is_account_owner = $is_account_owner;
-        return $this;
-    }
-
-    public function getIsAccountOwner(): bool
-    {
-        return $this->is_account_owner;
     }
 }

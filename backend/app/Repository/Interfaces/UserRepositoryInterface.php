@@ -13,5 +13,7 @@ use HiEvents\Repository\Eloquent\BaseRepository;
  */
 interface UserRepositoryInterface extends RepositoryInterface
 {
+    public function findByIdAndAccountId(int $userId, int $accountId): UserDomainObject;
+
     public function findUsersByAccountId(int $accountId): ?Collection;
 }

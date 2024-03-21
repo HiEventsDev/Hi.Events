@@ -28,7 +28,7 @@ class UpdateMeAction extends BaseAction
         try {
             $user = $this->updateUserHandler->handle(UpdateMeDTO::fromArray([
                 'id' => $this->getAuthenticatedUser()->getId(),
-                'account_id' => $this->getAuthenticatedUser()->getAccountId(),
+                'account_id' => $this->getAuthenticatedAccountId(),
                 'first_name' => $request->validated('first_name'),
                 'last_name' => $request->validated('last_name'),
                 'email' => $request->validated('email'),

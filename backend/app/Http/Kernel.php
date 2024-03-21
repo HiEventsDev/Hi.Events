@@ -2,6 +2,7 @@
 
 namespace HiEvents\Http;
 
+use HiEvents\Http\Middleware\SetAccountContext;
 use Illuminate\Auth\Middleware\AuthenticateWithBasicAuth;
 use Illuminate\Auth\Middleware\Authorize;
 use Illuminate\Auth\Middleware\EnsureEmailIsVerified;
@@ -61,9 +62,9 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
-            // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             ThrottleRequests::class . ':api',
             SubstituteBindings::class,
+            SetAccountContext::class,
         ],
     ];
 

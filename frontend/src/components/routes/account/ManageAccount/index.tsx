@@ -4,11 +4,14 @@ import classes from "./ManageAccount.module.scss";
 import {IconAdjustmentsCog, IconCreditCard, IconReceiptTax, IconUsers} from "@tabler/icons-react";
 import {Outlet, useLocation, useNavigate} from "react-router-dom";
 import {t} from "@lingui/macro";
+import {useIsCurrentUserAdmin} from "../../../../hooks/useIsCurrentUserAdmin.ts";
 
 export const ManageAccount = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const tabValue = location.pathname.split('/').pop() || 'settings';
+    const isUserAdmin = useIsCurrentUserAdmin();
+
 
     return (
         <div className={classes.container}>
@@ -22,15 +25,18 @@ export const ManageAccount = () => {
                         <Tabs.Tab value="taxes-and-fees" leftSection={<IconReceiptTax/>}>
                             {t`Tax & Fees`}
                         </Tabs.Tab>
-                        {/*<Tabs.Tab value="event-defaults" leftSection={<IconTicket/>}>*/}
-                        {/*    {t`Event Defaults`}*/}
-                        {/*</Tabs.Tab>*/}
-                        <Tabs.Tab value="users" leftSection={<IconUsers/>}>
-                            {t`Users`}
-                        </Tabs.Tab>
-                        <Tabs.Tab value="payment" leftSection={<IconCreditCard/>}>
-                            {t`Payment`}
-                        </Tabs.Tab>
+
+                        {isUserAdmin && (
+                            <Tabs.Tab value="users" leftSection={<IconUsers/>}>
+                                {t`Users`}
+                            </Tabs.Tab>
+                        )}
+
+                        {isUserAdmin && (
+                            <Tabs.Tab value="payment" leftSection={<IconCreditCard/>}>
+                                {t`Payment`}
+                            </Tabs.Tab>
+                        )}
                     </Tabs.List>
                 </Tabs>
             </Card>

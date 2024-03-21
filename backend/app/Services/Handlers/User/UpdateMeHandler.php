@@ -12,27 +12,15 @@ use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Contracts\Mail\Mailer;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
-class UpdateMeHandler
+readonly class UpdateMeHandler
 {
-    private UserRepositoryInterface $userRepository;
-
-    private Hasher $hasher;
-
-    private Mailer $mailer;
-
-    private EncryptedPayloadService $encryptedPayloadService;
-
     public function __construct(
-        UserRepositoryInterface $userRepository,
-        Hasher                  $hasher,
-        Mailer                  $mailer,
-        EncryptedPayloadService $encryptedPayloadService,
+        private UserRepositoryInterface $userRepository,
+        private Hasher                  $hasher,
+        private Mailer                  $mailer,
+        private EncryptedPayloadService $encryptedPayloadService,
     )
     {
-        $this->userRepository = $userRepository;
-        $this->hasher = $hasher;
-        $this->mailer = $mailer;
-        $this->encryptedPayloadService = $encryptedPayloadService;
     }
 
     /**
@@ -65,11 +53,10 @@ class UpdateMeHandler
             attributes: $updateArray,
             where: [
                 'id' => $updateUserData->id,
-                'account_id' => $updateUserData->account_id,
             ]
         );
 
-        return $this->userRepository->findById($updateUserData->id);
+        return $this->userRepository->findByIdAndAccountId($updateUserData->id, $updateUserData->account_id);
     }
 
     private function isChangingPassword(UpdateMeDTO $updateUserData): bool
@@ -96,7 +83,6 @@ class UpdateMeHandler
     {
         $existingUser = $this->userRepository->findFirstWhere([
             'id' => $updateUserData->id,
-            'account_id' => $updateUserData->account_id,
         ]);
 
         if ($existingUser === null) {

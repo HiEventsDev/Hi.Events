@@ -28,7 +28,7 @@ class CreateEventAction extends BaseAction
         $eventData = array_merge(
             $request->validated(),
             [
-                'account_id' => $authorisedUser->getAccountId(),
+                'account_id' => $this->getAuthenticatedAccountId(),
                 'user_id' => $authorisedUser->getId(),
             ]
         );

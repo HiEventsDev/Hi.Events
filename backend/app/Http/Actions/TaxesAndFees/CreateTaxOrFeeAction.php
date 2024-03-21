@@ -30,7 +30,7 @@ class CreateTaxOrFeeAction extends BaseAction
 
         try {
             $payload = array_merge($request->validated(), [
-                'account_id' => $this->getAuthenticatedUser()->getAccountId(),
+                'account_id' => $this->getAuthenticatedAccountId(),
             ]);
 
             $tax = $this->taxHandler->handle(UpsertTaxDTO::fromArray($payload));

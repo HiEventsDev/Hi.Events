@@ -1,4 +1,4 @@
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {useGetMe} from "../../../../queries/useGetMe.ts";
 import {useConfirmEmailChange} from "../../../../mutations/useConfirmEmailChange.ts";
 import {Anchor, Button} from "@mantine/core";
@@ -13,8 +13,7 @@ const MessageCard = ({message, linkText, linkHref}: { message: string, linkText:
 );
 
 export const ConfirmEmailChange = () => {
-    const searchParams = new URLSearchParams(window.location.search);
-    const token = searchParams.get('token');
+    const {token} = useParams();
     const {data: userData, isFetched} = useGetMe();
     const navigate = useNavigate();
     const {mutate} = useConfirmEmailChange();

@@ -2,31 +2,26 @@
 
 namespace HiEvents\Http\Actions\Auth;
 
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Cookie;
 use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Resources\Auth\AuthenticatedResponseResource;
+use HiEvents\Services\Handlers\Auth\DTO\AuthenicatedResponseDTO;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cookie;
 
 abstract class BaseAuthAction extends BaseAction
 {
-    protected function respondWithToken(string $token): JsonResponse
+    protected function respondWithToken(?string $token, Collection $accounts): JsonResponse
     {
         $user = $this->getAuthenticatedUser();
 
-        return $this
-            ->jsonResponse(
-                [
-                    'token' => $token,
-                    'token_type' => 'bearer',
-                    'expires_in' => auth()->factory()->getTTL() * 60,
-                    'user' => [
-                        'id' => $user->getId(),
-                        'account_id' => $user->getAccountId(),
-                        'first_name' => $user->getFirstName(),
-                        'last_name' => $user->getLastName(),
-                        'email' => $user->getEmail()
-                    ]
-                ]
-            )->cookie(
+        return $this->jsonResponse(new AuthenticatedResponseResource(new AuthenicatedResponseDTO(
+            token: $token,
+            expiresIn: auth()->factory()->getTTL() * 60,
+            accounts: $accounts,
+            user: $user,
+        )))
+            ->cookie(
                 Cookie::make(
                     name: 'token',
                     value: $token,

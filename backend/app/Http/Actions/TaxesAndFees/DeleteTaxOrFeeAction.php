@@ -29,7 +29,7 @@ class DeleteTaxOrFeeAction extends BaseAction
 
         $this->deleteTaxHandler->handle(new DeleteTaxDTO(
             taxId: $taxOrFeeId,
-            accountId: $this->getAuthenticatedUser()->getAccountId(),
+            accountId: $this->getAuthenticatedAccountId(),
         ));
 
         return $this->deletedResponse();

@@ -20,7 +20,6 @@ export const GlobalMenu = () => {
             label: t`Account Settings`,
             icon: IconSettingsCog,
             link: `/account/settings`,
-            adminOnly: true,
         },
         {
             label: t`About hi.events`,

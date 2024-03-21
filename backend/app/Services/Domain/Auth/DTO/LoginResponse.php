@@ -2,14 +2,17 @@
 
 namespace HiEvents\Services\Domain\Auth\DTO;
 
-use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\DataTransferObjects\BaseDTO;
+use HiEvents\DomainObjects\UserDomainObject;
+use Illuminate\Support\Collection;
 
 class LoginResponse extends BaseDTO
 {
     public function __construct(
-        public readonly string           $token,
+        public Collection                $accounts,
+        public readonly ?string          $token,
         public readonly UserDomainObject $user,
+        public readonly ?int             $accountId = null,
     )
     {
     }

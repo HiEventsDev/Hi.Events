@@ -39,10 +39,7 @@ class ConfirmEmailAddressEmail extends BaseMail
             markdown: 'emails.user.confirm-email-address',
             with: [
                 'user' => $this->userDomainObject,
-                'link' => Url::getFrontEndUrlFromConfig(Url::CONFIRM_EMAIL_ADDRESS, [
-                        'token' => $this->token
-                    ]
-                ),
+                'link' => sprintf(Url::getFrontEndUrlFromConfig(Url::CONFIRM_EMAIL_ADDRESS), $this->token),
             ]
         );
     }

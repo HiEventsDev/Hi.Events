@@ -36,7 +36,7 @@ class UpdateEventAction extends BaseAction
                         $request->validated(),
                         [
                             'id' => $eventId,
-                            'account_id' => $authorisedUser->getAccountId(),
+                            'account_id' => $this->getAuthenticatedAccountId(),
                             'user_id' => $authorisedUser->getId(),
                         ]
                     )

@@ -34,7 +34,7 @@ class EditTicketAction extends BaseAction
 
         $request->merge([
             'event_id' => $eventId,
-            'account_id' => $this->getAuthenticatedUser()->getAccountId(),
+            'account_id' => $this->getAuthenticatedAccountId(),
             'ticket_id' => $ticketId,
         ]);
 

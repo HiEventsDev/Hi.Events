@@ -2,11 +2,12 @@
 
 namespace HiEvents\Http\Actions\Users;
 
-use Illuminate\Http\JsonResponse;
 use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Resources\User\UserResource;
 use HiEvents\Services\Handlers\User\CancelEmailChangeHandler;
+use HiEvents\Services\Handlers\User\DTO\CancelEmailChangeDTO;
+use Illuminate\Http\JsonResponse;
 
 class CancelEmailChangeAction extends BaseAction
 {
@@ -21,7 +22,12 @@ class CancelEmailChangeAction extends BaseAction
     {
         $this->isActionAuthorized($userId, UserDomainObject::class);
 
-        $user = $this->cancelEmailChangeHandler->handle($this->getAuthenticatedUser()->getId());
+        $user = $this->cancelEmailChangeHandler->handle(
+            new CancelEmailChangeDTO(
+                userId: $userId,
+                accountId: $this->getAuthenticatedAccountId(),
+            )
+        );
 
         return $this->resourceResponse(UserResource::class, $user);
     }

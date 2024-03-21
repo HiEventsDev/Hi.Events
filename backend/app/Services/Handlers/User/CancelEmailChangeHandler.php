@@ -2,9 +2,10 @@
 
 namespace HiEvents\Services\Handlers\User;
 
-use Psr\Log\LoggerInterface;
 use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
+use HiEvents\Services\Handlers\User\DTO\CancelEmailChangeDTO;
+use Psr\Log\LoggerInterface;
 
 class CancelEmailChangeHandler
 {
@@ -21,21 +22,22 @@ class CancelEmailChangeHandler
         $this->userRepository = $userRepository;
     }
 
-    public function handle(int $userId): UserDomainObject
+    public function handle(CancelEmailChangeDTO $data): UserDomainObject
     {
         $this->userRepository->updateWhere(
             attributes: [
                 'pending_email' => null,
             ],
             where: [
-                'id' => $userId,
+                'id' => $data->userId,
             ]
         );
 
         $this->logger->info('Cancelled email change', [
-            'user_id' => $userId
+            'user_id' => $data->userId,
+            'account_id' => $data->accountId,
         ]);
 
-        return $this->userRepository->findById($userId);
+        return $this->userRepository->findByIdAndAccountId($data->userId, $data->accountId);
     }
 }

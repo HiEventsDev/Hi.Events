@@ -115,7 +115,7 @@ $router->prefix('/auth')->group(
 $router->middleware(['auth:api'])->group(
     function (Router $router): void {
         $router->get('/auth/logout', LogoutAction::class);
-        $router->get('/auth/refresh', RefreshTokenAction::class);
+        $router->post('/auth/refresh', RefreshTokenAction::class);
 
         $router->get('/users/me', GetMeAction::class);
         $router->put('/users/me', UpdateMeAction::class);

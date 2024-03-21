@@ -36,7 +36,7 @@ class GetEventsAction extends BaseAction
             ))
             ->findEvents(
                 where: [
-                    'account_id' => $this->getAuthenticatedUser()->getAccountId(),
+                    'account_id' => $this->getAuthenticatedAccountId()
                 ],
                 params: QueryParamsDTO::fromArray($request->query->all())
             );

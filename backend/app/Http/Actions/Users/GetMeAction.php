@@ -10,6 +10,9 @@ class GetMeAction extends BaseAuthAction
 {
     public function __invoke(): JsonResponse
     {
-        return $this->resourceResponse(UserResource::class, $this->getAuthenticatedUser());
+        return $this->resourceResponse(
+            resource: UserResource::class,
+            data: $this->getAuthenticatedUser(),
+        );
     }
 }

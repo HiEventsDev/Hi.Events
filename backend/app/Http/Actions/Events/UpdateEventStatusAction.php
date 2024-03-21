@@ -28,7 +28,7 @@ class UpdateEventStatusAction extends BaseAction
             $updatedEvent = $this->updateEventStatusHandler->handle(UpdateEventStatusDTO::fromArray([
                 'status' => $request->input('status'),
                 'eventId' => $eventId,
-                'accountId' => $this->getAuthenticatedUser()->getAccountId(),
+                'accountId' => $this->getAuthenticatedAccountId(),
             ]));
         } catch (AccountNotVerifiedException $e) {
             return $this->errorResponse($e->getMessage(), ResponseCodes::HTTP_UNPROCESSABLE_ENTITY);

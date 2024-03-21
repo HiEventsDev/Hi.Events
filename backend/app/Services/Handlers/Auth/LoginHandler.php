@@ -2,21 +2,18 @@
 
 namespace HiEvents\Services\Handlers\Auth;
 
-use HiEvents\Repository\Interfaces\UserRepositoryInterface;
+use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
 use HiEvents\Services\Domain\Auth\DTO\LoginResponse;
 use HiEvents\Services\Domain\Auth\LoginService;
 use HiEvents\Services\Handlers\Auth\DTO\LoginCredentialsDTO;
 
-class LoginHandler
+readonly class LoginHandler
 {
-    private UserRepositoryInterface $userRepository;
-
-    private LoginService $loginService;
-
-    public function __construct(LoginService $loginService, UserRepositoryInterface $userRepository)
+    public function __construct(
+        private LoginService                   $loginService,
+        private AccountUserRepositoryInterface $accountUserRepository,
+    )
     {
-        $this->userRepository = $userRepository;
-        $this->loginService = $loginService;
     }
 
     public function handle(LoginCredentialsDTO $loginCredentials): LoginResponse
@@ -24,16 +21,20 @@ class LoginHandler
         $loginResponse = $this->loginService->authenticate(
             email: $loginCredentials->email,
             password: $loginCredentials->password,
+            requestedAccountId: $loginCredentials->accountId,
         );
 
-        $this->userRepository->updateWhere(
-            attributes: [
-                'last_login_at' => now()
-            ],
-            where: [
-                'id' => $loginResponse->user->getId(),
-            ],
-        );
+        if ($loginResponse->accountId !== null) {
+            $this->accountUserRepository->updateWhere(
+                attributes: [
+                    'last_login_at' => now(),
+                ],
+                where: [
+                    'user_id' => $loginResponse->user->getId(),
+                    'account_id' => $loginResponse->accountId,
+                ],
+            );
+        }
 
         return $loginResponse;
     }

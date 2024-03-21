@@ -6,23 +6,27 @@ use HiEvents\DomainObjects\AccountDomainObject;
 use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
+use HiEvents\DomainObjects\Status\UserStatus;
 use HiEvents\DomainObjects\TaxAndFeesDomainObject;
 use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Exceptions\UnauthorizedException;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
+use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
 use HiEvents\Repository\Interfaces\TaxAndFeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
+use Illuminate\Auth\AuthManager;
 use Illuminate\Foundation\Application;
 
-class IsAuthorizedService
+readonly class IsAuthorizedService
 {
-    private Application $app;
-
-    public function __construct(Application $app)
+    public function __construct(
+        private Application                    $app,
+        private AccountUserRepositoryInterface $accountUserRepository,
+        private AuthManager                    $auth,
+    )
     {
-        $this->app = $app;
     }
 
     /**
@@ -31,13 +35,20 @@ class IsAuthorizedService
      */
     public function validateUserRole(Role $minimumRole, UserDomainObject $authUser): void
     {
-        if ($minimumRole === Role::ADMIN && $authUser->getRole() !== Role::ADMIN->name) {
+        if ($minimumRole === Role::ADMIN && $authUser->getCurrentAccountUser()->getRole() !== Role::ADMIN->name) {
             throw new UnauthorizedException(__('You are not authorized to perform this action.'));
         }
     }
 
-    public function isActionAuthorized(int $entityId, string $entityType, UserDomainObject $authUser, Role $minimumRole): void
+    public function isActionAuthorized(
+        int              $entityId,
+        string           $entityType,
+        UserDomainObject $authUser,
+        int              $authAccountId,
+        Role             $minimumRole
+    ): void
     {
+        $this->validateUserStatus($authUser);
         $this->validateUserRole($minimumRole, $authUser);
 
         $repository = match ($entityType) {
@@ -52,10 +63,10 @@ class IsAuthorizedService
 
         $result = match ($entityType) {
             EventDomainObject::class,
-            OrganizerDomainObject::class => $entity?->getAccountId() === $authUser->getAccountId(),
-            AccountDomainObject::class => $entity?->getId() === $authUser->getAccountId(),
-            UserDomainObject::class => $this->validateUserUpdate($entity, $authUser),
-            TaxAndFeesDomainObject::class => $this->validateTax($entity, $authUser),
+            OrganizerDomainObject::class => $entity?->getAccountId() === $authAccountId,
+            AccountDomainObject::class => $entity?->getId() === $authAccountId,
+            UserDomainObject::class => $this->validateUserUpdate($entity, $authAccountId),
+            TaxAndFeesDomainObject::class => $this->validateTax($entity, $authAccountId),
         };
 
         if (!$result) {
@@ -63,29 +74,40 @@ class IsAuthorizedService
         }
     }
 
-    private function validateUserUpdate(?UserDomainObject $entity, UserDomainObject $authUser): bool
+    private function validateUserUpdate(?UserDomainObject $user, int $authAccountId): bool
     {
-        if ($entity === null) {
+        if ($user === null) {
             return false;
         }
 
-        if ($entity->getAccountId() === $authUser->getAccountId()) {
+        $accountUser = $this->accountUserRepository->findFirstWhere([
+            'account_id' => $authAccountId,
+            'user_id' => $user->getId(),
+        ]);
+
+        return $accountUser !== null;
+    }
+
+    private function validateTax(?TaxAndFeesDomainObject $taxOrFee, int $authAccountId): bool
+    {
+        if ($taxOrFee === null) {
+            return false;
+        }
+
+        if ($taxOrFee->getAccountId() === $authAccountId) {
             return true;
         }
 
         return false;
     }
 
-    private function validateTax(?TaxAndFeesDomainObject $entity, UserDomainObject $authUser): bool
+    private function validateUserStatus(UserDomainObject $authUser): void
     {
-        if ($entity === null) {
-            return false;
+        if ($authUser->getCurrentAccountUser()?->getStatus() !== UserStatus::ACTIVE->name) {
+            // Log the user out if their account is not active. This can happen if a user is
+            // deactivated while they are logged in.
+            $this->auth->logout();
+            throw new UnauthorizedException(__('Your account is not active.'));
         }
-
-        if ($entity->getAccountId() === $authUser->getAccountId()) {
-            return true;
-        }
-
-        return false;
     }
 }

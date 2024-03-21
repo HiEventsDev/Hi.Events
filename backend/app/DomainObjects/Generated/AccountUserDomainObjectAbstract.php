@@ -12,38 +12,41 @@ abstract class AccountUserDomainObjectAbstract extends \HiEvents\DomainObjects\A
     final public const PLURAL_NAME = 'account_users';
     final public const ID = 'id';
     final public const ACCOUNT_ID = 'account_id';
-    final public const FIRST_NAME = 'first_name';
-    final public const LAST_NAME = 'last_name';
-    final public const EMAIL = 'email';
-    final public const PASSWORD = 'password';
+    final public const USER_ID = 'user_id';
+    final public const INVITED_BY_USER_ID = 'invited_by_user_id';
+    final public const ROLE = 'role';
     final public const CREATED_AT = 'created_at';
-    final public const UPDATED_AT = 'updated_at';
     final public const DELETED_AT = 'deleted_at';
+    final public const UPDATED_AT = 'updated_at';
+    final public const IS_ACCOUNT_OWNER = 'is_account_owner';
+    final public const LAST_LOGIN_AT = 'last_login_at';
     final public const STATUS = 'status';
 
     protected int $id;
     protected int $account_id;
-    protected string $first_name;
-    protected string $last_name;
-    protected string $email;
-    protected string $password;
-    protected string $created_at;
-    protected string $updated_at;
-    protected string $deleted_at;
-    protected ?int $status = null;
+    protected int $user_id;
+    protected ?int $invited_by_user_id = null;
+    protected ?string $role = null;
+    protected ?string $created_at = 'now()';
+    protected ?string $deleted_at = null;
+    protected ?string $updated_at = null;
+    protected bool $is_account_owner = false;
+    protected ?string $last_login_at = null;
+    protected string $status = 'INVITED';
 
     public function toArray(): array
     {
         return [
                     'id' => $this->id ?? null,
                     'account_id' => $this->account_id ?? null,
-                    'first_name' => $this->first_name ?? null,
-                    'last_name' => $this->last_name ?? null,
-                    'email' => $this->email ?? null,
-                    'password' => $this->password ?? null,
+                    'user_id' => $this->user_id ?? null,
+                    'invited_by_user_id' => $this->invited_by_user_id ?? null,
+                    'role' => $this->role ?? null,
                     'created_at' => $this->created_at ?? null,
-                    'updated_at' => $this->updated_at ?? null,
                     'deleted_at' => $this->deleted_at ?? null,
+                    'updated_at' => $this->updated_at ?? null,
+                    'is_account_owner' => $this->is_account_owner ?? null,
+                    'last_login_at' => $this->last_login_at ?? null,
                     'status' => $this->status ?? null,
                 ];
     }
@@ -70,90 +73,101 @@ abstract class AccountUserDomainObjectAbstract extends \HiEvents\DomainObjects\A
         return $this->account_id;
     }
 
-    public function setFirstName(string $first_name): self
+    public function setUserId(int $user_id): self
     {
-        $this->first_name = $first_name;
+        $this->user_id = $user_id;
         return $this;
     }
 
-    public function getFirstName(): string
+    public function getUserId(): int
     {
-        return $this->first_name;
+        return $this->user_id;
     }
 
-    public function setLastName(string $last_name): self
+    public function setInvitedByUserId(?int $invited_by_user_id): self
     {
-        $this->last_name = $last_name;
+        $this->invited_by_user_id = $invited_by_user_id;
         return $this;
     }
 
-    public function getLastName(): string
+    public function getInvitedByUserId(): ?int
     {
-        return $this->last_name;
+        return $this->invited_by_user_id;
     }
 
-    public function setEmail(string $email): self
+    public function setRole(?string $role): self
     {
-        $this->email = $email;
+        $this->role = $role;
         return $this;
     }
 
-    public function getEmail(): string
+    public function getRole(): ?string
     {
-        return $this->email;
+        return $this->role;
     }
 
-    public function setPassword(string $password): self
-    {
-        $this->password = $password;
-        return $this;
-    }
-
-    public function getPassword(): string
-    {
-        return $this->password;
-    }
-
-    public function setCreatedAt(string $created_at): self
+    public function setCreatedAt(?string $created_at): self
     {
         $this->created_at = $created_at;
         return $this;
     }
 
-    public function getCreatedAt(): string
+    public function getCreatedAt(): ?string
     {
         return $this->created_at;
     }
 
-    public function setUpdatedAt(string $updated_at): self
-    {
-        $this->updated_at = $updated_at;
-        return $this;
-    }
-
-    public function getUpdatedAt(): string
-    {
-        return $this->updated_at;
-    }
-
-    public function setDeletedAt(string $deleted_at): self
+    public function setDeletedAt(?string $deleted_at): self
     {
         $this->deleted_at = $deleted_at;
         return $this;
     }
 
-    public function getDeletedAt(): string
+    public function getDeletedAt(): ?string
     {
         return $this->deleted_at;
     }
 
-    public function setStatus(?int $status): self
+    public function setUpdatedAt(?string $updated_at): self
+    {
+        $this->updated_at = $updated_at;
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?string
+    {
+        return $this->updated_at;
+    }
+
+    public function setIsAccountOwner(bool $is_account_owner): self
+    {
+        $this->is_account_owner = $is_account_owner;
+        return $this;
+    }
+
+    public function getIsAccountOwner(): bool
+    {
+        return $this->is_account_owner;
+    }
+
+    public function setLastLoginAt(?string $last_login_at): self
+    {
+        $this->last_login_at = $last_login_at;
+        return $this;
+    }
+
+    public function getLastLoginAt(): ?string
+    {
+        return $this->last_login_at;
+    }
+
+    public function setStatus(string $status): self
     {
         $this->status = $status;
         return $this;
     }
 
-    public function getStatus(): ?int
+    public function getStatus(): string
     {
         return $this->status;
     }

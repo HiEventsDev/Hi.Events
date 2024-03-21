@@ -23,7 +23,7 @@ class GetAccountAction extends BaseAction
     {
         $this->minimumAllowedRole(Role::ORGANIZER);
 
-        $account = $this->accountRepository->findById($this->getAuthenticatedUser()->getAccountId());
+        $account = $this->accountRepository->findById($this->getAuthenticatedAccountId());
 
         return $this->resourceResponse(AccountResource::class, $account);
     }

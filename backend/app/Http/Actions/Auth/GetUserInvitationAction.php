@@ -12,7 +12,7 @@ use HiEvents\Services\Infrastructure\Encyption\Exception\EncryptedPayloadExpired
 use Illuminate\Http\JsonResponse;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class GetUserInvitationAction extends BaseAction
 {
@@ -27,25 +27,29 @@ class GetUserInvitationAction extends BaseAction
     public function __invoke(string $inviteToken): JsonResponse
     {
         try {
-            ['user_id' => $userId, 'email' => $email] = $this->encryptedPayloadService->decryptPayload($inviteToken);
+            [
+                'user_id' => $userId,
+                'account_id' => $accountId,
+            ] = $this->encryptedPayloadService->decryptPayload($inviteToken);
+
         } catch (EncryptedPayloadExpiredException) {
             throw new HttpException(ResponseCodes::HTTP_GONE, __('The invitation has expired'));
         } catch (DecryptionFailedException) {
             throw new HttpException(ResponseCodes::HTTP_BAD_REQUEST, __('The invitation is invalid'));
         }
 
-        $user = $this->userRepository->findFirstWhere([
-            'id' => $userId,
-            'email' => $email,
-        ]);
-
-        if (!$user) {
+        try {
+            $user = $this->userRepository->findByIdAndAccountId($userId, $accountId);
+        } catch (ResourceNotFoundException) {
             $this->logger->info(__('Invitation valid, but user not found'), [
                 'user_id' => $userId,
-                'email' => $email,
+                'account_id' => $accountId,
             ]);
 
-            throw new NotFoundHttpException();
+            throw new HttpException(
+                statusCode: ResponseCodes::HTTP_NOT_FOUND,
+                message: __('No user found for this invitation. The invitation may have been revoked.'),
+            );
         }
 
         return $this->resourceResponse(UserResource::class, $user);

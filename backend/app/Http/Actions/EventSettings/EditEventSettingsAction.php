@@ -26,7 +26,7 @@ class EditEventSettingsAction extends BaseAction
             $request->validated(),
             [
                 'event_id' => $eventId,
-                'account_id' => $this->getAuthenticatedUser()->getAccountId(),
+                'account_id' => $this->getAuthenticatedAccountId(),
             ],
         );
 

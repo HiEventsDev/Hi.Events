@@ -19,7 +19,7 @@ class GetOrganizersAction extends BaseAction
         $organizers = $this->organizerRepository
             ->loadRelation(ImageDomainObject::class)
             ->findwhere([
-                'account_id' => $this->getAuthenticatedUser()->getAccountId()
+                'account_id' => $this->getAuthenticatedAccountId(),
             ]);
 
         return $this->resourceResponse(

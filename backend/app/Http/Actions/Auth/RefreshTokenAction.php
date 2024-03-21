@@ -8,6 +8,6 @@ class RefreshTokenAction extends BaseAuthAction
 {
     public function __invoke(): JsonResponse
     {
-        return $this->respondWithToken(auth()->refresh());
+        return $this->respondWithToken(auth()->refresh(), auth()->user()->accounts);
     }
 }

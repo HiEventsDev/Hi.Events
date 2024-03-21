@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Users;
 
-use Illuminate\Http\JsonResponse;
+use HiEvents\DomainObjects\AccountUserDomainObject;
 use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Resources\User\UserResource;
+use Illuminate\Http\JsonResponse;
 
 class GetUsersAction extends BaseAction
 {
@@ -25,7 +27,9 @@ class GetUsersAction extends BaseAction
 
         return $this->resourceResponse(
             UserResource::class,
-            $this->userRepository->findUsersByAccountId($this->getAuthenticatedUser()->getAccountId()),
+            $this->userRepository
+                ->loadRelation(new Relationship(domainObject: AccountUserDomainObject::class, name: 'currentAccountUser'))
+                ->findUsersByAccountId($this->getAuthenticatedAccountId()),
         );
     }
 }

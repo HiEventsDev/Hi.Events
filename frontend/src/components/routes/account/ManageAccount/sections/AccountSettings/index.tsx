@@ -13,6 +13,7 @@ import {showSuccess} from "../../../../../../utilites/notifications.tsx";
 import {useFormErrorResponseHandler} from "../../../../../../hooks/useFormErrorResponseHandler.ts";
 import {Account} from "../../../../../../types.ts";
 import {LoadingMask} from "../../../../../common/LoadingMask";
+import {useIsCurrentUserAdmin} from "../../../../../../hooks/useIsCurrentUserAdmin.ts";
 
 const AccountSettings = () => {
     const form = useForm({
@@ -26,6 +27,7 @@ const AccountSettings = () => {
     const accountQuery = useGetAccount();
     const updateMutation = useUpdateAccount();
     const formErrorHandler = useFormErrorResponseHandler();
+    const isUserAdmin = useIsCurrentUserAdmin();
 
     useEffect(() => {
         if (accountQuery.data) {
@@ -54,7 +56,7 @@ const AccountSettings = () => {
             />
             <Card className={classes.tabContent}>
                 <LoadingMask/>
-                <fieldset disabled={updateMutation.isLoading || accountQuery.isLoading}>
+                <fieldset disabled={updateMutation.isLoading || accountQuery.isLoading || !isUserAdmin}>
                     <form onSubmit={form.onSubmit(handleSubmit)}>
                         <TextInput
                             {...form.getInputProps('name')}
@@ -89,9 +91,13 @@ const AccountSettings = () => {
                             placeholder={t`UTC`}
                             description={t`The default timezone for your events.`}
                         />
-                        <div className={classes.footer}>
-                            <Button disabled={updateMutation.isLoading} type={'submit'} fullWidth>{t`Save Settings`}</Button>
-                        </div>
+
+                        {isUserAdmin && (
+                            <div className={classes.footer}>
+                                <Button disabled={updateMutation.isLoading} type={'submit'}
+                                        fullWidth>{t`Save Settings`}</Button>
+                            </div>
+                        )}
                     </form>
                 </fieldset>
             </Card>

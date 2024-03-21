@@ -28,12 +28,12 @@ class SendUserInvitationService
         $this->config = $config;
     }
 
-    public function sendInvitation(UserDomainObject $invitedUser): void
+    public function sendInvitation(UserDomainObject $invitedUser, int $accountId): void
     {
         $invitedPayload = $this->encryptedPayloadService->encryptPayload(
             payload: [
                 'user_id' => $invitedUser->getId(),
-                'email' => $invitedUser->getEmail(),
+                'account_id' => $accountId,
             ],
             expiry: now()->addWeek(),
         );

@@ -21,7 +21,7 @@ class CreateOrganizerAction extends BaseAction
         $organizerData = array_merge(
             $request->validated(),
             [
-                'account_id' => $this->getAuthenticatedUser()->getAccountId()
+                'account_id' => $this->getAuthenticatedAccountId(),
             ]
         );
 

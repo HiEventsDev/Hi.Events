@@ -2,12 +2,12 @@
 
 namespace HiEvents\Http\Actions\Users;
 
-use Illuminate\Http\Response;
 use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\Status\UserStatus;
 use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
+use Illuminate\Http\Response;
 
 class DeactivateUsersAction extends BaseAction
 {
@@ -30,7 +30,7 @@ class DeactivateUsersAction extends BaseAction
             ],
             where: [
                 'id' => $authUser->getId(),
-                'account_id' => $authUser->getAccountId(),
+                'account_id' => $this->getAuthenticatedAccountId(),
             ]
         );
 

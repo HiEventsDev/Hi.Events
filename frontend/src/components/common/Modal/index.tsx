@@ -14,14 +14,14 @@ export const Modal = (props: MantineModalProps & ModalProps) => {
                 blur: 3,
             }}
             size={'xl'}
-            withCloseButton={false}
+            withCloseButton={true}
         >
             {props.heading && (
                 <MantineModal.Header>
                     <MantineModal.Title>
                         <Title order={2}>{props.heading}</Title>
                     </MantineModal.Title>
-                    <MantineModal.CloseButton/>
+                    {props.withCloseButton && <MantineModal.CloseButton/>}
                 </MantineModal.Header>
             )}
 

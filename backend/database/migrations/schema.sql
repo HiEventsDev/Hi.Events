@@ -1,19 +1,3 @@
-create sequence tax_and_fee_types_account_id_seq;
-
-create sequence tax_and_fees_id_seq;
-
-create sequence ticket_tax_and_fees_id_seq;
-
-create sequence taxes_and_fees_id_seq;
-
-create sequence ticket_taxes_and_fees_id_seq
-    as integer;
-
-create sequence taxes_and_fees_id_seq1;
-
-create sequence ticket_taxes_and_fees_id_seq1
-    as integer;
-
 create table if not exists migrations
 (
     id        serial,
@@ -101,18 +85,6 @@ create table if not exists password_resets
     user_agent varchar
 );
 
-create table if not exists attributes
-(
-    id         bigint generated always as identity,
-    name       varchar(50) not null,
-    value      text        not null,
-    type       varchar(20) not null,
-    created_at timestamp,
-    updated_at timestamp,
-    deleted_at timestamp,
-    primary key (id)
-);
-
 create table if not exists timezones
 (
     id         bigint generated always as identity,
@@ -136,37 +108,19 @@ create table if not exists roles
 create table if not exists users
 (
     id                bigint generated always as identity,
-    email             varchar(255)          not null,
+    email             varchar(255) not null,
     email_verified_at timestamp(0),
-    password          varchar(255)          not null,
+    password          varchar(255) not null,
     remember_token    varchar(100),
     created_at        timestamp(0),
     updated_at        timestamp(0),
     deleted_at        timestamp,
-    account_id        integer               not null,
-    first_name        varchar               not null,
+    first_name        varchar      not null,
     last_name         varchar,
     pending_email     varchar,
-    timezone          varchar               not null,
-    role_id           bigint,
-    invited_by        bigint,
-    status            varchar(40)           not null,
-    role              varchar(20)           not null,
-    last_login_at     timestamp,
-    is_account_owner  boolean default false not null,
-    primary key (id),
-    constraint users_email_unique
-        unique (email),
-    constraint users_accounts_id_fk
-        foreign key (account_id) references accounts,
-    constraint users_roles_id_fk
-        foreign key (role_id) references roles,
-    constraint users_users_id_fk
-        foreign key (invited_by) references users
+    timezone          varchar      not null,
+    primary key (id)
 );
-
-create unique index if not exists users_email_uindex
-    on users (email);
 
 create table if not exists event_logs
 (
@@ -210,10 +164,6 @@ create table if not exists taxes_and_fees
 );
 
 comment on column taxes_and_fees.is_default is 'Whether to apply to all new tickets automatically';
-
-alter sequence tax_and_fee_types_account_id_seq owned by taxes_and_fees.account_id;
-
-alter sequence tax_and_fees_id_seq owned by taxes_and_fees.id;
 
 create index if not exists tax_and_fees_account_id_index
     on taxes_and_fees (account_id);
@@ -550,8 +500,6 @@ create table if not exists ticket_taxes_and_fees
             on delete cascade
 );
 
-alter sequence ticket_tax_and_fees_id_seq owned by ticket_taxes_and_fees.id;
-
 create index if not exists ticket_tax_and_fees_tax_and_fee_id_index
     on ticket_taxes_and_fees (tax_and_fee_id);
 
@@ -720,12 +668,12 @@ create table if not exists event_settings
     continue_button_text            varchar(100),
     email_footer_message            text,
     reply_to_email                  varchar(255),
-    event_id                        bigint                not null,
-    created_at                      timestamp             not null,
-    updated_at                      timestamp             not null,
+    event_id                        bigint                                              not null,
+    created_at                      timestamp                                           not null,
+    updated_at                      timestamp                                           not null,
     deleted_at                      timestamp,
-    require_attendee_details        boolean default true  not null,
-    order_timeout_in_minutes        integer default 15    not null,
+    require_attendee_details        boolean      default true                           not null,
+    order_timeout_in_minutes        integer      default 15                             not null,
     website_url                     varchar(400),
     maps_url                        varchar(400),
     homepage_background_color       varchar(20),
@@ -735,39 +683,59 @@ create table if not exists event_settings
     homepage_secondary_color        varchar(20),
     location_details                jsonb,
     online_event_connection_details text,
-    is_online_event                 boolean default false not null,
-    allow_search_engine_indexing    boolean default true  not null,
+    is_online_event                 boolean      default false                          not null,
+    allow_search_engine_indexing    boolean      default true                           not null,
     seo_title                       varchar(255),
     seo_description                 varchar(255),
     social_media_handles            jsonb,
     show_social_media_handles       boolean,
     seo_keywords                    varchar(255),
-    notify_organizer_of_new_orders  boolean default true  not null,
+    notify_organizer_of_new_orders  boolean      default true                           not null,
+    price_display_mode              varchar(255) default 'INCLUSIVE'::character varying not null,
     constraint event_settings_pk
         primary key (id),
     constraint event_settings_events_id_fk
         foreign key (event_id) references events
-            on delete cascade
+            on delete cascade,
+    constraint event_settings_price_display_mode_check
+        check ((price_display_mode)::text = ANY
+               ((ARRAY ['INCLUSIVE'::character varying, 'EXCLUSIVE'::character varying])::text[]))
 );
 
 create index if not exists event_settings_event_id_index
     on event_settings (event_id);
 
-create view question_and_answer_views
-        (question_id, event_id, belongs_to, question_type, first_name, last_name, attendee_id, order_id, title,
-         answer) as
-SELECT q.id AS question_id,
-       q.event_id,
-       q.belongs_to,
-       q.type AS question_type,
-       a.first_name,
-       a.last_name,
-       a.id AS attendee_id,
-       qa.order_id,
-       q.title,
-       qa.answer
-FROM question_answers qa
-         LEFT JOIN attendees a ON a.id = qa.attendee_id
-         JOIN orders o ON qa.order_id = o.id
-         JOIN questions q ON q.id = qa.question_id;
+create table if not exists account_users
+(
+    id                 bigint generated always as identity,
+    account_id         bigint                                           not null,
+    user_id            bigint                                           not null,
+    role               varchar(100),
+    created_at         timestamp   default now(),
+    deleted_at         timestamp,
+    updated_at         timestamp,
+    is_account_owner   boolean     default false                        not null,
+    invited_by_user_id bigint,
+    last_login_at      timestamp,
+    status             varchar(40) default 'INVITED'::character varying not null,
+    primary key (id),
+    unique (account_id, user_id, role),
+    constraint fk_account_users_accounts
+        foreign key (account_id) references accounts
+            on delete cascade,
+    constraint fk_account_users_users
+        foreign key (user_id) references users
+            on delete cascade,
+    constraint account_users_users_id_fk
+        foreign key (invited_by_user_id) references users
+);
+
+create index if not exists idx_account_users_account_id
+    on account_users (account_id);
+
+create index if not exists idx_account_users_user_id
+    on account_users (user_id);
+
+create index if not exists idx_account_users_role
+    on account_users (role);
 

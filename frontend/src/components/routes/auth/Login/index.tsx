@@ -3,25 +3,40 @@ import {NavLink} from "react-router-dom";
 import {useMutation} from "@tanstack/react-query";
 import {notifications} from '@mantine/notifications';
 import {authClient} from "../../../../api/auth.client.ts";
-import {LoginData} from "../../../../types.ts";
+import {LoginData, LoginResponse} from "../../../../types.ts";
 import {useForm} from "@mantine/form";
 import {redirectToPreviousUrl} from "../../../../api/client.ts";
 import {Card} from "../../../common/Card";
 import classes from "./Login.module.scss";
 import {t, Trans} from "@lingui/macro";
+import {useState} from "react";
+import {ChooseAccountModal} from "../../../modals/ChooseAccountModal";
 
 const Login = () => {
     const form = useForm({
         initialValues: {
             email: '',
             password: '',
+            account_id: '',
         }
     });
+    const [showChooseAccount, setShowChooseAccount] = useState(false);
 
-    const {mutate: loginUser, isLoading} = useMutation(
+    const {mutate: loginUser, isLoading, data} = useMutation(
         (userData: LoginData) => authClient.login(userData),
         {
-            onSuccess: () => redirectToPreviousUrl(),
+            onSuccess: (response: LoginResponse) => {
+                console.log(response.token, response);
+                if (response.token) {
+                    redirectToPreviousUrl();
+                    return;
+                }
+
+                if (response.accounts.length > 1) {
+                    setShowChooseAccount(true);
+                    return;
+                }
+            },
             onError: () => {
                 notifications.show({
                     message: t`Please check your email and password and try again`,
@@ -57,6 +72,11 @@ const Login = () => {
                     </NavLink>
                 </Trans>
             </div>
+            {(showChooseAccount && data) && <ChooseAccountModal onAccountChosen={(accountId) => {
+                form.setFieldValue('account_id', accountId as string);
+                loginUser(form.values);
+            }
+            } accounts={data.accounts}/>}
         </>
     )
 }

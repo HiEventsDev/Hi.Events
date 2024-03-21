@@ -53,6 +53,7 @@ class CreateAccountAction extends BaseAuthAction
             $loginResponse = $this->loginHandler->handle(new LoginCredentialsDTO(
                 email: $accountData->getEmail(),
                 password: $request->validated('password'),
+                accountId: $accountData->getId(),
             ));
         } catch (UnauthorizedException $e) {
             return $this->errorResponse(

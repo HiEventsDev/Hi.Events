@@ -7,10 +7,13 @@ namespace HiEvents\Services\Handlers\Account;
 use HiEvents\DomainObjects\AccountDomainObject;
 use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\Status\UserStatus;
+use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Exceptions\EmailAlreadyExists;
 use HiEvents\Helper\IdHelper;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
+use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
+use HiEvents\Services\Domain\Account\AccountUserAssociationService;
 use HiEvents\Services\Domain\User\EmailConfirmationService;
 use HiEvents\Services\Handlers\Account\DTO\CreateAccountDTO;
 use Illuminate\Config\Repository;
@@ -22,12 +25,14 @@ use Throwable;
 readonly class CreateAccountHandler
 {
     public function __construct(
-        private UserRepositoryInterface    $userRepository,
-        private AccountRepositoryInterface $accountRepository,
-        private HashManager                $hashManager,
-        private DatabaseManager            $databaseManager,
-        private Repository                 $config,
-        private EmailConfirmationService   $emailConfirmationService,
+        private UserRepositoryInterface        $userRepository,
+        private AccountRepositoryInterface     $accountRepository,
+        private HashManager                    $hashManager,
+        private DatabaseManager                $databaseManager,
+        private Repository                     $config,
+        private EmailConfirmationService       $emailConfirmationService,
+        private AccountUserAssociationService  $accountUserAssociationService,
+        private AccountUserRepositoryInterface $accountUserRepository,
     )
     {
     }
@@ -48,25 +53,21 @@ readonly class CreateAccountHandler
                 'short_id' => IdHelper::randomPrefixedId(IdHelper::ACCOUNT_PREFIX),
             ]);
 
-            $existingUsers = $this->userRepository->findWhere([
-                'email' => strtolower($accountData->email),
-            ]);
-
-            if ($existingUsers->isNotEmpty()) {
-                throw new EmailAlreadyExists(__('This email address is already in use.'));
-            }
-
-            $user = $this->userRepository->create([
+            $user = $this->getExistingUser($accountData) ?? $this->userRepository->create([
                 'password' => $passwordHash,
-                'account_id' => $account->getId(),
                 'email' => strtolower($accountData->email),
                 'first_name' => $accountData->first_name,
                 'last_name' => $accountData->last_name,
                 'timezone' => $this->getTimezone($accountData),
-                'status' => UserStatus::ACTIVE->name,
-                'role' => Role::ADMIN->name,
-                'is_account_owner' => true,
             ]);
+
+            $this->accountUserAssociationService->associate(
+                user: $user,
+                account: $account,
+                role: Role::ADMIN,
+                status: UserStatus::ACTIVE,
+                isAccountOwner: true
+            );
 
             $this->emailConfirmationService->sendConfirmation($user);
 
@@ -98,5 +99,33 @@ readonly class CreateAccountHandler
         }
 
         return $defaultCurrency;
+    }
+
+    /**
+     * @throws EmailAlreadyExists
+     */
+    private function getExistingUser(CreateAccountDTO $accountData): ?UserDomainObject
+    {
+        $existingUser = $this->userRepository
+            ->findFirstWhere([
+                'email' => strtolower($accountData->email),
+            ]);
+
+        if ($existingUser === null) {
+            return null;
+        }
+
+        $existingOwner = $this->accountUserRepository->findFirstWhere([
+            'user_id' => $existingUser->getId(),
+            'is_account_owner' => true,
+        ]);
+
+        if ($existingOwner !== null) {
+            throw new EmailAlreadyExists(
+                __('There is already an account associated with this email. Please log in instead.')
+            );
+        }
+
+        return $existingUser;
     }
 }

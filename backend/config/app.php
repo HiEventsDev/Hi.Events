@@ -15,7 +15,7 @@ return [
     'frontend_urls' => [
         'confirm_email_address' => '/manage/profile/confirm-email-address/%s',
         'reset_password' => '/auth/reset-password/%s',
-        'confirm_email_change' => '/manage/profile/confirm-email-change',
+        'confirm_email_change' => '/manage/profile/confirm-email-change/%s',
         'accept_invitation' => '/auth/accept-invitation/%s',
         'stripe_connect_return_url' => '/account/payment',
         'stripe_connect_refresh_url' => '/account/payment',

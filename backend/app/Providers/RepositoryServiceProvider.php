@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace HiEvents\Providers;
 
-use Illuminate\Support\ServiceProvider;
 use HiEvents\Repository\Eloquent\AccountRepository;
+use HiEvents\Repository\Eloquent\AccountUserRepository;
 use HiEvents\Repository\Eloquent\AttendeeRepository;
-use HiEvents\Repository\Eloquent\EventSettingsRepository;
 use HiEvents\Repository\Eloquent\EventDailyStatisticRepository;
 use HiEvents\Repository\Eloquent\EventRepository;
+use HiEvents\Repository\Eloquent\EventSettingsRepository;
 use HiEvents\Repository\Eloquent\EventStatisticRepository;
 use HiEvents\Repository\Eloquent\ImageRepository;
 use HiEvents\Repository\Eloquent\MessageRepository;
@@ -27,6 +27,7 @@ use HiEvents\Repository\Eloquent\TicketPriceRepository;
 use HiEvents\Repository\Eloquent\TicketRepository;
 use HiEvents\Repository\Eloquent\UserRepository;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
+use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventDailyStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
@@ -47,6 +48,7 @@ use HiEvents\Repository\Interfaces\TaxAndFeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\TicketPriceRepositoryInterface;
 use HiEvents\Repository\Interfaces\TicketRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
+use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -75,6 +77,7 @@ class RepositoryServiceProvider extends ServiceProvider
         EventDailyStatisticRepositoryInterface::class => EventDailyStatisticRepository::class,
         EventSettingsRepositoryInterface::class => EventSettingsRepository::class,
         OrganizerRepositoryInterface::class => OrganizerRepository::class,
+        AccountUserRepositoryInterface::class => AccountUserRepository::class,
     ];
 
     public function register(): void

@@ -28,7 +28,7 @@ class EditOrganizerAction extends BaseAction
             $request->validated(),
             [
                 'id' => $organizerId,
-                'account_id' => $this->getAuthenticatedUser()->getAccountId()
+                'account_id' => $this->getAuthenticatedAccountId(),
             ]
         );
 
