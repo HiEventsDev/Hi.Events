@@ -4,7 +4,7 @@ namespace HiEvents\Services\Handlers\User;
 
 use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Exceptions\PasswordInvalidException;
-use HiEvents\Mail\ConfirmEmailChangeMail;
+use HiEvents\Mail\User\ConfirmEmailChangeMail;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Services\Handlers\User\DTO\UpdateMeDTO;
 use HiEvents\Services\Infrastructure\Encyption\EncryptedPayloadService;

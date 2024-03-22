@@ -3,15 +3,16 @@ import {prettyDate, relativeDate} from "../../../utilites/dates.ts";
 import {OrderStatusBadge} from "../OrderStatusBadge";
 import {Currency} from "../Currency";
 import {Card} from "../Card";
-import {Order, Event} from "../../../types.ts";
+import {Event, Order} from "../../../types.ts";
 import classes from "./OrderDetails.module.scss";
+import {t} from "@lingui/macro";
 
-export const OrderDetails = ({order, event}: {order: Order, event: Event}) => {
+export const OrderDetails = ({order, event}: { order: Order, event: Event }) => {
     return (
         <Card className={classes.orderDetails} variant={'lightGray'}>
             <div className={classes.block}>
                 <div className={classes.title}>
-                    Name
+                    {t`Name`}
                 </div>
                 <div className={classes.amount}>
                     {order.first_name} {order.last_name}
@@ -19,7 +20,7 @@ export const OrderDetails = ({order, event}: {order: Order, event: Event}) => {
             </div>
             <div className={classes.block}>
                 <div className={classes.title}>
-                    Email
+                    {t`Email`}
                 </div>
                 <div className={classes.value}>
                     <Anchor href={'mailto:' + order.email} target={'_blank'}>{order.email}</Anchor>
@@ -27,7 +28,7 @@ export const OrderDetails = ({order, event}: {order: Order, event: Event}) => {
             </div>
             <div className={classes.block}>
                 <div className={classes.title}>
-                    Order Date
+                    {t`Date`}
                 </div>
                 <div className={classes.amount}>
                     <Tooltip label={prettyDate(order.created_at, event.timezone)} position={'bottom'} withArrow>
@@ -39,7 +40,7 @@ export const OrderDetails = ({order, event}: {order: Order, event: Event}) => {
             </div>
             <div className={classes.block}>
                 <div className={classes.title}>
-                    Status
+                    {t`Status`}
                 </div>
                 <div className={classes.amount}>
                     <OrderStatusBadge order={order} variant={'filled'}/>
@@ -47,7 +48,7 @@ export const OrderDetails = ({order, event}: {order: Order, event: Event}) => {
             </div>
             <div className={classes.block}>
                 <div className={classes.title}>
-                    Total order amount
+                    {t`Total order amount`}
                 </div>
                 <div className={classes.amount}>
                     <Currency currency={order.currency} price={order.total_gross}/>
@@ -55,7 +56,7 @@ export const OrderDetails = ({order, event}: {order: Order, event: Event}) => {
             </div>
             <div className={classes.block}>
                 <div className={classes.title}>
-                    Total refunded
+                    {t`Total refunded`}
                 </div>
                 <div className={classes.amount}>
                     <Currency currency={order.currency} price={order.total_refunded}/>

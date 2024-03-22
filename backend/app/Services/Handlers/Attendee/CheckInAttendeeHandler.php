@@ -11,13 +11,15 @@ use HiEvents\Exceptions\CannotCheckInException;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Services\Handlers\Attendee\DTO\CheckInAttendeeDTO;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
-readonly class CheckInAttendeeHandler
+class CheckInAttendeeHandler
 {
     public function __construct(
-        private AttendeeRepositoryInterface $attendeeRepository,
-        private UserRepositoryInterface     $userRepository
+        private readonly AttendeeRepositoryInterface $attendeeRepository,
+        private readonly UserRepositoryInterface     $userRepository,
+        private readonly LoggerInterface             $logger,
     )
     {
     }
@@ -60,6 +62,14 @@ readonly class CheckInAttendeeHandler
     private function validateAttendeeStatus(AttendeeDomainObject $attendee): void
     {
         if ($attendee->getStatus() !== AttendeeStatus::ACTIVE->name) {
+            $this->logger->info(
+                'Attempted to check in attendee that is not active',
+                [
+                    'attendee_public_id' => $attendee->getPublicId(),
+                    'event_id' => $attendee->getEventId(),
+                ]
+            );
+
             throw new CannotCheckInException(__('Cannot check in attendee as they are not active.'));
         }
     }
@@ -113,5 +123,13 @@ readonly class CheckInAttendeeHandler
         ];
 
         $this->attendeeRepository->updateWhere($updateData, $criteria);
+
+        $this->logger->info(
+            'Attendee checked ' . $checkInAttendeeDTO->action . ' by user ' . $checkInAttendeeDTO->checked_in_by_user_id,
+            [
+                'attendee_public_id' => $checkInAttendeeDTO->attendee_public_id,
+                'event_id' => $checkInAttendeeDTO->event_id,
+            ]
+        );
     }
 }

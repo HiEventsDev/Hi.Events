@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class QuestionAndAnswerView extends Model
 {
-    protected $model = 'question_and_answer_view';
+    protected string $model = 'question_and_answer_view';
 
     protected $casts = [
         'answer' => 'array',

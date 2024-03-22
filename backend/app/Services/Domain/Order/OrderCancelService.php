@@ -2,18 +2,18 @@
 
 namespace HiEvents\Services\Domain\Order;
 
-use Illuminate\Contracts\Mail\Mailer;
-use Illuminate\Database\DatabaseManager;
-use Throwable;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
-use HiEvents\Mail\OrderCancelled;
+use HiEvents\Mail\Order\OrderCancelled;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Domain\Ticket\TicketQuantityService;
+use Illuminate\Contracts\Mail\Mailer;
+use Illuminate\Database\DatabaseManager;
+use Throwable;
 
 readonly class OrderCancelService
 {

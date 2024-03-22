@@ -1,16 +1,17 @@
 <?php
 
-namespace HiEvents\Mail;
+namespace HiEvents\Mail\Order;
 
-use Illuminate\Mail\Mailables\Content;
-use Illuminate\Mail\Mailables\Envelope;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\Mail\BaseMail;
+use Illuminate\Mail\Mailables\Content;
+use Illuminate\Mail\Mailables\Envelope;
 
 /**
- * @uses /backend/resources/views/emails/orders/payment-success-but-order-expired.blade.php
+ * @uses /backend/resources/views/emails/orders/summary.blade.php
  */
-class PaymentSuccessButOrderExpiredMail extends BaseMail
+class OrderSummary extends BaseMail
 {
     private OrderDomainObject $orderDomainObject;
 
@@ -27,14 +28,14 @@ class PaymentSuccessButOrderExpiredMail extends BaseMail
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: __('We were unable to process your order'),
+            subject: 'Your Order is Confirmed! 🎉',
         );
     }
 
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.orders.payment-success-but-order-expired',
+            markdown: 'emails.orders.summary',
             with: [
                 'event' => $this->eventDomainObject,
                 'order' => $this->orderDomainObject,

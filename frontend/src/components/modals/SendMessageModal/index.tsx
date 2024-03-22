@@ -3,17 +3,7 @@ import {useParams} from "react-router-dom";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {useGetOrder} from "../../../queries/useGetOrder.ts";
 import {Modal} from "../../common/Modal";
-import {
-    Alert,
-    Button,
-    ComboboxItemGroup,
-    LoadingOverlay,
-    MultiSelect,
-    Select,
-    SimpleGrid,
-    Switch,
-    TextInput
-} from "@mantine/core";
+import {Alert, Button, ComboboxItemGroup, LoadingOverlay, MultiSelect, Select, Switch, TextInput} from "@mantine/core";
 import {IconAlertCircle, IconSend} from "@tabler/icons-react";
 import {useGetMe} from "../../../queries/useGetMe.ts";
 import {useForm, UseFormReturnType} from "@mantine/form";
@@ -23,6 +13,7 @@ import {showSuccess} from "../../../utilites/notifications.tsx";
 import {messagesClient} from "../../../api/messages.client.ts";
 import {t, Trans} from "@lingui/macro";
 import {Editor} from "../../common/Editor";
+import {useIsAccountVerified} from "../../../hooks/useIsAccountVerified.ts";
 
 interface EventMessageModalProps extends GenericModalProps {
     orderId?: IdParam,
@@ -91,6 +82,8 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
     const {data: me} = useGetMe();
     const errorHandler = useFormErrorResponseHandler();
     const isPreselectedRecipient = !!(orderId || attendeeId || ticketId);
+    const isAccountVerified = useIsAccountVerified();
+
     const form = useForm({
         initialValues: {
             subject: '',
@@ -106,7 +99,7 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
     });
 
     const mutation = useMutation(
-        (message: Message) => messagesClient.send(eventId, message),
+        (message: Partial<Message>) => messagesClient.send(eventId, message as Message),
         {
             onSuccess: () => {
                 showSuccess(t`Message Sent`);
@@ -129,91 +122,100 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
             heading={t`Send a message`}
         >
             <form onSubmit={form.onSubmit((values) => mutation.mutate(values))}>
-                {!isPreselectedRecipient && (
-                    <Select
-                        mt={20}
-                        data={[
-                            {
-                                value: 'TICKET',
-                                label: t`Attendees with a specific ticket`,
-                            },
-                            {
-                                value: 'EVENT',
-                                label: t`All attendees of this event`,
-                            },
-                        ]}
-                        label={t`Who is this message to?`}
-                        placeholder={t`Please select`}
-                        {...form.getInputProps('message_type')}
-                    />
-                )}
-
-                {((form.values.message_type === MessageType.Attendee) && attendeeId && orderId) && (
-                    <AttendeeField eventId={eventId} orderId={orderId} attendeeId={attendeeId} form={form}/>
-                )}
-
-                {((form.values.message_type === MessageType.Ticket && event.tickets)) && (
-                    <MultiSelect
-                        mt={20}
-                        label={t`Message attendees with specific tickets`}
-                        searchable
-                        data={event.tickets?.map(ticket => {
-                            return {
-                                value: String(ticket.id),
-                                label: ticket.title,
-                            };
-                        })}
-                        {...form.getInputProps('ticket_ids')}
-                    />
-                )}
-
-                {(form.values.message_type === MessageType.Order && orderId) && (
-                    <OrderField orderId={orderId} eventId={eventId}/>
-                )}
-
-                <TextInput
-                    required
-                    mt={20}
-                    label={t`Subject`}
-                    {...form.getInputProps('subject')}
-                />
-
-                <Editor
-                    label={t`Message Content`}
-                    value={form.values.message || ''}
-                    onChange={(value) => form.setFieldValue('message', value)}
-                    error={form.errors.message}
-                />
-
-                <Switch
-                    mt={20}
-                    label={(
-                        <Trans>
-                            Send a copy to <b>{me?.email}</b>
-                        </Trans>
+                <fieldset disabled={!isAccountVerified}>
+                    {!isPreselectedRecipient && (
+                        <Select
+                            mt={20}
+                            data={[
+                                {
+                                    value: 'TICKET',
+                                    label: t`Attendees with a specific ticket`,
+                                },
+                                {
+                                    value: 'EVENT',
+                                    label: t`All attendees of this event`,
+                                },
+                            ]}
+                            label={t`Who is this message to?`}
+                            placeholder={t`Please select`}
+                            {...form.getInputProps('message_type')}
+                        />
                     )}
-                    {...form.getInputProps('send_copy_to_current_user')}
-                />
 
-                <Switch
-                    mt={20}
-                    label={(
-                        <Trans>
-                            Send as a test. This will send the message to your email address instead of the recipients.
-                        </Trans>
+                    {((form.values.message_type === MessageType.Attendee) && attendeeId && orderId) && (
+                        <AttendeeField eventId={eventId} orderId={orderId} attendeeId={attendeeId} form={form}/>
                     )}
-                    {...form.getInputProps('is_test')}
-                />
 
-                <Alert variant={'outline'} mt={20} icon={<IconAlertCircle size="1rem"/>} title={t`Before you send!`}>
-                    {t`Please ensure you only send emails directly related to the order. Promotional emails
+                    {((form.values.message_type === MessageType.Ticket && event.tickets)) && (
+                        <MultiSelect
+                            mt={20}
+                            label={t`Message attendees with specific tickets`}
+                            searchable
+                            data={event.tickets?.map(ticket => {
+                                return {
+                                    value: String(ticket.id),
+                                    label: ticket.title,
+                                };
+                            })}
+                            {...form.getInputProps('ticket_ids')}
+                        />
+                    )}
+
+                    {(form.values.message_type === MessageType.Order && orderId) && (
+                        <OrderField orderId={orderId} eventId={eventId}/>
+                    )}
+
+                    <TextInput
+                        required
+                        mt={20}
+                        label={t`Subject`}
+                        {...form.getInputProps('subject')}
+                    />
+
+                    <Editor
+                        label={t`Message Content`}
+                        value={form.values.message || ''}
+                        onChange={(value) => form.setFieldValue('message', value)}
+                        error={form.errors.message}
+                    />
+
+                    <Switch
+                        mt={20}
+                        label={(
+                            <Trans>
+                                Send a copy to <b>{me?.email}</b>
+                            </Trans>
+                        )}
+                        {...form.getInputProps('send_copy_to_current_user')}
+                    />
+
+                    <Switch
+                        mt={20}
+                        label={(
+                            <Trans>
+                                Send as a test. This will send the message to your email address instead of the
+                                recipients.
+                            </Trans>
+                        )}
+                        {...form.getInputProps('is_test')}
+                    />
+
+                    <Alert variant={'outline'} mt={20} icon={<IconAlertCircle size="1rem"/>}
+                           title={t`Before you send!`}>
+                        {t`Please ensure you only send emails directly related to the order. Promotional emails
                     should not be sent using this form.`}
-                </Alert>
-                <SimpleGrid mt={20}>
-                    <Button loading={mutation.isLoading} type={'submit'} fullWidth leftSection={<IconSend/>}>
+                    </Alert>
+
+                    {!isAccountVerified && (
+                        <Alert mt={20} variant={'light'} icon={<IconAlertCircle size="1rem"/>}>
+                            {t`You need to verify your account before you can send messages.`}
+                        </Alert>
+                    )}
+
+                    <Button mt={20} loading={mutation.isLoading} type={'submit'} fullWidth leftSection={<IconSend/>}>
                         {form.values.is_test ? t`Send Test` : t`Send`}
                     </Button>
-                </SimpleGrid>
+                </fieldset>
             </form>
         </Modal>
     )

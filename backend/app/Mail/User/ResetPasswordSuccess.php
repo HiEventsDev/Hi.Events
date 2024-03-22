@@ -1,7 +1,8 @@
 <?php
 
-namespace HiEvents\Mail;
+namespace HiEvents\Mail\User;
 
+use HiEvents\Mail\BaseMail;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 

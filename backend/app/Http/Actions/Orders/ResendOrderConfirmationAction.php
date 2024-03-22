@@ -2,15 +2,15 @@
 
 namespace HiEvents\Http\Actions\Orders;
 
-use Illuminate\Http\Response;
-use Illuminate\Mail\Mailer;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Mail\OrderSummary;
+use HiEvents\Mail\Order\OrderSummary;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
+use Illuminate\Http\Response;
+use Illuminate\Mail\Mailer;
 
 class ResendOrderConfirmationAction extends BaseAction
 {

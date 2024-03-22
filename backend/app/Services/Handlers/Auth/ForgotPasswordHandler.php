@@ -2,7 +2,7 @@
 
 namespace HiEvents\Services\Handlers\Auth;
 
-use HiEvents\Mail\ForgotPassword;
+use HiEvents\Mail\User\ForgotPassword;
 use HiEvents\Repository\Interfaces\PasswordResetTokenRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Services\Infrastructure\TokenGenerator\TokenGeneratorService;

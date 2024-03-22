@@ -15,11 +15,9 @@ use Throwable;
 
 class EditAttendeeAction extends BaseAction
 {
-    private EditAttendeeHandler $handler;
-
-    public function __construct(EditAttendeeHandler $handler)
+    public function __construct(
+        private readonly EditAttendeeHandler $handler)
     {
-        $this->handler = $handler;
     }
 
     /**

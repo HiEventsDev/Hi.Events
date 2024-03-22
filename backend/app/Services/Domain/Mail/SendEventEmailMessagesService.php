@@ -10,7 +10,7 @@ use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\DomainObjects\Status\MessageStatus;
 use HiEvents\Exceptions\UnableToSendMessageException;
-use HiEvents\Mail\EventMessage;
+use HiEvents\Mail\Event\EventMessage;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;

@@ -6,15 +6,15 @@ use Brick\Math\Exception\MathException;
 use Brick\Math\Exception\NumberFormatException;
 use Brick\Math\Exception\RoundingNecessaryException;
 use Brick\Money\Exception\UnknownCurrencyException;
+use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\DomainObjects\StripePaymentDomainObject;
+use HiEvents\Mail\Order\PaymentSuccessButOrderExpiredMail;
+use HiEvents\Repository\Interfaces\EventRepositoryInterface;
+use HiEvents\Values\MoneyValue;
 use Illuminate\Contracts\Mail\Mailer;
 use Psr\Log\LoggerInterface;
 use Stripe\Exception\ApiErrorException;
 use Stripe\PaymentIntent;
-use HiEvents\DomainObjects\OrderDomainObject;
-use HiEvents\DomainObjects\StripePaymentDomainObject;
-use HiEvents\Mail\PaymentSuccessButOrderExpiredMail;
-use HiEvents\Repository\Interfaces\EventRepositoryInterface;
-use HiEvents\Values\MoneyValue;
 
 readonly class StripeRefundExpiredOrderService
 {

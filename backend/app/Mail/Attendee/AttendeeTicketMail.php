@@ -1,12 +1,13 @@
 <?php
 
-namespace HiEvents\Mail;
+namespace HiEvents\Mail\Attendee;
 
+use HiEvents\DomainObjects\AttendeeDomainObject;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\Mail\BaseMail;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Support\Str;
-use HiEvents\DomainObjects\AttendeeDomainObject;
-use HiEvents\DomainObjects\EventDomainObject;
 
 /**
  * @uses /backend/resources/views/emails/orders/attendee-ticket.blade.php

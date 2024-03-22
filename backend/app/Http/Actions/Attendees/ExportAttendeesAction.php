@@ -30,12 +30,9 @@ class ExportAttendeesAction extends BaseAction
     {
         $this->isActionAuthorized($eventId, EventDomainObject::class);
 
-        $orders = $this->attendeeRepository
+        $attendees = $this->attendeeRepository
             ->loadRelation(QuestionAndAnswerViewDomainObject::class)
-            ->findByEventId($eventId, new QueryParamsDTO(
-                page: 1,
-                per_page: 10000
-            ));
+            ->findByEventIdForExport($eventId);
 
         $questions = $this->questionRepository->findWhere([
             'event_id' => $eventId,
@@ -43,7 +40,7 @@ class ExportAttendeesAction extends BaseAction
         ]);
 
         return Excel::download(
-            $this->export->withData($orders, $questions),
+            $this->export->withData($attendees, $questions),
             'attendees.xlsx'
         );
     }

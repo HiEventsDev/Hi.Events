@@ -4,7 +4,7 @@ namespace HiEvents\Services\Domain\Attendee;
 
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
-use HiEvents\Mail\AttendeeTicketMail;
+use HiEvents\Mail\Attendee\AttendeeTicketMail;
 use Illuminate\Contracts\Mail\Mailer;
 
 readonly class SendAttendeeTicketService

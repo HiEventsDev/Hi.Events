@@ -1,16 +1,16 @@
 <?php
 
-namespace HiEvents\Jobs;
+namespace HiEvents\Jobs\Event;
 
+use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\Exceptions\EventStatisticsVersionMismatchException;
+use HiEvents\Services\Domain\EventStatistics\EventStatisticsUpdateService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Throwable;
-use HiEvents\DomainObjects\OrderDomainObject;
-use HiEvents\Exceptions\EventStatisticsVersionMismatchException;
-use HiEvents\Services\Domain\EventStatistics\EventStatisticsUpdateService;
 
 class UpdateEventStatisticsJob implements ShouldQueue
 {

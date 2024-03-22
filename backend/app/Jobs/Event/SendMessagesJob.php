@@ -1,6 +1,6 @@
 <?php
 
-namespace HiEvents\Jobs;
+namespace HiEvents\Jobs\Event;
 
 use HiEvents\Exceptions\UnableToSendMessageException;
 use HiEvents\Services\Domain\Mail\SendEventEmailMessagesService;

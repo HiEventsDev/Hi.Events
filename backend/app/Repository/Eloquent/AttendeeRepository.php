@@ -4,6 +4,7 @@ namespace HiEvents\Repository\Eloquent;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
@@ -24,6 +25,18 @@ class AttendeeRepository extends BaseRepository implements AttendeeRepositoryInt
         return AttendeeDomainObject::class;
     }
 
+    public function findByEventIdForExport(int $eventId): Collection
+    {
+        $this->applyConditions([
+            'event_id' => $eventId,
+        ]);
+        $model = $this->model->limit(10000)->get();
+        $this->resetModel();
+
+        return $this->handleResults($model);
+    }
+
+
     public function findByEventId(int $eventId, QueryParamsDTO $params): LengthAwarePaginator
     {
         $where = [
@@ -42,6 +55,7 @@ class AttendeeRepository extends BaseRepository implements AttendeeRepositoryInt
                             )
                         ), 'ilike', '%' . $params->query . '%')
                     ->orWhere('attendees.' . AttendeeDomainObjectAbstract::LAST_NAME, 'ilike', '%' . $params->query . '%')
+                    ->orWhere('attendees.' . AttendeeDomainObjectAbstract::FIRST_NAME, 'ilike', '%' . $params->query . '%')
                     ->orWhere('attendees.' . AttendeeDomainObjectAbstract::PUBLIC_ID, 'ilike', '%' . $params->query . '%')
                     ->orWhere('attendees.' . AttendeeDomainObjectAbstract::EMAIL, 'ilike', '%' . $params->query . '%');
             };

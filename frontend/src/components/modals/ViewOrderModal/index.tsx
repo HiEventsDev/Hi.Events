@@ -8,6 +8,7 @@ import {Card} from "../../common/Card";
 import {AttendeeList} from "../../common/AttendeeList";
 import {OrderDetails} from "../../common/OrderDetails";
 import {t, Trans} from "@lingui/macro";
+import {QuestionAndAnswerList} from "../../common/QuestionAndAnswerList";
 
 interface ViewOrderModalProps {
     orderId: IdParam,
@@ -37,23 +38,15 @@ export const ViewOrderModal = ({onClose, orderId}: GenericModalProps & ViewOrder
                 <OrderSummary event={event} order={order}/>
             </Card>
 
-            {(order.question_answers && order.question_answers.length > 0) && (
-                <>
-                    <h3>
-                        {t`Questions`}
-                    </h3>
-                    <Card variant={'lightGray'}>
-                        {order.question_answers.map((answer, index) => (
-                            <div key={index}>
-                                <strong>{answer.title}</strong>
-                                <p>
-                                    {answer.text_answer}
-                                </p>
-                            </div>
-                        ))}
-                    </Card>
-                </>
-            )}
+            {(order.question_answers && order.question_answers.length > 0)
+                && (
+                    <>
+                        <h3>
+                            {t`Questions`}
+                        </h3>
+                        <QuestionAndAnswerList questionAnswers={order.question_answers}/>
+                    </>
+                )}
 
             {tickets && (
                 <>

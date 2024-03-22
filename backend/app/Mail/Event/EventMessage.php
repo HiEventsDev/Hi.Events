@@ -1,8 +1,9 @@
 <?php
 
-namespace HiEvents\Mail;
+namespace HiEvents\Mail\Event;
 
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\Mail\BaseMail;
 use HiEvents\Services\Handlers\Message\DTO\SendMessageDTO;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;

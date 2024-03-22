@@ -27,6 +27,7 @@ import {Table, TableHead} from "../Table";
 import {ShowForDesktop, ShowForMobile} from "../Responsive/ShowHideComponents.tsx";
 import {useResendOrderConfirmation} from "../../../mutations/useResendOrderConfirmation.ts";
 import {OrderStatusBadge} from "../OrderStatusBadge";
+import {formatNumber} from "../../../utilites/helpers.ts";
 
 interface OrdersTableProps {
     event: Event,
@@ -163,7 +164,7 @@ export const OrdersTable = ({orders, event}: OrdersTableProps) => {
                                 </MantineTable.Td>
                                 <MantineTable.Td>
                                     <Anchor onClick={() => handleModalClick(order.id, viewModal)}>
-                                        {order.attendees?.length}
+                                        {formatNumber(order.attendees?.length as number)}
                                     </Anchor>
                                 </MantineTable.Td>
                                 <MantineTable.Td>

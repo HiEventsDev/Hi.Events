@@ -14,7 +14,6 @@ use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
-
 class CreateStripeConnectAccountAction extends BaseAction
 {
     public function __construct(

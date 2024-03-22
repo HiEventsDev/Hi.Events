@@ -6,7 +6,9 @@ use Carbon\Carbon;
 use HiEvents\DomainObjects\MessageDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\DomainObjects\Status\MessageStatus;
-use HiEvents\Jobs\SendMessagesJob;
+use HiEvents\Exceptions\AccountNotVerifiedException;
+use HiEvents\Jobs\Event\SendMessagesJob;
+use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\MessageRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
@@ -22,13 +24,23 @@ readonly class SendMessageHandler
         private AttendeeRepositoryInterface $attendeeRepository,
         private TicketRepositoryInterface   $ticketRepository,
         private MessageRepositoryInterface  $messageRepository,
+        private AccountRepositoryInterface  $accountRepository,
         private HTMLPurifier                $purifier,
     )
     {
     }
 
+    /**
+     * @throws AccountNotVerifiedException
+     */
     public function handle(SendMessageDTO $messageData): MessageDomainObject
     {
+        $account = $this->accountRepository->findById($messageData->account_id);
+
+        if ($account->getAccountVerifiedAt() === null) {
+            throw new AccountNotVerifiedException(__('You cannot send messages until your account is verified.'));
+        }
+
         $message = $this->messageRepository->create([
             'event_id' => $messageData->event_id,
             'subject' => $messageData->subject,
@@ -54,6 +66,7 @@ readonly class SendMessageHandler
             'ticket_ids' => $message->getTicketIds(),
             'send_copy_to_current_user' => $messageData->send_copy_to_current_user,
             'sent_by_user_id' => $messageData->sent_by_user_id,
+            'account_id' => $messageData->account_id,
         ]);
 
         SendMessagesJob::dispatch($updatedData);

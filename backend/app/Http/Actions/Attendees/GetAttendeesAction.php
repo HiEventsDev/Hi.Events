@@ -13,6 +13,9 @@ use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Resources\Attendee\AttendeeResource;
 
+/**
+ * @todo move to handler
+ */
 class GetAttendeesAction extends BaseAction
 {
     private AttendeeRepositoryInterface $attendeeRepository;

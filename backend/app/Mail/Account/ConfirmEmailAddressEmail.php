@@ -1,16 +1,17 @@
 <?php
 
-namespace HiEvents\Mail;
+namespace HiEvents\Mail\Account;
 
-use Illuminate\Mail\Mailables\Content;
-use Illuminate\Mail\Mailables\Envelope;
 use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Helper\Url;
+use HiEvents\Mail\BaseMail;
+use Illuminate\Mail\Mailables\Content;
+use Illuminate\Mail\Mailables\Envelope;
 
 /**
- * @uses /backend/resources/views/emails/user/confirm-email-change.blade.php
+ * @uses /backend/resources/views/emails/user/confirm-email-address.blade.php
  */
-class ConfirmEmailChangeMail extends BaseMail
+class ConfirmEmailAddressEmail extends BaseMail
 {
     private UserDomainObject $userDomainObject;
 
@@ -27,17 +28,19 @@ class ConfirmEmailChangeMail extends BaseMail
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Confirm email change',
+            subject: __('Welcome to :app_name! Please confirm your email address', [
+                'app_name' => config('app.name'),
+            ]),
         );
     }
 
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.user.confirm-email-change',
+            markdown: 'emails.user.confirm-email-address',
             with: [
                 'user' => $this->userDomainObject,
-                'link' => sprintf(Url::getFrontEndUrlFromConfig(Url::CONFIRM_EMAIL_CHANGE), $this->token),
+                'link' => sprintf(Url::getFrontEndUrlFromConfig(Url::CONFIRM_EMAIL_ADDRESS), $this->token),
             ]
         );
     }

@@ -6,6 +6,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Repository\Eloquent\BaseRepository;
+use Illuminate\Support\Collection;
 
 /**
  * @extends BaseRepository<AttendeeDomainObject>
@@ -13,4 +14,6 @@ use HiEvents\Repository\Eloquent\BaseRepository;
 interface AttendeeRepositoryInterface extends RepositoryInterFace
 {
     public function findByEventId(int $eventId, QueryParamsDTO $params): LengthAwarePaginator;
+
+    public function findByEventIdForExport(int $eventId): Collection;
 }

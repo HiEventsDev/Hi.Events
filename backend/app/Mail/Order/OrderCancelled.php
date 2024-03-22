@@ -1,11 +1,12 @@
 <?php
 
-namespace HiEvents\Mail;
+namespace HiEvents\Mail\Order;
 
-use Illuminate\Mail\Mailables\Content;
-use Illuminate\Mail\Mailables\Envelope;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\Mail\BaseMail;
+use Illuminate\Mail\Mailables\Content;
+use Illuminate\Mail\Mailables\Envelope;
 
 /**
  * @uses /backend/resources/views/emails/orders/order-cancelled.blade.php

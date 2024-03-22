@@ -4,7 +4,7 @@ namespace HiEvents\Services\Handlers\Auth;
 
 use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Exceptions\PasswordInvalidException;
-use HiEvents\Mail\ResetPasswordSuccess;
+use HiEvents\Mail\User\ResetPasswordSuccess;
 use HiEvents\Repository\Interfaces\PasswordResetTokenRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Services\Domain\Auth\ResetPasswordTokenValidateService;

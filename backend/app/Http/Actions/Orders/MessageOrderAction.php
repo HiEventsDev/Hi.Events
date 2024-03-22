@@ -2,11 +2,11 @@
 
 namespace HiEvents\Http\Actions\Orders;
 
-use Illuminate\Http\Response;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Message\SendMessageRequest;
-use HiEvents\Jobs\SendMessagesJob;
+use HiEvents\Jobs\Event\SendMessagesJob;
+use Illuminate\Http\Response;
 
 class MessageOrderAction extends BaseAction
 {

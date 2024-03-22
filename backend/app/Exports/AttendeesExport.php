@@ -3,6 +3,10 @@
 namespace HiEvents\Exports;
 
 use Carbon\Carbon;
+use HiEvents\DomainObjects\Enums\QuestionTypeEnum;
+use HiEvents\DomainObjects\QuestionDomainObject;
+use HiEvents\Resources\Attendee\AttendeeResource;
+use HiEvents\Services\Domain\Question\QuestionAnswerFormatter;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Collection;
@@ -11,21 +15,17 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-use HiEvents\DomainObjects\Enums\QuestionTypeEnum;
-use HiEvents\DomainObjects\QuestionDomainObject;
-use HiEvents\Resources\Attendee\AttendeeResource;
-use HiEvents\Services\Domain\Question\QuestionAnswerFormatter;
 
 readonly class AttendeesExport implements FromCollection, WithHeadings, WithMapping, WithStyles
 {
-    private LengthAwarePaginator $data;
+    private LengthAwarePaginator|Collection $data;
     private Collection $questions;
 
     public function __construct(private QuestionAnswerFormatter $questionAnswerFormatter)
     {
     }
 
-    public function withData(LengthAwarePaginator $data, Collection $questions): AttendeesExport
+    public function withData(LengthAwarePaginator|Collection $data, Collection $questions): AttendeesExport
     {
         $this->data = $data;
         $this->questions = $questions;

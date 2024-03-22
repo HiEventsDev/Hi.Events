@@ -2,21 +2,20 @@
 
 namespace HiEvents\Services\Domain\Mail;
 
-use HiEvents\Services\Domain\Attendee\SendAttendeeTicketService;
-use Illuminate\Mail\Mailer;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
-use HiEvents\Mail\AttendeeTicketMail;
-use HiEvents\Mail\OrderFailed;
-use HiEvents\Mail\OrderSummary;
-use HiEvents\Mail\OrganizerMail\OrderSummaryForOrganizer;
+use HiEvents\Mail\Order\OrderFailed;
+use HiEvents\Mail\Order\OrderSummary;
+use HiEvents\Mail\Organizer\OrderSummaryForOrganizer;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
+use HiEvents\Services\Domain\Attendee\SendAttendeeTicketService;
+use Illuminate\Mail\Mailer;
 
 readonly class SendOrderDetailsService
 {

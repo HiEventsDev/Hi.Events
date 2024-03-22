@@ -1,6 +1,6 @@
 <?php
 
-namespace HiEvents\Mail\OrganizerMail;
+namespace HiEvents\Mail\Organizer;
 
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;

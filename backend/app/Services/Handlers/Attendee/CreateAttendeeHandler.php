@@ -3,6 +3,8 @@
 namespace HiEvents\Services\Handlers\Attendee;
 
 use Brick\Money\Money;
+use Faker\Factory;
+use Faker\Generator;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;

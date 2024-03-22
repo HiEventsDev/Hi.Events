@@ -1,6 +1,14 @@
 import {Anchor, Avatar, Badge, Button, Group, Menu, Table as MantineTable,} from '@mantine/core';
 import {Attendee, MessageType} from "../../../types.ts";
-import {IconDotsVertical, IconPencil, IconPlus, IconSend, IconTrash} from "@tabler/icons-react";
+import {
+    IconDotsVertical,
+    IconEye,
+    IconMailForward,
+    IconPencil,
+    IconPlus,
+    IconSend,
+    IconTrash
+} from "@tabler/icons-react";
 import {getInitials, getTicketFromEvent} from "../../../utilites/helpers.ts";
 import {Table, TableHead} from "../Table";
 import {useDisclosure} from "@mantine/hooks";
@@ -13,9 +21,11 @@ import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import Truncate from "../Truncate";
 import {notifications} from "@mantine/notifications";
 import {useModifyAttendee} from "../../../mutations/useModifyAttendee.ts";
-import {showError} from "../../../utilites/notifications.tsx";
+import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {t, Trans} from "@lingui/macro";
 import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
+import {useResendAttendeeTicket} from "../../../mutations/useResendAttendeeTicket.ts";
+import {ViewAttendeeModal} from "../../modals/ViewAttendeeModal";
 
 interface AttendeeTableProps {
     attendees: Attendee[];
@@ -26,13 +36,25 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
     const {eventId} = useParams();
     const [isMessageModalOpen, messageModal] = useDisclosure(false);
     const [isEditModalOpen, editModal] = useDisclosure(false);
+    const [isViewModalOpem, viewModalOpen] = useDisclosure(false);
     const [selectedAttendee, setSelectedAttendee] = useState<Attendee>();
     const {data: event} = useGetEvent(eventId);
     const modifyMutation = useModifyAttendee();
+    const resendTicketMutation = useResendAttendeeTicket();
 
     const handleModalClick = (attendee: Attendee, modal: { open: () => void }) => {
         setSelectedAttendee(attendee);
         modal.open();
+    }
+
+    const handleResendTicket = (attendee: Attendee) => {
+        resendTicketMutation.mutate({
+            attendeeId: attendee.id,
+            eventId: eventId,
+        }, {
+            onSuccess: () => showSuccess(t`Ticket email has been resent to attendee`),
+            onError: (error: any) => showError(error.response.data.message || t`Failed to resend ticket email`)
+        });
     }
 
     if (attendees.length === 0) {
@@ -106,7 +128,8 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
                                 </MantineTable.Td>
                                 <MantineTable.Td>
                                     <b>
-                                        <Truncate length={20} text={attendee.first_name + ' ' + attendee.last_name}/>
+                                        <Truncate length={20}
+                                                  text={attendee.first_name + ' ' + attendee.last_name}/>
                                     </b>
                                     <div>
                                         {attendee.public_id}
@@ -118,7 +141,8 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
                                     </Anchor>
                                 </MantineTable.Td>
                                 <MantineTable.Td>
-                                    <Anchor href={`/manage/event/${eventId}/orders?query=${attendee.order?.public_id}`}>
+                                    <Anchor
+                                        href={`/manage/event/${eventId}/orders?query=${attendee.order?.public_id}`}>
                                         <Badge variant={'outline'}>
                                             {attendee.order?.public_id}
                                         </Badge>
@@ -146,6 +170,13 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
 
                                             <Menu.Dropdown>
                                                 <Menu.Label>{t`Manage`}</Menu.Label>
+                                                <Menu.Item
+                                                    leftSection={<IconEye size={14}/>}
+                                                    onClick={() => handleModalClick(attendee, viewModalOpen)}
+                                                >
+                                                    {t`View attendee`}
+                                                </Menu.Item>
+
                                                 <Menu.Item leftSection={<IconSend size={14}/>}
                                                            onClick={() => handleModalClick(attendee, messageModal)}>
                                                     {t`Message attendee`}
@@ -156,6 +187,15 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
                                                 >
                                                     {t`Edit attendee`}
                                                 </Menu.Item>
+
+                                                {attendee.status === 'ACTIVE' && (
+                                                    <Menu.Item
+                                                        leftSection={<IconMailForward size={14}/>}
+                                                        onClick={() => handleResendTicket(attendee)}
+                                                    >
+                                                        {t`Resend ticket email`}
+                                                    </Menu.Item>
+                                                )}
 
                                                 <Menu.Divider/>
 
@@ -185,7 +225,11 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
             {(selectedAttendee?.id && isEditModalOpen) && <EditAttendeeModal
                 attendeeId={selectedAttendee.id}
                 onClose={editModal.close}
-                isOpen={isEditModalOpen}
+            />}
+
+            {(selectedAttendee?.id && isViewModalOpem) && <ViewAttendeeModal
+                attendeeId={selectedAttendee.id}
+                onClose={viewModalOpen.close}
             />}
         </>
 

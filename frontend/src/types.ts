@@ -301,6 +301,7 @@ export interface Attendee {
     checked_in_at?: string;
     checked_out_by?: number;
     checked_in_by?: number;
+    question_answers?: QuestionAnswer[];
 }
 
 export interface Address {
@@ -401,7 +402,7 @@ export interface Message {
     subject: string;
     message: string;
     message_preview: string;
-    type: 'ATTENDEE' | 'ORDER' | 'TICKET' | 'EVENT';
+    type: 'TICKET' | 'EVENT';
     is_test: boolean;
     order_id?: number;
     attendee_ids?: IdParam[];
@@ -513,7 +514,7 @@ export interface SortableItem {
     order: number;
 }
 
-interface QuestionAnswer {
+export interface QuestionAnswer {
     question_id: number;
     title: string;
     answer: string[] | string;

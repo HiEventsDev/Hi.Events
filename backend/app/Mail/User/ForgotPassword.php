@@ -1,11 +1,12 @@
 <?php
 
-namespace HiEvents\Mail;
+namespace HiEvents\Mail\User;
 
-use Illuminate\Mail\Mailables\Content;
-use Illuminate\Mail\Mailables\Envelope;
 use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Helper\Url;
+use HiEvents\Mail\BaseMail;
+use Illuminate\Mail\Mailables\Content;
+use Illuminate\Mail\Mailables\Envelope;
 
 /**
  * @uses /backend/resources/views/emails/auth/forgot-password.blade.php

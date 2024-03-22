@@ -2,10 +2,11 @@
 
 namespace Tests\Unit\Services\Domain\Event;
 
-use HiEvents\Repository\Interfaces\EventStatisticRepositoryInterface;
+use HiEvents\Jobs\Event\UpdateEventPageViewsJob;
 use HiEvents\Services\Domain\Event\EventPageViewIncrementService;
 use Illuminate\Cache\CacheManager;
 use Illuminate\Config\Repository;
+use Illuminate\Queue\QueueManager;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
@@ -14,16 +15,16 @@ class EventPageViewIncrementServiceTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    private EventStatisticRepositoryInterface $eventStatisticsRepository;
     private CacheManager $cacheManager;
+    private QueueManager $queueManager;
     private EventPageViewIncrementService $service;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->eventStatisticsRepository = m::mock(EventStatisticRepositoryInterface::class);
         $this->cacheManager = m::mock(CacheManager::class);
+        $this->queueManager = m::mock(QueueManager::class);
         $config = m::mock(Repository::class);
 
         $config->shouldReceive('get')
@@ -32,9 +33,9 @@ class EventPageViewIncrementServiceTest extends TestCase
             ->once();
 
         $this->service = new EventPageViewIncrementService(
-            $this->eventStatisticsRepository,
             $this->cacheManager,
-            $config
+            $config,
+            $this->queueManager
         );
     }
 
@@ -46,7 +47,7 @@ class EventPageViewIncrementServiceTest extends TestCase
         $this->cacheManager->shouldReceive('has')->once()->andReturn(true);
 
         $this->cacheManager->shouldNotReceive('increment');
-        $this->eventStatisticsRepository->shouldNotReceive('incrementWhere');
+        $this->queueManager->shouldNotReceive('push');
 
         $this->service->increment($eventId, $userIp);
     }
@@ -61,7 +62,7 @@ class EventPageViewIncrementServiceTest extends TestCase
         $this->cacheManager->shouldReceive('increment')->once()->andReturn(1);
 
         $this->cacheManager->shouldNotReceive('decrement');
-        $this->eventStatisticsRepository->shouldNotReceive('incrementWhere', m::any());
+        $this->queueManager->shouldNotReceive('push');
 
         $this->service->increment($eventId, $userIp);
     }
@@ -76,11 +77,10 @@ class EventPageViewIncrementServiceTest extends TestCase
         $this->cacheManager->shouldReceive('increment')->once()->andReturn(100);
         $this->cacheManager->shouldReceive('decrement')->once()->with('event_views_' . $eventId, 100);
 
-        $this->eventStatisticsRepository->shouldReceive('incrementWhere')
+        // The expectation has changed to checking if the job is pushed to the queue
+        $this->queueManager->shouldReceive('push')
             ->once()
-            ->with([
-                'event_id' => $eventId,
-            ], 'total_views', 100);
+            ->withArgs(fn($job) => $job instanceof UpdateEventPageViewsJob);
 
         $this->service->increment($eventId, $userIp);
     }

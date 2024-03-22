@@ -8,6 +8,7 @@ use HiEvents\DomainObjects\Enums\MessageTypeEnum;
 class SendMessageDTO extends BaseDTO
 {
     public function __construct(
+        public readonly int             $account_id,
         public readonly int             $event_id,
         public readonly string          $subject,
         public readonly string          $message,

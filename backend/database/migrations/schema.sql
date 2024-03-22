@@ -353,6 +353,18 @@ create table if not exists orders
 create index if not exists orders_promo_code_id_index
     on orders (promo_code_id);
 
+create index if not exists idx_orders_first_name_trgm
+    on orders using gin (first_name gin_trgm_ops);
+
+create index if not exists idx_orders_last_name_trgm
+    on orders using gin (last_name gin_trgm_ops);
+
+create index if not exists idx_orders_email_trgm
+    on orders using gin (email gin_trgm_ops);
+
+create index if not exists idx_orders_public_id_trgm
+    on orders using gin (public_id gin_trgm_ops);
+
 create table if not exists questions
 (
     id         bigint generated always as identity,
@@ -477,6 +489,7 @@ create table if not exists event_daily_statistics
     event_id                     bigint                      not null,
     version                      integer        default 0    not null,
     total_refunded               numeric(14, 2) default 0    not null,
+    total_views                  bigint         default 0    not null,
     primary key (id),
     constraint event_daily_statistics_events_id_fk
         foreign key (event_id) references events
@@ -608,6 +621,21 @@ create table if not exists attendees
     constraint attendees_ticket_prices_id_fk
         foreign key (ticket_price_id) references ticket_prices
 );
+
+create index if not exists idx_attendees_first_name_trgm
+    on attendees using gin (first_name gin_trgm_ops);
+
+create index if not exists idx_attendees_last_name_trgm
+    on attendees using gin (last_name gin_trgm_ops);
+
+create index if not exists idx_attendees_email_trgm
+    on attendees using gin (email gin_trgm_ops);
+
+create index if not exists idx_attendees_public_id_trgm
+    on attendees using gin (public_id gin_trgm_ops);
+
+create index if not exists idx_attendees_public_id_lower
+    on attendees (lower(public_id::text));
 
 create table if not exists question_answers
 (

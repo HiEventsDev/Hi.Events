@@ -1,52 +1,44 @@
 <?php
 
-namespace HiEvents\Mail;
+namespace HiEvents\Mail\Order;
 
-use Illuminate\Mail\Mailables\Content;
-use Illuminate\Mail\Mailables\Envelope;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
-use HiEvents\Values\MoneyValue;
+use HiEvents\Mail\BaseMail;
+use Illuminate\Mail\Mailables\Content;
+use Illuminate\Mail\Mailables\Envelope;
 
 /**
- * @uses /backend/resources/views/emails/orders/order-refunded.blade.php
+ * @uses /backend/resources/views/emails/orders/payment-success-but-order-expired.blade.php
  */
-class OrderRefunded extends BaseMail
+class PaymentSuccessButOrderExpiredMail extends BaseMail
 {
     private OrderDomainObject $orderDomainObject;
 
     private EventDomainObject $eventDomainObject;
 
-    private MoneyValue $refundAmount;
-
-    public function __construct(
-        OrderDomainObject $order,
-        EventDomainObject $event,
-        MoneyValue        $refundAmount,
-    )
+    public function __construct(OrderDomainObject $order, EventDomainObject $event)
     {
         parent::__construct();
 
         $this->orderDomainObject = $order;
         $this->eventDomainObject = $event;
-        $this->refundAmount = $refundAmount;
     }
 
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'You\'ve received a refund',
+            subject: __('We were unable to process your order'),
         );
     }
 
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.orders.order-refunded',
+            markdown: 'emails.orders.payment-success-but-order-expired',
             with: [
                 'event' => $this->eventDomainObject,
                 'order' => $this->orderDomainObject,
-                'refundAmount' => $this->refundAmount,
             ]
         );
     }

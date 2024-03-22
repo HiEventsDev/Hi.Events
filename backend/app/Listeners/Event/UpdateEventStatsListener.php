@@ -1,9 +1,9 @@
 <?php
 
-namespace HiEvents\Listeners;
+namespace HiEvents\Listeners\Event;
 
 use HiEvents\Events\OrderStatusChangedEvent;
-use HiEvents\Jobs\UpdateEventStatisticsJob;
+use HiEvents\Jobs\Event\UpdateEventStatisticsJob;
 
 readonly class UpdateEventStatsListener
 {

@@ -4,7 +4,7 @@ namespace HiEvents\Services\Domain\User;
 
 use Carbon\Carbon;
 use HiEvents\DomainObjects\UserDomainObject;
-use HiEvents\Mail\ConfirmEmailAddressEmail;
+use HiEvents\Mail\Account\ConfirmEmailAddressEmail;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;

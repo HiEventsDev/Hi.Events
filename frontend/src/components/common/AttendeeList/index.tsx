@@ -5,6 +5,7 @@ import {NavLink} from "react-router-dom";
 import {IconEye} from "@tabler/icons-react";
 import classes from './AttendeeList.module.scss';
 import {Order, Ticket} from "../../../types.ts";
+import {t} from "@lingui/macro";
 
 export const AttendeeList = ({order, tickets}: { order: Order, tickets: Ticket[] }) => {
     return (
@@ -22,7 +23,7 @@ export const AttendeeList = ({order, tickets}: { order: Order, tickets: Ticket[]
                         </div>
                     </div>
                     <div className={classes.viewAttendee}>
-                        <Tooltip label={'Navigate to Attendee'} position={'bottom'} withArrow>
+                        <Tooltip label={t`Navigate to Attendee`} position={'bottom'} withArrow>
                             <NavLink to={`../attendees?query=${attendee.public_id}`}>
                                 <ActionIcon variant={'light'}>
                                     <IconEye/>

@@ -1,9 +1,9 @@
 <?php
 
-namespace HiEvents\Listeners;
+namespace HiEvents\Listeners\Order;
 
 use HiEvents\Events\OrderStatusChangedEvent;
-use HiEvents\Jobs\SendOrderDetailsEmailJob;
+use HiEvents\Jobs\Order\SendOrderDetailsEmailJob;
 
 readonly class SendOrderDetailsEmailListener
 {

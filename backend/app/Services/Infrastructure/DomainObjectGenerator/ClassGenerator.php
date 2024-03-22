@@ -20,6 +20,9 @@ use Nette\PhpGenerator\PhpFile;
 use Nette\PhpGenerator\PhpNamespace;
 use Nette\PhpGenerator\PsrPrinter;
 
+/**
+ * @todo - move properties to config
+ */
 class ClassGenerator
 {
     public const NO_TYPE = 'no-type';

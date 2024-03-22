@@ -9,7 +9,7 @@ import {redirectToPreviousUrl} from "../../../../api/client.ts";
 import {Card} from "../../../common/Card";
 import classes from "./Login.module.scss";
 import {t, Trans} from "@lingui/macro";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {ChooseAccountModal} from "../../../modals/ChooseAccountModal";
 
 const Login = () => {
@@ -46,6 +46,10 @@ const Login = () => {
         }
     );
 
+    useEffect(() => {
+        form.values.account_id && loginUser(form.values);
+    }, [form.values.account_id]);
+
     return (
         <>
             <Card>
@@ -74,7 +78,6 @@ const Login = () => {
             </div>
             {(showChooseAccount && data) && <ChooseAccountModal onAccountChosen={(accountId) => {
                 form.setFieldValue('account_id', accountId as string);
-                loginUser(form.values);
             }
             } accounts={data.accounts}/>}
         </>

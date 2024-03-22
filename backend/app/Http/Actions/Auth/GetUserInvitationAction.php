@@ -14,6 +14,9 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
+/**
+ * @todo move to a service
+ */
 class GetUserInvitationAction extends BaseAction
 {
     public function __construct(
