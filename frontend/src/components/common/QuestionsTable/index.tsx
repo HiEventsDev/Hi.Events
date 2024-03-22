@@ -5,7 +5,7 @@ import {
     IconEye,
     IconEyeClosed,
     IconGripVertical,
-    IconHelp,
+    IconInfoCircle,
     IconPencil,
     IconPlus,
     IconTrash
@@ -40,6 +40,7 @@ import {SortableContext, useSortable, verticalListSortingStrategy} from "@dnd-ki
 import {CSS} from "@dnd-kit/utilities";
 import {useSortQuestions} from "../../../mutations/useSortQuestions.ts";
 import classNames from "classnames";
+import {Popover} from "../Popover";
 
 interface QuestionsTableProp {
     questions: Partial<Question>[];
@@ -296,7 +297,7 @@ export const QuestionsTable = ({questions}: QuestionsTableProp) => {
                         {orderQuestions
                             .filter(question => showHiddenQuestions || !question.is_hidden)
                             .length === 0 && (
-                            <Alert variant={'light'} className={classes.noQuestionsAlert}>
+                            <Alert icon={<IconInfoCircle/>} variant={'light'} className={classes.noQuestionsAlert}>
                                 {t`You have no order questions.`}
                             </Alert>
                         )}
@@ -311,7 +312,7 @@ export const QuestionsTable = ({questions}: QuestionsTableProp) => {
                         {ticketQuestions
                             .filter(question => showHiddenQuestions || !question.is_hidden)
                             .length === 0 && (
-                            <Alert variant={'light'} className={classes.noQuestionsAlert}>
+                            <Alert icon={<IconInfoCircle/>} variant={'light'} className={classes.noQuestionsAlert}>
                                 {t`You have no attendee questions.`}
                             </Alert>
                         )}
@@ -319,15 +320,17 @@ export const QuestionsTable = ({questions}: QuestionsTableProp) => {
                 </div>
 
                 <div className={classes.previewContainer}>
-                    <h3>{t`Preview`}</h3>
+                    <h3>
+                        <Group>
+                            {t`Preview`}
+                            <Popover width={'400px'}
+                                     title={t`First Name, Last Name, and Email Address are default questions that are always included in the checkout process.`}>
+                                <IconInfoCircle size={18}/>
+                            </Popover>
+                        </Group>
+                    </h3>
                     <Card className={classes.previewCard}>
-                        <h3>{t`Order questions`}
-                            <Tooltip
-                                label={t`Order questions are asked once per order. By default, people are asked for their first name, last name, and email address.`}>
-                                <IconHelp size={14}/>
-                            </Tooltip>
-
-                        </h3>
+                        <h3>{t`Order questions`}</h3>
                         <div className={classes.previewForm}>
                             <div className={classes.mask}/>
                             <DefaultQuestions/>
@@ -341,12 +344,7 @@ export const QuestionsTable = ({questions}: QuestionsTableProp) => {
                                     />
                                 ))}
 
-                            <h3>{t`Attendee questions`}
-                                <Tooltip
-                                    label={t`Attendee questions are asked once per attendee. By default, people are asked for their first name, last name, and email address.`}>
-                                    <IconHelp size={14}/>
-                                </Tooltip>
-                            </h3>
+                            <h3>{t`Attendee questions`}</h3>
                             <DefaultQuestions/>
                             {ticketQuestions
                                 .filter(question => showHiddenQuestions || !question.is_hidden)

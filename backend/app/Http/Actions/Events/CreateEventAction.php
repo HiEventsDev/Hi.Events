@@ -14,7 +14,9 @@ use Throwable;
 
 class CreateEventAction extends BaseAction
 {
-    public function __construct(private CreateEventHandler $createEventHandler)
+    public function __construct(
+        private readonly CreateEventHandler $createEventHandler
+    )
     {
     }
 

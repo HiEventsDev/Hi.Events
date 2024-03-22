@@ -12,6 +12,7 @@ use HiEvents\Helper\DateHelper;
 use HiEvents\Helper\IdHelper;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
 use HiEvents\Services\Handlers\Event\DTO\CreateEventDTO;
 use Illuminate\Database\DatabaseManager;
@@ -20,10 +21,11 @@ use Throwable;
 readonly class CreateEventHandler
 {
     public function __construct(
-        private EventRepositoryInterface         $eventRepository,
-        private EventSettingsRepositoryInterface $eventSettingsRepository,
-        private OrganizerRepositoryInterface     $organizerRepository,
-        private DatabaseManager                  $databaseManager,
+        private EventRepositoryInterface          $eventRepository,
+        private EventSettingsRepositoryInterface  $eventSettingsRepository,
+        private OrganizerRepositoryInterface      $organizerRepository,
+        private DatabaseManager                   $databaseManager,
+        private EventStatisticRepositoryInterface $eventStatisticsRepository,
     )
     {
     }
@@ -110,6 +112,16 @@ readonly class CreateEventHandler
             'homepage_secondary_text_color' => '#ffffff',
             'homepage_secondary_color' => '#7b5eb9',
             'continue_button_text' => __('Continue'),
+        ]);
+
+        $this->eventStatisticsRepository->create([
+            'event_id' => $event->getId(),
+            'tickets_sold' => 0,
+            'sales_total_gross' => 0,
+            'sales_total_before_additions' => 0,
+            'total_tax' => 0,
+            'total_fee' => 0,
+            'orders_created' => 0,
         ]);
 
         return $event;

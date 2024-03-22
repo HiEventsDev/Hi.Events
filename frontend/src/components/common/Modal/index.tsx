@@ -14,7 +14,7 @@ export const Modal = (props: MantineModalProps & ModalProps) => {
                 blur: 3,
             }}
             size={'xl'}
-            withCloseButton={true}
+            withCloseButton={false}
         >
             {props.heading && (
                 <MantineModal.Header>

@@ -234,6 +234,15 @@ abstract class BaseRepository implements RepositoryInterface
         return $this->model->findOrFail($id)->increment($column, $amount);
     }
 
+    public function incrementWhere(array $where, string $column, int|float $amount = 1): int
+    {
+        $this->applyConditions($where);
+        $count = $this->model->increment($column, $amount);
+        $this->resetModel();
+
+        return $count;
+    }
+
     public function decrement(int|float $id, string $column, int|float $amount = 1): int
     {
         return $this->model->findOrFail($id)?->decrement($column, $amount);
@@ -248,7 +257,7 @@ abstract class BaseRepository implements RepositoryInterface
         return $deleted;
     }
 
-    public function loadRelation(string|Relationship $relationship): self
+    public function loadRelation(string|Relationship $relationship): static
     {
         if (is_string($relationship)) {
             $relationship = new Relationship($relationship);

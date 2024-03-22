@@ -12,12 +12,12 @@ use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Services\Domain\Tax\TaxAndFeeCalculationService;
 use Illuminate\Support\Collection;
 
-readonly class TicketFilterService
+class TicketFilterService
 {
     public function __construct(
-        private EventRepositoryInterface    $eventRepository,
-        private TaxAndFeeCalculationService $taxCalculationService,
-        private TicketPriceService          $ticketPriceService,
+        private readonly EventRepositoryInterface    $eventRepository,
+        private readonly TaxAndFeeCalculationService $taxCalculationService,
+        private readonly TicketPriceService          $ticketPriceService,
     )
     {
     }

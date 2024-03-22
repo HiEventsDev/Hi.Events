@@ -68,3 +68,7 @@ export const getUrlParam = (paramName: string) => {
     const params = new URLSearchParams(window.location.search);
     return params.get(paramName);
 };
+
+export const formatNumber = (number: number) => {
+    return new Intl.NumberFormat().format(number);
+}

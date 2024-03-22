@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Request\Order;
 
-use Illuminate\Validation\ValidationException;
 use HiEvents\Http\Request\BaseRequest;
-use HiEvents\Validators\CreateOrderValidator;
+use HiEvents\Services\Domain\Order\OrderCreateRequestValidationService;
 
 class CreateOrderRequest extends BaseRequest
 {
-    public function rules(CreateOrderValidator $validator): array
+    /**
+     * @see OrderCreateRequestValidationService
+     */
+    public function rules(): array
     {
         return [];
     }

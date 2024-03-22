@@ -57,10 +57,6 @@ export const GlobalMenu = () => {
 
             <Menu.Dropdown>
                 {links.map((link) => {
-                    if (link.adminOnly && me?.role !== 'ADMIN') {
-                        return null;
-                    }
-
                     return (
                         <NavLink onClick={link.onClick} to={link.link ?? '#'} key={link.label}>
                             <Menu.Item component={'div'} leftSection={<link.icon/>}>{link.label}</Menu.Item>

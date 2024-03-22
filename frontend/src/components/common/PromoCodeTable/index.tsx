@@ -153,7 +153,7 @@ export const PromoCodeTable = ({event, promoCodes, openCreateModal}: PromoCodeTa
                                     </span>
                                     </Tooltip> : t`Never`}</MantineTable.Td>
                                 <MantineTable.Td>
-                                    <Group wrap={'nowrap'} gap={0}>
+                                    <Group wrap={'nowrap'} gap={0} justify={'flex-end'}>
                                         <Menu shadow="md" width={200}>
                                             <Menu.Target>
                                                 <Button size={'xs'} variant={'transparent'}><IconDotsVertical/></Button>

@@ -136,7 +136,7 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
                                         color={attendee.status === 'CANCELLED' ? 'red' : 'green'}>{attendee.status}</Badge>
                                 </MantineTable.Td>
                                 <MantineTable.Td style={{paddingRight: 0}}>
-                                    <Group wrap={'nowrap'} gap={0}>
+                                    <Group wrap={'nowrap'} gap={0} justify={'flex-end'}>
                                         <Menu shadow="md" width={200}>
                                             <Menu.Target>
                                                 <Button variant={'transparent'}>

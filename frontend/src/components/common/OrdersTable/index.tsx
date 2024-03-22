@@ -75,7 +75,7 @@ export const OrdersTable = ({orders, event}: OrdersTableProps) => {
     }
 
     const ActionMenu = ({order}: { order: Order }) => {
-        return <Group wrap={'nowrap'} gap={0}>
+        return <Group wrap={'nowrap'} gap={0} justify={'flex-end'}>
             <Menu shadow="md" width={200}>
                 <Menu.Target>
                     <div className={classes.action}>
@@ -85,7 +85,6 @@ export const OrdersTable = ({orders, event}: OrdersTableProps) => {
                                     {t`Manage`}
                                 </Button>
                             </ShowForMobile>
-
                         </div>
                         <div className={classes.desktopAction}>
                             <ShowForDesktop>

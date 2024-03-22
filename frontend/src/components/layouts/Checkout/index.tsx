@@ -8,6 +8,8 @@ import {t} from "@lingui/macro";
 import {Countdown} from "../../common/Countdown";
 import {showSuccess} from "../../../utilites/notifications.tsx";
 import {Event, Order} from "../../../types.ts";
+import {IconExternalLink} from "@tabler/icons-react";
+import {Group} from "@mantine/core";
 
 const SubTitle = ({order, event}: { order: Order, event: Event }) => {
     const navigate = useNavigate();
@@ -46,7 +48,15 @@ const Checkout = () => {
             <div className={classes.container}>
                 <div className={classes.mainContent}>
                     <header className={classes.header}>
-                        <h2>{event?.title}</h2>
+                        <h2>
+                            <Group>
+                                {event?.title}
+                                <a title={t`View event homepage`} href={`/event/${event?.id}/${event?.slug}`} target="_blank" rel="noopener noreferrer">
+                                    <IconExternalLink size={16}/>
+                                </a>
+                            </Group>
+
+                        </h2>
                         {(order && event) ? <SubTitle order={order} event={event}/> : <span>...</span>}
                     </header>
                     <main className={classes.main}>

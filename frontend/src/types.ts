@@ -174,6 +174,7 @@ export interface EventStats {
     total_gross_sales_percentage_change: number;
     total_tax: number;
     total_fees: number;
+    total_views: number;
 }
 
 export interface Organizer {
@@ -515,7 +516,7 @@ export interface SortableItem {
 interface QuestionAnswer {
     question_id: number;
     title: string;
-    answer: string[]|string;
+    answer: string[] | string;
     text_answer: string;
     order_id: number;
     belongs_to: string; // Assuming this is a string, adjust based on actual data type

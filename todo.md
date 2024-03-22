@@ -45,12 +45,12 @@ P1
 - Event Messaging boxes - Done
 - Hide draft event from public - Done
 - View attendee details modal - Done
+- Min/Max quantity on tickets - Done
+- Tooltips for mobile - Done
 
-- Tooltips for mobile
 - Confirm order quantities calculations
 - Fix attendee question errors
 - Ensure email links are working
-- Min/Max quantity on tickets
 
 .hi-promo-code-row  - check css is nested correctly
 
@@ -58,7 +58,6 @@ P3
 - Organizer social handles and meta
 - Multiple requests being made when query param are present
 - Changing a question type could break exports
-
 
 # Set up
 docker-compose up -d

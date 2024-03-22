@@ -11,7 +11,17 @@ import classes from "./EventDashboard.module.scss";
 import {useGetEventStats} from "../../../../queries/useGetEventStats.ts";
 import {formatCurrency} from "../../../../utilites/currency.ts";
 import {formatDate} from "../../../../utilites/dates.ts";
-import {LoadingMask} from "../../../common/LoadingMask";
+import {Skeleton} from "@mantine/core";
+
+export const DashBoardSkeleton = () => {
+    return (
+        <>
+            <Skeleton height={120} radius="l" mb="20px" />
+            <Skeleton height={350} radius="l" mb="20px" />
+            <Skeleton height={350} radius="l" />
+        </>
+    );
+}
 
 export const EventDashboard = () => {
     const {eventId} = useParams();
@@ -33,7 +43,7 @@ export const EventDashboard = () => {
                 </Trans>
             </PageTitle>
 
-            {!event && <LoadingMask/>}
+            {!event && <DashBoardSkeleton/>}
 
             {event && (<>
                 <StatBoxes/>

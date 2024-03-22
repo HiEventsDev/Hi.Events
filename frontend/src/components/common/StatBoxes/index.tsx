@@ -6,6 +6,7 @@ import {useParams} from "react-router-dom";
 import {t} from "@lingui/macro";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {formatCurrency} from "../../../utilites/currency.ts";
+import {formatNumber} from "../../../utilites/helpers.ts";
 
 export const StatBoxes = () => {
     const {eventId} = useParams();
@@ -16,7 +17,7 @@ export const StatBoxes = () => {
 
     const data = [
         {
-            number: eventStats?.total_tickets_sold,
+            number: formatNumber(eventStats?.total_tickets_sold as number),
             description: t`Tickets sold`,
             icon: <IconTicket/>
         },
@@ -26,12 +27,12 @@ export const StatBoxes = () => {
             icon: <IconCash/>
         },
         {
-            number: '2,345',
+            number: formatNumber(eventStats?.total_views as number),
             description: t`Page views`,
             icon: <IconEye/>
         },
         {
-            number: eventStats?.total_orders,
+            number: formatNumber(eventStats?.total_orders as number),
             description: t`Orders Created`,
             icon: <IconReceipt/>
         }

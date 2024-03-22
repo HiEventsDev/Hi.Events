@@ -17,6 +17,7 @@ use HiEvents\Services\Domain\Auth\AuthUserService;
 use HiEvents\Services\Infrastructure\Authorization\IsAuthorizedService;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response as LaravelResponse;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Routing\Controller;
@@ -179,5 +180,15 @@ abstract class BaseAction extends Controller
         $authService = app()->make(IsAuthorizedService::class);
 
         $authService->validateUserRole($minimumRole, $this->getAuthenticatedUser());
+    }
+
+    public function getClientIp(Request $request): ?string
+    {
+        // If the request is coming from a DigitalOcean load balancer, use the connecting IP
+        if ($digitalOceanIp = $request->server('HTTP_DO_CONNECTING_IP')) {
+            return $digitalOceanIp;
+        }
+
+        return $request->getClientIp();
     }
 }

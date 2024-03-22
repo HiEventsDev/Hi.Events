@@ -8,106 +8,50 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3955a247-b760-4719-8eb2-a39d5c8d4182" name="Changes" comment="Promo code delete">
-      <change afterPath="$PROJECT_DIR$/backend/app/Http/Middleware/SetAccountContext.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/app/Models/AccountUser.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/app/Repository/Eloquent/AccountUserRepository.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/app/Repository/Interfaces/AccountUserRepositoryInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/app/Resources/Auth/AuthenticatedResponseResource.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/app/Services/Domain/Account/AccountUserAssociationService.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/app/Services/Handlers/Auth/DTO/AuthenicatedResponseDTO.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/app/Services/Handlers/User/DTO/CancelEmailChangeDTO.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/app/Services/Handlers/User/DTO/ConfirmEmailChangeDTO.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/modals/ChooseAccountModal/index.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/hooks/useIsCurrentUserAdmin.ts" afterDir="false" />
+    <list default="true" id="3955a247-b760-4719-8eb2-a39d5c8d4182" name="Changes" comment="Refactor accounts and users">
+      <change afterPath="$PROJECT_DIR$/backend/app/Services/Domain/Event/EventPageViewIncrementService.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/app/Services/Handlers/Event/DTO/GetPublicEventDTO.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/tests/Unit/Services/Domain/Event/EventPageViewIncrementServiceTest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/components/common/Popover/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/DomainObjects/AccountUserDomainObject.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/DomainObjects/AccountUserDomainObject.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/DomainObjects/Generated/AccountUserDomainObjectAbstract.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/DomainObjects/Generated/AccountUserDomainObjectAbstract.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/DomainObjects/Generated/EventSettingDomainObjectAbstract.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/DomainObjects/Generated/EventSettingDomainObjectAbstract.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/DomainObjects/Generated/UserDomainObjectAbstract.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/DomainObjects/Generated/UserDomainObjectAbstract.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/DomainObjects/UserDomainObject.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/DomainObjects/UserDomainObject.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Http/Actions/Accounts/CreateAccountAction.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Actions/Accounts/CreateAccountAction.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Http/Actions/Accounts/GetAccountAction.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Actions/Accounts/GetAccountAction.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Http/Actions/Accounts/UpdateAccountAction.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Actions/Accounts/UpdateAccountAction.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Http/Actions/Auth/AcceptInvitationAction.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Actions/Auth/AcceptInvitationAction.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Http/Actions/Auth/BaseAuthAction.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Actions/Auth/BaseAuthAction.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Http/Actions/Auth/GetUserInvitationAction.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Actions/Auth/GetUserInvitationAction.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Http/Actions/Auth/LoginAction.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Actions/Auth/LoginAction.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Http/Actions/Auth/RefreshTokenAction.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Actions/Auth/RefreshTokenAction.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/app/Http/Actions/BaseAction.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Actions/BaseAction.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Http/Actions/EventSettings/EditEventSettingsAction.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Actions/EventSettings/EditEventSettingsAction.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Http/Actions/EventSettings/PartialEditEventSettingsAction.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Actions/EventSettings/PartialEditEventSettingsAction.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/app/Http/Actions/Events/CreateEventAction.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Actions/Events/CreateEventAction.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Http/Actions/Events/GetEventsAction.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Actions/Events/GetEventsAction.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Http/Actions/Events/UpdateEventAction.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Actions/Events/UpdateEventAction.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Http/Actions/Events/UpdateEventStatusAction.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Actions/Events/UpdateEventStatusAction.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Http/Actions/Organizers/CreateOrganizerAction.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Actions/Organizers/CreateOrganizerAction.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Http/Actions/Organizers/EditOrganizerAction.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Actions/Organizers/EditOrganizerAction.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Http/Actions/Organizers/GetOrganizerAction.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Actions/Organizers/GetOrganizerAction.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Http/Actions/Organizers/GetOrganizersAction.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Actions/Organizers/GetOrganizersAction.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Http/Actions/TaxesAndFees/CreateTaxOrFeeAction.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Actions/TaxesAndFees/CreateTaxOrFeeAction.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Http/Actions/TaxesAndFees/DeleteTaxOrFeeAction.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Actions/TaxesAndFees/DeleteTaxOrFeeAction.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Http/Actions/TaxesAndFees/EditTaxOrFeeAction.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Actions/TaxesAndFees/EditTaxOrFeeAction.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Http/Actions/TaxesAndFees/GetTaxOrFeeAction.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Actions/TaxesAndFees/GetTaxOrFeeAction.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Http/Actions/Tickets/CreateTicketAction.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Actions/Tickets/CreateTicketAction.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Http/Actions/Tickets/EditTicketAction.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Actions/Tickets/EditTicketAction.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Http/Actions/Users/CancelEmailChangeAction.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Actions/Users/CancelEmailChangeAction.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Http/Actions/Users/ConfirmEmailAddressAction.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Actions/Users/ConfirmEmailAddressAction.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Http/Actions/Users/ConfirmEmailChangeAction.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Actions/Users/ConfirmEmailChangeAction.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Http/Actions/Users/CreateUserAction.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Actions/Users/CreateUserAction.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Http/Actions/Users/DeactivateUsersAction.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Actions/Users/DeactivateUsersAction.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Http/Actions/Users/DeleteInvitationAction.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Actions/Users/DeleteInvitationAction.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Http/Actions/Users/GetMeAction.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Actions/Users/GetMeAction.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Http/Actions/Users/GetUserAction.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Actions/Users/GetUserAction.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Http/Actions/Users/GetUsersAction.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Actions/Users/GetUsersAction.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Http/Actions/Users/ResendInvitationAction.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Actions/Users/ResendInvitationAction.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Http/Actions/Users/UpdateMeAction.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Actions/Users/UpdateMeAction.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Http/Actions/Users/UpdateUserAction.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Actions/Users/UpdateUserAction.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Http/Kernel.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Kernel.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Http/Request/Auth/LoginRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Request/Auth/LoginRequest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Mail/ConfirmEmailAddressEmail.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Mail/ConfirmEmailAddressEmail.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Mail/ConfirmEmailChangeMail.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Mail/ConfirmEmailChangeMail.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Models/Account.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Models/Account.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Models/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Models/User.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Providers/AppServiceProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Providers/AppServiceProvider.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Providers/RepositoryServiceProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Providers/RepositoryServiceProvider.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/Http/Actions/Events/GetEventPublicAction.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Actions/Events/GetEventPublicAction.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/Http/Request/Order/CreateOrderRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Request/Order/CreateOrderRequest.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/app/Repository/Eloquent/BaseRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Repository/Eloquent/BaseRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Repository/Eloquent/UserRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Repository/Eloquent/UserRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Repository/Interfaces/UserRepositoryInterface.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Repository/Interfaces/UserRepositoryInterface.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Resources/User/UserResource.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Resources/User/UserResource.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Services/Domain/Auth/AuthUserService.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Services/Domain/Auth/AuthUserService.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Services/Domain/Auth/DTO/LoginResponse.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Services/Domain/Auth/DTO/LoginResponse.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Services/Domain/Auth/LoginService.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Services/Domain/Auth/LoginService.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Services/Domain/Auth/ResetPasswordTokenValidateService.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Services/Domain/Auth/ResetPasswordTokenValidateService.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Services/Domain/User/EmailConfirmationService.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Services/Domain/User/EmailConfirmationService.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Services/Domain/User/SendUserInvitationService.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Services/Domain/User/SendUserInvitationService.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Services/Handlers/Account/CreateAccountHandler.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Services/Handlers/Account/CreateAccountHandler.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Services/Handlers/Auth/AcceptInvitationHandler.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Services/Handlers/Auth/AcceptInvitationHandler.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Services/Handlers/Auth/DTO/LoginCredentialsDTO.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Services/Handlers/Auth/DTO/LoginCredentialsDTO.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Services/Handlers/Auth/LoginHandler.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Services/Handlers/Auth/LoginHandler.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Services/Handlers/User/CancelEmailChangeHandler.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Services/Handlers/User/CancelEmailChangeHandler.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Services/Handlers/User/ConfirmEmailAddressHandler.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Services/Handlers/User/ConfirmEmailAddressHandler.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Services/Handlers/User/ConfirmEmailChangeHandler.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Services/Handlers/User/ConfirmEmailChangeHandler.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Services/Handlers/User/CreateUserHandler.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Services/Handlers/User/CreateUserHandler.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Services/Handlers/User/UpdateMeHandler.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Services/Handlers/User/UpdateMeHandler.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Services/Handlers/User/UpdateUserHandler.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Services/Handlers/User/UpdateUserHandler.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/Services/Infrastructure/Authorization/IsAuthorizedService.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Services/Infrastructure/Authorization/IsAuthorizedService.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/User.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/Repository/Interfaces/RepositoryInterface.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Repository/Interfaces/RepositoryInterface.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/Services/Domain/Event/EventStatsFetchService.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Services/Domain/Event/EventStatsFetchService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/Services/Domain/Ticket/TicketFilterService.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Services/Domain/Ticket/TicketFilterService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/Services/Handlers/Event/CreateEventHandler.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Services/Handlers/Event/CreateEventHandler.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/Services/Handlers/Event/DTO/EventStatsResponseDTO.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Services/Handlers/Event/DTO/EventStatsResponseDTO.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/Services/Handlers/Event/GetPublicEventHandler.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Services/Handlers/Event/GetPublicEventHandler.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/Services/Handlers/Order/CompleteOrderHandler.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Services/Handlers/Order/CompleteOrderHandler.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/Validators/CreateOrderValidator.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/bootstrap/cache/services.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/bootstrap/cache/services.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend/composer.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/backend/composer.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/config/app.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/config/app.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/database/migrations/2024_03_07_024241_add-price-display-mode-to-event-settings.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/database/migrations/2024_03_12_051739_drop_attributes_table.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/database/migrations/schema.sql" beforeDir="false" afterPath="$PROJECT_DIR$/backend/database/migrations/schema.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/routes/api.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/tests/Unit/Service/Common/EncryptedPayloadServiceTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/tests/Unit/Services/Common/EncryptedPayloadServiceTest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/tests/Unit/Service/Common/Order/OrderCancelServiceTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/tests/Unit/Services/Common/Order/OrderCancelServiceTest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/tests/Unit/Service/Handler/Event/GetPublicEventHandlerTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/tests/Unit/Services/Handlers/Event/GetPublicEventHandlerTest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/common/AttendeeTable/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/common/AttendeeTable/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/common/GlobalMenu/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/common/GlobalMenu/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/common/MessageList/MessageList.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/common/MessageList/MessageList.module.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/common/MessageList/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/common/MessageList/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/common/Modal/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/common/Modal/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/forms/TicketForm/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/forms/TicketForm/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/modals/EditUserModal/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/modals/EditUserModal/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/routes/account/ManageAccount/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/routes/account/ManageAccount/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/routes/auth/Login/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/routes/auth/Login/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/routes/profile/ConfirmEmailChange/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/routes/profile/ConfirmEmailChange/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/router.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/router.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/common/OrdersTable/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/common/OrdersTable/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/common/PromoCodeTable/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/common/PromoCodeTable/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/common/QuestionsTable/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/common/QuestionsTable/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/common/StatBoxes/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/common/StatBoxes/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/common/WidgetEditor/WidgetEditor.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/common/WidgetEditor/WidgetEditor.module.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/common/WidgetEditor/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/common/WidgetEditor/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/layouts/Checkout/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/layouts/Checkout/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/layouts/EventHomepage/EventHomepage.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/layouts/EventHomepage/EventHomepage.module.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/routes/event/EventDashboard/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/routes/event/EventDashboard/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/types.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/utilites/helpers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/utilites/helpers.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/todo.md" beforeDir="false" afterPath="$PROJECT_DIR$/todo.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -139,8 +83,8 @@
         <option value="HTML File" />
         <option value="Dockerfile" />
         <option value="SCSS File" />
-        <option value="TypeScript JSX File" />
         <option value="TypeScript File" />
+        <option value="TypeScript JSX File" />
       </list>
     </option>
   </component>
@@ -328,6 +272,10 @@
       <path value="$PROJECT_DIR$/backend/vendor/symfony/error-handler" />
       <path value="$PROJECT_DIR$/backend/vendor/symfony/http-foundation" />
       <path value="$PROJECT_DIR$/backend/vendor/symfony/service-contracts" />
+      <path value="$PROJECT_DIR$/backend/vendor/laravel/prompts" />
+      <path value="$PROJECT_DIR$/backend/vendor/carbonphp/carbon-doctrine-types" />
+      <path value="$PROJECT_DIR$/backend/vendor/symfony/polyfill-php83" />
+      <path value="$PROJECT_DIR$/backend/vendor/symfony/clock" />
     </include_path>
   </component>
   <component name="ProjectColorInfo">{
@@ -401,17 +349,29 @@
       <recent name="$PROJECT_DIR$/frontend/src/components/routes/event" />
     </key>
   </component>
-  <component name="RunManager" selected="PHPUnit.EncryptedPayloadServiceTest">
-    <configuration name="EmailConfirmationServiceTest.testConfirmEmailAddress" type="PHPUnitRunConfigurationType" factoryName="PHPUnit" temporary="true">
-      <TestRunner class="Tests\Service\Common\User\EmailConfirmationServiceTest" file="$PROJECT_DIR$/backend/tests/Service/Common/User/EmailConfirmationServiceTest.php" method="testConfirmEmailAddress" scope="Method" />
+  <component name="RunManager" selected="PHPUnit.GetPublicEventHandlerTest.testHandleWithValidPromoCode">
+    <configuration name="EventPageViewIncrementServiceTest" type="PHPUnitRunConfigurationType" factoryName="PHPUnit" temporary="true">
+      <TestRunner class="Tests\Unit\Services\Domain\Event\EventPageViewIncrementServiceTest" file="$PROJECT_DIR$/backend/tests/Unit/Services/Domain/Event/EventPageViewIncrementServiceTest.php" scope="Class" />
       <method v="2" />
     </configuration>
-    <configuration name="EncryptedPayloadServiceTest" type="PHPUnitRunConfigurationType" factoryName="PHPUnit" temporary="true">
-      <TestRunner class="Tests\Unit\Service\Common\EncryptedPayloadServiceTest" file="$PROJECT_DIR$/backend/tests/Unit/Service/Common/EncryptedPayloadServiceTest.php" scope="Class" />
+    <configuration name="GetPublicEventHandlerTest" type="PHPUnitRunConfigurationType" factoryName="PHPUnit" temporary="true">
+      <TestRunner class="Tests\Unit\Services\Handlers\Event\GetPublicEventHandlerTest" file="$PROJECT_DIR$/backend/tests/Unit/Services/Handlers/Event/GetPublicEventHandlerTest.php" scope="Class" />
+      <method v="2" />
+    </configuration>
+    <configuration name="GetPublicEventHandlerTest.testHandleWithInvalidPromoCode" type="PHPUnitRunConfigurationType" factoryName="PHPUnit" temporary="true">
+      <TestRunner class="Tests\Unit\Services\Handlers\Event\GetPublicEventHandlerTest" file="$PROJECT_DIR$/backend/tests/Unit/Services/Handlers/Event/GetPublicEventHandlerTest.php" method="testHandleWithInvalidPromoCode" scope="Method" />
+      <method v="2" />
+    </configuration>
+    <configuration name="GetPublicEventHandlerTest.testHandleWithValidPromoCode" type="PHPUnitRunConfigurationType" factoryName="PHPUnit" temporary="true">
+      <TestRunner class="Tests\Unit\Services\Handlers\Event\GetPublicEventHandlerTest" file="$PROJECT_DIR$/backend/tests/Unit/Services/Handlers/Event/GetPublicEventHandlerTest.php" method="testHandleWithValidPromoCode" scope="Method" />
+      <method v="2" />
+    </configuration>
+    <configuration name="GetPublicEventHandlerTest.testHandleWithoutPromoCodeAndUnauthenticatedUser" type="PHPUnitRunConfigurationType" factoryName="PHPUnit" temporary="true">
+      <TestRunner class="Tests\Unit\Services\Handlers\Event\GetPublicEventHandlerTest" file="$PROJECT_DIR$/backend/tests/Unit/Services/Handlers/Event/GetPublicEventHandlerTest.php" method="testHandleWithoutPromoCodeAndUnauthenticatedUser" scope="Method" />
       <method v="2" />
     </configuration>
     <configuration name="im" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
-      <TestRunner class="Tests\Unit\Service\Handler\Event\GetPublicEventHandlerTest" file="$PROJECT_DIR$/backend/tests/Unit/Service/Handler/Event/GetPublicEventHandlerTest.php" method="testHandle" scope="Method" />
+      <TestRunner class="Tests\Unit\Service\Handler\Event\GetPublicEventHandlerTest" file="$PROJECT_DIR$/backend/tests/Unit/Services/Handlers/Event/GetPublicEventHandlerTest.php" method="testHandle" scope="Method" />
       <method v="2" />
     </configuration>
     <configuration default="true" type="docker-deploy" factoryName="docker-compose.yml" temporary="true">
@@ -426,46 +386,13 @@
       </deployment>
       <method v="2" />
     </configuration>
-    <configuration name="backend/Dockerfile base" type="docker-deploy" factoryName="dockerfile" temporary="true" server-name="Docker">
-      <deployment type="dockerfile">
-        <settings>
-          <option name="imageTag" value="php8.2-fpm-alpine_base" />
-          <option name="buildCliOptions" value="--target base" />
-          <option name="buildKitEnabled" value="true" />
-          <option name="buildOnly" value="true" />
-          <option name="sourceFilePath" value="backend/Dockerfile" />
-        </settings>
-      </deployment>
-      <method v="2" />
-    </configuration>
-    <configuration name="backend/Dockerfile" type="docker-deploy" factoryName="dockerfile" temporary="true" server-name="Docker">
-      <deployment type="dockerfile">
-        <settings>
-          <option name="sourceFilePath" value="backend/Dockerfile" />
-        </settings>
-      </deployment>
-      <method v="2" />
-    </configuration>
-    <configuration name="docker.frontend: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
-      <deployment type="docker-compose.yml">
-        <settings>
-          <option name="services">
-            <list>
-              <option value="frontend" />
-            </list>
-          </option>
-          <option name="sourceFilePath" value="docker/docker-compose.yml" />
-        </settings>
-      </deployment>
-      <method v="2" />
-    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="PHPUnit.EncryptedPayloadServiceTest" />
-        <item itemvalue="Docker.docker.frontend: Compose Deployment" />
-        <item itemvalue="Docker.backend/Dockerfile" />
-        <item itemvalue="Docker.backend/Dockerfile base" />
-        <item itemvalue="PHPUnit.EmailConfirmationServiceTest.testConfirmEmailAddress" />
+        <item itemvalue="PHPUnit.GetPublicEventHandlerTest.testHandleWithValidPromoCode" />
+        <item itemvalue="PHPUnit.GetPublicEventHandlerTest.testHandleWithInvalidPromoCode" />
+        <item itemvalue="PHPUnit.GetPublicEventHandlerTest.testHandleWithoutPromoCodeAndUnauthenticatedUser" />
+        <item itemvalue="PHPUnit.GetPublicEventHandlerTest" />
+        <item itemvalue="PHPUnit.EventPageViewIncrementServiceTest" />
       </list>
     </recent_temporary>
   </component>
@@ -548,7 +475,7 @@
       <workItem from="1709407610738" duration="51323000" />
       <workItem from="1709873302572" duration="1235000" />
       <workItem from="1710051759452" duration="75347000" />
-      <workItem from="1710711649470" duration="34395000" />
+      <workItem from="1710711649470" duration="50343000" />
     </task>
     <task id="LOCAL-00001" summary="lots">
       <created>1686782936185</created>
@@ -612,14 +539,6 @@
       <option name="presentableId" value="LOCAL-00009" />
       <option name="project" value="LOCAL" />
       <updated>1694367607098</updated>
-    </task>
-    <task id="LOCAL-00038" summary="update schema.sql">
-      <option name="closed" value="true" />
-      <created>1708124430633</created>
-      <option name="number" value="00038" />
-      <option name="presentableId" value="LOCAL-00038" />
-      <option name="project" value="LOCAL" />
-      <updated>1708124430633</updated>
     </task>
     <task id="LOCAL-00039" summary="i18n">
       <option name="closed" value="true" />
@@ -933,7 +852,15 @@
       <option name="project" value="LOCAL" />
       <updated>1710479259429</updated>
     </task>
-    <option name="localTasksCounter" value="78" />
+    <task id="LOCAL-00078" summary="Refactor accounts and users">
+      <option name="closed" value="true" />
+      <created>1711062481467</created>
+      <option name="number" value="00078" />
+      <option name="presentableId" value="LOCAL-00078" />
+      <option name="project" value="LOCAL" />
+      <updated>1711062481467</updated>
+    </task>
+    <option name="localTasksCounter" value="79" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -956,7 +883,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/frontend" />
     </ignored-roots>
-    <MESSAGE value="widget page colors" />
     <MESSAGE value="bug fixes" />
     <MESSAGE value="change name space" />
     <MESSAGE value="fix formatting" />
@@ -981,7 +907,8 @@
     <MESSAGE value="add DO files" />
     <MESSAGE value="Account for DigitalOcean in session service" />
     <MESSAGE value="Promo code delete" />
-    <option name="LAST_COMMIT_MESSAGE" value="Promo code delete" />
+    <MESSAGE value="Refactor accounts and users" />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactor accounts and users" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

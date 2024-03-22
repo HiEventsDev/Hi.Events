@@ -15,7 +15,6 @@ interface MessageListProps {
 const SingleMessage = ({message}: { message: Message }) => {
     const [showFullMessage, setShowFullMessage] = useState(false);
 
-
     return (
         <Card className={classes.message}>
             <div className={classes.avatar}>
@@ -23,15 +22,18 @@ const SingleMessage = ({message}: { message: Message }) => {
                         size={40}>{getInitials(message.sent_by_user?.first_name + " " + message.sent_by_user?.last_name)}</Avatar>
             </div>
             <div className={classes.details}>
-                <div className={classes.date_and_status}>
-                    <div className={classes.date} title={message.sent_at}>
-                        {relativeDate(message.sent_at as string)}
-                    </div>
+
+                <div className={classes.status}>
                     <Badge
                         color={message.status === "SENT" ? "green" : "orange"}
                         variant={"outline"}>
                         {message.status}
                     </Badge>
+                </div>
+                <div className={classes.date}>
+                    <div className={classes.date} title={message.sent_at}>
+                        {relativeDate(message.sent_at as string)}
+                    </div>
                 </div>
                 <div className={classes.subject}>{message.subject}</div>
                 <div className={classes.type}>{message.type}</div>

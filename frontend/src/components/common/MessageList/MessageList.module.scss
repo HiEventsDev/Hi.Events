@@ -14,20 +14,28 @@
   }
 
   .details {
-    .date_and_status {
+    .status {
       position: absolute;
-      right: 20px;
       top: 20px;
+      right: 20px;
+      font-size: .8rem;
+      font-weight: 400;
+      color: #9ca3af;
+    }
+
+    .date {
       font-size: .8rem;
       font-weight: 400;
       color: #9ca3af;
       display: flex;
+      flex: 1;
+      gap: 10px;
+      margin-bottom: 10px;
 
       .date {
         margin-right: 5px;
       }
     }
-
     .subject {
       font-size: 1.1rem;
       font-weight: 600;
@@ -52,5 +60,7 @@
       }
     }
   }
+
+
 
 }

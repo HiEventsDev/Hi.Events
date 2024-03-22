@@ -1,6 +1,6 @@
 import classes from './WidgetEditor.module.scss';
 import {SelectTickets} from "../../routes/ticket-widget/SelectTickets";
-import {ColorInput, Group, Textarea, Tooltip} from "@mantine/core";
+import {ColorInput, Group, Textarea} from "@mantine/core";
 import {t, Trans} from "@lingui/macro";
 import {matches, useForm} from "@mantine/form";
 import {useEffect, useState} from "react";
@@ -8,6 +8,7 @@ import {CopyButton} from "../CopyButton";
 import {useParams} from "react-router-dom";
 import {IconInfoCircle} from "@tabler/icons-react";
 import {useGetEventSettings} from "../../../queries/useGetEventSettings.ts";
+import {Popover} from "../Popover";
 
 export const WidgetEditor = () => {
     const {eventId} = useParams();
@@ -81,10 +82,10 @@ export const WidgetEditor = () => {
                         <h3>
                             <Group justify={'space-between'}>
                                 {t`Colors`}
-                                <Tooltip
-                                    label={t`These colors are not saved in our system. They are only used to generate the widget.`}>
+
+                                <Popover title={t`These colors are not saved in our system.`}>
                                     <IconInfoCircle size={23}/>
-                                </Tooltip>
+                                </Popover>
                             </Group>
                         </h3>
                         <ColorInput

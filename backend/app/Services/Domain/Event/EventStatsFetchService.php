@@ -29,7 +29,8 @@ readonly class EventStatsFetchService
             SUM(es.orders_created) AS total_orders,
             SUM(es.sales_total_gross) AS total_gross_sales,
             SUM(es.total_tax) AS total_tax,
-            SUM(es.total_fee) AS total_fees
+            SUM(es.total_fee) AS total_fees,
+            SUM(es.total_views) AS total_views
         FROM event_statistics es
         WHERE es.event_id = :eventId
           AND es.deleted_at IS NULL;
@@ -49,6 +50,8 @@ readonly class EventStatsFetchService
             total_gross_sales: $totalsResult->total_gross_sales ?? 0,
             total_fees: $totalsResult->total_fees ?? 0,
             total_tax: $totalsResult->total_tax ?? 0,
+            total_views: $totalsResult->total_views ?? 0,
+
         );
     }
 

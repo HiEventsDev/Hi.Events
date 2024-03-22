@@ -49,6 +49,9 @@ readonly class CompleteOrderHandler
     {
     }
 
+    /**
+     * @throws ResourceNotFoundException|ResourceConflictException|RuntimeException
+     */
     public function handle(string $orderShortId, CompleteOrderDTO $orderData): OrderDomainObject
     {
         return DB::transaction(function () use ($orderData, $orderShortId) {

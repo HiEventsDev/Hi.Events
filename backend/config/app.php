@@ -12,6 +12,13 @@ return [
     'saas_mode_enabled' => env('APP_SAAS_MODE_ENABLED', true),
     'saas_stripe_application_fee_percent' => env('APP_SAAS_STRIPE_APPLICATION_FEE_PERCENT', 1.5),
 
+    /**
+     * The number of page views to batch before updating the database
+     *
+     * For high traffic sites, this can be set to a higher number to reduce the number of database writes
+     */
+    'homepage_views_update_batch_size' => env('APP_HOMEPAGE_VIEWS_UPDATE_BATCH_SIZE', 8),
+
     'frontend_urls' => [
         'confirm_email_address' => '/manage/profile/confirm-email-address/%s',
         'reset_password' => '/auth/reset-password/%s',
