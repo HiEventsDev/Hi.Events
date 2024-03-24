@@ -3,7 +3,7 @@
 </p>
 <h3 align="center">Hi.Events 🚀</h3>
 <p align="center">
-<a href="https://hi.events">Website</a> | <a href="https://hi.events/docs">Documentation</a> | <a href="https://hi.events/docs/faq">FAQ</a>
+<a href="https://hi.events">Website</a> | <a href="https://hi.events/docs">Documentation</a> | <a href="https://demo.hi.events">Demo Event</a> | <a href="https://hi.events/docs/installation">Installation</a> | <a href="https://hi.events/docs/faq">FAQ</a>
 </p>
 
 <h3 align="center">
@@ -71,7 +71,7 @@ official Docker website: [Docker](https://www.docker.com/get-started).
    ```bash
    git clone git@github.com:HiEventsDev/hi.events.git
    ```
-   
+
 2. **Navigate to the docker Directory:**
    ```bash
     cd hi.events/docker
@@ -80,7 +80,7 @@ official Docker website: [Docker](https://www.docker.com/get-started).
    ```bash
    docker-compose up -d
    ```
-   
+
 4. **Migration the database:**
    ```bash
     docker-compose exec backend php artisan key:generate
@@ -88,6 +88,7 @@ official Docker website: [Docker](https://www.docker.com/get-started).
    ```
 
 5. **Access the Hi.Events Dashboard:**
+
 ```
 Open your browser and navigate to `http://localhost:5678` to access the Hi.Events dashboard.
 ```
