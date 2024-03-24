@@ -14,7 +14,7 @@ jobs:
 
     strategy:
       matrix:
-        php-versions: ['8.2', '8.3']
+        php-versions: ['8.2', '8.2']
 
     steps:
       - name: Checkout code
@@ -39,6 +39,9 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-composer-
+
+      - name: Create Laravel bootstrap cache directory
+        run: mkdir -p ./backend/bootstrap/cache && chmod -R 777 ./backend/bootstrap/cache
 
       - name: Install dependencies
         run: cd backend && composer install --prefer-dist --no-progress --no-interaction
