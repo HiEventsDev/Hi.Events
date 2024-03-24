@@ -3,6 +3,9 @@
 </p>
 
 <h1 align="center">Hi.Events</h1>
+<p align="center">
+<a href="https://hi.events">Website</a> | <a href="https://hi.events/docs">Documentation</a> | <a href="https://hi.events/docs/faq">FAQ</a>
+</p>
 <hr/>
 <h3 align="center">
  Self-hosted event management and ticketing platform  🎫
@@ -28,6 +31,8 @@
 
 ## Introduction
 <a href="https://hi.events">Hi.Events</a> is a comprehensive, self-hosted event management and ticketing platform designed for ease of use and deployment. Perfect for event organizers who need a robust, customizable solution.
+
+<img alt="Hi.Event self-hosted ticket selling dashboard" src="https://hievents-public.s3.us-west-1.amazonaws.com/website/dashboard-screenshot.png"/>
 
 ## Features 🌟
 <a href="https://hi.events">Hi.Events</a> is packed with features to streamline your event management and ticketing:
