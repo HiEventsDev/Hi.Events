@@ -7,6 +7,7 @@ use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Repository\Eloquent\BaseRepository;
 use Illuminate\Support\Collection;
+use HiEvents\Repository\Interfaces\RepositoryInterface;
 
 /**
  * @extends BaseRepository<AttendeeDomainObject>
