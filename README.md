@@ -1,7 +1,7 @@
 <p align="center">
   <img src="https://hievents-public.s3.us-west-1.amazonaws.com/website/hi-events-rainbow.png?v=1" alt="Hi.Events Logo" width="200px">
 </p>
-<h3 align="center">Hi.Events</h3>
+<h3 align="center">Hi.Events 🚀</h3>
 <p align="center">
 <a href="https://hi.events">Website</a> | <a href="https://hi.events/docs">Documentation</a> | <a href="https://hi.events/docs/faq">FAQ</a>
 </p>
@@ -21,6 +21,7 @@
 <hr/>
 
 ## Table of Contents 📚
+
 - [Introduction](#introduction)
 - [Features](#features)
 - [Getting Started](#getting-started)
@@ -29,11 +30,13 @@
 - [FAQ](#faq)
 
 ## Introduction
+
 <a href="https://hi.events">Hi.Events</a> is a comprehensive, self-hosted event management and ticketing platform designed for ease of use and deployment. Perfect for event organizers who need a robust, customizable solution.
 
 <img alt="Hi.Event self-hosted ticket selling dashboard" src="https://hievents-public.s3.us-west-1.amazonaws.com/website/dashboard-screenshot.png"/>
 
 ## Features 🌟
+
 <a href="https://hi.events">Hi.Events</a> is packed with features to streamline your event management and ticketing:
 
 - 📊 **Analytics:** Gain deep insights into event performance and ticket sales.
@@ -43,7 +46,8 @@
 - 💬 **Messaging:** Utilize tools for timely updates and reminders.
 - 📝 **Order Forms:** Collect attendee information with tailored forms.
 - 🎫 **Ticket Options:** Offer diverse ticket types — free, paid, donation, or tiered.
-- 💸 **Promo Codes:** Drive sales with customizable discount codes, including pre-sale codes and multiple discount options.
+- 💸 **Promo Codes:** Drive sales with customizable discount codes, including pre-sale codes and multiple discount
+  options.
 - 💰 **Instant Payouts:** Enjoy quick payouts with seamless Stripe integration.
 - 🧾 **Flexible Tax and Fee Configuration:** Tailor taxes and service fees as needed.
 - 📦 **Easy Export:** Conveniently export attendee and order data.
@@ -55,16 +59,57 @@
 - 🌟 **Beautiful Checkout Experience:** Delight purchasers with an elegantly designed process.
 
 ## Getting Started 🚀
-To launch your event with <a href="https://hi.events/docs">Hi.Events</a>, simply:
-1. Visit our [documentation](https://hi.events/docs).
-2. Follow the step-by-step guide to setup your event.
+
+For detailed installation instructions, please refer to our [documentation](https://hi.events/docs/installation). For a
+quick start, follow these steps:
+
+**Prerequisites:**
+Please ensure you have Docker and Docker Compose installed on your system. If not, you can download them from the
+official Docker website: [Docker](https://www.docker.com/get-started).
+
+1. **Clone the Repository:**
+   ```bash
+   git clone git@github.com:HiEventsDev/hi.events.git
+   ```
+   
+2. **Navigate to the docker Directory:**
+   ```bash
+    cd hi.events/docker
+    ```
+3. **Run the Docker Compose Command:**
+   ```bash
+   docker-compose up -d
+   ```
+   
+4. **Migration the database:**
+   ```bash
+    docker-compose exec backend php artisan key:generate
+    docker-compose exec backend php artisan migrate
+   ```
+
+5. **Access the Hi.Events Dashboard:**
+```
+Open your browser and navigate to `http://localhost:5678` to access the Hi.Events dashboard.
+```
 
 ## Change Log 📝
-Stay updated with our ongoing improvements and feature additions at our [GitHub releases page](https://github.com/HiEventsDev/hi.events/releases).
+
+Stay updated with our ongoing improvements and feature additions at
+our [GitHub releases page](https://github.com/HiEventsDev/hi.events/releases).
 
 ## Contributing 🤝
-We welcome contributions, suggestions, and bug reports! Before proposing a new feature or extension, please open an issue to discuss it. We're excited to see your ideas!
+
+We welcome contributions, suggestions, and bug reports! Before proposing a new feature or extension, please open an
+issue to discuss it. We're excited to see your ideas!
 
 ## FAQ ❓
+
 Have questions? Our [FAQ page](https://hi.events/docs/faq) has answers. Check it out for quick help and insights.
 
+## License 📜
+
+Hi.Events code is licensed under the terms of the Elastic License 2.0 (ELv2), which means you can use it freely
+for commercial and non-commercial purposes, as long as you respect the terms of the license.
+
+We also offer a commercial license for those who wish white-label Hi.Events or use it in a proprietary product.
+For more information, please contact us at [licence@hi.events](mailto:licence@hi.events).
