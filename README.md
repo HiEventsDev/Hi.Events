@@ -64,8 +64,10 @@ For detailed installation instructions, please refer to our [documentation](http
 quick start, follow these steps:
 
 **Prerequisites:**
-Please ensure you have Docker and Docker Compose installed on your system. If not, you can download them from the
-official Docker website: [Docker](https://www.docker.com/get-started).
+
+> [!IMPORTANT]  
+> Please ensure you have Docker and Docker Compose installed on your system. If not, you can download them from the
+> official Docker website: [Docker](https://www.docker.com/get-started).
 
 1. **Clone the Repository:**
    ```bash
