@@ -87,11 +87,10 @@ official Docker website: [Docker](https://www.docker.com/get-started).
     docker-compose exec backend php artisan migrate
    ```
 
-5. **Access the Hi.Events Dashboard:**
-
-```
-Open your browser and navigate to `http://localhost:5678` to access the Hi.Events dashboard.
-```
+5. **Access the Dashboard:**
+    ```
+    Open your browser and navigate to `http://localhost:5678` to access the Hi.Events dashboard.
+    ```
 
 ## Change Log 📝
 
