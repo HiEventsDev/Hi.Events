@@ -1,10 +1,10 @@
 <?php
 
-namespace HiEvents\Services\Infrastructure\Encyption;
+namespace HiEvents\Services\Infrastructure\Encryption;
 
 use Carbon\Carbon;
-use HiEvents\Services\Infrastructure\Encyption\Exception\DecryptionFailedException;
-use HiEvents\Services\Infrastructure\Encyption\Exception\EncryptedPayloadExpiredException;
+use HiEvents\Services\Infrastructure\Encryption\Exception\DecryptionFailedException;
+use HiEvents\Services\Infrastructure\Encryption\Exception\EncryptedPayloadExpiredException;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Contracts\Encryption\Encrypter;
 

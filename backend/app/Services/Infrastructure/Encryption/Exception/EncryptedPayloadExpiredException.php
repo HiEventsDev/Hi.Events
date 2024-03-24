@@ -1,6 +1,6 @@
 <?php
 
-namespace HiEvents\Services\Infrastructure\Encyption\Exception;
+namespace HiEvents\Services\Infrastructure\Encryption\Exception;
 
 use Exception;
 

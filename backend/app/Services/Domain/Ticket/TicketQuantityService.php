@@ -5,10 +5,10 @@ namespace HiEvents\Services\Domain\Ticket;
 use Illuminate\Support\Facades\DB;
 use HiEvents\Repository\Interfaces\TicketPriceRepositoryInterface;
 
-readonly class TicketQuantityService
+class TicketQuantityService
 {
     public function __construct(
-        private TicketPriceRepositoryInterface $ticketPriceRepository,
+        private readonly TicketPriceRepositoryInterface $ticketPriceRepository,
     )
     {
     }

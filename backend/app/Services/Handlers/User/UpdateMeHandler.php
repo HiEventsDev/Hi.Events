@@ -7,7 +7,7 @@ use HiEvents\Exceptions\PasswordInvalidException;
 use HiEvents\Mail\User\ConfirmEmailChangeMail;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Services\Handlers\User\DTO\UpdateMeDTO;
-use HiEvents\Services\Infrastructure\Encyption\EncryptedPayloadService;
+use HiEvents\Services\Infrastructure\Encryption\EncryptedPayloadService;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Contracts\Mail\Mailer;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;

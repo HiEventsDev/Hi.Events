@@ -5,7 +5,7 @@ namespace HiEvents\Services\Domain\User;
 use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Helper\Url;
 use HiEvents\Mail\User\UserInvited;
-use HiEvents\Services\Infrastructure\Encyption\EncryptedPayloadService;
+use HiEvents\Services\Infrastructure\Encryption\EncryptedPayloadService;
 use Illuminate\Config\Repository;
 use Illuminate\Contracts\Mail\Mailer;
 

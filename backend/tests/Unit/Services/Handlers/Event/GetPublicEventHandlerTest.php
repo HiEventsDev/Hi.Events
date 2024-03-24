@@ -11,13 +11,10 @@ use HiEvents\Services\Domain\Ticket\TicketFilterService;
 use HiEvents\Services\Handlers\Event\DTO\GetPublicEventDTO;
 use HiEvents\Services\Handlers\Event\GetPublicEventHandler;
 use Mockery as m;
-use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 
 class GetPublicEventHandlerTest extends TestCase
 {
-    use MockeryPHPUnitIntegration;
-
     private EventRepositoryInterface $eventRepository;
     private PromoCodeRepositoryInterface $promoCodeRepository;
     private TicketFilterService $ticketFilterService;
