@@ -6,7 +6,7 @@
 <p align="center">
 <a href="https://hi.events">Website</a> | <a href="https://hi.events/docs">Documentation</a> | <a href="https://hi.events/docs/faq">FAQ</a>
 </p>
-<hr/>
+
 <h3 align="center">
  Self-hosted event management and ticketing platform  🎫
 </h3>
