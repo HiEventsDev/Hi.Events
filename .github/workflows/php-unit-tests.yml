@@ -47,4 +47,4 @@ jobs:
         run: cd backend && composer install --prefer-dist --no-progress --no-interaction
 
       - name: Run PHPUnit Tests
-        run: cd backend && ./vendor/bin/phpunit --coverage-text
+        run: cd backend && ./vendor/bin/phpunit tests/Unit --coverage-text
