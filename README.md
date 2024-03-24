@@ -1,7 +1,7 @@
 <p align="center">
   <img src="https://hievents-public.s3.us-west-1.amazonaws.com/website/hi-events-rainbow.png" alt="Hi.Events Logo" width="250px">
 </p>
-<h1 align="center">Hi.Events</h1>
+<h3 align="center">Hi.Events</h3>
 <p align="center">
 <a href="https://hi.events">Website</a> | <a href="https://hi.events/docs">Documentation</a> | <a href="https://hi.events/docs/faq">FAQ</a>
 </p>
