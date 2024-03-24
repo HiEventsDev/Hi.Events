@@ -68,6 +68,7 @@ readonly class PartialUpdateEventSettingsHandler
 
                 'notify_organizer_of_new_orders' => $eventSettingsDTO->settings['notify_organizer_of_new_orders'] ?? $existingSettings->getNotifyOrganizerOfNewOrders(),
                 'price_display_mode' => $eventSettingsDTO->settings['price_display_mode'] ?? $existingSettings->getPriceDisplayMode(),
+                'hide_getting_started_page' => $eventSettingsDTO->settings['hide_getting_started_page'] ?? $existingSettings->getHideGettingStartedPage(),
             ]),
         );
     }

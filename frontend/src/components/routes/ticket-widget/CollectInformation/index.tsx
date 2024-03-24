@@ -154,29 +154,20 @@ export const CollectInformation = () => {
     };
 
     useEffect(() => {
-        if (isEventFetched && isOrderFetched) {
+        if (isEventFetched && isOrderFetched && questionsQuery.isFetched && ticketQuestions && orderQuestions) {
             const attendees = createAttendeesAndQuestions(createTicketIdToQuestionMap());
-
-            form.setValues({
-                ...form.values,
-                attendees,
-            });
-        }
-    }, [isEventFetched, isOrderFetched]);
-
-    useEffect(() => {
-        if (questionsQuery.isFetched) {
             const formOrderQuestions = createFormOrderQuestions();
 
             form.setValues({
                 ...form.values,
+                attendees: attendees,
                 order: {
                     ...form.values.order,
                     questions: formOrderQuestions,
                 },
             });
         }
-    }, [questionsQuery.isFetched]);
+    }, [isEventFetched, isOrderFetched, questionsQuery.isFetched]);
 
     if (!isEventFetched || !isOrderFetched) {
         return <></>;
@@ -279,7 +270,7 @@ export const CollectInformation = () => {
                             <h3>{orderItem?.item_name}</h3>
                             {Array.from(Array(orderItem?.quantity)).map((_, index) => {
                                 const attendeeInputs = (
-                                    <Card>
+                                    <Card key={`${orderItem.id} ${index}`}>
                                         <h4 style={{marginTop: 0}}>
                                             {t`Attendee`} {index + 1} {t`Details`}
                                         </h4>

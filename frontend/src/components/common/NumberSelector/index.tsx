@@ -25,7 +25,7 @@ export const NumberSelector = ({formInstance, fieldName, min, max}: NumberSelect
         if (value !== 0) {
             formInstance.setFieldValue(fieldName, value);
         }
-    }, [value, formInstance, fieldName]);
+    }, [value]);
 
     const increment = () => {
         // Adjust from 0 to minValue on the first increment, if minValue is greater than 0

@@ -53,6 +53,7 @@ use HiEvents\Http\Actions\Orders\ResendOrderConfirmationAction;
 use HiEvents\Http\Actions\Organizers\CreateOrganizerAction;
 use HiEvents\Http\Actions\Organizers\EditOrganizerAction;
 use HiEvents\Http\Actions\Organizers\GetOrganizerAction;
+use HiEvents\Http\Actions\Organizers\GetOrganizerEventsAction;
 use HiEvents\Http\Actions\Organizers\GetOrganizersAction;
 use HiEvents\Http\Actions\PromoCodes\CreatePromoCodeAction;
 use HiEvents\Http\Actions\PromoCodes\DeletePromoCodeAction;
@@ -135,9 +136,11 @@ $router->middleware(['auth:api'])->group(
         $router->post('/accounts/{account_id}/stripe/connect', CreateStripeConnectAccountAction::class);
 
         $router->post('/organizers', CreateOrganizerAction::class);
+        // This is POST instead of PUT because you can't upload files via PUT in PHP (at least not easily)
         $router->post('/organizers/{organizer_id}', EditOrganizerAction::class);
         $router->get('/organizers', GetOrganizersAction::class);
         $router->get('/organizers/{organizer_id}', GetOrganizerAction::class);
+        $router->get('/organizers/{organizer_id}/events', GetOrganizerEventsAction::class);
 
         $router->post('/accounts/{account_id}/taxes-and-fees', CreateTaxOrFeeAction::class);
         $router->get('/accounts/{account_id}/taxes-and-fees', GetTaxOrFeeAction::class);

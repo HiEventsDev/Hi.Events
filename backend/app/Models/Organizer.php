@@ -3,6 +3,7 @@
 namespace HiEvents\Models;
 
 use HiEvents\Models\Traits\HasImages;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Organizer extends BaseModel
 {
@@ -16,5 +17,10 @@ class Organizer extends BaseModel
     protected function getFillableFields(): array
     {
         return [];
+    }
+
+    public function events(): HasMany
+    {
+        return $this->hasMany(Event::class);
     }
 }

@@ -121,7 +121,7 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
             onClose={onClose}
             heading={t`Send a message`}
         >
-            <form onSubmit={form.onSubmit((values) => mutation.mutate(values))}>
+            <form onSubmit={form.onSubmit((values) => mutation.mutate(values as any))}>
                 <fieldset disabled={!isAccountVerified}>
                     {!isPreselectedRecipient && (
                         <Select
@@ -176,7 +176,7 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
                         label={t`Message Content`}
                         value={form.values.message || ''}
                         onChange={(value) => form.setFieldValue('message', value)}
-                        error={form.errors.message}
+                        error={form.errors.message as string}
                     />
 
                     <Switch

@@ -59,6 +59,7 @@ export const CreateEventModal = ({onClose}: GenericModalProps) => {
             heading={t`Create Event`}
             opened
             size={'lg'}
+            withCloseButton
         >
             {showCreateOrganizer && (
                 <Card>

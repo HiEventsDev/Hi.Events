@@ -297,7 +297,7 @@ export const QuestionsTable = ({questions}: QuestionsTableProp) => {
                         {orderQuestions
                             .filter(question => showHiddenQuestions || !question.is_hidden)
                             .length === 0 && (
-                            <Alert icon={<IconInfoCircle/>} variant={'light'} className={classes.noQuestionsAlert}>
+                            <Alert icon={<IconInfoCircle/>} color={'gray'} className={classes.noQuestionsAlert}>
                                 {t`You have no order questions.`}
                             </Alert>
                         )}
@@ -312,7 +312,7 @@ export const QuestionsTable = ({questions}: QuestionsTableProp) => {
                         {ticketQuestions
                             .filter(question => showHiddenQuestions || !question.is_hidden)
                             .length === 0 && (
-                            <Alert icon={<IconInfoCircle/>} variant={'light'} className={classes.noQuestionsAlert}>
+                            <Alert icon={<IconInfoCircle/>} color={'gray'} className={classes.noQuestionsAlert}>
                                 {t`You have no attendee questions.`}
                             </Alert>
                         )}

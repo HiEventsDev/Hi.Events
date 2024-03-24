@@ -47,11 +47,11 @@ export const GlobalMenu = () => {
         <Menu shadow="md" width={200}>
             <Menu.Target>
                 <UnstyledButton>
-                    {me && (
-                        <Avatar color={'pink'} radius="xl">
-                            {getInitials(me.first_name + ' ' + me.last_name)}
-                        </Avatar>
-                    )}
+                    <Avatar color={'pink'} radius="xl">
+                        {me
+                            ? getInitials(me.first_name + ' ' + me.last_name)
+                        : '..'}
+                    </Avatar>
                 </UnstyledButton>
             </Menu.Target>
 

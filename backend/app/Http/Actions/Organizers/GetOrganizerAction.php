@@ -2,12 +2,12 @@
 
 namespace HiEvents\Http\Actions\Organizers;
 
-use Symfony\Component\HttpFoundation\Response;
 use HiEvents\DomainObjects\ImageDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
 use HiEvents\Resources\Organizer\OrganizerResource;
+use Symfony\Component\HttpFoundation\Response;
 
 class GetOrganizerAction extends BaseAction
 {

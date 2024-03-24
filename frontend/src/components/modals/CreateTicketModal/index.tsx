@@ -83,6 +83,7 @@ export const CreateTicketModal = ({onClose}: GenericModalProps) => {
             heading={t`Create Ticket`}
             opened
             size={'lg'}
+            withCloseButton
         >
             <form onSubmit={form.onSubmit((values) => mutation.mutate(values as any as Ticket))}>
                 <TicketForm form={form}/>

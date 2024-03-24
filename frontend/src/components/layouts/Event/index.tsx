@@ -29,6 +29,7 @@ import {useUpdateEventStatus} from "../../../mutations/useUpdateEventStatus.ts";
 import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {Tooltip} from "../../common/Tooltip";
 import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
+import {useGetEventSettings} from "../../../queries/useGetEventSettings.ts";
 
 const EventLayout = () => {
     const data = [
@@ -54,6 +55,7 @@ const EventLayout = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const {eventId} = useParams();
     const {data: event, isFetched: isEventFetched} = useGetEvent(eventId);
+    const {data: eventSettings, isFetched: isEventSettingsFetched} = useGetEventSettings(eventId);
     const statusToggleMutation = useUpdateEventStatus();
 
     const links = data.map((item) => {
@@ -63,6 +65,14 @@ const EventLayout = () => {
                     {item.label}
                 </div>
             );
+        }
+
+        if (!isEventSettingsFetched || !isEventFetched) {
+            return <a className={classes.loading}></a>;
+        }
+
+        if (item.link === 'getting-started' && eventSettings?.hide_getting_started_page) {
+            return null;
         }
 
         return (
@@ -101,7 +111,6 @@ const EventLayout = () => {
     }
 
 
-
     return (
         <div id={'event-manage-container'} className={`${classes.container} ${sidebarOpen ? classes.closed : ''}`}>
             <div className={`${classes.topBar}`}>
@@ -117,9 +126,20 @@ const EventLayout = () => {
                 <div className={classes.breadcrumbs}>
                     <Breadcrumbs separator="→">
                         <NavLink to={'/manage/events'}>{t`Events`}</NavLink>
-                        {isEventFetched && <NavLink to={`/manage/event/${event?.id}`}>
-                            <Truncate text={event?.title} showTooltip={false}/>
-                        </NavLink>}
+
+                        {isEventFetched && (
+                            <NavLink to={`/manage/organizer/${event?.organizer?.id}`}>
+                                <Truncate text={event?.organizer?.name} showTooltip={false}/>
+                            </NavLink>
+                        )}
+
+                        {isEventFetched && (
+                               <NavLink to={`/manage/event/${event?.id}`}>
+                                   <Truncate text={event?.title} showTooltip={false}/>
+                               </NavLink>
+                        )}
+
+                        {!isEventFetched && <span>{t`...`} </span>}
                     </Breadcrumbs>
 
                     {isEventFetched && (

@@ -13,6 +13,7 @@ class QueryParamsDTO extends BaseDTO
         public readonly ?string $sort_direction = 'desc',
         public readonly ?string $query = null,
         public readonly ?array  $filter_fields = null,
+        public readonly ?array  $includes = null,
     )
     {
     }

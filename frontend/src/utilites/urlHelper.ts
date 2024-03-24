@@ -5,5 +5,5 @@ export const eventCheckoutUrl = (eventId: IdParam, orderShortId: IdParam, subPag
 }
 
 export const eventHomepageUrl = (event: Event) => {
-    return window.location.origin + `/${event.id}/${event.slug}`;
+    return window.location.origin + `/event/${event.id}/${event.slug}`;
 }

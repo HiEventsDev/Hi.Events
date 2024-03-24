@@ -53,7 +53,9 @@ export function EventCard({event}: EventCardProps) {
                         <Group gap="xs" wrap="nowrap">
                             <IconUser color={'#ccc'}/>
                             <Text size="xs">
-                                {event?.organizer?.name}
+                                <NavLink to={`/manage/organizer/${event?.organizer?.id}`}>
+                                    {event?.organizer?.name}
+                                </NavLink>
                             </Text>
                         </Group>
                     </div>
@@ -72,7 +74,7 @@ export function EventCard({event}: EventCardProps) {
                         </Menu.Target>
 
                         <Menu.Dropdown>
-                            <Menu.Item onClick={() => navigate(eventHomepageUrl(event))}
+                            <Menu.Item onClick={() => window.location.href = eventHomepageUrl(event)}
                                        leftSection={<IconEye size={14}/>}
                             >
                                 {t`View event page`}

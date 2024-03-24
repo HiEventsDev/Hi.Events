@@ -2,8 +2,8 @@
 
 namespace HiEvents\Http\Request\Organizer;
 
-use Illuminate\Validation\Rule;
 use HiEvents\Http\Request\BaseRequest;
+use Illuminate\Validation\Rule;
 
 class UpsertOrganizerRequest extends BaseRequest
 {
@@ -22,8 +22,8 @@ class UpsertOrganizerRequest extends BaseRequest
             'logo' => [
                 'image',
                 'nullable',
-                'max:2548',
-                'dimensions:min_width=200,min_height=200,max_width=2500,max_height=2500'
+                'max:1024',
+                'dimensions:min_width=200,min_height=200,max_width=2000,max_height=2000'
             ],
         ];
     }
@@ -31,8 +31,8 @@ class UpsertOrganizerRequest extends BaseRequest
     public function messages(): array
     {
         return [
-            'logo.dimensions' => 'The logo must be at least 200x200 pixels and at most 2500x2500 pixels.',
-            'logo.max' => 'The logo may not be larger than 2.5MB.',
+            'logo.dimensions' => 'The logo must be at least 200x200 pixels and at most 2000x2000 pixels.',
+            'logo.max' => 'The logo may not be larger than 1MB.',
         ];
     }
 }

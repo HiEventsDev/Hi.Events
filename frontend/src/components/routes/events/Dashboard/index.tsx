@@ -3,8 +3,8 @@ import {useGetEvents} from "../../../../queries/useGetEvents.ts";
 import {EventCard} from "../../../common/EventCard";
 import {t} from "@lingui/macro";
 import {SearchBarWrapper} from "../../../common/SearchBar";
-import {Button} from "@mantine/core";
-import {IconCalendar} from "@tabler/icons-react";
+import {Button, Menu} from "@mantine/core";
+import {IconCalendarPlus, IconChevronDown, IconPlus, IconUserPlus} from "@tabler/icons-react";
 import {ToolBar} from "../../../common/ToolBar";
 import {Pagination} from "../../../common/Pagination";
 import {useFilterQueryParamSync} from "../../../../hooks/useFilterQueryParamSync.ts";
@@ -13,22 +13,21 @@ import {CreateEventModal} from "../../../modals/CreateEventModal";
 import {useGetOrganizers} from "../../../../queries/useGetOrganizers.ts";
 import {Navigate} from "react-router-dom";
 import {LoadingMask} from "../../../common/LoadingMask";
+import {NoResultsSplash} from "../../../common/NoResultsSplash";
+import {CreateOrganizerModal} from "../../../modals/CreateOrganizerModal";
 
 export function Dashboard() {
     const [searchParams, setSearchParams] = useFilterQueryParamSync();
     const [createModalOpen, {open: openCreateModal, close: closeCreateModal}] = useDisclosure(false);
-    const eventsQuery = useGetEvents(searchParams as QueryFilters);
+    const [createOrganizerModalOpen, {open: openCreateOrganizerModal, close: closeCreateOrganizerModal}] = useDisclosure(false);
+    const {data: eventData, isFetched: isEventsFetched} = useGetEvents(searchParams as QueryFilters);
     const organizersQuery = useGetOrganizers();
-    const pagination = eventsQuery?.data?.meta;
-    const events = eventsQuery?.data?.data;
+    const pagination = eventData?.meta;
+    const events = eventData?.data;
     const organizers = organizersQuery?.data?.data;
 
     if (organizersQuery.isFetched && organizers?.length === 0) {
         return <Navigate to={'/welcome'}/>
-    }
-
-    if (eventsQuery.isFetching) {
-        return <LoadingMask/>;
     }
 
     return (
@@ -43,11 +42,69 @@ export function Dashboard() {
                     pagination={pagination}
                 />
             )}>
-                <Button onClick={openCreateModal} color={'green'}
-                        rightSection={<IconCalendar/>}>
-                    {t`Create Event`}
-                </Button>
+                <>
+                    <Menu
+                        transitionProps={{transition: 'pop-top-right'}}
+                        position="top-end"
+                        width={220}
+                        withinPortal
+                    >
+                        <Menu.Target>
+                            <Button
+                                leftSection={<IconPlus />}
+                                color={'green'}
+                                rightSection={
+                                    <IconChevronDown stroke={1.5}/>
+                                }
+                                pr={12}
+                            >
+                                {t`Create new`}
+                            </Button>
+                        </Menu.Target>
+                        <Menu.Dropdown>
+                            <Menu.Item
+                                leftSection={
+                                    <IconCalendarPlus
+                                        stroke={1.5}
+                                    />
+                                }
+                                onClick={openCreateModal}
+                            >
+                                {t`Event`}
+                            </Menu.Item>
+                            <Menu.Item
+                                leftSection={
+                                    <IconUserPlus
+                                        stroke={1.5}
+                                    />
+                                }
+                                onClick={openCreateOrganizerModal}
+                            >
+                                {t`Organizer`}
+                            </Menu.Item>
+                        </Menu.Dropdown>
+                    </Menu>
+                </>
             </ToolBar>
+
+            {events?.length === 0 && isEventsFetched && (
+                <NoResultsSplash
+                    heading={t`No events to show`}
+                    subHeading={(
+                        <>
+                            <p>
+                                {t`Once you create an event, you'll see it here.`}
+                            </p>
+                            <Button
+                                size={'xs'}
+                                leftSection={<IconPlus/>}
+                                color={'green'}
+                                onClick={() => openCreateModal()}>{t`Create Event`}
+                            </Button>
+                        </>
+                    )}
+                />
+            )}
 
             <div>
                 {events?.map((event: Event) =>
@@ -55,13 +112,14 @@ export function Dashboard() {
                         <EventCard event={event}/>
                     ))}
             </div>
-            {!!events?.length
+            {events && events.length > 0
                 && <Pagination value={searchParams.pageNumber}
                                onChange={(value) => setSearchParams({pageNumber: value})}
                                total={Number(pagination?.last_page)}
                 />
             }
-            {createModalOpen && <CreateEventModal onClose={closeCreateModal} isOpen={createModalOpen}/>}
+            {createModalOpen && <CreateEventModal onClose={closeCreateModal}/>}
+            {createOrganizerModalOpen && <CreateOrganizerModal onClose={closeCreateOrganizerModal}/>}
         </>
     );
 }

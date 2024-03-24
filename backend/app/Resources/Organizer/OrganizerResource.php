@@ -2,9 +2,9 @@
 
 namespace HiEvents\Resources\Organizer;
 
-use Illuminate\Http\Resources\Json\JsonResource;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Resources\Image\ImageResource;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * @mixin OrganizerDomainObject

@@ -1,5 +1,6 @@
 import {api} from "./client";
-import {GenericDataResponse, GenericPaginatedResponse, IdParam, Organizer,} from "../types";
+import {Event, GenericDataResponse, GenericPaginatedResponse, IdParam, Organizer, QueryFilters,} from "../types";
+import {queryParamsHelper} from "../utilites/queryParamsHelper.ts";
 
 export const organizerClient = {
     create: async (organizer: Partial<Organizer>) => {
@@ -19,6 +20,13 @@ export const organizerClient = {
 
     findByID: async (organizerId: IdParam) => {
         const response = await api.get<GenericDataResponse<Organizer>>('organizers/' + organizerId);
+        return response.data;
+    },
+
+    findEventsByOrganizerId: async (organizerId: IdParam, pagination: QueryFilters) => {
+        const response = await api.get<GenericPaginatedResponse<Event>>(
+            'organizers/' + organizerId + '/events' + queryParamsHelper.buildQueryString(pagination)
+        );
         return response.data;
     },
 }

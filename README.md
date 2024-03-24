@@ -1,55 +1,66 @@
-# Hi.Events: Open Source Ticketing Software
+<p align="center">
+  <img src="https://hievents-public.s3.us-west-1.amazonaws.com/website/logo-for-readme.png" alt="Hi.Events Logo" width="300px">
+</p>
 
-Welcome to **hi.events**, your go-to open source ticketing solution crafted with the power of Laravel and React. If you're on the hunt for a comprehensive, user-friendly, and customizable ticketing software, you've landed at the right place!
+<h1 align="center">Hi.Events</h1>
+<hr/>
+<h3 align="center">
+ Self-hosted event management and ticketing platform  🎫
+</h3>
 
+<div align="center">
 
-## 🌟 Features
+![hi.events docs](https://img.shields.io/badge/docs-docs.hi.events-blue?style=for-the-badge)
+![hi.events version](https://img.shields.io/badge/version-v0.0.2alpha-green?style=for-the-badge)
+![hi.events licence](https://img.shields.io/badge/licence-el2?style=for-the-badge)
 
-1. **Stunning Mobile-Optimized Event Pages:** Craft beautiful event pages that look great on any device.
-2. **Effortless Attendee Management:** Handle refunds, communicate seamlessly, and ensure a smooth attendee experience.
-3. **Comprehensive Data Export:** Download attendee lists in formats like XLS, CSV, and more.
-4. **Print-Ready Attendee Lists:** Generate lists that are optimized for printing, ensuring easy check-ins.
-5. **Unlimited Event & Organizer Management:** No limits on the number of events or organizers you can manage.
-6. **Real-Time Event Analytics:** Get instant insights with up-to-the-minute statistics on your events.
-7. **Tailored Event Pages:** Customize your event pages to reflect your brand and style.
-8. **Multi-Currency Support:** Cater to a global audience with support for various currencies.
-9. **Swift & Secure Checkout:** A user-friendly process that ensures attendees can register quickly.
-10. **Personalized Tickets:** Design tickets with QR codes, organizer logos, and more.
-11. **Full Brand Integration:** Make it truly yours with your own logos and branding on tickets.
-12. **Affiliate Performance Tracking:** Monitor sales volume, website visits, and more from your affiliates.
-13. **Embeddable Ticket Widgets:** Seamlessly integrate ticket sales into your existing websites or WordPress blogs.
-14. **Social Media Integration:** Boost your event's reach with easy social sharing options.
-15. **Diverse Payment Gateways:** Support for Stripe, PayPal, Coinbase, and more, with continuous additions.
-16. **Offline Payment Support:** Cater to attendees who prefer offline payment methods.
-17. **Flexible Refund Options:** Offer both partial and full refunds with ease.
-18. **Service Charge Flexibility:** Add a service charge to tickets as needed.
-19. **Tax Management:** Easily add tax to your tickets, ensuring compliance with local regulations.
-20. **Targeted Messaging:** Communicate with specific ticket holders or all attendees effortlessly.
-21. **Custom Checkout Queries:** Pose specific questions to attendees during the registration process.
-22. **On-Site QR Code Scanning:** A browser-based scanner for efficient door management.
-23. **Sophisticated Dashboard:** An intuitive interface for easy event management.
-24. **REST API:** Easily extend the platform using the fully documented REST API
-25. **Promo Code Capabilities:** Offer special discounts and track their usage.
-26. **Hidden Ticket Options:** Create exclusive tickets that are hidden from the general view.
+</div>
 
-## 🛠️ Tech Stack
+<hr/>
 
-- **Backend:** Laravel
-- **Frontend:** React
+## Table of Contents 📚
+- [Introduction](#introduction)
+- [Features](#features)
+- [Getting Started](#getting-started)
+- [Change Log](#change-log)
+- [Contributing](#contributing)
+- [FAQ](#faq)
 
-## 🚀 Getting Started
+## Introduction
+<a href="https://hi.events">Hi.Events</a> is a comprehensive, self-hosted event management and ticketing platform designed for ease of use and deployment. Perfect for event organizers who need a robust, customizable solution.
 
-1. Clone the repository:
-```bash
-   git clone https://github.com/your_username/ticketkitten.git
-```
+## Features 🌟
+<a href="https://hi.events">Hi.Events</a> is packed with features to streamline your event management and ticketing:
 
-## 🤝 Contributing
-We welcome contributions from the community! Please read our contributing guidelines to get started.
+- 📊 **Analytics:** Gain deep insights into event performance and ticket sales.
+- 🎟 **Embeddable Widget:** Easily integrate ticket sales into any website.
+- 🖥 **Customizable Homepages:** Create eye-catching event pages with flexible design options.
+- 🔑 **Check-In:** Manage attendees efficiently at the door.
+- 💬 **Messaging:** Utilize tools for timely updates and reminders.
+- 📝 **Order Forms:** Collect attendee information with tailored forms.
+- 🎫 **Ticket Options:** Offer diverse ticket types — free, paid, donation, or tiered.
+- 💸 **Promo Codes:** Drive sales with customizable discount codes, including pre-sale codes and multiple discount options.
+- 💰 **Instant Payouts:** Enjoy quick payouts with seamless Stripe integration.
+- 🧾 **Flexible Tax and Fee Configuration:** Tailor taxes and service fees as needed.
+- 📦 **Easy Export:** Conveniently export attendee and order data.
+- 🔍 **SEO Tools:** Boost your event's online visibility.
+- 🛒 **Sleek Checkout:** Ensure a smooth, beautiful checkout experience.
+- 🔐 **Role-Based Access:** Implement role-based permissions for team members.
+- 💻 **Online Event Support:** Get tailored tools for virtual events.
+- ⏪ **Refund Support:** Manage full and partial refunds with ease.
+- 🌟 **Beautiful Checkout Experience:** Delight purchasers with an elegantly designed process.
 
-## 📜 License
-This project is licensed under the AGPL License. See the LICENSE file for details.
+## Getting Started 🚀
+To launch your event with <a href="https://hi.events/docs">Hi.Events</a>, simply:
+1. Visit our [documentation](https://hi.events/docs).
+2. Follow the step-by-step guide to setup your event.
 
-## 🔍 Keywords: Open Source Ticketing Software, Laravel Ticketing, React Event Management, SEO Friendly Ticketing System
+## Change Log 📝
+Stay updated with our ongoing improvements and feature additions at our [GitHub releases page](https://github.com/HiEventsDev/hi.events/releases).
 
-By using TicketKitten, you're choosing a powerful, open-source solution for all your ticketing needs. Give it a star ⭐ if you find it useful!
+## Contributing 🤝
+We welcome contributions, suggestions, and bug reports! Before proposing a new feature or extension, please open an issue to discuss it. We're excited to see your ideas!
+
+## FAQ ❓
+Have questions? Our [FAQ page](https://hi.events/docs/faq) has answers. Check it out for quick help and insights.
+

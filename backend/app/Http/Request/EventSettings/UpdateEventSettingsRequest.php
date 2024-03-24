@@ -50,6 +50,8 @@ class UpdateEventSettingsRequest extends BaseRequest
             'notify_organizer_of_new_orders' => ['boolean'],
 
             'price_display_mode' => [Rule::in(PriceDisplayMode::valuesArray())],
+
+            'hide_getting_started_page' => ['boolean'],
         ];
     }
 

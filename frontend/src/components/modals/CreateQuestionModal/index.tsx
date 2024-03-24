@@ -1,5 +1,5 @@
 import {Button} from "@mantine/core";
-import {GenericModalProps, Question, QuestionType} from "../../../types.ts";
+import {GenericModalProps, Question, QuestionRequestData, QuestionType} from "../../../types.ts";
 import {useForm} from "@mantine/form";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {notifications} from "@mantine/notifications";
@@ -37,7 +37,7 @@ export const CreateQuestionModal = ({onClose, onCompleted}: CreateQuestionModalP
     });
 
     const mutation = useMutation(
-        (questionData: Question) => questionClient.create(eventId, questionData),
+        (questionData: Question) => questionClient.create(eventId, questionData as QuestionRequestData),
         {
             onSuccess: ({data: question}) => {
                 notifications.show({

@@ -41,6 +41,7 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     final public const SEO_KEYWORDS = 'seo_keywords';
     final public const NOTIFY_ORGANIZER_OF_NEW_ORDERS = 'notify_organizer_of_new_orders';
     final public const PRICE_DISPLAY_MODE = 'price_display_mode';
+    final public const HIDE_GETTING_STARTED_PAGE = 'hide_getting_started_page';
 
     protected int $id;
     protected int $event_id;
@@ -73,6 +74,7 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     protected ?string $seo_keywords = null;
     protected bool $notify_organizer_of_new_orders = true;
     protected string $price_display_mode = 'INCLUSIVE';
+    protected bool $hide_getting_started_page = false;
 
     public function toArray(): array
     {
@@ -108,6 +110,7 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
                     'seo_keywords' => $this->seo_keywords ?? null,
                     'notify_organizer_of_new_orders' => $this->notify_organizer_of_new_orders ?? null,
                     'price_display_mode' => $this->price_display_mode ?? null,
+                    'hide_getting_started_page' => $this->hide_getting_started_page ?? null,
                 ];
     }
 
@@ -450,5 +453,16 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     public function getPriceDisplayMode(): string
     {
         return $this->price_display_mode;
+    }
+
+    public function setHideGettingStartedPage(bool $hide_getting_started_page): self
+    {
+        $this->hide_getting_started_page = $hide_getting_started_page;
+        return $this;
+    }
+
+    public function getHideGettingStartedPage(): bool
+    {
+        return $this->hide_getting_started_page;
     }
 }
