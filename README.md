@@ -1,4 +1,3 @@
-```markdown
 ### Hi.Events 🚀
 
 <p align="center">
@@ -112,4 +111,3 @@ Have questions? Our [FAQ page](https://hi.events/docs/faq) has answers. Check it
 Hi.Events code is licensed under the terms of the Elastic License 2.0 (ELv2), which means you can use it freely for commercial and non-commercial purposes, as long as you respect the terms of the license.
 
 We also offer a commercial license for those who wish to white-label Hi.Events or use it in a proprietary product. For more information, please contact us at [licence@hi.events](mailto:licence@hi.events).
-```
