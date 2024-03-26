@@ -1,9 +1,7 @@
-### Hi.Events 🚀
-
 <p align="center">
   <img src="https://hievents-public.s3.us-west-1.amazonaws.com/website/hi-events-rainbow.png?v=1" alt="Hi.Events Logo" width="200px">
 </p>
-<h3 align="center">Hi.Events 🚀</h3>
+<h3 align="center">Hi.Events</h3>
 <p align="center">
 <a href="https://hi.events">Website</a> | <a href="https://hi.events/docs">Documentation</a> | <a href="https://demo.hi.events">Demo Event</a> | <a href="https://hi.events/docs/installation">Installation</a> | <a href="https://hi.events/docs/faq">FAQ</a>
 </p>
@@ -22,14 +20,14 @@
 
 <hr/>
 
-## Table of Contents 📚
+## Table of Contents 
 
-- [📚 Introduction](#-introduction)
-- [🌟 Features](#-features)
-- [🚀 Getting Started](#-getting-started)
-- [📝 Change Log](#-change-log)
-- [🤝 Contributing](#-contributing)
-- [❓ FAQ](#-faq)
+- [Introduction](#-introduction)
+- [Features](#-features)
+- [Getting Started](#-getting-started)
+- [Change Log](#-change-log)
+- [Contributing](#-contributing)
+- [FAQ](#-faq)
 
 ## 📚 Introduction
 
