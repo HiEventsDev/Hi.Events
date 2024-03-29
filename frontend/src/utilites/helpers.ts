@@ -70,5 +70,9 @@ export const getUrlParam = (paramName: string) => {
 };
 
 export const formatNumber = (number: number) => {
+    if (!isNumber(number)) {
+        return 0;
+    }
+
     return new Intl.NumberFormat().format(number);
 }

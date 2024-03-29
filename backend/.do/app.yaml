@@ -1,0 +1,209 @@
+alerts:
+  - rule: DEPLOYMENT_FAILED
+  - rule: DOMAIN_FAILED
+databases:
+  - cluster_name: hi-events-redis
+    engine: REDIS
+    name: hi-events-redis
+    production: true
+    version: "7"
+  - cluster_name: hi-events-postgres
+    db_name: hi-events-db
+    db_user: hi-events-db
+    engine: PG
+    name: hi-events-postgres
+    production: true
+    version: "12"
+domains:
+  - domain: dev.app.hi.events
+    type: PRIMARY
+  - domain: dev.api.hi.events
+    type: ALIAS
+envs:
+  - key: APP_KEY
+    scope: RUN_AND_BUILD_TIME
+    type: SECRET
+    value: EV[1:tgNynPB6rjrGHux5SLWOaGXa0Dq2wUb9:EkhnCswHYeeErT6Mvx+XPQ2tjyq4C250jc2PCPOkz3c98IeV8s98ncrlucqXN9og5RFoNHD/T0UaZdZo/N5hwf3alA==]
+  - key: APP_SAAS_MODE_ENABLED
+    scope: RUN_AND_BUILD_TIME
+    value: "true"
+  - key: APP_SAAS_STRIPE_APPLICATION_FEE_PERCENT
+    scope: RUN_AND_BUILD_TIME
+    value: "1.5"
+  - key: APP_FRONTEND_URL
+    scope: RUN_AND_BUILD_TIME
+    value: ${APP_URL}
+  - key: APP_CDN_URL
+    scope: RUN_AND_BUILD_TIME
+    value: https://d31hxulcw8spzw.cloudfront.net
+  - key: FILESYSTEM_DISK
+    scope: RUN_AND_BUILD_TIME
+    value: s3-public
+  - key: JWT_SECRET
+    scope: RUN_AND_BUILD_TIME
+    type: SECRET
+    value: EV[1:JBreFQlA8IdEHquwAg9P58pMz0JEa+KL:4UMIEVR52tj7N1SzSqykHXJNaO9QrCKB1iSa5AOOEHwBoPoiA8WLeplfaaowgliyk/h51NX26+oA0tw7SHL3JrADnw==]
+  - key: LOG_CHANNEL
+    scope: RUN_AND_BUILD_TIME
+    value: stderr
+  - key: AWS_ACCESS_KEY_ID
+    scope: RUN_AND_BUILD_TIME
+    type: SECRET
+    value: EV[1:nzGNZAsAUDy/A4I57t55AtmGPrdMWVtk:SKvcYl/NT0+IKcu2KaftzbiG3t5nQPfaP/VAj8AE+uzcCWlD]
+  - key: AWS_SECRET_ACCESS_KEY
+    scope: RUN_AND_BUILD_TIME
+    type: SECRET
+    value: EV[1:vmiq656HFNEtHHJs07EQQeV1HVwjM2ea:h9a00bBytMXPz0sNKHOUOfu5e5EUVeBz1kAcdqRLtYhREmhjr1/oUFQ66fJjMxRuCMCyYpu9kbg=]
+  - key: AWS_DEFAULT_REGION
+    scope: RUN_AND_BUILD_TIME
+    value: us-west-1
+  - key: AWS_PUBLIC_BUCKET
+    scope: RUN_AND_BUILD_TIME
+    value: hievents-public
+  - key: AWS_PRIVATE_BUCKET
+    scope: RUN_AND_BUILD_TIME
+    value: hievents-private
+  - key: STRIPE_PUBLIC_KEY
+    scope: RUN_AND_BUILD_TIME
+    type: SECRET
+    value: EV[1:XWMOWzHz/fCYVb824fdEDC1dzGM8O7cC:HV/yWPv7eI721IxatBR9alNVIgsyzS1+SOpk3sxdo8kBK2QcRl+seuhB/MTx4dENQRvI083S7Ybe66UrWKAgR5jO4T2xoyEulvJlCeuZksbv0dC0L6rLFX6wJnZCCqhUei6ua02tU71XQqRg5WGO6daLvGbN6xQ5hrbO]
+  - key: STRIPE_SECRET_KEY
+    scope: RUN_AND_BUILD_TIME
+    type: SECRET
+    value: EV[1:i3ZPSO52CRk6hX2IoC0hox+8yfa8nCNc:NRV6VGMKIGKHlcxw1HTRW25jfNF7tKWuKIF0trHFECPcQ0c7d12BkKlaENi5qi4MxsS3cmbA5wI7lgFwcmEhEz4DOqBBbHjpRgUGF9UXaRvW0PxIixOb9glKW45gPuQGeZn/MJLHNE98p9xi/UyRdgX6wlba96bkauKT]
+  - key: STRIPE_WEBHOOK_SECRET
+    scope: RUN_AND_BUILD_TIME
+    type: SECRET
+    value: EV[1:R1RgskZKXSKnNsqSCQnPX4VrvJ7GANAW:0yNAzT6WlSBM56ghXUWYtK6Cp0O1WyJZS5RLT17bsqnYrvSCEr2x3mEaR0Go7hSKSODHe1Ql]
+  - key: MAIL_MAILER
+    scope: RUN_AND_BUILD_TIME
+    value: smtp
+  - key: MAIL_HOST
+    scope: RUN_AND_BUILD_TIME
+    value: sandbox.smtp.mailtrap.io
+  - key: MAIL_PORT
+    scope: RUN_AND_BUILD_TIME
+    value: "2525"
+  - key: MAIL_USERNAME
+    scope: RUN_AND_BUILD_TIME
+    type: SECRET
+    value: EV[1:FVdDTpQf7I1jYF63nPkgQo8dsvRMTKPU:hTCQ3cK6XFZaqp6Fd6jprgRB61oDfwO30p0ii4VL]
+  - key: MAIL_PASSWORD
+    scope: RUN_AND_BUILD_TIME
+    type: SECRET
+    value: EV[1:kzHCAK6w/8muUxfl9XQ++aCgbbPiq9PK:5Hmdbri+Xz6JVzV9FT0nrrqR+ece7Irq3mm/zdzi]
+  - key: DB_CONNECTION
+    scope: RUN_AND_BUILD_TIME
+    value: pgsql
+  - key: DB_HOST
+    scope: RUN_AND_BUILD_TIME
+    value: ${hi-events-postgres.HOSTNAME}
+  - key: DB_PORT
+    scope: RUN_AND_BUILD_TIME
+    value: ${hi-events-postgres.PORT}
+  - key: DB_DATABASE
+    scope: RUN_AND_BUILD_TIME
+    value: ${hi-events-postgres.DATABASE}
+  - key: DB_USERNAME
+    scope: RUN_AND_BUILD_TIME
+    value: ${hi-events-postgres.USERNAME}
+  - key: DB_PASSWORD
+    scope: RUN_AND_BUILD_TIME
+    value: ${hi-events-postgres.PASSWORD}
+  - key: REDIS_HOST
+    scope: RUN_AND_BUILD_TIME
+    value: ${hi-events-redis.HOSTNAME}
+  - key: REDIS_PASSWORD
+    scope: RUN_AND_BUILD_TIME
+    value: ${hi-events-redis.PASSWORD}
+  - key: REDIS_USER
+    scope: RUN_AND_BUILD_TIME
+    value: ${hi-events-redis.USERNAME}
+  - key: REDIS_PORT
+    scope: RUN_AND_BUILD_TIME
+    value: ${hi-events-redis.PORT}
+  - key: REDIS_URL
+    scope: RUN_AND_BUILD_TIME
+    value: ${hi-events-redis.REDIS_URL}
+  - key: QUEUE_CONNECTION
+    scope: RUN_AND_BUILD_TIME
+    value: redis
+  - key: DATABASE_URL
+    scope: RUN_AND_BUILD_TIME
+    value: ${hi-events-postgres.DATABASE_URL}
+features:
+  - buildpack-stack=ubuntu-22
+ingress:
+  rules:
+    - component:
+        name: hi-events-frontend
+      match:
+        path:
+          prefix: /
+    - component:
+        name: hi-events-backend
+      match:
+        path:
+          prefix: /api
+jobs:
+  - dockerfile_path: /backend/Dockerfile
+    github:
+      branch: main
+      deploy_on_push: true
+      repo: HiEventsDev/hi.events
+    instance_count: 2
+    instance_size_slug: professional-xs
+    kind: PRE_DEPLOY
+    name: hi-events-migration
+    run_command: php artisan migrate --force
+    source_dir: backend
+name: hi-events-backend-app
+region: sfo
+services:
+  - alerts:
+      - operator: GREATER_THAN
+        rule: CPU_UTILIZATION
+        value: 50
+        window: FIVE_MINUTES
+      - operator: GREATER_THAN
+        rule: MEM_UTILIZATION
+        value: 50
+        window: FIVE_MINUTES
+    dockerfile_path: /backend/Dockerfile
+    github:
+      branch: main
+      deploy_on_push: true
+      repo: HiEventsDev/hi.events
+    http_port: 80
+    instance_count: 1
+    instance_size_slug: professional-xs
+    name: hi-events-backend
+    source_dir: backend
+static_sites:
+  - build_command: yarn build
+    catchall_document: index.html
+    environment_slug: node-js
+    envs:
+      - key: VITE_API_URL
+        scope: BUILD_TIME
+        value: ${APP_URL}/api
+      - key: VITE_STRIPE_PUBLISHABLE_KEY
+        scope: BUILD_TIME
+        value: pk_test_51Ofu1CJKnXOyGeQuDPUHiZcJxZozRuERiv4vQRBtCscwTbxOL574cxUjAoNRL2YLCumgC5160pl6kvTIiAc9mOeM0058KAWQ55
+    github:
+      branch: main
+      deploy_on_push: true
+      repo: HiEventsDev/hi.events
+    name: hi-events-frontend
+    source_dir: frontend
+workers:
+  - dockerfile_path: /backend/Dockerfile
+    github:
+      branch: main
+      deploy_on_push: true
+      repo: HiEventsDev/hi.events
+    instance_count: 1
+    instance_size_slug: professional-xs
+    name: hi-events-worker
+    run_command: php artisan queue:work
+    source_dir: backend
