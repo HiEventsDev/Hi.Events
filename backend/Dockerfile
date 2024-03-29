@@ -12,6 +12,7 @@ COPY ./docker/supervisord/syslog.conf /opt/docker/etc/supervisor.d/syslog.conf
 
 RUN chown -R application:application /app \
     && chmod -R 755 /app/storage  \
+    && mkdir -p /app/bootstrap/cache \
     && chmod -R 775 /app/bootstrap/cache
 
 RUN php artisan cache:clear && composer install \
