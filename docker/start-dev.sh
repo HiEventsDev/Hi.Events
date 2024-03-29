@@ -29,12 +29,23 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-# It's fine to run key:generate here for development environments
-# but DO NOT regenerate the get every time in production environments
+echo -e "${GREEN}Waiting for the database to be ready...${NC}"
+while ! $COMPOSE_CMD logs pgsql | grep "ready to accept connections" > /dev/null; do
+  echo -n '.'
+  sleep 1
+done
+
+echo -e "\n${GREEN}Database is ready. Proceeding with migrations...${NC}"
+
 $COMPOSE_CMD exec backend cp .env.example .env
 $COMPOSE_CMD exec backend php artisan key:generate
-
 $COMPOSE_CMD exec backend php artisan migrate
+$COMPOSE_CMD exec backend chmod -R 775 /app/vendor/ezyang/htmlpurifier/library/HTMLPurifier/DefinitionCache/Serializer
+
+if [ $? -ne 0 ]; then
+    echo -e "${RED}Migrations failed.${NC}"
+    exit 1
+fi
 
 echo -e "${GREEN}Hi.Events is now running at:${NC} http://localhost:5678"
 
