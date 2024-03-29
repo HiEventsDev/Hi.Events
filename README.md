@@ -78,18 +78,11 @@ For detailed installation instructions, please refer to our [documentation](http
    cd hi.events/docker
    ```
 
-3. **Run the Docker Compose Command:**
+3. **Run the set-up script:**
    ```bash
-   docker-compose up -d
+   ./start-dev.sh
    ```
-
-4. **Migrate the Database:**
-   ```bash
-   docker-compose exec backend php artisan key:generate
-   docker-compose exec backend php artisan migrate
-   ```
-
-5. **Access the Dashboard:**
+4. **Access the Dashboard:**
     ```
     Open your browser and navigate to http://localhost:5678 to access the Hi.Events dashboard.
     ```
