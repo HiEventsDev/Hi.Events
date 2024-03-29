@@ -31,6 +31,7 @@ fi
 
 # It's fine to run key:generate here for development environments
 # but DO NOT regenerate the get every time in production environments
+$COMPOSE_CMD exec backend cp .env.example .env
 $COMPOSE_CMD exec backend php artisan key:generate
 
 $COMPOSE_CMD exec backend php artisan migrate
