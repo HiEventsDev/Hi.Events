@@ -1,5 +1,5 @@
-import {Alert, Button, PasswordInput, Select, Switch, TextInput} from "@mantine/core";
-import {t} from "@lingui/macro";
+import {Alert, Anchor, Button, PasswordInput, Select, Switch, TextInput} from "@mantine/core";
+import {t, Trans} from "@lingui/macro";
 import {timezones} from "../../../../../data/timezones.ts";
 import {useNavigate, useParams} from "react-router-dom";
 import {hasLength, isEmail, matchesField, useForm} from "@mantine/form";
@@ -105,7 +105,11 @@ const AcceptInvitation = () => {
                                    required/>
 
                     <Switch {...form.getInputProps('terms', {type: 'checkbox'})}
-                            label={t`I agree to the terms and conditions`}/>
+                            label={(
+                                <Trans>
+                                    I agree to the <Anchor target={'_blank'} href={'https://hi.events/terms-of-service'}>terms and conditions</Anchor>
+                                </Trans>
+                            )}/>
 
                     <Button fullWidth loading={acceptInvitationMutation.isLoading}
                             type={'submit'}>{t`Accept Invitation`}</Button>

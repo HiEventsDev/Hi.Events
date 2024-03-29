@@ -96,8 +96,9 @@ export const Register = () => {
                 </form>
                 <footer>
                     <Trans>
-                        By registering you agree to our <NavLink to={'/terms'}>Terms of Service</NavLink> and <NavLink
-                        to={'/privacy'}>Privacy Policy</NavLink>.
+                        By registering you agree to our <NavLink target={'_blank'} to={'https://hi.events/terms-of-service'}>Terms of Service</NavLink> and <NavLink
+                        target={'_blank'}
+                        to={'https://hi.events/privacy-policy'}>Privacy Policy</NavLink>.
                     </Trans>
                 </footer>
             </Card>

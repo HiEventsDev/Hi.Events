@@ -1,3 +1,5 @@
+@import "../../../styles/mixins";
+
 .container {
   display: flex;
   align-items: center;
@@ -9,10 +11,16 @@
 
   img {
     max-width: 500px;
+    width: 240px;
+
+    @include respond-below(md) {
+      width: 170px;
+    }
   }
 
   h2 {
     font-size: 1.3em;
     margin-bottom: 0;
+    margin-top: 5px;
   }
 }

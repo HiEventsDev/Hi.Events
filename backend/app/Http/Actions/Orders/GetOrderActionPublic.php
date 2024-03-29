@@ -64,7 +64,7 @@ class GetOrderActionPublic extends BaseAction
     private function verifySessionId(string $orderSessionId): void
     {
         if (!$this->sessionIdentifierService->verifyIdentifier($orderSessionId)) {
-            throw new UnauthorizedException();
+            throw new UnauthorizedException(__('Sorry, we could not verify your session. Please restart your order.'));
         }
     }
 }

@@ -36,9 +36,9 @@ export const GlobalMenu = () => {
             icon: IconLogout,
             onClick: (event: any) => {
                 event.preventDefault();
+                authClient.logout();
                 localStorage.removeItem('token');
                 navigate('/auth/login', {replace: true});
-                authClient.logout();
             }
         }
     ];

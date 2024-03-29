@@ -1,40 +1,16 @@
 import {Currency, TicketPriceDisplay} from "../../../../../common/Currency";
-import {Event, Ticket, TicketPrice, TicketType} from "../../../../../../types.ts";
-import {Group, TextInput, Tooltip} from "@mantine/core";
+import {Event, Ticket, TicketType} from "../../../../../../types.ts";
+import {Group, TextInput} from "@mantine/core";
 import {NumberSelector} from "../../../../../common/NumberSelector";
 import {UseFormReturnType} from "@mantine/form";
 import {t} from "@lingui/macro";
-import {prettyDate, relativeDate} from "../../../../../../utilites/dates.ts";
-import {IconInfoCircle} from "@tabler/icons-react";
+import {TicketPriceAvailability} from "../../../../../common/TicketPriceAvailability";
 
 interface TieredPricingProps {
     event: Event;
     ticket: Ticket;
     form: UseFormReturnType<any>;
     ticketIndex: number;
-}
-
-const TicketPriceSaleDateMessage = ({price, event}: { price: TicketPrice, event: Event }) => {
-    if (price.is_sold_out) {
-        return t`Sold out`;
-    }
-
-    if (price.is_after_sale_end_date) {
-        return t`Sales ended`;
-    }
-
-    if (price.is_before_sale_start_date) {
-        return (
-            <span>
-                {t`Sales start`}{' '}
-                <Tooltip label={prettyDate(String(price.sale_start_date), event.timezone)}>
-                    <span>{relativeDate(String(price.sale_start_date))}{' '}<IconInfoCircle size={12}/></span>
-                </Tooltip>
-            </span>
-        );
-    }
-
-    return t`Not available`;
 }
 
 export const TieredPricing = ({ticket, event, form, ticketIndex}: TieredPricingProps) => {
@@ -72,7 +48,7 @@ export const TieredPricing = ({ticket, event, form, ticketIndex}: TieredPricingP
                                             ticket={ticket}
                                             currency={event?.currency}
                                             className={'hi-price-tier-price-amount'}
-                                            freeLabel={price.label}
+                                            freeLabel={t`Free`}
                                             taxAndServiceFeeDisplayType={event?.settings?.price_display_mode}
                                         />
                                     )}
@@ -95,7 +71,9 @@ export const TieredPricing = ({ticket, event, form, ticketIndex}: TieredPricingP
                                         )}
                                     </>
                                 )}
-                                {!price.is_available && <TicketPriceSaleDateMessage price={price} event={event}/>}
+                                {(!ticket.is_available || !price.is_available) && (
+                                    <TicketPriceAvailability ticket={ticket} price={price} event={event}/>
+                                )}
                             </div>
                         </Group>
 

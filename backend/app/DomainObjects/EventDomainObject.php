@@ -51,7 +51,7 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
 
     public static function getDefaultSortDirection(): string
     {
-        return 'desc';
+        return 'asc';
     }
 
     public function setTickets(Collection $tickets): self

@@ -1,21 +1,25 @@
-import {useGetOrderPublic} from "../../../../queries/useGetOrderPublic.ts";
-import {NavLink, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import {loadStripe, Stripe} from "@stripe/stripe-js";
 import {Elements} from "@stripe/react-stripe-js";
 import StripeCheckoutForm from "../../../forms/StripeCheckoutForm";
 import {useCreateStripePaymentIntent} from "../../../../queries/useCreateStripePaymentIntent.ts";
-import {Alert} from "@mantine/core";
-import {t, Trans} from "@lingui/macro";
-import {Center} from "../../../common/Center";
-import classes from './Payment.module.scss';
 import {useEffect, useState} from "react";
 import {LoadingMask} from "../../../common/LoadingMask";
+import {CheckoutContent} from "../../../layouts/Checkout/CheckoutContent";
+import {t} from "@lingui/macro";
+import {Anchor} from "@mantine/core";
+import {eventHomepageUrl} from "../../../../utilites/urlHelper.ts";
+import {useGetEventPublic} from "../../../../queries/useGetEventPublic.ts";
 
 const Payment = () => {
     const {eventId, orderShortId} = useParams();
-    const {data: order, isFetched: isOrderFetched} = useGetOrderPublic(eventId, orderShortId);
-    const {data: stripeData, isFetched: isStripeFetched} = useCreateStripePaymentIntent(eventId, orderShortId);
+    const {
+        data: stripeData,
+        isFetched: isStripeFetched,
+        error: stripePaymentIntentError
+    } = useCreateStripePaymentIntent(eventId, orderShortId);
     const [stripePromise, setStripePromise] = useState<Promise<Stripe | null>>();
+    const {data: event} = useGetEventPublic(eventId);
 
     useEffect(() => {
         if (!stripeData?.client_secret) {
@@ -30,45 +34,24 @@ const Payment = () => {
         setStripePromise(loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY, options));
     }, [stripeData]);
 
-    if (!isOrderFetched || !isStripeFetched) {
-        return <></>;
-    }
-
-    if (order?.payment_status === 'PAYMENT_RECEIVED') {
+    if (stripePaymentIntentError && event) {
         return (
-            <Center>
-                <Trans>
-                    This order has already been paid. <NavLink
-                    to={`/checkout/${eventId}/${orderShortId}/summary`}>
-                    View order details
-                </NavLink>
-                </Trans>
-            </Center>
+            <CheckoutContent>
+                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                {/*@ts-ignore}*/}
+                {stripePaymentIntentError.response?.data?.message || t`Sorry, something has gone wrong. Please restart the checkout process.`}
+                {' '} <Anchor href={eventHomepageUrl(event)}>{t`Return to event page`}</Anchor>
+            </CheckoutContent>
         );
     }
 
-    if (order?.payment_status !== 'AWAITING_PAYMENT' && order?.payment_status !== 'PAYMENT_FAILED') {
-        return (
-            <Center>
-                <Trans>
-                    This page has expired. <NavLink to={`/checkout/${eventId}/${orderShortId}/summary`}>
-                    View order details
-                </NavLink>
-                </Trans>
-            </Center>
-
-        );
+    if (!isStripeFetched) {
+        return <LoadingMask/>;
     }
 
     return (
-        <div className={classes.container}>
-            <h1>{t`Payment`}</h1>
-
-            {(order?.payment_status === 'PAYMENT_FAILED' || window.location.search.includes('payment_failed')) && (
-                <Alert mb={20} color={'red'}>{t`Your payment was unsuccessful. Please try again.`}</Alert>
-            )}
-
-            {(!isStripeFetched || !stripePromise) && <LoadingMask/>}
+        <>
+            {(!stripePromise) && <LoadingMask/>}
 
             {(isStripeFetched && stripeData?.client_secret && stripePromise) && (
                 <Elements options={{
@@ -78,7 +61,7 @@ const Payment = () => {
                     <StripeCheckoutForm/>
                 </Elements>
             )}
-        </div>
+        </>
     );
 }
 

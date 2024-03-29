@@ -44,6 +44,7 @@ export const OrdersTable = ({orders, event}: OrdersTableProps) => {
 
     if (orders.length === 0) {
         return <NoResultsSplash
+            imageHref={'/blank-slate/orders.svg'}
             heading={t`No orders to show`}
             subHeading={(
                 <p>

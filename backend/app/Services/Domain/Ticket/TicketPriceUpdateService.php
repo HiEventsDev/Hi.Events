@@ -3,9 +3,11 @@
 namespace HiEvents\Services\Domain\Ticket;
 
 use HiEvents\DomainObjects\Enums\TicketType;
+use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\TicketDomainObject;
 use HiEvents\DomainObjects\TicketPriceDomainObject;
 use HiEvents\Exceptions\CannotDeleteEntityException;
+use HiEvents\Helper\DateHelper;
 use HiEvents\Repository\Eloquent\TicketPriceRepository;
 use HiEvents\Services\Domain\Ticket\DTO\TicketPriceDTO;
 use HiEvents\Services\Handlers\Ticket\DTO\UpsertTicketDTO;
@@ -26,7 +28,8 @@ readonly class TicketPriceUpdateService
         TicketDomainObject $ticket,
         UpsertTicketDTO    $ticketsData,
         /** @var Collection<TicketPriceDomainObject> $existingPrices */
-        Collection         $existingPrices
+        Collection         $existingPrices,
+        EventDomainObject  $event,
     ): void
     {
         if ($ticketsData->type !== TicketType::TIERED) {
@@ -50,8 +53,12 @@ readonly class TicketPriceUpdateService
                     'ticket_id' => $ticket->getId(),
                     'price' => $price->price,
                     'label' => $price->label,
-                    'sale_start_date' => $price->sale_start_date,
-                    'sale_end_date' => $price->sale_end_date,
+                    'sale_start_date' => $price->sale_start_date
+                        ? DateHelper::convertToUTC($price->sale_start_date, $event->getTimezone())
+                        : null,
+                    'sale_end_date' => $price->sale_end_date
+                        ? DateHelper::convertToUTC($price->sale_end_date, $event->getTimezone())
+                        : null,
                     'initial_quantity_available' => $price->initial_quantity_available,
                     'is_hidden' => $price->is_hidden,
                     'order' => $order++,
@@ -61,8 +68,12 @@ readonly class TicketPriceUpdateService
                     'ticket_id' => $ticket->getId(),
                     'price' => $price->price,
                     'label' => $price->label,
-                    'sale_start_date' => $price->sale_start_date,
-                    'sale_end_date' => $price->sale_end_date,
+                    'sale_start_date' => $price->sale_start_date
+                        ? DateHelper::convertToUTC($price->sale_start_date, $event->getTimezone())
+                        : null,
+                    'sale_end_date' => $price->sale_end_date
+                        ? DateHelper::convertToUTC($price->sale_end_date, $event->getTimezone())
+                        : null,
                     'initial_quantity_available' => $price->initial_quantity_available,
                     'is_hidden' => $price->is_hidden,
                     'order' => $order++,

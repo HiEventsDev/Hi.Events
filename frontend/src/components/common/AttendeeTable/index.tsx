@@ -60,6 +60,7 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
     if (attendees.length === 0) {
         return <NoResultsSplash
             heading={t`No Attendees to show`}
+            imageHref={'/blank-slate/attendees.svg'}
             subHeading={(
                 <>
                     <p>

@@ -1,13 +1,15 @@
-import {GenericModalProps} from "../../../types.ts";
-import {OrganizerForm} from "../../forms/OrganizerForm";
+import {GenericModalProps, Organizer} from "../../../types.ts";
+import {OrganizerCreateForm} from "../../forms/OrganizerForm";
 import {t} from "@lingui/macro";
 import {Modal} from "../../common/Modal";
+import {useNavigate} from "react-router-dom";
 
 interface CreateOrganizerModalProps extends GenericModalProps {
     onClose: () => void;
 }
 
 export const CreateOrganizerModal = ({onClose}: CreateOrganizerModalProps) => {
+    const navigate = useNavigate();
     return (
         <Modal
             onClose={onClose}
@@ -15,7 +17,10 @@ export const CreateOrganizerModal = ({onClose}: CreateOrganizerModalProps) => {
             opened
             size={'lg'}
         >
-            <OrganizerForm/>
+            <OrganizerCreateForm onSuccess={(organizer: Organizer) => {
+                onClose();
+                navigate(`/manage/organizer/${organizer.id}`);
+            }}/>
         </Modal>
     )
 }

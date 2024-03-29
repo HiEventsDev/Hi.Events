@@ -124,18 +124,18 @@ const EventLayout = () => {
                     </NavLink>
                 </div>
                 <div className={classes.breadcrumbs}>
-                    <Breadcrumbs separator="→">
+                    <Breadcrumbs separator='/'>
                         <NavLink to={'/manage/events'}>{t`Events`}</NavLink>
 
                         {isEventFetched && (
                             <NavLink to={`/manage/organizer/${event?.organizer?.id}`}>
-                                <Truncate text={event?.organizer?.name} showTooltip={false}/>
+                                <Truncate length={15} text={event?.organizer?.name} showTooltip={false}/>
                             </NavLink>
                         )}
 
                         {isEventFetched && (
                                <NavLink to={`/manage/event/${event?.id}`}>
-                                   <Truncate text={event?.title} showTooltip={false}/>
+                                   <Truncate length={15} text={event?.title} showTooltip={false}/>
                                </NavLink>
                         )}
 

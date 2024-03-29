@@ -1,9 +1,17 @@
 @import "../../../../styles/mixins";
-.headingDate {
+
+.preHeading {
   text-transform: uppercase;
   font-size: 1.1rem;
   font-weight: 600;
   color: var(--homepage-secondary-color, var(--tk-color-black));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .shareButtons button {
+    color: var(--homepage-secondary-color, var(--tk-color-black));
+  }
 
   @include respond-below(sm) {
     font-size: 0.8rem;

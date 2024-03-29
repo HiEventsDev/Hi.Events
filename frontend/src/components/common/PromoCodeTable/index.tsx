@@ -41,6 +41,7 @@ export const PromoCodeTable = ({event, promoCodes, openCreateModal}: PromoCodeTa
     if (promoCodes.length === 0) {
         return <NoResultsSplash
             heading={t`No Promo Codes to show`}
+            imageHref={'/blank-slate/promo-codes.svg'}
             subHeading={(
                 <>
                     <p>

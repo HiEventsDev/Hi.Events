@@ -4,7 +4,7 @@ import {Button} from "../../common/Button";
 import {useParams} from "react-router-dom";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.ts";
 import {useForm} from "@mantine/form";
-import {LoadingOverlay, Select, SimpleGrid, TextInput} from "@mantine/core";
+import {LoadingOverlay, Select, TextInput} from "@mantine/core";
 import {EditAttendeeRequest} from "../../../api/attendee.client.ts";
 import {useGetAttendee} from "../../../queries/useGetAttendee.ts";
 import {useEffect} from "react";
@@ -13,6 +13,7 @@ import {showSuccess} from "../../../utilites/notifications.tsx";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {IconInfoCircle} from "@tabler/icons-react";
 import {t} from "@lingui/macro";
+import {InputGroup} from "../../common/InputGroup";
 
 interface EditAttendeeModalProps extends GenericModalProps {
     attendeeId: number;
@@ -70,7 +71,7 @@ export const EditAttendeeModal = ({onClose, attendeeId}: EditAttendeeModalProps)
     return (
         <Modal opened onClose={onClose} heading={t`Edit Attendee`}>
             <form onSubmit={form.onSubmit(handleSubmit)}>
-                <SimpleGrid cols={2}>
+                <InputGroup>
                     <TextInput
                         {...form.getInputProps('first_name')}
                         label={t`First name`}
@@ -84,9 +85,8 @@ export const EditAttendeeModal = ({onClose, attendeeId}: EditAttendeeModalProps)
                         placeholder={t`Simpson`}
                         required
                     />
-                </SimpleGrid>
+                </InputGroup>
                 <TextInput
-                    mt={20}
                     {...form.getInputProps('email')}
                     label={t`Email address`}
                     placeholder="homer@simpson.com"

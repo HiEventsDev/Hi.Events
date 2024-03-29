@@ -42,7 +42,11 @@ readonly class CreateTicketHandler
                 $ticket = $this->handleTaxes($ticket, $ticketsData);
             }
 
-            return $this->priceCreateService->createPrices($ticket, $ticketsData);
+            return $this->priceCreateService->createPrices(
+                ticket: $ticket,
+                ticketsData: $ticketsData,
+                event: $this->eventRepository->findById($ticketsData->event_id)
+            );
         });
     }
 
@@ -54,10 +58,10 @@ readonly class CreateTicketHandler
             'title' => $ticketsData->title,
             'type' => $ticketsData->type->name,
             'order' => $ticketsData->order,
-            'sale_start_date' => !!$ticketsData->sale_start_date
+            'sale_start_date' => $ticketsData->sale_start_date
                 ? DateHelper::convertToUTC($ticketsData->sale_start_date, $event->getTimezone())
                 : null,
-            'sale_end_date' => !!$ticketsData->sale_end_date
+            'sale_end_date' => $ticketsData->sale_end_date
                 ? DateHelper::convertToUTC($ticketsData->sale_end_date, $event->getTimezone())
                 : null,
             'max_per_order' => $ticketsData->max_per_order,

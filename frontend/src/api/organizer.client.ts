@@ -13,8 +13,8 @@ export const organizerClient = {
         return response.data;
     },
 
-    update: async (organizer: Organizer) => {
-        const response = await api.post<GenericDataResponse<Organizer>>('organizers/' + organizer.id, organizer);
+    update: async (organizerId: IdParam, organizer: Partial<Organizer>) => {
+        const response = await api.post<GenericDataResponse<Organizer>>('organizers/' + organizerId, organizer);
         return response.data;
     },
 

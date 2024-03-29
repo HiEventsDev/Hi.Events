@@ -11,6 +11,9 @@ export const useGetOrganizer = (organizerId: IdParam) => {
         async () => {
             const {data} = await organizerClient.findByID(organizerId);
             return data;
+        }, {
+            staleTime: 0,
+            cacheTime: 0,
         },
     );
 }

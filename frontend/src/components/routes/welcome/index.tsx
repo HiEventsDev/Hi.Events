@@ -7,11 +7,11 @@ import classes from "./Welcome.module.scss";
 import {useForm} from "@mantine/form";
 import {Event} from "../../../types.ts";
 import {useCreateEvent} from "../../../mutations/useCreateEvent.ts";
-import {useNavigate} from "react-router-dom";
+import {NavLink, useNavigate} from "react-router-dom";
 import {useEffect} from "react";
 import {useGetEvents} from "../../../queries/useGetEvents.ts";
 import {LoadingContainer} from "../../common/LoadingContainer";
-import {OrganizerForm} from "../../forms/OrganizerForm";
+import {OrganizerCreateForm} from "../../forms/OrganizerForm";
 
 export const CreateOrganizer = () => {
     return (
@@ -22,7 +22,7 @@ export const CreateOrganizer = () => {
             <p className={classes.sectionDescription}>
                 {t`An organizer is the company or person who is hosting the event`}
             </p>
-            <OrganizerForm/>
+            <OrganizerCreateForm/>
         </>
     );
 }
@@ -129,6 +129,15 @@ const Welcome = () => {
             <Card>
                 {organizerExists ? <CreateEvent/> : <CreateOrganizer/>}
             </Card>
+            {organizerExists && (
+                <div className={classes.skip}>
+                    <NavLink
+                        to={'/manage/events'}
+                    >
+                        {t`Skip this step`}
+                    </NavLink>
+                </div>
+            )}
         </>
     )
 }

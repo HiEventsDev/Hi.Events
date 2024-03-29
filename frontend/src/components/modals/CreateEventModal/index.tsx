@@ -13,7 +13,7 @@ import {Editor} from "../../common/Editor";
 import {useGetOrganizers} from "../../../queries/useGetOrganizers.ts";
 import {IconUsers} from "@tabler/icons-react";
 import classes from "./CreateEventModal.module.scss";
-import {OrganizerForm} from "../../forms/OrganizerForm";
+import {OrganizerCreateForm} from "../../forms/OrganizerForm";
 import {Card} from "../../common/Card";
 
 export const CreateEventModal = ({onClose}: GenericModalProps) => {
@@ -66,7 +66,7 @@ export const CreateEventModal = ({onClose}: GenericModalProps) => {
                     <h3 className={classes.createOrganizerHeading}>
                         {t`Create Organizer`}
                     </h3>
-                    <OrganizerForm
+                    <OrganizerCreateForm
                         onCancel={() => setShowCreateOrganizer(false)}
                         onSuccess={(organizer: Organizer) => {
                             setShowCreateOrganizer(false);

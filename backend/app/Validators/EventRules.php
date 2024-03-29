@@ -19,7 +19,8 @@ trait EventRules
             'timezone' => ['timezone:all'],
             'organizer_id' => ['required', 'integer'],
             'currency' => [Rule::in(array_values($currencies))],
-            'description' => ['string', 'min:1', 'max:5000', 'nullable'],
+            // todo - Revisit the 50k character limit
+            'description' => ['string', 'min:1', 'max:50000', 'nullable'],
             'attributes.*.name' => ['string', 'min:1', 'max:50', 'required'],
             'attributes.*.value' => ['min:1', 'max:1000', 'required'],
             'attributes.*.is_public' => ['boolean', 'required'],

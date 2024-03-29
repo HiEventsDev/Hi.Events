@@ -4,13 +4,14 @@ import {Button} from "../../common/Button";
 import {useNavigate, useParams} from "react-router-dom";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.ts";
 import {useForm} from "@mantine/form";
-import {LoadingOverlay, NumberInput, Select, SimpleGrid, Switch, TextInput} from "@mantine/core";
+import {LoadingOverlay, NumberInput, Select, Switch, TextInput} from "@mantine/core";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {CreateAttendeeRequest} from "../../../api/attendee.client.ts";
 import {useCreateAttendee} from "../../../mutations/useCreateAttendee.ts";
 import {showSuccess} from "../../../utilites/notifications.tsx";
 import {t, Trans} from "@lingui/macro";
 import {useEffect} from "react";
+import {InputGroup} from "../../common/InputGroup";
 
 export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
     const {eventId} = useParams();
@@ -99,7 +100,7 @@ export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
     return (
         <Modal opened onClose={onClose} heading={t`Manually Add Attendee`}>
             <form onSubmit={form.onSubmit(handleSubmit)}>
-                <SimpleGrid cols={2}>
+                <InputGroup>
                     <TextInput
                         {...form.getInputProps('first_name')}
                         label={t`First name`}
@@ -113,7 +114,7 @@ export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
                         placeholder={t`Johnson`}
                         required
                     />
-                </SimpleGrid>
+                </InputGroup>
                 <TextInput
                     {...form.getInputProps('email')}
                     label={t`Email address`}
@@ -169,7 +170,7 @@ export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
                                 mt={20}
                                 fixedDecimalScale
                                 {...form.getInputProps(`taxes_and_fees.${index}.amount`)}
-                                label={tax.name + ' ' +  t`paid` + ' (' + event?.currency + ')'}
+                                label={tax.name + ' ' + t`paid` + ' (' + event?.currency + ')'}
                                 placeholder="0.00"
                                 decimalScale={2}
                                 step={1}

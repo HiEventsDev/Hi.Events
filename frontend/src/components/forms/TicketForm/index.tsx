@@ -11,7 +11,6 @@ import {
     Group,
     MultiSelect,
     NumberInput,
-    SimpleGrid,
     Switch,
     TextInput
 } from "@mantine/core";
@@ -220,7 +219,7 @@ export const TicketForm = ({form, ticket}: TicketFormProps) => {
                 />
 
                 {form.values.type !== TicketType.Tiered && (
-                    <SimpleGrid cols={2} mt={20}>
+                    <InputGroup>
                         <NumberInput decimalScale={2}
                                      min={0}
                                      fixedDecimalScale
@@ -233,7 +232,7 @@ export const TicketForm = ({form, ticket}: TicketFormProps) => {
                                      placeholder={t`Unlimited`}
                                      {...form.getInputProps('initial_quantity_available')}
                                      label={t`Quantity Available`}/>
-                    </SimpleGrid>
+                    </InputGroup>
                 )}
             </div>
 
@@ -309,6 +308,9 @@ export const TicketForm = ({form, ticket}: TicketFormProps) => {
                         <TextInput type={'datetime-local'} {...form.getInputProps('sale_end_date')}
                                    label={t`Sale End Date`}/>
                     </InputGroup>
+                    <h3>
+                        {t`Visibility`}
+                    </h3>
                     <Switch mt={15} {...form.getInputProps('hide_before_sale_start_date', {type: 'checkbox'})}
                             label={t`Hide ticket before sale start date`}/>
                     <Switch mt={20} {...form.getInputProps('hide_after_sale_end_date', {type: 'checkbox'})}

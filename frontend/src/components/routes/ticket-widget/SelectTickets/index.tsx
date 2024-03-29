@@ -1,5 +1,5 @@
-import {t} from "@lingui/macro";
-import {Anchor, Button, Group, Input, Spoiler, TextInput, Tooltip} from "@mantine/core";
+import {t, Trans} from "@lingui/macro";
+import {Anchor, Button, Group, Input, Spoiler, TextInput} from "@mantine/core";
 import {useNavigate, useParams} from "react-router-dom";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {notifications} from "@mantine/notifications";
@@ -15,34 +15,12 @@ import {useGetEventPublic} from "../../../../queries/useGetEventPublic.ts";
 import React, {useEffect, useMemo, useRef} from "react";
 import {useGetPromoCodePublic} from "../../../../queries/useGetPromoCodePublic.ts";
 import {showError, showInfo, showSuccess} from "../../../../utilites/notifications.tsx";
-import {Event, Ticket} from "../../../../types.ts";
-import {prettyDate, relativeDate} from "../../../../utilites/dates.ts";
-import {IconInfoCircle} from "@tabler/icons-react";
 import {addQueryStringToUrl, isObjectEmpty} from "../../../../utilites/helpers.ts";
 import {TieredPricing} from "./Prices/Tiered";
 import classNames from 'classnames';
 import '../../../../styles/widget/default.scss';
-
-const TicketAvailabilityMessage = ({ticket, event}: { ticket: Ticket, event: Event }) => {
-    if (ticket.is_sold_out) {
-        return t`Sold out`;
-    }
-    if (ticket.is_after_sale_end_date) {
-        return t`Sales ended`;
-    }
-    if (ticket.is_before_sale_start_date) {
-        return (
-            <span>
-                {t`Sales start`}{' '}
-                <Tooltip label={prettyDate(String(ticket.sale_start_date), event.timezone)}>
-                    <span>{relativeDate(String(ticket.sale_start_date))}{' '}<IconInfoCircle size={12}/></span>
-                </Tooltip>
-            </span>
-        );
-    }
-
-    return t`Not available`;
-}
+import {TicketAvailabilityMessage} from "../../../common/TicketPriceAvailability";
+import {PoweredByFooter} from "../../../common/PoweredByFooter";
 
 interface SelectTicketsProps {
     colors?: {
@@ -69,6 +47,7 @@ export const SelectTickets = (props: SelectTicketsProps) => {
     const eventQuery = useGetEventPublic(eventId, true, isPromoCodeValid, promoCode);
     const {data: event, data: {tickets} = {}} = eventQuery;
     let ticketIndex = 0;
+    const ticketAreAvailable = tickets && tickets.length > 0;
 
     const form = useForm<TicketFormPayload>({
         initialValues: {
@@ -193,22 +172,19 @@ export const SelectTickets = (props: SelectTicketsProps) => {
             '--widget-secondary-text-color': props.colors?.secondaryText,
             '--widget-padding': props?.padding,
         } as React.CSSProperties}>
-            {tickets?.length === 0 && (
+            {!ticketAreAvailable && (
                 <div className={classNames(['hi-no-tickets'])}>
-                    <h2 className={classNames(['hi-no-tickets-heading'])}>
-                        {t`No tickets available`}
-                    </h2>
                     <p className={classNames(['hi-no-tickets-message'])}>
                         {t`There are no tickets available for this event`}
                     </p>
                 </div>
             )}
 
-            {(event && tickets && tickets.length > 0) && (
+            {(event && ticketAreAvailable) && (
                 <form onSubmit={form.onSubmit(handleTicketSelection)}>
                     <Input type={'hidden'} {...form.getInputProps('promo_code')} />
                     <div className={'hi-ticket-rows'}>
-                        {(event && tickets) && tickets.map((ticket) => {
+                        {(tickets) && tickets.map((ticket) => {
                             const quantityRange = range(ticket.min_per_order || 1, ticket.max_per_order || 25)
                                 .map((n) => n.toString());
                             quantityRange.unshift("0");
@@ -222,7 +198,7 @@ export const SelectTickets = (props: SelectTicketsProps) => {
                                             <h3>{ticket.title}</h3>
                                         </div>
                                         <div className={'hi-ticket-availability'}>
-                                            {(!ticket.is_available && event) && (
+                                            {(!ticket.is_available && ticket.type === 'TIERED') && (
                                                 <TicketAvailabilityMessage ticket={ticket} event={event}/>
                                             )}
                                         </div>
@@ -238,7 +214,7 @@ export const SelectTickets = (props: SelectTicketsProps) => {
 
                                     {ticket.max_per_order && form.values.tickets && isObjectEmpty(form.errors) && (form.values.tickets[index]?.quantities.reduce((acc, {quantity}) => acc + Number(quantity), 0) > ticket.max_per_order) && (
                                         <div className={'hi-ticket-quantity-error'}>
-                                            {t`The maximum numbers number of tickets for Generals is ${ticket.max_per_order}`}
+                                            <Trans>The maximum numbers number of tickets for Generals is {ticket.max_per_order}</Trans>
                                         </div>
                                     )}
 
@@ -277,31 +253,36 @@ export const SelectTickets = (props: SelectTicketsProps) => {
                     </div>
                 </form>
             )}
-            <div className={'hi-promo-code-row'}>
-                {(!showPromoCodeInput && !promoCode) && (
-                    <Anchor className={'hi-have-a-promo-code-link'}
-                            onClick={() => setShowPromoCodeInput(true)}>
-                        {t`Have a promo code?`}
-                    </Anchor>
-                )}
-                {promoValid && (
-                    <div className={'hi-promo-code-applied'}>
-                        <b>{promoCode}</b> {t`applied`}
-                    </div>
-                )}
-                {(!promoValid && showPromoCodeInput && tickets?.length !== 0) && (
-                    <Group className={'hi-promo-code-input-wrapper'} wrap={'nowrap'} gap={'20px'}>
-                        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                        {/*@ts-ignore*/}
-                        <TextInput classNames={{input: 'hi-promo-code-input'}} onKeyPress={handleApplyPromoCodeKeyPress} mb={0} ref={promoRef}/>
-                        <Button className={'hi-apply-promo-code-button'} variant={'outline'}
-                                onClick={handleApplyPromoCode}>
-                            {t`Apply Promo Code`}
-                        </Button>
-                    </Group>
-                )}
-            </div>
 
+            {ticketAreAvailable && (
+                <div className={'hi-promo-code-row'}>
+                    {(!showPromoCodeInput && !promoCode) && (
+                        <Anchor className={'hi-have-a-promo-code-link'}
+                                onClick={() => setShowPromoCodeInput(true)}>
+                            {t`Have a promo code?`}
+                        </Anchor>
+                    )}
+                    {promoValid && (
+                        <div className={'hi-promo-code-applied'}>
+                            <b>{promoCode}</b> {t`applied`}
+                        </div>
+                    )}
+                    {(!promoValid && showPromoCodeInput && ticketAreAvailable) && (
+                        <Group className={'hi-promo-code-input-wrapper'} wrap={'nowrap'} gap={'20px'}>
+                            {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                            {/*@ts-ignore*/}
+                            <TextInput classNames={{input: 'hi-promo-code-input'}} onKeyPress={handleApplyPromoCodeKeyPress} mb={0} ref={promoRef}/>
+                            <Button className={'hi-apply-promo-code-button'} variant={'outline'}
+                                    onClick={handleApplyPromoCode}>
+                                {t`Apply Promo Code`}
+                            </Button>
+                        </Group>
+                    )}
+                </div>
+            )}
+            <PoweredByFooter style={{
+                'color': props.colors?.primaryText || '#000',
+            }}/>
         </div>
     );
 }

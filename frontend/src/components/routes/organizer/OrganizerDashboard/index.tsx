@@ -6,18 +6,21 @@ import {t, Trans} from "@lingui/macro";
 import {ToolBar} from "../../../common/ToolBar";
 import {SearchBarWrapper} from "../../../common/SearchBar";
 import {Button, Skeleton} from "@mantine/core";
-import {IconArrowLeft, IconCalendarPlus, IconPlus} from "@tabler/icons-react";
+import {IconArrowLeft, IconCalendarPlus, IconPencil, IconPlus} from "@tabler/icons-react";
 import {EventCard} from "../../../common/EventCard";
 import {Pagination} from "../../../common/Pagination";
 import {CreateEventModal} from "../../../modals/CreateEventModal";
 import {useGetOrganizer} from "../../../../queries/useGetOrganizer.ts";
 import {useGetOrganizerEvents} from "../../../../queries/useGetOrganizerEvents.ts";
 import {NoResultsSplash} from "../../../common/NoResultsSplash";
+import classes from './OrganizerDashboard.module.scss';
+import {EditOrganizerModal} from "../../../modals/EditOrganizerModal";
 
 const OrganizerDashboard = () => {
     const {organizerId} = useParams();
     const [searchParams, setSearchParams] = useFilterQueryParamSync();
     const [createModalOpen, {open: openCreateModal, close: closeCreateModal}] = useDisclosure(false);
+    const [editModalOpen, {open: openEditModal, close: closeEditModal}] = useDisclosure(false);
     const {data: eventsData, isFetched: isEventsFetched} = useGetOrganizerEvents(
         organizerId,
         searchParams as QueryFilters
@@ -28,14 +31,26 @@ const OrganizerDashboard = () => {
 
     return (
         <>
-            <Button
-                mt={20}
-                pl={0}
-                variant="transparent"
-                leftSection={<IconArrowLeft/>}
-                component={NavLink} to={`/manage/events`}>
-                {t`Back to all events`}
-            </Button>
+            <div className={classes.topLinks}>
+                <Button
+                    mt={20}
+                    pl={0}
+                    variant="transparent"
+                    leftSection={<IconArrowLeft/>}
+                    component={NavLink} to={`/manage/events`}>
+                    {t`Back to all events`}
+                </Button>
+                <Button
+                    mt={20}
+                    pl={0}
+                    variant="transparent"
+                    leftSection={<IconPencil/>}
+                    onClick={openEditModal}
+                    >
+                    {t`Edit Organizer`}
+                </Button>
+            </div>
+
 
             <h1 style={{marginTop: '15px'}}>
                 {isOrganizerFetched && (
@@ -72,6 +87,7 @@ const OrganizerDashboard = () => {
             {events?.length === 0 && isEventsFetched && (
                 <NoResultsSplash
                     heading={t`No events for this organizer`}
+                    imageHref={'/blank-slate/events.svg'}
                     subHeading={(
                         <>
                             <p>
@@ -101,7 +117,8 @@ const OrganizerDashboard = () => {
                                total={Number(pagination?.last_page)}
                 />
             }
-            {createModalOpen && <CreateEventModal onClose={closeCreateModal} isOpen={createModalOpen}/>}
+            {createModalOpen && <CreateEventModal onClose={closeCreateModal} />}
+            {(editModalOpen && organizer) && <EditOrganizerModal organizerId={organizerId} onClose={closeEditModal}/>}
         </>
     );
 }

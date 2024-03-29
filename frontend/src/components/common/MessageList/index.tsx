@@ -57,6 +57,7 @@ export const MessageList = ({messages}: MessageListProps) => {
     if (messages.length === 0) {
         return <NoResultsSplash
             heading={t`No messages to show`}
+            imageHref={'/blank-slate/messages.svg'}
             subHeading={(
                 <>
                     <p>

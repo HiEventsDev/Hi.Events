@@ -78,6 +78,7 @@ export const EventDetailsForm = () => {
                         label={t`Description`}
                         value={form.values.description || ''}
                         onChange={(value) => form.setFieldValue('description', value)}
+                        error={form.errors?.description as string}
                     />
 
                     <InputGroup>

@@ -10,7 +10,7 @@ import {useParams} from "react-router-dom";
 import {useGetEventPublic} from "../../../queries/useGetEventPublic.ts";
 import {LoadingMask} from "../../common/LoadingMask";
 import {EventDocumentHead} from "../../common/EventDocumentHead";
-import {EventNotAvailable} from "./EventNotAvailable";
+import {HomepageInfoMessage} from "../../common/HomepageInfoMessage";
 
 interface EventHomepageProps {
     colors?: {
@@ -29,7 +29,9 @@ const EventHomepage = ({colors, continueButtonText}: EventHomepageProps) => {
     const coverImage = event?.images?.find((image) => image.type === 'EVENT_COVER');
 
     if (error?.response?.status === 404) {
-        return <EventNotAvailable/>
+        return <HomepageInfoMessage
+            message={t`This event is not available.`}
+        />
     }
 
     if (!eventIsFetched || !event) {

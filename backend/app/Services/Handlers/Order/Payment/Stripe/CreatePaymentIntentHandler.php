@@ -49,7 +49,7 @@ readonly class CreatePaymentIntentHandler
 
 
         if (!$order || !$this->sessionIdentifierService->verifyIdentifier($order->getSessionId())) {
-            throw new UnauthorizedException();
+            throw new UnauthorizedException(__('Sorry, we could not verify your session. Please create a new order.'));
         }
 
         $account = $this->accountRepository->findByEventId($order->getEventId());

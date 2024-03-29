@@ -1,15 +1,15 @@
 import {Outlet, useNavigate, useParams} from "react-router-dom";
 import {useGetEventPublic} from "../../../queries/useGetEventPublic.ts";
 import classes from './Checkout.module.scss';
-import {OrderSummary} from "../../common/OrderSummary";
 import {useGetOrderPublic} from "../../../queries/useGetOrderPublic.ts";
-import {LoadingMask} from "../../common/LoadingMask";
 import {t} from "@lingui/macro";
 import {Countdown} from "../../common/Countdown";
 import {showSuccess} from "../../../utilites/notifications.tsx";
 import {Event, Order} from "../../../types.ts";
 import {IconExternalLink} from "@tabler/icons-react";
-import {Group} from "@mantine/core";
+import {Anchor, Group} from "@mantine/core";
+import {CheckoutSidebar} from "./CheckoutSidebar";
+import {eventHomepageUrl} from "../../../utilites/urlHelper.ts";
 
 const SubTitle = ({order, event}: { order: Order, event: Event }) => {
     const navigate = useNavigate();
@@ -23,6 +23,7 @@ const SubTitle = ({order, event}: { order: Order, event: Event }) => {
     if (order?.status === 'RESERVED') {
         return (
             <Countdown
+                className={classes.countdown}
                 targetDate={order.reserved_until}
                 onExpiry={() => {
                     showSuccess(t`Sorry, your order has expired. Please start a new order.`);
@@ -41,7 +42,6 @@ const Checkout = () => {
         data: order,
     } = useGetOrderPublic(eventId, orderShortId);
     const {data: event} = useGetEventPublic(eventId);
-    const coverImage = event?.images?.find((image) => image.type === 'EVENT_COVER');
 
     return (
         <>
@@ -51,39 +51,21 @@ const Checkout = () => {
                         <h2>
                             <Group>
                                 {event?.title}
-                                <a title={t`View event homepage`} href={`/event/${event?.id}/${event?.slug}`} target="_blank" rel="noopener noreferrer">
-                                    <IconExternalLink size={16}/>
-                                </a>
+                                {event && (
+                                    <Anchor style={{display: 'flex'}} title={t`View event homepage`}
+                                            href={eventHomepageUrl(event as Event)}
+                                            target="_blank">
+                                        <IconExternalLink size={16}/>
+                                    </Anchor>
+                                )}
                             </Group>
-
                         </h2>
                         {(order && event) ? <SubTitle order={order} event={event}/> : <span>...</span>}
                     </header>
-                    <main className={classes.main}>
-                        <div className={classes.innerContainer}>
-                            <Outlet/>
-                        </div>
-                        <LoadingMask/>
-                    </main>
+                    <Outlet/>
                 </div>
 
-                <aside className={classes.sidebar}>
-                    {coverImage && (
-                        <div className={classes.coverImage}>
-                            <img src={coverImage?.url} alt={event?.title}/>
-                        </div>
-                    )}
-
-                    <div className={classes.checkoutSummary}>
-                        {(order && event) && (
-                            <>
-                                <h4>{t`Order Summary`}</h4>
-                                <OrderSummary event={event} order={order}/>
-                            </>
-                        )}
-                        <LoadingMask/>
-                    </div>
-                </aside>
+                {(order && event) && <CheckoutSidebar className={classes.sidebar} event={event} order={order}/>}
             </div>
         </>
     );

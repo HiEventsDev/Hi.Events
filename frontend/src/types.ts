@@ -184,6 +184,8 @@ export interface Organizer {
     email: string;
     description?: string;
     website?: string;
+    timezone?: string;
+    currency?: string;
     phone?: string;
     images?: Image[];
     events?: Event[];

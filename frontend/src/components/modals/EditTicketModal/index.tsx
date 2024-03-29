@@ -68,8 +68,8 @@ export const EditTicketModal = ({onClose, ticketId}: GenericModalProps & { ticke
             prices: ticket.prices?.map(p => ({
                 price: p.price,
                 label: p.label,
-                sale_start_date: p.sale_start_date,
-                sale_end_date: p.sale_end_date,
+                sale_start_date: utcToTz(p.sale_start_date, event.timezone),
+                sale_end_date: utcToTz(p.sale_end_date, event.timezone),
                 initial_quantity_available: p.initial_quantity_available,
                 id: p.id,
                 is_hidden: p.is_hidden,

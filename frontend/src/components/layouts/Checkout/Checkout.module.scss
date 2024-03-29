@@ -5,6 +5,16 @@
   background-color: #3c2b5c05 !important;
   height: 100vh;
 
+  .sidebar {
+    @include respond-below(md) {
+      display: none;
+    }
+  }
+
+  .countdown {
+    color: #0ca678;
+  }
+
   .subTitle {
     font-size: .95em;
   }
@@ -55,31 +65,6 @@
     .footer {
       height: 100px;
       background-color: #ffffff;
-    }
-  }
-
-  .sidebar {
-    width: 350px;
-    min-width: 300px;
-    background-color: #ffffff;
-
-    @include respond-below(md) {
-      display: none;
-    }
-
-    .coverImage {
-      img {
-        width: 100%;
-      }
-    }
-
-    .checkoutSummary {
-      position: relative;
-      padding: 20px;
-
-      h4 {
-        margin-top: 0;
-      }
     }
   }
 }

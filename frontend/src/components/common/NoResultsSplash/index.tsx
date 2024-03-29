@@ -7,19 +7,21 @@ interface NoResultsSplashProps {
     heading?: React.ReactNode,
     children?: React.ReactNode,
     subHeading?: React.ReactNode,
+    imageHref?: string
 }
 
 export const NoResultsSplash = ({
                                     heading = t`'There\'s nothing to show yet'`,
                                     children,
-                                    subHeading
+                                    subHeading,
+                                    imageHref = '/no-results-empty-boxes.svg'
                                 }: NoResultsSplashProps) => {
     const [searchParams] = useSearchParams();
     const hasSearchQuery = !!searchParams.get('query');
 
     return (
         <div className={classes.container}>
-            <img alt={t`No results`} width={300} src={'/no-results-empty-boxes.svg'}/>
+            <img alt={t`No results`} width={300} src={imageHref}/>
 
             {heading && !hasSearchQuery && <h2>{heading}</h2>}
 

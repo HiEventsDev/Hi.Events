@@ -80,7 +80,11 @@ export const Editor = ({error, onChange, value, label = '', required = false, cl
 
                 <RichTextEditor.Content/>
             </RichTextEditor>
-            {error && <InputError>{error}</InputError>}
+            {error && (
+                <div className={classes.error}>
+                    <InputError>{error}</InputError>
+                </div>
+            )}
         </div>
     );
 }

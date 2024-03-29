@@ -1,20 +1,32 @@
 import {useMutation} from "@tanstack/react-query";
 import {FinaliseOrderPayload, orderClientPublic} from "../../../../api/order.client.ts";
-import {NavLink, useNavigate, useParams} from "react-router-dom";
-import {Alert, Button, Group, TextInput} from "@mantine/core";
+import {useNavigate, useParams} from "react-router-dom";
+import {Button, Skeleton, TextInput} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import {notifications} from "@mantine/notifications";
 import {useGetOrderPublic} from "../../../../queries/useGetOrderPublic.ts";
 import {useGetEventPublic} from "../../../../queries/useGetEventPublic.ts";
 import {useGetEventQuestionsPublic} from "../../../../queries/useGetEventQuestionsPublic.ts";
 import {CheckoutOrderQuestions, CheckoutTicketQuestions} from "../../../common/CheckoutQuestion";
-import {Question} from "../../../../types.ts";
+import {Event, Order, Question} from "../../../../types.ts";
 import {useEffect} from "react";
 import {t} from "@lingui/macro";
 import {InputGroup} from "../../../common/InputGroup";
-import {Center} from "../../../common/Center";
 import {Card} from "../../../common/Card";
 import {IconCopy} from "@tabler/icons-react";
+import {CheckoutFooter} from "../../../layouts/Checkout/CheckoutFooter";
+import {CheckoutContent} from "../../../layouts/Checkout/CheckoutContent";
+import {HomepageInfoMessage} from "../../../common/HomepageInfoMessage";
+import {eventCheckoutUrl, eventHomepageUrl} from "../../../../utilites/urlHelper.ts";
+
+const LoadingSkeleton = () =>
+    (
+        <CheckoutContent>
+            <Skeleton mb={20} height={200}/>
+            <Skeleton mb={20} height={200}/>
+            <Skeleton mb={20} height={200}/>
+        </CheckoutContent>
+    );
 
 export const CollectInformation = () => {
     const {eventId, eventSlug, orderShortId} = useParams();
@@ -31,9 +43,13 @@ export const CollectInformation = () => {
         isFetched: isEventFetched,
         isError: isEventError,
     } = useGetEventPublic(eventId, isOrderFetched, !!order?.promo_code, order?.promo_code ?? null);
-    const questionsQuery = useGetEventQuestionsPublic(eventId);
-    const ticketQuestions = questionsQuery?.data?.filter(question => question.belongs_to === "TICKET");
-    const orderQuestions = questionsQuery?.data?.filter(question => question.belongs_to === "ORDER");
+    const {
+        data: questions,
+        isFetched: isQuestionsFetched,
+        isError: isQuestionsError
+    } = useGetEventQuestionsPublic(eventId);
+    const ticketQuestions = questions?.filter(question => question.belongs_to === "TICKET");
+    const orderQuestions = questions?.filter(question => question.belongs_to === "ORDER");
     let attendeeIndex = 0;
 
     const form = useForm({
@@ -77,7 +93,7 @@ export const CollectInformation = () => {
         {
             onSuccess: (data) => {
                 const nextPage = order?.is_payment_required ? 'payment' : 'summary';
-                navigate('/checkout/' + eventId + '/' + data.data.short_id + '/' + nextPage);
+                navigate(eventCheckoutUrl(eventId, data.data.short_id, nextPage));
             },
             onError: (error: any) => {
                 if (error?.response?.data?.errors && Object.keys(error?.response?.data?.errors).length > 0) {
@@ -89,7 +105,7 @@ export const CollectInformation = () => {
 
                     // if it's a 409, we need to redirect to the event page as the order is no longer valid
                     if (error.response.status === 409) {
-                        navigate(`/event/${eventId}/${event?.slug}`);
+                        navigate(eventHomepageUrl(event as Event));
                     }
                 }
             },
@@ -154,7 +170,7 @@ export const CollectInformation = () => {
     };
 
     useEffect(() => {
-        if (isEventFetched && isOrderFetched && questionsQuery.isFetched && ticketQuestions && orderQuestions) {
+        if (isEventFetched && isOrderFetched && isQuestionsFetched && ticketQuestions && orderQuestions) {
             const attendees = createAttendeesAndQuestions(createTicketIdToQuestionMap());
             const formOrderQuestions = createFormOrderQuestions();
 
@@ -167,61 +183,55 @@ export const CollectInformation = () => {
                 },
             });
         }
-    }, [isEventFetched, isOrderFetched, questionsQuery.isFetched]);
+    }, [isEventFetched, isOrderFetched, isQuestionsFetched]);
 
     if (!isEventFetched || !isOrderFetched) {
-        return <></>;
+        return <LoadingSkeleton/>
     }
 
     if (order?.payment_status === 'AWAITING_PAYMENT') {
-        return (
-            <Center>
-                {t` This order is awaiting payment.`} <NavLink
-                to={`/checkout/${eventId}/${orderShortId}/payment`}>
-                {t`Complete payment`}
-            </NavLink>
-            </Center>
-        );
+        return <HomepageInfoMessage
+            message={t`This order is awaiting payment`}
+            link={eventCheckoutUrl(eventId, orderShortId, 'payment')}
+            linkText={t`Complete payment`}
+        />;
     }
 
     if (order?.status === 'COMPLETED') {
-        return (
-            <Center>
-                {t`This order has already been processed.`} <NavLink
-                to={`/checkout/${eventId}/${orderShortId}/summary`}>
-                {t`View order details`}
-            </NavLink>
-            </Center>
-        );
+        return <HomepageInfoMessage
+            message={t`This order is complete`}
+            link={eventCheckoutUrl(eventId, orderShortId, 'summary')}
+            linkText={t`View order details`}
+        />;
     }
 
     if (order?.status === 'CANCELLED') {
-        return (
-            <Center>
-                {t`This order has been cancelled.`} <NavLink
-                to={`/event/${eventId}/${eventSlug}`}>
-                {t`Back to event homepage`}
-            </NavLink>
-            </Center>
-        );
+        return <HomepageInfoMessage
+            message={t`This order has been cancelled`}
+            link={eventHomepageUrl(event as Event)}
+            linkText={t`Go to event homepage`}
+        />;
     }
 
     if (order?.is_expired) {
         navigate(`/event/${eventId}/${eventSlug}`);
     }
 
-    if (isOrderError || isEventError || questionsQuery.isError) {
-        //todo - we need to decide what to do here
+    if (isOrderError || isEventError || isQuestionsError) {
         return (
-            <Alert>
-                {t`There was an error loading this content. Please refresh the page and try again.`}
-            </Alert>
+            <>
+                <HomepageInfoMessage
+                    message={t`Sorry, something went wrong loading this page.`}
+                    link={eventHomepageUrl(event as Event)}
+                    linkText={t`View event page`}
+                />
+            </>
         );
     }
 
     return (
-        <>
-            <form onSubmit={form.onSubmit(handleSubmit)}>
+        <form onSubmit={form.onSubmit(handleSubmit)}>
+            <CheckoutContent>
                 <h2>
                     {t`Your Details`}
                 </h2>
@@ -318,14 +328,14 @@ export const CollectInformation = () => {
                         <div dangerouslySetInnerHTML={{__html: event?.settings?.pre_checkout_message}}/>
                     </Card>
                 )}
-
-                <Group mt="xl">
-                    <Button fullWidth loading={mutation.isLoading} type="submit" size="md">
-                        {order?.is_payment_required ? t`Continue To Payment` : t`Complete Order`}
-                    </Button>
-                </Group>
-            </form>
-        </>
+            </CheckoutContent>
+            <CheckoutFooter
+                isLoading={mutation.isLoading}
+                buttonText={order?.is_payment_required ? t`Continue To Payment` : t`Complete Order`}
+                event={event as Event}
+                order={order as Order}
+            />
+        </form>
     );
 }
 

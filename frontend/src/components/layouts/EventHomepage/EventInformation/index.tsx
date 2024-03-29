@@ -1,12 +1,13 @@
-import {IconCalendar, IconExternalLink, IconMapPin} from "@tabler/icons-react";
+import {IconCalendar, IconCopy, IconExternalLink, IconMapPin, IconShare} from "@tabler/icons-react";
 import classes from "./EventInformation.module.scss";
 import {useParams} from "react-router-dom";
 import {useGetEventPublic} from "../../../../queries/useGetEventPublic.ts";
 import {prettyDate} from "../../../../utilites/dates.ts";
 import {formatAddress} from "../../../../utilites/formatAddress.tsx";
 import {t} from "@lingui/macro";
-import {Button} from "@mantine/core";
+import {Button, UnstyledButton} from "@mantine/core";
 import {LoadingMask} from "../../../common/LoadingMask";
+import {ShareBar} from "../../../common/ShareBar";
 
 export const EventInformation = () => {
     const {eventId} = useParams();
@@ -18,7 +19,16 @@ export const EventInformation = () => {
 
     return (
         <>
-            <div className={classes.headingDate}>{prettyDate(event.start_date, event.timezone)}</div>
+            <div className={classes.preHeading}>
+                <div className={classes.date}>
+                    {prettyDate(event.start_date, event.timezone)}
+                </div>
+                <div className={classes.shareButtons}>
+                    <Button variant={'transparent'} leftSection={<IconShare size={20}/>}>
+                        {t`Share`}
+                    </Button>
+                </div>
+            </div>
             <h1 className={classes.eventTitle}>{event.title}</h1>
             <div className={classes.eventInfo}>
                 <div className={classes.eventDetail}>

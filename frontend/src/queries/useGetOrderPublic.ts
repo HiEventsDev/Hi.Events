@@ -15,6 +15,7 @@ export const useGetOrderPublic = (eventId: IdParam, orderShortId: IdParam) => {
             refetchOnWindowFocus: false,
             staleTime: 0,
             retryOnMount: false,
+            retry: false,
         }
     );
 }

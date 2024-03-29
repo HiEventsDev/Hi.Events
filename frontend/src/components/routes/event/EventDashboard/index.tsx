@@ -16,9 +16,9 @@ import {Skeleton} from "@mantine/core";
 export const DashBoardSkeleton = () => {
     return (
         <>
-            <Skeleton height={120} radius="l" mb="20px" />
-            <Skeleton height={350} radius="l" mb="20px" />
-            <Skeleton height={350} radius="l" />
+            <Skeleton height={120} radius="l" mb="20px"/>
+            <Skeleton height={350} radius="l" mb="20px"/>
+            <Skeleton height={350} radius="l"/>
         </>
     );
 }

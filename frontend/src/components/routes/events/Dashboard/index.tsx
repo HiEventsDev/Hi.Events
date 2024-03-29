@@ -12,14 +12,16 @@ import {useDisclosure} from "@mantine/hooks";
 import {CreateEventModal} from "../../../modals/CreateEventModal";
 import {useGetOrganizers} from "../../../../queries/useGetOrganizers.ts";
 import {Navigate} from "react-router-dom";
-import {LoadingMask} from "../../../common/LoadingMask";
 import {NoResultsSplash} from "../../../common/NoResultsSplash";
 import {CreateOrganizerModal} from "../../../modals/CreateOrganizerModal";
 
 export function Dashboard() {
     const [searchParams, setSearchParams] = useFilterQueryParamSync();
     const [createModalOpen, {open: openCreateModal, close: closeCreateModal}] = useDisclosure(false);
-    const [createOrganizerModalOpen, {open: openCreateOrganizerModal, close: closeCreateOrganizerModal}] = useDisclosure(false);
+    const [createOrganizerModalOpen, {
+        open: openCreateOrganizerModal,
+        close: closeCreateOrganizerModal
+    }] = useDisclosure(false);
     const {data: eventData, isFetched: isEventsFetched} = useGetEvents(searchParams as QueryFilters);
     const organizersQuery = useGetOrganizers();
     const pagination = eventData?.meta;
@@ -32,7 +34,7 @@ export function Dashboard() {
 
     return (
         <>
-            <h1>{t`Events`}</h1>
+            <h1>{t`All Events`}</h1>
 
             <ToolBar searchComponent={() => (
                 <SearchBarWrapper
@@ -51,7 +53,7 @@ export function Dashboard() {
                     >
                         <Menu.Target>
                             <Button
-                                leftSection={<IconPlus />}
+                                leftSection={<IconPlus/>}
                                 color={'green'}
                                 rightSection={
                                     <IconChevronDown stroke={1.5}/>
@@ -90,6 +92,7 @@ export function Dashboard() {
             {events?.length === 0 && isEventsFetched && (
                 <NoResultsSplash
                     heading={t`No events to show`}
+                    imageHref={'/blank-slate/events.svg'}
                     subHeading={(
                         <>
                             <p>

@@ -1,18 +1,27 @@
-import  {useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {PaymentElement, useElements, useStripe} from "@stripe/react-stripe-js";
 import {useParams} from "react-router-dom";
 import * as stripeJs from "@stripe/stripe-js";
-import {Alert, Button} from "@mantine/core";
+import {Alert, Skeleton} from "@mantine/core";
 import {t} from "@lingui/macro";
 import classes from './StripeCheckoutForm.module.scss';
 import {LoadingMask} from "../../common/LoadingMask";
+import {useGetOrderPublic} from "../../../queries/useGetOrderPublic.ts";
+import {useGetEventPublic} from "../../../queries/useGetEventPublic.ts";
+import {CheckoutContent} from "../../layouts/Checkout/CheckoutContent";
+import {CheckoutFooter} from "../../layouts/Checkout/CheckoutFooter";
+import {Event} from "../../../types.ts";
+import {eventCheckoutUrl, eventHomepageUrl} from "../../../utilites/urlHelper.ts";
+import {HomepageInfoMessage} from "../../common/HomepageInfoMessage";
 
 export default function StripeCheckoutForm() {
     const {eventId, orderShortId} = useParams();
     const stripe = useStripe();
     const elements = useElements();
     const [message, setMessage] = useState<string | undefined>('');
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
+    const {data: order, isFetched: isOrderFetched} = useGetOrderPublic(eventId, orderShortId);
+    const {data: event, isFetched: isEventFetched} = useGetEventPublic(eventId);
 
     useEffect(() => {
         if (!stripe) {
@@ -44,6 +53,26 @@ export default function StripeCheckoutForm() {
             }
         });
     }, [stripe]);
+
+    if (order?.payment_status === 'PAYMENT_RECEIVED') {
+        return (
+            <HomepageInfoMessage
+                message={t`This order has already been paid.`}
+                linkText={t`View order details`}
+                link={eventCheckoutUrl(eventId, orderShortId, 'summary')}
+            />
+        );
+    }
+
+    if (order?.payment_status !== 'AWAITING_PAYMENT' && order?.payment_status !== 'PAYMENT_FAILED') {
+        return (
+            <HomepageInfoMessage
+                message={t`This order page is no longer available.`}
+                linkText={t`View order details`}
+                link={eventHomepageUrl(event as Event)}
+            />
+        );
+    }
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
@@ -78,21 +107,41 @@ export default function StripeCheckoutForm() {
         },
     }
 
+    if (!isOrderFetched || !isEventFetched) {
+        return (
+            <CheckoutContent>
+                <Skeleton height={300} mb={20}/>
+            </CheckoutContent>
+        )
+    }
+
     return (
-        <>
-            <form id="payment-form" onSubmit={handleSubmit}>
+        <form id="payment-form" onSubmit={handleSubmit}>
+            <CheckoutContent>
+                <h2>
+                    {t`Payment`}
+                </h2>
+                {(order?.payment_status === 'PAYMENT_FAILED' || window.location.search.includes('payment_failed')) && (
+                    <Alert mb={20} color={'red'}>{t`Your payment was unsuccessful. Please try again.`}</Alert>
+                )}
+
                 {message !== '' && <Alert mb={20}>{message}</Alert>}
-                <LoadingMask />
-                <PaymentElement className={classes.stripeForElement} id="payment-element"  options={paymentElementOptions} onReady={() => setIsLoading(false)}/>
-                <Button type={'submit'} mt={20} fullWidth disabled={isLoading || !stripe || !elements} id="submit">
-                    {t`Complete Payment`}
-                </Button>
-            </form>
-            <div className={classes.stripeLogo}>
-                <img
-                    src={'https://cdn.brandfolder.io/KGT2DTA4/at/g65qkq94m43qc3c9fqnhh3m/Powered_by_Stripe_-_black.svg'}
-                    alt={t`Powered by Stripe`} width={'100px'} height={'auto'}/>
-            </div>
-        </>
+                <LoadingMask/>
+                <PaymentElement className={classes.stripeForElement} id="payment-element"
+                                options={paymentElementOptions} onReady={() => setIsLoading(false)}/>
+
+                <div className={classes.stripeLogo}>
+                    <img
+                        src={'https://cdn.brandfolder.io/KGT2DTA4/at/g65qkq94m43qc3c9fqnhh3m/Powered_by_Stripe_-_black.svg'}
+                        alt={t`Powered by Stripe`} width={'100px'} height={'auto'}/>
+                </div>
+            </CheckoutContent>
+            <CheckoutFooter
+                event={event as Event}
+                order={order}
+                isLoading={isLoading}
+                buttonText={t`Complete Payment`}
+            />
+        </form>
     );
 }

@@ -89,11 +89,10 @@ export const LocationSettings = () => {
                         <Textarea
                             {...form.getInputProps('online_event_connection_details')}
                             label={t`Connection Details`}
-                            description={t`Include connection details for your online event`}
+                            description={t`Include connection details for your online event. These details will be after successful registration.`}
                             placeholder={t`You can connecting using this Zoom link...`}
                         />
                     )}
-
                     {!form.values.is_online_event && (
                         <>
                             <TextInput

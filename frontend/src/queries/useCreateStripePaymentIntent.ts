@@ -10,6 +10,11 @@ export const useCreateStripePaymentIntent = (eventId: IdParam, orderShortId: IdP
         async () => {
             const {client_secret, account_id} = await orderClientPublic.createStripePaymentIntent(Number(eventId), String(orderShortId));
             return {client_secret, account_id};
+        },
+        {
+            retry: false,
+            staleTime: 0,
+            cacheTime: 0,
         }
     );
 }

@@ -1,7 +1,7 @@
 import {useForm} from "@mantine/form";
 import {GenericModalProps, User,} from "../../../types.ts";
 import {Modal} from "../../common/Modal";
-import {Alert, Button, Select, SimpleGrid, TextInput} from "@mantine/core";
+import {Alert, Button, Select, TextInput} from "@mantine/core";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.ts";
 import {t, Trans} from "@lingui/macro";
 import {CustomSelect, ItemProps} from "../../common/CustomSelect";
@@ -10,6 +10,7 @@ import {showSuccess} from "../../../utilites/notifications.tsx";
 import {UpdateUserRequest} from "../../../api/user.client.ts";
 import {useEditUser} from "../../../mutations/useEditUser.ts";
 import {NavLink} from "react-router-dom";
+import {InputGroup} from "../../common/InputGroup";
 
 interface EditUserModalProps extends GenericModalProps {
     user: User;
@@ -66,10 +67,10 @@ export const EditUserModal = ({onClose, user}: EditUserModalProps) => {
             )}
             <form onSubmit={form.onSubmit(values => handleCreate(values))}>
                 <fieldset disabled={ediMutation.isLoading}>
-                    <SimpleGrid cols={2}>
+                    <InputGroup>
                         <TextInput required {...form.getInputProps('first_name')} label={t`First Name`}/>
                         <TextInput required {...form.getInputProps('last_name')} label={t`Last Name`}/>
-                    </SimpleGrid>
+                    </InputGroup>
 
                     <TextInput
                         disabled
@@ -77,7 +78,9 @@ export const EditUserModal = ({onClose, user}: EditUserModalProps) => {
                         value={user.email}
                         type={'email'}
                         label={t`Email`}
-                        description={<Trans>Users can change their email in <NavLink target={'_blank'} to={'/manage/profile'}>Profile Settings</NavLink></Trans>}
+                        description={<Trans>Users can change their email in <NavLink target={'_blank'}
+                                                                                     to={'/manage/profile'}>Profile
+                            Settings</NavLink></Trans>}
                     />
 
                     {user.is_account_owner && (

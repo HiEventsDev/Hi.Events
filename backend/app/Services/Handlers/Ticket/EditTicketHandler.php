@@ -51,7 +51,8 @@ readonly class EditTicketHandler
             $this->priceUpdateService->updatePrices(
                 $ticket,
                 $ticketsData,
-                $ticket->getTicketPrices()
+                $ticket->getTicketPrices(),
+                $this->eventRepository->findById($ticketsData->event_id)
             );
 
             return $this->ticketRepository

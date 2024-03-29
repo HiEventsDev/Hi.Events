@@ -1,27 +1,25 @@
-import { useEffect, useState } from 'react';
+import {useEffect, useState} from 'react';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import { t } from '@lingui/macro';
+import {t} from '@lingui/macro';
 
 dayjs.extend(utc);
 
 interface CountdownProps {
     targetDate: string;
     onExpiry?: () => void;
+    className?: string;
 }
 
-export const Countdown = ({ targetDate, onExpiry }: CountdownProps) => {
+export const Countdown = ({targetDate, onExpiry, className = ''}: CountdownProps) => {
     const [timeLeft, setTimeLeft] = useState('');
 
     useEffect(() => {
         const interval = setInterval(() => {
-            // Current time in the client's local timezone
             const now = dayjs();
 
-            // Target time assumed to be in UTC
             const dateInUTC = dayjs.utc(targetDate);
 
-            // Calculate the difference in milliseconds
             const diff = dateInUTC.diff(now);
 
             if (diff <= 0) {
@@ -39,7 +37,7 @@ export const Countdown = ({ targetDate, onExpiry }: CountdownProps) => {
         return () => {
             clearInterval(interval);
         };
-    }, [targetDate, onExpiry]); // Include onExpiry in the dependency array
+    }, [targetDate, onExpiry]);
 
-    return <span>{timeLeft}</span>;
+    return <span className={className}>{timeLeft === '' ? '...' : timeLeft}</span>;
 };

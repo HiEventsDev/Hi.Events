@@ -60,6 +60,7 @@ export const TicketsTable = ({tickets, openCreateModal, enableSorting = false}: 
 
     if (tickets.length === 0) {
         return <NoResultsSplash
+            imageHref={'/blank-slate/tickets.svg'}
             heading={t`No tickets to show`}
             subHeading={(
                 <>
