@@ -31,7 +31,7 @@
 
 ## 📚 Introduction
 
-<a href="https://hi.events">Hi.Events</a> is a feature-rich, self-hosted event management and ticketing platform. From conferences to concerts, 
+<a href="https://hi.events">Hi.Events</a> is a feature-rich, self-hosted event management and ticketing platform. From conferences to club nights, 
 Hi.Events is designed to help you create, manage, and sell tickets for events of all sizes.
 
 <img alt="Hi.Events self-hosted ticket selling dashboard" src="https://hievents-public.s3.us-west-1.amazonaws.com/website/dashboard-screenshot.png"/>
