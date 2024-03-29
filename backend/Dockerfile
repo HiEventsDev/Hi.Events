@@ -11,9 +11,10 @@ ENV PHP_DISMOD=ioncube,pdo_sqlsrv,sqlsrv,pdo_mysql,mysqli,mysqlnd,pdo_sqlite,mys
 COPY ./docker/supervisord/syslog.conf /opt/docker/etc/supervisor.d/syslog.conf
 
 RUN chown -R application:application /app \
-    && chmod -R 755 /app/storage
+    && chmod -R 755 /app/storage  \
+    && chmod -R 775 /app/bootstrap/cache
 
-RUN composer install \
+RUN php artisan cache:clear && composer install \
     --ignore-platform-reqs \
     --no-interaction \
     --no-dev \
