@@ -15,7 +15,7 @@ RUN chown -R application:application /app \
     && mkdir -p /app/bootstrap/cache \
     && chmod -R 775 /app/bootstrap/cache
 
-RUN php artisan cache:clear && composer install \
+RUN composer install \
     --ignore-platform-reqs \
     --no-interaction \
     --no-dev \
