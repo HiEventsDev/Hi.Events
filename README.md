@@ -43,7 +43,7 @@ Hi.Events is designed to help you create, manage, and sell tickets for events of
 - 📊 **Analytics:** Gain deep insights into event performance and ticket sales.
 - 🎟 **Embeddable Widget:** Easily integrate ticket sales into any website.
 - 🖥 **Customizable Homepages:** Create eye-catching event pages with flexible design options.
-- 🔑 **Check-In:** Easily attendees at the door with Hi.Event's QR code check-in tool.
+- 🔑 **Check-In:** Easily check in attendees at the door with Hi.Events' QR code check-in tool.
 - 💬 **Messaging:** Message attendees with important updates and reminders.
 - 📝 **Order Forms:** Collect attendee information with tailored questions at checkout.
 - 🎫 **Ticket Options:** Free, paid, donation, or tiered ticket types.
@@ -91,7 +91,7 @@ For detailed installation instructions, please refer to our [documentation](http
 
 5. **Access the Dashboard:**
     ```
-    Open your browser and navigate to `http://localhost:5678` to access the Hi.Events dashboard.
+    Open your browser and navigate to http://localhost:5678 to access the Hi.Events dashboard.
     ```
 
 ## 📝 Change Log
