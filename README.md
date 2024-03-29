@@ -31,7 +31,8 @@
 
 ## 📚 Introduction
 
-<a href="https://hi.events">Hi.Events</a> is a comprehensive, self-hosted event management and ticketing platform designed for ease of use and deployment. Perfect for event organizers who need a robust, customizable solution.
+<a href="https://hi.events">Hi.Events</a> is a feature-rich, self-hosted event management and ticketing platform. From conferences to concerts, 
+Hi.Events is designed to help you create, manage, and sell tickets for events of all sizes.
 
 <img alt="Hi.Events self-hosted ticket selling dashboard" src="https://hievents-public.s3.us-west-1.amazonaws.com/website/dashboard-screenshot.png"/>
 
@@ -42,22 +43,23 @@
 - 📊 **Analytics:** Gain deep insights into event performance and ticket sales.
 - 🎟 **Embeddable Widget:** Easily integrate ticket sales into any website.
 - 🖥 **Customizable Homepages:** Create eye-catching event pages with flexible design options.
-- 🔑 **Check-In:** Manage attendees efficiently at the door.
-- 💬 **Messaging:** Utilize tools for timely updates and reminders.
-- 📝 **Order Forms:** Collect attendee information with tailored forms.
-- 🎫 **Ticket Options:** Offer diverse ticket types — free, paid, donation, or tiered.
-- 💸 **Promo Codes:** Drive sales with customizable discount codes, including pre-sale codes and multiple discount options.
-- 💰 **Instant Payouts:** Enjoy quick payouts with seamless Stripe integration.
-- 🧾 **Flexible Tax and Fee Configuration:** Tailor taxes and service fees as needed.
-- 📦 **Easy Export:** Conveniently export attendee and order data.
-- 🔍 **SEO Tools:** Boost your event's online visibility.
+- 🔑 **Check-In:** Easily attendees at the door with Hi.Event's QR code check-in tool.
+- 💬 **Messaging:** Message attendees with important updates and reminders.
+- 📝 **Order Forms:** Collect attendee information with tailored questions at checkout.
+- 🎫 **Ticket Options:** Free, paid, donation, or tiered ticket types.
+- 💸 **Promo Codes:** Highly customizable discount codes, including pre-sale codes and multiple discount options.
+- 💰 **Instant Payouts:** Enjoy instant payouts with seamless Stripe integration.
+- 🧾 **Tax and Fee Configuration:** Add tax and fees on a per-ticket basis.
+- 📦 **Data Exports:**  Export attendee and order data to XLSX or CSV.
+- 🔍 **SEO Tools:** Customize SEO settings for each event.
 - 🛒 **Sleek Checkout:** Ensure a smooth, beautiful checkout experience.
-- 🔐 **Role-Based Access:** Implement role-based permissions for team members.
-- 💻 **Online Event Support:** Get tailored tools for virtual events.
+- 🔐 **Role-Based Access:** Support for multiple user roles.
+- 💻 **Online Event Support:** Offer online event instructions and links.
 - ⏪ **Refund Support:** Manage full and partial refunds with ease.
-- 🌟 **Beautiful Checkout Experience:** Delight purchasers with an elegantly designed process.
-
-## 🚀 Getting Started
+- 📧 **Email Notifications:** Keep attendees informed with automated email notifications.
+- 📱 **Mobile-Responsive:** Enjoy a seamless experience on any device.
+- 🌐 **Multi-Language Support:** Support for multiple languages - `Coming Soon!`
+- 🎉 **And much more!**
 
 For detailed installation instructions, please refer to our [documentation](https://hi.events/docs/installation). For a quick start, follow these steps:
 
@@ -98,7 +100,8 @@ Stay updated with our ongoing improvements and feature additions at our [GitHub 
 
 ## 🤝 Contributing
 
-We welcome contributions, suggestions, and bug reports! Before proposing a new feature or extension, please open an issue to discuss it. We're excited to see your ideas!
+We welcome contributions, suggestions, and bug reports! Before proposing a new feature or extension,
+please open an issue to discuss it. We're excited to see your ideas!
 
 ## ❓ FAQ
 

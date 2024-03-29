@@ -1,13 +1,12 @@
-import {IconCalendar, IconCopy, IconExternalLink, IconMapPin, IconShare} from "@tabler/icons-react";
+import {IconCalendar, IconExternalLink, IconMapPin, IconShare} from "@tabler/icons-react";
 import classes from "./EventInformation.module.scss";
 import {useParams} from "react-router-dom";
 import {useGetEventPublic} from "../../../../queries/useGetEventPublic.ts";
 import {prettyDate} from "../../../../utilites/dates.ts";
 import {formatAddress} from "../../../../utilites/formatAddress.tsx";
 import {t} from "@lingui/macro";
-import {Button, UnstyledButton} from "@mantine/core";
+import {Button} from "@mantine/core";
 import {LoadingMask} from "../../../common/LoadingMask";
-import {ShareBar} from "../../../common/ShareBar";
 
 export const EventInformation = () => {
     const {eventId} = useParams();
@@ -62,7 +61,7 @@ export const EventInformation = () => {
                                         component="a"
                                         target="_blank"
                                         href={
-                                        event.settings.maps_url || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(formatAddress(event?.settings?.location_details))}`}
+                                            event.settings.maps_url || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(formatAddress(event?.settings?.location_details))}`}
                                         variant="transparent"
                                         size="xs"
                                         rightSection={<IconExternalLink size={15}/>}
