@@ -61,9 +61,9 @@ Hi.Events is designed to help you create, manage, and sell tickets for events of
 - 🌐 **Multi-Language Support:** Support for multiple languages - `Coming Soon!`
 - 🎉 **And much more!**
 
-For detailed installation instructions, please refer to our [documentation](https://hi.events/docs/installation). For a quick start, follow these steps:
+## 🚀 Getting Started
 
-**Prerequisites:**
+For detailed installation instructions, please refer to our [documentation](https://hi.events/docs/installation). For a quick start, follow these steps:
 
 > [!IMPORTANT]  
 > Please ensure you have Docker and Docker Compose installed on your system. If not, you can download them from the official Docker website: [Docker](https://www.docker.com/get-started).

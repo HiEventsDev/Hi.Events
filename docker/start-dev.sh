@@ -52,5 +52,5 @@ echo -e "${GREEN}Hi.Events is now running at:${NC} http://localhost:5678"
 case "$(uname -s)" in
     Darwin) open http://localhost:5678 ;;
     Linux) xdg-open http://localhost:5678 ;;
-    MINGW*|MSYS*|CYGWIN*) cmd //c start http://localhost:5678 ;; # Added for Windows support in Git Bash or similar
+    MINGW*|MSYS*|CYGWIN*) cmd //c start http://localhost:5678 ;;
 esac
