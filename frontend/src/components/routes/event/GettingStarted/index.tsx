@@ -83,7 +83,7 @@ const GettingStarted = () => {
                             {t`Add event details and and manage event settings.`}
                         </p>
                         <Button variant={'light'} component={'a'} href={'/manage/event/' + eventId + '/settings'}>
-                            {t`Set up your event`}
+                            {event?.description ? t`Continue set up` : t`Set up your event`}
                         </Button>
                         {event?.description && <Check/>}
                     </Card>

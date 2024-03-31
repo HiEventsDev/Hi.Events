@@ -1,4 +1,4 @@
-import {GenericModalProps, IdParam, Message, MessageType} from "../../../types.ts";
+import {GenericModalProps, IdParam, MessageType} from "../../../types.ts";
 import {useParams} from "react-router-dom";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {useGetOrder} from "../../../queries/useGetOrder.ts";
@@ -7,13 +7,12 @@ import {Alert, Button, ComboboxItemGroup, LoadingOverlay, MultiSelect, Select, S
 import {IconAlertCircle, IconSend} from "@tabler/icons-react";
 import {useGetMe} from "../../../queries/useGetMe.ts";
 import {useForm, UseFormReturnType} from "@mantine/form";
-import {useMutation} from "@tanstack/react-query";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.ts";
 import {showSuccess} from "../../../utilites/notifications.tsx";
-import {messagesClient} from "../../../api/messages.client.ts";
 import {t, Trans} from "@lingui/macro";
 import {Editor} from "../../common/Editor";
 import {useIsAccountVerified} from "../../../hooks/useIsAccountVerified.ts";
+import {useSendEventMessage} from "../../../mutations/useSendEventMessage.ts";
 
 interface EventMessageModalProps extends GenericModalProps {
     orderId?: IdParam,
@@ -83,6 +82,7 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
     const errorHandler = useFormErrorResponseHandler();
     const isPreselectedRecipient = !!(orderId || attendeeId || ticketId);
     const isAccountVerified = useIsAccountVerified();
+    const sendMessageMutation = useSendEventMessage();
 
     const form = useForm({
         initialValues: {
@@ -98,17 +98,19 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
         },
     });
 
-    const mutation = useMutation(
-        (message: Partial<Message>) => messagesClient.send(eventId, message as Message),
-        {
+    const handleSend = (values: any) => {
+        sendMessageMutation.mutate({
+            eventId: eventId,
+            messageData: values,
+        }, {
             onSuccess: () => {
                 showSuccess(t`Message Sent`);
                 form.reset();
                 onClose();
             },
             onError: (error: any) => errorHandler(form, error)
-        }
-    );
+        });
+    }
 
     if (!event || !me || !tickets) {
         return <LoadingOverlay visible/>;
@@ -121,7 +123,7 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
             onClose={onClose}
             heading={t`Send a message`}
         >
-            <form onSubmit={form.onSubmit((values) => mutation.mutate(values as any))}>
+            <form onSubmit={form.onSubmit(handleSend)}>
                 <fieldset disabled={!isAccountVerified}>
                     {!isPreselectedRecipient && (
                         <Select
@@ -212,7 +214,7 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
                         </Alert>
                     )}
 
-                    <Button mt={20} loading={mutation.isLoading} type={'submit'} fullWidth leftSection={<IconSend/>}>
+                    <Button mt={20} loading={sendMessageMutation.isLoading} type={'submit'} fullWidth leftSection={<IconSend/>}>
                         {form.values.is_test ? t`Send Test` : t`Send`}
                     </Button>
                 </fieldset>

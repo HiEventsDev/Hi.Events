@@ -3,7 +3,7 @@ import {useGetEvents} from "../../../../queries/useGetEvents.ts";
 import {EventCard} from "../../../common/EventCard";
 import {t} from "@lingui/macro";
 import {SearchBarWrapper} from "../../../common/SearchBar";
-import {Button, Menu} from "@mantine/core";
+import {Button, Menu, Skeleton} from "@mantine/core";
 import {IconCalendarPlus, IconChevronDown, IconPlus, IconUserPlus} from "@tabler/icons-react";
 import {ToolBar} from "../../../common/ToolBar";
 import {Pagination} from "../../../common/Pagination";
@@ -15,6 +15,16 @@ import {Navigate} from "react-router-dom";
 import {NoResultsSplash} from "../../../common/NoResultsSplash";
 import {CreateOrganizerModal} from "../../../modals/CreateOrganizerModal";
 
+const DashboardSkeleton = () => {
+    return (
+        <>
+            <Skeleton height={120} radius="l" mb="20px"/>
+            <Skeleton height={120} radius="l" mb="20px"/>
+            <Skeleton height={120} radius="l"/>
+        </>
+    );
+}
+
 export function Dashboard() {
     const [searchParams, setSearchParams] = useFilterQueryParamSync();
     const [createModalOpen, {open: openCreateModal, close: closeCreateModal}] = useDisclosure(false);
@@ -22,7 +32,11 @@ export function Dashboard() {
         open: openCreateOrganizerModal,
         close: closeCreateOrganizerModal
     }] = useDisclosure(false);
-    const {data: eventData, isFetched: isEventsFetched} = useGetEvents(searchParams as QueryFilters);
+    const {
+        data: eventData,
+        isFetched: isEventsFetched,
+        isFetching: isEventsFetching,
+    } = useGetEvents(searchParams as QueryFilters);
     const organizersQuery = useGetOrganizers();
     const pagination = eventData?.meta;
     const events = eventData?.data;
@@ -110,6 +124,8 @@ export function Dashboard() {
             )}
 
             <div>
+                {isEventsFetching && <DashboardSkeleton/>}
+
                 {events?.map((event: Event) =>
                     (
                         <EventCard event={event}/>

@@ -7,6 +7,7 @@ import {formatAddress} from "../../../../utilites/formatAddress.tsx";
 import {t} from "@lingui/macro";
 import {Button} from "@mantine/core";
 import {LoadingMask} from "../../../common/LoadingMask";
+import {ShareComponent} from "../../../common/ShareIcon";
 
 export const EventInformation = () => {
     const {eventId} = useParams();
@@ -23,9 +24,9 @@ export const EventInformation = () => {
                     {prettyDate(event.start_date, event.timezone)}
                 </div>
                 <div className={classes.shareButtons}>
-                    <Button variant={'transparent'} leftSection={<IconShare size={20}/>}>
-                        {t`Share`}
-                    </Button>
+                    <ShareComponent title={'Hi.events'} text={'check it out'} url={'https://google.com'}>
+
+                    </ShareComponent>
                 </div>
             </div>
             <h1 className={classes.eventTitle}>{event.title}</h1>
