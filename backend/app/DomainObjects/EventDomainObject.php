@@ -2,6 +2,7 @@
 
 namespace HiEvents\DomainObjects;
 
+use HiEvents\Helper\Url;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use HiEvents\DomainObjects\Interfaces\IsSortable;
@@ -118,7 +119,11 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
 
     public function getEventUrl(): string
     {
-        return '/events/' . $this->getId() . '/' . $this->getSlug();
+        return sprintf(
+            Url::getFrontEndUrlFromConfig(Url::EVENT_HOMEPAGE),
+            $this->getId(),
+            $this->getSlug()
+        );
     }
 
     public function getDescriptionPreview(): string

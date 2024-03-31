@@ -4,6 +4,8 @@ namespace HiEvents\Mail\Order;
 
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\DomainObjects\OrganizerDomainObject;
+use HiEvents\Helper\Url;
 use HiEvents\Mail\BaseMail;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
@@ -13,16 +15,13 @@ use Illuminate\Mail\Mailables\Envelope;
  */
 class OrderSummary extends BaseMail
 {
-    private OrderDomainObject $orderDomainObject;
-
-    private EventDomainObject $eventDomainObject;
-
-    public function __construct(OrderDomainObject $order, EventDomainObject $event)
+    public function __construct(
+        private readonly OrderDomainObject     $order,
+        private readonly EventDomainObject     $event,
+        private readonly OrganizerDomainObject $organizer,
+    )
     {
         parent::__construct();
-
-        $this->orderDomainObject = $order;
-        $this->eventDomainObject = $event;
     }
 
     public function envelope(): Envelope
@@ -37,8 +36,14 @@ class OrderSummary extends BaseMail
         return new Content(
             markdown: 'emails.orders.summary',
             with: [
-                'event' => $this->eventDomainObject,
-                'order' => $this->orderDomainObject,
+                'event' => $this->event,
+                'order' => $this->order,
+                'organizer' => $this->organizer,
+                'orderUrl' => sprintf(
+                    Url::getFrontEndUrlFromConfig(Url::ORDER_SUMMARY),
+                    $this->event->getId(),
+                    $this->order->getShortId(),
+                )
             ]
         );
     }

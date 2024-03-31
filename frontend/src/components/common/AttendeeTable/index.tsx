@@ -143,7 +143,7 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
                                 </MantineTable.Td>
                                 <MantineTable.Td>
                                     <Anchor
-                                        href={`/manage/event/${eventId}/orders?query=${attendee.order?.public_id}`}>
+                                        href={`/manage/event/${eventId}/orders#order-${attendee.order?.id}`}>
                                         <Badge variant={'outline'}>
                                             {attendee.order?.public_id}
                                         </Badge>

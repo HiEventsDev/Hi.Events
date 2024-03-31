@@ -65,9 +65,13 @@ readonly class SendOrderDetailsService
 
     private function sendOrderSummaryEmails(OrderDomainObject $order, EventDomainObject $event): void
     {
-        $this->mailer->to($order->getEmail())->send(new OrderSummary($order, $event));
+        $this->mailer->to($order->getEmail())->send(new OrderSummary(
+            order: $order,
+            event: $event,
+            organizer: $event->getOrganizer()
+        ));
 
-        if (!$event->getEventSettings()->getNotifyOrganizerOfNewOrders() || $order->getIsManuallyCreated()) {
+        if ($order->getIsManuallyCreated() || !$event->getEventSettings()->getNotifyOrganizerOfNewOrders()) {
             return;
         }
 

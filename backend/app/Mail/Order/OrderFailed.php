@@ -4,6 +4,7 @@ namespace HiEvents\Mail\Order;
 
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\Helper\Url;
 use HiEvents\Mail\BaseMail;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
@@ -28,7 +29,7 @@ class OrderFailed extends BaseMail
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Your order wasn\'t successful',
+            subject: __('Your order wasn\'t successful'),
         );
     }
 
@@ -39,6 +40,11 @@ class OrderFailed extends BaseMail
             with: [
                 'event' => $this->eventDomainObject,
                 'order' => $this->orderDomainObject,
+                'eventUrl' => sprintf(
+                    Url::getFrontEndUrlFromConfig(Url::EVENT_HOMEPAGE),
+                    $this->eventDomainObject->getId(),
+                    $this->eventDomainObject->getSlug(),
+                )
             ]
         );
     }

@@ -3,9 +3,9 @@
 @php /** @var \HiEvents\Values\MoneyValue $refundAmount */ @endphp
 
 <x-mail::message>
-    Hello,
+Hello,
 
-    You have received a refund of <b>{{$refundAmount}}</b> for the following event: <b>{{$event->getTitle()}}</b>.
+You have received a refund of <b>{{$refundAmount}}</b> for the following event: <b>{{$event->getTitle()}}</b>.
 
-    Thank you
+Thank you
 </x-mail::message>

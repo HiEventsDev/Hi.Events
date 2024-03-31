@@ -14,7 +14,7 @@ import {
 import {prettyDate, relativeDate} from "../../../utilites/dates.ts";
 import {ViewOrderModal} from "../../modals/ViewOrderModal";
 import {useDisclosure} from "@mantine/hooks";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {CancelOrderModal} from "../../modals/CancelOrderModal";
 import {SendMessageModal} from "../../modals/SendMessageModal";
 import {notifications} from "@mantine/notifications";
@@ -41,6 +41,18 @@ export const OrdersTable = ({orders, event}: OrdersTableProps) => {
     const [isRefundModalOpen, refundModal] = useDisclosure(false);
     const [orderId, setOrderId] = useState<IdParam>();
     const resendConfirmationMutation = useResendOrderConfirmation();
+
+    useEffect(() => {
+        if (window.location.hash) {
+            const match = window.location.hash.match(/^#order-(\d+)$/);
+
+            if (match && match[1]) {
+                const orderId = match[1];
+                setOrderId(orderId);
+                viewModal.open();
+            }
+        }
+    }, []);
 
     if (orders.length === 0) {
         return <NoResultsSplash

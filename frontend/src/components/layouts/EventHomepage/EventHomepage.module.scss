@@ -20,7 +20,6 @@
   }
 }
 
-
 .styleContainer {
   display: flex;
   justify-content: center;
@@ -40,6 +39,13 @@
     min-width: 780px;
   }
 
+  @include respond-below(md) {
+    margin: 0;
+    border-radius: 0;
+    box-shadow: none;
+    width: 100%;
+  }
+
   @include respond-below(sm) {
     border-radius: 0;
     margin: 0;
@@ -54,7 +60,11 @@
     color: var(--homepage-primary-text-color, var(--tk-primary));
     padding: 35px;
     width: 100%;
-    min-height: 100vh;
+
+    @include respond-below(md) {
+      min-height: 100vh;
+      justify-content: space-between;
+    }
 
     a {
       color: var(--homepage-primary-text-color, var(--tk-primary)) !important;

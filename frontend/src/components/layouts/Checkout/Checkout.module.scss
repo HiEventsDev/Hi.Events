@@ -3,7 +3,6 @@
 .container {
   display: flex;
   background-color: #3c2b5c05 !important;
-  height: 100vh;
 
   .sidebar {
     @include respond-below(md) {
@@ -22,6 +21,7 @@
   .mainContent {
     flex: 1;
     border-right: 1px solid #e0e0e0;
+    //height: 100vh;
 
     .header {
       height: 90px;
@@ -33,8 +33,6 @@
       flex-direction: column;
       box-shadow: 0 5px 5px 0 #0000000a;
       text-align: center;
-
-
 
       h2 {
         @include respond-below(md) {

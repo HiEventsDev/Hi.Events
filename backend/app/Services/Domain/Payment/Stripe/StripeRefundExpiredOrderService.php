@@ -7,8 +7,10 @@ use Brick\Math\Exception\NumberFormatException;
 use Brick\Math\Exception\RoundingNecessaryException;
 use Brick\Money\Exception\UnknownCurrencyException;
 use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\DomainObjects\StripePaymentDomainObject;
 use HiEvents\Mail\Order\PaymentSuccessButOrderExpiredMail;
+use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Values\MoneyValue;
 use Illuminate\Contracts\Mail\Mailer;
@@ -40,7 +42,10 @@ readonly class StripeRefundExpiredOrderService
         OrderDomainObject         $order,
     ): void
     {
-        $event = $this->eventRepository->findById($order->getEventId());
+        $event = $this->eventRepository
+            ->loadRelation(new Relationship(OrganizerDomainObject::class, name: 'organizer'))
+            ->findById($order->getEventId());
+
 
         $this->refundService->refundPayment(
             MoneyValue::fromMinorUnit($paymentIntent->amount, strtoupper($paymentIntent->currency)),
@@ -50,6 +55,7 @@ readonly class StripeRefundExpiredOrderService
         $this->mailer->to($order->getEmail())->send(new PaymentSuccessButOrderExpiredMail(
             order: $order,
             event: $event,
+
         ));
 
         $this->logger->info('Refunded expired order', [

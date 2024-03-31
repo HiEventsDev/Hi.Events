@@ -105,6 +105,37 @@ services:
                 - 'http://localhost:9000/minio/health/live'
             retries: 3
             timeout: 5s
+
+    createbuckets:
+        image: minio/mc
+        depends_on:
+            - minio
+        environment:
+            MINIO_SERVER_URL: 'http://minio:9000'
+            MINIO_ROOT_USER: 'app'
+            MINIO_ROOT_PASSWORD: 'password'
+        entrypoint: >
+            /bin/sh -c "
+            echo 'Waiting for MinIO to start...';
+            until /usr/bin/mc alias set myminio $$MINIO_SERVER_URL $$MINIO_ROOT_USER $$MINIO_ROOT_PASSWORD; do
+                echo 'Waiting for MinIO server to become available...';
+                sleep 1;
+            done;
+            echo 'MinIO started, configuring mc...';
+            
+            /usr/bin/mc alias set myminio $$MINIO_SERVER_URL $$MINIO_ROOT_USER $$MINIO_ROOT_PASSWORD;
+                        
+            /usr/bin/mc mb myminio/hievents-public;
+            /usr/bin/mc mb myminio/hievents-private;
+            
+            /usr/bin/mc anonymous set public myminio/hievents-public;
+                        
+            echo 'Buckets created and policies set.';
+            exit 0;
+            "
+        networks:
+            - app
+
 networks:
     app:
         driver: bridge

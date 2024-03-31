@@ -4,6 +4,7 @@ namespace HiEvents\Mail\Order;
 
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\Helper\Url;
 use HiEvents\Mail\BaseMail;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
@@ -35,6 +36,11 @@ class OrderCancelled extends BaseMail
             with: [
                 'event' => $this->event,
                 'order' => $this->order,
+                'eventUrl' => sprintf(
+                    Url::getFrontEndUrlFromConfig(Url::EVENT_HOMEPAGE),
+                    $this->event->getId(),
+                    $this->event->getSlug(),
+                )
             ]
         );
     }

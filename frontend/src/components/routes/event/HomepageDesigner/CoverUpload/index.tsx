@@ -82,7 +82,6 @@ export const CoverUpload = () => {
                     <span>
                         {t`Drag and drop or click`}
                     </span>
-
                 </Dropzone>
 
                 {preview.length > 0 && (

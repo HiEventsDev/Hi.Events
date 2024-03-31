@@ -12,10 +12,13 @@ Congratulations! You've got a new order for <b>{{ $event->getTitle() }}</b>! Ple
 <br>
 <br>
 
-Order Name: <b>{{ $order->getFullName() }}</b><br>
 Order Amount: <b>{{ Currency::format($order->getTotalGross(), $event->getCurrency()) }}</b><br>
 Order ID: <b>{{ $order->getPublicId() }}</b>
 <br>
+
+<x-mail::button :url="$orderUrl">
+        View Order
+</x-mail::button>
 
 
 <div class="table">

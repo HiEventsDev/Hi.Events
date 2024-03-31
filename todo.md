@@ -48,9 +48,9 @@ P1
 - Min/Max quantity on tickets - Done
 - Tooltips for mobile - Done
 
-- Confirm order quantities calculations
-- Fix attendee question errors
-- Ensure email links are working
+- Confirm order quantities calculations -done
+- Fix attendee question errors - done
+- Ensure email links are working - done
 
 .hi-promo-code-row  - check css is nested correctly
 

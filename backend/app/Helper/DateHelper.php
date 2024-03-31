@@ -12,4 +12,11 @@ class DateHelper
             ->setTimezone('UTC')
             ->toString();
     }
+
+    public static function convertFromUTC(string $eventDate, string $userTimezone): string
+    {
+        return Carbon::parse($eventDate, 'UTC')
+            ->setTimezone($userTimezone)
+            ->toString();
+    }
 }

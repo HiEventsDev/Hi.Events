@@ -1,8 +1,7 @@
-@php use HiEvents\Helper\Currency @endphp
-
 @php /** @uses /backend/app/Mail/OrderSummary.php */ @endphp
 @php /** @var \HiEvents\DomainObjects\OrderDomainObject $order */ @endphp
 @php /** @var \HiEvents\DomainObjects\EventDomainObject $event */ @endphp
+@php /** @var string $ticketUrl */ @endphp
 
 <x-mail::message>
 # You're going to {{ $event->getTitle() }}! 🎉
@@ -11,7 +10,7 @@
 
 Please find your ticket details below.
 
-<x-mail::button :url="$event->getEventUrl()">
+<x-mail::button :url="$ticketUrl">
     View Ticket
 </x-mail::button>
 

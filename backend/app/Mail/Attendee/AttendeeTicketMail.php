@@ -4,6 +4,7 @@ namespace HiEvents\Mail\Attendee;
 
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\Helper\Url;
 use HiEvents\Mail\BaseMail;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
@@ -41,6 +42,11 @@ class AttendeeTicketMail extends BaseMail
             with: [
                 'event' => $this->event,
                 'attendee' => $this->attendee,
+                'ticketUrl' => sprintf(
+                    Url::getFrontEndUrlFromConfig(Url::ATTENDEE_TICKET),
+                    $this->event->getId(),
+                    $this->event->getSlug(),
+                )
             ]
         );
     }

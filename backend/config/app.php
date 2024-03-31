@@ -26,6 +26,10 @@ return [
         'accept_invitation' => '/auth/accept-invitation/%s',
         'stripe_connect_return_url' => '/account/payment',
         'stripe_connect_refresh_url' => '/account/payment',
+        'event_homepage' => '/event/%d/%s',
+        'attendee_ticket' => '/ticket/%d/%s',
+        'order_summary' => '/checkout/%d/%s',
+        'organizer_order_summary' => '/manage/event/%d/orders#order-%d',
     ],
 
     /*

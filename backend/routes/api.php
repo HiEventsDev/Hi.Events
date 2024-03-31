@@ -232,3 +232,5 @@ $router->prefix('/public')->group(
         $router->post('/webhooks/stripe', StripeIncomingWebhookAction::class);
     }
 );
+
+include_once __DIR__ . '/mail.php';
