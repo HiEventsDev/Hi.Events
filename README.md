@@ -47,7 +47,7 @@ Hi.Events is designed to help you create, manage, and sell tickets for events of
 - 💬 **Messaging:** Message attendees with important updates and reminders.
 - 📝 **Order Forms:** Collect attendee information with tailored questions at checkout.
 - 🎫 **Ticket Options:** Free, paid, donation, or tiered ticket types.
-- 💸 **Promo Codes:** Highly customizable discount codes, including pre-sale codes and multiple discount options.
+- 💸 **Promo Codes:** Highly versatile discount codes. Pre-sale access, multiple discount options.
 - 💰 **Instant Payouts:** Enjoy instant payouts with seamless Stripe integration.
 - 🧾 **Tax and Fee Configuration:** Add tax and fees on a per-ticket basis.
 - 📦 **Data Exports:**  Export attendee and order data to XLSX or CSV.
