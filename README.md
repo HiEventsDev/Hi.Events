@@ -51,6 +51,7 @@ Hi.Events is designed to help you create, manage, and sell tickets for events of
 - 💰 **Instant Payouts:** Enjoy instant payouts with seamless Stripe integration.
 - 🧾 **Tax and Fee Configuration:** Add tax and fees on a per-ticket basis.
 - 📦 **Data Exports:**  Export attendee and order data to XLSX or CSV.
+- 💻 **REST API:** Full-featured REST API for custom integrations.
 - 🔍 **SEO Tools:** Customize SEO settings for each event.
 - 🛒 **Sleek Checkout:** Ensure a smooth, beautiful checkout experience.
 - 🔐 **Role-Based Access:** Support for multiple user roles.
