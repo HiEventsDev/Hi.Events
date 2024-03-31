@@ -16,6 +16,7 @@ export const Header = () => {
         <>
             <header className={classes.header}>
                 <img
+                    loading={'lazy'}
                     alt={event?.title}
                     src={coverImage.url}/>
             </header>
