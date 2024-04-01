@@ -19,7 +19,7 @@ export const router = createBrowserRouter([
                 async lazy() {
                     const Login = await import("./components/routes/auth/Login");
                     return {Component: Login.default};
-                }
+                },
             },
             {
                 path: "register",

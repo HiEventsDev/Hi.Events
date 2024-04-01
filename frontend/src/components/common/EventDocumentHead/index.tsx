@@ -2,6 +2,8 @@
 import {Helmet} from "react-helmet-async";
 import {t} from "@lingui/macro";
 import {Event} from "../../../types";
+import {eventCoverImageUrl} from "../../../utilites/urlHelper.ts";
+import {utcToTz} from "../../../utilites/dates.ts";
 
 interface EventDocumentHeadProps {
     event: Event;
@@ -12,10 +14,10 @@ export const EventDocumentHead = ({event}: EventDocumentHeadProps) => {
     const title = (eventSettings?.seo_title ?? event.title) + ' | ' + t`Powered By ` + import.meta.env.VITE_APP_NAME;
     const description = eventSettings?.seo_description ?? event.description_preview;
     const keywords = eventSettings?.seo_keywords;
-    const image = event?.images?.find((image) => image.type === 'EVENT_COVER')?.url;
+    const image = eventCoverImageUrl(event);
     const url = window.location.href;
-    const startDate = new Date(event.start_date).toISOString();
-    const endDate = event.end_date ? new Date(event.end_date).toISOString() : null;
+    const startDate = utcToTz(new Date(event.start_date), event.timezone);
+    const endDate = event.end_date ? utcToTz(new Date(event.end_date), event.timezone) : undefined;
 
     // Dynamically build the address object based on available data
     const address = {
@@ -70,7 +72,7 @@ export const EventDocumentHead = ({event}: EventDocumentHeadProps) => {
             {keywords && <meta name="keywords" content={keywords}/>}
             <meta property="og:title" content={title}/>
             <meta property="og:description" content={description}/>
-            <meta property="og:image" content={image}/>
+            {image && <meta property="og:image" content={image}/>}
             {url && <meta property="og:url" content={url}/>}
             <meta property="og:type" content="website"/>
             <meta name="author" content={event.organizer?.name}/>

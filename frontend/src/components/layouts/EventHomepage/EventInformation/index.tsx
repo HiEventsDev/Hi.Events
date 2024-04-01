@@ -26,13 +26,11 @@ export const EventInformation = () => {
                 </div>
                 <div className={classes.shareButtons}>
                     <ShareComponent
-                        title={'Hi.events'}
-                        text={'Check out this event:' + event.title}
+                        title={'Check out this event: ' + event.title}
+                        text={'Check out this event: ' + event.title}
                         url={window.location.origin + eventHomepageUrl(event)}
                         imageUrl={eventCoverImageUrl(event)}
-                    >
-
-                    </ShareComponent>
+                    />
                 </div>
             </div>
             <h1 className={classes.eventTitle}>{event.title}</h1>
