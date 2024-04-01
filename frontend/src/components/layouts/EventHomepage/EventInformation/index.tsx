@@ -1,4 +1,4 @@
-import {IconCalendar, IconExternalLink, IconMapPin, IconShare} from "@tabler/icons-react";
+import {IconCalendar, IconExternalLink, IconMapPin} from "@tabler/icons-react";
 import classes from "./EventInformation.module.scss";
 import {useParams} from "react-router-dom";
 import {useGetEventPublic} from "../../../../queries/useGetEventPublic.ts";
@@ -8,6 +8,7 @@ import {t} from "@lingui/macro";
 import {Button} from "@mantine/core";
 import {LoadingMask} from "../../../common/LoadingMask";
 import {ShareComponent} from "../../../common/ShareIcon";
+import {eventCoverImageUrl, eventHomepageUrl} from "../../../../utilites/urlHelper.ts";
 
 export const EventInformation = () => {
     const {eventId} = useParams();
@@ -24,7 +25,12 @@ export const EventInformation = () => {
                     {prettyDate(event.start_date, event.timezone)}
                 </div>
                 <div className={classes.shareButtons}>
-                    <ShareComponent title={'Hi.events'} text={'check it out'} url={'https://google.com'}>
+                    <ShareComponent
+                        title={'Hi.events'}
+                        text={'Check out this event:' + event.title}
+                        url={window.location.origin + eventHomepageUrl(event)}
+                        imageUrl={eventCoverImageUrl(event)}
+                    >
 
                     </ShareComponent>
                 </div>
