@@ -11,6 +11,7 @@ import {useGetEventPublic} from "../../../queries/useGetEventPublic.ts";
 import {LoadingMask} from "../../common/LoadingMask";
 import {EventDocumentHead} from "../../common/EventDocumentHead";
 import {HomepageInfoMessage} from "../../common/HomepageInfoMessage";
+import {eventCoverImageUrl} from "../../../utilites/urlHelper.ts";
 
 interface EventHomepageProps {
     colors?: {
@@ -26,7 +27,6 @@ interface EventHomepageProps {
 const EventHomepage = ({colors, continueButtonText}: EventHomepageProps) => {
     const {eventId} = useParams();
     const {data: event, isFetched: eventIsFetched, error} = useGetEventPublic(eventId);
-    const coverImage = event?.images?.find((image) => image.type === 'EVENT_COVER');
 
     if (error?.response?.status === 404) {
         return <HomepageInfoMessage
@@ -46,10 +46,12 @@ const EventHomepage = ({colors, continueButtonText}: EventHomepageProps) => {
         '--homepage-secondary-text-color': colors?.secondaryText || event?.settings?.homepage_secondary_text_color,
     } as React.CSSProperties;
 
+    const coverImage = eventCoverImageUrl(event);
+
     return (
         <>
             {(event && eventIsFetched) && <EventDocumentHead event={event}/>}
-            {coverImage && <div className={classes.background} style={{backgroundImage: `url(${coverImage.url})`}}/>}
+            {coverImage && <div className={classes.background} style={{backgroundImage: `url(${coverImage})`}}/>}
             <div id={'event-homepage'} style={styleOverrides} className={classes.styleContainer}>
                 <div className={classes.container}>
                     <Header/>
