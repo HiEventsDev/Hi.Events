@@ -1,7 +1,11 @@
-import {createBrowserRouter, Navigate} from "react-router-dom";
+import { Navigate, RouteObject} from "react-router-dom";
 import ErrorPage from "./error-page.tsx";
 
-export const router = createBrowserRouter([
+export const router: RouteObject[] = [
+    {
+        path: "testSSR",
+        element: <>what test</>
+    },
     {
         path: "",
         element: <Navigate to={'/manage/events'} replace/>
@@ -377,9 +381,5 @@ export const router = createBrowserRouter([
         },
         errorElement: <ErrorPage/>
     },
-], {
-    future: {
-        v7_normalizeFormMethod: true,
-    }
-});
+];
 
