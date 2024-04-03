@@ -27,7 +27,7 @@ export const api = axios.create({
     // withCredentials: true,
 });
 
-const existingToken = window.localStorage.getItem('token');
+const existingToken = window.localStorage?.getItem('token');
 if (existingToken) {
     setAuthToken(existingToken);
 }
@@ -58,7 +58,7 @@ api.interceptors.response.use(
 axios.defaults.withCredentials = true
 
 export const redirectToPreviousUrl = () => {
-    const previousUrl = window.localStorage.getItem(PREVIOUS_URL_KEY) || '/manage/events';
+    const previousUrl = window.localStorage?.getItem(PREVIOUS_URL_KEY) || '/manage/events';
     window.localStorage.removeItem(PREVIOUS_URL_KEY); // Clean up after redirecting
     window.location.href = previousUrl;
 };

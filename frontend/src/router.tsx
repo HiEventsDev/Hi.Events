@@ -1,11 +1,8 @@
 import { Navigate, RouteObject} from "react-router-dom";
 import ErrorPage from "./error-page.tsx";
+import { eventsClientPublic } from "./api/event.client.ts";
 
 export const router: RouteObject[] = [
-    {
-        path: "testSSR",
-        element: <>what test</>
-    },
     {
         path: "",
         element: <Navigate to={'/manage/events'} replace/>
@@ -296,6 +293,10 @@ export const router: RouteObject[] = [
     },
     {
         path: "/event/:eventId/:eventSlug",
+        loader: async ({params}) => {
+            const {data} = await eventsClientPublic.findByID(params.eventId, null);
+            return data;
+        },
         async lazy() {
             const EventHomepage = await import("./components/layouts/EventHomepage");
             return {Component: EventHomepage.default};

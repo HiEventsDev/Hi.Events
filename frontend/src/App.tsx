@@ -1,10 +1,11 @@
-import React, { FC, PropsWithChildren } from "react";
+import React, { FC, PropsWithChildren, useRef } from "react";
 import { MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";
 import { ModalsProvider } from "@mantine/modals";
-import { HelmetProvider } from "react-helmet-async";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {HelmetProvider} from "react-helmet-async";
 
 import "@mantine/core/styles/global.css";
 import "@mantine/core/styles.css";
@@ -13,21 +14,32 @@ import "@mantine/tiptap/styles.css";
 import "@mantine/dropzone/styles.css";
 import "@mantine/charts/styles.css";
 import "./styles/global.scss";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+import { messages as en } from "./locales/en.po";
+import { messages as de } from "./locales/de.po";
+import { messages as fr } from "./locales/fr.po";
+import { messages as pt } from "./locales/pt.po";
+import { messages as es } from "./locales/es.po";
+
+const supportedLocales: Record<string, any> = {
+  en,
+  de,
+  fr,
+  pt,
+  es,
+};
 
 export async function dynamicActivate(locale: string) {
-  const { messages } = await import(`./locales/${locale}.po`);
-
-  i18n.load(locale, messages);
+  i18n.load(locale, supportedLocales[locale || "en"] || {});
   i18n.activate(locale);
 }
 
 const getSupportedLocale = () => {
   if (typeof window.navigator !== "undefined") {
-    const supportedLocales = ["es", "de", "en", "fr", "pt"];
+    const supportedLocalesKeys = Object.keys(supportedLocales);
     const userLocale = navigator.language.split("-")[0]; // Extracting the base language
 
-    if (supportedLocales.includes(userLocale)) {
+    if (supportedLocalesKeys.includes(userLocale)) {
       return userLocale;
     }
   }
@@ -35,16 +47,22 @@ const getSupportedLocale = () => {
   return "en";
 };
 
-dynamicActivate(getSupportedLocale());
-
 export const App: FC<
   PropsWithChildren<{
     queryClient: QueryClient;
+    helmetContext?: any;
   }>
 > = (props) => {
+  const localeActivated = useRef(false);
+
+  if (!localeActivated.current) {
+    localeActivated.current = true;
+    dynamicActivate(getSupportedLocale());
+  }
+
   return (
     <React.StrictMode>
-      <HelmetProvider>
+      <HelmetProvider context={props.helmetContext}>
         <I18nProvider i18n={i18n}>
           <QueryClientProvider client={props.queryClient}>
             <MantineProvider

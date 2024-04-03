@@ -1,15 +1,15 @@
 import classes from './Header.module.scss'
-import {useGetEventPublic} from "../../../../queries/useGetEventPublic.ts";
-import {useParams} from "react-router-dom";
+import { FC } from 'react';
+import { Event } from '../../../../types.ts';
 
-export const Header = () => {
-    const {eventId} = useParams();
-    const {data: event} = useGetEventPublic(eventId);
-
+export const Header: FC<{
+    event: Event
+}> = ({event}) => {
+   
     const coverImage = event?.images?.find((image) => image.type === 'EVENT_COVER');
 
     if (!coverImage) {
-        return <></>;
+        return <>no cover</>;
     }
 
     return (

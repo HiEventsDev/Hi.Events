@@ -1,106 +1,89 @@
 /* eslint-disable lingui/no-unlocalized-strings */
-import path from "path";
-import { promises as fsp } from "fs";
 import express from "express";
 import { installGlobals } from "@remix-run/node";
 import process from "process";
-import { fileURLToPath } from 'url';
-import {createServer as viteServer} from "vite"
+import { createServer as viteServer } from "vite";
 import compression from "compression";
+import fs from "node:fs/promises";
+import sirv from "sirv";
 
 installGlobals();
 
-const root = process.cwd();
+const base = process.env.BASE || "/";
 const isProduction = process.env.NODE_ENV === "production";
 
-function resolve(p) {
-  const __filename = fileURLToPath(import.meta.url);
-  const __dirname = path.dirname(__filename);
-  return path.resolve(__dirname, p);
+globalThis.window = {};
+
+// Cached production assets
+const templateHtml = isProduction
+  ? await fs.readFile("./dist/client/index.html", "utf-8")
+  : "";
+
+// not being used atm
+const ssrManifest = isProduction
+  ? await fs.readFile("./dist/client/.vite/ssr-manifest.json", "utf-8")
+  : undefined;
+
+const app = express();
+
+let vite;
+
+if (!isProduction) {
+  vite = await viteServer({
+    server: { middlewareMode: true },
+    appType: "custom",
+    base,
+  });
+
+  app.use(vite.middlewares);
+} else {
+  app.use(compression());
+  app.use(base, sirv("./dist/client", { extensions: [] }));
 }
 
-async function createServer() {
-  globalThis.window = {};
-  const app = express();
+app.use("*", async (req, res) => {
+  const url = req.originalUrl.replace(base, "");
 
-  app.use((_req,_res,next)=>{
-    console.log("test1")
-    next()
-  })
-  /**
-   * @type {import('vite').ViteDevServer}
-   */
-  let vite;
+  try {
+    let template;
+    let render;
 
-  if (!isProduction) {
-    vite = await viteServer({
-      root,
-      server: { middlewareMode: "ssr" },
-    });
-
-    app.use(vite.middlewares);
-  } else {
-    app.use(compression());
-    app.use(express.static(resolve("dist/client")));
-  }
-
-  app.use((_req,_res,next)=>{
-    console.log("test2")
-    next()
-  })
-
-  app.use("*", async (req, res) => {
-    console.log("test2", req.originalUrl)
-
-    const url = req.originalUrl;
-
-    try {
-      let template;
-      let render;
-
-      if (!isProduction) {
-        template = await fsp.readFile(resolve("index.html"), "utf8");
-        template = await vite.transformIndexHtml(url, template);
-        const module = await vite.ssrLoadModule("src/entry.server.tsx");
-        render = module.render;
-      } else {
-        template = await fsp.readFile(resolve("dist/client/index.html"), "utf8");
-        const module = await import(resolve("dist/server/entry.server.js"));
-        render = module.render;
-      }
-
-      try {
-        const { appHtml, dehydratedState } = await render(req, res);
-        const strifiedState = JSON.stringify(dehydratedState);
-        console.log(appHtml)
-        const html = template
-          .replace("<!--app-html-->", appHtml)
-          .replace(
-            "<!--dehydrated-state-->",
-            `<script>window.__REHYDRATED_STATE__ = ${strifiedState}</script>`
-          );
-        res.setHeader("Content-Type", "text/html");
-        return res.status(200).end(html);
-      } catch (e) {
-        if (e instanceof Response && e.status >= 300 && e.status <= 399) {
-          return res.redirect(e.status, e.headers.get("Location"));
-        }
-        throw e;
-      }
-    } catch (error) {
-      if (!isProduction) {
-        vite.ssrFixStacktrace(error);
-      }
-      console.log(error.stack);
-      res.status(500).end(error.stack);
+    if (!isProduction) {
+      template = await fs.readFile("./index.html", "utf-8");
+      template = await vite.transformIndexHtml(url, template);
+      render = (await vite.ssrLoadModule("/src/entry.server.tsx")).render;
+    } else {
+      template = templateHtml;
+      render = (await import("./dist/server/entry.server.js")).render;
     }
-  });
 
-  return app;
-}
+    const { appHtml, dehydratedState, helmetContext } = await render(req, res);
+    const strifiedState = JSON.stringify(dehydratedState);
+    const html = template
+      .replace("<!--app-html-->", appHtml)
+      .replace(
+        "<!--dehydrated-state-->",
+        `<script>window.__REHYDRATED_STATE__ = ${strifiedState}</script>`
+      )
+      .replace(
+        "<!--render-helmet-->",
+        `${Object.values(helmetContext.helmet || {}).map((value) =>
+    {
+      return value.toString() || ""
+    }
+  ).join(" ")}`
+      );
+    res.setHeader("Content-Type", "text/html");
+    return res.status(200).end(html);
+  } catch (error) {
+    if (!isProduction) {
+      vite.ssrFixStacktrace(error);
+    }
+    console.log(error.stack);
+    res.status(500).end(error.stack);
+  }
+});
 
-createServer().then((app) => {
-  app.listen(3000, () => {
-    console.info("SSR Serving at http://localhost:3000");
-  });
+app.listen(3000, () => {
+  console.info("SSR Serving at http://localhost:3000");
 });

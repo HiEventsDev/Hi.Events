@@ -14,7 +14,7 @@ const setAuthToken = (token: string) => {
     }
 };
 
-const existingToken = window.localStorage.getItem('token');
+const existingToken = window.localStorage?.getItem('token');
 
 if (existingToken) {
     setAuthToken(existingToken);

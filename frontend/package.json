@@ -6,9 +6,9 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development node server.js",
     "build": "npm run build:client && npm run build:server",
-    "build:client": "vite build --outDir dist/client --ssrManifest",
+    "build:client": "vite build --ssrManifest --outDir dist/client",
     "build:server": "vite build --ssr src/entry.server.tsx --outDir dist/server",
-    "build-strict": "tsc && vite build",
+    "build-strict": "tsc && npm run build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "messages:extract": "lingui extract",
@@ -58,7 +58,8 @@
     "react-helmet-async": "^2.0.4",
     "react-qr-code": "^2.0.12",
     "react-router-dom": "^6.11.2",
-    "recharts": "2"
+    "recharts": "2",
+    "sirv": "^2.0.4"
   },
   "devDependencies": {
     "@lingui/cli": "^4.7.0",
@@ -83,7 +84,7 @@
     "postcss-simple-vars": "^7.0.1",
     "sass": "^1.63.4",
     "typescript": "^5.0.2",
-    "vite": "^4.5.3",
+    "vite": "^5.2.7",
     "vite-bundle-visualizer": "^1.0.1",
     "vite-plugin-copy": "^0.1.6"
   }

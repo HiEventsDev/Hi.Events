@@ -1,7 +1,5 @@
 import {IconCalendar, IconExternalLink, IconMapPin} from "@tabler/icons-react";
 import classes from "./EventInformation.module.scss";
-import {useParams} from "react-router-dom";
-import {useGetEventPublic} from "../../../../queries/useGetEventPublic.ts";
 import {prettyDate} from "../../../../utilites/dates.ts";
 import {formatAddress} from "../../../../utilites/formatAddress.tsx";
 import {t} from "@lingui/macro";
@@ -9,10 +7,12 @@ import {Button} from "@mantine/core";
 import {LoadingMask} from "../../../common/LoadingMask";
 import {ShareComponent} from "../../../common/ShareIcon";
 import {eventCoverImageUrl, eventHomepageUrl} from "../../../../utilites/urlHelper.ts";
+import { FC } from "react";
+import { Event } from "../../../../types.ts";
 
-export const EventInformation = () => {
-    const {eventId} = useParams();
-    const {data: event} = useGetEventPublic(eventId);
+export const EventInformation: FC<{
+    event: Event
+}> = ({event}) => {
 
     if (!event) {
         return <LoadingMask/>;
@@ -28,7 +28,7 @@ export const EventInformation = () => {
                     <ShareComponent
                         title={'Check out this event: ' + event.title}
                         text={'Check out this event: ' + event.title}
-                        url={window.location.origin + eventHomepageUrl(event)}
+                        url={window.location?.origin + eventHomepageUrl(event)}
                         imageUrl={eventCoverImageUrl(event)}
                     />
                 </div>

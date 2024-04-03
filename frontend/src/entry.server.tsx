@@ -1,5 +1,4 @@
 import type * as express from "express";
-import * as React from "react";
 import ReactDOMServer from "react-dom/server";
 import { dehydrate } from "@tanstack/react-query";
 
@@ -12,6 +11,8 @@ import { router } from "./router";
 import { App } from "./App";
 import { queryClient } from "./utilites/queryClient";
 
+const helmetContext = {};
+
 export async function render(
   request: express.Request,
   response: express.Response
@@ -19,6 +20,7 @@ export async function render(
   const { query, dataRoutes } = createStaticHandler(router);
   const remixRequest = createFetchRequest(request, response);
   const context = await query(remixRequest);
+  
 
   // prefetch queries
   // await queryClient.prefetchQuery("test", async () => {
@@ -31,9 +33,11 @@ export async function render(
     throw context;
   }
 
+
+
   const routerWithContext = createStaticRouter(dataRoutes, context);
   const appHtml = ReactDOMServer.renderToString(
-    <App queryClient={queryClient}>
+    <App queryClient={queryClient} helmetContext={helmetContext}>
       <StaticRouterProvider
         router={routerWithContext}
         context={context}
@@ -44,9 +48,11 @@ export async function render(
 
   const dehydratedState = dehydrate(queryClient);
 
+
   return {
     appHtml,
     dehydratedState,
+    helmetContext
   };
 }
 

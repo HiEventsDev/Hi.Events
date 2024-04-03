@@ -6,12 +6,13 @@ import {t} from "@lingui/macro";
 import {SelectTickets} from "../../routes/ticket-widget/SelectTickets";
 import '../../../styles/widget/default.scss';
 import React from "react";
-import {useParams} from "react-router-dom";
+import {useLoaderData, useParams} from "react-router-dom";
 import {useGetEventPublic} from "../../../queries/useGetEventPublic.ts";
 import {LoadingMask} from "../../common/LoadingMask";
 import {EventDocumentHead} from "../../common/EventDocumentHead";
 import {HomepageInfoMessage} from "../../common/HomepageInfoMessage";
 import {eventCoverImageUrl} from "../../../utilites/urlHelper.ts";
+import { Event } from "../../../types.ts";
 
 interface EventHomepageProps {
     colors?: {
@@ -25,18 +26,21 @@ interface EventHomepageProps {
 }
 
 const EventHomepage = ({colors, continueButtonText}: EventHomepageProps) => {
-    const {eventId} = useParams();
-    const {data: event, isFetched: eventIsFetched, error} = useGetEventPublic(eventId);
+    const loaderData = useLoaderData()
+    const event = loaderData as Event
+    // console.log(loaderData)
+    // const {eventId} = useParams();
+    // const {data: event, isFetched: eventIsFetched, error} = useGetEventPublic(eventId);
 
-    if (error?.response?.status === 404) {
-        return <HomepageInfoMessage
-            message={t`This event is not available.`}
-        />
-    }
+    // if (error?.response?.status === 404) {
+    //     return <HomepageInfoMessage
+    //         message={t`This event is not available.`}
+    //     />
+    // }
 
-    if (!eventIsFetched || !event) {
-        return <LoadingMask/>;
-    }
+    // if (!eventIsFetched || !event) {
+    //     return <LoadingMask/>;
+    // }
 
     const styleOverrides = {
         '--homepage-background-color': colors?.background || event?.settings?.homepage_background_color,
@@ -50,14 +54,14 @@ const EventHomepage = ({colors, continueButtonText}: EventHomepageProps) => {
 
     return (
         <>
-            {(event && eventIsFetched) && <EventDocumentHead event={event}/>}
+            {(event) && <EventDocumentHead event={event}/>}
             {coverImage && <div className={classes.background} style={{backgroundImage: `url(${coverImage})`}}/>}
             <div id={'event-homepage'} style={styleOverrides} className={classes.styleContainer}>
                 <div className={classes.container}>
-                    <Header/>
+                    <Header event={event} />
                     <div className={classes.innerContainer}>
                         <div className={classes.eventInfo}>
-                            <EventInformation/>
+                            <EventInformation event={event}/>
                         </div>
 
                         <div className={classes.ticketContainer}>

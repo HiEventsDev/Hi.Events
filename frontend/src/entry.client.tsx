@@ -10,6 +10,7 @@ import { router } from "./router";
 import { App } from "./App";
 import { queryClient } from "./utilites/queryClient";
 
+
 declare global {
   interface Window {
     __REHYDRATED_STATE__?: unknown;
@@ -46,7 +47,7 @@ async function initClientApp() {
   });
 
   ReactDOM.hydrateRoot(
-    document.getElementById("app")!,
+    document.getElementById("app") as HTMLElement,
     <App queryClient={queryClient}>
       <RouterProvider router={browserRouter} fallbackElement={null} />
     </App>
