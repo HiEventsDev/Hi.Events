@@ -293,8 +293,10 @@ export const router: RouteObject[] = [
     },
     {
         path: "/event/:eventId/:eventSlug",
-        loader: async ({params}) => {
-            const {data} = await eventsClientPublic.findByID(params.eventId, null);
+        loader: async ({params, request, context}) => {
+            const url = new URL(request.url)
+            const queryParams = new URLSearchParams(url.search);
+            const {data} = await eventsClientPublic.findByID(params.eventId, queryParams.get("promo_code") ?? null);
             return data;
         },
         async lazy() {
