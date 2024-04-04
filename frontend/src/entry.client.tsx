@@ -10,7 +10,6 @@ import { router } from "./router";
 import { App } from "./App";
 import { queryClient } from "./utilites/queryClient";
 
-
 declare global {
   interface Window {
     __REHYDRATED_STATE__?: unknown;
@@ -20,6 +19,12 @@ declare global {
 if (window.__REHYDRATED_STATE__) {
   hydrate(queryClient, window.__REHYDRATED_STATE__);
 }
+
+export const browserRouter = createBrowserRouter(router, {
+  future: {
+    v7_normalizeFormMethod: true,
+  },
+});
 
 initClientApp();
 
@@ -39,12 +44,6 @@ async function initClientApp() {
       })
     );
   }
-
-  const browserRouter = createBrowserRouter(router, {
-    future: {
-      v7_normalizeFormMethod: true,
-    },
-  });
 
   ReactDOM.hydrateRoot(
     document.getElementById("app") as HTMLElement,

@@ -1,11 +1,11 @@
 import React, { FC, PropsWithChildren, useRef } from "react";
-import { MantineProvider } from "@mantine/core";
+import { ColorSchemeScript, MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";
 import { ModalsProvider } from "@mantine/modals";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import {HelmetProvider} from "react-helmet-async";
+import { Helmet, HelmetProvider } from "react-helmet-async";
 
 import "@mantine/core/styles/global.css";
 import "@mantine/core/styles.css";
@@ -62,35 +62,36 @@ export const App: FC<
 
   return (
     <React.StrictMode>
-      <HelmetProvider context={props.helmetContext}>
-        <I18nProvider i18n={i18n}>
-          <QueryClientProvider client={props.queryClient}>
-            <MantineProvider
-              theme={{
-                colors: {
-                  purple: [
-                    "#8260C6",
-                    "#734DBF",
-                    "#6741B2",
-                    "#5E3CA1",
-                    "#563792",
-                    "#4E3284",
-                    "#472E78",
-                    "#40296C",
-                    "#392562",
-                    "#332158",
-                  ],
-                },
-                primaryColor: "purple",
-                fontFamily: "'Varela Round', sans-serif",
-              }}
-            >
+      <MantineProvider
+        theme={{
+          colors: {
+            purple: [
+              "#8260C6",
+              "#734DBF",
+              "#6741B2",
+              "#5E3CA1",
+              "#563792",
+              "#4E3284",
+              "#472E78",
+              "#40296C",
+              "#392562",
+              "#332158",
+            ],
+          },
+          primaryColor: "purple",
+          fontFamily: "'Varela Round', sans-serif",
+          
+        }}
+      >
+        <HelmetProvider context={props.helmetContext}>
+          <I18nProvider i18n={i18n}>
+            <QueryClientProvider client={props.queryClient}>
               <ModalsProvider>{props.children}</ModalsProvider>
               <Notifications />
-            </MantineProvider>
-          </QueryClientProvider>
-        </I18nProvider>
-      </HelmetProvider>
+            </QueryClientProvider>
+          </I18nProvider>
+        </HelmetProvider>
+      </MantineProvider>
     </React.StrictMode>
   );
 };

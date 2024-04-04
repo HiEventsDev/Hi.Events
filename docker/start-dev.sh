@@ -2,6 +2,12 @@
 
 COMPOSE_CMD="docker-compose -f docker-compose.dev.yml"
 
+if [[ "$1" == "csr" || "$1" == "ssr" ]]; then
+    COMPOSE_CMD+=" --profile $1"
+else
+    COMPOSE_CMD+=" --profile csr"
+fi
+
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 BG_BLACK='\033[40m'

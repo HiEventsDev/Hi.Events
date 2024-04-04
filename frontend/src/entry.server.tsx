@@ -13,27 +13,17 @@ import { queryClient } from "./utilites/queryClient";
 
 const helmetContext = {};
 
-export async function render(
-  request: express.Request,
-  response: express.Response
-) {
+export async function render(params: {
+  req: express.Request;
+  res: express.Response;
+}) {
   const { query, dataRoutes } = createStaticHandler(router);
-  const remixRequest = createFetchRequest(request, response);
+  const remixRequest = createFetchRequest(params.req, params.res);
   const context = await query(remixRequest);
-  
-
-  // prefetch queries
-  // await queryClient.prefetchQuery("test", async () => {
-  //   const ipAPIResponse = await fetch("https://api.ipify.org?format=json");
-  //   const ipAPIJSON = await ipAPIResponse.json();
-  //   return ipAPIJSON;
-  // });
 
   if (context instanceof Response) {
     throw context;
   }
-
-
 
   const routerWithContext = createStaticRouter(dataRoutes, context);
   const appHtml = ReactDOMServer.renderToString(
@@ -48,11 +38,10 @@ export async function render(
 
   const dehydratedState = dehydrate(queryClient);
 
-
   return {
     appHtml,
     dehydratedState,
-    helmetContext
+    helmetContext,
   };
 }
 

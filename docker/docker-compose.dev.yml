@@ -21,23 +21,42 @@ services:
         networks:
             - app
 
-    frontend:
+    frontend-csr:
         build:
             context: ./../frontend
-            dockerfile: Dockerfile.dev
-        container_name: frontend
+            dockerfile: Dockerfile.csr.dev
+        container_name: frontend-csr
+        profiles:
+            - csr
         ports:
             - "5678:5678"
         volumes:
             - ./../frontend:/app
             - /app/node_modules
 
-        command: yarn dev
+        command: yarn dev:csr
         environment:
             VITE_API_URL: '${API_URL}'
         networks:
             - app
+    frontend-ssr:
+        build:
+            context: ./../frontend
+            dockerfile: Dockerfile.ssr.dev
+        container_name: frontend-ssr
+        profiles:
+            - ssr
+        ports:
+            - "5678:5678"
+        volumes:
+            - ./../frontend:/app
+            - /app/node_modules
 
+        command: yarn dev:ssr
+        environment:
+            VITE_API_URL: '${API_URL}'
+        networks:
+            - app
     redis:
         image: 'redis:alpine'
         ports:
