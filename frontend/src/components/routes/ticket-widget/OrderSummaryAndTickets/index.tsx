@@ -40,7 +40,7 @@ export const OrderSummaryAndTickets = () => {
         return <LoadingMask/>;
     }
 
-    if (window.location.search.includes('failed') || order?.status === 'PAYMENT_FAILED') {
+    if (window?.location.search.includes('failed') || order?.status === 'PAYMENT_FAILED') {
         navigate(eventCheckoutUrl(eventId, orderShortId, 'payment') + '?payment_failed=true');
         return;
     }
@@ -88,7 +88,7 @@ export const OrderSummaryAndTickets = () => {
                         size={'sm'}
                         variant={'transparent'}
                         leftSection={<IconPrinter size={16}/>}
-                        onClick={() => window.open(`/order/${eventId}/${orderShortId}/print`, '_blank')}
+                        onClick={() => window?.open(`/order/${eventId}/${orderShortId}/print`, '_blank')}
                     >
                         {t`Print All Tickets`}
                     </Button>

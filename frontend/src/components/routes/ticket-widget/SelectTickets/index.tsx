@@ -11,9 +11,7 @@ import {
 } from "../../../../api/order.client.ts";
 import {useForm} from "@mantine/form";
 import {range, useInputState} from "@mantine/hooks";
-import {useGetEventPublic} from "../../../../queries/useGetEventPublic.ts";
 import React, {useEffect, useMemo, useRef} from "react";
-import {useGetPromoCodePublic} from "../../../../queries/useGetPromoCodePublic.ts";
 import {showError, showInfo, showSuccess} from "../../../../utilites/notifications.tsx";
 import {addQueryStringToUrl, isObjectEmpty} from "../../../../utilites/helpers.ts";
 import {TieredPricing} from "./Prices/Tiered";
@@ -21,8 +19,11 @@ import classNames from 'classnames';
 import '../../../../styles/widget/default.scss';
 import {TicketAvailabilityMessage} from "../../../common/TicketPriceAvailability";
 import {PoweredByFooter} from "../../../common/PoweredByFooter";
+import { Event } from "../../../../types.ts";
 
 interface SelectTicketsProps {
+    event: Event;
+    promoCodeValid: boolean;
     colors?: {
         primary?: string;
         primaryText?: string;
@@ -40,12 +41,11 @@ export const SelectTickets = (props: SelectTicketsProps) => {
     const promoRef = useRef<HTMLInputElement>(null);
     const [promoCode, setPromoCode] = useInputState<string | null>(null);
     const [showPromoCodeInput, setShowPromoCodeInput] = useInputState<boolean>(false);
-    const [isPromoCodeValid, setIsPromoCodeValid] = useInputState<boolean>(false);
-    const {data: {valid: promoValid} = {}} = useGetPromoCodePublic(eventId, promoCode);
+    const [promoValid, setIsPromoCodeValid] = useInputState<boolean>(false);
     const queryClient = useQueryClient();
     const navigate = useNavigate();
-    const eventQuery = useGetEventPublic(eventId, true, isPromoCodeValid, promoCode);
-    const {data: event, data: {tickets} = {}} = eventQuery;
+    const event = props.event;
+    const tickets = props.event.tickets;
     let ticketIndex = 0;
     const ticketAreAvailable = tickets && tickets.length > 0;
 
@@ -127,7 +127,7 @@ export const SelectTickets = (props: SelectTicketsProps) => {
     useEffect(populateFormValue, [tickets]);
 
     useEffect(() => {
-        const searchParams = new URLSearchParams(window.location.search);
+        const searchParams = new URLSearchParams(window?.location.search);
         const promoCode = searchParams.get('promo_code');
         if (promoCode) {
             setPromoCode(promoCode);
@@ -135,9 +135,7 @@ export const SelectTickets = (props: SelectTicketsProps) => {
         }
     }, [])
 
-    if (!eventQuery.isFetched) {
-        return <></>;
-    }
+
 
     const handleTicketSelection = (values: TicketFormPayload) => {
         if (values && selectedTicketQuantitySum > 0) {

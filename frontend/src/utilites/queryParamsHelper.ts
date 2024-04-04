@@ -18,7 +18,7 @@ export const queryParamsHelper = {
      * @param defaultReturn {*}
      */
     getParam: (param: string, defaultReturn: string | number = ''): string | number => {
-        const urlParams = new URLSearchParams(window.location.search);
+        const urlParams = new URLSearchParams(window?.location.search);
         return urlParams.get(param) || defaultReturn;
     },
 

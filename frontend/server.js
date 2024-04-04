@@ -15,7 +15,6 @@ const port = process.argv.includes("--port")
   : process.env.PORT || 5678;
 const isProduction = process.env.NODE_ENV === "production";
 
-globalThis.window = {};
 
 // Cached production assets
 const templateHtml = isProduction

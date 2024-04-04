@@ -15,7 +15,7 @@ const PrintTicket = () => {
 
     useEffect(() => {
         if (attendee && event) {
-            setTimeout(() => window.print(), 500);
+            setTimeout(() => window?.print(), 500);
         }
     }, [attendee, event]);
 

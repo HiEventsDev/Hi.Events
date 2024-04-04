@@ -15,7 +15,7 @@ export const EventDocumentHead = ({event}: EventDocumentHeadProps) => {
     const description = eventSettings?.seo_description ?? event.description_preview;
     const keywords = eventSettings?.seo_keywords;
     const image = eventCoverImageUrl(event);
-    const url = window.location?.href;
+    const url = typeof window !== "undefined" ? window.location.href : undefined;
     const startDate = utcToTz(new Date(event.start_date), event.timezone);
     const endDate = event.end_date ? utcToTz(new Date(event.end_date), event.timezone) : undefined;
 

@@ -15,7 +15,7 @@ export const PrintOrder = () => {
 
     useEffect(() => {
         if (order && event) {
-            setTimeout(() => window.print(), 500);
+            setTimeout(() => window?.print(), 500);
         }
     }, [order, event]);
 

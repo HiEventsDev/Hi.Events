@@ -1,8 +1,10 @@
 import { Navigate, RouteObject} from "react-router-dom";
 import ErrorPage from "./error-page.tsx";
 import { eventsClientPublic } from "./api/event.client.ts";
+import { promoCodeClientPublic } from "./api/promo-code.client.ts";
 
 export const router: RouteObject[] = [
+
     {
         path: "",
         element: <Navigate to={'/manage/events'} replace/>
@@ -293,11 +295,15 @@ export const router: RouteObject[] = [
     },
     {
         path: "/event/:eventId/:eventSlug",
-        loader: async ({params, request, context}) => {
+        loader: async ({params, request}) => {
             const url = new URL(request.url)
             const queryParams = new URLSearchParams(url.search);
-            const {data} = await eventsClientPublic.findByID(params.eventId, queryParams.get("promo_code") ?? null);
-            return data;
+            const promo_code = queryParams.get("promo_code") ?? null
+            const {data: event } = await eventsClientPublic.findByID(params.eventId, promo_code);
+            let promoCodeValid = false;
+            // if (promo_code)
+            //     promoCodeValid = (await promoCodeClientPublic.validateCode(params.eventId, promo_code)).valid;
+            return {event, promoCodeValid };
         },
         async lazy() {
             const EventHomepage = await import("./components/layouts/EventHomepage");

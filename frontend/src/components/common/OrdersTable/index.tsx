@@ -43,8 +43,8 @@ export const OrdersTable = ({orders, event}: OrdersTableProps) => {
     const resendConfirmationMutation = useResendOrderConfirmation();
 
     useEffect(() => {
-        if (window.location.hash) {
-            const match = window.location.hash.match(/^#order-(\d+)$/);
+        if (window?.location.hash) {
+            const match = window?.location.hash.match(/^#order-(\d+)$/);
 
             if (match && match[1]) {
                 const orderId = match[1];

@@ -37,13 +37,13 @@ export const formatStatus = (status: string) => {
 }
 
 export const addQueryStringToUrl = (key: string, value: string): void => {
-    const currentUrl = new URL(window.location.href);
+    const currentUrl = new URL(window?.location.href);
 
     if (!currentUrl.searchParams.has(key)) {
         currentUrl.searchParams.append(key, value);
     }
 
-    window.history.pushState({}, '', currentUrl.toString());
+    window?.history.pushState({}, '', currentUrl.toString());
 };
 
 export const getStatusColor = (status: string): MantineColor => {
@@ -65,7 +65,7 @@ export const getStatusColor = (status: string): MantineColor => {
 };
 
 export const getUrlParam = (paramName: string) => {
-    const params = new URLSearchParams(window.location.search);
+    const params = new URLSearchParams(window?.location.search);
     return params.get(paramName);
 };
 

@@ -74,7 +74,9 @@ export function EventCard({event}: EventCardProps) {
                         </Menu.Target>
 
                         <Menu.Dropdown>
-                            <Menu.Item onClick={() => window.location.href = eventHomepageUrl(event)}
+                            <Menu.Item onClick={() => {
+                                if (typeof window !== "undefined" ) window.location.href = eventHomepageUrl(event)
+                            }}
                                        leftSection={<IconEye size={14}/>}
                             >
                                 {t`View event page`}

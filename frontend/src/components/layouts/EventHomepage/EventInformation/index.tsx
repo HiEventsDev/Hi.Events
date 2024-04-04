@@ -28,7 +28,7 @@ export const EventInformation: FC<{
                     <ShareComponent
                         title={'Check out this event: ' + event.title}
                         text={'Check out this event: ' + event.title}
-                        url={window.location?.origin + eventHomepageUrl(event)}
+                        url={typeof window !== "undefined" ?window?.location?.origin + eventHomepageUrl(event) : ""}
                         imageUrl={eventCoverImageUrl(event)}
                     />
                 </div>

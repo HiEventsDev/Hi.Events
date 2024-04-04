@@ -28,7 +28,7 @@ export default function StripeCheckoutForm() {
             return;
         }
 
-        const clientSecret = new URLSearchParams(window.location.search).get(
+        const clientSecret = new URLSearchParams(window?.location.search).get(
             "payment_intent_client_secret"
         );
 
@@ -86,7 +86,7 @@ export default function StripeCheckoutForm() {
         const {error} = await stripe.confirmPayment({
             elements,
             confirmParams: {
-                return_url: window.location.origin + `/checkout/${eventId}/${orderShortId}/payment_return`
+                return_url: window?.location.origin + `/checkout/${eventId}/${orderShortId}/payment_return`
             },
         });
 
@@ -121,7 +121,7 @@ export default function StripeCheckoutForm() {
                 <h2>
                     {t`Payment`}
                 </h2>
-                {(order?.payment_status === 'PAYMENT_FAILED' || window.location.search.includes('payment_failed')) && (
+                {(order?.payment_status === 'PAYMENT_FAILED' || window?.location.search.includes('payment_failed')) && (
                     <Alert mb={20} color={'red'}>{t`Your payment was unsuccessful. Please try again.`}</Alert>
                 )}
 

@@ -68,13 +68,13 @@ export const AttendeeTicket = ({attendee, ticket, event, hideButtons = false}: A
                     <div className={classes.ticketButtons}>
                         <Button variant={'transparent'}
                                 size={'sm'}
-                                onClick={() => window.open(`/ticket/${event.id}/${attendee.short_id}/print`, '_blank', 'noopener,noreferrer')}
+                                onClick={() => window?.open(`/ticket/${event.id}/${attendee.short_id}/print`, '_blank', 'noopener,noreferrer')}
                                 leftSection={<IconPrinter size={18}/>
                                 }>
                             {t`Print`}
                         </Button>
 
-                        <CopyButton value={`${window.location.origin}/ticket/${event.id}/${attendee.short_id}`}>
+                        <CopyButton value={`${window?.location.origin}/ticket/${event.id}/${attendee.short_id}`}>
                             {({copied, copy}) => (
                                 <Button variant={'transparent'}
                                         size={'sm'}

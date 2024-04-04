@@ -35,7 +35,7 @@ export const WidgetEditor = () => {
     );
     const [embedCode, setEmbedCode] = useState<string>("");
     // eslint-disable-next-line lingui/no-unlocalized-strings
-    const currentLocation = window.location;
+    const currentLocation = window?.location;
     // eslint-disable-next-line lingui/no-unlocalized-strings
     const embedScript = `<script async src="${currentLocation.protocol}//${currentLocation.host}/widget.js"></script>`;
 

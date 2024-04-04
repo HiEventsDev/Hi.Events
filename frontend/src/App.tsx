@@ -35,9 +35,9 @@ export async function dynamicActivate(locale: string) {
 }
 
 const getSupportedLocale = () => {
-  if (typeof window.navigator !== "undefined") {
+  if (typeof window !== "undefined") {
     const supportedLocalesKeys = Object.keys(supportedLocales);
-    const userLocale = navigator.language.split("-")[0]; // Extracting the base language
+    const userLocale = window.navigator.language.split("-")[0]; // Extracting the base language
 
     if (supportedLocalesKeys.includes(userLocale)) {
       return userLocale;

@@ -14,7 +14,7 @@ const setAuthToken = (token: string) => {
     }
 };
 
-const existingToken = window.localStorage?.getItem('token');
+const existingToken = typeof window !== "undefined"? window?.localStorage?.getItem('token') : undefined;
 
 if (existingToken) {
     setAuthToken(existingToken);

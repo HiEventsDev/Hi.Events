@@ -52,7 +52,7 @@ export const PaymentReturn = () => {
         }
     }, [paymentIntentQuery.isFetched]);
 
-    if (order?.payment_status === 'PAYMENT_FAILED' || window.location.search.includes('failed')) {
+    if (order?.payment_status === 'PAYMENT_FAILED' || window?.location.search.includes('failed')) {
         navigate(eventCheckoutUrl(eventId, orderShortId, 'payment') + '?payment_failed=true');
         return null;
     }

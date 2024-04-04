@@ -10,8 +10,8 @@ import paymentClasses from "./PaymentSettings.module.scss"
 import classes from "../../ManageAccount.module.scss"
 
 const ConnectStatus = (props: { stripeDetails: StripeConnectDetails }) => {
-    const isReturn = window.location.search.includes('is_return');
-    const isRefresh = window.location.search.includes('is_refresh');
+    const isReturn = window?.location.search.includes('is_return');
+    const isRefresh = window?.location.search.includes('is_refresh');
     const isReturningFromStripe = isReturn || isRefresh;
 
     return (
@@ -37,7 +37,7 @@ const ConnectStatus = (props: { stripeDetails: StripeConnectDetails }) => {
                         <Group gap={20}>
                             <Button variant={'light'}
                                     onClick={() => {
-                                        window.location.href = String(props.stripeDetails?.connect_url);
+                                        window?.location.href = String(props.stripeDetails?.connect_url);
                                     }}
                             >
                                 {(!isReturningFromStripe) && t`Connect Stripe`}

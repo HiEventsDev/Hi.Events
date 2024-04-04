@@ -39,7 +39,7 @@ export async function render(params: {
   const dehydratedState = dehydrate(queryClient);
 
   return {
-    appHtml,
+    appHtml:`<!-- SSR --!>${appHtml}`,
     dehydratedState,
     helmetContext,
   };

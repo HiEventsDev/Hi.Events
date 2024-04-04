@@ -70,7 +70,7 @@ export const ShareComponent = ({title, text, url, imageUrl}: ShareComponentProps
                         <IconBrandFacebook size={24}/>
                     </ActionIcon>
                     <ActionIcon variant={'transparent'} component="a"
-                                href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}&summary=${encodeURIComponent(shareText)}&source=${encodeURIComponent(window.location?.hostname)}`}
+                                href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}&summary=${encodeURIComponent(shareText)}&source=${encodeURIComponent(typeof window !== "undefined" ? window?.location?.hostname : "")}`}
                                 target="_blank" rel="noopener noreferrer">
                         <IconBrandLinkedin size={24}/>
                     </ActionIcon>

@@ -5,8 +5,8 @@ import classes from "./EventHomepage.module.scss";
 import {t} from "@lingui/macro";
 import {SelectTickets} from "../../routes/ticket-widget/SelectTickets";
 import '../../../styles/widget/default.scss';
-import React from "react";
-import {useLoaderData, useParams} from "react-router-dom";
+import React, { Fragment } from "react";
+import {useLoaderData, useNavigation, useParams} from "react-router-dom";
 import {useGetEventPublic} from "../../../queries/useGetEventPublic.ts";
 import {LoadingMask} from "../../common/LoadingMask";
 import {EventDocumentHead} from "../../common/EventDocumentHead";
@@ -27,8 +27,15 @@ interface EventHomepageProps {
 
 const EventHomepage = ({colors, continueButtonText}: EventHomepageProps) => {
     const loaderData = useLoaderData()
-    const event = loaderData as Event
-    // console.log(loaderData)
+    const { state } = useNavigation();
+
+
+    const {event, promoCodeValid} = loaderData as {
+        event: Event;
+        promoCodeValid: boolean;
+    }
+
+    
     // const {eventId} = useParams();
     // const {data: event, isFetched: eventIsFetched, error} = useGetEventPublic(eventId);
 
@@ -38,9 +45,7 @@ const EventHomepage = ({colors, continueButtonText}: EventHomepageProps) => {
     //     />
     // }
 
-    // if (!eventIsFetched || !event) {
-    //     return <LoadingMask/>;
-    // }
+
 
     const styleOverrides = {
         '--homepage-background-color': colors?.background || event?.settings?.homepage_background_color,
@@ -53,7 +58,7 @@ const EventHomepage = ({colors, continueButtonText}: EventHomepageProps) => {
     const coverImage = eventCoverImageUrl(event);
 
     return (
-        <>
+        <Fragment key={`${event.id}`}>
             {(event) && <EventDocumentHead event={event}/>}
             {coverImage && <div className={classes.background} style={{backgroundImage: `url(${coverImage})`}}/>}
             <div id={'event-homepage'} style={styleOverrides} className={classes.styleContainer}>
@@ -76,14 +81,16 @@ const EventHomepage = ({colors, continueButtonText}: EventHomepageProps) => {
                                         secondaryText: 'var(--homepage-secondary-text-color)',
                                     }}
                                     continueButtonText={continueButtonText}
-                                    padding={'0px'}/>
+                                    padding={'0px'} 
+                                    event={event}
+                                    promoCodeValid={promoCodeValid}/>
                             </div>
                         </div>
                     </div>
                 </div>
                 {/*<PoweredByFooter/>*/}
             </div>
-        </>
+        </Fragment>
     );
 }
 

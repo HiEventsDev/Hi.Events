@@ -27,7 +27,7 @@ export const api = axios.create({
     // withCredentials: true,
 });
 
-const existingToken = window.localStorage?.getItem('token');
+const existingToken = typeof window !== "undefined" ? window.localStorage.getItem('token') : undefined;
 if (existingToken) {
     setAuthToken(existingToken);
 }
@@ -39,17 +39,17 @@ api.interceptors.response.use(
         const token = response?.data?.token || response?.headers["x-auth-token"];
 
         if (token) {
-            window.localStorage.setItem('token', token);
+            window?.localStorage?.setItem('token', token);
             setAuthToken(token);
         }
         return response;
     },
     (error) => {
         const { status } = error.response;
-        if ((status === 401 || status === 403) && !ALLOWED_UNAUTHENTICATED_PATHS.some(path => window.location.pathname.includes(path))) {
+        if ((status === 401 || status === 403) && !ALLOWED_UNAUTHENTICATED_PATHS.some(path => window?.location.pathname.includes(path))) {
             // Store the current URL before redirecting to the login page
-            window.localStorage.setItem(PREVIOUS_URL_KEY, window.location.href);
-            window.location.replace(LOGIN_PATH);
+            window?.localStorage?.setItem(PREVIOUS_URL_KEY, window?.location.href);
+            window?.location?.replace(LOGIN_PATH);
         }
         return Promise.reject(error);
     }
@@ -58,7 +58,9 @@ api.interceptors.response.use(
 axios.defaults.withCredentials = true
 
 export const redirectToPreviousUrl = () => {
-    const previousUrl = window.localStorage?.getItem(PREVIOUS_URL_KEY) || '/manage/events';
-    window.localStorage.removeItem(PREVIOUS_URL_KEY); // Clean up after redirecting
-    window.location.href = previousUrl;
+    const previousUrl = window?.localStorage?.getItem(PREVIOUS_URL_KEY) || '/manage/events';
+    window?.localStorage?.removeItem(PREVIOUS_URL_KEY); // Clean up after redirecting
+    if (typeof window !== "undefined")
+        window.location.href = previousUrl;
+
 };
