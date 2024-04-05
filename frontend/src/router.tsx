@@ -2,6 +2,7 @@ import { Navigate, RouteObject} from "react-router-dom";
 import ErrorPage from "./error-page.tsx";
 import { eventsClientPublic } from "./api/event.client.ts";
 import { promoCodeClientPublic } from "./api/promo-code.client.ts";
+import { AxiosError } from "axios";
 
 export const router: RouteObject[] = [
 
@@ -296,14 +297,21 @@ export const router: RouteObject[] = [
     {
         path: "/event/:eventId/:eventSlug",
         loader: async ({params, request}) => {
-            const url = new URL(request.url)
-            const queryParams = new URLSearchParams(url.search);
-            const promo_code = queryParams.get("promo_code") ?? null
-            const {data: event } = await eventsClientPublic.findByID(params.eventId, promo_code);
-            let promoCodeValid: undefined | boolean = undefined;
-            if (promo_code)
-                promoCodeValid = (await promoCodeClientPublic.validateCode(params.eventId, promo_code)).valid;
-            return {event, promoCodeValid };
+            try {
+                const url = new URL(request.url)
+                const queryParams = new URLSearchParams(url.search);
+                const promo_code = queryParams.get("promo_code") ?? null
+                const {data: event } = await eventsClientPublic.findByID(params.eventId, promo_code);
+                let promoCodeValid: undefined | boolean = undefined;
+                if (promo_code)
+                    promoCodeValid = (await promoCodeClientPublic.validateCode(params.eventId, promo_code)).valid;
+                return {event, promoCodeValid };
+            } catch (error) {
+               return {
+                     event: null,
+                     promoCodeValid: null
+               }
+            }
         },
         async lazy() {
             const EventHomepage = await import("./components/layouts/EventHomepage");
