@@ -6,11 +6,8 @@ import {t} from "@lingui/macro";
 import {SelectTickets} from "../../routes/ticket-widget/SelectTickets";
 import '../../../styles/widget/default.scss';
 import React, { Fragment } from "react";
-import {useLoaderData, useNavigation, useParams} from "react-router-dom";
-import {useGetEventPublic} from "../../../queries/useGetEventPublic.ts";
-import {LoadingMask} from "../../common/LoadingMask";
+import {useLoaderData } from "react-router-dom";
 import {EventDocumentHead} from "../../common/EventDocumentHead";
-import {HomepageInfoMessage} from "../../common/HomepageInfoMessage";
 import {eventCoverImageUrl} from "../../../utilites/urlHelper.ts";
 import { Event } from "../../../types.ts";
 
@@ -27,25 +24,12 @@ interface EventHomepageProps {
 
 const EventHomepage = ({colors, continueButtonText}: EventHomepageProps) => {
     const loaderData = useLoaderData()
-    const { state } = useNavigation();
 
 
     const {event, promoCodeValid} = loaderData as {
         event: Event;
-        promoCodeValid: boolean;
+        promoCodeValid?: boolean;
     }
-
-    
-    // const {eventId} = useParams();
-    // const {data: event, isFetched: eventIsFetched, error} = useGetEventPublic(eventId);
-
-    // if (error?.response?.status === 404) {
-    //     return <HomepageInfoMessage
-    //         message={t`This event is not available.`}
-    //     />
-    // }
-
-
 
     const styleOverrides = {
         '--homepage-background-color': colors?.background || event?.settings?.homepage_background_color,

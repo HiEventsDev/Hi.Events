@@ -20,11 +20,6 @@ if (window.__REHYDRATED_STATE__) {
   hydrate(queryClient, window.__REHYDRATED_STATE__);
 }
 
-export const browserRouter = createBrowserRouter(router, {
-  future: {
-    v7_normalizeFormMethod: true,
-  },
-});
 
 initClientApp();
 
@@ -44,6 +39,8 @@ async function initClientApp() {
       })
     );
   }
+  
+   const browserRouter = createBrowserRouter(router);
 
   ReactDOM.hydrateRoot(
     document.getElementById("app") as HTMLElement,

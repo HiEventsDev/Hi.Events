@@ -300,9 +300,9 @@ export const router: RouteObject[] = [
             const queryParams = new URLSearchParams(url.search);
             const promo_code = queryParams.get("promo_code") ?? null
             const {data: event } = await eventsClientPublic.findByID(params.eventId, promo_code);
-            let promoCodeValid = false;
-            // if (promo_code)
-            //     promoCodeValid = (await promoCodeClientPublic.validateCode(params.eventId, promo_code)).valid;
+            let promoCodeValid: undefined | boolean = undefined;
+            if (promo_code)
+                promoCodeValid = (await promoCodeClientPublic.validateCode(params.eventId, promo_code)).valid;
             return {event, promoCodeValid };
         },
         async lazy() {

@@ -1,11 +1,11 @@
 import React, { FC, PropsWithChildren, useRef } from "react";
-import { ColorSchemeScript, MantineProvider } from "@mantine/core";
+import { MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";
 import { ModalsProvider } from "@mantine/modals";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Helmet, HelmetProvider } from "react-helmet-async";
+import { Hydrate, QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { HelmetProvider } from "react-helmet-async";
 
 import "@mantine/core/styles/global.css";
 import "@mantine/core/styles.css";
@@ -86,8 +86,10 @@ export const App: FC<
         <HelmetProvider context={props.helmetContext}>
           <I18nProvider i18n={i18n}>
             <QueryClientProvider client={props.queryClient}>
+            <Hydrate state={typeof window !== "undefined" ? window.__REHYDRATED_STATE__ : {}}>
               <ModalsProvider>{props.children}</ModalsProvider>
               <Notifications />
+              </Hydrate>
             </QueryClientProvider>
           </I18nProvider>
         </HelmetProvider>

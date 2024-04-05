@@ -23,7 +23,7 @@ import { Event } from "../../../../types.ts";
 
 interface SelectTicketsProps {
     event: Event;
-    promoCodeValid: boolean;
+    promoCodeValid?: boolean;
     colors?: {
         primary?: string;
         primaryText?: string;
@@ -41,7 +41,8 @@ export const SelectTickets = (props: SelectTicketsProps) => {
     const promoRef = useRef<HTMLInputElement>(null);
     const [promoCode, setPromoCode] = useInputState<string | null>(null);
     const [showPromoCodeInput, setShowPromoCodeInput] = useInputState<boolean>(false);
-    const [promoValid, setIsPromoCodeValid] = useInputState<boolean>(false);
+    const [isPromoCodeValid, setIsPromoCodeValid] = useInputState<boolean>(false);
+    const promoValid = props.promoCodeValid;
     const queryClient = useQueryClient();
     const navigate = useNavigate();
     const event = props.event;
