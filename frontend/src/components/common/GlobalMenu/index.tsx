@@ -38,6 +38,9 @@ export const GlobalMenu = () => {
                 event.preventDefault();
                 authClient.logout();
                 localStorage.removeItem('token');
+                if (typeof document !== "undefined") 
+                    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
                 navigate('/auth/login', {replace: true});
             }
         }

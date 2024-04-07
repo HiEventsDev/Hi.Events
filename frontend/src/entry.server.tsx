@@ -27,7 +27,7 @@ export async function render(params: {
 
   const routerWithContext = createStaticRouter(dataRoutes, context);
   const appHtml = ReactDOMServer.renderToString(
-    <App queryClient={queryClient} helmetContext={helmetContext}>
+    <App queryClient={queryClient} helmetContext={helmetContext} token={params.req.cookies.token}>
       <StaticRouterProvider
         router={routerWithContext}
         context={context}

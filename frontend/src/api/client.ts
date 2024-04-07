@@ -1,11 +1,6 @@
 import axios from "axios";
 
-const setAuthToken = (token: string) => {
-    if (token) {
-        // eslint-disable-next-line lingui/no-unlocalized-strings
-        api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-    }
-};
+
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 const LOGIN_PATH = "/auth/login";
@@ -27,6 +22,13 @@ export const api = axios.create({
     // withCredentials: true,
 });
 
+export const setAuthToken = (token: string) => {
+    if (token) {
+        // eslint-disable-next-line lingui/no-unlocalized-strings
+        api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    }
+};
+
 const existingToken = typeof window !== "undefined" ? window.localStorage.getItem('token') : undefined;
 if (existingToken) {
     setAuthToken(existingToken);
@@ -40,6 +42,8 @@ api.interceptors.response.use(
 
         if (token) {
             window?.localStorage?.setItem('token', token);
+            if (typeof document !== "undefined")
+                document.cookie = `token=${token}; path=/; max-age=3600; secure; samesite=strict;`;
             setAuthToken(token);
         }
         return response;

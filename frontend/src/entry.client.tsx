@@ -13,6 +13,9 @@ import { queryClient } from "./utilites/queryClient";
 declare global {
   interface Window {
     __REHYDRATED_STATE__?: unknown;
+    __EXTRA_STATE__? : {
+      token?: string;
+    };
   }
 }
 
@@ -42,9 +45,11 @@ async function initClientApp() {
   
    const browserRouter = createBrowserRouter(router);
 
+  const extraState = window.__EXTRA_STATE__;
+  
   ReactDOM.hydrateRoot(
     document.getElementById("app") as HTMLElement,
-    <App queryClient={queryClient}>
+    <App queryClient={queryClient} token={extraState?.token}>
       <RouterProvider router={browserRouter} fallbackElement={null} />
     </App>
   );

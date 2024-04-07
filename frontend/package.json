@@ -5,17 +5,14 @@
   "type": "module",
   "scripts": {
     "dev:csr": "vite --port 5678 --host 0.0.0.0",
-    "build:csr": "vite build",    
+    "build:csr": "vite build",
     "build-strict:csr": "tsc && npm run build:csr",
     "preview:csr": "vite preview",
-    
-
     "dev:ssr": "cross-env NODE_ENV=development node server.js --port 5678",
     "build:ssr": "npm run build:ssr:client && npm run build:ssr:server",
     "build:ssr:client": "vite build --ssrManifest --outDir dist/client",
     "build:ssr:server": "vite build --ssr src/entry.server.tsx --outDir dist/server",
     "start:ssr": "cross-env NODE_ENV=production node server.js --port 5678",
-
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "messages:extract": "lingui extract",
     "messages:compile": "lingui compile"
@@ -53,6 +50,7 @@
     "classnames": "^2.3.2",
     "collect.js": "^4.36.1",
     "compression": "^1.7.4",
+    "cookie-parser": "^1.4.6",
     "cross-env": "^7.0.3",
     "dayjs": "^1.11.8",
     "express": "^4.19.2",

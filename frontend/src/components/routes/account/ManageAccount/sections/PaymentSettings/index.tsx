@@ -37,7 +37,8 @@ const ConnectStatus = (props: { stripeDetails: StripeConnectDetails }) => {
                         <Group gap={20}>
                             <Button variant={'light'}
                                     onClick={() => {
-                                        window?.location.href = String(props.stripeDetails?.connect_url);
+                                        if (typeof window !== 'undefined')
+                                            window.location.href = String(props.stripeDetails?.connect_url);
                                     }}
                             >
                                 {(!isReturningFromStripe) && t`Connect Stripe`}

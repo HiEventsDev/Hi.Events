@@ -1,10 +1,14 @@
-import React, { FC, PropsWithChildren, useRef } from "react";
+import React, { FC, PropsWithChildren, useEffect, useRef } from "react";
 import { MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";
 import { ModalsProvider } from "@mantine/modals";
-import { Hydrate, QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+  Hydrate,
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
 import { HelmetProvider } from "react-helmet-async";
 
 import "@mantine/core/styles/global.css";
@@ -20,6 +24,7 @@ import { messages as de } from "./locales/de.po";
 import { messages as fr } from "./locales/fr.po";
 import { messages as pt } from "./locales/pt.po";
 import { messages as es } from "./locales/es.po";
+import { setAuthToken } from "./api/client";
 
 const supportedLocales: Record<string, any> = {
   en,
@@ -51,8 +56,10 @@ export const App: FC<
   PropsWithChildren<{
     queryClient: QueryClient;
     helmetContext?: any;
+    token?: string;
   }>
 > = (props) => {
+  const [isLoadedOnBrowser, setIsLoadedOnBrowser] = React.useState(false);
   const localeActivated = useRef(false);
 
   if (!localeActivated.current) {
@@ -60,8 +67,27 @@ export const App: FC<
     dynamicActivate(getSupportedLocale());
   }
 
+  if (props.token) {
+    setAuthToken(props.token);
+  }
+
+  useEffect(()=>{
+    setIsLoadedOnBrowser(true)
+  },[])
+
   return (
     <React.StrictMode>
+      <div
+        className="ssr-loader"
+        style={{
+          width: "100%",
+          height: "100%",
+          position: "fixed",
+          background: "#fff",
+          zIndex: 1000,
+          display: isLoadedOnBrowser ? "none" : "block",
+        }}
+      ></div>
       <MantineProvider
         theme={{
           colors: {
@@ -80,15 +106,20 @@ export const App: FC<
           },
           primaryColor: "purple",
           fontFamily: "'Varela Round', sans-serif",
-          
         }}
       >
         <HelmetProvider context={props.helmetContext}>
           <I18nProvider i18n={i18n}>
             <QueryClientProvider client={props.queryClient}>
-            <Hydrate state={typeof window !== "undefined" ? window.__REHYDRATED_STATE__ : {}}>
-              <ModalsProvider>{props.children}</ModalsProvider>
-              <Notifications />
+              <Hydrate
+                state={
+                  typeof window !== "undefined"
+                    ? window.__REHYDRATED_STATE__
+                    : {}
+                }
+              >
+                <ModalsProvider>{props.children}</ModalsProvider>
+                <Notifications />
               </Hydrate>
             </QueryClientProvider>
           </I18nProvider>

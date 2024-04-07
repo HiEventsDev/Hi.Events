@@ -6,6 +6,7 @@ import { createServer as viteServer } from "vite";
 import compression from "compression";
 import fs from "node:fs/promises";
 import sirv from "sirv";
+import cookieParser from "cookie-parser";
 
 installGlobals();
 
@@ -14,7 +15,6 @@ const port = process.argv.includes("--port")
   ? process.argv[process.argv.indexOf("--port") + 1]
   : process.env.PORT || 5678;
 const isProduction = process.env.NODE_ENV === "production";
-
 
 // Cached production assets
 const templateHtml = isProduction
@@ -26,6 +26,7 @@ const ssrManifest = isProduction
   : undefined;
 
 const app = express();
+app.use(cookieParser());
 
 let vite;
 
@@ -63,11 +64,18 @@ app.use("*", async (req, res) => {
       ssrManifest
     );
     const strifiedState = JSON.stringify(dehydratedState);
+
     const html = template
       .replace("<!--app-html-->", appHtml)
       .replace(
         "<!--dehydrated-state-->",
         `<script>window.__REHYDRATED_STATE__ = ${strifiedState}</script>`
+      )
+      .replace(
+        "<!--extra-state-->",
+        `<script>window.__EXTRA_STATE__ = ${JSON.stringify({
+          token: req.cookies.token,
+        })}</script>`
       )
       .replace(
         "<!--render-helmet-->",
