@@ -6,7 +6,6 @@ import { t } from "@lingui/macro";
 import { SelectTickets } from "../../routes/ticket-widget/SelectTickets";
 import "../../../styles/widget/default.scss";
 import React, { Fragment } from "react";
-import { useLoaderData } from "react-router-dom";
 import { EventDocumentHead } from "../../common/EventDocumentHead";
 import { eventCoverImageUrl } from "../../../utilites/urlHelper.ts";
 import { Event } from "../../../types.ts";
@@ -21,15 +20,14 @@ interface EventHomepageProps {
     secondaryText?: string;
   };
   continueButtonText?: string;
+  event?: Event;
+  promoCodeValid?: boolean;
+  promoCode?: string;
 }
 
-const EventHomepage = ({ colors, continueButtonText }: EventHomepageProps) => {
-  const loaderData = useLoaderData();
+const EventHomepage = ({ colors, continueButtonText, ...loaderData }: EventHomepageProps) => {
 
-  const { event, promoCodeValid } = loaderData as {
-    event?: Event;
-    promoCodeValid?: boolean;
-  };
+  const { event, promoCodeValid, promoCode } = loaderData;
 
   const styleOverrides = {
     "--homepage-background-color":
@@ -44,11 +42,13 @@ const EventHomepage = ({ colors, continueButtonText }: EventHomepageProps) => {
       colors?.secondaryText || event?.settings?.homepage_secondary_text_color,
   } as React.CSSProperties;
 
-  const coverImage = eventCoverImageUrl(event);
-
+  
   if (!event) {
     return <HomepageInfoMessage message={t`This event is not available.`} />;
   }
+
+  const coverImage = eventCoverImageUrl(event);
+
 
   return (
     <Fragment key={`${event.id}`}>
@@ -86,6 +86,7 @@ const EventHomepage = ({ colors, continueButtonText }: EventHomepageProps) => {
                   padding={"0px"}
                   event={event}
                   promoCodeValid={promoCodeValid}
+                  promoCode={promoCode}
                 />
               </div>
             </div>

@@ -46,6 +46,16 @@ export const addQueryStringToUrl = (key: string, value: string): void => {
     window?.history.pushState({}, '', currentUrl.toString());
 };
 
+export const removeQueryStringFromUrl = (key: string): void => {
+    const currentUrl = new URL(window?.location.href);
+
+    if (currentUrl.searchParams.has(key)) {
+        currentUrl.searchParams.delete(key);
+    }
+
+    window?.history.pushState({}, '', currentUrl.toString());
+}
+
 export const getStatusColor = (status: string): MantineColor => {
     switch (status) {
         case 'AWAITING_PAYMENT':

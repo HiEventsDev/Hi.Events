@@ -9,9 +9,14 @@ import {useParams} from "react-router-dom";
 import {IconInfoCircle} from "@tabler/icons-react";
 import {useGetEventSettings} from "../../../queries/useGetEventSettings.ts";
 import {Popover} from "../Popover";
+import { useGetEventPublic } from '../../../queries/useGetEventPublic.ts';
+import { LoadingMask } from '../LoadingMask/index.tsx';
+import { Event } from '../../../types.ts';
 
 export const WidgetEditor = () => {
     const {eventId} = useParams();
+    const publicEventQuery = useGetEventPublic(eventId);
+
     const colorMessage = t`Color must be a valid hex color code. Example: #ffffff`;
     const colorRegex = /^#([0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/;
     const {data: eventSettings, isFetched: isEventSettingsFetched} = useGetEventSettings(eventId);
@@ -35,9 +40,9 @@ export const WidgetEditor = () => {
     );
     const [embedCode, setEmbedCode] = useState<string>("");
     // eslint-disable-next-line lingui/no-unlocalized-strings
-    const currentLocation = window?.location;
+    const currentLocation = typeof window !== "undefined" ? window?.location : undefined;
     // eslint-disable-next-line lingui/no-unlocalized-strings
-    const embedScript = `<script async src="${currentLocation.protocol}//${currentLocation.host}/widget.js"></script>`;
+    const embedScript = `<script async src="${currentLocation?.protocol}//${currentLocation?.host}/widget.js"></script>`;
 
     useEffect(() => {
         setEmbedCode(
@@ -177,13 +182,19 @@ export const WidgetEditor = () => {
                             </p>
 
                             <div className={classes.widgetWrapper}>
-                                <SelectTickets isInPreviewMode colors={{
-                                    primary: form.values.primary_color,
-                                    primaryText: form.values.primary_text_color,
-                                    secondary: form.values.secondary_color,
-                                    secondaryText: form.values.secondary_text_color,
-                                    background: form.values.background_color,
-                                }}/>
+                                {!publicEventQuery.isFetched && typeof publicEventQuery.data === "undefined" ? <LoadingMask /> : 
+                                    <SelectTickets 
+                                        event={publicEventQuery.data as Event}
+                                        isInPreviewMode 
+                                        colors={{
+                                            primary: form.values.primary_color,
+                                            primaryText: form.values.primary_text_color,
+                                            secondary: form.values.secondary_color,
+                                            secondaryText: form.values.secondary_text_color,
+                                            background: form.values.background_color,
+                                        }}
+                                    />
+                                }
                             </div>
 
                             <p className={classes.lorem}>

@@ -13,10 +13,13 @@ import {CoverUpload} from "./CoverUpload";
 import {IconHelp} from "@tabler/icons-react";
 import {Tooltip} from "../../../common/Tooltip";
 import EventHomepage from "../../../layouts/EventHomepage";
+import { useGetEventPublic } from '../../../../queries/useGetEventPublic.ts';
+import { LoadingMask } from '../../../common/LoadingMask/index.tsx';
 
 const HomepageDesigner = () => {
     const {eventId} = useParams();
     const eventSettingsQuery = useGetEventSettings(eventId);
+    const publicEventQuery = useGetEventPublic(eventId);
     const updateMutation = useUpdateEventSettings();
 
     const form = useForm({
@@ -109,7 +112,8 @@ const HomepageDesigner = () => {
             <div className={classes.previewContainer}>
                 <h2>{t`Homepage Preview`}</h2>
                 <div className={classes.preview}>
-                    <EventHomepage
+                    {!publicEventQuery.isFetched ? <LoadingMask /> : <EventHomepage
+                        event={publicEventQuery.data}
                         continueButtonText={form.values.continue_button_text}
                         colors={{
                             primary: form.values.homepage_primary_color,
@@ -118,7 +122,7 @@ const HomepageDesigner = () => {
                             secondaryText: form.values.homepage_secondary_text_color,
                             background: form.values.homepage_background_color,
                         }}
-                    />
+                    />}
                 </div>
 
             </div>

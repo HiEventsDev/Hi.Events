@@ -1,5 +1,5 @@
 import {t, Trans} from "@lingui/macro";
-import {Anchor, Button, Group, Input, Spoiler, TextInput} from "@mantine/core";
+import {ActionIcon, Anchor, Button, Group, Input, Spoiler, TextInput} from "@mantine/core";
 import {useNavigate, useParams} from "react-router-dom";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {notifications} from "@mantine/notifications";
@@ -11,19 +11,23 @@ import {
 } from "../../../../api/order.client.ts";
 import {useForm} from "@mantine/form";
 import {range, useInputState} from "@mantine/hooks";
-import React, {useEffect, useMemo, useRef} from "react";
+import React, {useEffect, useMemo, useRef, useState} from "react";
 import {showError, showInfo, showSuccess} from "../../../../utilites/notifications.tsx";
-import {addQueryStringToUrl, isObjectEmpty} from "../../../../utilites/helpers.ts";
+import {addQueryStringToUrl,removeQueryStringFromUrl, isObjectEmpty} from "../../../../utilites/helpers.ts";
 import {TieredPricing} from "./Prices/Tiered";
 import classNames from 'classnames';
 import '../../../../styles/widget/default.scss';
 import {TicketAvailabilityMessage} from "../../../common/TicketPriceAvailability";
 import {PoweredByFooter} from "../../../common/PoweredByFooter";
 import { Event } from "../../../../types.ts";
+import { eventsClientPublic } from "../../../../api/event.client.ts";
+import { promoCodeClientPublic } from "../../../../api/promo-code.client.ts";
+import {IconX} from "@tabler/icons-react"
 
 interface SelectTicketsProps {
     event: Event;
     promoCodeValid?: boolean;
+    promoCode?: string;
     colors?: {
         primary?: string;
         primaryText?: string;
@@ -38,39 +42,22 @@ interface SelectTicketsProps {
 
 export const SelectTickets = (props: SelectTicketsProps) => {
     const {eventId} = useParams();
-    const promoRef = useRef<HTMLInputElement>(null);
-    const [promoCode, setPromoCode] = useInputState<string | null>(null);
-    const [showPromoCodeInput, setShowPromoCodeInput] = useInputState<boolean>(false);
-    const [isPromoCodeValid, setIsPromoCodeValid] = useInputState<boolean>(false);
-    const promoValid = props.promoCodeValid;
     const queryClient = useQueryClient();
     const navigate = useNavigate();
-    const event = props.event;
-    const tickets = props.event.tickets;
-    let ticketIndex = 0;
-    const ticketAreAvailable = tickets && tickets.length > 0;
-
+    
+    const promoRef = useRef<HTMLInputElement>(null);
+    const [showPromoCodeInput, setShowPromoCodeInput] = useInputState<boolean>(false);
+    const [event, setEvent] = useState(props.event);
+     
     const form = useForm<TicketFormPayload>({
         initialValues: {
             tickets: undefined,
-            promo_code: null,
-        }
+            promo_code: props.promoCodeValid ? props.promoCode || null : null, 
+        }, 
     });
 
-    const selectedTicketQuantitySum = useMemo(() => {
-            let total = 0;
-            form.values.tickets?.forEach(({quantities}) => {
-                quantities?.forEach(({quantity}) => {
-                    total += Number(quantity);
-                });
-            });
-
-            return total;
-        }
-        , [form.values]);
-
     //todo - replace with hook
-    const mutation = useMutation(
+    const ticketMutation = useMutation(
         (orderData: TicketFormPayload) => orderClientPublic.create(Number(eventId), orderData),
         {
             onSuccess: (data) => queryClient.invalidateQueries()
@@ -86,12 +73,79 @@ export const SelectTickets = (props: SelectTicketsProps) => {
             },
         }
     );
+   
+    const promoCodeEventRefetchMutation = useMutation({
+        mutationFn: async (promoCode: string | null) => {
+            if (promoCode)  {
+                const validPromocode = await promoCodeClientPublic.validateCode(
+                    eventId,
+                    promoCode
+                );
+
+                if (!validPromocode.valid) {
+                    showError(t`That promo code is invalid`);
+                    return;
+                }
+            } 
+
+            // fetch fresh event even if the promo code is removed.
+            const eventWithPromoCodeApplied = await eventsClientPublic.findByID(
+                eventId,
+                promoCode
+            );
+
+            setEvent(eventWithPromoCodeApplied.data);
+
+            if (promoCode) {
+                form.setFieldValue("promo_code", promoCode);
+            } else {
+                // if it's removed
+                form.setFieldValue("promo_code", null);
+                setShowPromoCodeInput(false)
+                removeQueryStringFromUrl('promo_code');
+            }
+
+        },
+    });
+
+
+    const tickets = event.tickets || [];
+    const ticketAreAvailable = tickets && tickets.length > 0;
+
+    const selectedTicketQuantitySum = useMemo(() => {
+            let total = 0;
+            form.values.tickets?.forEach(({quantities}) => {
+                quantities?.forEach(({quantity}) => {
+                    total += Number(quantity);
+                });
+            });
+
+            return total;
+        }
+        , [form.values]);
+
+    useEffect(()=>{
+        if (form.values.promo_code) {
+            const promo_code = form.values.promo_code
+            showSuccess(t`Promo ${promo_code} code applied`);
+            addQueryStringToUrl('promo_code', promo_code);
+        }
+    }, [form.values.promo_code])
+
+    useEffect(()=>{
+        if (typeof props.promoCodeValid !== 'undefined') {
+            if (!props.promoCodeValid) {
+                showError(t`That promo code is invalid`);
+                removeQueryStringFromUrl('promo_code');
+            }
+        }
+    },[props.promoCodeValid])
+
 
     const populateFormValue = () => {
         const ticketValues: Array<TicketFormValue> = [];
         tickets?.forEach(ticket => {
             const quantitiesValues: Array<TicketPriceQuantityFormValue> = [];
-
             ticket.prices?.forEach(priceQuantity => {
                 quantitiesValues.push({
                     quantity: 0,
@@ -106,41 +160,16 @@ export const SelectTickets = (props: SelectTicketsProps) => {
             })
         });
 
-        form.setValues({
-            tickets: ticketValues,
-        })
+        form.setFieldValue("tickets", ticketValues)
     }
 
-    useEffect(() => {
-        if (promoValid !== undefined) {
-            setIsPromoCodeValid(promoValid);
-            if (promoValid === true) {
-                addQueryStringToUrl('promo_code', String(promoCode));
-                form.setFieldValue('promo_code', promoCode);
-                showSuccess(t`Promo ${promoCode} code applied`);
-            }
-            if (!promoValid) {
-                showError(t`That promo code is invalid`);
-            }
-        }
-    }, [promoValid]);
 
     useEffect(populateFormValue, [tickets]);
-
-    useEffect(() => {
-        const searchParams = new URLSearchParams(window?.location.search);
-        const promoCode = searchParams.get('promo_code');
-        if (promoCode) {
-            setPromoCode(promoCode);
-            setShowPromoCodeInput(false);
-        }
-    }, [])
-
 
 
     const handleTicketSelection = (values: TicketFormPayload) => {
         if (values && selectedTicketQuantitySum > 0) {
-            mutation.mutate(values);
+            ticketMutation.mutate(values);
         } else {
             showInfo(t`Please select at least one ticket`);
         }
@@ -149,16 +178,9 @@ export const SelectTickets = (props: SelectTicketsProps) => {
     const handleApplyPromoCode = () => {
         const promoCode = promoRef.current?.value;
         if (promoCode && promoCode.length >= 3) {
-            setPromoCode(promoCode);
+            promoCodeEventRefetchMutation.mutate(promoCode);
         } else {
             showError(t`Sorry, this promo code is invalid'`);
-        }
-    }
-
-    const handleApplyPromoCodeKeyPress = (event: KeyboardEvent) => {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            handleApplyPromoCode();
         }
     }
 
@@ -183,12 +205,11 @@ export const SelectTickets = (props: SelectTicketsProps) => {
                 <form onSubmit={form.onSubmit(handleTicketSelection)}>
                     <Input type={'hidden'} {...form.getInputProps('promo_code')} />
                     <div className={'hi-ticket-rows'}>
-                        {(tickets) && tickets.map((ticket) => {
+                        {(tickets) && tickets.map((ticket, ticketIndex) => {
                             const quantityRange = range(ticket.min_per_order || 1, ticket.max_per_order || 25)
                                 .map((n) => n.toString());
                             quantityRange.unshift("0");
 
-                            const index = ticketIndex++
 
                             return (
                                 <div key={ticket.id} className={'hi-ticket-row'}>
@@ -204,22 +225,22 @@ export const SelectTickets = (props: SelectTicketsProps) => {
                                     </div>
                                     <div className={'hi-price-tiers-rows'}>
                                         <TieredPricing
-                                            ticketIndex={index}
+                                            ticketIndex={ticketIndex}
                                             event={event}
                                             ticket={ticket}
                                             form={form}
                                         />
                                     </div>
 
-                                    {ticket.max_per_order && form.values.tickets && isObjectEmpty(form.errors) && (form.values.tickets[index]?.quantities.reduce((acc, {quantity}) => acc + Number(quantity), 0) > ticket.max_per_order) && (
+                                    {ticket.max_per_order && form.values.tickets && isObjectEmpty(form.errors) && (form.values.tickets[ticketIndex]?.quantities.reduce((acc, {quantity}) => acc + Number(quantity), 0) > ticket.max_per_order) && (
                                         <div className={'hi-ticket-quantity-error'}>
                                             <Trans>The maximum numbers number of tickets for Generals is {ticket.max_per_order}</Trans>
                                         </div>
                                     )}
 
-                                    {form.errors[`tickets.${index}`] && (
+                                    {form.errors[`tickets.${ticketIndex}`] && (
                                         <div className={'hi-ticket-quantity-error'}>
-                                            {form.errors[`tickets.${index}`]}
+                                            {form.errors[`tickets.${ticketIndex}`]}
                                         </div>
                                     )}
 
@@ -246,7 +267,7 @@ export const SelectTickets = (props: SelectTicketsProps) => {
                         )}
                         <Button disabled={props.isInPreviewMode} fullWidth className={'hi-continue-button'}
                                 type={"submit"}
-                                loading={mutation.isLoading}>
+                                loading={ticketMutation.isLoading}>
                             {props.continueButtonText || event?.settings?.continue_button_text || t`Continue`}
                         </Button>
                     </div>
@@ -255,23 +276,38 @@ export const SelectTickets = (props: SelectTicketsProps) => {
 
             {ticketAreAvailable && (
                 <div className={'hi-promo-code-row'}>
-                    {(!showPromoCodeInput && !promoCode) && (
+                    {(!showPromoCodeInput && !form.values.promo_code) && (
                         <Anchor className={'hi-have-a-promo-code-link'}
                                 onClick={() => setShowPromoCodeInput(true)}>
                             {t`Have a promo code?`}
                         </Anchor>
                     )}
-                    {promoValid && (
+                    {form.values.promo_code && (
                         <div className={'hi-promo-code-applied'}>
-                            <b>{promoCode}</b> {t`applied`}
+                            <span><b>{form.values.promo_code}</b> {t`applied`}</span>
+                            <ActionIcon 
+                                className={'hi-promo-code-applied-remove-icon-button'} 
+                                variant="outline" 
+                                aria-label={t`remove`}
+                                onClick={()=>{
+                                    promoCodeEventRefetchMutation.mutate(null)                          
+                                }}
+                            >
+                                <IconX />
+                            </ActionIcon>
                         </div>
                     )}
-                    {(!promoValid && showPromoCodeInput && ticketAreAvailable) && (
+                    {(showPromoCodeInput && !form.values.promo_code) && (
                         <Group className={'hi-promo-code-input-wrapper'} wrap={'nowrap'} gap={'20px'}>
                             {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                             {/*@ts-ignore*/}
-                            <TextInput classNames={{input: 'hi-promo-code-input'}} onKeyPress={handleApplyPromoCodeKeyPress} mb={0} ref={promoRef}/>
-                            <Button className={'hi-apply-promo-code-button'} variant={'outline'}
+                            <TextInput autoFocus classNames={{input: 'hi-promo-code-input'}} onKeyDown={(event)=>{
+                                if (event.key === 'Enter') {
+                                    event.preventDefault();
+                                    handleApplyPromoCode();
+                                }
+                            }} mb={0} ref={promoRef}/>
+                            <Button disabled={promoCodeEventRefetchMutation.isLoading} className={'hi-apply-promo-code-button'} variant={'outline'}
                                     onClick={handleApplyPromoCode}>
                                 {t`Apply Promo Code`}
                             </Button>

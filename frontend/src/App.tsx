@@ -5,7 +5,6 @@ import { i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";
 import { ModalsProvider } from "@mantine/modals";
 import {
-  Hydrate,
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
@@ -111,16 +110,8 @@ export const App: FC<
         <HelmetProvider context={props.helmetContext}>
           <I18nProvider i18n={i18n}>
             <QueryClientProvider client={props.queryClient}>
-              <Hydrate
-                state={
-                  typeof window !== "undefined"
-                    ? window.__REHYDRATED_STATE__
-                    : {}
-                }
-              >
                 <ModalsProvider>{props.children}</ModalsProvider>
                 <Notifications />
-              </Hydrate>
             </QueryClientProvider>
           </I18nProvider>
         </HelmetProvider>

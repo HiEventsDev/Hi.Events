@@ -4,6 +4,7 @@ import {UseFormReturnType} from "@mantine/form";
 import {IconMinus, IconPlus} from "@tabler/icons-react";
 import classes from './NumberSelector.module.scss';
 import classNames from "classnames";
+import _ from "lodash";
 
 interface NumberSelectorProps extends TextInputProps {
     formInstance: UseFormReturnType<any>;
@@ -26,6 +27,14 @@ export const NumberSelector = ({formInstance, fieldName, min, max}: NumberSelect
             formInstance.setFieldValue(fieldName, value);
         }
     }, [value]);
+
+    useEffect(() => {
+        // to handle application promo code after updating the quanity 
+        const formValue = _.get(formInstance.values, fieldName)
+        if (formValue !== value) {
+            formInstance.setFieldValue(fieldName, value);
+        }
+    }, [formInstance]);
 
     const increment = () => {
         // Adjust from 0 to minValue on the first increment, if minValue is greater than 0

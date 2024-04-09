@@ -2,7 +2,6 @@ import { Navigate, RouteObject} from "react-router-dom";
 import ErrorPage from "./error-page.tsx";
 import { eventsClientPublic } from "./api/event.client.ts";
 import { promoCodeClientPublic } from "./api/promo-code.client.ts";
-import { AxiosError } from "axios";
 
 export const router: RouteObject[] = [
 
@@ -300,22 +299,23 @@ export const router: RouteObject[] = [
             try {
                 const url = new URL(request.url)
                 const queryParams = new URLSearchParams(url.search);
-                const promo_code = queryParams.get("promo_code") ?? null
-                const {data: event } = await eventsClientPublic.findByID(params.eventId, promo_code);
+                const promoCode = queryParams.get("promo_code") ?? null
+                const { data: event } = await eventsClientPublic.findByID(params.eventId, promoCode);
                 let promoCodeValid: undefined | boolean = undefined;
-                if (promo_code)
-                    promoCodeValid = (await promoCodeClientPublic.validateCode(params.eventId, promo_code)).valid;
-                return {event, promoCodeValid };
+                if (promoCode)
+                    promoCodeValid = (await promoCodeClientPublic.validateCode(params.eventId, promoCode)).valid;
+                return {event, promoCodeValid, promoCode};
             } catch (error) {
                return {
-                     event: null,
-                     promoCodeValid: null
+                     event: undefined,
+                     promoCodeValid: undefined,
+                     promoCode: undefined
                }
             }
         },
         async lazy() {
-            const EventHomepage = await import("./components/layouts/EventHomepage");
-            return {Component: EventHomepage.default};
+            const PublicEvent = await import("./components/layouts/PublicEvent");
+            return {Component: PublicEvent.default};
         },
         errorElement: <ErrorPage/>,
     },
