@@ -6,9 +6,9 @@ import {t} from "@lingui/macro";
 import {Button} from "@mantine/core";
 import {LoadingMask} from "../../../common/LoadingMask";
 import {ShareComponent} from "../../../common/ShareIcon";
-import {eventCoverImageUrl, eventHomepageUrl} from "../../../../utilites/urlHelper.ts";
-import { FC } from "react";
-import { Event } from "../../../../types.ts";
+import {eventCoverImageUrl, eventHomepagePath} from "../../../../utilites/urlHelper.ts";
+import {FC} from "react";
+import {Event} from "../../../../types.ts";
 
 export const EventInformation: FC<{
     event: Event
@@ -28,7 +28,7 @@ export const EventInformation: FC<{
                     <ShareComponent
                         title={'Check out this event: ' + event.title}
                         text={'Check out this event: ' + event.title}
-                        url={typeof window !== "undefined" ?window?.location?.origin + eventHomepageUrl(event) : ""}
+                        url={typeof window !== "undefined" ? window?.location?.origin + eventHomepagePath(event) : ""}
                         imageUrl={eventCoverImageUrl(event)}
                     />
                 </div>

@@ -2,7 +2,7 @@
 import {Helmet} from "react-helmet-async";
 import {t} from "@lingui/macro";
 import {Event} from "../../../types";
-import {eventCoverImageUrl} from "../../../utilites/urlHelper.ts";
+import {eventCoverImageUrl, eventHomepageUrl} from "../../../utilites/urlHelper.ts";
 import {utcToTz} from "../../../utilites/dates.ts";
 
 interface EventDocumentHeadProps {
@@ -15,7 +15,7 @@ export const EventDocumentHead = ({event}: EventDocumentHeadProps) => {
     const description = eventSettings?.seo_description ?? event.description_preview;
     const keywords = eventSettings?.seo_keywords;
     const image = eventCoverImageUrl(event);
-    const url = typeof window !== "undefined" ? window.location.href : undefined;
+    const url = eventHomepageUrl(event);
     const startDate = utcToTz(new Date(event.start_date), event.timezone);
     const endDate = event.end_date ? utcToTz(new Date(event.end_date), event.timezone) : undefined;
 

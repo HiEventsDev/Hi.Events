@@ -9,7 +9,7 @@ import {Event, Order} from "../../../types.ts";
 import {IconExternalLink} from "@tabler/icons-react";
 import {Anchor, Group} from "@mantine/core";
 import {CheckoutSidebar} from "./CheckoutSidebar";
-import {eventHomepageUrl} from "../../../utilites/urlHelper.ts";
+import {eventHomepagePath} from "../../../utilites/urlHelper.ts";
 
 const SubTitle = ({order, event}: { order: Order, event: Event }) => {
     const navigate = useNavigate();
@@ -53,7 +53,7 @@ const Checkout = () => {
                                 {event?.title}
                                 {event && (
                                     <Anchor style={{display: 'flex'}} title={t`View event homepage`}
-                                            href={eventHomepageUrl(event as Event)}
+                                            href={eventHomepagePath(event as Event)}
                                             target="_blank">
                                         <IconExternalLink size={16}/>
                                     </Anchor>

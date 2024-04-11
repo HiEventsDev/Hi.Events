@@ -8,7 +8,7 @@ import {LoadingMask} from "../../../common/LoadingMask";
 import {CheckoutContent} from "../../../layouts/Checkout/CheckoutContent";
 import {t} from "@lingui/macro";
 import {Anchor} from "@mantine/core";
-import {eventHomepageUrl} from "../../../../utilites/urlHelper.ts";
+import {eventHomepagePath} from "../../../../utilites/urlHelper.ts";
 import {useGetEventPublic} from "../../../../queries/useGetEventPublic.ts";
 
 const Payment = () => {
@@ -40,7 +40,7 @@ const Payment = () => {
                 {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                 {/*@ts-ignore}*/}
                 {stripePaymentIntentError.response?.data?.message || t`Sorry, something has gone wrong. Please restart the checkout process.`}
-                {' '} <Anchor href={eventHomepageUrl(event)}>{t`Return to event page`}</Anchor>
+                {' '} <Anchor href={eventHomepagePath(event)}>{t`Return to event page`}</Anchor>
             </CheckoutContent>
         );
     }

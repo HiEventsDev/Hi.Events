@@ -36,7 +36,7 @@ services:
 
         command: yarn dev:csr
         environment:
-            VITE_API_URL: '${API_URL}'
+            VITE_API_URL_CLIENT: 'http://localhost:${API_PORT:-1234}'
         networks:
             - app
     frontend-ssr:
@@ -48,13 +48,15 @@ services:
             - ssr
         ports:
             - "5678:5678"
+            - "24678:24678"
         volumes:
             - ./../frontend:/app
             - /app/node_modules
 
         command: yarn dev:ssr
         environment:
-            VITE_API_URL: '${API_URL}'
+            VITE_API_URL_CLIENT: 'http://localhost:${API_PORT:-1234}'
+            VITE_API_URL_SERVER: 'http://host.docker.internal:${API_PORT:-1234}'
         networks:
             - app
     redis:

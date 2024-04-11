@@ -10,6 +10,7 @@ import { EventDocumentHead } from "../../common/EventDocumentHead";
 import { eventCoverImageUrl } from "../../../utilites/urlHelper.ts";
 import { Event } from "../../../types.ts";
 import { HomepageInfoMessage } from "../../common/HomepageInfoMessage/index.tsx";
+import {isSsr} from "../../../utilites/helpers.ts";
 
 interface EventHomepageProps {
   colors?: {
@@ -26,7 +27,6 @@ interface EventHomepageProps {
 }
 
 const EventHomepage = ({ colors, continueButtonText, ...loaderData }: EventHomepageProps) => {
-
   const { event, promoCodeValid, promoCode } = loaderData;
 
   const styleOverrides = {
@@ -44,6 +44,7 @@ const EventHomepage = ({ colors, continueButtonText, ...loaderData }: EventHomep
 
   
   if (!event) {
+    console.error(isSsr(), "Event not found");
     return <HomepageInfoMessage message={t`This event is not available.`} />;
   }
 

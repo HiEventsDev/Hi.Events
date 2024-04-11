@@ -77,7 +77,7 @@ const EventLayout = () => {
 
         return (
             <NavLink
-                to={item.comingSoon ? 'javascript:void(0);' : item.link}
+                to={item.comingSoon ? '#' : item.link}
                 key={item.label}
                 onClick={() => setSidebarOpen(false)}
                 className={({isActive}) =>

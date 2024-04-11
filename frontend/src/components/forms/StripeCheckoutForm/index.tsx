@@ -11,7 +11,7 @@ import {useGetEventPublic} from "../../../queries/useGetEventPublic.ts";
 import {CheckoutContent} from "../../layouts/Checkout/CheckoutContent";
 import {CheckoutFooter} from "../../layouts/Checkout/CheckoutFooter";
 import {Event} from "../../../types.ts";
-import {eventCheckoutUrl, eventHomepageUrl} from "../../../utilites/urlHelper.ts";
+import {eventCheckoutPath, eventHomepagePath} from "../../../utilites/urlHelper.ts";
 import {HomepageInfoMessage} from "../../common/HomepageInfoMessage";
 
 export default function StripeCheckoutForm() {
@@ -59,7 +59,7 @@ export default function StripeCheckoutForm() {
             <HomepageInfoMessage
                 message={t`This order has already been paid.`}
                 linkText={t`View order details`}
-                link={eventCheckoutUrl(eventId, orderShortId, 'summary')}
+                link={eventCheckoutPath(eventId, orderShortId, 'summary')}
             />
         );
     }
@@ -69,7 +69,7 @@ export default function StripeCheckoutForm() {
             <HomepageInfoMessage
                 message={t`This order page is no longer available.`}
                 linkText={t`View order details`}
-                link={eventHomepageUrl(event as Event)}
+                link={eventHomepagePath(event as Event)}
             />
         );
     }

@@ -86,3 +86,11 @@ export const formatNumber = (number: number) => {
 
     return new Intl.NumberFormat().format(number);
 }
+
+export const isSsr = () => {
+    if (typeof process !== 'undefined' && process.versions && process.versions.node) {
+        return true;
+    }
+
+    return typeof global !== 'undefined' && global.global === global;
+}

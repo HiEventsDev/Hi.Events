@@ -13,7 +13,7 @@ import {Button, Group} from "@mantine/core";
 import {IconPrinter} from "@tabler/icons-react";
 import {CheckoutContent} from "../../../layouts/Checkout/CheckoutContent";
 import {CheckoutFooter} from "../../../layouts/Checkout/CheckoutFooter";
-import {eventCheckoutUrl} from "../../../../utilites/urlHelper.ts";
+import {eventCheckoutPath} from "../../../../utilites/urlHelper.ts";
 import {HomepageInfoMessage} from "../../../common/HomepageInfoMessage";
 
 const OrderStatus = ({order}: { order: Order }) => {
@@ -41,7 +41,7 @@ export const OrderSummaryAndTickets = () => {
     }
 
     if (window?.location.search.includes('failed') || order?.status === 'PAYMENT_FAILED') {
-        navigate(eventCheckoutUrl(eventId, orderShortId, 'payment') + '?payment_failed=true');
+        navigate(eventCheckoutPath(eventId, orderShortId, 'payment') + '?payment_failed=true');
         return;
     }
     if (order?.status !== 'COMPLETED') {

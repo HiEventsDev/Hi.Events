@@ -1,20 +1,17 @@
 import axios from "axios";
+import {setAuthToken} from "../utilites/apiClient.ts";
+import {isSsr} from "../utilites/helpers.ts";
 
-const BASE_URL = import.meta.env.VITE_API_URL + '/public';
+const BASE_URL =
+    (isSsr()
+        ? import.meta.env.VITE_API_URL_SERVER
+        : import.meta.env.VITE_API_URL_CLIENT) + '/public';
 
 export const publicApi = axios.create({
     baseURL: BASE_URL,
 });
 
-//For the public client we set the token as we want to know if the user is logged in
-const setAuthToken = (token: string) => {
-    if (token) {
-        // eslint-disable-next-line lingui/no-unlocalized-strings
-        publicApi.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-    }
-};
-
-const existingToken = typeof window !== "undefined"? window?.localStorage?.getItem('token') : undefined;
+const existingToken = typeof window !== "undefined" ? window?.localStorage?.getItem('token') : undefined;
 
 if (existingToken) {
     setAuthToken(existingToken);

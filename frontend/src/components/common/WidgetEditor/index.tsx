@@ -10,7 +10,7 @@ import {IconInfoCircle} from "@tabler/icons-react";
 import {useGetEventSettings} from "../../../queries/useGetEventSettings.ts";
 import {Popover} from "../Popover";
 import { useGetEventPublic } from '../../../queries/useGetEventPublic.ts';
-import { LoadingMask } from '../LoadingMask/index.tsx';
+import { LoadingMask } from '../LoadingMask';
 import { Event } from '../../../types.ts';
 
 export const WidgetEditor = () => {

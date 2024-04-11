@@ -1,7 +1,7 @@
-import { Navigate, RouteObject} from "react-router-dom";
+import {Navigate, RouteObject} from "react-router-dom";
 import ErrorPage from "./error-page.tsx";
-import { eventsClientPublic } from "./api/event.client.ts";
-import { promoCodeClientPublic } from "./api/promo-code.client.ts";
+import {eventsClientPublic} from "./api/event.client.ts";
+import {promoCodeClientPublic} from "./api/promo-code.client.ts";
 
 export const router: RouteObject[] = [
 
@@ -296,22 +296,15 @@ export const router: RouteObject[] = [
     {
         path: "/event/:eventId/:eventSlug",
         loader: async ({params, request}) => {
-            try {
-                const url = new URL(request.url)
-                const queryParams = new URLSearchParams(url.search);
-                const promoCode = queryParams.get("promo_code") ?? null
-                const { data: event } = await eventsClientPublic.findByID(params.eventId, promoCode);
-                let promoCodeValid: undefined | boolean = undefined;
-                if (promoCode)
-                    promoCodeValid = (await promoCodeClientPublic.validateCode(params.eventId, promoCode)).valid;
-                return {event, promoCodeValid, promoCode};
-            } catch (error) {
-               return {
-                     event: undefined,
-                     promoCodeValid: undefined,
-                     promoCode: undefined
-               }
+            const url = new URL(request.url)
+            const queryParams = new URLSearchParams(url.search);
+            const promoCode = queryParams.get("promo_code") ?? null
+            const {data: event} = await eventsClientPublic.findByID(params.eventId, promoCode);
+            let promoCodeValid: undefined | boolean = undefined;
+            if (promoCode) {
+                promoCodeValid = (await promoCodeClientPublic.validateCode(params.eventId, promoCode)).valid;
             }
+            return {event, promoCodeValid, promoCode};
         },
         async lazy() {
             const PublicEvent = await import("./components/layouts/PublicEvent");

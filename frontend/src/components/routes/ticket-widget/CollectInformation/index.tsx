@@ -17,7 +17,7 @@ import {IconCopy} from "@tabler/icons-react";
 import {CheckoutFooter} from "../../../layouts/Checkout/CheckoutFooter";
 import {CheckoutContent} from "../../../layouts/Checkout/CheckoutContent";
 import {HomepageInfoMessage} from "../../../common/HomepageInfoMessage";
-import {eventCheckoutUrl, eventHomepageUrl} from "../../../../utilites/urlHelper.ts";
+import {eventCheckoutPath, eventHomepagePath} from "../../../../utilites/urlHelper.ts";
 
 const LoadingSkeleton = () =>
     (
@@ -93,7 +93,7 @@ export const CollectInformation = () => {
         {
             onSuccess: (data) => {
                 const nextPage = order?.is_payment_required ? 'payment' : 'summary';
-                navigate(eventCheckoutUrl(eventId, data.data.short_id, nextPage));
+                navigate(eventCheckoutPath(eventId, data.data.short_id, nextPage));
             },
             onError: (error: any) => {
                 if (error?.response?.data?.errors && Object.keys(error?.response?.data?.errors).length > 0) {
@@ -105,7 +105,7 @@ export const CollectInformation = () => {
 
                     // if it's a 409, we need to redirect to the event page as the order is no longer valid
                     if (error.response.status === 409) {
-                        navigate(eventHomepageUrl(event as Event));
+                        navigate(eventHomepagePath(event as Event));
                     }
                 }
             },
@@ -192,7 +192,7 @@ export const CollectInformation = () => {
     if (order?.payment_status === 'AWAITING_PAYMENT') {
         return <HomepageInfoMessage
             message={t`This order is awaiting payment`}
-            link={eventCheckoutUrl(eventId, orderShortId, 'payment')}
+            link={eventCheckoutPath(eventId, orderShortId, 'payment')}
             linkText={t`Complete payment`}
         />;
     }
@@ -200,7 +200,7 @@ export const CollectInformation = () => {
     if (order?.status === 'COMPLETED') {
         return <HomepageInfoMessage
             message={t`This order is complete`}
-            link={eventCheckoutUrl(eventId, orderShortId, 'summary')}
+            link={eventCheckoutPath(eventId, orderShortId, 'summary')}
             linkText={t`View order details`}
         />;
     }
@@ -208,7 +208,7 @@ export const CollectInformation = () => {
     if (order?.status === 'CANCELLED') {
         return <HomepageInfoMessage
             message={t`This order has been cancelled`}
-            link={eventHomepageUrl(event as Event)}
+            link={eventHomepagePath(event as Event)}
             linkText={t`Go to event homepage`}
         />;
     }
@@ -222,7 +222,7 @@ export const CollectInformation = () => {
             <>
                 <HomepageInfoMessage
                     message={t`Sorry, something went wrong loading this page.`}
-                    link={eventHomepageUrl(event as Event)}
+                    link={eventHomepagePath(event as Event)}
                     linkText={t`View event page`}
                 />
             </>

@@ -12,12 +12,12 @@ export const useGetEventPublic = (eventId: IdParam, enabled = true, isPromoCodeV
             const {data} = await eventsClientPublic.findByID(eventId, promoCode);
             return data;
         },
-        {
-            refetchOnWindowFocus: false,
-            retryOnMount: false,
-            staleTime: 0,
-            retry: false,
-            enabled: enabled,
-        }
+        // {
+        //     refetchOnWindowFocus: false,
+        //     retryOnMount: false,
+        //     staleTime: 2,
+        //     retry: false,
+        //     enabled: enabled,
+        // }
     )
 };

@@ -5,7 +5,7 @@ import classes from './PaymentReturn.module.scss';
 import {t} from "@lingui/macro";
 import {useGetOrderStripePaymentIntentPublic} from "../../../../queries/useGetOrderStripePaymentIntentPublic.ts";
 import {CheckoutContent} from "../../../layouts/Checkout/CheckoutContent";
-import {eventCheckoutUrl} from "../../../../utilites/urlHelper.ts";
+import {eventCheckoutPath} from "../../../../utilites/urlHelper.ts";
 import {HomepageInfoMessage} from "../../../common/HomepageInfoMessage";
 
 /**
@@ -43,7 +43,7 @@ export const PaymentReturn = () => {
             return;
         }
         if (paymentIntentQuery.data?.status === 'succeeded') {
-            navigate(eventCheckoutUrl(eventId, orderShortId, 'summary'));
+            navigate(eventCheckoutPath(eventId, orderShortId, 'summary'));
         } else {
             // At this point we've tried multiple times to confirm the payment and failed.
             // This could be due to a network error on our end, or a problem with the payment provider (Stripe).
@@ -53,12 +53,12 @@ export const PaymentReturn = () => {
     }, [paymentIntentQuery.isFetched]);
 
     if (order?.payment_status === 'PAYMENT_FAILED' || window?.location.search.includes('failed')) {
-        navigate(eventCheckoutUrl(eventId, orderShortId, 'payment') + '?payment_failed=true');
+        navigate(eventCheckoutPath(eventId, orderShortId, 'payment') + '?payment_failed=true');
         return null;
     }
 
     if (order?.status === 'COMPLETED') {
-        navigate(eventCheckoutUrl(eventId, orderShortId, 'summary'));
+        navigate(eventCheckoutPath(eventId, orderShortId, 'summary'));
         return null;
     }
 

@@ -33,7 +33,7 @@ export const relativeDate = (date: string): string => {
     return dayjs().to(dateInUTC);
 };
 
-export const utcToTz = (date: undefined|string|Date, tz: string): string|undefined => {
+export const utcToTz = (date: undefined | string | Date, tz: string): string | undefined => {
     if (!date) {
         return undefined;
     }

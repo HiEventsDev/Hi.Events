@@ -108,7 +108,6 @@ export const SelectTickets = (props: SelectTicketsProps) => {
         },
     });
 
-
     const tickets = event.tickets || [];
     const ticketAreAvailable = tickets && tickets.length > 0;
 
@@ -121,8 +120,7 @@ export const SelectTickets = (props: SelectTicketsProps) => {
             });
 
             return total;
-        }
-        , [form.values]);
+        }, [form.values]);
 
     useEffect(()=>{
         if (form.values.promo_code) {

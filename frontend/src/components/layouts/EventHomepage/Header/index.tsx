@@ -9,7 +9,7 @@ export const Header: FC<{
     const coverImage = event?.images?.find((image) => image.type === 'EVENT_COVER');
 
     if (!coverImage) {
-        return <>no cover</>;
+        return <></>;
     }
 
     return (

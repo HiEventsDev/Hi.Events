@@ -1,11 +1,15 @@
 import {Event, IdParam} from "../types.ts";
 
-export const eventCheckoutUrl = (eventId: IdParam, orderShortId: IdParam, subPage = '') => {
+export const eventCheckoutPath = (eventId: IdParam, orderShortId: IdParam, subPage = '') => {
     return `/checkout/${eventId}/${orderShortId}/${subPage}`;
 }
 
-export const eventHomepageUrl = (event: Event) => {
+export const eventHomepagePath = (event: Event) => {
     return `/event/${event?.id}/${event?.slug}`;
+}
+
+export const eventHomepageUrl = (event: Event) => {
+    return import.meta.env.VITE_APP_FRONTEND_URL + eventHomepagePath(event);
 }
 
 export const eventCoverImageUrl = (event: Event) => {

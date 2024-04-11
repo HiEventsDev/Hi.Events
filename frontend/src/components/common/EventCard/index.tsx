@@ -6,7 +6,7 @@ import {NavLink, useNavigate} from "react-router-dom";
 import {IconCalendarEvent, IconDotsVertical, IconEye, IconMap, IconSettings, IconUser,} from "@tabler/icons-react";
 import {relativeDate} from "../../../utilites/dates.ts";
 import {t} from "@lingui/macro"
-import {eventHomepageUrl} from "../../../utilites/urlHelper.ts";
+import {eventHomepagePath} from "../../../utilites/urlHelper.ts";
 
 interface EventCardProps {
     event: Event;
@@ -74,11 +74,7 @@ export function EventCard({event}: EventCardProps) {
                         </Menu.Target>
 
                         <Menu.Dropdown>
-                            <Menu.Item onClick={() => {
-                                if (typeof window !== "undefined" ) window.location.href = eventHomepageUrl(event)
-                            }}
-                                       leftSection={<IconEye size={14}/>}
-                            >
+                            <Menu.Item onClick={() => window.location.href = eventHomepagePath(event)}>
                                 {t`View event page`}
                             </Menu.Item>
                             <Menu.Item onClick={() => navigate(`/manage/event/${event.id}`)}
