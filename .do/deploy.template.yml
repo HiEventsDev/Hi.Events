@@ -1,0 +1,16 @@
+spec:
+  name: hi.event
+  services:
+    - name: hi.events
+      dockerfile_path: Dockerfile.all-in-one
+      git:
+        repo_clone_url: https://github.com/HiEventsDev/hi.events.git
+        branch: master
+      envs:
+        - key: APP_KEY
+          scope: RUN_TIME
+        - key: DATABASE_URL
+          scope: RUN_TIME
+          value: ${hievents-db.DATABASE_URL}
+  databases:
+    - name: hievents-db

@@ -1,0 +1,18 @@
+FROM node:alpine as build-stage
+
+WORKDIR /app
+
+RUN apk add --no-cache yarn
+
+COPY package.json yarn.lock ./
+
+RUN yarn install
+
+COPY . .
+
+RUN yarn build
+
+EXPOSE 5678
+
+CMD ["yarn", "start"]
+

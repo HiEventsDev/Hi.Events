@@ -1,0 +1,35 @@
+.attendeeList {
+  margin-bottom: var(--tk-spacing-lg);
+
+  .attendee {
+    display: flex;
+    padding: 10px;
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    align-items: center;
+
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+
+    .attendeeName {
+      margin-left: 10px;
+
+      .ticketName {
+        color: #9ca3af;
+        font-size: .8em;
+      }
+    }
+
+    .viewAttendee {
+      flex: 1;
+      display: flex;
+      place-content: flex-end;
+
+      a {
+        align-self: flex-end;
+      }
+    }
+  }
+}

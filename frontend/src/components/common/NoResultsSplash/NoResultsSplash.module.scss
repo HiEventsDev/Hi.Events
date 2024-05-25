@@ -1,0 +1,28 @@
+@import "../../../styles/mixins";
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  max-width: 500px;
+  text-align: center;
+  margin: 50px auto;
+
+  img {
+    max-width: 500px;
+    width: 240px;
+    height: 240px;
+
+    @include respond-below(md) {
+      width: 170px;
+      height: 170px;
+    }
+  }
+
+  h2 {
+    font-size: 1.3em;
+    margin-bottom: 0;
+    margin-top: 5px;
+  }
+}

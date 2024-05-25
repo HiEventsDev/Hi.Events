@@ -1,0 +1,235 @@
+@import "../../../styles/mixins";
+
+.container {
+  display: grid;
+  grid-template-areas:
+          "topbar"
+           "main";
+  grid-template-rows: 55px 1fr;
+  grid-template-columns: 1fr;
+  height: 100vh;
+  transition: 200ms ease;
+
+  &.closed {
+    transform: translateX(275px);
+  }
+
+  @media (min-width: 768px) {
+    grid-template-areas:
+            "sidebar topbar"
+            "sidebar main"
+            "sidebar main";
+    grid-template-rows: 55px 1fr;
+    grid-template-columns: 275px 1fr;
+
+    &.closed {
+      transform: none;
+      grid-template-areas:
+            "topbar"
+            "main"
+            "main";
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .topBar {
+    grid-area: topbar;
+    background: var(--tk-background-light);
+    align-items: center;
+    padding: var(--tk-spacing-md);
+    display: flex;
+    transition: box-shadow 0.3s ease;
+    position: sticky;
+    top: 0;
+    box-shadow: 0 5px 5px 0 #00000010;
+    z-index: 1;
+
+    .breadcrumbs {
+      font-weight: 500;
+      display: flex;
+
+      @include respond-below(md) {
+        display: none;
+      }
+    }
+
+    @include respond-below(md) {
+      background-color: var(--tk-primary);
+    }
+
+    &.withShadow {
+      box-shadow: 0 5px 5px 0 #00000010;
+    }
+
+    .burger {
+      --burger-color : var(--tk-color-white);
+      @include respond-above(md) {
+        display: none;
+      }
+    }
+
+    .logo {
+      color: var(--tk-color-white);
+      font-weight: bold;
+      font-size: 1.2em;
+      display: flex;
+      justify-content: center;
+
+      a {
+        display: flex;
+      }
+
+      img {
+        max-width: 120px;
+      }
+
+      @include respond-above(md) {
+        display: none;
+      }
+    }
+
+    .menu {
+      display: flex;
+      flex: 1;
+      justify-content: flex-end;
+
+      .eventPageButton {
+        @include respond-below(md) {
+          color: var(--tk-color-white);
+        }
+      }
+    }
+
+    @include respond-above(md) {
+      background-color: white;
+    }
+  }
+
+  &.closed {
+    @include respond-above(md) {
+      .sidebar {
+        display: none;
+      }
+    }
+  }
+
+  .sidebar {
+    overflow: auto;
+    grid-area: sidebar;
+    background: linear-gradient(270deg, var(--tk-primary), #7d5eba);
+    color: var(--tk-color-white);
+    scrollbar-width: thin;
+    scrollbar-color: var(--tk-secondary) transparent;
+    position: relative;
+
+    &::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: transparent;
+      border-radius: 10px;
+      border: 3px solid transparent;
+    }
+
+    &:hover::-webkit-scrollbar-thumb {
+      background-color: var(--tk-secondary);
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    @include respond-below(md) {
+      position: fixed;
+      width: 275px;
+      height: 100vh;
+      z-index: 1;
+      transform: translateX(-100%);
+    }
+
+    .logo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      a {
+        display: flex;
+        width: 100%;
+      }
+    }
+
+    .nav {
+      .sectionHeading {
+        padding: var(--tk-spacing-md);
+      }
+
+      a {
+        display: flex;
+        color: var(--tk-color-white);
+        padding: var(--tk-spacing-sm) var(--tk-spacing-sm);
+        text-decoration: none;
+        margin: 4px 10px;
+        border-radius: var(--tk-radius-md);
+        font-size: .9em;
+        font-weight: 600;
+
+        &.loading {
+          background-color: #4b327d75;
+          width: 90%;
+          height: 33px;
+        }
+
+        &.linkActive, &:hover {
+          background: #4b327d75;
+          color: var(--tk-color-white);
+        }
+
+        svg {
+          margin-right: var(--tk-spacing-md);
+        }
+      }
+    }
+
+    .sidebarClose {
+      color: #fff;
+      margin-right: 5px;
+      display: flex;
+      align-items: center;
+      position: absolute;
+      right: -5px;
+      top: 50%;
+
+      @include respond-below(md) {
+        display: none;
+      }
+    }
+  }
+
+  .sidebarOpen {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    left: -5px;
+    top: 50%;
+
+    @include respond-below(md) {
+      display: none;
+    }
+  }
+
+  .main {
+    grid-area: main;
+    padding: var(--tk-spacing-lg);
+    overflow: auto;
+
+    @include scrollbar;
+
+    @include respond-below(md) {
+      height: calc(100vh - 55px);
+    }
+  }
+}

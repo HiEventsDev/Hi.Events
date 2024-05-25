@@ -1,0 +1,45 @@
+@import "../../../styles/mixins.scss";
+
+.container {
+  background-repeat: repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  flex-direction: column;
+
+  .logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+    img {
+      width: 160px;
+    }
+  }
+
+  .wrapper {
+    min-width: 450px;
+    margin-bottom: 50px;
+    max-width: 550px;
+    position: relative;
+
+    a {
+      color: var(--tk-color-blue);
+    }
+
+    footer {
+      font-size: .9em;
+      margin-top: 20px;
+
+      p:last-of-type {
+        margin-bottom: 0;
+      }
+    }
+
+    @include respond-below(md) {
+      min-width: 75%;
+      margin: 10px 20px;
+    }
+  }
+}

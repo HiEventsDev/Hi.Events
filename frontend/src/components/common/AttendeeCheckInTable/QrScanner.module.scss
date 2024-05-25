@@ -1,0 +1,80 @@
+@import "../../../styles/mixins";
+
+@keyframes colorfulBorder {
+  0% {
+    border-color: #ffffff50;
+  }
+  50% {
+    border-color: #00000050;
+  }
+  100% {
+    border-color: #ffffff50
+  }
+}
+
+.videoContainer {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .permissionMessage {
+    position: absolute;
+    width: 100vw;
+    padding: 20px;
+    text-align: center;
+    background-color: #000000;
+    color: #fff;
+    z-index: 3;
+
+    a {
+      color: #dddddd;
+      text-decoration: underline;
+    }
+  }
+
+  .flashToggle {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 2;
+  }
+
+  .closeButton {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 2;
+  }
+
+  .switchCameraButton {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    z-index: 2;
+  }
+
+  //scanner overlay is a square div that scales as the browser window scales
+  .scannerOverlay {
+    width: 60vw;
+    height: 60vw;
+    border: 5px solid #ffffff50;
+    position: absolute;
+    animation: colorfulBorder 10s infinite;
+    border-radius: 10px;
+    outline: solid 50vmax #472e7840;
+    min-width: 200px;
+    min-height: 200px;
+
+    @include respond-above(md) {
+        width: 40vw;
+        height: 40vw;
+    }
+  }
+
+  video {
+    width: 100vw !important;
+    height: 100vh !important;
+    object-fit: cover;
+  }
+}

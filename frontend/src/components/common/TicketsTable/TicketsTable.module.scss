@@ -1,0 +1,152 @@
+@import "../../../styles/mixins.scss";
+
+.cards {
+  display: flex;
+  flex-direction: column;
+
+  .ticketCard {
+    display: grid;
+    padding: 20px;
+    margin-bottom: 20px;
+    //border-top: 3px solid var(--tk-color-money-green) !important;
+    position: relative;
+    gap: 10px;
+
+    grid-template-areas: "dragHanlde ticketInfo action";
+    grid-template-columns: 40px 1fr 40px;
+
+    @include respond-below(lg) {
+      grid-template-areas: "dragHanlde ticketInfo"
+                            "dragHanlde action";
+    }
+
+    .halfCircle {
+      width: 20px;
+      height: 10px;
+      background-color: #fbfafb;
+      border-top-left-radius: 110px;
+      border-top-right-radius: 110px;
+      border: 1px solid #ddd;
+      border-bottom: 0;
+      transform: rotate(90deg);
+      position: absolute;
+      left: -6px;
+      top: 44%;
+    }
+
+    .halfCircle.right {
+      left: auto;
+      right: -6px;
+      transform: rotate(270deg);
+    }
+
+    .dragHandle {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: move;
+      grid-area: dragHanlde;
+      touch-action: none;
+    }
+
+    .dragHandleDisabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+
+    .ticketInfo {
+      grid-area: ticketInfo;
+
+      .ticketDetails {
+        display: grid;
+        width: 100%;
+        align-items: center;
+        gap: 15px;
+        flex-wrap: wrap;
+
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+
+        @include respond-below(lg) {
+          flex-direction: column;
+          align-items: flex-start;
+          grid-template-columns: 1fr 1fr;
+          gap: 20px;
+        }
+
+        @include respond-below(sm) {
+          gap: 10px;
+        }
+
+        @include respond-below(xs) {
+          gap: 20px;
+          grid-template-columns: 1fr;
+        }
+
+        > div {
+          flex: 1;
+          min-width: 125px;
+
+          @include respond-below(sm) {
+            min-width: 100px;
+          }
+        }
+
+        .heading {
+          text-transform: uppercase;
+          color: #9ca3af;
+          font-size: .8em;
+        }
+
+        .status {
+          max-width: 120px;
+          cursor: pointer;
+        }
+
+        .title {
+          text-wrap: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .price {
+          color: var(--tk-color-money-green);
+
+          .priceAmount {
+            font-weight: 600;
+            text-wrap: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+        }
+
+        .availability {
+        }
+      }
+    }
+
+    .action {
+      display: flex;
+      grid-area: action;
+
+      @include respond-below(lg) {
+        margin-top: 10px;
+      }
+
+      .desktopAction {
+        @include respond-below(lg) {
+          display: none;
+        }
+      }
+
+      .mobileAction {
+        display: none;
+        @include respond-below(lg) {
+          display: block;
+        }
+      }
+    }
+  }
+}
+
+
+

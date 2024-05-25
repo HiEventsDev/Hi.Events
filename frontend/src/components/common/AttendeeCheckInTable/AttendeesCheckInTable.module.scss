@@ -1,0 +1,68 @@
+@import '../../../styles/mixins';
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+
+  .checkInCount {
+    font-size: 0.7em;
+    color: #999;
+  }
+
+  .search {
+    flex: 1;
+
+    .searchBar {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+
+      .searchInput {
+        flex: 1;
+        margin-bottom: 0 !important;
+      }
+
+      .scanButton {
+        @include respond-below(sm) {
+          display: none;
+        }
+      }
+
+      .scanIcon {
+        display: none;
+        @include respond-below(sm) {
+          display: flex;
+        }
+      }
+    }
+  }
+
+  .stats {
+    flex: 1;
+  }
+}
+
+.loading, .noResults {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
+}
+
+.attendees {
+  .attendee {
+    display: flex;
+    align-items: center;
+
+    .details {
+      flex: 1;
+    }
+
+    .actions {
+      flex-grow: initial;
+    }
+  }
+}

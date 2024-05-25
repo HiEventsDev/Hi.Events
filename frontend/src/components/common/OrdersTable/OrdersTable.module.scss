@@ -1,0 +1,113 @@
+@import "../../../styles/mixins.scss";
+
+.paymentStatus {
+  text-transform: capitalize;
+  color: #777777;
+}
+
+.orderCard {
+  display: flex;
+  flex-direction: row;
+  padding: 15px;
+  margin-bottom: 15px;
+  align-items: center;
+
+  @include respond-below(md) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  & .colDetails {
+    display: flex;
+    flex-direction: column;
+    font-size: .9em;
+    max-width: 100%;
+
+    @include respond-below(md) {
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+
+    .header {
+      font-size: 1.1em;
+      font-weight: 600;
+      color: #333333;
+      @include ellipsis;
+    }
+
+    .email {
+      font-size: 0.9em;
+      @include ellipsis;
+    }
+
+    .reference {
+      margin-top: 10px;
+      font-size: 0.9em;
+      color: #9f9f9f;
+    }
+
+    .createdDate {
+      font-size: 0.9em;
+      color: #9f9f9f;
+    }
+
+    .amount {
+      margin-bottom: 10px;
+    }
+  }
+
+  & .colActions {
+    flex-direction: column;
+    flex: 1;
+    align-items: flex-end;
+    place-self: flex-start;
+
+    @include respond-below(md) {
+      width: 100%;
+      align-items: flex-start;
+    }
+
+    .actionButton {
+      display: flex;
+
+      .desktopAction {
+        display: none;
+        @include respond-below(md) {
+          display: none;
+        }
+      }
+
+      .mobileAction {
+        display: none;
+        @include respond-below(md) {
+          display: block;
+        }
+      }
+
+      @include respond-above(md) {
+        place-content: flex-end;
+      }
+
+      @include respond-below(md) {
+        width: 100%;
+        > div {
+          width: 100%;
+
+          > button {
+            width: 100%;
+          }
+        }
+      }
+    }
+
+    .status {
+      display: flex;
+      margin-bottom: 20px;
+
+      @include respond-above(md) {
+        place-content: flex-end;
+        margin-bottom: 35px;
+      }
+    }
+  }
+}

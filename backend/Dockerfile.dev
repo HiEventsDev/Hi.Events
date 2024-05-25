@@ -1,0 +1,21 @@
+FROM webdevops/php-nginx:8.2-alpine
+
+WORKDIR /app
+
+COPY . /app
+
+ENV WEB_DOCUMENT_ROOT /app/public
+
+ENV PHP_DISMOD=ioncube,pdo_sqlsrv,sqlsrv,pdo_mysql,mysqli,mysqlnd,pdo_sqlite,mysqlnd,mongodb,memcached
+
+COPY ./docker/supervisord/syslog.conf /opt/docker/etc/supervisor.d/syslog.conf
+
+RUN chown -R application:application /app \
+    && mkdir -p /app/storage \
+    && chmod -R 755 /app/storage  \
+    && mkdir -p /app/bootstrap/cache \
+    && chmod -R 775 /app/bootstrap/cache
+
+EXPOSE 80 443
+
+CMD ["supervisord"]

@@ -1,0 +1,87 @@
+@import "../../../styles/mixins.scss";
+
+.card {
+  background-color: var(--mantine-color-body);
+  padding: 0 20px;
+  display: flex;
+  gap: 20px;
+
+  @include respond-below(sm) {
+    flex-direction: column;
+    gap: 0px;
+  }
+
+  .body {
+    padding: var(--mantine-spacing-xs);
+    flex: 1;
+
+    @include respond-below(sm) {
+      padding-left: 0;
+      padding-bottom: 0;
+    }
+
+    .eventInfo {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+
+      .dotSeparator {
+
+      }
+
+      @include respond-below(sm) {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        margin-bottom: var(--mantine-spacing-md);
+
+        .dotSeparator {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    @include respond-below(sm) {
+      align-items: flex-start;
+        justify-content: flex-start;
+      margin-bottom: var(--mantine-spacing-md);
+
+      .mobileButton {
+        display: flex;
+      }
+      .desktopButton {
+        display: none;
+      }
+    }
+
+    @include respond-above(sm) {
+      .mobileButton {
+        display: none;
+      }
+      .desktopButton {
+        display: flex;
+      }
+    }
+  }
+}
+
+.image {
+  width: 140px;
+  height: 70px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: var(--tk-radius-md);
+  background-color: var(--tk-primary);
+}
+
+.title {
+  line-height: 1.2;
+}
+

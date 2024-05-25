@@ -1,0 +1,99 @@
+@import "../../../../styles/mixins.scss";
+
+@include respond-below(sm) {
+  :global(#event-manage-main) {
+    overflow: auto;
+  }
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  margin: calc(var(--tk-spacing-lg) * -1);
+
+  h2 {
+    margin-bottom: 0;
+  }
+
+  @include respond-below(sm) {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    min-width: 350px;
+    max-width: 350px;
+    background-color: #ffffff;
+    padding: 20px;
+    height: calc(100vh - 55px);
+    overflow-y: auto;
+    position: sticky;
+    top: 0;
+
+    @include respond-below(sm) {
+      width: 100%;
+      min-width: unset;
+      max-width: unset;
+      position: relative;
+      overflow: auto;
+      height: auto;
+    }
+
+    h2 {
+      margin-top: 0;
+    }
+
+    div.scrollable {
+      overflow-y: auto;
+    }
+  }
+
+  .previewContainer {
+    height: calc(100vh - 55px);
+    width: 100%;
+    overflow: hidden;
+
+    h2 {
+      padding: 20px;
+    }
+
+    .preview {
+      width: 100%;
+      height: 100%;
+      overflow-y: auto;
+    }
+
+    .iframeContainer {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      --scale: 0.65;
+
+      iframe {
+        transform: scale(var(--scale));
+        transform-origin: 0 0;
+        width: calc(100% / var(--scale));
+        height: calc(100% / var(--scale));
+        border: none;
+        position: absolute;
+        inset: 0;
+      }
+    }
+
+    > h2 {
+      display: none;
+    }
+
+    @include respond-below(sm) {
+      > h2 {
+        display: block;
+      }
+
+      width: 100%;
+      min-width: unset;
+      max-width: unset;
+      position: relative;
+      overflow: auto;
+      height: auto;
+    }
+  }
+}

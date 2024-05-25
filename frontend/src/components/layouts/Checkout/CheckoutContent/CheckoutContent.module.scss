@@ -1,0 +1,32 @@
+@import "../../../../styles/mixins.scss";
+
+.main {
+  position: relative;
+  height: calc(100vh - 153px);
+  overflow-y: auto;
+  padding: 20px 60px;
+
+  &.hasFooter {
+    height: calc(100vh - 90px);
+
+    @include respond-below(md) {
+      height: calc(100vh - 139px);
+    }
+  }
+
+  @include scrollbar();
+
+  @include respond-below(md) {
+    padding: 20px;
+  }
+
+  .innerContainer {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+}
+
+.footer {
+  height: 100px;
+  background-color: #ffffff;
+}

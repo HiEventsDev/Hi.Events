@@ -1,0 +1,33 @@
+@import "../../../styles/mixins";
+
+.card {
+  container-type: inline-size;
+
+  .wrapper {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    place-content: space-between;
+
+    @include respond-below(sm, true) {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .searchBar {
+      margin-bottom: 0 !important;
+      width: 100%;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      place-self: flex-end;
+    }
+  }
+
+  button {
+    height: 42px !important;
+  }
+}

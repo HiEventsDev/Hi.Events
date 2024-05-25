@@ -1,0 +1,39 @@
+version: '3.8'
+services:
+  all-in-one:
+    build:
+      context: ./../../
+      dockerfile: Dockerfile.all-in-one
+    container_name: all-in-one
+    ports:
+      - "8123:80"
+    environment:
+      - VITE_FRONTEND_URL=http://localhost:8123
+      - VITE_API_URL_CLIENT=http://localhost:8123/api
+      - VITE_API_URL_SERVER=http://localhost:80/api
+      - VITE_STRIPE_PUBLISHABLE_KEY=pk_test
+      - LOG_CHANNEL=stderr
+      - QUEUE_CONNECTION=sync
+      - MAIL_MAILER=array
+      - APP_KEY=base64:ZIkx+O/ILP80gxHRLH+Yv7qKv94oHUgFdPn4OdD/hO8=
+      - JWT_SECRET=TJMzToO9cKLFpF5v4ADvNbTnvuWfgYNj
+      - FILESYSTEM_PUBLIC_DISK=public
+      - FILESYSTEM_PRIVATE_DISK=local
+      - APP_CDN_URL=http://localhost:8123/storage
+      - DATABASE_URL=postgresql://postgres:secret@postgres:5432/hi-events
+
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      POSTGRES_DB: hi-events
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secret
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:

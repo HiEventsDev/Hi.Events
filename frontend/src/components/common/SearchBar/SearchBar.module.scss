@@ -1,0 +1,26 @@
+@import "../../../styles/mixins";
+
+.searchBarWrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+
+  @include respond-below(sm, true) {
+    flex-direction: column;
+  }
+
+  .searchBar {
+    margin-bottom: 0 !important;
+    width: 100%;
+
+    @include respond-below(sm, true) {
+      width: 100%;
+    }
+
+    @include respond-below(md) {
+      max-width: 100%;
+    }
+  }
+}
+

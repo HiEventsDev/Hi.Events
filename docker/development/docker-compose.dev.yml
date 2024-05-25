@@ -1,0 +1,185 @@
+version: '3'
+services:
+    backend:
+        build:
+            context: ./../../backend
+            dockerfile: Dockerfile.dev
+        container_name: backend
+        ports:
+            - "1234:80"
+        volumes:
+            - ./../../backend:/app
+            - ./../../backend/storage:/app/storage
+            - ./../../backend/bootstrap/cache:/app/bootstrap/cache
+        environment:
+              APP_ENV: '${APP_ENV:-local}'
+              APP_KEY: '${APP_KEY}'
+        depends_on:
+            - redis
+            - mailpit
+            - pgsql
+        networks:
+            - app
+
+    frontend-csr:
+        build:
+            context: ./../../frontend
+            dockerfile: Dockerfile.csr.dev
+        container_name: frontend-csr
+        profiles:
+            - csr
+        ports:
+            - "5678:5678"
+        volumes:
+            - ./../../frontend:/app
+            - /app/node_modules
+
+        command: yarn dev:csr
+        environment:
+            VITE_API_URL_CLIENT: 'http://localhost:${API_PORT:-1234}'
+        networks:
+            - app
+    frontend:
+        build:
+            context: ./../../frontend
+            dockerfile: Dockerfile.ssr.dev
+        container_name: frontend-ssr
+        ports:
+            - "5678:5678"
+            - "24678:24678"
+        volumes:
+            - ./../../frontend:/app
+            - /app/node_modules
+
+        command: yarn dev:ssr
+        environment:
+            VITE_API_URL_CLIENT: '${API_URL_CLIENT}'
+            VITE_API_URL_SERVER: '${API_URL_SERVER}'
+            VITE_STRIPE_PUBLISHABLE_KEY: '${STRIPE_PUBLIC_KEY}'
+            VITE_FRONTEND_URL: '${FRONTEND_URL}'
+        networks:
+            - app
+
+    nginx:
+        image: nginx:alpine
+        container_name: nginx
+        ports:
+            - "8080:80"
+            - "8443:443"
+        volumes:
+            - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+            - ./certs:/etc/nginx/certs:ro
+        depends_on:
+            - backend
+            - frontend
+        networks:
+            - app
+
+    redis:
+        image: 'redis:alpine'
+        ports:
+            - '${FORWARD_REDIS_PORT:-6379}:6379'
+        volumes:
+            - 'app-redis:/data'
+        networks:
+            - app
+        healthcheck:
+            test:
+                - CMD
+                - redis-cli
+                - ping
+            retries: 3
+            timeout: 5s
+    mailpit:
+        image: 'axllent/mailpit:latest'
+        ports:
+            - '${FORWARD_MAILPIT_PORT:-1025}:1025'
+            - '${FORWARD_MAILPIT_DASHBOARD_PORT:-8025}:8025'
+        networks:
+            - app
+    pgsql:
+        image: 'postgres:15'
+        ports:
+            - '${FORWARD_DB_PORT:-5432}:5432'
+        environment:
+            PGPASSWORD: '${DB_PASSWORD:-secret}'
+            POSTGRES_DB: '${DB_DATABASE}'
+            POSTGRES_USER: '${DB_USERNAME}'
+            POSTGRES_PASSWORD: '${DB_PASSWORD:-secret}'
+        volumes:
+            - 'app-pgsql:/var/lib/postgresql/data'
+        networks:
+            - app
+        healthcheck:
+            test:
+                - CMD
+                - pg_isready
+                - '-q'
+                - '-d'
+                - '${DB_DATABASE}'
+                - '-U'
+                - '${DB_USERNAME}'
+            retries: 3
+            timeout: 5s
+    minio:
+        image: 'minio/minio:latest'
+        ports:
+            - '${FORWARD_MINIO_PORT:-9000}:9000'
+            - '${FORWARD_MINIO_CONSOLE_PORT:-8900}:8900'
+        environment:
+            MINIO_ROOT_USER: app
+            MINIO_ROOT_PASSWORD: password
+        volumes:
+            - 'app-minio:/data/minio'
+        networks:
+            - app
+        command: 'minio server /data/minio --console-address ":8900"'
+        healthcheck:
+            test:
+                - CMD
+                - curl
+                - '-f'
+                - 'http://localhost:9000/minio/health/live'
+            retries: 3
+            timeout: 5s
+
+    createbuckets:
+        image: minio/mc
+        depends_on:
+            - minio
+        environment:
+            MINIO_SERVER_URL: 'http://minio:9000'
+            MINIO_ROOT_USER: 'app'
+            MINIO_ROOT_PASSWORD: 'password'
+        entrypoint: >
+            /bin/sh -c "
+            echo 'Waiting for MinIO to start...';
+            until /usr/bin/mc alias set myminio $$MINIO_SERVER_URL $$MINIO_ROOT_USER $$MINIO_ROOT_PASSWORD; do
+                echo 'Waiting for MinIO server to become available...';
+                sleep 1;
+            done;
+            echo 'MinIO started, configuring mc...';
+            
+            /usr/bin/mc alias set myminio $$MINIO_SERVER_URL $$MINIO_ROOT_USER $$MINIO_ROOT_PASSWORD;
+                        
+            /usr/bin/mc mb myminio/hievents-public;
+            /usr/bin/mc mb myminio/hievents-private;
+            
+            /usr/bin/mc anonymous set public myminio/hievents-public;
+                        
+            echo 'Buckets created and policies set.';
+            exit 0;
+            "
+        networks:
+            - app
+
+networks:
+    app:
+        driver: bridge
+volumes:
+    app-redis:
+        driver: local
+    app-pgsql:
+        driver: local
+    app-minio:
+        driver: local

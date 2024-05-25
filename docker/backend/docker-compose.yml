@@ -1,0 +1,43 @@
+version: '3.8'
+services:
+  hi-events-backend:
+    build:
+      context: ./../../backend
+      dockerfile: Dockerfile
+    container_name: hi-events-backend
+    ports:
+      - "8124:80"
+    environment:
+      APP_KEY: ""
+      APP_SAAS_MODE_ENABLED: "true"
+      APP_FRONTEND_URL: ""
+      APP_CDN_URL: ""
+      FILESYSTEM_DISK: "s3-public"
+      JWT_SECRET: ""
+      LOG_CHANNEL: "stderr"
+      AWS_ACCESS_KEY_ID: ""
+      AWS_SECRET_ACCESS_KEY: ""
+      AWS_DEFAULT_REGION: "us-west-1"
+      AWS_PUBLIC_BUCKET: "hievents-public"
+      AWS_PRIVATE_BUCKET: "hievents-private"
+      STRIPE_PUBLIC_KEY: ""
+      STRIPE_SECRET_KEY: ""
+      MAIL_MAILER: "smtp"
+      MAIL_HOST: "sandbox.smtp.mailtrap.io"
+      MAIL_PORT: "2525"
+      MAIL_USERNAME: ""
+      MAIL_PASSWORD: ""
+      DB_CONNECTION: "pgsql"
+      DB_HOST: ""
+      DB_PORT: ""
+      DB_DATABASE: ""
+      DB_USERNAME: ""
+      DB_PASSWORD: ""
+      REDIS_HOST: ""
+      REDIS_PASSWORD: ""
+      REDIS_USER: ""
+      REDIS_PORT: ""
+      REDIS_URL: ""
+      QUEUE_CONNECTION: "redis"
+      DATABASE_URL: ""
+      STRIPE_WEBHOOK_SECRET: ""

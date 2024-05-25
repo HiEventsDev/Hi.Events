@@ -1,0 +1,22 @@
+FROM node:alpine as build-stage
+
+WORKDIR /app
+
+RUN apk add --no-cache yarn
+
+COPY package.json yarn.lock ./
+
+RUN yarn install
+
+COPY . .
+
+RUN yarn build:csr
+
+FROM nginx:alpine
+
+COPY --from=build-stage /app/dist /usr/share/nginx/html
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
+

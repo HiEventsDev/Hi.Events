@@ -1,0 +1,82 @@
+@import "../../../../styles/mixins";
+
+.preHeading {
+  text-transform: uppercase;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--homepage-secondary-color, var(--tk-color-black));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .shareButtons button {
+    color: var(--homepage-secondary-color, var(--tk-color-black));
+  }
+
+  @include respond-below(sm) {
+    font-size: 0.8rem;
+  }
+}
+
+.eventTitle {
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  margin-top: 0;
+
+  @include respond-below(sm) {
+    font-size: 1.5rem;
+  }
+}
+
+.eventInfo {
+  .eventDetail {
+    display: flex;
+    margin-bottom: 10px;
+    flex-direction: column;
+
+    .details {
+      display: flex;
+      margin-bottom: 10px;
+
+      svg {
+        place-self: flex-start;
+        margin-right: 10px;
+        color: var(--homepage-secondary-color, var(--tk-primary));
+      }
+    }
+
+    .detail {
+      display: flex;
+      margin-bottom: 10px;
+      flex-direction: column;
+    }
+
+    h2 {
+      margin-bottom: 10px;
+      margin-top: 0;
+    }
+  }
+
+  h2 {
+    @include respond-below(sm) {
+      font-size: 1rem;
+    }
+  }
+
+  .viewOnGoogleMaps {
+    padding: 0;
+
+    svg {
+      width: 15px !important;
+    }
+  }
+}
+
+.eventDescription {
+  margin-bottom: 20px;
+
+  h2 {
+    margin-top: 0;
+  }
+}

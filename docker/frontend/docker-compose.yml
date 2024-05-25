@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  hi-events-frontend:
+    build:
+      context: ./../../frontend
+      dockerfile: Dockerfile.ssr
+    container_name: hi-events-frontend
+    ports:
+      - "8125:80"
+    environment:
+      VITE_STRIPE_PUBLISHABLE_KEY: ""
+      VITE_API_URL_SERVER: "http://localhost/api"
+      VITE_API_URL_CLIENT: "https://app.hi.events/api"
+      VITE_FRONTEND_URL: "https://app.hi.events"
