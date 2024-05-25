@@ -7,7 +7,7 @@
 </p>
 
 <h3 align="center">
- Effortlesly manage events and sell tickets online.
+ Effortlessly manage events and sell tickets online.
 </h3>
 
 <div align="center">
@@ -107,16 +107,14 @@ Stay updated with our ongoing improvements and feature additions at our [GitHub 
 ## 🤝 Contributing
 
 We welcome contributions, suggestions, and bug reports! Before proposing a new feature or extension,
-please open an issue to discuss it. We're excited to see your ideas!
+please open an issue to discuss it.
 
 ## ❓ FAQ
 
-Have questions? Our [Docs](https://hi.events/docs) has answers. If you can't find what you're looking for, feel free to reach out to us at [hello@hi.events](mailto:hello@hi.events).
+Have questions? Our [Docs](https://hi.events/docs) have answers. If you can't find what you're looking for, feel free to reach out to us at [hello@hi.events](mailto:hello@hi.events).
 
 ## 📜 License
 
-TLDR: Do what you like with Hi.Events, but don't remove the Hi.Events branding without a license.
+Hi.Events code is licensed under the terms of the [Elastic License 2.0](https://github.com/HiEventsDev/hi.events/blob/main/LICENCE), which means you can use it freely for commercial and non-commercial purposes, as long as you respect the terms of the license.
 
-Hi.Events code is licensed under the terms of the Elastic License 2.0 (ELv2), which means you can use it freely for commercial and non-commercial purposes, as long as you respect the terms of the license.
-
-We also offer a commercial license for those who wish to white-label Hi.Events or use it in a proprietary product. For more information, please contact us at [licence@hi.events](mailto:licence@hi.events).
+For more information on licensing, please visit our licensing page [here](https://hi.events/licensing).
