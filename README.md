@@ -3,7 +3,7 @@
 </p>
 <h3 align="center">Hi.Events</h3>
 <p align="center">
-<a href="https://hi.events?utm_source=gh-readme">Website 🌎</a> | <a href="https://hi.events/docs">Documentation 📄</a> | <a href="https://demo.hi.events/event/1/dog-conf-2030">Demo Event 🌟</a> | <a href="https://hi.events/docs/getting-started?utm_source=gh-readme">Installation ⚙️</a>
+<a href="https://hi.events?utm_source=gh-readme">Website 🌎</a>  <a href="https://hi.events/docs">Documentation 📄</a>  <a href="https://demo.hi.events/event/1/dog-conf-2030">Demo Event 🌟</a>  <a href="https://hi.events/docs/getting-started?utm_source=gh-readme">Installation ⚙️</a>
 </p>
 
 <h3 align="center">
