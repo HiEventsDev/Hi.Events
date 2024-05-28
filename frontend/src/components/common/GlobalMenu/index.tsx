@@ -24,7 +24,7 @@ export const GlobalMenu = () => {
             {
                 label: t`Purchase License`,
                 icon: IconMoneybag,
-                link: 'https://hi.events/licensing',
+                link: 'https://hi.events/licensing?utm_source=app-top-menu',
                 target: '_blank',
             }
         ]),

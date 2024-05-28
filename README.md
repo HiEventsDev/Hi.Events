@@ -23,7 +23,7 @@
 
 <hr/>
 
-## Table of Contents 
+## Table of Contents
 
 - [Introduction](#-introduction)
 - [Features](#-features)
@@ -43,23 +43,23 @@ Hi.Events is designed to help you create, manage, and sell tickets for events of
 
 <a href="https://hi.events">Hi.Events</a> is packed with features to streamline your event management and ticketing:
 
-- 📊 **Analytics:** Gain deep insights into event performance and ticket sales.
-- 🎟 **Embeddable Widget:** Easily integrate ticket sales into any website.
-- 🖥 **Customizable Homepages:** Create eye-catching event pages with flexible design options.
-- 🔑 **Check-In:** Easily check in attendees at the door with Hi.Events' QR code check-in tool.
-- 💬 **Messaging:** Message attendees with important updates and reminders.
-- 📝 **Order Forms:** Collect attendee information with tailored questions at checkout.
-- 🎫 **Ticket Options:** Free, paid, donation, or tiered ticket types.
-- 💸 **Promo Codes:** Highly versatile discount codes. Pre-sale access, multiple discount options.
+- 📊 **Event Analytics:** Gain deep insights into event performance and ticket sales.
+- 🎟 **Embeddable Ticket Widget:** Easily integrate ticket sales into any website.
+- 🖥 **Customizable Event Homepages:** Create eye-catching event pages with flexible design options.
+- 🔑 **Intuitive Check-In Tools:** Easily check in attendees at the door with Hi.Events' QR code check-in tool.
+- 💬 **Event Messaging Tools:** Message attendees with important updates and reminders.
+- 📝 **Custom Order Forms:** Collect attendee information with tailored questions at checkout.
+- 🎫 **Multiple Ticket Types:** Free, paid, donation, or tiered ticket types.
+- 💸 **Versatile Promo Codes:** Highly versatile discount codes. Pre-sale access, multiple discount options.
 - 💰 **Instant Payouts:** Enjoy instant payouts with seamless Stripe integration.
 - 🧾 **Tax and Fee Configuration:** Add tax and fees on a per-ticket basis.
-- 📦 **Data Exports:**  Export attendee and order data to XLSX or CSV.
+- 📦 **Data Exports:** Export attendee and order data to XLSX or CSV.
 - 💻 **REST API:** Full-featured REST API for custom integrations.
 - 🔍 **SEO Tools:** Customize SEO settings for each event.
-- 🛒 **Sleek Checkout:** Ensure a smooth, beautiful checkout experience.
+- 🛒 **Beautiful Checkout Process:** Ensure a smooth, beautiful checkout experience.
 - 🔐 **Role-Based Access:** Support for multiple user roles.
 - 💻 **Online Event Support:** Offer online event instructions and links.
-- ⏪ **Refund Support:** Manage full and partial refunds with ease.
+- ⏪ **Full and Partial Refund Support:** Manage full and partial refunds with ease.
 - 📧 **Email Notifications:** Keep attendees informed with automated email notifications.
 - 📱 **Mobile-Responsive:** Enjoy a seamless experience on any device.
 - 🌐 **Multi-Language Support:** Support for multiple languages - `Coming Soon!`
@@ -71,11 +71,11 @@ For detailed installation instructions, please refer to our [documentation](http
 
 ### One-Click Deployments
 
-   [![Deploy on DigitalOcean](https://www.deploytodo.com/do-btn-blue.svg)](https://github.com/HiEventsDev/hi.events-digitalocean)
+[![Deploy on DigitalOcean](https://www.deploytodo.com/do-btn-blue.svg)](https://github.com/HiEventsDev/hi.events-digitalocean)
 
-   [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://github.com/HiEventsDev/hi.events-render.com)
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://github.com/HiEventsDev/hi.events-render.com)
 
-   [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/8CGKmu?referralCode=KvSr11)
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/8CGKmu?referralCode=KvSr11)
 
 ### 🐳 Local development - using Docker
 > [!IMPORTANT]  
@@ -115,6 +115,6 @@ Have questions? Our [Docs](https://hi.events/docs) have answers. If you can't fi
 
 ## 📜 License
 
-Hi.Events code is licensed under the terms of the [Elastic License 2.0](https://github.com/HiEventsDev/hi.events/blob/main/LICENCE), which means you can use it freely for commercial and non-commercial purposes, as long as you respect the terms of the license.
+Hi.Events is licensed under the terms of the [Elastic License 2.0](https://github.com/HiEventsDev/hi.events/blob/main/LICENCE), which means you can use it freely for commercial and non-commercial purposes, as long as you respect the terms of the license.
 
 For more information on licensing, please visit our licensing page [here](https://hi.events/licensing).
