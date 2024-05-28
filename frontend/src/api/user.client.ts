@@ -20,7 +20,6 @@ export interface UpdateUserRequest {
 
 export const userClient = {
     confirmEmailAddress: async (userId: IdParam, token: string) => {
-        console.error('token', api.defaults.headers.common['Authorization']);
         const response = await api.post<GenericDataResponse<User>>(`users/${userId}/confirm-email/${token}`);
         return response.data;
     },

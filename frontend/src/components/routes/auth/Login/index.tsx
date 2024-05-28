@@ -26,7 +26,6 @@ const Login = () => {
         (userData: LoginData) => authClient.login(userData),
         {
             onSuccess: (response: LoginResponse) => {
-                console.log(response.token, response);
                 if (response.token) {
                     redirectToPreviousUrl();
                     return;

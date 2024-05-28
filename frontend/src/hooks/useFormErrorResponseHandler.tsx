@@ -22,7 +22,6 @@ export const useFormErrorResponseHandler = () => {
         }
 
         if (error?.response?.status && error.response.status >= 500) {
-            console.error(error);
             showError((
                 <>
                     <p>

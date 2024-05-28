@@ -16,7 +16,6 @@ const isEmptyHtml = (content: string) => {
     const tempDiv = document.createElement('div');
     tempDiv.innerHTML = content;
     const textContent = tempDiv.textContent?.trim();
-    console.log(textContent === '' || textContent === null);
     return textContent === '' || textContent === null;
 };
 
