@@ -18,7 +18,15 @@ interface EditorProps {
     error?: string;
 }
 
-export const Editor = ({error, onChange, value, label = '', required = false, className = '', description = ''}: EditorProps) => {
+export const Editor = ({
+                           error,
+                           onChange,
+                           value,
+                           label = '',
+                           required = false,
+                           className = '',
+                           description = ''
+                       }: EditorProps) => {
     const editor = useEditor({
         extensions: [
             StarterKit,
@@ -42,7 +50,7 @@ export const Editor = ({error, onChange, value, label = '', required = false, cl
     return (
         <div className={classNames([classes.inputWrapper, className])}>
             {label && <InputLabel required={required} onClick={() => editor?.commands.focus()}>{label}</InputLabel>}
-            {description && <InputDescription>{description}</InputDescription> }
+            {description && <InputDescription>{description}</InputDescription>}
             <RichTextEditor editor={editor}>
                 <RichTextEditor.Toolbar>
                     <RichTextEditor.ControlsGroup>
@@ -50,7 +58,6 @@ export const Editor = ({error, onChange, value, label = '', required = false, cl
                         <RichTextEditor.Italic/>
                         <RichTextEditor.Underline/>
                         <RichTextEditor.ClearFormatting/>
-                        <RichTextEditor.Highlight/>
                     </RichTextEditor.ControlsGroup>
 
                     <RichTextEditor.ControlsGroup>
