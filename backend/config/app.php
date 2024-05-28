@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
 
 return [
+    'name' => env('APP_NAME', 'Hi.Events'),
+
     'reset_password_token_expiry_in_min' => 15,
     'frontend_url' => env('APP_FRONTEND_URL', 'http://localhost'),
     'cnd_url' => env('APP_CDN_URL', '/storage'),
@@ -33,18 +35,8 @@ return [
         'organizer_order_summary' => '/manage/event/%d/orders#order-%d',
     ],
 
-    /*
-    |--------------------------------------------------------------------------
-    | Application Name
-    |--------------------------------------------------------------------------
-    |
-    | This value is the name of your application. This value is used when the
-    | framework needs to place the application's name in a notification or
-    | any other location as required by the application or its packages.
-    |
-    */
-
-    'name' => env('APP_NAME', 'Hi.Events'),
+    'email_logo_url' => env('APP_EMAIL_LOGO_URL'),
+    'email_footer_text' => env('APP_EMAIL_FOOTER_TEXT'),
 
     /*
     |--------------------------------------------------------------------------
