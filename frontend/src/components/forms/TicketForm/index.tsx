@@ -28,7 +28,7 @@ import {useDisclosure} from "@mantine/hooks";
 import {NavLink, useParams} from "react-router-dom";
 import {useEffect} from "react";
 import {CustomSelect, ItemProps} from "../../common/CustomSelect";
-import {formatCurrency} from "../../../utilites/currency.ts";
+import {formatCurrency, getCurrencySymbol} from "../../../utilites/currency.ts";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {useGetTaxesAndFees} from "../../../queries/useGetTaxesAndFees.ts";
 import {Card} from "../../common/Card";
@@ -224,7 +224,7 @@ export const TicketForm = ({form, ticket}: TicketFormProps) => {
                                      min={0}
                                      fixedDecimalScale
                                      disabled={isFreeTicket}
-                                     leftSection={<IconCurrencyDollar/>}
+                                     leftSection={event?.currency ? getCurrencySymbol(event.currency) : ''}
                                      {...form.getInputProps('price')}
                                      label={isDonationTicket ? t`Minimum Price` : t`Price`}
                                      placeholder="19.99"/>
