@@ -53,7 +53,7 @@ const GettingStarted = () => {
             <PageBody>
                 <Card className={classes.headerCard}>
                     <h2>
-                        {t`🎉 Congratulation on creating an event!`}
+                        {t`🎉 Congratulations on creating an event!`}
                     </h2>
                     <p>
                         {t`Before your event can go live, there are a few things you need to do.`}
