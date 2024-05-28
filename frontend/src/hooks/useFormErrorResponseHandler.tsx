@@ -14,7 +14,7 @@ type ErrorResponse = {
 export const useFormErrorResponseHandler = () => {
     return (
         form: UseFormReturnType<any>,
-        error: ErrorResponse,
+        error: ErrorResponse | any,
         errorMessage = t`Please check the provided information is correct`
     ) => {
         if (error?.response?.data?.errors) {

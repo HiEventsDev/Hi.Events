@@ -44,7 +44,7 @@ export const EditTaxOrFeeModal = ({onClose, taxOrFee}: EditTaxOrFeeModalProps) =
                 form.reset();
                 onClose();
             },
-            onError: (error) => formErrorHandler(form, error)
+            onError: (error: any) => formErrorHandler(form, error)
         });
     };
 
@@ -56,7 +56,7 @@ export const EditTaxOrFeeModal = ({onClose, taxOrFee}: EditTaxOrFeeModalProps) =
                     fullWidth
                     loading={updateMutation.isLoading}
                     type={'submit'}>
-                    <Trans>Edit {form.values.type === TaxAndFeeType.Tax ? t`Tax` : t`Fee`}</Trans>
+                    <Trans>Update {form.values.type === TaxAndFeeType.Tax ? t`Tax` : t`Fee`}</Trans>
                 </Button>
             </form>
         </Modal>

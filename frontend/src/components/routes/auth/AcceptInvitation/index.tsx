@@ -25,6 +25,7 @@ const AcceptInvitation = () => {
             terms: false,
         },
         validate: {
+            first_name: hasLength({min: 1, max: 50}, t`First name must be between 1 and 50 characters`),
             password: hasLength({min: 8}, t`Password must be a minimum  of 8 characters`),
             password_confirmation: matchesField('password', t`Passwords are not the same`),
             email: isEmail(t`Please check your email is valid`),
