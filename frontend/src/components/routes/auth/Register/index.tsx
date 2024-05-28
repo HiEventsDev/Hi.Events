@@ -12,6 +12,7 @@ import classes from "./Register.module.scss";
 export const Register = () => {
     const navigate = useNavigate();
     const form = useForm({
+        validateInputOnBlur: true,
         initialValues: {
             first_name: '',
             last_name: '',
@@ -21,7 +22,7 @@ export const Register = () => {
             timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
         },
         validate: {
-            password: hasLength({min: 8}, t`Password must be a minimum  of 8 characters`),
+            password: hasLength({min: 8}, t`Password must be at least 8 characters`),
             password_confirmation: matchesField('password', t`Passwords are not the same`),
             email: isEmail(t`Please check your email is valid`),
         },
@@ -77,12 +78,14 @@ export const Register = () => {
                                        label={t`Password`}
                                        placeholder={t`Your password`}
                                        required mt="md"
-                                       mb={0}
+                                       mb={10}
                         />
                         <PasswordInput {...form.getInputProps('password_confirmation')}
                                        label={t`Confirm Password`}
                                        placeholder={t`Confirm password`}
-                                       required mt="md"
+                                       required
+                                       mt="md"
+                                       mb={10}
                         />
                     </InputGroup>
                     <TextInput
