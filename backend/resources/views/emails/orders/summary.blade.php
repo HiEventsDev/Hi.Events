@@ -2,6 +2,7 @@
 @php /** @var \HiEvents\DomainObjects\OrderDomainObject $order */ @endphp
 @php /** @var \HiEvents\DomainObjects\EventDomainObject $event */ @endphp
 @php /** @var string $orderUrl */ @endphp
+@php /** @see \HiEvents\Mail\Order\OrderSummary */ @endphp
 
 <x-mail::message>
 # Your Order is Confirmed! 🎉

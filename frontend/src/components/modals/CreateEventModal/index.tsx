@@ -6,7 +6,7 @@ import {useEffect, useState} from "react";
 import {showSuccess} from "../../../utilites/notifications.tsx";
 import {t} from "@lingui/macro";
 import {Anchor, Button, Select, SimpleGrid, TextInput} from "@mantine/core";
-import {useForm} from "@mantine/form";
+import {hasLength, useForm} from "@mantine/form";
 import {Modal} from "../../common/Modal";
 import {useCreateEvent} from "../../../mutations/useCreateEvent.ts";
 import {Editor} from "../../common/Editor";
@@ -29,7 +29,17 @@ export const CreateEventModal = ({onClose}: GenericModalProps) => {
             end_date: undefined,
             description: undefined,
             organizer_id: undefined,
-        }
+        },
+        validate: {
+            title: hasLength({max: 150}, t`Name should be less than 150 characters`),
+            organizer_id: (value) => {
+                if (!value) {
+                    return t`Organizer is required`;
+                }
+            },
+            description: hasLength({max: 50000}, t`Description should be less than 50,000 characters`),
+        },
+        validateInputOnChange: true,
     });
     const eventMutation = useCreateEvent();
     const [showCreateOrganizer, setShowCreateOrganizer] = useState(false);

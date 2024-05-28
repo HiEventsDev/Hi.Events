@@ -25,7 +25,7 @@ trait EventRules
             'attributes.*.value' => ['min:1', 'max:1000', 'required'],
             'attributes.*.is_public' => ['boolean', 'required'],
             'location_details' => ['array'],
-            'location_details.venue_name' => ['string', 'max:255'],
+            'location_details.venue_name' => ['string', 'max:100'],
             'location_details.address_line_1' => ['required_with:location_details', 'string', 'max:255'],
             'location_details.address_line_2' => ['string', 'max:255', 'nullable'],
             'location_details.city' => ['required_with:location_details', 'string', 'max:85'],
