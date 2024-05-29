@@ -67,7 +67,8 @@ Hi.Events is designed to help you create, manage, and sell tickets for events of
 
 ## 🚀 Getting Started
 
-For detailed installation instructions, please refer to our [documentation](https://hi.events/docs/getting-started). For a quick start, follow these steps:
+For detailed installation instructions, please refer to our [documentation](https://hi.events/docs/getting-started). For
+a quick start, follow these steps:
 
 ### One-Click Deployments
 
@@ -77,9 +78,11 @@ For detailed installation instructions, please refer to our [documentation](http
 
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/8CGKmu?referralCode=KvSr11)
 
-### 🐳 Local development - using Docker
+### 🐳 Quick Start with Docker
+
 > [!IMPORTANT]  
-> Please ensure you have Docker and Docker Compose installed on your system. If not, you can download them from the official Docker website: [Docker](https://www.docker.com/get-started).
+> Please ensure you have Docker and Docker Compose installed on your system. If not, you can download them from the
+> official Docker website: [Docker](https://www.docker.com/get-started).
 
 1. **Clone the Repository:**
    ```bash
@@ -88,21 +91,25 @@ For detailed installation instructions, please refer to our [documentation](http
 
 2. **Navigate to the Docker Directory:**
    ```bash
-   cd hi.events/docker/development
+   cd hi.events/docker/all-in-one
    ```
 
 3. **Run the set-up script:**
    ```bash
-   ./start-dev.sh
+   docker-compose up -d
    ```
 4. **Create an account:**
-    ```
-    Open your browser and navigate to https://localhost:8443/auth/register.
-    ```
+```bash
+Open your browser and navigate to https://localhost:8123/auth/register.
+```
+
+ℹ️ Please refer to the [getting started guide](https://hi.events/docs/getting-started) for other installation methods, and
+for setting up a production or local development environment.
 
 ## 📝 Change Log
 
-Stay updated with our ongoing improvements and feature additions at our [GitHub releases page](https://github.com/HiEventsDev/hi.events/releases).
+Stay updated with our ongoing improvements and feature additions at
+our [GitHub releases page](https://github.com/HiEventsDev/hi.events/releases).
 
 ## 🤝 Contributing
 
@@ -111,10 +118,13 @@ please open an issue to discuss it.
 
 ## ❓ FAQ
 
-Have questions? Our [Docs](https://hi.events/docs) have answers. If you can't find what you're looking for, feel free to reach out to us at [hello@hi.events](mailto:hello@hi.events).
+Have questions? Our [Docs](https://hi.events/docs) have answers. If you can't find what you're looking for, feel free to
+reach out to us at [hello@hi.events](mailto:hello@hi.events).
 
 ## 📜 License
 
-Hi.Events is licensed under the terms of the [Elastic License 2.0](https://github.com/HiEventsDev/hi.events/blob/main/LICENCE), which means you can use it freely for commercial and non-commercial purposes, as long as you respect the terms of the license.
+Hi.Events is licensed under the terms of
+the [Elastic License 2.0](https://github.com/HiEventsDev/hi.events/blob/main/LICENCE), which means you can use it freely
+for commercial and non-commercial purposes, as long as you respect the terms of the license.
 
 For more information on licensing, please visit our licensing page [here](https://hi.events/licensing).
