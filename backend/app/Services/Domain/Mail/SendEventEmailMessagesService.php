@@ -23,16 +23,16 @@ use Illuminate\Mail\Mailer;
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpKernel\Log\Logger;
 
-readonly class SendEventEmailMessagesService
+class SendEventEmailMessagesService
 {
     public function __construct(
-        private OrderRepositoryInterface    $orderRepository,
-        private AttendeeRepositoryInterface $attendeeRepository,
-        private EventRepositoryInterface    $eventRepository,
-        private MessageRepositoryInterface  $messageRepository,
-        private UserRepositoryInterface     $userRepository,
-        private Mailer                      $mailer,
-        private Logger                      $logger
+        private readonly OrderRepositoryInterface    $orderRepository,
+        private readonly AttendeeRepositoryInterface $attendeeRepository,
+        private readonly EventRepositoryInterface    $eventRepository,
+        private readonly MessageRepositoryInterface  $messageRepository,
+        private readonly UserRepositoryInterface     $userRepository,
+        private readonly Mailer                      $mailer,
+        private readonly Logger                      $logger
     )
     {
     }
@@ -138,7 +138,14 @@ readonly class SendEventEmailMessagesService
             return;
         }
 
-        $attendees->each(function (AttendeeDomainObject $attendee) use ($event, $messageData) {
+        $sentEmails = [];
+        $attendees->each(function (AttendeeDomainObject $attendee) use (&$sentEmails, $event, $messageData) {
+            if (in_array($attendee->getEmail(), $sentEmails, true)) {
+                return;
+            }
+
+            $sentEmails[] = $attendee->getEmail();
+
             $this->sendMessage(
                 emailAddress: $attendee->getEmail(),
                 fullName: $attendee->getFullName(),

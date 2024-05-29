@@ -6,6 +6,7 @@ import {Attendee, Ticket} from "../../../../types.ts";
 import {Container} from "@mantine/core";
 import {t} from "@lingui/macro";
 import {PoweredByFooter} from "../../../common/PoweredByFooter";
+import {OnlineEventDetails} from "../../../common/OnlineEventDetails";
 
 export const AttendeeTicketAndInformation = () => {
     const {eventId, attendeeShortId} = useParams();
@@ -28,11 +29,14 @@ export const AttendeeTicketAndInformation = () => {
     return (
         <Container>
             <h2>{t`Your ticket for`} {event.title}</h2>
+
             <AttendeeTicket
                 attendee={attendee as Attendee}
                 ticket={attendee.ticket as Ticket}
                 event={event}
             />
+
+            {(event?.settings?.is_online_event && <OnlineEventDetails eventSettings={event.settings}/>)}
 
             <PoweredByFooter/>
         </Container>

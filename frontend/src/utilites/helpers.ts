@@ -101,3 +101,10 @@ export const isSsr = () => import.meta.env.SSR;
 export const iHavePurchasedALicence = () =>{
     return getConfig('VITE_I_HAVE_PURCHASED_A_LICENCE');
 }
+
+export const isEmptyHtml = (content: string) => {
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = content;
+    const textContent = tempDiv.textContent?.trim();
+    return textContent === '' || textContent === null;
+};

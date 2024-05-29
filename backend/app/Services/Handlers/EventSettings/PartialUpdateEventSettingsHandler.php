@@ -61,7 +61,9 @@ readonly class PartialUpdateEventSettingsHandler
                 'maps_url' => $eventSettingsDTO->settings['maps_url'] ?? $existingSettings->getMapsUrl(),
                 'location_details' => $eventSettingsDTO->settings['location_details'] ?? $existingSettings->getLocationDetails(),
                 'is_online_event' => $eventSettingsDTO->settings['is_online_event'] ?? $existingSettings->getIsOnlineEvent(),
-                'online_event_connection_details' => $eventSettingsDTO->settings['online_event_connection_details'] ?? $existingSettings->getOnlineEventConnectionDetails(),
+                'online_event_connection_details' => array_key_exists('online_event_connection_details', $eventSettingsDTO->settings)
+                    ? $eventSettingsDTO->settings['online_event_connection_details']
+                    : $existingSettings->getOnlineEventConnectionDetails(),
 
                 'seo_title' => $eventSettingsDTO->settings['seo_title'] ?? $existingSettings->getSeoTitle(),
                 'seo_description' => $eventSettingsDTO->settings['seo_description'] ?? $existingSettings->getSeoDescription(),

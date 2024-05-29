@@ -87,14 +87,14 @@ export const App: FC<
             <div
                 className="ssr-loader"
                 style={{
-                    width: "100%",
-                    height: "100%",
+                    width: "100vw",
+                    height: "100vh",
                     position: "fixed",
-                    background: "#fff",
+                    background: "#ffffff",
                     zIndex: 1000,
                     display: isLoadedOnBrowser ? "none" : "block",
                 }}
-            ></div>
+            />
             <MantineProvider
                 theme={{
                     colors: {

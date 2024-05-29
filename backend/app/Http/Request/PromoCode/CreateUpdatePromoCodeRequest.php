@@ -11,7 +11,7 @@ class CreateUpdatePromoCodeRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'code' => 'string|required|max:50',
+            'code' => 'min:2|string|required|max:50',
             'applicable_ticket_ids' => 'array',
             'discount' => [
                 'required_if:discount_type,PERCENTAGE,FIXED',

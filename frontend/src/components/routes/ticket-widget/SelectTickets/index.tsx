@@ -348,13 +348,14 @@ const SelectTickets = (props: SelectTicketsProps) => {
                             <span><b>{form.values.promo_code}</b> {t`applied`}</span>
                             <ActionIcon
                                 className={'hi-promo-code-applied-remove-icon-button'}
-                                variant="outline"
+                                variant="transparent"
                                 aria-label={t`remove`}
+                                title={t`Remove`}
                                 onClick={() => {
                                     promoCodeEventRefetchMutation.mutate(null)
                                 }}
                             >
-                                <IconX/>
+                                <IconX stroke={1.5} size={20}/>
                             </ActionIcon>
                         </div>
                     )}

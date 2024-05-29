@@ -15,6 +15,7 @@ import {CheckoutContent} from "../../../layouts/Checkout/CheckoutContent";
 import {CheckoutFooter} from "../../../layouts/Checkout/CheckoutFooter";
 import {eventCheckoutPath} from "../../../../utilites/urlHelper.ts";
 import {HomepageInfoMessage} from "../../../common/HomepageInfoMessage";
+import {OnlineEventDetails} from "../../../common/OnlineEventDetails";
 
 const OrderStatus = ({order}: { order: Order }) => {
     let message = t`This order is processing.`; // Default message
@@ -82,6 +83,8 @@ export const OrderSummaryAndTickets = () => {
                     </div>
                 )}
 
+                {(event?.settings?.is_online_event && <OnlineEventDetails eventSettings={event.settings} />)}
+
                 <Group justify={'space-between'}>
                     <h2 className={classes.subHeading}>{t`Guests`}</h2>
                     <Button
@@ -104,7 +107,6 @@ export const OrderSummaryAndTickets = () => {
                         />
                     );
                 })}
-
 
                 {/*PLEASE NOTE:*/}
                 {/*Under the terms of the license, you are not permitted to remove or obscure the powered by footer unless you have a white-label*/}

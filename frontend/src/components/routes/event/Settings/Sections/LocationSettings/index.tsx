@@ -1,5 +1,5 @@
 import {t} from "@lingui/macro";
-import {Button, Select, Switch, Textarea, TextInput} from "@mantine/core";
+import {Button, Select, Switch, TextInput} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import {useParams} from "react-router-dom";
 import {useEffect} from "react";
@@ -12,6 +12,8 @@ import countries from "../../../../../../../data/countries.json";
 import {useGetEventSettings} from "../../../../../../queries/useGetEventSettings.ts";
 import {InputGroup} from "../../../../../common/InputGroup";
 import {HeadingWithDescription} from "../../../../../common/Card/CardHeading";
+import {Editor} from "../../../../../common/Editor";
+import {isEmptyHtml} from "../../../../../../utilites/helpers.ts";
 
 export const LocationSettings = () => {
     const {eventId} = useParams();
@@ -31,7 +33,11 @@ export const LocationSettings = () => {
             is_online_event: false,
             online_event_connection_details: '',
             maps_url: '',
-        }
+        },
+        transformValues: (values) => ({
+            ...values,
+            online_event_connection_details: isEmptyHtml(values.online_event_connection_details) ? null : values.online_event_connection_details,
+        }),
     });
     const formErrorHandle = useFormErrorResponseHandler();
 
@@ -48,7 +54,7 @@ export const LocationSettings = () => {
                     country: eventSettingsQuery.data.location_details?.country || '',
                 },
                 is_online_event: eventSettingsQuery.data.is_online_event || false,
-                online_event_connection_details: eventSettingsQuery.data.online_event_connection_details || '',
+                online_event_connection_details: eventSettingsQuery.data.online_event_connection_details,
                 maps_url: eventSettingsQuery.data.maps_url || '',
             });
         }
@@ -86,11 +92,12 @@ export const LocationSettings = () => {
                     />
 
                     {form.values.is_online_event && (
-                        <Textarea
-                            {...form.getInputProps('online_event_connection_details')}
+                        <Editor
+                            value={form.values.online_event_connection_details || ''}
+                            error={form.errors.online_event_connection_details as string}
                             label={t`Connection Details`}
-                            description={t`Include connection details for your online event. These details will be after successful registration.`}
-                            placeholder={t`You can connecting using this Zoom link...`}
+                            description={t`Include connection details for your online event. These details will be shown on the order summary page and attendee ticket page`}
+                            onChange={(value) => form.setFieldValue('online_event_connection_details', value)}
                         />
                     )}
                     {!form.values.is_online_event && (

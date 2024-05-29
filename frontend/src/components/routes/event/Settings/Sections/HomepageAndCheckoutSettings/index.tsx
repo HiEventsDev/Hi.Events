@@ -11,13 +11,7 @@ import {useUpdateEventSettings} from "../../../../../../mutations/useUpdateEvent
 import {useGetEventSettings} from "../../../../../../queries/useGetEventSettings.ts";
 import {Editor} from "../../../../../common/Editor";
 import {HeadingWithDescription} from "../../../../../common/Card/CardHeading";
-
-const isEmptyHtml = (content: string) => {
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = content;
-    const textContent = tempDiv.textContent?.trim();
-    return textContent === '' || textContent === null;
-};
+import {isEmptyHtml} from "../../../../../../utilites/helpers.ts";
 
 export const HomepageAndCheckoutSettings = () => {
     const {eventId} = useParams();
@@ -85,7 +79,7 @@ export const HomepageAndCheckoutSettings = () => {
 
                     <NumberInput
                         label={t`Order timeout`}
-                        description={t`How many minutes the customer has to complete their order`}
+                        description={t`How many minutes the customer has to complete their order. We recommend at least 15 minutes`}
                         {...form.getInputProps('order_timeout_in_minutes')}
                     />
 

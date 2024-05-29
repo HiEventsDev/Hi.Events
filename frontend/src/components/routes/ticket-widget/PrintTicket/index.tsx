@@ -7,6 +7,7 @@ import {Container} from '@mantine/core';
 import {PoweredByFooter} from '../../../common/PoweredByFooter';
 import {t} from '@lingui/macro';
 import {useEffect} from "react";
+import {OnlineEventDetails} from "../../../common/OnlineEventDetails";
 
 const PrintTicket = () => {
     const {eventId, attendeeShortId} = useParams();
@@ -41,6 +42,9 @@ const PrintTicket = () => {
                 event={event}
                 hideButtons
             />
+
+            {(event?.settings?.is_online_event && <OnlineEventDetails eventSettings={event.settings}/>)}
+
             <PoweredByFooter/>
         </Container>
     )

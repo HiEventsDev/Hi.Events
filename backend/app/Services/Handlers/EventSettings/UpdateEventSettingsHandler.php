@@ -50,7 +50,8 @@ readonly class UpdateEventSettingsHandler
                     'maps_url' => trim($settings->maps_url),
                     'location_details' => $settings->location_details?->toArray(),
                     'is_online_event' => $settings->is_online_event,
-                    'online_event_connection_details' => $settings->online_event_connection_details,
+                    'online_event_connection_details' => $settings->online_event_connection_details
+                        ?? $this->purifier->purify($settings->online_event_connection_details),
 
                     'seo_title' => $settings->seo_title,
                     'seo_description' => $settings->seo_description,

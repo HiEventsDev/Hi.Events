@@ -27,6 +27,7 @@ export const Editor = ({
                            className = '',
                            description = ''
                        }: EditorProps) => {
+
     const editor = useEditor({
         extensions: [
             StarterKit,
@@ -40,12 +41,12 @@ export const Editor = ({
     });
 
     useEffect(() => {
-        if (value) {
-            if (value !== editor?.getHTML()) {
-                editor?.commands.setContent(value, false, {preserveWhitespace: "full"});
+        if (value && editor) {
+            if (value !== editor.getHTML()) {
+                editor.commands.setContent(value, false, {preserveWhitespace: "full"});
             }
         }
-    }, [value]);
+    }, [value, editor]);
 
     return (
         <div className={classNames([classes.inputWrapper, className])}>

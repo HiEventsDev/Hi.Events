@@ -26,7 +26,10 @@ class OrderResourcePublic extends BaseResource
             'payment_status' => $this->getPaymentStatus(),
             'currency' => $this->getCurrency(),
             'reserved_until' => $this->getReservedUntil(),
-            'is_expired' => Carbon::createFromTimeString($this->getReservedUntil())->isPast(),
+            'is_expired' => $this->when(
+                !is_null($this->getReservedUntil()),
+                fn() => Carbon::createFromTimeString($this->getReservedUntil())->isPast(),
+            ),
             'first_name' => $this->getFirstName(),
             'last_name' => $this->getLastName(),
             'email' => $this->getEmail(),

@@ -1,5 +1,5 @@
 import {GenericModalProps, PromoCode, PromoCodeDiscountType} from "../../../types.ts";
-import {useForm} from "@mantine/form";
+import {hasLength, useForm} from "@mantine/form";
 import {useParams} from "react-router-dom";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
 import {PromoCodeForm} from "../../forms/PromoCodeForm";
@@ -22,6 +22,10 @@ export const CreatePromoCodeModal = ({onClose}: GenericModalProps) => {
             discount_type: PromoCodeDiscountType.None,
             max_allowed_usages: undefined,
         },
+        validate: {
+            code: hasLength({min: 3, max: 50}, t`Code must be between 3 and 50 characters long`),
+        },
+        validateInputOnBlur: true,
     });
 
 
