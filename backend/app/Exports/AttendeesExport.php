@@ -16,7 +16,7 @@ use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-readonly class AttendeesExport implements FromCollection, WithHeadings, WithMapping, WithStyles
+class AttendeesExport implements FromCollection, WithHeadings, WithMapping, WithStyles
 {
     private LengthAwarePaginator|Collection $data;
     private Collection $questions;

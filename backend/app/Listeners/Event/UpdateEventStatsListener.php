@@ -5,7 +5,7 @@ namespace HiEvents\Listeners\Event;
 use HiEvents\Events\OrderStatusChangedEvent;
 use HiEvents\Jobs\Event\UpdateEventStatisticsJob;
 
-readonly class UpdateEventStatsListener
+class UpdateEventStatsListener
 {
     public function handle(OrderStatusChangedEvent $changedEvent): void
     {

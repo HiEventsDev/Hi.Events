@@ -10,7 +10,7 @@ class EventUpdateEvent
     use Dispatchable;
 
     public function __construct(
-        private EventDomainObject $event,
+        private readonly EventDomainObject $event,
     )
     {
     }

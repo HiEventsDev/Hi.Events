@@ -2,11 +2,11 @@
 
 namespace HiEvents\Http\Actions\Organizers;
 
-use Illuminate\Http\JsonResponse;
 use HiEvents\DomainObjects\ImageDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
 use HiEvents\Resources\Organizer\OrganizerResource;
+use Illuminate\Http\JsonResponse;
 
 class GetOrganizersAction extends BaseAction
 {
