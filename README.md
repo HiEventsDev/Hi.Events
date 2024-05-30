@@ -99,7 +99,7 @@ a quick start, follow these steps:
    ```
 4. **Create an account:**
    ```bash
-   Open your browser and navigate to https://localhost:8123/auth/register.
+   Open your browser and navigate to http://localhost:8123/auth/register.
    ```
 
 ℹ️ Please refer to the [getting started guide](https://hi.events/docs/getting-started) for other installation methods, and
