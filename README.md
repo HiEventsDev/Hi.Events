@@ -3,7 +3,7 @@
 </p>
 <h3 align="center">Hi.Events</h3>
 <p align="center">
-<a href="https://hi.events?utm_source=gh-readme">Website 🌎</a>  <a href="https://hi.events/docs">Documentation 📄</a>  <a href="https://demo.hi.events/event/1/dog-conf-2030">Demo Event 🌟</a>  <a href="https://hi.events/docs/getting-started?utm_source=gh-readme">Installation ⚙️</a>
+<a href="https://demo.hi.events/event/1/dog-conf-2030">Demo Event 🌟</a> <a href="https://hi.events?utm_source=gh-readme">Website 🌎</a>  <a href="https://hi.events/docs">Documentation 📄</a>  <a href="https://hi.events/docs/getting-started?utm_source=gh-readme">Installation ⚙️</a>
 </p>
 
 <h3 align="center">
@@ -13,11 +13,10 @@
 <div align="center">
 
 [![Hi.Events docs](https://img.shields.io/badge/docs-hi.events-blue)](https://hi.events/docs)
-[![Hi.Events licence](https://img.shields.io/badge/licence-el2)](https://github.com/HiEventsDev/hi.events/LICENCE)
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://github.com/HiEventsDev/hi.events/LICENCE)
 [![GitHub Release](https://img.shields.io/github/v/release/HiEventsDev/hi.events?include_prereleases)](https://github.com/HiEventsDev/hi.events/releases)
 [![Run Unit Tests](https://github.com/HiEventsDev/hi.events/actions/workflows/unit-tests.yml/badge.svg?event=push)](https://github.com/HiEventsDev/hi.events/actions/workflows/unit-tests.yml)
-
-[//]: # ([![Docker Pulls]&#40;https://img.shields.io/docker/pulls/daveearley/hi.events-all-in-one&#41;]&#40;https://hub.docker.com/r/daveearley/hi.events-all-in-one&#41;)
+[![Docker Pulls](https://img.shields.io/docker/pulls/daveearley/hi.events-all-in-one)](https://hub.docker.com/r/daveearley/hi.events-all-in-one)
 
 </div>
 
