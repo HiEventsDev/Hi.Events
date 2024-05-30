@@ -99,9 +99,9 @@ a quick start, follow these steps:
    docker-compose up -d
    ```
 4. **Create an account:**
-```bash
-Open your browser and navigate to https://localhost:8123/auth/register.
-```
+   ```bash
+   Open your browser and navigate to https://localhost:8123/auth/register.
+   ```
 
 ℹ️ Please refer to the [getting started guide](https://hi.events/docs/getting-started) for other installation methods, and
 for setting up a production or local development environment.
@@ -123,8 +123,6 @@ reach out to us at [hello@hi.events](mailto:hello@hi.events).
 
 ## 📜 License
 
-Hi.Events is licensed under the terms of
-the [Elastic License 2.0](https://github.com/HiEventsDev/hi.events/blob/main/LICENCE), which means you can use it freely
-for commercial and non-commercial purposes, as long as you respect the terms of the license.
+Hi.Events is licensed under the terms of the [AGPL-3.0](https://github.com/HiEventsDev/hi.events/blob/main/LICENCE) license.
 
-For more information on licensing, please visit our licensing page [here](https://hi.events/licensing).
+For more licensing information, including commercial licencing options, please visit our licensing page [here](https://hi.events/licensing).]

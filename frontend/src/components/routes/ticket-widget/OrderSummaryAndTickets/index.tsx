@@ -83,7 +83,7 @@ export const OrderSummaryAndTickets = () => {
                     </div>
                 )}
 
-                {(event?.settings?.is_online_event && <OnlineEventDetails eventSettings={event.settings} />)}
+                {(event?.settings?.is_online_event && <OnlineEventDetails eventSettings={event.settings}/>)}
 
                 <Group justify={'space-between'}>
                     <h2 className={classes.subHeading}>{t`Guests`}</h2>
@@ -108,11 +108,21 @@ export const OrderSummaryAndTickets = () => {
                     );
                 })}
 
-                {/*PLEASE NOTE:*/}
-                {/*Under the terms of the license, you are not permitted to remove or obscure the powered by footer unless you have a white-label*/}
-                {/*or commercial license.*/}
-                {/*@see https://github.com/HiEventsDev/hi.events/blob/main/LICENCE#L13*/}
-                {/*You can purchase a license at https://hi.events/licensing*/}
+                {
+                    /**
+                     * (c) Hi.Events Ltd 2024
+                     *
+                     * PLEASE NOTE:
+                     *
+                     * Hi.Events is licensed under the GNU Affero General Public License (AGPL) version 3.
+                     *
+                     * You can find the full license text at: https://github.com/HiEventsDev/hi.events/blob/main/LICENSE
+                     *
+                     * In accordance with Section 7(b) of the AGPL, we ask that you retain the "Powered by Hi.Events" notice.
+                     *
+                     * If you wish to remove this notice, a commercial license is available at: https://hi.events/licensing
+                     */
+                }
                 <PoweredByFooter/>
             </CheckoutContent>
             <CheckoutFooter
