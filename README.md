@@ -124,4 +124,4 @@ reach out to us at [hello@hi.events](mailto:hello@hi.events).
 
 Hi.Events is licensed under the terms of the [AGPL-3.0](https://github.com/HiEventsDev/hi.events/blob/main/LICENCE) license.
 
-For more licensing information, including commercial licencing options, please visit our licensing page [here](https://hi.events/licensing).]
+For more licensing information, including commercial licencing options, please visit our licensing page [here](https://hi.events/licensing).
