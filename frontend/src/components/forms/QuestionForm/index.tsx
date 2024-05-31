@@ -160,7 +160,7 @@ export const QuestionForm = ({form, tickets}: QuestionFormProps) => {
 
             <CustomSelect
                 optionList={questionTypeOptions}
-                label={t`Who type of question is this?`}
+                label={t`What type of question is this?`}
                 required
                 form={form}
                 name="type"

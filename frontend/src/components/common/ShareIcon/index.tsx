@@ -82,7 +82,7 @@ export const ShareComponent = ({title, text, url}: ShareComponentProps) => {
                         <IconMail size={24}/>
                     </ActionIcon>
                 </Group>
-                <Input mt={10} value={url} rightSection={(
+                <Input rightSectionPointerEvents={'all'} mt={10} value={url} rightSection={(
                     <CopyButton value={url}>
                         {({ copied, copy }) => (
                             <ActionIcon variant={'transparent'} onClick={copy}>

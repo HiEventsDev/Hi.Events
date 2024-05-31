@@ -37,7 +37,6 @@ export const CreateEventModal = ({onClose}: GenericModalProps) => {
                     return t`Organizer is required`;
                 }
             },
-            description: hasLength({max: 50000}, t`Description should be less than 50,000 characters`),
         },
         validateInputOnChange: true,
     });
