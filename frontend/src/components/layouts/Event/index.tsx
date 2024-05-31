@@ -30,6 +30,7 @@ import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {Tooltip} from "../../common/Tooltip";
 import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
 import {useGetEventSettings} from "../../../queries/useGetEventSettings.ts";
+import {EventStatusBadge} from "../../common/EventStatusBadge";
 
 const EventLayout = () => {
     const data = [
@@ -148,10 +149,11 @@ const EventLayout = () => {
                             : t`Event is not visible to the public`
                         }>
                             <UnstyledButton onClick={handleStatusToggle}>
-                                <Badge color={event?.status === 'LIVE' ? 'green' : 'gray'}
-                                       ml={10}>
-                                    {event?.status}
-                                </Badge>
+                                {event && (
+                                    <div style={{marginLeft: '10px'}}>
+                                        <EventStatusBadge event={event}/>
+                                    </div>
+                                )}
                             </UnstyledButton>
                         </Tooltip>
                     )}

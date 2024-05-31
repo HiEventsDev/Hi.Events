@@ -131,11 +131,13 @@ export interface Event {
     id?: IdParam;
     title: string;
     slug: string;
-    status?: string;
+    status?: 'DRAFT' | 'LIVE' | 'PAUSED';
     start_date: string;
     end_date?: string;
     description?: string;
     description_preview?: string;
+
+    lifecycle_status?: 'ONGOING' | 'UPCOMING' | 'ENDED';
 
     settings?: EventSettings;
     tickets?: Ticket[],

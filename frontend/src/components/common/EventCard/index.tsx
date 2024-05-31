@@ -1,12 +1,21 @@
-import {Badge, Button, Group, Menu, Text,} from '@mantine/core';
+import {Button, Group, Menu, Text,} from '@mantine/core';
 import {Event} from "../../../types.ts";
 import classes from "./EventCard.module.scss";
 import {Card} from "../Card";
 import {NavLink, useNavigate} from "react-router-dom";
-import {IconCalendarEvent, IconDotsVertical, IconEye, IconMap, IconSettings, IconUser,} from "@tabler/icons-react";
+import {
+    IconCalendarEvent,
+    IconDotsVertical,
+    IconEye,
+    IconMap,
+    IconQrcode,
+    IconSettings,
+    IconUser,
+} from "@tabler/icons-react";
 import {relativeDate} from "../../../utilites/dates.ts";
 import {t} from "@lingui/macro"
 import {eventHomepagePath} from "../../../utilites/urlHelper.ts";
+import {EventStatusBadge} from "../EventStatusBadge";
 
 interface EventCardProps {
     event: Event;
@@ -19,9 +28,7 @@ export function EventCard({event}: EventCardProps) {
         <>
             <Card className={classes.card}>
                 <div className={classes.body}>
-                    <Badge color={event?.status === 'LIVE' ? 'green' : 'gray'}>
-                        {event?.status}
-                    </Badge>
+                    {event && <EventStatusBadge event={event}/>}
                     <Text className={classes.title} mt="xs" mb="md">
                         <NavLink to={`/manage/event/${event.id}`}>
                             {event.title}
@@ -74,12 +81,16 @@ export function EventCard({event}: EventCardProps) {
                         </Menu.Target>
 
                         <Menu.Dropdown>
-                            <Menu.Item leftSection={<IconEye size={14}/>} onClick={() => window.location.href = eventHomepagePath(event)}>
+                            <Menu.Item leftSection={<IconEye size={14}/>}
+                                       onClick={() => window.location.href = eventHomepagePath(event)}>
                                 {t`View event page`}
                             </Menu.Item>
                             <Menu.Item onClick={() => navigate(`/manage/event/${event.id}`)}
                                        leftSection={<IconSettings size={14}/>}
                             >{t`Manage event`}</Menu.Item>
+                            <Menu.Item onClick={() => navigate(`/manage/event/${event.id}/check-in`)}
+                                       leftSection={<IconQrcode size={14}/>}
+                            >{t`Check-in`}</Menu.Item>
 
                         </Menu.Dropdown>
                     </Menu>

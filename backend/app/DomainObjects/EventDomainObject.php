@@ -2,12 +2,14 @@
 
 namespace HiEvents\DomainObjects;
 
+use Carbon\Carbon;
+use HiEvents\DomainObjects\Interfaces\IsSortable;
+use HiEvents\DomainObjects\SortingAndFiltering\AllowedSorts;
+use HiEvents\DomainObjects\Status\EventLifecycleStatus;
+use HiEvents\Helper\StringHelper;
 use HiEvents\Helper\Url;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-use HiEvents\DomainObjects\Interfaces\IsSortable;
-use HiEvents\DomainObjects\SortingAndFiltering\AllowedSorts;
-use HiEvents\Helper\StringHelper;
 
 class EventDomainObject extends Generated\EventDomainObjectAbstract implements IsSortable
 {
@@ -133,5 +135,59 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
         }
 
         return StringHelper::previewFromHtml($this->getDescription());
+    }
+
+    public function isEventInPast(): bool
+    {
+        if ($this->getEndDate() === null) {
+            return false;
+        }
+        $endDate = Carbon::parse($this->getEndDate());
+        $endDate->setTimezone($this->getTimezone());
+
+        return $endDate->isPast();
+    }
+
+    public function isEventInFuture(): bool
+    {
+        if ($this->getStartDate() === null) {
+            return false;
+        }
+        $startDate = Carbon::parse($this->getStartDate());
+        $startDate->setTimezone($this->getTimezone());
+
+        return $startDate->isFuture();
+    }
+
+    public function isEventOngoing(): bool
+    {
+        $startDate = Carbon::parse($this->getStartDate());
+        $startDate->setTimezone($this->getTimezone());
+
+        if ($this->getEndDate() === null) {
+            return $startDate->isPast();
+        }
+
+        $endDate = Carbon::parse($this->getEndDate());
+        $endDate->setTimezone($this->getTimezone());
+
+        return $startDate->isPast() && $endDate->isFuture();
+    }
+
+    public function getLifecycleStatus(): string
+    {
+        if ($this->isEventInPast()) {
+            return EventLifecycleStatus::ENDED->name;
+        }
+
+        if ($this->isEventInFuture()) {
+            return EventLifecycleStatus::UPCOMING->name;
+        }
+
+        if ($this->isEventOngoing()) {
+            return EventLifecycleStatus::ONGOING->name;
+        }
+
+        return EventLifecycleStatus::ENDED->name;
     }
 }

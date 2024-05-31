@@ -23,6 +23,7 @@ class EventResource extends BaseResource
             'start_date' => $this->getStartDate(),
             'end_date' => $this->getEndDate(),
             'status' => $this->getStatus(),
+            'lifecycle_status' => $this->getLifeCycleStatus(),
             'currency' => $this->getCurrency(),
             'timezone' => $this->getTimezone(),
             'slug' => $this->getSlug(),
