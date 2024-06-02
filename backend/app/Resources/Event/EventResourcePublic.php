@@ -26,6 +26,7 @@ class EventResourcePublic extends BaseResource
             'currency' => $this->getCurrency(),
             'slug' => $this->getSlug(),
             'status' => $this->getStatus(),
+            'lifecycle_status' => $this->getLifecycleStatus(),
             'timezone' => $this->getTimezone(),
             'location_details' => $this->when((bool)$this->getLocationDetails(), fn() => $this->getLocationDetails()),
 

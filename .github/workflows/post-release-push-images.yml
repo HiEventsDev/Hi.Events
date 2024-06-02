@@ -3,6 +3,7 @@ name: Publish Docker image
 on:
   release:
     types: [published]
+  workflow_dispatch:
 
 jobs:
   push_to_registry:
@@ -14,19 +15,6 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           persist-credentials: true
-
-      - name: Update VERSION file
-        run: echo "${{ github.event.release.tag_name }}" > VERSION
-
-      - name: Commit VERSION file
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add VERSION
-          git commit -m "Update VERSION file to ${{ github.event.release.tag_name }}"
-          git push origin HEAD:main
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
