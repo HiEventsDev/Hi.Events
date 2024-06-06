@@ -105,7 +105,7 @@ export const QuestionForm = ({form, tickets}: QuestionFormProps) => {
             icon: <IconSquareCheck/>,
             label: t`Checkboxes`,
             value: QuestionType.CHECKBOX,
-            description: t`These allow multiple selections`,
+            description: t`Checkbox options allow multiple selections`,
         },
         {
             icon: <IconCircleCheck/>,

@@ -29,7 +29,7 @@ class OrderItemResourcePublic extends BaseResource
             'total_tax' => $this->getTotalTax(),
             'total_gross' => $this->getTotalGross(),
             'taxes_and_fees_rollup' => $this->getTaxesAndFeesRollup(),
-            'ticket' => $this->when(!!$this->getTicket(), fn() => new TicketResourcePublic($this->getTicket())),
+            'ticket' => $this->when((bool)$this->getTicket(), fn() => new TicketResourcePublic($this->getTicket())),
         ];
     }
 }

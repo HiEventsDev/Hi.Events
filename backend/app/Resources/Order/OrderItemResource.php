@@ -21,6 +21,7 @@ class OrderItemResource extends BaseResource
             'quantity' => $this->getQuantity(),
             'ticket_id' => $this->getTicketId(),
             'item_name' => $this->getItemName(),
+            'price_before_discount' => $this->getPriceBeforeDiscount(),
             'taxes_and_fees_rollup' => $this->getTaxesAndFeesRollup(),
         ];
     }
