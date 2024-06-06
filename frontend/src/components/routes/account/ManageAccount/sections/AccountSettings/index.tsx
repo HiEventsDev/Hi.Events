@@ -21,7 +21,6 @@ const AccountSettings = () => {
             name: '',
             currency_code: '',
             timezone: '',
-            email: '',
         }
     });
     const accountQuery = useGetAccount();
@@ -57,19 +56,12 @@ const AccountSettings = () => {
             <Card className={classes.tabContent}>
                 <LoadingMask/>
                 <fieldset disabled={updateMutation.isLoading || accountQuery.isLoading || !isUserAdmin}>
-                    <form onSubmit={form.onSubmit(handleSubmit)}>
+                    <form onSubmit={form.onSubmit(handleSubmit as any)}>
                         <TextInput
                             {...form.getInputProps('name')}
                             label={t`Account Name`}
                             placeholder={t`Name`}
                             description={t`Your account name is used on event pages and in emails.`}
-                        />
-                        <TextInput
-                            type={'email'}
-                            {...form.getInputProps('email')}
-                            label={t`Account Email`}
-                            placeholder={t`Email`}
-                            description={t`Your account email in outgoing emails.`}
                         />
                         <Select
                             searchable
