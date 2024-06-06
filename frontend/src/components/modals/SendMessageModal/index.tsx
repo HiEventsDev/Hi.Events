@@ -95,7 +95,11 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
             is_test: false,
             send_copy_to_current_user: false,
             type: 'EVENT',
+            acknowledgement: false,
         },
+        validate: {
+            acknowledgement: (value) => value === true ? null : t`You must acknowledge that this email is not promotional`,
+        }
     });
 
     const handleSend = (values: any) => {
@@ -204,8 +208,8 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
 
                     <Alert variant={'outline'} mt={20} icon={<IconAlertCircle size="1rem"/>}
                            title={t`Before you send!`}>
-                        {t`Please ensure you only send emails directly related to the order. Promotional emails
-                    should not be sent using this form.`}
+                        {t`Only important emails, which are directly related to this event, should be sent using this form.
+                         Any misuse, including sending promotional emails, will lead to an immediate account ban.`}
                     </Alert>
 
                     {!isAccountVerified && (
@@ -214,7 +218,15 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
                         </Alert>
                     )}
 
-                    <Button mt={20} loading={sendMessageMutation.isLoading} type={'submit'} fullWidth leftSection={<IconSend/>}>
+                    <Switch mt={20} {...form.getInputProps('acknowledgement', {type: 'checkbox'})}
+                            label={(
+                                <Trans>
+                                    This email is not promotional and is directly related to the event.
+                                </Trans>
+                            )}/>
+
+                    <Button mt={20} loading={sendMessageMutation.isLoading} type={'submit'} fullWidth
+                            leftSection={<IconSend/>}>
                         {form.values.is_test ? t`Send Test` : t`Send`}
                     </Button>
                 </fieldset>

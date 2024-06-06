@@ -14,6 +14,7 @@
     <b>{{ $event->getTitle() }}</b>. If you believe you have received this email in error,
     please contact the event organizer at <a
             href="mailto:{{$eventSettings->getSupportEmail()}}">{{$eventSettings->getSupportEmail()}}</a>.
+    If you believe this is spam, please report it to <a href="mailto:{{config('mail.from.address')}}">{{config('mail.from.address')}}</a>.
 </div>
 </x-mail::message>
 
