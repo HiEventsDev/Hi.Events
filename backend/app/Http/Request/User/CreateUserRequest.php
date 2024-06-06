@@ -13,8 +13,8 @@ class CreateUserRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'first_name' => 'required|min:2',
-            'last_name' => 'required|min:2',
+            'first_name' => 'required|min:1',
+            'last_name' => 'required|min:1',
             'role' => Rule::in(Role::valuesArray()),
             'email' => [
                 'required',

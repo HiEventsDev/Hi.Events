@@ -14,8 +14,8 @@ class UpdateMeRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'first_name' => 'required_without_all:current_password,password,password_confirmation|min:2',
-            'last_name' => 'required_without_all:current_password,password,password_confirmation|min:2',
+            'first_name' => 'required_without_all:current_password,password,password_confirmation|min:1',
+            'last_name' => 'required_without_all:current_password,password,password_confirmation|min:1',
             'email' => 'required_without_all:current_password,password,password_confirmation|email',
             'timezone' => 'required_without_all:current_password,password,password_confirmation|timezone',
 
