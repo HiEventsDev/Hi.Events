@@ -52,10 +52,10 @@ export const ManageProfile = () => {
             userData: formValues,
         }, {
             onSuccess: () => {
+                form.reset();
                 showSuccess(t`Profile updated successfully`);
             },
             onError: (error: any) => {
-                showError(t`Something went wrong. Please try again.`);
                 errorHandler(form, error);
             }
         })

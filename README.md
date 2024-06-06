@@ -20,6 +20,10 @@
 
 </div>
 
+<div align="center">
+ 🌟 A star would be much appreciated! 🌟
+</div>
+
 <hr/>
 
 ## Table of Contents
@@ -93,7 +97,7 @@ a quick start, follow these steps:
    cd hi.events/docker/all-in-one
    ```
 
-3. **Run the set-up script:**
+3. **Start the Docker Containers:**
    ```bash
    docker-compose up -d
    ```

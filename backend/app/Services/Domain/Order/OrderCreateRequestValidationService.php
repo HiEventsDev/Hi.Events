@@ -170,10 +170,23 @@ readonly class OrderCreateRequestValidationService
         $totalQuantity = collect($ticketAndQuantities['quantities'])->sum('quantity');
         $maxPerOrder = (int)$ticket->getMaxPerOrder() ?: 100; // Placeholder for config value
         $minPerOrder = (int)$ticket->getMinPerOrder() ?: 1;
+        $ticketQuantityAvailable = $this->ticketRepository->getQuantityRemainingForTicketPrice(
+            ticketId: $ticket->getId(),
+            ticketPriceId: $ticketAndQuantities['quantities'][0]['price_id']
+        );
+
+        if ($totalQuantity > $ticketQuantityAvailable) {
+            throw ValidationException::withMessages([
+                "tickets.$ticketIndex" => __("The maximum number of tickets available for :ticket is :max", [
+                    'max' => $ticketQuantityAvailable,
+                    'ticket' => $ticket->getTitle(),
+                ]),
+            ]);
+        }
 
         if ($totalQuantity > $maxPerOrder) {
             throw ValidationException::withMessages([
-                "tickets.$ticketIndex" => __("The maximum numbers number of tickets for :tickets is :max", [
+                "tickets.$ticketIndex" => __("The maximum number of tickets available for :tickets is :max", [
                     'max' => $maxPerOrder,
                     'ticket' => $ticket->getTitle(),
                 ]),

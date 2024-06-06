@@ -16,7 +16,6 @@ class AccountResource extends JsonResource
         return [
             'id' => $this->getId(),
             'name' => $this->getName(),
-            'email' => $this->getEmail(),
             'currency_code' => $this->getCurrencyCode(),
             'timezone' => $this->getTimezone(),
             'updated_at' => $this->getUpdatedAt(),
