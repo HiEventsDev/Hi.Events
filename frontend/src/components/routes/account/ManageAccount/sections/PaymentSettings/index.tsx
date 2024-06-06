@@ -8,11 +8,19 @@ import {Anchor, Button, Group} from "@mantine/core";
 import {StripeConnectDetails} from "../../../../../../types.ts";
 import paymentClasses from "./PaymentSettings.module.scss"
 import classes from "../../ManageAccount.module.scss"
+import {useEffect, useState} from "react";
 
 const ConnectStatus = (props: { stripeDetails: StripeConnectDetails }) => {
-    const isReturn = window?.location.search.includes('is_return');
-    const isRefresh = window?.location.search.includes('is_refresh');
-    const isReturningFromStripe = isReturn || isRefresh;
+    const [isReturningFromStripe, setIsReturningFromStripe] = useState(false);
+
+    useEffect(() => {
+        if (typeof window === 'undefined') {
+            return;
+        }
+        setIsReturningFromStripe(
+            window.location.search.includes('is_return') || window.location.search.includes('is_refresh')
+        );
+    }, []);
 
     return (
         <div className={paymentClasses.stripeInfo}>
