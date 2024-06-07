@@ -1,4 +1,3 @@
-/* eslint-disable lingui/no-unlocalized-strings */
 import express from "express";
 import {installGlobals} from "@remix-run/node";
 import process from "process";
@@ -7,6 +6,8 @@ import compression from "compression";
 import fs from "node:fs/promises";
 import sirv from "sirv";
 import cookieParser from "cookie-parser";
+import path from "node:path";
+import {fileURLToPath} from "node:url";
 
 installGlobals();
 
@@ -15,6 +16,8 @@ const port = process.argv.includes("--port")
     ? process.argv[process.argv.indexOf("--port") + 1]
     : process.env.NODE_PORT || 5678;
 const isProduction = process.env.NODE_ENV === "production";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const templateHtml = isProduction
     ? await fs.readFile("./dist/client/index.html", "utf-8")
@@ -26,6 +29,8 @@ const ssrManifest = isProduction
 
 const app = express();
 app.use(cookieParser());
+
+app.use('/.well-known', express.static(path.join(__dirname, 'public/.well-known')));
 
 let vite;
 
@@ -39,7 +44,7 @@ if (!isProduction) {
     app.use(vite.middlewares);
 } else {
     app.use(compression());
-    app.use(base, sirv("./dist/client", {extensions: []}));
+    app.use(base, sirv(path.join(__dirname, "./dist/client"), {extensions: []}));
 }
 
 const getViteEnvironmentVariables = () => {
@@ -60,12 +65,12 @@ app.use("*", async (req, res) => {
         let render;
 
         if (!isProduction) {
-            template = await fs.readFile("./index.html", "utf-8");
+            template = await fs.readFile(path.join(__dirname, "./index.html"), "utf-8");
             template = await vite.transformIndexHtml(url, template);
             render = (await vite.ssrLoadModule("/src/entry.server.tsx")).render;
         } else {
             template = templateHtml;
-            render = (await import("./dist/server/entry.server.js")).render;
+            render = (await import(path.join(__dirname, "./dist/server/entry.server.js"))).render;
         }
 
         const {appHtml, dehydratedState, helmetContext} = await render(
