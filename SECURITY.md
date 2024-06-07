@@ -42,7 +42,7 @@ For any questions or clarifications, feel free to reach out to us at [security@h
 
 ##  Hi.Events Public Key
 
-if you need to send us encrypted information, you can use our public key below:
+If you need to send us encrypted information, you can use our public key below:
 
 ```plaintext
 
