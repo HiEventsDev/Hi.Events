@@ -21,7 +21,7 @@ const ConfirmEmailAddress = () => {
         confirmEmailAddressMutation.mutate({token: (token as string), userId: userData?.id}, {
             onSuccess: () => {
                 showSuccess(t`Successfully confirmed email address`);
-                navigate('/manage/profile');
+                navigate('/manage/events');
             },
             onError: () => {
                 showError(t`Error confirming email address`);

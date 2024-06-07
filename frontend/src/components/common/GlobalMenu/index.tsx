@@ -1,5 +1,5 @@
 import {Avatar, Menu, UnstyledButton} from "@mantine/core";
-import {getInitials, iHavePurchasedALicence} from "../../../utilites/helpers.ts";
+import {getInitials, iHavePurchasedALicence, isHiEvents} from "../../../utilites/helpers.ts";
 import {IconLogout, IconMoneybag, IconSettingsCog, IconSpeakerphone, IconUser} from "@tabler/icons-react";
 import {useGetMe} from "../../../queries/useGetMe.ts";
 import {NavLink} from "react-router-dom";
@@ -20,7 +20,7 @@ export const GlobalMenu = () => {
             icon: IconSettingsCog,
             link: `/account/settings`,
         },
-        ...(iHavePurchasedALicence() ? [] : [
+        ...((iHavePurchasedALicence() || isHiEvents()) ? [] : [
             {
                 label: t`Purchase License`,
                 icon: IconMoneybag,
