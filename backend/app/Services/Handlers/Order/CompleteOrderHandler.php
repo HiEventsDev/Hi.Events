@@ -96,6 +96,8 @@ readonly class CompleteOrderHandler
             values: $attendees->pluck('ticket_price_id')->toArray(),
         );
 
+        $this->validateTicketPriceIdsMatchOrder($order, $ticketsPrices);
+
         foreach ($attendees as $attendee) {
             $ticketId = $ticketsPrices->first(
                 fn(TicketPriceDomainObject $ticketPrice) => $ticketPrice->getId() === $attendee->ticket_price_id)
@@ -237,5 +239,22 @@ readonly class CompleteOrderHandler
                         : OrderStatus::COMPLETED->name,
                 ]
             );
+    }
+
+    /**
+     * Check if the passed ticket price IDs match what exist in the order_items table
+     *
+     * @throws ResourceConflictException
+     */
+    private function validateTicketPriceIdsMatchOrder(OrderDomainObject $order, Collection $ticketsPrices): void
+    {
+        $orderTicketPriceIds = $order->getOrderItems()
+            ?->map(fn(OrderItemDomainObject $orderItem) => $orderItem->getTicketPriceId())->toArray();
+
+        $ticketsPricesIds = $ticketsPrices->map(fn(TicketPriceDomainObject $ticketPrice) => $ticketPrice->getId());
+
+        if ($ticketsPricesIds->diff($orderTicketPriceIds)->isNotEmpty()) {
+            throw new ResourceConflictException(__('There is an unexpected ticket price ID in the order'));
+        }
     }
 }
