@@ -42,7 +42,7 @@ readonly class OrderManagementService
     ): OrderDomainObject
     {
         $reservedUntil = Carbon::now()->addMinutes($timeOutMinutes);
-        $publicId = Str::upper(Str::random(5));
+        $publicId = Str::upper(Str::random(7));
 
         return $this->orderRepository->create([
             'event_id' => $eventId,
