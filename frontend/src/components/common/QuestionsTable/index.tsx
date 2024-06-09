@@ -1,4 +1,4 @@
-import {Alert, Button, Group, Menu, Switch, TextInput, Tooltip} from '@mantine/core';
+import {Button, Group, Menu, Switch, TextInput, Tooltip} from '@mantine/core';
 import {IdParam, Question} from "../../../types.ts";
 import {
     IconDotsVertical,
@@ -297,9 +297,9 @@ export const QuestionsTable = ({questions}: QuestionsTableProp) => {
                         {orderQuestions
                             .filter(question => showHiddenQuestions || !question.is_hidden)
                             .length === 0 && (
-                            <Alert icon={<IconInfoCircle/>} color={'gray'} className={classes.noQuestionsAlert}>
-                                {t`You have no order questions.`}
-                            </Alert>
+                            <Card className={classes.noQuestionsAlert}>
+                                <IconInfoCircle/> {t`You have no order questions.`}
+                            </Card>
                         )}
                     </div>
                     <div className={classes.questions}>
@@ -312,9 +312,9 @@ export const QuestionsTable = ({questions}: QuestionsTableProp) => {
                         {ticketQuestions
                             .filter(question => showHiddenQuestions || !question.is_hidden)
                             .length === 0 && (
-                            <Alert icon={<IconInfoCircle/>} color={'gray'} className={classes.noQuestionsAlert}>
-                                {t`You have no attendee questions.`}
-                            </Alert>
+                            <Card className={classes.noQuestionsAlert}>
+                                <IconInfoCircle/> {t`You have no attendee questions.`}
+                            </Card>
                         )}
                     </div>
                 </div>
