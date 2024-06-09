@@ -1,12 +1,13 @@
 import {UseFormReturnType} from "@mantine/form";
 import {Alert, MultiSelect, NumberInput, Select, TextInput} from "@mantine/core";
-import {IconAlertCircle, IconCurrencyDollar, IconPercentage} from "@tabler/icons-react";
+import {IconAlertCircle, IconPercentage} from "@tabler/icons-react";
 import {PromoCode, PromoCodeDiscountType} from "../../../types.ts";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {useParams} from "react-router-dom";
 import {LoadingMask} from "../../common/LoadingMask";
 import {t} from "@lingui/macro";
 import {InputGroup} from "../../common/InputGroup";
+import {getCurrencySymbol} from "../../../utilites/currency.ts";
 
 interface PromoCodeFormProps {
     form: UseFormReturnType<PromoCode>,
@@ -20,7 +21,7 @@ export const PromoCodeForm = ({form}: PromoCodeFormProps) => {
         if (form.values.discount_type === 'PERCENTAGE') {
             return <IconPercentage/>;
         }
-        return <IconCurrencyDollar/>
+        return getCurrencySymbol(event?.currency as string);
     };
 
     if (!event || !tickets) {
@@ -55,7 +56,9 @@ export const PromoCodeForm = ({form}: PromoCodeFormProps) => {
                     ]}/>
                 <NumberInput
                     disabled={form.values.discount_type === PromoCodeDiscountType.None}
-                    decimalScale={2} min={0} rightSection={<DiscountIcon/>} {...form.getInputProps('discount')}
+                    decimalScale={2} min={0}
+                    leftSection={<DiscountIcon/>}
+                    {...form.getInputProps('discount')}
                     label={(form.values.discount_type === 'PERCENTAGE' ? t`Discount %` : t`Discount in ${event.currency}`)}
                     placeholder="0.00"/>
             </InputGroup>
