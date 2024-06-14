@@ -296,9 +296,9 @@ export const TicketForm = ({form, ticket}: TicketFormProps) => {
                     )}
 
                     <InputGroup>
-                        <NumberInput {...form.getInputProps('max_per_order')} label={t`Maximum Per Order`}
-                                     placeholder="5"/>
                         <NumberInput {...form.getInputProps('min_per_order')} label={t`Minimum Per Order`}
+                                     placeholder="5"/>
+                        <NumberInput {...form.getInputProps('max_per_order')} label={t`Maximum Per Order`}
                                      placeholder="5"/>
                     </InputGroup>
 

@@ -99,7 +99,7 @@ a quick start, follow these steps:
 
 3. **Start the Docker Containers:**
    ```bash
-   docker-compose up -d
+   docker compose up -d
    ```
 4. **Create an account:**
    ```bash

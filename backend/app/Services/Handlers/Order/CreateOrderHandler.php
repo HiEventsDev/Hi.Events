@@ -65,7 +65,12 @@ readonly class CreateOrderHandler
                 sessionId: $sessionId
             );
 
-            $orderItems = $this->orderItemProcessingService->process($order, $createOrderPublicDTO->tickets, $event, $promoCode);
+            $orderItems = $this->orderItemProcessingService->process(
+                order: $order,
+                ticketsOrderDetails: $createOrderPublicDTO->tickets,
+                event: $event,
+                promoCode: $promoCode,
+            );
 
             return $this->orderManagementService->updateOrderTotals($order, $orderItems);
         });

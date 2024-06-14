@@ -7,5 +7,8 @@ export const queryClient = new QueryClient({
       refetchOnWindowFocus: false,
       networkMode: "always",
     },
+    mutations: {
+      networkMode: 'always',
+    }
   },
 });

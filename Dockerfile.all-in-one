@@ -37,7 +37,7 @@ COPY ./docker/all-in-one/nginx/nginx.conf /etc/nginx/nginx.conf
 COPY ./docker/all-in-one/supervisor/supervisord.conf /etc/supervisord.conf
 
 COPY ./docker/all-in-one/scripts/startup.sh /startup.sh
-RUN chmod +x /startup.sh
+RUN dos2unix /startup.sh && chmod +x /startup.sh
 
 EXPOSE 80
 

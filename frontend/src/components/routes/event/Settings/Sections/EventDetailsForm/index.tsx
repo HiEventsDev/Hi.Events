@@ -99,6 +99,7 @@ export const EventDetailsForm = () => {
                             {...form.getInputProps('currency')}
                             label={t`Currency`}
                             placeholder={t`EUR`}
+                            disabled
                         />
 
                         <Select

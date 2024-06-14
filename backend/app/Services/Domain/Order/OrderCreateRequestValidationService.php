@@ -168,21 +168,14 @@ readonly class OrderCreateRequestValidationService
     private function validateTicketQuantity(int $ticketIndex, array $ticketAndQuantities, TicketDomainObject $ticket): void
     {
         $totalQuantity = collect($ticketAndQuantities['quantities'])->sum('quantity');
-        $maxPerOrder = (int)$ticket->getMaxPerOrder() ?: 100; // Placeholder for config value
+        $maxPerOrder = (int)$ticket->getMaxPerOrder() ?: 100;
         $minPerOrder = (int)$ticket->getMinPerOrder() ?: 1;
-        $ticketQuantityAvailable = $this->ticketRepository->getQuantityRemainingForTicketPrice(
-            ticketId: $ticket->getId(),
-            ticketPriceId: $ticketAndQuantities['quantities'][0]['price_id']
-        );
 
-        if ($totalQuantity > $ticketQuantityAvailable) {
-            throw ValidationException::withMessages([
-                "tickets.$ticketIndex" => __("The maximum number of tickets available for :ticket is :max", [
-                    'max' => $ticketQuantityAvailable,
-                    'ticket' => $ticket->getTitle(),
-                ]),
-            ]);
-        }
+        $this->validateTicketPricesQuantity(
+            quantities: $ticketAndQuantities['quantities'],
+            ticket: $ticket,
+            ticketIndex: $ticketIndex
+        );
 
         if ($totalQuantity > $maxPerOrder) {
             throw ValidationException::withMessages([
@@ -272,6 +265,42 @@ readonly class OrderCreateRequestValidationService
 
         if (!empty($errors)) {
             throw ValidationException::withMessages($errors);
+        }
+    }
+
+    /**
+     * @throws ValidationException
+     */
+    private function validateTicketPricesQuantity(array $quantities, TicketDomainObject $ticket, int $ticketIndex): void
+    {
+        foreach ($quantities as $ticketQuantity) {
+            $numberAvailable = $this->ticketRepository->getQuantityRemainingForTicketPrice(
+                ticketId: $ticket->getId(),
+                ticketPriceId: $ticketQuantity['price_id']
+            );
+
+            $numberAvailable = max(0, $numberAvailable);
+
+            /** @var TicketPriceDomainObject $ticketPrice */
+            $ticketPrice = $ticket->getTicketPrices()
+                ?->first(fn(TicketPriceDomainObject $price) => $price->getId() === $ticketQuantity['price_id']);
+
+            if ($ticketQuantity['quantity'] > $numberAvailable) {
+                if ($numberAvailable === 0) {
+                    throw ValidationException::withMessages([
+                        "tickets.$ticketIndex" => __("The ticket :ticket is sold out", [
+                            'ticket' => $ticket->getTitle() . ($ticketPrice->getLabel() ? ' - ' . $ticketPrice->getLabel() : ''),
+                        ]),
+                    ]);
+                }
+
+                throw ValidationException::withMessages([
+                    "tickets.$ticketIndex" => __("The maximum number of tickets available for :ticket is :max", [
+                        'max' => $numberAvailable,
+                        'ticket' => $ticket->getTitle() . ($ticketPrice->getLabel() ? ' - ' . $ticketPrice->getLabel() : ''),
+                    ]),
+                ]);
+            }
         }
     }
 }
