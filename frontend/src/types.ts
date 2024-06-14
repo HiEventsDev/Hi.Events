@@ -201,7 +201,6 @@ export interface Organizer {
     events?: Event[];
 }
 
-
 export interface SortDirectionLabel {
     asc: string;
     desc: string;
@@ -283,6 +282,7 @@ export interface Ticket {
     hide_after_sale_end_date?: boolean;
     hide_when_sold_out?: boolean;
     show_quantity_remaining?: boolean;
+    quantity_available?: number;
     status?: TicketStatus;
     is_sold_out?: boolean;
     is_available?: boolean;

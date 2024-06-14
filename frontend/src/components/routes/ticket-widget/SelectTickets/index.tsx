@@ -276,7 +276,6 @@ const SelectTickets = (props: SelectTicketsProps) => {
                                 .map((n) => n.toString());
                             quantityRange.unshift("0");
 
-
                             return (
                                 <div key={ticket.id} className={'hi-ticket-row'}>
                                     <div className={'hi-title-row'}>
@@ -284,6 +283,12 @@ const SelectTickets = (props: SelectTicketsProps) => {
                                             <h3>{ticket.title}</h3>
                                         </div>
                                         <div className={'hi-ticket-availability'}>
+                                            {(ticket.is_available && !!ticket.quantity_available) && (
+                                                <>
+                                                    <Trans>{ticket?.quantity_available} available</Trans>
+                                                </>
+                                            )}
+
                                             {(!ticket.is_available && ticket.type === 'TIERED') && (
                                                 <TicketAvailabilityMessage ticket={ticket} event={event}/>
                                             )}
