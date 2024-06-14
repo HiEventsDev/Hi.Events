@@ -324,9 +324,15 @@ export const router: RouteObject[] = [
                 }
 
                 return {event, promoCodeValid, promoCode};
-            } catch (error) {
+            } catch (error: any) {
+                // for 404s we want to return null so that the 404 page is shown
+                if (error?.response?.status === 404) {
+                    return {event: null, promoCodeValid: undefined, promoCode: null};
+                }
+
                 console.error(error);
-                return {event: null, promoCodeValid: undefined, promoCode: null};
+
+                throw error;
             }
         },
         async lazy() {

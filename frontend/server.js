@@ -94,11 +94,16 @@ app.use("*", async (req, res) => {
         res.setHeader("Content-Type", "text/html");
         return res.status(200).end(html);
     } catch (error) {
-        if (!isProduction) {
-            vite.ssrFixStacktrace(error);
+        if (error instanceof Response) {
+            if (error.status >= 300 && error.status < 400) {
+                return res.redirect(error.status, error.headers.get("Location") || "/");
+            } else {
+                return res.status(error.status).send(await error.text());
+            }
         }
-        console.log(error.stack);
-        res.status(500).end(error.stack);
+
+        console.error(error);
+        res.status(500).send("Internal Server Error");
     }
 });
 
