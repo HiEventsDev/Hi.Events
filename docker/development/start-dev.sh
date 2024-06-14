@@ -75,11 +75,11 @@ done
 
 echo -e "\n${GREEN}Database is ready. Proceeding with migrations...${NC}"
 
-if [ ! -f ./../backend/.env ]; then
+if [ ! -f ./../../backend/.env ]; then
     $COMPOSE_CMD exec backend cp .env.example .env
 fi
 
-if [ ! -f ./../frontend/.env ]; then
+if [ ! -f ./../../frontend/.env ]; then
     $COMPOSE_CMD exec frontend cp .env.example .env
 fi
 

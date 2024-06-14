@@ -9,6 +9,7 @@ import {ResetPasswordRequest} from "../../../../types.ts";
 import {useFormErrorResponseHandler} from "../../../../hooks/useFormErrorResponseHandler.tsx";
 import {t} from "@lingui/macro";
 import {Card} from "../../../common/Card";
+import classes from "./ResetPassword.module.scss";
 
 export const ResetPassword = () => {
     const form = useForm({
@@ -48,18 +49,25 @@ export const ResetPassword = () => {
     });
 
     return (
-        <Card>
-            <form onSubmit={form.onSubmit(handleSubmit)}>
-                <PasswordInput {...form.getInputProps('password')} label={t`New Password`} required/>
-                <PasswordInput {...form.getInputProps('password_confirmation')} label={t`Confirm Password`} required/>
-                <Button type="submit" fullWidth disabled={mutate.isLoading}>
-                    {mutate.isLoading ? t`Working...` : t`Reset password`}
-                </Button>
-            </form>
-            <footer>
-                <NavLink to={'/auth/login'}>{t`Back to login`}</NavLink>
-            </footer>
-        </Card>
+        <>
+            <header className={classes.header}>
+                <h2>{t`Reset Password`}</h2>
+                <p>{t`Please enter your new password`}</p>
+            </header>
+            <Card>
+                <form onSubmit={form.onSubmit(handleSubmit)}>
+                    <PasswordInput {...form.getInputProps('password')} label={t`New Password`} required/>
+                    <PasswordInput {...form.getInputProps('password_confirmation')} label={t`Confirm Password`} required/>
+                    <Button type="submit" fullWidth disabled={mutate.isLoading}>
+                        {mutate.isLoading ? t`Working...` : t`Reset password`}
+                    </Button>
+                </form>
+                <footer>
+                    <NavLink to={'/auth/login'}>{t`Back to login`}</NavLink>
+                </footer>
+            </Card>
+        </>
+
     )
 }
 

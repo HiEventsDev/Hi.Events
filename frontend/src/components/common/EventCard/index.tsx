@@ -88,10 +88,12 @@ export function EventCard({event}: EventCardProps) {
                             <Menu.Item onClick={() => navigate(`/manage/event/${event.id}`)}
                                        leftSection={<IconSettings size={14}/>}
                             >{t`Manage event`}</Menu.Item>
-                            <Menu.Item onClick={() => navigate(`/manage/event/${event.id}/check-in`)}
-                                       leftSection={<IconQrcode size={14}/>}
-                            >{t`Check-in`}</Menu.Item>
 
+                            {(event.lifecycle_status === 'UPCOMING' || event.lifecycle_status === 'ONGOING') && (
+                                <Menu.Item onClick={() => navigate(`/manage/event/${event.id}/check-in`)}
+                                           leftSection={<IconQrcode size={14}/>}
+                                >{t`Check-in`}</Menu.Item>
+                            )}
                         </Menu.Dropdown>
                     </Menu>
                 </div>

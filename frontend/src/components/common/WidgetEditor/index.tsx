@@ -12,6 +12,7 @@ import {Popover} from "../Popover";
 import {LoadingMask} from '../LoadingMask';
 import {Event} from '../../../types.ts';
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
+import {Card} from "../Card";
 
 export const WidgetEditor = () => {
     const {eventId} = useParams();
@@ -155,7 +156,7 @@ export default App;
     return (
         <div>
             <div className={classes.widgetGrid}>
-                <div className={classes.widgetForm}>
+                <Card className={classes.widgetForm}>
                     <form>
                         <h2 className={classes.formHeader}>
                             {t`Widget Settings`}
@@ -303,7 +304,7 @@ export default App;
                         </Tabs>
 
                     </form>
-                </div>
+                </Card>
                 <div className={classes.previewPane}>
                     <h2 className={classes.previewHeader}>
                         {t`Ticket Widget Preview`}

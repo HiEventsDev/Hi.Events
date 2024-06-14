@@ -27,7 +27,7 @@ class TicketResourcePublic extends JsonResource
             'is_before_sale_start_date' => $this->isBeforeSaleStartDate(),
             'is_after_sale_end_date' => $this->isAfterSaleEndDate(),
             'price' => $this->when(
-                (bool)$this->getTicketPrices() && !$this->isTieredType(),
+                $this->getTicketPrices() && !$this->isTieredType(),
                 fn() => $this->getPrice(),
             ),
             'prices' => $this->when(
@@ -40,6 +40,7 @@ class TicketResourcePublic extends JsonResource
             ),
             $this->mergeWhen((bool)$this->getTicketPrices(), fn() => [
                 'is_available' => $this->isAvailable(),
+                'is_sold_out' => $this->isSoldOut(),
             ]),
         ];
     }

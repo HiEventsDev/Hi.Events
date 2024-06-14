@@ -59,6 +59,8 @@ class TicketRepository extends BaseRepository implements TicketRepositoryInterfa
                     WHERE order_items.ticket_price_id = :ticketPriceId
                     AND orders.status in ('RESERVED')
                     AND current_timestamp < orders.reserved_until
+                    AND orders.deleted_at IS NULL
+                    AND order_items.deleted_at IS NULL
                 ), 0)
             ) AS quantity_remaining,
             ticket_prices.initial_quantity_available IS NULL AS unlimited_tickets_available

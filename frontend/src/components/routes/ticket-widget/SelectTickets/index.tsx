@@ -214,6 +214,12 @@ const SelectTickets = (props: SelectTicketsProps) => {
         }
     }
 
+    const isButtonDisabled = ticketMutation.isLoading
+        || !ticketAreAvailable
+        || selectedTicketQuantitySum === 0
+        || props.widgetMode === 'preview'
+        || tickets?.every(ticket => ticket.is_sold_out);
+
     return (
         <div className={'hi-ticket-widget-container'}
              ref={resizeRef}
@@ -326,7 +332,7 @@ const SelectTickets = (props: SelectTicketsProps) => {
                                 __html: event.settings.ticket_page_message.replace(/\n/g, '<br/>')
                             }} className={'hi-ticket-page-message'}/>
                         )}
-                        <Button disabled={props.widgetMode === 'preview'} fullWidth className={'hi-continue-button'}
+                        <Button disabled={isButtonDisabled} fullWidth className={'hi-continue-button'}
                                 type={"submit"}
                                 loading={ticketMutation.isLoading}>
                             {props.continueButtonText || event?.settings?.continue_button_text || t`Continue`}

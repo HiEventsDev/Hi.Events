@@ -21,7 +21,6 @@ export const OrderSummary = ({event, order, showFreeWhenZeroTotal = true}: Order
                             <div className={classes.itemValue}>
                                 {!!item.price_before_discount && (
                                     <div style={{color: '#888', marginRight: '5px', display: 'inline-block'}}>
-
                                         <Currency
                                             currency={event.currency}
                                             price={item.price_before_discount * item.quantity}

@@ -10,6 +10,7 @@ import {Button, Group, Select, TextInput} from "@mantine/core";
 import {currencies} from "../../../../data/currencies.ts";
 import {timezones} from "../../../../data/timezones.ts";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
+import {useGetMe} from "../../../queries/useGetMe.ts";
 
 interface OrganizerFormProps {
     onSuccess?: (organizer: Organizer) => void;
@@ -62,6 +63,7 @@ export const OrganizerForm = ({form}: { form: UseFormReturnType<Partial<Organize
 export const OrganizerCreateForm = ({onSuccess}: OrganizerFormProps) => {
     const organizerMutation = useCreateOrganizer();
     const {data: account, isFetched: accountFetched} = useGetAccount();
+    const {data: me, isFetched: meFetched} = useGetMe();
     const form = useForm({
         initialValues: {
             name: '',
@@ -88,16 +90,16 @@ export const OrganizerCreateForm = ({onSuccess}: OrganizerFormProps) => {
 
     useEffect(() => {
         if (accountFetched) {
-            form.setFieldValue('email', String(account?.email));
+            form.setFieldValue('email', String(me?.email));
             form.setFieldValue('currency', String(account?.currency_code));
-            form.setFieldValue('timezone', String(account?.timezone));
+            form.setFieldValue('timezone', String(me?.timezone));
         }
-    }, [accountFetched]);
+    }, [accountFetched, meFetched]);
 
     return (
         <LoadingContainer>
             <form onSubmit={form.onSubmit(handleSubmit)}>
-                <fieldset disabled={organizerMutation.isLoading || !accountFetched}>
+                <fieldset disabled={organizerMutation.isLoading || !accountFetched || !meFetched}>
                     <OrganizerForm form={form as any}/>
 
                     <Group gap={10}>

@@ -1,6 +1,5 @@
 /* eslint-disable lingui/no-unlocalized-strings */
 import {Helmet} from "react-helmet-async";
-import {t} from "@lingui/macro";
 import {Event} from "../../../types";
 import {eventCoverImageUrl, eventHomepageUrl} from "../../../utilites/urlHelper.ts";
 import {utcToTz} from "../../../utilites/dates.ts";
@@ -11,7 +10,7 @@ interface EventDocumentHeadProps {
 
 export const EventDocumentHead = ({event}: EventDocumentHeadProps) => {
     const eventSettings = event.settings;
-    const title = (eventSettings?.seo_title ?? event.title) + ' | ' + t` Powered By Hi.Events`;
+    const title = (eventSettings?.seo_title ?? event.title) + ' | ' + `Hi.Events`;
     const description = eventSettings?.seo_description ?? event.description_preview;
     const keywords = eventSettings?.seo_keywords;
     const image = eventCoverImageUrl(event);

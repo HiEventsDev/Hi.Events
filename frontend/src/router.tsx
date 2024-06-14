@@ -24,6 +24,7 @@ export const router: RouteObject[] = [
     {
         path: "",
         element: <Root/>,
+        errorElement: <ErrorPage/>
     },
     {
         path: "auth",
