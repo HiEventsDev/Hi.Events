@@ -26,6 +26,11 @@ export const api = axios.create({
     withCredentials: true,
 });
 
+const existingToken = typeof window !== "undefined" ? window.localStorage.getItem('token') : undefined;
+if (existingToken) {
+    setAuthToken(existingToken);
+}
+
 api.interceptors.response.use(
     (response) => {
         // Securely update the token on each response
