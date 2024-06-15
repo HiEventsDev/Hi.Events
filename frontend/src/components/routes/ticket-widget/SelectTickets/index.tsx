@@ -345,49 +345,46 @@ const SelectTickets = (props: SelectTicketsProps) => {
                     </div>
                 </form>
             )}
-
-            {ticketAreAvailable && (
-                <div className={'hi-promo-code-row'}>
-                    {(!showPromoCodeInput && !form.values.promo_code) && (
-                        <Anchor className={'hi-have-a-promo-code-link'}
-                                onClick={() => setShowPromoCodeInput(true)}>
-                            {t`Have a promo code?`}
-                        </Anchor>
-                    )}
-                    {form.values.promo_code && (
-                        <div className={'hi-promo-code-applied'}>
-                            <span><b>{form.values.promo_code}</b> {t`applied`}</span>
-                            <ActionIcon
-                                className={'hi-promo-code-applied-remove-icon-button'}
-                                variant="transparent"
-                                aria-label={t`remove`}
-                                title={t`Remove`}
-                                onClick={() => {
-                                    promoCodeEventRefetchMutation.mutate(null)
-                                }}
-                            >
-                                <IconX stroke={1.5} size={20}/>
-                            </ActionIcon>
-                        </div>
-                    )}
-                    {(showPromoCodeInput && !form.values.promo_code) && (
-                        <Group className={'hi-promo-code-input-wrapper'} wrap={'nowrap'} gap={'20px'}>
-                            {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                            {/*@ts-ignore*/}
-                            <TextInput autoFocus classNames={{input: 'hi-promo-code-input'}} onKeyDown={(event) => {
-                                if (event.key === 'Enter') {
-                                    event.preventDefault();
-                                    handleApplyPromoCode();
-                                }
-                            }} mb={0} ref={promoRef}/>
-                            <Button disabled={promoCodeEventRefetchMutation.isLoading}
-                                    className={'hi-apply-promo-code-button'} variant={'outline'}
-                                    onClick={handleApplyPromoCode}>
-                                {t`Apply Promo Code`}
-                            </Button>
-                        </Group>
-                    )}
-                </div>
+            <div className={'hi-promo-code-row'}>
+                {(!showPromoCodeInput && !form.values.promo_code) && (
+                    <Anchor className={'hi-have-a-promo-code-link'}
+                            onClick={() => setShowPromoCodeInput(true)}>
+                        {t`Have a promo code?`}
+                    </Anchor>
+                )}
+                {form.values.promo_code && (
+                    <div className={'hi-promo-code-applied'}>
+                        <span><b>{form.values.promo_code}</b> {t`applied`}</span>
+                        <ActionIcon
+                            className={'hi-promo-code-applied-remove-icon-button'}
+                            variant="transparent"
+                            aria-label={t`remove`}
+                            title={t`Remove`}
+                            onClick={() => {
+                                promoCodeEventRefetchMutation.mutate(null)
+                            }}
+                        >
+                            <IconX stroke={1.5} size={20}/>
+                        </ActionIcon>
+                    </div>
+                )}
+            </div>
+            {(showPromoCodeInput && !form.values.promo_code) && (
+                <Group className={'hi-promo-code-input-wrapper'} wrap={'nowrap'} gap={'20px'}>
+                    {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                    {/*@ts-ignore*/}
+                    <TextInput autoFocus classNames={{input: 'hi-promo-code-input'}} onKeyDown={(event) => {
+                        if (event.key === 'Enter') {
+                            event.preventDefault();
+                            handleApplyPromoCode();
+                        }
+                    }} mb={0} ref={promoRef}/>
+                    <Button disabled={promoCodeEventRefetchMutation.isLoading}
+                            className={'hi-apply-promo-code-button'} variant={'outline'}
+                            onClick={handleApplyPromoCode}>
+                        {t`Apply Promo Code`}
+                    </Button>
+                </Group>
             )}
             {
                 /**
