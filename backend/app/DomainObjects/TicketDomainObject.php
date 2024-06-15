@@ -76,7 +76,7 @@ class TicketDomainObject extends Generated\TicketDomainObjectAbstract implements
     public function isSoldOut(): bool
     {
         if (!$this->getTicketPrices() || $this->getTicketPrices()->isEmpty()) {
-            throw new LogicException('You cannot check if a ticket is sold out without prices.');
+            return true;
         }
 
         return $this->getTicketPrices()->every(fn(TicketPriceDomainObject $price) => $price->isSoldOut());
@@ -85,7 +85,7 @@ class TicketDomainObject extends Generated\TicketDomainObjectAbstract implements
     public function getQuantityAvailable(): int
     {
         if (!$this->getTicketPrices() || $this->getTicketPrices()->isEmpty()) {
-            throw new LogicException('You cannot get the quantity available for a ticket without prices.');
+            return 0;
         }
 
         return $this->getTicketPrices()->sum(fn(TicketPriceDomainObject $price) => $price->getQuantityAvailable());

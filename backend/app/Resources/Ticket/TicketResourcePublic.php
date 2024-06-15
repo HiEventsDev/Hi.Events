@@ -26,6 +26,9 @@ class TicketResourcePublic extends JsonResource
             'event_id' => $this->getEventId(),
             'is_before_sale_start_date' => $this->isBeforeSaleStartDate(),
             'is_after_sale_end_date' => $this->isAfterSaleEndDate(),
+            $this->mergeWhen($this->getShowQuantityRemaining(), fn () => [
+                'quantity_available' => $this->getQuantityAvailable(),
+            ]),
             'price' => $this->when(
                 $this->getTicketPrices() && !$this->isTieredType(),
                 fn() => $this->getPrice(),

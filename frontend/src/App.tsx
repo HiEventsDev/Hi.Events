@@ -24,7 +24,6 @@ import {messages as fr} from "./locales/fr.po";
 import {messages as pt} from "./locales/pt.po";
 // @ts-ignore
 import {messages as es} from "./locales/es.po";
-import {setAuthToken} from "./utilites/apiClient.ts";
 import {isSsr} from "./utilites/helpers.ts";
 
 declare global {
@@ -63,7 +62,6 @@ export const App: FC<
     PropsWithChildren<{
         queryClient: QueryClient;
         helmetContext?: any;
-        token?: string;
     }>
 > = (props) => {
     const [isLoadedOnBrowser, setIsLoadedOnBrowser] = React.useState(false);
@@ -72,10 +70,6 @@ export const App: FC<
     if (!localeActivated.current) {
         localeActivated.current = true;
         dynamicActivate(getSupportedLocale());
-    }
-
-    if (props.token) {
-        setAuthToken(props.token);
     }
 
     useEffect(() => {

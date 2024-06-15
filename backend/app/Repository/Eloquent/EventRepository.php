@@ -71,6 +71,7 @@ class EventRepository extends BaseRepository implements EventRepositoryInterface
                   WHERE orders.event_id = $eventId
                     AND orders.status = '$reserved'
                     AND orders.reserved_until > NOW()
+                    AND orders.deleted_at IS NULL
                   GROUP BY order_items.ticket_id, order_items.ticket_price_id) AS reserved_quantities
                  ON ticket_prices.id = reserved_quantities.ticket_price_id
             WHERE tickets.event_id = $eventId

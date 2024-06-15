@@ -6,6 +6,7 @@ import {createStaticHandler, createStaticRouter, StaticRouterProvider,} from "re
 import {router} from "./router";
 import {App} from "./App";
 import {queryClient} from "./utilites/queryClient";
+import {setAuthToken} from "./utilites/apiClient.ts";
 
 const helmetContext = {};
 
@@ -13,6 +14,8 @@ export async function render(params: {
     req: express.Request;
     res: express.Response;
 }) {
+    setAuthToken(params.req.cookies.token);
+
     const {query, dataRoutes} = createStaticHandler(router);
     const remixRequest = createFetchRequest(params.req, params.res);
     const context = await query(remixRequest);
@@ -23,7 +26,7 @@ export async function render(params: {
 
     const routerWithContext = createStaticRouter(dataRoutes, context);
     const appHtml = ReactDOMServer.renderToString(
-        <App queryClient={queryClient} helmetContext={helmetContext} token={params.req.cookies.token}>
+        <App queryClient={queryClient} helmetContext={helmetContext}>
             <StaticRouterProvider
                 router={routerWithContext}
                 context={context}

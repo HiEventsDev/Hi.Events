@@ -45,7 +45,7 @@ readonly class UpdateMeHandler
 
             if ($this->isChangingEmail($updateUserData, $existingUser)) {
                 $updateArray['pending_email'] = $updateUserData->email;
-                $this->sendEmailChangeConfirmation($updateUserData, $existingUser);
+                $this->sendEmailChangeConfirmation($existingUser);
             }
         }
 
@@ -92,10 +92,10 @@ readonly class UpdateMeHandler
         return $existingUser;
     }
 
-    private function sendEmailChangeConfirmation(UpdateMeDTO $updateUserData, UserDomainObject $existingUser): void
+    private function sendEmailChangeConfirmation(UserDomainObject $existingUser): void
     {
         $this->mailer
-            ->to($updateUserData->email)
+            ->to($existingUser->getEmail())
             ->send(new ConfirmEmailChangeMail($existingUser, $this->encryptedPayloadService->encryptPayload([
                     'id' => $existingUser->getId(),
                 ]))

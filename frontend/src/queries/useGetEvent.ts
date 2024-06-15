@@ -10,6 +10,9 @@ export const useGetEvent = (eventId: IdParam) => {
         async () => {
             const {data} = await eventsClient.findByID(eventId);
             return data;
+        },
+        {
+            staleTime: 5,
         }
     );
 };
