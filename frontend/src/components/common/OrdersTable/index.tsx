@@ -14,7 +14,7 @@ import {
 import {prettyDate, relativeDate} from "../../../utilites/dates.ts";
 import {ViewOrderModal} from "../../modals/ViewOrderModal";
 import {useDisclosure} from "@mantine/hooks";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {CancelOrderModal} from "../../modals/CancelOrderModal";
 import {SendMessageModal} from "../../modals/SendMessageModal";
 import {notifications} from "@mantine/notifications";
@@ -28,6 +28,7 @@ import {ShowForDesktop, ShowForMobile} from "../Responsive/ShowHideComponents.ts
 import {useResendOrderConfirmation} from "../../../mutations/useResendOrderConfirmation.ts";
 import {OrderStatusBadge} from "../OrderStatusBadge";
 import {formatNumber} from "../../../utilites/helpers.ts";
+import {useUrlHash} from "../../../hooks/useUrlHash.ts";
 
 interface OrdersTableProps {
     event: Event,
@@ -42,17 +43,11 @@ export const OrdersTable = ({orders, event}: OrdersTableProps) => {
     const [orderId, setOrderId] = useState<IdParam>();
     const resendConfirmationMutation = useResendOrderConfirmation();
 
-    useEffect(() => {
-        if (window?.location.hash) {
-            const match = window?.location.hash.match(/^#order-(\d+)$/);
-
-            if (match && match[1]) {
-                const orderId = match[1];
-                setOrderId(orderId);
-                viewModal.open();
-            }
-        }
-    }, []);
+    useUrlHash(/^#order-(\d+)$/, (matches => {
+        const orderId = matches![1];
+        setOrderId(orderId);
+        viewModal.open();
+    }));
 
     if (orders.length === 0) {
         return <NoResultsSplash

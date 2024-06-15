@@ -69,7 +69,7 @@ const GettingStarted = () => {
                             {t`Create tickets for your event, set prices, and manage available quantity.`}
                         </p>
 
-                        <Button variant={'light'} component={'a'} href={'/manage/event/' + eventId + '/tickets'}>
+                        <Button variant={'light'} component={'a'} href={'/manage/event/' + eventId + '/tickets#create-ticket'}>
                             {hasTickets ? t`Add More tickets` : t`Add tickets`}
                         </Button>
 

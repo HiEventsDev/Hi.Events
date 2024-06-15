@@ -14,6 +14,7 @@ import {useGetTickets} from "../../../queries/useGetTickets.ts";
 import {TableSkeleton} from "../../common/TableSkeleton";
 import {Pagination} from "../../common/Pagination";
 import {t} from "@lingui/macro";
+import {useUrlHash} from "../../../hooks/useUrlHash.ts";
 
 export const Tickets = () => {
     const [searchParams, setSearchParams] = useFilterQueryParamSync();
@@ -23,11 +24,13 @@ export const Tickets = () => {
     const pagination = ticketsQuery?.data?.meta;
     const tickets = ticketsQuery?.data?.data;
     const enableSorting =
-        (Object.keys(searchParams).length === 0) || // searchParams is an empty object
+        (Object.keys(searchParams).length === 0) ||
         (
-            (searchParams.sortBy === 'order' || searchParams.sortBy === undefined) && // orderBy is 'order' or undefined
-            (searchParams.query === '' || searchParams.query === undefined) // query is an empty string or undefined
+            (searchParams.sortBy === 'order' || searchParams.sortBy === undefined) &&
+            (searchParams.query === '' || searchParams.query === undefined)
         );
+
+    useUrlHash('create-ticket', () => openCreateModal());
 
     return (
         <PageBody>
