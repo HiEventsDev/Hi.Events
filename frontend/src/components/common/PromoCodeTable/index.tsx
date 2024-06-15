@@ -12,6 +12,7 @@ import {useState} from "react";
 import {NoResultsSplash} from "../NoResultsSplash";
 import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
 import {useDeletePromoCode} from "../../../mutations/useDeletePromoCode.ts";
+import {eventHomepageUrl} from "../../../utilites/urlHelper.ts";
 
 interface PromoCodeTableProps {
     event: Event,
@@ -23,6 +24,7 @@ export const PromoCodeTable = ({event, promoCodes, openCreateModal}: PromoCodeTa
     const [promoCodeId, setPromoCodeId] = useState<number | undefined>();
     const [editModalOpen, {open: openEditModal, close: closeEditModal}] = useDisclosure(false);
     const deleteMutation = useDeletePromoCode();
+    const clipboard = useClipboard({ timeout: 500 });
 
     const handleEditModal = (promoCodeId: number | undefined) => {
         setPromoCodeId(promoCodeId);
@@ -168,6 +170,8 @@ export const PromoCodeTable = ({event, promoCodes, openCreateModal}: PromoCodeTa
                                                 </Menu.Item>
                                                 <Menu.Item leftSection={<IconCopy size={14}/>}
                                                            onClick={() => {
+                                                                clipboard.copy(eventHomepageUrl(event) + `?promo_code=${code?.code}`);
+                                                                showSuccess(t`URL copied to clipboard`)
                                                            }}>
                                                     {t`Copy URL`}
                                                 </Menu.Item>
