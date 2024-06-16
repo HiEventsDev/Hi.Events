@@ -3,8 +3,10 @@
 namespace HiEvents\Services\Handlers\Attendee;
 
 use HiEvents\DomainObjects\EventSettingDomainObject;
+use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\Exceptions\ResourceConflictException;
+use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Services\Domain\Attendee\SendAttendeeTicketService;
@@ -42,10 +44,16 @@ readonly class ResendAttendeeTicketHandler
         }
 
         $event = $this->eventRepository
+            ->loadRelation(new Relationship(OrganizerDomainObject::class, name: 'organizer'))
             ->loadRelation(EventSettingDomainObject::class)
             ->findById($resendAttendeeTicketDTO->eventId);
 
-        $this->sendAttendeeTicketService->send($attendee, $event, $event->getEventSettings());
+        $this->sendAttendeeTicketService->send(
+            attendee: $attendee,
+            event: $event,
+            eventSettings: $event->getEventSettings(),
+            organizer: $event->getOrganizer(),
+        );
 
         $this->logger->info('Attendee ticket resent', [
             'attendeeId' => $resendAttendeeTicketDTO->attendeeId,
