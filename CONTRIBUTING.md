@@ -53,6 +53,10 @@ Please ensure that your pull request includes:
 - Tests for new functionality or bug fixes, if applicable.
 - A demo or screenshots, if the changes are visual.
 
+Once you create a pull request, a CLA bot will automatically check if you have signed the Contributor License Agreement (CLA). 
+Signing is as simple as leaving a comment on the pull request with the message `I have read the CLA Document and I hereby sign the CLA`.
+We require all contributors to sign the CLA to ensure that we have the necessary permissions to use and distribute your contributions.
+
 ## Development Setup
 
 To set up the development environment for Hi.Events, follow the detailed instructions in our [Getting Started with Local Development guide](https://hi.events/docs/getting-started/local-development).
