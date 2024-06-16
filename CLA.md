@@ -8,7 +8,7 @@ Like many open source projects, we ask you to please sign this Contributor Licen
 
 This Contributor License Agreement ("Agreement") documents the rights granted by contributors to Hi.Event Ltd. ("Company"). To make this a binding legal agreement, please review the following terms and sign below.
 
-You hereby grant to Hi.Event Ltd. a perpetual, worldwide, non-exclusive, no-charge, royalty-free, irrevocable license to use, modify, reproduce, distribute, and sublicense your contributions under the terms of both the GNU Affero General Public License version 3 (AGPL-3.0) and a commercial license, without any additional compensation to you.
+You hereby grant to Hi.Event Ltd. a perpetual, worldwide, non-exclusive, no-charge, royalty-free, irrevocable license to use, modify, reproduce, distribute, and sublicense your contributions under the terms of both the GNU Affero General Public License version 3 (AGPL-3.0) and a commercial license, without any compensation to you.
 
 You confirm that:
 
@@ -18,6 +18,6 @@ You confirm that:
 
 For more details on how to contribute, please read our [Contribution Guidelines](https://github.com/HiEventsDev/hi.events/blob/develop/CONTRIBUTING.md).
 
-By signing below, you accept and agree to the terms of this Agreement.
+Before contributing to Hi.Events, you must accept and agree to the terms of this Agreement.
 
 Thank you for your contributions and support!
