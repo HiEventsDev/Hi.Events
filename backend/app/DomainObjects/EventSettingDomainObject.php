@@ -20,4 +20,27 @@ class EventSettingDomainObject extends Generated\EventSettingDomainObjectAbstrac
 </div>
 HTML;
     }
+
+    public function getAddressString(): string
+    {
+        $locationDetails = $this->getLocationDetails();
+
+        if (is_null($locationDetails)) {
+            return '';
+        }
+
+        $addressParts = [
+            $locationDetails['venue_name'] ?? null,
+            $locationDetails['address_line_1'] ?? null,
+            $locationDetails['address_line_2'] ?? null,
+            $locationDetails['city'] ?? null,
+            $locationDetails['state_or_region'] ?? null,
+            $locationDetails['zip_or_postal_code'] ?? null,
+            $locationDetails['country'] ?? null
+        ];
+
+        $filteredAddressParts = array_filter($addressParts, static fn($part) => !is_null($part) && $part !== '');
+
+        return implode(', ', $filteredAddressParts);
+    }
 }

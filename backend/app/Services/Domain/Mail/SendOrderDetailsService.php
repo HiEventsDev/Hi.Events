@@ -62,7 +62,13 @@ readonly class SendOrderDetailsService
                 continue;
             }
 
-            $this->sendAttendeeTicketService->send($attendee, $event, $event->getEventSettings());
+            $this->sendAttendeeTicketService->send(
+                attendee: $attendee,
+                event: $event,
+                eventSettings: $event->getEventSettings(),
+                organizer: $event->getOrganizer(),
+            );
+
             $sentEmails[] = $attendee->getEmail();
         }
     }
