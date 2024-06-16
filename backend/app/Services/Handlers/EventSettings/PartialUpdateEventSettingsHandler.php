@@ -31,6 +31,13 @@ readonly class PartialUpdateEventSettingsHandler
             throw new RefundNotPossibleException('Event settings not found');
         }
 
+        $locationDetails = $eventSettingsDTO->settings['location_details'] ?? $existingSettings->getLocationDetails();
+        $isOnlineEvent = $eventSettingsDTO->settings['is_online_event'] ?? $existingSettings->getIsOnlineEvent();
+
+        if ($isOnlineEvent) {
+            $locationDetails = null;
+        }
+
         return $this->eventSettingsHandler->handle(
             UpdateEventSettingsDTO::fromArray([
                 'event_id' => $eventSettingsDTO->event_id,
@@ -59,7 +66,7 @@ readonly class PartialUpdateEventSettingsHandler
                 'order_timeout_in_minutes' => $eventSettingsDTO->settings['order_timeout_in_minutes'] ?? $existingSettings->getOrderTimeoutInMinutes(),
                 'website_url' => $eventSettingsDTO->settings['website_url'] ?? $existingSettings->getWebsiteUrl(),
                 'maps_url' => $eventSettingsDTO->settings['maps_url'] ?? $existingSettings->getMapsUrl(),
-                'location_details' => $eventSettingsDTO->settings['location_details'] ?? $existingSettings->getLocationDetails(),
+                'location_details' => $locationDetails,
                 'is_online_event' => $eventSettingsDTO->settings['is_online_event'] ?? $existingSettings->getIsOnlineEvent(),
                 'online_event_connection_details' => array_key_exists('online_event_connection_details', $eventSettingsDTO->settings)
                     ? $eventSettingsDTO->settings['online_event_connection_details']
