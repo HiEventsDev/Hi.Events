@@ -28,7 +28,7 @@ class ConfirmEmailChangeMail extends BaseMail
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Confirm email change',
+            subject: __('Confirm email change'),
         );
     }
 

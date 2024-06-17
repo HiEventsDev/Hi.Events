@@ -37,6 +37,7 @@ readonly class OrderManagementService
         int                    $eventId,
         EventDomainObject      $event,
         int                    $timeOutMinutes,
+        string                 $locale,
         ?PromoCodeDomainObject $promoCode,
         string                 $sessionId = null,
     ): OrderDomainObject
@@ -54,6 +55,7 @@ readonly class OrderManagementService
             'public_id' => $publicId,
             'promo_code_id' => $promoCode?->getId(),
             'promo_code' => $promoCode?->getCode(),
+            'locale' => $locale,
         ]);
     }
 

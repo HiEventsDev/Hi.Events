@@ -29,7 +29,7 @@ class OrderRefunded extends BaseMail
     {
         return new Envelope(
             replyTo: $this->eventSettings->getSupportEmail(),
-            subject: 'You\'ve received a refund',
+            subject: __('You\'ve received a refund'),
         );
     }
 

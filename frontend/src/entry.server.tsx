@@ -10,6 +10,11 @@ import {setAuthToken} from "./utilites/apiClient.ts";
 
 const helmetContext = {};
 
+const getLocale = (req: express.Request): string => {
+    const acceptLanguage = req.headers['accept-language'];
+    return acceptLanguage ? acceptLanguage.split(',')[0].split('-')[0] : 'en';
+}
+
 export async function render(params: {
     req: express.Request;
     res: express.Response;
@@ -26,7 +31,11 @@ export async function render(params: {
 
     const routerWithContext = createStaticRouter(dataRoutes, context);
     const appHtml = ReactDOMServer.renderToString(
-        <App queryClient={queryClient} helmetContext={helmetContext}>
+        <App
+            queryClient={queryClient}
+            helmetContext={helmetContext}
+            locale={getLocale(params.req)}
+        >
             <StaticRouterProvider
                 router={routerWithContext}
                 context={context}

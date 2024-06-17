@@ -22,6 +22,7 @@ abstract class UserDomainObjectAbstract extends \HiEvents\DomainObjects\Abstract
     final public const LAST_NAME = 'last_name';
     final public const PENDING_EMAIL = 'pending_email';
     final public const TIMEZONE = 'timezone';
+    final public const LOCALE = 'locale';
 
     protected int $id;
     protected string $email;
@@ -35,6 +36,7 @@ abstract class UserDomainObjectAbstract extends \HiEvents\DomainObjects\Abstract
     protected ?string $last_name = null;
     protected ?string $pending_email = null;
     protected string $timezone;
+    protected string $locale = 'en';
 
     public function toArray(): array
     {
@@ -51,6 +53,7 @@ abstract class UserDomainObjectAbstract extends \HiEvents\DomainObjects\Abstract
                     'last_name' => $this->last_name ?? null,
                     'pending_email' => $this->pending_email ?? null,
                     'timezone' => $this->timezone ?? null,
+                    'locale' => $this->locale ?? null,
                 ];
     }
 
@@ -184,5 +187,16 @@ abstract class UserDomainObjectAbstract extends \HiEvents\DomainObjects\Abstract
     public function getTimezone(): string
     {
         return $this->timezone;
+    }
+
+    public function setLocale(string $locale): self
+    {
+        $this->locale = $locale;
+        return $this;
+    }
+
+    public function getLocale(): string
+    {
+        return $this->locale;
     }
 }
