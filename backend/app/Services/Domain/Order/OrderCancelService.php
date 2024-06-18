@@ -43,11 +43,14 @@ readonly class OrderCancelService
                 ->loadRelation(EventSettingDomainObject::class)
                 ->findById($order->getEventId());
 
-            $this->mailer->to($order->getEmail())->send(new OrderCancelled(
-                order: $order,
-                event: $event,
-                eventSettings: $event->getEventSettings(),
-            ));
+            $this->mailer
+                ->to($order->getEmail())
+                ->locale($order->getLocale())
+                ->send(new OrderCancelled(
+                    order: $order,
+                    event: $event,
+                    eventSettings: $event->getEventSettings(),
+                ));
         });
     }
 

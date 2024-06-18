@@ -14,7 +14,7 @@ class ResetPasswordSuccess extends BaseMail
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Your password has been reset',
+            subject: __('Your password has been reset'),
         );
     }
 

@@ -38,6 +38,7 @@ abstract class OrderDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     final public const TAXES_AND_FEES_ROLLUP = 'taxes_and_fees_rollup';
     final public const TOTAL_TAX = 'total_tax';
     final public const TOTAL_FEE = 'total_fee';
+    final public const LOCALE = 'locale';
 
     protected int $id;
     protected int $event_id;
@@ -67,6 +68,7 @@ abstract class OrderDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     protected array|string|null $taxes_and_fees_rollup = null;
     protected float $total_tax = 0.0;
     protected float $total_fee = 0.0;
+    protected string $locale = 'en';
 
     public function toArray(): array
     {
@@ -99,6 +101,7 @@ abstract class OrderDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
                     'taxes_and_fees_rollup' => $this->taxes_and_fees_rollup ?? null,
                     'total_tax' => $this->total_tax ?? null,
                     'total_fee' => $this->total_fee ?? null,
+                    'locale' => $this->locale ?? null,
                 ];
     }
 
@@ -408,5 +411,16 @@ abstract class OrderDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     public function getTotalFee(): float
     {
         return $this->total_fee;
+    }
+
+    public function setLocale(string $locale): self
+    {
+        $this->locale = $locale;
+        return $this;
+    }
+
+    public function getLocale(): string
+    {
+        return $this->locale;
     }
 }

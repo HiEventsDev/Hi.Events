@@ -102,9 +102,9 @@ class EditAttendeeHandler
         );
 
         if ($availableQuantity <= 0) {
-            throw new NoTicketsAvailableException(__('There are no tickets available. ' .
-                'If you would like to assign this ticket to this attendee,' .
-                ' please adjust the ticket\'s available quantity.'));
+            throw new NoTicketsAvailableException(
+                __('There are no tickets available. If you would like to assign this ticket to this attendee, please adjust the ticket\'s available quantity.')
+            );
         }
     }
 

@@ -49,12 +49,15 @@ class ResendOrderConfirmationAction extends BaseAction
                 ->loadRelation(new Relationship(EventSettingDomainObject::class))
                 ->findById($order->getEventId());
 
-            $this->mailer->to($order->getEmail())->send(new OrderSummary(
-                order: $order,
-                event: $event,
-                organizer: $event->getOrganizer(),
-                eventSettings: $event->getEventSettings(),
-            ));
+            $this->mailer
+                ->to($order->getEmail())
+                ->locale($order->getLocale())
+                ->send(new OrderSummary(
+                    order: $order,
+                    event: $event,
+                    organizer: $event->getOrganizer(),
+                    eventSettings: $event->getEventSettings(),
+                ));
         }
 
         return $this->noContentResponse();

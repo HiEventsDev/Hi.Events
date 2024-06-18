@@ -18,17 +18,20 @@ readonly class SendAttendeeTicketService
     }
 
     public function send(
-        AttendeeDomainObject $attendee,
-        EventDomainObject $event,
+        AttendeeDomainObject     $attendee,
+        EventDomainObject        $event,
         EventSettingDomainObject $eventSettings,
-        OrganizerDomainObject $organizer,
+        OrganizerDomainObject    $organizer,
     ): void
     {
-        $this->mailer->to($attendee->getEmail())->send(new AttendeeTicketMail(
-            attendee: $attendee,
-            event: $event,
-            eventSettings: $eventSettings,
-            organizer: $organizer,
-        ));
+        $this->mailer
+            ->to($attendee->getEmail())
+            ->locale($attendee->getLocale())
+            ->send(new AttendeeTicketMail(
+                attendee: $attendee,
+                event: $event,
+                eventSettings: $eventSettings,
+                organizer: $organizer,
+            ));
     }
 }

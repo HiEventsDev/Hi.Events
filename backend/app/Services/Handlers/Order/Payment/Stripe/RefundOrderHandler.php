@@ -82,12 +82,15 @@ readonly class RefundOrderHandler
 
     private function notifyBuyer(OrderDomainObject $order, EventDomainObject $event, MoneyValue $amount): void
     {
-        $this->mailer->to($order->getEmail())->send(new OrderRefunded(
-            order: $order,
-            event: $event,
-            eventSettings: $event->getEventSettings(),
-            refundAmount: $amount
-        ));
+        $this->mailer
+            ->to($order->getEmail())
+            ->locale($order->getLocale())
+            ->send(new OrderRefunded(
+                order: $order,
+                event: $event,
+                eventSettings: $event->getEventSettings(),
+                refundAmount: $amount
+            ));
     }
 
     private function markOrderRefundPending(OrderDomainObject $order): OrderDomainObject

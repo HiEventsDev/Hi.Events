@@ -1,5 +1,5 @@
 import ReactDOM from "react-dom/client";
-import {createBrowserRouter, matchRoutes, RouterProvider,} from "react-router-dom";
+import {createBrowserRouter, matchRoutes, RouterProvider} from "react-router-dom";
 import {hydrate} from "@tanstack/react-query";
 
 import {router} from "./router";
@@ -16,7 +16,19 @@ if (window.__REHYDRATED_STATE__) {
     hydrate(queryClient, window.__REHYDRATED_STATE__);
 }
 
-initClientApp();
+const getLocale = (): string => {
+    if (typeof window !== "undefined") {
+        const storedLocale = localStorage.getItem("locale");
+        if (storedLocale) {
+            return storedLocale;
+        }
+
+
+        return window.navigator.language.split("-")[0];
+    }
+
+    return "en";
+};
 
 async function initClientApp() {
     if (window.__REHYDRATED_STATE__) {
@@ -40,13 +52,19 @@ async function initClientApp() {
 
         ReactDOM.hydrateRoot(
             document.getElementById("app") as HTMLElement,
-            <App queryClient={queryClient}>
+            <App
+                queryClient={queryClient}
+                locale={getLocale()}
+            >
                 <RouterProvider router={browserRouter} fallbackElement={null}/>
             </App>
         );
     } else {
         ReactDOM.createRoot(document.getElementById("app") as HTMLElement).render(
-            <App queryClient={queryClient}>
+            <App
+                queryClient={queryClient}
+                locale={getLocale()}
+            >
                 <RouterProvider
                     router={createBrowserRouter(router)}
                     fallbackElement={null}
@@ -55,3 +73,5 @@ async function initClientApp() {
         );
     }
 }
+
+initClientApp();

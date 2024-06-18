@@ -27,6 +27,7 @@ abstract class AttendeeDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
     final public const CREATED_AT = 'created_at';
     final public const UPDATED_AT = 'updated_at';
     final public const DELETED_AT = 'deleted_at';
+    final public const LOCALE = 'locale';
 
     protected int $id;
     protected int $order_id;
@@ -45,6 +46,7 @@ abstract class AttendeeDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
     protected string $created_at;
     protected string $updated_at;
     protected ?string $deleted_at = null;
+    protected string $locale = 'en';
 
     public function toArray(): array
     {
@@ -66,6 +68,7 @@ abstract class AttendeeDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
                     'created_at' => $this->created_at ?? null,
                     'updated_at' => $this->updated_at ?? null,
                     'deleted_at' => $this->deleted_at ?? null,
+                    'locale' => $this->locale ?? null,
                 ];
     }
 
@@ -254,5 +257,16 @@ abstract class AttendeeDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
     public function getDeletedAt(): ?string
     {
         return $this->deleted_at;
+    }
+
+    public function setLocale(string $locale): self
+    {
+        $this->locale = $locale;
+        return $this;
+    }
+
+    public function getLocale(): string
+    {
+        return $this->locale;
     }
 }

@@ -96,6 +96,7 @@ readonly class UpdateMeHandler
     {
         $this->mailer
             ->to($existingUser->getEmail())
+            ->locale($existingUser->getLocale())
             ->send(new ConfirmEmailChangeMail($existingUser, $this->encryptedPayloadService->encryptPayload([
                     'id' => $existingUser->getId(),
                 ]))
