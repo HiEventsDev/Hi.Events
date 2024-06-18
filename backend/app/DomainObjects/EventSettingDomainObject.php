@@ -2,6 +2,8 @@
 
 namespace HiEvents\DomainObjects;
 
+use HiEvents\DataTransferObjects\AddressDTO;
+
 class EventSettingDomainObject extends Generated\EventSettingDomainObjectAbstract
 {
     /**
@@ -42,5 +44,18 @@ HTML;
         $filteredAddressParts = array_filter($addressParts, static fn($part) => !is_null($part) && $part !== '');
 
         return implode(', ', $filteredAddressParts);
+    }
+
+    public function getAddress(): AddressDTO
+    {
+        return new AddressDTO(
+            venue_name: $this->getLocationDetails()['venue_name'] ?? null,
+            address_line_1: $this->getLocationDetails()['address_line_1'] ?? null,
+            address_line_2: $this->getLocationDetails()['address_line_2'] ?? null,
+            city: $this->getLocationDetails()['city'] ?? null,
+            state_or_region: $this->getLocationDetails()['state_or_region'] ?? null,
+            zip_or_postal_code: $this->getLocationDetails()['zip_or_postal_code'] ?? null,
+            country: $this->getLocationDetails()['country'] ?? null,
+        );
     }
 }
