@@ -9,6 +9,7 @@ import {ShareComponent} from "../../../common/ShareIcon";
 import {eventCoverImageUrl, eventHomepageUrl} from "../../../../utilites/urlHelper.ts";
 import {FC} from "react";
 import {Event} from "../../../../types.ts";
+import {EventDateRange} from "../../../common/EventDateRange";
 
 export const EventInformation: FC<{
     event: Event
@@ -39,15 +40,8 @@ export const EventInformation: FC<{
                     <h2>{t`Date & Time`}</h2>
                     <div className={classes.details}>
                         <IconCalendar size={20}/>
-                        <div className={classes.detail}>
-                            <div>
-                                {prettyDate(event.start_date, event.timezone)}
-                            </div>
-                            {event?.end_date && (
-                                <div>
-                                    {prettyDate(event.end_date, event.timezone)}
-                                </div>
-                            )}
+                        <div>
+                            <EventDateRange event={event}/>
                         </div>
                     </div>
                 </div>
