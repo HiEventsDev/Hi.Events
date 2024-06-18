@@ -136,9 +136,9 @@ export const TicketForm = ({form, ticket}: TicketFormProps) => {
         },
         {
             icon: <IconHeartDollar/>,
-            label: t`Donation Ticket`,
+            label: t`Donation / Pay what you'd like ticket`,
             value: 'DONATION',
-            description: t`Set a minimum price and let users donate more`,
+            description: t`Set a minimum price and let users pay more if they choose`,
         },
         {
             icon: <IconCoins/>,
