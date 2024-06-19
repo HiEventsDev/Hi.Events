@@ -50,6 +50,7 @@ class AttendeeTicketMail extends BaseMail
                 'event' => $this->event,
                 'attendee' => $this->attendee,
                 'eventSettings' => $this->eventSettings,
+                'organizer' => $this->organizer,
                 'ticketUrl' => sprintf(
                     Url::getFrontEndUrlFromConfig(Url::ATTENDEE_TICKET),
                     $this->event->getId(),
