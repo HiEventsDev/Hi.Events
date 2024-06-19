@@ -81,6 +81,8 @@ a quick start, follow these steps:
 
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/8CGKmu?referralCode=KvSr11)
 
+[![Deploy on Zeabur](https://zeabur.com/button.svg)](https://zeabur.com/templates/8DIRY6)
+
 ### 🐳 Quick Start with Docker
 
 > [!IMPORTANT]  
