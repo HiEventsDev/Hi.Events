@@ -118,7 +118,7 @@ export const RefundOrderModal = ({onClose, orderId}: RefundOrderModalProps) => {
         return (
             <>
                 <Alert icon={<IconInfoCircle/>} color={'blue'}>
-                    {t`${message}`}
+                    {message}
                 </Alert>
                 <Button mt={20} fullWidth onClick={onClose}>{t`Close`}</Button>
             </>
