@@ -46,11 +46,14 @@ readonly class SendOrderDetailsService
         }
 
         if ($order->isOrderFailed()) {
-            $this->mailer->to($order->getEmail())->send(new OrderFailed(
-                order: $order,
-                event: $event,
-                eventSettings: $event->getEventSettings(),
-            ));
+            $this->mailer
+                ->to($order->getEmail())
+                ->locale($order->getLocale())
+                ->send(new OrderFailed(
+                    order: $order,
+                    event: $event,
+                    eventSettings: $event->getEventSettings(),
+                ));
         }
     }
 
@@ -75,12 +78,15 @@ readonly class SendOrderDetailsService
 
     private function sendOrderSummaryEmails(OrderDomainObject $order, EventDomainObject $event): void
     {
-        $this->mailer->to($order->getEmail())->send(new OrderSummary(
-            order: $order,
-            event: $event,
-            organizer: $event->getOrganizer(),
-            eventSettings: $event->getEventSettings(),
-        ));
+        $this->mailer
+            ->to($order->getEmail())
+            ->locale($order->getLocale())
+            ->send(new OrderSummary(
+                order: $order,
+                event: $event,
+                organizer: $event->getOrganizer(),
+                eventSettings: $event->getEventSettings(),
+            ));
 
         if ($order->getIsManuallyCreated() || !$event->getEventSettings()->getNotifyOrganizerOfNewOrders()) {
             return;

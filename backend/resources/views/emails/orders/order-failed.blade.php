@@ -6,21 +6,20 @@
 @php /** @see \HiEvents\Mail\Order\OrderFailed */ @endphp
 
 <x-mail::message>
-Hello,
+{{ __('Hello') }},
 
-Your recent order for <b>{{$event->getTitle()}}</b> was not successful.
+{{ __('Your recent order for') }} <b>{{$event->getTitle()}}</b> {{ __('was not successful.') }}
 
 <x-mail::button :url="$eventUrl">
-    View Event Homepage
+{{ __('View Event Homepage') }}
 </x-mail::button>
 
-If you have any questions or need assistance, feel free to reach out to our support team
-at {{ $supportEmail ?? 'hello@hi.events' }}.
+{{ __('If you have any questions or need assistance, feel free to reach out to our support team') }}
+{{ __('at') }} {{ $supportEmail ?? 'hello@hi.events' }}.
 
-Best regards,
+{{ __('Best regards') }},
 <br>
 {{config('app.name')}}
-
 
 {!! $eventSettings->getGetEmailFooterHtml() !!}
 </x-mail::message>

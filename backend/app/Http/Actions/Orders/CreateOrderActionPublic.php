@@ -8,6 +8,7 @@ use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Order\CreateOrderRequest;
 use HiEvents\Http\ResponseCodes;
 use HiEvents\Resources\Order\OrderResourcePublic;
+use HiEvents\Services\Application\Locale\LocaleService;
 use HiEvents\Services\Domain\Order\OrderCreateRequestValidationService;
 use HiEvents\Services\Handlers\Order\CreateOrderHandler;
 use HiEvents\Services\Handlers\Order\DTO\CreateOrderPublicDTO;
@@ -22,6 +23,7 @@ class CreateOrderActionPublic extends BaseAction
         private readonly CreateOrderHandler                  $orderHandler,
         private readonly OrderCreateRequestValidationService $orderCreateRequestValidationService,
         private readonly CheckoutSessionManagementService    $sessionIdentifierService,
+        private readonly LocaleService                        $localeService,
 
     )
     {
@@ -41,6 +43,7 @@ class CreateOrderActionPublic extends BaseAction
                 'promo_code' => $request->input('promo_code'),
                 'tickets' => TicketOrderDetailsDTO::collectionFromArray($request->input('tickets')),
                 'session_identifier' => $this->sessionIdentifierService->getSessionId(),
+                'order_locale' => $this->localeService->getLocaleOrDefault($request->getPreferredLanguage()),
             ])
         );
 

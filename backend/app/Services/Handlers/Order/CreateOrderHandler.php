@@ -61,8 +61,9 @@ readonly class CreateOrderHandler
                 eventId: $eventId,
                 event: $event,
                 timeOutMinutes: $event->getEventSettings()?->getOrderTimeoutInMinutes(),
+                locale: $createOrderPublicDTO->order_locale,
                 promoCode: $promoCode,
-                sessionId: $sessionId
+                sessionId: $sessionId,
             );
 
             $orderItems = $this->orderItemProcessingService->process(
