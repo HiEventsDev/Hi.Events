@@ -82,6 +82,11 @@ class OrderCancelServiceTest extends TestCase
         $this->mailer->shouldReceive('to')
             ->once()
             ->andReturnSelf();
+
+        $this->mailer->shouldReceive('locale')
+            ->once()
+            ->andReturnSelf();
+
         $this->mailer->shouldReceive('send')->once()->withArgs(function ($mail) {
             return $mail instanceof OrderCancelled;
         });
