@@ -41,7 +41,7 @@ export const WidgetEditor = () => {
         },
     });
 
-    const [htmlEmbedCode, setHtmlHtmlEmbedCode] = useState<string>("");
+    const [htmlEmbedCode, setHtmlEmbedCode] = useState<string>("");
     const [reactComponentCode, setReactComponentCode] = useState<string>("");
     const [reactUsageCode, setReactUsageCode] = useState<string>("");
     const currentLocation = typeof window !== "undefined" ? window?.location : undefined;
@@ -49,7 +49,7 @@ export const WidgetEditor = () => {
     const embedScript = `<script async src="${embedUrl}"></script>`;
 
     useEffect(() => {
-        setHtmlHtmlEmbedCode(
+        setHtmlEmbedCode(
             '<div ' +
             'data-hievents-id="' + eventId + '" ' +
             'data-hievents-primary-color="' + form.values.primary_color + '" ' +
@@ -165,7 +165,8 @@ export default App;
                             <Group justify={'space-between'}>
                                 {t`Colors`}
 
-                                <Popover title={t`The styling settings you choose apply only to copied HTML and won't be stored.`}>
+                                <Popover
+                                    title={t`The styling settings you choose apply only to copied HTML and won't be stored.`}>
                                     <IconInfoCircle size={23}/>
                                 </Popover>
                             </Group>
