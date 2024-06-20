@@ -16,6 +16,7 @@ class CreateAttendeeDTO extends BaseDTO
         public readonly int         $event_id,
         public readonly bool        $send_confirmation_email,
         public readonly float       $amount_paid,
+        public readonly string      $locale,
         public readonly ?bool       $amount_includes_tax = false,
         public readonly ?int        $ticket_price_id = null,
         #[CollectionOf(CreateAttendeeTaxAndFeeDTO::class)]

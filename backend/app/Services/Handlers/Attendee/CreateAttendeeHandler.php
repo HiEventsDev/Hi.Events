@@ -3,8 +3,6 @@
 namespace HiEvents\Services\Handlers\Attendee;
 
 use Brick\Money\Money;
-use Faker\Factory;
-use Faker\Generator;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
@@ -34,6 +32,7 @@ use HiEvents\Services\Handlers\Attendee\DTO\CreateAttendeeTaxAndFeeDTO;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use RuntimeException;
 use Throwable;
 
 readonly class CreateAttendeeHandler
@@ -119,6 +118,7 @@ readonly class CreateAttendeeHandler
                 OrderDomainObjectAbstract::CURRENCY => $event->getCurrency(),
                 OrderDomainObjectAbstract::PUBLIC_ID => $publicId,
                 OrderDomainObjectAbstract::IS_MANUALLY_CREATED => true,
+                OrderDomainObjectAbstract::LOCALE => $attendeeDTO->locale,
             ]
         );
     }
@@ -166,7 +166,7 @@ readonly class CreateAttendeeHandler
             $taxOrFee = $taxesAndFees->first(fn($taxOrFee) => $taxOrFee->getId() === $taxAndFee->tax_or_fee_id);
 
             if (!$taxOrFee) {
-                throw new \RuntimeException('Tax or fee not found.');
+                throw new RuntimeException('Tax or fee not found.');
             }
 
             $validatedTaxesAndFees->push($taxOrFee);
@@ -220,6 +220,7 @@ readonly class CreateAttendeeHandler
             AttendeeDomainObjectAbstract::ORDER_ID => $order->getId(),
             AttendeeDomainObjectAbstract::PUBLIC_ID => $order->getPublicId() . '-1',
             AttendeeDomainObjectAbstract::SHORT_ID => IdHelper::randomPrefixedId(IdHelper::ATTENDEE_PREFIX),
+            AttendeeDomainObjectAbstract::LOCALE => $attendeeDTO->locale,
         ]);
     }
 

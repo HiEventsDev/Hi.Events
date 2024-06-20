@@ -25,7 +25,8 @@ class AttendeeResourcePublic extends JsonResource
             'short_id' => $this->getShortId(),
             'ticket_id' => $this->getTicketId(),
             'ticket_price_id' => $this->getTicketPriceId(),
-            'ticket' => $this->when(!!$this->getTicket(), fn() => new TicketMinimalResourcePublic($this->getTicket())),
+            'ticket' => $this->when((bool)$this->getTicket(), fn() => new TicketMinimalResourcePublic($this->getTicket())),
+            'locale' => $this->getLocale(),
         ];
     }
 }

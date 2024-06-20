@@ -2,6 +2,7 @@
 
 namespace HiEvents\Http\Request\User;
 
+use HiEvents\Locale;
 use Illuminate\Validation\Rules\Password;
 use HiEvents\Http\Request\BaseRequest;
 
@@ -18,6 +19,7 @@ class UpdateMeRequest extends BaseRequest
             'last_name' => 'required_without_all:current_password,password,password_confirmation|min:1',
             'email' => 'required_without_all:current_password,password,password_confirmation|email',
             'timezone' => 'required_without_all:current_password,password,password_confirmation|timezone',
+            'locale' => 'required_without_all:current_password,password,password_confirmation|in:' . implode(',', Locale::getSupportedLocales()),
 
             'current_password' => [
                 'required_with:password,password_confirmation',

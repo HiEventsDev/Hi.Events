@@ -5,6 +5,7 @@ import {hydrate} from "@tanstack/react-query";
 import {router} from "./router";
 import {App} from "./App";
 import {queryClient} from "./utilites/queryClient";
+import {getClientLocale} from "./locales.ts";
 
 declare global {
     interface Window {
@@ -15,20 +16,6 @@ declare global {
 if (window.__REHYDRATED_STATE__) {
     hydrate(queryClient, window.__REHYDRATED_STATE__);
 }
-
-const getLocale = (): string => {
-    if (typeof window !== "undefined") {
-        const storedLocale = localStorage.getItem("locale");
-        if (storedLocale) {
-            return storedLocale;
-        }
-
-
-        return window.navigator.language.split("-")[0];
-    }
-
-    return "en";
-};
 
 async function initClientApp() {
     if (window.__REHYDRATED_STATE__) {
@@ -54,7 +41,7 @@ async function initClientApp() {
             document.getElementById("app") as HTMLElement,
             <App
                 queryClient={queryClient}
-                locale={getLocale()}
+                locale={getClientLocale()}
             >
                 <RouterProvider router={browserRouter} fallbackElement={null}/>
             </App>
@@ -63,7 +50,7 @@ async function initClientApp() {
         ReactDOM.createRoot(document.getElementById("app") as HTMLElement).render(
             <App
                 queryClient={queryClient}
-                locale={getLocale()}
+                locale={getClientLocale()}
             >
                 <RouterProvider
                     router={createBrowserRouter(router)}

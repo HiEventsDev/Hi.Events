@@ -9,6 +9,7 @@ export interface UserMeRequest {
     password: string;
     password_confirmation: string;
     password_current: string;
+    locale: string;
 }
 
 export interface UpdateUserRequest {

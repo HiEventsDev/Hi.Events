@@ -56,6 +56,7 @@ class OrderCancelServiceTest extends TestCase
         $order->shouldReceive('getEventId')->andReturn(1);
         $order->shouldReceive('getId')->andReturn(1);
         $order->shouldReceive('getEmail')->andReturn('customer@example.com');
+        $order->shouldReceive('getLocale')->andReturn('en');
 
         $attendees = new Collection([
             m::mock(AttendeeDomainObject::class)->shouldReceive('getTicketPriceId')->andReturn(1)->mock(),

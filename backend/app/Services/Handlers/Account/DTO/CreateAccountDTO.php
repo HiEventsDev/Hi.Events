@@ -10,10 +10,10 @@ final class CreateAccountDTO extends BaseDTO
         public readonly string  $email,
         public readonly string  $password,
         public readonly string  $first_name,
+        public readonly string $locale,
         public readonly ?string $last_name = null,
         public readonly ?string $timezone = null,
         public readonly ?string $currency_code = null,
-        public readonly ?string $locale = null,
     )
     {
     }

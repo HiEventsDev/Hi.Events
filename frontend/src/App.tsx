@@ -1,4 +1,4 @@
-import React, {FC, PropsWithChildren, useEffect, useRef} from "react";
+import React, {FC, PropsWithChildren, useEffect, useRef, useState} from "react";
 import {MantineProvider} from "@mantine/core";
 import {Notifications} from "@mantine/notifications";
 import {i18n} from "@lingui/core";
@@ -14,49 +14,15 @@ import "@mantine/tiptap/styles.css";
 import "@mantine/dropzone/styles.css";
 import "@mantine/charts/styles.css";
 import "./styles/global.scss";
-// @ts-ignore
-import {messages as en} from "./locales/en.po";
-// @ts-ignore
-import {messages as de} from "./locales/de.po";
-// @ts-ignore
-import {messages as fr} from "./locales/fr.po";
-// @ts-ignore
-import {messages as pt} from "./locales/pt.po";
-// @ts-ignore
-import {messages as es} from "./locales/es.po";
 import {isSsr} from "./utilites/helpers.ts";
+import {dynamicActivateLocale, getSupportedLocale} from "./locales";
+import {StartupChecks} from "./StartupChecks.tsx";
 
 declare global {
     interface Window {
         hievents: Record<string, string>;
     }
 }
-
-const supportedLocales: Record<string, any> = {
-    en,
-    de,
-    fr,
-    pt,
-    es,
-};
-
-export async function dynamicActivate(locale: string) {
-    try {
-        i18n.load(locale, supportedLocales[locale || "en"] || {});
-        i18n.activate(locale);
-    } catch (error) {
-        console.error(`Error loading locale ${locale}:`, error);
-        i18n.activate("en");
-    }
-}
-
-const getSupportedLocale = (userLocale: string) => {
-    if (Object.keys(supportedLocales).includes(userLocale)) {
-        return userLocale;
-    }
-
-    return "en";
-};
 
 export const App: FC<
     PropsWithChildren<{
@@ -66,16 +32,20 @@ export const App: FC<
     }>
 > = (props) => {
     const [isLoadedOnBrowser, setIsLoadedOnBrowser] = React.useState(false);
-    const localeActivated = useRef(false); // Initialize localeActivated as a ref with the initial value false
+    const localeActivated = useRef(false);
+    const [loaded, setLoaded] = useState(false);
 
     useEffect(() => {
         if (!localeActivated.current && typeof window !== "undefined") {
             localeActivated.current = true;
-            dynamicActivate(getSupportedLocale(props.locale));
+            dynamicActivateLocale(getSupportedLocale(props.locale)).then(() => setLoaded(true));
         }
-
         setIsLoadedOnBrowser(!isSsr());
     }, []);
+
+    if (!loaded) {
+        return <></>;
+    }
 
     return (
         <React.StrictMode>
@@ -113,6 +83,7 @@ export const App: FC<
                 <HelmetProvider context={props.helmetContext}>
                     <I18nProvider i18n={i18n}>
                         <QueryClientProvider client={props.queryClient}>
+                            <StartupChecks/>
                             <ModalsProvider>
                                 <Helmet>
                                     <title>Hi.Events</title>

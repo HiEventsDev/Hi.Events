@@ -41,6 +41,7 @@ readonly class UpdateMeHandler
                 'first_name' => $updateUserData->first_name,
                 'last_name' => $updateUserData->last_name,
                 'timezone' => $updateUserData->timezone,
+                'locale' => $updateUserData->locale,
             ];
 
             if ($this->isChangingEmail($updateUserData, $existingUser)) {

@@ -15,6 +15,7 @@ class UpdateMeDTO extends BaseDTO
         public readonly ?string $timezone,
         public readonly ?string $password,
         public readonly ?string $current_password,
+        public readonly ?string $locale,
     )
     {
     }

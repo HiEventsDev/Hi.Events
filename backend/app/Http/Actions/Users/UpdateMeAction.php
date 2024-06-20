@@ -35,6 +35,7 @@ class UpdateMeAction extends BaseAction
                 'password' => $request->validated('password'),
                 'current_password' => $request->validated('current_password'),
                 'timezone' => $request->validated('timezone'),
+                'locale' => $request->validated('locale'),
             ]));
 
             return $this->resourceResponse(UserResource::class, $user);

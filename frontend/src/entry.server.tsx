@@ -11,6 +11,10 @@ import {setAuthToken} from "./utilites/apiClient.ts";
 const helmetContext = {};
 
 const getLocale = (req: express.Request): string => {
+    if (req.cookies.locale) {
+        return req.cookies.locale;
+    }
+
     const acceptLanguage = req.headers['accept-language'];
     return acceptLanguage ? acceptLanguage.split(',')[0].split('-')[0] : 'en';
 }
