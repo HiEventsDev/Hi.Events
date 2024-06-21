@@ -27,13 +27,13 @@
 </div>
 
 <hr/>
-<div style="text-align: center; font-size: 30px">
+<p align="center" style="text-align: center; font-size: 30px">
 <a href="README.de.md">🇩🇪</a>
 <a href="README.pt.md">🇵🇹</a>
 <a href="README.fr.md">🇫🇷</a>
 <a href="README.es.md">🇪🇸</a>
 <a href="README.zh-cn.md">🇨🇳</a>
-</div>
+</p>
 <hr/>
 
 ## Table of Contents
