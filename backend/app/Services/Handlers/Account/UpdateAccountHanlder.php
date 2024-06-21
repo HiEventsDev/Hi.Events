@@ -24,7 +24,6 @@ class UpdateAccountHanlder
         $this->accountRepository->updateWhere(
             attributes: [
                 'name' => $data->name,
-                'email' => $data->email,
                 'currency_code' => $data->currency_code,
                 'timezone' => $data->timezone,
             ],

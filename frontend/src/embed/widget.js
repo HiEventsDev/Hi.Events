@@ -1,5 +1,5 @@
 /* eslint-disable lingui/no-unlocalized-strings */
-(function () {
+(function(scriptElement) {
     const isScriptLoaded = () => !!window.hiEventWidgetLoaded;
 
     const loadWidget = () => {
@@ -7,7 +7,7 @@
 
         let scriptOrigin;
         try {
-            const scriptURL = document.currentScript.src;
+            const scriptURL = scriptElement.src;
             scriptOrigin = new URL(scriptURL).origin;
         } catch (e) {
             console.error('HiEvent widget error: Invalid script URL');
@@ -86,4 +86,4 @@
             loadWidget();
         }
     }
-})();
+})(document.currentScript);
