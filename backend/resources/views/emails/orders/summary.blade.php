@@ -11,9 +11,12 @@
 </p>
 
 <p>
+
 ## {{ __('Event Details') }}
-- ** {{ __('Event Name:') }} ** {{ $event->getTitle() }}
-- ** {{ __('Date & Time:') }} ** {{ (new Carbon(DateHelper::convertFromUTC($event->getStartDate(), $event->getTimezone())))->format('F j, Y') }} at {{ (new Carbon(DateHelper::convertFromUTC($event->getStartDate(), $event->getTimezone())))->format('g:i A') }}
+**{{ __('Event Name:') }}** {{ $event->getTitle() }}
+    <br>
+**{{ __('Date & Time:') }}** {{ (new Carbon(DateHelper::convertFromUTC($event->getStartDate(), $event->getTimezone())))->format('F j, Y') }} at {{ (new Carbon(DateHelper::convertFromUTC($event->getStartDate(), $event->getTimezone())))->format('g:i A') }}
+
 </p>
 
 ## {{ __('Order Summary') }}
