@@ -13,7 +13,7 @@ import {useCancelEmailChange} from "../../../../mutations/useCancelEmailChange.t
 import {useFormErrorResponseHandler} from "../../../../hooks/useFormErrorResponseHandler.tsx";
 import {t, Trans} from "@lingui/macro";
 import {useResendEmailConfirmation} from "../../../../mutations/useResendEmailConfirmation.ts";
-import {localeToFlagEmojiMap, localeToNameMap, SupportedLocales} from "../../../../locales.ts";
+import {getLocaleName, localeToFlagEmojiMap, localeToNameMap, SupportedLocales} from "../../../../locales.ts";
 
 export const ManageProfile = () => {
     const {data: me, isFetching} = useGetMe();
@@ -166,7 +166,7 @@ export const ManageProfile = () => {
                                         required
                                         data={Object.keys(localeToNameMap).map(locale => ({
                                             value: locale,
-                                            label: localeToFlagEmojiMap[locale as SupportedLocales] + ' ' + localeToNameMap[locale as SupportedLocales]
+                                            label: localeToFlagEmojiMap[locale as SupportedLocales] + ' ' + getLocaleName(locale as SupportedLocales),
                                         }))}
                                         {...profileForm.getInputProps('locale')}
                                         label={t`Language`}
