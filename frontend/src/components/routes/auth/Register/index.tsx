@@ -1,4 +1,4 @@
-import {Button, PasswordInput, Select, TextInput} from "@mantine/core";
+import {Button, PasswordInput, TextInput} from "@mantine/core";
 import {hasLength, isEmail, matchesField, useForm} from "@mantine/form";
 import {RegisterAccountRequest} from "../../../../types.ts";
 import {useFormErrorResponseHandler} from "../../../../hooks/useFormErrorResponseHandler.tsx";
@@ -8,7 +8,7 @@ import {t, Trans} from "@lingui/macro";
 import {InputGroup} from "../../../common/InputGroup";
 import {Card} from "../../../common/Card";
 import classes from "./Register.module.scss";
-import {getClientLocale, localeToFlagEmojiMap, localeToNameMap, SupportedLocales} from "../../../../locales.ts";
+import {getClientLocale} from "../../../../locales.ts";
 
 export const Register = () => {
     const navigate = useNavigate();
@@ -101,7 +101,9 @@ export const Register = () => {
                 </form>
                 <footer>
                     <Trans>
-                        By registering you agree to our <NavLink target={'_blank'} to={'https://hi.events/terms-of-service?utm_source=app-register-footer'}>Terms of Service</NavLink> and <NavLink
+                        By registering you agree to our <NavLink target={'_blank'}
+                                                                 to={'https://hi.events/terms-of-service?utm_source=app-register-footer'}>Terms
+                        of Service</NavLink> and <NavLink
                         target={'_blank'}
                         to={'https://hi.events/privacy-policy?utm_source=app-register-footer'}>Privacy Policy</NavLink>.
                     </Trans>
