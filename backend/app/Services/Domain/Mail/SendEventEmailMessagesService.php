@@ -203,7 +203,7 @@ class SendEventEmailMessagesService
         string            $emailAddress,
         string            $fullName,
         SendMessageDTO    $messageData,
-        EventDomainObject $event
+        EventDomainObject $event,
     ): void
     {
         $this->mailer->to(

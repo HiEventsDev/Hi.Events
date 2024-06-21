@@ -3,7 +3,9 @@
 namespace HiEvents\Http\Request\Attendee;
 
 use HiEvents\Http\Request\BaseRequest;
+use HiEvents\Locale;
 use HiEvents\Validators\Rules\RulesHelper;
+use Illuminate\Validation\Rule;
 
 class CreateAttendeeRequest extends BaseRequest
 {
@@ -20,6 +22,7 @@ class CreateAttendeeRequest extends BaseRequest
             'taxes_and_fees' => ['array'],
             'taxes_and_fees.*.tax_or_fee_id' => ['required', 'int'],
             'taxes_and_fees.*.amount' => ['required', ...RulesHelper::MONEY],
+            'locale' => ['required', Rule::in(Locale::getSupportedLocales())],
         ];
     }
 }

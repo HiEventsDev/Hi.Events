@@ -1,13 +1,19 @@
+<div align="center">
+ 🌟 A star would be much appreciated! 🌟
+</div>
+
 <p align="center">
   <img src="https://hievents-public.s3.us-west-1.amazonaws.com/website/hi-events-rainbow.png?v=1" alt="Hi.Events Logo" width="200px">
 </p>
+
+
 <h3 align="center">Hi.Events</h3>
 <p align="center">
-<a href="https://demo.hi.events/event/1/dog-conf-2030">Demo Event 🌟</a> <a href="https://hi.events?utm_source=gh-readme">Website 🌎</a>  <a href="https://hi.events/docs">Documentation 📄</a>  <a href="https://hi.events/docs/getting-started?utm_source=gh-readme">Installation ⚙️</a>
+<a href="https://demo.hi.events/event/1/dog-conf-2030">Demo Event 🌟</a> • <a href="https://hi.events?utm_source=gh-readme">Website 🌎</a> • <a href="https://hi.events/docs">Documentation 📄</a> • <a href="https://hi.events/docs/getting-started?utm_source=gh-readme">Installation ⚙️</a>
 </p>
 
 <h3 align="center">
- Effortlessly manage events and sell tickets online.
+ Open-source event management and ticketing platform.
 </h3>
 
 <div align="center">
@@ -20,10 +26,14 @@
 
 </div>
 
-<div align="center">
- 🌟 A star would be much appreciated! 🌟
+<hr/>
+<div style="text-align: center; font-size: 30px">
+<a href="README.de.md">🇩🇪</a>
+<a href="README.pt.md">🇵🇹</a>
+<a href="README.fr.md">🇫🇷</a>
+<a href="README.es.md">🇪🇸</a>
+<a href="README.zh-cn.md">🇨🇳</a>
 </div>
-
 <hr/>
 
 ## Table of Contents

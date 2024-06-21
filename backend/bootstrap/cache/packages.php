@@ -1,4 +1,11 @@
 <?php return array (
+  'druc/laravel-langscanner' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Druc\\Langscanner\\LangscannerServiceProvider',
+    ),
+  ),
   'laravel/sail' => 
   array (
     'providers' => 

@@ -6,12 +6,11 @@
 @php /** @see \HiEvents\Mail\Order\OrderRefunded */ @endphp
 
 <x-mail::message>
-Hello,
+{{ __('Hello') }},
 
-You have received a refund of <b>{{$refundAmount}}</b> for the following event: <b>{{$event->getTitle()}}</b>.
+{{ __('You have received a refund of :refundAmount for the following event: :eventTitle.', ['refundAmount' => $refundAmount, 'eventTitle' => $event->getTitle()]) }}
 
-Thank you
+{{ __('Thank you') }}
 
 {!! $eventSettings->getGetEmailFooterHtml() !!}
-
 </x-mail::message>

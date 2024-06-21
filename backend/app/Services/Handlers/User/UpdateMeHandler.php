@@ -41,6 +41,7 @@ readonly class UpdateMeHandler
                 'first_name' => $updateUserData->first_name,
                 'last_name' => $updateUserData->last_name,
                 'timezone' => $updateUserData->timezone,
+                'locale' => $updateUserData->locale,
             ];
 
             if ($this->isChangingEmail($updateUserData, $existingUser)) {
@@ -96,6 +97,7 @@ readonly class UpdateMeHandler
     {
         $this->mailer
             ->to($existingUser->getEmail())
+            ->locale($existingUser->getLocale())
             ->send(new ConfirmEmailChangeMail($existingUser, $this->encryptedPayloadService->encryptPayload([
                     'id' => $existingUser->getId(),
                 ]))

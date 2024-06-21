@@ -140,7 +140,7 @@ const EventLayout = () => {
                                </NavLink>
                         )}
 
-                        {!isEventFetched && <span>{t`...`} </span>}
+                        {!isEventFetched && <span>... </span>}
                     </Breadcrumbs>
 
                     {isEventFetched && (

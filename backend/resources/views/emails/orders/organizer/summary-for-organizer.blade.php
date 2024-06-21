@@ -5,29 +5,28 @@
 @php /** @var \HiEvents\DomainObjects\EventDomainObject $event */ @endphp
 
 <x-mail::message>
-# You've received a new order! 🎉
+# {{ __('You\'ve received a new order!') }} 🎉
 
 <br>
-Congratulations! You've got a new order for <b>{{ $event->getTitle() }}</b>! Please find the details below.
+{{ __('Congratulations! You\'ve received a new order for ') }} <b>{{ $event->getTitle() }}</b>! {{ __('Please find the details below.') }}
 <br>
 <br>
 
-Order Amount: <b>{{ Currency::format($order->getTotalGross(), $event->getCurrency()) }}</b><br>
-Order ID: <b>{{ $order->getPublicId() }}</b>
+{{ __('Order Amount:') }} <b>{{ Currency::format($order->getTotalGross(), $event->getCurrency()) }}</b><br>
+{{ __('Order ID:') }} <b>{{ $order->getPublicId() }}</b>
 <br>
 
 <x-mail::button :url="$orderUrl">
-        View Order
+    {{ __('View Order') }}
 </x-mail::button>
-
 
 <div class="table">
     <table>
         <thead>
         <tr>
-            <td><b>Ticket</b></td>
-            <td><b>Price</b></td>
-            <td><b>Total</b></td>
+            <td><b>{{ __('Ticket') }}</b></td>
+            <td><b>{{ __('Price') }}</b></td>
+            <td><b>{{ __('Total') }}</b></td>
         </tr>
         </thead>
         <tbody>
@@ -41,7 +40,7 @@ Order ID: <b>{{ $order->getPublicId() }}</b>
         @endforeach
         <tr>
             <td colspan="3">
-                <b>Total</b>
+                <b>{{ __('Total') }}</b>
             </td>
             <td>
                 {{ Currency::format($order->getTotalGross(), $event->getCurrency()) }}
@@ -51,7 +50,13 @@ Order ID: <b>{{ $order->getPublicId() }}</b>
     </table>
 </div>
 
-Best regards,
+{{ __('Best regards') }},
 <br>
 {{config('app.name')}}
 </x-mail::message>
+
+
+
+
+
+

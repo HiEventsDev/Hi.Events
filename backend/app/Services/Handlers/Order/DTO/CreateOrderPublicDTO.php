@@ -13,6 +13,7 @@ class CreateOrderPublicDTO extends BaseDTO
          */
         public readonly Collection $tickets,
         public readonly bool       $is_user_authenticated,
+        public readonly ?string    $order_locale = null,
         public readonly ?string    $promo_code = null,
         public readonly ?string    $session_identifier = null,
     )

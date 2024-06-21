@@ -2,6 +2,7 @@
 
 namespace HiEvents\Services\Handlers\Auth;
 
+use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Mail\User\ForgotPassword;
 use HiEvents\Repository\Interfaces\PasswordResetTokenRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
@@ -66,17 +67,20 @@ class ForgotPasswordHandler
         return $token;
     }
 
-    private function sendResetPasswordEmail($user, string $token): void
+    private function sendResetPasswordEmail(UserDomainObject $user, string $token): void
     {
         $this->logger->info('resetting password for user', [
             'user' => $user->getId(),
             'email' => $user->getEmail(),
         ]);
 
-        $this->mailer->to($user->getEmail())->send(new ForgotPassword(
-            user: $user,
-            token: $token,
-        ));
+        $this->mailer
+            ->to($user->getEmail())
+            ->locale($user->getLocale())
+            ->send(new ForgotPassword(
+                user: $user,
+                token: $token,
+            ));
     }
 
     private function logUnrecognisedEmail(string $email): void

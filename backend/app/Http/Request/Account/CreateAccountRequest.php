@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Request\Account;
 
+use HiEvents\Http\Request\BaseRequest;
+use HiEvents\Locale;
+use HiEvents\Validators\Rules\RulesHelper;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
-use HiEvents\Http\Request\BaseRequest;
-use HiEvents\Validators\Rules\RulesHelper;
 
 class CreateAccountRequest extends BaseRequest
 {
@@ -22,6 +23,7 @@ class CreateAccountRequest extends BaseRequest
             'password' => ['required', 'confirmed', Password::min(8)],
             'timezone' => ['timezone:all'],
             'currency_code' => [Rule::in(array_values($currencies))],
+            'locale' => ['nullable', Rule::in(Locale::getSupportedLocales())],
         ];
     }
 }

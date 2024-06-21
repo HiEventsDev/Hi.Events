@@ -13,6 +13,7 @@ import {useCancelEmailChange} from "../../../../mutations/useCancelEmailChange.t
 import {useFormErrorResponseHandler} from "../../../../hooks/useFormErrorResponseHandler.tsx";
 import {t, Trans} from "@lingui/macro";
 import {useResendEmailConfirmation} from "../../../../mutations/useResendEmailConfirmation.ts";
+import {localeToFlagEmojiMap, localeToNameMap, SupportedLocales} from "../../../../locales.ts";
 
 export const ManageProfile = () => {
     const {data: me, isFetching} = useGetMe();
@@ -27,6 +28,7 @@ export const ManageProfile = () => {
             last_name: me?.last_name,
             email: me?.email,
             timezone: me?.timezone,
+            locale: me?.locale,
         },
     });
 
@@ -44,6 +46,7 @@ export const ManageProfile = () => {
             last_name: me?.last_name,
             email: me?.email,
             timezone: me?.timezone,
+            locale: me?.locale,
         });
     }, [me]);
 
@@ -54,6 +57,11 @@ export const ManageProfile = () => {
             onSuccess: () => {
                 form.reset();
                 showSuccess(t`Profile updated successfully`);
+                document.cookie = `locale=${formValues.locale};path=/;max-age=31536000`;
+
+                if (form.isDirty('locale')) {
+                    window.location.reload();
+                }
             },
             onError: (error: any) => {
                 errorHandler(form, error);
@@ -152,6 +160,17 @@ export const ManageProfile = () => {
                                         {...profileForm.getInputProps('timezone')}
                                         label={t`Timezone`}
                                         placeholder={t`UTC`}
+                                    />
+
+                                    <Select
+                                        required
+                                        data={Object.keys(localeToNameMap).map(locale => ({
+                                            value: locale,
+                                            label: localeToFlagEmojiMap[locale as SupportedLocales] + ' ' + localeToNameMap[locale as SupportedLocales]
+                                        }))}
+                                        {...profileForm.getInputProps('locale')}
+                                        label={t`Language`}
+                                        placeholder={t`English`}
                                     />
 
                                     <Button fullWidth loading={mutation.isLoading}

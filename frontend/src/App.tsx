@@ -1,10 +1,10 @@
-import React, {FC, PropsWithChildren, useEffect, useRef} from "react";
+import React, {FC, PropsWithChildren, useEffect, useRef, useState} from "react";
 import {MantineProvider} from "@mantine/core";
 import {Notifications} from "@mantine/notifications";
 import {i18n} from "@lingui/core";
 import {I18nProvider} from "@lingui/react";
 import {ModalsProvider} from "@mantine/modals";
-import {QueryClient, QueryClientProvider,} from "@tanstack/react-query";
+import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {Helmet, HelmetProvider} from "react-helmet-async";
 
 import "@mantine/core/styles/global.css";
@@ -14,17 +14,9 @@ import "@mantine/tiptap/styles.css";
 import "@mantine/dropzone/styles.css";
 import "@mantine/charts/styles.css";
 import "./styles/global.scss";
-// @ts-ignore
-import {messages as en} from "./locales/en.po";
-// @ts-ignore
-import {messages as de} from "./locales/de.po";
-// @ts-ignore
-import {messages as fr} from "./locales/fr.po";
-// @ts-ignore
-import {messages as pt} from "./locales/pt.po";
-// @ts-ignore
-import {messages as es} from "./locales/es.po";
 import {isSsr} from "./utilites/helpers.ts";
+import {dynamicActivateLocale, getSupportedLocale} from "./locales";
+import {StartupChecks} from "./StartupChecks.tsx";
 
 declare global {
     interface Window {
@@ -32,49 +24,28 @@ declare global {
     }
 }
 
-const supportedLocales: Record<string, any> = {
-    en,
-    de,
-    fr,
-    pt,
-    es,
-};
-
-export async function dynamicActivate(locale: string) {
-    i18n.load(locale, supportedLocales[locale || "en"] || {});
-    i18n.activate(locale);
-}
-
-const getSupportedLocale = () => {
-    // if (typeof window !== "undefined") {
-    //     const supportedLocalesKeys = Object.keys(supportedLocales);
-    //     const userLocale = window.navigator.language.split("-")[0]; // Extracting the base language
-    //
-    //     if (supportedLocalesKeys.includes(userLocale)) {
-    //         return userLocale;
-    //     }
-    // }
-
-    return "en";
-};
-
 export const App: FC<
     PropsWithChildren<{
         queryClient: QueryClient;
+        locale: string;
         helmetContext?: any;
     }>
 > = (props) => {
     const [isLoadedOnBrowser, setIsLoadedOnBrowser] = React.useState(false);
     const localeActivated = useRef(false);
-
-    if (!localeActivated.current) {
-        localeActivated.current = true;
-        dynamicActivate(getSupportedLocale());
-    }
+    const [loaded, setLoaded] = useState(false);
 
     useEffect(() => {
+        if (!localeActivated.current && typeof window !== "undefined") {
+            localeActivated.current = true;
+            dynamicActivateLocale(getSupportedLocale(props.locale)).then(() => setLoaded(true));
+        }
         setIsLoadedOnBrowser(!isSsr());
-    }, [])
+    }, []);
+
+    if (!loaded) {
+        return <></>;
+    }
 
     return (
         <React.StrictMode>
@@ -112,6 +83,7 @@ export const App: FC<
                 <HelmetProvider context={props.helmetContext}>
                     <I18nProvider i18n={i18n}>
                         <QueryClientProvider client={props.queryClient}>
+                            <StartupChecks/>
                             <ModalsProvider>
                                 <Helmet>
                                     <title>Hi.Events</title>

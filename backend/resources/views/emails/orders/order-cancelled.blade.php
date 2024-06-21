@@ -6,19 +6,18 @@
 @php /** @see \HiEvents\Mail\Order\OrderCancelled */ @endphp
 
 <x-mail::message>
-Hello,
+{{ __('Hello') }},
 
-Your order for <b>{{$event->getTitle()}}</b> has been cancelled.
+{{ __('Your order for') }} <b>{{$event->getTitle()}}</b> {{ __('has been cancelled.') }}
 <br>
 <br>
-Order #: <b>{{$order->getPublicId()}}</b>
+{{ __('Order #:') }} <b>{{$order->getPublicId()}}</b>
 <br>
 <br>
-If you have any questions or need assistance, please respond to this email.
+{{ __('If you have any questions or need assistance, please respond to this email.') }}
 <br><br>
-Thank you,<br>
+{{ __('Thank you') }},<br>
 {{config('app.name')}}
 
 {!! $eventSettings->getGetEmailFooterHtml() !!}
-
 </x-mail::message>

@@ -21,6 +21,7 @@ class UserResource extends BaseResource
             'email' => $this->getEmail(),
             'is_email_verified' => $this->getEmailVerifiedAt() !== null,
             'has_pending_email_change' => $this->getPendingEmail() !== null,
+            'locale' => $this->getLocale(),
             $this->mergeWhen($this->getCurrentAccountUser() !== null, fn() => [
                 'role' => $this->getCurrentAccountUser()?->getRole(),
                 'is_account_owner' => $this->getCurrentAccountUser()?->getIsAccountOwner(),

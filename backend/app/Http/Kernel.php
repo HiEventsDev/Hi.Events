@@ -3,6 +3,7 @@
 namespace HiEvents\Http;
 
 use HiEvents\Http\Middleware\SetAccountContext;
+use HiEvents\Http\Middleware\SetUserLocaleMiddleware;
 use Illuminate\Auth\Middleware\AuthenticateWithBasicAuth;
 use Illuminate\Auth\Middleware\Authorize;
 use Illuminate\Auth\Middleware\EnsureEmailIsVerified;
@@ -65,6 +66,7 @@ class Kernel extends HttpKernel
             ThrottleRequests::class . ':api',
             SubstituteBindings::class,
             SetAccountContext::class,
+            SetUserLocaleMiddleware::class,
         ],
     ];
 

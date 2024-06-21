@@ -10,6 +10,7 @@ use HiEvents\Http\Actions\Auth\BaseAuthAction;
 use HiEvents\Http\Request\Account\CreateAccountRequest;
 use HiEvents\Http\ResponseCodes;
 use HiEvents\Resources\Account\AccountResource;
+use HiEvents\Services\Application\Locale\LocaleService;
 use HiEvents\Services\Handlers\Account\CreateAccountHandler;
 use HiEvents\Services\Handlers\Account\DTO\CreateAccountDTO;
 use HiEvents\Services\Handlers\Account\Exceptions\AccountRegistrationDisabledException;
@@ -24,6 +25,7 @@ class CreateAccountAction extends BaseAuthAction
     public function __construct(
         private readonly CreateAccountHandler $createAccountHandler,
         private readonly LoginHandler         $loginHandler,
+        private readonly LocaleService        $localeService,
     )
     {
     }
@@ -42,7 +44,9 @@ class CreateAccountAction extends BaseAuthAction
                 'password' => $request->validated('password'),
                 'timezone' => $request->validated('timezone'),
                 'currency_code' => $request->validated('currency_code'),
-                'locale' => $request->getPreferredLanguage(),
+                'locale' => $request->has('locale')
+                    ? $request->validated('locale')
+                    : $this->localeService->getLocaleOrDefault($request->getPreferredLanguage()),
             ]));
         } catch (EmailAlreadyExists $e) {
             throw ValidationException::withMessages([
