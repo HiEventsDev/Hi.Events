@@ -8,18 +8,13 @@ msgstr ""
 "Language: zh-Hans\n"
 
 #: src/components/layouts/Event/index.tsx:143
-msgid "..."
-msgstr "..."
-
 #: src/components/common/NoResultsSplash/index.tsx:14
 msgid "'There\\'s nothing to show yet'"
 msgstr "There's nothing to show yet"
 
 #: src/components/common/QuestionsTable/index.tsx:267
-msgid "{0, plural, one {# hidden question} other {# hidden questions}}"
-msgstr "{0，复数，一个{#隐藏问题} 其他{#隐藏问题}}."
-
 #: src/components/common/AttendeeTable/index.tsx:113
+#: src/components/common/QuestionsTable/index.tsx:267
 #: src/components/routes/ticket-widget/SelectTickets/index.tsx:288
 msgid "{0} available"
 msgstr "{0}可用"
@@ -40,10 +35,8 @@ msgstr "{0}更新成功"
 msgid "{0}'s Events"
 msgstr "{0}的活动"
 
+#: src/components/common/QuestionsTable/index.tsx:267
 #: src/components/modals/RefundOrderModal/index.tsx:121
-msgid "{message}"
-msgstr "{信息｝"
-
 #: src/components/common/Countdown/index.tsx:34
 msgid "{minutes} minutes and {seconds} seconds"
 msgstr "{分}分钟和{秒}秒钟"
@@ -173,7 +166,7 @@ msgid "A standard tax, like VAT or GST"
 msgstr "标准税，如增值税或消费税"
 
 #: src/components/common/GlobalMenu/index.tsx:25
-#: src/components/layouts/EventHomepage/EventInformation/index.tsx:85
+#: src/components/layouts/EventHomepage/EventInformation/index.tsx:79
 msgid "About the event"
 msgstr "关于活动"
 
@@ -299,7 +292,7 @@ msgstr "本次活动的所有与会者"
 msgid "All Events"
 msgstr "所有活动"
 
-#: src/components/common/PromoCodeTable/index.tsx:128
+#: src/components/common/PromoCodeTable/index.tsx:130
 msgid "All Tickets"
 msgstr "所有门票"
 
@@ -327,7 +320,7 @@ msgid "Amount"
 msgstr "金额"
 
 #: src/components/forms/PromoCodeForm/index.tsx:53
-#: src/components/modals/CreateAttendeeModal/index.tsx:158
+#: src/components/modals/CreateAttendeeModal/index.tsx:173
 msgid "Amount paid ({0})"
 msgstr "支付金额 ({0})"
 
@@ -369,12 +362,12 @@ msgstr "持票人的任何询问都将发送到此电子邮件地址。该地址
 msgid "Appearance"
 msgstr "外观"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:359
+#: src/components/routes/ticket-widget/SelectTickets/index.tsx:357
 msgid "applied"
 msgstr "应用"
 
 #: src/components/routes/ticket-widget/SelectTickets/index.tsx:271
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:386
+#: src/components/routes/ticket-widget/SelectTickets/index.tsx:385
 msgid "Apply Promo Code"
 msgstr "应用促销代码"
 
@@ -390,7 +383,7 @@ msgstr "您确定要激活该与会者吗？"
 msgid "Are you sure you want to cancel this attendee? This will void their ticket"
 msgstr "您确定要取消该与会者吗？这将使其门票作废"
 
-#: src/components/common/PromoCodeTable/index.tsx:34
+#: src/components/common/PromoCodeTable/index.tsx:36
 msgid "Are you sure you want to delete this promo code?"
 msgstr "您确定要删除此促销代码吗？"
 
@@ -422,8 +415,8 @@ msgstr "与会者"
 msgid "Attendee Details"
 msgstr "与会者详情"
 
-#: src/components/common/QuestionsTable/index.tsx:306
-#: src/components/common/QuestionsTable/index.tsx:347
+#: src/components/common/QuestionsTable/index.tsx:307
+#: src/components/common/QuestionsTable/index.tsx:348
 msgid "Attendee questions"
 msgstr "与会者提问"
 
@@ -499,7 +492,7 @@ msgstr "发送之前"
 msgid "Before your event can go live, there are a few things you need to do."
 msgstr "在活动上线之前，您需要做几件事。"
 
-#: src/components/routes/auth/Register/index.tsx:47
+#: src/components/routes/auth/Register/index.tsx:49
 msgid "Begin selling tickets in minutes"
 msgstr "几分钟内开始售票"
 
@@ -507,7 +500,7 @@ msgstr "几分钟内开始售票"
 #: src/components/routes/account/ManageAccount/sections/BillingSettings/index.tsx:10
 #: src/components/routes/account/ManageAccount/sections/BillingSettings/index.tsx:14
 #: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:87
-#: src/components/routes/auth/Register/index.tsx:101
+#: src/components/routes/auth/Register/index.tsx:103
 msgid "By registering you agree to our <0>Terms of Service</0> and <1>Privacy Policy</1>."
 msgstr "注册即表示您同意我们的<0>服务条款</0>和<1>隐私政策</1>。"
 
@@ -525,12 +518,12 @@ msgstr "相机权限被拒绝。<0>再次请求权限</0>，如果还不行，�
 
 #: src/components/routes/events/Dashboard/dashboard.tsx:18
 #: src/components/common/AttendeeTable/index.tsx:211
-#: src/components/common/PromoCodeTable/index.tsx:37
+#: src/components/common/PromoCodeTable/index.tsx:39
 #: src/utilites/confirmationDialog.tsx:11
 msgid "Cancel"
 msgstr "取消"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:118
+#: src/components/routes/profile/ManageProfile/index.tsx:126
 msgid "Cancel email change"
 msgstr "取消更改电子邮件"
 
@@ -559,7 +552,7 @@ msgstr "已取消"
 msgid "Change Cover"
 msgstr "更改封面"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:182
+#: src/components/routes/profile/ManageProfile/index.tsx:201
 msgid "Change password"
 msgstr "更改密码"
 
@@ -594,7 +587,7 @@ msgid "Checkboxes"
 msgstr "复选框"
 
 #: src/components/common/AttendeeCheckInTable/index.tsx:124
-#: src/components/common/AttendeeDetails/index.tsx:37
+#: src/components/common/AttendeeDetails/index.tsx:38
 msgid "Checked In"
 msgstr "登记入住"
 
@@ -603,6 +596,7 @@ msgstr "登记入住"
 msgid "Checkout Settings"
 msgstr "结账设置"
 
+#: src/components/routes/profile/ManageProfile/index.tsx:173
 #: src/components/routes/event/HomepageDesigner/index.tsx:102
 msgid "Choose a color for your background"
 msgstr "选择背景颜色"
@@ -626,7 +620,7 @@ msgstr "清除搜索文本"
 msgid "click here"
 msgstr "点击此处"
 
-#: src/components/common/PromoCodeTable/index.tsx:95
+#: src/components/common/PromoCodeTable/index.tsx:97
 msgid "Click to copy"
 msgstr "点击复制"
 
@@ -639,7 +633,7 @@ msgstr "关闭"
 msgid "Close sidebar"
 msgstr "关闭侧边栏"
 
-#: src/components/common/PromoCodeTable/index.tsx:66
+#: src/components/common/PromoCodeTable/index.tsx:68
 #: src/components/forms/PromoCodeForm/index.tsx:33
 msgid "Code"
 msgstr "代码"
@@ -699,16 +693,16 @@ msgstr "确认"
 msgid "Confirm Email Change"
 msgstr "确认电子邮件更改"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:180
+#: src/components/routes/profile/ManageProfile/index.tsx:199
 msgid "Confirm New Password"
 msgstr "确认新密码"
 
-#: src/components/routes/auth/Register/index.tsx:85
+#: src/components/routes/auth/Register/index.tsx:87
 msgid "Confirm password"
 msgstr "确认密码"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:105
-#: src/components/routes/auth/Register/index.tsx:84
+#: src/components/routes/auth/Register/index.tsx:86
 #: src/components/routes/auth/ResetPassword/index.tsx:60
 msgid "Confirm Password"
 msgstr "确认密码"
@@ -775,7 +769,7 @@ msgstr "继续付款"
 msgid "Copied"
 msgstr "复制的"
 
-#: src/components/common/PromoCodeTable/index.tsx:103
+#: src/components/common/PromoCodeTable/index.tsx:105
 msgid "copied to clipboard"
 msgstr "复制到剪贴板"
 
@@ -791,7 +785,7 @@ msgstr "将详细信息抄送给所有与会者"
 msgid "Copy Link"
 msgstr "复制链接"
 
-#: src/components/common/PromoCodeTable/index.tsx:172
+#: src/components/common/PromoCodeTable/index.tsx:176
 msgid "Copy URL"
 msgstr "复制 URL"
 
@@ -810,7 +804,7 @@ msgstr "封面"
 msgid "Create {0}"
 msgstr "创建 {0}"
 
-#: src/components/common/PromoCodeTable/index.tsx:54
+#: src/components/common/PromoCodeTable/index.tsx:56
 msgid "Create a Promo Code"
 msgstr "创建促销代码"
 
@@ -818,7 +812,7 @@ msgstr "创建促销代码"
 msgid "Create a Ticket"
 msgstr "创建票单"
 
-#: src/components/routes/auth/Register/index.tsx:49
+#: src/components/routes/auth/Register/index.tsx:51
 msgid "Create an account or <0>{0}</0> to get started"
 msgstr "创建账户或 <0>{0}</0> 开始使用"
 
@@ -826,7 +820,7 @@ msgstr "创建账户或 <0>{0}</0> 开始使用"
 msgid "create an organizer"
 msgstr "创建一个组织者"
 
-#: src/components/modals/CreateAttendeeModal/index.tsx:189
+#: src/components/modals/CreateAttendeeModal/index.tsx:204
 msgid "Create Attendee"
 msgstr "创建与会者"
 
@@ -885,7 +879,7 @@ msgstr "创建"
 msgid "Currency"
 msgstr "货币"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:172
+#: src/components/routes/profile/ManageProfile/index.tsx:191
 msgid "Current Password"
 msgstr "当前密码"
 
@@ -925,7 +919,7 @@ msgstr "定制您的活动页面，以符合您的品牌和风格。"
 
 #: src/components/common/AttendeeTable/index.tsx:205
 #: src/components/common/OrdersTable/index.tsx:131
-#: src/components/common/PromoCodeTable/index.tsx:176
+#: src/components/common/PromoCodeTable/index.tsx:180
 #: src/components/common/QuestionsTable/index.tsx:113
 #: src/components/common/TicketsTable/SortableTicket/index.tsx:193
 msgid "Danger zone"
@@ -939,17 +933,17 @@ msgstr "仪表板"
 msgid "Date"
 msgstr "日期"
 
-#: src/components/layouts/EventHomepage/EventInformation/index.tsx:39
+#: src/components/layouts/EventHomepage/EventInformation/index.tsx:40
 msgid "Date & Time"
 msgstr "日期和时间"
 
 #: src/components/routes/account/ManageAccount/sections/Users/index.tsx:105
-#: src/components/common/PromoCodeTable/index.tsx:37
+#: src/components/common/PromoCodeTable/index.tsx:39
 #: src/components/common/TaxAndFeeList/index.tsx:73
 msgid "Delete"
 msgstr "删除"
 
-#: src/components/common/PromoCodeTable/index.tsx:180
+#: src/components/common/PromoCodeTable/index.tsx:184
 msgid "Delete code"
 msgstr "删除代码"
 
@@ -983,7 +977,7 @@ msgid "Details"
 msgstr "详细信息"
 
 #: src/components/common/PromoCodeTable/index.tsx:167
-#: src/components/common/PromoCodeTable/index.tsx:67
+#: src/components/common/PromoCodeTable/index.tsx:69
 msgid "Discount"
 msgstr "折扣"
 
@@ -1009,9 +1003,6 @@ msgstr "没有帐户？   <0>注册</0"
 
 #: src/components/routes/ticket-widget/SelectTickets/Prices/Tiered/index.tsx:59
 #: src/components/forms/TicketForm/index.tsx:139
-msgid "Donation Ticket"
-msgstr "捐赠券"
-
 #: src/components/routes/ticket-widget/OrderSummaryAndTickets/index.tsx:91
 #: src/components/routes/event/HomepageDesigner/CoverUpload/index.tsx:83
 msgid "Drag and drop or click"
@@ -1049,7 +1040,7 @@ msgstr "编辑与会者"
 msgid "Edit Attendee"
 msgstr "编辑参会者"
 
-#: src/components/common/PromoCodeTable/index.tsx:167
+#: src/components/common/PromoCodeTable/index.tsx:169
 msgid "Edit Code"
 msgstr "编辑代码"
 
@@ -1095,7 +1086,7 @@ msgstr "例如2.50 换 2.50"
 msgid "eg. 23.5 for 23.5%"
 msgstr "例如23.5 表示 23.5%"
 
-#: src/components/common/AttendeeDetails/index.tsx:21
+#: src/components/common/AttendeeDetails/index.tsx:22
 #: src/components/common/AttendeeTable/index.tsx:117
 #: src/components/common/OrderDetails/index.tsx:23
 #: src/components/forms/OrganizerForm/index.tsx:32
@@ -1103,8 +1094,8 @@ msgstr "例如23.5 表示 23.5%"
 #: src/components/modals/InviteUserModal/index.tsx:61
 #: src/components/routes/auth/AcceptInvitation/index.tsx:93
 #: src/components/routes/auth/Login/index.tsx:56
-#: src/components/routes/auth/Register/index.tsx:73
-#: src/components/routes/profile/ManageProfile/index.tsx:130
+#: src/components/routes/auth/Register/index.tsx:75
+#: src/components/routes/profile/ManageProfile/index.tsx:138
 #: src/components/routes/ticket-widget/OrderSummaryAndTickets/index.tsx:67
 msgid "Email"
 msgstr "电子邮件"
@@ -1113,7 +1104,7 @@ msgstr "电子邮件"
 msgid "Email & Notification Settings"
 msgstr "电子邮件和通知设置"
 
-#: src/components/modals/CreateAttendeeModal/index.tsx:120
+#: src/components/modals/CreateAttendeeModal/index.tsx:122
 #: src/components/modals/EditAttendeeModal/index.tsx:91
 msgid "Email address"
 msgstr "电子邮件地址"
@@ -1127,20 +1118,20 @@ msgstr "电子邮件地址"
 msgid "Email Address"
 msgstr "电子邮件地址"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:69
+#: src/components/routes/profile/ManageProfile/index.tsx:77
 msgid "Email change cancelled successfully"
 msgstr "电子邮件更改已成功取消"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:108
+#: src/components/routes/profile/ManageProfile/index.tsx:116
 msgid "Email change pending"
 msgstr "电子邮件更改待定"
 
 #: src/components/routes/event/settings.tsx:72
-#: src/components/routes/profile/ManageProfile/index.tsx:143
+#: src/components/routes/profile/ManageProfile/index.tsx:151
 msgid "Email confirmation resent"
 msgstr "重新发送电子邮件确认"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:82
+#: src/components/routes/profile/ManageProfile/index.tsx:90
 msgid "Email confirmation resent successfully"
 msgstr "成功重新发送电子邮件确认"
 
@@ -1148,7 +1139,7 @@ msgstr "成功重新发送电子邮件确认"
 msgid "Email footer message"
 msgstr "电子邮件页脚信息"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:133
+#: src/components/routes/profile/ManageProfile/index.tsx:141
 msgid "Email not verified"
 msgstr "电子邮件未经验证"
 
@@ -1171,7 +1162,7 @@ msgstr "结束日期"
 msgid "Ended"
 msgstr "完工"
 
-#: src/components/modals/CreateAttendeeModal/index.tsx:163
+#: src/components/modals/CreateAttendeeModal/index.tsx:178
 msgid "Enter an amount excluding taxes and fees."
 msgstr "输入不含税费的金额。"
 
@@ -1233,7 +1224,7 @@ msgstr "事件状态已更新"
 msgid "Events"
 msgstr "活动"
 
-#: src/components/common/PromoCodeTable/index.tsx:70
+#: src/components/common/PromoCodeTable/index.tsx:72
 msgid "Expires"
 msgstr "到期"
 
@@ -1289,7 +1280,7 @@ msgid "Fees"
 msgstr "费用"
 
 #: src/components/common/QuestionsTable/index.tsx:206
-#: src/components/modals/CreateAttendeeModal/index.tsx:106
+#: src/components/modals/CreateAttendeeModal/index.tsx:108
 #: src/components/modals/EditAttendeeModal/index.tsx:77
 #: src/components/routes/ticket-widget/CollectInformation/index.tsx:244
 #: src/components/routes/ticket-widget/CollectInformation/index.tsx:291
@@ -1300,8 +1291,8 @@ msgstr "姓名"
 #: src/components/modals/EditUserModal/index.tsx:71
 #: src/components/modals/InviteUserModal/index.tsx:57
 #: src/components/routes/auth/AcceptInvitation/index.tsx:90
-#: src/components/routes/auth/Register/index.tsx:62
-#: src/components/routes/profile/ManageProfile/index.tsx:127
+#: src/components/routes/auth/Register/index.tsx:64
+#: src/components/routes/profile/ManageProfile/index.tsx:135
 #: src/components/routes/ticket-widget/CollectInformation/index.tsx:243
 #: src/components/routes/ticket-widget/CollectInformation/index.tsx:290
 msgid "First Name"
@@ -1311,7 +1302,7 @@ msgstr "姓名"
 msgid "First name must be between 1 and 50 characters"
 msgstr "名字必须在 1 至 50 个字符之间"
 
-#: src/components/common/QuestionsTable/index.tsx:327
+#: src/components/common/QuestionsTable/index.tsx:328
 msgid "First Name, Last Name, and Email Address are default questions and are always included in the checkout process."
 msgstr "名字、姓氏和电子邮件地址为默认问题，在结账过程中始终包含。"
 
@@ -1350,7 +1341,6 @@ msgstr "免费门票"
 msgid "Free ticket, no payment information required"
 msgstr "免费门票，无需支付信息"
 
-#: src/components/layouts/EventHomepage/index.tsx:34
 #: src/components/layouts/EventHomepage/index.tsx:42
 #: src/components/layouts/Event/index.tsx:37
 msgid "Getting Started"
@@ -1378,7 +1368,7 @@ msgstr "销售总额"
 msgid "Guests"
 msgstr "宾客"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:354
+#: src/components/routes/ticket-widget/SelectTickets/index.tsx:352
 msgid "Have a promo code?"
 msgstr "有促销代码吗？"
 
@@ -1403,7 +1393,7 @@ msgstr "Hi.Events Conference {0}"
 msgid "Hi.Events Conference Center"
 msgstr "Hi.Events 会议中心"
 
-#: src/components/layouts/AuthLayout/index.tsx:16
+#: src/components/layouts/AuthLayout/index.tsx:24
 msgid "hi.events logo"
 msgstr "hi.events 徽标"
 
@@ -1425,7 +1415,7 @@ msgstr "隐藏"
 msgid "Hide getting started page"
 msgstr "隐藏入门页面"
 
-#: src/components/common/QuestionsTable/index.tsx:273
+#: src/components/common/QuestionsTable/index.tsx:274
 msgid "Hide hidden questions"
 msgstr "隐藏隐藏问题"
 
@@ -1514,7 +1504,7 @@ msgstr "如果为空，该地址将用于生成 Google 地图链接"
 msgid "If enabled, the organizer will receive an email notification when a new order is placed"
 msgstr "如果启用，当有新订单时，组织者将收到电子邮件通知"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:114
+#: src/components/routes/profile/ManageProfile/index.tsx:122
 msgid "If you did not request this change, please immediately change your password."
 msgstr "如果您没有要求更改密码，请立即更改密码。"
 
@@ -1581,11 +1571,11 @@ msgstr "邀请用户"
 msgid "Issue refund"
 msgstr "退款问题"
 
-#: src/components/routes/auth/Register/index.tsx:63
+#: src/components/routes/auth/Register/index.tsx:65
 msgid "John"
 msgstr "约翰"
 
-#: src/components/modals/CreateAttendeeModal/index.tsx:114
+#: src/components/modals/CreateAttendeeModal/index.tsx:116
 msgid "Johnson"
 msgstr "约翰逊"
 
@@ -1599,7 +1589,7 @@ msgstr "标签"
 msgid "Last login"
 msgstr "最后登录"
 
-#: src/components/modals/CreateAttendeeModal/index.tsx:113
+#: src/components/modals/CreateAttendeeModal/index.tsx:115
 #: src/components/modals/EditAttendeeModal/index.tsx:84
 msgid "Last name"
 msgstr "姓氏"
@@ -1609,8 +1599,8 @@ msgstr "姓氏"
 #: src/components/modals/EditUserModal/index.tsx:72
 #: src/components/modals/InviteUserModal/index.tsx:58
 #: src/components/routes/auth/AcceptInvitation/index.tsx:92
-#: src/components/routes/auth/Register/index.tsx:68
-#: src/components/routes/profile/ManageProfile/index.tsx:129
+#: src/components/routes/auth/Register/index.tsx:70
+#: src/components/routes/profile/ManageProfile/index.tsx:137
 #: src/components/routes/ticket-widget/CollectInformation/index.tsx:249
 #: src/components/routes/ticket-widget/CollectInformation/index.tsx:250
 #: src/components/routes/ticket-widget/CollectInformation/index.tsx:296
@@ -1629,7 +1619,7 @@ msgid "Let's get started by creating your first organizer"
 msgstr "让我们从创建第一个组织者开始吧"
 
 #: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:91
-#: src/components/layouts/EventHomepage/EventInformation/index.tsx:57
+#: src/components/layouts/EventHomepage/EventInformation/index.tsx:51
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:84
 msgid "Location"
 msgstr "地点"
@@ -1642,7 +1632,7 @@ msgstr "登录"
 msgid "Logging in"
 msgstr "登录"
 
-#: src/components/routes/auth/Register/index.tsx:51
+#: src/components/routes/auth/Register/index.tsx:53
 msgid "Login"
 msgstr "登录"
 
@@ -1663,7 +1653,7 @@ msgstr "将此问题作为必答题"
 #: src/components/common/EventCard/index.tsx:78
 #: src/components/common/OrdersTable/index.tsx:94
 #: src/components/common/OrdersTable/index.tsx:109
-#: src/components/common/PromoCodeTable/index.tsx:164
+#: src/components/common/PromoCodeTable/index.tsx:166
 #: src/components/common/TicketsTable/SortableTicket/index.tsx:171
 #: src/components/layouts/Event/index.tsx:38
 msgid "Manage"
@@ -1676,7 +1666,7 @@ msgid "Manage event"
 msgstr "管理活动"
 
 #: src/components/routes/account/ManageAccount/index.tsx:16
-#: src/components/routes/profile/ManageProfile/index.tsx:93
+#: src/components/routes/profile/ManageProfile/index.tsx:101
 msgid "Manage Profile"
 msgstr "管理简介"
 
@@ -1685,7 +1675,7 @@ msgstr "管理简介"
 msgid "Manage taxes and fees which can be applied to your tickets"
 msgstr "管理适用于机票的税费"
 
-#: src/components/modals/CreateAttendeeModal/index.tsx:94
+#: src/components/modals/CreateAttendeeModal/index.tsx:96
 msgid "Manage tickets"
 msgstr "管理机票"
 
@@ -1711,12 +1701,12 @@ msgstr "在顾客结账前，必须回答必填问题。"
 msgid "Manually add an Attendee"
 msgstr "手动添加与会者"
 
-#: src/components/modals/CreateAttendeeModal/index.tsx:85
-#: src/components/modals/CreateAttendeeModal/index.tsx:101
+#: src/components/modals/CreateAttendeeModal/index.tsx:87
+#: src/components/modals/CreateAttendeeModal/index.tsx:103
 msgid "Manually Add Attendee"
 msgstr "手动添加与会者"
 
-#: src/components/modals/CreateAttendeeModal/index.tsx:127
+#: src/components/modals/CreateAttendeeModal/index.tsx:142
 msgid "Manually adding an attendee will adjust ticket quantity."
 msgstr "手动添加与会者将调整门票数量。"
 
@@ -1794,7 +1784,7 @@ msgstr "我的简介"
 msgid "Nam placerat elementum..."
 msgstr "Nam placerat elementum..."
 
-#: src/components/common/AttendeeDetails/index.tsx:13
+#: src/components/common/AttendeeDetails/index.tsx:14
 #: src/components/common/AttendeeTable/index.tsx:116
 #: src/components/common/OrderDetails/index.tsx:15
 #: src/components/forms/TaxAndFeeForm/index.tsx:61
@@ -1815,20 +1805,20 @@ msgstr "名称应少于 150 个字符"
 msgid "Navigate to Attendee"
 msgstr "导航至与会者"
 
-#: src/components/common/PromoCodeTable/index.tsx:155
+#: src/components/common/PromoCodeTable/index.tsx:157
 #: src/components/routes/account/ManageAccount/sections/Users/index.tsx:101
 msgid "Never"
 msgstr "从不"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:104
 #: src/components/routes/auth/ResetPassword/index.tsx:59
-#: src/components/routes/profile/ManageProfile/index.tsx:176
+#: src/components/routes/profile/ManageProfile/index.tsx:195
 msgid "New Password"
 msgstr "新密码"
 
 #: src/components/routes/event/settings.tsx:108
 #: src/components/routes/event/settings.tsx:113
-#: src/components/common/AttendeeDetails/index.tsx:40
+#: src/components/common/AttendeeDetails/index.tsx:41
 msgid "No"
 msgstr "没有"
 
@@ -1856,7 +1846,7 @@ msgstr "无信息显示"
 msgid "No orders to show"
 msgstr "无订单显示"
 
-#: src/components/common/PromoCodeTable/index.tsx:43
+#: src/components/common/PromoCodeTable/index.tsx:45
 msgid "No Promo Codes to show"
 msgstr "无促销代码显示"
 
@@ -1878,7 +1868,7 @@ msgstr "未加收任何税费。"
 msgid "No tickets to show"
 msgstr "没有演出门票"
 
-#: src/components/common/PromoCodeTable/index.tsx:79
+#: src/components/common/PromoCodeTable/index.tsx:81
 msgid "None"
 msgstr "无"
 
@@ -1997,8 +1987,8 @@ msgstr "订单详情 {0}"
 msgid "Order has been canceled and the order owner has been notified."
 msgstr "订单已取消，并已通知订单所有者。"
 
-#: src/components/common/QuestionsTable/index.tsx:291
-#: src/components/common/QuestionsTable/index.tsx:333
+#: src/components/common/QuestionsTable/index.tsx:292
+#: src/components/common/QuestionsTable/index.tsx:334
 msgid "Order questions"
 msgstr "订购问题"
 
@@ -2067,7 +2057,7 @@ msgstr "页面浏览量"
 msgid "page."
 msgstr "page."
 
-#: src/components/modals/CreateAttendeeModal/index.tsx:173
+#: src/components/modals/CreateAttendeeModal/index.tsx:188
 msgid "paid"
 msgstr "付讫"
 
@@ -2076,8 +2066,8 @@ msgid "Paid Ticket"
 msgstr "付费机票"
 
 #: src/components/routes/auth/Login/index.tsx:58
-#: src/components/routes/auth/Register/index.tsx:78
-#: src/components/routes/profile/ManageProfile/index.tsx:101
+#: src/components/routes/auth/Register/index.tsx:80
+#: src/components/routes/profile/ManageProfile/index.tsx:109
 msgid "Password"
 msgstr "密码"
 
@@ -2085,7 +2075,7 @@ msgstr "密码"
 msgid "Password must be a minimum  of 8 characters"
 msgstr "密码必须至少包含 8 个字符"
 
-#: src/components/routes/auth/Register/index.tsx:25
+#: src/components/routes/auth/Register/index.tsx:27
 msgid "Password must be at least 8 characters"
 msgstr "密码必须至少包含 8 个字符"
 
@@ -2094,7 +2084,7 @@ msgid "Password reset successfully. Please login with your new password."
 msgstr "密码重置成功。请使用新密码登录。"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:30
-#: src/components/routes/auth/Register/index.tsx:26
+#: src/components/routes/auth/Register/index.tsx:28
 msgid "Passwords are not the same"
 msgstr "密码不一样"
 
@@ -2102,11 +2092,11 @@ msgstr "密码不一样"
 msgid "Paste this where you want the widget to appear."
 msgstr "将其粘贴到希望小部件出现的位置。"
 
-#: src/components/modals/CreateAttendeeModal/index.tsx:107
+#: src/components/modals/CreateAttendeeModal/index.tsx:109
 msgid "Patrick"
 msgstr "帕特里克"
 
-#: src/components/modals/CreateAttendeeModal/index.tsx:121
+#: src/components/modals/CreateAttendeeModal/index.tsx:123
 msgid "patrick@acme.com"
 msgstr "patrick@acme.com"
 
@@ -2153,11 +2143,11 @@ msgid "Please check your email and password and try again"
 msgstr "请检查您的电子邮件和密码并重试"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:31
-#: src/components/routes/auth/Register/index.tsx:27
+#: src/components/routes/auth/Register/index.tsx:29
 msgid "Please check your email is valid"
 msgstr "请检查您的电子邮件是否有效"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:144
+#: src/components/routes/profile/ManageProfile/index.tsx:152
 msgid "Please check your email to confirm your email address"
 msgstr "请检查您的电子邮件以确认您的电子邮件地址"
 
@@ -2192,7 +2182,7 @@ msgstr "请选择"
 msgid "Please select at least one ticket"
 msgstr "请至少选择一张票"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:134
+#: src/components/routes/profile/ManageProfile/index.tsx:142
 msgid "Please verify your email address to access all features"
 msgstr "请验证您的电子邮件地址，以访问所有功能"
 
@@ -2215,7 +2205,7 @@ msgstr "由 Stripe 提供支持"
 msgid "Pre Checkout message"
 msgstr "结账前信息"
 
-#: src/components/common/QuestionsTable/index.tsx:325
+#: src/components/common/QuestionsTable/index.tsx:326
 msgid "Preview"
 msgstr "预览"
 
@@ -2255,11 +2245,11 @@ msgstr "打印"
 msgid "Print All Tickets"
 msgstr "打印所有门票"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:98
+#: src/components/routes/profile/ManageProfile/index.tsx:106
 msgid "Profile"
 msgstr "简介"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:56
+#: src/components/routes/profile/ManageProfile/index.tsx:59
 msgid "Profile updated successfully"
 msgstr "成功更新个人资料"
 
@@ -2277,7 +2267,7 @@ msgstr "促销代码页面"
 msgid "Promo Codes"
 msgstr "促销代码"
 
-#: src/components/common/PromoCodeTable/index.tsx:48
+#: src/components/common/PromoCodeTable/index.tsx:50
 msgid "Promo codes can be used to offer discounts, presale access, or provide special access to your event."
 msgstr "促销代码可用于提供折扣、预售权限或为您的活动提供特殊权限。"
 
@@ -2341,15 +2331,15 @@ msgstr "退款订单"
 msgid "Refunded"
 msgstr "退款"
 
-#: src/components/routes/auth/Register/index.tsx:97
+#: src/components/routes/auth/Register/index.tsx:99
 msgid "Register"
 msgstr "注册"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:363
+#: src/components/routes/ticket-widget/SelectTickets/index.tsx:361
 msgid "remove"
 msgstr "去除"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:364
+#: src/components/routes/ticket-widget/SelectTickets/index.tsx:362
 msgid "Remove"
 msgstr "移除"
 
@@ -2358,7 +2348,7 @@ msgstr "移除"
 msgid "Resend confirmation email"
 msgstr "重新发送确认电子邮件"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:136
+#: src/components/routes/profile/ManageProfile/index.tsx:144
 msgid "Resend email confirmation"
 msgstr "重新发送电子邮件确认"
 
@@ -2374,7 +2364,7 @@ msgstr "重新发送订单电子邮件"
 msgid "Resend ticket email"
 msgstr "重新发送票务电子邮件"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:136
+#: src/components/routes/profile/ManageProfile/index.tsx:144
 msgid "Resending..."
 msgstr "重新发送..."
 
@@ -2525,11 +2515,11 @@ msgstr "选择组织者"
 msgid "Select status"
 msgstr "选择状态"
 
-#: src/components/modals/CreateAttendeeModal/index.tsx:128
+#: src/components/modals/CreateAttendeeModal/index.tsx:143
 msgid "Select Ticket"
 msgstr "选择机票"
 
-#: src/components/modals/CreateAttendeeModal/index.tsx:142
+#: src/components/modals/CreateAttendeeModal/index.tsx:157
 #: src/components/modals/EditAttendeeModal/index.tsx:117
 msgid "Select Ticket Tier"
 msgstr "选择票价等级"
@@ -2556,7 +2546,7 @@ msgid "Send as a test. This will send the message to your email address instead 
 msgstr "作为测试发送。这将把信息发送到您的电子邮件地址，而不是收件人的电子邮件地址。"
 
 #: src/components/modals/CreateAttendeeModal/index.tsx:184
-#: src/components/modals/CreateAttendeeModal/index.tsx:185
+#: src/components/modals/CreateAttendeeModal/index.tsx:200
 msgid "Send order confirmation and ticket email"
 msgstr "发送订单确认和票务电子邮件"
 
@@ -2584,10 +2574,6 @@ msgstr "搜索引擎优化标题"
 msgid "Service Fee"
 msgstr "服务费"
 
-#: src/components/forms/TicketForm/index.tsx:141
-msgid "Set a minimum price and let users donate more"
-msgstr "设定最低价格，让用户捐得更多"
-
 #: src/components/routes/event/GettingStarted/index.tsx:86
 msgid "Set up your event"
 msgstr "准备活动"
@@ -2614,7 +2600,7 @@ msgstr "显示"
 msgid "Show available ticket quantity"
 msgstr "显示可用门票数量"
 
-#: src/components/common/QuestionsTable/index.tsx:273
+#: src/components/common/QuestionsTable/index.tsx:274
 msgid "Show hidden questions"
 msgstr "显示隐藏问题"
 
@@ -2650,7 +2636,7 @@ msgstr "单行文本框"
 msgid "Skip this step"
 msgstr "跳过此步骤"
 
-#: src/components/routes/auth/Register/index.tsx:69
+#: src/components/routes/auth/Register/index.tsx:71
 msgid "Smith"
 msgstr "史密斯"
 
@@ -2681,8 +2667,8 @@ msgstr "出错了！请重试"
 msgid "Something went wrong."
 msgstr "出问题了"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:72
-#: src/components/routes/profile/ManageProfile/index.tsx:86
+#: src/components/routes/profile/ManageProfile/index.tsx:80
+#: src/components/routes/profile/ManageProfile/index.tsx:94
 msgid "Something went wrong. Please try again."
 msgstr "出错了。请重试。"
 
@@ -2723,7 +2709,7 @@ msgstr "开始日期"
 msgid "State or Region"
 msgstr "州或地区"
 
-#: src/components/common/AttendeeDetails/index.tsx:29
+#: src/components/common/AttendeeDetails/index.tsx:30
 #: src/components/common/AttendeeTable/index.tsx:120
 #: src/components/common/OrderDetails/index.tsx:43
 #: src/components/common/OrdersTable/index.tsx:154
@@ -2764,7 +2750,7 @@ msgstr "成功确认电子邮件地址"
 msgid "Successfully confirmed email change"
 msgstr "成功确认电子邮件更改"
 
-#: src/components/modals/CreateAttendeeModal/index.tsx:70
+#: src/components/modals/CreateAttendeeModal/index.tsx:72
 msgid "Successfully created attendee"
 msgstr "成功创建与会者"
 
@@ -3045,9 +3031,9 @@ msgstr "该用户未激活，因为他们没有接受邀请。"
 msgid "ticket"
 msgstr "入场券"
 
-#: src/components/common/AttendeeDetails/index.tsx:45
+#: src/components/common/AttendeeDetails/index.tsx:46
 #: src/components/common/AttendeeTable/index.tsx:119
-#: src/components/modals/CreateAttendeeModal/index.tsx:125
+#: src/components/modals/CreateAttendeeModal/index.tsx:140
 #: src/components/modals/EditAttendeeModal/index.tsx:108
 msgid "Ticket"
 msgstr "门票"
@@ -3065,7 +3051,7 @@ msgstr "门票电子邮件已重新发送给与会者"
 msgid "Ticket Sales"
 msgstr "门票销售"
 
-#: src/components/modals/CreateAttendeeModal/index.tsx:140
+#: src/components/modals/CreateAttendeeModal/index.tsx:155
 #: src/components/modals/EditAttendeeModal/index.tsx:115
 msgid "Ticket Tier"
 msgstr "门票等级"
@@ -3081,11 +3067,11 @@ msgid "Ticket Widget Preview"
 msgstr "票务小工具预览"
 
 #: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:101
-#: src/components/common/PromoCodeTable/index.tsx:145
+#: src/components/common/PromoCodeTable/index.tsx:147
 msgid "Ticket(s)"
 msgstr "机票"
 
-#: src/components/common/PromoCodeTable/index.tsx:69
+#: src/components/common/PromoCodeTable/index.tsx:71
 #: src/components/layouts/Event/index.tsx:41
 #: src/components/layouts/EventHomepage/index.tsx:80
 #: src/components/routes/event/tickets.tsx:37
@@ -3127,7 +3113,7 @@ msgstr "分层门票允许您为同一张门票提供多种价格选择。\n"
 "选择。"
 
 #: src/components/forms/TicketForm/index.tsx:156
-#: src/components/common/PromoCodeTable/index.tsx:68
+#: src/components/common/PromoCodeTable/index.tsx:70
 msgid "Times used"
 msgstr "使用次数"
 
@@ -3135,7 +3121,7 @@ msgstr "使用次数"
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:82
 #: src/components/routes/auth/AcceptInvitation/index.tsx:100
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:109
-#: src/components/routes/profile/ManageProfile/index.tsx:153
+#: src/components/routes/profile/ManageProfile/index.tsx:161
 msgid "Timezone"
 msgstr "时区"
 
@@ -3210,7 +3196,7 @@ msgid "Unlimited"
 msgstr "无限制"
 
 #: src/components/common/TicketsTable/index.tsx:106
-#: src/components/common/PromoCodeTable/index.tsx:123
+#: src/components/common/PromoCodeTable/index.tsx:125
 msgid "Unlimited usages allowed"
 msgstr "允许无限次使用"
 
@@ -3226,7 +3212,7 @@ msgstr "更新 {0}"
 msgid "Update event name, description and dates"
 msgstr "更新活动名称、说明和日期"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:158
+#: src/components/routes/profile/ManageProfile/index.tsx:177
 msgid "Update profile"
 msgstr "更新个人资料"
 
@@ -3267,7 +3253,7 @@ msgstr "用户可在 <0>\"配置文件设置\"</0> 中更改自己的电子邮�
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:83
 #: src/components/routes/auth/AcceptInvitation/index.tsx:101
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:110
-#: src/components/routes/profile/ManageProfile/index.tsx:154
+#: src/components/routes/profile/ManageProfile/index.tsx:162
 msgid "UTC"
 msgstr "世界协调时"
 
@@ -3295,11 +3281,11 @@ msgstr "查看活动页面"
 msgid "View full message"
 msgstr "查看完整信息"
 
-#: src/components/layouts/EventHomepage/EventInformation/index.tsx:74
+#: src/components/layouts/EventHomepage/EventInformation/index.tsx:68
 msgid "View map"
 msgstr "查看地图"
 
-#: src/components/layouts/EventHomepage/EventInformation/index.tsx:74
+#: src/components/layouts/EventHomepage/EventInformation/index.tsx:68
 msgid "View on Google Maps"
 msgstr "在谷歌地图上查看"
 
@@ -3402,7 +3388,7 @@ msgstr "嵌入小部件"
 msgid "Widget Settings"
 msgstr "小部件设置"
 
-#: src/components/modals/CreateAttendeeModal/index.tsx:189
+#: src/components/modals/CreateAttendeeModal/index.tsx:204
 msgid "Working"
 msgstr "工作"
 
@@ -3413,12 +3399,12 @@ msgstr "工作"
 #: src/components/modals/EditPromoCodeModal/index.tsx:84
 #: src/components/modals/EditQuestionModal/index.tsx:94
 #: src/components/modals/EditTicketModal/index.tsx:106
-#: src/components/routes/auth/Register/index.tsx:97
+#: src/components/routes/auth/Register/index.tsx:99
 #: src/components/routes/auth/ResetPassword/index.tsx:62
 msgid "Working..."
 msgstr "工作..."
 
-#: src/components/common/AttendeeDetails/index.tsx:40
+#: src/components/common/AttendeeDetails/index.tsx:41
 msgid "Yes"
 msgstr "是"
 
@@ -3477,12 +3463,12 @@ msgstr "您已接受此邀请。请登录以继续。"
 msgid "You have connected your Stripe account"
 msgstr "您已连接 Stripe 账户"
 
-#: src/components/common/QuestionsTable/index.tsx:316
+#: src/components/common/QuestionsTable/index.tsx:317
 msgid "You have no attendee questions."
 msgstr "没有与会者提问。"
 
 #: src/components/common/QuestionsTable/index.tsx:149
-#: src/components/common/QuestionsTable/index.tsx:301
+#: src/components/common/QuestionsTable/index.tsx:302
 msgid "You have no order questions."
 msgstr "您没有订单问题。"
 
@@ -3519,7 +3505,7 @@ msgstr "您必须同意条款和条件"
 msgid "You must confirm your email address before your event can go live."
 msgstr "您必须在活动上线前确认您的电子邮件地址。"
 
-#: src/components/modals/CreateAttendeeModal/index.tsx:86
+#: src/components/modals/CreateAttendeeModal/index.tsx:88
 msgid "You must create a ticket before you can manually add an attendee."
 msgstr "必须先创建机票，然后才能手动添加与会者。"
 
@@ -3553,7 +3539,7 @@ msgstr "您的网站真棒 🎉"
 msgid "Your Details"
 msgstr "您的详细信息"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:110
+#: src/components/routes/profile/ManageProfile/index.tsx:118
 msgid "Your email request change to <0>{0}</0> is pending. Please check your email to confirm"
 msgstr "您要求将电子邮件更改为<0>{0}</0>的申请正在处理中。请检查您的电子邮件以确认"
 
@@ -3567,7 +3553,7 @@ msgid "Your orders will appear here once they start rolling in."
 msgstr "您的订单一旦开始滚动，就会出现在这里。"
 
 #: src/components/routes/auth/Login/index.tsx:59
-#: src/components/routes/auth/Register/index.tsx:79
+#: src/components/routes/auth/Register/index.tsx:81
 msgid "Your password"
 msgstr "您的密码"
 
@@ -3597,4 +3583,67 @@ msgstr "您的入场券"
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:137
 msgid "Zip or Postal Code"
 msgstr "邮政编码"
+
+#: src/locales.ts:46
+msgid "Chinese"
+msgstr "中文"
+
+#: src/components/forms/TicketForm/index.tsx:139
+msgid "Donation / Pay what you'd like ticket"
+msgstr "捐款/自费门票"
+
+#: src/components/common/LanguageSwitcher/index.tsx:19
+#: src/components/modals/CreateAttendeeModal/index.tsx:135
+#: src/components/routes/profile/ManageProfile/index.tsx:173
+#: src/locales.ts:41
+msgid "English"
+msgstr "英语"
+
+#: src/locales.ts:43
+msgid "French"
+msgstr "法语"
+
+#: src/components/layouts/EventHomepage/index.tsx:34
+#: src/locales.ts:42
+msgid "German"
+msgstr "德国"
+
+#: src/components/common/QuestionsTable/index.tsx:269
+msgid "hidden question"
+msgstr "隐藏问题"
+
+#: src/components/common/QuestionsTable/index.tsx:270
+msgid "hidden questions"
+msgstr "隐藏问题"
+
+#: src/components/common/AttendeeDetails/index.tsx:54
+#: src/components/modals/CreateAttendeeModal/index.tsx:134
+#: src/components/routes/profile/ManageProfile/index.tsx:172
+msgid "Language"
+msgstr "语言"
+
+#: src/locales.ts:44
+msgid "Portuguese"
+msgstr "葡萄牙语"
+
+#: src/locales.ts:47
+msgid "Portuguese (Brazil)"
+msgstr "葡萄牙语（巴西）"
+
+#: src/components/forms/TicketForm/index.tsx:141
+#: src/components/forms/TicketForm/index.tsx:141
+msgid "Set a minimum price and let users pay more if they choose"
+msgstr "设定最低价格，用户可选择支付更高的价格"
+
+#: src/locales.ts:45
+msgid "Spanish"
+msgstr "西班牙语"
+
+#: src/components/modals/CreateAttendeeModal/index.tsx:136
+msgid "The language the attendee will receive emails in."
+msgstr "与会者接收电子邮件的语言。"
+
+#: src/components/common/PromoCodeTable/index.tsx:174
+msgid "URL copied to clipboard"
+msgstr "复制到剪贴板的 URL"
 

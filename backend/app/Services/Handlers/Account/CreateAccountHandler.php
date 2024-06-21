@@ -69,6 +69,7 @@ readonly class CreateAccountHandler
                 'last_name' => $accountData->last_name,
                 'timezone' => $this->getTimezone($accountData),
                 'email_verified_at' => $isSaasMode ? null : now()->toDateTimeString(),
+                'locale' => $accountData->locale,
             ]);
 
             $this->accountUserAssociationService->associate(

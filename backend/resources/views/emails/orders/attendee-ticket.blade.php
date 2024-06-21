@@ -8,20 +8,20 @@
 @php /** @see \HiEvents\Mail\Attendee\AttendeeTicketMail */ @endphp
 
 <x-mail::message>
-# You're going to {{ $event->getTitle() }}! 🎉
+# {{ __('You\'re going to') }} {{ $event->getTitle() }}! 🎉
 <br>
 <br>
 
-Please find your ticket details below.
+{{ __('Please find your ticket details below.') }}
 
 <x-mail::button :url="$ticketUrl">
-    View Ticket
+{{ __('View Ticket') }}
 </x-mail::button>
 
-If you have any questions or need assistance, please reply to this email or contact the event organizer
-at <a href="mailto:{{$eventSettings->getSupportEmail()}}">{{$eventSettings->getSupportEmail()}}</a>.
+{{ __('If you have any questions or need assistance, please reply to this email or contact the event organizer') }}
+{{ __('at') }} <a href="mailto:{{$eventSettings->getSupportEmail()}}">{{$eventSettings->getSupportEmail()}}</a>.
 
-Best regards,
+{{ __('Best regards,') }}
 <br>
 {{config('app.name')}}
 

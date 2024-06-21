@@ -1,6 +1,7 @@
 /**
  * @todo - This file needs to be organized better. Split into multiple files.
  */
+import {SupportedLocales} from "./locales.ts";
 
 export type ConfigKeys = 'VITE_FRONTEND_URL'
     | 'VITE_API_URL_CLIENT'
@@ -24,6 +25,7 @@ export interface RegisterAccountRequest {
     email: string;
     password: string;
     password_confirmation: string;
+    locale: SupportedLocales;
 }
 
 export interface ResetPasswordRequest {
@@ -54,6 +56,7 @@ export interface User {
     status?: 'ACTIVE' | 'INACTIVE' | 'INVITED';
     role?: 'ADMIN' | 'ORGANIZER';
     is_account_owner?: boolean;
+    locale?: SupportedLocales;
 }
 
 export interface Account {
@@ -315,6 +318,7 @@ export interface Attendee {
     checked_out_by?: number;
     checked_in_by?: number;
     question_answers?: QuestionAnswer[];
+    locale?: SupportedLocales;
 }
 
 export interface Address {

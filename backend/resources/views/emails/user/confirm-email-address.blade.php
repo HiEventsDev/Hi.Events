@@ -2,7 +2,7 @@
 @php /** @var string $link */ @endphp
 
 <x-mail::message>
-Hi {{ $user->getFirstName() }},
+{{ __('Hi :name', ['name' => $user->getFirstName()]) }},
 
 {{ __('Welcome to :appName! We\'re excited to have you aboard!', ['appName' => config('app.name')]) }}
 

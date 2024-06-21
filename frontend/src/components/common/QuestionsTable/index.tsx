@@ -18,7 +18,7 @@ import {PageTitle} from "../PageTitle";
 import {CreateQuestionModal} from "../../modals/CreateQuestionModal";
 import {useDisclosure} from "@mantine/hooks";
 import {Card} from "../Card";
-import {plural, t} from "@lingui/macro";
+import {t} from "@lingui/macro";
 import {useEffect, useState} from "react";
 import {EditQuestionModal} from "../../modals/EditQuestionModal";
 import {useDeleteQuestion} from "../../../mutations/useDeleteQuestion.ts";
@@ -264,10 +264,11 @@ export const QuestionsTable = ({questions}: QuestionsTableProp) => {
                     <div className={classes.hiddenToggle}>
                         <Group>
                             <span className={classes.hiddenCount}>
-                                {plural(questions.filter(question => question.is_hidden).length, {
-                                    one: "# hidden question",
-                                    other: "# hidden questions"
-                                })}
+                                    {questions.filter(question => question.is_hidden).length}{' '}
+                                {questions.filter(question => question.is_hidden).length === 1
+                                    ? t`hidden question`
+                                    : t`hidden questions`
+                                }
                             </span>
                             <Tooltip
                                 label={showHiddenQuestions ? t`Hide hidden questions` : t`Show hidden questions`}

@@ -31,6 +31,7 @@ class AttendeeResource extends JsonResource
             'checked_in_at' => $this->getCheckedInAt(),
             'checked_in_by' => $this->getCheckedInBy(),
             'short_id' => $this->getShortId(),
+            'locale' => $this->getLocale(),
             'ticket' => $this->when(
                 !is_null($this->getTicket()),
                 fn() => new TicketResource($this->getTicket()),

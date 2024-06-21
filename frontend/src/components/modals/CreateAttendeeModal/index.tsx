@@ -12,6 +12,7 @@ import {showSuccess} from "../../../utilites/notifications.tsx";
 import {t, Trans} from "@lingui/macro";
 import {useEffect} from "react";
 import {InputGroup} from "../../common/InputGroup";
+import {getClientLocale, localeToFlagEmojiMap, localeToNameMap, SupportedLocales} from "../../../locales.ts";
 
 export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
     const {eventId} = useParams();
@@ -28,7 +29,8 @@ export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
             last_name: '',
             amount_paid: 0.00,
             send_confirmation_email: true,
-            taxes_and_fees: []
+            taxes_and_fees: [],
+            locale: getClientLocale() as SupportedLocales,
         },
     });
 
@@ -121,6 +123,19 @@ export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
                     placeholder={t`patrick@acme.com`}
                     required
                 />
+
+                <Select
+                    required
+                    data={Object.keys(localeToNameMap).map(locale => ({
+                        value: locale,
+                        label: localeToFlagEmojiMap[locale as SupportedLocales] + ' ' + localeToNameMap[locale as SupportedLocales]
+                    }))}
+                    {...form.getInputProps('locale')}
+                    label={t`Language`}
+                    placeholder={t`English`}
+                    description={t`The language the attendee will receive emails in.`}
+                />
+
                 <Select
                     label={t`Ticket`}
                     mt={20}

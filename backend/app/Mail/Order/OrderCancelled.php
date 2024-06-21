@@ -28,7 +28,7 @@ class OrderCancelled extends BaseMail
     {
         return new Envelope(
             replyTo: $this->eventSettings->getSupportEmail(),
-            subject: 'Your order has been cancelled',
+            subject: __('Your order has been cancelled'),
         );
     }
 

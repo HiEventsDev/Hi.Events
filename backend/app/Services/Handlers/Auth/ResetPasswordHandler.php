@@ -81,8 +81,11 @@ class ResetPasswordHandler
         );
     }
 
-    private function sendResetPasswordEmail($user): void
+    private function sendResetPasswordEmail(UserDomainObject $user): void
     {
-        $this->mailer->to($user->getEmail())->send(new ResetPasswordSuccess());
+        $this->mailer
+            ->to($user->getEmail())
+            ->locale($user->getLocale())
+            ->send(new ResetPasswordSuccess());
     }
 }

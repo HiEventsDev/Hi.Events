@@ -5,25 +5,22 @@
 @php /** @see \HiEvents\Mail\Order\PaymentSuccessButOrderExpiredMail */ @endphp
 
 <x-mail::message>
-Hello,
+{{ __('Hello') }},
 
 <p>
-Your recent order for <b>{{$event->getTitle()}}</b> was not successful. The order expired while you were completing
-the payment.
-We have issued a refund for the order.
+{{ __('Your recent order for :eventTitle was not successful. The order expired while you were completing the payment. We have issued a refund for the order.', ['eventTitle' => $event->getTitle()]) }}
 </p>
 
 <p>
-We apologize for the inconvenience. If you have any questions or need assistance, feel free to reach us
-at <a href="mailto:{{$organizer->getEmail()}}">{{$organizer->getEmail()}}</a>.
+{{ __('We apologize for the inconvenience. If you have any questions or need assistance, feel free to reach us at') }} <a href="mailto:{{$organizer->getEmail()}}">{{$organizer->getEmail()}}</a>.
 </p>
 
 <x-mail::button :url="$event->getEventUrl()">
-    View Event Page
+{{ __('View Event Page') }}
 </x-mail::button>
 
-Best regards,<br>
-Hi.Events
+{{ __('Best regards') }},<br>
+{{ __('Hi.Events') }}
 
 {!! $eventSettings->getGetEmailFooterHtml() !!}
 </x-mail::message>

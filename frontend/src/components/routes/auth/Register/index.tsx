@@ -8,6 +8,7 @@ import {t, Trans} from "@lingui/macro";
 import {InputGroup} from "../../../common/InputGroup";
 import {Card} from "../../../common/Card";
 import classes from "./Register.module.scss";
+import {getClientLocale} from "../../../../locales.ts";
 
 export const Register = () => {
     const navigate = useNavigate();
@@ -20,6 +21,7 @@ export const Register = () => {
             password: '',
             password_confirmation: '',
             timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+            locale: getClientLocale(),
         },
         validate: {
             password: hasLength({min: 8}, t`Password must be at least 8 characters`),
@@ -55,7 +57,7 @@ export const Register = () => {
             </header>
 
             <Card>
-                <form onSubmit={form.onSubmit((values) => registerUser(values))}>
+                <form onSubmit={form.onSubmit((values) => registerUser(values as RegisterAccountRequest))}>
                     <InputGroup>
                         <TextInput
                             {...form.getInputProps('first_name')}
@@ -99,7 +101,9 @@ export const Register = () => {
                 </form>
                 <footer>
                     <Trans>
-                        By registering you agree to our <NavLink target={'_blank'} to={'https://hi.events/terms-of-service?utm_source=app-register-footer'}>Terms of Service</NavLink> and <NavLink
+                        By registering you agree to our <NavLink target={'_blank'}
+                                                                 to={'https://hi.events/terms-of-service?utm_source=app-register-footer'}>Terms
+                        of Service</NavLink> and <NavLink
                         target={'_blank'}
                         to={'https://hi.events/privacy-policy?utm_source=app-register-footer'}>Privacy Policy</NavLink>.
                     </Trans>

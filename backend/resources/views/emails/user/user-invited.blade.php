@@ -3,14 +3,14 @@
 @php /** @var string $appName */ @endphp
 
 <x-mail::message>
-Hi {{ $invitedUser->getFirstName() }},
+{{ __('Hi :name', ['name' => $user->getFirstName()]) }},
 
-You've been invited to join {{ $appName }}.
+{{ __('You\'ve been invited to join :appName.', ['appName' => $appName]) }}
 
-To accept the invitation, please click the link below:
+{{ __('To accept the invitation, please click the link below:') }}
 
-<a href="{{ $inviteLink }}">Accept Invitation</a>
+<a href="{{ $inviteLink }}">{{ __('Accept Invitation') }}</a>
 
-Thank you,<br>
+{{ __('Thank you') }},<br>
 {{ $appName }}
 </x-mail::message>

@@ -38,10 +38,13 @@ class SendUserInvitationService
             expiry: now()->addWeek(),
         );
 
-        $this->mailer->to($invitedUser->getEmail())->send(new UserInvited(
-            invitedUser: $invitedUser,
-            appName: $this->config->get('app.name'),
-            inviteLink: sprintf(Url::getFrontEndUrlFromConfig(Url::ACCEPT_INVITATION), $invitedPayload),
-        ));
+        $this->mailer
+            ->to($invitedUser->getEmail())
+            ->locale($invitedUser->getLocale())
+            ->send(new UserInvited(
+                invitedUser: $invitedUser,
+                appName: $this->config->get('app.name'),
+                inviteLink: sprintf(Url::getFrontEndUrlFromConfig(Url::ACCEPT_INVITATION), $invitedPayload),
+            ));
     }
 }

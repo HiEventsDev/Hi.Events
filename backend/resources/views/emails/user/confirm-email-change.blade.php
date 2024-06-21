@@ -2,14 +2,13 @@
 @php /** @var string $link */ @endphp
 
 <x-mail::message>
-Hi {{ $user->getFirstName() }},
+{{ __('Hi :name', ['name' => $user->getFirstName()]) }},
 
-You have requested to change your email address to <b>{{ $user->getPendingEmail() }}</b>. Please click the link
-below to confirm this change.
+{!! __('You have requested to change your email address to <b>:pendingEmail</b>. Please click the link below to confirm this change.', ['pendingEmail' => $user->getPendingEmail()]) !!}
 
-<a href="{{ $link }}">Confirm email change</a>
+<a href="{{ $link }}">{{ __('Confirm email change') }}</a>
 
-If you did not request this change, please immediately change your password.
+{{ __('If you did not request this change, please immediately change your password.') }}
 
-Thanks,
+{{ __('Thanks,') }}
 </x-mail::message>
