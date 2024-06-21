@@ -4,7 +4,7 @@ import {Attendee} from "../../../types.ts";
 import classes from "./AttendeeDetails.module.scss";
 import {t} from "@lingui/macro";
 import {getAttendeeTicketTitle} from "../../../utilites/tickets.ts";
-import {localeToNameMap, SupportedLocales} from "../../../locales.ts";
+import {getLocaleName, SupportedLocales} from "../../../locales.ts";
 
 export const AttendeeDetails = ({attendee}: { attendee: Attendee }) => {
     return (
@@ -54,7 +54,7 @@ export const AttendeeDetails = ({attendee}: { attendee: Attendee }) => {
                     {t`Language`}
                 </div>
                 <div className={classes.amount}>
-                    {localeToNameMap[attendee.locale as SupportedLocales]}
+                    {getLocaleName(attendee.locale as SupportedLocales)}
                 </div>
             </div>
         </Card>

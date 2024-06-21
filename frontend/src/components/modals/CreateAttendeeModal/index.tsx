@@ -12,7 +12,13 @@ import {showSuccess} from "../../../utilites/notifications.tsx";
 import {t, Trans} from "@lingui/macro";
 import {useEffect} from "react";
 import {InputGroup} from "../../common/InputGroup";
-import {getClientLocale, localeToFlagEmojiMap, localeToNameMap, SupportedLocales} from "../../../locales.ts";
+import {
+    getClientLocale,
+    getLocaleName,
+    localeToFlagEmojiMap,
+    localeToNameMap,
+    SupportedLocales
+} from "../../../locales.ts";
 
 export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
     const {eventId} = useParams();
@@ -128,7 +134,7 @@ export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
                     required
                     data={Object.keys(localeToNameMap).map(locale => ({
                         value: locale,
-                        label: localeToFlagEmojiMap[locale as SupportedLocales] + ' ' + localeToNameMap[locale as SupportedLocales]
+                        label: localeToFlagEmojiMap[locale as SupportedLocales] + ' ' + getLocaleName(locale as SupportedLocales),
                     }))}
                     {...form.getInputProps('locale')}
                     label={t`Language`}

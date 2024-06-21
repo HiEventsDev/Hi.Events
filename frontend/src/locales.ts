@@ -38,14 +38,18 @@ export const localeToFlagEmojiMap: Record<SupportedLocales, string> = {
 };
 
 export const localeToNameMap: Record<SupportedLocales, string> = {
-    en: t`English`,
-    de: t`German`,
-    fr: t`French`,
-    pt: t`Portuguese`,
-    es: t`Spanish`,
-    "zh-cn": t`Chinese`,
-    "pt-br": t`Portuguese (Brazil)`,
+    en: `English`,
+    de: `German`,
+    fr: `French`,
+    pt: `Portuguese`,
+    es: `Spanish`,
+    "zh-cn": `Chinese`,
+    "pt-br": `Portuguese (Brazil)`,
 };
+
+export const getLocaleName = (locale: SupportedLocales) => {
+    return t`${localeToNameMap[locale]}`
+}
 
 export const getClientLocale = () => {
     if (typeof window !== "undefined") {
