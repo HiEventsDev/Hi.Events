@@ -7,7 +7,7 @@ const BASE_URL = isSsr()
     ? getConfig('VITE_API_URL_SERVER')
     : getConfig('VITE_API_URL_CLIENT');
 const LOGIN_PATH = "/auth/login";
-const PREVIOUS_URL_KEY = 'previous_url'; // Key for storing the previous URL
+const PREVIOUS_URL_KEY = 'previous_url';
 
 const ALLOWED_UNAUTHENTICATED_PATHS = [
     'auth/login',
@@ -28,7 +28,6 @@ export const api = axios.create({
     withCredentials: true,
 });
 
-
 const existingToken = typeof window !== "undefined" ? window.localStorage.getItem('token') : undefined;
 if (existingToken) {
     setAuthToken(existingToken);
@@ -36,10 +35,7 @@ if (existingToken) {
 
 api.interceptors.response.use(
     (response) => {
-        // Securely update the token on each response
-        // eslint-disable-next-line lingui/no-unlocalized-strings
         const token = response?.data?.token || response?.headers["x-auth-token"];
-
         if (token) {
             window?.localStorage?.setItem('token', token);
             setAuthToken(token);
@@ -48,20 +44,26 @@ api.interceptors.response.use(
     },
     (error) => {
         const { status } = error.response;
-        if ((status === 401 || status === 403) && !ALLOWED_UNAUTHENTICATED_PATHS.some(path => window?.location.pathname.includes(path))) {
+        const currentPath = window?.location.pathname;
+        const isAllowedUnauthenticatedPath = ALLOWED_UNAUTHENTICATED_PATHS.some(path => currentPath.includes(path));
+        const isManageEventPath = currentPath.startsWith('/manage/event/');
+        const isAuthError = status === 401 || status === 403;
+
+        if (isAuthError && (!isAllowedUnauthenticatedPath || isManageEventPath)) {
             // Store the current URL before redirecting to the login page
             window?.localStorage?.setItem(PREVIOUS_URL_KEY, window?.location.href);
             window?.location?.replace(LOGIN_PATH);
         }
+
         return Promise.reject(error);
     }
 );
 
-axios.defaults.withCredentials = true
+axios.defaults.withCredentials = true;
 
 export const redirectToPreviousUrl = () => {
     const previousUrl = window?.localStorage?.getItem(PREVIOUS_URL_KEY) || '/manage/events';
-    window?.localStorage?.removeItem(PREVIOUS_URL_KEY); // Clean up after redirecting
+    window?.localStorage?.removeItem(PREVIOUS_URL_KEY);
     if (typeof window !== "undefined") {
         window.location.href = previousUrl;
     }

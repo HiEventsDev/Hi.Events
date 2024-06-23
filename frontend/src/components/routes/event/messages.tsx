@@ -38,7 +38,7 @@ export const Messages = () => {
                     />
                 )}>
                     <Button color={'green'} size={'sm'} onClick={openSendModal} rightSection={<IconSend/>}>
-                        Send Message
+                        {t`Send Message`}
                     </Button>
                 </ToolBar>
 

@@ -25,12 +25,12 @@ class MessageDomainObject extends Generated\MessageDomainObjectAbstract implemen
         return new AllowedSorts(
             [
                 self::CREATED_AT => [
-                    'asc' => 'Sent Date Oldest',
-                    'desc' => 'Sent Date Newest',
+                    'asc' => __('Sent Date Oldest'),
+                    'desc' => __('Sent Date Newest'),
                 ],
                 self::SUBJECT => [
-                    'asc' => 'Subject A-Z',
-                    'desc' => 'Subject Z-A',
+                    'asc' => __('Subject A-Z'),
+                    'desc' => __('Subject Z-A'),
                 ],
             ],
         );
