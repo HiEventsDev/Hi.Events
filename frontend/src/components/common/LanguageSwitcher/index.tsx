@@ -1,15 +1,32 @@
 import {Select} from "@mantine/core";
-import {
-    dynamicActivateLocale,
-    getClientLocale,
-    getLocaleName,
-    localeToNameMap,
-    SupportedLocales
-} from "../../../locales.ts";
+import {dynamicActivateLocale, getClientLocale, localeToNameMap, SupportedLocales} from "../../../locales.ts";
 import {t} from "@lingui/macro";
 import {IconWorld} from "@tabler/icons-react";
+import {useLingui} from "@lingui/react";
 
 export const LanguageSwitcher = () => {
+    useLingui();
+
+    // Ideally these would be in the locales.ts file, but when they're there they don't translate
+    const getLocaleName = (locale: SupportedLocales): string => {
+        switch (locale) {
+            case "de":
+                return t`German`;
+            case "en":
+                return t`English`;
+            case "es":
+                return t`Spanish`;
+            case "fr":
+                return t`French`;
+            case "pt":
+                return t`Portuguese`;
+            case "pt-br":
+                return t`Brazilian Portuguese`;
+            case "zh-cn":
+                return t`Chinese (Simplified)`;
+        }
+    };
+
     return (
         <>
             <Select

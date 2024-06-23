@@ -4,12 +4,17 @@ namespace HiEvents\Http\Middleware;
 
 use Closure;
 use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\Services\Application\Locale\LocaleService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 
 class SetUserLocaleMiddleware
 {
+    public function __construct(private readonly LocaleService $localeService)
+    {
+    }
+
     public function handle(Request $request, Closure $next)
     {
         $this->setLocale($request);
@@ -34,7 +39,7 @@ class SetUserLocaleMiddleware
     protected function setLocaleFromCookie(Request $request): bool
     {
         if ($locale = $request->cookie('locale')) {
-            App::setLocale($locale);
+            App::setLocale($this->localeService->getLocaleOrDefault($locale));
             return true;
         }
 
@@ -56,7 +61,7 @@ class SetUserLocaleMiddleware
     protected function setLocaleFromAcceptLanguage(Request $request): bool
     {
         if ($request->hasHeader('Accept-Language')) {
-            App::setLocale($request->header('Accept-Language'));
+            App::setLocale($this->localeService->getLocaleOrDefault($request->getPreferredLanguage()));
             return true;
         }
 

@@ -28,6 +28,9 @@ const config: LinguiConfig = {
     ],
     sourceLocale: "en",
     format: "po",
+    fallbackLocales: {
+        "default": "en",
+    }
 };
 
 export default config;
