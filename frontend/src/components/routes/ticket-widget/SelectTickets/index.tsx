@@ -183,6 +183,17 @@ const SelectTickets = (props: SelectTicketsProps) => {
                 })
             });
 
+            // this is hacky way to add empty quantity for a sold out ticket.
+            // this is needed to avoid validation error when the ticket is sold out.
+            // @todo - refactor this code so returning here doesn't break the checkout process.
+            if (quantitiesValues.length === 0) {
+                quantitiesValues.push({
+                    quantity: 0,
+                    price_id: 0,
+                    price: 0,
+                })
+            }
+
             ticketValues.push({
                 ticket_id: Number(ticket.id),
                 quantities: quantitiesValues,
