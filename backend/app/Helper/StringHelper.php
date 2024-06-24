@@ -12,7 +12,7 @@ class StringHelper
         $text = trim(preg_replace('/\s+/', ' ', $text));
 
         if (strlen($text) > $length) {
-            $text = substr($text, 0, $length - 3) . '...';
+            $text = mb_substr($text, 0, $length - 3) . '...';
         }
 
         return $text;
