@@ -43,7 +43,6 @@ export async function render(params: {
             <StaticRouterProvider
                 router={routerWithContext}
                 context={context}
-                nonce="the-nonce"
             />
         </App>
     );

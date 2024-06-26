@@ -18,14 +18,13 @@ export const EventDocumentHead = ({event}: EventDocumentHeadProps) => {
     const startDate = utcToTz(new Date(event.start_date), event.timezone);
     const endDate = event.end_date ? utcToTz(new Date(event.end_date), event.timezone) : undefined;
 
-    // Dynamically build the address object based on available data
     const address = {
-        "@type": "PostalAddress",
-        streetAddress: event.location_details?.address_line_1,
-        addressLocality: event.location_details?.city,
-        addressRegion: event.location_details?.state_or_region,
-        postalCode: event.location_details?.zip_or_postal_code,
-        addressCountry: event.location_details?.country
+        "@type": "http://schema.org/PostalAddress",
+        streetAddress: eventSettings?.location_details?.address_line_1,
+        addressLocality: eventSettings?.location_details?.city,
+        addressRegion: eventSettings?.location_details?.state_or_region,
+        postalCode: eventSettings?.location_details?.zip_or_postal_code,
+        addressCountry: eventSettings?.location_details?.country
     };
 
     // Filter out undefined address properties
@@ -33,15 +32,15 @@ export const EventDocumentHead = ({event}: EventDocumentHeadProps) => {
     // @ts-ignore
     Object.keys(address).forEach(key => address[key] === undefined && delete address[key]);
 
-    const location = event.location_details && Object.keys(address).length > 1 ? {
-        "@type": "Place",
+    const location = eventSettings?.location_details && Object.keys(address).length > 1 ? {
+        "@type": "http://schema.org/Place",
         name: event.location_details?.venue_name,
         address
     } : {};
 
     const schemaOrgJSONLD = {
         "@context": "http://schema.org",
-        "@type": "Event",
+        "@type": "http://schema.org/Event",
         name: title,
         startDate,
         endDate,
@@ -50,19 +49,21 @@ export const EventDocumentHead = ({event}: EventDocumentHeadProps) => {
         description: description,
         keywords,
         organizer: {
-            "@type": "Organization",
+            "@type": "http://schema.org/Organization",
             name: event.organizer?.name,
             url: event.organizer?.website
         },
         url,
+        eventStatus: 'https://schema.org/EventScheduled',
         eventAttendanceMode: event.settings?.is_online_event ? "https://schema.org/OnlineEventAttendanceMode" : "https://schema.org/OfflineEventAttendanceMode",
         currency: event.currency,
         offers: event.tickets?.map(ticket => ({
-            "@type": "Offer",
+            "@type": "http://schema.org/Offer",
             url,
-            price: ticket.price?.toString(),
+            price: ticket.prices?.[0]?.price,
             priceCurrency: event.currency,
-            validFrom: startDate
+            validFrom: startDate,
+            availability: ticket.is_available ? "http://schema.org/InStock" : "http://schema.org/SoldOut",
         })),
     };
 
