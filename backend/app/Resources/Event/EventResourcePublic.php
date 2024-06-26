@@ -2,12 +2,13 @@
 
 namespace HiEvents\Resources\Event;
 
-use Illuminate\Http\Request;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Resources\BaseResource;
 use HiEvents\Resources\Image\ImageResource;
+use HiEvents\Resources\Organizer\OrganizerResourcePublic;
 use HiEvents\Resources\Question\QuestionResource;
 use HiEvents\Resources\Ticket\TicketResourcePublic;
+use Illuminate\Http\Request;
 
 /**
  * @mixin EventDomainObject
@@ -49,6 +50,10 @@ class EventResourcePublic extends BaseResource
             'images' => $this->when(
                 !is_null($this->getImages()),
                 fn() => ImageResource::collection($this->getImages())
+            ),
+            'organizer' => $this->when(
+                !is_null($this->getOrganizer()),
+                fn() => new OrganizerResourcePublic($this->getOrganizer()),
             ),
         ];
     }

@@ -33,7 +33,7 @@ export const App: FC<
 > = (props) => {
     const [isLoadedOnBrowser, setIsLoadedOnBrowser] = React.useState(false);
     const localeActivated = useRef(false);
-    const [loaded, setLoaded] = useState(false);
+    const [loaded, setLoaded] = useState(isSsr());
 
     useEffect(() => {
         if (!localeActivated.current && typeof window !== "undefined") {

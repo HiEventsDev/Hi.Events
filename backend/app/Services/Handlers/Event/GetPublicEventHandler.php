@@ -6,6 +6,7 @@ use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\Generated\PromoCodeDomainObjectAbstract;
 use HiEvents\DomainObjects\ImageDomainObject;
+use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\DomainObjects\TaxAndFeesDomainObject;
 use HiEvents\DomainObjects\TicketDomainObject;
 use HiEvents\DomainObjects\TicketPriceDomainObject;
@@ -38,6 +39,7 @@ readonly class GetPublicEventHandler
             )
             ->loadRelation(new Relationship(EventSettingDomainObject::class))
             ->loadRelation(new Relationship(ImageDomainObject::class))
+            ->loadRelation(new Relationship(OrganizerDomainObject::class, name: 'organizer'))
             ->findById($data->eventId);
 
         $promoCodeDomainObject = $this->promoCodeRepository->findFirstWhere([
