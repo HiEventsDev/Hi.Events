@@ -86,7 +86,7 @@ class GetPublicEventHandlerTest extends TestCase
 
     private function setupEventRepositoryMock($event, $eventId): void
     {
-        $this->eventRepository->shouldReceive('loadRelation')->andReturnSelf()->times(3);
+        $this->eventRepository->shouldReceive('loadRelation')->andReturnSelf()->times(4);
         $this->eventRepository->shouldReceive('findById')->with($eventId)->andReturn($event);
     }
 }
