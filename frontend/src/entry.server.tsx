@@ -7,6 +7,7 @@ import {router} from "./router";
 import {App} from "./App";
 import {queryClient} from "./utilites/queryClient";
 import {setAuthToken} from "./utilites/apiClient.ts";
+import {i18n} from "@lingui/core";
 
 const helmetContext = {};
 
@@ -28,10 +29,13 @@ export async function render(params: {
     const {query, dataRoutes} = createStaticHandler(router);
     const remixRequest = createFetchRequest(params.req, params.res);
     const context = await query(remixRequest);
+    const locale = getLocale(params.req);
 
     if (context instanceof Response) {
         throw context;
     }
+
+    i18n.activate(locale);
 
     const routerWithContext = createStaticRouter(dataRoutes, context);
     const appHtml = ReactDOMServer.renderToString(
