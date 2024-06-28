@@ -20,7 +20,8 @@ const ALLOWED_UNAUTHENTICATED_PATHS = [
     'checkout',
     '/event/',
     'print',
-    '/order/'
+    '/order/',
+    'widget',
 ];
 
 export const api = axios.create({
