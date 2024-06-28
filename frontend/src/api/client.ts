@@ -9,6 +9,7 @@ const BASE_URL = isSsr()
 const LOGIN_PATH = "/auth/login";
 const PREVIOUS_URL_KEY = 'previous_url';
 
+// todo - This isn't scalable, we need to better way to manage this
 const ALLOWED_UNAUTHENTICATED_PATHS = [
     'auth/login',
     'accept-invitation',
@@ -18,7 +19,9 @@ const ALLOWED_UNAUTHENTICATED_PATHS = [
     'account/payment',
     'checkout',
     '/event/',
-    'widget'
+    'print',
+    '/order/',
+    'widget',
 ];
 
 export const api = axios.create({
