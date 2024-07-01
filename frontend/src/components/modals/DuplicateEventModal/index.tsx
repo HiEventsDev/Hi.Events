@@ -55,7 +55,7 @@ export const DuplicateEventModal = ({onClose, eventId}: DuplicateEventModalProps
     return (
         <Modal
             onClose={onClose}
-            heading={t`Duplicate Ticket`}
+            heading={t`Duplicate Event`}
             opened
             size={'lg'}
             withCloseButton
