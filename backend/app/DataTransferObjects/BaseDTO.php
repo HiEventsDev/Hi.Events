@@ -2,14 +2,12 @@
 
 namespace HiEvents\DataTransferObjects;
 
-use BackedEnum;
 use HiEvents\DataTransferObjects\Attributes\CollectionOf;
 use Illuminate\Support\Collection;
 use ReflectionClass;
 use ReflectionProperty;
 use RuntimeException;
 use Throwable;
-use UnitEnum;
 
 abstract class BaseDTO
 {
