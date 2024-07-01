@@ -34,9 +34,11 @@ trait EventRules
         return [
             'title' => ['string', 'required', 'max:150', 'min:1'],
             'description' => ['string', 'min:1', 'max:50000', 'nullable'],
-            'start_date' => ['date', 'required',
-                Rule::when($this->input('end_date') !== null,
-                    ['before_or_equal:end_date'])],
+            'start_date' => [
+                'date',
+                'required',
+                Rule::when($this->input('end_date') !== null, ['before_or_equal:end_date'])
+            ],
             'end_date' => ['date', 'nullable'],
         ];
     }

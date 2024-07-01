@@ -13,7 +13,6 @@ use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Services\Domain\PromoCode\CreatePromoCodeService;
 use HiEvents\Services\Domain\Question\CreateQuestionService;
 use HiEvents\Services\Domain\Ticket\CreateTicketService;
-use Illuminate\Support\Collection;
 use Throwable;
 
 class DuplicateEventService
@@ -90,9 +89,7 @@ class DuplicateEventService
                 ->setTimezone($event->getTimezone())
                 ->setCurrency($event->getCurrency())
                 ->setStatus($event->getStatus()),
-            eventSettings: $cloneEventSettings
-                ? $event->getEventSettings()
-                : null,
+            eventSettings: $cloneEventSettings ? $event->getEventSettings() : null,
         );
     }
 
@@ -108,58 +105,63 @@ class DuplicateEventService
     {
         $oldTicketToNewTicketMap = [];
 
-        $tickets = $event->getTickets();
-        foreach ($tickets as $ticket) {
+        foreach ($event->getTickets() as $ticket) {
             $ticket->setEventId($newEventId);
-            $newTicket = $this->createTicketService->createTicket(
-                $ticket,
-                $event->getAccountId(),
-            );
-
+            $newTicket = $this->createTicketService->createTicket($ticket, $event->getAccountId());
             $oldTicketToNewTicketMap[$ticket->getId()] = $newTicket->getId();
         }
 
         if ($duplicateQuestions) {
-            /** @var Collection<QuestionDomainObject> $questions */
-            $questions = $event->getQuestions();
-
-            foreach ($questions as $question) {
-                $this->createQuestionService->createQuestion(
-                    (new QuestionDomainObject())
-                        ->setTitle($question->getTitle())
-                        ->setEventId($newEventId)
-                        ->setBelongsTo($question->getBelongsTo())
-                        ->setType($question->getType())
-                        ->setRequired($question->getRequired())
-                        ->setOptions($question->getOptions())
-                        ->setIsHidden($question->getIsHidden()),
-                    array_map(
-                        static fn(TicketDomainObject $ticket) => $oldTicketToNewTicketMap[$ticket->getId()],
-                        $question->getTickets()?->all(),
-                    ),
-                );
-            }
+            $this->cloneQuestions($event, $newEventId, $oldTicketToNewTicketMap);
         }
 
         if ($duplicatePromoCodes) {
-            /** @var Collection<PromoCodeDomainObject> $promoCodes */
-            $promoCodes = $event->getPromoCodes();
+            $this->clonePromoCodes($event, $newEventId, $oldTicketToNewTicketMap);
+        }
+    }
 
-            foreach ($promoCodes as $promoCode) {
-                $this->createPromoCodeService->createPromoCode(
-                    (new PromoCodeDomainObject())
-                        ->setCode($promoCode->getCode())
-                        ->setEventId($newEventId)
-                        ->setApplicableTicketIds(array_map(
-                            static fn($ticketId) => $oldTicketToNewTicketMap[$ticketId],
-                            $promoCode->getApplicableTicketIds() ?? [],
-                        ))
-                        ->setDiscountType($promoCode->getDiscountType())
-                        ->setDiscount($promoCode->getDiscount())
-                        ->setExpiryDate($promoCode->getExpiryDate())
-                        ->setMaxAllowedUsages($promoCode->getMaxAllowedUsages()),
-                );
-            }
+    /**
+     * @throws Throwable
+     */
+    private function cloneQuestions(EventDomainObject $event, int $newEventId, array $oldTicketToNewTicketMap): void
+    {
+        foreach ($event->getQuestions() as $question) {
+            $this->createQuestionService->createQuestion(
+                (new QuestionDomainObject())
+                    ->setTitle($question->getTitle())
+                    ->setEventId($newEventId)
+                    ->setBelongsTo($question->getBelongsTo())
+                    ->setType($question->getType())
+                    ->setRequired($question->getRequired())
+                    ->setOptions($question->getOptions())
+                    ->setIsHidden($question->getIsHidden()),
+                array_map(
+                    static fn(TicketDomainObject $ticket) => $oldTicketToNewTicketMap[$ticket->getId()],
+                    $question->getTickets()?->all(),
+                ),
+            );
+        }
+    }
+
+    /**
+     * @throws Throwable
+     */
+    private function clonePromoCodes(EventDomainObject $event, int $newEventId, array $oldTicketToNewTicketMap): void
+    {
+        foreach ($event->getPromoCodes() as $promoCode) {
+            $this->createPromoCodeService->createPromoCode(
+                (new PromoCodeDomainObject())
+                    ->setCode($promoCode->getCode())
+                    ->setEventId($newEventId)
+                    ->setApplicableTicketIds(array_map(
+                        static fn($ticketId) => $oldTicketToNewTicketMap[$ticketId],
+                        $promoCode->getApplicableTicketIds() ?? [],
+                    ))
+                    ->setDiscountType($promoCode->getDiscountType())
+                    ->setDiscount($promoCode->getDiscount())
+                    ->setExpiryDate($promoCode->getExpiryDate())
+                    ->setMaxAllowedUsages($promoCode->getMaxAllowedUsages()),
+            );
         }
     }
 
@@ -171,18 +173,12 @@ class DuplicateEventService
             ->loadRelation(PromoCodeDomainObject::class)
             ->loadRelation(new Relationship(
                 domainObject: QuestionDomainObject::class,
-                nested: [
-                    new Relationship(
-                        domainObject: TicketDomainObject::class,
-                    ),
-                ]))
+                nested: [new Relationship(domainObject: TicketDomainObject::class)]
+            ))
             ->loadRelation(new Relationship(
                 domainObject: TicketDomainObject::class,
-                nested: [
-                    new Relationship(
-                        domainObject: TicketPriceDomainObject::class,
-                    ),
-                ]))
+                nested: [new Relationship(domainObject: TicketPriceDomainObject::class)]
+            ))
             ->findFirstWhere([
                 'id' => $eventId,
                 'account_id' => $accountId,
