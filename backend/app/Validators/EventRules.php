@@ -10,17 +10,11 @@ trait EventRules
     {
         $currencies = include __DIR__ . '/../../data/currencies.php';
 
-        return [
-            'title' => ['string', 'required', 'max:150', 'min:1'],
-            'end_date' => ['date', 'nullable'],
-            'start_date' => ['date', 'required',
-                Rule::when($this->input('end_date') !== null,
-                    ['before_or_equal:end_date'])],
+        return array_merge($this->minimalRules(), [
             'timezone' => ['timezone:all'],
             'organizer_id' => ['required', 'integer'],
             'currency' => [Rule::in(array_values($currencies))],
             // todo - Revisit the 50k character limit
-            'description' => ['string', 'min:1', 'max:50000', 'nullable'],
             'attributes.*.name' => ['string', 'min:1', 'max:50', 'required'],
             'attributes.*.value' => ['min:1', 'max:1000', 'required'],
             'attributes.*.is_public' => ['boolean', 'required'],
@@ -32,6 +26,18 @@ trait EventRules
             'location_details.state_or_region' => ['string', 'max:85'],
             'location_details.zip_or_postal_code' => ['required_with:location_details', 'string', 'max:85'],
             'location_details.country' => ['required_with:location_details', 'string', 'max:2'],
+        ]);
+    }
+
+    public function minimalRules(): array
+    {
+        return [
+            'title' => ['string', 'required', 'max:150', 'min:1'],
+            'description' => ['string', 'min:1', 'max:50000', 'nullable'],
+            'start_date' => ['date', 'required',
+                Rule::when($this->input('end_date') !== null,
+                    ['before_or_equal:end_date'])],
+            'end_date' => ['date', 'nullable'],
         ];
     }
 

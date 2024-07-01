@@ -19,6 +19,8 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
 
     private ?Collection $images = null;
 
+    private ?Collection $promoCodes = null;
+
     private ?EventSettingDomainObject $settings = null;
 
     private ?OrganizerDomainObject $organizer = null;
@@ -189,5 +191,17 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
         }
 
         return EventLifecycleStatus::ENDED->name;
+    }
+
+    public function getPromoCodes(): ?Collection
+    {
+        return $this->promoCodes;
+    }
+
+    public function setPromoCodes(?Collection $promoCodes): self
+    {
+        $this->promoCodes = $promoCodes;
+
+        return $this;
     }
 }

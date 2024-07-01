@@ -23,6 +23,7 @@ use HiEvents\Http\Actions\Auth\ResetPasswordAction;
 use HiEvents\Http\Actions\Auth\ValidateResetPasswordTokenAction;
 use HiEvents\Http\Actions\Common\Webhooks\StripeIncomingWebhookAction;
 use HiEvents\Http\Actions\Events\CreateEventAction;
+use HiEvents\Http\Actions\Events\DuplicateEventAction;
 use HiEvents\Http\Actions\Events\GetEventAction;
 use HiEvents\Http\Actions\Events\GetEventPublicAction;
 use HiEvents\Http\Actions\Events\GetEventsAction;
@@ -154,6 +155,7 @@ $router->middleware(['auth:api'])->group(
         $router->get('/events/{event_id}', GetEventAction::class);
         $router->put('/events/{event_id}', UpdateEventAction::class);
         $router->put('/events/{event_id}/status', UpdateEventStatusAction::class);
+        $router->post('/events/{event_id}/duplicate', DuplicateEventAction::class);
 
         $router->post('/events/{event_id}/tickets', CreateTicketAction::class);
         $router->post('/events/{event_id}/tickets/sort', SortTicketsAction::class);

@@ -2,18 +2,16 @@
 
 namespace HiEvents\Services\Handlers\Question;
 
-use HiEvents\DomainObjects\Generated\QuestionDomainObjectAbstract;
 use HiEvents\DomainObjects\QuestionDomainObject;
-use HiEvents\Repository\Interfaces\QuestionRepositoryInterface;
+use HiEvents\Services\Domain\Question\CreateQuestionService;
 use HiEvents\Services\Handlers\Question\DTO\UpsertQuestionDTO;
-use Illuminate\Database\DatabaseManager;
 use Throwable;
 
-readonly class CreateQuestionHandler
+class CreateQuestionHandler
 {
     public function __construct(
-        private QuestionRepositoryInterface $questionRepository,
-        private DatabaseManager             $databaseManager)
+        private readonly CreateQuestionService $createQuestionService,
+    )
     {
     }
 
@@ -22,15 +20,18 @@ readonly class CreateQuestionHandler
      */
     public function handle(UpsertQuestionDTO $createQuestionDTO): QuestionDomainObject
     {
-        return $this->databaseManager->transaction(fn() => $this->questionRepository->create([
-            QuestionDomainObjectAbstract::TITLE => $createQuestionDTO->title,
-            QuestionDomainObjectAbstract::EVENT_ID => $createQuestionDTO->event_id,
-            QuestionDomainObjectAbstract::BELONGS_TO => $createQuestionDTO->belongs_to->name,
-            QuestionDomainObjectAbstract::TYPE => $createQuestionDTO->type->name,
-            QuestionDomainObjectAbstract::REQUIRED => $createQuestionDTO->required,
-            QuestionDomainObjectAbstract::OPTIONS => $createQuestionDTO->options,
-            QuestionDomainObjectAbstract::IS_HIDDEN => $createQuestionDTO->is_hidden,
+        $question = (new QuestionDomainObject())
+            ->setTitle($createQuestionDTO->title)
+            ->setEventId($createQuestionDTO->event_id)
+            ->setBelongsTo($createQuestionDTO->belongs_to->name)
+            ->setType($createQuestionDTO->type->name)
+            ->setRequired($createQuestionDTO->required)
+            ->setOptions($createQuestionDTO->options)
+            ->setIsHidden($createQuestionDTO->is_hidden);
 
-        ], $createQuestionDTO->ticket_ids));
+        return $this->createQuestionService->createQuestion(
+            $question,
+            $createQuestionDTO->ticket_ids,
+        );
     }
 }

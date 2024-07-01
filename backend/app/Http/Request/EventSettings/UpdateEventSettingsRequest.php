@@ -10,6 +10,7 @@ use Illuminate\Validation\Rule;
 
 class UpdateEventSettingsRequest extends BaseRequest
 {
+    // @todo these should all be required for the update request. They should only be nullable for the PATCH request
     public function rules(): array
     {
         return [

@@ -130,14 +130,23 @@ export interface VenueAddress {
     country?: string;
 }
 
-export interface Event {
-    id?: IdParam;
+export interface EventBase {
     title: string;
-    slug: string;
-    status?: 'DRAFT' | 'LIVE' | 'PAUSED';
+    description?: string;
     start_date: string;
     end_date?: string;
-    description?: string;
+}
+
+export interface EventDuplicatePayload extends EventBase {
+    duplicate_tickets: boolean;
+    duplicate_questions: boolean;
+    duplicate_settings: boolean;
+}
+
+export interface Event extends EventBase {
+    id?: IdParam;
+    slug: string;
+    status?: 'DRAFT' | 'LIVE' | 'PAUSED';
     description_preview?: string;
 
     lifecycle_status?: 'ONGOING' | 'UPCOMING' | 'ENDED';

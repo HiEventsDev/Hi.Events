@@ -2,12 +2,14 @@
 
 namespace HiEvents\DataTransferObjects;
 
+use BackedEnum;
+use HiEvents\DataTransferObjects\Attributes\CollectionOf;
 use Illuminate\Support\Collection;
 use ReflectionClass;
 use ReflectionProperty;
 use RuntimeException;
 use Throwable;
-use HiEvents\DataTransferObjects\Attributes\CollectionOf;
+use UnitEnum;
 
 abstract class BaseDTO
 {
@@ -52,6 +54,58 @@ abstract class BaseDTO
     public static function collectionFromArray(array $items): Collection
     {
         return collect(array_map([static::class, 'fromArray'], $items));
+    }
+
+    /**
+     * Convert the DTO to a flattened array. Converts all enums to string and DTOs to arrays.
+     *
+     * It ain't pretty, but it works.
+     *
+     * @param array $without
+     * @return array
+     */
+    public function toFlattenedArray(array $without = []): array
+    {
+        $data = [];
+        $properties = get_object_vars($this);
+
+        foreach ($properties as $key => $value) {
+            if (in_array($key, $without, true)) {
+                continue;
+            }
+
+            if ($value instanceof self) {
+                $data[$key] = $value->toFlattenedArray();
+            } elseif ($value instanceof UnitEnum) {
+                $data[$key] = $value instanceof BackedEnum ? $value->value : $value->name;
+            } elseif ($value instanceof Collection) {
+                $data[$key] = $value->map(function ($item) {
+                    if ($item instanceof BaseDTO) {
+                        return $item->toFlattenedArray();
+                    }
+
+                    if ($item instanceof UnitEnum) {
+                        return $item instanceof BackedEnum ? $item->value : $item->name;
+                    }
+                    return $item;
+                })->toArray();
+            } elseif (is_array($value)) {
+                $data[$key] = array_map(static function ($item) {
+                    if ($item instanceof BaseDTO) {
+                        return $item->toFlattenedArray();
+                    }
+
+                    if ($item instanceof UnitEnum) {
+                        return $item instanceof BackedEnum ? $item->value : $item->name;
+                    }
+                    return $item;
+                }, $value);
+            } else {
+                $data[$key] = $value;
+            }
+        }
+
+        return $data;
     }
 
     /**
