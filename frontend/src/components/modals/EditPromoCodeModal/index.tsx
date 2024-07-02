@@ -23,6 +23,8 @@ export const EditPromoCodeModal = ({onClose, promoCodeId}: EditPromoCodeModalPro
     const errorHandler = useFormErrorResponseHandler();
     const promoCodeQuery = useGetPromoCode(eventId, promoCodeId);
     const {data: event} = useGetEvent(eventId);
+    const {data: promoCode} = promoCodeQuery;
+
     const form = useForm<PromoCode>({
         initialValues: {
             code: '',
@@ -56,21 +58,19 @@ export const EditPromoCodeModal = ({onClose, promoCodeId}: EditPromoCodeModalPro
     }
 
     useEffect(() => {
-        const {data} = promoCodeQuery;
-        if (!data || !event) {
+        if (!promoCode || !event) {
             return;
         }
 
         form.setValues({
-            code: data.code,
-            discount: data.discount,
-            applicable_ticket_ids: data.applicable_ticket_ids,
-            expiry_date: utcToTz(data.expiry_date, event.timezone),
-            discount_type: data.discount_type,
-            max_allowed_usages: data.max_allowed_usages || undefined,
+            code: promoCode.code,
+            discount: promoCode.discount,
+            applicable_ticket_ids: promoCode.applicable_ticket_ids ? promoCode.applicable_ticket_ids.map((id) => id.toString()) : [],
+            expiry_date: utcToTz(promoCode.expiry_date, event.timezone),
+            discount_type: promoCode.discount_type,
+            max_allowed_usages: promoCode.max_allowed_usages || undefined,
         });
-
-    }, [promoCodeQuery.isFetched, event]);
+    }, [promoCode, event]);
 
     return (
         <Modal

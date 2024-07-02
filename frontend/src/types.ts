@@ -490,7 +490,7 @@ export interface PromoCode {
     id?: number;
     code: string;
     discount?: number;
-    applicable_ticket_ids?: number[];
+    applicable_ticket_ids?: number[] | string[];
     expiry_date?: string;
     event_id?: number;
     discount_type?: PromoCodeDiscountType | null;
