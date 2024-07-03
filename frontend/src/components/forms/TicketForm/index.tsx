@@ -225,12 +225,12 @@ export const TicketForm = ({form, ticket}: TicketFormProps) => {
                                      fixedDecimalScale
                                      disabled={isFreeTicket}
                                      leftSection={event?.currency ? getCurrencySymbol(event.currency) : ''}
-                                     {...form.getInputProps('price')}
+                                     {...form.getInputProps('prices.0.price')}
                                      label={isDonationTicket ? t`Minimum Price` : t`Price`}
                                      placeholder="19.99"/>
                         <NumberInput min={0}
                                      placeholder={t`Unlimited`}
-                                     {...form.getInputProps('initial_quantity_available')}
+                                     {...form.getInputProps('prices.0.initial_quantity_available')}
                                      label={t`Quantity Available`}/>
                     </InputGroup>
                 )}

@@ -20,15 +20,18 @@ use HTMLPurifier;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
 
-readonly class EditTicketHandler
+/**
+ * @todo - Move logic into a domain service
+ */
+class EditTicketHandler
 {
     public function __construct(
-        private TicketRepositoryInterface      $ticketRepository,
-        private TaxAndTicketAssociationService $taxAndTicketAssociationService,
-        private DatabaseManager                $databaseManager,
-        private TicketPriceUpdateService       $priceUpdateService,
-        private HTMLPurifier                   $purifier,
-        private EventRepositoryInterface       $eventRepository,
+        private readonly TicketRepositoryInterface      $ticketRepository,
+        private readonly TaxAndTicketAssociationService $taxAndTicketAssociationService,
+        private readonly DatabaseManager                $databaseManager,
+        private readonly TicketPriceUpdateService       $priceUpdateService,
+        private readonly HTMLPurifier                   $purifier,
+        private readonly EventRepositoryInterface       $eventRepository,
     )
     {
     }
@@ -75,10 +78,10 @@ readonly class EditTicketHandler
                 'title' => $ticketsData->title,
                 'type' => $ticketsData->type->name,
                 'order' => $ticketsData->order,
-                'sale_start_date' => !!$ticketsData->sale_start_date
+                'sale_start_date' => $ticketsData->sale_start_date
                     ? DateHelper::convertToUTC($ticketsData->sale_start_date, $event->getTimezone())
                     : null,
-                'sale_end_date' => !!$ticketsData->sale_end_date
+                'sale_end_date' => $ticketsData->sale_end_date
                     ? DateHelper::convertToUTC($ticketsData->sale_end_date, $event->getTimezone())
                     : null,
                 'max_per_order' => $ticketsData->max_per_order,

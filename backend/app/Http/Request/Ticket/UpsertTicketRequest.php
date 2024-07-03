@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Request\Ticket;
 
-use Illuminate\Validation\Rule;
 use HiEvents\DomainObjects\Enums\TicketType;
 use HiEvents\Http\Request\BaseRequest;
 use HiEvents\Validators\Rules\RulesHelper;
+use Illuminate\Validation\Rule;
 
 class UpsertTicketRequest extends BaseRequest
 {
@@ -20,16 +20,12 @@ class UpsertTicketRequest extends BaseRequest
             'sale_start_date' => 'date|nullable',
             'sale_end_date' => 'date|nullable|after:sale_start_date',
             'max_per_order' => 'integer|nullable',
-            'price' => array_merge(RulesHelper::MONEY, [
-                'required_without:prices',
-                Rule::requiredIf($this->input('type') !== TicketType::TIERED->name),
-            ]),
-            'prices' => 'required_without:price|array|required_if:type,' . TicketType::TIERED->name,
-            'prices.*.price' => RulesHelper::MONEY,
-            'prices.*.label' => ['nullable', ...RulesHelper::STRING],
+            'prices' => ['required', 'array'],
+            'prices.*.price' => [...RulesHelper::MONEY, 'required'],
+            'prices.*.label' => ['nullable', ...RulesHelper::STRING, 'required_if:type,' . TicketType::TIERED->name],
             'prices.*.sale_start_date' => ['date', 'nullable', 'after:sale_start_date'],
             'prices.*.sale_end_date' => 'date|nullable|after:prices.*.sale_start_date',
-            'prices.*.initial_quantity_available' => 'integer|nullable',
+            'prices.*.initial_quantity_available' => ['integer', 'nullable', 'min:0'],
             'prices.*.is_hidden' => ['boolean'],
             'description' => 'string|nullable',
             'min_per_order' => 'integer|nullable',

@@ -13,10 +13,10 @@ use HiEvents\Services\Domain\Ticket\DTO\TicketPriceDTO;
 use HiEvents\Services\Handlers\Ticket\DTO\UpsertTicketDTO;
 use Illuminate\Support\Collection;
 
-readonly class TicketPriceUpdateService
+class TicketPriceUpdateService
 {
     public function __construct(
-        private TicketPriceRepository $ticketPriceRepository,
+        private readonly TicketPriceRepository $ticketPriceRepository,
     )
     {
     }
@@ -34,11 +34,11 @@ readonly class TicketPriceUpdateService
     {
         if ($ticketsData->type !== TicketType::TIERED) {
             $prices = new Collection([new TicketPriceDTO(
-                price: $ticketsData->type === TicketType::FREE ? 0.00 : $ticketsData->price,
+                price: $ticketsData->type === TicketType::FREE ? 0.00 : $ticketsData->prices->first()->price,
                 label: null,
                 sale_start_date: null,
                 sale_end_date: null,
-                initial_quantity_available: $ticketsData->initial_quantity_available,
+                initial_quantity_available: $ticketsData->prices->first()->initial_quantity_available,
                 id: $existingPrices->first()->getId(),
             )]);
         } else {
@@ -86,9 +86,12 @@ readonly class TicketPriceUpdateService
         $this->deletePrices($prices, $existingPrices);
     }
 
+    /**
+     * @throws CannotDeleteEntityException
+     */
     private function deletePrices(?Collection $prices, Collection $existingPrices): void
     {
-        $pricesIds = $prices->map(fn($price) => $price->id)->toArray();
+        $pricesIds = $prices?->map(fn($price) => $price->id)->toArray();
 
         $existingPrices->each(function (TicketPriceDomainObject $price) use ($pricesIds) {
             if (in_array($price->getId(), $pricesIds)) {
