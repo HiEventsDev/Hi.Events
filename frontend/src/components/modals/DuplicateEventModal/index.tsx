@@ -10,6 +10,7 @@ import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {useNavigate} from "react-router-dom";
 import {useEffect} from "react";
 import {utcToTz} from "../../../utilites/dates.ts";
+import {showSuccess} from "../../../utilites/notifications.tsx";
 
 interface DuplicateEventModalProps extends GenericModalProps {
     eventId: IdParam;
@@ -48,6 +49,7 @@ export const DuplicateEventModal = ({onClose, eventId}: DuplicateEventModalProps
         mutation.mutate({eventId, duplicateData}, {
             onSuccess: ({data}) => {
                 nav(`/manage/event/${data.id}`);
+                showSuccess(t`Event duplicated successfully`);
             }
         });
     }
