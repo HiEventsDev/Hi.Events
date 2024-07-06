@@ -6,6 +6,7 @@ use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\PromoCodeDomainObject;
 use HiEvents\DomainObjects\QuestionDomainObject;
+use HiEvents\DomainObjects\TaxAndFeesDomainObject;
 use HiEvents\DomainObjects\TicketDomainObject;
 use HiEvents\DomainObjects\TicketPriceDomainObject;
 use HiEvents\Repository\Eloquent\Value\Relationship;
@@ -13,6 +14,7 @@ use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Services\Domain\PromoCode\CreatePromoCodeService;
 use HiEvents\Services\Domain\Question\CreateQuestionService;
 use HiEvents\Services\Domain\Ticket\CreateTicketService;
+use Illuminate\Database\DatabaseManager;
 use Throwable;
 
 class DuplicateEventService
@@ -23,6 +25,7 @@ class DuplicateEventService
         private readonly CreateTicketService      $createTicketService,
         private readonly CreateQuestionService    $createQuestionService,
         private readonly CreatePromoCodeService   $createPromoCodeService,
+        private readonly DatabaseManager          $databaseManager,
     )
     {
     }
@@ -43,6 +46,8 @@ class DuplicateEventService
         ?string $endDate = null,
     ): EventDomainObject
     {
+        $this->databaseManager->beginTransaction();
+
         $event = $this->getEventWithRelations($eventId, $accountId);
 
         $event
@@ -64,6 +69,8 @@ class DuplicateEventService
                 duplicatePromoCodes: $duplicatePromoCodes,
             );
         }
+
+        $this->databaseManager->commit();
 
         return $this->getEventWithRelations($newEvent->getId(), $newEvent->getAccountId());
     }
@@ -107,7 +114,11 @@ class DuplicateEventService
 
         foreach ($event->getTickets() as $ticket) {
             $ticket->setEventId($newEventId);
-            $newTicket = $this->createTicketService->createTicket($ticket, $event->getAccountId());
+            $newTicket = $this->createTicketService->createTicket(
+                ticket: $ticket,
+                accountId: $event->getAccountId(),
+                taxAndFeeIds: $ticket->getTaxAndFees()?->map(fn($taxAndFee) => $taxAndFee->getId())?->toArray(),
+            );
             $oldTicketToNewTicketMap[$ticket->getId()] = $newTicket->getId();
         }
 
@@ -169,16 +180,16 @@ class DuplicateEventService
     {
         return $this->eventRepository
             ->loadRelation(EventSettingDomainObject::class)
-            ->loadRelation(TicketDomainObject::class)
+            ->loadRelation(
+                new Relationship(TicketDomainObject::class, [
+                    new Relationship(TicketPriceDomainObject::class),
+                    new Relationship(TaxAndFeesDomainObject::class)
+                ])
+            )
             ->loadRelation(PromoCodeDomainObject::class)
-            ->loadRelation(new Relationship(
-                domainObject: QuestionDomainObject::class,
-                nested: [new Relationship(domainObject: TicketDomainObject::class)]
-            ))
-            ->loadRelation(new Relationship(
-                domainObject: TicketDomainObject::class,
-                nested: [new Relationship(domainObject: TicketPriceDomainObject::class)]
-            ))
+            ->loadRelation(new Relationship(QuestionDomainObject::class, [
+                new Relationship(TicketDomainObject::class),
+            ]))
             ->findFirstWhere([
                 'id' => $eventId,
                 'account_id' => $accountId,
