@@ -279,7 +279,7 @@ msgstr "附属机构"
 msgid "All attendees of this event"
 msgstr "本次活动的所有与会者"
 
-#: src/components/routes/events/Dashboard/index.tsx:51
+#: src/components/routes/events/Dashboard/index.tsx:52
 msgid "All Events"
 msgstr "所有活动"
 
@@ -547,7 +547,7 @@ msgstr "报到"
 msgid "check out"
 msgstr "查看"
 
-#: src/components/common/EventCard/index.tsx:95
+#: src/components/common/EventCard/index.tsx:106
 msgid "Check-in"
 msgstr "办理登机手续"
 
@@ -620,7 +620,7 @@ msgid "Code"
 msgstr "代码"
 
 #: src/components/modals/CreatePromoCodeModal/index.tsx:26
-#: src/components/modals/EditPromoCodeModal/index.tsx:36
+#: src/components/modals/EditPromoCodeModal/index.tsx:38
 msgid "Code must be between 3 and 50 characters long"
 msgstr "代码长度必须在 3 至 50 个字符之间"
 
@@ -802,14 +802,14 @@ msgid "Create Attendee"
 msgstr "创建与会者"
 
 #: src/components/modals/CreateEventModal/index.tsx:67
-#: src/components/routes/events/Dashboard/index.tsx:119
+#: src/components/routes/events/Dashboard/index.tsx:120
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:81
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:99
 #: src/components/routes/welcome/index.tsx:108
 msgid "Create Event"
 msgstr "创建活动"
 
-#: src/components/routes/events/Dashboard/index.tsx:77
+#: src/components/routes/events/Dashboard/index.tsx:78
 msgid "Create new"
 msgstr "创建新的"
 
@@ -833,8 +833,8 @@ msgstr "创建问题"
 msgid "Create Tax or Fee"
 msgstr "创建税费"
 
-#: src/components/modals/CreateTicketModal/index.tsx:83
-#: src/components/modals/CreateTicketModal/index.tsx:91
+#: src/components/modals/CreateTicketModal/index.tsx:81
+#: src/components/modals/CreateTicketModal/index.tsx:89
 #: src/components/routes/event/tickets.tsx:48
 msgid "Create Ticket"
 msgstr "创建机票"
@@ -938,6 +938,7 @@ msgstr "删除机票"
 #: src/components/forms/TaxAndFeeForm/index.tsx:80
 #: src/components/forms/TicketForm/index.tsx:216
 #: src/components/modals/CreateEventModal/index.tsx:117
+#: src/components/modals/DuplicateEventModal/index.tsx:75
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:78
 msgid "Description"
 msgstr "说明"
@@ -986,6 +987,31 @@ msgstr "拖动排序"
 msgid "Dropdown selection"
 msgstr "下拉选择"
 
+#: src/components/common/EventCard/index.tsx:111
+msgid "Duplicate event"
+msgstr "复制活动"
+
+#: src/components/modals/DuplicateEventModal/index.tsx:60
+#: src/components/modals/DuplicateEventModal/index.tsx:111
+msgid "Duplicate Event"
+msgstr "复制活动"
+
+#: src/components/modals/DuplicateEventModal/index.tsx:107
+msgid "Duplicate Promo Codes"
+msgstr "复制促销代码"
+
+#: src/components/modals/DuplicateEventModal/index.tsx:99
+msgid "Duplicate Questions"
+msgstr "复制问题"
+
+#: src/components/modals/DuplicateEventModal/index.tsx:103
+msgid "Duplicate Settings"
+msgstr "复制设置"
+
+#: src/components/modals/DuplicateEventModal/index.tsx:95
+msgid "Duplicate Tickets"
+msgstr "复制票"
+
 #: src/components/forms/TicketForm/index.tsx:75
 msgid "Early bird"
 msgstr "早起的鸟儿"
@@ -1031,8 +1057,8 @@ msgid "Edit Question"
 msgstr "编辑问题"
 
 #: src/components/common/TicketsTable/SortableTicket/index.tsx:191
-#: src/components/modals/EditTicketModal/index.tsx:98
-#: src/components/modals/EditTicketModal/index.tsx:106
+#: src/components/modals/EditTicketModal/index.tsx:94
+#: src/components/modals/EditTicketModal/index.tsx:102
 msgid "Edit Ticket"
 msgstr "编辑机票"
 
@@ -1118,6 +1144,7 @@ msgid "Embed Script"
 msgstr "嵌入脚本"
 
 #: src/components/modals/CreateEventModal/index.tsx:131
+#: src/components/modals/DuplicateEventModal/index.tsx:89
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:92
 #: src/components/routes/welcome/index.tsx:96
 msgid "End Date"
@@ -1152,7 +1179,7 @@ msgstr "确认更改电子邮件时出错"
 msgid "EUR"
 msgstr "欧元"
 
-#: src/components/routes/events/Dashboard/index.tsx:89
+#: src/components/routes/events/Dashboard/index.tsx:90
 msgid "Event"
 msgstr "活动"
 
@@ -1163,6 +1190,10 @@ msgstr "成功创建事件 🎉"
 #: src/components/routes/account/ManageAccount/sections/EventDefaultsSettings/index.tsx:5
 msgid "Event Defaults"
 msgstr "事件默认值"
+
+#: src/components/modals/DuplicateEventModal/index.tsx:52
+msgid "Event duplicated successfully"
+msgstr "事件成功复制"
 
 #: src/components/layouts/Event/index.tsx:149
 msgid "Event is not visible to the public"
@@ -1360,6 +1391,7 @@ msgid "Here is the React component you can use to embed the widget in your appli
 msgstr "下面是 React 组件，您可以用它在应用程序中嵌入 widget。"
 
 #: src/components/modals/CreateEventModal/index.tsx:112
+#: src/components/modals/DuplicateEventModal/index.tsx:70
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:73
 msgid "Hi.Events Conference {0}"
 msgstr "Hi.Events Conference {0}"
@@ -1622,7 +1654,7 @@ msgid "Make this question mandatory"
 msgstr "将此问题作为必答题"
 
 #: src/components/common/AttendeeTable/index.tsx:175
-#: src/components/common/EventCard/index.tsx:78
+#: src/components/common/EventCard/index.tsx:89
 #: src/components/common/OrdersTable/index.tsx:94
 #: src/components/common/OrdersTable/index.tsx:109
 #: src/components/common/PromoCodeTable/index.tsx:166
@@ -1631,7 +1663,7 @@ msgstr "将此问题作为必答题"
 msgid "Manage"
 msgstr "管理"
 
-#: src/components/common/EventCard/index.tsx:90
+#: src/components/common/EventCard/index.tsx:101
 msgid "Manage event"
 msgstr "管理活动"
 
@@ -1755,6 +1787,7 @@ msgstr "Nam placerat elementum..."
 #: src/components/forms/TaxAndFeeForm/index.tsx:61
 #: src/components/forms/TicketForm/index.tsx:211
 #: src/components/modals/CreateEventModal/index.tsx:111
+#: src/components/modals/DuplicateEventModal/index.tsx:69
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:63
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:72
 #: src/components/routes/ticket-widget/OrderSummaryAndTickets/index.tsx:59
@@ -1797,7 +1830,7 @@ msgstr "无折扣"
 msgid "No events for this organizer"
 msgstr "没有该组织者的活动"
 
-#: src/components/routes/events/Dashboard/index.tsx:108
+#: src/components/routes/events/Dashboard/index.tsx:109
 msgid "No events to show"
 msgstr "无事件显示"
 
@@ -1872,7 +1905,7 @@ msgstr "销售中"
 msgid "On Sale"
 msgstr "销售中"
 
-#: src/components/routes/events/Dashboard/index.tsx:113
+#: src/components/routes/events/Dashboard/index.tsx:114
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:93
 msgid "Once you create an event, you'll see it here."
 msgstr "创建事件后，您就可以在这里看到它。"
@@ -1885,7 +1918,7 @@ msgstr "准备就绪后，设置您的活动并开始售票。"
 msgid "Ongoing"
 msgstr "持续进行"
 
-#: src/components/common/EventCard/index.tsx:50
+#: src/components/common/EventCard/index.tsx:61
 msgid "Online event"
 msgstr "在线活动"
 
@@ -1980,7 +2013,7 @@ msgstr "创建的订单"
 
 #: src/components/modals/EditUserModal/index.tsx:55
 #: src/components/modals/InviteUserModal/index.tsx:47
-#: src/components/routes/events/Dashboard/index.tsx:99
+#: src/components/routes/events/Dashboard/index.tsx:100
 msgid "Organizer"
 msgstr "组织者"
 
@@ -2412,7 +2445,7 @@ msgstr "按姓名、订单号、参会者编号或电子邮件搜索..."
 msgid "Search by attendee name, email or order #..."
 msgstr "按与会者姓名、电子邮件或订单号搜索..."
 
-#: src/components/routes/events/Dashboard/index.tsx:55
+#: src/components/routes/events/Dashboard/index.tsx:56
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:66
 msgid "Search by event name..."
 msgstr "按活动名称搜索..."
@@ -2656,6 +2689,7 @@ msgid "Standard ticket with a fixed price"
 msgstr "固定价格标准票"
 
 #: src/components/modals/CreateEventModal/index.tsx:126
+#: src/components/modals/DuplicateEventModal/index.tsx:84
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:87
 #: src/components/routes/welcome/index.tsx:90
 msgid "Start Date"
@@ -2719,7 +2753,7 @@ msgstr "成功创建促销代码"
 msgid "Successfully Created Question"
 msgstr "成功创建问题"
 
-#: src/components/modals/CreateTicketModal/index.tsx:51
+#: src/components/modals/CreateTicketModal/index.tsx:49
 msgid "Successfully Created Ticket"
 msgstr "成功创建票单"
 
@@ -2751,7 +2785,7 @@ msgstr "成功更新位置"
 msgid "Successfully Updated Misc Settings"
 msgstr "成功更新杂项设置"
 
-#: src/components/modals/EditPromoCodeModal/index.tsx:50
+#: src/components/modals/EditPromoCodeModal/index.tsx:52
 msgid "Successfully Updated Promo Code"
 msgstr "成功更新促销代码"
 
@@ -2759,7 +2793,7 @@ msgstr "成功更新促销代码"
 msgid "Successfully Updated Seo Settings"
 msgstr "成功更新搜索引擎设置"
 
-#: src/components/modals/EditTicketModal/index.tsx:87
+#: src/components/modals/EditTicketModal/index.tsx:83
 msgid "Successfully updated ticket"
 msgstr "成功更新票单"
 
@@ -3100,7 +3134,7 @@ msgstr "无法{0}与会者"
 msgid "Unable to create question. Please check the your details"
 msgstr "无法创建问题。请检查您的详细信息"
 
-#: src/components/modals/CreateTicketModal/index.tsx:64
+#: src/components/modals/CreateTicketModal/index.tsx:62
 #: src/components/routes/ticket-widget/SelectTickets/index.tsx:103
 msgid "Unable to create ticket. Please check the your details"
 msgstr "无法创建票单。请检查您的详细信息"
@@ -3199,7 +3233,7 @@ msgstr "查看与会者"
 msgid "View event homepage"
 msgstr "查看活动主页"
 
-#: src/components/common/EventCard/index.tsx:86
+#: src/components/common/EventCard/index.tsx:97
 msgid "View event page"
 msgstr "查看活动页面"
 
@@ -3315,11 +3349,12 @@ msgstr "工作"
 
 #: src/components/modals/CreatePromoCodeModal/index.tsx:57
 #: src/components/modals/CreateQuestionModal/index.tsx:72
-#: src/components/modals/CreateTicketModal/index.tsx:91
+#: src/components/modals/CreateTicketModal/index.tsx:89
+#: src/components/modals/DuplicateEventModal/index.tsx:111
 #: src/components/modals/EditAttendeeModal/index.tsx:129
 #: src/components/modals/EditPromoCodeModal/index.tsx:84
 #: src/components/modals/EditQuestionModal/index.tsx:94
-#: src/components/modals/EditTicketModal/index.tsx:106
+#: src/components/modals/EditTicketModal/index.tsx:102
 #: src/components/routes/auth/Register/index.tsx:99
 #: src/components/routes/auth/ResetPassword/index.tsx:62
 msgid "Working..."

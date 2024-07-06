@@ -1,10 +1,11 @@
 import {Button, Group, Menu, Text,} from '@mantine/core';
-import {Event} from "../../../types.ts";
+import {Event, IdParam} from "../../../types.ts";
 import classes from "./EventCard.module.scss";
 import {Card} from "../Card";
 import {NavLink, useNavigate} from "react-router-dom";
 import {
     IconCalendarEvent,
+    IconCopy,
     IconDotsVertical,
     IconEye,
     IconMap,
@@ -16,6 +17,9 @@ import {relativeDate} from "../../../utilites/dates.ts";
 import {t} from "@lingui/macro"
 import {eventHomepagePath} from "../../../utilites/urlHelper.ts";
 import {EventStatusBadge} from "../EventStatusBadge";
+import {useDisclosure} from "@mantine/hooks";
+import {DuplicateEventModal} from "../../modals/DuplicateEventModal";
+import {useState} from "react";
 
 interface EventCardProps {
     event: Event;
@@ -23,6 +27,13 @@ interface EventCardProps {
 
 export function EventCard({event}: EventCardProps) {
     const navigate = useNavigate();
+    const [isDuplicateModalOpen, duplicateModal] = useDisclosure(false);
+    const [eventId, setEventId] = useState<IdParam>();
+
+    const handleDuplicate = (event: Event) => {
+        setEventId(() => event.id);
+        duplicateModal.open();
+    }
 
     return (
         <>
@@ -94,10 +105,15 @@ export function EventCard({event}: EventCardProps) {
                                            leftSection={<IconQrcode size={14}/>}
                                 >{t`Check-in`}</Menu.Item>
                             )}
+
+                            <Menu.Item onClick={() => handleDuplicate(event)}
+                                       leftSection={<IconCopy size={14}/>}
+                            >{t`Duplicate event`}</Menu.Item>
                         </Menu.Dropdown>
                     </Menu>
                 </div>
             </Card>
+            {isDuplicateModalOpen && <DuplicateEventModal eventId={eventId} onClose={duplicateModal.close}/>}
         </>
     );
 }
