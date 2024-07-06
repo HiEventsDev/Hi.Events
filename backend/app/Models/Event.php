@@ -39,6 +39,11 @@ class Event extends BaseModel
         return $this->hasOne(EventSetting::class);
     }
 
+    public function promo_codes(): HasMany
+    {
+        return $this->hasMany(PromoCode::class);
+    }
+
     public static function boot()
     {
         parent::boot();

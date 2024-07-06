@@ -20,12 +20,10 @@ export const CreateTicketModal = ({onClose}: GenericModalProps) => {
         initialValues: {
             title: '',
             description: '',
-            price: 0,
             max_per_order: 100,
             min_per_order: 1,
             sale_start_date: '',
             sale_end_date: '',
-            initial_quantity_available: undefined,
             hide_before_sale_start_date: false,
             hide_after_sale_end_date: false,
             show_quantity_remaining: false,

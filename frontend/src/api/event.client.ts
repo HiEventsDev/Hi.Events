@@ -1,7 +1,7 @@
 import {api} from "./client";
 import {
     CheckInStats,
-    Event,
+    Event, EventDuplicatePayload,
     EventStats,
     GenericDataResponse,
     GenericPaginatedResponse,
@@ -69,6 +69,11 @@ export const eventsClient = {
 
     delete: async (eventId: IdParam) => {
         const response = await api.get('events/' + eventId);
+        return response.data;
+    },
+
+    duplicate: async (eventId: IdParam, event: EventDuplicatePayload) => {
+        const response = await api.post<GenericDataResponse<Event>>('events/' + eventId + '/duplicate', event);
         return response.data;
     },
 

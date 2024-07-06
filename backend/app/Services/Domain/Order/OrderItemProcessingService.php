@@ -108,7 +108,7 @@ readonly class OrderItemProcessingService
         ];
     }
 
-    public function getOrderItemLabel(TicketDomainObject $ticket, int $priceId): string
+    private function getOrderItemLabel(TicketDomainObject $ticket, int $priceId): string
     {
         if ($ticket->isTieredType()) {
             return $ticket->getTitle() . ' - ' . $ticket->getTicketPrices()

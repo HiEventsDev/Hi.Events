@@ -14,6 +14,7 @@ import {useGetOrganizers} from "../../../../queries/useGetOrganizers.ts";
 import {Navigate} from "react-router-dom";
 import {NoResultsSplash} from "../../../common/NoResultsSplash";
 import {CreateOrganizerModal} from "../../../modals/CreateOrganizerModal";
+import classes from "./Dashboard.module.scss";
 
 const DashboardSkeleton = () => {
     return (
@@ -47,7 +48,7 @@ export function Dashboard() {
     }
 
     return (
-        <>
+        <div className={classes.eventsContainer}>
             <h1>{t`All Events`}</h1>
 
             <ToolBar searchComponent={() => (
@@ -139,7 +140,7 @@ export function Dashboard() {
             }
             {createModalOpen && <CreateEventModal onClose={closeCreateModal}/>}
             {createOrganizerModalOpen && <CreateOrganizerModal onClose={closeCreateOrganizerModal}/>}
-        </>
+        </div>
     );
 }
 
