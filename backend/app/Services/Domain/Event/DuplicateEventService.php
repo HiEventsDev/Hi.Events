@@ -6,6 +6,7 @@ use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\PromoCodeDomainObject;
 use HiEvents\DomainObjects\QuestionDomainObject;
+use HiEvents\DomainObjects\Status\EventStatus;
 use HiEvents\DomainObjects\TaxAndFeesDomainObject;
 use HiEvents\DomainObjects\TicketDomainObject;
 use HiEvents\DomainObjects\TicketPriceDomainObject;
@@ -54,7 +55,8 @@ class DuplicateEventService
             ->setTitle($title)
             ->setStartDate($startDate)
             ->setEndDate($endDate)
-            ->setDescription($description);
+            ->setDescription($description)
+            ->setStatus(EventStatus::DRAFT->name);
 
         $newEvent = $this->cloneExistingEvent(
             event: $event,
