@@ -75,7 +75,7 @@ Hi.Events is designed to help you create, manage, and sell tickets for events of
 - ⏪ **Full and Partial Refund Support:** Manage full and partial refunds with ease.
 - 📧 **Email Notifications:** Keep attendees informed with automated email notifications.
 - 📱 **Mobile-Responsive:** Enjoy a seamless experience on any device.
-- 🌐 **Multi-Language Support:** Support for multiple languages - `Coming Soon!`
+- 🌐 **Multi-Language Support:** Support for multiple languages (English, Português, Español, 中文 (Zhōngwén), Deutsch, Français)
 - 🎉 **And much more!**
 
 ## 🚀 Getting Started
