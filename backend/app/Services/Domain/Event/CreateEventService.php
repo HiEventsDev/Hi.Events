@@ -13,6 +13,7 @@ use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
+use HTMLPurifier;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
 
@@ -24,6 +25,7 @@ class CreateEventService
         private readonly OrganizerRepositoryInterface      $organizerRepository,
         private readonly DatabaseManager                   $databaseManager,
         private readonly EventStatisticRepositoryInterface $eventStatisticsRepository,
+        private readonly HTMLPurifier                      $purifier,
     )
     {
     }
@@ -86,7 +88,7 @@ class CreateEventService
             'end_date' => $eventData->getEndDate()
                 ? DateHelper::convertToUTC($eventData->getEndDate(), $eventData->getTimezone())
                 : null,
-            'description' => $eventData->getDescription(),
+            'description' => $this->purifier->purify($eventData->getDescription()),
             'timezone' => $eventData->getTimezone(),
             'currency' => $eventData->getCurrency(),
             'location_details' => $eventData->getLocationDetails(),
