@@ -15,6 +15,7 @@ use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Services\Domain\PromoCode\CreatePromoCodeService;
 use HiEvents\Services\Domain\Question\CreateQuestionService;
 use HiEvents\Services\Domain\Ticket\CreateTicketService;
+use HTMLPurifier;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
 
@@ -27,6 +28,7 @@ class DuplicateEventService
         private readonly CreateQuestionService    $createQuestionService,
         private readonly CreatePromoCodeService   $createPromoCodeService,
         private readonly DatabaseManager          $databaseManager,
+        private readonly HTMLPurifier             $purifier,
     )
     {
     }
@@ -55,7 +57,7 @@ class DuplicateEventService
             ->setTitle($title)
             ->setStartDate($startDate)
             ->setEndDate($endDate)
-            ->setDescription($description)
+            ->setDescription($this->purifier->purify($description))
             ->setStatus(EventStatus::DRAFT->name);
 
         $newEvent = $this->cloneExistingEvent(

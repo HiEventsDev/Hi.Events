@@ -11,6 +11,7 @@ use HiEvents\Helper\DateHelper;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Handlers\Event\DTO\UpdateEventDTO;
+use HTMLPurifier;
 use Illuminate\Database\DatabaseManager;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Throwable;
@@ -22,6 +23,7 @@ readonly class UpdateEventHandler
         private Dispatcher               $dispatcher,
         private DatabaseManager          $databaseManager,
         private OrderRepositoryInterface $orderRepository,
+        private HTMLPurifier             $purifier,
     )
     {
     }
@@ -72,7 +74,7 @@ readonly class UpdateEventHandler
                 'end_date' => $eventData->end_date
                     ? DateHelper::convertToUTC($eventData->end_date, $eventData->timezone)
                     : null,
-                'description' => $eventData->description,
+                'description' => $this->purifier->purify($eventData->description),
                 'timezone' => $eventData->timezone ?? $existingEvent->getTimezone(),
                 'currency' => $eventData->currency ?? $existingEvent->getCurrency(),
                 'location' => $eventData->location,

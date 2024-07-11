@@ -12,6 +12,7 @@ use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
 use HiEvents\Services\Domain\Event\CreateEventService;
+use HTMLPurifier;
 use Illuminate\Database\DatabaseManager;
 use Mockery;
 use Tests\TestCase;
@@ -24,6 +25,7 @@ class CreateEventServiceTest extends TestCase
     private OrganizerRepositoryInterface $organizerRepository;
     private DatabaseManager $databaseManager;
     private EventStatisticRepositoryInterface $eventStatisticsRepository;
+    private HTMLPurifier $purifier;
 
     protected function setUp(): void
     {
@@ -34,13 +36,15 @@ class CreateEventServiceTest extends TestCase
         $this->organizerRepository = Mockery::mock(OrganizerRepositoryInterface::class);
         $this->databaseManager = Mockery::mock(DatabaseManager::class);
         $this->eventStatisticsRepository = Mockery::mock(EventStatisticRepositoryInterface::class);
+        $this->purifier = Mockery::mock(HTMLPurifier::class);
 
         $this->createEventService = new CreateEventService(
             $this->eventRepository,
             $this->eventSettingsRepository,
             $this->organizerRepository,
             $this->databaseManager,
-            $this->eventStatisticsRepository
+            $this->eventStatisticsRepository,
+            $this->purifier,
         );
     }
 
@@ -86,6 +90,9 @@ class CreateEventServiceTest extends TestCase
                     $arg['sales_total_gross'] === 0;
             }));
 
+
+        $this->purifier->shouldReceive('purify')->andReturn('Test Description');
+
         $result = $this->createEventService->createEvent($eventData, $eventSettings);
 
         $this->assertInstanceOf(EventDomainObject::class, $result);
@@ -102,6 +109,8 @@ class CreateEventServiceTest extends TestCase
 
         $this->organizerRepository->shouldReceive('findFirstWhere')->andReturn($organizer);
         $this->eventRepository->shouldReceive('create')->andReturn($eventData);
+
+        $this->purifier->shouldReceive('purify')->andReturn('Test Description');
 
         $this->eventSettingsRepository->shouldReceive('create')
             ->with(Mockery::on(function ($arg) use ($eventData, $organizer) {
