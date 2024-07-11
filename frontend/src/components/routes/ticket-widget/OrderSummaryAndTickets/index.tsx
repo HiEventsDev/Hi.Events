@@ -7,7 +7,7 @@ import {LoadingMask} from "../../../common/LoadingMask";
 import {Order, Ticket} from "../../../../types.ts";
 import {Card} from "../../../common/Card";
 import {AttendeeTicket} from "../../../common/AttendeeTicket";
-import {prettyDate} from "../../../../utilites/dates.ts";
+import {dateToBrowserTz} from "../../../../utilites/dates.ts";
 import {PoweredByFooter} from "../../../common/PoweredByFooter";
 import {Button, Group} from "@mantine/core";
 import {IconPrinter} from "@tabler/icons-react";
@@ -70,7 +70,7 @@ export const OrderSummaryAndTickets = () => {
                     <div className={classes.orderDetail}>
                         <div className={classes.orderDetailLabel}>{t`Order Date`}</div>
                         <div className={classes.orderDetailContent}>
-                            {prettyDate(order?.created_at, event?.timezone)}
+                            {dateToBrowserTz(order?.created_at, event?.timezone)}
                         </div>
                     </div>
                 </Card>
