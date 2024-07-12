@@ -27,7 +27,7 @@ export const AttendeeTicket = ({attendee, ticket, event, hideButtons = false}: A
                         <h2>
                             {attendee.first_name} {attendee.last_name}
                         </h2>
-                        <div>
+                        <div className={classes.ticketName}>
                             {getAttendeeTicketTitle(attendee)}
                         </div>
                         <Anchor href={`mailto:${attendee.email}`}>

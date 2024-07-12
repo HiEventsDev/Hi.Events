@@ -9,6 +9,7 @@ import {useGetOrder} from "../../../queries/useGetOrder.ts";
 import {AttendeeDetails} from "../../common/AttendeeDetails";
 import {QuestionAndAnswerList} from "../../common/QuestionAndAnswerList";
 import {LoadingMask} from "../../common/LoadingMask";
+import {AttendeeTicket} from "../../common/AttendeeTicket";
 
 interface ViewAttendeeModalProps extends GenericModalProps {
     onClose: () => void;
@@ -49,6 +50,12 @@ export const ViewAttendeeModal = ({onClose, attendeeId}: ViewAttendeeModalProps)
                         <QuestionAndAnswerList questionAnswers={attendee.question_answers}/>
                     </>
                 )}
+
+            <h3>
+                {t`Ticket`}
+            </h3>
+
+            {(attendee?.ticket) && <AttendeeTicket event={event} attendee={attendee} ticket={attendee.ticket}/>}
         </Modal>
     )
 }
