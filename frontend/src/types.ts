@@ -403,6 +403,7 @@ export interface StripePaymentIntent {
 export interface Question {
     id?: number,
     title: string,
+    description?: string,
     required: boolean,
     type: string,
     options: string[],
@@ -415,6 +416,7 @@ export interface Question {
 
 export interface QuestionRequestData {
     title: string,
+    description?: string,
     required: boolean,
     is_hidden: boolean,
     type: string,

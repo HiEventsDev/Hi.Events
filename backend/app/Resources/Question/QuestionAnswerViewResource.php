@@ -2,11 +2,11 @@
 
 namespace HiEvents\Resources\Question;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 use HiEvents\DomainObjects\Enums\QuestionTypeEnum;
 use HiEvents\DomainObjects\QuestionAndAnswerViewDomainObject;
 use HiEvents\Services\Domain\Question\QuestionAnswerFormatter;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * @mixin QuestionAndAnswerViewDomainObject

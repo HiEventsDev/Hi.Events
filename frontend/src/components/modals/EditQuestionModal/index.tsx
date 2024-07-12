@@ -10,7 +10,7 @@ import {GET_EVENT_QUESTIONS_QUERY_KEY} from "../../../queries/useGetEventQuestio
 import {Modal} from "../../common/Modal";
 import {t} from "@lingui/macro";
 import {QuestionForm} from "../../forms/QuestionForm";
-import {useGetQuestion} from "../../../queries/useGetQuestion.ts";
+import {GET_QUESTION_QUERY_KEY, useGetQuestion} from "../../../queries/useGetQuestion.ts";
 import {useEffect} from "react";
 
 interface EditQuestionModalProps extends GenericModalProps {
@@ -28,6 +28,7 @@ export const EditQuestionModal = ({onClose, questionId}: EditQuestionModalProps)
     const form = useForm<QuestionRequestData>({
         initialValues: {
             title: "",
+            description: "",
             type: QuestionType.SINGLE_LINE_TEXT.toString(),
             required: false,
             options: [],
@@ -46,6 +47,7 @@ export const EditQuestionModal = ({onClose, questionId}: EditQuestionModalProps)
 
             form.setValues({
                 title: data.title,
+                description: data.description,
                 type: data.type,
                 required: data.required,
                 options: data.options,
@@ -67,7 +69,10 @@ export const EditQuestionModal = ({onClose, questionId}: EditQuestionModalProps)
                 queryClient.invalidateQueries({queryKey: [GET_EVENT_QUESTIONS_QUERY_KEY, eventId]}).then(() => {
                     form.reset();
                     onClose();
-                });
+                }).then(() => {
+                        queryClient.invalidateQueries({queryKey: [GET_QUESTION_QUERY_KEY, eventId, questionId]});
+                    }
+                )
             },
             onError: (error: any) => {
                 if (error?.response?.data?.errors) {

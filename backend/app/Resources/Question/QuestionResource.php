@@ -18,6 +18,7 @@ class QuestionResource extends BaseResource
             'id' => $this->getId(),
             'type' => $this->getType(),
             'title' => $this->getTitle(),
+            'description' => $this->getDescription(),
             'options' => $this->getOptions(),
             'required' => $this->getRequired(),
             'event_id' => $this->getEventId(),

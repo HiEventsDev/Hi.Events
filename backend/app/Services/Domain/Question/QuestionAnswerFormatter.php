@@ -18,7 +18,7 @@ class QuestionAnswerFormatter
                 $answer['country'] ?? null,
             ];
 
-            return implode(', ', array_filter($addressLines, function ($line) {
+            return implode(', ', array_filter($addressLines, static function ($line) {
                 return !empty($line);
             }));
         }

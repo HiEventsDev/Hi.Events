@@ -3,10 +3,11 @@ import {useEditor} from "@tiptap/react";
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
 import TextAlign from '@tiptap/extension-text-align';
-import {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {InputDescription, InputError, InputLabel} from "@mantine/core";
 import classes from "./Editor.module.scss";
 import classNames from "classnames";
+import {Trans} from "@lingui/macro";
 
 interface EditorProps {
     onChange: (value: string) => void;
@@ -16,6 +17,8 @@ interface EditorProps {
     required?: boolean;
     className?: string;
     error?: string;
+    editorType?: 'full' | 'simple';
+    maxLength?: number;
 }
 
 export const Editor = ({
@@ -25,8 +28,11 @@ export const Editor = ({
                            label = '',
                            required = false,
                            className = '',
-                           description = ''
+                           description = '',
+                           editorType = 'full',
+                           maxLength,
                        }: EditorProps) => {
+    const [charError, setCharError] = useState<string | null | React.ReactNode>(null);
 
     const editor = useEditor({
         extensions: [
@@ -35,8 +41,17 @@ export const Editor = ({
             Link,
             TextAlign.configure({types: ['heading', 'paragraph']}),
         ],
-        onUpdate: (a) => {
-            onChange(a.editor.getHTML());
+        onUpdate: ({editor}) => {
+            const html = editor.getHTML();
+            const htmlLength = html.length;
+
+            if (maxLength && htmlLength > maxLength) {
+                setCharError(`Character limit exceeded: ${htmlLength}/${maxLength}`);
+            } else {
+                setCharError(null);
+            }
+
+            onChange(html);
         },
     });
 
@@ -45,54 +60,96 @@ export const Editor = ({
             if (value !== editor.getHTML()) {
                 editor.commands.setContent(value, false, {preserveWhitespace: "full"});
             }
+            const htmlLength = value.length;
+
+            if (maxLength && htmlLength > maxLength) {
+                setCharError(<Trans>HTML character limit exceeded: {htmlLength}/{maxLength}</Trans>);
+            } else {
+                setCharError(null);
+            }
         }
-    }, [value, editor]);
+    }, [value, editor, maxLength]);
 
     return (
         <div className={classNames([classes.inputWrapper, className])}>
             {label && <InputLabel required={required} onClick={() => editor?.commands.focus()}>{label}</InputLabel>}
-            {description && <InputDescription>{description}</InputDescription>}
+            {description && (
+                <div style={{marginBottom: 5}}>
+                    <InputDescription>{description}</InputDescription>
+                </div>
+            )}
             <RichTextEditor editor={editor}>
                 <RichTextEditor.Toolbar>
-                    <RichTextEditor.ControlsGroup>
-                        <RichTextEditor.Bold/>
-                        <RichTextEditor.Italic/>
-                        <RichTextEditor.Underline/>
-                        <RichTextEditor.ClearFormatting/>
-                    </RichTextEditor.ControlsGroup>
+                    {editorType === 'full' && (
+                        <>
+                            <RichTextEditor.ControlsGroup>
+                                <RichTextEditor.Bold/>
+                                <RichTextEditor.Italic/>
+                                <RichTextEditor.Underline/>
+                                <RichTextEditor.ClearFormatting/>
+                            </RichTextEditor.ControlsGroup>
 
-                    <RichTextEditor.ControlsGroup>
-                        <RichTextEditor.H1/>
-                        <RichTextEditor.H2/>
-                        <RichTextEditor.H3/>
-                        <RichTextEditor.H4/>
-                    </RichTextEditor.ControlsGroup>
+                            <RichTextEditor.ControlsGroup>
+                                <RichTextEditor.H1/>
+                                <RichTextEditor.H2/>
+                                <RichTextEditor.H3/>
+                                <RichTextEditor.H4/>
+                            </RichTextEditor.ControlsGroup>
 
-                    <RichTextEditor.ControlsGroup>
-                        <RichTextEditor.BulletList/>
-                        <RichTextEditor.OrderedList/>
-                    </RichTextEditor.ControlsGroup>
+                            <RichTextEditor.ControlsGroup>
+                                <RichTextEditor.BulletList/>
+                                <RichTextEditor.OrderedList/>
+                            </RichTextEditor.ControlsGroup>
 
-                    <RichTextEditor.ControlsGroup>
-                        <RichTextEditor.Link/>
-                        <RichTextEditor.Unlink/>
-                    </RichTextEditor.ControlsGroup>
+                            <RichTextEditor.ControlsGroup>
+                                <RichTextEditor.Link/>
+                                <RichTextEditor.Unlink/>
+                            </RichTextEditor.ControlsGroup>
 
-                    <RichTextEditor.ControlsGroup>
-                        <RichTextEditor.AlignLeft/>
-                        <RichTextEditor.AlignCenter/>
-                        <RichTextEditor.AlignJustify/>
-                        <RichTextEditor.AlignRight/>
-                    </RichTextEditor.ControlsGroup>
+                            <RichTextEditor.ControlsGroup>
+                                <RichTextEditor.AlignLeft/>
+                                <RichTextEditor.AlignCenter/>
+                                <RichTextEditor.AlignJustify/>
+                                <RichTextEditor.AlignRight/>
+                            </RichTextEditor.ControlsGroup>
+                        </>
+                    )}
+
+                    {editorType === 'simple' && (
+                        <>
+                            <RichTextEditor.ControlsGroup>
+                                <RichTextEditor.Bold/>
+                                <RichTextEditor.Italic/>
+                                <RichTextEditor.Underline/>
+                                <RichTextEditor.ClearFormatting/>
+                            </RichTextEditor.ControlsGroup>
+
+                            <RichTextEditor.ControlsGroup>
+                                <RichTextEditor.Link/>
+                                <RichTextEditor.Unlink/>
+                            </RichTextEditor.ControlsGroup>
+
+                            <RichTextEditor.ControlsGroup>
+                                <RichTextEditor.AlignLeft/>
+                                <RichTextEditor.AlignCenter/>
+                                <RichTextEditor.AlignRight/>
+                            </RichTextEditor.ControlsGroup>
+
+                            <RichTextEditor.ControlsGroup>
+                                <RichTextEditor.BulletList/>
+                                <RichTextEditor.OrderedList/>
+                            </RichTextEditor.ControlsGroup>
+                        </>
+                    )}
                 </RichTextEditor.Toolbar>
 
                 <RichTextEditor.Content/>
             </RichTextEditor>
-            {error && (
+            {(charError || error) && (
                 <div className={classes.error}>
-                    <InputError>{error}</InputError>
+                    <InputError>{error || charError}</InputError>
                 </div>
             )}
         </div>
     );
-}
+};

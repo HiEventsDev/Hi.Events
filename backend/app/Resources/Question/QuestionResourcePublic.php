@@ -2,10 +2,9 @@
 
 namespace HiEvents\Resources\Question;
 
-use Illuminate\Http\Request;
 use HiEvents\DomainObjects\QuestionDomainObject;
 use HiEvents\Resources\BaseResource;
-use HiEvents\Resources\Ticket\TicketResourcePublic;
+use Illuminate\Http\Request;
 
 /**
  * @mixin QuestionDomainObject
@@ -18,6 +17,7 @@ class QuestionResourcePublic extends BaseResource
             'id' => $this->getId(),
             'type' => $this->getType(),
             'title' => $this->getTitle(),
+            'description' => $this->getDescription(),
             'options' => $this->getOptions(),
             'required' => $this->getRequired(),
             'event_id' => $this->getEventId(),

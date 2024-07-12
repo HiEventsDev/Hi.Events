@@ -5,6 +5,7 @@ namespace HiEvents\Services\Domain\Question;
 use HiEvents\DomainObjects\Generated\QuestionDomainObjectAbstract;
 use HiEvents\DomainObjects\QuestionDomainObject;
 use HiEvents\Repository\Interfaces\QuestionRepositoryInterface;
+use HTMLPurifier;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
 
@@ -12,7 +13,8 @@ class CreateQuestionService
 {
     public function __construct(
         private readonly QuestionRepositoryInterface $questionRepository,
-        private readonly DatabaseManager             $databaseManager
+        private readonly DatabaseManager             $databaseManager,
+        private readonly HTMLPurifier                $purifier,
     )
     {
     }
@@ -33,6 +35,7 @@ class CreateQuestionService
             QuestionDomainObjectAbstract::REQUIRED => $question->getRequired(),
             QuestionDomainObjectAbstract::OPTIONS => $question->getOptions(),
             QuestionDomainObjectAbstract::IS_HIDDEN => $question->getIsHidden(),
+            QuestionDomainObjectAbstract::DESCRIPTION => $this->purifier->purify($question->getDescription()),
         ], $ticketIds));
     }
 }
