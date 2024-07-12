@@ -5,12 +5,14 @@ namespace HiEvents\Services\Handlers\Question;
 use HiEvents\DomainObjects\QuestionDomainObject;
 use HiEvents\Services\Domain\Question\CreateQuestionService;
 use HiEvents\Services\Handlers\Question\DTO\UpsertQuestionDTO;
+use HTMLPurifier;
 use Throwable;
 
 class CreateQuestionHandler
 {
     public function __construct(
         private readonly CreateQuestionService $createQuestionService,
+        private readonly HTMLPurifier          $purifier,
     )
     {
     }
@@ -27,7 +29,8 @@ class CreateQuestionHandler
             ->setType($createQuestionDTO->type->name)
             ->setRequired($createQuestionDTO->required)
             ->setOptions($createQuestionDTO->options)
-            ->setIsHidden($createQuestionDTO->is_hidden);
+            ->setIsHidden($createQuestionDTO->is_hidden)
+            ->setDescription($this->purifier->purify($createQuestionDTO->description));
 
         return $this->createQuestionService->createQuestion(
             $question,

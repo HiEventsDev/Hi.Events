@@ -22,6 +22,7 @@ abstract class QuestionDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
     final public const DELETED_AT = 'deleted_at';
     final public const ORDER = 'order';
     final public const IS_HIDDEN = 'is_hidden';
+    final public const DESCRIPTION = 'description';
 
     protected int $id;
     protected int $event_id;
@@ -35,6 +36,7 @@ abstract class QuestionDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
     protected ?string $deleted_at = null;
     protected int $order = 1;
     protected bool $is_hidden = false;
+    protected ?string $description = null;
 
     public function toArray(): array
     {
@@ -51,6 +53,7 @@ abstract class QuestionDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
                     'deleted_at' => $this->deleted_at ?? null,
                     'order' => $this->order ?? null,
                     'is_hidden' => $this->is_hidden ?? null,
+                    'description' => $this->description ?? null,
                 ];
     }
 
@@ -184,5 +187,16 @@ abstract class QuestionDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
     public function getIsHidden(): bool
     {
         return $this->is_hidden;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
     }
 }

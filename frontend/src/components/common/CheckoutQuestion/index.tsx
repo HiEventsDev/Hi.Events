@@ -4,6 +4,8 @@ import {Box, Checkbox, ComboboxItem, Group, NativeSelect, Radio, Select, Textare
 import {t} from "@lingui/macro";
 import countries from "../../../../data/countries.json";
 import {InputGroup} from "../InputGroup";
+import classes from "./CheckoutQuestion.module.scss";
+import {UserGeneratedContent} from "../UserGeneratedContent";
 
 interface CheckoutQuestionProps {
     questions: Question[],
@@ -34,6 +36,10 @@ const DropDownInput = ({question, name, form}: QuestionInputProps) => {
     });
     return (
         <Select
+            classNames={{
+                description: classes.descriptionWithNoStyle,
+            }}
+            description={(<UserGeneratedContent dangerouslySetInnerHTML={{__html: question.description || ''}}/>)}
             {...form.getInputProps(`${name}.answer`)}
             data={items}
             label={question.title}
@@ -45,8 +51,13 @@ const DropDownInput = ({question, name, form}: QuestionInputProps) => {
 const MultiLineTextInput = ({question, name, form}: QuestionInputProps) => {
     return (
         <>
-            <Textarea {...form.getInputProps(`${name}.answer`)} withAsterisk={question.required}
-                      label={question.title}/>
+            <Textarea
+                classNames={{
+                    description: classes.descriptionWithNoStyle,
+                }}
+                description={(<UserGeneratedContent dangerouslySetInnerHTML={{__html: question.description || ''}}/>)}
+                {...form.getInputProps(`${name}.answer`)} withAsterisk={question.required}
+                label={question.title}/>
         </>
     );
 }
@@ -54,8 +65,15 @@ const MultiLineTextInput = ({question, name, form}: QuestionInputProps) => {
 const SingleLineTextInput = ({question, name, form}: QuestionInputProps) => {
     return (
         <>
-            <TextInput {...form.getInputProps(`${name}.answer`)} withAsterisk={question.required}
-                       label={question.title}/>
+            <TextInput
+                classNames={{
+                    description: classes.descriptionWithNoStyle,
+                }}
+                {...form.getInputProps(`${name}.answer`)}
+                withAsterisk={question.required}
+                label={question.title}
+                description={(<UserGeneratedContent dangerouslySetInnerHTML={{__html: question.description || ''}}/>)}
+            />
         </>
     );
 }
@@ -63,7 +81,13 @@ const SingleLineTextInput = ({question, name, form}: QuestionInputProps) => {
 const RadioInput = ({question, name, form}: QuestionInputProps) => {
     return (
         <Radio.Group
-            withAsterisk={question.required} {...form.getInputProps(`${name}.answer`)} label={question.title}
+            classNames={{
+                description: classes.descriptionWithNoStyle,
+            }}
+            withAsterisk={question.required}
+            {...form.getInputProps(`${name}.answer`)}
+            label={question.title}
+            description={(<UserGeneratedContent dangerouslySetInnerHTML={{__html: question.description || ''}}/>)}
         >
             <Group mt="xs">
                 {question.options?.map((option, index) => {
@@ -82,8 +106,15 @@ const RadioInput = ({question, name, form}: QuestionInputProps) => {
 
 const CheckBoxInput = ({question, name, form}: QuestionInputProps) => {
     return (
-        <Checkbox.Group withAsterisk={question.required} {...form.getInputProps(`${name}.answer`)}
-                        label={question.title}>
+        <Checkbox.Group
+            classNames={{
+                description: classes.descriptionWithNoStyle,
+            }}
+            withAsterisk={question.required}
+            {...form.getInputProps(`${name}.answer`)}
+            label={question.title}
+            description={(<UserGeneratedContent dangerouslySetInnerHTML={{__html: question.description || ''}}/>)}
+        >
             <Group mt="xs">
                 {question.options?.map((option, index) => {
                     return (

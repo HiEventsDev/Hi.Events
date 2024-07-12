@@ -17,6 +17,8 @@ import {
 import {UseFormReturnType} from "@mantine/form";
 import {Card} from "../../common/Card";
 import classes from "./QuestionForm.module.scss";
+import {Editor} from "../../common/Editor";
+import {useState} from "react";
 
 const Options = ({form}: { form: UseFormReturnType<any> }) => {
     return (
@@ -73,6 +75,8 @@ interface QuestionFormProps {
 }
 
 export const QuestionForm = ({form, tickets}: QuestionFormProps) => {
+    const [showDescription, setShowDescription] = useState(false);
+
     const belongToOptions: ItemProps[] = [
         {
             icon: <IconReceipt/>,
@@ -173,6 +177,28 @@ export const QuestionForm = ({form, tickets}: QuestionFormProps) => {
                 placeholder={t`What time will you be arriving?`}
                 required
             />
+
+            {(showDescription || form.values.description) ? (
+                <Editor
+                    maxLength={10000}
+                    editorType={'simple'}
+                    error={form.errors.description as string}
+                    label={t`Question Description`}
+                    description={t`Provide additional context or instructions for this question. Use this field to add terms
+                                and conditions, guidelines, or any important information that attendees need to know before answering.`}
+                    value={form.values.description}
+                    onChange={(value: string) => form.setFieldValue('description', value)}
+                />
+            ) : (
+                <Button
+                    variant="transparent"
+                    ml={0}
+                    pl={0}
+                    onClick={() => setShowDescription(true)}
+                >
+                    {t`Add description`}
+                </Button>
+            )}
 
             {multiAnswerQuestionTypes.includes(form.values.type) && <Options form={form}/>}
 

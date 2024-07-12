@@ -2,9 +2,9 @@
 
 namespace HiEvents\Validators\Rules;
 
+use HiEvents\DomainObjects\QuestionDomainObject;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\ValidationException;
-use HiEvents\DomainObjects\QuestionDomainObject;
 
 class AttendeeQuestionRule extends BaseQuestionRule
 {
@@ -20,6 +20,7 @@ class AttendeeQuestionRule extends BaseQuestionRule
             $requiredQuestionIds = $this->questions
                 ->filter(function (QuestionDomainObject $question) use ($ticketId) {
                     return $question->getRequired()
+                        && !$question->getIsHidden()
                         && $question->getTickets()?->map(fn($ticket) => $ticket->getId())->contains($ticketId);
                 })
                 ->map(fn(QuestionDomainObject $question) => $question->getId());

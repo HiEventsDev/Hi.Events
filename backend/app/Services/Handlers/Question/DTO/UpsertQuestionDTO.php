@@ -17,6 +17,7 @@ class UpsertQuestionDTO extends BaseDTO
         public array             $ticket_ids,
         public bool              $is_hidden,
         public QuestionBelongsTo $belongs_to,
+        public ?string           $description = null,
     )
     {
     }
