@@ -33,8 +33,13 @@ class CreateQuestionAction extends BaseAction
             'ticket_ids' => $request->input('ticket_ids'),
             'belongs_to' => $request->input('belongs_to'),
             'is_hidden' => $request->boolean('is_hidden'),
+            'description' => $request->input('description'),
         ]));
 
-        return $this->resourceResponse(QuestionResource::class, $question, ResponseCodes::HTTP_CREATED);
+        return $this->resourceResponse(
+            resource: QuestionResource::class,
+            data: $question,
+            statusCode: ResponseCodes::HTTP_CREATED
+        );
     }
 }

@@ -2,10 +2,10 @@
 
 namespace HiEvents\Http\Request\Questions;
 
-use Illuminate\Validation\Rule;
 use HiEvents\DomainObjects\Enums\QuestionBelongsTo;
 use HiEvents\DomainObjects\Enums\QuestionTypeEnum;
 use HiEvents\Http\Request\BaseRequest;
+use Illuminate\Validation\Rule;
 
 class UpsertQuestionRequest extends BaseRequest
 {
@@ -13,6 +13,7 @@ class UpsertQuestionRequest extends BaseRequest
     {
         return [
             'title' => ['string', 'required'],
+            'description' => ['string', 'nullable', 'max:10000'],
             'type' => ['required', Rule::in(QuestionTypeEnum::valuesArray())],
             'ticket_ids' => ['array', 'required_if:belongs_to,TICKET'],
             'belongs_to' => [

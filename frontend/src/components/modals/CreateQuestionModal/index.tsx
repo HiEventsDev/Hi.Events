@@ -26,6 +26,7 @@ export const CreateQuestionModal = ({onClose, onCompleted}: CreateQuestionModalP
     const form = useForm({
         initialValues: {
             title: "",
+            description: "",
             type: QuestionType.SINGLE_LINE_TEXT.toString(),
             required: false,
             options: [],
