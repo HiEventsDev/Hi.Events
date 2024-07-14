@@ -31,7 +31,10 @@ readonly class ImageStorageService
         $path = $this->filesystemManager->disk($disk)->putFileAs(
             path: strtolower($imageType),
             file: $image,
-            name: $filename
+            name: $filename,
+            options: [
+                'visibility' => 'public',
+            ],
         );
 
         if ($path === false) {
