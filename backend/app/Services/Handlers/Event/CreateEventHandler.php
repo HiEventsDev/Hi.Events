@@ -40,7 +40,7 @@ class CreateEventHandler
             ->setEndDate($eventData->end_date)
             ->setDescription($eventData->description)
             ->setAttributes($eventData->attributes?->toArray())
-            ->setTimezone($eventData->timezone)
+            ->setTimezone($eventData->timezone ?? $organizer->getTimezone())
             ->setCurrency($eventData->currency ?? $organizer->getCurrency())
             ->setStatus($eventData->status)
             ->setEventSettings($eventData->event_settings)
