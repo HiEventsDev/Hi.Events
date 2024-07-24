@@ -76,6 +76,7 @@ Hi.Events is designed to help you create, manage, and sell tickets for events of
 - 📧 **Email Notifications:** Keep attendees informed with automated email notifications.
 - 📱 **Mobile-Responsive:** Enjoy a seamless experience on any device.
 - 🌐 **Multi-Language Support:** Support for multiple languages (English, Português, Español, 中文 (Zhōngwén), Deutsch, Français)
+- 🔋 **Advanced Capacity Management:** Set capacity limits across multiple ticket types. - `Coming Soon`
 - 🎉 **And much more!**
 
 ## 🚀 Getting Started

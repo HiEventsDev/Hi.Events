@@ -64,7 +64,7 @@
 - ⏪ **Support pour Remboursements Complets et Partiels :** Gérez facilement les remboursements complets et partiels.
 - 📧 **Notifications par E-mail :** Tenez les participants informés avec des notifications automatiques par e-mail.
 - 📱 **Adapté aux Mobiles :** Profitez d'une expérience sans faille sur tous les appareils.
-- 🌐 **Support Multilingue :** Support pour plusieurs langues - `Bientôt disponible !`
+- 🌐 **Support Multilingue :** Support pour plusieurs langues.
 - 🎉 **Et bien plus encore !**
 
 ## 🚀 Démarrage Rapide
