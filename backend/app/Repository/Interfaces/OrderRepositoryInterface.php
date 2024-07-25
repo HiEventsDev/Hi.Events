@@ -24,4 +24,6 @@ interface OrderRepositoryInterface extends RepositoryInterface
     public function addOrderItem(array $data): OrderItemDomainObject;
 
     public function findByShortId(string $orderShortId): ?OrderDomainObject;
+
+    public function getReservedQuantityForTicketPrice(int $ticketId, int $ticketPriceId): int;
 }

@@ -108,7 +108,7 @@ class TicketDomainObject extends Generated\TicketDomainObjectAbstract implements
     public function isAvailable(): bool
     {
         // If all prices are hidden, it's not available
-        if ($this->getType() === TicketType::TIERED->name && $this->getTicketPrices()->isEmpty()) {
+        if ($this->getType() === TicketType::TIERED->name && $this->getTicketPrices()?->isEmpty()) {
             return false;
         }
 

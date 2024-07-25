@@ -19,26 +19,21 @@ export interface AcceptInvitationRequest {
     password_confirmation: string;
 }
 
-export interface RegisterAccountRequest {
-    first_name: string;
-    last_name: string;
-    email: string;
-    password: string;
-    password_confirmation: string;
+export interface RegisterAccountRequest extends AcceptInvitationRequest {
     locale: SupportedLocales;
 }
 
 export interface ResetPasswordRequest {
     password: string;
     password_confirmation: string;
- }
+}
 
 export interface LoginResponse {
-    token?: string
-    token_type: string
-    expires_in: number
-    user: User,
-    accounts: Account[],
+    token?: string;
+    token_type: string;
+    expires_in: number;
+    user: User;
+    accounts: Account[];
 }
 
 export interface User {
@@ -71,7 +66,7 @@ export interface Account {
 }
 
 export interface StripeConnectDetails {
-    account: Account,
+    account: Account;
     stripe_account_id: string;
     is_connect_setup_complete: boolean;
     connect_url: string;
@@ -148,26 +143,15 @@ export interface Event extends EventBase {
     slug: string;
     status?: 'DRAFT' | 'LIVE' | 'PAUSED';
     description_preview?: string;
-
     lifecycle_status?: 'ONGOING' | 'UPCOMING' | 'ENDED';
-
     settings?: EventSettings;
-    tickets?: Ticket[],
-    images?: Image[],
-    organizer?: Organizer,
-    currency: string,
-    timezone: string,
-    organizer_id?: IdParam,
-
-    location_details?: {
-        venue_name?: string,
-        address_line_1?: string,
-        address_line_2?: string,
-        city?: string,
-        state_or_region?: string,
-        zip_or_postal_code?: string,
-        country?: string,
-    },
+    tickets?: Ticket[];
+    images?: Image[];
+    organizer?: Organizer;
+    currency: string;
+    timezone: string;
+    organizer_id?: IdParam;
+    location_details?: VenueAddress;
 }
 
 export interface EventDailyStats {
@@ -233,7 +217,7 @@ export interface PaginationData {
 }
 
 export interface GenericDataResponse<T> {
-    data: T
+    data: T;
 }
 
 export interface GenericPaginatedResponse<T> {
@@ -277,8 +261,8 @@ export interface Ticket {
     id?: number;
     order?: number;
     title: string;
-    event_id?: IdParam,
-    type: TicketType,
+    event_id?: IdParam;
+    type: TicketType;
     description?: string;
     price?: number;
     prices?: TicketPrice[];
@@ -298,7 +282,7 @@ export interface Ticket {
     status?: TicketStatus;
     is_sold_out?: boolean;
     is_available?: boolean;
-    is_hidden_without_promo_code?: boolean,
+    is_hidden_without_promo_code?: boolean;
     is_before_sale_start_date?: boolean;
     is_after_sale_end_date?: boolean;
     taxes?: TaxAndFee[];
@@ -364,7 +348,7 @@ export interface Order {
     total_gross: number;
     total_gross_after_refund: number;
     total_refunded: number;
-    is_expired: boolean,
+    is_expired: boolean;
     order_items?: OrderItem[];
     attendees?: Attendee[];
     created_at: string;
@@ -401,27 +385,45 @@ export interface StripePaymentIntent {
 }
 
 export interface Question {
-    id?: number,
-    title: string,
-    description?: string,
-    required: boolean,
-    type: string,
-    options: string[],
-    event_id?: number,
-    tickets?: Ticket[], // remove
-    ticket_ids?: number[],
+    id?: number;
+    title: string;
+    description?: string;
+    required: boolean;
+    type: string;
+    options: string[];
+    event_id?: number;
+    tickets?: Ticket[];
+    ticket_ids?: number[];
     belongs_to: string;
     is_hidden: boolean;
 }
 
+export interface CapacityAssignment {
+    id?: number;
+    event_id: number;
+    name: string;
+    used_capacity: number;
+    applies_to: 'TICKETS' | 'EVENT';
+    status: 'ACTIVE' | 'INACTIVE';
+    capacity: number | undefined;
+    tickets: {
+        id: number;
+        title: string;
+    }[];
+}
+
+export type CapacityAssignmentRequest = Omit<CapacityAssignment, 'id' | 'event_id' | 'used_capacity'> & {
+    ticket_ids: number[];
+};
+
 export interface QuestionRequestData {
-    title: string,
-    description?: string,
-    required: boolean,
-    is_hidden: boolean,
-    type: string,
-    options: string[],
-    ticket_ids?: string[],
+    title: string;
+    description?: string;
+    required: boolean;
+    is_hidden: boolean;
+    type: string;
+    options: string[];
+    ticket_ids?: string[];
     belongs_to: string;
 }
 
@@ -444,7 +446,6 @@ export interface Message {
 
 export enum QuestionType {
     ADDRESS = 'ADDRESS',
-
     SINGLE_LINE_TEXT = 'SINGLE_LINE_TEXT',
     MULTI_LINE_TEXT = 'MULTI_LINE_TEXT',
     CHECKBOX = 'CHECKBOX',
@@ -458,7 +459,7 @@ export enum QuestionBelongsToType {
 }
 
 export type QueryFilterFields = {
-    [key: string]: string | string[] | number | number[] | boolean | boolean[] | undefined
+    [key: string]: string | string[] | number | number[] | boolean | boolean[] | undefined;
 }
 
 export interface QueryFilters {
@@ -471,8 +472,8 @@ export interface QueryFilters {
 }
 
 export interface GenericModalProps {
-    onClose: () => void,
-    isOpen?: boolean,
+    onClose: () => void;
+    isOpen?: boolean;
 }
 
 export interface MessageOrderRequest {
@@ -510,7 +511,6 @@ export enum PromoCodeDiscountType {
 export enum TaxAndFeeType {
     Tax = 'TAX',
     Fee = 'FEE',
-
 }
 
 export enum TaxAndFeeCalculationType {
@@ -521,7 +521,7 @@ export enum TaxAndFeeCalculationType {
 export interface TaxAndFee {
     id?: number;
     name: string;
-    rate: number | undefined
+    rate: number | undefined;
     type: TaxAndFeeType;
     calculation_type: TaxAndFeeCalculationType;
     is_default: boolean;
@@ -548,10 +548,8 @@ export interface QuestionAnswer {
     answer: string[] | string;
     text_answer: string;
     order_id: number;
-    belongs_to: string; // Assuming this is a string, adjust based on actual data type
+    belongs_to: string;
     question_type: string;
-
-    // Optional properties, assuming they can be null based on your PHP code
     attendee_id?: number;
     first_name?: string;
     last_name?: string;

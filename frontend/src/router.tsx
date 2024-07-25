@@ -299,6 +299,13 @@ export const router: RouteObject[] = [
                     const GettingStarted = await import("./components/routes/event/GettingStarted");
                     return {Component: GettingStarted.default};
                 }
+            },
+            {
+                path: "capacity-assignments",
+                async lazy() {
+                    const CapacityAssignments = await import("./components/routes/event/CapacityAssignments");
+                    return {Component: CapacityAssignments.default};
+                }
             }
         ]
     },

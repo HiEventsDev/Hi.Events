@@ -42,6 +42,7 @@ class PartialEditAttendeeHandler
         }
 
         //if status has changed, adjust ticket quantity
+        // todo - check this logic
         if ($data->status && $data->status !== $attendee->getStatus()) {
             $this->ticketQuantityService->decreaseTicketPriceQuantitySold($attendee->getTicketPriceId());
             $this->ticketQuantityService->increaseTicketPriceQuantitySold($attendee->getTicketPriceId());

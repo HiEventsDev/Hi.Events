@@ -12,17 +12,19 @@ use HiEvents\Helper\Currency;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
 use HiEvents\Repository\Interfaces\TicketRepositoryInterface;
+use HiEvents\Services\Domain\Ticket\TicketAvailableQuantityService;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-readonly class OrderCreateRequestValidationService
+class OrderCreateRequestValidationService
 {
     public function __construct(
-        private TicketRepositoryInterface    $ticketRepository,
-        private PromoCodeRepositoryInterface $promoCodeRepository,
-        private EventRepositoryInterface     $eventRepository
+        readonly private TicketRepositoryInterface      $ticketRepository,
+        readonly private PromoCodeRepositoryInterface   $promoCodeRepository,
+        readonly private EventRepositoryInterface       $eventRepository,
+        readonly private TicketAvailableQuantityService $ticketAvailableQuantityService,
     )
     {
     }
@@ -139,22 +141,26 @@ readonly class OrderCreateRequestValidationService
             ticketId: $ticketId,
             ticket: $ticket
         );
+
         $this->validateTicketQuantity(
             ticketIndex: $ticketIndex,
             ticketAndQuantities: $ticketAndQuantities,
             ticket: $ticket
         );
+
         $this->validateTicketTypeAndPrice(
             event: $event,
             ticketIndex: $ticketIndex,
             ticketAndQuantities: $ticketAndQuantities,
             ticket: $ticket
         );
+
         $this->validateSoldOutTickets(
             ticketId: $ticketId,
             ticketIndex: $ticketIndex,
             ticket: $ticket
         );
+
         $this->validatePriceIdAndQuantity(
             ticketIndex: $ticketIndex,
             ticketAndQuantities: $ticketAndQuantities,
@@ -274,12 +280,10 @@ readonly class OrderCreateRequestValidationService
     private function validateTicketPricesQuantity(array $quantities, TicketDomainObject $ticket, int $ticketIndex): void
     {
         foreach ($quantities as $ticketQuantity) {
-            $numberAvailable = $this->ticketRepository->getQuantityRemainingForTicketPrice(
+            $numberAvailable = $this->ticketAvailableQuantityService->getAvailableQuantity(
                 ticketId: $ticket->getId(),
                 ticketPriceId: $ticketQuantity['price_id']
             );
-
-            $numberAvailable = max(0, $numberAvailable);
 
             /** @var TicketPriceDomainObject $ticketPrice */
             $ticketPrice = $ticket->getTicketPrices()

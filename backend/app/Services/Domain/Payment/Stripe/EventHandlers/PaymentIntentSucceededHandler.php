@@ -56,7 +56,7 @@ readonly class PaymentIntentSucceededHandler
 
             $updatedOrder = $this->updateOrderStatuses($stripePayment);
 
-            $this->quantityUpdateService->updateTicketQuantities($updatedOrder);
+            $this->quantityUpdateService->updateQuantities($updatedOrder);
 
             OrderStatusChangedEvent::dispatch($updatedOrder);
         });

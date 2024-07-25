@@ -7,23 +7,23 @@ use HiEvents\DomainObjects\PromoCodeDomainObject;
 use HiEvents\DomainObjects\TicketDomainObject;
 use HiEvents\DomainObjects\TicketPriceDomainObject;
 use HiEvents\Helper\Currency;
-use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Services\Domain\Tax\TaxAndFeeCalculationService;
+use HiEvents\Services\Domain\Ticket\DTO\AvailableTicketQuantitiesDTO;
 use Illuminate\Support\Collection;
 
 class TicketFilterService
 {
     public function __construct(
-        private readonly EventRepositoryInterface    $eventRepository,
-        private readonly TaxAndFeeCalculationService $taxCalculationService,
-        private readonly TicketPriceService          $ticketPriceService,
+        private readonly TaxAndFeeCalculationService           $taxCalculationService,
+        private readonly TicketPriceService                    $ticketPriceService,
+        private readonly FetchAvailableTicketQuantitiesService $fetchAvailableTicketQuantitiesService,
     )
     {
     }
 
     public function filter(EventDomainObject $event, ?PromoCodeDomainObject $promoCode): ?Collection
     {
-        $ticketQuantities = $this->eventRepository->getAvailableTicketQuantities($event->getId());
+        $ticketQuantities = $this->fetchAvailableTicketQuantitiesService->getAvailableTicketQuantities($event->getId());
 
         return $event->getTickets()
             ?->map(fn(TicketDomainObject $ticket) => $this->processTicket($promoCode, $ticket, $ticketQuantities))
@@ -51,6 +51,12 @@ class TicketFilterService
             && $promoCode->appliesToTicket($ticket);
     }
 
+    /**
+     * @param PromoCodeDomainObject|null $promoCode
+     * @param TicketDomainObject $ticket
+     * @param Collection<AvailableTicketQuantitiesDTO> $ticketQuantities
+     * @return TicketDomainObject
+     */
     private function processTicket(?PromoCodeDomainObject $promoCode, TicketDomainObject $ticket, Collection $ticketQuantities): TicketDomainObject
     {
         if ($this->shouldTicketBeDiscounted($promoCode, $ticket)) {
