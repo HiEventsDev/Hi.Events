@@ -7,7 +7,6 @@ import {NoResultsSplash} from "../NoResultsSplash";
 import classes from './CapacityAssignmentList.module.scss';
 import {Card} from "../Card";
 import {Popover} from "../Popover";
-import {SearchBar} from "../SearchBar";
 import {useState} from "react";
 import {ActionMenu} from "../ActionMenu";
 import {useDisclosure} from "@mantine/hooks";
@@ -22,7 +21,6 @@ interface CapacityAssignmentListProps {
 }
 
 export const CapacityAssignmentList = ({capacityAssignments, openCreateModal}: CapacityAssignmentListProps) => {
-    const [searchValue, setSearchValue] = useState<string>('');
     const [editModalOpen, {open: openEditModal, close: closeEditModal}] = useDisclosure(false);
     const [selectedCapacityAssignmentId, setSelectedCapacityAssignmentId] = useState<IdParam>();
     const deleteMutation = useDeleteCapacityAssignment();
@@ -42,23 +40,16 @@ export const CapacityAssignmentList = ({capacityAssignments, openCreateModal}: C
         return (
             <NoResultsSplash
                 heading={t`No Capacity Assignments`}
-                imageHref={'/blank-slate/attendees.svg'}
+                imageHref={'/blank-slate/capacity-assignments.svg'}
                 subHeading={(
                     <>
                         <p>
                             <Trans>
                                 <p>
                                     Capacity assignments allow you to manage capacity for specific tickets or the entire
-                                    event.
+                                    event. Perfect for multi-day events, workshops, or any event where you need to manage
+                                    capacity.
                                 </p>
-
-                                Example:
-                                <Card>
-                                    If you have a <b>Day 1</b> ticket and an <b>All Weekend</b> ticket, you can create a
-                                    capacity assignment called <b>Day 1 Capacity</b> which will ensure you don't go over
-                                    capacity on
-                                    the first day.
-                                </Card>
                             </Trans>
                         </p>
                         <Button
@@ -75,34 +66,12 @@ export const CapacityAssignmentList = ({capacityAssignments, openCreateModal}: C
 
     return (
         <>
-            <Card>
-                <div className={classes.toolbar}>
-                    <div className={classes.search}>
-                        <SearchBar
-                            placeholder={t`Search capacity assignments`}
-                            onClear={() => setSearchValue('')}
-                            value={searchValue}
-                            onChange={(value) => setSearchValue(value.target.value)}
-                        />
-                    </div>
-                    <div className={classes.button}>
-                        <Button color={'green'} rightSection={<IconPlus/>} onClick={openCreateModal}>
-                            {t`Add capacity assignment`}
-                        </Button>
-                    </div>
-                </div>
-            </Card>
-
             <div className={classes.capacityAssignmentList}>
                 {capacityAssignments.map((assignment) => {
                     const capacityPercentage = assignment.capacity
                         ? (assignment.used_capacity / assignment.capacity) * 100
                         : 0;
                     const capacityColor = capacityPercentage > 80 ? 'red' : capacityPercentage > 50 ? 'yellow' : 'green';
-
-                    if (searchValue && !assignment.name.toLowerCase().includes(searchValue.toLowerCase())) {
-                        return null;
-                    }
 
                     return (
                         <Card className={classes.capacityCard} key={assignment.id}>

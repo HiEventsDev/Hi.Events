@@ -7,10 +7,22 @@ import {CapacityAssignmentList} from "../../../common/CapacityAssignmentList/ind
 import {TableSkeleton} from "../../../common/TableSkeleton";
 import {CreateCapacityAssignmentModal} from "../../../modals/CreateCapacityAssignmentModal";
 import {useDisclosure} from "@mantine/hooks";
+import {ToolBar} from "../../../common/ToolBar";
+import {SearchBarWrapper} from "../../../common/SearchBar";
+import {Button} from "@mantine/core";
+import {IconPlus} from "@tabler/icons-react";
+import {useFilterQueryParamSync} from "../../../../hooks/useFilterQueryParamSync.ts";
+import {QueryFilters} from "../../../../types.ts";
 
 const CapacityAssignments = () => {
     const {eventId} = useParams();
-    const {data: capacityAssignments} = useGetEventCapacityAssignments(eventId);
+    const [searchParams, setSearchParams] = useFilterQueryParamSync();
+    const {data: capcityAssignmentsData} = useGetEventCapacityAssignments(
+        eventId,
+        searchParams as QueryFilters,
+    );
+    const capacityAssignments = capcityAssignmentsData?.data;
+    const pagination = capcityAssignmentsData?.meta
     const [createModalOpen, {open: openCreateModal, close: closeCreateModal}] = useDisclosure(false);
 
     return (
@@ -18,6 +30,22 @@ const CapacityAssignments = () => {
             <PageTitle>
                 {t`Capacity Management`}
             </PageTitle>
+
+            <ToolBar searchComponent={() => (
+                <SearchBarWrapper
+                    placeholder={t`Search capacity assignments...`}
+                    setSearchParams={setSearchParams}
+                    searchParams={searchParams}
+                    pagination={pagination}
+                />
+            )}>
+                <Button
+                    size={'xs'}
+                    leftSection={<IconPlus/>}
+                    color={'green'}
+                    onClick={() => openCreateModal()}>{t`Create Capacity Assignment`}
+                </Button>
+            </ToolBar>
 
             <TableSkeleton isVisible={!capacityAssignments}/>
 

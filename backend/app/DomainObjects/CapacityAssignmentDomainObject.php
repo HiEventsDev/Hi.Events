@@ -2,11 +2,51 @@
 
 namespace HiEvents\DomainObjects;
 
+use HiEvents\DomainObjects\Interfaces\IsSortable;
+use HiEvents\DomainObjects\SortingAndFiltering\AllowedSorts;
 use Illuminate\Support\Collection;
 
-class CapacityAssignmentDomainObject extends Generated\CapacityAssignmentDomainObjectAbstract
+class CapacityAssignmentDomainObject extends Generated\CapacityAssignmentDomainObjectAbstract implements IsSortable
 {
     public ?Collection $tickets = null;
+
+    public static function getDefaultSort(): string
+    {
+        return static::CREATED_AT;
+    }
+
+    public static function getDefaultSortDirection(): string
+    {
+        return 'desc';
+    }
+
+    public static function getAllowedSorts(): AllowedSorts
+    {
+        return new AllowedSorts(
+            [
+                self::NAME => [
+                    'asc' => __('Name A-Z'),
+                    'desc' => __('Name Z-A'),
+                ],
+                self::CREATED_AT => [
+                    'asc' => __('Oldest first'),
+                    'desc' => __('Newest first'),
+                ],
+                self::UPDATED_AT => [
+                    'asc' => __('Updated oldest first'),
+                    'desc' => __('Updated newest first'),
+                ],
+                self::USED_CAPACITY => [
+                    'desc' => __('Most capacity used'),
+                    'asc' => __('Least capacity used'),
+                ],
+                self::CAPACITY => [
+                    'desc' => __('Least capacity'),
+                    'asc' => __('Most capacity'),
+                ],
+            ]
+        );
+    }
 
     public function getPercentageUsed(): float
     {

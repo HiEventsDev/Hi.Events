@@ -4,8 +4,9 @@ import {
     CapacityAssignmentRequest,
     GenericDataResponse,
     GenericPaginatedResponse,
-    IdParam,
+    IdParam, QueryFilters,
 } from "../types";
+import {queryParamsHelper} from "../utilites/queryParamsHelper.ts";
 
 export const capacityAssignmentClient = {
     create: async (eventId: IdParam, capacityAssignment: CapacityAssignmentRequest) => {
@@ -16,8 +17,8 @@ export const capacityAssignmentClient = {
         const response = await api.put<GenericDataResponse<CapacityAssignment>>(`events/${eventId}/capacity-assignments/${capacityAssignmentId}`, capacityAssignment);
         return response.data;
     },
-    all: async (eventId: IdParam) => {
-        const response = await api.get<GenericPaginatedResponse<CapacityAssignment>>(`events/${eventId}/capacity-assignments`);
+    all: async (eventId: IdParam, pagination: QueryFilters) => {
+        const response = await api.get<GenericPaginatedResponse<CapacityAssignment>>(`events/${eventId}/capacity-assignments`  + queryParamsHelper.buildQueryString(pagination));
         return response.data;
     },
     get: async (eventId: IdParam, capacityAssignmentId: IdParam) => {

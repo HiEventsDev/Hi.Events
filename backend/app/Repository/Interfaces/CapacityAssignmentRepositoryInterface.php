@@ -3,6 +3,7 @@
 namespace HiEvents\Repository\Interfaces;
 
 use HiEvents\DomainObjects\CapacityAssignmentDomainObject;
+use HiEvents\Http\DTO\QueryParamsDTO;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 /**
@@ -10,5 +11,5 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
  */
 interface CapacityAssignmentRepositoryInterface extends RepositoryInterface
 {
-    public function findCapacityAssignments(int $eventId): LengthAwarePaginator;
+    public function findByEventId(int $eventId, QueryParamsDTO $params): LengthAwarePaginator;
 }

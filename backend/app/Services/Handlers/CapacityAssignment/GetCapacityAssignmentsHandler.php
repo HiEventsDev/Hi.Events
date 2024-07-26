@@ -19,6 +19,9 @@ class GetCapacityAssignmentsHandler
     {
         return $this->capacityAssignmentRepository
             ->loadRelation(TicketDomainObject::class)
-            ->findCapacityAssignments($dto->eventId);
+            ->findByEventId(
+                eventId: $dto->eventId,
+                params: $dto->queryParams,
+            );
     }
 }

@@ -59,7 +59,7 @@ export const EditCapacityAssignmentModal = ({
                 capacity: capacityAssignment.capacity,
                 applies_to: capacityAssignment.applies_to,
                 status: capacityAssignment.status,
-                ticket_ids: capacityAssignment.tickets.map(ticket => String(ticket.id)),
+                ticket_ids: capacityAssignment.tickets?.map(ticket => String(ticket.id)),
             });
         }
     }, [capacityAssignment]);

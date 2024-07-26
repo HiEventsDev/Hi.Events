@@ -13,10 +13,12 @@
   .search {
     width: 80%;
     margin-right: 20px;
+    max-width: 320px;
 
     @include respond-below(md) {
       width: 100%;
       margin-bottom: 20px;
+      max-width: 100%;
     }
   }
 
@@ -44,13 +46,11 @@
 
   }
 
-
   .capacityCard {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     margin-bottom: 0 !important;
-
 
     .capacityAssignmentHeader {
       display: flex;
@@ -67,7 +67,6 @@
           align-items: center;
         }
       }
-
     }
 
     .capacityAssignmentName {
