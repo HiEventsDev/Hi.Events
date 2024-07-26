@@ -5,7 +5,7 @@ namespace HiEvents\Services\Handlers\CapacityAssignment;
 use HiEvents\DomainObjects\TicketDomainObject;
 use HiEvents\Repository\Interfaces\CapacityAssignmentRepositoryInterface;
 use HiEvents\Services\Handlers\CapacityAssignment\DTO\GetCapacityAssignmentsDTO;
-use Illuminate\Support\Collection;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class GetCapacityAssignmentsHandler
 {
@@ -15,12 +15,10 @@ class GetCapacityAssignmentsHandler
     {
     }
 
-    public function handle(GetCapacityAssignmentsDTO $dto): Collection
+    public function handle(GetCapacityAssignmentsDTO $dto): LengthAwarePaginator
     {
         return $this->capacityAssignmentRepository
             ->loadRelation(TicketDomainObject::class)
-            ->findWhere([
-                'event_id' => $dto->eventId,
-            ]);
+            ->findCapacityAssignments($dto->eventId);
     }
 }

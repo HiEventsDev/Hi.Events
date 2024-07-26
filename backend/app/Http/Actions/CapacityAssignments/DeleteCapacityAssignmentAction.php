@@ -10,7 +10,7 @@ use Illuminate\Http\Response;
 class DeleteCapacityAssignmentAction extends BaseAction
 {
     public function __construct(
-        private readonly DeleteCapacityAssignmentHandler $deleteCapacityAssignmentHandler
+        private readonly DeleteCapacityAssignmentHandler $deleteCapacityAssignmentHandler,
     )
     {
     }

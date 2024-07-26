@@ -34,7 +34,10 @@ class CreateCapacityAssignmentService
         return $this->persistAssignmentAndAssociateTickets($capacityAssignment, $ticketIds);
     }
 
-    private function persistAssignmentAndAssociateTickets(CapacityAssignmentDomainObject $capacityAssignment, ?array $ticketIds): CapacityAssignmentDomainObject
+    private function persistAssignmentAndAssociateTickets(
+        CapacityAssignmentDomainObject $capacityAssignment,
+        ?array                         $ticketIds,
+    ): CapacityAssignmentDomainObject
     {
         return $this->databaseManager->transaction(function () use ($capacityAssignment, $ticketIds) {
             /** @var CapacityAssignmentDomainObject $capacityAssignment */

@@ -5,11 +5,34 @@
   justify-content: space-between;
   align-items: center;
 
-  .search {
+  @include respond-below(md) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
+  .search {
+    width: 80%;
+    margin-right: 20px;
+
+    @include respond-below(md) {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+  }
+
+  .button {
+    display: flex;
+    place-content: flex-end;
+
+    button {
+      height: 42px;
+    }
+
+    @include respond-below(md) {
+      width: 100%;
+    }
   }
 }
-
 
 .capacityAssignmentList {
   display: grid;
@@ -41,7 +64,7 @@
           display: flex;
           color: #999;
           justify-content: center;
-            align-items: center;
+          align-items: center;
         }
       }
 
@@ -73,7 +96,5 @@
       }
     }
   }
-
-
 }
 

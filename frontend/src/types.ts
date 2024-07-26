@@ -413,7 +413,7 @@ export interface CapacityAssignment {
 }
 
 export type CapacityAssignmentRequest = Omit<CapacityAssignment, 'id' | 'event_id' | 'used_capacity'> & {
-    ticket_ids: number[];
+    ticket_ids: IdParam[];
 };
 
 export interface QuestionRequestData {

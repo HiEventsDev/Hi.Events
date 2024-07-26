@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 class CreateCapacityAssignmentAction extends BaseAction
 {
     public function __construct(
-        private readonly CreateCapacityAssignmentHandler $createCapacityAssignmentHandler
+        private readonly CreateCapacityAssignmentHandler $createCapacityAssignmentHandler,
     )
     {
     }

@@ -1,7 +1,7 @@
-import {CapacityAssignment} from "../../../types";
+import {CapacityAssignment, IdParam} from "../../../types";
 import {Badge, Button, Progress} from "@mantine/core";
 import {t, Trans} from "@lingui/macro";
-import {IconDotsVertical, IconHelp, IconPlus} from "@tabler/icons-react";
+import {IconHelp, IconPencil, IconPlus, IconTrash} from "@tabler/icons-react";
 import Truncate from "../Truncate";
 import {NoResultsSplash} from "../NoResultsSplash";
 import classes from './CapacityAssignmentList.module.scss';
@@ -9,6 +9,12 @@ import {Card} from "../Card";
 import {Popover} from "../Popover";
 import {SearchBar} from "../SearchBar";
 import {useState} from "react";
+import {ActionMenu} from "../ActionMenu";
+import {useDisclosure} from "@mantine/hooks";
+import {EditCapacityAssignmentModal} from "../../modals/EditCapacityAssignmentModal";
+import {useDeleteCapacityAssignment} from "../../../mutations/useDeleteCapacityAssignment";
+import {showError, showSuccess} from "../../../utilites/notifications.tsx";
+import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
 
 interface CapacityAssignmentListProps {
     capacityAssignments: CapacityAssignment[];
@@ -17,7 +23,20 @@ interface CapacityAssignmentListProps {
 
 export const CapacityAssignmentList = ({capacityAssignments, openCreateModal}: CapacityAssignmentListProps) => {
     const [searchValue, setSearchValue] = useState<string>('');
+    const [editModalOpen, {open: openEditModal, close: closeEditModal}] = useDisclosure(false);
+    const [selectedCapacityAssignmentId, setSelectedCapacityAssignmentId] = useState<IdParam>();
+    const deleteMutation = useDeleteCapacityAssignment();
 
+    const handleDeleteTicket = (capacityAssignmentId: IdParam, eventId: IdParam) => {
+        deleteMutation.mutate({capacityAssignmentId, eventId}, {
+            onSuccess: () => {
+                showSuccess(t`Capacity Assignment deleted successfully`);
+            },
+            onError: (error: any) => {
+                showError(error.message);
+            }
+        });
+    }
 
     if (capacityAssignments.length === 0) {
         return (
@@ -60,6 +79,7 @@ export const CapacityAssignmentList = ({capacityAssignments, openCreateModal}: C
                 <div className={classes.toolbar}>
                     <div className={classes.search}>
                         <SearchBar
+                            placeholder={t`Search capacity assignments`}
                             onClear={() => setSearchValue('')}
                             value={searchValue}
                             onChange={(value) => setSearchValue(value.target.value)}
@@ -150,29 +170,53 @@ export const CapacityAssignmentList = ({capacityAssignments, openCreateModal}: C
                                     )}
                                 </div>
                                 <div className={classes.capacityAssignmentActions}>
-                                    <Button variant={'transparent'}>
-                                        <IconDotsVertical/>
-                                    </Button>
+                                    <ActionMenu
+                                        itemsGroups={[
+                                            {
+                                                label: t`Manage`,
+                                                items: [
+                                                    {
+                                                        label: t`Edit Capacity`,
+                                                        icon: <IconPencil size={14}/>,
+                                                        onClick: () => {
+                                                            console.log('Editing assignment:', assignment);
+                                                            setSelectedCapacityAssignmentId(assignment.id as IdParam);
+                                                            openEditModal();
+                                                        }
+                                                    },
+                                                ],
+                                            },
+                                            {
+                                                label: t`Danger zone`,
+                                                items: [
+                                                    {
+                                                        label: t`Delete Capacity`,
+                                                        icon: <IconTrash size={14}/>,
+                                                        onClick: () => {
+                                                            confirmationDialog(
+                                                                t`Are you sure you would like to delete this Capacity Assignment?`,
+                                                                () => {
+                                                                    handleDeleteTicket(
+                                                                        assignment.id as IdParam,
+                                                                        assignment.event_id as IdParam,
+                                                                    );
+                                                                })
+                                                        },
+                                                        color: 'red',
+                                                    },
+                                                ],
+                                            },
+                                        ]}
+                                    />
                                 </div>
                             </div>
                         </Card>
                     );
                 })}
             </div>
+            {(editModalOpen && selectedCapacityAssignmentId)
+                && <EditCapacityAssignmentModal onClose={closeEditModal}
+                                                capacityAssignmentId={selectedCapacityAssignmentId}/>}
         </>
     );
 };
-
-// Dummy handlers for menu actions (should be replaced with actual implementations)
-const handleModalClick = (assignment: CapacityAssignment, modalOpen: any) => {
-    console.log('Opening modal for:', assignment);
-};
-
-const handleDelete = (assignment: CapacityAssignment) => {
-    return () => {
-        console.log('Deleting assignment:', assignment);
-    };
-};
-
-const viewModalOpen = {};  // Placeholder for actual modal open state
-const editModal = {};      // Placeholder for actual modal open state

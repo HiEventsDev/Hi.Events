@@ -41,7 +41,7 @@ class UpdateCapacityAssignmentService
     {
         return $this->databaseManager->transaction(function () use ($capacityAssignment, $ticketIds) {
             /** @var CapacityAssignmentDomainObject $capacityAssignment */
-            $capacityAssignment = $this->capacityAssignmentRepository->updateWhere(
+            $this->capacityAssignmentRepository->updateWhere(
                 attributes: [
                     CapacityAssignmentDomainObjectAbstract::NAME => $capacityAssignment->getName(),
                     CapacityAssignmentDomainObjectAbstract::EVENT_ID => $capacityAssignment->getEventId(),
@@ -65,5 +65,4 @@ class UpdateCapacityAssignmentService
             return $capacityAssignment;
         });
     }
-
 }

@@ -4,15 +4,7 @@ import {t} from "@lingui/macro";
 import {UseFormReturnType} from "@mantine/form";
 import {CapacityAssignmentRequest, Ticket} from "../../../types.ts";
 import {CustomSelect, ItemProps} from "../../common/CustomSelect";
-import {
-    IconCalendarEvent,
-    IconCash, IconCheck,
-    IconCoinOff,
-    IconCoins, IconCross,
-    IconHeartDollar,
-    IconSwitch,
-    IconTicket, IconX
-} from "@tabler/icons-react";
+import {IconCalendarEvent, IconCheck, IconTicket, IconX} from "@tabler/icons-react";
 
 interface CapaciyAssigmentFormProps {
     form: UseFormReturnType<CapacityAssignmentRequest>;
