@@ -43,10 +43,29 @@ interface TicketRepositoryInterface extends RepositoryInterface
 
     /**
      * @param int $ticketId
+     * @return Collection
+     */
+    public function getCapacityAssignmentsByTicketId(int $ticketId): Collection;
+
+    /**
+     * @param int $ticketId
      * @param array $taxIds
      * @return void
      */
-    public function addTaxToTicket(int $ticketId, array $taxIds): void;
+    public function addTaxesAndFeesToTicket(int $ticketId, array $taxIds): void;
+
+    /**
+     * @param array $ticketIds
+     * @param int $capacityAssignmentId
+     * @return void
+     */
+    public function addCapacityAssignmentToTickets(int $capacityAssignmentId, array $ticketIds): void;
+
+    /**
+     * @param int $capacityAssignmentId
+     * @return void
+     */
+    public function removeCapacityAssignmentFromTickets(int $capacityAssignmentId): void;
 
     /**
      * @param int $eventId

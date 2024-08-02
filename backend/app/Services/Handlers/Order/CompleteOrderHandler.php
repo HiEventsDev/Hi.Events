@@ -74,7 +74,7 @@ readonly class CompleteOrderHandler
              * @see PaymentIntentSucceededHandler
              */
             if (!$order->isPaymentRequired()) {
-                $this->ticketQuantityUpdateService->updateTicketQuantities($updatedOrder);
+                $this->ticketQuantityUpdateService->updateQuantitiesFromOrder($updatedOrder);
             }
 
             OrderStatusChangedEvent::dispatch($updatedOrder);

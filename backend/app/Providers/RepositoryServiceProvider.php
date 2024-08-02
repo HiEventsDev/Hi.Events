@@ -7,6 +7,7 @@ namespace HiEvents\Providers;
 use HiEvents\Repository\Eloquent\AccountRepository;
 use HiEvents\Repository\Eloquent\AccountUserRepository;
 use HiEvents\Repository\Eloquent\AttendeeRepository;
+use HiEvents\Repository\Eloquent\CapacityAssignmentRepository;
 use HiEvents\Repository\Eloquent\EventDailyStatisticRepository;
 use HiEvents\Repository\Eloquent\EventRepository;
 use HiEvents\Repository\Eloquent\EventSettingsRepository;
@@ -21,6 +22,7 @@ use HiEvents\Repository\Eloquent\PasswordResetTokenRepository;
 use HiEvents\Repository\Eloquent\PromoCodeRepository;
 use HiEvents\Repository\Eloquent\QuestionAnswerRepository;
 use HiEvents\Repository\Eloquent\QuestionRepository;
+use HiEvents\Repository\Eloquent\ReservationRepository;
 use HiEvents\Repository\Eloquent\StripePaymentsRepository;
 use HiEvents\Repository\Eloquent\TaxAndFeeRepository;
 use HiEvents\Repository\Eloquent\TicketPriceRepository;
@@ -29,6 +31,7 @@ use HiEvents\Repository\Eloquent\UserRepository;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
+use HiEvents\Repository\Interfaces\CapacityAssignmentRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventDailyStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
@@ -43,6 +46,7 @@ use HiEvents\Repository\Interfaces\PasswordResetTokenRepositoryInterface;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
 use HiEvents\Repository\Interfaces\QuestionAnswerRepositoryInterface;
 use HiEvents\Repository\Interfaces\QuestionRepositoryInterface;
+use HiEvents\Repository\Interfaces\ReservationRepositoryInterface;
 use HiEvents\Repository\Interfaces\StripePaymentsRepositoryInterface;
 use HiEvents\Repository\Interfaces\TaxAndFeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\TicketPriceRepositoryInterface;
@@ -78,6 +82,8 @@ class RepositoryServiceProvider extends ServiceProvider
         EventSettingsRepositoryInterface::class => EventSettingsRepository::class,
         OrganizerRepositoryInterface::class => OrganizerRepository::class,
         AccountUserRepositoryInterface::class => AccountUserRepository::class,
+        CapacityAssignmentRepositoryInterface::class => CapacityAssignmentRepository::class,
+        ReservationRepositoryInterface::class => ReservationRepository::class,
     ];
 
     public function register(): void

@@ -11,6 +11,7 @@ use HiEvents\DomainObjects\Interfaces\IsFilterable;
 use HiEvents\DomainObjects\Interfaces\IsSortable;
 use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Exceptions\UnauthorizedException;
+use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Http\ResponseCodes;
 use HiEvents\Resources\BaseResource;
 use HiEvents\Services\Domain\Auth\AuthUserService;
@@ -146,7 +147,7 @@ abstract class BaseAction extends Controller
         if (Auth::check()) {
             /** @var AuthUserService $service */
             $service = app(AuthUserService::class);
-            $accountId =  $service->getAuthenticatedAccountId();
+            $accountId = $service->getAuthenticatedAccountId();
 
             if ($accountId === null) {
                 throw new UnauthorizedException(__('No account ID found in token'));
@@ -190,5 +191,10 @@ abstract class BaseAction extends Controller
         }
 
         return $request->getClientIp();
+    }
+
+    public function getPaginationQueryParams(Request $request): QueryParamsDTO
+    {
+        return QueryParamsDTO::fromArray($request->query->all());
     }
 }

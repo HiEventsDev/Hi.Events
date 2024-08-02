@@ -23,6 +23,7 @@ abstract class TicketPriceDomainObjectAbstract extends \HiEvents\DomainObjects\A
     final public const QUANTITY_SOLD = 'quantity_sold';
     final public const IS_HIDDEN = 'is_hidden';
     final public const ORDER = 'order';
+    final public const QUANTITY_AVAILABLE = 'quantity_available';
 
     protected int $id;
     protected int $ticket_id;
@@ -37,6 +38,7 @@ abstract class TicketPriceDomainObjectAbstract extends \HiEvents\DomainObjects\A
     protected int $quantity_sold = 0;
     protected ?bool $is_hidden = false;
     protected int $order = 1;
+    protected ?int $quantity_available = null;
 
     public function toArray(): array
     {
@@ -54,6 +56,7 @@ abstract class TicketPriceDomainObjectAbstract extends \HiEvents\DomainObjects\A
                     'quantity_sold' => $this->quantity_sold ?? null,
                     'is_hidden' => $this->is_hidden ?? null,
                     'order' => $this->order ?? null,
+                    'quantity_available' => $this->quantity_available ?? null,
                 ];
     }
 
@@ -198,5 +201,16 @@ abstract class TicketPriceDomainObjectAbstract extends \HiEvents\DomainObjects\A
     public function getOrder(): int
     {
         return $this->order;
+    }
+
+    public function setQuantityAvailable(?int $quantity_available): self
+    {
+        $this->quantity_available = $quantity_available;
+        return $this;
+    }
+
+    public function getQuantityAvailable(): ?int
+    {
+        return $this->quantity_available;
     }
 }

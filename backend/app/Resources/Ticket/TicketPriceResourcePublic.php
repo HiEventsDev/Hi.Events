@@ -28,8 +28,6 @@ class TicketPriceResourcePublic extends BaseResource
             'is_after_sale_end_date' => $this->isAfterSaleEndDate(),
             'is_available' => $this->isAvailable(),
             'is_sold_out' => $this->isSoldOut(),
-//            'quantity_remaining' => $this->when($this->getShowQuantityRemaining(), $this->getQuantityAvailable()),
-
             'quantity_remaining' => $this->getQuantityAvailable(),
         ];
     }

@@ -1,14 +1,6 @@
-import {Anchor, Avatar, Badge, Button, Group, Menu, Table as MantineTable,} from '@mantine/core';
+import {Anchor, Avatar, Badge, Button, Table as MantineTable,} from '@mantine/core';
 import {Attendee, MessageType} from "../../../types.ts";
-import {
-    IconDotsVertical,
-    IconEye,
-    IconMailForward,
-    IconPencil,
-    IconPlus,
-    IconSend,
-    IconTrash
-} from "@tabler/icons-react";
+import {IconEye, IconMailForward, IconPencil, IconPlus, IconSend, IconTrash} from "@tabler/icons-react";
 import {getInitials, getTicketFromEvent} from "../../../utilites/helpers.ts";
 import {Table, TableHead} from "../Table";
 import {useDisclosure} from "@mantine/hooks";
@@ -26,6 +18,7 @@ import {t, Trans} from "@lingui/macro";
 import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
 import {useResendAttendeeTicket} from "../../../mutations/useResendAttendeeTicket.ts";
 import {ViewAttendeeModal} from "../../modals/ViewAttendeeModal";
+import {ActionMenu} from '../ActionMenu/index.tsx';
 
 interface AttendeeTableProps {
     attendees: Attendee[];
@@ -79,7 +72,7 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
         />
     }
 
-    const handleCancel = (attendee: Attendee) => () => {
+    const handleCancel = (attendee: Attendee) => {
         const message = attendee.status === 'CANCELLED'
             ? t`Are you sure you want to activate this attendee?`
             : t`Are you sure you want to cancel this attendee? This will void their ticket`
@@ -89,7 +82,7 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
                 attendeeId: attendee.id,
                 eventId: eventId,
                 attendeeData: {
-                    status: attendee.status === 'CANCELLED' ? 'active' : 'cancelled'
+                    status: attendee.status === 'CANCELLED' ? 'ACTIVE' : 'CANCELLED'
                 }
             }, {
                 onSuccess: () => {
@@ -163,56 +156,45 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
                                         color={attendee.status === 'CANCELLED' ? 'red' : 'green'}>{attendee.status}</Badge>
                                 </MantineTable.Td>
                                 <MantineTable.Td style={{paddingRight: 0}}>
-                                    <Group wrap={'nowrap'} gap={0} justify={'flex-end'}>
-                                        <Menu shadow="md" width={200}>
-                                            <Menu.Target>
-                                                <Button variant={'transparent'}>
-                                                    <IconDotsVertical/>
-                                                </Button>
-                                            </Menu.Target>
-
-                                            <Menu.Dropdown>
-                                                <Menu.Label>{t`Manage`}</Menu.Label>
-                                                <Menu.Item
-                                                    leftSection={<IconEye size={14}/>}
-                                                    onClick={() => handleModalClick(attendee, viewModalOpen)}
-                                                >
-                                                    {t`View attendee`}
-                                                </Menu.Item>
-
-                                                <Menu.Item leftSection={<IconSend size={14}/>}
-                                                           onClick={() => handleModalClick(attendee, messageModal)}>
-                                                    {t`Message attendee`}
-                                                </Menu.Item>
-                                                <Menu.Item
-                                                    leftSection={<IconPencil size={14}/>}
-                                                    onClick={() => handleModalClick(attendee, editModal)}
-                                                >
-                                                    {t`Edit attendee`}
-                                                </Menu.Item>
-
-                                                {attendee.status === 'ACTIVE' && (
-                                                    <Menu.Item
-                                                        leftSection={<IconMailForward size={14}/>}
-                                                        onClick={() => handleResendTicket(attendee)}
-                                                    >
-                                                        {t`Resend ticket email`}
-                                                    </Menu.Item>
-                                                )}
-
-                                                <Menu.Divider/>
-
-                                                <Menu.Label>{t`Danger zone`}</Menu.Label>
-                                                <Menu.Item
-                                                    color={attendee.status === 'CANCELLED' ? 'green' : 'red'}
-                                                    leftSection={<IconTrash size={14}/>}
-                                                    onClick={handleCancel(attendee)}
-                                                >
-                                                    {attendee.status === 'CANCELLED' ? t`Activate` : t`Cancel`} {t`ticket`}
-                                                </Menu.Item>
-                                            </Menu.Dropdown>
-                                        </Menu>
-                                    </Group>
+                                    <ActionMenu itemsGroups={[
+                                        {
+                                            label: t`Actions`,
+                                            items: [
+                                                {
+                                                    label: t`View attendee`,
+                                                    icon: <IconEye size={14}/>,
+                                                    onClick: () => handleModalClick(attendee, viewModalOpen),
+                                                },
+                                                {
+                                                    label: t`Message attendee`,
+                                                    icon: <IconSend size={14}/>,
+                                                    onClick: () => handleModalClick(attendee, messageModal),
+                                                },
+                                                {
+                                                    label: t`Edit attendee`,
+                                                    icon: <IconPencil size={14}/>,
+                                                    onClick: () => handleModalClick(attendee, editModal),
+                                                },
+                                                {
+                                                    label: t`Resend ticket email`,
+                                                    icon: <IconMailForward size={14}/>,
+                                                    onClick: () => handleResendTicket(attendee),
+                                                    visible: attendee.status === 'ACTIVE',
+                                                },
+                                            ],
+                                        },
+                                        {
+                                            label: t`Danger Zone`,
+                                            items: [
+                                                {
+                                                    label: attendee.status === 'CANCELLED' ? t`Activate` : t`Cancel` + ` ` + t`ticket`,
+                                                    icon: <IconTrash size={14}/>,
+                                                    onClick: () => handleCancel(attendee),
+                                                    color: attendee.status === 'CANCELLED' ? 'green' : 'red',
+                                                },
+                                            ],
+                                        },
+                                    ]}/>
                                 </MantineTable.Td>
                             </MantineTable.Tr>
                         );

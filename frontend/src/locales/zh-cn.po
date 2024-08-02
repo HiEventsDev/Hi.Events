@@ -21,7 +21,7 @@ msgstr "There's nothing to show yet"
 msgid "{0}"
 msgstr ""
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:299
+#: src/components/routes/ticket-widget/SelectTickets/index.tsx:300
 msgid "{0} available"
 msgstr "{0}可用"
 
@@ -49,9 +49,21 @@ msgstr "{分}分钟和{秒}秒钟"
 msgid "{organizerName}'s first event"
 msgstr "{组织者名称}的首次活动"
 
+#: src/components/common/CapacityAssignmentList/index.tsx:47
+msgid "<0>Capacity assignments let you manage capacity across tickets or an entire event. Ideal for multi-day events, workshops, and more, where controlling attendance is crucial.</0><1>For instance, you can associate a capacity assignment with <2>Day One</2> and <3>All Days</3> ticket. Once the capacity is reached, both tickets will automatically stop being available for sale.</1>"
+msgstr "<0>容量分配让你可以管理票务或整个活动的容量。非常适合多日活动、研讨会等，需要控制出席人数的场合。</0><1>例如，你可以将容量分配与<2>第一天</2>和<3>所有天数</3>的票关联起来。一旦达到容量，这两种票将自动停止销售。</1>"
+
 #: src/components/common/WidgetEditor/index.tsx:322
 msgid "<0>https://</0>your-website.com"
 msgstr "<0>https://</0>your-website.com"
+
+#: src/components/forms/TicketForm/index.tsx:233
+msgid "<0>Please enter the price excluding taxes and fees.</0><1>Taxes and fees can be added below.</1>"
+msgstr "<0>请输入不含税费的价格。</0><1>税费可以在下方添加。</1>"
+
+#: src/components/forms/TicketForm/index.tsx:250
+msgid "<0>The number of tickets available for this ticket</0><1>This value can be overridden if there are <2>Capacity Limits</2> associated with this ticket.</1>"
+msgstr "<0>此票的可用票数</0><1>如果此票有<2>容量限制</2>，此值可以被覆盖。</1>"
 
 #: src/components/routes/event/GettingStarted/index.tsx:80
 msgid "⚡️ Set up your event"
@@ -109,15 +121,15 @@ msgstr "2024-01-01 18:00"
 msgid "94103"
 msgstr "94103"
 
-#: src/components/forms/QuestionForm/index.tsx:136
+#: src/components/forms/QuestionForm/index.tsx:137
 msgid "A date input. Perfect for asking for a date of birth etc."
 msgstr "日期输入字段。非常适合询问出生日期等。"
 
-#: src/components/forms/TaxAndFeeForm/index.tsx:87
+#: src/components/forms/TaxAndFeeForm/index.tsx:88
 msgid "A default {type} is automaticaly applied to all new tickets. You can override this on a per ticket basis."
 msgstr "默认 {type} 会自动应用于所有新票单。您可以根据每张票单的具体情况覆盖该默认值。"
 
-#: src/components/forms/QuestionForm/index.tsx:124
+#: src/components/forms/QuestionForm/index.tsx:125
 msgid "A Dropdown input allows only one selection"
 msgstr "下拉式输入法只允许一个选择"
 
@@ -129,7 +141,7 @@ msgstr "费用，如预订费或服务费"
 msgid "A fixed amount per ticket. E.g, $0.50 per ticket"
 msgstr "每张票的固定金额。例如，每张票 0.50 美元"
 
-#: src/components/forms/QuestionForm/index.tsx:106
+#: src/components/forms/QuestionForm/index.tsx:107
 msgid "A multi line text input"
 msgstr "多行文本输入"
 
@@ -141,7 +153,7 @@ msgstr "票价的百分比。例如，票价的 3.5%"
 msgid "A promo code with no discount can be used to reveal hidden tickets."
 msgstr "使用无折扣的促销代码可显示隐藏的门票。"
 
-#: src/components/forms/QuestionForm/index.tsx:118
+#: src/components/forms/QuestionForm/index.tsx:119
 msgid "A Radio option has multiple options but only one can be selected."
 msgstr "单选题有多个选项，但只能选择一个。"
 
@@ -149,15 +161,15 @@ msgstr "单选题有多个选项，但只能选择一个。"
 msgid "A short description of the event that will be displayed in search engine results and when sharing on social media. By default, the event description will be used"
 msgstr "活动的简短描述，将显示在搜索引擎结果中，并在社交媒体上分享时显示。默认情况下，将使用活动描述"
 
-#: src/components/forms/QuestionForm/index.tsx:100
+#: src/components/forms/QuestionForm/index.tsx:101
 msgid "A single line text input"
 msgstr "单行文本输入"
 
-#: src/components/forms/QuestionForm/index.tsx:91
+#: src/components/forms/QuestionForm/index.tsx:92
 msgid "A single question per attendee. E.g, What is your preferred meal?"
 msgstr "每位与会者只需回答一个问题。例如：您喜欢吃什么？"
 
-#: src/components/forms/QuestionForm/index.tsx:85
+#: src/components/forms/QuestionForm/index.tsx:86
 msgid "A single question per order. E.g, What is your company name?"
 msgstr "每份订单只有一个问题。例如：贵公司的名称是什么？"
 
@@ -191,15 +203,17 @@ msgstr "账户设置"
 msgid "Account updated successfully"
 msgstr "账户更新成功"
 
+#: src/components/common/AttendeeTable/index.tsx:161
 #: src/components/common/QuestionsTable/index.tsx:106
 #: src/components/common/TicketsTable/SortableTicket/index.tsx:183
 msgid "Actions"
 msgstr "行动"
 
-#: src/components/common/AttendeeTable/index.tsx:211
+#: src/components/common/AttendeeTable/index.tsx:190
 msgid "Activate"
 msgstr "激活"
 
+#: src/components/forms/CapaciyAssigmentForm/index.tsx:18
 #: src/components/modals/EditUserModal/index.tsx:110
 msgid "Active"
 msgstr "活跃"
@@ -208,7 +222,7 @@ msgstr "活跃"
 msgid "Add"
 msgstr "添加"
 
-#: src/components/forms/QuestionForm/index.tsx:207
+#: src/components/forms/QuestionForm/index.tsx:208
 msgid "Add description"
 msgstr "添加描述"
 
@@ -224,7 +238,7 @@ msgstr "添加更多门票"
 msgid "Add New"
 msgstr "添加新内容"
 
-#: src/components/forms/QuestionForm/index.tsx:66
+#: src/components/forms/QuestionForm/index.tsx:67
 msgid "Add Option"
 msgstr "添加选项"
 
@@ -240,20 +254,20 @@ msgstr "加税或费用"
 msgid "Add tickets"
 msgstr "添加机票"
 
-#: src/components/forms/TicketForm/index.tsx:255
+#: src/components/forms/TicketForm/index.tsx:283
 msgid "Add tier"
 msgstr "增加层级"
 
-#: src/components/forms/TicketForm/index.tsx:262
-#: src/components/forms/TicketForm/index.tsx:266
+#: src/components/forms/TicketForm/index.tsx:290
+#: src/components/forms/TicketForm/index.tsx:294
 msgid "Additional Options"
 msgstr "附加选项"
 
-#: src/components/forms/QuestionForm/index.tsx:128
+#: src/components/forms/QuestionForm/index.tsx:129
 msgid "Address"
 msgstr "地址"
 
-#: src/components/common/CheckoutQuestion/index.tsx:152
+#: src/components/common/CheckoutQuestion/index.tsx:154
 msgid "Address line 1"
 msgstr "地址第 1 行"
 
@@ -261,7 +275,7 @@ msgstr "地址第 1 行"
 msgid "Address Line 1"
 msgstr "地址 1"
 
-#: src/components/common/CheckoutQuestion/index.tsx:155
+#: src/components/common/CheckoutQuestion/index.tsx:157
 msgid "Address line 2"
 msgstr "地址第 2 行"
 
@@ -280,10 +294,10 @@ msgid "Admin users have full access to events and account settings."
 msgstr "管理员用户可以完全访问事件和账户设置。"
 
 #: src/components/layouts/Event/index.tsx:53
-msgid "Affiliates"
-msgstr "附属机构"
+#~ msgid "Affiliates"
+#~ msgstr "附属机构"
 
-#: src/components/modals/SendMessageModal/index.tsx:142
+#: src/components/modals/SendMessageModal/index.tsx:148
 msgid "All attendees of this event"
 msgstr "本次活动的所有与会者"
 
@@ -292,6 +306,7 @@ msgid "All Events"
 msgstr "所有活动"
 
 #: src/components/common/PromoCodeTable/index.tsx:130
+#: src/components/forms/PromoCodeForm/index.tsx:67
 msgid "All Tickets"
 msgstr "所有门票"
 
@@ -357,23 +372,31 @@ msgstr "持票人的任何询问都将发送到此电子邮件地址。该地址
 msgid "Appearance"
 msgstr "外观"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:368
+#: src/components/routes/ticket-widget/SelectTickets/index.tsx:369
 msgid "applied"
 msgstr "应用"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:396
+#: src/components/common/CapacityAssignmentList/index.tsx:97
+msgid "Applies to {0} tickets"
+msgstr "适用于{0}张票"
+
+#: src/components/common/CapacityAssignmentList/index.tsx:98
+msgid "Applies to 1 ticket"
+msgstr "适用于1张票"
+
+#: src/components/routes/ticket-widget/SelectTickets/index.tsx:397
 msgid "Apply Promo Code"
 msgstr "应用促销代码"
 
-#: src/components/forms/TaxAndFeeForm/index.tsx:85
+#: src/components/forms/TaxAndFeeForm/index.tsx:86
 msgid "Apply this {type} to all new tickets"
 msgstr "将此 {类型}应用于所有新票"
 
-#: src/components/common/AttendeeTable/index.tsx:84
+#: src/components/common/AttendeeTable/index.tsx:77
 msgid "Are you sure you want to activate this attendee?"
 msgstr "您确定要激活该与会者吗？"
 
-#: src/components/common/AttendeeTable/index.tsx:85
+#: src/components/common/AttendeeTable/index.tsx:78
 msgid "Are you sure you want to cancel this attendee? This will void their ticket"
 msgstr "您确定要取消该与会者吗？这将使其门票作废"
 
@@ -385,19 +408,23 @@ msgstr "您确定要删除此促销代码吗？"
 msgid "Are you sure you want to delete this question?"
 msgstr "您确定要删除这个问题吗？"
 
-#: src/components/layouts/Event/index.tsx:96
+#: src/components/layouts/Event/index.tsx:97
 msgid "Are you sure you want to make this event draft? This will make the event invisible to the public"
 msgstr "您确定要将此活动设为草稿吗？这将使公众无法看到该活动"
 
-#: src/components/layouts/Event/index.tsx:97
+#: src/components/layouts/Event/index.tsx:98
 msgid "Are you sure you want to make this event public? This will make the event visible to the public"
 msgstr "您确定要将此事件公开吗？这将使事件对公众可见"
 
-#: src/components/forms/QuestionForm/index.tsx:89
+#: src/components/common/CapacityAssignmentList/index.tsx:163
+msgid "Are you sure you would like to delete this Capacity Assignment?"
+msgstr "您确定要删除此容量分配吗？"
+
+#: src/components/forms/QuestionForm/index.tsx:90
 msgid "Ask once per attendee"
 msgstr "每位与会者提问一次"
 
-#: src/components/forms/QuestionForm/index.tsx:83
+#: src/components/forms/QuestionForm/index.tsx:84
 msgid "Ask once per order"
 msgstr "每份订单询问一次"
 
@@ -422,7 +449,7 @@ msgstr "与会者提问"
 msgid "Attendees"
 msgstr "与会者"
 
-#: src/components/modals/SendMessageModal/index.tsx:138
+#: src/components/modals/SendMessageModal/index.tsx:144
 msgid "Attendees with a specific ticket"
 msgstr "持有特定门票的与会者"
 
@@ -470,7 +497,7 @@ msgstr "背景类型"
 msgid "Basic Details"
 msgstr "基本详情"
 
-#: src/components/modals/SendMessageModal/index.tsx:210
+#: src/components/modals/SendMessageModal/index.tsx:216
 msgid "Before you send!"
 msgstr "发送之前"
 
@@ -502,7 +529,7 @@ msgstr "加利福尼亚州"
 msgid "Camera permission was denied. <0>Request Permission</0> again, or if this doesn't work, you will need to <1>grant this page</1> access to your camera in your browser settings."
 msgstr "相机权限被拒绝。<0>再次请求权限</0>，如果还不行，则需要在浏览器设置中<1>授予此页面</1>访问相机的权限。"
 
-#: src/components/common/AttendeeTable/index.tsx:211
+#: src/components/common/AttendeeTable/index.tsx:190
 #: src/components/common/PromoCodeTable/index.tsx:39
 #: src/utilites/confirmationDialog.tsx:11
 msgid "Cancel"
@@ -533,6 +560,23 @@ msgstr "取消将取消与此订单相关的所有机票，并将机票放回可
 msgid "Cancelled"
 msgstr "已取消"
 
+#: src/components/forms/CapaciyAssigmentForm/index.tsx:41
+#: src/components/layouts/Event/index.tsx:47
+msgid "Capacity"
+msgstr "容量"
+
+#: src/components/modals/CreateCapacityAssignmentModal/index.tsx:36
+msgid "Capacity Assignment created successfully"
+msgstr "容量分配创建成功"
+
+#: src/components/common/CapacityAssignmentList/index.tsx:31
+msgid "Capacity Assignment deleted successfully"
+msgstr "容量分配删除成功"
+
+#: src/components/routes/event/CapacityAssignments/index.tsx:32
+msgid "Capacity Management"
+msgstr "容量管理"
+
 #: src/components/routes/event/HomepageDesigner/CoverUpload/index.tsx:80
 msgid "Change Cover"
 msgstr "更改封面"
@@ -559,15 +603,15 @@ msgstr "查看"
 msgid "Check-in"
 msgstr "办理登机手续"
 
-#: src/components/layouts/Event/index.tsx:51
+#: src/components/layouts/Event/index.tsx:52
 msgid "Check-In"
 msgstr "办理登机手续"
 
-#: src/components/forms/QuestionForm/index.tsx:112
+#: src/components/forms/QuestionForm/index.tsx:113
 msgid "Checkbox options allow multiple selections"
 msgstr "复选框选项允许多重选择"
 
-#: src/components/forms/QuestionForm/index.tsx:110
+#: src/components/forms/QuestionForm/index.tsx:111
 msgid "Checkboxes"
 msgstr "复选框"
 
@@ -596,7 +640,7 @@ msgstr "选择背景颜色"
 msgid "Choose an account"
 msgstr "选择账户"
 
-#: src/components/common/CheckoutQuestion/index.tsx:158
+#: src/components/common/CheckoutQuestion/index.tsx:160
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:125
 msgid "City"
 msgstr "城市"
@@ -605,7 +649,7 @@ msgstr "城市"
 msgid "Clear Search Text"
 msgstr "清除搜索文本"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:265
+#: src/components/routes/ticket-widget/SelectTickets/index.tsx:266
 msgid "click here"
 msgstr "点击此处"
 
@@ -618,7 +662,7 @@ msgstr "点击复制"
 msgid "Close"
 msgstr "关闭"
 
-#: src/components/layouts/Event/index.tsx:192
+#: src/components/layouts/Event/index.tsx:193
 msgid "Close sidebar"
 msgstr "关闭侧边栏"
 
@@ -645,7 +689,7 @@ msgstr "颜色必须是有效的十六进制颜色代码。例如#ffffff"
 msgid "Colors"
 msgstr "颜色"
 
-#: src/components/layouts/Event/index.tsx:89
+#: src/components/layouts/Event/index.tsx:90
 msgid "Coming Soon"
 msgstr "即将推出"
 
@@ -723,7 +767,7 @@ msgstr "内容背景颜色"
 #: src/components/common/WidgetEditor/index.tsx:31
 #: src/components/common/WidgetEditor/index.tsx:217
 #: src/components/layouts/Checkout/CheckoutFooter/index.tsx:36
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:354
+#: src/components/routes/ticket-widget/SelectTickets/index.tsx:355
 msgid "Continue"
 msgstr "继续"
 
@@ -776,7 +820,7 @@ msgstr "复制链接"
 msgid "Copy URL"
 msgstr "复制 URL"
 
-#: src/components/common/CheckoutQuestion/index.tsx:170
+#: src/components/common/CheckoutQuestion/index.tsx:172
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:143
 msgid "Country"
 msgstr "国家"
@@ -794,6 +838,7 @@ msgid "Create a Promo Code"
 msgstr "创建促销代码"
 
 #: src/components/common/TicketsTable/index.tsx:74
+#: src/components/modals/CreateCapacityAssignmentModal/index.tsx:59
 msgid "Create a Ticket"
 msgstr "创建票单"
 
@@ -808,6 +853,13 @@ msgstr "创建一个组织者"
 #: src/components/modals/CreateAttendeeModal/index.tsx:210
 msgid "Create Attendee"
 msgstr "创建与会者"
+
+#: src/components/common/CapacityAssignmentList/index.tsx:63
+#: src/components/modals/CreateCapacityAssignmentModal/index.tsx:68
+#: src/components/modals/CreateCapacityAssignmentModal/index.tsx:78
+#: src/components/routes/event/CapacityAssignments/index.tsx:46
+msgid "Create Capacity Assignment"
+msgstr "创建容量分配"
 
 #: src/components/modals/CreateEventModal/index.tsx:67
 #: src/components/routes/events/Dashboard/index.tsx:120
@@ -841,8 +893,8 @@ msgstr "创建问题"
 msgid "Create Tax or Fee"
 msgstr "创建税费"
 
-#: src/components/modals/CreateTicketModal/index.tsx:81
-#: src/components/modals/CreateTicketModal/index.tsx:89
+#: src/components/modals/CreateTicketModal/index.tsx:82
+#: src/components/modals/CreateTicketModal/index.tsx:90
 #: src/components/routes/event/tickets.tsx:48
 msgid "Create Ticket"
 msgstr "创建机票"
@@ -898,7 +950,7 @@ msgstr "定制您的活动页面"
 msgid "Customize your event page to match your brand and style."
 msgstr "定制您的活动页面，以符合您的品牌和风格。"
 
-#: src/components/common/AttendeeTable/index.tsx:205
+#: src/components/common/CapacityAssignmentList/index.tsx:156
 #: src/components/common/OrdersTable/index.tsx:131
 #: src/components/common/PromoCodeTable/index.tsx:180
 #: src/components/common/QuestionsTable/index.tsx:113
@@ -906,12 +958,16 @@ msgstr "定制您的活动页面，以符合您的品牌和风格。"
 msgid "Danger zone"
 msgstr "危险区"
 
+#: src/components/common/AttendeeTable/index.tsx:187
+msgid "Danger Zone"
+msgstr "危险区"
+
 #: src/components/layouts/Event/index.tsx:39
 msgid "Dashboard"
 msgstr "仪表板"
 
 #: src/components/common/OrderDetails/index.tsx:31
-#: src/components/forms/QuestionForm/index.tsx:134
+#: src/components/forms/QuestionForm/index.tsx:135
 msgid "Date"
 msgstr "日期"
 
@@ -919,10 +975,18 @@ msgstr "日期"
 msgid "Date & Time"
 msgstr "日期和时间"
 
+#: src/components/forms/CapaciyAssigmentForm/index.tsx:37
+msgid "Day one capacity"
+msgstr "第一天容量"
+
 #: src/components/common/PromoCodeTable/index.tsx:39
 #: src/components/common/TaxAndFeeList/index.tsx:73
 msgid "Delete"
 msgstr "删除"
+
+#: src/components/common/CapacityAssignmentList/index.tsx:159
+msgid "Delete Capacity"
+msgstr "删除容量"
 
 #: src/components/common/PromoCodeTable/index.tsx:184
 msgid "Delete code"
@@ -944,8 +1008,8 @@ msgstr "删除问题"
 msgid "Delete ticket"
 msgstr "删除机票"
 
-#: src/components/forms/TaxAndFeeForm/index.tsx:80
-#: src/components/forms/TicketForm/index.tsx:216
+#: src/components/forms/TaxAndFeeForm/index.tsx:81
+#: src/components/forms/TicketForm/index.tsx:217
 #: src/components/modals/CreateEventModal/index.tsx:117
 #: src/components/modals/DuplicateEventModal/index.tsx:75
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:78
@@ -955,6 +1019,10 @@ msgstr "说明"
 #: src/components/routes/ticket-widget/CollectInformation/index.tsx:285
 msgid "Details"
 msgstr "详细信息"
+
+#: src/components/forms/CapaciyAssigmentForm/index.tsx:26
+msgid "Disable this capacity track capacity without stopping ticket sales"
+msgstr "禁用此容量以追踪容量而不停止售票"
 
 #: src/components/common/PromoCodeTable/index.tsx:69
 msgid "Discount"
@@ -972,7 +1040,7 @@ msgstr "{0}中的折扣"
 msgid "Discount Type"
 msgstr "折扣类型"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:274
+#: src/components/routes/ticket-widget/SelectTickets/index.tsx:275
 msgid "Dismiss"
 msgstr "解散"
 
@@ -980,7 +1048,7 @@ msgstr "解散"
 msgid "Don't have an account?   <0>Sign Up</0>"
 msgstr "没有帐户？   <0>注册</0>"
 
-#: src/components/forms/TicketForm/index.tsx:139
+#: src/components/forms/TicketForm/index.tsx:140
 msgid "Donation / Pay what you'd like ticket"
 msgstr "捐款/自费门票"
 
@@ -992,7 +1060,7 @@ msgstr "拖放或点击"
 msgid "Drag to sort"
 msgstr "拖动排序"
 
-#: src/components/forms/QuestionForm/index.tsx:122
+#: src/components/forms/QuestionForm/index.tsx:123
 msgid "Dropdown selection"
 msgstr "下拉选择"
 
@@ -1021,7 +1089,7 @@ msgstr "复制设置"
 msgid "Duplicate Tickets"
 msgstr "复制票"
 
-#: src/components/forms/TicketForm/index.tsx:75
+#: src/components/forms/TicketForm/index.tsx:76
 msgid "Early bird"
 msgstr "早起的鸟儿"
 
@@ -1033,7 +1101,7 @@ msgstr "编辑"
 msgid "Edit {0}"
 msgstr "编辑 {0}"
 
-#: src/components/common/AttendeeTable/index.tsx:191
+#: src/components/common/AttendeeTable/index.tsx:174
 msgid "Edit attendee"
 msgstr "编辑与会者"
 
@@ -1041,6 +1109,15 @@ msgstr "编辑与会者"
 #: src/components/modals/EditAttendeeModal/index.tsx:129
 msgid "Edit Attendee"
 msgstr "编辑参会者"
+
+#: src/components/common/CapacityAssignmentList/index.tsx:146
+msgid "Edit Capacity"
+msgstr "编辑容量"
+
+#: src/components/modals/EditCapacityAssignmentModal/index.tsx:66
+#: src/components/modals/EditCapacityAssignmentModal/index.tsx:74
+msgid "Edit Capacity Assignment"
+msgstr "编辑容量分配"
 
 #: src/components/common/PromoCodeTable/index.tsx:169
 msgid "Edit Code"
@@ -1080,16 +1157,16 @@ msgstr "编辑用户"
 msgid "Edit User"
 msgstr "编辑用户"
 
-#: src/components/forms/TaxAndFeeForm/index.tsx:73
+#: src/components/forms/TaxAndFeeForm/index.tsx:74
 msgid "eg. 2.50 for $2.50"
 msgstr "例如2.50 换 2.50"
 
-#: src/components/forms/TaxAndFeeForm/index.tsx:73
+#: src/components/forms/TaxAndFeeForm/index.tsx:74
 msgid "eg. 23.5 for 23.5%"
 msgstr "例如23.5 表示 23.5%"
 
 #: src/components/common/AttendeeDetails/index.tsx:22
-#: src/components/common/AttendeeTable/index.tsx:117
+#: src/components/common/AttendeeTable/index.tsx:110
 #: src/components/common/OrderDetails/index.tsx:23
 #: src/components/forms/OrganizerForm/index.tsx:32
 #: src/components/modals/EditUserModal/index.tsx:80
@@ -1152,6 +1229,10 @@ msgstr "嵌入代码"
 msgid "Embed Script"
 msgstr "嵌入脚本"
 
+#: src/components/forms/CapaciyAssigmentForm/index.tsx:20
+msgid "Enable this capacity to stop ticket sales when the limit is reached"
+msgstr "启用此容量以在达到限制时停止售票"
+
 #: src/components/modals/CreateEventModal/index.tsx:131
 #: src/components/modals/DuplicateEventModal/index.tsx:89
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:92
@@ -1204,11 +1285,11 @@ msgstr "事件默认值"
 msgid "Event duplicated successfully"
 msgstr "事件成功复制"
 
-#: src/components/layouts/Event/index.tsx:149
+#: src/components/layouts/Event/index.tsx:150
 msgid "Event is not visible to the public"
 msgstr "公众无法看到活动"
 
-#: src/components/layouts/Event/index.tsx:148
+#: src/components/layouts/Event/index.tsx:149
 msgid "Event is visible to the public"
 msgstr "活动对公众可见"
 
@@ -1216,21 +1297,21 @@ msgstr "活动对公众可见"
 msgid "Event location & venue details"
 msgstr "活动地点和场地详情"
 
-#: src/components/layouts/Event/index.tsx:170
+#: src/components/layouts/Event/index.tsx:171
 msgid "Event page"
 msgstr "活动页面"
 
-#: src/components/layouts/Event/index.tsx:108
+#: src/components/layouts/Event/index.tsx:109
 #: src/components/routes/event/GettingStarted/index.tsx:37
 msgid "Event status update failed. Please try again later"
 msgstr "活动状态更新失败。请稍后再试"
 
-#: src/components/layouts/Event/index.tsx:105
+#: src/components/layouts/Event/index.tsx:106
 #: src/components/routes/event/GettingStarted/index.tsx:34
 msgid "Event status updated"
 msgstr "事件状态已更新"
 
-#: src/components/layouts/Event/index.tsx:129
+#: src/components/layouts/Event/index.tsx:130
 msgid "Events"
 msgstr "活动"
 
@@ -1238,7 +1319,7 @@ msgstr "活动"
 msgid "Expires"
 msgstr "到期"
 
-#: src/components/forms/PromoCodeForm/index.tsx:81
+#: src/components/forms/PromoCodeForm/index.tsx:82
 msgid "Expiry Date"
 msgstr "有效期"
 
@@ -1247,7 +1328,7 @@ msgstr "有效期"
 msgid "Export"
 msgstr "出口"
 
-#: src/components/common/AttendeeTable/index.tsx:105
+#: src/components/common/AttendeeTable/index.tsx:98
 msgid "Failed to cancel attendee"
 msgstr "取消与会者失败"
 
@@ -1267,7 +1348,7 @@ msgstr "导出与会者失败。请重试。"
 msgid "Failed to export orders. Please try again."
 msgstr "导出订单失败。请重试。"
 
-#: src/components/common/AttendeeTable/index.tsx:58
+#: src/components/common/AttendeeTable/index.tsx:51
 msgid "Failed to resend ticket email"
 msgstr "重新发送票据电子邮件失败"
 
@@ -1281,11 +1362,11 @@ msgstr "重新发送票据电子邮件失败"
 msgid "Fee"
 msgstr "费用"
 
-#: src/components/common/GlobalMenu/index.tsx:32
+#: src/components/common/GlobalMenu/index.tsx:30
 msgid "Feedback"
 msgstr "反馈意见"
 
-#: src/components/forms/TicketForm/index.tsx:284
+#: src/components/forms/TicketForm/index.tsx:312
 msgid "Fees"
 msgstr "费用"
 
@@ -1342,11 +1423,11 @@ msgstr "忘记密码？"
 msgid "Free"
 msgstr "免费"
 
-#: src/components/forms/TicketForm/index.tsx:133
+#: src/components/forms/TicketForm/index.tsx:134
 msgid "Free Ticket"
 msgstr "免费门票"
 
-#: src/components/forms/TicketForm/index.tsx:135
+#: src/components/forms/TicketForm/index.tsx:136
 msgid "Free ticket, no payment information required"
 msgstr "免费门票，无需支付信息"
 
@@ -1383,13 +1464,17 @@ msgstr "销售总额"
 msgid "Guests"
 msgstr "宾客"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:363
+#: src/components/routes/ticket-widget/SelectTickets/index.tsx:364
 msgid "Have a promo code?"
 msgstr "有促销代码吗？"
 
 #: src/components/forms/OrganizerForm/index.tsx:33
 msgid "hello@awesome-events.com"
 msgstr "hello@awesome-events.com"
+
+#: src/components/common/GlobalMenu/index.tsx:24
+msgid "Help & Support"
+msgstr "帮助与支持"
 
 #: src/components/common/WidgetEditor/index.tsx:293
 msgid "Here is an example of how you can use the component in your application."
@@ -1425,12 +1510,12 @@ msgstr "隐藏问题"
 msgid "hidden questions"
 msgstr "隐藏问题"
 
-#: src/components/forms/QuestionForm/index.tsx:223
+#: src/components/forms/QuestionForm/index.tsx:224
 msgid "Hidden questions are only visible to the event organizer and not to the customer."
 msgstr "隐藏问题只有活动组织者可以看到，客户看不到。"
 
-#: src/components/forms/TicketForm/index.tsx:262
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:333
+#: src/components/forms/TicketForm/index.tsx:290
+#: src/components/routes/ticket-widget/SelectTickets/index.tsx:334
 msgid "Hide"
 msgstr "隐藏"
 
@@ -1446,35 +1531,35 @@ msgstr "隐藏隐藏问题"
 msgid "Hide the getting started page from the sidebar"
 msgstr "隐藏侧边栏中的入门页面"
 
-#: src/components/forms/QuestionForm/index.tsx:224
+#: src/components/forms/QuestionForm/index.tsx:225
 msgid "Hide this question"
 msgstr "隐藏此问题"
 
-#: src/components/forms/TicketForm/index.tsx:333
+#: src/components/forms/TicketForm/index.tsx:361
 msgid "Hide this ticket from customers"
 msgstr "向客户隐藏此票据"
 
-#: src/components/forms/TicketForm/index.tsx:100
+#: src/components/forms/TicketForm/index.tsx:101
 msgid "Hide this tier from users"
 msgstr "向用户隐藏此层级"
 
-#: src/components/forms/TicketForm/index.tsx:317
+#: src/components/forms/TicketForm/index.tsx:345
 msgid "Hide ticket after sale end date"
 msgstr "隐藏销售截止日期后的机票"
 
-#: src/components/forms/TicketForm/index.tsx:315
+#: src/components/forms/TicketForm/index.tsx:343
 msgid "Hide ticket before sale start date"
 msgstr "在开售日期前隐藏机票"
 
-#: src/components/forms/TicketForm/index.tsx:328
+#: src/components/forms/TicketForm/index.tsx:356
 msgid "Hide ticket unless user has applicable promo code"
 msgstr "隐藏机票，除非用户有适用的促销代码"
 
-#: src/components/forms/TicketForm/index.tsx:321
+#: src/components/forms/TicketForm/index.tsx:349
 msgid "Hide ticket when sold out"
 msgstr "售罄后隐藏门票"
 
-#: src/components/forms/TicketForm/index.tsx:98
+#: src/components/forms/TicketForm/index.tsx:99
 msgid "Hiding a ticket will prevent users from seeing it on the event page."
 msgstr "隐藏票单将阻止用户在活动页面上看到该票单。"
 
@@ -1482,7 +1567,7 @@ msgstr "隐藏票单将阻止用户在活动页面上看到该票单。"
 msgid "Homepage Design"
 msgstr "主页设计"
 
-#: src/components/layouts/Event/index.tsx:49
+#: src/components/layouts/Event/index.tsx:50
 msgid "Homepage Designer"
 msgstr "主页设计师"
 
@@ -1498,7 +1583,7 @@ msgstr "荷马"
 msgid "How many minutes the customer has to complete their order. We recommend at least 15 minutes"
 msgstr "客户有多少分钟来完成订单。我们建议至少 15 分钟"
 
-#: src/components/forms/PromoCodeForm/index.tsx:86
+#: src/components/forms/PromoCodeForm/index.tsx:87
 msgid "How many times can this code be used?"
 msgstr "这个代码可以使用多少次？"
 
@@ -1514,7 +1599,7 @@ msgstr "https://example-maps-service.com/..."
 msgid "I agree to the <0>terms and conditions</0>"
 msgstr "我同意<0>条款和条件</0>。"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:261
+#: src/components/routes/ticket-widget/SelectTickets/index.tsx:262
 msgid "If a new tab did not open, please  <0><1>{0}</1>.</0>"
 msgstr "如果新标签页没有打开，请<0><1>{0}</1>.</0>。"
 
@@ -1550,6 +1635,7 @@ msgstr "图片上传成功"
 msgid "Image width must be at least 900px and height at least 50px"
 msgstr "图片宽度必须至少为 900px，高度必须至少为 50px"
 
+#: src/components/forms/CapaciyAssigmentForm/index.tsx:24
 #: src/components/modals/EditUserModal/index.tsx:111
 msgid "Inactive"
 msgstr "不活动"
@@ -1567,8 +1653,8 @@ msgid "Include tax and fees in the price"
 msgstr "价格中包含税费"
 
 #: src/components/layouts/Event/index.tsx:54
-msgid "Integrations"
-msgstr "集成"
+#~ msgid "Integrations"
+#~ msgstr "集成"
 
 #: src/components/routes/account/ManageAccount/sections/Users/index.tsx:39
 msgid "Invitation resent!"
@@ -1596,7 +1682,7 @@ msgstr "约翰"
 msgid "Johnson"
 msgstr "约翰逊"
 
-#: src/components/forms/TicketForm/index.tsx:74
+#: src/components/forms/TicketForm/index.tsx:75
 msgid "Label"
 msgstr "标签"
 
@@ -1654,7 +1740,7 @@ msgstr "登录"
 msgid "Login"
 msgstr "登录"
 
-#: src/components/common/GlobalMenu/index.tsx:38
+#: src/components/common/GlobalMenu/index.tsx:36
 msgid "Logout"
 msgstr "注销"
 
@@ -1662,11 +1748,11 @@ msgstr "注销"
 msgid "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam placerat elementum..."
 msgstr "Lorem ipsum dolor sit amet, consectetur adipiscing elit.Nam placerat elementum..."
 
-#: src/components/forms/QuestionForm/index.tsx:217
+#: src/components/forms/QuestionForm/index.tsx:218
 msgid "Make this question mandatory"
 msgstr "将此问题作为必答题"
 
-#: src/components/common/AttendeeTable/index.tsx:175
+#: src/components/common/CapacityAssignmentList/index.tsx:143
 #: src/components/common/EventCard/index.tsx:89
 #: src/components/common/OrdersTable/index.tsx:94
 #: src/components/common/OrdersTable/index.tsx:109
@@ -1704,11 +1790,11 @@ msgstr "管理 Stripe 付款详情"
 msgid "Manage your users and their permissions"
 msgstr "管理用户及其权限"
 
-#: src/components/forms/QuestionForm/index.tsx:216
+#: src/components/forms/QuestionForm/index.tsx:217
 msgid "Mandatory questions must be answered before the customer can checkout."
 msgstr "在顾客结账前，必须回答必填问题。"
 
-#: src/components/common/AttendeeTable/index.tsx:75
+#: src/components/common/AttendeeTable/index.tsx:68
 msgid "Manually add an Attendee"
 msgstr "手动添加与会者"
 
@@ -1721,11 +1807,11 @@ msgstr "手动添加与会者"
 msgid "Manually adding an attendee will adjust ticket quantity."
 msgstr "手动添加与会者将调整门票数量。"
 
-#: src/components/forms/TicketForm/index.tsx:301
+#: src/components/forms/TicketForm/index.tsx:329
 msgid "Maximum Per Order"
 msgstr "每份订单的最高限额"
 
-#: src/components/common/AttendeeTable/index.tsx:185
+#: src/components/common/AttendeeTable/index.tsx:169
 msgid "Message attendee"
 msgstr "与会者留言"
 
@@ -1733,7 +1819,7 @@ msgstr "与会者留言"
 msgid "Message Attendees"
 msgstr "留言参与者"
 
-#: src/components/modals/SendMessageModal/index.tsx:158
+#: src/components/modals/SendMessageModal/index.tsx:164
 msgid "Message attendees with specific tickets"
 msgstr "向与会者发送特定门票的信息"
 
@@ -1741,7 +1827,7 @@ msgstr "向与会者发送特定门票的信息"
 msgid "Message buyer"
 msgstr "留言买家"
 
-#: src/components/modals/SendMessageModal/index.tsx:182
+#: src/components/modals/SendMessageModal/index.tsx:188
 msgid "Message Content"
 msgstr "留言内容"
 
@@ -1758,11 +1844,11 @@ msgstr "发送的信息"
 msgid "Messages"
 msgstr "信息"
 
-#: src/components/forms/TicketForm/index.tsx:299
+#: src/components/forms/TicketForm/index.tsx:327
 msgid "Minimum Per Order"
 msgstr "每次订购的最低数量"
 
-#: src/components/forms/TicketForm/index.tsx:229
+#: src/components/forms/TicketForm/index.tsx:231
 msgid "Minimum Price"
 msgstr "最低价格"
 
@@ -1770,11 +1856,11 @@ msgstr "最低价格"
 msgid "Miscellaneous Settings"
 msgstr "杂项设置"
 
-#: src/components/forms/QuestionForm/index.tsx:104
+#: src/components/forms/QuestionForm/index.tsx:105
 msgid "Multi line text box"
 msgstr "多行文本框"
 
-#: src/components/forms/TicketForm/index.tsx:147
+#: src/components/forms/TicketForm/index.tsx:148
 msgid "Multiple price options. Perfect for early bird tickets etc."
 msgstr "多种价格选择。非常适合早鸟票等。"
 
@@ -1795,10 +1881,11 @@ msgid "Nam placerat elementum..."
 msgstr "Nam placerat elementum..."
 
 #: src/components/common/AttendeeDetails/index.tsx:14
-#: src/components/common/AttendeeTable/index.tsx:116
+#: src/components/common/AttendeeTable/index.tsx:109
 #: src/components/common/OrderDetails/index.tsx:15
+#: src/components/forms/CapaciyAssigmentForm/index.tsx:36
 #: src/components/forms/TaxAndFeeForm/index.tsx:61
-#: src/components/forms/TicketForm/index.tsx:211
+#: src/components/forms/TicketForm/index.tsx:212
 #: src/components/modals/CreateEventModal/index.tsx:111
 #: src/components/modals/DuplicateEventModal/index.tsx:69
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:63
@@ -1831,9 +1918,13 @@ msgstr "新密码"
 msgid "No"
 msgstr "没有"
 
-#: src/components/common/AttendeeTable/index.tsx:64
+#: src/components/common/AttendeeTable/index.tsx:57
 msgid "No Attendees to show"
 msgstr "无与会者"
+
+#: src/components/common/CapacityAssignmentList/index.tsx:42
+msgid "No Capacity Assignments"
+msgstr "没有容量分配"
 
 #: src/components/forms/PromoCodeForm/index.tsx:46
 msgid "No Discount"
@@ -1939,7 +2030,7 @@ msgstr "在线活动"
 msgid "Online Event Details"
 msgstr "在线活动详情"
 
-#: src/components/modals/SendMessageModal/index.tsx:211
+#: src/components/modals/SendMessageModal/index.tsx:217
 msgid ""
 "Only important emails, which are directly related to this event, should be sent using this form.\n"
 "Any misuse, including sending promotional emails, will lead to an immediate account ban."
@@ -1947,15 +2038,15 @@ msgstr ""
 "只有与本次活动直接相关的重要邮件才能使用此表单发送。\n"
 "任何滥用行为，包括发送促销邮件，都将导致账户立即被封禁。"
 
-#: src/components/layouts/Event/index.tsx:199
+#: src/components/layouts/Event/index.tsx:200
 msgid "Open sidebar"
 msgstr "打开侧边栏"
 
-#: src/components/forms/QuestionForm/index.tsx:43
+#: src/components/forms/QuestionForm/index.tsx:44
 msgid "Option {i}"
 msgstr "方案 {i}"
 
-#: src/components/forms/QuestionForm/index.tsx:26
+#: src/components/forms/QuestionForm/index.tsx:27
 msgid "Options"
 msgstr "选项"
 
@@ -1963,7 +2054,7 @@ msgstr "选项"
 msgid "or"
 msgstr "或"
 
-#: src/components/common/AttendeeTable/index.tsx:118
+#: src/components/common/AttendeeTable/index.tsx:111
 msgid "Order"
 msgstr "订购"
 
@@ -2059,7 +2150,7 @@ msgstr "页面未找到"
 msgid "Page views"
 msgstr "页面浏览量"
 
-#: src/components/forms/TicketForm/index.tsx:276
+#: src/components/forms/TicketForm/index.tsx:304
 msgid "page."
 msgstr "page."
 
@@ -2067,7 +2158,7 @@ msgstr "page."
 msgid "paid"
 msgstr "付讫"
 
-#: src/components/forms/TicketForm/index.tsx:127
+#: src/components/forms/TicketForm/index.tsx:128
 msgid "Paid Ticket"
 msgstr "付费机票"
 
@@ -2133,7 +2224,7 @@ msgstr "百分比 金额"
 msgid "Place this in the <head> of your website."
 msgstr "将其放在网站的 <head> 中。"
 
-#: src/components/forms/QuestionForm/index.tsx:29
+#: src/components/forms/QuestionForm/index.tsx:30
 msgid "Please add at least one option"
 msgstr "请至少添加一个选项"
 
@@ -2158,9 +2249,13 @@ msgstr "请检查您的电子邮件以确认您的电子邮件地址"
 msgid "Please complete the form below to accept your invitation"
 msgstr "请填写下表接受邀请"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:259
+#: src/components/routes/ticket-widget/SelectTickets/index.tsx:260
 msgid "Please continue in the new tab"
 msgstr "请在新标签页中继续"
+
+#: src/components/modals/CreateCapacityAssignmentModal/index.tsx:47
+msgid "Please create a ticket"
+msgstr "请创建一张票"
 
 #: src/components/routes/auth/ResetPassword/index.tsx:55
 msgid "Please enter your new password"
@@ -2174,11 +2269,11 @@ msgstr "请注意"
 msgid "Please remove filters and set sorting to \"Homepage order\" to enable sorting"
 msgstr "请移除筛选器，并将排序设置为 \"主页顺序\"，以启用排序功能"
 
-#: src/components/modals/SendMessageModal/index.tsx:146
+#: src/components/modals/SendMessageModal/index.tsx:152
 msgid "Please select"
 msgstr "请选择"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:215
+#: src/components/routes/ticket-widget/SelectTickets/index.tsx:216
 msgid "Please select at least one ticket"
 msgstr "请至少选择一张票"
 
@@ -2215,8 +2310,8 @@ msgid "Preview"
 msgstr "预览"
 
 #: src/components/common/TicketsTable/SortableTicket/index.tsx:153
-#: src/components/forms/TicketForm/index.tsx:70
-#: src/components/forms/TicketForm/index.tsx:229
+#: src/components/forms/TicketForm/index.tsx:71
+#: src/components/forms/TicketForm/index.tsx:231
 msgid "Price"
 msgstr "价格"
 
@@ -2224,7 +2319,7 @@ msgstr "价格"
 msgid "Price display mode"
 msgstr "价格显示模式"
 
-#: src/components/forms/TicketForm/index.tsx:240
+#: src/components/forms/TicketForm/index.tsx:268
 msgid "Price tiers"
 msgstr "价格等级"
 
@@ -2257,11 +2352,11 @@ msgstr "简介"
 msgid "Profile updated successfully"
 msgstr "成功更新个人资料"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:159
+#: src/components/routes/ticket-widget/SelectTickets/index.tsx:160
 msgid "Promo {promo_code} code applied"
 msgstr "已使用促销 {promo_code} 代码"
 
-#: src/components/forms/TicketForm/index.tsx:325
+#: src/components/forms/TicketForm/index.tsx:353
 msgid "Promo Code page"
 msgstr "促销代码页面"
 
@@ -2274,18 +2369,18 @@ msgstr "促销代码"
 msgid "Promo codes can be used to offer discounts, presale access, or provide special access to your event."
 msgstr "促销代码可用于提供折扣、预售权限或为您的活动提供特殊权限。"
 
-#: src/components/forms/QuestionForm/index.tsx:194
+#: src/components/forms/QuestionForm/index.tsx:195
 msgid ""
 "Provide additional context or instructions for this question. Use this field to add terms\n"
 "and conditions, guidelines, or any important information that attendees need to know before answering."
 msgstr "提供此问题的附加背景或说明。使用此字段添加条款和条件、指南或参与者在回答前需要知道的任何重要信息。"
 
 #: src/components/common/GlobalMenu/index.tsx:25
-msgid "Purchase License"
-msgstr "购买许可证"
+#~ msgid "Purchase License"
+#~ msgstr "购买许可证"
 
-#: src/components/forms/TicketForm/index.tsx:82
-#: src/components/forms/TicketForm/index.tsx:234
+#: src/components/forms/TicketForm/index.tsx:83
+#: src/components/forms/TicketForm/index.tsx:248
 msgid "Quantity Available"
 msgstr "可用数量"
 
@@ -2293,11 +2388,11 @@ msgstr "可用数量"
 msgid "Question deleted"
 msgstr "问题已删除"
 
-#: src/components/forms/QuestionForm/index.tsx:193
+#: src/components/forms/QuestionForm/index.tsx:194
 msgid "Question Description"
 msgstr "问题描述"
 
-#: src/components/forms/QuestionForm/index.tsx:183
+#: src/components/forms/QuestionForm/index.tsx:184
 msgid "Question Title"
 msgstr "问题标题"
 
@@ -2312,7 +2407,7 @@ msgstr "问题"
 msgid "Questions sorted successfully"
 msgstr "问题已成功分类"
 
-#: src/components/forms/QuestionForm/index.tsx:116
+#: src/components/forms/QuestionForm/index.tsx:117
 msgid "Radio Option"
 msgstr "无线电选项"
 
@@ -2348,11 +2443,11 @@ msgstr "退款"
 msgid "Register"
 msgstr "注册"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:372
+#: src/components/routes/ticket-widget/SelectTickets/index.tsx:373
 msgid "remove"
 msgstr "去除"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:373
+#: src/components/routes/ticket-widget/SelectTickets/index.tsx:374
 msgid "Remove"
 msgstr "移除"
 
@@ -2372,7 +2467,7 @@ msgstr "重新发送邀请"
 msgid "Resend order email"
 msgstr "重新发送订单电子邮件"
 
-#: src/components/common/AttendeeTable/index.tsx:199
+#: src/components/common/AttendeeTable/index.tsx:179
 msgid "Resend ticket email"
 msgstr "重新发送票务电子邮件"
 
@@ -2406,8 +2501,8 @@ msgstr "撤销邀请"
 msgid "Role"
 msgstr "角色"
 
-#: src/components/forms/TicketForm/index.tsx:93
-#: src/components/forms/TicketForm/index.tsx:309
+#: src/components/forms/TicketForm/index.tsx:94
+#: src/components/forms/TicketForm/index.tsx:337
 msgid "Sale End Date"
 msgstr "销售结束日期"
 
@@ -2415,8 +2510,8 @@ msgstr "销售结束日期"
 msgid "Sale ended"
 msgstr "销售结束"
 
-#: src/components/forms/TicketForm/index.tsx:88
-#: src/components/forms/TicketForm/index.tsx:307
+#: src/components/forms/TicketForm/index.tsx:89
+#: src/components/forms/TicketForm/index.tsx:335
 msgid "Sale Start Date"
 msgstr "销售开始日期"
 
@@ -2489,6 +2584,10 @@ msgstr "按主题或内容搜索..."
 msgid "Search by ticket name..."
 msgstr "按票务名称搜索..."
 
+#: src/components/routes/event/CapacityAssignments/index.tsx:37
+msgid "Search capacity assignments..."
+msgstr "搜索容量分配..."
+
 #: src/components/common/SearchBar/index.tsx:36
 msgid "Search..."
 msgstr "搜索..."
@@ -2530,11 +2629,12 @@ msgstr "选择机票"
 msgid "Select Ticket Tier"
 msgstr "选择票价等级"
 
-#: src/components/forms/QuestionForm/index.tsx:160
+#: src/components/forms/CapaciyAssigmentForm/index.tsx:49
+#: src/components/forms/QuestionForm/index.tsx:161
 msgid "Select tickets"
 msgstr "选择票"
 
-#: src/components/forms/TicketForm/index.tsx:270
+#: src/components/forms/TicketForm/index.tsx:298
 msgid "Select..."
 msgstr "选择..."
 
@@ -2542,7 +2642,7 @@ msgstr "选择..."
 msgid "Send"
 msgstr "发送"
 
-#: src/components/modals/SendMessageModal/index.tsx:191
+#: src/components/modals/SendMessageModal/index.tsx:197
 msgid "Send a copy to <0>{0}</0>"
 msgstr "将副本发送至 <0>{0}</0>"
 
@@ -2550,7 +2650,7 @@ msgstr "将副本发送至 <0>{0}</0>"
 msgid "Send a message"
 msgstr "发送信息"
 
-#: src/components/modals/SendMessageModal/index.tsx:201
+#: src/components/modals/SendMessageModal/index.tsx:207
 msgid "Send as a test. This will send the message to your email address instead of the recipients."
 msgstr "作为测试发送。这将把信息发送到您的电子邮件地址，而不是收件人的电子邮件地址。"
 
@@ -2586,7 +2686,7 @@ msgstr "搜索引擎优化标题"
 msgid "Service Fee"
 msgstr "服务费"
 
-#: src/components/forms/TicketForm/index.tsx:141
+#: src/components/forms/TicketForm/index.tsx:142
 msgid "Set a minimum price and let users pay more if they choose"
 msgstr "设定最低价格，用户可选择支付更高的价格"
 
@@ -2607,11 +2707,11 @@ msgstr "设置"
 msgid "Share"
 msgstr "分享"
 
-#: src/components/forms/TicketForm/index.tsx:262
+#: src/components/forms/TicketForm/index.tsx:290
 msgid "Show"
 msgstr "显示"
 
-#: src/components/forms/TicketForm/index.tsx:319
+#: src/components/forms/TicketForm/index.tsx:347
 msgid "Show available ticket quantity"
 msgstr "显示可用门票数量"
 
@@ -2619,7 +2719,7 @@ msgstr "显示可用门票数量"
 msgid "Show hidden questions"
 msgstr "显示隐藏问题"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:333
+#: src/components/routes/ticket-widget/SelectTickets/index.tsx:334
 msgid "Show more"
 msgstr "显示更多"
 
@@ -2635,7 +2735,7 @@ msgstr "在客户结账后，在订单摘要页面上显示给客户"
 msgid "Shown to the customer before they checkout"
 msgstr "在顾客结账前向他们展示"
 
-#: src/components/forms/QuestionForm/index.tsx:130
+#: src/components/forms/QuestionForm/index.tsx:131
 msgid "Shows common address fields, including country"
 msgstr "显示常用地址字段，包括国家"
 
@@ -2643,7 +2743,7 @@ msgstr "显示常用地址字段，包括国家"
 msgid "Simpson"
 msgstr "辛普森"
 
-#: src/components/forms/QuestionForm/index.tsx:98
+#: src/components/forms/QuestionForm/index.tsx:99
 msgid "Single line text box"
 msgstr "单行文本框"
 
@@ -2695,7 +2795,7 @@ msgstr "对不起，出了点问题。请重新开始结账。"
 msgid "Sorry, something went wrong loading this page."
 msgstr "抱歉，在加载此页面时出了点问题。"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:224
+#: src/components/routes/ticket-widget/SelectTickets/index.tsx:225
 msgid "Sorry, this promo code is not recognized"
 msgstr "对不起，此优惠代码不可用"
 
@@ -2711,7 +2811,7 @@ msgstr "应用筛选器和排序时禁用排序"
 msgid "Spanish"
 msgstr "西班牙语"
 
-#: src/components/forms/TicketForm/index.tsx:129
+#: src/components/forms/TicketForm/index.tsx:130
 msgid "Standard ticket with a fixed price"
 msgstr "固定价格标准票"
 
@@ -2722,22 +2822,23 @@ msgstr "固定价格标准票"
 msgid "Start Date"
 msgstr "开始日期"
 
-#: src/components/common/CheckoutQuestion/index.tsx:161
+#: src/components/common/CheckoutQuestion/index.tsx:163
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:130
 msgid "State or Region"
 msgstr "州或地区"
 
 #: src/components/common/AttendeeDetails/index.tsx:30
-#: src/components/common/AttendeeTable/index.tsx:120
+#: src/components/common/AttendeeTable/index.tsx:113
 #: src/components/common/OrderDetails/index.tsx:43
 #: src/components/common/OrdersTable/index.tsx:154
 #: src/components/common/TicketsTable/SortableTicket/index.tsx:138
+#: src/components/forms/CapaciyAssigmentForm/index.tsx:61
 #: src/components/modals/EditUserModal/index.tsx:103
 #: src/components/routes/account/ManageAccount/sections/Users/index.tsx:157
 msgid "Status"
 msgstr "现状"
 
-#: src/components/modals/SendMessageModal/index.tsx:177
+#: src/components/modals/SendMessageModal/index.tsx:183
 msgid "Subject"
 msgstr "主题"
 
@@ -2750,7 +2851,7 @@ msgstr "小计"
 msgid "Success! {0} will receive an email shortly."
 msgstr "成功！{0} 将很快收到一封电子邮件。"
 
-#: src/components/common/AttendeeTable/index.tsx:98
+#: src/components/common/AttendeeTable/index.tsx:91
 msgid "Successfully {0} attendee"
 msgstr "成功 {0} 参会者"
 
@@ -2787,6 +2888,10 @@ msgstr "成功创建票单"
 #: src/components/modals/EditAttendeeModal/index.tsx:60
 msgid "Successfully updated attendee"
 msgstr "成功更新与会者"
+
+#: src/components/modals/EditCapacityAssignmentModal/index.tsx:47
+msgid "Successfully updated Capacity Assignment"
+msgstr "容量分配更新成功"
 
 #: src/components/routes/event/Settings/Sections/EmailSettings/index.tsx:43
 msgid "Successfully Updated Email Settings"
@@ -2851,17 +2956,17 @@ msgstr "税费"
 msgid "Tax or Fee deleted successfully"
 msgstr "成功删除税费"
 
-#: src/components/forms/TicketForm/index.tsx:281
+#: src/components/forms/TicketForm/index.tsx:309
 msgid "Taxes"
 msgstr "税收"
 
-#: src/components/forms/TicketForm/index.tsx:269
-#: src/components/forms/TicketForm/index.tsx:276
+#: src/components/forms/TicketForm/index.tsx:297
+#: src/components/forms/TicketForm/index.tsx:304
 msgid "Taxes and Fees"
 msgstr "税费"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:119
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:167
+#: src/components/routes/ticket-widget/SelectTickets/index.tsx:120
+#: src/components/routes/ticket-widget/SelectTickets/index.tsx:168
 msgid "That promo code is invalid"
 msgstr "促销代码无效"
 
@@ -2883,7 +2988,7 @@ msgstr "与会者接收电子邮件的语言。"
 msgid "The link you clicked is invalid."
 msgstr "您点击的链接无效。"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:319
+#: src/components/routes/ticket-widget/SelectTickets/index.tsx:320
 msgid "The maximum numbers number of tickets for Generals is {0}"
 msgstr "将军票的最大票数为{0}。"
 
@@ -2903,7 +3008,7 @@ msgstr "显示给客户的价格不包括税费。税费将单独显示"
 msgid "The styling settings you choose apply only to copied HTML and won't be stored."
 msgstr "您选择的样式设置只适用于复制的 HTML，不会被保存。"
 
-#: src/components/forms/TicketForm/index.tsx:273
+#: src/components/forms/TicketForm/index.tsx:301
 msgid "The taxes and fees to apply to this ticket. You can create new taxes and fees on the"
 msgstr "适用于该票据的税费。您可以在"
 
@@ -2911,7 +3016,7 @@ msgstr "适用于该票据的税费。您可以在"
 msgid "The title of the event that will be displayed in search engine results and when sharing on social media. By default, the event title will be used"
 msgstr "活动标题，将显示在搜索引擎结果中，并在社交媒体上分享时显示。默认情况下，将使用事件标题"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:248
+#: src/components/routes/ticket-widget/SelectTickets/index.tsx:249
 msgid "There are no tickets available for this event"
 msgstr "本次活动没有门票"
 
@@ -2984,7 +3089,7 @@ msgstr "此订单正在处理中。"
 msgid "This order page is no longer available."
 msgstr "此订购页面已不可用。"
 
-#: src/components/forms/TicketForm/index.tsx:331
+#: src/components/forms/TicketForm/index.tsx:359
 msgid "This overrides all visibility settings and will hide the ticket from all customers."
 msgstr "这会覆盖所有可见性设置，并对所有客户隐藏票单。"
 
@@ -3016,12 +3121,12 @@ msgstr "除非使用促销代码，否则此票为隐藏票"
 msgid "This user is not active, as they have not accepted their invitation."
 msgstr "该用户未激活，因为他们没有接受邀请。"
 
-#: src/components/common/AttendeeTable/index.tsx:211
+#: src/components/common/AttendeeTable/index.tsx:190
 msgid "ticket"
 msgstr "入场券"
 
 #: src/components/common/AttendeeDetails/index.tsx:46
-#: src/components/common/AttendeeTable/index.tsx:119
+#: src/components/common/AttendeeTable/index.tsx:112
 #: src/components/modals/CreateAttendeeModal/index.tsx:146
 #: src/components/modals/EditAttendeeModal/index.tsx:108
 #: src/components/modals/ViewAttendeeModal/index.tsx:55
@@ -3032,7 +3137,7 @@ msgstr "门票"
 msgid "Ticket deleted successfully"
 msgstr "成功删除票单"
 
-#: src/components/common/AttendeeTable/index.tsx:57
+#: src/components/common/AttendeeTable/index.tsx:50
 msgid "Ticket email has been resent to attendee"
 msgstr "门票电子邮件已重新发送给与会者"
 
@@ -3045,8 +3150,8 @@ msgstr "门票销售"
 msgid "Ticket Tier"
 msgstr "门票等级"
 
-#: src/components/forms/TicketForm/index.tsx:189
-#: src/components/forms/TicketForm/index.tsx:196
+#: src/components/forms/TicketForm/index.tsx:190
+#: src/components/forms/TicketForm/index.tsx:197
 msgid "Ticket Type"
 msgstr "机票类型"
 
@@ -3081,15 +3186,15 @@ msgstr "已售出的门票"
 msgid "Tickets sorted successfully"
 msgstr "成功分类的门票"
 
-#: src/components/forms/TicketForm/index.tsx:63
+#: src/components/forms/TicketForm/index.tsx:64
 msgid "Tier {0}"
 msgstr "{0}级"
 
-#: src/components/forms/TicketForm/index.tsx:145
+#: src/components/forms/TicketForm/index.tsx:146
 msgid "Tiered Ticket"
 msgstr "分层票"
 
-#: src/components/forms/TicketForm/index.tsx:203
+#: src/components/forms/TicketForm/index.tsx:204
 msgid ""
 "Tiered tickets allow you to offer multiple price options for the same ticket.\n"
 "This is perfect for early bird tickets, or offering different price\n"
@@ -3119,7 +3224,7 @@ msgstr "TIP"
 msgid "Title"
 msgstr "标题"
 
-#: src/components/layouts/Event/index.tsx:48
+#: src/components/layouts/Event/index.tsx:49
 msgid "Tools"
 msgstr "工具"
 
@@ -3162,8 +3267,8 @@ msgstr "无法{0}与会者"
 msgid "Unable to create question. Please check the your details"
 msgstr "无法创建问题。请检查您的详细信息"
 
-#: src/components/modals/CreateTicketModal/index.tsx:62
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:103
+#: src/components/modals/CreateTicketModal/index.tsx:63
+#: src/components/routes/ticket-widget/SelectTickets/index.tsx:104
 msgid "Unable to create ticket. Please check the your details"
 msgstr "无法创建票单。请检查您的详细信息"
 
@@ -3175,9 +3280,10 @@ msgstr "无法更新问题。请检查您的详细信息"
 msgid "United States"
 msgstr "美国"
 
-#: src/components/forms/PromoCodeForm/index.tsx:84
-#: src/components/forms/TicketForm/index.tsx:80
-#: src/components/forms/TicketForm/index.tsx:232
+#: src/components/forms/CapaciyAssigmentForm/index.tsx:42
+#: src/components/forms/PromoCodeForm/index.tsx:85
+#: src/components/forms/TicketForm/index.tsx:81
+#: src/components/forms/TicketForm/index.tsx:245
 msgid "Unlimited"
 msgstr "无限制"
 
@@ -3253,7 +3359,7 @@ msgstr "增值税"
 msgid "Venue Name"
 msgstr "地点名称"
 
-#: src/components/common/AttendeeTable/index.tsx:180
+#: src/components/common/AttendeeTable/index.tsx:164
 msgid "View attendee"
 msgstr "查看与会者"
 
@@ -3287,11 +3393,11 @@ msgstr "查看订单"
 msgid "View order details"
 msgstr "查看订单详情"
 
-#: src/components/forms/TicketForm/index.tsx:212
+#: src/components/forms/TicketForm/index.tsx:213
 msgid "VIP Ticket"
 msgstr "贵宾票"
 
-#: src/components/forms/TicketForm/index.tsx:312
+#: src/components/forms/TicketForm/index.tsx:340
 msgid "Visibility"
 msgstr "可见性"
 
@@ -3331,23 +3437,24 @@ msgstr "欢迎回来{0} 👋"
 msgid "Welcome to Hi.Events, {0} 👋"
 msgstr "欢迎来到 Hi.Events, {0} 👋"
 
-#: src/components/forms/TicketForm/index.tsx:202
+#: src/components/forms/TicketForm/index.tsx:203
 msgid "What are Tiered Tickets?"
 msgstr "什么是分层门票？"
 
-#: src/components/forms/PromoCodeForm/index.tsx:67
+#: src/components/forms/PromoCodeForm/index.tsx:68
 msgid "What tickets does this code apply to? (Applies to all by default)"
 msgstr "此代码适用于哪些机票？(默认适用于所有）"
 
-#: src/components/forms/QuestionForm/index.tsx:158
+#: src/components/forms/CapaciyAssigmentForm/index.tsx:47
+#: src/components/forms/QuestionForm/index.tsx:159
 msgid "What tickets should this question be apply to?"
 msgstr "该问题应适用于哪些机票？"
 
-#: src/components/forms/QuestionForm/index.tsx:184
+#: src/components/forms/QuestionForm/index.tsx:185
 msgid "What time will you be arriving?"
 msgstr "您什么时候抵达？"
 
-#: src/components/forms/QuestionForm/index.tsx:174
+#: src/components/forms/QuestionForm/index.tsx:175
 msgid "What type of question is this?"
 msgstr "这是什么类型的问题？"
 
@@ -3355,15 +3462,15 @@ msgstr "这是什么类型的问题？"
 msgid "Who is organizing this event?"
 msgstr "这项活动由谁组织？"
 
-#: src/components/modals/SendMessageModal/index.tsx:145
+#: src/components/modals/SendMessageModal/index.tsx:151
 msgid "Who is this message to?"
 msgstr "这条信息是发给谁的？"
 
-#: src/components/forms/QuestionForm/index.tsx:149
+#: src/components/forms/QuestionForm/index.tsx:150
 msgid "Who should be asked this question?"
 msgstr "这个问题应该问谁？"
 
-#: src/components/layouts/Event/index.tsx:50
+#: src/components/layouts/Event/index.tsx:51
 msgid "Widget Embed"
 msgstr "嵌入小部件"
 
@@ -3377,7 +3484,7 @@ msgstr "工作"
 
 #: src/components/modals/CreatePromoCodeModal/index.tsx:57
 #: src/components/modals/CreateQuestionModal/index.tsx:73
-#: src/components/modals/CreateTicketModal/index.tsx:89
+#: src/components/modals/CreateTicketModal/index.tsx:90
 #: src/components/modals/DuplicateEventModal/index.tsx:111
 #: src/components/modals/EditAttendeeModal/index.tsx:129
 #: src/components/modals/EditPromoCodeModal/index.tsx:84
@@ -3392,7 +3499,7 @@ msgstr "工作..."
 msgid "Yes"
 msgstr "是"
 
-#: src/components/forms/TicketForm/index.tsx:294
+#: src/components/forms/TicketForm/index.tsx:322
 msgid "Yes, remove them"
 msgstr "是的，移除它们"
 
@@ -3400,7 +3507,7 @@ msgstr "是的，移除它们"
 msgid "You are changing your email to <0>{0}</0>."
 msgstr "您正在将电子邮件更改为 <0>{0}</0>。"
 
-#: src/components/forms/TicketForm/index.tsx:323
+#: src/components/forms/TicketForm/index.tsx:351
 msgid "You can create a promo code which targets this ticket on the"
 msgstr "您可以在"
 
@@ -3408,11 +3515,11 @@ msgstr "您可以在"
 msgid "You can now start receiving payments through Stripe."
 msgstr "现在您可以开始通过 Stripe 接收付款。"
 
-#: src/components/forms/TicketForm/index.tsx:184
+#: src/components/forms/TicketForm/index.tsx:185
 msgid "You cannot change the ticket type as there are attendees associated with this ticket."
 msgstr "您不能更改票务类型，因为该票务已关联了与会者。"
 
-#: src/components/forms/TicketForm/index.tsx:53
+#: src/components/forms/TicketForm/index.tsx:54
 msgid "You cannot delete this price tier because there are already tickets sold for this tier. You can hide it instead."
 msgstr "您不能删除此价格等级，因为此等级已售出门票。您可以将其隐藏。"
 
@@ -3464,7 +3571,7 @@ msgstr "您尚未完成 Stripe Connect 设置"
 msgid "You have not connected your Stripe account"
 msgstr "您尚未连接 Stripe 账户"
 
-#: src/components/forms/TicketForm/index.tsx:292
+#: src/components/forms/TicketForm/index.tsx:320
 msgid "You have taxes and fees added to a Free Ticket. Would you like to remove or obscure them?"
 msgstr "您在免费机票上添加了税费。您想删除或隐藏它们吗？"
 
@@ -3488,13 +3595,17 @@ msgstr "您必须在活动上线前确认您的电子邮件地址。"
 msgid "You must create a ticket before you can manually add an attendee."
 msgstr "必须先创建机票，然后才能手动添加与会者。"
 
-#: src/components/forms/TicketForm/index.tsx:56
+#: src/components/forms/TicketForm/index.tsx:57
 msgid "You must have at least one price tier"
 msgstr "您必须至少有一个价格等级"
 
-#: src/components/modals/SendMessageModal/index.tsx:217
+#: src/components/modals/SendMessageModal/index.tsx:134
 msgid "You need to verify your account before you can send messages."
 msgstr "发送信息前，您需要验证您的账户。"
+
+#: src/components/modals/CreateCapacityAssignmentModal/index.tsx:51
+msgid "You'll need at a ticket before you can create a capacity assignment."
+msgstr "在创建容量分配之前，您需要一张票。"
 
 #: src/components/common/TicketsTable/index.tsx:68
 msgid "You'll need at least one ticket to get started. Free, paid or let the user decide what to pay."
@@ -3504,7 +3615,7 @@ msgstr "您至少需要一张票才能开始。免费、付费或让用户决定
 msgid "Your account name is used on event pages and in emails."
 msgstr "您的账户名称会在活动页面和电子邮件中使用。"
 
-#: src/components/common/AttendeeTable/index.tsx:69
+#: src/components/common/AttendeeTable/index.tsx:62
 msgid "Your attendees will appear here once they have registered for your event. You can also manually add attendees."
 msgstr "与会者注册参加活动后，就会出现在这里。您也可以手动添加与会者。"
 
@@ -3554,7 +3665,7 @@ msgstr "您的退款正在处理中。"
 msgid "Your ticket for"
 msgstr "您的入场券"
 
-#: src/components/common/CheckoutQuestion/index.tsx:166
+#: src/components/common/CheckoutQuestion/index.tsx:168
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:137
 msgid "Zip or Postal Code"
 msgstr "邮政编码"

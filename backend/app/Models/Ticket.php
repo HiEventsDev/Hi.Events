@@ -37,4 +37,9 @@ class Ticket extends BaseModel
     {
         return $this->belongsToMany(TaxAndFee::class, 'ticket_taxes_and_fees');
     }
+
+    public function capacity_assignments(): BelongsToMany
+    {
+        return $this->belongsToMany(CapacityAssignment::class, 'ticket_capacity_assignments');
+    }
 }

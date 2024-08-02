@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace HiEvents\Repository\Eloquent;
 
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\DB;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
@@ -16,6 +13,9 @@ use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Models\Order;
 use HiEvents\Models\OrderItem;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 
 class OrderRepository extends BaseRepository implements OrderRepositoryInterface
 {

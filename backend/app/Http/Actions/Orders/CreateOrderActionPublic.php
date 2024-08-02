@@ -34,7 +34,7 @@ class CreateOrderActionPublic extends BaseAction
      */
     public function __invoke(CreateOrderRequest $request, int $eventId): JsonResponse
     {
-        $this->orderCreateRequestValidationService->validateRequest($eventId, $request->all());
+        $this->orderCreateRequestValidationService->validateRequestData($eventId, $request->all());
 
         $order = $this->orderHandler->handle(
             $eventId,

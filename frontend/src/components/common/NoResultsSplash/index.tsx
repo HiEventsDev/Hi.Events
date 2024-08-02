@@ -14,7 +14,7 @@ export const NoResultsSplash = ({
                                     heading = t`'There\'s nothing to show yet'`,
                                     children,
                                     subHeading,
-                                    imageHref = '/no-results-empty-boxes.svg'
+                                    imageHref = '/no-results-empty-boxes.svg',
                                 }: NoResultsSplashProps) => {
     const [searchParams] = useSearchParams();
     const hasSearchQuery = !!searchParams.get('query');

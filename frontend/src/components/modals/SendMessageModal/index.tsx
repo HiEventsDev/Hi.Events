@@ -128,6 +128,12 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
             heading={t`Send a message`}
         >
             <form onSubmit={form.onSubmit(handleSend)}>
+
+                {!isAccountVerified && (
+                    <Alert mt={20} variant={'light'} icon={<IconAlertCircle size="1rem"/>}>
+                        {t`You need to verify your account before you can send messages.`}
+                    </Alert>
+                )}
                 <fieldset disabled={!isAccountVerified}>
                     {!isPreselectedRecipient && (
                         <Select
@@ -211,12 +217,6 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
                         {t`Only important emails, which are directly related to this event, should be sent using this form.
                          Any misuse, including sending promotional emails, will lead to an immediate account ban.`}
                     </Alert>
-
-                    {!isAccountVerified && (
-                        <Alert mt={20} variant={'light'} icon={<IconAlertCircle size="1rem"/>}>
-                            {t`You need to verify your account before you can send messages.`}
-                        </Alert>
-                    )}
 
                     <Switch mt={20} {...form.getInputProps('acknowledgement', {type: 'checkbox'})}
                             label={(
