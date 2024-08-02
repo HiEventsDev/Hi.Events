@@ -87,27 +87,6 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
         return $this->findFirstByField('short_id', $orderShortId);
     }
 
-    public function getReservedQuantityForTicketPrice(int $ticketId, int $ticketPriceId): int
-    {
-        $query = <<<SQL
-            SELECT COALESCE(SUM(order_items.quantity), 0) as reserved_quantity
-            FROM orders
-            INNER JOIN order_items ON orders.id = order_items.order_id
-            WHERE order_items.ticket_id = :ticketId AND order_items.ticket_price_id = :ticketPriceId
-            AND orders.status = 'RESERVED'
-            AND current_timestamp < orders.reserved_until
-            AND orders.deleted_at IS NULL
-            AND order_items.deleted_at IS NULL
-        SQL;
-
-        $result = $this->db->selectOne($query, [
-            'ticketId' => $ticketId,
-            'ticketPriceId' => $ticketPriceId,
-        ]);
-
-        return (int)$result->reserved_quantity;
-    }
-
     public function getDomainObject(): string
     {
         return OrderDomainObject::class;

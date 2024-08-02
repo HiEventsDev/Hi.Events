@@ -15,7 +15,5 @@ use HiEvents\Repository\Eloquent\BaseRepository;
  */
 interface EventRepositoryInterface extends RepositoryInterface
 {
-    public function getAvailableTicketQuantities(int $eventId): Collection;
-
     public function findEvents(array $where, QueryParamsDTO $params): LengthAwarePaginator;
 }
