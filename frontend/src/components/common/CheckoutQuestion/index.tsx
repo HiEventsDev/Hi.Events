@@ -6,6 +6,7 @@ import countries from "../../../../data/countries.json";
 import {InputGroup} from "../InputGroup";
 import classes from "./CheckoutQuestion.module.scss";
 import {UserGeneratedContent} from "../UserGeneratedContent";
+import {DatePicker} from "@mantine/dates";
 
 interface CheckoutQuestionProps {
     questions: Question[],
@@ -58,6 +59,18 @@ const MultiLineTextInput = ({question, name, form}: QuestionInputProps) => {
                 description={(<UserGeneratedContent dangerouslySetInnerHTML={{__html: question.description || ''}}/>)}
                 {...form.getInputProps(`${name}.answer`)} withAsterisk={question.required}
                 label={question.title}/>
+        </>
+    );
+}
+
+const DateInput = ({question, name, form}: QuestionInputProps) => {
+    return (
+        <>
+            <TextInput withAsterisk={question.required}
+                       type="date"
+                       {...form.getInputProps(`${name}.answer`)}
+                       label={question.title}
+            />
         </>
     );
 }
@@ -180,6 +193,9 @@ export const QuestionInput = ({question, name, form}: QuestionInputProps) => {
             break;
         case QuestionType.SINGLE_LINE_TEXT:
             input = <SingleLineTextInput question={question} name={name} form={form}/>;
+            break;
+        case QuestionType.DATE:
+            input = <DateInput question={question} name={name} form={form}/>;
             break;
     }
 
