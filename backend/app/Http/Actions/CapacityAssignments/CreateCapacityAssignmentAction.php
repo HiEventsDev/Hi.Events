@@ -30,7 +30,6 @@ class CreateCapacityAssignmentAction extends BaseAction
                     'name' => $request->validated('name'),
                     'event_id' => $eventId,
                     'capacity' => $request->validated('capacity'),
-                    'applies_to' => $request->validated('applies_to'),
                     'status' => $request->validated('status'),
                     'ticket_ids' => $request->validated('ticket_ids'),
                 ]),

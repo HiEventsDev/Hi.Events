@@ -403,7 +403,6 @@ export interface CapacityAssignment {
     event_id: number;
     name: string;
     used_capacity: number;
-    applies_to: 'TICKETS' | 'EVENT';
     status: 'ACTIVE' | 'INACTIVE';
     capacity: number | undefined;
     tickets: {
@@ -412,7 +411,7 @@ export interface CapacityAssignment {
     }[];
 }
 
-export type CapacityAssignmentRequest = Omit<CapacityAssignment, 'id' | 'event_id' | 'used_capacity'> & {
+export type CapacityAssignmentRequest = Omit<CapacityAssignment, 'id' | 'event_id' | 'used_capacity' | 'tickets'> & {
     ticket_ids: IdParam[];
 };
 

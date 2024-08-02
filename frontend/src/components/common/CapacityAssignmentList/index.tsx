@@ -46,9 +46,13 @@ export const CapacityAssignmentList = ({capacityAssignments, openCreateModal}: C
                         <p>
                             <Trans>
                                 <p>
-                                    Capacity assignments allow you to manage capacity for specific tickets or the entire
-                                    event. Perfect for multi-day events, workshops, or any event where you need to manage
-                                    capacity.
+                                    Capacity assignments let you manage capacity across tickets or an entire event. Ideal
+                                    for multi-day events, workshops, and more, where controlling attendance is crucial.
+                                </p>
+                                <p>
+                                    For instance, you can associate a capacity assignment with <b>Day One</b> and <b>All
+                                    Days</b> ticket. Once the capacity is reached, both tickets will automatically stop
+                                    being available for sale.
                                 </p>
                             </Trans>
                         </p>
@@ -77,13 +81,7 @@ export const CapacityAssignmentList = ({capacityAssignments, openCreateModal}: C
                         <Card className={classes.capacityCard} key={assignment.id}>
                             <div className={classes.capacityAssignmentHeader}>
                                 <div className={classes.capacityAssignmentAppliesTo}>
-                                    {assignment.applies_to === 'EVENT' && (
-                                        <div className={classes.appliesToText}>
-                                            {t`Applies to entire event`}
-                                        </div>
-                                    )}
-
-                                    {assignment.applies_to === 'TICKETS' && (
+                                    {assignment.tickets && (
                                         <Popover
                                             title={assignment.tickets.map((ticket) => (
                                                 <div key={ticket.id}>
@@ -148,7 +146,6 @@ export const CapacityAssignmentList = ({capacityAssignments, openCreateModal}: C
                                                         label: t`Edit Capacity`,
                                                         icon: <IconPencil size={14}/>,
                                                         onClick: () => {
-                                                            console.log('Editing assignment:', assignment);
                                                             setSelectedCapacityAssignmentId(assignment.id as IdParam);
                                                             openEditModal();
                                                         }

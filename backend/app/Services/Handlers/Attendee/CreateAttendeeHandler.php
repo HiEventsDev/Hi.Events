@@ -26,7 +26,7 @@ use HiEvents\Repository\Interfaces\TaxAndFeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\TicketRepositoryInterface;
 use HiEvents\Services\Domain\Order\OrderManagementService;
 use HiEvents\Services\Domain\Tax\TaxAndFeeRollupService;
-use HiEvents\Services\Domain\Ticket\TicketQuantityService;
+use HiEvents\Services\Domain\Ticket\TicketQuantityUpdateService;
 use HiEvents\Services\Handlers\Attendee\DTO\CreateAttendeeDTO;
 use HiEvents\Services\Handlers\Attendee\DTO\CreateAttendeeTaxAndFeeDTO;
 use Illuminate\Database\DatabaseManager;
@@ -35,18 +35,18 @@ use Illuminate\Support\Str;
 use RuntimeException;
 use Throwable;
 
-readonly class CreateAttendeeHandler
+class CreateAttendeeHandler
 {
     public function __construct(
-        private AttendeeRepositoryInterface  $attendeeRepository,
-        private OrderRepositoryInterface     $orderRepository,
-        private TicketRepositoryInterface    $ticketRepository,
-        private EventRepositoryInterface     $eventRepository,
-        private TicketQuantityService        $ticketQuantityAdjustmentService,
-        private DatabaseManager              $databaseManager,
-        private TaxAndFeeRepositoryInterface $taxAndFeeRepository,
-        private TaxAndFeeRollupService       $taxAndFeeRollupService,
-        private OrderManagementService       $orderManagementService,
+        private readonly AttendeeRepositoryInterface  $attendeeRepository,
+        private readonly OrderRepositoryInterface     $orderRepository,
+        private readonly TicketRepositoryInterface    $ticketRepository,
+        private readonly EventRepositoryInterface     $eventRepository,
+        private readonly TicketQuantityUpdateService  $ticketQuantityAdjustmentService,
+        private readonly DatabaseManager              $databaseManager,
+        private readonly TaxAndFeeRepositoryInterface $taxAndFeeRepository,
+        private readonly TaxAndFeeRollupService       $taxAndFeeRollupService,
+        private readonly OrderManagementService       $orderManagementService,
     )
     {
     }
@@ -226,7 +226,7 @@ readonly class CreateAttendeeHandler
 
     private function fireEventsAndUpdateQuantities(CreateAttendeeDTO $attendeeDTO, OrderDomainObject $order): void
     {
-        $this->ticketQuantityAdjustmentService->increaseTicketPriceQuantitySold(
+        $this->ticketQuantityAdjustmentService->increaseQuantitySold(
             priceId: $attendeeDTO->ticket_price_id,
         );
 

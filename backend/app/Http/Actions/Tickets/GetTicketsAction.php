@@ -4,34 +4,30 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Tickets;
 
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\TicketDomainObject;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Resources\Ticket\TicketResource;
+use HiEvents\Services\Handlers\Ticket\GetTicketsHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use HiEvents\DomainObjects\EventDomainObject;
-use HiEvents\DomainObjects\TaxAndFeesDomainObject;
-use HiEvents\DomainObjects\TicketDomainObject;
-use HiEvents\DomainObjects\TicketPriceDomainObject;
-use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Http\DTO\QueryParamsDTO;
-use HiEvents\Repository\Interfaces\TicketRepositoryInterface;
-use HiEvents\Resources\Ticket\TicketResource;
 
 class GetTicketsAction extends BaseAction
 {
-    private TicketRepositoryInterface $ticketRepository;
-
-    public function __construct(TicketRepositoryInterface $ticketRepository)
+    public function __construct(
+        private readonly GetTicketsHandler $getTicketsHandler,
+    )
     {
-        $this->ticketRepository = $ticketRepository;
     }
 
     public function __invoke(int $eventId, Request $request): JsonResponse
     {
         $this->isActionAuthorized($eventId, EventDomainObject::class);
 
-        $tickets = $this->ticketRepository
-            ->loadRelation(TicketPriceDomainObject::class)
-            ->loadRelation(TaxAndFeesDomainObject::class)
-            ->findByEventId($eventId, QueryParamsDTO::fromArray($request->query->all()));
+        $tickets = $this->getTicketsHandler->handle(
+            eventId: $eventId,
+            queryParamsDTO: $this->getPaginationQueryParams($request),
+        );
 
         return $this->filterableResourceResponse(
             resource: TicketResource::class,

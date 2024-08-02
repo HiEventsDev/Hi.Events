@@ -31,7 +31,6 @@ export const EditCapacityAssignmentModal = ({
         initialValues: {
             name: '',
             capacity: undefined,
-            applies_to: 'EVENT',
             status: 'ACTIVE',
             ticket_ids: [],
         }
@@ -57,7 +56,6 @@ export const EditCapacityAssignmentModal = ({
             form.setValues({
                 name: capacityAssignment.name,
                 capacity: capacityAssignment.capacity,
-                applies_to: capacityAssignment.applies_to,
                 status: capacityAssignment.status,
                 ticket_ids: capacityAssignment.tickets?.map(ticket => String(ticket.id)),
             });

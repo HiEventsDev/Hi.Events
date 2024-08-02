@@ -16,6 +16,8 @@ class TicketPriceDomainObject extends Generated\TicketPriceDomainObjectAbstract
 
     private ?bool $isAvailable = null;
 
+    private ?string $offSaleReason = null;
+
     public function getPriceBeforeDiscount(): ?float
     {
         return $this->priceBeforeDiscount;
@@ -98,5 +100,17 @@ class TicketPriceDomainObject extends Generated\TicketPriceDomainObjectAbstract
     {
         $this->isAvailable = $isAvailable;
         return $this;
+    }
+
+    public function setOffSaleReason(?string $offSaleReason): TicketDomainObject
+    {
+        $this->offSaleReason = $offSaleReason;
+
+        return $this;
+    }
+
+    public function getOffSaleReason(): ?string
+    {
+        return $this->offSaleReason;
     }
 }

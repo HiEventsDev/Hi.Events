@@ -2,7 +2,6 @@
 
 namespace HiEvents\Http\Request\CapacityAssigment;
 
-use HiEvents\DomainObjects\Enums\CapacityAssignmentAppliesTo;
 use HiEvents\DomainObjects\Status\CapacityAssignmentStatus;
 use HiEvents\Http\Request\BaseRequest;
 use HiEvents\Validators\Rules\RulesHelper;
@@ -15,16 +14,15 @@ class UpsertCapacityAssignmentRequest extends BaseRequest
         return [
             'name' => RulesHelper::REQUIRED_STRING,
             'capacity' => ['nullable', 'numeric', 'min:1'],
-            'applies_to' => [Rule::in(CapacityAssignmentAppliesTo::valuesArray())],
             'status' => [Rule::in(CapacityAssignmentStatus::valuesArray())],
-            'ticket_ids' => ['nullable', 'required_if:applies_to,' . CapacityAssignmentAppliesTo::TICKETS->name, 'array'],
+            'ticket_ids' => ['required', 'array'],
         ];
     }
 
     public function messages(): array
     {
         return [
-            'ticket_ids.required_if' => __('Please select at least one ticket.'),
+            'ticket_ids.required' => __('Please select at least one ticket.'),
         ];
     }
 }

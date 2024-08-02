@@ -15,6 +15,8 @@ class TicketDomainObject extends Generated\TicketDomainObjectAbstract implements
 
     private ?Collection $prices = null;
 
+    private ?string $offSaleReason = null;
+
     public static function getDefaultSort(): string
     {
         return self::ORDER;
@@ -184,5 +186,17 @@ class TicketDomainObject extends Generated\TicketDomainObjectAbstract implements
     public function getQuantitySold(): int
     {
         return $this->getTicketPrices()?->sum(fn(TicketPriceDomainObject $price) => $price->getQuantitySold()) ?? 0;
+    }
+
+    public function setOffSaleReason(?string $offSaleReason): TicketDomainObject
+    {
+        $this->offSaleReason = $offSaleReason;
+
+        return $this;
+    }
+
+    public function getOffSaleReason(): ?string
+    {
+        return $this->offSaleReason;
     }
 }

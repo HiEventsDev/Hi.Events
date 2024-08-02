@@ -2,6 +2,7 @@
 
 namespace HiEvents\DomainObjects;
 
+use HiEvents\Constants;
 use HiEvents\DomainObjects\Interfaces\IsSortable;
 use HiEvents\DomainObjects\SortingAndFiltering\AllowedSorts;
 use Illuminate\Support\Collection;
@@ -67,5 +68,19 @@ class CapacityAssignmentDomainObject extends Generated\CapacityAssignmentDomainO
         $this->tickets = $tickets;
 
         return $this;
+    }
+
+    public function isCapacityUnlimited(): bool
+    {
+        return is_null($this->getCapacity());
+    }
+
+    public function getAvailableCapacity(): int
+    {
+        if ($this->isCapacityUnlimited()) {
+            return Constants::INFINITE;
+        }
+
+        return $this->getCapacity() - $this->getUsedCapacity();
     }
 }

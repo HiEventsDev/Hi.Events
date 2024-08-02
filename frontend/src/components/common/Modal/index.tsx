@@ -1,5 +1,6 @@
-import {Modal as MantineModal, ModalProps as MantineModalProps, Title} from "@mantine/core";
+import {Modal as MantineModal, ModalProps as MantineModalProps} from "@mantine/core";
 import React from "react";
+import classes from "./Modal.module.scss";
 
 interface ModalProps {
     heading?: string | React.ReactNode,
@@ -14,21 +15,16 @@ export const Modal = (props: MantineModalProps & ModalProps) => {
                 blur: 3,
             }}
             size={'xl'}
-            withCloseButton={false}
+            withCloseButton={true}
+            title={props.heading}
+            closeOnClickOutside={false}
+            classNames={{
+                title: classes.modalTitle,
+            }}
         >
-            {props.heading && (
-                <MantineModal.Header>
-                    <MantineModal.Title>
-                        <Title order={2}>{props.heading}</Title>
-                    </MantineModal.Title>
-                    {props.withCloseButton && <MantineModal.CloseButton/>}
-                </MantineModal.Header>
-            )}
-
             <div style={{padding: '15px', paddingTop: 0}}>
                 {props.children}
             </div>
-
         </MantineModal>
     )
 }

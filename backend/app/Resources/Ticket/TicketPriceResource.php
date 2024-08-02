@@ -26,6 +26,8 @@ class TicketPriceResource extends BaseResource
             'quantity_sold' => $this->getQuantitySold(),
             'is_sold_out' => $this->isSoldOut(),
             'is_hidden' => $this->getIsHidden(),
+            'off_sale_reason' => $this->getOffSaleReason(),
+            'price_including_taxes_and_fees' => $this->getPriceIncludingTaxAndServiceFee(),
         ];
     }
 }

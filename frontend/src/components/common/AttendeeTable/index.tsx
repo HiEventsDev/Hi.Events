@@ -72,7 +72,7 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
         />
     }
 
-    const handleCancel = (attendee: Attendee) => () => {
+    const handleCancel = (attendee: Attendee) => {
         const message = attendee.status === 'CANCELLED'
             ? t`Are you sure you want to activate this attendee?`
             : t`Are you sure you want to cancel this attendee? This will void their ticket`
@@ -82,7 +82,7 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
                 attendeeId: attendee.id,
                 eventId: eventId,
                 attendeeData: {
-                    status: attendee.status === 'CANCELLED' ? 'active' : 'cancelled'
+                    status: attendee.status === 'CANCELLED' ? 'ACTIVE' : 'CANCELLED'
                 }
             }, {
                 onSuccess: () => {

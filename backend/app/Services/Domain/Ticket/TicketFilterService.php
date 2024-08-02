@@ -2,7 +2,7 @@
 
 namespace HiEvents\Services\Domain\Ticket;
 
-use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\Constants;
 use HiEvents\DomainObjects\PromoCodeDomainObject;
 use HiEvents\DomainObjects\TicketDomainObject;
 use HiEvents\DomainObjects\TicketPriceDomainObject;
@@ -16,20 +16,34 @@ class TicketFilterService
     public function __construct(
         private readonly TaxAndFeeCalculationService           $taxCalculationService,
         private readonly TicketPriceService                    $ticketPriceService,
-        private readonly FetchAvailableTicketQuantitiesService $fetchAvailableTicketQuantitiesService,
+        private readonly AvailableTicketQuantitiesFetchService $fetchAvailableTicketQuantitiesService,
     )
     {
     }
 
-    public function filter(EventDomainObject $event, ?PromoCodeDomainObject $promoCode): ?Collection
+    /**
+     * @param Collection<TicketDomainObject> $tickets
+     * @param PromoCodeDomainObject|null $promoCode
+     * @param bool $hideSoldOutTickets
+     * @return Collection<TicketDomainObject>
+     */
+    public function filter(
+        Collection             $tickets,
+        ?PromoCodeDomainObject $promoCode = null,
+        bool                   $hideSoldOutTickets = true,
+    ): Collection
     {
-        $ticketQuantities = $this->fetchAvailableTicketQuantitiesService->getAvailableTicketQuantities($event->getId());
+        if ($tickets->isEmpty()) {
+            return $tickets;
+        }
 
-        return $event->getTickets()
-            ?->map(fn(TicketDomainObject $ticket) => $this->processTicket($promoCode, $ticket, $ticketQuantities))
-            ->reject(fn(TicketDomainObject $ticket) => $this->filterTicket($ticket, $promoCode))
-            ->each(fn(TicketDomainObject $ticket) => $this->processTicketPrices($ticket));
+        $ticketQuantities = $this->fetchAvailableTicketQuantitiesService
+            ->getAvailableTicketQuantities($tickets->first()->getEventId());
 
+        return $tickets
+            ->map(fn(TicketDomainObject $ticket) => $this->processTicket($ticket, $ticketQuantities->ticketQuantities, $promoCode))
+            ->reject(fn(TicketDomainObject $ticket) => $this->filterTicket($ticket, $promoCode, $hideSoldOutTickets))
+            ->each(fn(TicketDomainObject $ticket) => $this->processTicketPrices($ticket, $hideSoldOutTickets));
     }
 
     private function isHiddenByPromoCode(TicketDomainObject $ticket, ?PromoCodeDomainObject $promoCode): bool
@@ -57,7 +71,11 @@ class TicketFilterService
      * @param Collection<AvailableTicketQuantitiesDTO> $ticketQuantities
      * @return TicketDomainObject
      */
-    private function processTicket(?PromoCodeDomainObject $promoCode, TicketDomainObject $ticket, Collection $ticketQuantities): TicketDomainObject
+    private function processTicket(
+        TicketDomainObject     $ticket,
+        Collection             $ticketQuantities,
+        ?PromoCodeDomainObject $promoCode = null,
+    ): TicketDomainObject
     {
         if ($this->shouldTicketBeDiscounted($promoCode, $ticket)) {
             $ticket->getTicketPrices()?->each(function (TicketPriceDomainObject $price) use ($ticket, $promoCode) {
@@ -67,37 +85,50 @@ class TicketFilterService
         }
 
         $ticket->getTicketPrices()?->map(function (TicketPriceDomainObject $price) use ($ticketQuantities) {
+            $availableQuantity = $ticketQuantities->where('price_id', $price->getId())->first()?->quantity_available;
+            $availableQuantity = $availableQuantity === Constants::INFINITE ? null : $availableQuantity;
             $price->setQuantityAvailable(
-                max($ticketQuantities->where('price_id', $price->getId())->first()?->quantity_available, 0)
+                max($availableQuantity, 0)
             );
         });
 
         return $ticket;
     }
 
-    private function filterTicket(TicketDomainObject $ticket, ?PromoCodeDomainObject $promoCode): bool
+    private function filterTicket(
+        TicketDomainObject     $ticket,
+        ?PromoCodeDomainObject $promoCode = null,
+        bool                   $hideSoldOutTickets = true,
+    ): bool
     {
+        $hidden = false;
+
         if ($this->isHiddenByPromoCode($ticket, $promoCode)) {
-            return true;
+            $ticket->setOffSaleReason(__('Ticket is hidden without promo code'));
+            $hidden = true;
         }
 
         if ($ticket->isSoldOut() && $ticket->getHideWhenSoldOut()) {
-            return true;
+            $ticket->setOffSaleReason(__('Ticket is sold out'));
+            $hidden = true;
         }
 
         if ($ticket->isBeforeSaleStartDate() && $ticket->getHideBeforeSaleStartDate()) {
-            return true;
+            $ticket->setOffSaleReason(__('Ticket is before sale start date'));
+            $hidden = true;
         }
 
         if ($ticket->isAfterSaleEndDate() && $ticket->getHideAfterSaleEndDate()) {
-            return true;
+            $ticket->setOffSaleReason(__('Ticket is after sale end date'));
+            $hidden = true;
         }
 
         if ($ticket->getIsHidden()) {
-            return true;
+            $ticket->setOffSaleReason(__('Ticket is hidden'));
+            $hidden = true;
         }
 
-        return false;
+        return $hidden && $hideSoldOutTickets;
     }
 
     private function processTicketPrice(TicketDomainObject $ticket, TicketPriceDomainObject $price): void
@@ -112,37 +143,47 @@ class TicketFilterService
         $price->setIsAvailable($this->getPriceAvailability($price, $ticket));
     }
 
-    private function filterTicketPrice(TicketDomainObject $ticket, TicketPriceDomainObject $price): bool
+    private function filterTicketPrice(
+        TicketDomainObject      $ticket,
+        TicketPriceDomainObject $price,
+        bool                    $hideSoldOutTickets = true
+    ): bool
     {
+        $hidden = false;
+
         if (!$ticket->isTieredType()) {
             return false;
         }
 
         if ($price->isBeforeSaleStartDate() && $ticket->getHideBeforeSaleStartDate()) {
-            return true;
+            $price->setOffSaleReason(__('Price is before sale start date'));
+            $hidden = true;
         }
 
         if ($price->isAfterSaleEndDate() && $ticket->getHideAfterSaleEndDate()) {
-            return true;
+            $price->setOffSaleReason(__('Price is after sale end date'));
+            $hidden = true;
         }
 
         if ($price->isSoldOut() && $ticket->getHideWhenSoldOut()) {
-            return true;
+            $price->setOffSaleReason(__('Price is sold out'));
+            $hidden = true;
         }
 
         if ($price->getIsHidden()) {
-            return true;
+            $price->setOffSaleReason(__('Price is hidden'));
+            $hidden = true;
         }
 
-        return false;
+        return $hidden && $hideSoldOutTickets;
     }
 
-    private function processTicketPrices(TicketDomainObject $ticket): void
+    private function processTicketPrices(TicketDomainObject $ticket, bool $hideSoldOutTickets = true): void
     {
         $ticket->setTicketPrices(
             $ticket->getTicketPrices()
                 ?->each(fn(TicketPriceDomainObject $price) => $this->processTicketPrice($ticket, $price))
-                ->reject(fn(TicketPriceDomainObject $price) => $this->filterTicketPrice($ticket, $price))
+                ->reject(fn(TicketPriceDomainObject $price) => $this->filterTicketPrice($ticket, $price, $hideSoldOutTickets))
         );
     }
 

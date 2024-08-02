@@ -10,7 +10,7 @@ use HiEvents\DomainObjects\TicketPriceDomainObject;
 use HiEvents\Exceptions\NoTicketsAvailableException;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\TicketRepositoryInterface;
-use HiEvents\Services\Domain\Ticket\TicketQuantityService;
+use HiEvents\Services\Domain\Ticket\TicketQuantityUpdateService;
 use HiEvents\Services\Handlers\Attendee\DTO\EditAttendeeDTO;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Validation\ValidationException;
@@ -18,25 +18,13 @@ use Throwable;
 
 class EditAttendeeHandler
 {
-    private AttendeeRepositoryInterface $attendeeRepository;
-
-    private TicketRepositoryInterface $ticketRepository;
-
-    private TicketQuantityService $ticketQuantityService;
-
-    private DatabaseManager $databaseManager;
-
     public function __construct(
-        AttendeeRepositoryInterface $attendeeRepository,
-        TicketRepositoryInterface   $ticketRepository,
-        TicketQuantityService       $ticketQuantityService,
-        DatabaseManager             $databaseManager,
+        private readonly AttendeeRepositoryInterface $attendeeRepository,
+        private readonly TicketRepositoryInterface   $ticketRepository,
+        private readonly TicketQuantityUpdateService $ticketQuantityService,
+        private readonly DatabaseManager             $databaseManager,
     )
     {
-        $this->attendeeRepository = $attendeeRepository;
-        $this->ticketRepository = $ticketRepository;
-        $this->ticketQuantityService = $ticketQuantityService;
-        $this->databaseManager = $databaseManager;
     }
 
     /**
@@ -59,8 +47,8 @@ class EditAttendeeHandler
     private function adjustTicketQuantities(AttendeeDomainObject $attendee, EditAttendeeDTO $editAttendeeDTO): void
     {
         if ($attendee->getTicketPriceId() !== $editAttendeeDTO->ticket_price_id) {
-            $this->ticketQuantityService->decreaseTicketPriceQuantitySold($editAttendeeDTO->ticket_price_id);
-            $this->ticketQuantityService->increaseTicketPriceQuantitySold($attendee->getTicketPriceId());
+            $this->ticketQuantityService->decreaseQuantitySold($editAttendeeDTO->ticket_price_id);
+            $this->ticketQuantityService->increaseQuantitySold($attendee->getTicketPriceId());
         }
     }
 

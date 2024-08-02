@@ -3,6 +3,7 @@
 namespace HiEvents\Services\Handlers\CapacityAssignment;
 
 use HiEvents\DomainObjects\CapacityAssignmentDomainObject;
+use HiEvents\DomainObjects\Enums\CapacityAssignmentAppliesTo;
 use HiEvents\Services\Domain\CapacityAssignment\UpdateCapacityAssignmentService;
 use HiEvents\Services\Domain\Ticket\Exception\UnrecognizedTicketIdException;
 use HiEvents\Services\Handlers\CapacityAssignment\DTO\UpsertCapacityAssignmentDTO;
@@ -25,7 +26,7 @@ class UpdateCapacityAssignmentHandler
             ->setName($data->name)
             ->setEventId($data->event_id)
             ->setCapacity($data->capacity)
-            ->setAppliesTo($data->applies_to->name)
+            ->setAppliesTo(CapacityAssignmentAppliesTo::TICKETS->name)
             ->setStatus($data->status->name);
 
         return $this->updateCapacityAssignmentService->updateCapacityAssignment(

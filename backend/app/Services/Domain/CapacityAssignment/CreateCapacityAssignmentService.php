@@ -5,7 +5,9 @@ namespace HiEvents\Services\Domain\CapacityAssignment;
 use HiEvents\DomainObjects\CapacityAssignmentDomainObject;
 use HiEvents\DomainObjects\Enums\CapacityAssignmentAppliesTo;
 use HiEvents\DomainObjects\Generated\CapacityAssignmentDomainObjectAbstract;
+use HiEvents\DomainObjects\TicketPriceDomainObject;
 use HiEvents\Repository\Interfaces\CapacityAssignmentRepositoryInterface;
+use HiEvents\Repository\Interfaces\TicketPriceRepositoryInterface;
 use HiEvents\Services\Domain\Ticket\EventTicketValidationService;
 use HiEvents\Services\Domain\Ticket\Exception\UnrecognizedTicketIdException;
 use Illuminate\Database\DatabaseManager;
@@ -17,6 +19,7 @@ class CreateCapacityAssignmentService
         private readonly CapacityAssignmentRepositoryInterface      $capacityAssignmentRepository,
         private readonly EventTicketValidationService               $eventTicketValidationService,
         private readonly CapacityAssignmentTicketAssociationService $capacityAssignmentTicketAssociationService,
+        private readonly TicketPriceRepositoryInterface             $ticketPriceRepository,
     )
     {
     }
@@ -26,7 +29,7 @@ class CreateCapacityAssignmentService
      */
     public function createCapacityAssignment(
         CapacityAssignmentDomainObject $capacityAssignment,
-        ?array                         $ticketIds = null,
+        array                          $ticketIds,
     ): CapacityAssignmentDomainObject
     {
         $this->eventTicketValidationService->validateTicketIds($ticketIds, $capacityAssignment->getEventId());
@@ -47,6 +50,7 @@ class CreateCapacityAssignmentService
                 CapacityAssignmentDomainObjectAbstract::CAPACITY => $capacityAssignment->getCapacity(),
                 CapacityAssignmentDomainObjectAbstract::APPLIES_TO => $capacityAssignment->getAppliesTo(),
                 CapacityAssignmentDomainObjectAbstract::STATUS => $capacityAssignment->getStatus(),
+                CapacityAssignmentDomainObjectAbstract::USED_CAPACITY => $this->getUsedCapacity($ticketIds),
             ]);
 
             if ($capacityAssignment->getAppliesTo() === CapacityAssignmentAppliesTo::TICKETS->name) {
@@ -59,5 +63,12 @@ class CreateCapacityAssignmentService
 
             return $capacityAssignment;
         });
+    }
+
+    private function getUsedCapacity(array $ticketIds): int
+    {
+        $ticketPrices = $this->ticketPriceRepository->findWhereIn('ticket_id', $ticketIds);
+
+        return $ticketPrices->sum(fn(TicketPriceDomainObject $ticketPrice) => $ticketPrice->getQuantitySold());
     }
 }

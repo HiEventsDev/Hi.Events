@@ -13,16 +13,17 @@ import {Button} from "@mantine/core";
 import {IconPlus} from "@tabler/icons-react";
 import {useFilterQueryParamSync} from "../../../../hooks/useFilterQueryParamSync.ts";
 import {QueryFilters} from "../../../../types.ts";
+import {Pagination} from "../../../common/Pagination";
 
 const CapacityAssignments = () => {
     const {eventId} = useParams();
     const [searchParams, setSearchParams] = useFilterQueryParamSync();
-    const {data: capcityAssignmentsData} = useGetEventCapacityAssignments(
+    const {data: capacityAssignmentsData} = useGetEventCapacityAssignments(
         eventId,
         searchParams as QueryFilters,
     );
-    const capacityAssignments = capcityAssignmentsData?.data;
-    const pagination = capcityAssignmentsData?.meta
+    const capacityAssignments = capacityAssignmentsData?.data;
+    const pagination = capacityAssignmentsData?.meta
     const [createModalOpen, {open: openCreateModal, close: closeCreateModal}] = useDisclosure(false);
 
     return (
@@ -40,7 +41,6 @@ const CapacityAssignments = () => {
                 />
             )}>
                 <Button
-                    size={'xs'}
                     leftSection={<IconPlus/>}
                     color={'green'}
                     onClick={() => openCreateModal()}>{t`Create Capacity Assignment`}
@@ -55,6 +55,13 @@ const CapacityAssignments = () => {
             />}
 
             {createModalOpen && <CreateCapacityAssignmentModal onClose={closeCreateModal}/>}
+
+            {(!!capacityAssignments?.length && (pagination?.total || 0) >= 20) && (
+                <Pagination value={searchParams.pageNumber}
+                            onChange={(value) => setSearchParams({pageNumber: value})}
+                            total={Number(pagination?.last_page)}
+                />
+            )}
         </PageBody>
     );
 }

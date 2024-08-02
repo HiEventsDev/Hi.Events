@@ -69,7 +69,9 @@ class TicketRepository extends BaseRepository implements TicketRepositoryInterfa
             ) AS quantity_remaining,
             ticket_prices.initial_quantity_available IS NULL AS unlimited_tickets_available
         FROM ticket_prices
-        WHERE ticket_prices.id = :ticketPriceId AND ticket_prices.ticket_id = :ticketId
+        WHERE ticket_prices.id = :ticketPriceId
+        AND ticket_prices.ticket_id = :ticketId
+        AND ticket_prices.deleted_at IS NULL
     SQL;
 
         $result = $this->db->selectOne($query, [
@@ -124,9 +126,9 @@ class TicketRepository extends BaseRepository implements TicketRepositoryInterfa
 
     public function getCapacityAssignmentsByTicketId(int $ticketId): Collection
     {
-        /** @var Ticket $ticket */
-        $ticket = $this->model->findOrFail($ticketId);
-        $capacityAssignments = $ticket->capacity_assignments()->get();
+        $capacityAssignments = CapacityAssignment::whereHas('tickets', static function($query) use ($ticketId) {
+            $query->where('ticket_id', $ticketId);
+        })->get();
 
         return $this->handleResults($capacityAssignments, CapacityAssignmentDomainObject::class);
     }

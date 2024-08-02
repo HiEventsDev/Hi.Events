@@ -11,7 +11,7 @@ use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Domain\Order\OrderCancelService;
-use HiEvents\Services\Domain\Ticket\TicketQuantityService;
+use HiEvents\Services\Domain\Ticket\TicketQuantityUpdateService;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Collection;
@@ -26,7 +26,7 @@ class OrderCancelServiceTest extends TestCase
     private EventRepositoryInterface $eventRepository;
     private OrderRepositoryInterface $orderRepository;
     private DatabaseManager $databaseManager;
-    private TicketQuantityService $ticketQuantityService;
+    private TicketQuantityUpdateService $ticketQuantityService;
     private OrderCancelService $service;
 
     protected function setUp(): void
@@ -38,7 +38,7 @@ class OrderCancelServiceTest extends TestCase
         $this->eventRepository = m::mock(EventRepositoryInterface::class);
         $this->orderRepository = m::mock(OrderRepositoryInterface::class);
         $this->databaseManager = m::mock(DatabaseManager::class);
-        $this->ticketQuantityService = m::mock(TicketQuantityService::class);
+        $this->ticketQuantityService = m::mock(TicketQuantityUpdateService::class);
 
         $this->service = new OrderCancelService(
             mailer: $this->mailer,
@@ -66,7 +66,7 @@ class OrderCancelServiceTest extends TestCase
         $this->attendeeRepository->shouldReceive('findWhere')->once()->andReturn($attendees);
         $this->attendeeRepository->shouldReceive('updateWhere')->once();
 
-        $this->ticketQuantityService->shouldReceive('decreaseTicketPriceQuantitySold')->twice();
+        $this->ticketQuantityService->shouldReceive('decreaseQuantitySold')->twice();
 
         $this->orderRepository->shouldReceive('updateWhere')->once();
 

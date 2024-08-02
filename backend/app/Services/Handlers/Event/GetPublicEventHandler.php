@@ -55,6 +55,6 @@ readonly class GetPublicEventHandler
             $this->eventPageViewIncrementService->increment($data->eventId, $data->ipAddress);
         }
 
-        return $event->setTickets($this->ticketFilterService->filter($event, $promoCodeDomainObject));
+        return $event->setTickets($this->ticketFilterService->filter($event->getTickets(), $promoCodeDomainObject));
     }
 }

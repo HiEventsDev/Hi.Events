@@ -29,7 +29,9 @@ class UpdateCapacityAssignmentService
         ?array                         $ticketIds = null,
     ): CapacityAssignmentDomainObject
     {
-        $this->eventTicketValidationService->validateTicketIds($ticketIds, $capacityAssignment->getEventId());
+        if ($ticketIds !== null) {
+            $this->eventTicketValidationService->validateTicketIds($ticketIds, $capacityAssignment->getEventId());
+        }
 
         return $this->updateAssignmentAndAssociateTickets($capacityAssignment, $ticketIds);
     }

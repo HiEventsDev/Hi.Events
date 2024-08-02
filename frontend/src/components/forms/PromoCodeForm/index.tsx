@@ -30,7 +30,7 @@ export const PromoCodeForm = ({form}: PromoCodeFormProps) => {
 
     return (
         <>
-            <TextInput mt={20} {...form.getInputProps('code')} label={t`Code`} placeholder="20OFF" required/>
+            <TextInput {...form.getInputProps('code')} label={t`Code`} placeholder="20OFF" required/>
 
             <Alert variant={'light'} mt={20} mb={20} icon={<IconAlertCircle size="1rem"/>} title={t`TIP`}>
                 {t`A promo code with no discount can be used to reveal hidden tickets.`}
@@ -64,6 +64,7 @@ export const PromoCodeForm = ({form}: PromoCodeFormProps) => {
             </InputGroup>
 
             <MultiSelect
+                placeholder={t`All Tickets`}
                 label={t`What tickets does this code apply to? (Applies to all by default)`}
                 searchable
                 data={tickets.map(ticket => {
