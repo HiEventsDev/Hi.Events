@@ -64,7 +64,7 @@
 - ⏪ **Suporte a Reembolsos Totais e Parciais:** Gerencie facilmente reembolsos totais e parciais.
 - 📧 **Notificações por E-mail:** Mantenha os participantes informados com notificações automáticas por e-mail.
 - 📱 **Adaptável a Dispositivos Móveis:** Desfrute de uma experiência contínua em qualquer dispositivo.
-- 🌐 **Suporte Multilíngue:** Suporte para vários idiomas - `Em Breve!`
+- 🌐 **Suporte Multilíngue:** Suporte para vários idiomas.
 - 🎉 **E muito mais!**
 
 ## 🚀 Primeiros Passos

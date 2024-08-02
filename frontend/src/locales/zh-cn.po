@@ -109,6 +109,10 @@ msgstr "2024-01-01 18:00"
 msgid "94103"
 msgstr "94103"
 
+#: src/components/forms/QuestionForm/index.tsx:136
+msgid "A date input. Perfect for asking for a date of birth etc."
+msgstr "日期输入字段。非常适合询问出生日期等。"
+
 #: src/components/forms/TaxAndFeeForm/index.tsx:87
 msgid "A default {type} is automaticaly applied to all new tickets. You can override this on a per ticket basis."
 msgstr "默认 {type} 会自动应用于所有新票单。您可以根据每张票单的具体情况覆盖该默认值。"
@@ -204,7 +208,7 @@ msgstr "活跃"
 msgid "Add"
 msgstr "添加"
 
-#: src/components/forms/QuestionForm/index.tsx:199
+#: src/components/forms/QuestionForm/index.tsx:207
 msgid "Add description"
 msgstr "添加描述"
 
@@ -249,7 +253,7 @@ msgstr "附加选项"
 msgid "Address"
 msgstr "地址"
 
-#: src/components/common/CheckoutQuestion/index.tsx:139
+#: src/components/common/CheckoutQuestion/index.tsx:152
 msgid "Address line 1"
 msgstr "地址第 1 行"
 
@@ -257,7 +261,7 @@ msgstr "地址第 1 行"
 msgid "Address Line 1"
 msgstr "地址 1"
 
-#: src/components/common/CheckoutQuestion/index.tsx:142
+#: src/components/common/CheckoutQuestion/index.tsx:155
 msgid "Address line 2"
 msgstr "地址第 2 行"
 
@@ -592,7 +596,7 @@ msgstr "选择背景颜色"
 msgid "Choose an account"
 msgstr "选择账户"
 
-#: src/components/common/CheckoutQuestion/index.tsx:145
+#: src/components/common/CheckoutQuestion/index.tsx:158
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:125
 msgid "City"
 msgstr "城市"
@@ -772,7 +776,7 @@ msgstr "复制链接"
 msgid "Copy URL"
 msgstr "复制 URL"
 
-#: src/components/common/CheckoutQuestion/index.tsx:157
+#: src/components/common/CheckoutQuestion/index.tsx:170
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:143
 msgid "Country"
 msgstr "国家"
@@ -907,6 +911,7 @@ msgid "Dashboard"
 msgstr "仪表板"
 
 #: src/components/common/OrderDetails/index.tsx:31
+#: src/components/forms/QuestionForm/index.tsx:134
 msgid "Date"
 msgstr "日期"
 
@@ -1420,7 +1425,7 @@ msgstr "隐藏问题"
 msgid "hidden questions"
 msgstr "隐藏问题"
 
-#: src/components/forms/QuestionForm/index.tsx:215
+#: src/components/forms/QuestionForm/index.tsx:223
 msgid "Hidden questions are only visible to the event organizer and not to the customer."
 msgstr "隐藏问题只有活动组织者可以看到，客户看不到。"
 
@@ -1441,7 +1446,7 @@ msgstr "隐藏隐藏问题"
 msgid "Hide the getting started page from the sidebar"
 msgstr "隐藏侧边栏中的入门页面"
 
-#: src/components/forms/QuestionForm/index.tsx:216
+#: src/components/forms/QuestionForm/index.tsx:224
 msgid "Hide this question"
 msgstr "隐藏此问题"
 
@@ -1657,7 +1662,7 @@ msgstr "注销"
 msgid "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam placerat elementum..."
 msgstr "Lorem ipsum dolor sit amet, consectetur adipiscing elit.Nam placerat elementum..."
 
-#: src/components/forms/QuestionForm/index.tsx:209
+#: src/components/forms/QuestionForm/index.tsx:217
 msgid "Make this question mandatory"
 msgstr "将此问题作为必答题"
 
@@ -1699,7 +1704,7 @@ msgstr "管理 Stripe 付款详情"
 msgid "Manage your users and their permissions"
 msgstr "管理用户及其权限"
 
-#: src/components/forms/QuestionForm/index.tsx:208
+#: src/components/forms/QuestionForm/index.tsx:216
 msgid "Mandatory questions must be answered before the customer can checkout."
 msgstr "在顾客结账前，必须回答必填问题。"
 
@@ -2269,7 +2274,7 @@ msgstr "促销代码"
 msgid "Promo codes can be used to offer discounts, presale access, or provide special access to your event."
 msgstr "促销代码可用于提供折扣、预售权限或为您的活动提供特殊权限。"
 
-#: src/components/forms/QuestionForm/index.tsx:187
+#: src/components/forms/QuestionForm/index.tsx:194
 msgid ""
 "Provide additional context or instructions for this question. Use this field to add terms\n"
 "and conditions, guidelines, or any important information that attendees need to know before answering."
@@ -2288,11 +2293,11 @@ msgstr "可用数量"
 msgid "Question deleted"
 msgstr "问题已删除"
 
-#: src/components/forms/QuestionForm/index.tsx:186
+#: src/components/forms/QuestionForm/index.tsx:193
 msgid "Question Description"
 msgstr "问题描述"
 
-#: src/components/forms/QuestionForm/index.tsx:176
+#: src/components/forms/QuestionForm/index.tsx:183
 msgid "Question Title"
 msgstr "问题标题"
 
@@ -2525,6 +2530,10 @@ msgstr "选择机票"
 msgid "Select Ticket Tier"
 msgstr "选择票价等级"
 
+#: src/components/forms/QuestionForm/index.tsx:160
+msgid "Select tickets"
+msgstr "选择票"
+
 #: src/components/forms/TicketForm/index.tsx:270
 msgid "Select..."
 msgstr "选择..."
@@ -2713,7 +2722,7 @@ msgstr "固定价格标准票"
 msgid "Start Date"
 msgstr "开始日期"
 
-#: src/components/common/CheckoutQuestion/index.tsx:148
+#: src/components/common/CheckoutQuestion/index.tsx:161
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:130
 msgid "State or Region"
 msgstr "州或地区"
@@ -3330,15 +3339,15 @@ msgstr "什么是分层门票？"
 msgid "What tickets does this code apply to? (Applies to all by default)"
 msgstr "此代码适用于哪些机票？(默认适用于所有）"
 
-#: src/components/forms/QuestionForm/index.tsx:152
+#: src/components/forms/QuestionForm/index.tsx:158
 msgid "What tickets should this question be apply to?"
 msgstr "该问题应适用于哪些机票？"
 
-#: src/components/forms/QuestionForm/index.tsx:177
+#: src/components/forms/QuestionForm/index.tsx:184
 msgid "What time will you be arriving?"
 msgstr "您什么时候抵达？"
 
-#: src/components/forms/QuestionForm/index.tsx:167
+#: src/components/forms/QuestionForm/index.tsx:174
 msgid "What type of question is this?"
 msgstr "这是什么类型的问题？"
 
@@ -3350,7 +3359,7 @@ msgstr "这项活动由谁组织？"
 msgid "Who is this message to?"
 msgstr "这条信息是发给谁的？"
 
-#: src/components/forms/QuestionForm/index.tsx:143
+#: src/components/forms/QuestionForm/index.tsx:149
 msgid "Who should be asked this question?"
 msgstr "这个问题应该问谁？"
 
@@ -3545,7 +3554,7 @@ msgstr "您的退款正在处理中。"
 msgid "Your ticket for"
 msgstr "您的入场券"
 
-#: src/components/common/CheckoutQuestion/index.tsx:153
+#: src/components/common/CheckoutQuestion/index.tsx:166
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:137
 msgid "Zip or Postal Code"
 msgstr "邮政编码"

@@ -15,4 +15,5 @@ enum QuestionTypeEnum
     case RADIO;
     case DROPDOWN;
     case MULTI_SELECT_DROPDOWN;
+    case DATE;
 }

@@ -65,7 +65,7 @@ Hi.Events ist darauf ausgelegt, Ihnen zu helfen, Events jeder Größe zu erstell
 - ⏪ **Unterstützung für vollständige und teilweise Rückerstattungen:** Einfache Verwaltung von vollständigen und teilweisen Rückerstattungen.
 - 📧 **E-Mail-Benachrichtigungen:** Halten Sie Teilnehmer mit automatischen E-Mail-Benachrichtigungen auf dem Laufenden.
 - 📱 **Mobile-Responsive:** Nahtloses Erlebnis auf jedem Gerät.
-- 🌐 **Mehrsprachige Unterstützung:** Unterstützung für mehrere Sprachen - `Bald verfügbar!`
+- 🌐 **Mehrsprachige Unterstützung:** Unterstützung für mehrere Sprachen.
 - 🎉 **Und vieles mehr!**
 
 ## 🚀 Schnellstart

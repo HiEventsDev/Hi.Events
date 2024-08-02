@@ -64,7 +64,7 @@
 - ⏪ **Soporte para Reembolsos Completos y Parciales:** Gestione fácilmente reembolsos completos y parciales.
 - 📧 **Notificaciones por Correo Electrónico:** Mantenga informados a los asistentes con notificaciones automáticas por correo electrónico.
 - 📱 **Adaptable a Móviles:** Disfrute de una experiencia sin interrupciones en cualquier dispositivo.
-- 🌐 **Soporte Multilingüe:** Soporte para varios idiomas - `Próximamente!`
+- 🌐 **Soporte Multilingüe:** Soporte para varios idiomas.
 - 🎉 **Y mucho más!**
 
 ## 🚀 Primeros Pasos
