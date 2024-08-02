@@ -3,7 +3,8 @@ import {t, Trans} from "@lingui/macro";
 import {QuestionBelongsToType, QuestionType, Ticket} from "../../../types.ts";
 import {Button, Group, MultiSelect, Switch, TextInput} from "@mantine/core";
 import {
-    IconAlignBoxLeftTop, IconCalendar,
+    IconAlignBoxLeftTop,
+    IconCalendar,
     IconCircleCheck,
     IconForms,
     IconMapPin,
