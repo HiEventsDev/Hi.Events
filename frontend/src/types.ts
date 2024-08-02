@@ -450,6 +450,7 @@ export enum QuestionType {
     CHECKBOX = 'CHECKBOX',
     RADIO = 'RADIO',
     DROPDOWN = 'DROPDOWN',
+    DATE = 'DATE',
 }
 
 export enum QuestionBelongsToType {

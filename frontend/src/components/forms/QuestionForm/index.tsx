@@ -4,6 +4,7 @@ import {QuestionBelongsToType, QuestionType, Ticket} from "../../../types.ts";
 import {Button, Group, MultiSelect, Switch, TextInput} from "@mantine/core";
 import {
     IconAlignBoxLeftTop,
+    IconCalendar,
     IconCircleCheck,
     IconForms,
     IconMapPin,
@@ -129,6 +130,12 @@ export const QuestionForm = ({form, tickets}: QuestionFormProps) => {
             value: QuestionType.ADDRESS,
             description: t`Shows common address fields, including country`,
         },
+        {
+            icon: <IconCalendar/>,
+            label: t`Date`,
+            value: QuestionType.DATE,
+            description: t`A date input. Perfect for asking for a date of birth etc.`,
+        }
     ];
     const multiAnswerQuestionTypes = [
         QuestionType.CHECKBOX.toString(),
@@ -151,6 +158,7 @@ export const QuestionForm = ({form, tickets}: QuestionFormProps) => {
                     mt={20}
                     label={t`What tickets should this question be apply to?`}
                     multiple
+                    placeholder={t`Select tickets`}
                     data={tickets?.map(ticket => {
                         return {
                             value: String(ticket.id),
@@ -194,6 +202,7 @@ export const QuestionForm = ({form, tickets}: QuestionFormProps) => {
                     variant="transparent"
                     ml={0}
                     pl={0}
+                    mb={10}
                     onClick={() => setShowDescription(true)}
                 >
                     {t`Add description`}
