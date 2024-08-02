@@ -17,13 +17,13 @@ use HiEvents\Services\Domain\Event\EventPageViewIncrementService;
 use HiEvents\Services\Domain\Ticket\TicketFilterService;
 use HiEvents\Services\Handlers\Event\DTO\GetPublicEventDTO;
 
-readonly class GetPublicEventHandler
+class GetPublicEventHandler
 {
     public function __construct(
-        private EventRepositoryInterface      $eventRepository,
-        private PromoCodeRepositoryInterface  $promoCodeRepository,
-        private TicketFilterService           $ticketFilterService,
-        private EventPageViewIncrementService $eventPageViewIncrementService,
+        private readonly EventRepositoryInterface      $eventRepository,
+        private readonly PromoCodeRepositoryInterface  $promoCodeRepository,
+        private readonly TicketFilterService           $ticketFilterService,
+        private readonly EventPageViewIncrementService $eventPageViewIncrementService,
     )
     {
     }

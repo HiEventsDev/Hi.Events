@@ -1,13 +1,13 @@
 #!/bin/bash
 
-# Define the path to your single PO file
+# This script lists all untranslated strings in a .po file.
+
+# arbitrary translation file
 poFile="../src/locales/es.po"
 
-# Check if the file exists
 if [ -f "$poFile" ]; then
     echo "Checking file: $poFile"
 
-    # Use awk to parse the PO file and find untranslated terms
     awk '
     BEGIN { RS=""; FS="\n" }
     {
