@@ -27,12 +27,12 @@
 </div>
 
 <hr/>
-<p align="center" style="text-align: center; font-size: 30px">
-<a href="README.de.md">🇩🇪</a>
-<a href="README.pt.md">🇵🇹</a>
-<a href="README.fr.md">🇫🇷</a>
-<a href="README.es.md">🇪🇸</a>
-<a href="README.zh-cn.md">🇨🇳</a>
+<p align="center" style="text-align: center;">
+<a href="README.de.md">Deutsch</a> |
+<a href="README.pt.md">Português</a> |
+<a href="README.fr.md">Français</a> |
+<a href="README.es.md">Español</a> |
+<a href="README.zh-cn.md">中文 (Zhōngwén)</a>
 </p>
 <hr/>
 
