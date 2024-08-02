@@ -1,0 +1,99 @@
+@import '../../../styles/mixins';
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  @include respond-below(md) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .search {
+    width: 80%;
+    margin-right: 20px;
+    max-width: 320px;
+
+    @include respond-below(md) {
+      width: 100%;
+      margin-bottom: 20px;
+      max-width: 100%;
+    }
+  }
+
+  .button {
+    display: flex;
+    place-content: flex-end;
+
+    button {
+      height: 42px;
+    }
+
+    @include respond-below(md) {
+      width: 100%;
+    }
+  }
+}
+
+.capacityAssignmentList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+
+  @include respond-below(md) {
+
+  }
+
+  .capacityCard {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-bottom: 0 !important;
+
+    .capacityAssignmentHeader {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 5px;
+      margin-bottom: 20px;
+
+      .capacityAssignmentAppliesTo {
+        .appliesToText {
+          display: flex;
+          color: #999;
+          justify-content: center;
+          align-items: center;
+        }
+      }
+    }
+
+    .capacityAssignmentName {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .capacityAssignmentInfo {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .capacityAssignmentCapacity {
+        margin-bottom: 4px;
+        width: 120px;
+
+        .capacityText {
+          margin-top: 10px;
+          color: #999;
+        }
+      }
+
+      .capacityAssignmentActions {
+
+      }
+    }
+  }
+}
+

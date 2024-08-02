@@ -99,8 +99,9 @@ const SelectTickets = (props: SelectTicketsProps) => {
                 if (error?.response?.data?.errors) {
                     form.setErrors(error.response.data.errors);
                 }
+
                 notifications.show({
-                    message: t`Unable to create ticket. Please check the your details`,
+                    message: error.response.data.errors?.tickets[0] || t`Unable to create ticket. Please check the your details`,
                     color: 'red',
                 });
             },

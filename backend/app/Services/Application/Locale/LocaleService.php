@@ -13,7 +13,7 @@ class LocaleService
     {
     }
 
-    public function getLocaleOrDefault(string $locale): string
+    public function getLocaleOrDefault(?string $locale): string
     {
         $supportedLocales = Locale::getSupportedLocales();
 

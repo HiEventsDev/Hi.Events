@@ -11,7 +11,7 @@ use HiEvents\Mail\Order\OrderCancelled;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
-use HiEvents\Services\Domain\Ticket\TicketQuantityService;
+use HiEvents\Services\Domain\Ticket\TicketQuantityUpdateService;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
@@ -24,7 +24,7 @@ readonly class OrderCancelService
         private EventRepositoryInterface    $eventRepository,
         private OrderRepositoryInterface    $orderRepository,
         private DatabaseManager             $databaseManager,
-        private TicketQuantityService       $ticketQuantityService,
+        private TicketQuantityUpdateService $ticketQuantityService,
     )
     {
     }
@@ -75,7 +75,7 @@ readonly class OrderCancelService
         $ticketIdCountMap = $attendees->map(fn(AttendeeDomainObject $attendee) => $attendee->getTicketPriceId())->countBy();
 
         foreach ($ticketIdCountMap as $ticketPriceId => $count) {
-            $this->ticketQuantityService->decreaseTicketPriceQuantitySold($ticketPriceId, $count);
+            $this->ticketQuantityService->decreaseQuantitySold($ticketPriceId, $count);
         }
     }
 

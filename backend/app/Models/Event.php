@@ -48,6 +48,7 @@ class Event extends BaseModel
     {
         parent::boot();
 
+        // todo - move into a domain service
         static::creating(
             static function (Event $event) {
                 $event->user_id = auth()->user()->id;

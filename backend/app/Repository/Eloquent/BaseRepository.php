@@ -15,7 +15,6 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use HiEvents\DomainObjects\Interfaces\DomainObjectInterface;
-use HiEvents\DomainObjects\Interfaces\HasDefaultEagerLoads;
 use HiEvents\Models\BaseModel;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\RepositoryInterface;

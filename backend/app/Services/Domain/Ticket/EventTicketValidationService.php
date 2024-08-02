@@ -6,10 +6,10 @@ use HiEvents\DomainObjects\TicketDomainObject;
 use HiEvents\Repository\Interfaces\TicketRepositoryInterface;
 use HiEvents\Services\Domain\Ticket\Exception\UnrecognizedTicketIdException;
 
-readonly class EventTicketValidationService
+class EventTicketValidationService
 {
     public function __construct(
-        private TicketRepositoryInterface $ticketRepository,
+        readonly private TicketRepositoryInterface $ticketRepository,
     )
     {
     }

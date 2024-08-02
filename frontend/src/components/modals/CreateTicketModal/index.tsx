@@ -58,6 +58,7 @@ export const CreateTicketModal = ({onClose}: GenericModalProps) => {
                 if (error?.response?.data?.errors) {
                     form.setErrors(error.response.data.errors);
                 }
+
                 notifications.show({
                     message: t`Unable to create ticket. Please check the your details`,
                     color: 'red',

@@ -14,9 +14,9 @@ class TicketPriceDomainObject extends Generated\TicketPriceDomainObjectAbstract
 
     private ?float $feeTotal = null;
 
-    private ?int $quantityAvailable = null;
-
     private ?bool $isAvailable = null;
+
+    private ?string $offSaleReason = null;
 
     public function getPriceBeforeDiscount(): ?float
     {
@@ -91,17 +91,6 @@ class TicketPriceDomainObject extends Generated\TicketPriceDomainObjectAbstract
         return $this->getQuantitySold() >= $this->getInitialQuantityAvailable();
     }
 
-    public function setQuantityAvailable(?int $quantityAvailable): TicketPriceDomainObject
-    {
-        $this->quantityAvailable = $quantityAvailable;
-        return $this;
-    }
-
-    public function getQuantityAvailable(): ?int
-    {
-        return $this->quantityAvailable;
-    }
-
     public function isAvailable(): ?bool
     {
         return $this->isAvailable;
@@ -111,5 +100,17 @@ class TicketPriceDomainObject extends Generated\TicketPriceDomainObjectAbstract
     {
         $this->isAvailable = $isAvailable;
         return $this;
+    }
+
+    public function setOffSaleReason(?string $offSaleReason): TicketDomainObject
+    {
+        $this->offSaleReason = $offSaleReason;
+
+        return $this;
+    }
+
+    public function getOffSaleReason(): ?string
+    {
+        return $this->offSaleReason;
     }
 }

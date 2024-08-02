@@ -38,6 +38,7 @@ import {Editor} from "../../common/Editor";
 import {InputGroup} from "../../common/InputGroup";
 import {showError} from "../../../utilites/notifications.tsx";
 import classNames from "classnames";
+import {InputLabelWithHelp} from "../../common/InputLabelWithHelp";
 
 interface TicketFormProps {
     form: UseFormReturnType<Ticket>,
@@ -226,12 +227,39 @@ export const TicketForm = ({form, ticket}: TicketFormProps) => {
                                      disabled={isFreeTicket}
                                      leftSection={event?.currency ? getCurrencySymbol(event.currency) : ''}
                                      {...form.getInputProps('prices.0.price')}
-                                     label={isDonationTicket ? t`Minimum Price` : t`Price`}
+                                     label={<InputLabelWithHelp
+                                         label={isDonationTicket ? t`Minimum Price` : t`Price`}
+                                         helpText={(
+                                             <Trans>
+                                                 <p>
+                                                     Please enter the price excluding taxes and fees.
+                                                 </p>
+                                                 <p>
+                                                     Taxes and fees can be added below.
+                                                 </p>
+                                             </Trans>
+                                         )}
+                                     />}
                                      placeholder="19.99"/>
                         <NumberInput min={0}
                                      placeholder={t`Unlimited`}
                                      {...form.getInputProps('prices.0.initial_quantity_available')}
-                                     label={t`Quantity Available`}/>
+                                     label={<InputLabelWithHelp
+                                         label={t`Quantity Available`}
+                                         helpText={(
+                                             <Trans>
+                                                 <p>
+                                                     The number of tickets available for this ticket
+                                                 </p>
+                                                 <p>
+                                                     This value can be overridden if there are <a target={'__blank'}
+                                                                                                  href={'capacity-assignments'}>Capacity
+                                                     Limits</a> associated with this ticket.
+                                                 </p>
+                                             </Trans>
+                                         )}
+                                     />}
+                        />
                     </InputGroup>
                 )}
             </div>

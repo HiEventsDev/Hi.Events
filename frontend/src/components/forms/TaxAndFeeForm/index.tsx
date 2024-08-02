@@ -70,6 +70,7 @@ export const TaxAndFeeForm = ({form}: { form: UseFormReturnType<TaxAndFee> }) =>
                 {...form.getInputProps('rate')}
                 label={form.values.calculation_type === TaxAndFeeCalculationType.Percentage ? t`Percentage Amount` : t`Amount`}
                 placeholder={form.values.calculation_type === TaxAndFeeCalculationType.Percentage ? '23' : '2.50'}
+                leftSection={form.values.calculation_type === TaxAndFeeCalculationType.Percentage ? '%' : ''}
                 description={form.values.calculation_type === TaxAndFeeCalculationType.Percentage ? t`eg. 23.5 for 23.5%` : t`eg. 2.50 for $2.50`}
                 required
                 max={form.values.calculation_type === TaxAndFeeCalculationType.Percentage ? 100 : undefined}

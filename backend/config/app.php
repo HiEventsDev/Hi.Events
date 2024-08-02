@@ -22,6 +22,14 @@ return [
      */
     'homepage_views_update_batch_size' => env('APP_HOMEPAGE_VIEWS_UPDATE_BATCH_SIZE', 8),
 
+    /**
+     * The number of seconds to cache the ticket quantities on the homepage
+     * It is recommended to cache this value for a short period of time for high traffic sites
+     *
+     * Set to null to disable caching
+     */
+    'homepage_ticket_quantities_cache_ttl' => env('APP_HOMEPAGE_TICKET_QUANTITIES_CACHE_TTL', 2),
+
     'frontend_urls' => [
         'confirm_email_address' => '/manage/profile/confirm-email-address/%s',
         'reset_password' => '/auth/reset-password/%s',

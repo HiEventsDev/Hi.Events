@@ -24,7 +24,6 @@ abstract class OrderDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     final public const STATUS = 'status';
     final public const PAYMENT_STATUS = 'payment_status';
     final public const REFUND_STATUS = 'refund_status';
-    final public const RESERVED_UNTIL = 'reserved_until';
     final public const IS_MANUALLY_CREATED = 'is_manually_created';
     final public const SESSION_ID = 'session_id';
     final public const PUBLIC_ID = 'public_id';
@@ -39,6 +38,7 @@ abstract class OrderDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     final public const TOTAL_TAX = 'total_tax';
     final public const TOTAL_FEE = 'total_fee';
     final public const LOCALE = 'locale';
+    final public const RESERVED_UNTIL = 'reserved_until';
 
     protected int $id;
     protected int $event_id;
@@ -54,7 +54,6 @@ abstract class OrderDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     protected string $status;
     protected ?string $payment_status = null;
     protected ?string $refund_status = null;
-    protected ?string $reserved_until = null;
     protected bool $is_manually_created = false;
     protected ?string $session_id = null;
     protected string $public_id;
@@ -69,6 +68,7 @@ abstract class OrderDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     protected float $total_tax = 0.0;
     protected float $total_fee = 0.0;
     protected string $locale = 'en';
+    protected ?string $reserved_until = null;
 
     public function toArray(): array
     {
@@ -87,7 +87,6 @@ abstract class OrderDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
                     'status' => $this->status ?? null,
                     'payment_status' => $this->payment_status ?? null,
                     'refund_status' => $this->refund_status ?? null,
-                    'reserved_until' => $this->reserved_until ?? null,
                     'is_manually_created' => $this->is_manually_created ?? null,
                     'session_id' => $this->session_id ?? null,
                     'public_id' => $this->public_id ?? null,
@@ -102,6 +101,7 @@ abstract class OrderDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
                     'total_tax' => $this->total_tax ?? null,
                     'total_fee' => $this->total_fee ?? null,
                     'locale' => $this->locale ?? null,
+                    'reserved_until' => $this->reserved_until ?? null,
                 ];
     }
 
@@ -259,17 +259,6 @@ abstract class OrderDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
         return $this->refund_status;
     }
 
-    public function setReservedUntil(?string $reserved_until): self
-    {
-        $this->reserved_until = $reserved_until;
-        return $this;
-    }
-
-    public function getReservedUntil(): ?string
-    {
-        return $this->reserved_until;
-    }
-
     public function setIsManuallyCreated(bool $is_manually_created): self
     {
         $this->is_manually_created = $is_manually_created;
@@ -422,5 +411,16 @@ abstract class OrderDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     public function getLocale(): string
     {
         return $this->locale;
+    }
+
+    public function setReservedUntil(?string $reserved_until): self
+    {
+        $this->reserved_until = $reserved_until;
+        return $this;
+    }
+
+    public function getReservedUntil(): ?string
+    {
+        return $this->reserved_until;
     }
 }

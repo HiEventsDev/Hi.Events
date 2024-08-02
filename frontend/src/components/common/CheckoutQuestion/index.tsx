@@ -147,6 +147,8 @@ const AddressInput = ({question, name, form}: QuestionInputProps) => {
     return (
         <>
             <h4>{question.title}</h4>
+            <div className={classes.description} dangerouslySetInnerHTML={{__html: question.description || ''}}/>
+
             <TextInput withAsterisk={question.required}
                        {...form.getInputProps(`${name}.address_line_1`)}
                        label={t`Address line 1`}/>

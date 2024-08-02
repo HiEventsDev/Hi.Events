@@ -36,7 +36,7 @@ readonly class TaxAndTicketAssociationService
             throw new InvalidTaxOrFeeIdException(__('One or more tax IDs are invalid'));
         }
 
-        $this->ticketRepository->addTaxToTicket($params->ticketId, $params->taxAndFeeIds);
+        $this->ticketRepository->addTaxesAndFeesToTicket($params->ticketId, $params->taxAndFeeIds);
 
         return $taxesAndFees;
     }

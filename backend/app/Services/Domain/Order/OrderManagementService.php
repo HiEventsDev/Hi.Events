@@ -15,11 +15,11 @@ use HiEvents\Services\Domain\Tax\TaxAndFeeOrderRollupService;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
-readonly class OrderManagementService
+class OrderManagementService
 {
     public function __construct(
-        private OrderRepositoryInterface    $orderRepository,
-        private TaxAndFeeOrderRollupService $taxAndFeeOrderRollupService,
+        readonly private OrderRepositoryInterface    $orderRepository,
+        readonly private TaxAndFeeOrderRollupService $taxAndFeeOrderRollupService,
     )
     {
     }

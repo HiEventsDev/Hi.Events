@@ -2,16 +2,16 @@
 
 namespace HiEvents\Repository\Eloquent;
 
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
 use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Models\Attendee;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class AttendeeRepository extends BaseRepository implements AttendeeRepositoryInterface
 {
