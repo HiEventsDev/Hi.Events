@@ -1,6 +1,6 @@
 import {Avatar, Menu, UnstyledButton} from "@mantine/core";
-import {getInitials, iHavePurchasedALicence, isHiEvents} from "../../../utilites/helpers.ts";
-import {IconLogout, IconMoneybag, IconSettingsCog, IconSpeakerphone, IconUser} from "@tabler/icons-react";
+import {getInitials} from "../../../utilites/helpers.ts";
+import {IconLifebuoy, IconLogout, IconSettingsCog, IconSpeakerphone, IconUser} from "@tabler/icons-react";
 import {useGetMe} from "../../../queries/useGetMe.ts";
 import {NavLink} from "react-router-dom";
 import {t} from "@lingui/macro";
@@ -20,14 +20,12 @@ export const GlobalMenu = () => {
             icon: IconSettingsCog,
             link: `/account/settings`,
         },
-        ...((iHavePurchasedALicence() || isHiEvents()) ? [] : [
-            {
-                label: t`Purchase License`,
-                icon: IconMoneybag,
-                link: 'https://hi.events/licensing?utm_source=app-top-menu',
-                target: '_blank',
-            }
-        ]),
+        {
+            label: t`Help & Support`,
+            icon: IconLifebuoy,
+            link: 'https://hi.events/docs?utm_source=app-top-menu-help-support',
+            target: '_blank',
+        },
         {
             label: t`Feedback`,
             icon: IconSpeakerphone,
