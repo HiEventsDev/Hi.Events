@@ -143,7 +143,7 @@ class StripePaymentIntentCreationService
     }
 
     /**
-     * @throws ApiErrorException
+     * @throws ApiErrorException|CreatePaymentIntentFailedException
      */
     private function upsertStripeCustomer(CreatePaymentIntentRequestDTO $paymentIntentDTO): StripeCustomerDomainObject
     {
@@ -152,10 +152,13 @@ class StripePaymentIntentCreationService
         ]);
 
         if ($customer === null) {
-            $stripeCustomer = $this->stripeClient->customers->create([
-                'email' => $paymentIntentDTO->order->getEmail(),
-                'name' => $paymentIntentDTO->order->getFullName(),
-            ]);
+            $stripeCustomer = $this->stripeClient->customers->create(
+                params: [
+                    'email' => $paymentIntentDTO->order->getEmail(),
+                    'name' => $paymentIntentDTO->order->getFullName(),
+                ],
+                opts: $this->getStripeAccountData($paymentIntentDTO)
+            );
 
             return $this->stripeCustomerRepository->create([
                 'name' => $stripeCustomer->name,
@@ -169,8 +172,9 @@ class StripePaymentIntentCreationService
         }
 
         $stripeCustomer = $this->stripeClient->customers->update(
-            $customer->getStripeCustomerId(),
-            ['name' => $paymentIntentDTO->order->getFullName()]
+            id: $customer->getStripeCustomerId(),
+            params: ['name' => $paymentIntentDTO->order->getFullName()],
+            opts: $this->getStripeAccountData($paymentIntentDTO),
         );
 
         $this->stripeCustomerRepository->updateFromArray($customer->getId(), [
