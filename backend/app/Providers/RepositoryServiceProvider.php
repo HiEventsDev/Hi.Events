@@ -22,7 +22,7 @@ use HiEvents\Repository\Eloquent\PasswordResetTokenRepository;
 use HiEvents\Repository\Eloquent\PromoCodeRepository;
 use HiEvents\Repository\Eloquent\QuestionAnswerRepository;
 use HiEvents\Repository\Eloquent\QuestionRepository;
-use HiEvents\Repository\Eloquent\ReservationRepository;
+use HiEvents\Repository\Eloquent\StripeCustomerRepository;
 use HiEvents\Repository\Eloquent\StripePaymentsRepository;
 use HiEvents\Repository\Eloquent\TaxAndFeeRepository;
 use HiEvents\Repository\Eloquent\TicketPriceRepository;
@@ -46,7 +46,7 @@ use HiEvents\Repository\Interfaces\PasswordResetTokenRepositoryInterface;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
 use HiEvents\Repository\Interfaces\QuestionAnswerRepositoryInterface;
 use HiEvents\Repository\Interfaces\QuestionRepositoryInterface;
-use HiEvents\Repository\Interfaces\ReservationRepositoryInterface;
+use HiEvents\Repository\Interfaces\StripeCustomerRepositoryInterface;
 use HiEvents\Repository\Interfaces\StripePaymentsRepositoryInterface;
 use HiEvents\Repository\Interfaces\TaxAndFeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\TicketPriceRepositoryInterface;
@@ -83,7 +83,7 @@ class RepositoryServiceProvider extends ServiceProvider
         OrganizerRepositoryInterface::class => OrganizerRepository::class,
         AccountUserRepositoryInterface::class => AccountUserRepository::class,
         CapacityAssignmentRepositoryInterface::class => CapacityAssignmentRepository::class,
-        ReservationRepositoryInterface::class => ReservationRepository::class,
+        StripeCustomerRepositoryInterface::class => StripeCustomerRepository::class,
     ];
 
     public function register(): void
