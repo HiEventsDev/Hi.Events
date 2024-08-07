@@ -69,6 +69,7 @@ readonly class CreatePaymentIntentHandler
             'amount' => Money::of($order->getTotalGross(), $order->getCurrency())->getMinorAmount()->toInt(),
             'currencyCode' => $order->getCurrency(),
             'account' => $account,
+            'order' => $order,
         ]));
 
         $this->stripePaymentsRepository->create([
