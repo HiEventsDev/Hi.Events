@@ -3,7 +3,7 @@
 @php /** @var string $appName */ @endphp
 
 <x-mail::message>
-{{ __('Hi :name', ['name' => $user->getFirstName()]) }},
+{{ __('Hi :name', ['name' => $invitedUser->getFirstName()]) }},
 
 {{ __('You\'ve been invited to join :appName.', ['appName' => $appName]) }}
 
