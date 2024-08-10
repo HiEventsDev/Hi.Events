@@ -54,7 +54,7 @@ const Login = () => {
             <Card>
                 <form onSubmit={form.onSubmit((values) => loginUser(values))}>
                     <TextInput {...form.getInputProps('email')} label={t`Email`}
-                               placeholder="you@mantine.dev" required/>
+                               placeholder="hello@hi.events" required/>
                     <PasswordInput {...form.getInputProps('password')} label={t`Password`}
                                    placeholder={t`Your password`} required mt="md"/>
                     <p>
