@@ -28,8 +28,13 @@ class AttendeeRepository extends BaseRepository implements AttendeeRepositoryInt
     public function findByEventIdForExport(int $eventId): Collection
     {
         $this->applyConditions([
-            'event_id' => $eventId,
+            'attendees.event_id' => $eventId,
         ]);
+
+        $this->model->select('attendees.*');
+        $this->model->join('orders', 'orders.id', '=', 'attendees.order_id');
+        $this->model->whereIn('orders.status', [OrderStatus::COMPLETED->name, OrderStatus::CANCELLED->name]);
+
         $model = $this->model->limit(10000)->get();
         $this->resetModel();
 
