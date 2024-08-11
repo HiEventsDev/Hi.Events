@@ -89,9 +89,11 @@ export const OrganizerCreateForm = ({onSuccess}: OrganizerFormProps) => {
     }
 
     useEffect(() => {
+        if (meFetched) {
+            form.setFieldValue('currency', String(account?.currency_code));
+        }
         if (accountFetched) {
             form.setFieldValue('email', String(me?.email));
-            form.setFieldValue('currency', String(account?.currency_code));
             form.setFieldValue('timezone', String(me?.timezone));
         }
     }, [accountFetched, meFetched]);
