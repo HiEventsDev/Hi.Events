@@ -122,7 +122,7 @@ a quick start, follow these steps:
 ℹ️ Please refer to the [getting started guide](https://hi.events/docs/getting-started) for other installation methods, and
 for setting up a production or local development environment.
 
-## 💜 Buy Me a Coffee
+## 💜 Support Hi.Events
 
 If you find Hi.Events useful, it would be massively appreciated if you made a small donation to help support the project.
 
