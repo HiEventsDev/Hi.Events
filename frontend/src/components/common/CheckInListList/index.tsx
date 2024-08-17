@@ -1,7 +1,7 @@
 import {CheckInList, IdParam} from "../../../types";
 import {Badge, Button, Progress} from "@mantine/core";
 import {t, Trans} from "@lingui/macro";
-import {IconCopy, IconHelp, IconPencil, IconPlus, IconTrash} from "@tabler/icons-react";
+import {IconCopy, IconExternalLink, IconHelp, IconLink, IconPencil, IconPlus, IconTrash} from "@tabler/icons-react";
 import Truncate from "../Truncate";
 import {NoResultsSplash} from "../NoResultsSplash";
 import classes from './CheckInListList.module.scss';
@@ -160,6 +160,13 @@ export const CheckInListList = ({checkInLists, openCreateModal}: CheckInListList
                                                             ).then(() => {
                                                                 showSuccess(t`Check-In URL copied to clipboard`);
                                                             });
+                                                        }
+                                                    },
+                                                    {
+                                                        label: t`Open Check-In Page`,
+                                                        icon: <IconExternalLink size={14}/>,
+                                                        onClick: () => {
+                                                            window.open(`/check-in/${list.short_id}`, '_blank');
                                                         }
                                                     }
                                                 ],
