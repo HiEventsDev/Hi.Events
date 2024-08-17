@@ -40,7 +40,9 @@ class DeleteAttendeeCheckInService
         $checkInList = $this->checkInListDataService->getCheckInList($checkInListShortId);
 
         if ($checkInList->getId() !== $checkIn->getCheckInListId()) {
-            throw new CannotCheckInException(__('Attendee does not belong to this check-in list'));
+            // For now, let's allow this, as someone could delete the check-in list and be unable to delete the check-in
+            // It should be safe as to check someone out you need to know the check-in list and check in short id
+            //throw new CannotCheckInException(__('Attendee does not belong to this check-in list'));
         }
 
         $this->attendeeCheckInRepository->deleteById($checkIn->getId());

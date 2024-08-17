@@ -1,7 +1,7 @@
 import {CheckInList, IdParam} from "../../../types";
 import {Badge, Button, Progress} from "@mantine/core";
 import {t, Trans} from "@lingui/macro";
-import {IconHelp, IconPencil, IconPlus, IconTrash} from "@tabler/icons-react";
+import {IconCopy, IconHelp, IconPencil, IconPlus, IconTrash} from "@tabler/icons-react";
 import Truncate from "../Truncate";
 import {NoResultsSplash} from "../NoResultsSplash";
 import classes from './CheckInListList.module.scss';
@@ -14,6 +14,7 @@ import {EditCheckInListModal} from "../../modals/EditCheckInListModal";
 import {useDeleteCheckInList} from "../../../mutations/useDeleteCheckInList";
 import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
+import { useParams } from "react-router-dom";
 
 interface CheckInListListProps {
     checkInLists: CheckInList[];
@@ -24,6 +25,7 @@ export const CheckInListList = ({checkInLists, openCreateModal}: CheckInListList
     const [editModalOpen, {open: openEditModal, close: closeEditModal}] = useDisclosure(false);
     const [selectedCheckInListId, setSelectedCheckInListId] = useState<IdParam>();
     const deleteMutation = useDeleteCheckInList();
+    const {eventId} = useParams();
 
     const handleDeleteCheckInList = (checkInListId: IdParam, eventId: IdParam) => {
         deleteMutation.mutate({checkInListId, eventId}, {
@@ -149,6 +151,17 @@ export const CheckInListList = ({checkInLists, openCreateModal}: CheckInListList
                                                             openEditModal();
                                                         }
                                                     },
+                                                    {
+                                                        label: t`Copy Check-In URL`,
+                                                        icon: <IconCopy size={14}/>,
+                                                        onClick: () => {
+                                                            navigator.clipboard.writeText(
+                                                                `${window.location.origin}/check-in/${list.short_id}`
+                                                            ).then(() => {
+                                                                showSuccess(t`Check-In URL copied to clipboard`);
+                                                            });
+                                                        }
+                                                    }
                                                 ],
                                             },
                                             {
@@ -163,7 +176,7 @@ export const CheckInListList = ({checkInLists, openCreateModal}: CheckInListList
                                                                 () => {
                                                                     handleDeleteCheckInList(
                                                                         list.id as IdParam,
-                                                                        list.event_id as IdParam,
+                                                                        eventId,
                                                                     );
                                                                 })
                                                         },

@@ -11,5 +11,8 @@ export const useGetCheckInListPublic = (checkInListShortId: IdParam) => {
             const data = await publicCheckInClient.getCheckInList(checkInListShortId);
             return data;
         },
+        {
+            retry: false,
+        }
     );
 };

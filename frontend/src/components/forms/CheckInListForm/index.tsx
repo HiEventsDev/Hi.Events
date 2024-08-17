@@ -18,7 +18,7 @@ export const CheckInListForm = ({form, tickets}: CheckInListFormProps) => {
                 {...form.getInputProps('name')}
                 required
                 label={t`Name`}
-                placeholder={t`Day one check-in list`}
+                placeholder={t`VIP check-in list`}
             />
 
             <MultiSelect

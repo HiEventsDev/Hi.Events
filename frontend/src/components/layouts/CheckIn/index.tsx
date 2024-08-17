@@ -190,6 +190,22 @@ const CheckIn = () => {
         );
     }
 
+    if (CheckInListQuery.error && CheckInListQuery.error.response?.status === 404) {
+        return (
+            <NoResultsSplash
+                heading={t`Check-in list not found`}
+                imageHref={'/blank-slate/check-in-lists.svg'}
+                subHeading={(
+                    <>
+                        <p>
+                            {t`The check-in list you are looking for does not exist.`}
+                        </p>
+                    </>
+                )}
+            />)
+    }
+
+
     if (checkInList?.is_expired) {
         return (
             <NoResultsSplash
