@@ -56,7 +56,7 @@ readonly class CreateAccountHandler
                 'currency_code' => $this->getCurrencyCode($accountData),
                 'name' => $accountData->first_name . ($accountData->last_name ? ' ' . $accountData->last_name : ''),
                 'email' => strtolower($accountData->email),
-                'short_id' => IdHelper::randomPrefixedId(IdHelper::ACCOUNT_PREFIX),
+                'short_id' => IdHelper::shortId(IdHelper::ACCOUNT_PREFIX),
                 // If the app is not running in SaaS mode, we can immediately verify the account.
                 // Same goes for the email verification below.
                 'account_verified_at' => $isSaasMode ? null : now()->toDateTimeString(),

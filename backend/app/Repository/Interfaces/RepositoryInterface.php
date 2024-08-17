@@ -3,6 +3,7 @@
 namespace HiEvents\Repository\Interfaces;
 
 use Exception;
+use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
@@ -56,6 +57,18 @@ interface RepositoryInterface
         int   $limit = self::DEFAULT_PAGINATE_LIMIT,
         array $columns = self::DEFAULT_COLUMNS
     ): LengthAwarePaginator;
+
+    /**
+     * @param array $where
+     * @param int|null $limit
+     * @param array $columns
+     * @return LengthAwarePaginator<T>
+     */
+    public function simplePaginateWhere(
+        array $where,
+        int   $limit = null,
+        array $columns = self::DEFAULT_COLUMNS,
+    ): Paginator;
 
     /**
      * @param Relation $relation

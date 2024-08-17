@@ -16,6 +16,7 @@ use HiEvents\Http\ResponseCodes;
 use HiEvents\Resources\BaseResource;
 use HiEvents\Services\Domain\Auth\AuthUserService;
 use HiEvents\Services\Infrastructure\Authorization\IsAuthorizedService;
+use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -61,22 +62,27 @@ abstract class BaseAction extends Controller
 
     /**
      * @param class-string<BaseResource> $resource
-     * @param Collection|DomainObjectInterface|LengthAwarePaginator|BaseDTO $data
+     * @param Collection|DomainObjectInterface|LengthAwarePaginator|BaseDTO|Paginator $data
      * @param int $statusCode
      * @param array $meta
      * @param array $headers
      * @return JsonResponse
      */
     protected function resourceResponse(
-        string                                                        $resource,
-        Collection|DomainObjectInterface|LengthAwarePaginator|BaseDTO $data,
-        int                                                           $statusCode = ResponseCodes::HTTP_OK,
-        array                                                         $meta = [],
-        array                                                         $headers = [],
+        string                                                                  $resource,
+        Collection|DomainObjectInterface|LengthAwarePaginator|BaseDTO|Paginator $data,
+        int                                                                     $statusCode = ResponseCodes::HTTP_OK,
+        array                                                                   $meta = [],
+        array                                                                   $headers = [],
+        array                                                                   $errors = [],
     ): JsonResponse
     {
-        if ($data instanceof Collection || $data instanceof LengthAwarePaginator) {
-            $response = ($resource::collection($data)->additional(['meta' => $meta]))
+        if ($data instanceof Collection || $data instanceof Paginator) {
+            $additional = array_filter([
+                'meta' => $meta ?? null,
+                'errors' => $errors ?? null,
+            ]);
+            $response = ($resource::collection($data)->additional($additional))
                 ->response()
                 ->setStatusCode($statusCode);
         } else {

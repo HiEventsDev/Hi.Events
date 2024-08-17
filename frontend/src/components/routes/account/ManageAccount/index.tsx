@@ -5,13 +5,14 @@ import {IconAdjustmentsCog, IconCreditCard, IconReceiptTax, IconUsers} from "@ta
 import {Outlet, useLocation, useNavigate} from "react-router-dom";
 import {t} from "@lingui/macro";
 import {useIsCurrentUserAdmin} from "../../../../hooks/useIsCurrentUserAdmin.ts";
+import { useGetAccount } from "../../../../queries/useGetAccount.ts";
 
 export const ManageAccount = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const tabValue = location.pathname.split('/').pop() || 'settings';
     const isUserAdmin = useIsCurrentUserAdmin();
-
+    const {data: account} = useGetAccount();
 
     return (
         <div className={classes.container}>
@@ -32,7 +33,7 @@ export const ManageAccount = () => {
                             </Tabs.Tab>
                         )}
 
-                        {isUserAdmin && (
+                        {(isUserAdmin && account && account.is_saas_mode_enabled) && (
                             <Tabs.Tab value="payment" leftSection={<IconCreditCard/>}>
                                 {t`Payment`}
                             </Tabs.Tab>

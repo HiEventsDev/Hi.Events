@@ -28,7 +28,6 @@ export const CreatePromoCodeModal = ({onClose}: GenericModalProps) => {
         validateInputOnBlur: true,
     });
 
-
     const handleSubmit = (values: PromoCode) => {
         mutation.mutate({
             eventId: eventId,

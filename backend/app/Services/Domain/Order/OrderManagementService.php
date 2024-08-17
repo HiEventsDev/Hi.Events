@@ -43,16 +43,15 @@ class OrderManagementService
     ): OrderDomainObject
     {
         $reservedUntil = Carbon::now()->addMinutes($timeOutMinutes);
-        $publicId = Str::upper(Str::random(7));
 
         return $this->orderRepository->create([
             'event_id' => $eventId,
-            'short_id' => IdHelper::randomPrefixedId(IdHelper::ORDER_PREFIX),
+            'short_id' => IdHelper::shortId(IdHelper::ORDER_PREFIX),
             'reserved_until' => $reservedUntil->toString(),
             'status' => OrderStatus::RESERVED->name,
             'session_id' => $sessionId,
             'currency' => $event->getCurrency(),
-            'public_id' => $publicId,
+            'public_id' => IdHelper::publicId(),
             'promo_code_id' => $promoCode?->getId(),
             'promo_code' => $promoCode?->getCode(),
             'locale' => $locale,

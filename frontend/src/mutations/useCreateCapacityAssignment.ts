@@ -12,7 +12,8 @@ export const useCreateCapacityAssignment = () => {
             capacityAssignmentData: CapacityAssignmentRequest,
         }) => capacityAssignmentClient.create(eventId, capacityAssignmentData),
         {
-            onSuccess: () => queryClient.invalidateQueries({queryKey: [GET_EVENT_CAPACITY_ASSIGNMENTS_QUERY_KEY]}),
+            onSuccess: (_, variables) => queryClient
+                .invalidateQueries({queryKey: [GET_EVENT_CAPACITY_ASSIGNMENTS_QUERY_KEY, variables.eventId]}),
         }
     )
 }

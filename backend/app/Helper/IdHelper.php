@@ -11,8 +11,16 @@ class IdHelper
     public const EVENT_PREFIX = 'e';
     public const ACCOUNT_PREFIX = 'acc';
 
-    public static function randomPrefixedId(string $prefix, int $length = 13): string
+    public const CHECK_IN_LIST_PREFIX = 'cil';
+    public const CHECK_IN_PREFIX = 'ci';
+
+    public static function shortId(string $prefix, int $length = 13): string
     {
-        return sprintf('%s%s', $prefix, Str::random($length));
+        return sprintf('%s_%s', $prefix, Str::random($length));
+    }
+
+    public static function publicId(int $length = 7, string $suffix = ''): string
+    {
+        return Str::upper(Str::random($length)) . $suffix;
     }
 }
