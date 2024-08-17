@@ -9,7 +9,6 @@ use HiEvents\Resources\CheckInList\AttendeeCheckInPublicResource;
 use HiEvents\Services\Handlers\CheckInList\Public\CreateAttendeeCheckInPublicHandler;
 use HiEvents\Services\Handlers\CheckInList\Public\DTO\CreateAttendeeCheckInPublicDTO;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class CreateAttendeeCheckInPublicAction extends BaseAction
@@ -21,7 +20,7 @@ class CreateAttendeeCheckInPublicAction extends BaseAction
     }
 
     public function __invoke(
-        string  $checkInListUuid,
+        string                             $checkInListUuid,
         CreateAttendeeCheckInPublicRequest $request,
     ): JsonResponse
     {

@@ -112,7 +112,7 @@ readonly class CompleteOrderHandler
                 AttendeeDomainObjectAbstract::FIRST_NAME => $attendee->first_name,
                 AttendeeDomainObjectAbstract::LAST_NAME => $attendee->last_name,
                 AttendeeDomainObjectAbstract::ORDER_ID => $order->getId(),
-                AttendeeDomainObjectAbstract::PUBLIC_ID => $order->getPublicId() . '-' . $publicIdIndex++,
+                AttendeeDomainObjectAbstract::PUBLIC_ID => IdHelper::publicId(IdHelper::ATTENDEE_PREFIX),
                 AttendeeDomainObjectAbstract::SHORT_ID => IdHelper::shortId(IdHelper::ATTENDEE_PREFIX),
                 AttendeeDomainObjectAbstract::LOCALE => $order->getLocale(),
             ];

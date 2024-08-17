@@ -19,8 +19,8 @@ class IdHelper
         return sprintf('%s_%s', $prefix, Str::random($length));
     }
 
-    public static function publicId(int $length = 7, string $suffix = ''): string
+    public static function publicId(string $prefix = '', string $suffix = '', int $length = 7): string
     {
-        return Str::upper(Str::random($length)) . $suffix;
+        return Str::upper($prefix . '-' . Str::random($length) . $suffix);
     }
 }

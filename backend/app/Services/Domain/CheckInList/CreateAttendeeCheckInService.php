@@ -11,6 +11,7 @@ use HiEvents\Exceptions\CannotCheckInException;
 use HiEvents\Helper\DateHelper;
 use HiEvents\Helper\IdHelper;
 use HiEvents\Repository\Interfaces\AttendeeCheckInRepositoryInterface;
+use HiEvents\Services\Domain\CheckInList\DTO\CreateAttendeeCheckInsResponseDTO;
 use Illuminate\Support\Collection;
 
 class CreateAttendeeCheckInService
@@ -44,6 +45,9 @@ class CreateAttendeeCheckInService
             )->map(
                 fn(AttendeeDomainObject $attendee) => $attendee->getId()
             )->toArray(),
+            additionalWhere: [
+                AttendeeCheckInDomainObjectAbstract::EVENT_ID => $checkInList->getEventId(),
+            ],
         );
 
         $errors = new ErrorBagDTO();
@@ -74,6 +78,7 @@ class CreateAttendeeCheckInService
                     AttendeeCheckInDomainObjectAbstract::IP_ADDRESS => $checkInUserIpAddress,
                     AttendeeCheckInDomainObjectAbstract::TICKET_ID => $attendee->getTicketId(),
                     AttendeeCheckInDomainObjectAbstract::SHORT_ID => IdHelper::shortId(IdHelper::CHECK_IN_PREFIX),
+                    AttendeeCheckInDomainObjectAbstract::EVENT_ID => $checkInList->getEventId(),
                 ])
             );
         }
