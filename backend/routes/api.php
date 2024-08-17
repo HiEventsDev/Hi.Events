@@ -26,6 +26,15 @@ use HiEvents\Http\Actions\CapacityAssignments\DeleteCapacityAssignmentAction;
 use HiEvents\Http\Actions\CapacityAssignments\GetCapacityAssignmentAction;
 use HiEvents\Http\Actions\CapacityAssignments\GetCapacityAssignmentsAction;
 use HiEvents\Http\Actions\CapacityAssignments\UpdateCapacityAssignmentAction;
+use HiEvents\Http\Actions\CheckInLists\CreateCheckInListAction;
+use HiEvents\Http\Actions\CheckInLists\DeleteCheckInListAction;
+use HiEvents\Http\Actions\CheckInLists\GetCheckInListAction;
+use HiEvents\Http\Actions\CheckInLists\GetCheckInListsAction;
+use HiEvents\Http\Actions\CheckInLists\Public\CreateAttendeeCheckInPublicAction;
+use HiEvents\Http\Actions\CheckInLists\Public\DeleteAttendeeCheckInPublicAction;
+use HiEvents\Http\Actions\CheckInLists\Public\GetCheckInListAttendeesPublicAction;
+use HiEvents\Http\Actions\CheckInLists\Public\GetCheckInListPublicAction;
+use HiEvents\Http\Actions\CheckInLists\UpdateCheckInListAction;
 use HiEvents\Http\Actions\Common\Webhooks\StripeIncomingWebhookAction;
 use HiEvents\Http\Actions\Events\CreateEventAction;
 use HiEvents\Http\Actions\Events\DuplicateEventAction;
@@ -218,6 +227,12 @@ $router->middleware(['auth:api'])->group(
         $router->get('/events/{event_id}/capacity-assignments/{capacity_assignment_id}', GetCapacityAssignmentAction::class);
         $router->put('/events/{event_id}/capacity-assignments/{capacity_assignment_id}', UpdateCapacityAssignmentAction::class);
         $router->delete('/events/{event_id}/capacity-assignments/{capacity_assignment_id}', DeleteCapacityAssignmentAction::class);
+
+        $router->post('/events/{event_id}/check-in-lists', CreateCheckInListAction::class);
+        $router->get('/events/{event_id}/check-in-lists', GetCheckInListsAction::class);
+        $router->get('/events/{event_id}/check-in-lists/{check_in_list_id}', GetCheckInListAction::class);
+        $router->put('/events/{event_id}/check-in-lists/{check_in_list_id}', UpdateCheckInListAction::class);
+        $router->delete('/events/{event_id}/check-in-lists/{check_in_list_id}', DeleteCheckInListAction::class);
     }
 );
 
@@ -226,25 +241,38 @@ $router->middleware(['auth:api'])->group(
  */
 $router->prefix('/public')->group(
     function (Router $router): void {
+        // Events
         $router->get('/events/{event_id}', GetEventPublicAction::class);
+
+        // Tickets
         $router->get('/events/{event_id}/tickets', GetEventPublicAction::class);
 
+        // Orders
         $router->post('/events/{event_id}/order', CreateOrderActionPublic::class);
         $router->put('/events/{event_id}/order/{order_short_id}', CompleteOrderActionPublic::class);
         $router->get('/events/{event_id}/order/{order_short_id}', GetOrderActionPublic::class);
 
+        // Attendees
         $router->get('/events/{event_id}/attendees/{attendee_short_id}', GetAttendeeActionPublic::class);
 
+        // Promo codes
         $router->get('/events/{event_id}/promo-codes/{promo_code}', GetPromoCodePublic::class);
 
         // Stripe payment gateway
         $router->post('/events/{event_id}/order/{order_short_id}/stripe/payment_intent', CreatePaymentIntentActionPublic::class);
         $router->get('/events/{event_id}/order/{order_short_id}/stripe/payment_intent', GetPaymentIntentActionPublic::class);
 
+        // Questions
         $router->get('/events/{event_id}/questions', GetQuestionsPublicAction::class);
 
         // Webhooks
         $router->post('/webhooks/stripe', StripeIncomingWebhookAction::class);
+
+        // Check-In
+        $router->get('/check-in-lists/{check_in_list_short_id}', GetCheckInListPublicAction::class);
+        $router->get('/check-in-lists/{check_in_list_short_id}/attendees', GetCheckInListAttendeesPublicAction::class);
+        $router->post('/check-in-lists/{check_in_list_short_id}/check-ins', CreateAttendeeCheckInPublicAction::class);
+        $router->delete('/check-in-lists/{check_in_list_short_id}/check-ins/{check_in_short_id}', DeleteAttendeeCheckInPublicAction::class);
     }
 );
 

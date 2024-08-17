@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace HiEvents\Repository\Interfaces;
 
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
 use HiEvents\DomainObjects\TicketDomainObject;
 use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Repository\Eloquent\BaseRepository;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 
 /**
  * @extends BaseRepository<TicketDomainObject>
@@ -60,6 +60,19 @@ interface TicketRepositoryInterface extends RepositoryInterface
      * @return void
      */
     public function addCapacityAssignmentToTickets(int $capacityAssignmentId, array $ticketIds): void;
+
+    /**
+     * @param int $checkInListId
+     * @param array $ticketIds
+     * @return void
+     */
+    public function addCheckInListToTickets(int $checkInListId, array $ticketIds): void;
+
+    /**
+     * @param int $checkInListId
+     * @return void
+     */
+    public function removeCheckInListFromTickets(int $checkInListId): void;
 
     /**
      * @param int $capacityAssignmentId

@@ -11,12 +11,12 @@ use HiEvents\DomainObjects\TaxAndFeesDomainObject;
 use HiEvents\DomainObjects\TicketDomainObject;
 use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Models\CapacityAssignment;
+use HiEvents\Models\CheckInList;
 use HiEvents\Models\Ticket;
 use HiEvents\Repository\Interfaces\TicketRepositoryInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 use RuntimeException;
 
 class TicketRepository extends BaseRepository implements TicketRepositoryInterface
@@ -126,7 +126,7 @@ class TicketRepository extends BaseRepository implements TicketRepositoryInterfa
 
     public function getCapacityAssignmentsByTicketId(int $ticketId): Collection
     {
-        $capacityAssignments = CapacityAssignment::whereHas('tickets', static function($query) use ($ticketId) {
+        $capacityAssignments = CapacityAssignment::whereHas('tickets', static function ($query) use ($ticketId) {
             $query->where('ticket_id', $ticketId);
         })->get();
 
@@ -140,9 +140,45 @@ class TicketRepository extends BaseRepository implements TicketRepositoryInterfa
 
     public function addCapacityAssignmentToTickets(int $capacityAssignmentId, array $ticketIds): void
     {
-        Ticket::whereIn('id', $ticketIds)->each(function (Ticket $ticket) use ($capacityAssignmentId) {
-            $ticket->capacity_assignments()->syncWithoutDetaching([$capacityAssignmentId]);
-        });
+        $ticketIds = array_unique($ticketIds);
+
+        Ticket::whereNotIn('id', $ticketIds)
+            ->whereHas('capacity_assignments', function ($query) use ($capacityAssignmentId) {
+                $query->where('capacity_assignment_id', $capacityAssignmentId);
+            })
+            ->each(function (Ticket $ticket) use ($capacityAssignmentId) {
+                $ticket->capacity_assignments()->detach($capacityAssignmentId);
+            });
+
+        Ticket::whereIn('id', $ticketIds)
+            ->each(function (Ticket $ticket) use ($capacityAssignmentId) {
+                $ticket->capacity_assignments()->syncWithoutDetaching([$capacityAssignmentId]);
+            });
+    }
+
+    public function addCheckInListToTickets(int $checkInListId, array $ticketIds): void
+    {
+        $ticketIds = array_unique($ticketIds);
+
+        Ticket::whereNotIn('id', $ticketIds)
+            ->whereHas('check_in_lists', function ($query) use ($checkInListId) {
+                $query->where('check_in_list_id', $checkInListId);
+            })
+            ->each(function (Ticket $ticket) use ($checkInListId) {
+                $ticket->check_in_lists()->detach($checkInListId);
+            });
+
+        Ticket::whereIn('id', $ticketIds)
+            ->each(function (Ticket $ticket) use ($checkInListId) {
+                $ticket->check_in_lists()->syncWithoutDetaching([$checkInListId]);
+            });
+    }
+
+    public function removeCheckInListFromTickets(int $checkInListId): void
+    {
+        $checkInList = CheckInList::find($checkInListId);
+
+        $checkInList?->tickets()->detach();
     }
 
     public function removeCapacityAssignmentFromTickets(int $capacityAssignmentId): void

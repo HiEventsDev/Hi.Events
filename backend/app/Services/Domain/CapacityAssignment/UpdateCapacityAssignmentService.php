@@ -64,7 +64,10 @@ class UpdateCapacityAssignmentService
                 );
             }
 
-            return $capacityAssignment;
+            return $this->capacityAssignmentRepository->findFirstWhere([
+                CapacityAssignmentDomainObjectAbstract::ID => $capacityAssignment->getId(),
+                CapacityAssignmentDomainObjectAbstract::EVENT_ID => $capacityAssignment->getEventId(),
+            ]);
         });
     }
 }

@@ -42,4 +42,9 @@ class Ticket extends BaseModel
     {
         return $this->belongsToMany(CapacityAssignment::class, 'ticket_capacity_assignments');
     }
+
+    public function check_in_lists(): BelongsToMany
+    {
+        return $this->belongsToMany(CheckInList::class, 'ticket_check_in_lists');
+    }
 }

@@ -6,8 +6,10 @@ namespace HiEvents\Providers;
 
 use HiEvents\Repository\Eloquent\AccountRepository;
 use HiEvents\Repository\Eloquent\AccountUserRepository;
+use HiEvents\Repository\Eloquent\AttendeeCheckInRepository;
 use HiEvents\Repository\Eloquent\AttendeeRepository;
 use HiEvents\Repository\Eloquent\CapacityAssignmentRepository;
+use HiEvents\Repository\Eloquent\CheckInListRepository;
 use HiEvents\Repository\Eloquent\EventDailyStatisticRepository;
 use HiEvents\Repository\Eloquent\EventRepository;
 use HiEvents\Repository\Eloquent\EventSettingsRepository;
@@ -30,8 +32,10 @@ use HiEvents\Repository\Eloquent\TicketRepository;
 use HiEvents\Repository\Eloquent\UserRepository;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
+use HiEvents\Repository\Interfaces\AttendeeCheckInRepositoryInterface;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\CapacityAssignmentRepositoryInterface;
+use HiEvents\Repository\Interfaces\CheckInListRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventDailyStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
@@ -84,6 +88,8 @@ class RepositoryServiceProvider extends ServiceProvider
         AccountUserRepositoryInterface::class => AccountUserRepository::class,
         CapacityAssignmentRepositoryInterface::class => CapacityAssignmentRepository::class,
         StripeCustomerRepositoryInterface::class => StripeCustomerRepository::class,
+        CheckInListRepositoryInterface::class => CheckInListRepository::class,
+        AttendeeCheckInRepositoryInterface::class => AttendeeCheckInRepository::class,
     ];
 
     public function register(): void

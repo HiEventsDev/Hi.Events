@@ -6,6 +6,7 @@ namespace HiEvents\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Attendee extends BaseModel
 {
@@ -32,5 +33,10 @@ class Attendee extends BaseModel
     public function ticket(): BelongsTo
     {
         return $this->belongsTo(Ticket::class);
+    }
+
+    public function check_in(): HasOne
+    {
+        return $this->hasOne(AttendeeCheckIn::class);
     }
 }

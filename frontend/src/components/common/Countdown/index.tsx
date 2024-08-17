@@ -1,7 +1,7 @@
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import {t} from '@lingui/macro';
+import { t } from '@lingui/macro';
 
 dayjs.extend(utc);
 
@@ -11,7 +11,7 @@ interface CountdownProps {
     className?: string;
 }
 
-export const Countdown = ({targetDate, onExpiry, className = ''}: CountdownProps) => {
+export const Countdown = ({ targetDate, onExpiry, className = '' }: CountdownProps) => {
     const [timeLeft, setTimeLeft] = useState('');
 
     useEffect(() => {
@@ -29,9 +29,18 @@ export const Countdown = ({targetDate, onExpiry, className = ''}: CountdownProps
                 return;
             }
 
-            const minutes = Math.floor(diff / 1000 / 60);
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const minutes = Math.floor((diff / 1000 / 60) % 60);
             const seconds = Math.floor((diff / 1000) % 60);
-            setTimeLeft(t`${minutes} minutes and ${seconds} seconds`);
+
+            if (days > 0) {
+                setTimeLeft(t`${days} days, ${hours} hours, ${minutes} minutes, and ${seconds} seconds`);
+            } else if (hours > 0) {
+                setTimeLeft(t`${hours} hours, ${minutes} minutes, and ${seconds} seconds`);
+            } else {
+                setTimeLeft(t`${minutes} minutes and ${seconds} seconds`);
+            }
         }, 1000);
 
         return () => {

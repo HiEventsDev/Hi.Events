@@ -6,6 +6,7 @@ namespace HiEvents\Repository\Eloquent;
 
 use BadMethodCallException;
 use Carbon\Carbon;
+use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -77,6 +78,19 @@ abstract class BaseRepository implements RepositoryInterface
             columns: $columns,
             page: $page,
         );
+        $this->resetModel();
+
+        return $this->handleResults($results);
+    }
+
+    public function simplePaginateWhere(
+        array $where,
+        int   $limit = null,
+        array $columns = self::DEFAULT_COLUMNS,
+    ): Paginator
+    {
+        $this->applyConditions($where);
+        $results = $this->model->simplePaginate($this->getPaginationPerPage($limit), $columns);
         $this->resetModel();
 
         return $this->handleResults($results);
@@ -297,6 +311,10 @@ abstract class BaseRepository implements RepositoryInterface
         }
 
         if ($results instanceof LengthAwarePaginator) {
+            return $results->setCollection(collect($domainObjects));
+        }
+
+        if ($results instanceof Paginator) {
             return $results->setCollection(collect($domainObjects));
         }
 

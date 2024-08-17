@@ -1,0 +1,95 @@
+@import '../../../styles/mixins';
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  @include respond-below(md) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .search {
+    width: 80%;
+    margin-right: 20px;
+    max-width: 320px;
+
+    @include respond-below(md) {
+      width: 100%;
+      margin-bottom: 20px;
+      max-width: 100%;
+    }
+  }
+
+  .button {
+    display: flex;
+    place-content: flex-end;
+
+    button {
+      height: 42px;
+    }
+
+    @include respond-below(md) {
+      width: 100%;
+    }
+  }
+}
+
+.checkInListList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+
+  .checkInListCard {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-bottom: 0 !important;
+
+    .checkInListHeader {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 5px;
+      margin-bottom: 20px;
+
+      .checkInListAppliesTo {
+        .appliesToText {
+          display: flex;
+          color: #999;
+          justify-content: center;
+          align-items: center;
+        }
+      }
+    }
+
+    .checkInListName {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .checkInListInfo {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .checkInListCapacity {
+        margin-bottom: 4px;
+        width: 120px;
+
+        .capacityText {
+          margin-top: 10px;
+          color: #999;
+        }
+      }
+
+      .checkInListActions {
+
+      }
+    }
+  }
+}
+
