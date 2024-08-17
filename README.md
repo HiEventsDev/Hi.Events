@@ -122,6 +122,15 @@ a quick start, follow these steps:
 ℹ️ Please refer to the [getting started guide](https://hi.events/docs/getting-started) for other installation methods, and
 for setting up a production or local development environment.
 
+## 💜 Buy Me a Coffee
+
+If you find Hi.Events useful, it would be massively appreciated if you made a small donation to help support the project.
+
+<a href="https://www.buymeacoffee.com/hi.events" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
+<br/>
+or
+<a href="https://github.com/sponsors/HiEventsDev" target="_blank"> Sponsor on GitHub</a>
+
 ## 📝 Change Log
 
 Stay updated with our ongoing improvements and feature additions at
