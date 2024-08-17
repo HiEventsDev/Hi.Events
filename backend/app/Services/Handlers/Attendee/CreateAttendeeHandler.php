@@ -116,7 +116,7 @@ class CreateAttendeeHandler
                     ? OrderPaymentStatus::NO_PAYMENT_REQUIRED->name
                     : OrderPaymentStatus::PAYMENT_RECEIVED->name,
                 OrderDomainObjectAbstract::CURRENCY => $event->getCurrency(),
-                OrderDomainObjectAbstract::PUBLIC_ID => IdHelper::publicId(),
+                OrderDomainObjectAbstract::PUBLIC_ID => IdHelper::publicId(IdHelper::ORDER_PREFIX),
                 OrderDomainObjectAbstract::IS_MANUALLY_CREATED => true,
                 OrderDomainObjectAbstract::LOCALE => $attendeeDTO->locale,
             ]
@@ -218,7 +218,7 @@ class CreateAttendeeHandler
             AttendeeDomainObjectAbstract::FIRST_NAME => $attendeeDTO->first_name,
             AttendeeDomainObjectAbstract::LAST_NAME => $attendeeDTO->last_name,
             AttendeeDomainObjectAbstract::ORDER_ID => $order->getId(),
-            AttendeeDomainObjectAbstract::PUBLIC_ID => $order->getPublicId() . '-1',
+            AttendeeDomainObjectAbstract::PUBLIC_ID => IdHelper::publicId(IdHelper::ATTENDEE_PREFIX),
             AttendeeDomainObjectAbstract::SHORT_ID => IdHelper::shortId(IdHelper::ATTENDEE_PREFIX),
             AttendeeDomainObjectAbstract::LOCALE => $attendeeDTO->locale,
         ]);

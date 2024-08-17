@@ -51,7 +51,7 @@ class OrderManagementService
             'status' => OrderStatus::RESERVED->name,
             'session_id' => $sessionId,
             'currency' => $event->getCurrency(),
-            'public_id' => IdHelper::publicId(),
+            'public_id' => IdHelper::publicId(IdHelper::ORDER_PREFIX),
             'promo_code_id' => $promoCode?->getId(),
             'promo_code' => $promoCode?->getCode(),
             'locale' => $locale,

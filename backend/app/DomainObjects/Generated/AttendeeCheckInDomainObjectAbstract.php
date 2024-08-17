@@ -14,6 +14,7 @@ abstract class AttendeeCheckInDomainObjectAbstract extends \HiEvents\DomainObjec
     final public const CHECK_IN_LIST_ID = 'check_in_list_id';
     final public const TICKET_ID = 'ticket_id';
     final public const ATTENDEE_ID = 'attendee_id';
+    final public const EVENT_ID = 'event_id';
     final public const SHORT_ID = 'short_id';
     final public const IP_ADDRESS = 'ip_address';
     final public const DELETED_AT = 'deleted_at';
@@ -24,6 +25,7 @@ abstract class AttendeeCheckInDomainObjectAbstract extends \HiEvents\DomainObjec
     protected int $check_in_list_id;
     protected int $ticket_id;
     protected int $attendee_id;
+    protected int $event_id;
     protected string $short_id;
     protected string $ip_address;
     protected ?string $deleted_at = null;
@@ -37,6 +39,7 @@ abstract class AttendeeCheckInDomainObjectAbstract extends \HiEvents\DomainObjec
                     'check_in_list_id' => $this->check_in_list_id ?? null,
                     'ticket_id' => $this->ticket_id ?? null,
                     'attendee_id' => $this->attendee_id ?? null,
+                    'event_id' => $this->event_id ?? null,
                     'short_id' => $this->short_id ?? null,
                     'ip_address' => $this->ip_address ?? null,
                     'deleted_at' => $this->deleted_at ?? null,
@@ -87,6 +90,17 @@ abstract class AttendeeCheckInDomainObjectAbstract extends \HiEvents\DomainObjec
     public function getAttendeeId(): int
     {
         return $this->attendee_id;
+    }
+
+    public function setEventId(int $event_id): self
+    {
+        $this->event_id = $event_id;
+        return $this;
+    }
+
+    public function getEventId(): int
+    {
+        return $this->event_id;
     }
 
     public function setShortId(string $short_id): self

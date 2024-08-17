@@ -1,7 +1,16 @@
 import {CheckInList, IdParam} from "../../../types";
 import {Badge, Button, Progress} from "@mantine/core";
 import {t, Trans} from "@lingui/macro";
-import {IconCopy, IconExternalLink, IconHelp, IconLink, IconPencil, IconPlus, IconTrash} from "@tabler/icons-react";
+import {
+    IconCopy,
+    IconExternalLink,
+    IconHelp,
+    IconLink,
+    IconPencil,
+    IconPlus,
+    IconTrash,
+    IconUsers
+} from "@tabler/icons-react";
 import Truncate from "../Truncate";
 import {NoResultsSplash} from "../NoResultsSplash";
 import classes from './CheckInListList.module.scss';
@@ -134,7 +143,7 @@ export const CheckInListList = ({checkInLists, openCreateModal}: CheckInListList
                                         style={{marginTop: '10px'}}
                                     />
                                     <div className={classes.capacityText}>
-                                        {list.checked_in_attendees} / {list.total_attendees}
+                                        <IconUsers size={18}/> {list.checked_in_attendees} / {list.total_attendees}
                                     </div>
                                 </div>
                                 <div className={classes.checkInListActions}>

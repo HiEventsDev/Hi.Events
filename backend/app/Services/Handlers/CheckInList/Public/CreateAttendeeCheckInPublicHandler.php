@@ -5,7 +5,7 @@ namespace HiEvents\Services\Handlers\CheckInList\Public;
 use HiEvents\DomainObjects\AttendeeCheckInDomainObject;
 use HiEvents\Exceptions\CannotCheckInException;
 use HiEvents\Services\Domain\CheckInList\CreateAttendeeCheckInService;
-use HiEvents\Services\Domain\CheckInList\CreateAttendeeCheckInsResponseDTO;
+use HiEvents\Services\Domain\CheckInList\DTO\CreateAttendeeCheckInsResponseDTO;
 use HiEvents\Services\Handlers\CheckInList\Public\DTO\CreateAttendeeCheckInPublicDTO;
 use Psr\Log\LoggerInterface;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace HiEvents\Services\Domain\CheckInList;
+namespace HiEvents\Services\Domain\CheckInList\DTO;
 
 use HiEvents\DataTransferObjects\BaseDTO;
 use HiEvents\DataTransferObjects\ErrorBagDTO;

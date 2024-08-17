@@ -42,7 +42,11 @@ const CheckIn = () => {
             status: ['ACTIVE'],
         },
     };
-    const attendeesQuery = useGetCheckInListAttendees(checkInListShortId, queryFilters);
+    const attendeesQuery = useGetCheckInListAttendees(
+        checkInListShortId,
+        queryFilters,
+        checkInList?.is_active && !checkInList?.is_expired,
+    );
     const attendees = attendeesQuery?.data?.data;
     const checkInMutation = useCreateCheckInPublic(queryFilters);
     const deleteCheckInMutation = useDeleteCheckInPublic(queryFilters);
