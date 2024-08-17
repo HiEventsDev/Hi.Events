@@ -16,6 +16,8 @@ class AttendeeDomainObject extends Generated\AttendeeDomainObjectAbstract implem
     /** @var Collection<QuestionAndAnswerViewDomainObject>|null */
     public ?Collection $questionAndAnswerViews = null;
 
+    public ?AttendeeCheckInDomainObject $checkIn = null;
+
     public static function getDefaultSort(): string
     {
         return self::CREATED_AT;
@@ -98,5 +100,16 @@ class AttendeeDomainObject extends Generated\AttendeeDomainObjectAbstract implem
     public function getQuestionAndAnswerViews(): ?Collection
     {
         return $this->questionAndAnswerViews;
+    }
+
+    public function setCheckIn(?AttendeeCheckInDomainObject $checkIn): AttendeeDomainObject
+    {
+        $this->checkIn = $checkIn;
+        return $this;
+    }
+
+    public function getCheckIn(): ?AttendeeCheckInDomainObject
+    {
+        return $this->checkIn;
     }
 }

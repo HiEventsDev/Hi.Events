@@ -14,8 +14,6 @@ abstract class AttendeeDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
     final public const ORDER_ID = 'order_id';
     final public const TICKET_ID = 'ticket_id';
     final public const EVENT_ID = 'event_id';
-    final public const CHECKED_IN_BY = 'checked_in_by';
-    final public const CHECKED_OUT_BY = 'checked_out_by';
     final public const TICKET_PRICE_ID = 'ticket_price_id';
     final public const SHORT_ID = 'short_id';
     final public const FIRST_NAME = 'first_name';
@@ -23,7 +21,6 @@ abstract class AttendeeDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
     final public const EMAIL = 'email';
     final public const PUBLIC_ID = 'public_id';
     final public const STATUS = 'status';
-    final public const CHECKED_IN_AT = 'checked_in_at';
     final public const CREATED_AT = 'created_at';
     final public const UPDATED_AT = 'updated_at';
     final public const DELETED_AT = 'deleted_at';
@@ -33,8 +30,6 @@ abstract class AttendeeDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
     protected int $order_id;
     protected int $ticket_id;
     protected int $event_id;
-    protected ?int $checked_in_by = null;
-    protected ?int $checked_out_by = null;
     protected int $ticket_price_id;
     protected string $short_id;
     protected string $first_name = '';
@@ -42,7 +37,6 @@ abstract class AttendeeDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
     protected string $email;
     protected string $public_id;
     protected string $status;
-    protected ?string $checked_in_at = null;
     protected string $created_at;
     protected string $updated_at;
     protected ?string $deleted_at = null;
@@ -55,8 +49,6 @@ abstract class AttendeeDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
                     'order_id' => $this->order_id ?? null,
                     'ticket_id' => $this->ticket_id ?? null,
                     'event_id' => $this->event_id ?? null,
-                    'checked_in_by' => $this->checked_in_by ?? null,
-                    'checked_out_by' => $this->checked_out_by ?? null,
                     'ticket_price_id' => $this->ticket_price_id ?? null,
                     'short_id' => $this->short_id ?? null,
                     'first_name' => $this->first_name ?? null,
@@ -64,7 +56,6 @@ abstract class AttendeeDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
                     'email' => $this->email ?? null,
                     'public_id' => $this->public_id ?? null,
                     'status' => $this->status ?? null,
-                    'checked_in_at' => $this->checked_in_at ?? null,
                     'created_at' => $this->created_at ?? null,
                     'updated_at' => $this->updated_at ?? null,
                     'deleted_at' => $this->deleted_at ?? null,
@@ -114,28 +105,6 @@ abstract class AttendeeDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
     public function getEventId(): int
     {
         return $this->event_id;
-    }
-
-    public function setCheckedInBy(?int $checked_in_by): self
-    {
-        $this->checked_in_by = $checked_in_by;
-        return $this;
-    }
-
-    public function getCheckedInBy(): ?int
-    {
-        return $this->checked_in_by;
-    }
-
-    public function setCheckedOutBy(?int $checked_out_by): self
-    {
-        $this->checked_out_by = $checked_out_by;
-        return $this;
-    }
-
-    public function getCheckedOutBy(): ?int
-    {
-        return $this->checked_out_by;
     }
 
     public function setTicketPriceId(int $ticket_price_id): self
@@ -213,17 +182,6 @@ abstract class AttendeeDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
     public function getStatus(): string
     {
         return $this->status;
-    }
-
-    public function setCheckedInAt(?string $checked_in_at): self
-    {
-        $this->checked_in_at = $checked_in_at;
-        return $this;
-    }
-
-    public function getCheckedInAt(): ?string
-    {
-        return $this->checked_in_at;
     }
 
     public function setCreatedAt(string $created_at): self

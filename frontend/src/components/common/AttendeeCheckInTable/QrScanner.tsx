@@ -54,6 +54,11 @@ export const QRScannerComponent = (props: QRScannerComponentProps) => {
             const latestProcessedAttendeeIds = latestProcessedAttendeeIdsRef.current;
             const alreadyScanned = latestProcessedAttendeeIds.includes(debouncedAttendeeId);
 
+            if (alreadyScanned) {
+                showError(t`You already scanned this ticket`);
+                return;
+            }
+
             if (!isCheckingIn && !alreadyScanned) {
                 setIsCheckingIn(true);
                 props.onCheckIn(debouncedAttendeeId, () => {
@@ -129,7 +134,8 @@ export const QRScannerComponent = (props: QRScannerComponentProps) => {
             {permissionDenied && (
                 <div className={classes.permissionMessage}>
                     <Trans>
-                        Camera permission was denied. <Anchor onClick={requestPermission}>Request Permission</Anchor> again,
+                        Camera permission was denied. <Anchor onClick={requestPermission}>Request
+                        Permission</Anchor> again,
                         or if this doesn't work,
                         you will need to <Anchor target={'_blank'}
                                                  href={'https://support.onemob.com/hc/en-us/articles/360037342154-How-do-I-grant-permission-for-Camera-and-Microphone-in-my-web-browser-'}>grant

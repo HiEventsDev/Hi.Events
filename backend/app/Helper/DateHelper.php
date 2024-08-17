@@ -19,4 +19,14 @@ class DateHelper
             ->setTimezone($userTimezone)
             ->toString();
     }
+
+    public static function utcDateIsPast(string $eventDate): bool
+    {
+        return Carbon::parse($eventDate, 'UTC')->isPast();
+    }
+
+    public static function utcDateIsFuture(string $eventDate): bool
+    {
+        return Carbon::parse($eventDate, 'UTC')->isFuture();
+    }
 }

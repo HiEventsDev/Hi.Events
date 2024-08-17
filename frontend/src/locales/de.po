@@ -21,6 +21,14 @@ msgstr "„Es gibt noch nichts zu zeigen“"
 msgid "{0}"
 msgstr ""
 
+#: src/components/layouts/CheckIn/index.tsx:83
+msgid "{0} <0>checked in</0> successfully"
+msgstr "{0} <0>erfolgreich eingecheckt</0>"
+
+#: src/components/layouts/CheckIn/index.tsx:57
+msgid "{0} <0>checked out</0> successfully"
+msgstr "{0} <0>erfolgreich ausgecheckt</0>"
+
 #: src/components/routes/ticket-widget/SelectTickets/index.tsx:300
 msgid "{0} available"
 msgstr "{0} verfügbar"
@@ -41,7 +49,19 @@ msgstr "{0} erfolgreich aktualisiert"
 msgid "{0}'s Events"
 msgstr "{0}s Veranstaltungen"
 
-#: src/components/common/Countdown/index.tsx:34
+#: src/components/layouts/CheckIn/index.tsx:337
+msgid "{0}/{1} checked in"
+msgstr "{0}/{1} eingecheckt"
+
+#: src/components/common/Countdown/index.tsx:38
+msgid "{days} days, {hours} hours, {minutes} minutes, and {seconds} seconds"
+msgstr "{days} Tage, {hours} Stunden, {minutes} Minuten und {seconds} Sekunden"
+
+#: src/components/common/Countdown/index.tsx:40
+msgid "{hours} hours, {minutes} minutes, and {seconds} seconds"
+msgstr "{hours} Stunden, {minutes} Minuten und {seconds} Sekunden"
+
+#: src/components/common/Countdown/index.tsx:42
 msgid "{minutes} minutes and {seconds} seconds"
 msgstr "{Minuten} Minuten und {Sekunden} Sekunden"
 
@@ -52,6 +72,10 @@ msgstr "Erste Veranstaltung von {organizerName}"
 #: src/components/common/CapacityAssignmentList/index.tsx:47
 msgid "<0>Capacity assignments let you manage capacity across tickets or an entire event. Ideal for multi-day events, workshops, and more, where controlling attendance is crucial.</0><1>For instance, you can associate a capacity assignment with <2>Day One</2> and <3>All Days</3> ticket. Once the capacity is reached, both tickets will automatically stop being available for sale.</1>"
 msgstr "<0>Kapazitätszuweisungen ermöglichen es Ihnen, die Kapazität über Tickets oder ein ganzes Ereignis zu verwalten. Ideal für mehrtägige Veranstaltungen, Workshops und mehr, bei denen die Kontrolle der Teilnehmerzahl entscheidend ist.</0><1>Beispielsweise können Sie eine Kapazitätszuweisung mit einem <2>Tag Eins</2> und einem <3>Alle Tage</3>-Ticket verknüpfen. Sobald die Kapazität erreicht ist, werden beide Tickets automatisch nicht mehr zum Verkauf angeboten.</1>"
+
+#: src/components/common/CheckInListList/index.tsx:49
+msgid "<0>Check-in lists help manage attendee entry for your event. You can associate multiple tickets with a check-in list and ensure only those with valid tickets can enter.</0>"
+msgstr "<0>Einchecklisten helfen, den Eintritt der Teilnehmer zu verwalten. Sie können mehrere Tickets mit einer Eincheckliste verknüpfen und sicherstellen, dass nur Personen mit gültigen Tickets eintreten können.</0>"
 
 #: src/components/common/WidgetEditor/index.tsx:322
 msgid "<0>https://</0>your-website.com"
@@ -185,7 +209,7 @@ msgstr "Über die Veranstaltung"
 msgid "Accept Invitation"
 msgstr "Die Einladung annehmen"
 
-#: src/components/routes/account/ManageAccount/index.tsx:23
+#: src/components/routes/account/ManageAccount/index.tsx:24
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:53
 msgid "Account"
 msgstr "Konto"
@@ -195,7 +219,7 @@ msgid "Account Name"
 msgstr "Kontoname"
 
 #: src/components/common/GlobalMenu/index.tsx:19
-#: src/components/routes/account/ManageAccount/index.tsx:18
+#: src/components/routes/account/ManageAccount/index.tsx:19
 msgid "Account Settings"
 msgstr "Account Einstellungen"
 
@@ -213,6 +237,11 @@ msgstr "Aktionen"
 msgid "Activate"
 msgstr "aktivieren Sie"
 
+#: src/components/forms/CheckInListForm/index.tsx:53
+msgid "Activation date"
+msgstr "Aktivierungsdatum"
+
+#: src/components/common/CheckInListList/index.tsx:115
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:18
 #: src/components/modals/EditUserModal/index.tsx:110
 msgid "Active"
@@ -221,6 +250,10 @@ msgstr "Aktiv"
 #: src/components/routes/event/attendees.tsx:59
 msgid "Add"
 msgstr "Hinzufügen"
+
+#: src/components/forms/CheckInListForm/index.tsx:45
+msgid "Add a description for this check-in list"
+msgstr "Fügen Sie eine Beschreibung für diese Eincheckliste hinzu"
 
 #: src/components/forms/QuestionForm/index.tsx:208
 msgid "Add description"
@@ -408,17 +441,21 @@ msgstr "Möchten Sie diesen Aktionscode wirklich löschen?"
 msgid "Are you sure you want to delete this question?"
 msgstr "Möchten Sie diese Frage wirklich löschen?"
 
-#: src/components/layouts/Event/index.tsx:97
+#: src/components/layouts/Event/index.tsx:94
 msgid "Are you sure you want to make this event draft? This will make the event invisible to the public"
 msgstr "Möchten Sie diese Veranstaltung wirklich als Entwurf speichern? Dadurch wird die Veranstaltung für die Öffentlichkeit unsichtbar."
 
-#: src/components/layouts/Event/index.tsx:98
+#: src/components/layouts/Event/index.tsx:95
 msgid "Are you sure you want to make this event public? This will make the event visible to the public"
 msgstr "Möchten Sie diese Veranstaltung wirklich öffentlich machen? Dadurch wird die Veranstaltung für die Öffentlichkeit sichtbar"
 
 #: src/components/common/CapacityAssignmentList/index.tsx:163
 msgid "Are you sure you would like to delete this Capacity Assignment?"
 msgstr "Sind Sie sicher, dass Sie diese Kapazitätszuweisung löschen möchten?"
+
+#: src/components/common/CheckInListList/index.tsx:175
+msgid "Are you sure you would like to delete this Check-In List?"
+msgstr "Möchten Sie diese Eincheckliste wirklich löschen?"
 
 #: src/components/forms/QuestionForm/index.tsx:90
 msgid "Ask once per attendee"
@@ -525,7 +562,7 @@ msgstr "Berechnungstyp"
 msgid "California"
 msgstr "Kalifornien"
 
-#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:131
+#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:136
 msgid "Camera permission was denied. <0>Request Permission</0> again, or if this doesn't work, you will need to <1>grant this page</1> access to your camera in your browser settings."
 msgstr "Die Kameraberechtigung wurde verweigert. <0>Fordern Sie die Berechtigung erneut an</0>. Wenn dies nicht funktioniert, müssen Sie dieser Seite in Ihren Browsereinstellungen <1>Zugriff auf Ihre Kamera gewähren</1>."
 
@@ -591,6 +628,7 @@ msgid "check in"
 msgstr "einchecken"
 
 #: src/components/common/AttendeeCheckInTable/index.tsx:152
+#: src/components/layouts/CheckIn/index.tsx:171
 msgid "Check In"
 msgstr "Einchecken"
 
@@ -599,13 +637,46 @@ msgstr "Einchecken"
 msgid "check out"
 msgstr "Kasse"
 
+#: src/components/layouts/CheckIn/index.tsx:171
+msgid "Check Out"
+msgstr "Auschecken"
+
 #: src/components/common/EventCard/index.tsx:106
 msgid "Check-in"
 msgstr "Einchecken"
 
 #: src/components/layouts/Event/index.tsx:52
-msgid "Check-In"
-msgstr "Einchecken"
+#~ msgid "Check-In"
+#~ msgstr "Einchecken"
+
+#: src/components/modals/CreateCheckInListModal/index.tsx:37
+msgid "Check-In List created successfully"
+msgstr "Eincheckliste erfolgreich erstellt"
+
+#: src/components/common/CheckInListList/index.tsx:33
+msgid "Check-In List deleted successfully"
+msgstr "Eincheckliste erfolgreich gelöscht"
+
+#: src/components/layouts/CheckIn/index.tsx:212
+msgid "Check-in list has expired"
+msgstr "Die Eincheckliste ist abgelaufen"
+
+#: src/components/layouts/CheckIn/index.tsx:229
+msgid "Check-in list is not active"
+msgstr "Die Eincheckliste ist nicht aktiv"
+
+#: src/components/layouts/CheckIn/index.tsx:196
+msgid "Check-in list not found"
+msgstr "Eincheckliste nicht gefunden"
+
+#: src/components/layouts/Event/index.tsx:48
+#: src/components/routes/event/CheckInLists/index.tsx:32
+msgid "Check-In Lists"
+msgstr "Einchecklisten"
+
+#: src/components/common/CheckInListList/index.tsx:161
+msgid "Check-In URL copied to clipboard"
+msgstr "Eincheck-URL in die Zwischenablage kopiert"
 
 #: src/components/forms/QuestionForm/index.tsx:113
 msgid "Checkbox options allow multiple selections"
@@ -619,6 +690,10 @@ msgstr "Kontrollkästchen"
 #: src/components/common/AttendeeDetails/index.tsx:38
 msgid "Checked In"
 msgstr "Eingecheckt"
+
+#: src/components/layouts/CheckIn/index.tsx:115
+msgid "Checked in successfully"
+msgstr "Erfolgreich eingecheckt"
 
 #: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:61
 msgid "Checkout Settings"
@@ -657,12 +732,12 @@ msgstr "klicken Sie hier"
 msgid "Click to copy"
 msgstr "Zum Kopieren klicken"
 
-#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:141
+#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:147
 #: src/components/modals/RefundOrderModal/index.tsx:123
 msgid "Close"
 msgstr "Schließen"
 
-#: src/components/layouts/Event/index.tsx:193
+#: src/components/layouts/Event/index.tsx:190
 msgid "Close sidebar"
 msgstr "Sidebar schließen"
 
@@ -689,7 +764,7 @@ msgstr "Die Farbe muss ein gültiger Hex-Farbcode sein. Beispiel: #ffffff"
 msgid "Colors"
 msgstr "Farben"
 
-#: src/components/layouts/Event/index.tsx:90
+#: src/components/layouts/Event/index.tsx:87
 msgid "Coming Soon"
 msgstr "Demnächst"
 
@@ -808,6 +883,10 @@ msgstr "in die Zwischenablage kopiert"
 msgid "Copy"
 msgstr "Kopieren"
 
+#: src/components/common/CheckInListList/index.tsx:155
+msgid "Copy Check-In URL"
+msgstr "Eincheck-URL kopieren"
+
 #: src/components/routes/ticket-widget/CollectInformation/index.tsx:267
 msgid "Copy details to all attendees"
 msgstr "Details an alle Teilnehmer kopieren"
@@ -839,6 +918,7 @@ msgstr "Einen Promo-Code erstellen"
 
 #: src/components/common/TicketsTable/index.tsx:74
 #: src/components/modals/CreateCapacityAssignmentModal/index.tsx:59
+#: src/components/modals/CreateCheckInListModal/index.tsx:60
 msgid "Create a Ticket"
 msgstr "Ticket erstellen"
 
@@ -861,6 +941,13 @@ msgstr "Teilnehmer erstellen"
 msgid "Create Capacity Assignment"
 msgstr "Kapazitätszuweisung erstellen"
 
+#: src/components/common/CheckInListList/index.tsx:60
+#: src/components/modals/CreateCheckInListModal/index.tsx:69
+#: src/components/modals/CreateCheckInListModal/index.tsx:79
+#: src/components/routes/event/CheckInLists/index.tsx:46
+msgid "Create Check-In List"
+msgstr "Eincheckliste erstellen"
+
 #: src/components/modals/CreateEventModal/index.tsx:67
 #: src/components/routes/events/Dashboard/index.tsx:120
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:81
@@ -879,8 +966,8 @@ msgstr "Erstelle neu"
 msgid "Create Organizer"
 msgstr "Organizer erstellen"
 
-#: src/components/modals/CreatePromoCodeModal/index.tsx:52
-#: src/components/modals/CreatePromoCodeModal/index.tsx:57
+#: src/components/modals/CreatePromoCodeModal/index.tsx:51
+#: src/components/modals/CreatePromoCodeModal/index.tsx:56
 msgid "Create Promo Code"
 msgstr "Promo-Code erstellen"
 
@@ -951,6 +1038,7 @@ msgid "Customize your event page to match your brand and style."
 msgstr "Passen Sie Ihre Veranstaltungsseite an Ihre Marke und Ihren Stil an."
 
 #: src/components/common/CapacityAssignmentList/index.tsx:156
+#: src/components/common/CheckInListList/index.tsx:168
 #: src/components/common/OrdersTable/index.tsx:131
 #: src/components/common/PromoCodeTable/index.tsx:180
 #: src/components/common/QuestionsTable/index.tsx:113
@@ -979,6 +1067,10 @@ msgstr "Terminzeit"
 msgid "Day one capacity"
 msgstr "Kapazität am ersten Tag"
 
+#: src/components/forms/CheckInListForm/index.tsx:21
+#~ msgid "Day one check-in list"
+#~ msgstr "Tag eins Eincheckliste"
+
 #: src/components/common/PromoCodeTable/index.tsx:39
 #: src/components/common/TaxAndFeeList/index.tsx:73
 msgid "Delete"
@@ -987,6 +1079,10 @@ msgstr "Löschen"
 #: src/components/common/CapacityAssignmentList/index.tsx:159
 msgid "Delete Capacity"
 msgstr "Kapazität löschen"
+
+#: src/components/common/CheckInListList/index.tsx:171
+msgid "Delete Check-In List"
+msgstr "Eincheckliste löschen"
 
 #: src/components/common/PromoCodeTable/index.tsx:184
 msgid "Delete code"
@@ -1015,6 +1111,10 @@ msgstr "Ticket löschen"
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:78
 msgid "Description"
 msgstr "Beschreibung"
+
+#: src/components/forms/CheckInListForm/index.tsx:42
+msgid "Description for check-in staff"
+msgstr "Beschreibung für das Eincheckpersonal"
 
 #: src/components/routes/ticket-widget/CollectInformation/index.tsx:285
 msgid "Details"
@@ -1118,6 +1218,12 @@ msgstr "Kapazität bearbeiten"
 #: src/components/modals/EditCapacityAssignmentModal/index.tsx:74
 msgid "Edit Capacity Assignment"
 msgstr "Kapazitätszuweisung bearbeiten"
+
+#: src/components/common/CheckInListList/index.tsx:147
+#: src/components/modals/EditCheckInListModal/index.tsx:69
+#: src/components/modals/EditCheckInListModal/index.tsx:91
+msgid "Edit Check-In List"
+msgstr "Eincheckliste bearbeiten"
 
 #: src/components/common/PromoCodeTable/index.tsx:169
 msgid "Edit Code"
@@ -1285,11 +1391,11 @@ msgstr "Ereignisstandards"
 msgid "Event duplicated successfully"
 msgstr "Ereignis erfolgreich dupliziert"
 
-#: src/components/layouts/Event/index.tsx:150
+#: src/components/layouts/Event/index.tsx:147
 msgid "Event is not visible to the public"
 msgstr "Das Ereignis ist nicht öffentlich sichtbar"
 
-#: src/components/layouts/Event/index.tsx:149
+#: src/components/layouts/Event/index.tsx:146
 msgid "Event is visible to the public"
 msgstr "Veranstaltung ist öffentlich sichtbar"
 
@@ -1297,23 +1403,27 @@ msgstr "Veranstaltung ist öffentlich sichtbar"
 msgid "Event location & venue details"
 msgstr "Veranstaltungsort & Details zum Veranstaltungsort"
 
-#: src/components/layouts/Event/index.tsx:171
+#: src/components/layouts/Event/index.tsx:168
 msgid "Event page"
 msgstr "Veranstaltungsseite"
 
-#: src/components/layouts/Event/index.tsx:109
+#: src/components/layouts/Event/index.tsx:106
 #: src/components/routes/event/GettingStarted/index.tsx:37
 msgid "Event status update failed. Please try again later"
 msgstr "Die Aktualisierung des Ereignisstatus ist fehlgeschlagen. Bitte versuchen Sie es später erneut"
 
-#: src/components/layouts/Event/index.tsx:106
+#: src/components/layouts/Event/index.tsx:103
 #: src/components/routes/event/GettingStarted/index.tsx:34
 msgid "Event status updated"
 msgstr "Veranstaltungsstatus aktualisiert"
 
-#: src/components/layouts/Event/index.tsx:130
+#: src/components/layouts/Event/index.tsx:127
 msgid "Events"
 msgstr "Veranstaltungen"
+
+#: src/components/forms/CheckInListForm/index.tsx:62
+msgid "Expiration date"
+msgstr "Ablaufdatum"
 
 #: src/components/common/PromoCodeTable/index.tsx:72
 msgid "Expires"
@@ -1347,6 +1457,10 @@ msgstr "Das Exportieren der Teilnehmer ist fehlgeschlagen. Bitte versuchen Sie e
 #: src/components/routes/event/orders.tsx:38
 msgid "Failed to export orders. Please try again."
 msgstr "Der Export der Bestellungen ist fehlgeschlagen. Bitte versuchen Sie es erneut."
+
+#: src/components/modals/EditCheckInListModal/index.tsx:79
+msgid "Failed to load Check-In List"
+msgstr "Laden der Eincheckliste fehlgeschlagen"
 
 #: src/components/common/AttendeeTable/index.tsx:51
 msgid "Failed to resend ticket email"
@@ -1405,7 +1519,7 @@ msgstr "Fest"
 msgid "Fixed amount"
 msgstr "Fester Betrag"
 
-#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:83
+#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:88
 msgid "Flash is not available on this device"
 msgstr "Flash ist auf diesem Gerät nicht verfügbar"
 
@@ -1567,7 +1681,7 @@ msgstr "Wenn Sie ein Ticket ausblenden, können Benutzer es nicht auf der Verans
 msgid "Homepage Design"
 msgstr "Homepage-Design"
 
-#: src/components/layouts/Event/index.tsx:50
+#: src/components/layouts/Event/index.tsx:51
 msgid "Homepage Designer"
 msgstr "Homepage Designer"
 
@@ -1635,6 +1749,7 @@ msgstr "Bild erfolgreich hochgeladen"
 msgid "Image width must be at least 900px and height at least 50px"
 msgstr "Die Bildbreite muss mindestens 900 Pixel und die Höhe mindestens 50 Pixel betragen."
 
+#: src/components/common/CheckInListList/index.tsx:115
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:24
 #: src/components/modals/EditUserModal/index.tsx:111
 msgid "Inactive"
@@ -1651,6 +1766,14 @@ msgstr "Fügen Sie Verbindungsdetails für Ihre Online-Veranstaltung hinzu. Dies
 #: src/components/routes/event/Settings/Sections/MiscSettings/index.tsx:54
 msgid "Include tax and fees in the price"
 msgstr "Steuern und Gebühren im Preis einbeziehen"
+
+#: src/components/common/CheckInListList/index.tsx:102
+msgid "Includes {0} tickets"
+msgstr "Enthält {0} Tickets"
+
+#: src/components/common/CheckInListList/index.tsx:103
+msgid "Includes 1 ticket"
+msgstr "Enthält 1 Ticket"
 
 #: src/components/layouts/Event/index.tsx:54
 #~ msgid "Integrations"
@@ -1753,6 +1876,7 @@ msgid "Make this question mandatory"
 msgstr "Machen Sie diese Frage obligatorisch"
 
 #: src/components/common/CapacityAssignmentList/index.tsx:143
+#: src/components/common/CheckInListList/index.tsx:144
 #: src/components/common/EventCard/index.tsx:89
 #: src/components/common/OrdersTable/index.tsx:94
 #: src/components/common/OrdersTable/index.tsx:109
@@ -1884,6 +2008,7 @@ msgstr "Ich habe das Element platziert …"
 #: src/components/common/AttendeeTable/index.tsx:109
 #: src/components/common/OrderDetails/index.tsx:15
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:36
+#: src/components/forms/CheckInListForm/index.tsx:20
 #: src/components/forms/TaxAndFeeForm/index.tsx:61
 #: src/components/forms/TicketForm/index.tsx:212
 #: src/components/modals/CreateEventModal/index.tsx:111
@@ -1922,9 +2047,17 @@ msgstr "NEIN"
 msgid "No Attendees to show"
 msgstr "Keine Teilnehmer zum Anzeigen"
 
+#: src/components/forms/CheckInListForm/index.tsx:54
+msgid "No attendees will be able to check in before this date using this list"
+msgstr "Vor diesem Datum kann sich niemand mit dieser Liste einchecken"
+
 #: src/components/common/CapacityAssignmentList/index.tsx:42
 msgid "No Capacity Assignments"
 msgstr "Keine Kapazitätszuweisungen"
+
+#: src/components/common/CheckInListList/index.tsx:44
+msgid "No Check-In Lists"
+msgstr "Keine Einchecklisten"
 
 #: src/components/forms/PromoCodeForm/index.tsx:46
 msgid "No Discount"
@@ -2038,7 +2171,7 @@ msgstr ""
 "Über dieses Formular sollten ausschließlich wichtige E-Mails gesendet werden, die in direktem Zusammenhang mit dieser Veranstaltung stehen.\n"
 "Jeder Missbrauch, einschließlich des Versendens von Werbe-E-Mails, führt zu einer sofortigen Sperrung des Kontos."
 
-#: src/components/layouts/Event/index.tsx:200
+#: src/components/layouts/Event/index.tsx:197
 msgid "Open sidebar"
 msgstr "Seitenleiste öffnen"
 
@@ -2198,7 +2331,7 @@ msgid "patrick@acme.com"
 msgstr "patrick@acme.com"
 
 #: src/components/forms/StripeCheckoutForm/index.tsx:122
-#: src/components/routes/account/ManageAccount/index.tsx:37
+#: src/components/routes/account/ManageAccount/index.tsx:38
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:90
 msgid "Payment"
 msgstr "Zahlung"
@@ -2254,6 +2387,7 @@ msgid "Please continue in the new tab"
 msgstr "Bitte fahren Sie im neuen Tab fort"
 
 #: src/components/modals/CreateCapacityAssignmentModal/index.tsx:47
+#: src/components/modals/CreateCheckInListModal/index.tsx:48
 msgid "Please create a ticket"
 msgstr "Bitte erstellen Sie ein Ticket"
 
@@ -2552,10 +2686,13 @@ msgstr "Einstellungen speichern"
 
 #: src/components/common/AttendeeCheckInTable/index.tsx:173
 #: src/components/common/AttendeeCheckInTable/index.tsx:175
+#: src/components/layouts/CheckIn/index.tsx:287
+#: src/components/layouts/CheckIn/index.tsx:289
 msgid "Scan QR Code"
 msgstr "QR-Code scannen"
 
 #: src/components/common/AttendeeCheckInTable/index.tsx:169
+#: src/components/layouts/CheckIn/index.tsx:283
 msgid "Seach by name, order #, attendee # or email..."
 msgstr "Suche nach Namen, Bestellnummer, Teilnehmernummer oder E-Mail ..."
 
@@ -2588,6 +2725,10 @@ msgstr "Suche nach Ticketnamen..."
 msgid "Search capacity assignments..."
 msgstr "Kapazitätszuweisungen suchen..."
 
+#: src/components/routes/event/CheckInLists/index.tsx:37
+msgid "Search check-in lists..."
+msgstr "Einchecklisten durchsuchen..."
+
 #: src/components/common/SearchBar/index.tsx:36
 msgid "Search..."
 msgstr "Suchen..."
@@ -2608,7 +2749,7 @@ msgstr "Sekundäre Textfarbe"
 msgid "Secondary Text Color"
 msgstr "Sekundäre Textfarbe"
 
-#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:162
+#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:168
 msgid "Select Camera"
 msgstr "Kamera auswählen"
 
@@ -2630,6 +2771,7 @@ msgid "Select Ticket Tier"
 msgstr "Ticketstufe auswählen"
 
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:49
+#: src/components/forms/CheckInListForm/index.tsx:27
 #: src/components/forms/QuestionForm/index.tsx:161
 msgid "Select tickets"
 msgstr "Tickets auswählen"
@@ -2872,7 +3014,7 @@ msgstr "E-Mail-Änderung erfolgreich bestätigt"
 msgid "Successfully created attendee"
 msgstr "Teilnehmer erfolgreich erstellt"
 
-#: src/components/modals/CreatePromoCodeModal/index.tsx:40
+#: src/components/modals/CreatePromoCodeModal/index.tsx:39
 msgid "Successfully Created Promo Code"
 msgstr "Promo-Code erfolgreich erstellt"
 
@@ -2892,6 +3034,10 @@ msgstr "Teilnehmer erfolgreich aktualisiert"
 #: src/components/modals/EditCapacityAssignmentModal/index.tsx:47
 msgid "Successfully updated Capacity Assignment"
 msgstr "Kapazitätszuweisung erfolgreich aktualisiert"
+
+#: src/components/modals/EditCheckInListModal/index.tsx:49
+msgid "Successfully updated Check-In List"
+msgstr "Eincheckliste erfolgreich aktualisiert"
 
 #: src/components/routes/event/Settings/Sections/EmailSettings/index.tsx:43
 msgid "Successfully Updated Email Settings"
@@ -2947,7 +3093,7 @@ msgstr "Support-E-Mail"
 msgid "Tax"
 msgstr "Steuer"
 
-#: src/components/routes/account/ManageAccount/index.tsx:26
+#: src/components/routes/account/ManageAccount/index.tsx:27
 #: src/components/routes/account/ManageAccount/sections/TaxSettings/index.tsx:16
 msgid "Tax & Fees"
 msgstr "Steuern & Gebühren"
@@ -2969,6 +3115,10 @@ msgstr "Steuern und Gebühren"
 #: src/components/routes/ticket-widget/SelectTickets/index.tsx:168
 msgid "That promo code is invalid"
 msgstr "Dieser Aktionscode ist ungültig"
+
+#: src/components/layouts/CheckIn/index.tsx:201
+msgid "The check-in list you are looking for does not exist."
+msgstr "Die gesuchte Eincheckliste existiert nicht."
 
 #: src/components/forms/OrganizerForm/index.tsx:47
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:75
@@ -3032,6 +3182,30 @@ msgstr "Bei der Bearbeitung Ihrer Anfrage ist ein Fehler aufgetreten. Bitte vers
 msgid "There was an error sending your message"
 msgstr "Beim Senden Ihrer Nachricht ist ein Fehler aufgetreten"
 
+#: src/components/common/CheckInListList/index.tsx:74
+msgid "This check-in list has expired"
+msgstr "Diese Eincheckliste ist abgelaufen"
+
+#: src/components/layouts/CheckIn/index.tsx:217
+msgid "This check-in list has expired and is no longer available for check-ins."
+msgstr "Diese Eincheckliste ist abgelaufen und steht nicht mehr für Eincheckungen zur Verfügung."
+
+#: src/components/common/CheckInListList/index.tsx:81
+msgid "This check-in list is active"
+msgstr "Diese Eincheckliste ist aktiv"
+
+#: src/components/common/CheckInListList/index.tsx:78
+msgid "This check-in list is not active yet"
+msgstr "Diese Eincheckliste ist noch nicht aktiv"
+
+#: src/components/layouts/CheckIn/index.tsx:234
+msgid "This check-in list is not yet active and is not available for check-ins."
+msgstr "Diese Eincheckliste ist noch nicht aktiv und steht nicht für Eincheckungen zur Verfügung."
+
+#: src/components/forms/CheckInListForm/index.tsx:43
+msgid "This description will be shown to the check-in staff"
+msgstr "Diese Beschreibung wird dem Eincheckpersonal angezeigt"
+
 #: src/components/modals/SendMessageModal/index.tsx:223
 msgid "This email is not promotional and is directly related to the event."
 msgstr "Diese E-Mail hat keinen Werbezweck und steht in direktem Zusammenhang mit der Veranstaltung."
@@ -3047,6 +3221,10 @@ msgstr "Dieses Event ist nicht verfügbar."
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:91
 msgid "This is an online event"
 msgstr "Dies ist eine Online-Veranstaltung"
+
+#: src/components/forms/CheckInListForm/index.tsx:63
+msgid "This list will no longer be available for check-ins after this date"
+msgstr "Diese Liste wird nach diesem Datum nicht mehr für Eincheckungen verfügbar sein"
 
 #: src/components/routes/event/Settings/Sections/EmailSettings/index.tsx:68
 msgid "This message will be included in the footer of all emails sent from this event"
@@ -3224,7 +3402,7 @@ msgstr "TIPP"
 msgid "Title"
 msgstr "Titel"
 
-#: src/components/layouts/Event/index.tsx:49
+#: src/components/layouts/Event/index.tsx:50
 msgid "Tools"
 msgstr "Werkzeuge"
 
@@ -3262,6 +3440,15 @@ msgstr "Typ"
 #: src/components/common/AttendeeCheckInTable/index.tsx:81
 msgid "Unable to {0} attendee"
 msgstr "Teilnehmer {0} konnte nicht ausgewählt werden"
+
+#: src/components/layouts/CheckIn/index.tsx:92
+#: src/components/layouts/CheckIn/index.tsx:124
+msgid "Unable to check in attendee"
+msgstr "Teilnehmer konnte nicht eingecheckt werden"
+
+#: src/components/layouts/CheckIn/index.tsx:65
+msgid "Unable to check out attendee"
+msgstr "Teilnehmer konnte nicht ausgecheckt werden"
 
 #: src/components/modals/CreateQuestionModal/index.tsx:58
 msgid "Unable to create question. Please check the your details"
@@ -3335,7 +3522,7 @@ msgstr "Benutzer"
 msgid "User Management"
 msgstr "Benutzerverwaltung"
 
-#: src/components/routes/account/ManageAccount/index.tsx:31
+#: src/components/routes/account/ManageAccount/index.tsx:32
 msgid "Users"
 msgstr "Benutzer"
 
@@ -3393,6 +3580,10 @@ msgstr "Bestellung anzeigen"
 msgid "View order details"
 msgstr "Bestell Details ansehen"
 
+#: src/components/forms/CheckInListForm/index.tsx:21
+msgid "VIP check-in list"
+msgstr "VIP-Eincheckliste"
+
 #: src/components/forms/TicketForm/index.tsx:213
 msgid "VIP Ticket"
 msgstr "VIP-Ticket"
@@ -3441,6 +3632,10 @@ msgstr "Willkommen bei Hi.Events, {0} 👋"
 msgid "What are Tiered Tickets?"
 msgstr "Was sind Stufentickets?"
 
+#: src/components/forms/CheckInListForm/index.tsx:56
+msgid "What date should this check-in list become active?"
+msgstr "An welchem Datum soll diese Eincheckliste aktiv werden?"
+
 #: src/components/forms/PromoCodeForm/index.tsx:68
 msgid "What tickets does this code apply to? (Applies to all by default)"
 msgstr "Für welche Tickets gilt dieser Code? (Gilt standardmäßig für alle)"
@@ -3458,6 +3653,14 @@ msgstr "Um wie viel Uhr werden Sie ankommen?"
 msgid "What type of question is this?"
 msgstr "Um welche Art von Frage handelt es sich?"
 
+#: src/components/forms/CheckInListForm/index.tsx:65
+msgid "When should this check-in list expire?"
+msgstr "Wann soll diese Eincheckliste ablaufen?"
+
+#: src/components/forms/CheckInListForm/index.tsx:25
+msgid "Which tickets should be associated with this check-in list?"
+msgstr "Welche Tickets sollen mit dieser Eincheckliste verknüpft werden?"
+
 #: src/components/modals/CreateEventModal/index.tsx:89
 msgid "Who is organizing this event?"
 msgstr "Wer organisiert diese Veranstaltung?"
@@ -3470,7 +3673,7 @@ msgstr "An wen ist diese Nachricht gerichtet?"
 msgid "Who should be asked this question?"
 msgstr "Wem sollte diese Frage gestellt werden?"
 
-#: src/components/layouts/Event/index.tsx:51
+#: src/components/layouts/Event/index.tsx:52
 msgid "Widget Embed"
 msgstr "Widget einbetten"
 
@@ -3482,7 +3685,7 @@ msgstr "Widget-Einstellungen"
 msgid "Working"
 msgstr "Arbeiten"
 
-#: src/components/modals/CreatePromoCodeModal/index.tsx:57
+#: src/components/modals/CreatePromoCodeModal/index.tsx:56
 #: src/components/modals/CreateQuestionModal/index.tsx:73
 #: src/components/modals/CreateTicketModal/index.tsx:90
 #: src/components/modals/DuplicateEventModal/index.tsx:111
@@ -3503,9 +3706,19 @@ msgstr "Ja"
 msgid "Yes, remove them"
 msgstr "Ja, entfernen"
 
+#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:58
+msgid "You already scanned this ticket"
+msgstr "Sie haben dieses Ticket bereits gescannt"
+
 #: src/components/routes/profile/ConfirmEmailChange/index.tsx:53
 msgid "You are changing your email to <0>{0}</0>."
 msgstr "Sie ändern Ihre E-Mail zu <0>{0}</0>."
+
+#: src/components/layouts/CheckIn/index.tsx:61
+#: src/components/layouts/CheckIn/index.tsx:87
+#: src/components/layouts/CheckIn/index.tsx:119
+msgid "You are offline"
+msgstr "Sie sind offline"
 
 #: src/components/forms/TicketForm/index.tsx:351
 msgid "You can create a promo code which targets this ticket on the"
@@ -3602,6 +3815,10 @@ msgstr "Sie müssen mindestens eine Preisstufe haben"
 #: src/components/modals/SendMessageModal/index.tsx:134
 msgid "You need to verify your account before you can send messages."
 msgstr "Sie müssen Ihr Konto verifizieren, bevor Sie Nachrichten senden können."
+
+#: src/components/modals/CreateCheckInListModal/index.tsx:52
+msgid "You'll need a ticket before you can create a check-in list."
+msgstr "Sie benötigen ein Ticket, bevor Sie eine Eincheckliste erstellen können."
 
 #: src/components/modals/CreateCapacityAssignmentModal/index.tsx:51
 msgid "You'll need at a ticket before you can create a capacity assignment."

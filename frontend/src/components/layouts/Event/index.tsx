@@ -45,14 +45,11 @@ const EventLayout = () => {
         {link: 'promo-codes', label: t`Promo Codes`, icon: IconDiscount2},
         {link: 'messages', label: t`Messages`, icon: IconSend},
         {link: 'capacity-assignments', label: t`Capacity`, icon: IconUsersGroup},
+        {link: 'check-in', label: t`Check-In Lists`, icon: IconQrcode},
 
         {label: t`Tools`},
         {link: 'homepage-designer', label: t`Homepage Designer`, icon: IconPaint},
         {link: 'widget', label: t`Widget Embed`, icon: IconDeviceTabletCode},
-        {link: 'check-in', label: t`Check-In`, icon: IconQrcode},
-        // { link: 'check-in', label: t`Interested People`, icon: IconBellHeart, comingSoon: true },
-        // {link: '/', label: t`Affiliates`, icon: IconAffiliate, comingSoon: true},
-        // {link: '/', label: t`Integrations`, icon: IconWebhook, comingSoon: true},
     ];
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const {eventId} = useParams();

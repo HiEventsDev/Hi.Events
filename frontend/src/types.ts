@@ -63,6 +63,7 @@ export interface Account {
     password?: string;
     stripe_connect_setup_complete?: boolean;
     is_account_email_confirmed?: boolean;
+    is_saas_mode_enabled?: boolean;
 }
 
 export interface StripeConnectDetails {
@@ -218,6 +219,7 @@ export interface PaginationData {
 
 export interface GenericDataResponse<T> {
     data: T;
+    errors?: Record<string, string>;
 }
 
 export interface GenericPaginatedResponse<T> {
@@ -312,6 +314,7 @@ export interface Attendee {
     checked_in_by?: number;
     question_answers?: QuestionAnswer[];
     locale?: SupportedLocales;
+    check_in?: CheckIn;
 }
 
 export interface Address {
@@ -414,6 +417,37 @@ export interface CapacityAssignment {
 export type CapacityAssignmentRequest = Omit<CapacityAssignment, 'id' | 'event_id' | 'used_capacity' | 'tickets'> & {
     ticket_ids: IdParam[];
 };
+
+export interface CheckInList {
+    id?: number;
+    short_id: string;
+    name: string;
+    description?: string | null;
+    expires_at?: string;  // ISO 8601 string
+    activates_at?: string;  // ISO 8601 string
+    total_attendees: number;
+    checked_in_attendees: number;
+    is_expired: boolean;
+    is_active: boolean;
+    event_id: number;
+    event?: Event;
+    tickets: {
+        id: number;
+        title: string;
+    }[];
+}
+
+export type CheckInListRequest = Omit<CheckInList, 'event_id' | 'short_id' | 'id' | 'tickets' | 'total_attendees' | 'checked_in_attendees' | 'is_expired' | 'is_active'> & {
+    ticket_ids: IdParam[];
+};
+
+export interface CheckIn {
+    id: number;
+    short_id: string;
+    check_in_list_id: number;
+    attendee_id: number;
+    checked_in_at: string;
+}
 
 export interface QuestionRequestData {
     title: string;

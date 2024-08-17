@@ -1,0 +1,111 @@
+@import '../../../styles/mixins';
+
+.container {
+  min-width: 300px;
+}
+
+
+.header {
+  position: sticky;
+  top: 0px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  background-color: #fff;
+  border-bottom: 1px solid #e0e0e0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.07);
+
+  .title {
+    margin-bottom: 10px;
+    margin-top: 0px;
+  }
+
+  .search {
+    flex: 1;
+
+    .offline {
+      margin-bottom: 20px;
+    }
+
+    .description {
+      margin-bottom: 20px;
+    }
+
+    .searchBar {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+
+      .searchInput {
+        flex: 1;
+        margin-bottom: 0 !important;
+      }
+
+      .scanButton {
+        @include respond-below(sm) {
+          display: none;
+        }
+      }
+
+      .scanIcon {
+        display: none;
+        @include respond-below(sm) {
+          display: flex;
+        }
+      }
+    }
+  }
+
+  .stats {
+    flex: 1;
+  }
+}
+
+.loading, .noResults {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
+}
+
+.attendees {
+  .attendee {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    padding: 15px;
+    border-bottom: 1px solid #e0e0e0;
+
+    .details {
+      flex: 1;
+
+      .ticket {
+        color: #999;
+        font-size: 0.9em;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+    }
+
+    .actions {
+      flex-grow: initial;
+    }
+  }
+}
+
+.infoModal {
+  padding: 20px;
+  padding-top: 0;
+
+  .checkInCount {
+    font-size: 1em;
+    color: #999;
+    margin-bottom: 10px;
+
+    h4 {
+      margin: 0;
+    }
+  }
+}

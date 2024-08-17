@@ -3,6 +3,7 @@
 namespace HiEvents\Services\Handlers\Attendee;
 
 use Brick\Money\Money;
+use Faker\Generator;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
@@ -100,7 +101,6 @@ class CreateAttendeeHandler
     private function createOrder(int $eventId, CreateAttendeeDTO $attendeeDTO): OrderDomainObject
     {
         $event = $this->eventRepository->findById($eventId);
-        $publicId = Str::upper(Str::random(5));
         $total = Money::of($attendeeDTO->amount_paid, $event->getCurrency());
 
         return $this->orderRepository->create(
@@ -110,13 +110,13 @@ class CreateAttendeeHandler
                 OrderDomainObjectAbstract::LAST_NAME => $attendeeDTO->last_name,
                 OrderDomainObjectAbstract::EMAIL => $attendeeDTO->email,
                 OrderDomainObjectAbstract::EVENT_ID => $eventId,
-                OrderDomainObjectAbstract::SHORT_ID => IdHelper::randomPrefixedId(IdHelper::ORDER_PREFIX),
+                OrderDomainObjectAbstract::SHORT_ID => IdHelper::shortId(IdHelper::ORDER_PREFIX),
                 OrderDomainObjectAbstract::STATUS => OrderStatus::COMPLETED->name,
                 OrderDomainObjectAbstract::PAYMENT_STATUS => $total->isZero()
                     ? OrderPaymentStatus::NO_PAYMENT_REQUIRED->name
                     : OrderPaymentStatus::PAYMENT_RECEIVED->name,
                 OrderDomainObjectAbstract::CURRENCY => $event->getCurrency(),
-                OrderDomainObjectAbstract::PUBLIC_ID => $publicId,
+                OrderDomainObjectAbstract::PUBLIC_ID => IdHelper::publicId(),
                 OrderDomainObjectAbstract::IS_MANUALLY_CREATED => true,
                 OrderDomainObjectAbstract::LOCALE => $attendeeDTO->locale,
             ]
@@ -219,7 +219,7 @@ class CreateAttendeeHandler
             AttendeeDomainObjectAbstract::LAST_NAME => $attendeeDTO->last_name,
             AttendeeDomainObjectAbstract::ORDER_ID => $order->getId(),
             AttendeeDomainObjectAbstract::PUBLIC_ID => $order->getPublicId() . '-1',
-            AttendeeDomainObjectAbstract::SHORT_ID => IdHelper::randomPrefixedId(IdHelper::ATTENDEE_PREFIX),
+            AttendeeDomainObjectAbstract::SHORT_ID => IdHelper::shortId(IdHelper::ATTENDEE_PREFIX),
             AttendeeDomainObjectAbstract::LOCALE => $attendeeDTO->locale,
         ]);
     }

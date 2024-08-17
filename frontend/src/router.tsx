@@ -261,7 +261,7 @@ export const router: RouteObject[] = [
             {
                 path: "check-in",
                 async lazy() {
-                    const CheckIn = await import("./components/routes/event/check-in");
+                    const CheckIn = await import("./components/routes/event/CheckInLists");
                     return {Component: CheckIn.default};
                 }
             },
@@ -418,5 +418,13 @@ export const router: RouteObject[] = [
         },
         errorElement: <ErrorPage/>
     },
+    {
+        path: "/check-in/:checkInListShortId",
+        async lazy() {
+            const CheckIn = await import("./components/layouts/CheckIn");
+            return {Component: CheckIn.default};
+        },
+        errorElement: <ErrorPage/>,
+    }
 ];
 

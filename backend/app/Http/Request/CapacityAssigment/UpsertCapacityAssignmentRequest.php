@@ -14,7 +14,7 @@ class UpsertCapacityAssignmentRequest extends BaseRequest
         return [
             'name' => RulesHelper::REQUIRED_STRING,
             'capacity' => ['nullable', 'numeric', 'min:1'],
-            'status' => [Rule::in(CapacityAssignmentStatus::valuesArray())],
+            'status' => ['required', Rule::in(CapacityAssignmentStatus::valuesArray())],
             'ticket_ids' => ['required', 'array'],
         ];
     }

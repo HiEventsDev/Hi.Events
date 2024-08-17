@@ -28,8 +28,6 @@ class AttendeeResource extends JsonResource
             'first_name' => $this->getFirstName(),
             'last_name' => $this->getLastName(),
             'public_id' => $this->getPublicId(),
-            'checked_in_at' => $this->getCheckedInAt(),
-            'checked_in_by' => $this->getCheckedInBy(),
             'short_id' => $this->getShortId(),
             'locale' => $this->getLocale(),
             'ticket' => $this->when(

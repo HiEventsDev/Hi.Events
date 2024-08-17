@@ -19,7 +19,7 @@ class OrderFactory extends Factory
             'total_tax' => $this->faker->randomFloat(2, 0, 100),
             'created_at' => now(),
             'updated_at' => now(),
-            'short_id' => IdHelper::randomPrefixedId(IdHelper::ORDER_PREFIX),
+            'short_id' => IdHelper::shortId(IdHelper::ORDER_PREFIX),
             'first_name' => $this->faker->firstName,
             'last_name' => $this->faker->lastName,
             'email' => $this->faker->safeEmail,

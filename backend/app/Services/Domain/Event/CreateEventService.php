@@ -95,7 +95,7 @@ class CreateEventService
             'account_id' => $eventData->getAccountId(),
             'user_id' => $eventData->getUserId(),
             'status' => $eventData->getStatus(),
-            'short_id' => IdHelper::randomPrefixedId(IdHelper::EVENT_PREFIX),
+            'short_id' => IdHelper::shortId(IdHelper::EVENT_PREFIX),
             'attributes' => $eventData->getAttributes(),
         ]);
     }
