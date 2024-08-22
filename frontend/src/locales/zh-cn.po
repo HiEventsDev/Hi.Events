@@ -21,11 +21,11 @@ msgstr "There's nothing to show yet"
 msgid "{0}"
 msgstr ""
 
-#: src/components/layouts/CheckIn/index.tsx:83
+#: src/components/layouts/CheckIn/index.tsx:87
 msgid "{0} <0>checked in</0> successfully"
 msgstr "{0} <0>签到</0>成功"
 
-#: src/components/layouts/CheckIn/index.tsx:57
+#: src/components/layouts/CheckIn/index.tsx:61
 msgid "{0} <0>checked out</0> successfully"
 msgstr "{0} <0>签退</0>成功"
 
@@ -49,7 +49,7 @@ msgstr "{0}更新成功"
 msgid "{0}'s Events"
 msgstr "{0}的活动"
 
-#: src/components/layouts/CheckIn/index.tsx:337
+#: src/components/layouts/CheckIn/index.tsx:341
 msgid "{0}/{1} checked in"
 msgstr "{0}/{1} 已签到"
 
@@ -73,7 +73,7 @@ msgstr "{组织者名称}的首次活动"
 msgid "<0>Capacity assignments let you manage capacity across tickets or an entire event. Ideal for multi-day events, workshops, and more, where controlling attendance is crucial.</0><1>For instance, you can associate a capacity assignment with <2>Day One</2> and <3>All Days</3> ticket. Once the capacity is reached, both tickets will automatically stop being available for sale.</1>"
 msgstr "<0>容量分配让你可以管理票务或整个活动的容量。非常适合多日活动、研讨会等，需要控制出席人数的场合。</0><1>例如，你可以将容量分配与<2>第一天</2>和<3>所有天数</3>的票关联起来。一旦达到容量，这两种票将自动停止销售。</1>"
 
-#: src/components/common/CheckInListList/index.tsx:49
+#: src/components/common/CheckInListList/index.tsx:58
 msgid "<0>Check-in lists help manage attendee entry for your event. You can associate multiple tickets with a check-in list and ensure only those with valid tickets can enter.</0>"
 msgstr "<0>签到列表帮助管理活动的参与者入场。您可以将多个票与一个签到列表关联，并确保只有持有效票的人员才能入场。</0>"
 
@@ -241,7 +241,7 @@ msgstr "激活"
 msgid "Activation date"
 msgstr "激活日期"
 
-#: src/components/common/CheckInListList/index.tsx:115
+#: src/components/common/CheckInListList/index.tsx:124
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:18
 #: src/components/modals/EditUserModal/index.tsx:110
 msgid "Active"
@@ -335,8 +335,8 @@ msgid "All attendees of this event"
 msgstr "本次活动的所有与会者"
 
 #: src/components/routes/events/Dashboard/index.tsx:52
-msgid "All Events"
-msgstr "所有活动"
+#~ msgid "All Events"
+#~ msgstr "所有活动"
 
 #: src/components/common/PromoCodeTable/index.tsx:130
 #: src/components/forms/PromoCodeForm/index.tsx:67
@@ -425,9 +425,25 @@ msgstr "应用促销代码"
 msgid "Apply this {type} to all new tickets"
 msgstr "将此 {类型}应用于所有新票"
 
+#: src/components/common/EventCard/index.tsx:135
+msgid "Archive event"
+msgstr "归档活动"
+
+#: src/components/common/EventsDashboardStatusButtons/index.tsx:32
+msgid "Archived"
+msgstr "已归档"
+
+#: src/components/routes/events/Dashboard/index.tsx:59
+msgid "Archived Events"
+msgstr "已归档的活动"
+
 #: src/components/common/AttendeeTable/index.tsx:77
 msgid "Are you sure you want to activate this attendee?"
 msgstr "您确定要激活该与会者吗？"
+
+#: src/components/common/EventCard/index.tsx:45
+msgid "Are you sure you want to archive this event?"
+msgstr "您确定要归档此活动吗?"
 
 #: src/components/common/AttendeeTable/index.tsx:78
 msgid "Are you sure you want to cancel this attendee? This will void their ticket"
@@ -441,19 +457,23 @@ msgstr "您确定要删除此促销代码吗？"
 msgid "Are you sure you want to delete this question?"
 msgstr "您确定要删除这个问题吗？"
 
-#: src/components/layouts/Event/index.tsx:94
+#: src/components/layouts/Event/index.tsx:93
 msgid "Are you sure you want to make this event draft? This will make the event invisible to the public"
 msgstr "您确定要将此活动设为草稿吗？这将使公众无法看到该活动"
 
-#: src/components/layouts/Event/index.tsx:95
+#: src/components/layouts/Event/index.tsx:94
 msgid "Are you sure you want to make this event public? This will make the event visible to the public"
 msgstr "您确定要将此事件公开吗？这将使事件对公众可见"
+
+#: src/components/common/EventCard/index.tsx:46
+msgid "Are you sure you want to restore this event? It will be restored as a draft event."
+msgstr "您确定要恢复此活动吗？它将作为草稿恢复。"
 
 #: src/components/common/CapacityAssignmentList/index.tsx:163
 msgid "Are you sure you would like to delete this Capacity Assignment?"
 msgstr "您确定要删除此容量分配吗？"
 
-#: src/components/common/CheckInListList/index.tsx:182
+#: src/components/common/CheckInListList/index.tsx:191
 msgid "Are you sure you would like to delete this Check-In List?"
 msgstr "您确定要删除此签到列表吗？"
 
@@ -480,7 +500,7 @@ msgstr "与会者提问"
 
 #: src/components/common/OrdersTable/index.tsx:151
 #: src/components/common/TicketsTable/SortableTicket/index.tsx:159
-#: src/components/layouts/Event/index.tsx:42
+#: src/components/layouts/Event/index.tsx:41
 #: src/components/modals/ViewOrderModal/index.tsx:54
 #: src/components/routes/event/attendees.tsx:47
 msgid "Attendees"
@@ -510,7 +530,7 @@ msgstr "精彩活动"
 msgid "Awesome Organizer Ltd."
 msgstr "Awesome Organizer Ltd."
 
-#: src/components/routes/organizer/OrganizerDashboard/index.tsx:41
+#: src/components/routes/organizer/OrganizerDashboard/index.tsx:42
 msgid "Back to all events"
 msgstr "返回所有活动"
 
@@ -598,7 +618,7 @@ msgid "Cancelled"
 msgstr "已取消"
 
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:41
-#: src/components/layouts/Event/index.tsx:47
+#: src/components/layouts/Event/index.tsx:46
 msgid "Capacity"
 msgstr "容量"
 
@@ -628,7 +648,7 @@ msgid "check in"
 msgstr "报到"
 
 #: src/components/common/AttendeeCheckInTable/index.tsx:152
-#: src/components/layouts/CheckIn/index.tsx:171
+#: src/components/layouts/CheckIn/index.tsx:175
 msgid "Check In"
 msgstr "报到"
 
@@ -637,11 +657,11 @@ msgstr "报到"
 msgid "check out"
 msgstr "查看"
 
-#: src/components/layouts/CheckIn/index.tsx:171
+#: src/components/layouts/CheckIn/index.tsx:175
 msgid "Check Out"
 msgstr "签退"
 
-#: src/components/common/EventCard/index.tsx:106
+#: src/components/common/EventCard/index.tsx:124
 msgid "Check-in"
 msgstr "办理登机手续"
 
@@ -653,28 +673,28 @@ msgstr "办理登机手续"
 msgid "Check-In List created successfully"
 msgstr "签到列表创建成功"
 
-#: src/components/common/CheckInListList/index.tsx:33
+#: src/components/common/CheckInListList/index.tsx:42
 msgid "Check-In List deleted successfully"
 msgstr "签到列表删除成功"
 
-#: src/components/layouts/CheckIn/index.tsx:212
+#: src/components/layouts/CheckIn/index.tsx:216
 msgid "Check-in list has expired"
 msgstr "签到列表已过期"
 
-#: src/components/layouts/CheckIn/index.tsx:229
+#: src/components/layouts/CheckIn/index.tsx:233
 msgid "Check-in list is not active"
 msgstr "签到列表未激活"
 
-#: src/components/layouts/CheckIn/index.tsx:196
+#: src/components/layouts/CheckIn/index.tsx:200
 msgid "Check-in list not found"
 msgstr "未找到签到列表"
 
-#: src/components/layouts/Event/index.tsx:48
+#: src/components/layouts/Event/index.tsx:47
 #: src/components/routes/event/CheckInLists/index.tsx:32
 msgid "Check-In Lists"
 msgstr "签到列表"
 
-#: src/components/common/CheckInListList/index.tsx:161
+#: src/components/common/CheckInListList/index.tsx:170
 msgid "Check-In URL copied to clipboard"
 msgstr "签到链接已复制到剪贴板"
 
@@ -691,7 +711,7 @@ msgstr "复选框"
 msgid "Checked In"
 msgstr "登记入住"
 
-#: src/components/layouts/CheckIn/index.tsx:115
+#: src/components/layouts/CheckIn/index.tsx:119
 msgid "Checked in successfully"
 msgstr "签到成功"
 
@@ -737,7 +757,7 @@ msgstr "点击复制"
 msgid "Close"
 msgstr "关闭"
 
-#: src/components/layouts/Event/index.tsx:190
+#: src/components/layouts/Event/index.tsx:188
 msgid "Close sidebar"
 msgstr "关闭侧边栏"
 
@@ -764,7 +784,7 @@ msgstr "颜色必须是有效的十六进制颜色代码。例如#ffffff"
 msgid "Colors"
 msgstr "颜色"
 
-#: src/components/layouts/Event/index.tsx:87
+#: src/components/layouts/Event/index.tsx:86
 msgid "Coming Soon"
 msgstr "即将推出"
 
@@ -854,7 +874,7 @@ msgstr "继续按钮文本"
 msgid "Continue Button Text"
 msgstr "继续按钮文本"
 
-#: src/components/modals/CreateEventModal/index.tsx:135
+#: src/components/modals/CreateEventModal/index.tsx:141
 msgid "Continue Event Setup"
 msgstr "继续活动设置"
 
@@ -883,7 +903,7 @@ msgstr "复制到剪贴板"
 msgid "Copy"
 msgstr "复制"
 
-#: src/components/common/CheckInListList/index.tsx:155
+#: src/components/common/CheckInListList/index.tsx:164
 msgid "Copy Check-In URL"
 msgstr "复制签到链接"
 
@@ -926,7 +946,7 @@ msgstr "创建票单"
 msgid "Create an account or <0>{0}</0> to get started"
 msgstr "创建账户或 <0>{0}</0> 开始使用"
 
-#: src/components/modals/CreateEventModal/index.tsx:102
+#: src/components/modals/CreateEventModal/index.tsx:108
 msgid "create an organizer"
 msgstr "创建一个组织者"
 
@@ -941,27 +961,26 @@ msgstr "创建与会者"
 msgid "Create Capacity Assignment"
 msgstr "创建容量分配"
 
-#: src/components/common/CheckInListList/index.tsx:60
+#: src/components/common/CheckInListList/index.tsx:69
 #: src/components/modals/CreateCheckInListModal/index.tsx:69
 #: src/components/modals/CreateCheckInListModal/index.tsx:79
 #: src/components/routes/event/CheckInLists/index.tsx:46
 msgid "Create Check-In List"
 msgstr "创建签到列表"
 
-#: src/components/modals/CreateEventModal/index.tsx:67
-#: src/components/routes/events/Dashboard/index.tsx:120
+#: src/components/common/NoEventsBlankSlate/index.tsx:27
+#: src/components/modals/CreateEventModal/index.tsx:73
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:81
-#: src/components/routes/organizer/OrganizerDashboard/index.tsx:99
 #: src/components/routes/welcome/index.tsx:108
 msgid "Create Event"
 msgstr "创建活动"
 
-#: src/components/routes/events/Dashboard/index.tsx:78
+#: src/components/routes/events/Dashboard/index.tsx:91
 msgid "Create new"
 msgstr "创建新的"
 
 #: src/components/forms/OrganizerForm/index.tsx:110
-#: src/components/modals/CreateEventModal/index.tsx:75
+#: src/components/modals/CreateEventModal/index.tsx:81
 #: src/components/modals/CreateOrganizerModal/index.tsx:16
 msgid "Create Organizer"
 msgstr "创建组织器"
@@ -1038,7 +1057,7 @@ msgid "Customize your event page to match your brand and style."
 msgstr "定制您的活动页面，以符合您的品牌和风格。"
 
 #: src/components/common/CapacityAssignmentList/index.tsx:156
-#: src/components/common/CheckInListList/index.tsx:175
+#: src/components/common/CheckInListList/index.tsx:184
 #: src/components/common/OrdersTable/index.tsx:131
 #: src/components/common/PromoCodeTable/index.tsx:180
 #: src/components/common/QuestionsTable/index.tsx:113
@@ -1050,7 +1069,7 @@ msgstr "危险区"
 msgid "Danger Zone"
 msgstr "危险区"
 
-#: src/components/layouts/Event/index.tsx:39
+#: src/components/layouts/Event/index.tsx:38
 msgid "Dashboard"
 msgstr "仪表板"
 
@@ -1080,7 +1099,7 @@ msgstr "删除"
 msgid "Delete Capacity"
 msgstr "删除容量"
 
-#: src/components/common/CheckInListList/index.tsx:178
+#: src/components/common/CheckInListList/index.tsx:187
 msgid "Delete Check-In List"
 msgstr "删除签到列表"
 
@@ -1106,7 +1125,7 @@ msgstr "删除机票"
 
 #: src/components/forms/TaxAndFeeForm/index.tsx:81
 #: src/components/forms/TicketForm/index.tsx:217
-#: src/components/modals/CreateEventModal/index.tsx:117
+#: src/components/modals/CreateEventModal/index.tsx:123
 #: src/components/modals/DuplicateEventModal/index.tsx:75
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:78
 msgid "Description"
@@ -1164,7 +1183,7 @@ msgstr "拖动排序"
 msgid "Dropdown selection"
 msgstr "下拉选择"
 
-#: src/components/common/EventCard/index.tsx:111
+#: src/components/common/EventCard/index.tsx:130
 msgid "Duplicate event"
 msgstr "复制活动"
 
@@ -1219,7 +1238,7 @@ msgstr "编辑容量"
 msgid "Edit Capacity Assignment"
 msgstr "编辑容量分配"
 
-#: src/components/common/CheckInListList/index.tsx:147
+#: src/components/common/CheckInListList/index.tsx:156
 #: src/components/modals/EditCheckInListModal/index.tsx:69
 #: src/components/modals/EditCheckInListModal/index.tsx:91
 msgid "Edit Check-In List"
@@ -1230,7 +1249,7 @@ msgid "Edit Code"
 msgstr "编辑代码"
 
 #: src/components/modals/EditOrganizerModal/index.tsx:63
-#: src/components/routes/organizer/OrganizerDashboard/index.tsx:50
+#: src/components/routes/organizer/OrganizerDashboard/index.tsx:51
 msgid "Edit Organizer"
 msgstr "编辑组织器"
 
@@ -1339,16 +1358,21 @@ msgstr "嵌入脚本"
 msgid "Enable this capacity to stop ticket sales when the limit is reached"
 msgstr "启用此容量以在达到限制时停止售票"
 
-#: src/components/modals/CreateEventModal/index.tsx:131
+#: src/components/modals/CreateEventModal/index.tsx:137
 #: src/components/modals/DuplicateEventModal/index.tsx:89
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:92
 #: src/components/routes/welcome/index.tsx:96
 msgid "End Date"
 msgstr "结束日期"
 
+#: src/components/common/EventsDashboardStatusButtons/index.tsx:26
 #: src/components/common/EventStatusBadge/index.tsx:14
 msgid "Ended"
 msgstr "完工"
+
+#: src/components/routes/events/Dashboard/index.tsx:57
+msgid "Ended Events"
+msgstr "已结束的活动"
 
 #: src/components/common/LanguageSwitcher/index.tsx:16
 #: src/components/common/LanguageSwitcher/index.tsx:42
@@ -1375,11 +1399,11 @@ msgstr "确认更改电子邮件时出错"
 msgid "EUR"
 msgstr "欧元"
 
-#: src/components/routes/events/Dashboard/index.tsx:90
+#: src/components/routes/events/Dashboard/index.tsx:103
 msgid "Event"
 msgstr "活动"
 
-#: src/components/modals/CreateEventModal/index.tsx:57
+#: src/components/modals/CreateEventModal/index.tsx:63
 msgid "Event created successfully 🎉"
 msgstr "成功创建事件 🎉"
 
@@ -1391,11 +1415,11 @@ msgstr "事件默认值"
 msgid "Event duplicated successfully"
 msgstr "事件成功复制"
 
-#: src/components/layouts/Event/index.tsx:147
+#: src/components/layouts/Event/index.tsx:145
 msgid "Event is not visible to the public"
 msgstr "公众无法看到活动"
 
-#: src/components/layouts/Event/index.tsx:146
+#: src/components/layouts/Event/index.tsx:144
 msgid "Event is visible to the public"
 msgstr "活动对公众可见"
 
@@ -1403,21 +1427,23 @@ msgstr "活动对公众可见"
 msgid "Event location & venue details"
 msgstr "活动地点和场地详情"
 
-#: src/components/layouts/Event/index.tsx:168
+#: src/components/layouts/Event/index.tsx:166
 msgid "Event page"
 msgstr "活动页面"
 
-#: src/components/layouts/Event/index.tsx:106
+#: src/components/common/EventCard/index.tsx:57
+#: src/components/layouts/Event/index.tsx:105
 #: src/components/routes/event/GettingStarted/index.tsx:37
 msgid "Event status update failed. Please try again later"
 msgstr "活动状态更新失败。请稍后再试"
 
-#: src/components/layouts/Event/index.tsx:103
+#: src/components/common/EventCard/index.tsx:54
+#: src/components/layouts/Event/index.tsx:102
 #: src/components/routes/event/GettingStarted/index.tsx:34
 msgid "Event status updated"
 msgstr "事件状态已更新"
 
-#: src/components/layouts/Event/index.tsx:127
+#: src/components/layouts/Event/index.tsx:125
 msgid "Events"
 msgstr "活动"
 
@@ -1553,7 +1579,7 @@ msgstr "法语"
 msgid "German"
 msgstr "德国"
 
-#: src/components/layouts/Event/index.tsx:37
+#: src/components/layouts/Event/index.tsx:36
 msgid "Getting Started"
 msgstr "入门"
 
@@ -1598,7 +1624,7 @@ msgstr "下面举例说明如何在应用程序中使用该组件。"
 msgid "Here is the React component you can use to embed the widget in your application."
 msgstr "下面是 React 组件，您可以用它在应用程序中嵌入 widget。"
 
-#: src/components/modals/CreateEventModal/index.tsx:112
+#: src/components/modals/CreateEventModal/index.tsx:118
 #: src/components/modals/DuplicateEventModal/index.tsx:70
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:73
 msgid "Hi.Events Conference {0}"
@@ -1681,7 +1707,7 @@ msgstr "隐藏票单将阻止用户在活动页面上看到该票单。"
 msgid "Homepage Design"
 msgstr "主页设计"
 
-#: src/components/layouts/Event/index.tsx:51
+#: src/components/layouts/Event/index.tsx:50
 msgid "Homepage Designer"
 msgstr "主页设计师"
 
@@ -1749,7 +1775,7 @@ msgstr "图片上传成功"
 msgid "Image width must be at least 900px and height at least 50px"
 msgstr "图片宽度必须至少为 900px，高度必须至少为 50px"
 
-#: src/components/common/CheckInListList/index.tsx:115
+#: src/components/common/CheckInListList/index.tsx:124
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:24
 #: src/components/modals/EditUserModal/index.tsx:111
 msgid "Inactive"
@@ -1767,11 +1793,11 @@ msgstr "包括在线活动的连接详情。这些详细信息将显示在订单
 msgid "Include tax and fees in the price"
 msgstr "价格中包含税费"
 
-#: src/components/common/CheckInListList/index.tsx:102
+#: src/components/common/CheckInListList/index.tsx:111
 msgid "Includes {0} tickets"
 msgstr "包括 {0} 张票"
 
-#: src/components/common/CheckInListList/index.tsx:103
+#: src/components/common/CheckInListList/index.tsx:112
 msgid "Includes 1 ticket"
 msgstr "包括 1 张票"
 
@@ -1876,17 +1902,17 @@ msgid "Make this question mandatory"
 msgstr "将此问题作为必答题"
 
 #: src/components/common/CapacityAssignmentList/index.tsx:143
-#: src/components/common/CheckInListList/index.tsx:144
-#: src/components/common/EventCard/index.tsx:89
+#: src/components/common/CheckInListList/index.tsx:153
+#: src/components/common/EventCard/index.tsx:148
 #: src/components/common/OrdersTable/index.tsx:94
 #: src/components/common/OrdersTable/index.tsx:109
 #: src/components/common/PromoCodeTable/index.tsx:166
 #: src/components/common/TicketsTable/SortableTicket/index.tsx:171
-#: src/components/layouts/Event/index.tsx:38
+#: src/components/layouts/Event/index.tsx:37
 msgid "Manage"
 msgstr "管理"
 
-#: src/components/common/EventCard/index.tsx:101
+#: src/components/common/EventCard/index.tsx:118
 msgid "Manage event"
 msgstr "管理活动"
 
@@ -1963,7 +1989,7 @@ msgstr "给个别与会者留言"
 msgid "Message Sent"
 msgstr "发送的信息"
 
-#: src/components/layouts/Event/index.tsx:46
+#: src/components/layouts/Event/index.tsx:45
 #: src/components/routes/event/messages.tsx:31
 msgid "Messages"
 msgstr "信息"
@@ -2011,7 +2037,7 @@ msgstr "Nam placerat elementum..."
 #: src/components/forms/CheckInListForm/index.tsx:20
 #: src/components/forms/TaxAndFeeForm/index.tsx:61
 #: src/components/forms/TicketForm/index.tsx:212
-#: src/components/modals/CreateEventModal/index.tsx:111
+#: src/components/modals/CreateEventModal/index.tsx:117
 #: src/components/modals/DuplicateEventModal/index.tsx:69
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:63
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:72
@@ -2043,6 +2069,10 @@ msgstr "新密码"
 msgid "No"
 msgstr "没有"
 
+#: src/components/common/NoEventsBlankSlate/index.tsx:21
+msgid "No archived events to show."
+msgstr "没有可显示的已归档活动。"
+
 #: src/components/common/AttendeeTable/index.tsx:57
 msgid "No Attendees to show"
 msgstr "无与会者"
@@ -2055,7 +2085,7 @@ msgstr "在此日期前，使用此列表的参与者将无法签到"
 msgid "No Capacity Assignments"
 msgstr "没有容量分配"
 
-#: src/components/common/CheckInListList/index.tsx:44
+#: src/components/common/CheckInListList/index.tsx:53
 msgid "No Check-In Lists"
 msgstr "没有签到列表"
 
@@ -2063,11 +2093,15 @@ msgstr "没有签到列表"
 msgid "No Discount"
 msgstr "无折扣"
 
-#: src/components/routes/organizer/OrganizerDashboard/index.tsx:88
-msgid "No events for this organizer"
-msgstr "没有该组织者的活动"
+#: src/components/common/NoEventsBlankSlate/index.tsx:20
+msgid "No ended events to show."
+msgstr "没有可显示的已结束活动。"
 
-#: src/components/routes/events/Dashboard/index.tsx:109
+#: src/components/routes/organizer/OrganizerDashboard/index.tsx:88
+#~ msgid "No events for this organizer"
+#~ msgstr "没有该组织者的活动"
+
+#: src/components/common/NoEventsBlankSlate/index.tsx:14
 msgid "No events to show"
 msgstr "无事件显示"
 
@@ -2142,8 +2176,7 @@ msgstr "销售中"
 msgid "On Sale"
 msgstr "销售中"
 
-#: src/components/routes/events/Dashboard/index.tsx:114
-#: src/components/routes/organizer/OrganizerDashboard/index.tsx:93
+#: src/components/common/NoEventsBlankSlate/index.tsx:19
 msgid "Once you create an event, you'll see it here."
 msgstr "创建事件后，您就可以在这里看到它。"
 
@@ -2155,7 +2188,7 @@ msgstr "准备就绪后，设置您的活动并开始售票。"
 msgid "Ongoing"
 msgstr "持续进行"
 
-#: src/components/common/EventCard/index.tsx:61
+#: src/components/common/EventCard/index.tsx:86
 msgid "Online event"
 msgstr "在线活动"
 
@@ -2171,11 +2204,11 @@ msgstr ""
 "只有与本次活动直接相关的重要邮件才能使用此表单发送。\n"
 "任何滥用行为，包括发送促销邮件，都将导致账户立即被封禁。"
 
-#: src/components/common/CheckInListList/index.tsx:166
+#: src/components/common/CheckInListList/index.tsx:175
 msgid "Open Check-In Page"
-msgstr ""
+msgstr "打开签到页面"
 
-#: src/components/layouts/Event/index.tsx:197
+#: src/components/layouts/Event/index.tsx:195
 msgid "Open sidebar"
 msgstr "打开侧边栏"
 
@@ -2187,7 +2220,7 @@ msgstr "方案 {i}"
 msgid "Options"
 msgstr "选项"
 
-#: src/components/modals/CreateEventModal/index.tsx:100
+#: src/components/modals/CreateEventModal/index.tsx:106
 msgid "or"
 msgstr "或"
 
@@ -2242,7 +2275,7 @@ msgstr "订单摘要"
 msgid "Order timeout"
 msgstr "订单超时"
 
-#: src/components/layouts/Event/index.tsx:43
+#: src/components/layouts/Event/index.tsx:42
 #: src/components/routes/event/orders.tsx:44
 msgid "Orders"
 msgstr "订单"
@@ -2254,7 +2287,7 @@ msgstr "创建的订单"
 
 #: src/components/modals/EditUserModal/index.tsx:55
 #: src/components/modals/InviteUserModal/index.tsx:47
-#: src/components/routes/events/Dashboard/index.tsx:100
+#: src/components/routes/events/Dashboard/index.tsx:113
 msgid "Organizer"
 msgstr "组织者"
 
@@ -2498,7 +2531,7 @@ msgstr "已使用促销 {promo_code} 代码"
 msgid "Promo Code page"
 msgstr "促销代码页面"
 
-#: src/components/layouts/Event/index.tsx:45
+#: src/components/layouts/Event/index.tsx:44
 #: src/components/routes/event/promo-codes.tsx:31
 msgid "Promo Codes"
 msgstr "促销代码"
@@ -2535,7 +2568,7 @@ msgid "Question Title"
 msgstr "问题标题"
 
 #: src/components/common/QuestionsTable/index.tsx:257
-#: src/components/layouts/Event/index.tsx:44
+#: src/components/layouts/Event/index.tsx:43
 #: src/components/modals/ViewAttendeeModal/index.tsx:48
 #: src/components/modals/ViewOrderModal/index.tsx:45
 msgid "Questions"
@@ -2621,6 +2654,10 @@ msgstr "重置密码"
 msgid "Reset Password"
 msgstr "重置密码"
 
+#: src/components/common/EventCard/index.tsx:135
+msgid "Restore event"
+msgstr "恢复活动"
+
 #: src/components/routes/ticket-widget/Payment/index.tsx:45
 msgid "Return to event page"
 msgstr "返回活动页面"
@@ -2690,13 +2727,13 @@ msgstr "保存设置"
 
 #: src/components/common/AttendeeCheckInTable/index.tsx:173
 #: src/components/common/AttendeeCheckInTable/index.tsx:175
-#: src/components/layouts/CheckIn/index.tsx:287
-#: src/components/layouts/CheckIn/index.tsx:289
+#: src/components/layouts/CheckIn/index.tsx:291
+#: src/components/layouts/CheckIn/index.tsx:293
 msgid "Scan QR Code"
 msgstr "扫描 QR 码"
 
 #: src/components/common/AttendeeCheckInTable/index.tsx:169
-#: src/components/layouts/CheckIn/index.tsx:283
+#: src/components/layouts/CheckIn/index.tsx:287
 msgid "Seach by name, order #, attendee # or email..."
 msgstr "按姓名、订单号、参会者编号或电子邮件搜索..."
 
@@ -2704,7 +2741,7 @@ msgstr "按姓名、订单号、参会者编号或电子邮件搜索..."
 msgid "Search by attendee name, email or order #..."
 msgstr "按与会者姓名、电子邮件或订单号搜索..."
 
-#: src/components/routes/events/Dashboard/index.tsx:56
+#: src/components/routes/events/Dashboard/index.tsx:69
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:66
 msgid "Search by event name..."
 msgstr "按活动名称搜索..."
@@ -2757,7 +2794,7 @@ msgstr "辅助文字颜色"
 msgid "Select Camera"
 msgstr "选择相机"
 
-#: src/components/modals/CreateEventModal/index.tsx:92
+#: src/components/modals/CreateEventModal/index.tsx:98
 msgid "Select organizer"
 msgstr "选择组织者"
 
@@ -2844,7 +2881,7 @@ msgstr "准备活动"
 msgid "Set your event live"
 msgstr "实时设置您的活动"
 
-#: src/components/layouts/Event/index.tsx:40
+#: src/components/layouts/Event/index.tsx:39
 #: src/components/routes/event/Settings/index.tsx:15
 msgid "Settings"
 msgstr "设置"
@@ -2961,7 +2998,7 @@ msgstr "西班牙语"
 msgid "Standard ticket with a fixed price"
 msgstr "固定价格标准票"
 
-#: src/components/modals/CreateEventModal/index.tsx:126
+#: src/components/modals/CreateEventModal/index.tsx:132
 #: src/components/modals/DuplicateEventModal/index.tsx:84
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:87
 #: src/components/routes/welcome/index.tsx:90
@@ -3120,7 +3157,7 @@ msgstr "税费"
 msgid "That promo code is invalid"
 msgstr "促销代码无效"
 
-#: src/components/layouts/CheckIn/index.tsx:201
+#: src/components/layouts/CheckIn/index.tsx:205
 msgid "The check-in list you are looking for does not exist."
 msgstr "您查找的签到列表不存在。"
 
@@ -3186,23 +3223,23 @@ msgstr "处理您的请求时出现错误。请重试。"
 msgid "There was an error sending your message"
 msgstr "发送信息时出现错误"
 
-#: src/components/common/CheckInListList/index.tsx:74
+#: src/components/common/CheckInListList/index.tsx:83
 msgid "This check-in list has expired"
 msgstr "此签到列表已过期"
 
-#: src/components/layouts/CheckIn/index.tsx:217
+#: src/components/layouts/CheckIn/index.tsx:221
 msgid "This check-in list has expired and is no longer available for check-ins."
 msgstr "此签到列表已过期，不再可用于签到。"
 
-#: src/components/common/CheckInListList/index.tsx:81
+#: src/components/common/CheckInListList/index.tsx:90
 msgid "This check-in list is active"
 msgstr "此签到列表已激活"
 
-#: src/components/common/CheckInListList/index.tsx:78
+#: src/components/common/CheckInListList/index.tsx:87
 msgid "This check-in list is not active yet"
 msgstr "此签到列表尚未激活"
 
-#: src/components/layouts/CheckIn/index.tsx:234
+#: src/components/layouts/CheckIn/index.tsx:238
 msgid "This check-in list is not yet active and is not available for check-ins."
 msgstr "此签到列表尚未激活，不能用于签到。"
 
@@ -3346,7 +3383,7 @@ msgid "Ticket(s)"
 msgstr "机票"
 
 #: src/components/common/PromoCodeTable/index.tsx:71
-#: src/components/layouts/Event/index.tsx:41
+#: src/components/layouts/Event/index.tsx:40
 #: src/components/layouts/EventHomepage/index.tsx:80
 #: src/components/routes/event/tickets.tsx:37
 msgid "Tickets"
@@ -3406,7 +3443,7 @@ msgstr "TIP"
 msgid "Title"
 msgstr "标题"
 
-#: src/components/layouts/Event/index.tsx:50
+#: src/components/layouts/Event/index.tsx:49
 msgid "Tools"
 msgstr "工具"
 
@@ -3445,12 +3482,12 @@ msgstr "类型"
 msgid "Unable to {0} attendee"
 msgstr "无法{0}与会者"
 
-#: src/components/layouts/CheckIn/index.tsx:92
-#: src/components/layouts/CheckIn/index.tsx:124
+#: src/components/layouts/CheckIn/index.tsx:96
+#: src/components/layouts/CheckIn/index.tsx:128
 msgid "Unable to check in attendee"
 msgstr "无法签到参与者"
 
-#: src/components/layouts/CheckIn/index.tsx:65
+#: src/components/layouts/CheckIn/index.tsx:69
 msgid "Unable to check out attendee"
 msgstr "无法签退参与者"
 
@@ -3482,9 +3519,14 @@ msgstr "无限制"
 msgid "Unlimited usages allowed"
 msgstr "允许无限次使用"
 
+#: src/components/common/EventsDashboardStatusButtons/index.tsx:20
 #: src/components/common/EventStatusBadge/index.tsx:16
 msgid "Upcoming"
 msgstr "即将推出"
+
+#: src/components/routes/events/Dashboard/index.tsx:55
+msgid "Upcoming Events"
+msgstr "即将举行的活动"
 
 #: src/components/modals/EditTaxOrFeeModal/index.tsx:59
 msgid "Update {0}"
@@ -3558,7 +3600,7 @@ msgstr "查看与会者"
 msgid "View event homepage"
 msgstr "查看活动主页"
 
-#: src/components/common/EventCard/index.tsx:97
+#: src/components/common/EventCard/index.tsx:113
 msgid "View event page"
 msgstr "查看活动页面"
 
@@ -3665,7 +3707,7 @@ msgstr "此签到列表应在何时过期？"
 msgid "Which tickets should be associated with this check-in list?"
 msgstr "哪些票应与此签到列表关联？"
 
-#: src/components/modals/CreateEventModal/index.tsx:89
+#: src/components/modals/CreateEventModal/index.tsx:95
 msgid "Who is organizing this event?"
 msgstr "这项活动由谁组织？"
 
@@ -3677,7 +3719,7 @@ msgstr "这条信息是发给谁的？"
 msgid "Who should be asked this question?"
 msgstr "这个问题应该问谁？"
 
-#: src/components/layouts/Event/index.tsx:52
+#: src/components/layouts/Event/index.tsx:51
 msgid "Widget Embed"
 msgstr "嵌入小部件"
 
@@ -3718,9 +3760,9 @@ msgstr "您已经扫描过此票"
 msgid "You are changing your email to <0>{0}</0>."
 msgstr "您正在将电子邮件更改为 <0>{0}</0>。"
 
-#: src/components/layouts/CheckIn/index.tsx:61
-#: src/components/layouts/CheckIn/index.tsx:87
-#: src/components/layouts/CheckIn/index.tsx:119
+#: src/components/layouts/CheckIn/index.tsx:65
+#: src/components/layouts/CheckIn/index.tsx:91
+#: src/components/layouts/CheckIn/index.tsx:123
 msgid "You are offline"
 msgstr "您处于离线状态"
 
@@ -3890,7 +3932,3 @@ msgstr "您的入场券"
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:137
 msgid "Zip or Postal Code"
 msgstr "邮政编码"
-
-#: src/components/common/CheckInListList/index.tsx:166
-msgid "Open Check-In Page"
-msgstr "打开签到页面"

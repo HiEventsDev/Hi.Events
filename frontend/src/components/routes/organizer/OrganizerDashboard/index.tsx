@@ -6,28 +6,29 @@ import {t, Trans} from "@lingui/macro";
 import {ToolBar} from "../../../common/ToolBar";
 import {SearchBarWrapper} from "../../../common/SearchBar";
 import {Button, Skeleton} from "@mantine/core";
-import {IconArrowLeft, IconCalendarPlus, IconPencil, IconPlus} from "@tabler/icons-react";
+import {IconArrowLeft, IconCalendarPlus, IconPencil} from "@tabler/icons-react";
 import {EventCard} from "../../../common/EventCard";
 import {Pagination} from "../../../common/Pagination";
 import {CreateEventModal} from "../../../modals/CreateEventModal";
 import {useGetOrganizer} from "../../../../queries/useGetOrganizer.ts";
-import {useGetOrganizerEvents} from "../../../../queries/useGetOrganizerEvents.ts";
-import {NoResultsSplash} from "../../../common/NoResultsSplash";
 import classes from './OrganizerDashboard.module.scss';
 import {EditOrganizerModal} from "../../../modals/EditOrganizerModal";
+import {useGetEvents} from "../../../../queries/useGetEvents.ts";
+import {getEventQueryFilters} from "../../../../utilites/eventsPageFiltersHelper.ts";
+import {EventsDashboardStatusButtons} from "../../../common/EventsDashboardStatusButtons";
+import {NoEventsBlankSlate} from "../../../common/NoEventsBlankSlate";
 
 const OrganizerDashboard = () => {
-    const {organizerId} = useParams();
+    const {organizerId, eventsState} = useParams();
     const [searchParams, setSearchParams] = useFilterQueryParamSync();
     const [createModalOpen, {open: openCreateModal, close: closeCreateModal}] = useDisclosure(false);
     const [editModalOpen, {open: openEditModal, close: closeEditModal}] = useDisclosure(false);
-    const {data: eventsData, isFetched: isEventsFetched} = useGetOrganizerEvents(
-        organizerId,
-        searchParams as QueryFilters
+    const {data: eventsData, isFetched: isEventsFetched} = useGetEvents(
+        getEventQueryFilters(searchParams) as QueryFilters
     );
     const pagination = eventsData?.meta;
     const events = eventsData?.data;
-    const {data: organizer, isFetched: isOrganizerFetched} = useGetOrganizer(organizerId)
+    const {data: organizer, isFetched: isOrganizerFetched} = useGetOrganizer(organizerId);
 
     return (
         <>
@@ -46,11 +47,10 @@ const OrganizerDashboard = () => {
                     variant="transparent"
                     leftSection={<IconPencil/>}
                     onClick={openEditModal}
-                    >
+                >
                     {t`Edit Organizer`}
                 </Button>
             </div>
-
 
             <h1 style={{marginTop: '15px'}}>
                 {isOrganizerFetched && (
@@ -83,31 +83,18 @@ const OrganizerDashboard = () => {
                 </>
             </ToolBar>
 
-            {events?.length === 0 && isEventsFetched && (
-                <NoResultsSplash
-                    heading={t`No events for this organizer`}
-                    imageHref={'/blank-slate/events.svg'}
-                    subHeading={(
-                        <>
-                            <p>
-                                {t`Once you create an event, you'll see it here.`}
-                            </p>
-                            <Button
-                                size={'xs'}
-                                leftSection={<IconPlus/>}
-                                color={'green'}
-                                onClick={() => openCreateModal()}>{t`Create Event`}
-                            </Button>
-                        </>
-                    )}
-                />
-            )}
+            <EventsDashboardStatusButtons
+                baseUrl={`/manage/organizer/${organizerId}/events`}
+                eventsState={eventsState as string}
+            />
+
+            {(events?.length === 0 && isEventsFetched)
+                && <NoEventsBlankSlate openCreateModal={openCreateModal} eventsState={eventsState}/>}
 
             <div>
-                {events?.map((event: Event) =>
-                    (
-                        <EventCard event={event} key={event.id}/>
-                    ))}
+                {events?.map((event: Event) => (
+                    <EventCard event={event} key={event.id}/>
+                ))}
             </div>
 
             {isEventsFetched && events && events?.length > 0
@@ -116,7 +103,7 @@ const OrganizerDashboard = () => {
                                total={Number(pagination?.last_page)}
                 />
             }
-            {createModalOpen && <CreateEventModal onClose={closeCreateModal} />}
+            {createModalOpen && <CreateEventModal onClose={closeCreateModal}/>}
             {(editModalOpen && organizer) && <EditOrganizerModal organizerId={organizerId} onClose={closeEditModal}/>}
         </>
     );

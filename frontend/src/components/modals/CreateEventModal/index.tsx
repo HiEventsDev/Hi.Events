@@ -24,7 +24,7 @@ export const CreateEventModal = ({onClose}: GenericModalProps) => {
     const form = useForm<Partial<Event>>({
         initialValues: {
             title: '',
-            status: '',
+            status: undefined,
             start_date: '',
             end_date: undefined,
             description: undefined,
@@ -42,6 +42,12 @@ export const CreateEventModal = ({onClose}: GenericModalProps) => {
     });
     const eventMutation = useCreateEvent();
     const [showCreateOrganizer, setShowCreateOrganizer] = useState(false);
+
+    useEffect(() => {
+        if (organizersQuery.isFetched && organizersQuery.data?.data?.length === 1) {
+            form.setFieldValue('organizer_id', String(organizersQuery.data?.data[0].id));
+        }
+    }, [organizersQuery.isFetched]);
 
     useEffect(() => {
         if (isAccountFetched) {

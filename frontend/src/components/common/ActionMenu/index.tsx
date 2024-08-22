@@ -2,7 +2,7 @@ import React from 'react';
 import {Button, Group, Menu} from '@mantine/core';
 import {IconDotsVertical} from '@tabler/icons-react';
 
-interface MenuItem {
+export interface MenuItem {
     label: string;
     icon: React.ReactNode;
     onClick: () => void;
@@ -16,17 +16,21 @@ export interface ActionMenuItemsGroup {
     showDividerAbove?: boolean;
 }
 
- interface ActionMenuProps {
+interface ActionMenuProps {
     itemsGroups: ActionMenuItemsGroup[];
+    target?: React.ReactNode;
 }
 
-export const ActionMenu: React.FC<ActionMenuProps> = ({itemsGroups}) => {
+export const ActionMenu: React.FC<ActionMenuProps> = ({
+                                                          itemsGroups,
+                                                          target = <IconDotsVertical/>
+                                                      }) => {
     return (
         <Group wrap={'nowrap'} gap={0} justify={'flex-end'}>
             <Menu shadow="md" width={200}>
                 <Menu.Target>
                     <Button variant={'transparent'}>
-                        <IconDotsVertical/>
+                        {target}
                     </Button>
                 </Menu.Target>
 

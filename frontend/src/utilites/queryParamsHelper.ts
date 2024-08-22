@@ -1,4 +1,4 @@
-import {QueryFilterFields, QueryFilters} from "../types.ts";
+import {QueryFilterCondition, QueryFilters} from "../types.ts";
 
 export const queryParamsHelper = {
     PER_PAGE_PARAM: "per_page",
@@ -28,7 +28,7 @@ export const queryParamsHelper = {
      * @example "?per_page=10&page=1"
      */
     buildQueryString: (
-        {pageNumber, perPage, query, sortBy, sortDirection, filterFields = {}}: QueryFilters
+        {pageNumber, perPage, query, sortBy, sortDirection, filterFields = {}, additionalParams = {}}: QueryFilters
     ): string => {
         const baseParams: any = {
             [queryParamsHelper.PAGE_PARAM]: pageNumber ||
@@ -47,12 +47,27 @@ export const queryParamsHelper = {
             queryParamsHelper.getParam(queryParamsHelper.SORT_DIRECTION_PARAM, ''),
         };
 
-        const filterParams = Object.entries(filterFields).reduce<QueryFilterFields>((acc, [key, value]) => {
-            acc[`filter_fields[${key}]`] = value;
+        const filterParams = Object.entries(filterFields).reduce<Record<string, string>>((acc, [key, value]) => {
+            if (Array.isArray(value)) {
+                value.forEach((condition: QueryFilterCondition) => {
+                    const paramKey = `filter_fields[${key}][${condition.operator}]`;
+                    acc[paramKey] = String(condition.value);
+                });
+            } else if (typeof value === 'object' && value !== null) {
+                const condition = value as QueryFilterCondition;
+                const paramKey = `filter_fields[${key}][${condition.operator}]`;
+                acc[paramKey] = String(condition.value);
+            }
             return acc;
         }, {});
 
-        const combinedParams = { ...baseParams, ...filterParams };
+        const additionalParamsProcessed = Object.entries(additionalParams).reduce<Record<string, string>>((acc, [key, value]) => {
+            acc[key] = String(value);
+            return acc;
+        }, {});
 
-        return '?' + new URLSearchParams(combinedParams).toString();    }
+        const combinedParams = {...baseParams, ...filterParams, ...additionalParamsProcessed};
+
+        return '?' + new URLSearchParams(combinedParams).toString();
+    }
 };
