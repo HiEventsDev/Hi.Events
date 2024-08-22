@@ -50,6 +50,17 @@ class EventRepository extends BaseRepository implements EventRepositoryInterface
                             ->orWhere(EventDomainObjectAbstract::END_DATE, '>=', now());
                     });
             };
+
+            $organizerId = $params->filter_fields->first(fn ($filter) => $filter->field === EventDomainObjectAbstract::ORGANIZER_ID)?->value;
+            if ($organizerId) {
+                $where[] = static function (Builder $builder) use ($params) {
+                    $builder
+                        ->where(EventDomainObjectAbstract::ORGANIZER_ID, $params
+                            ->filter_fields
+                            ->get(EventDomainObjectAbstract::ORGANIZER_ID)
+                        );
+                };
+            }
         }
 
         $this->model = $this->model->orderBy(
