@@ -1,4 +1,4 @@
-import {Button, Group, Menu, Text,} from '@mantine/core';
+import {ActionIcon, Button, Group, Text,} from '@mantine/core';
 import {Event, IdParam} from "../../../types.ts";
 import classes from "./EventCard.module.scss";
 import {Card} from "../Card";
@@ -20,6 +20,10 @@ import {EventStatusBadge} from "../EventStatusBadge";
 import {useDisclosure} from "@mantine/hooks";
 import {DuplicateEventModal} from "../../modals/DuplicateEventModal";
 import {useState} from "react";
+import {ActionMenu, MenuItem} from '../ActionMenu/index.tsx';
+import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
+import {showError, showSuccess} from "../../../utilites/notifications.tsx";
+import {useUpdateEventStatus} from "../../../mutations/useUpdateEventStatus.ts";
 
 interface EventCardProps {
     event: Event;
@@ -29,10 +33,31 @@ export function EventCard({event}: EventCardProps) {
     const navigate = useNavigate();
     const [isDuplicateModalOpen, duplicateModal] = useDisclosure(false);
     const [eventId, setEventId] = useState<IdParam>();
+    const statusToggleMutation = useUpdateEventStatus();
 
     const handleDuplicate = (event: Event) => {
         setEventId(() => event.id);
         duplicateModal.open();
+    }
+
+    const handleStatusToggle = (event: Event) => () => {
+        const message = event?.status !== 'ARCHIVED'
+            ? t`Are you sure you want to archive this event?`
+            : t`Are you sure you want to restore this event? It will be restored as a draft event.`;
+
+        confirmationDialog(message, () => {
+            statusToggleMutation.mutate({
+                eventId: event.id,
+                status: event?.status === 'ARCHIVED' ? 'DRAFT' : 'ARCHIVED'
+            }, {
+                onSuccess: () => {
+                    showSuccess(t`Event status updated`);
+                },
+                onError: (error: any) => {
+                    showError(error?.response?.data?.message || t`Event status update failed. Please try again later`);
+                }
+            });
+        })
     }
 
     return (
@@ -79,38 +104,52 @@ export function EventCard({event}: EventCardProps) {
                     </div>
                 </div>
                 <div className={classes.actions}>
-                    <Menu shadow="md" width={200}>
-                        <Menu.Target>
+                    <ActionMenu
+                        itemsGroups={[
+                            {
+                                label: '',
+                                items: [
+                                    {
+                                        label: t`View event page`,
+                                        icon: <IconEye size={14}/>,
+                                        onClick: () => window.location.href = eventHomepagePath(event),
+                                    },
+                                    {
+                                        label: t`Manage event`,
+                                        icon: <IconSettings size={14}/>,
+                                        onClick: () => navigate(`/manage/event/${event.id}`),
+                                    },
+                                    ((event.lifecycle_status === 'UPCOMING' || event.lifecycle_status === 'ONGOING')
+                                        && event.status === 'LIVE') && {
+                                        label: t`Check-in`,
+                                        icon: <IconQrcode size={14}/>,
+                                        onClick: () => navigate(`/manage/event/${event.id}/check-in`),
+                                        visible: true,
+                                    },
+                                    {
+                                        label: t`Duplicate event`,
+                                        icon: <IconCopy size={14}/>,
+                                        onClick: () => handleDuplicate(event),
+                                    },
+                                    {
+                                        label: event?.status === 'ARCHIVED' ? t`Restore event` : t`Archive event`,
+                                        icon: <IconCopy size={14}/>,
+                                        onClick: handleStatusToggle(event)
+                                    },
+                                ].filter(Boolean) as MenuItem[],
+                            },
+                        ]}
+                        target={
                             <div>
-                                <Button className={classes.desktopButton} size={"xs"} variant={"transparent"}>
+                                <ActionIcon className={classes.desktopButton} size={"md"} variant={"transparent"}>
                                     <IconDotsVertical/>
-                                </Button>
+                                </ActionIcon>
                                 <Button className={classes.mobileButton} variant={"light"}>
                                     {t`Manage`}
                                 </Button>
                             </div>
-                        </Menu.Target>
-
-                        <Menu.Dropdown>
-                            <Menu.Item leftSection={<IconEye size={14}/>}
-                                       onClick={() => window.location.href = eventHomepagePath(event)}>
-                                {t`View event page`}
-                            </Menu.Item>
-                            <Menu.Item onClick={() => navigate(`/manage/event/${event.id}`)}
-                                       leftSection={<IconSettings size={14}/>}
-                            >{t`Manage event`}</Menu.Item>
-
-                            {(event.lifecycle_status === 'UPCOMING' || event.lifecycle_status === 'ONGOING') && (
-                                <Menu.Item onClick={() => navigate(`/manage/event/${event.id}/check-in`)}
-                                           leftSection={<IconQrcode size={14}/>}
-                                >{t`Check-in`}</Menu.Item>
-                            )}
-
-                            <Menu.Item onClick={() => handleDuplicate(event)}
-                                       leftSection={<IconCopy size={14}/>}
-                            >{t`Duplicate event`}</Menu.Item>
-                        </Menu.Dropdown>
-                    </Menu>
+                        }
+                    />
                 </div>
             </Card>
             {isDuplicateModalOpen && <DuplicateEventModal eventId={eventId} onClose={duplicateModal.close}/>}

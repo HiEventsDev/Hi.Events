@@ -9,6 +9,7 @@ use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Services\Handlers\Event\DTO\GetEventsDTO;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
 
 
 class GetEventsHandler
@@ -28,7 +29,7 @@ class GetEventsHandler
             ))
             ->findEvents(
                 where: [
-                    'account_id' => $dto->accountId
+                    'account_id' => $dto->accountId,
                 ],
                 params: $dto->queryParams
             );

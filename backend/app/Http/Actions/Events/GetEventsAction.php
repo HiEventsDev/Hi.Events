@@ -29,7 +29,7 @@ class GetEventsAction extends BaseAction
         $events = $this->getEventsHandler->handle(
             GetEventsDTO::fromArray([
                 'accountId' => $this->getAuthenticatedAccountId(),
-                'queryParams' => QueryParamsDTO::fromArray($request->query->all()),
+                'queryParams' => $this->getPaginationQueryParams($request),
             ]),
         );
 

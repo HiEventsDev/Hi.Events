@@ -10,5 +10,5 @@ enum EventStatus
 
     case DRAFT;
     case LIVE;
-    case PAUSED;
+    case ARCHIVED;
 }

@@ -6,13 +6,12 @@ namespace HiEvents\Repository\Eloquent;
 
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\Generated\EventDomainObjectAbstract;
-use HiEvents\DomainObjects\Status\OrderStatus;
+use HiEvents\DomainObjects\Status\EventStatus;
 use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Models\Event;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
 
 class EventRepository extends BaseRepository implements EventRepositoryInterface
 {
@@ -32,6 +31,24 @@ class EventRepository extends BaseRepository implements EventRepositoryInterface
             $where[] = static function (Builder $builder) use ($params) {
                 $builder
                     ->where(EventDomainObjectAbstract::TITLE, 'ilike', '%' . $params->query . '%');
+            };
+        }
+
+        $upcomingEventsFilter = $params->query_params->get('eventsStatus') === 'upcoming';
+
+        if (!empty($params->filter_fields) && !$upcomingEventsFilter) {
+            $this->applyFilterFields($params, EventDomainObject::getAllowedFilterFields());
+        }
+
+        // Apply custom filter for upcoming events, as it keeps things less complex on the front-end
+        if ($upcomingEventsFilter) {
+            $where[] = static function (Builder $builder) {
+                $builder
+                    ->where(EventDomainObjectAbstract::STATUS, '!=', EventStatus::ARCHIVED->getName())
+                    ->where(function ($query) {
+                        $query->whereNull(EventDomainObjectAbstract::END_DATE)
+                            ->orWhere(EventDomainObjectAbstract::END_DATE, '>=', now());
+                    });
             };
         }
 

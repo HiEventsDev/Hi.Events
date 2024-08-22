@@ -6,6 +6,11 @@ namespace HiEvents\Repository\Eloquent;
 
 use BadMethodCallException;
 use Carbon\Carbon;
+use HiEvents\DomainObjects\Interfaces\DomainObjectInterface;
+use HiEvents\Http\DTO\QueryParamsDTO;
+use HiEvents\Models\BaseModel;
+use HiEvents\Repository\Eloquent\Value\Relationship;
+use HiEvents\Repository\Interfaces\RepositoryInterface;
 use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\Eloquent\Builder;
@@ -15,10 +20,6 @@ use Illuminate\Foundation\Application;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-use HiEvents\DomainObjects\Interfaces\DomainObjectInterface;
-use HiEvents\Models\BaseModel;
-use HiEvents\Repository\Eloquent\Value\Relationship;
-use HiEvents\Repository\Interfaces\RepositoryInterface;
 
 /**
  * @template T
@@ -333,6 +334,39 @@ abstract class BaseRepository implements RepositoryInterface
         return $this->hydrateDomainObjectFromModel($model, $domainObjectOverride);
     }
 
+    protected function applyFilterFields(QueryParamsDTO $params, array $allowedFilterFields = []): void
+    {
+        if ($params->filter_fields && $params->filter_fields->isNotEmpty()) {
+            $params->filter_fields->each(function ($filterField) use ($allowedFilterFields) {
+                if (!in_array($filterField->field, $allowedFilterFields, true)) {
+                    return;
+                }
+
+                $isNull = $filterField->value === 'null';
+
+                $operatorMapping = [
+                    'eq' => $isNull ? 'IS' : '=',
+                    'ne' => $isNull ? 'IS NOT' : '!=',
+                    'lt' => '<',
+                    'lte' => '<=',
+                    'gt' => '>',
+                    'gte' => '>=',
+                    'like' => 'LIKE',
+                ];
+
+                $operator = $operatorMapping[$filterField->operator] ?? throw new BadMethodCallException(
+                    sprintf('Operator %s is not supported', $filterField->operator)
+                );
+
+                $this->model = $this->model->where(
+                    column: $filterField->field,
+                    operator: $operator,
+                    value: $isNull ? null : $filterField->value,
+                );
+            });
+        }
+    }
+
     protected function resetModel(): void
     {
         $model = $this->getModel();
@@ -357,9 +391,9 @@ abstract class BaseRepository implements RepositoryInterface
      * @todo use hydrate method from AbstractDomainObject
      */
     private function hydrateDomainObjectFromModel(
-        Model $model,
-        string    $domainObjectOverride = null,
-        ?array    $relationships = null,
+        Model  $model,
+        string $domainObjectOverride = null,
+        ?array $relationships = null,
     ): DomainObjectInterface
     {
         /** @var DomainObjectInterface $object */

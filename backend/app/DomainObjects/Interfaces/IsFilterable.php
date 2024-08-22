@@ -5,7 +5,7 @@ namespace HiEvents\DomainObjects\Interfaces;
 interface IsFilterable
 {
     /**
-     * @return array<string, string>
+     * @return array<string>
      */
     public static function getAllowedFilterFields(): array;
 }

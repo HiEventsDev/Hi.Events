@@ -1,7 +1,6 @@
 import {Badge, Breadcrumbs, Burger, Button, UnstyledButton, VisuallyHidden} from '@mantine/core';
 import {NavLink, Outlet, useParams} from "react-router-dom";
 import {
-    IconAffiliate,
     IconChevronLeft,
     IconChevronRight,
     IconDashboard,
@@ -16,8 +15,8 @@ import {
     IconStar,
     IconTicket,
     IconUserQuestion,
-    IconUsers, IconUsersGroup,
-    IconWebhook
+    IconUsers,
+    IconUsersGroup
 } from "@tabler/icons-react";
 import {useState} from "react";
 import classes from './Event.module.scss';
@@ -109,7 +108,6 @@ const EventLayout = () => {
         })
     }
 
-
     return (
         <div id={'event-manage-container'} className={`${classes.container} ${sidebarOpen ? classes.closed : ''}`}>
             <div className={`${classes.topBar}`}>
@@ -133,9 +131,9 @@ const EventLayout = () => {
                         )}
 
                         {isEventFetched && (
-                               <NavLink to={`/manage/event/${event?.id}`}>
-                                   <Truncate length={15} text={event?.title} showTooltip={false}/>
-                               </NavLink>
+                            <NavLink to={`/manage/event/${event?.id}`}>
+                                <Truncate length={15} text={event?.title} showTooltip={false}/>
+                            </NavLink>
                         )}
 
                         {!isEventFetched && <span>... </span>}

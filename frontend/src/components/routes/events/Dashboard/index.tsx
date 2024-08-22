@@ -1,9 +1,9 @@
-import {Event, QueryFilters} from "../../../../types.ts";
+import {Event, EventStatus, QueryFilterOperator, QueryFilters} from "../../../../types.ts";
 import {useGetEvents} from "../../../../queries/useGetEvents.ts";
 import {EventCard} from "../../../common/EventCard";
 import {t} from "@lingui/macro";
 import {SearchBarWrapper} from "../../../common/SearchBar";
-import {Button, Menu, Skeleton} from "@mantine/core";
+import {Button, Group, Menu, Skeleton} from "@mantine/core";
 import {IconCalendarPlus, IconChevronDown, IconPlus, IconUserPlus} from "@tabler/icons-react";
 import {ToolBar} from "../../../common/ToolBar";
 import {Pagination} from "../../../common/Pagination";
@@ -11,7 +11,7 @@ import {useFilterQueryParamSync} from "../../../../hooks/useFilterQueryParamSync
 import {useDisclosure} from "@mantine/hooks";
 import {CreateEventModal} from "../../../modals/CreateEventModal";
 import {useGetOrganizers} from "../../../../queries/useGetOrganizers.ts";
-import {Navigate} from "react-router-dom";
+import {Navigate, useNavigate, useParams} from "react-router-dom";
 import {NoResultsSplash} from "../../../common/NoResultsSplash";
 import {CreateOrganizerModal} from "../../../modals/CreateOrganizerModal";
 import classes from "./Dashboard.module.scss";
@@ -26,7 +26,50 @@ const DashboardSkeleton = () => {
     );
 }
 
+export const getEventQueryFilters = (searchParams: Partial<QueryFilters>) => {
+    const {eventsState, organizerId} = useParams();
+    let filter = {};
+    if (eventsState === 'upcoming' || !eventsState) {
+        filter = {
+            additionalParams: {
+                eventsStatus: 'upcoming',
+            },
+            filterFields: {}
+        };
+    } else if (eventsState === 'ended') {
+        filter = {
+            filterFields: {
+                end_date: {operator: QueryFilterOperator.LessThanOrEquals, value: 'now'},
+                status: {operator: QueryFilterOperator.NotEquals, value: EventStatus.ARCHIVED},
+            }
+        };
+    } else if (eventsState === 'archived') {
+        filter = {
+            filterFields: {
+                status: {operator: QueryFilterOperator.Equals, value: EventStatus.ARCHIVED},
+            }
+        };
+    }
+
+    if (organizerId) {
+        // add the organizer filter on top of the other filters
+        filter = {
+            ...filter,
+            filterFields: {
+                organizer_id: {operator: QueryFilterOperator.Equals, value: organizerId},
+                ...filter.filterFields
+            }
+        }
+    }
+
+    return {
+        ...searchParams,
+        ...filter,
+    };
+}
+
 export function Dashboard() {
+    const {eventsState} = useParams();
     const [searchParams, setSearchParams] = useFilterQueryParamSync();
     const [createModalOpen, {open: openCreateModal, close: closeCreateModal}] = useDisclosure(false);
     const [createOrganizerModalOpen, {
@@ -37,19 +80,30 @@ export function Dashboard() {
         data: eventData,
         isFetched: isEventsFetched,
         isFetching: isEventsFetching,
-    } = useGetEvents(searchParams as QueryFilters);
+    } = useGetEvents(getEventQueryFilters(searchParams) as QueryFilters);
     const organizersQuery = useGetOrganizers();
     const pagination = eventData?.meta;
     const events = eventData?.data;
     const organizers = organizersQuery?.data?.data;
+    const navigate = useNavigate();
 
     if (organizersQuery.isFetched && organizers?.length === 0) {
         return <Navigate to={'/welcome'}/>
     }
 
+    const getHeading = () => {
+        if (eventsState === 'upcoming' || !eventsState) {
+            return t`Upcoming Events`;
+        } else if (eventsState === 'ended') {
+            return t`Ended Events`;
+        } else if (eventsState === 'archived') {
+            return t`Archived Events`;
+        }
+    }
+
     return (
         <div className={classes.eventsContainer}>
-            <h1>{t`All Events`}</h1>
+            <h1>{getHeading()}</h1>
 
             <ToolBar searchComponent={() => (
                 <SearchBarWrapper
@@ -103,6 +157,28 @@ export function Dashboard() {
                     </Menu>
                 </>
             </ToolBar>
+
+            <Group mt={10} mb={15}>
+                <Button
+                    size={'compact-sm'}
+                    variant={eventsState === 'upcoming' || !eventsState ? 'light' : 'transparent'}
+                    onClick={() => navigate('/manage/events' + window.location.search)}
+                >
+                    {t`Upcoming`}
+                </Button>
+                <Button size={'compact-sm'}
+                        variant={eventsState === 'ended' ? 'light' : 'transparent'}
+                        onClick={() => navigate('/manage/events/ended' + window.location.search)}
+                >
+                    {t`Ended`}
+                </Button>
+                <Button size={'compact-sm'}
+                        variant={eventsState === 'archived' ? 'light' : 'transparent'}
+                        onClick={() => navigate('/manage/events/archived' + window.location.search)}
+                >
+                    {t`Archived`}
+                </Button>
+            </Group>
 
             {events?.length === 0 && isEventsFetched && (
                 <NoResultsSplash
