@@ -15,11 +15,13 @@ import {TableSkeleton} from "../../common/TableSkeleton";
 import {Pagination} from "../../common/Pagination";
 import {t} from "@lingui/macro";
 import {useUrlHash} from "../../../hooks/useUrlHash.ts";
+import { useGetEvent } from "../../../queries/useGetEvent.ts";
 
 export const Tickets = () => {
     const [searchParams, setSearchParams] = useFilterQueryParamSync();
     const [createModalOpen, {open: openCreateModal, close: closeCreateModal}] = useDisclosure(false);
     const {eventId} = useParams();
+    const {data: event} = useGetEvent(eventId);
     const ticketsQuery = useGetTickets(eventId, searchParams as QueryFilters);
     const pagination = ticketsQuery?.data?.meta;
     const tickets = ticketsQuery?.data?.data;
@@ -49,13 +51,15 @@ export const Tickets = () => {
                 </Button>
             </ToolBar>
 
-            <TableSkeleton isVisible={!tickets || ticketsQuery.isFetching}/>
+            <TableSkeleton isVisible={!tickets || ticketsQuery.isFetching || !event}/>
 
-            {tickets
+            {(tickets && event)
                 && (<TicketsTable
                         openCreateModal={openCreateModal}
                         enableSorting={enableSorting}
-                        tickets={tickets}/>
+                        tickets={tickets}
+                        event={event}
+                    />
                 )}
 
             {!!tickets?.length && (

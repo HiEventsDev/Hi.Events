@@ -1,6 +1,6 @@
 import {t, Trans} from "@lingui/macro";
 import {UseFormReturnType} from "@mantine/form";
-import {TaxAndFee, TaxAndFeeCalculationType, TaxAndFeeType, Ticket, TicketType} from "../../../types.ts";
+import {Event, TaxAndFee, TaxAndFeeCalculationType, TaxAndFeeType, Ticket, TicketType} from "../../../types.ts";
 import {
     ActionIcon,
     Alert,
@@ -18,7 +18,6 @@ import {
     IconCash,
     IconCoinOff,
     IconCoins,
-    IconCurrencyDollar,
     IconHeartDollar,
     IconInfoCircle,
     IconTrash,
@@ -43,9 +42,10 @@ import {InputLabelWithHelp} from "../../common/InputLabelWithHelp";
 interface TicketFormProps {
     form: UseFormReturnType<Ticket>,
     ticket?: Ticket,
+    event?: Event,
 }
 
-const TicketPriceTierForm = ({form, ticket}: TicketFormProps) => {
+const TicketPriceTierForm = ({form, ticket, event}: TicketFormProps) => {
     return form?.values?.prices?.map((price, index) => {
         const existingPrice = ticket?.prices?.find((p) => Number(p.id) === Number(price.id));
         const deleteDisabled = form?.values?.prices?.length === 1 || (existingPrice && Number(existingPrice?.quantity_sold) > 0);
@@ -66,8 +66,7 @@ const TicketPriceTierForm = ({form, ticket}: TicketFormProps) => {
                     <NumberInput decimalScale={2}
                                  min={0}
                                  fixedDecimalScale
-                                 leftSection={<IconCurrencyDollar/>}
-                                 {...form.getInputProps(`prices.${index}.price`)}
+                                 leftSection={event?.currency ? getCurrencySymbol(event.currency) : ''}                                 {...form.getInputProps(`prices.${index}.price`)}
                                  label={t`Price`}
                                  placeholder="19.99"/>
                     <TextInput
@@ -266,7 +265,7 @@ export const TicketForm = ({form, ticket}: TicketFormProps) => {
 
             {form.values.type === TicketType.Tiered && (
                 <Fieldset legend={t`Price tiers`} mt={20} mb={20}>
-                    <TicketPriceTierForm ticket={ticket} form={form}/>
+                    <TicketPriceTierForm ticket={ticket} form={form} event={event}/>
                     <Group>
                         <Button
                             size={'xs'}
