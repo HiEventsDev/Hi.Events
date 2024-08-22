@@ -12,7 +12,7 @@ import {
     useSensors,
 } from '@dnd-kit/core';
 import {SortableContext, verticalListSortingStrategy,} from '@dnd-kit/sortable';
-import {Ticket} from "../../../types";
+import {Ticket, Event} from "../../../types";
 import {useSortTickets} from "../../../mutations/useSortTickets.ts";
 import {useParams} from "react-router-dom";
 import {showError, showSuccess} from "../../../utilites/notifications.tsx";
@@ -23,11 +23,12 @@ import {IconPlus} from "@tabler/icons-react";
 
 interface TicketCardProps {
     tickets: Ticket[];
+    event: Event;
     enableSorting: boolean;
     openCreateModal: () => void;
 }
 
-export const TicketsTable = ({tickets, openCreateModal, enableSorting = false}: TicketCardProps) => {
+export const TicketsTable = ({tickets, event, openCreateModal, enableSorting = false}: TicketCardProps) => {
     const {eventId} = useParams();
     const sortTicketsMutation = useSortTickets();
     const {items, setItems, handleDragEnd} = useDragItemsHandler({
@@ -105,6 +106,7 @@ export const TicketsTable = ({tickets, openCreateModal, enableSorting = false}: 
                                 key={ticketId}
                                 ticket={ticket}
                                 enableSorting={enableSorting}
+                                currencyCode={event.currency}
                             />
                         );
                     })}

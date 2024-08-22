@@ -18,7 +18,7 @@ import {EditTicketModal} from "../../../modals/EditTicketModal";
 import {SendMessageModal} from "../../../modals/SendMessageModal";
 import {UniqueIdentifier} from "@dnd-kit/core";
 
-export const SortableTicket = ({ticket, enableSorting}: {ticket: Ticket, enableSorting: boolean }) => {
+export const SortableTicket = ({ticket, enableSorting, currencyCode}: {ticket: Ticket, enableSorting: boolean, currencyCode: string }) => {
     const uniqueId = ticket.id as UniqueIdentifier;
     const {
         attributes,
@@ -87,11 +87,11 @@ export const SortableTicket = ({ticket, enableSorting}: {ticket: Ticket, enableS
             if (ticketPrices[0].price <= 0) {
                 return t`Free`;
             }
-            return formatCurrency(ticketPrices[0].price);
+            return formatCurrency(ticketPrices[0].price, currencyCode);
         }
 
         if (ticketPrices.length === 0) {
-            return formatCurrency(ticketPrices[0].price)
+            return formatCurrency(ticketPrices[0].price, currencyCode)
         }
 
         const prices = ticketPrices.map(ticketPrice => ticketPrice.price);
@@ -102,7 +102,7 @@ export const SortableTicket = ({ticket, enableSorting}: {ticket: Ticket, enableS
             return t`Free`;
         }
 
-        return formatCurrency(minPrice) + ' - ' + formatCurrency(maxPrice);
+        return formatCurrency(minPrice, currencyCode) + ' - ' + formatCurrency(maxPrice, currencyCode);
     }
 
     return (

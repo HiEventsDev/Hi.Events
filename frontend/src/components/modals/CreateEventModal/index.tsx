@@ -56,6 +56,15 @@ export const CreateEventModal = ({onClose}: GenericModalProps) => {
         }
     }, [isAccountFetched]);
 
+    useEffect(() => {
+        if (form.values.organizer_id && organizersQuery.data) {
+            form.setFieldValue(
+                'currency',
+                organizersQuery.data.data
+                    .find((organizer) => organizer.id === Number(form.values.organizer_id))?.currency);
+        }
+    }, [form.values.organizer_id]);
+
     const handleCreate = (values: Partial<Event>) => {
         eventMutation.mutateAsync({
             eventData: values,
