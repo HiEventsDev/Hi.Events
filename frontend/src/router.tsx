@@ -80,14 +80,14 @@ export const router: RouteObject[] = [
         },
         children: [
             {
-                path: "events",
+                path: "events/:eventsState?",
                 async lazy() {
                     const Dashboard = await import("./components/routes/events/Dashboard");
                     return {Component: Dashboard.default};
-                }
+                },
             },
             {
-                path: "organizer/:organizerId",
+                path: "organizer/:organizerId/events?/:eventsState?",
                 async lazy() {
                     const OrganizerDashboard = await import("./components/routes/organizer/OrganizerDashboard");
                     return {Component: OrganizerDashboard.default};

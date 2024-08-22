@@ -39,7 +39,7 @@ const CheckIn = () => {
         query: searchQueryDebounced,
         perPage: 100,
         filterFields: {
-            status: ['ACTIVE'],
+            status: {operator: 'eq', value: 'ACTIVE'},
         },
     };
     const attendeesQuery = useGetCheckInListAttendees(

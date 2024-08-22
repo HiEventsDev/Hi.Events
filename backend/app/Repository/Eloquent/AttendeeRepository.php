@@ -5,6 +5,7 @@ namespace HiEvents\Repository\Eloquent;
 use HiEvents\DomainObjects\AttendeeCheckInDomainObject;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
+use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Models\Attendee;
@@ -69,19 +70,6 @@ class AttendeeRepository extends BaseRepository implements AttendeeRepositoryInt
             };
         }
 
-        if ($params->filter_fields) {
-            foreach ($params->filter_fields as $field => $value) {
-                if (in_array($field, AttendeeDomainObject::getAllowedFilterFields(), true) === false) {
-                    continue;
-                }
-                if ($value === null || $value === '' || $value === []) {
-                    continue;
-                }
-                $this->model
-                    ->whereIn('attendees.' . $field, array_map('trim', explode(',', $value)));
-            }
-        }
-
         $this->model = $this->model->select('attendees.*')
             ->join('orders', 'orders.id', '=', 'attendees.order_id')
             ->whereIn('orders.status', [OrderStatus::COMPLETED->name, OrderStatus::CANCELLED->name])
@@ -123,6 +111,7 @@ class AttendeeRepository extends BaseRepository implements AttendeeRepositoryInt
             ->join('ticket_check_in_lists', 'ticket_check_in_lists.ticket_id', '=', 'attendees.ticket_id')
             ->join('check_in_lists', 'check_in_lists.id', '=', 'ticket_check_in_lists.check_in_list_id')
             ->where('check_in_lists.short_id', $shortId)
+            ->where('attendees.status', AttendeeStatus::ACTIVE->name)
             ->whereIn('orders.status', [OrderStatus::COMPLETED->name]);
 
         $this->loadRelation(new Relationship(AttendeeCheckInDomainObject::class, name: 'check_in'));

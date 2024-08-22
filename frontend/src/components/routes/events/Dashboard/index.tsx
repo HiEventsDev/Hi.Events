@@ -11,10 +11,12 @@ import {useFilterQueryParamSync} from "../../../../hooks/useFilterQueryParamSync
 import {useDisclosure} from "@mantine/hooks";
 import {CreateEventModal} from "../../../modals/CreateEventModal";
 import {useGetOrganizers} from "../../../../queries/useGetOrganizers.ts";
-import {Navigate} from "react-router-dom";
-import {NoResultsSplash} from "../../../common/NoResultsSplash";
+import {Navigate, useParams} from "react-router-dom";
 import {CreateOrganizerModal} from "../../../modals/CreateOrganizerModal";
 import classes from "./Dashboard.module.scss";
+import {getEventQueryFilters} from "../../../../utilites/eventsPageFiltersHelper.ts";
+import {EventsDashboardStatusButtons} from "../../../common/EventsDashboardStatusButtons";
+import {NoEventsBlankSlate} from "../../../common/NoEventsBlankSlate";
 
 const DashboardSkeleton = () => {
     return (
@@ -27,6 +29,7 @@ const DashboardSkeleton = () => {
 }
 
 export function Dashboard() {
+    const {eventsState} = useParams();
     const [searchParams, setSearchParams] = useFilterQueryParamSync();
     const [createModalOpen, {open: openCreateModal, close: closeCreateModal}] = useDisclosure(false);
     const [createOrganizerModalOpen, {
@@ -37,7 +40,7 @@ export function Dashboard() {
         data: eventData,
         isFetched: isEventsFetched,
         isFetching: isEventsFetching,
-    } = useGetEvents(searchParams as QueryFilters);
+    } = useGetEvents(getEventQueryFilters(searchParams) as QueryFilters);
     const organizersQuery = useGetOrganizers();
     const pagination = eventData?.meta;
     const events = eventData?.data;
@@ -47,9 +50,19 @@ export function Dashboard() {
         return <Navigate to={'/welcome'}/>
     }
 
+    const getHeading = () => {
+        if (eventsState === 'upcoming' || !eventsState) {
+            return t`Upcoming Events`;
+        } else if (eventsState === 'ended') {
+            return t`Ended Events`;
+        } else if (eventsState === 'archived') {
+            return t`Archived Events`;
+        }
+    }
+
     return (
         <div className={classes.eventsContainer}>
-            <h1>{t`All Events`}</h1>
+            <h1>{getHeading()}</h1>
 
             <ToolBar searchComponent={() => (
                 <SearchBarWrapper
@@ -104,28 +117,16 @@ export function Dashboard() {
                 </>
             </ToolBar>
 
-            {events?.length === 0 && isEventsFetched && (
-                <NoResultsSplash
-                    heading={t`No events to show`}
-                    imageHref={'/blank-slate/events.svg'}
-                    subHeading={(
-                        <>
-                            <p>
-                                {t`Once you create an event, you'll see it here.`}
-                            </p>
-                            <Button
-                                size={'xs'}
-                                leftSection={<IconPlus/>}
-                                color={'green'}
-                                onClick={() => openCreateModal()}>{t`Create Event`}
-                            </Button>
-                        </>
-                    )}
-                />
-            )}
+            <EventsDashboardStatusButtons
+                baseUrl={`/manage/events`}
+                eventsState={eventsState as string}
+            />
+
+            {(events?.length === 0 && isEventsFetched)
+                && <NoEventsBlankSlate openCreateModal={openCreateModal} eventsState={eventsState}/>}
 
             <div>
-                {isEventsFetching && <DashboardSkeleton/>}
+                {(isEventsFetching && !events) && <DashboardSkeleton/>}
 
                 {events?.map((event: Event) =>
                     (

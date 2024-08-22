@@ -139,12 +139,25 @@ export interface EventDuplicatePayload extends EventBase {
     duplicate_settings: boolean;
 }
 
+export enum EventStatus {
+    DRAFT = 'DRAFT',
+    LIVE = 'LIVE',
+    PAUSED = 'PAUSED',
+    ARCHIVED = 'ARCHIVED'
+}
+
+export enum EventLifecycleStatus {
+    ONGOING = 'ONGOING',
+    UPCOMING = 'UPCOMING',
+    ENDED = 'ENDED'
+}
+
 export interface Event extends EventBase {
     id?: IdParam;
     slug: string;
-    status?: 'DRAFT' | 'LIVE' | 'PAUSED';
+    status?: EventStatus;
     description_preview?: string;
-    lifecycle_status?: 'ONGOING' | 'UPCOMING' | 'ENDED';
+    lifecycle_status?: EventLifecycleStatus;
     settings?: EventSettings;
     tickets?: Ticket[];
     images?: Image[];
@@ -437,7 +450,9 @@ export interface CheckInList {
     }[];
 }
 
-export type CheckInListRequest = Omit<CheckInList, 'event_id' | 'short_id' | 'id' | 'tickets' | 'total_attendees' | 'checked_in_attendees' | 'is_expired' | 'is_active'> & {
+export type CheckInListRequest =
+    Omit<CheckInList, 'event_id' | 'short_id' | 'id' | 'tickets' | 'total_attendees' | 'checked_in_attendees' | 'is_expired' | 'is_active'>
+    & {
     ticket_ids: IdParam[];
 };
 
@@ -492,17 +507,36 @@ export enum QuestionBelongsToType {
     ORDER = 'ORDER',
 }
 
+export enum QueryFilterOperator {
+    Equals = 'eq',
+    NotEquals = 'ne',
+    GreaterThan = 'gt',
+    GreaterThanOrEquals = 'gte',
+    LessThan = 'lt',
+    LessThanOrEquals = 'lte',
+    Like = 'like',
+    NotLike = 'not_like',
+}
+
+export type QueryFilterValue = string | number | boolean;
+
+export type QueryFilterCondition = {
+    operator: QueryFilterOperator;
+    value: QueryFilterValue;
+};
+
 export type QueryFilterFields = {
-    [key: string]: string | string[] | number | number[] | boolean | boolean[] | undefined;
+    [key: string]: QueryFilterCondition | QueryFilterCondition[] | undefined;
 }
 
 export interface QueryFilters {
-    pageNumber: number;
+    pageNumber?: number;
     perPage?: number;
     query?: string;
     sortBy?: string;
     sortDirection?: string;
     filterFields?: QueryFilterFields;
+    additionalParams?: Record<string, any>;
 }
 
 export interface GenericModalProps {

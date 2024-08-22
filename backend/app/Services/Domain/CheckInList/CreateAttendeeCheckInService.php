@@ -7,6 +7,7 @@ use HiEvents\DataTransferObjects\ErrorBagDTO;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\CheckInListDomainObject;
 use HiEvents\DomainObjects\Generated\AttendeeCheckInDomainObjectAbstract;
+use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\Exceptions\CannotCheckInException;
 use HiEvents\Helper\DateHelper;
 use HiEvents\Helper\IdHelper;
@@ -59,6 +60,16 @@ class CreateAttendeeCheckInService
             $existingCheckIn = $existingCheckIns->first(
                 fn($checkIn) => $checkIn->getAttendeeId() === $attendee->getId()
             );
+
+            if ($attendee->getStatus() === AttendeeStatus::CANCELLED->name) {
+                $errors->addError(
+                    key: $attendee->getPublicId(),
+                    message: __('Attendee :attendee_name\'s ticket is cancelled', [
+                        'attendee_name' => $attendee->getFullName(),
+                    ])
+                );
+                continue;
+            }
 
             if ($existingCheckIn) {
                 $checkIns->push($existingCheckIn);

@@ -3,6 +3,7 @@
 namespace HiEvents\DomainObjects;
 
 use Carbon\Carbon;
+use HiEvents\DomainObjects\Interfaces\IsFilterable;
 use HiEvents\DomainObjects\Interfaces\IsSortable;
 use HiEvents\DomainObjects\SortingAndFiltering\AllowedSorts;
 use HiEvents\DomainObjects\Status\EventLifecycleStatus;
@@ -11,7 +12,7 @@ use HiEvents\Helper\Url;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
-class EventDomainObject extends Generated\EventDomainObjectAbstract implements IsSortable
+class EventDomainObject extends Generated\EventDomainObjectAbstract implements IsSortable, IsFilterable
 {
     private ?Collection $tickets = null;
 
@@ -24,6 +25,19 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
     private ?EventSettingDomainObject $settings = null;
 
     private ?OrganizerDomainObject $organizer = null;
+
+    public static function getAllowedFilterFields(): array
+    {
+        return [
+            self::TITLE,
+            self::START_DATE,
+            self::END_DATE,
+            self::CREATED_AT,
+            self::UPDATED_AT,
+            self::STATUS,
+            self::ORGANIZER_ID,
+        ];
+    }
 
     public static function getAllowedSorts(): AllowedSorts
     {
