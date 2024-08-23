@@ -27,7 +27,7 @@
     {{-- Footer --}}
     <x-slot:footer>
         <x-mail::footer>
-            @if($appEmailFooter = config('app.email_footer'))
+            @if($appEmailFooter = config('app.email_footer_text'))
                 {{ $appEmailFooter }}
             @else
                 {{-- (c) Hi.Events Ltd 2024 --}}
