@@ -8,6 +8,8 @@ import sirv from "sirv";
 import cookieParser from "cookie-parser";
 import path from "node:path";
 import {fileURLToPath} from "node:url";
+import * as nodePath from "node:path";
+import * as nodeUrl from "node:url";
 
 installGlobals();
 
@@ -70,7 +72,7 @@ app.use("*", async (req, res) => {
             render = (await vite.ssrLoadModule("/src/entry.server.tsx")).render;
         } else {
             template = templateHtml;
-            render = (await import(path.join(__dirname, "./dist/server/entry.server.js"))).render;
+            render = (await dynamicImport(path.join(__dirname, "./dist/server/entry.server.js"))).render;
         }
 
         const {appHtml, dehydratedState, helmetContext} = await render(
@@ -110,3 +112,10 @@ app.use("*", async (req, res) => {
 app.listen(port, () => {
     console.info(`SSR Serving at http://localhost:${port}`);
 });
+
+const dynamicImport = async (path) => {
+    return import(
+        nodePath.isAbsolute(path) ? nodeUrl.pathToFileURL(path).toString() : path
+    );
+        
+}
