@@ -42,8 +42,8 @@ export const CoverUpload = () => {
         const image = new Image();
         image.src = URL.createObjectURL(files[0]);
         image.onload = () => {
-            if (image.width > 3000 || image.height > 2000) {
-                showError(t`Image dimensions must be between 3000px by 2000px. With a max height of 2000px and max width of 3000px`);
+            if (image.width > 4000 || image.height > 4000) {
+                showError(t`Image dimensions must be between 4000px by 4000px. With a max height of 4000px and max width of 4000px`);
                 setFiles([]);
             } else if (files[0].size > 5000000) {
                 showError(t`Image must be less than 5MB`);

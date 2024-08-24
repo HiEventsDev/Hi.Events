@@ -22,6 +22,10 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
 
     private ?Collection $promoCodes = null;
 
+    private ?Collection $checkInLists = null;
+
+    private ?Collection $capacityAssignments = null;
+
     private ?EventSettingDomainObject $settings = null;
 
     private ?OrganizerDomainObject $organizer = null;
@@ -215,6 +219,30 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
     public function setPromoCodes(?Collection $promoCodes): self
     {
         $this->promoCodes = $promoCodes;
+
+        return $this;
+    }
+
+    public function getCheckInLists(): ?Collection
+    {
+        return $this->checkInLists;
+    }
+
+    public function setCheckInLists(?Collection $checkInLists): self
+    {
+        $this->checkInLists = $checkInLists;
+
+        return $this;
+    }
+
+    public function getCapacityAssignments(): ?Collection
+    {
+        return $this->capacityAssignments;
+    }
+
+    public function setCapacityAssignments(?Collection $capacityAssignments): self
+    {
+        $this->capacityAssignments = $capacityAssignments;
 
         return $this;
     }

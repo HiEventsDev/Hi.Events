@@ -33,6 +33,9 @@ class DuplicateEventAction extends BaseAction
             duplicateQuestions: $request->validated('duplicate_questions'),
             duplicateSettings: $request->validated('duplicate_settings'),
             duplicatePromoCodes: $request->validated('duplicate_promo_codes'),
+            duplicateCapacityAssignments: $request->validated('duplicate_capacity_assignments'),
+            duplicateCheckInLists: $request->validated('duplicate_check_in_lists'),
+            duplicateEventCoverImage: $request->validated('duplicate_event_cover_image'),
             description: $request->validated('description'),
             endDate: $request->validated('end_date'),
         ));

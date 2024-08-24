@@ -29,6 +29,9 @@ class DuplicateEventHandler
             duplicateQuestions: $data->duplicateQuestions,
             duplicateSettings: $data->duplicateSettings,
             duplicatePromoCodes: $data->duplicatePromoCodes,
+            duplicateCapacityAssignments: $data->duplicateCapacityAssignments,
+            duplicateCheckInLists: $data->duplicateCheckInLists,
+            duplicateEventCoverImage: $data->duplicateEventCoverImage,
             description: $data->description,
             endDate: $data->endDate,
         );
