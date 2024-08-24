@@ -137,6 +137,10 @@ export interface EventDuplicatePayload extends EventBase {
     duplicate_tickets: boolean;
     duplicate_questions: boolean;
     duplicate_settings: boolean;
+    duplicate_promo_codes: boolean;
+    duplicate_capacity_assignments: boolean;
+    duplicate_check_in_lists: boolean;
+    duplicate_event_cover_image: boolean;
 }
 
 export enum EventStatus {

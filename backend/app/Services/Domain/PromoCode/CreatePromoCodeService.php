@@ -30,10 +30,12 @@ class CreatePromoCodeService
     {
         $this->checkForDuplicateCode($promoCode);
 
-        $this->eventTicketValidationService->validateTicketIds(
-            ticketIds: $promoCode->getApplicableTicketIds(),
-            eventId: $promoCode->getEventId()
-        );
+        if (!empty($promoCode->getApplicableTicketIds())) {
+            $this->eventTicketValidationService->validateTicketIds(
+                ticketIds: $promoCode->getApplicableTicketIds(),
+                eventId: $promoCode->getEventId()
+            );
+        }
 
         $event = $this->eventRepository->findById($promoCode->getEventId());
 

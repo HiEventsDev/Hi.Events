@@ -15,6 +15,9 @@ class DuplicateEventDataDTO extends BaseDTO
         public bool    $duplicateQuestions = true,
         public bool    $duplicateSettings = true,
         public bool    $duplicatePromoCodes = true,
+        public bool    $duplicateCapacityAssignments = true,
+        public bool    $duplicateCheckInLists = true,
+        public bool    $duplicateEventCoverImage = true,
         public ?string $description = null,
         public ?string $endDate = null,
     )

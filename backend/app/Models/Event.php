@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace HiEvents\Models;
 
+use HiEvents\DomainObjects\Generated\EventDomainObjectAbstract;
+use HiEvents\Models\Traits\HasImages;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use HiEvents\DomainObjects\Generated\EventDomainObjectAbstract;
-use HiEvents\Models\Traits\HasImages;
 
 class Event extends BaseModel
 {
@@ -42,6 +42,16 @@ class Event extends BaseModel
     public function promo_codes(): HasMany
     {
         return $this->hasMany(PromoCode::class);
+    }
+
+    public function check_in_lists(): HasMany
+    {
+        return $this->hasMany(CheckInList::class);
+    }
+
+    public function capacity_assignments(): HasMany
+    {
+        return $this->hasMany(CapacityAssignment::class);
     }
 
     public static function boot()
