@@ -18,6 +18,9 @@ class DuplicateEventRequest extends BaseRequest
             'duplicate_questions' => ['boolean', 'required'],
             'duplicate_settings' => ['boolean', 'required'],
             'duplicate_promo_codes' => ['boolean', 'required'],
+            'duplicate_capacity_assignments' => ['boolean', 'required'],
+            'duplicate_check_in_lists' => ['boolean', 'required'],
+            'duplicate_event_cover_image' => ['boolean', 'required'],
         ];
 
         return array_merge($eventValidations, $duplicateValidations);
