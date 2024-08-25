@@ -70,8 +70,10 @@ Note that you can use any mail server you want. In this example, we are using Ma
 ```bash
 APP_URL=http://localhost
 APP_PORT=8000
-APP_FRONTEND_URL=http://localhost:5678
+APP_FRONTEND_URL=http://localhost:*
 ```
+
+Note that the `APP_FRONTEND_URL` is set to `http://localhost:*` to ensure that the frontend can access the backend and will not be blocked by CORS.
 
 5. Add the frontend URL to the `CORS` configuration in the .env file:
 
