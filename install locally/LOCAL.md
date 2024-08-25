@@ -104,11 +104,34 @@ You should see the following screen when you open the browser and navigate to `h
 
 ### Frontend Setup
 
-1. Go to the `frontend` directory and install the dependencies, build the project, and start the server by running the following commands:
+1. Go to the `frontend` directory and create a `.env` file by copying the `.env.example` file:
 
 ```bash
 cd frontend
-yarn install
-yarn build
-yarn start
+cp .env.example .env
 ```
+
+2. Configure the .env file with the following settings:
+
+```bash
+VITE_API_URL_CLIENT=http://localhost:8000
+VITE_API_URL_SERVER=http://localhost:8000
+VITE_FRONTEND_URL=http://localhost:5678
+
+VITE_STRIPE_PUBLISHABLE_KEY=pk_test_51Ofu1CJKnXOyGeQuDPUHiZcJxZozRuERiv4vQRBtCscwTbxOL574cxUjAoNRL2YLCumgC5160pl6kvTIiAc9mOeM0058KAWQ55
+```
+
+3. Install the project dependencies by running the following command:
+
+```bash
+yarn install
+```
+
+4. Run the following command to start the server:
+
+```bash
+yarn dev:csr
+```
+
+Now you can open the browser and navigate to `http://localhost:5678` to see the application running.
+
