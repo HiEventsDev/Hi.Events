@@ -5,7 +5,7 @@
 1. [Install PHP 8.2 or higher](https://www.php.net/downloads.php)
 2. [Install Composer](https://getcomposer.org/download/)
 3. Install Postgres
-4. Install Node.js and yarn
+4. [Install Node.js LTS and yarn](https://nodejs.org/en)
 
 ### Php Extensions
 
@@ -16,6 +16,10 @@ Make sure you have the following PHP extensions installed:
 3. sodium
 4. curl
 5. intl
+6. mbstring
+7. xml
+8. zip
+9. bcmath
 
 If you don't have them installed, you can go to the `php.ini` file and uncomment the lines that contain the extensions by removing the `;` at the beginning of the line.
 
@@ -103,6 +107,14 @@ php artisan serve
 
 You should see the following screen when you open the browser and navigate to `http://localhost:8000`:
 ![alt text](image.png)
+
+10. Set up Stripe by creating an account on [Stripe](https://stripe.com/). After creating an account, you can get the publishable key and secret key from the dashboard.
+
+```bash
+STRIPE_PUBLIC_KEY=yourpublickey
+STRIPE_SECRET_KEY=yoursecretkey
+STRIPE_WEBHOOK_SECRET=yoursecret
+```
 
 ### Frontend Setup
 
