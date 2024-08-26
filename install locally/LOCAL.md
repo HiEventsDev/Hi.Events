@@ -141,9 +141,36 @@ VITE_STRIPE_PUBLISHABLE_KEY=pk_test_51Ofu1CJKnXOyGeQuDPUHiZcJxZozRuERiv4vQRBtCsc
 yarn install
 ```
 
+4. Set up the environment variables in the terminal:
+
+#### For Windows:
+
+```bash
+$env:VITE_API_URL_CLIENT = "http://localhost:8000"
+$env:VITE_API_URL_SERVER = "http://localhost:8000"
+$env:VITE_FRONTEND_URL = "http://localhost:5678"
+$env:VITE_STRIPE_PUBLISHABLE_KEY = "pk_test_51Ofu1CJKnXOyGeQuDPUHiZcJxZozRuERiv4vQRBtCscwTbxOL574cxUjAoNRL2YLCumgC5160pl6kvTIiAc9mOeM0058KAWQ55"
+```
+
+#### For Linux/Mac:
+
+```bash
+export VITE_API_URL_CLIENT="http://localhost:8000"
+export VITE_API_URL_SERVER="http://localhost:8000"
+export VITE_FRONTEND_URL="http://localhost:5678"
+export VITE_STRIPE_PUBLISHABLE_KEY="pk_test_51Ofu1CJKnXOyGeQuDPUHiZcJxZozRuERiv4vQRBtCscwTbxOL574cxUjAoNRL2YLCumgC5160pl6kvTIiAc9mOeM0058KAWQ55"
+```
+
+5. Run the following commands to start the frontend application.
+
+```bash
+yarn build
+yarn start
+```
+
 ### Client Side Rendering
 
-Run the following command to start the frontend application in client-side rendering mode (Development mode):
+If you want to run the application in Client Side Rendering mode, you can run the following command (Development mode):
 
 ```bash
 yarn dev:csr
@@ -163,4 +190,38 @@ You can open the browser and navigate to `http://localhost:4173` to see the appl
 
 ### Server Side Rendering
 
-Coming soon...
+1. Set up the environment variables in the terminal, as shown in the Frontend Setup section.
+
+2. Run the following command to start the frontend application in server-side rendering mode (Development mode):
+
+```bash
+yarn dev:ssr
+```
+
+Now you can open the browser and navigate to `http://localhost:5678` to see the application running.
+
+---
+Instead, if you want to run the application in Production mode, you can run the following command:
+
+```bash
+yarn build:ssr
+yarn preview:ssr
+```
+
+You can open the browser and navigate to `http://localhost:4173` to see the application running.
+
+## Troubleshooting
+
+1. **Composer Install Error:** If you encounter an error while running `composer install`, ensure that you have the required PHP extensions installed. You can check the PHP extensions by running the following command:
+
+```bash
+php -m
+```
+
+2. **Database Connection Error:** If you encounter a database connection error, ensure that the database credentials in the `.env` file are correct. Check that the database server is running and that the database exists.
+
+3. **Mail Server Error:** If you encounter an error with the mail server configuration, ensure that the mail server settings in the `.env` file are correct. Check that the mail server is running and that the SMTP credentials are valid.
+
+4. **Frontend is not connecting to the backend:** If the frontend is not connecting to the backend, ensure you set the correct URLs in the `.env` file for both the backend and frontend. Ensure you set the environment variables correctly in the terminal for SSR. 
+
+5. **CORS Error:** If you encounter a CORS error, ensure that the CORS configuration in the `backend/.env` file allows the frontend URL. Check that the frontend URL is set correctly in the `.env` file.
