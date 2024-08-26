@@ -129,7 +129,9 @@ VITE_STRIPE_PUBLISHABLE_KEY=pk_test_51Ofu1CJKnXOyGeQuDPUHiZcJxZozRuERiv4vQRBtCsc
 yarn install
 ```
 
-4. Run the following command to start the server:
+### Client Side Rendering
+
+Run the following command to start the frontend application in client-side rendering mode (Development mode):
 
 ```bash
 yarn dev:csr
@@ -137,3 +139,16 @@ yarn dev:csr
 
 Now you can open the browser and navigate to `http://localhost:5678` to see the application running.
 
+---
+Instead, if you want to run the application in Production mode, you can run the following command:
+
+```bash
+yarn build:csr
+yarn preview:csr
+```
+
+You can open the browser and navigate to `http://localhost:4173` to see the application running.
+
+### Server Side Rendering
+
+Coming soon...
