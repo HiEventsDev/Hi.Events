@@ -66,7 +66,7 @@ export const EditUserModal = ({onClose, user}: EditUserModalProps) => {
                 </Alert>
             )}
             <form onSubmit={form.onSubmit(values => handleCreate(values))}>
-                <fieldset disabled={ediMutation.isLoading}>
+                <fieldset disabled={ediMutation.isPending}>
                     <InputGroup>
                         <TextInput required {...form.getInputProps('first_name')} label={t`First Name`}/>
                         <TextInput required {...form.getInputProps('last_name')} label={t`Last Name`}/>
@@ -115,7 +115,7 @@ export const EditUserModal = ({onClose, user}: EditUserModalProps) => {
                 </fieldset>
                 <Button
                     fullWidth
-                    loading={ediMutation.isLoading}
+                    loading={ediMutation.isPending}
                     type={'submit'}>
                     {t`Edit User`}
                 </Button>

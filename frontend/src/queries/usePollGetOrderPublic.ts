@@ -5,9 +5,10 @@ import {GET_ORDER_PUBLIC_QUERY_KEY} from "./useGetOrderPublic.ts";
 import {getSessionIdentifier} from "../utilites/sessionIdentifier.ts";
 
 export const usePollGetOrderPublic = (eventId: IdParam, orderShortId: IdParam, enabled: boolean) => {
-    return useQuery<Order, Error>(
-        [GET_ORDER_PUBLIC_QUERY_KEY, eventId, orderShortId],
-        async () => {
+    return useQuery<Order>({
+        queryKey: [GET_ORDER_PUBLIC_QUERY_KEY, eventId, orderShortId],
+
+        queryFn: async () => {
             const {data} = await orderClientPublic.findByShortId(
                 Number(eventId),
                 String(orderShortId),
@@ -15,9 +16,8 @@ export const usePollGetOrderPublic = (eventId: IdParam, orderShortId: IdParam, e
             );
             return data;
         },
-        {
-            refetchInterval: 5000,
-            enabled: enabled,
-        }
-    );
+
+        refetchInterval: 5000,
+        enabled: enabled
+    });
 }

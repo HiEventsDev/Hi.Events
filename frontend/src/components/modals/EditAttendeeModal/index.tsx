@@ -125,8 +125,8 @@ export const EditAttendeeModal = ({onClose, attendeeId}: EditAttendeeModalProps)
                     />
                 )}
 
-                <Button type="submit" fullWidth mt="xl" disabled={mutation.isLoading}>
-                    {mutation.isLoading ? t`Working...` : t`Edit Attendee`}
+                <Button type="submit" fullWidth mt="xl" disabled={mutation.isPending}>
+                    {mutation.isPending ? t`Working...` : t`Edit Attendee`}
                 </Button>
             </form>
         </Modal>

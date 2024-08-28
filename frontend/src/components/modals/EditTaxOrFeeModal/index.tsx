@@ -54,7 +54,7 @@ export const EditTaxOrFeeModal = ({onClose, taxOrFee}: EditTaxOrFeeModalProps) =
                 <TaxAndFeeForm form={form}/>
                 <Button
                     fullWidth
-                    loading={updateMutation.isLoading}
+                    loading={updateMutation.isPending}
                     type={'submit'}>
                     <Trans>Update {form.values.type === TaxAndFeeType.Tax ? t`Tax` : t`Fee`}</Trans>
                 </Button>

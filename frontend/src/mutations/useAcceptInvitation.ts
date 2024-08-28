@@ -3,10 +3,10 @@ import {AcceptInvitationRequest} from "../types.ts";
 import {authClient} from "../api/auth.client.ts";
 
 export const useAcceptInvitation = () => {
-    return useMutation(
-        ({token, userData}: {
+    return useMutation({
+        mutationFn: ({token, userData}: {
             token: string,
             userData: AcceptInvitationRequest,
-        }) => authClient.acceptInvitation(token, userData),
-    );
+        }) => authClient.acceptInvitation(token, userData)
+    });
 }

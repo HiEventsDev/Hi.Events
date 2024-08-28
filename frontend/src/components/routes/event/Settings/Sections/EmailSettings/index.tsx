@@ -55,7 +55,7 @@ export const EmailSettings = () => {
                 description={t`Customize the email and notification settings for this event`}
             />
             <form onSubmit={form.onSubmit(handleSubmit)}>
-                <fieldset disabled={eventSettingsQuery.isLoading || updateMutation.isLoading}>
+                <fieldset disabled={eventSettingsQuery.isLoading || updateMutation.isPending}>
                     <TextInput
                         {...form.getInputProps('support_email')}
                         description={t`Any queries from ticket holders will be sent to this email address. This will also be used as the "reply-to" address for all emails sent from this event`}
@@ -76,7 +76,7 @@ export const EmailSettings = () => {
                         description={t`If enabled, the organizer will receive an email notification when a new order is placed`}
                     />
 
-                    <Button loading={updateMutation.isLoading} type={'submit'}>
+                    <Button loading={updateMutation.isPending} type={'submit'}>
                         {t`Save`}
                     </Button>
                 </fieldset>

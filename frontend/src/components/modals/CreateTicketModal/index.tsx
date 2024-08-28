@@ -41,31 +41,31 @@ export const CreateTicketModal = ({onClose}: GenericModalProps) => {
         },
     });
 
-    const mutation = useMutation(
-        (ticketData: Ticket) => ticketClient.create(eventId, ticketData),
-        {
-            onSuccess: () => {
-                notifications.show({
-                    message: t`Successfully Created Ticket`,
-                    color: 'green',
-                });
-                queryClient.invalidateQueries({queryKey: [GET_TICKETS_QUERY_KEY]}).then(() => {
-                    form.reset();
-                    onClose();
-                });
-            },
-            onError: (error: any) => {
-                if (error?.response?.data?.errors) {
-                    form.setErrors(error.response.data.errors);
-                }
+    const mutation = useMutation({
+        mutationFn: (ticketData: Ticket) => ticketClient.create(eventId, ticketData),
 
-                notifications.show({
-                    message: t`Unable to create ticket. Please check the your details`,
-                    color: 'red',
-                });
-            },
+        onSuccess: () => {
+            notifications.show({
+                message: t`Successfully Created Ticket`,
+                color: 'green',
+            });
+            queryClient.invalidateQueries({queryKey: [GET_TICKETS_QUERY_KEY]}).then(() => {
+                form.reset();
+                onClose();
+            });
+        },
+
+        onError: (error: any) => {
+            if (error?.response?.data?.errors) {
+                form.setErrors(error.response.data.errors);
+            }
+
+            notifications.show({
+                message: t`Unable to create ticket. Please check the your details`,
+                color: 'red',
+            });
         }
-    );
+    });
 
     useEffect(() => {
         form.setFieldValue('tax_and_fee_ids', taxesAndFees
@@ -86,8 +86,8 @@ export const CreateTicketModal = ({onClose}: GenericModalProps) => {
         >
             <form onSubmit={form.onSubmit((values) => mutation.mutate(values as any as Ticket))}>
                 <TicketForm form={form}/>
-                <Button type="submit" fullWidth disabled={mutation.isLoading}>
-                    {mutation.isLoading ? t`Working...` : t`Create Ticket`}
+                <Button type="submit" fullWidth disabled={mutation.isPending}>
+                    {mutation.isPending ? t`Working...` : t`Create Ticket`}
                 </Button>
             </form>
         </Modal>

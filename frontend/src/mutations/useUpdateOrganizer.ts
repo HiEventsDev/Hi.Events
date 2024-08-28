@@ -7,16 +7,19 @@ import {GET_ORGANIZER_QUERY_KEY} from "../queries/useGetOrganizer.ts";
 export const useUpdateOrganizer = () => {
     const queryClient = useQueryClient();
 
-    return useMutation(
-        ({organizerId, organizerData}: {
+    return useMutation({
+        mutationFn: ({organizerId, organizerData}: {
             organizerId: IdParam,
             organizerData: Partial<Organizer>,
         }) => organizerClient.update(organizerId, organizerData),
-        {
-            onSuccess: (_, variables) => {
-                queryClient.invalidateQueries([GET_ORGANIZER_QUERY_KEY, variables.organizerId]);
-                queryClient.invalidateQueries([GET_ORGANIZERS_QUERY_KEY]);
-            },
+
+        onSuccess: (_, variables) => {
+            queryClient.invalidateQueries({
+                queryKey: [GET_ORGANIZER_QUERY_KEY, variables.organizerId]
+            });
+            queryClient.invalidateQueries({
+                queryKey: [GET_ORGANIZERS_QUERY_KEY]
+            });
         }
-    )
+    });
 }

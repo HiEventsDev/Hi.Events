@@ -80,8 +80,8 @@ export const EditPromoCodeModal = ({onClose, promoCodeId}: EditPromoCodeModalPro
         >
             <form onSubmit={form.onSubmit(handleSubmit)}>
                 <PromoCodeForm form={form}/>
-                <Button type="submit" fullWidth mt="xl" disabled={mutation.isLoading}>
-                    {mutation.isLoading ? t`Working...` : t`Edit Promo Code`}
+                <Button type="submit" fullWidth mt="xl" disabled={mutation.isPending}>
+                    {mutation.isPending ? t`Working...` : t`Edit Promo Code`}
                 </Button>
             </form>
             <LoadingMask/>

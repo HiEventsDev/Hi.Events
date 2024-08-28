@@ -74,7 +74,7 @@ export const CreateCheckInListModal = ({onClose}: GenericModalProps) => {
                     <Button
                         type={'submit'}
                         fullWidth
-                        loading={createMutation.isLoading}
+                        loading={createMutation.isPending}
                     >
                         {t`Create Check-In List`}
                     </Button>

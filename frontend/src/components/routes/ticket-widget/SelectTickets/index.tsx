@@ -81,32 +81,32 @@ const SelectTickets = (props: SelectTicketsProps) => {
     });
 
     //todo - replace with hook
-    const ticketMutation = useMutation(
-        (orderData: TicketFormPayload) => orderClientPublic.create(Number(eventId), orderData),
-        {
-            onSuccess: (data) => queryClient.invalidateQueries()
-                .then(() => {
-                    const url = '/checkout/' + eventId + '/' + data.data.short_id + '/details';
-                    if (props.widgetMode === 'embedded') {
-                        window.open(url, '_blank');
-                        setOrderInProcessOverlayVisible(true);
-                        return;
-                    }
+    const ticketMutation = useMutation({
+        mutationFn: (orderData: TicketFormPayload) => orderClientPublic.create(Number(eventId), orderData),
 
-                    return navigate(url);
-                }),
-            onError: (error: any) => {
-                if (error?.response?.data?.errors) {
-                    form.setErrors(error.response.data.errors);
+        onSuccess: (data) => queryClient.invalidateQueries()
+            .then(() => {
+                const url = '/checkout/' + eventId + '/' + data.data.short_id + '/details';
+                if (props.widgetMode === 'embedded') {
+                    window.open(url, '_blank');
+                    setOrderInProcessOverlayVisible(true);
+                    return;
                 }
 
-                notifications.show({
-                    message: error.response.data.errors?.tickets[0] || t`Unable to create ticket. Please check the your details`,
-                    color: 'red',
-                });
-            },
+                return navigate(url);
+            }),
+
+        onError: (error: any) => {
+            if (error?.response?.data?.errors) {
+                form.setErrors(error.response.data.errors);
+            }
+
+            notifications.show({
+                message: error.response.data.errors?.tickets[0] || t`Unable to create ticket. Please check the your details`,
+                color: 'red',
+            });
         }
-    );
+    });
 
     const promoCodeEventRefetchMutation = useMutation({
         mutationFn: async (promoCode: string | null) => {
@@ -226,14 +226,14 @@ const SelectTickets = (props: SelectTicketsProps) => {
         }
     }
 
-    const isButtonDisabled = ticketMutation.isLoading
+    const isButtonDisabled = ticketMutation.isPending
         || !ticketAreAvailable
         || selectedTicketQuantitySum === 0
         || props.widgetMode === 'preview'
         || tickets?.every(ticket => ticket.is_sold_out);
 
     return (
-        <div className={'hi-ticket-widget-container'}
+        (<div className={'hi-ticket-widget-container'}
              ref={resizeRef}
              style={{
                  '--widget-background-color': props.colors?.background,
@@ -250,7 +250,6 @@ const SelectTickets = (props: SelectTicketsProps) => {
                     </p>
                 </div>
             )}
-
             {orderInProcessOverlayVisible && (
                 <Modal withCloseButton={false} opened={true} onClose={() => setOrderInProcessOverlayVisible(false)}>
                     <div style={{textAlign: 'center', padding: '20px'}}>
@@ -278,7 +277,6 @@ const SelectTickets = (props: SelectTicketsProps) => {
                     </div>
                 </Modal>
             )}
-
             {(event && ticketAreAvailable) && (
                 <form target={'__blank'} onSubmit={form.onSubmit(handleTicketSelection as any)}>
                     <Input type={'hidden'} {...form.getInputProps('promo_code')} />
@@ -351,7 +349,7 @@ const SelectTickets = (props: SelectTicketsProps) => {
                         )}
                         <Button disabled={isButtonDisabled} fullWidth className={'hi-continue-button'}
                                 type={"submit"}
-                                loading={ticketMutation.isLoading}>
+                                loading={ticketMutation.isPending}>
                             {props.continueButtonText || event?.settings?.continue_button_text || t`Continue`}
                         </Button>
                     </div>
@@ -391,7 +389,7 @@ const SelectTickets = (props: SelectTicketsProps) => {
                             handleApplyPromoCode();
                         }
                     }} mb={0} ref={promoRef}/>
-                    <Button disabled={promoCodeEventRefetchMutation.isLoading}
+                    <Button disabled={promoCodeEventRefetchMutation.isPending}
                             className={'hi-apply-promo-code-button'} variant={'outline'}
                             onClick={handleApplyPromoCode}>
                         {t`Apply Promo Code`}
@@ -416,7 +414,7 @@ const SelectTickets = (props: SelectTicketsProps) => {
             <PoweredByFooter style={{
                 'color': props.colors?.primaryText || '#000',
             }}/>
-        </div>
+        </div>)
     );
 }
 

@@ -5,10 +5,11 @@ import {capacityAssignmentClient} from "../api/capacity-assignment.client.ts";
 export const GET_EVENT_CAPACITY_ASSIGNMENTS_QUERY_KEY = 'getEventCapacityAssignments';
 
 export const useGetEventCapacityAssignments = (eventId: IdParam, pagination: QueryFilters) => {
-    return useQuery(
-        [GET_EVENT_CAPACITY_ASSIGNMENTS_QUERY_KEY, eventId, pagination],
-        async () => {
+    return useQuery({
+        queryKey: [GET_EVENT_CAPACITY_ASSIGNMENTS_QUERY_KEY, eventId, pagination],
+
+        queryFn: async () => {
             return await capacityAssignmentClient.all(eventId, pagination);
         }
-    )
+    });
 };

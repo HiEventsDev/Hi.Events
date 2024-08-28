@@ -15,21 +15,21 @@ export const ForgotPassword = () => {
     });
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
-    const mutate = useMutation(
-        (email: string) => {
+    const mutate = useMutation({
+        mutationFn: (email: string) => {
             return authClient.forgotPassword({
                 email: email,
             });
         },
-        {
-            onSuccess: () => {
-                setShowSuccessMessage(true);
-            },
-            onError: () => {
-                showError('Something went wrong, please try again, or contact support if the problem persists');
-            }
+
+        onSuccess: () => {
+            setShowSuccessMessage(true);
+        },
+
+        onError: () => {
+            showError('Something went wrong, please try again, or contact support if the problem persists');
         }
-    );
+    });
 
     return (
         <Card>
@@ -50,8 +50,8 @@ export const ForgotPassword = () => {
                     <form onSubmit={form.onSubmit((values) => mutate.mutate(values.email))}>
                         <TextInput type={'email'} {...form.getInputProps('email')} label="Your email"
                                    placeholder="joe@bloggs.com" required/>
-                        <Button fullWidth type="submit" disabled={mutate.isLoading}>
-                            {mutate.isLoading ? 'Working...' : 'Reset password'}
+                        <Button fullWidth type="submit" disabled={mutate.isPending}>
+                            {mutate.isPending ? 'Working...' : 'Reset password'}
                         </Button>
                     </form>
                     <footer>

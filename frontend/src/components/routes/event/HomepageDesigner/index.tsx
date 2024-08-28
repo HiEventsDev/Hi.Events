@@ -90,7 +90,7 @@ const HomepageDesigner = () => {
                         {t`Colors`}
                     </h3>
                     <form onSubmit={form.onSubmit(handleSubmit as any)}>
-                        <fieldset disabled={eventSettingsQuery.isLoading || updateMutation.isLoading}>
+                        <fieldset disabled={eventSettingsQuery.isLoading || updateMutation.isPending}>
 
                             <CustomSelect
                                 optionList={
@@ -139,7 +139,7 @@ const HomepageDesigner = () => {
                                 label={t`Continue button text`}
                                 {...form.getInputProps('continue_button_text')}
                             />
-                            <Button loading={updateMutation.isLoading} type={'submit'}>
+                            <Button loading={updateMutation.isPending} type={'submit'}>
                                 {t`Save Changes`}
                             </Button>
                         </fieldset>

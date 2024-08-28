@@ -73,7 +73,7 @@ export const CreateCapacityAssignmentModal = ({onClose}: GenericModalProps) => {
                     <Button
                         type={'submit'}
                         fullWidth
-                        loading={createMutation.isLoading}
+                        loading={createMutation.isPending}
                     >
                         {t`Create Capacity Assignment`}
                     </Button>

@@ -6,13 +6,14 @@ import {GET_EVENT_CAPACITY_ASSIGNMENTS_QUERY_KEY} from "../queries/useGetCapacit
 export const useDeleteCapacityAssignment = () => {
     const queryClient = useQueryClient();
 
-    return useMutation(
-        ({capacityAssignmentId, eventId}: {
+    return useMutation({
+        mutationFn: ({capacityAssignmentId, eventId}: {
             capacityAssignmentId: IdParam,
             eventId: IdParam,
         }) => capacityAssignmentClient.delete(eventId, capacityAssignmentId),
-        {
-            onSuccess: () => queryClient.invalidateQueries([GET_EVENT_CAPACITY_ASSIGNMENTS_QUERY_KEY]),
-        }
-    )
+
+        onSuccess: () => queryClient.invalidateQueries({
+            queryKey: [GET_EVENT_CAPACITY_ASSIGNMENTS_QUERY_KEY]
+        })
+    });
 }

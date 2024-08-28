@@ -6,9 +6,10 @@ import {getSessionIdentifier} from "../utilites/sessionIdentifier.ts";
 export const GET_ORDER_PUBLIC_QUERY_KEY = 'getOrderPublic';
 
 export const useGetOrderPublic = (eventId: IdParam, orderShortId: IdParam) => {
-    return useQuery<Order, Error>(
-        [GET_ORDER_PUBLIC_QUERY_KEY, eventId, orderShortId],
-        async () => {
+    return useQuery<Order>({
+        queryKey: [GET_ORDER_PUBLIC_QUERY_KEY, eventId, orderShortId],
+
+        queryFn: async () => {
             const {data} = await orderClientPublic.findByShortId(
                 Number(eventId),
                 String(orderShortId),
@@ -16,11 +17,10 @@ export const useGetOrderPublic = (eventId: IdParam, orderShortId: IdParam) => {
             );
             return data;
         },
-        {
-            refetchOnWindowFocus: false,
-            staleTime: 0,
-            retryOnMount: false,
-            retry: false,
-        }
-    );
+
+        refetchOnWindowFocus: false,
+        staleTime: 0,
+        retryOnMount: false,
+        retry: false
+    });
 }

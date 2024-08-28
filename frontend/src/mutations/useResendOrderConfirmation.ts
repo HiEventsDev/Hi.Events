@@ -3,10 +3,10 @@ import {IdParam} from "../types.ts";
 import {orderClient} from "../api/order.client.ts";
 
 export const useResendOrderConfirmation = () => {
-    return useMutation(
-        ({eventId, orderId}: {
+    return useMutation({
+        mutationFn: ({eventId, orderId}: {
             eventId: IdParam,
             orderId: IdParam,
-        }) => orderClient.resendConfirmation(eventId, orderId),
-    )
+        }) => orderClient.resendConfirmation(eventId, orderId)
+    });
 }

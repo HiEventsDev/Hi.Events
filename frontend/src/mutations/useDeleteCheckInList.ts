@@ -6,14 +6,14 @@ import {GET_EVENT_CHECK_IN_LISTS_QUERY_KEY} from "../queries/useGetCheckInLists.
 export const useDeleteCheckInList = () => {
     const queryClient = useQueryClient();
 
-    return useMutation(
-        ({checkInListId, eventId}: {
+    return useMutation({
+        mutationFn: ({checkInListId, eventId}: {
             checkInListId: IdParam,
             eventId: IdParam,
         }) => checkInListClient.delete(eventId, checkInListId),
-        {
-            onSuccess: (_, {eventId}) => queryClient
-                .invalidateQueries([GET_EVENT_CHECK_IN_LISTS_QUERY_KEY, eventId]),
-        }
-    )
+
+        onSuccess: (_, {eventId}) => queryClient.invalidateQueries({
+            queryKey: [GET_EVENT_CHECK_IN_LISTS_QUERY_KEY, eventId]
+        })
+    });
 }

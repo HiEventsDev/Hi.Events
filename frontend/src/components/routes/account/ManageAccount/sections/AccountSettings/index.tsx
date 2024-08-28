@@ -55,7 +55,7 @@ const AccountSettings = () => {
             />
             <Card className={classes.tabContent}>
                 <LoadingMask/>
-                <fieldset disabled={updateMutation.isLoading || accountQuery.isLoading || !isUserAdmin}>
+                <fieldset disabled={updateMutation.isPending || accountQuery.isLoading || !isUserAdmin}>
                     <form onSubmit={form.onSubmit(handleSubmit as any)}>
                         <TextInput
                             {...form.getInputProps('name')}
@@ -86,7 +86,7 @@ const AccountSettings = () => {
 
                         {isUserAdmin && (
                             <div className={classes.footer}>
-                                <Button disabled={updateMutation.isLoading} type={'submit'}
+                                <Button disabled={updateMutation.isPending} type={'submit'}
                                         fullWidth>{t`Save Settings`}</Button>
                             </div>
                         )}

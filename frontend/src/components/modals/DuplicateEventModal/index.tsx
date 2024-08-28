@@ -71,7 +71,7 @@ export const DuplicateEventModal = ({onClose, eventId}: DuplicateEventModalProps
             withCloseButton
         >
             <form onSubmit={form.onSubmit((values) => handleDuplicate(eventId, values))}>
-                <fieldset disabled={eventQuery.isLoading || mutation.isLoading}>
+                <fieldset disabled={eventQuery.isLoading || mutation.isPending}>
                     <TextInput
                         {...form.getInputProps('title')}
                         label={t`Name`}
@@ -133,8 +133,8 @@ export const DuplicateEventModal = ({onClose, eventId}: DuplicateEventModalProps
                         />
                     </Card>
                 </fieldset>
-                <Button type="submit" fullWidth disabled={mutation.isLoading}>
-                    {mutation.isLoading ? t`Working...` : t`Duplicate Event`}
+                <Button type="submit" fullWidth disabled={mutation.isIdle}>
+                    {mutation.isPending ? t`Working...` : t`Duplicate Event`}
                 </Button>
             </form>
         </Modal>

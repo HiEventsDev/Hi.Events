@@ -6,15 +6,16 @@ import {GET_EVENT_SETTINGS_QUERY_KEY} from "../queries/useGetEventSettings.ts";
 export const useUpdateEventSettings = () => {
     const queryClient = useQueryClient();
 
-    return useMutation(
-        ({eventSettings, eventId}: {
+    return useMutation({
+        mutationFn: ({eventSettings, eventId}: {
             eventSettings: Partial<EventSettings>,
             eventId: IdParam,
         }) => eventsSettingsClient.partialUpdate(eventId, eventSettings),
-        {
-            onSuccess: (_, variables) => {
-                queryClient.invalidateQueries([GET_EVENT_SETTINGS_QUERY_KEY, variables.eventId]);
-            }
+
+        onSuccess: (_, variables) => {
+            queryClient.invalidateQueries({
+                queryKey: [GET_EVENT_SETTINGS_QUERY_KEY, variables.eventId]
+            });
         }
-    )
+    });
 }

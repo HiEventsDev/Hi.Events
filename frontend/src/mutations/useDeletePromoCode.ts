@@ -7,16 +7,19 @@ import {GET_EVENT_PROMO_CODES_QUERY_KEY} from "../queries/useGetEventPromoCodes.
 export const useDeletePromoCode = () => {
     const queryClient = useQueryClient();
 
-    return useMutation(
-        ({promoCodeId, eventId}: {
+    return useMutation({
+        mutationFn: ({promoCodeId, eventId}: {
             promoCodeId: IdParam,
             eventId: IdParam,
         }) => promoCodeClient.delete(eventId, promoCodeId),
-        {
-            onSuccess: (_, variables) => {
-                 queryClient.invalidateQueries([GET_PROMO_CODE_QUERY_KEY, variables.eventId, variables.promoCodeId]);
-                 queryClient.invalidateQueries([GET_EVENT_PROMO_CODES_QUERY_KEY]);
-            },
+
+        onSuccess: (_, variables) => {
+             queryClient.invalidateQueries({
+                 queryKey: [GET_PROMO_CODE_QUERY_KEY, variables.eventId, variables.promoCodeId]
+             });
+             queryClient.invalidateQueries({
+                 queryKey: [GET_EVENT_PROMO_CODES_QUERY_KEY]
+             });
         }
-    )
+    });
 }

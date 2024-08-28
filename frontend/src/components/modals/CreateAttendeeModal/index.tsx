@@ -206,8 +206,8 @@ export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
                     label={t`Send order confirmation and ticket email`}
                     {...form.getInputProps('send_confirmation_email', {type: 'checkbox'})}
                 />
-                <Button type="submit" fullWidth mt="xl" disabled={mutation.isLoading}>
-                    {mutation.isLoading ? t`Working` + '...' : t`Create Attendee`}
+                <Button type="submit" fullWidth mt="xl" disabled={mutation.isPending}>
+                    {mutation.isPending ? t`Working` + '...' : t`Create Attendee`}
                 </Button>
             </form>
         </Modal>

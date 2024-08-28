@@ -54,7 +54,7 @@ export const CancelOrderModal = ({onClose, orderId}: RefundOrderModalProps) => {
                 {t`Canceling will cancel all tickets associated with this order, and release the tickets back into the available pool.`}
             </Alert>
 
-            <Button loading={cancelOrderMutation.isLoading} className={'mb20'} color={'red'} fullWidth
+            <Button loading={cancelOrderMutation.isPending} className={'mb20'} color={'red'} fullWidth
                     onClick={handleCancelOrder}>
                 {t`Cancel Order`}
             </Button>

@@ -225,7 +225,7 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
                                 </Trans>
                             )}/>
 
-                    <Button mt={20} loading={sendMessageMutation.isLoading} type={'submit'} fullWidth
+                    <Button mt={20} loading={sendMessageMutation.isPending} type={'submit'} fullWidth
                             leftSection={<IconSend/>}>
                         {form.values.is_test ? t`Send Test` : t`Send`}
                     </Button>

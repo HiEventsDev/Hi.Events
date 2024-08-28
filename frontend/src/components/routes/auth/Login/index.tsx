@@ -22,28 +22,28 @@ const Login = () => {
     });
     const [showChooseAccount, setShowChooseAccount] = useState(false);
 
-    const {mutate: loginUser, isLoading, data} = useMutation(
-        (userData: LoginData) => authClient.login(userData),
-        {
-            onSuccess: (response: LoginResponse) => {
-                if (response.token) {
-                    redirectToPreviousUrl();
-                    return;
-                }
+    const {mutate: loginUser, isLoading, data} = useMutation({
+        mutationFn: (userData: LoginData) => authClient.login(userData),
 
-                if (response.accounts.length > 1) {
-                    setShowChooseAccount(true);
-                    return;
-                }
-            },
-            onError: () => {
-                notifications.show({
-                    message: t`Please check your email and password and try again`,
-                    color: 'red',
-                });
-            },
+        onSuccess: (response: LoginResponse) => {
+            if (response.token) {
+                redirectToPreviousUrl();
+                return;
+            }
+
+            if (response.accounts.length > 1) {
+                setShowChooseAccount(true);
+                return;
+            }
+        },
+
+        onError: () => {
+            notifications.show({
+                message: t`Please check your email and password and try again`,
+                color: 'red',
+            });
         }
-    );
+    });
 
     useEffect(() => {
         form.values.account_id && loginUser(form.values);

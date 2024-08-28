@@ -6,15 +6,16 @@ import {GET_EVENT_MESSAGES_QUERY_KEY} from "../queries/useGetEventMessages.ts";
 export const useSendEventMessage = () => {
     const queryClient = useQueryClient();
 
-    return useMutation(
-        ({messageData, eventId}: {
+    return useMutation({
+        mutationFn: ({messageData, eventId}: {
             messageData: Partial<Message>,
             eventId: IdParam,
         }) => messagesClient.send(eventId, messageData as Message),
-        {
-            onSuccess: (_, variables) => {
-                queryClient.invalidateQueries([GET_EVENT_MESSAGES_QUERY_KEY, variables.eventId]);
-            }
+
+        onSuccess: (_, variables) => {
+            queryClient.invalidateQueries({
+                queryKey: [GET_EVENT_MESSAGES_QUERY_KEY, variables.eventId]
+            });
         }
-    )
+    });
 }
