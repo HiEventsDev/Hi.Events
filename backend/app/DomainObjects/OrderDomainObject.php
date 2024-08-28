@@ -2,11 +2,11 @@
 
 namespace HiEvents\DomainObjects;
 
-use Illuminate\Support\Collection;
 use HiEvents\DomainObjects\Interfaces\IsSortable;
 use HiEvents\DomainObjects\SortingAndFiltering\AllowedSorts;
 use HiEvents\DomainObjects\Status\OrderPaymentStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
+use Illuminate\Support\Collection;
 
 class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements IsSortable
 {

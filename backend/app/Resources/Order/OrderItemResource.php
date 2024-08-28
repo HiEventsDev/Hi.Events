@@ -2,9 +2,9 @@
 
 namespace HiEvents\Resources\Order;
 
-use Illuminate\Http\Request;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\Resources\BaseResource;
+use Illuminate\Http\Request;
 
 /**
  * @mixin OrderItemDomainObject

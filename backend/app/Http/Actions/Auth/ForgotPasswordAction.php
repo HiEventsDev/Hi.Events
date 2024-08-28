@@ -2,11 +2,11 @@
 
 namespace HiEvents\Http\Actions\Auth;
 
-use Illuminate\Http\JsonResponse;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Auth\ForgotPasswordRequest;
 use HiEvents\Services\Handlers\Auth\ForgotPasswordHandler;
+use Illuminate\Http\JsonResponse;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class ForgotPasswordAction extends BaseAction
 {

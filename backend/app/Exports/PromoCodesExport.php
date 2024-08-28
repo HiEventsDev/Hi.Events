@@ -2,12 +2,12 @@
 
 namespace HiEvents\Exports;
 
+use HiEvents\Resources\PromoCode\PromoCodeResource;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-use HiEvents\Resources\PromoCode\PromoCodeResource;
 
 class PromoCodesExport implements FromCollection, WithHeadings, WithMapping, WithStyles
 {

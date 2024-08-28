@@ -7,7 +7,6 @@ namespace HiEvents\Http\Actions\Events;
 use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Resources\Event\EventResource;
 use HiEvents\Services\Handlers\Event\DTO\GetEventsDTO;
 use HiEvents\Services\Handlers\Event\GetEventsHandler;

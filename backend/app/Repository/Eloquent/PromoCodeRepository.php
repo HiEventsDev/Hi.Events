@@ -2,13 +2,13 @@
 
 namespace HiEvents\Repository\Eloquent;
 
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Builder;
 use HiEvents\DomainObjects\Generated\PromoCodeDomainObjectAbstract;
 use HiEvents\DomainObjects\PromoCodeDomainObject;
 use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Models\PromoCode;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
 
 class PromoCodeRepository extends BaseRepository implements PromoCodeRepositoryInterface
 {

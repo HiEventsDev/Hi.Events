@@ -5,16 +5,16 @@ namespace HiEvents\Providers;
 use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\OrganizerDomainObject;
+use HiEvents\Models\Event;
+use HiEvents\Models\Organizer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
 use Stripe\StripeClient;
-use HiEvents\DomainObjects\EventDomainObject;
-use HiEvents\DomainObjects\OrganizerDomainObject;
-use HiEvents\Models\Event;
-use HiEvents\Models\Organizer;
 
 class AppServiceProvider extends ServiceProvider
 {

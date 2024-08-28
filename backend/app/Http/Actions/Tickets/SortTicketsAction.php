@@ -2,13 +2,13 @@
 
 namespace HiEvents\Http\Actions\Tickets;
 
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Ticket\SortTicketsRequest;
 use HiEvents\Services\Handlers\Ticket\SortTicketsHandler;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
 class SortTicketsAction extends BaseAction
 {

@@ -2,16 +2,15 @@
 
 namespace HiEvents\Http\Actions\Questions;
 
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use HiEvents\DomainObjects\EventDomainObject;
-use HiEvents\DomainObjects\Generated\QuestionDomainObjectAbstract;
 use HiEvents\DomainObjects\TicketDomainObject;
 use HiEvents\DomainObjects\TicketPriceDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\QuestionRepositoryInterface;
 use HiEvents\Resources\Question\QuestionResource;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class GetQuestionsAction extends BaseAction
 {

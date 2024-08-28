@@ -2,8 +2,16 @@
 
 namespace HiEvents\Http;
 
+use HiEvents\Http\Middleware\Authenticate;
+use HiEvents\Http\Middleware\EncryptCookies;
+use HiEvents\Http\Middleware\PreventRequestsDuringMaintenance;
+use HiEvents\Http\Middleware\RedirectIfAuthenticated;
 use HiEvents\Http\Middleware\SetAccountContext;
 use HiEvents\Http\Middleware\SetUserLocaleMiddleware;
+use HiEvents\Http\Middleware\TrimStrings;
+use HiEvents\Http\Middleware\TrustProxies;
+use HiEvents\Http\Middleware\ValidateSignature;
+use HiEvents\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Auth\Middleware\AuthenticateWithBasicAuth;
 use Illuminate\Auth\Middleware\Authorize;
 use Illuminate\Auth\Middleware\EnsureEmailIsVerified;
@@ -19,14 +27,6 @@ use Illuminate\Routing\Middleware\ThrottleRequests;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-use HiEvents\Http\Middleware\Authenticate;
-use HiEvents\Http\Middleware\EncryptCookies;
-use HiEvents\Http\Middleware\PreventRequestsDuringMaintenance;
-use HiEvents\Http\Middleware\RedirectIfAuthenticated;
-use HiEvents\Http\Middleware\TrimStrings;
-use HiEvents\Http\Middleware\TrustProxies;
-use HiEvents\Http\Middleware\ValidateSignature;
-use HiEvents\Http\Middleware\VerifyCsrfToken;
 
 class Kernel extends HttpKernel
 {

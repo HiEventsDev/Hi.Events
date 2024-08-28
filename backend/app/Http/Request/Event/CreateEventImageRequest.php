@@ -2,9 +2,9 @@
 
 namespace HiEvents\Http\Request\Event;
 
+use HiEvents\DomainObjects\Enums\EventImageType;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use HiEvents\DomainObjects\Enums\EventImageType;
 
 class CreateEventImageRequest extends FormRequest
 {

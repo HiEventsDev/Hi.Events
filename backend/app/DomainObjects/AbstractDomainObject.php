@@ -2,10 +2,10 @@
 
 namespace HiEvents\DomainObjects;
 
+use HiEvents\DomainObjects\Interfaces\DomainObjectInterface;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
 use InvalidArgumentException;
-use HiEvents\DomainObjects\Interfaces\DomainObjectInterface;
 
 abstract class AbstractDomainObject implements DomainObjectInterface, Arrayable
 {

@@ -2,8 +2,8 @@
 
 namespace HiEvents\Events;
 
-use Illuminate\Foundation\Events\Dispatchable;
 use HiEvents\DomainObjects\EventDomainObject;
+use Illuminate\Foundation\Events\Dispatchable;
 
 class EventUpdateEvent
 {

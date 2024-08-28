@@ -2,7 +2,6 @@
 
 namespace HiEvents\Http\Actions\CheckInLists;
 
-use Carbon\Carbon;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\CheckInList\UpsertCheckInListRequest;

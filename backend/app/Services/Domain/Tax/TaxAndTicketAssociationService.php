@@ -3,11 +3,11 @@
 namespace HiEvents\Services\Domain\Tax;
 
 use Exception;
-use Illuminate\Support\Collection;
 use HiEvents\Exceptions\InvalidTaxOrFeeIdException;
 use HiEvents\Repository\Interfaces\TaxAndFeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\TicketRepositoryInterface;
 use HiEvents\Services\Domain\Tax\DTO\TaxAndTicketAssociateParams;
+use Illuminate\Support\Collection;
 
 readonly class TaxAndTicketAssociationService
 {

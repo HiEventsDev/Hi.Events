@@ -2,9 +2,9 @@
 
 namespace HiEvents\Resources\PromoCode;
 
+use HiEvents\DomainObjects\PromoCodeDomainObject;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use HiEvents\DomainObjects\PromoCodeDomainObject;
 
 /**
  * @mixin PromoCodeDomainObject

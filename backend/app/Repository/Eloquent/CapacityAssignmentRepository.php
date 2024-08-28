@@ -4,7 +4,6 @@ namespace HiEvents\Repository\Eloquent;
 
 use HiEvents\DomainObjects\CapacityAssignmentDomainObject;
 use HiEvents\DomainObjects\Generated\CapacityAssignmentDomainObjectAbstract;
-use HiEvents\DomainObjects\Generated\TicketDomainObjectAbstract;
 use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Models\CapacityAssignment;
 use HiEvents\Repository\Interfaces\CapacityAssignmentRepositoryInterface;

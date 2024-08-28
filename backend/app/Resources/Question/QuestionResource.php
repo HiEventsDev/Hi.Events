@@ -2,10 +2,9 @@
 
 namespace HiEvents\Resources\Question;
 
-use Illuminate\Http\Request;
 use HiEvents\DomainObjects\QuestionDomainObject;
 use HiEvents\Resources\BaseResource;
-use HiEvents\Resources\Ticket\TicketResource;
+use Illuminate\Http\Request;
 
 /**
  * @mixin QuestionDomainObject

@@ -2,9 +2,9 @@
 
 namespace HiEvents\Http\Request\Event;
 
-use Illuminate\Validation\Rule;
 use HiEvents\DomainObjects\Status\EventStatus;
 use HiEvents\Http\Request\BaseRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateEventStatusRequest extends BaseRequest
 {

@@ -2,8 +2,8 @@
 
 namespace HiEvents\Models;
 
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use HiEvents\DomainObjects\Generated\QuestionDomainObjectAbstract;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Question extends BaseModel
 {

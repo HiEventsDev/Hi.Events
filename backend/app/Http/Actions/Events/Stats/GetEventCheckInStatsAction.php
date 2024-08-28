@@ -2,11 +2,11 @@
 
 namespace HiEvents\Http\Actions\Events\Stats;
 
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Resources\Json\JsonResource;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Services\Handlers\Event\GetEventCheckInStatsHandler;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class GetEventCheckInStatsAction extends BaseAction
 {

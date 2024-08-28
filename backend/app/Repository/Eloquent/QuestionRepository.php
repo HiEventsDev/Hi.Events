@@ -2,15 +2,15 @@
 
 namespace HiEvents\Repository\Eloquent;
 
-use Illuminate\Database\DatabaseManager;
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Collection;
 use HiEvents\DomainObjects\Generated\QuestionDomainObjectAbstract;
 use HiEvents\DomainObjects\QuestionDomainObject;
 use HiEvents\Models\Question;
 use HiEvents\Models\TicketQuestion;
 use HiEvents\Repository\Interfaces\QuestionRepositoryInterface;
 use HiEvents\Repository\Interfaces\TicketRepositoryInterface;
+use Illuminate\Database\DatabaseManager;
+use Illuminate\Foundation\Application;
+use Illuminate\Support\Collection;
 
 class QuestionRepository extends BaseRepository implements QuestionRepositoryInterface
 {

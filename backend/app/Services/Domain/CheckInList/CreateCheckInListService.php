@@ -11,7 +11,6 @@ use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Services\Domain\Ticket\EventTicketValidationService;
 use HiEvents\Services\Domain\Ticket\Exception\UnrecognizedTicketIdException;
 use Illuminate\Database\DatabaseManager;
-use Illuminate\Support\Str;
 
 class CreateCheckInListService
 {

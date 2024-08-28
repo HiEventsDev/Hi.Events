@@ -2,11 +2,11 @@
 
 namespace HiEvents\Http\Actions\Orders\Payment\Stripe;
 
-use Illuminate\Http\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use HiEvents\Exceptions\Stripe\CreatePaymentIntentFailedException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Services\Handlers\Order\Payment\Stripe\CreatePaymentIntentHandler;
+use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class CreatePaymentIntentActionPublic extends BaseAction
 {

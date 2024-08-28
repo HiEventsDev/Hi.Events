@@ -2,9 +2,9 @@
 
 namespace HiEvents\Http\Actions\Users;
 
-use Illuminate\Http\JsonResponse;
 use HiEvents\Http\Actions\Auth\BaseAuthAction;
 use HiEvents\Resources\User\UserResource;
+use Illuminate\Http\JsonResponse;
 
 class GetMeAction extends BaseAuthAction
 {

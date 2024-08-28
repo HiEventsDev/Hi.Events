@@ -2,9 +2,9 @@
 
 namespace HiEvents\Exceptions;
 
+use HiEvents\Http\ResponseCodes;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Throwable;
-use HiEvents\Http\ResponseCodes;
 
 class UnauthorizedException extends AccessDeniedHttpException
 {

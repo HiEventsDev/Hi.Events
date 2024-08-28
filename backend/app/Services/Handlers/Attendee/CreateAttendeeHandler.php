@@ -3,7 +3,6 @@
 namespace HiEvents\Services\Handlers\Attendee;
 
 use Brick\Money\Money;
-use Faker\Generator;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
@@ -32,7 +31,6 @@ use HiEvents\Services\Handlers\Attendee\DTO\CreateAttendeeDTO;
 use HiEvents\Services\Handlers\Attendee\DTO\CreateAttendeeTaxAndFeeDTO;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 use RuntimeException;
 use Throwable;
 

@@ -2,9 +2,9 @@
 
 namespace HiEvents\Validators\Rules;
 
+use HiEvents\DomainObjects\QuestionDomainObject;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\ValidationException;
-use HiEvents\DomainObjects\QuestionDomainObject;
 
 class OrderQuestionRule extends BaseQuestionRule
 {

@@ -2,12 +2,12 @@
 
 namespace HiEvents\Resources\Event;
 
-use Illuminate\Http\Request;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Resources\BaseResource;
 use HiEvents\Resources\Image\ImageResource;
 use HiEvents\Resources\Organizer\OrganizerResource;
 use HiEvents\Resources\Ticket\TicketResource;
+use Illuminate\Http\Request;
 
 /**
  * @mixin EventDomainObject

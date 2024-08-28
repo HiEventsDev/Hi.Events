@@ -2,13 +2,12 @@
 
 namespace HiEvents\Services\Domain\Tax;
 
-use InvalidArgumentException;
 use HiEvents\DomainObjects\Enums\TaxCalculationType;
-use HiEvents\DomainObjects\Enums\TicketType;
 use HiEvents\DomainObjects\TaxAndFeesDomainObject;
 use HiEvents\DomainObjects\TicketDomainObject;
 use HiEvents\DomainObjects\TicketPriceDomainObject;
 use HiEvents\Services\Domain\Tax\DTO\TaxCalculationResponse;
+use InvalidArgumentException;
 
 class TaxAndFeeCalculationService
 {

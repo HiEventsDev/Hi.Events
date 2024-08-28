@@ -2,11 +2,11 @@
 
 namespace HiEvents\Services\Handlers\Question;
 
-use Illuminate\Database\DatabaseManager;
-use Throwable;
 use HiEvents\Exceptions\CannotDeleteEntityException;
 use HiEvents\Repository\Interfaces\QuestionAnswerRepositoryInterface;
 use HiEvents\Repository\Interfaces\QuestionRepositoryInterface;
+use Illuminate\Database\DatabaseManager;
+use Throwable;
 
 readonly class DeleteQuestionHandler
 {

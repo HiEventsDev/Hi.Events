@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace HiEvents\Validators;
 
-use Illuminate\Routing\Route;
 use HiEvents\DomainObjects\Enums\QuestionBelongsTo;
 use HiEvents\DomainObjects\Generated\QuestionDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\TicketDomainObjectAbstract;
@@ -16,6 +15,7 @@ use HiEvents\Repository\Interfaces\QuestionRepositoryInterface;
 use HiEvents\Repository\Interfaces\TicketRepositoryInterface;
 use HiEvents\Validators\Rules\AttendeeQuestionRule;
 use HiEvents\Validators\Rules\OrderQuestionRule;
+use Illuminate\Routing\Route;
 
 class CompleteOrderValidator extends BaseValidator
 {

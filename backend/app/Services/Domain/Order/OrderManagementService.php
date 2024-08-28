@@ -13,7 +13,6 @@ use HiEvents\Helper\IdHelper;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Domain\Tax\TaxAndFeeOrderRollupService;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 
 class OrderManagementService
 {

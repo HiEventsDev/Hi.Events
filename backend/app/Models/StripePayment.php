@@ -2,8 +2,8 @@
 
 namespace HiEvents\Models;
 
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use HiEvents\DomainObjects\Generated\StripePaymentDomainObjectAbstract;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class StripePayment extends BaseModel
 {

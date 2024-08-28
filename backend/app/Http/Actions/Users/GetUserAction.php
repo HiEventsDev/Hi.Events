@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Users;
 
-use HiEvents\DomainObjects\AccountUserDomainObject;
 use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Resources\User\UserResource;
 use Illuminate\Http\JsonResponse;

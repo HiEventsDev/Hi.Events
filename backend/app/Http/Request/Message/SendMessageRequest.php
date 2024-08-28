@@ -2,9 +2,9 @@
 
 namespace HiEvents\Http\Request\Message;
 
+use HiEvents\DomainObjects\Enums\MessageTypeEnum;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\In;
-use HiEvents\DomainObjects\Enums\MessageTypeEnum;
 
 class SendMessageRequest extends FormRequest
 {

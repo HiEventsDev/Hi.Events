@@ -2,13 +2,13 @@
 
 namespace HiEvents\Http\Actions\Questions;
 
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use HiEvents\DomainObjects\Generated\QuestionDomainObjectAbstract;
 use HiEvents\DomainObjects\TicketDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Repository\Interfaces\QuestionRepositoryInterface;
 use HiEvents\Resources\Question\QuestionResourcePublic;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class GetQuestionsPublicAction extends BaseAction
 {
