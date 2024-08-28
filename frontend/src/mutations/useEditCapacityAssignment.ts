@@ -7,8 +7,8 @@ import {GET_EVENT_CAPACITY_ASSIGNMENT_QUERY_KEY} from "../queries/useGetCapacity
 export const useEditCapacityAssignment = () => {
     const queryClient = useQueryClient();
 
-    return useMutation(
-        ({capacityAssignmentData, eventId, capacityAssignmentId}: {
+    return useMutation({
+        mutationFn: ({capacityAssignmentData, eventId, capacityAssignmentId}: {
             eventId: IdParam,
             capacityAssignmentData: CapacityAssignmentRequest,
             capacityAssignmentId: IdParam,
@@ -17,17 +17,16 @@ export const useEditCapacityAssignment = () => {
             capacityAssignmentId,
             capacityAssignmentData,
         ),
-        {
-            onSuccess: (_, variables) => {
-                queryClient.invalidateQueries({
-                    queryKey: [
-                        GET_EVENT_CAPACITY_ASSIGNMENT_QUERY_KEY,
-                        variables.eventId,
-                        variables.capacityAssignmentId,
-                    ]
-                });
-                return queryClient.invalidateQueries({queryKey: [GET_EVENT_CAPACITY_ASSIGNMENTS_QUERY_KEY]});
-            },
+
+        onSuccess: (_, variables) => {
+            queryClient.invalidateQueries({
+                queryKey: [
+                    GET_EVENT_CAPACITY_ASSIGNMENT_QUERY_KEY,
+                    variables.eventId,
+                    variables.capacityAssignmentId,
+                ]
+            });
+            return queryClient.invalidateQueries({queryKey: [GET_EVENT_CAPACITY_ASSIGNMENTS_QUERY_KEY]});
         }
-    )
+    });
 }

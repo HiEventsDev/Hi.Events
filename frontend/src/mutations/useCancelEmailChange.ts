@@ -6,13 +6,12 @@ import {GET_ME_QUERY_KEY} from "../queries/useGetMe.ts";
 export const useCancelEmailChange = () => {
     const queryClient = useQueryClient();
 
-    return useMutation(
-        ({userId}: { userId: IdParam}) =>
+    return useMutation({
+        mutationFn: ({userId}: { userId: IdParam}) =>
             userClient.cancelEmailChange(userId),
-        {
-            onSuccess: () => {
-                queryClient.invalidateQueries({queryKey: [GET_ME_QUERY_KEY]});
-            },
+
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: [GET_ME_QUERY_KEY]});
         }
-    );
+    });
 };

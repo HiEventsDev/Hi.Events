@@ -43,7 +43,7 @@ export const CreateTaxOrFeeModal = ({ onClose }: GenericModalProps) => {
                 <TaxAndFeeForm form={form} />
                 <Button
                     fullWidth
-                    loading={createMutation.isLoading}
+                    loading={createMutation.isPending}
                     type={'submit'}>
                     <Trans>Create {form.values.type === TaxAndFeeType.Tax ? t`Tax` : t`Fee`}</Trans>
                 </Button>

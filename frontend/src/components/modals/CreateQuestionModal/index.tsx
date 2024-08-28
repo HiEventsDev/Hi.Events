@@ -37,29 +37,29 @@ export const CreateQuestionModal = ({onClose, onCompleted}: CreateQuestionModalP
         },
     });
 
-    const mutation = useMutation(
-        (questionData: Question) => questionClient.create(eventId, questionData as QuestionRequestData),
-        {
-            onSuccess: ({data: question}) => {
-                notifications.show({
-                    message: t`Successfully Created Question`,
-                    color: 'green',
-                });
-                queryClient.invalidateQueries({queryKey: [GET_EVENT_QUESTIONS_QUERY_KEY]}).then(() => {
-                    onCompleted(question);
-                    onClose();
-                    form.reset();
-                });
-            },
-            onError: (error: any) => {
-                if (error?.response?.data?.errors) {
-                    form.setErrors(error.response.data.errors);
-                } else {
-                    showError(t`Unable to create question. Please check the your details`);
-                }
-            },
+    const mutation = useMutation({
+        mutationFn: (questionData: Question) => questionClient.create(eventId, questionData as QuestionRequestData),
+
+        onSuccess: ({data: question}) => {
+            notifications.show({
+                message: t`Successfully Created Question`,
+                color: 'green',
+            });
+            queryClient.invalidateQueries({queryKey: [GET_EVENT_QUESTIONS_QUERY_KEY]}).then(() => {
+                onCompleted(question);
+                onClose();
+                form.reset();
+            });
+        },
+
+        onError: (error: any) => {
+            if (error?.response?.data?.errors) {
+                form.setErrors(error.response.data.errors);
+            } else {
+                showError(t`Unable to create question. Please check the your details`);
+            }
         }
-    );
+    });
 
     return (
         <Modal
@@ -69,8 +69,8 @@ export const CreateQuestionModal = ({onClose, onCompleted}: CreateQuestionModalP
         >
             <form onSubmit={form.onSubmit((values) => mutation.mutate(values as any as Question))}>
                 <QuestionForm form={form} tickets={tickets}/>
-                <Button loading={mutation.isLoading} type="submit" fullWidth mt="xl">
-                    {mutation.isLoading ? t`Working...` : t`Create Question`}
+                <Button loading={mutation.isPending} type="submit" fullWidth mt="xl">
+                    {mutation.isPending ? t`Working...` : t`Create Question`}
                 </Button>
             </form>
         </Modal>

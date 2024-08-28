@@ -124,7 +124,7 @@ export const AttendeesCheckInTable = () => {
                                         onLabel={t`Checked In`}
                                         offLabel={t`Not Checked In`}
                                         size="xl"
-                                        disabled={mutation.isLoading}
+                                        disabled={mutation.isPending}
                                         checked={attendee.checked_in_at !== null}
                                         value={attendee.public_id}
                                         onChange={(event) => handleCheckInToggle(event.target.checked, attendee)}

@@ -6,14 +6,13 @@ import {checkInListClient} from "../api/check-in-list.client.ts";
 export const useCreateCheckInList = () => {
     const queryClient = useQueryClient();
 
-    return useMutation(
-        ({checkInListData, eventId}: {
+    return useMutation({
+        mutationFn: ({checkInListData, eventId}: {
             eventId: IdParam,
             checkInListData: CheckInListRequest,
         }) => checkInListClient.create(eventId, checkInListData),
-        {
-            onSuccess: (_, variables) => queryClient
-                .invalidateQueries({queryKey: [GET_EVENT_CHECK_IN_LISTS_QUERY_KEY, variables.eventId]}),
-        }
-    )
+
+        onSuccess: (_, variables) => queryClient
+            .invalidateQueries({queryKey: [GET_EVENT_CHECK_IN_LISTS_QUERY_KEY, variables.eventId]})
+    });
 }

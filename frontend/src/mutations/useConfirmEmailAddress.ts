@@ -6,13 +6,12 @@ import {GET_ME_QUERY_KEY} from "../queries/useGetMe";
 export const useConfirmEmailAddress = () => {
     const queryClient = useQueryClient();
 
-    return useMutation(
-        ({userId, token}: { userId: IdParam, token: string }) =>
+    return useMutation({
+        mutationFn: ({userId, token}: { userId: IdParam, token: string }) =>
             userClient.confirmEmailAddress(userId, token),
-        {
-            onSuccess: () => {
-                queryClient.invalidateQueries({queryKey: [GET_ME_QUERY_KEY]});
-            },
+
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: [GET_ME_QUERY_KEY]});
         }
-    );
+    });
 };

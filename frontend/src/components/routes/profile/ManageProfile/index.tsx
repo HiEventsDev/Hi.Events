@@ -141,7 +141,7 @@ export const ManageProfile = () => {
                                                title={t`Email not verified`} icon={<IconInfoCircle/>}>
                                             <p>{t`Please verify your email address to access all features`}</p>
                                             <Button size={'xs'} onClick={handleEmailConfirmationResend}>
-                                                {resendEmailConfirmationMutation.isLoading ? t`Resending...` : t`Resend email confirmation`}
+                                                {resendEmailConfirmationMutation.isPending ? t`Resending...` : t`Resend email confirmation`}
                                             </Button>
                                         </Alert>
                                     )}
@@ -173,7 +173,7 @@ export const ManageProfile = () => {
                                         placeholder={t`English`}
                                     />
 
-                                    <Button fullWidth loading={mutation.isLoading}
+                                    <Button fullWidth loading={mutation.isPending}
                                             type={'submit'}>{t`Update profile`}</Button>
                                 </fieldset>
                             </form>
@@ -197,7 +197,7 @@ export const ManageProfile = () => {
                                         required
                                         {...passwordForm.getInputProps('password_confirmation')}
                                         label={t`Confirm New Password`}/>
-                                    <Button fullWidth loading={mutation.isLoading}
+                                    <Button fullWidth loading={mutation.isPending}
                                             type={'submit'}>{t`Change password`}</Button>
                                 </fieldset>
                             </form>

@@ -5,11 +5,12 @@ import {userClient} from "../api/user.client.ts";
 export const GET_USER_QUERY_KEY = 'getUser';
 
 export const useGetUser = (userId: IdParam) => {
-    return useQuery<User, Error>(
-        [GET_USER_QUERY_KEY, userId],
-        async () => {
+    return useQuery<User>({
+        queryKey: [GET_USER_QUERY_KEY, userId],
+
+        queryFn: async () => {
             const {data} = await userClient.findByID(userId);
             return data;
-        },
-    )
+        }
+    });
 };

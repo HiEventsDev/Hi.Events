@@ -71,9 +71,9 @@ export const CoverUpload = () => {
 
     return (
         <form style={{position: 'relative'}}>
-            <fieldset disabled={uploadMutation.isLoading}>
-                {(uploadMutation.isLoading || loading || deleteImageMutation.isLoading) && (
-                    <LoadingOverlay visible={uploadMutation.isLoading} opacity={0.6}/>
+            <fieldset disabled={uploadMutation.isPending}>
+                {(uploadMutation.isPending || loading || deleteImageMutation.isPending) && (
+                    <LoadingOverlay visible={uploadMutation.isPending} opacity={0.6}/>
                 )}
                 <Dropzone accept={IMAGE_MIME_TYPE} onDrop={setFiles} className={classes.dropZone}>
                     <div>

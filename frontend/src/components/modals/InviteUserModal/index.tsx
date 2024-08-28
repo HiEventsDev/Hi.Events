@@ -69,7 +69,7 @@ export const InviteUserModal = ({onClose}: GenericModalProps) => {
 
                 <Button
                     fullWidth
-                    loading={createMutation.isLoading}
+                    loading={createMutation.isPending}
                     type={'submit'}>
                     {t`Invite User`}
                 </Button>

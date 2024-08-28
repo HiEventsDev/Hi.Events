@@ -88,29 +88,29 @@ export const CollectInformation = () => {
         });
     }
 
-    const mutation = useMutation(
-        (orderData: FinaliseOrderPayload) => orderClientPublic.finaliseOrder(Number(eventId), String(orderShortId), orderData),
-        {
-            onSuccess: (data) => {
-                const nextPage = order?.is_payment_required ? 'payment' : 'summary';
-                navigate(eventCheckoutPath(eventId, data.data.short_id, nextPage));
-            },
-            onError: (error: any) => {
-                if (error?.response?.data?.errors && Object.keys(error?.response?.data?.errors).length > 0) {
-                    form.setErrors(error.response.data.errors);
-                } else if (error?.response?.data?.message) {
-                    notifications.show({
-                        message: error?.response?.data?.message,
-                    });
+    const mutation = useMutation({
+        mutationFn: (orderData: FinaliseOrderPayload) => orderClientPublic.finaliseOrder(Number(eventId), String(orderShortId), orderData),
 
-                    // if it's a 409, we need to redirect to the event page as the order is no longer valid
-                    if (error.response.status === 409) {
-                        navigate(eventHomepagePath(event as Event));
-                    }
+        onSuccess: (data) => {
+            const nextPage = order?.is_payment_required ? 'payment' : 'summary';
+            navigate(eventCheckoutPath(eventId, data.data.short_id, nextPage));
+        },
+
+        onError: (error: any) => {
+            if (error?.response?.data?.errors && Object.keys(error?.response?.data?.errors).length > 0) {
+                form.setErrors(error.response.data.errors);
+            } else if (error?.response?.data?.message) {
+                notifications.show({
+                    message: error?.response?.data?.message,
+                });
+
+                // if it's a 409, we need to redirect to the event page as the order is no longer valid
+                if (error.response.status === 409) {
+                    navigate(eventHomepagePath(event as Event));
                 }
-            },
+            }
         }
-    );
+    });
 
     const createTicketIdToQuestionMap = () => {
         const ticketIdToQuestionMap = new Map();
@@ -330,7 +330,7 @@ export const CollectInformation = () => {
                 )}
             </CheckoutContent>
             <CheckoutFooter
-                isLoading={mutation.isLoading}
+                isLoading={mutation.isPending}
                 buttonText={order?.is_payment_required ? t`Continue To Payment` : t`Complete Order`}
                 event={event as Event}
                 order={order as Order}

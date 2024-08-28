@@ -6,14 +6,15 @@ import {AxiosError} from "axios";
 export const GET_ORGANIZER_QUERY_KEY = 'getOrganizer';
 
 export const useGetOrganizer = (organizerId: IdParam) => {
-    return useQuery<Organizer, AxiosError>(
-        [GET_ORGANIZER_QUERY_KEY, organizerId],
-        async () => {
+    return useQuery<Organizer, AxiosError>({
+        queryKey: [GET_ORGANIZER_QUERY_KEY, organizerId],
+
+        queryFn: async () => {
             const {data} = await organizerClient.findByID(organizerId);
             return data;
-        }, {
-            staleTime: 0,
-            cacheTime: 0,
         },
-    );
+
+        staleTime: 0,
+        gcTime: 0
+    });
 }

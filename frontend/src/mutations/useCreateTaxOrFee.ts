@@ -9,12 +9,11 @@ export const useCreateTaxOrFee = () => {
     const queryClient = useQueryClient();
     const {data: me} = useGetMe();
 
-    return useMutation(
-        ({taxOrFeeData}: {
+    return useMutation({
+        mutationFn: ({taxOrFeeData}: {
             taxOrFeeData: TaxAndFee
         }) => taxAndFeeClient.create(me?.account_id, taxOrFeeData),
-        {
-            onSuccess: () => queryClient.invalidateQueries({queryKey: [GET_TAXES_AND_FEES_QUERY_KEY]}),
-        }
-    )
+
+        onSuccess: () => queryClient.invalidateQueries({queryKey: [GET_TAXES_AND_FEES_QUERY_KEY]})
+    });
 }

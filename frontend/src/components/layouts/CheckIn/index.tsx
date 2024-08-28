@@ -168,8 +168,8 @@ const CheckIn = () => {
                                 <div className={classes.actions}>
                                     <Button
                                         onClick={() => handleCheckInToggle(attendee)}
-                                        disabled={checkInMutation.isLoading || deleteCheckInMutation.isLoading}
-                                        loading={checkInMutation.isLoading || deleteCheckInMutation.isLoading}
+                                        disabled={checkInMutation.isPending || deleteCheckInMutation.isPending}
+                                        loading={checkInMutation.isPending || deleteCheckInMutation.isPending}
                                         color={attendee.check_in ? 'red' : 'teal'}
                                     >
                                         {attendee.check_in ? t`Check Out` : t`Check In`}

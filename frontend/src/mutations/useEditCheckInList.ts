@@ -7,8 +7,8 @@ import {GET_EVENT_CHECK_IN_LIST_QUERY_KEY} from "../queries/useGetCheckInList.ts
 export const useEditCheckInList = () => {
     const queryClient = useQueryClient();
 
-    return useMutation(
-        ({checkInListData, eventId, checkInListId}: {
+    return useMutation({
+        mutationFn: ({checkInListData, eventId, checkInListId}: {
             eventId: IdParam,
             checkInListData: CheckInListRequest,
             checkInListId: IdParam,
@@ -17,17 +17,16 @@ export const useEditCheckInList = () => {
             checkInListId,
             checkInListData,
         ),
-        {
-            onSuccess: (_, variables) => {
-                queryClient.invalidateQueries({
-                    queryKey: [
-                        GET_EVENT_CHECK_IN_LIST_QUERY_KEY,
-                        variables.eventId,
-                        variables.checkInListId,
-                    ]
-                });
-                return queryClient.invalidateQueries({queryKey: [GET_EVENT_CHECK_IN_LISTS_QUERY_KEY]});
-            },
+
+        onSuccess: (_, variables) => {
+            queryClient.invalidateQueries({
+                queryKey: [
+                    GET_EVENT_CHECK_IN_LIST_QUERY_KEY,
+                    variables.eventId,
+                    variables.checkInListId,
+                ]
+            });
+            return queryClient.invalidateQueries({queryKey: [GET_EVENT_CHECK_IN_LISTS_QUERY_KEY]});
         }
-    )
+    });
 }

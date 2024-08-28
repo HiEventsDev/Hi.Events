@@ -7,12 +7,11 @@ import {GET_USERS_QUERY_KEY} from "../queries/useGetUsers.ts";
 export const useInviteUser = () => {
     const queryClient = useQueryClient();
 
-    return useMutation(
-        ({inviteUserData}: {
+    return useMutation({
+        mutationFn: ({inviteUserData}: {
             inviteUserData: InviteUserRequest
         }) => userClient.invite(inviteUserData),
-        {
-            onSuccess: () => queryClient.invalidateQueries({queryKey: [GET_USERS_QUERY_KEY]}),
-        }
-    )
+
+        onSuccess: () => queryClient.invalidateQueries({queryKey: [GET_USERS_QUERY_KEY]})
+    });
 }

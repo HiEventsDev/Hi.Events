@@ -57,7 +57,7 @@ export const SeoSettings = () => {
                 description={t`Customize the SEO settings for this event`}
             />
             <form onSubmit={form.onSubmit(handleSubmit)}>
-                <fieldset disabled={eventSettingsQuery.isLoading || updateMutation.isLoading}>
+                <fieldset disabled={eventSettingsQuery.isLoading || updateMutation.isPending}>
                     <TextInput
                         {...form.getInputProps('seo_title')}
                         description={t`The title of the event that will be displayed in search engine results and when sharing on social media. By default, the event title will be used`}
@@ -81,7 +81,7 @@ export const SeoSettings = () => {
                         description={t`Allow search engines to index this event`}
                         label={t`Allow search engine indexing`}
                     />
-                    <Button loading={updateMutation.isLoading} type={'submit'}>
+                    <Button loading={updateMutation.isPending} type={'submit'}>
                         {t`Save`}
                     </Button>
 

@@ -6,12 +6,11 @@ import {organizerClient} from "../api/organizer.client.ts";
 export const useCreateOrganizer = () => {
     const queryClient = useQueryClient();
 
-    return useMutation(
-        ({organizerData}: {
+    return useMutation({
+        mutationFn: ({organizerData}: {
             organizerData: Partial<Organizer>
         }) => organizerClient.create(organizerData),
-        {
-            onSuccess: () => queryClient.invalidateQueries({queryKey: [GET_ORGANIZERS_QUERY_KEY]}),
-        }
-    )
+
+        onSuccess: () => queryClient.invalidateQueries({queryKey: [GET_ORGANIZERS_QUERY_KEY]})
+    });
 }

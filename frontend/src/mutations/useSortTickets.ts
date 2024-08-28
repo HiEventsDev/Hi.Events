@@ -3,10 +3,10 @@ import {IdParam, SortableItem} from "../types.ts";
 import {ticketClient} from "../api/ticket.client.ts";
 
 export const useSortTickets = () => {
-    return useMutation(
-        ({sortedTickets, eventId}: {
+    return useMutation({
+        mutationFn: ({sortedTickets, eventId}: {
             eventId: IdParam,
             sortedTickets: SortableItem[],
-        }) => ticketClient.sortTickets(eventId, sortedTickets),
-    )
+        }) => ticketClient.sortTickets(eventId, sortedTickets)
+    });
 }

@@ -6,15 +6,16 @@ import {GET_EVENT_QUERY_KEY} from "../queries/useGetEvent.ts";
 export const useUpdateEvent = () => {
     const queryClient = useQueryClient();
 
-    return useMutation(
-        ({eventData, eventId}: {
+    return useMutation({
+        mutationFn: ({eventData, eventId}: {
             eventData: Partial<Event>,
             eventId: IdParam,
         }) => eventsClient.update(eventId, eventData),
-        {
-            onSuccess: (_, variables) => {
-                queryClient.invalidateQueries([GET_EVENT_QUERY_KEY, variables.eventId]);
-            }
+
+        onSuccess: (_, variables) => {
+            queryClient.invalidateQueries({
+                queryKey: [GET_EVENT_QUERY_KEY, variables.eventId]
+            });
         }
-    )
+    });
 }

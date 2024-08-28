@@ -6,13 +6,14 @@ import {GET_TICKETS_QUERY_KEY} from "../queries/useGetTickets.ts";
 export const useDeleteTicket = () => {
     const queryClient = useQueryClient();
 
-    return useMutation(
-        ({ticketId, eventId}: {
+    return useMutation({
+        mutationFn: ({ticketId, eventId}: {
             ticketId: IdParam,
             eventId: IdParam,
         }) => ticketClient.delete(eventId, ticketId),
-        {
-            onSuccess: () => queryClient.invalidateQueries([GET_TICKETS_QUERY_KEY]),
-        }
-    )
+
+        onSuccess: () => queryClient.invalidateQueries({
+            queryKey: [GET_TICKETS_QUERY_KEY]
+        })
+    });
 }

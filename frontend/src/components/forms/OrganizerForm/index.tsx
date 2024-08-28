@@ -101,11 +101,11 @@ export const OrganizerCreateForm = ({onSuccess}: OrganizerFormProps) => {
     return (
         <LoadingContainer>
             <form onSubmit={form.onSubmit(handleSubmit)}>
-                <fieldset disabled={organizerMutation.isLoading || !accountFetched || !meFetched}>
+                <fieldset disabled={organizerMutation.isPending || !accountFetched || !meFetched}>
                     <OrganizerForm form={form as any}/>
 
                     <Group gap={10}>
-                        <Button fullWidth loading={organizerMutation.isLoading}
+                        <Button fullWidth loading={organizerMutation.isPending}
                                 type={'submit'}
                                 color={'green'}>{t`Create Organizer`}
                         </Button>

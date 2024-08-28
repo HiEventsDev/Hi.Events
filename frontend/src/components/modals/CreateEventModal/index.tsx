@@ -146,7 +146,7 @@ export const CreateEventModal = ({onClose}: GenericModalProps) => {
                                label={t`End Date`}
                     />
                 </SimpleGrid>
-                <Button loading={eventMutation.isLoading} mt={20} fullWidth type={'submit'}>
+                <Button loading={eventMutation.isPending} mt={20} fullWidth type={'submit'}>
                     {t`Continue Event Setup`}
                 </Button>
             </form>
