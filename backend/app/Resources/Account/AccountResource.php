@@ -2,9 +2,9 @@
 
 namespace HiEvents\Resources\Account;
 
+use HiEvents\DomainObjects\AccountDomainObject;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use HiEvents\DomainObjects\AccountDomainObject;
 
 /**
  * @mixin AccountDomainObject

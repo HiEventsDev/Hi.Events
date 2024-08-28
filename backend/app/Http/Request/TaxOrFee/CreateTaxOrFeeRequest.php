@@ -2,10 +2,10 @@
 
 namespace HiEvents\Http\Request\TaxOrFee;
 
-use Illuminate\Validation\Rule;
 use HiEvents\DomainObjects\Enums\TaxCalculationType;
 use HiEvents\DomainObjects\Enums\TaxType;
 use HiEvents\Http\Request\BaseRequest;
+use Illuminate\Validation\Rule;
 
 class CreateTaxOrFeeRequest extends BaseRequest
 {

@@ -2,10 +2,10 @@
 
 namespace HiEvents\DomainObjects;
 
-use Illuminate\Support\Collection;
 use HiEvents\DomainObjects\Interfaces\IsFilterable;
 use HiEvents\DomainObjects\Interfaces\IsSortable;
 use HiEvents\DomainObjects\SortingAndFiltering\AllowedSorts;
+use Illuminate\Support\Collection;
 
 class AttendeeDomainObject extends Generated\AttendeeDomainObjectAbstract implements IsSortable, IsFilterable
 {

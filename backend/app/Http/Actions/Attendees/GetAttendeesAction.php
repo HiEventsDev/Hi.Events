@@ -2,8 +2,6 @@
 
 namespace HiEvents\Http\Actions\Attendees;
 
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
@@ -12,6 +10,8 @@ use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Resources\Attendee\AttendeeResource;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 /**
  * @todo move to handler

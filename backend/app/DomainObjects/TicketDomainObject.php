@@ -3,11 +3,11 @@
 namespace HiEvents\DomainObjects;
 
 use Carbon\Carbon;
-use Illuminate\Support\Collection;
-use LogicException;
 use HiEvents\DomainObjects\Enums\TicketType;
 use HiEvents\DomainObjects\Interfaces\IsSortable;
 use HiEvents\DomainObjects\SortingAndFiltering\AllowedSorts;
+use Illuminate\Support\Collection;
+use LogicException;
 
 class TicketDomainObject extends Generated\TicketDomainObjectAbstract implements IsSortable
 {

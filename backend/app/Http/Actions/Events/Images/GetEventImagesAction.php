@@ -2,12 +2,12 @@
 
 namespace HiEvents\Http\Actions\Events\Images;
 
-use Illuminate\Http\JsonResponse;
 use HiEvents\DomainObjects\Enums\EventImageType;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Repository\Interfaces\ImageRepositoryInterface;
 use HiEvents\Resources\Image\ImageResource;
+use Illuminate\Http\JsonResponse;
 
 class GetEventImagesAction extends BaseAction
 {

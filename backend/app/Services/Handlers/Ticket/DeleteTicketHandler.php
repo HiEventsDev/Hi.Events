@@ -2,9 +2,6 @@
 
 namespace HiEvents\Services\Handlers\Ticket;
 
-use Illuminate\Database\DatabaseManager;
-use Psr\Log\LoggerInterface;
-use Throwable;
 use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\TicketDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\TicketPriceDomainObjectAbstract;
@@ -12,6 +9,9 @@ use HiEvents\Exceptions\CannotDeleteEntityException;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\TicketPriceRepositoryInterface;
 use HiEvents\Repository\Interfaces\TicketRepositoryInterface;
+use Illuminate\Database\DatabaseManager;
+use Psr\Log\LoggerInterface;
+use Throwable;
 
 readonly class DeleteTicketHandler
 {

@@ -8,8 +8,8 @@ use HiEvents\DomainObjects\Enums\TicketType;
 use HiEvents\DomainObjects\Generated\TicketPriceDomainObjectAbstract;
 use HiEvents\DomainObjects\TicketDomainObject;
 use HiEvents\DomainObjects\TicketPriceDomainObject;
-use HiEvents\Services\Domain\Ticket\DTO\TicketPriceDTO;
 use HiEvents\Services\Domain\Ticket\CreateTicketService;
+use HiEvents\Services\Domain\Ticket\DTO\TicketPriceDTO;
 use HiEvents\Services\Handlers\Ticket\DTO\UpsertTicketDTO;
 use Throwable;
 

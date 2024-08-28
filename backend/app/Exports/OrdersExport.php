@@ -3,6 +3,11 @@
 namespace HiEvents\Exports;
 
 use Carbon\Carbon;
+use HiEvents\DomainObjects\Enums\QuestionTypeEnum;
+use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\DomainObjects\QuestionDomainObject;
+use HiEvents\Resources\Order\OrderResource;
+use HiEvents\Services\Domain\Question\QuestionAnswerFormatter;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
@@ -11,11 +16,6 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-use HiEvents\DomainObjects\Enums\QuestionTypeEnum;
-use HiEvents\DomainObjects\OrderDomainObject;
-use HiEvents\DomainObjects\QuestionDomainObject;
-use HiEvents\Resources\Order\OrderResource;
-use HiEvents\Services\Domain\Question\QuestionAnswerFormatter;
 
 class OrdersExport implements FromCollection, WithHeadings, WithMapping, WithStyles
 {

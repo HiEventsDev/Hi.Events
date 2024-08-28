@@ -2,9 +2,9 @@
 
 namespace HiEvents\Http\Actions\Orders\Payment\Stripe;
 
-use Illuminate\Http\JsonResponse;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Services\Handlers\Order\Payment\Stripe\GetPaymentIntentHandler;
+use Illuminate\Http\JsonResponse;
 
 class GetPaymentIntentActionPublic extends BaseAction
 {

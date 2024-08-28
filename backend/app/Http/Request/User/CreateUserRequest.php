@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Request\User;
 
-use Illuminate\Validation\Rule;
 use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Http\Request\BaseRequest;
+use Illuminate\Validation\Rule;
 
 class CreateUserRequest extends BaseRequest
 {

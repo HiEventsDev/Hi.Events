@@ -2,11 +2,11 @@
 
 namespace HiEvents\Http\Actions\TaxesAndFees;
 
-use Illuminate\Http\JsonResponse;
 use HiEvents\DomainObjects\AccountDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Repository\Interfaces\TaxAndFeeRepositoryInterface;
 use HiEvents\Resources\Tax\TaxAndFeeResource;
+use Illuminate\Http\JsonResponse;
 
 class GetTaxOrFeeAction extends BaseAction
 {

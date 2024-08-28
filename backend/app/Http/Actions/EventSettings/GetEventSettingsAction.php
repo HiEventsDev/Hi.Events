@@ -2,12 +2,12 @@
 
 namespace HiEvents\Http\Actions\EventSettings;
 
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Resources\Event\EventSettingsResource;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
 class GetEventSettingsAction extends BaseAction
 {

@@ -2,10 +2,10 @@
 
 namespace HiEvents\Services\Domain\Payment\Stripe\EventHandlers;
 
+use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use Psr\Log\LoggerInterface;
 use Stripe\Account;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 
 readonly class AccountUpdateHandler
 {

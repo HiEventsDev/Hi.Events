@@ -2,8 +2,6 @@
 
 namespace HiEvents\Http\Actions\Messages;
 
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\MessageDomainObject;
 use HiEvents\DomainObjects\UserDomainObject;
@@ -12,6 +10,8 @@ use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\MessageRepositoryInterface;
 use HiEvents\Resources\Message\MessageResource;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class GetMessagesAction extends BaseAction
 {

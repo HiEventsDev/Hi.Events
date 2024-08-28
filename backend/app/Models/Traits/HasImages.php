@@ -2,8 +2,8 @@
 
 namespace HiEvents\Models\Traits;
 
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 use HiEvents\Models\Image;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 trait HasImages
 {

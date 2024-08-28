@@ -2,9 +2,9 @@
 
 namespace HiEvents\Resources\Ticket;
 
-use Illuminate\Http\Request;
 use HiEvents\DomainObjects\TicketPriceDomainObject;
 use HiEvents\Resources\BaseResource;
+use Illuminate\Http\Request;
 
 /**
  * @mixin TicketPriceDomainObject

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace HiEvents\Repository\Interfaces;
 
-use Illuminate\Support\Collection;
 use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Repository\Eloquent\BaseRepository;
+use Illuminate\Support\Collection;
 
 /**
  * @extends BaseRepository<UserDomainObject>

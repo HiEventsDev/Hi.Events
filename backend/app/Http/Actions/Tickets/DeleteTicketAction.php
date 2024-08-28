@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Tickets;
 
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
-use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Exceptions\CannotDeleteEntityException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Services\Handlers\Ticket\DeleteTicketHandler;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class DeleteTicketAction extends BaseAction
 {

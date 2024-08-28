@@ -2,10 +2,10 @@
 
 namespace HiEvents\Resources\Message;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 use HiEvents\DomainObjects\MessageDomainObject;
 use HiEvents\Resources\User\UserResource;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * @mixin MessageDomainObject

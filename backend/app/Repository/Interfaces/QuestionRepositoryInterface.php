@@ -2,9 +2,9 @@
 
 namespace HiEvents\Repository\Interfaces;
 
-use Illuminate\Support\Collection;
 use HiEvents\DomainObjects\QuestionDomainObject;
 use HiEvents\Repository\Eloquent\BaseRepository;
+use Illuminate\Support\Collection;
 
 /**
  * @extends BaseRepository<QuestionDomainObject>

@@ -3,8 +3,8 @@
 namespace HiEvents\DomainObjects;
 
 use Carbon\Carbon;
-use LogicException;
 use HiEvents\Helper\Currency;
+use LogicException;
 
 class TicketPriceDomainObject extends Generated\TicketPriceDomainObjectAbstract
 {

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace HiEvents\Models;
 
+use HiEvents\DomainObjects\Generated\TicketDomainObjectAbstract;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use HiEvents\DomainObjects\Generated\TicketDomainObjectAbstract;
 
 class Ticket extends BaseModel
 {

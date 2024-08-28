@@ -2,9 +2,9 @@
 
 namespace HiEvents\Http\Request\User;
 
+use HiEvents\Http\Request\BaseRequest;
 use HiEvents\Locale;
 use Illuminate\Validation\Rules\Password;
-use HiEvents\Http\Request\BaseRequest;
 
 class UpdateMeRequest extends BaseRequest
 {

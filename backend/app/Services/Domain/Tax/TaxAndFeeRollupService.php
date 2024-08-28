@@ -4,8 +4,8 @@ namespace HiEvents\Services\Domain\Tax;
 
 namespace HiEvents\Services\Domain\Tax;
 
-use Illuminate\Support\Str;
 use HiEvents\DomainObjects\TaxAndFeesDomainObject;
+use Illuminate\Support\Str;
 
 class TaxAndFeeRollupService
 {

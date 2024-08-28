@@ -2,8 +2,6 @@
 
 namespace HiEvents\Http\Actions\Orders;
 
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
@@ -12,6 +10,8 @@ use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Resources\Order\OrderResource;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class GetOrdersAction extends BaseAction
 {

@@ -2,8 +2,8 @@
 
 namespace HiEvents\Resources\Event;
 
-use Illuminate\Http\Resources\Json\JsonResource;
 use HiEvents\DomainObjects\EventSettingDomainObject;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * @mixin EventSettingDomainObject

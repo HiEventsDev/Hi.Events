@@ -2,8 +2,8 @@
 
 namespace HiEvents\Services\Handlers\Question;
 
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use HiEvents\Repository\Interfaces\QuestionRepositoryInterface;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 readonly class SortQuestionsHandler
 {

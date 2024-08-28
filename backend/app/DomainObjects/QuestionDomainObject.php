@@ -2,8 +2,8 @@
 
 namespace HiEvents\DomainObjects;
 
-use Illuminate\Support\Collection;
 use HiEvents\DomainObjects\Enums\QuestionTypeEnum;
+use Illuminate\Support\Collection;
 
 class QuestionDomainObject extends Generated\QuestionDomainObjectAbstract
 {

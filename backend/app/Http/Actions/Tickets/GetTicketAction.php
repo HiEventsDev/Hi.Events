@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Tickets;
 
-use Illuminate\Http\JsonResponse;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\Generated\TicketDomainObjectAbstract;
 use HiEvents\DomainObjects\TaxAndFeesDomainObject;
@@ -12,6 +11,7 @@ use HiEvents\DomainObjects\TicketPriceDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Repository\Interfaces\TicketRepositoryInterface;
 use HiEvents\Resources\Ticket\TicketResource;
+use Illuminate\Http\JsonResponse;
 
 class GetTicketAction extends BaseAction
 {

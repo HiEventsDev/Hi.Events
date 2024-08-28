@@ -3,11 +3,11 @@
 namespace HiEvents\Repository\Interfaces;
 
 use Exception;
+use HiEvents\DomainObjects\Interfaces\DomainObjectInterface;
 use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
-use HiEvents\DomainObjects\Interfaces\DomainObjectInterface;
 
 /**
  * @template T

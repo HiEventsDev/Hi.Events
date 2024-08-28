@@ -3,15 +3,15 @@
 namespace HiEvents\Validators\Rules;
 
 use Closure;
+use HiEvents\DomainObjects\Enums\QuestionTypeEnum;
+use HiEvents\DomainObjects\QuestionDomainObject;
+use HiEvents\DomainObjects\TicketDomainObject;
+use HiEvents\DomainObjects\TicketPriceDomainObject;
 use Illuminate\Contracts\Validation\DataAwareRule;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Contracts\Validation\ValidatorAwareRule;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\Validator;
-use HiEvents\DomainObjects\Enums\QuestionTypeEnum;
-use HiEvents\DomainObjects\QuestionDomainObject;
-use HiEvents\DomainObjects\TicketDomainObject;
-use HiEvents\DomainObjects\TicketPriceDomainObject;
 
 abstract class BaseQuestionRule implements ValidationRule, DataAwareRule, ValidatorAwareRule
 {

@@ -2,13 +2,13 @@
 
 namespace HiEvents\Http\Actions\Orders;
 
-use Illuminate\Http\JsonResponse;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\QuestionAndAnswerViewDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Resources\Order\OrderResource;
+use Illuminate\Http\JsonResponse;
 
 class GetOrderAction extends BaseAction
 {

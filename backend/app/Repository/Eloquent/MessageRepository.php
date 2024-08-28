@@ -2,13 +2,13 @@
 
 namespace HiEvents\Repository\Eloquent;
 
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Pagination\LengthAwarePaginator;
 use HiEvents\DomainObjects\Generated\MessageDomainObjectAbstract;
 use HiEvents\DomainObjects\MessageDomainObject;
 use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Models\Message;
 use HiEvents\Repository\Interfaces\MessageRepositoryInterface;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class MessageRepository extends BaseRepository implements MessageRepositoryInterface
 {

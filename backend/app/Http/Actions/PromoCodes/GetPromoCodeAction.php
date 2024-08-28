@@ -2,12 +2,12 @@
 
 namespace HiEvents\Http\Actions\PromoCodes;
 
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
 use HiEvents\Resources\PromoCode\PromoCodeResource;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class GetPromoCodeAction extends BaseAction
 {

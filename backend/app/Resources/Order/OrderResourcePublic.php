@@ -3,10 +3,10 @@
 namespace HiEvents\Resources\Order;
 
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\Resources\Attendee\AttendeeResourcePublic;
 use HiEvents\Resources\BaseResource;
+use Illuminate\Http\Request;
 
 /**
  * @mixin OrderDomainObject

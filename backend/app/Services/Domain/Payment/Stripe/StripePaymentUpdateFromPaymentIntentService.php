@@ -2,9 +2,9 @@
 
 namespace HiEvents\Services\Domain\Payment\Stripe;
 
-use Stripe\PaymentIntent;
 use HiEvents\DomainObjects\Generated\StripePaymentDomainObjectAbstract;
 use HiEvents\Repository\Eloquent\StripePaymentsRepository;
+use Stripe\PaymentIntent;
 
 readonly class StripePaymentUpdateFromPaymentIntentService
 {

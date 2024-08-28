@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Accounts;
 
-use Illuminate\Http\JsonResponse;
 use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Resources\Account\AccountResource;
+use Illuminate\Http\JsonResponse;
 
 class GetAccountAction extends BaseAction
 {

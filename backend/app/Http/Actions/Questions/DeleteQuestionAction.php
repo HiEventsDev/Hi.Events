@@ -2,13 +2,13 @@
 
 namespace HiEvents\Http\Actions\Questions;
 
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
-use Throwable;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Exceptions\CannotDeleteEntityException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Services\Handlers\Question\DeleteQuestionHandler;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
+use Throwable;
 
 class DeleteQuestionAction extends BaseAction
 {
