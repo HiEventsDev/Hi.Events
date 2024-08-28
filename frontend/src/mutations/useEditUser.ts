@@ -7,13 +7,12 @@ import {IdParam} from "../types.ts";
 export const useEditUser = () => {
     const queryClient = useQueryClient();
 
-    return useMutation(
-        ({userId, userData}: {
+    return useMutation({
+        mutationFn: ({userId, userData}: {
             userId: IdParam,
             userData: UpdateUserRequest
         }) => userClient.updateUser(userId, userData),
-        {
-            onSuccess: () => queryClient.invalidateQueries({queryKey: [GET_USERS_QUERY_KEY]}),
-        }
-    )
+
+        onSuccess: () => queryClient.invalidateQueries({queryKey: [GET_USERS_QUERY_KEY]})
+    });
 }

@@ -7,14 +7,13 @@ import {GET_EVENT_ORDERS_QUERY_KEY} from "../queries/useGetEventOrders.ts";
 export const useRefundOrder = () => {
     const queryClient = useQueryClient();
 
-    return useMutation(
-        ({eventId, orderId, refundData}: {
+    return useMutation({
+        mutationFn: ({eventId, orderId, refundData}: {
             eventId: IdParam,
             orderId: IdParam,
             refundData: RefundOrderPayload
         }) => orderClient.refund(eventId, orderId, refundData),
-        {
-            onSuccess: () => queryClient.invalidateQueries({queryKey: [GET_EVENT_ORDERS_QUERY_KEY]}),
-        }
-    )
+
+        onSuccess: () => queryClient.invalidateQueries({queryKey: [GET_EVENT_ORDERS_QUERY_KEY]})
+    });
 }

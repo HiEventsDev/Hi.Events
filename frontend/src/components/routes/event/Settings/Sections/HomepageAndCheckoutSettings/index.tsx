@@ -62,7 +62,7 @@ export const HomepageAndCheckoutSettings = () => {
                 description={t`Customize the event homepage and checkout messaging`}
             />
             <form onSubmit={form.onSubmit(handleSubmit as any)}>
-                <fieldset disabled={eventSettingsQuery.isLoading || updateMutation.isLoading}>
+                <fieldset disabled={eventSettingsQuery.isLoading || updateMutation.isPending}>
                     <Editor
                         label={t`Pre Checkout message`}
                         value={form.values.pre_checkout_message || ''}
@@ -83,7 +83,7 @@ export const HomepageAndCheckoutSettings = () => {
                         {...form.getInputProps('order_timeout_in_minutes')}
                     />
 
-                    <Button loading={updateMutation.isLoading} type={'submit'}>
+                    <Button loading={updateMutation.isPending} type={'submit'}>
                         {t`Save`}
                     </Button>
                 </fieldset>

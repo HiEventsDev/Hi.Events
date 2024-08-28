@@ -6,13 +6,14 @@ import {GET_TAXES_AND_FEES_QUERY_KEY} from "../queries/useGetTaxesAndFees.ts";
 export const useDeleteTaxOrFee = () => {
     const queryClient = useQueryClient();
 
-    return useMutation(
-        ({accountId, taxAndFeeId}: {
+    return useMutation({
+        mutationFn: ({accountId, taxAndFeeId}: {
             accountId: IdParam,
             taxAndFeeId: IdParam,
         }) => taxAndFeeClient.delete(accountId, taxAndFeeId),
-        {
-            onSuccess: () => queryClient.invalidateQueries([GET_TAXES_AND_FEES_QUERY_KEY]),
-        }
-    )
+
+        onSuccess: () => queryClient.invalidateQueries({
+            queryKey: [GET_TAXES_AND_FEES_QUERY_KEY]
+        })
+    });
 }

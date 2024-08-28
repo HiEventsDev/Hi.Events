@@ -6,16 +6,15 @@ import {GET_TICKETS_QUERY_KEY} from "../queries/useGetTickets.ts";
 export const useUpdateTicket = () => {
     const queryClient = useQueryClient();
 
-    return useMutation(
-        ({ticketData, ticketId, eventId}: {
+    return useMutation({
+        mutationFn: ({ticketData, ticketId, eventId}: {
             ticketData: Ticket,
             ticketId: IdParam,
             eventId: IdParam
         }) => ticketClient.update(eventId, ticketId, ticketData),
-        {
-            onSuccess: () => {
-                queryClient.invalidateQueries({queryKey: [GET_TICKETS_QUERY_KEY]});
-            },
+
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: [GET_TICKETS_QUERY_KEY]});
         }
-    )
+    });
 }

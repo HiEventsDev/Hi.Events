@@ -66,7 +66,7 @@ export const EventDetailsForm = () => {
                 description={t`Update event name, description and dates`}
             />
             <form onSubmit={form.onSubmit(handleSubmit)}>
-                <fieldset disabled={eventQuery.isLoading || updateMutation.isLoading}>
+                <fieldset disabled={eventQuery.isLoading || updateMutation.isPending}>
                     <TextInput
                         {...form.getInputProps('title')}
                         label={t`Name`}
@@ -110,7 +110,7 @@ export const EventDetailsForm = () => {
                             placeholder={t`UTC`}
                         />
                     </InputGroup>
-                    <Button loading={updateMutation.isLoading} type={'submit'}>
+                    <Button loading={updateMutation.isPending} type={'submit'}>
                         {t`Save`}
                     </Button>
                 </fieldset>

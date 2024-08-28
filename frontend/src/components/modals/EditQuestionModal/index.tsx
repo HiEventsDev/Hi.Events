@@ -58,33 +58,33 @@ export const EditQuestionModal = ({onClose, questionId}: EditQuestionModalProps)
         }
         , [questionQuery.isFetched]);
 
-    const mutation = useMutation(
-        (questionData: Question) => questionClient.update(eventId, questionId, questionData),
-        {
-            onSuccess: () => {
-                notifications.show({
-                    message: t`Successfully Created Question`,
-                    color: 'green',
-                });
-                queryClient.invalidateQueries({queryKey: [GET_EVENT_QUESTIONS_QUERY_KEY, eventId]}).then(() => {
-                    form.reset();
-                    onClose();
-                }).then(() => {
-                        queryClient.invalidateQueries({queryKey: [GET_QUESTION_QUERY_KEY, eventId, questionId]});
-                    }
-                )
-            },
-            onError: (error: any) => {
-                if (error?.response?.data?.errors) {
-                    form.setErrors(error.response.data.errors);
+    const mutation = useMutation({
+        mutationFn: (questionData: Question) => questionClient.update(eventId, questionId, questionData),
+
+        onSuccess: () => {
+            notifications.show({
+                message: t`Successfully Created Question`,
+                color: 'green',
+            });
+            queryClient.invalidateQueries({queryKey: [GET_EVENT_QUESTIONS_QUERY_KEY, eventId]}).then(() => {
+                form.reset();
+                onClose();
+            }).then(() => {
+                    queryClient.invalidateQueries({queryKey: [GET_QUESTION_QUERY_KEY, eventId, questionId]});
                 }
-                notifications.show({
-                    message: t`Unable to update question. Please check the your details`,
-                    color: 'red',
-                });
-            },
+            )
+        },
+
+        onError: (error: any) => {
+            if (error?.response?.data?.errors) {
+                form.setErrors(error.response.data.errors);
+            }
+            notifications.show({
+                message: t`Unable to update question. Please check the your details`,
+                color: 'red',
+            });
         }
-    );
+    });
 
     return (
         <Modal
@@ -95,8 +95,8 @@ export const EditQuestionModal = ({onClose, questionId}: EditQuestionModalProps)
             <form onSubmit={form.onSubmit((values) => mutation.mutate(values as any as Question))}>
                 <QuestionForm form={form} tickets={tickets}/>
                 {!questionQuery.isFetched && <LoadingOverlay visible/>}
-                <Button loading={mutation.isLoading} type="submit" fullWidth mt="xl">
-                    {mutation.isLoading ? t`Working...` : t`Edit Question`}
+                <Button loading={mutation.isPending} type="submit" fullWidth mt="xl">
+                    {mutation.isPending ? t`Working...` : t`Edit Question`}
                 </Button>
             </form>
         </Modal>

@@ -112,7 +112,7 @@ const AcceptInvitation = () => {
                                 </Trans>
                             )}/>
 
-                    <Button fullWidth loading={acceptInvitationMutation.isLoading}
+                    <Button fullWidth loading={acceptInvitationMutation.isPending}
                             type={'submit'}>{t`Accept Invitation`}</Button>
                 </fieldset>
             </form>

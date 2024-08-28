@@ -70,7 +70,7 @@ export const MiscSettings = () => {
                 description={t`Customize the miscellaneous settings for this event`}
             />
             <form onSubmit={form.onSubmit(handleSubmit as any)}>
-                <fieldset disabled={eventSettingsQuery.isLoading || updateMutation.isLoading}>
+                <fieldset disabled={eventSettingsQuery.isLoading || updateMutation.isPending}>
                     <CustomSelect
                         optionList={priceOptions}
                         form={form}
@@ -90,7 +90,7 @@ export const MiscSettings = () => {
                         description={t`Hide the getting started page from the sidebar`}
                     />
 
-                    <Button loading={updateMutation.isLoading} type={'submit'}>
+                    <Button loading={updateMutation.isPending} type={'submit'}>
                         {t`Save`}
                     </Button>
                 </fieldset>

@@ -7,16 +7,19 @@ import {GET_EVENT_PUBLIC_QUERY_KEY} from "../queries/useGetEventPublic.ts";
 export const useUploadEventImage = () => {
     const queryClient = useQueryClient();
 
-    return useMutation(
-        ({eventId, image}: {
+    return useMutation({
+        mutationFn: ({eventId, image}: {
             image: File,
             eventId: IdParam,
         }) => eventsClient.uploadEventImage(eventId, image),
-        {
-            onSuccess: (_, variables) => {
-                queryClient.invalidateQueries([GET_EVENT_IMAGES_QUERY_KEY, variables.eventId]);
-                queryClient.invalidateQueries([GET_EVENT_PUBLIC_QUERY_KEY, variables.eventId]);
-            }
+
+        onSuccess: (_, variables) => {
+            queryClient.invalidateQueries({
+                queryKey: [GET_EVENT_IMAGES_QUERY_KEY, variables.eventId]
+            });
+            queryClient.invalidateQueries({
+                queryKey: [GET_EVENT_PUBLIC_QUERY_KEY, variables.eventId]
+            });
         }
-    )
+    });
 }

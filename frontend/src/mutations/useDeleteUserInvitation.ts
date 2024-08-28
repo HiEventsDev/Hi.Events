@@ -6,14 +6,15 @@ import {GET_USERS_QUERY_KEY} from "../queries/useGetUsers.ts";
 export const useDeleteUserInvitation = () => {
     const queryClient = useQueryClient();
 
-    return useMutation(
-        ({userId}: {
+    return useMutation({
+        mutationFn: ({userId}: {
             userId: IdParam,
         }) => userClient.deleteInvitation(userId),
-        {
-            onSuccess: () => {
-                queryClient.invalidateQueries([GET_USERS_QUERY_KEY])
-            }
+
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: [GET_USERS_QUERY_KEY]
+            })
         }
-    )
+    });
 }

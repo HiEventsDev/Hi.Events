@@ -52,8 +52,8 @@ export const CreatePromoCodeModal = ({onClose}: GenericModalProps) => {
         >
             <form onSubmit={form.onSubmit(handleSubmit)}>
                 <PromoCodeForm form={form}/>
-                <Button type="submit" fullWidth mt="xl" disabled={mutation.isLoading}>
-                    {mutation.isLoading ? t`Working...` : t`Create Promo Code`}
+                <Button type="submit" fullWidth mt="xl" disabled={mutation.isPending}>
+                    {mutation.isPending ? t`Working...` : t`Create Promo Code`}
                 </Button>
             </form>
         </Modal>

@@ -8,16 +8,15 @@ import {GET_EVENT_QUERY_KEY} from "../queries/useGetEvent.ts";
 export const useCreatePromoCode = () => {
     const queryClient = useQueryClient();
 
-    return useMutation(
-        ({eventId, promoCodeData}: {
+    return useMutation({
+        mutationFn: ({eventId, promoCodeData}: {
             eventId: IdParam,
             promoCodeData: PromoCode
         }) => promoCodeClient.create(eventId, promoCodeData),
-        {
-            onSuccess: (_, variables) => {
-                queryClient.invalidateQueries({queryKey: [GET_EVENT_QUERY_KEY, variables.eventId]})
-                return queryClient.invalidateQueries({queryKey: [GET_EVENT_PROMO_CODES_QUERY_KEY]});
-            },
+
+        onSuccess: (_, variables) => {
+            queryClient.invalidateQueries({queryKey: [GET_EVENT_QUERY_KEY, variables.eventId]})
+            return queryClient.invalidateQueries({queryKey: [GET_EVENT_PROMO_CODES_QUERY_KEY]});
         }
-    )
+    });
 }

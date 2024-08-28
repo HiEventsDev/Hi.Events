@@ -7,16 +7,19 @@ import {GET_EVENTS_QUERY_KEY} from "../queries/useGetEvents.ts";
 export const useUpdateEventStatus = () => {
     const queryClient = useQueryClient();
 
-    return useMutation(
-        ({eventId, status}: {
+    return useMutation({
+        mutationFn: ({eventId, status}: {
             eventId: IdParam,
             status: string,
         }) => eventsClient.updateEventStatus(eventId, status),
-        {
-            onSuccess: (_, variables) => {
-                queryClient.invalidateQueries([GET_EVENT_QUERY_KEY, variables.eventId]);
-                queryClient.invalidateQueries([GET_EVENTS_QUERY_KEY]);
-            }
+
+        onSuccess: (_, variables) => {
+            queryClient.invalidateQueries({
+                queryKey: [GET_EVENT_QUERY_KEY, variables.eventId]
+            });
+            queryClient.invalidateQueries({
+                queryKey: [GET_EVENTS_QUERY_KEY]
+            });
         }
-    )
+    });
 }

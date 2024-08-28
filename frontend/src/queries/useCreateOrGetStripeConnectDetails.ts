@@ -1,19 +1,20 @@
-import {useQuery} from '@tanstack/react-query';
-import {IdParam, StripeConnectDetails} from '../types.ts';
-import {accountClient} from "../api/account.client.ts";
-import {AxiosError} from "axios";
+import { useQuery } from '@tanstack/react-query';
+import { IdParam, StripeConnectDetails } from '../types';
+import { accountClient } from "../api/account.client";
+import { AxiosError } from "axios";
 
 export const GET_STRIPE_CONNECT_ACCOUNT_DETAILS = 'getStripeConnectAccountDetails';
 
 export const useCreateOrGetStripeConnectDetails = (accountId: IdParam) => {
-    return useQuery<StripeConnectDetails, AxiosError>(
-        [GET_STRIPE_CONNECT_ACCOUNT_DETAILS],
-        async () => {
-            const {data} = await accountClient.getStripeConnectDetails(accountId);
+    return useQuery<StripeConnectDetails, AxiosError>({
+        queryKey: [GET_STRIPE_CONNECT_ACCOUNT_DETAILS, accountId],
+
+        queryFn: async (): Promise<StripeConnectDetails> => {
+            const { data } = await accountClient.getStripeConnectDetails(accountId);
             return data;
-        }, {
-            enabled: accountId !== undefined,
-            retry: false,
-        }
-    )
+        },
+
+        enabled: accountId !== undefined,
+        retry: false,
+    });
 };

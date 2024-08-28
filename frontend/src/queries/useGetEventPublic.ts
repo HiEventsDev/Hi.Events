@@ -6,18 +6,18 @@ import {AxiosError} from "axios";
 export const GET_EVENT_PUBLIC_QUERY_KEY = 'getEventPublic';
 
 export const useGetEventPublic = (eventId: IdParam, enabled = true, isPromoCodeValid = false, promoCode: null | string = null) => {
-    return useQuery<Event, AxiosError>(
-        [GET_EVENT_PUBLIC_QUERY_KEY, eventId, isPromoCodeValid],
-        async () => {
+    return useQuery<Event, AxiosError>({
+        queryKey: [GET_EVENT_PUBLIC_QUERY_KEY, eventId, isPromoCodeValid],
+
+        queryFn: async () => {
             const {data} = await eventsClientPublic.findByID(eventId, promoCode);
             return data;
         },
-        {
-            refetchOnWindowFocus: false,
-            retryOnMount: false,
-            staleTime: 0,
-            retry: false,
-            enabled: enabled,
-        }
-    )
+
+        refetchOnWindowFocus: false,
+        retryOnMount: false,
+        staleTime: 0,
+        retry: false,
+        enabled: enabled
+    });
 };

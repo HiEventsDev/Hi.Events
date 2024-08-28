@@ -63,6 +63,7 @@ export const CheckInListList = ({checkInLists, openCreateModal}: CheckInListList
                             </Trans>
                         </p>
                         <Button
+                            loading={deleteMutation.isPending}
                             size={'xs'}
                             leftSection={<IconPlus/>}
                             color={'green'}

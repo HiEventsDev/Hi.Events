@@ -95,8 +95,8 @@ export const Register = () => {
                         {...form.getInputProps('timezone')}
                         type="hidden"
                     />
-                    <Button type="submit" fullWidth disabled={mutate.isLoading}>
-                        {mutate.isLoading ? t`Working...` : t`Register`}
+                    <Button type="submit" fullWidth disabled={mutate.isPending}>
+                        {mutate.isPending ? t`Working...` : t`Register`}
                     </Button>
                 </form>
                 <footer>

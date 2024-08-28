@@ -5,11 +5,12 @@ import {IdParam} from "../types.ts";
 export const GET_QUESTION_QUERY_KEY = 'getQuestion';
 
 export const useGetQuestion = (eventId: IdParam, questionId: IdParam) => {
-    return useQuery(
-        [GET_QUESTION_QUERY_KEY, eventId, questionId],
-        async () => {
+    return useQuery({
+        queryKey: [GET_QUESTION_QUERY_KEY, eventId, questionId],
+
+        queryFn: async () => {
             const {data} = await questionClient.get(eventId, questionId);
             return data;
-        },
-    )
+        }
+    });
 }

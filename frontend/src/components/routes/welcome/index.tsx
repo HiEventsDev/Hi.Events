@@ -76,7 +76,7 @@ export const CreateEvent = () => {
             </p>
 
             <form onSubmit={form.onSubmit(handleSubmit)}>
-                <fieldset disabled={eventMutation.isLoading}>
+                <fieldset disabled={eventMutation.isPending}>
                     <TextInput
                         {...form.getInputProps('title')}
                         required
@@ -103,7 +103,7 @@ export const CreateEvent = () => {
                         type={'submit'}
                         color={'green'}
                         fullWidth
-                        loading={eventMutation.isLoading}
+                        loading={eventMutation.isPending}
                     >
                         {t`Create Event`}
                     </Button>

@@ -3,9 +3,9 @@ import {IdParam} from "../types.ts";
 import {userClient} from "../api/user.client.ts";
 
 export const useResendUserInvitation = () => {
-    return useMutation(
-        ({userId}: {
+    return useMutation({
+        mutationFn: ({userId}: {
             userId: IdParam,
-        }) => userClient.resendInvitation(userId),
-    )
+        }) => userClient.resendInvitation(userId)
+    });
 }

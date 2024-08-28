@@ -8,16 +8,15 @@ import {GET_EVENT_ORDERS_QUERY_KEY} from "../queries/useGetEventOrders.ts";
 export const useCreateAttendee = () => {
     const queryClient = useQueryClient();
 
-    return useMutation(
-        ({eventId, attendeeData}: {
+    return useMutation({
+        mutationFn: ({eventId, attendeeData}: {
             eventId: IdParam,
             attendeeData: CreateAttendeeRequest,
         }) => attendeesClient.create(eventId, attendeeData),
-        {
-            onSuccess: () => {
-                queryClient.invalidateQueries({queryKey: [GET_EVENT_ORDERS_QUERY_KEY]});
-                 queryClient.invalidateQueries({queryKey: [GET_ATTENDEES_QUERY_KEY]});
-            },
+
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: [GET_EVENT_ORDERS_QUERY_KEY]});
+             queryClient.invalidateQueries({queryKey: [GET_ATTENDEES_QUERY_KEY]});
         }
-    )
+    });
 }

@@ -86,7 +86,7 @@ export const EditCheckInListModal = ({
                     <Button
                         type={'submit'}
                         fullWidth
-                        loading={editMutation.isLoading}
+                        loading={editMutation.isPending}
                     >
                         {t`Edit Check-In List`}
                     </Button>

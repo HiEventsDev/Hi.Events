@@ -69,7 +69,7 @@ export const EditCapacityAssignmentModal = ({
                 <Button
                     type={'submit'}
                     fullWidth
-                    loading={editMutation.isLoading}
+                    loading={editMutation.isPending}
                 >
                     {t`Edit Capacity Assignment`}
                 </Button>
