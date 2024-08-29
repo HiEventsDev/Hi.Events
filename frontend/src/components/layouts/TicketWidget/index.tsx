@@ -1,12 +1,12 @@
-import { useParams, useLocation } from "react-router-dom";
-import { LoadingMask } from "../../common/LoadingMask";
+import {useLocation, useParams} from "react-router-dom";
 import '../../../styles/widget/default.scss';
-import { useGetEventPublic } from "../../../queries/useGetEventPublic.ts";
+import {useGetEventPublic} from "../../../queries/useGetEventPublic.ts";
 import SelectTickets from "../../routes/ticket-widget/SelectTickets";
-import { useMemo } from "react";
+import {useMemo} from "react";
+import {Loader} from "@mantine/core";
 
 const TicketWidget = () => {
-    const { eventId } = useParams();
+    const {eventId} = useParams();
     const location = useLocation();
     const eventQuery = useGetEventPublic(eventId);
 
@@ -27,11 +27,21 @@ const TicketWidget = () => {
     }, [location.search]);
 
     if (!eventQuery.isFetched || !eventQuery.data) {
-        return <LoadingMask />;
+        return (
+            <div style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100vh',
+                backgroundColor: settings.colors.background
+            }}>
+                <Loader color={settings.colors.primaryText} size="md" type="dots"/>
+            </div>
+        )
     }
 
     return (
-        <div className={'hi-ticket-widget-container full-height'}>
+        <div className={'full-height'}>
             <SelectTickets
                 widgetMode={'embedded'}
                 event={eventQuery.data}
