@@ -6,7 +6,7 @@ use HiEvents\DataTransferObjects\BaseDTO;
 use HiEvents\DomainObjects\UserDomainObject;
 use Illuminate\Support\Collection;
 
-class AuthenicatedResponseDTO extends BaseDTO
+class AuthenticatedResponseDTO extends BaseDTO
 {
     public function __construct(
         public ?string          $token,

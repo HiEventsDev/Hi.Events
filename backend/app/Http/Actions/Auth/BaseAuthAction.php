@@ -4,7 +4,7 @@ namespace HiEvents\Http\Actions\Auth;
 
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Resources\Auth\AuthenticatedResponseResource;
-use HiEvents\Services\Handlers\Auth\DTO\AuthenicatedResponseDTO;
+use HiEvents\Services\Handlers\Auth\DTO\AuthenticatedResponseDTO;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
@@ -23,8 +23,12 @@ abstract class BaseAuthAction extends BaseAction
         );
     }
 
-    protected function addTokenToResponse(JsonResponse|Response $response, string $token): JsonResponse
+    protected function addTokenToResponse(JsonResponse|Response $response, ?string $token): JsonResponse
     {
+        if (!$token) {
+            return $response;
+        }
+
         $response = $response->withCookie($this->getAuthCookie($token));
 
         $response->header('X-Auth-Token', $token);
@@ -37,7 +41,7 @@ abstract class BaseAuthAction extends BaseAction
         $user = $this->getAuthenticatedUser();
 
         return $this->addTokenToResponse(
-            response: $this->jsonResponse(new AuthenticatedResponseResource(new AuthenicatedResponseDTO(
+            response: $this->jsonResponse(new AuthenticatedResponseResource(new AuthenticatedResponseDTO(
                 token: $token,
                 expiresIn: auth()->factory()->getTTL() * 60,
                 accounts: $accounts,
