@@ -4,11 +4,11 @@ namespace HiEvents\Resources\Auth;
 
 use HiEvents\Resources\Account\AccountResource;
 use HiEvents\Resources\User\UserResource;
-use HiEvents\Services\Handlers\Auth\DTO\AuthenicatedResponseDTO;
+use HiEvents\Services\Handlers\Auth\DTO\AuthenticatedResponseDTO;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @mixin AuthenicatedResponseDTO
+ * @mixin AuthenticatedResponseDTO
  */
 class AuthenticatedResponseResource extends JsonResource
 {

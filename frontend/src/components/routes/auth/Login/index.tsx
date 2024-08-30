@@ -22,7 +22,7 @@ const Login = () => {
     });
     const [showChooseAccount, setShowChooseAccount] = useState(false);
 
-    const {mutate: loginUser, isLoading, data} = useMutation({
+    const {mutate: loginUser, isPending, data} = useMutation({
         mutationFn: (userData: LoginData) => authClient.login(userData),
 
         onSuccess: (response: LoginResponse) => {
@@ -62,8 +62,8 @@ const Login = () => {
                             {t`Forgot password?`}
                         </NavLink>
                     </p>
-                    <Button type="submit" fullWidth loading={isLoading} disabled={isLoading}>
-                        {isLoading ? t`Logging in` : t`Log in`}
+                    <Button type="submit" fullWidth loading={isPending} disabled={isPending}>
+                        {isPending ? t`Logging in` : t`Log in`}
                     </Button>
                 </form>
             </Card>
