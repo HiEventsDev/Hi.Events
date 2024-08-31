@@ -102,7 +102,7 @@ class TicketPriceDomainObject extends Generated\TicketPriceDomainObjectAbstract
         return $this;
     }
 
-    public function setOffSaleReason(?string $offSaleReason): TicketDomainObject
+    public function setOffSaleReason(?string $offSaleReason): TicketPriceDomainObject
     {
         $this->offSaleReason = $offSaleReason;
 
