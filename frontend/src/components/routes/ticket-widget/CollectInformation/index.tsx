@@ -36,6 +36,7 @@ export const CollectInformation = () => {
         data: order,
         data: {order_items: orderItems} = {},
         isError: isOrderError,
+        error: orderError,
     } = useGetOrderPublic(eventId, orderShortId);
     const {
         data: event,
@@ -215,6 +216,18 @@ export const CollectInformation = () => {
 
     if (order?.is_expired) {
         navigate(`/event/${eventId}/${eventSlug}`);
+    }
+
+    if (isOrderError && orderError?.response?.status === 404) {
+        return (
+            <>
+                <HomepageInfoMessage
+                    message={t`Sorry, this order no longer exists.`}
+                    link={eventHomepagePath(event as Event)}
+                    linkText={t`Back to event page`}
+                />
+            </>
+        );
     }
 
     if (isOrderError || isEventError || isQuestionsError) {

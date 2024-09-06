@@ -15,20 +15,18 @@ use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
 use HiEvents\Services\Domain\Order\OrderItemProcessingService;
 use HiEvents\Services\Domain\Order\OrderManagementService;
 use HiEvents\Services\Handlers\Order\DTO\CreateOrderPublicDTO;
-use HiEvents\Services\Infrastructure\Session\CheckoutSessionManagementService;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Validation\UnauthorizedException;
 use Throwable;
 
-readonly class CreateOrderHandler
+class CreateOrderHandler
 {
     public function __construct(
-        private EventRepositoryInterface         $eventRepository,
-        private PromoCodeRepositoryInterface     $promoCodeRepository,
-        private OrderManagementService           $orderManagementService,
-        private OrderItemProcessingService       $orderItemProcessingService,
-        private DatabaseManager                  $databaseManager,
-        private CheckoutSessionManagementService $sessionIdentifierService,
+        private readonly EventRepositoryInterface     $eventRepository,
+        private readonly PromoCodeRepositoryInterface $promoCodeRepository,
+        private readonly OrderManagementService       $orderManagementService,
+        private readonly OrderItemProcessingService   $orderItemProcessingService,
+        private readonly DatabaseManager              $databaseManager,
     )
     {
     }
@@ -42,9 +40,7 @@ readonly class CreateOrderHandler
         bool                 $deleteExistingOrdersForSession = true
     ): OrderDomainObject
     {
-        $sessionId = $this->sessionIdentifierService->getSessionId();
-
-        return $this->databaseManager->transaction(function () use ($sessionId, $eventId, $createOrderPublicDTO, $deleteExistingOrdersForSession) {
+        return $this->databaseManager->transaction(function () use ($eventId, $createOrderPublicDTO, $deleteExistingOrdersForSession) {
             $event = $this->eventRepository
                 ->loadRelation(EventSettingDomainObject::class)
                 ->findById($eventId);
@@ -54,7 +50,7 @@ readonly class CreateOrderHandler
             $promoCode = $this->getPromoCode($createOrderPublicDTO, $eventId);
 
             if ($deleteExistingOrdersForSession) {
-                $this->orderManagementService->deleteExistingOrders($eventId, $sessionId);
+                $this->orderManagementService->deleteExistingOrders($eventId, $createOrderPublicDTO->session_identifier);
             }
 
             $order = $this->orderManagementService->createNewOrder(
@@ -63,7 +59,7 @@ readonly class CreateOrderHandler
                 timeOutMinutes: $event->getEventSettings()?->getOrderTimeoutInMinutes(),
                 locale: $createOrderPublicDTO->order_locale,
                 promoCode: $promoCode,
-                sessionId: $sessionId,
+                sessionId: $createOrderPublicDTO->session_identifier,
             );
 
             $orderItems = $this->orderItemProcessingService->process(
