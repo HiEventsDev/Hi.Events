@@ -15,7 +15,6 @@ use HiEvents\Resources\Order\OrderResourcePublic;
 use HiEvents\Services\Infrastructure\Session\CheckoutSessionManagementService;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class GetOrderActionPublic extends BaseAction
 {
@@ -52,7 +51,7 @@ class GetOrderActionPublic extends BaseAction
             ->findByShortId($orderShortId);
 
         if (!$order) {
-            throw new ResourceNotFoundException(__('Order not found'));
+            throw new NotFoundHttpException();
         }
 
         if ($order->getStatus() === OrderStatus::RESERVED->name) {
