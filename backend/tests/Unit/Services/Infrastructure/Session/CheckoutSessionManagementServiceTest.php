@@ -8,46 +8,50 @@ use Tests\TestCase;
 
 class CheckoutSessionManagementServiceTest extends TestCase
 {
-    public function testGetSessionId(): void
+    public function testGetSessionIdWithExistingCookie(): void
     {
         $request = $this->createMock(Request::class);
 
         $request->expects($this->once())
-            ->method('userAgent')
-            ->willReturn('userAgent');
-
-        $request->expects($this->once())
-            ->method('input')
+            ->method('cookie')
             ->with('session_identifier')
-            ->willReturn('sessionIdentifier');
-
-        $request->expects($this->once())
-            ->method('ip')
-            ->willReturn('ip');
+            ->willReturn('existingSessionId');
 
         $service = new CheckoutSessionManagementService($request);
 
-        $this->assertEquals(sha1('userAgent' . 'ip' . 'sessionIdentifier'), $service->getSessionId());
+        $this->assertEquals('existingSessionId', $service->getSessionId());
     }
 
     public function testVerifySession(): void
     {
         $request = $this->createMock(Request::class);
-        $request->expects($this->once())
-            ->method('userAgent')
-            ->willReturn('userAgent');
 
         $request->expects($this->once())
-            ->method('input')
+            ->method('cookie')
             ->with('session_identifier')
-            ->willReturn('sessionIdentifier');
-
-        $request->expects($this->once())
-            ->method('ip')
-            ->willReturn('ip');
+            ->willReturn('existingSessionId');
 
         $service = new CheckoutSessionManagementService($request);
 
-        $this->assertTrue($service->verifySession(sha1('userAgent' . 'ip' . 'sessionIdentifier')));
+        $this->assertTrue($service->verifySession('existingSessionId'));
+    }
+
+    public function testGetSessionCookie(): void
+    {
+        $request = $this->createMock(Request::class);
+
+        $request->expects($this->once())
+            ->method('cookie')
+            ->with('session_identifier')
+            ->willReturn('existingSessionId');
+
+        $service = new CheckoutSessionManagementService($request);
+
+        $cookie = $service->getSessionCookie();
+
+        $this->assertEquals('session_identifier', $cookie->getName());
+        $this->assertEquals('existingSessionId', $cookie->getValue());
+        $this->assertTrue($cookie->isSecure());
+        $this->assertEquals('none', $cookie->getSameSite());
     }
 }
