@@ -117,7 +117,7 @@ abstract class BaseRepository implements RepositoryInterface
         array  $columns = ['*']
     ): ?DomainObjectInterface
     {
-        $model = $this->model->where($field, '=', $value)->firstOrFail($columns);
+        $model = $this->model->where($field, '=', $value)->first($columns);
         $this->resetModel();
 
         return $this->handleSingleResult($model);
