@@ -35,7 +35,6 @@ class CreateOrderActionPublic extends BaseAction
     public function __invoke(CreateOrderRequest $request, int $eventId): JsonResponse
     {
         $this->orderCreateRequestValidationService->validateRequestData($eventId, $request->all());
-        $sessionId = $this->sessionIdentifierService->getSessionId();
 
         $order = $this->orderHandler->handle(
             $eventId,
@@ -43,19 +42,15 @@ class CreateOrderActionPublic extends BaseAction
                 'is_user_authenticated' => $this->isUserAuthenticated(),
                 'promo_code' => $request->input('promo_code'),
                 'tickets' => TicketOrderDetailsDTO::collectionFromArray($request->input('tickets')),
-                'session_identifier' => $sessionId,
+                'session_identifier' => $this->sessionIdentifierService->getSessionId(),
                 'order_locale' => $this->localeService->getLocaleOrDefault($request->getPreferredLanguage()),
             ])
         );
 
-        $response =  $this->resourceResponse(
+        return $this->resourceResponse(
             resource: OrderResourcePublic::class,
             data: $order,
             statusCode: ResponseCodes::HTTP_CREATED
-        );
-
-        return $response->withCookie(
-            cookie: $this->sessionIdentifierService->getSessionCookie(),
         );
     }
 }
