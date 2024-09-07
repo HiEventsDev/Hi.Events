@@ -18,7 +18,9 @@
 
 <div align="center">
 
+[![Share on AddToAny](https://img.shields.io/badge/Share%20Hi.Events-blue)](https://www.addtoany.com/share?linkurl=https://github.com/HiEventsDev/hi.events)
 [![X (formerly Twitter) Follow](https://img.shields.io/twitter/follow/HiEventsTickets)](https://x.com/HiEventsTickets)
+<br/>
 [![Hi.Events docs](https://img.shields.io/badge/docs-hi.events-blue)](https://hi.events/docs)
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://github.com/HiEventsDev/hi.events/LICENCE)
 [![GitHub Release](https://img.shields.io/github/v/release/HiEventsDev/hi.events?include_prereleases)](https://github.com/HiEventsDev/hi.events/releases)
