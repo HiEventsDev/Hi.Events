@@ -14,8 +14,8 @@ services:
       - LOG_CHANNEL=stderr
       - QUEUE_CONNECTION=sync
       - MAIL_MAILER=array
-      - APP_KEY=base64:ZIkx+O/ILP80gxHRLH+Yv7qKv94oHUgFdPn4OdD/hO8=
-      - JWT_SECRET=TJMzToO9cKLFpF5v4ADvNbTnvuWfgYNj
+      - APP_KEY=${APP_KEY}
+      - JWT_SECRET=${JWT_SECRET}
       - FILESYSTEM_PUBLIC_DISK=public
       - FILESYSTEM_PRIVATE_DISK=local
       - APP_CDN_URL=http://localhost:8123/storage

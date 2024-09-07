@@ -110,11 +110,26 @@ a quick start, follow these steps:
    cd hi.events/docker/all-in-one
    ```
 
-3. **Start the Docker Containers:**
+3. **Generate the `APP_KEY` and `JWT_SECRET`**
+
+   Generate the keys using the following commands:
+
+   **Unix/Linux/MacOS:**
+   ```bash
+   echo base64:$(openssl rand -base64 32)  # For APP_KEY
+   openssl rand -base64 32                 # For JWT_SECRET
+   ```
+   
+   **Windows:**
+   Check the instructions in *./docker/all-in-one/README.md* for generating the keys on Windows.
+
+   Add the generated values to the `.env` file located in `./docker/all-in-one/.env`:
+
+4. **Start the Docker Containers:**
    ```bash
    docker compose up -d
    ```
-4. **Create an account:**
+5. **Create an account:**
    ```bash
    Open your browser and navigate to http://localhost:8123/auth/register.
    ```
