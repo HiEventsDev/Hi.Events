@@ -1,6 +1,6 @@
 # Running Hi.Events Locally Without Docker
 
-This guide provides instructions for setting up Hi.Events locally without using Docker, including the necessary prerequisites, 
+This guide provides instructions for setting up Hi.Events locally without using Docker, including the necessary prerequisites,
 setup steps, and configuration details.
 
 **For a faster and more reliable setup, we strongly recommend using the official [Docker setup](https://hi.events/docs/getting-started/quick-start).**
@@ -50,8 +50,8 @@ Hi.Events has two main directories: `backend` (Laravel) and `frontend` (React).
    DB_USERNAME=postgres
    DB_PASSWORD=postgres
    ```
-   
-    This assume the default PostgreSQL configuration. Update the values as needed.
+
+   This assume the default PostgreSQL configuration. Update the values as needed.
 
 3. **Mail Server Configuration:**
 
@@ -143,18 +143,18 @@ STRIPE_WEBHOOK_SECRET=your_webhook_secret
 
 ### Frontend Setup
 
-1. **Create the `.env` File:**
+#### 1. **Create the `.env` File:**
 
-   Navigate to the `frontend` directory and copy the example `.env` file:
+Navigate to the `frontend` directory and copy the example `.env` file:
 
    ```bash
    cd frontend
    cp .env.example .env
    ```
 
-2. **Configure Frontend `.env`:**
+#### 2. **Configure Frontend `.env`:**
 
-   Update the `.env` file with the following settings:
+Update the `.env` file with the following settings:
 
    ```bash
    VITE_API_URL_CLIENT=http://localhost:8000
@@ -163,46 +163,46 @@ STRIPE_WEBHOOK_SECRET=your_webhook_secret
    VITE_STRIPE_PUBLISHABLE_KEY=pk_test_XXXXXXXX
    ```
 
-3. **Install Dependencies:**
+#### 3. **Install Dependencies:**
 
-   Install the frontend dependencies:
+Install the frontend dependencies:
 
    ```bash
    yarn install
    ```
 
-4. **Set Environment Variables:**
+#### 4. **Set Environment Variables:**
 
-   Set the environment variables before starting the frontend app.
+Set the environment variables before starting the frontend app.
 
-    - **Windows:**
+- **Windows:**
 
-      ```bash
-      $env:VITE_API_URL_CLIENT="http://localhost:8000"
-      $env:VITE_API_URL_SERVER="http://localhost:8000"
-      $env:VITE_FRONTEND_URL="http://localhost:5678"
-      $env:VITE_STRIPE_PUBLISHABLE_KEY="pk_test_XXXXXXXX"
-      ```
+  ```bash
+  $env:VITE_API_URL_CLIENT="http://localhost:8000"
+  $env:VITE_API_URL_SERVER="http://localhost:8000"
+  $env:VITE_FRONTEND_URL="http://localhost:5678"
+  $env:VITE_STRIPE_PUBLISHABLE_KEY="pk_test_XXXXXXXX"
+  ```
 
-    - **Linux/Mac:**
+- **Linux/Mac:**
 
-      ```bash
-      export VITE_API_URL_CLIENT="http://localhost:8000"
-      export VITE_API_URL_SERVER="http://localhost:8000"
-      export VITE_FRONTEND_URL="http://localhost:5678"
-      export VITE_STRIPE_PUBLISHABLE_KEY="pk_test_XXXXXXXX"
-      ```
+  ```bash
+  export VITE_API_URL_CLIENT="http://localhost:8000"
+  export VITE_API_URL_SERVER="http://localhost:8000"
+  export VITE_FRONTEND_URL="http://localhost:5678"
+  export VITE_STRIPE_PUBLISHABLE_KEY="pk_test_XXXXXXXX"
+  ```
 
-5. **Build and Start the Frontend:**
+#### 5. **Build and Start the Frontend:**
 
-   Run the following commands to build and start the frontend application:
+Run the following commands to build and start the frontend application:
 
    ```bash
    yarn build
    yarn start
    ```
 
-   Visit `http://localhost:5678` to view the frontend.
+Visit `http://localhost:5678` to view the frontend.
 
 ## Troubleshooting
 
