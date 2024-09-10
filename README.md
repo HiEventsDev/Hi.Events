@@ -8,9 +8,7 @@
 
 
 <h3 align="center">Hi.Events</h3>
-<div align="center">
- <a href="https://trendshift.io/repositories/10563" target="_blank"><img src="https://trendshift.io/api/badge/repositories/10563" alt="HiEventsDev%2Fhi.events | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
-</div>
+
 <p align="center">
 <a href="https://demo.hi.events/event/1/dog-conf-2030">Demo Event 🌟</a> • <a href="https://hi.events?utm_source=gh-readme">Website 🌎</a> • <a href="https://hi.events/docs">Documentation 📄</a> • <a href="https://hi.events/docs/getting-started?utm_source=gh-readme">Installation ⚙️</a>
 </p>
@@ -30,6 +28,10 @@
 [![Run Unit Tests](https://github.com/HiEventsDev/hi.events/actions/workflows/unit-tests.yml/badge.svg?event=push)](https://github.com/HiEventsDev/hi.events/actions/workflows/unit-tests.yml)
 [![Docker Pulls](https://img.shields.io/docker/pulls/daveearley/hi.events-all-in-one)](https://hub.docker.com/r/daveearley/hi.events-all-in-one)
 
+</div>
+
+<div align="center">
+ <a href="https://trendshift.io/repositories/10563" target="_blank"><img src="https://trendshift.io/api/badge/repositories/10563" alt="HiEventsDev%2Fhi.events | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
 </div>
 
 <hr/>
