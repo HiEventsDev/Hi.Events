@@ -39,6 +39,10 @@ class EventResource extends BaseResource
                 !is_null($this->getOrganizer()),
                 fn() => new OrganizerResource($this->getOrganizer())
             ),
+            'statistics' => $this->when(
+                !is_null($this->getEventStatistics()),
+                fn() => new EventStatisticsResource($this->getEventStatistics())
+            ),
         ];
     }
 }
