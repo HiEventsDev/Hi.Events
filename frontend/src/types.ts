@@ -170,6 +170,18 @@ export interface Event extends EventBase {
     timezone: string;
     organizer_id?: IdParam;
     location_details?: VenueAddress;
+    statistics?: EventStatistics;
+}
+
+export interface EventStatistics {
+    unique_views: number;
+    total_views: number;
+    sales_total_gross: number;
+    total_tax: number;
+    sales_total_before_additions: number;
+    total_fee: number;
+    tickets_sold: number;
+    total_refunded: number;
 }
 
 export interface EventDailyStats {

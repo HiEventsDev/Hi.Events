@@ -30,6 +30,8 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
 
     private ?OrganizerDomainObject $organizer = null;
 
+    private ?EventStatisticDomainObject $eventStatistics = null;
+
     public static function getAllowedFilterFields(): array
     {
         return [
@@ -244,6 +246,17 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
     {
         $this->capacityAssignments = $capacityAssignments;
 
+        return $this;
+    }
+
+    public function getEventStatistics(): ?EventStatisticDomainObject
+    {
+        return $this->eventStatistics;
+    }
+
+    public function setEventStatistics(?EventStatisticDomainObject $eventStatistics): self
+    {
+        $this->eventStatistics = $eventStatistics;
         return $this;
     }
 }
