@@ -9,7 +9,8 @@ const config: LinguiConfig = {
         "pt-br", // Portuguese (Brazil)
         "ru", // Russian
         "de", // German
-        "pt", // Portuguese (Portugal)
+        "pt", // Portuguese (Portugal),
+        "nl", // Dutch
 
         // "it", // Italian
         // "pl", // Polish
