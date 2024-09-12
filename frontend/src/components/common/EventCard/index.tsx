@@ -1,19 +1,20 @@
-import {ActionIcon, Button, Group, Text,} from '@mantine/core';
+import {ActionIcon, Button,} from '@mantine/core';
 import {Event, IdParam} from "../../../types.ts";
 import classes from "./EventCard.module.scss";
 import {Card} from "../Card";
 import {NavLink, useNavigate} from "react-router-dom";
 import {
-    IconCalendarEvent,
+    IconArchive,
+    IconCash,
     IconCopy,
     IconDotsVertical,
     IconEye,
     IconMap,
     IconQrcode,
     IconSettings,
-    IconUser,
+    IconUsers,
+    IconWorld,
 } from "@tabler/icons-react";
-import {relativeDate} from "../../../utilites/dates.ts";
 import {t} from "@lingui/macro"
 import {eventHomepagePath} from "../../../utilites/urlHelper.ts";
 import {EventStatusBadge} from "../EventStatusBadge";
@@ -24,6 +25,11 @@ import {ActionMenu, MenuItem} from '../ActionMenu/index.tsx';
 import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
 import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {useUpdateEventStatus} from "../../../mutations/useUpdateEventStatus.ts";
+import {formatCurrency} from "../../../utilites/currency.ts";
+import {formatNumber} from "../../../utilites/helpers.ts";
+import {formatDate} from "../../../utilites/dates.ts";
+
+const NUMBER_OF_THUMBNAILS = 10;
 
 interface EventCardProps {
     event: Event;
@@ -34,6 +40,13 @@ export function EventCard({event}: EventCardProps) {
     const [isDuplicateModalOpen, duplicateModal] = useDisclosure(false);
     const [eventId, setEventId] = useState<IdParam>();
     const statusToggleMutation = useUpdateEventStatus();
+
+    const eventThumbnailPath = ((eventId: number) => {
+        const result = (eventId % NUMBER_OF_THUMBNAILS);
+        const imageNumber = result === 0 ? NUMBER_OF_THUMBNAILS : Math.abs(result);
+
+        return '/images/event-thumbnails/event-thumb-%d.jpg'.replace('%d', String(imageNumber));
+    });
 
     const handleDuplicate = (event: Event) => {
         setEventId(() => event.id);
@@ -63,44 +76,63 @@ export function EventCard({event}: EventCardProps) {
     return (
         <>
             <Card className={classes.card}>
+                <div className={classes.imageAndDate}
+                     style={{backgroundImage: `url(${eventThumbnailPath(event.id as number)})`}}>
+                    <div className={classes.date}>
+                        <div className={classes.day}>
+                            {formatDate(event.start_date, 'D', event.timezone)}
+                        </div>
+                        <div className={classes.month}>
+                            {formatDate(event.start_date, 'MMM', event.timezone)}
+                        </div>
+                        <div className={classes.time}>
+                            {formatDate(event.start_date, 'HH:mm', event.timezone)}
+                        </div>
+                    </div>
+                </div>
                 <div className={classes.body}>
                     {event && <EventStatusBadge event={event}/>}
-                    <Text className={classes.title} mt="xs" mb="md">
+                    <div className={classes.title}>
                         <NavLink to={`/manage/event/${event.id}`}>
                             {event.title}
                         </NavLink>
-                    </Text>
+                    </div>
+                    <div className={classes.organizer}>
+                        <NavLink to={`/manage/organizer/${event?.organizer?.id}`}>
+                            {event?.organizer?.name}
+                        </NavLink>
+                    </div>
                     <div className={classes.eventInfo}>
                         {event.settings?.location_details?.venue_name && (
-                            <Group gap="xs" wrap="nowrap">
-                                <IconMap color={'#ccc'}/>
-                                <Text size="xs">
+                            <div className={classes.infoItem}>
+                                <IconMap size={16} color={'#ccc'}/>
+                                <span>
                                     {event.settings?.location_details?.venue_name}
-                                </Text>
-                            </Group>
+                                </span>
+                            </div>
                         )}
                         {event.settings?.is_online_event && (
-                            <Group gap="xs" wrap="nowrap">
-                                <IconMap color={'#ccc'}/>
-                                <Text size="xs">
-                                    {t`Online event`}
-                                </Text>
-                            </Group>
+                            <div className={classes.infoItem}>
+                                <IconWorld size={16} color={'#ccc'}/>
+                                <span>
+                            {t`Online event`}
+                            </span>
+                            </div>
                         )}
-                        <Group gap="xs" wrap="nowrap">
-                            <IconCalendarEvent color={'#ccc'}/>
-                            <Text size="xs">
-                                {relativeDate(event.start_date)}
-                            </Text>
-                        </Group>
-                        <Group gap="xs" wrap="nowrap">
-                            <IconUser color={'#ccc'}/>
-                            <Text size="xs">
-                                <NavLink to={`/manage/organizer/${event?.organizer?.id}`}>
-                                    {event?.organizer?.name}
-                                </NavLink>
-                            </Text>
-                        </Group>
+
+                        <div className={classes.infoItem}>
+                            <IconUsers size={16} color={'#ccc'}/>
+                            <span>
+                            {formatNumber(event?.statistics?.tickets_sold || 0)} {t`tickets sold`}
+                            </span>
+                        </div>
+
+                        <div className={classes.infoItem}>
+                            <IconCash size={16} color={'#ccc'}/>
+                            <span>
+                            {formatCurrency(event?.statistics?.sales_total_gross || 0, event?.currency)} {t`gross sales`}
+                            </span>
+                        </div>
                     </div>
                 </div>
                 <div className={classes.actions}>
@@ -133,7 +165,7 @@ export function EventCard({event}: EventCardProps) {
                                     },
                                     {
                                         label: event?.status === 'ARCHIVED' ? t`Restore event` : t`Archive event`,
-                                        icon: <IconCopy size={14}/>,
+                                        icon: <IconArchive size={14}/>,
                                         onClick: handleStatusToggle(event)
                                     },
                                 ].filter(Boolean) as MenuItem[],
@@ -144,7 +176,7 @@ export function EventCard({event}: EventCardProps) {
                                 <ActionIcon className={classes.desktopButton} size={"md"} variant={"transparent"}>
                                     <IconDotsVertical/>
                                 </ActionIcon>
-                                <Button className={classes.mobileButton} variant={"light"}>
+                                <Button fullWidth className={classes.mobileButton} variant={"light"}>
                                     {t`Manage`}
                                 </Button>
                             </div>

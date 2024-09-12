@@ -23,7 +23,7 @@ export const EventStatusBadge = ({event, showLifecycleStatus = true}: EventLifec
 
     return (
         <>
-            <Badge color={event?.status === 'LIVE' ? 'green' : 'gray'}>
+            <Badge variant={'outline'} color={event?.status === 'LIVE' ? 'green' : 'gray'}>
                 {event.status} {showLifecycleStatus && (
                 <>
                     &bull; {getLifecycleStatus}
