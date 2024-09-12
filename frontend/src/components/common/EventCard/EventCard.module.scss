@@ -9,6 +9,7 @@
   @include respond-below(sm) {
     flex-direction: column;
     gap: 0px;
+    padding: var(--mantine-spacing-md) !important;
   }
 
   &:hover .imageAndDate {
@@ -92,8 +93,15 @@
       gap: 20px;
       align-items: center;
 
-      .dotSeparator {
+      .infoItem {
+        display: flex;
+        gap: 5px;
+        align-items: center;
 
+        span {
+          font-size: var(--mantine-font-size-xs);
+          color: var(--mantine-color-gray-6);
+        }
       }
 
       @include respond-below(sm) {
@@ -113,11 +121,13 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
+    margin: 0 10px;
 
     @include respond-below(sm) {
       align-items: flex-start;
       justify-content: flex-start;
       margin-bottom: var(--mantine-spacing-md);
+      margin: 0;
 
       .mobileButton {
         display: flex;

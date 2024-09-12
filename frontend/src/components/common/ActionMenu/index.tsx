@@ -21,17 +21,23 @@ interface ActionMenuProps {
     target?: React.ReactNode;
 }
 
+const DefaultTarget = () => (
+    <Button variant="transparent">
+        <IconDotsVertical/>
+    </Button>
+);
+
 export const ActionMenu: React.FC<ActionMenuProps> = ({
                                                           itemsGroups,
-                                                          target = <IconDotsVertical/>
+                                                          target = <DefaultTarget/>
                                                       }) => {
     return (
         <Group wrap={'nowrap'} gap={0} justify={'flex-end'}>
             <Menu shadow="md" width={200}>
                 <Menu.Target>
-                    <Button variant={'transparent'}>
+                    <div style={{cursor: 'pointer'}}>
                         {target}
-                    </Button>
+                    </div>
                 </Menu.Target>
 
                 <Menu.Dropdown>
@@ -49,7 +55,6 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({
                                     {item.label}
                                 </Menu.Item>
                             ))}
-
                         </React.Fragment>
                     ))}
                 </Menu.Dropdown>

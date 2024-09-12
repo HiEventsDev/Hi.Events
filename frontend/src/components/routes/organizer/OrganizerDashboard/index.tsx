@@ -103,7 +103,7 @@ const OrganizerDashboard = () => {
                                total={Number(pagination?.last_page)}
                 />
             }
-            {createModalOpen && <CreateEventModal onClose={closeCreateModal}/>}
+            {createModalOpen && <CreateEventModal organizerId={organizerId} onClose={closeCreateModal}/>}
             {(editModalOpen && organizer) && <EditOrganizerModal organizerId={organizerId} onClose={closeEditModal}/>}
         </>
     );

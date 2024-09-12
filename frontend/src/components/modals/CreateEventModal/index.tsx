@@ -1,7 +1,7 @@
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
 import {useNavigate} from "react-router-dom";
 import {useGetAccount} from "../../../queries/useGetAccount.ts";
-import {Event, GenericModalProps, Organizer} from "../../../types.ts";
+import {Event, GenericModalProps, IdParam, Organizer} from "../../../types.ts";
 import {useEffect, useState} from "react";
 import {showSuccess} from "../../../utilites/notifications.tsx";
 import {t} from "@lingui/macro";
@@ -16,7 +16,11 @@ import classes from "./CreateEventModal.module.scss";
 import {OrganizerCreateForm} from "../../forms/OrganizerForm";
 import {Card} from "../../common/Card";
 
-export const CreateEventModal = ({onClose}: GenericModalProps) => {
+interface CreateEventModalProps extends GenericModalProps {
+    organizerId?: IdParam;
+}
+
+export const CreateEventModal = ({onClose, organizerId}: CreateEventModalProps) => {
     const errorHandler = useFormErrorResponseHandler();
     const navigate = useNavigate();
     const {data: account, isFetched: isAccountFetched} = useGetAccount();
@@ -28,7 +32,7 @@ export const CreateEventModal = ({onClose}: GenericModalProps) => {
             start_date: '',
             end_date: undefined,
             description: undefined,
-            organizer_id: undefined,
+            organizer_id: organizerId ? String(organizerId) : undefined,
         },
         validate: {
             title: hasLength({max: 150}, t`Name should be less than 150 characters`),
