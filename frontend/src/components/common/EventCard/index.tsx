@@ -1,16 +1,19 @@
-import {ActionIcon, Button, Group, Text,} from '@mantine/core';
+import {ActionIcon, Button,} from '@mantine/core';
 import {Event, IdParam} from "../../../types.ts";
 import classes from "./EventCard.module.scss";
 import {Card} from "../Card";
 import {NavLink, useNavigate} from "react-router-dom";
 import {
     IconArchive,
+    IconCash,
     IconCopy,
     IconDotsVertical,
     IconEye,
     IconMap,
     IconQrcode,
     IconSettings,
+    IconUsers,
+    IconWorld,
 } from "@tabler/icons-react";
 import {t} from "@lingui/macro"
 import {eventHomepagePath} from "../../../utilites/urlHelper.ts";
@@ -40,7 +43,7 @@ export function EventCard({event}: EventCardProps) {
 
     const eventThumbnailPath = ((eventId: number) => {
         const result = (eventId % NUMBER_OF_THUMBNAILS);
-        const imageNumber =  result === 0 ? NUMBER_OF_THUMBNAILS : Math.abs(result);
+        const imageNumber = result === 0 ? NUMBER_OF_THUMBNAILS : Math.abs(result);
 
         return '/images/event-thumbnails/event-thumb-%d.jpg'.replace('%d', String(imageNumber));
     });
@@ -101,24 +104,35 @@ export function EventCard({event}: EventCardProps) {
                     </div>
                     <div className={classes.eventInfo}>
                         {event.settings?.location_details?.venue_name && (
-                            <Group gap="xs" wrap="nowrap">
-                                <IconMap color={'#ccc'}/>
-                                <Text size="xs">
+                            <div className={classes.infoItem}>
+                                <IconMap size={16} color={'#ccc'}/>
+                                <span>
                                     {event.settings?.location_details?.venue_name}
-                                </Text>
-                            </Group>
+                                </span>
+                            </div>
                         )}
                         {event.settings?.is_online_event && (
-                            <Text size="xs">
-                                {t`Online event`}
-                            </Text>
+                            <div className={classes.infoItem}>
+                                <IconWorld size={16} color={'#ccc'}/>
+                                <span>
+                            {t`Online event`}
+                            </span>
+                            </div>
                         )}
-                        <Text size="xs">
+
+                        <div className={classes.infoItem}>
+                            <IconUsers size={16} color={'#ccc'}/>
+                            <span>
                             {formatNumber(event?.statistics?.tickets_sold || 0)} {t`tickets sold`}
-                        </Text>
-                        <Text size="xs">
+                            </span>
+                        </div>
+
+                        <div className={classes.infoItem}>
+                            <IconCash size={16} color={'#ccc'}/>
+                            <span>
                             {formatCurrency(event?.statistics?.sales_total_gross || 0, event?.currency)} {t`gross sales`}
-                        </Text>
+                            </span>
+                        </div>
                     </div>
                 </div>
                 <div className={classes.actions}>
@@ -162,7 +176,7 @@ export function EventCard({event}: EventCardProps) {
                                 <ActionIcon className={classes.desktopButton} size={"md"} variant={"transparent"}>
                                     <IconDotsVertical/>
                                 </ActionIcon>
-                                <Button className={classes.mobileButton} variant={"light"}>
+                                <Button fullWidth className={classes.mobileButton} variant={"light"}>
                                     {t`Manage`}
                                 </Button>
                             </div>
