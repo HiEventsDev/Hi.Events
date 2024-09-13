@@ -10,11 +10,24 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class EventSettingsResourcePublic extends JsonResource
 {
+    public function __construct(
+        mixed                 $resource,
+        private readonly bool $includePostCheckoutData = false,
+    )
+    {
+        parent::__construct($resource);
+    }
+
     public function toArray($request): array
     {
         return [
             'pre_checkout_message' => $this->getPreCheckoutMessage(),
-            'post_checkout_message' => $this->getPostCheckoutMessage(),
+
+            $this->mergeWhen($this->includePostCheckoutData, [
+                'post_checkout_message' => $this->getPostCheckoutMessage(),
+                'online_event_connection_details' => $this->getOnlineEventConnectionDetails(),
+            ]),
+
             'ticket_page_message' => $this->getTicketPageMessage(),
             'continue_button_text' => $this->getContinueButtonText(),
             'required_attendee_details' => $this->getRequireAttendeeDetails(),
@@ -35,7 +48,6 @@ class EventSettingsResourcePublic extends JsonResource
 
             'location_details' => $this->getLocationDetails(),
             'is_online_event' => $this->getIsOnlineEvent(),
-            'online_event_connection_details' => $this->getOnlineEventConnectionDetails(),
 
             'seo_title' => $this->getSeoTitle(),
             'seo_description' => $this->getSeoDescription(),

@@ -1,7 +1,6 @@
 import {t} from "@lingui/macro";
 import {useGetOrderPublic} from "../../../../queries/useGetOrderPublic.ts";
 import {useNavigate, useParams} from "react-router-dom";
-import {useGetEventPublic} from "../../../../queries/useGetEventPublic.ts";
 import classes from './OrderSummaryAndTickets.module.scss';
 import {LoadingMask} from "../../../common/LoadingMask";
 import {Order, Ticket} from "../../../../types.ts";
@@ -33,11 +32,11 @@ const OrderStatus = ({order}: { order: Order }) => {
 
 export const OrderSummaryAndTickets = () => {
     const {eventId, orderShortId} = useParams();
-    const {data: order, isFetched: orderIsFetched} = useGetOrderPublic(eventId, orderShortId);
-    const {data: event, isFetched: eventIsFetched} = useGetEventPublic(eventId);
+    const {data: order, isFetched: orderIsFetched} = useGetOrderPublic(eventId, orderShortId, ['event']);
+    const event = order?.event;
     const navigate = useNavigate();
 
-    if (!orderIsFetched || !eventIsFetched || !order || !event) {
+    if (!orderIsFetched || !order || !event) {
         return <LoadingMask/>;
     }
 
