@@ -54,6 +54,11 @@ class Event extends BaseModel
         return $this->hasMany(CapacityAssignment::class);
     }
 
+    public function event_statistics(): HasOne
+    {
+        return $this->hasOne(EventStatistic::class);
+    }
+
     public static function boot()
     {
         parent::boot();

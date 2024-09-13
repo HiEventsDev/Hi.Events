@@ -8,6 +8,7 @@
 
 
 <h3 align="center">Hi.Events</h3>
+
 <p align="center">
 <a href="https://demo.hi.events/event/1/dog-conf-2030">Demo Event 🌟</a> • <a href="https://hi.events?utm_source=gh-readme">Website 🌎</a> • <a href="https://hi.events/docs">Documentation 📄</a> • <a href="https://hi.events/docs/getting-started?utm_source=gh-readme">Installation ⚙️</a>
 </p>
@@ -18,6 +19,9 @@
 
 <div align="center">
 
+[![Share on AddToAny](https://img.shields.io/badge/Share%20Hi.Events-blue)](https://www.addtoany.com/share?linkurl=https://github.com/HiEventsDev/hi.events)
+[![X (formerly Twitter) Follow](https://img.shields.io/twitter/follow/HiEventsTickets)](https://x.com/HiEventsTickets)
+<br/>
 [![Hi.Events docs](https://img.shields.io/badge/docs-hi.events-blue)](https://hi.events/docs)
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://github.com/HiEventsDev/hi.events/LICENCE)
 [![GitHub Release](https://img.shields.io/github/v/release/HiEventsDev/hi.events?include_prereleases)](https://github.com/HiEventsDev/hi.events/releases)
@@ -26,13 +30,18 @@
 
 </div>
 
+<div align="center">
+ <a href="https://trendshift.io/repositories/10563" target="_blank"><img src="https://trendshift.io/api/badge/repositories/10563" alt="HiEventsDev%2Fhi.events | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
+</div>
+
 <hr/>
 <p align="center" style="text-align: center;">
 <a href="README.de.md">Deutsch</a> |
 <a href="README.pt.md">Português</a> |
 <a href="README.fr.md">Français</a> |
 <a href="README.es.md">Español</a> |
-<a href="README.zh-cn.md">中文 (Zhōngwén)</a>
+<a href="README.zh-cn.md">中文 (Zhōngwén)</a> |
+<a href="README.ja.md">日本語</a>
 </p>
 <hr/>
 
@@ -110,11 +119,26 @@ a quick start, follow these steps:
    cd hi.events/docker/all-in-one
    ```
 
-3. **Start the Docker Containers:**
+3. **Generate the `APP_KEY` and `JWT_SECRET`**
+
+   Generate the keys using the following commands:
+
+   **Unix/Linux/MacOS:**
+   ```bash
+   echo base64:$(openssl rand -base64 32)  # For APP_KEY
+   openssl rand -base64 32                 # For JWT_SECRET
+   ```
+   
+   **Windows:**
+   Check the instructions in *./docker/all-in-one/README.md* for generating the keys on Windows.
+
+   Add the generated values to the `.env` file located in `./docker/all-in-one/.env`:
+
+4. **Start the Docker Containers:**
    ```bash
    docker compose up -d
    ```
-4. **Create an account:**
+5. **Create an account:**
    ```bash
    Open your browser and navigate to http://localhost:8123/auth/register.
    ```

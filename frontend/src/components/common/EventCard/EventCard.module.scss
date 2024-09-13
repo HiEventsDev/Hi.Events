@@ -1,14 +1,82 @@
 @import "../../../styles/mixins.scss";
 
 .card {
-  background-color: var(--mantine-color-body);
-  padding: 0 20px;
   display: flex;
-  gap: 20px;
+  gap: 10px;
+  overflow: hidden;
+  padding: var(--mantine-spacing-sm) !important;
 
   @include respond-below(sm) {
     flex-direction: column;
     gap: 0px;
+    padding: var(--mantine-spacing-md) !important;
+  }
+
+  &:hover .imageAndDate {
+    background-size: 210%;
+  }
+
+  .imageAndDate {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0;
+    width: 180px;
+    background-size: 150%;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: var(--tk-radius-md);
+    overflow: hidden;
+    transition: background-size 15s ease;
+
+    @include respond-below(sm) {
+      flex-direction: row;
+      gap: 20px;
+      align-items: flex-start;
+      justify-content: flex-start;
+      width: 100%;
+      height: 100px;
+    }
+
+    .date {
+      font-size: var(--mantine-font-size-sm);
+      color: #fff;
+      font-weight: 500;
+      background-color: #320c51b5;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      flex-direction: column;
+
+      .day {
+        font-size: 2em;
+        font-weight: 500;
+      }
+
+      .month {
+        font-size: 1.5em;
+        font-weight: 500;
+        text-transform: uppercase;
+      }
+
+      .time {
+        font-size: 1em;
+        font-weight: 500;
+      }
+
+      @include respond-below(sm) {
+        .day {
+          font-size: 1.2em;
+        }
+        .month {
+          font-size: 0.8em;
+        }
+      }
+    }
   }
 
   .body {
@@ -25,8 +93,15 @@
       gap: 20px;
       align-items: center;
 
-      .dotSeparator {
+      .infoItem {
+        display: flex;
+        gap: 5px;
+        align-items: center;
 
+        span {
+          font-size: var(--mantine-font-size-xs);
+          color: var(--mantine-color-gray-6);
+        }
       }
 
       @include respond-below(sm) {
@@ -46,11 +121,13 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
+    margin: 0 10px;
 
     @include respond-below(sm) {
       align-items: flex-start;
-        justify-content: flex-start;
+      justify-content: flex-start;
       margin-bottom: var(--mantine-spacing-md);
+      margin: 0;
 
       .mobileButton {
         display: flex;
@@ -83,5 +160,23 @@
 
 .title {
   line-height: 1.2;
+  margin-top: var(--tk-spacing-md);
+  margin-bottom: 4px;
+
+  a {
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 
+.organizer {
+  font-size: var(--mantine-font-size-sm);
+  margin-bottom: var(--tk-spacing-md);
+
+  a {
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
