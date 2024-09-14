@@ -70,9 +70,11 @@ readonly class OrderCancelService
     {
         $attendees = $this->attendeeRepository->findWhere([
             'order_id' => $order->getId(),
+            'status' => AttendeeStatus::ACTIVE->name,
         ]);
 
-        $ticketIdCountMap = $attendees->map(fn(AttendeeDomainObject $attendee) => $attendee->getTicketPriceId())->countBy();
+        $ticketIdCountMap = $attendees
+            ->map(fn(AttendeeDomainObject $attendee) => $attendee->getTicketPriceId())->countBy();
 
         foreach ($ticketIdCountMap as $ticketPriceId => $count) {
             $this->ticketQuantityService->decreaseQuantitySold($ticketPriceId, $count);
