@@ -3,6 +3,7 @@
 namespace HiEvents\Services\Domain\Ticket;
 
 use HiEvents\Constants;
+use HiEvents\DomainObjects\CapacityAssignmentDomainObject;
 use HiEvents\DomainObjects\PromoCodeDomainObject;
 use HiEvents\DomainObjects\TicketDomainObject;
 use HiEvents\DomainObjects\TicketPriceDomainObject;
@@ -37,7 +38,8 @@ class TicketFilterService
             return $tickets;
         }
 
-        $ticketQuantities = $this->fetchAvailableTicketQuantitiesService
+        $ticketQuantities = $this
+            ->fetchAvailableTicketQuantitiesService
             ->getAvailableTicketQuantities($tickets->first()->getEventId());
 
         return $tickets
@@ -84,12 +86,21 @@ class TicketFilterService
             });
         }
 
+
         $ticket->getTicketPrices()?->map(function (TicketPriceDomainObject $price) use ($ticketQuantities) {
             $availableQuantity = $ticketQuantities->where('price_id', $price->getId())->first()?->quantity_available;
             $availableQuantity = $availableQuantity === Constants::INFINITE ? null : $availableQuantity;
             $price->setQuantityAvailable(
                 max($availableQuantity, 0)
             );
+        });
+
+        $ticketQuantities->each(function (AvailableTicketQuantitiesDTO $quantity) use ($ticket) {
+            if ($quantity->capacities !== null && $quantity->capacities->isNotEmpty() && $quantity->ticket_id === $ticket->getId()) {
+                $ticket->setQuantityAvailable(
+                    $quantity->capacities->min(fn(CapacityAssignmentDomainObject $capacity) => $capacity->getAvailableCapacity())
+                );
+            }
         });
 
         return $ticket;

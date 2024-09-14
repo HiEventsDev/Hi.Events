@@ -26,7 +26,7 @@ class TicketResourcePublic extends JsonResource
             'event_id' => $this->getEventId(),
             'is_before_sale_start_date' => $this->isBeforeSaleStartDate(),
             'is_after_sale_end_date' => $this->isAfterSaleEndDate(),
-            $this->mergeWhen($this->getShowQuantityRemaining(), fn () => [
+            $this->mergeWhen($this->getShowQuantityRemaining(), fn() => [
                 'quantity_available' => $this->getQuantityAvailable(),
             ]),
             'price' => $this->when(
@@ -35,7 +35,9 @@ class TicketResourcePublic extends JsonResource
             ),
             'prices' => $this->when(
                 (bool)$this->getTicketPrices(),
-                fn() => TicketPriceResourcePublic::collection($this->getTicketPrices()),
+                fn() => TicketPriceResourcePublic::collectionWithAdditionalData($this->getTicketPrices(), [
+                    TicketPriceResourcePublic::SHOW_QUANTITY_AVAILABLE => $this->getShowQuantityRemaining(),
+                ]),
             ),
             'taxes' => $this->when(
                 (bool)$this->getTaxAndFees(),

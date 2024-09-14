@@ -286,6 +286,7 @@ export interface TicketPrice {
     initial_quantity_available?: number;
     quantity_sold?: number;
     is_hidden?: boolean;
+    quantity_remaining?: number;
 }
 
 export interface Ticket {
