@@ -86,7 +86,6 @@ class TicketFilterService
             });
         }
 
-
         $ticket->getTicketPrices()?->map(function (TicketPriceDomainObject $price) use ($ticketQuantities) {
             $availableQuantity = $ticketQuantities->where('price_id', $price->getId())->first()?->quantity_available;
             $availableQuantity = $availableQuantity === Constants::INFINITE ? null : $availableQuantity;
@@ -95,6 +94,8 @@ class TicketFilterService
             );
         });
 
+        // If there is a capacity assigned to the ticket, we set the capacity to capacity available qty, or the sum of all
+        // ticket prices qty, whichever is lower
         $ticketQuantities->each(function (AvailableTicketQuantitiesDTO $quantity) use ($ticket) {
             if ($quantity->capacities !== null && $quantity->capacities->isNotEmpty() && $quantity->ticket_id === $ticket->getId()) {
                 $ticket->setQuantityAvailable(
