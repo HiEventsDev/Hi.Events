@@ -100,7 +100,7 @@ const CheckIn = () => {
         )
     }
 
-    const handleQrCheckIn = (attendeePublicId: string, onRequestComplete?: () => void) => {
+    const handleQrCheckIn = (attendeePublicId: string, onRequestComplete: () => void, onFailure: () => void) => {
         checkInMutation.mutate({
             checkInListShortId: checkInListShortId,
             attendeePublicId: attendeePublicId,
@@ -119,6 +119,8 @@ const CheckIn = () => {
                 showSuccess(t`Checked in successfully`);
             },
             onError: (error) => {
+                onFailure();
+
                 if (!networkStatus.online) {
                     showError(t`You are offline`);
                     return;

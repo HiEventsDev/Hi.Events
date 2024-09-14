@@ -8,7 +8,7 @@ import {showError} from "../../../utilites/notifications.tsx";
 import {t, Trans} from "@lingui/macro";
 
 interface QRScannerComponentProps {
-    onCheckIn: (attendeePublicId: string, onRequestComplete?: () => void) => void;
+    onCheckIn: (attendeePublicId: string, onRequestComplete: () => void, onFailure: () => void) => void;
     onClose: () => void;
 }
 
@@ -62,10 +62,14 @@ export const QRScannerComponent = (props: QRScannerComponentProps) => {
             if (!isCheckingIn && !alreadyScanned) {
                 setIsCheckingIn(true);
                 props.onCheckIn(debouncedAttendeeId, () => {
-                    setIsCheckingIn(false);
-                    setProcessedAttendeeIds(prevIds => [...prevIds, debouncedAttendeeId]);
-                    setCurrentAttendeeId(null);
-                });
+                        setIsCheckingIn(false);
+                        setProcessedAttendeeIds(prevIds => [...prevIds, debouncedAttendeeId]);
+                        setCurrentAttendeeId(null);
+                    }, () => {
+                        setIsCheckingIn(false);
+                        setCurrentAttendeeId(null);
+                    }
+                );
             }
         }
     }, [debouncedAttendeeId]);
