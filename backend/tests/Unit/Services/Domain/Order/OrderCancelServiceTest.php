@@ -6,6 +6,7 @@ use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\Mail\Order\OrderCancelled;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
@@ -63,7 +64,15 @@ class OrderCancelServiceTest extends TestCase
             m::mock(AttendeeDomainObject::class)->shouldReceive('getTicketPriceId')->andReturn(2)->mock(),
         ]);
 
-        $this->attendeeRepository->shouldReceive('findWhere')->once()->andReturn($attendees);
+        $this->attendeeRepository
+            ->shouldReceive('findWhere')
+            ->once()
+            ->with([
+                'order_id' => $order->getId(),
+                'status' => AttendeeStatus::ACTIVE->name,
+            ])
+            ->andReturn($attendees);
+
         $this->attendeeRepository->shouldReceive('updateWhere')->once();
 
         $this->ticketQuantityService->shouldReceive('decreaseQuantitySold')->twice();
