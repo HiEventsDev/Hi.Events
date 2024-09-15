@@ -3,6 +3,7 @@
 namespace HiEvents\Services\Domain\Order;
 
 use Exception;
+use HiEvents\DomainObjects\CapacityAssignmentDomainObject;
 use HiEvents\DomainObjects\Enums\TicketType;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\Generated\PromoCodeDomainObjectAbstract;
@@ -13,6 +14,7 @@ use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
 use HiEvents\Repository\Interfaces\TicketRepositoryInterface;
 use HiEvents\Services\Domain\Ticket\AvailableTicketQuantitiesFetchService;
+use HiEvents\Services\Domain\Ticket\DTO\AvailableTicketQuantitiesDTO;
 use HiEvents\Services\Domain\Ticket\DTO\AvailableTicketQuantitiesResponseDTO;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
@@ -186,7 +188,16 @@ class OrderCreateRequestValidationService
     {
         $totalQuantity = collect($ticketAndQuantities['quantities'])->sum('quantity');
         $maxPerOrder = (int)$ticket->getMaxPerOrder() ?: 100;
-        $minPerOrder = (int)$ticket->getMinPerOrder() ?: 1;
+
+        $capacityMaximum = $this->availableTicketQuantities
+            ->ticketQuantities
+            ->where('ticket_id', $ticket->getId())
+            ->map(fn(AvailableTicketQuantitiesDTO $price) => $price->capacities)
+            ->flatten()
+            ->min(fn(CapacityAssignmentDomainObject $capacity) => $capacity->getCapacity());
+
+        # if there are fewer tickets available than the configured minimum, we allow less than the minimum to be purchased
+        $minPerOrder = min((int)$ticket->getMinPerOrder() ?: 1, $capacityMaximum ?: $maxPerOrder);
 
         $this->validateTicketPricesQuantity(
             quantities: $ticketAndQuantities['quantities'],

@@ -11,15 +11,18 @@ interface NumberSelectorProps extends TextInputProps {
     fieldName: string,
     min?: number;
     max?: number;
+    sharedValues?: SharedValues;
 }
 
-export const NumberSelector = ({formInstance, fieldName, min, max}: NumberSelectorProps) => {
+export const NumberSelector = ({formInstance, fieldName, min, max, sharedValues}: NumberSelectorProps) => {
     const handlers = useRef<NumberInputHandlers>(null);
     // Start with 0, ensuring it's treated as number for consistency
     const [value, setValue] = useState<number>(0);
 
     const minValue = min || 0;
     const maxValue = max || 100;
+
+    const [sharedVals, setSharedVals] = useState<SharedValues>(sharedValues ?? new SharedValues(maxValue));
 
     useEffect(() => {
         formInstance.setFieldValue(fieldName, value);
@@ -35,20 +38,35 @@ export const NumberSelector = ({formInstance, fieldName, min, max}: NumberSelect
 
     const increment = () => {
         // Adjust from 0 to minValue on the first increment, if minValue is greater than 0
-        if (value === 0 && minValue > 0) {
-            setValue(minValue);
+        if (value === 0 && minValue > 1) {
+            // If incrementing from 0, we have a few scenarios:
+            // 1. If there is sufficient quantity, increment to the minValue
+            // 2. If there is insufficient quantity to reach minValue, increment to the remaining quantity
+            // 3. If another NumberSelector is sharing this NumberSelector's SharedValues, and the amount
+            //    selected on that NumberSelector is less than minValue, increment to an amount where the
+            //    combined count across the NumberSelectors is minValue (or at least 1)
+            let adjustedMinimum = Math.max(1, minValue - sharedVals.currentValue)
+            setValue(sharedVals.changeValue(Math.min(adjustedMinimum, maxValue, sharedVals.quantityRemaining)))
+        } else if (sharedVals.currentValue < minValue) {
+            setValue(prevValue => prevValue + (sharedVals.changeValue(minValue - sharedVals.currentValue)))
         } else if (value < maxValue) {
-            setValue(prevValue => Math.min(maxValue, prevValue + 1));
+            setValue(prevValue => prevValue + sharedVals.changeValue(1));
         }
     };
 
     const decrement = () => {
-        // Ensure decrement does not go below minValue
-        if (value > minValue) {
-            setValue(prevValue => Math.max(minValue, prevValue - 1));
+        // Ensure decrement does not bring the current shared value between 0 and minValue
+        if (sharedVals.currentValue > minValue) {
+            setValue(prevValue => prevValue + sharedVals.changeValue(-1));
         } else {
+            sharedVals.changeValue(-value)
             setValue(0);
         }
+    };
+
+    const changeValue = (newValue: number) => {
+        let adjustedDifference = sharedVals.changeValue(newValue - value);
+        setValue(value + adjustedDifference);
     };
 
     return (
@@ -71,14 +89,14 @@ export const NumberSelector = ({formInstance, fieldName, min, max}: NumberSelect
                 handlersRef={handlers}
                 value={value}
                 hideControls
-                onChange={(value) => setValue(value as number)}
+                onChange={changeValue}
                 classNames={{input: classes.input}}
             />
 
             <ActionIcon
                 size={28}
                 onClick={increment}
-                disabled={value >= maxValue}
+                disabled={value >= maxValue || sharedVals.quantityRemaining == 0}
                 onMouseDown={(event) => event.preventDefault()}
                 className={classes.control}
             >
@@ -125,5 +143,28 @@ export const NumberSelectorSelect = ({formInstance, fieldName, min, max, classNa
             />
         </div>
     );
+}
+
+// Used to aggregate related NumberSelectors together, to allow them to share a common maximum
+// and know about the collective values of all the selectors
+export class SharedValues {
+    sharedMax: number;
+    currentValue: number;
+
+    constructor(sharedMax: number) {
+        this.sharedMax = sharedMax;
+        this.currentValue = 0;
+    }
+
+    get quantityRemaining() {
+        return this.sharedMax - this.currentValue;
+    }
+
+    changeValue(difference: number) {
+        let adjustedDifference = Math.min(difference, this.sharedMax - this.currentValue);
+        this.currentValue += adjustedDifference;
+
+        return adjustedDifference;
+    }
 }
 
