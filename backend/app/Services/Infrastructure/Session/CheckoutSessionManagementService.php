@@ -11,6 +11,8 @@ class CheckoutSessionManagementService
 {
     private const SESSION_IDENTIFIER = 'session_identifier';
 
+    private ?string $sessionId = null;
+
     public function __construct(
         private readonly Request $request,
     )
@@ -22,13 +24,13 @@ class CheckoutSessionManagementService
      */
     public function getSessionId(): string
     {
-        $sessionId = $this->request->cookie(self::SESSION_IDENTIFIER);
-
-        if (!$sessionId) {
-            $sessionId = $this->createSessionId();
+        if ($this->sessionId) {
+            return $this->sessionId;
         }
 
-        return $sessionId;
+        $this->sessionId = $this->request->cookie(self::SESSION_IDENTIFIER) ?? $this->createSessionId();
+
+        return $this->sessionId;
     }
 
     public function verifySession(string $identifier): bool
