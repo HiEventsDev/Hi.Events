@@ -9,12 +9,20 @@ import {useDisclosure} from "@mantine/hooks";
 import {AboutModal} from "../../modals/AboutModal/index.tsx";
 import {getConfig} from "../../../utilites/config.ts";
 
+interface Link {
+    label: string;
+    icon: any;
+    link?: string;
+    target?: string;
+    onClick?: (event: any) => void;
+}
+
 export const GlobalMenu = () => {
     const {data: me} = useGetMe();
     const [aboutModalOpen, {open: openAboutModal, close: closeAboutModal}] =
         useDisclosure(false);
 
-    const links = [
+    const links: Link[] = [
         {
             label: t`My Profile`,
             icon: IconUser,
@@ -25,16 +33,6 @@ export const GlobalMenu = () => {
             icon: IconSettingsCog,
             link: `/account/settings`,
         },
-        {
-            label: t`Logout`,
-            icon: IconLogout,
-            onClick: (event: any) => {
-                event.preventDefault();
-                authClient.logout();
-                localStorage.removeItem("token");
-                window.location.href = "/auth/login";
-            },
-        },
     ];
 
     if (!getConfig("VITE_HIDE_ABOUT_LINK")) {
@@ -44,6 +42,17 @@ export const GlobalMenu = () => {
             onClick: openAboutModal,
         });
     }
+
+    links.push({
+        label: t`Logout`,
+        icon: IconLogout,
+        onClick: (event: any) => {
+            event.preventDefault();
+            authClient.logout();
+            localStorage.removeItem("token");
+            window.location.href = "/auth/login";
+        },
+    });
 
     return (
         <>
