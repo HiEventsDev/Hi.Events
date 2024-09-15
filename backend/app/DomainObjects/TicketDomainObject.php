@@ -17,6 +17,8 @@ class TicketDomainObject extends Generated\TicketDomainObjectAbstract implements
 
     private ?string $offSaleReason = null;
 
+    private ?int $quantityAvailable = null;
+
     public static function getDefaultSort(): string
     {
         return self::ORDER;
@@ -86,11 +88,24 @@ class TicketDomainObject extends Generated\TicketDomainObjectAbstract implements
 
     public function getQuantityAvailable(): int
     {
+        $availableCount = $this->getTicketPrices()->sum(fn(TicketPriceDomainObject $price) => $price->getQuantityAvailable());
+
+        if ($this->quantityAvailable !== null) {
+            return min($availableCount, $this->quantityAvailable);
+        }
+
         if (!$this->getTicketPrices() || $this->getTicketPrices()->isEmpty()) {
             return 0;
         }
 
-        return $this->getTicketPrices()->sum(fn(TicketPriceDomainObject $price) => $price->getQuantityAvailable());
+        return $availableCount;
+    }
+
+    public function setQuantityAvailable(int $quantityAvailable): TicketDomainObject
+    {
+        $this->quantityAvailable = $quantityAvailable;
+
+        return $this;
     }
 
     public function isBeforeSaleStartDate(): bool

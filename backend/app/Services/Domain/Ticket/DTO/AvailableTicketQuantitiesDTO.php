@@ -3,6 +3,7 @@
 namespace HiEvents\Services\Domain\Ticket\DTO;
 
 use HiEvents\DataTransferObjects\BaseDTO;
+use HiEvents\DomainObjects\CapacityAssignmentDomainObject;
 use Illuminate\Support\Collection;
 
 class AvailableTicketQuantitiesDTO extends BaseDTO
@@ -15,6 +16,7 @@ class AvailableTicketQuantitiesDTO extends BaseDTO
         public int         $quantity_available,
         public int         $quantity_reserved,
         public ?int        $initial_quantity_available,
+        /** @var Collection<CapacityAssignmentDomainObject> */
         public ?Collection $capacities = null,
     )
     {

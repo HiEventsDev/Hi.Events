@@ -3,6 +3,7 @@
 namespace HiEvents\Services\Domain\Ticket;
 
 use HiEvents\Constants;
+use HiEvents\DomainObjects\CapacityAssignmentDomainObject;
 use HiEvents\DomainObjects\PromoCodeDomainObject;
 use HiEvents\DomainObjects\TicketDomainObject;
 use HiEvents\DomainObjects\TicketPriceDomainObject;
@@ -37,7 +38,8 @@ class TicketFilterService
             return $tickets;
         }
 
-        $ticketQuantities = $this->fetchAvailableTicketQuantitiesService
+        $ticketQuantities = $this
+            ->fetchAvailableTicketQuantitiesService
             ->getAvailableTicketQuantities($tickets->first()->getEventId());
 
         return $tickets
@@ -90,6 +92,16 @@ class TicketFilterService
             $price->setQuantityAvailable(
                 max($availableQuantity, 0)
             );
+        });
+
+        // If there is a capacity assigned to the ticket, we set the capacity to capacity available qty, or the sum of all
+        // ticket prices qty, whichever is lower
+        $ticketQuantities->each(function (AvailableTicketQuantitiesDTO $quantity) use ($ticket) {
+            if ($quantity->capacities !== null && $quantity->capacities->isNotEmpty() && $quantity->ticket_id === $ticket->getId()) {
+                $ticket->setQuantityAvailable(
+                    $quantity->capacities->min(fn(CapacityAssignmentDomainObject $capacity) => $capacity->getAvailableCapacity())
+                );
+            }
         });
 
         return $ticket;
