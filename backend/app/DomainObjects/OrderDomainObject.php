@@ -21,6 +21,8 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
     /** @var Collection<QuestionAndAnswerViewDomainObject>|null */
     public ?Collection $questionAndAnswerViews = null;
 
+    public ?EventDomainObject $event = null;
+
     public static function getAllowedSorts(): AllowedSorts
     {
         return new AllowedSorts(
@@ -144,5 +146,16 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
     public function getQuestionAndAnswerViews(): ?Collection
     {
         return $this->questionAndAnswerViews;
+    }
+
+    public function setEvent(?EventDomainObject $event): OrderDomainObject
+    {
+        $this->event = $event;
+        return $this;
+    }
+
+    public function getEvent(): ?EventDomainObject
+    {
+        return $this->event;
     }
 }

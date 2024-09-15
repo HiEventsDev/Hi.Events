@@ -59,8 +59,8 @@ export const TieredPricing = ({ticket, event, form, ticketIndex}: TieredPricingP
                                     <>
                                         <NumberSelector
                                             className={'hi-ticket-quantity-selector'}
-                                            min={(ticket.type !== TicketType.Tiered ? ticket.min_per_order : 0) || 0}
-                                            max={(ticket.type !== TicketType.Tiered ? ticket.max_per_order : 100) || 100}
+                                            min={ticket.min_per_order ?? 0}
+                                            max={(Math.min(price.quantity_remaining ?? 50, ticket.max_per_order ?? 50))}
                                             fieldName={`tickets.${ticketIndex}.quantities.${index}.quantity`}
                                             formInstance={form}
                                         />

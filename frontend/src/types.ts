@@ -286,6 +286,7 @@ export interface TicketPrice {
     initial_quantity_available?: number;
     quantity_sold?: number;
     is_hidden?: boolean;
+    quantity_remaining?: number;
 }
 
 export interface Ticket {
@@ -396,6 +397,7 @@ export interface Order {
     promo_code_id?: number;
     taxes_and_fees_rollup?: TaxesAndFeesRollup;
     question_answers?: QuestionAnswer[];
+    event?: Event;
 }
 
 export interface OrderItem {

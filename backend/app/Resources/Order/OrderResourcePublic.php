@@ -4,8 +4,10 @@ namespace HiEvents\Resources\Order;
 
 use Carbon\Carbon;
 use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Resources\Attendee\AttendeeResourcePublic;
 use HiEvents\Resources\BaseResource;
+use HiEvents\Resources\Event\EventResourcePublic;
 use Illuminate\Http\Request;
 
 /**
@@ -37,6 +39,13 @@ class OrderResourcePublic extends BaseResource
             'is_payment_required' => $this->isPaymentRequired(),
             'promo_code' => $this->getPromoCode(),
             'taxes_and_fees_rollup' => $this->getTaxesAndFeesRollup(),
+            'event' => $this->when(
+                !is_null($this->getEvent()),
+                fn() => new EventResourcePublic(
+                    resource: $this->getEvent(),
+                    includePostCheckoutData: $this->getStatus() === OrderStatus::COMPLETED->name,
+                ),
+            ),
             'address' => $this->when(
                 !is_null($this->getAddress()),
                 fn() => $this->getAddress()
