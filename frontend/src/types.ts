@@ -397,6 +397,7 @@ export interface Order {
     promo_code_id?: number;
     taxes_and_fees_rollup?: TaxesAndFeesRollup;
     question_answers?: QuestionAnswer[];
+    event?: Event;
 }
 
 export interface OrderItem {

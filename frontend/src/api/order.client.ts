@@ -93,8 +93,8 @@ export const orderClientPublic = {
         return response.data;
     },
 
-    findByShortId: async (eventId: number, orderShortId: string, sessionIdentifier: string) => {
-        const response = await publicApi.get<GenericDataResponse<Order>>(`events/${eventId}/order/${orderShortId}?session_identifier=${sessionIdentifier}`);
+    findByShortId: async (eventId: number, orderShortId: string, includes: string[] = []) => {
+        const response = await publicApi.get<GenericDataResponse<Order>>(`events/${eventId}/order/${orderShortId}?include=${includes.join(',')}`);
         return response.data;
     },
 

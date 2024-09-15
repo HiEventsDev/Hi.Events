@@ -203,4 +203,9 @@ abstract class BaseAction extends Controller
     {
         return QueryParamsDTO::fromArray($request->query->all());
     }
+
+    public function isIncludeRequested(Request $request, string $include): bool
+    {
+        return in_array($include, explode(',', $request->query('include', '')), true);
+    }
 }
