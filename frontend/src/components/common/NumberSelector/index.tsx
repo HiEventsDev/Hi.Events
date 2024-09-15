@@ -22,10 +22,7 @@ export const NumberSelector = ({formInstance, fieldName, min, max}: NumberSelect
     const maxValue = max || 100;
 
     useEffect(() => {
-        // Only synchronize with form if the value is within bounds and not 0
-        if (value !== 0) {
-            formInstance.setFieldValue(fieldName, value);
-        }
+        formInstance.setFieldValue(fieldName, value);
     }, [value]);
 
     useEffect(() => {
