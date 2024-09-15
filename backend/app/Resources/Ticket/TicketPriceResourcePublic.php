@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
  */
 class TicketPriceResourcePublic extends BaseResource
 {
+    public const SHOW_QUANTITY_AVAILABLE = 'show_quantity_available';
+
     public function toArray(Request $request): array
     {
         return [
@@ -28,7 +30,9 @@ class TicketPriceResourcePublic extends BaseResource
             'is_after_sale_end_date' => $this->isAfterSaleEndDate(),
             'is_available' => $this->isAvailable(),
             'is_sold_out' => $this->isSoldOut(),
-            'quantity_remaining' => $this->getQuantityAvailable(),
+            $this->mergeWhen($this->getAdditionalDataByKey(self::SHOW_QUANTITY_AVAILABLE), fn() => [
+                'quantity_remaining' => $this->getQuantityAvailable(),
+            ]),
         ];
     }
 }

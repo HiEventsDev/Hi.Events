@@ -3,6 +3,9 @@
 namespace HiEvents\Services\Infrastructure\Session;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Str;
+use Symfony\Component\HttpFoundation\Cookie as SymfonyCookie;
 
 class CheckoutSessionManagementService
 {
@@ -14,12 +17,18 @@ class CheckoutSessionManagementService
     {
     }
 
+    /**
+     * Get the session ID from the cookie, or generate a new one if it doesn't exist.
+     */
     public function getSessionId(): string
     {
-        $userAgent = $this->request->userAgent();
-        $ipAddress = $this->getIpAddress();
+        $sessionId = $this->request->cookie(self::SESSION_IDENTIFIER);
 
-        return sha1($userAgent . $ipAddress . $this->request->input(self::SESSION_IDENTIFIER));
+        if (!$sessionId) {
+            $sessionId = $this->createSessionId();
+        }
+
+        return $sessionId;
     }
 
     public function verifySession(string $identifier): bool
@@ -27,13 +36,18 @@ class CheckoutSessionManagementService
         return $this->getSessionId() === $identifier;
     }
 
-    private function getIpAddress(): string
+    public function getSessionCookie(): SymfonyCookie
     {
-        if ($digitalOceanIp = $this->request->server('HTTP_DO_CONNECTING_IP')) {
-            return $digitalOceanIp;
-        }
+        return Cookie::make(
+            name: self::SESSION_IDENTIFIER,
+            value: $this->getSessionId(),
+            secure: true,
+            sameSite: 'None',
+        );
+    }
 
-        return $this->request->ip();
+    private function createSessionId(): string
+    {
+        return sha1(Str::uuid() . Str::random(40));
     }
 }
-

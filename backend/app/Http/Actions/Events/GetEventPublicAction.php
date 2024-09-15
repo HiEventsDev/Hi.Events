@@ -34,6 +34,7 @@ class GetEventPublicAction extends BaseAction
             $this->logger->debug(__('Event with ID :eventId is not live and user is not authenticated', [
                 'eventId' => $eventId
             ]));
+
             return $this->notFoundResponse();
         }
 

@@ -15,6 +15,14 @@ use Illuminate\Http\Request;
  */
 class EventResourcePublic extends BaseResource
 {
+    public function __construct(
+        mixed                 $resource,
+        private readonly bool $includePostCheckoutData = false,
+    )
+    {
+        parent::__construct($resource);
+    }
+
     public function toArray(Request $request): array
     {
         return [
@@ -37,7 +45,7 @@ class EventResourcePublic extends BaseResource
             ),
             'settings' => $this->when(
                 !is_null($this->getEventSettings()),
-                fn() => new EventSettingsResourcePublic($this->getEventSettings())
+                fn() => new EventSettingsResourcePublic($this->getEventSettings(), $this->includePostCheckoutData),
             ),
             // @TODO - public question resource
             'questions' => $this->when(

@@ -315,7 +315,7 @@ const SelectTickets = (props: SelectTicketsProps) => {
 
                                     {ticket.max_per_order && form.values.tickets && isObjectEmpty(form.errors) && (form.values.tickets[ticketIndex]?.quantities.reduce((acc, {quantity}) => acc + Number(quantity), 0) > ticket.max_per_order) && (
                                         <div className={'hi-ticket-quantity-error'}>
-                                            <Trans>The maximum numbers number of tickets for Generals
+                                            <Trans>The maximum numbers number of tickets for {ticket.title}
                                                 is {ticket.max_per_order}</Trans>
                                         </div>
                                     )}
