@@ -5,6 +5,7 @@ namespace HiEvents\Repository\Eloquent;
 use HiEvents\DomainObjects\CheckInListDomainObject;
 use HiEvents\DomainObjects\Generated\CapacityAssignmentDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\CheckInListDomainObjectAbstract;
+use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Models\CheckInList;
 use HiEvents\Repository\DTO\CheckedInAttendeesCountDTO;
@@ -65,6 +66,7 @@ class CheckInListRepository extends BaseRepository implements CheckInListReposit
     public function getCheckedInAttendeeCountByIds(array $checkInListIds): Collection
     {
         $placeholders = implode(',', array_fill(0, count($checkInListIds), '?'));
+        $attendeeActiveStatus = AttendeeStatus::ACTIVE->name;
 
         $sql = <<<SQL
             WITH valid_check_ins AS (
@@ -79,6 +81,7 @@ class CheckInListRepository extends BaseRepository implements CheckInListReposit
                               JOIN ticket_check_in_lists tcil ON a.ticket_id = tcil.ticket_id
                      WHERE a.deleted_at IS NULL
                        AND tcil.deleted_at IS NULL
+                     AND a.status = '$attendeeActiveStatus'
                  )
             SELECT
                 cil.id AS check_in_list_id,
