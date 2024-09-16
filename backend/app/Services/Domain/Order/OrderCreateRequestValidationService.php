@@ -196,8 +196,15 @@ class OrderCreateRequestValidationService
             ->flatten()
             ->min(fn(CapacityAssignmentDomainObject $capacity) => $capacity->getCapacity());
 
+        $ticketAvailableQuantity = $this->availableTicketQuantities
+            ->ticketQuantities
+            ->first(fn(AvailableTicketQuantitiesDTO $price) => $price->ticket_id === $ticket->getId())
+            ->quantity_available;
+
         # if there are fewer tickets available than the configured minimum, we allow less than the minimum to be purchased
-        $minPerOrder = min((int)$ticket->getMinPerOrder() ?: 1, $capacityMaximum ?: $maxPerOrder);
+        $minPerOrder = min((int)$ticket->getMinPerOrder() ?: 1,
+            $capacityMaximum ?: $maxPerOrder,
+            $ticketAvailableQuantity ?: $maxPerOrder);
 
         $this->validateTicketPricesQuantity(
             quantities: $ticketAndQuantities['quantities'],
