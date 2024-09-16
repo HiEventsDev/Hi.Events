@@ -13,13 +13,14 @@ services:
       - VITE_STRIPE_PUBLISHABLE_KEY=pk_test
       - LOG_CHANNEL=stderr
       - QUEUE_CONNECTION=sync
-      - MAIL_MAILER=array
+      - MAIL_MAILER=log
       - APP_KEY=${APP_KEY}
       - JWT_SECRET=${JWT_SECRET}
       - FILESYSTEM_PUBLIC_DISK=public
       - FILESYSTEM_PRIVATE_DISK=local
       - APP_CDN_URL=http://localhost:8123/storage
       - DATABASE_URL=postgresql://postgres:secret@postgres:5432/hi-events
+      - APP_FRONTEND_URL=http://localhost:8123
 
     depends_on:
       - postgres
