@@ -22,7 +22,7 @@ export const NumberSelector = ({formInstance, fieldName, min, max, sharedValues}
     const minValue = min || 0;
     const maxValue = max || 100;
 
-    const [sharedVals, setSharedVals] = useState<SharedValues>(sharedValues ?? new SharedValues(maxValue));
+    const [sharedVals] = useState<SharedValues>(sharedValues ?? new SharedValues(maxValue));
 
     useEffect(() => {
         formInstance.setFieldValue(fieldName, value);
