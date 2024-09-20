@@ -5,6 +5,7 @@ namespace HiEvents\Services\Handlers\Product\DTO;
 use HiEvents\DataTransferObjects\Attributes\CollectionOf;
 use HiEvents\DataTransferObjects\BaseDTO;
 use HiEvents\DomainObjects\Enums\ProductPriceType;
+use HiEvents\DomainObjects\Enums\ProductType;
 use HiEvents\Services\Domain\Product\DTO\ProductPriceDTO;
 use Illuminate\Support\Collection;
 
@@ -15,6 +16,7 @@ class UpsertProductDTO extends BaseDTO
         public readonly int              $event_id,
         public readonly string           $title,
         public readonly ProductPriceType $type,
+        public readonly ProductType      $product_type,
         #[CollectionOf(ProductPriceDTO::class)]
         public readonly ?Collection      $prices = null,
         public readonly ?float           $price = 0.00,
@@ -25,15 +27,15 @@ class UpsertProductDTO extends BaseDTO
         public readonly ?string          $sale_end_date = null,
         public readonly ?int             $max_per_order = 100,
         public readonly ?string          $description = null,
-        public readonly ?int          $min_per_order = 0,
-        public readonly ?bool         $is_hidden = false,
-        public readonly ?bool         $hide_before_sale_start_date = false,
-        public readonly ?bool         $hide_after_sale_end_date = false,
-        public readonly ?bool         $hide_when_sold_out = false,
-        public readonly ?bool         $show_quantity_remaining = false,
-        public readonly ?bool         $is_hidden_without_promo_code = false,
-        public readonly ?array        $tax_and_fee_ids = [],
-        public readonly ?int          $product_id = null,
+        public readonly ?int             $min_per_order = 0,
+        public readonly ?bool            $is_hidden = false,
+        public readonly ?bool            $hide_before_sale_start_date = false,
+        public readonly ?bool            $hide_after_sale_end_date = false,
+        public readonly ?bool            $hide_when_sold_out = false,
+        public readonly ?bool            $show_quantity_remaining = false,
+        public readonly ?bool            $is_hidden_without_promo_code = false,
+        public readonly ?array           $tax_and_fee_ids = [],
+        public readonly ?int             $product_id = null,
     )
     {
     }

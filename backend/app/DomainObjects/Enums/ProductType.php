@@ -6,6 +6,6 @@ enum ProductType
 {
     use BaseEnum;
 
-    case PRODUCT;
-    case PRODUCT;
+    case TICKET;
+    case GENERAL;
 }

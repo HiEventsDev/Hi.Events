@@ -14,7 +14,7 @@ use HiEvents\Mail\Organizer\OrderSummaryForOrganizer;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
-use HiEvents\Services\Domain\Attendee\SendAttendeeProductService;
+use HiEvents\Services\Domain\Attendee\SendAttendeeTicketService;
 use Illuminate\Mail\Mailer;
 
 readonly class SendOrderDetailsService
@@ -23,7 +23,7 @@ readonly class SendOrderDetailsService
         private EventRepositoryInterface  $eventRepository,
         private OrderRepositoryInterface  $orderRepository,
         private Mailer                    $mailer,
-        private SendAttendeeProductService $sendAttendeeProductService,
+        private SendAttendeeTicketService $sendAttendeeProductService,
     )
     {
     }

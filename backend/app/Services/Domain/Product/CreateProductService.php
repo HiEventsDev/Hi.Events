@@ -54,6 +54,7 @@ class CreateProductService
         return $this->productRepository->create([
             'title' => $productsData->getTitle(),
             'type' => $productsData->getType(),
+            'product_type' => $productsData->getProductType(),
             'order' => $productsData->getOrder(),
             'sale_start_date' => $productsData->getSaleStartDate()
                 ? DateHelper::convertToUTC($productsData->getSaleStartDate(), $event->getTimezone())

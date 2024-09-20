@@ -1,6 +1,6 @@
 import {t, Trans} from "@lingui/macro";
 import {UseFormReturnType} from "@mantine/form";
-import {Event, TaxAndFee, TaxAndFeeCalculationType, TaxAndFeeType, Product, ProductType} from "../../../types.ts";
+import {Event, TaxAndFee, TaxAndFeeCalculationType, TaxAndFeeType, Product, ProductPriceType} from "../../../types.ts";
 import {
     ActionIcon,
     Alert,
@@ -19,7 +19,7 @@ import {
     IconCoinOff,
     IconCoins,
     IconHeartDollar,
-    IconInfoCircle,
+    IconInfoCircle, IconShirt, IconTicket,
     IconTrash,
     IconTrashOff,
 } from "@tabler/icons-react";
@@ -121,7 +121,22 @@ const ProductPriceTierForm = ({form, product, event}: ProductFormProps) => {
 }
 
 export const ProductForm = ({form, product}: ProductFormProps) => {
-    const productOptions: ItemProps[] = [
+    const productTypeOptions: ItemProps[] = [
+        {
+            icon: <IconTicket/>,
+            label: t`Ticket`,
+            value: 'TICKET',
+            description: t`This product is a ticket. Buyers will be issued a ticket upon purchase`,
+        },
+        {
+            icon: <IconShirt/>,
+            label: t`General`,
+            value: 'GENERAL',
+            description: t`This is a general product, like a t-shirt or a mug. No ticket will be issued`,
+        },
+    ];
+
+    const productPriceOptions: ItemProps[] = [
         {
             icon: <IconCash/>,
             label: t`Paid Product`,
@@ -167,7 +182,7 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
     }
 
     useEffect(() => {
-        if (form.values.type === ProductType.Free) {
+        if (form.values.type === ProductPriceType.Free) {
             form.setFieldValue('price', 0.00);
         }
     }, [form, form.values.type]);
@@ -184,21 +199,36 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                         {t`You cannot change the product type as there are attendees associated with this product.`}
                     </Alert>
                 )}
+
                 <CustomSelect
                     disabled={Number(product?.quantity_sold) > 0}
                     label={t`Product Type`}
                     required
                     form={form}
+                    name={'product_type'}
+                    optionList={productTypeOptions}
+                />
+                {form.errors.product_type && (
+                    <Alert title={t`Product Type`} mb={20} color={'red'}>
+                        {form.errors.product_type}
+                    </Alert>
+                )}
+
+                <CustomSelect
+                    disabled={Number(product?.quantity_sold) > 0}
+                    label={t`Price Type`}
+                    required
+                    form={form}
                     name={'type'}
-                    optionList={productOptions}
+                    optionList={productPriceOptions}
                 />
                 {form.errors.type && (
-                    <Alert title={t`Product Type`} mb={20} color={'red'}>
+                    <Alert title={t`Product Price Type`} mb={20} color={'red'}>
                         {form.errors.type}
                     </Alert>
                 )}
 
-                {form.values.type === ProductType.Tiered && (
+                {form.values.type === ProductPriceType.Tiered && (
                     <Alert title={t`What are Tiered Products?`} mb={20}>
                         {t`Tiered products allow you to offer multiple price options for the same product.
                          This is perfect for early bird products, or offering different price
@@ -218,7 +248,7 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                     onChange={(value) => form.setFieldValue('description', value)}
                 />
 
-                {form.values.type !== ProductType.Tiered && (
+                {form.values.type !== ProductPriceType.Tiered && (
                     <InputGroup>
                         <NumberInput decimalScale={2}
                                      min={0}
@@ -263,7 +293,7 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                 )}
             </div>
 
-            {form.values.type === ProductType.Tiered && (
+            {form.values.type === ProductPriceType.Tiered && (
                 <Fieldset legend={t`Price tiers`} mt={20} mb={20}>
                     <ProductPriceTierForm product={product} form={form} event={event}/>
                     <Group>
@@ -313,7 +343,7 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                         }]}
                     />
 
-                    {(form.values.type === ProductType.Free && !!form.values.tax_and_fee_ids?.length) && (
+                    {(form.values.type === ProductPriceType.Free && !!form.values.tax_and_fee_ids?.length) && (
                         <Alert mb={20}>
                             <p>
                                 {t`You have taxes and fees added to a Free Product. Would you like to remove or obscure them?`}

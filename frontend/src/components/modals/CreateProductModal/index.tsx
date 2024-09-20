@@ -1,5 +1,5 @@
 import {Button} from "@mantine/core";
-import {GenericModalProps, TaxAndFee, Product, ProductType} from "../../../types.ts";
+import {GenericModalProps, Product, ProductPriceType, ProductType, TaxAndFee} from "../../../types.ts";
 import {useForm} from "@mantine/form";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {notifications} from "@mantine/notifications";
@@ -29,7 +29,8 @@ export const CreateProductModal = ({onClose}: GenericModalProps) => {
             show_quantity_remaining: false,
             hide_when_sold_out: false,
             is_hidden_without_promo_code: false,
-            type: ProductType.Paid,
+            type: ProductPriceType.Paid,
+            product_type: ProductType.Ticket,
             tax_and_fee_ids: undefined,
             prices: [{
                 price: 0,

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace HiEvents\Http\Request\Product;
 
 use HiEvents\DomainObjects\Enums\ProductPriceType;
+use HiEvents\DomainObjects\Enums\ProductType;
 use HiEvents\Http\Request\BaseRequest;
 use HiEvents\Validators\Rules\RulesHelper;
 use Illuminate\Validation\Rule;
@@ -36,6 +37,7 @@ class UpsertProductRequest extends BaseRequest
             'show_quantity_remaining' => 'boolean',
             'is_hidden_without_promo_code' => 'boolean',
             'type' => ['required', Rule::in(ProductPriceType::valuesArray())],
+            'product_type' => ['required', Rule::in(ProductType::valuesArray())],
             'tax_and_fee_ids' => 'array',
         ];
     }

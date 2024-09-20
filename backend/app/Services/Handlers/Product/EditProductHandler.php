@@ -93,6 +93,7 @@ class EditProductHandler
                 'hide_when_sold_out' => $productsData->hide_when_sold_out,
                 'show_quantity_remaining' => $productsData->show_quantity_remaining,
                 'is_hidden_without_promo_code' => $productsData->is_hidden_without_promo_code,
+                'product_type' => $productsData->product_type->name,
             ],
             where: $where
         );

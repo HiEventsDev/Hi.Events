@@ -9,7 +9,7 @@ use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
-use HiEvents\Services\Domain\Attendee\SendAttendeeProductService;
+use HiEvents\Services\Domain\Attendee\SendAttendeeTicketService;
 use HiEvents\Services\Handlers\Attendee\DTO\ResendAttendeeTicketDTO;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 readonly class ResendAttendeeTicketHandler
 {
     public function __construct(
-        private SendAttendeeProductService   $sendAttendeeProductService,
+        private SendAttendeeTicketService   $sendAttendeeProductService,
         private AttendeeRepositoryInterface $attendeeRepository,
         private EventRepositoryInterface    $eventRepository,
         private LoggerInterface             $logger,

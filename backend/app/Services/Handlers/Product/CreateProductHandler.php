@@ -52,7 +52,8 @@ class CreateProductHandler
                 ->setShowQuantityRemaining($productsData->show_quantity_remaining)
                 ->setIsHiddenWithoutPromoCode($productsData->is_hidden_without_promo_code)
                 ->setProductPrices($productPrices)
-                ->setEventId($productsData->event_id),
+                ->setEventId($productsData->event_id)
+                ->setProductType($productsData->product_type->name),
             accountId: $productsData->account_id,
             taxAndFeeIds: $productsData->tax_and_fee_ids,
         );

@@ -1,4 +1,4 @@
-import {IdParam, MessageType, Product, ProductPrice, ProductType} from "../../../../types.ts";
+import {IdParam, MessageType, Product, ProductPrice, ProductPriceType} from "../../../../types.ts";
 import {useSortable} from "@dnd-kit/sortable";
 import {useDisclosure} from "@mantine/hooks";
 import {useState} from "react";
@@ -83,7 +83,7 @@ export const SortableProduct = ({product, enableSorting, currencyCode}: {product
     const getPriceRange = (product: Product) => {
         const productPrices: ProductPrice[] = product.prices as ProductPrice[];
 
-        if (product.type !== ProductType.Tiered) {
+        if (product.type !== ProductPriceType.Tiered) {
             if (productPrices[0].price <= 0) {
                 return t`Free`;
             }

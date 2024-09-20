@@ -1,5 +1,5 @@
 import {Button} from "@mantine/core";
-import {GenericModalProps, IdParam, Product, ProductType} from "../../../types.ts";
+import {GenericModalProps, IdParam, Product, ProductPriceType} from "../../../types.ts";
 import {useForm} from "@mantine/form";
 import {useParams} from "react-router-dom";
 import {useEffect} from "react";
@@ -32,7 +32,7 @@ export const EditProductModal = ({onClose, productId}: GenericModalProps & { pro
             show_quantity_remaining: undefined,
             hide_when_sold_out: undefined,
             is_hidden_without_promo_code: undefined,
-            type: ProductType.Paid,
+            type: ProductPriceType.Paid,
             tax_and_fee_ids: [],
             prices: []
         },

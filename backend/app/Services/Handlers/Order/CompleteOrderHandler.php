@@ -37,14 +37,14 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 /**
  * @todo - Tidy this up
  */
-readonly class CompleteOrderHandler
+class CompleteOrderHandler
 {
     public function __construct(
-        private OrderRepositoryInterface          $orderRepository,
-        private AttendeeRepositoryInterface       $attendeeRepository,
-        private QuestionAnswerRepositoryInterface $questionAnswersRepository,
-        private ProductQuantityUpdateService      $productQuantityUpdateService,
-        private ProductPriceRepositoryInterface   $productPriceRepository,
+        private readonly OrderRepositoryInterface          $orderRepository,
+        private readonly AttendeeRepositoryInterface       $attendeeRepository,
+        private readonly QuestionAnswerRepositoryInterface $questionAnswersRepository,
+        private readonly ProductQuantityUpdateService      $productQuantityUpdateService,
+        private readonly ProductPriceRepositoryInterface   $productPriceRepository,
     )
     {
     }
@@ -89,8 +89,7 @@ readonly class CompleteOrderHandler
     private function createAttendees(Collection $attendees, OrderDomainObject $order): void
     {
         $inserts = [];
-        $publicIdIndex = 1;
-
+        
         $productsPrices = $this->productPriceRepository->findWhereIn(
             field: ProductPriceDomainObjectAbstract::ID,
             values: $attendees->pluck('product_price_id')->toArray(),

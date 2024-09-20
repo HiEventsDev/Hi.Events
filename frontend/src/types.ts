@@ -256,11 +256,16 @@ export interface GenericPaginatedResponse<T> {
     meta: PaginationData;
 }
 
-export enum ProductType {
+export enum ProductPriceType {
     Paid = 'PAID',
     Donation = 'DONATION',
     Free = 'FREE',
     Tiered = 'TIERED',
+}
+
+export enum ProductType {
+    Ticket = 'TICKET',
+    General = 'GENERAL',
 }
 
 export enum ProductStatus {
@@ -294,7 +299,9 @@ export interface Product {
     order?: number;
     title: string;
     event_id?: IdParam;
-    type: ProductType;
+    // todo - rename to price_type
+    type: ProductPriceType;
+    product_type: ProductType;
     description?: string;
     price?: number;
     prices?: ProductPrice[];

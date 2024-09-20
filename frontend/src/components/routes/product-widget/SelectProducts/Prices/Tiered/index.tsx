@@ -1,5 +1,5 @@
 import {Currency, ProductPriceDisplay} from "../../../../../common/Currency";
-import {Event, Product, ProductType} from "../../../../../../types.ts";
+import {Event, Product, ProductPriceType} from "../../../../../../types.ts";
 import {Group, TextInput} from "@mantine/core";
 import {NumberSelector, SharedValues} from "../../../../../common/NumberSelector";
 import {UseFormReturnType} from "@mantine/form";
