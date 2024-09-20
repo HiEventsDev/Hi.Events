@@ -7,18 +7,18 @@ services:
     ports:
       - "8123:80"
     environment:
-      - VITE_FRONTEND_URL=http://localhost:8123
-      - VITE_API_URL_CLIENT=http://localhost:8123/api
-      - VITE_API_URL_SERVER=http://localhost:80/api
-      - VITE_STRIPE_PUBLISHABLE_KEY=pk_test
-      - LOG_CHANNEL=stderr
-      - QUEUE_CONNECTION=sync
-      - MAIL_MAILER=array
+      - VITE_FRONTEND_URL=${VITE_FRONTEND_URL}
+      - VITE_API_URL_CLIENT=${VITE_API_URL_CLIENT}
+      - VITE_API_URL_SERVER=${VITE_API_URL_SERVER}
+      - VITE_STRIPE_PUBLISHABLE_KEY=${VITE_STRIPE_PUBLISHABLE_KEY}
+      - LOG_CHANNEL=${LOG_CHANNEL}
+      - QUEUE_CONNECTION=${QUEUE_CONNECTION}
+      - MAIL_MAILER=${MAIL_MAILER}
       - APP_KEY=${APP_KEY}
       - JWT_SECRET=${JWT_SECRET}
-      - FILESYSTEM_PUBLIC_DISK=public
-      - FILESYSTEM_PRIVATE_DISK=local
-      - APP_CDN_URL=http://localhost:8123/storage
+      - FILESYSTEM_PUBLIC_DISK=${FILESYSTEM_PUBLIC_DISK}
+      - FILESYSTEM_PRIVATE_DISK=${FILESYSTEM_PRIVATE_DISK}
+      - APP_CDN_URL=${APP_CDN_URL}
       - DATABASE_URL=postgresql://postgres:secret@postgres:5432/hi-events
 
     depends_on:
