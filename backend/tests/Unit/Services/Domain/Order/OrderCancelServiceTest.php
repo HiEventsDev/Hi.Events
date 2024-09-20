@@ -27,7 +27,7 @@ class OrderCancelServiceTest extends TestCase
     private EventRepositoryInterface $eventRepository;
     private OrderRepositoryInterface $orderRepository;
     private DatabaseManager $databaseManager;
-    private ProductQuantityUpdateService $ticketQuantityService;
+    private ProductQuantityUpdateService $productQuantityService;
     private OrderCancelService $service;
 
     protected function setUp(): void
@@ -39,7 +39,7 @@ class OrderCancelServiceTest extends TestCase
         $this->eventRepository = m::mock(EventRepositoryInterface::class);
         $this->orderRepository = m::mock(OrderRepositoryInterface::class);
         $this->databaseManager = m::mock(DatabaseManager::class);
-        $this->ticketQuantityService = m::mock(ProductQuantityUpdateService::class);
+        $this->productQuantityService = m::mock(ProductQuantityUpdateService::class);
 
         $this->service = new OrderCancelService(
             mailer: $this->mailer,
@@ -47,7 +47,7 @@ class OrderCancelServiceTest extends TestCase
             eventRepository: $this->eventRepository,
             orderRepository: $this->orderRepository,
             databaseManager: $this->databaseManager,
-            ticketQuantityService: $this->ticketQuantityService,
+            productQuantityService: $this->productQuantityService,
         );
     }
 
@@ -60,8 +60,8 @@ class OrderCancelServiceTest extends TestCase
         $order->shouldReceive('getLocale')->andReturn('en');
 
         $attendees = new Collection([
-            m::mock(AttendeeDomainObject::class)->shouldReceive('getTicketPriceId')->andReturn(1)->mock(),
-            m::mock(AttendeeDomainObject::class)->shouldReceive('getTicketPriceId')->andReturn(2)->mock(),
+            m::mock(AttendeeDomainObject::class)->shouldReceive('getproductPriceId')->andReturn(1)->mock(),
+            m::mock(AttendeeDomainObject::class)->shouldReceive('getproductPriceId')->andReturn(2)->mock(),
         ]);
 
         $this->attendeeRepository
@@ -75,7 +75,7 @@ class OrderCancelServiceTest extends TestCase
 
         $this->attendeeRepository->shouldReceive('updateWhere')->once();
 
-        $this->ticketQuantityService->shouldReceive('decreaseQuantitySold')->twice();
+        $this->productQuantityService->shouldReceive('decreaseQuantitySold')->twice();
 
         $this->orderRepository->shouldReceive('updateWhere')->once();
 
