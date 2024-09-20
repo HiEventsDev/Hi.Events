@@ -1,6 +1,6 @@
 import {CustomSelect, ItemProps} from "../../common/CustomSelect";
 import {t, Trans} from "@lingui/macro";
-import {QuestionBelongsToType, QuestionType, Ticket} from "../../../types.ts";
+import {QuestionBelongsToType, QuestionType, Product} from "../../../types.ts";
 import {Button, Group, MultiSelect, Switch, TextInput} from "@mantine/core";
 import {
     IconAlignBoxLeftTop,
@@ -72,10 +72,10 @@ const Options = ({form}: { form: UseFormReturnType<any> }) => {
 
 interface QuestionFormProps {
     form: UseFormReturnType<any>;
-    tickets?: Ticket[];
+    products?: Product[];
 }
 
-export const QuestionForm = ({form, tickets}: QuestionFormProps) => {
+export const QuestionForm = ({form, products}: QuestionFormProps) => {
     const [showDescription, setShowDescription] = useState(false);
 
     const belongToOptions: ItemProps[] = [
@@ -88,7 +88,7 @@ export const QuestionForm = ({form, tickets}: QuestionFormProps) => {
         {
             icon: <IconUser/>,
             label: t`Ask once per attendee`,
-            value: QuestionBelongsToType.TICKET,
+            value: QuestionBelongsToType.PRODUCT,
             description: t`A single question per attendee. E.g, What is your preferred meal?`,
         },
     ];
@@ -153,20 +153,20 @@ export const QuestionForm = ({form, tickets}: QuestionFormProps) => {
                 name="belongs_to"
             />
 
-            {form.values.belongs_to === QuestionBelongsToType.TICKET && (
+            {form.values.belongs_to === QuestionBelongsToType.PRODUCT && (
                 <MultiSelect
                     mt={20}
-                    label={t`What tickets should this question be apply to?`}
+                    label={t`What products should this question be apply to?`}
                     multiple
-                    placeholder={t`Select tickets`}
-                    data={tickets?.map(ticket => {
+                    placeholder={t`Select products`}
+                    data={products?.map(product => {
                         return {
-                            value: String(ticket.id),
-                            label: ticket.title,
+                            value: String(product.id),
+                            label: product.title,
                         }
                     })}
                     leftSection={<IconTicket size="1rem"/>}
-                    {...form.getInputProps('ticket_ids')}
+                    {...form.getInputProps('product_ids')}
                 />
             )}
 

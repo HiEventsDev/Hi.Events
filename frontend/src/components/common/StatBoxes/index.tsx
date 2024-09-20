@@ -17,8 +17,8 @@ export const StatBoxes = () => {
 
     const data = [
         {
-            number: formatNumber(eventStats?.total_tickets_sold as number),
-            description: t`Tickets sold`,
+            number: formatNumber(eventStats?.total_products_sold as number),
+            description: t`Products sold`,
             icon: <IconTicket/>
         },
         {

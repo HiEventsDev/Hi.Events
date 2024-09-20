@@ -36,13 +36,13 @@ class OrderItem extends BaseModel
         return [];
     }
 
-    public function ticket_price(): HasOne
+    public function product_price(): HasOne
     {
-        return $this->hasOne(TicketPrice::class);
+        return $this->hasOne(ProductPrice::class);
     }
 
-    public function ticket(): BelongsTo
+    public function product(): BelongsTo
     {
-        return $this->belongsTo(Ticket::class);
+        return $this->belongsTo(Product::class);
     }
 }

@@ -34,7 +34,7 @@ class CreateQuestionHandler
 
         return $this->createQuestionService->createQuestion(
             $question,
-            $createQuestionDTO->ticket_ids,
+            $createQuestionDTO->product_ids,
         );
     }
 }

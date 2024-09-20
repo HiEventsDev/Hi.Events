@@ -13,9 +13,9 @@ interface QuestionRepositoryInterface extends RepositoryInterface
 {
     public function findByEventId(int $eventId): Collection;
 
-    public function create(array $attributes, array $ticketIds = []): QuestionDomainObject;
+    public function create(array $attributes, array $productIds = []): QuestionDomainObject;
 
-    public function updateQuestion(int $questionId, int $eventId, array $attributes, array $ticketIds = []): void;
+    public function updateQuestion(int $questionId, int $eventId, array $attributes, array $productIds = []): void;
 
     public function sortQuestions(int $eventId, array $orderedQuestionIds): void;
 }

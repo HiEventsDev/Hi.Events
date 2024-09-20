@@ -58,7 +58,7 @@ export const CheckInListList = ({checkInLists, openCreateModal}: CheckInListList
                             <Trans>
                                 <p>
                                     Check-in lists help manage attendee entry for your event. You can associate multiple
-                                    tickets with a check-in list and ensure only those with valid tickets can enter.
+                                    products with a check-in list and ensure only those with valid products can enter.
                                 </p>
                             </Trans>
                         </p>
@@ -96,11 +96,11 @@ export const CheckInListList = ({checkInLists, openCreateModal}: CheckInListList
                         <Card className={classes.checkInListCard} key={list.id}>
                             <div className={classes.checkInListHeader}>
                                 <div className={classes.checkInListAppliesTo}>
-                                    {list.tickets && (
+                                    {list.products && (
                                         <Popover
-                                            title={list.tickets.map((ticket) => (
-                                                <div key={ticket.id}>
-                                                    {ticket.title}
+                                            title={list.products.map((product) => (
+                                                <div key={product.id}>
+                                                    {product.title}
                                                 </div>
                                             ))}
                                             position={'bottom'}
@@ -108,9 +108,9 @@ export const CheckInListList = ({checkInLists, openCreateModal}: CheckInListList
                                         >
                                             <div className={classes.appliesToText}>
                                                 <div>
-                                                    {list.tickets.length > 1 &&
-                                                        <Trans>Includes {list.tickets.length} tickets</Trans>}
-                                                    {list.tickets.length === 1 && t`Includes 1 ticket`}
+                                                    {list.products.length > 1 &&
+                                                        <Trans>Includes {list.products.length} products</Trans>}
+                                                    {list.products.length === 1 && t`Includes 1 product`}
                                                 </div>
                                                 &nbsp;
                                                 <IconHelp size={16}/>

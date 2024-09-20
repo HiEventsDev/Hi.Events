@@ -28,8 +28,8 @@ export const getInitials = (fullName: string) => {
     }, '');
 };
 
-export const getTicketFromEvent = (ticketId: number, event?: Event) => {
-    return event?.tickets?.find(ticket => ticket.id === ticketId)
+export const getProductFromEvent = (productId: number, event?: Event) => {
+    return event?.products?.find(product => product.id === productId)
 }
 
 export const formatStatus = (status: string) => {

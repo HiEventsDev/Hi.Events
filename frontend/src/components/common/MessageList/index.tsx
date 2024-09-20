@@ -61,7 +61,7 @@ export const MessageList = ({messages}: MessageListProps) => {
             subHeading={(
                 <>
                     <p>
-                        {t`You haven't sent any messages yet. You can send messages to all attendees, or to specific ticket holders.`}
+                        {t`You haven't sent any messages yet. You can send messages to all attendees, or to specific product holders.`}
                     </p>
                 </>
             )}

@@ -1,4 +1,4 @@
-import {Question, QuestionType, Ticket} from "../../../types.ts";
+import {Question, QuestionType, Product} from "../../../types.ts";
 import {UseFormReturnType} from "@mantine/form";
 import {Box, Checkbox, ComboboxItem, Group, NativeSelect, Radio, Select, Textarea, TextInput} from "@mantine/core";
 import {t} from "@lingui/macro";
@@ -19,10 +19,10 @@ interface QuestionInputProps {
     form: UseFormReturnType<any, any>,
 }
 
-interface CheckoutTicketQuestionProps {
+interface CheckoutProductQuestionProps {
     questions: Question[],
     form: UseFormReturnType<any, any>;
-    ticket: Ticket,
+    product: Product,
     index: number,
 }
 
@@ -220,17 +220,17 @@ export const CheckoutOrderQuestions = ({questions, form}: CheckoutQuestionProps)
     )
 }
 
-export const CheckoutTicketQuestions = ({
+export const CheckoutProductQuestions = ({
                                             questions,
                                             form,
-                                            ticket,
+                                            product,
                                             index: attendeeIndex
-                                        }: CheckoutTicketQuestionProps) => {
+                                        }: CheckoutProductQuestionProps) => {
     let questionIndex = 0;
     return (
         <>
             {questions.map((question, index) => {
-                if (!question.ticket_ids?.includes(Number(ticket.id))) {
+                if (!question.product_ids?.includes(Number(product.id))) {
                     return;
                 }
 

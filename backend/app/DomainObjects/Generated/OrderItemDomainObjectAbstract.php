@@ -12,8 +12,8 @@ abstract class OrderItemDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
     final public const PLURAL_NAME = 'order_items';
     final public const ID = 'id';
     final public const ORDER_ID = 'order_id';
-    final public const TICKET_ID = 'ticket_id';
-    final public const TICKET_PRICE_ID = 'ticket_price_id';
+    final public const PRODUCT_ID = 'product_id';
+    final public const PRODUCT_PRICE_ID = 'product_price_id';
     final public const TOTAL_BEFORE_ADDITIONS = 'total_before_additions';
     final public const QUANTITY = 'quantity';
     final public const ITEM_NAME = 'item_name';
@@ -27,8 +27,8 @@ abstract class OrderItemDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
 
     protected int $id;
     protected int $order_id;
-    protected int $ticket_id;
-    protected int $ticket_price_id;
+    protected int $product_id;
+    protected int $product_price_id;
     protected float $total_before_additions;
     protected int $quantity;
     protected ?string $item_name = null;
@@ -45,8 +45,8 @@ abstract class OrderItemDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
         return [
                     'id' => $this->id ?? null,
                     'order_id' => $this->order_id ?? null,
-                    'ticket_id' => $this->ticket_id ?? null,
-                    'ticket_price_id' => $this->ticket_price_id ?? null,
+                    'product_id' => $this->product_id ?? null,
+                    'product_price_id' => $this->product_price_id ?? null,
                     'total_before_additions' => $this->total_before_additions ?? null,
                     'quantity' => $this->quantity ?? null,
                     'item_name' => $this->item_name ?? null,
@@ -82,26 +82,26 @@ abstract class OrderItemDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
         return $this->order_id;
     }
 
-    public function setTicketId(int $ticket_id): self
+    public function setProductId(int $product_id): self
     {
-        $this->ticket_id = $ticket_id;
+        $this->product_id = $product_id;
         return $this;
     }
 
-    public function getTicketId(): int
+    public function getProductId(): int
     {
-        return $this->ticket_id;
+        return $this->product_id;
     }
 
-    public function setTicketPriceId(int $ticket_price_id): self
+    public function setProductPriceId(int $product_price_id): self
     {
-        $this->ticket_price_id = $ticket_price_id;
+        $this->product_price_id = $product_price_id;
         return $this;
     }
 
-    public function getTicketPriceId(): int
+    public function getProductPriceId(): int
     {
-        return $this->ticket_price_id;
+        return $this->product_price_id;
     }
 
     public function setTotalBeforeAdditions(float $total_before_additions): self

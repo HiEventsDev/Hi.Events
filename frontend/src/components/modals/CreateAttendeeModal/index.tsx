@@ -29,7 +29,7 @@ export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
 
     const form = useForm<CreateAttendeeRequest>({
         initialValues: {
-            ticket_id: undefined,
+            product_id: undefined,
             email: '',
             first_name: '',
             last_name: '',
@@ -41,14 +41,14 @@ export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
     });
 
     useEffect(() => {
-        if (event?.tickets) {
+        if (event?.products) {
             form.setFieldValue(
-                'ticket_price_id',
-                String(event?.tickets?.find(ticket => ticket.id == form.values.ticket_id)?.prices?.[0]?.id)
+                'product_price_id',
+                String(event?.products?.find(product => product.id == form.values.product_id)?.prices?.[0]?.id)
             );
 
-            const taxesAndFees = event?.tickets
-                ?.find(ticket => ticket.id == form.values.ticket_id)
+            const taxesAndFees = event?.products
+                ?.find(product => product.id == form.values.product_id)
                 ?.taxes_and_fees;
 
             if (taxesAndFees?.length === 0) {
@@ -67,7 +67,7 @@ export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
                 }
             );
         }
-    }, [form.values.ticket_id]);
+    }, [form.values.product_id]);
 
     const handleSubmit = (values: CreateAttendeeRequest) => {
         mutation.mutate({
@@ -82,24 +82,24 @@ export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
         })
     };
 
-    if (!event?.tickets) {
+    if (!event?.products) {
         return (
             <LoadingOverlay visible/>
         )
     }
 
-    if (isEventFetched && event.tickets.length === 0) {
+    if (isEventFetched && event.products.length === 0) {
         return (
             <Modal opened onClose={onClose} heading={t`Manually Add Attendee`}>
-                <p>{t`You must create a ticket before you can manually add an attendee.`}</p>
+                <p>{t`You must create a product before you can manually add an attendee.`}</p>
                 <Button
                     fullWidth
                     variant={'light'}
                     onClick={() => {
-                        navigate(`/manage/event/${eventId}/tickets`)
+                        navigate(`/manage/event/${eventId}/products`)
                     }}
                 >
-                    {t`Manage tickets`}
+                    {t`Manage products`}
                 </Button>
             </Modal>
         )
@@ -143,26 +143,26 @@ export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
                 />
 
                 <Select
-                    label={t`Ticket`}
+                    label={t`Product`}
                     mt={20}
-                    description={t`Manually adding an attendee will adjust ticket quantity.`}
-                    placeholder={t`Select Ticket`}
-                    {...form.getInputProps('ticket_id')}
-                    data={event.tickets.map(ticket => {
+                    description={t`Manually adding an attendee will adjust product quantity.`}
+                    placeholder={t`Select Product`}
+                    {...form.getInputProps('product_id')}
+                    data={event.products.map(product => {
                         return {
-                            value: String(ticket.id),
-                            label: ticket.title,
+                            value: String(product.id),
+                            label: product.title,
                         };
                     })}
                 />
 
-                {event.tickets.find(ticket => ticket.id == form.values.ticket_id)?.type === 'TIERED' && (
+                {event.products.find(product => product.id == form.values.product_id)?.type === 'TIERED' && (
                     <Select
-                        label={t`Ticket Tier`}
+                        label={t`Product Tier`}
                         mt={20}
-                        placeholder={t`Select Ticket Tier`}
-                        {...form.getInputProps('ticket_price_id')}
-                        data={event?.tickets?.find(ticket => ticket.id == form.values.ticket_id)?.prices?.map(price => {
+                        placeholder={t`Select Product Tier`}
+                        {...form.getInputProps('product_price_id')}
+                        data={event?.products?.find(product => product.id == form.values.product_id)?.prices?.map(price => {
                             return {
                                 value: String(price.id),
                                 label: String(price.label),
@@ -203,7 +203,7 @@ export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
 
                 <Switch
                     mt={20}
-                    label={t`Send order confirmation and ticket email`}
+                    label={t`Send order confirmation and product email`}
                     {...form.getInputProps('send_confirmation_email', {type: 'checkbox'})}
                 />
                 <Button type="submit" fullWidth mt="xl" disabled={mutation.isPending}>

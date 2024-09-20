@@ -14,14 +14,14 @@ class AttendeeQuestionRule extends BaseQuestionRule
     protected function validateRequiredQuestionArePresent(Collection $orderAttendees): void
     {
         foreach ($orderAttendees as $attendee) {
-            $ticketId = $this->getTicketIdFromTicketPriceId($attendee['ticket_price_id']);
+            $productId = $this->getProductIdFromProductPriceId($attendee['product_price_id']);
             $questions = $attendee['questions'] ?? [];
 
             $requiredQuestionIds = $this->questions
-                ->filter(function (QuestionDomainObject $question) use ($ticketId) {
+                ->filter(function (QuestionDomainObject $question) use ($productId) {
                     return $question->getRequired()
                         && !$question->getIsHidden()
-                        && $question->getTickets()?->map(fn($ticket) => $ticket->getId())->contains($ticketId);
+                        && $question->getProducts()?->map(fn($product) => $product->getId())->contains($productId);
                 })
                 ->map(fn(QuestionDomainObject $question) => $question->getId());
 

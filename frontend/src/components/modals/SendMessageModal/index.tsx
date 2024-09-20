@@ -16,7 +16,7 @@ import {useSendEventMessage} from "../../../mutations/useSendEventMessage.ts";
 
 interface EventMessageModalProps extends GenericModalProps {
     orderId?: IdParam,
-    ticketId?: IdParam,
+    productId?: IdParam,
     messageType: MessageType,
     attendeeId?: IdParam,
 }
@@ -45,16 +45,16 @@ const AttendeeField = ({orderId, eventId, attendeeId, form}: {
     form: UseFormReturnType<any>
 }) => {
     const {data: order} = useGetOrder(eventId, orderId);
-    const {data: {tickets} = {}} = useGetEvent(eventId);
+    const {data: {products} = {}} = useGetEvent(eventId);
 
-    if (!order || !tickets || !attendeeId) {
+    if (!order || !products || !attendeeId) {
         return null;
     }
 
-    const groups: ComboboxItemGroup[] = tickets.map(ticket => {
+    const groups: ComboboxItemGroup[] = products.map(product => {
         return {
-            group: ticket.title,
-            items: order.attendees?.filter(a => a.ticket_id === ticket.id).map(attendee => {
+            group: product.title,
+            items: order.attendees?.filter(a => a.product_id === product.id).map(attendee => {
                 return {
                     value: String(attendee.id),
                     label: attendee.first_name + ' ' + attendee.last_name,
@@ -75,12 +75,12 @@ const AttendeeField = ({orderId, eventId, attendeeId, form}: {
 }
 
 export const SendMessageModal = (props: EventMessageModalProps) => {
-    const {onClose, orderId, ticketId, messageType, attendeeId} = props;
+    const {onClose, orderId, productId, messageType, attendeeId} = props;
     const {eventId} = useParams();
-    const {data: event, data: {tickets} = {}} = useGetEvent(eventId);
+    const {data: event, data: {products} = {}} = useGetEvent(eventId);
     const {data: me} = useGetMe();
     const errorHandler = useFormErrorResponseHandler();
-    const isPreselectedRecipient = !!(orderId || attendeeId || ticketId);
+    const isPreselectedRecipient = !!(orderId || attendeeId || productId);
     const isAccountVerified = useIsAccountVerified();
     const sendMessageMutation = useSendEventMessage();
 
@@ -90,7 +90,7 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
             message: '',
             message_type: messageType,
             attendee_ids: attendeeId ? [String(attendeeId)] : [],
-            ticket_ids: ticketId ? [String(ticketId)] : [],
+            product_ids: productId ? [String(productId)] : [],
             order_id: orderId,
             is_test: false,
             send_copy_to_current_user: false,
@@ -116,7 +116,7 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
         });
     }
 
-    if (!event || !me || !tickets) {
+    if (!event || !me || !products) {
         return <LoadingOverlay visible/>;
     }
 
@@ -140,8 +140,8 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
                             mt={20}
                             data={[
                                 {
-                                    value: 'TICKET',
-                                    label: t`Attendees with a specific ticket`,
+                                    value: 'PRODUCT',
+                                    label: t`Attendees with a specific product`,
                                 },
                                 {
                                     value: 'EVENT',
@@ -158,18 +158,18 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
                         <AttendeeField eventId={eventId} orderId={orderId} attendeeId={attendeeId} form={form}/>
                     )}
 
-                    {((form.values.message_type === MessageType.Ticket && event.tickets)) && (
+                    {((form.values.message_type === MessageType.Product && event.products)) && (
                         <MultiSelect
                             mt={20}
-                            label={t`Message attendees with specific tickets`}
+                            label={t`Message attendees with specific products`}
                             searchable
-                            data={event.tickets?.map(ticket => {
+                            data={event.products?.map(product => {
                                 return {
-                                    value: String(ticket.id),
-                                    label: ticket.title,
+                                    value: String(product.id),
+                                    label: product.title,
                                 };
                             })}
-                            {...form.getInputProps('ticket_ids')}
+                            {...form.getInputProps('product_ids')}
                         />
                     )}
 

@@ -11,7 +11,7 @@ class DuplicateEventDataDTO extends BaseDTO
         public int     $accountId,
         public string  $title,
         public string  $startDate,
-        public bool    $duplicateTickets = true,
+        public bool    $duplicateProducts = true,
         public bool    $duplicateQuestions = true,
         public bool    $duplicateSettings = true,
         public bool    $duplicatePromoCodes = true,

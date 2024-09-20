@@ -28,7 +28,7 @@ abstract class EventDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     final public const DELETED_AT = 'deleted_at';
     final public const LOCATION = 'location';
     final public const SHORT_ID = 'short_id';
-    final public const TICKET_QUANTITY_AVAILABLE = 'ticket_quantity_available';
+    final public const PRODUCT_QUANTITY_AVAILABLE = 'ticket_quantity_available';
 
     protected int $id;
     protected int $account_id;

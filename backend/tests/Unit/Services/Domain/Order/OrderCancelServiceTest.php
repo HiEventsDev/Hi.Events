@@ -12,7 +12,7 @@ use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Domain\Order\OrderCancelService;
-use HiEvents\Services\Domain\Ticket\TicketQuantityUpdateService;
+use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Collection;
@@ -27,7 +27,7 @@ class OrderCancelServiceTest extends TestCase
     private EventRepositoryInterface $eventRepository;
     private OrderRepositoryInterface $orderRepository;
     private DatabaseManager $databaseManager;
-    private TicketQuantityUpdateService $ticketQuantityService;
+    private ProductQuantityUpdateService $ticketQuantityService;
     private OrderCancelService $service;
 
     protected function setUp(): void
@@ -39,7 +39,7 @@ class OrderCancelServiceTest extends TestCase
         $this->eventRepository = m::mock(EventRepositoryInterface::class);
         $this->orderRepository = m::mock(OrderRepositoryInterface::class);
         $this->databaseManager = m::mock(DatabaseManager::class);
-        $this->ticketQuantityService = m::mock(TicketQuantityUpdateService::class);
+        $this->ticketQuantityService = m::mock(ProductQuantityUpdateService::class);
 
         $this->service = new OrderCancelService(
             mailer: $this->mailer,

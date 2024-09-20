@@ -14,7 +14,7 @@ export const TaxSettings = () => {
         <>
             <HeadingCard
                 heading={t`Tax & Fees`}
-                subHeading={t`Manage taxes and fees which can be applied to your tickets`}
+                subHeading={t`Manage taxes and fees which can be applied to your products`}
                 buttonText={t`Add Tax or Fee`}
                 buttonAction={openCreateModal}
             />

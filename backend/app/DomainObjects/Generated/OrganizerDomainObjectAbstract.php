@@ -22,6 +22,8 @@ abstract class OrganizerDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
     final public const DELETED_AT = 'deleted_at';
     final public const CURRENCY = 'currency';
     final public const TIMEZONE = 'timezone';
+    final public const SOCIAL_HANDLES = 'social_handles';
+    final public const IS_PUBLIC_PROFILE_ENABLED = 'is_public_profile_enabled';
 
     protected int $id;
     protected int $account_id;
@@ -35,6 +37,8 @@ abstract class OrganizerDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
     protected ?string $deleted_at = null;
     protected string $currency = 'USD';
     protected string $timezone;
+    protected array|string|null $social_handles = null;
+    protected ?string $is_public_profile_enabled = null;
 
     public function toArray(): array
     {
@@ -51,6 +55,8 @@ abstract class OrganizerDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
                     'deleted_at' => $this->deleted_at ?? null,
                     'currency' => $this->currency ?? null,
                     'timezone' => $this->timezone ?? null,
+                    'social_handles' => $this->social_handles ?? null,
+                    'is_public_profile_enabled' => $this->is_public_profile_enabled ?? null,
                 ];
     }
 
@@ -184,5 +190,27 @@ abstract class OrganizerDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
     public function getTimezone(): string
     {
         return $this->timezone;
+    }
+
+    public function setSocialHandles(array|string|null $social_handles): self
+    {
+        $this->social_handles = $social_handles;
+        return $this;
+    }
+
+    public function getSocialHandles(): array|string|null
+    {
+        return $this->social_handles;
+    }
+
+    public function setIsPublicProfileEnabled(?string $is_public_profile_enabled): self
+    {
+        $this->is_public_profile_enabled = $is_public_profile_enabled;
+        return $this;
+    }
+
+    public function getIsPublicProfileEnabled(): ?string
+    {
+        return $this->is_public_profile_enabled;
     }
 }

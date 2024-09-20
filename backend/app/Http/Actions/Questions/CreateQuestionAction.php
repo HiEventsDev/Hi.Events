@@ -30,7 +30,7 @@ class CreateQuestionAction extends BaseAction
             'required' => $request->boolean('required'),
             'options' => $request->input('options'),
             'event_id' => $eventId,
-            'ticket_ids' => $request->input('ticket_ids'),
+            'product_ids' => $request->input('product_ids'),
             'belongs_to' => $request->input('belongs_to'),
             'is_hidden' => $request->boolean('is_hidden'),
             'description' => $request->input('description'),

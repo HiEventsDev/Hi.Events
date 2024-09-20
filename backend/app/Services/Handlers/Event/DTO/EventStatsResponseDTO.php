@@ -18,7 +18,7 @@ class EventStatsResponseDTO extends BaseDTO
 
         public EventCheckInStatsResponseDTO $check_in_stats,
 
-        public int                          $total_tickets_sold,
+        public int                          $total_products_sold,
         public int                          $total_orders,
         public float                        $total_gross_sales,
         public float                        $total_fees,

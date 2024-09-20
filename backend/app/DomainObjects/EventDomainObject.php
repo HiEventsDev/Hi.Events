@@ -14,7 +14,7 @@ use Illuminate\Support\Str;
 
 class EventDomainObject extends Generated\EventDomainObjectAbstract implements IsSortable, IsFilterable
 {
-    private ?Collection $tickets = null;
+    private ?Collection $products = null;
 
     private ?Collection $questions = null;
 
@@ -79,16 +79,16 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
         return 'asc';
     }
 
-    public function setTickets(Collection $tickets): self
+    public function setProducts(Collection $products): self
     {
-        $this->tickets = $tickets;
+        $this->products = $products;
 
         return $this;
     }
 
-    public function getTickets(): ?Collection
+    public function getProducts(): ?Collection
     {
-        return $this->tickets;
+        return $this->products;
     }
 
     public function setQuestions(?Collection $questions): EventDomainObject

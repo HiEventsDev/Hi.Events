@@ -7,7 +7,7 @@ use HiEvents\DomainObjects\PromoCodeDomainObject;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
 use HiEvents\Services\Domain\Event\EventPageViewIncrementService;
-use HiEvents\Services\Domain\Ticket\TicketFilterService;
+use HiEvents\Services\Domain\Product\ProductFilterService;
 use HiEvents\Services\Handlers\Event\DTO\GetPublicEventDTO;
 use HiEvents\Services\Handlers\Event\GetPublicEventHandler;
 use Mockery as m;
@@ -17,7 +17,7 @@ class GetPublicEventHandlerTest extends TestCase
 {
     private EventRepositoryInterface $eventRepository;
     private PromoCodeRepositoryInterface $promoCodeRepository;
-    private TicketFilterService $ticketFilterService;
+    private ProductFilterService $ticketFilterService;
     private EventPageViewIncrementService $eventPageViewIncrementService;
     private GetPublicEventHandler $handler;
 
@@ -27,7 +27,7 @@ class GetPublicEventHandlerTest extends TestCase
 
         $this->eventRepository = m::mock(EventRepositoryInterface::class);
         $this->promoCodeRepository = m::mock(PromoCodeRepositoryInterface::class);
-        $this->ticketFilterService = m::mock(TicketFilterService::class);
+        $this->ticketFilterService = m::mock(ProductFilterService::class);
         $this->eventPageViewIncrementService = m::mock(EventPageViewIncrementService::class);
 
         $this->handler = new GetPublicEventHandler(

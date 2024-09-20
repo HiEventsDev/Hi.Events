@@ -57,13 +57,13 @@ export const EventDocumentHead = ({event}: EventDocumentHeadProps) => {
         eventStatus: 'https://schema.org/EventScheduled',
         eventAttendanceMode: event.settings?.is_online_event ? "https://schema.org/OnlineEventAttendanceMode" : "https://schema.org/OfflineEventAttendanceMode",
         currency: event.currency,
-        offers: event.tickets?.map(ticket => ({
+        offers: event.products?.map(product => ({
             "@type": "http://schema.org/Offer",
             url,
-            price: ticket.prices?.[0]?.price,
+            price: product.prices?.[0]?.price,
             priceCurrency: event.currency,
             validFrom: startDate,
-            availability: ticket.is_available ? "http://schema.org/InStock" : "http://schema.org/SoldOut",
+            availability: product.is_available ? "http://schema.org/InStock" : "http://schema.org/SoldOut",
         })),
     };
 

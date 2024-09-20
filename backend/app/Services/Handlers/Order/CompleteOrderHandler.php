@@ -9,22 +9,22 @@ use Exception;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
-use HiEvents\DomainObjects\Generated\TicketPriceDomainObjectAbstract;
+use HiEvents\DomainObjects\Generated\ProductPriceDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\DomainObjects\Status\OrderPaymentStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
-use HiEvents\DomainObjects\TicketPriceDomainObject;
+use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\Events\OrderStatusChangedEvent;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Helper\IdHelper;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\QuestionAnswerRepositoryInterface;
-use HiEvents\Repository\Interfaces\TicketPriceRepositoryInterface;
+use HiEvents\Repository\Interfaces\ProductPriceRepositoryInterface;
 use HiEvents\Services\Domain\Payment\Stripe\EventHandlers\PaymentIntentSucceededHandler;
-use HiEvents\Services\Domain\Ticket\TicketQuantityUpdateService;
+use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
 use HiEvents\Services\Handlers\Order\DTO\CompleteOrderAttendeeDTO;
 use HiEvents\Services\Handlers\Order\DTO\CompleteOrderDTO;
 use HiEvents\Services\Handlers\Order\DTO\CompleteOrderOrderDTO;
@@ -43,8 +43,8 @@ readonly class CompleteOrderHandler
         private OrderRepositoryInterface          $orderRepository,
         private AttendeeRepositoryInterface       $attendeeRepository,
         private QuestionAnswerRepositoryInterface $questionAnswersRepository,
-        private TicketQuantityUpdateService       $ticketQuantityUpdateService,
-        private TicketPriceRepositoryInterface    $ticketPriceRepository,
+        private ProductQuantityUpdateService      $productQuantityUpdateService,
+        private ProductPriceRepositoryInterface   $productPriceRepository,
     )
     {
     }
@@ -68,13 +68,13 @@ readonly class CompleteOrderHandler
             }
 
             /**
-             * If there's no payment required, immediately update the ticket quantities, otherwise handle
+             * If there's no payment required, immediately update the product quantities, otherwise handle
              * this in the PaymentIntentEventHandlerService
              *
              * @see PaymentIntentSucceededHandler
              */
             if (!$order->isPaymentRequired()) {
-                $this->ticketQuantityUpdateService->updateQuantitiesFromOrder($updatedOrder);
+                $this->productQuantityUpdateService->updateQuantitiesFromOrder($updatedOrder);
             }
 
             OrderStatusChangedEvent::dispatch($updatedOrder);
@@ -91,22 +91,22 @@ readonly class CompleteOrderHandler
         $inserts = [];
         $publicIdIndex = 1;
 
-        $ticketsPrices = $this->ticketPriceRepository->findWhereIn(
-            field: TicketPriceDomainObjectAbstract::ID,
-            values: $attendees->pluck('ticket_price_id')->toArray(),
+        $productsPrices = $this->productPriceRepository->findWhereIn(
+            field: ProductPriceDomainObjectAbstract::ID,
+            values: $attendees->pluck('product_price_id')->toArray(),
         );
 
-        $this->validateTicketPriceIdsMatchOrder($order, $ticketsPrices);
+        $this->validateProductPriceIdsMatchOrder($order, $productsPrices);
 
         foreach ($attendees as $attendee) {
-            $ticketId = $ticketsPrices->first(
-                fn(TicketPriceDomainObject $ticketPrice) => $ticketPrice->getId() === $attendee->ticket_price_id)
-                ->getTicketId();
+            $productId = $productsPrices->first(
+                fn(ProductPriceDomainObject $productPrice) => $productPrice->getId() === $attendee->product_price_id)
+                ->getProductId();
 
             $inserts[] = [
                 AttendeeDomainObjectAbstract::EVENT_ID => $order->getEventId(),
-                AttendeeDomainObjectAbstract::TICKET_ID => $ticketId,
-                AttendeeDomainObjectAbstract::TICKET_PRICE_ID => $attendee->ticket_price_id,
+                AttendeeDomainObjectAbstract::PRODUCT_ID => $productId,
+                AttendeeDomainObjectAbstract::PRODUCT_PRICE_ID => $attendee->product_price_id,
                 AttendeeDomainObjectAbstract::STATUS => AttendeeStatus::ACTIVE->name,
                 AttendeeDomainObjectAbstract::EMAIL => $attendee->email,
                 AttendeeDomainObjectAbstract::FIRST_NAME => $attendee->first_name,
@@ -126,7 +126,7 @@ readonly class CompleteOrderHandler
             AttendeeDomainObjectAbstract::ORDER_ID => $order->getId()
         ]);
 
-        $this->createAttendeeQuestions($attendees, $insertedAttendees, $order, $ticketsPrices);
+        $this->createAttendeeQuestions($attendees, $insertedAttendees, $order, $productsPrices);
     }
 
     private function createOrderQuestions(Collection $questions, OrderDomainObject $order): void
@@ -147,18 +147,18 @@ readonly class CompleteOrderHandler
         Collection        $attendees,
         Collection        $insertedAttendees,
         OrderDomainObject $order,
-        Collection        $ticketPrices,
+        Collection        $productPrices,
     ): void
     {
         $insertedIds = [];
         /** @var CompleteOrderAttendeeDTO $attendee */
         foreach ($attendees as $attendee) {
-            $ticketId = $ticketPrices->first(
-                fn(TicketPriceDomainObject $ticketPrice) => $ticketPrice->getId() === $attendee->ticket_price_id)
-                ->getTicketId();
+            $productId = $productPrices->first(
+                fn(ProductPriceDomainObject $productPrice) => $productPrice->getId() === $attendee->product_price_id)
+                ->getProductId();
 
             $attendeeIterator = $insertedAttendees->filter(
-                fn(AttendeeDomainObject $insertedAttendee) => $insertedAttendee->getTicketId() === $ticketId
+                fn(AttendeeDomainObject $insertedAttendee) => $insertedAttendee->getProductId() === $productId
                     && !in_array($insertedAttendee->getId(), $insertedIds, true)
             )->getIterator();
 
@@ -177,7 +177,7 @@ readonly class CompleteOrderHandler
                     'question_id' => $question->question_id,
                     'answer' => $question->response['answer'] ?? $question->response,
                     'order_id' => $order->getId(),
-                    'ticket_id' => $ticketId,
+                    'product_id' => $productId,
                     'attendee_id' => $attendeeId
                 ]);
 
@@ -243,19 +243,19 @@ readonly class CompleteOrderHandler
     }
 
     /**
-     * Check if the passed ticket price IDs match what exist in the order_items table
+     * Check if the passed product price IDs match what exist in the order_items table
      *
      * @throws ResourceConflictException
      */
-    private function validateTicketPriceIdsMatchOrder(OrderDomainObject $order, Collection $ticketsPrices): void
+    private function validateProductPriceIdsMatchOrder(OrderDomainObject $order, Collection $productsPrices): void
     {
-        $orderTicketPriceIds = $order->getOrderItems()
-            ?->map(fn(OrderItemDomainObject $orderItem) => $orderItem->getTicketPriceId())->toArray();
+        $orderProductPriceIds = $order->getOrderItems()
+            ?->map(fn(OrderItemDomainObject $orderItem) => $orderItem->getProductPriceId())->toArray();
 
-        $ticketsPricesIds = $ticketsPrices->map(fn(TicketPriceDomainObject $ticketPrice) => $ticketPrice->getId());
+        $productsPricesIds = $productsPrices->map(fn(ProductPriceDomainObject $productPrice) => $productPrice->getId());
 
-        if ($ticketsPricesIds->diff($orderTicketPriceIds)->isNotEmpty()) {
-            throw new ResourceConflictException(__('There is an unexpected ticket price ID in the order'));
+        if ($productsPricesIds->diff($orderProductPriceIds)->isNotEmpty()) {
+            throw new ResourceConflictException(__('There is an unexpected product price ID in the order'));
         }
     }
 }

@@ -6,10 +6,10 @@ use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
-use HiEvents\Mail\Attendee\AttendeeTicketMail;
+use HiEvents\Mail\Attendee\AttendeeProductMail;
 use Illuminate\Contracts\Mail\Mailer;
 
-readonly class SendAttendeeTicketService
+readonly class SendAttendeeProductService
 {
     public function __construct(
         private Mailer $mailer
@@ -27,7 +27,7 @@ readonly class SendAttendeeTicketService
         $this->mailer
             ->to($attendee->getEmail())
             ->locale($attendee->getLocale())
-            ->send(new AttendeeTicketMail(
+            ->send(new AttendeeProductMail(
                 attendee: $attendee,
                 event: $event,
                 eventSettings: $eventSettings,

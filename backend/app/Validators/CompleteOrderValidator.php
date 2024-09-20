@@ -6,13 +6,13 @@ namespace HiEvents\Validators;
 
 use HiEvents\DomainObjects\Enums\QuestionBelongsTo;
 use HiEvents\DomainObjects\Generated\QuestionDomainObjectAbstract;
-use HiEvents\DomainObjects\Generated\TicketDomainObjectAbstract;
+use HiEvents\DomainObjects\Generated\ProductDomainObjectAbstract;
 use HiEvents\DomainObjects\QuestionDomainObject;
-use HiEvents\DomainObjects\TicketDomainObject;
-use HiEvents\DomainObjects\TicketPriceDomainObject;
+use HiEvents\DomainObjects\ProductDomainObject;
+use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\QuestionRepositoryInterface;
-use HiEvents\Repository\Interfaces\TicketRepositoryInterface;
+use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Validators\Rules\AttendeeQuestionRule;
 use HiEvents\Validators\Rules\OrderQuestionRule;
 use Illuminate\Routing\Route;
@@ -21,7 +21,7 @@ class CompleteOrderValidator extends BaseValidator
 {
     public function __construct(
         private readonly QuestionRepositoryInterface $questionRepository,
-        private readonly TicketRepositoryInterface   $ticketRepository,
+        private readonly ProductRepositoryInterface  $productRepository,
         private readonly Route                       $route
     )
     {
@@ -31,8 +31,8 @@ class CompleteOrderValidator extends BaseValidator
     {
         $questions = $this->questionRepository
             ->loadRelation(
-                new Relationship(TicketDomainObject::class, [
-                    new Relationship(TicketPriceDomainObject::class)
+                new Relationship(ProductDomainObject::class, [
+                    new Relationship(ProductPriceDomainObject::class)
                 ])
             )
             ->findWhere(
@@ -41,25 +41,25 @@ class CompleteOrderValidator extends BaseValidator
         $orderQuestions = $questions->filter(
             fn(QuestionDomainObject $question) => $question->getBelongsTo() === QuestionBelongsTo::ORDER->name
         );
-        $ticketQuestions = $questions->filter(
-            fn(QuestionDomainObject $question) => $question->getBelongsTo() === QuestionBelongsTo::TICKET->name
+        $productQuestions = $questions->filter(
+            fn(QuestionDomainObject $question) => $question->getBelongsTo() === QuestionBelongsTo::PRODUCT->name
         );
 
-        $tickets = $this->ticketRepository
-            ->loadRelation(TicketPriceDomainObject::class)
+        $products = $this->productRepository
+            ->loadRelation(ProductPriceDomainObject::class)
             ->findWhere(
-                [TicketDomainObjectAbstract::EVENT_ID => $this->route->parameter('event_id')]
+                [ProductDomainObjectAbstract::EVENT_ID => $this->route->parameter('event_id')]
             );
 
         return [
             'order.first_name' => ['required', 'string', 'max:40'],
             'order.last_name' => ['required', 'string', 'max:40'],
-            'order.questions' => new OrderQuestionRule($orderQuestions, $tickets),
+            'order.questions' => new OrderQuestionRule($orderQuestions, $products),
             'order.email' => 'required|email',
             'attendees.*.first_name' => ['required', 'string', 'max:40'],
             'attendees.*.last_name' => ['required', 'string', 'max:40'],
             'attendees.*.email' => ['required', 'email'],
-            'attendees' => new AttendeeQuestionRule($ticketQuestions, $tickets),
+            'attendees' => new AttendeeQuestionRule($productQuestions, $products),
 
             // Address validation is intentionally not strict, as we want to support all countries
             'order.address.address_line_1' => ['string', 'max:255'],

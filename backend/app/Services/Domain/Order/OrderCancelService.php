@@ -11,7 +11,7 @@ use HiEvents\Mail\Order\OrderCancelled;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
-use HiEvents\Services\Domain\Ticket\TicketQuantityUpdateService;
+use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
@@ -19,12 +19,12 @@ use Throwable;
 readonly class OrderCancelService
 {
     public function __construct(
-        private Mailer                      $mailer,
-        private AttendeeRepositoryInterface $attendeeRepository,
-        private EventRepositoryInterface    $eventRepository,
-        private OrderRepositoryInterface    $orderRepository,
-        private DatabaseManager             $databaseManager,
-        private TicketQuantityUpdateService $ticketQuantityService,
+        private Mailer                       $mailer,
+        private AttendeeRepositoryInterface  $attendeeRepository,
+        private EventRepositoryInterface     $eventRepository,
+        private OrderRepositoryInterface     $orderRepository,
+        private DatabaseManager              $databaseManager,
+        private ProductQuantityUpdateService $productQuantityService,
     )
     {
     }
@@ -36,7 +36,7 @@ readonly class OrderCancelService
     {
         $this->databaseManager->transaction(function () use ($order) {
             $this->cancelAttendees($order);
-            $this->adjustTicketQuantities($order);
+            $this->adjustProductQuantities($order);
             $this->updateOrderStatus($order);
 
             $event = $this->eventRepository
@@ -66,18 +66,18 @@ readonly class OrderCancelService
         );
     }
 
-    private function adjustTicketQuantities(OrderDomainObject $order): void
+    private function adjustProductQuantities(OrderDomainObject $order): void
     {
         $attendees = $this->attendeeRepository->findWhere([
             'order_id' => $order->getId(),
             'status' => AttendeeStatus::ACTIVE->name,
         ]);
 
-        $ticketIdCountMap = $attendees
-            ->map(fn(AttendeeDomainObject $attendee) => $attendee->getTicketPriceId())->countBy();
+        $productIdCountMap = $attendees
+            ->map(fn(AttendeeDomainObject $attendee) => $attendee->getProductPriceId())->countBy();
 
-        foreach ($ticketIdCountMap as $ticketPriceId => $count) {
-            $this->ticketQuantityService->decreaseQuantitySold($ticketPriceId, $count);
+        foreach ($productIdCountMap as $productPriceId => $count) {
+            $this->productQuantityService->decreaseQuantitySold($productPriceId, $count);
         }
     }
 

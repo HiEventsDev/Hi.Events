@@ -5,7 +5,7 @@ namespace HiEvents\Http\Actions\CheckInLists;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\CheckInList\UpsertCheckInListRequest;
 use HiEvents\Resources\CheckInList\CheckInListResource;
-use HiEvents\Services\Domain\Ticket\Exception\UnrecognizedTicketIdException;
+use HiEvents\Services\Domain\Product\Exception\UnrecognizedProductIdException;
 use HiEvents\Services\Handlers\CheckInList\CreateCheckInListHandler;
 use HiEvents\Services\Handlers\CheckInList\DTO\UpsertCheckInListDTO;
 use Illuminate\Http\JsonResponse;
@@ -27,12 +27,12 @@ class CreateCheckInListAction extends BaseAction
                     name: $request->validated('name'),
                     description: $request->validated('description'),
                     eventId: $eventId,
-                    ticketIds: $request->validated('ticket_ids'),
+                    productIds: $request->validated('product_ids'),
                     expiresAt: $request->validated('expires_at'),
                     activatesAt: $request->validated('activates_at'),
                 )
             );
-        } catch (UnrecognizedTicketIdException $exception) {
+        } catch (UnrecognizedProductIdException $exception) {
             return $this->errorResponse(
                 message: $exception->getMessage(),
                 statusCode: Response::HTTP_UNPROCESSABLE_ENTITY,

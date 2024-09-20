@@ -5,8 +5,8 @@ namespace HiEvents\Validators\Rules;
 use Closure;
 use HiEvents\DomainObjects\Enums\QuestionTypeEnum;
 use HiEvents\DomainObjects\QuestionDomainObject;
-use HiEvents\DomainObjects\TicketDomainObject;
-use HiEvents\DomainObjects\TicketPriceDomainObject;
+use HiEvents\DomainObjects\ProductDomainObject;
+use HiEvents\DomainObjects\ProductPriceDomainObject;
 use Illuminate\Contracts\Validation\DataAwareRule;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Contracts\Validation\ValidatorAwareRule;
@@ -34,7 +34,7 @@ abstract class BaseQuestionRule implements ValidationRule, DataAwareRule, Valida
 
     protected Collection $questions;
 
-    private Collection $tickets;
+    private Collection $products;
 
     protected Validator $validator;
 
@@ -44,10 +44,10 @@ abstract class BaseQuestionRule implements ValidationRule, DataAwareRule, Valida
 
     abstract protected function validateQuestions(mixed $data): array;
 
-    public function __construct(Collection $questions, Collection $tickets)
+    public function __construct(Collection $questions, Collection $products)
     {
         $this->questions = $questions;
-        $this->tickets = $tickets;
+        $this->products = $products;
     }
 
     public function validate(string $attribute, mixed $value, Closure $fail): void
@@ -73,16 +73,16 @@ abstract class BaseQuestionRule implements ValidationRule, DataAwareRule, Valida
         $this->data = $data;
     }
 
-    protected function getTicketIdFromTicketPriceId(int $ticketPriceId): int
+    protected function getProductIdFromProductPriceId(int $productPriceId): int
     {
-        $ticketPrices = new Collection();
-        $this->tickets->each(fn(TicketDomainObject $ticket) => $ticketPrices->push(...$ticket->getTicketPrices()));
+        $productPrices = new Collection();
+        $this->products->each(fn(ProductDomainObject $product) => $productPrices->push(...$product->getProductPrices()));
 
-        /** @var TicketPriceDomainObject $ticketPrice */
-        $ticketPrice = $ticketPrices
-            ->first(fn(TicketPriceDomainObject $ticketPrice) => $ticketPrice->getId() === $ticketPriceId);
+        /** @var ProductPriceDomainObject $productPrice */
+        $productPrice = $productPrices
+            ->first(fn(ProductPriceDomainObject $productPrice) => $productPrice->getId() === $productPriceId);
 
-        return $ticketPrice->getTicketId();
+        return $productPrice->getProductId();
     }
 
     protected function isAnswerValid(QuestionDomainObject $questionDomainObject, mixed $response): bool

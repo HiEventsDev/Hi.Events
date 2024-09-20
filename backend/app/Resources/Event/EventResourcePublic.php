@@ -7,7 +7,7 @@ use HiEvents\Resources\BaseResource;
 use HiEvents\Resources\Image\ImageResource;
 use HiEvents\Resources\Organizer\OrganizerResourcePublic;
 use HiEvents\Resources\Question\QuestionResource;
-use HiEvents\Resources\Ticket\TicketResourcePublic;
+use HiEvents\Resources\Product\ProductResourcePublic;
 use Illuminate\Http\Request;
 
 /**
@@ -39,9 +39,9 @@ class EventResourcePublic extends BaseResource
             'timezone' => $this->getTimezone(),
             'location_details' => $this->when((bool)$this->getLocationDetails(), fn() => $this->getLocationDetails()),
 
-            'tickets' => $this->when(
-                !is_null($this->getTickets()),
-                fn() => TicketResourcePublic::collection($this->getTickets())
+            'products' => $this->when(
+                !is_null($this->getProducts()),
+                fn() => ProductResourcePublic::collection($this->getProducts())
             ),
             'settings' => $this->when(
                 !is_null($this->getEventSettings()),

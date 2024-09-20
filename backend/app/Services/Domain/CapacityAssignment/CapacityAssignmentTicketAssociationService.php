@@ -2,52 +2,52 @@
 
 namespace HiEvents\Services\Domain\CapacityAssignment;
 
-use HiEvents\Repository\Interfaces\TicketRepositoryInterface;
+use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use Illuminate\Database\DatabaseManager;
 
-class CapacityAssignmentTicketAssociationService
+class CapacityAssignmentProductAssociationService
 {
     public function __construct(
-        private readonly TicketRepositoryInterface $ticketRepository,
-        public readonly DatabaseManager            $databaseManager,
+        private readonly ProductRepositoryInterface $productRepository,
+        public readonly DatabaseManager             $databaseManager,
     )
     {
     }
 
-    public function addCapacityToTickets(
+    public function addCapacityToProducts(
         int    $capacityAssignmentId,
-        ?array $ticketIds,
+        ?array $productIds,
         bool   $removePreviousAssignments = true
     ): void
     {
-        $this->databaseManager->transaction(function () use ($capacityAssignmentId, $ticketIds, $removePreviousAssignments) {
-            $this->associateTicketsWithCapacityAssignment(
+        $this->databaseManager->transaction(function () use ($capacityAssignmentId, $productIds, $removePreviousAssignments) {
+            $this->associateProductsWithCapacityAssignment(
                 capacityAssignmentId: $capacityAssignmentId,
-                ticketIds: $ticketIds,
+                productIds: $productIds,
                 removePreviousAssignments: $removePreviousAssignments,
             );
         });
     }
 
-    private function associateTicketsWithCapacityAssignment(
+    private function associateProductsWithCapacityAssignment(
         int    $capacityAssignmentId,
-        ?array $ticketIds,
+        ?array $productIds,
         bool   $removePreviousAssignments = true
     ): void
     {
-        if (empty($ticketIds)) {
+        if (empty($productIds)) {
             return;
         }
 
         if ($removePreviousAssignments) {
-            $this->ticketRepository->removeCapacityAssignmentFromTickets(
+            $this->productRepository->removeCapacityAssignmentFromProducts(
                 capacityAssignmentId: $capacityAssignmentId,
             );
         }
 
-        $this->ticketRepository->addCapacityAssignmentToTickets(
+        $this->productRepository->addCapacityAssignmentToProducts(
             capacityAssignmentId: $capacityAssignmentId,
-            ticketIds: array_unique($ticketIds),
+            productIds: array_unique($productIds),
         );
     }
 }

@@ -64,7 +64,7 @@ class CreateAttendeeCheckInService
             if ($attendee->getStatus() === AttendeeStatus::CANCELLED->name) {
                 $errors->addError(
                     key: $attendee->getPublicId(),
-                    message: __('Attendee :attendee_name\'s ticket is cancelled', [
+                    message: __('Attendee :attendee_name\'s product is cancelled', [
                         'attendee_name' => $attendee->getFullName(),
                     ])
                 );
@@ -87,7 +87,7 @@ class CreateAttendeeCheckInService
                     AttendeeCheckInDomainObjectAbstract::ATTENDEE_ID => $attendee->getId(),
                     AttendeeCheckInDomainObjectAbstract::CHECK_IN_LIST_ID => $checkInList->getId(),
                     AttendeeCheckInDomainObjectAbstract::IP_ADDRESS => $checkInUserIpAddress,
-                    AttendeeCheckInDomainObjectAbstract::TICKET_ID => $attendee->getTicketId(),
+                    AttendeeCheckInDomainObjectAbstract::PRODUCT_ID => $attendee->getProductId(),
                     AttendeeCheckInDomainObjectAbstract::SHORT_ID => IdHelper::shortId(IdHelper::CHECK_IN_PREFIX),
                     AttendeeCheckInDomainObjectAbstract::EVENT_ID => $checkInList->getEventId(),
                 ])

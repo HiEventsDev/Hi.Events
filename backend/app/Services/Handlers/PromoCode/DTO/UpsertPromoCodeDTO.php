@@ -9,7 +9,7 @@ class UpsertPromoCodeDTO
     public function __construct(
         public readonly string                    $code,
         public readonly int                       $event_id,
-        public readonly array                     $applicable_ticket_ids,
+        public readonly array                     $applicable_product_ids,
         public readonly PromoCodeDiscountTypeEnum $discount_type,
         public readonly ?float                    $discount,
         public readonly ?string                   $expiry_date,

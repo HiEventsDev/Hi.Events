@@ -20,7 +20,7 @@ readonly class SortQuestionsHandler
         $questionIdResult = $this->questionRepository->findWhere([
             'event_id' => $eventId,
         ])
-            ->map(fn($ticket) => $ticket->getId())
+            ->map(fn($product) => $product->getId())
             ->toArray();
 
         $extraInOrdered = array_diff($orderedQuestionIds, $questionIdResult);

@@ -4,14 +4,14 @@ namespace HiEvents\Services\Handlers\Order\DTO;
 
 use HiEvents\DataTransferObjects\Attributes\CollectionOf;
 use HiEvents\DataTransferObjects\BaseDTO;
-use HiEvents\Services\Domain\Ticket\DTO\OrderTicketPriceDTO;
+use HiEvents\Services\Domain\Product\DTO\OrderProductPriceDTO;
 use Illuminate\Support\Collection;
 
-class TicketOrderDetailsDTO extends BaseDTO
+class ProductOrderDetailsDTO extends BaseDTO
 {
     public function __construct(
-        public readonly int $ticket_id,
-        #[CollectionOf(OrderTicketPriceDTO::class)]
+        public readonly int $product_id,
+        #[CollectionOf(OrderProductPriceDTO::class)]
         public Collection   $quantities,
     )
     {

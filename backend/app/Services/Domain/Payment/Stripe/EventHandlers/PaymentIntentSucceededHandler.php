@@ -19,7 +19,7 @@ use HiEvents\Repository\Eloquent\StripePaymentsRepository;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Domain\Payment\Stripe\StripeRefundExpiredOrderService;
-use HiEvents\Services\Domain\Ticket\TicketQuantityUpdateService;
+use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
 use Illuminate\Database\DatabaseManager;
 use Stripe\Exception\ApiErrorException;
 use Stripe\PaymentIntent;
@@ -30,7 +30,7 @@ readonly class PaymentIntentSucceededHandler
     public function __construct(
         private OrderRepositoryInterface        $orderRepository,
         private StripePaymentsRepository        $stripePaymentsRepository,
-        private TicketQuantityUpdateService     $quantityUpdateService,
+        private ProductQuantityUpdateService    $quantityUpdateService,
         private StripeRefundExpiredOrderService $refundExpiredOrderService,
         private DatabaseManager                 $databaseManager,
     )
@@ -93,8 +93,8 @@ readonly class PaymentIntentSucceededHandler
 
     /**
      * If the order has expired (reserved_until is in the past), refund the payment and throw an exception.
-     * This does seem quite extreme, but it ensures we don't oversell tickets. As far as I can see
-     * this is how Ticketmaster and other ticketing systems work.
+     * This does seem quite extreme, but it ensures we don't oversell products. As far as I can see
+     * this is how Productmaster and other producting systems work.
      *
      * @throws ApiErrorException
      * @throws RoundingNecessaryException
@@ -102,7 +102,7 @@ readonly class PaymentIntentSucceededHandler
      * @throws MathException
      * @throws UnknownCurrencyException
      * @throws NumberFormatException
-     * @todo We could check to see if there are tickets available, and if so, complete the order.
+     * @todo We could check to see if there are products available, and if so, complete the order.
      *       This would be a better user experience.
      *
      */

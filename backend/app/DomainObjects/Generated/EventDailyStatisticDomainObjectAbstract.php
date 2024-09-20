@@ -15,7 +15,7 @@ abstract class EventDailyStatisticDomainObjectAbstract extends \HiEvents\DomainO
     final public const SALES_TOTAL_GROSS = 'sales_total_gross';
     final public const TOTAL_TAX = 'total_tax';
     final public const SALES_TOTAL_BEFORE_ADDITIONS = 'sales_total_before_additions';
-    final public const TICKETS_SOLD = 'tickets_sold';
+    final public const PRODUCTS_SOLD = 'products_sold';
     final public const ORDERS_CREATED = 'orders_created';
     final public const DATE = 'date';
     final public const CREATED_AT = 'created_at';
@@ -31,7 +31,7 @@ abstract class EventDailyStatisticDomainObjectAbstract extends \HiEvents\DomainO
     protected float $sales_total_gross = 0.0;
     protected float $total_tax = 0.0;
     protected float $sales_total_before_additions = 0.0;
-    protected int $tickets_sold = 0;
+    protected int $products_sold = 0;
     protected int $orders_created = 0;
     protected string $date;
     protected string $created_at;
@@ -50,7 +50,7 @@ abstract class EventDailyStatisticDomainObjectAbstract extends \HiEvents\DomainO
                     'sales_total_gross' => $this->sales_total_gross ?? null,
                     'total_tax' => $this->total_tax ?? null,
                     'sales_total_before_additions' => $this->sales_total_before_additions ?? null,
-                    'tickets_sold' => $this->tickets_sold ?? null,
+                    'products_sold' => $this->products_sold ?? null,
                     'orders_created' => $this->orders_created ?? null,
                     'date' => $this->date ?? null,
                     'created_at' => $this->created_at ?? null,
@@ -118,15 +118,15 @@ abstract class EventDailyStatisticDomainObjectAbstract extends \HiEvents\DomainO
         return $this->sales_total_before_additions;
     }
 
-    public function setTicketsSold(int $tickets_sold): self
+    public function setProductsSold(int $products_sold): self
     {
-        $this->tickets_sold = $tickets_sold;
+        $this->products_sold = $products_sold;
         return $this;
     }
 
-    public function getTicketsSold(): int
+    public function getProductsSold(): int
     {
-        return $this->tickets_sold;
+        return $this->products_sold;
     }
 
     public function setOrdersCreated(int $orders_created): self

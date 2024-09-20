@@ -25,7 +25,7 @@ class DuplicateEventHandler
             accountId: $data->accountId,
             title: $data->title,
             startDate: $data->startDate,
-            duplicateTickets: $data->duplicateTickets,
+            duplicateProducts: $data->duplicateProducts,
             duplicateQuestions: $data->duplicateQuestions,
             duplicateSettings: $data->duplicateSettings,
             duplicatePromoCodes: $data->duplicatePromoCodes,

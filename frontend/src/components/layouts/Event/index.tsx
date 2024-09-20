@@ -37,7 +37,7 @@ const EventLayout = () => {
         {label: t`Manage`},
         {link: 'dashboard', label: t`Dashboard`, icon: IconDashboard},
         {link: 'settings', label: t`Settings`, icon: IconSettings},
-        {link: 'tickets', label: t`Tickets`, icon: IconTicket},
+        {link: 'products', label: t`Products`, icon: IconTicket},
         {link: 'attendees', label: t`Attendees`, icon: IconUsers},
         {link: 'orders', label: t`Orders`, icon: IconReceipt},
         {link: 'questions', label: t`Questions`, icon: IconUserQuestion},

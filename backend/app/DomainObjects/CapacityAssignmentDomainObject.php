@@ -9,7 +9,7 @@ use Illuminate\Support\Collection;
 
 class CapacityAssignmentDomainObject extends Generated\CapacityAssignmentDomainObjectAbstract implements IsSortable
 {
-    public ?Collection $tickets = null;
+    public ?Collection $products = null;
 
     public static function getDefaultSort(): string
     {
@@ -58,14 +58,14 @@ class CapacityAssignmentDomainObject extends Generated\CapacityAssignmentDomainO
         return round(($this->getUsedCapacity() / $this->getCapacity()) * 100, 2);
     }
 
-    public function getTickets(): ?Collection
+    public function getProducts(): ?Collection
     {
-        return $this->tickets;
+        return $this->products;
     }
 
-    public function setTickets(?Collection $tickets): static
+    public function setProducts(?Collection $products): static
     {
-        $this->tickets = $tickets;
+        $this->products = $products;
 
         return $this;
     }

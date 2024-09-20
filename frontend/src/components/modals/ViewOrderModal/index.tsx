@@ -17,7 +17,7 @@ interface ViewOrderModalProps {
 export const ViewOrderModal = ({onClose, orderId}: GenericModalProps & ViewOrderModalProps) => {
     const {eventId} = useParams();
     const {data: order} = useGetOrder(eventId, orderId);
-    const {data: event, data: {tickets} = {}} = useGetEvent(eventId);
+    const {data: event, data: {products} = {}} = useGetEvent(eventId);
 
     if (!order || !event) {
         return null;
@@ -48,12 +48,12 @@ export const ViewOrderModal = ({onClose, orderId}: GenericModalProps & ViewOrder
                     </>
                 )}
 
-            {tickets && (
+            {products && (
                 <>
                     <h3>
                         {t`Attendees`}
                     </h3>
-                    <AttendeeList order={order} tickets={tickets}/>
+                    <AttendeeList order={order} products={products}/>
                 </>
             )}
         </Modal>

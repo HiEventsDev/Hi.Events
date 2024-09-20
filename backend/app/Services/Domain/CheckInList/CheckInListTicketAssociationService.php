@@ -2,52 +2,52 @@
 
 namespace HiEvents\Services\Domain\CheckInList;
 
-use HiEvents\Repository\Interfaces\TicketRepositoryInterface;
+use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use Illuminate\Database\DatabaseManager;
 
-class CheckInListTicketAssociationService
+class CheckInListProductAssociationService
 {
     public function __construct(
-        private readonly TicketRepositoryInterface $ticketRepository,
-        public readonly DatabaseManager            $databaseManager,
+        private readonly ProductRepositoryInterface $productRepository,
+        public readonly DatabaseManager             $databaseManager,
     )
     {
     }
 
-    public function addCheckInListToTickets(
+    public function addCheckInListToProducts(
         int    $checkInListId,
-        ?array $ticketIds,
+        ?array $productIds,
         bool   $removePreviousAssignments = true
     ): void
     {
-        $this->databaseManager->transaction(function () use ($checkInListId, $ticketIds, $removePreviousAssignments) {
-            $this->associateTicketsWithCheckInList(
+        $this->databaseManager->transaction(function () use ($checkInListId, $productIds, $removePreviousAssignments) {
+            $this->associateProductsWithCheckInList(
                 checkInListId: $checkInListId,
-                ticketIds: $ticketIds,
+                productIds: $productIds,
                 removePreviousAssignments: $removePreviousAssignments,
             );
         });
     }
 
-    private function associateTicketsWithCheckInList(
+    private function associateProductsWithCheckInList(
         int    $checkInListId,
-        ?array $ticketIds,
+        ?array $productIds,
         bool   $removePreviousAssignments = true
     ): void
     {
-        if (empty($ticketIds)) {
+        if (empty($productIds)) {
             return;
         }
 
         if ($removePreviousAssignments) {
-            $this->ticketRepository->removeCheckInListFromTickets(
+            $this->productRepository->removeCheckInListFromProducts(
                 checkInListId: $checkInListId,
             );
         }
 
-        $this->ticketRepository->addCheckInListToTickets(
+        $this->productRepository->addCheckInListToProducts(
             checkInListId: $checkInListId,
-            ticketIds: array_unique($ticketIds),
+            productIds: array_unique($productIds),
         );
     }
 }

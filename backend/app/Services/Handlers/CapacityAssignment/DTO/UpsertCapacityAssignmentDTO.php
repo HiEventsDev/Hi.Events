@@ -13,7 +13,7 @@ class UpsertCapacityAssignmentDTO extends BaseDTO
         public CapacityAssignmentStatus $status,
 
         public ?int                     $capacity,
-        public ?array                   $ticket_ids = null,
+        public ?array                   $product_ids = null,
         public ?int                     $id = null,
     )
     {

@@ -3,7 +3,7 @@
 namespace HiEvents\Services\Handlers\CapacityAssignment;
 
 use HiEvents\DomainObjects\CapacityAssignmentDomainObject;
-use HiEvents\DomainObjects\TicketDomainObject;
+use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\Repository\Interfaces\CapacityAssignmentRepositoryInterface;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
@@ -18,7 +18,7 @@ class GetCapacityAssignmentHandler
     public function handle(int $capacityAssignmentId, int $eventId): CapacityAssignmentDomainObject
     {
         $capacityAssignment = $this->capacityAssignmentRepository
-            ->loadRelation(TicketDomainObject::class)
+            ->loadRelation(ProductDomainObject::class)
             ->findFirstWhere([
                 'event_id' => $eventId,
                 'id' => $capacityAssignmentId,

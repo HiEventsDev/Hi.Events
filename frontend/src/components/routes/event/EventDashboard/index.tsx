@@ -50,7 +50,7 @@ export const EventDashboard = () => {
 
                 <Card className={classes.chartCard}>
                     <div className={classes.chartCardTitle}>
-                        <h2>{t`Ticket Sales`}</h2>
+                        <h2>{t`Product Sales`}</h2>
                         <div className={classes.dateRange}>
                         <span>
                             {dateRange}
@@ -62,7 +62,7 @@ export const EventDashboard = () => {
                         data={eventStats?.daily_stats.map(stat => ({
                             date: formatDate(stat.date, 'MMM DD', event.timezone),
                             orders_created: stat.orders_created,
-                            tickets_sold: stat.tickets_sold,
+                            products_sold: stat.products_sold,
                         })) || []}
                         dataKey="date"
                         withLegend
@@ -70,7 +70,7 @@ export const EventDashboard = () => {
 
                         series={[
                             {name: 'orders_created', color: 'blue.6', label: t`Orders Created`},
-                            {name: 'tickets_sold', color: 'blue.2', label: t`Tickets Sold`},
+                            {name: 'products_sold', color: 'blue.2', label: t`Products Sold`},
                         ]}
                         curveType="natural"
                         tickLine="none"

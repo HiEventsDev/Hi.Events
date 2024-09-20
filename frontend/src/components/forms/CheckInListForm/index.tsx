@@ -1,17 +1,17 @@
 import {MultiSelect, Textarea, TextInput} from "@mantine/core";
 import {t} from "@lingui/macro";
 import {UseFormReturnType} from "@mantine/form";
-import {CheckInListRequest, Ticket} from "../../../types.ts";
+import {CheckInListRequest, Product} from "../../../types.ts";
 import {InputLabelWithHelp} from "../../common/InputLabelWithHelp";
 import {InputGroup} from "../../common/InputGroup";
 import {IconTicket} from "@tabler/icons-react";
 
 interface CheckInListFormProps {
     form: UseFormReturnType<CheckInListRequest>;
-    tickets: Ticket[],
+    products: Product[],
 }
 
-export const CheckInListForm = ({form, tickets}: CheckInListFormProps) => {
+export const CheckInListForm = ({form, products}: CheckInListFormProps) => {
     return (
         <>
             <TextInput
@@ -22,18 +22,18 @@ export const CheckInListForm = ({form, tickets}: CheckInListFormProps) => {
             />
 
             <MultiSelect
-                label={t`Which tickets should be associated with this check-in list?`}
+                label={t`Which products should be associated with this check-in list?`}
                 multiple
-                placeholder={t`Select tickets`}
-                data={tickets?.map(ticket => {
+                placeholder={t`Select products`}
+                data={products?.map(product => {
                     return {
-                        value: String(ticket.id),
-                        label: ticket.title,
+                        value: String(product.id),
+                        label: product.title,
                     }
                 })}
                 required
                 leftSection={<IconTicket size="1rem"/>}
-                {...form.getInputProps('ticket_ids')}
+                {...form.getInputProps('product_ids')}
             />
 
             <Textarea

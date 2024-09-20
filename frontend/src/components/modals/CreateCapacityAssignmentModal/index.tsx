@@ -1,4 +1,4 @@
-import {CapacityAssignmentRequest, GenericModalProps, Ticket} from "../../../types.ts";
+import {CapacityAssignmentRequest, GenericModalProps, Product} from "../../../types.ts";
 import {Modal} from "../../common/Modal";
 import {t} from "@lingui/macro";
 import {CapaciyAssigmentForm} from "../../forms/CapaciyAssigmentForm";
@@ -21,11 +21,11 @@ export const CreateCapacityAssignmentModal = ({onClose}: GenericModalProps) => {
             name: '',
             capacity: undefined,
             status: 'ACTIVE',
-            ticket_ids: [],
+            product_ids: [],
         }
     });
     const createMutation = useCreateCapacityAssignment();
-    const eventHasTickets = event?.tickets && event.tickets.length > 0;
+    const eventHasProducts = event?.products && event.products.length > 0;
 
     const handleSubmit = (requestData: CapacityAssignmentRequest) => {
         createMutation.mutate({
@@ -40,23 +40,23 @@ export const CreateCapacityAssignmentModal = ({onClose}: GenericModalProps) => {
         })
     }
 
-    const NoTickets = () => {
+    const NoProducts = () => {
         return (
             <NoResultsSplash
-                imageHref={'/blank-slate/tickets.svg'}
-                heading={t`Please create a ticket`}
+                imageHref={'/blank-slate/products.svg'}
+                heading={t`Please create a product`}
                 subHeading={(
                     <>
                         <p>
-                            {t`You'll need at a ticket before you can create a capacity assignment.`}
+                            {t`You'll need at a product before you can create a capacity assignment.`}
                         </p>
                         <Button
                             size={'xs'}
                             leftSection={<IconPlus/>}
                             color={'green'}
-                            onClick={() => window.location.href = `/manage/event/${eventId}/tickets/#create-ticket`}
+                            onClick={() => window.location.href = `/manage/event/${eventId}/products/#create-product`}
                         >
-                            {t`Create a Ticket`}
+                            {t`Create a Product`}
                         </Button>
                     </>
                 )}
@@ -65,11 +65,11 @@ export const CreateCapacityAssignmentModal = ({onClose}: GenericModalProps) => {
     }
 
     return (
-        <Modal opened onClose={onClose} heading={eventHasTickets ? t`Create Capacity Assignment` : null}>
-            {!eventHasTickets && <NoTickets/>}
-            {eventHasTickets && (
+        <Modal opened onClose={onClose} heading={eventHasProducts ? t`Create Capacity Assignment` : null}>
+            {!eventHasProducts && <NoProducts/>}
+            {eventHasProducts && (
                 <form onSubmit={form.onSubmit(handleSubmit)}>
-                    {event && <CapaciyAssigmentForm form={form} tickets={event.tickets as Ticket[]}/>}
+                    {event && <CapaciyAssigmentForm form={form} products={event.products as Product[]}/>}
                     <Button
                         type={'submit'}
                         fullWidth

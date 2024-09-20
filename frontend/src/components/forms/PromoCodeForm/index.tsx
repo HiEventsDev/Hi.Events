@@ -15,7 +15,7 @@ interface PromoCodeFormProps {
 
 export const PromoCodeForm = ({form}: PromoCodeFormProps) => {
     const {eventId} = useParams();
-    const {data: event, data: {tickets} = {}} = useGetEvent(eventId);
+    const {data: event, data: {products} = {}} = useGetEvent(eventId);
 
     const DiscountIcon = () => {
         if (form.values.discount_type === 'PERCENTAGE') {
@@ -24,7 +24,7 @@ export const PromoCodeForm = ({form}: PromoCodeFormProps) => {
         return getCurrencySymbol(event?.currency as string);
     };
 
-    if (!event || !tickets) {
+    if (!event || !products) {
         return <LoadingMask/>
     }
 
@@ -33,7 +33,7 @@ export const PromoCodeForm = ({form}: PromoCodeFormProps) => {
             <TextInput {...form.getInputProps('code')} label={t`Code`} placeholder="20OFF" required/>
 
             <Alert variant={'light'} mt={20} mb={20} icon={<IconAlertCircle size="1rem"/>} title={t`TIP`}>
-                {t`A promo code with no discount can be used to reveal hidden tickets.`}
+                {t`A promo code with no discount can be used to reveal hidden products.`}
             </Alert>
 
             <InputGroup>
@@ -64,16 +64,16 @@ export const PromoCodeForm = ({form}: PromoCodeFormProps) => {
             </InputGroup>
 
             <MultiSelect
-                placeholder={t`All Tickets`}
-                label={t`What tickets does this code apply to? (Applies to all by default)`}
+                placeholder={t`All Products`}
+                label={t`What products does this code apply to? (Applies to all by default)`}
                 searchable
-                data={tickets.map(ticket => {
+                data={products.map(product => {
                     return {
-                        value: String(ticket.id),
-                        label: String(ticket.title),
+                        value: String(product.id),
+                        label: String(product.title),
                     };
                 })}
-                {...form.getInputProps('applicable_ticket_ids')}
+                {...form.getInputProps('applicable_product_ids')}
             />
 
             <InputGroup>

@@ -12,7 +12,7 @@ use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\MessageRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
-use HiEvents\Repository\Interfaces\TicketRepositoryInterface;
+use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Services\Handlers\Message\DTO\SendMessageDTO;
 use HTMLPurifier;
 use Illuminate\Support\Collection;
@@ -22,7 +22,7 @@ readonly class SendMessageHandler
     public function __construct(
         private OrderRepositoryInterface    $orderRepository,
         private AttendeeRepositoryInterface $attendeeRepository,
-        private TicketRepositoryInterface   $ticketRepository,
+        private ProductRepositoryInterface  $productRepository,
         private MessageRepositoryInterface  $messageRepository,
         private AccountRepositoryInterface  $accountRepository,
         private HTMLPurifier                $purifier,
@@ -48,7 +48,7 @@ readonly class SendMessageHandler
             'type' => $messageData->type->name,
             'order_id' => $this->getOrderId($messageData),
             'attendee_ids' => $this->getAttendeeIds($messageData)->toArray(),
-            'ticket_ids' => $this->getTicketIds($messageData)->toArray(),
+            'product_ids' => $this->getProductIds($messageData)->toArray(),
             'sent_at' => Carbon::now()->toDateTimeString(),
             'sent_by_user_id' => $messageData->sent_by_user_id,
             'status' => MessageStatus::PROCESSING->name,
@@ -63,7 +63,7 @@ readonly class SendMessageHandler
             'is_test' => $messageData->is_test,
             'order_id' => $message->getOrderId(),
             'attendee_ids' => $message->getAttendeeIds(),
-            'ticket_ids' => $message->getTicketIds(),
+            'product_ids' => $message->getProductIds(),
             'send_copy_to_current_user' => $messageData->send_copy_to_current_user,
             'sent_by_user_id' => $messageData->sent_by_user_id,
             'account_id' => $messageData->account_id,
@@ -90,18 +90,18 @@ readonly class SendMessageHandler
     }
 
 
-    private function getTicketIds(SendMessageDTO $messageData): Collection
+    private function getProductIds(SendMessageDTO $messageData): Collection
     {
-        $tickets = $this->ticketRepository->findWhereIn(
+        $products = $this->productRepository->findWhereIn(
             field: 'id',
-            values: $messageData->ticket_ids,
+            values: $messageData->product_ids,
             additionalWhere: [
                 'event_id' => $messageData->event_id,
             ],
             columns: ['id']
         );
 
-        return $tickets->map(fn($attendee) => $attendee->getId());
+        return $products->map(fn($attendee) => $attendee->getId());
     }
 
     private function getOrderId(SendMessageDTO $messageData): ?int

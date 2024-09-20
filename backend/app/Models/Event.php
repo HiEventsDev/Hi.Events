@@ -19,9 +19,9 @@ class Event extends BaseModel
         return $this->belongsTo(Organizer::class);
     }
 
-    public function tickets(): HasMany
+    public function products(): HasMany
     {
-        return $this->hasMany(Ticket::class)->orderBy('order');
+        return $this->hasMany(Product::class)->orderBy('order');
     }
 
     public function attendees(): HasMany

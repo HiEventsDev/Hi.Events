@@ -104,7 +104,7 @@ class CreateEventService
     {
         $this->eventStatisticsRepository->create([
             'event_id' => $event->getId(),
-            'tickets_sold' => 0,
+            'products_sold' => 0,
             'sales_total_gross' => 0,
             'sales_total_before_additions' => 0,
             'total_tax' => 0,

@@ -87,12 +87,12 @@ use HiEvents\Http\Actions\TaxesAndFees\CreateTaxOrFeeAction;
 use HiEvents\Http\Actions\TaxesAndFees\DeleteTaxOrFeeAction;
 use HiEvents\Http\Actions\TaxesAndFees\EditTaxOrFeeAction;
 use HiEvents\Http\Actions\TaxesAndFees\GetTaxOrFeeAction;
-use HiEvents\Http\Actions\Tickets\CreateTicketAction;
-use HiEvents\Http\Actions\Tickets\DeleteTicketAction;
-use HiEvents\Http\Actions\Tickets\EditTicketAction;
-use HiEvents\Http\Actions\Tickets\GetTicketAction;
-use HiEvents\Http\Actions\Tickets\GetTicketsAction;
-use HiEvents\Http\Actions\Tickets\SortTicketsAction;
+use HiEvents\Http\Actions\Products\CreateProductAction;
+use HiEvents\Http\Actions\Products\DeleteProductAction;
+use HiEvents\Http\Actions\Products\EditProductAction;
+use HiEvents\Http\Actions\Products\GetProductAction;
+use HiEvents\Http\Actions\Products\GetProductsAction;
+use HiEvents\Http\Actions\Products\SortProductsAction;
 use HiEvents\Http\Actions\Users\CancelEmailChangeAction;
 use HiEvents\Http\Actions\Users\ConfirmEmailAddressAction;
 use HiEvents\Http\Actions\Users\ConfirmEmailChangeAction;
@@ -171,12 +171,12 @@ $router->middleware(['auth:api'])->group(
         $router->put('/events/{event_id}/status', UpdateEventStatusAction::class);
         $router->post('/events/{event_id}/duplicate', DuplicateEventAction::class);
 
-        $router->post('/events/{event_id}/tickets', CreateTicketAction::class);
-        $router->post('/events/{event_id}/tickets/sort', SortTicketsAction::class);
-        $router->put('/events/{event_id}/tickets/{ticket_id}', EditTicketAction::class);
-        $router->get('/events/{event_id}/tickets/{ticket_id}', GetTicketAction::class);
-        $router->delete('/events/{event_id}/tickets/{ticket_id}', DeleteTicketAction::class);
-        $router->get('/events/{event_id}/tickets', GetTicketsAction::class);
+        $router->post('/events/{event_id}/products', CreateProductAction::class);
+        $router->post('/events/{event_id}/products/sort', SortProductsAction::class);
+        $router->put('/events/{event_id}/products/{ticket_id}', EditProductAction::class);
+        $router->get('/events/{event_id}/products/{ticket_id}', GetProductAction::class);
+        $router->delete('/events/{event_id}/products/{ticket_id}', DeleteProductAction::class);
+        $router->get('/events/{event_id}/products', GetProductsAction::class);
         $router->get('/events/{event_id}/check_in_stats', GetEventCheckInStatsAction::class);
         $router->get('/events/{event_id}/stats', GetEventStatsAction::class);
 
@@ -244,8 +244,8 @@ $router->prefix('/public')->group(
         // Events
         $router->get('/events/{event_id}', GetEventPublicAction::class);
 
-        // Tickets
-        $router->get('/events/{event_id}/tickets', GetEventPublicAction::class);
+        // Products
+        $router->get('/events/{event_id}/products', GetEventPublicAction::class);
 
         // Orders
         $router->post('/events/{event_id}/order', CreateOrderActionPublic::class);

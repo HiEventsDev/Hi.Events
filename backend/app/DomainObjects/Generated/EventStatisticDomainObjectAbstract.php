@@ -21,7 +21,7 @@ abstract class EventStatisticDomainObjectAbstract extends \HiEvents\DomainObject
     final public const DELETED_AT = 'deleted_at';
     final public const UPDATED_AT = 'updated_at';
     final public const TOTAL_FEE = 'total_fee';
-    final public const TICKETS_SOLD = 'tickets_sold';
+    final public const PRODUCTS_SOLD = 'products_sold';
     final public const VERSION = 'version';
     final public const ORDERS_CREATED = 'orders_created';
     final public const TOTAL_REFUNDED = 'total_refunded';
@@ -37,7 +37,7 @@ abstract class EventStatisticDomainObjectAbstract extends \HiEvents\DomainObject
     protected ?string $deleted_at = null;
     protected ?string $updated_at = null;
     protected float $total_fee = 0.0;
-    protected int $tickets_sold = 0;
+    protected int $products_sold = 0;
     protected int $version = 0;
     protected int $orders_created = 0;
     protected float $total_refunded = 0.0;
@@ -56,7 +56,7 @@ abstract class EventStatisticDomainObjectAbstract extends \HiEvents\DomainObject
                     'deleted_at' => $this->deleted_at ?? null,
                     'updated_at' => $this->updated_at ?? null,
                     'total_fee' => $this->total_fee ?? null,
-                    'tickets_sold' => $this->tickets_sold ?? null,
+                    'products_sold' => $this->products_sold ?? null,
                     'version' => $this->version ?? null,
                     'orders_created' => $this->orders_created ?? null,
                     'total_refunded' => $this->total_refunded ?? null,
@@ -184,15 +184,15 @@ abstract class EventStatisticDomainObjectAbstract extends \HiEvents\DomainObject
         return $this->total_fee;
     }
 
-    public function setTicketsSold(int $tickets_sold): self
+    public function setProductsSold(int $products_sold): self
     {
-        $this->tickets_sold = $tickets_sold;
+        $this->products_sold = $products_sold;
         return $this;
     }
 
-    public function getTicketsSold(): int
+    public function getProductsSold(): int
     {
-        return $this->tickets_sold;
+        return $this->products_sold;
     }
 
     public function setVersion(int $version): self
