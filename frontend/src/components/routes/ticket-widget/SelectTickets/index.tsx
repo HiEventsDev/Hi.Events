@@ -24,6 +24,7 @@ import {eventsClientPublic} from "../../../../api/event.client.ts";
 import {promoCodeClientPublic} from "../../../../api/promo-code.client.ts";
 import {IconX} from "@tabler/icons-react"
 import {getSessionIdentifier} from "../../../../utilites/sessionIdentifier.ts";
+import {Constants} from "../../../../constants.ts";
 
 const sendHeightToIframeWidgets = () => {
     const height = document.documentElement.scrollHeight;
@@ -234,15 +235,15 @@ const SelectTickets = (props: SelectTicketsProps) => {
 
     return (
         (<div className={'hi-ticket-widget-container'}
-             ref={resizeRef}
-             style={{
-                 '--widget-background-color': props.colors?.background,
-                 '--widget-primary-color': props.colors?.primary,
-                 '--widget-primary-text-color': props.colors?.primaryText,
-                 '--widget-secondary-color': props.colors?.secondary,
-                 '--widget-secondary-text-color': props.colors?.secondaryText,
-                 '--widget-padding': props?.padding,
-             } as React.CSSProperties}>
+              ref={resizeRef}
+              style={{
+                  '--widget-background-color': props.colors?.background,
+                  '--widget-primary-color': props.colors?.primary,
+                  '--widget-primary-text-color': props.colors?.primaryText,
+                  '--widget-secondary-color': props.colors?.secondary,
+                  '--widget-secondary-text-color': props.colors?.secondaryText,
+                  '--widget-padding': props?.padding,
+              } as React.CSSProperties}>
             {!ticketAreAvailable && (
                 <div className={classNames(['hi-no-tickets'])}>
                     <p className={classNames(['hi-no-tickets-message'])}>
@@ -295,7 +296,16 @@ const SelectTickets = (props: SelectTicketsProps) => {
                                         <div className={'hi-ticket-availability'}>
                                             {(ticket.is_available && !!ticket.quantity_available) && (
                                                 <>
-                                                    <Trans>{ticket?.quantity_available} available</Trans>
+                                                    {ticket.quantity_available === Constants.INFINITE_TICKETS && (
+                                                        <Trans>
+                                                            Unlimited available
+                                                        </Trans>
+                                                    )}
+                                                    {ticket.quantity_available !== Constants.INFINITE_TICKETS && (
+                                                        <Trans>
+                                                            {ticket.quantity_available} available
+                                                        </Trans>
+                                                    )}
                                                 </>
                                             )}
 
