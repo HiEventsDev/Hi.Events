@@ -1,10 +1,11 @@
 import {Currency, TicketPriceDisplay} from "../../../../../common/Currency";
-import {Event, Ticket, TicketType} from "../../../../../../types.ts";
+import {Event, Ticket} from "../../../../../../types.ts";
 import {Group, TextInput} from "@mantine/core";
 import {NumberSelector, SharedValues} from "../../../../../common/NumberSelector";
 import {UseFormReturnType} from "@mantine/form";
 import {t} from "@lingui/macro";
 import {TicketPriceAvailability} from "../../../../../common/TicketPriceAvailability";
+import {getCurrencySymbol} from "../../../../../../utilites/currency.ts";
 
 interface TieredPricingProps {
     event: Event;
@@ -37,6 +38,7 @@ export const TieredPricing = ({ticket, event, form, ticketIndex}: TieredPricingP
                                                 required={true}
                                                 w={150}
                                                 mb={0}
+                                                leftSection={getCurrencySymbol(event?.currency)}
                                                 classNames={{
                                                     input: 'hi-donation-input',
                                                 }}
