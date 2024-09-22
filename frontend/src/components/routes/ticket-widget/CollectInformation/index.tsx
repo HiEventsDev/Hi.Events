@@ -1,6 +1,6 @@
 import {useMutation} from "@tanstack/react-query";
 import {FinaliseOrderPayload, orderClientPublic} from "../../../../api/order.client.ts";
-import {useNavigate, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import {Button, Skeleton, TextInput} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import {notifications} from "@mantine/notifications";
@@ -13,7 +13,7 @@ import {useEffect} from "react";
 import {t} from "@lingui/macro";
 import {InputGroup} from "../../../common/InputGroup";
 import {Card} from "../../../common/Card";
-import {IconCopy} from "@tabler/icons-react";
+import {IconChevronLeft, IconCopy} from "@tabler/icons-react";
 import {CheckoutFooter} from "../../../layouts/Checkout/CheckoutFooter";
 import {CheckoutContent} from "../../../layouts/Checkout/CheckoutContent";
 import {HomepageInfoMessage} from "../../../common/HomepageInfoMessage";
@@ -245,7 +245,15 @@ export const CollectInformation = () => {
     return (
         <form onSubmit={form.onSubmit(handleSubmit)}>
             <CheckoutContent>
-                <h2>
+                <Button
+                    component={Link}
+                    to={eventHomepagePath(event as Event)}
+                    variant="transparent"
+                    leftSection={<IconChevronLeft />}
+                    style={{ padding: 0, marginBottom: 10 }}
+                >
+                    {t`Back to event page`}
+                </Button>                <h2>
                     {t`Your Details`}
                 </h2>
 
