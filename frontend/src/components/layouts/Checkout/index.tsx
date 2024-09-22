@@ -6,11 +6,7 @@ import {t} from "@lingui/macro";
 import {Countdown} from "../../common/Countdown";
 import {showSuccess} from "../../../utilites/notifications.tsx";
 import {Event, Order} from "../../../types.ts";
-import {IconExternalLink} from "@tabler/icons-react";
-import {Anchor, Group} from "@mantine/core";
 import {CheckoutSidebar} from "./CheckoutSidebar";
-import {eventHomepagePath} from "../../../utilites/urlHelper.ts";
-import Truncate from "../../common/Truncate";
 
 const SubTitle = ({order, event}: { order: Order, event: Event }) => {
     const navigate = useNavigate();
@@ -50,7 +46,7 @@ const Checkout = () => {
                 <div className={classes.mainContent}>
                     <header className={classes.header}>
                         <h1>
-                          {event?.title}
+                            {event?.title}
                         </h1>
                         {(order && event) ? <SubTitle order={order} event={event}/> : <span>...</span>}
                     </header>
