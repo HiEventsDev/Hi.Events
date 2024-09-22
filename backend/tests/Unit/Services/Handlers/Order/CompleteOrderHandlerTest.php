@@ -21,12 +21,14 @@ use HiEvents\Services\Handlers\Order\DTO\CompleteOrderDTO;
 use HiEvents\Services\Handlers\Order\DTO\CompleteOrderOrderDTO;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Queue;
 use Mockery;
 use Mockery\MockInterface;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Tests\TestCase;
+use Illuminate\Database\Connection;
 
 class CompleteOrderHandlerTest extends TestCase
 {
@@ -43,6 +45,7 @@ class CompleteOrderHandlerTest extends TestCase
         Queue::fake();
         Mail::fake();
         Bus::fake();
+        DB::shouldReceive('transaction')->andReturnUsing(fn($callback) => $callback(Mockery::mock(Connection::class)));
 
         $this->orderRepository = Mockery::mock(OrderRepositoryInterface::class);
         $this->attendeeRepository = Mockery::mock(AttendeeRepositoryInterface::class);
