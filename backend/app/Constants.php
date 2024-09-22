@@ -11,5 +11,5 @@ final class Constants
      *
      * @var int
      */
-    public const INFINITE = PHP_INT_MAX;
+    public const INFINITE = 999999999;
 }

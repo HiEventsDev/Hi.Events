@@ -3,6 +3,7 @@
 namespace HiEvents\DomainObjects;
 
 use Carbon\Carbon;
+use HiEvents\Constants;
 use HiEvents\DomainObjects\Enums\TicketType;
 use HiEvents\DomainObjects\Interfaces\IsSortable;
 use HiEvents\DomainObjects\SortingAndFiltering\AllowedSorts;
@@ -96,6 +97,13 @@ class TicketDomainObject extends Generated\TicketDomainObjectAbstract implements
 
         if (!$this->getTicketPrices() || $this->getTicketPrices()->isEmpty()) {
             return 0;
+        }
+
+        // This is to address a case where prices have an unlimited quantity available and the user has
+        // enabled show_quantity_remaining.
+        if ($this->getShowQuantityRemaining()
+            && $this->getTicketPrices()->first(fn(TicketPriceDomainObject $price) => $price->getQuantityAvailable() === null)) {
+            return Constants::INFINITE;
         }
 
         return $availableCount;
