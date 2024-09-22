@@ -15,10 +15,12 @@ use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\DomainObjects\Status\OrderPaymentStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
+use HiEvents\DomainObjects\TicketDomainObject;
 use HiEvents\DomainObjects\TicketPriceDomainObject;
 use HiEvents\Events\OrderStatusChangedEvent;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Helper\IdHelper;
+use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\QuestionAnswerRepositoryInterface;
@@ -37,14 +39,14 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 /**
  * @todo - Tidy this up
  */
-readonly class CompleteOrderHandler
+class CompleteOrderHandler
 {
     public function __construct(
-        private OrderRepositoryInterface          $orderRepository,
-        private AttendeeRepositoryInterface       $attendeeRepository,
-        private QuestionAnswerRepositoryInterface $questionAnswersRepository,
-        private TicketQuantityUpdateService       $ticketQuantityUpdateService,
-        private TicketPriceRepositoryInterface    $ticketPriceRepository,
+        private readonly OrderRepositoryInterface          $orderRepository,
+        private readonly AttendeeRepositoryInterface       $attendeeRepository,
+        private readonly QuestionAnswerRepositoryInterface $questionAnswersRepository,
+        private readonly TicketQuantityUpdateService       $ticketQuantityUpdateService,
+        private readonly TicketPriceRepositoryInterface    $ticketPriceRepository,
     )
     {
     }
@@ -89,7 +91,6 @@ readonly class CompleteOrderHandler
     private function createAttendees(Collection $attendees, OrderDomainObject $order): void
     {
         $inserts = [];
-        $publicIdIndex = 1;
 
         $ticketsPrices = $this->ticketPriceRepository->findWhereIn(
             field: TicketPriceDomainObjectAbstract::ID,
@@ -97,6 +98,7 @@ readonly class CompleteOrderHandler
         );
 
         $this->validateTicketPriceIdsMatchOrder($order, $ticketsPrices);
+        $this->validateAttendees($order, $attendees);
 
         foreach ($attendees as $attendee) {
             $ticketId = $ticketsPrices->first(
@@ -192,7 +194,7 @@ readonly class CompleteOrderHandler
     private function validateOrder(OrderDomainObject $order): void
     {
         if ($order->getEmail() !== null) {
-            throw new ResourceConflictException(__('This order is has already been processed'));
+            throw new ResourceConflictException(__('This order has already been processed'));
         }
 
         if (Carbon::createFromTimeString($order->getReservedUntil())->isPast()) {
@@ -210,7 +212,11 @@ readonly class CompleteOrderHandler
     private function getOrder(string $orderShortId): OrderDomainObject
     {
         $order = $this->orderRepository
-            ->loadRelation(OrderItemDomainObject::class)
+            ->loadRelation(
+                new Relationship(
+                    domainObject: OrderItemDomainObject::class,
+                    nested: [new Relationship(TicketDomainObject::class, name: 'ticket')]
+                ))
             ->findByShortId($orderShortId);
 
         if ($order === null) {
@@ -256,6 +262,20 @@ readonly class CompleteOrderHandler
 
         if ($ticketsPricesIds->diff($orderTicketPriceIds)->isNotEmpty()) {
             throw new ResourceConflictException(__('There is an unexpected ticket price ID in the order'));
+        }
+    }
+
+    /**
+     * @throws ResourceConflictException
+     */
+    private function validateAttendees(OrderDomainObject $order, Collection $attendees): void
+    {
+        $orderAttendeeCount = $order->getOrderItems()->sum(fn(OrderItemDomainObject $orderItem) => $orderItem->getQuantity());
+
+        if ($orderAttendeeCount !== $attendees->count()) {
+            throw new ResourceConflictException(
+                __('The number of attendees does not match the number of tickets in the order')
+            );
         }
     }
 }
