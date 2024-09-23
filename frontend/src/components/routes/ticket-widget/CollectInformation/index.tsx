@@ -250,10 +250,13 @@ export const CollectInformation = () => {
                     to={eventHomepagePath(event as Event)}
                     variant="transparent"
                     leftSection={<IconChevronLeft />}
-                    style={{ padding: 0, marginBottom: 10 }}
+                    size={'sm'}
+                    ml={'-20px'}
                 >
                     {t`Back to event page`}
-                </Button>                <h2>
+                </Button>
+
+                <h2>
                     {t`Your Details`}
                 </h2>
 
