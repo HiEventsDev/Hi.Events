@@ -1,6 +1,11 @@
 # Hi.Events All-in-One Docker Image
 
-The all-in-one Docker image runs both the frontend and backend services in a single container. While it can be used in production, the recommended approach for production is to run the frontend and backend separately for better scalability and security.
+The all-in-one Docker image runs both the frontend and backend services in a single container. While it can be used in 
+production, the recommended approach for production is to run the frontend and backend separately for better scalability and security.
+
+The provided docker-compose.yml file is meant for development and testing purposes. For production, you should use
+the [Docker image](https://hub.docker.com/r/daveearley/hi.events-all-in-one), or create your own Docker compose file with the 
+necessary [configurations for production](https://hi.events/docs/getting-started/deploying#configuring-environment-variables).
 
 ## Quick Start with Docker
 
