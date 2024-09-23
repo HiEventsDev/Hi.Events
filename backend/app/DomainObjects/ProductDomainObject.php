@@ -4,6 +4,7 @@ namespace HiEvents\DomainObjects;
 
 use Carbon\Carbon;
 use HiEvents\DomainObjects\Enums\ProductPriceType;
+use HiEvents\Constants;
 use HiEvents\DomainObjects\Interfaces\IsSortable;
 use HiEvents\DomainObjects\SortingAndFiltering\AllowedSorts;
 use Illuminate\Support\Collection;
@@ -96,6 +97,13 @@ class ProductDomainObject extends Generated\ProductDomainObjectAbstract implemen
 
         if (!$this->getProductPrices() || $this->getProductPrices()->isEmpty()) {
             return 0;
+        }
+
+        // This is to address a case where prices have an unlimited quantity available and the user has
+        // enabled show_quantity_remaining.
+        if ($this->getShowQuantityRemaining()
+            && $this->getProductPrices()->first(fn(ProductPriceDomainObject $price) => $price->getQuantityAvailable() === null)) {
+            return Constants::INFINITE;
         }
 
         return $availableCount;

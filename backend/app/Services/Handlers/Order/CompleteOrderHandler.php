@@ -19,6 +19,7 @@ use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\Events\OrderStatusChangedEvent;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Helper\IdHelper;
+use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\QuestionAnswerRepositoryInterface;
@@ -89,13 +90,14 @@ class CompleteOrderHandler
     private function createAttendees(Collection $attendees, OrderDomainObject $order): void
     {
         $inserts = [];
-        
+
         $productsPrices = $this->productPriceRepository->findWhereIn(
             field: ProductPriceDomainObjectAbstract::ID,
             values: $attendees->pluck('product_price_id')->toArray(),
         );
 
         $this->validateProductPriceIdsMatchOrder($order, $productsPrices);
+        $this->validateAttendees($order, $attendees);
 
         foreach ($attendees as $attendee) {
             $productId = $productsPrices->first(
@@ -191,7 +193,7 @@ class CompleteOrderHandler
     private function validateOrder(OrderDomainObject $order): void
     {
         if ($order->getEmail() !== null) {
-            throw new ResourceConflictException(__('This order is has already been processed'));
+            throw new ResourceConflictException(__('This order has already been processed'));
         }
 
         if (Carbon::createFromTimeString($order->getReservedUntil())->isPast()) {
@@ -209,7 +211,11 @@ class CompleteOrderHandler
     private function getOrder(string $orderShortId): OrderDomainObject
     {
         $order = $this->orderRepository
-            ->loadRelation(OrderItemDomainObject::class)
+            ->loadRelation(
+                new Relationship(
+                    domainObject: OrderItemDomainObject::class,
+                    nested: [new Relationship(TicketDomainObject::class, name: 'ticket')]
+                ))
             ->findByShortId($orderShortId);
 
         if ($order === null) {
@@ -255,6 +261,20 @@ class CompleteOrderHandler
 
         if ($productsPricesIds->diff($orderProductPriceIds)->isNotEmpty()) {
             throw new ResourceConflictException(__('There is an unexpected product price ID in the order'));
+        }
+    }
+
+    /**
+     * @throws ResourceConflictException
+     */
+    private function validateAttendees(OrderDomainObject $order, Collection $attendees): void
+    {
+        $orderAttendeeCount = $order->getOrderItems()->sum(fn(OrderItemDomainObject $orderItem) => $orderItem->getQuantity());
+
+        if ($orderAttendeeCount !== $attendees->count()) {
+            throw new ResourceConflictException(
+                __('The number of attendees does not match the number of tickets in the order')
+            );
         }
     }
 }

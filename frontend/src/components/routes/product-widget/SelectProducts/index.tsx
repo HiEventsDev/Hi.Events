@@ -24,6 +24,7 @@ import {eventsClientPublic} from "../../../../api/event.client.ts";
 import {promoCodeClientPublic} from "../../../../api/promo-code.client.ts";
 import {IconX} from "@tabler/icons-react"
 import {getSessionIdentifier} from "../../../../utilites/sessionIdentifier.ts";
+import {Constants} from "../../../../constants.ts";
 
 const sendHeightToIframeWidgets = () => {
     const height = document.documentElement.scrollHeight;
@@ -295,7 +296,16 @@ const SelectProducts = (props: SelectProductsProps) => {
                                         <div className={'hi-product-availability'}>
                                             {(product.is_available && !!product.quantity_available) && (
                                                 <>
-                                                    <Trans>{product?.quantity_available} available</Trans>
+                                                    {product.quantity_available === Constants.INFINITE_TICKETS && (
+                                                        <Trans>
+                                                            Unlimited available
+                                                        </Trans>
+                                                    )}
+                                                    {product.quantity_available !== Constants.INFINITE_TICKETS && (
+                                                        <Trans>
+                                                            {product.quantity_available} available
+                                                        </Trans>
+                                                    )}
                                                 </>
                                             )}
 

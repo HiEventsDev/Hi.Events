@@ -17,6 +17,7 @@
 
   .subTitle {
     font-size: .95em;
+    margin-top: 10px;
   }
 
   .mainContent {
@@ -35,12 +36,22 @@
       box-shadow: 0 5px 5px 0 #0000000a;
       text-align: center;
 
-      h2 {
+      h1 {
+        font-size: 1.3em;
+        width: calc(100vw - 350px);
+        margin: 0 0 5px;
+
+        padding: 0 15px;
+
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+
         @include respond-below(md) {
+          width: calc(100vw - 60px);
           font-size: 1em;
         }
 
-        margin: 0;
       }
     }
 

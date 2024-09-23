@@ -1,5 +1,5 @@
 import {Currency, ProductPriceDisplay} from "../../../../../common/Currency";
-import {Event, Product, ProductPriceType} from "../../../../../../types.ts";
+import {Event, Product} from "../../../../../../types.ts";
 import {Group, TextInput} from "@mantine/core";
 import {NumberSelector, SharedValues} from "../../../../../common/NumberSelector";
 import {UseFormReturnType} from "@mantine/form";
@@ -38,6 +38,7 @@ export const TieredPricing = ({product, event, form, productIndex}: TieredPricin
                                                 required={true}
                                                 w={150}
                                                 mb={0}
+                                                leftSection={getCurrencySymbol(event?.currency)}
                                                 classNames={{
                                                     input: 'hi-donation-input',
                                                 }}
