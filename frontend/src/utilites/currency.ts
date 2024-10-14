@@ -60,6 +60,20 @@ export const getCurrencySymbol = (currencyCode: string): string => {
         'DZD': 'د.ج', // Algerian Dinar
         'MAD': 'د.م.',// Moroccan Dirham
         'IQD': 'ع.د', // Iraqi Dinar
+        'ISK': 'kr',  // Icelandic Króna
+        'LKR': '₨',   // Sri Lankan Rupee
+        'ETB': 'Br',  // Ethiopian Birr
+        'BOB': 'Bs.', // Bolivian Boliviano
+        'UYU': '$U',  // Uruguayan Peso
+        'TND': 'د.ت', // Tunisian Dinar
+        'JOD': 'د.ا', // Jordanian Dinar
+        'OMR': '﷼',   // Omani Rial
+        'BHD': '.د.ب', // Bahraini Dinar
+        'KWD': 'د.ك', // Kuwaiti Dinar
+        'LBP': 'ل.ل', // Lebanese Pound
+        'XOF': 'CFA', // West African CFA franc
+        'XAF': 'FCFA', // Central African CFA franc
+        'XPF': '₣',   // CFP Franc
     };
 
     return currencySymbols[currencyCode] || '';
