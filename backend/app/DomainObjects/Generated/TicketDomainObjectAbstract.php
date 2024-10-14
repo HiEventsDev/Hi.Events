@@ -70,6 +70,7 @@ abstract class TicketDomainObjectAbstract extends \HiEvents\DomainObjects\Abstra
                     'hide_before_sale_start_date' => $this->hide_before_sale_start_date ?? null,
                     'hide_after_sale_end_date' => $this->hide_after_sale_end_date ?? null,
                     'hide_when_sold_out' => $this->hide_when_sold_out ?? null,
+                    'start_collapsed' => $this->start_collapsed ?? null,
                     'show_quantity_remaining' => $this->show_quantity_remaining ?? null,
                     'is_hidden_without_promo_code' => $this->is_hidden_without_promo_code ?? null,
                     'order' => $this->order ?? null,
@@ -134,6 +135,17 @@ abstract class TicketDomainObjectAbstract extends \HiEvents\DomainObjects\Abstra
     public function getSaleEndDate(): ?string
     {
         return $this->sale_end_date;
+    }
+
+    public function setStartCollapsed(?bool $start_collapsed): self
+    {
+        $this->start_collapsed = $start_collapsed;
+        return $this;
+    }
+
+    public function getStartCollapsed(): ?bool
+    {
+        return $this->start_collapsed;
     }
 
     public function setMaxPerOrder(?int $max_per_order): self

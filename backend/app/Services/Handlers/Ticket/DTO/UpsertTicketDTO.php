@@ -30,6 +30,7 @@ class UpsertTicketDTO extends BaseDTO
         public readonly ?bool         $hide_before_sale_start_date = false,
         public readonly ?bool         $hide_after_sale_end_date = false,
         public readonly ?bool         $hide_when_sold_out = false,
+        public readonly ?bool         $start_collapsed = false,
         public readonly ?bool         $show_quantity_remaining = false,
         public readonly ?bool         $is_hidden_without_promo_code = false,
         public readonly ?array        $tax_and_fee_ids = [],

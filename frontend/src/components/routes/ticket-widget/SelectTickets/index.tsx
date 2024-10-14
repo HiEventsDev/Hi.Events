@@ -1,5 +1,5 @@
 import {t, Trans} from "@lingui/macro";
-import {ActionIcon, Anchor, Button, Group, Input, Modal, Spoiler, TextInput} from "@mantine/core";
+import {ActionIcon, Anchor, Button, Collapse, Group, Input, Modal, Spoiler, TextInput} from "@mantine/core";
 import {useNavigate, useParams} from "react-router-dom";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {notifications} from "@mantine/notifications";
@@ -10,7 +10,7 @@ import {
     TicketPriceQuantityFormValue
 } from "../../../../api/order.client.ts";
 import {useForm} from "@mantine/form";
-import {range, useInputState, useResizeObserver} from "@mantine/hooks";
+import {range, useDisclosure, useInputState, useResizeObserver} from "@mantine/hooks";
 import React, {useEffect, useMemo, useRef, useState} from "react";
 import {showError, showInfo, showSuccess} from "../../../../utilites/notifications.tsx";
 import {addQueryStringToUrl, isObjectEmpty, removeQueryStringFromUrl} from "../../../../utilites/helpers.ts";
@@ -286,11 +286,19 @@ const SelectTickets = (props: SelectTicketsProps) => {
                                 .map((n) => n.toString());
                             quantityRange.unshift("0");
 
+                            const [opened, {toggle}] = useDisclosure(!ticket.start_collapsed);
+
                             return (
                                 <div key={ticket.id} className={'hi-ticket-row'}>
                                     <div className={'hi-title-row'}>
                                         <div className={'hi-ticket-title'}>
-                                            <h3>{ticket.title}</h3>
+                                            <h3>
+                                                <Anchor display={'flex'} underline={'false'} onClick={toggle}>
+                                                    {ticket.title}
+
+                                                    <div className={'hi-ticket-collapse-arrow'}>{opened ? t`▼` : t`▲`}</div>
+                                                </Anchor>
+                                            </h3>
                                         </div>
                                         <div className={'hi-ticket-availability'}>
                                             {(ticket.is_available && !!ticket.quantity_available) && (
@@ -304,38 +312,41 @@ const SelectTickets = (props: SelectTicketsProps) => {
                                             )}
                                         </div>
                                     </div>
-                                    <div className={'hi-price-tiers-rows'}>
-                                        <TieredPricing
-                                            ticketIndex={ticketIndex}
-                                            event={event}
-                                            ticket={ticket}
-                                            form={form}
-                                        />
-                                    </div>
 
-                                    {ticket.max_per_order && form.values.tickets && isObjectEmpty(form.errors) && (form.values.tickets[ticketIndex]?.quantities.reduce((acc, {quantity}) => acc + Number(quantity), 0) > ticket.max_per_order) && (
-                                        <div className={'hi-ticket-quantity-error'}>
-                                            <Trans>The maximum numbers number of tickets for {ticket.title}
-                                                is {ticket.max_per_order}</Trans>
+                                    <Collapse in={opened} mt={20}>
+                                        <div className={'hi-price-tiers-rows'}>
+                                            <TieredPricing
+                                                ticketIndex={ticketIndex}
+                                                event={event}
+                                                ticket={ticket}
+                                                form={form}
+                                            />
                                         </div>
-                                    )}
 
-                                    {form.errors[`tickets.${ticketIndex}`] && (
-                                        <div className={'hi-ticket-quantity-error'}>
-                                            {form.errors[`tickets.${ticketIndex}`]}
-                                        </div>
-                                    )}
+                                        {ticket.max_per_order && form.values.tickets && isObjectEmpty(form.errors) && (form.values.tickets[ticketIndex]?.quantities.reduce((acc, {quantity}) => acc + Number(quantity), 0) > ticket.max_per_order) && (
+                                            <div className={'hi-ticket-quantity-error'}>
+                                                <Trans>The maximum numbers number of tickets for {ticket.title}
+                                                    is {ticket.max_per_order}</Trans>
+                                            </div>
+                                        )}
 
-                                    {ticket.description && (
-                                        <div
-                                            className={'hi-ticket-description-row'}>
-                                            <Spoiler maxHeight={87} showLabel={t`Show more`} hideLabel={t`Hide`}>
-                                                <div dangerouslySetInnerHTML={{
-                                                    __html: ticket.description
-                                                }}/>
-                                            </Spoiler>
-                                        </div>
-                                    )}
+                                        {form.errors[`tickets.${ticketIndex}`] && (
+                                            <div className={'hi-ticket-quantity-error'}>
+                                                {form.errors[`tickets.${ticketIndex}`]}
+                                            </div>
+                                        )}
+
+                                        {ticket.description && (
+                                            <div
+                                                className={'hi-ticket-description-row'}>
+                                                <Spoiler maxHeight={87} showLabel={t`Show more`} hideLabel={t`Hide`}>
+                                                    <div dangerouslySetInnerHTML={{
+                                                        __html: ticket.description
+                                                    }}/>
+                                                </Spoiler>
+                                            </div>
+                                        )}
+                                    </Collapse>
                                 </div>
                             )
                         })}

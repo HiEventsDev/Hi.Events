@@ -68,6 +68,7 @@ class CreateTicketService
             'hide_before_sale_start_date' => $ticketsData->getHideBeforeSaleStartDate(),
             'hide_after_sale_end_date' => $ticketsData->getHideAfterSaleEndDate(),
             'hide_when_sold_out' => $ticketsData->getHideWhenSoldOut(),
+            'start_collapsed' => $ticketsData->getStartCollapsed(),
             'show_quantity_remaining' => $ticketsData->getShowQuantityRemaining(),
             'is_hidden_without_promo_code' => $ticketsData->getIsHiddenWithoutPromoCode(),
             'event_id' => $ticketsData->getEventId(),
