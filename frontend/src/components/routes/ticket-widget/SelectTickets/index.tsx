@@ -297,29 +297,30 @@ const SelectTickets = (props: SelectTicketsProps) => {
                                                 <Anchor display={'flex'} underline={'false'} onClick={toggle}>
                                                     {ticket.title}
 
-                                                    <div className={'hi-ticket-collapse-arrow'}>{opened ? t`▼` : t`▲`}</div>
+                                                    <div className={'hi-ticket-title-metadata'}>
+                                                        {(ticket.is_available && !!ticket.quantity_available) && (
+                                                            <>
+                                                                {ticket.quantity_available === Constants.INFINITE_TICKETS && (
+                                                                    <Trans>
+                                                                        Unlimited available
+                                                                    </Trans>
+                                                                )}
+                                                                {ticket.quantity_available !== Constants.INFINITE_TICKETS && (
+                                                                    <Trans>
+                                                                        {ticket.quantity_available} available
+                                                                    </Trans>
+                                                                )}
+                                                            </>
+                                                        )}
+
+                                                        {(!ticket.is_available && ticket.type === 'TIERED') && (
+                                                            <TicketAvailabilityMessage ticket={ticket} event={event}/>
+                                                        )}
+
+                                                        <span className={'hi-ticket-collapse-arrow'}>{opened ? t`▼` : t`▲`}</span>
+                                                    </div>
                                                 </Anchor>
                                             </h3>
-                                        </div>
-                                        <div className={'hi-ticket-availability'}>
-                                            {(ticket.is_available && !!ticket.quantity_available) && (
-                                                <>
-                                                    {ticket.quantity_available === Constants.INFINITE_TICKETS && (
-                                                        <Trans>
-                                                            Unlimited available
-                                                        </Trans>
-                                                    )}
-                                                    {ticket.quantity_available !== Constants.INFINITE_TICKETS && (
-                                                        <Trans>
-                                                            {ticket.quantity_available} available
-                                                        </Trans>
-                                                    )}
-                                                </>
-                                            )}
-
-                                            {(!ticket.is_available && ticket.type === 'TIERED') && (
-                                                <TicketAvailabilityMessage ticket={ticket} event={event}/>
-                                            )}
                                         </div>
                                     </div>
 
