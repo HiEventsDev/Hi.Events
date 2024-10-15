@@ -317,7 +317,7 @@ const SelectTickets = (props: SelectTicketsProps) => {
                                                             <TicketAvailabilityMessage ticket={ticket} event={event}/>
                                                         )}
 
-                                                        <span className={'hi-ticket-collapse-arrow'}>{opened ? t`\u25BC` : t`\u25B2`}</span>
+                                                        <span className={'hi-ticket-collapse-arrow'}>{opened ? `\u25BC` : `\u25B2`}</span>
                                                     </div>
                                                 </Anchor>
                                             </h3>
