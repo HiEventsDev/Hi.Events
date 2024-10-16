@@ -201,7 +201,8 @@ export const ImageResize = Image.extend({
                     }
                 }
 
-                paintPositionController();
+                // Disable positioning for the time being as it's not working properly
+                //paintPositionController();
 
                 $container.setAttribute(
                     'style',
