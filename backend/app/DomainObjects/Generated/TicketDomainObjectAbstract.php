@@ -31,6 +31,7 @@ abstract class TicketDomainObjectAbstract extends \HiEvents\DomainObjects\Abstra
     final public const DELETED_AT = 'deleted_at';
     final public const TYPE = 'type';
     final public const IS_HIDDEN = 'is_hidden';
+    final public const START_COLLAPSED = 'start_collapsed';
 
     protected int $id;
     protected int $event_id;
@@ -53,6 +54,7 @@ abstract class TicketDomainObjectAbstract extends \HiEvents\DomainObjects\Abstra
     protected ?string $deleted_at = null;
     protected string $type = 'PAID';
     protected ?bool $is_hidden = false;
+    protected bool $start_collapsed = false;
 
     public function toArray(): array
     {
@@ -70,7 +72,6 @@ abstract class TicketDomainObjectAbstract extends \HiEvents\DomainObjects\Abstra
                     'hide_before_sale_start_date' => $this->hide_before_sale_start_date ?? null,
                     'hide_after_sale_end_date' => $this->hide_after_sale_end_date ?? null,
                     'hide_when_sold_out' => $this->hide_when_sold_out ?? null,
-                    'start_collapsed' => $this->start_collapsed ?? null,
                     'show_quantity_remaining' => $this->show_quantity_remaining ?? null,
                     'is_hidden_without_promo_code' => $this->is_hidden_without_promo_code ?? null,
                     'order' => $this->order ?? null,
@@ -79,6 +80,7 @@ abstract class TicketDomainObjectAbstract extends \HiEvents\DomainObjects\Abstra
                     'deleted_at' => $this->deleted_at ?? null,
                     'type' => $this->type ?? null,
                     'is_hidden' => $this->is_hidden ?? null,
+                    'start_collapsed' => $this->start_collapsed ?? null,
                 ];
     }
 
@@ -135,17 +137,6 @@ abstract class TicketDomainObjectAbstract extends \HiEvents\DomainObjects\Abstra
     public function getSaleEndDate(): ?string
     {
         return $this->sale_end_date;
-    }
-
-    public function setStartCollapsed(?bool $start_collapsed): self
-    {
-        $this->start_collapsed = $start_collapsed;
-        return $this;
-    }
-
-    public function getStartCollapsed(): ?bool
-    {
-        return $this->start_collapsed;
     }
 
     public function setMaxPerOrder(?int $max_per_order): self
@@ -322,5 +313,16 @@ abstract class TicketDomainObjectAbstract extends \HiEvents\DomainObjects\Abstra
     public function getIsHidden(): ?bool
     {
         return $this->is_hidden;
+    }
+
+    public function setStartCollapsed(bool $start_collapsed): self
+    {
+        $this->start_collapsed = $start_collapsed;
+        return $this;
+    }
+
+    public function getStartCollapsed(): bool
+    {
+        return $this->start_collapsed;
     }
 }
