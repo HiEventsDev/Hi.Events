@@ -276,6 +276,7 @@ create table if not exists tickets
     deleted_at                   timestamp,
     type                         varchar(20)    default 'PAID'::character varying not null,
     is_hidden                    boolean        default false,
+    start_collapsed              boolean        default false,
     primary key (id),
     constraint fk_tickets_event_id
         foreign key (event_id) references events

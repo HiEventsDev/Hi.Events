@@ -22,7 +22,7 @@
       display: flex;
       flex-flow: column;
       border: 3px solid var(--widget-primary-color, var(--tk-secondary));
-      padding: 10px 20px 20px;
+      padding: 10px 20px;
       border-radius: 5px;
 
       .hi-ticket-description-row {
@@ -36,16 +36,24 @@
 
         .hi-ticket-title {
           flex: 1;
-          font-weight: bold;
 
           h3 {
             margin: 10px 0;
-          }
-        }
 
-        .hi-ticket-availability {
-          text-align: right;
-          color: var(--widget-primary-text-color);
+            a {
+              font-weight: bold;
+            }
+          }
+
+          .hi-ticket-title-metadata {
+            .hi-ticket-collapse-arrow {
+              color: var(--widget-secondary-color, var(--tk-primary));
+              margin-left: 10px;
+            }
+
+            margin-left: auto;
+            font-weight: normal;
+          }
         }
       }
 
