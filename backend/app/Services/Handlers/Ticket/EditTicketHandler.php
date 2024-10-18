@@ -91,6 +91,7 @@ class EditTicketHandler
                 'hide_before_sale_start_date' => $ticketsData->hide_before_sale_start_date,
                 'hide_after_sale_end_date' => $ticketsData->hide_after_sale_end_date,
                 'hide_when_sold_out' => $ticketsData->hide_when_sold_out,
+                'start_collapsed' => $ticketsData->start_collapsed,
                 'show_quantity_remaining' => $ticketsData->show_quantity_remaining,
                 'is_hidden_without_promo_code' => $ticketsData->is_hidden_without_promo_code,
             ],

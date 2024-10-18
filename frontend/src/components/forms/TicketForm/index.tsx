@@ -342,6 +342,8 @@ export const TicketForm = ({form, ticket}: TicketFormProps) => {
                             label={t`Hide ticket before sale start date`}/>
                     <Switch mt={20} {...form.getInputProps('hide_after_sale_end_date', {type: 'checkbox'})}
                             label={t`Hide ticket after sale end date`}/>
+                    <Switch mt={20} {...form.getInputProps('start_collapsed', {type: 'checkbox'})}
+                            label={t`Collapse this ticket when the event page is initially loaded`}/>
                     <Switch mt={20} {...form.getInputProps('show_quantity_remaining', {type: 'checkbox'})}
                             label={t`Show available ticket quantity`}/>
                     <Switch mt={20} {...form.getInputProps('hide_when_sold_out', {type: 'checkbox'})}

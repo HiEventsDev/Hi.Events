@@ -26,6 +26,7 @@ export const CreateTicketModal = ({onClose}: GenericModalProps) => {
             sale_end_date: '',
             hide_before_sale_start_date: false,
             hide_after_sale_end_date: false,
+            start_collapsed: false,
             show_quantity_remaining: false,
             hide_when_sold_out: false,
             is_hidden_without_promo_code: false,

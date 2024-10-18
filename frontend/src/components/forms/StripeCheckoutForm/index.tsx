@@ -54,6 +54,14 @@ export default function StripeCheckoutForm() {
         });
     }, [stripe]);
 
+    if (!isOrderFetched || !isEventFetched || !order?.payment_status) {
+        return (
+            <CheckoutContent>
+                <Skeleton height={300} mb={20}/>
+            </CheckoutContent>
+        )
+    }
+
     if (order?.payment_status === 'PAYMENT_RECEIVED') {
         return (
             <HomepageInfoMessage
@@ -105,14 +113,6 @@ export default function StripeCheckoutForm() {
             defaultCollapsed: false,
             radios: true,
         },
-    }
-
-    if (!isOrderFetched || !isEventFetched) {
-        return (
-            <CheckoutContent>
-                <Skeleton height={300} mb={20}/>
-            </CheckoutContent>
-        )
     }
 
     return (

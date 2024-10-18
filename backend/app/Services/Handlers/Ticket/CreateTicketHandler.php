@@ -49,6 +49,7 @@ class CreateTicketHandler
                 ->setHideBeforeSaleStartDate($ticketsData->hide_before_sale_start_date)
                 ->setHideAfterSaleEndDate($ticketsData->hide_after_sale_end_date)
                 ->setHideWhenSoldOut($ticketsData->hide_when_sold_out)
+                ->setStartCollapsed($ticketsData->start_collapsed)
                 ->setShowQuantityRemaining($ticketsData->show_quantity_remaining)
                 ->setIsHiddenWithoutPromoCode($ticketsData->is_hidden_without_promo_code)
                 ->setTicketPrices($ticketPrices)

@@ -3,7 +3,7 @@
 This guide provides instructions for setting up Hi.Events locally without using Docker, including the necessary prerequisites,
 setup steps, and configuration details.
 
-**For a faster and more reliable setup, we strongly recommend using the official [Docker setup](https://hi.events/docs/getting-started/quick-start).**
+**ℹ️ For a faster and more reliable setup, we strongly recommend using the official [Docker setup](https://hi.events/docs/getting-started/quick-start).**
 
 ## Prerequisites
 
