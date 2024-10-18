@@ -1,5 +1,16 @@
 import {t, Trans} from "@lingui/macro";
-import {ActionIcon, Anchor, Button, Collapse, Group, Input, Modal, Spoiler, TextInput} from "@mantine/core";
+import {
+    ActionIcon,
+    Anchor,
+    Button,
+    Collapse,
+    Group,
+    Input,
+    Modal,
+    Spoiler,
+    TextInput,
+    UnstyledButton
+} from "@mantine/core";
 import {useNavigate, useParams} from "react-router-dom";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {notifications} from "@mantine/notifications";
@@ -172,7 +183,6 @@ const SelectTickets = (props: SelectTicketsProps) => {
         }
     }, [props.promoCodeValid])
 
-
     const populateFormValue = () => {
         const ticketValues: Array<TicketFormValue> = [];
         tickets?.forEach(ticket => {
@@ -287,44 +297,46 @@ const SelectTickets = (props: SelectTicketsProps) => {
                                 .map((n) => n.toString());
                             quantityRange.unshift("0");
 
-                            const [opened, {toggle}] = useDisclosure(!ticket.start_collapsed);
+                            const [ticketIsCollapsed, {toggle: collapseTicket}] = useDisclosure(!ticket.start_collapsed);
 
                             return (
                                 <div key={ticket.id} className={'hi-ticket-row'}>
                                     <div className={'hi-title-row'}>
-                                        <div className={'hi-ticket-title'}>
+                                        <UnstyledButton variant={'transparent'}
+                                                        className={'hi-ticket-title'}
+                                                        onClick={collapseTicket}
+                                        >
                                             <h3>
-                                                <Anchor display={'flex'} underline={'false'} onClick={toggle}>
-                                                    {ticket.title}
-
-                                                    <div className={'hi-ticket-title-metadata'}>
-                                                        {(ticket.is_available && !!ticket.quantity_available) && (
-                                                            <>
-                                                                {ticket.quantity_available === Constants.INFINITE_TICKETS && (
-                                                                    <Trans>
-                                                                        Unlimited available
-                                                                    </Trans>
-                                                                )}
-                                                                {ticket.quantity_available !== Constants.INFINITE_TICKETS && (
-                                                                    <Trans>
-                                                                        {ticket.quantity_available} available
-                                                                    </Trans>
-                                                                )}
-                                                            </>
-                                                        )}
-
-                                                        {(!ticket.is_available && ticket.type === 'TIERED') && (
-                                                            <TicketAvailabilityMessage ticket={ticket} event={event}/>
-                                                        )}
-
-                                                        <span className={'hi-ticket-collapse-arrow'}>{opened ? '\u25BC' : '\u25B6'}</span>
-                                                    </div>
-                                                </Anchor>
+                                                {ticket.title}
                                             </h3>
-                                        </div>
+                                            <div className={'hi-ticket-title-metadata'}>
+                                                {(ticket.is_available && !!ticket.quantity_available) && (
+                                                    <>
+                                                        {ticket.quantity_available === Constants.INFINITE_TICKETS && (
+                                                            <Trans>
+                                                                Unlimited available
+                                                            </Trans>
+                                                        )}
+                                                        {ticket.quantity_available !== Constants.INFINITE_TICKETS && (
+                                                            <Trans>
+                                                                {ticket.quantity_available} available
+                                                            </Trans>
+                                                        )}
+                                                    </>
+                                                )}
+
+                                                {(!ticket.is_available && ticket.type === 'TIERED') && (
+                                                    <TicketAvailabilityMessage ticket={ticket} event={event}/>
+                                                )}
+
+                                                <span className={'hi-ticket-collapse-arrow'}>
+                                                    {ticketIsCollapsed ? '\u25BC' : '\u25B6'}
+                                                </span>
+                                            </div>
+                                        </UnstyledButton>
                                     </div>
 
-                                    <Collapse in={opened} mt={20}>
+                                    <Collapse in={ticketIsCollapsed} className={'hi-ticket-content'}>
                                         <div className={'hi-price-tiers-rows'}>
                                             <TieredPricing
                                                 ticketIndex={ticketIndex}

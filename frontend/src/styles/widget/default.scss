@@ -1,4 +1,3 @@
-
 .full-height {
   height: 100vh;
 }
@@ -22,7 +21,6 @@
       display: flex;
       flex-flow: column;
       border: 3px solid var(--widget-primary-color, var(--tk-secondary));
-      padding: 10px 20px;
       border-radius: 5px;
 
       .hi-ticket-description-row {
@@ -36,6 +34,10 @@
 
         .hi-ticket-title {
           flex: 1;
+          padding: 10px 20px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
 
           h3 {
             margin: 10px 0;
@@ -51,10 +53,14 @@
               margin-left: 10px;
             }
 
-            margin-left: auto;
+            margin-left: 5px;
             font-weight: normal;
           }
         }
+      }
+
+      .hi-ticket-content {
+        padding: 10px 20px;
       }
 
       .hi-price-tiers-rows {
