@@ -7,6 +7,10 @@ assignees: ''
 
 ---
 
+> [!NOTE]
+> Please stick to the template and provide as much detail as possible to help us diagnose and fix the issue.
+> Low effort bug reports will be closed.
+
 **Describe the bug**
 A clear and concise description of what the bug is.
 
@@ -23,10 +27,16 @@ A clear and concise description of what you expected to happen.
 **Screenshots**
 If applicable, add screenshots to help explain your problem.
 
+**Logs**
+Add any relevant error logs. If it's an error in the browser, please include the browser console logs as well
+as what endpoints are being hit and what the response from the server is.
+
 **Desktop (please complete the following information):**
  - OS: [e.g. iOS]
  - Browser [e.g. chrome, safari]
  - Version [e.g. 22]
+
+or
 
 **Smartphone (please complete the following information):**
  - Device: [e.g. iPhone6]
@@ -36,9 +46,6 @@ If applicable, add screenshots to help explain your problem.
 
 **Hi.Events Version and platform**
 Please state the version of Hi.Events you are using and what platform it is hosted on. Local, Docker etc.
-
-**Logs**
-Add any relevant error logs 
 
 **Additional context**
 Add any other context about the problem here.
