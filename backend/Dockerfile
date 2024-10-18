@@ -1,11 +1,12 @@
-FROM serversideup/php:beta-8.3-fpm-nginx-alpine
+FROM serversideup/php:8.3-fpm-nginx-alpine
 
 ENV PHP_OPCACHE_ENABLE=1
 
 USER root
 
 # Set `www-data` as the user to start FPM
-RUN echo "user = www-data" >> /usr/local/etc/php-fpm.d/docker-php-serversideup-pool.conf && \
+RUN echo "" >> /usr/local/etc/php-fpm.d/docker-php-serversideup-pool.conf && \
+    echo "user = www-data" >> /usr/local/etc/php-fpm.d/docker-php-serversideup-pool.conf && \
     echo "group = www-data" >> /usr/local/etc/php-fpm.d/docker-php-serversideup-pool.conf
 
 RUN install-php-extensions intl

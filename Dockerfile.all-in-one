@@ -2,8 +2,6 @@ FROM node:alpine AS node-frontend
 
 WORKDIR /app/frontend
 
-ENV PHP_OPCACHE_ENABLE=1
-
 RUN apk add --no-cache yarn
 
 COPY ./frontend/package.json ./frontend/yarn.lock ./
@@ -13,6 +11,8 @@ COPY ./frontend .
 RUN yarn install && yarn build
 
 FROM serversideup/php:beta-8.3.2-fpm-alpine
+
+ENV PHP_OPCACHE_ENABLE=1
 
 RUN install-php-extensions intl
 
