@@ -171,8 +171,8 @@ our [GitHub releases page](https://github.com/HiEventsDev/hi.events/releases).
 
 ## 🤝 Contributing
 
-We welcome contributions, suggestions, and bug reports! Before proposing a new feature or extension,
-please open an issue to discuss it.
+We welcome contributions, suggestions, and bug reports! Please see our [contributing guidelines](CONTRIBUTING.md) for more
+information.
 
 ## ❓ FAQ
 
