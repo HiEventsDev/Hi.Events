@@ -1,7 +1,7 @@
 <x-mail::layout>
     {{-- Header --}}
     <x-slot:header>
-        <x-mail::header :url="config('app.frontend_url')">
+        <x-mail::header :url="config('app.email_logo_link_url')">
             @if($appLogo = config('app.email_logo_url'))
                 <img src="{{ $appLogo }}" class="logo" alt="{{ config('app.name') }}"
                      style="max-width: 300px;">
