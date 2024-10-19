@@ -36,9 +36,8 @@
                 {{-- You can find the full license text at: https://github.com/HiEventsDev/hi.events/blob/main/LICENSE --}}
                 {{-- In accordance with Section 7(b) of the AGPL, we ask that you retain the "Powered by Hi.Events" notice. --}}
                 {{-- If you wish to remove this notice, a commercial license is available at: https://hi.events/licensing --}}
-                © {{ date('Y') }} <a title="Manage events and sell tickets online with Hi.Events"
-                                     href="https://hi.events?utm_source=app-email-footer">Hi.Events</a> - Effortless
-                Event Management
+
+                © {{ date('Y') }} {{ config('app.app_name') }} | Powered by <a title="Manage events and sell tickets online with Hi.Events" href="https://hi.events?utm_source=app-email-footer">Hi.Events</a>
             @endif
         </x-mail::footer>
     </x-slot:footer>

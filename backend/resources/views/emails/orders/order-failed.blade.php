@@ -17,9 +17,8 @@
 {{ __('If you have any questions or need assistance, feel free to reach out to our support team') }}
 {{ __('at') }} {{ $supportEmail ?? 'hello@hi.events' }}.
 
-{{ __('Best regards') }},
-<br>
-{{config('app.name')}}
+{{ __('Best regards') }},<br>
+{{ config('app.name') }}
 
 {!! $eventSettings->getGetEmailFooterHtml() !!}
 </x-mail::message>

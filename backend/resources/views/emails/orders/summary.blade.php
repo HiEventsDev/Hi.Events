@@ -34,7 +34,6 @@
 - **{{ __('Prepare for the Event:') }}** {{ __('Make sure to note the event date, time, and location.') }}
 - **{{ __('Stay Updated:') }}** {{ __('Keep an eye on your email for any updates from the event organizer.') }}
 
-{{ __('Best regards,') }}
-<br>
+{{ __('Best regards,') }}<br>
 {{ config('app.name') }}
 </x-mail::message>
