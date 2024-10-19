@@ -20,11 +20,13 @@ class QuestionDomainObject extends Generated\QuestionDomainObjectAbstract
         return $this->products;
     }
 
-    public function isMultipleChoice(): bool
+    public function isPreDefinedChoice(): bool
     {
         return in_array($this->getType(), [
-            QuestionTypeEnum::MULTI_SELECT_DROPDOWN,
-            QuestionTypeEnum::CHECKBOX,
+            QuestionTypeEnum::MULTI_SELECT_DROPDOWN->name,
+            QuestionTypeEnum::CHECKBOX->name,
+            QuestionTypeEnum::RADIO->name,
+            QuestionTypeEnum::DROPDOWN->name,
         ], true);
     }
 

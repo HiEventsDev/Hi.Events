@@ -1,7 +1,7 @@
-import {CapacityAssignmentRequest, GenericModalProps, IdParam, Product} from "../../../types.ts";
+import {CapacityAssignmentRequest, GenericModalProps, IdParam, Product, ProductCategory} from "../../../types.ts";
 import {Modal} from "../../common/Modal";
 import {t} from "@lingui/macro";
-import {CapaciyAssigmentForm} from "../../forms/CapaciyAssigmentForm";
+import {CapacityAssigmentForm} from "../../forms/CapaciyAssigmentForm";
 import {useForm} from "@mantine/form";
 import {Button} from "@mantine/core";
 import {showSuccess} from "../../../utilites/notifications.tsx";
@@ -65,7 +65,7 @@ export const EditCapacityAssignmentModal = ({
     return (
         <Modal opened onClose={onClose} heading={t`Edit Capacity Assignment`}>
             <form onSubmit={form.onSubmit(handleSubmit)}>
-                {event && <CapaciyAssigmentForm form={form} products={event.products as Product[]}/>}
+                {event && <CapacityAssigmentForm form={form} productsCategories={event.product_categories as ProductCategory[]}/>}
                 <Button
                     type={'submit'}
                     fullWidth

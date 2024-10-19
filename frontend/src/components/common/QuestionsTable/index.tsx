@@ -304,7 +304,7 @@ export const QuestionsTable = ({questions}: QuestionsTableProp) => {
                         )}
                     </div>
                     <div className={classes.questions}>
-                        <h3>{t`Attendee questions`}</h3>
+                        <h3>{t`Product questions`}</h3>
                         <QuestionsList
                             questions={productQuestions}
                             onEditModalOpen={handleModalOpen}

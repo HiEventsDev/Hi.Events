@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace HiEvents\Models;
 
 use HiEvents\DomainObjects\Generated\ProductDomainObjectAbstract;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -46,5 +47,10 @@ class Product extends BaseModel
     public function check_in_lists(): BelongsToMany
     {
         return $this->belongsToMany(CheckInList::class, 'product_check_in_lists');
+    }
+
+    public function product_category(): BelongsTo
+    {
+        return $this->belongsTo(ProductCategory::class);
     }
 }

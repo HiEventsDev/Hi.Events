@@ -82,7 +82,7 @@ export const EditCheckInListModal = ({
 
             {event && checkInList && (
                 <form onSubmit={form.onSubmit(handleSubmit)}>
-                    <CheckInListForm form={form} products={event.products as Product[]}/>
+                    <CheckInListForm form={form} productCategories={event.products as Product[]}/>
                     <Button
                         type={'submit'}
                         fullWidth

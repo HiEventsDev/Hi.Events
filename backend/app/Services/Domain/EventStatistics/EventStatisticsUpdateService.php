@@ -2,16 +2,16 @@
 
 namespace HiEvents\Services\Domain\EventStatistics;
 
-use HiEvents\DomainObjects\Generated\PromoCodeDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\ProductDomainObjectAbstract;
+use HiEvents\DomainObjects\Generated\PromoCodeDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\Exceptions\EventStatisticsVersionMismatchException;
 use HiEvents\Repository\Interfaces\EventDailyStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
-use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
+use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
 use HiEvents\Values\MoneyValue;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Carbon;
@@ -155,6 +155,8 @@ readonly class EventStatisticsUpdateService
                 'event_id' => $order->getEventId(),
                 'products_sold' => $order->getOrderItems()
                     ?->sum(fn(OrderItemDomainObject $orderItem) => $orderItem->getQuantity()),
+                'attendees_registered' => $order->getTicketOrderItems()
+                    ?->sum(fn(OrderItemDomainObject $orderItem) => $orderItem->getQuantity()),
                 'sales_total_gross' => $order->getTotalGross(),
                 'sales_total_before_additions' => $order->getTotalBeforeAdditions(),
                 'total_tax' => $order->getTotalTax(),
@@ -168,6 +170,8 @@ readonly class EventStatisticsUpdateService
         $update = $this->eventStatisticsRepository->updateWhere(
             attributes: [
                 'products_sold' => $eventStatistics->getProductsSold() + $order->getOrderItems()
+                        ?->sum(fn(OrderItemDomainObject $orderItem) => $orderItem->getQuantity()),
+                'attendees_registered' => $eventStatistics->getAttendeesRegistered() + $order->getTicketOrderItems()
                         ?->sum(fn(OrderItemDomainObject $orderItem) => $orderItem->getQuantity()),
                 'sales_total_gross' => $eventStatistics->getSalesTotalGross() + $order->getTotalGross(),
                 'sales_total_before_additions' => $eventStatistics->getSalesTotalBeforeAdditions() + $order->getTotalBeforeAdditions(),
@@ -209,6 +213,7 @@ readonly class EventStatisticsUpdateService
                 'event_id' => $order->getEventId(),
                 'date' => (new Carbon($order->getCreatedAt()))->format('Y-m-d'),
                 'products_sold' => $order->getOrderItems()?->sum(fn(OrderItemDomainObject $orderItem) => $orderItem->getQuantity()),
+                'attendees_registered' => $order->getTicketOrderItems()?->sum(fn(OrderItemDomainObject $orderItem) => $orderItem->getQuantity()),
                 'sales_total_gross' => $order->getTotalGross(),
                 'sales_total_before_additions' => $order->getTotalBeforeAdditions(),
                 'total_tax' => $order->getTotalTax(),
@@ -220,6 +225,7 @@ readonly class EventStatisticsUpdateService
 
         $update = $this->eventDailyStatisticRepository->updateWhere(
             attributes: [
+                'attendees_registered' => $eventDailyStatistic->getAttendeesRegistered() + $order->getTicketOrderItems()->sum(fn(OrderItemDomainObject $orderItem) => $orderItem->getQuantity()),
                 'products_sold' => $eventDailyStatistic->getProductsSold() + $order->getOrderItems()->sum(fn(OrderItemDomainObject $orderItem) => $orderItem->getQuantity()),
                 'sales_total_gross' => $eventDailyStatistic->getSalesTotalGross() + $order->getTotalGross(),
                 'sales_total_before_additions' => $eventDailyStatistic->getSalesTotalBeforeAdditions() + $order->getTotalBeforeAdditions(),

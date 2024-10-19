@@ -7,28 +7,31 @@ namespace HiEvents\Services\Handlers\Order;
 use Carbon\Carbon;
 use Exception;
 use HiEvents\DomainObjects\AttendeeDomainObject;
+use HiEvents\DomainObjects\Enums\ProductType;
 use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\ProductPriceDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
+use HiEvents\DomainObjects\ProductDomainObject;
+use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\DomainObjects\Status\OrderPaymentStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
-use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\Events\OrderStatusChangedEvent;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Helper\IdHelper;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
-use HiEvents\Repository\Interfaces\QuestionAnswerRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductPriceRepositoryInterface;
+use HiEvents\Repository\Interfaces\QuestionAnswerRepositoryInterface;
 use HiEvents\Services\Domain\Payment\Stripe\EventHandlers\PaymentIntentSucceededHandler;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
-use HiEvents\Services\Handlers\Order\DTO\CompleteOrderAttendeeDTO;
 use HiEvents\Services\Handlers\Order\DTO\CompleteOrderDTO;
 use HiEvents\Services\Handlers\Order\DTO\CompleteOrderOrderDTO;
+use HiEvents\Services\Handlers\Order\DTO\CompleteOrderProductDataDTO;
+use HiEvents\Services\Handlers\Order\DTO\CreatedProductDataDTO;
 use HiEvents\Services\Handlers\Order\DTO\OrderQuestionsDTO;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -62,7 +65,7 @@ class CompleteOrderHandler
 
             $updatedOrder = $this->updateOrder($order, $orderDTO);
 
-            $this->createAttendees($orderData->attendees, $order);
+            $this->createAttendees($orderData->products, $order);
 
             if ($orderData->order->questions) {
                 $this->createOrderQuestions($orderDTO->questions, $order);
@@ -85,24 +88,39 @@ class CompleteOrderHandler
     }
 
     /**
+     * @param Collection<CompleteOrderProductDataDTO> $orderProducts
      * @throws Exception
      */
-    private function createAttendees(Collection $attendees, OrderDomainObject $order): void
+    private function createAttendees(Collection $orderProducts, OrderDomainObject $order): void
     {
         $inserts = [];
+        $createdProductData = collect();
 
         $productsPrices = $this->productPriceRepository->findWhereIn(
             field: ProductPriceDomainObjectAbstract::ID,
-            values: $attendees->pluck('product_price_id')->toArray(),
+            values: $orderProducts->pluck('product_price_id')->toArray(),
         );
 
         $this->validateProductPriceIdsMatchOrder($order, $productsPrices);
-        $this->validateAttendees($order, $attendees);
+        $this->validateTicketProductsCount($order, $orderProducts);
 
-        foreach ($attendees as $attendee) {
+        foreach ($orderProducts as $attendee) {
             $productId = $productsPrices->first(
                 fn(ProductPriceDomainObject $productPrice) => $productPrice->getId() === $attendee->product_price_id)
                 ->getProductId();
+            $productType = $this->getProductTypeFromPriceId($attendee->product_price_id, $order->getOrderItems());
+
+            // If it's not a ticket, skip, as we only want to create attendees for tickets
+            if ($productType !== ProductType::TICKET->name) {
+                $createdProductData->push(new CreatedProductDataDTO(
+                    productRequestData: $attendee,
+                    shortId: null,
+                ));
+
+                continue;
+            }
+
+            $shortId = IdHelper::shortId(IdHelper::ATTENDEE_PREFIX);
 
             $inserts[] = [
                 AttendeeDomainObjectAbstract::EVENT_ID => $order->getEventId(),
@@ -114,20 +132,25 @@ class CompleteOrderHandler
                 AttendeeDomainObjectAbstract::LAST_NAME => $attendee->last_name,
                 AttendeeDomainObjectAbstract::ORDER_ID => $order->getId(),
                 AttendeeDomainObjectAbstract::PUBLIC_ID => IdHelper::publicId(IdHelper::ATTENDEE_PREFIX),
-                AttendeeDomainObjectAbstract::SHORT_ID => IdHelper::shortId(IdHelper::ATTENDEE_PREFIX),
+                AttendeeDomainObjectAbstract::SHORT_ID => $shortId,
                 AttendeeDomainObjectAbstract::LOCALE => $order->getLocale(),
             ];
+
+            $createdProductData->push(new CreatedProductDataDTO(
+                productRequestData: $attendee,
+                shortId: $shortId,
+            ));
         }
 
         if (!$this->attendeeRepository->insert($inserts)) {
             throw new RuntimeException(__('Failed to create attendee'));
         }
 
-        $insertedAttendees = $this->attendeeRepository->findWhere([
-            AttendeeDomainObjectAbstract::ORDER_ID => $order->getId()
-        ]);
-
-        $this->createAttendeeQuestions($attendees, $insertedAttendees, $order, $productsPrices);
+        $this->createProductQuestions(
+            createdAttendees: $createdProductData,
+            order: $order,
+            productPrices: $productsPrices,
+        );
     }
 
     private function createOrderQuestions(Collection $questions, OrderDomainObject $order): void
@@ -144,32 +167,39 @@ class CompleteOrderHandler
         });
     }
 
-    private function createAttendeeQuestions(
-        Collection        $attendees,
-        Collection        $insertedAttendees,
+    /**
+     * @param Collection<CreatedProductDataDTO> $createdAttendees
+     * @param Collection<ProductPriceDomainObject> $productPrices
+     * @throws ResourceConflictException|Exception
+     */
+    private function createProductQuestions(
+        Collection        $createdAttendees,
         OrderDomainObject $order,
-        Collection        $productPrices,
+        Collection        $productPrices
     ): void
     {
-        $insertedIds = [];
-        /** @var CompleteOrderAttendeeDTO $attendee */
-        foreach ($attendees as $attendee) {
-            $productId = $productPrices->first(
-                fn(ProductPriceDomainObject $productPrice) => $productPrice->getId() === $attendee->product_price_id)
-                ->getProductId();
+        $newAttendees = $this->attendeeRepository->findWhereIn(
+            field: AttendeeDomainObjectAbstract::SHORT_ID,
+            values: $createdAttendees->pluck('shortId')->toArray(),
+        );
 
-            $attendeeIterator = $insertedAttendees->filter(
-                fn(AttendeeDomainObject $insertedAttendee) => $insertedAttendee->getProductId() === $productId
-                    && !in_array($insertedAttendee->getId(), $insertedIds, true)
-            )->getIterator();
+        foreach ($createdAttendees as $createdAttendee) {
+            $productRequestData = $createdAttendee->productRequestData;
 
-            if ($attendee->questions === null) {
+            if ($productRequestData->questions === null) {
                 continue;
             }
 
-            foreach ($attendee->questions as $question) {
-                $attendeeId = $attendeeIterator->current()->getId();
+            $productId = $productPrices->first(
+                fn(ProductPriceDomainObject $productPrice) => $productPrice->getId() === $productRequestData->product_price_id
+            )->getProductId();
 
+            // This will be null for non-ticket products
+            $insertedAttendee = $newAttendees->first(
+                fn(AttendeeDomainObject $attendee) => $attendee->getShortId() === $createdAttendee->shortId,
+            );
+
+            foreach ($productRequestData->questions as $question) {
                 if (empty($question->response)) {
                     continue;
                 }
@@ -179,10 +209,8 @@ class CompleteOrderHandler
                     'answer' => $question->response['answer'] ?? $question->response,
                     'order_id' => $order->getId(),
                     'product_id' => $productId,
-                    'attendee_id' => $attendeeId
+                    'attendee_id' => $insertedAttendee?->getId(),
                 ]);
-
-                $insertedIds[] = $attendeeId;
             }
         }
     }
@@ -214,7 +242,7 @@ class CompleteOrderHandler
             ->loadRelation(
                 new Relationship(
                     domainObject: OrderItemDomainObject::class,
-                    nested: [new Relationship(TicketDomainObject::class, name: 'ticket')]
+                    nested: [new Relationship(ProductDomainObject::class, name: 'product')]
                 ))
             ->findByShortId($orderShortId);
 
@@ -267,14 +295,30 @@ class CompleteOrderHandler
     /**
      * @throws ResourceConflictException
      */
-    private function validateAttendees(OrderDomainObject $order, Collection $attendees): void
+    private function validateTicketProductsCount(OrderDomainObject $order, Collection $attendees): void
     {
-        $orderAttendeeCount = $order->getOrderItems()->sum(fn(OrderItemDomainObject $orderItem) => $orderItem->getQuantity());
+        $orderAttendeeCount = $order->getOrderItems()
+            ?->filter(fn(OrderItemDomainObject $orderItem) => $orderItem->getProductType() === ProductType::TICKET->name)
+            ?->sum(fn(OrderItemDomainObject $orderItem) => $orderItem->getQuantity());
 
-        if ($orderAttendeeCount !== $attendees->count()) {
+        $ticketAttendeeCount = $attendees
+            ->filter(
+                fn(CompleteOrderProductDataDTO $attendee) => $this->getProductTypeFromPriceId(
+                        $attendee->product_price_id,
+                        $order->getOrderItems()
+                    ) === ProductType::TICKET->name)
+            ->count();
+
+        if ($orderAttendeeCount !== $ticketAttendeeCount) {
             throw new ResourceConflictException(
                 __('The number of attendees does not match the number of tickets in the order')
             );
         }
+    }
+
+    private function getProductTypeFromPriceId(int $priceId, Collection $orderItems): string
+    {
+        return $orderItems->first(fn(OrderItemDomainObject $orderItem) => $orderItem->getProductPriceId() === $priceId)
+            ->getProductType();
     }
 }

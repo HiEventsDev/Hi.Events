@@ -25,6 +25,7 @@ abstract class EventStatisticDomainObjectAbstract extends \HiEvents\DomainObject
     final public const VERSION = 'version';
     final public const ORDERS_CREATED = 'orders_created';
     final public const TOTAL_REFUNDED = 'total_refunded';
+    final public const ATTENDEES_REGISTERED = 'attendees_registered';
 
     protected int $id;
     protected int $event_id;
@@ -41,6 +42,7 @@ abstract class EventStatisticDomainObjectAbstract extends \HiEvents\DomainObject
     protected int $version = 0;
     protected int $orders_created = 0;
     protected float $total_refunded = 0.0;
+    protected int $attendees_registered = 0;
 
     public function toArray(): array
     {
@@ -60,6 +62,7 @@ abstract class EventStatisticDomainObjectAbstract extends \HiEvents\DomainObject
                     'version' => $this->version ?? null,
                     'orders_created' => $this->orders_created ?? null,
                     'total_refunded' => $this->total_refunded ?? null,
+                    'attendees_registered' => $this->attendees_registered ?? null,
                 ];
     }
 
@@ -226,5 +229,16 @@ abstract class EventStatisticDomainObjectAbstract extends \HiEvents\DomainObject
     public function getTotalRefunded(): float
     {
         return $this->total_refunded;
+    }
+
+    public function setAttendeesRegistered(int $attendees_registered): self
+    {
+        $this->attendees_registered = $attendees_registered;
+        return $this;
+    }
+
+    public function getAttendeesRegistered(): int
+    {
+        return $this->attendees_registered;
     }
 }

@@ -39,6 +39,7 @@ class UpsertProductRequest extends BaseRequest
             'type' => ['required', Rule::in(ProductPriceType::valuesArray())],
             'product_type' => ['required', Rule::in(ProductType::valuesArray())],
             'tax_and_fee_ids' => 'array',
+            'product_category_id' => ['required', 'integer'],
         ];
     }
 

@@ -17,12 +17,13 @@ use Throwable;
 class CreateProductService
 {
     public function __construct(
-        private readonly ProductRepositoryInterface     $productRepository,
-        private readonly DatabaseManager                $databaseManager,
+        private readonly ProductRepositoryInterface      $productRepository,
+        private readonly DatabaseManager                 $databaseManager,
         private readonly TaxAndProductAssociationService $taxAndProductAssociationService,
-        private readonly ProductPriceCreateService      $priceCreateService,
-        private readonly HTMLPurifier                   $purifier,
-        private readonly EventRepositoryInterface       $eventRepository,
+        private readonly ProductPriceCreateService       $priceCreateService,
+        private readonly HTMLPurifier                    $purifier,
+        private readonly EventRepositoryInterface        $eventRepository,
+        private readonly ProductOrderingService          $productOrderingService,
     )
     {
     }
@@ -55,7 +56,10 @@ class CreateProductService
             'title' => $productsData->getTitle(),
             'type' => $productsData->getType(),
             'product_type' => $productsData->getProductType(),
-            'order' => $productsData->getOrder(),
+            'order' => $this->productOrderingService->getOrderForNewProduct(
+                eventId: $productsData->getEventId(),
+                productCategoryId: $productsData->getProductCategoryId(),
+            ),
             'sale_start_date' => $productsData->getSaleStartDate()
                 ? DateHelper::convertToUTC($productsData->getSaleStartDate(), $event->getTimezone())
                 : null,
@@ -72,6 +76,7 @@ class CreateProductService
             'show_quantity_remaining' => $productsData->getShowQuantityRemaining(),
             'is_hidden_without_promo_code' => $productsData->getIsHiddenWithoutPromoCode(),
             'event_id' => $productsData->getEventId(),
+            'product_category_id' => $productsData->getProductCategoryId(),
         ]);
     }
 

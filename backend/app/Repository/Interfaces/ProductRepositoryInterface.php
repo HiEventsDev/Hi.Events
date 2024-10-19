@@ -86,4 +86,6 @@ interface ProductRepositoryInterface extends RepositoryInterface
      * @return void
      */
     public function sortProducts(int $eventId, array $orderedProductIds): void;
+
+    public function hasAssociatedOrders(int $productId): bool;
 }

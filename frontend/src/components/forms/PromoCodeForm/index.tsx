@@ -1,13 +1,14 @@
 import {UseFormReturnType} from "@mantine/form";
-import {Alert, MultiSelect, NumberInput, Select, TextInput} from "@mantine/core";
-import {IconAlertCircle, IconPercentage} from "@tabler/icons-react";
-import {PromoCode, PromoCodeDiscountType} from "../../../types.ts";
+import {Alert, NumberInput, Select, TextInput} from "@mantine/core";
+import {IconAlertCircle, IconPercentage, IconTicket} from "@tabler/icons-react";
+import {ProductType, PromoCode, PromoCodeDiscountType} from "../../../types.ts";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {useParams} from "react-router-dom";
 import {LoadingMask} from "../../common/LoadingMask";
 import {t} from "@lingui/macro";
 import {InputGroup} from "../../common/InputGroup";
 import {getCurrencySymbol} from "../../../utilites/currency.ts";
+import {ProductSelector} from "../../common/ProductSelector";
 
 interface PromoCodeFormProps {
     form: UseFormReturnType<PromoCode>,
@@ -15,7 +16,7 @@ interface PromoCodeFormProps {
 
 export const PromoCodeForm = ({form}: PromoCodeFormProps) => {
     const {eventId} = useParams();
-    const {data: event, data: {products} = {}} = useGetEvent(eventId);
+    const {data: event, data: {product_categories: productCategories} = {}} = useGetEvent(eventId);
 
     const DiscountIcon = () => {
         if (form.values.discount_type === 'PERCENTAGE') {
@@ -24,7 +25,7 @@ export const PromoCodeForm = ({form}: PromoCodeFormProps) => {
         return getCurrencySymbol(event?.currency as string);
     };
 
-    if (!event || !products) {
+    if (!event || !productCategories) {
         return <LoadingMask/>
     }
 
@@ -63,17 +64,13 @@ export const PromoCodeForm = ({form}: PromoCodeFormProps) => {
                     placeholder="0.00"/>
             </InputGroup>
 
-            <MultiSelect
-                placeholder={t`All Products`}
+            <ProductSelector
                 label={t`What products does this code apply to? (Applies to all by default)`}
-                searchable
-                data={products.map(product => {
-                    return {
-                        value: String(product.id),
-                        label: String(product.title),
-                    };
-                })}
-                {...form.getInputProps('applicable_product_ids')}
+                placeholder="Select products"
+                icon={<IconTicket size="1rem"/>}
+                data={productCategories}
+                form={form}
+                fieldName="applicable_product_ids"
             />
 
             <InputGroup>

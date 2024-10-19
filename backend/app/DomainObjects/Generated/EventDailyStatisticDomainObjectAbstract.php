@@ -25,6 +25,7 @@ abstract class EventDailyStatisticDomainObjectAbstract extends \HiEvents\DomainO
     final public const VERSION = 'version';
     final public const TOTAL_REFUNDED = 'total_refunded';
     final public const TOTAL_VIEWS = 'total_views';
+    final public const ATTENDEES_REGISTERED = 'attendees_registered';
 
     protected int $id;
     protected int $event_id;
@@ -41,6 +42,7 @@ abstract class EventDailyStatisticDomainObjectAbstract extends \HiEvents\DomainO
     protected int $version = 0;
     protected float $total_refunded = 0.0;
     protected int $total_views = 0;
+    protected int $attendees_registered = 0;
 
     public function toArray(): array
     {
@@ -60,6 +62,7 @@ abstract class EventDailyStatisticDomainObjectAbstract extends \HiEvents\DomainO
                     'version' => $this->version ?? null,
                     'total_refunded' => $this->total_refunded ?? null,
                     'total_views' => $this->total_views ?? null,
+                    'attendees_registered' => $this->attendees_registered ?? null,
                 ];
     }
 
@@ -226,5 +229,16 @@ abstract class EventDailyStatisticDomainObjectAbstract extends \HiEvents\DomainO
     public function getTotalViews(): int
     {
         return $this->total_views;
+    }
+
+    public function setAttendeesRegistered(int $attendees_registered): self
+    {
+        $this->attendees_registered = $attendees_registered;
+        return $this;
+    }
+
+    public function getAttendeesRegistered(): int
+    {
+        return $this->attendees_registered;
     }
 }

@@ -40,7 +40,7 @@ export const CollectInformation = () => {
     } = useGetOrderPublic(eventId, orderShortId);
     const {
         data: event,
-        data: {products} = {},
+        data: {product_categories: productCategories} = {},
         isFetched: isEventFetched,
         isError: isEventError,
     } = useGetEventPublic(eventId, isOrderFetched, !!order?.promo_code, order?.promo_code ?? null);
@@ -51,7 +51,9 @@ export const CollectInformation = () => {
     } = useGetEventQuestionsPublic(eventId);
     const productQuestions = questions?.filter(question => question.belongs_to === "PRODUCT");
     const orderQuestions = questions?.filter(question => question.belongs_to === "ORDER");
-    let attendeeIndex = 0;
+    const products = productCategories?.flatMap(category => category.products);
+
+    let productIndex = 0;
 
     const form = useForm({
         initialValues: {
@@ -62,7 +64,7 @@ export const CollectInformation = () => {
                 address: {},
                 questions: {},
             },
-            attendees: [{
+            products: [{
                 first_name: "",
                 last_name: "",
                 email: "",
@@ -74,9 +76,9 @@ export const CollectInformation = () => {
     });
 
     const copyDetailsToAllAttendees = () => {
-        const updatedAttendees = form.values.attendees.map((attendee) => {
+        const updatedProducts = form.values.products.map((product) => {
             return {
-                ...attendee,
+                ...product,
                 first_name: form.values.order.first_name,
                 last_name: form.values.order.last_name,
                 email: form.values.order.email,
@@ -85,7 +87,7 @@ export const CollectInformation = () => {
 
         form.setValues({
             ...form.values,
-            attendees: updatedAttendees,
+            products: updatedProducts,
         });
     }
 
@@ -129,12 +131,12 @@ export const CollectInformation = () => {
         return productIdToQuestionMap;
     }
 
-    const createAttendeesAndQuestions = (productIdToQuestionMap: Map<number, Question[]>) => {
-        const attendees: any = [];
+    const createProductsAndQuestions = (productIdToQuestionMap: Map<number, Question[]>) => {
+        const products: any = [];
 
         orderItems?.forEach(orderItem => {
             Array.from(Array(orderItem?.quantity)).map(() => {
-                attendees.push({
+                products.push({
                     product_price_id: orderItem?.product_price_id,
                     product_id: orderItem?.product_id,
                     first_name: "",
@@ -150,7 +152,7 @@ export const CollectInformation = () => {
             });
         });
 
-        return attendees;
+        return products;
     }
 
     const createFormOrderQuestions = () => {
@@ -172,12 +174,12 @@ export const CollectInformation = () => {
 
     useEffect(() => {
         if (isEventFetched && isOrderFetched && isQuestionsFetched && productQuestions && orderQuestions) {
-            const attendees = createAttendeesAndQuestions(createProductIdToQuestionMap());
+            const products = createProductsAndQuestions(createProductIdToQuestionMap());
             const formOrderQuestions = createFormOrderQuestions();
 
             form.setValues({
                 ...form.values,
-                attendees: attendees,
+                products: products,
                 order: {
                     ...form.values.order,
                     questions: formOrderQuestions,
@@ -294,8 +296,14 @@ export const CollectInformation = () => {
 
                 {orderItems?.map(orderItem => {
                     const product = products?.find(product => product.id === orderItem.product_id);
+                    const productRequiresDetails = product?.product_type === 'TICKET';
+                    const productHasQuestions = productQuestions?.some(question => question.product_ids?.includes(orderItem.product_id));
 
                     if (!product) {
+                        return;
+                    }
+
+                    if (!productRequiresDetails && !productHasQuestions) {
                         return;
                     }
 
@@ -303,45 +311,52 @@ export const CollectInformation = () => {
                         <div key={orderItem.product_id + orderItem.id}>
                             <h3>{orderItem?.item_name}</h3>
                             {Array.from(Array(orderItem?.quantity)).map((_, index) => {
-                                const attendeeInputs = (
-                                    <Card key={`${orderItem.id} ${index}`}>
-                                        <h4 style={{marginTop: 0}}>
-                                            {t`Attendee`} {index + 1} {t`Details`}
-                                        </h4>
-                                        <InputGroup>
-                                            <TextInput
-                                                withAsterisk
-                                                label={t`First Name`}
-                                                placeholder={t`First name`}
-                                                {...form.getInputProps(`attendees.${attendeeIndex}.first_name`)}
-                                            />
-                                            <TextInput
-                                                withAsterisk
-                                                label={t`Last Name`}
-                                                placeholder={t`Last Name`}
-                                                {...form.getInputProps(`attendees.${attendeeIndex}.last_name`)}
-                                            />
-                                        </InputGroup>
+                                const productInputs = (
+                                    <>
+                                        <Card key={`${orderItem.id} ${index}`}>
+                                            <h4 style={{marginTop: 0}}>
+                                                {product.product_type === 'TICKET' ? t`Attendee` : t`Item`} {index + 1} {t`Details`}
+                                            </h4>
 
-                                        <TextInput
-                                            withAsterisk
-                                            label={t`Email Address`}
-                                            placeholder={t`Email Address`}
-                                            {...form.getInputProps(`attendees.${attendeeIndex}.email`)}
-                                        />
+                                            {productRequiresDetails && (
+                                                <>
+                                                    <InputGroup>
+                                                        <TextInput
+                                                            withAsterisk
+                                                            label={t`First Name`}
+                                                            placeholder={t`First name`}
+                                                            {...form.getInputProps(`products.${productIndex}.first_name`)}
+                                                        />
+                                                        <TextInput
+                                                            withAsterisk
+                                                            label={t`Last Name`}
+                                                            placeholder={t`Last Name`}
+                                                            {...form.getInputProps(`products.${productIndex}.last_name`)}
+                                                        />
+                                                    </InputGroup>
 
-                                        {productQuestions &&
-                                            <CheckoutProductQuestions
-                                                index={attendeeIndex}
-                                                product={product}
-                                                form={form}
-                                                questions={productQuestions}/>}
-                                    </Card>
+                                                    <TextInput
+                                                        withAsterisk
+                                                        label={t`Email Address`}
+                                                        placeholder={t`Email Address`}
+                                                        {...form.getInputProps(`products.${productIndex}.email`)}
+                                                    />
+                                                </>
+                                            )}
+
+                                            {productQuestions &&
+                                                <CheckoutProductQuestions
+                                                    index={productIndex}
+                                                    product={product}
+                                                    form={form}
+                                                    questions={productQuestions}/>}
+                                        </Card>
+                                    </>
                                 );
 
-                                attendeeIndex++;
+                                productIndex++;
 
-                                return attendeeInputs;
+                                return productInputs;
                             })}
                         </div>
                     );

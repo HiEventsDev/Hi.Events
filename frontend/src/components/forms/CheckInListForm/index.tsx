@@ -1,17 +1,17 @@
-import {MultiSelect, Textarea, TextInput} from "@mantine/core";
+import {Textarea, TextInput} from "@mantine/core";
 import {t} from "@lingui/macro";
 import {UseFormReturnType} from "@mantine/form";
-import {CheckInListRequest, Product} from "../../../types.ts";
+import {CheckInListRequest, ProductCategory, ProductType} from "../../../types.ts";
 import {InputLabelWithHelp} from "../../common/InputLabelWithHelp";
 import {InputGroup} from "../../common/InputGroup";
-import {IconTicket} from "@tabler/icons-react";
+import {ProductSelector} from "../../common/ProductSelector";
 
 interface CheckInListFormProps {
     form: UseFormReturnType<CheckInListRequest>;
-    products: Product[],
+    productCategories: ProductCategory[],
 }
 
-export const CheckInListForm = ({form, products}: CheckInListFormProps) => {
+export const CheckInListForm = ({form, productCategories}: CheckInListFormProps) => {
     return (
         <>
             <TextInput
@@ -21,19 +21,13 @@ export const CheckInListForm = ({form, products}: CheckInListFormProps) => {
                 placeholder={t`VIP check-in list`}
             />
 
-            <MultiSelect
-                label={t`Which products should be associated with this check-in list?`}
-                multiple
-                placeholder={t`Select products`}
-                data={products?.map(product => {
-                    return {
-                        value: String(product.id),
-                        label: product.title,
-                    }
-                })}
-                required
-                leftSection={<IconTicket size="1rem"/>}
-                {...form.getInputProps('product_ids')}
+            <ProductSelector
+                label={t`Which tickets should be associated with this check-in list?`}
+                placeholder={t`Select tickets`}
+                data={productCategories}
+                form={form}
+                fieldName="product_ids"
+                includedProductTypes={[ProductType.Ticket]}
             />
 
             <Textarea

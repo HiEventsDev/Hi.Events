@@ -1,9 +1,8 @@
 import {Button} from "@mantine/core";
-import {GenericModalProps, Product, ProductPriceType, ProductType, TaxAndFee} from "../../../types.ts";
+import {GenericModalProps, IdParam, Product, ProductPriceType, ProductType, TaxAndFee} from "../../../types.ts";
 import {useForm} from "@mantine/form";
-import {useMutation, useQueryClient} from "@tanstack/react-query";
+import {useQueryClient} from "@tanstack/react-query";
 import {notifications} from "@mantine/notifications";
-import {productClient} from "../../../api/product.client.ts";
 import {useParams} from "react-router-dom";
 import {Modal} from "../../common/Modal";
 import {ProductForm} from "../../forms/ProductForm";
@@ -11,11 +10,17 @@ import {GET_PRODUCTS_QUERY_KEY} from "../../../queries/useGetProducts.ts";
 import {useEffect} from "react";
 import {useGetTaxesAndFees} from "../../../queries/useGetTaxesAndFees.ts";
 import {t} from "@lingui/macro";
+import {useCreateProduct} from "../../../mutations/useCreateProduct.ts";
 
-export const CreateProductModal = ({onClose}: GenericModalProps) => {
+interface CreateProductModalProps extends GenericModalProps {
+    selectedCategoryId?: IdParam;
+}
+
+export const CreateProductModal = ({onClose, selectedCategoryId = undefined}: CreateProductModalProps) => {
     const {eventId} = useParams();
     const queryClient = useQueryClient();
     const {data: taxesAndFees, isFetched: taxesAndFeesLoaded} = useGetTaxesAndFees();
+    const createProductMutation = useCreateProduct();
     const form = useForm<Product>({
         initialValues: {
             title: '',
@@ -32,6 +37,7 @@ export const CreateProductModal = ({onClose}: GenericModalProps) => {
             type: ProductPriceType.Paid,
             product_type: ProductType.Ticket,
             tax_and_fee_ids: undefined,
+            product_category_id: selectedCategoryId ? String(selectedCategoryId) : undefined,
             prices: [{
                 price: 0,
                 label: undefined,
@@ -42,31 +48,31 @@ export const CreateProductModal = ({onClose}: GenericModalProps) => {
         },
     });
 
-    const mutation = useMutation({
-        mutationFn: (productData: Product) => productClient.create(eventId, productData),
+    const handleCreateProduct = (values: Product) => {
+        createProductMutation.mutate({eventId, productData: values}, {
+            onSuccess: () => {
+                notifications.show({
+                    message: t`Successfully Created Product`,
+                    color: 'green',
+                });
+                queryClient.invalidateQueries({queryKey: [GET_PRODUCTS_QUERY_KEY]}).then(() => {
+                    form.reset();
+                    onClose();
+                });
+            },
 
-        onSuccess: () => {
-            notifications.show({
-                message: t`Successfully Created Product`,
-                color: 'green',
-            });
-            queryClient.invalidateQueries({queryKey: [GET_PRODUCTS_QUERY_KEY]}).then(() => {
-                form.reset();
-                onClose();
-            });
-        },
+            onError: (error: any) => {
+                if (error?.response?.data?.errors) {
+                    form.setErrors(error.response.data.errors);
+                }
 
-        onError: (error: any) => {
-            if (error?.response?.data?.errors) {
-                form.setErrors(error.response.data.errors);
+                notifications.show({
+                    message: t`Unable to create product. Please check the your details`,
+                    color: 'red',
+                });
             }
-
-            notifications.show({
-                message: t`Unable to create product. Please check the your details`,
-                color: 'red',
-            });
-        }
-    });
+        });
+    }
 
     useEffect(() => {
         form.setFieldValue('tax_and_fee_ids', taxesAndFees
@@ -85,10 +91,10 @@ export const CreateProductModal = ({onClose}: GenericModalProps) => {
             size={'lg'}
             withCloseButton
         >
-            <form onSubmit={form.onSubmit((values) => mutation.mutate(values as any as Product))}>
+            <form onSubmit={form.onSubmit((values) => handleCreateProduct(values))}>
                 <ProductForm form={form}/>
-                <Button type="submit" fullWidth disabled={mutation.isPending}>
-                    {mutation.isPending ? t`Working...` : t`Create Product`}
+                <Button type="submit" fullWidth disabled={createProductMutation.isPending}>
+                    {createProductMutation.isPending ? t`Working...` : t`Create Product`}
                 </Button>
             </form>
         </Modal>

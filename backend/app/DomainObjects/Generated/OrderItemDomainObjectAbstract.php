@@ -24,6 +24,7 @@ abstract class OrderItemDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
     final public const TOTAL_GROSS = 'total_gross';
     final public const TOTAL_SERVICE_FEE = 'total_service_fee';
     final public const TAXES_AND_FEES_ROLLUP = 'taxes_and_fees_rollup';
+    final public const PRODUCT_TYPE = 'product_type';
 
     protected int $id;
     protected int $order_id;
@@ -39,6 +40,7 @@ abstract class OrderItemDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
     protected ?float $total_gross = null;
     protected ?float $total_service_fee = 0.0;
     protected array|string|null $taxes_and_fees_rollup = null;
+    protected string $product_type = 'TICKET';
 
     public function toArray(): array
     {
@@ -57,6 +59,7 @@ abstract class OrderItemDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
                     'total_gross' => $this->total_gross ?? null,
                     'total_service_fee' => $this->total_service_fee ?? null,
                     'taxes_and_fees_rollup' => $this->taxes_and_fees_rollup ?? null,
+                    'product_type' => $this->product_type ?? null,
                 ];
     }
 
@@ -212,5 +215,16 @@ abstract class OrderItemDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
     public function getTaxesAndFeesRollup(): array|string|null
     {
         return $this->taxes_and_fees_rollup;
+    }
+
+    public function setProductType(string $product_type): self
+    {
+        $this->product_type = $product_type;
+        return $this;
+    }
+
+    public function getProductType(): string
+    {
+        return $this->product_type;
     }
 }

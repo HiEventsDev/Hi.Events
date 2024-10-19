@@ -2,14 +2,18 @@ import {Anchor, Tooltip} from "@mantine/core";
 import {prettyDate, relativeDate} from "../../../utilites/dates.ts";
 import {OrderStatusBadge} from "../OrderStatusBadge";
 import {Currency} from "../Currency";
-import {Card} from "../Card";
+import {Card, CardVariant} from "../Card";
 import {Event, Order} from "../../../types.ts";
 import classes from "./OrderDetails.module.scss";
 import {t} from "@lingui/macro";
 
-export const OrderDetails = ({order, event}: { order: Order, event: Event }) => {
+export const OrderDetails = ({order, event, cardVariant = 'lightGray'}: {
+    order: Order,
+    event: Event,
+    cardVariant?: CardVariant
+}) => {
     return (
-        <Card className={classes.orderDetails} variant={'lightGray'}>
+        <Card className={classes.orderDetails} variant={cardVariant}>
             <div className={classes.block}>
                 <div className={classes.title}>
                     {t`Name`}
@@ -43,7 +47,7 @@ export const OrderDetails = ({order, event}: { order: Order, event: Event }) => 
                     {t`Status`}
                 </div>
                 <div className={classes.amount}>
-                    <OrderStatusBadge order={order} variant={'filled'}/>
+                    <OrderStatusBadge order={order} variant={'outline'}/>
                 </div>
             </div>
             <div className={classes.block}>

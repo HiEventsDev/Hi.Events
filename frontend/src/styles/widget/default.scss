@@ -12,125 +12,137 @@
     color: var(--widget-primary-text-color, var(--tk-primary));
   }
 
-  .hi-product-rows {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    margin-bottom: 20px;
+  .hi-product-category-rows {
 
-    .hi-product-row {
-      display: flex;
-      flex-flow: column;
-      border: 3px solid var(--widget-primary-color, var(--tk-secondary));
-      padding: 10px 20px 20px;
-      border-radius: 5px;
-
-      .hi-product-description-row {
-        font-size: .9em;
+    .hi-product-category-row {
+      .hi-product-category-title {
+        margin-bottom: 20px;
+        margin-top: 0;
       }
 
-      .hi-title-row {
+      .hi-product-rows {
         display: flex;
-        justify-content: center;
-        align-items: center;
+        flex-direction: column;
+        gap: 20px;
+        margin-bottom: 20px;
 
-        .hi-product-title {
-          flex: 1;
-          font-weight: bold;
+        .hi-product-row {
+          display: flex;
+          flex-flow: column;
+          border: 3px solid var(--widget-primary-color, var(--tk-secondary));
+          padding: 10px 20px 20px;
+          border-radius: 5px;
 
-          h3 {
+          .hi-product-description-row {
+            font-size: .9em;
+          }
+
+          .hi-title-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            .hi-product-title {
+              flex: 1;
+              font-weight: bold;
+
+              h3 {
+                margin: 10px 0;
+              }
+            }
+
+            .hi-product-availability {
+              text-align: right;
+              color: var(--widget-primary-text-color);
+            }
+          }
+
+          .hi-price-tiers-rows {
+            .productPrice {
+
+              .hi-price-tier-amount {
+                span:first-child {
+                  display: block;
+                  color: #909090;
+                  font-size: .85em;
+                }
+              }
+            }
+          }
+
+          .hi-product-quantity-error {
+            color: var(--widget-primary-color, var(--tk-primary));
+            background-color: var(--widget-background-color, var(--tk-color-white));
+            border: 2px solid var(--widget-primary-color, var(--tk-primary));
+            padding: 10px 20px;
             margin: 10px 0;
-          }
-        }
-
-        .hi-product-availability {
-          text-align: right;
-          color: var(--widget-primary-text-color);
-        }
-      }
-
-      .hi-price-tiers-rows {
-        .productPrice {
-
-          .hi-price-tier-amount {
-            span:first-child {
-              display: block;
-              color: #909090;
-              font-size: .85em;
-            }
-          }
-        }
-      }
-
-      .hi-product-quantity-error {
-        color: var(--widget-primary-color, var(--tk-primary));
-        background-color: var(--widget-background-color, var(--tk-color-white));
-        border: 2px solid var(--widget-primary-color, var(--tk-primary));
-        padding: 10px 20px;
-        margin: 10px 0;
-        border-radius: 5px;
-      }
-
-      .hi-price-tier-row {
-        margin-bottom: 10px;
-
-        .hi-price-tier {
-          .hi-price-tier-label {
-            font-weight: bold;
+            border-radius: 5px;
           }
 
-          .hi-price-tier-price {
-            .hi-price-tier-price-amount {
-              display: flex;
-              gap: 5px;
+          .hi-price-tier-row {
+            margin-bottom: 10px;
 
-              svg {
-                margin-top: 3px;
+            .hi-price-tier {
+              .hi-price-tier-label {
+                font-weight: bold;
+              }
+
+              .hi-price-tier-price {
+                .hi-price-tier-price-amount {
+                  display: flex;
+                  gap: 5px;
+
+                  svg {
+                    margin-top: 3px;
+                  }
+                }
+
+                .hi-donation-input-wrapper {
+                  .hi-donation-input {
+                    color: var(--widget-primary-text-color, var(--tk-primary));
+                    background-color: var(--widget-background-color, var(--tk-color-white));
+                    border: 2px solid var(--widget-primary-color, var(--tk-primary));
+                  }
+                }
               }
             }
 
-            .hi-donation-input-wrapper {
-              .hi-donation-input {
-                color: var(--widget-primary-text-color, var(--tk-primary));
-                background-color: var(--widget-background-color, var(--tk-color-white));
-                border: 2px solid var(--widget-primary-color, var(--tk-primary));
-              }
-            }
-          }
-        }
+            .hi-product-quantity-selector {
+              .button-input {
+                input {
+                  color: var(--widget-primary-text-color, var(--tk-primary));
+                }
 
-        .hi-product-quantity-selector {
-          .button-input {
-            input {
-              color: var(--widget-primary-text-color, var(--tk-primary));
-            }
+                button {
+                  &:disabled {
+                    border: none;
+                    opacity: .5;
+                  }
 
-            button {
-              &:disabled {
-                border: none;
-                opacity: .5;
+                  background-color: var(--widget-secondary-color, var(--tk-primary));
+                  color: var(--widget-secondary-text-color, var(--tk-color-white));
+                }
               }
 
-              background-color: var(--widget-secondary-color, var(--tk-primary));
-              color: var(--widget-secondary-text-color, var(--tk-color-white));
-            }
-          }
+              .select-input {
+                input {
+                  background-color: var(--widget-background-color, var(--tk-color-white));
+                  border: 2px solid var(--widget-primary-color, var(--tk-primary));
+                  color: var(--widget-primary-text-color, var(--tk-primary));
+                }
 
-          .select-input {
-            input {
-              background-color: var(--widget-background-color, var(--tk-color-white));
-              border: 2px solid var(--widget-primary-color, var(--tk-primary));
-              color: var(--widget-primary-text-color, var(--tk-primary));
-            }
-
-            svg {
-              color: var(--widget-primary-text-color, var(--tk-primary));
+                svg {
+                  color: var(--widget-primary-text-color, var(--tk-primary));
+                }
+              }
             }
           }
         }
       }
+
     }
   }
+
 
   .hi-promo-code-row {
     display: flex;

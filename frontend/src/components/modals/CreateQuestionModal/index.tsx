@@ -21,7 +21,7 @@ export const CreateQuestionModal = ({onClose, onCompleted}: CreateQuestionModalP
     const queryClient = useQueryClient();
 
     const eventQuery = useGetEvent(eventId);
-    const products = eventQuery?.data?.products;
+    const productCategories = eventQuery?.data?.product_categories;
 
     const form = useForm({
         initialValues: {
@@ -68,7 +68,7 @@ export const CreateQuestionModal = ({onClose, onCompleted}: CreateQuestionModalP
             heading={t`Create Question`}
         >
             <form onSubmit={form.onSubmit((values) => mutation.mutate(values as any as Question))}>
-                <QuestionForm form={form} products={products}/>
+                <QuestionForm form={form} productCategories={productCategories}/>
                 <Button loading={mutation.isPending} type="submit" fullWidth mt="xl">
                     {mutation.isPending ? t`Working...` : t`Create Question`}
                 </Button>

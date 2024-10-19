@@ -43,7 +43,7 @@ class CreateEventImageService
                 image: $image,
                 entityId: $eventId,
                 entityType: EventDomainObject::class,
-                imageType: EventImageType::EVENT_COVER->name,
+                imageType: $type->name,
             );
         });
     }

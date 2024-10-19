@@ -30,7 +30,10 @@ readonly class EventStatsFetchService
             SUM(es.sales_total_gross) AS total_gross_sales,
             SUM(es.total_tax) AS total_tax,
             SUM(es.total_fee) AS total_fees,
-            SUM(es.total_views) AS total_views
+            SUM(es.total_views) AS total_views,
+            SUM(es.total_refunded) AS total_refunded,
+            SUM(es.attendees_registered) AS attendees_registered
+
         FROM event_statistics es
         WHERE es.event_id = :eventId
           AND es.deleted_at IS NULL;
@@ -46,12 +49,13 @@ readonly class EventStatsFetchService
             end_date: $requestData->end_date,
             check_in_stats: $this->getCheckedInStats($eventId),
             total_products_sold: $totalsResult->total_products_sold ?? 0,
+            total_attendees_registered: $totalsResult->attendees_registered ?? 0,
             total_orders: $totalsResult->total_orders ?? 0,
             total_gross_sales: $totalsResult->total_gross_sales ?? 0,
             total_fees: $totalsResult->total_fees ?? 0,
             total_tax: $totalsResult->total_tax ?? 0,
             total_views: $totalsResult->total_views ?? 0,
-
+            total_refunded: $totalsResult->total_refunded ?? 0,
         );
     }
 
@@ -77,7 +81,9 @@ readonly class EventStatsFetchService
               COALESCE(SUM(eds.total_tax), 0) AS total_tax,
               COALESCE(SUM(eds.sales_total_gross), 0) AS total_sales_gross,
               COALESCE(SUM(eds.orders_created), 0) AS orders_created,
-              COALESCE(SUM(eds.products_sold), 0) AS products_sold
+              COALESCE(SUM(eds.products_sold), 0) AS products_sold,
+              COALESCE(SUM(eds.attendees_registered), 0) AS attendees_registered,
+              COALESCE(SUM(eds.total_refunded), 0) AS total_refunded
             FROM date_series ds
             LEFT JOIN event_daily_statistics eds ON ds.date = eds.date AND eds.deleted_at IS NULL AND eds.event_id = :eventId
             GROUP BY ds.date
@@ -102,6 +108,8 @@ readonly class EventStatsFetchService
                 total_sales_gross: $result->total_sales_gross,
                 products_sold: $result->products_sold,
                 orders_created: $result->orders_created,
+                attendees_registered: $result->attendees_registered,
+                total_refunded: $result->total_refunded,
             );
         });
     }

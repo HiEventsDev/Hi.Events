@@ -7,9 +7,10 @@ use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\Generated\PromoCodeDomainObjectAbstract;
 use HiEvents\DomainObjects\ImageDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
-use HiEvents\DomainObjects\TaxAndFeesDomainObject;
+use HiEvents\DomainObjects\ProductCategoryDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
+use HiEvents\DomainObjects\TaxAndFeesDomainObject;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
@@ -32,9 +33,11 @@ class GetPublicEventHandler
     {
         $event = $this->eventRepository
             ->loadRelation(
-                new Relationship(ProductDomainObject::class, [
-                    new Relationship(ProductPriceDomainObject::class),
-                    new Relationship(TaxAndFeesDomainObject::class)
+                new Relationship(ProductCategoryDomainObject::class, [
+                    new Relationship(ProductDomainObject::class, [
+                        new Relationship(ProductPriceDomainObject::class),
+                        new Relationship(TaxAndFeesDomainObject::class),
+                    ]),
                 ])
             )
             ->loadRelation(new Relationship(EventSettingDomainObject::class))
@@ -55,6 +58,9 @@ class GetPublicEventHandler
             $this->eventPageViewIncrementService->increment($data->eventId, $data->ipAddress);
         }
 
-        return $event->setProducts($this->productFilterService->filter($event->getProducts(), $promoCodeDomainObject));
+        return $event->setProducts($this->productFilterService->filter(
+            productsCategories: $event->getProductCategories(),
+            promoCode: $promoCodeDomainObject
+        ));
     }
 }

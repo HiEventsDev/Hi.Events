@@ -224,7 +224,7 @@ export const CheckoutProductQuestions = ({
                                             questions,
                                             form,
                                             product,
-                                            index: attendeeIndex
+                                            index: productIndex
                                         }: CheckoutProductQuestionProps) => {
     let questionIndex = 0;
     return (
@@ -234,8 +234,8 @@ export const CheckoutProductQuestions = ({
                     return;
                 }
 
-                const name = `attendees.${attendeeIndex}.questions.${questionIndex++}.response`;
-                return <QuestionInput key={`${index}-attendee`} question={question} name={name} form={form}/>
+                const name = `products.${productIndex}.questions.${questionIndex++}.response`;
+                return <QuestionInput key={`${index}-product`} question={question} name={name} form={form}/>
             })}
         </>
     )

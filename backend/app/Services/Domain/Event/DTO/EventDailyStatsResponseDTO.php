@@ -11,6 +11,9 @@ readonly class EventDailyStatsResponseDTO
         public float  $total_sales_gross,
         public int    $products_sold,
         public int    $orders_created,
+        public int    $attendees_registered,
+        public float  $total_refunded,
+
     )
     {
     }

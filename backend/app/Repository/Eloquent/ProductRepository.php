@@ -8,6 +8,7 @@ use HiEvents\Constants;
 use HiEvents\DomainObjects\CapacityAssignmentDomainObject;
 use HiEvents\DomainObjects\Generated\ProductDomainObjectAbstract;
 use HiEvents\DomainObjects\ProductDomainObject;
+use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\DomainObjects\TaxAndFeesDomainObject;
 use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Models\CapacityAssignment;
@@ -206,6 +207,15 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
               WHERE products.id = new_order.product_id AND products.event_id = :eventId";
 
         $this->db->update($query, $parameters);
+    }
+
+    public function hasAssociatedOrders(int $productId): bool
+    {
+        return $this->db->table('order_items')
+            ->join('orders', 'order_items.order_id', '=', 'orders.id')
+            ->whereIn('orders.status', [OrderStatus::COMPLETED->name, OrderStatus::CANCELLED->name])
+            ->where('order_items.product_id', $productId)
+            ->exists();
     }
 
     public function getModel(): string

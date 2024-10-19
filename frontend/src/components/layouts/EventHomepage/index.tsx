@@ -77,7 +77,6 @@ const EventHomepage = ({colors, continueButtonText, backgroundType, ...loaderDat
                         </div>
 
                         <div className={classes.productContainer}>
-                            <h2>{t`Products`}</h2>
                             <div className={classes.productSelection}>
                                 <SelectProducts
                                     colors={{

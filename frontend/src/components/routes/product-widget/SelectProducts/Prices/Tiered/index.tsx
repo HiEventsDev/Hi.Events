@@ -5,6 +5,7 @@ import {NumberSelector, SharedValues} from "../../../../../common/NumberSelector
 import {UseFormReturnType} from "@mantine/form";
 import {t} from "@lingui/macro";
 import {ProductPriceAvailability} from "../../../../../common/ProductPriceAvailability";
+import { getCurrencySymbol } from "../../../../../../utilites/currency.ts";
 
 interface TieredPricingProps {
     event: Event;
@@ -14,10 +15,9 @@ interface TieredPricingProps {
 }
 
 export const TieredPricing = ({product, event, form, productIndex}: TieredPricingProps) => {
-
-    const sharedValues = new SharedValues(Math.min(product.max_per_order ?? 100, product.quantity_available ?? 10000));
     return (
         <>
+            {productIndex}<br/>
             {product?.prices?.map((price, index) => {
                 return (
                     <div key={index} className={'hi-price-tier-row'}>
@@ -66,7 +66,6 @@ export const TieredPricing = ({product, event, form, productIndex}: TieredPricin
                                             max={(Math.min(price.quantity_remaining ?? 50, product.max_per_order ?? 50))}
                                             fieldName={`products.${productIndex}.quantities.${index}.quantity`}
                                             formInstance={form}
-                                            sharedValues={sharedValues}
                                         />
                                         {form.errors[`products.${productIndex}.quantities.${index}.quantity`] && (
                                             <div className={'hi-product-quantity-error'}>

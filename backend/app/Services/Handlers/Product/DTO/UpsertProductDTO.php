@@ -14,6 +14,7 @@ class UpsertProductDTO extends BaseDTO
     public function __construct(
         public readonly int              $account_id,
         public readonly int              $event_id,
+        public readonly int              $product_category_id,
         public readonly string           $title,
         public readonly ProductPriceType $type,
         public readonly ProductType      $product_type,

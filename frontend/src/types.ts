@@ -164,6 +164,7 @@ export interface Event extends EventBase {
     lifecycle_status?: EventLifecycleStatus;
     settings?: EventSettings;
     products?: Product[];
+    product_categories?: ProductCategory[];
     images?: Image[];
     organizer?: Organizer;
     currency: string;
@@ -190,6 +191,8 @@ export interface EventDailyStats {
     total_tax: number;
     total_sales_gross: number;
     products_sold: number;
+    attendees_registered: number;
+    total_refunded: number;
     orders_created: number;
 }
 
@@ -204,6 +207,7 @@ export interface EventStats {
     end_date: string;
     check_in_stats: CheckInStats;
     total_products_sold: number;
+    total_attendees_registered: number;
     total_product_sold_percentage_change: number;
     total_orders: number;
     total_orders_percentage_change: number;
@@ -212,6 +216,7 @@ export interface EventStats {
     total_tax: number;
     total_fees: number;
     total_views: number;
+    total_refunded: number;
 }
 
 export interface Organizer {
@@ -330,6 +335,16 @@ export interface Product {
     price_including_taxes_and_fees?: number;
     tax_and_fee_ids?: IdParam[];
     taxes_and_fees?: TaxAndFee[];
+    is_hidden?: boolean;
+    product_category_id?: IdParam;
+}
+
+export interface ProductCategory {
+    id?: number;
+    name: string;
+    description?: string;
+    products?: Product[];
+    event_id?: number;
     is_hidden?: boolean;
 }
 
@@ -636,6 +651,8 @@ export interface SortableItem {
 }
 
 export interface QuestionAnswer {
+    product_id?: number;
+    product_title?: string;
     question_id: number;
     title: string;
     answer: string[] | string;

@@ -91,7 +91,7 @@ export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
     if (isEventFetched && event.products.length === 0) {
         return (
             <Modal opened onClose={onClose} heading={t`Manually Add Attendee`}>
-                <p>{t`You must create a product before you can manually add an attendee.`}</p>
+                <p>{t`You must create a ticket before you can manually add an attendee.`}</p>
                 <Button
                     fullWidth
                     variant={'light'}

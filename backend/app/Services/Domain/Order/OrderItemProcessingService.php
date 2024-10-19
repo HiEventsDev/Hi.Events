@@ -5,16 +5,16 @@ namespace HiEvents\Services\Domain\Order;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\Generated\ProductDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
-use HiEvents\DomainObjects\PromoCodeDomainObject;
-use HiEvents\DomainObjects\TaxAndFeesDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
+use HiEvents\DomainObjects\PromoCodeDomainObject;
+use HiEvents\DomainObjects\TaxAndFeesDomainObject;
 use HiEvents\Helper\Currency;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
-use HiEvents\Services\Domain\Tax\TaxAndFeeCalculationService;
 use HiEvents\Services\Domain\Product\DTO\OrderProductPriceDTO;
 use HiEvents\Services\Domain\Product\ProductPriceService;
+use HiEvents\Services\Domain\Tax\TaxAndFeeCalculationService;
 use HiEvents\Services\Handlers\Order\DTO\ProductOrderDetailsDTO;
 use Illuminate\Support\Collection;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -57,7 +57,7 @@ readonly class OrderItemProcessingService
 
             if ($product === null) {
                 throw new ResourceNotFoundException(
-                   __('Product with id :id not found', ['id' => $productOrderDetail->product_id])
+                    __('Product with id :id not found', ['id' => $productOrderDetail->product_id])
                 );
             }
 
@@ -93,6 +93,7 @@ readonly class OrderItemProcessingService
         );
 
         return [
+            'product_type' => $product->getProductType(),
             'product_id' => $product->getId(),
             'product_price_id' => $productPriceDetails->price_id,
             'quantity' => $productPriceDetails->quantity,

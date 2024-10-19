@@ -12,9 +12,11 @@ use HiEvents\Exceptions\CannotChangeProductTypeException;
 use HiEvents\Helper\DateHelper;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
+use HiEvents\Services\Domain\Product\ProductOrderingService;
+use HiEvents\Services\Domain\Product\ProductPriceUpdateService;
+use HiEvents\Services\Domain\ProductCategory\GetProductCategoryService;
 use HiEvents\Services\Domain\Tax\DTO\TaxAndProductAssociateParams;
 use HiEvents\Services\Domain\Tax\TaxAndProductAssociationService;
-use HiEvents\Services\Domain\Product\ProductPriceUpdateService;
 use HiEvents\Services\Handlers\Product\DTO\UpsertProductDTO;
 use HTMLPurifier;
 use Illuminate\Database\DatabaseManager;
@@ -26,12 +28,14 @@ use Throwable;
 class EditProductHandler
 {
     public function __construct(
-        private readonly ProductRepositoryInterface     $productRepository,
+        private readonly ProductRepositoryInterface      $productRepository,
         private readonly TaxAndProductAssociationService $taxAndProductAssociationService,
-        private readonly DatabaseManager                $databaseManager,
-        private readonly ProductPriceUpdateService      $priceUpdateService,
-        private readonly HTMLPurifier                   $purifier,
-        private readonly EventRepositoryInterface       $eventRepository,
+        private readonly DatabaseManager                 $databaseManager,
+        private readonly ProductPriceUpdateService       $priceUpdateService,
+        private readonly HTMLPurifier                    $purifier,
+        private readonly EventRepositoryInterface        $eventRepository,
+        private readonly ProductOrderingService          $productOrderingService,
+        private readonly GetProductCategoryService       $getProductCategoryService,
     )
     {
     }
@@ -73,11 +77,19 @@ class EditProductHandler
 
         $this->validateChangeInProductType($productsData);
 
+        $productCategory = $this->getProductCategoryService->getCategory(
+            $productsData->product_category_id,
+            $productsData->event_id,
+        );
+
         $this->productRepository->updateWhere(
             attributes: [
                 'title' => $productsData->title,
                 'type' => $productsData->type->name,
-                'order' => $productsData->order,
+                'order' => $this->productOrderingService->getOrderForNewProduct(
+                    eventId: $productsData->event_id,
+                    productCategoryId: $productCategory->getId(),
+                ),
                 'sale_start_date' => $productsData->sale_start_date
                     ? DateHelper::convertToUTC($productsData->sale_start_date, $event->getTimezone())
                     : null,

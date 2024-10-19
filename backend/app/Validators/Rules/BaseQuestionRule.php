@@ -54,10 +54,10 @@ abstract class BaseQuestionRule implements ValidationRule, DataAwareRule, Valida
     {
         $this->validateRequiredQuestionArePresent(collect($value));
 
-        $validationMessages = $this->validateQuestions($value);
+        $questionValidationMessages = $this->validateQuestions($value);
 
-        if ($validationMessages) {
-            $this->validator->messages()->merge($validationMessages);
+        if ($questionValidationMessages) {
+            $this->validator->messages()->merge($questionValidationMessages);
         }
     }
 
@@ -87,7 +87,7 @@ abstract class BaseQuestionRule implements ValidationRule, DataAwareRule, Valida
 
     protected function isAnswerValid(QuestionDomainObject $questionDomainObject, mixed $response): bool
     {
-        if (!$questionDomainObject->isMultipleChoice()) {
+        if (!$questionDomainObject->isPreDefinedChoice()) {
             return true;
         }
 
@@ -96,7 +96,7 @@ abstract class BaseQuestionRule implements ValidationRule, DataAwareRule, Valida
         }
 
         if (is_string($response['answer'])) {
-            return in_array($response, $questionDomainObject->getOptions(), true);
+            return in_array($response['answer'], $questionDomainObject->getOptions(), true);
         }
 
         return array_diff((array)$response['answer'], $questionDomainObject->getOptions()) === [];
@@ -159,5 +159,10 @@ abstract class BaseQuestionRule implements ValidationRule, DataAwareRule, Valida
         }
 
         return $validationMessages;
+    }
+
+    protected function getProductDomainObject(int $id): ?ProductDomainObject
+    {
+        return $this->products->filter(fn($product) => $product->getId() === $id)?->first();
     }
 }

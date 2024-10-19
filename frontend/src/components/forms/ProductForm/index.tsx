@@ -10,7 +10,7 @@ import {
     ComboboxItem,
     Group,
     MultiSelect,
-    NumberInput,
+    NumberInput, Select,
     Switch,
     TextInput
 } from "@mantine/core";
@@ -187,6 +187,12 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
         }
     }, [form, form.values.type]);
 
+    useEffect(() => {
+        if (event?.product_categories && event.product_categories.length === 1) {
+            form.setFieldValue('product_category_id', String(event.product_categories[0].id));
+        }
+    }, [event?.product_categories]);
+
     const removeTaxesAndFees = () => {
         form.setFieldValue('tax_and_fee_ids', []);
     };
@@ -222,6 +228,7 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                     name={'type'}
                     optionList={productPriceOptions}
                 />
+
                 {form.errors.type && (
                     <Alert title={t`Product Price Type`} mb={20} color={'red'}>
                         {form.errors.type}
@@ -246,6 +253,19 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                     label={t`Description`}
                     value={form.values.description || ''}
                     onChange={(value) => form.setFieldValue('description', value)}
+                />
+
+                <Select
+                    {...form.getInputProps('product_category_id')}
+                    label={<InputLabelWithHelp
+                        label={t`Product Category`}
+                        helpText={t`Categories help you organize your products. This title will be displayed on the public event page.`}
+                    />}
+                    placeholder={t`Select category...`}
+                    data={event?.product_categories?.map((category) => ({
+                        value: String(category.id),
+                        label: category.name,
+                    }))}
                 />
 
                 {form.values.type !== ProductPriceType.Tiered && (

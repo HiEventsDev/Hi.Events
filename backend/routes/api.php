@@ -70,6 +70,11 @@ use HiEvents\Http\Actions\Organizers\EditOrganizerAction;
 use HiEvents\Http\Actions\Organizers\GetOrganizerAction;
 use HiEvents\Http\Actions\Organizers\GetOrganizerEventsAction;
 use HiEvents\Http\Actions\Organizers\GetOrganizersAction;
+use HiEvents\Http\Actions\ProductCategories\CreateProductCategoryAction;
+use HiEvents\Http\Actions\ProductCategories\DeleteProductCategoryAction;
+use HiEvents\Http\Actions\ProductCategories\EditProductCategoryAction;
+use HiEvents\Http\Actions\ProductCategories\GetProductCategoriesAction;
+use HiEvents\Http\Actions\ProductCategories\GetProductCategoryAction;
 use HiEvents\Http\Actions\PromoCodes\CreatePromoCodeAction;
 use HiEvents\Http\Actions\PromoCodes\DeletePromoCodeAction;
 use HiEvents\Http\Actions\PromoCodes\GetPromoCodeAction;
@@ -171,12 +176,19 @@ $router->middleware(['auth:api'])->group(
         $router->put('/events/{event_id}/status', UpdateEventStatusAction::class);
         $router->post('/events/{event_id}/duplicate', DuplicateEventAction::class);
 
+        $router->post('/events/{event_id}/product-categories', CreateProductCategoryAction::class);
+        $router->get('/events/{event_id}/product-categories', GetProductCategoriesAction::class);
+        $router->get('/events/{event_id}/product-categories/{category_id}', GetProductCategoryAction::class);
+        $router->put('/events/{event_id}/product-categories/{category_id}', EditProductCategoryAction::class);
+        $router->delete('/events/{event_id}/product-categories/{category_id}', DeleteProductCategoryAction::class);
+
         $router->post('/events/{event_id}/products', CreateProductAction::class);
         $router->post('/events/{event_id}/products/sort', SortProductsAction::class);
         $router->put('/events/{event_id}/products/{ticket_id}', EditProductAction::class);
         $router->get('/events/{event_id}/products/{ticket_id}', GetProductAction::class);
         $router->delete('/events/{event_id}/products/{ticket_id}', DeleteProductAction::class);
         $router->get('/events/{event_id}/products', GetProductsAction::class);
+
         $router->get('/events/{event_id}/check_in_stats', GetEventCheckInStatsAction::class);
         $router->get('/events/{event_id}/stats', GetEventStatsAction::class);
 

@@ -24,6 +24,11 @@ class Event extends BaseModel
         return $this->hasMany(Product::class)->orderBy('order');
     }
 
+    public function product_categories(): HasMany
+    {
+        return $this->hasMany(ProductCategory::class)->orderBy('order');
+    }
+
     public function attendees(): HasMany
     {
         return $this->hasMany(Attendee::class);

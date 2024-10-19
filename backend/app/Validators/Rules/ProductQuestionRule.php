@@ -2,20 +2,22 @@
 
 namespace HiEvents\Validators\Rules;
 
+use HiEvents\DomainObjects\Enums\ProductType;
 use HiEvents\DomainObjects\QuestionDomainObject;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
-class AttendeeQuestionRule extends BaseQuestionRule
+class ProductQuestionRule extends BaseQuestionRule
 {
     /**
      * @throws ValidationException
      */
-    protected function validateRequiredQuestionArePresent(Collection $orderAttendees): void
+    protected function validateRequiredQuestionArePresent(Collection $orderProducts): void
     {
-        foreach ($orderAttendees as $attendee) {
-            $productId = $this->getProductIdFromProductPriceId($attendee['product_price_id']);
-            $questions = $attendee['questions'] ?? [];
+        foreach ($orderProducts as $productData) {
+            $productId = $this->getProductIdFromProductPriceId($productData['product_price_id']);
+            $questions = $productData['questions'] ?? [];
 
             $requiredQuestionIds = $this->questions
                 ->filter(function (QuestionDomainObject $question) use ($productId) {
@@ -33,15 +35,29 @@ class AttendeeQuestionRule extends BaseQuestionRule
         }
     }
 
-    protected function validateQuestions(mixed $attendees): array
+    protected function validateQuestions(mixed $products): array
     {
         $validationMessages = [];
 
-        foreach ($attendees as $attendeeIndex => $attendee) {
-            $questions = $attendee['questions'] ?? [];
+        foreach ($products as $productIndex => $productRequestData) {
+            $productDomainObject = $this->getProductDomainObject($productRequestData['product_id']);
+
+            if (!$productDomainObject) {
+                $validationMessages['products.' . $productIndex][] = __('This product is outdated. Please reload the page.');
+                continue;
+            }
+
+            if ($productDomainObject->getProductType() === ProductType::TICKET->name) {
+                $validationMessages = [
+                    ...$validationMessages,
+                    ...$this->validateBasicTicketFields($productRequestData, $productIndex),
+                ];
+            }
+
+            $questions = $productRequestData['questions'] ?? [];
             foreach ($questions as $questionIndex => $question) {
                 $questionDomainObject = $this->getQuestionDomainObject($question['question_id'] ?? null);
-                $key = 'attendees.' . $attendeeIndex . '.questions.' . $questionIndex . '.response';
+                $key = 'products.' . $productIndex . '.questions.' . $questionIndex . '.response';
                 $response = empty($question['response']) ? null : $question['response'];
 
                 if (!$questionDomainObject) {
@@ -62,6 +78,27 @@ class AttendeeQuestionRule extends BaseQuestionRule
                 }
 
                 $validationMessages = $this->validateResponseLength($questionDomainObject, $response, $key, $validationMessages);
+            }
+        }
+
+        return $validationMessages;
+    }
+
+    private function validateBasicTicketFields(mixed $productRequestData, int|string $productIndex): array
+    {
+        $validationMessages = [];
+
+        $validator = Validator::make($productRequestData, [
+            'first_name' => ['required', 'string', 'min:1', 'max:100'],
+            'last_name' => ['required', 'string', 'min:1', 'max:100'],
+            'email' => ['required', 'string', 'email', 'max:100'],
+        ]);
+
+        if ($validator->fails()) {
+            foreach ($validator->errors()->messages() as $field => $messages) {
+                foreach ($messages as $message) {
+                    $validationMessages["products.$productIndex.$field"][] = $message;
+                }
             }
         }
 

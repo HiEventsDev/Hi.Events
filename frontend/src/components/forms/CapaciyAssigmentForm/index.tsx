@@ -1,17 +1,18 @@
 import {InputGroup} from "../../common/InputGroup";
-import {MultiSelect, NumberInput, Switch, TextInput} from "@mantine/core";
+import {NumberInput, TextInput} from "@mantine/core";
 import {t} from "@lingui/macro";
 import {UseFormReturnType} from "@mantine/form";
-import {CapacityAssignmentRequest, Product} from "../../../types.ts";
+import {CapacityAssignmentRequest, ProductCategory} from "../../../types.ts";
 import {CustomSelect, ItemProps} from "../../common/CustomSelect";
-import {IconCheck, IconTicket, IconX} from "@tabler/icons-react";
+import {IconCheck, IconX} from "@tabler/icons-react";
+import {ProductSelector} from "../../common/ProductSelector";
 
-interface CapaciyAssigmentFormProps {
+interface CapacityAssigmentFormProps {
     form: UseFormReturnType<CapacityAssignmentRequest>;
-    products: Product[],
+    productsCategories: ProductCategory[],
 }
 
-export const CapaciyAssigmentForm = ({form, products}: CapaciyAssigmentFormProps) => {
+export const CapacityAssigmentForm = ({form, productsCategories}: CapacityAssigmentFormProps) => {
     const statusOptions: ItemProps[] = [
         {
             icon: <IconCheck/>,
@@ -43,18 +44,12 @@ export const CapaciyAssigmentForm = ({form, products}: CapaciyAssigmentFormProps
                 />
             </InputGroup>
 
-            <MultiSelect
-                label={t`What products should this question be apply to?`}
-                multiple
+            <ProductSelector
+                label={t`What products should this capacity apply to?`}
                 placeholder={t`Select products`}
-                data={products?.map(product => {
-                    return {
-                        value: String(product.id),
-                        label: product.title,
-                    }
-                })}
-                leftSection={<IconTicket size="1rem"/>}
-                {...form.getInputProps('product_ids')}
+                data={productsCategories}
+                form={form}
+                fieldName={'product_ids'}
             />
 
             <CustomSelect

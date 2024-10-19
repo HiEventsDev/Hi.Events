@@ -1,45 +1,42 @@
-import {IdParam, MessageType, Product, ProductPrice, ProductPriceType} from "../../../../types.ts";
-import {useSortable} from "@dnd-kit/sortable";
-import {useDisclosure} from "@mantine/hooks";
-import {useState} from "react";
-import {useDeleteProduct} from "../../../../mutations/useDeleteProduct.ts";
-import {CSS} from "@dnd-kit/utilities";
-import {showError, showSuccess} from "../../../../utilites/notifications.tsx";
+import {useSortable} from '@dnd-kit/sortable';
+import {CSS} from '@dnd-kit/utilities';
+import {IconDotsVertical, IconEyeOff, IconGripVertical, IconPencil, IconSend, IconTrash} from "@tabler/icons-react";
+import classes from "../ProductsTable.module.scss";
+import classNames from "classnames";
+import {Badge, Button, Group, Menu, Popover} from "@mantine/core";
+import Truncate from "../../Truncate";
 import {t} from "@lingui/macro";
 import {relativeDate} from "../../../../utilites/dates.ts";
 import {formatCurrency} from "../../../../utilites/currency.ts";
-import {Card} from "../../Card";
-import classes from "../ProductsTable.module.scss";
-import classNames from "classnames";
-import {IconDotsVertical, IconEyeOff, IconGripVertical, IconPencil, IconSend, IconTrash} from "@tabler/icons-react";
-import Truncate from "../../Truncate";
-import {Badge, Button, Group, Menu, Popover} from "@mantine/core";
+import {IdParam, MessageType, Product, ProductPrice, ProductPriceType, ProductType} from "../../../../types.ts";
+import {useDisclosure} from "@mantine/hooks";
+import {useState} from "react";
+import {useDeleteProduct} from "../../../../mutations/useDeleteProduct.ts";
+import {showError, showSuccess} from "../../../../utilites/notifications.tsx";
 import {EditProductModal} from "../../../modals/EditProductModal";
 import {SendMessageModal} from "../../../modals/SendMessageModal";
-import {UniqueIdentifier} from "@dnd-kit/core";
 
-export const SortableProduct = ({product, enableSorting, currencyCode}: {product: Product, enableSorting: boolean, currencyCode: string }) => {
-    const uniqueId = product.id as UniqueIdentifier;
+
+interface SortableProductProps {
+    product: Product;
+    enableSorting: boolean;
+    currencyCode: string;
+    isOver: boolean;
+    isDragging: boolean;
+}
+
+export const SortableProduct = ({product, enableSorting, currencyCode, isOver, isDragging}: SortableProductProps) => {
     const {
         attributes,
         listeners,
         setNodeRef,
         transform,
-        transition
-    } = useSortable(
-        {
-            id: uniqueId,
-        }
-    );
+        transition,
+    } = useSortable({id: product.id});
     const [isEditModalOpen, editModal] = useDisclosure(false);
     const [isMessageModalOpen, messageModal] = useDisclosure(false);
     const [productId, setProductId] = useState<IdParam>();
     const deleteMutation = useDeleteProduct();
-
-    const style = {
-        transform: CSS.Transform.toString(transform),
-        transition,
-    };
 
     const handleModalClick = (productId: IdParam, modal: { open: () => void }) => {
         setProductId(productId);
@@ -59,6 +56,11 @@ export const SortableProduct = ({product, enableSorting, currencyCode}: {product
             }
         });
     }
+
+    const style = {
+        transform: CSS.Transform.toString(transform),
+        transition,
+    };
 
     const getProductStatus = (product: Product) => {
         if (product.is_sold_out) {
@@ -107,21 +109,27 @@ export const SortableProduct = ({product, enableSorting, currencyCode}: {product
 
     return (
         <>
-            <div ref={setNodeRef} style={style}>
-                <Card className={classes.productCard}>
-                    <div
-                        {...attributes}
-                        {...listeners}
-                        title={enableSorting ? t`Drag to sort` : t`Sorting is disabled while filters and sorting are applied`}
-                        className={classNames(['drag-handle', classes.dragHandle, !enableSorting && classes.dragHandleDisabled])}>
-                        <IconGripVertical size={'25px'}/>
-                    </div>
-                    <div className={classes.productInfo}>
-                        <div className={classes.productDetails}>
-                            <div className={classes.title}>
-                                <div className={classes.heading}>{t`Title`}</div>
-                                <Truncate text={product.title}
-                                          length={60}/> {(product.is_hidden_without_promo_code || product.is_hidden) && (
+            <div
+                ref={setNodeRef}
+                style={style}
+                className={classNames(classes.productCard, {
+                    [classes.isOver]: isOver,
+                    [classes.isDragging]: isDragging,
+                })}
+            >
+                <div
+                    {...attributes}
+                    {...listeners}
+                    className={classNames(['drag-handle', classes.dragHandle, !enableSorting && classes.dragHandleDisabled])}
+                >
+                    <IconGripVertical size={25}/>
+                </div>
+                <div className={classes.productInfo}>
+                    <div className={classes.productDetails}>
+                        <div className={classes.title}>
+                            <div className={classes.heading}>{t`Title`} {product.id}</div>
+                            <Truncate text={product.title} length={60}/>
+                            {(product.is_hidden_without_promo_code || product.is_hidden) && (
                                 <Popover>
                                     <Popover.Target>
                                         <IconEyeOff style={{cursor: 'pointer'}} size={14}/>
@@ -133,82 +141,82 @@ export const SortableProduct = ({product, enableSorting, currencyCode}: {product
                                     </Popover.Dropdown>
                                 </Popover>
                             )}
-                            </div>
-                            <div className={classes.description}>
-                                <div className={classes.heading}>{t`Status`}</div>
-                                <Popover>
-                                    <Popover.Target>
-                                        <Badge className={classes.status}
-                                               color={product.is_available ? 'green' : 'orange'} variant={"outline"}>
-                                            {product.is_available ? t`On Sale` : t`Not On Sale`}
-                                        </Badge>
-                                    </Popover.Target>
-                                    <Popover.Dropdown>
-                                        {getProductStatus(product)}
-                                    </Popover.Dropdown>
-                                </Popover>
-
-                            </div>
-                            <div className={classes.price}>
-                                <div className={classes.heading}>{t`Price`}</div>
-                                <div className={classes.priceAmount}>
-                                    {getPriceRange(product)}
-                                </div>
-                            </div>
-                            <div className={classes.availability}>
-                                <div className={classes.heading}>{t`Attendees`}</div>
-                                {Number(product.quantity_sold)}
+                        </div>
+                        <div className={classes.description}>
+                            <div className={classes.heading}>{t`Status`}</div>
+                            <Popover>
+                                <Popover.Target>
+                                    <Badge className={classes.status}
+                                           color={product.is_available ? 'green' : 'orange'} variant={"outline"}>
+                                        {product.is_available ? t`On Sale` : t`Not On Sale`}
+                                    </Badge>
+                                </Popover.Target>
+                                <Popover.Dropdown>
+                                    {getProductStatus(product)}
+                                </Popover.Dropdown>
+                            </Popover>
+                        </div>
+                        <div className={classes.price}>
+                            <div className={classes.heading}>{t`Price`}</div>
+                            <div className={classes.priceAmount}>
+                                {getPriceRange(product)}
                             </div>
                         </div>
+                        <div className={classes.availability}>
+                            <div
+                                className={classes.heading}>{product.product_type === ProductType.Ticket ? t`Attendees` : t`Quantity Sold`}</div>
+                            {Number(product.quantity_sold)}
+                        </div>
                     </div>
-                    <div className={classes.action}>
-                        <Group wrap={'nowrap'} gap={0}>
-                            <Menu shadow="md" width={200}>
-                                <Menu.Target>
-                                    <div>
-                                        <div className={classes.mobileAction}>
-                                            <Button size={"xs"} variant={"light"}>
-                                                {t`Manage`}
-                                            </Button>
-                                        </div>
-                                        <div className={classes.desktopAction}>
-                                            <Button size={"xs"} variant={"transparent"}>
-                                                <IconDotsVertical/>
-                                            </Button>
-                                        </div>
+                </div>
+                <div className={classes.action}>
+                    <Group wrap={'nowrap'} gap={0}>
+                        <Menu shadow="md" width={200}>
+                            <Menu.Target>
+                                <div>
+                                    <div className={classes.mobileAction}>
+                                        <Button size={"xs"} variant={"light"}>
+                                            {t`Manage`}
+                                        </Button>
                                     </div>
-                                </Menu.Target>
+                                    <div className={classes.desktopAction}>
+                                        <Button size={"xs"} variant={"transparent"}>
+                                            <IconDotsVertical/>
+                                        </Button>
+                                    </div>
+                                </div>
+                            </Menu.Target>
 
-                                <Menu.Dropdown>
-                                    <Menu.Label>{t`Actions`}</Menu.Label>
-                                    <Menu.Item
-                                        onClick={() => handleModalClick(product.id, messageModal)}
-                                        leftSection={<IconSend
-                                            size={14}/>}>{t`Message Attendees`}</Menu.Item>
-                                    <Menu.Item
-                                        onClick={() => handleModalClick(product.id, editModal)}
-                                        leftSection={<IconPencil
-                                            size={14}/>}>{t`Edit Product`}</Menu.Item>
+                            <Menu.Dropdown>
+                                <Menu.Label>{t`Actions`}</Menu.Label>
+                                <Menu.Item
+                                    onClick={() => handleModalClick(product.id, messageModal)}
+                                    leftSection={<IconSend
+                                        size={14}/>}>{t`Message Attendees`}</Menu.Item>
+                                <Menu.Item
+                                    onClick={() => handleModalClick(product.id, editModal)}
+                                    leftSection={<IconPencil
+                                        size={14}/>}>{t`Edit Product`}</Menu.Item>
 
-                                    <Menu.Label>{t`Danger zone`}</Menu.Label>
-                                    <Menu.Item
-                                        onClick={() => handleDeleteProduct(product.id, product.event_id)}
-                                        color="red"
-                                        leftSection={<IconTrash size={14}/>}
-                                    >
-                                        {t`Delete product`}
-                                    </Menu.Item>
-                                </Menu.Dropdown>
-                            </Menu>
-                        </Group>
-                    </div>
-                    <div className={classes.halfCircle}/>
-                    <div className={`${classes.halfCircle} ${classes.right}`}/>
-                </Card>
+                                <Menu.Label>{t`Danger zone`}</Menu.Label>
+                                <Menu.Item
+                                    onClick={() => handleDeleteProduct(product.id, product.event_id)}
+                                    color="red"
+                                    leftSection={<IconTrash size={14}/>}
+                                >
+                                    {t`Delete product`}
+                                </Menu.Item>
+                            </Menu.Dropdown>
+                        </Menu>
+                    </Group>
+                </div>
+
+                {product.product_type === ProductType.Ticket && <div className={classes.halfCircle}/>}
+
+                <div className={`${classes.halfCircle} ${classes.right}`}/>
             </div>
-
             {isEditModalOpen && <EditProductModal productId={productId}
-                                                 onClose={editModal.close}
+                                                  onClose={editModal.close}
             />}
             {isMessageModalOpen && <SendMessageModal onClose={messageModal.close}
                                                      productId={productId}

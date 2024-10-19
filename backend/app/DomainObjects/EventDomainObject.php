@@ -16,6 +16,8 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
 {
     private ?Collection $products = null;
 
+    private ?Collection $productCategories = null;
+
     private ?Collection $questions = null;
 
     private ?Collection $images = null;
@@ -258,5 +260,16 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
     {
         $this->eventStatistics = $eventStatistics;
         return $this;
+    }
+
+    public function setProductCategories(?Collection $productCategories): EventDomainObject
+    {
+        $this->productCategories = $productCategories;
+        return $this;
+    }
+
+    public function getProductCategories(): ?Collection
+    {
+        return $this->productCategories;
     }
 }

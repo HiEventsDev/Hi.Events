@@ -1,7 +1,7 @@
 import {CustomSelect, ItemProps} from "../../common/CustomSelect";
 import {t, Trans} from "@lingui/macro";
-import {QuestionBelongsToType, QuestionType, Product} from "../../../types.ts";
-import {Button, Group, MultiSelect, Switch, TextInput} from "@mantine/core";
+import {ProductCategory, QuestionBelongsToType, QuestionType} from "../../../types.ts";
+import {Button, Group, Switch, TextInput} from "@mantine/core";
 import {
     IconAlignBoxLeftTop,
     IconCalendar,
@@ -20,6 +20,7 @@ import {Card} from "../../common/Card";
 import classes from "./QuestionForm.module.scss";
 import {Editor} from "../../common/Editor";
 import {useState} from "react";
+import {ProductSelector} from "../../common/ProductSelector";
 
 const Options = ({form}: { form: UseFormReturnType<any> }) => {
     return (
@@ -72,10 +73,10 @@ const Options = ({form}: { form: UseFormReturnType<any> }) => {
 
 interface QuestionFormProps {
     form: UseFormReturnType<any>;
-    products?: Product[];
+    productCategories?: ProductCategory[];
 }
 
-export const QuestionForm = ({form, products}: QuestionFormProps) => {
+export const QuestionForm = ({form, productCategories}: QuestionFormProps) => {
     const [showDescription, setShowDescription] = useState(false);
 
     const belongToOptions: ItemProps[] = [
@@ -83,13 +84,13 @@ export const QuestionForm = ({form, products}: QuestionFormProps) => {
             icon: <IconReceipt/>,
             label: t`Ask once per order`,
             value: QuestionBelongsToType.ORDER,
-            description: t`A single question per order. E.g, What is your company name?`,
+            description: t`A single question per order. E.g, What is your shipping address?`,
         },
         {
             icon: <IconUser/>,
-            label: t`Ask once per attendee`,
+            label: t`Ask once per product`,
             value: QuestionBelongsToType.PRODUCT,
-            description: t`A single question per attendee. E.g, What is your preferred meal?`,
+            description: t`A single question per product. E.g, What is your t-shirt size?`,
         },
     ];
 
@@ -154,19 +155,13 @@ export const QuestionForm = ({form, products}: QuestionFormProps) => {
             />
 
             {form.values.belongs_to === QuestionBelongsToType.PRODUCT && (
-                <MultiSelect
-                    mt={20}
-                    label={t`What products should this question be apply to?`}
-                    multiple
-                    placeholder={t`Select products`}
-                    data={products?.map(product => {
-                        return {
-                            value: String(product.id),
-                            label: product.title,
-                        }
-                    })}
-                    leftSection={<IconTicket size="1rem"/>}
-                    {...form.getInputProps('product_ids')}
+                <ProductSelector
+                    label={t`What products does this code apply to?`}
+                    placeholder="Select products"
+                    icon={<IconTicket size="1rem"/>}
+                    data={productCategories ?? []}
+                    form={form}
+                    fieldName="product_ids"
                 />
             )}
 

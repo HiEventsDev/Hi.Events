@@ -45,14 +45,14 @@ class AttendeeTicketMail extends BaseMail
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.orders.attendee-product',
+            markdown: 'emails.orders.attendee-ticket',
             with: [
                 'event' => $this->event,
                 'attendee' => $this->attendee,
                 'eventSettings' => $this->eventSettings,
                 'organizer' => $this->organizer,
-                'productUrl' => sprintf(
-                    Url::getFrontEndUrlFromConfig(Url::ATTENDEE_PRODUCT),
+                'ticketUrl' => sprintf(
+                    Url::getFrontEndUrlFromConfig(Url::ATTENDEE_TICKET),
                     $this->event->getId(),
                     $this->attendee->getShortId(),
                 )

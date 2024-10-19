@@ -21,6 +21,7 @@ class EventStatisticsResource extends JsonResource
             'sales_total_before_additions' => $this->getSalesTotalBeforeAdditions(),
             'total_fee' => $this->getTotalFee(),
             'products_sold' => $this->getProductsSold(),
+            'attendees_registered' => $this->getAttendeesRegistered(),
             'total_refunded' => $this->getTotalRefunded(),
         ];
     }

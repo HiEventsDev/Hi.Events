@@ -26,7 +26,7 @@ class GetProductsHandler
             ->findByEventId($eventId, $queryParamsDTO);
 
         $filteredProducts = $this->productFilterService->filter(
-            products: $productPaginator->getCollection(),
+            productsCategories: $productPaginator->getCollection(),
             hideSoldOutProducts: false,
         );
 

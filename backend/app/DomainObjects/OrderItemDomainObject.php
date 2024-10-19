@@ -10,6 +10,8 @@ class OrderItemDomainObject extends Generated\OrderItemDomainObjectAbstract
 
     public ?ProductDomainObject $product = null;
 
+    public ?OrderDomainObject $order = null;
+
     public function getTotalBeforeDiscount(): float
     {
         return Currency::round($this->getPriceBeforeDiscount() * $this->getQuantity());
@@ -35,6 +37,18 @@ class OrderItemDomainObject extends Generated\OrderItemDomainObjectAbstract
     public function setProduct(?ProductDomainObject $product): self
     {
         $this->product = $product;
+
+        return $this;
+    }
+
+    public function getOrder(): ?OrderDomainObject
+    {
+        return $this->order;
+    }
+
+    public function setOrder(?OrderDomainObject $order): self
+    {
+        $this->order = $order;
 
         return $this;
     }

@@ -23,7 +23,7 @@ export const EditQuestionModal = ({onClose, questionId}: EditQuestionModalProps)
 
     const eventQuery = useGetEvent(eventId);
     const questionQuery = useGetQuestion(eventId, questionId);
-    const products = eventQuery?.data?.products;
+    const productsCategories = eventQuery?.data?.product_categories;
 
     const form = useForm<QuestionRequestData>({
         initialValues: {
@@ -93,7 +93,7 @@ export const EditQuestionModal = ({onClose, questionId}: EditQuestionModalProps)
             heading={t`Edit Question`}
         >
             <form onSubmit={form.onSubmit((values) => mutation.mutate(values as any as Question))}>
-                <QuestionForm form={form} products={products}/>
+                <QuestionForm form={form} productCategories={productsCategories}/>
                 {!questionQuery.isFetched && <LoadingOverlay visible/>}
                 <Button loading={mutation.isPending} type="submit" fullWidth mt="xl">
                     {mutation.isPending ? t`Working...` : t`Edit Question`}

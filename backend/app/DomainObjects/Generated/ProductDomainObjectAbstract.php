@@ -12,6 +12,7 @@ abstract class ProductDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     final public const PLURAL_NAME = 'products';
     final public const ID = 'id';
     final public const EVENT_ID = 'event_id';
+    final public const PRODUCT_CATEGORY_ID = 'product_category_id';
     final public const TITLE = 'title';
     final public const SALE_START_DATE = 'sale_start_date';
     final public const SALE_END_DATE = 'sale_end_date';
@@ -35,6 +36,7 @@ abstract class ProductDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
 
     protected int $id;
     protected int $event_id;
+    protected ?int $product_category_id = null;
     protected string $title;
     protected ?string $sale_start_date = null;
     protected ?string $sale_end_date = null;
@@ -54,13 +56,14 @@ abstract class ProductDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     protected ?string $deleted_at = null;
     protected string $type = 'PAID';
     protected ?bool $is_hidden = false;
-    protected string $product_type = 'PRODUCT';
+    protected string $product_type = 'TICKET';
 
     public function toArray(): array
     {
         return [
                     'id' => $this->id ?? null,
                     'event_id' => $this->event_id ?? null,
+                    'product_category_id' => $this->product_category_id ?? null,
                     'title' => $this->title ?? null,
                     'sale_start_date' => $this->sale_start_date ?? null,
                     'sale_end_date' => $this->sale_end_date ?? null,
@@ -104,6 +107,17 @@ abstract class ProductDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     public function getEventId(): int
     {
         return $this->event_id;
+    }
+
+    public function setProductCategoryId(?int $product_category_id): self
+    {
+        $this->product_category_id = $product_category_id;
+        return $this;
+    }
+
+    public function getProductCategoryId(): ?int
+    {
+        return $this->product_category_id;
     }
 
     public function setTitle(string $title): self

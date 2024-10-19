@@ -1,7 +1,7 @@
-import {CapacityAssignmentRequest, GenericModalProps, Product} from "../../../types.ts";
+import {CapacityAssignmentRequest, GenericModalProps, ProductCategory} from "../../../types.ts";
 import {Modal} from "../../common/Modal";
 import {t} from "@lingui/macro";
-import {CapaciyAssigmentForm} from "../../forms/CapaciyAssigmentForm";
+import {CapacityAssigmentForm} from "../../forms/CapaciyAssigmentForm";
 import {useForm} from "@mantine/form";
 import {Button} from "@mantine/core";
 import {useCreateCapacityAssignment} from "../../../mutations/useCreateCapacityAssignment.ts";
@@ -25,7 +25,7 @@ export const CreateCapacityAssignmentModal = ({onClose}: GenericModalProps) => {
         }
     });
     const createMutation = useCreateCapacityAssignment();
-    const eventHasProducts = event?.products && event.products.length > 0;
+    const eventHasProducts = event?.product_categories?.every(category => category.products?.length === 0) === false;
 
     const handleSubmit = (requestData: CapacityAssignmentRequest) => {
         createMutation.mutate({
@@ -43,7 +43,7 @@ export const CreateCapacityAssignmentModal = ({onClose}: GenericModalProps) => {
     const NoProducts = () => {
         return (
             <NoResultsSplash
-                imageHref={'/blank-slate/products.svg'}
+                imageHref={'/blank-slate/tickets.svg'}
                 heading={t`Please create a product`}
                 subHeading={(
                     <>
@@ -69,7 +69,8 @@ export const CreateCapacityAssignmentModal = ({onClose}: GenericModalProps) => {
             {!eventHasProducts && <NoProducts/>}
             {eventHasProducts && (
                 <form onSubmit={form.onSubmit(handleSubmit)}>
-                    {event && <CapaciyAssigmentForm form={form} products={event.products as Product[]}/>}
+                    {event && <CapacityAssigmentForm form={form}
+                                                     productsCategories={event.product_categories as ProductCategory[]}/>}
                     <Button
                         type={'submit'}
                         fullWidth

@@ -1,16 +1,7 @@
 import {CheckInList, IdParam} from "../../../types";
 import {Badge, Button, Progress} from "@mantine/core";
 import {t, Trans} from "@lingui/macro";
-import {
-    IconCopy,
-    IconExternalLink,
-    IconHelp,
-    IconLink,
-    IconPencil,
-    IconPlus,
-    IconTrash,
-    IconUsers
-} from "@tabler/icons-react";
+import {IconCopy, IconExternalLink, IconHelp, IconPencil, IconPlus, IconTrash, IconUsers} from "@tabler/icons-react";
 import Truncate from "../Truncate";
 import {NoResultsSplash} from "../NoResultsSplash";
 import classes from './CheckInListList.module.scss';
@@ -23,7 +14,7 @@ import {EditCheckInListModal} from "../../modals/EditCheckInListModal";
 import {useDeleteCheckInList} from "../../../mutations/useDeleteCheckInList";
 import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
-import { useParams } from "react-router-dom";
+import {useParams} from "react-router-dom";
 
 interface CheckInListListProps {
     checkInLists: CheckInList[];
@@ -58,7 +49,7 @@ export const CheckInListList = ({checkInLists, openCreateModal}: CheckInListList
                             <Trans>
                                 <p>
                                     Check-in lists help manage attendee entry for your event. You can associate multiple
-                                    products with a check-in list and ensure only those with valid products can enter.
+                                    tickets with a check-in list and ensure only those with valid tickets can enter.
                                 </p>
                             </Trans>
                         </p>
