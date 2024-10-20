@@ -3,14 +3,14 @@
 namespace HiEvents\Services\Handlers\Attendee;
 
 use HiEvents\DomainObjects\AttendeeDomainObject;
-use HiEvents\DomainObjects\Enums\TicketType;
+use HiEvents\DomainObjects\Enums\ProductPriceType;
 use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
-use HiEvents\DomainObjects\Generated\TicketDomainObjectAbstract;
-use HiEvents\DomainObjects\TicketPriceDomainObject;
-use HiEvents\Exceptions\NoTicketsAvailableException;
+use HiEvents\DomainObjects\Generated\ProductDomainObjectAbstract;
+use HiEvents\DomainObjects\ProductPriceDomainObject;
+use HiEvents\Exceptions\NoProductsAvailableException;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
-use HiEvents\Repository\Interfaces\TicketRepositoryInterface;
-use HiEvents\Services\Domain\Ticket\TicketQuantityUpdateService;
+use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
+use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
 use HiEvents\Services\Handlers\Attendee\DTO\EditAttendeeDTO;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Validation\ValidationException;
@@ -19,10 +19,10 @@ use Throwable;
 class EditAttendeeHandler
 {
     public function __construct(
-        private readonly AttendeeRepositoryInterface $attendeeRepository,
-        private readonly TicketRepositoryInterface   $ticketRepository,
-        private readonly TicketQuantityUpdateService $ticketQuantityService,
-        private readonly DatabaseManager             $databaseManager,
+        private readonly AttendeeRepositoryInterface  $attendeeRepository,
+        private readonly ProductRepositoryInterface   $productRepository,
+        private readonly ProductQuantityUpdateService $productQuantityService,
+        private readonly DatabaseManager              $databaseManager,
     )
     {
     }
@@ -34,21 +34,21 @@ class EditAttendeeHandler
     public function handle(EditAttendeeDTO $editAttendeeDTO): AttendeeDomainObject
     {
         return $this->databaseManager->transaction(function () use ($editAttendeeDTO) {
-            $this->validateTicketId($editAttendeeDTO);
+            $this->validateProductId($editAttendeeDTO);
 
             $attendee = $this->getAttendee($editAttendeeDTO);
 
-            $this->adjustTicketQuantities($attendee, $editAttendeeDTO);
+            $this->adjustProductQuantities($attendee, $editAttendeeDTO);
 
             return $this->updateAttendee($editAttendeeDTO);
         });
     }
 
-    private function adjustTicketQuantities(AttendeeDomainObject $attendee, EditAttendeeDTO $editAttendeeDTO): void
+    private function adjustProductQuantities(AttendeeDomainObject $attendee, EditAttendeeDTO $editAttendeeDTO): void
     {
-        if ($attendee->getTicketPriceId() !== $editAttendeeDTO->ticket_price_id) {
-            $this->ticketQuantityService->decreaseQuantitySold($editAttendeeDTO->ticket_price_id);
-            $this->ticketQuantityService->increaseQuantitySold($attendee->getTicketPriceId());
+        if ($attendee->getProductPriceId() !== $editAttendeeDTO->product_price_id) {
+            $this->productQuantityService->decreaseQuantitySold($editAttendeeDTO->product_price_id);
+            $this->productQuantityService->increaseQuantitySold($attendee->getProductPriceId());
         }
     }
 
@@ -58,7 +58,7 @@ class EditAttendeeHandler
             'first_name' => $editAttendeeDTO->first_name,
             'last_name' => $editAttendeeDTO->last_name,
             'email' => $editAttendeeDTO->email,
-            'ticket_id' => $editAttendeeDTO->ticket_id,
+            'product_id' => $editAttendeeDTO->product_id,
         ], [
             'event_id' => $editAttendeeDTO->event_id,
         ]);
@@ -66,32 +66,32 @@ class EditAttendeeHandler
 
     /**
      * @throws ValidationException
-     * @throws NoTicketsAvailableException
+     * @throws NoProductsAvailableException
      */
-    private function validateTicketId(EditAttendeeDTO $editAttendeeDTO): void
+    private function validateProductId(EditAttendeeDTO $editAttendeeDTO): void
     {
-        $ticket = $this->ticketRepository
-            ->loadRelation(TicketPriceDomainObject::class)
+        $product = $this->productRepository
+            ->loadRelation(ProductPriceDomainObject::class)
             ->findFirstWhere([
-                TicketDomainObjectAbstract::ID => $editAttendeeDTO->ticket_id,
+                ProductDomainObjectAbstract::ID => $editAttendeeDTO->product_id,
             ]);
 
-        if ($ticket->getEventId() !== $editAttendeeDTO->event_id) {
+        if ($product->getEventId() !== $editAttendeeDTO->event_id) {
             throw ValidationException::withMessages([
-                'ticket_id' => __('Ticket ID is not valid'),
+                'product_id' => __('Product ID is not valid'),
             ]);
         }
 
-        $availableQuantity = $this->ticketRepository->getQuantityRemainingForTicketPrice(
-            ticketId: $editAttendeeDTO->ticket_id,
-            ticketPriceId: $ticket->getType() === TicketType::TIERED->name
-                ? $editAttendeeDTO->ticket_price_id
-                : $ticket->getTicketPrices()->first()->getId(),
+        $availableQuantity = $this->productRepository->getQuantityRemainingForProductPrice(
+            productId: $editAttendeeDTO->product_id,
+            productPriceId: $product->getType() === ProductPriceType::TIERED->name
+                ? $editAttendeeDTO->product_price_id
+                : $product->getProductPrices()->first()->getId(),
         );
 
         if ($availableQuantity <= 0) {
-            throw new NoTicketsAvailableException(
-                __('There are no tickets available. If you would like to assign this ticket to this attendee, please adjust the ticket\'s available quantity.')
+            throw new NoProductsAvailableException(
+                __('There are no products available. If you would like to assign this product to this attendee, please adjust the product\'s available quantity.')
             );
         }
     }

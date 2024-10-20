@@ -30,8 +30,8 @@ export const EditAttendeeModal = ({onClose, attendeeId}: EditAttendeeModalProps)
             first_name: '',
             last_name: '',
             email: '',
-            ticket_id: '',
-            ticket_price_id: '',
+            product_id: '',
+            product_price_id: '',
         },
     });
 
@@ -44,8 +44,8 @@ export const EditAttendeeModal = ({onClose, attendeeId}: EditAttendeeModalProps)
             first_name: attendee.first_name,
             last_name: attendee.last_name,
             email: attendee.email,
-            ticket_id: String(attendee.ticket_id),
-            ticket_price_id: String(attendee.ticket_price_id),
+            product_id: String(attendee.product_id),
+            product_price_id: String(attendee.product_price_id),
         });
 
     }, [isFetched]);
@@ -93,30 +93,30 @@ export const EditAttendeeModal = ({onClose, attendeeId}: EditAttendeeModalProps)
                     required
                 />
 
-                {event?.tickets && (
+                {event?.products && (
                     <Select
                         mt={20}
-                        description={<><IconInfoCircle size={12}/> Changing an attendee's tickets will adjust ticket
+                        description={<><IconInfoCircle size={12}/> Changing an attendee's products will adjust product
                             quantities</>}
-                        data={event.tickets.map(ticket => {
+                        data={event.products.map(product => {
                             return {
-                                value: String(ticket.id),
-                                label: ticket.title,
+                                value: String(product.id),
+                                label: product.title,
                             };
                         })}
-                        {...form.getInputProps('ticket_id')}
-                        label={t`Ticket`}
+                        {...form.getInputProps('product_id')}
+                        label={t`Product`}
                         required
                     />
                 )}
 
-                {event?.tickets?.find(ticket => ticket.id == form.values.ticket_id)?.type === 'TIERED' && (
+                {event?.products?.find(product => product.id == form.values.product_id)?.type === 'TIERED' && (
                     <Select
-                        label={t`Ticket Tier`}
+                        label={t`Product Tier`}
                         mt={20}
-                        placeholder={t`Select Ticket Tier`}
-                        {...form.getInputProps('ticket_price_id')}
-                        data={event?.tickets?.find(ticket => ticket.id == form.values.ticket_id)?.prices?.map(price => {
+                        placeholder={t`Select Product Tier`}
+                        {...form.getInputProps('product_price_id')}
+                        data={event?.products?.find(product => product.id == form.values.product_id)?.prices?.map(price => {
                             return {
                                 value: String(price.id),
                                 label: String(price.label),

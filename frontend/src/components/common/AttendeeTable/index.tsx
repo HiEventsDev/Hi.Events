@@ -1,7 +1,7 @@
 import {Anchor, Avatar, Badge, Button, Table as MantineTable,} from '@mantine/core';
 import {Attendee, MessageType} from "../../../types.ts";
 import {IconEye, IconMailForward, IconPencil, IconPlus, IconSend, IconTrash} from "@tabler/icons-react";
-import {getInitials, getTicketFromEvent} from "../../../utilites/helpers.ts";
+import {getInitials, getProductFromEvent} from "../../../utilites/helpers.ts";
 import {Table, TableHead} from "../Table";
 import {useDisclosure} from "@mantine/hooks";
 import {SendMessageModal} from "../../modals/SendMessageModal";
@@ -16,7 +16,7 @@ import {useModifyAttendee} from "../../../mutations/useModifyAttendee.ts";
 import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {t, Trans} from "@lingui/macro";
 import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
-import {useResendAttendeeTicket} from "../../../mutations/useResendAttendeeTicket.ts";
+import {useResendAttendeeProduct} from "../../../mutations/useResendAttendeeProduct.ts";
 import {ViewAttendeeModal} from "../../modals/ViewAttendeeModal";
 import {ActionMenu} from '../ActionMenu/index.tsx';
 
@@ -33,7 +33,7 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
     const [selectedAttendee, setSelectedAttendee] = useState<Attendee>();
     const {data: event} = useGetEvent(eventId);
     const modifyMutation = useModifyAttendee();
-    const resendTicketMutation = useResendAttendeeTicket();
+    const resendProductMutation = useResendAttendeeProduct();
 
     const handleModalClick = (attendee: Attendee, modal: {
         open: () => void
@@ -42,13 +42,13 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
         modal.open();
     }
 
-    const handleResendTicket = (attendee: Attendee) => {
-        resendTicketMutation.mutate({
+    const handleResendProduct = (attendee: Attendee) => {
+        resendProductMutation.mutate({
             attendeeId: attendee.id,
             eventId: eventId,
         }, {
-            onSuccess: () => showSuccess(t`Ticket email has been resent to attendee`),
-            onError: (error: any) => showError(error.response.data.message || t`Failed to resend ticket email`)
+            onSuccess: () => showSuccess(t`Product email has been resent to attendee`),
+            onError: (error: any) => showError(error.response.data.message || t`Failed to resend product email`)
         });
     }
 
@@ -75,7 +75,7 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
     const handleCancel = (attendee: Attendee) => {
         const message = attendee.status === 'CANCELLED'
             ? t`Are you sure you want to activate this attendee?`
-            : t`Are you sure you want to cancel this attendee? This will void their ticket`
+            : t`Are you sure you want to cancel this attendee? This will void their product`
 
         confirmationDialog(message, () => {
             modifyMutation.mutate({
@@ -109,7 +109,7 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
                         <MantineTable.Th>{t`Name`}</MantineTable.Th>
                         <MantineTable.Th>{t`Email`}</MantineTable.Th>
                         <MantineTable.Th>{t`Order`}</MantineTable.Th>
-                        <MantineTable.Th>{t`Ticket`}</MantineTable.Th>
+                        <MantineTable.Th>{t`Product`}</MantineTable.Th>
                         <MantineTable.Th>{t`Status`}</MantineTable.Th>
                         <MantineTable.Th></MantineTable.Th>
                     </MantineTable.Tr>
@@ -146,7 +146,7 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
                                 </MantineTable.Td>
                                 <MantineTable.Td>
                                     <Truncate
-                                        text={getTicketFromEvent(attendee.ticket_id, event)?.title}
+                                        text={getProductFromEvent(attendee.product_id, event)?.title}
                                         length={25}
                                     />
                                 </MantineTable.Td>
@@ -176,9 +176,9 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
                                                     onClick: () => handleModalClick(attendee, editModal),
                                                 },
                                                 {
-                                                    label: t`Resend ticket email`,
+                                                    label: t`Resend product email`,
                                                     icon: <IconMailForward size={14}/>,
-                                                    onClick: () => handleResendTicket(attendee),
+                                                    onClick: () => handleResendProduct(attendee),
                                                     visible: attendee.status === 'ACTIVE',
                                                 },
                                             ],
@@ -187,7 +187,7 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
                                             label: t`Danger Zone`,
                                             items: [
                                                 {
-                                                    label: attendee.status === 'CANCELLED' ? t`Activate` : t`Cancel` + ` ` + t`ticket`,
+                                                    label: attendee.status === 'CANCELLED' ? t`Activate` : t`Cancel` + ` ` + t`product`,
                                                     icon: <IconTrash size={14}/>,
                                                     onClick: () => handleCancel(attendee),
                                                     color: attendee.status === 'CANCELLED' ? 'green' : 'red',

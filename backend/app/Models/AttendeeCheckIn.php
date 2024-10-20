@@ -16,10 +16,10 @@ class AttendeeCheckIn extends BaseModel
         return [];
     }
 
-    public function tickets(): BelongsTo
+    public function products(): BelongsTo
     {
         return $this->belongsTo(
-            related: Ticket::class,
+            related: Product::class,
         );
     }
 

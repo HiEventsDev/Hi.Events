@@ -17,7 +17,7 @@ export interface OrderDetails {
 }
 
 export interface AttendeeDetails extends OrderDetails {
-    ticket_id: number,
+    product_id: number,
 }
 
 export interface FinaliseOrderPayload {
@@ -26,19 +26,19 @@ export interface FinaliseOrderPayload {
 }
 
 
-export interface TicketPriceQuantityFormValue {
+export interface ProductPriceQuantityFormValue {
     price?: number,
     quantity: number,
     price_id: number,
 }
 
-export interface TicketFormValue {
-    ticket_id: number,
-    quantities: TicketPriceQuantityFormValue[],
+export interface ProductFormValue {
+    product_id: number,
+    quantities: ProductPriceQuantityFormValue[],
 }
 
-export interface TicketFormPayload {
-    tickets?: TicketFormValue[],
+export interface ProductFormPayload {
+    products?: ProductFormValue[],
     promo_code: string | null,
     session_identifier?: string,
 }
@@ -88,7 +88,7 @@ export const orderClient = {
 }
 
 export const orderClientPublic = {
-    create: async (eventId: number, createOrderPayload: TicketFormPayload) => {
+    create: async (eventId: number, createOrderPayload: ProductFormPayload) => {
         const response = await publicApi.post<GenericDataResponse<Order>>('events/' + eventId + '/order', createOrderPayload);
         return response.data;
     },

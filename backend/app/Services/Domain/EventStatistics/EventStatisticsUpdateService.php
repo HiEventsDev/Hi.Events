@@ -2,16 +2,16 @@
 
 namespace HiEvents\Services\Domain\EventStatistics;
 
+use HiEvents\DomainObjects\Generated\ProductDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\PromoCodeDomainObjectAbstract;
-use HiEvents\DomainObjects\Generated\TicketDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\Exceptions\EventStatisticsVersionMismatchException;
 use HiEvents\Repository\Interfaces\EventDailyStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
+use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
-use HiEvents\Repository\Interfaces\TicketRepositoryInterface;
 use HiEvents\Values\MoneyValue;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Carbon;
@@ -26,7 +26,7 @@ readonly class EventStatisticsUpdateService
 {
     public function __construct(
         private PromoCodeRepositoryInterface           $promoCodeRepository,
-        private TicketRepositoryInterface              $ticketRepository,
+        private ProductRepositoryInterface             $productRepository,
         private EventStatisticRepositoryInterface      $eventStatisticsRepository,
         private EventDailyStatisticRepositoryInterface $eventDailyStatisticRepository,
         private DatabaseManager                        $databaseManager,
@@ -50,7 +50,7 @@ readonly class EventStatisticsUpdateService
             $this->updateEventStats($order);
             $this->updateEventDailyStats($order);
             $this->updatePromoCodeCounts($order);
-            $this->updateTicketStatistics($order);
+            $this->updateProductStatistics($order);
         });
     }
 
@@ -126,12 +126,12 @@ readonly class EventStatisticsUpdateService
         }
     }
 
-    private function updateTicketStatistics(OrderDomainObject $order): void
+    private function updateProductStatistics(OrderDomainObject $order): void
     {
         foreach ($order->getOrderItems() as $orderItem) {
-            $this->ticketRepository->increment(
-                $orderItem->getTicketId(),
-                TicketDomainObjectAbstract::SALES_VOLUME,
+            $this->productRepository->increment(
+                $orderItem->getProductId(),
+                ProductDomainObjectAbstract::SALES_VOLUME,
                 $orderItem->getTotalBeforeAdditions(),
             );
         }
@@ -153,7 +153,9 @@ readonly class EventStatisticsUpdateService
         if ($eventStatistics === null) {
             $this->eventStatisticsRepository->create([
                 'event_id' => $order->getEventId(),
-                'tickets_sold' => $order->getOrderItems()
+                'products_sold' => $order->getOrderItems()
+                    ?->sum(fn(OrderItemDomainObject $orderItem) => $orderItem->getQuantity()),
+                'attendees_registered' => $order->getTicketOrderItems()
                     ?->sum(fn(OrderItemDomainObject $orderItem) => $orderItem->getQuantity()),
                 'sales_total_gross' => $order->getTotalGross(),
                 'sales_total_before_additions' => $order->getTotalBeforeAdditions(),
@@ -167,7 +169,9 @@ readonly class EventStatisticsUpdateService
 
         $update = $this->eventStatisticsRepository->updateWhere(
             attributes: [
-                'tickets_sold' => $eventStatistics->getTicketsSold() + $order->getOrderItems()
+                'products_sold' => $eventStatistics->getProductsSold() + $order->getOrderItems()
+                        ?->sum(fn(OrderItemDomainObject $orderItem) => $orderItem->getQuantity()),
+                'attendees_registered' => $eventStatistics->getAttendeesRegistered() + $order->getTicketOrderItems()
                         ?->sum(fn(OrderItemDomainObject $orderItem) => $orderItem->getQuantity()),
                 'sales_total_gross' => $eventStatistics->getSalesTotalGross() + $order->getTotalGross(),
                 'sales_total_before_additions' => $eventStatistics->getSalesTotalBeforeAdditions() + $order->getTotalBeforeAdditions(),
@@ -208,7 +212,8 @@ readonly class EventStatisticsUpdateService
             $this->eventDailyStatisticRepository->create([
                 'event_id' => $order->getEventId(),
                 'date' => (new Carbon($order->getCreatedAt()))->format('Y-m-d'),
-                'tickets_sold' => $order->getOrderItems()?->sum(fn(OrderItemDomainObject $orderItem) => $orderItem->getQuantity()),
+                'products_sold' => $order->getOrderItems()?->sum(fn(OrderItemDomainObject $orderItem) => $orderItem->getQuantity()),
+                'attendees_registered' => $order->getTicketOrderItems()?->sum(fn(OrderItemDomainObject $orderItem) => $orderItem->getQuantity()),
                 'sales_total_gross' => $order->getTotalGross(),
                 'sales_total_before_additions' => $order->getTotalBeforeAdditions(),
                 'total_tax' => $order->getTotalTax(),
@@ -220,7 +225,8 @@ readonly class EventStatisticsUpdateService
 
         $update = $this->eventDailyStatisticRepository->updateWhere(
             attributes: [
-                'tickets_sold' => $eventDailyStatistic->getTicketsSold() + $order->getOrderItems()->sum(fn(OrderItemDomainObject $orderItem) => $orderItem->getQuantity()),
+                'attendees_registered' => $eventDailyStatistic->getAttendeesRegistered() + $order->getTicketOrderItems()->sum(fn(OrderItemDomainObject $orderItem) => $orderItem->getQuantity()),
+                'products_sold' => $eventDailyStatistic->getProductsSold() + $order->getOrderItems()->sum(fn(OrderItemDomainObject $orderItem) => $orderItem->getQuantity()),
                 'sales_total_gross' => $eventDailyStatistic->getSalesTotalGross() + $order->getTotalGross(),
                 'sales_total_before_additions' => $eventDailyStatistic->getSalesTotalBeforeAdditions() + $order->getTotalBeforeAdditions(),
                 'total_tax' => $eventDailyStatistic->getTotalTax() + $order->getTotalTax(),

@@ -6,12 +6,12 @@ use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\Generated\EventDomainObjectAbstract;
-use HiEvents\DomainObjects\Generated\TicketDomainObjectAbstract;
+use HiEvents\DomainObjects\Generated\ProductDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\Status\OrderStatus;
-use HiEvents\DomainObjects\TicketDomainObject;
-use HiEvents\DomainObjects\TicketPriceDomainObject;
+use HiEvents\DomainObjects\ProductDomainObject;
+use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\Exceptions\UnauthorizedException;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
@@ -59,13 +59,13 @@ class GetOrderPublicHandler
                 domainObject: AttendeeDomainObject::class,
                 nested: [
                     new Relationship(
-                        domainObject: TicketDomainObject::class,
+                        domainObject: ProductDomainObject::class,
                         nested: [
                             new Relationship(
-                                domainObject: TicketPriceDomainObject::class,
+                                domainObject: ProductPriceDomainObject::class,
                             )
                         ],
-                        name: TicketDomainObjectAbstract::SINGULAR_NAME,
+                        name: ProductDomainObjectAbstract::SINGULAR_NAME,
                     )
                 ],
             ))

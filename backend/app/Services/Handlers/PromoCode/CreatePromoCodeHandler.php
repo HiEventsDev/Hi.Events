@@ -5,7 +5,7 @@ namespace HiEvents\Services\Handlers\PromoCode;
 use HiEvents\DomainObjects\PromoCodeDomainObject;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Services\Domain\PromoCode\CreatePromoCodeService;
-use HiEvents\Services\Domain\Ticket\Exception\UnrecognizedTicketIdException;
+use HiEvents\Services\Domain\Product\Exception\UnrecognizedProductIdException;
 use HiEvents\Services\Handlers\PromoCode\DTO\UpsertPromoCodeDTO;
 
 readonly class CreatePromoCodeHandler
@@ -18,7 +18,7 @@ readonly class CreatePromoCodeHandler
 
     /**
      * @throws ResourceConflictException
-     * @throws UnrecognizedTicketIdException
+     * @throws UnrecognizedProductIdException
      */
     public function handle(int $eventId, UpsertPromoCodeDTO $promoCodeDTO): PromoCodeDomainObject
     {
@@ -30,7 +30,7 @@ readonly class CreatePromoCodeHandler
                 ->setDiscount($promoCodeDTO->discount)
                 ->setExpiryDate($promoCodeDTO->expiry_date)
                 ->setMaxAllowedUsages($promoCodeDTO->max_allowed_usages)
-                ->setApplicableTicketIds($promoCodeDTO->applicable_ticket_ids)
+                ->setApplicableProductIds($promoCodeDTO->applicable_product_ids)
         );
     }
 }

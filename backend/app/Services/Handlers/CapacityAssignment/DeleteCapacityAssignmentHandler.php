@@ -3,14 +3,14 @@
 namespace HiEvents\Services\Handlers\CapacityAssignment;
 
 use HiEvents\Repository\Interfaces\CapacityAssignmentRepositoryInterface;
-use HiEvents\Repository\Interfaces\TicketRepositoryInterface;
+use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use Illuminate\Database\DatabaseManager;
 
 class DeleteCapacityAssignmentHandler
 {
     public function __construct(
         private readonly CapacityAssignmentRepositoryInterface $capacityAssignmentRepository,
-        private readonly TicketRepositoryInterface             $ticketRepository,
+        private readonly ProductRepositoryInterface            $productRepository,
         private readonly DatabaseManager                       $databaseManager,
     )
     {
@@ -19,7 +19,7 @@ class DeleteCapacityAssignmentHandler
     public function handle(int $id, int $eventId): void
     {
         $this->databaseManager->transaction(function () use ($id, $eventId) {
-            $this->ticketRepository->removeCapacityAssignmentFromTickets(
+            $this->productRepository->removeCapacityAssignmentFromProducts(
                 capacityAssignmentId: $id,
             );
 

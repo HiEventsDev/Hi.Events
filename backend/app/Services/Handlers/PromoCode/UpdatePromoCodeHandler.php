@@ -9,28 +9,28 @@ use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Helper\DateHelper;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
-use HiEvents\Services\Domain\Ticket\EventTicketValidationService;
-use HiEvents\Services\Domain\Ticket\Exception\UnrecognizedTicketIdException;
+use HiEvents\Services\Domain\Product\EventProductValidationService;
+use HiEvents\Services\Domain\Product\Exception\UnrecognizedProductIdException;
 use HiEvents\Services\Handlers\PromoCode\DTO\UpsertPromoCodeDTO;
 
 readonly class UpdatePromoCodeHandler
 {
     public function __construct(
-        private PromoCodeRepositoryInterface $promoCodeRepository,
-        private EventTicketValidationService $eventTicketValidationService,
-        private EventRepositoryInterface     $eventRepository,
+        private PromoCodeRepositoryInterface  $promoCodeRepository,
+        private EventProductValidationService $eventProductValidationService,
+        private EventRepositoryInterface      $eventRepository,
     )
     {
     }
 
     /**
      * @throws ResourceConflictException
-     * @throws UnrecognizedTicketIdException
+     * @throws UnrecognizedProductIdException
      */
     public function handle(int $promoCodeId, UpsertPromoCodeDTO $promoCodeDTO): PromoCodeDomainObject
     {
-        $this->eventTicketValidationService->validateTicketIds(
-            ticketIds: $promoCodeDTO->applicable_ticket_ids,
+        $this->eventProductValidationService->validateProductIds(
+            productIds: $promoCodeDTO->applicable_product_ids,
             eventId: $promoCodeDTO->event_id
         );
 
@@ -57,7 +57,7 @@ readonly class UpdatePromoCodeHandler
                 ? DateHelper::convertToUTC($promoCodeDTO->expiry_date, $event->getTimezone())
                 : null,
             PromoCodeDomainObjectAbstract::MAX_ALLOWED_USAGES => $promoCodeDTO->max_allowed_usages,
-            PromoCodeDomainObjectAbstract::APPLICABLE_TICKET_IDS => $promoCodeDTO->applicable_ticket_ids,
+            PromoCodeDomainObjectAbstract::APPLICABLE_PRODUCT_IDS => $promoCodeDTO->applicable_product_ids,
         ]);
     }
 }

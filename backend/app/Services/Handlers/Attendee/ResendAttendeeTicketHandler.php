@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 readonly class ResendAttendeeTicketHandler
 {
     public function __construct(
-        private SendAttendeeTicketService   $sendAttendeeTicketService,
+        private SendAttendeeTicketService   $sendAttendeeProductService,
         private AttendeeRepositoryInterface $attendeeRepository,
         private EventRepositoryInterface    $eventRepository,
         private LoggerInterface             $logger,
@@ -28,11 +28,11 @@ readonly class ResendAttendeeTicketHandler
     /**
      * @throws ResourceConflictException
      */
-    public function handle(ResendAttendeeTicketDTO $resendAttendeeTicketDTO): void
+    public function handle(ResendAttendeeTicketDTO $resendAttendeeProductDTO): void
     {
         $attendee = $this->attendeeRepository->findFirstWhere([
-            'id' => $resendAttendeeTicketDTO->attendeeId,
-            'event_id' => $resendAttendeeTicketDTO->eventId,
+            'id' => $resendAttendeeProductDTO->attendeeId,
+            'event_id' => $resendAttendeeProductDTO->eventId,
         ]);
 
         if (!$attendee) {
@@ -46,9 +46,9 @@ readonly class ResendAttendeeTicketHandler
         $event = $this->eventRepository
             ->loadRelation(new Relationship(OrganizerDomainObject::class, name: 'organizer'))
             ->loadRelation(EventSettingDomainObject::class)
-            ->findById($resendAttendeeTicketDTO->eventId);
+            ->findById($resendAttendeeProductDTO->eventId);
 
-        $this->sendAttendeeTicketService->send(
+        $this->sendAttendeeProductService->send(
             attendee: $attendee,
             event: $event,
             eventSettings: $event->getEventSettings(),
@@ -56,8 +56,8 @@ readonly class ResendAttendeeTicketHandler
         );
 
         $this->logger->info('Attendee ticket resent', [
-            'attendeeId' => $resendAttendeeTicketDTO->attendeeId,
-            'eventId' => $resendAttendeeTicketDTO->eventId
+            'attendeeId' => $resendAttendeeProductDTO->attendeeId,
+            'eventId' => $resendAttendeeProductDTO->eventId
         ]);
     }
 }

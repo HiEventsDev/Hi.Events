@@ -34,7 +34,7 @@ class EditQuestionHandler
 
         return $this->editQuestionService->editQuestion(
             question: $question,
-            ticketIds: $createQuestionDTO->ticket_ids,
+            productIds: $createQuestionDTO->product_ids,
         );
     }
 }

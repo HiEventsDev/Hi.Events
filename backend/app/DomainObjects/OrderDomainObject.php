@@ -2,6 +2,7 @@
 
 namespace HiEvents\DomainObjects;
 
+use HiEvents\DomainObjects\Enums\ProductType;
 use HiEvents\DomainObjects\Interfaces\IsSortable;
 use HiEvents\DomainObjects\SortingAndFiltering\AllowedSorts;
 use HiEvents\DomainObjects\Status\OrderPaymentStatus;
@@ -64,6 +65,28 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
     public function getFullName(): string
     {
         return $this->getFirstName() . ' ' . $this->getLastName();
+    }
+
+    public function getProductOrderItems(): Collection
+    {
+        if ($this->getOrderItems() === null) {
+            return new Collection();
+        }
+
+        return $this->getOrderItems()->filter(static function (OrderItemDomainObject $orderItem) {
+            return $orderItem->getProductType() === ProductType::GENERAL->name;
+        });
+    }
+
+    public function getTicketOrderItems(): Collection
+    {
+        if ($this->getOrderItems() === null) {
+            return new Collection();
+        }
+
+        return $this->getOrderItems()->filter(static function (OrderItemDomainObject $orderItem) {
+            return $orderItem->getProductType() === ProductType::TICKET->name;
+        });
     }
 
     public function setOrderItems(?Collection $orderItems): OrderDomainObject

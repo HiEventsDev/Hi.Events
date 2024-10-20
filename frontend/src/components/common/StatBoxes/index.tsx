@@ -1,5 +1,5 @@
 import classes from "./StatBoxes.module.scss";
-import {IconCash, IconEye, IconReceipt, IconTicket} from "@tabler/icons-react";
+import {IconCash, IconCreditCardRefund, IconEye, IconReceipt, IconShoppingCart, IconUsers} from "@tabler/icons-react";
 import {Card} from "../Card";
 import {useGetEventStats} from "../../../queries/useGetEventStats.ts";
 import {useParams} from "react-router-dom";
@@ -17,24 +17,34 @@ export const StatBoxes = () => {
 
     const data = [
         {
-            number: formatNumber(eventStats?.total_tickets_sold as number),
-            description: t`Tickets sold`,
-            icon: <IconTicket/>
+            number: formatNumber(eventStats?.total_products_sold as number),
+            description: t`Products sold`,
+            icon: <IconShoppingCart size={18}/>
+        },
+        {
+            number: formatNumber(eventStats?.total_attendees_registered as number),
+            description: t`Attendees`,
+            icon: <IconUsers size={18}/>
+        },
+        {
+            number: formatCurrency(eventStats?.total_refunded as number || 0, event?.currency),
+            description: t`Refunded`,
+            icon: <IconCreditCardRefund size={18}/>
         },
         {
             number: formatCurrency(eventStats?.total_gross_sales || 0, event?.currency),
             description: t`Gross sales`,
-            icon: <IconCash/>
+            icon: <IconCash size={18}/>
         },
         {
             number: formatNumber(eventStats?.total_views as number),
             description: t`Page views`,
-            icon: <IconEye/>
+            icon: <IconEye size={18}/>
         },
         {
             number: formatNumber(eventStats?.total_orders as number),
             description: t`Orders Created`,
-            icon: <IconReceipt/>
+            icon: <IconReceipt size={18}/>
         }
     ];
 

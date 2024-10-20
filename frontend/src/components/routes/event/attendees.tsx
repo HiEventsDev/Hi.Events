@@ -56,7 +56,7 @@ const Attendees = () => {
                     />
                 )}>
                     <Button color={'green'} size={'sm'} onClick={openCreateModal} rightSection={<IconPlus/>}>
-                        {t`Add`}
+                        {t`Create`}
                     </Button>
 
                     <Button color={'green'}

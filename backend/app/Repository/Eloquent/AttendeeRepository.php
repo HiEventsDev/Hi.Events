@@ -108,8 +108,8 @@ class AttendeeRepository extends BaseRepository implements AttendeeRepositoryInt
 
         $this->model = $this->model->select('attendees.*')
             ->join('orders', 'orders.id', '=', 'attendees.order_id')
-            ->join('ticket_check_in_lists', 'ticket_check_in_lists.ticket_id', '=', 'attendees.ticket_id')
-            ->join('check_in_lists', 'check_in_lists.id', '=', 'ticket_check_in_lists.check_in_list_id')
+            ->join('product_check_in_lists', 'product_check_in_lists.product_id', '=', 'attendees.product_id')
+            ->join('check_in_lists', 'check_in_lists.id', '=', 'product_check_in_lists.check_in_list_id')
             ->where('check_in_lists.short_id', $shortId)
             ->where('attendees.status', AttendeeStatus::ACTIVE->name)
             ->whereIn('orders.status', [OrderStatus::COMPLETED->name]);

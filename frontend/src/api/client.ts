@@ -22,7 +22,7 @@ const ALLOWED_UNAUTHENTICATED_PATHS = [
     'print',
     '/order/',
     'widget',
-    '/ticket/',
+    '/product/',
     'check-in',
 ];
 

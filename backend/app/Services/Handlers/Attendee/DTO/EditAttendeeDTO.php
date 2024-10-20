@@ -10,8 +10,8 @@ class EditAttendeeDTO extends BaseDTO
         public string $first_name,
         public string $last_name,
         public string $email,
-        public int    $ticket_id,
-        public int    $ticket_price_id,
+        public int    $product_id,
+        public int    $product_price_id,
         public int    $event_id,
         public int    $attendee_id,
     )

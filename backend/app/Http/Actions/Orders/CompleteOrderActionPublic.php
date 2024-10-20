@@ -33,7 +33,7 @@ class CompleteOrderActionPublic extends BaseAction
                         ? $request->input('order.questions')
                         : null,
                 ]),
-                'attendees' => $request->input('attendees'),
+                'products' => $request->input('products'),
             ]));
         } catch (ResourceConflictException $e) {
             return $this->errorResponse($e->getMessage(), Response::HTTP_CONFLICT);

@@ -1,3 +1,5 @@
+@import "../../../styles/mixins.scss";
+
 .statistics {
   display: flex;
   justify-content: space-around;
@@ -10,18 +12,33 @@
   flex: 1 1 50px;
   display: flex;
   flex-direction: row;
-  padding: 20px;
-  min-width: 250px;
-  margin-bottom: 0;
+  padding: 15px !important;
+  min-width: 300px;
+  margin-bottom: 0px !important;
+
+  @include respond-below(md) {
+    padding: 7px 20px !important;
+  }
 
   .leftPanel {
     display: flex;
     flex-direction: column;
     gap: 10px;
 
+    @include respond-below(md) {
+      align-items: center;
+      flex-direction: row-reverse;
+      justify-content: space-between;
+      width: 100%;
+    }
+
     .number {
       font-size: 1.5em;
       font-weight: bold;
+
+      @include respond-below(md) {
+        font-size: 1.1em;
+      }
     }
 
     .description {
@@ -38,8 +55,11 @@
     flex: 1;
     display: flex;
     place-content: flex-end;
-    align-items: center;
+    align-items: flex-start;
 
+    @include respond-below(md) {
+      display: none;
+    }
 
     .icon {
       width: 40px;

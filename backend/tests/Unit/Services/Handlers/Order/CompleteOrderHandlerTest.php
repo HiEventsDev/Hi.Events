@@ -16,7 +16,7 @@ use HiEvents\Repository\Interfaces\QuestionAnswerRepositoryInterface;
 use HiEvents\Repository\Interfaces\TicketPriceRepositoryInterface;
 use HiEvents\Services\Domain\Ticket\TicketQuantityUpdateService;
 use HiEvents\Services\Handlers\Order\CompleteOrderHandler;
-use HiEvents\Services\Handlers\Order\DTO\CompleteOrderAttendeeDTO;
+use HiEvents\Services\Handlers\Order\DTO\CompleteOrderProductDataDTO;
 use HiEvents\Services\Handlers\Order\DTO\CompleteOrderDTO;
 use HiEvents\Services\Handlers\Order\DTO\CompleteOrderOrderDTO;
 use Illuminate\Support\Collection;
@@ -242,7 +242,7 @@ class CompleteOrderHandlerTest extends TestCase
             questions: null,
         );
 
-        $attendeeDTO = new CompleteOrderAttendeeDTO(
+        $attendeeDTO = new CompleteOrderProductDataDTO(
             first_name: 'John',
             last_name: 'Doe',
             email: 'john@example.com',
@@ -251,7 +251,7 @@ class CompleteOrderHandlerTest extends TestCase
 
         return new CompleteOrderDTO(
             order: $orderDTO,
-            attendees: new Collection([$attendeeDTO])
+            products: new Collection([$attendeeDTO])
         );
     }
 

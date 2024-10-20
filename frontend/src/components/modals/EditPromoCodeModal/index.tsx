@@ -29,7 +29,7 @@ export const EditPromoCodeModal = ({onClose, promoCodeId}: EditPromoCodeModalPro
         initialValues: {
             code: '',
             discount: undefined,
-            applicable_ticket_ids: [],
+            applicable_product_ids: [],
             expiry_date: undefined,
             discount_type: undefined,
             max_allowed_usages: undefined,
@@ -65,7 +65,7 @@ export const EditPromoCodeModal = ({onClose, promoCodeId}: EditPromoCodeModalPro
         form.setValues({
             code: promoCode.code,
             discount: promoCode.discount,
-            applicable_ticket_ids: promoCode.applicable_ticket_ids ? promoCode.applicable_ticket_ids.map((id) => id.toString()) : [],
+            applicable_product_ids: promoCode.applicable_product_ids ? promoCode.applicable_product_ids.map((id) => id.toString()) : [],
             expiry_date: utcToTz(promoCode.expiry_date, event.timezone),
             discount_type: promoCode.discount_type,
             max_allowed_usages: promoCode.max_allowed_usages || undefined,

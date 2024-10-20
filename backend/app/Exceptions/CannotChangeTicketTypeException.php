@@ -2,7 +2,7 @@
 
 namespace HiEvents\Exceptions;
 
-class CannotChangeTicketTypeException extends BaseException
+class CannotChangeProductTypeException extends BaseException
 {
 
 }

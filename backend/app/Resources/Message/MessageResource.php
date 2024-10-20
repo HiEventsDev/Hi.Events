@@ -22,7 +22,7 @@ class MessageResource extends JsonResource
             'type' => $this->getType(),
             'attendee_ids' => $this->getAttendeeIds(),
             'order_id' => $this->getOrderId(),
-            'ticket_ids' => $this->getTicketIds(),
+            'product_ids' => $this->getProductIds(),
             'sent_at' => $this->getCreatedAt(),
             'status' => $this->getStatus(),
             'message_preview' => $this->getMessagePreview(),

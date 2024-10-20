@@ -24,12 +24,12 @@ return [
     'homepage_views_update_batch_size' => env('APP_HOMEPAGE_VIEWS_UPDATE_BATCH_SIZE', 8),
 
     /**
-     * The number of seconds to cache the ticket quantities on the homepage
+     * The number of seconds to cache the product quantities on the homepage
      * It is recommended to cache this value for a short period of time for high traffic sites
      *
      * Set to null to disable caching
      */
-    'homepage_ticket_quantities_cache_ttl' => env('APP_HOMEPAGE_TICKET_QUANTITIES_CACHE_TTL', 2),
+    'homepage_product_quantities_cache_ttl' => env('APP_HOMEPAGE_TICKET_QUANTITIES_CACHE_TTL', 2),
 
     'frontend_urls' => [
         'confirm_email_address' => '/manage/profile/confirm-email-address/%s',
@@ -39,7 +39,7 @@ return [
         'stripe_connect_return_url' => '/account/payment',
         'stripe_connect_refresh_url' => '/account/payment',
         'event_homepage' => '/event/%d/%s',
-        'attendee_ticket' => '/ticket/%d/%s',
+        'attendee_product' => '/product/%d/%s',
         'order_summary' => '/checkout/%d/%s/summary',
         'organizer_order_summary' => '/manage/event/%d/orders#order-%d',
     ],

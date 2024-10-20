@@ -7,26 +7,26 @@ use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\OrderItemDomainObjectAbstract;
-use HiEvents\DomainObjects\Generated\TicketDomainObjectAbstract;
+use HiEvents\DomainObjects\Generated\ProductDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\DomainObjects\Status\OrderPaymentStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
-use HiEvents\DomainObjects\TicketDomainObject;
-use HiEvents\DomainObjects\TicketPriceDomainObject;
+use HiEvents\DomainObjects\ProductDomainObject;
+use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\Events\OrderStatusChangedEvent;
-use HiEvents\Exceptions\InvalidTicketPriceId;
-use HiEvents\Exceptions\NoTicketsAvailableException;
+use HiEvents\Exceptions\InvalidProductPriceId;
+use HiEvents\Exceptions\NoProductsAvailableException;
 use HiEvents\Helper\IdHelper;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\TaxAndFeeRepositoryInterface;
-use HiEvents\Repository\Interfaces\TicketRepositoryInterface;
+use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Services\Domain\Order\OrderManagementService;
 use HiEvents\Services\Domain\Tax\TaxAndFeeRollupService;
-use HiEvents\Services\Domain\Ticket\TicketQuantityUpdateService;
+use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
 use HiEvents\Services\Handlers\Attendee\DTO\CreateAttendeeDTO;
 use HiEvents\Services\Handlers\Attendee\DTO\CreateAttendeeTaxAndFeeDTO;
 use Illuminate\Database\DatabaseManager;
@@ -39,9 +39,9 @@ class CreateAttendeeHandler
     public function __construct(
         private readonly AttendeeRepositoryInterface  $attendeeRepository,
         private readonly OrderRepositoryInterface     $orderRepository,
-        private readonly TicketRepositoryInterface    $ticketRepository,
+        private readonly ProductRepositoryInterface   $productRepository,
         private readonly EventRepositoryInterface     $eventRepository,
-        private readonly TicketQuantityUpdateService  $ticketQuantityAdjustmentService,
+        private readonly ProductQuantityUpdateService $productQuantityAdjustmentService,
         private readonly DatabaseManager              $databaseManager,
         private readonly TaxAndFeeRepositoryInterface $taxAndFeeRepository,
         private readonly TaxAndFeeRollupService       $taxAndFeeRollupService,
@@ -51,7 +51,7 @@ class CreateAttendeeHandler
     }
 
     /**
-     * @throws NoTicketsAvailableException
+     * @throws NoProductsAvailableException
      * @throws Throwable
      */
     public function handle(CreateAttendeeDTO $attendeeDTO): AttendeeDomainObject
@@ -61,30 +61,30 @@ class CreateAttendeeHandler
 
             $order = $this->createOrder($attendeeDTO->event_id, $attendeeDTO);
 
-            /** @var TicketDomainObject $ticket */
-            $ticket = $this->ticketRepository
-                ->loadRelation(TicketPriceDomainObject::class)
+            /** @var ProductDomainObject $product */
+            $product = $this->productRepository
+                ->loadRelation(ProductPriceDomainObject::class)
                 ->findFirstWhere([
-                    TicketDomainObjectAbstract::ID => $attendeeDTO->ticket_id,
-                    TicketDomainObjectAbstract::EVENT_ID => $attendeeDTO->event_id,
+                    ProductDomainObjectAbstract::ID => $attendeeDTO->product_id,
+                    ProductDomainObjectAbstract::EVENT_ID => $attendeeDTO->event_id,
                 ]);
 
-            $availableQuantity = $this->ticketRepository->getQuantityRemainingForTicketPrice(
-                $attendeeDTO->ticket_id,
-                $attendeeDTO->ticket_price_id,
+            $availableQuantity = $this->productRepository->getQuantityRemainingForProductPrice(
+                $attendeeDTO->product_id,
+                $attendeeDTO->product_price_id,
             );
 
             if ($availableQuantity <= 0) {
-                throw new NoTicketsAvailableException(__('There are no tickets available. ' .
-                    'If you would like to assign a ticket to this attendee,' .
-                    ' please adjust the ticket\'s available quantity.'));
+                throw new NoProductsAvailableException(__('There are no products available. ' .
+                    'If you would like to assign a product to this attendee,' .
+                    ' please adjust the product\'s available quantity.'));
             }
 
-            $ticketPriceId = $this->getTicketPriceId($attendeeDTO, $ticket);
+            $productPriceId = $this->getProductPriceId($attendeeDTO, $product);
 
             $this->processTaxesAndFees($attendeeDTO);
 
-            $orderItem = $this->createOrderItem($attendeeDTO, $order, $ticket, $ticketPriceId);
+            $orderItem = $this->createOrderItem($attendeeDTO, $order, $product, $productPriceId);
 
             $attendee = $this->createAttendee($order, $attendeeDTO);
 
@@ -122,27 +122,27 @@ class CreateAttendeeHandler
     }
 
     /**
-     * @throws InvalidTicketPriceId
+     * @throws InvalidProductPriceId
      */
-    private function getTicketPriceId(CreateAttendeeDTO $attendeeDTO, TicketDomainObject $ticket): int
+    private function getProductPriceId(CreateAttendeeDTO $attendeeDTO, ProductDomainObject $product): int
     {
-        $priceIds = $ticket->getTicketPrices()->map(fn(TicketPriceDomainObject $ticketPrice) => $ticketPrice->getId());
+        $priceIds = $product->getProductPrices()->map(fn(ProductPriceDomainObject $productPrice) => $productPrice->getId());
 
-        if ($attendeeDTO->ticket_price_id) {
-            if (!$priceIds->contains($attendeeDTO->ticket_price_id)) {
-                throw new InvalidTicketPriceId(__('The ticket price ID is invalid.'));
+        if ($attendeeDTO->product_price_id) {
+            if (!$priceIds->contains($attendeeDTO->product_price_id)) {
+                throw new InvalidProductPriceId(__('The product price ID is invalid.'));
             }
-            return $attendeeDTO->ticket_price_id;
+            return $attendeeDTO->product_price_id;
         }
 
-        /** @var TicketPriceDomainObject $ticketPrice */
-        $ticketPrice = $ticket->getTicketPrices()->first();
+        /** @var ProductPriceDomainObject $productPrice */
+        $productPrice = $product->getProductPrices()->first();
 
-        if ($ticketPrice) {
-            return $ticketPrice->getId();
+        if ($productPrice) {
+            return $productPrice->getId();
         }
 
-        throw new InvalidTicketPriceId(__('The ticket price ID is invalid.'));
+        throw new InvalidProductPriceId(__('The product price ID is invalid.'));
     }
 
     private function calculateTaxesAndFees(CreateAttendeeDTO $attendeeDTO): ?Collection
@@ -186,11 +186,11 @@ class CreateAttendeeHandler
             );
     }
 
-    private function createOrderItem(CreateAttendeeDTO $attendeeDTO, OrderDomainObject $order, TicketDomainObject $ticket, int $ticketPriceId): OrderItemDomainObject
+    private function createOrderItem(CreateAttendeeDTO $attendeeDTO, OrderDomainObject $order, ProductDomainObject $product, int $productPriceId): OrderItemDomainObject
     {
         return $this->orderRepository->addOrderItem(
             [
-                OrderItemDomainObjectAbstract::TICKET_ID => $attendeeDTO->ticket_id,
+                OrderItemDomainObjectAbstract::PRODUCT_ID => $attendeeDTO->product_id,
                 OrderItemDomainObjectAbstract::QUANTITY => 1,
                 OrderItemDomainObjectAbstract::TOTAL_BEFORE_ADDITIONS => $attendeeDTO->amount_paid,
                 OrderItemDomainObjectAbstract::TOTAL_GROSS => $attendeeDTO->amount_paid + $this->taxAndFeeRollupService->getTotalTaxesAndFees(),
@@ -198,8 +198,8 @@ class CreateAttendeeHandler
                 OrderItemDomainObjectAbstract::TOTAL_SERVICE_FEE => $this->taxAndFeeRollupService->getTotalFees(),
                 OrderItemDomainObjectAbstract::PRICE => $attendeeDTO->amount_paid,
                 OrderItemDomainObjectAbstract::ORDER_ID => $order->getId(),
-                OrderItemDomainObjectAbstract::ITEM_NAME => $ticket->getTitle(),
-                OrderItemDomainObjectAbstract::TICKET_PRICE_ID => $ticketPriceId,
+                OrderItemDomainObjectAbstract::ITEM_NAME => $product->getTitle(),
+                OrderItemDomainObjectAbstract::PRODUCT_PRICE_ID => $productPriceId,
                 OrderItemDomainObjectAbstract::TAXES_AND_FEES_ROLLUP => $this->taxAndFeeRollupService->getRollUp(),
             ]
         );
@@ -209,8 +209,8 @@ class CreateAttendeeHandler
     {
         return $this->attendeeRepository->create([
             AttendeeDomainObjectAbstract::EVENT_ID => $order->getEventId(),
-            AttendeeDomainObjectAbstract::TICKET_ID => $attendeeDTO->ticket_id,
-            AttendeeDomainObjectAbstract::TICKET_PRICE_ID => $attendeeDTO->ticket_price_id,
+            AttendeeDomainObjectAbstract::PRODUCT_ID => $attendeeDTO->product_id,
+            AttendeeDomainObjectAbstract::PRODUCT_PRICE_ID => $attendeeDTO->product_price_id,
             AttendeeDomainObjectAbstract::STATUS => AttendeeStatus::ACTIVE->name,
             AttendeeDomainObjectAbstract::EMAIL => $attendeeDTO->email,
             AttendeeDomainObjectAbstract::FIRST_NAME => $attendeeDTO->first_name,
@@ -224,8 +224,8 @@ class CreateAttendeeHandler
 
     private function fireEventsAndUpdateQuantities(CreateAttendeeDTO $attendeeDTO, OrderDomainObject $order): void
     {
-        $this->ticketQuantityAdjustmentService->increaseQuantitySold(
-            priceId: $attendeeDTO->ticket_price_id,
+        $this->productQuantityAdjustmentService->increaseQuantitySold(
+            priceId: $attendeeDTO->product_price_id,
         );
 
         event(new OrderStatusChangedEvent(

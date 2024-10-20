@@ -12,11 +12,11 @@ abstract class AttendeeDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
     final public const PLURAL_NAME = 'attendees';
     final public const ID = 'id';
     final public const ORDER_ID = 'order_id';
-    final public const TICKET_ID = 'ticket_id';
+    final public const PRODUCT_ID = 'product_id';
     final public const EVENT_ID = 'event_id';
     final public const CHECKED_IN_BY = 'checked_in_by';
     final public const CHECKED_OUT_BY = 'checked_out_by';
-    final public const TICKET_PRICE_ID = 'ticket_price_id';
+    final public const PRODUCT_PRICE_ID = 'product_price_id';
     final public const SHORT_ID = 'short_id';
     final public const FIRST_NAME = 'first_name';
     final public const LAST_NAME = 'last_name';
@@ -31,11 +31,11 @@ abstract class AttendeeDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
 
     protected int $id;
     protected int $order_id;
-    protected int $ticket_id;
+    protected int $product_id;
     protected int $event_id;
     protected ?int $checked_in_by = null;
     protected ?int $checked_out_by = null;
-    protected int $ticket_price_id;
+    protected int $product_price_id;
     protected string $short_id;
     protected string $first_name = '';
     protected string $last_name = '';
@@ -53,11 +53,11 @@ abstract class AttendeeDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
         return [
                     'id' => $this->id ?? null,
                     'order_id' => $this->order_id ?? null,
-                    'ticket_id' => $this->ticket_id ?? null,
+                    'product_id' => $this->product_id ?? null,
                     'event_id' => $this->event_id ?? null,
                     'checked_in_by' => $this->checked_in_by ?? null,
                     'checked_out_by' => $this->checked_out_by ?? null,
-                    'ticket_price_id' => $this->ticket_price_id ?? null,
+                    'product_price_id' => $this->product_price_id ?? null,
                     'short_id' => $this->short_id ?? null,
                     'first_name' => $this->first_name ?? null,
                     'last_name' => $this->last_name ?? null,
@@ -94,15 +94,15 @@ abstract class AttendeeDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
         return $this->order_id;
     }
 
-    public function setTicketId(int $ticket_id): self
+    public function setProductId(int $product_id): self
     {
-        $this->ticket_id = $ticket_id;
+        $this->product_id = $product_id;
         return $this;
     }
 
-    public function getTicketId(): int
+    public function getProductId(): int
     {
-        return $this->ticket_id;
+        return $this->product_id;
     }
 
     public function setEventId(int $event_id): self
@@ -138,15 +138,15 @@ abstract class AttendeeDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
         return $this->checked_out_by;
     }
 
-    public function setTicketPriceId(int $ticket_price_id): self
+    public function setProductPriceId(int $product_price_id): self
     {
-        $this->ticket_price_id = $ticket_price_id;
+        $this->product_price_id = $product_price_id;
         return $this;
     }
 
-    public function getTicketPriceId(): int
+    public function getProductPriceId(): int
     {
-        return $this->ticket_price_id;
+        return $this->product_price_id;
     }
 
     public function setShortId(string $short_id): self

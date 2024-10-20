@@ -4,8 +4,8 @@ namespace HiEvents\Http\Actions\Attendees;
 
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\QuestionAndAnswerViewDomainObject;
-use HiEvents\DomainObjects\TicketDomainObject;
-use HiEvents\DomainObjects\TicketPriceDomainObject;
+use HiEvents\DomainObjects\ProductDomainObject;
+use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
@@ -29,12 +29,12 @@ class GetAttendeeAction extends BaseAction
         $attendee = $this->attendeeRepository
             ->loadRelation(QuestionAndAnswerViewDomainObject::class)
             ->loadRelation(new Relationship(
-                domainObject: TicketDomainObject::class,
+                domainObject: ProductDomainObject::class,
                 nested: [
                     new Relationship(
-                        domainObject: TicketPriceDomainObject::class,
+                        domainObject: ProductPriceDomainObject::class,
                     ),
-                ], name: 'ticket'))
+                ], name: 'product'))
             ->findFirstWhere([
                 'id' => $attendeeId,
                 'event_id' => $eventId,

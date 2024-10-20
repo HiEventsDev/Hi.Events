@@ -6,6 +6,6 @@ enum CapacityAssignmentAppliesTo
 {
     use BaseEnum;
 
-    case TICKETS;
+    case PRODUCTS;
     case EVENT;
 }

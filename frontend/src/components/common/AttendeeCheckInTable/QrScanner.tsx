@@ -55,7 +55,7 @@ export const QRScannerComponent = (props: QRScannerComponentProps) => {
             const alreadyScanned = latestProcessedAttendeeIds.includes(debouncedAttendeeId);
 
             if (alreadyScanned) {
-                showError(t`You already scanned this ticket`);
+                showError(t`You already scanned this product`);
                 return;
             }
 

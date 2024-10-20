@@ -19,7 +19,7 @@ class OrderItemResource extends BaseResource
             'total_before_additions' => $this->getTotalBeforeAdditions(),
             'price' => $this->getPrice(),
             'quantity' => $this->getQuantity(),
-            'ticket_id' => $this->getTicketId(),
+            'product_id' => $this->getProductId(),
             'item_name' => $this->getItemName(),
             'price_before_discount' => $this->getPriceBeforeDiscount(),
             'taxes_and_fees_rollup' => $this->getTaxesAndFeesRollup(),

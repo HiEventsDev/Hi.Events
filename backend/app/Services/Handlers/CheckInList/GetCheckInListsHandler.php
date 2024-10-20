@@ -4,7 +4,7 @@ namespace HiEvents\Services\Handlers\CheckInList;
 
 use HiEvents\DomainObjects\CheckInListDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
-use HiEvents\DomainObjects\TicketDomainObject;
+use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\CheckInListRepositoryInterface;
 use HiEvents\Services\Handlers\CheckInList\DTO\GetCheckInListsDTO;
@@ -21,7 +21,7 @@ class GetCheckInListsHandler
     public function handle(GetCheckInListsDTO $dto): LengthAwarePaginator
     {
         $checkInLists = $this->checkInListRepository
-            ->loadRelation(TicketDomainObject::class)
+            ->loadRelation(ProductDomainObject::class)
             ->loadRelation(new Relationship(domainObject: EventDomainObject::class, name: 'event'))
             ->findByEventId(
                 eventId: $dto->eventId,

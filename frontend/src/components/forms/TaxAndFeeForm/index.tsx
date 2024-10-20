@@ -26,13 +26,13 @@ export const TaxAndFeeForm = ({form}: { form: UseFormReturnType<TaxAndFee> }) =>
             icon: <IconPercentage/>,
             label: t`Percentage`,
             value: 'PERCENTAGE',
-            description: t`A percentage of the ticket price. E.g., 3.5% of the ticket price`,
+            description: t`A percentage of the product price. E.g., 3.5% of the product price`,
         },
         {
             icon: <IconCash/>,
             label: t`Fixed`,
             value: 'FIXED',
-            description: t`A fixed amount per ticket. E.g, $0.50 per ticket`,
+            description: t`A fixed amount per product. E.g, $0.50 per product`,
         },
     ];
 
@@ -83,9 +83,9 @@ export const TaxAndFeeForm = ({form}: { form: UseFormReturnType<TaxAndFee> }) =>
 
             <Switch
                 {...form.getInputProps('is_default', {type: 'checkbox'})}
-                label={t`Apply this ${type} to all new tickets`}
+                label={t`Apply this ${type} to all new products`}
                 value={1}
-                description={t`A default ${type} is automaticaly applied to all new tickets. You can override this on a per ticket basis.`}
+                description={t`A default ${type} is automaticaly applied to all new products. You can override this on a per product basis.`}
             />
         </div>
     )

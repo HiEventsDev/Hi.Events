@@ -128,10 +128,25 @@ abstract class BaseRepository implements RepositoryInterface
         return $this->handleSingleResult($this->model->findOrFail($id, $columns));
     }
 
-    public function findWhere(array $where, array $columns = self::DEFAULT_COLUMNS): Collection
+    public function findWhere(
+        array $where,
+        array $columns = self::DEFAULT_COLUMNS,
+        array $orderAndDirections = [],
+    ): Collection
     {
         $this->applyConditions($where);
+
+        if ($orderAndDirections) {
+            foreach ($orderAndDirections as $orderAndDirection) {
+                $this->model = $this->model->orderBy(
+                    $orderAndDirection->getOrder(),
+                    $orderAndDirection->getDirection()
+                );
+            }
+        }
+
         $model = $this->model->get($columns);
+
         $this->resetModel();
 
         return $this->handleResults($model);

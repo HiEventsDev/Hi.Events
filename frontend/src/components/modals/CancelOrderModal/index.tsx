@@ -20,7 +20,7 @@ export const CancelOrderModal = ({onClose, orderId}: RefundOrderModalProps) => {
     const {eventId} = useParams();
     // const queryClient = useQueryClient();
     const {data: order} = useGetOrder(eventId, orderId);
-    const {data: event, data: {tickets} = {}} = useGetEvent(eventId);
+    const {data: event, data: {products} = {}} = useGetEvent(eventId);
     const cancelOrderMutation = useCancelOrder();
 
     const handleCancelOrder = () => {
@@ -47,11 +47,11 @@ export const CancelOrderModal = ({onClose, orderId}: RefundOrderModalProps) => {
         >
             <OrderDetails order={order} event={event}/>
 
-            {tickets && <AttendeeList order={order} tickets={tickets}/>}
+            {products && <AttendeeList order={order} products={products}/>}
 
             <Alert className={classes.alert} variant="light" color="blue" title={t`Please Note`}
                    icon={<IconInfoCircle/>}>
-                {t`Canceling will cancel all tickets associated with this order, and release the tickets back into the available pool.`}
+                {t`Canceling will cancel all products associated with this order, and release the products back into the available pool.`}
             </Alert>
 
             <Button loading={cancelOrderMutation.isPending} className={'mb20'} color={'red'} fullWidth

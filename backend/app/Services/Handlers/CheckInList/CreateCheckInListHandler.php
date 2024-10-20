@@ -4,7 +4,7 @@ namespace HiEvents\Services\Handlers\CheckInList;
 
 use HiEvents\DomainObjects\CheckInListDomainObject;
 use HiEvents\Services\Domain\CheckInList\CreateCheckInListService;
-use HiEvents\Services\Domain\Ticket\Exception\UnrecognizedTicketIdException;
+use HiEvents\Services\Domain\Product\Exception\UnrecognizedProductIdException;
 use HiEvents\Services\Handlers\CheckInList\DTO\UpsertCheckInListDTO;
 
 class CreateCheckInListHandler
@@ -16,7 +16,7 @@ class CreateCheckInListHandler
     }
 
     /**
-     * @throws UnrecognizedTicketIdException
+     * @throws UnrecognizedProductIdException
      */
     public function handle(UpsertCheckInListDTO $listData): CheckInListDomainObject
     {
@@ -29,7 +29,7 @@ class CreateCheckInListHandler
 
         return $this->createCheckInListService->createCheckInList(
             checkInList: $checkInList,
-            ticketIds: $listData->ticketIds
+            productIds: $listData->productIds
         );
     }
 }

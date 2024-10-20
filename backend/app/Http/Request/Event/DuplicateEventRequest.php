@@ -14,7 +14,7 @@ class DuplicateEventRequest extends BaseRequest
         $eventValidations = $this->minimalRules();
 
         $duplicateValidations = [
-            'duplicate_tickets' => ['boolean', 'required'],
+            'duplicate_products' => ['boolean', 'required'],
             'duplicate_questions' => ['boolean', 'required'],
             'duplicate_settings' => ['boolean', 'required'],
             'duplicate_promo_codes' => ['boolean', 'required'],

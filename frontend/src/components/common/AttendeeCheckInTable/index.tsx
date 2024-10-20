@@ -22,7 +22,7 @@ export const AttendeesCheckInTable = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [searchQueryDebounced] = useDebouncedValue(searchQuery, 200);
     const [qrScannerOpen, setQrScannerOpen] = useState(false);
-    const {data: {tickets} = {}} = useGetEvent(eventId);
+    const {data: {products} = {}} = useGetEvent(eventId);
     const queryFilters: QueryFilters = {
         pageNumber: 1,
         query: searchQueryDebounced,
@@ -86,7 +86,7 @@ export const AttendeesCheckInTable = () => {
 
     const Attendees = () => {
         const Container = () => {
-            if (attendeesQuery.isFetching || !attendees || !tickets) {
+            if (attendeesQuery.isFetching || !attendees || !products) {
                 return (
                     <div className={classes.loading}>
                         <Loader size={40}/>
@@ -115,7 +115,7 @@ export const AttendeesCheckInTable = () => {
                                         <b>{attendee.public_id}</b>
                                     </div>
                                     <div style={{color: 'gray'}}>
-                                        {tickets.find(ticket => ticket.id === attendee.ticket_id)?.title}
+                                        {products.find(product => product.id === attendee.product_id)?.title}
                                     </div>
                                 </div>
                                 <div className={classes.actions}>

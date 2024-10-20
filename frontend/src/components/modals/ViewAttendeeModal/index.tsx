@@ -9,7 +9,7 @@ import {useGetOrder} from "../../../queries/useGetOrder.ts";
 import {AttendeeDetails} from "../../common/AttendeeDetails";
 import {QuestionAndAnswerList} from "../../common/QuestionAndAnswerList";
 import {LoadingMask} from "../../common/LoadingMask";
-import {AttendeeTicket} from "../../common/AttendeeTicket";
+import {AttendeeProduct} from "../../common/AttendeeProduct";
 
 interface ViewAttendeeModalProps extends GenericModalProps {
     onClose: () => void;
@@ -52,10 +52,10 @@ export const ViewAttendeeModal = ({onClose, attendeeId}: ViewAttendeeModalProps)
                 )}
 
             <h3>
-                {t`Ticket`}
+                {t`Product`}
             </h3>
 
-            {(attendee?.ticket) && <AttendeeTicket event={event} attendee={attendee} ticket={attendee.ticket}/>}
+            {(attendee?.product) && <AttendeeProduct event={event} attendee={attendee} product={attendee.product}/>}
         </Modal>
     )
 }

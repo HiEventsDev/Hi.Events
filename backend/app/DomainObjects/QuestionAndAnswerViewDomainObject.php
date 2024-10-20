@@ -10,6 +10,8 @@ class QuestionAndAnswerViewDomainObject extends AbstractDomainObject
     final public const SINGULAR_NAME = 'question_and_answer_view';
     final public const PLURAL_NAME = 'question_and_answer_views';
 
+    private ?int $product_id;
+    private ?string $product_title;
     private int $question_id;
     private ?int $order_id;
     private string $title;
@@ -128,6 +130,28 @@ class QuestionAndAnswerViewDomainObject extends AbstractDomainObject
     public function setEventId(int $event_id): QuestionAndAnswerViewDomainObject
     {
         $this->event_id = $event_id;
+        return $this;
+    }
+
+    public function getProductId(): ?int
+    {
+        return $this->product_id;
+    }
+
+    public function setProductId(?int $product_id): QuestionAndAnswerViewDomainObject
+    {
+        $this->product_id = $product_id;
+        return $this;
+    }
+
+    public function getProductTitle(): ?string
+    {
+        return $this->product_title;
+    }
+
+    public function setProductTitle(?string $product_title): QuestionAndAnswerViewDomainObject
+    {
+        $this->product_title = $product_title;
         return $this;
     }
 

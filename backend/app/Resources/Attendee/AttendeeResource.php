@@ -6,7 +6,7 @@ use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Enums\QuestionBelongsTo;
 use HiEvents\Resources\Order\OrderResource;
 use HiEvents\Resources\Question\QuestionAnswerViewResource;
-use HiEvents\Resources\Ticket\TicketResource;
+use HiEvents\Resources\Product\ProductResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -20,8 +20,8 @@ class AttendeeResource extends JsonResource
         return [
             'id' => $this->getId(),
             'order_id' => $this->getOrderId(),
-            'ticket_id' => $this->getTicketId(),
-            'ticket_price_id' => $this->getTicketPriceId(),
+            'product_id' => $this->getProductId(),
+            'product_price_id' => $this->getProductPriceId(),
             'event_id' => $this->getEventId(),
             'email' => $this->getEmail(),
             'status' => $this->getStatus(),
@@ -30,9 +30,9 @@ class AttendeeResource extends JsonResource
             'public_id' => $this->getPublicId(),
             'short_id' => $this->getShortId(),
             'locale' => $this->getLocale(),
-            'ticket' => $this->when(
-                !is_null($this->getTicket()),
-                fn() => new TicketResource($this->getTicket()),
+            'product' => $this->when(
+                !is_null($this->getProduct()),
+                fn() => new ProductResource($this->getProduct()),
             ),
             'order' => $this->when(
                 !is_null($this->getOrder()),
@@ -42,7 +42,7 @@ class AttendeeResource extends JsonResource
                 $this->getQuestionAndAnswerViews() !== null,
                 fn() => QuestionAnswerViewResource::collection(
                     $this->getQuestionAndAnswerViews()
-                        ?->filter(fn($qav) => $qav->getBelongsTo() === QuestionBelongsTo::TICKET->name)
+                        ?->filter(fn($qav) => $qav->getBelongsTo() === QuestionBelongsTo::PRODUCT->name)
                 )
             ),
 

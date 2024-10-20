@@ -6,7 +6,7 @@ use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\CapacityAssigment\UpsertCapacityAssignmentRequest;
 use HiEvents\Resources\CapacityAssignment\CapacityAssignmentResource;
-use HiEvents\Services\Domain\Ticket\Exception\UnrecognizedTicketIdException;
+use HiEvents\Services\Domain\Product\Exception\UnrecognizedProductIdException;
 use HiEvents\Services\Handlers\CapacityAssignment\DTO\UpsertCapacityAssignmentDTO;
 use HiEvents\Services\Handlers\CapacityAssignment\UpdateCapacityAssignmentHandler;
 use Illuminate\Http\JsonResponse;
@@ -33,10 +33,10 @@ class UpdateCapacityAssignmentAction extends BaseAction
                     'capacity' => $request->validated('capacity'),
                     'applies_to' => $request->validated('applies_to'),
                     'status' => $request->validated('status'),
-                    'ticket_ids' => $request->validated('ticket_ids'),
+                    'product_ids' => $request->validated('product_ids'),
                 ]),
             );
-        } catch (UnrecognizedTicketIdException $exception) {
+        } catch (UnrecognizedProductIdException $exception) {
             return $this->errorResponse(
                 message: $exception->getMessage(),
                 statusCode: Response::HTTP_UNPROCESSABLE_ENTITY,

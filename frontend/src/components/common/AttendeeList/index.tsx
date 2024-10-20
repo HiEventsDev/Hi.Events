@@ -2,12 +2,12 @@ import {ActionIcon, Avatar, Tooltip} from "@mantine/core";
 import {getInitials} from "../../../utilites/helpers.ts";
 import Truncate from "../Truncate";
 import {NavLink} from "react-router-dom";
-import {IconEye} from "@tabler/icons-react";
+import {IconExternalLink, IconEye} from "@tabler/icons-react";
 import classes from './AttendeeList.module.scss';
-import {Order, Ticket} from "../../../types.ts";
+import {Order, Product} from "../../../types.ts";
 import {t} from "@lingui/macro";
 
-export const AttendeeList = ({order, tickets}: { order: Order, tickets: Ticket[] }) => {
+export const AttendeeList = ({order, products}: { order: Order, products: Product[] }) => {
     return (
         <div className={classes.attendeeList}>
             {order.attendees?.map(attendee => (
@@ -18,15 +18,15 @@ export const AttendeeList = ({order, tickets}: { order: Order, tickets: Ticket[]
 
                     <div className={classes.attendeeName}>
                         {attendee.first_name + ' ' + attendee.last_name}
-                        <div className={classes.ticketName}>
-                            <Truncate text={tickets?.find(ticket => ticket.id === attendee.ticket_id)?.title}/>
+                        <div className={classes.productName}>
+                            <Truncate text={products?.find(product => product.id === attendee.product_id)?.title}/>
                         </div>
                     </div>
                     <div className={classes.viewAttendee}>
                         <Tooltip label={t`Navigate to Attendee`} position={'bottom'} withArrow>
                             <NavLink to={`../attendees?query=${attendee.public_id}`}>
-                                <ActionIcon variant={'light'}>
-                                    <IconEye/>
+                                <ActionIcon variant={'transparent'} radius={'m'}>
+                                    <IconExternalLink size={16}/>
                                 </ActionIcon>
                             </NavLink>
                         </Tooltip>

@@ -5,7 +5,7 @@ namespace HiEvents\Services\Handlers\Attendee;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
-use HiEvents\Services\Domain\Ticket\TicketQuantityUpdateService;
+use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
 use HiEvents\Services\Handlers\Attendee\DTO\PartialEditAttendeeDTO;
 use Illuminate\Database\DatabaseManager;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -14,9 +14,9 @@ use Throwable;
 class PartialEditAttendeeHandler
 {
     public function __construct(
-        private readonly AttendeeRepositoryInterface $attendeeRepository,
-        private readonly TicketQuantityUpdateService $ticketQuantityService,
-        private readonly DatabaseManager             $databaseManager
+        private readonly AttendeeRepositoryInterface  $attendeeRepository,
+        private readonly ProductQuantityUpdateService $productQuantityService,
+        private readonly DatabaseManager              $databaseManager
     )
     {
     }
@@ -43,7 +43,7 @@ class PartialEditAttendeeHandler
         }
 
         if ($data->status && $data->status !== $attendee->getStatus()) {
-            $this->adjustTicketQuantity($data, $attendee);
+            $this->adjustProductQuantity($data, $attendee);
         }
 
         return $this->attendeeRepository->updateByIdWhere(
@@ -62,14 +62,14 @@ class PartialEditAttendeeHandler
     }
 
     /**
-     * @todo - we should check ticket availability before updating the ticket quantity
+     * @todo - we should check product availability before updating the product quantity
      */
-    private function adjustTicketQuantity(PartialEditAttendeeDTO $data, AttendeeDomainObject $attendee): void
+    private function adjustProductQuantity(PartialEditAttendeeDTO $data, AttendeeDomainObject $attendee): void
     {
         if ($data->status === AttendeeStatus::ACTIVE->name) {
-            $this->ticketQuantityService->increaseQuantitySold($attendee->getTicketPriceId());
+            $this->productQuantityService->increaseQuantitySold($attendee->getProductPriceId());
         } elseif ($data->status === AttendeeStatus::CANCELLED->name) {
-            $this->ticketQuantityService->decreaseQuantitySold($attendee->getTicketPriceId());
+            $this->productQuantityService->decreaseQuantitySold($attendee->getProductPriceId());
         }
     }
 }
