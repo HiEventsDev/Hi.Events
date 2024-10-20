@@ -1,5 +1,16 @@
 import {t, Trans} from "@lingui/macro";
-import {ActionIcon, Anchor, Button, Group, Input, Modal, Spoiler, TextInput} from "@mantine/core";
+import {
+    ActionIcon,
+    Anchor,
+    Button,
+    Collapse,
+    Group,
+    Input,
+    Modal,
+    Spoiler,
+    TextInput,
+    UnstyledButton
+} from "@mantine/core";
 import {useNavigate, useParams} from "react-router-dom";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {notifications} from "@mantine/notifications";
@@ -10,7 +21,7 @@ import {
     ProductPriceQuantityFormValue
 } from "../../../../api/order.client.ts";
 import {useForm} from "@mantine/form";
-import {range, useInputState, useResizeObserver} from "@mantine/hooks";
+import {range, useDisclosure, useInputState, useResizeObserver} from "@mantine/hooks";
 import React, {useEffect, useMemo, useRef, useState} from "react";
 import {showError, showInfo, showSuccess} from "../../../../utilites/notifications.tsx";
 import {addQueryStringToUrl, isObjectEmpty, removeQueryStringFromUrl} from "../../../../utilites/helpers.ts";
@@ -240,14 +251,6 @@ const SelectProducts = (props: SelectProductsProps) => {
         || props.widgetMode === 'preview'
         || products?.every(product => product.is_sold_out);
 
-    console.log({
-        'productMutation.isPending': productMutation.isPending,
-        'productAreAvailable': productAreAvailable,
-        'selectedProductQuantitySum': selectedProductQuantitySum,
-        'props.widgetMode': props.widgetMode,
-        'products.every(product => product.is_sold_out)': products?.every(product => product.is_sold_out),
-    });
-
     let productIndex = 0;
 
     return (
@@ -311,43 +314,61 @@ const SelectProducts = (props: SelectProductsProps) => {
                                                     .map((n) => n.toString());
                                                 quantityRange.unshift("0");
 
-                                                return (
-                                                    <div key={product.id} className={'hi-product-row'}>
-                                                        <div className={'hi-title-row'}>
-                                                            <div className={'hi-product-title'}>
-                                                                <h3>{product.title}</h3>
-                                                            </div>
-                                                            <div className={'hi-product-availability'}>
-                                                                {(product.is_available && !!product.quantity_available) && (
-                                                                    <>
-                                                                        {product.quantity_available === Constants.INFINITE_TICKETS && (
-                                                                            <Trans>
-                                                                                Unlimited available
-                                                                            </Trans>
-                                                                        )}
-                                                                        {product.quantity_available !== Constants.INFINITE_TICKETS && (
-                                                                            <Trans>
-                                                                                {product.quantity_available} available
-                                                                            </Trans>
-                                                                        )}
-                                                                    </>
-                                                                )}
+                            const [ticketIsCollapsed, {toggle: collapseTicket}] = useDisclosure(!ticket.start_collapsed);
 
-                                                                {(!product.is_available && product.type === 'TIERED') && (
-                                                                    <ProductAvailabilityMessage product={product}
-                                                                                                event={event}/>
-                                                                )}
-                                                            </div>
-                                                        </div>
-                                                        <div className={'hi-price-tiers-rows'}>
-                                                            <TieredPricing
-                                                                productIndex={productIndex++}
-                                                                event={event}
-                                                                product={product}
-                                                                form={form}
-                                                            />
-                                                        </div>
+                            return (
+                                <div key={ticket.id} className={'hi-ticket-row'}>
+                                    <div className={'hi-title-row'}>
+                                        <UnstyledButton variant={'transparent'}
+                                                        className={'hi-ticket-title'}
+                                                        onClick={collapseTicket}
+                                        >
+                                            <h3>
+                                                {ticket.title}
+                                            </h3>
+                                            <div className={'hi-ticket-title-metadata'}>
+                                                {(ticket.is_available && !!ticket.quantity_available) && (
+                                                    <>
+                                                        {ticket.quantity_available === Constants.INFINITE_TICKETS && (
+                                                            <Trans>
+                                                                Unlimited available
+                                                            </Trans>
+                                                        )}
+                                                        {ticket.quantity_available !== Constants.INFINITE_TICKETS && (
+                                                            <Trans>
+                                                                {ticket.quantity_available} available
+                                                            </Trans>
+                                                        )}
+                                                    </>
+                                                )}
 
+                                                {(!ticket.is_available && ticket.type === 'TIERED') && (
+                                                    <TicketAvailabilityMessage ticket={ticket} event={event}/>
+                                                )}
+
+                                                <span className={'hi-ticket-collapse-arrow'}>
+                                                    {ticketIsCollapsed ? '\u25BC' : '\u25B6'}
+                                                </span>
+                                            </div>
+                                        </UnstyledButton>
+                                    </div>
+
+                                    <Collapse in={ticketIsCollapsed} className={'hi-ticket-content'}>
+                                        <div className={'hi-price-tiers-rows'}>
+                                            <TieredPricing
+                                                ticketIndex={ticketIndex}
+                                                event={event}
+                                                ticket={ticket}
+                                                form={form}
+                                            />
+                                        </div>
+
+                                        {ticket.max_per_order && form.values.tickets && isObjectEmpty(form.errors) && (form.values.tickets[ticketIndex]?.quantities.reduce((acc, {quantity}) => acc + Number(quantity), 0) > ticket.max_per_order) && (
+                                            <div className={'hi-ticket-quantity-error'}>
+                                                <Trans>The maximum numbers number of tickets for {ticket.title}
+                                                    is {ticket.max_per_order}</Trans>
+                                            </div>
+                                        )}
                                                         {product.max_per_order && form.values.products && isObjectEmpty(form.errors) && (form.values.products[productIndex]?.quantities.reduce((acc, {quantity}) => acc + Number(quantity), 0) > product.max_per_order) && (
                                                             <div className={'hi-product-quantity-error'}>
                                                                 <Trans>The maximum numbers number of products
@@ -356,12 +377,31 @@ const SelectProducts = (props: SelectProductsProps) => {
                                                             </div>
                                                         )}
 
+                                        {form.errors[`tickets.${ticketIndex}`] && (
+                                            <div className={'hi-ticket-quantity-error'}>
+                                                {form.errors[`tickets.${ticketIndex}`]}
+                                            </div>
+                                        )}
                                                         {form.errors[`products.${productIndex}`] && (
                                                             <div className={'hi-product-quantity-error'}>
                                                                 {form.errors[`products.${productIndex}`]}
                                                             </div>
                                                         )}
 
+                                        {ticket.description && (
+                                            <div
+                                                className={'hi-ticket-description-row'}>
+                                                <Spoiler maxHeight={87} showLabel={t`Show more`} hideLabel={t`Hide`}>
+                                                    <div dangerouslySetInnerHTML={{
+                                                        __html: ticket.description
+                                                    }}/>
+                                                </Spoiler>
+                                            </div>
+                                        )}
+                                    </Collapse>
+                                </div>
+                            )
+                        })}
                                                         {product.description && (
                                                             <div
                                                                 className={'hi-product-description-row'}>
@@ -446,7 +486,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                  *
                  * Hi.Events is licensed under the GNU Affero General Public License (AGPL) version 3.
                  *
-                 * You can find the full license text at: https://github.com/HiEventsDev/hi.events/blob/main/LICENSE
+                 * You can find the full license text at: https://github.com/HiEventsDev/hi.events/blob/main/LICENCE
                  *
                  * In accordance with Section 7(b) of the AGPL, we ask that you retain the "Powered by Hi.Events" notice.
                  *

@@ -34,6 +34,7 @@ class UpsertProductRequest extends BaseRequest
             'hide_before_sale_start_date' => 'boolean',
             'hide_after_sale_end_date' => 'boolean',
             'hide_when_sold_out' => 'boolean',
+            'start_collapsed' => 'boolean',
             'show_quantity_remaining' => 'boolean',
             'is_hidden_without_promo_code' => 'boolean',
             'type' => ['required', Rule::in(ProductPriceType::valuesArray())],

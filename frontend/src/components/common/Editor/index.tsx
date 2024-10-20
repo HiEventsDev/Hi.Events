@@ -3,11 +3,14 @@ import {useEditor} from "@tiptap/react";
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
 import TextAlign from '@tiptap/extension-text-align';
+import Image from '@tiptap/extension-image';
 import React, {useEffect, useState} from "react";
 import {InputDescription, InputError, InputLabel} from "@mantine/core";
 import classes from "./Editor.module.scss";
 import classNames from "classnames";
 import {Trans} from "@lingui/macro";
+import {InsertImageControl} from "./Controls/InsertImageControl";
+import {ImageResize} from "./Extensions/ImageResizeExtension";
 
 interface EditorProps {
     onChange: (value: string) => void;
@@ -40,6 +43,8 @@ export const Editor = ({
             Underline,
             Link,
             TextAlign.configure({types: ['heading', 'paragraph']}),
+            Image,
+            ImageResize
         ],
         onUpdate: ({editor}) => {
             const html = editor.getHTML();
@@ -111,6 +116,9 @@ export const Editor = ({
                                 <RichTextEditor.AlignCenter/>
                                 <RichTextEditor.AlignJustify/>
                                 <RichTextEditor.AlignRight/>
+                            </RichTextEditor.ControlsGroup>
+                            <RichTextEditor.ControlsGroup>
+                                <InsertImageControl/>
                             </RichTextEditor.ControlsGroup>
                         </>
                     )}

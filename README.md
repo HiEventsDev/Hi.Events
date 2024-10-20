@@ -146,14 +146,23 @@ a quick start, follow these steps:
 ℹ️ Please refer to the [getting started guide](https://hi.events/docs/getting-started) for other installation methods, and
 for setting up a production or local development environment.
 
-## 💜 Support Hi.Events
+## 💜 Sponsors
+<a href="https://stinkingbadges.app/?utm_source=hi.events-readme">
+Stinking Badges
+</a>
+
+### Making a Donation
 
 If you find Hi.Events useful, it would be massively appreciated if you made a small donation to help support the project.
+
+We'll use your donation to fund ongoing development and maintenance of Hi.Events.
 
 <a href="https://www.buymeacoffee.com/hi.events" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
 <br/>
 or
 <a href="https://github.com/sponsors/HiEventsDev" target="_blank"> Sponsor on GitHub</a>
+or
+<a href="https://opencollective.com/hievents" target="_blank"> Sponsor on Open Collective</a>
 
 ## 📝 Change Log
 
@@ -162,8 +171,8 @@ our [GitHub releases page](https://github.com/HiEventsDev/hi.events/releases).
 
 ## 🤝 Contributing
 
-We welcome contributions, suggestions, and bug reports! Before proposing a new feature or extension,
-please open an issue to discuss it.
+We welcome contributions, suggestions, and bug reports! Please see our [contributing guidelines](CONTRIBUTING.md) for more
+information.
 
 ## ❓ FAQ
 
