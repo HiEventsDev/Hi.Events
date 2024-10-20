@@ -30,21 +30,45 @@
   }
 
   .buttons {
-    .orderSummaryToggle {
-      display: block;
+    .orderTotal {
+      .itemRow {
+        display: flex;
+        align-content: center;
+        justify-content: space-between;
+
+        .itemName {
+          text-align: left;
+          flex: 1;
+
+          .total {
+            font-size: 1.1em;
+          }
+        }
+
+        .itemValue {
+          text-align: right;
+          font-weight: 500;
+          white-space: nowrap;
+        }
+      }
 
       @include respond-above(md) {
         display: none;
       }
+
+      width: 100%;
     }
 
     .continueButton {
       margin-top: 20px;
       flex: 1;
       max-width: 700px;
+      flex-width: 100%;
     }
 
+    position: relative;
     display: flex;
+    flex-wrap: wrap;
     gap: 10px;
     justify-content: center;
     align-items: center;
@@ -56,6 +80,23 @@
 
     .continueButton {
       margin-top: 0;
+    }
+
+    .orderSummaryToggle {
+      position: absolute;
+      background-color: var(--tk-color-white);
+      top: 0;
+      left: 0;
+      right: 0;
+      margin-inline: auto;
+      width: fit-content;
+      transform:translateY(-50%);
+      border: 1px solid #e0e0e0;
+      box-shadow: 0px -5px 5px 0 rgba(0, 0, 0, 0.0392156863);
+
+      @include respond-above(md) {
+        display: none;
+      }
     }
   }
 }
