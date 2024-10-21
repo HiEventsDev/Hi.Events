@@ -1,11 +1,13 @@
 import {ActionIcon, Button} from "@mantine/core";
 import {t} from "@lingui/macro";
-import {IconShoppingCartDown, IconShoppingCartUp} from "@tabler/icons-react";
+import {IconChevronsDown, IconChevronsUp} from "@tabler/icons-react";
 import classes from "./CheckoutFooter.module.scss";
 import {Event, Order} from "../../../../types.ts";
 import {CheckoutSidebar} from "../CheckoutSidebar";
 import {useState} from "react";
 import classNames from "classnames";
+import {Currency} from "../../../common/Currency";
+
 
 interface ContinueButtonProps {
     isLoading: boolean;
@@ -15,7 +17,7 @@ interface ContinueButtonProps {
     isOrderComplete?: boolean;
 }
 
-export const CheckoutFooter = ({isLoading, buttonText, event, order, isOrderComplete = false}: ContinueButtonProps) => {
+export const CheckoutFooter = ({isLoading, buttonText, event, order, isOrderComplete = false, showFreeWhenZeroTotal = true}: ContinueButtonProps) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     return (
@@ -26,6 +28,18 @@ export const CheckoutFooter = ({isLoading, buttonText, event, order, isOrderComp
                 {isSidebarOpen && <CheckoutSidebar event={event} order={order} className={classes.sidebar}/>}
 
                 <div className={classes.buttons}>
+                    <div className={classes.orderTotal}>
+                        <div className={classes.itemRow}>
+                            <div className={classes.itemName}><b className={classes.total}>{t`Total`}</b></div>
+                            <div className={classes.itemValue}>
+                                <Currency
+                                    currency={event.currency}
+                                    price={order.total_gross}
+                                    freeLabel={showFreeWhenZeroTotal ? t`Free` : null}
+                                />
+                            </div>
+                        </div>
+                    </div>
                     {!isOrderComplete && (
                         <Button
                             className={classes.continueButton}
@@ -41,8 +55,7 @@ export const CheckoutFooter = ({isLoading, buttonText, event, order, isOrderComp
                                 size={'md'}
                                 className={classes.orderSummaryToggle}
                     >
-                        {isSidebarOpen && <IconShoppingCartDown stroke={2}/>}
-                        {!isSidebarOpen && <IconShoppingCartUp stroke={2}/>}
+                        {isSidebarOpen ? <IconChevronsDown stroke={2}/> : <IconChevronsUp stroke={2}/>}
                     </ActionIcon>
                 </div>
             </div>
