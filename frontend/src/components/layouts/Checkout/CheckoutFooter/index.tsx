@@ -1,6 +1,6 @@
 import {ActionIcon, Button} from "@mantine/core";
 import {t} from "@lingui/macro";
-import {IconShoppingCartDown, IconShoppingCartUp} from "@tabler/icons-react";
+import {IconChevronsDown, IconChevronsUp} from "@tabler/icons-react";
 import classes from "./CheckoutFooter.module.scss";
 import {Event, Order} from "../../../../types.ts";
 import {CheckoutSidebar} from "../CheckoutSidebar";
@@ -55,7 +55,7 @@ export const CheckoutFooter = ({isLoading, buttonText, event, order, isOrderComp
                                 size={'md'}
                                 className={classes.orderSummaryToggle}
                     >
-                        {isSidebarOpen ? <IconShoppingCartDown stroke={2}/> : <IconShoppingCartUp stroke={2}/>}
+                        {isSidebarOpen ? <IconChevronsDown stroke={2}/> : <IconChevronsUp stroke={2}/>}
                     </ActionIcon>
                 </div>
             </div>
