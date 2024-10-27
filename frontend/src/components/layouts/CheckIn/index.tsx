@@ -100,7 +100,7 @@ const CheckIn = () => {
         )
     }
 
-    const handleQrCheckIn = (attendeePublicId: string, onRequestComplete: (didSucceed: void) => void, onFailure: () => void) => {
+    const handleQrCheckIn = (attendeePublicId: string, onRequestComplete: (didSucceed: bool) => void, onFailure: () => void) => {
         checkInMutation.mutate({
             checkInListShortId: checkInListShortId,
             attendeePublicId: attendeePublicId,
