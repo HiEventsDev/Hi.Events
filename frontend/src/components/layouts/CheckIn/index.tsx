@@ -100,14 +100,14 @@ const CheckIn = () => {
         )
     }
 
-    const handleQrCheckIn = (attendeePublicId: string, onRequestComplete: () => void, onFailure: () => void) => {
+    const handleQrCheckIn = (attendeePublicId: string, onRequestComplete: (didSucceed: void) => void, onFailure: () => void) => {
         checkInMutation.mutate({
             checkInListShortId: checkInListShortId,
             attendeePublicId: attendeePublicId,
         }, {
             onSuccess: ({errors}) => {
                 if (onRequestComplete) {
-                    onRequestComplete()
+                    onRequestComplete(!(errors && errors[attendeePublicId]))
                 }
                 // Show error if there is an error for this specific attendee
                 // It's a bulk endpoint, so even if there's an error it returns a 200

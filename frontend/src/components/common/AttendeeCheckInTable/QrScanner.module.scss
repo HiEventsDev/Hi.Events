@@ -63,6 +63,7 @@
     animation: colorfulBorder 10s infinite;
     border-radius: 10px;
     outline: solid 50vmax #472e7840;
+    transition: outline-color .2s ease-out;
     min-width: 200px;
     min-height: 200px;
 
@@ -70,6 +71,16 @@
         width: 40vw;
         height: 40vw;
     }
+  }
+
+  .scannerOverlay.success {
+    outline: solid 50vmax rgb(72 193 72 / 50%);
+  
+  }
+
+  .scannerOverlay.failure {
+    outline: solid 50vmax rgb(193 72 72 / 50%);
+  
   }
 
   video {

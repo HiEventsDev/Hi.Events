@@ -8,7 +8,7 @@ import {showError} from "../../../utilites/notifications.tsx";
 import {t, Trans} from "@lingui/macro";
 
 interface QRScannerComponentProps {
-    onCheckIn: (attendeePublicId: string, onRequestComplete: () => void, onFailure: () => void) => void;
+    onCheckIn: (attendeePublicId: string, onRequestComplete: (didSucceed: bool) => void, onFailure: () => void) => void;
     onClose: () => void;
 }
 
@@ -26,6 +26,8 @@ export const QRScannerComponent = (props: QRScannerComponentProps) => {
 
     const [currentAttendeeId, setCurrentAttendeeId] = useState<string | null>(null);
     const [debouncedAttendeeId] = useDebouncedValue(currentAttendeeId, 500);
+    const [isScanFailed, setIsScanFailed] = useState(false);
+    const [isScanSucceeded, setIsScanSucceeded] = useState(false);
 
     useEffect(() => {
         latestProcessedAttendeeIdsRef.current = processedAttendeeIds;
@@ -56,15 +58,33 @@ export const QRScannerComponent = (props: QRScannerComponentProps) => {
 
             if (alreadyScanned) {
                 showError(t`You already scanned this ticket`);
+                setIsScanFailed(true);
+                setInterval(function() {
+                    setIsScanFailed(false);
+                }, 1000);
                 return;
             }
 
             if (!isCheckingIn && !alreadyScanned) {
                 setIsCheckingIn(true);
-                props.onCheckIn(debouncedAttendeeId, () => {
+                props.onCheckIn(debouncedAttendeeId, (didSucceed) => {
                         setIsCheckingIn(false);
                         setProcessedAttendeeIds(prevIds => [...prevIds, debouncedAttendeeId]);
                         setCurrentAttendeeId(null);
+
+                        console.log(`Did it succeed? ${didSucceed}`)
+                        console.log(this);
+                        if (didSucceed) {
+                            setIsScanSucceeded(true);
+                            setInterval(function() {
+                                setIsScanSucceeded(false);
+                            }, 1000);
+                        } else {
+                            setIsScanFailed(true);
+                            setInterval(function() {
+                                setIsScanFailed(false);
+                            }, 1000);
+                        }
                     }, () => {
                         setIsCheckingIn(false);
                         setCurrentAttendeeId(null);
@@ -178,7 +198,7 @@ export const QRScannerComponent = (props: QRScannerComponentProps) => {
                     </Menu.Dropdown>
                 </Menu>
             </Button>
-            <div className={classes.scannerOverlay}/>
+            <div className={`${classes.scannerOverlay} ${isScanSucceeded ? classes.success : ""} ${isScanFailed ? classes.failure : ""}`}/>
         </div>
     );
 };
