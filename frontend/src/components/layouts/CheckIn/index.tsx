@@ -100,7 +100,7 @@ const CheckIn = () => {
         )
     }
 
-    const handleQrCheckIn = (attendeePublicId: string, onRequestComplete: (didSucceed: bool) => void, onFailure: () => void) => {
+    const handleQrCheckIn = (attendeePublicId: string, onRequestComplete: (didSucceed: boolean) => void, onFailure: () => void) => {
         checkInMutation.mutate({
             checkInListShortId: checkInListShortId,
             attendeePublicId: attendeePublicId,
@@ -210,7 +210,6 @@ const CheckIn = () => {
                 )}
             />)
     }
-
 
     if (checkInList?.is_expired) {
         return (

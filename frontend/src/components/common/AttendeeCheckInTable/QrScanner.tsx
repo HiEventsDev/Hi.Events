@@ -8,7 +8,7 @@ import {showError} from "../../../utilites/notifications.tsx";
 import {t, Trans} from "@lingui/macro";
 
 interface QRScannerComponentProps {
-    onCheckIn: (attendeePublicId: string, onRequestComplete: (didSucceed: bool) => void, onFailure: () => void) => void;
+    onCheckIn: (attendeePublicId: string, onRequestComplete: (didSucceed: boolean) => void, onFailure: () => void) => void;
     onClose: () => void;
 }
 
@@ -57,7 +57,6 @@ export const QRScannerComponent = (props: QRScannerComponentProps) => {
             const alreadyScanned = latestProcessedAttendeeIds.includes(debouncedAttendeeId);
 
             if (isScanSucceeded || isScanFailed) {
-                // wait for the full succeed/fail outline transition to complete
                 return;
             }
 
