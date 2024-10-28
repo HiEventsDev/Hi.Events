@@ -68,6 +68,7 @@ class CreateProductService
                 : null,
             'max_per_order' => $productsData->getMaxPerOrder(),
             'description' => $this->purifier->purify($productsData->getDescription()),
+            'start_collapsed' => $productsData->getStartCollapsed(),
             'min_per_order' => $productsData->getMinPerOrder(),
             'is_hidden' => $productsData->getIsHidden(),
             'hide_before_sale_start_date' => $productsData->getHideBeforeSaleStartDate(),

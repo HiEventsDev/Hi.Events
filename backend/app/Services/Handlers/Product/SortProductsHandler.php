@@ -2,13 +2,16 @@
 
 namespace HiEvents\Services\Handlers\Product;
 
+use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\Exceptions\ResourceConflictException;
+use HiEvents\Repository\Interfaces\ProductCategoryRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 
 readonly class SortProductsHandler
 {
     public function __construct(
-        private ProductRepositoryInterface $productRepository,
+        private ProductRepositoryInterface         $productRepository,
+        private ProductCategoryRepositoryInterface $productCategoryRepository,
     )
     {
     }
@@ -16,26 +19,55 @@ readonly class SortProductsHandler
     /**
      * @throws ResourceConflictException
      */
-    public function handle(int $eventId, array $data): void
+    public function handle(int $eventId, array $sortData): void
     {
-        $orderedProductIds = collect($data)->sortBy('order')->pluck('id')->toArray();
+        $categories = $this->productCategoryRepository
+            ->loadRelation(ProductDomainObject::class)
+            ->findWhere(['event_id' => $eventId]);
 
-        $productIdsResult = $this->productRepository->findWhere([
-            'event_id' => $eventId,
-        ])
-            ->map(fn($product) => $product->getId())
+        $existingCategoryIds = $categories->map(fn($category) => $category->getId())->toArray();
+        $existingProductIds = $categories->flatMap(fn($category) => $category->products->map(fn($product) => $product->getId()))->toArray();
+
+        $orderedCategoryIds = collect($sortData)->pluck('product_category_id')->toArray();
+        $orderedProductIds = collect($sortData)
+            ->flatMap(fn($category) => collect($category['sorted_products'])->pluck('id'))
             ->toArray();
 
-        // Check if the orderedProductIds array exactly matches the product IDs from the database
-        $missingInOrdered = array_diff($productIdsResult, $orderedProductIds);
-        $extraInOrdered = array_diff($orderedProductIds, $productIdsResult);
+        if (array_diff($existingCategoryIds, $orderedCategoryIds) || array_diff($orderedCategoryIds, $existingCategoryIds)) {
+            throw new ResourceConflictException(
+                __('The ordered category IDs must exactly match all categories for the event without missing or extra IDs.')
+            );
+        }
 
-        if (!empty($missingInOrdered) || !empty($extraInOrdered)) {
+        if (array_diff($existingProductIds, $orderedProductIds) || array_diff($orderedProductIds, $existingProductIds)) {
             throw new ResourceConflictException(
                 __('The ordered product IDs must exactly match all products for the event without missing or extra IDs.')
             );
         }
 
-        $this->productRepository->sortProducts($eventId, $orderedProductIds);
+        $productUpdates = [];
+        $categoryUpdates = [];
+
+        foreach ($sortData as $categoryIndex => $category) {
+            $categoryId = $category['product_category_id'];
+            $categoryUpdates[] = [
+                'id' => $categoryId,
+                'order' => $categoryIndex + 1,
+            ];
+
+            foreach ($category['sorted_products'] as $productIndex => $product) {
+                $productUpdates[] = [
+                    'id' => $product['id'],
+                    'order' => $productIndex + 1,
+                    'product_category_id' => $categoryId,
+                ];
+            }
+        }
+
+        $this->productRepository->bulkUpdateProductsAndCategories(
+            eventId: $eventId,
+            productUpdates: $productUpdates,
+            categoryUpdates: $categoryUpdates,
+        );
     }
 }

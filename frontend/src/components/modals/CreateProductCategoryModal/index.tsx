@@ -19,6 +19,7 @@ export const CreateProductCategoryModal = ({onClose}: GenericModalProps) => {
                 name: '',
                 description: '',
                 is_hidden: false,
+                no_products_message: t`No products available in this category.`,
             },
         },
     );

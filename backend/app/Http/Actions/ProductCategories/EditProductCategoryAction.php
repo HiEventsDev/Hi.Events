@@ -33,6 +33,7 @@ class EditProductCategoryAction extends BaseAction
             description: $request->validated('description'),
             is_hidden: $request->validated('is_hidden'),
             event_id: $eventId,
+            no_products_message: $request->validated('no_products_message'),
             product_category_id: $productCategoryId,
         ));
 

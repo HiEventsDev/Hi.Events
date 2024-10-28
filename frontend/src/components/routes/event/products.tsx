@@ -103,7 +103,6 @@ export const Products = () => {
 
             {(event && productCategories)
                 && (<ProductCategoryList
-                        enableSorting={true}
                         initialCategories={productCategories}
                         event={event}
                         searchTerm={searchTerm}

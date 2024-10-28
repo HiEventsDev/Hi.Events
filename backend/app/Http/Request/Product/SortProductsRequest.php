@@ -9,8 +9,11 @@ class SortProductsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            '*.id' => 'integer|required',
-            '*.order' => 'integer|required',
+            'sorted_categories' => 'array|required',
+            'sorted_categories.*.product_category_id' => 'integer|required',
+            'sorted_categories.*.sorted_products' => 'array|required',
+            'sorted_categories.*.sorted_products.*.id' => 'integer|required',
+            'sorted_categories.*.sorted_products.*.order' => 'integer|required', // Updated field name
         ];
     }
 }

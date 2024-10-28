@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace HiEvents\Repository\Eloquent;
 
+use Exception;
 use HiEvents\Constants;
 use HiEvents\DomainObjects\CapacityAssignmentDomainObject;
 use HiEvents\DomainObjects\Generated\ProductDomainObjectAbstract;
@@ -19,6 +20,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use RuntimeException;
+use Throwable;
 
 class ProductRepository extends BaseRepository implements ProductRepositoryInterface
 {
@@ -189,24 +191,65 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         $capacityAssignment?->products()->detach();
     }
 
-    public function sortProducts(int $eventId, array $orderedProductIds): void
+    /**
+     * @throws Throwable
+     */
+    public function bulkUpdateProductsAndCategories(int $eventId, array $productUpdates, array $categoryUpdates): void
     {
-        $parameters = [
-            'eventId' => $eventId,
-            'productIds' => '{' . implode(',', $orderedProductIds) . '}',
-            'orders' => '{' . implode(',', range(1, count($orderedProductIds))) . '}',
-        ];
+        $this->db->beginTransaction();
 
-        $query = "WITH new_order AS (
-                  SELECT unnest(:productIds::bigint[]) AS product_id,
-                         unnest(:orders::int[]) AS order
-              )
-              UPDATE products
-              SET \"order\" = new_order.order
-              FROM new_order
-              WHERE products.id = new_order.product_id AND products.event_id = :eventId";
+        try {
+            $productIds = array_column($productUpdates, 'id');
+            $productOrders = range(1, count($productUpdates));
+            $productCategoryIds = array_column($productUpdates, 'product_category_id');
 
-        $this->db->update($query, $parameters);
+            $productParameters = [
+                'eventId' => $eventId,
+                'productIds' => '{' . implode(',', $productIds) . '}',
+                'productOrders' => '{' . implode(',', $productOrders) . '}',
+                'productCategoryIds' => '{' . implode(',', $productCategoryIds) . '}',
+            ];
+
+            $productUpdateQuery = "WITH new_order AS (
+                                  SELECT unnest(:productIds::bigint[]) AS product_id,
+                                         unnest(:productOrders::int[]) AS order,
+                                         unnest(:productCategoryIds::bigint[]) AS category_id
+                              )
+                              UPDATE products
+                              SET \"order\" = new_order.order,
+                                  product_category_id = new_order.category_id,
+                                  updated_at = NOW()
+                              FROM new_order
+                              WHERE products.id = new_order.product_id AND products.event_id = :eventId";
+
+            $this->db->update($productUpdateQuery, $productParameters);
+
+            $categoryIds = array_column($categoryUpdates, 'id');
+            $categoryOrders = array_column($categoryUpdates, 'order');
+
+            $categoryParameters = [
+                'eventId' => $eventId,
+                'categoryIds' => '{' . implode(',', $categoryIds) . '}',
+                'categoryOrders' => '{' . implode(',', $categoryOrders) . '}',
+            ];
+
+            $categoryUpdateQuery = "WITH new_category_order AS (
+                                  SELECT unnest(:categoryIds::bigint[]) AS category_id,
+                                         unnest(:categoryOrders::int[]) AS order
+                              )
+                              UPDATE product_categories
+                              SET \"order\" = new_category_order.order,
+                                  updated_at = NOW()
+                              FROM new_category_order
+                              WHERE product_categories.id = new_category_order.category_id AND product_categories.event_id = :eventId";
+
+            $this->db->update($categoryUpdateQuery, $categoryParameters);
+
+            $this->db->commit();
+        } catch (Exception $e) {
+            $this->db->rollBack();
+            throw $e;
+        }
     }
 
     public function hasAssociatedOrders(int $productId): bool

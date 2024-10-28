@@ -155,6 +155,7 @@ class CreateEventService
             isHidden: false,
             eventId: $event->getId(),
             description: null,
+            noProductsMessage: __('There are no tickets available for this event.'),
         );
     }
 }

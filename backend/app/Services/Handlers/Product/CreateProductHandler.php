@@ -53,6 +53,7 @@ class CreateProductHandler
                 ->setDescription($productsData->description)
                 ->setMinPerOrder($productsData->min_per_order)
                 ->setIsHidden($productsData->is_hidden)
+                ->setStartCollapsed($productsData->start_collapsed)
                 ->setHideBeforeSaleStartDate($productsData->hide_before_sale_start_date)
                 ->setHideAfterSaleEndDate($productsData->hide_after_sale_end_date)
                 ->setHideWhenSoldOut($productsData->hide_when_sold_out)

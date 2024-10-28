@@ -61,23 +61,20 @@ class DeleteProductCategoryService
             ]
         );
 
-
         $productsWhichCanNotBeDeleted = new Collection();
 
         foreach ($productsToDelete as $product) {
             try {
                 $this->deleteProductService->deleteProduct($product->getId(), $eventId);
             } catch (CannotDeleteEntityException) {
-
                 $productsWhichCanNotBeDeleted->push($product);
             }
         }
 
         if ($productsWhichCanNotBeDeleted->isNotEmpty()) {
             throw new CannotDeleteEntityException(
-                __('You cannot delete this product category because products :products are associated with it, ' .
-                    'and they have orders associated with them. Please move the :product_name to another category.', [
-                    'products' => $productsWhichCanNotBeDeleted->pluck('name')->implode(', '),
+                __('You cannot delete this product category because it contains the following products: :products. These products are linked to existing orders. Please move the :product_name to another category before attempting to delete this one.', [
+                    'products' => $productsWhichCanNotBeDeleted->map(fn($product) => $product->getTitle())->implode(', '),
                     'product_name' => $productsWhichCanNotBeDeleted->count() > 1 ? __('products') : __('product'),
                 ])
             );

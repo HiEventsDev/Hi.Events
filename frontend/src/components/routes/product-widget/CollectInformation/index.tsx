@@ -244,6 +244,11 @@ export const CollectInformation = () => {
         );
     }
 
+    const orderRequiresAttendeeDetails = orderItems?.some(orderItem => {
+        const product = products?.find(product => product!.id === orderItem.product_id);
+        return product?.product_type === 'TICKET';
+    });
+
     return (
         <form onSubmit={form.onSubmit(handleSubmit)}>
             <CheckoutContent>
@@ -251,7 +256,7 @@ export const CollectInformation = () => {
                     component={Link}
                     to={eventHomepagePath(event as Event)}
                     variant="transparent"
-                    leftSection={<IconChevronLeft />}
+                    leftSection={<IconChevronLeft/>}
                     size={'sm'}
                     ml={'-20px'}
                 >
@@ -288,14 +293,16 @@ export const CollectInformation = () => {
 
                     {orderQuestions && <CheckoutOrderQuestions form={form} questions={orderQuestions}/>}
 
-                    <Button p={0} ml={0} size={'sm'} variant={'transparent'} leftSection={<IconCopy size={14}/>}
-                            onClick={copyDetailsToAllAttendees}>
-                        {t`Copy details to all attendees`}
-                    </Button>
+                    {orderRequiresAttendeeDetails && (
+                        <Button p={0} ml={0} size={'sm'} variant={'transparent'} leftSection={<IconCopy size={14}/>}
+                                onClick={copyDetailsToAllAttendees}>
+                            {t`Copy details to all attendees`}
+                        </Button>
+                    )}
                 </Card>
 
                 {orderItems?.map(orderItem => {
-                    const product = products?.find(product => product.id === orderItem.product_id);
+                    const product = products?.find(product => product!.id === orderItem.product_id);
                     const productRequiresDetails = product?.product_type === 'TICKET';
                     const productHasQuestions = productQuestions?.some(question => question.product_ids?.includes(orderItem.product_id));
 

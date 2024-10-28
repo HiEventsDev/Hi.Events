@@ -25,7 +25,7 @@ class SortProductsAction extends BaseAction
         try {
             $this->sortProductsHandler->handle(
                 $eventId,
-                $request->validated(),
+                $request->validated('sorted_categories'),
             );
         } catch (ResourceConflictException $e) {
             return $this->errorResponse($e->getMessage(), Response::HTTP_CONFLICT);

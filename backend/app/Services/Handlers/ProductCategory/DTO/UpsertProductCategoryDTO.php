@@ -11,6 +11,7 @@ class UpsertProductCategoryDTO extends BaseDTO
         public ?string $description,
         public bool    $is_hidden,
         public int     $event_id,
+        public ?string $no_products_message = '',
         public ?int    $product_category_id = null,
     )
     {

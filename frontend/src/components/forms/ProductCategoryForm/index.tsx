@@ -18,6 +18,13 @@ export const ProductCategoryForm = ({form}: ProductCategoryFormProps) => {
                 {...form.getInputProps("name")}
             />
 
+            <TextInput
+                label={"No products message"}
+                description={"A message to display when there are no products in this category."}
+                required
+                {...form.getInputProps("no_products_message")}
+            />
+
             <Editor
                 label={"Description"}
                 description={"An optional description of this category to display on the event page."}

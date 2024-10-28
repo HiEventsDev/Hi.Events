@@ -80,12 +80,14 @@ interface ProductRepositoryInterface extends RepositoryInterface
      */
     public function removeCapacityAssignmentFromProducts(int $capacityAssignmentId): void;
 
+
     /**
      * @param int $eventId
-     * @param array $orderedProductIds
+     * @param array $productUpdates
+     * @param array $categoryUpdates
      * @return void
      */
-    public function sortProducts(int $eventId, array $orderedProductIds): void;
+    public function bulkUpdateProductsAndCategories(int $eventId, array $productUpdates, array $categoryUpdates): void;
 
     public function hasAssociatedOrders(int $productId): bool;
 }

@@ -18,6 +18,7 @@ class CreateProductCategoryService
         bool    $isHidden,
         int     $eventId,
         ?string $description,
+        ?string $noProductsMessage,
     ): ProductCategoryDomainObject
     {
         return $this->productCategoryRepository->create([
@@ -26,6 +27,7 @@ class CreateProductCategoryService
             'is_hidden' => $isHidden,
             'event_id' => $eventId,
             'order' => $this->productCategoryRepository->getNextOrder($eventId),
+            'no_products_message' => $noProductsMessage,
         ]);
     }
 }

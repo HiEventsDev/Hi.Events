@@ -32,8 +32,10 @@ export const productClient = {
         const response = await api.delete<GenericDataResponse<Product>>(`/events/${eventId}/products/${productId}`);
         return response.data;
     },
-    sortProducts: async (eventId: IdParam, productSort: SortableItem[]) => {
-        return await api.post(`/events/${eventId}/products/sort`, productSort);
+    sortAllProducts: async (eventId: IdParam, sortedCategories: { product_category_id: IdParam, sorted_products: SortableItem[] }[]) => {
+        return await api.post(`/events/${eventId}/products/sort`, {
+            'sorted_categories': sortedCategories,
+        });
     }
 }
 

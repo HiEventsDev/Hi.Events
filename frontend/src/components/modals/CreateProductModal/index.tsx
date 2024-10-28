@@ -29,6 +29,7 @@ export const CreateProductModal = ({onClose, selectedCategoryId = undefined}: Cr
             min_per_order: 1,
             sale_start_date: '',
             sale_end_date: '',
+            start_collapsed: false,
             hide_before_sale_start_date: false,
             hide_after_sale_end_date: false,
             show_quantity_remaining: false,

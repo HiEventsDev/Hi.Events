@@ -12,8 +12,8 @@ export const useDeleteProduct = () => {
             eventId: IdParam,
         }) => productClient.delete(eventId, productId),
 
-        onSuccess: (_, variables) => queryClient.invalidateQueries({
-            queryKey: [GET_EVENT_PRODUCT_CATEGORIES_QUERY_KEY, variables.eventId],
+        onSuccess: () => queryClient.invalidateQueries({
+            queryKey: [GET_EVENT_PRODUCT_CATEGORIES_QUERY_KEY],
         })
     });
 }

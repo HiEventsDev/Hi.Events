@@ -1,4 +1,4 @@
-import {GenericModalProps, IdParam,} from "../../../types.ts";
+import {GenericModalProps, IdParam, Product, QuestionAnswer,} from "../../../types.ts";
 import {useParams} from "react-router-dom";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {useGetOrder} from "../../../queries/useGetOrder.ts";
@@ -22,8 +22,8 @@ export const ViewOrderModal = ({onClose, orderId}: GenericModalProps & ViewOrder
     const {data: order} = useGetOrder(eventId, orderId);
     const {data: event, data: {product_categories: productCategories} = {}} = useGetEvent(eventId);
     const products = productCategories?.flatMap(category => category.products);
-
-    console.log(event);
+    const orderHasQuestions = order?.question_answers && order.question_answers.length > 0;
+    const orderHasAttendees = order?.attendees && order.attendees.length > 0;
 
     if (!order || !event) {
         return null;
@@ -57,25 +57,32 @@ export const ViewOrderModal = ({onClose, orderId}: GenericModalProps & ViewOrder
                     </Tabs.Tab>
                 </Tabs.List>
 
-                <Card variant={'noStyle'} style={{padding: rem(20), borderTop: 0, borderRadius: 0}}>
+                <Card variant={'noStyle'} style={{padding: rem(20), paddingBottom: 0, borderTop: 0, borderRadius: 0}}>
                     <Tabs.Panel value="summary">
                         <OrderSummary event={event} order={order}/>
                     </Tabs.Panel>
 
                     <Tabs.Panel value="questions">
-                        {(order.question_answers && order.question_answers.length > 0)
+                        {orderHasQuestions
                             && (
                                 <>
-                                    <QuestionAndAnswerList questionAnswers={order.question_answers}/>
+                                    <QuestionAndAnswerList
+                                        questionAnswers={order.question_answers as QuestionAnswer[]}/>
                                 </>
                             )}
+
+                        {!orderHasQuestions && (
+                            <p>No questions have been asked for this order.</p>
+                        )}
                     </Tabs.Panel>
 
                     <Tabs.Panel value="attendees">
-                        {products && (
-                            <>
-                                <AttendeeList order={order} products={products}/>
-                            </>
+                        {(orderHasAttendees) && (
+                            <AttendeeList order={order} products={products as Product[]}/>
+                        )}
+
+                        {!orderHasAttendees && (
+                            <p>No attendees have been added to this order.</p>
                         )}
                     </Tabs.Panel>
                 </Card>

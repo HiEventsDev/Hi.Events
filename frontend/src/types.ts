@@ -347,6 +347,7 @@ export interface ProductCategory {
     products?: Product[];
     event_id?: number;
     is_hidden?: boolean;
+    no_products_message?: string;
 }
 
 export interface Attendee {

@@ -92,7 +92,6 @@ const SelectProducts = (props: SelectProductsProps) => {
         },
     });
 
-    //todo - replace with hook
     const productMutation = useMutation({
         mutationFn: (orderData: ProductFormPayload) => orderClientPublic.create(Number(eventId), orderData),
 
@@ -114,7 +113,7 @@ const SelectProducts = (props: SelectProductsProps) => {
             }
 
             notifications.show({
-                message: error.response.data.errors?.products[0] || t`Unable to create product. Please check the your details`,
+                message: error.response.data.errors?.products[0] || t`Unable to create product. Please check your details`,
                 color: 'red',
             });
         }
@@ -134,7 +133,6 @@ const SelectProducts = (props: SelectProductsProps) => {
                 }
             }
 
-            // fetch fresh event even if the promo code is removed.
             const eventWithPromoCodeApplied = await eventsClientPublic.findByID(
                 eventId,
                 promoCode
@@ -165,11 +163,11 @@ const SelectProducts = (props: SelectProductsProps) => {
         });
 
         return total;
-    }, [form.values.products]); // Only recompute when the form's products change
+    }, [form.values.products]);
 
     useEffect(() => {
         if (form.values.promo_code) {
-            const promo_code = form.values.promo_code
+            const promo_code = form.values.promo_code;
             showSuccess(t`Promo ${promo_code} code applied`);
             addQueryStringToUrl('promo_code', promo_code);
         }
@@ -189,15 +187,13 @@ const SelectProducts = (props: SelectProductsProps) => {
         products?.forEach(product => {
             const quantitiesValues: Array<ProductPriceQuantityFormValue> = [];
 
-            // Check if the form already has the product and preserve existing quantities
             const existingProduct = form.values.products?.find(p => p.product_id === product.id);
 
             product.prices?.forEach(priceQuantity => {
-                // If the product exists, preserve its current quantity
                 const existingQuantity = existingProduct?.quantities?.find(q => q.price_id === priceQuantity.id)?.quantity || 0;
 
                 quantitiesValues.push({
-                    quantity: existingQuantity, // Use existing quantity if available
+                    quantity: existingQuantity,
                     price_id: Number(priceQuantity.id),
                     price: product.type === 'DONATION' ? Number(priceQuantity.price) : undefined,
                 });
@@ -217,7 +213,6 @@ const SelectProducts = (props: SelectProductsProps) => {
             });
         });
 
-        // Only update form if the product structure has changed
         if (JSON.stringify(form.values.products) !== JSON.stringify(productValues)) {
             form.setFieldValue("products", productValues);
         }
@@ -303,124 +298,106 @@ const SelectProducts = (props: SelectProductsProps) => {
                     <Input type={'hidden'} {...form.getInputProps('promo_code')} />
                     <div className={'hi-product-category-rows'}>
                         {productCategories && productCategories.map((category) => {
-                                return (
-                                    <div className={'hi-product-category-row'} key={category.id}>
-                                        <h2 className={'hi-product-category-title'}>
-                                            {category.name}
-                                        </h2>
-                                        <div className={'hi-product-rows'}>
-                                            {(category.products) && category.products.map((product) => {
-                                                const quantityRange = range(product.min_per_order || 1, product.max_per_order || 25)
-                                                    .map((n) => n.toString());
-                                                quantityRange.unshift("0");
-
-                            const [ticketIsCollapsed, {toggle: collapseTicket}] = useDisclosure(!ticket.start_collapsed);
-
                             return (
-                                <div key={ticket.id} className={'hi-ticket-row'}>
-                                    <div className={'hi-title-row'}>
-                                        <UnstyledButton variant={'transparent'}
-                                                        className={'hi-ticket-title'}
-                                                        onClick={collapseTicket}
-                                        >
-                                            <h3>
-                                                {ticket.title}
-                                            </h3>
-                                            <div className={'hi-ticket-title-metadata'}>
-                                                {(ticket.is_available && !!ticket.quantity_available) && (
-                                                    <>
-                                                        {ticket.quantity_available === Constants.INFINITE_TICKETS && (
-                                                            <Trans>
-                                                                Unlimited available
-                                                            </Trans>
-                                                        )}
-                                                        {ticket.quantity_available !== Constants.INFINITE_TICKETS && (
-                                                            <Trans>
-                                                                {ticket.quantity_available} available
-                                                            </Trans>
-                                                        )}
-                                                    </>
-                                                )}
+                                <div className={'hi-product-category-row'} key={category.id}>
+                                    <h2 className={'hi-product-category-title'}>
+                                        {category.name}
+                                    </h2>
+                                    <div className={'hi-product-rows'}>
 
-                                                {(!ticket.is_available && ticket.type === 'TIERED') && (
-                                                    <TicketAvailabilityMessage ticket={ticket} event={event}/>
-                                                )}
-
-                                                <span className={'hi-ticket-collapse-arrow'}>
-                                                    {ticketIsCollapsed ? '\u25BC' : '\u25B6'}
-                                                </span>
-                                            </div>
-                                        </UnstyledButton>
-                                    </div>
-
-                                    <Collapse in={ticketIsCollapsed} className={'hi-ticket-content'}>
-                                        <div className={'hi-price-tiers-rows'}>
-                                            <TieredPricing
-                                                ticketIndex={ticketIndex}
-                                                event={event}
-                                                ticket={ticket}
-                                                form={form}
-                                            />
-                                        </div>
-
-                                        {ticket.max_per_order && form.values.tickets && isObjectEmpty(form.errors) && (form.values.tickets[ticketIndex]?.quantities.reduce((acc, {quantity}) => acc + Number(quantity), 0) > ticket.max_per_order) && (
-                                            <div className={'hi-ticket-quantity-error'}>
-                                                <Trans>The maximum numbers number of tickets for {ticket.title}
-                                                    is {ticket.max_per_order}</Trans>
+                                        {category.products?.length === 0 && (
+                                            <div className={'hi-no-products'}>
+                                                <p className={'hi-no-products-message'}>
+                                                    {category.no_products_message || t`There are no products available in this category`}
+                                                </p>
                                             </div>
                                         )}
+
+                                        {(category.products) && category.products.map((product) => {
+                                            const quantityRange = range(product.min_per_order || 1, product.max_per_order || 25)
+                                                .map((n) => n.toString());
+                                            quantityRange.unshift("0");
+
+                                            const [productIsCollapsed, {toggle: collapseProduct}] = useDisclosure(!product.start_collapsed);
+
+                                            return (
+                                                <div key={product.id} className={'hi-product-row'}>
+                                                    <div className={'hi-title-row'}>
+                                                        <UnstyledButton variant={'transparent'}
+                                                                        className={'hi-product-title'}
+                                                                        onClick={collapseProduct}
+                                                        >
+                                                            <h3>
+                                                                {product.title}
+                                                            </h3>
+                                                            <div className={'hi-product-title-metadata'}>
+                                                                {(product.is_available && !!product.quantity_available) && (
+                                                                    <>
+                                                                        {product.quantity_available === Constants.INFINITE_TICKETS && (
+                                                                            <Trans>
+                                                                                Unlimited available
+                                                                            </Trans>
+                                                                        )}
+                                                                        {product.quantity_available !== Constants.INFINITE_TICKETS && (
+                                                                            <Trans>
+                                                                                {product.quantity_available} available
+                                                                            </Trans>
+                                                                        )}
+                                                                    </>
+                                                                )}
+
+                                                                {(!product.is_available && product.type === 'TIERED') && (
+                                                                    <ProductAvailabilityMessage product={product} event={event}/>
+                                                                )}
+
+                                                                <span className={'hi-product-collapse-arrow'}>
+                                                                    {productIsCollapsed ? '\u25BC' : '\u25B6'}
+                                                                </span>
+                                                            </div>
+                                                        </UnstyledButton>
+                                                    </div>
+
+                                                    <Collapse in={productIsCollapsed} className={'hi-product-content'}>
+                                                        <div className={'hi-price-tiers-rows'}>
+                                                            <TieredPricing
+                                                                productIndex={productIndex++}
+                                                                event={event}
+                                                                product={product}
+                                                                form={form}
+                                                            />
+                                                        </div>
+
                                                         {product.max_per_order && form.values.products && isObjectEmpty(form.errors) && (form.values.products[productIndex]?.quantities.reduce((acc, {quantity}) => acc + Number(quantity), 0) > product.max_per_order) && (
                                                             <div className={'hi-product-quantity-error'}>
-                                                                <Trans>The maximum numbers number of products
-                                                                    for {product.title}
+                                                                <Trans>The maximum number of products for {product.title}
                                                                     is {product.max_per_order}</Trans>
                                                             </div>
                                                         )}
 
-                                        {form.errors[`tickets.${ticketIndex}`] && (
-                                            <div className={'hi-ticket-quantity-error'}>
-                                                {form.errors[`tickets.${ticketIndex}`]}
-                                            </div>
-                                        )}
                                                         {form.errors[`products.${productIndex}`] && (
                                                             <div className={'hi-product-quantity-error'}>
                                                                 {form.errors[`products.${productIndex}`]}
                                                             </div>
                                                         )}
 
-                                        {ticket.description && (
-                                            <div
-                                                className={'hi-ticket-description-row'}>
-                                                <Spoiler maxHeight={87} showLabel={t`Show more`} hideLabel={t`Hide`}>
-                                                    <div dangerouslySetInnerHTML={{
-                                                        __html: ticket.description
-                                                    }}/>
-                                                </Spoiler>
-                                            </div>
-                                        )}
-                                    </Collapse>
-                                </div>
-                            )
-                        })}
                                                         {product.description && (
                                                             <div
                                                                 className={'hi-product-description-row'}>
-                                                                <Spoiler maxHeight={87} showLabel={t`Show more`}
-                                                                         hideLabel={t`Hide`}>
+                                                                <Spoiler maxHeight={87} showLabel={t`Show more`} hideLabel={t`Hide`}>
                                                                     <div dangerouslySetInnerHTML={{
                                                                         __html: product.description
                                                                     }}/>
                                                                 </Spoiler>
                                                             </div>
                                                         )}
-                                                    </div>
-                                                )
-                                            })}
-                                        </div>
+                                                    </Collapse>
+                                                </div>
+                                            )
+                                        })}
                                     </div>
-                                )
-                            }
-                        )}
+                                </div>
+                            )
+                        })}
                     </div>
 
                     <div className={'hi-footer-row'}>

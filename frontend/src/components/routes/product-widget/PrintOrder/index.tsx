@@ -40,7 +40,7 @@ export const PrintOrder = () => {
     return (
         <>
             <Container>
-                <h2>{t`Products for`} {event.title}</h2>
+                <h2>{t`Tickets for`} {event.title}</h2>
                 {order.attendees?.map((attendee) => {
                     return (
                         <AttendeeProduct

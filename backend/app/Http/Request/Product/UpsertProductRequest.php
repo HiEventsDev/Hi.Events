@@ -51,6 +51,7 @@ class UpsertProductRequest extends BaseRequest
             'prices.*.sale_end_date.after' => __('The sale end date must be after the sale start date.'),
             'prices.*.sale_end_date.date' => __('The sale end date must be a valid date.'),
             'prices.*.sale_start_date.after' => __('The sale start date must be after the product sale start date.'),
+            'product_category_id.required' => __('You must select a product category.'),
         ];
     }
 }

@@ -21,6 +21,7 @@ class CreateProductCategoryHandler
             isHidden: $dto->is_hidden,
             eventId: $dto->event_id,
             description: $dto->description,
+            noProductsMessage: $dto->no_products_message,
         );
     }
 }

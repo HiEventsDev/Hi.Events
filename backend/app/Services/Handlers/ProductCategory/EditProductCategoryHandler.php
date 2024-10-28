@@ -21,6 +21,7 @@ class EditProductCategoryHandler
                 'name' => $dto->name,
                 'is_hidden' => $dto->is_hidden,
                 'description' => $dto->description,
+                'no_products_message' => $dto->no_products_message,
             ],
             where: [
                 'id' => $dto->product_category_id,

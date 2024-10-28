@@ -84,17 +84,19 @@ export const OrderSummaryAndProducts = () => {
 
                 {(event?.settings?.is_online_event && <OnlineEventDetails eventSettings={event.settings}/>)}
 
-                <Group justify={'space-between'}>
-                    <h2 className={classes.subHeading}>{t`Guests`}</h2>
-                    <Button
-                        size={'sm'}
-                        variant={'transparent'}
-                        leftSection={<IconPrinter size={16}/>}
-                        onClick={() => window?.open(`/order/${eventId}/${orderShortId}/print`, '_blank')}
-                    >
-                        {t`Print All Products`}
-                    </Button>
-                </Group>
+                {(order?.attendees && order.attendees.length > 0) && (
+                    <Group justify={'space-between'}>
+                        <h2 className={classes.subHeading}>{t`Guests`}</h2>
+                        <Button
+                            size={'sm'}
+                            variant={'transparent'}
+                            leftSection={<IconPrinter size={16}/>}
+                            onClick={() => window?.open(`/order/${eventId}/${orderShortId}/print`, '_blank')}
+                        >
+                            {t`Print All Tickets`}
+                        </Button>
+                    </Group>
+                )}
 
                 {order.attendees?.map((attendee) => {
                     return (

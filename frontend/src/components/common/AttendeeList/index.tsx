@@ -2,7 +2,7 @@ import {ActionIcon, Avatar, Tooltip} from "@mantine/core";
 import {getInitials} from "../../../utilites/helpers.ts";
 import Truncate from "../Truncate";
 import {NavLink} from "react-router-dom";
-import {IconExternalLink, IconEye} from "@tabler/icons-react";
+import {IconExternalLink} from "@tabler/icons-react";
 import classes from './AttendeeList.module.scss';
 import {Order, Product} from "../../../types.ts";
 import {t} from "@lingui/macro";

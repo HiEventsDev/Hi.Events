@@ -1,13 +1,15 @@
-import { Card } from "../Card";
-import { QuestionAnswer } from "../../../types.ts";
-import { Table } from '@mantine/core';
+import {QuestionAnswer} from "../../../types.ts";
+import {ActionIcon, Table, Tooltip} from '@mantine/core';
+import {t} from "@lingui/macro";
+import {NavLink} from "react-router-dom";
+import {IconExternalLink} from "@tabler/icons-react";
 
 interface QuestionAndAnswerListProps {
     questionAnswers: QuestionAnswer[];
     belongsToFilter?: string[];  // Array of filter values
 }
 
-export const QuestionAndAnswerList = ({ questionAnswers, belongsToFilter }: QuestionAndAnswerListProps) => {
+export const QuestionAndAnswerList = ({questionAnswers, belongsToFilter}: QuestionAndAnswerListProps) => {
     // Filter questionAnswers by 'belongs_to' array if the filter is applied
     const filteredQuestions = belongsToFilter && belongsToFilter.length > 0
         ? questionAnswers.filter(qa => belongsToFilter.includes(qa.belongs_to))
@@ -20,42 +22,51 @@ export const QuestionAndAnswerList = ({ questionAnswers, belongsToFilter }: Ques
 
     // Function to render a table for a given category of questions
     const renderTable = (title: string, questions: QuestionAnswer[], showProductColumn = true) => (
-        <Card variant={'lightGray'} style={{ marginBottom: '1rem' }}>
-            <h3 style={{ textAlign: 'left', marginBottom: '1rem', marginTop: 0 }}>{title}</h3>
+        <div style={{marginBottom: '2rem'}}>
+            <h3 style={{textAlign: 'left', marginBottom: '1rem', marginTop: 0}}>{title}</h3>
             {questions.length > 0 ? (
-                <Table striped highlightOnHover withBorder withColumnBorders>
-                    <thead>
-                    <tr>
-                        {showProductColumn && <th style={{ textAlign: 'left' }}>Product</th>}
-                        <th style={{ textAlign: 'left' }}>Question</th>
-                        <th style={{ textAlign: 'left' }}>Answer</th>
-                        {title === "Attendee Answers" && <th style={{ textAlign: 'left' }}>Attendee</th>}
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {questions.map((qa, index) => (
-                        <tr key={index}>
-                            {showProductColumn && <td>{qa.product_title || 'N/A'}</td>}
-                            <td>{qa.title}</td>
-                            <td>{Array.isArray(qa.answer) ? qa.answer.join(", ") : qa.answer}</td>
-                            {title === "Attendee Answers" && (
-                                <td>{qa.first_name ? `${qa.first_name} ${qa.last_name}` : 'N/A'}</td>
-                            )}
-                        </tr>
-                    ))}
-                    </tbody>
+                <Table    withTableBorder >
+                    <Table.Thead>
+                        <Table.Tr>
+                            {showProductColumn && <Table.Th style={{textAlign: 'left'}}>Product</Table.Th>}
+                            <Table.Th style={{textAlign: 'left'}}>Question</Table.Th>
+                            <Table.Th style={{textAlign: 'left'}}>Answer</Table.Th>
+                            {title === "Attendee Answers" && <Table.Th style={{textAlign: 'left'}}>Attendee</Table.Th>}
+                        </Table.Tr>
+                    </Table.Thead>
+                    <Table.Tbody>
+                        {questions.map((qa, index) => (
+                            <Table.Tr key={index}>
+                                {showProductColumn && <Table.Td>{qa.product_title || 'N/A'}</Table.Td>}
+                                <Table.Td>{qa.title}</Table.Td>
+                                <Table.Td>{Array.isArray(qa.answer) ? qa.answer.join(", ") : qa.answer}</Table.Td>
+                                {title === "Attendee Answers" && (
+                                    <Table.Td>
+                                        {qa.first_name ? `${qa.first_name} ${qa.last_name}` : 'N/A'}
+                                        <Tooltip label={t`Navigate to Attendee`} position={'bottom'} withArrow>
+                                            <NavLink to={`../attendees?query=${qa.attendee_id}`}>
+                                                <ActionIcon variant={'transparent'} radius={'m'}>
+                                                    <IconExternalLink size={16}/>
+                                                </ActionIcon>
+                                            </NavLink>
+                                        </Tooltip>
+                                    </Table.Td>
+                                )}
+                            </Table.Tr>
+                        ))}
+                    </Table.Tbody>
                 </Table>
             ) : (
                 <p>No {title.toLowerCase()} questions available.</p>
             )}
-        </Card>
+        </div>
     );
 
     return (
         <div>
-            {renderTable('Attendee Answers', attendeeQuestions)}
-            {renderTable('Order Answers', orderQuestions, false)}
-            {renderTable('Products Answers', productQuestions)}
+            {attendeeQuestions.length > 0 && renderTable('Attendee Answers', attendeeQuestions)}
+            {orderQuestions.length > 0 && renderTable('Order Answers', orderQuestions, false)}
+            {productQuestions.length > 0 && renderTable('Products Answers', productQuestions)}
         </div>
     );
 }

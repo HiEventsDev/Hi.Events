@@ -42,6 +42,10 @@ class ProductFilterService
         $products = $productsCategories
             ->flatMap(fn(ProductCategoryDomainObject $category) => $category->getProducts());
 
+        if ($products->isEmpty()) {
+            return $productsCategories;
+        }
+
         $productQuantities = $this
             ->fetchAvailableProductQuantitiesService
             ->getAvailableProductQuantities($products->first()->getEventId());

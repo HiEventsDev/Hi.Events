@@ -4,7 +4,7 @@ import {IconPlus} from "@tabler/icons-react";
 import {t, Trans} from "@lingui/macro";
 
 interface ProductsBlankSlateProps {
-    openCreateModal: () => void;
+    openCreateModal: (categoryId?: string) => void;
     productCategories: any;
     searchTerm: string;
 }
@@ -46,7 +46,9 @@ export const ProductsBlankSlate = ({openCreateModal, productCategories, searchTe
                             size={'xs'}
                             leftSection={<IconPlus/>}
                             color={'green'}
-                            onClick={openCreateModal}>{t`Add Product to Category`}
+                            onClick={() => openCreateModal()}
+                        >
+                            {t`Add Product to Category`}
                         </Button>
                     </>
                 )}
@@ -62,7 +64,8 @@ export const ProductsBlankSlate = ({openCreateModal, productCategories, searchTe
                 size={'xs'}
                 leftSection={<IconPlus/>}
                 color={'green'}
-                onClick={openCreateModal}>{t`Add Product`}
+                onClick={() => openCreateModal()}
+            >{t`Add Product`}
             </Button>
         </div>
     )

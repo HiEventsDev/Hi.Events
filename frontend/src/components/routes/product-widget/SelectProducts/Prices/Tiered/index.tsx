@@ -1,11 +1,11 @@
 import {Currency, ProductPriceDisplay} from "../../../../../common/Currency";
 import {Event, Product} from "../../../../../../types.ts";
 import {Group, TextInput} from "@mantine/core";
-import {NumberSelector, SharedValues} from "../../../../../common/NumberSelector";
+import {NumberSelector} from "../../../../../common/NumberSelector";
 import {UseFormReturnType} from "@mantine/form";
 import {t} from "@lingui/macro";
 import {ProductPriceAvailability} from "../../../../../common/ProductPriceAvailability";
-import { getCurrencySymbol } from "../../../../../../utilites/currency.ts";
+import {getCurrencySymbol} from "../../../../../../utilites/currency.ts";
 
 interface TieredPricingProps {
     event: Event;
@@ -17,7 +17,6 @@ interface TieredPricingProps {
 export const TieredPricing = ({product, event, form, productIndex}: TieredPricingProps) => {
     return (
         <>
-            {productIndex}<br/>
             {product?.prices?.map((price, index) => {
                 return (
                     <div key={index} className={'hi-price-tier-row'}>
