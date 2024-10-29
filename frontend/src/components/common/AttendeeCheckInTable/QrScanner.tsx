@@ -31,6 +31,7 @@ export const QRScannerComponent = (props: QRScannerComponentProps) => {
 
     const scanSuccessAudioRef = useRef(null);
     const scanErrorAudioRef = useRef(null);
+    const scanInProgressAudioRef = useRef(null);
 
     const [isSoundOn, setIsSoundOn] = useState(() => {
         const storedIsSoundOn = localStorage.getItem("qrScannerSoundOn");
@@ -94,6 +95,11 @@ export const QRScannerComponent = (props: QRScannerComponentProps) => {
 
             if (!isCheckingIn && !alreadyScanned) {
                 setIsCheckingIn(true);
+
+                if (isSoundOn && scanInProgressAudioRef.current) {
+                    scanInProgressAudioRef.current.play();
+                }
+
                 props.onCheckIn(debouncedAttendeeId, (didSucceed) => {
                         setIsCheckingIn(false);
                         setProcessedAttendeeIds(prevIds => [...prevIds, debouncedAttendeeId]);
@@ -220,6 +226,7 @@ export const QRScannerComponent = (props: QRScannerComponentProps) => {
             </Button>
             <audio ref={scanSuccessAudioRef} src="/public/sounds/scan-success.wav" />
             <audio ref={scanErrorAudioRef} src="/public/sounds/scan-error.wav" />
+            <audio ref={scanInProgressAudioRef} src="/public/sounds/scan-in-progress.wav" />
             <Button onClick={handleClose} variant={'transparent'} className={classes.closeButton}>
                 <IconX color={'#ffffff95'} size={30}/>
             </Button>
