@@ -81,8 +81,8 @@ export const QRScannerComponent = (props: QRScannerComponentProps) => {
                 setInterval(function() {
                     setIsScanFailed(false);
                 }, 500);
-                if (isSoundOn && scanSuccessAudioRef.current) {
-                    scanSuccessAudioRef.current.play();
+                if (isSoundOn && scanErrorAudioRef.current) {
+                    scanErrorAudioRef.current.play();
                 }
 
                 return;
