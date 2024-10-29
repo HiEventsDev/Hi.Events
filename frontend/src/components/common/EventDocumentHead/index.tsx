@@ -10,7 +10,7 @@ interface EventDocumentHeadProps {
 
 export const EventDocumentHead = ({event}: EventDocumentHeadProps) => {
     const eventSettings = event.settings;
-    const title = (eventSettings?.seo_title ?? event.title) + ' | ' + `Hi.Events`;
+    const title = (eventSettings?.seo_title ?? event.title) + ' | ' + event.organizer?.name;
     const description = eventSettings?.seo_description ?? event.description_preview;
     const keywords = eventSettings?.seo_keywords;
     const image = eventCoverImageUrl(event);

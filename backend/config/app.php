@@ -45,6 +45,7 @@ return [
     ],
 
     'email_logo_url' => env('APP_EMAIL_LOGO_URL'),
+    'email_logo_link_url' => env('APP_EMAIL_LOGO_LINK_URL', env('APP_FRONTEND_URL', 'http://localhost')),
     'email_footer_text' => env('APP_EMAIL_FOOTER_TEXT'),
 
     /*

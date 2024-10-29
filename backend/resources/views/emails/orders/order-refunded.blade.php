@@ -10,7 +10,8 @@
 
 {{ __('You have received a refund of :refundAmount for the following event: :eventTitle.', ['refundAmount' => $refundAmount, 'eventTitle' => $event->getTitle()]) }}
 
-{{ __('Thank you') }}
+{{ __('Thank you') }},<br>
+{{ config('app.name') }}
 
 {!! $eventSettings->getGetEmailFooterHtml() !!}
 </x-mail::message>
