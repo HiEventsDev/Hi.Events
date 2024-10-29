@@ -38,14 +38,6 @@ export const QRScannerComponent = (props: QRScannerComponentProps) => {
         return storedIsSoundOn == undefined ? true : storedIsSoundOn === "true";
     });
 
-    console.log(isSoundOn);
-
-
-    useEffect(() => {
-        //const storedSoundSetting = ;
-        //setIsSoundOn(storedSoundSetting);
-    }, []);
-
     useEffect(() => {
         localStorage.setItem('qrScannerSoundOn', isSoundOn);
     }, [isSoundOn]);
@@ -224,9 +216,9 @@ export const QRScannerComponent = (props: QRScannerComponentProps) => {
             <Button onClick={handleSoundToggle} variant={'transparent'} className={classes.soundToggle}>
                 {isSoundOn ? <IconVolume color={'#ffffff95'} size={30}/> : <IconVolume3 color={'#66666695'} size={30}/>}
             </Button>
-            <audio ref={scanSuccessAudioRef} src="/public/sounds/scan-success.wav" />
-            <audio ref={scanErrorAudioRef} src="/public/sounds/scan-error.wav" />
-            <audio ref={scanInProgressAudioRef} src="/public/sounds/scan-in-progress.wav" />
+            <audio ref={scanSuccessAudioRef} src="/sounds/scan-success.wav" />
+            <audio ref={scanErrorAudioRef} src="/sounds/scan-error.wav" />
+            <audio ref={scanInProgressAudioRef} src="/sounds/scan-in-progress.wav" />
             <Button onClick={handleClose} variant={'transparent'} className={classes.closeButton}>
                 <IconX color={'#ffffff95'} size={30}/>
             </Button>
