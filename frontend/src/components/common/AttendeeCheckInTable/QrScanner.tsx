@@ -222,7 +222,7 @@ export const QRScannerComponent = (props: QRScannerComponentProps) => {
                 {isFlashAvailable && <IconBulb color={isFlashOn ? 'yellow' : '#ffffff95'} size={30}/>}
             </Button>
             <Button onClick={handleSoundToggle} variant={'transparent'} className={classes.soundToggle}>
-                {isSoundOn ? <IconVolume color={'#ffffff95'} size={30}/> : <IconVolume3 color={'#e32b2b95'} size={30}/>}
+                {isSoundOn ? <IconVolume color={'#ffffff95'} size={30}/> : <IconVolume3 color={'#66666695'} size={30}/>}
             </Button>
             <audio ref={scanSuccessAudioRef} src="/public/sounds/scan-success.wav" />
             <audio ref={scanErrorAudioRef} src="/public/sounds/scan-error.wav" />
