@@ -2,7 +2,7 @@ import {useEffect, useRef, useState} from 'react';
 import QrScanner from 'qr-scanner';
 import {useDebouncedValue} from '@mantine/hooks';
 import classes from './QrScanner.module.scss';
-import {IconBulb, IconBulbOff, IconCameraRotate, IconX, IconVolume, IconVolume3} from "@tabler/icons-react";
+import {IconBulb, IconBulbOff, IconCameraRotate, IconVolume, IconVolumeOff, IconX} from "@tabler/icons-react";
 import {Anchor, Button, Menu} from "@mantine/core";
 import {showError} from "../../../utilites/notifications.tsx";
 import {t, Trans} from "@lingui/macro";
@@ -29,17 +29,17 @@ export const QRScannerComponent = (props: QRScannerComponentProps) => {
     const [isScanFailed, setIsScanFailed] = useState(false);
     const [isScanSucceeded, setIsScanSucceeded] = useState(false);
 
-    const scanSuccessAudioRef = useRef(null);
-    const scanErrorAudioRef = useRef(null);
-    const scanInProgressAudioRef = useRef(null);
+    const scanSuccessAudioRef = useRef<HTMLAudioElement | null>(null);
+    const scanErrorAudioRef = useRef<HTMLAudioElement | null>(null);
+    const scanInProgressAudioRef = useRef<HTMLAudioElement | null>(null);
 
     const [isSoundOn, setIsSoundOn] = useState(() => {
         const storedIsSoundOn = localStorage.getItem("qrScannerSoundOn");
-        return storedIsSoundOn == undefined ? true : storedIsSoundOn === "true";
+        return storedIsSoundOn === null ? true : JSON.parse(storedIsSoundOn);
     });
 
     useEffect(() => {
-        localStorage.setItem('qrScannerSoundOn', isSoundOn);
+        localStorage.setItem("qrScannerSoundOn", JSON.stringify(isSoundOn));
     }, [isSoundOn]);
 
 
@@ -78,7 +78,7 @@ export const QRScannerComponent = (props: QRScannerComponentProps) => {
                 showError(t`You already scanned this ticket`);
 
                 setIsScanFailed(true);
-                setInterval(function() {
+                setInterval(function () {
                     setIsScanFailed(false);
                 }, 500);
                 if (isSoundOn && scanErrorAudioRef.current) {
@@ -102,7 +102,7 @@ export const QRScannerComponent = (props: QRScannerComponentProps) => {
 
                         if (didSucceed) {
                             setIsScanSucceeded(true);
-                            setInterval(function() {
+                            setInterval(function () {
                                 setIsScanSucceeded(false);
                             }, 500);
                             if (isSoundOn && scanSuccessAudioRef.current) {
@@ -110,7 +110,7 @@ export const QRScannerComponent = (props: QRScannerComponentProps) => {
                             }
                         } else {
                             setIsScanFailed(true);
-                            setInterval(function() {
+                            setInterval(function () {
                                 setIsScanFailed(false);
                             }, 500);
                             if (isSoundOn && scanErrorAudioRef.current) {
@@ -217,11 +217,12 @@ export const QRScannerComponent = (props: QRScannerComponentProps) => {
                 {isFlashAvailable && <IconBulb color={isFlashOn ? 'yellow' : '#ffffff95'} size={30}/>}
             </Button>
             <Button onClick={handleSoundToggle} variant={'transparent'} className={classes.soundToggle}>
-                {isSoundOn ? <IconVolume color={'#ffffff95'} size={30}/> : <IconVolume3 color={'#66666695'} size={30}/>}
+                {isSoundOn && <IconVolume color={'#ffffff95'} size={30}/>}
+                {!isSoundOn && <IconVolumeOff color={'#ffffff95'} size={30}/>}
             </Button>
-            <audio ref={scanSuccessAudioRef} src="/sounds/scan-success.wav" />
-            <audio ref={scanErrorAudioRef} src="/sounds/scan-error.wav" />
-            <audio ref={scanInProgressAudioRef} src="/sounds/scan-in-progress.wav" />
+            <audio ref={scanSuccessAudioRef} src="/sounds/scan-success.wav"/>
+            <audio ref={scanErrorAudioRef} src="/sounds/scan-error.wav"/>
+            <audio ref={scanInProgressAudioRef} src="/sounds/scan-in-progress.wav"/>
             <Button onClick={handleClose} variant={'transparent'} className={classes.closeButton}>
                 <IconX color={'#ffffff95'} size={30}/>
             </Button>
