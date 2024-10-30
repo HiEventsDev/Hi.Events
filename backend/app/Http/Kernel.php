@@ -4,6 +4,7 @@ namespace HiEvents\Http;
 
 use HiEvents\Http\Middleware\Authenticate;
 use HiEvents\Http\Middleware\EncryptCookies;
+use HiEvents\Http\Middleware\HandleDeprecatedTimezones;
 use HiEvents\Http\Middleware\PreventRequestsDuringMaintenance;
 use HiEvents\Http\Middleware\RedirectIfAuthenticated;
 use HiEvents\Http\Middleware\SetAccountContext;
@@ -45,6 +46,7 @@ class Kernel extends HttpKernel
         ValidatePostSize::class,
         TrimStrings::class,
         ConvertEmptyStringsToNull::class,
+        HandleDeprecatedTimezones::class,
     ];
 
     /**
