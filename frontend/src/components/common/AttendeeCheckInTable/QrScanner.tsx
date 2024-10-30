@@ -2,7 +2,7 @@ import {useEffect, useRef, useState} from 'react';
 import QrScanner from 'qr-scanner';
 import {useDebouncedValue} from '@mantine/hooks';
 import classes from './QrScanner.module.scss';
-import {IconBulb, IconBulbOff, IconCameraRotate, IconX} from "@tabler/icons-react";
+import {IconBulb, IconBulbOff, IconCameraRotate, IconVolume, IconVolumeOff, IconX} from "@tabler/icons-react";
 import {Anchor, Button, Menu} from "@mantine/core";
 import {showError} from "../../../utilites/notifications.tsx";
 import {t, Trans} from "@lingui/macro";
@@ -28,6 +28,20 @@ export const QRScannerComponent = (props: QRScannerComponentProps) => {
     const [debouncedAttendeeId] = useDebouncedValue(currentAttendeeId, 1000);
     const [isScanFailed, setIsScanFailed] = useState(false);
     const [isScanSucceeded, setIsScanSucceeded] = useState(false);
+
+    const scanSuccessAudioRef = useRef<HTMLAudioElement | null>(null);
+    const scanErrorAudioRef = useRef<HTMLAudioElement | null>(null);
+    const scanInProgressAudioRef = useRef<HTMLAudioElement | null>(null);
+
+    const [isSoundOn, setIsSoundOn] = useState(() => {
+        const storedIsSoundOn = localStorage.getItem("qrScannerSoundOn");
+        return storedIsSoundOn === null ? true : JSON.parse(storedIsSoundOn);
+    });
+
+    useEffect(() => {
+        localStorage.setItem("qrScannerSoundOn", JSON.stringify(isSoundOn));
+    }, [isSoundOn]);
+
 
     useEffect(() => {
         latestProcessedAttendeeIdsRef.current = processedAttendeeIds;
@@ -64,15 +78,23 @@ export const QRScannerComponent = (props: QRScannerComponentProps) => {
                 showError(t`You already scanned this ticket`);
 
                 setIsScanFailed(true);
-                setInterval(function() {
+                setInterval(function () {
                     setIsScanFailed(false);
                 }, 500);
+                if (isSoundOn && scanErrorAudioRef.current) {
+                    scanErrorAudioRef.current.play();
+                }
 
                 return;
             }
 
             if (!isCheckingIn && !alreadyScanned) {
                 setIsCheckingIn(true);
+
+                if (isSoundOn && scanInProgressAudioRef.current) {
+                    scanInProgressAudioRef.current.play();
+                }
+
                 props.onCheckIn(debouncedAttendeeId, (didSucceed) => {
                         setIsCheckingIn(false);
                         setProcessedAttendeeIds(prevIds => [...prevIds, debouncedAttendeeId]);
@@ -80,14 +102,20 @@ export const QRScannerComponent = (props: QRScannerComponentProps) => {
 
                         if (didSucceed) {
                             setIsScanSucceeded(true);
-                            setInterval(function() {
+                            setInterval(function () {
                                 setIsScanSucceeded(false);
                             }, 500);
+                            if (isSoundOn && scanSuccessAudioRef.current) {
+                                scanSuccessAudioRef.current.play();
+                            }
                         } else {
                             setIsScanFailed(true);
-                            setInterval(function() {
+                            setInterval(function () {
                                 setIsScanFailed(false);
                             }, 500);
+                            if (isSoundOn && scanErrorAudioRef.current) {
+                                scanErrorAudioRef.current.play();
+                            }
                         }
                     }, () => {
                         setIsCheckingIn(false);
@@ -124,6 +152,10 @@ export const QRScannerComponent = (props: QRScannerComponentProps) => {
             }
             setIsFlashOn(!isFlashOn);
         }
+    };
+
+    const handleSoundToggle = () => {
+        setIsSoundOn(!isSoundOn);
     };
 
     const requestPermission = async () => {
@@ -184,6 +216,13 @@ export const QRScannerComponent = (props: QRScannerComponentProps) => {
                 {!isFlashAvailable && <IconBulbOff color={'#ffffff95'} size={30}/>}
                 {isFlashAvailable && <IconBulb color={isFlashOn ? 'yellow' : '#ffffff95'} size={30}/>}
             </Button>
+            <Button onClick={handleSoundToggle} variant={'transparent'} className={classes.soundToggle}>
+                {isSoundOn && <IconVolume color={'#ffffff95'} size={30}/>}
+                {!isSoundOn && <IconVolumeOff color={'#ffffff95'} size={30}/>}
+            </Button>
+            <audio ref={scanSuccessAudioRef} src="/sounds/scan-success.wav"/>
+            <audio ref={scanErrorAudioRef} src="/sounds/scan-error.wav"/>
+            <audio ref={scanInProgressAudioRef} src="/sounds/scan-in-progress.wav"/>
             <Button onClick={handleClose} variant={'transparent'} className={classes.closeButton}>
                 <IconX color={'#ffffff95'} size={30}/>
             </Button>
