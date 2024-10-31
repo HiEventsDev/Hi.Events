@@ -40,6 +40,7 @@
           align-items: center;
 
           h3 {
+            flex: 1;
             margin: 10px 0;
 
             a {
@@ -48,13 +49,23 @@
           }
 
           .hi-ticket-title-metadata {
-            .hi-ticket-collapse-arrow {
-              color: var(--widget-secondary-color, var(--tk-primary));
-              margin-left: 10px;
-            }
-
             margin-left: 5px;
             font-weight: normal;
+          }
+
+          .hi-ticket-collapse-arrow {
+            display: flex;
+            color: var(--widget-secondary-color, var(--tk-primary));
+            margin-left: 10px;
+
+            svg {
+              transform: rotate(90deg);
+              transition: all 0.1s linear;
+            }
+
+            svg.open {
+              transform: rotate(180deg);
+            }
           }
         }
       }

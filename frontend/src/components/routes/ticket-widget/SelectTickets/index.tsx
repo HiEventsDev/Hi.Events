@@ -33,7 +33,7 @@ import {PoweredByFooter} from "../../../common/PoweredByFooter";
 import {Event} from "../../../../types.ts";
 import {eventsClientPublic} from "../../../../api/event.client.ts";
 import {promoCodeClientPublic} from "../../../../api/promo-code.client.ts";
-import {IconX} from "@tabler/icons-react"
+import {IconX, IconNavigationFilled} from "@tabler/icons-react"
 import {getSessionIdentifier} from "../../../../utilites/sessionIdentifier.ts";
 import {Constants} from "../../../../constants.ts";
 
@@ -297,7 +297,7 @@ const SelectTickets = (props: SelectTicketsProps) => {
                                 .map((n) => n.toString());
                             quantityRange.unshift("0");
 
-                            const [ticketIsCollapsed, {toggle: collapseTicket}] = useDisclosure(!ticket.start_collapsed);
+                            const [ticketIsCollapsed, {toggle: collapseTicket}] = useDisclosure(ticket.start_collapsed);
 
                             return (
                                 <div key={ticket.id} className={'hi-ticket-row'}>
@@ -328,15 +328,14 @@ const SelectTickets = (props: SelectTicketsProps) => {
                                                 {(!ticket.is_available && ticket.type === 'TIERED') && (
                                                     <TicketAvailabilityMessage ticket={ticket} event={event}/>
                                                 )}
-
-                                                <span className={'hi-ticket-collapse-arrow'}>
-                                                    {ticketIsCollapsed ? '\u25BC' : '\u25B6'}
-                                                </span>
                                             </div>
+                                            <span className={`hi-ticket-collapse-arrow`}>
+                                                <IconNavigationFilled className={ticketIsCollapsed ? "" : "open"} />
+                                            </span>
                                         </UnstyledButton>
                                     </div>
 
-                                    <Collapse in={ticketIsCollapsed} className={'hi-ticket-content'}>
+                                    <Collapse in={!ticketIsCollapsed} className={'hi-ticket-content'}>
                                         <div className={'hi-price-tiers-rows'}>
                                             <TieredPricing
                                                 ticketIndex={ticketIndex}
