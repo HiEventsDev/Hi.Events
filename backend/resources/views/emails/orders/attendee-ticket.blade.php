@@ -21,9 +21,8 @@
 {{ __('If you have any questions or need assistance, please reply to this email or contact the event organizer') }}
 {{ __('at') }} <a href="mailto:{{$eventSettings->getSupportEmail()}}">{{$eventSettings->getSupportEmail()}}</a>.
 
-{{ __('Best regards,') }}
-<br>
-{{config('app.name')}}
+{{ __('Best regards,') }}<br>
+{{ config('app.name') }}
 
 <script type="application/ld+json">
         {
