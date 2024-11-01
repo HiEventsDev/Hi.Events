@@ -147,7 +147,7 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
 
     public function isFullyRefunded(): bool
     {
-        return $this->getTotalRefunded() >= $this->getTotalGross();
+        return !$this->isFreeOrder() && ($this->getTotalRefunded() >= $this->getTotalGross());
     }
 
     public function getStripePayment(): ?StripePaymentDomainObject

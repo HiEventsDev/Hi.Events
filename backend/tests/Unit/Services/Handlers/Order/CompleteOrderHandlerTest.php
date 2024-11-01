@@ -8,13 +8,13 @@ use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\Status\OrderStatus;
-use HiEvents\DomainObjects\TicketPriceDomainObject;
+use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\QuestionAnswerRepositoryInterface;
-use HiEvents\Repository\Interfaces\TicketPriceRepositoryInterface;
-use HiEvents\Services\Domain\Ticket\TicketQuantityUpdateService;
+use HiEvents\Repository\Interfaces\ProductPriceRepositoryInterface;
+use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
 use HiEvents\Services\Handlers\Order\CompleteOrderHandler;
 use HiEvents\Services\Handlers\Order\DTO\CompleteOrderProductDataDTO;
 use HiEvents\Services\Handlers\Order\DTO\CompleteOrderDTO;
@@ -35,8 +35,8 @@ class CompleteOrderHandlerTest extends TestCase
     private OrderRepositoryInterface|MockInterface $orderRepository;
     private AttendeeRepositoryInterface|MockInterface $attendeeRepository;
     private QuestionAnswerRepositoryInterface|MockInterface $questionAnswersRepository;
-    private TicketQuantityUpdateService|MockInterface $ticketQuantityUpdateService;
-    private TicketPriceRepositoryInterface|MockInterface $ticketPriceRepository;
+    private ProductQuantityUpdateService|MockInterface $productQuantityUpdateService;
+    private ProductPriceRepositoryInterface|MockInterface $productPriceRepository;
     private CompleteOrderHandler $completeOrderHandler;
 
     protected function setUp(): void
@@ -50,15 +50,15 @@ class CompleteOrderHandlerTest extends TestCase
         $this->orderRepository = Mockery::mock(OrderRepositoryInterface::class);
         $this->attendeeRepository = Mockery::mock(AttendeeRepositoryInterface::class);
         $this->questionAnswersRepository = Mockery::mock(QuestionAnswerRepositoryInterface::class);
-        $this->ticketQuantityUpdateService = Mockery::mock(TicketQuantityUpdateService::class);
-        $this->ticketPriceRepository = Mockery::mock(TicketPriceRepositoryInterface::class);
+        $this->productQuantityUpdateService = Mockery::mock(ProductQuantityUpdateService::class);
+        $this->productPriceRepository = Mockery::mock(ProductPriceRepositoryInterface::class);
 
         $this->completeOrderHandler = new CompleteOrderHandler(
             $this->orderRepository,
             $this->attendeeRepository,
             $this->questionAnswersRepository,
-            $this->ticketQuantityUpdateService,
-            $this->ticketPriceRepository
+            $this->productQuantityUpdateService,
+            $this->productPriceRepository
         );
     }
 
@@ -80,12 +80,12 @@ class CompleteOrderHandlerTest extends TestCase
         $this->orderRepository->shouldReceive('updateFromArray')->andReturn($updatedOrder);
         $this->orderRepository->shouldReceive('loadRelation')->andReturnSelf();
 
-        $this->ticketPriceRepository->shouldReceive('findWhereIn')->andReturn(new Collection([$this->createMockTicketPrice()]));
+        $this->productPriceRepository->shouldReceive('findWhereIn')->andReturn(new Collection([$this->createMockProductPrice()]));
 
         $this->attendeeRepository->shouldReceive('insert')->andReturn(true);
-        $this->attendeeRepository->shouldReceive('findWhere')->andReturn(new Collection([$this->createMockAttendee()]));
+        $this->attendeeRepository->shouldReceive('findWhereIn')->andReturn(new Collection([$this->createMockAttendee()]));
 
-        $this->ticketQuantityUpdateService->shouldReceive('updateQuantitiesFromOrder');
+        $this->productQuantityUpdateService->shouldReceive('updateQuantitiesFromOrder');
 
         $this->completeOrderHandler->handle($orderShortId, $orderData);
 
@@ -140,7 +140,7 @@ class CompleteOrderHandlerTest extends TestCase
         $this->completeOrderHandler->handle($orderShortId, $orderData);
     }
 
-    public function testHandleUpdatesTicketQuantitiesForFreeOrder(): void
+    public function testHandleUpdatesProductQuantitiesForFreeOrder(): void
     {
         $orderShortId = 'ABC123';
         $orderData = $this->createMockCompleteOrderDTO();
@@ -152,19 +152,19 @@ class CompleteOrderHandlerTest extends TestCase
         $this->orderRepository->shouldReceive('loadRelation')->andReturnSelf();
         $this->orderRepository->shouldReceive('updateFromArray')->andReturn($updatedOrder);
 
-        $this->ticketPriceRepository->shouldReceive('findWhereIn')->andReturn(new Collection([$this->createMockTicketPrice()]));
+        $this->productPriceRepository->shouldReceive('findWhereIn')->andReturn(new Collection([$this->createMockProductPrice()]));
 
         $this->attendeeRepository->shouldReceive('insert')->andReturn(true);
         $this->attendeeRepository->shouldReceive('findWhere')->andReturn(new Collection([$this->createMockAttendee()]));
 
-        $this->ticketQuantityUpdateService->shouldReceive('updateQuantitiesFromOrder')->once();
+        $this->productQuantityUpdateService->shouldReceive('updateQuantitiesFromOrder')->once();
 
         $order = $this->completeOrderHandler->handle($orderShortId, $orderData);
 
         $this->assertSame($order->getStatus(), OrderStatus::COMPLETED->name);
     }
 
-    public function testHandleDoesNotUpdateTicketQuantitiesForPaidOrder(): void
+    public function testHandleDoesNotUpdateProductQuantitiesForPaidOrder(): void
     {
         $orderShortId = 'ABC123';
         $orderData = $this->createMockCompleteOrderDTO();
@@ -177,12 +177,12 @@ class CompleteOrderHandlerTest extends TestCase
         $this->orderRepository->shouldReceive('loadRelation')->andReturnSelf();
         $this->orderRepository->shouldReceive('updateFromArray')->andReturn($updatedOrder);
 
-        $this->ticketPriceRepository->shouldReceive('findWhereIn')->andReturn(new Collection([$this->createMockTicketPrice()]));
+        $this->productPriceRepository->shouldReceive('findWhereIn')->andReturn(new Collection([$this->createMockProductPrice()]));
 
         $this->attendeeRepository->shouldReceive('insert')->andReturn(true);
         $this->attendeeRepository->shouldReceive('findWhere')->andReturn(new Collection([$this->createMockAttendee()]));
 
-        $this->ticketQuantityUpdateService->shouldNotReceive('updateQuantitiesFromOrder');
+        $this->productQuantityUpdateService->shouldNotReceive('updateQuantitiesFromOrder');
 
         $this->completeOrderHandler->handle($orderShortId, $orderData);
 
@@ -202,7 +202,7 @@ class CompleteOrderHandlerTest extends TestCase
         $this->orderRepository->shouldReceive('loadRelation')->andReturnSelf();
         $this->orderRepository->shouldReceive('updateFromArray')->andReturn($updatedOrder);
 
-        $this->ticketPriceRepository->shouldReceive('findWhereIn')->andReturn(new Collection([$this->createMockTicketPrice()]));
+        $this->productPriceRepository->shouldReceive('findWhereIn')->andReturn(new Collection([$this->createMockProductPrice()]));
 
         $this->attendeeRepository->shouldReceive('insert')->andReturn(false);
 
@@ -225,7 +225,7 @@ class CompleteOrderHandlerTest extends TestCase
         $this->orderRepository->shouldReceive('loadRelation')->andReturnSelf();
         $this->orderRepository->shouldReceive('updateFromArray')->andReturn($updatedOrder);
 
-        $this->ticketPriceRepository->shouldReceive('findWhereIn')->andReturn(new Collection([$this->createMockTicketPrice()]));
+        $this->productPriceRepository->shouldReceive('findWhereIn')->andReturn(new Collection([$this->createMockProductPrice()]));
 
         $this->attendeeRepository->shouldReceive('insert')->andReturn(true);
         $this->attendeeRepository->shouldReceive('findWhere')->andReturn(new Collection());
@@ -246,7 +246,7 @@ class CompleteOrderHandlerTest extends TestCase
             first_name: 'John',
             last_name: 'Doe',
             email: 'john@example.com',
-            ticket_price_id: 1
+            product_price_id: 1
         );
 
         return new CompleteOrderDTO(
@@ -274,26 +274,26 @@ class CompleteOrderHandlerTest extends TestCase
     {
         return (new OrderItemDomainObject())
             ->setId(1)
-            ->setTicketId(1)
+            ->setProductId(1)
             ->setQuantity(1)
             ->setPrice(10)
             ->setTotalGross(10)
-            ->setTicketPriceId(1);
+            ->setProductPriceId(1);
     }
 
-    private function createMockTicketPrice(): TicketPriceDomainObject|MockInterface
+    private function createMockProductPrice(): ProductPriceDomainObject|MockInterface
     {
-        $ticketPrice = Mockery::mock(TicketPriceDomainObject::class);
-        $ticketPrice->shouldReceive('getId')->andReturn(1);
-        $ticketPrice->shouldReceive('getTicketId')->andReturn(1);
-        return $ticketPrice;
+        $productPrice = Mockery::mock(ProductPriceDomainObject::class);
+        $productPrice->shouldReceive('getId')->andReturn(1);
+        $productPrice->shouldReceive('getProductId')->andReturn(1);
+        return $productPrice;
     }
 
     private function createMockAttendee(): AttendeeDomainObject|MockInterface
     {
         $attendee = Mockery::mock(AttendeeDomainObject::class);
         $attendee->shouldReceive('getId')->andReturn(1);
-        $attendee->shouldReceive('getTicketId')->andReturn(1);
+        $attendee->shouldReceive('getProductId')->andReturn(1);
         return $attendee;
     }
 }

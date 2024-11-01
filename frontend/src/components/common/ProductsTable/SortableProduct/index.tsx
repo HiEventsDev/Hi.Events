@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import {useState} from 'react';
 import {IconDotsVertical, IconEyeOff, IconPencil, IconSend, IconTrash} from "@tabler/icons-react";
 import classes from "../ProductsTable.module.scss";
 import classNames from "classnames";
@@ -37,13 +37,8 @@ export const SortableProduct = ({product, currencyCode, category, categories}: S
     const [productId, setProductId] = useState<IdParam>();
     const deleteMutation = useDeleteProduct();
     const sortMutation = useSortProducts();
-    const [localCategories, setLocalCategories] = useState(categories);
 
-    useEffect(() => {
-        setLocalCategories(categories);
-    }, [categories]);
-
-    if (!product?.id || !category?.id || !localCategories?.length || !Array.isArray(category.products)) {
+    if (!product?.id || !category?.id || !Array.isArray(category.products)) {
         return null;
     }
 
@@ -110,41 +105,68 @@ export const SortableProduct = ({product, currencyCode, category, categories}: S
     }
 
     const handleSort = (productId: IdParam, direction: 'up' | 'down') => {
-        const currentCategory = localCategories.find(cat => cat.id === category.id);
-        if (!currentCategory?.products?.length) return;
+        if (!category?.products?.length || !product.event_id) return;
 
-        const currentProducts = [...currentCategory.products];
-        const currentIndex = currentProducts.findIndex(p => p.id === productId);
+        // Find current category index in all categories
+        const categoryIndex = categories.findIndex(cat => cat.id === category.id);
+        const currentIndex = category.products.findIndex(p => p.id === productId);
 
-        if (currentIndex === -1) return;
+        if (categoryIndex === -1 || currentIndex === -1) return;
 
-        const newIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
-        if (newIndex < 0 || newIndex >= currentProducts.length) return;
+        let updatedCategories = [...categories];
 
-        // Swap the products immutably
-        const updatedProducts = [...currentProducts];
-        [updatedProducts[currentIndex], updatedProducts[newIndex]] =
-            [updatedProducts[newIndex], updatedProducts[currentIndex]];
+        // Handle moving to different category
+        if ((direction === 'up' && currentIndex === 0) ||
+            (direction === 'down' && currentIndex === category.products.length - 1)) {
 
-        const updatedCategories = localCategories.map(cat =>
-            cat.id === category.id
-                ? {...cat, products: updatedProducts}
-                : cat
-        );
+            const targetCategoryIndex = direction === 'up' ? categoryIndex - 1 : categoryIndex + 1;
 
-        setLocalCategories(updatedCategories);
+            // Check if target category exists
+            if (targetCategoryIndex < 0 || targetCategoryIndex >= categories.length) return;
 
-        // Prepare the sorted data for the mutation
+            const sourceProducts = [...category.products];
+            const [movedProduct] = sourceProducts.splice(currentIndex, 1);
+
+            const targetCategory = categories[targetCategoryIndex];
+            const targetProducts = [...(targetCategory.products || [])];
+
+            // Insert at end if moving up, start if moving down
+            const targetPosition = direction === 'up' ? targetProducts.length : 0;
+            targetProducts.splice(targetPosition, 0, movedProduct);
+
+            updatedCategories = categories.map((cat, index) => {
+                if (index === categoryIndex) {
+                    return {...cat, products: sourceProducts};
+                }
+                if (index === targetCategoryIndex) {
+                    return {...cat, products: targetProducts};
+                }
+                return cat;
+            });
+        } else {
+            // Handle moving within same category
+            const newIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
+            if (newIndex < 0 || newIndex >= category.products.length) return;
+
+            const updatedProducts = [...category.products];
+            [updatedProducts[currentIndex], updatedProducts[newIndex]] =
+                [updatedProducts[newIndex], updatedProducts[currentIndex]];
+
+            updatedCategories = categories.map(cat =>
+                cat.id === category.id ? {...cat, products: updatedProducts} : cat
+            );
+        }
+
         const sortedCategories = updatedCategories.map(cat => ({
             product_category_id: cat.id,
-            sorted_products: cat.products.map((prod, index) => ({
+            sorted_products: (cat.products || []).map((prod, index) => ({
                 id: prod.id,
                 order: index + 1
             }))
         }));
 
         sortMutation.mutate({
-            sortedCategories: sortedCategories,
+            sortedCategories,
             eventId: product.event_id,
         }, {
             onSuccess: () => showSuccess(t`Products sorted successfully`),
@@ -152,11 +174,13 @@ export const SortableProduct = ({product, currencyCode, category, categories}: S
         });
     };
 
-    // Retrieve the latest version of products from the category
+    const currentCategoryIndex = categories.findIndex(cat => cat.id === category.id);
     const currentProducts = category.products || [];
     const currentIndex = currentProducts.findIndex(p => p.id === product.id);
-    const canMoveUp = currentIndex > 0;
-    const canMoveDown = currentIndex < currentProducts.length - 1;
+
+    const canMoveUp = currentIndex > 0 || currentCategoryIndex > 0;
+    const canMoveDown = currentIndex < currentProducts.length - 1 ||
+        currentCategoryIndex < categories.length - 1;
 
     return (
         <>
@@ -167,6 +191,7 @@ export const SortableProduct = ({product, currencyCode, category, categories}: S
                         downArrowEnabled={canMoveDown}
                         onSortUp={() => handleSort(product.id, 'up')}
                         onSortDown={() => handleSort(product.id, 'down')}
+                        flexDirection={'column'}
                     />
                 </div>
                 <div className={classes.productInfo}>
@@ -234,11 +259,15 @@ export const SortableProduct = ({product, currencyCode, category, categories}: S
                             </Menu.Target>
                             <Menu.Dropdown>
                                 <Menu.Label>{t`Actions`}</Menu.Label>
-                                <Menu.Item
-                                    onClick={() => handleModalClick(product.id, messageModal)}
-                                    leftSection={<IconSend size={14}/>}>
-                                    {t`Message Attendees`}
-                                </Menu.Item>
+
+                                {product.product_type === ProductType.Ticket && (
+                                    <Menu.Item
+                                        onClick={() => handleModalClick(product.id, messageModal)}
+                                        leftSection={<IconSend size={14}/>}>
+                                        {t`Message Attendees`}
+                                    </Menu.Item>
+                                )}
+
                                 <Menu.Item
                                     onClick={() => handleModalClick(product.id, editModal)}
                                     leftSection={<IconPencil size={14}/>}>

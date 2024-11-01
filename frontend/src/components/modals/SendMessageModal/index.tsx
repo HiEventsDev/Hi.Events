@@ -13,6 +13,7 @@ import {t, Trans} from "@lingui/macro";
 import {Editor} from "../../common/Editor";
 import {useIsAccountVerified} from "../../../hooks/useIsAccountVerified.ts";
 import {useSendEventMessage} from "../../../mutations/useSendEventMessage.ts";
+import {ProductSelector} from "../../common/ProductSelector";
 
 interface EventMessageModalProps extends GenericModalProps {
     orderId?: IdParam,
@@ -77,7 +78,8 @@ const AttendeeField = ({orderId, eventId, attendeeId, form}: {
 export const SendMessageModal = (props: EventMessageModalProps) => {
     const {onClose, orderId, productId, messageType, attendeeId} = props;
     const {eventId} = useParams();
-    const {data: event, data: {products} = {}} = useGetEvent(eventId);
+    const {data: event, data: {product_categories} = {}} = useGetEvent(eventId);
+    const tickets = product_categories?.find(category => category.type === 'TICKET');
     const {data: me} = useGetMe();
     const errorHandler = useFormErrorResponseHandler();
     const isPreselectedRecipient = !!(orderId || attendeeId || productId);
@@ -116,7 +118,7 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
         });
     }
 
-    if (!event || !me || !products) {
+    if (!event || !me || !product_categories) {
         return <LoadingOverlay visible/>;
     }
 
@@ -158,19 +160,14 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
                         <AttendeeField eventId={eventId} orderId={orderId} attendeeId={attendeeId} form={form}/>
                     )}
 
-                    {((form.values.message_type === MessageType.Product && event.products)) && (
-                        <MultiSelect
-                            mt={20}
+                    {((form.values.message_type === MessageType.Product && event.product_categories)) && (
+                        <ProductSelector
                             label={t`Message attendees with specific products`}
-                            searchable
-                            data={event.products?.map(product => {
-                                return {
-                                    value: String(product.id),
-                                    label: product.title,
-                                };
-                            })}
-                            {...form.getInputProps('product_ids')}
-                        />
+                            placeholder={t`Select products`}
+                            data={event.product_categories}
+                            form={form}
+                            fieldName={'product_ids'}
+                            />
                     )}
 
                     {(form.values.message_type === MessageType.Order && orderId) && (

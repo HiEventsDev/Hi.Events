@@ -1,5 +1,5 @@
 import React from 'react';
-import {IconEyeOff, IconGripVertical, IconPencil, IconPlus, IconTrash, IconTrashOff} from "@tabler/icons-react";
+import {IconEyeOff, IconPencil, IconPlus, IconTrash, IconTrashOff} from "@tabler/icons-react";
 import classes from "../ProductsTable.module.scss";
 import classNames from "classnames";
 import {ActionIcon, Popover} from "@mantine/core";
@@ -9,14 +9,16 @@ import {ProductCategory} from "../../../../types.ts";
 import {t} from "@lingui/macro";
 import {useDeleteProductCategory} from "../../../../mutations/useDeleteProductCategory.ts";
 import {useParams} from "react-router-dom";
-import {showError} from "../../../../utilites/notifications.tsx";
-import {AxiosError} from "axios";
+import {showError, showSuccess} from "../../../../utilites/notifications.tsx";
+import {SortArrows} from "../../SortArrows";
+import {useSortProducts} from "../../../../mutations/useSortProducts.ts";
 
 interface SortableCategoryProps {
     category: ProductCategory;
     children: React.ReactNode;
     isLastCategory: boolean;
     openCreateModal: () => void;
+    categories: ProductCategory[];
 }
 
 export const SortableCategory: React.FC<SortableCategoryProps> = ({
@@ -24,10 +26,14 @@ export const SortableCategory: React.FC<SortableCategoryProps> = ({
                                                                       children,
                                                                       isLastCategory,
                                                                       openCreateModal,
+                                                                      categories,
                                                                   }) => {
     const [isEditModalOpen, editModal] = useDisclosure(false);
     const {eventId} = useParams();
     const deleteMutation = useDeleteProductCategory();
+    const sortMutation = useSortProducts();
+    const upSortEnabled = categories.findIndex(cat => cat.id === category.id) > 0;
+    const downSortEnabled = categories.findIndex(cat => cat.id === category.id) < categories.length - 1;
 
     const handleDelete = () => {
         if (isLastCategory) {
@@ -50,6 +56,47 @@ export const SortableCategory: React.FC<SortableCategoryProps> = ({
         });
     }
 
+    const handleSort = (direction: 'up' | 'down') => {
+        if (!eventId || !category.id) return;
+
+        const currentIndex = categories.findIndex(cat => cat.id === category.id);
+
+        if (currentIndex === -1) return;
+
+        const targetIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
+
+        if (targetIndex < 0 || targetIndex >= categories.length) return;
+
+        const newCategories = [...categories];
+        const [movedCategory] = newCategories.splice(currentIndex, 1);
+        newCategories.splice(targetIndex, 0, movedCategory);
+
+        // Prepare the sorted categories data
+        const sortedCategories = newCategories.map(cat =>
+            ({
+                product_category_id: cat.id as number,
+                sorted_products: (cat.products || []).map((product, index) => ({
+                    id: product.id as number,
+                    sort_order: index
+                }))
+            }));
+
+        sortMutation.mutate(
+            {
+                eventId: eventId,
+                sortedCategories: sortedCategories
+            },
+            {
+                onSuccess: () => {
+                    showSuccess(t`Categories reordered successfully.`);
+                },
+                onError: () => {
+                    showError(t`We couldn't reorder the categories. Please try again.`);
+                }
+            }
+        );
+    };
+
     return (
         <>
             <div className={classNames(classes.sortableCategory)}>
@@ -69,11 +116,17 @@ export const SortableCategory: React.FC<SortableCategoryProps> = ({
                     </h2>
 
                     <div className={classes.categoryActions}>
+                        <SortArrows
+                            upArrowEnabled={upSortEnabled}
+                            downArrowEnabled={downSortEnabled}
+                            onSortUp={() => handleSort('up')}
+                            onSortDown={() => handleSort('down')}
+                        />
                         <ActionIcon
                             className={classes.categoryAction}
                             onClick={openCreateModal}
-                            title={'Create category'}
-                            aria-label={'Create category'}
+                            title={t`Create category`}
+                            aria-label={t`Create category`}
                             variant={'transparent'}
                         >
                             <IconPlus size={20}/>
@@ -81,8 +134,8 @@ export const SortableCategory: React.FC<SortableCategoryProps> = ({
                         <ActionIcon
                             className={classes.categoryAction}
                             onClick={editModal.open}
-                            title={'Edit category'}
-                            aria-label={'Edit category'}
+                            title={t`Edit category`}
+                            aria-label={t`Edit category`}
                             variant={'transparent'}
                         >
                             <IconPencil size={20}/>
@@ -90,18 +143,12 @@ export const SortableCategory: React.FC<SortableCategoryProps> = ({
                         <ActionIcon
                             className={classes.categoryAction}
                             onClick={handleDelete}
-                            title={'Delete category'}
-                            aria-label={'Delete category'}
+                            title={t`Delete category`}
+                            aria-label={t`Delete category`}
                             variant={'transparent'}
                         >
                             {isLastCategory ? <IconTrashOff size={20}/> : <IconTrash size={20}/>}
                         </ActionIcon>
-                        <div className={classNames([
-                            classes.dragHandle,
-                            classes.categoryDragHandle,
-                        ])}>
-                            <IconGripVertical size={20}/>
-                        </div>
                     </div>
                 </div>
                 <div className={classes.categoryContent}>

@@ -21,24 +21,42 @@ export const ProductCategoryList: React.FC<ProductCategoryListProps> = ({
     const [categories, setCategories] = useState<ProductCategory[]>(initialCategories);
     const [filteredCategories, setFilteredCategories] = useState<ProductCategory[]>(initialCategories);
 
+    useEffect(() => {
+        setCategories(initialCategories);
+    }, [initialCategories]);
+
     if (!categories || categories.length === 0 || !event) {
         return <>no categories or event</>;
     }
 
     useEffect(() => {
         if (searchTerm) {
-            const filtered = initialCategories
-                .map(category => ({
-                    ...category,
-                    products: category.products?.filter(product => product.title.toLowerCase().includes(searchTerm.toLowerCase()))
-                }))
-                .filter(category => category.products ? category.products.length > 0 : false);
+            const lowercaseSearch = searchTerm.toLowerCase();
+            const filtered = categories
+                .map(category => {
+                    const categoryMatchesSearch = category.name.toLowerCase().includes(lowercaseSearch);
+                    const filteredProducts = category.products?.filter(product =>
+                        product.title.toLowerCase().includes(lowercaseSearch)
+                    );
+
+                    return {
+                        ...category,
+                        products: categoryMatchesSearch
+                            ? category.products
+                            : filteredProducts
+                    };
+                })
+                .filter(category => {
+                    const hasMatchingProducts = category.products ? category.products.length > 0 : false;
+                    const categoryNameMatches = category.name.toLowerCase().includes(lowercaseSearch);
+                    return hasMatchingProducts || categoryNameMatches;
+                });
 
             setFilteredCategories(filtered);
         } else {
-            setFilteredCategories(initialCategories);
+            setFilteredCategories(categories);
         }
-    }, [searchTerm, initialCategories]);
+    }, [searchTerm, categories]);
 
     return (
         <div>
@@ -53,6 +71,7 @@ export const ProductCategoryList: React.FC<ProductCategoryListProps> = ({
                                 category={category}
                                 openCreateModal={() => onCreateOpen(category.id)}
                                 isLastCategory={filteredCategories.length === 1}
+                                categories={categories}
                             >
                                 {category.products.length === 0 && (
                                     <ProductsBlankSlate

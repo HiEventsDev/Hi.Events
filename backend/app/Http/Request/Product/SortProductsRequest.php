@@ -11,9 +11,9 @@ class SortProductsRequest extends FormRequest
         return [
             'sorted_categories' => 'array|required',
             'sorted_categories.*.product_category_id' => 'integer|required',
-            'sorted_categories.*.sorted_products' => 'array|required',
+            'sorted_categories.*.sorted_products' => 'array',
             'sorted_categories.*.sorted_products.*.id' => 'integer|required',
-            'sorted_categories.*.sorted_products.*.order' => 'integer|required', // Updated field name
+            'sorted_categories.*.sorted_products.*.order' => 'integer',
         ];
     }
 }

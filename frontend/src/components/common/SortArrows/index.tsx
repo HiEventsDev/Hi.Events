@@ -6,11 +6,22 @@ interface SortArrowsProps {
     downArrowEnabled: boolean;
     onSortUp: () => void;
     onSortDown: () => void;
+    flexDirection?: 'row' | 'column';
 }
 
-export const SortArrows = ({upArrowEnabled, downArrowEnabled, onSortUp, onSortDown}: SortArrowsProps) => {
+export const SortArrows = ({
+                               upArrowEnabled,
+                               downArrowEnabled,
+                               onSortUp,
+                               onSortDown,
+                               flexDirection = 'row'
+                           }: SortArrowsProps) => {
     return (
-        <div style={{display: 'flex', flexDirection: 'column', gap: 2}}>
+        <div style={{
+            display: 'flex',
+            flexDirection: flexDirection,
+            alignItems: 'center'
+        }}>
             <ActionIcon
                 onClick={upArrowEnabled ? onSortUp : undefined}
                 variant="transparent"
