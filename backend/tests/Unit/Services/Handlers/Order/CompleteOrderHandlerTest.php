@@ -155,7 +155,7 @@ class CompleteOrderHandlerTest extends TestCase
         $this->productPriceRepository->shouldReceive('findWhereIn')->andReturn(new Collection([$this->createMockProductPrice()]));
 
         $this->attendeeRepository->shouldReceive('insert')->andReturn(true);
-        $this->attendeeRepository->shouldReceive('findWhere')->andReturn(new Collection([$this->createMockAttendee()]));
+        $this->attendeeRepository->shouldReceive('findWhereIn')->andReturn(new Collection([$this->createMockAttendee()]));
 
         $this->productQuantityUpdateService->shouldReceive('updateQuantitiesFromOrder')->once();
 
