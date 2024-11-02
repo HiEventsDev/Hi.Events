@@ -1,0 +1,144 @@
+name: PR Environment Management
+
+on:
+  pull_request:
+    types: [labeled, unlabeled, closed]
+
+env:
+  DROPLET_SIZE: s-2vcpu-2gb
+  DROPLET_REGION: nyc1
+  DO_API_TOKEN: ${{ secrets.DIGITALOCEAN_API_TOKEN }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  check-permissions:
+    runs-on: ubuntu-latest
+    outputs:
+      is-admin: ${{ steps.check.outputs.is-admin }}
+    steps:
+      - id: check
+        name: Check if PR author is admin
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const author = context.payload.pull_request.user.login;
+            
+            try {
+              const { data: collaborator } = await github.rest.repos.getCollaboratorPermissionLevel({
+                owner,
+                repo,
+                username: author
+              });
+            
+              const isAdmin = collaborator.permission === 'admin';
+              core.setOutput('is-admin', isAdmin);
+            } catch (error) {
+              core.setOutput('is-admin', false);
+            }
+
+  manage-environment:
+    needs: check-permissions
+    runs-on: ubuntu-latest
+    if: |
+      needs.check-permissions.outputs.is-admin == 'true' && (
+        (github.event.action == 'labeled' && github.event.label.name == 'deploy') ||
+        (github.event.action == 'unlabeled' && github.event.label.name == 'deploy') ||
+        github.event.action == 'closed'
+      )
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_API_TOKEN }}
+
+      - name: Set Environment Variables
+        run: |
+          echo "PR_NUMBER=${{ github.event.pull_request.number }}" >> $GITHUB_ENV
+          echo "DROPLET_NAME=hi-events-pr-${{ github.event.pull_request.number }}" >> $GITHUB_ENV
+
+      - name: Create and Deploy Droplet
+        if: github.event.action == 'labeled' && github.event.label.name == 'deploy'
+        run: |
+          # Create droplet
+          DROPLET_ID=$(doctl compute droplet create ${{ env.DROPLET_NAME }} \
+            --image docker-20-04 \
+            --size ${{ env.DROPLET_SIZE }} \
+            --region ${{ env.DROPLET_REGION }} \
+            --ssh-keys ${{ secrets.DO_SSH_KEY_FINGERPRINT }} \
+            --wait \
+            --format ID \
+            --no-header)
+          
+          # Wait for droplet to be ready
+          echo "Waiting for droplet to be ready..."
+          sleep 60
+          
+          # Get droplet IP
+          DROPLET_IP=$(doctl compute droplet get $DROPLET_ID --format PublicIPv4 --no-header)
+          echo "DROPLET_IP=$DROPLET_IP" >> $GITHUB_ENV
+          
+          # Deploy application using SSH
+          echo "${{ secrets.DO_SSH_PRIVATE_KEY }}" > private_key
+          chmod 600 private_key
+          
+          # Copy files to droplet
+          scp -o StrictHostKeyChecking=no -i private_key \
+            -r ./* root@$DROPLET_IP:/root/hi-events/
+          
+          # Setup and start application
+          ssh -o StrictHostKeyChecking=no -i private_key root@$DROPLET_IP << 'EOF'
+            cd /root/hi-events
+          
+            # Create .env file from secrets
+            echo "${{ secrets.ENV_FILE }}" > .env
+          
+            # Build and start containers
+            docker-compose -f docker/all-in-one/docker-compose.yml up -d
+          
+            # Wait for services to be ready
+            sleep 30
+  EOF
+
+# Add deployment URL to PR comment
+gh pr comment ${{ env.PR_NUMBER }} --body "🚀 Deployment available at: http://$DROPLET_IP:8123"
+
+- name: Destroy Droplet
+  if: |
+    github.event.action == 'closed' ||
+    (github.event.action == 'unlabeled' && github.event.label.name == 'deploy')
+  run: |
+    # Delete the droplet
+    DROPLET_ID=$(doctl compute droplet list --format ID,Name --no-header | grep ${{ env.DROPLET_NAME }} | awk '{print $1}')
+    if [ ! -z "$DROPLET_ID" ]; then
+      doctl compute droplet delete $DROPLET_ID -f
+      gh pr comment ${{ env.PR_NUMBER }} --body "🗑️ Deployment environment has been destroyed."
+    fi
+
+- name: Cleanup
+  if: always()
+  run: |
+    rm -f private_key || true
+
+- name: Notify Non-Admin PR
+  if: needs.check-permissions.outputs.is-admin != 'true' && github.event.action == 'labeled' && github.event.label.name == 'deploy'
+  uses: actions/github-script@v7
+  with:
+    script: |
+      const { issue: { number: issue_number }, repo: { owner, repo } } = context;
+      await github.rest.issues.createComment({
+        owner,
+        repo,
+        issue_number,
+        body: '⚠️ Only repository administrators can deploy preview environments.'
+      });
+      // Remove the deploy label
+      await github.rest.issues.removeLabel({
+        owner,
+        repo,
+        issue_number,
+        name: 'deploy'
+      });
