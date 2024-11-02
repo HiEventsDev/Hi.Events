@@ -30,7 +30,6 @@ jobs:
                 repo,
                 username: author
               });
-            
               const isAdmin = collaborator.permission === 'admin';
               core.setOutput('is-admin', isAdmin);
             } catch (error) {
@@ -92,19 +91,17 @@ jobs:
           # Setup and start application
           ssh -o StrictHostKeyChecking=no -i private_key root@$DROPLET_IP << 'EOF'
             cd /root/hi-events
-          
             # Create .env file from secrets
             echo "${{ secrets.ENV_FILE }}" > .env
-          
             # Build and start containers
             docker-compose -f docker/all-in-one/docker-compose.yml up -d
-          
             # Wait for services to be ready
             sleep 30
   EOF
 
-# Add deployment URL to PR comment
-gh pr comment ${{ env.PR_NUMBER }} --body "🚀 Deployment available at: http://$DROPLET_IP:8123"
+- name: Add deployment URL to PR comment
+  run: |
+    gh pr comment ${{ env.PR_NUMBER }} --body "🚀 Deployment available at: http://$DROPLET_IP:8123"
 
 - name: Destroy Droplet
   if: |
@@ -120,8 +117,7 @@ gh pr comment ${{ env.PR_NUMBER }} --body "🚀 Deployment available at: http://
 
 - name: Cleanup
   if: always()
-  run: |
-    rm -f private_key || true
+  run: rm -f private_key || true
 
 - name: Notify Non-Admin PR
   if: needs.check-permissions.outputs.is-admin != 'true' && github.event.action == 'labeled' && github.event.label.name == 'deploy'
