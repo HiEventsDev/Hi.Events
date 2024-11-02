@@ -89,52 +89,48 @@ jobs:
             -r ./* root@$DROPLET_IP:/root/hi-events/
           
           # Setup and start application
-          ssh -o StrictHostKeyChecking=no -i private_key root@$DROPLET_IP << 'EOF'
-            cd /root/hi-events
-            # Create .env file from secrets
-            echo "${{ secrets.ENV_FILE }}" > .env
-            # Build and start containers
-            docker-compose -f docker/all-in-one/docker-compose.yml up -d
-            # Wait for services to be ready
-            sleep 30
-  EOF
+          ssh -o StrictHostKeyChecking=no -i private_key root@$DROPLET_IP \
+            "cd /root/hi-events && \
+            echo '${{ secrets.ENV_FILE }}' > .env && \
+            docker-compose -f docker/all-in-one/docker-compose.yml up -d && \
+            sleep 30"
 
-- name: Add deployment URL to PR comment
-  run: |
-    gh pr comment ${{ env.PR_NUMBER }} --body "🚀 Deployment available at: http://$DROPLET_IP:8123"
+      - name: Add deployment URL to PR comment
+        run: |
+          gh pr comment ${{ env.PR_NUMBER }} --body "🚀 Deployment available at: http://$DROPLET_IP:8123"
 
-- name: Destroy Droplet
-  if: |
-    github.event.action == 'closed' ||
-    (github.event.action == 'unlabeled' && github.event.label.name == 'deploy')
-  run: |
-    # Delete the droplet
-    DROPLET_ID=$(doctl compute droplet list --format ID,Name --no-header | grep ${{ env.DROPLET_NAME }} | awk '{print $1}')
-    if [ ! -z "$DROPLET_ID" ]; then
-      doctl compute droplet delete $DROPLET_ID -f
-      gh pr comment ${{ env.PR_NUMBER }} --body "🗑️ Deployment environment has been destroyed."
-    fi
+      - name: Destroy Droplet
+        if: |
+          github.event.action == 'closed' ||
+          (github.event.action == 'unlabeled' && github.event.label.name == 'deploy')
+        run: |
+          # Delete the droplet
+          DROPLET_ID=$(doctl compute droplet list --format ID,Name --no-header | grep ${{ env.DROPLET_NAME }} | awk '{print $1}')
+          if [ ! -z "$DROPLET_ID" ]; then
+            doctl compute droplet delete $DROPLET_ID -f
+            gh pr comment ${{ env.PR_NUMBER }} --body "🗑️ Deployment environment has been destroyed."
+          fi
 
-- name: Cleanup
-  if: always()
-  run: rm -f private_key || true
+      - name: Cleanup
+        if: always()
+        run: rm -f private_key || true
 
-- name: Notify Non-Admin PR
-  if: needs.check-permissions.outputs.is-admin != 'true' && github.event.action == 'labeled' && github.event.label.name == 'deploy'
-  uses: actions/github-script@v7
-  with:
-    script: |
-      const { issue: { number: issue_number }, repo: { owner, repo } } = context;
-      await github.rest.issues.createComment({
-        owner,
-        repo,
-        issue_number,
-        body: '⚠️ Only repository administrators can deploy preview environments.'
-      });
-      // Remove the deploy label
-      await github.rest.issues.removeLabel({
-        owner,
-        repo,
-        issue_number,
-        name: 'deploy'
-      });
+      - name: Notify Non-Admin PR
+        if: needs.check-permissions.outputs.is-admin != 'true' && github.event.action == 'labeled' && github.event.label.name == 'deploy'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { issue: { number: issue_number }, repo: { owner, repo } } = context;
+            await github.rest.issues.createComment({
+              owner,
+              repo,
+              issue_number,
+              body: '⚠️ Only repository administrators can deploy preview environments.'
+            });
+            // Remove the deploy label
+            await github.rest.issues.removeLabel({
+              owner,
+              repo,
+              issue_number,
+              name: 'deploy'
+            });
