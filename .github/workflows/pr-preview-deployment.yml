@@ -14,17 +14,7 @@ jobs:
   check-permissions:
     runs-on: ubuntu-latest
     outputs:
-      is-admin: ${{ steps.check.outputs.is-admin }}
-    steps:
-      - id: check
-        name: Check if PR author is 'daveearley'
-        run: |
-          if [ "${{ github.event.pull_request.user.login }}" = "daveearley" ]; then
-            echo "is-admin=true" >> $GITHUB_ENV
-          else
-            echo "is-admin=false" >> $GITHUB_ENV
-          fi
-          echo "::set-output name=is-admin::$(cat $GITHUB_ENV | grep 'is-admin' | cut -d '=' -f 2)"
+      is-admin: ${{ github.event.pull_request.user.login == 'daveearley' }}
 
   manage-environment:
     needs: check-permissions
