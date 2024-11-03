@@ -14,7 +14,10 @@ jobs:
   check-permissions:
     runs-on: ubuntu-latest
     outputs:
-      is-admin: ${{ github.event.pull_request.user.login == 'daveearley' }}
+      is-admin: ${{ steps.check-admin.outputs.result }}
+    steps:
+      - id: check-admin
+        run: echo "result=${{ github.event.pull_request.user.login == 'daveearley' }}" >> $GITHUB_OUTPUT
 
   manage-environment:
     needs: check-permissions
