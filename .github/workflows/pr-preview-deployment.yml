@@ -2,7 +2,7 @@ name: PR Environment Management
 
 on:
   pull_request:
-    types: [labeled, unlabeled, closed, opened, reopened, synchronize]
+    types: [ labeled, unlabeled, closed, opened, reopened, synchronize ]
 
 env:
   DROPLET_SIZE: s-2vcpu-2gb
@@ -53,12 +53,17 @@ jobs:
             --size ${{ env.DROPLET_SIZE }} \
             --region ${{ env.DROPLET_REGION }} \
             --ssh-keys ${{ secrets.DO_SSH_KEY_FINGERPRINT }} \
-            --wait \
             --format ID \
             --no-header)
           
-          # Wait for droplet to be ready
-          echo "Waiting for droplet to be ready..."
+          # Wait for droplet to be active
+          echo "Waiting for droplet to be active..."
+          while [ "$(doctl compute droplet get $DROPLET_ID --format Status --no-header)" != "active" ]; do
+            sleep 10
+          done
+          
+          # Additional wait for system setup
+          echo "Waiting for system to complete setup..."
           sleep 60
           
           # Get droplet IP
