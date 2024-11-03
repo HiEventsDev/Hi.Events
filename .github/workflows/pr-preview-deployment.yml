@@ -47,14 +47,15 @@ jobs:
       - name: Create and Deploy Droplet
         if: github.event.action == 'labeled' && github.event.label.name == 'deploy'
         run: |
-          # Create droplet
-          DROPLET_ID=$(doctl compute droplet create ${{ env.DROPLET_NAME }} \
+          # Create droplet and get its ID
+          doctl compute droplet create ${{ env.DROPLET_NAME }} \
             --image docker-20-04 \
             --size ${{ env.DROPLET_SIZE }} \
             --region ${{ env.DROPLET_REGION }} \
-            --ssh-keys ${{ secrets.DO_SSH_KEY_FINGERPRINT }} \
-            --format ID \
-            --no-header)
+            --ssh-keys ${{ secrets.DO_SSH_KEY_FINGERPRINT }}
+          
+          # Get the droplet ID
+          DROPLET_ID=$(doctl compute droplet list --format ID,Name --no-header | grep ${{ env.DROPLET_NAME }} | awk '{print $1}')
           
           # Wait for droplet to be active
           echo "Waiting for droplet to be active..."
@@ -86,6 +87,7 @@ jobs:
             sleep 30"
 
       - name: Add deployment URL to PR comment
+        if: github.event.action == 'labeled' && github.event.label.name == 'deploy'
         run: |
           gh pr comment ${{ env.PR_NUMBER }} --body "🚀 Deployment available at: http://$DROPLET_IP:8123"
 
