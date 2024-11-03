@@ -14,10 +14,14 @@ jobs:
   check-permissions:
     runs-on: ubuntu-latest
     outputs:
-      is-admin: ${{ steps.check-admin.outputs.result }}
+      is-admin: ${{ steps.check.outputs.has-permission }}
     steps:
-      - id: check-admin
-        run: echo "result=${{ github.event.pull_request.user.login == 'daveearley' }}" >> $GITHUB_OUTPUT
+      - uses: actions-cool/check-user-permission@v2
+        id: check
+        with:
+          username: daveearley
+          require: 'admin'
+          token: ${{ secrets.GITHUB_TOKEN }}
 
   manage-environment:
     needs: check-permissions
@@ -110,7 +114,7 @@ jobs:
               issue_number,
               body: '⚠️ Only Dave Earley can deploy preview environments.'
             });
-            // Remove the deploy label
+            # Remove the deploy label
             await github.rest.issues.removeLabel({
               owner,
               repo,
