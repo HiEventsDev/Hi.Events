@@ -13,8 +13,6 @@ env:
 jobs:
   check-permissions:
     runs-on: ubuntu-latest
-    outputs:
-      is-admin: ${{ steps.check.outputs.has-permission }}
     steps:
       - uses: actions-cool/check-user-permission@v2
         id: check
@@ -27,7 +25,7 @@ jobs:
     needs: check-permissions
     runs-on: ubuntu-latest
     if: |
-      needs.check-permissions.outputs.is-admin == 'true' && (
+      (
         (github.event.action == 'labeled' && github.event.label.name == 'deploy') ||
         (github.event.action == 'unlabeled' && github.event.label.name == 'deploy') ||
         github.event.action == 'closed'
