@@ -24,9 +24,9 @@ export const CheckInListForm = ({form, productCategories}: CheckInListFormProps)
             <ProductSelector
                 label={t`Which tickets should be associated with this check-in list?`}
                 placeholder={t`Select tickets`}
-                data={productCategories}
+                productCategories={productCategories}
                 form={form}
-                fieldName="product_ids"
+                productFieldName="product_ids"
                 includedProductTypes={[ProductType.Ticket]}
             />
 

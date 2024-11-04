@@ -164,9 +164,9 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
                         <ProductSelector
                             label={t`Message attendees with specific products`}
                             placeholder={t`Select products`}
-                            data={event.product_categories}
+                            productCategories={event.product_categories}
                             form={form}
-                            fieldName={'product_ids'}
+                            productFieldName={'product_ids'}
                             />
                     )}
 

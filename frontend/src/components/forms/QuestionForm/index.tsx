@@ -159,9 +159,9 @@ export const QuestionForm = ({form, productCategories}: QuestionFormProps) => {
                     label={t`What products does this code apply to?`}
                     placeholder="Select products"
                     icon={<IconTicket size="1rem"/>}
-                    data={productCategories ?? []}
+                    productCategories={productCategories ?? []}
                     form={form}
-                    fieldName="product_ids"
+                    productFieldName="product_ids"
                 />
             )}
 

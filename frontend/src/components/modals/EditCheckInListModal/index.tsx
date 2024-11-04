@@ -1,4 +1,4 @@
-import {CheckInListRequest, GenericModalProps, IdParam, Product} from "../../../types.ts";
+import {CheckInListRequest, GenericModalProps, IdParam, ProductCategory} from "../../../types.ts";
 import {Modal} from "../../common/Modal";
 import {t} from "@lingui/macro";
 import {CheckInListForm} from "../../forms/CheckInListForm";
@@ -82,7 +82,7 @@ export const EditCheckInListModal = ({
 
             {event && checkInList && (
                 <form onSubmit={form.onSubmit(handleSubmit)}>
-                    <CheckInListForm form={form} productCategories={event.products as Product[]}/>
+                    <CheckInListForm form={form} productCategories={event.product_categories as ProductCategory[]}/>
                     <Button
                         type={'submit'}
                         fullWidth

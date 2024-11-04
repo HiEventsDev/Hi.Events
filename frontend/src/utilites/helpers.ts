@@ -28,8 +28,12 @@ export const getInitials = (fullName: string) => {
     }, '');
 };
 
+export const getProductsFromEvent = (event?: Event) => {
+    return event?.product_categories?.flatMap(category => category.products).filter(product => product !== undefined);
+}
+
 export const getProductFromEvent = (productId: number, event?: Event) => {
-    return event?.products?.find(product => product.id === productId)
+    return getProductsFromEvent(event)?.find(product => product.id === productId);
 }
 
 export const formatStatus = (status: string) => {

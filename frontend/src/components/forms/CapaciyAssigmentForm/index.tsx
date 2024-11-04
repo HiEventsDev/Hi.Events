@@ -47,9 +47,9 @@ export const CapacityAssigmentForm = ({form, productsCategories}: CapacityAssigm
             <ProductSelector
                 label={t`What products should this capacity apply to?`}
                 placeholder={t`Select products`}
-                data={productsCategories}
+                productCategories={productsCategories}
                 form={form}
-                fieldName={'product_ids'}
+                productFieldName={'product_ids'}
             />
 
             <CustomSelect

@@ -25,6 +25,7 @@ export const PromoCodeTable = ({event, promoCodes, openCreateModal}: PromoCodeTa
     const [editModalOpen, {open: openEditModal, close: closeEditModal}] = useDisclosure(false);
     const deleteMutation = useDeletePromoCode();
     const clipboard = useClipboard({ timeout: 500 });
+    const eventProducts = event.product_categories?.flatMap(category => category.products);
 
     const handleEditModal = (promoCodeId: number | undefined) => {
         setPromoCodeId(promoCodeId);
@@ -132,7 +133,7 @@ export const PromoCodeTable = ({event, promoCodes, openCreateModal}: PromoCodeTa
 
                                         {Number(code.applicable_product_ids?.length) > 0 && (
                                             <Tooltip label={
-                                                event?.products?.filter(product =>
+                                                eventProducts?.filter((product) =>
                                                     code.applicable_product_ids?.map(Number)?.includes(Number(product.id)))
                                                     .map(product => {
                                                         return (

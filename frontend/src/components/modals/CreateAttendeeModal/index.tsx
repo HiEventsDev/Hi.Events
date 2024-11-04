@@ -1,5 +1,5 @@
 import {Modal} from "../../common/Modal";
-import {GenericModalProps} from "../../../types.ts";
+import {GenericModalProps, ProductCategory} from "../../../types.ts";
 import {Button} from "../../common/Button";
 import {useNavigate, useParams} from "react-router-dom";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
@@ -19,6 +19,8 @@ import {
     localeToNameMap,
     SupportedLocales
 } from "../../../locales.ts";
+import {ProductSelector} from "../../common/ProductSelector";
+import {getProductsFromEvent} from "../../../utilites/helpers.ts";
 
 export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
     const {eventId} = useParams();
@@ -26,6 +28,8 @@ export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
     const {data: event, isFetched: isEventFetched} = useGetEvent(eventId);
     const mutation = useCreateAttendee();
     const navigate = useNavigate();
+    const eventProducts = getProductsFromEvent(event);
+    const eventHasProducts = eventProducts && eventProducts?.length > 0;
 
     const form = useForm<CreateAttendeeRequest>({
         initialValues: {
@@ -41,13 +45,13 @@ export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
     });
 
     useEffect(() => {
-        if (event?.products) {
+        if (event?.product_categories) {
             form.setFieldValue(
                 'product_price_id',
-                String(event?.products?.find(product => product.id == form.values.product_id)?.prices?.[0]?.id)
+                String(eventProducts?.find(product => product.id == form.values.product_id)?.prices?.[0]?.id)
             );
 
-            const taxesAndFees = event?.products
+            const taxesAndFees = eventProducts
                 ?.find(product => product.id == form.values.product_id)
                 ?.taxes_and_fees;
 
@@ -82,13 +86,13 @@ export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
         })
     };
 
-    if (!event?.products) {
+    if (!event?.product_categories) {
         return (
             <LoadingOverlay visible/>
         )
     }
 
-    if (isEventFetched && event.products.length === 0) {
+    if (isEventFetched && !eventHasProducts) {
         return (
             <Modal opened onClose={onClose} heading={t`Manually Add Attendee`}>
                 <p>{t`You must create a ticket before you can manually add an attendee.`}</p>
@@ -142,34 +146,15 @@ export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
                     description={t`The language the attendee will receive emails in.`}
                 />
 
-                <Select
-                    label={t`Product`}
-                    mt={20}
-                    description={t`Manually adding an attendee will adjust product quantity.`}
+                <ProductSelector
                     placeholder={t`Select Product`}
-                    {...form.getInputProps('product_id')}
-                    data={event.products.map(product => {
-                        return {
-                            value: String(product.id),
-                            label: product.title,
-                        };
-                    })}
+                    label={t`Product`}
+                    productCategories={event.product_categories as ProductCategory[]}
+                    form={form}
+                    productFieldName={'product_id'}
+                    multiSelect={false}
+                    showTierSelector={true}
                 />
-
-                {event.products.find(product => product.id == form.values.product_id)?.type === 'TIERED' && (
-                    <Select
-                        label={t`Product Tier`}
-                        mt={20}
-                        placeholder={t`Select Product Tier`}
-                        {...form.getInputProps('product_price_id')}
-                        data={event?.products?.find(product => product.id == form.values.product_id)?.prices?.map(price => {
-                            return {
-                                value: String(price.id),
-                                label: String(price.label),
-                            };
-                        })}
-                    />
-                )}
 
                 <NumberInput
                     required

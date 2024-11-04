@@ -1,19 +1,19 @@
 import {Modal} from "../../common/Modal";
-import {GenericModalProps} from "../../../types.ts";
+import {GenericModalProps, ProductCategory, ProductType} from "../../../types.ts";
 import {Button} from "../../common/Button";
 import {useParams} from "react-router-dom";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
 import {useForm} from "@mantine/form";
-import {LoadingOverlay, Select, TextInput} from "@mantine/core";
+import {LoadingOverlay, TextInput} from "@mantine/core";
 import {EditAttendeeRequest} from "../../../api/attendee.client.ts";
 import {useGetAttendee} from "../../../queries/useGetAttendee.ts";
 import {useEffect} from "react";
 import {useUpdateAttendee} from "../../../mutations/useUpdateAttendee.ts";
 import {showSuccess} from "../../../utilites/notifications.tsx";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
-import {IconInfoCircle} from "@tabler/icons-react";
 import {t} from "@lingui/macro";
 import {InputGroup} from "../../common/InputGroup";
+import {ProductSelector} from "../../common/ProductSelector";
 
 interface EditAttendeeModalProps extends GenericModalProps {
     attendeeId: number;
@@ -93,35 +93,16 @@ export const EditAttendeeModal = ({onClose, attendeeId}: EditAttendeeModalProps)
                     required
                 />
 
-                {event?.products && (
-                    <Select
-                        mt={20}
-                        description={<><IconInfoCircle size={12}/> Changing an attendee's products will adjust product
-                            quantities</>}
-                        data={event.products.map(product => {
-                            return {
-                                value: String(product.id),
-                                label: product.title,
-                            };
-                        })}
-                        {...form.getInputProps('product_id')}
+                {event?.product_categories && event.product_categories.length > 0 && (
+                    <ProductSelector
+                        placeholder={t`Select Product`}
                         label={t`Product`}
-                        required
-                    />
-                )}
-
-                {event?.products?.find(product => product.id == form.values.product_id)?.type === 'TIERED' && (
-                    <Select
-                        label={t`Product Tier`}
-                        mt={20}
-                        placeholder={t`Select Product Tier`}
-                        {...form.getInputProps('product_price_id')}
-                        data={event?.products?.find(product => product.id == form.values.product_id)?.prices?.map(price => {
-                            return {
-                                value: String(price.id),
-                                label: String(price.label),
-                            };
-                        })}
+                        productCategories={event.product_categories as ProductCategory[]}
+                        form={form}
+                        productFieldName={'product_id'}
+                        includedProductTypes={[ProductType.Ticket]}
+                        multiSelect={false}
+                        showTierSelector={true}
                     />
                 )}
 

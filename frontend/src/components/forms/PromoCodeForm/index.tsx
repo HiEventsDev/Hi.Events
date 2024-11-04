@@ -68,9 +68,9 @@ export const PromoCodeForm = ({form}: PromoCodeFormProps) => {
                 label={t`What products does this code apply to? (Applies to all by default)`}
                 placeholder="Select products"
                 icon={<IconTicket size="1rem"/>}
-                data={productCategories}
+                productCategories={productCategories}
                 form={form}
-                fieldName="applicable_product_ids"
+                productFieldName="applicable_product_ids"
             />
 
             <InputGroup>
