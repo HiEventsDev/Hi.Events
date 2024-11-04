@@ -1,7 +1,7 @@
-import {CapacityAssignmentRequest, GenericModalProps, IdParam, Ticket} from "../../../types.ts";
+import {CapacityAssignmentRequest, GenericModalProps, IdParam, Product, ProductCategory} from "../../../types.ts";
 import {Modal} from "../../common/Modal";
 import {t} from "@lingui/macro";
-import {CapaciyAssigmentForm} from "../../forms/CapaciyAssigmentForm";
+import {CapacityAssigmentForm} from "../../forms/CapaciyAssigmentForm";
 import {useForm} from "@mantine/form";
 import {Button} from "@mantine/core";
 import {showSuccess} from "../../../utilites/notifications.tsx";
@@ -32,7 +32,7 @@ export const EditCapacityAssignmentModal = ({
             name: '',
             capacity: undefined,
             status: 'ACTIVE',
-            ticket_ids: [],
+            product_ids: [],
         }
     });
     const editMutation = useEditCapacityAssignment();
@@ -57,7 +57,7 @@ export const EditCapacityAssignmentModal = ({
                 name: capacityAssignment.name,
                 capacity: capacityAssignment.capacity,
                 status: capacityAssignment.status,
-                ticket_ids: capacityAssignment.tickets?.map(ticket => String(ticket.id)),
+                product_ids: capacityAssignment.products?.map(product => String(product.id)),
             });
         }
     }, [capacityAssignment]);
@@ -65,7 +65,7 @@ export const EditCapacityAssignmentModal = ({
     return (
         <Modal opened onClose={onClose} heading={t`Edit Capacity Assignment`}>
             <form onSubmit={form.onSubmit(handleSubmit)}>
-                {event && <CapaciyAssigmentForm form={form} tickets={event.tickets as Ticket[]}/>}
+                {event && <CapacityAssigmentForm form={form} productsCategories={event.product_categories as ProductCategory[]}/>}
                 <Button
                     type={'submit'}
                     fullWidth

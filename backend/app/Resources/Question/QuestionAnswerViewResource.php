@@ -16,6 +16,8 @@ class QuestionAnswerViewResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'product_id' => $this->getProductId(),
+            'product_title' => $this->getProductTitle(),
             'question_id' => $this->getQuestionId(),
             'title' => $this->getTitle(),
             'answer' => $this->getAnswer(),

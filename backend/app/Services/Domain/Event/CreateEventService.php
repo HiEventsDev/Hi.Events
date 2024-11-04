@@ -13,6 +13,7 @@ use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
+use HiEvents\Services\Domain\ProductCategory\CreateProductCategoryService;
 use HTMLPurifier;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
@@ -26,6 +27,7 @@ class CreateEventService
         private readonly DatabaseManager                   $databaseManager,
         private readonly EventStatisticRepositoryInterface $eventStatisticsRepository,
         private readonly HTMLPurifier                      $purifier,
+        private readonly CreateProductCategoryService      $createProductCategoryService,
     )
     {
     }
@@ -54,6 +56,8 @@ class CreateEventService
         );
 
         $this->createEventStatistics($event);
+
+        $this->createDefaultProductCategory($event);
 
         $this->databaseManager->commit();
 
@@ -104,7 +108,7 @@ class CreateEventService
     {
         $this->eventStatisticsRepository->create([
             'event_id' => $event->getId(),
-            'tickets_sold' => 0,
+            'products_sold' => 0,
             'sales_total_gross' => 0,
             'sales_total_before_additions' => 0,
             'total_tax' => 0,
@@ -142,5 +146,16 @@ class CreateEventService
             'continue_button_text' => __('Continue'),
             'support_email' => $organizer->getEmail(),
         ]);
+    }
+
+    private function createDefaultProductCategory(EventDomainObject $event): void
+    {
+        $this->createProductCategoryService->createCategory(
+            name: __('Tickets'),
+            isHidden: false,
+            eventId: $event->getId(),
+            description: null,
+            noProductsMessage: __('There are no tickets available for this event.'),
+        );
     }
 }

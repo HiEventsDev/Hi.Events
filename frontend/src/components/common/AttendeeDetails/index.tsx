@@ -1,14 +1,13 @@
 import {Anchor} from "@mantine/core";
-import {Card} from "../Card";
 import {Attendee} from "../../../types.ts";
 import classes from "./AttendeeDetails.module.scss";
 import {t} from "@lingui/macro";
-import {getAttendeeTicketTitle} from "../../../utilites/tickets.ts";
+import {getAttendeeProductTitle} from "../../../utilites/products.ts";
 import {getLocaleName, SupportedLocales} from "../../../locales.ts";
 
 export const AttendeeDetails = ({attendee}: { attendee: Attendee }) => {
     return (
-        <Card className={classes.orderDetails} variant={'lightGray'}>
+        <div className={classes.orderDetails} variant={'lightGray'}>
             <div className={classes.block}>
                 <div className={classes.title}>
                     {t`Name`}
@@ -43,10 +42,10 @@ export const AttendeeDetails = ({attendee}: { attendee: Attendee }) => {
             </div>
             <div className={classes.block}>
                 <div className={classes.title}>
-                    {t`Ticket`}
+                    {t`Product`}
                 </div>
                 <div className={classes.amount}>
-                    {getAttendeeTicketTitle(attendee)}
+                    {getAttendeeProductTitle(attendee)}
                 </div>
             </div>
             <div className={classes.block}>
@@ -57,6 +56,6 @@ export const AttendeeDetails = ({attendee}: { attendee: Attendee }) => {
                     {getLocaleName(attendee.locale as SupportedLocales)}
                 </div>
             </div>
-        </Card>
+        </div>
     );
 }

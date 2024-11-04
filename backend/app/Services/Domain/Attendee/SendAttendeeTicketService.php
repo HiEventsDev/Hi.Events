@@ -9,10 +9,10 @@ use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Mail\Attendee\AttendeeTicketMail;
 use Illuminate\Contracts\Mail\Mailer;
 
-readonly class SendAttendeeTicketService
+class SendAttendeeTicketService
 {
     public function __construct(
-        private Mailer $mailer
+        private readonly Mailer $mailer
     )
     {
     }

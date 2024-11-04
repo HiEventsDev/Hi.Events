@@ -12,7 +12,7 @@ use HiEvents\Services\Application\Locale\LocaleService;
 use HiEvents\Services\Domain\Order\OrderCreateRequestValidationService;
 use HiEvents\Services\Handlers\Order\CreateOrderHandler;
 use HiEvents\Services\Handlers\Order\DTO\CreateOrderPublicDTO;
-use HiEvents\Services\Handlers\Order\DTO\TicketOrderDetailsDTO;
+use HiEvents\Services\Handlers\Order\DTO\ProductOrderDetailsDTO;
 use HiEvents\Services\Infrastructure\Session\CheckoutSessionManagementService;
 use Illuminate\Http\JsonResponse;
 use Throwable;
@@ -42,7 +42,7 @@ class CreateOrderActionPublic extends BaseAction
             CreateOrderPublicDTO::fromArray([
                 'is_user_authenticated' => $this->isUserAuthenticated(),
                 'promo_code' => $request->input('promo_code'),
-                'tickets' => TicketOrderDetailsDTO::collectionFromArray($request->input('tickets')),
+                'products' => ProductOrderDetailsDTO::collectionFromArray($request->input('products')),
                 'session_identifier' => $sessionId,
                 'order_locale' => $this->localeService->getLocaleOrDefault($request->getPreferredLanguage()),
             ])

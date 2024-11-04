@@ -16,8 +16,8 @@ const GettingStarted = () => {
     const {eventId} = useParams();
     const eventQuery = useGetEvent(eventId);
     const event = eventQuery.data;
-    const tickets = event?.tickets;
-    const hasTickets = tickets && tickets.length > 0;
+    const products = event?.products;
+    const hasProducts = products && products.length > 0;
     const eventImagesQuery = useGetEventImages(eventId);
     const eventImages = eventImagesQuery.data;
     const hasImages = eventImages && eventImages.length > 0;
@@ -63,17 +63,17 @@ const GettingStarted = () => {
                 <div className={classes.actionItems}>
                     <Card>
                         <h2>
-                            {t`🎟️ Add tickets`}
+                            {t`🎟️ Add products`}
                         </h2>
                         <p>
-                            {t`Create tickets for your event, set prices, and manage available quantity.`}
+                            {t`Create products for your event, set prices, and manage available quantity.`}
                         </p>
 
-                        <Button variant={'light'} component={'a'} href={'/manage/event/' + eventId + '/tickets#create-ticket'}>
-                            {hasTickets ? t`Add More tickets` : t`Add tickets`}
+                        <Button variant={'light'} component={'a'} href={'/manage/event/' + eventId + '/products#create-product'}>
+                            {hasProducts ? t`Add More products` : t`Add products`}
                         </Button>
 
-                        {hasTickets && <Check/>}
+                        {hasProducts && <Check/>}
                     </Card>
                     <Card>
                         <h2>
@@ -105,7 +105,7 @@ const GettingStarted = () => {
                             {t`🚀 Set your event live`}
                         </h2>
                         <p>
-                            {t`Once you're ready, set your event live and start selling tickets.`}
+                            {t`Once you're ready, set your event live and start selling products.`}
                         </p>
                         {event?.status !== 'LIVE' &&
                             (<Button variant={'light'} onClick={handleStatusToggle}>

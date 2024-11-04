@@ -5,7 +5,7 @@ namespace HiEvents\Services\Handlers\CheckInList\Public;
 use HiEvents\DomainObjects\CheckInListDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\Generated\CheckInListDomainObjectAbstract;
-use HiEvents\DomainObjects\TicketDomainObject;
+use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\Exceptions\CannotCheckInException;
 use HiEvents\Helper\DateHelper;
 use HiEvents\Http\DTO\QueryParamsDTO;
@@ -30,7 +30,7 @@ class GetCheckInListAttendeesPublicHandler
     public function handle(string $shortId, QueryParamsDTO $queryParams): Paginator
     {
         $checkInList = $this->checkInListRepository
-            ->loadRelation(TicketDomainObject::class)
+            ->loadRelation(ProductDomainObject::class)
             ->loadRelation(new Relationship(EventDomainObject::class, name: 'event'))
             ->findFirstWhere([
                 CheckInListDomainObjectAbstract::SHORT_ID => $shortId,

@@ -123,7 +123,7 @@ export function EventCard({event}: EventCardProps) {
                         <div className={classes.infoItem}>
                             <IconUsers size={16} color={'#ccc'}/>
                             <span>
-                            {formatNumber(event?.statistics?.tickets_sold || 0)} {t`tickets sold`}
+                            {formatNumber(event?.statistics?.products_sold || 0)} {t`products sold`}
                             </span>
                         </div>
 

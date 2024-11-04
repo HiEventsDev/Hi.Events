@@ -93,7 +93,7 @@ export interface EventSettings {
     continue_button_text: string;
     email_footer_message: string;
     pre_checkout_message: string;
-    ticket_page_message: string;
+    product_page_message: string;
     post_checkout_message: string;
     support_email?: string;
     order_timeout_in_minutes?: number;
@@ -134,7 +134,7 @@ export interface EventBase {
 }
 
 export interface EventDuplicatePayload extends EventBase {
-    duplicate_tickets: boolean;
+    duplicate_products: boolean;
     duplicate_questions: boolean;
     duplicate_settings: boolean;
     duplicate_promo_codes: boolean;
@@ -163,7 +163,8 @@ export interface Event extends EventBase {
     description_preview?: string;
     lifecycle_status?: EventLifecycleStatus;
     settings?: EventSettings;
-    tickets?: Ticket[];
+    products?: Product[];
+    product_categories?: ProductCategory[];
     images?: Image[];
     organizer?: Organizer;
     currency: string;
@@ -180,7 +181,7 @@ export interface EventStatistics {
     total_tax: number;
     sales_total_before_additions: number;
     total_fee: number;
-    tickets_sold: number;
+    products_sold: number;
     total_refunded: number;
 }
 
@@ -189,7 +190,9 @@ export interface EventDailyStats {
     total_fees: number;
     total_tax: number;
     total_sales_gross: number;
-    tickets_sold: number;
+    products_sold: number;
+    attendees_registered: number;
+    total_refunded: number;
     orders_created: number;
 }
 
@@ -203,8 +206,9 @@ export interface EventStats {
     start_date: string;
     end_date: string;
     check_in_stats: CheckInStats;
-    total_tickets_sold: number;
-    total_ticket_sold_percentage_change: number;
+    total_products_sold: number;
+    total_attendees_registered: number;
+    total_product_sold_percentage_change: number;
     total_orders: number;
     total_orders_percentage_change: number;
     total_gross_sales: number;
@@ -212,6 +216,7 @@ export interface EventStats {
     total_tax: number;
     total_fees: number;
     total_views: number;
+    total_refunded: number;
 }
 
 export interface Organizer {
@@ -256,19 +261,24 @@ export interface GenericPaginatedResponse<T> {
     meta: PaginationData;
 }
 
-export enum TicketType {
+export enum ProductPriceType {
     Paid = 'PAID',
     Donation = 'DONATION',
     Free = 'FREE',
     Tiered = 'TIERED',
 }
 
-export enum TicketStatus {
+export enum ProductType {
+    Ticket = 'TICKET',
+    General = 'GENERAL',
+}
+
+export enum ProductStatus {
     Active = 'ACTIVE',
     Inactive = 'INACTIVE',
 }
 
-export interface TicketPrice {
+export interface ProductPrice {
     id?: number;
     label?: string;
     price: number;
@@ -289,15 +299,17 @@ export interface TicketPrice {
     quantity_remaining?: number;
 }
 
-export interface Ticket {
+export interface Product {
     id?: number;
     order?: number;
     title: string;
     event_id?: IdParam;
-    type: TicketType;
+    // todo - rename to price_type
+    type: ProductPriceType;
+    product_type: ProductType;
     description?: string;
     price?: number;
-    prices?: TicketPrice[];
+    prices?: ProductPrice[];
     price_before_discount?: number;
     is_discounted?: boolean;
     initial_quantity_available?: number | undefined;
@@ -312,7 +324,7 @@ export interface Ticket {
     start_collapsed?: boolean;
     show_quantity_remaining?: boolean;
     quantity_available?: number;
-    status?: TicketStatus;
+    status?: ProductStatus;
     is_sold_out?: boolean;
     is_available?: boolean;
     is_hidden_without_promo_code?: boolean;
@@ -325,13 +337,24 @@ export interface Ticket {
     tax_and_fee_ids?: IdParam[];
     taxes_and_fees?: TaxAndFee[];
     is_hidden?: boolean;
+    product_category_id?: IdParam;
+}
+
+export interface ProductCategory {
+    id?: number;
+    name: string;
+    description?: string;
+    products?: Product[];
+    event_id?: number;
+    is_hidden?: boolean;
+    no_products_message?: string;
 }
 
 export interface Attendee {
     id?: number;
-    ticket_id: number;
-    ticket?: Ticket;
-    ticket_price_id: number;
+    product_id: number;
+    product?: Product;
+    product_price_id: number;
     order_id: number;
     status: string;
     first_name: string;
@@ -403,8 +426,8 @@ export interface Order {
 
 export interface OrderItem {
     id: number;
-    ticket_id: number;
-    ticket_price_id: number;
+    product_id: number;
+    product_price_id: number;
     item_name: string;
     total_before_additions: number;
     total_before_discount?: number;
@@ -427,8 +450,8 @@ export interface Question {
     type: string;
     options: string[];
     event_id?: number;
-    tickets?: Ticket[];
-    ticket_ids?: number[];
+    products?: Product[];
+    product_ids?: number[];
     belongs_to: string;
     is_hidden: boolean;
 }
@@ -440,14 +463,14 @@ export interface CapacityAssignment {
     used_capacity: number;
     status: 'ACTIVE' | 'INACTIVE';
     capacity: number | undefined;
-    tickets: {
+    products: {
         id: number;
         title: string;
     }[];
 }
 
-export type CapacityAssignmentRequest = Omit<CapacityAssignment, 'id' | 'event_id' | 'used_capacity' | 'tickets'> & {
-    ticket_ids: IdParam[];
+export type CapacityAssignmentRequest = Omit<CapacityAssignment, 'id' | 'event_id' | 'used_capacity' | 'products'> & {
+    product_ids: IdParam[];
 };
 
 export interface CheckInList {
@@ -463,16 +486,16 @@ export interface CheckInList {
     is_active: boolean;
     event_id: number;
     event?: Event;
-    tickets: {
+    products: {
         id: number;
         title: string;
     }[];
 }
 
 export type CheckInListRequest =
-    Omit<CheckInList, 'event_id' | 'short_id' | 'id' | 'tickets' | 'total_attendees' | 'checked_in_attendees' | 'is_expired' | 'is_active'>
+    Omit<CheckInList, 'event_id' | 'short_id' | 'id' | 'products' | 'total_attendees' | 'checked_in_attendees' | 'is_expired' | 'is_active'>
     & {
-    ticket_ids: IdParam[];
+    product_ids: IdParam[];
 };
 
 export interface CheckIn {
@@ -490,7 +513,7 @@ export interface QuestionRequestData {
     is_hidden: boolean;
     type: string;
     options: string[];
-    ticket_ids?: string[];
+    product_ids?: string[];
     belongs_to: string;
 }
 
@@ -499,11 +522,11 @@ export interface Message {
     subject: string;
     message: string;
     message_preview: string;
-    type: 'TICKET' | 'EVENT';
+    type: 'PRODUCT' | 'EVENT';
     is_test: boolean;
     order_id?: number;
     attendee_ids?: IdParam[];
-    ticket_ids?: IdParam[];
+    product_ids?: IdParam[];
     created_at?: string;
     updated_at?: string;
     sent_at?: string;
@@ -522,7 +545,7 @@ export enum QuestionType {
 }
 
 export enum QuestionBelongsToType {
-    TICKET = 'TICKET',
+    PRODUCT = 'PRODUCT',
     ORDER = 'ORDER',
 }
 
@@ -572,7 +595,7 @@ export interface MessageOrderRequest {
 export enum MessageType {
     Attendee = 'ATTENDEE',
     Order = 'ORDER',
-    Ticket = 'TICKET',
+    Product = 'PRODUCT',
     Event = 'EVENT',
 }
 
@@ -580,7 +603,7 @@ export interface PromoCode {
     id?: number;
     code: string;
     discount?: number;
-    applicable_ticket_ids?: number[] | string[];
+    applicable_product_ids?: number[] | string[];
     expiry_date?: string;
     event_id?: number;
     discount_type?: PromoCodeDiscountType | null;
@@ -630,6 +653,8 @@ export interface SortableItem {
 }
 
 export interface QuestionAnswer {
+    product_id?: number;
+    product_title?: string;
     question_id: number;
     title: string;
     answer: string[] | string;

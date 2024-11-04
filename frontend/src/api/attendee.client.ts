@@ -8,8 +8,8 @@ export interface EditAttendeeRequest {
     first_name: string;
     last_name: string;
     email: string;
-    ticket_id?: IdParam;
-    ticket_price_id?: IdParam;
+    product_id?: IdParam;
+    product_price_id?: IdParam;
     status?: string;
 }
 
@@ -62,8 +62,8 @@ export const attendeesClient = {
 
         return new Blob([response.data]);
     },
-    resendTicket: async (eventId: IdParam, attendeeId: IdParam) => {
-        return await api.post(`events/${eventId}/attendees/${attendeeId}/resend-ticket`);
+    resendProduct: async (eventId: IdParam, attendeeId: IdParam) => {
+        return await api.post(`events/${eventId}/attendees/${attendeeId}/resend-product`);
     },
 }
 

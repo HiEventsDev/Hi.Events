@@ -2,6 +2,7 @@
 
 namespace HiEvents\DomainObjects;
 
+use HiEvents\DomainObjects\Enums\ProductType;
 use HiEvents\DomainObjects\Interfaces\IsSortable;
 use HiEvents\DomainObjects\SortingAndFiltering\AllowedSorts;
 use HiEvents\DomainObjects\Status\OrderPaymentStatus;
@@ -66,6 +67,28 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
         return $this->getFirstName() . ' ' . $this->getLastName();
     }
 
+    public function getProductOrderItems(): Collection
+    {
+        if ($this->getOrderItems() === null) {
+            return new Collection();
+        }
+
+        return $this->getOrderItems()->filter(static function (OrderItemDomainObject $orderItem) {
+            return $orderItem->getProductType() === ProductType::GENERAL->name;
+        });
+    }
+
+    public function getTicketOrderItems(): Collection
+    {
+        if ($this->getOrderItems() === null) {
+            return new Collection();
+        }
+
+        return $this->getOrderItems()->filter(static function (OrderItemDomainObject $orderItem) {
+            return $orderItem->getProductType() === ProductType::TICKET->name;
+        });
+    }
+
     public function setOrderItems(?Collection $orderItems): OrderDomainObject
     {
         $this->orderItems = $orderItems;
@@ -124,7 +147,7 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
 
     public function isFullyRefunded(): bool
     {
-        return $this->getTotalRefunded() >= $this->getTotalGross();
+        return !$this->isFreeOrder() && ($this->getTotalRefunded() >= $this->getTotalGross());
     }
 
     public function getStripePayment(): ?StripePaymentDomainObject

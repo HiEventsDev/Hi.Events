@@ -14,7 +14,7 @@ class UpsertQuestionDTO extends BaseDTO
         public bool              $required,
         public ?array            $options,
         public int               $event_id,
-        public array             $ticket_ids,
+        public array             $product_ids,
         public bool              $is_hidden,
         public QuestionBelongsTo $belongs_to,
         public ?string           $description = null,

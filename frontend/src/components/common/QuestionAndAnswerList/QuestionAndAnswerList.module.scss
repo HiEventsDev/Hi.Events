@@ -1,0 +1,77 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-bottom: 0.75rem;
+}
+
+.questionsList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.questionCard {
+  padding: 1rem;
+  border-radius: var(--mantine-radius-sm);
+  background: var(--mantine-color-gray-0);
+  border: 1px solid var(--mantine-color-gray-2);
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: var(--mantine-color-gray-3);
+  }
+}
+
+.productTitle {
+  color: var(--mantine-color-gray-6);
+  margin-bottom: 0.5rem;
+}
+
+.questionTitle {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+
+  svg {
+    margin-top: 0;
+  }
+}
+
+.answer {
+  color: var(--mantine-color-dark-9);
+  line-height: 1.5;
+  padding: 0.5rem 0;
+}
+
+.attendeeInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--mantine-color-gray-2);
+}
+
+.emptyState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: var(--mantine-color-gray-0);
+  border-radius: var(--mantine-radius-sm);
+  color: var(--mantine-color-gray-6);
+}

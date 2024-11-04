@@ -3,7 +3,7 @@
 namespace HiEvents\Http\Actions\Questions;
 
 use HiEvents\DomainObjects\Generated\QuestionDomainObjectAbstract;
-use HiEvents\DomainObjects\TicketDomainObject;
+use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Repository\Interfaces\QuestionRepositoryInterface;
 use HiEvents\Resources\Question\QuestionResourcePublic;
@@ -22,7 +22,7 @@ class GetQuestionsPublicAction extends BaseAction
     public function __invoke(Request $request, int $eventId): JsonResponse
     {
         $questions = $this->questionRepository
-            ->loadRelation(TicketDomainObject::class)
+            ->loadRelation(ProductDomainObject::class)
             ->findWhere([
                 QuestionDomainObjectAbstract::EVENT_ID => $eventId,
                 QuestionDomainObjectAbstract::IS_HIDDEN => false,

@@ -75,7 +75,7 @@ export function Dashboard() {
                 <>
                     <Menu
                         transitionProps={{transition: 'pop-top-right'}}
-                        position="top-end"
+                        position="bottom"
                         width={220}
                         withinPortal
                     >

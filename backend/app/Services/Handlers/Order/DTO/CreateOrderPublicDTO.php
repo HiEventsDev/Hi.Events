@@ -9,9 +9,9 @@ class CreateOrderPublicDTO extends BaseDTO
 {
     public function __construct(
         /**
-         * @var Collection<TicketOrderDetailsDTO>
+         * @var Collection<ProductOrderDetailsDTO>
          */
-        public readonly Collection $tickets,
+        public readonly Collection $products,
         public readonly bool       $is_user_authenticated,
         public readonly string     $session_identifier,
         public readonly ?string    $order_locale = null,

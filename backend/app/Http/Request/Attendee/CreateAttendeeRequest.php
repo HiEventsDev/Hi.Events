@@ -12,8 +12,8 @@ class CreateAttendeeRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'ticket_id' => ['int', 'required'],
-            'ticket_price_id' => ['int', 'nullable'],
+            'product_id' => ['int', 'required'],
+            'product_price_id' => ['int', 'nullable'],
             'email' => ['required', 'email'],
             'first_name' => 'string|required',
             'last_name' => 'string',

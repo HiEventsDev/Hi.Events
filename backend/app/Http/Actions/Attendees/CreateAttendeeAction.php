@@ -3,8 +3,8 @@
 namespace HiEvents\Http\Actions\Attendees;
 
 use HiEvents\DomainObjects\EventDomainObject;
-use HiEvents\Exceptions\InvalidTicketPriceId;
-use HiEvents\Exceptions\NoTicketsAvailableException;
+use HiEvents\Exceptions\InvalidProductPriceId;
+use HiEvents\Exceptions\NoProductsAvailableException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Attendee\CreateAttendeeRequest;
 use HiEvents\Http\ResponseCodes;
@@ -37,13 +37,13 @@ class CreateAttendeeAction extends BaseAction
                     'event_id' => $eventId,
                 ])
             ));
-        } catch (NoTicketsAvailableException $exception) {
+        } catch (NoProductsAvailableException $exception) {
             throw ValidationException::withMessages([
-                'ticket_id' => $exception->getMessage(),
+                'product_id' => $exception->getMessage(),
             ]);
-        } catch (InvalidTicketPriceId $exception) {
+        } catch (InvalidProductPriceId $exception) {
             throw ValidationException::withMessages([
-                'ticket_price_id' => $exception->getMessage(),
+                'product_price_id' => $exception->getMessage(),
             ]);
         }
 

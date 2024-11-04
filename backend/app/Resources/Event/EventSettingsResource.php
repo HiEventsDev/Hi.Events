@@ -15,7 +15,7 @@ class EventSettingsResource extends JsonResource
         return [
             'pre_checkout_message' => $this->getPreCheckoutMessage(),
             'post_checkout_message' => $this->getPostCheckoutMessage(),
-            'ticket_page_message' => $this->getTicketPageMessage(),
+            'product_page_message' => $this->getProductPageMessage(),
             'continue_button_text' => $this->getContinueButtonText(),
             'required_attendee_details' => $this->getRequireAttendeeDetails(),
             'email_footer_message' => $this->getEmailFooterMessage(),

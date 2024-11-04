@@ -17,7 +17,7 @@ export const CreatePromoCodeModal = ({onClose}: GenericModalProps) => {
         initialValues: {
             code: '',
             discount: undefined,
-            applicable_ticket_ids: [],
+            applicable_product_ids: [],
             expiry_date: undefined,
             discount_type: PromoCodeDiscountType.None,
             max_allowed_usages: undefined,

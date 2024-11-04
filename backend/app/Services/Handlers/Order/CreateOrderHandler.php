@@ -64,7 +64,7 @@ class CreateOrderHandler
 
             $orderItems = $this->orderItemProcessingService->process(
                 order: $order,
-                ticketsOrderDetails: $createOrderPublicDTO->tickets,
+                productsOrderDetails: $createOrderPublicDTO->products,
                 event: $event,
                 promoCode: $promoCode,
             );

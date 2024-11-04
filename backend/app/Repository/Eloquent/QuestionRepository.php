@@ -5,21 +5,21 @@ namespace HiEvents\Repository\Eloquent;
 use HiEvents\DomainObjects\Generated\QuestionDomainObjectAbstract;
 use HiEvents\DomainObjects\QuestionDomainObject;
 use HiEvents\Models\Question;
-use HiEvents\Models\TicketQuestion;
+use HiEvents\Models\ProductQuestion;
 use HiEvents\Repository\Interfaces\QuestionRepositoryInterface;
-use HiEvents\Repository\Interfaces\TicketRepositoryInterface;
+use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Collection;
 
 class QuestionRepository extends BaseRepository implements QuestionRepositoryInterface
 {
-    private TicketRepositoryInterface $ticketRepository;
+    private ProductRepositoryInterface $productRepository;
 
-    public function __construct(Application $application, DatabaseManager $db, TicketRepositoryInterface $ticketRepository)
+    public function __construct(Application $application, DatabaseManager $db, ProductRepositoryInterface $productRepository)
     {
         parent::__construct($application, $db);
-        $this->ticketRepository = $ticketRepository;
+        $this->productRepository = $productRepository;
     }
 
     protected function getModel(): string
@@ -32,37 +32,37 @@ class QuestionRepository extends BaseRepository implements QuestionRepositoryInt
         return QuestionDomainObject::class;
     }
 
-    public function create(array $attributes, array $ticketIds = []): QuestionDomainObject
+    public function create(array $attributes, array $productIds = []): QuestionDomainObject
     {
         /** @var QuestionDomainObject $question */
         $question = parent::create($attributes);
 
-        foreach ($ticketIds as $ticketId) {
-            $ticketQuestion = new TicketQuestion();
-            $ticketQuestion->create([
-                'ticket_id' => $ticketId,
+        foreach ($productIds as $productId) {
+            $productQuestion = new ProductQuestion();
+            $productQuestion->create([
+                'product_id' => $productId,
                 'question_id' => $question->getId(),
             ]);
         }
 
-        $question->setTickets($this->ticketRepository->findWhereIn('id', $ticketIds));
+        $question->setProducts($this->productRepository->findWhereIn('id', $productIds));
 
         return $question;
     }
 
-    public function updateQuestion(int $questionId, int $eventId, array $attributes, array $ticketIds = []): void
+    public function updateQuestion(int $questionId, int $eventId, array $attributes, array $productIds = []): void
     {
         $this->updateWhere($attributes, [
             'id' => $questionId,
             'event_id' => $eventId,
         ]);
 
-        TicketQuestion::where('question_id', $questionId)->delete();
+        ProductQuestion::where('question_id', $questionId)->delete();
 
-        foreach ($ticketIds as $ticketId) {
-            $ticketQuestion = new TicketQuestion();
-            $ticketQuestion->create([
-                'ticket_id' => $ticketId,
+        foreach ($productIds as $productId) {
+            $productQuestion = new ProductQuestion();
+            $productQuestion->create([
+                'product_id' => $productId,
                 'question_id' => $questionId,
             ]);
         }

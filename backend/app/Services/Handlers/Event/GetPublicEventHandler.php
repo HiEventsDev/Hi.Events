@@ -7,14 +7,15 @@ use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\Generated\PromoCodeDomainObjectAbstract;
 use HiEvents\DomainObjects\ImageDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
+use HiEvents\DomainObjects\ProductCategoryDomainObject;
+use HiEvents\DomainObjects\ProductDomainObject;
+use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\TaxAndFeesDomainObject;
-use HiEvents\DomainObjects\TicketDomainObject;
-use HiEvents\DomainObjects\TicketPriceDomainObject;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
 use HiEvents\Services\Domain\Event\EventPageViewIncrementService;
-use HiEvents\Services\Domain\Ticket\TicketFilterService;
+use HiEvents\Services\Domain\Product\ProductFilterService;
 use HiEvents\Services\Handlers\Event\DTO\GetPublicEventDTO;
 
 class GetPublicEventHandler
@@ -22,7 +23,7 @@ class GetPublicEventHandler
     public function __construct(
         private readonly EventRepositoryInterface      $eventRepository,
         private readonly PromoCodeRepositoryInterface  $promoCodeRepository,
-        private readonly TicketFilterService           $ticketFilterService,
+        private readonly ProductFilterService          $productFilterService,
         private readonly EventPageViewIncrementService $eventPageViewIncrementService,
     )
     {
@@ -32,9 +33,11 @@ class GetPublicEventHandler
     {
         $event = $this->eventRepository
             ->loadRelation(
-                new Relationship(TicketDomainObject::class, [
-                    new Relationship(TicketPriceDomainObject::class),
-                    new Relationship(TaxAndFeesDomainObject::class)
+                new Relationship(ProductCategoryDomainObject::class, [
+                    new Relationship(ProductDomainObject::class, [
+                        new Relationship(ProductPriceDomainObject::class),
+                        new Relationship(TaxAndFeesDomainObject::class),
+                    ]),
                 ])
             )
             ->loadRelation(new Relationship(EventSettingDomainObject::class))
@@ -55,6 +58,9 @@ class GetPublicEventHandler
             $this->eventPageViewIncrementService->increment($data->eventId, $data->ipAddress);
         }
 
-        return $event->setTickets($this->ticketFilterService->filter($event->getTickets(), $promoCodeDomainObject));
+        return $event->setProducts($this->productFilterService->filter(
+            productsCategories: $event->getProductCategories(),
+            promoCode: $promoCodeDomainObject
+        ));
     }
 }

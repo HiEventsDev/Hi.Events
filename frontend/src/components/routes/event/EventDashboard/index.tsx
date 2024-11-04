@@ -50,7 +50,7 @@ export const EventDashboard = () => {
 
                 <Card className={classes.chartCard}>
                     <div className={classes.chartCardTitle}>
-                        <h2>{t`Ticket Sales`}</h2>
+                        <h2>{t`Product Sales`}</h2>
                         <div className={classes.dateRange}>
                         <span>
                             {dateRange}
@@ -62,7 +62,8 @@ export const EventDashboard = () => {
                         data={eventStats?.daily_stats.map(stat => ({
                             date: formatDate(stat.date, 'MMM DD', event.timezone),
                             orders_created: stat.orders_created,
-                            tickets_sold: stat.tickets_sold,
+                            products_sold: stat.products_sold,
+                            attendees_registered: stat.attendees_registered,
                         })) || []}
                         dataKey="date"
                         withLegend
@@ -70,9 +71,10 @@ export const EventDashboard = () => {
 
                         series={[
                             {name: 'orders_created', color: 'blue.6', label: t`Orders Created`},
-                            {name: 'tickets_sold', color: 'blue.2', label: t`Tickets Sold`},
+                            {name: 'products_sold', color: 'blue.2', label: t`Products Sold`},
+                            {name: 'attendees_registered', color: 'blue.4', label: t`Attendees Registered`},
                         ]}
-                        curveType="natural"
+                        curveType="bump"
                         tickLine="none"
                         areaChartProps={{syncId: 'events'}}
                     />
@@ -96,6 +98,7 @@ export const EventDashboard = () => {
                                 total_fees: stat.total_fees,
                                 total_sales_gross: stat.total_sales_gross,
                                 total_tax: stat.total_tax,
+                                total_refunded: stat.total_refunded,
                             });
                         }) || []}
                         dataKey="date"
@@ -106,6 +109,7 @@ export const EventDashboard = () => {
                             {name: 'total_fees', label: t`Total Fees`, color: 'purple.3'},
                             {name: 'total_sales_gross', label: t`Gross Sales`, color: 'grape.5'},
                             {name: 'total_tax', label: t`Total Tax`, color: 'grape.7'},
+                            {name: 'total_refunded', label: t`Total Refunded`, color: 'red.6'},
                         ]}
                         curveType="natural"
                         tickLine="none"

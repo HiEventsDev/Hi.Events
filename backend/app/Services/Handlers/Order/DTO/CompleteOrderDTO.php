@@ -10,12 +10,12 @@ class CompleteOrderDTO extends BaseDTO
 {
     /**
      * @param CompleteOrderOrderDTO $order
-     * @param Collection<CompleteOrderAttendeeDTO> $attendees
+     * @param Collection<CompleteOrderProductDataDTO> $products
      */
     public function __construct(
         public CompleteOrderOrderDTO $order,
-        #[CollectionOf(CompleteOrderAttendeeDTO::class)]
-        public Collection            $attendees
+        #[CollectionOf(CompleteOrderProductDataDTO::class)]
+        public Collection $products
     )
     {
     }

@@ -24,7 +24,7 @@ class CreateQuestionService
      */
     public function createQuestion(
         QuestionDomainObject $question,
-        array                $ticketIds,
+        array                $productIds,
     ): QuestionDomainObject
     {
         return $this->databaseManager->transaction(fn() => $this->questionRepository->create([
@@ -36,6 +36,6 @@ class CreateQuestionService
             QuestionDomainObjectAbstract::OPTIONS => $question->getOptions(),
             QuestionDomainObjectAbstract::IS_HIDDEN => $question->getIsHidden(),
             QuestionDomainObjectAbstract::DESCRIPTION => $this->purifier->purify($question->getDescription()),
-        ], $ticketIds));
+        ], $productIds));
     }
 }

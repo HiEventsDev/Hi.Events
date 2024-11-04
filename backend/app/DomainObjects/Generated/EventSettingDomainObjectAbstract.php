@@ -14,7 +14,7 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     final public const EVENT_ID = 'event_id';
     final public const PRE_CHECKOUT_MESSAGE = 'pre_checkout_message';
     final public const POST_CHECKOUT_MESSAGE = 'post_checkout_message';
-    final public const TICKET_PAGE_MESSAGE = 'ticket_page_message';
+    final public const PRODUCT_PAGE_MESSAGE = 'product_page_message';
     final public const CONTINUE_BUTTON_TEXT = 'continue_button_text';
     final public const EMAIL_FOOTER_MESSAGE = 'email_footer_message';
     final public const SUPPORT_EMAIL = 'support_email';
@@ -50,7 +50,7 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     protected int $event_id;
     protected ?string $pre_checkout_message = null;
     protected ?string $post_checkout_message = null;
-    protected ?string $ticket_page_message = null;
+    protected ?string $product_page_message = null;
     protected ?string $continue_button_text = null;
     protected ?string $email_footer_message = null;
     protected ?string $support_email = null;
@@ -89,7 +89,7 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
                     'event_id' => $this->event_id ?? null,
                     'pre_checkout_message' => $this->pre_checkout_message ?? null,
                     'post_checkout_message' => $this->post_checkout_message ?? null,
-                    'ticket_page_message' => $this->ticket_page_message ?? null,
+                    'product_page_message' => $this->product_page_message ?? null,
                     'continue_button_text' => $this->continue_button_text ?? null,
                     'email_footer_message' => $this->email_footer_message ?? null,
                     'support_email' => $this->support_email ?? null,
@@ -167,15 +167,15 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
         return $this->post_checkout_message;
     }
 
-    public function setTicketPageMessage(?string $ticket_page_message): self
+    public function setProductPageMessage(?string $product_page_message): self
     {
-        $this->ticket_page_message = $ticket_page_message;
+        $this->product_page_message = $product_page_message;
         return $this;
     }
 
-    public function getTicketPageMessage(): ?string
+    public function getProductPageMessage(): ?string
     {
-        return $this->ticket_page_message;
+        return $this->product_page_message;
     }
 
     public function setContinueButtonText(?string $continue_button_text): self

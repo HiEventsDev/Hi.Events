@@ -6,8 +6,8 @@ use HiEvents\DomainObjects\CapacityAssignmentDomainObject;
 use HiEvents\DomainObjects\Enums\CapacityAssignmentAppliesTo;
 use HiEvents\DomainObjects\Generated\CapacityAssignmentDomainObjectAbstract;
 use HiEvents\Repository\Interfaces\CapacityAssignmentRepositoryInterface;
-use HiEvents\Services\Domain\Ticket\EventTicketValidationService;
-use HiEvents\Services\Domain\Ticket\Exception\UnrecognizedTicketIdException;
+use HiEvents\Services\Domain\Product\EventProductValidationService;
+use HiEvents\Services\Domain\Product\Exception\UnrecognizedProductIdException;
 use Illuminate\Database\DatabaseManager;
 
 class UpdateCapacityAssignmentService
@@ -15,33 +15,33 @@ class UpdateCapacityAssignmentService
     public function __construct(
         private readonly DatabaseManager                            $databaseManager,
         private readonly CapacityAssignmentRepositoryInterface      $capacityAssignmentRepository,
-        private readonly EventTicketValidationService               $eventTicketValidationService,
-        private readonly CapacityAssignmentTicketAssociationService $capacityAssignmentTicketAssociationService,
+        private readonly EventProductValidationService              $eventProductValidationService,
+        private readonly CapacityAssignmentProductAssociationService $capacityAssignmentProductAssociationService,
     )
     {
     }
 
     /**
-     * @throws UnrecognizedTicketIdException
+     * @throws UnrecognizedProductIdException
      */
     public function updateCapacityAssignment(
         CapacityAssignmentDomainObject $capacityAssignment,
-        ?array                         $ticketIds = null,
+        ?array                         $productIds = null,
     ): CapacityAssignmentDomainObject
     {
-        if ($ticketIds !== null) {
-            $this->eventTicketValidationService->validateTicketIds($ticketIds, $capacityAssignment->getEventId());
+        if ($productIds !== null) {
+            $this->eventProductValidationService->validateProductIds($productIds, $capacityAssignment->getEventId());
         }
 
-        return $this->updateAssignmentAndAssociateTickets($capacityAssignment, $ticketIds);
+        return $this->updateAssignmentAndAssociateProducts($capacityAssignment, $productIds);
     }
 
-    private function updateAssignmentAndAssociateTickets(
+    private function updateAssignmentAndAssociateProducts(
         CapacityAssignmentDomainObject $capacityAssignment,
-        ?array                         $ticketIds
+        ?array                         $productIds
     ): CapacityAssignmentDomainObject
     {
-        return $this->databaseManager->transaction(function () use ($capacityAssignment, $ticketIds) {
+        return $this->databaseManager->transaction(function () use ($capacityAssignment, $productIds) {
             /** @var CapacityAssignmentDomainObject $capacityAssignment */
             $this->capacityAssignmentRepository->updateWhere(
                 attributes: [
@@ -57,10 +57,10 @@ class UpdateCapacityAssignmentService
                 ]
             );
 
-            if ($capacityAssignment->getAppliesTo() === CapacityAssignmentAppliesTo::TICKETS->name) {
-                $this->capacityAssignmentTicketAssociationService->addCapacityToTickets(
+            if ($capacityAssignment->getAppliesTo() === CapacityAssignmentAppliesTo::PRODUCTS->name) {
+                $this->capacityAssignmentProductAssociationService->addCapacityToProducts(
                     capacityAssignmentId: $capacityAssignment->getId(),
-                    ticketIds: $ticketIds,
+                    productIds: $productIds,
                 );
             }
 

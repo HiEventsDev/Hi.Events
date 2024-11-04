@@ -9,7 +9,7 @@ use Illuminate\Support\Collection;
 
 class CheckInListDomainObject extends Generated\CheckInListDomainObjectAbstract implements IsSortable
 {
-    private ?Collection $tickets = null;
+    private ?Collection $products = null;
 
     private ?EventDomainObject $event = null;
 
@@ -53,14 +53,14 @@ class CheckInListDomainObject extends Generated\CheckInListDomainObjectAbstract 
         );
     }
 
-    public function getTickets(): ?Collection
+    public function getProducts(): ?Collection
     {
-        return $this->tickets;
+        return $this->products;
     }
 
-    public function setTickets(?Collection $tickets): static
+    public function setProducts(?Collection $products): static
     {
-        $this->tickets = $tickets;
+        $this->products = $products;
 
         return $this;
     }

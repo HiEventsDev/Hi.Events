@@ -10,7 +10,7 @@ class UpsertCheckInListDTO extends BaseDTO
         public string  $name,
         public ?string $description,
         public int     $eventId,
-        public array   $ticketIds,
+        public array   $productIds,
         public ?string $expiresAt = null,
         public ?string $activatesAt = null,
         public ?int    $id = null,

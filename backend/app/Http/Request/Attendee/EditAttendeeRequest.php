@@ -13,8 +13,8 @@ class EditAttendeeRequest extends BaseRequest
             'email' => RulesHelper::REQUIRED_EMAIL,
             'first_name' => RulesHelper::REQUIRED_STRING,
             'last_name' => RulesHelper::REQUIRED_STRING,
-            'ticket_id' => RulesHelper::REQUIRED_NUMERIC,
-            'ticket_price_id' => RulesHelper::REQUIRED_NUMERIC,
+            'product_id' => RulesHelper::REQUIRED_NUMERIC,
+            'product_price_id' => RulesHelper::REQUIRED_NUMERIC,
         ];
     }
 
@@ -25,10 +25,10 @@ class EditAttendeeRequest extends BaseRequest
             'email.email' => __('Email must be a valid email address'),
             'first_name.required' => __('First name is required'),
             'last_name.required' => __('Last name is required'),
-            'ticket_id.required' => __('Ticket is required'),
-            'ticket_price_id.required' => __('Ticket price is required'),
-            'ticket_id.numeric' => '',
-            'ticket_price_id.numeric' => '',
+            'product_id.required' => __('Product is required'),
+            'product_price_id.required' => __('Product price is required'),
+            'product_id.numeric' => '',
+            'product_price_id.numeric' => '',
         ];
     }
 }

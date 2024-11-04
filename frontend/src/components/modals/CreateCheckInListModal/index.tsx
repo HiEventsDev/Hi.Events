@@ -1,4 +1,4 @@
-import {CheckInListRequest, GenericModalProps, Ticket} from "../../../types.ts";
+import {CheckInListRequest, GenericModalProps, Product, ProductCategory} from "../../../types.ts";
 import {Modal} from "../../common/Modal";
 import {t} from "@lingui/macro";
 import {CheckInListForm} from "../../forms/CheckInListForm";
@@ -22,11 +22,14 @@ export const CreateCheckInListModal = ({onClose}: GenericModalProps) => {
             description: '',
             expires_at: '',
             activates_at: '',
-            ticket_ids: [],
+            product_ids: [],
         }
     });
     const createMutation = useCreateCheckInList();
-    const eventHasTickets = event?.tickets && event.tickets.length > 0;
+    const eventHasTickets = event?.product_categories
+        && event.product_categories.some(category => category.products.length > 0)
+        && event.product_categories.filter(category =>
+            category?.products?.filter((product: Product) => product.product_type === 'TICKET').length > 0).length > 0
 
     const handleSubmit = (requestData: CheckInListRequest) => {
         createMutation.mutate({
@@ -41,7 +44,7 @@ export const CreateCheckInListModal = ({onClose}: GenericModalProps) => {
         })
     }
 
-    const NoTickets = () => {
+    const NoProducts = () => {
         return (
             <NoResultsSplash
                 imageHref={'/blank-slate/tickets.svg'}
@@ -55,7 +58,7 @@ export const CreateCheckInListModal = ({onClose}: GenericModalProps) => {
                             size={'xs'}
                             leftSection={<IconPlus/>}
                             color={'green'}
-                            onClick={() => window.location.href = `/manage/event/${eventId}/tickets/#create-ticket`}
+                            onClick={() => window.location.href = `/manage/event/${eventId}/products/#create-product`}
                         >
                             {t`Create a Ticket`}
                         </Button>
@@ -67,10 +70,10 @@ export const CreateCheckInListModal = ({onClose}: GenericModalProps) => {
 
     return (
         <Modal opened onClose={onClose} heading={eventHasTickets ? t`Create Check-In List` : null}>
-            {!eventHasTickets && <NoTickets/>}
+            {!eventHasTickets && <NoProducts/>}
             {eventHasTickets && (
                 <form onSubmit={form.onSubmit(handleSubmit)}>
-                    {event && <CheckInListForm form={form} tickets={event.tickets as Ticket[]}/>}
+                    {event && <CheckInListForm form={form} productCategories={event.product_categories as ProductCategory[]}/>}
                     <Button
                         type={'submit'}
                         fullWidth

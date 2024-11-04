@@ -19,7 +19,7 @@ abstract class MessageDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     final public const RECIPIENT_IDS = 'recipient_ids';
     final public const SENT_AT = 'sent_at';
     final public const ATTENDEE_IDS = 'attendee_ids';
-    final public const TICKET_IDS = 'ticket_ids';
+    final public const PRODUCT_IDS = 'product_ids';
     final public const ORDER_ID = 'order_id';
     final public const STATUS = 'status';
     final public const SEND_DATA = 'send_data';
@@ -36,7 +36,7 @@ abstract class MessageDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     protected array|string|null $recipient_ids = null;
     protected ?string $sent_at = null;
     protected array|string|null $attendee_ids = null;
-    protected array|string|null $ticket_ids = null;
+    protected array|string|null $product_ids = null;
     protected ?int $order_id = null;
     protected string $status;
     protected array|string|null $send_data = null;
@@ -56,7 +56,7 @@ abstract class MessageDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
                     'recipient_ids' => $this->recipient_ids ?? null,
                     'sent_at' => $this->sent_at ?? null,
                     'attendee_ids' => $this->attendee_ids ?? null,
-                    'ticket_ids' => $this->ticket_ids ?? null,
+                    'product_ids' => $this->product_ids ?? null,
                     'order_id' => $this->order_id ?? null,
                     'status' => $this->status ?? null,
                     'send_data' => $this->send_data ?? null,
@@ -165,15 +165,15 @@ abstract class MessageDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
         return $this->attendee_ids;
     }
 
-    public function setTicketIds(array|string|null $ticket_ids): self
+    public function setProductIds(array|string|null $product_ids): self
     {
-        $this->ticket_ids = $ticket_ids;
+        $this->product_ids = $product_ids;
         return $this;
     }
 
-    public function getTicketIds(): array|string|null
+    public function getProductIds(): array|string|null
     {
-        return $this->ticket_ids;
+        return $this->product_ids;
     }
 
     public function setOrderId(?int $order_id): self

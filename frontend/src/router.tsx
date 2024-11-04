@@ -217,10 +217,10 @@ export const router: RouteObject[] = [
                 }
             },
             {
-                path: "tickets",
+                path: "products",
                 async lazy() {
-                    const Tickets = await import("./components/routes/event/tickets");
-                    return {Component: Tickets.default};
+                    const Products = await import("./components/routes/event/products");
+                    return {Component: Products.default};
                 }
             },
             {
@@ -351,8 +351,8 @@ export const router: RouteObject[] = [
     {
         path: "/widget/:eventId",
         async lazy() {
-            const TicketWidget = await import("./components/layouts/TicketWidget");
-            return {Component: TicketWidget.default};
+            const ProductWidget = await import("./components/layouts/ProductWidget");
+            return {Component: ProductWidget.default};
         },
         errorElement: <ErrorPage/>,
     },
@@ -367,28 +367,28 @@ export const router: RouteObject[] = [
             {
                 path: ":orderShortId/details",
                 async lazy() {
-                    const CollectInformation = await import("./components/routes/ticket-widget/CollectInformation");
+                    const CollectInformation = await import("./components/routes/product-widget/CollectInformation");
                     return {Component: CollectInformation.default};
                 }
             },
             {
                 path: ":orderShortId/payment",
                 async lazy() {
-                    const Payment = await import("./components/routes/ticket-widget/Payment");
+                    const Payment = await import("./components/routes/product-widget/Payment");
                     return {Component: Payment.default};
                 }
             },
             {
                 path: ":orderShortId/summary",
                 async lazy() {
-                    const OrderSummaryAndTickets = await import("./components/routes/ticket-widget/OrderSummaryAndTickets");
-                    return {Component: OrderSummaryAndTickets.default};
+                    const OrderSummaryAndProducts = await import("./components/routes/product-widget/OrderSummaryAndProducts");
+                    return {Component: OrderSummaryAndProducts.default};
                 }
             },
             {
                 path: ":orderShortId/payment_return",
                 async lazy() {
-                    const PaymentReturn = await import("./components/routes/ticket-widget/PaymentReturn");
+                    const PaymentReturn = await import("./components/routes/product-widget/PaymentReturn");
                     return {Component: PaymentReturn.default};
                 }
             },
@@ -397,24 +397,24 @@ export const router: RouteObject[] = [
     {
         path: "/order/:eventId/:orderShortId/print",
         async lazy() {
-            const PrintOrder = await import("./components/routes/ticket-widget/PrintOrder");
+            const PrintOrder = await import("./components/routes/product-widget/PrintOrder");
             return {Component: PrintOrder.default};
         },
         errorElement: <ErrorPage/>
     },
     {
-        path: "/ticket/:eventId/:attendeeShortId/print",
+        path: "/product/:eventId/:attendeeShortId/print",
         async lazy() {
-            const PrintTicket = await import("./components/routes/ticket-widget/PrintTicket");
-            return {Component: PrintTicket.default};
+            const PrintProduct = await import("./components/routes/product-widget/PrintProduct");
+            return {Component: PrintProduct.default};
         },
         errorElement: <ErrorPage/>
     },
     {
-        path: "/ticket/:eventId/:attendeeShortId",
+        path: "/product/:eventId/:attendeeShortId",
         async lazy() {
-            const AttendeeTicketAndInformation = await import("./components/routes/ticket-widget/AttendeeTicketAndInformation");
-            return {Component: AttendeeTicketAndInformation.default};
+            const AttendeeProductAndInformation = await import("./components/routes/product-widget/AttendeeProductAndInformation");
+            return {Component: AttendeeProductAndInformation.default};
         },
         errorElement: <ErrorPage/>
     },

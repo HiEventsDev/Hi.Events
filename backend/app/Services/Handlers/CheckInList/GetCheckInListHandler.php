@@ -4,7 +4,7 @@ namespace HiEvents\Services\Handlers\CheckInList;
 
 use HiEvents\DomainObjects\CheckInListDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
-use HiEvents\DomainObjects\TicketDomainObject;
+use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\CheckInListRepositoryInterface;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -20,7 +20,7 @@ class GetCheckInListHandler
     public function handle(int $checkInListId, int $eventId): CheckInListDomainObject
     {
         $checkInList = $this->checkInListRepository
-            ->loadRelation(TicketDomainObject::class)
+            ->loadRelation(ProductDomainObject::class)
             ->loadRelation(new Relationship(domainObject: EventDomainObject::class, name: 'event'))
             ->findFirstWhere([
                 'event_id' => $eventId,

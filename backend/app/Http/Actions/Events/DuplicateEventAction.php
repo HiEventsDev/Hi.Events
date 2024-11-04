@@ -29,7 +29,7 @@ class DuplicateEventAction extends BaseAction
             accountId: $this->getAuthenticatedAccountId(),
             title: $request->validated('title'),
             startDate: $request->validated('start_date'),
-            duplicateTickets: $request->validated('duplicate_tickets'),
+            duplicateProducts: $request->validated('duplicate_products'),
             duplicateQuestions: $request->validated('duplicate_questions'),
             duplicateSettings: $request->validated('duplicate_settings'),
             duplicatePromoCodes: $request->validated('duplicate_promo_codes'),

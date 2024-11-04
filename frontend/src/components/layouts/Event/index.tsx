@@ -37,7 +37,7 @@ const EventLayout = () => {
         {label: t`Manage`},
         {link: 'dashboard', label: t`Dashboard`, icon: IconDashboard},
         {link: 'settings', label: t`Settings`, icon: IconSettings},
-        {link: 'tickets', label: t`Tickets`, icon: IconTicket},
+        {link: 'products', label: t`Products`, icon: IconTicket},
         {link: 'attendees', label: t`Attendees`, icon: IconUsers},
         {link: 'orders', label: t`Orders`, icon: IconReceipt},
         {link: 'questions', label: t`Questions`, icon: IconUserQuestion},
@@ -174,7 +174,7 @@ const EventLayout = () => {
             <div className={classes.sidebar}>
                 <div className={classes.logo}>
                     <NavLink to={'/manage/events'}>
-                        <img style={{maxWidth: '170px', margin: "20px auto"}}
+                        <img style={{maxWidth: '120px', margin: "20px auto"}}
                              src={'/logo.svg'} alt={''}/>
                     </NavLink>
                 </div>

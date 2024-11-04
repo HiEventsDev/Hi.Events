@@ -6,9 +6,10 @@ namespace HiEvents\Http\Actions\Events;
 
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
+use HiEvents\DomainObjects\ProductCategoryDomainObject;
 use HiEvents\DomainObjects\TaxAndFeesDomainObject;
-use HiEvents\DomainObjects\TicketDomainObject;
-use HiEvents\DomainObjects\TicketPriceDomainObject;
+use HiEvents\DomainObjects\ProductDomainObject;
+use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
@@ -31,10 +32,12 @@ class GetEventAction extends BaseAction
         $event = $this->eventRepository
             ->loadRelation(new Relationship(domainObject: OrganizerDomainObject::class, name: 'organizer'))
             ->loadRelation(
-                new Relationship(TicketDomainObject::class, [
-                    new Relationship(TicketPriceDomainObject::class),
-                    new Relationship(TaxAndFeesDomainObject::class),
-                ]),
+                new Relationship(ProductCategoryDomainObject::class, [
+                    new Relationship(ProductDomainObject::class, [
+                        new Relationship(ProductPriceDomainObject::class),
+                        new Relationship(TaxAndFeesDomainObject::class),
+                    ]),
+                ])
             )
             ->findById($eventId);
 

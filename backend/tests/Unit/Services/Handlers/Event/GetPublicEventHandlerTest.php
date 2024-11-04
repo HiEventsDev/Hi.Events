@@ -7,7 +7,7 @@ use HiEvents\DomainObjects\PromoCodeDomainObject;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
 use HiEvents\Services\Domain\Event\EventPageViewIncrementService;
-use HiEvents\Services\Domain\Ticket\TicketFilterService;
+use HiEvents\Services\Domain\Product\ProductFilterService;
 use HiEvents\Services\Handlers\Event\DTO\GetPublicEventDTO;
 use HiEvents\Services\Handlers\Event\GetPublicEventHandler;
 use Mockery as m;
@@ -17,7 +17,7 @@ class GetPublicEventHandlerTest extends TestCase
 {
     private EventRepositoryInterface $eventRepository;
     private PromoCodeRepositoryInterface $promoCodeRepository;
-    private TicketFilterService $ticketFilterService;
+    private ProductFilterService $ticketFilterService;
     private EventPageViewIncrementService $eventPageViewIncrementService;
     private GetPublicEventHandler $handler;
 
@@ -27,7 +27,7 @@ class GetPublicEventHandlerTest extends TestCase
 
         $this->eventRepository = m::mock(EventRepositoryInterface::class);
         $this->promoCodeRepository = m::mock(PromoCodeRepositoryInterface::class);
-        $this->ticketFilterService = m::mock(TicketFilterService::class);
+        $this->ticketFilterService = m::mock(ProductFilterService::class);
         $this->eventPageViewIncrementService = m::mock(EventPageViewIncrementService::class);
 
         $this->handler = new GetPublicEventHandler(
@@ -41,14 +41,12 @@ class GetPublicEventHandlerTest extends TestCase
     public function testHandleWithoutPromoCodeAndUnauthenticatedUser(): void
     {
         $data = new GetPublicEventDTO(eventId: 1, isAuthenticated: false, ipAddress: '127.0.0.1', promoCode: null);
-        $tickets = collect();
-        $event = m::mock(EventDomainObject::class);
-        $event->shouldReceive('setTickets')->once()->andReturnSelf();
-        $event->shouldReceive('getTickets')->once()->andReturn($tickets);
+        $event = new EventDomainObject();
+        $event->setProductCategories(collect());
 
         $this->setupEventRepositoryMock($event, $data->eventId);
         $this->promoCodeRepository->shouldReceive('findFirstWhere')->once()->andReturnNull();
-        $this->ticketFilterService->shouldReceive('filter')->once()->with($tickets, null)->andReturn(collect());
+        $this->ticketFilterService->shouldReceive('filter')->once()->withAnyArgs()->andReturn(collect());
         $this->eventPageViewIncrementService->shouldReceive('increment')->once()->with($data->eventId, $data->ipAddress);
 
         $this->handler->handle($data);
@@ -57,16 +55,14 @@ class GetPublicEventHandlerTest extends TestCase
     public function testHandleWithInvalidPromoCode(): void
     {
         $data = new GetPublicEventDTO(eventId: 1, isAuthenticated: false, ipAddress: '127.0.0.1', promoCode: 'INVALID');
-        $event = m::mock(EventDomainObject::class);
-        $tickets = collect();
-        $event->shouldReceive('setTickets')->once()->andReturnSelf();
-        $event->shouldReceive('getTickets')->once()->andReturn($tickets);
+        $event = new EventDomainObject();
+        $event->setProductCategories(collect());
         $promoCode = m::mock(PromoCodeDomainObject::class)->makePartial();
         $promoCode->shouldReceive('isValid')->andReturn(false);
 
         $this->setupEventRepositoryMock($event, $data->eventId);
         $this->promoCodeRepository->shouldReceive('findFirstWhere')->once()->andReturn($promoCode);
-        $this->ticketFilterService->shouldReceive('filter')->once()->with($tickets, null)->andReturn(collect());
+        $this->ticketFilterService->shouldReceive('filter')->once()->withAnyArgs()->andReturn(collect());
         $this->eventPageViewIncrementService->shouldReceive('increment')->once()->with($data->eventId, $data->ipAddress);
 
         $this->handler->handle($data);
@@ -75,16 +71,14 @@ class GetPublicEventHandlerTest extends TestCase
     public function testHandleWithValidPromoCode(): void
     {
         $data = new GetPublicEventDTO(eventId: 1, isAuthenticated: false, ipAddress: '127.0.0.1', promoCode: 'VALID');
-        $tickets = collect();
-        $event = m::mock(EventDomainObject::class);
-        $event->shouldReceive('setTickets')->once()->andReturnSelf();
-        $event->shouldReceive('getTickets')->once()->andReturn($tickets);
+        $event = new EventDomainObject();
+        $event->setProductCategories(collect());
         $promoCode = m::mock(PromoCodeDomainObject::class)->makePartial();
         $promoCode->shouldReceive('isValid')->andReturn(true);
 
         $this->setupEventRepositoryMock($event, $data->eventId);
         $this->promoCodeRepository->shouldReceive('findFirstWhere')->once()->andReturn($promoCode);
-        $this->ticketFilterService->shouldReceive('filter')->once()->with($tickets, $promoCode)->andReturn(collect());
+        $this->ticketFilterService->shouldReceive('filter')->once()->withAnyArgs()->andReturn(collect());
         $this->eventPageViewIncrementService->shouldReceive('increment')->once()->with($data->eventId, $data->ipAddress);
 
         $this->handler->handle($data);

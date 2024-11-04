@@ -15,7 +15,7 @@ use Psr\Log\LoggerInterface;
 class GetEventPublicAction extends BaseAction
 {
     public function __construct(
-        private readonly GetPublicEventHandler $handler,
+        private readonly GetPublicEventHandler $getPublicEventHandler,
         private readonly LoggerInterface       $logger,
     )
     {
@@ -23,7 +23,7 @@ class GetEventPublicAction extends BaseAction
 
     public function __invoke(int $eventId, Request $request): Response|JsonResponse
     {
-        $event = $this->handler->handle(GetPublicEventDTO::fromArray([
+        $event = $this->getPublicEventHandler->handle(GetPublicEventDTO::fromArray([
             'eventId' => $eventId,
             'ipAddress' => $this->getClientIp($request),
             'promoCode' => strtolower($request->string('promo_code')),
