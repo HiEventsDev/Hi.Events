@@ -1,6 +1,6 @@
 import {t, Trans} from "@lingui/macro";
 import {UseFormReturnType} from "@mantine/form";
-import {Event, TaxAndFee, TaxAndFeeCalculationType, TaxAndFeeType, Product, ProductPriceType} from "../../../types.ts";
+import {Event, Product, ProductPriceType, TaxAndFee, TaxAndFeeCalculationType, TaxAndFeeType} from "../../../types.ts";
 import {
     ActionIcon,
     Alert,
@@ -10,7 +10,8 @@ import {
     ComboboxItem,
     Group,
     MultiSelect,
-    NumberInput, Select,
+    NumberInput,
+    Select,
     Switch,
     TextInput
 } from "@mantine/core";
@@ -19,7 +20,9 @@ import {
     IconCoinOff,
     IconCoins,
     IconHeartDollar,
-    IconInfoCircle, IconShirt, IconTicket,
+    IconInfoCircle,
+    IconShirt,
+    IconTicket,
     IconTrash,
     IconTrashOff,
 } from "@tabler/icons-react";
@@ -237,9 +240,11 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
 
                 {form.values.type === ProductPriceType.Tiered && (
                     <Alert title={t`What are Tiered Products?`} mb={20}>
-                        {t`Tiered products allow you to offer multiple price options for the same product.
-                         This is perfect for early bird products, or offering different price
-                          options for different groups of people.`}
+                        <Trans>
+                            Tiered products allow you to offer multiple price options for the same product.
+                            This is perfect for early bird products, or offering different price
+                            options for different groups of people.
+                        </Trans>
                     </Alert>
                 )}
 
