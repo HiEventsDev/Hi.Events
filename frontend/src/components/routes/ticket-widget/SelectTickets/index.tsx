@@ -33,7 +33,7 @@ import {PoweredByFooter} from "../../../common/PoweredByFooter";
 import {Event} from "../../../../types.ts";
 import {eventsClientPublic} from "../../../../api/event.client.ts";
 import {promoCodeClientPublic} from "../../../../api/promo-code.client.ts";
-import {IconX, IconNavigationFilled} from "@tabler/icons-react"
+import {IconX, IconChevronRight} from "@tabler/icons-react"
 import {getSessionIdentifier} from "../../../../utilites/sessionIdentifier.ts";
 import {Constants} from "../../../../constants.ts";
 
@@ -330,7 +330,7 @@ const SelectTickets = (props: SelectTicketsProps) => {
                                                 )}
                                             </div>
                                             <span className={`hi-ticket-collapse-arrow`}>
-                                                <IconNavigationFilled className={ticketIsCollapsed ? "" : "open"} />
+                                                <IconChevronRight className={ticketIsCollapsed ? "" : "open"} />
                                             </span>
                                         </UnstyledButton>
                                     </div>
