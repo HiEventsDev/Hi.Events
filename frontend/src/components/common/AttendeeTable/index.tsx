@@ -16,7 +16,7 @@ import {useModifyAttendee} from "../../../mutations/useModifyAttendee.ts";
 import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {t, Trans} from "@lingui/macro";
 import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
-import {useResendAttendeeProduct} from "../../../mutations/useResendAttendeeProduct.ts";
+import {useResendAttendeeTicket} from "../../../mutations/useResendAttendeeTicket.ts";
 import {ViewAttendeeModal} from "../../modals/ViewAttendeeModal";
 import {ActionMenu} from '../ActionMenu/index.tsx';
 
@@ -33,7 +33,7 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
     const [selectedAttendee, setSelectedAttendee] = useState<Attendee>();
     const {data: event} = useGetEvent(eventId);
     const modifyMutation = useModifyAttendee();
-    const resendProductMutation = useResendAttendeeProduct();
+    const resendTicketMutation = useResendAttendeeTicket();
 
     const handleModalClick = (attendee: Attendee, modal: {
         open: () => void
@@ -43,7 +43,7 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
     }
 
     const handleResendProduct = (attendee: Attendee) => {
-        resendProductMutation.mutate({
+        resendTicketMutation.mutate({
             attendeeId: attendee.id,
             eventId: eventId,
         }, {
