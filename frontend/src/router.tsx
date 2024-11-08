@@ -4,6 +4,8 @@ import {eventsClientPublic} from "./api/event.client.ts";
 import {promoCodeClientPublic} from "./api/promo-code.client.ts";
 import {useEffect, useState} from "react";
 import {useGetMe} from "./queries/useGetMe.ts";
+import {ReportTypes} from "./types.ts";
+import ReportLayout from "./components/routes/event/Reports/ReportLayout";
 
 const Root = () => {
     const [redirectPath, setRedirectPath] = useState<string | null>(null);
@@ -215,6 +217,20 @@ export const router: RouteObject[] = [
                     const EventDashboard = await import("./components/routes/event/EventDashboard");
                     return {Component: EventDashboard.default};
                 }
+            },
+            {
+                path: "reports",
+                async lazy() {
+                    const Reports = await import("./components/routes/event/Reports");
+                    return {Component: Reports.default};
+                },
+            },
+            {
+                path: "report/:reportType",
+                async lazy() {
+                    const ReportLayout = await import("./components/routes/event/Reports/ReportLayout");
+                    return {Component: ReportLayout.default};
+                },
             },
             {
                 path: "products",

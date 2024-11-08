@@ -1,6 +1,7 @@
 import {Badge, Breadcrumbs, Burger, Button, UnstyledButton, VisuallyHidden} from '@mantine/core';
 import {NavLink, Outlet, useParams} from "react-router-dom";
 import {
+    IconChartBar, IconChartPie,
     IconChevronLeft,
     IconChevronRight,
     IconDashboard,
@@ -36,6 +37,7 @@ const EventLayout = () => {
         {link: 'getting-started', label: t`Getting Started`, icon: IconStar},
         {label: t`Manage`},
         {link: 'dashboard', label: t`Dashboard`, icon: IconDashboard},
+        {link: 'reports', label: t`Reports`, icon: IconChartPie},
         {link: 'settings', label: t`Settings`, icon: IconSettings},
         {link: 'products', label: t`Products`, icon: IconTicket},
         {link: 'attendees', label: t`Attendees`, icon: IconUsers},

@@ -18,7 +18,7 @@ import {t, Trans} from "@lingui/macro";
 import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
 import {useResendAttendeeProduct} from "../../../mutations/useResendAttendeeProduct.ts";
 import {ViewAttendeeModal} from "../../modals/ViewAttendeeModal";
-import {ActionMenu} from '../ActionMenu/index.tsx';
+import {ActionMenu} from '../ActionMenu';
 
 interface AttendeeTableProps {
     attendees: Attendee[];

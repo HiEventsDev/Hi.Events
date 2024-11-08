@@ -666,3 +666,8 @@ export interface QuestionAnswer {
     first_name?: string;
     last_name?: string;
 }
+
+export enum ReportTypes {
+    ProductSales = 'product_sales',
+    DailySales = 'daily_sales_report',
+}

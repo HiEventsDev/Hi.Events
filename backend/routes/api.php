@@ -88,6 +88,7 @@ use HiEvents\Http\Actions\Questions\GetQuestionAction;
 use HiEvents\Http\Actions\Questions\GetQuestionsAction;
 use HiEvents\Http\Actions\Questions\GetQuestionsPublicAction;
 use HiEvents\Http\Actions\Questions\SortQuestionsAction;
+use HiEvents\Http\Actions\Reports\GetReportAction;
 use HiEvents\Http\Actions\TaxesAndFees\CreateTaxOrFeeAction;
 use HiEvents\Http\Actions\TaxesAndFees\DeleteTaxOrFeeAction;
 use HiEvents\Http\Actions\TaxesAndFees\EditTaxOrFeeAction;
@@ -245,6 +246,8 @@ $router->middleware(['auth:api'])->group(
         $router->get('/events/{event_id}/check-in-lists/{check_in_list_id}', GetCheckInListAction::class);
         $router->put('/events/{event_id}/check-in-lists/{check_in_list_id}', UpdateCheckInListAction::class);
         $router->delete('/events/{event_id}/check-in-lists/{check_in_list_id}', DeleteCheckInListAction::class);
+
+        $router->get('/events/{event_id}/reports/{report_type}', GetReportAction::class);
     }
 );
 
