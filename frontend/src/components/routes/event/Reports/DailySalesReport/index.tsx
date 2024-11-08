@@ -34,7 +34,7 @@ export const DailySalesReport = () => {
         },
         {
             key: 'sales_total_before_additions' as const,
-            label: 'New Sales',
+            label: 'Net Sales',
             sortable: true,
             render: (value: string) => formatCurrency(value)
         },
