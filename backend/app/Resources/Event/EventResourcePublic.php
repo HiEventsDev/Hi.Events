@@ -39,7 +39,7 @@ class EventResourcePublic extends BaseResource
             'timezone' => $this->getTimezone(),
             'location_details' => $this->when((bool)$this->getLocationDetails(), fn() => $this->getLocationDetails()),
             'product_categories' => $this->when(
-                condition: !is_null($this->getProductCategories()),
+                condition: !is_null($this->getProductCategories()) && $this->getProductCategories()->isNotEmpty(),
                 value: fn() => ProductCategoryResourcePublic::collection($this->getProductCategories()),
             ),
             'settings' => $this->when(

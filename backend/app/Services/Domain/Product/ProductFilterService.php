@@ -27,7 +27,7 @@ class ProductFilterService
      * @param Collection<ProductCategoryDomainObject> $productsCategories
      * @param PromoCodeDomainObject|null $promoCode
      * @param bool $hideSoldOutProducts
-     * @return Collection<ProductDomainObject>
+     * @return Collection<ProductCategoryDomainObject>
      */
     public function filter(
         Collection             $productsCategories,
@@ -43,7 +43,8 @@ class ProductFilterService
             ->flatMap(fn(ProductCategoryDomainObject $category) => $category->getProducts());
 
         if ($products->isEmpty()) {
-            return $productsCategories;
+            return $productsCategories
+                ->reject(fn(ProductCategoryDomainObject $category) => $category->getIsHidden());
         }
 
         $productQuantities = $this
@@ -56,7 +57,8 @@ class ProductFilterService
             ->each(fn(ProductDomainObject $product) => $this->processProductPrices($product, $hideSoldOutProducts));
 
         return $productsCategories
-            ->map(fn(ProductCategoryDomainObject $category) => $category->setProducts(
+            ->reject(fn(ProductCategoryDomainObject $category) => $category->getIsHidden())
+            ->each(fn(ProductCategoryDomainObject $category) => $category->setProducts(
                 $filteredProducts->where(
                     static fn(ProductDomainObject $product) => $product->getProductCategoryId() === $category->getId()
                 )

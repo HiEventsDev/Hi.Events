@@ -3,6 +3,7 @@
 namespace HiEvents\Services\Domain\ProductCategory;
 
 use HiEvents\DomainObjects\Generated\ProductCategoryDomainObjectAbstract;
+use HiEvents\DomainObjects\Generated\ProductDomainObjectAbstract;
 use HiEvents\Exceptions\CannotDeleteEntityException;
 use HiEvents\Repository\Interfaces\ProductCategoryRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
@@ -56,8 +57,8 @@ class DeleteProductCategoryService
     {
         $productsToDelete = $this->productRepository->findWhere(
             [
-                ProductCategoryDomainObjectAbstract::ID => $productCategoryId,
-                ProductCategoryDomainObjectAbstract::EVENT_ID => $eventId,
+                ProductDomainObjectAbstract::PRODUCT_CATEGORY_ID => $productCategoryId,
+                ProductDomainObjectAbstract::EVENT_ID => $eventId,
             ]
         );
 

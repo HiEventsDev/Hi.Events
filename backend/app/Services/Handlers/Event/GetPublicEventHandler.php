@@ -58,7 +58,7 @@ class GetPublicEventHandler
             $this->eventPageViewIncrementService->increment($data->eventId, $data->ipAddress);
         }
 
-        return $event->setProducts($this->productFilterService->filter(
+        return $event->setProductCategories($this->productFilterService->filter(
             productsCategories: $event->getProductCategories(),
             promoCode: $promoCodeDomainObject
         ));

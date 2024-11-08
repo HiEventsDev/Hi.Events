@@ -218,7 +218,7 @@ const SelectProducts = (props: SelectProductsProps) => {
         }
     };
 
-    useEffect(populateFormValue, [products]);
+    useEffect(populateFormValue, [productCategories]);
 
     const handleProductSelection = (values: Omit<ProductFormPayload, "session_identifier">) => {
         if (values && selectedProductQuantitySum > 0) {
