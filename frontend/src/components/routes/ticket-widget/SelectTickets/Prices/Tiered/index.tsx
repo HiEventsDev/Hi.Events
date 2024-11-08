@@ -21,7 +21,7 @@ export const TieredPricing = ({ticket, event, form, ticketIndex}: TieredPricingP
             {ticket?.prices?.map((price, index) => {
                 return (
                     <div key={index} className={'hi-price-tier-row'}>
-                        <Group justify={'space-between'}>
+                        <Group justify={'space-between'} wrap={'nowrap'}>
                             <div className={'hi-price-tier'}>
                                 <div className={'hi-price-tier-label'}>{price.label}</div>
                                 <div className={'hi-price-tier-price'}>
