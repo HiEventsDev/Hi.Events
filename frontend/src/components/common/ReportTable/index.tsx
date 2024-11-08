@@ -30,16 +30,16 @@ interface ReportProps<T> {
 }
 
 const ReportTable = <T extends Record<string, any>>({
-                                                   title,
-                                                   columns,
-                                                   isLoading = false,
-                                                   showDateRange = true,
-                                                   defaultStartDate = new Date(new Date().setMonth(new Date().getMonth() - 3)),
-                                                   defaultEndDate = new Date(),
-                                                   onDateRangeChange,
-                                                   enableDownload = true,
-                                                   downloadFileName = 'report.csv'
-                                               }: ReportProps<T>) => {
+                                                        title,
+                                                        columns,
+                                                        isLoading = false,
+                                                        showDateRange = true,
+                                                        defaultStartDate = new Date(new Date().setMonth(new Date().getMonth() - 3)),
+                                                        defaultEndDate = new Date(),
+                                                        onDateRangeChange,
+                                                        enableDownload = true,
+                                                        downloadFileName = 'report.csv'
+                                                    }: ReportProps<T>) => {
     const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([defaultStartDate, defaultEndDate]);
     const [sortField, setSortField] = useState<keyof T | null>(null);
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | null>(null);
@@ -69,9 +69,9 @@ const ReportTable = <T extends Record<string, any>>({
     };
 
     const getSortIcon = (field: keyof T) => {
-        if (sortField !== field) return <IconArrowsSort size={16} className="ml-2 text-gray-400"/>;
-        if (sortDirection === 'asc') return <IconArrowUp size={16} className="ml-2 text-blue-500"/>;
-        if (sortDirection === 'desc') return <IconArrowDown size={16} className="ml-2 text-blue-500"/>;
+        if (sortField !== field) return <IconArrowsSort size={16}/>;
+        if (sortDirection === 'asc') return <IconArrowUp size={16}/>;
+        if (sortDirection === 'desc') return <IconArrowDown size={16}/>;
         return <IconArrowsSort size={16} className="ml-2 text-gray-400"/>;
     };
 
@@ -98,8 +98,6 @@ const ReportTable = <T extends Record<string, any>>({
             return aValue < bValue ? 1 : -1;
         }
     });
-
-    const headerClassName = "cursor-pointer hover:bg-gray-50 select-none";
 
     // Prepare CSV data
     const csvHeaders = columns.map(col => col.label);
@@ -166,11 +164,10 @@ const ReportTable = <T extends Record<string, any>>({
                         {columns.map((column) => (
                             <MantineTable.Th
                                 key={String(column.key)}
-                                className={column.sortable ? headerClassName : undefined}
                                 onClick={column.sortable ? () => handleSort(column.key) : undefined}
                                 style={{cursor: column.sortable ? 'pointer' : 'default', minWidth: '180px'}}
                             >
-                                <Group gap="xs" className="items-center">
+                                <Group gap="xs">
                                     {t`${column.label}`}
                                     {column.sortable && getSortIcon(column.key)}
                                 </Group>
