@@ -7,7 +7,7 @@ use HiEvents\DomainObjects\Enums\ProductPriceType;
 use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\ProductDomainObjectAbstract;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
-use HiEvents\Exceptions\NoProductsAvailableException;
+use HiEvents\Exceptions\NoTicketsAvailableException;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
@@ -66,7 +66,7 @@ class EditAttendeeHandler
 
     /**
      * @throws ValidationException
-     * @throws NoProductsAvailableException
+     * @throws NoTicketsAvailableException
      */
     private function validateProductId(EditAttendeeDTO $editAttendeeDTO): void
     {
@@ -90,7 +90,7 @@ class EditAttendeeHandler
         );
 
         if ($availableQuantity <= 0) {
-            throw new NoProductsAvailableException(
+            throw new NoTicketsAvailableException(
                 __('There are no products available. If you would like to assign this product to this attendee, please adjust the product\'s available quantity.')
             );
         }

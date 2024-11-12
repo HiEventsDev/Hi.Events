@@ -1,5 +1,5 @@
 import {Modal} from "../../common/Modal";
-import {GenericModalProps, ProductCategory} from "../../../types.ts";
+import {GenericModalProps, ProductCategory, ProductType} from "../../../types.ts";
 import {Button} from "../../common/Button";
 import {useNavigate, useParams} from "react-router-dom";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
@@ -103,7 +103,7 @@ export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
                         navigate(`/manage/event/${eventId}/products`)
                     }}
                 >
-                    {t`Manage products`}
+                    {t`Manage tickets`}
                 </Button>
             </Modal>
         )
@@ -147,13 +147,14 @@ export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
                 />
 
                 <ProductSelector
-                    placeholder={t`Select Product`}
-                    label={t`Product`}
+                    placeholder={t`Select Ticket`}
+                    label={t`Ticket`}
                     productCategories={event.product_categories as ProductCategory[]}
                     form={form}
                     productFieldName={'product_id'}
                     multiSelect={false}
                     showTierSelector={true}
+                    includedProductTypes={[ProductType.Ticket]}
                 />
 
                 <NumberInput
@@ -188,7 +189,7 @@ export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
 
                 <Switch
                     mt={20}
-                    label={t`Send order confirmation and product email`}
+                    label={t`Send order confirmation and ticket email`}
                     {...form.getInputProps('send_confirmation_email', {type: 'checkbox'})}
                 />
                 <Button type="submit" fullWidth mt="xl" disabled={mutation.isPending}>
