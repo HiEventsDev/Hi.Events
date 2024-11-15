@@ -33,7 +33,7 @@ import {PoweredByFooter} from "../../../common/PoweredByFooter";
 import {Event, Product} from "../../../../types.ts";
 import {eventsClientPublic} from "../../../../api/event.client.ts";
 import {promoCodeClientPublic} from "../../../../api/promo-code.client.ts";
-import {IconX, IconChevronRight} from "@tabler/icons-react"
+import {IconChevronRight, IconX} from "@tabler/icons-react"
 import {getSessionIdentifier} from "../../../../utilites/sessionIdentifier.ts";
 import {Constants} from "../../../../constants.ts";
 
@@ -318,7 +318,8 @@ const SelectProducts = (props: SelectProductsProps) => {
                                                 .map((n) => n.toString());
                                             quantityRange.unshift("0");
 
-                            const [productIsCollapsed, {toggle: collapseProduct}] = useDisclosure(product.start_collapsed);
+
+                                            const [productIsCollapsed, {toggle: collapseProduct}] = useDisclosure(product.start_collapsed);
 
                                             return (
                                                 <div key={product.id} className={'hi-product-row'}>
@@ -346,26 +347,18 @@ const SelectProducts = (props: SelectProductsProps) => {
                                                                     </>
                                                                 )}
 
-                                                {(!product.is_available && product.type === 'TIERED') && (
-                                                    <ProductAvailabilityMessage product={product} event={event}/>
-                                                )}
-                                            </div>
-                                            <span className={`hi-ticket-collapse-arrow`}>
-                                                <IconChevronRight className={productIsCollapsed ? "" : "open"} />
-                                            </span>
-                                        </UnstyledButton>
-                                    </div>
+                                                                {(!product.is_available && product.type === 'TIERED') && (
+                                                                    <ProductAvailabilityMessage product={product} event={event}/>
+                                                                )}
 
-                                    <Collapse in={!productIsCollapsed} className={'hi-product-content'}>
-                                        <div className={'hi-price-tiers-rows'}>
-                                            <TieredPricing
-                                                productIndex={productIndex}
-                                                event={event}
-                                                product={product}
-                                                form={form}
-                                            />
-                                        </div>
-                                                    <Collapse in={productIsCollapsed} className={'hi-product-content'}>
+                                                                <span className={`hi-product-collapse-arrow`}>
+                                                                <IconChevronRight
+                                                                    className={productIsCollapsed ? "" : "open"}/>
+                                                                </span>
+                                                            </div>
+                                                        </UnstyledButton>
+                                                    </div>
+                                                    <Collapse transitionDuration={100} in={!productIsCollapsed} className={'hi-product-content'}>
                                                         <div className={'hi-price-tiers-rows'}>
                                                             <TieredPricing
                                                                 productIndex={productIndex++}
