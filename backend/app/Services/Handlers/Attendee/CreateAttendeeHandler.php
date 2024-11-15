@@ -4,29 +4,30 @@ namespace HiEvents\Services\Handlers\Attendee;
 
 use Brick\Money\Money;
 use HiEvents\DomainObjects\AttendeeDomainObject;
+use HiEvents\DomainObjects\Enums\ProductType;
 use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\OrderItemDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\ProductDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
+use HiEvents\DomainObjects\ProductDomainObject;
+use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\DomainObjects\Status\OrderPaymentStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
-use HiEvents\DomainObjects\ProductDomainObject;
-use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\Events\OrderStatusChangedEvent;
 use HiEvents\Exceptions\InvalidProductPriceId;
-use HiEvents\Exceptions\NoProductsAvailableException;
+use HiEvents\Exceptions\NoTicketsAvailableException;
 use HiEvents\Helper\IdHelper;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
-use HiEvents\Repository\Interfaces\TaxAndFeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
+use HiEvents\Repository\Interfaces\TaxAndFeeRepositoryInterface;
 use HiEvents\Services\Domain\Order\OrderManagementService;
-use HiEvents\Services\Domain\Tax\TaxAndFeeRollupService;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
+use HiEvents\Services\Domain\Tax\TaxAndFeeRollupService;
 use HiEvents\Services\Handlers\Attendee\DTO\CreateAttendeeDTO;
 use HiEvents\Services\Handlers\Attendee\DTO\CreateAttendeeTaxAndFeeDTO;
 use Illuminate\Database\DatabaseManager;
@@ -51,7 +52,7 @@ class CreateAttendeeHandler
     }
 
     /**
-     * @throws NoProductsAvailableException
+     * @throws NoTicketsAvailableException
      * @throws Throwable
      */
     public function handle(CreateAttendeeDTO $attendeeDTO): AttendeeDomainObject
@@ -67,7 +68,12 @@ class CreateAttendeeHandler
                 ->findFirstWhere([
                     ProductDomainObjectAbstract::ID => $attendeeDTO->product_id,
                     ProductDomainObjectAbstract::EVENT_ID => $attendeeDTO->event_id,
+                    ProductDomainObjectAbstract::PRODUCT_TYPE => ProductType::TICKET->name,
                 ]);
+
+            if (!$product) {
+                throw new NoTicketsAvailableException(__('This ticket is invalid'));
+            }
 
             $availableQuantity = $this->productRepository->getQuantityRemainingForProductPrice(
                 $attendeeDTO->product_id,
@@ -75,7 +81,7 @@ class CreateAttendeeHandler
             );
 
             if ($availableQuantity <= 0) {
-                throw new NoProductsAvailableException(__('There are no products available. ' .
+                throw new NoTicketsAvailableException(__('There are no tickets available. ' .
                     'If you would like to assign a product to this attendee,' .
                     ' please adjust the product\'s available quantity.'));
             }

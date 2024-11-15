@@ -4,7 +4,7 @@ namespace HiEvents\Exceptions;
 
 use Exception;
 
-class NoProductsAvailableException extends Exception
+class NoTicketsAvailableException extends Exception
 {
 
 }

@@ -4,7 +4,7 @@ namespace HiEvents\Http\Actions\Attendees;
 
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Exceptions\InvalidProductPriceId;
-use HiEvents\Exceptions\NoProductsAvailableException;
+use HiEvents\Exceptions\NoTicketsAvailableException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Attendee\CreateAttendeeRequest;
 use HiEvents\Http\ResponseCodes;
@@ -37,7 +37,7 @@ class CreateAttendeeAction extends BaseAction
                     'event_id' => $eventId,
                 ])
             ));
-        } catch (NoProductsAvailableException $exception) {
+        } catch (NoTicketsAvailableException $exception) {
             throw ValidationException::withMessages([
                 'product_id' => $exception->getMessage(),
             ]);

@@ -112,7 +112,8 @@ export default function StripeCheckoutForm() {
             type: "accordion",
             defaultCollapsed: false,
             radios: true,
-        },
+            spacedAccordionItems: true,
+        }
     }
 
     return (

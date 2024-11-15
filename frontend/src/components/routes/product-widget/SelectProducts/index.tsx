@@ -33,7 +33,7 @@ import {PoweredByFooter} from "../../../common/PoweredByFooter";
 import {Event, Product} from "../../../../types.ts";
 import {eventsClientPublic} from "../../../../api/event.client.ts";
 import {promoCodeClientPublic} from "../../../../api/promo-code.client.ts";
-import {IconX} from "@tabler/icons-react"
+import {IconChevronRight, IconX} from "@tabler/icons-react"
 import {getSessionIdentifier} from "../../../../utilites/sessionIdentifier.ts";
 import {Constants} from "../../../../constants.ts";
 
@@ -318,7 +318,8 @@ const SelectProducts = (props: SelectProductsProps) => {
                                                 .map((n) => n.toString());
                                             quantityRange.unshift("0");
 
-                                            const [productIsCollapsed, {toggle: collapseProduct}] = useDisclosure(!product.start_collapsed);
+
+                                            const [productIsCollapsed, {toggle: collapseProduct}] = useDisclosure(product.start_collapsed);
 
                                             return (
                                                 <div key={product.id} className={'hi-product-row'}>
@@ -350,14 +351,14 @@ const SelectProducts = (props: SelectProductsProps) => {
                                                                     <ProductAvailabilityMessage product={product} event={event}/>
                                                                 )}
 
-                                                                <span className={'hi-product-collapse-arrow'}>
-                                                                    {productIsCollapsed ? '\u25BC' : '\u25B6'}
+                                                                <span className={`hi-product-collapse-arrow`}>
+                                                                <IconChevronRight
+                                                                    className={productIsCollapsed ? "" : "open"}/>
                                                                 </span>
                                                             </div>
                                                         </UnstyledButton>
                                                     </div>
-
-                                                    <Collapse in={productIsCollapsed} className={'hi-product-content'}>
+                                                    <Collapse transitionDuration={100} in={!productIsCollapsed} className={'hi-product-content'}>
                                                         <div className={'hi-price-tiers-rows'}>
                                                             <TieredPricing
                                                                 productIndex={productIndex++}

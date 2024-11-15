@@ -16,7 +16,7 @@ export const HomepageInfoMessage = ({message, link, linkText, iconType = 'info'}
             return '/info-icon.svg';
         }
         if (iconType === 'processing') {
-            return '/stopwatch-product-icon.svg';
+            return '/stopwatch-ticket-icon.svg';
         }
     }
 
