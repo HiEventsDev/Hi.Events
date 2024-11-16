@@ -670,4 +670,5 @@ export interface QuestionAnswer {
 export enum ReportTypes {
     ProductSales = 'product_sales',
     DailySales = 'daily_sales_report',
+    PromoCodes = 'promo_codes_report',
 }

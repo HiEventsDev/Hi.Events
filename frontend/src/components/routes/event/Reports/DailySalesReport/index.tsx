@@ -73,7 +73,8 @@ export const DailySalesReport = () => {
             columns={columns}
             isLoading={eventQuery.isLoading}
             downloadFileName="daily_sales_report.csv"
-            showDateRange={true}
+            showDateFilter={true}
+            event={event}
         />
     );
 };

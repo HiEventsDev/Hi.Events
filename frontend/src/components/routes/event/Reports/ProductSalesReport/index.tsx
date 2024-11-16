@@ -8,6 +8,10 @@ const ProductSalesReport = () => {
     const eventQuery = useGetEvent(eventId);
     const event = eventQuery.data;
 
+    if (!event) {
+        return null;
+    }
+
     const columns = [
         {
             key: 'product_title' as const,
@@ -45,6 +49,7 @@ const ProductSalesReport = () => {
             columns={columns}
             isLoading={eventQuery.isLoading}
             downloadFileName="product_sales_report.csv"
+            event={event}
         />
     );
 };

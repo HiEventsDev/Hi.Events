@@ -54,8 +54,8 @@ class GetReportAction extends BaseAction
 
         $diffInDays = Carbon::parse($startDate)->diffInDays(Carbon::parse($endDate));
 
-        if ($diffInDays > 366) {
-            throw ValidationException::withMessages(['start_date' => 'Date range must be less than 365 days.']);
+        if ($diffInDays > 370) {
+            throw ValidationException::withMessages(['start_date' => 'Date range must be less than 370 days.']);
         }
     }
 }

@@ -3,7 +3,7 @@
 namespace HiEvents\Resources\ProductCategory;
 
 use HiEvents\DomainObjects\ProductCategoryDomainObject;
-use HiEvents\Resources\Product\ProductResource;
+use HiEvents\Resources\Product\ProductResourcePublic;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -21,7 +21,7 @@ class ProductCategoryResourcePublic extends JsonResource
             'order' => $this->getOrder(),
             'no_products_message' => $this->getNoProductsMessage(),
             $this->mergeWhen((bool)$this->getProducts(), fn() => [
-                'products' => ProductResource::collection($this->getProducts()),
+                'products' => ProductResourcePublic::collection($this->getProducts()),
             ]),
         ];
     }
