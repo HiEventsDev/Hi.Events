@@ -56,14 +56,6 @@ class PromoCodesReport extends AbstractReportService
                      COALESCE(SUM(ot.total_gross), 0) as total_gross_sales,
                      COALESCE(SUM(ot.original_total), 0) as total_before_discounts,
                      COALESCE(SUM(ot.original_total - ot.discounted_total), 0) as total_discount_amount,
-                     CASE
-                         WHEN COUNT(ot.order_id) > 0 THEN ROUND(AVG(ot.original_total - ot.discounted_total)::numeric, 2)
-                         ELSE 0
-                         END as avg_discount_per_order,
-                     CASE
-                         WHEN COUNT(ot.order_id) > 0 THEN ROUND(AVG(ot.total_gross)::numeric, 2)
-                         ELSE 0
-                         END as avg_order_value,
                      MIN(ot.created_at AT TIME ZONE 'UTC') as first_used_at,
                      MAX(ot.created_at AT TIME ZONE 'UTC') as last_used_at,
                      pc.discount as configured_discount,
@@ -103,8 +95,6 @@ class PromoCodesReport extends AbstractReportService
             total_gross_sales,
             total_before_discounts,
             total_discount_amount,
-            avg_discount_per_order,
-            avg_order_value,
             first_used_at,
             last_used_at,
             max_allowed_usages,

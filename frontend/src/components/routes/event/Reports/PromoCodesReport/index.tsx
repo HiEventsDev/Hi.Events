@@ -60,18 +60,6 @@ const PromoCodesReport = () => {
             render: (value: string) => formatCurrency(value, event?.currency)
         },
         {
-            key: 'avg_discount_per_order' as const,
-            label: t`Avg Discount/Order`,
-            sortable: true,
-            render: (value: string) => formatCurrency(value, event?.currency)
-        },
-        {
-            key: 'avg_order_value' as const,
-            label: t`Avg Order Value`,
-            sortable: true,
-            render: (value: string) => formatCurrency(value, event?.currency)
-        },
-        {
             key: 'first_used_at' as const,
             label: t`First Used`,
             sortable: true,
