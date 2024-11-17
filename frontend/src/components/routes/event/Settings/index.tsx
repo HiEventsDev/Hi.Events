@@ -60,7 +60,7 @@ const SECTIONS = [
 ];
 
 export const Settings = () => {
-    const isLargeScreen = useMediaQuery('(min-width: 1200px)');
+    const isLargeScreen = useMediaQuery('(min-width: 1200px)', true);
     const [activeSection, setActiveSection] = useState(SECTIONS[0].id);
 
     const handleClick = (sectionId: string) => {
