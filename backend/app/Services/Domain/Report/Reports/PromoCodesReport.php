@@ -2,6 +2,7 @@
 
 namespace HiEvents\Services\Domain\Report\Reports;
 
+use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Services\Domain\Report\AbstractReportService;
 use Illuminate\Support\Carbon;
 
@@ -11,6 +12,13 @@ class PromoCodesReport extends AbstractReportService
     {
         $startDateString = $startDate->format('Y-m-d H:i:s');
         $endDateString = $endDate->format('Y-m-d H:i:s');
+        $reservedString = OrderStatus::RESERVED->name;
+        $translatedStringMap = [
+            'Expired' => __('Expired'),
+            'Limit Reached' => __('Limit Reached'),
+            'Deleted' => __('Deleted'),
+            'Active' => __('Active'),
+        ];
 
         return <<<SQL
                 WITH order_totals AS (
@@ -27,7 +35,7 @@ class PromoCodesReport extends AbstractReportService
                              JOIN order_items oi ON oi.order_id = o.id
                     WHERE
                         o.deleted_at IS NULL
-                      AND o.status NOT IN ('RESERVED')
+                      AND o.status NOT IN ('$reservedString')
                       AND o.event_id = :event_id
                       AND o.created_at >= '$startDateString'
                       AND o.created_at <= '$endDateString'
@@ -67,10 +75,10 @@ class PromoCodesReport extends AbstractReportService
                              THEN pc.max_allowed_usages - COUNT(ot.order_id)::integer
                          END as remaining_uses,
                      CASE
-                         WHEN pc.expiry_date < CURRENT_TIMESTAMP THEN 'Expired'
-                         WHEN pc.max_allowed_usages IS NOT NULL AND COUNT(ot.order_id) >= pc.max_allowed_usages THEN 'Limit Reached'
-                         WHEN pc.deleted_at IS NOT NULL THEN 'Deleted'
-                         ELSE 'Active'
+                         WHEN pc.expiry_date < CURRENT_TIMESTAMP THEN '{$translatedStringMap['Expired']}'
+                         WHEN pc.max_allowed_usages IS NOT NULL AND COUNT(ot.order_id) >= pc.max_allowed_usages THEN '{$translatedStringMap['Limit Reached']}'
+                         WHEN pc.deleted_at IS NOT NULL THEN '{$translatedStringMap['Deleted']}'
+                         ELSE '{$translatedStringMap['Active']}'
                          END as status
                  FROM promo_codes pc
                           LEFT JOIN order_totals ot ON pc.id = ot.promo_code_id

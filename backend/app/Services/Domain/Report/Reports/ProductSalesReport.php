@@ -2,6 +2,7 @@
 
 namespace HiEvents\Services\Domain\Report\Reports;
 
+use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Services\Domain\Report\AbstractReportService;
 use Illuminate\Support\Carbon;
 
@@ -11,6 +12,7 @@ class ProductSalesReport extends AbstractReportService
     {
         $startDateString = $startDate->format('Y-m-d H:i:s');
         $endDateString = $endDate->format('Y-m-d H:i:s');
+        $completedStatus = OrderStatus::COMPLETED->name;
 
         return <<<SQL
             WITH filtered_orders AS (
@@ -22,7 +24,7 @@ class ProductSalesReport extends AbstractReportService
                     oi.id AS order_item_id
                 FROM order_items oi
                 JOIN orders o ON oi.order_id = o.id
-                WHERE o.status = 'COMPLETED'
+                WHERE o.status = '$completedStatus'
                     AND o.event_id = :event_id
                     AND o.created_at BETWEEN '$startDateString' AND '$endDateString'
                     AND oi.deleted_at IS NULL
