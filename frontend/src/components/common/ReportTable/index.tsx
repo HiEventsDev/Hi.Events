@@ -253,7 +253,7 @@ const ReportTable = <T extends Record<string, any>>({
     return (
         <>
             <Group justify="space-between" mb="md">
-                <PageTitle>{t`${title}`}</PageTitle>
+                <PageTitle>{title}</PageTitle>
                 <Group justify="flex-end" align="center" gap="sm">
                     {showDateFilter && (
                         <Select
