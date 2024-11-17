@@ -18,6 +18,7 @@ class ProductResourcePublic extends JsonResource
             'id' => $this->getId(),
             'title' => $this->getTitle(),
             'type' => $this->getType(),
+            'product_type' => $this->getProductType(),
             'description' => $this->getDescription(),
             'max_per_order' => $this->getMaxPerOrder(),
             'min_per_order' => $this->getMinPerOrder(),

@@ -1,4 +1,4 @@
-import {ComboboxItem, Group, LoadingOverlay, Paper, Select, Table as MantineTable} from '@mantine/core';
+import {ComboboxItem, Group, Select, Skeleton, Table as MantineTable} from '@mantine/core';
 import {t} from '@lingui/macro';
 import {DatePickerInput} from "@mantine/dates";
 import {IconArrowDown, IconArrowsSort, IconArrowUp, IconCalendar} from "@tabler/icons-react";
@@ -13,6 +13,8 @@ import {Event} from "../../../types.ts";
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
+import {NoResultsSplash} from "../NoResultsSplash";
+import classes from './ReportTable.module.scss';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -54,7 +56,6 @@ const TIME_PERIODS = [
 const ReportTable = <T extends Record<string, any>>({
                                                         title,
                                                         columns,
-                                                        isLoading = false,
                                                         showDateFilter = true,
                                                         defaultStartDate = new Date(new Date().setMonth(new Date().getMonth() - 3)),
                                                         defaultEndDate = new Date(),
@@ -145,14 +146,6 @@ const ReportTable = <T extends Record<string, any>>({
         onDateRangeChange?.(tzRange);
     };
 
-    if (isLoading) {
-        return (
-            <Paper p="md" pos="relative">
-                <LoadingOverlay visible={true}/>
-            </Paper>
-        );
-    }
-
     const handleSort = (field: keyof T) => {
         if (sortField === field) {
             if (sortDirection === 'asc') setSortDirection('desc');
@@ -226,6 +219,37 @@ const ReportTable = <T extends Record<string, any>>({
         }
     };
 
+    if (reportQuery.isLoading) {
+        return (
+            <>
+                <Group justify="space-between" mb="xl">
+                    <Skeleton height={32} width={200}/>
+                    <Group gap="sm">
+                        <Skeleton height={32} width={200}/>
+                        <Skeleton height={32} width={130}/>
+                    </Group>
+                </Group>
+                <Skeleton height={300} radius="md"/>
+            </>
+        );
+    }
+
+    if (reportQuery.isFetched && !reportQuery.isLoading && !data.length) {
+        return (
+            <NoResultsSplash
+                heading={t`Nothing to show yet`}
+                imageHref={'/blank-slate/reports.svg'}
+                subHeading={(
+                    <>
+                        <p>
+                            {t`Once you start collecting data, you'll see it here.`}
+                        </p>
+                    </>
+                )}
+            />
+        );
+    }
+
     return (
         <>
             <Group justify="space-between" mb="md">
@@ -240,6 +264,7 @@ const ReportTable = <T extends Record<string, any>>({
                             onChange={handlePeriodChange}
                             leftSection={<IconCalendar stroke={1.5} size={20}/>}
                             mb="0"
+                            className={classes.periodSelect}
                         />
                     )}
                     {showDateFilter && showDatePickerInput && (
@@ -252,7 +277,7 @@ const ReportTable = <T extends Record<string, any>>({
                             onChange={handleDateRangeChange}
                             minDate={dayjs().subtract(1, 'year').tz(event.timezone).toDate()}
                             maxDate={dayjs().tz(event.timezone).toDate()}
-                            tim
+                            className={classes.datePicker}
                         />
                     )}
                     {enableDownload && (
@@ -260,6 +285,7 @@ const ReportTable = <T extends Record<string, any>>({
                             headers={csvHeaders}
                             data={csvData}
                             filename={downloadFileName}
+                            className={classes.downloadButton}
                         />
                     )}
                 </Group>
