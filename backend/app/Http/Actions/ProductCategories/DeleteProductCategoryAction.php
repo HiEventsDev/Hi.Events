@@ -5,7 +5,7 @@ namespace HiEvents\Http\Actions\ProductCategories;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Exceptions\CannotDeleteEntityException;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Services\Handlers\ProductCategory\DeleteProductCategoryHandler;
+use HiEvents\Services\Application\Handlers\ProductCategory\DeleteProductCategoryHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Throwable;

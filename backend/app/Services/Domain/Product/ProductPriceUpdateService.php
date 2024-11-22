@@ -9,8 +9,8 @@ use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\Exceptions\CannotDeleteEntityException;
 use HiEvents\Helper\DateHelper;
 use HiEvents\Repository\Eloquent\ProductPriceRepository;
+use HiEvents\Services\Application\Handlers\Product\DTO\UpsertProductDTO;
 use HiEvents\Services\Domain\Product\DTO\ProductPriceDTO;
-use HiEvents\Services\Handlers\Product\DTO\UpsertProductDTO;
 use Illuminate\Support\Collection;
 
 class ProductPriceUpdateService

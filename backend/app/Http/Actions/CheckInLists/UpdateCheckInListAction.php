@@ -6,9 +6,9 @@ use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\CheckInList\UpsertCheckInListRequest;
 use HiEvents\Resources\CheckInList\CheckInListResource;
+use HiEvents\Services\Application\Handlers\CheckInList\DTO\UpsertCheckInListDTO;
+use HiEvents\Services\Application\Handlers\CheckInList\UpdateCheckInlistHandler;
 use HiEvents\Services\Domain\Product\Exception\UnrecognizedProductIdException;
-use HiEvents\Services\Handlers\CheckInList\DTO\UpsertCheckInListDTO;
-use HiEvents\Services\Handlers\CheckInList\UpdateCheckInlistHandler;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 

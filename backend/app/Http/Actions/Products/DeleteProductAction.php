@@ -7,7 +7,7 @@ namespace HiEvents\Http\Actions\Products;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Exceptions\CannotDeleteEntityException;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Services\Handlers\Product\DeleteProductHandler;
+use HiEvents\Services\Application\Handlers\Product\DeleteProductHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;

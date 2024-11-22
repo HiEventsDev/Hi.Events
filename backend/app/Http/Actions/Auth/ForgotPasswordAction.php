@@ -4,7 +4,7 @@ namespace HiEvents\Http\Actions\Auth;
 
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Auth\ForgotPasswordRequest;
-use HiEvents\Services\Handlers\Auth\ForgotPasswordHandler;
+use HiEvents\Services\Application\Handlers\Auth\ForgotPasswordHandler;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 

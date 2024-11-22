@@ -8,7 +8,7 @@ use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Resources\Product\ProductResource;
-use HiEvents\Services\Handlers\Product\GetProductsHandler;
+use HiEvents\Services\Application\Handlers\Product\GetProductsHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

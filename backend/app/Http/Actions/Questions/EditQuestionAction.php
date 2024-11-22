@@ -8,8 +8,8 @@ use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Questions\UpsertQuestionRequest;
 use HiEvents\Resources\Question\QuestionResource;
-use HiEvents\Services\Handlers\Question\DTO\UpsertQuestionDTO;
-use HiEvents\Services\Handlers\Question\EditQuestionHandler;
+use HiEvents\Services\Application\Handlers\Question\DTO\UpsertQuestionDTO;
+use HiEvents\Services\Application\Handlers\Question\EditQuestionHandler;
 use Illuminate\Http\JsonResponse;
 use Throwable;
 

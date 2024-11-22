@@ -6,8 +6,8 @@ use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\ProductCategory\UpsertProductCategoryRequest;
 use HiEvents\Resources\ProductCategory\ProductCategoryResource;
-use HiEvents\Services\Handlers\ProductCategory\DTO\UpsertProductCategoryDTO;
-use HiEvents\Services\Handlers\ProductCategory\EditProductCategoryHandler;
+use HiEvents\Services\Application\Handlers\ProductCategory\DTO\UpsertProductCategoryDTO;
+use HiEvents\Services\Application\Handlers\ProductCategory\EditProductCategoryHandler;
 use Illuminate\Http\JsonResponse;
 
 class EditProductCategoryAction extends BaseAction
