@@ -1,23 +1,197 @@
+import React from "react";
 import {t} from "@lingui/macro";
+import {NavLink, useNavigate, useParams} from "react-router-dom";
+import {Badge, Button, Group, SimpleGrid, Text} from "@mantine/core";
+import {
+    IconBuilding,
+    IconCalendar,
+    IconCalendarEvent,
+    IconCash,
+    IconClock,
+    IconId,
+    IconMail,
+    IconMapPin,
+    IconMenuOrder,
+    IconPrinter,
+    IconUser
+} from "@tabler/icons-react";
+
 import {useGetOrderPublic} from "../../../../queries/useGetOrderPublic.ts";
-import {useNavigate, useParams} from "react-router-dom";
-import classes from './OrderSummaryAndProducts.module.scss';
-import {LoadingMask} from "../../../common/LoadingMask";
-import {Order, Product} from "../../../../types.ts";
-import {Card} from "../../../common/Card";
-import {AttendeeProduct} from "../../../common/AttendeeProduct";
+import {eventCheckoutPath} from "../../../../utilites/urlHelper.ts";
 import {dateToBrowserTz} from "../../../../utilites/dates.ts";
+import {formatAddress} from "../../../../utilites/formatAddress.tsx";
+
+import {Card} from "../../../common/Card";
+import {LoadingMask} from "../../../common/LoadingMask";
+import {HomepageInfoMessage} from "../../../common/HomepageInfoMessage";
+import {AttendeeProduct} from "../../../common/AttendeeProduct";
 import {PoweredByFooter} from "../../../common/PoweredByFooter";
-import {Button, Group} from "@mantine/core";
-import {IconPrinter} from "@tabler/icons-react";
+import {EventDateRange} from "../../../common/EventDateRange";
+import {OnlineEventDetails} from "../../../common/OnlineEventDetails";
 import {CheckoutContent} from "../../../layouts/Checkout/CheckoutContent";
 import {CheckoutFooter} from "../../../layouts/Checkout/CheckoutFooter";
-import {eventCheckoutPath} from "../../../../utilites/urlHelper.ts";
-import {HomepageInfoMessage} from "../../../common/HomepageInfoMessage";
-import {OnlineEventDetails} from "../../../common/OnlineEventDetails";
+
+import {Event, Order, Product} from "../../../../types.ts";
+import classes from './OrderSummaryAndProducts.module.scss';
+
+const PaymentStatus = ({order}: { order: Order }) => {
+    const paymentStatuses: Record<string, string> = {
+        'NO_PAYMENT_REQUIRED': t`No Payment Required`,
+        'AWAITING_PAYMENT': t`Awaiting Payment`,
+        'PAYMENT_FAILED': t`Payment Failed`,
+        'PAYMENT_RECEIVED': t`Payment Received`,
+    };
+
+    return order?.payment_status ? <span>{paymentStatuses[order.payment_status] || ''}</span> : null;
+};
+
+const RefundStatusType = ({order}: { order: Order }) => {
+    const refundStatuses: Record<string, string> = {
+        'REFUND_PENDING': t`Refund Pending`,
+        'REFUND_FAILED': t`Refund Failed`,
+        'REFUNDED': t`Refunded`,
+        'PARTIALLY_REFUNDED': t`Partially Refunded`,
+    };
+
+    return order?.refund_status ? <span>{refundStatuses[order.refund_status] || ''}</span> : null;
+};
+
+const OrderStatusType = ({order}: { order: Order }) => {
+    const statuses: Record<string, { label: string, color: string }> = {
+        'COMPLETED': {label: t`Order Completed`, color: 'green'},
+        'CANCELLED': {label: t`Order Cancelled`, color: 'red'},
+        'PAYMENT_FAILED': {label: t`Payment Failed`, color: 'red'},
+        'AWAITING_PAYMENT': {label: t`Awaiting Payment`, color: 'orange'},
+    };
+
+    const status = statuses[order?.status];
+    if (!status) return null;
+
+    return (
+        <Badge variant="outline" color={status.color}>
+            {status.label}
+        </Badge>
+    );
+};
+
+const DetailItem = ({icon: Icon, label, value}: { icon: any, label: string, value: React.ReactNode }) => (
+    <div className={classes.detailItem}>
+        <Group gap="xs" wrap="nowrap">
+            <Icon size={20} style={{color: 'var(--mantine-color-gray-6)', flexShrink: 0}}/>
+            <div className={classes.detailContent}>
+                <Text size="sm" c="dimmed" className={classes.label}>{label}</Text>
+                <Text className={classes.value}>{value}</Text>
+            </div>
+        </Group>
+    </div>
+);
+
+const WelcomeHeader = ({order, event}: { order: Order; event: Event }) => {
+    const message = {
+        'COMPLETED': t`You're going to ${event.title}! 🎉`,
+        'CANCELLED': t`Your order has been cancelled`,
+        'RESERVED': null,
+    }[order.status];
+
+    return message ? <div className={classes.welcomeHeader}>{message}</div> : null;
+};
+
+const OrderDetails = ({order, event}: { order: Order, event: Event }) => (
+    <Card style={{marginBottom: '40px'}}>
+        <SimpleGrid cols={{base: 1, sm: 2}} spacing="md">
+            <DetailItem
+                icon={IconUser}
+                label={t`Name`}
+                value={`${order.first_name} ${order.last_name}`}
+            />
+            <DetailItem
+                icon={IconId}
+                label={t`Order Reference`}
+                value={order.public_id}
+            />
+            <DetailItem
+                icon={IconMail}
+                label={t`Email`}
+                value={order.email}
+            />
+            <DetailItem
+                icon={IconCalendar}
+                label={t`Order Date`}
+                value={dateToBrowserTz(order.created_at, event.timezone)}
+            />
+            {!!order.refund_status && (
+                <DetailItem
+                    icon={IconMenuOrder}
+                    label={t`Refund Status`}
+                    value={<RefundStatusType order={order}/>}
+                />
+            )}
+            {(order.payment_status !== 'PAYMENT_RECEIVED' && order.payment_status !== 'NO_PAYMENT_REQUIRED') && (
+                <DetailItem
+                    icon={IconCash}
+                    label={t`Payment Status`}
+                    value={<PaymentStatus order={order}/>}
+                />
+            )}
+        </SimpleGrid>
+    </Card>
+);
+
+const EventDetails = ({event}: { event: Event }) => {
+    const location = event.settings?.location_details ? formatAddress(event.settings.location_details) : null;
+    const venueDetails = event.settings?.location_details?.venue_name
+        ? `${event.settings.location_details.venue_name}${location ? `, ${location}` : ''}`
+        : location;
+
+    return (
+        <Card>
+            <SimpleGrid cols={{base: 1, sm: 2}} spacing="md">
+                <DetailItem
+                    icon={IconCalendarEvent}
+                    label={t`Event Date`}
+                    value={<EventDateRange event={event}/>}
+                />
+                {venueDetails && (
+                    <DetailItem
+                        icon={IconMapPin}
+                        label={t`Location`}
+                        value={(
+                            <NavLink
+                                to={event.settings?.maps_url || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(formatAddress(event?.settings?.location_details))}`}
+                                target="_blank"
+                            >
+                                {venueDetails}
+                            </NavLink>
+
+                        )}
+                    />
+                )}
+                <DetailItem
+                    icon={IconClock}
+                    label={t`Timezone`}
+                    value={event.timezone}
+                />
+                <DetailItem
+                    icon={IconBuilding}
+                    label={t`Organizer`}
+                    value={(
+                        <>
+                            {event.organizer?.email && (
+                                <NavLink to={event.organizer?.email ? `mailto:${event.organizer.email}` : '#'}>
+                                    {event.organizer?.name}
+                                </NavLink>
+                            )}
+                            {!event.organizer?.email && event.organizer?.name}
+                        </>
+                    )}
+                />
+            </SimpleGrid>
+        </Card>
+    );
+};
 
 const OrderStatus = ({order}: { order: Order }) => {
-    let message = t`This order is processing.`; // Default message
+    let message = t`This order is processing.`;
 
     if (order?.payment_status === 'AWAITING_PAYMENT') {
         message = t`This order is processing.`;
@@ -30,6 +204,15 @@ const OrderStatus = ({order}: { order: Order }) => {
     return <HomepageInfoMessage message={message}/>;
 };
 
+const PostCheckoutMessage = ({ message }: { message: string }) => (
+    <div style={{ marginTop: '20px', marginBottom: '40px' }}>
+        <h1 className={classes.heading}>{t`Additional Information`}</h1>
+        <Card>
+            <div dangerouslySetInnerHTML={{ __html: message }} />
+        </Card>
+    </div>
+);
+
 export const OrderSummaryAndProducts = () => {
     const {eventId, orderShortId} = useParams();
     const {data: order, isFetched: orderIsFetched} = useGetOrderPublic(eventId, orderShortId, ['event']);
@@ -40,56 +223,40 @@ export const OrderSummaryAndProducts = () => {
         return <LoadingMask/>;
     }
 
-    if (window?.location.search.includes('failed') || order?.status === 'PAYMENT_FAILED') {
+    if (window?.location.search.includes('failed') || order?.payment_status === 'PAYMENT_FAILED') {
         navigate(eventCheckoutPath(eventId, orderShortId, 'payment') + '?payment_failed=true');
         return;
     }
-    if (order?.status !== 'COMPLETED') {
+
+    if (order?.status !== 'COMPLETED' && order?.status !== 'CANCELLED') {
         return <OrderStatus order={order}/>;
     }
 
     return (
         <>
             <CheckoutContent hasFooter={true}>
-                <h1 className={classes.heading}>{t`Order Details`}</h1>
+                <WelcomeHeader order={order} event={event}/>
 
-                <Card className={classes.orderDetails}>
-                    <div className={classes.orderDetail}>
-                        <div className={classes.orderDetailLabel}>{t`Name`}</div>
-                        <div className={classes.orderDetailContent}>{order?.first_name} {order?.last_name}</div>
-                    </div>
-                    <div className={classes.orderDetail}>
-                        <div className={classes.orderDetailLabel}>{t`Order Reference`}</div>
-                        <div className={classes.orderDetailContent}>{order?.public_id}</div>
-                    </div>
-                    <div className={classes.orderDetail}>
-                        <div className={classes.orderDetailLabel}>{t`Email`}</div>
-                        <div className={classes.orderDetailContent}>{order?.email}</div>
-                    </div>
-                    <div className={classes.orderDetail}>
-                        <div className={classes.orderDetailLabel}>{t`Order Date`}</div>
-                        <div className={classes.orderDetailContent}>
-                            {dateToBrowserTz(order?.created_at, event?.timezone)}
-                        </div>
-                    </div>
-                </Card>
+                <Group justify="space-between" align="center">
+                    <h1 className={classes.heading}>{t`Order Details`}</h1>
+                    <OrderStatusType order={order}/>
+                </Group>
 
-                {!!event?.settings?.post_checkout_message && (
-                    <div style={{marginTop: '20px'}}>
-                        <Card>
-                            <div dangerouslySetInnerHTML={{__html: event?.settings?.post_checkout_message}}/>
-                        </Card>
-                    </div>
-                )}
+                <OrderDetails order={order} event={event}/>
 
-                {(event?.settings?.is_online_event && <OnlineEventDetails eventSettings={event.settings}/>)}
+                {event?.settings?.is_online_event && <OnlineEventDetails eventSettings={event.settings}/>}
+
+                {!!event?.settings?.post_checkout_message && <PostCheckoutMessage message={event.settings.post_checkout_message}/>}
+
+                <h1 className={classes.heading}>{t`Event Details`}</h1>
+                <EventDetails event={event}/>
 
                 {(order?.attendees && order.attendees.length > 0) && (
-                    <Group justify={'space-between'}>
-                        <h2 className={classes.subHeading}>{t`Guests`}</h2>
+                    <Group justify="space-between" align="center">
+                        <h1 className={classes.heading}>{t`Guests`}</h1>
                         <Button
-                            size={'sm'}
-                            variant={'transparent'}
+                            size="sm"
+                            variant="transparent"
                             leftSection={<IconPrinter size={16}/>}
                             onClick={() => window?.open(`/order/${eventId}/${orderShortId}/print`, '_blank')}
                         >
@@ -98,32 +265,15 @@ export const OrderSummaryAndProducts = () => {
                     </Group>
                 )}
 
-                {order.attendees?.map((attendee) => {
-                    return (
-                        <AttendeeProduct
-                            key={attendee.id}
-                            attendee={attendee}
-                            product={attendee.product as Product}
-                            event={event}
-                        />
-                    );
-                })}
+                {order.attendees?.map((attendee) => (
+                    <AttendeeProduct
+                        key={attendee.id}
+                        attendee={attendee}
+                        product={attendee.product as Product}
+                        event={event}
+                    />
+                ))}
 
-                {
-                    /**
-                     * (c) Hi.Events Ltd 2024
-                     *
-                     * PLEASE NOTE:
-                     *
-                     * Hi.Events is licensed under the GNU Affero General Public License (AGPL) version 3.
-                     *
-                     * You can find the full license text at: https://github.com/HiEventsDev/hi.events/blob/main/LICENCE
-                     *
-                     * In accordance with Section 7(b) of the AGPL, we ask that you retain the "Powered by Hi.Events" notice.
-                     *
-                     * If you wish to remove this notice, a commercial license is available at: https://hi.events/licensing
-                     */
-                }
                 <PoweredByFooter/>
             </CheckoutContent>
             <CheckoutFooter
@@ -134,6 +284,6 @@ export const OrderSummaryAndProducts = () => {
             />
         </>
     );
-}
+};
 
 export default OrderSummaryAndProducts;

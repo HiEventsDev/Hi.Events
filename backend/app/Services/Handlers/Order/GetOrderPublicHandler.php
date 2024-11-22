@@ -6,12 +6,15 @@ use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\Generated\EventDomainObjectAbstract;
+use HiEvents\DomainObjects\Generated\OrganizerDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\ProductDomainObjectAbstract;
+use HiEvents\DomainObjects\ImageDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
-use HiEvents\DomainObjects\Status\OrderStatus;
+use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
+use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Exceptions\UnauthorizedException;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
@@ -79,6 +82,13 @@ class GetOrderPublicHandler
                 nested: [
                     new Relationship(
                         domainObject: EventSettingDomainObject::class,
+                    ),
+                    new Relationship(
+                        domainObject: OrganizerDomainObject::class,
+                        name: OrganizerDomainObjectAbstract::SINGULAR_NAME,
+                    ),
+                    new Relationship(
+                        domainObject: ImageDomainObject::class,
                     )
                 ],
                 name: EventDomainObjectAbstract::SINGULAR_NAME

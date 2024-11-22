@@ -1,7 +1,7 @@
 import {useMutation} from "@tanstack/react-query";
 import {FinaliseOrderPayload, orderClientPublic} from "../../../../api/order.client.ts";
-import {Link, useNavigate, useParams} from "react-router-dom";
-import {Button, Skeleton, TextInput} from "@mantine/core";
+import {useNavigate, useParams} from "react-router-dom";
+import {Button, Group, Skeleton, TextInput} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import {notifications} from "@mantine/notifications";
 import {useGetOrderPublic} from "../../../../queries/useGetOrderPublic.ts";
@@ -13,11 +13,13 @@ import {useEffect} from "react";
 import {t} from "@lingui/macro";
 import {InputGroup} from "../../../common/InputGroup";
 import {Card} from "../../../common/Card";
-import {IconChevronLeft, IconCopy} from "@tabler/icons-react";
+import {IconCopy} from "@tabler/icons-react";
 import {CheckoutFooter} from "../../../layouts/Checkout/CheckoutFooter";
 import {CheckoutContent} from "../../../layouts/Checkout/CheckoutContent";
 import {HomepageInfoMessage} from "../../../common/HomepageInfoMessage";
 import {eventCheckoutPath, eventHomepagePath} from "../../../../utilites/urlHelper.ts";
+import {formatCurrency} from "../../../../utilites/currency.ts";
+import {showInfo} from "../../../../utilites/notifications.tsx";
 
 const LoadingSkeleton = () =>
     (
@@ -29,7 +31,7 @@ const LoadingSkeleton = () =>
     );
 
 export const CollectInformation = () => {
-    const {eventId, eventSlug, orderShortId} = useParams();
+    const {eventId, orderShortId} = useParams();
     const navigate = useNavigate();
     const {
         isFetched: isOrderFetched,
@@ -37,7 +39,7 @@ export const CollectInformation = () => {
         data: {order_items: orderItems} = {},
         isError: isOrderError,
         error: orderError,
-    } = useGetOrderPublic(eventId, orderShortId);
+    } = useGetOrderPublic(eventId, orderShortId, ['event']);
     const {
         data: event,
         data: {product_categories: productCategories} = {},
@@ -188,6 +190,13 @@ export const CollectInformation = () => {
         }
     }, [isEventFetched, isOrderFetched, isQuestionsFetched]);
 
+    useEffect(() => {
+        if ((order && event) && order?.is_expired) {
+            showInfo(t`This order has expired. Please start again.`);
+            navigate(`/event/${eventId}/${event.slug}`);
+        }
+    }, [order, event]);
+
     if (!isEventFetched || !isOrderFetched) {
         return <LoadingSkeleton/>
     }
@@ -214,10 +223,6 @@ export const CollectInformation = () => {
             link={eventHomepagePath(event as Event)}
             linkText={t`Go to event homepage`}
         />;
-    }
-
-    if (order?.is_expired) {
-        navigate(`/event/${eventId}/${eventSlug}`);
     }
 
     if (isOrderError && orderError?.response?.status === 404) {
@@ -252,17 +257,6 @@ export const CollectInformation = () => {
     return (
         <form onSubmit={form.onSubmit(handleSubmit)}>
             <CheckoutContent>
-                <Button
-                    component={Link}
-                    to={eventHomepagePath(event as Event)}
-                    variant="transparent"
-                    leftSection={<IconChevronLeft/>}
-                    size={'sm'}
-                    ml={'-20px'}
-                >
-                    {t`Back to event page`}
-                </Button>
-
                 <h2>
                     {t`Your Details`}
                 </h2>
@@ -377,7 +371,19 @@ export const CollectInformation = () => {
             </CheckoutContent>
             <CheckoutFooter
                 isLoading={mutation.isPending}
-                buttonText={order?.is_payment_required ? t`Continue To Payment` : t`Complete Order`}
+                buttonContent={order?.is_payment_required ? (
+                    <Group gap={'10px'}>
+                        <div style={{fontWeight: "bold"}}>
+                            Continue
+                        </div>
+                        <div style={{fontSize: 14}}>
+                            {formatCurrency(order.total_gross, order.currency)}
+                        </div>
+                        <div style={{fontSize: 14, fontWeight: 500}}>
+                            {order.currency}
+                        </div>
+                    </Group>
+                ) : t`Complete Order`}
                 event={event as Event}
                 order={order as Order}
             />

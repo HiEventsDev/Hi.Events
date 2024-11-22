@@ -19,7 +19,7 @@ import {isSsr} from "../../../../utilites/helpers.ts";
 export const PaymentReturn = () => {
     const [shouldPoll, setShouldPoll] = useState(true);
     const {eventId, orderShortId} = useParams();
-    const {data: order} = usePollGetOrderPublic(eventId, orderShortId, shouldPoll);
+    const {data: order} = usePollGetOrderPublic(eventId, orderShortId, shouldPoll, ['event']);
     const navigate = useNavigate();
     const [attemptManualConfirmation, setAttemptManualConfirmation] = useState(false);
     const paymentIntentQuery = useGetOrderStripePaymentIntentPublic(eventId, orderShortId, attemptManualConfirmation);

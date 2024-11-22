@@ -1,7 +1,22 @@
 @import "../../../../styles/mixins";
 
+.welcomeHeader {
+  margin-bottom: 20px;
+  padding: 20px;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.actionBar {
+  background-color: #800080;
+  padding: var(--tk-spacing-md);
+  color: #fff;
+}
+
 .heading {
-  font-size: 1.7em;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 20px;
 }
 
 .subHeading {
@@ -15,38 +30,22 @@
   border: 1px solid #800080;
 }
 
-.orderDetails {
-  display: flex;
-  margin-bottom: 10px;
-  gap: 20px;
-  flex-flow: wrap;
-  place-content: space-between;
+.detailItem {
+  min-width: 0; // Enable text truncation
+  overflow: hidden;
 
-  @include respond-below(sm) {
-    gap: 10px;
+  .detailContent {
+    min-width: 0;
+    flex: 1;
   }
 
-  .orderDetail {
-    display: flex;
-    padding: 5px 10px;
-    background: #fff;
-    border-radius: 5px;
-    width: calc(50% - 20px);
-    flex-direction: column;
+  .label {
+    margin-bottom: 0.25rem;
+  }
 
-    @include respond-below(sm) {
-      width: 100%;
-    }
-
-    .orderDetailLabel {
-      color: #9ca3af;
-      font-size: .9em;
-      flex: auto;
-    }
-
-    .orderDetailContent {
-      place-self: flex-start;
-      font-weight: 900;
-    }
+  .value {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
   }
 }
