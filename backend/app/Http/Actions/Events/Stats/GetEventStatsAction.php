@@ -5,8 +5,8 @@ namespace HiEvents\Http\Actions\Events\Stats;
 use Carbon\Carbon;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Services\Handlers\Event\DTO\EventStatsRequestDTO;
-use HiEvents\Services\Handlers\Event\GetEventStatsHandler;
+use HiEvents\Services\Application\Handlers\Event\DTO\EventStatsRequestDTO;
+use HiEvents\Services\Application\Handlers\Event\GetEventStatsHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
 

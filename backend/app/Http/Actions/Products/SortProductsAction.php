@@ -6,7 +6,7 @@ use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Product\SortProductsRequest;
-use HiEvents\Services\Handlers\Product\SortProductsHandler;
+use HiEvents\Services\Application\Handlers\Product\SortProductsHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 

@@ -6,8 +6,8 @@ use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Event\DuplicateEventRequest;
 use HiEvents\Resources\Event\EventResource;
+use HiEvents\Services\Application\Handlers\Event\DuplicateEventHandler;
 use HiEvents\Services\Domain\Event\DTO\DuplicateEventDataDTO;
-use HiEvents\Services\Handlers\Event\DuplicateEventHandler;
 use Illuminate\Http\JsonResponse;
 use Throwable;
 

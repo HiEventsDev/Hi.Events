@@ -18,7 +18,7 @@ use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\MessageRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
-use HiEvents\Services\Handlers\Message\DTO\SendMessageDTO;
+use HiEvents\Services\Application\Handlers\Message\DTO\SendMessageDTO;
 use Illuminate\Mail\Mailer;
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpKernel\Log\Logger;

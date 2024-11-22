@@ -12,10 +12,10 @@ use HiEvents\DomainObjects\TaxAndFeesDomainObject;
 use HiEvents\Helper\Currency;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
+use HiEvents\Services\Application\Handlers\Order\DTO\ProductOrderDetailsDTO;
 use HiEvents\Services\Domain\Product\DTO\OrderProductPriceDTO;
 use HiEvents\Services\Domain\Product\ProductPriceService;
 use HiEvents\Services\Domain\Tax\TaxAndFeeCalculationService;
-use HiEvents\Services\Handlers\Order\DTO\ProductOrderDetailsDTO;
 use Illuminate\Support\Collection;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 

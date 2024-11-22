@@ -4,8 +4,8 @@ namespace HiEvents\Http\Actions\Orders;
 
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Resources\Order\OrderResourcePublic;
-use HiEvents\Services\Handlers\Order\DTO\GetOrderPublicDTO;
-use HiEvents\Services\Handlers\Order\GetOrderPublicHandler;
+use HiEvents\Services\Application\Handlers\Order\DTO\GetOrderPublicDTO;
+use HiEvents\Services\Application\Handlers\Order\GetOrderPublicHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

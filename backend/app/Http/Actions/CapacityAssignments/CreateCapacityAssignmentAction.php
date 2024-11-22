@@ -6,9 +6,9 @@ use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\CapacityAssigment\UpsertCapacityAssignmentRequest;
 use HiEvents\Resources\CapacityAssignment\CapacityAssignmentResource;
+use HiEvents\Services\Application\Handlers\CapacityAssignment\CreateCapacityAssignmentHandler;
+use HiEvents\Services\Application\Handlers\CapacityAssignment\DTO\UpsertCapacityAssignmentDTO;
 use HiEvents\Services\Domain\Product\Exception\UnrecognizedProductIdException;
-use HiEvents\Services\Handlers\CapacityAssignment\CreateCapacityAssignmentHandler;
-use HiEvents\Services\Handlers\CapacityAssignment\DTO\UpsertCapacityAssignmentDTO;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 

@@ -5,9 +5,9 @@ namespace HiEvents\Http\Actions\CheckInLists;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\CheckInList\UpsertCheckInListRequest;
 use HiEvents\Resources\CheckInList\CheckInListResource;
+use HiEvents\Services\Application\Handlers\CheckInList\CreateCheckInListHandler;
+use HiEvents\Services\Application\Handlers\CheckInList\DTO\UpsertCheckInListDTO;
 use HiEvents\Services\Domain\Product\Exception\UnrecognizedProductIdException;
-use HiEvents\Services\Handlers\CheckInList\CreateCheckInListHandler;
-use HiEvents\Services\Handlers\CheckInList\DTO\UpsertCheckInListDTO;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 

@@ -9,9 +9,9 @@ use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\PromoCode\CreateUpdatePromoCodeRequest;
 use HiEvents\Http\ResponseCodes;
 use HiEvents\Resources\PromoCode\PromoCodeResource;
+use HiEvents\Services\Application\Handlers\PromoCode\CreatePromoCodeHandler;
+use HiEvents\Services\Application\Handlers\PromoCode\DTO\UpsertPromoCodeDTO;
 use HiEvents\Services\Domain\Product\Exception\UnrecognizedProductIdException;
-use HiEvents\Services\Handlers\PromoCode\CreatePromoCodeHandler;
-use HiEvents\Services\Handlers\PromoCode\DTO\UpsertPromoCodeDTO;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 

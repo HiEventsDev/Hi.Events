@@ -4,8 +4,8 @@ namespace HiEvents\Http\Actions\Attendees;
 
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Services\Handlers\Attendee\DTO\ResendAttendeeTicketDTO;
-use HiEvents\Services\Handlers\Attendee\ResendAttendeeTicketHandler;
+use HiEvents\Services\Application\Handlers\Attendee\DTO\ResendAttendeeTicketDTO;
+use HiEvents\Services\Application\Handlers\Attendee\ResendAttendeeTicketHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;

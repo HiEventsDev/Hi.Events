@@ -6,8 +6,8 @@ use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\EventSettings\UpdateEventSettingsRequest;
 use HiEvents\Resources\Event\EventSettingsResource;
-use HiEvents\Services\Handlers\EventSettings\DTO\PartialUpdateEventSettingsDTO;
-use HiEvents\Services\Handlers\EventSettings\PartialUpdateEventSettingsHandler;
+use HiEvents\Services\Application\Handlers\EventSettings\DTO\PartialUpdateEventSettingsDTO;
+use HiEvents\Services\Application\Handlers\EventSettings\PartialUpdateEventSettingsHandler;
 use Illuminate\Http\JsonResponse;
 use Throwable;
 

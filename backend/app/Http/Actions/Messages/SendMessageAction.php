@@ -7,8 +7,8 @@ use HiEvents\Exceptions\AccountNotVerifiedException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Message\SendMessageRequest;
 use HiEvents\Resources\Message\MessageResource;
-use HiEvents\Services\Handlers\Message\DTO\SendMessageDTO;
-use HiEvents\Services\Handlers\Message\SendMessageHandler;
+use HiEvents\Services\Application\Handlers\Message\DTO\SendMessageDTO;
+use HiEvents\Services\Application\Handlers\Message\SendMessageHandler;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
