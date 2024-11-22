@@ -69,7 +69,7 @@ export const Settings = () => {
     };
 
     const sideMenu = (
-        <Card style={{padding: '15px'}}>
+        <Card style={{padding: '15px', marginBottom: 0}}>
             <Stack gap="xs">
                 {SECTIONS.map((section) => (
                     <MantineNavLink
@@ -96,7 +96,7 @@ export const Settings = () => {
             <PageTitle>{t`Settings`}</PageTitle>
 
             {isLargeScreen ? (
-                <Group align="flex-start" gap="xl">
+                <Group align="flex-start" gap="md">
                     <Box w={240} style={{position: 'sticky', top: 20}}>
                         {sideMenu}
                     </Box>

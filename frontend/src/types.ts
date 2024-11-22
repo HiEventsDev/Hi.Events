@@ -410,9 +410,9 @@ export interface Order {
     attendees?: Attendee[];
     created_at: string;
     currency: string;
-    status: string;
-    refund_status?: string;
-    payment_status?: string;
+    status: 'RESERVED' | 'CANCELLED' | 'COMPLETED';
+    refund_status?: 'REFUND_PENDING' | 'REFUND_FAILED' | 'REFUNDED' | 'PARTIALLY_REFUNDED';
+    payment_status?: 'NO_PAYMENT_REQUIRED' | 'AWAITING_PAYMENT' | 'PAYMENT_FAILED' | 'PAYMENT_RECEIVED';
     public_id: string;
     is_payment_required: boolean;
     is_manually_created: boolean;
