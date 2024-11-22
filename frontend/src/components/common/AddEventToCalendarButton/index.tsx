@@ -69,7 +69,7 @@ const createICSContent = (event: Event): string => {
         `DTSTART:${formatDate(event.start_date)}`,
         `DTEND:${formatDate(event.end_date || event.start_date)}`,
         `SUMMARY:${event.title.replace(/\n/g, '\\n')}`,
-        `DESCRIPTION:${stripHtml(event.description || '').replace(/\n/g, '\\n')}`,
+        `DESCRIPTION:${stripHtml(event.description_preview || '').replace(/\n/g, '\\n')}`,
         `LOCATION:${eventLocation(event)}`,
         `DTSTAMP:${formatDate(new Date().toISOString())}`,
         `UID:${crypto.randomUUID()}@hi.events`,
