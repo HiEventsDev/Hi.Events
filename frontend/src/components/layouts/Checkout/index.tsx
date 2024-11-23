@@ -49,7 +49,7 @@ const Checkout = () => {
                                         {!isMobile && t`Event Homepage`}
                                     </Button>
 
-                                    <span>
+                                    <span className={classes.title}>
                                         {order.status === 'RESERVED' && t`Checkout`}
                                         {order.status === 'COMPLETED' && t`Your Order`}
                                     </span>
