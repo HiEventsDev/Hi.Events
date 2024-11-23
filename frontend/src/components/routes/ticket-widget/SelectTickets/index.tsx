@@ -21,7 +21,7 @@ import {
     TicketPriceQuantityFormValue
 } from "../../../../api/order.client.ts";
 import {useForm} from "@mantine/form";
-import {range, useDisclosure, useInputState, useResizeObserver} from "@mantine/hooks";
+import {range, useInputState, useResizeObserver} from "@mantine/hooks";
 import React, {useEffect, useMemo, useRef, useState} from "react";
 import {showError, showInfo, showSuccess} from "../../../../utilites/notifications.tsx";
 import {addQueryStringToUrl, isObjectEmpty, removeQueryStringFromUrl} from "../../../../utilites/helpers.ts";
@@ -33,7 +33,7 @@ import {PoweredByFooter} from "../../../common/PoweredByFooter";
 import {Event} from "../../../../types.ts";
 import {eventsClientPublic} from "../../../../api/event.client.ts";
 import {promoCodeClientPublic} from "../../../../api/promo-code.client.ts";
-import {IconX, IconChevronRight} from "@tabler/icons-react"
+import {IconChevronRight, IconX} from "@tabler/icons-react"
 import {getSessionIdentifier} from "../../../../utilites/sessionIdentifier.ts";
 import {Constants} from "../../../../constants.ts";
 
@@ -81,6 +81,7 @@ const SelectTickets = (props: SelectTicketsProps) => {
     const [event, setEvent] = useState(props.event);
     const [orderInProcessOverlayVisible, setOrderInProcessOverlayVisible] = useState(false);
     const [resizeRef, resizeObserverRect] = useResizeObserver();
+    const [collapsedTickets, setCollapsedTickets] = useState<{ [key: string]: boolean }>({});
 
     useEffect(() => sendHeightToIframeWidgets(), [resizeObserverRect.height]);
 
@@ -297,14 +298,21 @@ const SelectTickets = (props: SelectTicketsProps) => {
                                 .map((n) => n.toString());
                             quantityRange.unshift("0");
 
-                            const [ticketIsCollapsed, {toggle: collapseTicket}] = useDisclosure(ticket.start_collapsed);
+                            const isTicketCollapsed = collapsedTickets[ticket.id] ?? ticket.start_collapsed;
+                            const toggleCollapse = () => {
+                                setCollapsedTickets(prev => ({
+                                    ...prev,
+                                    [ticket.id]: !isTicketCollapsed
+                                }));
+                            };
 
                             return (
                                 <div key={ticket.id} className={'hi-ticket-row'}>
                                     <div className={'hi-title-row'}>
-                                        <UnstyledButton variant={'transparent'}
-                                                        className={'hi-ticket-title'}
-                                                        onClick={collapseTicket}
+                                        <UnstyledButton
+                                            variant={'transparent'}
+                                            className={'hi-ticket-title'}
+                                            onClick={toggleCollapse}
                                         >
                                             <h3>
                                                 {ticket.title}
@@ -330,12 +338,12 @@ const SelectTickets = (props: SelectTicketsProps) => {
                                                 )}
                                             </div>
                                             <span className={`hi-ticket-collapse-arrow`}>
-                                                <IconChevronRight className={ticketIsCollapsed ? "" : "open"} />
+                                                <IconChevronRight className={!isTicketCollapsed ? "" : "open"}/>
                                             </span>
                                         </UnstyledButton>
                                     </div>
 
-                                    <Collapse in={!ticketIsCollapsed} className={'hi-ticket-content'}>
+                                    <Collapse in={!isTicketCollapsed} className={'hi-ticket-content'}>
                                         <div className={'hi-price-tiers-rows'}>
                                             <TieredPricing
                                                 ticketIndex={ticketIndex}
