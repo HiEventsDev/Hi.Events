@@ -81,7 +81,7 @@ const SelectTickets = (props: SelectTicketsProps) => {
     const [event, setEvent] = useState(props.event);
     const [orderInProcessOverlayVisible, setOrderInProcessOverlayVisible] = useState(false);
     const [resizeRef, resizeObserverRect] = useResizeObserver();
-    const [collapsedTickets, setCollapsedTickets] = useState<{ [key: string]: boolean }>({});
+    const [collapsedTickets, setCollapsedTickets] = useState<{ [key: number]: boolean }>({});
 
     useEffect(() => sendHeightToIframeWidgets(), [resizeObserverRect.height]);
 
@@ -298,11 +298,11 @@ const SelectTickets = (props: SelectTicketsProps) => {
                                 .map((n) => n.toString());
                             quantityRange.unshift("0");
 
-                            const isTicketCollapsed = collapsedTickets[ticket.id] ?? ticket.start_collapsed;
+                            const isTicketCollapsed = collapsedTickets[Number(ticket.id)] ?? ticket.start_collapsed;
                             const toggleCollapse = () => {
                                 setCollapsedTickets(prev => ({
                                     ...prev,
-                                    [ticket.id]: !isTicketCollapsed
+                                    [Number(ticket.id)]: !isTicketCollapsed
                                 }));
                             };
 
