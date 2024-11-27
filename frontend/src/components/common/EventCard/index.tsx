@@ -93,7 +93,7 @@ export function EventCard({event}: EventCardProps) {
                 <div className={classes.body}>
                     {event && <EventStatusBadge event={event}/>}
                     <div className={classes.title}>
-                        <NavLink to={`/manage/event/${event.id}`}>
+                        <NavLink to={`/manage/event/${event.id}/dashboard`}>
                             {event.title}
                         </NavLink>
                     </div>

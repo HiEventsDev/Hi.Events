@@ -11,7 +11,10 @@ import classes from "./EventDashboard.module.scss";
 import {useGetEventStats} from "../../../../queries/useGetEventStats.ts";
 import {formatCurrency} from "../../../../utilites/currency.ts";
 import {formatDate} from "../../../../utilites/dates.ts";
-import {Skeleton} from "@mantine/core";
+import {Button, Group, Skeleton} from "@mantine/core";
+import {useDisclosure, useMediaQuery} from "@mantine/hooks";
+import {IconShare} from "@tabler/icons-react";
+import {ShareModal} from "../../../modals/ShareModal";
 
 export const DashBoardSkeleton = () => {
     return (
@@ -30,6 +33,8 @@ export const EventDashboard = () => {
     const event = eventQuery?.data;
     const eventStatsQuery = useGetEventStats(eventId);
     const {data: eventStats} = eventStatsQuery;
+    const [opened, {open, close}] = useDisclosure(false);
+    const isMobile = useMediaQuery('(max-width: 768px)');
 
     const dateRange = (eventStats && event)
         ? `${formatDate(eventStats.start_date, 'MMM DD', event?.timezone)} - ${formatDate(eventStats.end_date, 'MMM DD', event?.timezone)}`
@@ -37,11 +42,38 @@ export const EventDashboard = () => {
 
     return (
         <PageBody>
-            <PageTitle>
-                <Trans>
-                    Welcome back{me?.first_name && ', ' + me?.first_name} 👋
-                </Trans>
-            </PageTitle>
+            <Group justify="space-between" align="center" mb={'5px'}>
+                <PageTitle style={{marginBottom: 0}}>
+                    {!isMobile && (
+                        <Trans>
+                            Welcome back{me?.first_name && ', ' + me?.first_name} 👋
+                        </Trans>
+                    )}
+
+                    {isMobile && (
+                        <Trans>
+                            Hi {me?.first_name && me?.first_name} 👋
+                        </Trans>
+                    )}
+                </PageTitle>
+                {event && (
+                    <>
+                        <Button
+                            onClick={open}
+                            variant="transparent"
+                            leftSection={<IconShare size={16}/>}
+                        >
+                            {t`Share Event`}
+                        </Button>
+
+                        {event && <ShareModal
+                            event={event}
+                            opened={opened}
+                            onClose={close}
+                        />}
+                    </>
+                )}
+            </Group>
 
             {!event && <DashBoardSkeleton/>}
 
