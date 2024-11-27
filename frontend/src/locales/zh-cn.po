@@ -593,14 +593,14 @@ msgstr "参会者票"
 
 #: src/components/common/OrdersTable/index.tsx:151
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:237
-#: src/components/common/StatBoxes/index.tsx:26
+#: src/components/common/StatBoxes/index.tsx:27
 #: src/components/layouts/Event/index.tsx:58
 #: src/components/modals/ViewOrderModal/index.tsx:67
 #: src/components/routes/event/attendees.tsx:47
 msgid "Attendees"
 msgstr "与会者"
 
-#: src/components/routes/event/EventDashboard/index.tsx:75
+#: src/components/routes/event/EventDashboard/index.tsx:107
 msgid "Attendees Registered"
 msgstr "注册的参会者"
 
@@ -1048,6 +1048,8 @@ msgstr "继续 Stripe 连接设置"
 
 #: src/components/common/AttendeeProduct/index.tsx:84
 #: src/components/common/CopyButton/index.tsx:13
+#: src/components/modals/ShareModal/index.tsx:243
+#: src/components/modals/ShareModal/index.tsx:250
 msgid "Copied"
 msgstr "复制的"
 
@@ -1056,6 +1058,7 @@ msgid "copied to clipboard"
 msgstr "复制到剪贴板"
 
 #: src/components/common/CopyButton/index.tsx:13
+#: src/components/modals/ShareModal/index.tsx:250
 msgid "Copy"
 msgstr "复制"
 
@@ -1072,6 +1075,7 @@ msgid "Copy Link"
 msgstr "复制链接"
 
 #: src/components/common/PromoCodeTable/index.tsx:177
+#: src/components/modals/ShareModal/index.tsx:243
 msgid "Copy URL"
 msgstr "复制 URL"
 
@@ -1381,6 +1385,10 @@ msgstr "下载 .ics"
 #: src/components/common/DownloadCsvButton/index.tsx:48
 msgid "Download CSV"
 msgstr "下载 CSV"
+
+#: src/components/modals/ShareModal/index.tsx:224
+msgid "Download QR Code"
+msgstr "下载二维码"
 
 #: src/components/routes/event/HomepageDesigner/CoverUpload/index.tsx:83
 msgid "Drag and drop or click"
@@ -1709,6 +1717,10 @@ msgstr "活动状态更新失败。请稍后再试"
 msgid "Event status updated"
 msgstr "事件状态已更新"
 
+#: src/components/modals/ShareModal/index.tsx:237
+msgid "Event URL"
+msgstr "活动链接"
+
 #: src/components/layouts/Event/index.tsx:143
 msgid "Events"
 msgstr "活动"
@@ -1890,11 +1902,11 @@ msgstr "谷歌日历"
 msgid "gross sales"
 msgstr "总销售额"
 
-#: src/components/common/StatBoxes/index.tsx:36
+#: src/components/common/StatBoxes/index.tsx:39
 msgid "Gross sales"
 msgstr "销售总额"
 
-#: src/components/routes/event/EventDashboard/index.tsx:110
+#: src/components/routes/event/EventDashboard/index.tsx:142
 msgid "Gross Sales"
 msgstr "销售总额"
 
@@ -1921,6 +1933,10 @@ msgstr "下面举例说明如何在应用程序中使用该组件。"
 #: src/components/common/WidgetEditor/index.tsx:282
 msgid "Here is the React component you can use to embed the widget in your application."
 msgstr "下面是 React 组件，您可以用它在应用程序中嵌入 widget。"
+
+#: src/components/routes/event/EventDashboard/index.tsx:54
+msgid "Hi {0} 👋"
+msgstr "你好 {0} 👋"
 
 #: src/components/modals/CreateEventModal/index.tsx:131
 #: src/components/modals/DuplicateEventModal/index.tsx:78
@@ -2758,8 +2774,8 @@ msgstr "订单超时"
 msgid "Orders"
 msgstr "订单"
 
-#: src/components/common/StatBoxes/index.tsx:46
-#: src/components/routes/event/EventDashboard/index.tsx:73
+#: src/components/common/StatBoxes/index.tsx:51
+#: src/components/routes/event/EventDashboard/index.tsx:105
 msgid "Orders Created"
 msgstr "创建的订单"
 
@@ -2800,7 +2816,7 @@ msgstr "页面背景颜色"
 msgid "Page not found"
 msgstr "页面未找到"
 
-#: src/components/common/StatBoxes/index.tsx:41
+#: src/components/common/StatBoxes/index.tsx:45
 msgid "Page views"
 msgstr "页面浏览量"
 
@@ -3078,7 +3094,7 @@ msgstr "产品价格类型"
 msgid "Product questions"
 msgstr "产品问题"
 
-#: src/components/routes/event/EventDashboard/index.tsx:53
+#: src/components/routes/event/EventDashboard/index.tsx:85
 msgid "Product Sales"
 msgstr "产品销售"
 
@@ -3113,7 +3129,7 @@ msgstr "已售产品"
 msgid "Products sold"
 msgstr "已售产品"
 
-#: src/components/routes/event/EventDashboard/index.tsx:74
+#: src/components/routes/event/EventDashboard/index.tsx:106
 msgid "Products Sold"
 msgstr "已售产品"
 
@@ -3163,6 +3179,10 @@ msgstr "提供此问题的附加背景或说明。使用此字段添加条款和
 #: src/components/common/GlobalMenu/index.tsx:25
 #~ msgid "Purchase License"
 #~ msgstr "购买许可证"
+
+#: src/components/modals/ShareModal/index.tsx:126
+msgid "QR Code"
+msgstr "二维码"
 
 #: src/components/forms/ProductForm/index.tsx:85
 #: src/components/forms/ProductForm/index.tsx:302
@@ -3240,7 +3260,7 @@ msgid "Refund Status"
 msgstr "退款状态"
 
 #: src/components/common/OrderSummary/index.tsx:80
-#: src/components/common/StatBoxes/index.tsx:31
+#: src/components/common/StatBoxes/index.tsx:33
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:52
 msgid "Refunded"
 msgstr "退款"
@@ -3314,7 +3334,7 @@ msgstr "返回活动页面"
 msgid "Return to Event Page"
 msgstr "返回活动页面"
 
-#: src/components/routes/event/EventDashboard/index.tsx:85
+#: src/components/routes/event/EventDashboard/index.tsx:117
 msgid "Revenue"
 msgstr "收入"
 
@@ -3381,6 +3401,10 @@ msgstr "保存设置"
 #: src/components/layouts/CheckIn/index.tsx:294
 msgid "Scan QR Code"
 msgstr "扫描 QR 码"
+
+#: src/components/modals/ShareModal/index.tsx:229
+msgid "Scan this QR code to access the event page or share it with others"
+msgstr "扫描此二维码以访问活动页面或与他人分享"
 
 #: src/components/layouts/CheckIn/index.tsx:288
 msgid "Seach by name, order #, attendee # or email..."
@@ -3571,8 +3595,51 @@ msgid "Settings"
 msgstr "设置"
 
 #: src/components/common/ShareIcon/index.tsx:28
+#: src/components/modals/ShareModal/index.tsx:123
+#: src/components/modals/ShareModal/index.tsx:141
 msgid "Share"
 msgstr "分享"
+
+#: src/components/modals/ShareModal/index.tsx:116
+#: src/components/routes/event/EventDashboard/index.tsx:66
+msgid "Share Event"
+msgstr "分享活动"
+
+#: src/components/modals/ShareModal/index.tsx:169
+msgid "Share to Facebook"
+msgstr "分享到 Facebook"
+
+#: src/components/modals/ShareModal/index.tsx:163
+msgid "Share to LinkedIn"
+msgstr "分享到 LinkedIn"
+
+#: src/components/modals/ShareModal/index.tsx:193
+msgid "Share to Pinterest"
+msgstr "分享到 Pinterest"
+
+#: src/components/modals/ShareModal/index.tsx:187
+msgid "Share to Reddit"
+msgstr "分享到 Reddit"
+
+#: src/components/modals/ShareModal/index.tsx:148
+msgid "Share to Social"
+msgstr "分享到社交网络"
+
+#: src/components/modals/ShareModal/index.tsx:181
+msgid "Share to Telegram"
+msgstr "分享到 Telegram"
+
+#: src/components/modals/ShareModal/index.tsx:175
+msgid "Share to WhatsApp"
+msgstr "分享到 WhatsApp"
+
+#: src/components/modals/ShareModal/index.tsx:157
+msgid "Share to X"
+msgstr "分享到 X"
+
+#: src/components/modals/ShareModal/index.tsx:199
+msgid "Share via Email"
+msgstr "通过电子邮件分享"
 
 #: src/components/forms/ProductForm/index.tsx:344
 msgid "Show"
@@ -4246,7 +4313,7 @@ msgstr "折扣前总计"
 msgid "Total Discount Amount"
 msgstr "折扣总金额"
 
-#: src/components/routes/event/EventDashboard/index.tsx:109
+#: src/components/routes/event/EventDashboard/index.tsx:141
 msgid "Total Fees"
 msgstr "总费用"
 
@@ -4264,7 +4331,7 @@ msgstr "订单总额"
 msgid "Total refunded"
 msgstr "退款总额"
 
-#: src/components/routes/event/EventDashboard/index.tsx:112
+#: src/components/routes/event/EventDashboard/index.tsx:144
 msgid "Total Refunded"
 msgstr "退款总额"
 
@@ -4272,7 +4339,7 @@ msgstr "退款总额"
 msgid "Total remaining"
 msgstr "剩余总数"
 
-#: src/components/routes/event/EventDashboard/index.tsx:111
+#: src/components/routes/event/EventDashboard/index.tsx:143
 msgid "Total Tax"
 msgstr "总税额"
 
@@ -4364,6 +4431,10 @@ msgstr "更新个人资料"
 #: src/components/routes/event/HomepageDesigner/CoverUpload/index.tsx:80
 msgid "Upload Cover"
 msgstr "上传封面"
+
+#: src/components/modals/ShareModal/index.tsx:129
+msgid "URL"
+msgstr "链接"
 
 #: src/components/common/PromoCodeTable/index.tsx:175
 msgid "URL copied to clipboard"
@@ -4511,7 +4582,7 @@ msgstr "我们正在处理您的订单。请稍候..."
 msgid "Welcome aboard! Please login to continue."
 msgstr "欢迎加入！请登录以继续。"
 
-#: src/components/routes/event/EventDashboard/index.tsx:41
+#: src/components/routes/event/EventDashboard/index.tsx:48
 msgid "Welcome back{0} 👋"
 msgstr "欢迎回来{0} 👋"
 

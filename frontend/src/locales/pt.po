@@ -593,14 +593,14 @@ msgstr "Bilhete do Participante"
 
 #: src/components/common/OrdersTable/index.tsx:151
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:237
-#: src/components/common/StatBoxes/index.tsx:26
+#: src/components/common/StatBoxes/index.tsx:27
 #: src/components/layouts/Event/index.tsx:58
 #: src/components/modals/ViewOrderModal/index.tsx:67
 #: src/components/routes/event/attendees.tsx:47
 msgid "Attendees"
 msgstr "Participantes"
 
-#: src/components/routes/event/EventDashboard/index.tsx:75
+#: src/components/routes/event/EventDashboard/index.tsx:107
 msgid "Attendees Registered"
 msgstr "Participantes Registrados"
 
@@ -1048,6 +1048,8 @@ msgstr "Continuar a configuração do Stripe Connect"
 
 #: src/components/common/AttendeeProduct/index.tsx:84
 #: src/components/common/CopyButton/index.tsx:13
+#: src/components/modals/ShareModal/index.tsx:243
+#: src/components/modals/ShareModal/index.tsx:250
 msgid "Copied"
 msgstr "Copiado"
 
@@ -1056,6 +1058,7 @@ msgid "copied to clipboard"
 msgstr "Copiado para a área de transferência"
 
 #: src/components/common/CopyButton/index.tsx:13
+#: src/components/modals/ShareModal/index.tsx:250
 msgid "Copy"
 msgstr "cópia de"
 
@@ -1072,6 +1075,7 @@ msgid "Copy Link"
 msgstr "Link de cópia"
 
 #: src/components/common/PromoCodeTable/index.tsx:177
+#: src/components/modals/ShareModal/index.tsx:243
 msgid "Copy URL"
 msgstr "Copiar URL"
 
@@ -1381,6 +1385,10 @@ msgstr "Baixar .ics"
 #: src/components/common/DownloadCsvButton/index.tsx:48
 msgid "Download CSV"
 msgstr "Baixar CSV"
+
+#: src/components/modals/ShareModal/index.tsx:224
+msgid "Download QR Code"
+msgstr "Baixar código QR"
 
 #: src/components/routes/event/HomepageDesigner/CoverUpload/index.tsx:83
 msgid "Drag and drop or click"
@@ -1709,6 +1717,10 @@ msgstr "Falha na atualização do status do evento. Por favor, tente novamente m
 msgid "Event status updated"
 msgstr "Status do evento atualizado"
 
+#: src/components/modals/ShareModal/index.tsx:237
+msgid "Event URL"
+msgstr "URL do evento"
+
 #: src/components/layouts/Event/index.tsx:143
 msgid "Events"
 msgstr "Eventos"
@@ -1890,11 +1902,11 @@ msgstr "Google Agenda"
 msgid "gross sales"
 msgstr "vendas brutas"
 
-#: src/components/common/StatBoxes/index.tsx:36
+#: src/components/common/StatBoxes/index.tsx:39
 msgid "Gross sales"
 msgstr "Vendas brutas"
 
-#: src/components/routes/event/EventDashboard/index.tsx:110
+#: src/components/routes/event/EventDashboard/index.tsx:142
 msgid "Gross Sales"
 msgstr "Vendas brutas"
 
@@ -1921,6 +1933,10 @@ msgstr "Aqui está um exemplo de como você pode usar o componente em seu aplica
 #: src/components/common/WidgetEditor/index.tsx:282
 msgid "Here is the React component you can use to embed the widget in your application."
 msgstr "Aqui está o componente React que você pode usar para incorporar o widget em seu aplicativo."
+
+#: src/components/routes/event/EventDashboard/index.tsx:54
+msgid "Hi {0} 👋"
+msgstr "Oi {0} 👋"
 
 #: src/components/modals/CreateEventModal/index.tsx:131
 #: src/components/modals/DuplicateEventModal/index.tsx:78
@@ -2758,8 +2774,8 @@ msgstr "Tempo limite do pedido"
 msgid "Orders"
 msgstr "Pedidos"
 
-#: src/components/common/StatBoxes/index.tsx:46
-#: src/components/routes/event/EventDashboard/index.tsx:73
+#: src/components/common/StatBoxes/index.tsx:51
+#: src/components/routes/event/EventDashboard/index.tsx:105
 msgid "Orders Created"
 msgstr "Pedidos criados"
 
@@ -2800,7 +2816,7 @@ msgstr "Cor de fundo da página"
 msgid "Page not found"
 msgstr "página não encontrada"
 
-#: src/components/common/StatBoxes/index.tsx:41
+#: src/components/common/StatBoxes/index.tsx:45
 msgid "Page views"
 msgstr "visualizações de página"
 
@@ -3078,7 +3094,7 @@ msgstr "Tipo de Preço do Produto"
 msgid "Product questions"
 msgstr "Perguntas sobre o produto"
 
-#: src/components/routes/event/EventDashboard/index.tsx:53
+#: src/components/routes/event/EventDashboard/index.tsx:85
 msgid "Product Sales"
 msgstr "Vendas de Produtos"
 
@@ -3113,7 +3129,7 @@ msgstr "produtos vendidos"
 msgid "Products sold"
 msgstr "Produtos vendidos"
 
-#: src/components/routes/event/EventDashboard/index.tsx:74
+#: src/components/routes/event/EventDashboard/index.tsx:106
 msgid "Products Sold"
 msgstr "Produtos Vendidos"
 
@@ -3163,6 +3179,10 @@ msgstr "Forneça contexto adicional ou instruções para esta pergunta. Use este
 #: src/components/common/GlobalMenu/index.tsx:25
 #~ msgid "Purchase License"
 #~ msgstr "Licença de compra"
+
+#: src/components/modals/ShareModal/index.tsx:126
+msgid "QR Code"
+msgstr "Código QR"
 
 #: src/components/forms/ProductForm/index.tsx:85
 #: src/components/forms/ProductForm/index.tsx:302
@@ -3240,7 +3260,7 @@ msgid "Refund Status"
 msgstr "Status do reembolso"
 
 #: src/components/common/OrderSummary/index.tsx:80
-#: src/components/common/StatBoxes/index.tsx:31
+#: src/components/common/StatBoxes/index.tsx:33
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:52
 msgid "Refunded"
 msgstr "Devolveu"
@@ -3314,7 +3334,7 @@ msgstr "Voltar à página do evento"
 msgid "Return to Event Page"
 msgstr "Voltar para a página do evento"
 
-#: src/components/routes/event/EventDashboard/index.tsx:85
+#: src/components/routes/event/EventDashboard/index.tsx:117
 msgid "Revenue"
 msgstr "Receita"
 
@@ -3381,6 +3401,10 @@ msgstr "Salvar configurações"
 #: src/components/layouts/CheckIn/index.tsx:294
 msgid "Scan QR Code"
 msgstr "Digitalize o código QR"
+
+#: src/components/modals/ShareModal/index.tsx:229
+msgid "Scan this QR code to access the event page or share it with others"
+msgstr "Escaneie este código QR para acessar a página do evento ou compartilhe-o com outras pessoas"
 
 #: src/components/layouts/CheckIn/index.tsx:288
 msgid "Seach by name, order #, attendee # or email..."
@@ -3571,8 +3595,51 @@ msgid "Settings"
 msgstr "Configurações"
 
 #: src/components/common/ShareIcon/index.tsx:28
+#: src/components/modals/ShareModal/index.tsx:123
+#: src/components/modals/ShareModal/index.tsx:141
 msgid "Share"
 msgstr "Compartilhar"
+
+#: src/components/modals/ShareModal/index.tsx:116
+#: src/components/routes/event/EventDashboard/index.tsx:66
+msgid "Share Event"
+msgstr "Compartilhar evento"
+
+#: src/components/modals/ShareModal/index.tsx:169
+msgid "Share to Facebook"
+msgstr "Compartilhar no Facebook"
+
+#: src/components/modals/ShareModal/index.tsx:163
+msgid "Share to LinkedIn"
+msgstr "Compartilhar no LinkedIn"
+
+#: src/components/modals/ShareModal/index.tsx:193
+msgid "Share to Pinterest"
+msgstr "Compartilhar no Pinterest"
+
+#: src/components/modals/ShareModal/index.tsx:187
+msgid "Share to Reddit"
+msgstr "Compartilhar no Reddit"
+
+#: src/components/modals/ShareModal/index.tsx:148
+msgid "Share to Social"
+msgstr "Compartilhar em redes sociais"
+
+#: src/components/modals/ShareModal/index.tsx:181
+msgid "Share to Telegram"
+msgstr "Compartilhar no Telegram"
+
+#: src/components/modals/ShareModal/index.tsx:175
+msgid "Share to WhatsApp"
+msgstr "Compartilhar no WhatsApp"
+
+#: src/components/modals/ShareModal/index.tsx:157
+msgid "Share to X"
+msgstr "Compartilhar no X"
+
+#: src/components/modals/ShareModal/index.tsx:199
+msgid "Share via Email"
+msgstr "Compartilhar por e-mail"
 
 #: src/components/forms/ProductForm/index.tsx:344
 msgid "Show"
@@ -4246,7 +4313,7 @@ msgstr "Total antes de descontos"
 msgid "Total Discount Amount"
 msgstr "Montante total do desconto"
 
-#: src/components/routes/event/EventDashboard/index.tsx:109
+#: src/components/routes/event/EventDashboard/index.tsx:141
 msgid "Total Fees"
 msgstr "Taxas totais"
 
@@ -4264,7 +4331,7 @@ msgstr "Valor total do pedido"
 msgid "Total refunded"
 msgstr "Total reembolsado"
 
-#: src/components/routes/event/EventDashboard/index.tsx:112
+#: src/components/routes/event/EventDashboard/index.tsx:144
 msgid "Total Refunded"
 msgstr "Total Reembolsado"
 
@@ -4272,7 +4339,7 @@ msgstr "Total Reembolsado"
 msgid "Total remaining"
 msgstr "Total restante"
 
-#: src/components/routes/event/EventDashboard/index.tsx:111
+#: src/components/routes/event/EventDashboard/index.tsx:143
 msgid "Total Tax"
 msgstr "Taxa total"
 
@@ -4364,6 +4431,10 @@ msgstr "Atualizar perfil"
 #: src/components/routes/event/HomepageDesigner/CoverUpload/index.tsx:80
 msgid "Upload Cover"
 msgstr "Carregar capa"
+
+#: src/components/modals/ShareModal/index.tsx:129
+msgid "URL"
+msgstr "URL"
 
 #: src/components/common/PromoCodeTable/index.tsx:175
 msgid "URL copied to clipboard"
@@ -4511,7 +4582,7 @@ msgstr "Estamos processando seu pedido. Por favor, aguarde..."
 msgid "Welcome aboard! Please login to continue."
 msgstr "Bem vindo a bordo! Por favor faça o login para continuar."
 
-#: src/components/routes/event/EventDashboard/index.tsx:41
+#: src/components/routes/event/EventDashboard/index.tsx:48
 msgid "Welcome back{0} 👋"
 msgstr "Bem vindo de volta{0} 👋"
 
