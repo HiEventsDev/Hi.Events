@@ -3,6 +3,7 @@
 namespace HiEvents\Http\Actions\Orders;
 
 use HiEvents\DomainObjects\AttendeeDomainObject;
+use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\QuestionAndAnswerViewDomainObject;
 use HiEvents\Http\Actions\BaseAction;
@@ -21,6 +22,8 @@ class GetOrderAction extends BaseAction
 
     public function __invoke(int $eventId, int $orderId): JsonResponse
     {
+        $this->isActionAuthorized($eventId, EventDomainObject::class);
+
         $order = $this->orderRepository
             ->loadRelation(OrderItemDomainObject::class)
             ->loadRelation(AttendeeDomainObject::class)
