@@ -5,6 +5,7 @@ namespace HiEvents\Services\Domain\Event;
 use HiEvents\DomainObjects\CapacityAssignmentDomainObject;
 use HiEvents\DomainObjects\CheckInListDomainObject;
 use HiEvents\DomainObjects\Enums\EventImageType;
+use HiEvents\DomainObjects\Enums\QuestionBelongsTo;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\ImageDomainObject;
@@ -181,7 +182,7 @@ class DuplicateEventService
     private function clonePerTicketQuestions(EventDomainObject $event, int $newEventId, array $oldTicketToNewTicketMap): void
     {
         foreach ($event->getQuestions() as $question) {
-            if ($question->getBelongsTo() == "TICKET") {
+            if ($question->getBelongsTo() === QuestionBelongsTo::TICKET->name) {
                 $this->createQuestionService->createQuestion(
                     (new QuestionDomainObject())
                         ->setTitle($question->getTitle())
@@ -206,7 +207,7 @@ class DuplicateEventService
     private function clonePerOrderQuestions(EventDomainObject $event, int $newEventId): void
     {
         foreach ($event->getQuestions() as $question) {
-            if ($question->getBelongsTo() == "ORDER") {
+            if ($question->getBelongsTo() === QuestionBelongsTo::ORDER->name) {
                 $this->createQuestionService->createQuestion(
                     (new QuestionDomainObject())
                         ->setTitle($question->getTitle())
