@@ -11,7 +11,7 @@ export const AttendeeList = ({order, tickets}: { order: Order, tickets: Ticket[]
     return (
         <div className={classes.attendeeList}>
             {order.attendees?.map(attendee => (
-                <div className={classes.attendee}>
+                <div className={classes.attendee} key={`${attendee.id}`}>
                     <Avatar size={40}>
                         {getInitials(attendee.first_name + ' ' + attendee.last_name)}
                     </Avatar>
