@@ -5,6 +5,7 @@ namespace HiEvents\Services\Domain\Event;
 use HiEvents\DomainObjects\CapacityAssignmentDomainObject;
 use HiEvents\DomainObjects\CheckInListDomainObject;
 use HiEvents\DomainObjects\Enums\EventImageType;
+use HiEvents\DomainObjects\Enums\QuestionBelongsTo;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\ImageDomainObject;
@@ -79,8 +80,12 @@ class DuplicateEventService
                 cloneEventSettings: $duplicateSettings,
             );
 
+            if ($duplicateQuestions) {
+                $this->clonePerOrderQuestions($event, $newEvent->getId());
+            }
+
             if ($duplicateProducts) {
-                $this->cloneExistingProducts(
+                $this->cloneExistingTickets(
                     event: $event,
                     newEventId: $newEvent->getId(),
                     duplicateQuestions: $duplicateQuestions,
@@ -131,7 +136,7 @@ class DuplicateEventService
     /**
      * @throws Throwable
      */
-    private function cloneExistingProducts(
+    private function cloneExistingTickets(
         EventDomainObject $event,
         int               $newEventId,
         bool              $duplicateQuestions,
@@ -140,20 +145,20 @@ class DuplicateEventService
         bool              $duplicateCheckInLists,
     ): array
     {
-        $oldProductToNewProductMap = [];
+        $oldTicketToNewTicketMap = [];
 
-        foreach ($event->getProducts() as $product) {
-            $product->setEventId($newEventId);
-            $newProduct = $this->createProductService->createProduct(
-                product: $product,
+        foreach ($event->getProducts() as $ticket) {
+            $ticket->setEventId($newEventId);
+            $newTicket = $this->createProductService->createTicket(
+                ticket: $ticket,
                 accountId: $event->getAccountId(),
-                taxAndFeeIds: $product->getTaxAndFees()?->map(fn($taxAndFee) => $taxAndFee->getId())?->toArray(),
+                taxAndFeeIds: $ticket->getTaxAndFees()?->map(fn($taxAndFee) => $taxAndFee->getId())?->toArray(),
             );
-            $oldProductToNewProductMap[$product->getId()] = $newProduct->getId();
+            $oldTicketToNewTicketMap[$ticket->getId()] = $newTicket->getId();
         }
 
         if ($duplicateQuestions) {
-            $this->cloneQuestions($event, $newEventId, $oldProductToNewProductMap);
+            $this->clonePerTicketQuestions($event, $newEventId, $oldTicketToNewTicketMap);
         }
 
         if ($duplicatePromoCodes) {
@@ -174,23 +179,47 @@ class DuplicateEventService
     /**
      * @throws Throwable
      */
-    private function cloneQuestions(EventDomainObject $event, int $newEventId, array $oldProductToNewProductMap): void
+    private function clonePerTicketQuestions(EventDomainObject $event, int $newEventId, array $oldTicketToNewTicketMap): void
     {
         foreach ($event->getQuestions() as $question) {
-            $this->createQuestionService->createQuestion(
-                (new QuestionDomainObject())
-                    ->setTitle($question->getTitle())
-                    ->setEventId($newEventId)
-                    ->setBelongsTo($question->getBelongsTo())
-                    ->setType($question->getType())
-                    ->setRequired($question->getRequired())
-                    ->setOptions($question->getOptions())
-                    ->setIsHidden($question->getIsHidden()),
-                array_map(
-                    static fn(ProductDomainObject $product) => $oldProductToNewProductMap[$product->getId()],
-                    $question->getProducts()?->all(),
-                ),
-            );
+            if ($question->getBelongsTo() === QuestionBelongsTo::TICKET->name) {
+                $this->createQuestionService->createQuestion(
+                    (new QuestionDomainObject())
+                        ->setTitle($question->getTitle())
+                        ->setEventId($newEventId)
+                        ->setBelongsTo($question->getBelongsTo())
+                        ->setType($question->getType())
+                        ->setRequired($question->getRequired())
+                        ->setOptions($question->getOptions())
+                        ->setIsHidden($question->getIsHidden()),
+                    array_map(
+                        static fn(ProductDomainObject $ticket) => $oldTicketToNewTicketMap[$ticket->getId()],
+                        $question->getTickets()?->all(),
+                    ),
+                );
+            }
+        }
+    }
+
+    /**
+     * @throws Throwable
+     */
+    private function clonePerOrderQuestions(EventDomainObject $event, int $newEventId): void
+    {
+        foreach ($event->getQuestions() as $question) {
+            if ($question->getBelongsTo() === QuestionBelongsTo::ORDER->name) {
+                $this->createQuestionService->createQuestion(
+                    (new QuestionDomainObject())
+                        ->setTitle($question->getTitle())
+                        ->setEventId($newEventId)
+                        ->setBelongsTo($question->getBelongsTo())
+                        ->setType($question->getType())
+                        ->setRequired($question->getRequired())
+                        ->setOptions($question->getOptions())
+                        ->setIsHidden($question->getIsHidden()),
+                    [],
+                );
+            }
         }
     }
 

@@ -360,6 +360,7 @@ export interface Attendee {
     first_name: string;
     last_name: string;
     email: string;
+    notes?: string;
     order?: Order;
     public_id: string;
     short_id: string;

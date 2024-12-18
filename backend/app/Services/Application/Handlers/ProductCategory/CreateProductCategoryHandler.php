@@ -21,7 +21,7 @@ class CreateProductCategoryHandler
             isHidden: $dto->is_hidden,
             eventId: $dto->event_id,
             description: $dto->description,
-            noProductsMessage: $dto->no_products_message,
+            noProductsMessage: $dto->no_products_message ?? __('There are no products available in this category'),
         );
     }
 }

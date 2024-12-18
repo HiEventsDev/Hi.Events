@@ -21,7 +21,6 @@ export const ProductCategoryForm = ({form}: ProductCategoryFormProps) => {
             <TextInput
                 label={"No products message"}
                 description={"A message to display when there are no products in this category."}
-                required
                 {...form.getInputProps("no_products_message")}
             />
 

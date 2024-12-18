@@ -8,6 +8,7 @@ export interface EditAttendeeRequest {
     first_name: string;
     last_name: string;
     email: string;
+    notes?: string;
     product_id?: IdParam;
     product_price_id?: IdParam;
     status?: string;

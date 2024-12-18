@@ -30,6 +30,7 @@ class AttendeeResource extends JsonResource
             'public_id' => $this->getPublicId(),
             'short_id' => $this->getShortId(),
             'locale' => $this->getLocale(),
+            'notes' => $this->getNotes(),
             'product' => $this->when(
                 !is_null($this->getProduct()),
                 fn() => new ProductResource($this->getProduct()),

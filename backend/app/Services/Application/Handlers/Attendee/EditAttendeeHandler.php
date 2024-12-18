@@ -6,6 +6,7 @@ use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Enums\ProductPriceType;
 use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\ProductDomainObjectAbstract;
+use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\Exceptions\NoTicketsAvailableException;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
@@ -59,6 +60,7 @@ class EditAttendeeHandler
             'last_name' => $editAttendeeDTO->last_name,
             'email' => $editAttendeeDTO->email,
             'product_id' => $editAttendeeDTO->product_id,
+            'notes' => $editAttendeeDTO->notes,
         ], [
             'event_id' => $editAttendeeDTO->event_id,
         ]);
@@ -70,6 +72,7 @@ class EditAttendeeHandler
      */
     private function validateProductId(EditAttendeeDTO $editAttendeeDTO): void
     {
+        /** @var ProductDomainObject $product */
         $product = $this->productRepository
             ->loadRelation(ProductPriceDomainObject::class)
             ->findFirstWhere([

@@ -21,7 +21,7 @@ import {
     ProductPriceQuantityFormValue
 } from "../../../../api/order.client.ts";
 import {useForm} from "@mantine/form";
-import {range, useDisclosure, useInputState, useResizeObserver} from "@mantine/hooks";
+import {range, useInputState, useResizeObserver} from "@mantine/hooks";
 import React, {useEffect, useMemo, useRef, useState} from "react";
 import {showError, showInfo, showSuccess} from "../../../../utilites/notifications.tsx";
 import {addQueryStringToUrl, isObjectEmpty, removeQueryStringFromUrl} from "../../../../utilites/helpers.ts";
@@ -81,6 +81,7 @@ const SelectProducts = (props: SelectProductsProps) => {
     const [event, setEvent] = useState(props.event);
     const [orderInProcessOverlayVisible, setOrderInProcessOverlayVisible] = useState(false);
     const [resizeRef, resizeObserverRect] = useResizeObserver();
+    const [collapsedProducts, setCollapsedProducts] = useState<{ [key: number]: boolean }>({});
 
     useEffect(() => sendHeightToIframeWidgets(), [resizeObserverRect.height]);
 
@@ -318,15 +319,20 @@ const SelectProducts = (props: SelectProductsProps) => {
                                                 .map((n) => n.toString());
                                             quantityRange.unshift("0");
 
-
-                                            const [productIsCollapsed, {toggle: collapseProduct}] = useDisclosure(product.start_collapsed);
+                                            const isProductCollapsed = collapsedProducts[Number(product.id)] ?? product.start_collapsed;
+                                            const toggleCollapse = () => {
+                                                setCollapsedProducts(prev => ({
+                                                    ...prev,
+                                                    [Number(product.id)]: !isProductCollapsed
+                                                }));
+                                            };
 
                                             return (
                                                 <div key={product.id} className={'hi-product-row'}>
                                                     <div className={'hi-title-row'}>
                                                         <UnstyledButton variant={'transparent'}
                                                                         className={'hi-product-title'}
-                                                                        onClick={collapseProduct}
+                                                                        onClick={toggleCollapse}
                                                         >
                                                             <h3>
                                                                 {product.title}
@@ -348,17 +354,19 @@ const SelectProducts = (props: SelectProductsProps) => {
                                                                 )}
 
                                                                 {(!product.is_available && product.type === 'TIERED') && (
-                                                                    <ProductAvailabilityMessage product={product} event={event}/>
+                                                                    <ProductAvailabilityMessage product={product}
+                                                                                                event={event}/>
                                                                 )}
 
                                                                 <span className={`hi-product-collapse-arrow`}>
                                                                 <IconChevronRight
-                                                                    className={productIsCollapsed ? "" : "open"}/>
+                                                                    className={isProductCollapsed ? "" : "open"}/>
                                                                 </span>
                                                             </div>
                                                         </UnstyledButton>
                                                     </div>
-                                                    <Collapse transitionDuration={100} in={!productIsCollapsed} className={'hi-product-content'}>
+                                                    <Collapse transitionDuration={100} in={!isProductCollapsed}
+                                                              className={'hi-product-content'}>
                                                         <div className={'hi-price-tiers-rows'}>
                                                             <TieredPricing
                                                                 productIndex={productIndex++}
@@ -370,7 +378,8 @@ const SelectProducts = (props: SelectProductsProps) => {
 
                                                         {product.max_per_order && form.values.products && isObjectEmpty(form.errors) && (form.values.products[productIndex]?.quantities.reduce((acc, {quantity}) => acc + Number(quantity), 0) > product.max_per_order) && (
                                                             <div className={'hi-product-quantity-error'}>
-                                                                <Trans>The maximum number of products for {product.title}
+                                                                <Trans>The maximum number of products
+                                                                    for {product.title}
                                                                     is {product.max_per_order}</Trans>
                                                             </div>
                                                         )}
@@ -384,7 +393,8 @@ const SelectProducts = (props: SelectProductsProps) => {
                                                         {product.description && (
                                                             <div
                                                                 className={'hi-product-description-row'}>
-                                                                <Spoiler maxHeight={87} showLabel={t`Show more`} hideLabel={t`Hide`}>
+                                                                <Spoiler maxHeight={87} showLabel={t`Show more`}
+                                                                         hideLabel={t`Hide`}>
                                                                     <div dangerouslySetInnerHTML={{
                                                                         __html: product.description
                                                                     }}/>
