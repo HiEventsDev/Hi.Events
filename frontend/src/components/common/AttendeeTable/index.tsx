@@ -1,6 +1,6 @@
 import {Anchor, Avatar, Badge, Button, Table as MantineTable,} from '@mantine/core';
 import {Attendee, MessageType} from "../../../types.ts";
-import {IconEye, IconMailForward, IconPencil, IconPlus, IconSend, IconTrash} from "@tabler/icons-react";
+import {IconMailForward, IconPlus, IconSend, IconTrash, IconUserCog} from "@tabler/icons-react";
 import {getInitials, getProductFromEvent} from "../../../utilites/helpers.ts";
 import {Table, TableHead} from "../Table";
 import {useDisclosure} from "@mantine/hooks";
@@ -8,7 +8,6 @@ import {SendMessageModal} from "../../modals/SendMessageModal";
 import {useState} from "react";
 import {NoResultsSplash} from "../NoResultsSplash";
 import {useParams} from "react-router-dom";
-import {EditAttendeeModal} from "../../modals/EditAttendeeModal";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import Truncate from "../Truncate";
 import {notifications} from "@mantine/notifications";
@@ -17,7 +16,7 @@ import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {t, Trans} from "@lingui/macro";
 import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
 import {useResendAttendeeTicket} from "../../../mutations/useResendAttendeeTicket.ts";
-import {ViewAttendeeModal} from "../../modals/ViewAttendeeModal";
+import {ManageAttendeeModal} from "../../modals/ManageAttendeeModal";
 import {ActionMenu} from '../ActionMenu';
 
 interface AttendeeTableProps {
@@ -28,7 +27,6 @@ interface AttendeeTableProps {
 export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) => {
     const {eventId} = useParams();
     const [isMessageModalOpen, messageModal] = useDisclosure(false);
-    const [isEditModalOpen, editModal] = useDisclosure(false);
     const [isViewModalOpem, viewModalOpen] = useDisclosure(false);
     const [selectedAttendee, setSelectedAttendee] = useState<Attendee>();
     const {data: event} = useGetEvent(eventId);
@@ -161,19 +159,14 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
                                             label: t`Actions`,
                                             items: [
                                                 {
-                                                    label: t`View attendee`,
-                                                    icon: <IconEye size={14}/>,
+                                                    label: t`Manage attendee`,
+                                                    icon: <IconUserCog size={14}/>,
                                                     onClick: () => handleModalClick(attendee, viewModalOpen),
                                                 },
                                                 {
                                                     label: t`Message attendee`,
                                                     icon: <IconSend size={14}/>,
                                                     onClick: () => handleModalClick(attendee, messageModal),
-                                                },
-                                                {
-                                                    label: t`Edit attendee`,
-                                                    icon: <IconPencil size={14}/>,
-                                                    onClick: () => handleModalClick(attendee, editModal),
                                                 },
                                                 {
                                                     label: t`Resend ticket email`,
@@ -207,12 +200,7 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
                 attendeeId={selectedAttendee.id}
                 messageType={MessageType.Attendee}
             />}
-            {(selectedAttendee?.id && isEditModalOpen) && <EditAttendeeModal
-                attendeeId={selectedAttendee.id}
-                onClose={editModal.close}
-            />}
-
-            {(selectedAttendee?.id && isViewModalOpem) && <ViewAttendeeModal
+            {(selectedAttendee?.id && isViewModalOpem) && <ManageAttendeeModal
                 attendeeId={selectedAttendee.id}
                 onClose={viewModalOpen.close}
             />}

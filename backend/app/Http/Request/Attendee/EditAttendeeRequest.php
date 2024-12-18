@@ -15,6 +15,7 @@ class EditAttendeeRequest extends BaseRequest
             'last_name' => RulesHelper::REQUIRED_STRING,
             'product_id' => RulesHelper::REQUIRED_NUMERIC,
             'product_price_id' => RulesHelper::REQUIRED_NUMERIC,
+            'notes' => RulesHelper::OPTIONAL_TEXT_MEDIUM_LENGTH,
         ];
     }
 
@@ -29,6 +30,7 @@ class EditAttendeeRequest extends BaseRequest
             'product_price_id.required' => __('Product price is required'),
             'product_id.numeric' => '',
             'product_price_id.numeric' => '',
+            'notes.max' => __('Notes must be less than 2000 characters'),
         ];
     }
 }

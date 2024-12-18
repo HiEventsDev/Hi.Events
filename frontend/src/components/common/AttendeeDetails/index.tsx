@@ -7,7 +7,7 @@ import {getLocaleName, SupportedLocales} from "../../../locales.ts";
 
 export const AttendeeDetails = ({attendee}: { attendee: Attendee }) => {
     return (
-        <div className={classes.orderDetails} variant={'lightGray'}>
+        <div className={classes.orderDetails}>
             <div className={classes.block}>
                 <div className={classes.title}>
                     {t`Name`}
@@ -29,7 +29,7 @@ export const AttendeeDetails = ({attendee}: { attendee: Attendee }) => {
                     {t`Status`}
                 </div>
                 <div className={classes.amount}>
-                    {attendee.status}
+                    {attendee.status === 'ACTIVE' ? <span style={{color: '#0d7553'}}>{t`Active`}</span> : <span style={{color: '#EF4444'}}>{t`Canceled`}</span>}
                 </div>
             </div>
             <div className={classes.block}>
