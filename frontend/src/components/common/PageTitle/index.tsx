@@ -1,12 +1,14 @@
 import React from "react";
 import classes from './PageTitle.module.scss';
 
-interface PageTitleProps {
+interface PageTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {
     children: React.ReactNode,
 }
 
-export const PageTitle = ({children}: PageTitleProps) => {
+export const PageTitle = (props: PageTitleProps) => {
     return (
-        <h1 className={classes.title}>{children}</h1>
+        <h1 className={classes.title} {...props}>
+            {props.children}
+        </h1>
     );
 }

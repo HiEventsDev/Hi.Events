@@ -1,6 +1,6 @@
 import React from 'react';
 import {formatCurrency} from "../../../utilites/currency.ts";
-import {Ticket, TicketPrice} from "../../../types.ts";
+import {Product, ProductPrice} from "../../../types.ts";
 import {t} from "@lingui/macro";
 import {Popover} from "@mantine/core";
 import {IconInfoCircle} from "@tabler/icons-react";
@@ -37,17 +37,17 @@ export const Currency: React.FC<CurrencyProps> = ({
     );
 };
 
-interface TicketPriceProps {
-    ticket: Ticket;
-    price: TicketPrice;
+interface ProductPriceProps {
+    product: Product;
+    price: ProductPrice;
     currency?: string;
     className?: string;
     freeLabel?: string | null;
     taxAndServiceFeeDisplayType?: 'INCLUSIVE' | 'EXCLUSIVE';
 }
 
-export const TicketPriceDisplay: React.FC<TicketPriceProps> = ({
-                                                                   ticket,
+export const ProductPriceDisplay: React.FC<ProductPriceProps> = ({
+                                                                   product,
                                                                    price,
                                                                    currency = 'USD',
                                                                    className,
@@ -58,7 +58,7 @@ export const TicketPriceDisplay: React.FC<TicketPriceProps> = ({
     const totalTaxAndFees = (price.tax_total || 0) + (price.fee_total || 0);
 
     // Order taxes and service fees for display
-    const orderedFees = [...(ticket.taxes || [])].sort((a, b) => a.type.localeCompare(b.type));
+    const orderedFees = [...(product.taxes || [])].sort((a, b) => a.type.localeCompare(b.type));
     const feeDescriptions = orderedFees.map(fee => fee.name).join(', ');
 
     const getTextAppendage = () => {

@@ -16,4 +16,5 @@ class RulesHelper
 
     public const REQUIRED_EMAIL = ['email' , 'required', 'max:100'];
 
+    public const OPTIONAL_TEXT_MEDIUM_LENGTH = ['string', 'max:2000', 'nullable'];
 }

@@ -2,8 +2,11 @@
 
 .sidebar {
   width: 350px;
-  min-width: 300px;
+  min-width: 250px;
   background-color: #ffffff;
+  max-height: 100vh;
+  overflow-y: auto;
+  @include scrollbar();
 
   .coverImage {
     img {

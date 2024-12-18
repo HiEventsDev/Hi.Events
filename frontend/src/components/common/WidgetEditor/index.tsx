@@ -1,5 +1,5 @@
 import classes from './WidgetEditor.module.scss';
-import SelectTickets from "../../routes/ticket-widget/SelectTickets";
+import SelectProducts from "../../routes/product-widget/SelectProducts";
 import {ColorInput, Group, NumberInput, Switch, Tabs, Textarea, TextInput} from "@mantine/core";
 import {t, Trans} from "@lingui/macro";
 import {matches, useForm} from "@mantine/form";
@@ -308,7 +308,7 @@ export default App;
                 </Card>
                 <div className={classes.previewPane}>
                     <h2 className={classes.previewHeader}>
-                        {t`Ticket Widget Preview`}
+                        {t`Product Widget Preview`}
                     </h2>
                     <section className={classes.stickyContainer}>
                         <div className={classes.browserChrome}>
@@ -332,7 +332,7 @@ export default App;
                             <div className={classes.widgetWrapper}>
                                 {!eventQuery.isFetched ?
                                     <LoadingMask/> :
-                                    <SelectTickets
+                                    <SelectProducts
                                         event={eventQuery.data as Event}
                                         widgetMode={'preview'}
                                         colors={{

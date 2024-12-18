@@ -4,7 +4,7 @@ namespace HiEvents\Http\Actions\CapacityAssignments;
 
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Services\Handlers\CapacityAssignment\DeleteCapacityAssignmentHandler;
+use HiEvents\Services\Application\Handlers\CapacityAssignment\DeleteCapacityAssignmentHandler;
 use Illuminate\Http\Response;
 
 class DeleteCapacityAssignmentAction extends BaseAction

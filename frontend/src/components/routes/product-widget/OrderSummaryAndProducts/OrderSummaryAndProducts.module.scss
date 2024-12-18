@@ -1,0 +1,51 @@
+@import "../../../../styles/mixins";
+
+.welcomeHeader {
+  margin-bottom: 20px;
+  padding: 20px;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.actionBar {
+  background-color: #800080;
+  padding: var(--tk-spacing-md);
+  color: #fff;
+}
+
+.heading {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 20px;
+}
+
+.subHeading {
+  margin-bottom: 10px;
+}
+
+.orderSummaryContainer {
+  padding: var(--tk-spacing-lg);
+  border-radius: var(--tk-radius-lg);
+  background-color: #fff9ff;
+  border: 1px solid #800080;
+}
+
+.detailItem {
+  min-width: 0; // Enable text truncation
+  overflow: hidden;
+
+  .detailContent {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .label {
+    margin-bottom: 0.25rem;
+  }
+
+  .value {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+  }
+}

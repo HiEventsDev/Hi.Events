@@ -4,7 +4,7 @@ namespace HiEvents\Resources\CapacityAssignment;
 
 use HiEvents\DomainObjects\CapacityAssignmentDomainObject;
 use HiEvents\DomainObjects\Enums\CapacityAssignmentAppliesTo;
-use HiEvents\DomainObjects\TicketDomainObject;
+use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\Resources\BaseResource;
 use Illuminate\Http\Request;
 
@@ -25,11 +25,11 @@ class CapacityAssignmentResource extends BaseResource
             'status' => $this->getStatus(),
             'event_id' => $this->getEventId(),
             $this->mergeWhen(
-                condition: $this->getTickets() !== null && $this->getAppliesTo() === CapacityAssignmentAppliesTo::TICKETS->name,
+                condition: $this->getProducts() !== null && $this->getAppliesTo() === CapacityAssignmentAppliesTo::PRODUCTS->name,
                 value: [
-                    'tickets' => $this->getTickets()?->map(fn(TicketDomainObject $ticket) => [
-                        'id' => $ticket->getId(),
-                        'title' => $ticket->getTitle(),
+                    'products' => $this->getProducts()?->map(fn(ProductDomainObject $product) => [
+                        'id' => $product->getId(),
+                        'title' => $product->getTitle(),
                     ]),
                 ]),
         ];

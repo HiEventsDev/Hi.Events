@@ -62,7 +62,7 @@ export const EventDetailsForm = () => {
     return (
         <Card>
             <HeadingWithDescription
-                heading={t`Basic Details`}
+                heading={t`Event Details`}
                 description={t`Update event name, description and dates`}
             />
             <form onSubmit={form.onSubmit(handleSubmit)}>

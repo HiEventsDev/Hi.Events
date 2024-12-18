@@ -1,7 +1,7 @@
 import {CustomSelect, ItemProps} from "../../common/CustomSelect";
 import {t, Trans} from "@lingui/macro";
-import {QuestionBelongsToType, QuestionType, Ticket} from "../../../types.ts";
-import {Button, Group, MultiSelect, Switch, TextInput} from "@mantine/core";
+import {ProductCategory, QuestionBelongsToType, QuestionType} from "../../../types.ts";
+import {Button, Group, Switch, TextInput} from "@mantine/core";
 import {
     IconAlignBoxLeftTop,
     IconCalendar,
@@ -20,6 +20,7 @@ import {Card} from "../../common/Card";
 import classes from "./QuestionForm.module.scss";
 import {Editor} from "../../common/Editor";
 import {useState} from "react";
+import {ProductSelector} from "../../common/ProductSelector";
 
 const Options = ({form}: { form: UseFormReturnType<any> }) => {
     return (
@@ -72,10 +73,10 @@ const Options = ({form}: { form: UseFormReturnType<any> }) => {
 
 interface QuestionFormProps {
     form: UseFormReturnType<any>;
-    tickets?: Ticket[];
+    productCategories?: ProductCategory[];
 }
 
-export const QuestionForm = ({form, tickets}: QuestionFormProps) => {
+export const QuestionForm = ({form, productCategories}: QuestionFormProps) => {
     const [showDescription, setShowDescription] = useState(false);
 
     const belongToOptions: ItemProps[] = [
@@ -83,13 +84,13 @@ export const QuestionForm = ({form, tickets}: QuestionFormProps) => {
             icon: <IconReceipt/>,
             label: t`Ask once per order`,
             value: QuestionBelongsToType.ORDER,
-            description: t`A single question per order. E.g, What is your company name?`,
+            description: t`A single question per order. E.g, What is your shipping address?`,
         },
         {
             icon: <IconUser/>,
-            label: t`Ask once per attendee`,
-            value: QuestionBelongsToType.TICKET,
-            description: t`A single question per attendee. E.g, What is your preferred meal?`,
+            label: t`Ask once per product`,
+            value: QuestionBelongsToType.PRODUCT,
+            description: t`A single question per product. E.g, What is your t-shirt size?`,
         },
     ];
 
@@ -153,20 +154,14 @@ export const QuestionForm = ({form, tickets}: QuestionFormProps) => {
                 name="belongs_to"
             />
 
-            {form.values.belongs_to === QuestionBelongsToType.TICKET && (
-                <MultiSelect
-                    mt={20}
-                    label={t`What tickets should this question be apply to?`}
-                    multiple
-                    placeholder={t`Select tickets`}
-                    data={tickets?.map(ticket => {
-                        return {
-                            value: String(ticket.id),
-                            label: ticket.title,
-                        }
-                    })}
-                    leftSection={<IconTicket size="1rem"/>}
-                    {...form.getInputProps('ticket_ids')}
+            {form.values.belongs_to === QuestionBelongsToType.PRODUCT && (
+                <ProductSelector
+                    label={t`What products does this code apply to?`}
+                    placeholder="Select products"
+                    icon={<IconTicket size="1rem"/>}
+                    productCategories={productCategories ?? []}
+                    form={form}
+                    productFieldName="product_ids"
                 />
             )}
 

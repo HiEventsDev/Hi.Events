@@ -8,9 +8,9 @@ use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Order\CompleteOrderRequest;
 use HiEvents\Resources\Order\OrderResourcePublic;
-use HiEvents\Services\Handlers\Order\CompleteOrderHandler;
-use HiEvents\Services\Handlers\Order\DTO\CompleteOrderDTO;
-use HiEvents\Services\Handlers\Order\DTO\CompleteOrderOrderDTO;
+use HiEvents\Services\Application\Handlers\Order\CompleteOrderHandler;
+use HiEvents\Services\Application\Handlers\Order\DTO\CompleteOrderDTO;
+use HiEvents\Services\Application\Handlers\Order\DTO\CompleteOrderOrderDTO;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -33,7 +33,7 @@ class CompleteOrderActionPublic extends BaseAction
                         ? $request->input('order.questions')
                         : null,
                 ]),
-                'attendees' => $request->input('attendees'),
+                'products' => $request->input('products'),
             ]));
         } catch (ResourceConflictException $e) {
             return $this->errorResponse($e->getMessage(), Response::HTTP_CONFLICT);

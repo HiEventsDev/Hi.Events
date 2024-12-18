@@ -3,7 +3,7 @@
 namespace HiEvents\Resources\Account\Stripe;
 
 use HiEvents\Resources\Account\AccountResource;
-use HiEvents\Services\Handlers\Account\Payment\Stripe\DTO\CreateStripeConnectAccountResponse;
+use HiEvents\Services\Application\Handlers\Account\Payment\Stripe\DTO\CreateStripeConnectAccountResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**

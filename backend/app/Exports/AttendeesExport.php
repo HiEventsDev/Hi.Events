@@ -49,7 +49,7 @@ class AttendeesExport implements FromCollection, WithHeadings, WithMapping, With
             'Status',
             'Is Checked In',
             'Checked In At',
-            'Ticket ID',
+            'Product ID',
             'Event ID',
             'Public ID',
             'Short ID',
@@ -80,7 +80,7 @@ class AttendeesExport implements FromCollection, WithHeadings, WithMapping, With
             $attendee->getCheckedInAt()
                 ? Carbon::parse($attendee->getCheckedInAt())->format('Y-m-d H:i:s')
                 : '',
-            $attendee->getTicketId(),
+            $attendee->getProductId(),
             $attendee->getEventId(),
             $attendee->getPublicId(),
             $attendee->getShortId(),

@@ -5,7 +5,7 @@ namespace HiEvents\Http\Actions\Questions;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Questions\SortQuestionsRequest;
-use HiEvents\Services\Handlers\Question\SortQuestionsHandler;
+use HiEvents\Services\Application\Handlers\Question\SortQuestionsHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;

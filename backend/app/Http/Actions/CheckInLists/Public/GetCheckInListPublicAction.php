@@ -4,7 +4,7 @@ namespace HiEvents\Http\Actions\CheckInLists\Public;
 
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Resources\CheckInList\CheckInListResourcePublic;
-use HiEvents\Services\Handlers\CheckInList\Public\GetCheckInListPublicHandler;
+use HiEvents\Services\Application\Handlers\CheckInList\Public\GetCheckInListPublicHandler;
 use Illuminate\Http\JsonResponse;
 
 class GetCheckInListPublicAction extends BaseAction

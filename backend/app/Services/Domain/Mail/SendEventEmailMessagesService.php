@@ -18,7 +18,7 @@ use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\MessageRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
-use HiEvents\Services\Handlers\Message\DTO\SendMessageDTO;
+use HiEvents\Services\Application\Handlers\Message\DTO\SendMessageDTO;
 use Illuminate\Mail\Mailer;
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpKernel\Log\Logger;
@@ -70,8 +70,8 @@ class SendEventEmailMessagesService
             case MessageTypeEnum::ORDER:
                 $this->sendOrderMessages($messageData, $event, $order);
                 break;
-            case MessageTypeEnum::TICKET:
-                $this->sendTicketMessages($messageData, $event);
+            case MessageTypeEnum::PRODUCT:
+                $this->sendProductMessages($messageData, $event);
                 break;
             case MessageTypeEnum::EVENT:
                 $this->sendEventMessages($messageData, $event);
@@ -95,11 +95,11 @@ class SendEventEmailMessagesService
         $this->emailAttendees($attendees, $messageData, $event);
     }
 
-    private function sendTicketMessages(SendMessageDTO $messageData, EventDomainObject $event): void
+    private function sendProductMessages(SendMessageDTO $messageData, EventDomainObject $event): void
     {
         $attendees = $this->attendeeRepository->findWhereIn(
-            field: 'ticket_id',
-            values: $messageData->ticket_ids,
+            field: 'product_id',
+            values: $messageData->product_ids,
             additionalWhere: [
                 'event_id' => $messageData->event_id,
                 'status' => AttendeeStatus::ACTIVE->name,

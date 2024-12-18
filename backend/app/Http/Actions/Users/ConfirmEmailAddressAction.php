@@ -4,8 +4,8 @@ namespace HiEvents\Http\Actions\Users;
 
 use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Services\Handlers\User\ConfirmEmailAddressHandler;
-use HiEvents\Services\Handlers\User\DTO\ConfirmEmailChangeDTO;
+use HiEvents\Services\Application\Handlers\User\ConfirmEmailAddressHandler;
+use HiEvents\Services\Application\Handlers\User\DTO\ConfirmEmailChangeDTO;
 use HiEvents\Services\Infrastructure\Encryption\Exception\DecryptionFailedException;
 use HiEvents\Services\Infrastructure\Encryption\Exception\EncryptedPayloadExpiredException;
 use Illuminate\Http\JsonResponse;

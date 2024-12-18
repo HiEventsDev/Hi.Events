@@ -1,0 +1,54 @@
+.accordionItem {
+  border: 1px solid var(--mantine-color-gray-2);
+  border-radius: var(--mantine-radius-sm);
+  background-color: var(--mantine-color-white);
+  overflow: hidden;
+
+  & + & {
+    margin-top: 0.75rem;
+  }
+}
+
+.accordionControl {
+  background-color: var(--mantine-color-gray-0);
+  border-bottom: none;
+
+  &:hover {
+    background-color: var(--mantine-color-gray-1);
+  }
+
+  &[data-expanded] {
+    background-color: var(--mantine-color-white);
+    border-bottom: 1px solid var(--mantine-color-gray-2);
+  }
+}
+
+.accordionContent {
+  padding: 1.25rem;
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
+}
+
+.accordionChevron {
+  transition: transform 0.2s ease;
+
+  &[data-expanded] {
+    transform: rotate(180deg);
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.title {
+  flex: 1;
+}
+
+.badge {
+  margin-left: auto;
+}

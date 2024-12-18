@@ -13,8 +13,8 @@ use HiEvents\DomainObjects\PromoCodeDomainObject;
 use HiEvents\DomainObjects\QuestionDomainObject;
 use HiEvents\DomainObjects\Status\EventStatus;
 use HiEvents\DomainObjects\TaxAndFeesDomainObject;
-use HiEvents\DomainObjects\TicketDomainObject;
-use HiEvents\DomainObjects\TicketPriceDomainObject;
+use HiEvents\DomainObjects\ProductDomainObject;
+use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\ImageRepositoryInterface;
@@ -22,7 +22,7 @@ use HiEvents\Services\Domain\CapacityAssignment\CreateCapacityAssignmentService;
 use HiEvents\Services\Domain\CheckInList\CreateCheckInListService;
 use HiEvents\Services\Domain\PromoCode\CreatePromoCodeService;
 use HiEvents\Services\Domain\Question\CreateQuestionService;
-use HiEvents\Services\Domain\Ticket\CreateTicketService;
+use HiEvents\Services\Domain\Product\CreateProductService;
 use HTMLPurifier;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
@@ -32,7 +32,7 @@ class DuplicateEventService
     public function __construct(
         private readonly EventRepositoryInterface        $eventRepository,
         private readonly CreateEventService              $createEventService,
-        private readonly CreateTicketService             $createTicketService,
+        private readonly CreateProductService            $createProductService,
         private readonly CreateQuestionService           $createQuestionService,
         private readonly CreatePromoCodeService          $createPromoCodeService,
         private readonly CreateCapacityAssignmentService $createCapacityAssignmentService,
@@ -52,7 +52,7 @@ class DuplicateEventService
         string  $accountId,
         string  $title,
         string  $startDate,
-        bool    $duplicateTickets = true,
+        bool    $duplicateProducts = true,
         bool    $duplicateQuestions = true,
         bool    $duplicateSettings = true,
         bool    $duplicatePromoCodes = true,
@@ -84,7 +84,7 @@ class DuplicateEventService
                 $this->clonePerOrderQuestions($event, $newEvent->getId());
             }
 
-            if ($duplicateTickets) {
+            if ($duplicateProducts) {
                 $this->cloneExistingTickets(
                     event: $event,
                     newEventId: $newEvent->getId(),
@@ -147,9 +147,9 @@ class DuplicateEventService
     {
         $oldTicketToNewTicketMap = [];
 
-        foreach ($event->getTickets() as $ticket) {
+        foreach ($event->getProducts() as $ticket) {
             $ticket->setEventId($newEventId);
-            $newTicket = $this->createTicketService->createTicket(
+            $newTicket = $this->createProductService->createTicket(
                 ticket: $ticket,
                 accountId: $event->getAccountId(),
                 taxAndFeeIds: $ticket->getTaxAndFees()?->map(fn($taxAndFee) => $taxAndFee->getId())?->toArray(),
@@ -162,18 +162,18 @@ class DuplicateEventService
         }
 
         if ($duplicatePromoCodes) {
-            $this->clonePromoCodes($event, $newEventId, $oldTicketToNewTicketMap);
+            $this->clonePromoCodes($event, $newEventId, $oldProductToNewProductMap);
         }
 
         if ($duplicateCapacityAssignments) {
-            $this->cloneCapacityAssignments($event, $newEventId, $oldTicketToNewTicketMap);
+            $this->cloneCapacityAssignments($event, $newEventId, $oldProductToNewProductMap);
         }
 
         if ($duplicateCheckInLists) {
-            $this->cloneCheckInLists($event, $newEventId, $oldTicketToNewTicketMap);
+            $this->cloneCheckInLists($event, $newEventId, $oldProductToNewProductMap);
         }
 
-        return $oldTicketToNewTicketMap;
+        return $oldProductToNewProductMap;
     }
 
     /**
@@ -193,7 +193,7 @@ class DuplicateEventService
                         ->setOptions($question->getOptions())
                         ->setIsHidden($question->getIsHidden()),
                     array_map(
-                        static fn(TicketDomainObject $ticket) => $oldTicketToNewTicketMap[$ticket->getId()],
+                        static fn(ProductDomainObject $ticket) => $oldTicketToNewTicketMap[$ticket->getId()],
                         $question->getTickets()?->all(),
                     ),
                 );
@@ -226,16 +226,16 @@ class DuplicateEventService
     /**
      * @throws Throwable
      */
-    private function clonePromoCodes(EventDomainObject $event, int $newEventId, array $oldTicketToNewTicketMap): void
+    private function clonePromoCodes(EventDomainObject $event, int $newEventId, array $oldProductToNewProductMap): void
     {
         foreach ($event->getPromoCodes() as $promoCode) {
             $this->createPromoCodeService->createPromoCode(
                 (new PromoCodeDomainObject())
                     ->setCode($promoCode->getCode())
                     ->setEventId($newEventId)
-                    ->setApplicableTicketIds(array_map(
-                        static fn($ticketId) => $oldTicketToNewTicketMap[$ticketId],
-                        $promoCode->getApplicableTicketIds() ?? [],
+                    ->setApplicableProductIds(array_map(
+                        static fn($productId) => $oldProductToNewProductMap[$productId],
+                        $promoCode->getApplicableProductIds() ?? [],
                     ))
                     ->setDiscountType($promoCode->getDiscountType())
                     ->setDiscount($promoCode->getDiscount())
@@ -245,7 +245,7 @@ class DuplicateEventService
         }
     }
 
-    private function cloneCapacityAssignments(EventDomainObject $event, int $newEventId, $oldTicketToNewTicketMap): void
+    private function cloneCapacityAssignments(EventDomainObject $event, int $newEventId, $oldProductToNewProductMap): void
     {
         /** @var CapacityAssignmentDomainObject $capacityAssignment */
         foreach ($event->getCapacityAssignments() as $capacityAssignment) {
@@ -256,13 +256,13 @@ class DuplicateEventService
                     ->setCapacity($capacityAssignment->getCapacity())
                     ->setAppliesTo($capacityAssignment->getAppliesTo())
                     ->setStatus($capacityAssignment->getStatus()),
-                ticketIds: $capacityAssignment->getTickets()
-                ?->map(fn($ticket) => $oldTicketToNewTicketMap[$ticket->getId()])?->toArray() ?? [],
+                productIds: $capacityAssignment->getProducts()
+                ?->map(fn($product) => $oldProductToNewProductMap[$product->getId()])?->toArray() ?? [],
             );
         }
     }
 
-    private function cloneCheckInLists(EventDomainObject $event, int $newEventId, $oldTicketToNewTicketMap): void
+    private function cloneCheckInLists(EventDomainObject $event, int $newEventId, $oldProductToNewProductMap): void
     {
         foreach ($event->getCheckInLists() as $checkInList) {
             $this->createCheckInListService->createCheckInList(
@@ -272,8 +272,8 @@ class DuplicateEventService
                     ->setExpiresAt($checkInList->getExpiresAt())
                     ->setActivatesAt($checkInList->getActivatesAt())
                     ->setEventId($newEventId),
-                ticketIds: $checkInList->getTickets()
-                ?->map(fn($ticket) => $oldTicketToNewTicketMap[$ticket->getId()])?->toArray() ?? [],
+                productIds: $checkInList->getProducts()
+                ?->map(fn($product) => $oldProductToNewProductMap[$product->getId()])?->toArray() ?? [],
             );
         }
     }
@@ -301,20 +301,20 @@ class DuplicateEventService
         return $this->eventRepository
             ->loadRelation(EventSettingDomainObject::class)
             ->loadRelation(
-                new Relationship(TicketDomainObject::class, [
-                    new Relationship(TicketPriceDomainObject::class),
+                new Relationship(ProductDomainObject::class, [
+                    new Relationship(ProductPriceDomainObject::class),
                     new Relationship(TaxAndFeesDomainObject::class)
                 ])
             )
             ->loadRelation(PromoCodeDomainObject::class)
             ->loadRelation(new Relationship(QuestionDomainObject::class, [
-                new Relationship(TicketDomainObject::class),
+                new Relationship(ProductDomainObject::class),
             ]))
             ->loadRelation(new Relationship(CapacityAssignmentDomainObject::class, [
-                new Relationship(TicketDomainObject::class),
+                new Relationship(ProductDomainObject::class),
             ]))
             ->loadRelation(new Relationship(CheckInListDomainObject::class, [
-                new Relationship(TicketDomainObject::class),
+                new Relationship(ProductDomainObject::class),
             ]))
             ->loadRelation(ImageDomainObject::class)
             ->findFirstWhere([

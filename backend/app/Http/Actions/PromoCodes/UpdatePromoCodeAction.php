@@ -9,9 +9,9 @@ use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\PromoCode\CreateUpdatePromoCodeRequest;
 use HiEvents\Http\ResponseCodes;
 use HiEvents\Resources\PromoCode\PromoCodeResource;
-use HiEvents\Services\Domain\Ticket\Exception\UnrecognizedTicketIdException;
-use HiEvents\Services\Handlers\PromoCode\DTO\UpsertPromoCodeDTO;
-use HiEvents\Services\Handlers\PromoCode\UpdatePromoCodeHandler;
+use HiEvents\Services\Application\Handlers\PromoCode\DTO\UpsertPromoCodeDTO;
+use HiEvents\Services\Application\Handlers\PromoCode\UpdatePromoCodeHandler;
+use HiEvents\Services\Domain\Product\Exception\UnrecognizedProductIdException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 
@@ -35,7 +35,7 @@ class UpdatePromoCodeAction extends BaseAction
             $promoCode = $this->updatePromoCodeHandler->handle($promoCodeId, new UpsertPromoCodeDTO(
                 code: strtolower($request->input('code')),
                 event_id: $eventId,
-                applicable_ticket_ids: $request->input('applicable_ticket_ids'),
+                applicable_product_ids: $request->input('applicable_product_ids'),
                 discount_type: PromoCodeDiscountTypeEnum::fromName($request->input('discount_type')),
                 discount: $request->float('discount'),
                 expiry_date: $request->input('expiry_date'),
@@ -45,9 +45,9 @@ class UpdatePromoCodeAction extends BaseAction
             throw ValidationException::withMessages([
                 'code' => $e->getMessage(),
             ]);
-        } catch (UnrecognizedTicketIdException $e) {
+        } catch (UnrecognizedProductIdException $e) {
             throw ValidationException::withMessages([
-                'applicable_ticket_ids' => $e->getMessage(),
+                'applicable_product_ids' => $e->getMessage(),
             ]);
         }
 

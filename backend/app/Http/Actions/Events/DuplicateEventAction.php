@@ -6,8 +6,8 @@ use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Event\DuplicateEventRequest;
 use HiEvents\Resources\Event\EventResource;
+use HiEvents\Services\Application\Handlers\Event\DuplicateEventHandler;
 use HiEvents\Services\Domain\Event\DTO\DuplicateEventDataDTO;
-use HiEvents\Services\Handlers\Event\DuplicateEventHandler;
 use Illuminate\Http\JsonResponse;
 use Throwable;
 
@@ -29,7 +29,7 @@ class DuplicateEventAction extends BaseAction
             accountId: $this->getAuthenticatedAccountId(),
             title: $request->validated('title'),
             startDate: $request->validated('start_date'),
-            duplicateTickets: $request->validated('duplicate_tickets'),
+            duplicateProducts: $request->validated('duplicate_products'),
             duplicateQuestions: $request->validated('duplicate_questions'),
             duplicateSettings: $request->validated('duplicate_settings'),
             duplicatePromoCodes: $request->validated('duplicate_promo_codes'),

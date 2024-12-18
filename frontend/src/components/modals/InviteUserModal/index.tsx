@@ -46,7 +46,7 @@ export const InviteUserModal = ({onClose}: GenericModalProps) => {
             icon: <IconUser/>,
             label: t`Organizer`,
             value: 'ORGANIZER',
-            description: t`Organizers can only manage events and tickets. They cannot manage users, account settings or billing information.`,
+            description: t`Organizers can only manage events and products. They cannot manage users, account settings or billing information.`,
         },
     ];
 

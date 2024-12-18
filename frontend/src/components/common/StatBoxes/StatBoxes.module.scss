@@ -1,57 +1,100 @@
+@import "../../../styles/mixins.scss";
+
 .statistics {
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
   color: var(--tk-primary);
-  gap: 15px;
+  margin: 0.5rem 0;
+
+  @include respond-below(lg) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include respond-below(md) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .statistic {
-  flex: 1 1 50px;
   display: flex;
-  flex-direction: row;
-  padding: 20px;
-  min-width: 250px;
-  margin-bottom: 0;
+  align-items: center;
+  padding: 1.25rem !important;
+  transition: all 0.2s ease-in-out;
+  margin-bottom: 0 !important;
+  height: 100%;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
 
   .leftPanel {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    flex: 1;
+    display: grid;
+    grid-template-rows: auto auto;
+    min-height: 65px;
+    gap: 5px;
 
     .number {
-      font-size: 1.5em;
-      font-weight: bold;
+      font-size: 1.75rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      align-self: end;
+
+      @include respond-below(md) {
+        font-size: 1.5rem;
+      }
     }
 
     .description {
-      font-size: 1em;
+      font-size: 1rem;
       color: var(--tk-color-gray-dark);
-    }
-
-    .change {
-      font-size: 1em;
+      font-weight: 500;
+      align-self: start;
     }
   }
 
   .rightPanel {
-    flex: 1;
-    display: flex;
-    place-content: flex-end;
-    align-items: center;
-
+    margin-left: 1rem;
+    align-self: flex-start;
 
     .icon {
-      width: 40px;
-      height: 40px;
-      background: #63d57e;
-      border-radius: 50px;
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
       color: #ffffff;
+      transition: transform 0.2s ease;
+
+      @include respond-below(md) {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+      }
+
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
+  }
+
+  @include respond-below(sm) {
+    padding: 1rem !important;
+
+    .leftPanel {
+      min-height: 55px;
+
+      .number {
+        font-size: 1.25rem;
+      }
+
+      .description {
+        font-size: 0.9125rem;
+      }
     }
   }
 }
-
-

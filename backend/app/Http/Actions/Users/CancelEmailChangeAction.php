@@ -5,8 +5,8 @@ namespace HiEvents\Http\Actions\Users;
 use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Resources\User\UserResource;
-use HiEvents\Services\Handlers\User\CancelEmailChangeHandler;
-use HiEvents\Services\Handlers\User\DTO\CancelEmailChangeDTO;
+use HiEvents\Services\Application\Handlers\User\CancelEmailChangeHandler;
+use HiEvents\Services\Application\Handlers\User\DTO\CancelEmailChangeDTO;
 use Illuminate\Http\JsonResponse;
 
 class CancelEmailChangeAction extends BaseAction

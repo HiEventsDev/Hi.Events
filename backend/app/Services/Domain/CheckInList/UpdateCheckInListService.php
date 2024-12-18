@@ -7,16 +7,16 @@ use HiEvents\DomainObjects\Generated\CheckInListDomainObjectAbstract;
 use HiEvents\Helper\DateHelper;
 use HiEvents\Repository\Interfaces\CheckInListRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
-use HiEvents\Services\Domain\Ticket\EventTicketValidationService;
-use HiEvents\Services\Domain\Ticket\Exception\UnrecognizedTicketIdException;
+use HiEvents\Services\Domain\Product\EventProductValidationService;
+use HiEvents\Services\Domain\Product\Exception\UnrecognizedProductIdException;
 use Illuminate\Database\DatabaseManager;
 
 class UpdateCheckInListService
 {
     public function __construct(
         private readonly DatabaseManager                     $databaseManager,
-        private readonly EventTicketValidationService        $eventTicketValidationService,
-        private readonly CheckInListTicketAssociationService $checkInListTicketAssociationService,
+        private readonly EventProductValidationService       $eventProductValidationService,
+        private readonly CheckInListProductAssociationService $checkInListProductAssociationService,
         private readonly CheckInListRepositoryInterface      $checkInListRepository,
         private readonly EventRepositoryInterface            $eventRepository,
     )
@@ -24,12 +24,12 @@ class UpdateCheckInListService
     }
 
     /**
-     * @throws UnrecognizedTicketIdException
+     * @throws UnrecognizedProductIdException
      */
-    public function updateCheckInList(CheckInListDomainObject $checkInList, array $ticketIds): CheckInListDomainObject
+    public function updateCheckInList(CheckInListDomainObject $checkInList, array $productIds): CheckInListDomainObject
     {
-        return $this->databaseManager->transaction(function () use ($checkInList, $ticketIds) {
-            $this->eventTicketValidationService->validateTicketIds($ticketIds, $checkInList->getEventId());
+        return $this->databaseManager->transaction(function () use ($checkInList, $productIds) {
+            $this->eventProductValidationService->validateProductIds($productIds, $checkInList->getEventId());
             $event = $this->eventRepository->findById($checkInList->getEventId());
 
             $this->checkInListRepository->updateWhere(
@@ -50,9 +50,9 @@ class UpdateCheckInListService
                 ]
             );
 
-            $this->checkInListTicketAssociationService->addCheckInListToTickets(
+            $this->checkInListProductAssociationService->addCheckInListToProducts(
                 checkInListId: $checkInList->getId(),
-                ticketIds: $ticketIds,
+                productIds: $productIds,
             );
 
             return $this->checkInListRepository->findFirstWhere(

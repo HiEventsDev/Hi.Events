@@ -28,7 +28,7 @@ class EventSettingsResourcePublic extends JsonResource
                 'online_event_connection_details' => $this->getOnlineEventConnectionDetails(),
             ]),
 
-            'ticket_page_message' => $this->getTicketPageMessage(),
+            'product_page_message' => $this->getProductPageMessage(),
             'continue_button_text' => $this->getContinueButtonText(),
             'required_attendee_details' => $this->getRequireAttendeeDetails(),
             'email_footer_message' => $this->getEmailFooterMessage(),

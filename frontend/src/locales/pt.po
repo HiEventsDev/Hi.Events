@@ -17,6 +17,7 @@ msgstr ""
 msgid "'There\\'s nothing to show yet'"
 msgstr "'Não há nada para mostrar ainda'"
 
+#: src/components/common/ReportTable/index.tsx:303
 #: src/locales.ts:51
 msgid "{0}"
 msgstr ""
@@ -29,13 +30,13 @@ msgstr "{0} <0>registrado</0> com sucesso"
 msgid "{0} <0>checked out</0> successfully"
 msgstr "{0} <0>desmarcado</0> com sucesso"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:321
+#: src/components/routes/product-widget/SelectProducts/index.tsx:349
 msgid "{0} available"
 msgstr "{0} disponível"
 
 #: src/components/common/AttendeeCheckInTable/index.tsx:155
-msgid "{0} checked in"
-msgstr "{0} fez check-in"
+#~ msgid "{0} checked in"
+#~ msgstr "{0} fez check-in"
 
 #: src/components/modals/CreateTaxOrFeeModal/index.tsx:32
 msgid "{0} created successfully"
@@ -49,19 +50,19 @@ msgstr "{0} atualizado com sucesso"
 msgid "{0}'s Events"
 msgstr "Eventos de {0}"
 
-#: src/components/layouts/CheckIn/index.tsx:343
+#: src/components/layouts/CheckIn/index.tsx:342
 msgid "{0}/{1} checked in"
 msgstr "{0}/{1} registrado"
 
-#: src/components/common/Countdown/index.tsx:38
+#: src/components/common/Countdown/index.tsx:68
 msgid "{days} days, {hours} hours, {minutes} minutes, and {seconds} seconds"
 msgstr "{days} dias, {hours} horas, {minutes} minutos e {seconds} segundos"
 
-#: src/components/common/Countdown/index.tsx:40
+#: src/components/common/Countdown/index.tsx:70
 msgid "{hours} hours, {minutes} minutes, and {seconds} seconds"
 msgstr "{hours} horas, {minutes} minutos e {seconds} segundos"
 
-#: src/components/common/Countdown/index.tsx:42
+#: src/components/common/Countdown/index.tsx:72
 msgid "{minutes} minutes and {seconds} seconds"
 msgstr "{minutos} minutos e {segundos} segundos"
 
@@ -69,11 +70,15 @@ msgstr "{minutos} minutos e {segundos} segundos"
 msgid "{organizerName}'s first event"
 msgstr "Primeiro evento de {organizerName}"
 
+#: src/components/common/ReportTable/index.tsx:256
+#~ msgid "{title}"
+#~ msgstr ""
+
 #: src/components/common/CapacityAssignmentList/index.tsx:47
 msgid "<0>Capacity assignments let you manage capacity across tickets or an entire event. Ideal for multi-day events, workshops, and more, where controlling attendance is crucial.</0><1>For instance, you can associate a capacity assignment with <2>Day One</2> and <3>All Days</3> ticket. Once the capacity is reached, both tickets will automatically stop being available for sale.</1>"
 msgstr "<0>As atribuições de capacidade permitem que você gerencie a capacidade entre ingressos ou um evento inteiro. Ideal para eventos de vários dias, workshops e mais, onde o controle de presença é crucial.</0><1>Por exemplo, você pode associar uma atribuição de capacidade ao ingresso de <2>Dia Um</2> e <3>Todos os Dias</3>. Uma vez que a capacidade é atingida, ambos os ingressos pararão automaticamente de estar disponíveis para venda.</1>"
 
-#: src/components/common/CheckInListList/index.tsx:58
+#: src/components/common/CheckInListList/index.tsx:49
 msgid "<0>Check-in lists help manage attendee entry for your event. You can associate multiple tickets with a check-in list and ensure only those with valid tickets can enter.</0>"
 msgstr "<0>As listas de registro ajudam a gerenciar a entrada dos participantes no seu evento. Você pode associar vários ingressos a uma lista de registro e garantir que apenas aqueles com ingressos válidos possam entrar.</0>"
 
@@ -81,13 +86,17 @@ msgstr "<0>As listas de registro ajudam a gerenciar a entrada dos participantes 
 msgid "<0>https://</0>your-website.com"
 msgstr "<0>https://</0>seu-website.com"
 
-#: src/components/forms/TicketForm/index.tsx:232
+#: src/components/forms/ProductForm/index.tsx:287
 msgid "<0>Please enter the price excluding taxes and fees.</0><1>Taxes and fees can be added below.</1>"
 msgstr "<0>Por favor, insira o preço sem incluir impostos e taxas.</0><1>Impostos e taxas podem ser adicionados abaixo.</1>"
 
+#: src/components/forms/ProductForm/index.tsx:304
+msgid "<0>The number of products available for this product</0><1>This value can be overridden if there are <2>Capacity Limits</2> associated with this product.</1>"
+msgstr "<0>O número de produtos disponíveis para este produto</0><1>Esse valor pode ser substituído se houver <2>Limites de Capacidade</2> associados a este produto.</1>"
+
 #: src/components/forms/TicketForm/index.tsx:249
-msgid "<0>The number of tickets available for this ticket</0><1>This value can be overridden if there are <2>Capacity Limits</2> associated with this ticket.</1>"
-msgstr "<0>O número de ingressos disponíveis para este ingresso</0><1>Este valor pode ser substituído se houver <2>Limites de Capacidade</2> associados a este ingresso.</1>"
+#~ msgid "<0>The number of tickets available for this ticket</0><1>This value can be overridden if there are <2>Capacity Limits</2> associated with this ticket.</1>"
+#~ msgstr "<0>O número de ingressos disponíveis para este ingresso</0><1>Este valor pode ser substituído se houver <2>Limites de Capacidade</2> associados a este ingresso.</1>"
 
 #: src/components/routes/event/GettingStarted/index.tsx:80
 msgid "⚡️ Set up your event"
@@ -102,8 +111,12 @@ msgid "🎉 Congratulations on creating an event!"
 msgstr "🎉 Parabéns por criar um evento!"
 
 #: src/components/routes/event/GettingStarted/index.tsx:66
-msgid "🎟️ Add tickets"
-msgstr "🎟️ Adicionar ingressos"
+msgid "🎟️ Add products"
+msgstr "🎟️ Adicionar produtos"
+
+#: src/components/routes/event/GettingStarted/index.tsx:66
+#~ msgid "🎟️ Add tickets"
+#~ msgstr "🎟️ Adicionar ingressos"
 
 #: src/components/routes/event/GettingStarted/index.tsx:92
 msgid "🎨 Customize your event page"
@@ -117,7 +130,7 @@ msgstr "💳 Conecte-se com Stripe"
 msgid "🚀 Set your event live"
 msgstr "🚀 Defina seu evento ao vivo"
 
-#: src/components/common/Countdown/index.tsx:26
+#: src/components/common/Countdown/index.tsx:34
 msgid "0 minutes and 0 seconds"
 msgstr "0 minutos e 0 segundos"
 
@@ -145,15 +158,19 @@ msgstr "01/01/2024 18:00"
 msgid "94103"
 msgstr "94103"
 
-#: src/components/forms/QuestionForm/index.tsx:137
+#: src/components/forms/QuestionForm/index.tsx:138
 msgid "A date input. Perfect for asking for a date of birth etc."
 msgstr "Um campo de data. Perfeito para pedir uma data de nascimento, etc."
 
 #: src/components/forms/TaxAndFeeForm/index.tsx:88
-msgid "A default {type} is automaticaly applied to all new tickets. You can override this on a per ticket basis."
-msgstr "Um {type} padrão é aplicado automaticamente a todos os novos tickets. Você pode substituir isso por ticket."
+msgid "A default {type} is automaticaly applied to all new products. You can override this on a per product basis."
+msgstr "Um {type} padrão é automaticamente aplicado a todos os novos produtos. Você pode substituir isso para cada produto."
 
-#: src/components/forms/QuestionForm/index.tsx:125
+#: src/components/forms/TaxAndFeeForm/index.tsx:88
+#~ msgid "A default {type} is automaticaly applied to all new tickets. You can override this on a per ticket basis."
+#~ msgstr "Um {type} padrão é aplicado automaticamente a todos os novos tickets. Você pode substituir isso por ticket."
+
+#: src/components/forms/QuestionForm/index.tsx:126
 msgid "A Dropdown input allows only one selection"
 msgstr "Uma entrada suspensa permite apenas uma seleção"
 
@@ -162,22 +179,34 @@ msgid "A fee, like a booking fee or a service fee"
 msgstr "Uma taxa, como uma taxa de reserva ou uma taxa de serviço"
 
 #: src/components/forms/TaxAndFeeForm/index.tsx:35
-msgid "A fixed amount per ticket. E.g, $0.50 per ticket"
-msgstr "Um valor fixo por ingresso. Por exemplo, US$ 0,50 por ingresso"
+msgid "A fixed amount per product. E.g, $0.50 per product"
+msgstr "Um valor fixo por produto. Ex: $0,50 por produto"
 
-#: src/components/forms/QuestionForm/index.tsx:107
+#: src/components/forms/TaxAndFeeForm/index.tsx:35
+#~ msgid "A fixed amount per ticket. E.g, $0.50 per ticket"
+#~ msgstr "Um valor fixo por ingresso. Por exemplo, US$ 0,50 por ingresso"
+
+#: src/components/forms/QuestionForm/index.tsx:108
 msgid "A multi line text input"
 msgstr "Uma entrada de texto multilinha"
 
 #: src/components/forms/TaxAndFeeForm/index.tsx:29
-msgid "A percentage of the ticket price. E.g., 3.5% of the ticket price"
-msgstr "Uma porcentagem do preço do ingresso. Por exemplo, 3,5% do preço do bilhete"
+msgid "A percentage of the product price. E.g., 3.5% of the product price"
+msgstr "Uma porcentagem do preço do produto. Ex: 3,5% do preço do produto"
+
+#: src/components/forms/TaxAndFeeForm/index.tsx:29
+#~ msgid "A percentage of the ticket price. E.g., 3.5% of the ticket price"
+#~ msgstr "Uma porcentagem do preço do ingresso. Por exemplo, 3,5% do preço do bilhete"
+
+#: src/components/forms/PromoCodeForm/index.tsx:37
+msgid "A promo code with no discount can be used to reveal hidden products."
+msgstr "Um código promocional sem desconto pode ser usado para revelar produtos ocultos."
 
 #: src/components/forms/PromoCodeForm/index.tsx:36
-msgid "A promo code with no discount can be used to reveal hidden tickets."
-msgstr "Um código promocional sem desconto pode ser usado para revelar ingressos ocultos."
+#~ msgid "A promo code with no discount can be used to reveal hidden tickets."
+#~ msgstr "Um código promocional sem desconto pode ser usado para revelar ingressos ocultos."
 
-#: src/components/forms/QuestionForm/index.tsx:119
+#: src/components/forms/QuestionForm/index.tsx:120
 msgid "A Radio option has multiple options but only one can be selected."
 msgstr "Uma opção Rádio tem múltiplas opções, mas apenas uma pode ser selecionada."
 
@@ -185,17 +214,25 @@ msgstr "Uma opção Rádio tem múltiplas opções, mas apenas uma pode ser sele
 msgid "A short description of the event that will be displayed in search engine results and when sharing on social media. By default, the event description will be used"
 msgstr "Uma breve descrição do evento que será exibida nos resultados dos buscadores e no compartilhamento nas redes sociais. Por padrão, a descrição do evento será usada"
 
-#: src/components/forms/QuestionForm/index.tsx:101
+#: src/components/forms/QuestionForm/index.tsx:102
 msgid "A single line text input"
 msgstr "Uma entrada de texto de linha única"
 
 #: src/components/forms/QuestionForm/index.tsx:92
-msgid "A single question per attendee. E.g, What is your preferred meal?"
-msgstr "Uma única pergunta por participante. Por exemplo, qual é a sua refeição preferida?"
+#~ msgid "A single question per attendee. E.g, What is your preferred meal?"
+#~ msgstr "Uma única pergunta por participante. Por exemplo, qual é a sua refeição preferida?"
 
 #: src/components/forms/QuestionForm/index.tsx:86
-msgid "A single question per order. E.g, What is your company name?"
-msgstr "Uma única pergunta por pedido. Por exemplo, qual é o nome da sua empresa?"
+#~ msgid "A single question per order. E.g, What is your company name?"
+#~ msgstr "Uma única pergunta por pedido. Por exemplo, qual é o nome da sua empresa?"
+
+#: src/components/forms/QuestionForm/index.tsx:87
+msgid "A single question per order. E.g, What is your shipping address?"
+msgstr "Uma única pergunta por pedido. Ex: Qual é o seu endereço de entrega?"
+
+#: src/components/forms/QuestionForm/index.tsx:93
+msgid "A single question per product. E.g, What is your t-shirt size?"
+msgstr "Uma única pergunta por produto. Ex: Qual é o seu tamanho de camiseta?"
 
 #: src/components/forms/TaxAndFeeForm/index.tsx:14
 msgid "A standard tax, like VAT or GST"
@@ -227,35 +264,44 @@ msgstr "Configurações de Conta"
 msgid "Account updated successfully"
 msgstr "Conta atualizada com sucesso"
 
-#: src/components/common/AttendeeTable/index.tsx:161
+#: src/components/common/AttendeeTable/index.tsx:159
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:261
 #: src/components/common/QuestionsTable/index.tsx:106
-#: src/components/common/TicketsTable/SortableTicket/index.tsx:183
 msgid "Actions"
 msgstr "Ações"
 
-#: src/components/common/AttendeeTable/index.tsx:190
+#: src/components/common/AttendeeTable/index.tsx:183
 msgid "Activate"
 msgstr "Ativar"
 
-#: src/components/forms/CheckInListForm/index.tsx:53
+#: src/components/forms/CheckInListForm/index.tsx:47
 msgid "Activation date"
 msgstr "Data de ativação"
 
-#: src/components/common/CheckInListList/index.tsx:125
-#: src/components/forms/CapaciyAssigmentForm/index.tsx:18
+#: src/components/common/AttendeeDetails/index.tsx:32
+#: src/components/common/CheckInListList/index.tsx:116
+#: src/components/forms/CapaciyAssigmentForm/index.tsx:19
 #: src/components/modals/EditUserModal/index.tsx:110
 msgid "Active"
 msgstr "Ativo"
 
 #: src/components/routes/event/attendees.tsx:59
-msgid "Add"
-msgstr "Adicionar"
+#~ msgid "Add"
+#~ msgstr "Adicionar"
 
-#: src/components/forms/CheckInListForm/index.tsx:45
+#: src/components/forms/CheckInListForm/index.tsx:39
 msgid "Add a description for this check-in list"
 msgstr "Adicione uma descrição para esta lista de registro"
 
-#: src/components/forms/QuestionForm/index.tsx:208
+#: src/components/modals/ManageAttendeeModal/index.tsx:116
+msgid "Add any notes about the attendee. These will not be visible to the attendee."
+msgstr "Adicione quaisquer notas sobre o participante. Estas não serão visíveis para o participante."
+
+#: src/components/modals/ManageAttendeeModal/index.tsx:118
+msgid "Add any notes about the attendee..."
+msgstr "Adicione quaisquer notas sobre o participante..."
+
+#: src/components/forms/QuestionForm/index.tsx:203
 msgid "Add description"
 msgstr "Adicionar descrição"
 
@@ -264,16 +310,32 @@ msgid "Add event details and and manage event settings."
 msgstr "Adicione detalhes do evento e gerencie as configurações do evento."
 
 #: src/components/routes/event/GettingStarted/index.tsx:73
-msgid "Add More tickets"
-msgstr "Adicionar mais ingressos"
+msgid "Add More products"
+msgstr "Adicionar mais produtos"
+
+#: src/components/routes/event/GettingStarted/index.tsx:73
+#~ msgid "Add More tickets"
+#~ msgstr "Adicionar mais ingressos"
 
 #: src/components/common/HeadingCard/index.tsx:27
 msgid "Add New"
 msgstr "Adicionar novo"
 
-#: src/components/forms/QuestionForm/index.tsx:67
+#: src/components/forms/QuestionForm/index.tsx:68
 msgid "Add Option"
 msgstr "Adicionar opção"
+
+#: src/components/common/ProductsTable/ProductsBlankSlate/index.tsx:68
+msgid "Add Product"
+msgstr "Adicionar Produto"
+
+#: src/components/common/ProductsTable/ProductsBlankSlate/index.tsx:51
+msgid "Add Product to Category"
+msgstr "Adicionar Produto à Categoria"
+
+#: src/components/routes/event/GettingStarted/index.tsx:73
+msgid "Add products"
+msgstr "Adicionar produtos"
 
 #: src/components/common/QuestionsTable/index.tsx:262
 msgid "Add question"
@@ -284,19 +346,28 @@ msgid "Add Tax or Fee"
 msgstr "Adicionar imposto ou taxa"
 
 #: src/components/routes/event/GettingStarted/index.tsx:73
-msgid "Add tickets"
-msgstr "Adicionar ingressos"
+#~ msgid "Add tickets"
+#~ msgstr "Adicionar ingressos"
 
-#: src/components/forms/TicketForm/index.tsx:282
+#: src/components/forms/ProductForm/index.tsx:337
 msgid "Add tier"
 msgstr "Adicionar nível"
 
-#: src/components/forms/TicketForm/index.tsx:289
-#: src/components/forms/TicketForm/index.tsx:293
+#: src/components/common/AddEventToCalendarButton/index.tsx:112
+#: src/components/common/AddEventToCalendarButton/index.tsx:120
+msgid "Add to Calendar"
+msgstr "Adicionar ao calendário"
+
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:209
+msgid "Additional Information"
+msgstr "Informações adicionais"
+
+#: src/components/forms/ProductForm/index.tsx:344
+#: src/components/forms/ProductForm/index.tsx:348
 msgid "Additional Options"
 msgstr "Opções adicionais"
 
-#: src/components/forms/QuestionForm/index.tsx:129
+#: src/components/forms/QuestionForm/index.tsx:130
 msgid "Address"
 msgstr "Endereço"
 
@@ -330,7 +401,7 @@ msgstr "Os usuários administradores têm acesso total aos eventos e configuraç
 #~ msgid "Affiliates"
 #~ msgstr "Afiliados"
 
-#: src/components/modals/SendMessageModal/index.tsx:148
+#: src/components/modals/SendMessageModal/index.tsx:150
 msgid "All attendees of this event"
 msgstr "Todos os participantes deste evento"
 
@@ -338,10 +409,14 @@ msgstr "Todos os participantes deste evento"
 #~ msgid "All Events"
 #~ msgstr "Todos os eventos"
 
+#: src/components/common/PromoCodeTable/index.tsx:131
+msgid "All Products"
+msgstr "Todos os Produtos"
+
 #: src/components/common/PromoCodeTable/index.tsx:130
 #: src/components/forms/PromoCodeForm/index.tsx:67
-msgid "All Tickets"
-msgstr "Todos os Tickets"
+#~ msgid "All Tickets"
+#~ msgstr "Todos os Tickets"
 
 #: src/components/routes/event/Settings/Sections/SeoSettings/index.tsx:82
 msgid "Allow search engine indexing"
@@ -351,7 +426,7 @@ msgstr "Permitir indexação do mecanismo de pesquisa"
 msgid "Allow search engines to index this event"
 msgstr "Permitir que mecanismos de pesquisa indexem este evento"
 
-#: src/components/routes/ticket-widget/PaymentReturn/index.tsx:78
+#: src/components/routes/product-widget/PaymentReturn/index.tsx:78
 msgid "Almost there! We're just waiting for your payment to be processed. This should only take a few seconds.."
 msgstr "Quase lá! Estamos apenas aguardando o processamento do seu pagamento. Isso deve levar apenas alguns segundos."
 
@@ -361,11 +436,11 @@ msgstr "Incrível, evento, palavras-chave..."
 
 #: src/components/common/OrdersTable/index.tsx:152
 #: src/components/forms/TaxAndFeeForm/index.tsx:71
-#: src/components/routes/ticket-widget/SelectTickets/Prices/Tiered/index.tsx:37
+#: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:36
 msgid "Amount"
 msgstr "Quantia"
 
-#: src/components/modals/CreateAttendeeModal/index.tsx:179
+#: src/components/modals/CreateAttendeeModal/index.tsx:165
 msgid "Amount paid ({0})"
 msgstr "Valor pago ({0})"
 
@@ -378,8 +453,8 @@ msgid "An error occurred while sorting the questions. Please try again or refres
 msgstr "Ocorreu um erro ao classificar as perguntas. Tente novamente ou atualize a página"
 
 #: src/components/common/TicketsTable/index.tsx:47
-msgid "An error occurred while sorting the tickets. Please try again or refresh the page"
-msgstr "Ocorreu um erro ao classificar os tickets. Tente novamente ou atualize a página"
+#~ msgid "An error occurred while sorting the tickets. Please try again or refresh the page"
+#~ msgstr "Ocorreu um erro ao classificar os tickets. Tente novamente ou atualize a página"
 
 #: src/components/routes/welcome/index.tsx:75
 msgid "An event is the actual event you are hosting. You can add more details later."
@@ -398,32 +473,48 @@ msgid "An unexpected error occurred. Please try again."
 msgstr "Um erro inesperado ocorreu. Por favor, tente novamente."
 
 #: src/components/routes/event/Settings/Sections/EmailSettings/index.tsx:61
-msgid "Any queries from ticket holders will be sent to this email address. This will also be used as the \"reply-to\" address for all emails sent from this event"
-msgstr "Quaisquer dúvidas dos titulares de ingressos serão enviadas para este endereço de e-mail. Este também será usado como endereço de \"resposta\" para todos os e-mails enviados neste evento"
+msgid "Any queries from product holders will be sent to this email address. This will also be used as the \"reply-to\" address for all emails sent from this event"
+msgstr "Quaisquer perguntas dos portadores de produtos serão enviadas para este endereço de e-mail. Este também será usado como o endereço de \"responder para\" em todos os e-mails enviados deste evento"
+
+#: src/components/routes/event/Settings/Sections/EmailSettings/index.tsx:61
+#~ msgid "Any queries from ticket holders will be sent to this email address. This will also be used as the \"reply-to\" address for all emails sent from this event"
+#~ msgstr "Quaisquer dúvidas dos titulares de ingressos serão enviadas para este endereço de e-mail. Este também será usado como endereço de \"resposta\" para todos os e-mails enviados neste evento"
 
 #: src/components/common/WidgetEditor/index.tsx:213
 msgid "Appearance"
 msgstr "Aparência"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:401
+#: src/components/routes/product-widget/SelectProducts/index.tsx:437
 msgid "applied"
 msgstr "aplicado"
 
 #: src/components/common/CapacityAssignmentList/index.tsx:97
-msgid "Applies to {0} tickets"
-msgstr "Aplica-se a {0} ingressos"
+msgid "Applies to {0} products"
+msgstr "Aplica-se a {0} produtos"
+
+#: src/components/common/CapacityAssignmentList/index.tsx:97
+#~ msgid "Applies to {0} tickets"
+#~ msgstr "Aplica-se a {0} ingressos"
 
 #: src/components/common/CapacityAssignmentList/index.tsx:98
-msgid "Applies to 1 ticket"
-msgstr "Aplica-se a 1 ingresso"
+msgid "Applies to 1 product"
+msgstr "Aplica-se a 1 produto"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:429
+#: src/components/common/CapacityAssignmentList/index.tsx:98
+#~ msgid "Applies to 1 ticket"
+#~ msgstr "Aplica-se a 1 ingresso"
+
+#: src/components/routes/product-widget/SelectProducts/index.tsx:465
 msgid "Apply Promo Code"
 msgstr "Aplicar código promocional"
 
 #: src/components/forms/TaxAndFeeForm/index.tsx:86
-msgid "Apply this {type} to all new tickets"
-msgstr "Aplique este {type} a todos os novos tickets"
+msgid "Apply this {type} to all new products"
+msgstr "Aplicar este {type} a todos os novos produtos"
+
+#: src/components/forms/TaxAndFeeForm/index.tsx:86
+#~ msgid "Apply this {type} to all new tickets"
+#~ msgstr "Aplique este {type} a todos os novos tickets"
 
 #: src/components/common/EventCard/index.tsx:167
 msgid "Archive event"
@@ -437,7 +528,7 @@ msgstr "Arquivado"
 msgid "Archived Events"
 msgstr "Eventos arquivados"
 
-#: src/components/common/AttendeeTable/index.tsx:77
+#: src/components/common/AttendeeTable/index.tsx:75
 msgid "Are you sure you want to activate this attendee?"
 msgstr "Tem certeza de que deseja ativar este participante?"
 
@@ -446,10 +537,14 @@ msgid "Are you sure you want to archive this event?"
 msgstr "Tem certeza de que deseja arquivar este evento?"
 
 #: src/components/common/AttendeeTable/index.tsx:78
+#~ msgid "Are you sure you want to cancel this attendee? This will void their product"
+#~ msgstr "Tem certeza de que deseja cancelar este participante? Isso invalidará o produto dele"
+
+#: src/components/common/AttendeeTable/index.tsx:76
 msgid "Are you sure you want to cancel this attendee? This will void their ticket"
 msgstr "Tem certeza de que deseja cancelar este participante? Isso anulará o ingresso"
 
-#: src/components/common/PromoCodeTable/index.tsx:36
+#: src/components/common/PromoCodeTable/index.tsx:37
 msgid "Are you sure you want to delete this promo code?"
 msgstr "Tem certeza de que deseja excluir este código promocional?"
 
@@ -457,11 +552,11 @@ msgstr "Tem certeza de que deseja excluir este código promocional?"
 msgid "Are you sure you want to delete this question?"
 msgstr "Tem certeza de que deseja excluir esta pergunta?"
 
-#: src/components/layouts/Event/index.tsx:93
+#: src/components/layouts/Event/index.tsx:111
 msgid "Are you sure you want to make this event draft? This will make the event invisible to the public"
 msgstr "Tem certeza de que deseja fazer o rascunho deste evento? Isso tornará o evento invisível para o público"
 
-#: src/components/layouts/Event/index.tsx:94
+#: src/components/layouts/Event/index.tsx:112
 msgid "Are you sure you want to make this event public? This will make the event visible to the public"
 msgstr "Tem certeza de que deseja tornar este evento público? Isso tornará o evento visível ao público"
 
@@ -473,42 +568,62 @@ msgstr "Tem certeza de que deseja restaurar este evento? Ele será restaurado co
 msgid "Are you sure you would like to delete this Capacity Assignment?"
 msgstr "Tem certeza de que deseja excluir esta Atribuição de Capacidade?"
 
-#: src/components/common/CheckInListList/index.tsx:192
+#: src/components/common/CheckInListList/index.tsx:183
 msgid "Are you sure you would like to delete this Check-In List?"
 msgstr "Tem certeza de que deseja excluir esta lista de registro?"
 
 #: src/components/forms/QuestionForm/index.tsx:90
-msgid "Ask once per attendee"
-msgstr "Pergunte uma vez por participante"
+#~ msgid "Ask once per attendee"
+#~ msgstr "Pergunte uma vez por participante"
 
-#: src/components/forms/QuestionForm/index.tsx:84
+#: src/components/forms/QuestionForm/index.tsx:85
 msgid "Ask once per order"
 msgstr "Pergunte uma vez por pedido"
 
-#: src/components/routes/ticket-widget/CollectInformation/index.tsx:309
+#: src/components/forms/QuestionForm/index.tsx:91
+msgid "Ask once per product"
+msgstr "Perguntar uma vez por produto"
+
+#: src/components/routes/product-widget/CollectInformation/index.tsx:319
 msgid "Attendee"
 msgstr "Participante"
 
-#: src/components/modals/ViewAttendeeModal/index.tsx:38
+#: src/components/modals/ManageAttendeeModal/index.tsx:132
 msgid "Attendee Details"
 msgstr "Detalhes do participante"
 
-#: src/components/common/QuestionsTable/index.tsx:307
+#: src/components/modals/ManageAttendeeModal/index.tsx:138
+msgid "Attendee Notes"
+msgstr "Notas do participante"
+
 #: src/components/common/QuestionsTable/index.tsx:348
 msgid "Attendee questions"
 msgstr "Perguntas dos participantes"
 
+#: src/components/modals/ManageAttendeeModal/index.tsx:157
+msgid "Attendee Ticket"
+msgstr "Bilhete do Participante"
+
 #: src/components/common/OrdersTable/index.tsx:151
-#: src/components/common/TicketsTable/SortableTicket/index.tsx:159
-#: src/components/layouts/Event/index.tsx:41
-#: src/components/modals/ViewOrderModal/index.tsx:54
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:237
+#: src/components/common/StatBoxes/index.tsx:27
+#: src/components/layouts/Event/index.tsx:58
+#: src/components/modals/ViewOrderModal/index.tsx:67
 #: src/components/routes/event/attendees.tsx:47
 msgid "Attendees"
 msgstr "Participantes"
 
+#: src/components/routes/event/EventDashboard/index.tsx:107
+msgid "Attendees Registered"
+msgstr "Participantes Registrados"
+
+#: src/components/modals/SendMessageModal/index.tsx:146
+msgid "Attendees with a specific product"
+msgstr "Participantes com um produto específico"
+
 #: src/components/modals/SendMessageModal/index.tsx:144
-msgid "Attendees with a specific ticket"
-msgstr "Participantes com um ingresso específico"
+#~ msgid "Attendees with a specific ticket"
+#~ msgstr "Participantes com um ingresso específico"
 
 #: src/components/common/WidgetEditor/index.tsx:233
 msgid "Auto Resize"
@@ -518,7 +633,16 @@ msgstr "Redimensionamento automático"
 msgid "Automatically resize the widget height based on the content. When disabled, the widget will fill the height of the container."
 msgstr "Redimensione automaticamente a altura do widget com base no conteúdo. Quando desativado, o widget preencherá a altura do contêiner."
 
-#: src/components/layouts/Checkout/index.tsx:17
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:64
+#~ msgid "Avg Discount/Order"
+#~ msgstr "Desconto médio/Pedido"
+
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:70
+#~ msgid "Avg Order Value"
+#~ msgstr "Valor médio do pedido"
+
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:40
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:64
 msgid "Awaiting Payment"
 msgstr "Aguardando Pagamento"
 
@@ -534,9 +658,9 @@ msgstr "Impressionante Organizador Ltd."
 msgid "Back to all events"
 msgstr "Voltar para todos os eventos"
 
-#: src/components/routes/ticket-widget/CollectInformation/index.tsx:227
-#: src/components/routes/ticket-widget/CollectInformation/index.tsx:239
-#: src/components/routes/ticket-widget/CollectInformation/index.tsx:256
+#: src/components/layouts/Checkout/index.tsx:43
+#: src/components/routes/product-widget/CollectInformation/index.tsx:234
+#: src/components/routes/product-widget/CollectInformation/index.tsx:246
 msgid "Back to event page"
 msgstr "Voltar à página do evento"
 
@@ -553,10 +677,10 @@ msgid "Background Type"
 msgstr "Tipo de plano de fundo"
 
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:65
-msgid "Basic Details"
-msgstr "Detalhes básicos"
+#~ msgid "Basic Details"
+#~ msgstr "Detalhes básicos"
 
-#: src/components/modals/SendMessageModal/index.tsx:216
+#: src/components/modals/SendMessageModal/index.tsx:213
 msgid "Before you send!"
 msgstr "Antes de enviar!"
 
@@ -565,8 +689,12 @@ msgid "Before your event can go live, there are a few things you need to do."
 msgstr "Antes que seu evento possa ir ao ar, há algumas coisas que você precisa fazer."
 
 #: src/components/routes/auth/Register/index.tsx:49
-msgid "Begin selling tickets in minutes"
-msgstr "Comece a vender ingressos em minutos"
+msgid "Begin selling products in minutes"
+msgstr "Comece a vender produtos em minutos"
+
+#: src/components/routes/auth/Register/index.tsx:49
+#~ msgid "Begin selling tickets in minutes"
+#~ msgstr "Comece a vender ingressos em minutos"
 
 #: src/components/common/LanguageSwitcher/index.tsx:24
 msgid "Brazilian Portuguese"
@@ -584,12 +712,12 @@ msgstr "Tipo de cálculo"
 msgid "California"
 msgstr "Califórnia"
 
-#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:140
+#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:196
 msgid "Camera permission was denied. <0>Request Permission</0> again, or if this doesn't work, you will need to <1>grant this page</1> access to your camera in your browser settings."
 msgstr "A permissão da câmera foi negada. <0>Solicite permissão</0> novamente ou, se isso não funcionar, você precisará <1>conceder a esta página</1> acesso à sua câmera nas configurações do navegador."
 
-#: src/components/common/AttendeeTable/index.tsx:190
-#: src/components/common/PromoCodeTable/index.tsx:39
+#: src/components/common/AttendeeTable/index.tsx:183
+#: src/components/common/PromoCodeTable/index.tsx:40
 #: src/utilites/confirmationDialog.tsx:11
 msgid "Cancel"
 msgstr "Cancelar"
@@ -611,16 +739,24 @@ msgstr "Cancelar pedido"
 msgid "Cancel Order {0}"
 msgstr "Cancelar pedido {0}"
 
-#: src/components/modals/CancelOrderModal/index.tsx:54
-msgid "Canceling will cancel all tickets associated with this order, and release the tickets back into the available pool."
-msgstr "O cancelamento cancelará todos os ingressos associados a este pedido e os liberará de volta ao pool disponível."
+#: src/components/common/AttendeeDetails/index.tsx:32
+msgid "Canceled"
+msgstr "Cancelado"
 
-#: src/components/common/AttendeeTicket/index.tsx:61
+#: src/components/modals/CancelOrderModal/index.tsx:54
+msgid "Canceling will cancel all products associated with this order, and release the products back into the available pool."
+msgstr "Cancelar irá cancelar todos os produtos associados a este pedido e devolver os produtos ao estoque disponível."
+
+#: src/components/modals/CancelOrderModal/index.tsx:54
+#~ msgid "Canceling will cancel all tickets associated with this order, and release the tickets back into the available pool."
+#~ msgstr "O cancelamento cancelará todos os ingressos associados a este pedido e os liberará de volta ao pool disponível."
+
+#: src/components/common/AttendeeProduct/index.tsx:61
 msgid "Cancelled"
 msgstr "Cancelado"
 
-#: src/components/forms/CapaciyAssigmentForm/index.tsx:41
-#: src/components/layouts/Event/index.tsx:46
+#: src/components/forms/CapaciyAssigmentForm/index.tsx:42
+#: src/components/layouts/Event/index.tsx:63
 msgid "Capacity"
 msgstr "Capacidade"
 
@@ -636,6 +772,22 @@ msgstr "Atribuição de Capacidade excluída com sucesso"
 msgid "Capacity Management"
 msgstr "Gestão de Capacidade"
 
+#: src/components/modals/CreateProductCategoryModal/index.tsx:56
+msgid "Categories allow you to group products together. For example, you might have a category for \"Tickets\" and another for \"Merchandise\"."
+msgstr "As categorias permitem agrupar produtos. Por exemplo, você pode ter uma categoria para \"Ingressos\" e outra para \"Mercadorias\"."
+
+#: src/components/forms/ProductForm/index.tsx:267
+msgid "Categories help you organize your products. This title will be displayed on the public event page."
+msgstr "As categorias ajudam a organizar seus produtos. Este título será exibido na página pública do evento."
+
+#: src/components/common/ProductsTable/SortableCategory/index.tsx:91
+msgid "Categories reordered successfully."
+msgstr "Categorias reordenadas com sucesso."
+
+#: src/components/modals/CreateProductCategoryModal/index.tsx:37
+msgid "Category Created Successfully"
+msgstr "Categoria Criada com Sucesso"
+
 #: src/components/routes/event/HomepageDesigner/CoverUpload/index.tsx:80
 msgid "Change Cover"
 msgstr "Alterar capa"
@@ -646,22 +798,25 @@ msgstr "Alterar a senha"
 
 #: src/components/common/AttendeeCheckInTable/index.tsx:54
 #: src/components/common/AttendeeCheckInTable/index.tsx:81
-msgid "check in"
-msgstr "check-in"
+#~ msgid "check in"
+#~ msgstr "check-in"
 
-#: src/components/common/AttendeeCheckInTable/index.tsx:152
 #: src/components/layouts/CheckIn/index.tsx:177
 msgid "Check In"
 msgstr "Check-in"
 
 #: src/components/common/AttendeeCheckInTable/index.tsx:54
 #: src/components/common/AttendeeCheckInTable/index.tsx:81
-msgid "check out"
-msgstr "Confira"
+#~ msgid "check out"
+#~ msgstr "Confira"
 
 #: src/components/layouts/CheckIn/index.tsx:177
 msgid "Check Out"
 msgstr "Desmarcar"
+
+#: src/components/layouts/Checkout/index.tsx:76
+msgid "Check out this event!"
+msgstr "Confira este evento!"
 
 #: src/components/common/EventCard/index.tsx:156
 msgid "Check-in"
@@ -671,19 +826,19 @@ msgstr "Check-in"
 #~ msgid "Check-In"
 #~ msgstr "Check-in"
 
-#: src/components/modals/CreateCheckInListModal/index.tsx:37
+#: src/components/modals/CreateCheckInListModal/index.tsx:40
 msgid "Check-In List created successfully"
 msgstr "Lista de registro criada com sucesso"
 
-#: src/components/common/CheckInListList/index.tsx:42
+#: src/components/common/CheckInListList/index.tsx:33
 msgid "Check-In List deleted successfully"
 msgstr "Lista de registro excluída com sucesso"
 
-#: src/components/layouts/CheckIn/index.tsx:218
+#: src/components/layouts/CheckIn/index.tsx:217
 msgid "Check-in list has expired"
 msgstr "A lista de registro expirou"
 
-#: src/components/layouts/CheckIn/index.tsx:235
+#: src/components/layouts/CheckIn/index.tsx:234
 msgid "Check-in list is not active"
 msgstr "A lista de registro não está ativa"
 
@@ -691,31 +846,35 @@ msgstr "A lista de registro não está ativa"
 msgid "Check-in list not found"
 msgstr "Lista de check-in não encontrada"
 
-#: src/components/layouts/Event/index.tsx:47
+#: src/components/layouts/Event/index.tsx:64
 #: src/components/routes/event/CheckInLists/index.tsx:32
 msgid "Check-In Lists"
 msgstr "Listas de Registro"
 
-#: src/components/common/CheckInListList/index.tsx:171
+#: src/components/common/CheckInListList/index.tsx:162
 msgid "Check-In URL copied to clipboard"
 msgstr "URL de check-in copiada para a área de transferência"
 
-#: src/components/forms/QuestionForm/index.tsx:113
+#: src/components/forms/QuestionForm/index.tsx:114
 msgid "Checkbox options allow multiple selections"
 msgstr "As opções de caixa de seleção permitem seleções múltiplas"
 
-#: src/components/forms/QuestionForm/index.tsx:111
+#: src/components/forms/QuestionForm/index.tsx:112
 msgid "Checkboxes"
 msgstr "Caixas de seleção"
 
-#: src/components/common/AttendeeCheckInTable/index.tsx:124
-#: src/components/common/AttendeeDetails/index.tsx:38
+#: src/components/common/AttendeeDetails/index.tsx:37
 msgid "Checked In"
 msgstr "Check-in"
 
 #: src/components/layouts/CheckIn/index.tsx:119
 msgid "Checked in successfully"
 msgstr "Registrado com sucesso"
+
+#: src/components/layouts/Checkout/index.tsx:53
+#: src/components/routes/event/Settings/index.tsx:38
+msgid "Checkout"
+msgstr "Finalizar compra"
 
 #: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:61
 msgid "Checkout Settings"
@@ -746,25 +905,25 @@ msgstr "Cidade"
 msgid "Clear Search Text"
 msgstr "Limpar texto de pesquisa"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:276
+#: src/components/routes/product-widget/SelectProducts/index.tsx:282
 msgid "click here"
 msgstr "Clique aqui"
 
-#: src/components/common/PromoCodeTable/index.tsx:97
+#: src/components/common/PromoCodeTable/index.tsx:98
 msgid "Click to copy"
 msgstr "Clique para copiar"
 
-#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:151
+#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:207
 #: src/components/modals/RefundOrderModal/index.tsx:123
 msgid "Close"
 msgstr "Fechar"
 
-#: src/components/layouts/Event/index.tsx:188
+#: src/components/layouts/Event/index.tsx:206
 msgid "Close sidebar"
 msgstr "Fechar barra lateral"
 
-#: src/components/common/PromoCodeTable/index.tsx:68
-#: src/components/forms/PromoCodeForm/index.tsx:33
+#: src/components/common/PromoCodeTable/index.tsx:69
+#: src/components/forms/PromoCodeForm/index.tsx:34
 msgid "Code"
 msgstr "Código"
 
@@ -773,9 +932,13 @@ msgstr "Código"
 msgid "Code must be between 3 and 50 characters long"
 msgstr "O código deve ter entre 3 e 50 caracteres"
 
+#: src/components/forms/ProductForm/index.tsx:401
+msgid "Collapse this product when the event page is initially loaded"
+msgstr "Recolher este produto quando a página do evento for carregada inicialmente"
+
 #: src/components/forms/TicketForm/index.tsx:346
-msgid "Collapse this ticket when the event page is initially loaded"
-msgstr "Recolher este bilhete ao carregar inicialmente a página do evento"
+#~ msgid "Collapse this ticket when the event page is initially loaded"
+#~ msgstr "Recolher este bilhete ao carregar inicialmente a página do evento"
 
 #: src/components/routes/event/HomepageDesigner/index.tsx:100
 msgid "Color"
@@ -790,7 +953,7 @@ msgstr "A cor deve ser um código de cor hexadecimal válido. Exemplo: #ffffff"
 msgid "Colors"
 msgstr "Cores"
 
-#: src/components/layouts/Event/index.tsx:86
+#: src/components/layouts/Event/index.tsx:105
 msgid "Coming Soon"
 msgstr "Em breve"
 
@@ -798,15 +961,15 @@ msgstr "Em breve"
 msgid "Comma seperated keywords that describe the event. These will be used by search engines to help categorize and index the event"
 msgstr "Palavras-chave separadas por vírgulas que descrevem o evento. Eles serão usados pelos mecanismos de pesquisa para ajudar a categorizar e indexar o evento"
 
-#: src/components/routes/ticket-widget/CollectInformation/index.tsx:358
+#: src/components/routes/product-widget/CollectInformation/index.tsx:386
 msgid "Complete Order"
 msgstr "Ordem completa"
 
-#: src/components/routes/ticket-widget/CollectInformation/index.tsx:197
+#: src/components/routes/product-widget/CollectInformation/index.tsx:208
 msgid "Complete payment"
 msgstr "Concluir pagamento"
 
-#: src/components/forms/StripeCheckoutForm/index.tsx:143
+#: src/components/forms/StripeCheckoutForm/index.tsx:156
 msgid "Complete Payment"
 msgstr "Concluir pagamento"
 
@@ -817,6 +980,10 @@ msgstr "Concluído"
 #: src/components/common/WidgetEditor/index.tsx:285
 msgid "Component Code"
 msgstr "Código do Componente"
+
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:35
+msgid "Configured Discount"
+msgstr "Desconto configurado"
 
 #: src/utilites/confirmationDialog.tsx:11
 msgid "Confirm"
@@ -868,7 +1035,7 @@ msgstr "Cor de fundo do conteúdo"
 #: src/components/common/WidgetEditor/index.tsx:31
 #: src/components/common/WidgetEditor/index.tsx:217
 #: src/components/layouts/Checkout/CheckoutFooter/index.tsx:36
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:387
+#: src/components/routes/product-widget/SelectProducts/index.tsx:423
 msgid "Continue"
 msgstr "Continuar"
 
@@ -892,36 +1059,40 @@ msgstr "Continuar a configuração"
 msgid "Continue Stripe Connect Setup"
 msgstr "Continuar a configuração do Stripe Connect"
 
-#: src/components/routes/ticket-widget/CollectInformation/index.tsx:358
-msgid "Continue To Payment"
-msgstr "Continuar para o pagamento"
+#: src/components/routes/product-widget/CollectInformation/index.tsx:380
+#~ msgid "Continue To Payment"
+#~ msgstr "Continuar para o pagamento"
 
-#: src/components/common/AttendeeTicket/index.tsx:84
+#: src/components/common/AttendeeProduct/index.tsx:84
 #: src/components/common/CopyButton/index.tsx:13
+#: src/components/modals/ShareModal/index.tsx:243
+#: src/components/modals/ShareModal/index.tsx:250
 msgid "Copied"
 msgstr "Copiado"
 
-#: src/components/common/PromoCodeTable/index.tsx:105
+#: src/components/common/PromoCodeTable/index.tsx:106
 msgid "copied to clipboard"
 msgstr "Copiado para a área de transferência"
 
 #: src/components/common/CopyButton/index.tsx:13
+#: src/components/modals/ShareModal/index.tsx:250
 msgid "Copy"
 msgstr "cópia de"
 
-#: src/components/common/CheckInListList/index.tsx:165
+#: src/components/common/CheckInListList/index.tsx:156
 msgid "Copy Check-In URL"
 msgstr "Copiar URL de check-in"
 
-#: src/components/routes/ticket-widget/CollectInformation/index.tsx:291
+#: src/components/routes/product-widget/CollectInformation/index.tsx:293
 msgid "Copy details to all attendees"
 msgstr "Copiar detalhes para todos os participantes"
 
-#: src/components/common/AttendeeTicket/index.tsx:84
+#: src/components/common/AttendeeProduct/index.tsx:84
 msgid "Copy Link"
 msgstr "Link de cópia"
 
-#: src/components/common/PromoCodeTable/index.tsx:176
+#: src/components/common/PromoCodeTable/index.tsx:177
+#: src/components/modals/ShareModal/index.tsx:243
 msgid "Copy URL"
 msgstr "Copiar URL"
 
@@ -934,17 +1105,24 @@ msgstr "País"
 msgid "Cover"
 msgstr "Cobrir"
 
+#: src/components/routes/event/attendees.tsx:59
+#: src/components/routes/event/products.tsx:74
+msgid "Create"
+msgstr "Criar"
+
 #: src/components/modals/CreateTaxOrFeeModal/index.tsx:48
 msgid "Create {0}"
 msgstr "Criar {0}"
 
-#: src/components/common/PromoCodeTable/index.tsx:56
+#: src/components/modals/CreateCapacityAssignmentModal/index.tsx:59
+msgid "Create a Product"
+msgstr "Criar um Produto"
+
+#: src/components/common/PromoCodeTable/index.tsx:57
 msgid "Create a Promo Code"
 msgstr "Crie um código promocional"
 
-#: src/components/common/TicketsTable/index.tsx:75
-#: src/components/modals/CreateCapacityAssignmentModal/index.tsx:59
-#: src/components/modals/CreateCheckInListModal/index.tsx:60
+#: src/components/modals/CreateCheckInListModal/index.tsx:63
 msgid "Create a Ticket"
 msgstr "Crie um ingresso"
 
@@ -956,20 +1134,30 @@ msgstr "Crie uma conta ou <0>{0}</0> para começar"
 msgid "create an organizer"
 msgstr "criar um organizador"
 
-#: src/components/modals/CreateAttendeeModal/index.tsx:210
+#: src/components/modals/CreateAttendeeModal/index.tsx:196
 msgid "Create Attendee"
 msgstr "Criar participante"
 
 #: src/components/common/CapacityAssignmentList/index.tsx:63
 #: src/components/modals/CreateCapacityAssignmentModal/index.tsx:68
-#: src/components/modals/CreateCapacityAssignmentModal/index.tsx:78
+#: src/components/modals/CreateCapacityAssignmentModal/index.tsx:79
 #: src/components/routes/event/CapacityAssignments/index.tsx:46
 msgid "Create Capacity Assignment"
 msgstr "Criar Atribuição de Capacidade"
 
-#: src/components/common/CheckInListList/index.tsx:70
-#: src/components/modals/CreateCheckInListModal/index.tsx:69
-#: src/components/modals/CreateCheckInListModal/index.tsx:79
+#: src/components/common/ProductsTable/SortableCategory/index.tsx:128
+#: src/components/common/ProductsTable/SortableCategory/index.tsx:129
+msgid "Create category"
+msgstr "Criar categoria"
+
+#: src/components/modals/CreateProductCategoryModal/index.tsx:45
+#: src/components/modals/CreateProductCategoryModal/index.tsx:60
+msgid "Create Category"
+msgstr "Criar Categoria"
+
+#: src/components/common/CheckInListList/index.tsx:61
+#: src/components/modals/CreateCheckInListModal/index.tsx:72
+#: src/components/modals/CreateCheckInListModal/index.tsx:82
 #: src/components/routes/event/CheckInLists/index.tsx:46
 msgid "Create Check-In List"
 msgstr "Criar Lista de Registro"
@@ -991,9 +1179,14 @@ msgstr "Crie um novo"
 msgid "Create Organizer"
 msgstr "Criar organizador"
 
-#: src/components/routes/event/products.tsx:50
-#~ msgid "Create Product"
-#~ msgstr ""
+#: src/components/modals/CreateProductModal/index.tsx:90
+#: src/components/modals/CreateProductModal/index.tsx:98
+msgid "Create Product"
+msgstr "Criar Produto"
+
+#: src/components/routes/event/GettingStarted/index.tsx:69
+msgid "Create products for your event, set prices, and manage available quantity."
+msgstr "Crie produtos para o seu evento, defina os preços e gerencie a quantidade disponível."
 
 #: src/components/modals/CreatePromoCodeModal/index.tsx:51
 #: src/components/modals/CreatePromoCodeModal/index.tsx:56
@@ -1012,12 +1205,12 @@ msgstr "Criar imposto ou taxa"
 #: src/components/modals/CreateTicketModal/index.tsx:83
 #: src/components/modals/CreateTicketModal/index.tsx:91
 #: src/components/routes/event/tickets.tsx:50
-msgid "Create Ticket"
-msgstr "Criar ingresso"
+#~ msgid "Create Ticket"
+#~ msgstr "Criar ingresso"
 
 #: src/components/routes/event/GettingStarted/index.tsx:69
-msgid "Create tickets for your event, set prices, and manage available quantity."
-msgstr "Crie ingressos para o seu evento, defina preços e gerencie a quantidade disponível."
+#~ msgid "Create tickets for your event, set prices, and manage available quantity."
+#~ msgstr "Crie ingressos para o seu evento, defina preços e gerencie a quantidade disponível."
 
 #: src/components/common/OrdersTable/index.tsx:153
 #: src/components/common/OrdersTable/index.tsx:226
@@ -1037,6 +1230,10 @@ msgstr "Senha atual"
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:150
 msgid "Custom Maps URL"
 msgstr "URL de mapas personalizados"
+
+#: src/components/common/ReportTable/index.tsx:53
+msgid "Custom Range"
+msgstr "Intervalo personalizado"
 
 #: src/components/common/OrdersTable/index.tsx:150
 msgid "Customer"
@@ -1067,24 +1264,24 @@ msgid "Customize your event page to match your brand and style."
 msgstr "Personalize a página do seu evento para combinar com sua marca e estilo."
 
 #: src/components/common/CapacityAssignmentList/index.tsx:156
-#: src/components/common/CheckInListList/index.tsx:185
+#: src/components/common/CheckInListList/index.tsx:176
 #: src/components/common/OrdersTable/index.tsx:131
-#: src/components/common/PromoCodeTable/index.tsx:180
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:276
+#: src/components/common/PromoCodeTable/index.tsx:181
 #: src/components/common/QuestionsTable/index.tsx:113
-#: src/components/common/TicketsTable/SortableTicket/index.tsx:193
 msgid "Danger zone"
 msgstr "Zona de perigo"
 
-#: src/components/common/AttendeeTable/index.tsx:187
+#: src/components/common/AttendeeTable/index.tsx:180
 msgid "Danger Zone"
 msgstr "Zona de Perigo"
 
-#: src/components/layouts/Event/index.tsx:38
+#: src/components/layouts/Event/index.tsx:49
 msgid "Dashboard"
 msgstr "Painel"
 
-#: src/components/common/OrderDetails/index.tsx:31
-#: src/components/forms/QuestionForm/index.tsx:135
+#: src/components/common/OrderDetails/index.tsx:35
+#: src/components/forms/QuestionForm/index.tsx:136
 msgid "Date"
 msgstr "Data"
 
@@ -1092,7 +1289,7 @@ msgstr "Data"
 msgid "Date & Time"
 msgstr "Data hora"
 
-#: src/components/forms/CapaciyAssigmentForm/index.tsx:37
+#: src/components/forms/CapaciyAssigmentForm/index.tsx:38
 msgid "Day one capacity"
 msgstr "Capacidade do primeiro dia"
 
@@ -1100,7 +1297,7 @@ msgstr "Capacidade do primeiro dia"
 #~ msgid "Day one check-in list"
 #~ msgstr "Lista de Registro do Primeiro Dia"
 
-#: src/components/common/PromoCodeTable/index.tsx:39
+#: src/components/common/PromoCodeTable/index.tsx:40
 #: src/components/common/TaxAndFeeList/index.tsx:73
 msgid "Delete"
 msgstr "Excluir"
@@ -1109,11 +1306,16 @@ msgstr "Excluir"
 msgid "Delete Capacity"
 msgstr "Excluir Capacidade"
 
-#: src/components/common/CheckInListList/index.tsx:188
+#: src/components/common/ProductsTable/SortableCategory/index.tsx:146
+#: src/components/common/ProductsTable/SortableCategory/index.tsx:147
+msgid "Delete category"
+msgstr "Excluir categoria"
+
+#: src/components/common/CheckInListList/index.tsx:179
 msgid "Delete Check-In List"
 msgstr "Excluir Lista de Registro"
 
-#: src/components/common/PromoCodeTable/index.tsx:184
+#: src/components/common/PromoCodeTable/index.tsx:185
 msgid "Delete code"
 msgstr "Excluir código"
 
@@ -1125,51 +1327,59 @@ msgstr "Excluir capa"
 msgid "Delete Image"
 msgstr "Excluir imagem"
 
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:281
+msgid "Delete product"
+msgstr "Excluir produto"
+
 #: src/components/common/QuestionsTable/index.tsx:118
 msgid "Delete question"
 msgstr "Excluir pergunta"
 
 #: src/components/common/TicketsTable/SortableTicket/index.tsx:199
-msgid "Delete ticket"
-msgstr "Excluir tíquete"
+#~ msgid "Delete ticket"
+#~ msgstr "Excluir tíquete"
 
+#: src/components/forms/ProductForm/index.tsx:258
 #: src/components/forms/TaxAndFeeForm/index.tsx:81
-#: src/components/forms/TicketForm/index.tsx:216
 #: src/components/modals/CreateEventModal/index.tsx:136
 #: src/components/modals/DuplicateEventModal/index.tsx:83
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:78
 msgid "Description"
 msgstr "Descrição"
 
-#: src/components/forms/CheckInListForm/index.tsx:42
+#: src/components/forms/CheckInListForm/index.tsx:36
 msgid "Description for check-in staff"
 msgstr "Descrição para a equipe de registro"
 
-#: src/components/routes/ticket-widget/CollectInformation/index.tsx:309
+#: src/components/routes/product-widget/CollectInformation/index.tsx:319
 msgid "Details"
 msgstr "Detalhes"
 
-#: src/components/forms/CapaciyAssigmentForm/index.tsx:26
-msgid "Disable this capacity track capacity without stopping ticket sales"
-msgstr "Desative esta capacidade para rastrear a capacidade sem interromper as vendas de ingressos"
+#: src/components/forms/CapaciyAssigmentForm/index.tsx:27
+msgid "Disable this capacity track capacity without stopping product sales"
+msgstr "Desative esta capacidade para monitorar sem interromper as vendas de produtos"
 
-#: src/components/common/PromoCodeTable/index.tsx:69
+#: src/components/forms/CapaciyAssigmentForm/index.tsx:26
+#~ msgid "Disable this capacity track capacity without stopping ticket sales"
+#~ msgstr "Desative esta capacidade para rastrear a capacidade sem interromper as vendas de ingressos"
+
+#: src/components/common/PromoCodeTable/index.tsx:70
 msgid "Discount"
 msgstr "Desconto"
 
-#: src/components/forms/PromoCodeForm/index.tsx:62
+#: src/components/forms/PromoCodeForm/index.tsx:63
 msgid "Discount %"
 msgstr "% de desconto"
 
-#: src/components/forms/PromoCodeForm/index.tsx:62
+#: src/components/forms/PromoCodeForm/index.tsx:63
 msgid "Discount in {0}"
 msgstr "Desconto em {0}"
 
-#: src/components/forms/PromoCodeForm/index.tsx:42
+#: src/components/forms/PromoCodeForm/index.tsx:43
 msgid "Discount Type"
 msgstr "Tipo de desconto"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:285
+#: src/components/routes/product-widget/SelectProducts/index.tsx:291
 msgid "Dismiss"
 msgstr "Liberar"
 
@@ -1177,19 +1387,35 @@ msgstr "Liberar"
 msgid "Don't have an account?   <0>Sign Up</0>"
 msgstr "Não tem uma conta?   <0>Inscreva-se</0>"
 
+#: src/components/forms/ProductForm/index.tsx:157
+msgid "Donation / Pay what you'd like product"
+msgstr "Doação / Produto com valor voluntário"
+
 #: src/components/forms/TicketForm/index.tsx:139
-msgid "Donation / Pay what you'd like ticket"
-msgstr "Doação / Pague o que quiser"
+#~ msgid "Donation / Pay what you'd like ticket"
+#~ msgstr "Doação / Pague o que quiser"
+
+#: src/components/common/AddEventToCalendarButton/index.tsx:137
+msgid "Download .ics"
+msgstr "Baixar .ics"
+
+#: src/components/common/DownloadCsvButton/index.tsx:48
+msgid "Download CSV"
+msgstr "Baixar CSV"
+
+#: src/components/modals/ShareModal/index.tsx:224
+msgid "Download QR Code"
+msgstr "Baixar código QR"
 
 #: src/components/routes/event/HomepageDesigner/CoverUpload/index.tsx:83
 msgid "Drag and drop or click"
 msgstr "Arraste e solte ou clique"
 
 #: src/components/common/TicketsTable/SortableTicket/index.tsx:115
-msgid "Drag to sort"
-msgstr "Arraste para classificar"
+#~ msgid "Drag to sort"
+#~ msgstr "Arraste para classificar"
 
-#: src/components/forms/QuestionForm/index.tsx:123
+#: src/components/forms/QuestionForm/index.tsx:124
 msgid "Dropdown selection"
 msgstr "Seleção suspensa"
 
@@ -1218,6 +1444,10 @@ msgstr "Duplicar a Imagem de Capa do Evento"
 msgid "Duplicate Options"
 msgstr "Duplicar Opções"
 
+#: src/components/modals/DuplicateEventModal/index.tsx:107
+msgid "Duplicate Products"
+msgstr "Duplicar Produtos"
+
 #: src/components/modals/DuplicateEventModal/index.tsx:119
 msgid "Duplicate Promo Codes"
 msgstr "Duplicar códigos promocionais"
@@ -1231,14 +1461,15 @@ msgid "Duplicate Settings"
 msgstr "Duplicar configurações"
 
 #: src/components/modals/DuplicateEventModal/index.tsx:107
-msgid "Duplicate Tickets"
-msgstr "Duplicar bilhetes"
+#~ msgid "Duplicate Tickets"
+#~ msgstr "Duplicar bilhetes"
 
-#: src/components/forms/TicketForm/index.tsx:75
+#: src/components/forms/ProductForm/index.tsx:78
 msgid "Early bird"
 msgstr "Madrugador"
 
 #: src/components/common/TaxAndFeeList/index.tsx:65
+#: src/components/modals/ManageAttendeeModal/index.tsx:205
 msgid "Edit"
 msgstr "Editar"
 
@@ -1247,13 +1478,13 @@ msgid "Edit {0}"
 msgstr "Editar {0}"
 
 #: src/components/common/AttendeeTable/index.tsx:174
-msgid "Edit attendee"
-msgstr "Editar participante"
+#~ msgid "Edit attendee"
+#~ msgstr "Editar participante"
 
 #: src/components/modals/EditAttendeeModal/index.tsx:72
-#: src/components/modals/EditAttendeeModal/index.tsx:129
-msgid "Edit Attendee"
-msgstr "Editar participante"
+#: src/components/modals/EditAttendeeModal/index.tsx:110
+#~ msgid "Edit Attendee"
+#~ msgstr "Editar participante"
 
 #: src/components/common/CapacityAssignmentList/index.tsx:146
 msgid "Edit Capacity"
@@ -1264,13 +1495,18 @@ msgstr "Editar Capacidade"
 msgid "Edit Capacity Assignment"
 msgstr "Editar Atribuição de Capacidade"
 
-#: src/components/common/CheckInListList/index.tsx:157
+#: src/components/common/ProductsTable/SortableCategory/index.tsx:137
+#: src/components/common/ProductsTable/SortableCategory/index.tsx:138
+msgid "Edit category"
+msgstr "Editar categoria"
+
+#: src/components/common/CheckInListList/index.tsx:148
 #: src/components/modals/EditCheckInListModal/index.tsx:69
 #: src/components/modals/EditCheckInListModal/index.tsx:91
 msgid "Edit Check-In List"
 msgstr "Editar Lista de Registro"
 
-#: src/components/common/PromoCodeTable/index.tsx:169
+#: src/components/common/PromoCodeTable/index.tsx:170
 msgid "Edit Code"
 msgstr "Editar código"
 
@@ -1278,6 +1514,17 @@ msgstr "Editar código"
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:51
 msgid "Edit Organizer"
 msgstr "Editar organizador"
+
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:274
+#: src/components/modals/EditProductModal/index.tsx:100
+#: src/components/modals/EditProductModal/index.tsx:108
+msgid "Edit Product"
+msgstr "Editar Produto"
+
+#: src/components/modals/EditProductCategoryModal/index.tsx:62
+#: src/components/modals/EditProductCategoryModal/index.tsx:70
+msgid "Edit Product Category"
+msgstr "Editar Categoria de Produto"
 
 #: src/components/modals/EditPromoCodeModal/index.tsx:79
 #: src/components/modals/EditPromoCodeModal/index.tsx:84
@@ -1296,8 +1543,8 @@ msgstr "Editar pergunta"
 #: src/components/common/TicketsTable/SortableTicket/index.tsx:191
 #: src/components/modals/EditTicketModal/index.tsx:96
 #: src/components/modals/EditTicketModal/index.tsx:104
-msgid "Edit Ticket"
-msgstr "Editar ingresso"
+#~ msgid "Edit Ticket"
+#~ msgstr "Editar ingresso"
 
 #: src/components/routes/account/ManageAccount/sections/Users/index.tsx:119
 msgid "Edit user"
@@ -1316,17 +1563,18 @@ msgstr "por exemplo. 2,50 por US$ 2,50"
 msgid "eg. 23.5 for 23.5%"
 msgstr "por exemplo. 23,5 para 23,5%"
 
-#: src/components/common/AttendeeDetails/index.tsx:22
-#: src/components/common/AttendeeTable/index.tsx:110
-#: src/components/common/OrderDetails/index.tsx:23
+#: src/components/common/AttendeeDetails/index.tsx:21
+#: src/components/common/AttendeeTable/index.tsx:108
+#: src/components/common/OrderDetails/index.tsx:27
 #: src/components/forms/OrganizerForm/index.tsx:32
 #: src/components/modals/EditUserModal/index.tsx:80
 #: src/components/modals/InviteUserModal/index.tsx:61
 #: src/components/routes/auth/AcceptInvitation/index.tsx:93
 #: src/components/routes/auth/Login/index.tsx:56
 #: src/components/routes/auth/Register/index.tsx:75
+#: src/components/routes/event/Settings/index.tsx:50
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:114
 #: src/components/routes/profile/ManageProfile/index.tsx:138
-#: src/components/routes/ticket-widget/OrderSummaryAndTickets/index.tsx:66
 msgid "Email"
 msgstr "E-mail"
 
@@ -1334,17 +1582,17 @@ msgstr "E-mail"
 msgid "Email & Notification Settings"
 msgstr "Configurações de e-mail e notificação"
 
-#: src/components/modals/CreateAttendeeModal/index.tsx:128
-#: src/components/modals/EditAttendeeModal/index.tsx:91
+#: src/components/modals/CreateAttendeeModal/index.tsx:132
+#: src/components/modals/ManageAttendeeModal/index.tsx:99
 msgid "Email address"
 msgstr "Endereço de email"
 
 #: src/components/common/QuestionsTable/index.tsx:218
 #: src/components/common/QuestionsTable/index.tsx:219
-#: src/components/routes/ticket-widget/CollectInformation/index.tsx:282
-#: src/components/routes/ticket-widget/CollectInformation/index.tsx:283
-#: src/components/routes/ticket-widget/CollectInformation/index.tsx:328
-#: src/components/routes/ticket-widget/CollectInformation/index.tsx:329
+#: src/components/routes/product-widget/CollectInformation/index.tsx:283
+#: src/components/routes/product-widget/CollectInformation/index.tsx:284
+#: src/components/routes/product-widget/CollectInformation/index.tsx:341
+#: src/components/routes/product-widget/CollectInformation/index.tsx:342
 msgid "Email Address"
 msgstr "Endereço de email"
 
@@ -1380,9 +1628,13 @@ msgstr "Código embutido"
 msgid "Embed Script"
 msgstr "Incorporar script"
 
+#: src/components/forms/CapaciyAssigmentForm/index.tsx:21
+msgid "Enable this capacity to stop product sales when the limit is reached"
+msgstr "Ative esta capacidade para interromper as vendas de produtos quando o limite for atingido"
+
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:20
-msgid "Enable this capacity to stop ticket sales when the limit is reached"
-msgstr "Ative esta capacidade para interromper as vendas de ingressos quando o limite for atingido"
+#~ msgid "Enable this capacity to stop ticket sales when the limit is reached"
+#~ msgstr "Ative esta capacidade para interromper as vendas de ingressos quando o limite for atingido"
 
 #: src/components/modals/CreateEventModal/index.tsx:150
 #: src/components/modals/DuplicateEventModal/index.tsx:97
@@ -1402,12 +1654,12 @@ msgstr "Eventos encerrados"
 
 #: src/components/common/LanguageSwitcher/index.tsx:16
 #: src/components/common/LanguageSwitcher/index.tsx:42
-#: src/components/modals/CreateAttendeeModal/index.tsx:141
+#: src/components/modals/CreateAttendeeModal/index.tsx:145
 #: src/components/routes/profile/ManageProfile/index.tsx:173
 msgid "English"
 msgstr "Inglês"
 
-#: src/components/modals/CreateAttendeeModal/index.tsx:184
+#: src/components/modals/CreateAttendeeModal/index.tsx:170
 msgid "Enter an amount excluding taxes and fees."
 msgstr "Insira um valor sem impostos e taxas."
 
@@ -1433,19 +1685,33 @@ msgstr "Evento"
 msgid "Event created successfully 🎉"
 msgstr "Evento criado com sucesso 🎉"
 
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:151
+msgid "Event Date"
+msgstr "Data do evento"
+
 #: src/components/routes/account/ManageAccount/sections/EventDefaultsSettings/index.tsx:5
 msgid "Event Defaults"
 msgstr "Padrões de eventos"
+
+#: src/components/routes/event/Settings/index.tsx:26
+#: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:65
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:251
+msgid "Event Details"
+msgstr "Detalhes do evento"
 
 #: src/components/modals/DuplicateEventModal/index.tsx:57
 msgid "Event duplicated successfully"
 msgstr "Evento duplicado com sucesso"
 
-#: src/components/layouts/Event/index.tsx:145
+#: src/components/layouts/Checkout/index.tsx:49
+msgid "Event Homepage"
+msgstr "Página inicial do evento"
+
+#: src/components/layouts/Event/index.tsx:163
 msgid "Event is not visible to the public"
 msgstr "O evento não está visível ao público"
 
-#: src/components/layouts/Event/index.tsx:144
+#: src/components/layouts/Event/index.tsx:162
 msgid "Event is visible to the public"
 msgstr "O evento é visível ao público"
 
@@ -1453,35 +1719,39 @@ msgstr "O evento é visível ao público"
 msgid "Event location & venue details"
 msgstr "Local do evento e detalhes do local"
 
-#: src/components/layouts/Event/index.tsx:166
+#: src/components/layouts/Event/index.tsx:184
 msgid "Event page"
 msgstr "Página do evento"
 
 #: src/components/common/EventCard/index.tsx:70
-#: src/components/layouts/Event/index.tsx:105
+#: src/components/layouts/Event/index.tsx:123
 #: src/components/routes/event/GettingStarted/index.tsx:37
 msgid "Event status update failed. Please try again later"
 msgstr "Falha na atualização do status do evento. Por favor, tente novamente mais tarde"
 
 #: src/components/common/EventCard/index.tsx:67
-#: src/components/layouts/Event/index.tsx:102
+#: src/components/layouts/Event/index.tsx:120
 #: src/components/routes/event/GettingStarted/index.tsx:34
 msgid "Event status updated"
 msgstr "Status do evento atualizado"
 
-#: src/components/layouts/Event/index.tsx:125
+#: src/components/modals/ShareModal/index.tsx:237
+msgid "Event URL"
+msgstr "URL do evento"
+
+#: src/components/layouts/Event/index.tsx:143
 msgid "Events"
 msgstr "Eventos"
 
-#: src/components/forms/CheckInListForm/index.tsx:62
+#: src/components/forms/CheckInListForm/index.tsx:56
 msgid "Expiration date"
 msgstr "Data de Expiração"
 
-#: src/components/common/PromoCodeTable/index.tsx:72
+#: src/components/common/PromoCodeTable/index.tsx:73
 msgid "Expires"
 msgstr "Expira"
 
-#: src/components/forms/PromoCodeForm/index.tsx:82
+#: src/components/forms/PromoCodeForm/index.tsx:79
 msgid "Expiry Date"
 msgstr "Data de validade"
 
@@ -1490,7 +1760,7 @@ msgstr "Data de validade"
 msgid "Export"
 msgstr "Exportar"
 
-#: src/components/common/AttendeeTable/index.tsx:98
+#: src/components/common/AttendeeTable/index.tsx:96
 msgid "Failed to cancel attendee"
 msgstr "Falha ao cancelar participante"
 
@@ -1515,8 +1785,16 @@ msgid "Failed to load Check-In List"
 msgstr "Falha ao carregar a Lista de Registro"
 
 #: src/components/common/AttendeeTable/index.tsx:51
+#~ msgid "Failed to resend product email"
+#~ msgstr "Falha ao reenviar o e-mail do produto"
+
+#: src/components/common/AttendeeTable/index.tsx:49
 msgid "Failed to resend ticket email"
 msgstr "Falha ao reenviar e-mail do ticket"
+
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:173
+msgid "Failed to sort products"
+msgstr "Falha ao ordenar os produtos"
 
 #: src/components/forms/TaxAndFeeForm/index.tsx:18
 #: src/components/forms/TaxAndFeeForm/index.tsx:39
@@ -1532,15 +1810,15 @@ msgstr "Taxa"
 #~ msgid "Feedback"
 #~ msgstr "Opinião"
 
-#: src/components/forms/TicketForm/index.tsx:311
+#: src/components/forms/ProductForm/index.tsx:366
 msgid "Fees"
 msgstr "Tarifas"
 
 #: src/components/common/QuestionsTable/index.tsx:206
-#: src/components/modals/CreateAttendeeModal/index.tsx:114
-#: src/components/modals/EditAttendeeModal/index.tsx:77
-#: src/components/routes/ticket-widget/CollectInformation/index.tsx:268
-#: src/components/routes/ticket-widget/CollectInformation/index.tsx:315
+#: src/components/modals/CreateAttendeeModal/index.tsx:118
+#: src/components/modals/ManageAttendeeModal/index.tsx:95
+#: src/components/routes/product-widget/CollectInformation/index.tsx:269
+#: src/components/routes/product-widget/CollectInformation/index.tsx:328
 msgid "First name"
 msgstr "Primeiro nome"
 
@@ -1549,9 +1827,9 @@ msgstr "Primeiro nome"
 #: src/components/modals/InviteUserModal/index.tsx:57
 #: src/components/routes/auth/AcceptInvitation/index.tsx:90
 #: src/components/routes/auth/Register/index.tsx:64
+#: src/components/routes/product-widget/CollectInformation/index.tsx:268
+#: src/components/routes/product-widget/CollectInformation/index.tsx:327
 #: src/components/routes/profile/ManageProfile/index.tsx:135
-#: src/components/routes/ticket-widget/CollectInformation/index.tsx:267
-#: src/components/routes/ticket-widget/CollectInformation/index.tsx:314
 msgid "First Name"
 msgstr "Primeiro nome"
 
@@ -1563,15 +1841,19 @@ msgstr "O nome deve ter entre 1 e 50 caracteres"
 msgid "First Name, Last Name, and Email Address are default questions and are always included in the checkout process."
 msgstr "Nome, Sobrenome e Endereço de E-mail são perguntas padrão e estão sempre incluídas no processo de checkout."
 
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:64
+msgid "First Used"
+msgstr "Usado pela primeira vez"
+
 #: src/components/forms/TaxAndFeeForm/index.tsx:33
 msgid "Fixed"
 msgstr "Fixo"
 
-#: src/components/forms/PromoCodeForm/index.tsx:54
+#: src/components/forms/PromoCodeForm/index.tsx:55
 msgid "Fixed amount"
 msgstr "Quantia fixa"
 
-#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:92
+#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:144
 msgid "Flash is not available on this device"
 msgstr "Flash não está disponível neste dispositivo"
 
@@ -1579,33 +1861,45 @@ msgstr "Flash não está disponível neste dispositivo"
 msgid "Forgot password?"
 msgstr "Esqueceu sua senha?"
 
-#: src/components/common/AttendeeTicket/index.tsx:40
+#: src/components/common/AttendeeProduct/index.tsx:40
 #: src/components/common/Currency/index.tsx:90
 #: src/components/common/OrderSummary/index.tsx:46
 #: src/components/common/OrderSummary/index.tsx:99
-#: src/components/common/TicketsTable/SortableTicket/index.tsx:88
-#: src/components/common/TicketsTable/SortableTicket/index.tsx:102
-#: src/components/routes/ticket-widget/SelectTickets/Prices/Tiered/index.tsx:54
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:91
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:101
+#: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:53
 msgid "Free"
 msgstr "Livre"
 
+#: src/components/forms/ProductForm/index.tsx:151
+msgid "Free Product"
+msgstr "Produto Gratuito"
+
+#: src/components/forms/ProductForm/index.tsx:153
+msgid "Free product, no payment information required"
+msgstr "Produto gratuito, sem necessidade de informações de pagamento"
+
 #: src/components/forms/TicketForm/index.tsx:133
-msgid "Free Ticket"
-msgstr "Bilhete grátis"
+#~ msgid "Free Ticket"
+#~ msgstr "Bilhete grátis"
 
 #: src/components/forms/TicketForm/index.tsx:135
-msgid "Free ticket, no payment information required"
-msgstr "Bilhete grátis, sem necessidade de informações de pagamento"
+#~ msgid "Free ticket, no payment information required"
+#~ msgstr "Bilhete grátis, sem necessidade de informações de pagamento"
 
 #: src/components/common/LanguageSwitcher/index.tsx:20
 msgid "French"
 msgstr "francês"
 
+#: src/components/forms/ProductForm/index.tsx:136
+msgid "General"
+msgstr "Geral"
+
 #: src/components/common/LanguageSwitcher/index.tsx:14
 msgid "German"
 msgstr "alemão"
 
-#: src/components/layouts/Event/index.tsx:36
+#: src/components/layouts/Event/index.tsx:47
 msgid "Getting Started"
 msgstr "Começando"
 
@@ -1614,27 +1908,31 @@ msgstr "Começando"
 msgid "Go back to profile"
 msgstr "Voltar ao perfil"
 
-#: src/components/routes/ticket-widget/CollectInformation/index.tsx:213
+#: src/components/routes/product-widget/CollectInformation/index.tsx:224
 msgid "Go to event homepage"
 msgstr "Ir para a página inicial do evento"
+
+#: src/components/common/AddEventToCalendarButton/index.tsx:128
+msgid "Google Calendar"
+msgstr "Google Agenda"
 
 #: src/components/common/EventCard/index.tsx:133
 msgid "gross sales"
 msgstr "vendas brutas"
 
-#: src/components/common/StatBoxes/index.tsx:26
+#: src/components/common/StatBoxes/index.tsx:39
 msgid "Gross sales"
 msgstr "Vendas brutas"
 
-#: src/components/routes/event/EventDashboard/index.tsx:107
+#: src/components/routes/event/EventDashboard/index.tsx:142
 msgid "Gross Sales"
 msgstr "Vendas brutas"
 
-#: src/components/routes/ticket-widget/OrderSummaryAndTickets/index.tsx:88
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:256
 msgid "Guests"
 msgstr "Convidados"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:396
+#: src/components/routes/product-widget/SelectProducts/index.tsx:432
 msgid "Have a promo code?"
 msgstr "Tem um código promocional?"
 
@@ -1654,6 +1952,10 @@ msgstr "Aqui está um exemplo de como você pode usar o componente em seu aplica
 msgid "Here is the React component you can use to embed the widget in your application."
 msgstr "Aqui está o componente React que você pode usar para incorporar o widget em seu aplicativo."
 
+#: src/components/routes/event/EventDashboard/index.tsx:54
+msgid "Hi {0} 👋"
+msgstr "Oi {0} 👋"
+
 #: src/components/modals/CreateEventModal/index.tsx:131
 #: src/components/modals/DuplicateEventModal/index.tsx:78
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:73
@@ -1668,7 +1970,7 @@ msgstr "Centro de Conferências Hi.Events"
 msgid "hi.events logo"
 msgstr "logotipo hi.events"
 
-#: src/components/common/TicketsTable/SortableTicket/index.tsx:77
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:77
 msgid "Hidden from public view"
 msgstr "Escondido da vista do público"
 
@@ -1680,12 +1982,12 @@ msgstr "pergunta oculta"
 msgid "hidden questions"
 msgstr "perguntas ocultas"
 
-#: src/components/forms/QuestionForm/index.tsx:224
+#: src/components/forms/QuestionForm/index.tsx:219
 msgid "Hidden questions are only visible to the event organizer and not to the customer."
 msgstr "As perguntas ocultas são visíveis apenas para o organizador do evento e não para o cliente."
 
-#: src/components/forms/TicketForm/index.tsx:289
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:365
+#: src/components/forms/ProductForm/index.tsx:344
+#: src/components/routes/product-widget/SelectProducts/index.tsx:397
 msgid "Hide"
 msgstr "Esconder"
 
@@ -1697,47 +1999,71 @@ msgstr "Ocultar página de primeiros passos"
 msgid "Hide hidden questions"
 msgstr "Ocultar perguntas ocultas"
 
+#: src/components/forms/ProductForm/index.tsx:399
+msgid "Hide product after sale end date"
+msgstr "Ocultar produto após a data de término da venda"
+
+#: src/components/forms/ProductForm/index.tsx:397
+msgid "Hide product before sale start date"
+msgstr "Ocultar produto antes da data de início da venda"
+
+#: src/components/forms/ProductForm/index.tsx:412
+msgid "Hide product unless user has applicable promo code"
+msgstr "Ocultar produto, a menos que o usuário tenha um código promocional aplicável"
+
+#: src/components/forms/ProductForm/index.tsx:405
+msgid "Hide product when sold out"
+msgstr "Ocultar produto quando esgotado"
+
 #: src/components/routes/event/Settings/Sections/MiscSettings/index.tsx:90
 msgid "Hide the getting started page from the sidebar"
 msgstr "Oculte a página de primeiros passos da barra lateral"
 
-#: src/components/forms/QuestionForm/index.tsx:225
+#: src/components/forms/ProductForm/index.tsx:417
+msgid "Hide this product from customers"
+msgstr "Ocultar este produto dos clientes"
+
+#: src/components/forms/QuestionForm/index.tsx:220
 msgid "Hide this question"
 msgstr "Ocultar esta pergunta"
 
 #: src/components/forms/TicketForm/index.tsx:362
-msgid "Hide this ticket from customers"
-msgstr "Ocultar este ticket dos clientes"
+#~ msgid "Hide this ticket from customers"
+#~ msgstr "Ocultar este ticket dos clientes"
 
-#: src/components/forms/TicketForm/index.tsx:100
+#: src/components/forms/ProductForm/index.tsx:103
 msgid "Hide this tier from users"
 msgstr "Ocultar esta camada dos usuários"
 
 #: src/components/forms/TicketForm/index.tsx:344
-msgid "Hide ticket after sale end date"
-msgstr "Ocultar ingresso após a data de término da venda"
+#~ msgid "Hide ticket after sale end date"
+#~ msgstr "Ocultar ingresso após a data de término da venda"
 
 #: src/components/forms/TicketForm/index.tsx:342
-msgid "Hide ticket before sale start date"
-msgstr "Ocultar ingresso antes da data de início da venda"
+#~ msgid "Hide ticket before sale start date"
+#~ msgstr "Ocultar ingresso antes da data de início da venda"
 
 #: src/components/forms/TicketForm/index.tsx:357
-msgid "Hide ticket unless user has applicable promo code"
-msgstr "Ocultar ingresso, a menos que o usuário tenha o código promocional aplicável"
+#~ msgid "Hide ticket unless user has applicable promo code"
+#~ msgstr "Ocultar ingresso, a menos que o usuário tenha o código promocional aplicável"
 
 #: src/components/forms/TicketForm/index.tsx:350
-msgid "Hide ticket when sold out"
-msgstr "Ocultar ingresso quando esgotado"
+#~ msgid "Hide ticket when sold out"
+#~ msgstr "Ocultar ingresso quando esgotado"
+
+#: src/components/forms/ProductForm/index.tsx:101
+msgid "Hiding a product will prevent users from seeing it on the event page."
+msgstr "Ocultar um produto impedirá que os usuários o vejam na página do evento."
 
 #: src/components/forms/TicketForm/index.tsx:98
-msgid "Hiding a ticket will prevent users from seeing it on the event page."
-msgstr "Ocultar um ingresso impedirá que os usuários o vejam na página do evento."
+#~ msgid "Hiding a ticket will prevent users from seeing it on the event page."
+#~ msgstr "Ocultar um ingresso impedirá que os usuários o vejam na página do evento."
 
 #: src/components/routes/event/HomepageDesigner/index.tsx:77
 msgid "Homepage Design"
 msgstr "Design da página inicial"
 
-#: src/components/layouts/Event/index.tsx:50
+#: src/components/layouts/Event/index.tsx:66
 msgid "Homepage Designer"
 msgstr "Designer da página inicial"
 
@@ -1745,7 +2071,7 @@ msgstr "Designer da página inicial"
 msgid "Homepage Preview"
 msgstr "Visualização da página inicial"
 
-#: src/components/modals/EditAttendeeModal/index.tsx:78
+#: src/components/modals/ManageAttendeeModal/index.tsx:95
 msgid "Homer"
 msgstr "Homero"
 
@@ -1753,7 +2079,7 @@ msgstr "Homero"
 msgid "How many minutes the customer has to complete their order. We recommend at least 15 minutes"
 msgstr "Quantos minutos o cliente tem para concluir o pedido. Recomendamos pelo menos 15 minutos"
 
-#: src/components/forms/PromoCodeForm/index.tsx:87
+#: src/components/forms/PromoCodeForm/index.tsx:84
 msgid "How many times can this code be used?"
 msgstr "Quantas vezes esse código pode ser usado?"
 
@@ -1769,7 +2095,7 @@ msgstr "https://example-maps-service.com/..."
 msgid "I agree to the <0>terms and conditions</0>"
 msgstr "Concordo com os <0>termos e condições</0>"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:272
+#: src/components/routes/product-widget/SelectProducts/index.tsx:278
 msgid "If a new tab did not open, please  <0><1>{0}</1>.</0>"
 msgstr "Se uma nova guia não for aberta, <0><1>{0}</1>.</0>"
 
@@ -1813,8 +2139,8 @@ msgstr "URL da imagem"
 msgid "Image width must be at least 900px and height at least 50px"
 msgstr "A largura da imagem deve ser de pelo menos 900 px e a altura de pelo menos 50 px"
 
-#: src/components/common/CheckInListList/index.tsx:125
-#: src/components/forms/CapaciyAssigmentForm/index.tsx:24
+#: src/components/common/CheckInListList/index.tsx:116
+#: src/components/forms/CapaciyAssigmentForm/index.tsx:25
 #: src/components/modals/EditUserModal/index.tsx:111
 msgid "Inactive"
 msgstr "Inativo"
@@ -1824,6 +2150,10 @@ msgid "Inactive users cannot log in."
 msgstr "Usuários inativos não podem fazer login."
 
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:99
+#~ msgid "Include connection details for your online event. These details will be shown on the order summary page and attendee product page"
+#~ msgstr "Inclua detalhes de conexão para o seu evento online. Esses detalhes serão exibidos na página de resumo do pedido e na página do produto do participante"
+
+#: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:99
 msgid "Include connection details for your online event. These details will be shown on the order summary page and attendee ticket page"
 msgstr "Inclua detalhes de conexão para seu evento online. Esses detalhes serão mostrados na página de resumo do pedido e na página do ingresso do participante"
 
@@ -1831,13 +2161,21 @@ msgstr "Inclua detalhes de conexão para seu evento online. Esses detalhes serã
 msgid "Include tax and fees in the price"
 msgstr "Incluir impostos e taxas no preço"
 
+#: src/components/common/CheckInListList/index.tsx:103
+msgid "Includes {0} products"
+msgstr "Inclui {0} produtos"
+
 #: src/components/common/CheckInListList/index.tsx:112
-msgid "Includes {0} tickets"
-msgstr "Inclui {0} ingressos"
+#~ msgid "Includes {0} tickets"
+#~ msgstr "Inclui {0} ingressos"
+
+#: src/components/common/CheckInListList/index.tsx:104
+msgid "Includes 1 product"
+msgstr "Inclui 1 produto"
 
 #: src/components/common/CheckInListList/index.tsx:113
-msgid "Includes 1 ticket"
-msgstr "Inclui 1 ingresso"
+#~ msgid "Includes 1 ticket"
+#~ msgstr "Inclui 1 ingresso"
 
 #: src/components/common/Editor/Controls/InsertImageControl/index.tsx:55
 #: src/components/common/Editor/Controls/InsertImageControl/index.tsx:66
@@ -1866,30 +2204,66 @@ msgstr "Convidar Usuário"
 msgid "Issue refund"
 msgstr "Emitir reembolso"
 
+#: src/components/routes/product-widget/CollectInformation/index.tsx:319
+msgid "Item"
+msgstr "Item"
+
 #: src/components/routes/auth/Register/index.tsx:65
 msgid "John"
 msgstr "John"
 
-#: src/components/modals/CreateAttendeeModal/index.tsx:122
+#: src/components/modals/CreateAttendeeModal/index.tsx:126
 msgid "Johnson"
 msgstr "Johnson"
 
-#: src/components/forms/TicketForm/index.tsx:74
+#: src/components/forms/ProductForm/index.tsx:77
 msgid "Label"
 msgstr "Rótulo"
 
-#: src/components/common/AttendeeDetails/index.tsx:54
-#: src/components/modals/CreateAttendeeModal/index.tsx:140
+#: src/components/common/AttendeeDetails/index.tsx:53
+#: src/components/modals/CreateAttendeeModal/index.tsx:144
 #: src/components/routes/profile/ManageProfile/index.tsx:172
 msgid "Language"
 msgstr "Língua"
+
+#: src/components/common/ReportTable/index.tsx:52
+msgid "Last 12 months"
+msgstr "Últimos 12 meses"
+
+#: src/components/common/ReportTable/index.tsx:47
+msgid "Last 14 days"
+msgstr "Últimos 14 dias"
+
+#: src/components/common/ReportTable/index.tsx:44
+msgid "Last 24 hours"
+msgstr "Últimas 24 horas"
+
+#: src/components/common/ReportTable/index.tsx:48
+msgid "Last 30 days"
+msgstr "Últimos 30 dias"
+
+#: src/components/common/ReportTable/index.tsx:45
+msgid "Last 48 hours"
+msgstr "Últimas 48 horas"
+
+#: src/components/common/ReportTable/index.tsx:50
+msgid "Last 6 months"
+msgstr "Últimos 6 meses"
+
+#: src/components/common/ReportTable/index.tsx:46
+msgid "Last 7 days"
+msgstr "Últimos 7 dias"
+
+#: src/components/common/ReportTable/index.tsx:49
+msgid "Last 90 days"
+msgstr "Últimos 90 dias"
 
 #: src/components/routes/account/ManageAccount/sections/Users/index.tsx:156
 msgid "Last login"
 msgstr "Último Login"
 
-#: src/components/modals/CreateAttendeeModal/index.tsx:121
-#: src/components/modals/EditAttendeeModal/index.tsx:84
+#: src/components/modals/CreateAttendeeModal/index.tsx:125
+#: src/components/modals/ManageAttendeeModal/index.tsx:96
 msgid "Last name"
 msgstr "Sobrenome"
 
@@ -1899,13 +2273,17 @@ msgstr "Sobrenome"
 #: src/components/modals/InviteUserModal/index.tsx:58
 #: src/components/routes/auth/AcceptInvitation/index.tsx:92
 #: src/components/routes/auth/Register/index.tsx:70
+#: src/components/routes/product-widget/CollectInformation/index.tsx:274
+#: src/components/routes/product-widget/CollectInformation/index.tsx:275
+#: src/components/routes/product-widget/CollectInformation/index.tsx:333
+#: src/components/routes/product-widget/CollectInformation/index.tsx:334
 #: src/components/routes/profile/ManageProfile/index.tsx:137
-#: src/components/routes/ticket-widget/CollectInformation/index.tsx:273
-#: src/components/routes/ticket-widget/CollectInformation/index.tsx:274
-#: src/components/routes/ticket-widget/CollectInformation/index.tsx:320
-#: src/components/routes/ticket-widget/CollectInformation/index.tsx:321
 msgid "Last Name"
 msgstr "Sobrenome"
+
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:70
+msgid "Last Used"
+msgstr "Última vez usado"
 
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:56
 msgid "Learn more about Stripe"
@@ -1915,8 +2293,14 @@ msgstr "Saiba mais sobre Stripe"
 msgid "Let's get started by creating your first organizer"
 msgstr "Vamos começar criando seu primeiro organizador"
 
+#: src/components/common/ReportTable/index.tsx:210
+msgid "Loading..."
+msgstr "Carregando..."
+
 #: src/components/layouts/EventHomepage/EventInformation/index.tsx:51
+#: src/components/routes/event/Settings/index.tsx:32
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:84
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:157
 msgid "Location"
 msgstr "Localização"
 
@@ -1940,34 +2324,46 @@ msgstr "Sair"
 msgid "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam placerat elementum..."
 msgstr "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nome placerat elementum..."
 
-#: src/components/forms/QuestionForm/index.tsx:218
+#: src/components/forms/QuestionForm/index.tsx:213
 msgid "Make this question mandatory"
 msgstr "Torne esta pergunta obrigatória"
 
 #: src/components/common/CapacityAssignmentList/index.tsx:143
-#: src/components/common/CheckInListList/index.tsx:154
+#: src/components/common/CheckInListList/index.tsx:145
 #: src/components/common/EventCard/index.tsx:180
 #: src/components/common/OrdersTable/index.tsx:94
 #: src/components/common/OrdersTable/index.tsx:109
-#: src/components/common/PromoCodeTable/index.tsx:166
-#: src/components/common/TicketsTable/SortableTicket/index.tsx:171
-#: src/components/layouts/Event/index.tsx:37
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:250
+#: src/components/common/PromoCodeTable/index.tsx:167
+#: src/components/layouts/Event/index.tsx:48
 msgid "Manage"
 msgstr "Gerenciar"
+
+#: src/components/common/AttendeeTable/index.tsx:162
+msgid "Manage attendee"
+msgstr "Gerenciar participante"
 
 #: src/components/common/EventCard/index.tsx:150
 msgid "Manage event"
 msgstr "Gerenciar evento"
+
+#: src/components/modals/CreateAttendeeModal/index.tsx:106
+#~ msgid "Manage products"
+#~ msgstr "Gerenciar produtos"
 
 #: src/components/routes/profile/ManageProfile/index.tsx:101
 msgid "Manage Profile"
 msgstr "Gerenciar perfil"
 
 #: src/components/routes/account/ManageAccount/sections/TaxSettings/index.tsx:17
-msgid "Manage taxes and fees which can be applied to your tickets"
-msgstr "Gerencie impostos e taxas que podem ser aplicadas aos seus ingressos"
+msgid "Manage taxes and fees which can be applied to your products"
+msgstr "Gerencie impostos e taxas que podem ser aplicados aos seus produtos"
 
-#: src/components/modals/CreateAttendeeModal/index.tsx:102
+#: src/components/routes/account/ManageAccount/sections/TaxSettings/index.tsx:17
+#~ msgid "Manage taxes and fees which can be applied to your tickets"
+#~ msgstr "Gerencie impostos e taxas que podem ser aplicadas aos seus ingressos"
+
+#: src/components/modals/CreateAttendeeModal/index.tsx:106
 msgid "Manage tickets"
 msgstr "Gerenciar ingressos"
 
@@ -1983,79 +2379,91 @@ msgstr "Gerencie seus detalhes de pagamento Stripe"
 msgid "Manage your users and their permissions"
 msgstr "Gerencie seus usuários e suas permissões"
 
-#: src/components/forms/QuestionForm/index.tsx:217
+#: src/components/forms/QuestionForm/index.tsx:212
 msgid "Mandatory questions must be answered before the customer can checkout."
 msgstr "Perguntas obrigatórias devem ser respondidas antes que o cliente possa finalizar a compra."
 
-#: src/components/common/AttendeeTable/index.tsx:68
+#: src/components/common/AttendeeTable/index.tsx:66
 msgid "Manually add an Attendee"
 msgstr "Adicionar manualmente um participante"
 
-#: src/components/modals/CreateAttendeeModal/index.tsx:93
-#: src/components/modals/CreateAttendeeModal/index.tsx:109
+#: src/components/modals/CreateAttendeeModal/index.tsx:97
+#: src/components/modals/CreateAttendeeModal/index.tsx:113
 msgid "Manually Add Attendee"
 msgstr "Adicionar participante manualmente"
 
 #: src/components/modals/CreateAttendeeModal/index.tsx:148
-msgid "Manually adding an attendee will adjust ticket quantity."
-msgstr "Adicionar manualmente um participante ajustará a quantidade de ingressos."
+#~ msgid "Manually adding an attendee will adjust ticket quantity."
+#~ msgstr "Adicionar manualmente um participante ajustará a quantidade de ingressos."
 
-#: src/components/forms/TicketForm/index.tsx:328
+#: src/components/forms/ProductForm/index.tsx:383
 msgid "Maximum Per Order"
 msgstr "Máximo por pedido"
 
-#: src/components/common/AttendeeTable/index.tsx:169
+#: src/components/common/AttendeeTable/index.tsx:167
 msgid "Message attendee"
 msgstr "Participante da mensagem"
 
-#: src/components/common/TicketsTable/SortableTicket/index.tsx:187
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:267
 msgid "Message Attendees"
 msgstr "Participantes da mensagem"
 
+#: src/components/modals/SendMessageModal/index.tsx:165
+msgid "Message attendees with specific products"
+msgstr "Enviar mensagem para participantes com produtos específicos"
+
 #: src/components/modals/SendMessageModal/index.tsx:164
-msgid "Message attendees with specific tickets"
-msgstr "Enviar mensagens aos participantes com tickets específicos"
+#~ msgid "Message attendees with specific tickets"
+#~ msgstr "Enviar mensagens aos participantes com tickets específicos"
 
 #: src/components/common/OrdersTable/index.tsx:113
 msgid "Message buyer"
 msgstr "Comprador de mensagens"
 
-#: src/components/modals/SendMessageModal/index.tsx:188
+#: src/components/modals/SendMessageModal/index.tsx:185
 msgid "Message Content"
 msgstr "Conteúdo da mensagem"
 
-#: src/components/modals/SendMessageModal/index.tsx:69
+#: src/components/modals/SendMessageModal/index.tsx:70
 msgid "Message individual attendees"
 msgstr "Mensagem para participantes individuais"
 
-#: src/components/modals/SendMessageModal/index.tsx:111
+#: src/components/modals/SendMessageModal/index.tsx:113
 msgid "Message Sent"
 msgstr "Mensagem enviada"
 
-#: src/components/layouts/Event/index.tsx:45
+#: src/components/layouts/Event/index.tsx:62
 #: src/components/routes/event/messages.tsx:31
 msgid "Messages"
 msgstr "Mensagens"
 
-#: src/components/forms/TicketForm/index.tsx:326
+#: src/components/forms/ProductForm/index.tsx:381
 msgid "Minimum Per Order"
 msgstr "Mínimo por pedido"
 
-#: src/components/forms/TicketForm/index.tsx:230
+#: src/components/forms/ProductForm/index.tsx:285
 msgid "Minimum Price"
 msgstr "Preço minimo"
+
+#: src/components/routes/event/Settings/index.tsx:56
+msgid "Miscellaneous"
+msgstr "Diversos"
 
 #: src/components/routes/event/Settings/Sections/MiscSettings/index.tsx:69
 msgid "Miscellaneous Settings"
 msgstr "Configurações Diversas"
 
-#: src/components/forms/QuestionForm/index.tsx:105
+#: src/components/forms/QuestionForm/index.tsx:106
 msgid "Multi line text box"
 msgstr "Caixa de texto com várias linhas"
 
+#: src/components/forms/ProductForm/index.tsx:165
+msgid "Multiple price options. Perfect for early bird products etc."
+msgstr "Múltiplas opções de preço. Perfeito para produtos antecipados, etc."
+
 #: src/components/forms/TicketForm/index.tsx:147
-msgid "Multiple price options. Perfect for early bird tickets etc."
-msgstr "Várias opções de preços. Perfeito para ingressos antecipados, etc."
+#~ msgid "Multiple price options. Perfect for early bird tickets etc."
+#~ msgstr "Várias opções de preços. Perfeito para ingressos antecipados, etc."
 
 #: src/components/routes/event/Settings/Sections/SeoSettings/index.tsx:71
 msgid "My amazing event description..."
@@ -2069,22 +2477,26 @@ msgstr "Meu incrível título de evento..."
 msgid "My Profile"
 msgstr "Meu perfil"
 
+#: src/components/common/QuestionAndAnswerList/index.tsx:80
+msgid "N/A"
+msgstr "N/D"
+
 #: src/components/common/WidgetEditor/index.tsx:352
 msgid "Nam placerat elementum..."
 msgstr "Nome placerat elementum..."
 
-#: src/components/common/AttendeeDetails/index.tsx:14
-#: src/components/common/AttendeeTable/index.tsx:109
-#: src/components/common/OrderDetails/index.tsx:15
-#: src/components/forms/CapaciyAssigmentForm/index.tsx:36
+#: src/components/common/AttendeeDetails/index.tsx:13
+#: src/components/common/AttendeeTable/index.tsx:107
+#: src/components/common/OrderDetails/index.tsx:19
+#: src/components/forms/CapaciyAssigmentForm/index.tsx:37
 #: src/components/forms/CheckInListForm/index.tsx:20
+#: src/components/forms/ProductForm/index.tsx:253
 #: src/components/forms/TaxAndFeeForm/index.tsx:61
-#: src/components/forms/TicketForm/index.tsx:211
 #: src/components/modals/CreateEventModal/index.tsx:130
 #: src/components/modals/DuplicateEventModal/index.tsx:77
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:63
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:72
-#: src/components/routes/ticket-widget/OrderSummaryAndTickets/index.tsx:58
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:104
 #: src/components/routes/welcome/index.tsx:83
 msgid "Name"
 msgstr "Nome"
@@ -2093,11 +2505,11 @@ msgstr "Nome"
 msgid "Name should be less than 150 characters"
 msgstr "O nome deve ter menos de 150 caracteres"
 
-#: src/components/common/AttendeeList/index.tsx:26
+#: src/components/common/QuestionAndAnswerList/index.tsx:83
 msgid "Navigate to Attendee"
 msgstr "Navegue até o participante"
 
-#: src/components/common/PromoCodeTable/index.tsx:157
+#: src/components/common/PromoCodeTable/index.tsx:158
 #: src/components/routes/account/ManageAccount/sections/Users/index.tsx:101
 msgid "Never"
 msgstr "Nunca"
@@ -2108,19 +2520,31 @@ msgstr "Nunca"
 msgid "New Password"
 msgstr "Nova Senha"
 
-#: src/components/common/AttendeeDetails/index.tsx:41
+#: src/components/common/AttendeeDetails/index.tsx:40
 msgid "No"
 msgstr "Não"
+
+#: src/components/common/QuestionAndAnswerList/index.tsx:105
+msgid "No {0} available."
+msgstr "Nenhum {0} disponível."
 
 #: src/components/common/NoEventsBlankSlate/index.tsx:21
 msgid "No archived events to show."
 msgstr "Não há eventos arquivados para mostrar."
 
-#: src/components/common/AttendeeTable/index.tsx:57
+#: src/components/common/AttendeeList/index.tsx:21
+msgid "No attendees found for this order."
+msgstr "Nenhum participante encontrado para este pedido."
+
+#: src/components/modals/ViewOrderModal/index.tsx:73
+msgid "No attendees have been added to this order."
+msgstr "Nenhum participante foi adicionado a este pedido."
+
+#: src/components/common/AttendeeTable/index.tsx:55
 msgid "No Attendees to show"
 msgstr "Nenhum participante para mostrar"
 
-#: src/components/forms/CheckInListForm/index.tsx:54
+#: src/components/forms/CheckInListForm/index.tsx:48
 msgid "No attendees will be able to check in before this date using this list"
 msgstr "Nenhum participante poderá se registrar antes desta data usando esta lista"
 
@@ -2128,11 +2552,19 @@ msgstr "Nenhum participante poderá se registrar antes desta data usando esta li
 msgid "No Capacity Assignments"
 msgstr "Sem Atribuições de Capacidade"
 
-#: src/components/common/CheckInListList/index.tsx:53
+#: src/components/common/CheckInListList/index.tsx:44
 msgid "No Check-In Lists"
 msgstr "Nenhuma Lista de Registro"
 
-#: src/components/forms/PromoCodeForm/index.tsx:46
+#: src/components/common/ReportTable/index.tsx:218
+msgid "No data available"
+msgstr "Nenhum dado disponível"
+
+#: src/components/common/ReportTable/index.tsx:214
+msgid "No data to show. Please select a date range"
+msgstr "Nenhum dado para mostrar. Por favor, selecione um intervalo de datas"
+
+#: src/components/forms/PromoCodeForm/index.tsx:47
 msgid "No Discount"
 msgstr "Sem desconto"
 
@@ -2156,13 +2588,45 @@ msgstr "Nenhuma mensagem para mostrar"
 msgid "No orders to show"
 msgstr "Não há pedidos para mostrar"
 
-#: src/components/common/PromoCodeTable/index.tsx:45
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:39
+msgid "No Payment Required"
+msgstr "Pagamento não necessário"
+
+#: src/components/modals/ManageAttendeeModal/index.tsx:162
+msgid "No product associated with this attendee."
+msgstr "Nenhum produto associado a este participante."
+
+#: src/components/modals/CreateProductCategoryModal/index.tsx:22
+msgid "No products available in this category."
+msgstr "Nenhum produto disponível nesta categoria."
+
+#: src/components/common/ProductsTable/ProductsBlankSlate/index.tsx:39
+msgid "No Products Yet"
+msgstr "Nenhum Produto Ainda"
+
+#: src/components/common/PromoCodeTable/index.tsx:46
 msgid "No Promo Codes to show"
 msgstr "Nenhum código promocional para mostrar"
+
+#: src/components/modals/ManageAttendeeModal/index.tsx:175
+msgid "No questions answered by this attendee."
+msgstr "Nenhuma pergunta foi respondida por este participante."
+
+#: src/components/modals/ViewAttendeeModal/index.tsx:75
+#~ msgid "No questions have been answered by this attendee."
+#~ msgstr "Nenhuma pergunta foi respondida por este participante."
+
+#: src/components/modals/ViewOrderModal/index.tsx:60
+msgid "No questions have been asked for this order."
+msgstr "Nenhuma pergunta foi feita para este pedido."
 
 #: src/components/common/NoResultsSplash/index.tsx:24
 msgid "No results"
 msgstr "Nenhum resultado"
+
+#: src/components/common/ProductsTable/ProductsBlankSlate/index.tsx:20
+msgid "No Search Results"
+msgstr "Nenhum Resultado de Pesquisa"
 
 #: src/components/common/NoResultsSplash/index.tsx:29
 msgid "No search results."
@@ -2173,26 +2637,34 @@ msgid "No Taxes or Fees have been added."
 msgstr "Nenhum imposto ou taxa foi adicionado."
 
 #: src/components/common/TicketsTable/index.tsx:65
-msgid "No tickets to show"
-msgstr "Não há ingressos para mostrar"
+#~ msgid "No tickets to show"
+#~ msgstr "Não há ingressos para mostrar"
 
-#: src/components/common/PromoCodeTable/index.tsx:81
+#: src/components/common/PromoCodeTable/index.tsx:82
 msgid "None"
 msgstr "Nenhum"
 
-#: src/components/common/TicketPriceAvailability/index.tsx:27
-#: src/components/common/TicketPriceAvailability/index.tsx:48
+#: src/components/common/ProductPriceAvailability/index.tsx:27
+#: src/components/common/ProductPriceAvailability/index.tsx:48
 msgid "Not available"
 msgstr "Não disponível"
 
 #: src/components/common/AttendeeCheckInTable/index.tsx:125
-msgid "Not Checked In"
-msgstr "Não verificado"
+#~ msgid "Not Checked In"
+#~ msgstr "Não verificado"
 
-#: src/components/common/TicketsTable/SortableTicket/index.tsx:80
-#: src/components/common/TicketsTable/SortableTicket/index.tsx:143
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:80
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:221
 msgid "Not On Sale"
 msgstr "Não está à venda"
+
+#: src/components/modals/ManageAttendeeModal/index.tsx:115
+msgid "Notes"
+msgstr "Notas"
+
+#: src/components/common/ReportTable/index.tsx:240
+msgid "Nothing to show yet"
+msgstr "Nada para mostrar ainda"
 
 #: src/components/routes/event/Settings/Sections/EmailSettings/index.tsx:72
 msgid "Notification Settings"
@@ -2210,12 +2682,12 @@ msgstr "Notificar o organizador sobre novos pedidos"
 msgid "Now let's create your first event"
 msgstr "Agora vamos criar seu primeiro evento"
 
-#: src/components/common/TicketsTable/SortableTicket/index.tsx:69
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:69
 msgid "On sale"
 msgstr "À venda"
 
-#: src/components/common/TicketsTable/SortableTicket/index.tsx:80
-#: src/components/common/TicketsTable/SortableTicket/index.tsx:143
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:80
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:221
 msgid "On Sale"
 msgstr "À venda"
 
@@ -2223,9 +2695,17 @@ msgstr "À venda"
 msgid "Once you create an event, you'll see it here."
 msgstr "Depois de criar um evento, você o verá aqui."
 
+#: src/components/common/ReportTable/index.tsx:245
+msgid "Once you start collecting data, you'll see it here."
+msgstr "Assim que você começar a coletar dados, eles aparecerão aqui."
+
 #: src/components/routes/event/GettingStarted/index.tsx:108
-msgid "Once you're ready, set your event live and start selling tickets."
-msgstr "Quando estiver pronto, programe seu evento ao vivo e comece a vender ingressos."
+msgid "Once you're ready, set your event live and start selling products."
+msgstr "Quando estiver pronto, coloque seu evento ao vivo e comece a vender produtos."
+
+#: src/components/routes/event/GettingStarted/index.tsx:108
+#~ msgid "Once you're ready, set your event live and start selling tickets."
+#~ msgstr "Quando estiver pronto, programe seu evento ao vivo e comece a vender ingressos."
 
 #: src/components/common/EventStatusBadge/index.tsx:18
 msgid "Ongoing"
@@ -2239,7 +2719,7 @@ msgstr "Evento on-line"
 msgid "Online Event Details"
 msgstr "Detalhes do evento on-line"
 
-#: src/components/modals/SendMessageModal/index.tsx:217
+#: src/components/modals/SendMessageModal/index.tsx:214
 msgid ""
 "Only important emails, which are directly related to this event, should be sent using this form.\n"
 "Any misuse, including sending promotional emails, will lead to an immediate account ban."
@@ -2247,19 +2727,19 @@ msgstr ""
 "Somente emails importantes, que estejam diretamente relacionados a este evento, deverão ser enviados através deste formulário.\n"
 "Qualquer uso indevido, incluindo o envio de e-mails promocionais, levará ao banimento imediato da conta."
 
-#: src/components/common/CheckInListList/index.tsx:176
+#: src/components/common/CheckInListList/index.tsx:167
 msgid "Open Check-In Page"
 msgstr "Abrir página de check-in"
 
-#: src/components/layouts/Event/index.tsx:195
+#: src/components/layouts/Event/index.tsx:213
 msgid "Open sidebar"
 msgstr "Abrir barra lateral"
 
-#: src/components/forms/QuestionForm/index.tsx:44
+#: src/components/forms/QuestionForm/index.tsx:45
 msgid "Option {i}"
 msgstr "Opção {i}"
 
-#: src/components/forms/QuestionForm/index.tsx:27
+#: src/components/forms/QuestionForm/index.tsx:28
 msgid "Options"
 msgstr "Opções"
 
@@ -2267,7 +2747,7 @@ msgstr "Opções"
 msgid "or"
 msgstr "ou"
 
-#: src/components/common/AttendeeTable/index.tsx:111
+#: src/components/common/AttendeeTable/index.tsx:109
 msgid "Order"
 msgstr "Ordem"
 
@@ -2275,26 +2755,27 @@ msgstr "Ordem"
 msgid "Order #"
 msgstr "Ordem #"
 
-#: src/components/layouts/Checkout/index.tsx:15
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:62
 msgid "Order Cancelled"
 msgstr "Pedido cancelado"
 
-#: src/components/layouts/Checkout/index.tsx:14
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:61
 msgid "Order Completed"
 msgstr "Encomenda completa"
 
-#: src/components/routes/ticket-widget/OrderSummaryAndTickets/index.tsx:70
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:119
 msgid "Order Date"
 msgstr "Data do pedido"
 
-#: src/components/modals/ViewAttendeeModal/index.tsx:41
-#: src/components/routes/ticket-widget/OrderSummaryAndTickets/index.tsx:54
+#: src/components/modals/ManageAttendeeModal/index.tsx:151
+#: src/components/modals/ViewOrderModal/index.tsx:42
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:241
 msgid "Order Details"
 msgstr "detalhes do pedido"
 
 #: src/components/modals/ViewOrderModal/index.tsx:30
-msgid "Order Details {0}"
-msgstr "Detalhes do pedido {0}"
+#~ msgid "Order Details {0}"
+#~ msgstr "Detalhes do pedido {0}"
 
 #: src/components/modals/CancelOrderModal/index.tsx:29
 msgid "Order has been canceled and the order owner has been notified."
@@ -2305,12 +2786,12 @@ msgstr "O pedido foi cancelado e o proprietário do pedido foi notificado."
 msgid "Order questions"
 msgstr "Perguntas sobre pedidos"
 
-#: src/components/routes/ticket-widget/OrderSummaryAndTickets/index.tsx:62
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:109
 msgid "Order Reference"
 msgstr "Referência do pedido"
 
 #: src/components/layouts/Checkout/CheckoutSidebar/index.tsx:28
-#: src/components/modals/ViewOrderModal/index.tsx:35
+#: src/components/modals/ViewOrderModal/index.tsx:48
 msgid "Order Summary"
 msgstr "resumo do pedido"
 
@@ -2318,19 +2799,20 @@ msgstr "resumo do pedido"
 msgid "Order timeout"
 msgstr "Tempo limite do pedido"
 
-#: src/components/layouts/Event/index.tsx:42
+#: src/components/layouts/Event/index.tsx:59
 #: src/components/routes/event/orders.tsx:44
 msgid "Orders"
 msgstr "Pedidos"
 
-#: src/components/common/StatBoxes/index.tsx:36
-#: src/components/routes/event/EventDashboard/index.tsx:72
+#: src/components/common/StatBoxes/index.tsx:51
+#: src/components/routes/event/EventDashboard/index.tsx:105
 msgid "Orders Created"
 msgstr "Pedidos criados"
 
 #: src/components/modals/EditUserModal/index.tsx:55
 #: src/components/modals/InviteUserModal/index.tsx:47
 #: src/components/routes/events/Dashboard/index.tsx:113
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:176
 msgid "Organizer"
 msgstr "Organizador"
 
@@ -2344,8 +2826,13 @@ msgstr "Nome do organizador"
 
 #: src/components/modals/EditUserModal/index.tsx:57
 #: src/components/modals/InviteUserModal/index.tsx:49
-msgid "Organizers can only manage events and tickets. They cannot manage users, account settings or billing information."
-msgstr "Os organizadores só podem gerenciar eventos e ingressos. Eles não podem gerenciar usuários, configurações de conta ou informações de cobrança."
+msgid "Organizers can only manage events and products. They cannot manage users, account settings or billing information."
+msgstr "Os organizadores só podem gerenciar eventos e produtos. Eles não podem gerenciar usuários, configurações de conta ou informações de faturamento."
+
+#: src/components/modals/EditUserModal/index.tsx:57
+#: src/components/modals/InviteUserModal/index.tsx:49
+#~ msgid "Organizers can only manage events and tickets. They cannot manage users, account settings or billing information."
+#~ msgstr "Os organizadores só podem gerenciar eventos e ingressos. Eles não podem gerenciar usuários, configurações de conta ou informações de cobrança."
 
 #: src/components/common/WidgetEditor/index.tsx:223
 msgid "Padding"
@@ -2359,21 +2846,29 @@ msgstr "Cor de fundo da página"
 msgid "Page not found"
 msgstr "página não encontrada"
 
-#: src/components/common/StatBoxes/index.tsx:31
+#: src/components/common/StatBoxes/index.tsx:45
 msgid "Page views"
 msgstr "visualizações de página"
 
-#: src/components/forms/TicketForm/index.tsx:303
+#: src/components/forms/ProductForm/index.tsx:358
 msgid "page."
 msgstr "página."
 
-#: src/components/modals/CreateAttendeeModal/index.tsx:194
+#: src/components/modals/CreateAttendeeModal/index.tsx:180
 msgid "paid"
 msgstr "pago"
 
+#: src/components/forms/ProductForm/index.tsx:145
+msgid "Paid Product"
+msgstr "Produto Pago"
+
 #: src/components/forms/TicketForm/index.tsx:127
-msgid "Paid Ticket"
-msgstr "Bilhete Pago"
+#~ msgid "Paid Ticket"
+#~ msgstr "Bilhete Pago"
+
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:53
+msgid "Partially Refunded"
+msgstr "Parcialmente reembolsado"
 
 #: src/components/routes/auth/Login/index.tsx:58
 #: src/components/routes/auth/Register/index.tsx:80
@@ -2402,29 +2897,38 @@ msgstr "senhas nao sao as mesmas"
 msgid "Paste this where you want the widget to appear."
 msgstr "Cole onde deseja que o widget apareça."
 
-#: src/components/modals/CreateAttendeeModal/index.tsx:115
+#: src/components/modals/CreateAttendeeModal/index.tsx:119
 msgid "Patrick"
 msgstr "Patrício"
 
-#: src/components/modals/CreateAttendeeModal/index.tsx:129
+#: src/components/modals/CreateAttendeeModal/index.tsx:133
 msgid "patrick@acme.com"
 msgstr "patrick@acme.com"
 
-#: src/components/forms/StripeCheckoutForm/index.tsx:122
+#: src/components/forms/StripeCheckoutForm/index.tsx:123
 #: src/components/routes/account/ManageAccount/index.tsx:38
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:90
 msgid "Payment"
 msgstr "Pagamento"
 
-#: src/components/layouts/Checkout/index.tsx:16
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:41
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:63
 msgid "Payment Failed"
 msgstr "Pagamento falhou"
+
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:42
+msgid "Payment Received"
+msgstr "Pagamento recebido"
+
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:132
+msgid "Payment Status"
+msgstr "Status do pagamento"
 
 #: src/components/forms/StripeCheckoutForm/index.tsx:42
 msgid "Payment succeeded!"
 msgstr "Pagamento realizado com sucesso!"
 
-#: src/components/forms/PromoCodeForm/index.tsx:50
+#: src/components/forms/PromoCodeForm/index.tsx:51
 #: src/components/forms/TaxAndFeeForm/index.tsx:27
 msgid "Percentage"
 msgstr "Percentagem"
@@ -2437,7 +2941,7 @@ msgstr "Valor percentual"
 msgid "Place this in the <head> of your website."
 msgstr "Coloque isso no <head> do seu site."
 
-#: src/components/forms/QuestionForm/index.tsx:30
+#: src/components/forms/QuestionForm/index.tsx:31
 msgid "Please add at least one option"
 msgstr "Adicione pelo menos uma opção"
 
@@ -2462,12 +2966,15 @@ msgstr "Verifique seu e-mail para confirmar seu endereço de e-mail"
 msgid "Please complete the form below to accept your invitation"
 msgstr "Preencha o formulário abaixo para aceitar seu convite"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:270
+#: src/components/routes/product-widget/SelectProducts/index.tsx:276
 msgid "Please continue in the new tab"
 msgstr "Continue na nova aba"
 
 #: src/components/modals/CreateCapacityAssignmentModal/index.tsx:47
-#: src/components/modals/CreateCheckInListModal/index.tsx:48
+msgid "Please create a product"
+msgstr "Por favor, crie um produto"
+
+#: src/components/modals/CreateCheckInListModal/index.tsx:51
 msgid "Please create a ticket"
 msgstr "Por favor, crie um ingresso"
 
@@ -2484,16 +2991,24 @@ msgid "Please Note"
 msgstr "Observe"
 
 #: src/components/common/TicketsTable/index.tsx:84
-msgid "Please remove filters and set sorting to \"Homepage order\" to enable sorting"
-msgstr "Remova os filtros e defina a classificação como \"Ordem da página inicial\" para ativar a classificação"
+#~ msgid "Please remove filters and set sorting to \"Homepage order\" to enable sorting"
+#~ msgstr "Remova os filtros e defina a classificação como \"Ordem da página inicial\" para ativar a classificação"
 
-#: src/components/modals/SendMessageModal/index.tsx:152
+#: src/components/layouts/Checkout/index.tsx:117
+msgid "Please return to the event page to start over."
+msgstr "Por favor, volte para a página do evento para recomeçar."
+
+#: src/components/modals/SendMessageModal/index.tsx:154
 msgid "Please select"
 msgstr "Por favor selecione"
 
+#: src/components/routes/product-widget/SelectProducts/index.tsx:231
+msgid "Please select at least one product"
+msgstr "Por favor, selecione pelo menos um produto"
+
 #: src/components/routes/ticket-widget/SelectTickets/index.tsx:227
-msgid "Please select at least one ticket"
-msgstr "Selecione pelo menos um ingresso"
+#~ msgid "Please select at least one ticket"
+#~ msgstr "Selecione pelo menos um ingresso"
 
 #: src/components/routes/profile/ManageProfile/index.tsx:142
 msgid "Please verify your email address to access all features"
@@ -2515,7 +3030,7 @@ msgstr "Mensagem pós-check-out"
 msgid "Powered by"
 msgstr "Distribuído por"
 
-#: src/components/forms/StripeCheckoutForm/index.tsx:136
+#: src/components/forms/StripeCheckoutForm/index.tsx:137
 msgid "Powered by Stripe"
 msgstr "Desenvolvido por Stripe"
 
@@ -2527,9 +3042,9 @@ msgstr "Mensagem pré-checkout"
 msgid "Preview"
 msgstr "Visualização"
 
-#: src/components/common/TicketsTable/SortableTicket/index.tsx:153
-#: src/components/forms/TicketForm/index.tsx:70
-#: src/components/forms/TicketForm/index.tsx:230
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:230
+#: src/components/forms/ProductForm/index.tsx:73
+#: src/components/forms/ProductForm/index.tsx:285
 msgid "Price"
 msgstr "Preço"
 
@@ -2537,9 +3052,17 @@ msgstr "Preço"
 msgid "Price display mode"
 msgstr "Modo de exibição de preço"
 
-#: src/components/forms/TicketForm/index.tsx:267
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:86
+msgid "Price not set"
+msgstr "Preço não definido"
+
+#: src/components/forms/ProductForm/index.tsx:322
 msgid "Price tiers"
 msgstr "Níveis de preços"
+
+#: src/components/forms/ProductForm/index.tsx:228
+msgid "Price Type"
+msgstr "Tipo de Preço"
 
 #: src/components/common/WidgetEditor/index.tsx:182
 msgid "Primary Color"
@@ -2554,17 +3077,95 @@ msgstr "Cor Primária"
 msgid "Primary Text Color"
 msgstr "Cor do texto principal"
 
-#: src/components/common/AttendeeTicket/index.tsx:74
+#: src/components/common/AttendeeProduct/index.tsx:74
 msgid "Print"
 msgstr "Imprimir"
 
-#: src/components/routes/ticket-widget/OrderSummaryAndTickets/index.tsx:95
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:263
 msgid "Print All Tickets"
 msgstr "Imprimir todos os ingressos"
 
-#: src/components/routes/event/products.tsx:39
-#~ msgid "Products"
-#~ msgstr ""
+#: src/components/layouts/Checkout/index.tsx:84
+msgid "Print Tickets"
+msgstr "Imprimir ingressos"
+
+#: src/components/common/AttendeeTable/index.tsx:190
+#~ msgid "product"
+#~ msgstr "produto"
+
+#: src/components/common/AttendeeDetails/index.tsx:45
+#: src/components/modals/ManageAttendeeModal/index.tsx:104
+#: src/components/routes/event/products.tsx:86
+msgid "Product"
+msgstr "Produto"
+
+#: src/components/forms/ProductForm/index.tsx:266
+#: src/components/routes/event/products.tsx:96
+msgid "Product Category"
+msgstr "Categoria de Produto"
+
+#: src/components/modals/EditProductCategoryModal/index.tsx:53
+msgid "Product category updated successfully."
+msgstr "Categoria de produto atualizada com sucesso."
+
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:53
+msgid "Product deleted successfully"
+msgstr "Produto excluído com sucesso"
+
+#: src/components/common/AttendeeTable/index.tsx:50
+#~ msgid "Product email has been resent to attendee"
+#~ msgstr "O e-mail do produto foi reenviado para o participante"
+
+#: src/components/forms/ProductForm/index.tsx:236
+msgid "Product Price Type"
+msgstr "Tipo de Preço do Produto"
+
+#: src/components/common/QuestionsTable/index.tsx:307
+msgid "Product questions"
+msgstr "Perguntas sobre o produto"
+
+#: src/components/routes/event/EventDashboard/index.tsx:85
+msgid "Product Sales"
+msgstr "Vendas de Produtos"
+
+#: src/components/common/ProductSelector/index.tsx:50
+msgid "Product Tier"
+msgstr "Nível do Produto"
+
+#: src/components/forms/ProductForm/index.tsx:214
+#: src/components/forms/ProductForm/index.tsx:221
+msgid "Product Type"
+msgstr "Tipo de Produto"
+
+#: src/components/common/WidgetEditor/index.tsx:311
+msgid "Product Widget Preview"
+msgstr "Pré-visualização do Widget de Produto"
+
+#: src/components/common/PromoCodeTable/index.tsx:148
+msgid "Product(s)"
+msgstr "Produto(s)"
+
+#: src/components/common/PromoCodeTable/index.tsx:72
+#: src/components/layouts/Event/index.tsx:57
+#: src/components/routes/event/products.tsx:46
+msgid "Products"
+msgstr "Produtos"
+
+#: src/components/common/EventCard/index.tsx:126
+msgid "products sold"
+msgstr "produtos vendidos"
+
+#: src/components/common/StatBoxes/index.tsx:21
+msgid "Products sold"
+msgstr "Produtos vendidos"
+
+#: src/components/routes/event/EventDashboard/index.tsx:106
+msgid "Products Sold"
+msgstr "Produtos Vendidos"
+
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:172
+msgid "Products sorted successfully"
+msgstr "Produtos ordenados com sucesso"
 
 #: src/components/routes/profile/ManageProfile/index.tsx:106
 msgid "Profile"
@@ -2574,24 +3175,32 @@ msgstr "Perfil"
 msgid "Profile updated successfully"
 msgstr "Perfil atualizado com sucesso"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:172
+#: src/components/routes/product-widget/SelectProducts/index.tsx:172
 msgid "Promo {promo_code} code applied"
 msgstr "Código promocional {promo_code} aplicado"
 
-#: src/components/forms/TicketForm/index.tsx:354
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:20
+msgid "Promo Code"
+msgstr "Código promocional"
+
+#: src/components/forms/ProductForm/index.tsx:409
 msgid "Promo Code page"
 msgstr "Página de código promocional"
 
-#: src/components/layouts/Event/index.tsx:44
+#: src/components/layouts/Event/index.tsx:61
 #: src/components/routes/event/promo-codes.tsx:31
 msgid "Promo Codes"
 msgstr "Códigos promocionais"
 
-#: src/components/common/PromoCodeTable/index.tsx:50
+#: src/components/common/PromoCodeTable/index.tsx:51
 msgid "Promo codes can be used to offer discounts, presale access, or provide special access to your event."
 msgstr "Os códigos promocionais podem ser usados para oferecer descontos, acesso pré-venda ou fornecer acesso especial ao seu evento."
 
-#: src/components/forms/QuestionForm/index.tsx:195
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:95
+msgid "Promo Codes Report"
+msgstr "Relatório de códigos promocionais"
+
+#: src/components/forms/QuestionForm/index.tsx:190
 msgid ""
 "Provide additional context or instructions for this question. Use this field to add terms\n"
 "and conditions, guidelines, or any important information that attendees need to know before answering."
@@ -2601,35 +3210,46 @@ msgstr "Forneça contexto adicional ou instruções para esta pergunta. Use este
 #~ msgid "Purchase License"
 #~ msgstr "Licença de compra"
 
-#: src/components/forms/TicketForm/index.tsx:82
-#: src/components/forms/TicketForm/index.tsx:247
+#: src/components/modals/ShareModal/index.tsx:126
+msgid "QR Code"
+msgstr "Código QR"
+
+#: src/components/forms/ProductForm/index.tsx:85
+#: src/components/forms/ProductForm/index.tsx:302
 msgid "Quantity Available"
 msgstr "Quantidade Disponível"
+
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:237
+msgid "Quantity Sold"
+msgstr "Quantidade Vendida"
 
 #: src/components/common/QuestionsTable/index.tsx:168
 msgid "Question deleted"
 msgstr "Pergunta excluída"
 
-#: src/components/forms/QuestionForm/index.tsx:194
+#: src/components/forms/QuestionForm/index.tsx:189
 msgid "Question Description"
 msgstr "Descrição da pergunta"
 
-#: src/components/forms/QuestionForm/index.tsx:184
+#: src/components/forms/QuestionForm/index.tsx:179
 msgid "Question Title"
 msgstr "título da questão"
 
 #: src/components/common/QuestionsTable/index.tsx:257
-#: src/components/layouts/Event/index.tsx:43
-#: src/components/modals/ViewAttendeeModal/index.tsx:48
-#: src/components/modals/ViewOrderModal/index.tsx:45
+#: src/components/layouts/Event/index.tsx:60
 msgid "Questions"
 msgstr "Questões"
+
+#: src/components/modals/ManageAttendeeModal/index.tsx:169
+#: src/components/modals/ViewOrderModal/index.tsx:54
+msgid "Questions & Answers"
+msgstr "Perguntas e Respostas"
 
 #: src/components/common/QuestionsTable/index.tsx:143
 msgid "Questions sorted successfully"
 msgstr "Perguntas classificadas com sucesso"
 
-#: src/components/forms/QuestionForm/index.tsx:117
+#: src/components/forms/QuestionForm/index.tsx:118
 msgid "Radio Option"
 msgstr "Opção de rádio"
 
@@ -2637,7 +3257,7 @@ msgstr "Opção de rádio"
 msgid "Read less"
 msgstr "Leia menos"
 
-#: src/components/modals/SendMessageModal/index.tsx:34
+#: src/components/modals/SendMessageModal/index.tsx:35
 msgid "Recipient"
 msgstr "Destinatário"
 
@@ -2649,6 +3269,10 @@ msgstr "Referência"
 msgid "Refund amount ({0})"
 msgstr "Valor do reembolso ({0})"
 
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:51
+msgid "Refund Failed"
+msgstr "Reembolso falhou"
+
 #: src/components/common/OrdersTable/index.tsx:117
 msgid "Refund order"
 msgstr "Pedido de reembolso"
@@ -2657,7 +3281,17 @@ msgstr "Pedido de reembolso"
 msgid "Refund Order"
 msgstr "Pedido de reembolso"
 
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:50
+msgid "Refund Pending"
+msgstr "Reembolso pendente"
+
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:125
+msgid "Refund Status"
+msgstr "Status do reembolso"
+
 #: src/components/common/OrderSummary/index.tsx:80
+#: src/components/common/StatBoxes/index.tsx:33
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:52
 msgid "Refunded"
 msgstr "Devolveu"
 
@@ -2665,13 +3299,22 @@ msgstr "Devolveu"
 msgid "Register"
 msgstr "Registro"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:405
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:82
+msgid "Remaining Uses"
+msgstr "Usos restantes"
+
+#: src/components/routes/product-widget/SelectProducts/index.tsx:441
 msgid "remove"
 msgstr "remover"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:406
+#: src/components/routes/product-widget/SelectProducts/index.tsx:442
 msgid "Remove"
 msgstr "Remover"
+
+#: src/components/layouts/Event/index.tsx:52
+#: src/components/routes/event/Reports/index.tsx:38
+msgid "Reports"
+msgstr "Relatórios"
 
 #: src/components/routes/event/GettingStarted/index.tsx:140
 msgid "Resend confirmation email"
@@ -2690,6 +3333,10 @@ msgid "Resend order email"
 msgstr "Reenviar e-mail do pedido"
 
 #: src/components/common/AttendeeTable/index.tsx:179
+#~ msgid "Resend product email"
+#~ msgstr "Reenviar e-mail do produto"
+
+#: src/components/common/AttendeeTable/index.tsx:172
 msgid "Resend ticket email"
 msgstr "Reenviar e-mail do ticket"
 
@@ -2709,11 +3356,15 @@ msgstr "Redefinir senha"
 msgid "Restore event"
 msgstr "Restaurar evento"
 
-#: src/components/routes/ticket-widget/Payment/index.tsx:45
+#: src/components/routes/product-widget/Payment/index.tsx:45
 msgid "Return to event page"
 msgstr "Voltar à página do evento"
 
-#: src/components/routes/event/EventDashboard/index.tsx:83
+#: src/components/layouts/Checkout/index.tsx:123
+msgid "Return to Event Page"
+msgstr "Voltar para a página do evento"
+
+#: src/components/routes/event/EventDashboard/index.tsx:117
 msgid "Revenue"
 msgstr "Receita"
 
@@ -2727,27 +3378,27 @@ msgstr "Revogar convite"
 msgid "Role"
 msgstr "Papel"
 
-#: src/components/forms/TicketForm/index.tsx:93
-#: src/components/forms/TicketForm/index.tsx:336
+#: src/components/forms/ProductForm/index.tsx:96
+#: src/components/forms/ProductForm/index.tsx:391
 msgid "Sale End Date"
 msgstr "Data de término da venda"
 
-#: src/components/common/TicketsTable/SortableTicket/index.tsx:73
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:73
 msgid "Sale ended"
 msgstr "A venda terminou"
 
-#: src/components/forms/TicketForm/index.tsx:88
-#: src/components/forms/TicketForm/index.tsx:334
+#: src/components/forms/ProductForm/index.tsx:91
+#: src/components/forms/ProductForm/index.tsx:389
 msgid "Sale Start Date"
 msgstr "Data de início da venda"
 
-#: src/components/common/TicketPriceAvailability/index.tsx:13
-#: src/components/common/TicketPriceAvailability/index.tsx:35
+#: src/components/common/ProductPriceAvailability/index.tsx:13
+#: src/components/common/ProductPriceAvailability/index.tsx:35
 msgid "Sales ended"
 msgstr "Vendas encerradas"
 
-#: src/components/common/TicketPriceAvailability/index.tsx:19
-#: src/components/common/TicketPriceAvailability/index.tsx:40
+#: src/components/common/ProductPriceAvailability/index.tsx:19
+#: src/components/common/ProductPriceAvailability/index.tsx:40
 msgid "Sales start"
 msgstr "Início das vendas"
 
@@ -2764,6 +3415,7 @@ msgstr "São Francisco"
 msgid "Save"
 msgstr "Salvar"
 
+#: src/components/modals/ManageAttendeeModal/index.tsx:215
 #: src/components/routes/event/HomepageDesigner/index.tsx:143
 msgid "Save Changes"
 msgstr "Salvar alterações"
@@ -2776,15 +3428,16 @@ msgstr "Salvar organizador"
 msgid "Save Settings"
 msgstr "Salvar configurações"
 
-#: src/components/common/AttendeeCheckInTable/index.tsx:173
-#: src/components/common/AttendeeCheckInTable/index.tsx:175
-#: src/components/layouts/CheckIn/index.tsx:293
-#: src/components/layouts/CheckIn/index.tsx:295
+#: src/components/layouts/CheckIn/index.tsx:292
+#: src/components/layouts/CheckIn/index.tsx:294
 msgid "Scan QR Code"
 msgstr "Digitalize o código QR"
 
-#: src/components/common/AttendeeCheckInTable/index.tsx:169
-#: src/components/layouts/CheckIn/index.tsx:289
+#: src/components/modals/ShareModal/index.tsx:229
+msgid "Scan this QR code to access the event page or share it with others"
+msgstr "Escaneie este código QR para acessar a página do evento ou compartilhe-o com outras pessoas"
+
+#: src/components/layouts/CheckIn/index.tsx:288
 msgid "Seach by name, order #, attendee # or email..."
 msgstr "Pesquise por nome, número do pedido, número do participante ou e-mail..."
 
@@ -2814,8 +3467,8 @@ msgid "Search by subject or content..."
 msgstr "Pesquise por assunto ou conteúdo..."
 
 #: src/components/routes/event/tickets.tsx:43
-msgid "Search by ticket name..."
-msgstr "Pesquisar por nome do ticket..."
+#~ msgid "Search by ticket name..."
+#~ msgstr "Pesquisar por nome do ticket..."
 
 #: src/components/routes/event/CapacityAssignments/index.tsx:37
 msgid "Search capacity assignments..."
@@ -2824,6 +3477,10 @@ msgstr "Pesquisar atribuições de capacidade..."
 #: src/components/routes/event/CheckInLists/index.tsx:37
 msgid "Search check-in lists..."
 msgstr "Pesquisar listas de registro..."
+
+#: src/components/routes/event/products.tsx:52
+msgid "Search products"
+msgstr "Buscar produtos"
 
 #: src/components/common/SearchBar/index.tsx:36
 msgid "Search..."
@@ -2845,50 +3502,69 @@ msgstr "Cor do texto secundário"
 msgid "Secondary Text Color"
 msgstr "Cor do texto secundário"
 
-#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:172
+#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:235
 msgid "Select Camera"
 msgstr "Selecione Câmera"
+
+#: src/components/forms/ProductForm/index.tsx:269
+msgid "Select category..."
+msgstr "Selecione a categoria..."
 
 #: src/components/modals/CreateEventModal/index.tsx:111
 msgid "Select organizer"
 msgstr "Selecione o organizador"
 
+#: src/components/modals/ManageAttendeeModal/index.tsx:103
+msgid "Select Product"
+msgstr "Selecione o Produto"
+
+#: src/components/common/ProductSelector/index.tsx:52
+msgid "Select Product Tier"
+msgstr "Selecione o Nível do Produto"
+
+#: src/components/forms/CapaciyAssigmentForm/index.tsx:49
+#: src/components/modals/SendMessageModal/index.tsx:166
+msgid "Select products"
+msgstr "Selecione os produtos"
+
 #: src/components/modals/EditUserModal/index.tsx:104
 msgid "Select status"
 msgstr "Selecione o status"
 
-#: src/components/modals/CreateAttendeeModal/index.tsx:149
+#: src/components/modals/CreateAttendeeModal/index.tsx:150
 msgid "Select Ticket"
 msgstr "Selecione o ingresso"
 
 #: src/components/modals/CreateAttendeeModal/index.tsx:163
 #: src/components/modals/EditAttendeeModal/index.tsx:117
-msgid "Select Ticket Tier"
-msgstr "Selecione o nível do ingresso"
+#~ msgid "Select Ticket Tier"
+#~ msgstr "Selecione o nível do ingresso"
 
-#: src/components/forms/CapaciyAssigmentForm/index.tsx:49
-#: src/components/forms/CheckInListForm/index.tsx:27
-#: src/components/forms/QuestionForm/index.tsx:161
+#: src/components/forms/CheckInListForm/index.tsx:26
 msgid "Select tickets"
 msgstr "Selecionar ingressos"
 
-#: src/components/forms/TicketForm/index.tsx:297
+#: src/components/common/ReportTable/index.tsx:261
+msgid "Select time period"
+msgstr "Selecione o período de tempo"
+
+#: src/components/forms/ProductForm/index.tsx:352
 msgid "Select..."
 msgstr "Selecione..."
 
-#: src/components/modals/SendMessageModal/index.tsx:230
+#: src/components/modals/SendMessageModal/index.tsx:227
 msgid "Send"
 msgstr "Enviar"
 
-#: src/components/modals/SendMessageModal/index.tsx:197
+#: src/components/modals/SendMessageModal/index.tsx:194
 msgid "Send a copy to <0>{0}</0>"
 msgstr "Envie uma cópia para <0>{0}</0>"
 
-#: src/components/modals/SendMessageModal/index.tsx:128
+#: src/components/modals/SendMessageModal/index.tsx:130
 msgid "Send a message"
 msgstr "Envie uma mensagem"
 
-#: src/components/modals/SendMessageModal/index.tsx:207
+#: src/components/modals/SendMessageModal/index.tsx:204
 msgid "Send as a test. This will send the message to your email address instead of the recipients."
 msgstr "Envie como teste. Isso enviará a mensagem para o seu endereço de e-mail, e não para os destinatários."
 
@@ -2896,13 +3572,21 @@ msgstr "Envie como teste. Isso enviará a mensagem para o seu endereço de e-mai
 msgid "Send Message"
 msgstr "Enviar Mensagem"
 
-#: src/components/modals/CreateAttendeeModal/index.tsx:206
+#: src/components/modals/CreateAttendeeModal/index.tsx:191
+#~ msgid "Send order confirmation and product email"
+#~ msgstr "Enviar confirmação do pedido e e-mail do produto"
+
+#: src/components/modals/CreateAttendeeModal/index.tsx:192
 msgid "Send order confirmation and ticket email"
 msgstr "Enviar confirmação do pedido e e-mail do ticket"
 
-#: src/components/modals/SendMessageModal/index.tsx:230
+#: src/components/modals/SendMessageModal/index.tsx:227
 msgid "Send Test"
 msgstr "Enviar teste"
+
+#: src/components/routes/event/Settings/index.tsx:44
+msgid "SEO"
+msgstr "SEO"
 
 #: src/components/routes/event/Settings/Sections/SeoSettings/index.tsx:70
 msgid "SEO Description"
@@ -2924,7 +3608,7 @@ msgstr "Título SEO"
 msgid "Service Fee"
 msgstr "Taxa de serviço"
 
-#: src/components/forms/TicketForm/index.tsx:141
+#: src/components/forms/ProductForm/index.tsx:159
 msgid "Set a minimum price and let users pay more if they choose"
 msgstr "Fixar um preço mínimo e permitir que os utilizadores paguem mais se assim o desejarem"
 
@@ -2936,28 +3620,75 @@ msgstr "Configure seu evento"
 msgid "Set your event live"
 msgstr "Defina seu evento ao vivo"
 
-#: src/components/layouts/Event/index.tsx:39
-#: src/components/routes/event/Settings/index.tsx:15
+#: src/components/layouts/Event/index.tsx:56
+#: src/components/routes/event/Settings/index.tsx:96
 msgid "Settings"
 msgstr "Configurações"
 
-#: src/components/common/ShareIcon/index.tsx:53
+#: src/components/common/ShareIcon/index.tsx:28
+#: src/components/modals/ShareModal/index.tsx:123
+#: src/components/modals/ShareModal/index.tsx:141
 msgid "Share"
 msgstr "Compartilhar"
 
-#: src/components/forms/TicketForm/index.tsx:289
+#: src/components/modals/ShareModal/index.tsx:116
+#: src/components/routes/event/EventDashboard/index.tsx:66
+msgid "Share Event"
+msgstr "Compartilhar evento"
+
+#: src/components/modals/ShareModal/index.tsx:169
+msgid "Share to Facebook"
+msgstr "Compartilhar no Facebook"
+
+#: src/components/modals/ShareModal/index.tsx:163
+msgid "Share to LinkedIn"
+msgstr "Compartilhar no LinkedIn"
+
+#: src/components/modals/ShareModal/index.tsx:193
+msgid "Share to Pinterest"
+msgstr "Compartilhar no Pinterest"
+
+#: src/components/modals/ShareModal/index.tsx:187
+msgid "Share to Reddit"
+msgstr "Compartilhar no Reddit"
+
+#: src/components/modals/ShareModal/index.tsx:148
+msgid "Share to Social"
+msgstr "Compartilhar em redes sociais"
+
+#: src/components/modals/ShareModal/index.tsx:181
+msgid "Share to Telegram"
+msgstr "Compartilhar no Telegram"
+
+#: src/components/modals/ShareModal/index.tsx:175
+msgid "Share to WhatsApp"
+msgstr "Compartilhar no WhatsApp"
+
+#: src/components/modals/ShareModal/index.tsx:157
+msgid "Share to X"
+msgstr "Compartilhar no X"
+
+#: src/components/modals/ShareModal/index.tsx:199
+msgid "Share via Email"
+msgstr "Compartilhar por e-mail"
+
+#: src/components/forms/ProductForm/index.tsx:344
 msgid "Show"
 msgstr "Mostrar"
 
+#: src/components/forms/ProductForm/index.tsx:403
+msgid "Show available product quantity"
+msgstr "Mostrar quantidade disponível do produto"
+
 #: src/components/forms/TicketForm/index.tsx:348
-msgid "Show available ticket quantity"
-msgstr "Mostrar quantidade de ingressos disponíveis"
+#~ msgid "Show available ticket quantity"
+#~ msgstr "Mostrar quantidade de ingressos disponíveis"
 
 #: src/components/common/QuestionsTable/index.tsx:274
 msgid "Show hidden questions"
 msgstr "Mostrar perguntas ocultas"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:365
+#: src/components/routes/product-widget/SelectProducts/index.tsx:396
 msgid "Show more"
 msgstr "Mostre mais"
 
@@ -2973,15 +3704,15 @@ msgstr "Mostrado ao cliente após a finalização da compra, na página de resum
 msgid "Shown to the customer before they checkout"
 msgstr "Mostrado ao cliente antes de finalizar a compra"
 
-#: src/components/forms/QuestionForm/index.tsx:131
+#: src/components/forms/QuestionForm/index.tsx:132
 msgid "Shows common address fields, including country"
 msgstr "Mostra campos de endereço comuns, incluindo país"
 
-#: src/components/modals/EditAttendeeModal/index.tsx:85
+#: src/components/modals/ManageAttendeeModal/index.tsx:96
 msgid "Simpson"
 msgstr "Simpson"
 
-#: src/components/forms/QuestionForm/index.tsx:99
+#: src/components/forms/QuestionForm/index.tsx:100
 msgid "Single line text box"
 msgstr "Caixa de texto de linha única"
 
@@ -2993,12 +3724,12 @@ msgstr "Pular esta etapa"
 msgid "Smith"
 msgstr "Smith"
 
-#: src/components/common/TicketPriceAvailability/index.tsx:9
-#: src/components/common/TicketPriceAvailability/index.tsx:32
+#: src/components/common/ProductPriceAvailability/index.tsx:9
+#: src/components/common/ProductPriceAvailability/index.tsx:32
 msgid "Sold out"
 msgstr "Vendido"
 
-#: src/components/common/TicketsTable/SortableTicket/index.tsx:65
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:65
 msgid "Sold Out"
 msgstr "Vendido"
 
@@ -3025,37 +3756,41 @@ msgstr "Algo deu errado."
 msgid "Something went wrong. Please try again."
 msgstr "Algo deu errado. Por favor, tente novamente."
 
-#: src/components/routes/ticket-widget/Payment/index.tsx:43
+#: src/components/routes/product-widget/Payment/index.tsx:43
 msgid "Sorry, something has gone wrong. Please restart the checkout process."
 msgstr "Desculpe, algo deu errado. Por favor, reinicie o processo de checkout."
 
-#: src/components/routes/ticket-widget/CollectInformation/index.tsx:237
+#: src/components/routes/product-widget/CollectInformation/index.tsx:244
 msgid "Sorry, something went wrong loading this page."
 msgstr "Desculpe, algo deu errado ao carregar esta página."
 
-#: src/components/routes/ticket-widget/CollectInformation/index.tsx:225
+#: src/components/routes/product-widget/CollectInformation/index.tsx:232
 msgid "Sorry, this order no longer exists."
 msgstr "Desculpe, este pedido não existe mais."
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:236
+#: src/components/routes/product-widget/SelectProducts/index.tsx:240
 msgid "Sorry, this promo code is not recognized"
 msgstr "Desculpe, este código promocional não é reconhecido"
 
 #: src/components/layouts/Checkout/index.tsx:26
-msgid "Sorry, your order has expired. Please start a new order."
-msgstr "Desculpe, seu pedido expirou. Por favor, inicie um novo pedido."
+#~ msgid "Sorry, your order has expired. Please start a new order."
+#~ msgstr "Desculpe, seu pedido expirou. Por favor, inicie um novo pedido."
 
 #: src/components/common/TicketsTable/SortableTicket/index.tsx:115
-msgid "Sorting is disabled while filters and sorting are applied"
-msgstr "A classificação está desativada enquanto os filtros e a classificação são aplicados"
+#~ msgid "Sorting is disabled while filters and sorting are applied"
+#~ msgstr "A classificação está desativada enquanto os filtros e a classificação são aplicados"
 
 #: src/components/common/LanguageSwitcher/index.tsx:18
 msgid "Spanish"
 msgstr "espanhol"
 
+#: src/components/forms/ProductForm/index.tsx:147
+msgid "Standard product with a fixed price"
+msgstr "Produto padrão com preço fixo"
+
 #: src/components/forms/TicketForm/index.tsx:129
-msgid "Standard ticket with a fixed price"
-msgstr "Bilhete padrão com preço fixo"
+#~ msgid "Standard ticket with a fixed price"
+#~ msgstr "Bilhete padrão com preço fixo"
 
 #: src/components/modals/CreateEventModal/index.tsx:145
 #: src/components/modals/DuplicateEventModal/index.tsx:92
@@ -3069,18 +3804,19 @@ msgstr "Data de início"
 msgid "State or Region"
 msgstr "Estado ou Região"
 
-#: src/components/common/AttendeeDetails/index.tsx:30
-#: src/components/common/AttendeeTable/index.tsx:113
-#: src/components/common/OrderDetails/index.tsx:43
+#: src/components/common/AttendeeDetails/index.tsx:29
+#: src/components/common/AttendeeTable/index.tsx:111
+#: src/components/common/OrderDetails/index.tsx:47
 #: src/components/common/OrdersTable/index.tsx:154
-#: src/components/common/TicketsTable/SortableTicket/index.tsx:138
-#: src/components/forms/CapaciyAssigmentForm/index.tsx:61
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:216
+#: src/components/forms/CapaciyAssigmentForm/index.tsx:56
 #: src/components/modals/EditUserModal/index.tsx:103
 #: src/components/routes/account/ManageAccount/sections/Users/index.tsx:157
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:88
 msgid "Status"
 msgstr "Status"
 
-#: src/components/modals/SendMessageModal/index.tsx:183
+#: src/components/modals/SendMessageModal/index.tsx:180
 msgid "Subject"
 msgstr "Assunto"
 
@@ -3093,14 +3829,14 @@ msgstr "Subtotal"
 msgid "Success! {0} will receive an email shortly."
 msgstr "Sucesso! {0} receberá um e-mail em breve."
 
-#: src/components/common/AttendeeTable/index.tsx:91
+#: src/components/common/AttendeeTable/index.tsx:89
 msgid "Successfully {0} attendee"
 msgstr "{0} participante com sucesso"
 
 #: src/components/common/AttendeeCheckInTable/index.tsx:47
 #: src/components/common/AttendeeCheckInTable/index.tsx:71
-msgid "Successfully checked <0>{0} {1}</0> {2}"
-msgstr "Verificado com sucesso <0>{0} {1}</0> {2}"
+#~ msgid "Successfully checked <0>{0} {1}</0> {2}"
+#~ msgstr "Verificado com sucesso <0>{0} {1}</0> {2}"
 
 #: src/components/routes/profile/ConfirmEmailAddress/index.tsx:23
 msgid "Successfully confirmed email address"
@@ -3110,9 +3846,13 @@ msgstr "Endereço de e-mail confirmado com sucesso"
 msgid "Successfully confirmed email change"
 msgstr "Alteração de e-mail confirmada com sucesso"
 
-#: src/components/modals/CreateAttendeeModal/index.tsx:78
+#: src/components/modals/CreateAttendeeModal/index.tsx:82
 msgid "Successfully created attendee"
 msgstr "Participante criado com sucesso"
+
+#: src/components/modals/CreateProductModal/index.tsx:56
+msgid "Successfully Created Product"
+msgstr "Produto Criado com Sucesso"
 
 #: src/components/modals/CreatePromoCodeModal/index.tsx:39
 msgid "Successfully Created Promo Code"
@@ -3124,10 +3864,10 @@ msgid "Successfully Created Question"
 msgstr "Pergunta criada com sucesso"
 
 #: src/components/modals/CreateTicketModal/index.tsx:50
-msgid "Successfully Created Ticket"
-msgstr "Ticket criado com sucesso"
+#~ msgid "Successfully Created Ticket"
+#~ msgstr "Ticket criado com sucesso"
 
-#: src/components/modals/EditAttendeeModal/index.tsx:60
+#: src/components/modals/ManageAttendeeModal/index.tsx:81
 msgid "Successfully updated attendee"
 msgstr "Participante atualizado com sucesso"
 
@@ -3163,6 +3903,10 @@ msgstr "Local atualizado com sucesso"
 msgid "Successfully Updated Misc Settings"
 msgstr "Configurações diversas atualizadas com sucesso"
 
+#: src/components/modals/EditProductModal/index.tsx:89
+msgid "Successfully updated product"
+msgstr "Produto atualizado com sucesso"
+
 #: src/components/modals/EditPromoCodeModal/index.tsx:52
 msgid "Successfully Updated Promo Code"
 msgstr "Código promocional atualizado com sucesso"
@@ -3172,8 +3916,8 @@ msgid "Successfully Updated Seo Settings"
 msgstr "Configurações de SEO atualizadas com sucesso"
 
 #: src/components/modals/EditTicketModal/index.tsx:85
-msgid "Successfully updated ticket"
-msgstr "Ticket atualizado com sucesso"
+#~ msgid "Successfully updated ticket"
+#~ msgstr "Ticket atualizado com sucesso"
 
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:119
 msgid "Suite 100"
@@ -3202,17 +3946,17 @@ msgstr "Impostos e taxas"
 msgid "Tax or Fee deleted successfully"
 msgstr "Imposto ou taxa excluídos com sucesso"
 
-#: src/components/forms/TicketForm/index.tsx:308
+#: src/components/forms/ProductForm/index.tsx:363
 msgid "Taxes"
 msgstr "Impostos"
 
-#: src/components/forms/TicketForm/index.tsx:296
-#: src/components/forms/TicketForm/index.tsx:303
+#: src/components/forms/ProductForm/index.tsx:351
+#: src/components/forms/ProductForm/index.tsx:358
 msgid "Taxes and Fees"
 msgstr "Impostos e Taxas"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:132
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:180
+#: src/components/routes/product-widget/SelectProducts/index.tsx:132
+#: src/components/routes/product-widget/SelectProducts/index.tsx:180
 msgid "That promo code is invalid"
 msgstr "Esse código promocional é inválido"
 
@@ -3230,7 +3974,7 @@ msgstr "A moeda padrão para seus eventos."
 msgid "The default timezone for your events."
 msgstr "O fuso horário padrão para seus eventos."
 
-#: src/components/modals/CreateAttendeeModal/index.tsx:142
+#: src/components/modals/CreateAttendeeModal/index.tsx:146
 msgid "The language the attendee will receive emails in."
 msgstr "A língua em que o participante receberá as mensagens de correio eletrónico."
 
@@ -3238,9 +3982,13 @@ msgstr "A língua em que o participante receberá as mensagens de correio eletr�
 msgid "The link you clicked is invalid."
 msgstr "O link que você clicou é inválido."
 
+#: src/components/routes/product-widget/SelectProducts/index.tsx:381
+msgid "The maximum number of products for {0}is {1}"
+msgstr "O número máximo de produtos para {0} é {1}"
+
 #: src/components/routes/ticket-widget/SelectTickets/index.tsx:351
-msgid "The maximum numbers number of tickets for {0}is {1}"
-msgstr "O número máximo de bilhetes para {0} é {1}"
+#~ msgid "The maximum numbers number of tickets for {0}is {1}"
+#~ msgstr "O número máximo de bilhetes para {0} é {1}"
 
 #: src/components/routes/ticket-widget/SelectTickets/index.tsx:318
 #~ msgid "The maximum numbers number of tickets for Generals is {0}"
@@ -3262,17 +4010,29 @@ msgstr "O preço apresentado ao cliente não incluirá impostos e taxas. Eles se
 msgid "The styling settings you choose apply only to copied HTML and won't be stored."
 msgstr "As configurações de estilo escolhidas aplicam-se somente ao HTML copiado e não serão armazenadas."
 
+#: src/components/forms/ProductForm/index.tsx:355
+msgid "The taxes and fees to apply to this product. You can create new taxes and fees on the"
+msgstr "Os impostos e taxas a serem aplicados a este produto. Você pode criar novos impostos e taxas no"
+
 #: src/components/forms/TicketForm/index.tsx:300
-msgid "The taxes and fees to apply to this ticket. You can create new taxes and fees on the"
-msgstr "Os impostos e taxas aplicáveis a este bilhete. Você pode criar novos impostos e taxas sobre o"
+#~ msgid "The taxes and fees to apply to this ticket. You can create new taxes and fees on the"
+#~ msgstr "Os impostos e taxas aplicáveis a este bilhete. Você pode criar novos impostos e taxas sobre o"
 
 #: src/components/routes/event/Settings/Sections/SeoSettings/index.tsx:63
 msgid "The title of the event that will be displayed in search engine results and when sharing on social media. By default, the event title will be used"
 msgstr "O título do evento que será exibido nos resultados dos buscadores e no compartilhamento nas redes sociais. Por padrão, o título do evento será usado"
 
+#: src/components/routes/product-widget/SelectProducts/index.tsx:266
+msgid "There are no products available for this event"
+msgstr "Não há produtos disponíveis para este evento"
+
+#: src/components/routes/product-widget/SelectProducts/index.tsx:312
+msgid "There are no products available in this category"
+msgstr "Não há produtos disponíveis nesta categoria"
+
 #: src/components/routes/ticket-widget/SelectTickets/index.tsx:260
-msgid "There are no tickets available for this event"
-msgstr "Não há ingressos disponíveis para este evento"
+#~ msgid "There are no tickets available for this event"
+#~ msgstr "Não há ingressos disponíveis para este evento"
 
 #: src/components/modals/RefundOrderModal/index.tsx:135
 msgid "There is a refund pending. Please wait for it to complete before requesting another refund."
@@ -3286,31 +4046,39 @@ msgstr "Houve um erro ao processar seu pedido. Por favor, tente novamente."
 msgid "There was an error sending your message"
 msgstr "Houve um erro ao enviar a sua mensagem"
 
-#: src/components/common/CheckInListList/index.tsx:84
+#: src/components/common/ProductsTable/ProductsBlankSlate/index.tsx:61
+msgid "This category doesn't have any products yet."
+msgstr "Esta categoria ainda não possui produtos."
+
+#: src/components/common/ProductsTable/SortableCategory/index.tsx:112
+msgid "This category is hidden from public view"
+msgstr "Esta categoria está oculta da visualização pública"
+
+#: src/components/common/CheckInListList/index.tsx:75
 msgid "This check-in list has expired"
 msgstr "Esta lista de registro expirou"
 
-#: src/components/layouts/CheckIn/index.tsx:223
+#: src/components/layouts/CheckIn/index.tsx:222
 msgid "This check-in list has expired and is no longer available for check-ins."
 msgstr "Esta lista de registro expirou e não está mais disponível para registros."
 
-#: src/components/common/CheckInListList/index.tsx:91
+#: src/components/common/CheckInListList/index.tsx:82
 msgid "This check-in list is active"
 msgstr "Esta lista de registro está ativa"
 
-#: src/components/common/CheckInListList/index.tsx:88
+#: src/components/common/CheckInListList/index.tsx:79
 msgid "This check-in list is not active yet"
 msgstr "Esta lista de registro ainda não está ativa"
 
-#: src/components/layouts/CheckIn/index.tsx:240
+#: src/components/layouts/CheckIn/index.tsx:239
 msgid "This check-in list is not yet active and is not available for check-ins."
 msgstr "Esta lista de registro ainda não está ativa e não está disponível para registros."
 
-#: src/components/forms/CheckInListForm/index.tsx:43
+#: src/components/forms/CheckInListForm/index.tsx:37
 msgid "This description will be shown to the check-in staff"
 msgstr "Esta descrição será mostrada à equipe de registro"
 
-#: src/components/modals/SendMessageModal/index.tsx:223
+#: src/components/modals/SendMessageModal/index.tsx:220
 msgid "This email is not promotional and is directly related to the event."
 msgstr "Este e-mail não é promocional e está diretamente relacionado ao evento."
 
@@ -3322,11 +4090,15 @@ msgstr "Este evento não está disponível no momento. Por favor, volte mais tar
 msgid "This event is not available."
 msgstr "Este evento não está disponível."
 
+#: src/components/forms/ProductForm/index.tsx:138
+msgid "This is a general product, like a t-shirt or a mug. No ticket will be issued"
+msgstr "Este é um produto geral, como uma camiseta ou uma caneca. Nenhum ingresso será emitido"
+
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:91
 msgid "This is an online event"
 msgstr "Este é um evento on-line"
 
-#: src/components/forms/CheckInListForm/index.tsx:63
+#: src/components/forms/CheckInListForm/index.tsx:57
 msgid "This list will no longer be available for check-ins after this date"
 msgstr "Esta lista não estará mais disponível para registros após esta data"
 
@@ -3342,28 +4114,32 @@ msgstr "Este pedido já foi pago."
 msgid "This order has already been refunded."
 msgstr "Este pedido já foi reembolsado."
 
-#: src/components/routes/ticket-widget/CollectInformation/index.tsx:211
+#: src/components/routes/product-widget/CollectInformation/index.tsx:222
 msgid "This order has been cancelled"
 msgstr "Esse pedido foi cancelado"
 
-#: src/components/routes/ticket-widget/OrderSummaryAndTickets/index.tsx:25
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:199
 msgid "This order has been cancelled."
 msgstr "Esse pedido foi cancelado."
 
-#: src/components/routes/ticket-widget/CollectInformation/index.tsx:195
+#: src/components/routes/product-widget/CollectInformation/index.tsx:195
+msgid "This order has expired. Please start again."
+msgstr "Este pedido expirou. Por favor, recomece."
+
+#: src/components/routes/product-widget/CollectInformation/index.tsx:206
 msgid "This order is awaiting payment"
 msgstr "Este pedido está aguardando pagamento"
 
-#: src/components/routes/ticket-widget/CollectInformation/index.tsx:203
+#: src/components/routes/product-widget/CollectInformation/index.tsx:214
 msgid "This order is complete"
 msgstr "Este pedido está completo"
 
-#: src/components/routes/ticket-widget/OrderSummaryAndTickets/index.tsx:27
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:201
 msgid "This order is complete."
 msgstr "Este pedido está completo."
 
-#: src/components/routes/ticket-widget/OrderSummaryAndTickets/index.tsx:20
-#: src/components/routes/ticket-widget/OrderSummaryAndTickets/index.tsx:23
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:194
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:197
 msgid "This order is processing."
 msgstr "Este pedido está sendo processado."
 
@@ -3371,9 +4147,29 @@ msgstr "Este pedido está sendo processado."
 msgid "This order page is no longer available."
 msgstr "Esta página de pedido não está mais disponível."
 
+#: src/components/forms/ProductForm/index.tsx:415
+msgid "This overrides all visibility settings and will hide the product from all customers."
+msgstr "Isso substitui todas as configurações de visibilidade e ocultará o produto de todos os clientes."
+
 #: src/components/forms/TicketForm/index.tsx:360
-msgid "This overrides all visibility settings and will hide the ticket from all customers."
-msgstr "Isso substituirá todas as configurações de visibilidade e ocultará o ticket de todos os clientes."
+#~ msgid "This overrides all visibility settings and will hide the ticket from all customers."
+#~ msgstr "Isso substituirá todas as configurações de visibilidade e ocultará o ticket de todos os clientes."
+
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:57
+msgid "This product cannot be deleted because it is associated with an order. You can hide it instead."
+msgstr "Este produto não pode ser excluído porque está associado a um pedido. Você pode ocultá-lo em vez disso."
+
+#: src/components/forms/ProductForm/index.tsx:132
+msgid "This product is a ticket. Buyers will be issued a ticket upon purchase"
+msgstr "Este produto é um ingresso. Os compradores receberão um ingresso ao comprar"
+
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:209
+msgid "This product is hidden from public view"
+msgstr "Este produto está oculto da visualização pública"
+
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:210
+msgid "This product is hidden unless targeted by a Promo Code"
+msgstr "Este produto está oculto a menos que seja direcionado por um Código Promocional"
 
 #: src/components/common/QuestionsTable/index.tsx:88
 msgid "This question is only visible to the event organizer"
@@ -3384,133 +4180,155 @@ msgid "This reset password link is invalid or expired."
 msgstr "Este link de redefinição de senha é inválido ou expirou."
 
 #: src/components/common/TicketsTable/SortableTicket/index.tsx:56
-msgid ""
-"This ticket cannot be deleted because it is\n"
-"associated with an order. You can hide it instead."
-msgstr ""
-"Este ticket não pode ser excluído porque é\n"
-"associado a um pedido. Você pode ocultá-lo."
+#~ msgid ""
+#~ "This ticket cannot be deleted because it is\n"
+#~ "associated with an order. You can hide it instead."
+#~ msgstr ""
+#~ "Este ticket não pode ser excluído porque é\n"
+#~ "associado a um pedido. Você pode ocultá-lo."
 
 #: src/components/common/TicketsTable/SortableTicket/index.tsx:131
-msgid "This ticket is hidden from public view"
-msgstr "Este ingresso está oculto da visualização pública"
+#~ msgid "This ticket is hidden from public view"
+#~ msgstr "Este ingresso está oculto da visualização pública"
 
 #: src/components/common/TicketsTable/SortableTicket/index.tsx:132
-msgid "This ticket is hidden unless targeted by a Promo Code"
-msgstr "Este ingresso fica oculto, a menos que seja alvo de um código promocional"
+#~ msgid "This ticket is hidden unless targeted by a Promo Code"
+#~ msgstr "Este ingresso fica oculto, a menos que seja alvo de um código promocional"
 
 #: src/components/modals/EditUserModal/index.tsx:65
 msgid "This user is not active, as they have not accepted their invitation."
 msgstr "Este usuário não está ativo porque não aceitou o convite."
 
-#: src/components/common/AttendeeTable/index.tsx:190
+#: src/components/common/AttendeeTable/index.tsx:183
 msgid "ticket"
 msgstr "bilhete"
 
-#: src/components/common/AttendeeDetails/index.tsx:46
-#: src/components/common/AttendeeTable/index.tsx:112
-#: src/components/modals/CreateAttendeeModal/index.tsx:146
-#: src/components/modals/EditAttendeeModal/index.tsx:108
-#: src/components/modals/ViewAttendeeModal/index.tsx:55
+#: src/components/common/AttendeeTable/index.tsx:110
+#: src/components/forms/ProductForm/index.tsx:130
+#: src/components/modals/CreateAttendeeModal/index.tsx:151
 msgid "Ticket"
 msgstr "Bilhete"
 
 #: src/components/common/TicketsTable/SortableTicket/index.tsx:52
-msgid "Ticket deleted successfully"
-msgstr "Ticket excluído com sucesso"
+#~ msgid "Ticket deleted successfully"
+#~ msgstr "Ticket excluído com sucesso"
 
-#: src/components/common/AttendeeTable/index.tsx:50
+#: src/components/common/AttendeeTable/index.tsx:48
 msgid "Ticket email has been resent to attendee"
 msgstr "O e-mail do ticket foi reenviado ao participante"
 
 #: src/components/routes/event/EventDashboard/index.tsx:53
-msgid "Ticket Sales"
-msgstr "Venda de ingressos"
+#~ msgid "Ticket Sales"
+#~ msgstr "Venda de ingressos"
 
 #: src/components/modals/CreateAttendeeModal/index.tsx:161
 #: src/components/modals/EditAttendeeModal/index.tsx:115
-msgid "Ticket Tier"
-msgstr "Nível de ingresso"
+#~ msgid "Ticket Tier"
+#~ msgstr "Nível de ingresso"
 
 #: src/components/forms/TicketForm/index.tsx:189
 #: src/components/forms/TicketForm/index.tsx:196
-msgid "Ticket Type"
-msgstr "Tipo de bilhete"
+#~ msgid "Ticket Type"
+#~ msgstr "Tipo de bilhete"
 
 #: src/components/common/WidgetEditor/index.tsx:311
-msgid "Ticket Widget Preview"
-msgstr "Visualização do widget de ingressos"
+#~ msgid "Ticket Widget Preview"
+#~ msgstr "Visualização do widget de ingressos"
 
 #: src/components/common/PromoCodeTable/index.tsx:147
-msgid "Ticket(s)"
-msgstr "Ingressos"
+#~ msgid "Ticket(s)"
+#~ msgstr "Ingressos"
 
 #: src/components/common/PromoCodeTable/index.tsx:71
 #: src/components/layouts/Event/index.tsx:40
 #: src/components/layouts/EventHomepage/index.tsx:80
 #: src/components/routes/event/tickets.tsx:39
-msgid "Tickets"
-msgstr "Ingressos"
+#~ msgid "Tickets"
+#~ msgstr "Ingressos"
 
-#: src/components/routes/ticket-widget/PrintOrder/index.tsx:43
+#: src/components/routes/product-widget/PrintOrder/index.tsx:43
 msgid "Tickets for"
 msgstr "Ingressos para"
 
 #: src/components/common/EventCard/index.tsx:126
-msgid "tickets sold"
-msgstr "bilhetes vendidos"
+#~ msgid "tickets sold"
+#~ msgstr "bilhetes vendidos"
 
 #: src/components/common/StatBoxes/index.tsx:21
-msgid "Tickets sold"
-msgstr "Ingressos vendidos"
+#~ msgid "Tickets sold"
+#~ msgstr "Ingressos vendidos"
 
 #: src/components/routes/event/EventDashboard/index.tsx:73
-msgid "Tickets Sold"
-msgstr "Ingressos vendidos"
+#~ msgid "Tickets Sold"
+#~ msgstr "Ingressos vendidos"
 
 #: src/components/common/TicketsTable/index.tsx:44
-msgid "Tickets sorted successfully"
-msgstr "Tickets classificados com sucesso"
+#~ msgid "Tickets sorted successfully"
+#~ msgstr "Tickets classificados com sucesso"
 
-#: src/components/forms/TicketForm/index.tsx:64
+#: src/components/forms/ProductForm/index.tsx:67
 msgid "Tier {0}"
 msgstr "Nível {0}"
 
+#: src/components/forms/ProductForm/index.tsx:163
+msgid "Tiered Product"
+msgstr "Produto em Camadas"
+
+#: src/components/forms/ProductForm/index.tsx:240
+#~ msgid ""
+#~ "Tiered products allow you to offer multiple price options for the same product.\n"
+#~ "This is perfect for early bird products, or offering different price\n"
+#~ "options for different groups of people."
+#~ msgstr ""
+
+#: src/components/forms/ProductForm/index.tsx:243
+msgid "Tiered products allow you to offer multiple price options for the same product. This is perfect for early bird products, or offering different price options for different groups of people."
+msgstr "Os produtos escalonados permitem que você ofereça múltiplas opções de preço para o mesmo produto. Isso é perfeito para produtos antecipados ou para oferecer diferentes opções de preço para diferentes grupos de pessoas.\" # pt"
+
 #: src/components/forms/TicketForm/index.tsx:145
-msgid "Tiered Ticket"
-msgstr "Bilhete em camadas"
+#~ msgid "Tiered Ticket"
+#~ msgstr "Bilhete em camadas"
 
 #: src/components/forms/TicketForm/index.tsx:203
-msgid ""
-"Tiered tickets allow you to offer multiple price options for the same ticket.\n"
-"This is perfect for early bird tickets, or offering different price\n"
-"options for different groups of people."
-msgstr ""
-"Os ingressos escalonados permitem que você ofereça várias opções de preços para o mesmo ingresso.\n"
-"Isso é perfeito para ingressos antecipados ou com preços diferentes\n"
-"opções para diferentes grupos de pessoas."
+#~ msgid ""
+#~ "Tiered tickets allow you to offer multiple price options for the same ticket.\n"
+#~ "This is perfect for early bird tickets, or offering different price\n"
+#~ "options for different groups of people."
+#~ msgstr ""
+#~ "Os ingressos escalonados permitem que você ofereça várias opções de preços para o mesmo ingresso.\n"
+#~ "Isso é perfeito para ingressos antecipados ou com preços diferentes\n"
+#~ "opções para diferentes grupos de pessoas."
 
-#: src/components/common/PromoCodeTable/index.tsx:70
+#: src/components/layouts/Checkout/index.tsx:60
+msgid "Time left:"
+msgstr "Tempo restante:"
+
+#: src/components/common/PromoCodeTable/index.tsx:71
 msgid "Times used"
 msgstr "Tempos usados"
+
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:25
+msgid "Times Used"
+msgstr "Vezes usado"
 
 #: src/components/forms/OrganizerForm/index.tsx:54
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:82
 #: src/components/routes/auth/AcceptInvitation/index.tsx:100
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:109
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:171
 #: src/components/routes/profile/ManageProfile/index.tsx:161
 msgid "Timezone"
 msgstr "Fuso horário"
 
-#: src/components/forms/PromoCodeForm/index.tsx:35
+#: src/components/forms/PromoCodeForm/index.tsx:36
 msgid "TIP"
 msgstr "DICA"
 
-#: src/components/common/TicketsTable/SortableTicket/index.tsx:122
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:200
 msgid "Title"
 msgstr "Título"
 
-#: src/components/layouts/Event/index.tsx:49
+#: src/components/layouts/Event/index.tsx:65
 msgid "Tools"
 msgstr "Ferramentas"
 
@@ -3518,25 +4336,41 @@ msgstr "Ferramentas"
 msgid "Total"
 msgstr "Total"
 
-#: src/components/routes/event/EventDashboard/index.tsx:106
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:52
+msgid "Total Before Discounts"
+msgstr "Total antes de descontos"
+
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:58
+msgid "Total Discount Amount"
+msgstr "Montante total do desconto"
+
+#: src/components/routes/event/EventDashboard/index.tsx:141
 msgid "Total Fees"
 msgstr "Taxas totais"
 
-#: src/components/common/OrderDetails/index.tsx:51
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:46
+msgid "Total Gross Sales"
+msgstr "Total de vendas brutas"
+
+#: src/components/common/OrderDetails/index.tsx:55
 #: src/components/modals/RefundOrderModal/index.tsx:74
 msgid "Total order amount"
 msgstr "Valor total do pedido"
 
-#: src/components/common/OrderDetails/index.tsx:59
+#: src/components/common/OrderDetails/index.tsx:63
 #: src/components/modals/RefundOrderModal/index.tsx:82
 msgid "Total refunded"
 msgstr "Total reembolsado"
+
+#: src/components/routes/event/EventDashboard/index.tsx:144
+msgid "Total Refunded"
+msgstr "Total Reembolsado"
 
 #: src/components/modals/RefundOrderModal/index.tsx:90
 msgid "Total remaining"
 msgstr "Total restante"
 
-#: src/components/routes/event/EventDashboard/index.tsx:108
+#: src/components/routes/event/EventDashboard/index.tsx:143
 msgid "Total Tax"
 msgstr "Taxa total"
 
@@ -3546,8 +4380,8 @@ msgstr "Tipo"
 
 #: src/components/common/AttendeeCheckInTable/index.tsx:54
 #: src/components/common/AttendeeCheckInTable/index.tsx:81
-msgid "Unable to {0} attendee"
-msgstr "Não foi possível {0} participante"
+#~ msgid "Unable to {0} attendee"
+#~ msgstr "Não foi possível {0} participante"
 
 #: src/components/layouts/CheckIn/index.tsx:96
 #: src/components/layouts/CheckIn/index.tsx:130
@@ -3558,35 +4392,49 @@ msgstr "Não foi possível registrar o participante"
 msgid "Unable to check out attendee"
 msgstr "Não foi possível retirar o participante"
 
+#: src/components/modals/CreateProductModal/index.tsx:71
+msgid "Unable to create product. Please check the your details"
+msgstr "Não foi possível criar o produto. Por favor, verifique seus detalhes"
+
+#: src/components/routes/product-widget/SelectProducts/index.tsx:117
+msgid "Unable to create product. Please check your details"
+msgstr "Não foi possível criar o produto. Por favor, verifique seus detalhes"
+
 #: src/components/modals/CreateQuestionModal/index.tsx:59
 msgid "Unable to create question. Please check the your details"
 msgstr "Não foi possível criar a pergunta. Por favor verifique os seus dados"
 
 #: src/components/modals/CreateTicketModal/index.tsx:65
 #: src/components/routes/ticket-widget/SelectTickets/index.tsx:117
-msgid "Unable to create ticket. Please check the your details"
-msgstr "Não foi possível criar o ticket. Por favor verifique os seus dados"
+#~ msgid "Unable to create ticket. Please check the your details"
+#~ msgstr "Não foi possível criar o ticket. Por favor verifique os seus dados"
 
 #: src/components/modals/EditQuestionModal/index.tsx:83
 msgid "Unable to update question. Please check the your details"
 msgstr "Não foi possível atualizar a pergunta. Por favor verifique os seus dados"
 
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:30
+msgid "Unique Customers"
+msgstr "Clientes únicos"
+
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:144
 msgid "United States"
 msgstr "Estados Unidos"
 
-#: src/components/forms/CapaciyAssigmentForm/index.tsx:42
-#: src/components/forms/PromoCodeForm/index.tsx:85
-#: src/components/forms/TicketForm/index.tsx:80
-#: src/components/forms/TicketForm/index.tsx:244
+#: src/components/forms/CapaciyAssigmentForm/index.tsx:43
+#: src/components/forms/ProductForm/index.tsx:83
+#: src/components/forms/ProductForm/index.tsx:299
+#: src/components/forms/PromoCodeForm/index.tsx:82
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:78
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:84
 msgid "Unlimited"
 msgstr "Ilimitado"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:316
+#: src/components/routes/product-widget/SelectProducts/index.tsx:344
 msgid "Unlimited available"
 msgstr "Ilimitado disponível"
 
-#: src/components/common/PromoCodeTable/index.tsx:125
+#: src/components/common/PromoCodeTable/index.tsx:126
 msgid "Unlimited usages allowed"
 msgstr "Usos ilimitados permitidos"
 
@@ -3615,13 +4463,21 @@ msgstr "Atualizar perfil"
 msgid "Upload Cover"
 msgstr "Carregar capa"
 
-#: src/components/common/PromoCodeTable/index.tsx:174
+#: src/components/modals/ShareModal/index.tsx:129
+msgid "URL"
+msgstr "URL"
+
+#: src/components/common/PromoCodeTable/index.tsx:175
 msgid "URL copied to clipboard"
 msgstr "URL copiado para a área de transferência"
 
 #: src/components/common/WidgetEditor/index.tsx:296
 msgid "Usage Example"
 msgstr "Exemplo de uso"
+
+#: src/components/routes/event/Reports/PromoCodesReport/index.tsx:76
+msgid "Usage Limit"
+msgstr "Limite de uso"
 
 #: src/components/routes/event/HomepageDesigner/index.tsx:108
 msgid "Use a blurred version of the cover image as the background"
@@ -3663,9 +4519,17 @@ msgstr "CUBA"
 msgid "Venue Name"
 msgstr "Nome do local"
 
+#: src/components/modals/ManageAttendeeModal/index.tsx:204
+msgid "View"
+msgstr "Visualizar"
+
 #: src/components/common/AttendeeTable/index.tsx:164
-msgid "View attendee"
-msgstr "Ver participante"
+#~ msgid "View attendee"
+#~ msgstr "Ver participante"
+
+#: src/components/common/AttendeeList/index.tsx:57
+msgid "View Attendee Details"
+msgstr "Ver Detalhes do Participante"
 
 #: src/components/layouts/Checkout/index.tsx:55
 #~ msgid "View event homepage"
@@ -3693,7 +4557,7 @@ msgstr "Ver pedido"
 
 #: src/components/forms/StripeCheckoutForm/index.tsx:69
 #: src/components/forms/StripeCheckoutForm/index.tsx:79
-#: src/components/routes/ticket-widget/CollectInformation/index.tsx:205
+#: src/components/routes/product-widget/CollectInformation/index.tsx:216
 msgid "View order details"
 msgstr "Ver detalhes do pedido"
 
@@ -3701,21 +4565,37 @@ msgstr "Ver detalhes do pedido"
 msgid "VIP check-in list"
 msgstr "Lista de check-in VIP"
 
-#: src/components/forms/TicketForm/index.tsx:212
-msgid "VIP Ticket"
-msgstr "Bilhete VIP"
+#: src/components/forms/ProductForm/index.tsx:254
+msgid "VIP Product"
+msgstr "Produto VIP"
 
-#: src/components/forms/TicketForm/index.tsx:339
+#: src/components/forms/TicketForm/index.tsx:212
+#~ msgid "VIP Ticket"
+#~ msgstr "Bilhete VIP"
+
+#: src/components/forms/ProductForm/index.tsx:394
 msgid "Visibility"
 msgstr "Visibilidade"
 
-#: src/components/routes/ticket-widget/PaymentReturn/index.tsx:77
+#: src/components/routes/product-widget/PaymentReturn/index.tsx:77
 msgid "We could not process your payment. Please try again or contact support."
 msgstr "Não foi possível processar seu pagamento. Tente novamente ou entre em contato com o suporte."
+
+#: src/components/common/ProductsTable/SortableCategory/index.tsx:53
+msgid "We couldn't delete the category. Please try again."
+msgstr "Não conseguimos excluir a categoria. Por favor, tente novamente."
+
+#: src/components/common/ProductsTable/ProductsBlankSlate/index.tsx:24
+msgid "We couldn't find any tickets matching {0}"
+msgstr "Não encontramos nenhum ingresso correspondente a {0}"
 
 #: src/components/common/ErrorLoadingMessage/index.tsx:13
 msgid "We couldn't load the data. Please try again."
 msgstr "Não foi possível carregar os dados. Por favor, tente novamente."
+
+#: src/components/common/ProductsTable/SortableCategory/index.tsx:94
+msgid "We couldn't reorder the categories. Please try again."
+msgstr "Não conseguimos reordenar as categorias. Por favor, tente novamente."
 
 #: src/components/routes/event/HomepageDesigner/index.tsx:83
 msgid "We recommend dimensions of 2160px by 1080px, and a maximum file size of 5MB"
@@ -3725,11 +4605,11 @@ msgstr "Recomendamos dimensões de 2160px por 1080px e tamanho máximo de arquiv
 msgid "We use Stripe to process payments. Connect your Stripe account to start receiving payments."
 msgstr "Usamos Stripe para processar pagamentos. Conecte sua conta Stripe para começar a receber pagamentos."
 
-#: src/components/routes/ticket-widget/PaymentReturn/index.tsx:84
+#: src/components/routes/product-widget/PaymentReturn/index.tsx:84
 msgid "We were unable to confirm your payment. Please try again or contact support."
 msgstr "Não foi possível confirmar seu pagamento. Tente novamente ou entre em contato com o suporte."
 
-#: src/components/routes/ticket-widget/PaymentReturn/index.tsx:79
+#: src/components/routes/product-widget/PaymentReturn/index.tsx:79
 msgid "We're processing your order. Please wait..."
 msgstr "Estamos processando seu pedido. Por favor, aguarde..."
 
@@ -3737,7 +4617,7 @@ msgstr "Estamos processando seu pedido. Por favor, aguarde..."
 msgid "Welcome aboard! Please login to continue."
 msgstr "Bem vindo a bordo! Por favor faça o login para continuar."
 
-#: src/components/routes/event/EventDashboard/index.tsx:41
+#: src/components/routes/event/EventDashboard/index.tsx:48
 msgid "Welcome back{0} 👋"
 msgstr "Bem vindo de volta{0} 👋"
 
@@ -3745,32 +4625,52 @@ msgstr "Bem vindo de volta{0} 👋"
 msgid "Welcome to Hi.Events, {0} 👋"
 msgstr "Bem-vindo ao Hi.Events, {0} 👋"
 
-#: src/components/forms/TicketForm/index.tsx:202
-msgid "What are Tiered Tickets?"
-msgstr "O que são ingressos diferenciados?"
+#: src/components/forms/ProductForm/index.tsx:242
+msgid "What are Tiered Products?"
+msgstr "O que são Produtos em Camadas?"
 
-#: src/components/forms/CheckInListForm/index.tsx:56
+#: src/components/forms/TicketForm/index.tsx:202
+#~ msgid "What are Tiered Tickets?"
+#~ msgstr "O que são ingressos diferenciados?"
+
+#: src/components/forms/CheckInListForm/index.tsx:50
 msgid "What date should this check-in list become active?"
 msgstr "Em que data esta lista de registro deve se tornar ativa?"
 
+#: src/components/modals/CreateProductCategoryModal/index.tsx:53
+msgid "What is a Category?"
+msgstr "O que é uma Categoria?"
+
+#: src/components/forms/QuestionForm/index.tsx:159
+msgid "What products does this code apply to?"
+msgstr "A quais produtos este código se aplica?"
+
 #: src/components/forms/PromoCodeForm/index.tsx:68
-msgid "What tickets does this code apply to? (Applies to all by default)"
-msgstr "A quais ingressos esse código se aplica? (Aplica-se a todos por padrão)"
+msgid "What products does this code apply to? (Applies to all by default)"
+msgstr "A quais produtos este código se aplica? (Aplica-se a todos por padrão)"
+
+#: src/components/forms/CapaciyAssigmentForm/index.tsx:48
+msgid "What products should this capacity apply to?"
+msgstr "A quais produtos essa capacidade deve se aplicar?"
+
+#: src/components/forms/PromoCodeForm/index.tsx:68
+#~ msgid "What tickets does this code apply to? (Applies to all by default)"
+#~ msgstr "A quais ingressos esse código se aplica? (Aplica-se a todos por padrão)"
 
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:47
 #: src/components/forms/QuestionForm/index.tsx:159
-msgid "What tickets should this question be apply to?"
-msgstr "A quais tickets esta pergunta deve ser aplicada?"
+#~ msgid "What tickets should this question be apply to?"
+#~ msgstr "A quais tickets esta pergunta deve ser aplicada?"
 
-#: src/components/forms/QuestionForm/index.tsx:185
+#: src/components/forms/QuestionForm/index.tsx:180
 msgid "What time will you be arriving?"
 msgstr "A que horas você chegará?"
 
-#: src/components/forms/QuestionForm/index.tsx:175
+#: src/components/forms/QuestionForm/index.tsx:170
 msgid "What type of question is this?"
 msgstr "Que tipo de pergunta é essa?"
 
-#: src/components/forms/CheckInListForm/index.tsx:65
+#: src/components/forms/CheckInListForm/index.tsx:59
 msgid "When should this check-in list expire?"
 msgstr "Quando esta lista de registro deve expirar?"
 
@@ -3782,15 +4682,15 @@ msgstr "Quais ingressos devem ser associados a esta lista de registro?"
 msgid "Who is organizing this event?"
 msgstr "Quem está organizando este evento?"
 
-#: src/components/modals/SendMessageModal/index.tsx:151
+#: src/components/modals/SendMessageModal/index.tsx:153
 msgid "Who is this message to?"
 msgstr "Para quem é esta mensagem?"
 
-#: src/components/forms/QuestionForm/index.tsx:150
+#: src/components/forms/QuestionForm/index.tsx:151
 msgid "Who should be asked this question?"
 msgstr "A quem deve ser feita esta pergunta?"
 
-#: src/components/layouts/Event/index.tsx:51
+#: src/components/layouts/Event/index.tsx:67
 msgid "Widget Embed"
 msgstr "Incorporação de widget"
 
@@ -3798,32 +4698,38 @@ msgstr "Incorporação de widget"
 msgid "Widget Settings"
 msgstr "Configurações de widget"
 
-#: src/components/modals/CreateAttendeeModal/index.tsx:210
+#: src/components/modals/CreateAttendeeModal/index.tsx:196
 msgid "Working"
 msgstr "Trabalhando"
 
+#: src/components/modals/CreateProductCategoryModal/index.tsx:60
+#: src/components/modals/CreateProductModal/index.tsx:98
 #: src/components/modals/CreatePromoCodeModal/index.tsx:56
 #: src/components/modals/CreateQuestionModal/index.tsx:73
-#: src/components/modals/CreateTicketModal/index.tsx:91
 #: src/components/modals/DuplicateEventModal/index.tsx:137
-#: src/components/modals/EditAttendeeModal/index.tsx:129
+#: src/components/modals/EditProductCategoryModal/index.tsx:70
+#: src/components/modals/EditProductModal/index.tsx:108
 #: src/components/modals/EditPromoCodeModal/index.tsx:84
 #: src/components/modals/EditQuestionModal/index.tsx:99
-#: src/components/modals/EditTicketModal/index.tsx:104
+#: src/components/modals/ManageAttendeeModal/index.tsx:215
 #: src/components/routes/auth/Register/index.tsx:99
 #: src/components/routes/auth/ResetPassword/index.tsx:62
 msgid "Working..."
 msgstr "Trabalhando..."
 
-#: src/components/common/AttendeeDetails/index.tsx:41
+#: src/components/common/ReportTable/index.tsx:51
+msgid "Year to date"
+msgstr "Ano até agora"
+
+#: src/components/common/AttendeeDetails/index.tsx:40
 msgid "Yes"
 msgstr "Sim"
 
-#: src/components/forms/TicketForm/index.tsx:321
+#: src/components/forms/ProductForm/index.tsx:376
 msgid "Yes, remove them"
 msgstr "Sim, remova-os"
 
-#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:58
+#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:78
 msgid "You already scanned this ticket"
 msgstr "Você já escaneou este ingresso"
 
@@ -3837,21 +4743,37 @@ msgstr "Você está alterando seu e-mail para <0>{0}</0>."
 msgid "You are offline"
 msgstr "Você está offline"
 
+#: src/components/forms/ProductForm/index.tsx:407
+msgid "You can create a promo code which targets this product on the"
+msgstr "Você pode criar um código promocional que direcione este produto no"
+
 #: src/components/forms/TicketForm/index.tsx:352
-msgid "You can create a promo code which targets this ticket on the"
-msgstr "Você pode criar um código promocional direcionado a este ingresso no"
+#~ msgid "You can create a promo code which targets this ticket on the"
+#~ msgstr "Você pode criar um código promocional direcionado a este ingresso no"
 
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:31
 msgid "You can now start receiving payments through Stripe."
 msgstr "Agora você pode começar a receber pagamentos através do Stripe."
 
+#: src/components/forms/ProductForm/index.tsx:208
+msgid "You cannot change the product type as there are attendees associated with this product."
+msgstr "Você não pode mudar o tipo de produto, pois há participantes associados a este produto."
+
 #: src/components/forms/TicketForm/index.tsx:184
-msgid "You cannot change the ticket type as there are attendees associated with this ticket."
-msgstr "Você não pode alterar o tipo de ingresso porque há participantes associados a esse ingresso."
+#~ msgid "You cannot change the ticket type as there are attendees associated with this ticket."
+#~ msgstr "Você não pode alterar o tipo de ingresso porque há participantes associados a esse ingresso."
+
+#: src/components/common/ProductsTable/SortableCategory/index.tsx:40
+msgid "You cannot delete the last category."
+msgstr "Você não pode excluir a última categoria."
+
+#: src/components/forms/ProductForm/index.tsx:57
+msgid "You cannot delete this price tier because there are already products sold for this tier. You can hide it instead."
+msgstr "Você não pode excluir este nível de preço porque já há produtos vendidos para este nível. Você pode ocultá-lo em vez disso."
 
 #: src/components/forms/TicketForm/index.tsx:54
-msgid "You cannot delete this price tier because there are already tickets sold for this tier. You can hide it instead."
-msgstr "Você não pode excluir esse nível de preço porque já existem ingressos vendidos para esse nível. Você pode ocultá-lo."
+#~ msgid "You cannot delete this price tier because there are already tickets sold for this tier. You can hide it instead."
+#~ msgstr "Você não pode excluir esse nível de preço porque já existem ingressos vendidos para esse nível. Você pode ocultá-lo."
 
 #: src/components/modals/EditUserModal/index.tsx:88
 msgid "You cannot edit the role or status of the account owner."
@@ -3901,15 +4823,27 @@ msgstr "Você não concluiu a configuração do Stripe Connect"
 msgid "You have not connected your Stripe account"
 msgstr "Você não conectou sua conta Stripe"
 
+#: src/components/layouts/Checkout/index.tsx:114
+msgid "You have run out of time to complete your order."
+msgstr "O tempo para concluir seu pedido acabou."
+
+#: src/components/forms/ProductForm/index.tsx:374
+msgid "You have taxes and fees added to a Free Product. Would you like to remove or obscure them?"
+msgstr "Você tem impostos e taxas adicionados a um Produto Gratuito. Gostaria de removê-los ou ocultá-los?"
+
 #: src/components/forms/TicketForm/index.tsx:319
-msgid "You have taxes and fees added to a Free Ticket. Would you like to remove or obscure them?"
-msgstr "Você tem impostos e taxas adicionados a um ingresso grátis. Você gostaria de removê-los ou ocultá-los?"
+#~ msgid "You have taxes and fees added to a Free Ticket. Would you like to remove or obscure them?"
+#~ msgstr "Você tem impostos e taxas adicionados a um ingresso grátis. Você gostaria de removê-los ou ocultá-los?"
 
 #: src/components/common/MessageList/index.tsx:64
-msgid "You haven't sent any messages yet. You can send messages to all attendees, or to specific ticket holders."
-msgstr "Você ainda não enviou nenhuma mensagem. Você pode enviar mensagens para todos os participantes ou para portadores de ingressos específicos."
+msgid "You haven't sent any messages yet. You can send messages to all attendees, or to specific product holders."
+msgstr "Você ainda não enviou nenhuma mensagem. Você pode enviar mensagens para todos os participantes ou para portadores de produtos específicos."
 
-#: src/components/modals/SendMessageModal/index.tsx:101
+#: src/components/common/MessageList/index.tsx:64
+#~ msgid "You haven't sent any messages yet. You can send messages to all attendees, or to specific ticket holders."
+#~ msgstr "Você ainda não enviou nenhuma mensagem. Você pode enviar mensagens para todos os participantes ou para portadores de ingressos específicos."
+
+#: src/components/modals/SendMessageModal/index.tsx:103
 msgid "You must acknowledge that this email is not promotional"
 msgstr "Você deve reconhecer que este e-mail não é promocional"
 
@@ -3921,35 +4855,47 @@ msgstr "Você deve concordar com os termos e condições"
 msgid "You must confirm your email address before your event can go live."
 msgstr "Você deve confirmar seu endereço de e-mail antes que seu evento possa ir ao ar."
 
-#: src/components/modals/CreateAttendeeModal/index.tsx:94
+#: src/components/modals/CreateAttendeeModal/index.tsx:98
 msgid "You must create a ticket before you can manually add an attendee."
 msgstr "Você deve criar um ticket antes de poder adicionar manualmente um participante."
 
-#: src/components/forms/TicketForm/index.tsx:57
+#: src/components/forms/ProductForm/index.tsx:60
 msgid "You must have at least one price tier"
 msgstr "Você deve ter pelo menos uma faixa de preço"
 
-#: src/components/modals/SendMessageModal/index.tsx:134
+#: src/components/modals/SendMessageModal/index.tsx:136
 msgid "You need to verify your account before you can send messages."
 msgstr "Você precisa verificar sua conta antes de enviar mensagens."
 
-#: src/components/modals/CreateCheckInListModal/index.tsx:52
+#: src/components/modals/CreateCheckInListModal/index.tsx:55
 msgid "You'll need a ticket before you can create a check-in list."
 msgstr "Você precisará de um ingresso antes de poder criar uma lista de registro."
 
 #: src/components/modals/CreateCapacityAssignmentModal/index.tsx:51
-msgid "You'll need at a ticket before you can create a capacity assignment."
-msgstr "Você precisará de um ingresso antes de poder criar uma atribuição de capacidade."
+msgid "You'll need at a product before you can create a capacity assignment."
+msgstr "Você precisará de um produto antes de poder criar uma atribuição de capacidade."
+
+#: src/components/modals/CreateCapacityAssignmentModal/index.tsx:51
+#~ msgid "You'll need at a ticket before you can create a capacity assignment."
+#~ msgstr "Você precisará de um ingresso antes de poder criar uma atribuição de capacidade."
+
+#: src/components/common/ProductsTable/ProductsBlankSlate/index.tsx:43
+msgid "You'll need at least one product to get started. Free, paid or let the user decide what to pay."
+msgstr "Você precisará de pelo menos um produto para começar. Grátis, pago ou deixe o usuário decidir o que pagar."
 
 #: src/components/common/TicketsTable/index.tsx:69
-msgid "You'll need at least one ticket to get started. Free, paid or let the user decide what to pay."
-msgstr "Você precisará de pelo menos um ticket para começar. Gratuito, pago ou deixa o usuário decidir quanto pagar."
+#~ msgid "You'll need at least one ticket to get started. Free, paid or let the user decide what to pay."
+#~ msgstr "Você precisará de pelo menos um ticket para começar. Gratuito, pago ou deixa o usuário decidir quanto pagar."
+
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:91
+msgid "You're going to {0}! 🎉"
+msgstr "Você vai para {0}! 🎉"
 
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:64
 msgid "Your account name is used on event pages and in emails."
 msgstr "O nome da sua conta é usado nas páginas do evento e nos e-mails."
 
-#: src/components/common/AttendeeTable/index.tsx:62
+#: src/components/common/AttendeeTable/index.tsx:60
 msgid "Your attendees will appear here once they have registered for your event. You can also manually add attendees."
 msgstr "Seus participantes aparecerão aqui assim que se inscreverem em seu evento. Você também pode adicionar participantes manualmente."
 
@@ -3957,7 +4903,7 @@ msgstr "Seus participantes aparecerão aqui assim que se inscreverem em seu even
 msgid "Your awesome website 🎉"
 msgstr "Seu site incrível 🎉"
 
-#: src/components/routes/ticket-widget/CollectInformation/index.tsx:260
+#: src/components/routes/product-widget/CollectInformation/index.tsx:261
 msgid "Your Details"
 msgstr "Seus detalhes"
 
@@ -3968,6 +4914,14 @@ msgstr "Sua solicitação de e-mail para <0>{0}</0> está pendente. Por favor, v
 #: src/components/common/OrdersTable/index.tsx:73
 msgid "Your message has been sent"
 msgstr "Sua mensagem foi enviada"
+
+#: src/components/layouts/Checkout/index.tsx:54
+msgid "Your Order"
+msgstr "Seu pedido"
+
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:92
+msgid "Your order has been cancelled"
+msgstr "Seu pedido foi cancelado"
 
 #: src/components/common/OrdersTable/index.tsx:58
 msgid "Your orders will appear here once they start rolling in."
@@ -3986,16 +4940,19 @@ msgstr "Seu pagamento está sendo processado."
 msgid "Your payment was not successful, please try again."
 msgstr "Seu pagamento não foi bem-sucedido, tente novamente."
 
-#: src/components/forms/StripeCheckoutForm/index.tsx:125
+#: src/components/forms/StripeCheckoutForm/index.tsx:126
 msgid "Your payment was unsuccessful. Please try again."
 msgstr "Seu pagamento não foi bem-sucedido. Por favor, tente novamente."
+
+#: src/components/routes/product-widget/AttendeeProductAndInformation/index.tsx:35
+msgid "Your product for"
+msgstr "Seu produto para"
 
 #: src/components/modals/RefundOrderModal/index.tsx:58
 msgid "Your refund is processing."
 msgstr "Seu reembolso está sendo processado."
 
-#: src/components/routes/ticket-widget/AttendeeTicketAndInformation/index.tsx:35
-#: src/components/routes/ticket-widget/PrintTicket/index.tsx:42
+#: src/components/routes/product-widget/PrintProduct/index.tsx:42
 msgid "Your ticket for"
 msgstr "Seu ingresso para"
 

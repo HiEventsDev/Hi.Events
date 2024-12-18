@@ -8,8 +8,8 @@ use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Attendee\CheckInAttendeeRequest;
 use HiEvents\Http\ResponseCodes;
 use HiEvents\Resources\Attendee\AttendeeResource;
-use HiEvents\Services\Handlers\Attendee\CheckInAttendeeHandler;
-use HiEvents\Services\Handlers\Attendee\DTO\CheckInAttendeeDTO;
+use HiEvents\Services\Application\Handlers\Attendee\CheckInAttendeeHandler;
+use HiEvents\Services\Application\Handlers\Attendee\DTO\CheckInAttendeeDTO;
 use Illuminate\Http\JsonResponse;
 
 class CheckInAttendeeAction extends BaseAction

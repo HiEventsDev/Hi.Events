@@ -23,7 +23,7 @@ export const EditQuestionModal = ({onClose, questionId}: EditQuestionModalProps)
 
     const eventQuery = useGetEvent(eventId);
     const questionQuery = useGetQuestion(eventId, questionId);
-    const tickets = eventQuery?.data?.tickets;
+    const productsCategories = eventQuery?.data?.product_categories;
 
     const form = useForm<QuestionRequestData>({
         initialValues: {
@@ -32,7 +32,7 @@ export const EditQuestionModal = ({onClose, questionId}: EditQuestionModalProps)
             type: QuestionType.SINGLE_LINE_TEXT.toString(),
             required: false,
             options: [],
-            ticket_ids: [],
+            product_ids: [],
             belongs_to: "ORDER",
             is_hidden: false,
         },
@@ -51,7 +51,7 @@ export const EditQuestionModal = ({onClose, questionId}: EditQuestionModalProps)
                 type: data.type,
                 required: data.required,
                 options: data.options,
-                ticket_ids: data.ticket_ids?.map(id => String(id)),
+                product_ids: data.product_ids?.map(id => String(id)),
                 belongs_to: data.belongs_to,
                 is_hidden: data.is_hidden,
             });
@@ -93,7 +93,7 @@ export const EditQuestionModal = ({onClose, questionId}: EditQuestionModalProps)
             heading={t`Edit Question`}
         >
             <form onSubmit={form.onSubmit((values) => mutation.mutate(values as any as Question))}>
-                <QuestionForm form={form} tickets={tickets}/>
+                <QuestionForm form={form} productCategories={productsCategories}/>
                 {!questionQuery.isFetched && <LoadingOverlay visible/>}
                 <Button loading={mutation.isPending} type="submit" fullWidth mt="xl">
                     {mutation.isPending ? t`Working...` : t`Edit Question`}

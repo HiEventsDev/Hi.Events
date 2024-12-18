@@ -5,7 +5,7 @@ namespace HiEvents\Http\Actions\CapacityAssignments;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Resources\CapacityAssignment\CapacityAssignmentResource;
-use HiEvents\Services\Handlers\CapacityAssignment\GetCapacityAssignmentHandler;
+use HiEvents\Services\Application\Handlers\CapacityAssignment\GetCapacityAssignmentHandler;
 use Illuminate\Http\JsonResponse;
 
 class GetCapacityAssignmentAction extends BaseAction

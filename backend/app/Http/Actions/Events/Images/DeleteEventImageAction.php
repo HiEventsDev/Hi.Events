@@ -4,8 +4,8 @@ namespace HiEvents\Http\Actions\Events\Images;
 
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Services\Handlers\Event\DeleteEventImageHandler;
-use HiEvents\Services\Handlers\Event\DTO\DeleteEventImageDTO;
+use HiEvents\Services\Application\Handlers\Event\DeleteEventImageHandler;
+use HiEvents\Services\Application\Handlers\Event\DTO\DeleteEventImageDTO;
 use Illuminate\Http\Response;
 
 class DeleteEventImageAction extends BaseAction

@@ -8,8 +8,8 @@ use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Questions\UpsertQuestionRequest;
 use HiEvents\Resources\Question\QuestionResource;
-use HiEvents\Services\Handlers\Question\DTO\UpsertQuestionDTO;
-use HiEvents\Services\Handlers\Question\EditQuestionHandler;
+use HiEvents\Services\Application\Handlers\Question\DTO\UpsertQuestionDTO;
+use HiEvents\Services\Application\Handlers\Question\EditQuestionHandler;
 use Illuminate\Http\JsonResponse;
 use Throwable;
 
@@ -37,7 +37,7 @@ class EditQuestionAction extends BaseAction
                 'required' => $request->boolean('required'),
                 'options' => $request->input('options'),
                 'event_id' => $eventId,
-                'ticket_ids' => $request->input('ticket_ids'),
+                'product_ids' => $request->input('product_ids'),
                 'is_hidden' => $request->boolean('is_hidden'),
                 'belongs_to' => QuestionBelongsTo::fromName($request->input('belongs_to')),
                 'description' => $request->input('description'),
