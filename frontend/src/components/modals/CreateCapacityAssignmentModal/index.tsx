@@ -1,7 +1,7 @@
 import {CapacityAssignmentRequest, GenericModalProps, Ticket} from "../../../types.ts";
 import {Modal} from "../../common/Modal";
 import {t} from "@lingui/macro";
-import {CapaciyAssigmentForm} from "../../forms/CapaciyAssigmentForm";
+import {CapacityAssigmentForm} from "../../forms/CapaciyAssigmentForm";
 import {useForm} from "@mantine/form";
 import {Button} from "@mantine/core";
 import {useCreateCapacityAssignment} from "../../../mutations/useCreateCapacityAssignment.ts";
@@ -69,7 +69,7 @@ export const CreateCapacityAssignmentModal = ({onClose}: GenericModalProps) => {
             {!eventHasTickets && <NoTickets/>}
             {eventHasTickets && (
                 <form onSubmit={form.onSubmit(handleSubmit)}>
-                    {event && <CapaciyAssigmentForm form={form} tickets={event.tickets as Ticket[]}/>}
+                    {event && <CapacityAssigmentForm form={form} tickets={event.tickets as Ticket[]}/>}
                     <Button
                         type={'submit'}
                         fullWidth

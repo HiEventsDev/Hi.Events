@@ -35,8 +35,8 @@ readonly class OrderCancelService
     public function cancelOrder(OrderDomainObject $order): void
     {
         $this->databaseManager->transaction(function () use ($order) {
-            $this->cancelAttendees($order);
             $this->adjustTicketQuantities($order);
+            $this->cancelAttendees($order);
             $this->updateOrderStatus($order);
 
             $event = $this->eventRepository
