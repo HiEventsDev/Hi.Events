@@ -29,13 +29,13 @@ msgstr "{0} <0>registrado</0> com sucesso"
 msgid "{0} <0>checked out</0> successfully"
 msgstr "{0} <0>desmarcado</0> com sucesso"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:321
+#: src/components/routes/ticket-widget/SelectTickets/index.tsx:329
 msgid "{0} available"
 msgstr "{0} disponível"
 
 #: src/components/common/AttendeeCheckInTable/index.tsx:155
-msgid "{0} checked in"
-msgstr "{0} fez check-in"
+#~ msgid "{0} checked in"
+#~ msgstr "{0} fez check-in"
 
 #: src/components/modals/CreateTaxOrFeeModal/index.tsx:32
 msgid "{0} created successfully"
@@ -49,7 +49,7 @@ msgstr "{0} atualizado com sucesso"
 msgid "{0}'s Events"
 msgstr "Eventos de {0}"
 
-#: src/components/layouts/CheckIn/index.tsx:343
+#: src/components/layouts/CheckIn/index.tsx:342
 msgid "{0}/{1} checked in"
 msgstr "{0}/{1} registrado"
 
@@ -405,7 +405,7 @@ msgstr "Quaisquer dúvidas dos titulares de ingressos serão enviadas para este 
 msgid "Appearance"
 msgstr "Aparência"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:401
+#: src/components/routes/ticket-widget/SelectTickets/index.tsx:408
 msgid "applied"
 msgstr "aplicado"
 
@@ -417,7 +417,7 @@ msgstr "Aplica-se a {0} ingressos"
 msgid "Applies to 1 ticket"
 msgstr "Aplica-se a 1 ingresso"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:429
+#: src/components/routes/ticket-widget/SelectTickets/index.tsx:436
 msgid "Apply Promo Code"
 msgstr "Aplicar código promocional"
 
@@ -584,7 +584,7 @@ msgstr "Tipo de cálculo"
 msgid "California"
 msgstr "Califórnia"
 
-#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:140
+#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:196
 msgid "Camera permission was denied. <0>Request Permission</0> again, or if this doesn't work, you will need to <1>grant this page</1> access to your camera in your browser settings."
 msgstr "A permissão da câmera foi negada. <0>Solicite permissão</0> novamente ou, se isso não funcionar, você precisará <1>conceder a esta página</1> acesso à sua câmera nas configurações do navegador."
 
@@ -646,18 +646,17 @@ msgstr "Alterar a senha"
 
 #: src/components/common/AttendeeCheckInTable/index.tsx:54
 #: src/components/common/AttendeeCheckInTable/index.tsx:81
-msgid "check in"
-msgstr "check-in"
+#~ msgid "check in"
+#~ msgstr "check-in"
 
-#: src/components/common/AttendeeCheckInTable/index.tsx:152
 #: src/components/layouts/CheckIn/index.tsx:177
 msgid "Check In"
 msgstr "Check-in"
 
 #: src/components/common/AttendeeCheckInTable/index.tsx:54
 #: src/components/common/AttendeeCheckInTable/index.tsx:81
-msgid "check out"
-msgstr "Confira"
+#~ msgid "check out"
+#~ msgstr "Confira"
 
 #: src/components/layouts/CheckIn/index.tsx:177
 msgid "Check Out"
@@ -679,11 +678,11 @@ msgstr "Lista de registro criada com sucesso"
 msgid "Check-In List deleted successfully"
 msgstr "Lista de registro excluída com sucesso"
 
-#: src/components/layouts/CheckIn/index.tsx:218
+#: src/components/layouts/CheckIn/index.tsx:217
 msgid "Check-in list has expired"
 msgstr "A lista de registro expirou"
 
-#: src/components/layouts/CheckIn/index.tsx:235
+#: src/components/layouts/CheckIn/index.tsx:234
 msgid "Check-in list is not active"
 msgstr "A lista de registro não está ativa"
 
@@ -708,7 +707,6 @@ msgstr "As opções de caixa de seleção permitem seleções múltiplas"
 msgid "Checkboxes"
 msgstr "Caixas de seleção"
 
-#: src/components/common/AttendeeCheckInTable/index.tsx:124
 #: src/components/common/AttendeeDetails/index.tsx:38
 msgid "Checked In"
 msgstr "Check-in"
@@ -746,7 +744,7 @@ msgstr "Cidade"
 msgid "Clear Search Text"
 msgstr "Limpar texto de pesquisa"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:276
+#: src/components/routes/ticket-widget/SelectTickets/index.tsx:277
 msgid "click here"
 msgstr "Clique aqui"
 
@@ -754,7 +752,7 @@ msgstr "Clique aqui"
 msgid "Click to copy"
 msgstr "Clique para copiar"
 
-#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:151
+#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:207
 #: src/components/modals/RefundOrderModal/index.tsx:123
 msgid "Close"
 msgstr "Fechar"
@@ -868,7 +866,7 @@ msgstr "Cor de fundo do conteúdo"
 #: src/components/common/WidgetEditor/index.tsx:31
 #: src/components/common/WidgetEditor/index.tsx:217
 #: src/components/layouts/Checkout/CheckoutFooter/index.tsx:36
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:387
+#: src/components/routes/ticket-widget/SelectTickets/index.tsx:394
 msgid "Continue"
 msgstr "Continuar"
 
@@ -1150,8 +1148,12 @@ msgid "Details"
 msgstr "Detalhes"
 
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:26
-msgid "Disable this capacity track capacity without stopping ticket sales"
-msgstr "Desative esta capacidade para rastrear a capacidade sem interromper as vendas de ingressos"
+#~ msgid "Disable this capacity track capacity without stopping ticket sales"
+#~ msgstr "Desative esta capacidade para rastrear a capacidade sem interromper as vendas de ingressos"
+
+#: src/components/forms/CapaciyAssigmentForm/index.tsx:26
+msgid "Disabling this capacity will track sales but not stop them when the limit is reached"
+msgstr "Desativar esta capacidade rastreará as vendas, mas não as interromperá quando o limite for atingido"
 
 #: src/components/common/PromoCodeTable/index.tsx:69
 msgid "Discount"
@@ -1169,7 +1171,7 @@ msgstr "Desconto em {0}"
 msgid "Discount Type"
 msgstr "Tipo de desconto"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:285
+#: src/components/routes/ticket-widget/SelectTickets/index.tsx:286
 msgid "Dismiss"
 msgstr "Liberar"
 
@@ -1571,7 +1573,7 @@ msgstr "Fixo"
 msgid "Fixed amount"
 msgstr "Quantia fixa"
 
-#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:92
+#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:144
 msgid "Flash is not available on this device"
 msgstr "Flash não está disponível neste dispositivo"
 
@@ -1634,7 +1636,7 @@ msgstr "Vendas brutas"
 msgid "Guests"
 msgstr "Convidados"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:396
+#: src/components/routes/ticket-widget/SelectTickets/index.tsx:403
 msgid "Have a promo code?"
 msgstr "Tem um código promocional?"
 
@@ -1685,7 +1687,7 @@ msgid "Hidden questions are only visible to the event organizer and not to the c
 msgstr "As perguntas ocultas são visíveis apenas para o organizador do evento e não para o cliente."
 
 #: src/components/forms/TicketForm/index.tsx:289
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:365
+#: src/components/routes/ticket-widget/SelectTickets/index.tsx:372
 msgid "Hide"
 msgstr "Esconder"
 
@@ -1769,7 +1771,7 @@ msgstr "https://example-maps-service.com/..."
 msgid "I agree to the <0>terms and conditions</0>"
 msgstr "Concordo com os <0>termos e condições</0>"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:272
+#: src/components/routes/ticket-widget/SelectTickets/index.tsx:273
 msgid "If a new tab did not open, please  <0><1>{0}</1>.</0>"
 msgstr "Se uma nova guia não for aberta, <0><1>{0}</1>.</0>"
 
@@ -2186,8 +2188,8 @@ msgid "Not available"
 msgstr "Não disponível"
 
 #: src/components/common/AttendeeCheckInTable/index.tsx:125
-msgid "Not Checked In"
-msgstr "Não verificado"
+#~ msgid "Not Checked In"
+#~ msgstr "Não verificado"
 
 #: src/components/common/TicketsTable/SortableTicket/index.tsx:80
 #: src/components/common/TicketsTable/SortableTicket/index.tsx:143
@@ -2462,7 +2464,7 @@ msgstr "Verifique seu e-mail para confirmar seu endereço de e-mail"
 msgid "Please complete the form below to accept your invitation"
 msgstr "Preencha o formulário abaixo para aceitar seu convite"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:270
+#: src/components/routes/ticket-widget/SelectTickets/index.tsx:271
 msgid "Please continue in the new tab"
 msgstr "Continue na nova aba"
 
@@ -2491,7 +2493,7 @@ msgstr "Remova os filtros e defina a classificação como \"Ordem da página ini
 msgid "Please select"
 msgstr "Por favor selecione"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:227
+#: src/components/routes/ticket-widget/SelectTickets/index.tsx:228
 msgid "Please select at least one ticket"
 msgstr "Selecione pelo menos um ingresso"
 
@@ -2574,7 +2576,7 @@ msgstr "Perfil"
 msgid "Profile updated successfully"
 msgstr "Perfil atualizado com sucesso"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:172
+#: src/components/routes/ticket-widget/SelectTickets/index.tsx:173
 msgid "Promo {promo_code} code applied"
 msgstr "Código promocional {promo_code} aplicado"
 
@@ -2665,11 +2667,11 @@ msgstr "Devolveu"
 msgid "Register"
 msgstr "Registro"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:405
+#: src/components/routes/ticket-widget/SelectTickets/index.tsx:412
 msgid "remove"
 msgstr "remover"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:406
+#: src/components/routes/ticket-widget/SelectTickets/index.tsx:413
 msgid "Remove"
 msgstr "Remover"
 
@@ -2776,15 +2778,12 @@ msgstr "Salvar organizador"
 msgid "Save Settings"
 msgstr "Salvar configurações"
 
-#: src/components/common/AttendeeCheckInTable/index.tsx:173
-#: src/components/common/AttendeeCheckInTable/index.tsx:175
-#: src/components/layouts/CheckIn/index.tsx:293
-#: src/components/layouts/CheckIn/index.tsx:295
+#: src/components/layouts/CheckIn/index.tsx:292
+#: src/components/layouts/CheckIn/index.tsx:294
 msgid "Scan QR Code"
 msgstr "Digitalize o código QR"
 
-#: src/components/common/AttendeeCheckInTable/index.tsx:169
-#: src/components/layouts/CheckIn/index.tsx:289
+#: src/components/layouts/CheckIn/index.tsx:288
 msgid "Seach by name, order #, attendee # or email..."
 msgstr "Pesquise por nome, número do pedido, número do participante ou e-mail..."
 
@@ -2845,7 +2844,7 @@ msgstr "Cor do texto secundário"
 msgid "Secondary Text Color"
 msgstr "Cor do texto secundário"
 
-#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:172
+#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:235
 msgid "Select Camera"
 msgstr "Selecione Câmera"
 
@@ -2957,7 +2956,7 @@ msgstr "Mostrar quantidade de ingressos disponíveis"
 msgid "Show hidden questions"
 msgstr "Mostrar perguntas ocultas"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:365
+#: src/components/routes/ticket-widget/SelectTickets/index.tsx:372
 msgid "Show more"
 msgstr "Mostre mais"
 
@@ -3037,7 +3036,7 @@ msgstr "Desculpe, algo deu errado ao carregar esta página."
 msgid "Sorry, this order no longer exists."
 msgstr "Desculpe, este pedido não existe mais."
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:236
+#: src/components/routes/ticket-widget/SelectTickets/index.tsx:237
 msgid "Sorry, this promo code is not recognized"
 msgstr "Desculpe, este código promocional não é reconhecido"
 
@@ -3099,8 +3098,8 @@ msgstr "{0} participante com sucesso"
 
 #: src/components/common/AttendeeCheckInTable/index.tsx:47
 #: src/components/common/AttendeeCheckInTable/index.tsx:71
-msgid "Successfully checked <0>{0} {1}</0> {2}"
-msgstr "Verificado com sucesso <0>{0} {1}</0> {2}"
+#~ msgid "Successfully checked <0>{0} {1}</0> {2}"
+#~ msgstr "Verificado com sucesso <0>{0} {1}</0> {2}"
 
 #: src/components/routes/profile/ConfirmEmailAddress/index.tsx:23
 msgid "Successfully confirmed email address"
@@ -3211,8 +3210,8 @@ msgstr "Impostos"
 msgid "Taxes and Fees"
 msgstr "Impostos e Taxas"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:132
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:180
+#: src/components/routes/ticket-widget/SelectTickets/index.tsx:133
+#: src/components/routes/ticket-widget/SelectTickets/index.tsx:181
 msgid "That promo code is invalid"
 msgstr "Esse código promocional é inválido"
 
@@ -3238,7 +3237,7 @@ msgstr "A língua em que o participante receberá as mensagens de correio eletr�
 msgid "The link you clicked is invalid."
 msgstr "O link que você clicou é inválido."
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:351
+#: src/components/routes/ticket-widget/SelectTickets/index.tsx:358
 msgid "The maximum numbers number of tickets for {0}is {1}"
 msgstr "O número máximo de bilhetes para {0} é {1}"
 
@@ -3270,7 +3269,7 @@ msgstr "Os impostos e taxas aplicáveis a este bilhete. Você pode criar novos i
 msgid "The title of the event that will be displayed in search engine results and when sharing on social media. By default, the event title will be used"
 msgstr "O título do evento que será exibido nos resultados dos buscadores e no compartilhamento nas redes sociais. Por padrão, o título do evento será usado"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:260
+#: src/components/routes/ticket-widget/SelectTickets/index.tsx:261
 msgid "There are no tickets available for this event"
 msgstr "Não há ingressos disponíveis para este evento"
 
@@ -3290,7 +3289,7 @@ msgstr "Houve um erro ao enviar a sua mensagem"
 msgid "This check-in list has expired"
 msgstr "Esta lista de registro expirou"
 
-#: src/components/layouts/CheckIn/index.tsx:223
+#: src/components/layouts/CheckIn/index.tsx:222
 msgid "This check-in list has expired and is no longer available for check-ins."
 msgstr "Esta lista de registro expirou e não está mais disponível para registros."
 
@@ -3302,7 +3301,7 @@ msgstr "Esta lista de registro está ativa"
 msgid "This check-in list is not active yet"
 msgstr "Esta lista de registro ainda não está ativa"
 
-#: src/components/layouts/CheckIn/index.tsx:240
+#: src/components/layouts/CheckIn/index.tsx:239
 msgid "This check-in list is not yet active and is not available for check-ins."
 msgstr "Esta lista de registro ainda não está ativa e não está disponível para registros."
 
@@ -3546,8 +3545,8 @@ msgstr "Tipo"
 
 #: src/components/common/AttendeeCheckInTable/index.tsx:54
 #: src/components/common/AttendeeCheckInTable/index.tsx:81
-msgid "Unable to {0} attendee"
-msgstr "Não foi possível {0} participante"
+#~ msgid "Unable to {0} attendee"
+#~ msgstr "Não foi possível {0} participante"
 
 #: src/components/layouts/CheckIn/index.tsx:96
 #: src/components/layouts/CheckIn/index.tsx:130
@@ -3563,7 +3562,7 @@ msgid "Unable to create question. Please check the your details"
 msgstr "Não foi possível criar a pergunta. Por favor verifique os seus dados"
 
 #: src/components/modals/CreateTicketModal/index.tsx:65
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:117
+#: src/components/routes/ticket-widget/SelectTickets/index.tsx:118
 msgid "Unable to create ticket. Please check the your details"
 msgstr "Não foi possível criar o ticket. Por favor verifique os seus dados"
 
@@ -3582,7 +3581,7 @@ msgstr "Estados Unidos"
 msgid "Unlimited"
 msgstr "Ilimitado"
 
-#: src/components/routes/ticket-widget/SelectTickets/index.tsx:316
+#: src/components/routes/ticket-widget/SelectTickets/index.tsx:324
 msgid "Unlimited available"
 msgstr "Ilimitado disponível"
 
@@ -3823,7 +3822,7 @@ msgstr "Sim"
 msgid "Yes, remove them"
 msgstr "Sim, remova-os"
 
-#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:58
+#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:78
 msgid "You already scanned this ticket"
 msgstr "Você já escaneou este ingresso"
 

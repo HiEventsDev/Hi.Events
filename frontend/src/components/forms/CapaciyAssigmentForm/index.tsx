@@ -1,17 +1,17 @@
 import {InputGroup} from "../../common/InputGroup";
-import {MultiSelect, NumberInput, Switch, TextInput} from "@mantine/core";
+import {MultiSelect, NumberInput, TextInput} from "@mantine/core";
 import {t} from "@lingui/macro";
 import {UseFormReturnType} from "@mantine/form";
 import {CapacityAssignmentRequest, Ticket} from "../../../types.ts";
 import {CustomSelect, ItemProps} from "../../common/CustomSelect";
 import {IconCheck, IconTicket, IconX} from "@tabler/icons-react";
 
-interface CapaciyAssigmentFormProps {
+interface CapacityAssigmentFormProps {
     form: UseFormReturnType<CapacityAssignmentRequest>;
     tickets: Ticket[],
 }
 
-export const CapaciyAssigmentForm = ({form, tickets}: CapaciyAssigmentFormProps) => {
+export const CapacityAssigmentForm = ({form, tickets}: CapacityAssigmentFormProps) => {
     const statusOptions: ItemProps[] = [
         {
             icon: <IconCheck/>,
@@ -23,7 +23,7 @@ export const CapaciyAssigmentForm = ({form, tickets}: CapaciyAssigmentFormProps)
             icon: <IconX/>,
             label: t`Inactive`,
             value: 'INACTIVE',
-            description: t`Disable this capacity track capacity without stopping ticket sales`,
+            description: t`Disabling this capacity will track sales but not stop them when the limit is reached`,
         },
     ];
 
