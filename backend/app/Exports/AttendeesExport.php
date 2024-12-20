@@ -5,7 +5,10 @@ namespace HiEvents\Exports;
 use Carbon\Carbon;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Enums\QuestionTypeEnum;
+use HiEvents\DomainObjects\Enums\TicketType;
 use HiEvents\DomainObjects\QuestionDomainObject;
+use HiEvents\DomainObjects\TicketDomainObject;
+use HiEvents\DomainObjects\TicketPriceDomainObject;
 use HiEvents\Resources\Attendee\AttendeeResource;
 use HiEvents\Services\Domain\Question\QuestionAnswerFormatter;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -51,6 +54,7 @@ class AttendeesExport implements FromCollection, WithHeadings, WithMapping, With
             'Is Checked In',
             'Checked In At',
             'Ticket ID',
+            'Ticket Name',
             'Event ID',
             'Public ID',
             'Short ID',
@@ -75,6 +79,16 @@ class AttendeesExport implements FromCollection, WithHeadings, WithMapping, With
             );
         });
 
+        /** @var TicketDomainObject $ticket */
+        $ticket = $attendee->getTicket();
+        $ticketName = $ticket->getTitle();
+        if ($attendee->getTicket()?->getType() === TicketType::TIERED->name) {
+            $ticketName .= ' - ' . $ticket
+                    ->getTicketPrices()
+                    ->first(fn(TicketPriceDomainObject $tp) => $tp->getId() === $attendee->getTicketPriceId())
+                    ->getLabel();
+        }
+
         return array_merge([
             $attendee->getId(),
             $attendee->getFirstName(),
@@ -86,6 +100,7 @@ class AttendeesExport implements FromCollection, WithHeadings, WithMapping, With
                 ? Carbon::parse($attendee->getCheckIn()->getCreatedAt())->format('Y-m-d H:i:s')
                 : '',
             $attendee->getTicketId(),
+            $ticketName,
             $attendee->getEventId(),
             $attendee->getPublicId(),
             $attendee->getShortId(),

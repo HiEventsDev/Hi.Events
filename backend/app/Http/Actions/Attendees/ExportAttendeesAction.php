@@ -6,6 +6,8 @@ use HiEvents\DomainObjects\AttendeeCheckInDomainObject;
 use HiEvents\DomainObjects\Enums\QuestionBelongsTo;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\QuestionAndAnswerViewDomainObject;
+use HiEvents\DomainObjects\TicketDomainObject;
+use HiEvents\DomainObjects\TicketPriceDomainObject;
 use HiEvents\Exports\AttendeesExport;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Repository\Eloquent\Value\Relationship;
@@ -36,6 +38,15 @@ class ExportAttendeesAction extends BaseAction
             ->loadRelation(new Relationship(
                 domainObject: AttendeeCheckInDomainObject::class,
                 name: 'check_in',
+            ))
+            ->loadRelation(new Relationship(
+                domainObject: TicketDomainObject::class,
+                nested: [
+                    new Relationship(
+                        domainObject: TicketPriceDomainObject::class,
+                    ),
+                ],
+                name: 'ticket'
             ))
             ->findByEventIdForExport($eventId);
 
