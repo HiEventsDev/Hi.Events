@@ -47,8 +47,8 @@ class EditAttendeeHandler
     private function adjustTicketQuantities(AttendeeDomainObject $attendee, EditAttendeeDTO $editAttendeeDTO): void
     {
         if ($attendee->getTicketPriceId() !== $editAttendeeDTO->ticket_price_id) {
-            $this->ticketQuantityService->decreaseQuantitySold($editAttendeeDTO->ticket_price_id);
-            $this->ticketQuantityService->increaseQuantitySold($attendee->getTicketPriceId());
+            $this->ticketQuantityService->decreaseQuantitySold($attendee->getTicketPriceId());
+            $this->ticketQuantityService->increaseQuantitySold($editAttendeeDTO->ticket_price_id);
         }
     }
 
@@ -59,6 +59,7 @@ class EditAttendeeHandler
             'last_name' => $editAttendeeDTO->last_name,
             'email' => $editAttendeeDTO->email,
             'ticket_id' => $editAttendeeDTO->ticket_id,
+            'ticket_price_id' => $editAttendeeDTO->ticket_price_id,
         ], [
             'event_id' => $editAttendeeDTO->event_id,
         ]);
@@ -79,6 +80,13 @@ class EditAttendeeHandler
         if ($ticket->getEventId() !== $editAttendeeDTO->event_id) {
             throw ValidationException::withMessages([
                 'ticket_id' => __('Ticket ID is not valid'),
+            ]);
+        }
+
+        $ticketPriceIds = $ticket->getTicketPrices()->map(fn($ticketPrice) => $ticketPrice->getId())->toArray();
+        if (!in_array($editAttendeeDTO->ticket_price_id, $ticketPriceIds, true)) {
+            throw ValidationException::withMessages([
+                'ticket_price_id' => __('Ticket price ID is not valid'),
             ]);
         }
 

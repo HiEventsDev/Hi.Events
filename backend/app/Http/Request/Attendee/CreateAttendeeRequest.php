@@ -13,7 +13,7 @@ class CreateAttendeeRequest extends BaseRequest
     {
         return [
             'ticket_id' => ['int', 'required'],
-            'ticket_price_id' => ['int', 'nullable'],
+            'ticket_price_id' => ['int', 'nullable', 'required'],
             'email' => ['required', 'email'],
             'first_name' => 'string|required',
             'last_name' => 'string',
