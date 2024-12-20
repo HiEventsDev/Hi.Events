@@ -3,6 +3,7 @@
 namespace HiEvents\Exports;
 
 use Carbon\Carbon;
+use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Enums\QuestionTypeEnum;
 use HiEvents\DomainObjects\QuestionDomainObject;
 use HiEvents\Resources\Attendee\AttendeeResource;
@@ -58,6 +59,10 @@ class AttendeesExport implements FromCollection, WithHeadings, WithMapping, With
         ], $questionTitles);
     }
 
+    /**
+     * @param AttendeeDomainObject $attendee
+     * @return array
+     */
     public function map($attendee): array
     {
         $answers = $this->questions->map(function (QuestionDomainObject $question) use ($attendee) {
@@ -76,9 +81,9 @@ class AttendeesExport implements FromCollection, WithHeadings, WithMapping, With
             $attendee->getLastName(),
             $attendee->getEmail(),
             $attendee->getStatus(),
-            $attendee->getCheckedInAt() ? 'Yes' : 'No',
-            $attendee->getCheckedInAt()
-                ? Carbon::parse($attendee->getCheckedInAt())->format('Y-m-d H:i:s')
+            $attendee->getCheckIn() ? 'Yes' : 'No',
+            $attendee->getCheckIn()
+                ? Carbon::parse($attendee->getCheckIn()->getCreatedAt())->format('Y-m-d H:i:s')
                 : '',
             $attendee->getTicketId(),
             $attendee->getEventId(),
