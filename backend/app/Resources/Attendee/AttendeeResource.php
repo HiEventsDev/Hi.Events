@@ -4,6 +4,7 @@ namespace HiEvents\Resources\Attendee;
 
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Enums\QuestionBelongsTo;
+use HiEvents\Resources\CheckInList\AttendeeCheckInResource;
 use HiEvents\Resources\Order\OrderResource;
 use HiEvents\Resources\Question\QuestionAnswerViewResource;
 use HiEvents\Resources\Ticket\TicketResource;
@@ -30,17 +31,21 @@ class AttendeeResource extends JsonResource
             'public_id' => $this->getPublicId(),
             'short_id' => $this->getShortId(),
             'locale' => $this->getLocale(),
+            'check_in' => $this->when(
+                condition: $this->getCheckIn() !== null,
+                value: fn() => new AttendeeCheckInResource($this->getCheckIn()),
+            ),
             'ticket' => $this->when(
-                !is_null($this->getTicket()),
-                fn() => new TicketResource($this->getTicket()),
+                condition: !is_null($this->getTicket()),
+                value: fn() => new TicketResource($this->getTicket()),
             ),
             'order' => $this->when(
-                !is_null($this->getOrder()),
-                fn() => new OrderResource($this->getOrder())
+                condition: !is_null($this->getOrder()),
+                value: fn() => new OrderResource($this->getOrder())
             ),
             'question_answers' => $this->when(
-                $this->getQuestionAndAnswerViews() !== null,
-                fn() => QuestionAnswerViewResource::collection(
+                condition: $this->getQuestionAndAnswerViews() !== null,
+                value: fn() => QuestionAnswerViewResource::collection(
                     $this->getQuestionAndAnswerViews()
                         ?->filter(fn($qav) => $qav->getBelongsTo() === QuestionBelongsTo::TICKET->name)
                 )

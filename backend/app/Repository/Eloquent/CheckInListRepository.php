@@ -41,6 +41,7 @@ class CheckInListRepository extends BaseRepository implements CheckInListReposit
                               JOIN ticket_check_in_lists tcil ON a.ticket_id = tcil.ticket_id
                      WHERE a.deleted_at IS NULL
                        AND tcil.deleted_at IS NULL
+                     AND a.status = 'ACTIVE'
                  )
             SELECT
                 cil.id AS check_in_list_id,
