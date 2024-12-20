@@ -69,9 +69,11 @@ class CreateAttendeeHandler
                     TicketDomainObjectAbstract::EVENT_ID => $attendeeDTO->event_id,
                 ]);
 
+            $ticketPriceId = $this->getTicketPriceId($attendeeDTO, $ticket);
+
             $availableQuantity = $this->ticketRepository->getQuantityRemainingForTicketPrice(
                 $attendeeDTO->ticket_id,
-                $attendeeDTO->ticket_price_id,
+                $ticketPriceId,
             );
 
             if ($availableQuantity <= 0) {
@@ -80,7 +82,6 @@ class CreateAttendeeHandler
                     ' please adjust the ticket\'s available quantity.'));
             }
 
-            $ticketPriceId = $this->getTicketPriceId($attendeeDTO, $ticket);
 
             $this->processTaxesAndFees($attendeeDTO);
 

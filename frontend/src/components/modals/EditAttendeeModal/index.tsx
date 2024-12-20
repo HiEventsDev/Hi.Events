@@ -50,6 +50,18 @@ export const EditAttendeeModal = ({onClose, attendeeId}: EditAttendeeModalProps)
 
     }, [isFetched]);
 
+    useEffect(() => {
+        if (!form.values.ticket_id) {
+            return;
+        }
+
+        let ticketPriceId = event?.tickets?.find(ticket => ticket.id == form.values.ticket_id)?.prices?.[0]?.id;
+        form.setValues({
+            ...form.values,
+            ticket_price_id: String(ticketPriceId),
+        });
+    }, [form.values.ticket_id]);
+
     const handleSubmit = (values: EditAttendeeRequest) => {
         mutation.mutate({
             attendeeId: attendeeId,
