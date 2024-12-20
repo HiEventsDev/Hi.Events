@@ -3,8 +3,12 @@
 namespace HiEvents\Exports;
 
 use Carbon\Carbon;
+use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Enums\QuestionTypeEnum;
+use HiEvents\DomainObjects\Enums\TicketType;
 use HiEvents\DomainObjects\QuestionDomainObject;
+use HiEvents\DomainObjects\TicketDomainObject;
+use HiEvents\DomainObjects\TicketPriceDomainObject;
 use HiEvents\Resources\Attendee\AttendeeResource;
 use HiEvents\Services\Domain\Question\QuestionAnswerFormatter;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -50,6 +54,7 @@ class AttendeesExport implements FromCollection, WithHeadings, WithMapping, With
             'Is Checked In',
             'Checked In At',
             'Ticket ID',
+            'Ticket Name',
             'Event ID',
             'Public ID',
             'Short ID',
@@ -58,6 +63,10 @@ class AttendeesExport implements FromCollection, WithHeadings, WithMapping, With
         ], $questionTitles);
     }
 
+    /**
+     * @param AttendeeDomainObject $attendee
+     * @return array
+     */
     public function map($attendee): array
     {
         $answers = $this->questions->map(function (QuestionDomainObject $question) use ($attendee) {
@@ -70,17 +79,28 @@ class AttendeesExport implements FromCollection, WithHeadings, WithMapping, With
             );
         });
 
+        /** @var TicketDomainObject $ticket */
+        $ticket = $attendee->getTicket();
+        $ticketName = $ticket->getTitle();
+        if ($attendee->getTicket()?->getType() === TicketType::TIERED->name) {
+            $ticketName .= ' - ' . $ticket
+                    ->getTicketPrices()
+                    ->first(fn(TicketPriceDomainObject $tp) => $tp->getId() === $attendee->getTicketPriceId())
+                    ->getLabel();
+        }
+
         return array_merge([
             $attendee->getId(),
             $attendee->getFirstName(),
             $attendee->getLastName(),
             $attendee->getEmail(),
             $attendee->getStatus(),
-            $attendee->getCheckedInAt() ? 'Yes' : 'No',
-            $attendee->getCheckedInAt()
-                ? Carbon::parse($attendee->getCheckedInAt())->format('Y-m-d H:i:s')
+            $attendee->getCheckIn() ? 'Yes' : 'No',
+            $attendee->getCheckIn()
+                ? Carbon::parse($attendee->getCheckIn()->getCreatedAt())->format('Y-m-d H:i:s')
                 : '',
             $attendee->getTicketId(),
+            $ticketName,
             $attendee->getEventId(),
             $attendee->getPublicId(),
             $attendee->getShortId(),
