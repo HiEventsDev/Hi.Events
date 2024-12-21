@@ -41,6 +41,7 @@ class CheckInListRepository extends BaseRepository implements CheckInListReposit
                               JOIN product_check_in_lists tcil ON a.product_id = tcil.product_id
                      WHERE a.deleted_at IS NULL
                        AND tcil.deleted_at IS NULL
+                     AND a.status = 'ACTIVE'
                  )
             SELECT
                 cil.id AS check_in_list_id,

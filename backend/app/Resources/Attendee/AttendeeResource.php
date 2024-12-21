@@ -4,6 +4,7 @@ namespace HiEvents\Resources\Attendee;
 
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Enums\QuestionBelongsTo;
+use HiEvents\Resources\CheckInList\AttendeeCheckInResource;
 use HiEvents\Resources\Order\OrderResource;
 use HiEvents\Resources\Question\QuestionAnswerViewResource;
 use HiEvents\Resources\Product\ProductResource;
@@ -35,18 +36,21 @@ class AttendeeResource extends JsonResource
                 !is_null($this->getProduct()),
                 fn() => new ProductResource($this->getProduct()),
             ),
+            'check_in' => $this->when(
+                condition: $this->getCheckIn() !== null,
+                value: fn() => new AttendeeCheckInResource($this->getCheckIn()),
+            ),
             'order' => $this->when(
-                !is_null($this->getOrder()),
-                fn() => new OrderResource($this->getOrder())
+                condition: !is_null($this->getOrder()),
+                value: fn() => new OrderResource($this->getOrder())
             ),
             'question_answers' => $this->when(
-                $this->getQuestionAndAnswerViews() !== null,
-                fn() => QuestionAnswerViewResource::collection(
+                condition: $this->getQuestionAndAnswerViews() !== null,
+                value: fn() => QuestionAnswerViewResource::collection(
                     $this->getQuestionAndAnswerViews()
                         ?->filter(fn($qav) => $qav->getBelongsTo() === QuestionBelongsTo::PRODUCT->name)
                 )
             ),
-
             'created_at' => $this->getCreatedAt(),
             'updated_at' => $this->getUpdatedAt(),
         ];

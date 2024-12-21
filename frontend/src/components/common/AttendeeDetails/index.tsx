@@ -37,7 +37,7 @@ export const AttendeeDetails = ({attendee}: { attendee: Attendee }) => {
                     {t`Checked In`}
                 </div>
                 <div className={classes.amount}>
-                    {attendee.checked_in_at ? t`Yes` : t`No`}
+                    {attendee.check_in ? t`Yes` : t`No`}
                 </div>
             </div>
             <div className={classes.block}>

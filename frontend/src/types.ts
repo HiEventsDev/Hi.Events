@@ -369,7 +369,19 @@ export interface Attendee {
     checked_in_by?: number;
     question_answers?: QuestionAnswer[];
     locale?: SupportedLocales;
-    check_in?: CheckIn;
+    check_in?: AttendeeCheckIn;
+}
+
+export type PublicCheckIn = Pick<AttendeeCheckIn, 'id' | 'attendee_id' | 'check_in_list_id' | 'ticket_id' | 'event_id'>;
+
+export interface AttendeeCheckIn {
+    id: IdParam;
+    attendee_id: IdParam;
+    check_in_list_id: IdParam;
+    ticket_id: IdParam;
+    event_id: IdParam;
+    short_id: IdParam;
+    created_at: string;
 }
 
 export interface Address {
@@ -498,14 +510,6 @@ export type CheckInListRequest =
     & {
     product_ids: IdParam[];
 };
-
-export interface CheckIn {
-    id: number;
-    short_id: string;
-    check_in_list_id: number;
-    attendee_id: number;
-    checked_in_at: string;
-}
 
 export interface QuestionRequestData {
     title: string;

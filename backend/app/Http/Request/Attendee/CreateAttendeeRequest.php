@@ -13,7 +13,7 @@ class CreateAttendeeRequest extends BaseRequest
     {
         return [
             'product_id' => ['int', 'required'],
-            'product_price_id' => ['int', 'nullable'],
+            'product_price_id' => ['int', 'nullable', 'required'],
             'email' => ['required', 'email'],
             'first_name' => 'string|required',
             'last_name' => 'string',

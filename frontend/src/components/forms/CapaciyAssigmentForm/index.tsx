@@ -24,7 +24,7 @@ export const CapacityAssigmentForm = ({form, productsCategories}: CapacityAssigm
             icon: <IconX/>,
             label: t`Inactive`,
             value: 'INACTIVE',
-            description: t`Disable this capacity track capacity without stopping product sales`,
+            description: t`Disabling this capacity will track sales but not stop them when the limit is reached`,
         },
     ];
 

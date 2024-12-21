@@ -75,9 +75,11 @@ class CreateAttendeeHandler
                 throw new NoTicketsAvailableException(__('This ticket is invalid'));
             }
 
+            $productPriceId = $this->getProductPriceId($attendeeDTO, $product);
+
             $availableQuantity = $this->productRepository->getQuantityRemainingForProductPrice(
                 $attendeeDTO->product_id,
-                $attendeeDTO->product_price_id,
+                $productPriceId,
             );
 
             if ($availableQuantity <= 0) {
