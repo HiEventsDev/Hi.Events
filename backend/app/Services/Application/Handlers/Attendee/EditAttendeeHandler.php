@@ -48,8 +48,8 @@ class EditAttendeeHandler
     private function adjustProductQuantities(AttendeeDomainObject $attendee, EditAttendeeDTO $editAttendeeDTO): void
     {
         if ($attendee->getProductPriceId() !== $editAttendeeDTO->product_price_id) {
-            $this->productQuantityService->decreaseQuantitySold($editAttendeeDTO->product_price_id);
-            $this->productQuantityService->increaseQuantitySold($attendee->getProductPriceId());
+            $this->productQuantityService->decreaseQuantitySold($attendee->getProductPriceId());
+            $this->productQuantityService->increaseQuantitySold($editAttendeeDTO->product_price_id);
         }
     }
 
@@ -60,6 +60,7 @@ class EditAttendeeHandler
             'last_name' => $editAttendeeDTO->last_name,
             'email' => $editAttendeeDTO->email,
             'product_id' => $editAttendeeDTO->product_id,
+            'product_price_id' => $editAttendeeDTO->product_price_id,
             'notes' => $editAttendeeDTO->notes,
         ], [
             'event_id' => $editAttendeeDTO->event_id,
@@ -82,6 +83,13 @@ class EditAttendeeHandler
         if ($product->getEventId() !== $editAttendeeDTO->event_id) {
             throw ValidationException::withMessages([
                 'product_id' => __('Product ID is not valid'),
+            ]);
+        }
+
+        $productPriceIds = $product->getProductPrices()->map(fn($productPrice) => $productPrice->getId())->toArray();
+        if (!in_array($editAttendeeDTO->product_price_id, $productPriceIds, true)) {
+            throw ValidationException::withMessages([
+                'product_price_id' => __('Product price ID is not valid'),
             ]);
         }
 

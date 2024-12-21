@@ -372,13 +372,13 @@ export interface Attendee {
     check_in?: AttendeeCheckIn;
 }
 
-export type PublicCheckIn = Pick<AttendeeCheckIn, 'id' | 'attendee_id' | 'check_in_list_id' | 'ticket_id' | 'event_id'>;
+export type PublicCheckIn = Pick<AttendeeCheckIn, 'id' | 'attendee_id' | 'check_in_list_id' | 'product_id' | 'event_id'>;
 
 export interface AttendeeCheckIn {
     id: IdParam;
     attendee_id: IdParam;
     check_in_list_id: IdParam;
-    ticket_id: IdParam;
+    product_id: IdParam;
     event_id: IdParam;
     short_id: IdParam;
     created_at: string;

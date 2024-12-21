@@ -65,6 +65,20 @@ export const ManageAttendeeModal = ({onClose, attendeeId}: ManageAttendeeModalPr
         }
     }, [attendee]);
 
+    useEffect(() => {
+        if (!form.values.product_id) {
+            return;
+        }
+        let productPriceId = event?.product_categories
+            ?.flatMap(category => category.products)
+            .find(product => product.id == form.values.product_id)?.prices?.[0]?.id;
+
+        form.setValues({
+            ...form.values,
+            product_price_id: String(productPriceId),
+        });
+    }, [form.values.product_id]);
+
     if (!attendee || !order || !event) {
         return <LoadingMask/>;
     }
