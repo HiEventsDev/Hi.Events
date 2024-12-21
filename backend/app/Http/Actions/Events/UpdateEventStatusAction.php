@@ -8,8 +8,8 @@ use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Event\UpdateEventStatusRequest;
 use HiEvents\Http\ResponseCodes;
 use HiEvents\Resources\Event\EventResource;
-use HiEvents\Services\Handlers\Event\DTO\UpdateEventStatusDTO;
-use HiEvents\Services\Handlers\Event\UpdateEventStatusHandler;
+use HiEvents\Services\Application\Handlers\Event\DTO\UpdateEventStatusDTO;
+use HiEvents\Services\Application\Handlers\Event\UpdateEventStatusHandler;
 use Illuminate\Http\JsonResponse;
 
 class UpdateEventStatusAction extends BaseAction

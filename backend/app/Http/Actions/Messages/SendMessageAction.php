@@ -7,8 +7,8 @@ use HiEvents\Exceptions\AccountNotVerifiedException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Message\SendMessageRequest;
 use HiEvents\Resources\Message\MessageResource;
-use HiEvents\Services\Handlers\Message\DTO\SendMessageDTO;
-use HiEvents\Services\Handlers\Message\SendMessageHandler;
+use HiEvents\Services\Application\Handlers\Message\DTO\SendMessageDTO;
+use HiEvents\Services\Application\Handlers\Message\SendMessageHandler;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -36,7 +36,7 @@ class SendMessageAction extends BaseAction
                 'is_test' => $request->input('is_test'),
                 'order_id' => $request->input('order_id'),
                 'attendee_ids' => $request->input('attendee_ids'),
-                'ticket_ids' => $request->input('ticket_ids'),
+                'product_ids' => $request->input('product_ids'),
                 'send_copy_to_current_user' => $request->boolean('send_copy_to_current_user'),
                 'sent_by_user_id' => $user->getId(),
                 'account_id' => $this->getAuthenticatedAccountId(),

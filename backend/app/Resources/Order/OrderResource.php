@@ -2,7 +2,6 @@
 
 namespace HiEvents\Resources\Order;
 
-use HiEvents\DomainObjects\Enums\QuestionBelongsTo;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\Resources\Attendee\AttendeeResource;
 use HiEvents\Resources\BaseResource;
@@ -49,10 +48,7 @@ class OrderResource extends BaseResource
             ),
             'question_answers' => $this->when(
                 !is_null($this->getQuestionAndAnswerViews()),
-                fn() => QuestionAnswerViewResource::collection(
-                    $this->getQuestionAndAnswerViews()
-                        ?->filter(fn($qav) => $qav->getBelongsTo() === QuestionBelongsTo::ORDER->name)
-                )
+                fn() => QuestionAnswerViewResource::collection($this->getQuestionAndAnswerViews()),
             ),
         ];
     }

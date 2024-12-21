@@ -7,8 +7,8 @@ use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Questions\UpsertQuestionRequest;
 use HiEvents\Http\ResponseCodes;
 use HiEvents\Resources\Question\QuestionResource;
-use HiEvents\Services\Handlers\Question\CreateQuestionHandler;
-use HiEvents\Services\Handlers\Question\DTO\UpsertQuestionDTO;
+use HiEvents\Services\Application\Handlers\Question\CreateQuestionHandler;
+use HiEvents\Services\Application\Handlers\Question\DTO\UpsertQuestionDTO;
 use Illuminate\Http\JsonResponse;
 
 class CreateQuestionAction extends BaseAction
@@ -30,7 +30,7 @@ class CreateQuestionAction extends BaseAction
             'required' => $request->boolean('required'),
             'options' => $request->input('options'),
             'event_id' => $eventId,
-            'ticket_ids' => $request->input('ticket_ids'),
+            'product_ids' => $request->input('product_ids'),
             'belongs_to' => $request->input('belongs_to'),
             'is_hidden' => $request->boolean('is_hidden'),
             'description' => $request->input('description'),

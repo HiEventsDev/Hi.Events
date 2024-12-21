@@ -4,7 +4,8 @@ import {
     CapacityAssignmentRequest,
     GenericDataResponse,
     GenericPaginatedResponse,
-    IdParam, QueryFilters,
+    IdParam,
+    QueryFilters,
 } from "../types";
 import {queryParamsHelper} from "../utilites/queryParamsHelper.ts";
 

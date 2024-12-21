@@ -4,18 +4,18 @@ namespace HiEvents\Services\Domain\Order;
 
 use Exception;
 use HiEvents\DomainObjects\CapacityAssignmentDomainObject;
-use HiEvents\DomainObjects\Enums\TicketType;
+use HiEvents\DomainObjects\Enums\ProductPriceType;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\Generated\PromoCodeDomainObjectAbstract;
-use HiEvents\DomainObjects\TicketDomainObject;
-use HiEvents\DomainObjects\TicketPriceDomainObject;
+use HiEvents\DomainObjects\ProductDomainObject;
+use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\Helper\Currency;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
-use HiEvents\Repository\Interfaces\TicketRepositoryInterface;
-use HiEvents\Services\Domain\Ticket\AvailableTicketQuantitiesFetchService;
-use HiEvents\Services\Domain\Ticket\DTO\AvailableTicketQuantitiesDTO;
-use HiEvents\Services\Domain\Ticket\DTO\AvailableTicketQuantitiesResponseDTO;
+use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
+use HiEvents\Services\Domain\Product\AvailableProductQuantitiesFetchService;
+use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesDTO;
+use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesResponseDTO;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -23,13 +23,13 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class OrderCreateRequestValidationService
 {
-    private AvailableTicketQuantitiesResponseDTO $availableTicketQuantities;
+    private AvailableProductQuantitiesResponseDTO $availableProductQuantities;
 
     public function __construct(
-        readonly private TicketRepositoryInterface             $ticketRepository,
-        readonly private PromoCodeRepositoryInterface          $promoCodeRepository,
-        readonly private EventRepositoryInterface              $eventRepository,
-        readonly private AvailableTicketQuantitiesFetchService $fetchAvailableTicketQuantitiesService,
+        readonly private ProductRepositoryInterface             $productRepository,
+        readonly private PromoCodeRepositoryInterface           $promoCodeRepository,
+        readonly private EventRepositoryInterface               $eventRepository,
+        readonly private AvailableProductQuantitiesFetchService $fetchAvailableProductQuantitiesService,
     )
     {
     }
@@ -44,16 +44,16 @@ class OrderCreateRequestValidationService
 
         $event = $this->eventRepository->findById($eventId);
         $this->validatePromoCode($eventId, $data);
-        $this->validateTicketSelection($data);
+        $this->validateProductSelection($data);
 
-        $this->availableTicketQuantities = $this->fetchAvailableTicketQuantitiesService
-            ->getAvailableTicketQuantities(
+        $this->availableProductQuantities = $this->fetchAvailableProductQuantitiesService
+            ->getAvailableProductQuantities(
                 $event->getId(),
                 ignoreCache: true,
             );
 
         $this->validateOverallCapacity($data);
-        $this->validateTicketDetails($event, $data);
+        $this->validateProductDetails($event, $data);
     }
 
     /**
@@ -81,12 +81,12 @@ class OrderCreateRequestValidationService
     private function validateTypes(array $data): void
     {
         $validator = Validator::make($data, [
-            'tickets' => 'required|array',
-            'tickets.*.ticket_id' => 'required|integer',
-            'tickets.*.quantities' => 'required|array',
-            'tickets.*.quantities.*.quantity' => 'required|integer',
-            'tickets.*.quantities.*.price_id' => 'required|integer',
-            'tickets.*.quantities.*.price' => 'numeric|min:0',
+            'products' => 'required|array',
+            'products.*.product_id' => 'required|integer',
+            'products.*.quantities' => 'required|array',
+            'products.*.quantities.*.quantity' => 'required|integer',
+            'products.*.quantities.*.price_id' => 'required|integer',
+            'products.*.quantities.*.price' => 'numeric|min:0',
         ]);
 
         if ($validator->fails()) {
@@ -97,12 +97,12 @@ class OrderCreateRequestValidationService
     /**
      * @throws ValidationException
      */
-    private function validateTicketSelection(array $data): void
+    private function validateProductSelection(array $data): void
     {
-        $ticketData = collect($data['tickets']);
-        if ($ticketData->isEmpty() || $ticketData->sum(fn($ticket) => collect($ticket['quantities'])->sum('quantity')) === 0) {
+        $productData = collect($data['products']);
+        if ($productData->isEmpty() || $productData->sum(fn($product) => collect($product['quantities'])->sum('quantity')) === 0) {
             throw ValidationException::withMessages([
-                'tickets' => __('You haven\'t selected any tickets')
+                'products' => __('You haven\'t selected any products')
             ]);
         }
     }
@@ -110,150 +110,150 @@ class OrderCreateRequestValidationService
     /**
      * @throws Exception
      */
-    private function getTickets(array $data): Collection
+    private function getProducts(array $data): Collection
     {
-        $ticketIds = collect($data['tickets'])->pluck('ticket_id');
-        return $this->ticketRepository
-            ->loadRelation(TicketPriceDomainObject::class)
-            ->findWhereIn('id', $ticketIds->toArray());
+        $productIds = collect($data['products'])->pluck('product_id');
+        return $this->productRepository
+            ->loadRelation(ProductPriceDomainObject::class)
+            ->findWhereIn('id', $productIds->toArray());
     }
 
     /**
      * @throws ValidationException
      * @throws Exception
      */
-    private function validateTicketDetails(EventDomainObject $event, array $data): void
+    private function validateProductDetails(EventDomainObject $event, array $data): void
     {
-        $tickets = $this->getTickets($data);
+        $products = $this->getProducts($data);
 
-        foreach ($data['tickets'] as $ticketIndex => $ticketAndQuantities) {
-            $this->validateSingleTicketDetails($event, $ticketIndex, $ticketAndQuantities, $tickets);
+        foreach ($data['products'] as $productIndex => $productAndQuantities) {
+            $this->validateSingleProductDetails($event, $productIndex, $productAndQuantities, $products);
         }
     }
 
     /**
      * @throws ValidationException
      */
-    private function validateSingleTicketDetails(EventDomainObject $event, int $ticketIndex, array $ticketAndQuantities, $tickets): void
+    private function validateSingleProductDetails(EventDomainObject $event, int $productIndex, array $productAndQuantities, $products): void
     {
-        $ticketId = $ticketAndQuantities['ticket_id'];
-        $totalQuantity = collect($ticketAndQuantities['quantities'])->sum('quantity');
+        $productId = $productAndQuantities['product_id'];
+        $totalQuantity = collect($productAndQuantities['quantities'])->sum('quantity');
 
         if ($totalQuantity === 0) {
             return;
         }
 
-        /** @var TicketDomainObject $ticket */
-        $ticket = $tickets->filter(fn($t) => $t->getId() === $ticketId)->first();
-        if (!$ticket) {
-            throw new NotFoundHttpException(sprintf('Ticket ID %d not found', $ticketId));
+        /** @var ProductDomainObject $product */
+        $product = $products->filter(fn($t) => $t->getId() === $productId)->first();
+        if (!$product) {
+            throw new NotFoundHttpException(sprintf('Product ID %d not found', $productId));
         }
 
-        $this->validateTicketEvent(
+        $this->validateProductEvent(
             event: $event,
-            ticketId: $ticketId,
-            ticket: $ticket
+            productId: $productId,
+            product: $product
         );
 
-        $this->validateTicketQuantity(
-            ticketIndex: $ticketIndex,
-            ticketAndQuantities: $ticketAndQuantities,
-            ticket: $ticket
+        $this->validateProductQuantity(
+            productIndex: $productIndex,
+            productAndQuantities: $productAndQuantities,
+            product: $product
         );
 
-        $this->validateTicketTypeAndPrice(
+        $this->validateProductTypeAndPrice(
             event: $event,
-            ticketIndex: $ticketIndex,
-            ticketAndQuantities: $ticketAndQuantities,
-            ticket: $ticket
+            productIndex: $productIndex,
+            productAndQuantities: $productAndQuantities,
+            product: $product
         );
 
-        $this->validateSoldOutTickets(
-            ticketId: $ticketId,
-            ticketIndex: $ticketIndex,
-            ticket: $ticket
+        $this->validateSoldOutProducts(
+            productId: $productId,
+            productIndex: $productIndex,
+            product: $product
         );
 
         $this->validatePriceIdAndQuantity(
-            ticketIndex: $ticketIndex,
-            ticketAndQuantities: $ticketAndQuantities,
-            ticket: $ticket
+            productIndex: $productIndex,
+            productAndQuantities: $productAndQuantities,
+            product: $product
         );
     }
 
     /**
      * @throws ValidationException
      */
-    private function validateTicketQuantity(int $ticketIndex, array $ticketAndQuantities, TicketDomainObject $ticket): void
+    private function validateProductQuantity(int $productIndex, array $productAndQuantities, ProductDomainObject $product): void
     {
-        $totalQuantity = collect($ticketAndQuantities['quantities'])->sum('quantity');
-        $maxPerOrder = (int)$ticket->getMaxPerOrder() ?: 100;
+        $totalQuantity = collect($productAndQuantities['quantities'])->sum('quantity');
+        $maxPerOrder = (int)$product->getMaxPerOrder() ?: 100;
 
-        $capacityMaximum = $this->availableTicketQuantities
-            ->ticketQuantities
-            ->where('ticket_id', $ticket->getId())
-            ->map(fn(AvailableTicketQuantitiesDTO $price) => $price->capacities)
+        $capacityMaximum = $this->availableProductQuantities
+            ->productQuantities
+            ->where('product_id', $product->getId())
+            ->map(fn(AvailableProductQuantitiesDTO $price) => $price->capacities)
             ->flatten()
             ->min(fn(CapacityAssignmentDomainObject $capacity) => $capacity->getCapacity());
 
-        $ticketAvailableQuantity = $this->availableTicketQuantities
-            ->ticketQuantities
-            ->first(fn(AvailableTicketQuantitiesDTO $price) => $price->ticket_id === $ticket->getId())
+        $productAvailableQuantity = $this->availableProductQuantities
+            ->productQuantities
+            ->first(fn(AvailableProductQuantitiesDTO $price) => $price->product_id === $product->getId())
             ->quantity_available;
 
-        # if there are fewer tickets available than the configured minimum, we allow less than the minimum to be purchased
-        $minPerOrder = min((int)$ticket->getMinPerOrder() ?: 1,
+        # if there are fewer products available than the configured minimum, we allow less than the minimum to be purchased
+        $minPerOrder = min((int)$product->getMinPerOrder() ?: 1,
             $capacityMaximum ?: $maxPerOrder,
-            $ticketAvailableQuantity ?: $maxPerOrder);
+            $productAvailableQuantity ?: $maxPerOrder);
 
-        $this->validateTicketPricesQuantity(
-            quantities: $ticketAndQuantities['quantities'],
-            ticket: $ticket,
-            ticketIndex: $ticketIndex
+        $this->validateProductPricesQuantity(
+            quantities: $productAndQuantities['quantities'],
+            product: $product,
+            productIndex: $productIndex
         );
 
         if ($totalQuantity > $maxPerOrder) {
             throw ValidationException::withMessages([
-                "tickets.$ticketIndex" => __("The maximum number of tickets available for :tickets is :max", [
+                "products.$productIndex" => __("The maximum number of products available for :products is :max", [
                     'max' => $maxPerOrder,
-                    'ticket' => $ticket->getTitle(),
+                    'product' => $product->getTitle(),
                 ]),
             ]);
         }
 
         if ($totalQuantity < $minPerOrder) {
             throw ValidationException::withMessages([
-                "tickets.$ticketIndex" => __("You must order at least :min tickets for :ticket", [
+                "products.$productIndex" => __("You must order at least :min products for :product", [
                     'min' => $minPerOrder,
-                    'ticket' => $ticket->getTitle(),
+                    'product' => $product->getTitle(),
                 ]),
             ]);
         }
     }
 
-    private function validateTicketEvent(EventDomainObject $event, int $ticketId, TicketDomainObject $ticket): void
+    private function validateProductEvent(EventDomainObject $event, int $productId, ProductDomainObject $product): void
     {
-        if ($ticket->getEventId() !== $event->getId()) {
-            throw new NotFoundHttpException(sprintf('Ticket ID %d not found for event ID %d', $ticketId, $event->getId()));
+        if ($product->getEventId() !== $event->getId()) {
+            throw new NotFoundHttpException(sprintf('Product ID %d not found for event ID %d', $productId, $event->getId()));
         }
     }
 
     /**
      * @throws ValidationException
      */
-    private function validateTicketTypeAndPrice(
+    private function validateProductTypeAndPrice(
         EventDomainObject  $event,
-        int                $ticketIndex,
-        array              $ticketAndQuantities,
-        TicketDomainObject $ticket
+        int                $productIndex,
+        array              $productAndQuantities,
+        ProductDomainObject $product
     ): void
     {
-        if ($ticket->getType() === TicketType::DONATION->name) {
-            $price = $ticketAndQuantities['quantities'][0]['price'] ?? 0;
-            if ($price < $ticket->getPrice()) {
-                $formattedPrice = Currency::format($ticket->getPrice(), $event->getCurrency());
+        if ($product->getType() === ProductPriceType::DONATION->name) {
+            $price = $productAndQuantities['quantities'][0]['price'] ?? 0;
+            if ($price < $product->getPrice()) {
+                $formattedPrice = Currency::format($product->getPrice(), $event->getCurrency());
                 throw ValidationException::withMessages([
-                    "tickets.$ticketIndex.quantities.0.price" => __("The minimum amount is :price", ['price' => $formattedPrice]),
+                    "products.$productIndex.quantities.0.price" => __("The minimum amount is :price", ['price' => $formattedPrice]),
                 ]);
             }
         }
@@ -262,13 +262,13 @@ class OrderCreateRequestValidationService
     /**
      * @throws ValidationException
      */
-    private function validateSoldOutTickets(int $ticketId, int $ticketIndex, TicketDomainObject $ticket): void
+    private function validateSoldOutProducts(int $productId, int $productIndex, ProductDomainObject $product): void
     {
-        if ($ticket->isSoldOut()) {
+        if ($product->isSoldOut()) {
             throw ValidationException::withMessages([
-                "tickets.$ticketIndex" => __("The ticket :ticket is sold out", [
-                    'id' => $ticketId,
-                    'ticket' => $ticket->getTitle(),
+                "products.$productIndex" => __("The product :product is sold out", [
+                    'id' => $productId,
+                    'product' => $product->getTitle(),
                 ]),
             ]);
         }
@@ -277,24 +277,24 @@ class OrderCreateRequestValidationService
     /**
      * @throws ValidationException
      */
-    private function validatePriceIdAndQuantity(int $ticketIndex, array $ticketAndQuantities, TicketDomainObject $ticket): void
+    private function validatePriceIdAndQuantity(int $productIndex, array $productAndQuantities, ProductDomainObject $product): void
     {
         $errors = [];
 
-        foreach ($ticketAndQuantities['quantities'] as $quantityIndex => $quantityData) {
+        foreach ($productAndQuantities['quantities'] as $quantityIndex => $quantityData) {
             $priceId = $quantityData['price_id'] ?? null;
             $quantity = $quantityData['quantity'] ?? null;
 
             if (null === $priceId || null === $quantity) {
                 $missingField = null === $priceId ? 'price_id' : 'quantity';
-                $errors["tickets.$ticketIndex.quantities.$quantityIndex.$missingField"] = __(":field must be specified", [
+                $errors["products.$productIndex.quantities.$quantityIndex.$missingField"] = __(":field must be specified", [
                     'field' => ucfirst($missingField)
                 ]);
             }
 
-            $validPriceIds = $ticket->getTicketPrices()?->map(fn(TicketPriceDomainObject $price) => $price->getId());
+            $validPriceIds = $product->getProductPrices()?->map(fn(ProductPriceDomainObject $price) => $price->getId());
             if (!in_array($priceId, $validPriceIds->toArray(), true)) {
-                $errors["tickets.$ticketIndex.quantities.$quantityIndex.price_id"] = __('Invalid price ID');
+                $errors["products.$productIndex.quantities.$quantityIndex.price_id"] = __('Invalid price ID');
             }
         }
 
@@ -306,32 +306,32 @@ class OrderCreateRequestValidationService
     /**
      * @throws ValidationException
      */
-    private function validateTicketPricesQuantity(array $quantities, TicketDomainObject $ticket, int $ticketIndex): void
+    private function validateProductPricesQuantity(array $quantities, ProductDomainObject $product, int $productIndex): void
     {
-        foreach ($quantities as $ticketQuantity) {
-            $numberAvailable = $this->availableTicketQuantities
-                ->ticketQuantities
-                ->where('ticket_id', $ticket->getId())
-                ->where('price_id', $ticketQuantity['price_id'])
+        foreach ($quantities as $productQuantity) {
+            $numberAvailable = $this->availableProductQuantities
+                ->productQuantities
+                ->where('product_id', $product->getId())
+                ->where('price_id', $productQuantity['price_id'])
                 ->first()?->quantity_available;
 
-            /** @var TicketPriceDomainObject $ticketPrice */
-            $ticketPrice = $ticket->getTicketPrices()
-                ?->first(fn(TicketPriceDomainObject $price) => $price->getId() === $ticketQuantity['price_id']);
+            /** @var ProductPriceDomainObject $productPrice */
+            $productPrice = $product->getProductPrices()
+                ?->first(fn(ProductPriceDomainObject $price) => $price->getId() === $productQuantity['price_id']);
 
-            if ($ticketQuantity['quantity'] > $numberAvailable) {
+            if ($productQuantity['quantity'] > $numberAvailable) {
                 if ($numberAvailable === 0) {
                     throw ValidationException::withMessages([
-                        "tickets.$ticketIndex" => __("The ticket :ticket is sold out", [
-                            'ticket' => $ticket->getTitle() . ($ticketPrice->getLabel() ? ' - ' . $ticketPrice->getLabel() : ''),
+                        "products.$productIndex" => __("The product :product is sold out", [
+                            'product' => $product->getTitle() . ($productPrice->getLabel() ? ' - ' . $productPrice->getLabel() : ''),
                         ]),
                     ]);
                 }
 
                 throw ValidationException::withMessages([
-                    "tickets.$ticketIndex" => __("The maximum number of tickets available for :ticket is :max", [
+                    "products.$productIndex" => __("The maximum number of products available for :product is :max", [
                         'max' => $numberAvailable,
-                        'ticket' => $ticket->getTitle() . ($ticketPrice->getLabel() ? ' - ' . $ticketPrice->getLabel() : ''),
+                        'product' => $product->getTitle() . ($productPrice->getLabel() ? ' - ' . $productPrice->getLabel() : ''),
                     ]),
                 ]);
             }
@@ -343,34 +343,34 @@ class OrderCreateRequestValidationService
      */
     private function validateOverallCapacity(array $data): void
     {
-        foreach ($this->availableTicketQuantities->capacities as $capacity) {
-            if ($capacity->getTickets() === null) {
+        foreach ($this->availableProductQuantities->capacities as $capacity) {
+            if ($capacity->getProducts() === null) {
                 continue;
             }
 
-            $ticketIds = $capacity->getTickets()->map(fn(TicketDomainObject $ticket) => $ticket->getId());
-            $totalQuantity = collect($data['tickets'])
-                ->filter(fn($ticket) => in_array($ticket['ticket_id'], $ticketIds->toArray(), true))
-                ->sum(fn($ticket) => collect($ticket['quantities'])->sum('quantity'));
+            $productIds = $capacity->getProducts()->map(fn(ProductDomainObject $product) => $product->getId());
+            $totalQuantity = collect($data['products'])
+                ->filter(fn($product) => in_array($product['product_id'], $productIds->toArray(), true))
+                ->sum(fn($product) => collect($product['quantities'])->sum('quantity'));
 
-            $reservedTicketQuantities = $capacity->getTickets()
-                ->map(fn(TicketDomainObject $ticket) => $this
-                    ->availableTicketQuantities
-                    ->ticketQuantities
-                    ->where('ticket_id', $ticket->getId())
+            $reservedProductQuantities = $capacity->getProducts()
+                ->map(fn(ProductDomainObject $product) => $this
+                    ->availableProductQuantities
+                    ->productQuantities
+                    ->where('product_id', $product->getId())
                     ->sum('quantity_reserved')
                 )
                 ->sum();
 
-            if ($totalQuantity > ($capacity->getAvailableCapacity() - $reservedTicketQuantities)) {
-                if ($capacity->getAvailableCapacity() - $reservedTicketQuantities <= 0) {
+            if ($totalQuantity > ($capacity->getAvailableCapacity() - $reservedProductQuantities)) {
+                if ($capacity->getAvailableCapacity() - $reservedProductQuantities <= 0) {
                     throw ValidationException::withMessages([
-                        'tickets' => __('Sorry, these tickets are sold out'),
+                        'products' => __('Sorry, these products are sold out'),
                     ]);
                 }
 
                 throw ValidationException::withMessages([
-                    'tickets' => __('The maximum number of tickets available is :max', [
+                    'products' => __('The maximum number of products available is :max', [
                         'max' => $capacity->getAvailableCapacity(),
                     ]),
                 ]);

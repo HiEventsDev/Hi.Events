@@ -1,6 +1,6 @@
 @php /** @var \HiEvents\DomainObjects\EventDomainObject $event */ @endphp
 @php /** @var \HiEvents\DomainObjects\EventSettingDomainObject $eventSettings */ @endphp
-@php /** @var \HiEvents\Services\Handlers\Message\DTO\SendMessageDTO $messageData */ @endphp
+@php /** @var \HiEvents\Services\Application\Handlers\Message\DTO\SendMessageDTO $messageData */ @endphp
 
 @php /** @see \HiEvents\Mail\Event\EventMessage */ @endphp
 

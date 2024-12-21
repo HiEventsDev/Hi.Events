@@ -6,6 +6,6 @@ enum QuestionBelongsTo
 {
     use BaseEnum;
 
-    case TICKET;
+    case PRODUCT;
     case ORDER;
 }

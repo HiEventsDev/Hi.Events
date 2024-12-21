@@ -1,0 +1,124 @@
+@import "../../../styles/mixins";
+
+.attendee {
+  display: flex;
+  justify-content: space-between;
+  border-radius: 10px;
+  background-color: #FFFFFF;
+  border: 1px solid #ddd;
+  overflow: hidden;
+  padding: 0;
+  margin-bottom: 20px;
+
+  @media print {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    margin-bottom: 100px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  @include respond-below(sm) {
+    flex-direction: column-reverse;
+  }
+
+  .attendeeInfo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px;
+    flex: 1;
+    place-content: space-between;
+
+    .attendeeNameAndPrice {
+      place-self: flex-start;
+      display: flex;
+      justify-content: space-between;
+      flex-direction: row;
+      width: 100%;
+
+      .attendeeName {
+        flex: 1;
+      }
+
+      .productName {
+        font-size: 0.9em;
+        font-weight: 900;
+        margin-bottom: 5px;
+      }
+
+      .productPrice {
+        .badge {
+          background-color: #8BC34A;
+          color: #fff;
+          padding: 5px 10px;
+          border-radius: 10px;
+          font-size: 0.8em;
+        }
+      }
+
+      h2 {
+        margin: 0;
+      }
+    }
+
+    .eventInfo {
+      .eventName {
+        font-weight: 900;
+      }
+    }
+
+    a {
+      font-size: .9em;
+    }
+  }
+
+  .qrCode {
+    .attendeeCode {
+      padding: 5px;
+      margin-bottom: 20px;
+      font-weight: 900;
+      font-size: 0.8em;
+    }
+
+    justify-content: flex-end;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    background-color: #f8f8f8;
+    border-left: 1px solid #ddd;
+    padding: 15px;
+
+    @include respond-below(sm) {
+      border-left: none;
+    }
+
+    .qrImage
+    {
+      svg {
+        width: 140px;
+        height: 140px;
+      }
+
+      .cancelled {
+        height: 140px;
+        padding: 20px;
+        font-size: 1.1em;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #d64646;
+        width: 140px;
+      }
+    }
+
+    .productButtons {
+      background: #ffffff;
+      border-radius: 5px;
+      margin-top: 20px;
+      border: 1px solid #d1d1d1;
+    }
+  }
+}

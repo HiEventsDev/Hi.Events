@@ -4,8 +4,8 @@ namespace HiEvents\Services\Domain\Tax;
 
 use HiEvents\DomainObjects\Enums\TaxCalculationType;
 use HiEvents\DomainObjects\TaxAndFeesDomainObject;
-use HiEvents\DomainObjects\TicketDomainObject;
-use HiEvents\DomainObjects\TicketPriceDomainObject;
+use HiEvents\DomainObjects\ProductDomainObject;
+use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\Services\Domain\Tax\DTO\TaxCalculationResponse;
 use InvalidArgumentException;
 
@@ -18,26 +18,26 @@ class TaxAndFeeCalculationService
         $this->taxRollupService = $taxRollupService;
     }
 
-    public function calculateTaxAndFeesForTicketPrice(
-        TicketDomainObject      $ticket,
-        TicketPriceDomainObject $price,
+    public function calculateTaxAndFeesForProductPrice(
+        ProductDomainObject      $product,
+        ProductPriceDomainObject $price,
     ): TaxCalculationResponse
     {
-        return $this->calculateTaxAndFeesForTicket($ticket, $price->getPrice());
+        return $this->calculateTaxAndFeesForProduct($product, $price->getPrice());
     }
 
-    public function calculateTaxAndFeesForTicket(
-        TicketDomainObject $ticket,
-        float              $price,
-        int                $quantity = 1
+    public function calculateTaxAndFeesForProduct(
+        ProductDomainObject $product,
+        float               $price,
+        int                 $quantity = 1
     ): TaxCalculationResponse
     {
         $this->taxRollupService->resetRollUp();
 
-        $fees = $ticket->getFees()
+        $fees = $product->getFees()
             ?->sum(fn($taxOrFee) => $this->calculateFee($taxOrFee, $price, $quantity)) ?: 0.00;
 
-        $taxFees = $ticket->getTaxRates()
+        $taxFees = $product->getTaxRates()
             ?->sum(fn($taxOrFee) => $this->calculateFee($taxOrFee, $price + $fees, $quantity));
 
         return new TaxCalculationResponse(

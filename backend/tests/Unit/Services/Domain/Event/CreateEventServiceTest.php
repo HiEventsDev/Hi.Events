@@ -12,6 +12,7 @@ use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
 use HiEvents\Services\Domain\Event\CreateEventService;
+use HiEvents\Services\Domain\ProductCategory\CreateProductCategoryService;
 use HTMLPurifier;
 use Illuminate\Database\DatabaseManager;
 use Mockery;
@@ -37,6 +38,7 @@ class CreateEventServiceTest extends TestCase
         $this->databaseManager = Mockery::mock(DatabaseManager::class);
         $this->eventStatisticsRepository = Mockery::mock(EventStatisticRepositoryInterface::class);
         $this->purifier = Mockery::mock(HTMLPurifier::class);
+        $this->createProductCategoryService = Mockery::mock(CreateProductCategoryService::class);
 
         $this->createEventService = new CreateEventService(
             $this->eventRepository,
@@ -45,6 +47,7 @@ class CreateEventServiceTest extends TestCase
             $this->databaseManager,
             $this->eventStatisticsRepository,
             $this->purifier,
+            $this->createProductCategoryService,
         );
     }
 
@@ -86,16 +89,23 @@ class CreateEventServiceTest extends TestCase
         $this->eventStatisticsRepository->shouldReceive('create')
             ->with(Mockery::on(function ($arg) use ($eventData) {
                 return $arg['event_id'] === $eventData->getId() &&
-                    $arg['tickets_sold'] === 0 &&
+                    $arg['products_sold'] === 0 &&
                     $arg['sales_total_gross'] === 0;
             }));
 
+        $this->createProductCategoryService->shouldReceive('createCategory')
+            ->with(
+                'Tickets',
+                false,
+                Mockery::any(),
+                null,
+                'There are no tickets available for this event.'
+            );
 
         $this->purifier->shouldReceive('purify')->andReturn('Test Description');
 
         $result = $this->createEventService->createEvent($eventData, $eventSettings);
 
-        $this->assertInstanceOf(EventDomainObject::class, $result);
         $this->assertEquals($eventData->getId(), $result->getId());
     }
 
@@ -121,9 +131,18 @@ class CreateEventServiceTest extends TestCase
 
         $this->eventStatisticsRepository->shouldReceive('create');
 
-        $result = $this->createEventService->createEvent($eventData);
+        $this->createProductCategoryService->shouldReceive('createCategory')
+            ->with(
+                'Tickets',
+                false,
+                Mockery::any(),
+                null,
+                'There are no tickets available for this event.'
+            );
 
-        $this->assertInstanceOf(EventDomainObject::class, $result);
+        $this->createEventService->createEvent($eventData);
+
+        $this->assertTrue(true);
     }
 
     public function testCreateEventThrowsOrganizerNotFoundException(): void

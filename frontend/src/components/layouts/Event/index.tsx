@@ -1,6 +1,7 @@
 import {Badge, Breadcrumbs, Burger, Button, UnstyledButton, VisuallyHidden} from '@mantine/core';
-import {NavLink, Outlet, useParams} from "react-router-dom";
+import {NavLink, Outlet, useLocation, useParams} from "react-router-dom";
 import {
+    IconChartPie,
     IconChevronLeft,
     IconChevronRight,
     IconDashboard,
@@ -31,13 +32,29 @@ import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
 import {useGetEventSettings} from "../../../queries/useGetEventSettings.ts";
 import {EventStatusBadge} from "../../common/EventStatusBadge";
 
+interface NavItem {
+    link?: string;
+    label: string;
+    icon?: any;
+    comingSoon?: boolean;
+    isActive?: (isActive: boolean) => boolean;
+}
+
 const EventLayout = () => {
-    const data = [
+    const location = useLocation();
+
+    const data: NavItem[] = [
         {link: 'getting-started', label: t`Getting Started`, icon: IconStar},
         {label: t`Manage`},
         {link: 'dashboard', label: t`Dashboard`, icon: IconDashboard},
+        {
+            link: 'reports',
+            label: t`Reports`,
+            icon: IconChartPie,
+            isActive: (isActive) => isActive || location.pathname.includes('/report/')
+        },
         {link: 'settings', label: t`Settings`, icon: IconSettings},
-        {link: 'tickets', label: t`Tickets`, icon: IconTicket},
+        {link: 'products', label: t`Products`, icon: IconTicket},
         {link: 'attendees', label: t`Attendees`, icon: IconUsers},
         {link: 'orders', label: t`Orders`, icon: IconReceipt},
         {link: 'questions', label: t`Questions`, icon: IconUserQuestion},
@@ -45,11 +62,11 @@ const EventLayout = () => {
         {link: 'messages', label: t`Messages`, icon: IconSend},
         {link: 'capacity-assignments', label: t`Capacity`, icon: IconUsersGroup},
         {link: 'check-in', label: t`Check-In Lists`, icon: IconQrcode},
-
         {label: t`Tools`},
         {link: 'homepage-designer', label: t`Homepage Designer`, icon: IconPaint},
         {link: 'widget', label: t`Widget Embed`, icon: IconDeviceTabletCode},
     ];
+
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const {eventId} = useParams();
     const {data: event, isFetched: isEventFetched} = useGetEvent(eventId);
@@ -79,7 +96,9 @@ const EventLayout = () => {
                 key={item.label}
                 onClick={() => setSidebarOpen(false)}
                 className={({isActive}) =>
-                    ((isActive && !item.comingSoon) ? classes.linkActive : "") + " " + classes.link
+                    `${((item.isActive ? item.isActive(isActive) : isActive) && !item.comingSoon)
+                        ? classes.linkActive
+                        : ""} ${classes.link}`
                 }
             >
                 <item.icon size={23} className={classes.linkIcon} stroke={1.5}/>
@@ -87,7 +106,6 @@ const EventLayout = () => {
             </NavLink>
         );
     });
-
     const handleStatusToggle = () => {
         const message = event?.status === 'LIVE'
             ? t`Are you sure you want to make this event draft? This will make the event invisible to the public`
@@ -174,7 +192,7 @@ const EventLayout = () => {
             <div className={classes.sidebar}>
                 <div className={classes.logo}>
                     <NavLink to={'/manage/events'}>
-                        <img style={{maxWidth: '170px', margin: "20px auto"}}
+                        <img style={{maxWidth: '120px', margin: "20px auto"}}
                              src={'/logo.svg'} alt={''}/>
                     </NavLink>
                 </div>

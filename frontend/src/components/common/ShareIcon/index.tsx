@@ -1,12 +1,13 @@
 import {useState} from 'react';
-import {ActionIcon, CopyButton, Group, Input, Popover, Button} from '@mantine/core';
+import {ActionIcon, Button, CopyButton, Group, Input, Popover} from '@mantine/core';
 import {
     IconBrandFacebook,
     IconBrandLinkedin,
     IconBrandTwitter,
     IconBrandWhatsapp,
     IconCheck,
-    IconCopy, IconMail,
+    IconCopy,
+    IconMail,
     IconShare
 } from "@tabler/icons-react";
 import {t} from "@lingui/macro";
@@ -16,9 +17,17 @@ interface ShareComponentProps {
     text: string;
     url: string;
     imageUrl?: string;
+    shareButtonText?: string;
+    hideShareButtonText?: boolean;
 }
 
-export const ShareComponent = ({title, text, url}: ShareComponentProps) => {
+export const ShareComponent = ({
+                                   title,
+                                   text,
+                                   url,
+                                   shareButtonText = t`Share`,
+                                   hideShareButtonText = false,
+                               }: ShareComponentProps) => {
     const [opened, setOpened] = useState(false);
 
     let shareText = text;
@@ -49,12 +58,21 @@ export const ShareComponent = ({title, text, url}: ShareComponentProps) => {
             withArrow
         >
             <Popover.Target>
-                <Button variant={'transparent'} leftSection={<IconShare size={20}/>} onClick={handleShareClick}>
-                    {t`Share`}
-                </Button>
+                <div style={{display: 'flex'}}>
+                    {hideShareButtonText && (
+                        <ActionIcon variant={'transparent'} onClick={handleShareClick}>
+                            <IconShare size={20}/>
+                        </ActionIcon>
+                    )}
+
+                    {!hideShareButtonText && (
+                        <Button variant={'transparent'} leftSection={<IconShare size={20}/>} onClick={handleShareClick}>
+                            {hideShareButtonText ? '' : shareButtonText}
+                        </Button>)}
+                </div>
             </Popover.Target>
 
-            <Popover.Dropdown>
+            <Popover.Dropdown style={{display: 'flex'}}>
                 <Group>
                     <ActionIcon variant={'transparent'} component="a"
                                 href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(url)}`}
@@ -84,7 +102,7 @@ export const ShareComponent = ({title, text, url}: ShareComponentProps) => {
                 </Group>
                 <Input rightSectionPointerEvents={'all'} mt={10} value={url} rightSection={(
                     <CopyButton value={url}>
-                        {({ copied, copy }) => (
+                        {({copied, copy}) => (
                             <ActionIcon variant={'transparent'} onClick={copy}>
                                 {copied ? <IconCheck/> : <IconCopy/>}
                             </ActionIcon>

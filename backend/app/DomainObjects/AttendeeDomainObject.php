@@ -11,7 +11,7 @@ class AttendeeDomainObject extends Generated\AttendeeDomainObjectAbstract implem
 {
     private ?OrderDomainObject $order = null;
 
-    private ?TicketDomainObject $ticket = null;
+    private ?ProductDomainObject $product = null;
 
     /** @var Collection<QuestionAndAnswerViewDomainObject>|null */
     public ?Collection $questionAndAnswerViews = null;
@@ -60,7 +60,7 @@ class AttendeeDomainObject extends Generated\AttendeeDomainObjectAbstract implem
     {
         return [
             self::STATUS,
-            self::TICKET_ID,
+            self::PRODUCT_ID,
         ];
     }
 
@@ -79,14 +79,14 @@ class AttendeeDomainObject extends Generated\AttendeeDomainObjectAbstract implem
         return $this->first_name . ' ' . $this->last_name;
     }
 
-    public function getTicket(): ?TicketDomainObject
+    public function getProduct(): ?ProductDomainObject
     {
-        return $this->ticket;
+        return $this->product;
     }
 
-    public function setTicket(?TicketDomainObject $ticket): self
+    public function setProduct(?ProductDomainObject $product): self
     {
-        $this->ticket = $ticket;
+        $this->product = $product;
 
         return $this;
     }

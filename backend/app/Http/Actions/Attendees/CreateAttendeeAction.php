@@ -3,14 +3,14 @@
 namespace HiEvents\Http\Actions\Attendees;
 
 use HiEvents\DomainObjects\EventDomainObject;
-use HiEvents\Exceptions\InvalidTicketPriceId;
+use HiEvents\Exceptions\InvalidProductPriceId;
 use HiEvents\Exceptions\NoTicketsAvailableException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Attendee\CreateAttendeeRequest;
 use HiEvents\Http\ResponseCodes;
 use HiEvents\Resources\Attendee\AttendeeResource;
-use HiEvents\Services\Handlers\Attendee\CreateAttendeeHandler;
-use HiEvents\Services\Handlers\Attendee\DTO\CreateAttendeeDTO;
+use HiEvents\Services\Application\Handlers\Attendee\CreateAttendeeHandler;
+use HiEvents\Services\Application\Handlers\Attendee\DTO\CreateAttendeeDTO;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 use Throwable;
@@ -39,11 +39,11 @@ class CreateAttendeeAction extends BaseAction
             ));
         } catch (NoTicketsAvailableException $exception) {
             throw ValidationException::withMessages([
-                'ticket_id' => $exception->getMessage(),
+                'product_id' => $exception->getMessage(),
             ]);
-        } catch (InvalidTicketPriceId $exception) {
+        } catch (InvalidProductPriceId $exception) {
             throw ValidationException::withMessages([
-                'ticket_price_id' => $exception->getMessage(),
+                'product_price_id' => $exception->getMessage(),
             ]);
         }
 

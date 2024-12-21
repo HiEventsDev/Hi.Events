@@ -6,8 +6,8 @@ use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Resources\BaseResource;
 use HiEvents\Resources\Image\ImageResource;
 use HiEvents\Resources\Organizer\OrganizerResourcePublic;
+use HiEvents\Resources\ProductCategory\ProductCategoryResourcePublic;
 use HiEvents\Resources\Question\QuestionResource;
-use HiEvents\Resources\Ticket\TicketResourcePublic;
 use Illuminate\Http\Request;
 
 /**
@@ -38,30 +38,29 @@ class EventResourcePublic extends BaseResource
             'lifecycle_status' => $this->getLifecycleStatus(),
             'timezone' => $this->getTimezone(),
             'location_details' => $this->when((bool)$this->getLocationDetails(), fn() => $this->getLocationDetails()),
-
-            'tickets' => $this->when(
-                !is_null($this->getTickets()),
-                fn() => TicketResourcePublic::collection($this->getTickets())
+            'product_categories' => $this->when(
+                condition: !is_null($this->getProductCategories()) && $this->getProductCategories()->isNotEmpty(),
+                value: fn() => ProductCategoryResourcePublic::collection($this->getProductCategories()),
             ),
             'settings' => $this->when(
-                !is_null($this->getEventSettings()),
-                fn() => new EventSettingsResourcePublic($this->getEventSettings(), $this->includePostCheckoutData),
+                condition: !is_null($this->getEventSettings()),
+                value: fn() => new EventSettingsResourcePublic($this->getEventSettings(), $this->includePostCheckoutData),
             ),
             // @TODO - public question resource
             'questions' => $this->when(
-                !is_null($this->getQuestions()),
-                fn() => QuestionResource::collection($this->getQuestions())
+                condition: !is_null($this->getQuestions()),
+                value: fn() => QuestionResource::collection($this->getQuestions())
             ),
             'attributes' => $this->when(
-                !is_null($this->getAttributes()),
-                fn() => collect($this->getAttributes())->reject(fn($attribute) => !$attribute['is_public'])),
+                condition: !is_null($this->getAttributes()),
+                value: fn() => collect($this->getAttributes())->reject(fn($attribute) => !$attribute['is_public'])),
             'images' => $this->when(
-                !is_null($this->getImages()),
-                fn() => ImageResource::collection($this->getImages())
+                condition: !is_null($this->getImages()),
+                value: fn() => ImageResource::collection($this->getImages())
             ),
             'organizer' => $this->when(
-                !is_null($this->getOrganizer()),
-                fn() => new OrganizerResourcePublic($this->getOrganizer()),
+                condition: !is_null($this->getOrganizer()),
+                value: fn() => new OrganizerResourcePublic($this->getOrganizer()),
             ),
         ];
     }

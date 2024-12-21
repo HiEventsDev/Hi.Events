@@ -1,5 +1,5 @@
 import {Modal} from "../../common/Modal";
-import {GenericModalProps} from "../../../types.ts";
+import {GenericModalProps, ProductCategory, ProductType} from "../../../types.ts";
 import {Button} from "../../common/Button";
 import {useNavigate, useParams} from "react-router-dom";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
@@ -19,6 +19,8 @@ import {
     localeToNameMap,
     SupportedLocales
 } from "../../../locales.ts";
+import {ProductSelector} from "../../common/ProductSelector";
+import {getProductsFromEvent} from "../../../utilites/helpers.ts";
 
 export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
     const {eventId} = useParams();
@@ -26,10 +28,12 @@ export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
     const {data: event, isFetched: isEventFetched} = useGetEvent(eventId);
     const mutation = useCreateAttendee();
     const navigate = useNavigate();
+    const eventProducts = getProductsFromEvent(event);
+    const eventHasProducts = eventProducts && eventProducts?.length > 0;
 
     const form = useForm<CreateAttendeeRequest>({
         initialValues: {
-            ticket_id: undefined,
+            product_id: undefined,
             email: '',
             first_name: '',
             last_name: '',
@@ -41,14 +45,14 @@ export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
     });
 
     useEffect(() => {
-        if (event?.tickets) {
+        if (event?.product_categories) {
             form.setFieldValue(
-                'ticket_price_id',
-                String(event?.tickets?.find(ticket => ticket.id == form.values.ticket_id)?.prices?.[0]?.id)
+                'product_price_id',
+                String(eventProducts?.find(product => product.id == form.values.product_id)?.prices?.[0]?.id)
             );
 
-            const taxesAndFees = event?.tickets
-                ?.find(ticket => ticket.id == form.values.ticket_id)
+            const taxesAndFees = eventProducts
+                ?.find(product => product.id == form.values.product_id)
                 ?.taxes_and_fees;
 
             if (taxesAndFees?.length === 0) {
@@ -67,7 +71,7 @@ export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
                 }
             );
         }
-    }, [form.values.ticket_id]);
+    }, [form.values.product_id]);
 
     const handleSubmit = (values: CreateAttendeeRequest) => {
         mutation.mutate({
@@ -82,13 +86,13 @@ export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
         })
     };
 
-    if (!event?.tickets) {
+    if (!event?.product_categories) {
         return (
             <LoadingOverlay visible/>
         )
     }
 
-    if (isEventFetched && event.tickets.length === 0) {
+    if (isEventFetched && !eventHasProducts) {
         return (
             <Modal opened onClose={onClose} heading={t`Manually Add Attendee`}>
                 <p>{t`You must create a ticket before you can manually add an attendee.`}</p>
@@ -96,7 +100,7 @@ export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
                     fullWidth
                     variant={'light'}
                     onClick={() => {
-                        navigate(`/manage/event/${eventId}/tickets`)
+                        navigate(`/manage/event/${eventId}/products`)
                     }}
                 >
                     {t`Manage tickets`}
@@ -142,34 +146,16 @@ export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
                     description={t`The language the attendee will receive emails in.`}
                 />
 
-                <Select
-                    label={t`Ticket`}
-                    mt={20}
-                    description={t`Manually adding an attendee will adjust ticket quantity.`}
+                <ProductSelector
                     placeholder={t`Select Ticket`}
-                    {...form.getInputProps('ticket_id')}
-                    data={event.tickets.map(ticket => {
-                        return {
-                            value: String(ticket.id),
-                            label: ticket.title,
-                        };
-                    })}
+                    label={t`Ticket`}
+                    productCategories={event.product_categories as ProductCategory[]}
+                    form={form}
+                    productFieldName={'product_id'}
+                    multiSelect={false}
+                    showTierSelector={true}
+                    includedProductTypes={[ProductType.Ticket]}
                 />
-
-                {event.tickets.find(ticket => ticket.id == form.values.ticket_id)?.type === 'TIERED' && (
-                    <Select
-                        label={t`Ticket Tier`}
-                        mt={20}
-                        placeholder={t`Select Ticket Tier`}
-                        {...form.getInputProps('ticket_price_id')}
-                        data={event?.tickets?.find(ticket => ticket.id == form.values.ticket_id)?.prices?.map(price => {
-                            return {
-                                value: String(price.id),
-                                label: String(price.label),
-                            };
-                        })}
-                    />
-                )}
 
                 <NumberInput
                     required

@@ -4,7 +4,7 @@ namespace HiEvents\Services\Domain\Question;
 
 use HiEvents\DomainObjects\Generated\QuestionDomainObjectAbstract;
 use HiEvents\DomainObjects\QuestionDomainObject;
-use HiEvents\DomainObjects\TicketDomainObject;
+use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\Repository\Interfaces\QuestionRepositoryInterface;
 use HTMLPurifier;
 use Illuminate\Database\DatabaseManager;
@@ -25,10 +25,10 @@ class EditQuestionService
      */
     public function editQuestion(
         QuestionDomainObject $question,
-        array                $ticketIds,
+        array                $productIds,
     ): QuestionDomainObject
     {
-        return $this->databaseManager->transaction(function () use ($question, $ticketIds) {
+        return $this->databaseManager->transaction(function () use ($question, $productIds) {
             $this->questionRepository->updateQuestion(
                 questionId: $question->getId(),
                 eventId: $question->getEventId(),
@@ -42,11 +42,11 @@ class EditQuestionService
                     QuestionDomainObjectAbstract::IS_HIDDEN => $question->getIsHidden(),
                     QuestionDomainObjectAbstract::DESCRIPTION => $this->purifier->purify($question->getDescription()),
                 ],
-                ticketIds: $ticketIds
+                productIds: $productIds
             );
 
             return $this->questionRepository
-                ->loadRelation(TicketDomainObject::class)
+                ->loadRelation(ProductDomainObject::class)
                 ->findById($question->getId());
         });
     }

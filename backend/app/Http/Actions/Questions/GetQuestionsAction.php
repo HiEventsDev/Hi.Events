@@ -3,8 +3,8 @@
 namespace HiEvents\Http\Actions\Questions;
 
 use HiEvents\DomainObjects\EventDomainObject;
-use HiEvents\DomainObjects\TicketDomainObject;
-use HiEvents\DomainObjects\TicketPriceDomainObject;
+use HiEvents\DomainObjects\ProductDomainObject;
+use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\QuestionRepositoryInterface;
@@ -27,8 +27,8 @@ class GetQuestionsAction extends BaseAction
 
         $questions = $this->questionRepository
             ->loadRelation(
-                new Relationship(TicketDomainObject::class, [
-                    new Relationship(TicketPriceDomainObject::class)
+                new Relationship(ProductDomainObject::class, [
+                    new Relationship(ProductPriceDomainObject::class)
                 ])
             )
             ->findByEventId($eventId);

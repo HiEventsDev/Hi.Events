@@ -4,9 +4,9 @@ namespace HiEvents\Http\Actions\Attendees;
 
 use HiEvents\DomainObjects\AttendeeCheckInDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\ProductDomainObject;
+use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\QuestionAndAnswerViewDomainObject;
-use HiEvents\DomainObjects\TicketDomainObject;
-use HiEvents\DomainObjects\TicketPriceDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
@@ -30,12 +30,12 @@ class GetAttendeeAction extends BaseAction
         $attendee = $this->attendeeRepository
             ->loadRelation(relationship: QuestionAndAnswerViewDomainObject::class)
             ->loadRelation(new Relationship(
-                domainObject: TicketDomainObject::class,
+                domainObject: ProductDomainObject::class,
                 nested: [
                     new Relationship(
-                        domainObject: TicketPriceDomainObject::class,
+                        domainObject: ProductPriceDomainObject::class,
                     ),
-                ], name: 'ticket'))
+                ], name: 'product'))
             ->loadRelation(new Relationship(
                 domainObject: AttendeeCheckInDomainObject::class,
                 name: 'check_in',

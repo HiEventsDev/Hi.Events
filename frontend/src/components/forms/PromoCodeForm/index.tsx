@@ -1,13 +1,14 @@
 import {UseFormReturnType} from "@mantine/form";
-import {Alert, MultiSelect, NumberInput, Select, TextInput} from "@mantine/core";
-import {IconAlertCircle, IconPercentage} from "@tabler/icons-react";
-import {PromoCode, PromoCodeDiscountType} from "../../../types.ts";
+import {Alert, NumberInput, Select, TextInput} from "@mantine/core";
+import {IconAlertCircle, IconPercentage, IconTicket} from "@tabler/icons-react";
+import {ProductType, PromoCode, PromoCodeDiscountType} from "../../../types.ts";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {useParams} from "react-router-dom";
 import {LoadingMask} from "../../common/LoadingMask";
 import {t} from "@lingui/macro";
 import {InputGroup} from "../../common/InputGroup";
 import {getCurrencySymbol} from "../../../utilites/currency.ts";
+import {ProductSelector} from "../../common/ProductSelector";
 
 interface PromoCodeFormProps {
     form: UseFormReturnType<PromoCode>,
@@ -15,7 +16,7 @@ interface PromoCodeFormProps {
 
 export const PromoCodeForm = ({form}: PromoCodeFormProps) => {
     const {eventId} = useParams();
-    const {data: event, data: {tickets} = {}} = useGetEvent(eventId);
+    const {data: event, data: {product_categories: productCategories} = {}} = useGetEvent(eventId);
 
     const DiscountIcon = () => {
         if (form.values.discount_type === 'PERCENTAGE') {
@@ -24,7 +25,7 @@ export const PromoCodeForm = ({form}: PromoCodeFormProps) => {
         return getCurrencySymbol(event?.currency as string);
     };
 
-    if (!event || !tickets) {
+    if (!event || !productCategories) {
         return <LoadingMask/>
     }
 
@@ -33,7 +34,7 @@ export const PromoCodeForm = ({form}: PromoCodeFormProps) => {
             <TextInput {...form.getInputProps('code')} label={t`Code`} placeholder="20OFF" required/>
 
             <Alert variant={'light'} mt={20} mb={20} icon={<IconAlertCircle size="1rem"/>} title={t`TIP`}>
-                {t`A promo code with no discount can be used to reveal hidden tickets.`}
+                {t`A promo code with no discount can be used to reveal hidden products.`}
             </Alert>
 
             <InputGroup>
@@ -63,17 +64,13 @@ export const PromoCodeForm = ({form}: PromoCodeFormProps) => {
                     placeholder="0.00"/>
             </InputGroup>
 
-            <MultiSelect
-                placeholder={t`All Tickets`}
-                label={t`What tickets does this code apply to? (Applies to all by default)`}
-                searchable
-                data={tickets.map(ticket => {
-                    return {
-                        value: String(ticket.id),
-                        label: String(ticket.title),
-                    };
-                })}
-                {...form.getInputProps('applicable_ticket_ids')}
+            <ProductSelector
+                label={t`What products does this code apply to? (Applies to all by default)`}
+                placeholder="Select products"
+                icon={<IconTicket size="1rem"/>}
+                productCategories={productCategories}
+                form={form}
+                productFieldName="applicable_product_ids"
             />
 
             <InputGroup>

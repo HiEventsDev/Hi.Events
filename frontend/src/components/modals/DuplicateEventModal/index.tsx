@@ -25,7 +25,7 @@ export const DuplicateEventModal = ({onClose, eventId}: DuplicateEventModalProps
             start_date: '',
             end_date: '',
             description: '',
-            duplicate_tickets: true,
+            duplicate_products: true,
             duplicate_questions: true,
             duplicate_settings: true,
             duplicate_promo_codes: true,
@@ -103,8 +103,8 @@ export const DuplicateEventModal = ({onClose, eventId}: DuplicateEventModalProps
                     </h3>
                     <Card variant={'lightGray'}>
                         <Switch
-                            {...form.getInputProps('duplicate_tickets', {type: 'checkbox'})}
-                            label={t`Duplicate Tickets`}
+                            {...form.getInputProps('duplicate_products', {type: 'checkbox'})}
+                            label={t`Duplicate Products`}
                         />
                         <Switch
                             {...form.getInputProps('duplicate_questions', {type: 'checkbox'})}

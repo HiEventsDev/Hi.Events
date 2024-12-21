@@ -33,7 +33,7 @@ const CheckIn = () => {
             }
         }
     );
-    const tickets = checkInList?.tickets;
+    const products = checkInList?.products;
     const queryFilters: QueryFilters = {
         pageNumber: 1,
         query: searchQueryDebounced,
@@ -135,7 +135,7 @@ const CheckIn = () => {
 
     const Attendees = () => {
         const Container = () => {
-            if (attendeesQuery.isFetching || !attendees || !tickets) {
+            if (attendeesQuery.isFetching || !attendees || !products) {
                 return (
                     <div className={classes.loading}>
                         <Loader size={40}/>
@@ -163,8 +163,8 @@ const CheckIn = () => {
                                     <div>
                                         <b>{attendee.public_id}</b>
                                     </div>
-                                    <div className={classes.ticket}>
-                                       <IconTicket size={15}/> {tickets.find(ticket => ticket.id === attendee.ticket_id)?.title}
+                                    <div className={classes.product}>
+                                       <IconTicket size={15}/> {products.find(product => product.id === attendee.product_id)?.title}
                                     </div>
                                 </div>
                                 <div className={classes.actions}>

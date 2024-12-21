@@ -11,9 +11,9 @@ export const ToolBar = ({searchComponent, children}: ToolBarProps) => {
     return (
         <Card className={classes.card}>
             <div className={classes.wrapper}>
-                <div className={classes.searchBar}>
+                {searchComponent && <div className={classes.searchBar}>
                     {searchComponent && searchComponent()}
-                </div>
+                </div>}
                 <div className={classes.actions}>
                     {children}
                 </div>

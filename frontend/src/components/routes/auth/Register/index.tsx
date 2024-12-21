@@ -46,7 +46,7 @@ export const Register = () => {
     return (
         <>
             <header className={classes.header}>
-                <h2>{t`Begin selling tickets in minutes`}</h2>
+                <h2>{t`Begin selling products in minutes`}</h2>
                 <p>
                     <Trans>
                         Create an account or <NavLink to={'/auth/login'}>

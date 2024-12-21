@@ -4,7 +4,7 @@ namespace HiEvents\Resources\Auth;
 
 use HiEvents\Resources\Account\AccountResource;
 use HiEvents\Resources\User\UserResource;
-use HiEvents\Services\Handlers\Auth\DTO\AuthenticatedResponseDTO;
+use HiEvents\Services\Application\Handlers\Auth\DTO\AuthenticatedResponseDTO;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**

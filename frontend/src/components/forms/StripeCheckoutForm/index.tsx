@@ -2,17 +2,17 @@ import {useEffect, useState} from "react";
 import {PaymentElement, useElements, useStripe} from "@stripe/react-stripe-js";
 import {useParams} from "react-router-dom";
 import * as stripeJs from "@stripe/stripe-js";
-import {Alert, Skeleton} from "@mantine/core";
+import {Alert, Group, Skeleton} from "@mantine/core";
 import {t} from "@lingui/macro";
 import classes from './StripeCheckoutForm.module.scss';
 import {LoadingMask} from "../../common/LoadingMask";
 import {useGetOrderPublic} from "../../../queries/useGetOrderPublic.ts";
-import {useGetEventPublic} from "../../../queries/useGetEventPublic.ts";
 import {CheckoutContent} from "../../layouts/Checkout/CheckoutContent";
 import {CheckoutFooter} from "../../layouts/Checkout/CheckoutFooter";
 import {Event} from "../../../types.ts";
 import {eventCheckoutPath, eventHomepagePath} from "../../../utilites/urlHelper.ts";
 import {HomepageInfoMessage} from "../../common/HomepageInfoMessage";
+import {formatCurrency} from "../../../utilites/currency.ts";
 
 export default function StripeCheckoutForm() {
     const {eventId, orderShortId} = useParams();
@@ -20,8 +20,8 @@ export default function StripeCheckoutForm() {
     const elements = useElements();
     const [message, setMessage] = useState<string | undefined>('');
     const [isLoading, setIsLoading] = useState(false);
-    const {data: order, isFetched: isOrderFetched} = useGetOrderPublic(eventId, orderShortId);
-    const {data: event, isFetched: isEventFetched} = useGetEventPublic(eventId);
+    const {data: order, isFetched: isOrderFetched} = useGetOrderPublic(eventId, orderShortId, ['event']);
+    const event = order?.event;
 
     useEffect(() => {
         if (!stripe) {
@@ -54,7 +54,7 @@ export default function StripeCheckoutForm() {
         });
     }, [stripe]);
 
-    if (!isOrderFetched || !isEventFetched || !order?.payment_status) {
+    if (!isOrderFetched || !order?.payment_status) {
         return (
             <CheckoutContent>
                 <Skeleton height={300} mb={20}/>
@@ -112,7 +112,8 @@ export default function StripeCheckoutForm() {
             type: "accordion",
             defaultCollapsed: false,
             radios: true,
-        },
+            spacedAccordionItems: true,
+        }
     }
 
     return (
@@ -140,7 +141,19 @@ export default function StripeCheckoutForm() {
                 event={event as Event}
                 order={order}
                 isLoading={isLoading}
-                buttonText={t`Complete Payment`}
+                buttonContent={order?.is_payment_required ? (
+                    <Group gap={'10px'}>
+                        <div style={{fontWeight: "bold"}}>
+                            Place Order
+                        </div>
+                        <div style={{fontSize: 14}}>
+                            {formatCurrency(order.total_gross, order.currency)}
+                        </div>
+                        <div style={{fontSize: 14, fontWeight: 500}}>
+                            {order.currency}
+                        </div>
+                    </Group>
+                ) : t`Complete Payment`}
             />
         </form>
     );

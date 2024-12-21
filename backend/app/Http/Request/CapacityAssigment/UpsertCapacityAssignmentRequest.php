@@ -15,14 +15,14 @@ class UpsertCapacityAssignmentRequest extends BaseRequest
             'name' => RulesHelper::REQUIRED_STRING,
             'capacity' => ['nullable', 'numeric', 'min:1'],
             'status' => ['required', Rule::in(CapacityAssignmentStatus::valuesArray())],
-            'ticket_ids' => ['required', 'array'],
+            'product_ids' => ['required', 'array'],
         ];
     }
 
     public function messages(): array
     {
         return [
-            'ticket_ids.required' => __('Please select at least one ticket.'),
+            'product_ids.required' => __('Please select at least one product.'),
         ];
     }
 }

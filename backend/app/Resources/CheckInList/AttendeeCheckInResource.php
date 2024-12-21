@@ -16,7 +16,7 @@ class AttendeeCheckInResource extends JsonResource
             'id' => $this->getId(),
             'attendee_id' => $this->getAttendeeId(),
             'check_in_list_id' => $this->getCheckInListId(),
-            'ticket_id' => $this->getTicketId(),
+            'product_id' => $this->getProductId(),
             'event_id' => $this->getEventId(),
             'short_id' => $this->getShortId(),
             'created_at' => $this->getCreatedAt(),

@@ -19,10 +19,10 @@ class Question extends BaseModel
         return [];
     }
 
-    public function tickets(): BelongsToMany
+    public function products(): BelongsToMany
     {
         return $this
-            ->belongsToMany(Ticket::class, 'ticket_questions')
-            ->whereNull('ticket_questions.deleted_at');
+            ->belongsToMany(Product::class, 'product_questions')
+            ->whereNull('product_questions.deleted_at');
     }
 }

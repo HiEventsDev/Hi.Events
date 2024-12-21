@@ -6,8 +6,8 @@ use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Account\UpdateAccountRequest;
 use HiEvents\Resources\Account\AccountResource;
-use HiEvents\Services\Handlers\Account\DTO\UpdateAccountDTO;
-use HiEvents\Services\Handlers\Account\UpdateAccountHanlder;
+use HiEvents\Services\Application\Handlers\Account\DTO\UpdateAccountDTO;
+use HiEvents\Services\Application\Handlers\Account\UpdateAccountHanlder;
 use Illuminate\Http\JsonResponse;
 
 class UpdateAccountAction extends BaseAction

@@ -52,7 +52,7 @@ class ExportAttendeesAction extends BaseAction
 
         $questions = $this->questionRepository->findWhere([
             'event_id' => $eventId,
-            'belongs_to' => QuestionBelongsTo::TICKET->name,
+            'belongs_to' => QuestionBelongsTo::PRODUCT->name,
         ]);
 
         return Excel::download(
