@@ -6,7 +6,6 @@
   <img src="https://hievents-public.s3.us-west-1.amazonaws.com/website/hi-events-rainbow.png?v=1" alt="Hi.Events Logo" width="200px">
 </p>
 
-
 <h3 align="center">Hi.Events</h3>
 
 <p align="center">
@@ -29,6 +28,11 @@
 [![Docker Pulls](https://img.shields.io/docker/pulls/daveearley/hi.events-all-in-one)](https://hub.docker.com/r/daveearley/hi.events-all-in-one)
 
 </div>
+
+> [!NOTE]
+> Versions below 1.0.0 are now in bug fix only mode. Any pull requests should be created against the v1.0.0-alpha branch at https://github.com/HiEventsDev/Hi.Events/tree/v1.0.0-alpha
+
+
 
 <div align="center">
  <a href="https://trendshift.io/repositories/10563" target="_blank"><img src="https://trendshift.io/api/badge/repositories/10563" alt="HiEventsDev%2Fhi.events | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
