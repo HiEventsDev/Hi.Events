@@ -102,7 +102,7 @@ export const EventDashboard = () => {
                         legendProps={{verticalAlign: 'bottom', height: 50}}
 
                         series={[
-                            {name: 'orders_created', color: 'blue.6', label: t`Orders Created`},
+                            {name: 'orders_created', color: 'blue.6', label: t`Completed Orders`},
                             {name: 'products_sold', color: 'blue.2', label: t`Products Sold`},
                             {name: 'attendees_registered', color: 'blue.4', label: t`Attendees Registered`},
                         ]}

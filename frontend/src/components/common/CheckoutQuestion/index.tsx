@@ -6,7 +6,6 @@ import countries from "../../../../data/countries.json";
 import {InputGroup} from "../InputGroup";
 import classes from "./CheckoutQuestion.module.scss";
 import {UserGeneratedContent} from "../UserGeneratedContent";
-import {DatePicker} from "@mantine/dates";
 
 interface CheckoutQuestionProps {
     questions: Question[],

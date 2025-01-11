@@ -39,6 +39,7 @@ class OrderSummary extends BaseMail
         return new Content(
             markdown: 'emails.orders.summary',
             with: [
+                'eventSettings' => $this->eventSettings,
                 'event' => $this->event,
                 'order' => $this->order,
                 'organizer' => $this->organizer,

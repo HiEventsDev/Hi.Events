@@ -3,6 +3,7 @@
 namespace HiEvents\Services\Domain\Event;
 
 use HiEvents\DomainObjects\Enums\HomepageBackgroundType;
+use HiEvents\DomainObjects\Enums\PaymentProviders;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
@@ -145,6 +146,18 @@ class CreateEventService
             'homepage_body_background_color' => '#7a5eb9',
             'continue_button_text' => __('Continue'),
             'support_email' => $organizer->getEmail(),
+
+            'payment_providers' => [PaymentProviders::STRIPE->value],
+            'offline_payment_instructions' => null,
+
+            'enable_invoicing' => false,
+            'invoice_label' => __('Receipt'),
+            'invoice_prefix' => null,
+            'invoice_start_number' => 1,
+            'require_billing_address' => true,
+            'organization_name' => $organizer->getName(),
+            'organization_address' => null,
+            'tax_details' => null,
         ]);
     }
 

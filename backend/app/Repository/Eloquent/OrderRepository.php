@@ -43,6 +43,10 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
             };
         }
 
+        if (!empty($params->filter_fields)) {
+            $this->applyFilterFields($params, OrderDomainObject::getAllowedFilterFields());
+        }
+
         $this->model = $this->model->orderBy(
             $params->sort_by ?? OrderDomainObject::getDefaultSort(),
             $params->sort_direction ?? 'desc',

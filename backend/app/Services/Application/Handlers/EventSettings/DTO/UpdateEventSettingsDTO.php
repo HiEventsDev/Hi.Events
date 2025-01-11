@@ -5,6 +5,7 @@ namespace HiEvents\Services\Application\Handlers\EventSettings\DTO;
 use HiEvents\DataTransferObjects\AddressDTO;
 use HiEvents\DataTransferObjects\BaseDTO;
 use HiEvents\DomainObjects\Enums\HomepageBackgroundType;
+use HiEvents\DomainObjects\Enums\PaymentProviders;
 use HiEvents\DomainObjects\Enums\PriceDisplayMode;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 
@@ -48,6 +49,20 @@ class UpdateEventSettingsDTO extends BaseDTO
         public readonly ?PriceDisplayMode       $price_display_mode = PriceDisplayMode::INCLUSIVE,
 
         public readonly ?bool                   $hide_getting_started_page = false,
+
+        // Payment settings
+        public readonly array                   $payment_providers = [],
+        public readonly ?string                 $offline_payment_instructions = null,
+
+        // Invoice settings
+        public readonly bool                    $enable_invoicing = false,
+        public readonly ?string                 $invoice_label = null,
+        public readonly ?string                 $invoice_prefix = null,
+        public readonly ?int                    $invoice_start_number = null,
+        public readonly bool                    $require_billing_address = true,
+        public readonly ?string                 $organization_name = null,
+        public readonly ?string                 $organization_address = null,
+        public readonly ?string                 $tax_details = null,
     )
     {
     }
@@ -87,6 +102,20 @@ class UpdateEventSettingsDTO extends BaseDTO
             notify_organizer_of_new_orders: null,
             price_display_mode: PriceDisplayMode::INCLUSIVE,
             hide_getting_started_page: false,
+
+            // Payment defaults
+            payment_providers: [PaymentProviders::STRIPE->value],
+            offline_payment_instructions: null,
+
+            // Invoice defaults
+            enable_invoicing: false,
+            invoice_label: __('Receipt'),
+            invoice_prefix: null,
+            invoice_start_number: 1,
+            require_billing_address: true,
+            organization_name: $organizer->getName(),
+            organization_address: null,
+            tax_details: null,
         );
     }
 }

@@ -46,6 +46,20 @@ class EventSettingsResource extends JsonResource
 
             'price_display_mode' => $this->getPriceDisplayMode(),
             'hide_getting_started_page' => $this->getHideGettingStartedPage(),
+
+            // Payment settings
+            'payment_providers' => $this->getPaymentProviders(),
+            'offline_payment_instructions' => $this->getOfflinePaymentInstructions(),
+
+            // Invoice settings
+            'enable_invoicing' => $this->getEnableInvoicing(),
+            'invoice_label' => $this->getInvoiceLabel(),
+            'invoice_prefix' => $this->getInvoicePrefix(),
+            'invoice_start_number' => $this->getInvoiceStartNumber(),
+            'require_billing_address' => $this->getRequireBillingAddress(),
+            'organization_name' => $this->getOrganizationName(),
+            'organization_address' => $this->getOrganizationAddress(),
+            'tax_details' => $this->getTaxDetails(),
         ];
     }
 }

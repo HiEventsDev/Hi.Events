@@ -65,7 +65,7 @@ class ProductQuantityUpdateService
     public function updateQuantitiesFromOrder(OrderDomainObject $order): void
     {
         $this->databaseManager->transaction(function () use ($order) {
-            if (!$order->getOrderItems() === null) {
+            if ($order->getOrderItems() === null) {
                 throw new InvalidArgumentException(__('Order has no order items'));
             }
 

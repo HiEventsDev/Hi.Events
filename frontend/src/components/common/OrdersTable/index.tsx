@@ -5,7 +5,7 @@ import {
     IconCheck,
     IconDotsVertical,
     IconEye,
-    IconInfoCircle,
+    IconInfoCircle, IconReceiptDollar,
     IconReceiptRefund,
     IconRepeat,
     IconSend,
@@ -29,6 +29,7 @@ import {useResendOrderConfirmation} from "../../../mutations/useResendOrderConfi
 import {OrderStatusBadge} from "../OrderStatusBadge";
 import {formatNumber} from "../../../utilites/helpers.ts";
 import {useUrlHash} from "../../../hooks/useUrlHash.ts";
+import {useMarkOrderAsPaid} from "../../../mutations/useMarkOrderAsPaid.ts";
 
 interface OrdersTableProps {
     event: Event,
@@ -42,6 +43,7 @@ export const OrdersTable = ({orders, event}: OrdersTableProps) => {
     const [isRefundModalOpen, refundModal] = useDisclosure(false);
     const [orderId, setOrderId] = useState<IdParam>();
     const resendConfirmationMutation = useResendOrderConfirmation();
+    const markAsPaidMutation = useMarkOrderAsPaid();
 
     useUrlHash(/^#order-(\d+)$/, (matches => {
         const orderId = matches![1];
@@ -64,6 +66,23 @@ export const OrdersTable = ({orders, event}: OrdersTableProps) => {
     const handleModalClick = (orderId: IdParam, modal: { open: () => void }) => {
         setOrderId(orderId);
         modal.open();
+    }
+
+    const handleMarkAsPaid = (eventId: IdParam, orderId: IdParam) => {
+        markAsPaidMutation.mutate({eventId, orderId}, {
+            onSuccess: () => {
+                notifications.show({
+                    message: t`Order marked as paid`,
+                    icon: <IconCheck/>
+                })
+            },
+            onError: () => {
+                notifications.show({
+                    message: t`There was an error marking the order as paid`,
+                    icon: <IconCheck/>
+                })
+            }
+        });
     }
 
     const handleResendConfirmation = (eventId: IdParam, orderId: IdParam) => {
@@ -112,7 +131,13 @@ export const OrdersTable = ({orders, event}: OrdersTableProps) => {
                     <Menu.Item onClick={() => handleModalClick(order.id, messageModal)}
                                leftSection={<IconSend size={14}/>}>{t`Message buyer`}</Menu.Item>
 
-                    {!order.is_free_order && (
+                    {order.status === 'AWAITING_OFFLINE_PAYMENT' && (
+                        <Menu.Item onClick={() => handleMarkAsPaid(event.id, order.id)}
+                                      leftSection={<IconReceiptDollar size={14}/>}>{t`Mark as paid`}</Menu.Item>
+                    )}
+
+
+                    {!order.is_free_order && order.status !== 'AWAITING_OFFLINE_PAYMENT' && (
                         <Menu.Item onClick={() => handleModalClick(order.id, refundModal)}
                                    leftSection={<IconReceiptRefund size={14}/>}>{t`Refund order`}</Menu.Item>
                     )}

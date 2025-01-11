@@ -85,6 +85,11 @@ export const orderClient = {
 
         return new Blob([response.data]);
     },
+
+    markAsPaid: async (eventId: IdParam, orderId: IdParam) => {
+        const response = await api.post<GenericDataResponse<Order>>('events/' + eventId + '/orders/' + orderId + '/mark-as-paid');
+        return response.data;
+    },
 }
 
 export const orderClientPublic = {
@@ -116,6 +121,11 @@ export const orderClientPublic = {
         payload: FinaliseOrderPayload
     ) => {
         const response = await publicApi.put<GenericDataResponse<Order>>(`events/${eventId}/order/${orderShortId}`, payload);
+        return response.data;
+    },
+
+    transitionToOfflinePayment: async (eventId: IdParam, orderShortId: IdParam) => {
+        const response = await publicApi.post<GenericDataResponse<Order>>(`events/${eventId}/order/${orderShortId}/await-offline-payment`);
         return response.data;
     },
 }

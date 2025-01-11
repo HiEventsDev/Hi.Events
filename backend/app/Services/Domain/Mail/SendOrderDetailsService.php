@@ -23,7 +23,7 @@ readonly class SendOrderDetailsService
         private EventRepositoryInterface  $eventRepository,
         private OrderRepositoryInterface  $orderRepository,
         private Mailer                    $mailer,
-        private SendAttendeeTicketService $sendAttendeeProductService,
+        private SendAttendeeTicketService $sendAttendeeTicketService,
     )
     {
     }
@@ -40,9 +40,9 @@ readonly class SendOrderDetailsService
             ->loadRelation(new Relationship(EventSettingDomainObject::class))
             ->findById($order->getEventId());
 
-        if ($order->isOrderCompleted()) {
+        if ($order->isOrderCompleted() || $order->isOrderAwaitingOfflinePayment()) {
             $this->sendOrderSummaryEmails($order, $event);
-            $this->sendAttendeeProductEmails($order, $event);
+            $this->sendAttendeeTicketEmails($order, $event);
         }
 
         if ($order->isOrderFailed()) {
@@ -57,7 +57,7 @@ readonly class SendOrderDetailsService
         }
     }
 
-    private function sendAttendeeProductEmails(OrderDomainObject $order, EventDomainObject $event): void
+    private function sendAttendeeTicketEmails(OrderDomainObject $order, EventDomainObject $event): void
     {
         $sentEmails = [];
         foreach ($order->getAttendees() as $attendee) {
@@ -65,7 +65,8 @@ readonly class SendOrderDetailsService
                 continue;
             }
 
-            $this->sendAttendeeProductService->send(
+            $this->sendAttendeeTicketService->send(
+                order: $order,
                 attendee: $attendee,
                 event: $event,
                 eventSettings: $event->getEventSettings(),

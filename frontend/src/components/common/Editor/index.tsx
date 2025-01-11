@@ -15,7 +15,7 @@ import {ImageResize} from "./Extensions/ImageResizeExtension";
 interface EditorProps {
     onChange: (value: string) => void;
     value: string;
-    label?: string;
+    label?: React.ReactNode;
     description?: string;
     required?: boolean;
     className?: string;

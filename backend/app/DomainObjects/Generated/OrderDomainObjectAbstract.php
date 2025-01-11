@@ -39,6 +39,7 @@ abstract class OrderDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     final public const TOTAL_TAX = 'total_tax';
     final public const TOTAL_FEE = 'total_fee';
     final public const LOCALE = 'locale';
+    final public const PAYMENT_PROVIDER = 'payment_provider';
 
     protected int $id;
     protected int $event_id;
@@ -69,6 +70,7 @@ abstract class OrderDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     protected float $total_tax = 0.0;
     protected float $total_fee = 0.0;
     protected string $locale = 'en';
+    protected ?string $payment_provider = null;
 
     public function toArray(): array
     {
@@ -102,6 +104,7 @@ abstract class OrderDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
                     'total_tax' => $this->total_tax ?? null,
                     'total_fee' => $this->total_fee ?? null,
                     'locale' => $this->locale ?? null,
+                    'payment_provider' => $this->payment_provider ?? null,
                 ];
     }
 
@@ -422,5 +425,16 @@ abstract class OrderDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     public function getLocale(): string
     {
         return $this->locale;
+    }
+
+    public function setPaymentProvider(?string $payment_provider): self
+    {
+        $this->payment_provider = $payment_provider;
+        return $this;
+    }
+
+    public function getPaymentProvider(): ?string
+    {
+        return $this->payment_provider;
     }
 }

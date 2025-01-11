@@ -262,6 +262,7 @@ class CompleteOrderHandler
             ->updateFromArray(
                 $order->getId(),
                 [
+                    OrderDomainObjectAbstract::ADDRESS => $orderDTO->address,
                     OrderDomainObjectAbstract::FIRST_NAME => $orderDTO->first_name,
                     OrderDomainObjectAbstract::LAST_NAME => $orderDTO->last_name,
                     OrderDomainObjectAbstract::EMAIL => $orderDTO->email,

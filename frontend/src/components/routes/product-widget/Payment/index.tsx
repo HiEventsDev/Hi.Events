@@ -1,69 +1,133 @@
-import {useParams} from "react-router-dom";
-import {loadStripe, Stripe} from "@stripe/stripe-js";
-import {Elements} from "@stripe/react-stripe-js";
-import StripeCheckoutForm from "../../../forms/StripeCheckoutForm";
-import {useCreateStripePaymentIntent} from "../../../../queries/useCreateStripePaymentIntent.ts";
-import {useEffect, useState} from "react";
-import {LoadingMask} from "../../../common/LoadingMask";
-import {CheckoutContent} from "../../../layouts/Checkout/CheckoutContent";
-import {t} from "@lingui/macro";
-import {eventHomepagePath} from "../../../../utilites/urlHelper.ts";
+import React, {useState} from "react";
+import {useNavigate, useParams} from "react-router-dom";
 import {useGetEventPublic} from "../../../../queries/useGetEventPublic.ts";
-import {HomepageInfoMessage} from "../../../common/HomepageInfoMessage";
-import {getConfig} from "../../../../utilites/config.ts";
+import {CheckoutContent} from "../../../layouts/Checkout/CheckoutContent";
+import {StripePaymentMethod} from "./PaymentMethods/Stripe";
+import {OfflinePaymentMethod} from "./PaymentMethods/Offline";
+import {Event, Order} from "../../../../types.ts";
+import {CheckoutFooter} from "../../../layouts/Checkout/CheckoutFooter";
+import {Group} from "@mantine/core";
+import {formatCurrency} from "../../../../utilites/currency.ts";
+import {t} from "@lingui/macro";
+import {useGetOrderPublic} from "../../../../queries/useGetOrderPublic.ts";
+import {
+    useTransitionOrderToOfflinePaymentPublic
+} from "../../../../mutations/useTransitionOrderToOfflinePaymentPublic.ts";
+import {Card} from "../../../common/Card";
+import {showError} from "../../../../utilites/notifications.tsx";
 
 const Payment = () => {
+    const navigate = useNavigate();
     const {eventId, orderShortId} = useParams();
-    const {
-        data: stripeData,
-        isFetched: isStripeFetched,
-        error: stripePaymentIntentError
-    } = useCreateStripePaymentIntent(eventId, orderShortId);
-    const [stripePromise, setStripePromise] = useState<Promise<Stripe | null>>();
     const {data: event} = useGetEventPublic(eventId);
+    const {data: order, isFetched: isOrderFetched} = useGetOrderPublic(eventId, orderShortId, ['event']);
+    const isLoading = !isOrderFetched;
+    const [isPaymentLoading, setIsPaymentLoading] = useState(false);
+    const [activePaymentMethod, setActivePaymentMethod] = useState<'STRIPE' | 'OFFLINE' | null>(null);
+    const [submitHandler, setSubmitHandler] = useState<(() => Promise<void>) | null>(null);
+    const transitionOrderToOfflinePaymentMutation = useTransitionOrderToOfflinePaymentPublic();
 
-    useEffect(() => {
-        if (!stripeData?.client_secret) {
-            return;
+    const isStripeEnabled = event?.settings?.payment_providers?.includes('STRIPE');
+    const isOfflineEnabled = event?.settings?.payment_providers?.includes('OFFLINE');
+
+    React.useEffect(() => {
+        // Automatically set the first available payment method
+        if (isStripeEnabled) {
+            setActivePaymentMethod('STRIPE');
+        } else if (isOfflineEnabled) {
+            setActivePaymentMethod('OFFLINE');
+        } else {
+            setActivePaymentMethod(null); // No methods available
         }
+    }, [isStripeEnabled, isOfflineEnabled]);
 
-        const stripeAccount = stripeData?.account_id;
-        const options = stripeAccount ? {
-            stripeAccount: stripeAccount
-        } : {};
+    const handleParentSubmit = () => {
+        if (submitHandler) {
+            setIsPaymentLoading(true);
+            submitHandler().finally(() => setIsPaymentLoading(false));
+        }
+    };
 
-        setStripePromise(loadStripe(getConfig('VITE_STRIPE_PUBLISHABLE_KEY') as string, options));
-    }, [stripeData]);
+    const handleSubmit = async () => {
+        if (activePaymentMethod === 'STRIPE') {
+            handleParentSubmit();
+        } else if (activePaymentMethod === 'OFFLINE') {
+            await transitionOrderToOfflinePaymentMutation.mutateAsync({
+                eventId,
+                orderShortId
+            }, {
+                onSuccess: () => {
+                    navigate(`/checkout/${eventId}/${orderShortId}/summary`);
+                },
+                onError: (error: any) => {
+                    setIsPaymentLoading(false);
+                    showError(error.response?.data?.message || t`Offline payment failed. Please try again or contact the event organizer.`);
+                }
+            });
+        }
+    };
 
-    if (stripePaymentIntentError && event) {
+    if (!isStripeEnabled && !isOfflineEnabled) {
         return (
             <CheckoutContent>
-                <HomepageInfoMessage
-                    /* @ts-ignore */
-                    message={stripePaymentIntentError.response?.data?.message || t`Sorry, something has gone wrong. Please restart the checkout process.`}
-                    link={eventHomepagePath(event)}
-                    linkText={t`Return to event page`}
-                />
+                <Card>
+                    {t`No payment methods are currently available. Please contact the event organizer for assistance.`}
+                </Card>
             </CheckoutContent>
         );
     }
 
-    if (!isStripeFetched) {
-        return <LoadingMask/>;
-    }
-
     return (
         <>
-            {(!stripePromise) && <LoadingMask/>}
+            <CheckoutContent>
+                {isStripeEnabled && (
+                    <div style={{display: activePaymentMethod === 'STRIPE' ? 'block' : 'none'}}>
+                        <StripePaymentMethod enabled={true} setSubmitHandler={setSubmitHandler}/>
+                    </div>
+                )}
 
-            {(isStripeFetched && stripeData?.client_secret && stripePromise) && (
-                <Elements options={{
-                    clientSecret: stripeData?.client_secret,
-                    loader: 'always',
-                }} stripe={stripePromise}>
-                    <StripeCheckoutForm/>
-                </Elements>
-            )}
+                {isOfflineEnabled && (
+                    <div style={{display: activePaymentMethod === 'OFFLINE' ? 'block' : 'none'}}>
+                        <OfflinePaymentMethod event={event as Event}/>
+                    </div>
+                )}
+
+                {(isStripeEnabled && isOfflineEnabled) && (
+                    <div style={{marginTop: '20px'}}>
+                        <a
+                            onClick={() => setActivePaymentMethod(
+                                activePaymentMethod === 'STRIPE' ? 'OFFLINE' : 'STRIPE'
+                            )}
+                            style={{cursor: 'pointer'}}
+                        >
+                            {activePaymentMethod === 'STRIPE'
+                                ? t`I would like to pay using an offline method`
+                                : t`I would like to pay using a payment card`
+                            }
+                        </a>
+                    </div>
+                )}
+            </CheckoutContent>
+
+            <CheckoutFooter
+                event={event as Event}
+                order={order as Order}
+                isLoading={isLoading || isPaymentLoading}
+                onClick={handleSubmit}
+                buttonContent={order?.is_payment_required ? (
+                    <Group gap={'10px'}>
+                        <div style={{fontWeight: "bold"}}>
+                            Place Order
+                        </div>
+                        <div style={{fontSize: 14}}>
+                            {formatCurrency(order.total_gross, order.currency)}
+                        </div>
+                        <div style={{fontSize: 14, fontWeight: 500}}>
+                            {order.currency}
+                        </div>
+                    </Group>
+                ) : t`Complete Payment`}
+            />
         </>
     );
 }

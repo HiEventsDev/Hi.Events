@@ -40,6 +40,7 @@ const PaymentStatus = ({order}: { order: Order }) => {
         'AWAITING_PAYMENT': t`Awaiting Payment`,
         'PAYMENT_FAILED': t`Payment Failed`,
         'PAYMENT_RECEIVED': t`Payment Received`,
+        'AWAITING_OFFLINE_PAYMENT': t`Awaiting Offline Payment`,
     };
 
     return order?.payment_status ? <span>{paymentStatuses[order.payment_status] || ''}</span> : null;
@@ -62,6 +63,7 @@ const OrderStatusType = ({order}: { order: Order }) => {
         'CANCELLED': {label: t`Order Cancelled`, color: 'red'},
         'PAYMENT_FAILED': {label: t`Payment Failed`, color: 'red'},
         'AWAITING_PAYMENT': {label: t`Awaiting Payment`, color: 'orange'},
+        'AWAITING_OFFLINE_PAYMENT': {label: t`Awaiting Offline Payment`, color: 'orange'},
     };
 
     const status = statuses[order?.status];
@@ -91,6 +93,7 @@ const WelcomeHeader = ({order, event}: { order: Order; event: Event }) => {
         'COMPLETED': t`You're going to ${event.title}! 🎉`,
         'CANCELLED': t`Your order has been cancelled`,
         'RESERVED': null,
+        'AWAITING_OFFLINE_PAYMENT': t`Your order is awaiting offline payment`,
     }[order.status];
 
     return message ? <div className={classes.welcomeHeader}>{message}</div> : null;
@@ -213,6 +216,19 @@ const PostCheckoutMessage = ({ message }: { message: string }) => (
     </div>
 );
 
+const OfflinePaymentInstructions = ({ event }: { event: Event }) => (
+    <div style={{ marginTop: '20px', marginBottom: '40px' }}>
+        <h2>{t`Payment Instructions`}</h2>
+        <Card>
+            <div
+                dangerouslySetInnerHTML={{
+                    __html: event?.settings?.offline_payment_instructions || "",
+                }}
+            />
+        </Card>
+    </div>
+);
+
 export const OrderSummaryAndProducts = () => {
     const {eventId, orderShortId} = useParams();
     const {data: order, isFetched: orderIsFetched} = useGetOrderPublic(eventId, orderShortId, ['event']);
@@ -228,7 +244,7 @@ export const OrderSummaryAndProducts = () => {
         return;
     }
 
-    if (order?.status !== 'COMPLETED' && order?.status !== 'CANCELLED') {
+    if (order?.status !== 'COMPLETED' && order?.status !== 'CANCELLED' && order?.status !== 'AWAITING_OFFLINE_PAYMENT') {
         return <OrderStatus order={order}/>;
     }
 
@@ -236,6 +252,8 @@ export const OrderSummaryAndProducts = () => {
         <>
             <CheckoutContent hasFooter={true}>
                 <WelcomeHeader order={order} event={event}/>
+
+                {order?.status === 'AWAITING_OFFLINE_PAYMENT' && <OfflinePaymentInstructions event={event}/>}
 
                 <Group justify="space-between" align="center">
                     <h1 className={classes.heading}>{t`Order Details`}</h1>

@@ -4,6 +4,8 @@
 @php /** @var \HiEvents\DomainObjects\EventSettingDomainObject $eventSettings */ @endphp
 @php /** @var \HiEvents\DomainObjects\OrganizerDomainObject $organizer */ @endphp
 @php /** @var \HiEvents\DomainObjects\AttendeeDomainObject $attendee */ @endphp
+@php /** @var \HiEvents\DomainObjects\OrderDomainObject $order */ @endphp
+
 @php /** @var string $ticketUrl */ @endphp
 @php /** @see \HiEvents\Mail\Attendee\AttendeeTicketMail */ @endphp
 
@@ -11,6 +13,17 @@
 # {{ __('You\'re going to') }} {{ $event->getTitle() }}! 🎉
 <br>
 <br>
+
+@if($order->isOrderAwaitingOfflinePayment())
+<div style="border-radius: 4px; background-color: #f8d7da; color: #842029; margin-bottom: 1.5rem; padding: 1rem;">
+<p>
+{{ __('ℹ️ Your order is pending payment. Tickets have been issued but will not be valid until payment is received.') }}
+</p>
+<p>
+{{ __('Please follow the instructions in your order confirmation email to complete your payment.') }}
+</p>
+</div>
+@endif
 
 {{ __('Please find your ticket details below.') }}
 

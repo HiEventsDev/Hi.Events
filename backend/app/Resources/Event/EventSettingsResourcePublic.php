@@ -35,6 +35,7 @@ class EventSettingsResourcePublic extends JsonResource
             'support_email' => $this->getSupportEmail(),
             'order_timeout_in_minutes' => $this->getOrderTimeoutInMinutes(),
 
+            // Homepage settings
             'homepage_body_background_color' => $this->getHomepageBodyBackgroundColor(),
             'homepage_background_color' => $this->getHomepageBackgroundColor(),
             'homepage_primary_color' => $this->getHomepagePrimaryColor(),
@@ -49,12 +50,20 @@ class EventSettingsResourcePublic extends JsonResource
             'location_details' => $this->getLocationDetails(),
             'is_online_event' => $this->getIsOnlineEvent(),
 
+            // SEO settings
             'seo_title' => $this->getSeoTitle(),
             'seo_description' => $this->getSeoDescription(),
             'seo_keywords' => $this->getSeoKeywords(),
             'allow_search_engine_indexing' => $this->getAllowSearchEngineIndexing(),
 
             'price_display_mode' => $this->getPriceDisplayMode(),
+
+            // Payment settings
+            'payment_providers' => $this->getPaymentProviders(),
+            'offline_payment_instructions' => $this->getOfflinePaymentInstructions(),
+
+            // Invoice settings
+            'require_billing_address' => $this->getRequireBillingAddress(),
         ];
     }
 }

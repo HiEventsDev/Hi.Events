@@ -3,13 +3,15 @@
 namespace HiEvents\DomainObjects;
 
 use HiEvents\DomainObjects\Enums\ProductType;
+use HiEvents\DomainObjects\Interfaces\IsFilterable;
 use HiEvents\DomainObjects\Interfaces\IsSortable;
 use HiEvents\DomainObjects\SortingAndFiltering\AllowedSorts;
 use HiEvents\DomainObjects\Status\OrderPaymentStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
+use HiEvents\Helper\AddressHelper;
 use Illuminate\Support\Collection;
 
-class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements IsSortable
+class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements IsSortable, IsFilterable
 {
     /** @var Collection<OrderItemDomainObject>|null */
     public ?Collection $orderItems = null;
@@ -23,6 +25,22 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
     public ?Collection $questionAndAnswerViews = null;
 
     public ?EventDomainObject $event = null;
+
+    public static function getAllowedFilterFields(): array
+    {
+        return [
+            self::STATUS,
+            self::PAYMENT_STATUS,
+            self::REFUND_STATUS,
+            self::CREATED_AT,
+            self::FIRST_NAME,
+            self::LAST_NAME,
+            self::EMAIL,
+            self::PUBLIC_ID,
+            self::CURRENCY,
+            self::TOTAL_GROSS,
+        ];
+    }
 
     public static function getAllowedSorts(): AllowedSorts
     {
@@ -119,6 +137,11 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
         return (int)ceil($this->getTotalGross()) > 0;
     }
 
+    public function isOrderAwaitingOfflinePayment(): bool
+    {
+        return $this->getStatus() === OrderStatus::AWAITING_OFFLINE_PAYMENT->name;
+    }
+
     public function isOrderCompleted(): bool
     {
         return $this->getStatus() === OrderStatus::COMPLETED->name;
@@ -148,6 +171,16 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
     public function isFullyRefunded(): bool
     {
         return !$this->isFreeOrder() && ($this->getTotalRefunded() >= $this->getTotalGross());
+    }
+
+    public function getHumanReadableStatus(): string
+    {
+        return OrderStatus::getHumanReadableStatus($this->getStatus());
+    }
+
+    public function getBillingAddressString(): string
+    {
+        return AddressHelper::formatAddress($this->getAddress());
     }
 
     public function getStripePayment(): ?StripePaymentDomainObject

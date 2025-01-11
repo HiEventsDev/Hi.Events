@@ -3,6 +3,7 @@
 namespace HiEvents\Services\Application\Handlers\Attendee;
 
 use HiEvents\DomainObjects\EventSettingDomainObject;
+use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\Exceptions\ResourceConflictException;
@@ -30,10 +31,12 @@ readonly class ResendAttendeeTicketHandler
      */
     public function handle(ResendAttendeeTicketDTO $resendAttendeeProductDTO): void
     {
-        $attendee = $this->attendeeRepository->findFirstWhere([
-            'id' => $resendAttendeeProductDTO->attendeeId,
-            'event_id' => $resendAttendeeProductDTO->eventId,
-        ]);
+        $attendee = $this->attendeeRepository
+            ->loadRelation(new Relationship(OrderDomainObject::class, name: 'order'))
+            ->findFirstWhere([
+                'id' => $resendAttendeeProductDTO->attendeeId,
+                'event_id' => $resendAttendeeProductDTO->eventId,
+            ]);
 
         if (!$attendee) {
             throw new ResourceNotFoundException();
@@ -49,6 +52,7 @@ readonly class ResendAttendeeTicketHandler
             ->findById($resendAttendeeProductDTO->eventId);
 
         $this->sendAttendeeProductService->send(
+            order: $attendee->getOrder(),
             attendee: $attendee,
             event: $event,
             eventSettings: $event->getEventSettings(),

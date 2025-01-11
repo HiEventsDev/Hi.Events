@@ -87,6 +87,8 @@ export interface Image {
     type: string;
 }
 
+export type PaymentProvider = 'STRIPE' | 'OFFLINE';
+
 export interface EventSettings {
     event_id?: IdParam;
     id?: IdParam;
@@ -114,6 +116,20 @@ export interface EventSettings {
     allow_search_engine_indexing?: boolean;
     price_display_mode?: 'INCLUSIVE' | 'EXCLUSIVE';
     hide_getting_started_page: boolean;
+
+    // Payment settings
+    offline_payment_instructions: string;
+    payment_providers: PaymentProvider[];
+
+    // Invoice settings
+    enable_invoicing: boolean;
+    invoice_label?: string;
+    invoice_prefix?: string;
+    invoice_start_number?: number;
+    require_billing_address: boolean;
+    organization_name?: string;
+    organization_address?: string;
+    tax_details?: string;
 }
 
 export interface VenueAddress {
@@ -423,9 +439,9 @@ export interface Order {
     attendees?: Attendee[];
     created_at: string;
     currency: string;
-    status: 'RESERVED' | 'CANCELLED' | 'COMPLETED';
+    status: 'RESERVED' | 'CANCELLED' | 'COMPLETED' | 'AWAITING_OFFLINE_PAYMENT';
     refund_status?: 'REFUND_PENDING' | 'REFUND_FAILED' | 'REFUNDED' | 'PARTIALLY_REFUNDED';
-    payment_status?: 'NO_PAYMENT_REQUIRED' | 'AWAITING_PAYMENT' | 'PAYMENT_FAILED' | 'PAYMENT_RECEIVED';
+    payment_status?: 'NO_PAYMENT_REQUIRED' | 'AWAITING_PAYMENT' | 'PAYMENT_FAILED' | 'PAYMENT_RECEIVED' | 'AWAITING_OFFLINE_PAYMENT';
     public_id: string;
     is_payment_required: boolean;
     is_manually_created: boolean;
@@ -563,6 +579,7 @@ export enum QueryFilterOperator {
     LessThanOrEquals = 'lte',
     Like = 'like',
     NotLike = 'not_like',
+    In = 'in',
 }
 
 export type QueryFilterValue = string | number | boolean;

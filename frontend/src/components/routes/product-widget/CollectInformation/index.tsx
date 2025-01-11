@@ -1,7 +1,7 @@
 import {useMutation} from "@tanstack/react-query";
 import {FinaliseOrderPayload, orderClientPublic} from "../../../../api/order.client.ts";
 import {useNavigate, useParams} from "react-router-dom";
-import {Button, Group, Skeleton, TextInput} from "@mantine/core";
+import {Button, Group, NativeSelect, Skeleton, TextInput} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import {notifications} from "@mantine/notifications";
 import {useGetOrderPublic} from "../../../../queries/useGetOrderPublic.ts";
@@ -20,6 +20,7 @@ import {HomepageInfoMessage} from "../../../common/HomepageInfoMessage";
 import {eventCheckoutPath, eventHomepagePath} from "../../../../utilites/urlHelper.ts";
 import {formatCurrency} from "../../../../utilites/currency.ts";
 import {showInfo} from "../../../../utilites/notifications.tsx";
+import countries from "../../../../../data/countries.json";
 
 const LoadingSkeleton = () =>
     (
@@ -54,6 +55,9 @@ export const CollectInformation = () => {
     const productQuestions = questions?.filter(question => question.belongs_to === "PRODUCT");
     const orderQuestions = questions?.filter(question => question.belongs_to === "ORDER");
     const products = productCategories?.flatMap(category => category.products);
+    const requireBillingAddress = event?.settings?.require_billing_address;
+
+    console.log('requireBillingAddress', requireBillingAddress, event?.settings);
 
     let productIndex = 0;
 
@@ -285,14 +289,66 @@ export const CollectInformation = () => {
                         {...form.getInputProps("order.email")}
                     />
 
-                    {orderQuestions && <CheckoutOrderQuestions form={form} questions={orderQuestions}/>}
-
                     {orderRequiresAttendeeDetails && (
                         <Button p={0} ml={0} size={'sm'} variant={'transparent'} leftSection={<IconCopy size={14}/>}
                                 onClick={copyDetailsToAllAttendees}>
                             {t`Copy details to all attendees`}
                         </Button>
                     )}
+
+                    {requireBillingAddress && (
+                        <>
+                            <h3 style={{marginBottom: 5}}>
+                                {t`Billing Address`}
+                            </h3>
+
+                            <InputGroup>
+                                <TextInput
+                                    withAsterisk
+                                    label={t`Address Line 1`}
+                                    placeholder={t`Address Line 1`}
+                                    {...form.getInputProps("order.address.address_line_1")}
+                                />
+                                <TextInput
+                                    label={t`Address Line 2`}
+                                    placeholder={t`Address Line 2`}
+                                    {...form.getInputProps("order.address.address_line_2")}
+                                />
+                            </InputGroup>
+
+                            <InputGroup>
+                                <TextInput
+                                    withAsterisk
+                                    label={t`City`}
+                                    placeholder={t`City`}
+                                    {...form.getInputProps("order.address.city")}
+                                />
+                                <TextInput
+                                    withAsterisk
+                                    label={t`State or Region`}
+                                    placeholder={t`State or Region`}
+                                    {...form.getInputProps("order.address.state_or_region")}
+                                />
+                            </InputGroup>
+
+                            <InputGroup>
+                                {/* Postal Code and Country */}
+                                <TextInput
+                                    label={t`ZIP / Postal Code`}
+                                    placeholder={t`ZIP or Postal Code`}
+                                    {...form.getInputProps("order.address.zip_or_postal_code")}
+                                />
+                                <NativeSelect
+                                    withAsterisk
+                                    label={t`Country`}
+                                    data={countries}
+                                    {...form.getInputProps("order.address.country")}
+                                />
+                            </InputGroup>
+                        </>
+                    )}
+
+                    {orderQuestions && <CheckoutOrderQuestions form={form} questions={orderQuestions}/>}
                 </Card>
 
                 {orderItems?.map(orderItem => {

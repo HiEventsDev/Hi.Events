@@ -60,6 +60,8 @@ use HiEvents\Http\Actions\Orders\ExportOrdersAction;
 use HiEvents\Http\Actions\Orders\GetOrderAction;
 use HiEvents\Http\Actions\Orders\GetOrderActionPublic;
 use HiEvents\Http\Actions\Orders\GetOrdersAction;
+use HiEvents\Http\Actions\Orders\MarkOrderAsPaidAction;
+use HiEvents\Http\Actions\Orders\TransitionOrderToOfflinePaymentPublicAction;
 use HiEvents\Http\Actions\Orders\MessageOrderAction;
 use HiEvents\Http\Actions\Orders\Payment\RefundOrderAction;
 use HiEvents\Http\Actions\Orders\Payment\Stripe\CreatePaymentIntentActionPublic;
@@ -208,6 +210,7 @@ $router->middleware(['auth:api'])->group(
         $router->post('/events/{event_id}/orders/{order_id}/refund', RefundOrderAction::class);
         $router->post('/events/{event_id}/orders/{order_id}/resend_confirmation', ResendOrderConfirmationAction::class);
         $router->post('/events/{event_id}/orders/{order_id}/cancel', CancelOrderAction::class);
+        $router->post('/events/{event_id}/orders/{order_id}/mark-as-paid', MarkOrderAsPaidAction::class);
         $router->post('/events/{event_id}/orders/export', ExportOrdersAction::class);
 
         $router->post('/events/{event_id}/questions', CreateQuestionAction::class);
@@ -266,6 +269,7 @@ $router->prefix('/public')->group(
         $router->post('/events/{event_id}/order', CreateOrderActionPublic::class);
         $router->put('/events/{event_id}/order/{order_short_id}', CompleteOrderActionPublic::class);
         $router->get('/events/{event_id}/order/{order_short_id}', GetOrderActionPublic::class);
+        $router->post('/events/{event_id}/order/{order_short_id}/await-offline-payment', TransitionOrderToOfflinePaymentPublicAction::class);
 
         // Attendees
         $router->get('/events/{event_id}/attendees/{attendee_short_id}', GetAttendeeActionPublic::class);

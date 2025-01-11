@@ -4,5 +4,8 @@ namespace HiEvents\DomainObjects\Enums;
 
 enum PaymentProviders: string
 {
-    case STRIPE = 'Stripe';
+    use BaseEnum;
+
+    case STRIPE = 'STRIPE';
+    case OFFLINE = 'OFFLINE';
 }

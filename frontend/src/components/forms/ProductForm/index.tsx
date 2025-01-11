@@ -251,7 +251,7 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                 <TextInput mt={20}
                            {...form.getInputProps('title')}
                            label={t`Name`}
-                           placeholder={t`VIP Product`}
+                           placeholder={form.values.product_type === 'TICKET' ? t`VIP Ticket` : t`T-shirt`}
                            required/>
 
                 <Editor

@@ -48,7 +48,7 @@ export const StatBoxes = () => {
         },
         {
             number: formatNumber(eventStats?.total_orders as number),
-            description: t`Orders Created`,
+            description: t`Completed orders`,
             icon: <IconReceipt size={18}/>,
             backgroundColor: '#E67D49' // Coral orange
         }
