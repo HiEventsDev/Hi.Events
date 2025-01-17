@@ -22,6 +22,13 @@ class Url
         return self::addQueryParamsToUrl($queryParams, $url);
     }
 
+    public static function getApiUrl(string $path, array $queryParams = []): string
+    {
+        $url = rtrim(config('app.api_url'), '/') . '/' . ltrim($path, '/');
+
+        return self::addQueryParamsToUrl($queryParams, $url);
+    }
+
     public static function getCdnUrl(string $path): string
     {
         return config('app.cnd_url') . '/' . $path;

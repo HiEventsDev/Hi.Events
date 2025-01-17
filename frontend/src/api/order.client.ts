@@ -90,6 +90,14 @@ export const orderClient = {
         const response = await api.post<GenericDataResponse<Order>>('events/' + eventId + '/orders/' + orderId + '/mark-as-paid');
         return response.data;
     },
+
+    downloadInvoice: async (eventId: IdParam, orderId: IdParam): Promise<Blob> => {
+        const response = await api.get(`events/${eventId}/orders/${orderId}/invoice`, {
+            responseType: 'blob',
+        });
+
+        return new Blob([response.data]);
+    }
 }
 
 export const orderClientPublic = {

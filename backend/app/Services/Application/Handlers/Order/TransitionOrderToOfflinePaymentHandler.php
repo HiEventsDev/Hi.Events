@@ -3,12 +3,14 @@
 namespace HiEvents\Services\Application\Handlers\Order;
 
 use HiEvents\DomainObjects\Enums\PaymentProviders;
+use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\Status\OrderPaymentStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Events\OrderStatusChangedEvent;
+use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Exceptions\UnauthorizedException;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
@@ -36,7 +38,12 @@ class TransitionOrderToOfflinePaymentHandler
                 ->loadRelation(OrderItemDomainObject::class)
                 ->findByShortId($dto->orderShortId);
 
-            $this->validateOfflinePaymentsAreEnabled($order);
+            /** @var EventSettingDomainObject $eventSettings */
+            $eventSettings = $this->eventSettingsRepository->findFirstWhere([
+                'event_id' => $order->getEventId(),
+            ]);
+
+            $this->validateOfflinePayment($order, $eventSettings);
 
             $this->updateOrderStatuses($order->getId());
 
@@ -46,7 +53,11 @@ class TransitionOrderToOfflinePaymentHandler
                 ->loadRelation(OrderItemDomainObject::class)
                 ->findById($order->getId());
 
-            OrderStatusChangedEvent::dispatch($order);
+            event(new OrderStatusChangedEvent(
+                order: $order,
+                sendEmails: true,
+                createInvoice: $eventSettings->getEnableInvoicing(),
+            ));
 
             return $order;
         });
@@ -55,21 +66,31 @@ class TransitionOrderToOfflinePaymentHandler
     private function updateOrderStatuses(int $orderId): void
     {
         $this->orderRepository
-            ->loadRelation(OrderItemDomainObject::class)
             ->updateFromArray($orderId, [
                 OrderDomainObjectAbstract::PAYMENT_STATUS => OrderPaymentStatus::AWAITING_OFFLINE_PAYMENT->name,
                 OrderDomainObjectAbstract::STATUS => OrderStatus::AWAITING_OFFLINE_PAYMENT->name,
+                OrderDomainObjectAbstract::PAYMENT_PROVIDER => PaymentProviders::OFFLINE->value,
             ]);
     }
 
-    public function validateOfflinePaymentsAreEnabled(OrderDomainObjectAbstract $order): void
+    /**
+     * @throws ResourceConflictException
+     */
+    public function validateOfflinePayment(
+        OrderDomainObject        $order,
+        EventSettingDomainObject $settings,
+    ): void
     {
-        $eventSettings = $this->eventSettingsRepository->findFirstWhere([
-            'event_id' => $order->getEventId(),
-        ]);
+        if (!$order->isOrderReserved()) {
+            throw new ResourceConflictException(__('Order is not in the correct status to transition to offline payment'));
+        }
 
-        if (collect($eventSettings->getPaymentProviders())->contains(PaymentProviders::OFFLINE->value) === false) {
-            throw new UnauthorizedException('This event does not support offline payments');
+        if ($order->isReservedOrderExpired()) {
+            throw new ResourceConflictException(__('Order reservation has expired'));
+        }
+
+        if (collect($settings->getPaymentProviders())->contains(PaymentProviders::OFFLINE->value) === false) {
+            throw new UnauthorizedException(__('Offline payments are not enabled for this event'));
         }
     }
 }

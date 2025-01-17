@@ -53,6 +53,7 @@ class UpdateEventSettingsDTO extends BaseDTO
         // Payment settings
         public readonly array                   $payment_providers = [],
         public readonly ?string                 $offline_payment_instructions = null,
+        public readonly bool                    $allow_orders_awaiting_offline_payment_to_check_in = false,
 
         // Invoice settings
         public readonly bool                    $enable_invoicing = false,
@@ -109,7 +110,7 @@ class UpdateEventSettingsDTO extends BaseDTO
 
             // Invoice defaults
             enable_invoicing: false,
-            invoice_label: __('Receipt'),
+            invoice_label: __('Invoice'),
             invoice_prefix: null,
             invoice_start_number: 1,
             require_billing_address: true,

@@ -1,11 +1,14 @@
 import {t} from "@lingui/macro";
 import {Anchor, Badge, Button, Group, Menu, Table as MantineTable, Tooltip} from '@mantine/core';
-import {Event, IdParam, MessageType, Order} from "../../../types.ts";
+import {Event, IdParam, Invoice, MessageType, Order} from "../../../types.ts";
 import {
+    IconCash,
     IconCheck,
     IconDotsVertical,
     IconEye,
-    IconInfoCircle, IconReceiptDollar,
+    IconInfoCircle,
+    IconReceipt2,
+    IconReceiptDollar,
     IconReceiptRefund,
     IconRepeat,
     IconSend,
@@ -30,6 +33,9 @@ import {OrderStatusBadge} from "../OrderStatusBadge";
 import {formatNumber} from "../../../utilites/helpers.ts";
 import {useUrlHash} from "../../../hooks/useUrlHash.ts";
 import {useMarkOrderAsPaid} from "../../../mutations/useMarkOrderAsPaid.ts";
+import {orderClient} from "../../../api/order.client.ts";
+import {downloadBinary} from "../../../utilites/download.ts";
+import {showError} from "../../../utilites/notifications.tsx";
 
 interface OrdersTableProps {
     event: Event,
@@ -73,7 +79,7 @@ export const OrdersTable = ({orders, event}: OrdersTableProps) => {
             onSuccess: () => {
                 notifications.show({
                     message: t`Order marked as paid`,
-                    icon: <IconCheck/>
+                    icon: <IconCash/>
                 })
             },
             onError: () => {
@@ -100,6 +106,15 @@ export const OrdersTable = ({orders, event}: OrdersTableProps) => {
                 })
             }
         });
+    }
+
+    const handleInvoiceDownload = async (invoice: Invoice) => {
+        try {
+            const blob = await orderClient.downloadInvoice(event.id, invoice.order_id);
+            downloadBinary(blob, invoice.invoice_number + '.pdf');
+        } catch (error) {
+            showError(t`Failed to download invoice. Please try again.`);
+        }
     }
 
     const ActionMenu = ({order}: { order: Order }) => {
@@ -131,9 +146,14 @@ export const OrdersTable = ({orders, event}: OrdersTableProps) => {
                     <Menu.Item onClick={() => handleModalClick(order.id, messageModal)}
                                leftSection={<IconSend size={14}/>}>{t`Message buyer`}</Menu.Item>
 
+                    {order.latest_invoice && (
+                        <Menu.Item onClick={() => handleInvoiceDownload(order.latest_invoice as Invoice)}
+                                   leftSection={<IconReceipt2 size={14}/>}>{t`Download invoice`}</Menu.Item>
+                    )}
+
                     {order.status === 'AWAITING_OFFLINE_PAYMENT' && (
                         <Menu.Item onClick={() => handleMarkAsPaid(event.id, order.id)}
-                                      leftSection={<IconReceiptDollar size={14}/>}>{t`Mark as paid`}</Menu.Item>
+                                   leftSection={<IconReceiptDollar size={14}/>}>{t`Mark as paid`}</Menu.Item>
                     )}
 
 

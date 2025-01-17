@@ -26,7 +26,7 @@ class CreateAttendeeCheckInPublicHandler
         $checkIns = $this->createAttendeeCheckInService->checkInAttendees(
             $checkInData->checkInListUuid,
             $checkInData->checkInUserIpAddress,
-            $checkInData->attendeePublicIds,
+            $checkInData->attendeesAndActions,
         );
 
         $this->logger->info('Attendee check-ins created', [

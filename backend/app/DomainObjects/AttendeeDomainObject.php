@@ -29,7 +29,7 @@ class AttendeeDomainObject extends Generated\AttendeeDomainObjectAbstract implem
             [
                 self::CREATED_AT => [
                     'asc' => __('Older First'),
-                    'desc' => __('Newer First'),
+                    'desc' => __('Newest First'),
                 ],
                 self::UPDATED_AT => [
                     'desc' => __('Recently Updated First'),

@@ -5,6 +5,7 @@ namespace HiEvents\Services\Domain\Mail;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
+use HiEvents\DomainObjects\InvoiceDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
@@ -33,6 +34,7 @@ readonly class SendOrderDetailsService
         $order = $this->orderRepository
             ->loadRelation(OrderItemDomainObject::class)
             ->loadRelation(AttendeeDomainObject::class)
+            ->loadRelation(InvoiceDomainObject::class)
             ->findById($order->getId());
 
         $event = $this->eventRepository
@@ -87,6 +89,7 @@ readonly class SendOrderDetailsService
                 event: $event,
                 organizer: $event->getOrganizer(),
                 eventSettings: $event->getEventSettings(),
+                invoice: $order->getLatestInvoice(),
             ));
 
         if ($order->getIsManuallyCreated() || !$event->getEventSettings()->getNotifyOrganizerOfNewOrders()) {

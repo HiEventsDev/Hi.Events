@@ -120,6 +120,7 @@ export interface EventSettings {
     // Payment settings
     offline_payment_instructions: string;
     payment_providers: PaymentProvider[];
+    allow_orders_awaiting_offline_payment_to_check_in: boolean;
 
     // Invoice settings
     enable_invoicing: boolean;
@@ -372,7 +373,7 @@ export interface Attendee {
     product?: Product;
     product_price_id: number;
     order_id: number;
-    status: string;
+    status: 'ACTIVE' | 'CANCELLED' | 'AWAITING_PAYMENT';
     first_name: string;
     last_name: string;
     email: string;
@@ -451,6 +452,15 @@ export interface Order {
     taxes_and_fees_rollup?: TaxesAndFeesRollup;
     question_answers?: QuestionAnswer[];
     event?: Event;
+    latest_invoice?: Invoice;
+}
+
+export interface Invoice {
+    download_url: string;
+    invoice_number: string;
+    id: IdParam,
+    order_id: IdParam,
+    status: 'PAID' | 'UNPAID' | 'VOID',
 }
 
 export interface OrderItem {

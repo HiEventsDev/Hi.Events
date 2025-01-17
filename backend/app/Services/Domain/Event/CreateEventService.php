@@ -151,7 +151,7 @@ class CreateEventService
             'offline_payment_instructions' => null,
 
             'enable_invoicing' => false,
-            'invoice_label' => __('Receipt'),
+            'invoice_label' => __('Invoice'),
             'invoice_prefix' => null,
             'invoice_start_number' => 1,
             'require_billing_address' => true,

@@ -19,6 +19,7 @@ const Checkout = () => {
     const navigate = useNavigate();
     const orderIsCompleted = order?.status === 'COMPLETED';
     const orderIsReserved = order?.status === 'RESERVED';
+    const orderIsAwaitingOfflinePayment = order?.status === 'AWAITING_OFFLINE_PAYMENT';
     const isMobile = useMediaQuery('(max-width: 768px)');
     const [isExpired, setIsExpired] = useState(false);
     const orderHasAttendees = order?.attendees && order.attendees.length > 0;
@@ -69,7 +70,7 @@ const Checkout = () => {
                                         </Group>
                                     )}
 
-                                    {orderIsCompleted && (
+                                    {(orderIsCompleted || orderIsAwaitingOfflinePayment) && (
                                         <Group gap="2px">
                                             <ShareComponent
                                                 title={event.title}

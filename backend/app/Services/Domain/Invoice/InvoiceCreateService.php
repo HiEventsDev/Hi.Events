@@ -1,0 +1,83 @@
+<?php
+
+namespace HiEvents\Services\Domain\Invoice;
+
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventSettingDomainObject;
+use HiEvents\DomainObjects\InvoiceDomainObject;
+use HiEvents\DomainObjects\OrderItemDomainObject;
+use HiEvents\DomainObjects\Status\InvoiceStatus;
+use HiEvents\Exceptions\ResourceConflictException;
+use HiEvents\Repository\Eloquent\Value\Relationship;
+use HiEvents\Repository\Interfaces\InvoiceRepositoryInterface;
+use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
+
+class InvoiceCreateService
+{
+    public function __construct(
+        private readonly OrderRepositoryInterface   $orderRepository,
+        private readonly InvoiceRepositoryInterface $invoiceRepository,
+    )
+    {
+    }
+
+    /**
+     * @throws ResourceConflictException
+     */
+    public function createInvoiceForOrder(int $orderId): InvoiceDomainObject
+    {
+        $existingInvoice = $this->invoiceRepository->findFirstWhere([
+            'order_id' => $orderId,
+        ]);
+
+        if ($existingInvoice) {
+            throw new ResourceConflictException(__('Invoice already exists'));
+        }
+
+        $order = $this->orderRepository
+            ->loadRelation(OrderItemDomainObject::class)
+            ->loadRelation(new Relationship(EventDomainObject::class, nested: [
+                new Relationship(EventSettingDomainObject::class, name: 'event_settings'),
+            ], name: 'event'))
+            ->findById($orderId);
+
+        return $this->invoiceRepository->create([
+            'order_id' => $orderId,
+            'account_id' => $order->getEvent()->getAccountId(),
+            'invoice_number' => $this->getLatestInvoiceNumber($order->getEvent()->getId(), $order->getEvent()->getEventSettings()),
+            'items' => collect($order->getOrderItems())->map(function (OrderItemDomainObject $item) {
+                return [
+                    'item_name' => $item->getItemName(),
+                    'quantity' => $item->getQuantity(),
+                    'price' => $item->getPrice(),
+                    'total_before_additions' => $item->getTotalBeforeAdditions(),
+                    'total_tax' => $item->getTotalTax(),
+                    'total_service_fee' => $item->getTotalServiceFee(),
+                    'total_gross' => $item->getTotalGross(),
+                    'taxes_and_fees_rollup' => $item->getTaxesAndFeesRollup(),
+                ];
+            })->toArray(),
+            'taxes_and_fees' => $order->getTaxesAndFeesRollup(),
+            'issue_date' => now()->toDateString(),
+            'status' => InvoiceStatus::UNPAID->name,
+            'total_amount' => $order->getTotalGross(),
+        ]);
+    }
+
+    public function getLatestInvoiceNumber(int $eventId, EventSettingDomainObject $eventSettings): string
+    {
+        $latestInvoice = $this->invoiceRepository->findLatestInvoiceForEvent($eventId);
+
+        $startNumber = $eventSettings->getInvoiceStartNumber() ?? 1;
+        $prefix = $eventSettings->getInvoicePrefix() ?? '';
+
+        if (!$latestInvoice) {
+            return $prefix . $startNumber;
+        }
+
+        $nextInvoiceNumber = (int)preg_replace('/\D+/', '', $latestInvoice->getInvoiceNumber()) + 1;
+
+        return $prefix . $nextInvoiceNumber;
+    }
+
+}

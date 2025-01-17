@@ -2,14 +2,17 @@
 
 namespace HiEvents\Services\Application\Handlers\CheckInList\Public\DTO;
 
-use HiEvents\DataTransferObjects\BaseDTO;
+use Illuminate\Support\Collection;
+use Spatie\LaravelData\Attributes\DataCollectionOf;
+use Spatie\LaravelData\Data;
 
-class CreateAttendeeCheckInPublicDTO extends BaseDTO
+class CreateAttendeeCheckInPublicDTO extends Data
 {
     public function __construct(
-        public string $checkInListUuid,
-        public string $checkInUserIpAddress,
-        public array $attendeePublicIds,
+        public string     $checkInListUuid,
+        public string     $checkInUserIpAddress,
+        #[DataCollectionOf(AttendeeAndActionDTO::class)]
+        public Collection $attendeesAndActions,
     )
     {
     }

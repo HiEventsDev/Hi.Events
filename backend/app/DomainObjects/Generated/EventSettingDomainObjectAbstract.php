@@ -55,6 +55,7 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     final public const TAX_DETAILS = 'tax_details';
     final public const PAYMENT_PROVIDERS = 'payment_providers';
     final public const OFFLINE_PAYMENT_INSTRUCTIONS = 'offline_payment_instructions';
+    final public const ALLOW_ORDERS_AWAITING_OFFLINE_PAYMENT_TO_CHECK_IN = 'allow_orders_awaiting_offline_payment_to_check_in';
 
     protected int $id;
     protected int $event_id;
@@ -101,6 +102,7 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     protected ?string $tax_details = null;
     protected array|string|null $payment_providers = null;
     protected ?string $offline_payment_instructions = null;
+    protected bool $allow_orders_awaiting_offline_payment_to_check_in = false;
 
     public function toArray(): array
     {
@@ -150,6 +152,7 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
                     'tax_details' => $this->tax_details ?? null,
                     'payment_providers' => $this->payment_providers ?? null,
                     'offline_payment_instructions' => $this->offline_payment_instructions ?? null,
+                    'allow_orders_awaiting_offline_payment_to_check_in' => $this->allow_orders_awaiting_offline_payment_to_check_in ?? null,
                 ];
     }
 
@@ -646,5 +649,17 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     public function getOfflinePaymentInstructions(): ?string
     {
         return $this->offline_payment_instructions;
+    }
+
+    public function setAllowOrdersAwaitingOfflinePaymentToCheckIn(
+        bool $allow_orders_awaiting_offline_payment_to_check_in,
+    ): self {
+        $this->allow_orders_awaiting_offline_payment_to_check_in = $allow_orders_awaiting_offline_payment_to_check_in;
+        return $this;
+    }
+
+    public function getAllowOrdersAwaitingOfflinePaymentToCheckIn(): bool
+    {
+        return $this->allow_orders_awaiting_offline_payment_to_check_in;
     }
 }

@@ -33,6 +33,11 @@ class Order extends BaseModel
         return $this->belongsTo(Event::class);
     }
 
+    public function invoices(): HasMany
+    {
+        return $this->hasMany(Invoice::class)->orderBy('created_at', 'desc');
+    }
+
     protected function getCastMap(): array
     {
         return [

@@ -12,7 +12,6 @@ return new class extends Migration {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('order_id');
             $table->unsignedBigInteger('account_id');
-            $table->unsignedBigInteger('user_id');
             $table->string('invoice_number', 50);
             $table->timestamp('issue_date')->useCurrent();
             $table->timestamp('due_date')->nullable();
@@ -26,7 +25,6 @@ return new class extends Migration {
 
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
             $table->foreign('account_id')->references('id')->on('accounts')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

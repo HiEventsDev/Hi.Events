@@ -1,5 +1,5 @@
 import {t} from "@lingui/macro";
-import {Button, Checkbox, NumberInput, Paper, Stack, Switch, Text, TextInput, Alert, Card as MantineCard} from "@mantine/core";
+import {Button, Card as MantineCard, Checkbox, NumberInput, Paper, Stack, Switch, Text, TextInput} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import {useParams} from "react-router-dom";
 import {useEffect} from "react";
@@ -22,6 +22,7 @@ export const PaymentAndInvoicingSettings = () => {
             require_billing_address: true,
             payment_providers: [] as PaymentProvider[],
             offline_payment_instructions: "",
+            allow_orders_awaiting_offline_payment_to_check_in: false,
             enable_invoicing: false,
             invoice_label: "",
             invoice_prefix: "",
@@ -43,6 +44,7 @@ export const PaymentAndInvoicingSettings = () => {
             form.setValues({
                 payment_providers: eventSettingsQuery.data.payment_providers || [],
                 offline_payment_instructions: eventSettingsQuery.data.offline_payment_instructions || "",
+                allow_orders_awaiting_offline_payment_to_check_in: eventSettingsQuery.data.allow_orders_awaiting_offline_payment_to_check_in || false,
                 enable_invoicing: eventSettingsQuery.data.enable_invoicing || false,
                 invoice_label: eventSettingsQuery.data.invoice_label || "",
                 invoice_prefix: eventSettingsQuery.data.invoice_prefix || "",
@@ -117,23 +119,39 @@ export const PaymentAndInvoicingSettings = () => {
                             )}
 
                             {form.values.payment_providers?.includes("OFFLINE") && (
-                                <MantineCard shadow="sm" padding="lg" radius="md" withBorder mb="md">
-                                    <h4 style={{margin:0,fontWeight:'normal'}}>{t`Offline Payments Information`}</h4>
-                                    <Text size="sm" mt="xs">{t`When offline payments are enabled, users will be able to complete their orders and receive their tickets. Their tickets will clearly indicate the order is not paid, and the check-in tool will notify the check-in staff if an order requires payment.`}</Text>
-                                    <Text size="sm" mt="xs">{t`You will have to mark an order as paid manually. This can be done on the manage order page.`}</Text>
-                                    <Text size="sm" mt="xs">{t`Offline orders are not reflected in event statistics until the order is marked as paid.`}</Text>
-                                </MantineCard>
-                            )}
-
-                            {form.values.payment_providers?.includes("OFFLINE") && (
-                                <Editor
-                                    editorType={'simple'}
-                                    value={form.values.offline_payment_instructions}
-                                    error={form.errors.offline_payment_instructions as string}
-                                    label={<InputLabelWithHelp label={t`Offline Payment Instructions`} helpText={t`This information will be shown on the payment page, order summary page, and order confirmation email.`}/>}
-                                    description={t`Add instructions for offline payments (e.g., bank transfer details, where to send checks, payment deadlines)`}
-                                    onChange={(value) => form.setFieldValue('offline_payment_instructions', value)}
-                                />
+                                <Card style={{boxShadow: 'none', marginTop: '20px'}}>
+                                    <h4 style={{
+                                        marginTop: '5px',
+                                        marginBottom: '10px'
+                                    }}>{t`Offline Payments Settings`}</h4>
+                                    <MantineCard shadow="sm" padding="lg" radius="md" withBorder mb="md">
+                                        <h4 style={{
+                                            margin: 0,
+                                            fontWeight: 'normal'
+                                        }}>{t`Offline Payments Information`}</h4>
+                                        <Text size="sm"
+                                              mt="xs">{t`When offline payments are enabled, users will be able to complete their orders and receive their tickets. Their tickets will clearly indicate the order is not paid, and the check-in tool will notify the check-in staff if an order requires payment.`}</Text>
+                                        <Text size="sm"
+                                              mt="xs">{t`You will have to mark an order as paid manually. This can be done on the manage order page.`}</Text>
+                                        <Text size="sm"
+                                              mt="xs">{t`Offline orders are not reflected in event statistics until the order is marked as paid.`}</Text>
+                                    </MantineCard>
+                                    <Editor
+                                        editorType={'simple'}
+                                        value={form.values.offline_payment_instructions}
+                                        error={form.errors.offline_payment_instructions as string}
+                                        label={<InputLabelWithHelp label={t`Offline Payment Instructions`}
+                                                                   helpText={t`This information will be shown on the payment page, order summary page, and order confirmation email.`}/>}
+                                        description={t`Add instructions for offline payments (e.g., bank transfer details, where to send checks, payment deadlines)`}
+                                        onChange={(value) => form.setFieldValue('offline_payment_instructions', value)}
+                                    />
+                                    <Switch
+                                        label={t`Allow attendees associated with unpaid orders to check in`}
+                                        description={t`If enabled, check-in staff can either mark attendees as checked in or mark the order as paid and check in the attendees. If disabled, attendees associated with unpaid orders cannot be checked in.`}
+                                        checked={form.values.allow_orders_awaiting_offline_payment_to_check_in}
+                                        {...form.getInputProps('allow_orders_awaiting_offline_payment_to_check_in', {type: 'checkbox'})}
+                                    />
+                                </Card>
                             )}
                         </Paper>
 
@@ -162,30 +180,30 @@ export const PaymentAndInvoicingSettings = () => {
                                     <>
                                         <TextInput
                                             label={t`Document Label`}
-                                            description={t`Leave blank to use the default word "Receipt"`}
+                                            description={t`Leave blank to use the default word "Invoice"`}
                                             placeholder="Invoice"
                                             {...form.getInputProps('invoice_label')}
                                         />
 
                                         <Stack gap="xs">
-                                            <h4 style={{margin:0}}>{t`Invoice Numbering`}</h4>
+                                            <h4 style={{margin: 0}}>{t`Invoice Numbering`}</h4>
                                             <TextInput
                                                 label={t`Number Prefix`}
-                                                description={t`Optional prefix for invoice numbers (e.g., EVT-)`}
-                                                placeholder="EVT-"
+                                                description={t`Optional prefix for invoice numbers (e.g., INV-)`}
+                                                placeholder="INV-"
                                                 {...form.getInputProps('invoice_prefix')}
                                             />
 
                                             <NumberInput
                                                 label={t`First Invoice Number`}
-                                                description={t`Set the starting number for invoice numbering`}
+                                                description={t`Set the starting number for invoice numbering. This cannot be changed once invoices have been generated.`}
                                                 min={1}
                                                 {...form.getInputProps('invoice_start_number')}
                                             />
                                         </Stack>
 
                                         <Stack gap="xs">
-                                            <h4 style={{margin:0}}>{t`Organization Details`}</h4>
+                                            <h4 style={{margin: 0}}>{t`Organization Details`}</h4>
                                             <TextInput
                                                 label={t`Organization Name`}
                                                 placeholder="Your Company Ltd"

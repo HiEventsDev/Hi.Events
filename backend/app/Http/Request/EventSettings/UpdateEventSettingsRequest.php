@@ -62,6 +62,7 @@ class UpdateEventSettingsRequest extends BaseRequest
             'payment_providers' => ['array'],
             'payment_providers.*' => ['string', Rule::in(PaymentProviders::valuesArray())],
             'offline_payment_instructions' => ['required_if:payment_providers,offline', 'string', 'nullable'],
+            'allow_orders_awaiting_offline_payment_to_check_in' => ['boolean'],
 
             // Invoice settings
             'enable_invoicing' => ['boolean'],

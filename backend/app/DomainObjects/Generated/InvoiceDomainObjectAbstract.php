@@ -13,7 +13,6 @@ abstract class InvoiceDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     final public const ID = 'id';
     final public const ORDER_ID = 'order_id';
     final public const ACCOUNT_ID = 'account_id';
-    final public const USER_ID = 'user_id';
     final public const INVOICE_NUMBER = 'invoice_number';
     final public const ISSUE_DATE = 'issue_date';
     final public const DUE_DATE = 'due_date';
@@ -29,7 +28,6 @@ abstract class InvoiceDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     protected int $id;
     protected int $order_id;
     protected int $account_id;
-    protected int $user_id;
     protected string $invoice_number;
     protected string $issue_date = 'CURRENT_TIMESTAMP';
     protected ?string $due_date = null;
@@ -48,7 +46,6 @@ abstract class InvoiceDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
                     'id' => $this->id ?? null,
                     'order_id' => $this->order_id ?? null,
                     'account_id' => $this->account_id ?? null,
-                    'user_id' => $this->user_id ?? null,
                     'invoice_number' => $this->invoice_number ?? null,
                     'issue_date' => $this->issue_date ?? null,
                     'due_date' => $this->due_date ?? null,
@@ -94,17 +91,6 @@ abstract class InvoiceDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     public function getAccountId(): int
     {
         return $this->account_id;
-    }
-
-    public function setUserId(int $user_id): self
-    {
-        $this->user_id = $user_id;
-        return $this;
-    }
-
-    public function getUserId(): int
-    {
-        return $this->user_id;
     }
 
     public function setInvoiceNumber(string $invoice_number): self

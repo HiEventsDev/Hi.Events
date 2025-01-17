@@ -1,5 +1,5 @@
 @php use HiEvents\Helper\DateHelper; @endphp
-@php /** @uses /backend/app/Mail/OrderSummary.php */ @endphp
+@php /** @uses \HiEvents\Mail\Order\OrderSummary */ @endphp
 @php /** @var \HiEvents\DomainObjects\EventDomainObject $event */ @endphp
 @php /** @var \HiEvents\DomainObjects\EventSettingDomainObject $eventSettings */ @endphp
 @php /** @var \HiEvents\DomainObjects\OrganizerDomainObject $organizer */ @endphp

@@ -52,6 +52,8 @@ const Payment = () => {
         if (activePaymentMethod === 'STRIPE') {
             handleParentSubmit();
         } else if (activePaymentMethod === 'OFFLINE') {
+            setIsPaymentLoading(true);
+
             await transitionOrderToOfflinePaymentMutation.mutateAsync({
                 eventId,
                 orderShortId

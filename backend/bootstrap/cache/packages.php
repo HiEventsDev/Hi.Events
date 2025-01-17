@@ -1,4 +1,16 @@
 <?php return array (
+  'barryvdh/laravel-dompdf' => 
+  array (
+    'aliases' => 
+    array (
+      'PDF' => 'Barryvdh\\DomPDF\\Facade\\Pdf',
+      'Pdf' => 'Barryvdh\\DomPDF\\Facade\\Pdf',
+    ),
+    'providers' => 
+    array (
+      0 => 'Barryvdh\\DomPDF\\ServiceProvider',
+    ),
+  ),
   'druc/laravel-langscanner' => 
   array (
     'providers' => 
@@ -71,6 +83,13 @@
       0 => 'PHPOpenSourceSaver\\JWTAuth\\Providers\\LaravelServiceProvider',
     ),
   ),
+  'spatie/laravel-data' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Spatie\\LaravelData\\LaravelDataServiceProvider',
+    ),
+  ),
   'spatie/laravel-ignition' => 
   array (
     'providers' => 
@@ -80,6 +99,13 @@
     'aliases' => 
     array (
       'Flare' => 'Spatie\\LaravelIgnition\\Facades\\Flare',
+    ),
+  ),
+  'spatie/php-structure-discoverer' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Spatie\\StructureDiscoverer\\StructureDiscovererServiceProvider',
     ),
   ),
 );

@@ -24,7 +24,7 @@ import {formatAddress} from "../../../../utilites/formatAddress.tsx";
 import {Card} from "../../../common/Card";
 import {LoadingMask} from "../../../common/LoadingMask";
 import {HomepageInfoMessage} from "../../../common/HomepageInfoMessage";
-import {AttendeeProduct} from "../../../common/AttendeeProduct";
+import {AttendeeTicket} from "../../../common/AttendeeTicket";
 import {PoweredByFooter} from "../../../common/PoweredByFooter";
 import {EventDateRange} from "../../../common/EventDateRange";
 import {OnlineEventDetails} from "../../../common/OnlineEventDetails";
@@ -284,7 +284,7 @@ export const OrderSummaryAndProducts = () => {
                 )}
 
                 {order.attendees?.map((attendee) => (
-                    <AttendeeProduct
+                    <AttendeeTicket
                         key={attendee.id}
                         attendee={attendee}
                         product={attendee.product as Product}

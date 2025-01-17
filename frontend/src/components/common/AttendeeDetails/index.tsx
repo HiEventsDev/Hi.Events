@@ -4,6 +4,7 @@ import classes from "./AttendeeDetails.module.scss";
 import {t} from "@lingui/macro";
 import {getAttendeeProductTitle} from "../../../utilites/products.ts";
 import {getLocaleName, SupportedLocales} from "../../../locales.ts";
+import {AttendeeStatusBadge} from "../AttendeeStatusBadge";
 
 export const AttendeeDetails = ({attendee}: { attendee: Attendee }) => {
     return (
@@ -22,14 +23,6 @@ export const AttendeeDetails = ({attendee}: { attendee: Attendee }) => {
                 </div>
                 <div className={classes.value}>
                     <Anchor href={'mailto:' + attendee.email} target={'_blank'}>{attendee.email}</Anchor>
-                </div>
-            </div>
-            <div className={classes.block}>
-                <div className={classes.title}>
-                    {t`Status`}
-                </div>
-                <div className={classes.amount}>
-                    {attendee.status === 'ACTIVE' ? <span style={{color: '#0d7553'}}>{t`Active`}</span> : <span style={{color: '#EF4444'}}>{t`Canceled`}</span>}
                 </div>
             </div>
             <div className={classes.block}>
