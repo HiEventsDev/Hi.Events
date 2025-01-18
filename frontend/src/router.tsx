@@ -192,6 +192,13 @@ export const router: RouteObject[] = [
                             return {Component: PaymentSettings.default};
                         }
                     },
+                    {
+                        path: "api-keys",
+                        async lazy() {
+                            const ApiKeys = await import("./components/routes/account/ManageAccount/sections/ApiKeys");
+                            return {Component: ApiKeys.default};
+                        }
+                    },
                 ]
             },
         ]

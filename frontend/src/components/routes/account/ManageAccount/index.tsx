@@ -1,7 +1,7 @@
 import {Card} from "../../../common/Card";
 import {Tabs} from "@mantine/core";
 import classes from "./ManageAccount.module.scss";
-import {IconAdjustmentsCog, IconCreditCard, IconReceiptTax, IconUsers} from "@tabler/icons-react";
+import {IconAdjustmentsCog, IconCreditCard, IconKey, IconReceiptTax, IconUsers} from "@tabler/icons-react";
 import {Outlet, useLocation, useNavigate} from "react-router-dom";
 import {t} from "@lingui/macro";
 import {useIsCurrentUserAdmin} from "../../../../hooks/useIsCurrentUserAdmin.ts";
@@ -14,6 +14,7 @@ export const ManageAccount = () => {
     const isUserAdmin = useIsCurrentUserAdmin();
     const {data: account} = useGetAccount();
 
+    // TODO: Translations
     return (
         <div className={classes.container}>
             <h1>{t`Account Settings`}</h1>
@@ -30,6 +31,11 @@ export const ManageAccount = () => {
                         {isUserAdmin && (
                             <Tabs.Tab value="users" leftSection={<IconUsers/>}>
                                 {t`Users`}
+                            </Tabs.Tab>
+                        )}
+                        {isUserAdmin && (
+                            <Tabs.Tab value="api-keys" leftSection={<IconKey/>}>
+                                {'API Keys'}
                             </Tabs.Tab>
                         )}
 
