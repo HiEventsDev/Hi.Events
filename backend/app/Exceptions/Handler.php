@@ -3,6 +3,7 @@
 namespace HiEvents\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Laravel\Sanctum\Exceptions\MissingAbilityException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Throwable;
 
@@ -52,6 +53,10 @@ class Handler extends ExceptionHandler
             return response()->json([
                 'message' => $exception->getMessage() ?: 'Resource not found',
             ], 404);
+        } else if ($exception instanceof MissingAbilityException) {
+            return response()->json([
+                'message' => $exception->getMessage(),
+            ], 403);
         }
 
         return parent::render($request, $exception);

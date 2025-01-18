@@ -24,6 +24,7 @@ const ALLOWED_UNAUTHENTICATED_PATHS = [
     'widget',
     '/product/',
     'check-in',
+    'csrf-cookie',
 ];
 
 export const api = axios.create({
@@ -32,6 +33,7 @@ export const api = axios.create({
         'Content-Type': 'application/json'
     },
     withCredentials: true,
+    withXSRFToken: true,
 });
 
 const existingToken = typeof window !== "undefined" ? window.localStorage.getItem('token') : undefined;

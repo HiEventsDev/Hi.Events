@@ -9,11 +9,14 @@ use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Models\Event;
 use HiEvents\Models\Organizer;
+use HiEvents\Models\PersonalAccessToken;
+use HiEvents\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Sanctum\Sanctum;
 use Stripe\StripeClient;
 
 class AppServiceProvider extends ServiceProvider
@@ -40,11 +43,14 @@ class AppServiceProvider extends ServiceProvider
             );
         }
 
+        Sanctum::usePersonalAccessTokenModel(PersonalAccessToken::class);
+
         Model::preventLazyLoading(!app()->isProduction());
 
         Relation::enforceMorphMap([
             EventDomainObject::class => Event::class,
             OrganizerDomainObject::class => Organizer::class,
+            'user' => User::class,
         ]);
     }
 

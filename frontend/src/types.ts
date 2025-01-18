@@ -677,3 +677,25 @@ export enum ReportTypes {
     DailySales = 'daily_sales_report',
     PromoCodes = 'promo_codes_report',
 }
+
+export interface CreateApiKeyRequest {
+    token_name: string;
+    abilities?: string[];
+    expires_at?: string;
+}
+
+export interface ApiKey {
+    id?: number;
+    name: string;
+    abilities: string[];
+    tokenable_id: number;
+    tokenable_type: string;
+    expires_at?: string;
+    created_at?: string;
+    updated_at?: string;
+}
+
+export interface NewApiKey {
+    accessToken: ApiKey;
+    plainTextToken: string;
+}
