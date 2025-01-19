@@ -427,6 +427,7 @@ export interface Order {
     last_name: string;
     company_name: string;
     address: Address;
+    payment_provider: PaymentProvider;
     notes?: string;
     email: string;
     reserved_until: string;

@@ -41,6 +41,7 @@ class OrderResource extends BaseResource
             'taxes_and_fees_rollup' => $this->getTaxesAndFeesRollup(),
             'address' => $this->getAddress(),
             'notes' => $this->getNotes(),
+            'payment_provider' => $this->getPaymentProvider(),
             'order_items' => $this->when(
                 !is_null($this->getOrderItems()),
                 fn() => OrderItemResource::collection($this->getOrderItems())

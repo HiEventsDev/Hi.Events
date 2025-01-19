@@ -69,6 +69,16 @@ export const OrderDetails = ({order, event, cardVariant = 'lightGray', style = {
                     <Currency currency={order.currency} price={order.total_refunded}/>
                 </div>
             </div>
+            {order.payment_provider && (
+                <div className={classes.block}>
+                    <div className={classes.title}>
+                        {t`Payment provider`}
+                    </div>
+                    <div className={classes.amount}>
+                        {order.payment_provider}
+                    </div>
+                </div>
+            )}
             {order.address && (
                 <div className={classes.block}>
                     <div className={classes.title}>
