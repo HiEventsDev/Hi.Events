@@ -2,6 +2,7 @@ import {t} from "@lingui/macro";
 import {Anchor, Badge, Button, Group, Menu, Table as MantineTable, Tooltip} from '@mantine/core';
 import {Event, IdParam, Invoice, MessageType, Order} from "../../../types.ts";
 import {
+    IconBasketCog,
     IconCash,
     IconCheck,
     IconDotsVertical,
@@ -15,7 +16,7 @@ import {
     IconTrash
 } from "@tabler/icons-react";
 import {prettyDate, relativeDate} from "../../../utilites/dates.ts";
-import {ViewOrderModal} from "../../modals/ViewOrderModal";
+import {ManageOrderModal} from "../../modals/ManageOrderModal";
 import {useDisclosure} from "@mantine/hooks";
 import {useState} from "react";
 import {CancelOrderModal} from "../../modals/CancelOrderModal";
@@ -142,7 +143,7 @@ export const OrdersTable = ({orders, event}: OrdersTableProps) => {
                 <Menu.Dropdown>
                     <Menu.Label>{t`Manage`}</Menu.Label>
                     <Menu.Item onClick={() => handleModalClick(order.id, viewModal)}
-                               leftSection={<IconEye size={14}/>}>{t`View order`}</Menu.Item>
+                               leftSection={<IconBasketCog size={14}/>}>{t`Manage order`}</Menu.Item>
                     <Menu.Item onClick={() => handleModalClick(order.id, messageModal)}
                                leftSection={<IconSend size={14}/>}>{t`Message buyer`}</Menu.Item>
 
@@ -294,7 +295,7 @@ export const OrdersTable = ({orders, event}: OrdersTableProps) => {
             {orderId && (
                 <>
                     {isRefundModalOpen && <RefundOrderModal onClose={refundModal.close} orderId={orderId}/>}
-                    {isViewModalOpen && <ViewOrderModal onClose={viewModal.close} orderId={orderId}/>}
+                    {isViewModalOpen && <ManageOrderModal onClose={viewModal.close} orderId={orderId}/>}
                     {isCancelModalOpen && <CancelOrderModal onClose={cancelModal.close} orderId={orderId}/>}
                     {isMessageModalOpen && <SendMessageModal
                         onClose={messageModal.close}

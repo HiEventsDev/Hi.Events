@@ -4,7 +4,6 @@ import classes from "./AttendeeDetails.module.scss";
 import {t} from "@lingui/macro";
 import {getAttendeeProductTitle} from "../../../utilites/products.ts";
 import {getLocaleName, SupportedLocales} from "../../../locales.ts";
-import {AttendeeStatusBadge} from "../AttendeeStatusBadge";
 
 export const AttendeeDetails = ({attendee}: { attendee: Attendee }) => {
     return (

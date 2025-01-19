@@ -39,6 +39,8 @@ class OrderResource extends BaseResource
             'is_free_order' => $this->isFreeOrder(),
             'is_manually_created' => $this->getIsManuallyCreated(),
             'taxes_and_fees_rollup' => $this->getTaxesAndFeesRollup(),
+            'address' => $this->getAddress(),
+            'notes' => $this->getNotes(),
             'order_items' => $this->when(
                 !is_null($this->getOrderItems()),
                 fn() => OrderItemResource::collection($this->getOrderItems())

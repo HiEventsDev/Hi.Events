@@ -7,6 +7,7 @@ use HiEvents\DomainObjects\Enums\PaymentProviders;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
+use HiEvents\DomainObjects\ProductCategoryDomainObject;
 use HiEvents\Exceptions\OrganizerNotFoundException;
 use HiEvents\Helper\DateHelper;
 use HiEvents\Helper\IdHelper;
@@ -28,7 +29,6 @@ class CreateEventService
         private readonly DatabaseManager                   $databaseManager,
         private readonly EventStatisticRepositoryInterface $eventStatisticsRepository,
         private readonly HTMLPurifier                      $purifier,
-        private readonly CreateProductCategoryService      $createProductCategoryService,
     )
     {
     }
@@ -57,8 +57,6 @@ class CreateEventService
         );
 
         $this->createEventStatistics($event);
-
-        $this->createDefaultProductCategory($event);
 
         $this->databaseManager->commit();
 
@@ -159,16 +157,5 @@ class CreateEventService
             'organization_address' => null,
             'tax_details' => null,
         ]);
-    }
-
-    private function createDefaultProductCategory(EventDomainObject $event): void
-    {
-        $this->createProductCategoryService->createCategory(
-            name: __('Tickets'),
-            isHidden: false,
-            eventId: $event->getId(),
-            description: null,
-            noProductsMessage: __('There are no tickets available for this event.'),
-        );
     }
 }

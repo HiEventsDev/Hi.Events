@@ -25,6 +25,12 @@ export interface FinaliseOrderPayload {
     attendees: AttendeeDetails[],
 }
 
+export interface EditOrderPayload {
+    first_name: string,
+    last_name: string,
+    email: string,
+    notes: string,
+}
 
 export interface ProductPriceQuantityFormValue {
     price?: number,
@@ -42,7 +48,6 @@ export interface ProductFormPayload {
     promo_code: string | null,
     session_identifier?: string,
 }
-
 
 export interface RefundOrderPayload {
     amount: number;
@@ -97,6 +102,11 @@ export const orderClient = {
         });
 
         return new Blob([response.data]);
+    },
+
+    editOrder: async (eventId: IdParam, orderId: IdParam, payload: EditOrderPayload) => {
+        const response = await api.put<GenericDataResponse<Order>>(`events/${eventId}/orders/${orderId}`, payload);
+        return response.data;
     }
 }
 

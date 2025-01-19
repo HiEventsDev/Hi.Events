@@ -6,14 +6,17 @@ import {Card, CardVariant} from "../Card";
 import {Event, Order} from "../../../types.ts";
 import classes from "./OrderDetails.module.scss";
 import {t} from "@lingui/macro";
+import {formatAddress} from "../../../utilites/formatAddress.tsx";
+import React from "react";
 
-export const OrderDetails = ({order, event, cardVariant = 'lightGray'}: {
+export const OrderDetails = ({order, event, cardVariant = 'lightGray', style = {}}: {
     order: Order,
     event: Event,
-    cardVariant?: CardVariant
+    cardVariant?: CardVariant,
+    style?: React.CSSProperties
 }) => {
     return (
-        <Card className={classes.orderDetails} variant={cardVariant}>
+        <Card className={classes.orderDetails} variant={cardVariant} style={style}>
             <div className={classes.block}>
                 <div className={classes.title}>
                     {t`Name`}
@@ -66,6 +69,16 @@ export const OrderDetails = ({order, event, cardVariant = 'lightGray'}: {
                     <Currency currency={order.currency} price={order.total_refunded}/>
                 </div>
             </div>
+            {order.address && (
+                <div className={classes.block}>
+                    <div className={classes.title}>
+                        {t`Address`}
+                    </div>
+                    <div className={classes.amount}>
+                        {formatAddress(order.address)}
+                    </div>
+                </div>
+            )}
         </Card>
     );
 }

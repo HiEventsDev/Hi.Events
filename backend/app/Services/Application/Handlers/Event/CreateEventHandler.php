@@ -9,13 +9,17 @@ use HiEvents\Exceptions\OrganizerNotFoundException;
 use HiEvents\Services\Application\Handlers\Event\DTO\CreateEventDTO;
 use HiEvents\Services\Domain\Event\CreateEventService;
 use HiEvents\Services\Domain\Organizer\OrganizerFetchService;
+use HiEvents\Services\Domain\ProductCategory\CreateProductCategoryService;
+use Illuminate\Database\DatabaseManager;
 use Throwable;
 
 class CreateEventHandler
 {
     public function __construct(
-        private readonly CreateEventService    $createEventService,
-        private readonly OrganizerFetchService $organizerFetchService
+        private readonly CreateEventService           $createEventService,
+        private readonly OrganizerFetchService        $organizerFetchService,
+        private readonly CreateProductCategoryService $createProductCategoryService,
+        private readonly DatabaseManager              $databaseManager,
     )
     {
     }
@@ -25,6 +29,15 @@ class CreateEventHandler
      * @throws Throwable
      */
     public function handle(CreateEventDTO $eventData): EventDomainObject
+    {
+        return $this->databaseManager->transaction(fn() => $this->createEvent($eventData));
+    }
+
+    /**
+     * @throws OrganizerNotFoundException
+     * @throws Throwable
+     */
+    private function createEvent(CreateEventDTO $eventData): EventDomainObject
     {
         $organizer = $this->organizerFetchService->fetchOrganizer(
             organizerId: $eventData->organizer_id,
@@ -46,6 +59,10 @@ class CreateEventHandler
             ->setEventSettings($eventData->event_settings)
             ->setLocationDetails($eventData->location_details?->toArray());
 
-        return $this->createEventService->createEvent($event);
+        $newEvent = $this->createEventService->createEvent($event);
+
+        $this->createProductCategoryService->createDefaultProductCategory($newEvent);
+
+        return $newEvent;
     }
 }

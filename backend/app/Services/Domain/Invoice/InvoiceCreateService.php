@@ -45,21 +45,10 @@ class InvoiceCreateService
             'order_id' => $orderId,
             'account_id' => $order->getEvent()->getAccountId(),
             'invoice_number' => $this->getLatestInvoiceNumber($order->getEvent()->getId(), $order->getEvent()->getEventSettings()),
-            'items' => collect($order->getOrderItems())->map(function (OrderItemDomainObject $item) {
-                return [
-                    'item_name' => $item->getItemName(),
-                    'quantity' => $item->getQuantity(),
-                    'price' => $item->getPrice(),
-                    'total_before_additions' => $item->getTotalBeforeAdditions(),
-                    'total_tax' => $item->getTotalTax(),
-                    'total_service_fee' => $item->getTotalServiceFee(),
-                    'total_gross' => $item->getTotalGross(),
-                    'taxes_and_fees_rollup' => $item->getTaxesAndFeesRollup(),
-                ];
-            })->toArray(),
+            'items' => collect($order->getOrderItems())->map(fn(OrderItemDomainObject $item) => $item->toArray())->toArray(),
             'taxes_and_fees' => $order->getTaxesAndFeesRollup(),
             'issue_date' => now()->toDateString(),
-            'status' => InvoiceStatus::UNPAID->name,
+            'status' => $order->isOrderCompleted() ? InvoiceStatus::PAID->name : InvoiceStatus::UNPAID->name,
             'total_amount' => $order->getTotalGross(),
         ]);
     }

@@ -57,8 +57,6 @@ export const CollectInformation = () => {
     const products = productCategories?.flatMap(category => category.products);
     const requireBillingAddress = event?.settings?.require_billing_address;
 
-    console.log('requireBillingAddress', requireBillingAddress, event?.settings);
-
     let productIndex = 0;
 
     const form = useForm({

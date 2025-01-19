@@ -8,7 +8,7 @@ import {useForm} from "@mantine/form";
 import {Modal} from "../../common/Modal";
 import {Accordion} from "../../common/Accordion";
 import {Button} from "../../common/Button";
-import {Avatar, Badge, Box, Group, Stack, Tabs, Text, Textarea, TextInput} from "@mantine/core";
+import {Avatar, Box, Group, Stack, Tabs, Text, Textarea, TextInput} from "@mantine/core";
 import {IconEdit, IconNotebook, IconQuestionMark, IconReceipt, IconTicket, IconUser} from "@tabler/icons-react";
 import {LoadingMask} from "../../common/LoadingMask";
 import {AttendeeDetails} from "../../common/AttendeeDetails";

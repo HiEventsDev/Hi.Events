@@ -10,9 +10,6 @@ use HiEvents\DomainObjects\Enums\AttendeeCheckInActionType;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\Generated\AttendeeCheckInDomainObjectAbstract;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
-use HiEvents\DomainObjects\Status\OrderPaymentStatus;
-use HiEvents\DomainObjects\Status\OrderStatus;
-use HiEvents\Events\OrderStatusChangedEvent;
 use HiEvents\Exceptions\CannotCheckInException;
 use HiEvents\Helper\DateHelper;
 use HiEvents\Helper\IdHelper;
@@ -23,6 +20,7 @@ use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Application\Handlers\CheckInList\Public\DTO\AttendeeAndActionDTO;
 use HiEvents\Services\Domain\CheckInList\DTO\CheckInResultDTO;
 use HiEvents\Services\Domain\CheckInList\DTO\CreateAttendeeCheckInsResponseDTO;
+use HiEvents\Services\Domain\Order\MarkOrderAsPaidService;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Support\Collection;
 use Throwable;
@@ -36,6 +34,7 @@ class CreateAttendeeCheckInService
         private readonly OrderRepositoryInterface           $orderRepository,
         private readonly AttendeeRepository                 $attendeeRepository,
         private readonly ConnectionInterface                $db,
+        private readonly MarkOrderAsPaidService             $markOrderAsPaidService,
     )
     {
     }
@@ -69,6 +68,20 @@ class CreateAttendeeCheckInService
             $existingCheckIns,
             $checkInUserIpAddress
         );
+    }
+
+    /**
+     * @throws CannotCheckInException
+     */
+    private function validateCheckInListIsActive(CheckInListDomainObject $checkInList): void
+    {
+        if ($checkInList->getExpiresAt() && DateHelper::utcDateIsPast($checkInList->getExpiresAt())) {
+            throw new CannotCheckInException(__('Check-in list has expired'));
+        }
+
+        if ($checkInList->getActivatesAt() && DateHelper::utcDateIsFuture($checkInList->getActivatesAt())) {
+            throw new CannotCheckInException(__('Check-in list is not active yet'));
+        }
     }
 
     /**
@@ -108,20 +121,6 @@ class CreateAttendeeCheckInService
                 AttendeeCheckInDomainObjectAbstract::EVENT_ID => $eventId,
             ],
         );
-    }
-
-    /**
-     * @throws CannotCheckInException
-     */
-    private function validateCheckInListIsActive(CheckInListDomainObject $checkInList): void
-    {
-        if ($checkInList->getExpiresAt() && DateHelper::utcDateIsPast($checkInList->getExpiresAt())) {
-            throw new CannotCheckInException(__('Check-in list has expired'));
-        }
-
-        if ($checkInList->getActivatesAt() && DateHelper::utcDateIsFuture($checkInList->getActivatesAt())) {
-            throw new CannotCheckInException(__('Check-in list is not active yet'));
-        }
     }
 
     /**
@@ -201,7 +200,10 @@ class CreateAttendeeCheckInService
             $checkIn = $this->createCheckIn($attendee, $checkInList, $checkInUserIpAddress);
 
             if ($checkInAction->value === AttendeeCheckInActionType::CHECK_IN_AND_MARK_ORDER_AS_PAID->value) {
-                $this->updateOrderAndAttendeeStatus($attendee, $checkInList);
+                $this->markOrderAsPaidService->markOrderAsPaid(
+                    orderId: $attendee->getOrderId(),
+                    eventId: $attendee->getEventId(),
+                );
             }
 
             return new CheckInResultDTO(checkIn: $checkIn);
@@ -262,44 +264,5 @@ class CreateAttendeeCheckInService
             AttendeeCheckInDomainObjectAbstract::SHORT_ID => IdHelper::shortId(IdHelper::CHECK_IN_PREFIX),
             AttendeeCheckInDomainObjectAbstract::EVENT_ID => $checkInList->getEventId(),
         ]);
-    }
-
-    /**
-     * @throws Throwable
-     */
-    private function updateOrderAndAttendeeStatus(
-        AttendeeDomainObject    $attendee,
-        CheckInListDomainObject $checkInList
-    ): void
-    {
-        $this->orderRepository->updateWhere(
-            attributes: [
-                'status' => OrderStatus::COMPLETED->name,
-                'payment_status' => OrderPaymentStatus::PAYMENT_RECEIVED->name,
-            ],
-            where: [
-                'id' => $attendee->getOrderId(),
-                'event_id' => $checkInList->getEventId(),
-            ]
-        );
-
-        $this->attendeeRepository->updateWhere(
-            attributes: [
-                'status' => AttendeeStatus::ACTIVE->name,
-            ],
-            where: [
-                'id' => $attendee->getId(),
-            ]
-        );
-
-        $order = $this->orderRepository->findFirstWhere([
-            'event_id' => $checkInList->getEventId(),
-            'id' => $attendee->getOrderId(),
-        ]);
-
-        event(new OrderStatusChangedEvent(
-            order: $order,
-            sendEmails: false,
-        ));
     }
 }

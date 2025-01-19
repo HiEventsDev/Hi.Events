@@ -158,6 +158,15 @@
             clear: both;
         }
 
+        .strikethrough {
+            text-decoration: line-through;
+            color: #95a5a6;
+        }
+
+        .discount {
+            color: #e74c3c;
+        }
+
         @media print {
             body {
                 padding: 0;
@@ -198,31 +207,43 @@
         <thead>
         <tr>
             <th style="width: 5%">#</th>
-            <th style="width: 45%">{{ __('Description') }}</th>
-            <th style="width: 15%">{{ __('Quantity') }}</th>
+            <th style="width: 35%">{{ __('Description') }}</th>
+            <th style="width: 10%">{{ __('Quantity') }}</th>
             <th style="width: 15%">{{ __('Unit Price') }}</th>
-            {{--            @if($order->getHasTaxes())--}}
-            {{--                <th style="width: 15%">{{ __('Tax') }}</th>--}}
-            {{--            @endif--}}
-            {{--            @if($order->getHasFees())--}}
-            {{--                <th style="width: 15%">{{ __('Service Fee') }}</th>--}}
-            {{--            @endif--}}
+            <th style="width: 15%">{{ __('Discount') }}</th>
             <th style="width: 20%">{{ __('Amount') }}</th>
         </tr>
         </thead>
         <tbody>
+        @php
+            $totalDiscount = 0;
+        @endphp
         @foreach($invoice->getItems() as $index => $orderItem)
+            @php
+                $itemDiscount = 0;
+                if ($orderItem['price_before_discount']) {
+                    $itemDiscount = ($orderItem['price_before_discount'] - $orderItem['price']) * $orderItem['quantity'];
+                    $totalDiscount += $itemDiscount;
+                }
+            @endphp
             <tr>
                 <td>{{ $index + 1 }}</td>
                 <td>{{ $orderItem['item_name'] }}</td>
                 <td>{{ $orderItem['quantity'] }}</td>
-                <td>{{ number_format($orderItem['price'], 2) }} {{ $order->getCurrency() }}</td>
-                {{--                @if($order->getHasTaxes())--}}
-                {{--                    <td>{{ number_format($orderItem['total_tax'], 2) }} {{ $order->getCurrency() }}</td>--}}
-                {{--                @endif--}}
-                {{--                @if($order->getHasFees())--}}
-                {{--                    <td>{{ number_format($orderItem['total_service_fee'], 2) }} {{ $order->getCurrency() }}</td>--}}
-                {{--                @endif--}}
+                <td>
+                    @if($orderItem['price_before_discount'])
+                        <span class="strikethrough">{{ number_format($orderItem['price_before_discount'], 2) }}</span>
+                        <br>
+                    @endif
+                    {{ number_format($orderItem['price'], 2) }} {{ $order->getCurrency() }}
+                </td>
+                <td>
+                    @if($itemDiscount > 0)
+                        <span class="discount">-{{ number_format($itemDiscount, 2) }} {{ $order->getCurrency() }}</span>
+                    @else
+                        -
+                    @endif
+                </td>
                 <td>{{ number_format($orderItem['total_before_additions'], 2) }} {{ $order->getCurrency() }}</td>
             </tr>
         @endforeach
@@ -237,11 +258,23 @@
             <td>{{ number_format($order->getTotalBeforeAdditions(), 2) }} {{ $order->getCurrency() }}</td>
         </tr>
 
+        @if($totalDiscount > 0)
+            <tr class="breakdown">
+                <td>{{ __('Total Discount') }}:</td>
+                <td class="discount">-{{ number_format($totalDiscount, 2) }} {{ $order->getCurrency() }}</td>
+            </tr>
+        @endif
+
         @if($order->getHasTaxes())
             <!-- Tax Breakdown -->
             @foreach($order->getTaxesAndFeesRollup()['taxes'] as $tax)
                 <tr class="breakdown">
-                    <td>{{ $tax['name'] }} ({{ $tax['rate'] }} @if($tax['type'] === 'PERCENTAGE') % @else {{ $order->getCurrency() }} @endif:</td>
+                    <td>{{ $tax['name'] }} ( {{ $tax['rate'] }} @if($tax['type'] === 'PERCENTAGE')
+                            %
+                        @else
+                            {{ $order->getCurrency() }}
+                        @endif)
+                    </td>
                     <td>{{ number_format($tax['value'], 2) }} {{ $order->getCurrency() }}</td>
                 </tr>
             @endforeach
@@ -256,7 +289,12 @@
             <!-- Fee Breakdown -->
             @foreach($order->getTaxesAndFeesRollup()['fees'] as $fee)
                 <tr class="breakdown">
-                    <td>{{ $fee['name'] }} ({{ $fee['rate'] }} @if($tax['type'] === 'PERCENTAGE') % @else {{ $order->getCurrency() }} @endif )</td>
+                    <td>{{ $fee['name'] }} ( {{ $fee['rate'] }} @if($fee['type'] === 'PERCENTAGE')
+                            %
+                        @else
+                            {{ $order->getCurrency() }}
+                        @endif)
+                    </td>
                     <td>{{ number_format($fee['value'], 2) }} {{ $order->getCurrency() }}</td>
                 </tr>
             @endforeach
