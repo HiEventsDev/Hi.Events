@@ -105,9 +105,15 @@ readonly class PartialUpdateEventSettingsHandler
                 'organization_address' => array_key_exists('organization_address', $eventSettingsDTO->settings)
                     ? $eventSettingsDTO->settings['organization_address']
                     : $existingSettings->getOrganizationAddress(),
-                'tax_details' => array_key_exists('tax_details', $eventSettingsDTO->settings)
-                    ? $eventSettingsDTO->settings['tax_details']
-                    : $existingSettings->getTaxDetails(),
+                'invoice_tax_details' => array_key_exists('invoice_tax_details', $eventSettingsDTO->settings)
+                    ? $eventSettingsDTO->settings['invoice_tax_details']
+                    : $existingSettings->getInvoiceTaxDetails(),
+                'invoice_notes' => array_key_exists('invoice_notes', $eventSettingsDTO->settings)
+                    ? $eventSettingsDTO->settings['invoice_notes']
+                    : $existingSettings->getInvoiceNotes(),
+                'invoice_payment_terms_days' => array_key_exists('invoice_payment_terms_days', $eventSettingsDTO->settings)
+                    ? $eventSettingsDTO->settings['invoice_payment_terms_days']
+                    : $existingSettings->getInvoicePaymentTermsDays()
             ]),
         );
     }

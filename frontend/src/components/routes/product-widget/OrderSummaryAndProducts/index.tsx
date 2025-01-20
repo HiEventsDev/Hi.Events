@@ -93,7 +93,7 @@ const WelcomeHeader = ({order, event}: { order: Order; event: Event }) => {
         'COMPLETED': t`You're going to ${event.title}! 🎉`,
         'CANCELLED': t`Your order has been cancelled`,
         'RESERVED': null,
-        'AWAITING_OFFLINE_PAYMENT': t`Your order is awaiting offline payment`,
+        'AWAITING_OFFLINE_PAYMENT': t`Your order is awaiting payment 🏦`
     }[order.status];
 
     return message ? <div className={classes.welcomeHeader}>{message}</div> : null;
@@ -134,6 +134,13 @@ const OrderDetails = ({order, event}: { order: Order, event: Event }) => (
                     icon={IconCash}
                     label={t`Payment Status`}
                     value={<PaymentStatus order={order}/>}
+                />
+            )}
+            {order.address && (
+                <DetailItem
+                    icon={IconMapPin}
+                    label={t`Billing Address`}
+                    value={formatAddress(order.address)}
                 />
             )}
         </SimpleGrid>

@@ -12,6 +12,7 @@ import {useGetEventSettings} from "../../../../../../queries/useGetEventSettings
 import {HeadingWithDescription} from "../../../../../common/Card/CardHeading";
 import {Editor} from "../../../../../common/Editor";
 import {InputLabelWithHelp} from "../../../../../common/InputLabelWithHelp";
+import {isEmptyHtml} from "../../../../../../utilites/helpers.ts";
 
 export const PaymentAndInvoicingSettings = () => {
     const {eventId} = useParams();
@@ -29,11 +30,16 @@ export const PaymentAndInvoicingSettings = () => {
             invoice_start_number: 1,
             organization_name: "",
             organization_address: "",
-            tax_details: "",
+            invoice_tax_details: "",
+            invoice_payment_terms_days: null as number | null,
+            invoice_notes: "",
         },
         transformValues: (values) => ({
             ...values,
             payment_providers: Array.isArray(values.payment_providers) ? values.payment_providers : [],
+            offline_payment_instructions: isEmptyHtml(values.offline_payment_instructions) ? null : values.offline_payment_instructions,
+            invoice_notes: isEmptyHtml(values.invoice_notes) ? null : values.invoice_notes,
+            invoice_tax_details: isEmptyHtml(values.invoice_tax_details) ? null : values.invoice_tax_details,
         }),
     });
 
@@ -48,11 +54,13 @@ export const PaymentAndInvoicingSettings = () => {
                 enable_invoicing: eventSettingsQuery.data.enable_invoicing || false,
                 invoice_label: eventSettingsQuery.data.invoice_label || "",
                 invoice_prefix: eventSettingsQuery.data.invoice_prefix || "",
+                invoice_payment_terms_days: eventSettingsQuery.data.invoice_payment_terms_days || null,
+                invoice_notes: eventSettingsQuery.data.invoice_notes || "",
                 invoice_start_number: eventSettingsQuery.data.invoice_start_number || 1,
                 require_billing_address: eventSettingsQuery.data.require_billing_address ?? true,
                 organization_name: eventSettingsQuery.data.organization_name || "",
                 organization_address: eventSettingsQuery.data.organization_address || "",
-                tax_details: eventSettingsQuery.data.tax_details || "",
+                invoice_tax_details: eventSettingsQuery.data.invoice_tax_details || "",
             });
         }
     }, [eventSettingsQuery.isFetched]);
@@ -171,7 +179,7 @@ export const PaymentAndInvoicingSettings = () => {
                             <Stack gap="md">
                                 <Switch
                                     label={t`Enable Invoicing`}
-                                    description={t`Automatically generate invoices for ticket orders`}
+                                    description={t`When enabled, invoices will be generated for ticket orders. Invoices will sent along with the order confirmation email. Attendees can also download their invoices from the order confirmation page.`}
                                     checked={form.values.enable_invoicing}
                                     onChange={(event) => form.setFieldValue('enable_invoicing', event.currentTarget.checked)}
                                 />
@@ -203,6 +211,18 @@ export const PaymentAndInvoicingSettings = () => {
                                         </Stack>
 
                                         <Stack gap="xs">
+                                            <h4 style={{margin: 0}}>{t`Payment Terms`}</h4>
+                                            <NumberInput
+                                                label={t`Payment Due Period`}
+                                                description={t`Number of days allowed for payment (leave blank to omit payment terms from invoices)`}
+                                                placeholder="30"
+                                                min={0}
+                                                max={365}
+                                                {...form.getInputProps('invoice_payment_terms_days')}
+                                            />
+                                        </Stack>
+
+                                        <Stack gap="xs">
                                             <h4 style={{margin: 0}}>{t`Organization Details`}</h4>
                                             <TextInput
                                                 label={t`Organization Name`}
@@ -219,11 +239,20 @@ export const PaymentAndInvoicingSettings = () => {
                                             />
 
                                             <Editor
-                                                value={form.values.tax_details}
+                                                value={form.values.invoice_tax_details}
                                                 label={t`Tax Details`}
                                                 description={t`Tax information to appear at the bottom of all invoices (e.g., VAT number, tax registration)`}
-                                                onChange={(value) => form.setFieldValue('tax_details', value)}
-                                                error={form.errors.tax_details as string}
+                                                onChange={(value) => form.setFieldValue('invoice_tax_details', value)}
+                                                error={form.errors.invoice_tax_details as string}
+                                                editorType={'simple'}
+                                            />
+
+                                            <Editor
+                                                value={form.values.invoice_notes}
+                                                label={t`Invoice Notes`}
+                                                description={t`Optional additional information to appear on all invoices (e.g., payment terms, late payment fees, return policy)`}
+                                                onChange={(value) => form.setFieldValue('invoice_notes', value)}
+                                                error={form.errors.invoice_notes as string}
                                                 editorType={'simple'}
                                             />
                                         </Stack>

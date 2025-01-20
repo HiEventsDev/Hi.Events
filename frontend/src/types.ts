@@ -130,7 +130,9 @@ export interface EventSettings {
     require_billing_address: boolean;
     organization_name?: string;
     organization_address?: string;
-    tax_details?: string;
+    invoice_tax_details?: string;
+    invoice_notes?: string;
+    invoice_payment_terms_days?: number;
 }
 
 export interface VenueAddress {

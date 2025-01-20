@@ -1,6 +1,6 @@
 <?php
 
-namespace HiEvents\Http\Actions\Orders;
+namespace HiEvents\Http\Actions\Orders\Public;
 
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Resources\Order\OrderResourcePublic;

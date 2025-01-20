@@ -104,7 +104,7 @@ const Payment = () => {
                         >
                             {activePaymentMethod === 'STRIPE'
                                 ? t`I would like to pay using an offline method`
-                                : t`I would like to pay using a payment card`
+                                : t`I would like to pay using an online method (credit card etc.)`
                             }
                         </a>
                     </div>

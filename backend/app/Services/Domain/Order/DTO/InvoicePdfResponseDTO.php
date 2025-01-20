@@ -1,10 +1,10 @@
 <?php
 
-namespace HiEvents\Services\Application\Handlers\Order\DTO;
+namespace HiEvents\Services\Domain\Order\DTO;
 
 use Barryvdh\DomPDF\PDF;
 
-class GetOrderInvoiceResponse
+class InvoicePdfResponseDTO
 {
     public function __construct(
         public readonly PDF    $pdf,

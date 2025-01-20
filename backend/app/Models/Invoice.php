@@ -12,6 +12,7 @@ class Invoice extends BaseModel
             'taxes_and_fees' => 'array',
             'items' => 'array',
             'total_amount' => 'float',
+            'due_date' => 'datetime',
         ];
     }
 

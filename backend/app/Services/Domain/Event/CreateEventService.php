@@ -7,7 +7,6 @@ use HiEvents\DomainObjects\Enums\PaymentProviders;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
-use HiEvents\DomainObjects\ProductCategoryDomainObject;
 use HiEvents\Exceptions\OrganizerNotFoundException;
 use HiEvents\Helper\DateHelper;
 use HiEvents\Helper\IdHelper;
@@ -15,7 +14,6 @@ use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
-use HiEvents\Services\Domain\ProductCategory\CreateProductCategoryService;
 use HTMLPurifier;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
@@ -150,12 +148,12 @@ class CreateEventService
 
             'enable_invoicing' => false,
             'invoice_label' => __('Invoice'),
-            'invoice_prefix' => null,
+            'invoice_prefix' => 'INV-',
             'invoice_start_number' => 1,
             'require_billing_address' => true,
             'organization_name' => $organizer->getName(),
             'organization_address' => null,
-            'tax_details' => null,
+            'invoice_tax_details' => null,
         ]);
     }
 }

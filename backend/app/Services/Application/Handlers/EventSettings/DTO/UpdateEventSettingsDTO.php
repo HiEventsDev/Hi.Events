@@ -63,7 +63,9 @@ class UpdateEventSettingsDTO extends BaseDTO
         public readonly bool                    $require_billing_address = true,
         public readonly ?string                 $organization_name = null,
         public readonly ?string                 $organization_address = null,
-        public readonly ?string                 $tax_details = null,
+        public readonly ?string                 $invoice_tax_details = null,
+        public readonly ?string                 $invoice_notes = null,
+        public readonly ?int                    $invoice_payment_terms_days = null,
     )
     {
     }
@@ -116,7 +118,9 @@ class UpdateEventSettingsDTO extends BaseDTO
             require_billing_address: true,
             organization_name: $organizer->getName(),
             organization_address: null,
-            tax_details: null,
+            invoice_tax_details: null,
+            invoice_notes: null,
+            invoice_payment_terms_days: null,
         );
     }
 }

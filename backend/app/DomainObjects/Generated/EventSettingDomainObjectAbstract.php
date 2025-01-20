@@ -52,10 +52,12 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     final public const REQUIRE_BILLING_ADDRESS = 'require_billing_address';
     final public const ORGANIZATION_NAME = 'organization_name';
     final public const ORGANIZATION_ADDRESS = 'organization_address';
-    final public const TAX_DETAILS = 'tax_details';
+    final public const INVOICE_TAX_DETAILS = 'invoice_tax_details';
     final public const PAYMENT_PROVIDERS = 'payment_providers';
     final public const OFFLINE_PAYMENT_INSTRUCTIONS = 'offline_payment_instructions';
     final public const ALLOW_ORDERS_AWAITING_OFFLINE_PAYMENT_TO_CHECK_IN = 'allow_orders_awaiting_offline_payment_to_check_in';
+    final public const INVOICE_PAYMENT_TERMS_DAYS = 'invoice_payment_terms_days';
+    final public const INVOICE_NOTES = 'invoice_notes';
 
     protected int $id;
     protected int $event_id;
@@ -99,10 +101,12 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     protected bool $require_billing_address = true;
     protected ?string $organization_name = null;
     protected ?string $organization_address = null;
-    protected ?string $tax_details = null;
+    protected ?string $invoice_tax_details = null;
     protected array|string|null $payment_providers = null;
     protected ?string $offline_payment_instructions = null;
     protected bool $allow_orders_awaiting_offline_payment_to_check_in = false;
+    protected ?int $invoice_payment_terms_days = null;
+    protected ?string $invoice_notes = null;
 
     public function toArray(): array
     {
@@ -149,10 +153,12 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
                     'require_billing_address' => $this->require_billing_address ?? null,
                     'organization_name' => $this->organization_name ?? null,
                     'organization_address' => $this->organization_address ?? null,
-                    'tax_details' => $this->tax_details ?? null,
+                    'invoice_tax_details' => $this->invoice_tax_details ?? null,
                     'payment_providers' => $this->payment_providers ?? null,
                     'offline_payment_instructions' => $this->offline_payment_instructions ?? null,
                     'allow_orders_awaiting_offline_payment_to_check_in' => $this->allow_orders_awaiting_offline_payment_to_check_in ?? null,
+                    'invoice_payment_terms_days' => $this->invoice_payment_terms_days ?? null,
+                    'invoice_notes' => $this->invoice_notes ?? null,
                 ];
     }
 
@@ -618,15 +624,15 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
         return $this->organization_address;
     }
 
-    public function setTaxDetails(?string $tax_details): self
+    public function setInvoiceTaxDetails(?string $invoice_tax_details): self
     {
-        $this->tax_details = $tax_details;
+        $this->invoice_tax_details = $invoice_tax_details;
         return $this;
     }
 
-    public function getTaxDetails(): ?string
+    public function getInvoiceTaxDetails(): ?string
     {
-        return $this->tax_details;
+        return $this->invoice_tax_details;
     }
 
     public function setPaymentProviders(array|string|null $payment_providers): self
@@ -661,5 +667,27 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     public function getAllowOrdersAwaitingOfflinePaymentToCheckIn(): bool
     {
         return $this->allow_orders_awaiting_offline_payment_to_check_in;
+    }
+
+    public function setInvoicePaymentTermsDays(?int $invoice_payment_terms_days): self
+    {
+        $this->invoice_payment_terms_days = $invoice_payment_terms_days;
+        return $this;
+    }
+
+    public function getInvoicePaymentTermsDays(): ?int
+    {
+        return $this->invoice_payment_terms_days;
+    }
+
+    public function setInvoiceNotes(?string $invoice_notes): self
+    {
+        $this->invoice_notes = $invoice_notes;
+        return $this;
+    }
+
+    public function getInvoiceNotes(): ?string
+    {
+        return $this->invoice_notes;
     }
 }

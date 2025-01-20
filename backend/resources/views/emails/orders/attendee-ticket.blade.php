@@ -19,9 +19,6 @@
 <p>
 {{ __('ℹ️ Your order is pending payment. Tickets have been issued but will not be valid until payment is received.') }}
 </p>
-<p>
-{{ __('Please follow the instructions in your order confirmation email to complete your payment.') }}
-</p>
 </div>
 @endif
 

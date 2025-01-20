@@ -9,7 +9,7 @@ use HiEvents\Services\Application\Handlers\Order\GetOrderInvoiceHandler;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class DownloadOrderInvoiceSignedAction extends BaseAction
+class DownloadOrderInvoiceAction extends BaseAction
 {
     public function __construct(
         private readonly GetOrderInvoiceHandler $orderInvoiceHandler,

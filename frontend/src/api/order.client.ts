@@ -146,4 +146,12 @@ export const orderClientPublic = {
         const response = await publicApi.post<GenericDataResponse<Order>>(`events/${eventId}/order/${orderShortId}/await-offline-payment`);
         return response.data;
     },
+
+    downloadInvoice: async (eventId: IdParam, orderShortId: IdParam): Promise<Blob> => {
+        const response = await publicApi.get(`events/${eventId}/order/${orderShortId}/invoice`, {
+            responseType: 'blob',
+        });
+
+        return new Blob([response.data]);
+    },
 }

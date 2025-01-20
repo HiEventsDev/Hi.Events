@@ -60,7 +60,9 @@ class EventSettingsResource extends JsonResource
             'require_billing_address' => $this->getRequireBillingAddress(),
             'organization_name' => $this->getOrganizationName(),
             'organization_address' => $this->getOrganizationAddress(),
-            'tax_details' => $this->getTaxDetails(),
+            'invoice_tax_details' => $this->getInvoiceTaxDetails(),
+            'invoice_notes' => $this->getInvoiceNotes(),
+            'invoice_payment_terms_days' => $this->getInvoicePaymentTermsDays(),
         ];
     }
 }

@@ -60,7 +60,7 @@ const SECTIONS = [
     },
     {
         id: 'payment-settings',
-        label: t`Payment Settings`,
+        label: t`Payment & Invoicing`,
         icon: IconCreditCard,
         component: PaymentAndInvoicingSettings,
     }

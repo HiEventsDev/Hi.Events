@@ -65,6 +65,7 @@ class EventSettingsResourcePublic extends JsonResource
 
             // Invoice settings
             'require_billing_address' => $this->getRequireBillingAddress(),
+            'invoice_label' => $this->getInvoiceLabel(),
         ];
     }
 }

@@ -1,5 +1,6 @@
 import {Event} from "../../../../../../types.ts";
 import {Card} from "../../../../../common/Card";
+import {t} from "@lingui/macro";
 
 interface OfflinePaymentMethodProps {
     event: Event;
@@ -10,7 +11,7 @@ export const OfflinePaymentMethod = ({event}: OfflinePaymentMethodProps) => {
 
     return (
         <div>
-            <h2>Offline Payment</h2>
+            <h2>{t`Payment Instructions`}</h2>
             <Card>
                 <div
                     dangerouslySetInnerHTML={{

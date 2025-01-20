@@ -1,4 +1,5 @@
 @php use Carbon\Carbon; @endphp
+@php use HiEvents\Helper\Currency; @endphp
 @php /** @var \HiEvents\DomainObjects\EventDomainObject $event */ @endphp
 @php /** @var \HiEvents\DomainObjects\EventSettingDomainObject $eventSettings */ @endphp
 @php /** @var \HiEvents\DomainObjects\OrderDomainObject $order */ @endphp
@@ -21,308 +22,367 @@
             font-family: 'DejaVu Sans', Arial, sans-serif;
             font-size: 12px;
             line-height: 1.4;
-            color: #2c3e50;
-            background: #ffffff;
-            padding: 20px;
+            color: #1a1a1a;
+            padding: 20px 30px;
         }
 
-        h1 {
-            font-size: 24px;
-            margin-bottom: 10px;
-            color: #2c3e50;
-        }
-
-        h2 {
-            font-size: 18px;
-            margin-bottom: 8px;
-            color: #34495e;
-        }
-
-        h3 {
-            font-size: 14px;
-            margin: 15px 0 10px 0;
-            color: #34495e;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 5px;
-        }
-
-        p {
-            margin-bottom: 5px;
-        }
-
-        .invoice-header {
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 20px;
+        .header {
             margin-bottom: 30px;
+            min-height: 100px;
+            display: block;
+        }
+
+        .logo-title {
+            font-size: 36px;
+            font-weight: normal;
+            color: #1a1a1a;
+            margin: 0;
+            float: left;
+            width: 50%;
         }
 
         .company-details {
-            float: left;
-            width: 60%;
-        }
-
-        .invoice-details {
             float: right;
-            width: 40%;
             text-align: right;
+            line-height: 1.6;
+            width: 45%;
         }
 
-        .billing-details {
-            margin: 20px 0;
-            padding: 15px;
-            background-color: #f9f9f9;
+        .company-details > div {
+            margin-bottom: 3px;
+        }
+
+        .invoice-info-container {
+            clear: both;
+            padding-top: 20px;
+        }
+
+        .invoice-info-grid {
+            width: 100%;
+            margin-bottom: 20px;
+            border: 1px solid #e6e6e6;
             border-radius: 4px;
         }
 
-        table {
+        .invoice-info-grid td {
+            padding: 10px;
+            width: 25%;
+            vertical-align: top;
+        }
+
+        .info-label {
+            color: #8a6bc0;
+            font-size: 12px;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .info-value {
+            font-size: 13px;
+        }
+
+        .billing-section {
+            margin-bottom: 20px;
+            background: #f8f8f8;
+            padding: 15px;
+            border-radius: 4px;
+            width: 48%;
+            float: left;
+        }
+
+        .billing-title {
+            color: #8a6bc0;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        table.items {
             width: 100%;
             border-collapse: collapse;
-            margin: 15px 0;
+            margin: 20px 0;
+            clear: both;
         }
 
-        th {
-            background-color: #3498db;
-            color: #ffffff;
-            padding: 10px;
+        .items th {
+            background: #8a6bc0;
+            color: white;
             text-align: left;
-            font-weight: normal;
+            padding: 12px 15px;
+            font-weight: bold;
+            font-size: 12px;
+            letter-spacing: 0.5px;
         }
 
-        td {
-            padding: 10px;
-            border-bottom: 1px solid #ecf0f1;
+        .items td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e6e6e6;
+            vertical-align: middle;
         }
 
-        .order-items table tr:nth-child(even) {
-            background-color: #f9f9f9;
+        .item-description {
+            color: #666;
+            font-size: 11px;
+            margin-top: 4px;
         }
 
-        .totals table {
+        .item-price-original {
+            color: #666;
+            text-decoration: line-through;
+            font-size: 11px;
+            margin-bottom: 2px;
+        }
+
+        .align-right {
+            text-align: right;
+        }
+
+        .totals {
             width: 350px;
             margin-left: auto;
             margin-top: 20px;
         }
 
         .totals td {
-            padding: 8px;
+            padding: 8px 10px;
             text-align: right;
         }
 
-        .totals .subtotal {
-            border-bottom: 1px solid #ecf0f1;
-        }
-
-        .totals .breakdown {
-            font-size: 11px;
-            color: #505050;
-        }
-
-        .totals .breakdown td {
-            padding: 4px 8px;
-        }
-
-        .totals .subtotal-line {
-            border-bottom: 1px solid #ecf0f1;
+        .total-line td {
+            border-top: 2px solid #8a6bc0;
             font-weight: bold;
-        }
-
-        .totals tr.total {
-            background-color: #3498db;
-            color: #ffffff;
-            font-weight: bold;
-        }
-
-        .totals tr.total td {
             font-size: 14px;
-            padding: 10px 8px;
+            padding-top: 12px;
+            background: #f8f8f8;
+        }
+
+        .subtotal td {
+            font-weight: bold;
+            padding-top: 15px;
+        }
+
+        .breakdown td {
+            color: #666;
+            font-size: 11px;
+        }
+
+        .invoice-notes {
+            margin: 30px 0;
+            padding: 15px;
+            background-color: #f8f8f8;
+            border-radius: 4px;
+            line-height: 1.6;
+            clear: both;
         }
 
         .invoice-footer {
-            margin-top: 40px;
+            margin-top: 30px;
             padding-top: 20px;
-            border-top: 1px solid #ecf0f1;
+            border-top: 1px solid #e6e6e6;
             text-align: center;
-            color: #7f8c8d;
+            line-height: 1.6;
+            clear: both;
         }
 
         .tax-info {
             margin-top: 20px;
-            padding-top: 10px;
-            border-top: 1px dashed #ecf0f1;
+            padding-top: 15px;
+            border-top: 1px dashed #e6e6e6;
             font-size: 11px;
+            color: #666;
         }
 
-        .clearfix:after {
-            content: "";
-            display: table;
-            clear: both;
+        /* Specific column widths for items table */
+        .col-description {
+            width: 55%;
         }
 
-        .strikethrough {
-            text-decoration: line-through;
-            color: #95a5a6;
+        .col-rate {
+            width: 15%;
         }
 
-        .discount {
-            color: #e74c3c;
+        .col-qty {
+            width: 15%;
+        }
+
+        .col-amount {
+            width: 15%;
         }
 
         @media print {
             body {
-                padding: 0;
-                background: #ffffff;
-            }
-
-            .invoice-header {
-                padding-top: 20px;
+                padding: 15px;
             }
         }
     </style>
 </head>
 <body>
-<div class="invoice-header clearfix">
+<div class="header">
+    <h1 class="logo-title">{{ $eventSettings->getInvoiceLabel() ?? __('Invoice') }}</h1>
     <div class="company-details">
-        <h1>{{ $eventSettings->getOrganizationName() }}</h1>
-        <p>{!! $eventSettings->getOrganizationAddress() !!}</p>
-    </div>
-    <div class="invoice-details">
-        <h2>{{ $eventSettings->getInvoiceLabel() ?? __('Invoice') }}</h2>
-        <p><strong>{{ __('Invoice No') }}:</strong> #{{ $invoice->getInvoiceNumber() }}</p>
-        <p><strong>{{ __('Date') }}:</strong> {{ Carbon::parse($order->getCreatedAt())->format('d/m/Y') }}</p>
+        <div>{{ $eventSettings->getOrganizationName() }}</div>
+        <div>{!! $eventSettings->getOrganizationAddress() !!}</div>
+        @if($eventSettings->getSupportEmail())
+            <div>{{ $eventSettings->getSupportEmail() }}</div>
+        @endif
     </div>
 </div>
 
-<div class="billing-details">
-    <h3>{{ __('Bill To') }}</h3>
-    <p><strong>{{ $order->getFullName() }}</strong></p>
-    <p>{{ $order->getEmail() }}</p>
+<div class="invoice-info-container">
+    <table class="invoice-info-grid">
+        <tr>
+            <td>
+                <span class="info-label">{{ __('Invoice Number') }}</span>
+                <span class="info-value">#{{ $invoice->getInvoiceNumber() }}</span>
+            </td>
+            <td>
+                <span class="info-label">{{ __('Date Issued') }}</span>
+                <span class="info-value">{{ Carbon::parse($order->getCreatedAt())->format('d/m/Y') }}</span>
+            </td>
+            @if($invoice->getDueDate())
+                <td>
+                    <span class="info-label">{{ __('Due Date') }}</span>
+                    <span
+                        class="info-value">{{ Carbon::parse($invoice->getDueDate())->format('d/m/Y') }}</span>
+                </td>
+            @endif
+            <td>
+                <span class="info-label">{{ __('Amount Due') }}</span>
+                <span class="info-value">{{ Currency::format($order->getTotalGross(), $order->getCurrency()) }}</span>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="billing-section">
+    <div class="billing-title">{{ __('Billed To') }}</div>
+    <div>{{ $order->getFullName() }}</div>
+    <div>{{ $order->getEmail() }}</div>
     @if($order->getAddress())
-        <p>{{ $order->getBillingAddressString() }}</p>
+        <div>{{ $order->getBillingAddressString() }}</div>
     @endif
 </div>
 
-<div class="order-items">
-    <h3>{{ __('Order Summary') }}</h3>
-    <table>
-        <thead>
-        <tr>
-            <th style="width: 5%">#</th>
-            <th style="width: 35%">{{ __('Description') }}</th>
-            <th style="width: 10%">{{ __('Quantity') }}</th>
-            <th style="width: 15%">{{ __('Unit Price') }}</th>
-            <th style="width: 15%">{{ __('Discount') }}</th>
-            <th style="width: 20%">{{ __('Amount') }}</th>
-        </tr>
-        </thead>
-        <tbody>
+<table class="items">
+    <thead>
+    <tr>
+        <th class="col-description">{{ __('DESCRIPTION') }}</th>
+        <th class="col-rate align-right">{{ __('RATE') }}</th>
+        <th class="col-qty align-right">{{ __('QTY') }}</th>
+        <th class="col-amount align-right">{{ __('AMOUNT') }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    @php $totalDiscount = 0; @endphp
+    @foreach($invoice->getItems() as $orderItem)
         @php
-            $totalDiscount = 0;
+            $itemDiscount = 0;
+            if ($orderItem['price_before_discount']) {
+                $itemDiscount = ($orderItem['price_before_discount'] - $orderItem['price']) * $orderItem['quantity'];
+                $totalDiscount += $itemDiscount;
+            }
         @endphp
-        @foreach($invoice->getItems() as $index => $orderItem)
-            @php
-                $itemDiscount = 0;
-                if ($orderItem['price_before_discount']) {
-                    $itemDiscount = ($orderItem['price_before_discount'] - $orderItem['price']) * $orderItem['quantity'];
-                    $totalDiscount += $itemDiscount;
-                }
-            @endphp
-            <tr>
-                <td>{{ $index + 1 }}</td>
-                <td>{{ $orderItem['item_name'] }}</td>
-                <td>{{ $orderItem['quantity'] }}</td>
-                <td>
-                    @if($orderItem['price_before_discount'])
-                        <span class="strikethrough">{{ number_format($orderItem['price_before_discount'], 2) }}</span>
-                        <br>
-                    @endif
-                    {{ number_format($orderItem['price'], 2) }} {{ $order->getCurrency() }}
-                </td>
-                <td>
-                    @if($itemDiscount > 0)
-                        <span class="discount">-{{ number_format($itemDiscount, 2) }} {{ $order->getCurrency() }}</span>
+        <tr>
+            <td>
+                {{ $orderItem['item_name'] }}
+                @if(!empty($orderItem['description']))
+                    <div class="item-description">{{ $orderItem['description'] }}</div>
+                @endif
+            </td>
+            <td class="align-right">
+                @if($orderItem['price_before_discount'])
+                    <div
+                        class="item-price-original">{{ Currency::format($orderItem['price_before_discount'], $order->getCurrency()) }}</div>
+                    <div
+                        class="item-price-discounted">{{ Currency::format($orderItem['price'], $order->getCurrency()) }}</div>
+                @else
+                    {{ Currency::format($orderItem['price'], $order->getCurrency()) }}
+                @endif
+            </td>
+            <td class="align-right">{{ $orderItem['quantity'] }}</td>
+            <td class="align-right">
+                @if($orderItem['price_before_discount'])
+                    <div
+                        class="item-price-original">{{ Currency::format($orderItem['price_before_discount'] * $orderItem['quantity'], $order->getCurrency()) }}</div>
+                    <div
+                        class="item-price-discounted">{{ Currency::format($orderItem['total_before_additions'], $order->getCurrency()) }}</div>
+                @else
+                    {{ Currency::format($orderItem['total_before_additions'], $order->getCurrency()) }}
+                @endif
+            </td>
+        </tr>
+    @endforeach
+    </tbody>
+</table>
+
+<table class="totals">
+    <tr class="subtotal">
+        <td>{{ __('Subtotal') }}</td>
+        <td>{{ Currency::format($order->getTotalBeforeAdditions(), $order->getCurrency()) }}</td>
+    </tr>
+
+    @if($totalDiscount > 0)
+        <tr class="breakdown">
+            <td>{{ __('Total Discount') }}</td>
+            <td>-{{ Currency::format($totalDiscount, $order->getCurrency()) }}</td>
+        </tr>
+    @endif
+
+    @if($order->getHasTaxes())
+        @foreach($order->getTaxesAndFeesRollup()['taxes'] as $tax)
+            <tr class="breakdown">
+                <td>{{ $tax['name'] }} ({{ $tax['rate'] }}@if($tax['type'] === 'PERCENTAGE')
+                        %
                     @else
-                        -
-                    @endif
-                </td>
-                <td>{{ number_format($orderItem['total_before_additions'], 2) }} {{ $order->getCurrency() }}</td>
+                        {{ $order->getCurrency() }}
+                    @endif)</td>
+                <td>{{ Currency::format($tax['value'], $order->getCurrency()) }}</td>
             </tr>
         @endforeach
-        </tbody>
-    </table>
-</div>
-
-<div class="totals">
-    <table>
         <tr class="subtotal">
-            <td>{{ __('Subtotal') }}:</td>
-            <td>{{ number_format($order->getTotalBeforeAdditions(), 2) }} {{ $order->getCurrency() }}</td>
+            <td>{{ __('Total Tax') }}</td>
+            <td>{{ Currency::format($order->getTotalTax(), $order->getCurrency()) }}</td>
         </tr>
+    @endif
 
-        @if($totalDiscount > 0)
+    @if($order->getHasFees())
+        @foreach($order->getTaxesAndFeesRollup()['fees'] as $fee)
             <tr class="breakdown">
-                <td>{{ __('Total Discount') }}:</td>
-                <td class="discount">-{{ number_format($totalDiscount, 2) }} {{ $order->getCurrency() }}</td>
+                <td>{{ $fee['name'] }} ({{ $fee['rate'] }}@if($fee['type'] === 'PERCENTAGE')
+                        %
+                    @else
+                        {{ $order->getCurrency() }}
+                    @endif)</td>
+                <td>{{ Currency::format($fee['value'], $order->getCurrency()) }}</td>
             </tr>
-        @endif
-
-        @if($order->getHasTaxes())
-            <!-- Tax Breakdown -->
-            @foreach($order->getTaxesAndFeesRollup()['taxes'] as $tax)
-                <tr class="breakdown">
-                    <td>{{ $tax['name'] }} ( {{ $tax['rate'] }} @if($tax['type'] === 'PERCENTAGE')
-                            %
-                        @else
-                            {{ $order->getCurrency() }}
-                        @endif)
-                    </td>
-                    <td>{{ number_format($tax['value'], 2) }} {{ $order->getCurrency() }}</td>
-                </tr>
-            @endforeach
-
-            <tr class="subtotal-line">
-                <td>{{ __('Total Tax') }}:</td>
-                <td>{{ number_format($order->getTotalTax(), 2) }} {{ $order->getCurrency() }}</td>
-            </tr>
-        @endif
-
-        @if($order->getHasFees())
-            <!-- Fee Breakdown -->
-            @foreach($order->getTaxesAndFeesRollup()['fees'] as $fee)
-                <tr class="breakdown">
-                    <td>{{ $fee['name'] }} ( {{ $fee['rate'] }} @if($fee['type'] === 'PERCENTAGE')
-                            %
-                        @else
-                            {{ $order->getCurrency() }}
-                        @endif)
-                    </td>
-                    <td>{{ number_format($fee['value'], 2) }} {{ $order->getCurrency() }}</td>
-                </tr>
-            @endforeach
-
-            <tr class="subtotal-line">
-                <td>{{ __('Total Service Fee') }}:</td>
-                <td>{{ number_format($order->getTotalFee(), 2) }} {{ $order->getCurrency() }}</td>
-            </tr>
-        @endif
-
-        <tr class="total">
-            <td>{{ __('Total Amount') }}:</td>
-            <td>{{ number_format($order->getTotalGross(), 2) }} {{ $order->getCurrency() }}</td>
+        @endforeach
+        <tr class="subtotal">
+            <td>{{ __('Total Service Fee') }}</td>
+            <td>{{ Currency::format($order->getTotalFee(), $order->getCurrency()) }}</td>
         </tr>
-    </table>
-</div>
+    @endif
+
+    <tr class="total-line">
+        <td>{{ __('Total Amount') }}</td>
+        <td>{{ Currency::format($order->getTotalGross(), $order->getCurrency()) }}</td>
+    </tr>
+</table>
+
+@if($eventSettings->getInvoiceNotes())
+    <div class="invoice-notes">
+        {!! $eventSettings->getInvoiceNotes() !!}
+    </div>
+@endif
 
 <div class="invoice-footer">
-    <p>{{ __('Thank you for your business!') }}</p>
-    <p><strong>{{ $eventSettings->getOrganizationName() }}</strong></p>
-
     @if($eventSettings->getSupportEmail())
         <p>{{ __('For any queries, please contact us at') }} {{ $eventSettings->getSupportEmail() }}</p>
     @endif
 
-    @if($eventSettings->getTaxDetails())
+    @if((bool) $eventSettings->getInvoiceTaxDetails())
         <div class="tax-info">
-            <p><strong>{{ __('Tax Information') }}:</strong> {!! $eventSettings->getTaxDetails() !!}</p>
+            <p><strong>{{ __('Tax Information') }}:</strong> {!! $eventSettings->getInvoiceTaxDetails() !!}</p>
         </div>
     @endif
 </div>

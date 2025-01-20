@@ -16,7 +16,7 @@ return new class extends Migration
             $table->boolean('require_billing_address')->default(true);
             $table->string('organization_name')->nullable();
             $table->text('organization_address')->nullable();
-            $table->text('tax_details')->nullable();
+            $table->text('invoice_tax_details')->nullable();
             $table->json('payment_providers')->nullable();
             $table->text('offline_payment_instructions')->nullable();
         });
@@ -33,7 +33,7 @@ return new class extends Migration
                 'require_billing_address',
                 'organization_name',
                 'organization_address',
-                'tax_details',
+                'invoice_tax_details',
                 'payment_providers',
                 'offline_payment_instructions'
             ]);

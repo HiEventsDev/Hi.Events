@@ -61,7 +61,7 @@ class UpdateEventSettingsRequest extends BaseRequest
             // Payment settings
             'payment_providers' => ['array'],
             'payment_providers.*' => ['string', Rule::in(PaymentProviders::valuesArray())],
-            'offline_payment_instructions' => ['required_if:payment_providers,offline', 'string', 'nullable'],
+            'offline_payment_instructions' => ['string', 'nullable', Rule::requiredIf(fn() => in_array(PaymentProviders::OFFLINE->name, $this->input('payment_providers', []), true))],
             'allow_orders_awaiting_offline_payment_to_check_in' => ['boolean'],
 
             // Invoice settings
@@ -70,9 +70,11 @@ class UpdateEventSettingsRequest extends BaseRequest
             'invoice_prefix' => ['nullable', 'string', 'max:10', 'regex:/^[A-Za-z0-9\-]*$/'],
             'invoice_start_number' => ['nullable', 'integer', 'min:1'],
             'require_billing_address' => ['boolean'],
-            'organization_name' => ['required_if:enable_invoicing,true', 'string', 'max:255'],
-            'organization_address' => ['required_if:enable_invoicing,true', 'string'],
-            'tax_details' => ['nullable', 'string'],
+            'organization_name' => ['required_if:enable_invoicing,true', 'string', 'max:255', 'nullable'],
+            'organization_address' => ['required_if:enable_invoicing,true', 'string', 'max:255', 'nullable'],
+            'invoice_tax_details' => ['nullable', 'string'],
+            'invoice_notes' => ['nullable', 'string'],
+            'invoice_payment_terms_days' => ['nullable', 'integer', 'gte:0', 'lte:1000'],
         ];
     }
 
@@ -97,7 +99,7 @@ class UpdateEventSettingsRequest extends BaseRequest
 
             // Payment messages
             'payment_providers.*.in' => __('Invalid payment provider selected.'),
-            'offline_payment_instructions.required_if' => __('Payment instructions are required when offline payments are enabled.'),
+            'offline_payment_instructions.required' => __('Payment instructions are required when offline payments are enabled.'),
 
             // Invoice messages
             'invoice_prefix.regex' => __('The invoice prefix may only contain letters, numbers, and hyphens.'),

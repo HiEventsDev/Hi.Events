@@ -146,7 +146,7 @@ export const LocationSettings = () => {
                             </InputGroup>
                             <TextInput
                                 {...form.getInputProps('maps_url')}
-                                description={t`If blank, the address will be used to generate a Google map link`}
+                                description={t`If blank, the address will be used to generate a Google Mapa link`}
                                 label={t`Custom Maps URL`}
                                 placeholder={t`https://example-maps-service.com/...`}
                             />

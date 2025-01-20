@@ -41,15 +41,23 @@ class InvoiceCreateService
             ], name: 'event'))
             ->findById($orderId);
 
+        /** @var EventSettingDomainObject $eventSettings */
+        $eventSettings = $order->getEvent()->getEventSettings();
+        /** @var EventDomainObject $event */
+        $event = $order->getEvent();
+
         return $this->invoiceRepository->create([
             'order_id' => $orderId,
-            'account_id' => $order->getEvent()->getAccountId(),
-            'invoice_number' => $this->getLatestInvoiceNumber($order->getEvent()->getId(), $order->getEvent()->getEventSettings()),
+            'account_id' => $event->getAccountId(),
+            'invoice_number' => $this->getLatestInvoiceNumber($event->getId(), $eventSettings),
             'items' => collect($order->getOrderItems())->map(fn(OrderItemDomainObject $item) => $item->toArray())->toArray(),
             'taxes_and_fees' => $order->getTaxesAndFeesRollup(),
             'issue_date' => now()->toDateString(),
             'status' => $order->isOrderCompleted() ? InvoiceStatus::PAID->name : InvoiceStatus::UNPAID->name,
             'total_amount' => $order->getTotalGross(),
+            'due_date' => $eventSettings->getInvoicePaymentTermsDays() !== null
+                ? now()->addDays($eventSettings->getInvoicePaymentTermsDays())
+                : null
         ]);
     }
 
