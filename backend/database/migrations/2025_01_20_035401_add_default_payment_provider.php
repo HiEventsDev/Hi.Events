@@ -8,8 +8,8 @@ return new class extends Migration {
     public function up(): void
     {
         DB::table('event_settings')
-            ->whereNull('payment_provider')
-            ->update(['payment_provider' => [PaymentProviders::STRIPE->name]]);
+            ->whereNull('payment_providers')
+            ->update(['payment_providers' => [PaymentProviders::STRIPE->name]]);
     }
 
     public function down(): void
