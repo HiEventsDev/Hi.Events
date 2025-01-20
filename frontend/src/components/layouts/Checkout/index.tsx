@@ -5,20 +5,26 @@ import {t} from "@lingui/macro";
 import {Countdown} from "../../common/Countdown";
 import {CheckoutSidebar} from "./CheckoutSidebar";
 import {ActionIcon, Button, Group, Modal, Tooltip} from "@mantine/core";
-import {IconArrowLeft, IconPrinter} from "@tabler/icons-react";
+import {IconArrowLeft, IconPrinter, IconReceipt} from "@tabler/icons-react";
 import {eventHomepageUrl} from "../../../utilites/urlHelper.ts";
 import {ShareComponent} from "../../common/ShareIcon";
 import {AddToEventCalendarButton} from "../../common/AddEventToCalendarButton";
 import {useMediaQuery} from "@mantine/hooks";
 import {useState} from "react";
+import {Invoice} from "../../../types.ts";
+import {orderClientPublic} from "../../../api/order.client.ts";
+import {downloadBinary} from "../../../utilites/download.ts";
+import {showError} from "../../../utilites/notifications.tsx";
 
 const Checkout = () => {
     const {eventId, orderShortId} = useParams();
     const {data: order} = useGetOrderPublic(eventId, orderShortId, ['event']);
     const event = order?.event;
+    const eventSettings = event?.settings;
     const navigate = useNavigate();
     const orderIsCompleted = order?.status === 'COMPLETED';
     const orderIsReserved = order?.status === 'RESERVED';
+    const orderIsAwaitingOfflinePayment = order?.status === 'AWAITING_OFFLINE_PAYMENT';
     const isMobile = useMediaQuery('(max-width: 768px)');
     const [isExpired, setIsExpired] = useState(false);
     const orderHasAttendees = order?.attendees && order.attendees.length > 0;
@@ -30,6 +36,15 @@ const Checkout = () => {
     const handleReturn = () => {
         navigate(`/event/${event?.id}/${event?.slug}`);
     };
+
+    const handleInvoiceDownload = async (invoice: Invoice) => {
+        try {
+            const blob = await orderClientPublic.downloadInvoice(eventId, orderShortId);
+            downloadBinary(blob, invoice.invoice_number + '.pdf');
+        } catch (error) {
+            showError(t`Failed to download invoice. Please try again.`);
+        }
+    }
 
     return (
         <>
@@ -69,12 +84,12 @@ const Checkout = () => {
                                         </Group>
                                     )}
 
-                                    {orderIsCompleted && (
+                                    {(orderIsCompleted || orderIsAwaitingOfflinePayment) && (
                                         <Group gap="2px">
                                             <ShareComponent
                                                 title={event.title}
                                                 text={t`Check out this event!`}
-                                                url={`${window.location.origin}/event/${eventId}`}
+                                                url={eventHomepageUrl(event)}
                                                 hideShareButtonText={isMobile}
                                             />
 
@@ -87,6 +102,18 @@ const Checkout = () => {
                                                         onClick={() => window?.open(`/order/${eventId}/${orderShortId}/print`, '_blank')}
                                                     >
                                                         <IconPrinter size={20}/>
+                                                    </ActionIcon>
+                                                </Tooltip>
+                                            )}
+
+                                            {order.latest_invoice && (
+                                                <Tooltip
+                                                    label={t`Download Invoice`}>
+                                                    <ActionIcon
+                                                        variant="subtle"
+                                                        onClick={() => handleInvoiceDownload(order.latest_invoice as Invoice)}
+                                                    >
+                                                        <IconReceipt size={20}/>
                                                     </ActionIcon>
                                                 </Tooltip>
                                             )}

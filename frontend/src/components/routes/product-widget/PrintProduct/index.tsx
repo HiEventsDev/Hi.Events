@@ -1,7 +1,7 @@
 import {useParams} from 'react-router-dom';
 import {useGetEventPublic} from '../../../../queries/useGetEventPublic.ts';
 import {useGetAttendeePublic} from '../../../../queries/useGetAttendeePublic.ts';
-import {AttendeeProduct} from '../../../common/AttendeeProduct';
+import {AttendeeTicket} from '../../../common/AttendeeTicket';
 import {Attendee, Product} from '../../../../types.ts';
 import {Container} from '@mantine/core';
 import {PoweredByFooter} from '../../../common/PoweredByFooter';
@@ -40,7 +40,7 @@ const PrintProduct = () => {
     return (
         <Container>
             <h2>{t`Your ticket for`} {event.title}</h2>
-            <AttendeeProduct
+            <AttendeeTicket
                 attendee={attendee as Attendee}
                 product={attendee.product as Product}
                 event={event}

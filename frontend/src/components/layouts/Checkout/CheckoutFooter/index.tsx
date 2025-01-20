@@ -13,9 +13,10 @@ interface ContinueButtonProps {
     order: Order;
     event: Event;
     isOrderComplete?: boolean;
+    onClick?: () => void;
 }
 
-export const CheckoutFooter = ({isLoading, buttonContent, event, order, isOrderComplete = false}: ContinueButtonProps) => {
+export const CheckoutFooter = ({isLoading, buttonContent, event, order, onClick, isOrderComplete = false}: ContinueButtonProps) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     return (
@@ -30,8 +31,9 @@ export const CheckoutFooter = ({isLoading, buttonContent, event, order, isOrderC
                         <Button
                             className={classes.continueButton}
                             loading={isLoading}
-                            type="submit"
                             size="md"
+                            type="submit"
+                            onClick={onClick}
                         >
                             {buttonContent || t`Continue`}
                         </Button>

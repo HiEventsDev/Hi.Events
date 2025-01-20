@@ -1,4 +1,4 @@
-import {AttendeeProduct} from "../../../common/AttendeeProduct";
+import {AttendeeTicket} from "../../../common/AttendeeTicket";
 import {Product} from "../../../../types.ts";
 import {PoweredByFooter} from "../../../common/PoweredByFooter";
 import {useParams} from "react-router-dom";
@@ -43,7 +43,7 @@ export const PrintOrder = () => {
                 <h2>{t`Tickets for`} {event.title}</h2>
                 {order.attendees?.map((attendee) => {
                     return (
-                        <AttendeeProduct
+                        <AttendeeTicket
                             key={attendee.id}
                             attendee={attendee}
                             product={attendee.product as Product}

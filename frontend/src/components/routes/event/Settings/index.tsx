@@ -12,13 +12,14 @@ import {
     IconAdjustments,
     IconAt,
     IconBrandGoogleAnalytics,
-    IconBuildingStore,
+    IconBuildingStore, IconCreditCard,
     IconHome,
     IconMapPin,
 } from "@tabler/icons-react";
 import {useMediaQuery} from "@mantine/hooks";
 import {useState} from "react";
 import {Card} from "../../../common/Card";
+import {PaymentAndInvoicingSettings} from "./Sections/PaymentSettings";
 
 const SECTIONS = [
     {
@@ -56,6 +57,12 @@ const SECTIONS = [
         label: t`Miscellaneous`,
         icon: IconAdjustments,
         component: MiscSettings
+    },
+    {
+        id: 'payment-settings',
+        label: t`Payment & Invoicing`,
+        icon: IconCreditCard,
+        component: PaymentAndInvoicingSettings,
     }
 ];
 

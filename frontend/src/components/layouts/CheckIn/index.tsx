@@ -7,9 +7,9 @@ import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {t, Trans} from "@lingui/macro";
 import {AxiosError} from "axios";
 import classes from "./CheckIn.module.scss";
-import {ActionIcon, Button, Loader, Modal, Progress} from "@mantine/core";
+import {ActionIcon, Alert, Button, Loader, Modal, Progress, Stack} from "@mantine/core";
 import {SearchBar} from "../../common/SearchBar";
-import {IconInfoCircle, IconQrcode, IconTicket} from "@tabler/icons-react";
+import {IconCreditCard, IconInfoCircle, IconQrcode, IconTicket, IconUserCheck} from "@tabler/icons-react";
 import {QRScannerComponent} from "../../common/AttendeeCheckInTable/QrScanner.tsx";
 import {useGetCheckInListAttendees} from "../../../queries/useGetCheckInListAttendeesPublic.ts";
 import {useCreateCheckInPublic} from "../../../mutations/useCreateCheckInPublic.ts";
@@ -24,15 +24,20 @@ const CheckIn = () => {
     const {checkInListShortId} = useParams();
     const CheckInListQuery = useGetCheckInListPublic(checkInListShortId);
     const checkInList = CheckInListQuery?.data?.data;
+    const event = checkInList?.event;
+    const eventSettings = event?.settings;
     const [searchQuery, setSearchQuery] = useState('');
     const [searchQueryDebounced] = useDebouncedValue(searchQuery, 200);
     const [qrScannerOpen, setQrScannerOpen] = useState(false);
+    const [selectedAttendee, setSelectedAttendee] = useState<Attendee | null>(null);
+    const [checkInModalOpen, checkInModalHandlers] = useDisclosure(false);
     const [infoModalOpen, infoModalHandlers] = useDisclosure(false, {
             onOpen: () => {
                 CheckInListQuery.refetch();
             }
         }
     );
+
     const products = checkInList?.products;
     const queryFilters: QueryFilters = {
         pageNumber: 1,
@@ -42,6 +47,7 @@ const CheckIn = () => {
             status: {operator: 'eq', value: 'ACTIVE'},
         },
     };
+
     const attendeesQuery = useGetCheckInListAttendees(
         checkInListShortId,
         queryFilters,
@@ -50,6 +56,35 @@ const CheckIn = () => {
     const attendees = attendeesQuery?.data?.data;
     const checkInMutation = useCreateCheckInPublic(queryFilters);
     const deleteCheckInMutation = useDeleteCheckInPublic(queryFilters);
+    const allowOrdersAwaitingOfflinePaymentToCheckIn = eventSettings?.allow_orders_awaiting_offline_payment_to_check_in;
+
+    const handleCheckInAction = (attendee: Attendee, action: 'check-in' | 'check-in-and-mark-order-as-paid') => {
+        checkInMutation.mutate({
+            checkInListShortId: checkInListShortId,
+            attendeePublicId: attendee.public_id,
+            action: action,
+        }, {
+            onSuccess: ({errors}) => {
+                if (errors && errors[attendee.public_id]) {
+                    showError(errors[attendee.public_id]);
+                    return;
+                }
+                showSuccess(<Trans>{attendee.first_name} <b>checked in</b> successfully</Trans>);
+                checkInModalHandlers.close();
+                setSelectedAttendee(null);
+            },
+            onError: (error) => {
+                if (!networkStatus.online) {
+                    showError(t`You are offline`);
+                    return;
+                }
+
+                if (error instanceof AxiosError) {
+                    showError(error?.response?.data.message || t`Unable to check in attendee`);
+                }
+            }
+        });
+    };
 
     const handleCheckInToggle = (attendee: Attendee) => {
         if (attendee.check_in) {
@@ -68,70 +103,96 @@ const CheckIn = () => {
 
                     showError(error?.response?.data.message || t`Unable to check out attendee`);
                 }
-            })
+            });
             return;
         }
 
-        checkInMutation.mutate({
-                checkInListShortId: checkInListShortId,
-                attendeePublicId: attendee.public_id,
-            }, {
-                onSuccess: ({errors}) => {
-                    // Show error if there is an error for this specific attendee
-                    // It's a bulk endpoint, so even if there's an error it returns a 200
-                    if (errors && errors[attendee.public_id]) {
-                        showError(errors[attendee.public_id]);
-                        return;
-                    }
+        const isAttendeeAwaitingPayment = attendee.status === 'AWAITING_PAYMENT';
 
-                    showSuccess(<Trans>{attendee.first_name} <b>checked in</b> successfully</Trans>);
-                },
-                onError: (error) => {
-                    if (!networkStatus.online) {
-                        showError(t`You are offline`);
-                        return;
-                    }
+        if (allowOrdersAwaitingOfflinePaymentToCheckIn && isAttendeeAwaitingPayment) {
+            setSelectedAttendee(attendee);
+            checkInModalHandlers.open();
+            return;
+        }
 
-                    if (error instanceof AxiosError) {
-                        showError(error?.response?.data.message || t`Unable to check in attendee`);
-                    }
-                }
-            }
-        )
-    }
+        if (!allowOrdersAwaitingOfflinePaymentToCheckIn && isAttendeeAwaitingPayment) {
+            showError(t`You cannot check in attendees with unpaid orders.`);
+            return;
+        }
 
-    const handleQrCheckIn = (attendeePublicId: string, onRequestComplete: (didSucceed: boolean) => void, onFailure: () => void) => {
-        checkInMutation.mutate({
-            checkInListShortId: checkInListShortId,
-            attendeePublicId: attendeePublicId,
-        }, {
-            onSuccess: ({errors}) => {
-                if (onRequestComplete) {
-                    onRequestComplete(!(errors && errors[attendeePublicId]))
-                }
-                // Show error if there is an error for this specific attendee
-                // It's a bulk endpoint, so even if there's an error it returns a 200
-                if (errors && errors[attendeePublicId]) {
-                    showError(errors[attendeePublicId]);
-                    return;
-                }
+        handleCheckInAction(attendee, 'check-in');
+    };
 
-                showSuccess(t`Checked in successfully`);
-            },
-            onError: (error) => {
-                onFailure();
+    const handleQrCheckIn = async (attendeePublicId: string) => {
+        // Find the attendee in the current list or fetch them
+        const attendee = attendees?.find(a => a.public_id === attendeePublicId);
 
-                if (!networkStatus.online) {
-                    showError(t`You are offline`);
-                    return;
-                }
+        if (!attendee) {
+            showError(t`Attendee not found`);
+            return;
+        }
 
-                if (error instanceof AxiosError) {
-                    showError(error?.response?.data.message || t`Unable to check in attendee`);
-                }
-            }
-        })
-    }
+        const isAttendeeAwaitingPayment = attendee.status === 'AWAITING_PAYMENT';
+
+        if (allowOrdersAwaitingOfflinePaymentToCheckIn && isAttendeeAwaitingPayment) {
+            setSelectedAttendee(attendee);
+            checkInModalHandlers.open();
+            return;
+        }
+
+        if (!allowOrdersAwaitingOfflinePaymentToCheckIn && isAttendeeAwaitingPayment) {
+            showError(t`You cannot check in attendees with unpaid orders. This setting can be changed in the event settings.`);
+            return;
+        }
+
+        handleCheckInAction(attendee, 'check-in');
+    };
+
+    const CheckInOptionsModal = () => {
+        if (!selectedAttendee) return null;
+
+        return (
+            <Modal
+                opened={checkInModalOpen}
+                onClose={() => {
+                    checkInModalHandlers.close();
+                    setSelectedAttendee(null);
+                }}
+                title={<Trans>Check in {selectedAttendee.first_name} {selectedAttendee.last_name}</Trans>}
+                size="md"
+            >
+                <Stack>
+                    <Alert variant={'light'} title={t`Unpaid Order`}>
+                        {t`This attendee has an unpaid order.`}
+                    </Alert>
+                    <Button
+                        leftSection={<IconUserCheck size={20}/>}
+                        onClick={() => handleCheckInAction(selectedAttendee, 'check-in')}
+                        loading={checkInMutation.isPending}
+                        fullWidth
+                    >
+                        {t`Check in only`}
+                    </Button>
+                    <Button
+                        leftSection={<IconCreditCard size={20}/>}
+                        onClick={() => handleCheckInAction(selectedAttendee, 'check-in-and-mark-order-as-paid')}
+                        loading={checkInMutation.isPending}
+                        variant="filled"
+                        fullWidth
+                    >
+                        {t`Check in and mark order as paid`}
+                    </Button>
+                    <Button
+                        onClick={checkInModalHandlers.close}
+                        variant="light"
+                        fullWidth
+                    >
+                        {t`Cancel`}
+                    </Button>
+                </Stack>
+            </Modal>
+        );
+    };
 
     const Attendees = () => {
         const Container = () => {
@@ -154,33 +215,48 @@ const CheckIn = () => {
             return (
                 <div className={classes.attendees}>
                     {attendees.map(attendee => {
+                        const isAttendeeAwaitingPayment = attendee.status === 'AWAITING_PAYMENT';
+
                         return (
                             <div className={classes.attendee} key={attendee.public_id}>
                                 <div className={classes.details}>
                                     <div>
                                         {attendee.first_name} {attendee.last_name}
                                     </div>
+                                    {isAttendeeAwaitingPayment && (
+                                        <div className={classes.awaitingPayment}>
+                                            {t`Awaiting payment`}
+                                        </div>
+                                    )}
                                     <div>
                                         <b>{attendee.public_id}</b>
                                     </div>
                                     <div className={classes.product}>
-                                       <IconTicket size={15}/> {products.find(product => product.id === attendee.product_id)?.title}
+                                        <IconTicket
+                                            size={15}/> {products.find(product => product.id === attendee.product_id)?.title}
                                     </div>
                                 </div>
                                 <div className={classes.actions}>
-                                    <Button
+                                    {<Button
                                         onClick={() => handleCheckInToggle(attendee)}
                                         disabled={checkInMutation.isPending || deleteCheckInMutation.isPending}
                                         loading={checkInMutation.isPending || deleteCheckInMutation.isPending}
-                                        color={attendee.check_in ? 'red' : 'teal'}
+                                        color={(function () {
+                                                if (attendee.check_in) {
+                                                    return 'red';
+                                                }
+                                                if (isAttendeeAwaitingPayment && !allowOrdersAwaitingOfflinePaymentToCheckIn) {
+                                                    return 'gray';
+                                                }
+
+                                                return 'teal';
+                                            }
+                                        )()}
                                     >
-                                        {attendee.check_in ? t`Check Out` : t`Check In`}
-                                    </Button>
-                                    {/*{attendee.check_in && (*/}
-                                    {/*    <div style={{color: 'gray', fontSize: 12, marginTop: 10}}>*/}
-                                    {/*        checked in {relativeDate(attendee.check_in.checked_in_at)}*/}
-                                    {/*    </div>*/}
-                                    {/*)}*/}
+                                        {attendee.check_in
+                                            ? t`Check Out`
+                                            : allowOrdersAwaitingOfflinePaymentToCheckIn ? t`Check In` : t`Cannot Check In`}
+                                    </Button>}
                                 </div>
                             </div>
                         )
@@ -247,7 +323,6 @@ const CheckIn = () => {
                                 />
                             </b>
                         </p>
-
                     </>
                 )}
             />)
@@ -260,9 +335,7 @@ const CheckIn = () => {
                 rightContent={(
                     <>
                         {!networkStatus.online && (
-                            <div className={classes.offline}>
-                                {/*<IconNetworkOff color={'red'}/>*/}
-                            </div>
+                            <div className={classes.offline}/>
                         )}
                         <ActionIcon
                             onClick={() => infoModalHandlers.open()}
@@ -285,7 +358,7 @@ const CheckIn = () => {
                             value={searchQuery}
                             onChange={(event) => setSearchQuery(event.target.value)}
                             onClear={() => setSearchQuery('')}
-                            placeholder={t`Seach by name, order #, attendee # or email...`}
+                            placeholder={t`Search by name, order #, attendee # or email...`}
                         />
                         <Button variant={'light'} size={'md'} className={classes.scanButton}
                                 onClick={() => setQrScannerOpen(true)} leftSection={<IconQrcode/>}>
@@ -300,6 +373,7 @@ const CheckIn = () => {
                 </div>
             </div>
             <Attendees/>
+            <CheckInOptionsModal/>
             {qrScannerOpen && (
                 <Modal.Root
                     opened
@@ -312,7 +386,7 @@ const CheckIn = () => {
                     <Modal.Overlay/>
                     <Modal.Content>
                         <QRScannerComponent
-                            onCheckIn={handleQrCheckIn}
+                            onAttendeeScanned={handleQrCheckIn}
                             onClose={() => setQrScannerOpen(false)}
                         />
                     </Modal.Content>
@@ -327,11 +401,11 @@ const CheckIn = () => {
                     padding={'none'}
                 >
                     <Modal.Overlay/>
-
                     <Modal.Content>
                         <Modal.Header>
                             <Modal.Title>
-                                <Truncate text={checkInList?.name} length={30}/> </Modal.Title>
+                                <Truncate text={checkInList?.name} length={30}/>
+                            </Modal.Title>
                             <Modal.CloseButton/>
                         </Modal.Header>
                         <div className={classes.infoModal}>
@@ -369,4 +443,4 @@ const CheckIn = () => {
     );
 }
 
-export default CheckIn
+export default CheckIn;

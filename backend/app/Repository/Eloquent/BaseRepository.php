@@ -367,17 +367,31 @@ abstract class BaseRepository implements RepositoryInterface
                     'gt' => '>',
                     'gte' => '>=',
                     'like' => 'LIKE',
+                    'in' => 'IN',
                 ];
 
                 $operator = $operatorMapping[$filterField->operator] ?? throw new BadMethodCallException(
                     sprintf('Operator %s is not supported', $filterField->operator)
                 );
 
-                $this->model = $this->model->where(
-                    column: $filterField->field,
-                    operator: $operator,
-                    value: $isNull ? null : $filterField->value,
-                );
+                // Special handling for IN operator
+                if ($operator === 'IN') {
+                    // Ensure value is array or convert comma-separated string to array
+                    $value = is_array($filterField->value)
+                        ? $filterField->value
+                        : explode(',', $filterField->value);
+
+                    $this->model = $this->model->whereIn(
+                        column: $filterField->field,
+                        values: $value
+                    );
+                } else {
+                    $this->model = $this->model->where(
+                        column: $filterField->field,
+                        operator: $operator,
+                        value: $isNull ? null : $filterField->value,
+                    );
+                }
             });
         }
     }

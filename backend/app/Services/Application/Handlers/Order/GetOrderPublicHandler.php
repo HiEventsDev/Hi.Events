@@ -9,6 +9,7 @@ use HiEvents\DomainObjects\Generated\EventDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\OrganizerDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\ProductDomainObjectAbstract;
 use HiEvents\DomainObjects\ImageDomainObject;
+use HiEvents\DomainObjects\InvoiceDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
@@ -72,6 +73,7 @@ class GetOrderPublicHandler
                     )
                 ],
             ))
+            ->loadRelation(new Relationship(domainObject: InvoiceDomainObject::class))
             ->loadRelation(new Relationship(
                 domainObject: OrderItemDomainObject::class,
             ));

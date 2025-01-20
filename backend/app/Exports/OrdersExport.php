@@ -43,26 +43,28 @@ class OrdersExport implements FromCollection, WithHeadings, WithMapping, WithSty
         $questionTitles = $this->questions->map(fn($question) => $question->getTitle())->toArray();
 
         return array_merge([
-            'ID',
-            'First Name',
-            'Last Name',
-            'Email',
-            'Total Before Additions',
-            'Total Gross',
-            'Total Tax',
-            'Total Fee',
-            'Total Refunded',
-            'Status',
-            'Payment Status',
-            'Refund Status',
-            'Currency',
-            'Created At',
-            'Public ID',
-            'Payment Gateway',
-            'Is Partially Refunded',
-            'Is Fully Refunded',
-            'Is Free Order',
-            'Is Manually Created',
+            __('ID'),
+            __('First Name'),
+            __('Last Name'),
+            __('Email'),
+            __('Total Before Additions'),
+            __('Total Gross'),
+            __('Total Tax'),
+            __('Total Fee'),
+            __('Total Refunded'),
+            __('Status'),
+            __('Payment Status'),
+            __('Refund Status'),
+            __('Currency'),
+            __('Created At'),
+            __('Public ID'),
+            __('Payment Gateway'),
+            __('Is Partially Refunded'),
+            __('Is Fully Refunded'),
+            __('Is Free Order'),
+            __('Is Manually Created'),
+            __('Billing Address'),
+            __('Notes')
         ], $questionTitles);
     }
 
@@ -103,6 +105,8 @@ class OrdersExport implements FromCollection, WithHeadings, WithMapping, WithSty
             $order->isFullyRefunded(),
             $order->isFreeOrder(),
             $order->getIsManuallyCreated(),
+            $order->getBillingAddressString(),
+            $order->getNotes(),
         ], $answers->toArray());
     }
 

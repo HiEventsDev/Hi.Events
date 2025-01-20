@@ -126,7 +126,9 @@ class CompleteOrderHandler
                 AttendeeDomainObjectAbstract::EVENT_ID => $order->getEventId(),
                 AttendeeDomainObjectAbstract::PRODUCT_ID => $productId,
                 AttendeeDomainObjectAbstract::PRODUCT_PRICE_ID => $attendee->product_price_id,
-                AttendeeDomainObjectAbstract::STATUS => AttendeeStatus::ACTIVE->name,
+                AttendeeDomainObjectAbstract::STATUS => $order->isPaymentRequired()
+                    ? AttendeeStatus::AWAITING_PAYMENT->name
+                    : AttendeeStatus::ACTIVE->name,
                 AttendeeDomainObjectAbstract::EMAIL => $attendee->email,
                 AttendeeDomainObjectAbstract::FIRST_NAME => $attendee->first_name,
                 AttendeeDomainObjectAbstract::LAST_NAME => $attendee->last_name,
@@ -262,6 +264,7 @@ class CompleteOrderHandler
             ->updateFromArray(
                 $order->getId(),
                 [
+                    OrderDomainObjectAbstract::ADDRESS => $orderDTO->address,
                     OrderDomainObjectAbstract::FIRST_NAME => $orderDTO->first_name,
                     OrderDomainObjectAbstract::LAST_NAME => $orderDTO->last_name,
                     OrderDomainObjectAbstract::EMAIL => $orderDTO->email,

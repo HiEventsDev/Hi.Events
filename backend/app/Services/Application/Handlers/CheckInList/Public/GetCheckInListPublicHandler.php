@@ -4,6 +4,7 @@ namespace HiEvents\Services\Application\Handlers\CheckInList\Public;
 
 use HiEvents\DomainObjects\CheckInListDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\CheckInListRepositoryInterface;
@@ -20,7 +21,9 @@ class GetCheckInListPublicHandler
     public function handle(string $shortId): CheckInListDomainObject
     {
         $checkInList = $this->checkInListRepository
-            ->loadRelation(new Relationship(domainObject: EventDomainObject::class, name: 'event'))
+            ->loadRelation((new Relationship(domainObject: EventDomainObject::class, nested: [
+                new Relationship(domainObject: EventSettingDomainObject::class, name: 'event_settings'),
+            ], name: 'event')))
             ->loadRelation(ProductDomainObject::class)
             ->findFirstWhere([
                 'short_id' => $shortId,

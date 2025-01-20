@@ -80,6 +80,40 @@ readonly class PartialUpdateEventSettingsHandler
                 'notify_organizer_of_new_orders' => $eventSettingsDTO->settings['notify_organizer_of_new_orders'] ?? $existingSettings->getNotifyOrganizerOfNewOrders(),
                 'price_display_mode' => $eventSettingsDTO->settings['price_display_mode'] ?? $existingSettings->getPriceDisplayMode(),
                 'hide_getting_started_page' => $eventSettingsDTO->settings['hide_getting_started_page'] ?? $existingSettings->getHideGettingStartedPage(),
+
+                // Payment settings
+                'payment_providers' => $eventSettingsDTO->settings['payment_providers'] ?? $existingSettings->getPaymentProviders(),
+                'offline_payment_instructions' => array_key_exists('offline_payment_instructions', $eventSettingsDTO->settings)
+                    ? $eventSettingsDTO->settings['offline_payment_instructions']
+                    : $existingSettings->getOfflinePaymentInstructions(),
+                'allow_orders_awaiting_offline_payment_to_check_in' => $eventSettingsDTO->settings['allow_orders_awaiting_offline_payment_to_check_in']
+                    ?? $existingSettings->getAllowOrdersAwaitingOfflinePaymentToCheckIn(),
+
+                // Invoice settings
+                'enable_invoicing' => $eventSettingsDTO->settings['enable_invoicing'] ?? $existingSettings->getEnableInvoicing(),
+                'invoice_label' => array_key_exists('invoice_label', $eventSettingsDTO->settings)
+                    ? $eventSettingsDTO->settings['invoice_label']
+                    : $existingSettings->getInvoiceLabel(),
+                'invoice_prefix' => array_key_exists('invoice_prefix', $eventSettingsDTO->settings)
+                    ? $eventSettingsDTO->settings['invoice_prefix']
+                    : $existingSettings->getInvoicePrefix(),
+                'invoice_start_number' => $eventSettingsDTO->settings['invoice_start_number'] ?? $existingSettings->getInvoiceStartNumber(),
+                'require_billing_address' => $eventSettingsDTO->settings['require_billing_address'] ?? $existingSettings->getRequireBillingAddress(),
+                'organization_name' => array_key_exists('organization_name', $eventSettingsDTO->settings)
+                    ? $eventSettingsDTO->settings['organization_name']
+                    : $existingSettings->getOrganizationName(),
+                'organization_address' => array_key_exists('organization_address', $eventSettingsDTO->settings)
+                    ? $eventSettingsDTO->settings['organization_address']
+                    : $existingSettings->getOrganizationAddress(),
+                'invoice_tax_details' => array_key_exists('invoice_tax_details', $eventSettingsDTO->settings)
+                    ? $eventSettingsDTO->settings['invoice_tax_details']
+                    : $existingSettings->getInvoiceTaxDetails(),
+                'invoice_notes' => array_key_exists('invoice_notes', $eventSettingsDTO->settings)
+                    ? $eventSettingsDTO->settings['invoice_notes']
+                    : $existingSettings->getInvoiceNotes(),
+                'invoice_payment_terms_days' => array_key_exists('invoice_payment_terms_days', $eventSettingsDTO->settings)
+                    ? $eventSettingsDTO->settings['invoice_payment_terms_days']
+                    : $existingSettings->getInvoicePaymentTermsDays()
             ]),
         );
     }

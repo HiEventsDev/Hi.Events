@@ -16,12 +16,15 @@ class CreateProductCategoryHandler
 
     public function handle(UpsertProductCategoryDTO $dto): ProductCategoryDomainObject
     {
-        return $this->productCategoryService->createCategory(
-            name: $dto->name,
-            isHidden: $dto->is_hidden,
-            eventId: $dto->event_id,
-            description: $dto->description,
-            noProductsMessage: $dto->no_products_message ?? __('There are no products available in this category'),
-        );
+        $productCategory = new ProductCategoryDomainObject();
+        $productCategory->setName($dto->name);
+        $productCategory->setIsHidden($dto->is_hidden);
+        $productCategory->setEventId($dto->event_id);
+        $productCategory->setDescription($dto->description);
+        $productCategory->setNoProductsMessage(
+            $dto->no_products_message ?? __('There are no products available in this category'
+        ));
+
+        return $this->productCategoryService->createCategory($productCategory);
     }
 }

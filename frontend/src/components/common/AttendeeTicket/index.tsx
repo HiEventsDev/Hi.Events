@@ -7,16 +7,16 @@ import {prettyDate} from "../../../utilites/dates.ts";
 import QRCode from "react-qr-code";
 import {IconCopy, IconPrinter} from "@tabler/icons-react";
 import {Attendee, Event, Product} from "../../../types.ts";
-import classes from './AttendeeProduct.module.scss';
+import classes from './AttendeeTicket.module.scss';
 
-interface AttendeeProductProps {
+interface AttendeeTicketProps {
     event: Event;
     attendee: Attendee;
     product: Product;
     hideButtons?: boolean;
 }
 
-export const AttendeeProduct = ({attendee, product, event, hideButtons = false}: AttendeeProductProps) => {
+export const AttendeeTicket = ({attendee, product, event, hideButtons = false}: AttendeeTicketProps) => {
     const productPrice = getAttendeeProductPrice(attendee, product);
 
     return (
@@ -61,7 +61,14 @@ export const AttendeeProduct = ({attendee, product, event, hideButtons = false}:
                             {t`Cancelled`}
                         </div>
                     )}
+
+                    {attendee.status === 'AWAITING_PAYMENT' && (
+                        <div className={classes.awaitingPayment}>
+                            {t`Awaiting Payment`}
+                        </div>
+                    )}
                     {attendee.status !== 'CANCELLED' && <QRCode value={String(attendee.public_id)}/>}
+
                 </div>
 
                 {!hideButtons && (

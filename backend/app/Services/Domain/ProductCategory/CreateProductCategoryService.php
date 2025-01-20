@@ -2,6 +2,7 @@
 
 namespace HiEvents\Services\Domain\ProductCategory;
 
+use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\ProductCategoryDomainObject;
 use HiEvents\Repository\Interfaces\ProductCategoryRepositoryInterface;
 
@@ -13,21 +14,18 @@ class CreateProductCategoryService
     {
     }
 
-    public function createCategory(
-        string  $name,
-        bool    $isHidden,
-        int     $eventId,
-        ?string $description,
-        ?string $noProductsMessage,
-    ): ProductCategoryDomainObject
+    public function createCategory(ProductCategoryDomainObject $productCategoryDomainObject): ProductCategoryDomainObject
     {
-        return $this->productCategoryRepository->create([
-            'name' => $name,
-            'description' => $description,
-            'is_hidden' => $isHidden,
-            'event_id' => $eventId,
-            'order' => $this->productCategoryRepository->getNextOrder($eventId),
-            'no_products_message' => $noProductsMessage,
-        ]);
+        return $this->productCategoryRepository->create(array_filter($productCategoryDomainObject->toArray()));
+    }
+
+    public function createDefaultProductCategory(EventDomainObject $event): void
+    {
+        $this->createCategory((new ProductCategoryDomainObject())
+            ->setEventId($event->getId())
+            ->setName(__('Tickets'))
+            ->setIsHidden(false)
+            ->setNoProductsMessage(__('There are no tickets available for this event'))
+        );
     }
 }

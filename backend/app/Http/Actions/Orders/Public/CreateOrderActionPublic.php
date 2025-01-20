@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace HiEvents\Http\Actions\Orders;
+namespace HiEvents\Http\Actions\Orders\Public;
 
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Order\CreateOrderRequest;

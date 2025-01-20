@@ -22,6 +22,7 @@ class AttendeeWithCheckInPublicResource extends JsonResource
             'public_id' => $this->getPublicId(),
             'product_id' => $this->getProductId(),
             'product_price_id' => $this->getProductPriceId(),
+            'status' => $this->getStatus(),
             'locale' => $this->getLocale(),
             $this->mergeWhen($this->getCheckIn() !== null, [
                 'check_in' => new AttendeeCheckInPublicResource($this->getCheckIn()),

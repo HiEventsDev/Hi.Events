@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace HiEvents\Http\Actions\Orders;
+namespace HiEvents\Http\Actions\Orders\Public;
 
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Http\Actions\BaseAction;

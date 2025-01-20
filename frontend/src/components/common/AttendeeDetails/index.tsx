@@ -26,14 +26,6 @@ export const AttendeeDetails = ({attendee}: { attendee: Attendee }) => {
             </div>
             <div className={classes.block}>
                 <div className={classes.title}>
-                    {t`Status`}
-                </div>
-                <div className={classes.amount}>
-                    {attendee.status === 'ACTIVE' ? <span style={{color: '#0d7553'}}>{t`Active`}</span> : <span style={{color: '#EF4444'}}>{t`Canceled`}</span>}
-                </div>
-            </div>
-            <div className={classes.block}>
-                <div className={classes.title}>
                     {t`Checked In`}
                 </div>
                 <div className={classes.amount}>

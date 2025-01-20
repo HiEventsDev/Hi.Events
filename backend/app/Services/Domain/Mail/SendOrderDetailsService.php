@@ -5,6 +5,7 @@ namespace HiEvents\Services\Domain\Mail;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
+use HiEvents\DomainObjects\InvoiceDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
@@ -23,7 +24,7 @@ readonly class SendOrderDetailsService
         private EventRepositoryInterface  $eventRepository,
         private OrderRepositoryInterface  $orderRepository,
         private Mailer                    $mailer,
-        private SendAttendeeTicketService $sendAttendeeProductService,
+        private SendAttendeeTicketService $sendAttendeeTicketService,
     )
     {
     }
@@ -33,6 +34,7 @@ readonly class SendOrderDetailsService
         $order = $this->orderRepository
             ->loadRelation(OrderItemDomainObject::class)
             ->loadRelation(AttendeeDomainObject::class)
+            ->loadRelation(InvoiceDomainObject::class)
             ->findById($order->getId());
 
         $event = $this->eventRepository
@@ -40,9 +42,9 @@ readonly class SendOrderDetailsService
             ->loadRelation(new Relationship(EventSettingDomainObject::class))
             ->findById($order->getEventId());
 
-        if ($order->isOrderCompleted()) {
+        if ($order->isOrderCompleted() || $order->isOrderAwaitingOfflinePayment()) {
             $this->sendOrderSummaryEmails($order, $event);
-            $this->sendAttendeeProductEmails($order, $event);
+            $this->sendAttendeeTicketEmails($order, $event);
         }
 
         if ($order->isOrderFailed()) {
@@ -57,7 +59,7 @@ readonly class SendOrderDetailsService
         }
     }
 
-    private function sendAttendeeProductEmails(OrderDomainObject $order, EventDomainObject $event): void
+    private function sendAttendeeTicketEmails(OrderDomainObject $order, EventDomainObject $event): void
     {
         $sentEmails = [];
         foreach ($order->getAttendees() as $attendee) {
@@ -65,7 +67,8 @@ readonly class SendOrderDetailsService
                 continue;
             }
 
-            $this->sendAttendeeProductService->send(
+            $this->sendAttendeeTicketService->send(
+                order: $order,
                 attendee: $attendee,
                 event: $event,
                 eventSettings: $event->getEventSettings(),
@@ -86,6 +89,7 @@ readonly class SendOrderDetailsService
                 event: $event,
                 organizer: $event->getOrganizer(),
                 eventSettings: $event->getEventSettings(),
+                invoice: $order->getLatestInvoice(),
             ));
 
         if ($order->getIsManuallyCreated() || !$event->getEventSettings()->getNotifyOrganizerOfNewOrders()) {

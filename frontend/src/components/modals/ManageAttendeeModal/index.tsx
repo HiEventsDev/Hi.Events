@@ -8,13 +8,13 @@ import {useForm} from "@mantine/form";
 import {Modal} from "../../common/Modal";
 import {Accordion} from "../../common/Accordion";
 import {Button} from "../../common/Button";
-import {Avatar, Badge, Box, Group, Stack, Tabs, Text, Textarea, TextInput} from "@mantine/core";
+import {Avatar, Box, Group, Stack, Tabs, Text, Textarea, TextInput} from "@mantine/core";
 import {IconEdit, IconNotebook, IconQuestionMark, IconReceipt, IconTicket, IconUser} from "@tabler/icons-react";
 import {LoadingMask} from "../../common/LoadingMask";
 import {AttendeeDetails} from "../../common/AttendeeDetails";
 import {OrderDetails} from "../../common/OrderDetails";
 import {QuestionAndAnswerList} from "../../common/QuestionAndAnswerList";
-import {AttendeeProduct} from "../../common/AttendeeProduct";
+import {AttendeeTicket} from "../../common/AttendeeTicket";
 import {getInitials} from "../../../utilites/helpers.ts";
 import {t} from "@lingui/macro";
 import classes from './ManageAttendeeModal.module.scss';
@@ -25,6 +25,7 @@ import {GenericModalProps, IdParam, ProductCategory, ProductType, QuestionAnswer
 import {InputGroup} from "../../common/InputGroup";
 import {InputLabelWithHelp} from "../../common/InputLabelWithHelp";
 import {EditAttendeeRequest} from "../../../api/attendee.client.ts";
+import {AttendeeStatusBadge} from "../../common/AttendeeStatusBadge";
 
 interface ManageAttendeeModalProps extends GenericModalProps {
     onClose: () => void;
@@ -170,7 +171,7 @@ export const ManageAttendeeModal = ({onClose, attendeeId}: ManageAttendeeModalPr
                     icon: IconTicket,
                     title: t`Attendee Ticket`,
                     content: attendee.product ? (
-                        <AttendeeProduct event={event} attendee={attendee} product={attendee.product}/>
+                        <AttendeeTicket event={event} attendee={attendee} product={attendee.product}/>
                     ) : (
                         <Text c="dimmed" ta="center" py="xl">
                             {t`No product associated with this attendee.`}
@@ -206,9 +207,7 @@ export const ManageAttendeeModal = ({onClose, attendeeId}: ManageAttendeeModalPr
                             </Avatar>
                             <div className={classes.attendeeInfo}>
                                 <Text fz="md" fw={500}>{fullName}</Text>
-                                <Badge color={attendee.status === 'ACTIVE' ? 'green' : 'red'} size="sm">
-                                    {attendee.status}
-                                </Badge>
+                                <AttendeeStatusBadge attendee={attendee}/>
                             </div>
                         </Group>
                     </Group>

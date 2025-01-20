@@ -5,6 +5,7 @@ namespace HiEvents\Resources\Order;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\Resources\Attendee\AttendeeResource;
 use HiEvents\Resources\BaseResource;
+use HiEvents\Resources\Order\Invoice\InvoiceResource;
 use HiEvents\Resources\Question\QuestionAnswerViewResource;
 use Illuminate\Http\Request;
 
@@ -38,6 +39,9 @@ class OrderResource extends BaseResource
             'is_free_order' => $this->isFreeOrder(),
             'is_manually_created' => $this->getIsManuallyCreated(),
             'taxes_and_fees_rollup' => $this->getTaxesAndFeesRollup(),
+            'address' => $this->getAddress(),
+            'notes' => $this->getNotes(),
+            'payment_provider' => $this->getPaymentProvider(),
             'order_items' => $this->when(
                 !is_null($this->getOrderItems()),
                 fn() => OrderItemResource::collection($this->getOrderItems())
@@ -49,6 +53,10 @@ class OrderResource extends BaseResource
             'question_answers' => $this->when(
                 !is_null($this->getQuestionAndAnswerViews()),
                 fn() => QuestionAnswerViewResource::collection($this->getQuestionAndAnswerViews()),
+            ),
+            'latest_invoice' => $this->when(
+                !is_null($this->getLatestInvoice()),
+                fn() => (new InvoiceResource($this->getLatestInvoice()))->toArray($request),
             ),
         ];
     }

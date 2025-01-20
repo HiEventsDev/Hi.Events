@@ -192,6 +192,7 @@ class CreateEventServiceTest extends TestCase
     {
         return Mockery::mock(OrganizerDomainObject::class, function ($mock) {
             $mock->shouldReceive('getEmail')->andReturn('organizer@example.com');
+            $mock->shouldReceive('getName')->andReturn('Organizer Name');
         });
     }
 }

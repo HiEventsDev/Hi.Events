@@ -25,11 +25,11 @@ class CreateAttendeeCheckInPublicAction extends BaseAction
     ): JsonResponse
     {
         try {
-            $checkIns = $this->createAttendeeCheckInPublicHandler->handle(new CreateAttendeeCheckInPublicDTO(
-                checkInListUuid: $checkInListUuid,
-                checkInUserIpAddress: $request->ip(),
-                attendeePublicIds: $request->validated('attendee_public_ids'),
-            ));
+            $checkIns = $this->createAttendeeCheckInPublicHandler->handle(CreateAttendeeCheckInPublicDTO::from([
+                'checkInListUuid' => $checkInListUuid,
+                'checkInUserIpAddress' => $request->ip(),
+                'attendeesAndActions' => $request->validated('attendees'),
+            ]));
         } catch (CannotCheckInException $e) {
             return $this->errorResponse(
                 message: $e->getMessage(),

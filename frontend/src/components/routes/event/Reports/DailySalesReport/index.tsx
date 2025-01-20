@@ -45,7 +45,7 @@ export const DailySalesReport = () => {
         },
         {
             key: 'orders_created' as const,
-            label: 'Orders Created',
+            label: 'Completed Orders',
             sortable: true
         },
         {

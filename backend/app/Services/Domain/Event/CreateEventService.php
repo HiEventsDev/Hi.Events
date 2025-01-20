@@ -3,6 +3,7 @@
 namespace HiEvents\Services\Domain\Event;
 
 use HiEvents\DomainObjects\Enums\HomepageBackgroundType;
+use HiEvents\DomainObjects\Enums\PaymentProviders;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
@@ -13,7 +14,6 @@ use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
-use HiEvents\Services\Domain\ProductCategory\CreateProductCategoryService;
 use HTMLPurifier;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
@@ -27,7 +27,6 @@ class CreateEventService
         private readonly DatabaseManager                   $databaseManager,
         private readonly EventStatisticRepositoryInterface $eventStatisticsRepository,
         private readonly HTMLPurifier                      $purifier,
-        private readonly CreateProductCategoryService      $createProductCategoryService,
     )
     {
     }
@@ -56,8 +55,6 @@ class CreateEventService
         );
 
         $this->createEventStatistics($event);
-
-        $this->createDefaultProductCategory($event);
 
         $this->databaseManager->commit();
 
@@ -145,17 +142,18 @@ class CreateEventService
             'homepage_body_background_color' => '#7a5eb9',
             'continue_button_text' => __('Continue'),
             'support_email' => $organizer->getEmail(),
-        ]);
-    }
 
-    private function createDefaultProductCategory(EventDomainObject $event): void
-    {
-        $this->createProductCategoryService->createCategory(
-            name: __('Tickets'),
-            isHidden: false,
-            eventId: $event->getId(),
-            description: null,
-            noProductsMessage: __('There are no tickets available for this event.'),
-        );
+            'payment_providers' => [PaymentProviders::STRIPE->value],
+            'offline_payment_instructions' => null,
+
+            'enable_invoicing' => false,
+            'invoice_label' => __('Invoice'),
+            'invoice_prefix' => 'INV-',
+            'invoice_start_number' => 1,
+            'require_billing_address' => true,
+            'organization_name' => $organizer->getName(),
+            'organization_address' => null,
+            'invoice_tax_details' => null,
+        ]);
     }
 }

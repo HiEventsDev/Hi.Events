@@ -18,6 +18,7 @@ import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
 import {useResendAttendeeTicket} from "../../../mutations/useResendAttendeeTicket.ts";
 import {ManageAttendeeModal} from "../../modals/ManageAttendeeModal";
 import {ActionMenu} from '../ActionMenu';
+import {AttendeeStatusBadge} from "../AttendeeStatusBadge";
 
 interface AttendeeTableProps {
     attendees: Attendee[];
@@ -149,9 +150,7 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
                                     />
                                 </MantineTable.Td>
                                 <MantineTable.Td>
-                                    <Badge
-                                        variant={'light'}
-                                        color={attendee.status === 'CANCELLED' ? 'red' : 'green'}>{attendee.status}</Badge>
+                                    <AttendeeStatusBadge attendee={attendee}/>
                                 </MantineTable.Td>
                                 <MantineTable.Td style={{paddingRight: 0}}>
                                     <ActionMenu itemsGroups={[

@@ -107,8 +107,10 @@ export const RefundOrderModal = ({onClose, orderId}: RefundOrderModalProps) => {
                 <Checkbox mt={20} {...form.getInputProps('notify_buyer', {type: 'checkbox'})}
                           label={t`Notify buyer of refund`}/>
 
-                <Checkbox mt={20} {...form.getInputProps('cancel_order', {type: 'checkbox'})}
-                          label={t`Cancel order`}/>
+                {order.status !== 'CANCELLED' && (
+                    <Checkbox mt={20} {...form.getInputProps('cancel_order', {type: 'checkbox'})}
+                              label={t`Cancel order`}/>
+                )}
 
                 <Button loading={mutation.isPending} fullWidth mt={20} type={'submit'}>{t`Issue refund`}</Button>
             </form>);
