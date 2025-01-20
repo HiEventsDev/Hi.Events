@@ -19,7 +19,7 @@ import {showError} from "../../../../utilites/notifications.tsx";
 const Payment = () => {
     const navigate = useNavigate();
     const {eventId, orderShortId} = useParams();
-    const {data: event} = useGetEventPublic(eventId);
+    const {data: event, isFetched: isEventFetched} = useGetEventPublic(eventId);
     const {data: order, isFetched: isOrderFetched} = useGetOrderPublic(eventId, orderShortId, ['event']);
     const isLoading = !isOrderFetched;
     const [isPaymentLoading, setIsPaymentLoading] = useState(false);
@@ -69,7 +69,7 @@ const Payment = () => {
         }
     };
 
-    if (!isStripeEnabled && !isOfflineEnabled) {
+    if (!isStripeEnabled && !isOfflineEnabled && isOrderFetched && isEventFetched) {
         return (
             <CheckoutContent>
                 <Card>
