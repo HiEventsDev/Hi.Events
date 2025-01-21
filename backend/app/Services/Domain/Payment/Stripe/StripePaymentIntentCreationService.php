@@ -112,7 +112,10 @@ class StripePaymentIntentCreationService
             return 0;
         }
 
-        return ceil($paymentIntentDTO->amount * $this->config->get('app.saas_stripe_application_fee_percent') / 100);
+        $fixedFee = $paymentIntentDTO->account->getApplicationFee()->fixedFee;
+        $percentageFee = $paymentIntentDTO->account->getApplicationFee()->percentageFee;
+
+        return ceil(($fixedFee * 100) + ($paymentIntentDTO->amount * $percentageFee / 100));
     }
 
     /**

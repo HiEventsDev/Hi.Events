@@ -6,7 +6,6 @@ import {
     IconCash,
     IconCheck,
     IconDotsVertical,
-    IconEye,
     IconInfoCircle,
     IconReceipt2,
     IconReceiptDollar,
@@ -36,7 +35,7 @@ import {useUrlHash} from "../../../hooks/useUrlHash.ts";
 import {useMarkOrderAsPaid} from "../../../mutations/useMarkOrderAsPaid.ts";
 import {orderClient} from "../../../api/order.client.ts";
 import {downloadBinary} from "../../../utilites/download.ts";
-import {showError} from "../../../utilites/notifications.tsx";
+import {withLoadingNotification} from "../../../utilites/withLoadingNotification.tsx";
 
 interface OrdersTableProps {
     event: Event,
@@ -110,15 +109,34 @@ export const OrdersTable = ({orders, event}: OrdersTableProps) => {
     }
 
     const handleInvoiceDownload = async (invoice: Invoice) => {
-        try {
-            const blob = await orderClient.downloadInvoice(event.id, invoice.order_id);
-            downloadBinary(blob, invoice.invoice_number + '.pdf');
-        } catch (error) {
-            showError(t`Failed to download invoice. Please try again.`);
-        }
-    }
+        await withLoadingNotification(
+            async () => {
+                const blob = await orderClient.downloadInvoice(event.id, invoice.order_id);
+                downloadBinary(blob, invoice.invoice_number + '.pdf');
+            },
+            {
+                loading: {
+                    title: t`Downloading Invoice`,
+                    message: t`Please wait while we prepare your invoice...`
+                },
+                success: {
+                    title: t`Success`,
+                    message: t`Invoice downloaded successfully`
+                },
+                error: {
+                    title: t`Error`,
+                    message: t`Failed to download invoice. Please try again.`
+                }
+            }
+        );
+    };
 
     const ActionMenu = ({order}: { order: Order }) => {
+
+        const isRefundable = !order.is_free_order
+            && order.status !== 'AWAITING_OFFLINE_PAYMENT'
+            && order.payment_provider === 'STRIPE';
+
         return <Group wrap={'nowrap'} gap={0} justify={'flex-end'}>
             <Menu shadow="md" width={200}>
                 <Menu.Target>
@@ -157,8 +175,7 @@ export const OrdersTable = ({orders, event}: OrdersTableProps) => {
                                    leftSection={<IconReceiptDollar size={14}/>}>{t`Mark as paid`}</Menu.Item>
                     )}
 
-
-                    {!order.is_free_order && order.status !== 'AWAITING_OFFLINE_PAYMENT' && (
+                    {isRefundable && (
                         <Menu.Item onClick={() => handleModalClick(order.id, refundModal)}
                                    leftSection={<IconReceiptRefund size={14}/>}>{t`Refund order`}</Menu.Item>
                     )}

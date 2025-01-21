@@ -22,6 +22,7 @@ abstract class AccountDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     final public const SHORT_ID = 'short_id';
     final public const STRIPE_CONNECT_SETUP_COMPLETE = 'stripe_connect_setup_complete';
     final public const ACCOUNT_VERIFIED_AT = 'account_verified_at';
+    final public const CONFIGURATION = 'configuration';
 
     protected int $id;
     protected string $currency_code = 'USD';
@@ -35,6 +36,7 @@ abstract class AccountDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     protected string $short_id;
     protected ?bool $stripe_connect_setup_complete = false;
     protected ?string $account_verified_at = null;
+    protected array|string|null $configuration = null;
 
     public function toArray(): array
     {
@@ -51,6 +53,7 @@ abstract class AccountDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
                     'short_id' => $this->short_id ?? null,
                     'stripe_connect_setup_complete' => $this->stripe_connect_setup_complete ?? null,
                     'account_verified_at' => $this->account_verified_at ?? null,
+                    'configuration' => $this->configuration ?? null,
                 ];
     }
 
@@ -184,5 +187,16 @@ abstract class AccountDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     public function getAccountVerifiedAt(): ?string
     {
         return $this->account_verified_at;
+    }
+
+    public function setConfiguration(array|string|null $configuration): self
+    {
+        $this->configuration = $configuration;
+        return $this;
+    }
+
+    public function getConfiguration(): array|string|null
+    {
+        return $this->configuration;
     }
 }

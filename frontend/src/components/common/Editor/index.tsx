@@ -16,7 +16,7 @@ interface EditorProps {
     onChange: (value: string) => void;
     value: string;
     label?: React.ReactNode;
-    description?: string;
+    description?: React.ReactNode;
     required?: boolean;
     className?: string;
     error?: string;

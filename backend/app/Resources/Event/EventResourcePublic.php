@@ -44,7 +44,10 @@ class EventResourcePublic extends BaseResource
             ),
             'settings' => $this->when(
                 condition: !is_null($this->getEventSettings()),
-                value: fn() => new EventSettingsResourcePublic($this->getEventSettings(), $this->includePostCheckoutData),
+                value: fn() => new EventSettingsResourcePublic(
+                    $this->getEventSettings(),
+                    $this->includePostCheckoutData
+                ),
             ),
             // @TODO - public question resource
             'questions' => $this->when(

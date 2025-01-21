@@ -11,7 +11,9 @@ class Account extends BaseModel
 {
     protected function getCastMap(): array
     {
-        return [];
+        return [
+            'configuration' => 'array',
+        ];
     }
 
     protected function getFillableFields(): array

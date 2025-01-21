@@ -96,7 +96,16 @@ export const LocationSettings = () => {
                             value={form.values.online_event_connection_details || ''}
                             error={form.errors.online_event_connection_details as string}
                             label={t`Connection Details`}
-                            description={t`Include connection details for your online event. These details will be shown on the order summary page and attendee ticket page`}
+                            description={(
+                                <>
+                                    <p>
+                                        {t`Include connection details for your online event. These details will be shown on the order summary page and attendee ticket page.`}
+                                    </p>
+                                    <p>
+                                        {t`These details will only be shown if order is completed successfully. Orders awaiting payment will not show this message.`}
+                                    </p>
+                                </>
+                            )}
                             onChange={(value) => form.setFieldValue('online_event_connection_details', value)}
                         />
                     )}

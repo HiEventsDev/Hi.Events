@@ -12,9 +12,10 @@ import {AddToEventCalendarButton} from "../../common/AddEventToCalendarButton";
 import {useMediaQuery} from "@mantine/hooks";
 import {useState} from "react";
 import {Invoice} from "../../../types.ts";
-import {orderClientPublic} from "../../../api/order.client.ts";
+import {orderClient, orderClientPublic} from "../../../api/order.client.ts";
 import {downloadBinary} from "../../../utilites/download.ts";
 import {showError} from "../../../utilites/notifications.tsx";
+import {withLoadingNotification} from "../../../utilites/withLoadingNotification.tsx";
 
 const Checkout = () => {
     const {eventId, orderShortId} = useParams();
@@ -38,12 +39,26 @@ const Checkout = () => {
     };
 
     const handleInvoiceDownload = async (invoice: Invoice) => {
-        try {
-            const blob = await orderClientPublic.downloadInvoice(eventId, orderShortId);
-            downloadBinary(blob, invoice.invoice_number + '.pdf');
-        } catch (error) {
-            showError(t`Failed to download invoice. Please try again.`);
-        }
+        await withLoadingNotification(
+            async () => {
+                const blob = await orderClientPublic.downloadInvoice(eventId, orderShortId);
+                downloadBinary(blob, invoice.invoice_number + '.pdf');
+            },
+            {
+                loading: {
+                    title: t`Downloading Invoice`,
+                    message: t`Please wait while we prepare your invoice...`
+                },
+                success: {
+                    title: t`Success`,
+                    message: t`Invoice downloaded successfully`
+                },
+                error: {
+                    title: t`Error`,
+                    message: t`Failed to download invoice. Please try again.`
+                }
+            }
+        );
     }
 
     return (
