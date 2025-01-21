@@ -23,6 +23,7 @@ use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Domain\Payment\Stripe\StripeRefundExpiredOrderService;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
 use Illuminate\Database\DatabaseManager;
+use Psr\Log\LoggerInterface;
 use Stripe\Exception\ApiErrorException;
 use Stripe\PaymentIntent;
 use Throwable;
@@ -36,6 +37,7 @@ class PaymentIntentSucceededHandler
         private readonly StripeRefundExpiredOrderService $refundExpiredOrderService,
         private readonly AttendeeRepositoryInterface     $attendeeRepository,
         private readonly DatabaseManager                 $databaseManager,
+        private readonly LoggerInterface                 $logger,
     )
     {
     }
@@ -52,6 +54,14 @@ class PaymentIntentSucceededHandler
                 ->findFirstWhere([
                     StripePaymentDomainObjectAbstract::PAYMENT_INTENT_ID => $paymentIntent->id,
                 ]);
+
+            if (!$stripePayment) {
+                $this->logger->error('Payment intent not found when handling payment intent succeeded event', [
+                    'paymentIntent' => $paymentIntent->toArray(),
+                ]);
+
+                return;
+            }
 
             $this->validatePaymentAndOrderStatus($stripePayment, $paymentIntent);
 
