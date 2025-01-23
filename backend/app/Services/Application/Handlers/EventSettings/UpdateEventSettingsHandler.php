@@ -5,7 +5,7 @@ namespace HiEvents\Services\Application\Handlers\EventSettings;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Services\Application\Handlers\EventSettings\DTO\UpdateEventSettingsDTO;
-use HTMLPurifier;
+use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
 
@@ -13,7 +13,7 @@ readonly class UpdateEventSettingsHandler
 {
     public function __construct(
         private EventSettingsRepositoryInterface $eventSettingsRepository,
-        private HTMLPurifier                     $purifier,
+        private HtmlPurifierService                     $purifier,
         private DatabaseManager                  $databaseManager,
     )
     {

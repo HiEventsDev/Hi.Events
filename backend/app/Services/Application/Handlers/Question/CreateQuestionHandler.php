@@ -5,14 +5,14 @@ namespace HiEvents\Services\Application\Handlers\Question;
 use HiEvents\DomainObjects\QuestionDomainObject;
 use HiEvents\Services\Application\Handlers\Question\DTO\UpsertQuestionDTO;
 use HiEvents\Services\Domain\Question\CreateQuestionService;
-use HTMLPurifier;
+use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 use Throwable;
 
 class CreateQuestionHandler
 {
     public function __construct(
         private readonly CreateQuestionService $createQuestionService,
-        private readonly HTMLPurifier          $purifier,
+        private readonly HtmlPurifierService   $purifier,
     )
     {
     }

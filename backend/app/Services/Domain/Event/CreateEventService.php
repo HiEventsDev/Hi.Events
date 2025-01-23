@@ -14,7 +14,7 @@ use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
-use HTMLPurifier;
+use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
 
@@ -26,7 +26,7 @@ class CreateEventService
         private readonly OrganizerRepositoryInterface      $organizerRepository,
         private readonly DatabaseManager                   $databaseManager,
         private readonly EventStatisticRepositoryInterface $eventStatisticsRepository,
-        private readonly HTMLPurifier                      $purifier,
+        private readonly HtmlPurifierService               $purifier,
     )
     {
     }

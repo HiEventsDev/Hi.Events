@@ -3,10 +3,10 @@
 namespace HiEvents\Services\Domain\Question;
 
 use HiEvents\DomainObjects\Generated\QuestionDomainObjectAbstract;
-use HiEvents\DomainObjects\QuestionDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
+use HiEvents\DomainObjects\QuestionDomainObject;
 use HiEvents\Repository\Interfaces\QuestionRepositoryInterface;
-use HTMLPurifier;
+use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
 
@@ -15,7 +15,7 @@ class EditQuestionService
     public function __construct(
         private readonly QuestionRepositoryInterface $questionRepository,
         private readonly DatabaseManager             $databaseManager,
-        private readonly HTMLPurifier                $purifier,
+        private readonly HtmlPurifierService         $purifier,
     )
     {
     }
