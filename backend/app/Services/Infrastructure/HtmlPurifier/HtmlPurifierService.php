@@ -22,6 +22,6 @@ class HtmlPurifierService
         $config = HTMLPurifier_Config::createDefault();
         $config->set('Cache.SerializerPath', base_path('storage/framework/cache'));
 
-        return $this->htmlPurifier->purify($html);
+        return $this->htmlPurifier->purify($html, $config);
     }
 }
