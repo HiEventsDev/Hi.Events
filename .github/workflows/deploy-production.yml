@@ -1,0 +1,38 @@
+name: Deploy to Vapor Production
+
+on:
+  push:
+    branches:
+      - master
+      - feat/vapor
+
+jobs:
+  vapor:
+    name: Deploy to Vapor Production
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - uses: actions/checkout@v2
+
+      # Step 2: Setup PHP
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.3 # Updated to PHP 8.3 to match your Vapor config
+          tools: composer:v2
+          coverage: none
+
+      # Step 3: Install Vapor CLI
+      - name: Install Vapor CLI
+        run: composer global require laravel/vapor-cli
+
+      # Step 4: Log the branch being deployed (Optional enhancement)
+      - name: Log Branch
+        run: echo "Deploying branch ${{ github.ref }}"
+
+      # Step 5: Deploy to the Vapor Production Environment
+      - name: Deploy to Production
+        run: vapor deploy production
+        env:
+          VAPOR_API_TOKEN: ${{ secrets.VAPOR_API_TOKEN }}
