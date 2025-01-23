@@ -23,27 +23,34 @@ jobs:
           tools: composer:v2
           coverage: none
 
-      # Step 3: Navigate to the backend and prepare environment
+      # Step 3: Prepare Laravel Environment
       - name: Prepare Laravel Environment
         working-directory: ./backend
         run: |
           mkdir -p bootstrap/cache
           chmod -R 775 bootstrap/cache
 
-      # Step 4: Install Dependencies
+      # Step 4: Prepare HTMLPurifier Cache Directory
+      - name: Prepare HTMLPurifier Cache Directory
+        working-directory: ./backend
+        run: |
+          mkdir -p storage/app/htmlpurifier
+          chmod -R 775 storage/app/htmlpurifier
+
+      # Step 5: Install Dependencies
       - name: Install Dependencies
         working-directory: ./backend
         run: composer install --no-dev --no-progress --no-scripts --optimize-autoloader
 
-      # Step 5: Install Vapor CLI
+      # Step 6: Install Vapor CLI
       - name: Install Vapor CLI
         run: composer global require laravel/vapor-cli
 
-      # Step 6: Log the branch being deployed (Optional enhancement)
+      # Step 7: Log the branch being deployed (Optional enhancement)
       - name: Log Branch
         run: echo "Deploying branch ${{ github.ref_name }}"
 
-      # Step 7: Deploy to the Vapor Production Environment
+      # Step 8: Deploy to the Vapor Production Environment
       - name: Deploy to Production
         working-directory: ./backend
         run: vapor deploy production

@@ -1,58 +1,21 @@
-name: Deploy to Vapor Production
+id: 68983
+name: HiEvents
+environments:
+  production:
+    memory: 1024
+    cli-memory: 512
+    runtime: 'php-8.3:al2'
+    warm: 10
+    cache: hievents-redis-prod
+    database: hievents-db-prod
+    queue: hievents-queue-prod
+    queue-memory: 1024
+    queue-concurrency: 5
+    build:
+      - 'composer install --no-dev'
+      - 'php artisan optimize'
+    deploy:
+      - 'php artisan migrate --force'
+    domains:
+      - app.hi.events
 
-on:
-  push:
-    branches:
-      - master
-      - feat/vapor
-
-jobs:
-  vapor:
-    name: Deploy to Vapor Production
-    runs-on: ubuntu-latest
-
-    steps:
-      # Step 1: Checkout the repository
-      - uses: actions/checkout@v2
-
-      # Step 2: Setup PHP
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: 8.3
-          tools: composer:v2
-          coverage: none
-
-      # Step 3: Prepare Laravel Environment
-      - name: Prepare Laravel Environment
-        working-directory: ./backend
-        run: |
-          mkdir -p bootstrap/cache
-          chmod -R 775 bootstrap/cache
-
-      # Step 4: Prepare HTMLPurifier Cache Directory
-      - name: Prepare HTMLPurifier Cache Directory
-        working-directory: ./backend
-        run: |
-          mkdir -p storage/app/htmlpurifier
-          chmod -R 775 storage/app/htmlpurifier
-
-      # Step 5: Install Dependencies
-      - name: Install Dependencies
-        working-directory: ./backend
-        run: composer install --no-dev --no-progress --no-scripts --optimize-autoloader
-
-      # Step 6: Install Vapor CLI
-      - name: Install Vapor CLI
-        run: composer global require laravel/vapor-cli
-
-      # Step 7: Log the branch being deployed (Optional enhancement)
-      - name: Log Branch
-        run: echo "Deploying branch ${{ github.ref_name }}"
-
-      # Step 8: Deploy to the Vapor Production Environment
-      - name: Deploy to Production
-        working-directory: ./backend
-        run: vapor deploy production
-        env:
-          VAPOR_API_TOKEN: ${{ secrets.VAPOR_API_TOKEN }}
