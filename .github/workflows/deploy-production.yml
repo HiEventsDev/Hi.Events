@@ -23,8 +23,9 @@ jobs:
           tools: composer:v2
           coverage: none
 
-      # Step 3: Install project dependencies
+      # Step 3: Navigate to the backend and install dependencies
       - name: Install Dependencies
+        working-directory: ./backend
         run: composer install --no-dev --no-progress --no-scripts --optimize-autoloader
 
       # Step 4: Install Vapor CLI
@@ -37,6 +38,7 @@ jobs:
 
       # Step 6: Deploy to the Vapor Production Environment
       - name: Deploy to Production
+        working-directory: ./backend
         run: vapor deploy production
         env:
           VAPOR_API_TOKEN: ${{ secrets.VAPOR_API_TOKEN }}
