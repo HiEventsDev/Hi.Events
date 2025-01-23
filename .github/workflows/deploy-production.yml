@@ -19,19 +19,23 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.3 # Updated to PHP 8.3 to match your Vapor config
+          php-version: 8.3
           tools: composer:v2
           coverage: none
 
-      # Step 3: Install Vapor CLI
+      # Step 3: Install project dependencies
+      - name: Install Dependencies
+        run: composer install --no-dev --no-progress --no-scripts --optimize-autoloader
+
+      # Step 4: Install Vapor CLI
       - name: Install Vapor CLI
         run: composer global require laravel/vapor-cli
 
-      # Step 4: Log the branch being deployed (Optional enhancement)
+      # Step 5: Log the branch being deployed (Optional enhancement)
       - name: Log Branch
-        run: echo "Deploying branch ${{ github.ref }}"
+        run: echo "Deploying branch ${{ github.ref_name }}"
 
-      # Step 5: Deploy to the Vapor Production Environment
+      # Step 6: Deploy to the Vapor Production Environment
       - name: Deploy to Production
         run: vapor deploy production
         env:
