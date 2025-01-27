@@ -97,7 +97,6 @@ app.use("*", async (req, res) => {
         return res.status(200).end(html);
     } catch (error) {
         if (error instanceof Response) {
-            console.log('ERROR:', error);
             if (error.status >= 300 && error.status < 400) {
                 return res.redirect(error.status, error.headers.get("Location") || "/");
             } else {

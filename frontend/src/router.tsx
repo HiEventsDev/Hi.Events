@@ -350,8 +350,7 @@ export const router: RouteObject[] = [
             } catch (error: any) {
                 // for 404s we want to return null so that the 404 page is shown
                 if (error?.response?.status === 404) {
-                    // console.error("Event not found", error);
-                    // return {event: null, promoCodeValid: undefined, promoCode: null};
+                    return {event: null, promoCodeValid: undefined, promoCode: null};
                 }
 
                 console.error(error);
