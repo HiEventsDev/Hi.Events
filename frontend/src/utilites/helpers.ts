@@ -94,7 +94,7 @@ export const formatNumber = (number: number) => {
 export const isSsr = () => import.meta.env.SSR;
 
 /**
- * (c) Hi.Events Ltd 2024
+ * (c) Hi.Events Ltd 2025
  *
  * PLEASE NOTE:
  *

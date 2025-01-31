@@ -25,7 +25,7 @@ const PrintProduct = () => {
     }
 
     /**
-     * (c) Hi.Events Ltd 2024
+     * (c) Hi.Events Ltd 2025
      *
      * PLEASE NOTE:
      *
