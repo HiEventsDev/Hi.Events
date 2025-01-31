@@ -25,7 +25,7 @@ return [
 
     'allowed_headers' => ['*'],
 
-    'exposed_headers' => ['X-Auth-Token'],
+    'exposed_headers' => ['X-Auth-Token', 'Set-Cookie'],
 
     'max_age' => 0,
 

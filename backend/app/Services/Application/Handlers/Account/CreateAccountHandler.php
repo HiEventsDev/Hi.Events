@@ -60,6 +60,12 @@ readonly class CreateAccountHandler
                 // If the app is not running in SaaS mode, we can immediately verify the account.
                 // Same goes for the email verification below.
                 'account_verified_at' => $isSaasMode ? null : now()->toDateTimeString(),
+                'configuration' => [
+                    'application_fee' => [
+                        'percentage' => config('app.saas_stripe_application_fee_percent'),
+                        'fixed' => config('app.saas_stripe_application_fee_fixed') ?? 0,
+                    ],
+                ],
             ]);
 
             $user = $this->getExistingUser($accountData) ?? $this->userRepository->create([
