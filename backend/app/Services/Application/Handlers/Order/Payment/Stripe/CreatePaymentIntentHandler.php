@@ -20,6 +20,8 @@ use HiEvents\Services\Domain\Payment\Stripe\DTOs\CreatePaymentIntentRequestDTO;
 use HiEvents\Services\Domain\Payment\Stripe\DTOs\CreatePaymentIntentResponseDTO;
 use HiEvents\Services\Domain\Payment\Stripe\StripePaymentIntentCreationService;
 use HiEvents\Services\Infrastructure\Session\CheckoutSessionManagementService;
+use Stripe\Exception\ApiErrorException;
+use Throwable;
 
 readonly class CreatePaymentIntentHandler
 {
@@ -34,11 +36,15 @@ readonly class CreatePaymentIntentHandler
     }
 
     /**
+     * @param string $orderShortId
+     * @return CreatePaymentIntentResponseDTO
+     * @throws CreatePaymentIntentFailedException
      * @throws MathException
      * @throws NumberFormatException
      * @throws RoundingNecessaryException
      * @throws UnknownCurrencyException
-     * @throws CreatePaymentIntentFailedException
+     * @throws ApiErrorException
+     * @throws Throwable
      */
     public function handle(string $orderShortId): CreatePaymentIntentResponseDTO
     {

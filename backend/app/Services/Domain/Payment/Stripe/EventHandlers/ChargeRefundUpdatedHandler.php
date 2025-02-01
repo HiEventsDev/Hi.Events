@@ -15,15 +15,14 @@ use Illuminate\Log\Logger;
 use Stripe\Refund;
 use Throwable;
 
-readonly class ChargeRefundUpdatedHandler
+class ChargeRefundUpdatedHandler
 {
     public function __construct(
-        private OrderRepositoryInterface          $orderRepository,
-        private StripePaymentsRepositoryInterface $stripePaymentsRepository,
-        private Logger                            $logger,
-        private DatabaseManager                   $databaseManager,
-        private EventStatisticsUpdateService      $eventStatisticsUpdateService,
-
+        private readonly OrderRepositoryInterface          $orderRepository,
+        private readonly StripePaymentsRepositoryInterface $stripePaymentsRepository,
+        private readonly Logger                            $logger,
+        private readonly DatabaseManager                   $databaseManager,
+        private readonly EventStatisticsUpdateService      $eventStatisticsUpdateService,
     )
     {
     }
@@ -54,6 +53,13 @@ readonly class ChargeRefundUpdatedHandler
             $this->updateOrderRefundedAmount($order->getId(), $refundedAmount);
             $this->updateOrderStatus($order, $refundedAmount);
             $this->updateEventStatistics($order, MoneyValue::fromMinorUnit($refund->amount, $order->getCurrency()));
+
+            $this->logger->info(__('Stripe refund successful'), [
+                'order_id' => $order->getId(),
+                'refunded_amount' => $refundedAmount,
+                'currency' => $order->getCurrency(),
+                'refund_id' => $refund->id,
+            ]);
         });
     }
 

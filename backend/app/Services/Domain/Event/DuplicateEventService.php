@@ -25,7 +25,7 @@ use HiEvents\Services\Domain\Product\CreateProductService;
 use HiEvents\Services\Domain\ProductCategory\CreateProductCategoryService;
 use HiEvents\Services\Domain\PromoCode\CreatePromoCodeService;
 use HiEvents\Services\Domain\Question\CreateQuestionService;
-use HTMLPurifier;
+use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
 
@@ -41,7 +41,7 @@ class DuplicateEventService
         private readonly CreateCheckInListService        $createCheckInListService,
         private readonly ImageRepositoryInterface        $imageRepository,
         private readonly DatabaseManager                 $databaseManager,
-        private readonly HTMLPurifier                    $purifier,
+        private readonly HtmlPurifierService             $purifier,
         private readonly CreateProductCategoryService    $createProductCategoryService,
     )
     {

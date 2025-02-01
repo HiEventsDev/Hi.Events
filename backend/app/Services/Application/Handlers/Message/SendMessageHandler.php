@@ -14,7 +14,7 @@ use HiEvents\Repository\Interfaces\MessageRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Message\DTO\SendMessageDTO;
-use HTMLPurifier;
+use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 use Illuminate\Support\Collection;
 
 readonly class SendMessageHandler
@@ -25,7 +25,7 @@ readonly class SendMessageHandler
         private ProductRepositoryInterface  $productRepository,
         private MessageRepositoryInterface  $messageRepository,
         private AccountRepositoryInterface  $accountRepository,
-        private HTMLPurifier                $purifier,
+        private HtmlPurifierService         $purifier,
     )
     {
     }

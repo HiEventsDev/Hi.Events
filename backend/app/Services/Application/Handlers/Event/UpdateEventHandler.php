@@ -11,7 +11,7 @@ use HiEvents\Helper\DateHelper;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Event\DTO\UpdateEventDTO;
-use HTMLPurifier;
+use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 use Illuminate\Database\DatabaseManager;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Throwable;
@@ -23,7 +23,7 @@ readonly class UpdateEventHandler
         private Dispatcher               $dispatcher,
         private DatabaseManager          $databaseManager,
         private OrderRepositoryInterface $orderRepository,
-        private HTMLPurifier             $purifier,
+        private HtmlPurifierService      $purifier,
     )
     {
     }

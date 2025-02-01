@@ -38,8 +38,8 @@ class CreateOrderActionPublic extends BaseAction
         $sessionId = $this->sessionIdentifierService->getSessionId();
 
         $order = $this->orderHandler->handle(
-            $eventId,
-            CreateOrderPublicDTO::fromArray([
+            eventId: $eventId,
+            createOrderPublicDTO: CreateOrderPublicDTO::fromArray([
                 'is_user_authenticated' => $this->isUserAuthenticated(),
                 'promo_code' => $request->input('promo_code'),
                 'products' => ProductOrderDetailsDTO::collectionFromArray($request->input('products')),

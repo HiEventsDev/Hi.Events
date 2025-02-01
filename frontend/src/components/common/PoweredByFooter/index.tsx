@@ -5,7 +5,7 @@ import React from "react";
 import {iHavePurchasedALicence} from "../../../utilites/helpers.ts";
 
 /**
- * (c) Hi.Events Ltd 2024
+ * (c) Hi.Events Ltd 2025
  *
  * PLEASE NOTE:
  *

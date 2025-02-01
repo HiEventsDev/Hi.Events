@@ -18,7 +18,7 @@ use HiEvents\Services\Domain\Product\ProductPriceUpdateService;
 use HiEvents\Services\Domain\ProductCategory\GetProductCategoryService;
 use HiEvents\Services\Domain\Tax\DTO\TaxAndProductAssociateParams;
 use HiEvents\Services\Domain\Tax\TaxAndProductAssociationService;
-use HTMLPurifier;
+use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
 
@@ -32,7 +32,7 @@ class EditProductHandler
         private readonly TaxAndProductAssociationService $taxAndProductAssociationService,
         private readonly DatabaseManager                 $databaseManager,
         private readonly ProductPriceUpdateService       $priceUpdateService,
-        private readonly HTMLPurifier                    $purifier,
+        private readonly HtmlPurifierService             $purifier,
         private readonly EventRepositoryInterface        $eventRepository,
         private readonly ProductOrderingService          $productOrderingService,
         private readonly GetProductCategoryService       $getProductCategoryService,

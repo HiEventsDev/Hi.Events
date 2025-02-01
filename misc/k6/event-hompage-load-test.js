@@ -3,18 +3,21 @@ import { check, sleep } from 'k6';
 
 export let options = {
     vus: 50,
-    duration: '60',
+    duration: '60s', // Using '60s' instead of '60000' for clarity
 };
 
 export default function () {
-    let res = http.get('https://demo.hi.events/event/1/dog-conf-2030');
-
-    // Check if the response status is 200 (OK)
-    check(res, {
-        'status is 200': (r) => r.status === 200,
-        'response time < 200ms': (r) => r.timings.duration < 400,
+    let res = http.get('https://api.hi.events/public/events/1', {
+        headers: {
+            'Accept': 'application/json',
+        },
     });
 
-    // Add a delay between requests
+    check(res, {
+        'status is 200': (r) => r.status === 200,
+        'response time < 400ms': (r) => r.timings.duration < 400,
+        'response is JSON': (r) => r.headers['Content-Type'] && r.headers['Content-Type'].includes('application/json'),
+    });
+
     sleep(1);
 }

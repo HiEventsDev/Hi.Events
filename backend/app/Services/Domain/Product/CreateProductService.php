@@ -9,7 +9,7 @@ use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Services\Domain\Tax\DTO\TaxAndProductAssociateParams;
 use HiEvents\Services\Domain\Tax\TaxAndProductAssociationService;
-use HTMLPurifier;
+use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Collection;
 use Throwable;
@@ -21,7 +21,7 @@ class CreateProductService
         private readonly DatabaseManager                 $databaseManager,
         private readonly TaxAndProductAssociationService $taxAndProductAssociationService,
         private readonly ProductPriceCreateService       $priceCreateService,
-        private readonly HTMLPurifier                    $purifier,
+        private readonly HtmlPurifierService             $purifier,
         private readonly EventRepositoryInterface        $eventRepository,
         private readonly ProductOrderingService          $productOrderingService,
     )
