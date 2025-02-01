@@ -2,16 +2,18 @@ id: 68983
 name: HiEvents
 environments:
   production:
+    gateway-version: 2.0
     domain: api.hi.events
     memory: 1024
     cli-memory: 512
     runtime: 'php-8.3:al2'
-    warm: 10
+    warm: 3
     cache: hievents-redis-prod
     database: hievents-db-prod
     queue: hievents-queue-prod
     queue-memory: 1024
     queue-concurrency: 5
+    concurrency: 100
     build:
       - 'composer install --no-dev'
       - 'php artisan optimize'

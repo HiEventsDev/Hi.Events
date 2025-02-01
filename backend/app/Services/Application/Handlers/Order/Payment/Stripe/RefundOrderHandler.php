@@ -126,14 +126,14 @@ readonly class RefundOrderHandler
             $this->orderCancelService->cancelOrder($order);
         }
 
-        if ($refundOrderDTO->notify_buyer) {
-            $this->notifyBuyer($order, $event, $amount);
-        }
-
         $this->refundService->refundPayment(
             amount: $amount,
             payment: $order->getStripePayment()
         );
+
+        if ($refundOrderDTO->notify_buyer) {
+            $this->notifyBuyer($order, $event, $amount);
+        }
 
         return $this->markOrderRefundPending($order);
     }
