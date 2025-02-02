@@ -13,13 +13,13 @@ use Stripe\Exception\ApiErrorException;
 use Stripe\StripeClient;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
-readonly class GetPaymentIntentHandler
+class GetPaymentIntentHandler
 {
     public function __construct(
-        private StripeClient                  $stripeClient,
-        private OrderRepositoryInterface      $orderRepository,
-        private LoggerInterface               $logger,
-        private PaymentIntentSucceededHandler $paymentIntentSucceededHandler,
+        private readonly StripeClient                  $stripeClient,
+        private readonly OrderRepositoryInterface      $orderRepository,
+        private readonly LoggerInterface               $logger,
+        private readonly PaymentIntentSucceededHandler $paymentIntentSucceededHandler,
     )
     {
     }

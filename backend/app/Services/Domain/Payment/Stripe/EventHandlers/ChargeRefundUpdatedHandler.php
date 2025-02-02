@@ -3,9 +3,11 @@
 namespace HiEvents\Services\Domain\Payment\Stripe\EventHandlers;
 
 use Brick\Money\Money;
+use HiEvents\DomainObjects\Enums\PaymentProviders;
 use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\Status\OrderRefundStatus;
+use HiEvents\Repository\Interfaces\OrderRefundRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\StripePaymentsRepositoryInterface;
 use HiEvents\Services\Domain\EventStatistics\EventStatisticsUpdateService;
@@ -23,6 +25,7 @@ class ChargeRefundUpdatedHandler
         private readonly Logger                            $logger,
         private readonly DatabaseManager                   $databaseManager,
         private readonly EventStatisticsUpdateService      $eventStatisticsUpdateService,
+        private readonly OrderRefundRepositoryInterface    $orderRefundRepository,
     )
     {
     }
@@ -41,6 +44,20 @@ class ChargeRefundUpdatedHandler
                 return;
             }
 
+            $existingRefund = $this->orderRefundRepository->findFirstWhere([
+                'refund_id' => $refund->id,
+            ]);
+
+            if ($existingRefund) {
+                $this->logger->info(__('Refund already processed'), [
+                    'refund_id' => $refund->id,
+                    'payment_intent_id' => $refund->payment_intent,
+                    'existing_refund' => $existingRefund->toArray(),
+                ]);
+
+                return;
+            }
+
             $order = $this->orderRepository->findById($stripePayment->getOrderId());
 
             if ($refund->status !== 'succeeded') {
@@ -53,6 +70,7 @@ class ChargeRefundUpdatedHandler
             $this->updateOrderRefundedAmount($order->getId(), $refundedAmount);
             $this->updateOrderStatus($order, $refundedAmount);
             $this->updateEventStatistics($order, MoneyValue::fromMinorUnit($refund->amount, $order->getCurrency()));
+            $this->createOrderRefund($refund, $order, $refundedAmount);
 
             $this->logger->info(__('Stripe refund successful'), [
                 'order_id' => $order->getId(),
@@ -100,5 +118,20 @@ class ChargeRefundUpdatedHandler
         ]);
 
         $this->logger->error(__('Failed to refund stripe charge'), $refund->toArray());
+    }
+
+    private function createOrderRefund(Refund $refund, OrderDomainObject $order, float $refundedAmount): void
+    {
+        $this->orderRefundRepository->create([
+            'order_id' => $order->getId(),
+            'payment_provider' => PaymentProviders::STRIPE->value,
+            'refund_id' => $refund->id,
+            'amount' => $refundedAmount,
+            'currency' => $order->getCurrency(),
+            'status' => $refund->status,
+            'metadata' => array_merge( $refund->metadata?->toArray() ?? [], [
+                'payment_intent' => $refund->payment_intent,
+            ]),
+        ]);
     }
 }
