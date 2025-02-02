@@ -19,6 +19,13 @@ use UnexpectedValueException;
 
 class IncomingWebhookHandler
 {
+    private static array $validEvents = [
+        Event::PAYMENT_INTENT_SUCCEEDED,
+        Event::PAYMENT_INTENT_PAYMENT_FAILED,
+        Event::CHARGE_REFUND_UPDATED,
+        Event::ACCOUNT_UPDATED,
+    ];
+
     public function __construct(
         private readonly ChargeRefundUpdatedHandler    $refundEventHandlerService,
         private readonly PaymentIntentSucceededHandler $paymentIntentSucceededHandler,
@@ -43,6 +50,17 @@ class IncomingWebhookHandler
                 $webhookDTO->headerSignature,
                 config('services.stripe.webhook_secret'),
             );
+
+            if (!in_array($event->type, self::$validEvents, true)) {
+                $this->logger->debug(__('Received a :event Stripe event, which has no handler', [
+                    'event' => $event->type,
+                ]), [
+                    'event_id' => $event->id,
+                    'event_type' => $event->type,
+                ]);
+
+                return;
+            }
 
             if ($this->hasEventBeenHandled($event)) {
                 $this->logger->debug('Stripe event already handled', [
@@ -69,8 +87,6 @@ class IncomingWebhookHandler
                 case Event::ACCOUNT_UPDATED:
                     $this->accountUpdateHandler->handleEvent($event->data->object);
                     break;
-                default:
-                    $this->logger->debug(sprintf('Unhandled Stripe webhook: %s', $event->type));
             }
 
             $this->markEventAsHandled($event);
@@ -110,6 +126,10 @@ class IncomingWebhookHandler
 
     private function markEventAsHandled(Event $event): void
     {
+        $this->logger->info('Marking Stripe event as handled', [
+            'event_id' => $event->id,
+            'type' => $event->type,
+        ]);
         $this->cache->put('stripe_event_' . $event->id, true, now()->addMinutes(60));
     }
 }
