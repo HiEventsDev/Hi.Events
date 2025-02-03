@@ -14,6 +14,7 @@ class StripeConnectAccountResponseResource extends JsonResource
     public function toArray($request): array
     {
         return [
+            'stripe_connect_account_type' => $this->stripeConnectAccountType,
             'stripe_account_id' => $this->stripeAccountId,
             'is_connect_setup_complete' => $this->isConnectSetupComplete,
             'connect_url' => $this->connectUrl,

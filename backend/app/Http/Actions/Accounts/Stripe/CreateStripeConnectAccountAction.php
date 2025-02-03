@@ -32,7 +32,7 @@ class CreateStripeConnectAccountAction extends BaseAction
 
         try {
             $accountResult = $this->createStripeConnectAccountHandler->handle(CreateStripeConnectAccountDTO::fromArray([
-                'accountId' => $accountId,
+                'accountId' => $this->getAuthenticatedAccountId(),
             ]));
         } catch (CreateStripeConnectAccountLinksFailedException|CreateStripeConnectAccountFailedException $e) {
             return $this->errorResponse(
