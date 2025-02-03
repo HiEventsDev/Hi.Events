@@ -29,7 +29,7 @@ const config: LinguiConfig = {
     sourceLocale: "en",
     format: "po",
     fallbackLocales: {
-        "default": "en",
+       default: "en",
     }
 };
 

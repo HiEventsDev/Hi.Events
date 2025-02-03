@@ -8,6 +8,7 @@ import classes from "./OrderDetails.module.scss";
 import {t} from "@lingui/macro";
 import {formatAddress} from "../../../utilites/formatAddress.tsx";
 import React from "react";
+import {capitalize} from "lodash";
 
 export const OrderDetails = ({order, event, cardVariant = 'lightGray', style = {}}: {
     order: Order,
@@ -75,7 +76,7 @@ export const OrderDetails = ({order, event, cardVariant = 'lightGray', style = {
                         {t`Payment provider`}
                     </div>
                     <div className={classes.amount}>
-                        {order.payment_provider}
+                        {capitalize(order.payment_provider)}
                     </div>
                 </div>
             )}
