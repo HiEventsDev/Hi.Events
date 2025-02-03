@@ -4,8 +4,6 @@ import {eventsClientPublic} from "./api/event.client.ts";
 import {promoCodeClientPublic} from "./api/promo-code.client.ts";
 import {useEffect, useState} from "react";
 import {useGetMe} from "./queries/useGetMe.ts";
-import {ReportTypes} from "./types.ts";
-import ReportLayout from "./components/routes/event/Reports/ReportLayout";
 
 const Root = () => {
     const [redirectPath, setRedirectPath] = useState<string | null>(null);

@@ -8,7 +8,7 @@ import classes from "./OrderDetails.module.scss";
 import {t} from "@lingui/macro";
 import {formatAddress} from "../../../utilites/formatAddress.tsx";
 import React from "react";
-import {capitalize} from "lodash";
+import { capitalize } from "../../../utilites/stringHelper.ts";
 
 export const OrderDetails = ({order, event, cardVariant = 'lightGray', style = {}}: {
     order: Order,
