@@ -1,5 +1,6 @@
 <?php
 
+use HiEvents\DomainObjects\Enums\StripeConnectAccountType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -14,7 +15,7 @@ return new class extends Migration {
 
         DB::table('accounts')
             ->whereNotNull('stripe_account_id')
-            ->update(['stripe_connect_account_type' => 'express']);
+            ->update(['stripe_connect_account_type' => StripeConnectAccountType::EXPRESS->value]);
     }
 
     public function down(): void
