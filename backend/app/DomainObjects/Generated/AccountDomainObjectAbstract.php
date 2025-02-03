@@ -23,6 +23,7 @@ abstract class AccountDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     final public const STRIPE_CONNECT_SETUP_COMPLETE = 'stripe_connect_setup_complete';
     final public const ACCOUNT_VERIFIED_AT = 'account_verified_at';
     final public const CONFIGURATION = 'configuration';
+    final public const STRIPE_CONNECT_ACCOUNT_TYPE = 'stripe_connect_account_type';
 
     protected int $id;
     protected string $currency_code = 'USD';
@@ -37,6 +38,7 @@ abstract class AccountDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     protected ?bool $stripe_connect_setup_complete = false;
     protected ?string $account_verified_at = null;
     protected array|string|null $configuration = null;
+    protected ?string $stripe_connect_account_type = null;
 
     public function toArray(): array
     {
@@ -54,6 +56,7 @@ abstract class AccountDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
                     'stripe_connect_setup_complete' => $this->stripe_connect_setup_complete ?? null,
                     'account_verified_at' => $this->account_verified_at ?? null,
                     'configuration' => $this->configuration ?? null,
+                    'stripe_connect_account_type' => $this->stripe_connect_account_type ?? null,
                 ];
     }
 
@@ -198,5 +201,16 @@ abstract class AccountDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     public function getConfiguration(): array|string|null
     {
         return $this->configuration;
+    }
+
+    public function setStripeConnectAccountType(?string $stripe_connect_account_type): self
+    {
+        $this->stripe_connect_account_type = $stripe_connect_account_type;
+        return $this;
+    }
+
+    public function getStripeConnectAccountType(): ?string
+    {
+        return $this->stripe_connect_account_type;
     }
 }

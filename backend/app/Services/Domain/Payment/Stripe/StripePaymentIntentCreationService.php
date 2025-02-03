@@ -151,6 +151,7 @@ class StripePaymentIntentCreationService
     {
         $customer = $this->stripeCustomerRepository->findFirstWhere([
             'email' => $paymentIntentDTO->order->getEmail(),
+            'stripe_account_id' => $paymentIntentDTO->account->getStripeAccountId(),
         ]);
 
         if ($customer === null) {
@@ -166,6 +167,7 @@ class StripePaymentIntentCreationService
                 'name' => $stripeCustomer->name,
                 'email' => $stripeCustomer->email,
                 'stripe_customer_id' => $stripeCustomer->id,
+                'stripe_account_id' => $paymentIntentDTO->account->getStripeAccountId(),
             ]);
         }
 

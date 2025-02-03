@@ -3,6 +3,8 @@
 namespace HiEvents\Services\Application\Handlers\Account\Payment\Stripe;
 
 use HiEvents\DomainObjects\AccountDomainObject;
+use HiEvents\DomainObjects\Enums\StripeConnectAccountType;
+use HiEvents\DomainObjects\Generated\AccountDomainObjectAbstract;
 use HiEvents\Exceptions\CreateStripeConnectAccountFailedException;
 use HiEvents\Exceptions\CreateStripeConnectAccountLinksFailedException;
 use HiEvents\Exceptions\SaasModeEnabledException;
@@ -55,6 +57,7 @@ readonly class CreateStripeConnectAccountHandler
         );
 
         $response = new CreateStripeConnectAccountResponse(
+            stripeConnectAccountType: $stripeConnectAccount->type,
             stripeAccountId: $stripeConnectAccount->id,
             account: $account,
             isConnectSetupComplete: $this->isStripeAccountComplete($stripeConnectAccount),
@@ -80,7 +83,8 @@ readonly class CreateStripeConnectAccountHandler
             }
 
             $stripeAccount = $this->stripe->accounts->create([
-                'type' => 'express',
+                'type' => $this->config->get('app.stripe_connect_account_type')
+                    ?? StripeConnectAccountType::EXPRESS->value,
             ]);
         } catch (Throwable $e) {
             $this->logger->error('Failed to create or fetch Stripe Connect Account: ' . $e->getMessage(), [
@@ -98,7 +102,8 @@ readonly class CreateStripeConnectAccountHandler
 
         $this->accountRepository->updateWhere(
             attributes: [
-                'stripe_account_id' => $stripeAccount->id,
+                AccountDomainObjectAbstract::STRIPE_ACCOUNT_ID => $stripeAccount->id,
+                AccountDomainObjectAbstract::STRIPE_CONNECT_ACCOUNT_TYPE => $stripeAccount->type,
             ],
             where: [
                 'id' => $account->getId(),
