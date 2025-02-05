@@ -253,6 +253,7 @@ export default App;
                             <div style={{marginTop: 15, marginBottom: 15}}>
                                 <Tabs.Panel value="html">
                                     <Textarea
+                                        onChange={void 0}
                                         description={t`Place this in the <head> of your website.`}
                                         label={(
                                             <Group>
@@ -264,6 +265,7 @@ export default App;
                                         value={embedScript}
                                     />
                                     <Textarea
+                                        onChange={void 0}
                                         description={t`Paste this where you want the widget to appear.`}
                                         label={(
                                             <Group>
