@@ -243,7 +243,6 @@ export const FilterModal: React.FC<FilterModalProps> = ({
                         <Button
                             variant="light"
                             onClick={handleReset}
-                            color="red"
                             disabled={!hasActiveFilters}
                         >
                             {t`Reset`}

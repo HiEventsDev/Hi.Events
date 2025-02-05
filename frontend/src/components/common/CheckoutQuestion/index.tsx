@@ -1,4 +1,4 @@
-import {Question, QuestionType, Product} from "../../../types.ts";
+import {Product, Question, QuestionType} from "../../../types.ts";
 import {UseFormReturnType} from "@mantine/form";
 import {Box, Checkbox, ComboboxItem, Group, NativeSelect, Radio, Select, Textarea, TextInput} from "@mantine/core";
 import {t} from "@lingui/macro";
@@ -69,6 +69,8 @@ const DateInput = ({question, name, form}: QuestionInputProps) => {
                        type="date"
                        {...form.getInputProps(`${name}.answer`)}
                        label={question.title}
+                       description={(
+                           <UserGeneratedContent dangerouslySetInnerHTML={{__html: question.description || ''}}/>)}
             />
         </>
     );
@@ -146,7 +148,8 @@ const AddressInput = ({question, name, form}: QuestionInputProps) => {
     return (
         <>
             <h4>{question.title}</h4>
-            <div className={classes.description} dangerouslySetInnerHTML={{__html: question.description || ''}}/>
+            <UserGeneratedContent className={classes.description}
+                                  dangerouslySetInnerHTML={{__html: question.description || ''}}/>
 
             <TextInput withAsterisk={question.required}
                        {...form.getInputProps(`${name}.address_line_1`)}
@@ -220,11 +223,11 @@ export const CheckoutOrderQuestions = ({questions, form}: CheckoutQuestionProps)
 }
 
 export const CheckoutProductQuestions = ({
-                                            questions,
-                                            form,
-                                            product,
-                                            index: productIndex
-                                        }: CheckoutProductQuestionProps) => {
+                                             questions,
+                                             form,
+                                             product,
+                                             index: productIndex
+                                         }: CheckoutProductQuestionProps) => {
     let questionIndex = 0;
     return (
         <>

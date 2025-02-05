@@ -80,14 +80,14 @@ export const Register = () => {
                                        label={t`Password`}
                                        placeholder={t`Your password`}
                                        required mt="md"
-                                       mb={10}
+                                       mb={20}
                         />
                         <PasswordInput {...form.getInputProps('password_confirmation')}
                                        label={t`Confirm Password`}
                                        placeholder={t`Confirm password`}
                                        required
                                        mt="md"
-                                       mb={10}
+                                       mb={20}
                         />
                     </InputGroup>
                     <TextInput

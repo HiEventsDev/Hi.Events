@@ -16,6 +16,7 @@ interface ProductSelectorProps {
     includedProductTypes?: ProductType[];
     multiSelect?: boolean;
     showTierSelector?: boolean;
+    noProductsMessage?: string;
 }
 
 export const ProductSelector = ({
@@ -29,6 +30,7 @@ export const ProductSelector = ({
                                     includedProductTypes = [ProductType.Ticket, ProductType.General],
                                     multiSelect = true,
                                     showTierSelector = false,
+                                    noProductsMessage = t`No products available for selection`,
                                 }: ProductSelectorProps) => {
     const formattedData = productCategories?.map((category) => ({
         group: category.name,
@@ -41,6 +43,17 @@ export const ProductSelector = ({
                 })) || [],
     }));
     const eventProducts = productCategories?.flatMap(category => category.products).filter(product => product !== undefined);
+
+    if (!eventProducts || eventProducts.length === 0) {
+        return (
+            <Select
+                label={label}
+                placeholder={noProductsMessage}
+                disabled
+                {...form.getInputProps(productFieldName)}
+            />
+        );
+    }
 
     const TierSelector = () => {
         return (

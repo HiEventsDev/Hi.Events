@@ -9,7 +9,14 @@ import {AxiosError} from "axios";
 import classes from "./CheckIn.module.scss";
 import {ActionIcon, Alert, Button, Loader, Modal, Progress, Stack} from "@mantine/core";
 import {SearchBar} from "../../common/SearchBar";
-import {IconCreditCard, IconInfoCircle, IconQrcode, IconTicket, IconUserCheck} from "@tabler/icons-react";
+import {
+    IconAlertCircle,
+    IconCreditCard,
+    IconInfoCircle,
+    IconQrcode,
+    IconTicket,
+    IconUserCheck
+} from "@tabler/icons-react";
 import {QRScannerComponent} from "../../common/AttendeeCheckInTable/QrScanner.tsx";
 import {useGetCheckInListAttendees} from "../../../queries/useGetCheckInListAttendeesPublic.ts";
 import {useCreateCheckInPublic} from "../../../mutations/useCreateCheckInPublic.ts";
@@ -56,7 +63,9 @@ const CheckIn = () => {
     const attendees = attendeesQuery?.data?.data;
     const checkInMutation = useCreateCheckInPublic(queryFilters);
     const deleteCheckInMutation = useDeleteCheckInPublic(queryFilters);
-    const allowOrdersAwaitingOfflinePaymentToCheckIn = eventSettings?.allow_orders_awaiting_offline_payment_to_check_in;
+    const areOfflinePaymentsEnabled = eventSettings?.payment_providers?.includes('OFFLINE');
+    const allowOrdersAwaitingOfflinePaymentToCheckIn = areOfflinePaymentsEnabled
+        && eventSettings?.allow_orders_awaiting_offline_payment_to_check_in;
 
     const handleCheckInAction = (attendee: Attendee, action: 'check-in' | 'check-in-and-mark-order-as-paid') => {
         checkInMutation.mutate({
@@ -116,7 +125,7 @@ const CheckIn = () => {
         }
 
         if (!allowOrdersAwaitingOfflinePaymentToCheckIn && isAttendeeAwaitingPayment) {
-            showError(t`You cannot check in attendees with unpaid orders.`);
+            showError(t`You cannot check in attendees with unpaid orders. This setting can be changed in the event settings.`);
             return;
         }
 
@@ -148,6 +157,18 @@ const CheckIn = () => {
         handleCheckInAction(attendee, 'check-in');
     };
 
+    const checkInButtonText = (attendee: Attendee) => {
+        if (!allowOrdersAwaitingOfflinePaymentToCheckIn && attendee.status === 'AWAITING_PAYMENT') {
+            return t`Cannot Check In`;
+        }
+
+        if (attendee.check_in) {
+            return t`Check Out`;
+        }
+
+        return t`Check In`;
+    }
+
     const CheckInOptionsModal = () => {
         if (!selectedAttendee) return null;
 
@@ -162,7 +183,10 @@ const CheckIn = () => {
                 size="md"
             >
                 <Stack>
-                    <Alert variant={'light'} title={t`Unpaid Order`}>
+                    <Alert
+                        icon={<IconAlertCircle size={20}/>}
+                        variant={'light'}
+                        title={t`Unpaid Order`}>
                         {t`This attendee has an unpaid order.`}
                     </Alert>
                     <Button
@@ -253,9 +277,7 @@ const CheckIn = () => {
                                             }
                                         )()}
                                     >
-                                        {attendee.check_in
-                                            ? t`Check Out`
-                                            : allowOrdersAwaitingOfflinePaymentToCheckIn ? t`Check In` : t`Cannot Check In`}
+                                        {checkInButtonText(attendee)}
                                     </Button>}
                                 </div>
                             </div>

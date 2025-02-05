@@ -33,6 +33,8 @@ abstract class BaseRepository implements RepositoryInterface
 
     protected DatabaseManager $db;
 
+    protected int $maxPerPage = self::MAX_PAGINATE_LIMIT;
+
     /** @var Relationship[] */
     protected array $eagerLoads = [];
 
@@ -49,6 +51,13 @@ abstract class BaseRepository implements RepositoryInterface
      * @return string
      */
     abstract protected function getModel(): string;
+
+    public function setMaxPerPage(int $maxPerPage): static
+    {
+        $this->maxPerPage = $maxPerPage;
+
+        return $this;
+    }
 
     public function all(array $columns = self::DEFAULT_COLUMNS): Collection
     {
@@ -408,7 +417,7 @@ abstract class BaseRepository implements RepositoryInterface
             $perPage = self::DEFAULT_PAGINATE_LIMIT;
         }
 
-        return (int)min($perPage, self::MAX_PAGINATE_LIMIT);
+        return (int)min($perPage, $this->maxPerPage);
     }
 
     /**
