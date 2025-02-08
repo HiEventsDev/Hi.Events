@@ -1,4 +1,4 @@
-import {useLocation, useParams} from "react-router-dom";
+import {useLocation, useParams} from "react-router";
 import '../../../styles/widget/default.scss';
 import {useGetEventPublic} from "../../../queries/useGetEventPublic.ts";
 import SelectProducts from "../../routes/product-widget/SelectProducts";

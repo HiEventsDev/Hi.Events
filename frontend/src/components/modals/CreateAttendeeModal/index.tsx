@@ -1,7 +1,7 @@
 import {Modal} from "../../common/Modal";
 import {GenericModalProps, ProductCategory, ProductType} from "../../../types.ts";
 import {Button} from "../../common/Button";
-import {useNavigate, useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
 import {useForm} from "@mantine/form";
 import {LoadingOverlay, NumberInput, Select, Switch, TextInput} from "@mantine/core";

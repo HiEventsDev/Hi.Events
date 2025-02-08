@@ -11,7 +11,7 @@ import {
     TextInput,
     UnstyledButton
 } from "@mantine/core";
-import {useNavigate, useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {notifications} from "@mantine/notifications";
 import {

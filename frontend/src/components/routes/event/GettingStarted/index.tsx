@@ -3,7 +3,7 @@ import {Card} from "../../../common/Card";
 import {t} from "@lingui/macro"
 import {Button} from "@mantine/core";
 import classes from "./GettingStarted.module.scss";
-import {useParams} from "react-router-dom";
+import {useParams} from "react-router";
 import {IconCheck} from "@tabler/icons-react";
 import {useGetEvent} from "../../../../queries/useGetEvent.ts";
 import {useGetEventImages} from "../../../../queries/useGetEventImages.ts";

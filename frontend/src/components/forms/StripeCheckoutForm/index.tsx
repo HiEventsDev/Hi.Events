@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import {PaymentElement, useElements, useStripe} from "@stripe/react-stripe-js";
-import {useParams} from "react-router-dom";
+import {useParams} from "react-router";
 import * as stripeJs from "@stripe/stripe-js";
 import {Alert, Skeleton} from "@mantine/core";
 import {t} from "@lingui/macro";

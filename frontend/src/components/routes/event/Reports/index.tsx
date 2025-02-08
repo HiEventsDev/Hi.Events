@@ -5,7 +5,7 @@ import {IconChartBar, IconChevronRight, IconReportMoney} from "@tabler/icons-rea
 import classes from './Reports.module.scss';
 import {Card} from "../../../common/Card";
 import {Avatar, UnstyledButton} from "@mantine/core";
-import {Link, useParams} from "react-router-dom";
+import {Link, useParams} from "react-router";
 import {ReportTypes} from "../../../../types.ts";
 
 const Reports = () => {

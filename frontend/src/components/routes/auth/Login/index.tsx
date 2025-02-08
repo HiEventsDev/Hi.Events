@@ -1,5 +1,5 @@
 import {Button, PasswordInput, TextInput} from "@mantine/core";
-import {NavLink} from "react-router-dom";
+import {NavLink} from "react-router";
 import {useMutation} from "@tanstack/react-query";
 import {notifications} from '@mantine/notifications';
 import {authClient} from "../../../../api/auth.client.ts";

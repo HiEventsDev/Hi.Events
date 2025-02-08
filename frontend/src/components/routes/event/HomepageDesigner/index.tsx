@@ -1,5 +1,5 @@
 import classes from './HomepageDesigner.module.scss';
-import {useParams} from "react-router-dom";
+import {useParams} from "react-router";
 import {useGetEventSettings} from "../../../../queries/useGetEventSettings.ts";
 import {useUpdateEventSettings} from "../../../../mutations/useUpdateEventSettings.ts";
 import {useFormErrorResponseHandler} from "../../../../hooks/useFormErrorResponseHandler.tsx";

@@ -1,7 +1,7 @@
 import {t} from "@lingui/macro";
 import {Button, Select, Switch, TextInput} from "@mantine/core";
 import {useForm} from "@mantine/form";
-import {useParams} from "react-router-dom";
+import {useParams} from "react-router";
 import {useEffect} from "react";
 import {Event} from "../../../../../../types.ts";
 import {Card} from "../../../../../common/Card";

@@ -7,7 +7,7 @@ import {useDisclosure} from "@mantine/hooks";
 import {SendMessageModal} from "../../modals/SendMessageModal";
 import {useState} from "react";
 import {NoResultsSplash} from "../NoResultsSplash";
-import {useParams} from "react-router-dom";
+import {useParams} from "react-router";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import Truncate from "../Truncate";
 import {notifications} from "@mantine/notifications";

@@ -1,7 +1,7 @@
 import {Alert, Button, Checkbox, LoadingOverlay, NumberInput} from "@mantine/core";
 import {GenericModalProps, IdParam, Order} from "../../../types.ts";
 import {useForm, UseFormReturnType} from "@mantine/form";
-import {useParams} from "react-router-dom";
+import {useParams} from "react-router";
 import {useGetOrder} from "../../../queries/useGetOrder.ts";
 import {useEffect} from "react";
 import {Currency} from "../../common/Currency";

@@ -8,7 +8,7 @@ import {EditProductCategoryModal} from "../../../modals/EditProductCategoryModal
 import {ProductCategory} from "../../../../types.ts";
 import {t} from "@lingui/macro";
 import {useDeleteProductCategory} from "../../../../mutations/useDeleteProductCategory.ts";
-import {useParams} from "react-router-dom";
+import {useParams} from "react-router";
 import {showError, showSuccess} from "../../../../utilites/notifications.tsx";
 import {SortArrows} from "../../SortArrows";
 import {useSortProducts} from "../../../../mutations/useSortProducts.ts";

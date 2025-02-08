@@ -1,5 +1,5 @@
 import {Badge, Breadcrumbs, Burger, Button, UnstyledButton, VisuallyHidden} from '@mantine/core';
-import {NavLink, Outlet, useLocation, useParams} from "react-router-dom";
+import {NavLink, Outlet, useLocation, useParams} from "react-router";
 import {
     IconChartPie,
     IconChevronLeft,

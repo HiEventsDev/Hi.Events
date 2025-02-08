@@ -1,4 +1,4 @@
-import {useParams} from "react-router-dom";
+import {useParams} from "react-router";
 import {useCreateStripePaymentIntent} from "../../../../../../queries/useCreateStripePaymentIntent.ts";
 import {useEffect, useState} from "react";
 import {loadStripe, Stripe} from "@stripe/stripe-js";

@@ -22,7 +22,7 @@ import {t} from "@lingui/macro";
 import {useEffect, useState} from "react";
 import {EditQuestionModal} from "../../modals/EditQuestionModal";
 import {useDeleteQuestion} from "../../../mutations/useDeleteQuestion.ts";
-import {useParams} from "react-router-dom";
+import {useParams} from "react-router";
 import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
 import {InputGroup} from "../InputGroup";

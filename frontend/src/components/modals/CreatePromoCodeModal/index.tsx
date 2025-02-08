@@ -1,6 +1,6 @@
 import {GenericModalProps, PromoCode, PromoCodeDiscountType} from "../../../types.ts";
 import {hasLength, useForm} from "@mantine/form";
-import {useParams} from "react-router-dom";
+import {useParams} from "react-router";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
 import {PromoCodeForm} from "../../forms/PromoCodeForm";
 import {Modal} from "../../common/Modal";

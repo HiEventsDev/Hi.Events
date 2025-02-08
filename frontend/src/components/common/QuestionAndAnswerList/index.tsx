@@ -1,7 +1,7 @@
 import {QuestionAnswer} from "../../../types.ts";
 import {ActionIcon, Group, Text, Tooltip} from '@mantine/core';
 import {t} from "@lingui/macro";
-import {NavLink} from "react-router-dom";
+import {NavLink} from "react-router";
 import {IconExternalLink, IconMessageCircle2, IconPackage, IconShoppingCart, IconUser} from "@tabler/icons-react";
 import classes from './QuestionAndAnswerList.module.scss';
 

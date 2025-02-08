@@ -1,4 +1,4 @@
-import {Navigate, Outlet} from "react-router-dom";
+import {Navigate, Outlet} from "react-router";
 import classes from "./Auth.module.scss";
 import {t} from "@lingui/macro";
 import {useGetMe} from "../../../queries/useGetMe.ts";

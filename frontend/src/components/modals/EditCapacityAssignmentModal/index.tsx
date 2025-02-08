@@ -5,7 +5,7 @@ import {CapacityAssigmentForm} from "../../forms/CapaciyAssigmentForm";
 import {useForm} from "@mantine/form";
 import {Button} from "@mantine/core";
 import {showSuccess} from "../../../utilites/notifications.tsx";
-import {useParams} from "react-router-dom";
+import {useParams} from "react-router";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {useEditCapacityAssignment} from "../../../mutations/useEditCapacityAssignment.ts";

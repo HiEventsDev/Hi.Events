@@ -3,7 +3,7 @@ import {hasLength, isEmail, matchesField, useForm} from "@mantine/form";
 import {RegisterAccountRequest} from "../../../../types.ts";
 import {useFormErrorResponseHandler} from "../../../../hooks/useFormErrorResponseHandler.tsx";
 import {useRegisterAccount} from "../../../../mutations/useRegisterAccount.ts";
-import {NavLink, useNavigate} from "react-router-dom";
+import {NavLink, useNavigate} from "react-router";
 import {t, Trans} from "@lingui/macro";
 import {InputGroup} from "../../../common/InputGroup";
 import {Card} from "../../../common/Card";

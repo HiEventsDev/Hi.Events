@@ -1,5 +1,5 @@
 import {useGetEvent} from "../../../../queries/useGetEvent.ts";
-import {useParams} from "react-router-dom";
+import {useParams} from "react-router";
 import {PageTitle} from "../../../common/PageTitle";
 import {PageBody} from "../../../common/PageBody";
 import {StatBoxes} from "../../../common/StatBoxes";

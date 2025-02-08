@@ -5,7 +5,7 @@ import {CheckInListForm} from "../../forms/CheckInListForm";
 import {useForm} from "@mantine/form";
 import {Alert, Button, Center, Loader} from "@mantine/core";
 import {showSuccess} from "../../../utilites/notifications.tsx";
-import {useParams} from "react-router-dom";
+import {useParams} from "react-router";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {useEditCheckInList} from "../../../mutations/useEditCheckInList.ts";

@@ -1,4 +1,4 @@
-import {useParams} from "react-router-dom";
+import {useParams} from "react-router";
 import {useDisclosure} from "@mantine/hooks";
 import {Button, Menu} from "@mantine/core";
 import {IconCategory, IconChevronDown, IconPlus, IconShoppingCart} from "@tabler/icons-react";

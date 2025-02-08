@@ -1,5 +1,5 @@
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
-import {useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router";
 import {useGetAccount} from "../../../queries/useGetAccount.ts";
 import {Event, GenericModalProps, IdParam, Organizer} from "../../../types.ts";
 import {useEffect, useState} from "react";

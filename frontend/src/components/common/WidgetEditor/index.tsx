@@ -5,7 +5,7 @@ import {t, Trans} from "@lingui/macro";
 import {matches, useForm} from "@mantine/form";
 import {useEffect, useState} from "react";
 import {CopyButton} from "../CopyButton";
-import {useParams} from "react-router-dom";
+import {useParams} from "react-router";
 import {IconInfoCircle} from "@tabler/icons-react";
 import {useGetEventSettings} from "../../../queries/useGetEventSettings.ts";
 import {Popover} from "../Popover";

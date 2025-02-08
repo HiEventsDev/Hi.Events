@@ -9,7 +9,7 @@ import {IconUser, IconUserShield} from "@tabler/icons-react";
 import {showSuccess} from "../../../utilites/notifications.tsx";
 import {UpdateUserRequest} from "../../../api/user.client.ts";
 import {useEditUser} from "../../../mutations/useEditUser.ts";
-import {NavLink} from "react-router-dom";
+import {NavLink} from "react-router";
 import {InputGroup} from "../../common/InputGroup";
 
 interface EditUserModalProps extends GenericModalProps {

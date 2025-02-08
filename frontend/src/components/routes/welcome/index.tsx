@@ -7,7 +7,7 @@ import classes from "./Welcome.module.scss";
 import {useForm} from "@mantine/form";
 import {Event} from "../../../types.ts";
 import {useCreateEvent} from "../../../mutations/useCreateEvent.ts";
-import {NavLink, useNavigate} from "react-router-dom";
+import {NavLink, useNavigate} from "react-router";
 import {useEffect} from "react";
 import {useGetEvents} from "../../../queries/useGetEvents.ts";
 import {LoadingContainer} from "../../common/LoadingContainer";

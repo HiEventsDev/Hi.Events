@@ -27,7 +27,7 @@ import {
     IconTrashOff,
 } from "@tabler/icons-react";
 import {useDisclosure} from "@mantine/hooks";
-import {NavLink, useParams} from "react-router-dom";
+import {NavLink, useParams} from "react-router";
 import {useEffect} from "react";
 import {CustomSelect, ItemProps} from "../../common/CustomSelect";
 import {formatCurrency, getCurrencySymbol} from "../../../utilites/currency.ts";

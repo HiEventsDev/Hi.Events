@@ -14,7 +14,7 @@ import {EditCheckInListModal} from "../../modals/EditCheckInListModal";
 import {useDeleteCheckInList} from "../../../mutations/useDeleteCheckInList";
 import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
-import {useParams} from "react-router-dom";
+import {useParams} from "react-router";
 
 interface CheckInListListProps {
     checkInLists: CheckInList[];

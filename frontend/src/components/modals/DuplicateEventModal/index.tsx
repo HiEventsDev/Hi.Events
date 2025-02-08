@@ -7,7 +7,7 @@ import {useDuplicateEvent} from "../../../mutations/useDuplicateEvent.ts";
 import {Editor} from "../../common/Editor";
 import {InputGroup} from "../../common/InputGroup";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
-import {useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router";
 import {useEffect} from "react";
 import {utcToTz} from "../../../utilites/dates.ts";
 import {showSuccess} from "../../../utilites/notifications.tsx";

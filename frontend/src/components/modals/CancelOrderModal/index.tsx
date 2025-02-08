@@ -1,5 +1,5 @@
 import {GenericModalProps, IdParam,} from "../../../types.ts";
-import {useParams} from "react-router-dom";
+import {useParams} from "react-router";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {useGetOrder} from "../../../queries/useGetOrder.ts";
 import {Modal} from "../../common/Modal";

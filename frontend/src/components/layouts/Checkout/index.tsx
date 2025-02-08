@@ -1,4 +1,4 @@
-import {NavLink, Outlet, useNavigate, useParams} from "react-router-dom";
+import {NavLink, Outlet, useNavigate, useParams} from "react-router";
 import classes from './Checkout.module.scss';
 import {useGetOrderPublic} from "../../../queries/useGetOrderPublic.ts";
 import {t} from "@lingui/macro";

@@ -4,7 +4,7 @@ import {t} from "@lingui/macro";
 import {LoadingMask} from "../../common/LoadingMask";
 import {Button} from "@mantine/core";
 import {useGetEventProductCategory} from "../../../queries/useGetProductCategory.ts";
-import {useParams} from "react-router-dom";
+import {useParams} from "react-router";
 import {useEditProductCategory} from "../../../mutations/useEditProductCategory.ts";
 import {useForm} from "@mantine/form";
 import {useEffect} from "react";

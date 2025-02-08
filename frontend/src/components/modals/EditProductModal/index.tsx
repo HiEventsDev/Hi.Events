@@ -1,7 +1,7 @@
 import {Button} from "@mantine/core";
 import {GenericModalProps, IdParam, Product, ProductPriceType, ProductType} from "../../../types.ts";
 import {useForm} from "@mantine/form";
-import {useParams} from "react-router-dom";
+import {useParams} from "react-router";
 import {useEffect} from "react";
 import {ProductForm} from "../../forms/ProductForm";
 import {Modal} from "../../common/Modal";

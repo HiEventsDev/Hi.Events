@@ -1,5 +1,5 @@
 import {usePollGetOrderPublic} from "../../../../queries/usePollGetOrderPublic.ts";
-import {useNavigate, useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router";
 import {useEffect, useState} from "react";
 import classes from './PaymentReturn.module.scss';
 import {t} from "@lingui/macro";

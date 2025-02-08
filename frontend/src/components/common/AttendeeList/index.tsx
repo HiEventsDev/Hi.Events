@@ -1,6 +1,6 @@
 import { ActionIcon, Avatar, Tooltip, Text, Group } from "@mantine/core";
 import { getInitials } from "../../../utilites/helpers.ts";
-import { NavLink } from "react-router-dom";
+import { NavLink } from "react-router";
 import { IconExternalLink, IconUsers } from "@tabler/icons-react";
 import classes from './AttendeeList.module.scss';
 import { Order, Product } from "../../../types.ts";

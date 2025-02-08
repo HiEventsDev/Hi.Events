@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router";
 import { Button } from "@mantine/core";
 import { IconDownload } from "@tabler/icons-react";
 import { t } from "@lingui/macro";

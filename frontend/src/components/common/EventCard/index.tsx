@@ -2,7 +2,7 @@ import {ActionIcon, Button,} from '@mantine/core';
 import {Event, IdParam} from "../../../types.ts";
 import classes from "./EventCard.module.scss";
 import {Card} from "../Card";
-import {NavLink, useNavigate} from "react-router-dom";
+import {NavLink, useNavigate} from "react-router";
 import {
     IconArchive,
     IconCash,

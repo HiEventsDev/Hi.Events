@@ -3,7 +3,7 @@ import {GenericModalProps, IdParam, Question, QuestionRequestData, QuestionType}
 import {useForm} from "@mantine/form";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {notifications} from "@mantine/notifications";
-import {useParams} from "react-router-dom";
+import {useParams} from "react-router";
 import {questionClient} from "../../../api/question.client.ts";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {GET_EVENT_QUESTIONS_QUERY_KEY} from "../../../queries/useGetEventQuestions.ts";

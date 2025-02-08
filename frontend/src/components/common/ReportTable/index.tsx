@@ -8,7 +8,7 @@ import {DownloadCsvButton} from "../DownloadCsvButton";
 import {Table, TableHead} from "../Table";
 import '@mantine/dates/styles.css';
 import {useGetEventReport} from "../../../queries/useGetEventReport.ts";
-import {useParams} from "react-router-dom";
+import {useParams} from "react-router";
 import {Event} from "../../../types.ts";
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';

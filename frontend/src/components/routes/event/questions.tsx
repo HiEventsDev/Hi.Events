@@ -1,4 +1,4 @@
-import {useParams} from "react-router-dom";
+import {useParams} from "react-router";
 import {PageBody} from "../../common/PageBody";
 import {useGetEventQuestions} from "../../../queries/useGetEventQuestions.ts";
 import {QuestionsTable} from "../../common/QuestionsTable";

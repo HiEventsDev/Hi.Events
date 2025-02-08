@@ -1,5 +1,5 @@
 import {EventStatus, QueryFilterOperator, QueryFilters} from "../types.ts";
-import {useParams} from "react-router-dom";
+import {useParams} from "react-router";
 
 export const getEventQueryFilters = (searchParams: Partial<QueryFilters>) => {
     const {eventsState, organizerId} = useParams();

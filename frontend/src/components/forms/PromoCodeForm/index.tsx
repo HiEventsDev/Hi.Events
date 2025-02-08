@@ -3,7 +3,7 @@ import {Alert, NumberInput, Select, TextInput} from "@mantine/core";
 import {IconAlertCircle, IconPercentage, IconTicket} from "@tabler/icons-react";
 import {ProductType, PromoCode, PromoCodeDiscountType} from "../../../types.ts";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
-import {useParams} from "react-router-dom";
+import {useParams} from "react-router";
 import {LoadingMask} from "../../common/LoadingMask";
 import {t} from "@lingui/macro";
 import {InputGroup} from "../../common/InputGroup";
