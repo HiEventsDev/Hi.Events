@@ -4,11 +4,12 @@ on:
   push:
     branches:
       - main
+      - develop
       - feat/front-end-deployment
 
 jobs:
   backend:
-    name: Deploy Backend to Vapor
+    name: Deploy Backend
     runs-on: ubuntu-latest
 
     steps:
@@ -40,14 +41,24 @@ jobs:
       - name: Install Vapor CLI
         run: composer global require laravel/vapor-cli
 
-      - name: Log Branch
-        run: echo "Deploying branch ${{ github.ref_name }} to Vapor"
+      - name: Set Deployment Environment
+        run: |
+          if [[ "${{ github.ref_name }}" == "develop" ]]; then
+            echo "VAPOR_ENV=staging" >> "$GITHUB_ENV"
+          else
+            echo "VAPOR_ENV=production" >> "$GITHUB_ENV"
+          fi
 
-      - name: Deploy to Vapor Production
+      - name: Log Branch and Environment
+        run: |
+          echo "🚀 Deploying branch ${{ github.ref_name }} to Vapor environment: $VAPOR_ENV"
+
+      - name: Deploy to Vapor
         working-directory: ./backend
-        run: vapor deploy production
+        run: vapor deploy $VAPOR_ENV
         env:
           VAPOR_API_TOKEN: ${{ secrets.VAPOR_API_TOKEN }}
+
   frontend:
     name: Deploy Frontend
     runs-on: ubuntu-latest
@@ -56,56 +67,65 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Set Deployment Environment
+        run: |
+          if [[ "${{ github.ref_name }}" == "develop" ]]; then
+            echo "DO_APP_ID=${{ secrets.DIGITALOCEAN_STAGING_APP_ID }}" >> "$GITHUB_ENV"
+          else
+            echo "DO_APP_ID=${{ secrets.DIGITALOCEAN_PRODUCTION_APP_ID }}" >> "$GITHUB_ENV"
+          fi
+
       - name: Trigger Deployment on DigitalOcean
         id: trigger_deployment
         run: |
-          RESPONSE=$(curl -s -o response.json -w "%{http_code}" -X POST "https://api.digitalocean.com/v2/apps/${{ secrets.DIGITALOCEAN_PRODUCTION_APP_ID }}/deployments" \
+          RESPONSE=$(curl -s -o response.json -w "%{http_code}" -X POST "https://api.digitalocean.com/v2/apps/$DO_APP_ID/deployments" \
             -H "Authorization: Bearer ${{ secrets.DIGITALOCEAN_API_TOKEN }}" \
             -H "Content-Type: application/json")
-  
+
           if [ "$RESPONSE" -ne 200 ]; then
-            echo "Failed to trigger deployment. HTTP Status: $RESPONSE"
-            cat response.json
+            ERROR_MSG=$(jq -r '.message // "Unknown error occurred."' response.json)
+            echo "❌ Failed to trigger deployment. HTTP Status: $RESPONSE. Error: $ERROR_MSG"
             exit 1
           fi
-  
+
           DEPLOYMENT_ID=$(jq -r '.deployment.id' response.json)
           if [ "$DEPLOYMENT_ID" == "null" ]; then
-            echo "Failed to extract deployment ID."
-            cat response.json
+            echo "❌ Failed to extract deployment ID."
             exit 1
           fi
-  
-          echo "Deployment triggered successfully: $DEPLOYMENT_ID"
+
+          echo "::add-mask::$DEPLOYMENT_ID"
+          echo "✅ Deployment triggered successfully."
+
           echo "deployment_id=$DEPLOYMENT_ID" >> "$GITHUB_ENV"
 
       - name: Poll Deployment Status
         run: |
-          MAX_RETRIES=30 
-          SLEEP_TIME=10 
+          MAX_RETRIES=30
+          SLEEP_TIME=10
           COUNTER=0
-  
+
           while [ $COUNTER -lt $MAX_RETRIES ]; do
-            RESPONSE=$(curl -s -X GET "https://api.digitalocean.com/v2/apps/${{ secrets.DIGITALOCEAN_PRODUCTION_APP_ID }}/deployments/${{ env.deployment_id }}" \
+            RESPONSE=$(curl -s -X GET "https://api.digitalocean.com/v2/apps/$DO_APP_ID/deployments/${{ env.deployment_id }}" \
               -H "Authorization: Bearer ${{ secrets.DIGITALOCEAN_API_TOKEN }}" \
               -H "Content-Type: application/json")
-  
+
             STATUS=$(echo "$RESPONSE" | jq -r '.deployment.phase')
-  
-            echo "Current Deployment Status: $STATUS"
-  
+
+            echo "🔄 Deployment Status: $STATUS"
+
             if [ "$STATUS" == "ACTIVE" ]; then
-              echo "Deployment completed successfully."
+              echo "✅ Deployment completed successfully."
               exit 0
             elif [[ "$STATUS" == "FAILED" || "$STATUS" == "CANCELLED" ]]; then
-              echo "Deployment failed or was cancelled."
+              echo "❌ Deployment failed or was cancelled."
               exit 1
             fi
-  
+
             COUNTER=$((COUNTER + 1))
-            echo "Retrying in $SLEEP_TIME seconds... ($COUNTER/$MAX_RETRIES)"
+            echo "⏳ Retrying in $SLEEP_TIME seconds... ($COUNTER/$MAX_RETRIES)"
             sleep $SLEEP_TIME
           done
-  
-          echo "Deployment timed out."
+
+          echo "⏰ Deployment timed out."
           exit 1
