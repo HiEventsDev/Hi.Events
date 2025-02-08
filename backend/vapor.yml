@@ -19,4 +19,21 @@ environments:
       - 'php artisan optimize'
     deploy:
       - 'php artisan migrate --force'
-
+  staging:
+    gateway-version: 2.0
+    domain: staging.hi.events
+    memory: 1024
+    cli-memory: 512
+    runtime: 'php-8.3:al2'
+    warm: 3
+    cache: hievents-redis-prod
+    database: hievents-db-staging
+    queue: hievents-queue-staging
+    queue-memory: 1024
+    queue-concurrency: 2
+    concurrency: 100
+    build:
+      - 'composer install --no-dev'
+      - 'php artisan optimize'
+    deploy:
+      - 'php artisan migrate --force'
