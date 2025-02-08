@@ -60,7 +60,7 @@ jobs:
         id: trigger_deployment
         run: |
           RESPONSE=$(curl -s -o response.json -w "%{http_code}" -X POST "https://api.digitalocean.com/v2/apps/${{ secrets.DIGITALOCEAN_PRODUCTION_APP_ID }}/deployments" \
-            -H "Authorization: Bearer ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}" \
+            -H "Authorization: Bearer ${{ secrets.DIGITALOCEAN_API_TOKEN }}" \
             -H "Content-Type: application/json")
   
           if [ "$RESPONSE" -ne 200 ]; then
@@ -81,13 +81,13 @@ jobs:
 
       - name: Poll Deployment Status
         run: |
-          MAX_RETRIES=20  # Max polling attempts (~10 minutes)
-          SLEEP_TIME=30    # Time (in seconds) between each poll
+          MAX_RETRIES=30 
+          SLEEP_TIME=10 
           COUNTER=0
   
           while [ $COUNTER -lt $MAX_RETRIES ]; do
             RESPONSE=$(curl -s -X GET "https://api.digitalocean.com/v2/apps/${{ secrets.DIGITALOCEAN_PRODUCTION_APP_ID }}/deployments/${{ env.deployment_id }}" \
-              -H "Authorization: Bearer ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}" \
+              -H "Authorization: Bearer ${{ secrets.DIGITALOCEAN_API_TOKEN }}" \
               -H "Content-Type: application/json")
   
             STATUS=$(echo "$RESPONSE" | jq -r '.deployment.phase')
