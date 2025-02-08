@@ -41,6 +41,7 @@ use HiEvents\Http\Actions\Events\DuplicateEventAction;
 use HiEvents\Http\Actions\Events\GetEventAction;
 use HiEvents\Http\Actions\Events\GetEventPublicAction;
 use HiEvents\Http\Actions\Events\GetEventsAction;
+use HiEvents\Http\Actions\Events\GetOrganizerEventsPublicAction;
 use HiEvents\Http\Actions\Events\Images\CreateEventImageAction;
 use HiEvents\Http\Actions\Events\Images\DeleteEventImageAction;
 use HiEvents\Http\Actions\Events\Images\GetEventImagesAction;
@@ -75,6 +76,7 @@ use HiEvents\Http\Actions\Organizers\EditOrganizerAction;
 use HiEvents\Http\Actions\Organizers\GetOrganizerAction;
 use HiEvents\Http\Actions\Organizers\GetOrganizerEventsAction;
 use HiEvents\Http\Actions\Organizers\GetOrganizersAction;
+use HiEvents\Http\Actions\Organizers\GetPublicOrganizerAction;
 use HiEvents\Http\Actions\ProductCategories\CreateProductCategoryAction;
 use HiEvents\Http\Actions\ProductCategories\DeleteProductCategoryAction;
 use HiEvents\Http\Actions\ProductCategories\EditProductCategoryAction;
@@ -266,6 +268,10 @@ $router->prefix('/public')->group(
     function (Router $router): void {
         // Events
         $router->get('/events/{event_id}', GetEventPublicAction::class);
+
+        // Organizers
+        $router->get('/organizers/{organizer_id}', GetPublicOrganizerAction::class);
+        $router->get('/organizers/{organizer_id}/events', GetOrganizerEventsPublicAction::class);
 
         // Products
         $router->get('/events/{event_id}/products', GetEventPublicAction::class);
