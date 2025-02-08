@@ -1,21 +1,19 @@
-name: Deploy to Vapor Production
+name: Deploy to Vapor and Frontend
 
 on:
   push:
     branches:
-      - master
-      - feat/vapor
+      - main
+      - feat/front-end-deployment
 
 jobs:
-  vapor:
-    name: Deploy to Vapor Production
+  backend:
+    name: Deploy Backend to Vapor
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout the repository
       - uses: actions/checkout@v2
 
-      # Step 2: Setup PHP
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -23,36 +21,44 @@ jobs:
           tools: composer:v2
           coverage: none
 
-      # Step 3: Prepare Laravel Environment
       - name: Prepare Laravel Environment
         working-directory: ./backend
         run: |
           mkdir -p bootstrap/cache
           chmod -R 775 bootstrap/cache
 
-      # Step 4: Prepare HTMLPurifier Cache Directory
       - name: Prepare HTMLPurifier Cache Directory
         working-directory: ./backend
         run: |
           mkdir -p storage/app/htmlpurifier
           chmod -R 775 storage/app/htmlpurifier
 
-      # Step 5: Install Dependencies
       - name: Install Dependencies
         working-directory: ./backend
         run: composer install --no-dev --no-progress --no-scripts --optimize-autoloader
 
-      # Step 6: Install Vapor CLI
       - name: Install Vapor CLI
         run: composer global require laravel/vapor-cli
 
-      # Step 7: Log the branch being deployed (Optional enhancement)
       - name: Log Branch
-        run: echo "Deploying branch ${{ github.ref_name }}"
+        run: echo "Deploying branch ${{ github.ref_name }} to Vapor"
 
-      # Step 8: Deploy to the Vapor Production Environment
-      - name: Deploy to Production
+      - name: Deploy to Vapor Production
         working-directory: ./backend
         run: vapor deploy production
         env:
           VAPOR_API_TOKEN: ${{ secrets.VAPOR_API_TOKEN }}
+
+  frontend:
+    name: Deploy Frontend
+    runs-on: ubuntu-latest
+    needs: backend
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Deploy to DigitalOcean App Platform
+        run: |
+          curl -X POST "https://api.digitalocean.com/v2/apps/${{ secrets.DIGITALOCEAN_PRODUCTION_APP_ID }}/deployments" \
+            -H "Authorization: Bearer ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}" \
+            -H "Content-Type: application/json"
