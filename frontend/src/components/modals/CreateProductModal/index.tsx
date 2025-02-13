@@ -55,6 +55,7 @@ export const CreateProductModal = ({onClose, selectedCategoryId = undefined}: Cr
                 notifications.show({
                     message: t`Successfully Created Product`,
                     color: 'green',
+                    position: 'top-center',
                 });
                 queryClient.invalidateQueries({queryKey: [GET_PRODUCTS_QUERY_KEY]}).then(() => {
                     form.reset();
@@ -70,6 +71,7 @@ export const CreateProductModal = ({onClose, selectedCategoryId = undefined}: Cr
                 notifications.show({
                     message: t`Unable to create product. Please check the your details`,
                     color: 'red',
+                    position: 'top-center',
                 });
             }
         });

@@ -320,6 +320,13 @@ export const router: RouteObject[] = [
                     const CapacityAssignments = await import("./components/routes/event/CapacityAssignments");
                     return {Component: CapacityAssignments.default};
                 }
+            },
+            {
+                path: "webhooks",
+                async lazy() {
+                    const Webhooks = await import("./components/routes/event/Webhooks");
+                    return {Component: Webhooks.default};
+                }
             }
         ]
     },

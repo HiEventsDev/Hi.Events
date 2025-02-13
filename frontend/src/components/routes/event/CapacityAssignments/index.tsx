@@ -3,7 +3,7 @@ import {PageTitle} from "../../../common/PageTitle";
 import {t} from "@lingui/macro";
 import {useParams} from "react-router";
 import {useGetEventCapacityAssignments} from "../../../../queries/useGetCapacityAssignments.ts";
-import {CapacityAssignmentList} from "../../../common/CapacityAssignmentList/index.tsx";
+import {CapacityAssignmentList} from "../../../common/CapacityAssignmentList";
 import {TableSkeleton} from "../../../common/TableSkeleton";
 import {CreateCapacityAssignmentModal} from "../../../modals/CreateCapacityAssignmentModal";
 import {useDisclosure} from "@mantine/hooks";

@@ -1,3 +1,18 @@
 .disabled {
-  opacity: 0.5;
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+:global {
+  .mantine-Combobox-option[data-active] {
+    background-color: var(--mantine-color-blue-light);
+  }
+
+  .mantine-Combobox-option[data-selected] {
+    background-color: var(--mantine-color-blue-light);
+
+    &[data-active] {
+      background-color: var(--mantine-color-blue-light-hover);
+    }
+  }
 }

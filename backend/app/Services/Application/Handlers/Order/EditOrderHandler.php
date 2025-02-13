@@ -6,6 +6,7 @@ use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\Services\Application\Handlers\Order\DTO\EditOrderDTO;
 use HiEvents\Services\Domain\Order\EditOrderService;
 use Psr\Log\LoggerInterface;
+use Throwable;
 
 class EditOrderHandler
 {
@@ -16,6 +17,9 @@ class EditOrderHandler
     {
     }
 
+    /**
+     * @throws Throwable
+     */
     public function handle(EditOrderDTO $dto): OrderDomainObject
     {
         $this->logger->info(__('Editing order with ID: :id', [

@@ -94,7 +94,7 @@ class ProductPriceUpdateService
         $pricesIds = $prices?->map(fn($price) => $price->id)->toArray();
 
         $existingPrices->each(function (ProductPriceDomainObject $price) use ($pricesIds) {
-            if (in_array($price->getId(), $pricesIds)) {
+            if (in_array($price->getId(), $pricesIds, true)) {
                 return;
             }
             if ($price->getQuantitySold() > 0) {

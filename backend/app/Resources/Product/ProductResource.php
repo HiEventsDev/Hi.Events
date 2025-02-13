@@ -26,9 +26,11 @@ class ProductResource extends JsonResource
             'product_type' => $this->getProductType(),
             'order' => $this->getOrder(),
             'description' => $this->getDescription(),
-            'price' => $this->when(
-                $this->getType() !== ProductPriceType::TIERED->name,
-                fn() => $this->getPrice()
+            $this->mergeWhen(
+                condition: $this->getType() !== ProductPriceType::TIERED->name,
+                value: fn() => [
+                    'price' => $this->getPrice(),
+                ]
             ),
             'max_per_order' => $this->getMaxPerOrder() ?? self::DEFAULT_MAX_PRODUCTS,
             'min_per_order' => $this->getMinPerOrder() ?? self::DEFAULT_MIN_PRODUCTS,

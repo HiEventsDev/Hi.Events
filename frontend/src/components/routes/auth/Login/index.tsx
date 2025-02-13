@@ -41,6 +41,7 @@ const Login = () => {
             notifications.show({
                 message: t`Please check your email and password and try again`,
                 color: 'red',
+                position: 'top-center',
             });
         }
     });

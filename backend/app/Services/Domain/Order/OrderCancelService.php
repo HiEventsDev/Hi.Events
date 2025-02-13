@@ -3,6 +3,7 @@
 namespace HiEvents\Services\Domain\Order;
 
 use HiEvents\DomainObjects\AttendeeDomainObject;
+use HiEvents\DomainObjects\Enums\WebhookEventType;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
@@ -12,19 +13,21 @@ use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
+use HiEvents\Services\Infrastructure\Webhook\WebhookDispatchService;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
 
-readonly class OrderCancelService
+class OrderCancelService
 {
     public function __construct(
-        private Mailer                       $mailer,
-        private AttendeeRepositoryInterface  $attendeeRepository,
-        private EventRepositoryInterface     $eventRepository,
-        private OrderRepositoryInterface     $orderRepository,
-        private DatabaseManager              $databaseManager,
-        private ProductQuantityUpdateService $productQuantityService,
+        private readonly Mailer                       $mailer,
+        private readonly AttendeeRepositoryInterface  $attendeeRepository,
+        private readonly EventRepositoryInterface     $eventRepository,
+        private readonly OrderRepositoryInterface     $orderRepository,
+        private readonly DatabaseManager              $databaseManager,
+        private readonly ProductQuantityUpdateService $productQuantityService,
+        private readonly WebhookDispatchService       $webhookDispatchService,
     )
     {
     }
@@ -51,6 +54,11 @@ readonly class OrderCancelService
                     event: $event,
                     eventSettings: $event->getEventSettings(),
                 ));
+
+            $this->webhookDispatchService->queueOrderWebhook(
+                eventType: WebhookEventType::ORDER_CANCELLED,
+                orderId: $order->getId(),
+            );
         });
     }
 

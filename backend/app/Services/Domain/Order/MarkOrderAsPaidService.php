@@ -2,6 +2,7 @@
 
 namespace HiEvents\Services\Domain\Order;
 
+use HiEvents\DomainObjects\Enums\WebhookEventType;
 use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
@@ -13,6 +14,7 @@ use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\InvoiceRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
+use HiEvents\Services\Infrastructure\Webhook\WebhookDispatchService;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
 
@@ -23,6 +25,7 @@ class MarkOrderAsPaidService
         private readonly DatabaseManager             $databaseManager,
         private readonly InvoiceRepositoryInterface  $invoiceRepository,
         private readonly AttendeeRepositoryInterface $attendeeRepository,
+        private readonly WebhookDispatchService      $webhookDispatchService,
     )
     {
     }
@@ -58,6 +61,11 @@ class MarkOrderAsPaidService
                 order: $updatedOrder,
                 sendEmails: false
             ));
+
+            $this->webhookDispatchService->queueOrderWebhook(
+                eventType: WebhookEventType::ORDER_MARKED_AS_PAID,
+                orderId: $orderId,
+            );
 
             return $updatedOrder;
         });

@@ -23,6 +23,10 @@ class QuestionAndAnswerViewDomainObject extends AbstractDomainObject
     private string $question_type;
     private int $event_id;
 
+    private ?AttendeeDomainObject $attendee = null;
+
+    private ?QuestionDomainObject $question = null;
+
     public function getQuestionId(): int
     {
         return $this->question_id;
@@ -152,6 +156,30 @@ class QuestionAndAnswerViewDomainObject extends AbstractDomainObject
     public function setProductTitle(?string $product_title): QuestionAndAnswerViewDomainObject
     {
         $this->product_title = $product_title;
+        return $this;
+    }
+
+    public function getAttendee(): ?AttendeeDomainObject
+    {
+        return $this->attendee;
+    }
+
+    public function setAttendee(?AttendeeDomainObject $attendee): static
+    {
+        $this->attendee = $attendee;
+
+        return $this;
+    }
+
+    public function getQuestion(): ?QuestionDomainObject
+    {
+        return $this->question;
+    }
+
+    public function setQuestion(?QuestionDomainObject $question): static
+    {
+        $this->question = $question;
+
         return $this;
     }
 

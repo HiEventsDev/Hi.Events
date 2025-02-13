@@ -79,13 +79,15 @@ export const OrdersTable = ({orders, event}: OrdersTableProps) => {
             onSuccess: () => {
                 notifications.show({
                     message: t`Order marked as paid`,
-                    icon: <IconCash/>
+                    icon: <IconCash/>,
+                    position: 'top-center',
                 })
             },
             onError: () => {
                 notifications.show({
                     message: t`There was an error marking the order as paid`,
-                    icon: <IconCheck/>
+                    icon: <IconCheck/>,
+                    position: 'top-center',
                 })
             }
         });
@@ -96,13 +98,15 @@ export const OrdersTable = ({orders, event}: OrdersTableProps) => {
             onSuccess: () => {
                 notifications.show({
                     message: t`Your message has been sent`,
-                    icon: <IconCheck/>
+                    icon: <IconCheck/>,
+                    position: 'top-center',
                 })
             },
             onError: () => {
                 notifications.show({
                     message: t`There was an error sending your message`,
-                    icon: <IconCheck/>
+                    icon: <IconCheck/>,
+                    position: 'top-center',
                 })
             }
         });

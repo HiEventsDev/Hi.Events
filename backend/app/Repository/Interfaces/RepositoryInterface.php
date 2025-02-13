@@ -90,7 +90,6 @@ interface RepositoryInterface
      * @param int $id
      * @param array $columns
      * @return T
-     *
      */
     public function findById(int $id, array $columns = self::DEFAULT_COLUMNS): DomainObjectInterface;
 
@@ -197,4 +196,6 @@ interface RepositoryInterface
     public function decrementEach(array $where, array $columns, array $extra = []): int;
 
     public function incrementEach(array $columns, array $additionalUpdates = [], ?array $where = null);
+
+    public function includeDeleted(): static;
 }
