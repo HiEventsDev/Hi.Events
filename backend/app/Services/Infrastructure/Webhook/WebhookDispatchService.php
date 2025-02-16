@@ -196,5 +196,4 @@ class WebhookDispatchService
                 ->dispatchSync();
         }
     }
-
 }

@@ -64,6 +64,11 @@ class Event extends BaseModel
         return $this->hasOne(EventStatistic::class);
     }
 
+    public function webhooks(): HasMany
+    {
+        return $this->hasMany(Webhook::class);
+    }
+
     public static function boot()
     {
         parent::boot();

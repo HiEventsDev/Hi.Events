@@ -160,6 +160,7 @@ export interface EventDuplicatePayload extends EventBase {
     duplicate_capacity_assignments: boolean;
     duplicate_check_in_lists: boolean;
     duplicate_event_cover_image: boolean;
+    duplicate_webhooks: boolean;
 }
 
 export enum EventStatus {

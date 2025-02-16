@@ -47,7 +47,6 @@ class PartialEditAttendeeHandler
 
         $statusIsUpdated = $data->status && $data->status !== $attendee->getStatus();
 
-
         if ($statusIsUpdated) {
             $this->adjustProductQuantity($data, $attendee);
         }

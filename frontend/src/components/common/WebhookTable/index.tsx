@@ -1,4 +1,16 @@
-import {Badge, Button, Group, Menu, Paper, Popover, Stack, Table as MantineTable, Text, Tooltip} from '@mantine/core';
+import {
+    Anchor,
+    Badge,
+    Button,
+    Group,
+    Menu,
+    Paper,
+    Popover,
+    Stack,
+    Table as MantineTable,
+    Text,
+    Tooltip
+} from '@mantine/core';
 import {
     IconBolt,
     IconClipboardList,
@@ -23,7 +35,6 @@ import {useParams} from "react-router";
 import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {NoResultsSplash} from "../NoResultsSplash";
 import {WebhookLogsModal} from "../../modals/WebhookLogsModal";
-
 
 interface WebhookTableProps {
     webhooks: Webhook[];
@@ -125,9 +136,9 @@ export const WebhookTable = ({webhooks, openCreateModal}: WebhookTableProps) => 
         if (webhook.last_response_code === null || webhook.last_response_code === undefined) {
             return (
                 <Text c="dimmed" size="sm">
-                    <Group gap={6}>
+                    <Group gap={6} wrap="nowrap">
                         <IconClockHour4 size={14}/>
-                        <span>No responses yet</span>
+                        <span>{t`No responses yet`}</span>
                     </Group>
                 </Text>
             );
@@ -191,12 +202,19 @@ export const WebhookTable = ({webhooks, openCreateModal}: WebhookTableProps) => 
                 imageHref={'/blank-slate/webhooks.svg'}
                 subHeading={(
                     <>
-                        <p>
-                            <Trans>
-                                Webhooks allow you to send real-time notifications to external services when
-                                specific events occur in your event.
-                            </Trans>
-                        </p>
+                        <Trans>
+                            <p>
+                                Webhooks instantly notify external services when events happen, like adding a new attendee
+                                to your CRM or mailing list upon registration, ensuring seamless automation.
+                            </p>
+                            <p>
+                                Use third-party services like <Anchor underline={'always'} target={'_blank'}
+                                                                      href="https://zapier.com/features/webhooks">Zapier</Anchor>,{' '}
+                                <Anchor underline={'always'} target={'_blank'} href="https://ifttt.com/maker_webhooks">IFTTT</Anchor> or <Anchor underline={'always'}
+                                target={'_blank'} href="https://www.make.com/en/help/tools/webhooks">Make</Anchor> to
+                                create custom workflows and automate tasks.
+                            </p>
+                        </Trans>
                         <Button
                             loading={deleteMutation.isPending}
                             size={'xs'}
