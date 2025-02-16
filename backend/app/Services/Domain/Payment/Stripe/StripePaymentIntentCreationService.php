@@ -61,7 +61,7 @@ class StripePaymentIntentCreationService
             $this->databaseManager->beginTransaction();
 
             $applicationFee = $this->getApplicationFee($paymentIntentDTO);
-
+            
             $paymentIntent = $this->stripeClient->paymentIntents->create([
                 'amount' => $paymentIntentDTO->amount,
                 'currency' => $paymentIntentDTO->currencyCode,
@@ -115,7 +115,7 @@ class StripePaymentIntentCreationService
         $fixedFee = $paymentIntentDTO->account->getApplicationFee()->fixedFee;
         $percentageFee = $paymentIntentDTO->account->getApplicationFee()->percentageFee;
 
-        return ceil(($fixedFee * 100) + ($paymentIntentDTO->amount * $percentageFee / 100));
+        return ceil(($fixedFee * 100) + ($paymentIntentDTO->order->getTotalBeforeAdditions() * $percentageFee));
     }
 
     /**
