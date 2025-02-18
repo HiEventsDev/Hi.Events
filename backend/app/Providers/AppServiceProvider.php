@@ -56,6 +56,10 @@ class AppServiceProvider extends ServiceProvider
 
     private function bindDoctrineConnection(): void
     {
+        if ($this->app->environment('production')) {
+            return;
+        }
+
         $this->app->bind(
             AbstractSchemaManager::class,
             function () {

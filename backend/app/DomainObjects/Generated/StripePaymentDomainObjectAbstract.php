@@ -21,6 +21,7 @@ abstract class StripePaymentDomainObjectAbstract extends \HiEvents\DomainObjects
     final public const DELETED_AT = 'deleted_at';
     final public const LAST_ERROR = 'last_error';
     final public const CONNECTED_ACCOUNT_ID = 'connected_account_id';
+    final public const APPLICATION_FEE = 'application_fee';
 
     protected int $id;
     protected int $order_id;
@@ -33,6 +34,7 @@ abstract class StripePaymentDomainObjectAbstract extends \HiEvents\DomainObjects
     protected ?string $deleted_at = null;
     protected array|string|null $last_error = null;
     protected ?string $connected_account_id = null;
+    protected int $application_fee = 0;
 
     public function toArray(): array
     {
@@ -48,6 +50,7 @@ abstract class StripePaymentDomainObjectAbstract extends \HiEvents\DomainObjects
                     'deleted_at' => $this->deleted_at ?? null,
                     'last_error' => $this->last_error ?? null,
                     'connected_account_id' => $this->connected_account_id ?? null,
+                    'application_fee' => $this->application_fee ?? null,
                 ];
     }
 
@@ -170,5 +173,16 @@ abstract class StripePaymentDomainObjectAbstract extends \HiEvents\DomainObjects
     public function getConnectedAccountId(): ?string
     {
         return $this->connected_account_id;
+    }
+
+    public function setApplicationFee(int $application_fee): self
+    {
+        $this->application_fee = $application_fee;
+        return $this;
+    }
+
+    public function getApplicationFee(): int
+    {
+        return $this->application_fee;
     }
 }

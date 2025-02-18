@@ -2,15 +2,21 @@
 
 namespace HiEvents\Services\Domain\Order;
 
+use HiEvents\DomainObjects\AccountConfigurationDomainObject;
+use HiEvents\DomainObjects\AccountDomainObject;
+use HiEvents\DomainObjects\Enums\PaymentProviders;
 use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\DomainObjects\Status\InvoiceStatus;
+use HiEvents\DomainObjects\Status\OrderApplicationFeeStatus;
 use HiEvents\DomainObjects\Status\OrderPaymentStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Events\OrderStatusChangedEvent;
 use HiEvents\Exceptions\ResourceConflictException;
+use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\InvoiceRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use Illuminate\Database\DatabaseManager;
@@ -19,10 +25,13 @@ use Throwable;
 class MarkOrderAsPaidService
 {
     public function __construct(
-        private readonly OrderRepositoryInterface    $orderRepository,
-        private readonly DatabaseManager             $databaseManager,
-        private readonly InvoiceRepositoryInterface  $invoiceRepository,
-        private readonly AttendeeRepositoryInterface $attendeeRepository,
+        private readonly OrderRepositoryInterface              $orderRepository,
+        private readonly DatabaseManager                       $databaseManager,
+        private readonly InvoiceRepositoryInterface            $invoiceRepository,
+        private readonly AttendeeRepositoryInterface           $attendeeRepository,
+        private readonly OrderApplicationFeeCalculationService $orderApplicationFeeCalculationService,
+        private readonly EventRepositoryInterface              $eventRepository,
+        private readonly OrderApplicationFeeService            $orderApplicationFeeService,
     )
     {
     }
@@ -58,6 +67,8 @@ class MarkOrderAsPaidService
                 order: $updatedOrder,
                 sendEmails: false
             ));
+
+            $this->storeApplicationFeePayment($updatedOrder);
 
             return $updatedOrder;
         });
@@ -95,4 +106,32 @@ class MarkOrderAsPaidService
         );
     }
 
+    private function storeApplicationFeePayment(OrderDomainObject $updatedOrder): void
+    {
+        /** @var AccountConfigurationDomainObject $config */
+        $config = $this->eventRepository
+            ->loadRelation(new Relationship(
+                domainObject: AccountDomainObject::class,
+                nested: [
+                    new Relationship(
+                        domainObject: AccountConfigurationDomainObject::class,
+                        name: 'configuration',
+                    ),
+                ],
+                name: 'account'
+            ))
+            ->findById($updatedOrder->getEventId())
+            ->getAccount()
+            ->getConfiguration();
+
+        $this->orderApplicationFeeService->createOrderApplicationFee(
+            orderId: $updatedOrder->getId(),
+            applicationFeeAmount: $this->orderApplicationFeeCalculationService->calculateApplicationFee(
+                $config,
+                $updatedOrder->getTotalGross(),
+            ),
+            orderApplicationFeeStatus: OrderApplicationFeeStatus::AWAITING_PAYMENT,
+            paymentMethod: PaymentProviders::OFFLINE,
+        );
+    }
 }

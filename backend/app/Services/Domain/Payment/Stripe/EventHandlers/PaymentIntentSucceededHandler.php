@@ -13,6 +13,7 @@ use HiEvents\DomainObjects\Generated\StripePaymentDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
+use HiEvents\DomainObjects\Status\OrderApplicationFeeStatus;
 use HiEvents\DomainObjects\Status\OrderPaymentStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Events\OrderStatusChangedEvent;
@@ -21,6 +22,7 @@ use HiEvents\Repository\Eloquent\StripePaymentsRepository;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
+use HiEvents\Services\Domain\Order\OrderApplicationFeeService;
 use HiEvents\Services\Domain\Payment\Stripe\StripeRefundExpiredOrderService;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
 use Illuminate\Cache\Repository;
@@ -41,6 +43,7 @@ class PaymentIntentSucceededHandler
         private readonly DatabaseManager                 $databaseManager,
         private readonly LoggerInterface                 $logger,
         private readonly Repository                      $cache,
+        private readonly OrderApplicationFeeService      $orderApplicationFeeService,
     )
     {
     }
@@ -87,6 +90,8 @@ class PaymentIntentSucceededHandler
             OrderStatusChangedEvent::dispatch($updatedOrder);
 
             $this->markPaymentIntentAsHandled($paymentIntent, $updatedOrder);
+
+            $this->storeApplicationFeePayment($updatedOrder, $paymentIntent);
         });
     }
 
@@ -107,6 +112,7 @@ class PaymentIntentSucceededHandler
             attributes: [
                 StripePaymentDomainObjectAbstract::LAST_ERROR => $paymentIntent->last_payment_error?->toArray(),
                 StripePaymentDomainObjectAbstract::AMOUNT_RECEIVED => $paymentIntent->amount_received,
+                StripePaymentDomainObjectAbstract::APPLICATION_FEE => $paymentIntent->application_fee_amount,
                 StripePaymentDomainObjectAbstract::PAYMENT_METHOD_ID => is_string($paymentIntent->payment_method)
                     ? $paymentIntent->payment_method
                     : $paymentIntent->payment_method?->id,
@@ -210,5 +216,15 @@ class PaymentIntentSucceededHandler
     private function isPaymentIntentAlreadyHandled(PaymentIntent $paymentIntent): bool
     {
         return $this->cache->has('payment_intent_handled_' . $paymentIntent->id);
+    }
+
+    private function storeApplicationFeePayment(OrderDomainObject $updatedOrder, PaymentIntent $paymentIntent): void
+    {
+        $this->orderApplicationFeeService->createOrderApplicationFee(
+            orderId: $updatedOrder->getId(),
+            applicationFeeAmount: $paymentIntent->application_fee_amount / 100,
+            orderApplicationFeeStatus: OrderApplicationFeeStatus::PAID,
+            paymentMethod: PaymentProviders::STRIPE,
+        );
     }
 }
