@@ -2,29 +2,29 @@ import {notifications} from "@mantine/notifications";
 import {IconCheck, IconInfoSmall, IconX} from "@tabler/icons-react";
 import React, {ReactNode} from "react";
 
-export const showSuccess = (message: ReactNode) => {
+export const showSuccess = (message: ReactNode, icon: ReactNode = <IconCheck/>) => {
     notifications.show({
         message: message,
         color: 'green',
-        icon: <IconCheck/>,
+        icon: icon,
         position: 'top-center',
     })
 }
 
-export const showInfo = (message: ReactNode) => {
+export const showInfo = (message: ReactNode, icon: ReactNode = <IconInfoSmall/>) => {
     notifications.show({
         message: message,
         color: 'blue',
-        icon: <IconInfoSmall/>,
+        icon: icon,
         position: 'top-center',
     })
 }
 
-export const showError = (message: React.ReactNode) => {
+export const showError = (message: React.ReactNode, icon: ReactNode = <IconX/>) => {
     notifications.show({
         message: message,
         color: 'red',
-        icon: <IconX/>,
+        icon: icon,
         position: 'top-center',
     })
 }
