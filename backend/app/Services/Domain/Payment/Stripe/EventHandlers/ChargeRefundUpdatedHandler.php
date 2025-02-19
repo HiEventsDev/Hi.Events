@@ -4,6 +4,7 @@ namespace HiEvents\Services\Domain\Payment\Stripe\EventHandlers;
 
 use Brick\Money\Money;
 use HiEvents\DomainObjects\Enums\PaymentProviders;
+use HiEvents\DomainObjects\Enums\WebhookEventType;
 use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\Status\OrderRefundStatus;
@@ -11,6 +12,7 @@ use HiEvents\Repository\Interfaces\OrderRefundRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\StripePaymentsRepositoryInterface;
 use HiEvents\Services\Domain\EventStatistics\EventStatisticsUpdateService;
+use HiEvents\Services\Infrastructure\Webhook\WebhookDispatchService;
 use HiEvents\Values\MoneyValue;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Log\Logger;
@@ -26,6 +28,7 @@ class ChargeRefundUpdatedHandler
         private readonly DatabaseManager                   $databaseManager,
         private readonly EventStatisticsUpdateService      $eventStatisticsUpdateService,
         private readonly OrderRefundRepositoryInterface    $orderRefundRepository,
+        private readonly WebhookDispatchService            $webhookDispatchService,
     )
     {
     }
@@ -78,6 +81,11 @@ class ChargeRefundUpdatedHandler
                 'currency' => $order->getCurrency(),
                 'refund_id' => $refund->id,
             ]);
+
+            $this->webhookDispatchService->queueOrderWebhook(
+                eventType: WebhookEventType::ORDER_REFUNDED,
+                orderId: $order->getId(),
+            );
         });
     }
 
@@ -129,7 +137,7 @@ class ChargeRefundUpdatedHandler
             'amount' => $refundedAmount,
             'currency' => $order->getCurrency(),
             'status' => $refund->status,
-            'metadata' => array_merge( $refund->metadata?->toArray() ?? [], [
+            'metadata' => array_merge($refund->metadata?->toArray() ?? [], [
                 'payment_intent' => $refund->payment_intent,
             ]),
         ]);

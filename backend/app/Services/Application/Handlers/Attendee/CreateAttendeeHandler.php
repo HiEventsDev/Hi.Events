@@ -5,6 +5,7 @@ namespace HiEvents\Services\Application\Handlers\Attendee;
 use Brick\Money\Money;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Enums\ProductType;
+use HiEvents\DomainObjects\Enums\WebhookEventType;
 use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\OrderItemDomainObjectAbstract;
@@ -30,6 +31,7 @@ use HiEvents\Services\Application\Handlers\Attendee\DTO\CreateAttendeeTaxAndFeeD
 use HiEvents\Services\Domain\Order\OrderManagementService;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
 use HiEvents\Services\Domain\Tax\TaxAndFeeRollupService;
+use HiEvents\Services\Infrastructure\Webhook\WebhookDispatchService;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Collection;
 use RuntimeException;
@@ -47,6 +49,7 @@ class CreateAttendeeHandler
         private readonly TaxAndFeeRepositoryInterface $taxAndFeeRepository,
         private readonly TaxAndFeeRollupService       $taxAndFeeRollupService,
         private readonly OrderManagementService       $orderManagementService,
+        private readonly WebhookDispatchService       $webhookDispatchService,
     )
     {
     }
@@ -99,6 +102,8 @@ class CreateAttendeeHandler
             $this->orderManagementService->updateOrderTotals($order, collect([$orderItem]));
 
             $this->fireEventsAndUpdateQuantities($attendeeDTO, $order);
+
+            $this->queueWebhooks($attendee, $order);
 
             return $attendee;
         });
@@ -240,5 +245,13 @@ class CreateAttendeeHandler
             order: $order,
             sendEmails: $attendeeDTO->send_confirmation_email,
         ));
+    }
+
+    private function queueWebhooks(AttendeeDomainObject $attendee, OrderDomainObject $order): void
+    {
+        $this->webhookDispatchService->queueOrderWebhook(
+            eventType: WebhookEventType::ORDER_CREATED,
+            orderId: $order->getId(),
+        );
     }
 }

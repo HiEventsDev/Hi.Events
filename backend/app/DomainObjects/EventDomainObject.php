@@ -26,6 +26,8 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
 
     private ?Collection $checkInLists = null;
 
+    private ?Collection $webhooks = null;
+
     private ?Collection $capacityAssignments = null;
 
     private ?EventSettingDomainObject $settings = null;
@@ -284,5 +286,16 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
     public function getProductCategories(): ?Collection
     {
         return $this->productCategories;
+    }
+
+    public function getWebhooks(): ?Collection
+    {
+        return $this->webhooks;
+    }
+
+    public function setWebhooks(?Collection $webhooks): EventDomainObject
+    {
+        $this->webhooks = $webhooks;
+        return $this;
     }
 }

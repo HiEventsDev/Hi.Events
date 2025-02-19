@@ -65,6 +65,7 @@ export const EditQuestionModal = ({onClose, questionId}: EditQuestionModalProps)
             notifications.show({
                 message: t`Successfully Created Question`,
                 color: 'green',
+                position: 'top-center',
             });
             queryClient.invalidateQueries({queryKey: [GET_EVENT_QUESTIONS_QUERY_KEY, eventId]}).then(() => {
                 form.reset();
@@ -82,6 +83,7 @@ export const EditQuestionModal = ({onClose, questionId}: EditQuestionModalProps)
             notifications.show({
                 message: t`Unable to update question. Please check the your details`,
                 color: 'red',
+                position: 'top-center',
             });
         }
     });

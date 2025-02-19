@@ -77,7 +77,11 @@ export const OrdersTable = ({orders, event}: OrdersTableProps) => {
     const handleMarkAsPaid = (eventId: IdParam, orderId: IdParam) => {
         markAsPaidMutation.mutate({eventId, orderId}, {
             onSuccess: () => {
-                showSuccess(t`Order marked as paid`);
+                notifications.show({
+                    message: t`Order marked as paid`,
+                    icon: <IconCash/>,
+                    position: 'top-center',
+                })
             },
             onError: () => {
                 showError(t`There was an error marking the order as paid`);
@@ -90,13 +94,15 @@ export const OrdersTable = ({orders, event}: OrdersTableProps) => {
             onSuccess: () => {
                 notifications.show({
                     message: t`Your message has been sent`,
-                    icon: <IconCheck/>
+                    icon: <IconCheck/>,
+                    position: 'top-center',
                 })
             },
             onError: () => {
                 notifications.show({
                     message: t`There was an error sending your message`,
-                    icon: <IconCheck/>
+                    icon: <IconCheck/>,
+                    position: 'top-center',
                 })
             }
         });

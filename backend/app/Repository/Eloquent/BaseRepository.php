@@ -15,6 +15,7 @@ use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Application;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -115,6 +116,9 @@ abstract class BaseRepository implements RepositoryInterface
         return $this->handleResults($relation->paginate($this->getPaginationPerPage($limit), $columns));
     }
 
+    /**
+     * @throws ModelNotFoundException
+     */
     public function findById(int $id, array $columns = self::DEFAULT_COLUMNS): DomainObjectInterface
     {
         return $this->handleSingleResult($this->model->findOrFail($id, $columns));
@@ -307,6 +311,13 @@ abstract class BaseRepository implements RepositoryInterface
         return $this;
     }
 
+    public function includeDeleted(): static
+    {
+        $this->model = $this->model->withTrashed();
+
+        return $this;
+    }
+
     protected function applyConditions(array $where): void
     {
         foreach ($where as $field => $value) {
@@ -451,7 +462,7 @@ abstract class BaseRepository implements RepositoryInterface
     }
 
     /**
-     * This method will handle nested eager loading of relationships. It works, but it's not pretty.
+     * This method will handle nested eager loading of relationships
      *
      * @param Model $model
      * @param DomainObjectInterface $object

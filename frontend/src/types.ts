@@ -171,6 +171,7 @@ export interface EventDuplicatePayload extends EventBase {
     duplicate_capacity_assignments: boolean;
     duplicate_check_in_lists: boolean;
     duplicate_event_cover_image: boolean;
+    duplicate_webhooks: boolean;
 }
 
 export enum EventStatus {
@@ -718,4 +719,28 @@ export enum ReportTypes {
     ProductSales = 'product_sales',
     DailySales = 'daily_sales_report',
     PromoCodes = 'promo_codes_report',
+}
+
+export interface Webhook {
+    id: IdParam;
+    event_id: IdParam;
+    url: string;
+    secret: string;
+    status: 'ENABLED' | 'PAUSED';
+    event?: Event;
+    event_types?: string[];
+    last_response_code?: number;
+    last_response_body?: string;
+    last_triggered_at?: string | Date;
+    logs?: WebhookLog[];
+}
+
+export interface WebhookLog {
+    id: IdParam;
+    webhook_id: IdParam;
+    payload?: string;
+    response_code?: number; // 0 = no response
+    response_body?: string;
+    event_type: string;
+    created_at: string;
 }

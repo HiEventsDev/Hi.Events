@@ -2,20 +2,24 @@
 
 namespace HiEvents\Services\Application\Handlers\Order;
 
+use HiEvents\DomainObjects\Enums\WebhookEventType;
 use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Order\DTO\CancelOrderDTO;
 use HiEvents\Services\Domain\Order\OrderCancelService;
+use HiEvents\Services\Infrastructure\Webhook\WebhookDispatchService;
+use Illuminate\Database\DatabaseManager;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Throwable;
 
-readonly class CancelOrderHandler
+class CancelOrderHandler
 {
     public function __construct(
-        private OrderCancelService       $orderCancelService,
-        private OrderRepositoryInterface $orderRepository
+        private readonly OrderCancelService       $orderCancelService,
+        private readonly OrderRepositoryInterface $orderRepository,
+        private readonly DatabaseManager          $databaseManager,
     )
     {
     }
@@ -26,22 +30,24 @@ readonly class CancelOrderHandler
      */
     public function handle(CancelOrderDTO $cancelOrderDTO): OrderDomainObject
     {
-        $order = $this->orderRepository
-            ->findFirstWhere([
-                OrderDomainObjectAbstract::EVENT_ID => $cancelOrderDTO->eventId,
-                OrderDomainObjectAbstract::ID => $cancelOrderDTO->orderId,
-            ]);
+        return $this->databaseManager->transaction(function () use ($cancelOrderDTO) {
+            $order = $this->orderRepository
+                ->findFirstWhere([
+                    OrderDomainObjectAbstract::EVENT_ID => $cancelOrderDTO->eventId,
+                    OrderDomainObjectAbstract::ID => $cancelOrderDTO->orderId,
+                ]);
 
-        if (!$order) {
-            throw new ResourceNotFoundException(__('Order not found'));
-        }
+            if (!$order) {
+                throw new ResourceNotFoundException(__('Order not found'));
+            }
 
-        if ($order->isOrderCancelled()) {
-            throw new ResourceConflictException(__('Order already cancelled'));
-        }
+            if ($order->isOrderCancelled()) {
+                throw new ResourceConflictException(__('Order already cancelled'));
+            }
 
-        $this->orderCancelService->cancelOrder($order);
+            $this->orderCancelService->cancelOrder($order);
 
-        return $this->orderRepository->findById($order->getId());
+            return $this->orderRepository->findById($order->getId());
+        });
     }
 }

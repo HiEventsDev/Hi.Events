@@ -35,6 +35,8 @@ use HiEvents\Repository\Eloquent\StripeCustomerRepository;
 use HiEvents\Repository\Eloquent\StripePaymentsRepository;
 use HiEvents\Repository\Eloquent\TaxAndFeeRepository;
 use HiEvents\Repository\Eloquent\UserRepository;
+use HiEvents\Repository\Eloquent\WebhookLogRepository;
+use HiEvents\Repository\Eloquent\WebhookRepository;
 use HiEvents\Repository\Interfaces\AccountConfigurationRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
@@ -66,6 +68,8 @@ use HiEvents\Repository\Interfaces\StripeCustomerRepositoryInterface;
 use HiEvents\Repository\Interfaces\StripePaymentsRepositoryInterface;
 use HiEvents\Repository\Interfaces\TaxAndFeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
+use HiEvents\Repository\Interfaces\WebhookLogRepositoryInterface;
+use HiEvents\Repository\Interfaces\WebhookRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -103,6 +107,8 @@ class RepositoryServiceProvider extends ServiceProvider
         ProductCategoryRepositoryInterface::class => ProductCategoryRepository::class,
         InvoiceRepositoryInterface::class => InvoiceRepository::class,
         OrderRefundRepositoryInterface::class => OrderRefundRepository::class,
+        WebhookRepositoryInterface::class => WebhookRepository::class,
+        WebhookLogRepositoryInterface::class => WebhookLogRepository::class
         OrderApplicationFeeRepositoryInterface::class => OrderApplicationFeeRepository::class,
         AccountConfigurationRepositoryInterface::class => AccountConfigurationRepository::class,
     ];

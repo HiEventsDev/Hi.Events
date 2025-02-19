@@ -10,7 +10,9 @@ environments:
     warm: 3
     cache: hievents-redis-prod
     database: hievents-db-prod
-    queue: hievents-queue-prod
+    queues:
+      - hievents-queue-prod
+      - hievents-webhook-queue-prod
     queue-memory: 1024
     queue-concurrency: 5
     concurrency: 100
@@ -28,7 +30,9 @@ environments:
     warm: 3
     cache: hievents-redis-prod
     database: hievents-db-staging
-    queue: hievents-queue-staging
+    queue:
+      - hievents-queue-staging
+      - hievents-webhook-queue-staging
     queue-memory: 1024
     queue-concurrency: 2
     concurrency: 100

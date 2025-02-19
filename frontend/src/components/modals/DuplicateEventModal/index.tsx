@@ -32,6 +32,7 @@ export const DuplicateEventModal = ({onClose, eventId}: DuplicateEventModalProps
             duplicate_capacity_assignments: true,
             duplicate_check_in_lists: true,
             duplicate_event_cover_image: true,
+            duplicate_webhooks: true,
         }
     });
     const mutation = useDuplicateEvent();
@@ -127,9 +128,13 @@ export const DuplicateEventModal = ({onClose, eventId}: DuplicateEventModalProps
                             label={t`Duplicate Check-In Lists`}
                         />
                         <Switch
-                            mb={0}
                             {...form.getInputProps('duplicate_event_cover_image', {type: 'checkbox'})}
                             label={t`Duplicate Event Cover Image`}
+                        />
+                        <Switch
+                            mb={0}
+                            {...form.getInputProps('duplicate_webhooks', {type: 'checkbox'})}
+                            label={t`Duplicate Webhooks`}
                         />
                     </Card>
                 </fieldset>

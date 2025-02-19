@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace HiEvents\Services\Application\Handlers\Product;
 
 use Exception;
+use HiEvents\DomainObjects\Enums\WebhookEventType;
 use HiEvents\DomainObjects\Interfaces\DomainObjectInterface;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
@@ -19,6 +20,7 @@ use HiEvents\Services\Domain\ProductCategory\GetProductCategoryService;
 use HiEvents\Services\Domain\Tax\DTO\TaxAndProductAssociateParams;
 use HiEvents\Services\Domain\Tax\TaxAndProductAssociationService;
 use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
+use HiEvents\Services\Infrastructure\Webhook\WebhookDispatchService;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
 
@@ -36,6 +38,7 @@ class EditProductHandler
         private readonly EventRepositoryInterface        $eventRepository,
         private readonly ProductOrderingService          $productOrderingService,
         private readonly GetProductCategoryService       $getProductCategoryService,
+        private readonly WebhookDispatchService          $webhookDispatchService,
     )
     {
     }
@@ -60,6 +63,11 @@ class EditProductHandler
                 $productsData,
                 $product->getProductPrices(),
                 $this->eventRepository->findById($productsData->event_id)
+            );
+
+            $this->webhookDispatchService->queueProductWebhook(
+                eventType: WebhookEventType::PRODUCT_UPDATED,
+                productId: $product->getId(),
             );
 
             return $this->productRepository

@@ -13,10 +13,8 @@ use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\Exceptions\CannotCheckInException;
 use HiEvents\Helper\DateHelper;
 use HiEvents\Helper\IdHelper;
-use HiEvents\Repository\Eloquent\AttendeeRepository;
 use HiEvents\Repository\Interfaces\AttendeeCheckInRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
-use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Application\Handlers\CheckInList\Public\DTO\AttendeeAndActionDTO;
 use HiEvents\Services\Domain\CheckInList\DTO\CheckInResultDTO;
 use HiEvents\Services\Domain\CheckInList\DTO\CreateAttendeeCheckInsResponseDTO;
@@ -31,8 +29,6 @@ class CreateAttendeeCheckInService
         private readonly AttendeeCheckInRepositoryInterface $attendeeCheckInRepository,
         private readonly CheckInListDataService             $checkInListDataService,
         private readonly EventSettingsRepositoryInterface   $eventSettingsRepository,
-        private readonly OrderRepositoryInterface           $orderRepository,
-        private readonly AttendeeRepository                 $attendeeRepository,
         private readonly ConnectionInterface                $db,
         private readonly MarkOrderAsPaidService             $markOrderAsPaidService,
     )

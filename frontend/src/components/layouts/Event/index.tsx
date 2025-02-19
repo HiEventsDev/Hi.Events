@@ -17,7 +17,8 @@ import {
     IconTicket,
     IconUserQuestion,
     IconUsers,
-    IconUsersGroup
+    IconUsersGroup,
+    IconWebhook
 } from "@tabler/icons-react";
 import {useState} from "react";
 import classes from './Event.module.scss';
@@ -65,6 +66,7 @@ const EventLayout = () => {
         {label: t`Tools`},
         {link: 'homepage-designer', label: t`Homepage Designer`, icon: IconPaint},
         {link: 'widget', label: t`Widget Embed`, icon: IconDeviceTabletCode},
+        {link: 'webhooks', label: t`Webhooks`, icon: IconWebhook},
     ];
 
     const [sidebarOpen, setSidebarOpen] = useState(false);

@@ -16,11 +16,13 @@ use HiEvents\DomainObjects\PromoCodeDomainObject;
 use HiEvents\DomainObjects\QuestionDomainObject;
 use HiEvents\DomainObjects\Status\EventStatus;
 use HiEvents\DomainObjects\TaxAndFeesDomainObject;
+use HiEvents\DomainObjects\WebhookDomainObject;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\ImageRepositoryInterface;
 use HiEvents\Services\Domain\CapacityAssignment\CreateCapacityAssignmentService;
 use HiEvents\Services\Domain\CheckInList\CreateCheckInListService;
+use HiEvents\Services\Domain\CreateWebhookService;
 use HiEvents\Services\Domain\Product\CreateProductService;
 use HiEvents\Services\Domain\ProductCategory\CreateProductCategoryService;
 use HiEvents\Services\Domain\PromoCode\CreatePromoCodeService;
@@ -43,6 +45,7 @@ class DuplicateEventService
         private readonly DatabaseManager                 $databaseManager,
         private readonly HtmlPurifierService             $purifier,
         private readonly CreateProductCategoryService    $createProductCategoryService,
+        private readonly CreateWebhookService            $createWebhookService,
     )
     {
     }
@@ -62,6 +65,7 @@ class DuplicateEventService
         bool    $duplicateCapacityAssignments = true,
         bool    $duplicateCheckInLists = true,
         bool    $duplicateEventCoverImage = true,
+        bool    $duplicateWebhooks = true,
         ?string $description = null,
         ?string $endDate = null,
     ): EventDomainObject
@@ -102,6 +106,10 @@ class DuplicateEventService
 
             if ($duplicateEventCoverImage) {
                 $this->cloneEventCoverImage($event, $newEvent->getId());
+            }
+
+            if ($duplicateWebhooks) {
+                $this->duplicateWebhooks($event, $newEvent);
             }
 
             $this->databaseManager->commit();
@@ -335,9 +343,26 @@ class DuplicateEventService
                 new Relationship(ProductDomainObject::class),
             ]))
             ->loadRelation(ImageDomainObject::class)
+            ->loadRelation(WebhookDomainObject::class)
             ->findFirstWhere([
                 'id' => $eventId,
                 'account_id' => $accountId,
             ]);
+    }
+
+    private function duplicateWebhooks(EventDomainObject $event, EventDomainObject $newEvent): void
+    {
+        $event->getWebhooks()?->each(function (WebhookDomainObject $webhook) use ($newEvent) {
+            $this->createWebhookService->createWebhook(
+                (new WebhookDomainObject())
+                    ->setEventId($newEvent->getId())
+                    ->setUrl($webhook->getUrl())
+                    ->setSecret($webhook->getSecret())
+                    ->setEventTypes($webhook->getEventTypes())
+                    ->setStatus($webhook->getStatus())
+                    ->setAccountId($newEvent->getAccountId())
+                    ->setUserId($newEvent->getUserId()),
+            );
+        });
     }
 }

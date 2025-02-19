@@ -169,7 +169,7 @@ class ProductDomainObject extends Generated\ProductDomainObjectAbstract implemen
             throw new LogicException('You cannot get a single price for a tiered product. Use getPrices() instead.');
         }
 
-        return $this->getProductPrices()?->first()->getPrice();
+        return $this->getProductPrices()?->first()?->getPrice();
     }
 
     public function getPriceById(int $priceId): ?ProductPriceDomainObject

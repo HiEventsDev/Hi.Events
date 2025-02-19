@@ -39,26 +39,24 @@ class CreateEventService
         EventSettingDomainObject $eventSettings = null
     ): EventDomainObject
     {
-        $this->databaseManager->beginTransaction();
+        return $this->databaseManager->transaction(function () use ($eventData, $eventSettings) {
+            $organizer = $this->getOrganizer(
+                organizerId: $eventData->getOrganizerId(),
+                accountId: $eventData->getAccountId()
+            );
 
-        $organizer = $this->getOrganizer(
-            organizerId: $eventData->getOrganizerId(),
-            accountId: $eventData->getAccountId()
-        );
+            $event = $this->handleEventCreate($eventData);
 
-        $event = $this->handleEventCreate($eventData);
+            $this->createEventSettings(
+                eventSettings: $eventSettings,
+                event: $event,
+                organizer: $organizer
+            );
 
-        $this->createEventSettings(
-            eventSettings: $eventSettings,
-            event: $event,
-            organizer: $organizer
-        );
+            $this->createEventStatistics($event);
 
-        $this->createEventStatistics($event);
-
-        $this->databaseManager->commit();
-
-        return $event;
+            return $event;
+        });
     }
 
     /**

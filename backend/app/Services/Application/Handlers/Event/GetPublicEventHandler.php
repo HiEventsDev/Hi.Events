@@ -11,6 +11,7 @@ use HiEvents\DomainObjects\ProductCategoryDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\TaxAndFeesDomainObject;
+use HiEvents\Repository\Eloquent\Value\OrderAndDirection;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
@@ -34,10 +35,15 @@ class GetPublicEventHandler
         $event = $this->eventRepository
             ->loadRelation(
                 new Relationship(ProductCategoryDomainObject::class, [
-                    new Relationship(ProductDomainObject::class, [
-                        new Relationship(ProductPriceDomainObject::class),
-                        new Relationship(TaxAndFeesDomainObject::class),
-                    ]),
+                    new Relationship(ProductDomainObject::class,
+                        nested: [
+                            new Relationship(ProductPriceDomainObject::class),
+                            new Relationship(TaxAndFeesDomainObject::class),
+                        ],
+                        orderAndDirections: [
+                            new OrderAndDirection('order', 'asc'),
+                        ]
+                    ),
                 ])
             )
             ->loadRelation(new Relationship(EventSettingDomainObject::class))
