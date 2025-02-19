@@ -76,16 +76,8 @@ export const OrdersTable = ({orders, event}: OrdersTableProps) => {
 
     const handleMarkAsPaid = (eventId: IdParam, orderId: IdParam) => {
         markAsPaidMutation.mutate({eventId, orderId}, {
-            onSuccess: () => {
-                notifications.show({
-                    message: t`Order marked as paid`,
-                    icon: <IconCash/>,
-                    position: 'top-center',
-                })
-            },
-            onError: () => {
-                showError(t`There was an error marking the order as paid`);
-            }
+            onSuccess: () => showSuccess(t`Order marked as paid`),
+            onError: () => showError(t`There was an error marking the order as paid`)
         });
     }
 
