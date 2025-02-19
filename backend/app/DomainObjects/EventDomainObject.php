@@ -36,6 +36,8 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
 
     private ?EventStatisticDomainObject $eventStatistics = null;
 
+    private ?AccountDomainObject $account = null;
+
     public static function getAllowedFilterFields(): array
     {
         return [
@@ -142,6 +144,17 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
     {
         $this->organizer = $organizer;
 
+        return $this;
+    }
+
+    public function getAccount(): ?AccountDomainObject
+    {
+        return $this->account;
+    }
+
+    public function setAccount(?AccountDomainObject $account): self
+    {
+        $this->account = $account;
         return $this;
     }
 

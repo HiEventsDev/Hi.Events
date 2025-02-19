@@ -14,6 +14,11 @@ class Event extends BaseModel
 {
     use HasImages;
 
+    public function account(): BelongsTo
+    {
+        return $this->belongsTo(Account::class);
+    }
+
     public function organizer(): BelongsTo
     {
         return $this->belongsTo(Organizer::class);

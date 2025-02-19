@@ -64,6 +64,17 @@ export interface Account {
     stripe_connect_setup_complete?: boolean;
     is_account_email_confirmed?: boolean;
     is_saas_mode_enabled?: boolean;
+    configuration?: AccountConfiguration;
+}
+
+export interface AccountConfiguration {
+    id: IdParam;
+    name: string;
+    application_fees: {
+        percentage: number;
+        fixed: number;
+    },
+    is_system_default: boolean;
 }
 
 export interface StripeConnectDetails {

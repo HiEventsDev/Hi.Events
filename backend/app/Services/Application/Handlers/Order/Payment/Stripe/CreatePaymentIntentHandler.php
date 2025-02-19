@@ -7,6 +7,7 @@ use Brick\Math\Exception\NumberFormatException;
 use Brick\Math\Exception\RoundingNecessaryException;
 use Brick\Money\Exception\UnknownCurrencyException;
 use Brick\Money\Money;
+use HiEvents\DomainObjects\AccountConfigurationDomainObject;
 use HiEvents\DomainObjects\Generated\StripePaymentDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\StripePaymentDomainObject;
@@ -30,7 +31,7 @@ readonly class CreatePaymentIntentHandler
         private StripePaymentIntentCreationService $stripePaymentService,
         private CheckoutSessionManagementService   $sessionIdentifierService,
         private StripePaymentsRepositoryInterface  $stripePaymentsRepository,
-        private AccountRepositoryInterface         $accountRepository
+        private AccountRepositoryInterface         $accountRepository,
     )
     {
     }
@@ -57,7 +58,12 @@ readonly class CreatePaymentIntentHandler
             throw new UnauthorizedException(__('Sorry, we could not verify your session. Please create a new order.'));
         }
 
-        $account = $this->accountRepository->findByEventId($order->getEventId());
+        $account = $this->accountRepository
+            ->loadRelation(new Relationship(
+                domainObject: AccountConfigurationDomainObject::class,
+                name: 'configuration',
+            ))
+            ->findByEventId($order->getEventId());
 
         // If we already have a Stripe session then re-fetch the client secret
         if ($order->getStripePayment() !== null) {
@@ -82,6 +88,7 @@ readonly class CreatePaymentIntentHandler
             StripePaymentDomainObjectAbstract::ORDER_ID => $order->getId(),
             StripePaymentDomainObjectAbstract::PAYMENT_INTENT_ID => $paymentIntent->paymentIntentId,
             StripePaymentDomainObjectAbstract::CONNECTED_ACCOUNT_ID => $account->getStripeAccountId(),
+            StripePaymentDomainObjectAbstract::APPLICATION_FEE => $paymentIntent->applicationFeeAmount,
         ]);
 
         return $paymentIntent;

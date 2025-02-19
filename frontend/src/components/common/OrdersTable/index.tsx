@@ -3,7 +3,6 @@ import {Anchor, Badge, Button, Group, Menu, Table as MantineTable, Tooltip} from
 import {Event, IdParam, Invoice, MessageType, Order} from "../../../types.ts";
 import {
     IconBasketCog,
-    IconCash,
     IconCheck,
     IconDotsVertical,
     IconInfoCircle,
@@ -36,6 +35,7 @@ import {useMarkOrderAsPaid} from "../../../mutations/useMarkOrderAsPaid.ts";
 import {orderClient} from "../../../api/order.client.ts";
 import {downloadBinary} from "../../../utilites/download.ts";
 import {withLoadingNotification} from "../../../utilites/withLoadingNotification.tsx";
+import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 
 interface OrdersTableProps {
     event: Event,
@@ -84,11 +84,7 @@ export const OrdersTable = ({orders, event}: OrdersTableProps) => {
                 })
             },
             onError: () => {
-                notifications.show({
-                    message: t`There was an error marking the order as paid`,
-                    icon: <IconCheck/>,
-                    position: 'top-center',
-                })
+                showError(t`There was an error marking the order as paid`);
             }
         });
     }

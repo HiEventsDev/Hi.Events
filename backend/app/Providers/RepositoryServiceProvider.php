@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace HiEvents\Providers;
 
+use HiEvents\Repository\Eloquent\AccountConfigurationRepository;
 use HiEvents\Repository\Eloquent\AccountRepository;
 use HiEvents\Repository\Eloquent\AccountUserRepository;
 use HiEvents\Repository\Eloquent\AttendeeCheckInRepository;
@@ -17,6 +18,7 @@ use HiEvents\Repository\Eloquent\EventStatisticRepository;
 use HiEvents\Repository\Eloquent\ImageRepository;
 use HiEvents\Repository\Eloquent\InvoiceRepository;
 use HiEvents\Repository\Eloquent\MessageRepository;
+use HiEvents\Repository\Eloquent\OrderApplicationFeeRepository;
 use HiEvents\Repository\Eloquent\OrderItemRepository;
 use HiEvents\Repository\Eloquent\OrderRefundRepository;
 use HiEvents\Repository\Eloquent\OrderRepository;
@@ -35,6 +37,7 @@ use HiEvents\Repository\Eloquent\TaxAndFeeRepository;
 use HiEvents\Repository\Eloquent\UserRepository;
 use HiEvents\Repository\Eloquent\WebhookLogRepository;
 use HiEvents\Repository\Eloquent\WebhookRepository;
+use HiEvents\Repository\Interfaces\AccountConfigurationRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
 use HiEvents\Repository\Interfaces\AttendeeCheckInRepositoryInterface;
@@ -48,6 +51,7 @@ use HiEvents\Repository\Interfaces\EventStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\ImageRepositoryInterface;
 use HiEvents\Repository\Interfaces\InvoiceRepositoryInterface;
 use HiEvents\Repository\Interfaces\MessageRepositoryInterface;
+use HiEvents\Repository\Interfaces\OrderApplicationFeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderItemRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRefundRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
@@ -105,6 +109,8 @@ class RepositoryServiceProvider extends ServiceProvider
         OrderRefundRepositoryInterface::class => OrderRefundRepository::class,
         WebhookRepositoryInterface::class => WebhookRepository::class,
         WebhookLogRepositoryInterface::class => WebhookLogRepository::class
+        OrderApplicationFeeRepositoryInterface::class => OrderApplicationFeeRepository::class,
+        AccountConfigurationRepositoryInterface::class => AccountConfigurationRepository::class,
     ];
 
     public function register(): void

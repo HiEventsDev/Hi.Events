@@ -10,10 +10,12 @@ use HiEvents\DomainObjects\Status\UserStatus;
 use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Exceptions\EmailAlreadyExists;
 use HiEvents\Helper\IdHelper;
+use HiEvents\Repository\Interfaces\AccountConfigurationRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Account\DTO\CreateAccountDTO;
+use HiEvents\Services\Application\Handlers\Account\Exceptions\AccountConfigurationDoesNotExist;
 use HiEvents\Services\Application\Handlers\Account\Exceptions\AccountRegistrationDisabledException;
 use HiEvents\Services\Domain\Account\AccountUserAssociationService;
 use HiEvents\Services\Domain\User\EmailConfirmationService;
@@ -21,19 +23,22 @@ use Illuminate\Config\Repository;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Hashing\HashManager;
 use NumberFormatter;
+use Psr\Log\LoggerInterface;
 use Throwable;
 
-readonly class CreateAccountHandler
+class CreateAccountHandler
 {
     public function __construct(
-        private UserRepositoryInterface        $userRepository,
-        private AccountRepositoryInterface     $accountRepository,
-        private HashManager                    $hashManager,
-        private DatabaseManager                $databaseManager,
-        private Repository                     $config,
-        private EmailConfirmationService       $emailConfirmationService,
-        private AccountUserAssociationService  $accountUserAssociationService,
-        private AccountUserRepositoryInterface $accountUserRepository,
+        private readonly UserRepositoryInterface                 $userRepository,
+        private readonly AccountRepositoryInterface              $accountRepository,
+        private readonly HashManager                             $hashManager,
+        private readonly DatabaseManager                         $databaseManager,
+        private readonly Repository                              $config,
+        private readonly EmailConfirmationService                $emailConfirmationService,
+        private readonly AccountUserAssociationService           $accountUserAssociationService,
+        private readonly AccountUserRepositoryInterface          $accountUserRepository,
+        private readonly AccountConfigurationRepositoryInterface $accountConfigurationRepository,
+        private readonly LoggerInterface                         $logger,
     )
     {
     }
@@ -48,7 +53,7 @@ readonly class CreateAccountHandler
         }
 
         $isSaasMode = $this->config->get('app.saas_mode_enabled');
-        $passwordHash = $this->hashManager->make($accountData->password);
+        $passwordHash = $this->hashManager->make($accountData->password);;
 
         return $this->databaseManager->transaction(function () use ($isSaasMode, $passwordHash, $accountData) {
             $account = $this->accountRepository->create([
@@ -60,12 +65,7 @@ readonly class CreateAccountHandler
                 // If the app is not running in SaaS mode, we can immediately verify the account.
                 // Same goes for the email verification below.
                 'account_verified_at' => $isSaasMode ? null : now()->toDateTimeString(),
-                'configuration' => [
-                    'application_fee' => [
-                        'percentage' => config('app.saas_stripe_application_fee_percent'),
-                        'fixed' => config('app.saas_stripe_application_fee_fixed') ?? 0,
-                    ],
-                ],
+                'account_configuration_id' => $this->getAccountConfigurationId($accountData),
             ]);
 
             $user = $this->getExistingUser($accountData) ?? $this->userRepository->create([
@@ -144,5 +144,41 @@ readonly class CreateAccountHandler
         }
 
         return $existingUser;
+    }
+
+    /**
+     * @throws AccountConfigurationDoesNotExist
+     */
+    private function getAccountConfigurationId(CreateAccountDTO $accountData): int
+    {
+        if ($accountData->invite_token !== null) {
+            $decryptedInviteToken = decrypt($accountData->invite_token);
+            $accountConfigurationId = $decryptedInviteToken['account_configuration_id'];
+
+            $accountConfiguration = $this->accountConfigurationRepository->findFirstWhere([
+                'id' => $accountConfigurationId,
+            ]);
+
+            if ($accountConfiguration !== null) {
+                return $accountConfiguration->getId();
+            }
+
+            $this->logger->error('Invalid account configuration ID in invite token', [
+                'account_configuration_id' => $accountConfigurationId,
+            ]);
+        }
+
+        $defaultConfiguration = $this->accountConfigurationRepository->findFirstWhere([
+            'is_system_default' => true,
+        ]);
+
+        if ($defaultConfiguration === null) {
+            $this->logger->error('No default account configuration found');
+            throw new AccountConfigurationDoesNotExist(
+                __('There is no default account configuration available')
+            );
+        }
+
+        return $defaultConfiguration->getId();
     }
 }
