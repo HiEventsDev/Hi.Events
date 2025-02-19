@@ -26,7 +26,6 @@ const EventHomepagePreview = () => {
         return <LoadingOverlay/>;
     }
 
-
     return (
         <EventHomepage
             event={event}
