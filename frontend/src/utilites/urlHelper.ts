@@ -5,6 +5,10 @@ export const eventCheckoutPath = (eventId: IdParam, orderShortId: IdParam, subPa
     return `/checkout/${eventId}/${orderShortId}/${subPage}`;
 }
 
+export const eventPreviewPath = (eventId: IdParam) => {
+    return `/event/${eventId}/preview`;
+}
+
 export const eventHomepagePath = (event: Event) => {
     return `/event/${event?.id}/${event?.slug}`;
 }

@@ -339,6 +339,13 @@ export const router: RouteObject[] = [
         errorElement: <ErrorPage/>,
     },
     {
+        path: "/event/:eventId/preview",
+        async lazy() {
+            const EventHomepagePreview = await import("./components/layouts/EventHomepagePreview");
+            return {Component: EventHomepagePreview.default};
+        },
+    },
+    {
         path: "/event/:eventId/:eventSlug",
         loader: async ({params, request}) => {
             try {
