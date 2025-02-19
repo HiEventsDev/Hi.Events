@@ -51,6 +51,11 @@
     height: calc(100vh - 55px);
     width: 100%;
     overflow: hidden;
+    min-width: 400px;
+
+    @include respond-below(sm) {
+      padding: 20px;
+    }
 
     .preview {
       width: 100%;
@@ -62,7 +67,8 @@
       position: relative;
       width: 100%;
       height: 100%;
-      --scale: 0.65;
+      min-height: 500px;
+      --scale: .75;
 
       iframe {
         transform: scale(var(--scale));
