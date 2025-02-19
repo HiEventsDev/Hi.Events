@@ -2,10 +2,10 @@
 
 namespace HiEvents\Services\Domain\Order;
 
-use HiEvents\DomainObjects\Enums\WebhookEventType;
 use HiEvents\DomainObjects\AccountConfigurationDomainObject;
 use HiEvents\DomainObjects\AccountDomainObject;
 use HiEvents\DomainObjects\Enums\PaymentProviders;
+use HiEvents\DomainObjects\Enums\WebhookEventType;
 use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
@@ -32,10 +32,6 @@ class MarkOrderAsPaidService
         private readonly InvoiceRepositoryInterface            $invoiceRepository,
         private readonly AttendeeRepositoryInterface           $attendeeRepository,
         private readonly WebhookDispatchService                $webhookDispatchService,
-        private readonly OrderRepositoryInterface              $orderRepository,
-        private readonly DatabaseManager                       $databaseManager,
-        private readonly InvoiceRepositoryInterface            $invoiceRepository,
-        private readonly AttendeeRepositoryInterface           $attendeeRepository,
         private readonly OrderApplicationFeeCalculationService $orderApplicationFeeCalculationService,
         private readonly EventRepositoryInterface              $eventRepository,
         private readonly OrderApplicationFeeService            $orderApplicationFeeService,
@@ -79,7 +75,7 @@ class MarkOrderAsPaidService
                 eventType: WebhookEventType::ORDER_MARKED_AS_PAID,
                 orderId: $orderId,
             );
-          
+
             $this->storeApplicationFeePayment($updatedOrder);
 
             return $updatedOrder;
