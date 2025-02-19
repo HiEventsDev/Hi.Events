@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {IconDotsVertical, IconEyeOff, IconPencil, IconSend, IconTrash} from "@tabler/icons-react";
+import {IconCopyPlus, IconDotsVertical, IconEyeOff, IconPencil, IconSend, IconTrash} from "@tabler/icons-react";
 import classes from "../ProductsTable.module.scss";
 import classNames from "classnames";
 import {Badge, Button, Group, Menu, Popover} from "@mantine/core";
@@ -23,6 +23,7 @@ import {EditProductModal} from "../../../modals/EditProductModal";
 import {SendMessageModal} from "../../../modals/SendMessageModal";
 import {SortArrows} from "../../SortArrows";
 import {useSortProducts} from "../../../../mutations/useSortProducts.ts";
+import {DuplicateProductModal} from "../../../modals/DuplicateProductModal";
 
 interface SortableProductProps {
     product: Product;
@@ -33,6 +34,7 @@ interface SortableProductProps {
 
 export const SortableProduct = ({product, currencyCode, category, categories}: SortableProductProps) => {
     const [isEditModalOpen, editModal] = useDisclosure(false);
+    const [isDuplicateModalOpen, duplicateModal] = useDisclosure(false);
     const [isMessageModalOpen, messageModal] = useDisclosure(false);
     const [productId, setProductId] = useState<IdParam>();
     const deleteMutation = useDeleteProduct();
@@ -273,6 +275,11 @@ export const SortableProduct = ({product, currencyCode, category, categories}: S
                                     leftSection={<IconPencil size={14}/>}>
                                     {t`Edit Product`}
                                 </Menu.Item>
+                                <Menu.Item
+                                    onClick={() => handleModalClick(product.id, duplicateModal)}
+                                    leftSection={<IconCopyPlus size={14}/>}>
+                                    {t`Duplicate Product`}
+                                </Menu.Item>
                                 <Menu.Label>{t`Danger zone`}</Menu.Label>
                                 <Menu.Item
                                     onClick={() => handleDeleteProduct(product.id, product.event_id)}
@@ -287,6 +294,7 @@ export const SortableProduct = ({product, currencyCode, category, categories}: S
                 {product.product_type === ProductType.Ticket && <div className={classes.halfCircle}/>}
                 <div className={`${classes.halfCircle} ${classes.right}`}/>
             </div>
+            {isDuplicateModalOpen && <DuplicateProductModal originalProductId={productId} onClose={duplicateModal.close}/>}
             {isEditModalOpen && <EditProductModal productId={productId} onClose={editModal.close}/>}
             {isMessageModalOpen && (
                 <SendMessageModal

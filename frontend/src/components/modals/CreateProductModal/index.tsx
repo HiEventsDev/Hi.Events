@@ -2,15 +2,14 @@ import {Button} from "@mantine/core";
 import {GenericModalProps, IdParam, Product, ProductPriceType, ProductType, TaxAndFee} from "../../../types.ts";
 import {useForm} from "@mantine/form";
 import {useQueryClient} from "@tanstack/react-query";
-import {notifications} from "@mantine/notifications";
 import {useParams} from "react-router";
 import {Modal} from "../../common/Modal";
 import {ProductForm} from "../../forms/ProductForm";
-import {GET_PRODUCTS_QUERY_KEY} from "../../../queries/useGetProducts.ts";
 import {useEffect} from "react";
 import {useGetTaxesAndFees} from "../../../queries/useGetTaxesAndFees.ts";
 import {t} from "@lingui/macro";
 import {useCreateProduct} from "../../../mutations/useCreateProduct.ts";
+import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 
 interface CreateProductModalProps extends GenericModalProps {
     selectedCategoryId?: IdParam;
@@ -52,27 +51,16 @@ export const CreateProductModal = ({onClose, selectedCategoryId = undefined}: Cr
     const handleCreateProduct = (values: Product) => {
         createProductMutation.mutate({eventId, productData: values}, {
             onSuccess: () => {
-                notifications.show({
-                    message: t`Successfully Created Product`,
-                    color: 'green',
-                    position: 'top-center',
-                });
-                queryClient.invalidateQueries({queryKey: [GET_PRODUCTS_QUERY_KEY]}).then(() => {
-                    form.reset();
-                    onClose();
-                });
+                showSuccess(t`Successfully Created Product`);
+                form.reset();
+                onClose();
             },
 
             onError: (error: any) => {
                 if (error?.response?.data?.errors) {
                     form.setErrors(error.response.data.errors);
                 }
-
-                notifications.show({
-                    message: t`Unable to create product. Please check the your details`,
-                    color: 'red',
-                    position: 'top-center',
-                });
+                showError(t`Unable to create product. Please check the your details`);
             }
         });
     }
