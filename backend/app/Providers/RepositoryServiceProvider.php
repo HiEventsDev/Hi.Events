@@ -108,7 +108,7 @@ class RepositoryServiceProvider extends ServiceProvider
         InvoiceRepositoryInterface::class => InvoiceRepository::class,
         OrderRefundRepositoryInterface::class => OrderRefundRepository::class,
         WebhookRepositoryInterface::class => WebhookRepository::class,
-        WebhookLogRepositoryInterface::class => WebhookLogRepository::class
+        WebhookLogRepositoryInterface::class => WebhookLogRepository::class,
         OrderApplicationFeeRepositoryInterface::class => OrderApplicationFeeRepository::class,
         AccountConfigurationRepositoryInterface::class => AccountConfigurationRepository::class,
     ];
