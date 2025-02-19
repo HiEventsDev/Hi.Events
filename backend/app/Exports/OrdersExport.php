@@ -64,7 +64,8 @@ class OrdersExport implements FromCollection, WithHeadings, WithMapping, WithSty
             __('Is Free Order'),
             __('Is Manually Created'),
             __('Billing Address'),
-            __('Notes')
+            __('Notes'),
+            __('Promo Code'),
         ], $questionTitles);
     }
 
@@ -107,6 +108,7 @@ class OrdersExport implements FromCollection, WithHeadings, WithMapping, WithSty
             $order->getIsManuallyCreated(),
             $order->getBillingAddressString(),
             $order->getNotes(),
+            $order->getPromoCode(),
         ], $answers->toArray());
     }
 

@@ -9,6 +9,7 @@ readonly class CreatePaymentIntentResponseDTO
         public ?string $clientSecret = null,
         public ?string $accountId = null,
         public ?string $error = null,
+        public int     $applicationFeeAmount = 0,
     )
     {
     }

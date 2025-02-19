@@ -14,6 +14,7 @@ final class CreateAccountDTO extends BaseDTO
         public readonly ?string $last_name = null,
         public readonly ?string $timezone = null,
         public readonly ?string $currency_code = null,
+        public readonly ?string $invite_token = null,
     )
     {
     }

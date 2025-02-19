@@ -4,11 +4,80 @@ import {HeadingCard} from "../../../../../common/HeadingCard";
 import {useCreateOrGetStripeConnectDetails} from "../../../../../../queries/useCreateOrGetStripeConnectDetails.ts";
 import {useGetAccount} from "../../../../../../queries/useGetAccount.ts";
 import {LoadingMask} from "../../../../../common/LoadingMask";
-import {Anchor, Button, Group} from "@mantine/core";
+import {Anchor, Button, Grid, Group, Text, ThemeIcon, Title} from "@mantine/core";
 import {StripeConnectDetails} from "../../../../../../types.ts";
-import paymentClasses from "./PaymentSettings.module.scss"
-import classes from "../../ManageAccount.module.scss"
+import paymentClasses from "./PaymentSettings.module.scss";
+import classes from "../../ManageAccount.module.scss";
 import {useEffect, useState} from "react";
+import {IconAlertCircle, IconBrandStripe, IconCheck, IconExternalLink} from '@tabler/icons-react';
+import {formatCurrency} from "../../../../../../utilites/currency.ts";
+
+interface FeePlanDisplayProps {
+    configuration?: {
+        name: string;
+        application_fees: {
+            percentage: number;
+            fixed: number;
+        };
+        is_system_default: boolean;
+    };
+}
+
+const formatPercentage = (value: number) => {
+    return new Intl.NumberFormat('en-US', {
+        style: 'percent',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    }).format(value / 100);
+};
+
+const FeePlanDisplay = ({configuration}: FeePlanDisplayProps) => {
+    if (!configuration) return null;
+
+    return (
+        <div className={paymentClasses.stripeInfo}>
+            <Title mb={10} order={3}>{t`Platform Fees`}</Title>
+
+            <Text size="sm" c="dimmed" mb="lg">
+                {t`Hi.Events charges platform fees to maintain and improve our services. These fees are automatically deducted from each transaction.`}
+            </Text>
+
+            <Card variant={'lightGray'}>
+                <Title order={4}>{configuration.name}</Title>
+                <Grid>
+                    <Grid.Col span={{base: 12, sm: 6}}>
+                        <Group gap="xs" wrap={'nowrap'}>
+                            <Text size="sm">
+                                {t`Transaction Fee:`}{' '}
+                                <Text span fw={600}>
+                                    {formatPercentage(configuration.application_fees.percentage)}
+                                </Text>
+                            </Text>
+                        </Group>
+                    </Grid.Col>
+                    <Grid.Col span={{base: 12, sm: 6}}>
+                        <Group gap="xs" wrap={'nowrap'}>
+                            <Text size="sm">
+                                {t`Fixed Fee:`}{' '}
+                                <Text span fw={600}>
+                                    {formatCurrency(configuration.application_fees.fixed)}
+                                </Text>
+                            </Text>
+                        </Group>
+                    </Grid.Col>
+                </Grid>
+            </Card>
+
+            <Text size="xs" c="dimmed" mt="md">
+                <Group gap="xs" align="center" wrap={'nowrap'}>
+                    <IconAlertCircle size={14}/>
+                    <Text
+                        span>{t`Fees are subject to change. You will be notified of any changes to your fee structure.`}</Text>
+                </Group>
+            </Text>
+        </div>
+    );
+};
 
 const ConnectStatus = (props: { stripeDetails: StripeConnectDetails }) => {
     const [isReturningFromStripe, setIsReturningFromStripe] = useState(false);
@@ -24,39 +93,89 @@ const ConnectStatus = (props: { stripeDetails: StripeConnectDetails }) => {
 
     return (
         <div className={paymentClasses.stripeInfo}>
-            {props.stripeDetails?.is_connect_setup_complete && (
+            <Title mb={10} order={3}>{t`Payment Processing`}</Title>
+
+            {props.stripeDetails?.is_connect_setup_complete ? (
                 <>
-                    <h2>{t`You have connected your Stripe account`}</h2>
-                    <p>
-                        {t`You can now start receiving payments through Stripe.`}
-                    </p>
+                    <Group gap="xs" mb="md">
+                        <ThemeIcon size="sm" variant="light" radius="xl" color="green">
+                            <IconCheck size={16}/>
+                        </ThemeIcon>
+                        <Text size="sm" fw={500}>
+                            <b>
+                                {t`Connected to Stripe`}
+                            </b>
+                        </Text>
+                    </Group>
+                    <Text size="sm" c="dimmed" mb="lg">
+                        {t`Your Stripe account is connected and ready to process payments.`}
+                    </Text>
+                    <Group gap="xs">
+                        <Anchor
+                            href="https://dashboard.stripe.com/"
+                            target="_blank"
+                            size="sm"
+                        >
+                            <Group gap="xs" wrap={'nowrap'}>
+                                <Text span>{t`Go to Stripe Dashboard`}</Text>
+                                <IconExternalLink size={14}/>
+                            </Group>
+                        </Anchor>
+                        <Text span c="dimmed">•</Text>
+                        <Anchor
+                            href="https://stripe.com/docs/connect"
+                            target="_blank"
+                            size="sm"
+                        >
+                            <Group gap="xs">
+                                <Text span>{t`Connect Documentation`}</Text>
+                                <IconExternalLink size={14}/>
+                            </Group>
+                        </Anchor>
+                    </Group>
                 </>
-            )}
-            {!props.stripeDetails?.is_connect_setup_complete && (
+            ) : (
                 <>
-                    <h2>
-                        {!isReturningFromStripe && t`You have not connected your Stripe account`}
-                        {isReturningFromStripe && t`You have not completed your Stripe Connect setup`}
-                    </h2>
-                    <p>
-                        {t`We use Stripe to process payments. Connect your Stripe account to start receiving payments.`}
-                    </p>
-                    <p>
-                        <Group gap={20}>
-                            <Button variant={'light'}
-                                    onClick={() => {
-                                        if (typeof window !== 'undefined')
-                                            window.location.href = String(props.stripeDetails?.connect_url);
-                                    }}
+                    <Text size="sm" c="dimmed" mb="lg">
+                        {t`To receive credit card payments, you need to connect your Stripe account. Stripe is our payment processing partner that ensures secure transactions and timely payouts.`}
+                    </Text>
+                    <Group gap="md">
+                        <Button
+                            variant="light"
+                            size="sm"
+                            leftSection={<IconBrandStripe size={20}/>}
+                            onClick={() => {
+                                if (typeof window !== 'undefined')
+                                    window.location.href = String(props.stripeDetails?.connect_url);
+                            }}
+                        >
+                            {(!isReturningFromStripe) && t`Connect with Stripe`}
+                            {(isReturningFromStripe) && t`Complete Stripe Setup`}
+                        </Button>
+                        <Group gap="xs">
+                            <Anchor
+                                href="https://stripe.com/connect"
+                                target="_blank"
+                                size="sm"
                             >
-                                {(!isReturningFromStripe) && t`Connect Stripe`}
-                                {(isReturningFromStripe) && t`Continue Stripe Connect Setup`}
-                            </Button>
-                            <Anchor target={'_blank'} href={'https://stripe.com/'}>
-                                {t`Learn more about Stripe`}
+                                <Group gap="xs">
+                                    <Text span>{t`About Stripe Connect`}</Text>
+                                    <IconExternalLink size={14}/>
+                                </Group>
+                            </Anchor>
+                            <Text span c="dimmed">•</Text>
+                            <Anchor
+                                href="https://stripe.com/docs/connect"
+                                target="_blank"
+                                size="sm"
+                            >
+                                <Group gap="xs">
+                                    <Text span>{t`Documentation`}</Text>
+                                    <IconExternalLink size={14}/>
+                                </Group>
                             </Anchor>
                         </Group>
-                    </p>
+                    </Group>
                 </>
             )}
         </div>
@@ -74,10 +193,15 @@ const PaymentSettings = () => {
             <>
                 <Card className={classes.tabContent}>
                     <div className={paymentClasses.stripeInfo}>
-                        <h2>{t`You do not have permission to access this page`}</h2>
-                        <p>
+                        <Group gap="xs" mb="md">
+                            <ThemeIcon size="lg" radius="md" variant="light">
+                                <IconAlertCircle size={20}/>
+                            </ThemeIcon>
+                            <Title order={2}>{t`Access Denied`}</Title>
+                        </Group>
+                        <Text size="md">
                             {error?.response?.data?.message}
-                        </p>
+                        </Text>
                     </div>
                 </Card>
             </>
@@ -87,12 +211,23 @@ const PaymentSettings = () => {
     return (
         <>
             <HeadingCard
-                heading={t`Payment`}
-                subHeading={t`Manage your Stripe payment details`}
+                heading={t`Payment Settings`}
+                subHeading={t`Manage your payment processing and view platform fees`}
             />
             <Card className={classes.tabContent}>
                 <LoadingMask/>
-                {stripeDetails && <ConnectStatus stripeDetails={stripeDetails}/>}
+                {(accountQuery.data?.configuration || stripeDetails) && (
+                    <Grid gutter="xl">
+                        <Grid.Col span={{base: 12, md: 6}}>
+                            {stripeDetails && <ConnectStatus stripeDetails={stripeDetails}/>}
+                        </Grid.Col>
+                        <Grid.Col span={{base: 12, md: 6}}>
+                            {accountQuery.data?.configuration && (
+                                <FeePlanDisplay configuration={accountQuery.data.configuration}/>
+                            )}
+                        </Grid.Col>
+                    </Grid>
+                )}
             </Card>
         </>
     );

@@ -5,6 +5,7 @@ namespace HiEvents\Services\Domain\Payment\Stripe;
 use HiEvents\DomainObjects\StripeCustomerDomainObject;
 use HiEvents\Exceptions\Stripe\CreatePaymentIntentFailedException;
 use HiEvents\Repository\Interfaces\StripeCustomerRepositoryInterface;
+use HiEvents\Services\Domain\Order\OrderApplicationFeeCalculationService;
 use HiEvents\Services\Domain\Payment\Stripe\DTOs\CreatePaymentIntentRequestDTO;
 use HiEvents\Services\Domain\Payment\Stripe\DTOs\CreatePaymentIntentResponseDTO;
 use Illuminate\Config\Repository;
@@ -17,11 +18,12 @@ use Throwable;
 class StripePaymentIntentCreationService
 {
     public function __construct(
-        readonly private StripeClient                      $stripeClient,
-        readonly private LoggerInterface                   $logger,
-        readonly private Repository                        $config,
-        readonly private StripeCustomerRepositoryInterface $stripeCustomerRepository,
-        readonly private DatabaseManager                   $databaseManager,
+        private readonly StripeClient                          $stripeClient,
+        private readonly LoggerInterface                       $logger,
+        private readonly Repository                            $config,
+        private readonly StripeCustomerRepositoryInterface     $stripeCustomerRepository,
+        private readonly DatabaseManager                       $databaseManager,
+        private readonly OrderApplicationFeeCalculationService $orderApplicationFeeCalculationService,
     )
     {
     }
@@ -60,7 +62,10 @@ class StripePaymentIntentCreationService
         try {
             $this->databaseManager->beginTransaction();
 
-            $applicationFee = $this->getApplicationFee($paymentIntentDTO);
+            $applicationFee = $this->orderApplicationFeeCalculationService->calculateApplicationFee(
+                accountConfiguration: $paymentIntentDTO->account->getConfiguration(),
+                orderTotal: $paymentIntentDTO->amount / 100
+            );
 
             $paymentIntent = $this->stripeClient->paymentIntents->create([
                 'amount' => $paymentIntentDTO->amount,
@@ -89,6 +94,7 @@ class StripePaymentIntentCreationService
                 paymentIntentId: $paymentIntent->id,
                 clientSecret: $paymentIntent->client_secret,
                 accountId: $paymentIntentDTO->account->getStripeAccountId(),
+                applicationFeeAmount: $applicationFee,
             );
         } catch (ApiErrorException $exception) {
             $this->logger->error("Stripe payment intent creation failed: {$exception->getMessage()}", [

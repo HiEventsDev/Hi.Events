@@ -35,7 +35,7 @@ export const ManageAccount = () => {
 
                         {(isUserAdmin && account && account.is_saas_mode_enabled) && (
                             <Tabs.Tab value="payment" leftSection={<IconCreditCard/>}>
-                                {t`Payment`}
+                                {t`Payment & Plan`}
                             </Tabs.Tab>
                         )}
                     </Tabs.List>

@@ -30,6 +30,11 @@ export const useFormErrorResponseHandler = () => {
                     <p style={{fontSize: '0.8rem', color: '#ccc'}}>
                         Error: {error.response.status}
                     </p>
+                    {error.response.data?.message && (
+                        <p style={{fontSize: '0.8rem', color: '#ccc'}}>
+                            {error.response.data.message}
+                        </p>
+                    )}
                 </>
             ));
             return;

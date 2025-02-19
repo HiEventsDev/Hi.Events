@@ -12,6 +12,7 @@ use HiEvents\Http\ResponseCodes;
 use HiEvents\Resources\Account\AccountResource;
 use HiEvents\Services\Application\Handlers\Account\CreateAccountHandler;
 use HiEvents\Services\Application\Handlers\Account\DTO\CreateAccountDTO;
+use HiEvents\Services\Application\Handlers\Account\Exceptions\AccountConfigurationDoesNotExist;
 use HiEvents\Services\Application\Handlers\Account\Exceptions\AccountRegistrationDisabledException;
 use HiEvents\Services\Application\Handlers\Auth\DTO\LoginCredentialsDTO;
 use HiEvents\Services\Application\Handlers\Auth\LoginHandler;
@@ -47,6 +48,7 @@ class CreateAccountAction extends BaseAuthAction
                 'locale' => $request->has('locale')
                     ? $request->validated('locale')
                     : $this->localeService->getLocaleOrDefault($request->getPreferredLanguage()),
+                'invite_token' => $request->validated('invite_token'),
             ]));
         } catch (EmailAlreadyExists $e) {
             throw ValidationException::withMessages([
@@ -56,6 +58,11 @@ class CreateAccountAction extends BaseAuthAction
             return $this->errorResponse(
                 message: __('Account registration is disabled'),
                 statusCode: ResponseCodes::HTTP_FORBIDDEN,
+            );
+        } catch (AccountConfigurationDoesNotExist $e) {
+            return $this->errorResponse(
+                message: $e->getMessage(),
+                statusCode: ResponseCodes::HTTP_INTERNAL_SERVER_ERROR,
             );
         }
 

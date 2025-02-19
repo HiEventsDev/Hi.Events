@@ -38,6 +38,11 @@ class Order extends BaseModel
         return $this->hasMany(Invoice::class)->orderBy('created_at', 'desc');
     }
 
+    public function order_application_fee(): HasOne
+    {
+        return $this->hasOne(OrderApplicationFee::class);
+    }
+
     protected function getCastMap(): array
     {
         return [
