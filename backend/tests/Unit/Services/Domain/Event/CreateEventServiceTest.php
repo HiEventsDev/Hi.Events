@@ -13,7 +13,7 @@ use HiEvents\Repository\Interfaces\EventStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
 use HiEvents\Services\Domain\Event\CreateEventService;
 use HiEvents\Services\Domain\ProductCategory\CreateProductCategoryService;
-use HTMLPurifier;
+use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 use Illuminate\Database\DatabaseManager;
 use Mockery;
 use Tests\TestCase;
@@ -26,7 +26,7 @@ class CreateEventServiceTest extends TestCase
     private OrganizerRepositoryInterface $organizerRepository;
     private DatabaseManager $databaseManager;
     private EventStatisticRepositoryInterface $eventStatisticsRepository;
-    private HTMLPurifier $purifier;
+    private HtmlPurifierService $purifier;
 
     protected function setUp(): void
     {
@@ -37,7 +37,7 @@ class CreateEventServiceTest extends TestCase
         $this->organizerRepository = Mockery::mock(OrganizerRepositoryInterface::class);
         $this->databaseManager = Mockery::mock(DatabaseManager::class);
         $this->eventStatisticsRepository = Mockery::mock(EventStatisticRepositoryInterface::class);
-        $this->purifier = Mockery::mock(HTMLPurifier::class);
+        $this->purifier = Mockery::mock(HtmlPurifierService::class);
         $this->createProductCategoryService = Mockery::mock(CreateProductCategoryService::class);
 
         $this->createEventService = new CreateEventService(
@@ -47,7 +47,6 @@ class CreateEventServiceTest extends TestCase
             $this->databaseManager,
             $this->eventStatisticsRepository,
             $this->purifier,
-            $this->createProductCategoryService,
         );
     }
 
@@ -63,8 +62,9 @@ class CreateEventServiceTest extends TestCase
         $eventSettings = $this->createMockEventSettingDomainObject();
         $organizer = $this->createMockOrganizerDomainObject();
 
-        $this->databaseManager->shouldReceive('beginTransaction')->once();
-        $this->databaseManager->shouldReceive('commit')->once();
+        $this->databaseManager->shouldReceive('transaction')->once()->andReturnUsing(function ($callback) {
+            return $callback();
+        });
 
         $this->organizerRepository->shouldReceive('findFirstWhere')
             ->with([
@@ -114,8 +114,9 @@ class CreateEventServiceTest extends TestCase
         $eventData = $this->createMockEventDomainObject();
         $organizer = $this->createMockOrganizerDomainObject();
 
-        $this->databaseManager->shouldReceive('beginTransaction')->once();
-        $this->databaseManager->shouldReceive('commit')->once();
+        $this->databaseManager->shouldReceive('transaction')->once()->andReturnUsing(function ($callback) {
+            return $callback();
+        });
 
         $this->organizerRepository->shouldReceive('findFirstWhere')->andReturn($organizer);
         $this->eventRepository->shouldReceive('create')->andReturn($eventData);
@@ -149,7 +150,9 @@ class CreateEventServiceTest extends TestCase
     {
         $eventData = $this->createMockEventDomainObject();
 
-        $this->databaseManager->shouldReceive('beginTransaction')->once();
+        $this->databaseManager->shouldReceive('transaction')->once()->andReturnUsing(function ($callback) {
+            return $callback();
+        });
 
         $this->organizerRepository->shouldReceive('findFirstWhere')->andReturnNull();
 

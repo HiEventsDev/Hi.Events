@@ -3,6 +3,7 @@
 namespace Tests\Unit\Services\Domain\Order;
 
 use HiEvents\DomainObjects\AttendeeDomainObject;
+use HiEvents\DomainObjects\Enums\WebhookEventType;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
@@ -13,6 +14,7 @@ use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Domain\Order\OrderCancelService;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
+use HiEvents\Services\Infrastructure\Webhook\WebhookDispatchService;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Collection;
@@ -29,6 +31,7 @@ class OrderCancelServiceTest extends TestCase
     private DatabaseManager $databaseManager;
     private ProductQuantityUpdateService $productQuantityService;
     private OrderCancelService $service;
+    private WebhookDispatchService $webhookDispatchService;
 
     protected function setUp(): void
     {
@@ -40,6 +43,7 @@ class OrderCancelServiceTest extends TestCase
         $this->orderRepository = m::mock(OrderRepositoryInterface::class);
         $this->databaseManager = m::mock(DatabaseManager::class);
         $this->productQuantityService = m::mock(ProductQuantityUpdateService::class);
+        $this->webhookDispatchService = m::mock(WebhookDispatchService::class);
 
         $this->service = new OrderCancelService(
             mailer: $this->mailer,
@@ -48,6 +52,7 @@ class OrderCancelServiceTest extends TestCase
             orderRepository: $this->orderRepository,
             databaseManager: $this->databaseManager,
             productQuantityService: $this->productQuantityService,
+            webhookDispatchService: $this->webhookDispatchService,
         );
     }
 
@@ -99,6 +104,10 @@ class OrderCancelServiceTest extends TestCase
         $this->mailer->shouldReceive('send')->once()->withArgs(function ($mail) {
             return $mail instanceof OrderCancelled;
         });
+
+        $this->webhookDispatchService->shouldReceive('queueOrderWebhook')
+            ->with(WebhookEventType::ORDER_CANCELLED, 1)
+            ->once();
 
         $this->databaseManager->shouldReceive('transaction')->once()->andReturnUsing(function ($callback) {
             $callback();

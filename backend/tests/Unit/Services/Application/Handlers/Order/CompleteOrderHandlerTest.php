@@ -5,6 +5,7 @@ namespace Tests\Unit\Services\Application\Handlers\Order;
 use Carbon\Carbon;
 use Exception;
 use HiEvents\DomainObjects\AttendeeDomainObject;
+use HiEvents\DomainObjects\Enums\WebhookEventType;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
@@ -19,6 +20,7 @@ use HiEvents\Services\Application\Handlers\Order\DTO\CompleteOrderDTO;
 use HiEvents\Services\Application\Handlers\Order\DTO\CompleteOrderOrderDTO;
 use HiEvents\Services\Application\Handlers\Order\DTO\CompleteOrderProductDataDTO;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
+use HiEvents\Services\Infrastructure\Webhook\WebhookDispatchService;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Bus;
@@ -38,6 +40,7 @@ class CompleteOrderHandlerTest extends TestCase
     private ProductQuantityUpdateService|MockInterface $productQuantityUpdateService;
     private ProductPriceRepositoryInterface|MockInterface $productPriceRepository;
     private CompleteOrderHandler $completeOrderHandler;
+    private WebhookDispatchService $webhookDispatchService;
 
     protected function setUp(): void
     {
@@ -52,13 +55,15 @@ class CompleteOrderHandlerTest extends TestCase
         $this->questionAnswersRepository = Mockery::mock(QuestionAnswerRepositoryInterface::class);
         $this->productQuantityUpdateService = Mockery::mock(ProductQuantityUpdateService::class);
         $this->productPriceRepository = Mockery::mock(ProductPriceRepositoryInterface::class);
+        $this->webhookDispatchService = Mockery::mock(WebhookDispatchService::class);
 
         $this->completeOrderHandler = new CompleteOrderHandler(
             $this->orderRepository,
             $this->attendeeRepository,
             $this->questionAnswersRepository,
             $this->productQuantityUpdateService,
-            $this->productPriceRepository
+            $this->productPriceRepository,
+            $this->webhookDispatchService
         );
     }
 
@@ -158,6 +163,10 @@ class CompleteOrderHandlerTest extends TestCase
         $this->attendeeRepository->shouldReceive('findWhereIn')->andReturn(new Collection([$this->createMockAttendee()]));
 
         $this->productQuantityUpdateService->shouldReceive('updateQuantitiesFromOrder')->once();
+
+        $this->webhookDispatchService->shouldReceive('queueOrderWebhook')
+            ->with(WebhookEventType::ORDER_CREATED, $updatedOrder->getId())
+            ->once();
 
         $order = $this->completeOrderHandler->handle($orderShortId, $orderData);
 
