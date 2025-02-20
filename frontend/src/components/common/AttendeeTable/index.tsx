@@ -107,9 +107,9 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
                         <MantineTable.Th></MantineTable.Th>
                         <MantineTable.Th>{t`Name`}</MantineTable.Th>
                         <MantineTable.Th>{t`Email`}</MantineTable.Th>
-                        <MantineTable.Th>{t`Order`}</MantineTable.Th>
+                        <MantineTable.Th miw={140}>{t`Order`}</MantineTable.Th>
                         <MantineTable.Th>{t`Ticket`}</MantineTable.Th>
-                        <MantineTable.Th>{t`Status`}</MantineTable.Th>
+                        <MantineTable.Th miw={120}>{t`Status`}</MantineTable.Th>
                         <MantineTable.Th></MantineTable.Th>
                     </MantineTable.Tr>
                 </TableHead>
