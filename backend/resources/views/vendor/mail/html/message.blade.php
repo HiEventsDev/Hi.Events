@@ -6,7 +6,7 @@
                 <img src="{{ $appLogo }}" class="logo" alt="{{ config('app.name') }}"
                      style="max-width: 300px;">
             @else
-                <img src="{{ config('app.frontend_url') }}/logo-dark.svg" class="logo" alt="{{ config('app.name') }}"
+                <img src="{{ config('app.frontend_url') }}/logo-dark.png" class="logo" alt="{{ config('app.name') }}"
                      style="max-width: 300px;">
             @endif
         </x-mail::header>
@@ -30,7 +30,7 @@
             @if($appEmailFooter = config('app.email_footer_text'))
                 {{ $appEmailFooter }}
             @else
-                {{-- (c) Hi.Events Ltd 2024 --}}
+                {{-- (c) Hi.Events Ltd 2025 --}}
                 {{-- PLEASE NOTE: --}}
                 {{-- Hi.Events is licensed under the GNU Affero General Public License (AGPL) version 3. --}}
                 {{-- You can find the full license text at: https://github.com/HiEventsDev/hi.events/blob/main/LICENSE --}}

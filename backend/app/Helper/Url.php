@@ -11,13 +11,20 @@ class Url
     public const ACCEPT_INVITATION = 'app.frontend_urls.accept_invitation';
     public const CONFIRM_EMAIL_ADDRESS = 'app.frontend_urls.confirm_email_address';
     public const EVENT_HOMEPAGE = 'app.frontend_urls.event_homepage';
-    public const ATTENDEE_TICKET = 'app.frontend_urls.attendee_ticket';
+    public const ATTENDEE_TICKET = 'app.frontend_urls.attendee_product';
     public const ORDER_SUMMARY = 'app.frontend_urls.order_summary';
     public const ORGANIZER_ORDER_SUMMARY = 'app.frontend_urls.organizer_order_summary';
 
     public static function getFrontEndUrlFromConfig(string $key, array $queryParams = []): string
     {
         $url = config('app.frontend_url') . config($key);
+
+        return self::addQueryParamsToUrl($queryParams, $url);
+    }
+
+    public static function getApiUrl(string $path, array $queryParams = []): string
+    {
+        $url = rtrim(config('app.api_url'), '/') . '/' . ltrim($path, '/');
 
         return self::addQueryParamsToUrl($queryParams, $url);
     }

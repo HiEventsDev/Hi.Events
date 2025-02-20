@@ -2,12 +2,12 @@ import type * as express from "express";
 import ReactDOMServer from "react-dom/server";
 import {dehydrate} from "@tanstack/react-query";
 
-import {createStaticHandler, createStaticRouter, StaticRouterProvider,} from "react-router-dom/server";
 import {router} from "./router";
 import {App} from "./App";
 import {queryClient} from "./utilites/queryClient";
 import {setAuthToken} from "./utilites/apiClient.ts";
 import {i18n} from "@lingui/core";
+import {createStaticHandler, createStaticRouter, StaticRouterProvider} from "react-router";
 
 const helmetContext = {};
 

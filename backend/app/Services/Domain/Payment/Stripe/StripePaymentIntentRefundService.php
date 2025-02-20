@@ -35,7 +35,8 @@ readonly class StripePaymentIntentRefundService
                 'payment_intent' => $payment->getPaymentIntentId(),
                 'amount' => $amount->toMinorUnit()
             ],
-            opts: $this->getStripeAccountData($payment));
+            opts: $this->getStripeAccountData($payment),
+        );
     }
 
     private function getStripeAccountData(StripePaymentDomainObject $payment): array
@@ -47,7 +48,9 @@ readonly class StripePaymentIntentRefundService
                 );
             }
 
-            return ['stripe_account' => $payment->getConnectedAccountId()];
+            return [
+                'stripe_account' => $payment->getConnectedAccountId(),
+            ];
         }
 
         return [];

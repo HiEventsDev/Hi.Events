@@ -1,5 +1,5 @@
 import {useMutation, useQueryClient} from "@tanstack/react-query";
-import {orderClientPublic, TicketFormPayload} from "../api/order.client.ts";
+import {orderClientPublic, ProductFormPayload} from "../api/order.client.ts";
 import {IdParam} from "../types.ts";
 
 export const useCreateOrderPublic = () => {
@@ -7,7 +7,7 @@ export const useCreateOrderPublic = () => {
 
     return useMutation({
         mutationFn: ({orderData, eventId}: {
-            orderData: TicketFormPayload,
+            orderData: ProductFormPayload,
             eventId: IdParam,
         }) => orderClientPublic.create(Number(eventId), orderData),
 

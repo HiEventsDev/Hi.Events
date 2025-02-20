@@ -1,6 +1,6 @@
 import {Container} from '@mantine/core';
 import classes from './Header.module.scss';
-import {NavLink} from "react-router-dom";
+import {NavLink} from "react-router";
 
 interface HeaderProps {
     rightContent?: React.ReactNode;

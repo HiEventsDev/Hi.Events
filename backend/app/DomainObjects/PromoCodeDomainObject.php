@@ -57,14 +57,14 @@ class PromoCodeDomainObject extends Generated\PromoCodeDomainObjectAbstract impl
         return true;
     }
 
-    public function appliesToTicket(TicketDomainObject $ticket): bool
+    public function appliesToProduct(ProductDomainObject $product): bool
     {
-        // If there's no ticket IDs we apply the promo to all tickets
-        if (!$this->getApplicableTicketIds()) {
+        // If there's no product IDs we apply the promo to all products
+        if (!$this->getApplicableProductIds()) {
             return true;
         }
 
-        return in_array($ticket->getId(), array_map('intval', $this->getApplicableTicketIds()), true);
+        return in_array($product->getId(), array_map('intval', $this->getApplicableProductIds()), true);
     }
 
     public function isFixedDiscount(): bool

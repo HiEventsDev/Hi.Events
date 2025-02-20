@@ -1,11 +1,11 @@
-import {CheckInListRequest, GenericModalProps, IdParam, Ticket} from "../../../types.ts";
+import {CheckInListRequest, GenericModalProps, IdParam, ProductCategory} from "../../../types.ts";
 import {Modal} from "../../common/Modal";
 import {t} from "@lingui/macro";
 import {CheckInListForm} from "../../forms/CheckInListForm";
 import {useForm} from "@mantine/form";
 import {Alert, Button, Center, Loader} from "@mantine/core";
 import {showSuccess} from "../../../utilites/notifications.tsx";
-import {useParams} from "react-router-dom";
+import {useParams} from "react-router";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {useEditCheckInList} from "../../../mutations/useEditCheckInList.ts";
@@ -34,7 +34,7 @@ export const EditCheckInListModal = ({
             expires_at: '',
             activates_at: '',
             description: '',
-            ticket_ids: [],
+            product_ids: [],
         }
     });
     const editMutation = useEditCheckInList();
@@ -60,7 +60,7 @@ export const EditCheckInListModal = ({
                 description: checkInList.description,
                 expires_at: utcToTz(checkInList.expires_at, event.timezone),
                 activates_at: utcToTz(checkInList.activates_at, event.timezone),
-                ticket_ids: checkInList.tickets?.map(ticket => String(ticket.id)),
+                product_ids: checkInList.products?.map(product => String(product.id)),
             });
         }
     }, [checkInList]);
@@ -82,7 +82,7 @@ export const EditCheckInListModal = ({
 
             {event && checkInList && (
                 <form onSubmit={form.onSubmit(handleSubmit)}>
-                    <CheckInListForm form={form} tickets={event.tickets as Ticket[]}/>
+                    <CheckInListForm form={form} productCategories={event.product_categories as ProductCategory[]}/>
                     <Button
                         type={'submit'}
                         fullWidth

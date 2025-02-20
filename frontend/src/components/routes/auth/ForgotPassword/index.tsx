@@ -4,7 +4,7 @@ import {useMutation} from "@tanstack/react-query";
 import {showError} from "../../../../utilites/notifications.tsx";
 import {authClient} from "../../../../api/auth.client.ts";
 import {useState} from "react";
-import {NavLink} from "react-router-dom";
+import {NavLink} from "react-router";
 import {Card} from "../../../common/Card";
 
 export const ForgotPassword = () => {

@@ -1,7 +1,7 @@
 import {t} from "@lingui/macro";
 import {Button, Select, TextInput} from "@mantine/core";
 import {useForm} from "@mantine/form";
-import {useParams} from "react-router-dom";
+import {useParams} from "react-router";
 import {useGetEvent} from "../../../../../../queries/useGetEvent.ts";
 import {useEffect} from "react";
 import {useUpdateEvent} from "../../../../../../mutations/useUpdateEvent.ts";
@@ -62,7 +62,7 @@ export const EventDetailsForm = () => {
     return (
         <Card>
             <HeadingWithDescription
-                heading={t`Basic Details`}
+                heading={t`Event Details`}
                 description={t`Update event name, description and dates`}
             />
             <form onSubmit={form.onSubmit(handleSubmit)}>

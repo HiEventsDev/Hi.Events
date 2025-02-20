@@ -27,9 +27,15 @@ abstract class BaseModel extends Model
         parent::__construct($attributes);
     }
 
-    abstract protected function getCastMap(): array;
+    protected function getCastMap(): array
+    {
+        return [];
+    }
 
-    abstract protected function getFillableFields(): array;
+    protected function getFillableFields() : array
+    {
+        return [];
+    }
 
     protected function getTimestampsEnabled(): bool
     {

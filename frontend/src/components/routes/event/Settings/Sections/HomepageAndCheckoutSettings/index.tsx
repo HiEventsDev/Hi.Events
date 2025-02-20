@@ -1,7 +1,7 @@
 import {t} from "@lingui/macro";
 import {Button, NumberInput} from "@mantine/core";
 import {useForm} from "@mantine/form";
-import {useParams} from "react-router-dom";
+import {useParams} from "react-router";
 import {useEffect} from "react";
 import {EventSettings} from "../../../../../../types.ts";
 import {Card} from "../../../../../common/Card";
@@ -73,7 +73,16 @@ export const HomepageAndCheckoutSettings = () => {
                     <Editor
                         label={t`Post Checkout message`}
                         value={form.values.post_checkout_message || ''}
-                        description={t`Shown to the customer after they checkout, on the order summary page`}
+                        description={(
+                            <>
+                                <p>
+                                    {t`Shown to the customer after they checkout, on the order summary page.`}
+                                </p>
+                                <p>
+                                    {t`This message will only be shown if order is completed successfully. Orders awaiting payment will not show this message`}
+                                </p>
+                            </>
+                        )}
                         onChange={(value) => form.setFieldValue('post_checkout_message', value)}
                     />
 

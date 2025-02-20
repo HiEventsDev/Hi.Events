@@ -17,6 +17,7 @@ abstract class StripeCustomerDomainObjectAbstract extends \HiEvents\DomainObject
     final public const CREATED_AT = 'created_at';
     final public const UPDATED_AT = 'updated_at';
     final public const DELETED_AT = 'deleted_at';
+    final public const STRIPE_ACCOUNT_ID = 'stripe_account_id';
 
     protected int $id;
     protected string $name;
@@ -25,6 +26,7 @@ abstract class StripeCustomerDomainObjectAbstract extends \HiEvents\DomainObject
     protected ?string $created_at = null;
     protected ?string $updated_at = null;
     protected ?string $deleted_at = null;
+    protected ?string $stripe_account_id = null;
 
     public function toArray(): array
     {
@@ -36,6 +38,7 @@ abstract class StripeCustomerDomainObjectAbstract extends \HiEvents\DomainObject
                     'created_at' => $this->created_at ?? null,
                     'updated_at' => $this->updated_at ?? null,
                     'deleted_at' => $this->deleted_at ?? null,
+                    'stripe_account_id' => $this->stripe_account_id ?? null,
                 ];
     }
 
@@ -114,5 +117,16 @@ abstract class StripeCustomerDomainObjectAbstract extends \HiEvents\DomainObject
     public function getDeletedAt(): ?string
     {
         return $this->deleted_at;
+    }
+
+    public function setStripeAccountId(?string $stripe_account_id): self
+    {
+        $this->stripe_account_id = $stripe_account_id;
+        return $this;
+    }
+
+    public function getStripeAccountId(): ?string
+    {
+        return $this->stripe_account_id;
     }
 }

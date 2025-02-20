@@ -1,35 +1,60 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
 .attendeeList {
-  margin-bottom: var(--tk-spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
 
-  .attendee {
-    display: flex;
-    padding: 10px;
-    border: 1px solid #dddddd;
-    border-radius: 5px;
-    margin-bottom: 10px;
-    align-items: center;
+.attendee {
+  display: flex;
+  align-items: center;
+  padding: 0.875rem;
+  background: var(--mantine-color-gray-0);
+  border: 1px solid var(--mantine-color-gray-2);
+  border-radius: var(--mantine-radius-sm);
+  transition: all 0.2s ease;
 
-    &:last-of-type {
-      margin-bottom: 0;
-    }
-
-    .attendeeName {
-      margin-left: 10px;
-
-      .ticketName {
-        color: #9ca3af;
-        font-size: .8em;
-      }
-    }
-
-    .viewAttendee {
-      flex: 1;
-      display: flex;
-      place-content: flex-end;
-
-      a {
-        align-self: flex-end;
-      }
-    }
+  &:hover {
+    border-color: var(--mantine-color-gray-3);
+    transform: translateY(-1px);
   }
+}
+
+.attendeeInfo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
+
+.details {
+  flex: 1;
+  min-width: 0;
+}
+
+.name {
+  line-height: 1.2;
+}
+
+.product {
+  margin-top: 0.25rem;
+  color: var(--mantine-color-gray-6);
+}
+
+.actionButton {
+  margin-left: auto;
+
+  &:hover {
+    background-color: var(--mantine-color-blue-0);
+  }
+}
+
+.avatar {
+  background: var(--tk-color-gray);
+  font-weight: 500;
 }

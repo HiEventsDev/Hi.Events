@@ -1,6 +1,6 @@
 import {Button, LoadingOverlay, PasswordInput,} from "@mantine/core";
 import {useForm} from "@mantine/form";
-import {NavLink, useNavigate, useParams} from "react-router-dom";
+import {NavLink, useNavigate, useParams} from "react-router";
 import {useResetPassword} from "../../../../mutations/useResetPassword.ts";
 import {useVerifyPasswordResetToken} from "../../../../queries/useVerifyPasswordResetToken.ts";
 import {showError, showSuccess} from "../../../../utilites/notifications.tsx";

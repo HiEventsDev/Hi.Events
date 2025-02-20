@@ -17,9 +17,9 @@ class SendMessageRequest extends FormRequest
             'is_test' => 'boolean',
             'attendee_ids' => 'max:50,array|required_if:message_type,' . MessageTypeEnum::ATTENDEE->name,
             'attendee_ids.*' => 'integer',
-            'ticket_ids' => ['array', 'required_if:message_type,' . MessageTypeEnum::TICKET->name],
+            'product_ids' => ['array', 'required_if:message_type,' . MessageTypeEnum::PRODUCT->name],
             'order_id' => 'integer|required_if:message_type,' . MessageTypeEnum::ORDER->name,
-            'ticket_ids.*' => 'integer',
+            'product_ids.*' => 'integer',
         ];
     }
 
@@ -28,7 +28,7 @@ class SendMessageRequest extends FormRequest
         return [
             'subject.max' => 'The subject must be less than 100 characters.',
             'attendee_ids.max' => 'You can only send a message to a maximum of 50 individual attendees at a time. ' .
-                'To message more attendees, you can send to attendees with a specific ticket, or to all event attendees.'
+                'To message more attendees, you can send to attendees with a specific product, or to all event attendees.'
         ];
     }
 }

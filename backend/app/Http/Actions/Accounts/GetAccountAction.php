@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Accounts;
 
+use HiEvents\DomainObjects\AccountConfigurationDomainObject;
 use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Resources\Account\AccountResource;
 use Illuminate\Http\JsonResponse;
@@ -23,7 +25,12 @@ class GetAccountAction extends BaseAction
     {
         $this->minimumAllowedRole(Role::ORGANIZER);
 
-        $account = $this->accountRepository->findById($this->getAuthenticatedAccountId());
+        $account = $this->accountRepository
+            ->loadRelation(new Relationship(
+                domainObject: AccountConfigurationDomainObject::class,
+                name: 'configuration',
+            ))
+            ->findById($this->getAuthenticatedAccountId());
 
         return $this->resourceResponse(AccountResource::class, $account);
     }

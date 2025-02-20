@@ -16,7 +16,7 @@ class PromoCodeResource extends JsonResource
         return [
             'id' => $this->getId(),
             'code' => $this->getCode(),
-            'applicable_ticket_ids' => $this->getApplicableTicketIds(),
+            'applicable_product_ids' => $this->getApplicableProductIds(),
             'discount' => $this->getDiscount(),
             'discount_type' => $this->getDiscountType(),
             'created_at' => $this->getCreatedAt(),

@@ -14,14 +14,24 @@ class Event extends BaseModel
 {
     use HasImages;
 
+    public function account(): BelongsTo
+    {
+        return $this->belongsTo(Account::class);
+    }
+
     public function organizer(): BelongsTo
     {
         return $this->belongsTo(Organizer::class);
     }
 
-    public function tickets(): HasMany
+    public function products(): HasMany
     {
-        return $this->hasMany(Ticket::class)->orderBy('order');
+        return $this->hasMany(Product::class)->orderBy('order');
+    }
+
+    public function product_categories(): HasMany
+    {
+        return $this->hasMany(ProductCategory::class)->orderBy('order');
     }
 
     public function attendees(): HasMany
@@ -57,6 +67,11 @@ class Event extends BaseModel
     public function event_statistics(): HasOne
     {
         return $this->hasOne(EventStatistic::class);
+    }
+
+    public function webhooks(): HasMany
+    {
+        return $this->hasMany(Webhook::class);
     }
 
     public static function boot()

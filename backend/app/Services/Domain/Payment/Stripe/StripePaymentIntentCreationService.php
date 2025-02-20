@@ -5,6 +5,7 @@ namespace HiEvents\Services\Domain\Payment\Stripe;
 use HiEvents\DomainObjects\StripeCustomerDomainObject;
 use HiEvents\Exceptions\Stripe\CreatePaymentIntentFailedException;
 use HiEvents\Repository\Interfaces\StripeCustomerRepositoryInterface;
+use HiEvents\Services\Domain\Order\OrderApplicationFeeCalculationService;
 use HiEvents\Services\Domain\Payment\Stripe\DTOs\CreatePaymentIntentRequestDTO;
 use HiEvents\Services\Domain\Payment\Stripe\DTOs\CreatePaymentIntentResponseDTO;
 use Illuminate\Config\Repository;
@@ -17,11 +18,12 @@ use Throwable;
 class StripePaymentIntentCreationService
 {
     public function __construct(
-        readonly private StripeClient                      $stripeClient,
-        readonly private LoggerInterface                   $logger,
-        readonly private Repository                        $config,
-        readonly private StripeCustomerRepositoryInterface $stripeCustomerRepository,
-        readonly private DatabaseManager                   $databaseManager,
+        private readonly StripeClient                          $stripeClient,
+        private readonly LoggerInterface                       $logger,
+        private readonly Repository                            $config,
+        private readonly StripeCustomerRepositoryInterface     $stripeCustomerRepository,
+        private readonly DatabaseManager                       $databaseManager,
+        private readonly OrderApplicationFeeCalculationService $orderApplicationFeeCalculationService,
     )
     {
     }
@@ -60,13 +62,15 @@ class StripePaymentIntentCreationService
         try {
             $this->databaseManager->beginTransaction();
 
-            $applicationFee = $this->getApplicationFee($paymentIntentDTO);
+            $applicationFee = $this->orderApplicationFeeCalculationService->calculateApplicationFee(
+                accountConfiguration: $paymentIntentDTO->account->getConfiguration(),
+                orderTotal: $paymentIntentDTO->amount / 100
+            );
 
             $paymentIntent = $this->stripeClient->paymentIntents->create([
                 'amount' => $paymentIntentDTO->amount,
                 'currency' => $paymentIntentDTO->currencyCode,
                 'customer' => $this->upsertStripeCustomer($paymentIntentDTO)->getStripeCustomerId(),
-                'setup_future_usage' => 'on_session',
                 'metadata' => [
                     'order_id' => $paymentIntentDTO->order->getId(),
                     'event_id' => $paymentIntentDTO->order->getEventId(),
@@ -90,6 +94,7 @@ class StripePaymentIntentCreationService
                 paymentIntentId: $paymentIntent->id,
                 clientSecret: $paymentIntent->client_secret,
                 accountId: $paymentIntentDTO->account->getStripeAccountId(),
+                applicationFeeAmount: $applicationFee,
             );
         } catch (ApiErrorException $exception) {
             $this->logger->error("Stripe payment intent creation failed: {$exception->getMessage()}", [
@@ -113,7 +118,10 @@ class StripePaymentIntentCreationService
             return 0;
         }
 
-        return ceil($paymentIntentDTO->amount * $this->config->get('app.saas_stripe_application_fee_percent') / 100);
+        $fixedFee = $paymentIntentDTO->account->getApplicationFee()->fixedFee;
+        $percentageFee = $paymentIntentDTO->account->getApplicationFee()->percentageFee;
+
+        return ceil(($fixedFee * 100) + ($paymentIntentDTO->amount * $percentageFee / 100));
     }
 
     /**
@@ -149,6 +157,7 @@ class StripePaymentIntentCreationService
     {
         $customer = $this->stripeCustomerRepository->findFirstWhere([
             'email' => $paymentIntentDTO->order->getEmail(),
+            'stripe_account_id' => $paymentIntentDTO->account->getStripeAccountId(),
         ]);
 
         if ($customer === null) {
@@ -164,6 +173,7 @@ class StripePaymentIntentCreationService
                 'name' => $stripeCustomer->name,
                 'email' => $stripeCustomer->email,
                 'stripe_customer_id' => $stripeCustomer->id,
+                'stripe_account_id' => $paymentIntentDTO->account->getStripeAccountId(),
             ]);
         }
 

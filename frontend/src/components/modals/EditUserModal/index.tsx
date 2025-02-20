@@ -9,7 +9,7 @@ import {IconUser, IconUserShield} from "@tabler/icons-react";
 import {showSuccess} from "../../../utilites/notifications.tsx";
 import {UpdateUserRequest} from "../../../api/user.client.ts";
 import {useEditUser} from "../../../mutations/useEditUser.ts";
-import {NavLink} from "react-router-dom";
+import {NavLink} from "react-router";
 import {InputGroup} from "../../common/InputGroup";
 
 interface EditUserModalProps extends GenericModalProps {
@@ -54,7 +54,7 @@ export const EditUserModal = ({onClose, user}: EditUserModalProps) => {
             icon: <IconUser/>,
             label: t`Organizer`,
             value: 'ORGANIZER',
-            description: t`Organizers can only manage events and tickets. They cannot manage users, account settings or billing information.`,
+            description: t`Organizers can only manage events and products. They cannot manage users, account settings or billing information.`,
         },
     ];
 

@@ -14,7 +14,9 @@ use Illuminate\Support\Str;
 
 class EventDomainObject extends Generated\EventDomainObjectAbstract implements IsSortable, IsFilterable
 {
-    private ?Collection $tickets = null;
+    private ?Collection $products = null;
+
+    private ?Collection $productCategories = null;
 
     private ?Collection $questions = null;
 
@@ -24,6 +26,8 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
 
     private ?Collection $checkInLists = null;
 
+    private ?Collection $webhooks = null;
+
     private ?Collection $capacityAssignments = null;
 
     private ?EventSettingDomainObject $settings = null;
@@ -31,6 +35,8 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
     private ?OrganizerDomainObject $organizer = null;
 
     private ?EventStatisticDomainObject $eventStatistics = null;
+
+    private ?AccountDomainObject $account = null;
 
     public static function getAllowedFilterFields(): array
     {
@@ -79,16 +85,16 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
         return 'asc';
     }
 
-    public function setTickets(Collection $tickets): self
+    public function setProducts(Collection $products): self
     {
-        $this->tickets = $tickets;
+        $this->products = $products;
 
         return $this;
     }
 
-    public function getTickets(): ?Collection
+    public function getProducts(): ?Collection
     {
-        return $this->tickets;
+        return $this->products;
     }
 
     public function setQuestions(?Collection $questions): EventDomainObject
@@ -138,6 +144,17 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
     {
         $this->organizer = $organizer;
 
+        return $this;
+    }
+
+    public function getAccount(): ?AccountDomainObject
+    {
+        return $this->account;
+    }
+
+    public function setAccount(?AccountDomainObject $account): self
+    {
+        $this->account = $account;
         return $this;
     }
 
@@ -257,6 +274,28 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
     public function setEventStatistics(?EventStatisticDomainObject $eventStatistics): self
     {
         $this->eventStatistics = $eventStatistics;
+        return $this;
+    }
+
+    public function setProductCategories(?Collection $productCategories): EventDomainObject
+    {
+        $this->productCategories = $productCategories;
+        return $this;
+    }
+
+    public function getProductCategories(): ?Collection
+    {
+        return $this->productCategories;
+    }
+
+    public function getWebhooks(): ?Collection
+    {
+        return $this->webhooks;
+    }
+
+    public function setWebhooks(?Collection $webhooks): EventDomainObject
+    {
+        $this->webhooks = $webhooks;
         return $this;
     }
 }

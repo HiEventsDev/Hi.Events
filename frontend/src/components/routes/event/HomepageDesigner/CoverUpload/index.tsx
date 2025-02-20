@@ -1,5 +1,5 @@
 import {t} from "@lingui/macro";
-import {useParams} from "react-router-dom";
+import {useParams} from "react-router";
 import {useFormErrorResponseHandler} from "../../../../../hooks/useFormErrorResponseHandler.tsx";
 import {useGetEventImages} from "../../../../../queries/useGetEventImages.ts";
 import {Dropzone, FileWithPath, IMAGE_MIME_TYPE} from '@mantine/dropzone';

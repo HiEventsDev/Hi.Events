@@ -29,12 +29,12 @@ export const NumberSelector = ({formInstance, fieldName, min, max, sharedValues}
     }, [value]);
 
     useEffect(() => {
-        // to handle application promo code after updating the quanity 
+        // to handle application promo code after updating the quantity
         const formValue = _.get(formInstance.values, fieldName)
         if (formValue !== value) {
             formInstance.setFieldValue(fieldName, value);
         }
-    }, [formInstance]);
+    }, [formInstance.values]);
 
     const increment = () => {
         // Adjust from 0 to minValue on the first increment, if minValue is greater than 0

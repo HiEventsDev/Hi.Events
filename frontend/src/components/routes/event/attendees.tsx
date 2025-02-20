@@ -1,4 +1,4 @@
-import {useParams} from "react-router-dom";
+import {useParams} from "react-router";
 import {useGetAttendees} from "../../../queries/useGetAttendees.ts";
 import {PageTitle} from "../../common/PageTitle";
 import {PageBody} from "../../common/PageBody";
@@ -17,7 +17,7 @@ import {downloadBinary} from "../../../utilites/download.ts";
 import {attendeesClient} from "../../../api/attendee.client.ts";
 import {useState} from "react";
 import {t} from "@lingui/macro";
-import {showError} from "../../../utilites/notifications.tsx";
+import {withLoadingNotification} from "../../../utilites/withLoadingNotification.tsx";
 
 const Attendees = () => {
     const {eventId} = useParams();
@@ -28,17 +28,29 @@ const Attendees = () => {
     const [createModalOpen, {open: openCreateModal, close: closeCreateModal}] = useDisclosure(false);
     const [downloadPending, setDownloadPending] = useState(false);
 
-    const handleExport = (eventId: IdParam) => {
-        setDownloadPending(true);
-        attendeesClient.export(eventId)
-            .then(blob => {
+    const handleExport = async (eventId: IdParam) => {
+        await withLoadingNotification(async () => {
+                setDownloadPending(true);
+                const blob = await attendeesClient.export(eventId);
                 downloadBinary(blob, 'attendees.xlsx');
-                setDownloadPending(false);
-            }).catch(() => {
-            setDownloadPending(false);
-            showError(t`Failed to export attendees. Please try again.`)
-        });
-    }
+            },
+            {
+                loading: {
+                    title: t`Exporting Attendees`,
+                    message: t`Please wait while we prepare your attendees for export...`
+                },
+                success: {
+                    title: t`Attendees Exported`,
+                    message: t`Your attendees have been exported successfully.`,
+                    onRun: () => setDownloadPending(false)
+                },
+                error: {
+                    title: t`Failed to export attendees`,
+                    message: t`Please try again.`,
+                    onRun: () => setDownloadPending(false)
+                }
+            });
+    };
 
     return (
         <>
@@ -56,7 +68,7 @@ const Attendees = () => {
                     />
                 )}>
                     <Button color={'green'} size={'sm'} onClick={openCreateModal} rightSection={<IconPlus/>}>
-                        {t`Add`}
+                        {t`Create`}
                     </Button>
 
                     <Button color={'green'}

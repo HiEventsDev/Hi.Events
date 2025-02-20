@@ -2,14 +2,22 @@ import {Anchor, Tooltip} from "@mantine/core";
 import {prettyDate, relativeDate} from "../../../utilites/dates.ts";
 import {OrderStatusBadge} from "../OrderStatusBadge";
 import {Currency} from "../Currency";
-import {Card} from "../Card";
+import {Card, CardVariant} from "../Card";
 import {Event, Order} from "../../../types.ts";
 import classes from "./OrderDetails.module.scss";
 import {t} from "@lingui/macro";
+import {formatAddress} from "../../../utilites/formatAddress.tsx";
+import React from "react";
+import { capitalize } from "../../../utilites/stringHelper.ts";
 
-export const OrderDetails = ({order, event}: { order: Order, event: Event }) => {
+export const OrderDetails = ({order, event, cardVariant = 'lightGray', style = {}}: {
+    order: Order,
+    event: Event,
+    cardVariant?: CardVariant,
+    style?: React.CSSProperties
+}) => {
     return (
-        <Card className={classes.orderDetails} variant={'lightGray'}>
+        <Card className={classes.orderDetails} variant={cardVariant} style={style}>
             <div className={classes.block}>
                 <div className={classes.title}>
                     {t`Name`}
@@ -43,7 +51,7 @@ export const OrderDetails = ({order, event}: { order: Order, event: Event }) => 
                     {t`Status`}
                 </div>
                 <div className={classes.amount}>
-                    <OrderStatusBadge order={order} variant={'filled'}/>
+                    <OrderStatusBadge order={order} variant={'outline'}/>
                 </div>
             </div>
             <div className={classes.block}>
@@ -62,6 +70,26 @@ export const OrderDetails = ({order, event}: { order: Order, event: Event }) => 
                     <Currency currency={order.currency} price={order.total_refunded}/>
                 </div>
             </div>
+            {order.payment_provider && (
+                <div className={classes.block}>
+                    <div className={classes.title}>
+                        {t`Payment provider`}
+                    </div>
+                    <div className={classes.amount}>
+                        {capitalize(order.payment_provider)}
+                    </div>
+                </div>
+            )}
+            {order.address && (
+                <div className={classes.block}>
+                    <div className={classes.title}>
+                        {t`Address`}
+                    </div>
+                    <div className={classes.amount}>
+                        {formatAddress(order.address)}
+                    </div>
+                </div>
+            )}
         </Card>
     );
 }

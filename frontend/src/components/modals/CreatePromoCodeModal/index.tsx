@@ -1,6 +1,6 @@
 import {GenericModalProps, PromoCode, PromoCodeDiscountType} from "../../../types.ts";
 import {hasLength, useForm} from "@mantine/form";
-import {useParams} from "react-router-dom";
+import {useParams} from "react-router";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
 import {PromoCodeForm} from "../../forms/PromoCodeForm";
 import {Modal} from "../../common/Modal";
@@ -17,7 +17,7 @@ export const CreatePromoCodeModal = ({onClose}: GenericModalProps) => {
         initialValues: {
             code: '',
             discount: undefined,
-            applicable_ticket_ids: [],
+            applicable_product_ids: [],
             expiry_date: undefined,
             discount_type: PromoCodeDiscountType.None,
             max_allowed_usages: undefined,

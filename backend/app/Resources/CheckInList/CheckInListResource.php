@@ -3,7 +3,7 @@
 namespace HiEvents\Resources\CheckInList;
 
 use HiEvents\DomainObjects\CheckInListDomainObject;
-use HiEvents\Resources\Ticket\TicketResource;
+use HiEvents\Resources\Product\ProductResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -26,8 +26,8 @@ class CheckInListResource extends JsonResource
                 'is_expired' => $this->isExpired($this->getEvent()->getTimezone()),
                 'is_active' => $this->isActivated($this->getEvent()->getTimezone()),
             ]),
-            $this->mergeWhen($this->getTickets() !== null, fn() => [
-                'tickets' => TicketResource::collection($this->getTickets()),
+            $this->mergeWhen($this->getProducts() !== null, fn() => [
+                'products' => ProductResource::collection($this->getProducts()),
             ]),
         ];
     }

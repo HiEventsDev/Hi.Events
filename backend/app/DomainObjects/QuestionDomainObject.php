@@ -7,24 +7,26 @@ use Illuminate\Support\Collection;
 
 class QuestionDomainObject extends Generated\QuestionDomainObjectAbstract
 {
-    public ?Collection $tickets = null;
+    public ?Collection $products = null;
 
-    public function setTickets(?Collection $tickets): QuestionDomainObject
+    public function setProducts(?Collection $products): QuestionDomainObject
     {
-        $this->tickets = $tickets;
+        $this->products = $products;
         return $this;
     }
 
-    public function getTickets(): ?Collection
+    public function getProducts(): ?Collection
     {
-        return $this->tickets;
+        return $this->products;
     }
 
-    public function isMultipleChoice(): bool
+    public function isPreDefinedChoice(): bool
     {
         return in_array($this->getType(), [
-            QuestionTypeEnum::MULTI_SELECT_DROPDOWN,
-            QuestionTypeEnum::CHECKBOX,
+            QuestionTypeEnum::MULTI_SELECT_DROPDOWN->name,
+            QuestionTypeEnum::CHECKBOX->name,
+            QuestionTypeEnum::RADIO->name,
+            QuestionTypeEnum::DROPDOWN->name,
         ], true);
     }
 

@@ -11,7 +11,7 @@ import {useFilterQueryParamSync} from "../../../../hooks/useFilterQueryParamSync
 import {useDisclosure} from "@mantine/hooks";
 import {CreateEventModal} from "../../../modals/CreateEventModal";
 import {useGetOrganizers} from "../../../../queries/useGetOrganizers.ts";
-import {Navigate, useParams} from "react-router-dom";
+import {Navigate, useParams} from "react-router";
 import {CreateOrganizerModal} from "../../../modals/CreateOrganizerModal";
 import classes from "./Dashboard.module.scss";
 import {getEventQueryFilters} from "../../../../utilites/eventsPageFiltersHelper.ts";
@@ -75,7 +75,7 @@ export function Dashboard() {
                 <>
                     <Menu
                         transitionProps={{transition: 'pop-top-right'}}
-                        position="top-end"
+                        position="bottom"
                         width={220}
                         withinPortal
                     >

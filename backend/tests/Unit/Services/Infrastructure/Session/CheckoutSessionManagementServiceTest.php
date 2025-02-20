@@ -3,7 +3,9 @@
 namespace Unit\Services\Infrastructure\Session;
 
 use HiEvents\Services\Infrastructure\Session\CheckoutSessionManagementService;
+use Illuminate\Config\Repository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 use Tests\TestCase;
 
 class CheckoutSessionManagementServiceTest extends TestCase
@@ -17,7 +19,9 @@ class CheckoutSessionManagementServiceTest extends TestCase
             ->with('session_identifier')
             ->willReturn('existingSessionId');
 
-        $service = new CheckoutSessionManagementService($request);
+        $configMock = $this->mock(Repository::class);
+
+        $service = new CheckoutSessionManagementService($request, $configMock);
 
         $this->assertEquals('existingSessionId', $service->getSessionId());
     }
@@ -31,7 +35,9 @@ class CheckoutSessionManagementServiceTest extends TestCase
             ->with('session_identifier')
             ->willReturn('existingSessionId');
 
-        $service = new CheckoutSessionManagementService($request);
+        $configMock = $this->mock(Repository::class);
+
+        $service = new CheckoutSessionManagementService($request, $configMock);
 
         $this->assertTrue($service->verifySession('existingSessionId'));
     }
@@ -45,7 +51,13 @@ class CheckoutSessionManagementServiceTest extends TestCase
             ->with('session_identifier')
             ->willReturn('existingSessionId');
 
-        $service = new CheckoutSessionManagementService($request);
+        $configMock = $this->mock(Repository::class)
+            ->shouldReceive('get')
+            ->with('session.domain')
+            ->andReturnNull()
+            ->getMock();
+
+        $service = new CheckoutSessionManagementService($request, $configMock);
 
         $cookie = $service->getSessionCookie();
 

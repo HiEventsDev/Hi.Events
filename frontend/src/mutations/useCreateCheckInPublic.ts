@@ -7,17 +7,33 @@ export const useCreateCheckInPublic = (pagination: QueryFilters) => {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: ({checkInListShortId, attendeePublicId}: { checkInListShortId: IdParam, attendeePublicId: IdParam }) =>
-            publicCheckInClient.createCheckIn(checkInListShortId, attendeePublicId),
+        mutationFn: ({checkInListShortId, attendeePublicId, action}: {
+            checkInListShortId: IdParam,
+            attendeePublicId: IdParam,
+            action: 'check-in' | 'check-in-and-mark-order-as-paid'
+        }) =>
+            publicCheckInClient.createCheckIn(checkInListShortId, attendeePublicId, action),
 
-        onSuccess: (data, {checkInListShortId}) => {
-            // Find the attendee in the cache and update the check-in status
-            queryClient.setQueryData([GET_CHECK_IN_LIST_ATTENDEES_PUBLIC_QUERY_KEY, checkInListShortId, pagination], (oldData: any) => {
+        onSuccess: (data, {checkInListShortId, action}) => {
+            const markedAsPaid = action === 'check-in-and-mark-order-as-paid';
+
+            queryClient.setQueryData(
+                [GET_CHECK_IN_LIST_ATTENDEES_PUBLIC_QUERY_KEY, checkInListShortId, pagination],
+                (oldData: any) => {
                     const newAttendees = oldData.data.map((attendee: any) => {
-                        if (data?.data?.length && attendee.id === data.data[0].attendee_id) {
+                        const attendeeCheckIn = data?.data?.find(
+                            (checkIn: any) => checkIn.attendee_id === attendee.id
+                        );
+
+                        if (attendeeCheckIn) {
+                            const hasError = data.errors && Object.keys(data.errors).some(
+                                (key) => key === attendee.public_id
+                            );
+
                             return {
                                 ...attendee,
-                                check_in: data.data[0],
+                                check_in: attendeeCheckIn,
+                                status: markedAsPaid && !hasError ? 'ACTIVE' : attendee.status,
                             };
                         }
                         return attendee;
@@ -28,7 +44,7 @@ export const useCreateCheckInPublic = (pagination: QueryFilters) => {
                         data: newAttendees,
                     };
                 }
-            )
+            );
         }
     });
 };

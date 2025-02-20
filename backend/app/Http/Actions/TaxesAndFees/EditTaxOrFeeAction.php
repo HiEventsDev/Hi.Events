@@ -7,8 +7,8 @@ use HiEvents\Exceptions\ResourceNameAlreadyExistsException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\TaxOrFee\CreateTaxOrFeeRequest;
 use HiEvents\Resources\Tax\TaxAndFeeResource;
-use HiEvents\Services\Handlers\TaxAndFee\DTO\UpsertTaxDTO;
-use HiEvents\Services\Handlers\TaxAndFee\EditTaxHandler;
+use HiEvents\Services\Application\Handlers\TaxAndFee\DTO\UpsertTaxDTO;
+use HiEvents\Services\Application\Handlers\TaxAndFee\EditTaxHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 

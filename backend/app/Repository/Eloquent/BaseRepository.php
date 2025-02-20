@@ -15,6 +15,7 @@ use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Application;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -33,6 +34,8 @@ abstract class BaseRepository implements RepositoryInterface
 
     protected DatabaseManager $db;
 
+    protected int $maxPerPage = self::MAX_PAGINATE_LIMIT;
+
     /** @var Relationship[] */
     protected array $eagerLoads = [];
 
@@ -49,6 +52,13 @@ abstract class BaseRepository implements RepositoryInterface
      * @return string
      */
     abstract protected function getModel(): string;
+
+    public function setMaxPerPage(int $maxPerPage): static
+    {
+        $this->maxPerPage = $maxPerPage;
+
+        return $this;
+    }
 
     public function all(array $columns = self::DEFAULT_COLUMNS): Collection
     {
@@ -106,6 +116,9 @@ abstract class BaseRepository implements RepositoryInterface
         return $this->handleResults($relation->paginate($this->getPaginationPerPage($limit), $columns));
     }
 
+    /**
+     * @throws ModelNotFoundException
+     */
     public function findById(int $id, array $columns = self::DEFAULT_COLUMNS): DomainObjectInterface
     {
         return $this->handleSingleResult($this->model->findOrFail($id, $columns));
@@ -128,10 +141,25 @@ abstract class BaseRepository implements RepositoryInterface
         return $this->handleSingleResult($this->model->findOrFail($id, $columns));
     }
 
-    public function findWhere(array $where, array $columns = self::DEFAULT_COLUMNS): Collection
+    public function findWhere(
+        array $where,
+        array $columns = self::DEFAULT_COLUMNS,
+        array $orderAndDirections = [],
+    ): Collection
     {
         $this->applyConditions($where);
+
+        if ($orderAndDirections) {
+            foreach ($orderAndDirections as $orderAndDirection) {
+                $this->model = $this->model->orderBy(
+                    $orderAndDirection->getOrder(),
+                    $orderAndDirection->getDirection()
+                );
+            }
+        }
+
         $model = $this->model->get($columns);
+
         $this->resetModel();
 
         return $this->handleResults($model);
@@ -283,6 +311,13 @@ abstract class BaseRepository implements RepositoryInterface
         return $this;
     }
 
+    public function includeDeleted(): static
+    {
+        $this->model = $this->model->withTrashed();
+
+        return $this;
+    }
+
     protected function applyConditions(array $where): void
     {
         foreach ($where as $field => $value) {
@@ -352,17 +387,31 @@ abstract class BaseRepository implements RepositoryInterface
                     'gt' => '>',
                     'gte' => '>=',
                     'like' => 'LIKE',
+                    'in' => 'IN',
                 ];
 
                 $operator = $operatorMapping[$filterField->operator] ?? throw new BadMethodCallException(
                     sprintf('Operator %s is not supported', $filterField->operator)
                 );
 
-                $this->model = $this->model->where(
-                    column: $filterField->field,
-                    operator: $operator,
-                    value: $isNull ? null : $filterField->value,
-                );
+                // Special handling for IN operator
+                if ($operator === 'IN') {
+                    // Ensure value is array or convert comma-separated string to array
+                    $value = is_array($filterField->value)
+                        ? $filterField->value
+                        : explode(',', $filterField->value);
+
+                    $this->model = $this->model->whereIn(
+                        column: $filterField->field,
+                        values: $value
+                    );
+                } else {
+                    $this->model = $this->model->where(
+                        column: $filterField->field,
+                        operator: $operator,
+                        value: $isNull ? null : $filterField->value,
+                    );
+                }
             });
         }
     }
@@ -379,7 +428,7 @@ abstract class BaseRepository implements RepositoryInterface
             $perPage = self::DEFAULT_PAGINATE_LIMIT;
         }
 
-        return (int)min($perPage, self::MAX_PAGINATE_LIMIT);
+        return (int)min($perPage, $this->maxPerPage);
     }
 
     /**
@@ -413,7 +462,7 @@ abstract class BaseRepository implements RepositoryInterface
     }
 
     /**
-     * This method will handle nested eager loading of relationships. It works, but it's not pretty.
+     * This method will handle nested eager loading of relationships
      *
      * @param Model $model
      * @param DomainObjectInterface $object

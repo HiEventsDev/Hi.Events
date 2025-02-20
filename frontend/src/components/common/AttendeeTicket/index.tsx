@@ -1,23 +1,23 @@
 import {Card} from "../Card";
-import {getAttendeeTicketPrice, getAttendeeTicketTitle} from "../../../utilites/tickets.ts";
+import {getAttendeeProductPrice, getAttendeeProductTitle} from "../../../utilites/products.ts";
 import {Anchor, Button, CopyButton} from "@mantine/core";
 import {formatCurrency} from "../../../utilites/currency.ts";
 import {t} from "@lingui/macro";
 import {prettyDate} from "../../../utilites/dates.ts";
 import QRCode from "react-qr-code";
 import {IconCopy, IconPrinter} from "@tabler/icons-react";
-import {Attendee, Event, Ticket} from "../../../types.ts";
+import {Attendee, Event, Product} from "../../../types.ts";
 import classes from './AttendeeTicket.module.scss';
 
 interface AttendeeTicketProps {
     event: Event;
     attendee: Attendee;
-    ticket: Ticket;
+    product: Product;
     hideButtons?: boolean;
 }
 
-export const AttendeeTicket = ({attendee, ticket, event, hideButtons = false}: AttendeeTicketProps) => {
-    const ticketPrice = getAttendeeTicketPrice(attendee, ticket);
+export const AttendeeTicket = ({attendee, product, event, hideButtons = false}: AttendeeTicketProps) => {
+    const productPrice = getAttendeeProductPrice(attendee, product);
 
     return (
         <Card className={classes.attendee}>
@@ -27,17 +27,17 @@ export const AttendeeTicket = ({attendee, ticket, event, hideButtons = false}: A
                         <h2>
                             {attendee.first_name} {attendee.last_name}
                         </h2>
-                        <div className={classes.ticketName}>
-                            {getAttendeeTicketTitle(attendee)}
+                        <div className={classes.productName}>
+                            {getAttendeeProductTitle(attendee)}
                         </div>
                         <Anchor href={`mailto:${attendee.email}`}>
                             {attendee.email}
                         </Anchor>
                     </div>
-                    <div className={classes.ticketPrice}>
+                    <div className={classes.productPrice}>
                         <div className={classes.badge}>
-                            {ticketPrice > 0 && formatCurrency(ticketPrice, event?.currency)}
-                            {ticketPrice === 0 && t`Free`}
+                            {productPrice > 0 && formatCurrency(productPrice, event?.currency)}
+                            {productPrice === 0 && t`Free`}
                         </div>
                     </div>
                 </div>
@@ -61,20 +61,27 @@ export const AttendeeTicket = ({attendee, ticket, event, hideButtons = false}: A
                             {t`Cancelled`}
                         </div>
                     )}
+
+                    {attendee.status === 'AWAITING_PAYMENT' && (
+                        <div className={classes.awaitingPayment}>
+                            {t`Awaiting Payment`}
+                        </div>
+                    )}
                     {attendee.status !== 'CANCELLED' && <QRCode value={String(attendee.public_id)}/>}
+
                 </div>
 
                 {!hideButtons && (
-                    <div className={classes.ticketButtons}>
+                    <div className={classes.productButtons}>
                         <Button variant={'transparent'}
                                 size={'sm'}
-                                onClick={() => window?.open(`/ticket/${event.id}/${attendee.short_id}/print`, '_blank', 'noopener,noreferrer')}
+                                onClick={() => window?.open(`/product/${event.id}/${attendee.short_id}/print`, '_blank', 'noopener,noreferrer')}
                                 leftSection={<IconPrinter size={18}/>
                                 }>
                             {t`Print`}
                         </Button>
 
-                        <CopyButton value={`${window?.location.origin}/ticket/${event.id}/${attendee.short_id}`}>
+                        <CopyButton value={`${window?.location.origin}/product/${event.id}/${attendee.short_id}`}>
                             {({copied, copy}) => (
                                 <Button variant={'transparent'}
                                         size={'sm'}

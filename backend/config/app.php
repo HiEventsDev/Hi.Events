@@ -8,13 +8,16 @@ return [
 
     'reset_password_token_expiry_in_min' => 15,
     'frontend_url' => env('APP_FRONTEND_URL', 'http://localhost'),
+    'api_url' => env('APP_URL', 'https://localhost:8443'),
     'cnd_url' => env('APP_CDN_URL', '/storage'),
     'default_timezone' => 'America/Vancouver',
     'default_currency_code' => 'USD',
     'saas_mode_enabled' => env('APP_SAAS_MODE_ENABLED', false),
     'saas_stripe_application_fee_percent' => env('APP_SAAS_STRIPE_APPLICATION_FEE_PERCENT', 1.5),
+    'saas_stripe_application_fee_fixed' => env('APP_SAAS_STRIPE_APPLICATION_FEE_FIXED', 0),
     'disable_registration' => env('APP_DISABLE_REGISTRATION', false),
     'api_rate_limit_per_minute' => env('APP_API_RATE_LIMIT_PER_MINUTE', 180),
+    'stripe_connect_account_type' => env('APP_STRIPE_CONNECT_ACCOUNT_TYPE', 'express'),
 
     /**
      * The number of page views to batch before updating the database
@@ -24,12 +27,12 @@ return [
     'homepage_views_update_batch_size' => env('APP_HOMEPAGE_VIEWS_UPDATE_BATCH_SIZE', 8),
 
     /**
-     * The number of seconds to cache the ticket quantities on the homepage
+     * The number of seconds to cache the product quantities on the homepage
      * It is recommended to cache this value for a short period of time for high traffic sites
      *
      * Set to null to disable caching
      */
-    'homepage_ticket_quantities_cache_ttl' => env('APP_HOMEPAGE_TICKET_QUANTITIES_CACHE_TTL', 2),
+    'homepage_product_quantities_cache_ttl' => env('APP_HOMEPAGE_TICKET_QUANTITIES_CACHE_TTL', 2),
 
     'frontend_urls' => [
         'confirm_email_address' => '/manage/profile/confirm-email-address/%s',
@@ -39,7 +42,7 @@ return [
         'stripe_connect_return_url' => '/account/payment',
         'stripe_connect_refresh_url' => '/account/payment',
         'event_homepage' => '/event/%d/%s',
-        'attendee_ticket' => '/ticket/%d/%s',
+        'attendee_product' => '/product/%d/%s',
         'order_summary' => '/checkout/%d/%s/summary',
         'organizer_order_summary' => '/manage/event/%d/orders#order-%d',
     ],

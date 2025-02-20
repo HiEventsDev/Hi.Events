@@ -24,7 +24,7 @@ class DeleteAttendeeCheckInService
     public function deleteAttendeeCheckIn(
         string $checkInListShortId,
         string $checkInShortId,
-    ): void
+    ): int
     {
         /** @var AttendeeCheckInDomainObject $checkIn */
         $checkIn = $this->attendeeCheckInRepository
@@ -46,5 +46,7 @@ class DeleteAttendeeCheckInService
         }
 
         $this->attendeeCheckInRepository->deleteById($checkIn->getId());
+
+        return $checkIn->getId();
     }
 }

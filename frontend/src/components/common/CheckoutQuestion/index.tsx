@@ -1,4 +1,4 @@
-import {Question, QuestionType, Ticket} from "../../../types.ts";
+import {Product, Question, QuestionType} from "../../../types.ts";
 import {UseFormReturnType} from "@mantine/form";
 import {Box, Checkbox, ComboboxItem, Group, NativeSelect, Radio, Select, Textarea, TextInput} from "@mantine/core";
 import {t} from "@lingui/macro";
@@ -6,7 +6,6 @@ import countries from "../../../../data/countries.json";
 import {InputGroup} from "../InputGroup";
 import classes from "./CheckoutQuestion.module.scss";
 import {UserGeneratedContent} from "../UserGeneratedContent";
-import {DatePicker} from "@mantine/dates";
 
 interface CheckoutQuestionProps {
     questions: Question[],
@@ -19,10 +18,10 @@ interface QuestionInputProps {
     form: UseFormReturnType<any, any>,
 }
 
-interface CheckoutTicketQuestionProps {
+interface CheckoutProductQuestionProps {
     questions: Question[],
     form: UseFormReturnType<any, any>;
-    ticket: Ticket,
+    product: Product,
     index: number,
 }
 
@@ -70,6 +69,8 @@ const DateInput = ({question, name, form}: QuestionInputProps) => {
                        type="date"
                        {...form.getInputProps(`${name}.answer`)}
                        label={question.title}
+                       description={(
+                           <UserGeneratedContent dangerouslySetInnerHTML={{__html: question.description || ''}}/>)}
             />
         </>
     );
@@ -147,7 +148,8 @@ const AddressInput = ({question, name, form}: QuestionInputProps) => {
     return (
         <>
             <h4>{question.title}</h4>
-            <div className={classes.description} dangerouslySetInnerHTML={{__html: question.description || ''}}/>
+            <UserGeneratedContent className={classes.description}
+                                  dangerouslySetInnerHTML={{__html: question.description || ''}}/>
 
             <TextInput withAsterisk={question.required}
                        {...form.getInputProps(`${name}.address_line_1`)}
@@ -220,22 +222,22 @@ export const CheckoutOrderQuestions = ({questions, form}: CheckoutQuestionProps)
     )
 }
 
-export const CheckoutTicketQuestions = ({
-                                            questions,
-                                            form,
-                                            ticket,
-                                            index: attendeeIndex
-                                        }: CheckoutTicketQuestionProps) => {
+export const CheckoutProductQuestions = ({
+                                             questions,
+                                             form,
+                                             product,
+                                             index: productIndex
+                                         }: CheckoutProductQuestionProps) => {
     let questionIndex = 0;
     return (
         <>
             {questions.map((question, index) => {
-                if (!question.ticket_ids?.includes(Number(ticket.id))) {
+                if (!question.product_ids?.includes(Number(product.id))) {
                     return;
                 }
 
-                const name = `attendees.${attendeeIndex}.questions.${questionIndex++}.response`;
-                return <QuestionInput key={`${index}-attendee`} question={question} name={name} form={form}/>
+                const name = `products.${productIndex}.questions.${questionIndex++}.response`;
+                return <QuestionInput key={`${index}-product`} question={question} name={name} form={form}/>
             })}
         </>
     )

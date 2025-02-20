@@ -2,7 +2,7 @@ import {ActionIcon, Button,} from '@mantine/core';
 import {Event, IdParam} from "../../../types.ts";
 import classes from "./EventCard.module.scss";
 import {Card} from "../Card";
-import {NavLink, useNavigate} from "react-router-dom";
+import {NavLink, useNavigate} from "react-router";
 import {
     IconArchive,
     IconCash,
@@ -93,7 +93,7 @@ export function EventCard({event}: EventCardProps) {
                 <div className={classes.body}>
                     {event && <EventStatusBadge event={event}/>}
                     <div className={classes.title}>
-                        <NavLink to={`/manage/event/${event.id}`}>
+                        <NavLink to={`/manage/event/${event.id}/dashboard`}>
                             {event.title}
                         </NavLink>
                     </div>
@@ -123,7 +123,7 @@ export function EventCard({event}: EventCardProps) {
                         <div className={classes.infoItem}>
                             <IconUsers size={16} color={'#ccc'}/>
                             <span>
-                            {formatNumber(event?.statistics?.tickets_sold || 0)} {t`tickets sold`}
+                            {formatNumber(event?.statistics?.products_sold || 0)} {t`products sold`}
                             </span>
                         </div>
 

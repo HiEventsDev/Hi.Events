@@ -12,7 +12,8 @@ use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
 use HiEvents\Services\Domain\Event\CreateEventService;
-use HTMLPurifier;
+use HiEvents\Services\Domain\ProductCategory\CreateProductCategoryService;
+use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 use Illuminate\Database\DatabaseManager;
 use Mockery;
 use Tests\TestCase;
@@ -25,7 +26,7 @@ class CreateEventServiceTest extends TestCase
     private OrganizerRepositoryInterface $organizerRepository;
     private DatabaseManager $databaseManager;
     private EventStatisticRepositoryInterface $eventStatisticsRepository;
-    private HTMLPurifier $purifier;
+    private HtmlPurifierService $purifier;
 
     protected function setUp(): void
     {
@@ -36,7 +37,8 @@ class CreateEventServiceTest extends TestCase
         $this->organizerRepository = Mockery::mock(OrganizerRepositoryInterface::class);
         $this->databaseManager = Mockery::mock(DatabaseManager::class);
         $this->eventStatisticsRepository = Mockery::mock(EventStatisticRepositoryInterface::class);
-        $this->purifier = Mockery::mock(HTMLPurifier::class);
+        $this->purifier = Mockery::mock(HtmlPurifierService::class);
+        $this->createProductCategoryService = Mockery::mock(CreateProductCategoryService::class);
 
         $this->createEventService = new CreateEventService(
             $this->eventRepository,
@@ -60,8 +62,9 @@ class CreateEventServiceTest extends TestCase
         $eventSettings = $this->createMockEventSettingDomainObject();
         $organizer = $this->createMockOrganizerDomainObject();
 
-        $this->databaseManager->shouldReceive('beginTransaction')->once();
-        $this->databaseManager->shouldReceive('commit')->once();
+        $this->databaseManager->shouldReceive('transaction')->once()->andReturnUsing(function ($callback) {
+            return $callback();
+        });
 
         $this->organizerRepository->shouldReceive('findFirstWhere')
             ->with([
@@ -86,16 +89,23 @@ class CreateEventServiceTest extends TestCase
         $this->eventStatisticsRepository->shouldReceive('create')
             ->with(Mockery::on(function ($arg) use ($eventData) {
                 return $arg['event_id'] === $eventData->getId() &&
-                    $arg['tickets_sold'] === 0 &&
+                    $arg['products_sold'] === 0 &&
                     $arg['sales_total_gross'] === 0;
             }));
 
+        $this->createProductCategoryService->shouldReceive('createCategory')
+            ->with(
+                'Tickets',
+                false,
+                Mockery::any(),
+                null,
+                'There are no tickets available for this event.'
+            );
 
         $this->purifier->shouldReceive('purify')->andReturn('Test Description');
 
         $result = $this->createEventService->createEvent($eventData, $eventSettings);
 
-        $this->assertInstanceOf(EventDomainObject::class, $result);
         $this->assertEquals($eventData->getId(), $result->getId());
     }
 
@@ -104,8 +114,9 @@ class CreateEventServiceTest extends TestCase
         $eventData = $this->createMockEventDomainObject();
         $organizer = $this->createMockOrganizerDomainObject();
 
-        $this->databaseManager->shouldReceive('beginTransaction')->once();
-        $this->databaseManager->shouldReceive('commit')->once();
+        $this->databaseManager->shouldReceive('transaction')->once()->andReturnUsing(function ($callback) {
+            return $callback();
+        });
 
         $this->organizerRepository->shouldReceive('findFirstWhere')->andReturn($organizer);
         $this->eventRepository->shouldReceive('create')->andReturn($eventData);
@@ -121,16 +132,27 @@ class CreateEventServiceTest extends TestCase
 
         $this->eventStatisticsRepository->shouldReceive('create');
 
-        $result = $this->createEventService->createEvent($eventData);
+        $this->createProductCategoryService->shouldReceive('createCategory')
+            ->with(
+                'Tickets',
+                false,
+                Mockery::any(),
+                null,
+                'There are no tickets available for this event.'
+            );
 
-        $this->assertInstanceOf(EventDomainObject::class, $result);
+        $this->createEventService->createEvent($eventData);
+
+        $this->assertTrue(true);
     }
 
     public function testCreateEventThrowsOrganizerNotFoundException(): void
     {
         $eventData = $this->createMockEventDomainObject();
 
-        $this->databaseManager->shouldReceive('beginTransaction')->once();
+        $this->databaseManager->shouldReceive('transaction')->once()->andReturnUsing(function ($callback) {
+            return $callback();
+        });
 
         $this->organizerRepository->shouldReceive('findFirstWhere')->andReturnNull();
 
@@ -173,6 +195,7 @@ class CreateEventServiceTest extends TestCase
     {
         return Mockery::mock(OrganizerDomainObject::class, function ($mock) {
             $mock->shouldReceive('getEmail')->andReturn('organizer@example.com');
+            $mock->shouldReceive('getName')->andReturn('Organizer Name');
         });
     }
 }

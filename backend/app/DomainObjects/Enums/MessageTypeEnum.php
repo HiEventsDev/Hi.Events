@@ -7,7 +7,7 @@ enum MessageTypeEnum
     use BaseEnum;
 
     case ORDER;
-    case TICKET;
+    case PRODUCT;
     case ATTENDEE;
     case EVENT;
 }

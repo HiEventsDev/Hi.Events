@@ -8,7 +8,7 @@ import {showError} from "../../../utilites/notifications.tsx";
 import {t, Trans} from "@lingui/macro";
 
 interface QRScannerComponentProps {
-    onCheckIn: (attendeePublicId: string, onRequestComplete: (didSucceed: boolean) => void, onFailure: () => void) => void;
+    onAttendeeScanned: (attendeePublicId: string) => void;
     onClose: () => void;
 }
 
@@ -41,7 +41,6 @@ export const QRScannerComponent = (props: QRScannerComponentProps) => {
     useEffect(() => {
         localStorage.setItem("qrScannerSoundOn", JSON.stringify(isSoundOn));
     }, [isSoundOn]);
-
 
     useEffect(() => {
         latestProcessedAttendeeIdsRef.current = processedAttendeeIds;
@@ -78,9 +77,7 @@ export const QRScannerComponent = (props: QRScannerComponentProps) => {
                 showError(t`You already scanned this ticket`);
 
                 setIsScanFailed(true);
-                setInterval(function () {
-                    setIsScanFailed(false);
-                }, 500);
+                setInterval(() => setIsScanFailed(false), 500);
                 if (isSoundOn && scanErrorAudioRef.current) {
                     scanErrorAudioRef.current.play();
                 }
@@ -90,38 +87,20 @@ export const QRScannerComponent = (props: QRScannerComponentProps) => {
 
             if (!isCheckingIn && !alreadyScanned) {
                 setIsCheckingIn(true);
-
                 if (isSoundOn && scanInProgressAudioRef.current) {
                     scanInProgressAudioRef.current.play();
                 }
 
-                props.onCheckIn(debouncedAttendeeId, (didSucceed) => {
-                        setIsCheckingIn(false);
-                        setProcessedAttendeeIds(prevIds => [...prevIds, debouncedAttendeeId]);
-                        setCurrentAttendeeId(null);
+                props.onAttendeeScanned(debouncedAttendeeId);
+                setIsCheckingIn(false);
+                setProcessedAttendeeIds(prevIds => [...prevIds, debouncedAttendeeId]);
+                setCurrentAttendeeId(null);
 
-                        if (didSucceed) {
-                            setIsScanSucceeded(true);
-                            setInterval(function () {
-                                setIsScanSucceeded(false);
-                            }, 500);
-                            if (isSoundOn && scanSuccessAudioRef.current) {
-                                scanSuccessAudioRef.current.play();
-                            }
-                        } else {
-                            setIsScanFailed(true);
-                            setInterval(function () {
-                                setIsScanFailed(false);
-                            }, 500);
-                            if (isSoundOn && scanErrorAudioRef.current) {
-                                scanErrorAudioRef.current.play();
-                            }
-                        }
-                    }, () => {
-                        setIsCheckingIn(false);
-                        setCurrentAttendeeId(null);
-                    }
-                );
+                setIsScanSucceeded(true);
+                setInterval(() => setIsScanSucceeded(false), 500);
+                if (isSoundOn && scanSuccessAudioRef.current) {
+                    scanSuccessAudioRef.current.play();
+                }
             }
         }
     }, [debouncedAttendeeId]);
