@@ -84,7 +84,7 @@ export const QuestionAndAnswerList = ({questionAnswers, belongsToFilter}: Questi
                                             position="bottom"
                                             withArrow
                                         >
-                                            <NavLink to={`../attendees?query=${qa.attendee_id}`}>
+                                            <NavLink to={`../attendees?query=${qa.first_name + ' ' + qa.last_name}`}>
                                                 <ActionIcon
                                                     variant="subtle"
                                                     radius="xl"
