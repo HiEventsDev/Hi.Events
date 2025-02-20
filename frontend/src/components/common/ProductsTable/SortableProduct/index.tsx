@@ -103,6 +103,10 @@ export const SortableProduct = ({product, currencyCode, category, categories}: S
             return t`Free`;
         }
 
+        if (minPrice === maxPrice) {
+            return formatCurrency(minPrice, currencyCode);
+        }
+
         return `${formatCurrency(minPrice, currencyCode)} - ${formatCurrency(maxPrice, currencyCode)}`;
     }
 
@@ -199,7 +203,7 @@ export const SortableProduct = ({product, currencyCode, category, categories}: S
                 <div className={classes.productInfo}>
                     <div className={classes.productDetails}>
                         <div className={classes.title}>
-                            <div className={classes.heading}>{t`Title`} {product.id}</div>
+                            <div className={classes.heading}>{t`Title`}</div>
                             <Truncate text={product.title} length={60}/>
                             {(product.is_hidden_without_promo_code || product.is_hidden) && (
                                 <Popover>
@@ -291,10 +295,16 @@ export const SortableProduct = ({product, currencyCode, category, categories}: S
                         </Menu>
                     </Group>
                 </div>
-                {product.product_type === ProductType.Ticket && <div className={classes.halfCircle}/>}
-                <div className={`${classes.halfCircle} ${classes.right}`}/>
+                {product.product_type === ProductType.Ticket && (
+                    <>
+                        <div className={classes.halfCircle}/>
+                        <div className={`${classes.halfCircle} ${classes.right}`}/>
+                    </>
+                )}
+
             </div>
-            {isDuplicateModalOpen && <DuplicateProductModal originalProductId={productId} onClose={duplicateModal.close}/>}
+            {isDuplicateModalOpen &&
+                <DuplicateProductModal originalProductId={productId} onClose={duplicateModal.close}/>}
             {isEditModalOpen && <EditProductModal productId={productId} onClose={editModal.close}/>}
             {isMessageModalOpen && (
                 <SendMessageModal

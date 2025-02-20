@@ -5,7 +5,6 @@ import {useGetOrder} from "../../../queries/useGetOrder.ts";
 import {useUpdateAttendee} from "../../../mutations/useUpdateAttendee.ts";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
 import {useForm} from "@mantine/form";
-import {Modal} from "../../common/Modal";
 import {Accordion} from "../../common/Accordion";
 import {Button} from "../../common/Button";
 import {Avatar, Box, Group, Stack, Tabs, Text, Textarea, TextInput} from "@mantine/core";
@@ -26,6 +25,7 @@ import {InputGroup} from "../../common/InputGroup";
 import {InputLabelWithHelp} from "../../common/InputLabelWithHelp";
 import {EditAttendeeRequest} from "../../../api/attendee.client.ts";
 import {AttendeeStatusBadge} from "../../common/AttendeeStatusBadge";
+import {SideDrawer} from "../../common/SideDrawer";
 
 interface ManageAttendeeModalProps extends GenericModalProps {
     onClose: () => void;
@@ -197,7 +197,7 @@ export const ManageAttendeeModal = ({onClose, attendeeId}: ManageAttendeeModalPr
     );
 
     return (
-        <Modal opened onClose={onClose} size="lg" padding="md">
+        <SideDrawer opened onClose={onClose} size="lg" padding="md">
             <Stack className={classes.container}>
                 <div className={classes.header}>
                     <Group justify="center" align="center">
@@ -233,6 +233,6 @@ export const ManageAttendeeModal = ({onClose, attendeeId}: ManageAttendeeModalPr
                     </Box>
                 </Tabs>
             </Stack>
-        </Modal>
+        </SideDrawer>
     );
 };

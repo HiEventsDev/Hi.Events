@@ -9,10 +9,12 @@ interface NotificationMessages {
     success: {
         title: string;
         message: string;
+        onRun?: () => void;
     };
     error: {
         title: string;
         message: string;
+        onRun?: () => void;
     };
 }
 
@@ -26,6 +28,7 @@ export const withLoadingNotification = async <T, >(
         message: messages.loading.message,
         autoClose: false,
         withCloseButton: false,
+        position: 'top-center',
     });
 
     try {
@@ -39,7 +42,12 @@ export const withLoadingNotification = async <T, >(
             icon: <IconCheck size="1rem"/>,
             autoClose: 2000,
             loading: false,
+            position: 'top-center',
         });
+
+        if (messages.success.onRun) {
+            messages.success.onRun();
+        }
 
         return result;
     } catch (error) {
@@ -51,7 +59,13 @@ export const withLoadingNotification = async <T, >(
             icon: <IconX size="1rem"/>,
             autoClose: 2000,
             loading: false,
+            position: 'top-center',
         });
+
+        if (messages.error.onRun) {
+            messages.error.onRun();
+        }
+
         throw error;
     }
 };

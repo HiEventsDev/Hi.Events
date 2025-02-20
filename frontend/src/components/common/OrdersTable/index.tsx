@@ -201,12 +201,12 @@ export const OrdersTable = ({orders, event}: OrdersTableProps) => {
             <Table>
                 <TableHead>
                     <MantineTable.Tr>
-                        <MantineTable.Th>{t`Order #`}</MantineTable.Th>
+                        <MantineTable.Th miw={120}>{t`Reference`}</MantineTable.Th>
                         <MantineTable.Th>{t`Customer`}</MantineTable.Th>
                         <MantineTable.Th>{t`Attendees`}</MantineTable.Th>
-                        <MantineTable.Th>{t`Amount`}</MantineTable.Th>
+                        <MantineTable.Th miw={140}>{t`Amount`}</MantineTable.Th>
                         <MantineTable.Th>{t`Created`}</MantineTable.Th>
-                        <MantineTable.Th>{t`Status`}</MantineTable.Th>
+                        <MantineTable.Th miw={120}>{t`Status`}</MantineTable.Th>
                         <MantineTable.Th></MantineTable.Th>
                     </MantineTable.Tr>
                 </TableHead>

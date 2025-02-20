@@ -46,7 +46,7 @@ class ExportAttendeesAction extends BaseAction
                         domainObject: ProductPriceDomainObject::class,
                     ),
                 ],
-                name: 'ticket'
+                name: 'product'
             ))
             ->findByEventIdForExport($eventId);
 

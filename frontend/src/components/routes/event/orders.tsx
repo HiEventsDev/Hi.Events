@@ -18,6 +18,7 @@ import { orderClient } from "../../../api/order.client";
 import { downloadBinary } from "../../../utilites/download";
 import { showError } from "../../../utilites/notifications";
 import {FilterModal, FilterOption} from "../../common/FilterModal";
+import {withLoadingNotification} from "../../../utilites/withLoadingNotification.tsx";
 
 const orderStatuses = [
     { label: t`Completed`, value: 'COMPLETED' },
@@ -80,15 +81,27 @@ export const Orders: React.FC = () => {
     };
 
     const handleExport = async (eventId: IdParam) => {
-        try {
+        await withLoadingNotification(async () => {
             setDownloadPending(true);
             const blob = await orderClient.exportOrders(eventId);
             downloadBinary(blob, 'orders.xlsx');
-        } catch (error) {
-            showError(t`Failed to export orders. Please try again.`);
-        } finally {
-            setDownloadPending(false);
-        }
+        },
+        {
+            loading: {
+                title: t`Exporting Orders`,
+                message: t`Please wait while we prepare your orders for export...`
+            },
+            success: {
+                title: t`Orders Exported`,
+                message: t`Your orders have been exported successfully.`,
+                onRun: () => setDownloadPending(false)
+            },
+            error: {
+                title: t`Failed to export orders`,
+                message: t`Please try again.`,
+                onRun: () => setDownloadPending(false)
+            }
+        });
     };
 
     const currentFilters = {

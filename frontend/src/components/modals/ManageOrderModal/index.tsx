@@ -22,6 +22,7 @@ import {InputGroup} from "../../common/InputGroup";
 import {InputLabelWithHelp} from "../../common/InputLabelWithHelp";
 import classes from './ManageOrderModal.module.scss';
 import {EditOrderPayload} from "../../../api/order.client.ts";
+import {SideDrawer} from "../../common/SideDrawer";
 
 interface ManageOrderModalProps {
     orderId: IdParam;
@@ -177,7 +178,7 @@ export const ManageOrderModal = ({onClose, orderId}: GenericModalProps & ManageO
     );
 
     return (
-        <Modal
+        <SideDrawer
             opened={true}
             onClose={onClose}
             size="lg"
@@ -215,6 +216,6 @@ export const ManageOrderModal = ({onClose, orderId}: GenericModalProps & ManageO
                     </Box>
                 </Tabs>
             </Stack>
-        </Modal>
+        </SideDrawer>
     );
 };
