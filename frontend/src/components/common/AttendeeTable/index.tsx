@@ -28,7 +28,7 @@ interface AttendeeTableProps {
 export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) => {
     const {eventId} = useParams();
     const [isMessageModalOpen, messageModal] = useDisclosure(false);
-    const [isViewModalOpem, viewModalOpen] = useDisclosure(false);
+    const [isViewModalOpen, viewModalOpen] = useDisclosure(false);
     const [selectedAttendee, setSelectedAttendee] = useState<Attendee>();
     const {data: event} = useGetEvent(eventId);
     const modifyMutation = useModifyAttendee();
@@ -199,7 +199,7 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
                 attendeeId={selectedAttendee.id}
                 messageType={MessageType.Attendee}
             />}
-            {(selectedAttendee?.id && isViewModalOpem) && <ManageAttendeeModal
+            {(selectedAttendee?.id && isViewModalOpen) && <ManageAttendeeModal
                 attendeeId={selectedAttendee.id}
                 onClose={viewModalOpen.close}
             />}

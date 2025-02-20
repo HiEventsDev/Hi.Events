@@ -25,7 +25,14 @@ readonly class ImageStorageService
      */
     public function store(UploadedFile $image, string $imageType): ImageStorageResponseDTO
     {
-        $filename = Str::slug($image->getClientOriginalName()) . '-' . Str::random(5) . '.' . $image->getClientOriginalExtension();
+        $filename = Str::slug(
+                title: str_ireplace(
+                    search: '.' . $image->getClientOriginalExtension(),
+                    replace: '',
+                    subject: $image->getClientOriginalName()
+                )
+            ) . '-' . Str::random(5) . '.' . $image->getClientOriginalExtension();
+
         $disk = $this->config->get('filesystems.public');
 
         $path = $this->filesystemManager->disk($disk)->putFileAs(
