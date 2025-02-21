@@ -16,12 +16,6 @@ const AuthLayout = () => {
         <div className={classes.authLayout}>
             <div className={classes.splitLayout}>
                 <div className={classes.leftPanel}>
-                    <header>
-                        <div className={classes.languageSwitcher}>
-                            <LanguageSwitcher/>
-                        </div>
-                    </header>
-
                     <main className={classes.container}>
                         <div className={classes.logo}>
                             <img src={'/logo-dark.svg'} alt={t`hi.events logo`}/>
@@ -44,12 +38,15 @@ const AuthLayout = () => {
                                 */
                             }
                             <PoweredByFooter/>
+                            <div className={classes.languageSwitcher}>
+                                <LanguageSwitcher/>
+                            </div>
                         </div>
                     </main>
                 </div>
 
                 <div className={classes.rightPanel}>
-                    <div className={classes.overlay}>
+                <div className={classes.overlay}>
                         <div className={classes.content}>
                             <div className={classes.featureGrid}>
                                 <div className={classes.feature}>

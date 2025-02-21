@@ -123,38 +123,36 @@
   }
 }
 
-header {
-  .languageSwitcher {
-    position: absolute;
-    top: 1.25rem;
-    right: 1.25rem;
-    width: 160px;
-    z-index: 10;
-  }
-
-  @include respond-below(sm) {
-    margin-bottom: 2.5rem;
-  }
-}
-
 .container {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  padding: 2rem;
   background: transparent;
-  height: 100%;
   box-sizing: border-box;
+  height: 100vh;
+
+  @include respond-below(md) {
+    height: auto;
+    padding: 15px;
+  }
 
   .logo {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 2.5rem;
+    padding: 40px;
+
+    @include respond-below(md) {
+      padding: 20px;
+    }
 
     img {
       width: 140px;
+
+      @include respond-below(md) {
+        width: 110px;
+      }
     }
   }
 
@@ -188,5 +186,11 @@ header {
         margin-bottom: 0;
       }
     }
+
+    .languageSwitcher {
+      max-width: 100px;
+      margin: 20px auto 0;
+    }
   }
 }
+
