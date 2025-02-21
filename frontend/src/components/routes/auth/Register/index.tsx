@@ -11,6 +11,7 @@ import classes from "./Register.module.scss";
 import {getClientLocale} from "../../../../locales.ts";
 import {useEffect} from "react";
 import {getUserCurrency} from "../../../../utilites/currency.ts";
+import {IconLock, IconMail} from "@tabler/icons-react";
 
 export const Register = () => {
     const navigate = useNavigate();
@@ -63,17 +64,17 @@ export const Register = () => {
     return (
         <>
             <header className={classes.header}>
-                <h2>{t`Begin selling products in minutes`}</h2>
+                <h2>{t`Welcome to Hi.Events 👋`}</h2>
                 <p>
                     <Trans>
                         Create an account or <NavLink to={'/auth/login'}>
-                        {t`Login`}
+                        {t`Log in`}
                     </NavLink> to get started
                     </Trans>
                 </p>
             </header>
 
-            <Card>
+            <div className={classes.registerCard}>
                 <form onSubmit={form.onSubmit((values) => registerUser(values as RegisterAccountRequest))}>
                     <InputGroup>
                         <TextInput
@@ -97,30 +98,33 @@ export const Register = () => {
                         required
                     />
 
-                    <InputGroup>
-                        <PasswordInput
-                            {...form.getInputProps('password')}
-                            label={t`Password`}
-                            placeholder={t`Your password`}
-                            required
-                            mt="md"
-                            mb={20}
-                        />
-                        <PasswordInput
-                            {...form.getInputProps('password_confirmation')}
-                            label={t`Confirm Password`}
-                            placeholder={t`Confirm password`}
-                            required
-                            mt="md"
-                            mb={20}
-                        />
-                    </InputGroup>
+                    <div style={{marginBottom: '20px'}}>
+                        <InputGroup>
+                            <PasswordInput
+                                {...form.getInputProps('password')}
+                                label={t`Password`}
+                                placeholder={t`Your password`}
+                                required
+                                mt="md"
+                                mb={0}
+                            />
+                            <PasswordInput
+                                {...form.getInputProps('password_confirmation')}
+                                label={t`Confirm Password`}
+                                placeholder={t`Confirm password`}
+                                required
+                                mt="md"
+                                mb={0}
+                            />
+                        </InputGroup>
+                    </div>
+
                     <TextInput
                         style={{display: 'none'}}
                         {...form.getInputProps('timezone')}
                         type="hidden"
                     />
-                    <Button type="submit" fullWidth disabled={mutate.isPending}>
+                    <Button color={'var(--tk-pink)'} type="submit" fullWidth disabled={mutate.isPending}>
                         {mutate.isPending ? t`Working...` : t`Register`}
                     </Button>
                 </form>
@@ -133,7 +137,7 @@ export const Register = () => {
                         to={'https://hi.events/privacy-policy?utm_source=app-register-footer'}>Privacy Policy</NavLink>.
                     </Trans>
                 </footer>
-            </Card>
+            </div>
         </>
     )
 }
