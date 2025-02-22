@@ -33,7 +33,17 @@
   width: 50%;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(135deg, var(--tk-pink) 0%, #6d28d9 100%);
+  background-image: url('/login-background.jpg');
+  background-size: cover;
+  background-position: center;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--tk-pink) 0%, #6d28d9 100%);
+    opacity: 0.95;
+  }
 
   @include respond-below(md) {
     display: none;
@@ -47,6 +57,7 @@
   align-items: center;
   justify-content: center;
   padding: 4rem;
+  z-index: 1; // Ensure content appears above the gradient overlay
 }
 
 .content {
@@ -194,4 +205,3 @@
     }
   }
 }
-
