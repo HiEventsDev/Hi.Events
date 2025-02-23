@@ -174,7 +174,6 @@ export const QuestionForm = ({form, productCategories}: QuestionFormProps) => {
             />
 
             <TextInput
-                mt={20}
                 {...form.getInputProps('title')}
                 label={t`Question Title`}
                 placeholder={t`What time will you be arriving?`}
