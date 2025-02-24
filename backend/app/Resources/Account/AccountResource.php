@@ -21,11 +21,11 @@ class AccountResource extends JsonResource
             'updated_at' => $this->getUpdatedAt(),
             'stripe_connect_setup_complete' => $this->getStripeConnectSetupComplete(),
             'is_account_email_confirmed' => $this->getAccountVerifiedAt() !== null,
-            // this really should not be on the account level
             'is_saas_mode_enabled' => config('app.saas_mode_enabled'),
             $this->mergeWhen($this->getConfiguration() !== null, fn() => [
                 'configuration' => new AccountConfigurationResource($this->getConfiguration()),
             ]),
+            'requires_manual_verification' => config('app.saas_mode_enabled') && !$this->getIsManuallyVerified(),
         ];
     }
 }

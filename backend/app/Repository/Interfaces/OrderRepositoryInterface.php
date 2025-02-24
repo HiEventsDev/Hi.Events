@@ -9,6 +9,7 @@ use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Repository\Eloquent\BaseRepository;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 
 /**
  * @extends BaseRepository<OrderDomainObject>
@@ -24,4 +25,6 @@ interface OrderRepositoryInterface extends RepositoryInterface
     public function addOrderItem(array $data): OrderItemDomainObject;
 
     public function findByShortId(string $orderShortId): ?OrderDomainObject;
+
+    public function findOrdersAssociatedWithProducts(int $eventId, array $productIds, array $orderStatuses): Collection;
 }

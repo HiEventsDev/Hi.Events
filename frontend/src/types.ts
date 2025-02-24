@@ -65,6 +65,7 @@ export interface Account {
     is_account_email_confirmed?: boolean;
     is_saas_mode_enabled?: boolean;
     configuration?: AccountConfiguration;
+    requires_manual_verification?: boolean;
 }
 
 export interface AccountConfiguration {
@@ -569,7 +570,7 @@ export interface Message {
     subject: string;
     message: string;
     message_preview: string;
-    type: 'PRODUCT' | 'EVENT';
+    type: MessageType;
     is_test: boolean;
     order_id?: number;
     attendee_ids?: IdParam[];
@@ -641,10 +642,11 @@ export interface MessageOrderRequest {
 }
 
 export enum MessageType {
-    Attendee = 'ATTENDEE',
-    Order = 'ORDER',
-    Product = 'PRODUCT',
-    Event = 'EVENT',
+    IndividualAttendees = 'INDIVIDUAL_ATTENDEES',
+    OrderOwner = 'ORDER_OWNER',
+    TicketHolders = 'TICKET_HOLDERS',
+    AllAttendees = 'ALL_ATTENDEES',
+    OrderOwnersWithProduct = 'ORDER_OWNERS_WITH_PRODUCT',
 }
 
 export interface PromoCode {

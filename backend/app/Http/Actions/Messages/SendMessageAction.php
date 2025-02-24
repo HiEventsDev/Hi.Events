@@ -37,6 +37,7 @@ class SendMessageAction extends BaseAction
                 'order_id' => $request->input('order_id'),
                 'attendee_ids' => $request->input('attendee_ids'),
                 'product_ids' => $request->input('product_ids'),
+                'order_statuses' => $request->input('order_statuses'),
                 'send_copy_to_current_user' => $request->boolean('send_copy_to_current_user'),
                 'sent_by_user_id' => $user->getId(),
                 'account_id' => $this->getAuthenticatedAccountId(),

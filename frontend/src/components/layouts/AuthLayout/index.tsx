@@ -46,50 +46,50 @@ const RegisterFeatures = () => (
     </div>
 );
 
-const allFeatures = [
-    {
-        icon: IconChartBar,
-        title: t`Smart Dashboard`,
-        description: t`Track revenue, page views, and sales with detailed analytics and exportable reports`
-    },
-    {
-        icon: IconTicket,
-        title: t`Flexible Ticketing`,
-        description: t`Support for tiered, donation-based, and product sales with customizable pricing and capacity`
-    },
-    {
-        icon: IconDeviceMobile,
-        title: t`Mobile Check-in`,
-        description: t`QR code scanning with instant feedback and secure sharing for staff access`
-    },
-    {
-        icon: IconBuildingStore,
-        title: t`Complete Store`,
-        description: t`Sell merchandise alongside tickets with integrated tax and promo code support`
-    },
-    {
-        icon: IconMessages,
-        title: t`Attendee Management`,
-        description: t`Message attendees, manage orders, and handle refunds all in one place`
-    },
-    {
-        icon: IconQrcode,
-        title: t`Smart Check-in`,
-        description: t`Automated entry management with multiple check-in lists and real-time validation`
-    },
-    {
-        icon: IconPalette,
-        title: t`Brand Control`,
-        description: t`Customize your event page and widget design to match your brand perfectly`
-    },
-    {
-        icon: IconWebhook,
-        title: t`Auto Workflow`,
-        description: t`Connect with CRM and automate tasks using webhooks and integrations`
-    }
-];
-
 const GenericFeatures = () => {
+    const allFeatures = [
+        {
+            icon: IconChartBar,
+            title: t`Smart Dashboard`,
+            description: t`Track revenue, page views, and sales with detailed analytics and exportable reports`
+        },
+        {
+            icon: IconTicket,
+            title: t`Flexible Ticketing`,
+            description: t`Support for tiered, donation-based, and product sales with customizable pricing and capacity`
+        },
+        {
+            icon: IconDeviceMobile,
+            title: t`Mobile Check-in`,
+            description: t`QR code scanning with instant feedback and secure sharing for staff access`
+        },
+        {
+            icon: IconBuildingStore,
+            title: t`Complete Store`,
+            description: t`Sell merchandise alongside tickets with integrated tax and promo code support`
+        },
+        {
+            icon: IconMessages,
+            title: t`Attendee Management`,
+            description: t`Message attendees, manage orders, and handle refunds all in one place`
+        },
+        {
+            icon: IconQrcode,
+            title: t`Smart Check-in`,
+            description: t`Automated entry management with multiple check-in lists and real-time validation`
+        },
+        {
+            icon: IconPalette,
+            title: t`Brand Control`,
+            description: t`Customize your event page and widget design to match your brand perfectly`
+        },
+        {
+            icon: IconWebhook,
+            title: t`Auto Workflow`,
+            description: t`Connect with CRM and automate tasks using webhooks and integrations`
+        }
+    ];
+
     const selectedFeatures = useMemo(() => {
         const shuffled = [...allFeatures].sort(() => 0.5 - Math.random());
         return shuffled.slice(0, 3);
