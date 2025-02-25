@@ -39,8 +39,11 @@ import {Constants} from "../../../../constants.ts";
 
 const sendHeightToIframeWidgets = () => {
     const height = document.documentElement.scrollHeight;
+    const widgetHeight = document.querySelector('.hi-product-widget-container')?.getBoundingClientRect().height || 0;
     const urlParams = new URLSearchParams(window.location.search);
     const iframeId = urlParams.get('iframeId');
+
+    const finalHeight = Math.max(height, widgetHeight);
 
     if (!iframeId) {
         return;
@@ -48,7 +51,7 @@ const sendHeightToIframeWidgets = () => {
 
     window.parent.postMessage({
         type: 'resize',
-        height: height,
+        height: finalHeight,
         iframeId: iframeId
     }, '*');
 };
