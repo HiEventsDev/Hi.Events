@@ -10,6 +10,7 @@ const config: LinguiConfig = {
         "ru", // Russian
         "de", // German
         "pt", // Portuguese (Portugal)
+        "vi", // Vietnamese
 
         // "it", // Italian
         // "pl", // Polish
