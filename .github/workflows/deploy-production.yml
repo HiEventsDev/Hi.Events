@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -94,7 +94,7 @@ jobs:
     needs: backend
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Set Deployment Environment
         run: |
@@ -133,7 +133,7 @@ jobs:
             -H "Authorization: Bearer ${{ secrets.DIGITALOCEAN_API_TOKEN }}" \
             -H "Content-Type: application/json")
 
-          if [ "$RESPONSE" -ne 200 ]; then
+          if [ "$RESPONSE" -ne 201 ] && [ "$RESPONSE" -ne 200 ]; then
             ERROR_MSG=$(jq -r '.message // "Unknown error occurred."' response.json)
             echo "❌ Failed to trigger deployment. HTTP Status: $RESPONSE. Error: $ERROR_MSG"
             exit 1
@@ -153,6 +153,7 @@ jobs:
       - name: Poll Deployment Status
         if: env.TEST_MODE != 'true'
         run: |
+          # Increase MAX_RETRIES or SLEEP_TIME if your deployments take longer
           MAX_RETRIES=30
           SLEEP_TIME=10
           COUNTER=0
