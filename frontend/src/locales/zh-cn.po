@@ -17,12 +17,20 @@ msgstr ""
 msgid "'There\\'s nothing to show yet'"
 msgstr "There's nothing to show yet"
 
+#: src/components/modals/SendMessageModal/index.tsx:159
+#~ msgid ""
+#~ "\"\"Due to the high risk of spam, we require manual verification before you can send messages.\n"
+#~ "\"\"Please contact us to request access."
+#~ msgstr ""
+#~ "\"\"由于垃圾邮件风险较高，我们需要手动验证才能允许您发送消息。\n"
+#~ "\"\"请联系我们申请访问权限。\"\""
+
 #: src/components/routes/auth/ForgotPassword/index.tsx:40
 #~ msgid ""
 #~ "\"\"If you have an account with us, you will receive an email with instructions on how to reset your\n"
 #~ "\"\"password."
 #~ msgstr ""
-#~ "\"\"如果您拥有我们的账户，您将收到一封电子邮件，其中包含重置您的\n"
+#~ "\"\"如果您在我们这里有账户，您将收到一封电子邮件，其中包含如何重置您的\n"
 #~ "\"\"密码的说明。\"\""
 
 #: src/components/common/ReportTable/index.tsx:303
@@ -38,7 +46,7 @@ msgstr "{0} <0>签到</0>成功"
 msgid "{0} <0>checked out</0> successfully"
 msgstr "{0} <0>签退</0>成功"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:349
+#: src/components/routes/product-widget/SelectProducts/index.tsx:352
 msgid "{0} available"
 msgstr "{0}可用"
 
@@ -344,7 +352,7 @@ msgstr "添加关于订单的备注。这些信息不会对客户可见。"
 msgid "Add any notes about the order..."
 msgstr "添加关于订单的备注..."
 
-#: src/components/forms/QuestionForm/index.tsx:203
+#: src/components/forms/QuestionForm/index.tsx:202
 msgid "Add description"
 msgstr "添加描述"
 
@@ -458,7 +466,11 @@ msgstr "管理员用户可以完全访问事件和账户设置。"
 #~ msgid "Affiliates"
 #~ msgstr "附属机构"
 
-#: src/components/modals/SendMessageModal/index.tsx:150
+#: src/components/common/MessageList/index.tsx:21
+msgid "All attendees"
+msgstr "所有与会者"
+
+#: src/components/modals/SendMessageModal/index.tsx:187
 msgid "All attendees of this event"
 msgstr "本次活动的所有与会者"
 
@@ -518,8 +530,12 @@ msgstr "问题排序时发生错误。请重试或刷新页面"
 #~ msgstr "在整理门票时发生错误。请重试或刷新页面"
 
 #: src/components/routes/welcome/index.tsx:75
-msgid "An event is the actual event you are hosting. You can add more details later."
-msgstr "事件是您要举办的实际活动。您可以稍后添加更多细节。"
+#~ msgid "An event is the actual event you are hosting. You can add more details later."
+#~ msgstr "事件是您要举办的实际活动。您可以稍后添加更多细节。"
+
+#: src/components/routes/welcome/index.tsx:75
+msgid "An event is the gathering or occasion you’re organizing. You can add more details later."
+msgstr "活动是您正在组织的聚会或场合。您可以稍后添加更多详细信息。"
 
 #: src/components/routes/welcome/index.tsx:23
 msgid "An organizer is the company or person who is hosting the event"
@@ -545,7 +561,7 @@ msgstr "产品持有者的任何查询都将发送到此电子邮件地址。此
 msgid "Appearance"
 msgstr "外观"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:437
+#: src/components/routes/product-widget/SelectProducts/index.tsx:440
 msgid "applied"
 msgstr "应用"
 
@@ -569,7 +585,7 @@ msgstr "适用于1个产品"
 msgid "Apply"
 msgstr "应用"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:465
+#: src/components/routes/product-widget/SelectProducts/index.tsx:468
 msgid "Apply Promo Code"
 msgstr "应用促销代码"
 
@@ -673,9 +689,9 @@ msgstr "与会者已创建"
 msgid "Attendee Details"
 msgstr "与会者详情"
 
-#: src/components/layouts/AuthLayout/index.tsx:72
+#: src/components/layouts/AuthLayout/index.tsx:73
 msgid "Attendee Management"
-msgstr ""
+msgstr "与会者管理"
 
 #: src/components/layouts/CheckIn/index.tsx:140
 msgid "Attendee not found"
@@ -715,22 +731,22 @@ msgid "Attendees Registered"
 msgstr "注册的参会者"
 
 #: src/components/modals/SendMessageModal/index.tsx:146
-msgid "Attendees with a specific product"
-msgstr "具有特定产品的参会者"
+#~ msgid "Attendees with a specific product"
+#~ msgstr "具有特定产品的参会者"
 
-#: src/components/modals/SendMessageModal/index.tsx:144
-#~ msgid "Attendees with a specific ticket"
-#~ msgstr "持有特定门票的与会者"
+#: src/components/modals/SendMessageModal/index.tsx:183
+msgid "Attendees with a specific ticket"
+msgstr "持有特定门票的与会者"
 
 #: src/components/common/WidgetEditor/index.tsx:233
 msgid "Auto Resize"
 msgstr "自动调整大小"
 
-#: src/components/layouts/AuthLayout/index.tsx:87
+#: src/components/layouts/AuthLayout/index.tsx:88
 msgid "Auto Workflow"
 msgstr "自动化工作流"
 
-#: src/components/layouts/AuthLayout/index.tsx:78
+#: src/components/layouts/AuthLayout/index.tsx:79
 msgid "Automated entry management with multiple check-in lists and real-time validation"
 msgstr "使用多个签到列表和实时验证的自动化入场管理"
 
@@ -747,6 +763,7 @@ msgstr "根据内容自动调整 widget 高度。禁用时，窗口小部件将�
 #~ msgstr "平均订单价值"
 
 #: src/components/common/OrderStatusBadge/index.tsx:15
+#: src/components/modals/SendMessageModal/index.tsx:231
 msgid "Awaiting offline payment"
 msgstr "等待线下付款"
 
@@ -801,7 +818,7 @@ msgstr "背景类型"
 #~ msgid "Basic Details"
 #~ msgstr "基本详情"
 
-#: src/components/modals/SendMessageModal/index.tsx:213
+#: src/components/modals/SendMessageModal/index.tsx:278
 msgid "Before you send!"
 msgstr "发送之前"
 
@@ -826,7 +843,7 @@ msgstr "账单地址"
 msgid "Billing Settings"
 msgstr "账单设置"
 
-#: src/components/layouts/AuthLayout/index.tsx:82
+#: src/components/layouts/AuthLayout/index.tsx:83
 msgid "Brand Control"
 msgstr "品牌控制"
 
@@ -1068,7 +1085,7 @@ msgstr "城市"
 msgid "Clear Search Text"
 msgstr "清除搜索文本"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:282
+#: src/components/routes/product-widget/SelectProducts/index.tsx:285
 msgid "click here"
 msgstr "点击此处"
 
@@ -1136,7 +1153,7 @@ msgstr "完成付款"
 msgid "Complete Payment"
 msgstr "完成付款"
 
-#: src/components/layouts/AuthLayout/index.tsx:67
+#: src/components/layouts/AuthLayout/index.tsx:68
 msgid "Complete Store"
 msgstr "完整商店"
 
@@ -1144,6 +1161,7 @@ msgstr "完整商店"
 msgid "Complete Stripe Setup"
 msgstr "完成 Stripe 设置"
 
+#: src/components/modals/SendMessageModal/index.tsx:230
 #: src/components/routes/event/GettingStarted/index.tsx:43
 #: src/components/routes/event/orders.tsx:24
 msgid "Completed"
@@ -1200,7 +1218,7 @@ msgstr "连接文档"
 #~ msgid "Connect Stripe"
 #~ msgstr "连接条纹"
 
-#: src/components/layouts/AuthLayout/index.tsx:88
+#: src/components/layouts/AuthLayout/index.tsx:89
 msgid "Connect with CRM and automate tasks using webhooks and integrations"
 msgstr "连接 CRM 并使用 Webhook 和集成自动化任务"
 
@@ -1221,6 +1239,14 @@ msgstr "已连接到 Stripe"
 msgid "Connection Details"
 msgstr "连接详情"
 
+#: src/components/modals/SendMessageModal/index.tsx:167
+msgid "Contact Support"
+msgstr "联系支持"
+
+#: src/components/modals/SendMessageModal/index.tsx:158
+msgid "Contact us to enable messaging"
+msgstr "联系我们以启用消息功能"
+
 #: src/components/routes/event/HomepageDesigner/index.tsx:155
 msgid "Content background color"
 msgstr "内容背景颜色"
@@ -1228,7 +1254,7 @@ msgstr "内容背景颜色"
 #: src/components/common/WidgetEditor/index.tsx:31
 #: src/components/common/WidgetEditor/index.tsx:217
 #: src/components/layouts/Checkout/CheckoutFooter/index.tsx:38
-#: src/components/routes/product-widget/SelectProducts/index.tsx:423
+#: src/components/routes/product-widget/SelectProducts/index.tsx:426
 msgid "Continue"
 msgstr "继续"
 
@@ -1371,7 +1397,7 @@ msgstr "创建活动"
 msgid "Create new"
 msgstr "创建新的"
 
-#: src/components/forms/OrganizerForm/index.tsx:110
+#: src/components/forms/OrganizerForm/index.tsx:111
 #: src/components/modals/CreateEventModal/index.tsx:94
 #: src/components/modals/CreateOrganizerModal/index.tsx:16
 msgid "Create Organizer"
@@ -1462,7 +1488,7 @@ msgstr "自定义此事件的搜索引擎优化设置"
 msgid "Customize your event page"
 msgstr "定制您的活动页面"
 
-#: src/components/layouts/AuthLayout/index.tsx:83
+#: src/components/layouts/AuthLayout/index.tsx:84
 msgid "Customize your event page and widget design to match your brand perfectly"
 msgstr "自定义您的活动页面和小部件设计，以完美匹配您的品牌"
 
@@ -1595,7 +1621,7 @@ msgstr "{0}中的折扣"
 msgid "Discount Type"
 msgstr "折扣类型"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:291
+#: src/components/routes/product-widget/SelectProducts/index.tsx:294
 msgid "Dismiss"
 msgstr "解散"
 
@@ -1663,6 +1689,12 @@ msgstr "拖放或点击"
 #: src/components/forms/QuestionForm/index.tsx:124
 msgid "Dropdown selection"
 msgstr "下拉选择"
+
+#: src/components/modals/SendMessageModal/index.tsx:159
+msgid ""
+"Due to the high risk of spam, we require manual verification before you can send messages.\n"
+"Please contact us to request access."
+msgstr ""
 
 #: src/components/modals/DuplicateEventModal/index.tsx:124
 msgid "Duplicate Capacity Assignments"
@@ -2192,7 +2224,7 @@ msgstr "固定费用："
 msgid "Flash is not available on this device"
 msgstr "该设备不支持闪存"
 
-#: src/components/layouts/AuthLayout/index.tsx:57
+#: src/components/layouts/AuthLayout/index.tsx:58
 msgid "Flexible Ticketing"
 msgstr "灵活的票务系统"
 
@@ -2279,7 +2311,7 @@ msgstr "销售总额"
 msgid "Guests"
 msgstr "宾客"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:432
+#: src/components/routes/product-widget/SelectProducts/index.tsx:435
 msgid "Have a promo code?"
 msgstr "有促销代码吗？"
 
@@ -2333,12 +2365,12 @@ msgstr "隐藏问题"
 msgid "hidden questions"
 msgstr "隐藏问题"
 
-#: src/components/forms/QuestionForm/index.tsx:219
+#: src/components/forms/QuestionForm/index.tsx:218
 msgid "Hidden questions are only visible to the event organizer and not to the customer."
 msgstr "隐藏问题只有活动组织者可以看到，客户看不到。"
 
 #: src/components/forms/ProductForm/index.tsx:344
-#: src/components/routes/product-widget/SelectProducts/index.tsx:397
+#: src/components/routes/product-widget/SelectProducts/index.tsx:400
 msgid "Hide"
 msgstr "隐藏"
 
@@ -2374,7 +2406,7 @@ msgstr "隐藏侧边栏中的入门页面"
 msgid "Hide this product from customers"
 msgstr "对客户隐藏此产品"
 
-#: src/components/forms/QuestionForm/index.tsx:220
+#: src/components/forms/QuestionForm/index.tsx:219
 msgid "Hide this question"
 msgstr "隐藏此问题"
 
@@ -2459,7 +2491,7 @@ msgstr "我想使用线下支付方式付款"
 msgid "I would like to pay using an online method (credit card etc.)"
 msgstr "我想使用在线支付方式（如信用卡）付款"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:278
+#: src/components/routes/product-widget/SelectProducts/index.tsx:281
 msgid "If a new tab did not open, please  <0><1>{0}</1>.</0>"
 msgstr "如果新标签页没有打开，请<0><1>{0}</1>.</0>。"
 
@@ -2558,6 +2590,10 @@ msgstr "包括1个产品"
 #: src/components/common/CheckInListList/index.tsx:113
 #~ msgid "Includes 1 ticket"
 #~ msgstr "包括 1 张票"
+
+#: src/components/common/MessageList/index.tsx:20
+msgid "Individual attendees"
+msgstr "个人与会者"
 
 #: src/components/common/Editor/Controls/InsertImageControl/index.tsx:55
 #: src/components/common/Editor/Controls/InsertImageControl/index.tsx:66
@@ -2741,7 +2777,7 @@ msgstr "Lorem ipsum dolor sit amet, consectetur adipiscing elit.Nam placerat ele
 msgid "Make billing address mandatory during checkout"
 msgstr "在结账时强制要求填写账单地址"
 
-#: src/components/forms/QuestionForm/index.tsx:213
+#: src/components/forms/QuestionForm/index.tsx:212
 msgid "Make this question mandatory"
 msgstr "将此问题作为必答题"
 
@@ -2808,7 +2844,7 @@ msgstr "管理您的支付处理并查看平台费用"
 msgid "Manage your users and their permissions"
 msgstr "管理用户及其权限"
 
-#: src/components/forms/QuestionForm/index.tsx:212
+#: src/components/forms/QuestionForm/index.tsx:211
 msgid "Mandatory questions must be answered before the customer can checkout."
 msgstr "在顾客结账前，必须回答必填问题。"
 
@@ -2842,14 +2878,14 @@ msgid "Message Attendees"
 msgstr "留言参与者"
 
 #: src/components/modals/SendMessageModal/index.tsx:165
-msgid "Message attendees with specific products"
-msgstr "向有特定产品的参会者发送消息"
+#~ msgid "Message attendees with specific products"
+#~ msgstr "向有特定产品的参会者发送消息"
 
-#: src/components/modals/SendMessageModal/index.tsx:164
-#~ msgid "Message attendees with specific tickets"
-#~ msgstr "向与会者发送特定门票的信息"
+#: src/components/modals/SendMessageModal/index.tsx:206
+msgid "Message attendees with specific tickets"
+msgstr "向与会者发送特定门票的信息"
 
-#: src/components/layouts/AuthLayout/index.tsx:73
+#: src/components/layouts/AuthLayout/index.tsx:74
 msgid "Message attendees, manage orders, and handle refunds all in one place"
 msgstr "在一个地方向与会者发送消息、管理订单并处理退款"
 
@@ -2857,15 +2893,19 @@ msgstr "在一个地方向与会者发送消息、管理订单并处理退款"
 msgid "Message buyer"
 msgstr "留言买家"
 
-#: src/components/modals/SendMessageModal/index.tsx:185
+#: src/components/modals/SendMessageModal/index.tsx:250
 msgid "Message Content"
 msgstr "留言内容"
 
-#: src/components/modals/SendMessageModal/index.tsx:70
+#: src/components/modals/SendMessageModal/index.tsx:71
 msgid "Message individual attendees"
 msgstr "给个别与会者留言"
 
-#: src/components/modals/SendMessageModal/index.tsx:113
+#: src/components/modals/SendMessageModal/index.tsx:218
+msgid "Message order owners with specific products"
+msgstr "向具有特定产品的订单所有者发送消息"
+
+#: src/components/modals/SendMessageModal/index.tsx:118
 msgid "Message Sent"
 msgstr "发送的信息"
 
@@ -2890,7 +2930,7 @@ msgstr "其他"
 msgid "Miscellaneous Settings"
 msgstr "杂项设置"
 
-#: src/components/layouts/AuthLayout/index.tsx:62
+#: src/components/layouts/AuthLayout/index.tsx:63
 msgid "Mobile Check-in"
 msgstr "移动签到"
 
@@ -3030,7 +3070,7 @@ msgstr "无事件显示"
 msgid "No filters available"
 msgstr "没有可用筛选器"
 
-#: src/components/common/MessageList/index.tsx:59
+#: src/components/common/MessageList/index.tsx:69
 msgid "No messages to show"
 msgstr "无信息显示"
 
@@ -3222,13 +3262,17 @@ msgstr "在线活动"
 msgid "Online Event Details"
 msgstr "在线活动详情"
 
-#: src/components/modals/SendMessageModal/index.tsx:214
+#: src/components/modals/SendMessageModal/index.tsx:279
 msgid ""
 "Only important emails, which are directly related to this event, should be sent using this form.\n"
 "Any misuse, including sending promotional emails, will lead to an immediate account ban."
 msgstr ""
 "只有与本次活动直接相关的重要邮件才能使用此表单发送。\n"
 "任何滥用行为，包括发送促销邮件，都将导致账户立即被封禁。"
+
+#: src/components/modals/SendMessageModal/index.tsx:226
+msgid "Only send to orders with these statuses"
+msgstr "仅发送给具有这些状态的订单"
 
 #: src/components/common/CheckInListList/index.tsx:167
 msgid "Open Check-In Page"
@@ -3309,6 +3353,18 @@ msgstr "订单标记为已支付"
 msgid "Order Notes"
 msgstr "订单备注"
 
+#: src/components/common/MessageList/index.tsx:23
+msgid "Order owner"
+msgstr "订单所有者"
+
+#: src/components/modals/SendMessageModal/index.tsx:191
+msgid "Order owners with a specific product"
+msgstr "具有特定产品的订单所有者"
+
+#: src/components/common/MessageList/index.tsx:19
+msgid "Order owners with products"
+msgstr "具有产品的订单所有者"
+
 #: src/components/common/QuestionsTable/index.tsx:292
 #: src/components/common/QuestionsTable/index.tsx:334
 msgid "Order questions"
@@ -3324,6 +3380,10 @@ msgstr "订单已退款"
 
 #: src/components/routes/event/orders.tsx:46
 msgid "Order Status"
+msgstr "订单状态"
+
+#: src/components/modals/SendMessageModal/index.tsx:228
+msgid "Order statuses"
 msgstr "订单状态"
 
 #: src/components/layouts/Checkout/CheckoutSidebar/index.tsx:28
@@ -3570,7 +3630,7 @@ msgstr "请检查您的电子邮件以确认您的电子邮件地址"
 msgid "Please complete the form below to accept your invitation"
 msgstr "请填写下表接受邀请"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:276
+#: src/components/routes/product-widget/SelectProducts/index.tsx:279
 msgid "Please continue in the new tab"
 msgstr "请在新标签页中继续"
 
@@ -3606,11 +3666,11 @@ msgstr "请注意"
 msgid "Please return to the event page to start over."
 msgstr "请返回活动页面重新开始。"
 
-#: src/components/modals/SendMessageModal/index.tsx:154
+#: src/components/modals/SendMessageModal/index.tsx:195
 msgid "Please select"
 msgstr "请选择"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:231
+#: src/components/routes/product-widget/SelectProducts/index.tsx:234
 msgid "Please select at least one product"
 msgstr "请选择至少一个产品"
 
@@ -3817,7 +3877,7 @@ msgstr "简介"
 msgid "Profile updated successfully"
 msgstr "成功更新个人资料"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:172
+#: src/components/routes/product-widget/SelectProducts/index.tsx:175
 msgid "Promo {promo_code} code applied"
 msgstr "已使用促销 {promo_code} 代码"
 
@@ -3842,7 +3902,7 @@ msgstr "促销代码可用于提供折扣、预售权限或为您的活动提供
 msgid "Promo Codes Report"
 msgstr "促销代码报告"
 
-#: src/components/forms/QuestionForm/index.tsx:190
+#: src/components/forms/QuestionForm/index.tsx:189
 msgid ""
 "Provide additional context or instructions for this question. Use this field to add terms\n"
 "and conditions, guidelines, or any important information that attendees need to know before answering."
@@ -3856,7 +3916,7 @@ msgstr "提供此问题的附加背景或说明。使用此字段添加条款和
 msgid "QR Code"
 msgstr "二维码"
 
-#: src/components/layouts/AuthLayout/index.tsx:63
+#: src/components/layouts/AuthLayout/index.tsx:64
 msgid "QR code scanning with instant feedback and secure sharing for staff access"
 msgstr "二维码扫描，提供即时反馈和安全共享，供工作人员使用"
 
@@ -3873,11 +3933,11 @@ msgstr "销售数量"
 msgid "Question deleted"
 msgstr "问题已删除"
 
-#: src/components/forms/QuestionForm/index.tsx:189
+#: src/components/forms/QuestionForm/index.tsx:188
 msgid "Question Description"
 msgstr "问题描述"
 
-#: src/components/forms/QuestionForm/index.tsx:179
+#: src/components/forms/QuestionForm/index.tsx:178
 msgid "Question Title"
 msgstr "问题标题"
 
@@ -3899,11 +3959,11 @@ msgstr "问题已成功分类"
 msgid "Radio Option"
 msgstr "无线电选项"
 
-#: src/components/common/MessageList/index.tsx:49
+#: src/components/common/MessageList/index.tsx:59
 msgid "Read less"
 msgstr "更多信息"
 
-#: src/components/modals/SendMessageModal/index.tsx:35
+#: src/components/modals/SendMessageModal/index.tsx:36
 msgid "Recipient"
 msgstr "受援国"
 
@@ -3952,11 +4012,11 @@ msgstr "注册"
 msgid "Remaining Uses"
 msgstr "剩余使用次数"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:441
+#: src/components/routes/product-widget/SelectProducts/index.tsx:444
 msgid "remove"
 msgstr "去除"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:442
+#: src/components/routes/product-widget/SelectProducts/index.tsx:445
 msgid "Remove"
 msgstr "移除"
 
@@ -4200,7 +4260,7 @@ msgid "Select Product Tier"
 msgstr "选择产品等级"
 
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:49
-#: src/components/modals/SendMessageModal/index.tsx:166
+#: src/components/modals/SendMessageModal/index.tsx:219
 msgid "Select products"
 msgstr "选择产品"
 
@@ -4218,6 +4278,7 @@ msgstr "选择机票"
 #~ msgstr "选择票价等级"
 
 #: src/components/forms/CheckInListForm/index.tsx:26
+#: src/components/modals/SendMessageModal/index.tsx:207
 msgid "Select tickets"
 msgstr "选择票"
 
@@ -4233,27 +4294,27 @@ msgstr "选择哪些事件将触发此 Webhook"
 msgid "Select..."
 msgstr "选择..."
 
-#: src/components/layouts/AuthLayout/index.tsx:68
+#: src/components/layouts/AuthLayout/index.tsx:69
 msgid "Sell merchandise alongside tickets with integrated tax and promo code support"
-msgstr "与门票一起销售商品，支持集成税收和促销代码"
+msgstr "在销售门票的同时销售商品，并支持集成税务和促销代码"
 
 #: src/components/layouts/AuthLayout/index.tsx:42
 msgid "Sell More Than Tickets"
 msgstr "销售不仅仅是门票"
 
-#: src/components/modals/SendMessageModal/index.tsx:227
+#: src/components/modals/SendMessageModal/index.tsx:295
 msgid "Send"
 msgstr "发送"
 
-#: src/components/modals/SendMessageModal/index.tsx:194
+#: src/components/modals/SendMessageModal/index.tsx:259
 msgid "Send a copy to <0>{0}</0>"
 msgstr "将副本发送至 <0>{0}</0>"
 
-#: src/components/modals/SendMessageModal/index.tsx:130
+#: src/components/modals/SendMessageModal/index.tsx:139
 msgid "Send a message"
 msgstr "发送信息"
 
-#: src/components/modals/SendMessageModal/index.tsx:204
+#: src/components/modals/SendMessageModal/index.tsx:269
 msgid "Send as a test. This will send the message to your email address instead of the recipients."
 msgstr "作为测试发送。这将把信息发送到您的电子邮件地址，而不是收件人的电子邮件地址。"
 
@@ -4269,7 +4330,7 @@ msgstr "发送消息"
 msgid "Send order confirmation and ticket email"
 msgstr "发送订单确认和票务电子邮件"
 
-#: src/components/modals/SendMessageModal/index.tsx:227
+#: src/components/modals/SendMessageModal/index.tsx:295
 msgid "Send Test"
 msgstr "发送测试"
 
@@ -4385,7 +4446,7 @@ msgstr "显示可用产品数量"
 msgid "Show hidden questions"
 msgstr "显示隐藏问题"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:396
+#: src/components/routes/product-widget/SelectProducts/index.tsx:399
 msgid "Show more"
 msgstr "显示更多"
 
@@ -4422,11 +4483,11 @@ msgstr "单行文本框"
 msgid "Skip this step"
 msgstr "跳过此步骤"
 
-#: src/components/layouts/AuthLayout/index.tsx:77
+#: src/components/layouts/AuthLayout/index.tsx:78
 msgid "Smart Check-in"
 msgstr "智能签到"
 
-#: src/components/layouts/AuthLayout/index.tsx:52
+#: src/components/layouts/AuthLayout/index.tsx:53
 msgid "Smart Dashboard"
 msgstr "智能仪表板"
 
@@ -4482,7 +4543,7 @@ msgstr "抱歉，在加载此页面时出了点问题。"
 msgid "Sorry, this order no longer exists."
 msgstr "抱歉，此订单不再存在。"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:240
+#: src/components/routes/product-widget/SelectProducts/index.tsx:243
 msgid "Sorry, this promo code is not recognized"
 msgstr "对不起，此优惠代码不可用"
 
@@ -4541,7 +4602,7 @@ msgstr "Stripe"
 msgid "Stripe payments are not enabled for this event."
 msgstr "此活动未启用 Stripe 支付。"
 
-#: src/components/modals/SendMessageModal/index.tsx:180
+#: src/components/modals/SendMessageModal/index.tsx:245
 msgid "Subject"
 msgstr "主题"
 
@@ -4673,9 +4734,9 @@ msgstr "100 号套房"
 msgid "Support Email"
 msgstr "支持电子邮件"
 
-#: src/components/layouts/AuthLayout/index.tsx:58
+#: src/components/layouts/AuthLayout/index.tsx:59
 msgid "Support for tiered, donation-based, and product sales with customizable pricing and capacity"
-msgstr "支持分级、捐赠和产品销售，价格和容量可定制"
+msgstr "支持分级、基于捐赠和产品销售，并提供可自定义的定价和容量"
 
 #: src/components/forms/ProductForm/index.tsx:254
 msgid "T-shirt"
@@ -4717,8 +4778,8 @@ msgstr "税收"
 msgid "Taxes and Fees"
 msgstr "税费"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:132
-#: src/components/routes/product-widget/SelectProducts/index.tsx:180
+#: src/components/routes/product-widget/SelectProducts/index.tsx:135
+#: src/components/routes/product-widget/SelectProducts/index.tsx:183
 msgid "That promo code is invalid"
 msgstr "促销代码无效"
 
@@ -4744,7 +4805,7 @@ msgstr "与会者接收电子邮件的语言。"
 msgid "The link you clicked is invalid."
 msgstr "您点击的链接无效。"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:381
+#: src/components/routes/product-widget/SelectProducts/index.tsx:384
 msgid "The maximum number of products for {0}is {1}"
 msgstr "{0}的最大产品数量是{1}"
 
@@ -4784,11 +4845,11 @@ msgstr "应用于此产品的税费。您可以在此创建新的税费"
 msgid "The title of the event that will be displayed in search engine results and when sharing on social media. By default, the event title will be used"
 msgstr "活动标题，将显示在搜索引擎结果中，并在社交媒体上分享时显示。默认情况下，将使用事件标题"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:266
+#: src/components/routes/product-widget/SelectProducts/index.tsx:269
 msgid "There are no products available for this event"
 msgstr "此活动没有可用产品"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:312
+#: src/components/routes/product-widget/SelectProducts/index.tsx:315
 msgid "There are no products available in this category"
 msgstr "此类别中没有可用产品"
 
@@ -4852,7 +4913,7 @@ msgstr "此签到列表尚未激活，不能用于签到。"
 msgid "This description will be shown to the check-in staff"
 msgstr "此描述将显示给签到工作人员"
 
-#: src/components/modals/SendMessageModal/index.tsx:220
+#: src/components/modals/SendMessageModal/index.tsx:285
 msgid "This email is not promotional and is directly related to the event."
 msgstr "此电子邮件并非促销邮件，与活动直接相关。"
 
@@ -4998,6 +5059,10 @@ msgstr "门票"
 #: src/components/common/AttendeeTable/index.tsx:49
 msgid "Ticket email has been resent to attendee"
 msgstr "门票电子邮件已重新发送给与会者"
+
+#: src/components/common/MessageList/index.tsx:22
+msgid "Ticket holders"
+msgstr "票务持有人"
 
 #: src/components/routes/event/EventDashboard/index.tsx:53
 #~ msgid "Ticket Sales"
@@ -5160,9 +5225,9 @@ msgstr "剩余总数"
 msgid "Total Tax"
 msgstr "总税额"
 
-#: src/components/layouts/AuthLayout/index.tsx:53
+#: src/components/layouts/AuthLayout/index.tsx:54
 msgid "Track revenue, page views, and sales with detailed analytics and exportable reports"
-msgstr "使用详细分析和可导出的报告跟踪收入、页面浏览量和销售情况"
+msgstr "通过详细的分析和可导出的报告跟踪收入、页面浏览量和销售情况"
 
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:51
 msgid "Transaction Fee:"
@@ -5189,7 +5254,7 @@ msgstr "无法签退参与者"
 msgid "Unable to create product. Please check the your details"
 msgstr "无法创建产品。请检查您的详细信息"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:117
+#: src/components/routes/product-widget/SelectProducts/index.tsx:120
 msgid "Unable to create product. Please check your details"
 msgstr "无法创建产品。请检查您的详细信息"
 
@@ -5227,7 +5292,7 @@ msgstr "美国"
 msgid "Unlimited"
 msgstr "无限制"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:344
+#: src/components/routes/product-widget/SelectProducts/index.tsx:347
 msgid "Unlimited available"
 msgstr "无限供应"
 
@@ -5346,7 +5411,7 @@ msgstr "查看参会者详情"
 msgid "View event page"
 msgstr "查看活动页面"
 
-#: src/components/common/MessageList/index.tsx:49
+#: src/components/common/MessageList/index.tsx:59
 msgid "View full message"
 msgstr "查看完整信息"
 
@@ -5514,7 +5579,7 @@ msgstr "此容量应适用于哪些产品？"
 #~ msgid "What tickets should this question be apply to?"
 #~ msgstr "该问题应适用于哪些机票？"
 
-#: src/components/forms/QuestionForm/index.tsx:180
+#: src/components/forms/QuestionForm/index.tsx:179
 msgid "What time will you be arriving?"
 msgstr "您什么时候抵达？"
 
@@ -5594,7 +5659,7 @@ msgstr "哪些票应与此签到列表关联？"
 msgid "Who is organizing this event?"
 msgstr "这项活动由谁组织？"
 
-#: src/components/modals/SendMessageModal/index.tsx:153
+#: src/components/modals/SendMessageModal/index.tsx:194
 msgid "Who is this message to?"
 msgstr "这条信息是发给谁的？"
 
@@ -5762,7 +5827,7 @@ msgstr "您已向免费产品添加了税费。您想要删除它们吗？"
 #~ msgid "You have taxes and fees added to a Free Ticket. Would you like to remove or obscure them?"
 #~ msgstr "您在免费机票上添加了税费。您想删除或隐藏它们吗？"
 
-#: src/components/common/MessageList/index.tsx:64
+#: src/components/common/MessageList/index.tsx:74
 msgid "You haven't sent any messages yet. You can send messages to all attendees, or to specific product holders."
 msgstr "您尚未发送任何消息。您可以向所有参会者发送消息，或向特定产品持有者发送消息。"
 
@@ -5770,7 +5835,7 @@ msgstr "您尚未发送任何消息。您可以向所有参会者发送消息，
 #~ msgid "You haven't sent any messages yet. You can send messages to all attendees, or to specific ticket holders."
 #~ msgstr "您尚未发送任何信息。您可以向所有与会者或特定持票人发送信息。"
 
-#: src/components/modals/SendMessageModal/index.tsx:103
+#: src/components/modals/SendMessageModal/index.tsx:108
 msgid "You must acknowledge that this email is not promotional"
 msgstr "您必须确认此电子邮件并非促销邮件"
 
@@ -5791,8 +5856,12 @@ msgid "You must have at least one price tier"
 msgstr "您必须至少有一个价格等级"
 
 #: src/components/modals/SendMessageModal/index.tsx:136
-msgid "You need to verify your account before you can send messages."
-msgstr "发送信息前，您需要验证您的账户。"
+#~ msgid "You need to verify your account before you can send messages."
+#~ msgstr "发送信息前，您需要验证您的账户。"
+
+#: src/components/modals/SendMessageModal/index.tsx:151
+msgid "You need to verify your account email before you can send messages."
+msgstr "您需要验证您的帐户电子邮件才能发送消息。"
 
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:143
 msgid "You will have to mark an order as paid manually. This can be done on the manage order page."

@@ -197,7 +197,7 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
                 onClose={messageModal.close}
                 orderId={selectedAttendee.order_id}
                 attendeeId={selectedAttendee.id}
-                messageType={MessageType.Attendee}
+                messageType={MessageType.IndividualAttendees}
             />}
             {(selectedAttendee?.id && isViewModalOpen) && <ManageAttendeeModal
                 attendeeId={selectedAttendee.id}

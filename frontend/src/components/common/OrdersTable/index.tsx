@@ -309,7 +309,7 @@ export const OrdersTable = ({orders, event}: OrdersTableProps) => {
                     {isMessageModalOpen && <SendMessageModal
                         onClose={messageModal.close}
                         orderId={orderId}
-                        messageType={MessageType.Order}
+                        messageType={MessageType.OrderOwner}
                     />}
                 </>
             )}

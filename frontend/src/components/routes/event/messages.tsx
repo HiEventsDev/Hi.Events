@@ -59,7 +59,7 @@ export const Messages = () => {
                 )}
             </PageBody>
 
-            {sendModalOpen && <SendMessageModal messageType={MessageType.Order} onClose={closeSendModal}/>}
+            {sendModalOpen && <SendMessageModal messageType={MessageType.OrderOwner} onClose={closeSendModal}/>}
         </>
     );
 };

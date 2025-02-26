@@ -24,6 +24,7 @@ abstract class AccountDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     final public const STRIPE_CONNECT_SETUP_COMPLETE = 'stripe_connect_setup_complete';
     final public const ACCOUNT_VERIFIED_AT = 'account_verified_at';
     final public const STRIPE_CONNECT_ACCOUNT_TYPE = 'stripe_connect_account_type';
+    final public const IS_MANUALLY_VERIFIED = 'is_manually_verified';
 
     protected int $id;
     protected ?int $account_configuration_id = null;
@@ -39,6 +40,7 @@ abstract class AccountDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     protected ?bool $stripe_connect_setup_complete = false;
     protected ?string $account_verified_at = null;
     protected ?string $stripe_connect_account_type = null;
+    protected bool $is_manually_verified = false;
 
     public function toArray(): array
     {
@@ -57,6 +59,7 @@ abstract class AccountDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
                     'stripe_connect_setup_complete' => $this->stripe_connect_setup_complete ?? null,
                     'account_verified_at' => $this->account_verified_at ?? null,
                     'stripe_connect_account_type' => $this->stripe_connect_account_type ?? null,
+                    'is_manually_verified' => $this->is_manually_verified ?? null,
                 ];
     }
 
@@ -212,5 +215,16 @@ abstract class AccountDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     public function getStripeConnectAccountType(): ?string
     {
         return $this->stripe_connect_account_type;
+    }
+
+    public function setIsManuallyVerified(bool $is_manually_verified): self
+    {
+        $this->is_manually_verified = $is_manually_verified;
+        return $this;
+    }
+
+    public function getIsManuallyVerified(): bool
+    {
+        return $this->is_manually_verified;
     }
 }

@@ -310,7 +310,7 @@ export const SortableProduct = ({product, currencyCode, category, categories}: S
                 <SendMessageModal
                     onClose={messageModal.close}
                     productId={productId}
-                    messageType={MessageType.Product}
+                    messageType={MessageType.TicketHolders}
                 />
             )}
         </>

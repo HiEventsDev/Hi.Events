@@ -20,6 +20,7 @@ const ProductWidget = () => {
                 primaryText: searchParams.get("PrimaryTextColor") || '#000000',
                 secondary: searchParams.get("SecondaryColor") || '#7b5eb9',
                 secondaryText: searchParams.get("SecondaryTextColor") || '#ffffff',
+                bodyBackground: searchParams.get("BackgroundColor") || '#ffffff',
             },
             continueButtonText: searchParams.get("ContinueButtonText") || 'Continue',
             padding: searchParams.get("Padding") || '10px',
@@ -41,7 +42,7 @@ const ProductWidget = () => {
     }
 
     return (
-        <div className={'full-height'}>
+        <div className={'full-height'} style={{backgroundColor: settings.colors.bodyBackground}}>
             <SelectProducts
                 widgetMode={'embedded'}
                 event={eventQuery.data}

@@ -72,7 +72,7 @@ export const CreateEvent = () => {
                 {t`Now let's create your first event`}
             </h3>
             <p className={classes.sectionDescription}>
-                {t`An event is the actual event you are hosting. You can add more details later.`}
+                {t`An event is the gathering or occasion you’re organizing. You can add more details later.`}
             </p>
 
             <form onSubmit={form.onSubmit(handleSubmit)}>
