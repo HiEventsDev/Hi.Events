@@ -34,7 +34,8 @@ const Reports = () => {
 
     return (
         <PageBody>
-            <PageTitle>
+            <PageTitle
+                subheading={t`View and download reports for your event. Please note, only completed orders are included in these reports.`}>
                 {t`Reports`}
             </PageTitle>
 

@@ -13,6 +13,8 @@ class PromoCodesReport extends AbstractReportService
         $startDateString = $startDate->format('Y-m-d H:i:s');
         $endDateString = $endDate->format('Y-m-d H:i:s');
         $reservedString = OrderStatus::RESERVED->name;
+        $completedStatus = OrderStatus::COMPLETED->name;
+
         $translatedStringMap = [
             'Expired' => __('Expired'),
             'Limit Reached' => __('Limit Reached'),
@@ -35,7 +37,7 @@ class PromoCodesReport extends AbstractReportService
                              JOIN order_items oi ON oi.order_id = o.id
                     WHERE
                         o.deleted_at IS NULL
-                      AND o.status NOT IN ('$reservedString')
+                      AND o.status IN ('$completedStatus')
                       AND o.event_id = :event_id
                       AND o.created_at >= '$startDateString'
                       AND o.created_at <= '$endDateString'
