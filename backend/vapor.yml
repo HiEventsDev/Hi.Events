@@ -4,7 +4,7 @@ environments:
   production:
     gateway-version: 2.0
     domain: api.hi.events
-    memory: 1024
+    memory: 1524
     cli-memory: 512
     runtime: 'php-8.3:al2'
     warm: 3
@@ -23,15 +23,15 @@ environments:
       - 'php artisan migrate --force'
   staging:
     gateway-version: 2.0
-    domain: staging.hi.events
+    domain: staging-api.hi.events
     memory: 1024
     cli-memory: 512
     runtime: 'php-8.3:al2'
     warm: 3
     cache: hievents-redis-prod
-    database: hievents-db-staging
+    database: hievents-db-prod
     queue:
-      - hievents-queue-staging
+      - hievents-queue-prod
       - hievents-webhook-queue-staging
     queue-memory: 1024
     queue-concurrency: 2
