@@ -7,7 +7,7 @@ import {useDuplicateEvent} from "../../../mutations/useDuplicateEvent.ts";
 import {Editor} from "../../common/Editor";
 import {InputGroup} from "../../common/InputGroup";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
-import {useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router";
 import {useEffect} from "react";
 import {utcToTz} from "../../../utilites/dates.ts";
 import {showSuccess} from "../../../utilites/notifications.tsx";
@@ -25,13 +25,14 @@ export const DuplicateEventModal = ({onClose, eventId}: DuplicateEventModalProps
             start_date: '',
             end_date: '',
             description: '',
-            duplicate_tickets: true,
+            duplicate_products: true,
             duplicate_questions: true,
             duplicate_settings: true,
             duplicate_promo_codes: true,
             duplicate_capacity_assignments: true,
             duplicate_check_in_lists: true,
             duplicate_event_cover_image: true,
+            duplicate_webhooks: true,
         }
     });
     const mutation = useDuplicateEvent();
@@ -103,8 +104,8 @@ export const DuplicateEventModal = ({onClose, eventId}: DuplicateEventModalProps
                     </h3>
                     <Card variant={'lightGray'}>
                         <Switch
-                            {...form.getInputProps('duplicate_tickets', {type: 'checkbox'})}
-                            label={t`Duplicate Tickets`}
+                            {...form.getInputProps('duplicate_products', {type: 'checkbox'})}
+                            label={t`Duplicate Products`}
                         />
                         <Switch
                             {...form.getInputProps('duplicate_questions', {type: 'checkbox'})}
@@ -127,9 +128,13 @@ export const DuplicateEventModal = ({onClose, eventId}: DuplicateEventModalProps
                             label={t`Duplicate Check-In Lists`}
                         />
                         <Switch
-                            mb={0}
                             {...form.getInputProps('duplicate_event_cover_image', {type: 'checkbox'})}
                             label={t`Duplicate Event Cover Image`}
+                        />
+                        <Switch
+                            mb={0}
+                            {...form.getInputProps('duplicate_webhooks', {type: 'checkbox'})}
+                            label={t`Duplicate Webhooks`}
                         />
                     </Card>
                 </fieldset>

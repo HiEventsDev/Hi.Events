@@ -15,9 +15,9 @@ class UpsertQuestionRequest extends BaseRequest
             'title' => ['string', 'required'],
             'description' => ['string', 'nullable', 'max:10000'],
             'type' => ['required', Rule::in(QuestionTypeEnum::valuesArray())],
-            'ticket_ids' => ['array', 'required_if:belongs_to,TICKET'],
+            'product_ids' => ['array', 'required_if:belongs_to,PRODUCT'],
             'belongs_to' => [
-                ['required', Rule::in([QuestionBelongsTo::TICKET->name, QuestionBelongsTo::ORDER->name])],
+                ['required', Rule::in([QuestionBelongsTo::PRODUCT->name, QuestionBelongsTo::ORDER->name])],
             ],
             'options' => 'max:2000|required_if:type,CHECKBOX,RADIO',
             'required' => 'required|boolean',
@@ -28,7 +28,7 @@ class UpsertQuestionRequest extends BaseRequest
     public function messages(): array
     {
         return [
-            'ticket_ids.required_if' => __('Please select at least one ticket.'),
+            'product_ids.required_if' => __('Please select at least one product.'),
         ];
     }
 }

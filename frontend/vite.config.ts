@@ -4,6 +4,9 @@ import react from "@vitejs/plugin-react";
 import {copy} from "vite-plugin-copy";
 
 export default defineConfig({
+    optimizeDeps: {
+        include: ["react-router"]
+    },
     server: {
         hmr: {
             port: 24678,

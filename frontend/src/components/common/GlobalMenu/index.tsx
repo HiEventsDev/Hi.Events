@@ -2,7 +2,7 @@ import {Avatar, Menu, UnstyledButton} from "@mantine/core";
 import {getInitials} from "../../../utilites/helpers.ts";
 import {IconLifebuoy, IconLogout, IconSettingsCog, IconUser,} from "@tabler/icons-react";
 import {useGetMe} from "../../../queries/useGetMe.ts";
-import {NavLink} from "react-router-dom";
+import {NavLink} from "react-router";
 import {t} from "@lingui/macro";
 import {authClient} from "../../../api/auth.client.ts";
 import {useDisclosure} from "@mantine/hooks";

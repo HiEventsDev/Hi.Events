@@ -7,8 +7,8 @@ namespace HiEvents\Http\Actions\Auth;
 use HiEvents\Exceptions\UnauthorizedException;
 use HiEvents\Http\Request\Auth\LoginRequest;
 use HiEvents\Http\ResponseCodes;
-use HiEvents\Services\Handlers\Auth\DTO\LoginCredentialsDTO;
-use HiEvents\Services\Handlers\Auth\LoginHandler;
+use HiEvents\Services\Application\Handlers\Auth\DTO\LoginCredentialsDTO;
+use HiEvents\Services\Application\Handlers\Auth\LoginHandler;
 use Illuminate\Http\JsonResponse;
 
 class LoginAction extends BaseAuthAction

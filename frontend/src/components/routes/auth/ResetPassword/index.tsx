@@ -1,6 +1,6 @@
 import {Button, LoadingOverlay, PasswordInput,} from "@mantine/core";
 import {useForm} from "@mantine/form";
-import {NavLink, useNavigate, useParams} from "react-router-dom";
+import {NavLink, useNavigate, useParams} from "react-router";
 import {useResetPassword} from "../../../../mutations/useResetPassword.ts";
 import {useVerifyPasswordResetToken} from "../../../../queries/useVerifyPasswordResetToken.ts";
 import {showError, showSuccess} from "../../../../utilites/notifications.tsx";
@@ -58,7 +58,7 @@ export const ResetPassword = () => {
                 <form onSubmit={form.onSubmit(handleSubmit)}>
                     <PasswordInput {...form.getInputProps('password')} label={t`New Password`} required/>
                     <PasswordInput {...form.getInputProps('password_confirmation')} label={t`Confirm Password`} required/>
-                    <Button type="submit" fullWidth disabled={mutate.isPending}>
+                    <Button color={'var(--tk-pink)'} type="submit" fullWidth disabled={mutate.isPending}>
                         {mutate.isPending ? t`Working...` : t`Reset password`}
                     </Button>
                 </form>

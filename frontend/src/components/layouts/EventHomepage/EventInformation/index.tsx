@@ -76,7 +76,7 @@ export const EventInformation: FC<{
 
             {event?.description && (
                 <div className={classes.eventDescription}>
-                    <h2>{t`About the event`}</h2>
+                    <h2>{t`About`}</h2>
                     <div dangerouslySetInnerHTML={{
                         __html: event.description || '',
                     }}/>

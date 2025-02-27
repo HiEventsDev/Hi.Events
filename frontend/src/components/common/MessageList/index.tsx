@@ -1,4 +1,4 @@
-import {Message} from "../../../types.ts";
+import {Message, MessageType} from "../../../types.ts";
 import classes from './MessageList.module.scss';
 import {relativeDate} from "../../../utilites/dates.ts";
 import {Card} from "../Card";
@@ -14,6 +14,14 @@ interface MessageListProps {
 
 const SingleMessage = ({message}: { message: Message }) => {
     const [showFullMessage, setShowFullMessage] = useState(false);
+
+    const typeToDescription = {
+        [MessageType.OrderOwnersWithProduct]: t`Order owners with products`,
+        [MessageType.IndividualAttendees]: t`Individual attendees`,
+        [MessageType.AllAttendees]: t`All attendees`,
+        [MessageType.TicketHolders]: t`Ticket holders`,
+        [MessageType.OrderOwner]: t`Order owner`,
+    }
 
     return (
         <Card className={classes.message}>
@@ -36,7 +44,9 @@ const SingleMessage = ({message}: { message: Message }) => {
                     </div>
                 </div>
                 <div className={classes.subject}>{message.subject}</div>
-                <div className={classes.type}>{message.type}</div>
+                <div className={classes.type}>
+                    {typeToDescription[message.type]}
+                </div>
                 <div className={classes.content}>
                     {showFullMessage
                         ? <div dangerouslySetInnerHTML={{__html: message.message}}></div>
@@ -61,7 +71,7 @@ export const MessageList = ({messages}: MessageListProps) => {
             subHeading={(
                 <>
                     <p>
-                        {t`You haven't sent any messages yet. You can send messages to all attendees, or to specific ticket holders.`}
+                        {t`You haven't sent any messages yet. You can send messages to all attendees, or to specific product holders.`}
                     </p>
                 </>
             )}

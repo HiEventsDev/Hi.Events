@@ -12,7 +12,7 @@ class CreateUpdatePromoCodeRequest extends BaseRequest
     {
         return [
             'code' => 'min:2|string|required|max:50',
-            'applicable_ticket_ids' => 'array',
+            'applicable_product_ids' => 'array',
             'discount' => [
                 'required_if:discount_type,PERCENTAGE,FIXED',
                 'numeric',

@@ -8,6 +8,7 @@ class EventSetting extends BaseModel
     {
         return [
             'location_details' => 'array',
+            'payment_providers' => 'array',
         ];
     }
 

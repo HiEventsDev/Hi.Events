@@ -14,7 +14,7 @@ abstract class PromoCodeDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
     final public const EVENT_ID = 'event_id';
     final public const CODE = 'code';
     final public const DISCOUNT = 'discount';
-    final public const APPLICABLE_TICKET_IDS = 'applicable_ticket_ids';
+    final public const APPLICABLE_PRODUCT_IDS = 'applicable_product_ids';
     final public const EXPIRY_DATE = 'expiry_date';
     final public const DISCOUNT_TYPE = 'discount_type';
     final public const ATTENDEE_USAGE_COUNT = 'attendee_usage_count';
@@ -28,7 +28,7 @@ abstract class PromoCodeDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
     protected int $event_id;
     protected string $code;
     protected float $discount = 0.0;
-    protected array|string|null $applicable_ticket_ids = null;
+    protected array|string|null $applicable_product_ids = null;
     protected ?string $expiry_date = null;
     protected ?string $discount_type = null;
     protected int $attendee_usage_count = 0;
@@ -45,7 +45,7 @@ abstract class PromoCodeDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
                     'event_id' => $this->event_id ?? null,
                     'code' => $this->code ?? null,
                     'discount' => $this->discount ?? null,
-                    'applicable_ticket_ids' => $this->applicable_ticket_ids ?? null,
+                    'applicable_product_ids' => $this->applicable_product_ids ?? null,
                     'expiry_date' => $this->expiry_date ?? null,
                     'discount_type' => $this->discount_type ?? null,
                     'attendee_usage_count' => $this->attendee_usage_count ?? null,
@@ -101,15 +101,15 @@ abstract class PromoCodeDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
         return $this->discount;
     }
 
-    public function setApplicableTicketIds(array|string|null $applicable_ticket_ids): self
+    public function setApplicableProductIds(array|string|null $applicable_product_ids): self
     {
-        $this->applicable_ticket_ids = $applicable_ticket_ids;
+        $this->applicable_product_ids = $applicable_product_ids;
         return $this;
     }
 
-    public function getApplicableTicketIds(): array|string|null
+    public function getApplicableProductIds(): array|string|null
     {
-        return $this->applicable_ticket_ids;
+        return $this->applicable_product_ids;
     }
 
     public function setExpiryDate(?string $expiry_date): self

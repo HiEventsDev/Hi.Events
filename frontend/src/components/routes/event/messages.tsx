@@ -1,4 +1,4 @@
-import {useParams} from "react-router-dom";
+import {useParams} from "react-router";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {PageTitle} from "../../common/PageTitle";
 import {PageBody} from "../../common/PageBody";
@@ -59,7 +59,7 @@ export const Messages = () => {
                 )}
             </PageBody>
 
-            {sendModalOpen && <SendMessageModal messageType={MessageType.Order} onClose={closeSendModal}/>}
+            {sendModalOpen && <SendMessageModal messageType={MessageType.OrderOwner} onClose={closeSendModal}/>}
         </>
     );
 };

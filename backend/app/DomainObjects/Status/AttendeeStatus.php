@@ -9,5 +9,6 @@ enum AttendeeStatus
     use BaseEnum;
 
     case ACTIVE;
+    case AWAITING_PAYMENT;
     case CANCELLED;
 }

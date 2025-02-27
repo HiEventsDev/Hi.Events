@@ -6,8 +6,8 @@ use HiEvents\DomainObjects\CapacityAssignmentDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Resources\CapacityAssignment\CapacityAssignmentResource;
-use HiEvents\Services\Handlers\CapacityAssignment\DTO\GetCapacityAssignmentsDTO;
-use HiEvents\Services\Handlers\CapacityAssignment\GetCapacityAssignmentsHandler;
+use HiEvents\Services\Application\Handlers\CapacityAssignment\DTO\GetCapacityAssignmentsDTO;
+use HiEvents\Services\Application\Handlers\CapacityAssignment\GetCapacityAssignmentsHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

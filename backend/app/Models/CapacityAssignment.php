@@ -22,11 +22,11 @@ class CapacityAssignment extends BaseModel
         return $this->belongsTo(Event::class);
     }
 
-    public function tickets(): BelongsToMany
+    public function products(): BelongsToMany
     {
         return $this->belongsToMany(
-            related: Ticket::class,
-            table: 'ticket_capacity_assignments',
+            related: Product::class,
+            table: 'product_capacity_assignments',
         );
     }
 }

@@ -6,7 +6,7 @@ use HiEvents\Exceptions\CannotCheckInException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Resources\Attendee\AttendeeWithCheckInPublicResource;
-use HiEvents\Services\Handlers\CheckInList\Public\GetCheckInListAttendeesPublicHandler;
+use HiEvents\Services\Application\Handlers\CheckInList\Public\GetCheckInListAttendeesPublicHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;

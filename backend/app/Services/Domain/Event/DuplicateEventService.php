@@ -9,21 +9,25 @@ use HiEvents\DomainObjects\Enums\QuestionBelongsTo;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\ImageDomainObject;
+use HiEvents\DomainObjects\ProductCategoryDomainObject;
+use HiEvents\DomainObjects\ProductDomainObject;
+use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\PromoCodeDomainObject;
 use HiEvents\DomainObjects\QuestionDomainObject;
 use HiEvents\DomainObjects\Status\EventStatus;
 use HiEvents\DomainObjects\TaxAndFeesDomainObject;
-use HiEvents\DomainObjects\TicketDomainObject;
-use HiEvents\DomainObjects\TicketPriceDomainObject;
+use HiEvents\DomainObjects\WebhookDomainObject;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\ImageRepositoryInterface;
 use HiEvents\Services\Domain\CapacityAssignment\CreateCapacityAssignmentService;
 use HiEvents\Services\Domain\CheckInList\CreateCheckInListService;
+use HiEvents\Services\Domain\CreateWebhookService;
+use HiEvents\Services\Domain\Product\CreateProductService;
+use HiEvents\Services\Domain\ProductCategory\CreateProductCategoryService;
 use HiEvents\Services\Domain\PromoCode\CreatePromoCodeService;
 use HiEvents\Services\Domain\Question\CreateQuestionService;
-use HiEvents\Services\Domain\Ticket\CreateTicketService;
-use HTMLPurifier;
+use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
 
@@ -32,14 +36,16 @@ class DuplicateEventService
     public function __construct(
         private readonly EventRepositoryInterface        $eventRepository,
         private readonly CreateEventService              $createEventService,
-        private readonly CreateTicketService             $createTicketService,
+        private readonly CreateProductService            $createProductService,
         private readonly CreateQuestionService           $createQuestionService,
         private readonly CreatePromoCodeService          $createPromoCodeService,
         private readonly CreateCapacityAssignmentService $createCapacityAssignmentService,
         private readonly CreateCheckInListService        $createCheckInListService,
         private readonly ImageRepositoryInterface        $imageRepository,
         private readonly DatabaseManager                 $databaseManager,
-        private readonly HTMLPurifier                    $purifier,
+        private readonly HtmlPurifierService             $purifier,
+        private readonly CreateProductCategoryService    $createProductCategoryService,
+        private readonly CreateWebhookService            $createWebhookService,
     )
     {
     }
@@ -52,13 +58,14 @@ class DuplicateEventService
         string  $accountId,
         string  $title,
         string  $startDate,
-        bool    $duplicateTickets = true,
+        bool    $duplicateProducts = true,
         bool    $duplicateQuestions = true,
         bool    $duplicateSettings = true,
         bool    $duplicatePromoCodes = true,
         bool    $duplicateCapacityAssignments = true,
         bool    $duplicateCheckInLists = true,
         bool    $duplicateEventCoverImage = true,
+        bool    $duplicateWebhooks = true,
         ?string $description = null,
         ?string $endDate = null,
     ): EventDomainObject
@@ -84,8 +91,8 @@ class DuplicateEventService
                 $this->clonePerOrderQuestions($event, $newEvent->getId());
             }
 
-            if ($duplicateTickets) {
-                $this->cloneExistingTickets(
+            if ($duplicateProducts) {
+                $this->cloneExistingProducts(
                     event: $event,
                     newEventId: $newEvent->getId(),
                     duplicateQuestions: $duplicateQuestions,
@@ -93,10 +100,16 @@ class DuplicateEventService
                     duplicateCapacityAssignments: $duplicateCapacityAssignments,
                     duplicateCheckInLists: $duplicateCheckInLists,
                 );
+            } else {
+                $this->createProductCategoryService->createDefaultProductCategory($newEvent);
             }
 
             if ($duplicateEventCoverImage) {
                 $this->cloneEventCoverImage($event, $newEvent->getId());
+            }
+
+            if ($duplicateWebhooks) {
+                $this->duplicateWebhooks($event, $newEvent);
             }
 
             $this->databaseManager->commit();
@@ -136,53 +149,64 @@ class DuplicateEventService
     /**
      * @throws Throwable
      */
-    private function cloneExistingTickets(
+    private function cloneExistingProducts(
         EventDomainObject $event,
         int               $newEventId,
         bool              $duplicateQuestions,
         bool              $duplicatePromoCodes,
         bool              $duplicateCapacityAssignments,
         bool              $duplicateCheckInLists,
-    ): array
+    ): void
     {
-        $oldTicketToNewTicketMap = [];
+        $oldProductToNewProductMap = [];
 
-        foreach ($event->getTickets() as $ticket) {
-            $ticket->setEventId($newEventId);
-            $newTicket = $this->createTicketService->createTicket(
-                ticket: $ticket,
-                accountId: $event->getAccountId(),
-                taxAndFeeIds: $ticket->getTaxAndFees()?->map(fn($taxAndFee) => $taxAndFee->getId())?->toArray(),
+        $event->getProductCategories()?->each(function (ProductCategoryDomainObject $productCategory) use ($event, $newEventId, &$oldProductToNewProductMap) {
+            $newCategory = $this->createProductCategoryService->createCategory(
+                (new ProductCategoryDomainObject())
+                    ->setName($productCategory->getName())
+                    ->setNoProductsMessage($productCategory->getNoProductsMessage())
+                    ->setDescription($productCategory->getDescription())
+                    ->setIsHidden($productCategory->getIsHidden())
+                    ->setEventId($newEventId),
             );
-            $oldTicketToNewTicketMap[$ticket->getId()] = $newTicket->getId();
-        }
+
+            /** @var ProductDomainObject $product */
+            foreach ($productCategory->getProducts() as $product) {
+                $product->setEventId($newEventId);
+                $product->setProductCategoryId($newCategory->getId());
+                $newProduct = $this->createProductService->createProduct(
+                    product: $product,
+                    accountId: $event->getAccountId(),
+                    taxAndFeeIds: $product->getTaxAndFees()?->map(fn($taxAndFee) => $taxAndFee->getId())?->toArray(),
+                );
+                $oldProductToNewProductMap[$product->getId()] = $newProduct->getId();
+            }
+        });
 
         if ($duplicateQuestions) {
-            $this->clonePerTicketQuestions($event, $newEventId, $oldTicketToNewTicketMap);
+            $this->clonePerProductQuestions($event, $newEventId, $oldProductToNewProductMap);
         }
 
         if ($duplicatePromoCodes) {
-            $this->clonePromoCodes($event, $newEventId, $oldTicketToNewTicketMap);
+            $this->clonePromoCodes($event, $newEventId, $oldProductToNewProductMap);
         }
 
         if ($duplicateCapacityAssignments) {
-            $this->cloneCapacityAssignments($event, $newEventId, $oldTicketToNewTicketMap);
+            $this->cloneCapacityAssignments($event, $newEventId, $oldProductToNewProductMap);
         }
 
         if ($duplicateCheckInLists) {
-            $this->cloneCheckInLists($event, $newEventId, $oldTicketToNewTicketMap);
+            $this->cloneCheckInLists($event, $newEventId, $oldProductToNewProductMap);
         }
-
-        return $oldTicketToNewTicketMap;
     }
 
     /**
      * @throws Throwable
      */
-    private function clonePerTicketQuestions(EventDomainObject $event, int $newEventId, array $oldTicketToNewTicketMap): void
+    private function clonePerProductQuestions(EventDomainObject $event, int $newEventId, array $oldProductToNewProductMap): void
     {
         foreach ($event->getQuestions() as $question) {
-            if ($question->getBelongsTo() === QuestionBelongsTo::TICKET->name) {
+            if ($question->getBelongsTo() === QuestionBelongsTo::PRODUCT->name) {
                 $this->createQuestionService->createQuestion(
                     (new QuestionDomainObject())
                         ->setTitle($question->getTitle())
@@ -193,8 +217,8 @@ class DuplicateEventService
                         ->setOptions($question->getOptions())
                         ->setIsHidden($question->getIsHidden()),
                     array_map(
-                        static fn(TicketDomainObject $ticket) => $oldTicketToNewTicketMap[$ticket->getId()],
-                        $question->getTickets()?->all(),
+                        static fn(ProductDomainObject $product) => $oldProductToNewProductMap[$product->getId()],
+                        $question->getProducts()?->all(),
                     ),
                 );
             }
@@ -226,16 +250,16 @@ class DuplicateEventService
     /**
      * @throws Throwable
      */
-    private function clonePromoCodes(EventDomainObject $event, int $newEventId, array $oldTicketToNewTicketMap): void
+    private function clonePromoCodes(EventDomainObject $event, int $newEventId, array $oldProductToNewProductMap): void
     {
         foreach ($event->getPromoCodes() as $promoCode) {
             $this->createPromoCodeService->createPromoCode(
                 (new PromoCodeDomainObject())
                     ->setCode($promoCode->getCode())
                     ->setEventId($newEventId)
-                    ->setApplicableTicketIds(array_map(
-                        static fn($ticketId) => $oldTicketToNewTicketMap[$ticketId],
-                        $promoCode->getApplicableTicketIds() ?? [],
+                    ->setApplicableProductIds(array_map(
+                        static fn($productId) => $oldProductToNewProductMap[$productId],
+                        $promoCode->getApplicableProductIds() ?? [],
                     ))
                     ->setDiscountType($promoCode->getDiscountType())
                     ->setDiscount($promoCode->getDiscount())
@@ -245,7 +269,7 @@ class DuplicateEventService
         }
     }
 
-    private function cloneCapacityAssignments(EventDomainObject $event, int $newEventId, $oldTicketToNewTicketMap): void
+    private function cloneCapacityAssignments(EventDomainObject $event, int $newEventId, $oldProductToNewProductMap): void
     {
         /** @var CapacityAssignmentDomainObject $capacityAssignment */
         foreach ($event->getCapacityAssignments() as $capacityAssignment) {
@@ -256,13 +280,13 @@ class DuplicateEventService
                     ->setCapacity($capacityAssignment->getCapacity())
                     ->setAppliesTo($capacityAssignment->getAppliesTo())
                     ->setStatus($capacityAssignment->getStatus()),
-                ticketIds: $capacityAssignment->getTickets()
-                ?->map(fn($ticket) => $oldTicketToNewTicketMap[$ticket->getId()])?->toArray() ?? [],
+                productIds: $capacityAssignment->getProducts()
+                ?->map(fn($product) => $oldProductToNewProductMap[$product->getId()])?->toArray() ?? [],
             );
         }
     }
 
-    private function cloneCheckInLists(EventDomainObject $event, int $newEventId, $oldTicketToNewTicketMap): void
+    private function cloneCheckInLists(EventDomainObject $event, int $newEventId, $oldProductToNewProductMap): void
     {
         foreach ($event->getCheckInLists() as $checkInList) {
             $this->createCheckInListService->createCheckInList(
@@ -272,8 +296,8 @@ class DuplicateEventService
                     ->setExpiresAt($checkInList->getExpiresAt())
                     ->setActivatesAt($checkInList->getActivatesAt())
                     ->setEventId($newEventId),
-                ticketIds: $checkInList->getTickets()
-                ?->map(fn($ticket) => $oldTicketToNewTicketMap[$ticket->getId()])?->toArray() ?? [],
+                productIds: $checkInList->getProducts()
+                ?->map(fn($product) => $oldProductToNewProductMap[$product->getId()])?->toArray() ?? [],
             );
         }
     }
@@ -301,25 +325,44 @@ class DuplicateEventService
         return $this->eventRepository
             ->loadRelation(EventSettingDomainObject::class)
             ->loadRelation(
-                new Relationship(TicketDomainObject::class, [
-                    new Relationship(TicketPriceDomainObject::class),
-                    new Relationship(TaxAndFeesDomainObject::class)
+                new Relationship(ProductCategoryDomainObject::class, [
+                    new Relationship(ProductDomainObject::class, [
+                        new Relationship(ProductPriceDomainObject::class),
+                        new Relationship(TaxAndFeesDomainObject::class),
+                    ]),
                 ])
             )
             ->loadRelation(PromoCodeDomainObject::class)
             ->loadRelation(new Relationship(QuestionDomainObject::class, [
-                new Relationship(TicketDomainObject::class),
+                new Relationship(ProductDomainObject::class),
             ]))
             ->loadRelation(new Relationship(CapacityAssignmentDomainObject::class, [
-                new Relationship(TicketDomainObject::class),
+                new Relationship(ProductDomainObject::class),
             ]))
             ->loadRelation(new Relationship(CheckInListDomainObject::class, [
-                new Relationship(TicketDomainObject::class),
+                new Relationship(ProductDomainObject::class),
             ]))
             ->loadRelation(ImageDomainObject::class)
+            ->loadRelation(WebhookDomainObject::class)
             ->findFirstWhere([
                 'id' => $eventId,
                 'account_id' => $accountId,
             ]);
+    }
+
+    private function duplicateWebhooks(EventDomainObject $event, EventDomainObject $newEvent): void
+    {
+        $event->getWebhooks()?->each(function (WebhookDomainObject $webhook) use ($newEvent) {
+            $this->createWebhookService->createWebhook(
+                (new WebhookDomainObject())
+                    ->setEventId($newEvent->getId())
+                    ->setUrl($webhook->getUrl())
+                    ->setSecret($webhook->getSecret())
+                    ->setEventTypes($webhook->getEventTypes())
+                    ->setStatus($webhook->getStatus())
+                    ->setAccountId($newEvent->getAccountId())
+                    ->setUserId($newEvent->getUserId()),
+            );
+        });
     }
 }

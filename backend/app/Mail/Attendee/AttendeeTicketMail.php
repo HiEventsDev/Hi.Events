@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
+use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Helper\StringHelper;
 use HiEvents\Helper\Url;
@@ -23,6 +24,7 @@ use Spatie\IcalendarGenerator\Components\Event;
 class AttendeeTicketMail extends BaseMail
 {
     public function __construct(
+        private readonly OrderDomainObject        $order,
         private readonly AttendeeDomainObject     $attendee,
         private readonly EventDomainObject        $event,
         private readonly EventSettingDomainObject $eventSettings,
@@ -51,6 +53,7 @@ class AttendeeTicketMail extends BaseMail
                 'attendee' => $this->attendee,
                 'eventSettings' => $this->eventSettings,
                 'organizer' => $this->organizer,
+                'order' => $this->order,
                 'ticketUrl' => sprintf(
                     Url::getFrontEndUrlFromConfig(Url::ATTENDEE_TICKET),
                     $this->event->getId(),

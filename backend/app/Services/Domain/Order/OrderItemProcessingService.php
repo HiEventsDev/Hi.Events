@@ -3,19 +3,19 @@
 namespace HiEvents\Services\Domain\Order;
 
 use HiEvents\DomainObjects\EventDomainObject;
-use HiEvents\DomainObjects\Generated\TicketDomainObjectAbstract;
+use HiEvents\DomainObjects\Generated\ProductDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\DomainObjects\ProductDomainObject;
+use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\PromoCodeDomainObject;
 use HiEvents\DomainObjects\TaxAndFeesDomainObject;
-use HiEvents\DomainObjects\TicketDomainObject;
-use HiEvents\DomainObjects\TicketPriceDomainObject;
 use HiEvents\Helper\Currency;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
-use HiEvents\Repository\Interfaces\TicketRepositoryInterface;
+use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
+use HiEvents\Services\Application\Handlers\Order\DTO\ProductOrderDetailsDTO;
+use HiEvents\Services\Domain\Product\DTO\OrderProductPriceDTO;
+use HiEvents\Services\Domain\Product\ProductPriceService;
 use HiEvents\Services\Domain\Tax\TaxAndFeeCalculationService;
-use HiEvents\Services\Domain\Ticket\DTO\OrderTicketPriceDTO;
-use HiEvents\Services\Domain\Ticket\TicketPriceService;
-use HiEvents\Services\Handlers\Order\DTO\TicketOrderDetailsDTO;
 use Illuminate\Support\Collection;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
@@ -23,49 +23,49 @@ readonly class OrderItemProcessingService
 {
     public function __construct(
         private OrderRepositoryInterface    $orderRepository,
-        private TicketRepositoryInterface   $ticketRepository,
+        private ProductRepositoryInterface  $productRepository,
         private TaxAndFeeCalculationService $taxCalculationService,
-        private TicketPriceService          $ticketPriceService,
+        private ProductPriceService         $productPriceService,
     )
     {
     }
 
     /**
      * @param OrderDomainObject $order
-     * @param Collection<TicketOrderDetailsDTO> $ticketsOrderDetails
+     * @param Collection<ProductOrderDetailsDTO> $productsOrderDetails
      * @param EventDomainObject $event
      * @param PromoCodeDomainObject|null $promoCode
      * @return Collection
      */
     public function process(
         OrderDomainObject      $order,
-        Collection             $ticketsOrderDetails,
+        Collection             $productsOrderDetails,
         EventDomainObject      $event,
         ?PromoCodeDomainObject $promoCode
     ): Collection
     {
         $orderItems = collect();
 
-        foreach ($ticketsOrderDetails as $ticketOrderDetail) {
-            $ticket = $this->ticketRepository
+        foreach ($productsOrderDetails as $productOrderDetail) {
+            $product = $this->productRepository
                 ->loadRelation(TaxAndFeesDomainObject::class)
-                ->loadRelation(TicketPriceDomainObject::class)
+                ->loadRelation(ProductPriceDomainObject::class)
                 ->findFirstWhere([
-                    TicketDomainObjectAbstract::ID => $ticketOrderDetail->ticket_id,
-                    TicketDomainObjectAbstract::EVENT_ID => $event->getId(),
+                    ProductDomainObjectAbstract::ID => $productOrderDetail->product_id,
+                    ProductDomainObjectAbstract::EVENT_ID => $event->getId(),
                 ]);
 
-            if ($ticket === null) {
+            if ($product === null) {
                 throw new ResourceNotFoundException(
-                   __('Ticket with id :id not found', ['id' => $ticketOrderDetail->ticket_id])
+                    __('Product with id :id not found', ['id' => $productOrderDetail->product_id])
                 );
             }
 
-            $ticketOrderDetail->quantities->each(function (OrderTicketPriceDTO $ticketPrice) use ($promoCode, $order, $orderItems, $ticket) {
-                if ($ticketPrice->quantity === 0) {
+            $productOrderDetail->quantities->each(function (OrderProductPriceDTO $productPrice) use ($promoCode, $order, $orderItems, $product) {
+                if ($productPrice->quantity === 0) {
                     return;
                 }
-                $orderItemData = $this->calculateOrderItemData($ticket, $ticketPrice, $order, $promoCode);
+                $orderItemData = $this->calculateOrderItemData($product, $productPrice, $order, $promoCode);
                 $orderItems->push($this->orderRepository->addOrderItem($orderItemData));
             });
         }
@@ -74,33 +74,34 @@ readonly class OrderItemProcessingService
     }
 
     private function calculateOrderItemData(
-        TicketDomainObject     $ticket,
-        OrderTicketPriceDTO    $ticketPriceDetails,
+        ProductDomainObject    $product,
+        OrderProductPriceDTO   $productPriceDetails,
         OrderDomainObject      $order,
         ?PromoCodeDomainObject $promoCode
     ): array
     {
-        $prices = $this->ticketPriceService->getPrice($ticket, $ticketPriceDetails, $promoCode);
+        $prices = $this->productPriceService->getPrice($product, $productPriceDetails, $promoCode);
         $priceWithDiscount = $prices->price;
         $priceBeforeDiscount = $prices->price_before_discount;
 
-        $itemTotalWithDiscount = $priceWithDiscount * $ticketPriceDetails->quantity;
+        $itemTotalWithDiscount = $priceWithDiscount * $productPriceDetails->quantity;
 
-        $taxesAndFees = $this->taxCalculationService->calculateTaxAndFeesForTicket(
-            ticket: $ticket,
+        $taxesAndFees = $this->taxCalculationService->calculateTaxAndFeesForProduct(
+            product: $product,
             price: $priceWithDiscount,
-            quantity: $ticketPriceDetails->quantity
+            quantity: $productPriceDetails->quantity
         );
 
         return [
-            'ticket_id' => $ticket->getId(),
-            'ticket_price_id' => $ticketPriceDetails->price_id,
-            'quantity' => $ticketPriceDetails->quantity,
+            'product_type' => $product->getProductType(),
+            'product_id' => $product->getId(),
+            'product_price_id' => $productPriceDetails->price_id,
+            'quantity' => $productPriceDetails->quantity,
             'price_before_discount' => $priceBeforeDiscount,
             'total_before_additions' => Currency::round($itemTotalWithDiscount),
             'price' => $priceWithDiscount,
             'order_id' => $order->getId(),
-            'item_name' => $this->getOrderItemLabel($ticket, $ticketPriceDetails->price_id),
+            'item_name' => $this->getOrderItemLabel($product, $productPriceDetails->price_id),
             'total_tax' => $taxesAndFees->taxTotal,
             'total_service_fee' => $taxesAndFees->feeTotal,
             'total_gross' => Currency::round($itemTotalWithDiscount + $taxesAndFees->taxTotal + $taxesAndFees->feeTotal),
@@ -108,14 +109,14 @@ readonly class OrderItemProcessingService
         ];
     }
 
-    private function getOrderItemLabel(TicketDomainObject $ticket, int $priceId): string
+    private function getOrderItemLabel(ProductDomainObject $product, int $priceId): string
     {
-        if ($ticket->isTieredType()) {
-            return $ticket->getTitle() . ' - ' . $ticket->getTicketPrices()
+        if ($product->isTieredType()) {
+            return $product->getTitle() . ' - ' . $product->getProductPrices()
                     ?->filter(fn($p) => $p->getId() === $priceId)->first()
                     ?->getLabel();
         }
 
-        return $ticket->getTitle();
+        return $product->getTitle();
     }
 }

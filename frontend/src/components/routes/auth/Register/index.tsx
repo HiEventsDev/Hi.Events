@@ -1,17 +1,22 @@
-import {Button, PasswordInput, TextInput} from "@mantine/core";
+import {Button, PasswordInput, SimpleGrid, TextInput} from "@mantine/core";
 import {hasLength, isEmail, matchesField, useForm} from "@mantine/form";
 import {RegisterAccountRequest} from "../../../../types.ts";
 import {useFormErrorResponseHandler} from "../../../../hooks/useFormErrorResponseHandler.tsx";
 import {useRegisterAccount} from "../../../../mutations/useRegisterAccount.ts";
-import {NavLink, useNavigate} from "react-router-dom";
+import {NavLink, useLocation, useNavigate} from "react-router";
 import {t, Trans} from "@lingui/macro";
 import {InputGroup} from "../../../common/InputGroup";
 import {Card} from "../../../common/Card";
 import classes from "./Register.module.scss";
 import {getClientLocale} from "../../../../locales.ts";
+import React, {useEffect} from "react";
+import {getUserCurrency} from "../../../../utilites/currency.ts";
+import {IconLock, IconMail} from "@tabler/icons-react";
 
 export const Register = () => {
     const navigate = useNavigate();
+    const location = useLocation();
+
     const form = useForm({
         validateInputOnBlur: true,
         initialValues: {
@@ -20,8 +25,12 @@ export const Register = () => {
             email: '',
             password: '',
             password_confirmation: '',
-            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+            timezone: typeof window !== 'undefined'
+                ? Intl.DateTimeFormat().resolvedOptions().timeZone
+                : 'UTC',
             locale: getClientLocale(),
+            invite_token: '',
+            currency_code: getUserCurrency(),
         },
         validate: {
             password: hasLength({min: 8}, t`Password must be at least 8 characters`),
@@ -43,22 +52,32 @@ export const Register = () => {
         });
     }
 
+    useEffect(() => {
+        const searchParams = new URLSearchParams(location.search);
+        const token = searchParams.get('invite_token');
+
+        if (token) {
+            form.setFieldValue('invite_token', token);
+        }
+    }, [location.search]);
+
     return (
         <>
             <header className={classes.header}>
-                <h2>{t`Begin selling tickets in minutes`}</h2>
+                <h2>{t`Welcome to Hi.Events 👋`}</h2>
                 <p>
                     <Trans>
                         Create an account or <NavLink to={'/auth/login'}>
-                        {t`Login`}
+                        {t`Log in`}
                     </NavLink> to get started
                     </Trans>
                 </p>
             </header>
 
-            <Card>
+            <div className={classes.registerCard}>
                 <form onSubmit={form.onSubmit((values) => registerUser(values as RegisterAccountRequest))}>
-                    <InputGroup>
+
+                    <SimpleGrid verticalSpacing={0} cols={{base: 2, xs: 2}}>
                         <TextInput
                             {...form.getInputProps('first_name')}
                             label={t`First Name`}
@@ -70,32 +89,43 @@ export const Register = () => {
                             label={t`Last Name`}
                             placeholder={t`Smith`}
                         />
-                    </InputGroup>
+                    </SimpleGrid>
 
-                    <TextInput mb={0} {...form.getInputProps('email')} label={t`Email`} placeholder={'your@email.com'}
-                               required/>
+                    <TextInput
+                        mb={0}
+                        {...form.getInputProps('email')}
+                        label={t`Email`}
+                        placeholder={'your@email.com'}
+                        required
+                    />
 
-                    <InputGroup>
-                        <PasswordInput {...form.getInputProps('password')}
-                                       label={t`Password`}
-                                       placeholder={t`Your password`}
-                                       required mt="md"
-                                       mb={10}
-                        />
-                        <PasswordInput {...form.getInputProps('password_confirmation')}
-                                       label={t`Confirm Password`}
-                                       placeholder={t`Confirm password`}
-                                       required
-                                       mt="md"
-                                       mb={10}
-                        />
-                    </InputGroup>
+                    <div style={{marginBottom: '20px'}}>
+                        <SimpleGrid verticalSpacing={0} cols={{base: 2, xs: 2}}>
+                            <PasswordInput
+                                {...form.getInputProps('password')}
+                                label={t`Password`}
+                                placeholder={t`Your password`}
+                                required
+                                mt="md"
+                                mb={0}
+                            />
+                            <PasswordInput
+                                {...form.getInputProps('password_confirmation')}
+                                label={t`Confirm Password`}
+                                placeholder={t`Confirm password`}
+                                required
+                                mt="md"
+                                mb={0}
+                            />
+                        </SimpleGrid>
+                    </div>
+
                     <TextInput
                         style={{display: 'none'}}
                         {...form.getInputProps('timezone')}
                         type="hidden"
                     />
-                    <Button type="submit" fullWidth disabled={mutate.isPending}>
+                    <Button color={'var(--tk-pink)'} type="submit" fullWidth disabled={mutate.isPending}>
                         {mutate.isPending ? t`Working...` : t`Register`}
                     </Button>
                 </form>
@@ -108,7 +138,7 @@ export const Register = () => {
                         to={'https://hi.events/privacy-policy?utm_source=app-register-footer'}>Privacy Policy</NavLink>.
                     </Trans>
                 </footer>
-            </Card>
+            </div>
         </>
     )
 }

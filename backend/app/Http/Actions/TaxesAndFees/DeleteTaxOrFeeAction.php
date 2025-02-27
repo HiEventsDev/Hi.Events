@@ -5,8 +5,8 @@ namespace HiEvents\Http\Actions\TaxesAndFees;
 use HiEvents\DomainObjects\TaxAndFeesDomainObject;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Services\Handlers\TaxAndFee\DeleteTaxHandler;
-use HiEvents\Services\Handlers\TaxAndFee\DTO\DeleteTaxDTO;
+use HiEvents\Services\Application\Handlers\TaxAndFee\DeleteTaxHandler;
+use HiEvents\Services\Application\Handlers\TaxAndFee\DTO\DeleteTaxDTO;
 use Illuminate\Http\Response;
 use Throwable;
 

@@ -6,35 +6,49 @@ use HiEvents\Helper\Currency;
 
 class OrderItemDomainObject extends Generated\OrderItemDomainObjectAbstract
 {
-    private ?TicketPriceDomainObject $ticketPrice = null;
+    private ?ProductPriceDomainObject $productPrice = null;
 
-    public ?TicketDomainObject $ticket = null;
+    public ?ProductDomainObject $product = null;
+
+    public ?OrderDomainObject $order = null;
 
     public function getTotalBeforeDiscount(): float
     {
         return Currency::round($this->getPriceBeforeDiscount() * $this->getQuantity());
     }
 
-    public function getTicketPrice(): ?TicketPriceDomainObject
+    public function getProductPrice(): ?ProductPriceDomainObject
     {
-        return $this->ticketPrice;
+        return $this->productPrice;
     }
 
-    public function setTicketPrice(?TicketPriceDomainObject $tier): self
+    public function setProductPrice(?ProductPriceDomainObject $tier): self
     {
-        $this->ticketPrice = $tier;
+        $this->productPrice = $tier;
 
         return $this;
     }
 
-    public function getTicket(): ?TicketDomainObject
+    public function getProduct(): ?ProductDomainObject
     {
-        return $this->ticket;
+        return $this->product;
     }
 
-    public function setTicket(?TicketDomainObject $ticket): self
+    public function setProduct(?ProductDomainObject $product): self
     {
-        $this->ticket = $ticket;
+        $this->product = $product;
+
+        return $this;
+    }
+
+    public function getOrder(): ?OrderDomainObject
+    {
+        return $this->order;
+    }
+
+    public function setOrder(?OrderDomainObject $order): self
+    {
+        $this->order = $order;
 
         return $this;
     }

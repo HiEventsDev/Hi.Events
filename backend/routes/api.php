@@ -41,6 +41,7 @@ use HiEvents\Http\Actions\Events\DuplicateEventAction;
 use HiEvents\Http\Actions\Events\GetEventAction;
 use HiEvents\Http\Actions\Events\GetEventPublicAction;
 use HiEvents\Http\Actions\Events\GetEventsAction;
+use HiEvents\Http\Actions\Events\GetOrganizerEventsPublicAction;
 use HiEvents\Http\Actions\Events\Images\CreateEventImageAction;
 use HiEvents\Http\Actions\Events\Images\DeleteEventImageAction;
 use HiEvents\Http\Actions\Events\Images\GetEventImagesAction;
@@ -54,22 +55,39 @@ use HiEvents\Http\Actions\EventSettings\PartialEditEventSettingsAction;
 use HiEvents\Http\Actions\Messages\GetMessagesAction;
 use HiEvents\Http\Actions\Messages\SendMessageAction;
 use HiEvents\Http\Actions\Orders\CancelOrderAction;
-use HiEvents\Http\Actions\Orders\CompleteOrderActionPublic;
-use HiEvents\Http\Actions\Orders\CreateOrderActionPublic;
+use HiEvents\Http\Actions\Orders\DownloadOrderInvoiceAction;
+use HiEvents\Http\Actions\Orders\EditOrderAction;
 use HiEvents\Http\Actions\Orders\ExportOrdersAction;
 use HiEvents\Http\Actions\Orders\GetOrderAction;
-use HiEvents\Http\Actions\Orders\GetOrderActionPublic;
 use HiEvents\Http\Actions\Orders\GetOrdersAction;
+use HiEvents\Http\Actions\Orders\MarkOrderAsPaidAction;
 use HiEvents\Http\Actions\Orders\MessageOrderAction;
 use HiEvents\Http\Actions\Orders\Payment\RefundOrderAction;
 use HiEvents\Http\Actions\Orders\Payment\Stripe\CreatePaymentIntentActionPublic;
 use HiEvents\Http\Actions\Orders\Payment\Stripe\GetPaymentIntentActionPublic;
+use HiEvents\Http\Actions\Orders\Public\CompleteOrderActionPublic;
+use HiEvents\Http\Actions\Orders\Public\CreateOrderActionPublic;
+use HiEvents\Http\Actions\Orders\Public\DownloadOrderInvoicePublicAction;
+use HiEvents\Http\Actions\Orders\Public\GetOrderActionPublic;
+use HiEvents\Http\Actions\Orders\Public\TransitionOrderToOfflinePaymentPublicAction;
 use HiEvents\Http\Actions\Orders\ResendOrderConfirmationAction;
 use HiEvents\Http\Actions\Organizers\CreateOrganizerAction;
 use HiEvents\Http\Actions\Organizers\EditOrganizerAction;
 use HiEvents\Http\Actions\Organizers\GetOrganizerAction;
 use HiEvents\Http\Actions\Organizers\GetOrganizerEventsAction;
 use HiEvents\Http\Actions\Organizers\GetOrganizersAction;
+use HiEvents\Http\Actions\Organizers\GetPublicOrganizerAction;
+use HiEvents\Http\Actions\ProductCategories\CreateProductCategoryAction;
+use HiEvents\Http\Actions\ProductCategories\DeleteProductCategoryAction;
+use HiEvents\Http\Actions\ProductCategories\EditProductCategoryAction;
+use HiEvents\Http\Actions\ProductCategories\GetProductCategoriesAction;
+use HiEvents\Http\Actions\ProductCategories\GetProductCategoryAction;
+use HiEvents\Http\Actions\Products\CreateProductAction;
+use HiEvents\Http\Actions\Products\DeleteProductAction;
+use HiEvents\Http\Actions\Products\EditProductAction;
+use HiEvents\Http\Actions\Products\GetProductAction;
+use HiEvents\Http\Actions\Products\GetProductsAction;
+use HiEvents\Http\Actions\Products\SortProductsAction;
 use HiEvents\Http\Actions\PromoCodes\CreatePromoCodeAction;
 use HiEvents\Http\Actions\PromoCodes\DeletePromoCodeAction;
 use HiEvents\Http\Actions\PromoCodes\GetPromoCodeAction;
@@ -83,16 +101,11 @@ use HiEvents\Http\Actions\Questions\GetQuestionAction;
 use HiEvents\Http\Actions\Questions\GetQuestionsAction;
 use HiEvents\Http\Actions\Questions\GetQuestionsPublicAction;
 use HiEvents\Http\Actions\Questions\SortQuestionsAction;
+use HiEvents\Http\Actions\Reports\GetReportAction;
 use HiEvents\Http\Actions\TaxesAndFees\CreateTaxOrFeeAction;
 use HiEvents\Http\Actions\TaxesAndFees\DeleteTaxOrFeeAction;
 use HiEvents\Http\Actions\TaxesAndFees\EditTaxOrFeeAction;
 use HiEvents\Http\Actions\TaxesAndFees\GetTaxOrFeeAction;
-use HiEvents\Http\Actions\Tickets\CreateTicketAction;
-use HiEvents\Http\Actions\Tickets\DeleteTicketAction;
-use HiEvents\Http\Actions\Tickets\EditTicketAction;
-use HiEvents\Http\Actions\Tickets\GetTicketAction;
-use HiEvents\Http\Actions\Tickets\GetTicketsAction;
-use HiEvents\Http\Actions\Tickets\SortTicketsAction;
 use HiEvents\Http\Actions\Users\CancelEmailChangeAction;
 use HiEvents\Http\Actions\Users\ConfirmEmailAddressAction;
 use HiEvents\Http\Actions\Users\ConfirmEmailChangeAction;
@@ -106,6 +119,12 @@ use HiEvents\Http\Actions\Users\ResendEmailConfirmationAction;
 use HiEvents\Http\Actions\Users\ResendInvitationAction;
 use HiEvents\Http\Actions\Users\UpdateMeAction;
 use HiEvents\Http\Actions\Users\UpdateUserAction;
+use HiEvents\Http\Actions\Webhooks\CreateWebhookAction;
+use HiEvents\Http\Actions\Webhooks\DeleteWebhookAction;
+use HiEvents\Http\Actions\Webhooks\EditWebhookAction;
+use HiEvents\Http\Actions\Webhooks\GetWebhookAction;
+use HiEvents\Http\Actions\Webhooks\GetWebhookLogsAction;
+use HiEvents\Http\Actions\Webhooks\GetWebhooksAction;
 use Illuminate\Routing\Router;
 
 /** @var Router|Router $router */
@@ -113,14 +132,17 @@ $router = app()->get('router');
 
 $router->prefix('/auth')->group(
     function (Router $router): void {
+        // Auth
         $router->post('/login', LoginAction::class)->name('login');
         $router->post('/logout', LogoutAction::class);
         $router->post('/register', CreateAccountAction::class);
         $router->post('/forgot-password', ForgotPasswordAction::class);
 
+        // Invitations
         $router->get('/invitation/{invite_token}', GetUserInvitationAction::class);
         $router->post('/invitation/{invite_token}', AcceptInvitationAction::class);
 
+        // Reset Passwords
         $router->get('/reset-password/{reset_token}', ValidateResetPasswordTokenAction::class);
         $router->post('/reset-password/{reset_token}', ResetPasswordAction::class);
     }
@@ -131,9 +153,11 @@ $router->prefix('/auth')->group(
  */
 $router->middleware(['auth:api'])->group(
     function (Router $router): void {
+        // Auth
         $router->get('/auth/logout', LogoutAction::class);
         $router->post('/auth/refresh', RefreshTokenAction::class);
 
+        // Users
         $router->get('/users/me', GetMeAction::class);
         $router->put('/users/me', UpdateMeAction::class);
         $router->post('/users', CreateUserAction::class);
@@ -148,10 +172,12 @@ $router->middleware(['auth:api'])->group(
         $router->post('/users/{user_id}/confirm-email/{token}', ConfirmEmailAddressAction::class);
         $router->post('/users/{user_id}/resend-email-confirmation', ResendEmailConfirmationAction::class);
 
+        // Accounts
         $router->get('/accounts/{account_id?}', GetAccountAction::class);
         $router->put('/accounts/{account_id?}', UpdateAccountAction::class);
         $router->post('/accounts/{account_id}/stripe/connect', CreateStripeConnectAccountAction::class);
 
+        // Organizers
         $router->post('/organizers', CreateOrganizerAction::class);
         // This is POST instead of PUT because you can't upload files via PUT in PHP (at least not easily)
         $router->post('/organizers/{organizer_id}', EditOrganizerAction::class);
@@ -159,11 +185,13 @@ $router->middleware(['auth:api'])->group(
         $router->get('/organizers/{organizer_id}', GetOrganizerAction::class);
         $router->get('/organizers/{organizer_id}/events', GetOrganizerEventsAction::class);
 
+        // Taxes and Fees
         $router->post('/accounts/{account_id}/taxes-and-fees', CreateTaxOrFeeAction::class);
         $router->get('/accounts/{account_id}/taxes-and-fees', GetTaxOrFeeAction::class);
         $router->put('/accounts/{account_id}/taxes-and-fees/{tax_or_fee_id}', EditTaxOrFeeAction::class);
         $router->delete('/accounts/{account_id}/taxes-and-fees/{tax_or_fee_id}', DeleteTaxOrFeeAction::class);
 
+        // Events
         $router->post('/events', CreateEventAction::class);
         $router->get('/events', GetEventsAction::class);
         $router->get('/events/{event_id}', GetEventAction::class);
@@ -171,15 +199,26 @@ $router->middleware(['auth:api'])->group(
         $router->put('/events/{event_id}/status', UpdateEventStatusAction::class);
         $router->post('/events/{event_id}/duplicate', DuplicateEventAction::class);
 
-        $router->post('/events/{event_id}/tickets', CreateTicketAction::class);
-        $router->post('/events/{event_id}/tickets/sort', SortTicketsAction::class);
-        $router->put('/events/{event_id}/tickets/{ticket_id}', EditTicketAction::class);
-        $router->get('/events/{event_id}/tickets/{ticket_id}', GetTicketAction::class);
-        $router->delete('/events/{event_id}/tickets/{ticket_id}', DeleteTicketAction::class);
-        $router->get('/events/{event_id}/tickets', GetTicketsAction::class);
+        // Product Categories
+        $router->post('/events/{event_id}/product-categories', CreateProductCategoryAction::class);
+        $router->get('/events/{event_id}/product-categories', GetProductCategoriesAction::class);
+        $router->get('/events/{event_id}/product-categories/{category_id}', GetProductCategoryAction::class);
+        $router->put('/events/{event_id}/product-categories/{category_id}', EditProductCategoryAction::class);
+        $router->delete('/events/{event_id}/product-categories/{category_id}', DeleteProductCategoryAction::class);
+
+        // Products
+        $router->post('/events/{event_id}/products', CreateProductAction::class);
+        $router->post('/events/{event_id}/products/sort', SortProductsAction::class);
+        $router->put('/events/{event_id}/products/{ticket_id}', EditProductAction::class);
+        $router->get('/events/{event_id}/products/{ticket_id}', GetProductAction::class);
+        $router->delete('/events/{event_id}/products/{ticket_id}', DeleteProductAction::class);
+        $router->get('/events/{event_id}/products', GetProductsAction::class);
+
+        // Stats
         $router->get('/events/{event_id}/check_in_stats', GetEventCheckInStatsAction::class);
         $router->get('/events/{event_id}/stats', GetEventStatsAction::class);
 
+        // Attendees
         $router->post('/events/{event_id}/attendees', CreateAttendeeAction::class);
         $router->get('/events/{event_id}/attendees', GetAttendeesAction::class);
         $router->get('/events/{event_id}/attendees/{attendee_id}', GetAttendeeAction::class);
@@ -189,14 +228,19 @@ $router->middleware(['auth:api'])->group(
         $router->post('/events/{event_id}/attendees/{attendee_public_id}/resend-ticket', ResendAttendeeTicketAction::class);
         $router->post('/events/{event_id}/attendees/{attendee_public_id}/check_in', CheckInAttendeeAction::class);
 
+        // Orders
         $router->get('/events/{event_id}/orders', GetOrdersAction::class);
         $router->get('/events/{event_id}/orders/{order_id}', GetOrderAction::class);
+        $router->put('/events/{event_id}/orders/{order_id}', EditOrderAction::class);
         $router->post('/events/{event_id}/orders/{order_id}/message', MessageOrderAction::class);
         $router->post('/events/{event_id}/orders/{order_id}/refund', RefundOrderAction::class);
         $router->post('/events/{event_id}/orders/{order_id}/resend_confirmation', ResendOrderConfirmationAction::class);
         $router->post('/events/{event_id}/orders/{order_id}/cancel', CancelOrderAction::class);
+        $router->post('/events/{event_id}/orders/{order_id}/mark-as-paid', MarkOrderAsPaidAction::class);
         $router->post('/events/{event_id}/orders/export', ExportOrdersAction::class);
+        $router->get('/events/{event_id}/orders/{order_id}/invoice', DownloadOrderInvoiceAction::class);
 
+        // Questions
         $router->post('/events/{event_id}/questions', CreateQuestionAction::class);
         $router->put('/events/{event_id}/questions/{question_id}', EditQuestionAction::class);
         $router->get('/events/{event_id}/questions/{question_id}', GetQuestionAction::class);
@@ -205,34 +249,51 @@ $router->middleware(['auth:api'])->group(
         $router->post('/events/{event_id}/questions/export', ExportOrdersAction::class);
         $router->post('/events/{event_id}/questions/sort', SortQuestionsAction::class);
 
+        // Images
         $router->post('/events/{event_id}/images', CreateEventImageAction::class);
         $router->get('/events/{event_id}/images', GetEventImagesAction::class);
         $router->delete('/events/{event_id}/images/{image_id}', DeleteEventImageAction::class);
 
+        // Promo Codes
         $router->post('/events/{event_id}/promo-codes', CreatePromoCodeAction::class);
         $router->put('/events/{event_id}/promo-codes/{promo_code_id}', UpdatePromoCodeAction::class);
         $router->get('/events/{event_id}/promo-codes', GetPromoCodesAction::class);
         $router->get('/events/{event_id}/promo-codes/{promo_code_id}', GetPromoCodeAction::class);
         $router->delete('/events/{event_id}/promo-codes/{promo_code_id}', DeletePromoCodeAction::class);
 
+        // Messages
         $router->post('/events/{event_id}/messages', SendMessageAction::class);
         $router->get('/events/{event_id}/messages', GetMessagesAction::class);
 
+        // Event Settings
         $router->get('/events/{event_id}/settings', GetEventSettingsAction::class);
         $router->put('/events/{event_id}/settings', EditEventSettingsAction::class);
         $router->patch('/events/{event_id}/settings', PartialEditEventSettingsAction::class);
 
+        // Capacity Assignments
         $router->post('/events/{event_id}/capacity-assignments', CreateCapacityAssignmentAction::class);
         $router->get('/events/{event_id}/capacity-assignments', GetCapacityAssignmentsAction::class);
         $router->get('/events/{event_id}/capacity-assignments/{capacity_assignment_id}', GetCapacityAssignmentAction::class);
         $router->put('/events/{event_id}/capacity-assignments/{capacity_assignment_id}', UpdateCapacityAssignmentAction::class);
         $router->delete('/events/{event_id}/capacity-assignments/{capacity_assignment_id}', DeleteCapacityAssignmentAction::class);
 
+        // Check-In Lists
         $router->post('/events/{event_id}/check-in-lists', CreateCheckInListAction::class);
         $router->get('/events/{event_id}/check-in-lists', GetCheckInListsAction::class);
         $router->get('/events/{event_id}/check-in-lists/{check_in_list_id}', GetCheckInListAction::class);
         $router->put('/events/{event_id}/check-in-lists/{check_in_list_id}', UpdateCheckInListAction::class);
         $router->delete('/events/{event_id}/check-in-lists/{check_in_list_id}', DeleteCheckInListAction::class);
+
+        // Webhooks
+        $router->post('/events/{event_id}/webhooks', CreateWebhookAction::class);
+        $router->get('/events/{event_id}/webhooks', GetWebhooksAction::class);
+        $router->put('/events/{event_id}/webhooks/{webhook_id}', EditWebhookAction::class);
+        $router->get('/events/{event_id}/webhooks/{webhook_id}', GetWebhookAction::class);
+        $router->delete('/events/{event_id}/webhooks/{webhook_id}', DeleteWebhookAction::class);
+        $router->get('/events/{event_id}/webhooks/{webhook_id}/logs', GetWebhookLogsAction::class);
+
+        // Reports
+        $router->get('/events/{event_id}/reports/{report_type}', GetReportAction::class);
     }
 );
 
@@ -244,13 +305,19 @@ $router->prefix('/public')->group(
         // Events
         $router->get('/events/{event_id}', GetEventPublicAction::class);
 
-        // Tickets
-        $router->get('/events/{event_id}/tickets', GetEventPublicAction::class);
+        // Organizers
+        $router->get('/organizers/{organizer_id}', GetPublicOrganizerAction::class);
+        $router->get('/organizers/{organizer_id}/events', GetOrganizerEventsPublicAction::class);
+
+        // Products
+        $router->get('/events/{event_id}/products', GetEventPublicAction::class);
 
         // Orders
         $router->post('/events/{event_id}/order', CreateOrderActionPublic::class);
         $router->put('/events/{event_id}/order/{order_short_id}', CompleteOrderActionPublic::class);
         $router->get('/events/{event_id}/order/{order_short_id}', GetOrderActionPublic::class);
+        $router->post('/events/{event_id}/order/{order_short_id}/await-offline-payment', TransitionOrderToOfflinePaymentPublicAction::class);
+        $router->get('/events/{event_id}/order/{order_short_id}/invoice', DownloadOrderInvoicePublicAction::class);
 
         // Attendees
         $router->get('/events/{event_id}/attendees/{attendee_short_id}', GetAttendeeActionPublic::class);

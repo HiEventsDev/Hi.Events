@@ -14,7 +14,7 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     final public const EVENT_ID = 'event_id';
     final public const PRE_CHECKOUT_MESSAGE = 'pre_checkout_message';
     final public const POST_CHECKOUT_MESSAGE = 'post_checkout_message';
-    final public const TICKET_PAGE_MESSAGE = 'ticket_page_message';
+    final public const PRODUCT_PAGE_MESSAGE = 'product_page_message';
     final public const CONTINUE_BUTTON_TEXT = 'continue_button_text';
     final public const EMAIL_FOOTER_MESSAGE = 'email_footer_message';
     final public const SUPPORT_EMAIL = 'support_email';
@@ -45,12 +45,25 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     final public const SHOW_SHARE_BUTTONS = 'show_share_buttons';
     final public const HOMEPAGE_BODY_BACKGROUND_COLOR = 'homepage_body_background_color';
     final public const HOMEPAGE_BACKGROUND_TYPE = 'homepage_background_type';
+    final public const ENABLE_INVOICING = 'enable_invoicing';
+    final public const INVOICE_LABEL = 'invoice_label';
+    final public const INVOICE_PREFIX = 'invoice_prefix';
+    final public const INVOICE_START_NUMBER = 'invoice_start_number';
+    final public const REQUIRE_BILLING_ADDRESS = 'require_billing_address';
+    final public const ORGANIZATION_NAME = 'organization_name';
+    final public const ORGANIZATION_ADDRESS = 'organization_address';
+    final public const INVOICE_TAX_DETAILS = 'invoice_tax_details';
+    final public const PAYMENT_PROVIDERS = 'payment_providers';
+    final public const OFFLINE_PAYMENT_INSTRUCTIONS = 'offline_payment_instructions';
+    final public const ALLOW_ORDERS_AWAITING_OFFLINE_PAYMENT_TO_CHECK_IN = 'allow_orders_awaiting_offline_payment_to_check_in';
+    final public const INVOICE_PAYMENT_TERMS_DAYS = 'invoice_payment_terms_days';
+    final public const INVOICE_NOTES = 'invoice_notes';
 
     protected int $id;
     protected int $event_id;
     protected ?string $pre_checkout_message = null;
     protected ?string $post_checkout_message = null;
-    protected ?string $ticket_page_message = null;
+    protected ?string $product_page_message = null;
     protected ?string $continue_button_text = null;
     protected ?string $email_footer_message = null;
     protected ?string $support_email = null;
@@ -81,6 +94,19 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     protected bool $show_share_buttons = true;
     protected ?string $homepage_body_background_color = null;
     protected string $homepage_background_type = 'COLOR';
+    protected bool $enable_invoicing = false;
+    protected ?string $invoice_label = null;
+    protected ?string $invoice_prefix = null;
+    protected int $invoice_start_number = 1;
+    protected bool $require_billing_address = true;
+    protected ?string $organization_name = null;
+    protected ?string $organization_address = null;
+    protected ?string $invoice_tax_details = null;
+    protected array|string|null $payment_providers = null;
+    protected ?string $offline_payment_instructions = null;
+    protected bool $allow_orders_awaiting_offline_payment_to_check_in = false;
+    protected ?int $invoice_payment_terms_days = null;
+    protected ?string $invoice_notes = null;
 
     public function toArray(): array
     {
@@ -89,7 +115,7 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
                     'event_id' => $this->event_id ?? null,
                     'pre_checkout_message' => $this->pre_checkout_message ?? null,
                     'post_checkout_message' => $this->post_checkout_message ?? null,
-                    'ticket_page_message' => $this->ticket_page_message ?? null,
+                    'product_page_message' => $this->product_page_message ?? null,
                     'continue_button_text' => $this->continue_button_text ?? null,
                     'email_footer_message' => $this->email_footer_message ?? null,
                     'support_email' => $this->support_email ?? null,
@@ -120,6 +146,19 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
                     'show_share_buttons' => $this->show_share_buttons ?? null,
                     'homepage_body_background_color' => $this->homepage_body_background_color ?? null,
                     'homepage_background_type' => $this->homepage_background_type ?? null,
+                    'enable_invoicing' => $this->enable_invoicing ?? null,
+                    'invoice_label' => $this->invoice_label ?? null,
+                    'invoice_prefix' => $this->invoice_prefix ?? null,
+                    'invoice_start_number' => $this->invoice_start_number ?? null,
+                    'require_billing_address' => $this->require_billing_address ?? null,
+                    'organization_name' => $this->organization_name ?? null,
+                    'organization_address' => $this->organization_address ?? null,
+                    'invoice_tax_details' => $this->invoice_tax_details ?? null,
+                    'payment_providers' => $this->payment_providers ?? null,
+                    'offline_payment_instructions' => $this->offline_payment_instructions ?? null,
+                    'allow_orders_awaiting_offline_payment_to_check_in' => $this->allow_orders_awaiting_offline_payment_to_check_in ?? null,
+                    'invoice_payment_terms_days' => $this->invoice_payment_terms_days ?? null,
+                    'invoice_notes' => $this->invoice_notes ?? null,
                 ];
     }
 
@@ -167,15 +206,15 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
         return $this->post_checkout_message;
     }
 
-    public function setTicketPageMessage(?string $ticket_page_message): self
+    public function setProductPageMessage(?string $product_page_message): self
     {
-        $this->ticket_page_message = $ticket_page_message;
+        $this->product_page_message = $product_page_message;
         return $this;
     }
 
-    public function getTicketPageMessage(): ?string
+    public function getProductPageMessage(): ?string
     {
-        return $this->ticket_page_message;
+        return $this->product_page_message;
     }
 
     public function setContinueButtonText(?string $continue_button_text): self
@@ -506,5 +545,149 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     public function getHomepageBackgroundType(): string
     {
         return $this->homepage_background_type;
+    }
+
+    public function setEnableInvoicing(bool $enable_invoicing): self
+    {
+        $this->enable_invoicing = $enable_invoicing;
+        return $this;
+    }
+
+    public function getEnableInvoicing(): bool
+    {
+        return $this->enable_invoicing;
+    }
+
+    public function setInvoiceLabel(?string $invoice_label): self
+    {
+        $this->invoice_label = $invoice_label;
+        return $this;
+    }
+
+    public function getInvoiceLabel(): ?string
+    {
+        return $this->invoice_label;
+    }
+
+    public function setInvoicePrefix(?string $invoice_prefix): self
+    {
+        $this->invoice_prefix = $invoice_prefix;
+        return $this;
+    }
+
+    public function getInvoicePrefix(): ?string
+    {
+        return $this->invoice_prefix;
+    }
+
+    public function setInvoiceStartNumber(int $invoice_start_number): self
+    {
+        $this->invoice_start_number = $invoice_start_number;
+        return $this;
+    }
+
+    public function getInvoiceStartNumber(): int
+    {
+        return $this->invoice_start_number;
+    }
+
+    public function setRequireBillingAddress(bool $require_billing_address): self
+    {
+        $this->require_billing_address = $require_billing_address;
+        return $this;
+    }
+
+    public function getRequireBillingAddress(): bool
+    {
+        return $this->require_billing_address;
+    }
+
+    public function setOrganizationName(?string $organization_name): self
+    {
+        $this->organization_name = $organization_name;
+        return $this;
+    }
+
+    public function getOrganizationName(): ?string
+    {
+        return $this->organization_name;
+    }
+
+    public function setOrganizationAddress(?string $organization_address): self
+    {
+        $this->organization_address = $organization_address;
+        return $this;
+    }
+
+    public function getOrganizationAddress(): ?string
+    {
+        return $this->organization_address;
+    }
+
+    public function setInvoiceTaxDetails(?string $invoice_tax_details): self
+    {
+        $this->invoice_tax_details = $invoice_tax_details;
+        return $this;
+    }
+
+    public function getInvoiceTaxDetails(): ?string
+    {
+        return $this->invoice_tax_details;
+    }
+
+    public function setPaymentProviders(array|string|null $payment_providers): self
+    {
+        $this->payment_providers = $payment_providers;
+        return $this;
+    }
+
+    public function getPaymentProviders(): array|string|null
+    {
+        return $this->payment_providers;
+    }
+
+    public function setOfflinePaymentInstructions(?string $offline_payment_instructions): self
+    {
+        $this->offline_payment_instructions = $offline_payment_instructions;
+        return $this;
+    }
+
+    public function getOfflinePaymentInstructions(): ?string
+    {
+        return $this->offline_payment_instructions;
+    }
+
+    public function setAllowOrdersAwaitingOfflinePaymentToCheckIn(
+        bool $allow_orders_awaiting_offline_payment_to_check_in,
+    ): self {
+        $this->allow_orders_awaiting_offline_payment_to_check_in = $allow_orders_awaiting_offline_payment_to_check_in;
+        return $this;
+    }
+
+    public function getAllowOrdersAwaitingOfflinePaymentToCheckIn(): bool
+    {
+        return $this->allow_orders_awaiting_offline_payment_to_check_in;
+    }
+
+    public function setInvoicePaymentTermsDays(?int $invoice_payment_terms_days): self
+    {
+        $this->invoice_payment_terms_days = $invoice_payment_terms_days;
+        return $this;
+    }
+
+    public function getInvoicePaymentTermsDays(): ?int
+    {
+        return $this->invoice_payment_terms_days;
+    }
+
+    public function setInvoiceNotes(?string $invoice_notes): self
+    {
+        $this->invoice_notes = $invoice_notes;
+        return $this;
+    }
+
+    public function getInvoiceNotes(): ?string
+    {
+        return $this->invoice_notes;
     }
 }

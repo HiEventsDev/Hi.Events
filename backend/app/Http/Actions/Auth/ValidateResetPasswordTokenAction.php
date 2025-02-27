@@ -4,7 +4,7 @@ namespace HiEvents\Http\Actions\Auth;
 
 use HiEvents\Exceptions\InvalidPasswordResetTokenException;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Services\Handlers\Auth\ValidateResetPasswordTokenHandler;
+use HiEvents\Services\Application\Handlers\Auth\ValidateResetPasswordTokenHandler;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;

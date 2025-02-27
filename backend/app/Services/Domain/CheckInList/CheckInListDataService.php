@@ -7,7 +7,7 @@ use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\CheckInListDomainObject;
 use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\CheckInListDomainObjectAbstract;
-use HiEvents\DomainObjects\TicketDomainObject;
+use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\Exceptions\CannotCheckInException;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\CheckInListRepositoryInterface;
@@ -30,9 +30,9 @@ class CheckInListDataService
         AttendeeDomainObject    $attendee,
     ): void
     {
-        $allowedTicketIds = $checkInList->getTickets()->map(fn($ticket) => $ticket->getId())->toArray() ?? [];
+        $allowedProductIds = $checkInList->getProducts()->map(fn($product) => $product->getId())->toArray() ?? [];
 
-        if (!in_array($attendee->getTicketId(), $allowedTicketIds, true)) {
+        if (!in_array($attendee->getProductId(), $allowedProductIds, true)) {
             throw new CannotCheckInException(
                 __('Attendee :attendee_name is not allowed to check in using this check-in list', [
                     'attendee_name' => $attendee->getFullName(),
@@ -47,9 +47,9 @@ class CheckInListDataService
      *
      * @throws CannotCheckInException
      */
-    public function getAttendees(array $attendeePublicIds): Collection
+    public function getAttendees(Collection $attendeePublicIds): Collection
     {
-        $attendeePublicIds = array_unique($attendeePublicIds);
+        $attendeePublicIds = array_unique($attendeePublicIds->toArray());
 
         $attendees = $this->attendeeRepository->findWhereIn(
             field: AttendeeDomainObjectAbstract::PUBLIC_ID,
@@ -59,8 +59,8 @@ class CheckInListDataService
         if (count($attendees) !== count($attendeePublicIds)) {
             throw new CannotCheckInException(__('Invalid attendee code detected: :attendees ', [
                 'attendees' => implode(', ', array_diff(
-                    $attendeePublicIds,
-                    $attendees->pluck(AttendeeDomainObjectAbstract::PUBLIC_ID)->toArray())
+                        $attendeePublicIds,
+                        $attendees->pluck(AttendeeDomainObjectAbstract::PUBLIC_ID)->toArray())
                 ),
             ]));
         }
@@ -74,7 +74,7 @@ class CheckInListDataService
     public function getCheckInList(string $checkInListUuid): CheckInListDomainObject
     {
         $checkInList = $this->checkInListRepository
-            ->loadRelation(TicketDomainObject::class)
+            ->loadRelation(ProductDomainObject::class)
             ->findFirstWhere([
                 CheckInListDomainObjectAbstract::SHORT_ID => $checkInListUuid,
             ]);

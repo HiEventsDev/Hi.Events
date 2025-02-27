@@ -1,11 +1,11 @@
 import classes from './WidgetEditor.module.scss';
-import SelectTickets from "../../routes/ticket-widget/SelectTickets";
+import SelectProducts from "../../routes/product-widget/SelectProducts";
 import {ColorInput, Group, NumberInput, Switch, Tabs, Textarea, TextInput} from "@mantine/core";
 import {t, Trans} from "@lingui/macro";
 import {matches, useForm} from "@mantine/form";
 import {useEffect, useState} from "react";
 import {CopyButton} from "../CopyButton";
-import {useParams} from "react-router-dom";
+import {useParams} from "react-router";
 import {IconInfoCircle} from "@tabler/icons-react";
 import {useGetEventSettings} from "../../../queries/useGetEventSettings.ts";
 import {Popover} from "../Popover";
@@ -253,6 +253,7 @@ export default App;
                             <div style={{marginTop: 15, marginBottom: 15}}>
                                 <Tabs.Panel value="html">
                                     <Textarea
+                                        onChange={void 0}
                                         description={t`Place this in the <head> of your website.`}
                                         label={(
                                             <Group>
@@ -264,6 +265,7 @@ export default App;
                                         value={embedScript}
                                     />
                                     <Textarea
+                                        onChange={void 0}
                                         description={t`Paste this where you want the widget to appear.`}
                                         label={(
                                             <Group>
@@ -308,7 +310,7 @@ export default App;
                 </Card>
                 <div className={classes.previewPane}>
                     <h2 className={classes.previewHeader}>
-                        {t`Ticket Widget Preview`}
+                        {t`Product Widget Preview`}
                     </h2>
                     <section className={classes.stickyContainer}>
                         <div className={classes.browserChrome}>
@@ -332,7 +334,7 @@ export default App;
                             <div className={classes.widgetWrapper}>
                                 {!eventQuery.isFetched ?
                                     <LoadingMask/> :
-                                    <SelectTickets
+                                    <SelectProducts
                                         event={eventQuery.data as Event}
                                         widgetMode={'preview'}
                                         colors={{

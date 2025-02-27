@@ -3,6 +3,7 @@
 namespace Tests\Unit\Services\Domain\Order;
 
 use HiEvents\DomainObjects\AttendeeDomainObject;
+use HiEvents\DomainObjects\Enums\WebhookEventType;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
@@ -12,7 +13,8 @@ use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Domain\Order\OrderCancelService;
-use HiEvents\Services\Domain\Ticket\TicketQuantityUpdateService;
+use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
+use HiEvents\Services\Infrastructure\Webhook\WebhookDispatchService;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Collection;
@@ -27,8 +29,9 @@ class OrderCancelServiceTest extends TestCase
     private EventRepositoryInterface $eventRepository;
     private OrderRepositoryInterface $orderRepository;
     private DatabaseManager $databaseManager;
-    private TicketQuantityUpdateService $ticketQuantityService;
+    private ProductQuantityUpdateService $productQuantityService;
     private OrderCancelService $service;
+    private WebhookDispatchService $webhookDispatchService;
 
     protected function setUp(): void
     {
@@ -39,7 +42,8 @@ class OrderCancelServiceTest extends TestCase
         $this->eventRepository = m::mock(EventRepositoryInterface::class);
         $this->orderRepository = m::mock(OrderRepositoryInterface::class);
         $this->databaseManager = m::mock(DatabaseManager::class);
-        $this->ticketQuantityService = m::mock(TicketQuantityUpdateService::class);
+        $this->productQuantityService = m::mock(ProductQuantityUpdateService::class);
+        $this->webhookDispatchService = m::mock(WebhookDispatchService::class);
 
         $this->service = new OrderCancelService(
             mailer: $this->mailer,
@@ -47,7 +51,8 @@ class OrderCancelServiceTest extends TestCase
             eventRepository: $this->eventRepository,
             orderRepository: $this->orderRepository,
             databaseManager: $this->databaseManager,
-            ticketQuantityService: $this->ticketQuantityService,
+            productQuantityService: $this->productQuantityService,
+            webhookDispatchService: $this->webhookDispatchService,
         );
     }
 
@@ -60,8 +65,8 @@ class OrderCancelServiceTest extends TestCase
         $order->shouldReceive('getLocale')->andReturn('en');
 
         $attendees = new Collection([
-            m::mock(AttendeeDomainObject::class)->shouldReceive('getTicketPriceId')->andReturn(1)->mock(),
-            m::mock(AttendeeDomainObject::class)->shouldReceive('getTicketPriceId')->andReturn(2)->mock(),
+            m::mock(AttendeeDomainObject::class)->shouldReceive('getproductPriceId')->andReturn(1)->mock(),
+            m::mock(AttendeeDomainObject::class)->shouldReceive('getproductPriceId')->andReturn(2)->mock(),
         ]);
 
         $this->attendeeRepository
@@ -75,7 +80,7 @@ class OrderCancelServiceTest extends TestCase
 
         $this->attendeeRepository->shouldReceive('updateWhere')->once();
 
-        $this->ticketQuantityService->shouldReceive('decreaseQuantitySold')->twice();
+        $this->productQuantityService->shouldReceive('decreaseQuantitySold')->twice();
 
         $this->orderRepository->shouldReceive('updateWhere')->once();
 
@@ -99,6 +104,10 @@ class OrderCancelServiceTest extends TestCase
         $this->mailer->shouldReceive('send')->once()->withArgs(function ($mail) {
             return $mail instanceof OrderCancelled;
         });
+
+        $this->webhookDispatchService->shouldReceive('queueOrderWebhook')
+            ->with(WebhookEventType::ORDER_CANCELLED, 1)
+            ->once();
 
         $this->databaseManager->shouldReceive('transaction')->once()->andReturnUsing(function ($callback) {
             $callback();

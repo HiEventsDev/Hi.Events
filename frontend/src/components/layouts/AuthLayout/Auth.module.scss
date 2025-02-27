@@ -1,58 +1,207 @@
 @import "../../../styles/mixins.scss";
 
-header {
-  .languageSwitcher {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 150px;
-  }
-
-  @include respond-below(sm) {
-    margin-bottom: 40px;
-  }
-}
-
-.container {
-  background-repeat: repeat;
+.authLayout {
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.splitLayout {
+  flex: 1;
+  display: flex;
+  position: relative;
+  background: linear-gradient(135deg, #faf5ff 0%, #ffffff 50%, #f9f5ff 100%);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  height: 100vh;
+}
+
+.leftPanel {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  background: transparent;
+  overflow-y: auto;
+
+  @include respond-below(md) {
+    width: 100%;
+  }
+}
+
+.rightPanel {
+  width: 50%;
+  position: relative;
+  overflow: hidden;
+  background-image: url('/login-background.jpg');
+  background-size: cover;
+  background-position: center;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--tk-pink) 0%, #6d28d9 100%);
+    opacity: 0.95;
+  }
+
+  @include respond-below(md) {
+    display: none;
+  }
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem;
+  z-index: 1; // Ensure content appears above the gradient overlay
+}
+
+.content {
+  max-width: 440px;
+  width: 100%;
+  position: relative;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 0.75rem 1.25rem;
+  border-radius: 9999px;
+  color: white;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  margin-bottom: 3.5rem;
+  backdrop-filter: blur(8px);
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.featureGrid {
+  display: grid;
+  gap: 1.75rem;
+}
+
+.feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+  color: white;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.06);
+    transform: translateX(4px);
+  }
+
+  .checkIcon {
+    background: rgba(255, 255, 255, 0.08);
+    padding: 0.5rem;
+    border-radius: 0.75rem;
+    color: #fff;
+    width: 32px;
+    height: 32px;
+  }
+
+  .featureText {
+    flex: 1;
+
+    h3 {
+      margin: 0 0 0.375rem;
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.95);
+      letter-spacing: -0.01em;
+    }
+
+    p {
+      margin: 0;
+      font-size: 0.9375rem;
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.6;
+    }
+  }
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-direction: column;
+  background: transparent;
+  box-sizing: border-box;
+  height: 100vh;
+  padding: 0 20px;
+  min-width: 250px;
+
+  @include respond-below(md) {
+    height: auto;
+  }
 
   .logo {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 30px;
+    padding: 40px;
+
+    @include respond-below(md) {
+      padding: 20px;
+    }
+
     img {
-      width: 160px;
+      width: 140px;
+
+      @include respond-below(md) {
+        width: 110px;
+      }
     }
   }
 
   .wrapper {
-    min-width: 450px;
-    margin-bottom: 50px;
-    max-width: 550px;
+    width: 100%;
+    max-width: 420px;
+    margin-bottom: 3rem;
     position: relative;
+
+    @include respond-below(md) {
+      min-width: 80%;
+      margin: 1rem;
+    }
 
     a {
       color: var(--tk-color-blue);
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
     }
 
     footer {
-      font-size: .9em;
-      margin-top: 20px;
+      font-size: 0.9375rem;
+      margin-top: 2.5rem;
+      text-align: center;
+      color: #64748b;
 
       p:last-of-type {
         margin-bottom: 0;
       }
     }
 
-    @include respond-below(md) {
-      min-width: 75%;
-      margin: 10px 20px;
+    .languageSwitcher {
+      max-width: 100px;
+      margin: 20px auto 0;
     }
   }
 }

@@ -1,5 +1,5 @@
 import ReactDOM from "react-dom/client";
-import {createBrowserRouter, matchRoutes, RouterProvider} from "react-router-dom";
+import {createBrowserRouter, matchRoutes, RouterProvider} from "react-router";
 import {hydrate} from "@tanstack/react-query";
 
 import {router} from "./router";
@@ -42,7 +42,6 @@ async function initClientApp() {
         >
             <RouterProvider
                 router={createBrowserRouter(router)}
-                fallbackElement={null}
             />
         </App>
     );

@@ -4,6 +4,7 @@ use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
+use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Mail\Organizer\OrderSummaryForOrganizer;
 use Illuminate\Support\Facades\Route;
 
@@ -24,6 +25,7 @@ Route::get('/mail-test', static function () {
         ->setId(2)
         ->setPublicId('123')
         ->setShortId('123')
+        ->setStatus(OrderStatus::COMPLETED->name)
         ->setOrderItems(collect([$orderItem, $orderItem2]));
 
     $organizer = (new OrganizerDomainObject())

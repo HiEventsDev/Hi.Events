@@ -3,6 +3,7 @@
 namespace HiEvents\Resources\CheckInList;
 
 use HiEvents\DomainObjects\AttendeeCheckInDomainObject;
+use HiEvents\Resources\Attendee\AttendeeResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -16,10 +17,14 @@ class AttendeeCheckInResource extends JsonResource
             'id' => $this->getId(),
             'attendee_id' => $this->getAttendeeId(),
             'check_in_list_id' => $this->getCheckInListId(),
-            'ticket_id' => $this->getTicketId(),
+            'product_id' => $this->getProductId(),
             'event_id' => $this->getEventId(),
             'short_id' => $this->getShortId(),
             'created_at' => $this->getCreatedAt(),
+            'attendee' => $this->when(
+                !is_null($this->getAttendee()),
+                fn() => (new AttendeeResource($this->getAttendee()))->toArray($request)
+            ),
         ];
     }
 }

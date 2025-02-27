@@ -9,30 +9,30 @@ use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Helper\DateHelper;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
-use HiEvents\Services\Domain\Ticket\EventTicketValidationService;
-use HiEvents\Services\Domain\Ticket\Exception\UnrecognizedTicketIdException;
+use HiEvents\Services\Domain\Product\EventProductValidationService;
+use HiEvents\Services\Domain\Product\Exception\UnrecognizedProductIdException;
 
 class CreatePromoCodeService
 {
     public function __construct(
-        private readonly PromoCodeRepositoryInterface $promoCodeRepository,
-        private readonly EventTicketValidationService $eventTicketValidationService,
-        private readonly EventRepositoryInterface     $eventRepository,
+        private readonly PromoCodeRepositoryInterface  $promoCodeRepository,
+        private readonly EventProductValidationService $eventProductValidationService,
+        private readonly EventRepositoryInterface      $eventRepository,
     )
     {
     }
 
     /**
      * @throws ResourceConflictException
-     * @throws UnrecognizedTicketIdException
+     * @throws UnrecognizedProductIdException
      */
     public function createPromoCode(PromoCodeDomainObject $promoCode): PromoCodeDomainObject
     {
         $this->checkForDuplicateCode($promoCode);
 
-        if (!empty($promoCode->getApplicableTicketIds())) {
-            $this->eventTicketValidationService->validateTicketIds(
-                ticketIds: $promoCode->getApplicableTicketIds(),
+        if (!empty($promoCode->getApplicableProductIds())) {
+            $this->eventProductValidationService->validateProductIds(
+                productIds: $promoCode->getApplicableProductIds(),
                 eventId: $promoCode->getEventId()
             );
         }
@@ -50,7 +50,7 @@ class CreatePromoCodeService
                 ? DateHelper::convertToUTC($promoCode->getExpiryDate(), $event->getTimezone())
                 : null,
             PromoCodeDomainObjectAbstract::MAX_ALLOWED_USAGES => $promoCode->getMaxAllowedUsages(),
-            PromoCodeDomainObjectAbstract::APPLICABLE_TICKET_IDS => $promoCode->getApplicableTicketIds(),
+            PromoCodeDomainObjectAbstract::APPLICABLE_PRODUCT_IDS => $promoCode->getApplicableProductIds(),
         ]);
     }
 

@@ -3,7 +3,7 @@
 namespace HiEvents\Http\Actions\Questions;
 
 use HiEvents\DomainObjects\EventDomainObject;
-use HiEvents\DomainObjects\TicketDomainObject;
+use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Repository\Interfaces\QuestionRepositoryInterface;
 use HiEvents\Resources\Question\QuestionResource;
@@ -24,7 +24,7 @@ class GetQuestionAction extends BaseAction
         $this->isActionAuthorized($eventId, EventDomainObject::class);
 
         $questions = $this->questionRepository
-            ->loadRelation(TicketDomainObject::class)
+            ->loadRelation(ProductDomainObject::class)
             ->findById($questionId);
 
         return $this->resourceResponse(QuestionResource::class, $questions);

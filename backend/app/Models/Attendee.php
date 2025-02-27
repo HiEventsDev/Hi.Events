@@ -30,9 +30,9 @@ class Attendee extends BaseModel
         return $this->belongsTo(Order::class);
     }
 
-    public function ticket(): BelongsTo
+    public function product(): BelongsTo
     {
-        return $this->belongsTo(Ticket::class);
+        return $this->belongsTo(Product::class);
     }
 
     public function check_in(): HasOne

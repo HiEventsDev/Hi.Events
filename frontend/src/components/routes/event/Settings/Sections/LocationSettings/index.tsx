@@ -1,7 +1,7 @@
 import {t} from "@lingui/macro";
 import {Button, Select, Switch, TextInput} from "@mantine/core";
 import {useForm} from "@mantine/form";
-import {useParams} from "react-router-dom";
+import {useParams} from "react-router";
 import {useEffect} from "react";
 import {Event} from "../../../../../../types.ts";
 import {Card} from "../../../../../common/Card";
@@ -96,7 +96,16 @@ export const LocationSettings = () => {
                             value={form.values.online_event_connection_details || ''}
                             error={form.errors.online_event_connection_details as string}
                             label={t`Connection Details`}
-                            description={t`Include connection details for your online event. These details will be shown on the order summary page and attendee ticket page`}
+                            description={(
+                                <>
+                                    <p>
+                                        {t`Include connection details for your online event. These details will be shown on the order summary page and attendee ticket page.`}
+                                    </p>
+                                    <p>
+                                        {t`These details will only be shown if order is completed successfully. Orders awaiting payment will not show this message.`}
+                                    </p>
+                                </>
+                            )}
                             onChange={(value) => form.setFieldValue('online_event_connection_details', value)}
                         />
                     )}
@@ -146,7 +155,7 @@ export const LocationSettings = () => {
                             </InputGroup>
                             <TextInput
                                 {...form.getInputProps('maps_url')}
-                                description={t`If blank, the address will be used to generate a Google map link`}
+                                description={t`If blank, the address will be used to generate a Google Mapa link`}
                                 label={t`Custom Maps URL`}
                                 placeholder={t`https://example-maps-service.com/...`}
                             />

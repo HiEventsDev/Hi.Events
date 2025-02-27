@@ -1,4 +1,4 @@
-import {useNavigate, useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router";
 import {useGetMe} from "../../../../queries/useGetMe.ts";
 import {useConfirmEmailChange} from "../../../../mutations/useConfirmEmailChange.ts";
 import {Anchor, Button} from "@mantine/core";

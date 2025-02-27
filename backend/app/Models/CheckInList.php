@@ -17,11 +17,11 @@ class CheckInList extends BaseModel
         return [];
     }
 
-    public function tickets(): BelongsToMany
+    public function products(): BelongsToMany
     {
         return $this->belongsToMany(
-            related: Ticket::class,
-            table: 'ticket_check_in_lists',
+            related: Product::class,
+            table: 'product_check_in_lists',
         );
     }
 
