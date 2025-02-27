@@ -67,8 +67,7 @@ export const QuestionAndAnswerList = ({questionAnswers, belongsToFilter}: Questi
                                 </div>
 
                                 <Text size="sm" className={classes.answer}>
-                                    {/*{Array.isArray(qa.answer) ? qa.answer.join(", ") : qa.answer}*/}
-                                    ddd
+                                    {Array.isArray(qa.answer) ? qa.answer.join(", ") : qa.answer}
                                 </Text>
 
                                 {qa.attendee_id && (
