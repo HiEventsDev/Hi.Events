@@ -428,7 +428,7 @@ export const CollectInformation = () => {
                 buttonContent={order?.is_payment_required ? (
                     <Group gap={'10px'}>
                         <div style={{fontWeight: "bold"}}>
-                            Continue
+                            {t`Continue`}
                         </div>
                         <div style={{fontSize: 14}}>
                             {formatCurrency(order.total_gross, order.currency)}
