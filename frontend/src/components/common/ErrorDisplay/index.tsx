@@ -1,6 +1,6 @@
 import {Container} from '@mantine/core';
 import classes from './ErrorDisplay.module.scss';
-import {useRouteError} from "react-router-dom";
+import {useRouteError} from "react-router";
 import {t} from "@lingui/macro";
 
 export const ErrorDisplay = () => {

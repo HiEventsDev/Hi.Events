@@ -6,8 +6,8 @@ use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\EventSettings\UpdateEventSettingsRequest;
 use HiEvents\Resources\Event\EventSettingsResource;
-use HiEvents\Services\Handlers\EventSettings\DTO\UpdateEventSettingsDTO;
-use HiEvents\Services\Handlers\EventSettings\UpdateEventSettingsHandler;
+use HiEvents\Services\Application\Handlers\EventSettings\DTO\UpdateEventSettingsDTO;
+use HiEvents\Services\Application\Handlers\EventSettings\UpdateEventSettingsHandler;
 use Illuminate\Http\JsonResponse;
 
 class EditEventSettingsAction extends BaseAction

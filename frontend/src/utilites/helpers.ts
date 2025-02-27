@@ -28,8 +28,12 @@ export const getInitials = (fullName: string) => {
     }, '');
 };
 
-export const getTicketFromEvent = (ticketId: number, event?: Event) => {
-    return event?.tickets?.find(ticket => ticket.id === ticketId)
+export const getProductsFromEvent = (event?: Event) => {
+    return event?.product_categories?.flatMap(category => category.products).filter(product => product !== undefined);
+}
+
+export const getProductFromEvent = (productId: number, event?: Event) => {
+    return getProductsFromEvent(event)?.find(product => product.id === productId);
 }
 
 export const formatStatus = (status: string) => {
@@ -90,7 +94,7 @@ export const formatNumber = (number: number) => {
 export const isSsr = () => import.meta.env.SSR;
 
 /**
- * (c) Hi.Events Ltd 2024
+ * (c) Hi.Events Ltd 2025
  *
  * PLEASE NOTE:
  *
@@ -107,7 +111,7 @@ export const iHavePurchasedALicence = () => {
 }
 
 export const isHiEvents = () => {
-    return getConfig('VITE_FRONTEND_URL')?.includes('hi.events');
+    return getConfig('VITE_FRONTEND_URL')?.includes('.hi.events');
 }
 
 export const isEmptyHtml = (content: string) => {

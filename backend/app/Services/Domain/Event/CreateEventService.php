@@ -3,6 +3,7 @@
 namespace HiEvents\Services\Domain\Event;
 
 use HiEvents\DomainObjects\Enums\HomepageBackgroundType;
+use HiEvents\DomainObjects\Enums\PaymentProviders;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
@@ -13,7 +14,7 @@ use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
-use HTMLPurifier;
+use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
 
@@ -25,7 +26,7 @@ class CreateEventService
         private readonly OrganizerRepositoryInterface      $organizerRepository,
         private readonly DatabaseManager                   $databaseManager,
         private readonly EventStatisticRepositoryInterface $eventStatisticsRepository,
-        private readonly HTMLPurifier                      $purifier,
+        private readonly HtmlPurifierService               $purifier,
     )
     {
     }
@@ -38,26 +39,24 @@ class CreateEventService
         EventSettingDomainObject $eventSettings = null
     ): EventDomainObject
     {
-        $this->databaseManager->beginTransaction();
+        return $this->databaseManager->transaction(function () use ($eventData, $eventSettings) {
+            $organizer = $this->getOrganizer(
+                organizerId: $eventData->getOrganizerId(),
+                accountId: $eventData->getAccountId()
+            );
 
-        $organizer = $this->getOrganizer(
-            organizerId: $eventData->getOrganizerId(),
-            accountId: $eventData->getAccountId()
-        );
+            $event = $this->handleEventCreate($eventData);
 
-        $event = $this->handleEventCreate($eventData);
+            $this->createEventSettings(
+                eventSettings: $eventSettings,
+                event: $event,
+                organizer: $organizer
+            );
 
-        $this->createEventSettings(
-            eventSettings: $eventSettings,
-            event: $event,
-            organizer: $organizer
-        );
+            $this->createEventStatistics($event);
 
-        $this->createEventStatistics($event);
-
-        $this->databaseManager->commit();
-
-        return $event;
+            return $event;
+        });
     }
 
     /**
@@ -104,7 +103,7 @@ class CreateEventService
     {
         $this->eventStatisticsRepository->create([
             'event_id' => $event->getId(),
-            'tickets_sold' => 0,
+            'products_sold' => 0,
             'sales_total_gross' => 0,
             'sales_total_before_additions' => 0,
             'total_tax' => 0,
@@ -141,6 +140,18 @@ class CreateEventService
             'homepage_body_background_color' => '#7a5eb9',
             'continue_button_text' => __('Continue'),
             'support_email' => $organizer->getEmail(),
+
+            'payment_providers' => [PaymentProviders::STRIPE->value],
+            'offline_payment_instructions' => null,
+
+            'enable_invoicing' => false,
+            'invoice_label' => __('Invoice'),
+            'invoice_prefix' => 'INV-',
+            'invoice_start_number' => 1,
+            'require_billing_address' => false,
+            'organization_name' => $organizer->getName(),
+            'organization_address' => null,
+            'invoice_tax_details' => null,
         ]);
     }
 }

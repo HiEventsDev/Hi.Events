@@ -15,7 +15,7 @@ class Message extends BaseModel
     {
         return [
             'attendee_ids' => 'array',
-            'ticket_ids' => 'array',
+            'product_ids' => 'array',
             'send_data' => 'array',
         ];
     }

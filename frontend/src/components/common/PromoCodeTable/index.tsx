@@ -25,6 +25,7 @@ export const PromoCodeTable = ({event, promoCodes, openCreateModal}: PromoCodeTa
     const [editModalOpen, {open: openEditModal, close: closeEditModal}] = useDisclosure(false);
     const deleteMutation = useDeletePromoCode();
     const clipboard = useClipboard({ timeout: 500 });
+    const eventProducts = event.product_categories?.flatMap(category => category.products);
 
     const handleEditModal = (promoCodeId: number | undefined) => {
         setPromoCodeId(promoCodeId);
@@ -68,7 +69,7 @@ export const PromoCodeTable = ({event, promoCodes, openCreateModal}: PromoCodeTa
                         <MantineTable.Th>{t`Code`}</MantineTable.Th>
                         <MantineTable.Th>{t`Discount`}</MantineTable.Th>
                         <MantineTable.Th>{t`Times used`}</MantineTable.Th>
-                        <MantineTable.Th>{t`Tickets`}</MantineTable.Th>
+                        <MantineTable.Th>{t`Products`}</MantineTable.Th>
                         <MantineTable.Th>{t`Expires`}</MantineTable.Th>
                         <MantineTable.Th></MantineTable.Th>
                     </MantineTable.Tr>
@@ -126,25 +127,25 @@ export const PromoCodeTable = ({event, promoCodes, openCreateModal}: PromoCodeTa
                                 </MantineTable.Td>
                                 <MantineTable.Td>
                                     <div style={{cursor: 'pointer'}}>
-                                        {code.applicable_ticket_ids?.length === 0 && (
-                                            <Badge variant={'light'} color={'pink'}>{t`All Tickets`}</Badge>
+                                        {code.applicable_product_ids?.length === 0 && (
+                                            <Badge variant={'light'} color={'pink'}>{t`All Products`}</Badge>
                                         )}
 
-                                        {Number(code.applicable_ticket_ids?.length) > 0 && (
+                                        {Number(code.applicable_product_ids?.length) > 0 && (
                                             <Tooltip label={
-                                                event?.tickets?.filter(ticket =>
-                                                    code.applicable_ticket_ids?.map(Number)?.includes(Number(ticket.id)))
-                                                    .map(ticket => {
+                                                eventProducts?.filter((product) =>
+                                                    code.applicable_product_ids?.map(Number)?.includes(Number(product.id)))
+                                                    .map(product => {
                                                         return (
                                                             <>
-                                                                {ticket.title}
+                                                                {product.title}
                                                                 <br/>
                                                             </>
                                                         );
                                                     })}>
                                                 <Badge
                                                     variant={'light'}
-                                                    color={'pink'}>{code.applicable_ticket_ids?.length} {t`Ticket(s)`}</Badge>
+                                                    color={'pink'}>{code.applicable_product_ids?.length} {t`Product(s)`}</Badge>
                                             </Tooltip>
                                         )}
                                     </div>

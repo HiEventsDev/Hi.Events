@@ -15,7 +15,7 @@ class EventSettingsResource extends JsonResource
         return [
             'pre_checkout_message' => $this->getPreCheckoutMessage(),
             'post_checkout_message' => $this->getPostCheckoutMessage(),
-            'ticket_page_message' => $this->getTicketPageMessage(),
+            'product_page_message' => $this->getProductPageMessage(),
             'continue_button_text' => $this->getContinueButtonText(),
             'required_attendee_details' => $this->getRequireAttendeeDetails(),
             'email_footer_message' => $this->getEmailFooterMessage(),
@@ -46,6 +46,23 @@ class EventSettingsResource extends JsonResource
 
             'price_display_mode' => $this->getPriceDisplayMode(),
             'hide_getting_started_page' => $this->getHideGettingStartedPage(),
+
+            // Payment settings
+            'payment_providers' => $this->getPaymentProviders(),
+            'offline_payment_instructions' => $this->getOfflinePaymentInstructions(),
+            'allow_orders_awaiting_offline_payment_to_check_in' => $this->getAllowOrdersAwaitingOfflinePaymentToCheckIn(),
+
+            // Invoice settings
+            'enable_invoicing' => $this->getEnableInvoicing(),
+            'invoice_label' => $this->getInvoiceLabel(),
+            'invoice_prefix' => $this->getInvoicePrefix(),
+            'invoice_start_number' => $this->getInvoiceStartNumber(),
+            'require_billing_address' => $this->getRequireBillingAddress(),
+            'organization_name' => $this->getOrganizationName(),
+            'organization_address' => $this->getOrganizationAddress(),
+            'invoice_tax_details' => $this->getInvoiceTaxDetails(),
+            'invoice_notes' => $this->getInvoiceNotes(),
+            'invoice_payment_terms_days' => $this->getInvoicePaymentTermsDays(),
         ];
     }
 }

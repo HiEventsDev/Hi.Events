@@ -15,6 +15,10 @@
     color: #0ca678;
   }
 
+  .countdownCloseToExpiry {
+    color: #ad2f26;
+  }
+
   .subTitle {
     font-size: .95em;
     margin-top: 10px;
@@ -26,7 +30,7 @@
     //height: 100vh;
 
     .header {
-      height: 90px;
+      height: 60px;
       background-color: #ffffff;
       border-bottom: 1px solid #e0e0e0;
       display: flex;
@@ -36,11 +40,19 @@
       box-shadow: 0 5px 5px 0 #0000000a;
       text-align: center;
 
+      .actionBar {
+        padding: var(--tk-spacing-md);
+        width: 100%;
+
+        .title {
+          font-size: 1.2em;
+          font-weight: 500;
+        }
+      }
+
       h1 {
         font-size: 1.3em;
         width: calc(100vw - 350px);
-        margin: 0 0 5px;
-
         padding: 0 15px;
 
         overflow: hidden;

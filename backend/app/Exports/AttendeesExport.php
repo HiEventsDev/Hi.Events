@@ -4,11 +4,11 @@ namespace HiEvents\Exports;
 
 use Carbon\Carbon;
 use HiEvents\DomainObjects\AttendeeDomainObject;
+use HiEvents\DomainObjects\Enums\ProductPriceType;
 use HiEvents\DomainObjects\Enums\QuestionTypeEnum;
-use HiEvents\DomainObjects\Enums\TicketType;
+use HiEvents\DomainObjects\ProductDomainObject;
+use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\QuestionDomainObject;
-use HiEvents\DomainObjects\TicketDomainObject;
-use HiEvents\DomainObjects\TicketPriceDomainObject;
 use HiEvents\Resources\Attendee\AttendeeResource;
 use HiEvents\Services\Domain\Question\QuestionAnswerFormatter;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -46,20 +46,21 @@ class AttendeesExport implements FromCollection, WithHeadings, WithMapping, With
         $questionTitles = $this->questions->map(fn($question) => $question->getTitle())->toArray();
 
         return array_merge([
-            'ID',
-            'First Name',
-            'Last Name',
-            'Email',
-            'Status',
-            'Is Checked In',
-            'Checked In At',
-            'Ticket ID',
-            'Ticket Name',
-            'Event ID',
-            'Public ID',
-            'Short ID',
-            'Created Date',
-            'Last Updated Date'
+            __('ID'),
+            __('First Name'),
+            __('Last Name'),
+            __('Email'),
+            __('Status'),
+            __('Is Checked In'),
+            __('Checked In At'),
+            __('Product ID'),
+            __('Product Name'),
+            __('Event ID'),
+            __('Public ID'),
+            __('Short ID'),
+            __('Created Date'),
+            __('Last Updated Date'),
+            __('Notes'),
         ], $questionTitles);
     }
 
@@ -79,13 +80,13 @@ class AttendeesExport implements FromCollection, WithHeadings, WithMapping, With
             );
         });
 
-        /** @var TicketDomainObject $ticket */
-        $ticket = $attendee->getTicket();
+        /** @var ProductDomainObject $ticket */
+        $ticket = $attendee->getProduct();
         $ticketName = $ticket->getTitle();
-        if ($attendee->getTicket()?->getType() === TicketType::TIERED->name) {
+        if ($ticket->getType() === ProductPriceType::TIERED->name) {
             $ticketName .= ' - ' . $ticket
-                    ->getTicketPrices()
-                    ->first(fn(TicketPriceDomainObject $tp) => $tp->getId() === $attendee->getTicketPriceId())
+                    ->getProductPrices()
+                    ->first(fn(ProductPriceDomainObject $tp) => $tp->getId() === $attendee->getProductPriceId())
                     ->getLabel();
         }
 
@@ -99,13 +100,14 @@ class AttendeesExport implements FromCollection, WithHeadings, WithMapping, With
             $attendee->getCheckIn()
                 ? Carbon::parse($attendee->getCheckIn()->getCreatedAt())->format('Y-m-d H:i:s')
                 : '',
-            $attendee->getTicketId(),
+            $attendee->getProductId(),
             $ticketName,
             $attendee->getEventId(),
             $attendee->getPublicId(),
             $attendee->getShortId(),
             Carbon::parse($attendee->getCreatedAt())->format('Y-m-d H:i:s'),
             Carbon::parse($attendee->getUpdatedAt())->format('Y-m-d H:i:s'),
+            $attendee->getNotes(),
         ], $answers->toArray());
     }
 

@@ -3,6 +3,7 @@
 namespace HiEvents\Http\Request\EventSettings;
 
 use HiEvents\DomainObjects\Enums\HomepageBackgroundType;
+use HiEvents\DomainObjects\Enums\PaymentProviders;
 use HiEvents\DomainObjects\Enums\PriceDisplayMode;
 use HiEvents\Http\Request\BaseRequest;
 use HiEvents\Validators\Rules\RulesHelper;
@@ -56,6 +57,24 @@ class UpdateEventSettingsRequest extends BaseRequest
             'price_display_mode' => [Rule::in(PriceDisplayMode::valuesArray())],
 
             'hide_getting_started_page' => ['boolean'],
+
+            // Payment settings
+            'payment_providers' => ['array'],
+            'payment_providers.*' => ['string', Rule::in(PaymentProviders::valuesArray())],
+            'offline_payment_instructions' => ['string', 'nullable', Rule::requiredIf(fn() => in_array(PaymentProviders::OFFLINE->name, $this->input('payment_providers', []), true))],
+            'allow_orders_awaiting_offline_payment_to_check_in' => ['boolean'],
+
+            // Invoice settings
+            'enable_invoicing' => ['boolean'],
+            'invoice_label' => ['nullable', 'string', 'max:50'],
+            'invoice_prefix' => ['nullable', 'string', 'max:10', 'regex:/^[A-Za-z0-9\-]*$/'],
+            'invoice_start_number' => ['nullable', 'integer', 'min:1'],
+            'require_billing_address' => ['boolean'],
+            'organization_name' => ['required_if:enable_invoicing,true', 'string', 'max:255', 'nullable'],
+            'organization_address' => ['required_if:enable_invoicing,true', 'string', 'max:255', 'nullable'],
+            'invoice_tax_details' => ['nullable', 'string'],
+            'invoice_notes' => ['nullable', 'string'],
+            'invoice_payment_terms_days' => ['nullable', 'integer', 'gte:0', 'lte:1000'],
         ];
     }
 
@@ -69,14 +88,24 @@ class UpdateEventSettingsRequest extends BaseRequest
             'homepage_text_color' => $colorMessage,
             'homepage_button_color' => $colorMessage,
             'homepage_link_color' => $colorMessage,
-            'homepage_ticket_widget_background_color' => $colorMessage,
-            'homepage_ticket_widget_text_color' => $colorMessage,
+            'homepage_product_widget_background_color' => $colorMessage,
+            'homepage_product_widget_text_color' => $colorMessage,
             'location_details.address_line_1.required_with' => __('The address line 1 field is required'),
             'location_details.city.required_with' => __('The city field is required'),
             'location_details.zip_or_postal_code.required_with' => __('The zip or postal code field is required'),
             'location_details.country.required_with' => __('The country field is required'),
             'location_details.country.max' => __('The country field should be a 2 character ISO 3166 code'),
             'price_display_mode.in' => 'The price display mode must be either inclusive or exclusive.',
+
+            // Payment messages
+            'payment_providers.*.in' => __('Invalid payment provider selected.'),
+            'offline_payment_instructions.required' => __('Payment instructions are required when offline payments are enabled.'),
+
+            // Invoice messages
+            'invoice_prefix.regex' => __('The invoice prefix may only contain letters, numbers, and hyphens.'),
+            'organization_name.required_if' => __('The organization name is required when invoicing is enabled.'),
+            'organization_address.required_if' => __('The organization address is required when invoicing is enabled.'),
+            'invoice_start_number.min' => __('The invoice start number must be at least 1.'),
         ];
     }
 }

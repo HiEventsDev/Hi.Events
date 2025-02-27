@@ -3,7 +3,7 @@
 namespace HiEvents\Http\Actions\Users;
 
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Services\Handlers\User\ResendEmailConfirmationHandler;
+use HiEvents\Services\Application\Handlers\User\ResendEmailConfirmationHandler;
 use Illuminate\Http\Response;
 
 class ResendEmailConfirmationAction extends BaseAction

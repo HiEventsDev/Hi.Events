@@ -2,14 +2,13 @@ import {Header} from "./Header";
 import "./styles.scss";
 import {EventInformation} from "./EventInformation";
 import classes from "./EventHomepage.module.scss";
-import {t} from "@lingui/macro";
-import SelectTickets from "../../routes/ticket-widget/SelectTickets";
+import SelectProducts from "../../routes/product-widget/SelectProducts";
 import "../../../styles/widget/default.scss";
 import React from "react";
 import {EventDocumentHead} from "../../common/EventDocumentHead";
 import {eventCoverImageUrl} from "../../../utilites/urlHelper.ts";
 import {Event} from "../../../types.ts";
-import {HomepageInfoMessage} from "../../common/HomepageInfoMessage";
+import {EventNotAvailable} from "./EventNotAvailable";
 
 interface EventHomepageProps {
     colors?: {
@@ -46,7 +45,7 @@ const EventHomepage = ({colors, continueButtonText, backgroundType, ...loaderDat
     } as React.CSSProperties;
 
     if (!event) {
-        return <HomepageInfoMessage message={t`This event is not available.`}/>;
+        return <EventNotAvailable/>;
     }
 
     const coverImage = eventCoverImageUrl(event);
@@ -76,10 +75,9 @@ const EventHomepage = ({colors, continueButtonText, backgroundType, ...loaderDat
                             <EventInformation event={event}/>
                         </div>
 
-                        <div className={classes.ticketContainer}>
-                            <h2>{t`Tickets`}</h2>
-                            <div className={classes.ticketSelection}>
-                                <SelectTickets
+                        <div className={classes.productContainer}>
+                            <div className={classes.productSelection}>
+                                <SelectProducts
                                     colors={{
                                         background: "var(--homepage-background-color)",
                                         primary: "var(--homepage-primary-color)",
@@ -98,7 +96,6 @@ const EventHomepage = ({colors, continueButtonText, backgroundType, ...loaderDat
                         </div>
                     </div>
                 </div>
-                {/*<PoweredByFooter/>*/}
             </div>
         </div>
     );

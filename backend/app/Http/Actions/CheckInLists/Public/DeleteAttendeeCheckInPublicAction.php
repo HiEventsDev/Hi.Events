@@ -4,8 +4,8 @@ namespace HiEvents\Http\Actions\CheckInLists\Public;
 
 use HiEvents\Exceptions\CannotCheckInException;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Services\Handlers\CheckInList\Public\DeleteAttendeeCheckInPublicHandler;
-use HiEvents\Services\Handlers\CheckInList\Public\DTO\DeleteAttendeeCheckInPublicDTO;
+use HiEvents\Services\Application\Handlers\CheckInList\Public\DeleteAttendeeCheckInPublicHandler;
+use HiEvents\Services\Application\Handlers\CheckInList\Public\DTO\DeleteAttendeeCheckInPublicDTO;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;

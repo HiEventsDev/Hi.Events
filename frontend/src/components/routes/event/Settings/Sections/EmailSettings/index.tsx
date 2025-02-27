@@ -1,7 +1,7 @@
 import {t} from "@lingui/macro";
 import {Button, Switch, TextInput} from "@mantine/core";
 import {useForm} from "@mantine/form";
-import {useParams} from "react-router-dom";
+import {useParams} from "react-router";
 import {useEffect} from "react";
 import {EventSettings} from "../../../../../../types.ts";
 import {Card} from "../../../../../common/Card";
@@ -58,7 +58,7 @@ export const EmailSettings = () => {
                 <fieldset disabled={eventSettingsQuery.isLoading || updateMutation.isPending}>
                     <TextInput
                         {...form.getInputProps('support_email')}
-                        description={t`Any queries from ticket holders will be sent to this email address. This will also be used as the "reply-to" address for all emails sent from this event`}
+                        description={t`Any queries from product holders will be sent to this email address. This will also be used as the "reply-to" address for all emails sent from this event`}
                         label={t`Support Email`}
                     />
 

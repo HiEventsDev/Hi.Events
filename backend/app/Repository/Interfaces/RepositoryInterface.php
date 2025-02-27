@@ -4,6 +4,7 @@ namespace HiEvents\Repository\Interfaces;
 
 use Exception;
 use HiEvents\DomainObjects\Interfaces\DomainObjectInterface;
+use HiEvents\Repository\Eloquent\Value\OrderAndDirection;
 use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -16,6 +17,9 @@ interface RepositoryInterface
 {
     /** @var array */
     public const DEFAULT_COLUMNS = ['*'];
+
+    /** @var string */
+    public const DEFAULT_ORDER_DIRECTION = 'asc';
 
     /** @var int */
     public const DEFAULT_PAGINATE_LIMIT = 20;
@@ -86,7 +90,6 @@ interface RepositoryInterface
      * @param int $id
      * @param array $columns
      * @return T
-     *
      */
     public function findById(int $id, array $columns = self::DEFAULT_COLUMNS): DomainObjectInterface;
 
@@ -100,9 +103,15 @@ interface RepositoryInterface
     /**
      * @param array $where
      * @param array $columns
+     * @param OrderAndDirection[] $orderAndDirections
      * @return Collection<T>
      */
-    public function findWhere(array $where, array $columns = self::DEFAULT_COLUMNS): Collection;
+    public function findWhere(
+        array $where,
+        array $columns = self::DEFAULT_COLUMNS,
+        /** @var OrderAndDirection[] */
+        array $orderAndDirections = [],
+    ): Collection;
 
     /**
      * @param array $where
@@ -187,4 +196,6 @@ interface RepositoryInterface
     public function decrementEach(array $where, array $columns, array $extra = []): int;
 
     public function incrementEach(array $columns, array $additionalUpdates = [], ?array $where = null);
+
+    public function includeDeleted(): static;
 }

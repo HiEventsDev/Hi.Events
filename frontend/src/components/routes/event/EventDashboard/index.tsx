@@ -1,5 +1,5 @@
 import {useGetEvent} from "../../../../queries/useGetEvent.ts";
-import {useParams} from "react-router-dom";
+import {useParams} from "react-router";
 import {PageTitle} from "../../../common/PageTitle";
 import {PageBody} from "../../../common/PageBody";
 import {StatBoxes} from "../../../common/StatBoxes";
@@ -11,7 +11,10 @@ import classes from "./EventDashboard.module.scss";
 import {useGetEventStats} from "../../../../queries/useGetEventStats.ts";
 import {formatCurrency} from "../../../../utilites/currency.ts";
 import {formatDate} from "../../../../utilites/dates.ts";
-import {Skeleton} from "@mantine/core";
+import {Button, Group, Skeleton} from "@mantine/core";
+import {useDisclosure, useMediaQuery} from "@mantine/hooks";
+import {IconShare} from "@tabler/icons-react";
+import {ShareModal} from "../../../modals/ShareModal";
 
 export const DashBoardSkeleton = () => {
     return (
@@ -30,6 +33,8 @@ export const EventDashboard = () => {
     const event = eventQuery?.data;
     const eventStatsQuery = useGetEventStats(eventId);
     const {data: eventStats} = eventStatsQuery;
+    const [opened, {open, close}] = useDisclosure(false);
+    const isMobile = useMediaQuery('(max-width: 768px)');
 
     const dateRange = (eventStats && event)
         ? `${formatDate(eventStats.start_date, 'MMM DD', event?.timezone)} - ${formatDate(eventStats.end_date, 'MMM DD', event?.timezone)}`
@@ -37,11 +42,38 @@ export const EventDashboard = () => {
 
     return (
         <PageBody>
-            <PageTitle>
-                <Trans>
-                    Welcome back{me?.first_name && ', ' + me?.first_name} 👋
-                </Trans>
-            </PageTitle>
+            <Group justify="space-between" align="center" mb={'5px'}>
+                <PageTitle style={{marginBottom: 0}}>
+                    {!isMobile && (
+                        <Trans>
+                            Welcome back{me?.first_name && ', ' + me?.first_name} 👋
+                        </Trans>
+                    )}
+
+                    {isMobile && (
+                        <Trans>
+                            Hi {me?.first_name && me?.first_name} 👋
+                        </Trans>
+                    )}
+                </PageTitle>
+                {event && (
+                    <>
+                        <Button
+                            onClick={open}
+                            variant="transparent"
+                            leftSection={<IconShare size={16}/>}
+                        >
+                            {t`Share Event`}
+                        </Button>
+
+                        {event && <ShareModal
+                            event={event}
+                            opened={opened}
+                            onClose={close}
+                        />}
+                    </>
+                )}
+            </Group>
 
             {!event && <DashBoardSkeleton/>}
 
@@ -50,7 +82,7 @@ export const EventDashboard = () => {
 
                 <Card className={classes.chartCard}>
                     <div className={classes.chartCardTitle}>
-                        <h2>{t`Ticket Sales`}</h2>
+                        <h2>{t`Product Sales`}</h2>
                         <div className={classes.dateRange}>
                         <span>
                             {dateRange}
@@ -62,17 +94,19 @@ export const EventDashboard = () => {
                         data={eventStats?.daily_stats.map(stat => ({
                             date: formatDate(stat.date, 'MMM DD', event.timezone),
                             orders_created: stat.orders_created,
-                            tickets_sold: stat.tickets_sold,
+                            products_sold: stat.products_sold,
+                            attendees_registered: stat.attendees_registered,
                         })) || []}
                         dataKey="date"
                         withLegend
                         legendProps={{verticalAlign: 'bottom', height: 50}}
 
                         series={[
-                            {name: 'orders_created', color: 'blue.6', label: t`Orders Created`},
-                            {name: 'tickets_sold', color: 'blue.2', label: t`Tickets Sold`},
+                            {name: 'orders_created', color: 'blue.6', label: t`Completed Orders`},
+                            {name: 'products_sold', color: 'blue.2', label: t`Products Sold`},
+                            {name: 'attendees_registered', color: 'blue.4', label: t`Attendees Registered`},
                         ]}
-                        curveType="natural"
+                        curveType="bump"
                         tickLine="none"
                         areaChartProps={{syncId: 'events'}}
                     />
@@ -96,6 +130,7 @@ export const EventDashboard = () => {
                                 total_fees: stat.total_fees,
                                 total_sales_gross: stat.total_sales_gross,
                                 total_tax: stat.total_tax,
+                                total_refunded: stat.total_refunded,
                             });
                         }) || []}
                         dataKey="date"
@@ -106,6 +141,7 @@ export const EventDashboard = () => {
                             {name: 'total_fees', label: t`Total Fees`, color: 'purple.3'},
                             {name: 'total_sales_gross', label: t`Gross Sales`, color: 'grape.5'},
                             {name: 'total_tax', label: t`Total Tax`, color: 'grape.7'},
+                            {name: 'total_refunded', label: t`Total Refunded`, color: 'red.6'},
                         ]}
                         curveType="natural"
                         tickLine="none"

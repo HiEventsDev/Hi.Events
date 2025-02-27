@@ -1,4 +1,4 @@
-import {useNavigate, useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router";
 import {useGetMe} from "../../../../queries/useGetMe";
 import {Card} from "../../../common/Card";
 import {showError, showSuccess} from "../../../../utilites/notifications";

@@ -87,7 +87,15 @@ app.use("*", async (req, res) => {
 
         const envVariablesHtml = `<script>window.hievents = ${getViteEnvironmentVariables()};</script>`;
 
+        const headSnippets = [];
+        if (process.env.VITE_FATHOM_SITE_ID) {
+            headSnippets.push(`
+                <script src="https://cdn.usefathom.com/script.js" data-spa="auto" data-site="${process.env.VITE_FATHOM_SITE_ID}" defer></script>
+            `);
+        }
+
         const html = template
+            .replace("<!--head-snippets-->", headSnippets.join("\n"))
             .replace("<!--app-html-->", appHtml)
             .replace("<!--dehydrated-state-->", `<script>window.__REHYDRATED_STATE__ = ${stringifiedState}</script>`)
             .replace("<!--environment-variables-->", envVariablesHtml)

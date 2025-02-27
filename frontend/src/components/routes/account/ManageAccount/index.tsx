@@ -2,7 +2,7 @@ import {Card} from "../../../common/Card";
 import {Tabs} from "@mantine/core";
 import classes from "./ManageAccount.module.scss";
 import {IconAdjustmentsCog, IconCreditCard, IconReceiptTax, IconUsers} from "@tabler/icons-react";
-import {Outlet, useLocation, useNavigate} from "react-router-dom";
+import {Outlet, useLocation, useNavigate} from "react-router";
 import {t} from "@lingui/macro";
 import {useIsCurrentUserAdmin} from "../../../../hooks/useIsCurrentUserAdmin.ts";
 import { useGetAccount } from "../../../../queries/useGetAccount.ts";
@@ -35,7 +35,7 @@ export const ManageAccount = () => {
 
                         {(isUserAdmin && account && account.is_saas_mode_enabled) && (
                             <Tabs.Tab value="payment" leftSection={<IconCreditCard/>}>
-                                {t`Payment`}
+                                {t`Payment & Plan`}
                             </Tabs.Tab>
                         )}
                     </Tabs.List>

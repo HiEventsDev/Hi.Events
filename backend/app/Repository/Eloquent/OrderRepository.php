@@ -15,6 +15,7 @@ use HiEvents\Models\OrderItem;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class OrderRepository extends BaseRepository implements OrderRepositoryInterface
@@ -41,6 +42,10 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
                     ->orWhere(OrderDomainObjectAbstract::PUBLIC_ID, 'ilike', '%' . $params->query . '%')
                     ->orWhere(OrderDomainObjectAbstract::EMAIL, 'ilike', '%' . $params->query . '%');
             };
+        }
+
+        if (!empty($params->filter_fields)) {
+            $this->applyFilterFields($params, OrderDomainObject::getAllowedFilterFields());
         }
 
         $this->model = $this->model->orderBy(
@@ -95,5 +100,18 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
     protected function getModel(): string
     {
         return Order::class;
+    }
+
+    public function findOrdersAssociatedWithProducts(int $eventId, array $productIds, array $orderStatuses): Collection
+    {
+        return $this->handleResults(
+            $this->model
+                ->whereHas('order_items', static function (Builder $query) use ($productIds) {
+                    $query->whereIn('product_id', $productIds);
+                })
+                ->whereIn('status', $orderStatuses)
+                ->where('event_id', $eventId)
+                ->get()
+        );
     }
 }

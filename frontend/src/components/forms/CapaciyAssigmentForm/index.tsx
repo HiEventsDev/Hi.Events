@@ -1,23 +1,24 @@
 import {InputGroup} from "../../common/InputGroup";
-import {MultiSelect, NumberInput, TextInput} from "@mantine/core";
+import {NumberInput, TextInput} from "@mantine/core";
 import {t} from "@lingui/macro";
 import {UseFormReturnType} from "@mantine/form";
-import {CapacityAssignmentRequest, Ticket} from "../../../types.ts";
+import {CapacityAssignmentRequest, ProductCategory} from "../../../types.ts";
 import {CustomSelect, ItemProps} from "../../common/CustomSelect";
-import {IconCheck, IconTicket, IconX} from "@tabler/icons-react";
+import {IconCheck, IconX} from "@tabler/icons-react";
+import {ProductSelector} from "../../common/ProductSelector";
 
 interface CapacityAssigmentFormProps {
     form: UseFormReturnType<CapacityAssignmentRequest>;
-    tickets: Ticket[],
+    productsCategories: ProductCategory[],
 }
 
-export const CapacityAssigmentForm = ({form, tickets}: CapacityAssigmentFormProps) => {
+export const CapacityAssigmentForm = ({form, productsCategories}: CapacityAssigmentFormProps) => {
     const statusOptions: ItemProps[] = [
         {
             icon: <IconCheck/>,
             label: t`Active`,
             value: 'ACTIVE',
-            description: t`Enable this capacity to stop ticket sales when the limit is reached`,
+            description: t`Enable this capacity to stop product sales when the limit is reached`,
         },
         {
             icon: <IconX/>,
@@ -43,18 +44,12 @@ export const CapacityAssigmentForm = ({form, tickets}: CapacityAssigmentFormProp
                 />
             </InputGroup>
 
-            <MultiSelect
-                label={t`What tickets should this question be apply to?`}
-                multiple
-                placeholder={t`Select tickets`}
-                data={tickets?.map(ticket => {
-                    return {
-                        value: String(ticket.id),
-                        label: ticket.title,
-                    }
-                })}
-                leftSection={<IconTicket size="1rem"/>}
-                {...form.getInputProps('ticket_ids')}
+            <ProductSelector
+                label={t`What products should this capacity apply to?`}
+                placeholder={t`Select products`}
+                productCategories={productsCategories}
+                form={form}
+                productFieldName={'product_ids'}
             />
 
             <CustomSelect

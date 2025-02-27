@@ -17,7 +17,7 @@ class QuestionAnswer extends BaseModel
     {
         return [
             QuestionAnswerDomainObjectAbstract::QUESTION_ID,
-            QuestionAnswerDomainObjectAbstract::TICKET_ID,
+            QuestionAnswerDomainObjectAbstract::PRODUCT_ID,
             QuestionAnswerDomainObjectAbstract::ORDER_ID,
             QuestionAnswerDomainObjectAbstract::ATTENDEE_ID,
             QuestionAnswerDomainObjectAbstract::ANSWER,

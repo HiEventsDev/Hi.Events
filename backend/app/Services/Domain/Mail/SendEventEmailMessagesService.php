@@ -18,7 +18,7 @@ use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\MessageRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
-use HiEvents\Services\Handlers\Message\DTO\SendMessageDTO;
+use HiEvents\Services\Application\Handlers\Message\DTO\SendMessageDTO;
 use Illuminate\Mail\Mailer;
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpKernel\Log\Logger;
@@ -55,7 +55,7 @@ class SendEventEmailMessagesService
             'event_id' => $messageData->event_id,
         ]);
 
-        if ((!$order && $messageData->type === MessageTypeEnum::ORDER) || !$messageData->id) {
+        if ((!$order && $messageData->type === MessageTypeEnum::ORDER_OWNER) || !$messageData->id) {
             $message = 'Unable to send message. Order or message ID not present.';
             $this->logger->error($message, $messageData->toArray());
             $this->updateMessageStatus($messageData, MessageStatus::FAILED);
@@ -64,17 +64,20 @@ class SendEventEmailMessagesService
         }
 
         switch ($messageData->type) {
-            case MessageTypeEnum::ATTENDEE:
+            case MessageTypeEnum::INDIVIDUAL_ATTENDEES:
                 $this->sendAttendeeMessages($messageData, $event);
                 break;
-            case MessageTypeEnum::ORDER:
+            case MessageTypeEnum::ORDER_OWNER:
                 $this->sendOrderMessages($messageData, $event, $order);
                 break;
-            case MessageTypeEnum::TICKET:
-                $this->sendTicketMessages($messageData, $event);
+            case MessageTypeEnum::TICKET_HOLDERS:
+                $this->sendTicketHolderMessages($messageData, $event);
                 break;
-            case MessageTypeEnum::EVENT:
+            case MessageTypeEnum::ALL_ATTENDEES:
                 $this->sendEventMessages($messageData, $event);
+                break;
+            case MessageTypeEnum::ORDER_OWNERS_WITH_PRODUCT:
+                $this->sendProductMessages($messageData, $event);
                 break;
         }
 
@@ -95,11 +98,11 @@ class SendEventEmailMessagesService
         $this->emailAttendees($attendees, $messageData, $event);
     }
 
-    private function sendTicketMessages(SendMessageDTO $messageData, EventDomainObject $event): void
+    private function sendTicketHolderMessages(SendMessageDTO $messageData, EventDomainObject $event): void
     {
         $attendees = $this->attendeeRepository->findWhereIn(
-            field: 'ticket_id',
-            values: $messageData->ticket_ids,
+            field: 'product_id',
+            values: $messageData->product_ids,
             additionalWhere: [
                 'event_id' => $messageData->event_id,
                 'status' => AttendeeStatus::ACTIVE->name,
@@ -120,7 +123,7 @@ class SendEventEmailMessagesService
 
         $this->sendMessage(
             emailAddress: $order->getEmail(),
-            fullName: $order->getFirstName() . ' ' . $order->getLastName(),
+            fullName: $order->getFullName(),
             messageData: $messageData,
             event: $event,
         );
@@ -215,5 +218,29 @@ class SendEventEmailMessagesService
                 eventSettings: $event->getEventSettings(),
                 messageData: $messageData
             ));
+    }
+
+    private function sendProductMessages(SendMessageDTO $messageData, EventDomainObject $event): void
+    {
+        $orders = $this->orderRepository->findOrdersAssociatedWithProducts(
+            eventId: $messageData->event_id,
+            productIds: $messageData->product_ids,
+            orderStatuses: $messageData->order_statuses
+        );
+
+        if ($orders->isEmpty()) {
+            return;
+        }
+
+        $this->sendEmailToMessageSender($messageData, $event);
+
+        $orders->each(function (OrderDomainObject $order) use ($messageData, $event) {
+            $this->sendMessage(
+                emailAddress: $order->getEmail(),
+                fullName: $order->getFullName(),
+                messageData: $messageData,
+                event: $event,
+            );
+        });
     }
 }

@@ -6,8 +6,8 @@ use HiEvents\Exceptions\PasswordInvalidException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\User\UpdateMeRequest;
 use HiEvents\Resources\User\UserResource;
-use HiEvents\Services\Handlers\User\DTO\UpdateMeDTO;
-use HiEvents\Services\Handlers\User\UpdateMeHandler;
+use HiEvents\Services\Application\Handlers\User\DTO\UpdateMeDTO;
+use HiEvents\Services\Application\Handlers\User\UpdateMeHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 

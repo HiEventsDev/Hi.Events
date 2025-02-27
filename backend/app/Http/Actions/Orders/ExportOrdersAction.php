@@ -28,6 +28,7 @@ class ExportOrdersAction extends BaseAction
         $this->isActionAuthorized($eventId, EventDomainObject::class);
 
         $orders = $this->orderRepository
+            ->setMaxPerPage(10000)
             ->loadRelation(QuestionAndAnswerViewDomainObject::class)
             ->findByEventId($eventId, new QueryParamsDTO(
                 page: 1,

@@ -6,8 +6,8 @@ use HiEvents\DomainObjects\CheckInListDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Resources\CheckInList\CheckInListResource;
-use HiEvents\Services\Handlers\CheckInList\DTO\GetCheckInListsDTO;
-use HiEvents\Services\Handlers\CheckInList\GetCheckInListsHandler;
+use HiEvents\Services\Application\Handlers\CheckInList\DTO\GetCheckInListsDTO;
+use HiEvents\Services\Application\Handlers\CheckInList\GetCheckInListsHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

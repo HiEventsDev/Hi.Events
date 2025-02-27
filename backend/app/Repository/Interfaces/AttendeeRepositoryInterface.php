@@ -12,7 +12,7 @@ use Illuminate\Support\Collection;
 /**
  * @extends BaseRepository<AttendeeDomainObject>
  */
-interface AttendeeRepositoryInterface extends RepositoryInterFace
+interface AttendeeRepositoryInterface extends RepositoryInterface
 {
     public function findByEventId(int $eventId, QueryParamsDTO $params): LengthAwarePaginator;
 

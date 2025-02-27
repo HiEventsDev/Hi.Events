@@ -6,8 +6,8 @@ use HiEvents\Exceptions\CannotCheckInException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\CheckInList\CreateAttendeeCheckInPublicRequest;
 use HiEvents\Resources\CheckInList\AttendeeCheckInPublicResource;
-use HiEvents\Services\Handlers\CheckInList\Public\CreateAttendeeCheckInPublicHandler;
-use HiEvents\Services\Handlers\CheckInList\Public\DTO\CreateAttendeeCheckInPublicDTO;
+use HiEvents\Services\Application\Handlers\CheckInList\Public\CreateAttendeeCheckInPublicHandler;
+use HiEvents\Services\Application\Handlers\CheckInList\Public\DTO\CreateAttendeeCheckInPublicDTO;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
@@ -25,11 +25,11 @@ class CreateAttendeeCheckInPublicAction extends BaseAction
     ): JsonResponse
     {
         try {
-            $checkIns = $this->createAttendeeCheckInPublicHandler->handle(new CreateAttendeeCheckInPublicDTO(
-                checkInListUuid: $checkInListUuid,
-                checkInUserIpAddress: $request->ip(),
-                attendeePublicIds: $request->validated('attendee_public_ids'),
-            ));
+            $checkIns = $this->createAttendeeCheckInPublicHandler->handle(CreateAttendeeCheckInPublicDTO::from([
+                'checkInListUuid' => $checkInListUuid,
+                'checkInUserIpAddress' => $request->ip(),
+                'attendeesAndActions' => $request->validated('attendees'),
+            ]));
         } catch (CannotCheckInException $e) {
             return $this->errorResponse(
                 message: $e->getMessage(),

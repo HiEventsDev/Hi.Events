@@ -22,7 +22,7 @@ import {t} from "@lingui/macro";
 import {useEffect, useState} from "react";
 import {EditQuestionModal} from "../../modals/EditQuestionModal";
 import {useDeleteQuestion} from "../../../mutations/useDeleteQuestion.ts";
-import {useParams} from "react-router-dom";
+import {useParams} from "react-router";
 import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
 import {InputGroup} from "../InputGroup";
@@ -222,7 +222,7 @@ const DefaultQuestions = () => (
 );
 
 export const QuestionsTable = ({questions}: QuestionsTableProp) => {
-    const ticketQuestions = questions.filter(question => question.belongs_to === "TICKET");
+    const productQuestions = questions.filter(question => question.belongs_to === "PRODUCT");
     const orderQuestions = questions.filter(question => question.belongs_to === "ORDER");
     const form = useForm();
     const [createModalOpen, {open: openCreateModal, close: closeCreateModal}] = useDisclosure(false);
@@ -304,13 +304,13 @@ export const QuestionsTable = ({questions}: QuestionsTableProp) => {
                         )}
                     </div>
                     <div className={classes.questions}>
-                        <h3>{t`Attendee questions`}</h3>
+                        <h3>{t`Product questions`}</h3>
                         <QuestionsList
-                            questions={ticketQuestions}
+                            questions={productQuestions}
                             onEditModalOpen={handleModalOpen}
                             showHiddenQuestions={showHiddenQuestions}
                         />
-                        {ticketQuestions
+                        {productQuestions
                             .filter(question => showHiddenQuestions || !question.is_hidden)
                             .length === 0 && (
                             <Card className={classes.noQuestionsAlert}>
@@ -347,7 +347,7 @@ export const QuestionsTable = ({questions}: QuestionsTableProp) => {
 
                             <h3>{t`Attendee questions`}</h3>
                             <DefaultQuestions/>
-                            {ticketQuestions
+                            {productQuestions
                                 .filter(question => showHiddenQuestions || !question.is_hidden)
                                 .map(question => (
                                     <QuestionInput key={question.id}

@@ -24,6 +24,8 @@ export const LanguageSwitcher = () => {
                 return t`Brazilian Portuguese`;
             case "zh-cn":
                 return t`Chinese (Simplified)`;
+            case "vi":
+                return t`Vietnamese`;
         }
     };
 

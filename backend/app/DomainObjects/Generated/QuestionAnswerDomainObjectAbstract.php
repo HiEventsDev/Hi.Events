@@ -14,7 +14,7 @@ abstract class QuestionAnswerDomainObjectAbstract extends \HiEvents\DomainObject
     final public const QUESTION_ID = 'question_id';
     final public const ORDER_ID = 'order_id';
     final public const ATTENDEE_ID = 'attendee_id';
-    final public const TICKET_ID = 'ticket_id';
+    final public const PRODUCT_ID = 'product_id';
     final public const CREATED_AT = 'created_at';
     final public const UPDATED_AT = 'updated_at';
     final public const DELETED_AT = 'deleted_at';
@@ -24,7 +24,7 @@ abstract class QuestionAnswerDomainObjectAbstract extends \HiEvents\DomainObject
     protected int $question_id;
     protected int $order_id;
     protected ?int $attendee_id = null;
-    protected ?int $ticket_id = null;
+    protected ?int $product_id = null;
     protected string $created_at;
     protected string $updated_at;
     protected ?string $deleted_at = null;
@@ -37,7 +37,7 @@ abstract class QuestionAnswerDomainObjectAbstract extends \HiEvents\DomainObject
                     'question_id' => $this->question_id ?? null,
                     'order_id' => $this->order_id ?? null,
                     'attendee_id' => $this->attendee_id ?? null,
-                    'ticket_id' => $this->ticket_id ?? null,
+                    'product_id' => $this->product_id ?? null,
                     'created_at' => $this->created_at ?? null,
                     'updated_at' => $this->updated_at ?? null,
                     'deleted_at' => $this->deleted_at ?? null,
@@ -89,15 +89,15 @@ abstract class QuestionAnswerDomainObjectAbstract extends \HiEvents\DomainObject
         return $this->attendee_id;
     }
 
-    public function setTicketId(?int $ticket_id): self
+    public function setProductId(?int $product_id): self
     {
-        $this->ticket_id = $ticket_id;
+        $this->product_id = $product_id;
         return $this;
     }
 
-    public function getTicketId(): ?int
+    public function getProductId(): ?int
     {
-        return $this->ticket_id;
+        return $this->product_id;
     }
 
     public function setCreatedAt(string $created_at): self

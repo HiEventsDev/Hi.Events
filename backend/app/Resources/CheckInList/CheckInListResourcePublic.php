@@ -4,7 +4,7 @@ namespace HiEvents\Resources\CheckInList;
 
 use HiEvents\DomainObjects\CheckInListDomainObject;
 use HiEvents\Resources\Event\EventResourcePublic;
-use HiEvents\Resources\Ticket\TicketMinimalResourcePublic;
+use HiEvents\Resources\Product\ProductMinimalResourcePublic;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -28,8 +28,8 @@ class CheckInListResourcePublic extends JsonResource
                 'is_active' => $this->isActivated($this->getEvent()->getTimezone()),
                 'event' => EventResourcePublic::make($this->getEvent()),
             ]),
-            $this->mergeWhen($this->getTickets() !== null, fn() => [
-                'tickets' => TicketMinimalResourcePublic::collection($this->getTickets()),
+            $this->mergeWhen($this->getProducts() !== null, fn() => [
+                'products' => ProductMinimalResourcePublic::collection($this->getProducts()),
             ]),
         ];
     }

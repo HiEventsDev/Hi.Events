@@ -1,4 +1,4 @@
-import {Outlet} from "react-router-dom";
+import {Outlet} from "react-router";
 import {Header} from "../../common/Header";
 import {Container} from "@mantine/core";
 import {GlobalMenu} from "../../common/GlobalMenu";

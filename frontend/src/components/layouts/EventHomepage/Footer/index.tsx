@@ -4,7 +4,7 @@ import {PoweredByFooter} from "../../../common/PoweredByFooter";
 export const Footer = () => {
     return (
         /**
-         * (c) Hi.Events Ltd 2024
+         * (c) Hi.Events Ltd 2025
          *
          * PLEASE NOTE:
          *

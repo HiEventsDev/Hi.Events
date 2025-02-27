@@ -66,6 +66,7 @@ abstract class BaseAction extends Controller
      * @param int $statusCode
      * @param array $meta
      * @param array $headers
+     * @param array $errors
      * @return JsonResponse
      */
     protected function resourceResponse(

@@ -24,6 +24,7 @@ class CreateAccountRequest extends BaseRequest
             'timezone' => ['timezone:all'],
             'currency_code' => [Rule::in(array_values($currencies))],
             'locale' => ['nullable', Rule::in(Locale::getSupportedLocales())],
+            'invite_token' => ['nullable', 'string'],
         ];
     }
 }

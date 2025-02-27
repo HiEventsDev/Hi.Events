@@ -25,7 +25,7 @@ export const CapacityAssignmentList = ({capacityAssignments, openCreateModal}: C
     const [selectedCapacityAssignmentId, setSelectedCapacityAssignmentId] = useState<IdParam>();
     const deleteMutation = useDeleteCapacityAssignment();
 
-    const handleDeleteTicket = (capacityAssignmentId: IdParam, eventId: IdParam) => {
+    const handleDeleteProduct = (capacityAssignmentId: IdParam, eventId: IdParam) => {
         deleteMutation.mutate({capacityAssignmentId, eventId}, {
             onSuccess: () => {
                 showSuccess(t`Capacity Assignment deleted successfully`);
@@ -81,11 +81,11 @@ export const CapacityAssignmentList = ({capacityAssignments, openCreateModal}: C
                         <Card className={classes.capacityCard} key={assignment.id}>
                             <div className={classes.capacityAssignmentHeader}>
                                 <div className={classes.capacityAssignmentAppliesTo}>
-                                    {assignment.tickets && (
+                                    {assignment.products && (
                                         <Popover
-                                            title={assignment.tickets.map((ticket) => (
-                                                <div key={ticket.id}>
-                                                    {ticket.title}
+                                            title={assignment.products.map((product) => (
+                                                <div key={product.id}>
+                                                    {product.title}
                                                 </div>
                                             ))}
                                             position={'bottom'}
@@ -93,9 +93,9 @@ export const CapacityAssignmentList = ({capacityAssignments, openCreateModal}: C
                                         >
                                             <div className={classes.appliesToText}>
                                                 <div>
-                                                    {assignment.tickets.length > 1 &&
-                                                        <Trans>Applies to {assignment.tickets.length} tickets</Trans>}
-                                                    {assignment.tickets.length === 1 && t`Applies to 1 ticket`}
+                                                    {assignment.products.length > 1 &&
+                                                        <Trans>Applies to {assignment.products.length} products</Trans>}
+                                                    {assignment.products.length === 1 && t`Applies to 1 product`}
                                                 </div>
                                                 &nbsp;
                                                 <IconHelp size={16}/>
@@ -162,7 +162,7 @@ export const CapacityAssignmentList = ({capacityAssignments, openCreateModal}: C
                                                             confirmationDialog(
                                                                 t`Are you sure you would like to delete this Capacity Assignment?`,
                                                                 () => {
-                                                                    handleDeleteTicket(
+                                                                    handleDeleteProduct(
                                                                         assignment.id as IdParam,
                                                                         assignment.event_id as IdParam,
                                                                     );

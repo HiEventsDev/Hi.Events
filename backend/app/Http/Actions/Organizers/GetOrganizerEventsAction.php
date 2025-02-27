@@ -7,8 +7,8 @@ use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Resources\Event\EventResource;
-use HiEvents\Services\Handlers\Organizer\DTO\GetOrganizerEventsDTO;
-use HiEvents\Services\Handlers\Organizer\GetOrganizerEventsHandler;
+use HiEvents\Services\Application\Handlers\Organizer\DTO\GetOrganizerEventsDTO;
+use HiEvents\Services\Application\Handlers\Organizer\GetOrganizerEventsHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

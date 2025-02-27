@@ -6,8 +6,8 @@ use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Organizer\UpsertOrganizerRequest;
 use HiEvents\Http\ResponseCodes;
 use HiEvents\Resources\Organizer\OrganizerResource;
-use HiEvents\Services\Handlers\Organizer\CreateOrganizerHandler;
-use HiEvents\Services\Handlers\Organizer\DTO\CreateOrganizerDTO;
+use HiEvents\Services\Application\Handlers\Organizer\CreateOrganizerHandler;
+use HiEvents\Services\Application\Handlers\Organizer\DTO\CreateOrganizerDTO;
 use Illuminate\Http\JsonResponse;
 
 class CreateOrganizerAction extends BaseAction

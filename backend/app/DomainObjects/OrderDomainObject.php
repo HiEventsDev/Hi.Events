@@ -2,13 +2,17 @@
 
 namespace HiEvents\DomainObjects;
 
+use HiEvents\DomainObjects\Enums\ProductType;
+use HiEvents\DomainObjects\Interfaces\IsFilterable;
 use HiEvents\DomainObjects\Interfaces\IsSortable;
 use HiEvents\DomainObjects\SortingAndFiltering\AllowedSorts;
 use HiEvents\DomainObjects\Status\OrderPaymentStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
+use HiEvents\Helper\AddressHelper;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
-class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements IsSortable
+class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements IsSortable, IsFilterable
 {
     /** @var Collection<OrderItemDomainObject>|null */
     public ?Collection $orderItems = null;
@@ -21,7 +25,25 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
     /** @var Collection<QuestionAndAnswerViewDomainObject>|null */
     public ?Collection $questionAndAnswerViews = null;
 
+    public ?Collection $invoices = null;
+
     public ?EventDomainObject $event = null;
+
+    public static function getAllowedFilterFields(): array
+    {
+        return [
+            self::STATUS,
+            self::PAYMENT_STATUS,
+            self::REFUND_STATUS,
+            self::CREATED_AT,
+            self::FIRST_NAME,
+            self::LAST_NAME,
+            self::EMAIL,
+            self::PUBLIC_ID,
+            self::CURRENCY,
+            self::TOTAL_GROSS,
+        ];
+    }
 
     public static function getAllowedSorts(): AllowedSorts
     {
@@ -66,6 +88,28 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
         return $this->getFirstName() . ' ' . $this->getLastName();
     }
 
+    public function getProductOrderItems(): Collection
+    {
+        if ($this->getOrderItems() === null) {
+            return new Collection();
+        }
+
+        return $this->getOrderItems()->filter(static function (OrderItemDomainObject $orderItem) {
+            return $orderItem->getProductType() === ProductType::GENERAL->name;
+        });
+    }
+
+    public function getTicketOrderItems(): Collection
+    {
+        if ($this->getOrderItems() === null) {
+            return new Collection();
+        }
+
+        return $this->getOrderItems()->filter(static function (OrderItemDomainObject $orderItem) {
+            return $orderItem->getProductType() === ProductType::TICKET->name;
+        });
+    }
+
     public function setOrderItems(?Collection $orderItems): OrderDomainObject
     {
         $this->orderItems = $orderItems;
@@ -96,6 +140,11 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
         return (int)ceil($this->getTotalGross()) > 0;
     }
 
+    public function isOrderAwaitingOfflinePayment(): bool
+    {
+        return $this->getStatus() === OrderStatus::AWAITING_OFFLINE_PAYMENT->name;
+    }
+
     public function isOrderCompleted(): bool
     {
         return $this->getStatus() === OrderStatus::COMPLETED->name;
@@ -104,6 +153,16 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
     public function isOrderCancelled(): bool
     {
         return $this->getStatus() === OrderStatus::CANCELLED->name;
+    }
+
+    public function isOrderReserved(): bool
+    {
+        return $this->getStatus() === OrderStatus::RESERVED->name;
+    }
+
+    public function isReservedOrderExpired(): bool
+    {
+        return (new Carbon($this->getReservedUntil()))->isPast();
     }
 
     public function isOrderFailed(): bool
@@ -124,7 +183,32 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
 
     public function isFullyRefunded(): bool
     {
-        return $this->getTotalRefunded() >= $this->getTotalGross();
+        return !$this->isFreeOrder() && ($this->getTotalRefunded() >= $this->getTotalGross());
+    }
+
+    public function getHumanReadableStatus(): string
+    {
+        return OrderStatus::getHumanReadableStatus($this->getStatus());
+    }
+
+    public function getBillingAddressString(): string
+    {
+        return AddressHelper::formatAddress($this->getAddress());
+    }
+
+    public function getHasTaxes(): bool
+    {
+        return $this->getTotalTax() > 0;
+    }
+
+    public function getHasFees(): bool
+    {
+        return $this->getTotalFee() > 0;
+    }
+
+    public function getLatestInvoice(): ?InvoiceDomainObject
+    {
+        return $this->getInvoices()?->sortByDesc(fn(InvoiceDomainObject $invoice) => $invoice->getId())->first();
     }
 
     public function getStripePayment(): ?StripePaymentDomainObject
@@ -157,5 +241,16 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
     public function getEvent(): ?EventDomainObject
     {
         return $this->event;
+    }
+
+    public function setInvoices(?Collection $invoices): OrderDomainObject
+    {
+        $this->invoices = $invoices;
+        return $this;
+    }
+
+    public function getInvoices(): ?Collection
+    {
+        return $this->invoices;
     }
 }

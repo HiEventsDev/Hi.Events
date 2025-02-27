@@ -1,7 +1,7 @@
 import {Alert, Anchor, Button, PasswordInput, Select, Switch, TextInput} from "@mantine/core";
 import {t, Trans} from "@lingui/macro";
 import {timezones} from "../../../../../data/timezones.ts";
-import {useNavigate, useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router";
 import {hasLength, isEmail, matchesField, useForm} from "@mantine/form";
 import {useFormErrorResponseHandler} from "../../../../hooks/useFormErrorResponseHandler.tsx";
 import {useGetInvitation} from "../../../../queries/useGetInvitation.ts";
@@ -112,7 +112,7 @@ const AcceptInvitation = () => {
                                 </Trans>
                             )}/>
 
-                    <Button fullWidth loading={acceptInvitationMutation.isPending}
+                    <Button color={'var(--tk-pink)'} fullWidth loading={acceptInvitationMutation.isPending}
                             type={'submit'}>{t`Accept Invitation`}</Button>
                 </fieldset>
             </form>

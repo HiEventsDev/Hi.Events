@@ -8,16 +8,16 @@ use HiEvents\Helper\DateHelper;
 use HiEvents\Helper\IdHelper;
 use HiEvents\Repository\Interfaces\CheckInListRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
-use HiEvents\Services\Domain\Ticket\EventTicketValidationService;
-use HiEvents\Services\Domain\Ticket\Exception\UnrecognizedTicketIdException;
+use HiEvents\Services\Domain\Product\EventProductValidationService;
+use HiEvents\Services\Domain\Product\Exception\UnrecognizedProductIdException;
 use Illuminate\Database\DatabaseManager;
 
 class CreateCheckInListService
 {
     public function __construct(
         private readonly CheckInListRepositoryInterface      $checkInListRepository,
-        private readonly EventTicketValidationService        $eventTicketValidationService,
-        private readonly CheckInListTicketAssociationService $checkInListTicketAssociationService,
+        private readonly EventProductValidationService       $eventProductValidationService,
+        private readonly CheckInListProductAssociationService $checkInListProductAssociationService,
         private readonly DatabaseManager                     $databaseManager,
         private readonly EventRepositoryInterface            $eventRepository,
 
@@ -26,12 +26,12 @@ class CreateCheckInListService
     }
 
     /**
-     * @throws UnrecognizedTicketIdException
+     * @throws UnrecognizedProductIdException
      */
-    public function createCheckInList(CheckInListDomainObject $checkInList, array $ticketIds): CheckInListDomainObject
+    public function createCheckInList(CheckInListDomainObject $checkInList, array $productIds): CheckInListDomainObject
     {
-        return $this->databaseManager->transaction(function () use ($checkInList, $ticketIds) {
-            $this->eventTicketValidationService->validateTicketIds($ticketIds, $checkInList->getEventId());
+        return $this->databaseManager->transaction(function () use ($checkInList, $productIds) {
+            $this->eventProductValidationService->validateProductIds($productIds, $checkInList->getEventId());
             $event = $this->eventRepository->findById($checkInList->getEventId());
 
             $newCheckInList = $this->checkInListRepository->create([
@@ -47,9 +47,9 @@ class CreateCheckInListService
                 CheckInListDomainObjectAbstract::SHORT_ID => IdHelper::shortId(IdHelper::CHECK_IN_LIST_PREFIX),
             ]);
 
-            $this->checkInListTicketAssociationService->addCheckInListToTickets(
+            $this->checkInListProductAssociationService->addCheckInListToProducts(
                 checkInListId: $newCheckInList->getId(),
-                ticketIds: $ticketIds,
+                productIds: $productIds,
                 removePreviousAssignments: false,
             );
 

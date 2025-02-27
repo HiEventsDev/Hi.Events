@@ -7,7 +7,7 @@ import classes from "./Welcome.module.scss";
 import {useForm} from "@mantine/form";
 import {Event} from "../../../types.ts";
 import {useCreateEvent} from "../../../mutations/useCreateEvent.ts";
-import {NavLink, useNavigate} from "react-router-dom";
+import {NavLink, useNavigate} from "react-router";
 import {useEffect} from "react";
 import {useGetEvents} from "../../../queries/useGetEvents.ts";
 import {LoadingContainer} from "../../common/LoadingContainer";
@@ -72,7 +72,7 @@ export const CreateEvent = () => {
                 {t`Now let's create your first event`}
             </h3>
             <p className={classes.sectionDescription}>
-                {t`An event is the actual event you are hosting. You can add more details later.`}
+                {t`An event is the gathering or occasion you’re organizing. You can add more details later.`}
             </p>
 
             <form onSubmit={form.onSubmit(handleSubmit)}>
