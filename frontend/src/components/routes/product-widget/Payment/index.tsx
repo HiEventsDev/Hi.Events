@@ -119,7 +119,7 @@ const Payment = () => {
                 buttonContent={order?.is_payment_required ? (
                     <Group gap={'10px'}>
                         <div style={{fontWeight: "bold"}}>
-                            Place Order
+                            {t`Place Order`}
                         </div>
                         <div style={{fontSize: 14}}>
                             {formatCurrency(order.total_gross, order.currency)}
