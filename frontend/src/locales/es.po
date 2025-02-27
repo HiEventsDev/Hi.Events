@@ -22,19 +22,17 @@ msgstr "'No hay nada que mostrar todavía'"
 #~ "\"\"Due to the high risk of spam, we require manual verification before you can send messages.\n"
 #~ "\"\"Please contact us to request access."
 #~ msgstr ""
-#~ "\"\"Debido al alto riesgo de spam, requerimos verificación manual antes de que puedas enviar mensajes.\n"
-#~ "\"\"Por favor, contáctanos para solicitar acceso.\"\""
+#~ "Debido al alto riesgo de spam, requerimos verificación manual antes de que puedas enviar mensajes.\n"
+#~ "Por favor, contáctanos para solicitar acceso."
 
 #: src/components/routes/auth/ForgotPassword/index.tsx:40
 #~ msgid ""
 #~ "\"\"If you have an account with us, you will receive an email with instructions on how to reset your\n"
 #~ "\"\"password."
-#~ msgstr ""
-#~ "\"\"Si tienes una cuenta con nosotros, recibirás un correo electrónico con instrucciones sobre cómo restablecer tu\n"
-#~ "\"\"contraseña.\"\""
+#~ msgstr "Si tienes una cuenta con nosotros, recibirás un correo electrónico con instrucciones para restablecer tu contraseña."
 
 #: src/components/common/ReportTable/index.tsx:303
-#: src/locales.ts:51
+#: src/locales.ts:56
 msgid "{0}"
 msgstr ""
 
@@ -45,6 +43,10 @@ msgstr "{0} <0>registrado</0> con éxito"
 #: src/components/layouts/CheckIn/index.tsx:105
 msgid "{0} <0>checked out</0> successfully"
 msgstr "{0} <0>retirado</0> con éxito"
+
+#: src/components/routes/event/Webhooks/index.tsx:24
+msgid "{0} Active Webhooks"
+msgstr "{0} webhooks activos"
 
 #: src/components/routes/product-widget/SelectProducts/index.tsx:352
 msgid "{0} available"
@@ -157,6 +159,10 @@ msgstr "🚀 Configura tu evento en vivo"
 #: src/components/common/Countdown/index.tsx:34
 msgid "0 minutes and 0 seconds"
 msgstr "0 minutos y 0 segundos"
+
+#: src/components/routes/event/Webhooks/index.tsx:23
+msgid "1 Active Webhook"
+msgstr "1 webhook activo"
 
 #: src/components/modals/RefundOrderModal/index.tsx:105
 msgid "10.00"
@@ -414,7 +420,7 @@ msgid "Add to Calendar"
 msgstr "Agregar al calendario"
 
 #: src/components/common/WebhookTable/index.tsx:223
-#: src/components/routes/event/Webhooks/index.tsx:27
+#: src/components/routes/event/Webhooks/index.tsx:35
 msgid "Add Webhook"
 msgstr "Agregar Webhook"
 
@@ -427,7 +433,7 @@ msgstr "Información adicional"
 msgid "Additional Options"
 msgstr "Opciones adicionales"
 
-#: src/components/common/OrderDetails/index.tsx:86
+#: src/components/common/OrderDetails/index.tsx:96
 #: src/components/forms/QuestionForm/index.tsx:130
 msgid "Address"
 msgstr "DIRECCIÓN"
@@ -1254,6 +1260,7 @@ msgstr "Color de fondo del contenido"
 #: src/components/common/WidgetEditor/index.tsx:31
 #: src/components/common/WidgetEditor/index.tsx:217
 #: src/components/layouts/Checkout/CheckoutFooter/index.tsx:38
+#: src/components/routes/product-widget/CollectInformation/index.tsx:431
 #: src/components/routes/product-widget/SelectProducts/index.tsx:426
 msgid "Continue"
 msgstr "Continuar"
@@ -1495,6 +1502,14 @@ msgstr "Personalice su página de evento y el diseño del widget para que coinci
 #: src/components/routes/event/GettingStarted/index.tsx:95
 msgid "Customize your event page to match your brand and style."
 msgstr "Personalice la página de su evento para que coincida con su marca y estilo."
+
+#: src/components/routes/event/Reports/index.tsx:23
+msgid "Daily Sales Report"
+msgstr "Informe de ventas diarias"
+
+#: src/components/routes/event/Reports/index.tsx:24
+msgid "Daily sales, tax, and fee breakdown"
+msgstr "Desglose de ventas diarias, impuestos y tarifas"
 
 #: src/components/common/CapacityAssignmentList/index.tsx:156
 #: src/components/common/CheckInListList/index.tsx:176
@@ -1959,7 +1974,7 @@ msgid "Ended Events"
 msgstr "Eventos finalizados"
 
 #: src/components/common/LanguageSwitcher/index.tsx:16
-#: src/components/common/LanguageSwitcher/index.tsx:42
+#: src/components/common/LanguageSwitcher/index.tsx:44
 #: src/components/modals/CreateAttendeeModal/index.tsx:145
 #: src/components/routes/profile/ManageProfile/index.tsx:173
 msgid "English"
@@ -1981,6 +1996,10 @@ msgstr "Error al confirmar la dirección de correo electrónico"
 #: src/components/routes/profile/ConfirmEmailChange/index.tsx:35
 msgid "Error confirming email change"
 msgstr "Error al confirmar el cambio de correo electrónico"
+
+#: src/components/modals/WebhookLogsModal/index.tsx:166
+msgid "Error loading logs"
+msgstr "Error al cargar los registros"
 
 #: src/components/forms/OrganizerForm/index.tsx:46
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:74
@@ -2029,6 +2048,11 @@ msgstr "El evento es visible para el público."
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:85
 msgid "Event location & venue details"
 msgstr "Ubicación del evento y detalles del lugar"
+
+#: src/components/layouts/EventHomepage/EventNotAvailable/index.tsx:12
+#: src/components/layouts/EventHomepage/EventNotAvailable/index.tsx:39
+msgid "Event Not Available"
+msgstr "Evento no disponible"
 
 #: src/components/layouts/Event/index.tsx:186
 msgid "Event page"
@@ -2286,6 +2310,10 @@ msgstr "volver al perfil"
 #: src/components/routes/product-widget/CollectInformation/index.tsx:226
 msgid "Go to event homepage"
 msgstr "Ir a la página de inicio del evento"
+
+#: src/components/layouts/EventHomepage/EventNotAvailable/index.tsx:53
+msgid "Go to Hi.Events"
+msgstr "Ir a Hi.Events"
 
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:120
 msgid "Go to Stripe Dashboard"
@@ -2741,6 +2769,10 @@ msgstr "Dejar en blanco para usar la palabra predeterminada \"Factura\""
 msgid "Let's get started by creating your first organizer"
 msgstr "Comencemos creando tu primer organizador."
 
+#: src/components/routes/event/Webhooks/index.tsx:21
+msgid "Loading Webhooks"
+msgstr "Cargando webhooks"
+
 #: src/components/common/ReportTable/index.tsx:210
 msgid "Loading..."
 msgstr "Cargando..."
@@ -2958,7 +2990,7 @@ msgstr "El increíble título de mi evento..."
 msgid "My Profile"
 msgstr "Mi perfil"
 
-#: src/components/common/QuestionAndAnswerList/index.tsx:80
+#: src/components/common/QuestionAndAnswerList/index.tsx:79
 msgid "N/A"
 msgstr "No disponible"
 
@@ -2986,7 +3018,7 @@ msgstr "Nombre"
 msgid "Name should be less than 150 characters"
 msgstr "El nombre debe tener menos de 150 caracteres."
 
-#: src/components/common/QuestionAndAnswerList/index.tsx:83
+#: src/components/common/QuestionAndAnswerList/index.tsx:82
 msgid "Navigate to Attendee"
 msgstr "Navegar al asistente"
 
@@ -3006,9 +3038,13 @@ msgstr "Nueva contraseña"
 msgid "No"
 msgstr "No"
 
-#: src/components/common/QuestionAndAnswerList/index.tsx:105
+#: src/components/common/QuestionAndAnswerList/index.tsx:104
 msgid "No {0} available."
 msgstr "No hay {0} disponible."
+
+#: src/components/routes/event/Webhooks/index.tsx:22
+msgid "No Active Webhooks"
+msgstr "No hay webhooks activos"
 
 #: src/components/common/NoEventsBlankSlate/index.tsx:21
 msgid "No archived events to show."
@@ -3069,6 +3105,10 @@ msgstr "No hay eventos para mostrar"
 #: src/components/common/FilterModal/index.tsx:230
 msgid "No filters available"
 msgstr "No hay filtros disponibles"
+
+#: src/components/modals/WebhookLogsModal/index.tsx:177
+msgid "No logs found"
+msgstr "No se encontraron registros"
 
 #: src/components/common/MessageList/index.tsx:69
 msgid "No messages to show"
@@ -3145,6 +3185,10 @@ msgstr "No se han agregado impuestos ni tarifas."
 #: src/components/common/TicketsTable/index.tsx:65
 #~ msgid "No tickets to show"
 #~ msgstr "No hay entradas para mostrar"
+
+#: src/components/modals/WebhookLogsModal/index.tsx:180
+msgid "No webhook events have been recorded for this endpoint yet. Events will appear here once they are triggered."
+msgstr "Aún no se han registrado eventos de webhook para este punto de acceso. Los eventos aparecerán aquí una vez que se activen."
 
 #: src/components/common/WebhookTable/index.tsx:201
 msgid "No Webhooks"
@@ -3597,6 +3641,10 @@ msgstr "Porcentaje"
 msgid "Percentage Amount"
 msgstr "Monto porcentual"
 
+#: src/components/routes/product-widget/Payment/index.tsx:122
+msgid "Place Order"
+msgstr "Realizar pedido"
+
 #: src/components/common/WidgetEditor/index.tsx:257
 msgid "Place this in the <head> of your website."
 msgstr "Coloque esto en el <head> de su sitio web."
@@ -3819,8 +3867,13 @@ msgid "Product questions"
 msgstr "Preguntas sobre el producto"
 
 #: src/components/routes/event/EventDashboard/index.tsx:85
+#: src/components/routes/event/Reports/index.tsx:17
 msgid "Product Sales"
 msgstr "Ventas de productos"
+
+#: src/components/routes/event/Reports/index.tsx:18
+msgid "Product sales, revenue, and tax breakdown"
+msgstr "Desglose de ventas de productos, ingresos e impuestos"
 
 #: src/components/common/ProductSelector/index.tsx:63
 msgid "Product Tier"
@@ -3881,6 +3934,10 @@ msgstr "perfil actualizado con éxito"
 msgid "Promo {promo_code} code applied"
 msgstr "Código promocional {promo_code} aplicado"
 
+#: src/components/common/OrderDetails/index.tsx:86
+msgid "Promo code"
+msgstr "Código promocional"
+
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:20
 msgid "Promo Code"
 msgstr "Código promocional"
@@ -3888,6 +3945,10 @@ msgstr "Código promocional"
 #: src/components/forms/ProductForm/index.tsx:409
 msgid "Promo Code page"
 msgstr "Página de códigos promocionales"
+
+#: src/components/routes/event/Reports/index.tsx:30
+msgid "Promo code usage and discount breakdown"
+msgstr "Uso de códigos promocionales y desglose de descuentos"
 
 #: src/components/layouts/Event/index.tsx:62
 #: src/components/routes/event/promo-codes.tsx:31
@@ -3898,6 +3959,7 @@ msgstr "Códigos promocionales"
 msgid "Promo codes can be used to offer discounts, presale access, or provide special access to your event."
 msgstr "Los códigos promocionales se pueden utilizar para ofrecer descuentos, acceso de preventa o proporcionar acceso especial a su evento."
 
+#: src/components/routes/event/Reports/index.tsx:29
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:95
 msgid "Promo Codes Report"
 msgstr "Informe de códigos promocionales"
@@ -4021,7 +4083,7 @@ msgid "Remove"
 msgstr "Eliminar"
 
 #: src/components/layouts/Event/index.tsx:53
-#: src/components/routes/event/Reports/index.tsx:38
+#: src/components/routes/event/Reports/index.tsx:39
 msgid "Reports"
 msgstr "Informes"
 
@@ -4797,6 +4859,11 @@ msgstr "La moneda predeterminada para tus eventos."
 msgid "The default timezone for your events."
 msgstr "La zona horaria predeterminada para sus eventos."
 
+#: src/components/layouts/EventHomepage/EventNotAvailable/index.tsx:16
+#: src/components/layouts/EventHomepage/EventNotAvailable/index.tsx:43
+msgid "The event you're looking for is not available at the moment. It may have been removed, expired, or the URL might be incorrect."
+msgstr "El evento que buscas no está disponible en este momento. Puede que haya sido eliminado, haya caducado o la URL sea incorrecta."
+
 #: src/components/modals/CreateAttendeeModal/index.tsx:146
 msgid "The language the attendee will receive emails in."
 msgstr "El idioma en el que el asistente recibirá los correos electrónicos."
@@ -4918,12 +4985,12 @@ msgid "This email is not promotional and is directly related to the event."
 msgstr "Este correo electrónico no es promocional y está directamente relacionado con el evento."
 
 #: src/components/layouts/EventHomepage/EventNotAvailable/index.tsx:8
-msgid "This event is not available at the moment. Please check back later."
-msgstr "Este evento no está disponible en este momento. Por favor, vuelva más tarde."
+#~ msgid "This event is not available at the moment. Please check back later."
+#~ msgstr "Este evento no está disponible en este momento. Por favor, vuelva más tarde."
 
 #: src/components/layouts/EventHomepage/index.tsx:49
-msgid "This event is not available."
-msgstr "Este evento no está disponible."
+#~ msgid "This event is not available."
+#~ msgstr "Este evento no está disponible."
 
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:152
 msgid "This information will be shown on the payment page, order summary page, and order confirmation email."
@@ -5390,10 +5457,18 @@ msgstr "IVA"
 msgid "Venue Name"
 msgstr "Nombre del lugar"
 
+#: src/components/common/LanguageSwitcher/index.tsx:28
+msgid "Vietnamese"
+msgstr "Vietnamita"
+
 #: src/components/modals/ManageAttendeeModal/index.tsx:217
 #: src/components/modals/ManageOrderModal/index.tsx:199
 msgid "View"
 msgstr "Ver"
+
+#: src/components/routes/event/Reports/index.tsx:38
+msgid "View and download reports for your event. Please note, only completed orders are included in these reports."
+msgstr "Consulta y descarga informes de tu evento. Ten en cuenta que solo se incluyen pedidos completados en estos informes."
 
 #: src/components/common/AttendeeTable/index.tsx:164
 #~ msgid "View attendee"
@@ -5497,7 +5572,7 @@ msgstr "Webhook creado con éxito"
 msgid "Webhook deleted successfully"
 msgstr "Webhook eliminado con éxito"
 
-#: src/components/modals/WebhookLogsModal/index.tsx:105
+#: src/components/modals/WebhookLogsModal/index.tsx:151
 msgid "Webhook Logs"
 msgstr "Registros del Webhook"
 
@@ -5514,7 +5589,7 @@ msgid "Webhook will send notifications"
 msgstr "El webhook enviará notificaciones"
 
 #: src/components/layouts/Event/index.tsx:69
-#: src/components/routes/event/Webhooks/index.tsx:22
+#: src/components/routes/event/Webhooks/index.tsx:30
 msgid "Webhooks"
 msgstr "Webhooks"
 
@@ -5555,8 +5630,8 @@ msgid "What is a Category?"
 msgstr "¿Qué es una categoría?"
 
 #: src/components/routes/event/Webhooks/index.tsx:31
-msgid "What is a webhook?"
-msgstr "¿Qué es un webhook?"
+#~ msgid "What is a webhook?"
+#~ msgstr "¿Qué es un webhook?"
 
 #: src/components/forms/QuestionForm/index.tsx:159
 msgid "What products does this code apply to?"

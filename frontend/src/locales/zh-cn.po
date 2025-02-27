@@ -22,19 +22,17 @@ msgstr "There's nothing to show yet"
 #~ "\"\"Due to the high risk of spam, we require manual verification before you can send messages.\n"
 #~ "\"\"Please contact us to request access."
 #~ msgstr ""
-#~ "\"\"由于垃圾邮件风险较高，我们需要手动验证才能允许您发送消息。\n"
-#~ "\"\"请联系我们申请访问权限。\"\""
+#~ "由于垃圾邮件风险较高，我们需要手动验证后才能发送消息。\n"
+#~ "请联系我们申请访问权限。"
 
 #: src/components/routes/auth/ForgotPassword/index.tsx:40
 #~ msgid ""
 #~ "\"\"If you have an account with us, you will receive an email with instructions on how to reset your\n"
 #~ "\"\"password."
-#~ msgstr ""
-#~ "\"\"如果您在我们这里有账户，您将收到一封电子邮件，其中包含如何重置您的\n"
-#~ "\"\"密码的说明。\"\""
+#~ msgstr "如果您已有账户，我们将向您的电子邮件发送密码重置说明。"
 
 #: src/components/common/ReportTable/index.tsx:303
-#: src/locales.ts:51
+#: src/locales.ts:56
 msgid "{0}"
 msgstr ""
 
@@ -45,6 +43,10 @@ msgstr "{0} <0>签到</0>成功"
 #: src/components/layouts/CheckIn/index.tsx:105
 msgid "{0} <0>checked out</0> successfully"
 msgstr "{0} <0>签退</0>成功"
+
+#: src/components/routes/event/Webhooks/index.tsx:24
+msgid "{0} Active Webhooks"
+msgstr "{0} 个活动的 Webhook"
 
 #: src/components/routes/product-widget/SelectProducts/index.tsx:352
 msgid "{0} available"
@@ -157,6 +159,10 @@ msgstr "🚀 实时设置您的活动"
 #: src/components/common/Countdown/index.tsx:34
 msgid "0 minutes and 0 seconds"
 msgstr "0 分 0 秒"
+
+#: src/components/routes/event/Webhooks/index.tsx:23
+msgid "1 Active Webhook"
+msgstr "1 个活动的 Webhook"
 
 #: src/components/modals/RefundOrderModal/index.tsx:105
 msgid "10.00"
@@ -414,7 +420,7 @@ msgid "Add to Calendar"
 msgstr "添加到日历"
 
 #: src/components/common/WebhookTable/index.tsx:223
-#: src/components/routes/event/Webhooks/index.tsx:27
+#: src/components/routes/event/Webhooks/index.tsx:35
 msgid "Add Webhook"
 msgstr "添加 Webhook"
 
@@ -427,7 +433,7 @@ msgstr "附加信息"
 msgid "Additional Options"
 msgstr "附加选项"
 
-#: src/components/common/OrderDetails/index.tsx:86
+#: src/components/common/OrderDetails/index.tsx:96
 #: src/components/forms/QuestionForm/index.tsx:130
 msgid "Address"
 msgstr "地址"
@@ -1254,6 +1260,7 @@ msgstr "内容背景颜色"
 #: src/components/common/WidgetEditor/index.tsx:31
 #: src/components/common/WidgetEditor/index.tsx:217
 #: src/components/layouts/Checkout/CheckoutFooter/index.tsx:38
+#: src/components/routes/product-widget/CollectInformation/index.tsx:431
 #: src/components/routes/product-widget/SelectProducts/index.tsx:426
 msgid "Continue"
 msgstr "继续"
@@ -1495,6 +1502,14 @@ msgstr "自定义您的活动页面和小部件设计，以完美匹配您的品
 #: src/components/routes/event/GettingStarted/index.tsx:95
 msgid "Customize your event page to match your brand and style."
 msgstr "定制您的活动页面，以符合您的品牌和风格。"
+
+#: src/components/routes/event/Reports/index.tsx:23
+msgid "Daily Sales Report"
+msgstr "每日销售报告"
+
+#: src/components/routes/event/Reports/index.tsx:24
+msgid "Daily sales, tax, and fee breakdown"
+msgstr "每日销售、税费和费用明细"
 
 #: src/components/common/CapacityAssignmentList/index.tsx:156
 #: src/components/common/CheckInListList/index.tsx:176
@@ -1959,7 +1974,7 @@ msgid "Ended Events"
 msgstr "已结束的活动"
 
 #: src/components/common/LanguageSwitcher/index.tsx:16
-#: src/components/common/LanguageSwitcher/index.tsx:42
+#: src/components/common/LanguageSwitcher/index.tsx:44
 #: src/components/modals/CreateAttendeeModal/index.tsx:145
 #: src/components/routes/profile/ManageProfile/index.tsx:173
 msgid "English"
@@ -1981,6 +1996,10 @@ msgstr "确认电子邮件地址出错"
 #: src/components/routes/profile/ConfirmEmailChange/index.tsx:35
 msgid "Error confirming email change"
 msgstr "确认更改电子邮件时出错"
+
+#: src/components/modals/WebhookLogsModal/index.tsx:166
+msgid "Error loading logs"
+msgstr "加载日志时出错"
 
 #: src/components/forms/OrganizerForm/index.tsx:46
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:74
@@ -2029,6 +2048,11 @@ msgstr "活动对公众可见"
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:85
 msgid "Event location & venue details"
 msgstr "活动地点和场地详情"
+
+#: src/components/layouts/EventHomepage/EventNotAvailable/index.tsx:12
+#: src/components/layouts/EventHomepage/EventNotAvailable/index.tsx:39
+msgid "Event Not Available"
+msgstr "活动不可用"
 
 #: src/components/layouts/Event/index.tsx:186
 msgid "Event page"
@@ -2286,6 +2310,10 @@ msgstr "返回个人资料"
 #: src/components/routes/product-widget/CollectInformation/index.tsx:226
 msgid "Go to event homepage"
 msgstr "前往活动主页"
+
+#: src/components/layouts/EventHomepage/EventNotAvailable/index.tsx:53
+msgid "Go to Hi.Events"
+msgstr "前往 Hi.Events"
 
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:120
 msgid "Go to Stripe Dashboard"
@@ -2741,6 +2769,10 @@ msgstr "留空以使用默认词“发票”"
 msgid "Let's get started by creating your first organizer"
 msgstr "让我们从创建第一个组织者开始吧"
 
+#: src/components/routes/event/Webhooks/index.tsx:21
+msgid "Loading Webhooks"
+msgstr "正在加载 Webhook"
+
 #: src/components/common/ReportTable/index.tsx:210
 msgid "Loading..."
 msgstr "加载中..."
@@ -2958,7 +2990,7 @@ msgstr "我的精彩活动标题..."
 msgid "My Profile"
 msgstr "我的简介"
 
-#: src/components/common/QuestionAndAnswerList/index.tsx:80
+#: src/components/common/QuestionAndAnswerList/index.tsx:79
 msgid "N/A"
 msgstr "不适用"
 
@@ -2986,7 +3018,7 @@ msgstr "名称"
 msgid "Name should be less than 150 characters"
 msgstr "名称应少于 150 个字符"
 
-#: src/components/common/QuestionAndAnswerList/index.tsx:83
+#: src/components/common/QuestionAndAnswerList/index.tsx:82
 msgid "Navigate to Attendee"
 msgstr "导航至与会者"
 
@@ -3006,9 +3038,13 @@ msgstr "新密码"
 msgid "No"
 msgstr "没有"
 
-#: src/components/common/QuestionAndAnswerList/index.tsx:105
+#: src/components/common/QuestionAndAnswerList/index.tsx:104
 msgid "No {0} available."
 msgstr "没有可用的{0}。"
+
+#: src/components/routes/event/Webhooks/index.tsx:22
+msgid "No Active Webhooks"
+msgstr "没有活动的 Webhook"
 
 #: src/components/common/NoEventsBlankSlate/index.tsx:21
 msgid "No archived events to show."
@@ -3069,6 +3105,10 @@ msgstr "无事件显示"
 #: src/components/common/FilterModal/index.tsx:230
 msgid "No filters available"
 msgstr "没有可用筛选器"
+
+#: src/components/modals/WebhookLogsModal/index.tsx:177
+msgid "No logs found"
+msgstr "未找到日志"
 
 #: src/components/common/MessageList/index.tsx:69
 msgid "No messages to show"
@@ -3145,6 +3185,10 @@ msgstr "未加收任何税费。"
 #: src/components/common/TicketsTable/index.tsx:65
 #~ msgid "No tickets to show"
 #~ msgstr "没有演出门票"
+
+#: src/components/modals/WebhookLogsModal/index.tsx:180
+msgid "No webhook events have been recorded for this endpoint yet. Events will appear here once they are triggered."
+msgstr "此端点尚未记录任何 Webhook 事件。事件触发后将显示在此处。"
 
 #: src/components/common/WebhookTable/index.tsx:201
 msgid "No Webhooks"
@@ -3597,6 +3641,10 @@ msgstr "百分比"
 msgid "Percentage Amount"
 msgstr "百分比 金额"
 
+#: src/components/routes/product-widget/Payment/index.tsx:122
+msgid "Place Order"
+msgstr "下单"
+
 #: src/components/common/WidgetEditor/index.tsx:257
 msgid "Place this in the <head> of your website."
 msgstr "将其放在网站的 <head> 中。"
@@ -3819,8 +3867,13 @@ msgid "Product questions"
 msgstr "产品问题"
 
 #: src/components/routes/event/EventDashboard/index.tsx:85
+#: src/components/routes/event/Reports/index.tsx:17
 msgid "Product Sales"
 msgstr "产品销售"
+
+#: src/components/routes/event/Reports/index.tsx:18
+msgid "Product sales, revenue, and tax breakdown"
+msgstr "产品销售、收入和税费明细"
 
 #: src/components/common/ProductSelector/index.tsx:63
 msgid "Product Tier"
@@ -3881,6 +3934,10 @@ msgstr "成功更新个人资料"
 msgid "Promo {promo_code} code applied"
 msgstr "已使用促销 {promo_code} 代码"
 
+#: src/components/common/OrderDetails/index.tsx:86
+msgid "Promo code"
+msgstr "优惠码"
+
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:20
 msgid "Promo Code"
 msgstr "促销代码"
@@ -3888,6 +3945,10 @@ msgstr "促销代码"
 #: src/components/forms/ProductForm/index.tsx:409
 msgid "Promo Code page"
 msgstr "促销代码页面"
+
+#: src/components/routes/event/Reports/index.tsx:30
+msgid "Promo code usage and discount breakdown"
+msgstr "促销码使用情况及折扣明细"
 
 #: src/components/layouts/Event/index.tsx:62
 #: src/components/routes/event/promo-codes.tsx:31
@@ -3898,6 +3959,7 @@ msgstr "促销代码"
 msgid "Promo codes can be used to offer discounts, presale access, or provide special access to your event."
 msgstr "促销代码可用于提供折扣、预售权限或为您的活动提供特殊权限。"
 
+#: src/components/routes/event/Reports/index.tsx:29
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:95
 msgid "Promo Codes Report"
 msgstr "促销代码报告"
@@ -4021,7 +4083,7 @@ msgid "Remove"
 msgstr "移除"
 
 #: src/components/layouts/Event/index.tsx:53
-#: src/components/routes/event/Reports/index.tsx:38
+#: src/components/routes/event/Reports/index.tsx:39
 msgid "Reports"
 msgstr "报告"
 
@@ -4797,6 +4859,11 @@ msgstr "事件的默认货币。"
 msgid "The default timezone for your events."
 msgstr "事件的默认时区。"
 
+#: src/components/layouts/EventHomepage/EventNotAvailable/index.tsx:16
+#: src/components/layouts/EventHomepage/EventNotAvailable/index.tsx:43
+msgid "The event you're looking for is not available at the moment. It may have been removed, expired, or the URL might be incorrect."
+msgstr "您查找的活动目前不可用。它可能已被删除、过期或 URL 不正确。"
+
 #: src/components/modals/CreateAttendeeModal/index.tsx:146
 msgid "The language the attendee will receive emails in."
 msgstr "与会者接收电子邮件的语言。"
@@ -4918,12 +4985,12 @@ msgid "This email is not promotional and is directly related to the event."
 msgstr "此电子邮件并非促销邮件，与活动直接相关。"
 
 #: src/components/layouts/EventHomepage/EventNotAvailable/index.tsx:8
-msgid "This event is not available at the moment. Please check back later."
-msgstr "此活动暂时不可用。请稍后再查看。"
+#~ msgid "This event is not available at the moment. Please check back later."
+#~ msgstr "此活动暂时不可用。请稍后再查看。"
 
 #: src/components/layouts/EventHomepage/index.tsx:49
-msgid "This event is not available."
-msgstr "此活动不可用。"
+#~ msgid "This event is not available."
+#~ msgstr "此活动不可用。"
 
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:152
 msgid "This information will be shown on the payment page, order summary page, and order confirmation email."
@@ -5390,10 +5457,18 @@ msgstr "增值税"
 msgid "Venue Name"
 msgstr "地点名称"
 
+#: src/components/common/LanguageSwitcher/index.tsx:28
+msgid "Vietnamese"
+msgstr "越南语"
+
 #: src/components/modals/ManageAttendeeModal/index.tsx:217
 #: src/components/modals/ManageOrderModal/index.tsx:199
 msgid "View"
 msgstr "查看"
+
+#: src/components/routes/event/Reports/index.tsx:38
+msgid "View and download reports for your event. Please note, only completed orders are included in these reports."
+msgstr "查看并下载您的活动报告。请注意，报告中仅包含已完成的订单。"
 
 #: src/components/common/AttendeeTable/index.tsx:164
 #~ msgid "View attendee"
@@ -5497,7 +5572,7 @@ msgstr "Webhook 创建成功"
 msgid "Webhook deleted successfully"
 msgstr "Webhook 删除成功"
 
-#: src/components/modals/WebhookLogsModal/index.tsx:105
+#: src/components/modals/WebhookLogsModal/index.tsx:151
 msgid "Webhook Logs"
 msgstr "Webhook 日志"
 
@@ -5514,7 +5589,7 @@ msgid "Webhook will send notifications"
 msgstr "Webhook 将发送通知"
 
 #: src/components/layouts/Event/index.tsx:69
-#: src/components/routes/event/Webhooks/index.tsx:22
+#: src/components/routes/event/Webhooks/index.tsx:30
 msgid "Webhooks"
 msgstr "Webhooks"
 
@@ -5555,8 +5630,8 @@ msgid "What is a Category?"
 msgstr "什么是类别？"
 
 #: src/components/routes/event/Webhooks/index.tsx:31
-msgid "What is a webhook?"
-msgstr "什么是 Webhook？"
+#~ msgid "What is a webhook?"
+#~ msgstr "什么是 Webhook？"
 
 #: src/components/forms/QuestionForm/index.tsx:159
 msgid "What products does this code apply to?"

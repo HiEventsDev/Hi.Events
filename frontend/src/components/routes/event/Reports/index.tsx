@@ -14,20 +14,20 @@ const Reports = () => {
     const reports = [
         {
             id: ReportTypes.ProductSales,
-            title: 'Product Sales',
-            description: 'Product sales, revenue, and tax breakdown',
+            title: t`Product Sales`,
+            description: t`Product sales, revenue, and tax breakdown`,
             icon: <Avatar size={40} color={'#831781'}><IconReportMoney/></Avatar>
         },
         {
             id: ReportTypes.DailySales,
-            title: 'Daily Sales Report',
-            description: 'Daily sales, tax, and fee breakdown',
+            title: t`Daily Sales Report`,
+            description: t`Daily sales, tax, and fee breakdown`,
             icon: <Avatar size={40} color={'#00a3e0'}><IconChartBar/></Avatar>
         },
         {
             id: ReportTypes.PromoCodes,
-            title: 'Promo Codes Report',
-            description: 'Promo code usage and discount breakdown',
+            title: t`Promo Codes Report`,
+            description: t`Promo code usage and discount breakdown`,
             icon: <Avatar size={40} color={'#634fc0'}><IconReportMoney/></Avatar>
         }
     ];

@@ -26,7 +26,7 @@ msgstr "'There\\'s nothing to show yet'"
 #~ msgstr "{0, plural, one {# hidden question} other {# hidden questions}}"
 
 #: src/components/common/ReportTable/index.tsx:303
-#: src/locales.ts:51
+#: src/locales.ts:56
 msgid "{0}"
 msgstr "{0}"
 
@@ -41,6 +41,10 @@ msgstr "{0} <0>checked in</0> successfully"
 #: src/components/layouts/CheckIn/index.tsx:105
 msgid "{0} <0>checked out</0> successfully"
 msgstr "{0} <0>checked out</0> successfully"
+
+#: src/components/routes/event/Webhooks/index.tsx:24
+msgid "{0} Active Webhooks"
+msgstr "{0} Active Webhooks"
 
 #: src/components/routes/product-widget/SelectProducts/index.tsx:352
 msgid "{0} available"
@@ -173,6 +177,10 @@ msgstr "0 minutes and 0 seconds"
 #: src/components/forms/TaxAndFeeForm/index.tsx:73
 #~ msgid "0.50 for $0.50"
 #~ msgstr "0.50 for $0.50"
+
+#: src/components/routes/event/Webhooks/index.tsx:23
+msgid "1 Active Webhook"
+msgstr "1 Active Webhook"
 
 #: src/components/forms/TaxAndFeeForm/index.tsx:73
 #~ msgid "1.75 for 1.75%"
@@ -466,7 +474,7 @@ msgid "Add to Calendar"
 msgstr "Add to Calendar"
 
 #: src/components/common/WebhookTable/index.tsx:223
-#: src/components/routes/event/Webhooks/index.tsx:27
+#: src/components/routes/event/Webhooks/index.tsx:35
 msgid "Add Webhook"
 msgstr "Add Webhook"
 
@@ -483,7 +491,7 @@ msgstr "Additional Information"
 msgid "Additional Options"
 msgstr "Additional Options"
 
-#: src/components/common/OrderDetails/index.tsx:86
+#: src/components/common/OrderDetails/index.tsx:96
 #: src/components/forms/QuestionForm/index.tsx:130
 msgid "Address"
 msgstr "Address"
@@ -1389,6 +1397,7 @@ msgstr "Content background color"
 #: src/components/common/WidgetEditor/index.tsx:31
 #: src/components/common/WidgetEditor/index.tsx:217
 #: src/components/layouts/Checkout/CheckoutFooter/index.tsx:38
+#: src/components/routes/product-widget/CollectInformation/index.tsx:431
 #: src/components/routes/product-widget/SelectProducts/index.tsx:426
 msgid "Continue"
 msgstr "Continue"
@@ -1650,6 +1659,14 @@ msgstr "Customize your event page and widget design to match your brand perfectl
 #: src/components/routes/event/GettingStarted/index.tsx:95
 msgid "Customize your event page to match your brand and style."
 msgstr "Customize your event page to match your brand and style."
+
+#: src/components/routes/event/Reports/index.tsx:23
+msgid "Daily Sales Report"
+msgstr "Daily Sales Report"
+
+#: src/components/routes/event/Reports/index.tsx:24
+msgid "Daily sales, tax, and fee breakdown"
+msgstr "Daily sales, tax, and fee breakdown"
 
 #: src/components/common/CapacityAssignmentList/index.tsx:156
 #: src/components/common/CheckInListList/index.tsx:176
@@ -2160,7 +2177,7 @@ msgid "Ended Events"
 msgstr "Ended Events"
 
 #: src/components/common/LanguageSwitcher/index.tsx:16
-#: src/components/common/LanguageSwitcher/index.tsx:42
+#: src/components/common/LanguageSwitcher/index.tsx:44
 #: src/components/modals/CreateAttendeeModal/index.tsx:145
 #: src/components/routes/profile/ManageProfile/index.tsx:173
 msgid "English"
@@ -2182,6 +2199,10 @@ msgstr "Error confirming email address"
 #: src/components/routes/profile/ConfirmEmailChange/index.tsx:35
 msgid "Error confirming email change"
 msgstr "Error confirming email change"
+
+#: src/components/modals/WebhookLogsModal/index.tsx:166
+msgid "Error loading logs"
+msgstr "Error loading logs"
 
 #: src/components/forms/OrganizerForm/index.tsx:46
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:74
@@ -2234,6 +2255,11 @@ msgstr "Event is visible to the public"
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:85
 msgid "Event location & venue details"
 msgstr "Event location & venue details"
+
+#: src/components/layouts/EventHomepage/EventNotAvailable/index.tsx:12
+#: src/components/layouts/EventHomepage/EventNotAvailable/index.tsx:39
+msgid "Event Not Available"
+msgstr "Event Not Available"
 
 #: src/components/layouts/Event/index.tsx:186
 msgid "Event page"
@@ -2511,6 +2537,10 @@ msgstr "Go back to profile"
 #: src/components/routes/product-widget/CollectInformation/index.tsx:226
 msgid "Go to event homepage"
 msgstr "Go to event homepage"
+
+#: src/components/layouts/EventHomepage/EventNotAvailable/index.tsx:53
+msgid "Go to Hi.Events"
+msgstr "Go to Hi.Events"
 
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:120
 msgid "Go to Stripe Dashboard"
@@ -3032,6 +3062,10 @@ msgstr "Let's get started by creating your first organizer"
 #~ msgid "Link color"
 #~ msgstr "Link color"
 
+#: src/components/routes/event/Webhooks/index.tsx:21
+msgid "Loading Webhooks"
+msgstr "Loading Webhooks"
+
 #: src/components/common/ReportTable/index.tsx:210
 msgid "Loading..."
 msgstr "Loading..."
@@ -3281,7 +3315,7 @@ msgstr "My amazing event title..."
 msgid "My Profile"
 msgstr "My Profile"
 
-#: src/components/common/QuestionAndAnswerList/index.tsx:80
+#: src/components/common/QuestionAndAnswerList/index.tsx:79
 msgid "N/A"
 msgstr "N/A"
 
@@ -3309,7 +3343,7 @@ msgstr "Name"
 msgid "Name should be less than 150 characters"
 msgstr "Name should be less than 150 characters"
 
-#: src/components/common/QuestionAndAnswerList/index.tsx:83
+#: src/components/common/QuestionAndAnswerList/index.tsx:82
 msgid "Navigate to Attendee"
 msgstr "Navigate to Attendee"
 
@@ -3334,9 +3368,13 @@ msgstr "New Password"
 msgid "No"
 msgstr "No"
 
-#: src/components/common/QuestionAndAnswerList/index.tsx:105
+#: src/components/common/QuestionAndAnswerList/index.tsx:104
 msgid "No {0} available."
 msgstr "No {0} available."
+
+#: src/components/routes/event/Webhooks/index.tsx:22
+msgid "No Active Webhooks"
+msgstr "No Active Webhooks"
 
 #: src/components/common/NoEventsBlankSlate/index.tsx:21
 msgid "No archived events to show."
@@ -3397,6 +3435,10 @@ msgstr "No events to show"
 #: src/components/common/FilterModal/index.tsx:230
 msgid "No filters available"
 msgstr "No filters available"
+
+#: src/components/modals/WebhookLogsModal/index.tsx:177
+msgid "No logs found"
+msgstr "No logs found"
 
 #: src/components/common/MessageList/index.tsx:69
 msgid "No messages to show"
@@ -3481,6 +3523,10 @@ msgstr "No Taxes or Fees have been added."
 #: src/components/common/TicketsTable/index.tsx:65
 #~ msgid "No tickets to show"
 #~ msgstr "No tickets to show"
+
+#: src/components/modals/WebhookLogsModal/index.tsx:180
+msgid "No webhook events have been recorded for this endpoint yet. Events will appear here once they are triggered."
+msgstr "No webhook events have been recorded for this endpoint yet. Events will appear here once they are triggered."
 
 #: src/components/common/WebhookTable/index.tsx:201
 msgid "No Webhooks"
@@ -3957,6 +4003,10 @@ msgstr "Percentage"
 msgid "Percentage Amount"
 msgstr "Percentage Amount"
 
+#: src/components/routes/product-widget/Payment/index.tsx:122
+msgid "Place Order"
+msgstr "Place Order"
+
 #: src/components/common/WidgetEditor/index.tsx:257
 msgid "Place this in the <head> of your website."
 msgstr "Place this in the <head> of your website."
@@ -4211,8 +4261,13 @@ msgid "Product questions"
 msgstr "Product questions"
 
 #: src/components/routes/event/EventDashboard/index.tsx:85
+#: src/components/routes/event/Reports/index.tsx:17
 msgid "Product Sales"
 msgstr "Product Sales"
+
+#: src/components/routes/event/Reports/index.tsx:18
+msgid "Product sales, revenue, and tax breakdown"
+msgstr "Product sales, revenue, and tax breakdown"
 
 #: src/components/common/ProductSelector/index.tsx:63
 msgid "Product Tier"
@@ -4277,6 +4332,10 @@ msgstr "Promo {promo_code} code applied"
 #~ msgid "Promo {promoCode} code applied"
 #~ msgstr "Promo {promoCode} code applied"
 
+#: src/components/common/OrderDetails/index.tsx:86
+msgid "Promo code"
+msgstr "Promo code"
+
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:20
 msgid "Promo Code"
 msgstr "Promo Code"
@@ -4284,6 +4343,10 @@ msgstr "Promo Code"
 #: src/components/forms/ProductForm/index.tsx:409
 msgid "Promo Code page"
 msgstr "Promo Code page"
+
+#: src/components/routes/event/Reports/index.tsx:30
+msgid "Promo code usage and discount breakdown"
+msgstr "Promo code usage and discount breakdown"
 
 #: src/components/layouts/Event/index.tsx:62
 #: src/components/routes/event/promo-codes.tsx:31
@@ -4294,6 +4357,7 @@ msgstr "Promo Codes"
 msgid "Promo codes can be used to offer discounts, presale access, or provide special access to your event."
 msgstr "Promo codes can be used to offer discounts, presale access, or provide special access to your event."
 
+#: src/components/routes/event/Reports/index.tsx:29
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:95
 msgid "Promo Codes Report"
 msgstr "Promo Codes Report"
@@ -4423,7 +4487,7 @@ msgstr "Remove"
 #~ msgstr "Reply to email"
 
 #: src/components/layouts/Event/index.tsx:53
-#: src/components/routes/event/Reports/index.tsx:38
+#: src/components/routes/event/Reports/index.tsx:39
 msgid "Reports"
 msgstr "Reports"
 
@@ -5287,6 +5351,11 @@ msgstr "The default currency for your events."
 msgid "The default timezone for your events."
 msgstr "The default timezone for your events."
 
+#: src/components/layouts/EventHomepage/EventNotAvailable/index.tsx:16
+#: src/components/layouts/EventHomepage/EventNotAvailable/index.tsx:43
+msgid "The event you're looking for is not available at the moment. It may have been removed, expired, or the URL might be incorrect."
+msgstr "The event you're looking for is not available at the moment. It may have been removed, expired, or the URL might be incorrect."
+
 #: src/components/modals/CreateAttendeeModal/index.tsx:146
 msgid "The language the attendee will receive emails in."
 msgstr "The language the attendee will receive emails in."
@@ -5452,12 +5521,12 @@ msgid "This email is not promotional and is directly related to the event."
 msgstr "This email is not promotional and is directly related to the event."
 
 #: src/components/layouts/EventHomepage/EventNotAvailable/index.tsx:8
-msgid "This event is not available at the moment. Please check back later."
-msgstr "This event is not available at the moment. Please check back later."
+#~ msgid "This event is not available at the moment. Please check back later."
+#~ msgstr "This event is not available at the moment. Please check back later."
 
 #: src/components/layouts/EventHomepage/index.tsx:49
-msgid "This event is not available."
-msgstr "This event is not available."
+#~ msgid "This event is not available."
+#~ msgstr "This event is not available."
 
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:152
 msgid "This information will be shown on the payment page, order summary page, and order confirmation email."
@@ -5994,10 +6063,18 @@ msgstr "VAT"
 msgid "Venue Name"
 msgstr "Venue Name"
 
+#: src/components/common/LanguageSwitcher/index.tsx:28
+msgid "Vietnamese"
+msgstr "Vietnamese"
+
 #: src/components/modals/ManageAttendeeModal/index.tsx:217
 #: src/components/modals/ManageOrderModal/index.tsx:199
 msgid "View"
 msgstr "View"
+
+#: src/components/routes/event/Reports/index.tsx:38
+msgid "View and download reports for your event. Please note, only completed orders are included in these reports."
+msgstr "View and download reports for your event. Please note, only completed orders are included in these reports."
 
 #: src/components/common/AttendeeTable/index.tsx:164
 #~ msgid "View attendee"
@@ -6101,7 +6178,7 @@ msgstr "Webhook created successfully"
 msgid "Webhook deleted successfully"
 msgstr "Webhook deleted successfully"
 
-#: src/components/modals/WebhookLogsModal/index.tsx:105
+#: src/components/modals/WebhookLogsModal/index.tsx:151
 msgid "Webhook Logs"
 msgstr "Webhook Logs"
 
@@ -6118,7 +6195,7 @@ msgid "Webhook will send notifications"
 msgstr "Webhook will send notifications"
 
 #: src/components/layouts/Event/index.tsx:69
-#: src/components/routes/event/Webhooks/index.tsx:22
+#: src/components/routes/event/Webhooks/index.tsx:30
 msgid "Webhooks"
 msgstr "Webhooks"
 
@@ -6163,8 +6240,8 @@ msgstr "What is a Category?"
 #~ msgstr "What is a Tiered Ticketing?"
 
 #: src/components/routes/event/Webhooks/index.tsx:31
-msgid "What is a webhook?"
-msgstr "What is a webhook?"
+#~ msgid "What is a webhook?"
+#~ msgstr "What is a webhook?"
 
 #: src/components/forms/QuestionForm/index.tsx:159
 msgid "What products does this code apply to?"
