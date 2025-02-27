@@ -4,7 +4,7 @@ import {Modal} from "../../common/Modal";
 import {t} from "@lingui/macro";
 import {Center} from "../../common/Center";
 import {Alert, Badge, Code, Collapse, Group, Loader, Paper, Stack, Text} from "@mantine/core";
-import {IconCheck, IconChevronDown, IconChevronRight, IconX} from '@tabler/icons-react';
+import {IconCheck, IconChevronRight, IconX} from '@tabler/icons-react';
 import {GenericModalProps, IdParam} from "../../../types.ts";
 import {useState} from "react";
 import {relativeDate} from "../../../utilites/dates.ts";
@@ -33,25 +33,49 @@ const LogEntry = ({log}: { log: WebhookLog }) => {
         return 'red';
     };
 
+    const formatContent = (content?: string) => {
+        if (!content) return '';
+
+        try {
+            return JSON.stringify(JSON.parse(content), null, 2);
+        } catch (e) {
+            return content;
+        }
+    };
+
     return (
         <Paper
             withBorder
-            p="sm"
-            mb="xs"
+            p="md"
+            mb="md"
             onClick={() => setDetailsOpen(!detailsOpen)}
-            style={{cursor: 'pointer'}}
+            style={{
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+                boxShadow: detailsOpen ? '0 4px 8px rgba(0, 0, 0, 0.1)' : 'none',
+                borderRadius: '8px',
+                borderLeft: `4px solid var(--mantine-color-${getStatusColor(log.response_code)}-6)`
+            }}
         >
             <Group justify="space-between" wrap="nowrap">
-                <Group wrap="nowrap">
-                    {detailsOpen ? <IconChevronDown size={16}/> : <IconChevronRight size={16}/>}
+                <Group wrap="nowrap" gap="md">
+                    <div style={{
+                        color: `var(--mantine-color-${getStatusColor(log.response_code)}-6)`,
+                        transition: 'transform 0.2s ease',
+                        transform: detailsOpen ? 'rotate(90deg)' : 'rotate(0deg)'
+                    }}>
+                        <IconChevronRight size={20}/>
+                    </div>
                     <div>
-                        <Group wrap="nowrap" mb={4}>
-                            <Text fw={500} size="sm">
+                        <Group wrap="nowrap" mb={6} gap="xs">
+                            <Text fw={600} size="sm">
                                 {log.event_type}
                             </Text>
                             <Badge
                                 color={getStatusColor(log.response_code)}
-                                variant="light"
+                                variant="filled"
+                                size="sm"
+                                radius="sm"
                             >
                                 {log.response_code || 'No Response'}
                             </Badge>
@@ -62,30 +86,52 @@ const LogEntry = ({log}: { log: WebhookLog }) => {
                     </div>
                 </Group>
                 {log.response_code && (
-                    log.response_code >= 200 && log.response_code < 300 ?
-                        <IconCheck size={18} color="var(--mantine-color-green-6)"/> :
-                        <IconX size={18} color="var(--mantine-color-red-6)"/>
+                    <div style={{
+                        background: `var(--mantine-color-${getStatusColor(log.response_code)}-0)`,
+                        color: `var(--mantine-color-${getStatusColor(log.response_code)}-6)`,
+                        borderRadius: '50%',
+                        width: '28px',
+                        height: '28px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    }}>
+                        {log.response_code >= 200 && log.response_code < 300 ?
+                            <IconCheck size={18}/> :
+                            <IconX size={18}/>
+                        }
+                    </div>
                 )}
             </Group>
 
-            <Collapse in={detailsOpen}>
-                <Stack mt="md">
+            <Collapse in={detailsOpen} transitionDuration={300}>
+                <Stack mt="lg" gap="md">
                     {log.payload && (
-                        <>
-                            <Text size="sm" fw={500}>Payload:</Text>
-                            <Code block>
-                                {JSON.stringify(JSON.parse(log.payload), null, 2)}
+                        <div>
+                            <Text size="sm" fw={500} mb={8} c="dimmed">Payload:</Text>
+                            <Code block p="md" style={{
+                                borderRadius: '6px',
+                                maxHeight: '300px',
+                                overflow: 'auto',
+                                backgroundColor: 'var(--mantine-color-gray-0)'
+                            }}>
+                                {formatContent(log.payload)}
                             </Code>
-                        </>
+                        </div>
                     )}
 
                     {log.response_body && (
-                        <>
-                            <Text size="sm" fw={500}>Response:</Text>
-                            <Code block>
-                                {JSON.stringify(JSON.parse(log.response_body), null, 2)}
+                        <div>
+                            <Text size="sm" fw={500} mb={8} c="dimmed">Response:</Text>
+                            <Code block p="md" style={{
+                                borderRadius: '6px',
+                                maxHeight: '300px',
+                                overflow: 'auto',
+                                backgroundColor: 'var(--mantine-color-gray-0)'
+                            }}>
+                                {formatContent(log.response_body)}
                             </Code>
-                        </>
+                        </div>
                     )}
                 </Stack>
             </Collapse>
@@ -103,28 +149,41 @@ export const WebhookLogsModal = ({onClose, webhookId}: WebhookLogsModalProps) =>
             opened
             onClose={onClose}
             heading={t`Webhook Logs`}
-            size="lg"
+            size="xl"
         >
             {logsQuery.isLoading && (
                 <Center>
-                    <Loader/>
+                    <Stack align="center" gap="xs">
+                        <Loader size="md"/>
+                        <Text size="sm" c="dimmed">Loading webhook logs...</Text>
+                    </Stack>
                 </Center>
             )}
 
             {!!logsQuery.error && (
-                <Alert color="red">
+                <Alert
+                    color="red"
+                    title={t`Error loading logs`}
+                    icon={<IconX size={18}/>}
+                    radius="md"
+                >
                     {logsQuery.error.message}
                 </Alert>
             )}
 
-            {logs && logs.length === 0 && (
-                <Text c="dimmed" ta="center" py="xl">
-                    No logs found
-                </Text>
+            {logs && logs.length === 0 && !logsQuery.isLoading && (
+                <Alert style={{textAlign: 'center'}} radius="md">
+                    <h2>
+                        {t`No logs found`}
+                    </h2>
+                    <p>
+                        {t`No webhook events have been recorded for this endpoint yet. Events will appear here once they are triggered.`}
+                    </p>
+                </Alert>
             )}
 
             {logs && logs.length > 0 && (
-                <Stack>
+                <Stack gap="md">
                     {logs.map((log) => (
                         <LogEntry key={log.id} log={log}/>
                     ))}
