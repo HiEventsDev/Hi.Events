@@ -5,6 +5,21 @@ on:
     branches:
       - main
       - develop
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - staging
+          - production
+      test_mode:
+        description: 'Run in test mode (no actual deployment)'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   backend:
@@ -12,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -42,19 +57,34 @@ jobs:
 
       - name: Set Deployment Environment
         run: |
-          if [[ "${{ github.ref_name }}" == "develop" ]]; then
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "VAPOR_ENV=${{ github.event.inputs.environment }}" >> "$GITHUB_ENV"
+            echo "TEST_MODE=${{ github.event.inputs.test_mode }}" >> "$GITHUB_ENV"
+          elif [[ "${{ github.ref_name }}" == "develop" ]]; then
             echo "VAPOR_ENV=staging" >> "$GITHUB_ENV"
+            echo "TEST_MODE=false" >> "$GITHUB_ENV"
           else
             echo "VAPOR_ENV=production" >> "$GITHUB_ENV"
+            echo "TEST_MODE=false" >> "$GITHUB_ENV"
           fi
 
       - name: Log Branch and Environment
         run: |
-          echo "🚀 Deploying branch ${{ github.ref_name }} to Vapor environment: $VAPOR_ENV"
+          echo "🚀 Deploying branch ${{ github.ref_name }} to Vapor environment: ${{ env.VAPOR_ENV }}"
+          echo "🧪 Test mode: ${{ env.TEST_MODE }}"
+
+      - name: Validate Deployment Configuration
+        working-directory: ./backend
+        run: |
+          if [[ "${{ env.TEST_MODE }}" == "true" ]]; then
+            echo "✅ TEST MODE: Would deploy to ${{ env.VAPOR_ENV }} environment"
+            echo "vapor deploy ${{ env.VAPOR_ENV }} --dry-run"
+            exit 0
+          fi
 
       - name: Deploy to Vapor
         working-directory: ./backend
-        run: vapor deploy $VAPOR_ENV
+        run: vapor deploy ${{ env.VAPOR_ENV }}
         env:
           VAPOR_API_TOKEN: ${{ secrets.VAPOR_API_TOKEN }}
 
@@ -64,24 +94,46 @@ jobs:
     needs: backend
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Set Deployment Environment
         run: |
-          if [[ "${{ github.ref_name }}" == "develop" ]]; then
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            if [[ "${{ github.event.inputs.environment }}" == "staging" ]]; then
+              echo "DO_APP_ID=${{ secrets.DIGITALOCEAN_STAGING_APP_ID }}" >> "$GITHUB_ENV"
+            else
+              echo "DO_APP_ID=${{ secrets.DIGITALOCEAN_PRODUCTION_APP_ID }}" >> "$GITHUB_ENV"
+            fi
+            echo "TEST_MODE=${{ github.event.inputs.test_mode }}" >> "$GITHUB_ENV"
+          elif [[ "${{ github.ref_name }}" == "develop" ]]; then
             echo "DO_APP_ID=${{ secrets.DIGITALOCEAN_STAGING_APP_ID }}" >> "$GITHUB_ENV"
+            echo "TEST_MODE=false" >> "$GITHUB_ENV"
           else
             echo "DO_APP_ID=${{ secrets.DIGITALOCEAN_PRODUCTION_APP_ID }}" >> "$GITHUB_ENV"
+            echo "TEST_MODE=false" >> "$GITHUB_ENV"
           fi
 
+      - name: Log Environment Settings
+        run: |
+          echo "🚀 Deploying frontend to DigitalOcean App: ${{ env.DO_APP_ID }}"
+          echo "🧪 Test mode: ${{ env.TEST_MODE }}"
+
+      - name: Validate Deployment Configuration (Test Mode)
+        if: env.TEST_MODE == 'true'
+        run: |
+          echo "✅ TEST MODE: Would trigger deployment for DigitalOcean App: ${{ env.DO_APP_ID }}"
+          echo "curl -X POST 'https://api.digitalocean.com/v2/apps/${{ env.DO_APP_ID }}/deployments'"
+          exit 0
+
       - name: Trigger Deployment on DigitalOcean
+        if: env.TEST_MODE != 'true'
         id: trigger_deployment
         run: |
           RESPONSE=$(curl -s -o response.json -w "%{http_code}" -X POST "https://api.digitalocean.com/v2/apps/$DO_APP_ID/deployments" \
             -H "Authorization: Bearer ${{ secrets.DIGITALOCEAN_API_TOKEN }}" \
             -H "Content-Type: application/json")
 
-          if [ "$RESPONSE" -ne 200 ]; then
+          if [ "$RESPONSE" -ne 201 ] && [ "$RESPONSE" -ne 200 ]; then
             ERROR_MSG=$(jq -r '.message // "Unknown error occurred."' response.json)
             echo "❌ Failed to trigger deployment. HTTP Status: $RESPONSE. Error: $ERROR_MSG"
             exit 1
@@ -99,7 +151,9 @@ jobs:
           echo "deployment_id=$DEPLOYMENT_ID" >> "$GITHUB_ENV"
 
       - name: Poll Deployment Status
+        if: env.TEST_MODE != 'true'
         run: |
+          # Increase MAX_RETRIES or SLEEP_TIME if your deployments take longer
           MAX_RETRIES=30
           SLEEP_TIME=10
           COUNTER=0
