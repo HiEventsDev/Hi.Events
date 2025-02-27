@@ -153,8 +153,7 @@ jobs:
       - name: Poll Deployment Status
         if: env.TEST_MODE != 'true'
         run: |
-          # Increase MAX_RETRIES or SLEEP_TIME if your deployments take longer
-          MAX_RETRIES=30
+          MAX_RETRIES=60
           SLEEP_TIME=10
           COUNTER=0
 
