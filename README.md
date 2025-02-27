@@ -83,7 +83,7 @@ Hi.Events is designed to help you create, manage, and sell tickets for events of
 - **Homepage Designer:** Customize event pages with a live preview editor.
 - **Embeddable Ticket Widget:** Add a seamless ticketing experience to your website.
 - **SEO Tools:** Customize event metadata for better search visibility.
-- **Event Categories:** Organize products and tickets with category management.
+- **Product Categories:** Organize products and tickets with category management.
 - **Offline Event Support:** Provide instructions for physical events.
 
 ### 📧 Attendee & Order Management
@@ -100,7 +100,6 @@ Hi.Events is designed to help you create, manage, and sell tickets for events of
 
 ### 🔧 Integrations & Automation
 - **Webhooks Support:** Automate tasks with Zapier, IFTTT, Make, or CRM integrations.
-- **Salesforce & HubSpot Integrations:** Sync attendees and orders automatically.
 - **Stripe Connect Integration:** Organizers get instant payouts.
 
 ### 📊 Advanced Features
