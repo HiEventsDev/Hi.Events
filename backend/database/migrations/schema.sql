@@ -1,3 +1,5 @@
+-- DO NOT MODIFY THIS FILE. Create a new migration file instead.
+
 create table if not exists migrations
 (
     id        serial,
@@ -782,7 +784,8 @@ SELECT q.id   AS question_id,
        a.id   AS attendee_id,
        qa.order_id,
        q.title,
-       qa.answer
+       qa.answer,
+       qa.id as question_answer_id
 FROM question_answers qa
          LEFT JOIN attendees a ON a.id = qa.attendee_id
          JOIN orders o ON qa.order_id = o.id

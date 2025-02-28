@@ -32,7 +32,12 @@ export const questionClient = {
     },
     sortQuestions: async (eventId: IdParam, questionsSort: SortableItem[]) => {
         return await api.post(`/events/${eventId}/questions/sort`, questionsSort);
-    }
+    },
+    updateAnswerQuestion: async (eventId: IdParam, questionId: IdParam, answerId: IdParam, answer: string | string[]) => {
+        await api.put(`/events/${eventId}/questions/${questionId}/answer/${answerId}`, {
+            'answer': answer,
+        });
+    },
 }
 
 export const questionClientPublic = {

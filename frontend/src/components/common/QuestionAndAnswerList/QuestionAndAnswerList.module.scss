@@ -1,60 +1,67 @@
+/* QuestionAndAnswerList.module.scss */
 .container {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.5rem;
 }
 
 .section {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 0.75rem;
 }
 
 .sectionHeader {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--mantine-color-gray-2);
 }
 
 .questionsList {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
 }
 
 .questionCard {
   padding: 1rem;
-  border-radius: var(--mantine-radius-sm);
-  background: var(--mantine-color-gray-0);
-  border: 1px solid var(--mantine-color-gray-2);
-  transition: all 0.2s ease;
+  border-bottom: 1px solid var(--mantine-color-gray-3);
+}
 
-  &:hover {
-    border-color: var(--mantine-color-gray-3);
-  }
+.questionCard:last-child {
+  border-bottom: none;
 }
 
 .productTitle {
-  color: var(--mantine-color-gray-6);
   margin-bottom: 0.5rem;
+  color: var(--mantine-color-dimmed);
+  font-size: 0.875rem;
 }
 
 .questionTitle {
   display: flex;
   gap: 0.5rem;
+  margin-bottom: 0.5rem;
   align-items: flex-start;
-  margin-bottom: 0.75rem;
+}
 
-  svg {
-    margin-top: 0;
-  }
+.answerContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  border-radius: var(--mantine-radius-sm);
+  background-color: var(--mantine-color-gray-0);
+  transition: background-color 0.2s ease;
+}
+
+.answerContainer:hover {
+  background-color: var(--mantine-color-gray-1);
 }
 
 .answer {
-  color: var(--mantine-color-dark-9);
-  line-height: 1.5;
-  padding: 0.5rem 0;
+  flex: 1;
+  color: var(--mantine-color-dark-6);
+  word-break: break-word;
 }
 
 .attendeeInfo {
@@ -63,15 +70,90 @@
   gap: 0.5rem;
   margin-top: 0.75rem;
   padding-top: 0.75rem;
-  border-top: 1px solid var(--mantine-color-gray-2);
+  border-top: 1px dashed var(--mantine-color-gray-3);
 }
 
 .emptyState {
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.editContainer {
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  background-color: var(--tk-color-gray);
+  border-radius: var(--tk-radius-sm);
+  border: 1px solid var(--tk-color-gray-2);
+}
+
+.editActions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.75rem;
+}
+
+.questionsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.questionCard {
+  padding: 0.75rem;
+  background: var(--mantine-color-gray-0);
+  border: 1px solid var(--mantine-color-gray-2);
+  border-radius: var(--mantine-radius-sm);
+}
+
+.questionCompact {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--mantine-color-gray-1);
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.productTitle {
+  color: var(--mantine-color-gray-6);
+  margin-bottom: 0.5rem;
+  font-size: var(--mantine-font-size-xs);
+}
+
+.questionTitle {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.375rem;
+  align-items: flex-start;
+}
+
+.answerContainer {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.editContainer {
+  padding-left: 1.625rem;
+  margin-bottom: 0.5rem;
+}
+
+.editActions {
+  margin-top: 0.5rem;
+}
+
+.attendeeInfo {
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 2rem;
-  background: var(--mantine-color-gray-0);
-  border-radius: var(--mantine-radius-sm);
+  gap: 0.5rem;
+  margin-top: 0.625rem;
+  padding-top: 0.625rem;
+  border-top: 1px solid var(--mantine-color-gray-1);
   color: var(--mantine-color-gray-6);
+}
+
+.questionText {
+  color: #333;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 4px;
 }

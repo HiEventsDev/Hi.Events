@@ -12,7 +12,7 @@ import {IconEdit, IconNotebook, IconQuestionMark, IconReceipt, IconTicket, IconU
 import {LoadingMask} from "../../common/LoadingMask";
 import {AttendeeDetails} from "../../common/AttendeeDetails";
 import {OrderDetails} from "../../common/OrderDetails";
-import {QuestionAndAnswerList} from "../../common/QuestionAndAnswerList";
+import {QuestionAndAnswerList, QuestionList} from "../../common/QuestionAndAnswerList";
 import {AttendeeTicket} from "../../common/AttendeeTicket";
 import {getInitials} from "../../../utilites/helpers.ts";
 import {t} from "@lingui/macro";
@@ -34,7 +34,7 @@ interface ManageAttendeeModalProps extends GenericModalProps {
 
 export const ManageAttendeeModal = ({onClose, attendeeId}: ManageAttendeeModalProps) => {
     const {eventId} = useParams();
-    const {data: attendee} = useGetAttendee(eventId, attendeeId);
+    const {data: attendee, refetch: refetchAttendee} = useGetAttendee(eventId, attendeeId);
     const {data: order} = useGetOrder(eventId, attendee?.order_id);
     const {data: event} = useGetEvent(eventId);
     const errorHandler = useFormErrorResponseHandler();
@@ -184,7 +184,10 @@ export const ManageAttendeeModal = ({onClose, attendeeId}: ManageAttendeeModalPr
                     title: t`Questions & Answers`,
                     count: hasQuestions ? attendee?.question_answers?.length : undefined,
                     content: hasQuestions ? (
-                        <QuestionAndAnswerList questionAnswers={attendee.question_answers as QuestionAnswer[]}/>
+                        <QuestionList
+                            onEditAnswer={refetchAttendee}
+                            questions={attendee.question_answers as QuestionAnswer[]}
+                        />
                     ) : (
                         <Text c="dimmed" ta="center" py="xl">
                             {t`No questions answered by this attendee.`}

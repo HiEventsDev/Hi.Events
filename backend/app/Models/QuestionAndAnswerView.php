@@ -14,6 +14,7 @@ class QuestionAndAnswerView extends Model
 
     protected $casts = [
         'answer' => 'array',
+        'question_options' => 'array',
     ];
 
     public function attendee(): BelongsTo

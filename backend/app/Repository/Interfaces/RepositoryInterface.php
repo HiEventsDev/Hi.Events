@@ -5,6 +5,7 @@ namespace HiEvents\Repository\Interfaces;
 use Exception;
 use HiEvents\DomainObjects\Interfaces\DomainObjectInterface;
 use HiEvents\Repository\Eloquent\Value\OrderAndDirection;
+use HiEvents\Repository\Eloquent\Value\Relationship;
 use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -198,4 +199,6 @@ interface RepositoryInterface
     public function incrementEach(array $columns, array $additionalUpdates = [], ?array $where = null);
 
     public function includeDeleted(): static;
+
+    public function loadRelation(string|Relationship $relationship): static;
 }

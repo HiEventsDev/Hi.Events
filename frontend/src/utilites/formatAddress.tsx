@@ -12,3 +12,4 @@ export const formatAddress = (address: VenueAddress) => {
 
     return addressLines.filter((line) => line).join(', ');
 }
+
