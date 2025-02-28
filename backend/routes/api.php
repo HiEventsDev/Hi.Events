@@ -110,7 +110,6 @@ use HiEvents\Http\Actions\Users\CancelEmailChangeAction;
 use HiEvents\Http\Actions\Users\ConfirmEmailAddressAction;
 use HiEvents\Http\Actions\Users\ConfirmEmailChangeAction;
 use HiEvents\Http\Actions\Users\CreateUserAction;
-use HiEvents\Http\Actions\Users\DeactivateUsersAction;
 use HiEvents\Http\Actions\Users\DeleteInvitationAction;
 use HiEvents\Http\Actions\Users\GetMeAction;
 use HiEvents\Http\Actions\Users\GetUserAction;
@@ -164,7 +163,6 @@ $router->middleware(['auth:api'])->group(
         $router->get('/users', GetUsersAction::class);
         $router->get('/users/{user_id}', GetUserAction::class);
         $router->put('/users/{user_id}', UpdateUserAction::class);
-        $router->delete('/users/{user_id}', DeactivateUsersAction::class);
         $router->post('/users/{user_id}/email-change/{token}', ConfirmEmailChangeAction::class);
         $router->post('/users/{user_id}/invitation', ResendInvitationAction::class);
         $router->delete('/users/{user_id}/invitation', DeleteInvitationAction::class);
