@@ -1,6 +1,5 @@
 import {IconCalendar, IconExternalLink, IconMapPin} from "@tabler/icons-react";
 import classes from "./EventInformation.module.scss";
-import {prettyDate} from "../../../../utilites/dates.ts";
 import {formatAddress} from "../../../../utilites/formatAddress.tsx";
 import {t} from "@lingui/macro";
 import {Button} from "@mantine/core";
@@ -22,8 +21,8 @@ export const EventInformation: FC<{
     return (
         <>
             <div className={classes.preHeading}>
-                <div className={classes.date}>
-                    {prettyDate(event.start_date, event.timezone)}
+                <div className={classes.organizer}>
+                    {event.organizer?.name}
                 </div>
                 <div className={classes.shareButtons}>
                     <ShareComponent
@@ -37,7 +36,6 @@ export const EventInformation: FC<{
             <h1 className={classes.eventTitle}>{event.title}</h1>
             <div className={classes.eventInfo}>
                 <div className={classes.eventDetail}>
-                    <h2>{t`Date & Time`}</h2>
                     <div className={classes.details}>
                         <IconCalendar size={20}/>
                         <div>
@@ -48,9 +46,8 @@ export const EventInformation: FC<{
 
                 {event.settings?.location_details && (
                     <div className={classes.eventDetail}>
-                        <h2>{t`Location`}</h2>
                         <div className={classes.details}>
-                            <IconMapPin size={25}/>
+                            <IconMapPin size={20}/>
                             <div className={classes.detail}>
                                 <b>{event.settings?.location_details?.venue_name}</b>
                                 <div>{formatAddress(event.settings?.location_details)}</div>

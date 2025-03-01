@@ -26,7 +26,7 @@ class LoginAction extends BaseAuthAction
             $loginResponse = $this->loginHandler->handle(new LoginCredentialsDTO(
                 email: strtolower($request->validated('email')),
                 password: $request->validated('password'),
-                accountId: $request->validated('account_id'),
+                accountId: (int)$request->validated('account_id'),
             ));
         } catch (UnauthorizedException $e) {
             return $this->errorResponse(

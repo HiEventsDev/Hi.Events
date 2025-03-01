@@ -32,6 +32,7 @@ class OrderQuestionRule extends BaseQuestionRule
             $questionDomainObject = $this->getQuestionDomainObject($orderQuestion['question_id']);
             $key = 'order.questions.' . $index . '.response';
             $response = $orderQuestion['response'] ?? null;
+            $answer = $response['answer'] ?? $response;
 
             if (!$questionDomainObject) {
                 $validationMessages[$key . '.answer'][] = 'This question is outdated. Please reload the page.';
@@ -46,7 +47,7 @@ class OrderQuestionRule extends BaseQuestionRule
                 $validationMessages = $this->validateRequiredFields($questionDomainObject, $response, $key, $validationMessages);
             }
 
-            if (!$this->isAnswerValid($questionDomainObject, $response)) {
+            if (!$questionDomainObject->isAnswerValid($answer)) {
                 $validationMessages[$key . '.answer'][] = 'Please select an option';
             }
 

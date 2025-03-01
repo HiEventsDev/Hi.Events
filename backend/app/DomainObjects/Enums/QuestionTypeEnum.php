@@ -16,4 +16,12 @@ enum QuestionTypeEnum
     case DROPDOWN;
     case MULTI_SELECT_DROPDOWN;
     case DATE;
+
+    public static function getMultipleChoiceTypes(): array
+    {
+        return [
+            self::CHECKBOX,
+            self::MULTI_SELECT_DROPDOWN,
+        ];
+    }
 }

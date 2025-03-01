@@ -97,6 +97,7 @@ use HiEvents\Http\Actions\PromoCodes\UpdatePromoCodeAction;
 use HiEvents\Http\Actions\Questions\CreateQuestionAction;
 use HiEvents\Http\Actions\Questions\DeleteQuestionAction;
 use HiEvents\Http\Actions\Questions\EditQuestionAction;
+use HiEvents\Http\Actions\Questions\EditQuestionAnswerAction;
 use HiEvents\Http\Actions\Questions\GetQuestionAction;
 use HiEvents\Http\Actions\Questions\GetQuestionsAction;
 use HiEvents\Http\Actions\Questions\GetQuestionsPublicAction;
@@ -110,7 +111,6 @@ use HiEvents\Http\Actions\Users\CancelEmailChangeAction;
 use HiEvents\Http\Actions\Users\ConfirmEmailAddressAction;
 use HiEvents\Http\Actions\Users\ConfirmEmailChangeAction;
 use HiEvents\Http\Actions\Users\CreateUserAction;
-use HiEvents\Http\Actions\Users\DeactivateUsersAction;
 use HiEvents\Http\Actions\Users\DeleteInvitationAction;
 use HiEvents\Http\Actions\Users\GetMeAction;
 use HiEvents\Http\Actions\Users\GetUserAction;
@@ -164,7 +164,6 @@ $router->middleware(['auth:api'])->group(
         $router->get('/users', GetUsersAction::class);
         $router->get('/users/{user_id}', GetUserAction::class);
         $router->put('/users/{user_id}', UpdateUserAction::class);
-        $router->delete('/users/{user_id}', DeactivateUsersAction::class);
         $router->post('/users/{user_id}/email-change/{token}', ConfirmEmailChangeAction::class);
         $router->post('/users/{user_id}/invitation', ResendInvitationAction::class);
         $router->delete('/users/{user_id}/invitation', DeleteInvitationAction::class);
@@ -248,6 +247,7 @@ $router->middleware(['auth:api'])->group(
         $router->get('/events/{event_id}/questions', GetQuestionsAction::class);
         $router->post('/events/{event_id}/questions/export', ExportOrdersAction::class);
         $router->post('/events/{event_id}/questions/sort', SortQuestionsAction::class);
+        $router->put('/events/{event_id}/questions/{question_id}/answer/{answer_id}', EditQuestionAnswerAction::class);
 
         // Images
         $router->post('/events/{event_id}/images', CreateEventImageAction::class);

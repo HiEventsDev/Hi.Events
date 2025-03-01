@@ -1,15 +1,15 @@
-id: 68983
+id: 69938
 name: HiEvents
 environments:
   production:
     gateway-version: 2.0
     domain: api.hi.events
-    memory: 1408
+    memory: 2048
     cli-memory: 512
     runtime: 'php-8.3:al2'
     warm: 3
-    cache: hievents-redis-prod
-    database: hievents-db-prod
+    cache: hievents-redis
+    database: hievents-postgres
     queues:
       - hievents-queue-prod
       - hievents-webhook-queue-prod
@@ -28,8 +28,8 @@ environments:
     cli-memory: 512
     runtime: 'php-8.3:al2'
     warm: 3
-    cache: hievents-redis-prod
-    database: hievents-db-prod
+    cache: hievents-redis
+    database: hievents-postgres
     queue:
       - hievents-queue-prod
       - hievents-webhook-queue-staging
