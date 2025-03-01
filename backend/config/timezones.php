@@ -2,7 +2,6 @@
 
 return [
     'deprecated' => [
-        // Standard Deprecated Timezones
         'Asia/Calcutta' => 'Asia/Kolkata',
         'Asia/Saigon' => 'Asia/Ho_Chi_Minh',
         'America/Buenos_Aires' => 'America/Argentina/Buenos_Aires',
@@ -15,7 +14,6 @@ return [
         'Pacific/Yap' => 'Pacific/Chuuk',
         'Etc/Greenwich' => 'Etc/GMT',
 
-        // Corrected Etc/GMT Mappings
         'Etc/GMT+1' => 'Atlantic/Azores',      // UTC-1
         'Etc/GMT+2' => 'Atlantic/South_Georgia', // UTC-2
         'Etc/GMT+3' => 'America/Argentina/Buenos_Aires', // UTC-3
@@ -40,7 +38,6 @@ return [
         'Etc/GMT-11' => 'Pacific/Noumea',      // UTC+11
         'Etc/GMT-12' => 'Pacific/Fiji',        // UTC+12
 
-        // Additional Deprecated Timezones (Unchanged)
         'Africa/Timbuktu' => 'Africa/Bamako',
         'America/Argentina/ComodRivadavia' => 'America/Argentina/Catamarca',
         'America/Atka' => 'America/Adak',
