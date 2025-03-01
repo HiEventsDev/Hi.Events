@@ -19,88 +19,12 @@
 .questionsList {
   display: flex;
   flex-direction: column;
-}
-
-.questionCard {
-  padding: 1rem;
-  border-bottom: 1px solid var(--mantine-color-gray-3);
-}
-
-.questionCard:last-child {
-  border-bottom: none;
-}
-
-.productTitle {
-  margin-bottom: 0.5rem;
-  color: var(--mantine-color-dimmed);
-  font-size: 0.875rem;
-}
-
-.questionTitle {
-  display: flex;
-  gap: 0.5rem;
-  margin-bottom: 0.5rem;
-  align-items: flex-start;
-}
-
-.answerContainer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 0.5rem;
-  padding: 0.5rem;
-  border-radius: var(--mantine-radius-sm);
-  background-color: var(--mantine-color-gray-0);
-  transition: background-color 0.2s ease;
-}
-
-.answerContainer:hover {
-  background-color: var(--mantine-color-gray-1);
-}
-
-.answer {
-  flex: 1;
-  color: var(--mantine-color-dark-6);
-  word-break: break-word;
-}
-
-.attendeeInfo {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 0.75rem;
-  padding-top: 0.75rem;
-  border-top: 1px dashed var(--mantine-color-gray-3);
-}
-
-.emptyState {
-  padding: 1.5rem;
-  text-align: center;
-}
-
-.editContainer {
-  margin-top: 0.75rem;
-  padding: 0.75rem;
-  background-color: var(--tk-color-gray);
-  border-radius: var(--tk-radius-sm);
-  border: 1px solid var(--tk-color-gray-2);
-}
-
-.editActions {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 0.75rem;
-}
-
-.questionsList {
-  display: flex;
-  flex-direction: column;
   gap: 0.75rem;
 }
 
 .questionCard {
   padding: 0.75rem;
-  background: var(--mantine-color-gray-0);
+  background: #ffffff;
   border: 1px solid var(--mantine-color-gray-2);
   border-radius: var(--mantine-radius-sm);
 }
@@ -133,9 +57,17 @@
   gap: 0.5rem;
 }
 
+.answer {
+  flex: 1;
+  color: var(--mantine-color-dark-6);
+  word-break: break-word;
+}
+
 .editContainer {
-  padding-left: 1.625rem;
-  margin-bottom: 0.5rem;
+  padding: 0.5rem;
+  background: var(--mantine-color-gray-0);
+  border: 1px solid var(--mantine-color-gray-2);
+  border-radius: var(--mantine-radius-sm);
 }
 
 .editActions {
@@ -152,8 +84,52 @@
   color: var(--mantine-color-gray-6);
 }
 
+.emptyState {
+  padding: 1.5rem;
+  text-align: center;
+}
+
 .questionText {
   color: #333;
   border-bottom: 1px solid #f0f0f0;
   padding-bottom: 4px;
+}
+
+/* New styles for attendee-focused layout */
+.attendeeQuestionsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.attendeeSection {
+  border: 1px solid var(--mantine-color-gray-3);
+  border-radius: var(--mantine-radius-sm);
+  overflow: hidden;
+  background: var(--mantine-color-gray-0);
+}
+
+.attendeeHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  background-color: var(--mantine-color-gray-1);
+  border-bottom: 1px solid var(--mantine-color-gray-3);
+}
+
+.attendeeQuestions {
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* In compact mode, adjust spacing in attendee sections */
+.questionCompact:first-child {
+  padding-top: 0.25rem;
+}
+
+.questionCompact:last-child {
+  padding-bottom: 0.25rem;
 }

@@ -28,7 +28,6 @@ class EditQuestionAnswerAction extends BaseAction
     {
         $this->isActionAuthorized($eventId, EventDomainObject::class);
 
-
         try {
             $this->editQuestionAnswerHandler->handle(new EditQuestionAnswerDTO(
                 questionAnswerId: $questionAnswerId,
