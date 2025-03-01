@@ -713,8 +713,13 @@ export interface QuestionAnswer {
     belongs_to: string;
     question_type: string;
     attendee_id?: number;
+    attendee_public_id?: IdParam;
     first_name?: string;
     last_name?: string;
+    question_answer_id?: IdParam;
+    question_description?: string;
+    question_required?: boolean;
+    question_options?: string[];
 }
 
 export enum ReportTypes {

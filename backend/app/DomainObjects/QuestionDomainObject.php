@@ -40,4 +40,20 @@ class QuestionDomainObject extends Generated\QuestionDomainObjectAbstract
         return $this;
     }
 
+    public function isAnswerValid(mixed $answer): bool
+    {
+        if (!isset($answer)) {
+            return false;
+        }
+
+        if (!$this->isPreDefinedChoice()) {
+            return true;
+        }
+
+        if (is_string($answer)) {
+            return in_array($answer, $this->getOptions(), true);
+        }
+
+        return array_diff((array)$answer, $this->getOptions()) === [];
+    }
 }

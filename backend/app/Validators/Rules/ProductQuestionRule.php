@@ -59,6 +59,7 @@ class ProductQuestionRule extends BaseQuestionRule
                 $questionDomainObject = $this->getQuestionDomainObject($question['question_id'] ?? null);
                 $key = 'products.' . $productIndex . '.questions.' . $questionIndex . '.response';
                 $response = empty($question['response']) ? null : $question['response'];
+                $answer = $response['answer'] ?? $response;
 
                 if (!$questionDomainObject) {
                     $validationMessages[$key . '.answer'][] = __('This question is outdated. Please reload the page.');
@@ -73,7 +74,7 @@ class ProductQuestionRule extends BaseQuestionRule
                     $validationMessages = $this->validateRequiredFields($questionDomainObject, $response, $key, $validationMessages);
                 }
 
-                if (!$this->isAnswerValid($questionDomainObject, $response)) {
+                if (!$questionDomainObject->isAnswerValid($answer)) {
                     $validationMessages[$key . '.answer'][] = __('Please select an option');
                 }
 

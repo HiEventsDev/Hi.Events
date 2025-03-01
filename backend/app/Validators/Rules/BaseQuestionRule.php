@@ -85,23 +85,6 @@ abstract class BaseQuestionRule implements ValidationRule, DataAwareRule, Valida
         return $productPrice->getProductId();
     }
 
-    protected function isAnswerValid(QuestionDomainObject $questionDomainObject, mixed $response): bool
-    {
-        if (!$questionDomainObject->isPreDefinedChoice()) {
-            return true;
-        }
-
-        if (!isset($response['answer'])) {
-            return false;
-        }
-
-        if (is_string($response['answer'])) {
-            return in_array($response['answer'], $questionDomainObject->getOptions(), true);
-        }
-
-        return array_diff((array)$response['answer'], $questionDomainObject->getOptions()) === [];
-    }
-
     protected function getQuestionDomainObject(?int $questionId): ?QuestionDomainObject
     {
         if ($questionId === null) {

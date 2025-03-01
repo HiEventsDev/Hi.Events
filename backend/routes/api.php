@@ -97,6 +97,7 @@ use HiEvents\Http\Actions\PromoCodes\UpdatePromoCodeAction;
 use HiEvents\Http\Actions\Questions\CreateQuestionAction;
 use HiEvents\Http\Actions\Questions\DeleteQuestionAction;
 use HiEvents\Http\Actions\Questions\EditQuestionAction;
+use HiEvents\Http\Actions\Questions\EditQuestionAnswerAction;
 use HiEvents\Http\Actions\Questions\GetQuestionAction;
 use HiEvents\Http\Actions\Questions\GetQuestionsAction;
 use HiEvents\Http\Actions\Questions\GetQuestionsPublicAction;
@@ -246,6 +247,7 @@ $router->middleware(['auth:api'])->group(
         $router->get('/events/{event_id}/questions', GetQuestionsAction::class);
         $router->post('/events/{event_id}/questions/export', ExportOrdersAction::class);
         $router->post('/events/{event_id}/questions/sort', SortQuestionsAction::class);
+        $router->put('/events/{event_id}/questions/{question_id}/answer/{answer_id}', EditQuestionAnswerAction::class);
 
         // Images
         $router->post('/events/{event_id}/images', CreateEventImageAction::class);
