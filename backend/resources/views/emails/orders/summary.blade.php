@@ -21,7 +21,17 @@
 <div style="border-radius: 4px; background-color: #d7e8f8; color: #204e84; margin-bottom: 1.5rem; padding: 1rem;">
 <h2>{{ __('Payment Instructions') }}</h2>
 {{ __('Please follow the instructions below to complete your payment.') }}
-{!! $eventSettings->getOfflinePaymentInstructions() !!}
+{!! $eventSettings->getProcessedOfflinePaymentInstructions([
+    'order_short_id' => $order->getShortId(),
+    'order_public_id' => $order->getPublicId(),
+    'order_first_name' => $order->getFirstName(),
+    'order_last_name' => $order->getLastName(),
+    'order_email' => $order->getEmail(),
+    'order_total_gross' => $order->getTotalGross(),
+    'order_currency' => $event->getCurrency(),
+    'order_items' => $order->getOrderItems(),
+    'client_language' => app()->getLocale()
+]) !!}
 </div>
 </div>
 @endif
