@@ -6,9 +6,11 @@ import {Button} from "@mantine/core";
 import {LoadingMask} from "../../../common/LoadingMask";
 import {ShareComponent} from "../../../common/ShareIcon";
 import {eventCoverImageUrl, eventHomepageUrl} from "../../../../utilites/urlHelper.ts";
-import {FC} from "react";
+import {FC, useMemo} from "react";
 import {Event} from "../../../../types.ts";
 import {EventDateRange} from "../../../common/EventDateRange";
+import { getClientLocale } from "../../../../locales.ts";
+import { Liquid } from "liquidjs";
 
 export const EventInformation: FC<{
     event: Event
@@ -17,6 +19,21 @@ export const EventInformation: FC<{
     if (!event) {
         return <LoadingMask/>;
     }
+    
+    const processedDescription = useMemo(() => {
+        if (!event.description) return '';
+        
+        const engine = new Liquid();
+        try {
+            const clientLocale = getClientLocale();
+            return engine.parseAndRenderSync(event.description, {
+                client_language: clientLocale
+            });
+        } catch (error) {
+            console.error("Error processing liquid template:", error);
+            return event.description;
+        }
+    }, [event.description]);
 
     return (
         <>
@@ -75,7 +92,7 @@ export const EventInformation: FC<{
                 <div className={classes.eventDescription}>
                     <h2>{t`About`}</h2>
                     <div dangerouslySetInnerHTML={{
-                        __html: event.description || '',
+                        __html: processedDescription,
                     }}/>
                 </div>
             )}
