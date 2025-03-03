@@ -64,8 +64,9 @@ class StripePaymentIntentCreationService
 
             $applicationFee = $this->orderApplicationFeeCalculationService->calculateApplicationFee(
                 accountConfiguration: $paymentIntentDTO->account->getConfiguration(),
-                orderTotal: $paymentIntentDTO->amount / 100
-            );
+                orderTotal: $paymentIntentDTO->amount / 100,
+                currency: $paymentIntentDTO->currencyCode,
+            )->toMinorUnit();
 
             $paymentIntent = $this->stripeClient->paymentIntents->create([
                 'amount' => $paymentIntentDTO->amount,

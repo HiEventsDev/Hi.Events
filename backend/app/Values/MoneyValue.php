@@ -46,6 +46,11 @@ class MoneyValue
         return new self($this->money->plus($other->getMoney()));
     }
 
+    public static function zero(string $currency): MoneyValue
+    {
+        return new self(Money::zero($currency));
+    }
+
     /**
      * @throws UnknownCurrencyException
      * @throws NumberFormatException
