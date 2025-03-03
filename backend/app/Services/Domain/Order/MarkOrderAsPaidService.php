@@ -6,6 +6,7 @@ use HiEvents\DomainObjects\AccountConfigurationDomainObject;
 use HiEvents\DomainObjects\AccountDomainObject;
 use HiEvents\DomainObjects\Enums\PaymentProviders;
 use HiEvents\DomainObjects\Enums\WebhookEventType;
+use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
@@ -116,8 +117,8 @@ class MarkOrderAsPaidService
 
     private function storeApplicationFeePayment(OrderDomainObject $updatedOrder): void
     {
-        /** @var AccountConfigurationDomainObject $config */
-        $config = $this->eventRepository
+        /** @var EventDomainObject $event */
+        $event = $this->eventRepository
             ->loadRelation(new Relationship(
                 domainObject: AccountDomainObject::class,
                 nested: [
@@ -128,16 +129,18 @@ class MarkOrderAsPaidService
                 ],
                 name: 'account'
             ))
-            ->findById($updatedOrder->getEventId())
-            ->getAccount()
-            ->getConfiguration();
+            ->findById($updatedOrder->getEventId());
+
+        /** @var AccountConfigurationDomainObject $config */
+        $config = $event->getAccount()->getConfiguration();
 
         $this->orderApplicationFeeService->createOrderApplicationFee(
             orderId: $updatedOrder->getId(),
             applicationFeeAmount: $this->orderApplicationFeeCalculationService->calculateApplicationFee(
                 $config,
                 $updatedOrder->getTotalGross(),
-            ),
+                $event->getCurrency(),
+            )->toFloat(),
             orderApplicationFeeStatus: OrderApplicationFeeStatus::AWAITING_PAYMENT,
             paymentMethod: PaymentProviders::OFFLINE,
         );

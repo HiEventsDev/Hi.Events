@@ -221,4 +221,6 @@ return [
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 
+
+    'is_hi_events' => env('APP_IS_HI_EVENTS', false),
 ];
