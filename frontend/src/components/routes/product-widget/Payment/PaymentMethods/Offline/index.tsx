@@ -19,16 +19,14 @@ export const OfflinePaymentMethod = ({ event, order }: OfflinePaymentMethodProps
         if (!text || !order) return text;
 
         const variables = {
-            order: {
-                short_id: order.short_id,
-                public_id: order.public_id,
-                first_name: order.first_name,
-                last_name: order.last_name,
-                email: order.email,
-                total_gross: order.total_gross,
-                currency: order.currency,
-                items: order.order_items
-            },
+            order_short_id: order.short_id,
+            order_public_id: order.public_id,
+            order_first_name: order.first_name,
+            order_last_name: order.last_name,
+            order_email: order.email,
+            order_total_gross: order.total_gross,
+            order_currency: order.currency,
+            order_items: order.order_items,
             client_language: getClientLocale()
         };
 
