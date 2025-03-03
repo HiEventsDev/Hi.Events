@@ -28,7 +28,7 @@ class OrderApplicationFeeService
             OrderApplicationFeeDomainObjectAbstract::STATUS => $orderApplicationFeeStatus->value,
             OrderApplicationFeeDomainObjectAbstract::PAYMENT_METHOD => $paymentMethod->value,
             OrderApplicationFeeDomainObjectAbstract::PAID_AT => $orderApplicationFeeStatus->value === OrderApplicationFeeStatus::PAID->value
-                ? now()
+                ? now()->toDateTimeString()
                 : null,
         ]);
     }

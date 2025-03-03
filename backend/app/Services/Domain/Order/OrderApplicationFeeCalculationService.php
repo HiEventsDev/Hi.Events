@@ -3,6 +3,7 @@
 namespace HiEvents\Services\Domain\Order;
 
 use HiEvents\DomainObjects\AccountConfigurationDomainObject;
+use HiEvents\Values\MoneyValue;
 use Illuminate\Config\Repository;
 
 class OrderApplicationFeeCalculationService
@@ -15,16 +16,20 @@ class OrderApplicationFeeCalculationService
 
     public function calculateApplicationFee(
         AccountConfigurationDomainObject $accountConfiguration,
-        float                            $orderTotal
-    ): float
+        float                            $orderTotal,
+        string                           $currency
+    ): MoneyValue
     {
         if (!$this->config->get('app.saas_mode_enabled')) {
-            return 0;
+            return MoneyValue::zero($currency);
         }
 
         $fixedFee = $accountConfiguration->getFixedApplicationFee();
         $percentageFee = $accountConfiguration->getPercentageApplicationFee();
 
-        return ($fixedFee) + ($orderTotal * ($percentageFee / 100));
+        return MoneyValue::fromFloat(
+            amount: $fixedFee + ($orderTotal * $percentageFee / 100),
+            currency: $currency
+        );
     }
 }

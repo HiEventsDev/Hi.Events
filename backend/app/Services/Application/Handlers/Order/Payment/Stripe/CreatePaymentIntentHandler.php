@@ -10,7 +10,9 @@ use Brick\Money\Money;
 use HiEvents\DomainObjects\AccountConfigurationDomainObject;
 use HiEvents\DomainObjects\Generated\StripePaymentDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderItemDomainObject;
+use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\DomainObjects\StripePaymentDomainObject;
+use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Exceptions\Stripe\CreatePaymentIntentFailedException;
 use HiEvents\Exceptions\UnauthorizedException;
 use HiEvents\Repository\Eloquent\Value\Relationship;
@@ -56,6 +58,10 @@ readonly class CreatePaymentIntentHandler
 
         if (!$order || !$this->sessionIdentifierService->verifySession($order->getSessionId())) {
             throw new UnauthorizedException(__('Sorry, we could not verify your session. Please create a new order.'));
+        }
+
+        if ($order->getStatus() !== OrderStatus::RESERVED->name || $order->isReservedOrderExpired()) {
+            throw new ResourceConflictException(__('Sorry, is expired or not in a valid state.'));
         }
 
         $account = $this->accountRepository
