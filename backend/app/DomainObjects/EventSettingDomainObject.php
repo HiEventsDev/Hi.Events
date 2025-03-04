@@ -4,6 +4,8 @@ namespace HiEvents\DomainObjects;
 
 use HiEvents\DataTransferObjects\AddressDTO;
 use HiEvents\Helper\AddressHelper;
+use Liquid\Liquid;
+use Liquid\Template;
 
 class EventSettingDomainObject extends Generated\EventSettingDomainObjectAbstract
 {
@@ -40,5 +42,32 @@ HTML;
             zip_or_postal_code: $this->getLocationDetails()['zip_or_postal_code'] ?? null,
             country: $this->getLocationDetails()['country'] ?? null,
         );
+    }
+
+    /**
+     * Get the offline payment instructions with Liquid template variables processed
+     * 
+     * @param array $variables Variables to use in template processing
+     * @return string|null Processed instructions or null if no instructions set
+     */
+    public function getProcessedOfflinePaymentInstructions(array $variables = []): ?string
+    {
+        $instructions = $this->getOfflinePaymentInstructions();
+        if (!$instructions) {
+            return null;
+        }
+
+        try {
+            $template = new Template();
+            $template->parse($instructions);
+            return $template->render($variables);
+        } catch (\Throwable $e) {
+            // If template processing fails, return original instructions
+            \Log::error('Error processing Liquid template for offline payment instructions', [
+                'error' => $e->getMessage(),
+                'instructions' => $instructions
+            ]);
+            return $instructions;
+        }
     }
 }
