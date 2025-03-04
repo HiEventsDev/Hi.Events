@@ -94,10 +94,6 @@ class EditProductHandler
             attributes: [
                 'title' => $productsData->title,
                 'type' => $productsData->type->name,
-                'order' => $this->productOrderingService->getOrderForNewProduct(
-                    eventId: $productsData->event_id,
-                    productCategoryId: $productCategory->getId(),
-                ),
                 'sale_start_date' => $productsData->sale_start_date
                     ? DateHelper::convertToUTC($productsData->sale_start_date, $event->getTimezone())
                     : null,
