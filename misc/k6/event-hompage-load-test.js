@@ -3,11 +3,11 @@ import { check, sleep } from 'k6';
 
 export let options = {
     vus: 50,
-    duration: '60s', // Using '60s' instead of '60000' for clarity
+    duration: '5s',
 };
 
 export default function () {
-    let res = http.get('https://api.hi.events/public/events/1', {
+    let res = http.get('https://api.hi.events/public/events/2', {
         headers: {
             'Accept': 'application/json',
         },
