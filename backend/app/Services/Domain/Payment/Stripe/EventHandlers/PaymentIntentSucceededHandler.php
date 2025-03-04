@@ -120,7 +120,7 @@ class PaymentIntentSucceededHandler
             attributes: [
                 StripePaymentDomainObjectAbstract::LAST_ERROR => $paymentIntent->last_payment_error?->toArray(),
                 StripePaymentDomainObjectAbstract::AMOUNT_RECEIVED => $paymentIntent->amount_received,
-                StripePaymentDomainObjectAbstract::APPLICATION_FEE => $paymentIntent->application_fee_amount,
+                StripePaymentDomainObjectAbstract::APPLICATION_FEE => $paymentIntent->application_fee_amount ?? 0,
                 StripePaymentDomainObjectAbstract::PAYMENT_METHOD_ID => is_string($paymentIntent->payment_method)
                     ? $paymentIntent->payment_method
                     : $paymentIntent->payment_method?->id,
