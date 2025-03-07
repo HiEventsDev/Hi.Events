@@ -5,7 +5,6 @@ namespace HiEvents\Repository\Eloquent;
 use HiEvents\DomainObjects\CheckInListDomainObject;
 use HiEvents\DomainObjects\Generated\CapacityAssignmentDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\CheckInListDomainObjectAbstract;
-use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Models\CheckInList;
 use HiEvents\Repository\DTO\CheckedInAttendeesCountDTO;
@@ -33,15 +32,24 @@ class CheckInListRepository extends BaseRepository implements CheckInListReposit
                 SELECT attendee_id, check_in_list_id
                 FROM attendee_check_ins
                 WHERE deleted_at IS NULL
+                AND check_in_list_id = :check_in_list_id
                 GROUP BY attendee_id, check_in_list_id
             ),
                  valid_attendees AS (
-                     SELECT a.id, tcil.check_in_list_id
+                     SELECT a.id, pcil.check_in_list_id
                      FROM attendees a
-                              JOIN product_check_in_lists tcil ON a.product_id = tcil.product_id
+                                 JOIN product_check_in_lists pcil ON a.product_id = pcil.product_id
+                                 JOIN orders o ON a.order_id = o.id
+                                 JOIN check_in_lists cil ON pcil.check_in_list_id = cil.id
+                                 JOIN event_settings es ON cil.event_id = es.event_id
                      WHERE a.deleted_at IS NULL
-                       AND tcil.deleted_at IS NULL
-                     AND a.status in ('ACTIVE', 'AWAITING_PAYMENT')
+                        AND pcil.deleted_at IS NULL
+                        AND pcil.check_in_list_id = :check_in_list_id
+                        AND (
+                            (es.allow_orders_awaiting_offline_payment_to_check_in = true AND a.status in ('ACTIVE', 'AWAITING_PAYMENT') AND o.status IN ('COMPLETED', 'AWAITING_OFFLINE_PAYMENT'))
+                            OR
+                            (es.allow_orders_awaiting_offline_payment_to_check_in = false AND a.status = 'ACTIVE' AND o.status = 'COMPLETED')
+                        )
                  )
             SELECT
                 cil.id AS check_in_list_id,
@@ -67,22 +75,30 @@ class CheckInListRepository extends BaseRepository implements CheckInListReposit
     public function getCheckedInAttendeeCountByIds(array $checkInListIds): Collection
     {
         $placeholders = implode(',', array_fill(0, count($checkInListIds), '?'));
-        $attendeeActiveStatus = AttendeeStatus::ACTIVE->name;
 
         $sql = <<<SQL
             WITH valid_check_ins AS (
                 SELECT attendee_id, check_in_list_id
                 FROM attendee_check_ins
                 WHERE deleted_at IS NULL
+                AND check_in_list_id IN ($placeholders)
                 GROUP BY attendee_id, check_in_list_id
             ),
                  valid_attendees AS (
-                     SELECT a.id, tcil.check_in_list_id
+                     SELECT a.id, pcil.check_in_list_id
                      FROM attendees a
-                              JOIN product_check_in_lists tcil ON a.product_id = tcil.product_id
+                              JOIN product_check_in_lists pcil ON a.product_id = pcil.product_id
+                              JOIN orders o ON a.order_id = o.id
+                              JOIN check_in_lists cil ON pcil.check_in_list_id = cil.id
+                              JOIN event_settings es ON cil.event_id = es.event_id
                      WHERE a.deleted_at IS NULL
-                       AND tcil.deleted_at IS NULL
-                     AND a.status = '$attendeeActiveStatus'
+                       AND pcil.deleted_at IS NULL
+                       AND pcil.check_in_list_id IN ($placeholders)
+                       AND (
+                           (es.allow_orders_awaiting_offline_payment_to_check_in = true AND a.status IN ('ACTIVE', 'AWAITING_PAYMENT') AND o.status IN ('COMPLETED', 'AWAITING_OFFLINE_PAYMENT'))
+                           OR
+                           (es.allow_orders_awaiting_offline_payment_to_check_in = false AND a.status = 'ACTIVE' AND o.status = 'COMPLETED')
+                       )
                  )
             SELECT
                 cil.id AS check_in_list_id,
@@ -96,7 +112,7 @@ class CheckInListRepository extends BaseRepository implements CheckInListReposit
             GROUP BY cil.id;
     SQL;
 
-        $query = $this->db->select($sql, $checkInListIds);
+        $query = $this->db->select($sql, array_merge($checkInListIds, $checkInListIds, $checkInListIds));
 
         return collect($query)->map(
             static fn($item) => new CheckedInAttendeesCountDTO(
