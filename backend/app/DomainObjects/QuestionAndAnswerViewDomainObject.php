@@ -14,15 +14,20 @@ class QuestionAndAnswerViewDomainObject extends AbstractDomainObject
     private ?string $product_title;
     private int $question_id;
     private ?int $order_id;
+    private ?string $order_first_name;
+    private ?string $order_last_name;
+    private ?string $order_email;
+    private ?string $order_public_id;
     private string $title;
     private bool $question_required;
     private ?string $question_description = null;
-    private ?string $first_name = null;
-    private ?string $last_name = null;
-    private array|string $answer;
-    private string $belongs_to;
     private ?int $attendee_id = null;
     private ?string $attendee_public_id = null;
+    private ?string $first_name = null;
+    private ?string $last_name = null;
+    private ?string $attendee_email = null;
+    private array|string $answer;
+    private string $belongs_to;
     private string $question_type;
     private int $event_id;
     private int $question_answer_id;
@@ -248,6 +253,66 @@ class QuestionAndAnswerViewDomainObject extends AbstractDomainObject
         return $this;
     }
 
+    public function getOrderFirstName(): ?string
+    {
+        return $this->order_first_name;
+    }
+
+    public function setOrderFirstName(?string $order_first_name): QuestionAndAnswerViewDomainObject
+    {
+        $this->order_first_name = $order_first_name;
+
+        return $this;
+    }
+
+    public function getOrderLastName(): ?string
+    {
+        return $this->order_last_name;
+    }
+
+    public function setOrderLastName(?string $order_last_name): QuestionAndAnswerViewDomainObject
+    {
+        $this->order_last_name = $order_last_name;
+
+        return $this;
+    }
+
+    public function getOrderEmail(): ?string
+    {
+        return $this->order_email;
+    }
+
+    public function setOrderEmail(?string $order_email): QuestionAndAnswerViewDomainObject
+    {
+        $this->order_email = $order_email;
+
+        return $this;
+    }
+
+    public function getOrderPublicId(): ?string
+    {
+        return $this->order_public_id;
+    }
+
+    public function setOrderPublicId(?string $order_public_id): QuestionAndAnswerViewDomainObject
+    {
+        $this->order_public_id = $order_public_id;
+
+        return $this;
+    }
+
+    public function getAttendeeEmail(): ?string
+    {
+        return $this->attendee_email;
+    }
+
+    public function setAttendeeEmail(?string $attendee_email): QuestionAndAnswerViewDomainObject
+    {
+        $this->attendee_email = $attendee_email;
+
+        return $this;
+    }
+
     public function toArray(): array
     {
         return [
@@ -268,6 +333,11 @@ class QuestionAndAnswerViewDomainObject extends AbstractDomainObject
             'product_title' => $this->product_title ?? null,
             'question_answer_id' => $this->question_answer_id ?? null,
             'question_options' => $this->question_options ?? null,
+            'attendee_email' => $this->attendee_email ?? null,
+            'order_first_name' => $this->order_first_name ?? null,
+            'order_last_name' => $this->order_last_name ?? null,
+            'order_email' => $this->order_email ?? null,
+            'order_public_id' => $this->order_public_id ?? null,
         ];
     }
 }

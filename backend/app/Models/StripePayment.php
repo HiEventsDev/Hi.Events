@@ -4,9 +4,12 @@ namespace HiEvents\Models;
 
 use HiEvents\DomainObjects\Generated\StripePaymentDomainObjectAbstract;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class StripePayment extends BaseModel
 {
+    use SoftDeletes;
+
     protected function getTimestampsEnabled(): bool
     {
         return false;

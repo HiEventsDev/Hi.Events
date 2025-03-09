@@ -8,20 +8,18 @@ use HiEvents\DomainObjects\Generated\ProductDomainObjectAbstract;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends BaseModel
 {
+    use SoftDeletes;
+
     protected function getCastMap(): array
     {
         return [
             ProductDomainObjectAbstract::SALES_VOLUME => 'float',
             ProductDomainObjectAbstract::SALES_TAX_VOLUME => 'float',
         ];
-    }
-
-    protected function getFillableFields(): array
-    {
-        return [];
     }
 
     public function questions(): BelongsToMany

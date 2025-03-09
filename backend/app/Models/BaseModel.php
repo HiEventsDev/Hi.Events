@@ -6,15 +6,12 @@ namespace HiEvents\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @mixin Builder
  */
 abstract class BaseModel extends Model
 {
-    use SoftDeletes;
-
     /** @var array */
     protected $guarded = [];
 

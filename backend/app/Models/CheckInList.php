@@ -4,18 +4,11 @@ namespace HiEvents\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CheckInList extends BaseModel
 {
-    protected function getCastMap(): array
-    {
-        return [];
-    }
-
-    protected function getFillableFields(): array
-    {
-        return [];
-    }
+    use SoftDeletes;
 
     public function products(): BelongsToMany
     {

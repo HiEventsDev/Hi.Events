@@ -3,9 +3,12 @@
 namespace HiEvents\Models;
 
 use HiEvents\DomainObjects\Generated\PromoCodeDomainObjectAbstract;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PromoCode extends BaseModel
 {
+    use SoftDeletes;
+
     protected function getCastMap(): array
     {
         return [

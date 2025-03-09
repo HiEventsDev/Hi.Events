@@ -5,9 +5,12 @@ namespace HiEvents\Models;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Order extends BaseModel
 {
+    use SoftDeletes;
+
     public function question_and_answer_views(): HasMany
     {
         return $this->hasMany(QuestionAndAnswerView::class);

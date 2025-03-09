@@ -2,8 +2,11 @@
 
 namespace HiEvents\Models;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 class EventStatistic extends BaseModel
 {
+    use SoftDeletes;
 
     protected function getCastMap(): array
     {
@@ -14,10 +17,5 @@ class EventStatistic extends BaseModel
             'sales_total_gross' => 'float',
             'total_refunded' => 'float',
         ];
-    }
-
-    protected function getFillableFields(): array
-    {
-        return [];
     }
 }

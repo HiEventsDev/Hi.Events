@@ -4,9 +4,12 @@ namespace HiEvents\Models;
 
 use HiEvents\DomainObjects\Generated\QuestionAnswerDomainObjectAbstract;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class QuestionAnswer extends BaseModel
 {
+    use SoftDeletes;
+
     protected function getCastMap(): array
     {
         return [

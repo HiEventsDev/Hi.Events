@@ -7,18 +7,11 @@ namespace HiEvents\Models;
 use HiEvents\DomainObjects\Enums\Role;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Account extends BaseModel
 {
-    protected function getCastMap(): array
-    {
-        return [];
-    }
-
-    protected function getFillableFields(): array
-    {
-        return [];
-    }
+    use SoftDeletes;
 
     public function users(): BelongsToMany
     {
