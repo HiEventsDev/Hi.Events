@@ -3,7 +3,7 @@
 # This script lists all untranslated strings in a .po file.
 
 # arbitrary translation file
-poFile="../src/locales/zh-cn.po"
+poFile="../src/locales/fr.po"
 
 if [ -f "$poFile" ]; then
     echo "Checking file: $poFile"

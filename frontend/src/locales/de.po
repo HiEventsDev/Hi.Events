@@ -22,14 +22,16 @@ msgstr "„Hier gibt es noch nichts zu sehen“"
 #~ "\"\"Due to the high risk of spam, we require manual verification before you can send messages.\n"
 #~ "\"\"Please contact us to request access."
 #~ msgstr ""
-#~ "Aufgrund eines hohen Spam-Risikos ist eine manuelle Überprüfung erforderlich, bevor Sie Nachrichten senden können.\n"
-#~ "Bitte kontaktieren Sie uns, um Zugriff anzufordern."
+#~ "\"\"Aufgrund des hohen Spam-Risikos erfordern wir eine manuelle Überprüfung, bevor Sie Nachrichten senden können.\n"
+#~ "\"\"Bitte kontaktieren Sie uns, um Zugang zu beantragen.\"\""
 
 #: src/components/routes/auth/ForgotPassword/index.tsx:40
 #~ msgid ""
 #~ "\"\"If you have an account with us, you will receive an email with instructions on how to reset your\n"
 #~ "\"\"password."
-#~ msgstr "Wenn Sie ein Konto bei uns haben, erhalten Sie eine E-Mail mit Anweisungen zum Zurücksetzen Ihres Passworts."
+#~ msgstr ""
+#~ "\"\"Wenn Sie ein Konto bei uns haben, erhalten Sie eine E-Mail mit Anweisungen zum Zurücksetzen Ihres\n"
+#~ "\"\"Passworts.\"\""
 
 #: src/components/common/ReportTable/index.tsx:303
 #: src/locales.ts:56
@@ -316,7 +318,7 @@ msgstr "Konto erfolgreich aktualisiert"
 
 #: src/components/common/AttendeeTable/index.tsx:158
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:267
-#: src/components/common/QuestionsTable/index.tsx:106
+#: src/components/common/QuestionsTable/index.tsx:108
 msgid "Actions"
 msgstr "Aktionen"
 
@@ -398,7 +400,7 @@ msgstr "Produkt zur Kategorie hinzufügen"
 msgid "Add products"
 msgstr "Produkte hinzufügen"
 
-#: src/components/common/QuestionsTable/index.tsx:262
+#: src/components/common/QuestionsTable/index.tsx:281
 msgid "Add question"
 msgstr "Frage hinzufügen"
 
@@ -523,11 +525,15 @@ msgstr "Menge"
 msgid "Amount paid ({0})"
 msgstr "Bezahlter Betrag ({0})"
 
+#: src/mutations/useExportAnswers.ts:43
+msgid "An error occurred while checking export status."
+msgstr "Ein Fehler ist aufgetreten beim Überprüfen des Exportstatus."
+
 #: src/components/common/ErrorDisplay/index.tsx:15
 msgid "An error occurred while loading the page"
 msgstr "Beim Laden der Seite ist ein Fehler aufgetreten"
 
-#: src/components/common/QuestionsTable/index.tsx:146
+#: src/components/common/QuestionsTable/index.tsx:148
 msgid "An error occurred while sorting the questions. Please try again or refresh the page"
 msgstr "Beim Sortieren der Fragen ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut oder aktualisieren Sie die Seite"
 
@@ -557,7 +563,7 @@ msgstr "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut."
 
 #: src/components/common/QuestionAndAnswerList/index.tsx:97
 msgid "Answer updated successfully."
-msgstr ""
+msgstr "Antwort erfolgreich aktualisiert."
 
 #: src/components/routes/event/Settings/Sections/EmailSettings/index.tsx:61
 msgid "Any queries from product holders will be sent to this email address. This will also be used as the \"reply-to\" address for all emails sent from this event"
@@ -639,7 +645,7 @@ msgstr "Möchten Sie diesen Teilnehmer wirklich stornieren? Dadurch wird sein Ti
 msgid "Are you sure you want to delete this promo code?"
 msgstr "Möchten Sie diesen Aktionscode wirklich löschen?"
 
-#: src/components/common/QuestionsTable/index.tsx:162
+#: src/components/common/QuestionsTable/index.tsx:164
 msgid "Are you sure you want to delete this question?"
 msgstr "Möchten Sie diese Frage wirklich löschen?"
 
@@ -711,7 +717,7 @@ msgstr "Teilnehmer nicht gefunden"
 msgid "Attendee Notes"
 msgstr "Teilnehmernotizen"
 
-#: src/components/common/QuestionsTable/index.tsx:348
+#: src/components/common/QuestionsTable/index.tsx:369
 msgid "Attendee questions"
 msgstr "Fragen der Teilnehmer"
 
@@ -1106,7 +1112,7 @@ msgstr "Zum Kopieren klicken"
 
 #: src/components/routes/product-widget/SelectProducts/index.tsx:473
 msgid "close"
-msgstr ""
+msgstr "schließen"
 
 #: src/components/common/AttendeeCheckInTable/QrScanner.tsx:186
 #: src/components/modals/RefundOrderModal/index.tsx:125
@@ -1526,7 +1532,7 @@ msgstr "Aufschlüsselung der täglichen Verkäufe, Steuern und Gebühren"
 #: src/components/common/OrdersTable/index.tsx:186
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:287
 #: src/components/common/PromoCodeTable/index.tsx:181
-#: src/components/common/QuestionsTable/index.tsx:113
+#: src/components/common/QuestionsTable/index.tsx:115
 #: src/components/common/WebhookTable/index.tsx:116
 msgid "Danger zone"
 msgstr "Gefahrenzone"
@@ -1590,7 +1596,7 @@ msgstr "Lösche Bild"
 msgid "Delete product"
 msgstr "Produkt löschen"
 
-#: src/components/common/QuestionsTable/index.tsx:118
+#: src/components/common/QuestionsTable/index.tsx:120
 msgid "Delete question"
 msgstr "Frage löschen"
 
@@ -1792,7 +1798,7 @@ msgstr "Bearbeiten {0}"
 
 #: src/components/common/QuestionAndAnswerList/index.tsx:159
 msgid "Edit Answer"
-msgstr ""
+msgstr "Antwort bearbeiten"
 
 #: src/components/common/AttendeeTable/index.tsx:174
 #~ msgid "Edit attendee"
@@ -1848,7 +1854,7 @@ msgstr "Produktkategorie bearbeiten"
 msgid "Edit Promo Code"
 msgstr "Aktionscode bearbeiten"
 
-#: src/components/common/QuestionsTable/index.tsx:110
+#: src/components/common/QuestionsTable/index.tsx:112
 msgid "Edit question"
 msgstr "Frage bearbeiten"
 
@@ -1914,8 +1920,8 @@ msgstr "E-Mail- und Benachrichtigungseinstellungen"
 msgid "Email address"
 msgstr "E-Mail-Adresse"
 
-#: src/components/common/QuestionsTable/index.tsx:218
-#: src/components/common/QuestionsTable/index.tsx:219
+#: src/components/common/QuestionsTable/index.tsx:220
+#: src/components/common/QuestionsTable/index.tsx:221
 #: src/components/routes/product-widget/CollectInformation/index.tsx:298
 #: src/components/routes/product-widget/CollectInformation/index.tsx:299
 #: src/components/routes/product-widget/CollectInformation/index.tsx:408
@@ -2114,9 +2120,25 @@ msgstr "Verfallsdatum"
 msgid "Export"
 msgstr "Export"
 
+#: src/components/common/QuestionsTable/index.tsx:267
+msgid "Export answers"
+msgstr "Antworten exportieren"
+
+#: src/mutations/useExportAnswers.ts:37
+msgid "Export failed. Please try again."
+msgstr "Export fehlgeschlagen. Bitte versuchen Sie es erneut."
+
+#: src/mutations/useExportAnswers.ts:17
+msgid "Export started. Preparing file..."
+msgstr "Export gestartet. Datei wird vorbereitet..."
+
 #: src/components/routes/event/attendees.tsx:39
 msgid "Exporting Attendees"
 msgstr "Teilnehmer werden exportiert"
+
+#: src/mutations/useExportAnswers.ts:31
+msgid "Exporting complete. Downloading file..."
+msgstr "Export abgeschlossen. Datei wird heruntergeladen..."
 
 #: src/components/routes/event/orders.tsx:90
 msgid "Exporting Orders"
@@ -2130,7 +2152,7 @@ msgstr "Teilnehmer konnte nicht abgesagt werden"
 msgid "Failed to cancel order"
 msgstr "Stornierung der Bestellung fehlgeschlagen"
 
-#: src/components/common/QuestionsTable/index.tsx:173
+#: src/components/common/QuestionsTable/index.tsx:175
 msgid "Failed to delete message. Please try again."
 msgstr "Nachricht konnte nicht gelöscht werden. Bitte versuchen Sie es erneut."
 
@@ -2175,9 +2197,13 @@ msgstr "Ticket-E-Mail konnte nicht erneut gesendet werden"
 msgid "Failed to sort products"
 msgstr "Produkte konnten nicht sortiert werden"
 
+#: src/mutations/useExportAnswers.ts:15
+msgid "Failed to start export job"
+msgstr "Exportauftrag konnte nicht gestartet werden"
+
 #: src/components/common/QuestionAndAnswerList/index.tsx:102
 msgid "Failed to update answer."
-msgstr ""
+msgstr "Fehler beim Aktualisieren der Antwort."
 
 #: src/components/forms/TaxAndFeeForm/index.tsx:18
 #: src/components/forms/TaxAndFeeForm/index.tsx:39
@@ -2218,7 +2244,7 @@ msgstr "Filter ({activeFilterCount})"
 msgid "First Invoice Number"
 msgstr "Erste Rechnungsnummer"
 
-#: src/components/common/QuestionsTable/index.tsx:206
+#: src/components/common/QuestionsTable/index.tsx:208
 #: src/components/modals/CreateAttendeeModal/index.tsx:118
 #: src/components/modals/ManageAttendeeModal/index.tsx:110
 #: src/components/modals/ManageOrderModal/index.tsx:144
@@ -2227,7 +2253,7 @@ msgstr "Erste Rechnungsnummer"
 msgid "First name"
 msgstr "Vorname"
 
-#: src/components/common/QuestionsTable/index.tsx:205
+#: src/components/common/QuestionsTable/index.tsx:207
 #: src/components/modals/EditUserModal/index.tsx:71
 #: src/components/modals/InviteUserModal/index.tsx:57
 #: src/components/routes/auth/AcceptInvitation/index.tsx:90
@@ -2242,7 +2268,7 @@ msgstr "Vorname"
 msgid "First name must be between 1 and 50 characters"
 msgstr "Der Vorname muss zwischen 1 und 50 Zeichen lang sein"
 
-#: src/components/common/QuestionsTable/index.tsx:328
+#: src/components/common/QuestionsTable/index.tsx:349
 msgid "First Name, Last Name, and Email Address are default questions and are always included in the checkout process."
 msgstr "Vorname, Nachname und E-Mail-Adresse sind Standardfragen und werden immer in den Bestellvorgang einbezogen."
 
@@ -2403,11 +2429,11 @@ msgstr "hi.events-Logo"
 msgid "Hidden from public view"
 msgstr "Vor der Öffentlichkeit verborgen"
 
-#: src/components/common/QuestionsTable/index.tsx:269
+#: src/components/common/QuestionsTable/index.tsx:290
 msgid "hidden question"
 msgstr "versteckte Frage"
 
-#: src/components/common/QuestionsTable/index.tsx:270
+#: src/components/common/QuestionsTable/index.tsx:291
 msgid "hidden questions"
 msgstr "versteckte Fragen"
 
@@ -2422,13 +2448,13 @@ msgstr "Verstecken"
 
 #: src/components/common/AttendeeList/index.tsx:84
 msgid "Hide Answers"
-msgstr ""
+msgstr "Antworten ausblenden"
 
 #: src/components/routes/event/Settings/Sections/MiscSettings/index.tsx:89
 msgid "Hide getting started page"
 msgstr "Seite „Erste Schritte“ ausblenden"
 
-#: src/components/common/QuestionsTable/index.tsx:274
+#: src/components/common/QuestionsTable/index.tsx:295
 msgid "Hide hidden questions"
 msgstr "Versteckte Fragen ausblenden"
 
@@ -2753,8 +2779,8 @@ msgstr "Letzte Anmeldung"
 msgid "Last name"
 msgstr "Nachname"
 
-#: src/components/common/QuestionsTable/index.tsx:210
-#: src/components/common/QuestionsTable/index.tsx:211
+#: src/components/common/QuestionsTable/index.tsx:212
+#: src/components/common/QuestionsTable/index.tsx:213
 #: src/components/modals/EditUserModal/index.tsx:72
 #: src/components/modals/InviteUserModal/index.tsx:58
 #: src/components/routes/auth/AcceptInvitation/index.tsx:92
@@ -3431,8 +3457,8 @@ msgstr "Bestelleigentümer mit einem bestimmten Produkt"
 msgid "Order owners with products"
 msgstr "Bestelleigentümer mit Produkten"
 
-#: src/components/common/QuestionsTable/index.tsx:292
-#: src/components/common/QuestionsTable/index.tsx:334
+#: src/components/common/QuestionsTable/index.tsx:313
+#: src/components/common/QuestionsTable/index.tsx:355
 msgid "Order questions"
 msgstr "Fragen zur Bestellung"
 
@@ -3794,7 +3820,7 @@ msgstr "Angetrieben von"
 msgid "Pre Checkout message"
 msgstr "Nachricht vor dem Checkout"
 
-#: src/components/common/QuestionsTable/index.tsx:326
+#: src/components/common/QuestionsTable/index.tsx:347
 msgid "Preview"
 msgstr "Vorschau"
 
@@ -3884,7 +3910,7 @@ msgstr "Produkt erfolgreich gelöscht"
 msgid "Product Price Type"
 msgstr "Produktpreistyp"
 
-#: src/components/common/QuestionsTable/index.tsx:307
+#: src/components/common/QuestionsTable/index.tsx:328
 msgid "Product questions"
 msgstr "Produktfragen"
 
@@ -4013,7 +4039,7 @@ msgstr "Verfügbare Menge"
 msgid "Quantity Sold"
 msgstr "Verkaufte Menge"
 
-#: src/components/common/QuestionsTable/index.tsx:168
+#: src/components/common/QuestionsTable/index.tsx:170
 msgid "Question deleted"
 msgstr "Frage gelöscht"
 
@@ -4025,7 +4051,7 @@ msgstr "Fragebeschreibung"
 msgid "Question Title"
 msgstr "Fragentitel"
 
-#: src/components/common/QuestionsTable/index.tsx:257
+#: src/components/common/QuestionsTable/index.tsx:275
 #: src/components/layouts/Event/index.tsx:61
 msgid "Questions"
 msgstr "Fragen"
@@ -4035,7 +4061,7 @@ msgstr "Fragen"
 msgid "Questions & Answers"
 msgstr "Fragen & Antworten"
 
-#: src/components/common/QuestionsTable/index.tsx:143
+#: src/components/common/QuestionsTable/index.tsx:145
 msgid "Questions sorted successfully"
 msgstr "Fragen erfolgreich sortiert"
 
@@ -4527,7 +4553,7 @@ msgstr "Verfügbare Produktmenge anzeigen"
 #~ msgid "Show available ticket quantity"
 #~ msgstr "Verfügbare Ticketanzahl anzeigen"
 
-#: src/components/common/QuestionsTable/index.tsx:274
+#: src/components/common/QuestionsTable/index.tsx:295
 msgid "Show hidden questions"
 msgstr "Versteckte Fragen anzeigen"
 
@@ -5104,7 +5130,7 @@ msgstr "Dieses Produkt ist vor der öffentlichen Ansicht verborgen"
 msgid "This product is hidden unless targeted by a Promo Code"
 msgstr "Dieses Produkt ist verborgen, es sei denn, es wird von einem Promo-Code anvisiert"
 
-#: src/components/common/QuestionsTable/index.tsx:88
+#: src/components/common/QuestionsTable/index.tsx:90
 msgid "This question is only visible to the event organizer"
 msgstr "Diese Frage ist nur für den Veranstalter sichtbar"
 
@@ -5375,7 +5401,7 @@ msgstr "Vereinigte Staaten"
 
 #: src/components/common/QuestionAndAnswerList/index.tsx:284
 msgid "Unknown Attendee"
-msgstr ""
+msgstr "Unbekannter Teilnehmer"
 
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:43
 #: src/components/forms/ProductForm/index.tsx:83
@@ -5499,7 +5525,7 @@ msgstr "Sehen Sie sich Berichte zu Ihrer Veranstaltung an und laden Sie sie heru
 
 #: src/components/common/AttendeeList/index.tsx:84
 msgid "View Answers"
-msgstr ""
+msgstr "Antworten anzeigen"
 
 #: src/components/common/AttendeeTable/index.tsx:164
 #~ msgid "View attendee"
@@ -5877,7 +5903,7 @@ msgstr "Sie können die Rolle oder den Status des Kontoinhabers nicht bearbeiten
 msgid "You cannot refund a manually created order."
 msgstr "Sie können eine manuell erstellte Bestellung nicht zurückerstatten."
 
-#: src/components/common/QuestionsTable/index.tsx:250
+#: src/components/common/QuestionsTable/index.tsx:252
 msgid "You created a hidden question but disabled the option to show hidden questions. It has been enabled."
 msgstr "Sie haben eine versteckte Frage erstellt, aber die Option zum Anzeigen versteckter Fragen deaktiviert. Sie wurde aktiviert."
 
@@ -5897,11 +5923,11 @@ msgstr "Sie haben diese Einladung bereits angenommen. Bitte melden Sie sich an, 
 #~ msgid "You have connected your Stripe account"
 #~ msgstr "Sie haben Ihr Stripe-Konto verbunden"
 
-#: src/components/common/QuestionsTable/index.tsx:317
+#: src/components/common/QuestionsTable/index.tsx:338
 msgid "You have no attendee questions."
 msgstr "Sie haben keine Teilnehmerfragen."
 
-#: src/components/common/QuestionsTable/index.tsx:302
+#: src/components/common/QuestionsTable/index.tsx:323
 msgid "You have no order questions."
 msgstr "Sie haben keine Bestellfragen."
 

@@ -77,7 +77,7 @@ class OrderAnswersSheet implements
         ];
     }
 
-    public function styles(Worksheet $sheet)
+    public function styles(Worksheet $sheet): array
     {
         $sheet->getStyle('A1:F1')->applyFromArray([
             'font' => ['bold' => true],
@@ -103,9 +103,6 @@ class OrderAnswersSheet implements
         ];
     }
 
-    /**
-     * Define column widths
-     */
     public function columnWidths(): array
     {
         return [
@@ -118,9 +115,6 @@ class OrderAnswersSheet implements
         ];
     }
 
-    /**
-     * @return string
-     */
     public function title(): string
     {
         return __('Order Answers');

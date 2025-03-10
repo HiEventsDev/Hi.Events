@@ -81,19 +81,15 @@ class AttendeeAnswersSheet implements
         ];
     }
 
-    public function styles(Worksheet $sheet)
+    public function styles(Worksheet $sheet): array
     {
-        // Make headers bold
         $sheet->getStyle('A1:H1')->applyFromArray([
             'font' => ['bold' => true],
         ]);
 
-        // Get highest row number
         $highestRow = $sheet->getHighestRow();
 
-        // Style the URL column cells but exclude the header row
         if ($highestRow > 1) {
-            // Apply styling to just the data cells in column H (skip header)
             $sheet->getStyle('H2:H' . $highestRow)->applyFromArray([
                 'alignment' => [
                     'horizontal' => Alignment::HORIZONTAL_CENTER,
@@ -110,9 +106,6 @@ class AttendeeAnswersSheet implements
         ];
     }
 
-    /**
-     * Define column widths
-     */
     public function columnWidths(): array
     {
         return [

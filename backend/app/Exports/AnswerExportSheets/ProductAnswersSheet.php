@@ -79,7 +79,7 @@ class ProductAnswersSheet implements
         ];
     }
 
-    public function styles(Worksheet $sheet)
+    public function styles(Worksheet $sheet): array
     {
         $highestRow = $sheet->getHighestRow();
 
@@ -100,9 +100,6 @@ class ProductAnswersSheet implements
         ];
     }
 
-    /**
-     * Define column widths
-     */
     public function columnWidths(): array
     {
         return [
@@ -116,9 +113,6 @@ class ProductAnswersSheet implements
         ];
     }
 
-    /**
-     * @return string
-     */
     public function title(): string
     {
         return __('Product Answers');
