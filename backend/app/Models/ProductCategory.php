@@ -3,9 +3,12 @@
 namespace HiEvents\Models;
 
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ProductCategory extends BaseModel
 {
+    use SoftDeletes;
+
     protected $table = 'product_categories';
 
     protected $fillable = [
@@ -17,16 +20,6 @@ class ProductCategory extends BaseModel
         'order',
         'event_id',
     ];
-
-    protected function getCastMap(): array
-    {
-        return [];
-    }
-
-    protected function getFillableFields(): array
-    {
-        return [];
-    }
 
     public function products(): HasMany
     {

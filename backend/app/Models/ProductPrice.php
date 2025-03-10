@@ -3,19 +3,17 @@
 namespace HiEvents\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ProductPrice extends BaseModel
 {
+    use SoftDeletes;
+
     protected function getCastMap(): array
     {
         return [
             'price' => 'float',
         ];
-    }
-
-    protected function getFillableFields(): array
-    {
-        return [];
     }
 
     public function product(): BelongsTo

@@ -3,9 +3,12 @@
 namespace HiEvents\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class TaxAndFee extends BaseModel
 {
+    use SoftDeletes;
+
     protected $table = 'taxes_and_fees';
 
     public function products(): BelongsToMany
@@ -18,10 +21,5 @@ class TaxAndFee extends BaseModel
         return [
             'rate' => 'float',
         ];
-    }
-
-    protected function getFillableFields(): array
-    {
-        return [];
     }
 }

@@ -8,3 +8,13 @@ export const downloadBinary = (binary: Blob, fileName: string) => {
     document.body.removeChild(link);
     window?.URL.revokeObjectURL(url);
 }
+
+export const downloadFile = (fileUrl: string, filename: string) => {
+    const link = document.createElement("a");
+    link.href = fileUrl;
+    link.download = filename;
+    link.target = "_blank";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+};

@@ -2,15 +2,9 @@
 
 namespace HiEvents\Models;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 class PasswordResetToken extends BaseModel
 {
-    protected function getCastMap(): array
-    {
-        return [];
-    }
-
-    protected function getFillableFields(): array
-    {
-        return [];
-    }
+    use SoftDeletes;
 }
