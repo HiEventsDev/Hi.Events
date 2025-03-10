@@ -253,16 +253,16 @@ const SelectProducts = (props: SelectProductsProps) => {
     let productIndex = 0;
 
     return (
-        (<div className={'hi-product-widget-container'}
-              ref={resizeRef}
-              style={{
-                  '--widget-background-color': props.colors?.background,
-                  '--widget-primary-color': props.colors?.primary,
-                  '--widget-primary-text-color': props.colors?.primaryText,
-                  '--widget-secondary-color': props.colors?.secondary,
-                  '--widget-secondary-text-color': props.colors?.secondaryText,
-                  '--widget-padding': props?.padding,
-              } as React.CSSProperties}>
+        <div className={'hi-product-widget-container'}
+             ref={resizeRef}
+             style={{
+                 '--widget-background-color': props.colors?.background,
+                 '--widget-primary-color': props.colors?.primary,
+                 '--widget-primary-text-color': props.colors?.primaryText,
+                 '--widget-secondary-color': props.colors?.secondary,
+                 '--widget-secondary-text-color': props.colors?.secondaryText,
+                 '--widget-padding': props?.padding,
+             } as React.CSSProperties}>
             {!productAreAvailable && (
                 <div className={classNames(['hi-no-products'])}>
                     <p className={classNames(['hi-no-products-message'])}>
@@ -497,7 +497,7 @@ const SelectProducts = (props: SelectProductsProps) => {
             <PoweredByFooter style={{
                 'color': props.colors?.primaryText || '#000',
             }}/>
-        </div>)
+        </div>
     );
 }
 
