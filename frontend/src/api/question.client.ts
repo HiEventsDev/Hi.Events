@@ -41,7 +41,7 @@ export const questionClient = {
         return await api.post(`/events/${eventId}/questions/sort`, questionsSort);
     },
     updateAnswerQuestion: async (eventId: IdParam, questionId: IdParam, answerId: IdParam, answer: string | string[]) => {
-        await api.put(`/events/${eventId}/questions/${questionId}/answer/${answerId}`, {
+        await api.put(`/events/${eventId}/questions/${questionId}/answers/${answerId}`, {
             'answer': answer,
         });
     },
