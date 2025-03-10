@@ -9,7 +9,7 @@
 <h3 align="center">Hi.Events</h3>
 
 <p align="center">
-<a href="https://demo.hi.events/event/1/dog-conf-2030">Demo Event 🌟</a> • <a href="https://hi.events?utm_source=gh-readme">Website 🌎</a> • <a href="https://hi.events/docs?utm_source=gh-readme">Documentation 📄</a> • <a href="https://hi.events/docs/getting-started?utm_source=gh-readme">Installation ⚙️</a>
+<a href="https://app.hi.events/event/2/hievents-conference-2030?utm_source=gh-readme&utm_content=demo-link">Demo Event 🌟</a> • <a href="https://hi.events?utm_source=gh-readme&utm_content=website-link">Website 🌎</a> • <a href="https://hi.events/docs?utm_source=gh-readme&utm_content=documentation-link">Documentation 📄</a> • <a href="https://hi.events/docs/getting-started?utm_source=gh-readme&utm_content=installation=link">Installation ⚙️</a>
 </p>
 
 <h3 align="center">

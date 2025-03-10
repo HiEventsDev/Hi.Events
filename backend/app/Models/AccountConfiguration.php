@@ -3,9 +3,12 @@
 namespace HiEvents\Models;
 
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class AccountConfiguration extends BaseModel
 {
+    use SoftDeletes;
+
     protected $table = 'account_configuration';
 
     protected function getCastMap(): array
@@ -13,11 +16,6 @@ class AccountConfiguration extends BaseModel
         return [
             'application_fees' => 'array',
         ];
-    }
-
-    protected function getFillableFields(): array
-    {
-        return [];
     }
 
     public function account(): HasMany

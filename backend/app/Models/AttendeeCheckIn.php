@@ -3,18 +3,11 @@
 namespace HiEvents\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class AttendeeCheckIn extends BaseModel
 {
-    protected function getCastMap(): array
-    {
-        return [];
-    }
-
-    protected function getFillableFields(): array
-    {
-        return [];
-    }
+    use SoftDeletes;
 
     public function products(): BelongsTo
     {

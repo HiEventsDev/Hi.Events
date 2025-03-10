@@ -8,6 +8,7 @@ import {
     IconInfoCircle,
     IconPencil,
     IconPlus,
+    IconTableExport,
     IconTrash
 } from "@tabler/icons-react";
 import Truncate from "../Truncate";
@@ -41,6 +42,7 @@ import {CSS} from "@dnd-kit/utilities";
 import {useSortQuestions} from "../../../mutations/useSortQuestions.ts";
 import classNames from "classnames";
 import {Popover} from "../Popover";
+import {useExportAnswers} from "../../../mutations/useExportAnswers.ts";
 
 interface QuestionsTableProp {
     questions: Partial<Question>[];
@@ -251,6 +253,22 @@ export const QuestionsTable = ({questions}: QuestionsTableProp) => {
         }
     }
 
+    const ExportAnswersButton = () => {
+        const {eventId} = useParams();
+        const {startExport, isExporting} = useExportAnswers(eventId);
+
+        return (
+            <Button
+                loading={isExporting}
+                color="green"
+                rightSection={<IconTableExport size={20}/>}
+                onClick={() => startExport()}
+            >
+                {t`Export answers`}
+            </Button>
+        );
+    };
+
     return (
         <div className={classes.outer}>
             <PageTitle>
@@ -258,9 +276,12 @@ export const QuestionsTable = ({questions}: QuestionsTableProp) => {
             </PageTitle>
             <Card>
                 <div className={classes.actions}>
-                    <Button color={'green'} rightSection={<IconPlus/>} onClick={openCreateModal}>
-                        {t`Add question`}
-                    </Button>
+                    <>
+                        <Button color={'green'} rightSection={<IconPlus/>} onClick={openCreateModal}>
+                            {t`Add question`}
+                        </Button>
+                        <ExportAnswersButton/>
+                    </>
                     <div className={classes.hiddenToggle}>
                         <Group>
                             <span className={classes.hiddenCount}>

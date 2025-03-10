@@ -4,9 +4,12 @@ namespace HiEvents\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class OrderItem extends BaseModel
 {
+    use SoftDeletes;
+
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
