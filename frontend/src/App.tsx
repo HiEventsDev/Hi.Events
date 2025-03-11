@@ -17,6 +17,7 @@ import "./styles/global.scss";
 import {isSsr} from "./utilites/helpers.ts";
 import {dynamicActivateLocale, getSupportedLocale} from "./locales";
 import {StartupChecks} from "./StartupChecks.tsx";
+import {ThirdPartyScripts} from "./components/common/ThirdPartyScripts";
 
 declare global {
     interface Window {
@@ -84,6 +85,7 @@ export const App: FC<
                     <I18nProvider i18n={i18n}>
                         <QueryClientProvider client={props.queryClient}>
                             <StartupChecks/>
+                            <ThirdPartyScripts/>
                             <ModalsProvider>
                                 <Helmet>
                                     <title>Hi.Events</title>
