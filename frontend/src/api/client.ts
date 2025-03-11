@@ -1,5 +1,4 @@
 import axios from "axios";
-import {setAuthToken} from "../utilites/apiClient.ts";
 import {isSsr} from "../utilites/helpers.ts";
 import {getConfig} from "../utilites/config.ts";
 
@@ -34,20 +33,8 @@ export const api = axios.create({
     withCredentials: true,
 });
 
-const existingToken = typeof window !== "undefined" ? window.localStorage.getItem('token') : undefined;
-if (existingToken) {
-    setAuthToken(existingToken);
-}
-
 api.interceptors.response.use(
-    (response) => {
-        const token = response?.data?.token || response?.headers["x-auth-token"];
-        if (token) {
-            window?.localStorage?.setItem('token', token);
-            setAuthToken(token);
-        }
-        return response;
-    },
+    (response) => response,
     (error) => {
         const { status } = error.response;
         const currentPath = window?.location.pathname;

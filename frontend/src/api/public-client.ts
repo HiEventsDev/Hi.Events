@@ -6,12 +6,6 @@ export const publicApi = axios.create({
     withCredentials: true,
 });
 
-const existingToken = typeof window !== "undefined" ? window?.localStorage?.getItem('token') : undefined;
-
-if (existingToken) {
-    publicApi.defaults.headers.common['Authorization'] = `Bearer ${existingToken}`;
-}
-
 publicApi.interceptors.request.use((config) => {
     const baseUrl = isSsr()
         ? getConfig('VITE_API_URL_SERVER')
