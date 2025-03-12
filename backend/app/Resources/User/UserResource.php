@@ -18,6 +18,7 @@ class UserResource extends BaseResource
             'timezone' => $this->getTimezone(),
             'first_name' => $this->getFirstName(),
             'last_name' => $this->getLastName(),
+            'full_name' => $this->getFullName(),
             'email' => $this->getEmail(),
             'is_email_verified' => $this->getEmailVerifiedAt() !== null,
             'has_pending_email_change' => $this->getPendingEmail() !== null,

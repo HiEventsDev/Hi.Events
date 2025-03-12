@@ -1,9 +1,9 @@
-import ZohoChatWidget from "../ZohoChatWidget";
+import ChatwootWidget from "../ChatwootWidget";
 
 export const ThirdPartyScripts = () => {
     return (
         <>
-            <ZohoChatWidget/>
+            <ChatwootWidget/>
         </>
     );
 }
