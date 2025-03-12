@@ -7,6 +7,8 @@ export type ConfigKeys = 'VITE_FRONTEND_URL'
     | 'VITE_API_URL_CLIENT'
     | 'VITE_STRIPE_PUBLISHABLE_KEY'
     | 'VITE_API_URL_SERVER'
+    | 'VITE_CHATWOOT_WEBSITE_TOKEN'
+    | 'VITE_CHATWOOT_BASE_URL'
     | string;
 
 export type IdParam = string | undefined | number;
@@ -41,6 +43,7 @@ export interface User {
     account_id?: IdParam;
     first_name: string;
     last_name: string;
+    full_name: string;
     email: string;
     timezone?: string;
     password?: string;
