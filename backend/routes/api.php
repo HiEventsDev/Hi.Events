@@ -165,11 +165,11 @@ $router->middleware(['auth:api'])->group(
         $router->get('/users', GetUsersAction::class);
         $router->get('/users/{user_id}', GetUserAction::class);
         $router->put('/users/{user_id}', UpdateUserAction::class);
-        $router->post('/users/{user_id}/email-change/{token}', ConfirmEmailChangeAction::class);
+        $router->post('/users/{user_id}/email-change/{changeToken}', ConfirmEmailChangeAction::class);
         $router->post('/users/{user_id}/invitation', ResendInvitationAction::class);
         $router->delete('/users/{user_id}/invitation', DeleteInvitationAction::class);
         $router->delete('/users/{user_id}/email-change', CancelEmailChangeAction::class);
-        $router->post('/users/{user_id}/confirm-email/{token}', ConfirmEmailAddressAction::class);
+        $router->post('/users/{user_id}/confirm-email/{resetToken}', ConfirmEmailAddressAction::class);
         $router->post('/users/{user_id}/resend-email-confirmation', ResendEmailConfirmationAction::class);
 
         // Accounts

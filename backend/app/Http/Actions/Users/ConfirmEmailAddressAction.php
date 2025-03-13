@@ -23,13 +23,13 @@ class ConfirmEmailAddressAction extends BaseAction
     /**
      * @throws DecryptionFailedException|Throwable
      */
-    public function __invoke(int $userId, string $token): Response|JsonResponse
+    public function __invoke(int $userId, string $resetToken): Response|JsonResponse
     {
         $this->isActionAuthorized($userId, UserDomainObject::class);
 
         try {
             $this->confirmEmailAddressHandler->handle(new ConfirmEmailChangeDTO(
-                token: $token,
+                token: $resetToken,
                 accountId: $this->getAuthenticatedAccountId(),
             ));
         } catch (EncryptedPayloadExpiredException) {

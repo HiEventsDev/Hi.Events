@@ -27,13 +27,13 @@ class ConfirmEmailChangeAction extends BaseAction
     /**
      * @throws DecryptionFailedException|Throwable
      */
-    public function __invoke(int $userId, string $token): Response|JsonResponse
+    public function __invoke(int $userId, string $changeToken): Response|JsonResponse
     {
         $this->isActionAuthorized($userId, UserDomainObject::class);
 
         try {
             $user = $this->confirmEmailChangeHandler->handle(new ConfirmEmailChangeDTO(
-                token: $token,
+                token: $changeToken,
                 accountId: $this->getAuthenticatedAccountId(),
             ));
         } catch (EncryptedPayloadExpiredException) {
