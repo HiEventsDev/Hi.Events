@@ -2,6 +2,7 @@
 
 namespace HiEvents\Http\Actions\Events;
 
+use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\Status\EventStatus;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Resources\Event\EventResourcePublic;
@@ -30,7 +31,7 @@ class GetEventPublicAction extends BaseAction
             'isAuthenticated' => $this->isUserAuthenticated(),
         ]));
 
-        if ($event->getStatus() !== EventStatus::LIVE->name && !$this->isUserAuthenticated()) {
+        if (!$this->canUserViewEvent($event)) {
             $this->logger->debug(__('Event with ID :eventId is not live and user is not authenticated', [
                 'eventId' => $eventId
             ]));
@@ -39,5 +40,18 @@ class GetEventPublicAction extends BaseAction
         }
 
         return $this->resourceResponse(EventResourcePublic::class, $event);
+    }
+
+    private function canUserViewEvent(EventDomainObject $event): bool
+    {
+        if ($event->getStatus() === EventStatus::LIVE->name) {
+            return true;
+        }
+
+        if ($this->isUserAuthenticated() && $event->getAccountId() === $this->getAuthenticatedAccountId()) {
+            return true;
+        }
+
+        return false;
     }
 }
