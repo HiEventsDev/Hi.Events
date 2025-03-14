@@ -20,6 +20,8 @@
 </div>
 @endif
 
+{{ __('Name') }}: <b>{{ $order->getFullName() }}</b><br>
+{{ __('Email') }}: <b>{{ $order->getEmail() }}</b><br>
 {{ __('Order Amount:') }} <b>{{ Currency::format($order->getTotalGross(), $event->getCurrency()) }}</b><br>
 {{ __('Order ID:') }} <b>{{ $order->getPublicId() }}</b><br>
 {{ __('Order Status:') }} <b>{{ $order->getHumanReadableStatus() }}</b>
