@@ -21,52 +21,52 @@ import {useState} from "react";
 import {Card} from "../../../common/Card";
 import {PaymentAndInvoicingSettings} from "./Sections/PaymentSettings";
 
-const SECTIONS = [
-    {
-        id: 'event-details',
-        label: t`Event Details`,
-        icon: IconBuildingStore,
-        component: EventDetailsForm
-    },
-    {
-        id: 'location-settings',
-        label: t`Location`,
-        icon: IconMapPin,
-        component: LocationSettings
-    },
-    {
-        id: 'homepage-settings',
-        label: t`Checkout`,
-        icon: IconHome,
-        component: HomepageAndCheckoutSettings
-    },
-    {
-        id: 'seo-settings',
-        label: t`SEO`,
-        icon: IconBrandGoogleAnalytics,
-        component: SeoSettings
-    },
-    {
-        id: 'email-settings',
-        label: t`Email`,
-        icon: IconAt,
-        component: EmailSettings
-    },
-    {
-        id: 'misc-settings',
-        label: t`Miscellaneous`,
-        icon: IconAdjustments,
-        component: MiscSettings
-    },
-    {
-        id: 'payment-settings',
-        label: t`Payment & Invoicing`,
-        icon: IconCreditCard,
-        component: PaymentAndInvoicingSettings,
-    }
-];
-
 export const Settings = () => {
+    const SECTIONS = [
+        {
+            id: 'event-details',
+            label: t`Event Details`,
+            icon: IconBuildingStore,
+            component: EventDetailsForm
+        },
+        {
+            id: 'location-settings',
+            label: t`Location`,
+            icon: IconMapPin,
+            component: LocationSettings
+        },
+        {
+            id: 'homepage-settings',
+            label: t`Checkout`,
+            icon: IconHome,
+            component: HomepageAndCheckoutSettings
+        },
+        {
+            id: 'seo-settings',
+            label: t`SEO`,
+            icon: IconBrandGoogleAnalytics,
+            component: SeoSettings
+        },
+        {
+            id: 'email-settings',
+            label: t`Email`,
+            icon: IconAt,
+            component: EmailSettings
+        },
+        {
+            id: 'misc-settings',
+            label: t`Miscellaneous`,
+            icon: IconAdjustments,
+            component: MiscSettings
+        },
+        {
+            id: 'payment-settings',
+            label: t`Payment & Invoicing`,
+            icon: IconCreditCard,
+            component: PaymentAndInvoicingSettings,
+        }
+    ];
+
     const isLargeScreen = useMediaQuery('(min-width: 1200px)', true);
     const [activeSection, setActiveSection] = useState(SECTIONS[0].id);
 
