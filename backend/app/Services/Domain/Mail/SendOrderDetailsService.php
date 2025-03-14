@@ -18,18 +18,18 @@ use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Domain\Attendee\SendAttendeeTicketService;
 use Illuminate\Mail\Mailer;
 
-readonly class SendOrderDetailsService
+class SendOrderDetailsService
 {
     public function __construct(
-        private EventRepositoryInterface  $eventRepository,
-        private OrderRepositoryInterface  $orderRepository,
-        private Mailer                    $mailer,
-        private SendAttendeeTicketService $sendAttendeeTicketService,
+        private readonly EventRepositoryInterface  $eventRepository,
+        private readonly OrderRepositoryInterface  $orderRepository,
+        private readonly Mailer                    $mailer,
+        private readonly SendAttendeeTicketService $sendAttendeeTicketService,
     )
     {
     }
 
-    public function sendOrderSummaryAndProductEmails(OrderDomainObject $order): void
+    public function sendOrderSummaryAndTicketEmails(OrderDomainObject $order): void
     {
         $order = $this->orderRepository
             ->loadRelation(OrderItemDomainObject::class)
@@ -59,6 +59,26 @@ readonly class SendOrderDetailsService
         }
     }
 
+    public function sendCustomerOrderSummary(
+        OrderDomainObject        $order,
+        EventDomainObject        $event,
+        OrganizerDomainObject    $organizer,
+        EventSettingDomainObject $eventSettings,
+        ?InvoiceDomainObject     $invoice = null
+    ): void
+    {
+        $this->mailer
+            ->to($order->getEmail())
+            ->locale($order->getLocale())
+            ->send(new OrderSummary(
+                order: $order,
+                event: $event,
+                organizer: $organizer,
+                eventSettings: $eventSettings,
+                invoice: $invoice,
+            ));
+    }
+
     private function sendAttendeeTicketEmails(OrderDomainObject $order, EventDomainObject $event): void
     {
         $sentEmails = [];
@@ -81,16 +101,13 @@ readonly class SendOrderDetailsService
 
     private function sendOrderSummaryEmails(OrderDomainObject $order, EventDomainObject $event): void
     {
-        $this->mailer
-            ->to($order->getEmail())
-            ->locale($order->getLocale())
-            ->send(new OrderSummary(
-                order: $order,
-                event: $event,
-                organizer: $event->getOrganizer(),
-                eventSettings: $event->getEventSettings(),
-                invoice: $order->getLatestInvoice(),
-            ));
+        $this->sendCustomerOrderSummary(
+            order: $order,
+            event: $event,
+            organizer: $event->getOrganizer(),
+            eventSettings: $event->getEventSettings(),
+            invoice: $order->getLatestInvoice(),
+        );
 
         if ($order->getIsManuallyCreated() || !$event->getEventSettings()->getNotifyOrganizerOfNewOrders()) {
             return;
