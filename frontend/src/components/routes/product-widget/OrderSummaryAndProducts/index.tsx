@@ -15,6 +15,7 @@ import {
     IconPrinter,
     IconUser
 } from "@tabler/icons-react";
+import { OfflinePaymentMethod } from "../Payment/PaymentMethods/Offline";
 
 import {useGetOrderPublic} from "../../../../queries/useGetOrderPublic.ts";
 import {eventCheckoutPath} from "../../../../utilites/urlHelper.ts";
@@ -223,16 +224,9 @@ const PostCheckoutMessage = ({ message }: { message: string }) => (
     </div>
 );
 
-const OfflinePaymentInstructions = ({ event }: { event: Event }) => (
+const OfflinePaymentInstructions = ({ event, order }: { event: Event, order: Order }) => (
     <div style={{ marginTop: '20px', marginBottom: '40px' }}>
-        <h2>{t`Payment Instructions`}</h2>
-        <Card>
-            <div
-                dangerouslySetInnerHTML={{
-                    __html: event?.settings?.offline_payment_instructions || "",
-                }}
-            />
-        </Card>
+        <OfflinePaymentMethod event={event} order={order} />
     </div>
 );
 
@@ -260,7 +254,7 @@ export const OrderSummaryAndProducts = () => {
             <CheckoutContent hasFooter={true}>
                 <WelcomeHeader order={order} event={event}/>
 
-                {order?.status === 'AWAITING_OFFLINE_PAYMENT' && <OfflinePaymentInstructions event={event}/>}
+                {order?.status === 'AWAITING_OFFLINE_PAYMENT' && <OfflinePaymentInstructions event={event} order={order}/>}
 
                 <Group justify="space-between" align="center">
                     <h1 className={classes.heading}>{t`Order Details`}</h1>
