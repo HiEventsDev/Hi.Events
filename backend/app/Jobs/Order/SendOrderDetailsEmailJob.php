@@ -22,6 +22,6 @@ class SendOrderDetailsEmailJob implements ShouldQueue
 
     public function handle(SendOrderDetailsService $service): void
     {
-        $service->sendOrderSummaryAndProductEmails($this->order);
+        $service->sendOrderSummaryAndTicketEmails($this->order);
     }
 }

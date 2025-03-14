@@ -9,10 +9,13 @@
 # {{ __('Your Order is Confirmed! ') }} 🎉
 
 @if($order->isOrderAwaitingOfflinePayment() === false)
+
 <p>
 {{ __('Congratulations! Your order for :eventTitle on :eventDate at :eventTime was successful. Please find your order details below.', ['eventTitle' => $event->getTitle(), 'eventDate' => (new Carbon(DateHelper::convertFromUTC($event->getStartDate(), $event->getTimezone())))->format('F j, Y'), 'eventTime' => (new Carbon(DateHelper::convertFromUTC($event->getStartDate(), $event->getTimezone())))->format('g:i A')]) }}
 </p>
+
 @else
+
 <div>
 <p>
 {{ __('Your order is pending payment. Tickets have been issued but will not be valid until payment is received.') }}
@@ -24,18 +27,29 @@
 {!! $eventSettings->getOfflinePaymentInstructions() !!}
 </div>
 </div>
+
 @endif
 
 <p>
 
-## {{ __('Event Details') }}
+# {{ __('Event Details') }}
 **{{ __('Event Name:') }}** {{ $event->getTitle() }}
     <br>
 **{{ __('Date & Time:') }}** {{ (new Carbon(DateHelper::convertFromUTC($event->getStartDate(), $event->getTimezone())))->format('F j, Y') }} at {{ (new Carbon(DateHelper::convertFromUTC($event->getStartDate(), $event->getTimezone())))->format('g:i A') }}
 
 </p>
 
-## {{ __('Order Summary') }}
+@if($eventSettings->getPostCheckoutMessage() && $order->isOrderCompleted())
+<p>
+
+# {{ __('Additional Information') }}
+
+{!! $eventSettings->getPostCheckoutMessage() !!}
+
+</p>
+@endif
+
+# {{ __('Order Summary') }}
 - **{{ __('Order Number:') }}** {{ $order->getPublicId() }}
 - **{{ __('Total Amount:') }}** {{ Currency::format($order->getTotalGross(), $event->getCurrency()) }}
 
@@ -44,11 +58,6 @@
 </x-mail::button>
 
 {{ __('If you have any questions or need assistance, feel free to reach out to our friendly support team at') }} <a href="mailto:{{ $organizer->getEmail() }}">{{ $organizer->getEmail() }}</a>.
-
-## {{ __('What\'s Next?') }}
-- **{{ __('Download Tickets:') }}** {{ __('Please download your tickets from the order summary page.') }}
-- **{{ __('Prepare for the Event:') }}** {{ __('Make sure to note the event date, time, and location.') }}
-- **{{ __('Stay Updated:') }}** {{ __('Keep an eye on your email for any updates from the event organizer.') }}
 
 {{ __('Best regards,') }}<br>
 {{ config('app.name') }}
