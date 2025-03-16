@@ -40,7 +40,9 @@ class ClassGenerator
     private array $defaultIgnoreProperties = [];
 
     private array $ignoredTables = [
-        'migrations'
+        'migrations',
+        'job_batches',
+        'failed_jobs',
     ];
 
     private AbstractSchemaManager $schemaManager;
