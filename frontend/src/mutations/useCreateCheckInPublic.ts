@@ -20,20 +20,36 @@ export const useCreateCheckInPublic = (pagination: QueryFilters) => {
             queryClient.setQueryData(
                 [GET_CHECK_IN_LIST_ATTENDEES_PUBLIC_QUERY_KEY, checkInListShortId, pagination],
                 (oldData: any) => {
+                    if (!oldData?.data) return oldData;
+
+                    const updatedAttendee = data?.data?.find((checkIn: any) => checkIn.attendee_id);
+
+                    if (!updatedAttendee) return oldData;
+
+                    const updatedOrderId = updatedAttendee.order_id;
+
                     const newAttendees = oldData.data.map((attendee: any) => {
                         const attendeeCheckIn = data?.data?.find(
                             (checkIn: any) => checkIn.attendee_id === attendee.id
                         );
 
-                        if (attendeeCheckIn) {
-                            const hasError = data.errors && Object.keys(data.errors).some(
-                                (key) => key === attendee.public_id
-                            );
+                        const hasError = data.errors && Object.keys(data.errors).some(
+                            (key) => key === attendee.public_id
+                        );
 
+                        if (attendeeCheckIn) {
                             return {
                                 ...attendee,
                                 check_in: attendeeCheckIn,
                                 status: markedAsPaid && !hasError ? 'ACTIVE' : attendee.status,
+                            };
+                        }
+
+                        // Mark all attendees with the same order_id as ACTIVE if markedAsPaid
+                        if (markedAsPaid && attendee.order_id === updatedOrderId) {
+                            return {
+                                ...attendee,
+                                status: 'ACTIVE',
                             };
                         }
                         return attendee;
