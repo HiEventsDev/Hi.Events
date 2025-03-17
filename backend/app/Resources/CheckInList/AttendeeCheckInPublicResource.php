@@ -18,6 +18,7 @@ class AttendeeCheckInPublicResource extends JsonResource
             'check_in_list_id' => $this->getCheckInListId(),
             'attendee_id' => $this->getAttendeeId(),
             'checked_in_at' => $this->getCreatedAt(),
+            'order_id' => $this->getOrderId(),
         ];
     }
 }

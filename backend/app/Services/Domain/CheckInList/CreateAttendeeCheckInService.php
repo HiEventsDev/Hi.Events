@@ -4,6 +4,7 @@ namespace HiEvents\Services\Domain\CheckInList;
 
 use Exception;
 use HiEvents\DataTransferObjects\ErrorBagDTO;
+use HiEvents\DomainObjects\AttendeeCheckInDomainObject;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\CheckInListDomainObject;
 use HiEvents\DomainObjects\Enums\AttendeeCheckInActionType;
@@ -250,9 +251,10 @@ class CreateAttendeeCheckInService
         AttendeeDomainObject    $attendee,
         CheckInListDomainObject $checkInList,
         string                  $checkInUserIpAddress
-    ): object
+    ): AttendeeCheckInDomainObject
     {
         return $this->attendeeCheckInRepository->create([
+            AttendeeCheckInDomainObjectAbstract::ORDER_ID => $attendee->getOrderId(),
             AttendeeCheckInDomainObjectAbstract::ATTENDEE_ID => $attendee->getId(),
             AttendeeCheckInDomainObjectAbstract::CHECK_IN_LIST_ID => $checkInList->getId(),
             AttendeeCheckInDomainObjectAbstract::IP_ADDRESS => $checkInUserIpAddress,

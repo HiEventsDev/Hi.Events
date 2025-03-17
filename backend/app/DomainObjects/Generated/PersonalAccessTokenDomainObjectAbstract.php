@@ -11,7 +11,6 @@ abstract class PersonalAccessTokenDomainObjectAbstract extends \HiEvents\DomainO
     final public const SINGULAR_NAME = 'personal_access_token';
     final public const PLURAL_NAME = 'personal_access_tokens';
     final public const ID = 'id';
-    final public const ACCOUNT_ID = 'account_id';
     final public const TOKENABLE_TYPE = 'tokenable_type';
     final public const TOKENABLE_ID = 'tokenable_id';
     final public const NAME = 'name';
@@ -23,7 +22,6 @@ abstract class PersonalAccessTokenDomainObjectAbstract extends \HiEvents\DomainO
     final public const UPDATED_AT = 'updated_at';
 
     protected int $id;
-    protected int $account_id;
     protected string $tokenable_type;
     protected int $tokenable_id;
     protected string $name;
@@ -38,7 +36,6 @@ abstract class PersonalAccessTokenDomainObjectAbstract extends \HiEvents\DomainO
     {
         return [
                     'id' => $this->id ?? null,
-                    'account_id' => $this->account_id ?? null,
                     'tokenable_type' => $this->tokenable_type ?? null,
                     'tokenable_id' => $this->tokenable_id ?? null,
                     'name' => $this->name ?? null,
@@ -60,17 +57,6 @@ abstract class PersonalAccessTokenDomainObjectAbstract extends \HiEvents\DomainO
     public function getId(): int
     {
         return $this->id;
-    }
-
-    public function setAccountId(int $account_id): self
-    {
-        $this->account_id = $account_id;
-        return $this;
-    }
-
-    public function getAccountId(): int
-    {
-        return $this->account_id;
     }
 
     public function setTokenableType(string $tokenable_type): self
