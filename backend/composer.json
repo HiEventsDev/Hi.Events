@@ -11,10 +11,10 @@
         "barryvdh/laravel-dompdf": "^3.0",
         "brick/money": "^0.8.0",
         "doctrine/dbal": "^3.6",
-        "druc/laravel-langscanner": "^2.2",
+        "druc/laravel-langscanner": "dev-l12-compatibility",
         "ezyang/htmlpurifier": "^4.17",
         "guzzlehttp/guzzle": "^7.2",
-        "laravel/framework": "^11.0",
+        "laravel/framework": "^12.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.8",
         "laravel/vapor-core": "^2.37",
@@ -35,7 +35,7 @@
         "laravel/sail": "^1.22",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^8.1",
-        "phpunit/phpunit": "^10.1",
+        "phpunit/phpunit": "^11.0",
         "spatie/laravel-ignition": "^2.0"
     },
     "autoload": {
@@ -80,5 +80,11 @@
         }
     },
     "minimum-stability": "stable",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/laravel-shift/laravel-langscanner.git"
+        }
+    ]
 }
