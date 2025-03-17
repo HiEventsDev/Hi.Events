@@ -7,9 +7,9 @@ services:
         ports:
             - "1234:80"
         volumes:
-            - ./../../backend:/app
-            - ./../../backend/storage:/app/storage
-            - ./../../backend/bootstrap/cache:/app/bootstrap/cache
+            - ./../../backend:/var/www/html
+            - ./../../backend/storage:/var/www/html/storage
+            - ./../../backend/bootstrap/cache:/var/www/html/bootstrap/cache
         environment:
               APP_ENV: '${APP_ENV:-local}'
               APP_KEY: '${APP_KEY}'
