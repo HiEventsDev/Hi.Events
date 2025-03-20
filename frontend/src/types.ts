@@ -65,6 +65,7 @@ export interface Account {
     currency_code?: string;
     password?: string;
     stripe_connect_setup_complete?: boolean;
+    stripe_account_id?: string;
     is_account_email_confirmed?: boolean;
     is_saas_mode_enabled?: boolean;
     configuration?: AccountConfiguration;

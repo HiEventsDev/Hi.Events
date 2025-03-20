@@ -5,7 +5,7 @@ import { AxiosError } from "axios";
 
 export const GET_STRIPE_CONNECT_ACCOUNT_DETAILS = 'getStripeConnectAccountDetails';
 
-export const useCreateOrGetStripeConnectDetails = (accountId: IdParam) => {
+export const useCreateOrGetStripeConnectDetails = (accountId: IdParam, enabled: boolean) => {
     return useQuery<StripeConnectDetails, AxiosError>({
         queryKey: [GET_STRIPE_CONNECT_ACCOUNT_DETAILS, accountId],
 
@@ -14,7 +14,7 @@ export const useCreateOrGetStripeConnectDetails = (accountId: IdParam) => {
             return data;
         },
 
-        enabled: accountId !== undefined,
+        enabled: enabled,
         retry: false,
     });
 };

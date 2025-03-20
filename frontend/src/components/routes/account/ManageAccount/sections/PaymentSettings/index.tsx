@@ -5,7 +5,7 @@ import {useCreateOrGetStripeConnectDetails} from "../../../../../../queries/useC
 import {useGetAccount} from "../../../../../../queries/useGetAccount.ts";
 import {LoadingMask} from "../../../../../common/LoadingMask";
 import {Anchor, Button, Grid, Group, Text, ThemeIcon, Title} from "@mantine/core";
-import {StripeConnectDetails} from "../../../../../../types.ts";
+import {Account} from "../../../../../../types.ts";
 import paymentClasses from "./PaymentSettings.module.scss";
 import classes from "../../ManageAccount.module.scss";
 import {useEffect, useState} from "react";
@@ -79,8 +79,36 @@ const FeePlanDisplay = ({configuration}: FeePlanDisplayProps) => {
     );
 };
 
-const ConnectStatus = (props: { stripeDetails: StripeConnectDetails }) => {
+const ConnectStatus = ({account}: { account: Account }) => {
+    const [fetchStripeDetails, setFetchStripeDetails] = useState(false);
     const [isReturningFromStripe, setIsReturningFromStripe] = useState(false);
+    const stripeDetailsQuery = useCreateOrGetStripeConnectDetails(
+        account.id,
+        !!account?.stripe_account_id || fetchStripeDetails
+    );
+
+    const stripeDetails = stripeDetailsQuery.data;
+    const error = stripeDetailsQuery.error as any;
+
+    if (error?.response?.status === 403) {
+        return (
+            <>
+                <Card className={classes.tabContent}>
+                    <div className={paymentClasses.stripeInfo}>
+                        <Group gap="xs" mb="md">
+                            <ThemeIcon size="lg" radius="md" variant="light">
+                                <IconAlertCircle size={20}/>
+                            </ThemeIcon>
+                            <Title order={2}>{t`Access Denied`}</Title>
+                        </Group>
+                        <Text size="md">
+                            {error?.response?.data?.message}
+                        </Text>
+                    </div>
+                </Card>
+            </>
+        );
+    }
 
     useEffect(() => {
         if (typeof window === 'undefined') {
@@ -91,11 +119,19 @@ const ConnectStatus = (props: { stripeDetails: StripeConnectDetails }) => {
         );
     }, []);
 
+    useEffect(() => {
+        if (fetchStripeDetails && !stripeDetailsQuery.isLoading) {
+            setFetchStripeDetails(false);
+            window.location.href = String(stripeDetails?.connect_url);
+        }
+
+    }, [fetchStripeDetails, stripeDetailsQuery.isFetched]);
+
     return (
         <div className={paymentClasses.stripeInfo}>
             <Title mb={10} order={3}>{t`Payment Processing`}</Title>
 
-            {props.stripeDetails?.is_connect_setup_complete ? (
+            {stripeDetails?.is_connect_setup_complete ? (
                 <>
                     <Group gap="xs" mb="md">
                         <ThemeIcon size="sm" variant="light" radius="xl" color="green">
@@ -145,8 +181,14 @@ const ConnectStatus = (props: { stripeDetails: StripeConnectDetails }) => {
                             size="sm"
                             leftSection={<IconBrandStripe size={20}/>}
                             onClick={() => {
-                                if (typeof window !== 'undefined')
-                                    window.location.href = String(props.stripeDetails?.connect_url);
+                                if (!stripeDetails) {
+                                    setFetchStripeDetails(true);
+                                    return;
+                                } else {
+                                    if (typeof window !== 'undefined') {
+                                        window.location.href = String(stripeDetails?.connect_url)
+                                    }
+                                }
                             }}
                         >
                             {(!isReturningFromStripe) && t`Connect with Stripe`}
@@ -184,29 +226,6 @@ const ConnectStatus = (props: { stripeDetails: StripeConnectDetails }) => {
 
 const PaymentSettings = () => {
     const accountQuery = useGetAccount();
-    const stripeDetailsQuery = useCreateOrGetStripeConnectDetails(accountQuery.data?.id);
-    const stripeDetails = stripeDetailsQuery.data;
-    const error = stripeDetailsQuery.error as any;
-
-    if (error?.response?.status === 403) {
-        return (
-            <>
-                <Card className={classes.tabContent}>
-                    <div className={paymentClasses.stripeInfo}>
-                        <Group gap="xs" mb="md">
-                            <ThemeIcon size="lg" radius="md" variant="light">
-                                <IconAlertCircle size={20}/>
-                            </ThemeIcon>
-                            <Title order={2}>{t`Access Denied`}</Title>
-                        </Group>
-                        <Text size="md">
-                            {error?.response?.data?.message}
-                        </Text>
-                    </div>
-                </Card>
-            </>
-        );
-    }
 
     return (
         <>
@@ -216,10 +235,12 @@ const PaymentSettings = () => {
             />
             <Card className={classes.tabContent}>
                 <LoadingMask/>
-                {(accountQuery.data?.configuration || stripeDetails) && (
+                {(accountQuery.data?.configuration) && (
                     <Grid gutter="xl">
                         <Grid.Col span={{base: 12, md: 6}}>
-                            {stripeDetails && <ConnectStatus stripeDetails={stripeDetails}/>}
+                            {accountQuery.isFetched && (
+                                <ConnectStatus account={accountQuery.data}/>
+                            )}
                         </Grid.Col>
                         <Grid.Col span={{base: 12, md: 6}}>
                             {accountQuery.data?.configuration && (
