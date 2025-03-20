@@ -22,146 +22,188 @@
 }
 
 .setupCard {
-  margin-bottom: 20px;
-  margin-top: 20px;
+  margin-bottom: 28px;
+  margin-top: 24px;
   overflow: hidden;
   position: relative;
-  padding-top: 16px;
+  padding: 32px 28px;
+  background: linear-gradient(to right, rgba(249, 250, 251, 0.6), rgba(243, 244, 246, 0.6));
+  border: 1px solid #f0f0f0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
 }
 
 .dismissButton {
   position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   z-index: 10;
-  color: #757575;
-  transition: background-color 0.2s;
+  color: #9e9e9e;
+  background-color: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(6px);
+  transition: all 0.2s ease;
 
   &:hover {
-    background-color: rgba(0, 0, 0, 0.05);
-    color: #303030;
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #555;
+    transform: scale(1.05);
   }
 }
 
 .setupCardContent {
   display: flex;
+  flex-direction: column;
   position: relative;
-  padding-right: 280px; // Make room for the rocket
 }
 
 .checklistContainer {
-  flex: 1;
-  padding-right: 20px;
+  width: 100%;
 
   h2 {
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
     margin-top: 0;
-    color: #303030;
+    color: #444;
+    font-weight: 700;
+    letter-spacing: -0.02em;
   }
 
   .setupDescription {
-    margin-bottom: 1.5rem;
+    margin-bottom: 2.25rem;
     color: #666;
+    font-size: 1.05rem;
+    line-height: 1.5;
+    max-width: 80%;
   }
 }
 
 .checklistItems {
   display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  margin: 0 -12px;
 }
 
 .checklistItem {
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
+  width: calc(50% - 24px);
+  margin: 0 12px 24px;
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  border: 1px solid rgba(230, 230, 230, 0.8);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03), 0 1px 3px rgba(0, 0, 0, 0.02);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.03);
+    border-color: rgba(210, 210, 210, 0.9);
+  }
 
   h3 {
-    font-size: 1.1rem;
-    margin: 0 0 0.25rem 0;
-    color: #303030;
+    font-size: 1.15rem;
+    margin: 0 0 0.8rem 0;
+    color: #333;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
   }
 
   p {
-    margin: 0;
+    margin: 0 0 1.2rem 0;
     color: #666;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+    line-height: 1.5;
   }
 }
 
 .checkboxContainer {
-  margin-top: 3px;
+  margin-right: 14px;
 }
 
 .checkbox {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  border: 2px solid var(--tk-primary);
+  width: 26px;
+  height: 26px;
+  border-radius: var(--tk-radius-sm);
+  border: 2px solid #ddd;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.2s ease;
+  background-color: rgba(255, 255, 255, 0.6);
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+
+  svg {
+    transition: all 0.2s ease;
+    transform: scale(0.85);
+  }
 }
 
 .checklistItemContent {
   flex: 1;
 }
 
-.rocketImageContainer {
-  position: absolute;
-  right: 50px;
-  top: 75%;
-  transform: translateY(-50%);
-  width: 220px;
-  height: 220px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.rocketImage {
-  width: 100%;
-  height: auto;
-  object-fit: contain;
-  opacity: 0.9;
-  filter: hue-rotate(350deg);
-}
-
-// Media query for tablets
-@media (max-width: 1024px) {
-  .setupCardContent {
-    padding-right: 180px;
-  }
-
-  .rocketImageContainer {
-    width: 160px;
-    height: 160px;
-  }
-}
-
-// Media query for mobile
-@media (max-width: 768px) {
-  .setupCardContent {
-    flex-direction: column;
-    padding-right: 0;
+// Tablet and smaller desktop styles
+@media (max-width: 1200px) {
+  .setupCard {
+    padding: 28px 24px;
   }
 
   .checklistContainer {
+    .setupDescription {
+      max-width: 100%;
+    }
+  }
+}
+
+// Small tablet styles
+@media (max-width: 992px) {
+  .checklistItem {
     width: 100%;
-    padding-right: 0;
+    margin-bottom: 16px;
   }
 
-  .rocketImageContainer {
-    display: none; // Hide the rocket on mobile
+  .setupCard {
+    padding: 24px 20px;
+  }
+
+  .checklistContainer h2 {
+    font-size: 1.6rem;
+  }
+}
+
+// Mobile styles
+@media (max-width: 768px) {
+  .setupCard {
+    padding: 24px 16px;
+    margin-bottom: 24px;
+  }
+
+  .checklistContainer {
+    h2 {
+      font-size: 1.4rem;
+    }
+
+    .setupDescription {
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  .checklistItem {
+    padding: 20px 16px;
+  }
+
+  .dismissButton {
+    top: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
   }
 }

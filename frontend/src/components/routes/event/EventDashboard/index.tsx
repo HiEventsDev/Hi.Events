@@ -19,7 +19,7 @@ import {useGetAccount} from "../../../../queries/useGetAccount.ts";
 import {useUpdateEventStatus} from "../../../../mutations/useUpdateEventStatus.ts";
 import {confirmationDialog} from "../../../../utilites/confirmationDialog.tsx";
 import {showError, showSuccess} from "../../../../utilites/notifications.tsx";
-import { useEffect, useState } from 'react';
+import {useEffect, useState} from 'react';
 
 export const DashBoardSkeleton = () => {
     return (
@@ -85,7 +85,7 @@ export const EventDashboard = () => {
         ? `${formatDate(eventStats.start_date, 'MMM DD', event?.timezone)} - ${formatDate(eventStats.end_date, 'MMM DD', event?.timezone)}`
         : '';
 
-    const shouldShowChecklist = isChecklistVisible && event && accountIsFetched && (
+    const shouldShowChecklist = (isChecklistVisible && event && accountIsFetched && account?.is_saas_mode_enabled) && (
         !account?.stripe_connect_setup_complete ||
         event?.status !== 'LIVE'
     );
@@ -138,81 +138,96 @@ export const EventDashboard = () => {
                             role="button"
                             aria-label="dismiss"
                         >
-                            <IconX size={18} />
+                            <IconX size={20}/>
                         </div>
 
                         <div className={classes.setupCardContent}>
                             <div className={classes.checklistContainer}>
-                                <h2>{t`Get your event ready`}</h2>
+                                <h2>🚀 {t`Get your event ready`}</h2>
                                 <p className={classes.setupDescription}>
                                     {t`Complete these steps to start selling tickets for your event.`}
                                 </p>
 
                                 <div className={classes.checklistItems}>
                                     <div className={classes.checklistItem}>
-                                        <div className={classes.checkboxContainer}>
-                                            <div className={classes.checkbox} style={{ backgroundColor: event?.status === 'LIVE' ? 'var(--tk-primary)' : 'transparent' }}>
-                                                {event?.status === 'LIVE' && (
-                                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M11.6666 3.5L5.24992 9.91667L2.33325 7" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                                    </svg>
-                                                )}
-                                            </div>
-                                        </div>
-                                        <div className={classes.checklistItemContent}>
-                                            <h3>{t`Make your event live`}</h3>
-                                            <p>{t`Your event must be live before you can sell tickets.`}</p>
-                                            {event?.status !== 'LIVE' && (
-                                                <Button
-                                                    onClick={handleStatusToggle}
-                                                    variant="light"
-                                                    size="sm"
-                                                    mt="sm"
+                                        <h3>
+                                            <div className={classes.checkboxContainer}>
+                                                <div
+                                                    className={classes.checkbox}
+                                                    style={{backgroundColor: event?.status === 'LIVE' ? 'var(--tk-primary)' : 'transparent'}}
                                                 >
-                                                    {t`Make Event Live`}
-                                                </Button>
-                                            )}
-                                        </div>
+                                                    {event?.status === 'LIVE' && (
+                                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+                                                             xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M13.3333 4L6.00001 11.3333L2.66667 8"
+                                                                  stroke="white" strokeWidth="2" strokeLinecap="round"
+                                                                  strokeLinejoin="round"/>
+                                                        </svg>
+                                                    )}
+                                                </div>
+                                            </div>
+                                            {t`Make your event live`}
+                                        </h3>
+                                        <p>{t`Your event must be live before you can sell tickets to attendees.`}</p>
+                                        {event?.status !== 'LIVE' && (
+                                            <Button
+                                                onClick={handleStatusToggle}
+                                                variant="light"
+                                                size="sm"
+                                                radius="md"
+                                                fullWidth
+                                            >
+                                                {t`Publish Event`}
+                                            </Button>
+                                        )}
+                                        {event?.status === 'LIVE' && (
+                                            <Button
+                                                onClick={handleStatusToggle}
+                                                variant="light"
+                                                size="sm"
+                                                radius="md"
+                                                fullWidth
+                                            >
+                                                {t`Unpublish Event`}
+                                            </Button>
+                                        )}
                                     </div>
 
                                     <div className={classes.checklistItem}>
-                                        <div className={classes.checkboxContainer}>
-                                            <div className={classes.checkbox} style={{ backgroundColor: account?.stripe_connect_setup_complete ? 'var(--tk-primary)' : 'transparent' }}>
-                                                {account?.stripe_connect_setup_complete && (
-                                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M11.6666 3.5L5.24992 9.91667L2.33325 7" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                                    </svg>
-                                                )}
-                                            </div>
-                                        </div>
-                                        <div className={classes.checklistItemContent}>
-                                            <h3>{t`Connect to Stripe`}</h3>
-                                            <p>{t`Set up your payment processing to receive funds from ticket sales.`}</p>
-                                            {!account?.stripe_connect_setup_complete && (
-                                                <Button
-                                                    onClick={() => {
-                                                        window.location.href = '/account/payment';
-                                                    }}
-                                                    variant="light"
-                                                    size="sm"
-                                                    mt="sm"
-                                                    disabled={event?.status !== 'LIVE'}
+                                        <h3>
+                                            <div className={classes.checkboxContainer}>
+                                                <div
+                                                    className={classes.checkbox}
+                                                    style={{backgroundColor: account?.stripe_connect_setup_complete ? 'var(--tk-primary)' : 'transparent'}}
                                                 >
-                                                    {account?.stripe_account_id && t`Complete Stripe Setup`}
-                                                    {!account?.stripe_account_id && t`Connect to Stripe`}
-                                                </Button>
-                                            )}
-                                        </div>
+                                                    {account?.stripe_connect_setup_complete && (
+                                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+                                                             xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M13.3333 4L6.00001 11.3333L2.66667 8"
+                                                                  stroke="white" strokeWidth="2" strokeLinecap="round"
+                                                                  strokeLinejoin="round"/>
+                                                        </svg>
+                                                    )}
+                                                </div>
+                                            </div>
+                                            {t`Connect payment processing`}
+                                        </h3>
+                                        <p>{t`Link your Stripe account to receive funds from ticket sales.`}</p>
+                                        {!account?.stripe_connect_setup_complete && (
+                                            <Button
+                                                onClick={() => {
+                                                    window.location.href = '/account/payment';
+                                                }}
+                                                variant="light"
+                                                size="sm"
+                                                radius="md"
+                                                fullWidth
+                                            >
+                                                {account?.stripe_account_id ? t`Complete Stripe Setup` : t`Connect to Stripe`}
+                                            </Button>
+                                        )}
                                     </div>
                                 </div>
-                            </div>
-
-                            <div className={classes.rocketImageContainer}>
-                                <img
-                                    src="https://cdn.pixabay.com/photo/2014/04/03/10/08/rocket-309901_1280.png"
-                                    alt="Rocket"
-                                    className={classes.rocketImage}
-                                />
                             </div>
                         </div>
                     </Card>
