@@ -108,6 +108,7 @@ const EventLayout = () => {
             </NavLink>
         );
     });
+
     const handleStatusToggle = () => {
         const message = event?.status === 'LIVE'
             ? t`Are you sure you want to make this event draft? This will make the event invisible to the public`
