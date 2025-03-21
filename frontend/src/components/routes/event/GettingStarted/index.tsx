@@ -11,12 +11,13 @@ import {Tooltip} from "../../../common/Tooltip";
 import {useGetAccount} from "../../../../queries/useGetAccount.ts";
 import {useUpdateEventStatus} from "../../../../mutations/useUpdateEventStatus.ts";
 import {showError, showSuccess} from "../../../../utilites/notifications.tsx";
+import {getProductsFromEvent} from "../../../../utilites/helpers.ts";
 
 const GettingStarted = () => {
     const {eventId} = useParams();
     const eventQuery = useGetEvent(eventId);
     const event = eventQuery.data;
-    const products = event?.products;
+    const products = getProductsFromEvent(event);
     const hasProducts = products && products.length > 0;
     const eventImagesQuery = useGetEventImages(eventId);
     const eventImages = eventImagesQuery.data;
@@ -69,7 +70,8 @@ const GettingStarted = () => {
                             {t`Create products for your event, set prices, and manage available quantity.`}
                         </p>
 
-                        <Button variant={'light'} component={'a'} href={'/manage/event/' + eventId + '/products#create-product'}>
+                        <Button variant={'light'} component={'a'}
+                                href={'/manage/event/' + eventId + '/products#create-product'}>
                             {hasProducts ? t`Add More products` : t`Add products`}
                         </Button>
 
@@ -86,6 +88,20 @@ const GettingStarted = () => {
                             {event?.description ? t`Continue set up` : t`Set up your event`}
                         </Button>
                         {event?.description && <Check/>}
+                    </Card>
+                    <Card>
+                        <h2>
+                            {t`💳 Connect with Stripe`}
+                        </h2>
+                        <p>
+                            {t`Connect your Stripe account to start receiving payments.`}
+                        </p>
+                        {!account?.stripe_connect_setup_complete && (
+                            <Button variant={'light'} component={'a'} href={'/account/payment'}>
+                                {t`Connect with Stripe`}
+                            </Button>)
+                        }
+                        {account?.stripe_connect_setup_complete && <Check/>}
                     </Card>
                     <Card>
                         <h2>
@@ -113,20 +129,6 @@ const GettingStarted = () => {
                                 </Button>
                             )}
                         {event?.status === 'LIVE' && <Check/>}
-                    </Card>
-                    <Card>
-                        <h2>
-                            {t`💳 Connect with Stripe`}
-                        </h2>
-                        <p>
-                            {t`Connect your Stripe account to start receiving payments.`}
-                        </p>
-                        {!account?.stripe_connect_setup_complete && (
-                            <Button variant={'light'} component={'a'} href={'/account/payment'}>
-                                {t`Connect with Stripe`}
-                            </Button>)
-                        }
-                        {account?.stripe_connect_setup_complete && <Check/>}
                     </Card>
                     <Card>
                         <h2>
