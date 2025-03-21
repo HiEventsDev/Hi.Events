@@ -11,6 +11,7 @@ import classes from "../../ManageAccount.module.scss";
 import {useEffect, useState} from "react";
 import {IconAlertCircle, IconBrandStripe, IconCheck, IconExternalLink} from '@tabler/icons-react';
 import {formatCurrency} from "../../../../../../utilites/currency.ts";
+import {showSuccess} from "../../../../../../utilites/notifications.tsx";
 
 interface FeePlanDisplayProps {
     configuration?: {
@@ -45,26 +46,30 @@ const FeePlanDisplay = ({configuration}: FeePlanDisplayProps) => {
             <Card variant={'lightGray'}>
                 <Title order={4}>{configuration.name}</Title>
                 <Grid>
-                    <Grid.Col span={{base: 12, sm: 6}}>
-                        <Group gap="xs" wrap={'nowrap'}>
-                            <Text size="sm">
-                                {t`Transaction Fee:`}{' '}
-                                <Text span fw={600}>
-                                    {formatPercentage(configuration.application_fees.percentage)}
+                    {configuration.application_fees.percentage > 0 && (
+                        <Grid.Col span={{base: 12, sm: 6}}>
+                            <Group gap="xs" wrap={'nowrap'}>
+                                <Text size="sm">
+                                    {t`Transaction Fee:`}{' '}
+                                    <Text span fw={600}>
+                                        {formatPercentage(configuration.application_fees.percentage)}
+                                    </Text>
                                 </Text>
-                            </Text>
-                        </Group>
-                    </Grid.Col>
-                    <Grid.Col span={{base: 12, sm: 6}}>
-                        <Group gap="xs" wrap={'nowrap'}>
-                            <Text size="sm">
-                                {t`Fixed Fee:`}{' '}
-                                <Text span fw={600}>
-                                    {formatCurrency(configuration.application_fees.fixed)}
+                            </Group>
+                        </Grid.Col>
+                    )}
+                    {configuration.application_fees.fixed > 0 && (
+                        <Grid.Col span={{base: 12, sm: 6}}>
+                            <Group gap="xs" wrap={'nowrap'}>
+                                <Text size="sm">
+                                    {t`Fixed Fee:`}{' '}
+                                    <Text span fw={600}>
+                                        {formatCurrency(configuration.application_fees.fixed)}
+                                    </Text>
                                 </Text>
-                            </Text>
-                        </Group>
-                    </Grid.Col>
+                            </Group>
+                        </Grid.Col>
+                    )}
                 </Grid>
             </Card>
 
@@ -90,6 +95,24 @@ const ConnectStatus = ({account}: { account: Account }) => {
     const stripeDetails = stripeDetailsQuery.data;
     const error = stripeDetailsQuery.error as any;
 
+    useEffect(() => {
+        if (typeof window === 'undefined') {
+            return;
+        }
+        setIsReturningFromStripe(
+            window.location.search.includes('is_return') || window.location.search.includes('is_refresh')
+        );
+    }, []);
+
+    useEffect(() => {
+        if (fetchStripeDetails && !stripeDetailsQuery.isLoading) {
+            setFetchStripeDetails(false);
+            showSuccess(t`Redirecting to Stripe...`);
+            window.location.href = String(stripeDetails?.connect_url);
+        }
+
+    }, [fetchStripeDetails, stripeDetailsQuery.isFetched]);
+
     if (error?.response?.status === 403) {
         return (
             <>
@@ -109,23 +132,6 @@ const ConnectStatus = ({account}: { account: Account }) => {
             </>
         );
     }
-
-    useEffect(() => {
-        if (typeof window === 'undefined') {
-            return;
-        }
-        setIsReturningFromStripe(
-            window.location.search.includes('is_return') || window.location.search.includes('is_refresh')
-        );
-    }, []);
-
-    useEffect(() => {
-        if (fetchStripeDetails && !stripeDetailsQuery.isLoading) {
-            setFetchStripeDetails(false);
-            window.location.href = String(stripeDetails?.connect_url);
-        }
-
-    }, [fetchStripeDetails, stripeDetailsQuery.isFetched]);
 
     return (
         <div className={paymentClasses.stripeInfo}>
@@ -186,13 +192,14 @@ const ConnectStatus = ({account}: { account: Account }) => {
                                     return;
                                 } else {
                                     if (typeof window !== 'undefined') {
+                                        showSuccess(t`Redirecting to Stripe...`);
                                         window.location.href = String(stripeDetails?.connect_url)
                                     }
                                 }
                             }}
                         >
-                            {(!isReturningFromStripe) && t`Connect with Stripe`}
-                            {(isReturningFromStripe) && t`Complete Stripe Setup`}
+                            {(!isReturningFromStripe && !account?.stripe_account_id) && t`Connect with Stripe`}
+                            {(isReturningFromStripe || account?.stripe_account_id) && t`Complete Stripe Setup`}
                         </Button>
                         <Group gap="xs">
                             <Anchor
