@@ -169,7 +169,7 @@ jobs:
             if [ "$STATUS" == "ACTIVE" ]; then
               echo "✅ Deployment completed successfully."
               exit 0
-            elif [[ "$STATUS" == "FAILED" || "$STATUS" == "CANCELLED" ]]; then
+            elif [[ "$STATUS" == "FAILED" || "$STATUS" == "CANCELED" ]]; then
               echo "❌ Deployment failed or was cancelled."
               exit 1
             fi
