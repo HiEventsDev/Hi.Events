@@ -116,8 +116,24 @@ export const orderClientPublic = {
         return response.data;
     },
 
-    findByShortId: async (eventId: number, orderShortId: string, includes: string[] = []) => {
-        const response = await publicApi.get<GenericDataResponse<Order>>(`events/${eventId}/order/${orderShortId}?include=${includes.join(',')}`);
+    findByShortId: async (
+        eventId: number,
+        orderShortId: string,
+        includes: string[] = [],
+        sessionIdentifier?: string
+    ) => {
+        const query = new URLSearchParams();
+        if (includes.length > 0) {
+            query.append("include", includes.join(","));
+        }
+        if (sessionIdentifier) {
+            query.append("session_identifier", sessionIdentifier);
+        }
+
+        const response = await publicApi.get<GenericDataResponse<Order>>(
+            `events/${eventId}/order/${orderShortId}?${query.toString()}`
+        );
+
         return response.data;
     },
 
@@ -125,11 +141,11 @@ export const orderClientPublic = {
         return await publicApi.get<StripePaymentIntent>(`events/${eventId}/order/${orderShortId}/stripe/payment_intent`);
     },
 
-    createStripePaymentIntent: async (eventId: number, orderShortId: string, sessionIdentifier: string) => {
+    createStripePaymentIntent: async (eventId: number, orderShortId: string) => {
         const response = await publicApi.post<{
             client_secret: string,
             account_id?: string,
-        }>(`events/${eventId}/order/${orderShortId}/stripe/payment_intent?session_identifier=${sessionIdentifier}`);
+        }>(`events/${eventId}/order/${orderShortId}/stripe/payment_intent`);
         return response.data;
     },
 
