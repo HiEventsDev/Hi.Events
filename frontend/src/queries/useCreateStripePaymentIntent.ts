@@ -13,7 +13,6 @@ export const useCreateStripePaymentIntent = (eventId: IdParam, orderShortId: IdP
             const {client_secret, account_id} = await orderClientPublic.createStripePaymentIntent(
                 Number(eventId),
                 String(orderShortId),
-                getSessionIdentifier(),
             );
             return {client_secret, account_id};
         },

@@ -141,11 +141,11 @@ export const orderClientPublic = {
         return await publicApi.get<StripePaymentIntent>(`events/${eventId}/order/${orderShortId}/stripe/payment_intent`);
     },
 
-    createStripePaymentIntent: async (eventId: number, orderShortId: string, sessionIdentifier: string) => {
+    createStripePaymentIntent: async (eventId: number, orderShortId: string) => {
         const response = await publicApi.post<{
             client_secret: string,
             account_id?: string,
-        }>(`events/${eventId}/order/${orderShortId}/stripe/payment_intent?session_identifier=${sessionIdentifier}`);
+        }>(`events/${eventId}/order/${orderShortId}/stripe/payment_intent`);
         return response.data;
     },
 
