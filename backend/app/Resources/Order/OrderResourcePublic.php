@@ -8,7 +8,6 @@ use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Resources\Attendee\AttendeeResourcePublic;
 use HiEvents\Resources\BaseResource;
 use HiEvents\Resources\Event\EventResourcePublic;
-use HiEvents\Resources\Order\Invoice\InvoiceResource;
 use HiEvents\Resources\Order\Invoice\InvoiceResourcePublic;
 use Illuminate\Http\Request;
 
@@ -64,6 +63,9 @@ class OrderResourcePublic extends BaseResource
                 !is_null($this->getAttendees()),
                 fn() => AttendeeResourcePublic::collection($this->getAttendees())
             ),
+            $this->mergeWhen($this->getSessionIdentifier() !== null, fn() => [
+                'session_identifier' => $this->getSessionIdentifier(),
+            ]),
         ];
     }
 }
