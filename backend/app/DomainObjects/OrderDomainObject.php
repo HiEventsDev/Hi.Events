@@ -29,8 +29,6 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
 
     public ?EventDomainObject $event = null;
 
-    public ?string $sessionIdentifier = null;
-
     public static function getAllowedFilterFields(): array
     {
         return [
@@ -254,16 +252,5 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
     public function getInvoices(): ?Collection
     {
         return $this->invoices;
-    }
-
-    public function setSessionIdentifier(?string $sessionIdentifier): OrderDomainObject
-    {
-        $this->sessionIdentifier = $sessionIdentifier;
-        return $this;
-    }
-
-    public function getSessionIdentifier(): ?string
-    {
-        return $this->sessionIdentifier;
     }
 }

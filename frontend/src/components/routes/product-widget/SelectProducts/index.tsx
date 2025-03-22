@@ -103,10 +103,7 @@ const SelectProducts = (props: SelectProductsProps) => {
             .then(() => {
                 const url = '/checkout/' + eventId + '/' + data.data.short_id + '/details';
                 if (props.widgetMode === 'embedded') {
-                    window.open(
-                        url + '?session_identifier=' + data.data.session_identifier + '&utm_source=embedded_widget',
-                        '_blank'
-                    );
+                    window.open(url, '_blank');
                     setOrderInProcessOverlayVisible(true);
                     return;
                 }

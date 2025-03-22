@@ -48,12 +48,10 @@ class CreateOrderActionPublic extends BaseAction
             ])
         );
 
-        $order->setSessionIdentifier($sessionId);
-
         $response =  $this->resourceResponse(
             resource: OrderResourcePublic::class,
             data: $order,
-            statusCode: ResponseCodes::HTTP_CREATED,
+            statusCode: ResponseCodes::HTTP_CREATED
         );
 
         return $response->withCookie(
