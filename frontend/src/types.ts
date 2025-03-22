@@ -475,6 +475,7 @@ export interface Order {
     question_answers?: QuestionAnswer[];
     event?: Event;
     latest_invoice?: Invoice;
+    session_identifier?: string;
 }
 
 export interface Invoice {

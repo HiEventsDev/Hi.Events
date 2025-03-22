@@ -22,7 +22,7 @@ class CheckoutSessionManagementService
     }
 
     /**
-     * Get the session ID from the cookie, or generate a new one if it doesn't exist.
+     * Get the session ID from query param, cookie, or generate a new one.
      */
     public function getSessionId(): string
     {
@@ -30,7 +30,9 @@ class CheckoutSessionManagementService
             return $this->sessionId;
         }
 
-        $this->sessionId = $this->request->cookie(self::SESSION_IDENTIFIER) ?? $this->createSessionId();
+        $this->sessionId = $this->request->query(self::SESSION_IDENTIFIER)
+            ?? $this->request->cookie(self::SESSION_IDENTIFIER)
+            ?? $this->createSessionId();
 
         return $this->sessionId;
     }
