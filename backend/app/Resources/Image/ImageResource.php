@@ -16,6 +16,7 @@ class ImageResource extends BaseResource
         return [
             'id' => $this->getId(),
             'url' => Url::getCdnUrl($this->getPath()),
+            'path' => $this->getPath(),
             'size' => $this->getSize(),
             'file_name' => $this->getFileName(),
             'mime_type' => $this->getMimeType(),
