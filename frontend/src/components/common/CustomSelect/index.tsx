@@ -112,7 +112,9 @@ export const CustomSelect = ({
     };
 
     return (
-        <Stack gap={4}>
+        <Stack
+            style={{opacity: disabled ? 0.6 : 1}}
+            gap={4}>
             {label && (
                 <Input.Label required={required}>
                     {label}
