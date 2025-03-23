@@ -22,6 +22,25 @@ export default function StripeCheckoutForm({setSubmitHandler}: {
     const {data: order, isFetched: isOrderFetched} = useGetOrderPublic(eventId, orderShortId, ['event']);
     const event = order?.event;
 
+    const handleSubmit = async () => {
+        if (!stripe || !elements) {
+            return;
+        }
+
+        const {error} = await stripe.confirmPayment({
+            elements,
+            confirmParams: {
+                return_url: window?.location.origin + `/checkout/${eventId}/${orderShortId}/payment_return`
+            },
+        });
+
+        if (error?.type === "card_error" || error?.type === "validation_error") {
+            setMessage(error.message);
+        } else {
+            setMessage(t`An unexpected error occurred.`);
+        }
+    };
+
     useEffect(() => {
         if (!stripe) {
             return;
@@ -87,25 +106,6 @@ export default function StripeCheckoutForm({setSubmitHandler}: {
             />
         );
     }
-
-    const handleSubmit = async () => {
-        if (!stripe || !elements) {
-            return;
-        }
-
-        const {error} = await stripe.confirmPayment({
-            elements,
-            confirmParams: {
-                return_url: window?.location.origin + `/checkout/${eventId}/${orderShortId}/payment_return`
-            },
-        });
-
-        if (error?.type === "card_error" || error?.type === "validation_error") {
-            setMessage(error.message);
-        } else {
-            setMessage(t`An unexpected error occurred.`);
-        }
-    };
 
     const paymentElementOptions: stripeJs.StripePaymentElementOptions = {
         layout: {
