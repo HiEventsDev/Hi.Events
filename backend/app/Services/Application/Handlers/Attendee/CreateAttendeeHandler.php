@@ -251,7 +251,7 @@ class CreateAttendeeHandler
     private function queueWebhooks(OrderDomainObject $order): void
     {
         $this->domainEventDispatcherService->dispatch(
-            new OrderEvent(DomainEventType::ATTENDEE_CREATED, $order->getId())
+            new OrderEvent(DomainEventType::ORDER_CREATED, $order->getId())
         );
     }
 }
