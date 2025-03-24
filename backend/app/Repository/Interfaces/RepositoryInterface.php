@@ -71,7 +71,7 @@ interface RepositoryInterface
      */
     public function simplePaginateWhere(
         array $where,
-        int   $limit = null,
+        ?int   $limit = null,
         array $columns = self::DEFAULT_COLUMNS,
     ): Paginator;
 
@@ -129,7 +129,7 @@ interface RepositoryInterface
      */
     public function findFirstByField(
         string $field,
-        string $value = null,
+        ?string $value = null,
         array  $columns = ['*']
     ): ?DomainObjectInterface;
 

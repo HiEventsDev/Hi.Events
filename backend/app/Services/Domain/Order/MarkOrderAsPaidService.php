@@ -6,7 +6,6 @@ use HiEvents\DomainObjects\AccountConfigurationDomainObject;
 use HiEvents\DomainObjects\AccountDomainObject;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Enums\PaymentProviders;
-use HiEvents\DomainObjects\Enums\WebhookEventType;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
@@ -27,7 +26,9 @@ use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\InvoiceRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Domain\Mail\SendOrderDetailsService;
-use HiEvents\Services\Infrastructure\Webhook\WebhookDispatchService;
+use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
+use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
+use HiEvents\Services\Infrastructure\DomainEvents\Events\OrderEvent;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
 
@@ -38,7 +39,7 @@ class MarkOrderAsPaidService
         private readonly DatabaseManager                       $databaseManager,
         private readonly InvoiceRepositoryInterface            $invoiceRepository,
         private readonly AttendeeRepositoryInterface           $attendeeRepository,
-        private readonly WebhookDispatchService                $webhookDispatchService,
+        private readonly DomainEventDispatcherService          $domainEventDispatcherService,
         private readonly OrderApplicationFeeCalculationService $orderApplicationFeeCalculationService,
         private readonly EventRepositoryInterface              $eventRepository,
         private readonly OrderApplicationFeeService            $orderApplicationFeeService,
@@ -88,9 +89,11 @@ class MarkOrderAsPaidService
                 sendEmails: false
             ));
 
-            $this->webhookDispatchService->queueOrderWebhook(
-                eventType: WebhookEventType::ORDER_MARKED_AS_PAID,
-                orderId: $orderId,
+            $this->domainEventDispatcherService->dispatch(
+                new OrderEvent(
+                    type: DomainEventType::ORDER_MARKED_AS_PAID,
+                    orderId: $orderId,
+                ),
             );
 
             $this->storeApplicationFeePayment($updatedOrder);

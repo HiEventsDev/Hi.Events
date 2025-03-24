@@ -3,7 +3,6 @@
 namespace Tests\Unit\Services\Domain\Order;
 
 use HiEvents\DomainObjects\AttendeeDomainObject;
-use HiEvents\DomainObjects\Enums\WebhookEventType;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
@@ -14,6 +13,9 @@ use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Domain\Order\OrderCancelService;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
+use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
+use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
+use HiEvents\Services\Infrastructure\DomainEvents\Events\OrderEvent;
 use HiEvents\Services\Infrastructure\Webhook\WebhookDispatchService;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Database\DatabaseManager;
@@ -31,7 +33,7 @@ class OrderCancelServiceTest extends TestCase
     private DatabaseManager $databaseManager;
     private ProductQuantityUpdateService $productQuantityService;
     private OrderCancelService $service;
-    private WebhookDispatchService $webhookDispatchService;
+    private DomainEventDispatcherService $domainEventDispatcherService;
 
     protected function setUp(): void
     {
@@ -43,7 +45,7 @@ class OrderCancelServiceTest extends TestCase
         $this->orderRepository = m::mock(OrderRepositoryInterface::class);
         $this->databaseManager = m::mock(DatabaseManager::class);
         $this->productQuantityService = m::mock(ProductQuantityUpdateService::class);
-        $this->webhookDispatchService = m::mock(WebhookDispatchService::class);
+        $this->domainEventDispatcherService = m::mock(DomainEventDispatcherService::class);
 
         $this->service = new OrderCancelService(
             mailer: $this->mailer,
@@ -52,7 +54,7 @@ class OrderCancelServiceTest extends TestCase
             orderRepository: $this->orderRepository,
             databaseManager: $this->databaseManager,
             productQuantityService: $this->productQuantityService,
-            webhookDispatchService: $this->webhookDispatchService,
+            domainEventDispatcherService: $this->domainEventDispatcherService,
         );
     }
 
@@ -105,8 +107,11 @@ class OrderCancelServiceTest extends TestCase
             return $mail instanceof OrderCancelled;
         });
 
-        $this->webhookDispatchService->shouldReceive('queueOrderWebhook')
-            ->with(WebhookEventType::ORDER_CANCELLED, 1)
+        $this->domainEventDispatcherService->shouldReceive('dispatch')
+            ->withArgs(function (OrderEvent $event) use ($order) {
+                return $event->type === DomainEventType::ORDER_CANCELLED
+                    && $event->orderId === $order->getId();
+            })
             ->once();
 
         $this->databaseManager->shouldReceive('transaction')->once()->andReturnUsing(function ($callback) {

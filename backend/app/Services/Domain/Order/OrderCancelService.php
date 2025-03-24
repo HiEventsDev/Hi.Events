@@ -3,7 +3,6 @@
 namespace HiEvents\Services\Domain\Order;
 
 use HiEvents\DomainObjects\AttendeeDomainObject;
-use HiEvents\DomainObjects\Enums\WebhookEventType;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
@@ -13,7 +12,9 @@ use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
-use HiEvents\Services\Infrastructure\Webhook\WebhookDispatchService;
+use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
+use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
+use HiEvents\Services\Infrastructure\DomainEvents\Events\OrderEvent;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
@@ -27,7 +28,7 @@ class OrderCancelService
         private readonly OrderRepositoryInterface     $orderRepository,
         private readonly DatabaseManager              $databaseManager,
         private readonly ProductQuantityUpdateService $productQuantityService,
-        private readonly WebhookDispatchService       $webhookDispatchService,
+        private readonly DomainEventDispatcherService $domainEventDispatcherService,
     )
     {
     }
@@ -55,9 +56,11 @@ class OrderCancelService
                     eventSettings: $event->getEventSettings(),
                 ));
 
-            $this->webhookDispatchService->queueOrderWebhook(
-                eventType: WebhookEventType::ORDER_CANCELLED,
-                orderId: $order->getId(),
+            $this->domainEventDispatcherService->dispatch(
+                new OrderEvent(
+                    type: DomainEventType::ORDER_CANCELLED,
+                    orderId: $order->getId(),
+                ),
             );
         });
     }

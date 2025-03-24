@@ -3,12 +3,13 @@
 namespace HiEvents\Services\Application\Handlers\Attendee;
 
 use HiEvents\DomainObjects\AttendeeDomainObject;
-use HiEvents\DomainObjects\Enums\WebhookEventType;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Attendee\DTO\PartialEditAttendeeDTO;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
-use HiEvents\Services\Infrastructure\Webhook\WebhookDispatchService;
+use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
+use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
+use HiEvents\Services\Infrastructure\DomainEvents\Events\AttendeeEvent;
 use Illuminate\Database\DatabaseManager;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Throwable;
@@ -19,7 +20,7 @@ class PartialEditAttendeeHandler
         private readonly AttendeeRepositoryInterface  $attendeeRepository,
         private readonly ProductQuantityUpdateService $productQuantityService,
         private readonly DatabaseManager              $databaseManager,
-        private readonly WebhookDispatchService       $webhookDispatchService,
+        private readonly DomainEventDispatcherService $domainEventDispatcherService,
     )
     {
     }
@@ -52,9 +53,11 @@ class PartialEditAttendeeHandler
         }
 
         if ($statusIsUpdated && $data->status === AttendeeStatus::CANCELLED->name) {
-            $this->webhookDispatchService->queueAttendeeWebhook(
-                eventType: WebhookEventType::ATTENDEE_CANCELLED,
-                attendeeId: $attendee->getId(),
+            $this->domainEventDispatcherService->dispatch(
+                new AttendeeEvent(
+                    type: DomainEventType::ATTENDEE_CANCELLED,
+                    attendeeId: $attendee->getId(),
+                )
             );
         }
 
