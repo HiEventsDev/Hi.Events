@@ -3,7 +3,6 @@
 namespace HiEvents\Services\Application\Handlers\Order;
 
 use HiEvents\DomainObjects\Enums\PaymentProviders;
-use HiEvents\DomainObjects\Enums\WebhookEventType;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
@@ -17,7 +16,9 @@ use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Order\DTO\TransitionOrderToOfflinePaymentPublicDTO;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
-use HiEvents\Services\Infrastructure\Webhook\WebhookDispatchService;
+use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
+use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
+use HiEvents\Services\Infrastructure\DomainEvents\Events\OrderEvent;
 use Illuminate\Database\DatabaseManager;
 
 class TransitionOrderToOfflinePaymentHandler
@@ -27,7 +28,7 @@ class TransitionOrderToOfflinePaymentHandler
         private readonly OrderRepositoryInterface         $orderRepository,
         private readonly DatabaseManager                  $databaseManager,
         private readonly EventSettingsRepositoryInterface $eventSettingsRepository,
-        private readonly WebhookDispatchService           $webhookDispatchService,
+        private readonly DomainEventDispatcherService     $domainEventDispatcherService,
 
     )
     {
@@ -62,9 +63,11 @@ class TransitionOrderToOfflinePaymentHandler
                 createInvoice: $eventSettings->getEnableInvoicing(),
             ));
 
-            $this->webhookDispatchService->queueOrderWebhook(
-                eventType: WebhookEventType::ORDER_CREATED,
-                orderId: $order->getId(),
+            $this->domainEventDispatcherService->dispatch(
+                new OrderEvent(
+                    type: DomainEventType::ORDER_CREATED,
+                    orderId: $order->getId(),
+                ),
             );
 
             return $order;
