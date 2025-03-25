@@ -22,7 +22,7 @@
 [![Docker Pulls](https://img.shields.io/docker/pulls/daveearley/hi.events-all-in-one)](https://hub.docker.com/r/daveearley/hi.events-all-in-one)
 
 <p>
-<a href="https://app.hi.events/event/2/hievents-conference-2030?utm_source=gh-readme&utm_content=try-cloud-link">Try Cloud ☁️</a> •
+<a href="https://app.hi.events/auth/register?utm_source=gh-readme&utm_content=try-cloud-link">Try Cloud ☁️</a> •
 <a href="https://app.hi.events/event/2/hievents-conference-2030?utm_source=gh-readme&utm_content=demo-link">Demo Event 🌟</a> • 
 <a href="https://hi.events?utm_source=gh-readme&utm_content=website-link">Website 🌎</a> • 
 <a href="https://hi.events/docs?utm_source=gh-readme&utm_content=documentation-link">Documentation 📄</a> • 
