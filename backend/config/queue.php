@@ -66,6 +66,7 @@ return [
             'suffix' => env('SQS_SUFFIX'),
             'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
             'after_commit' => false,
+            'rate_limit_per_second' => env('SQS_RATE_LIMIT_PER_SECOND', 14),
         ],
 
         'redis' => [
