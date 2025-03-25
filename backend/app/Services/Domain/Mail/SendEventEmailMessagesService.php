@@ -11,6 +11,7 @@ use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\DomainObjects\Status\MessageStatus;
 use HiEvents\Exceptions\UnableToSendMessageException;
+use HiEvents\Jobs\Event\SendEventEmailJob;
 use HiEvents\Mail\Event\EventMessage;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
@@ -19,20 +20,22 @@ use HiEvents\Repository\Interfaces\MessageRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Message\DTO\SendMessageDTO;
-use Illuminate\Mail\Mailer;
+use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpKernel\Log\Logger;
 
 class SendEventEmailMessagesService
 {
+    private array $sentEmails = [];
+
     public function __construct(
         private readonly OrderRepositoryInterface    $orderRepository,
         private readonly AttendeeRepositoryInterface $attendeeRepository,
         private readonly EventRepositoryInterface    $eventRepository,
         private readonly MessageRepositoryInterface  $messageRepository,
         private readonly UserRepositoryInterface     $userRepository,
-        private readonly Mailer                      $mailer,
-        private readonly Logger                      $logger
+        private readonly Logger                      $logger,
+        private readonly Dispatcher                  $dispatcher,
     )
     {
     }
@@ -202,24 +205,6 @@ class SendEventEmailMessagesService
         );
     }
 
-    private function sendMessage(
-        string            $emailAddress,
-        string            $fullName,
-        SendMessageDTO    $messageData,
-        EventDomainObject $event,
-    ): void
-    {
-        $this->mailer->to(
-            $emailAddress,
-            $fullName
-        )
-            ->queue(new EventMessage(
-                event: $event,
-                eventSettings: $event->getEventSettings(),
-                messageData: $messageData
-            ));
-    }
-
     private function sendProductMessages(SendMessageDTO $messageData, EventDomainObject $event): void
     {
         $orders = $this->orderRepository->findOrdersAssociatedWithProducts(
@@ -242,5 +227,32 @@ class SendEventEmailMessagesService
                 event: $event,
             );
         });
+    }
+
+    private function sendMessage(
+        string            $emailAddress,
+        string            $fullName,
+        SendMessageDTO    $messageData,
+        EventDomainObject $event,
+    ): void
+    {
+        if (in_array($emailAddress, $this->sentEmails, true)) {
+            return;
+        }
+
+        $this->dispatcher->dispatch(
+            new SendEventEmailJob(
+                email: $emailAddress,
+                toName: $fullName,
+                eventMessage: new EventMessage(
+                    event: $event,
+                    eventSettings: $event->getEventSettings(),
+                    messageData: $messageData
+                ),
+                messageData: $messageData,
+            )
+        );
+
+        $this->sentEmails[] = $emailAddress;
     }
 }

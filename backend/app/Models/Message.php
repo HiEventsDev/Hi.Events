@@ -2,6 +2,7 @@
 
 namespace HiEvents\Models;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -14,6 +15,11 @@ class Message extends BaseModel
         return $this->hasOne(User::class, 'id', 'sent_by_user_id');
     }
 
+    public function outgoing_messages(): HasMany
+    {
+        return $this->hasMany(OutgoingMessage::class);
+    }
+
     protected function getCastMap(): array
     {
         return [
@@ -22,5 +28,4 @@ class Message extends BaseModel
             'send_data' => 'array',
         ];
     }
-
 }
