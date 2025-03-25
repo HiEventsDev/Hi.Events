@@ -8,7 +8,6 @@ use Brick\Math\Exception\RoundingNecessaryException;
 use Brick\Money\Exception\UnknownCurrencyException;
 use Carbon\Carbon;
 use HiEvents\DomainObjects\Enums\PaymentProviders;
-use HiEvents\DomainObjects\Enums\WebhookEventType;
 use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\StripePaymentDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
@@ -26,7 +25,9 @@ use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Domain\Order\OrderApplicationFeeService;
 use HiEvents\Services\Domain\Payment\Stripe\StripeRefundExpiredOrderService;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
-use HiEvents\Services\Infrastructure\Webhook\WebhookDispatchService;
+use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
+use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
+use HiEvents\Services\Infrastructure\DomainEvents\Events\OrderEvent;
 use Illuminate\Cache\Repository;
 use Illuminate\Database\DatabaseManager;
 use Psr\Log\LoggerInterface;
@@ -45,7 +46,7 @@ class PaymentIntentSucceededHandler
         private readonly DatabaseManager                 $databaseManager,
         private readonly LoggerInterface                 $logger,
         private readonly Repository                      $cache,
-        private readonly WebhookDispatchService          $webhookDispatchService,
+        private readonly DomainEventDispatcherService    $domainEventDispatcherService,
         private readonly OrderApplicationFeeService      $orderApplicationFeeService,
     )
     {
@@ -92,9 +93,11 @@ class PaymentIntentSucceededHandler
 
             OrderStatusChangedEvent::dispatch($updatedOrder);
 
-            $this->webhookDispatchService->queueOrderWebhook(
-                eventType: WebhookEventType::ORDER_CREATED,
-                orderId: $updatedOrder->getId(),
+            $this->domainEventDispatcherService->dispatch(
+                new OrderEvent(
+                    type: DomainEventType::ORDER_CREATED,
+                    orderId: $updatedOrder->getId()
+                ),
             );
 
             $this->markPaymentIntentAsHandled($paymentIntent, $updatedOrder);

@@ -2,13 +2,14 @@
 
 namespace HiEvents\Services\Domain\Product;
 
-use HiEvents\DomainObjects\Enums\WebhookEventType;
 use HiEvents\DomainObjects\Generated\ProductDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\ProductPriceDomainObjectAbstract;
 use HiEvents\Exceptions\CannotDeleteEntityException;
 use HiEvents\Repository\Interfaces\ProductPriceRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
-use HiEvents\Services\Infrastructure\Webhook\WebhookDispatchService;
+use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
+use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
+use HiEvents\Services\Infrastructure\DomainEvents\Events\ProductEvent;
 use Illuminate\Database\DatabaseManager;
 use Psr\Log\LoggerInterface;
 use Throwable;
@@ -20,7 +21,7 @@ class DeleteProductService
         private readonly ProductPriceRepositoryInterface $productPriceRepository,
         private readonly LoggerInterface                 $logger,
         private readonly DatabaseManager                 $databaseManager,
-        private readonly WebhookDispatchService          $webhookDispatchService,
+        private readonly DomainEventDispatcherService    $domainEventDispatcherService,
     )
     {
     }
@@ -52,9 +53,11 @@ class DeleteProductService
             );
         });
 
-        $this->webhookDispatchService->queueProductWebhook(
-            eventType: WebhookEventType::PRODUCT_DELETED,
-            productId: $productId,
+        $this->domainEventDispatcherService->dispatch(
+            new ProductEvent(
+                type: DomainEventType::PRODUCT_DELETED,
+                productId: $productId,
+            )
         );
 
         $this->logger->info(

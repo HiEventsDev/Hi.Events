@@ -2,19 +2,20 @@
 
 namespace HiEvents\Services\Domain\Order;
 
-use HiEvents\DomainObjects\Enums\WebhookEventType;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
-use HiEvents\Services\Infrastructure\Webhook\WebhookDispatchService;
+use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
+use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
+use HiEvents\Services\Infrastructure\DomainEvents\Events\OrderEvent;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
 
 class EditOrderService
 {
     public function __construct(
-        private readonly OrderRepositoryInterface $orderRepository,
-        private readonly WebhookDispatchService   $webhookDispatchService,
-        private readonly DatabaseManager          $databaseManager,
+        private readonly OrderRepositoryInterface     $orderRepository,
+        private readonly DomainEventDispatcherService $domainEventDispatcherService,
+        private readonly DatabaseManager              $databaseManager,
     )
     {
     }
@@ -43,9 +44,11 @@ class EditOrderService
                 ]
             );
 
-            $this->webhookDispatchService->queueOrderWebhook(
-                eventType: WebhookEventType::ORDER_UPDATED,
-                orderId: $id,
+            $this->domainEventDispatcherService->dispatch(
+                new OrderEvent(
+                    type: DomainEventType::ORDER_UPDATED,
+                    orderId: $id,
+                ),
             );
 
             return $this->orderRepository->findById($id);

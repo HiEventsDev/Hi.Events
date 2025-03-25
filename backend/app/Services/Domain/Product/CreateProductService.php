@@ -3,15 +3,16 @@
 namespace HiEvents\Services\Domain\Product;
 
 use Exception;
-use HiEvents\DomainObjects\Enums\WebhookEventType;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\Helper\DateHelper;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Services\Domain\Tax\DTO\TaxAndProductAssociateParams;
 use HiEvents\Services\Domain\Tax\TaxAndProductAssociationService;
+use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
+use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
+use HiEvents\Services\Infrastructure\DomainEvents\Events\ProductEvent;
 use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
-use HiEvents\Services\Infrastructure\Webhook\WebhookDispatchService;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Collection;
 use Throwable;
@@ -26,7 +27,7 @@ class CreateProductService
         private readonly HtmlPurifierService             $purifier,
         private readonly EventRepositoryInterface        $eventRepository,
         private readonly ProductOrderingService          $productOrderingService,
-        private readonly WebhookDispatchService          $webhookDispatchService,
+        private readonly DomainEventDispatcherService    $domainEventDispatcherService,
     )
     {
     }
@@ -49,9 +50,11 @@ class CreateProductService
 
             $product = $this->createProductPrices($persistedProduct, $product);
 
-            $this->webhookDispatchService->queueProductWebhook(
-                eventType: WebhookEventType::PRODUCT_CREATED,
-                productId: $product->getId(),
+            $this->domainEventDispatcherService->dispatch(
+                new ProductEvent(
+                    type: DomainEventType::PRODUCT_CREATED,
+                    productId: $product->getId(),
+                )
             );
 
             return $product;

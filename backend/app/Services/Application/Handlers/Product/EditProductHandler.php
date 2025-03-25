@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace HiEvents\Services\Application\Handlers\Product;
 
 use Exception;
-use HiEvents\DomainObjects\Enums\WebhookEventType;
 use HiEvents\DomainObjects\Interfaces\DomainObjectInterface;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
@@ -14,13 +13,14 @@ use HiEvents\Helper\DateHelper;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Product\DTO\UpsertProductDTO;
-use HiEvents\Services\Domain\Product\ProductOrderingService;
 use HiEvents\Services\Domain\Product\ProductPriceUpdateService;
 use HiEvents\Services\Domain\ProductCategory\GetProductCategoryService;
 use HiEvents\Services\Domain\Tax\DTO\TaxAndProductAssociateParams;
 use HiEvents\Services\Domain\Tax\TaxAndProductAssociationService;
+use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
+use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
+use HiEvents\Services\Infrastructure\DomainEvents\Events\ProductEvent;
 use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
-use HiEvents\Services\Infrastructure\Webhook\WebhookDispatchService;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
 
@@ -36,9 +36,8 @@ class EditProductHandler
         private readonly ProductPriceUpdateService       $priceUpdateService,
         private readonly HtmlPurifierService             $purifier,
         private readonly EventRepositoryInterface        $eventRepository,
-        private readonly ProductOrderingService          $productOrderingService,
         private readonly GetProductCategoryService       $getProductCategoryService,
-        private readonly WebhookDispatchService          $webhookDispatchService,
+        private readonly DomainEventDispatcherService    $domainEventDispatcherService,
     )
     {
     }
@@ -65,9 +64,11 @@ class EditProductHandler
                 $this->eventRepository->findById($productsData->event_id)
             );
 
-            $this->webhookDispatchService->queueProductWebhook(
-                eventType: WebhookEventType::PRODUCT_UPDATED,
-                productId: $product->getId(),
+            $this->domainEventDispatcherService->dispatch(
+                new ProductEvent(
+                    type: DomainEventType::PRODUCT_UPDATED,
+                    productId: $product->getId(),
+                )
             );
 
             return $this->productRepository

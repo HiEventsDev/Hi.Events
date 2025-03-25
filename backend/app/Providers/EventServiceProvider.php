@@ -2,20 +2,27 @@
 
 namespace HiEvents\Providers;
 
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
+use HiEvents\Listeners\Webhook\WebhookEventListener;
+use HiEvents\Services\Infrastructure\DomainEvents\Events\AttendeeEvent;
+use HiEvents\Services\Infrastructure\DomainEvents\Events\CheckinEvent;
+use HiEvents\Services\Infrastructure\DomainEvents\Events\OrderEvent;
+use HiEvents\Services\Infrastructure\DomainEvents\Events\ProductEvent;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
 {
     /**
-     * The event to listener mappings for the application.
+     * Map of listeners to the events they should handle.
      *
-     * @var array<class-string, array<int, class-string>>
+     * @var array<class-string, array<class-string>>
      */
-    protected $listen = [
-        Registered::class => [
-            SendEmailVerificationNotification::class,
+    private static array $domainEventMap = [
+        WebhookEventListener::class => [
+            ProductEvent::class,
+            OrderEvent::class,
+            AttendeeEvent::class,
+            CheckinEvent::class,
         ],
     ];
 
@@ -24,7 +31,19 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        $this->registerDomainEventListeners();
+    }
+
+    /**
+     * Dynamically register all domain event listeners.
+     */
+    private function registerDomainEventListeners(): void
+    {
+        foreach (self::$domainEventMap as $listener => $events) {
+            foreach ($events as $event) {
+                Event::listen($event, [$listener, 'handle']);
+            }
+        }
     }
 
     /**

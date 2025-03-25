@@ -4,7 +4,6 @@ namespace HiEvents\Services\Domain\Payment\Stripe\EventHandlers;
 
 use Brick\Money\Money;
 use HiEvents\DomainObjects\Enums\PaymentProviders;
-use HiEvents\DomainObjects\Enums\WebhookEventType;
 use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\Status\OrderRefundStatus;
@@ -12,7 +11,9 @@ use HiEvents\Repository\Interfaces\OrderRefundRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\StripePaymentsRepositoryInterface;
 use HiEvents\Services\Domain\EventStatistics\EventStatisticsUpdateService;
-use HiEvents\Services\Infrastructure\Webhook\WebhookDispatchService;
+use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
+use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
+use HiEvents\Services\Infrastructure\DomainEvents\Events\OrderEvent;
 use HiEvents\Values\MoneyValue;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Log\Logger;
@@ -28,7 +29,7 @@ class ChargeRefundUpdatedHandler
         private readonly DatabaseManager                   $databaseManager,
         private readonly EventStatisticsUpdateService      $eventStatisticsUpdateService,
         private readonly OrderRefundRepositoryInterface    $orderRefundRepository,
-        private readonly WebhookDispatchService            $webhookDispatchService,
+        private readonly DomainEventDispatcherService      $domainEventDispatcherService,
     )
     {
     }
@@ -82,9 +83,11 @@ class ChargeRefundUpdatedHandler
                 'refund_id' => $refund->id,
             ]);
 
-            $this->webhookDispatchService->queueOrderWebhook(
-                eventType: WebhookEventType::ORDER_REFUNDED,
-                orderId: $order->getId(),
+            $this->domainEventDispatcherService->dispatch(
+                new OrderEvent(
+                    type: DomainEventType::ORDER_REFUNDED,
+                    orderId: $order->getId()
+                ),
             );
         });
     }
@@ -102,9 +105,9 @@ class ChargeRefundUpdatedHandler
     private function updateOrderRefundedAmount(int $orderId, float $refundedAmount): void
     {
         $this->orderRepository->increment(
-            $orderId,
-            OrderDomainObjectAbstract::TOTAL_REFUNDED,
-            $refundedAmount
+            id: $orderId,
+            column: OrderDomainObjectAbstract::TOTAL_REFUNDED,
+            amount: $refundedAmount
         );
     }
 
