@@ -1,8 +1,10 @@
 <?php
 
-namespace HiEvents\DomainObjects\Enums;
+namespace HiEvents\Services\Infrastructure\DomainEvents\Enums;
 
-enum WebhookEventType: string
+use HiEvents\DomainObjects\Enums\BaseEnum;
+
+enum DomainEventType: string
 {
     use BaseEnum;
 

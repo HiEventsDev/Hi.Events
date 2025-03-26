@@ -3,17 +3,12 @@
 namespace HiEvents\Services\Infrastructure\Webhook;
 
 use HiEvents\DomainObjects\AttendeeDomainObject;
-use HiEvents\DomainObjects\Enums\WebhookEventType;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\QuestionAndAnswerViewDomainObject;
 use HiEvents\DomainObjects\Status\WebhookStatus;
 use HiEvents\DomainObjects\TaxAndFeesDomainObject;
 use HiEvents\DomainObjects\WebhookDomainObject;
-use HiEvents\Jobs\Order\Webhook\DispatchAttendeeWebhookJob;
-use HiEvents\Jobs\Order\Webhook\DispatchCheckInWebhookJob;
-use HiEvents\Jobs\Order\Webhook\DispatchOrderWebhookJob;
-use HiEvents\Jobs\Order\Webhook\DispatchProductWebhookJob;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AttendeeCheckInRepositoryInterface;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
@@ -24,7 +19,7 @@ use HiEvents\Resources\Attendee\AttendeeResource;
 use HiEvents\Resources\CheckInList\AttendeeCheckInResource;
 use HiEvents\Resources\Order\OrderResource;
 use HiEvents\Resources\Product\ProductResource;
-use Illuminate\Config\Repository;
+use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Collection;
 use Psr\Log\LoggerInterface;
@@ -39,44 +34,11 @@ class WebhookDispatchService
         private readonly ProductRepositoryInterface         $productRepository,
         private readonly AttendeeRepositoryInterface        $attendeeRepository,
         private readonly AttendeeCheckInRepositoryInterface $attendeeCheckInRepository,
-        private readonly Repository                         $config,
     )
     {
     }
 
-    public function queueOrderWebhook(WebhookEventType $eventType, int $orderId): void
-    {
-        DispatchOrderWebhookJob::dispatch(
-            orderId: $orderId,
-            eventType: $eventType,
-        )->onQueue($this->config->get('queue.webhook_queue_name'));
-    }
-
-    public function queueProductWebhook(WebhookEventType $eventType, int $productId): void
-    {
-        DispatchProductWebhookJob::dispatch(
-            productId: $productId,
-            eventType: $eventType,
-        )->onQueue($this->config->get('queue.webhook_queue_name'));
-    }
-
-    public function queueCheckInWebhook(WebhookEventType $eventType, int $attendeeCheckInId): void
-    {
-        DispatchCheckInWebhookJob::dispatch(
-            attendeeCheckInId: $attendeeCheckInId,
-            eventType: $eventType,
-        )->onQueue($this->config->get('queue.webhook_queue_name'));
-    }
-
-    public function queueAttendeeWebhook(WebhookEventType $eventType, int $attendeeId): void
-    {
-        DispatchAttendeeWebhookJob::dispatch(
-            attendeeId: $attendeeId,
-            eventType: $eventType,
-        )->onQueue($this->config->get('queue.webhook_queue_name'));
-    }
-
-    public function dispatchAttendeeWebhook(WebhookEventType $eventType, int $attendeeId): void
+    public function dispatchAttendeeWebhook(DomainEventType $eventType, int $attendeeId): void
     {
         $attendee = $this->attendeeRepository
             ->loadRelation(new Relationship(
@@ -92,7 +54,7 @@ class WebhookDispatchService
         );
     }
 
-    public function dispatchCheckInWebhook(WebhookEventType $eventType, int $attendeeCheckInId): void
+    public function dispatchCheckInWebhook(DomainEventType $eventType, int $attendeeCheckInId): void
     {
         $attendeeCheckIn = $this->attendeeCheckInRepository
             ->loadRelation(new Relationship(
@@ -109,7 +71,7 @@ class WebhookDispatchService
         );
     }
 
-    public function dispatchProductWebhook(WebhookEventType $eventType, int $productId): void
+    public function dispatchProductWebhook(DomainEventType $eventType, int $productId): void
     {
         $product = $this->productRepository
             ->loadRelation(ProductPriceDomainObject::class)
@@ -124,7 +86,7 @@ class WebhookDispatchService
         );
     }
 
-    public function dispatchOrderWebhook(WebhookEventType $eventType, int $orderId): void
+    public function dispatchOrderWebhook(DomainEventType $eventType, int $orderId): void
     {
         $order = $this->orderRepository
             ->loadRelation(OrderItemDomainObject::class)
@@ -141,21 +103,21 @@ class WebhookDispatchService
             ->loadRelation(QuestionAndAnswerViewDomainObject::class)
             ->findById($orderId);
 
-        if ($eventType === WebhookEventType::ORDER_CREATED) {
+        if ($eventType === DomainEventType::ORDER_CREATED) {
             /** @var AttendeeDomainObject $attendee */
             foreach ($order->getAttendees() as $attendee) {
-                $this->queueAttendeeWebhook(
-                    eventType: WebhookEventType::ATTENDEE_CREATED,
+                $this->dispatchAttendeeWebhook(
+                    eventType: DomainEventType::ATTENDEE_CREATED,
                     attendeeId: $attendee->getId(),
                 );
             }
         }
 
-        if ($eventType === WebhookEventType::ORDER_CANCELLED) {
+        if ($eventType === DomainEventType::ORDER_CANCELLED) {
             /** @var AttendeeDomainObject $attendee */
             foreach ($order->getAttendees() as $attendee) {
-                $this->queueAttendeeWebhook(
-                    eventType: WebhookEventType::ATTENDEE_CANCELLED,
+                $this->dispatchAttendeeWebhook(
+                    eventType: DomainEventType::ATTENDEE_CANCELLED,
                     attendeeId: $attendee->getId(),
                 );
             }
@@ -168,7 +130,7 @@ class WebhookDispatchService
         );
     }
 
-    private function dispatchWebhook(WebhookEventType $eventType, JsonResource $payload, int $eventId): void
+    private function dispatchWebhook(DomainEventType $eventType, JsonResource $payload, int $eventId): void
     {
         /** @var Collection<WebhookDomainObject> $webhooks */
         $webhooks = $this->webhookRepository->findWhere([

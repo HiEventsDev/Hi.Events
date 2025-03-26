@@ -183,11 +183,11 @@ export const WebhookLogsModal = ({onClose, webhookId}: WebhookLogsModalProps) =>
             )}
 
             {logs && logs.length > 0 && (
-                <Stack gap="md">
+                <>
                     {logs.map((log) => (
                         <LogEntry key={log.id} log={log}/>
                     ))}
-                </Stack>
+                </>
             )}
         </Modal>
     );

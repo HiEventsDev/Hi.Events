@@ -2,7 +2,7 @@
 
 namespace HiEvents\Jobs\Order\Webhook;
 
-use HiEvents\DomainObjects\Enums\WebhookEventType;
+use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use HiEvents\Services\Infrastructure\Webhook\WebhookDispatchService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -14,8 +14,8 @@ class DispatchCheckInWebhookJob
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public function __construct(
-        public int              $attendeeCheckInId,
-        public WebhookEventType $eventType,
+        public int             $attendeeCheckInId,
+        public DomainEventType $eventType,
     )
     {
     }

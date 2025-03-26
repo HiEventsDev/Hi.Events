@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'rate_limit_per_second' => env('MAIL_RATE_LIMIT_PER_SECOND', 14),
 
     /*
     |--------------------------------------------------------------------------
