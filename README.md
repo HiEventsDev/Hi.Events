@@ -65,33 +65,48 @@ Get started in minutes with our one-click deployment options:
 
 <a href="https://hi.events">Hi.Events</a> offers comprehensive tools to streamline your event management:
 
-### 🎟 Ticketing & Sales
-- **Multiple Ticket Types:** Create free, paid, donation-based, and tiered tickets
-- **Capacity Management:** Set limits per event or ticket type
-- **Promo Codes & Discounts:** Drive early sales with special offers
-- **Product Upsells:** Sell merchandise and add-ons alongside tickets
-- **Custom Pricing:** Apply taxes and fees per product or entire order
+### 🎟 Ticketing & Product Sales
+- **Multiple Ticket Types:** Free, Paid, Donation, and Tiered tickets.
+- **Capacity Management:** Set event-wide or ticket-specific limits.
+- **Capacity Assignments:** Manage shared capacity across multiple ticket types.
+- **Promo Codes:** Discount codes for pre-sale access and special offers.
+- **Product Sales:** Sell event-related products (e.g., t-shirts, add-ons).
+- **Taxes & Fees:** Apply custom taxes and fees per product or order.
 
-### 🏆 Event Management
-- **Real-time Dashboard:** Track sales, revenue, and attendee metrics
-- **Visual Page Editor:** Design beautiful event pages with live preview
-- **Website Integration:** Embed ticketing widgets on your existing site
-- **SEO Optimization:** Customize metadata for better search visibility
-- **Offline Event Support:** Provide location details and instructions
+### 🏆 Event Management & Customization
+- **Event Dashboard:** Real-time revenue, ticket sales, and attendee analytics.
+- **Homepage Designer:** Customize event pages with a live preview editor.
+- **Embeddable Ticket Widget:** Add a seamless ticketing experience to your website.
+- **SEO Tools:** Customize event metadata for better search visibility.
+- **Product Categories:** Organize products and tickets with category management.
+- **Offline Event Support:** Provide instructions for physical events.
 
-### 📱 Attendee Experience
-- **Custom Registration Forms:** Collect exactly the information you need
-- **QR Code Check-In:** Fast, mobile-friendly entry verification
-- **Multi-language Support:** Reach global audiences with localized interfaces
-- **Bulk Communication:** Send targeted messages to specific ticket holders
-- **Refund Management:** Process full or partial refunds when needed
+### 📧 Attendee & Order Management
+- **Custom Checkout Forms:** Collect attendee details with tailored questions.
+- **Attendee Management:** Search, edit, cancel, and message attendees.
+- **Order Management:** Refund, cancel, and resend order details easily.
+- **Bulk Messaging:** Email or message specific ticket holders.
+- **Data Exports:** Export attendees and orders to CSV/XLSX.
 
-### 🔧 For Organizers
-- **Team Collaboration:** Role-based access for staff members
-- **Webhook Integration:** Connect with Zapier, IFTTT, Make, or your CRM
-- **Stripe Connect:** Receive instant payouts for ticket sales
-- **Comprehensive API:** Build custom integrations with full API access
-- **Advanced Reporting:** Generate sales, tax, and usage reports
+### 📱 Mobile-Friendly & Check-In Tools
+- **QR Code Check-In:** Web-based and mobile-friendly check-in tool.
+- **Check-In Lists:** Generate and share access-controlled check-in lists.
+- **Multi-User Access:** Role-based access control for event staff.
+
+### 🔧 Integrations & Automation
+- **Webhooks Support:** Automate tasks with Zapier, IFTTT, Make, or CRM integrations.
+- **Stripe Connect Integration:** Organizers get instant payouts.
+
+### 📊 Advanced Features
+- **Multi-Language Support:** English, Deutsch, Español, Português, Français, 中文 (Zhōngwén), and more.
+- **Partial & Full Refunds:** Manage refunds with detailed order tracking.
+- **Role-Based Access Control:** Multiple user roles with permission management.
+- **REST API:** Full API access for custom integrations.
+- **Invoicing System:** Generate and send invoices with tax details, payment terms, and due dates.
+- **Offline Payment Support:** Enable bank transfers, cash payments, or custom payment methods.
+- **Event Archive:** Archive past events to keep the dashboard organized.
+- **Advanced Ticket Locking:** Lock tickets behind promo codes or access restrictions.
+- **Advanced Reporting:** Daily sales, tax breakdowns, product sales, and promo code usage reports.
 
 ## 🚀 Getting Started
 
