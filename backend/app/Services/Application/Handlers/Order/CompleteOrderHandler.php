@@ -62,7 +62,7 @@ class CompleteOrderHandler
      */
     public function handle(string $orderShortId, CompleteOrderDTO $orderData): OrderDomainObject
     {
-        return DB::transaction(function () use ($orderData, $orderShortId) {
+        $updatedOrder = DB::transaction(function () use ($orderData, $orderShortId) {
             $orderDTO = $orderData->order;
 
             $order = $this->getOrder($orderShortId);
@@ -85,19 +85,21 @@ class CompleteOrderHandler
                 $this->productQuantityUpdateService->updateQuantitiesFromOrder($updatedOrder);
             }
 
-            OrderStatusChangedEvent::dispatch($updatedOrder);
-
-            if ($updatedOrder->isOrderCompleted()) {
-                $this->domainEventDispatcherService->dispatch(
-                    new OrderEvent(
-                        type: DomainEventType::ORDER_CREATED,
-                        orderId: $updatedOrder->getId(),
-                    )
-                );
-            }
-
             return $updatedOrder;
         });
+
+        OrderStatusChangedEvent::dispatch($updatedOrder);
+
+        if ($updatedOrder->isOrderCompleted()) {
+            $this->domainEventDispatcherService->dispatch(
+                new OrderEvent(
+                    type: DomainEventType::ORDER_CREATED,
+                    orderId: $updatedOrder->getId(),
+                )
+            );
+        }
+
+        return $updatedOrder;
     }
 
     /**
