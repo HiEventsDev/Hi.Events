@@ -81,8 +81,14 @@ class OrderCancelService
     {
         $attendees = $this->attendeeRepository->findWhere([
             'order_id' => $order->getId(),
-            'status' => AttendeeStatus::ACTIVE->name,
-        ]);
+        ])->filter(function (AttendeeDomainObject $attendee) use ($order) {
+            if ($order->isOrderAwaitingOfflinePayment()) {
+                return $attendee->getStatus() === AttendeeStatus::ACTIVE->name
+                    || $attendee->getStatus() === AttendeeStatus::AWAITING_PAYMENT->name;
+            }
+
+            return $attendee->getStatus() === AttendeeStatus::ACTIVE->name;
+        });
 
         $productIdCountMap = $attendees
             ->map(fn(AttendeeDomainObject $attendee) => $attendee->getProductPriceId())->countBy();
