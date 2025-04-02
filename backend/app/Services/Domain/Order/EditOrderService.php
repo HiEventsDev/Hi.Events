@@ -25,22 +25,24 @@ class EditOrderService
      */
     public function editOrder(
         int     $id,
-        ?string $first_name,
-        ?string $last_name,
+        int     $eventId,
+        ?string $firstName,
+        ?string $lastName,
         ?string $email,
         ?string $notes
     ): OrderDomainObject
     {
-        return $this->databaseManager->transaction(function () use ($id, $first_name, $last_name, $email, $notes) {
+        return $this->databaseManager->transaction(function () use ($id, $firstName, $lastName, $email, $notes, $eventId) {
             $this->orderRepository->updateWhere(
                 attributes: array_filter([
-                    'first_name' => $first_name,
-                    'last_name' => $last_name,
+                    'first_name' => $firstName,
+                    'last_name' => $lastName,
                     'email' => $email,
                     'notes' => $notes,
                 ]),
                 where: [
-                    'id' => $id
+                    'id' => $id,
+                    'event_id' => $eventId,
                 ]
             );
 
@@ -51,7 +53,10 @@ class EditOrderService
                 ),
             );
 
-            return $this->orderRepository->findById($id);
+            return $this->orderRepository->findFirstWhere([
+                'id' => $id,
+                'event_id' => $eventId,
+            ]);
         });
     }
 }
