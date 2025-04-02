@@ -28,8 +28,9 @@ class EditOrderHandler
 
         return $this->editOrderService->editOrder(
             id: $dto->id,
-            first_name: $dto->first_name,
-            last_name: $dto->last_name,
+            eventId: $dto->eventId,
+            firstName: $dto->firstName,
+            lastName: $dto->lastName,
             email: $dto->email,
             notes: $dto->notes
         );
