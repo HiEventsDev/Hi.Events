@@ -4,6 +4,8 @@ import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
 import TextAlign from '@tiptap/extension-text-align';
 import Image from '@tiptap/extension-image';
+import TextStyle from '@tiptap/extension-text-style';
+import Color from '@tiptap/extension-color';
 import React, {useEffect, useState} from "react";
 import {InputDescription, InputError, InputLabel} from "@mantine/core";
 import classes from "./Editor.module.scss";
@@ -44,7 +46,9 @@ export const Editor = ({
             Link,
             TextAlign.configure({types: ['heading', 'paragraph']}),
             Image,
-            ImageResize
+            ImageResize,
+            TextStyle,
+            Color
         ],
         onUpdate: ({editor}) => {
             const html = editor.getHTML();
@@ -92,6 +96,24 @@ export const Editor = ({
                                 <RichTextEditor.Italic/>
                                 <RichTextEditor.Underline/>
                                 <RichTextEditor.ClearFormatting/>
+                                <RichTextEditor.ColorPicker
+                                    colors={[
+                                        '#25262b',
+                                        '#868e96',
+                                        '#fa5252',
+                                        '#e64980',
+                                        '#be4bdb',
+                                        '#7950f2',
+                                        '#4c6ef5',
+                                        '#228be6',
+                                        '#15aabf',
+                                        '#12b886',
+                                        '#40c057',
+                                        '#82c91e',
+                                        '#fab005',
+                                        '#fd7e14',
+                                    ]}
+                                />
                             </RichTextEditor.ControlsGroup>
 
                             <RichTextEditor.ControlsGroup>
@@ -130,6 +152,24 @@ export const Editor = ({
                                 <RichTextEditor.Italic/>
                                 <RichTextEditor.Underline/>
                                 <RichTextEditor.ClearFormatting/>
+                                <RichTextEditor.ColorPicker
+                                    colors={[
+                                        '#25262b',
+                                        '#868e96',
+                                        '#fa5252',
+                                        '#e64980',
+                                        '#be4bdb',
+                                        '#7950f2',
+                                        '#4c6ef5',
+                                        '#228be6',
+                                        '#15aabf',
+                                        '#12b886',
+                                        '#40c057',
+                                        '#82c91e',
+                                        '#fab005',
+                                        '#fd7e14',
+                                    ]}
+                                />
                             </RichTextEditor.ControlsGroup>
 
                             <RichTextEditor.ControlsGroup>
