@@ -5,6 +5,7 @@ namespace HiEvents\Services\Domain\Report\Reports;
 use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Services\Domain\Report\AbstractReportService;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class PromoCodesReport extends AbstractReportService
 {
@@ -21,6 +22,14 @@ class PromoCodesReport extends AbstractReportService
             'Deleted' => __('Deleted'),
             'Active' => __('Active'),
         ];
+
+        $createdAtInTimezone = DB::getDriverName() === 'mysql' ?
+            "CONVERT_TZ(ot.created_at, @@session.time_zone, '+00:00')"
+            : "ot.created_at AT TIME ZONE 'UTC'";
+        $expiryDateInTimezone = DB::getDriverName() === 'mysql' ?
+            "CONVERT_TZ(pc.expiry_date, @@session.time_zone, '+00:00')"
+            : "pc.expiry_date AT TIME ZONE 'UTC'";
+        $castInteger = DB::getDriverName() === "mysql" ? '' : "::integer";
 
         return <<<SQL
                 WITH order_totals AS (
@@ -58,22 +67,22 @@ class PromoCodesReport extends AbstractReportService
                      COALESCE(SUM(ot.total_gross), 0) as total_gross_sales,
                      COALESCE(SUM(ot.original_total), 0) as total_before_discounts,
                      COALESCE(SUM(ot.original_total - ot.discounted_total), 0) as total_discount_amount,
-                     MIN(ot.created_at AT TIME ZONE 'UTC') as first_used_at,
-                     MAX(ot.created_at AT TIME ZONE 'UTC') as last_used_at,
+                     MIN($createdAtInTimezone) as first_used_at,
+                     MAX($createdAtInTimezone) as last_used_at,
                      pc.discount as configured_discount,
                      pc.discount_type,
                      pc.max_allowed_usages,
-                     pc.expiry_date AT TIME ZONE 'UTC' as expiry_date,
+                     $expiryDateInTimezone as expiry_date,
                      CASE
                          WHEN pc.max_allowed_usages IS NOT NULL
-                             THEN pc.max_allowed_usages - COUNT(ot.order_id)::integer
+                             THEN pc.max_allowed_usages - COUNT(ot.order_id)$castInteger
                          END as remaining_uses,
                      CASE
                          WHEN pc.expiry_date < CURRENT_TIMESTAMP THEN '{$translatedStringMap['Expired']}'
                          WHEN pc.max_allowed_usages IS NOT NULL AND COUNT(ot.order_id) >= pc.max_allowed_usages THEN '{$translatedStringMap['Limit Reached']}'
                          WHEN pc.deleted_at IS NOT NULL THEN '{$translatedStringMap['Deleted']}'
                          ELSE '{$translatedStringMap['Active']}'
-                         END as status
+                     END as status
                  FROM promo_codes pc
                           LEFT JOIN order_totals ot ON pc.id = ot.promo_code_id
                  WHERE

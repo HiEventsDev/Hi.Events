@@ -4,6 +4,7 @@ namespace HiEvents\Services\Domain\Report\Reports;
 
 use HiEvents\Services\Domain\Report\AbstractReportService;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class DailySalesReport extends AbstractReportService
 {
@@ -12,10 +13,18 @@ class DailySalesReport extends AbstractReportService
         $startDateStr = $startDate->toDateString();
         $endDateStr = $endDate->toDateString();
 
-        return <<<SQL
-            WITH date_range AS (
+        $withDateRange = DB::getDriverName() === 'mysql' ? "WITH RECURSIVE date_range AS (
+                SELECT DATE($startDateStr) AS date
+                UNION ALL
+                SELECT DATE_ADD(date, INTERVAL 1 DAY)
+                FROM date_range
+                WHERE date < DATE($endDateStr)
+            )" : "WITH date_range AS (
                 SELECT generate_series('$startDateStr'::date, '$endDateStr'::date, '1 day'::interval) AS date
-            )
+            )";
+
+        return <<<SQL
+            $withDateRange
             SELECT
                 d.date,
                 COALESCE(eds.sales_total_gross, 0.00) AS sales_total_gross,
@@ -32,6 +41,6 @@ class DailySalesReport extends AbstractReportService
                     ON d.date = eds.date
                     AND eds.event_id = :event_id
             ORDER BY d.date desc;
-SQL;
+        SQL;
     }
 }

@@ -9,6 +9,7 @@ use HiEvents\Services\Domain\Event\DTO\EventCheckInStatsResponseDTO;
 use HiEvents\Services\Domain\Event\DTO\EventDailyStatsResponseDTO;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 readonly class EventStatsFetchService
 {
@@ -65,8 +66,14 @@ readonly class EventStatsFetchService
 
         $startDate = $requestData->start_date;
         $endDate = $requestData->end_date;
-
-        $query = <<<SQL
+        $withStatement = DB::getDriverName() === 'mysql' ? '
+            WITH RECURSIVE date_series AS (
+              SELECT CAST(:startDate AS DATE) AS date
+              UNION ALL
+              SELECT DATE_ADD(date, INTERVAL 1 DAY)
+              FROM date_series
+              WHERE date < CAST(:endDate AS DATE)
+            )' : "
             WITH date_series AS (
               SELECT date::date
               FROM generate_series(
@@ -75,6 +82,9 @@ readonly class EventStatsFetchService
                 '1 day'
               ) AS gs(date)
             )
+        ";
+        $query = <<<SQL
+            $withStatement
             SELECT
               ds.date,
               COALESCE(SUM(eds.total_fee), 0) AS total_fees,
