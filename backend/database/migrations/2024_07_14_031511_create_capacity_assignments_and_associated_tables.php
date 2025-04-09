@@ -34,8 +34,8 @@ return new class extends Migration {
 
             $table->index('ticket_id');
             $table->index('capacity_assignment_id');
-
-            $table->unique(['ticket_id', 'capacity_assignment_id']);
+            // mysql default max key length is 64 characters. Laravel's auto generated index name is too long, so we set a shorter custom one.
+            $table->unique(['ticket_id', 'capacity_assignment_id'], 'idx_ticket_id_capacity_assignment_id_unique');
         });
 
         Schema::table('ticket_prices', function (Blueprint $table) {

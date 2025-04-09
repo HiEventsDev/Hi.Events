@@ -9,18 +9,26 @@ return new class extends Migration
 {
     public function up(): void
     {
-        DB::transaction(static function () {
+        $transactional = static function () {
             Schema::table('attendee_check_ins', static function (Blueprint $table) {
                 // Add the event_id column without a foreign key constraint first
                 $table->unsignedBigInteger('event_id')->nullable()->after('attendee_id');
             });
 
-            DB::statement('
-                UPDATE attendee_check_ins
-                SET event_id = attendees.event_id
-                FROM attendees
-                WHERE attendee_check_ins.attendee_id = attendees.id
-            ');
+            if (DB::getDriverName() === 'mysql') {
+                DB::statement('
+                    UPDATE attendee_check_ins
+                    JOIN attendees ON attendee_check_ins.attendee_id = attendees.id
+                    SET attendee_check_ins.event_id = attendees.event_id
+                ');
+            } else {
+                DB::statement('
+                    UPDATE attendee_check_ins
+                    SET event_id = attendees.event_id
+                    FROM attendees
+                    WHERE attendee_check_ins.attendee_id = attendees.id
+                ');
+            }
 
             // Now, set the event_id column to be not nullable and add the foreign key constraint
             Schema::table('attendee_check_ins', static function (Blueprint $table) {
@@ -29,7 +37,13 @@ return new class extends Migration
 
                 $table->index('event_id');
             });
-        });
+        };
+        // mysql does not support changing columns in transations, only adding or dropping columns
+        if (DB::getDriverName() === 'mysql') {
+            $transactional();
+        } else {
+            DB::transaction($transactional);
+        }
     }
 
     public function down(): void

@@ -16,8 +16,11 @@ return new class extends Migration {
         Schema::rename('ticket_check_in_lists', 'product_check_in_lists');
         Schema::rename('ticket_capacity_assignments', 'product_capacity_assignments');
 
-        DB::statement('ALTER SEQUENCE ticket_capacity_assignments_id_seq RENAME TO product_capacity_assignments_id_seq');
-        DB::statement('ALTER SEQUENCE ticket_check_in_lists_id_seq RENAME TO product_check_in_lists_id_seq');
+        // mysql's auto_increments have no name, therefore theres no need to rename them
+        if (DB::getDriverName() !== 'mysql') {
+            DB::statement('ALTER SEQUENCE ticket_capacity_assignments_id_seq RENAME TO product_capacity_assignments_id_seq');
+            DB::statement('ALTER SEQUENCE ticket_check_in_lists_id_seq RENAME TO product_check_in_lists_id_seq');
+        }
 
         Schema::table('order_items', function (Blueprint $table) {
             $table->renameColumn('ticket_id', 'product_id');
@@ -77,17 +80,17 @@ return new class extends Migration {
             $table->renameColumn('ticket_page_message', 'product_page_message');
         });
 
-        $this->renameIndex('idx_ticket_prices_ticket_id', 'idx_product_prices_product_id');
-        $this->renameIndex('order_items_ticket_id_index', 'order_items_product_id_index');
-        $this->renameIndex('order_items_ticket_price_id_index', 'order_items_product_price_id_index');
-        $this->renameIndex('idx_attendees_ticket_id_deleted_at', 'idx_attendees_product_id_deleted_at');
-        $this->renameIndex('ticket_tax_and_fees_ticket_id_index', 'product_tax_and_fees_product_id_index');
-        $this->renameIndex('idx_ticket_questions_active', 'idx_product_questions_active');
-        $this->renameIndex('ticket_check_in_lists_ticket_id_check_in_list_id_index', 'product_check_in_lists_product_id_check_in_list_id_index');
-        $this->renameIndex('idx_ticket_check_in_lists_ticket_id_deleted_at', 'idx_product_check_in_lists_product_id_deleted_at');
-        $this->renameIndex('attendee_check_ins_ticket_id_index', 'attendee_check_ins_product_id_index');
-        $this->renameIndex('ticket_capacity_assignments_ticket_id_index', 'product_capacity_assignments_product_id_index');
-        $this->renameIndex('attendees_ticket_prices_id_fk', 'attendees_product_prices_id_fk');
+        $this->renameIndex('product_prices', 'idx_ticket_prices_ticket_id', 'idx_product_prices_product_id');
+        $this->renameIndex('order_items', 'order_items_ticket_id_index', 'order_items_product_id_index');
+        $this->renameIndex('order_items', 'order_items_ticket_price_id_index', 'order_items_product_price_id_index');
+        $this->renameIndex('attendees', 'idx_attendees_ticket_id_deleted_at', 'idx_attendees_product_id_deleted_at');
+        $this->renameIndex('procut_tax_and_fees', 'ticket_tax_and_fees_ticket_id_index', 'product_tax_and_fees_product_id_index');
+        $this->renameIndex('product_questions', 'idx_ticket_questions_active', 'idx_product_questions_active');
+        $this->renameIndex('product_check_in_lists', 'ticket_check_in_lists_ticket_id_check_in_list_id_index', 'product_check_in_lists_product_id_check_in_list_id_index');
+        $this->renameIndex('product_check_in_lists', 'idx_ticket_check_in_lists_ticket_id_deleted_at', 'idx_product_check_in_lists_product_id_deleted_at');
+        $this->renameIndex('attendee_check_ins', 'attendee_check_ins_ticket_id_index', 'attendee_check_ins_product_id_index');
+        $this->renameIndex('product_capacity_assignments', 'ticket_capacity_assignments_ticket_id_index', 'product_capacity_assignments_product_id_index');
+        $this->renameIndex('attendees', 'attendees_ticket_prices_id_fk', 'attendees_product_prices_id_fk');
     }
 
     public function down(): void
@@ -100,9 +103,11 @@ return new class extends Migration {
         Schema::rename('product_check_in_lists', 'ticket_check_in_lists');
         Schema::rename('product_capacity_assignments', 'ticket_capacity_assignments');
 
-        // Rename sequences back
-        DB::statement('ALTER SEQUENCE product_capacity_assignments_id_seq RENAME TO ticket_capacity_assignments_id_seq');
-        DB::statement('ALTER SEQUENCE product_check_in_lists_id_seq RENAME TO ticket_check_in_lists_id_seq');
+        if (DB::getDriverName() !== 'mysql') {
+            // Rename sequences back
+            DB::statement('ALTER SEQUENCE product_capacity_assignments_id_seq RENAME TO ticket_capacity_assignments_id_seq');
+            DB::statement('ALTER SEQUENCE product_check_in_lists_id_seq RENAME TO ticket_check_in_lists_id_seq');
+        }
 
         Schema::table('order_items', function (Blueprint $table) {
             $table->renameColumn('product_id', 'ticket_id');
@@ -162,21 +167,25 @@ return new class extends Migration {
             $table->renameColumn('product_page_message', 'ticket_page_message');
         });
 
-        $this->renameIndex('idx_product_prices_product_id', 'idx_ticket_prices_ticket_id');
-        $this->renameIndex('order_items_product_id_index', 'order_items_ticket_id_index');
-        $this->renameIndex('order_items_product_price_id_index', 'order_items_ticket_price_id_index');
-        $this->renameIndex('idx_attendees_product_id_deleted_at', 'idx_attendees_ticket_id_deleted_at');
-        $this->renameIndex('product_tax_and_fees_product_id_index', 'ticket_tax_and_fees_ticket_id_index');
-        $this->renameIndex('idx_product_questions_active', 'idx_ticket_questions_active');
-        $this->renameIndex('product_check_in_lists_product_id_check_in_list_id_index', 'ticket_check_in_lists_ticket_id_check_in_list_id_index');
-        $this->renameIndex('idx_product_check_in_lists_product_id_deleted_at', 'idx_ticket_check_in_lists_ticket_id_deleted_at');
-        $this->renameIndex('attendee_check_ins_product_id_index', 'attendee_check_ins_ticket_id_index');
-        $this->renameIndex('product_capacity_assignments_product_id_index', 'ticket_capacity_assignments_ticket_id_index');
-        $this->renameIndex('attendees_product_prices_id_fk', 'attendees_ticket_prices_id_fk');
+        $this->renameIndex('ticket_prices', 'idx_product_prices_product_id', 'idx_ticket_prices_ticket_id');
+        $this->renameIndex('order_items', 'order_items_product_id_index', 'order_items_ticket_id_index');
+        $this->renameIndex('order_items', 'order_items_product_price_id_index', 'order_items_ticket_price_id_index');
+        $this->renameIndex('attendees', 'idx_attendees_product_id_deleted_at', 'idx_attendees_ticket_id_deleted_at');
+        $this->renameIndex('ticket_tax_tax_and_fees', 'product_tax_and_fees_product_id_index', 'ticket_tax_and_fees_ticket_id_index');
+        $this->renameIndex('ticket_questions', 'idx_product_questions_active', 'idx_ticket_questions_active');
+        $this->renameIndex('ticket_check_in_lists', 'product_check_in_lists_product_id_check_in_list_id_index', 'ticket_check_in_lists_ticket_id_check_in_list_id_index');
+        $this->renameIndex('ticket_check_in_lists', 'idx_product_check_in_lists_product_id_deleted_at', 'idx_ticket_check_in_lists_ticket_id_deleted_at');
+        $this->renameIndex('attendee_check_ins', 'attendee_check_ins_product_id_index', 'attendee_check_ins_ticket_id_index');
+        $this->renameIndex('ticket_capacity_assignments', 'product_capacity_assignments_product_id_index', 'ticket_capacity_assignments_ticket_id_index');
+        $this->renameIndex('attendees', 'attendees_product_prices_id_fk', 'attendees_ticket_prices_id_fk');
     }
 
-    private function renameIndex($from, $to): void
+    private function renameIndex($table, $from, $to): void
     {
-        DB::statement("ALTER INDEX IF EXISTS {$from} RENAME TO {$to}");
+        if (DB::getDriverName() === 'mysql') {
+            DB::statement("ALTER TABLE {$table} RENAME INDEX `{$from}` TO `{$to}`");
+        } else {
+            DB::statement("ALTER INDEX IF EXISTS {$from} RENAME TO {$to}");
+        }
     }
 };
