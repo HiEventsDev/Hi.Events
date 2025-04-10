@@ -24,8 +24,9 @@ class EditOrderAction extends BaseAction
 
         $order = $this->handler->handle(new EditOrderDTO(
             id: $orderId,
-            first_name: $request->validated('first_name'),
-            last_name: $request->validated('last_name'),
+            eventId: $eventId,
+            firstName: $request->validated('first_name'),
+            lastName: $request->validated('last_name'),
             email: $request->validated('email'),
             notes: $request->validated('notes'),
         ));
