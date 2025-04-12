@@ -6,7 +6,6 @@ use Brick\Math\Exception\MathException;
 use Brick\Math\Exception\NumberFormatException;
 use Brick\Math\Exception\RoundingNecessaryException;
 use Brick\Money\Exception\UnknownCurrencyException;
-use Brick\Money\Money;
 use HiEvents\DomainObjects\AccountConfigurationDomainObject;
 use HiEvents\DomainObjects\Generated\StripePaymentDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderItemDomainObject;
@@ -23,6 +22,7 @@ use HiEvents\Services\Domain\Payment\Stripe\DTOs\CreatePaymentIntentRequestDTO;
 use HiEvents\Services\Domain\Payment\Stripe\DTOs\CreatePaymentIntentResponseDTO;
 use HiEvents\Services\Domain\Payment\Stripe\StripePaymentIntentCreationService;
 use HiEvents\Services\Infrastructure\Session\CheckoutSessionManagementService;
+use HiEvents\Values\MoneyValue;
 use Stripe\Exception\ApiErrorException;
 use Throwable;
 
@@ -84,7 +84,7 @@ readonly class CreatePaymentIntentHandler
         }
 
         $paymentIntent = $this->stripePaymentService->createPaymentIntent(CreatePaymentIntentRequestDTO::fromArray([
-            'amount' => Money::of($order->getTotalGross(), $order->getCurrency())->getMinorAmount()->toInt(),
+            'amount' => MoneyValue::fromFloat($order->getTotalGross(), $order->getCurrency()),
             'currencyCode' => $order->getCurrency(),
             'account' => $account,
             'order' => $order,

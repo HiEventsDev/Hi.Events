@@ -9,6 +9,9 @@ use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Models\Event;
 use HiEvents\Models\Organizer;
+use HiEvents\Services\Infrastructure\CurrencyConversion\CurrencyConversionClientInterface;
+use HiEvents\Services\Infrastructure\CurrencyConversion\NoOpCurrencyConversionClient;
+use HiEvents\Services\Infrastructure\CurrencyConversion\OpenExchangeRatesCurrencyConversionClient;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Model;
@@ -28,6 +31,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->bindDoctrineConnection();
         $this->bindStripeClient();
+        $this->bindCurrencyConversionClient();
     }
 
     /**
@@ -129,5 +133,26 @@ class AppServiceProvider extends ServiceProvider
     private function disableLazyLoading(): void
     {
         Model::preventLazyLoading(!app()->isProduction());
+    }
+
+    private function bindCurrencyConversionClient(): void
+    {
+        $this->app->bind(
+            CurrencyConversionClientInterface::class,
+            function () {
+                if (config('services.open_exchange_rates.app_id')) {
+                    return new OpenExchangeRatesCurrencyConversionClient(
+                        apiKey: config('services.open_exchange_rates.app_id'),
+                        cache: $this->app->make('cache.store'),
+                        logger: $this->app->make('log')
+                    );
+                }
+
+                // Fallback to no-op client if no other client is available
+                return new NoOpCurrencyConversionClient(
+                    logger: $this->app->make('log')
+                );
+            }
+        );
     }
 }

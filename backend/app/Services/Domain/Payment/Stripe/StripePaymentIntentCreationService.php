@@ -64,12 +64,12 @@ class StripePaymentIntentCreationService
 
             $applicationFee = $this->orderApplicationFeeCalculationService->calculateApplicationFee(
                 accountConfiguration: $paymentIntentDTO->account->getConfiguration(),
-                orderTotal: $paymentIntentDTO->amount / 100,
+                orderTotal: $paymentIntentDTO->amount->toFloat(),
                 currency: $paymentIntentDTO->currencyCode,
             )->toMinorUnit();
 
             $paymentIntent = $this->stripeClient->paymentIntents->create([
-                'amount' => $paymentIntentDTO->amount,
+                'amount' => $paymentIntentDTO->amount->toMinorUnit(),
                 'currency' => $paymentIntentDTO->currencyCode,
                 'customer' => $this->upsertStripeCustomer($paymentIntentDTO)->getStripeCustomerId(),
                 'metadata' => [
@@ -103,6 +103,8 @@ class StripePaymentIntentCreationService
                 'paymentIntentDTO' => $paymentIntentDTO->toArray(['account']),
             ]);
 
+            $this->databaseManager->rollBack();
+
             throw new CreatePaymentIntentFailedException(
                 __('There was an error communicating with the payment provider. Please try again later.')
             );
@@ -111,18 +113,6 @@ class StripePaymentIntentCreationService
 
             throw $exception;
         }
-    }
-
-    private function getApplicationFee(CreatePaymentIntentRequestDTO $paymentIntentDTO): float
-    {
-        if (!$this->config->get('app.saas_mode_enabled')) {
-            return 0;
-        }
-
-        $fixedFee = $paymentIntentDTO->account->getApplicationFee()->fixedFee;
-        $percentageFee = $paymentIntentDTO->account->getApplicationFee()->percentageFee;
-
-        return ceil(($fixedFee * 100) + ($paymentIntentDTO->amount * $percentageFee / 100));
     }
 
     /**
