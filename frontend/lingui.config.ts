@@ -6,6 +6,7 @@ const config: LinguiConfig = {
         "zh-cn", // Mandarin Chinese (Simplified)
         "es", // Spanish
         "fr", // French
+        "nl", // Dutch
         "pt-br", // Portuguese (Brazil)
         "ru", // Russian
         "de", // German
