@@ -15,6 +15,8 @@ enum Locale: string
     case PT = 'pt';
     case PT_BR = 'pt-br';
     case ZH_CN = 'zh-cn';
+
+    case ZH_HK = 'zh-hk';
     case VI = 'vi';
 
     public static function getSupportedLocales(): array
