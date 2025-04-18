@@ -12,7 +12,9 @@ import classes from "./Editor.module.scss";
 import classNames from "classnames";
 import {Trans} from "@lingui/macro";
 import {InsertImageControl} from "./Controls/InsertImageControl";
+import {InsertIframeControl} from "./Controls/InsertIframeControl";
 import {ImageResize} from "./Extensions/ImageResizeExtension";
+import {Iframe} from "./Extensions/IframeExtension";
 
 interface EditorProps {
     onChange: (value: string) => void;
@@ -48,7 +50,13 @@ export const Editor = ({
             Image,
             ImageResize,
             TextStyle,
-            Color
+            Color,
+            Iframe.configure({
+                allowFullscreen: true,
+                HTMLAttributes: {
+                    class: 'iframe-wrapper',
+                },
+            }),
         ],
         onUpdate: ({editor}) => {
             const html = editor.getHTML();
@@ -141,6 +149,7 @@ export const Editor = ({
                             </RichTextEditor.ControlsGroup>
                             <RichTextEditor.ControlsGroup>
                                 <InsertImageControl/>
+                                <InsertIframeControl/>
                             </RichTextEditor.ControlsGroup>
                         </>
                     )}
@@ -186,6 +195,10 @@ export const Editor = ({
                             <RichTextEditor.ControlsGroup>
                                 <RichTextEditor.BulletList/>
                                 <RichTextEditor.OrderedList/>
+                            </RichTextEditor.ControlsGroup>
+
+                            <RichTextEditor.ControlsGroup>
+                                <InsertIframeControl/>
                             </RichTextEditor.ControlsGroup>
                         </>
                     )}

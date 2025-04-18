@@ -18,6 +18,11 @@ class HtmlPurifierService
         File::ensureDirectoryExists($cachePath, 0755);
 
         $this->config->set('Cache.SerializerPath', $cachePath);
+
+        // For testing I'm allowing all iframe sources, it's safer to lock it down to expected URLs
+        $this->config->set('HTML.AllowedElements', 'p,b,i,u,s,strong,em,li,ul,ol,br,span,img,a,iframe');
+        $this->config->set('HTML.SafeIframe', true);
+        $this->config->set('URI.SafeIframeRegexp', '/.*/');
     }
 
     public function purify(?string $html): string
