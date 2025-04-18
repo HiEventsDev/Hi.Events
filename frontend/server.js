@@ -10,6 +10,7 @@ import path from "node:path";
 import {fileURLToPath} from "node:url";
 import * as nodePath from "node:path";
 import * as nodeUrl from "node:url";
+import "dotenv/config";
 
 installGlobals();
 
