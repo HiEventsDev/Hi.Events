@@ -1,131 +1,180 @@
-<p align="center">
-  <img src="https://hievents-public.s3.us-west-1.amazonaws.com/website/hi-events-rainbow.png?v=1" alt="Logotipo do Hi.Events" width="200px">
-</p>
-<h3 align="center">Hi.Events</h3>
-<p align="center">
-<a href="https://demo.hi.events/event/1/dog-conf-2030">Evento de Demonstração 🌟</a> <a href="https://hi.events?utm_source=gh-readme">Site Web 🌎</a>  <a href="https://hi.events/docs">Documentação 📄</a>  <a href="https://hi.events/docs/getting-started?utm_source=gh-readme">Instalação ⚙️</a>
-</p>
-
-<h3 align="center">
- Gerencie eventos e venda ingressos online sem esforço.
-</h3>
-
+<div align="center">
 <div align="center">
 
-[![Documentação do Hi.Events](https://img.shields.io/badge/docs-hi.events-blue)](https://hi.events/docs)
-[![Licença: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://github.com/HiEventsDev/hi.events/LICENCE)
-[![Lançamento no GitHub](https://img.shields.io/github/v/release/HiEventsDev/hi.events?include_prereleases)](https://github.com/HiEventsDev/hi.events/releases)
-[![Executar Testes Unitários](https://github.com/HiEventsDev/hi.events/actions/workflows/unit-tests.yml/badge.svg?event=push)](https://github.com/HiEventsDev/hi.events/actions/workflows/unit-tests.yml)
-[![Downloads do Docker](https://img.shields.io/docker/pulls/daveearley/hi.events-all-in-one)](https://hub.docker.com/r/daveearley/hi.events-all-in-one)
+💖 **Achou o Hi.Events útil?**  
+⭐ Considere deixar uma estrela para apoiar o projeto! ⭐
 
 </div>
 
-<div align="center">
- 🌟 Uma estrela seria muito apreciada! 🌟
+<p>
+  <img src="https://hievents-public.s3.us-west-1.amazonaws.com/website/hi-events-rainbow.png?v=1" alt="Logo do Hi.Events" width="200px">
+</p>
+
+<h1>Hi.Events</h1>
+<h3>Plataforma open-source de gestão de eventos e venda de ingressos para eventos de todos os tamanhos</h3>
+
+[![Compartilhar Hi.Events](https://img.shields.io/badge/Share%20Hi.Events-blue)](https://www.addtoany.com/share?linkurl=https://github.com/HiEventsDev/hi.events)
+[![Seguir no X (antigo Twitter)](https://img.shields.io/twitter/follow/HiEventsTickets)](https://x.com/HiEventsTickets)
+[![Documentação do Hi.Events](https://img.shields.io/badge/docs-hi.events-blue)](https://hi.events/docs)
+[![Licença: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://github.com/HiEventsDev/Hi.Events/blob/develop/LICENCE)
+[![Versão do GitHub](https://img.shields.io/github/v/release/HiEventsDev/hi.events?include_prereleases)](https://github.com/HiEventsDev/hi.events/releases)
+[![Testes unitários](https://github.com/HiEventsDev/hi.events/actions/workflows/unit-tests.yml/badge.svg?event=push)](https://github.com/HiEventsDev/hi.events/actions/workflows/unit-tests.yml)
+[![Pulls no Docker](https://img.shields.io/docker/pulls/daveearley/hi.events-all-in-one)](https://hub.docker.com/r/daveearley/hi.events-all-in-one)
+
+<p>
+<a href="https://app.hi.events/auth/register?utm_source=gh-readme&utm_content=try-cloud-link">Experimente na Nuvem ☁️</a> •
+<a href="https://app.hi.events/event/2/hievents-conference-2030?utm_source=gh-readme&utm_content=demo-link">Evento de Demonstração 🌟</a> • 
+<a href="https://hi.events?utm_source=gh-readme&utm_content=website-link">Site 🌎</a> • 
+<a href="https://hi.events/docs?utm_source=gh-readme&utm_content=documentation-link">Documentação 📄</a> • 
+<a href="https://hi.events/docs/getting-started?utm_source=gh-readme&utm_content=installation=link">Instalação ⚙️</a>
+</p>
+
+<a href="https://trendshift.io/repositories/10563" target="_blank"><img src="https://trendshift.io/api/badge/repositories/10563" alt="HiEventsDev%2Fhi.events | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
 </div>
 
 <hr/>
-
-## Índice
-
-- [Introdução](#-introdução)
-- [Recursos](#-recursos)
-- [Primeiros Passos](#-primeiros-passos)
-- [Registro de Alterações](#-registro-de-alterações)
-- [Contribuições](#-contribuições)
-- [FAQ](#-faq)
+<p align="center">
+<a href="README.de.md">Deutsch</a> |
+<a href="README.pt.md">Português</a> |
+<a href="README.fr.md">Français</a> |
+<a href="README.nl.md">Nederlands</a> |
+<a href="README.es.md">Español</a> |
+<a href="README.zh-cn.md">中文 (Zhōngwén)</a> |
+<a href="README.ja.md">日本語</a>
+</p>
+<hr/>
 
 ## 📚 Introdução
 
-<a href="https://hi.events">Hi.Events</a> é uma plataforma de gestão de eventos e bilheteria auto-hospedada, rica em recursos. De conferências a noites de clube, o Hi.Events é projetado para ajudar você a criar, gerenciar e vender ingressos para eventos de todos os tamanhos.
+<a href="https://hi.events">Hi.Events</a> é uma plataforma de código aberto, rica em recursos, para gerenciamento de eventos e venda de ingressos. Ideal para conferências, shows, workshops, festas e muito mais.
 
-<img alt="Painel de controle de venda de ingressos auto-hospedado do Hi.Events" src="https://hievents-public.s3.us-west-1.amazonaws.com/website/dashboard-screenshot.png"/>
+<img alt="Dashboard autohospedado do Hi.Events" src="https://hievents-public.s3.us-west-1.amazonaws.com/website/github-readme-screenshot.png"/>
+<div align="center">
+<caption>Gerado com <a href="https://screenshot.rocks?utm_source=hi.events-readme">Screenshot Rocks</a></caption>
+</div>
 
-## 🌟 Recursos
+## ⚡ Implantação Rápida
 
-<a href="https://hi.events">Hi.Events</a> está repleto de recursos para agilizar sua gestão de eventos e vendas de ingressos:
+Comece em minutos com nossas opções de implantação com um clique:
 
-- 📊 **Análise de Eventos:** Obtenha insights profundos sobre o desempenho do evento e as vendas de ingressos.
-- 🎟 **Widget de Ingressos Incorporável:** Integre facilmente a venda de ingressos em qualquer site.
-- 🖥 **Páginas de Eventos Personalizáveis:** Crie páginas de eventos atraentes com opções de design flexíveis.
-- 🔑 **Ferramentas Intuitivas de Check-In:** Registre facilmente os participantes na entrada com a ferramenta de check-in por código QR do Hi.Events.
-- 💬 **Ferramentas de Mensagens para Eventos:** Envie mensagens importantes e lembretes aos participantes.
-- 📝 **Formulários de Pedido Personalizados:** Colete informações dos participantes com perguntas personalizadas no checkout.
-- 🎫 **Vários Tipos de Ingressos:** Ingressos gratuitos, pagos, de doação ou escalonados.
-- 💸 **Códigos Promocionais Versáteis:** Códigos de desconto altamente versáteis. Acesso pré-venda, múltiplas opções de desconto.
-- 💰 **Pagamentos Instantâneos:** Aproveite os pagamentos instantâneos com a integração do Stripe.
-- 🧾 **Configuração de Impostos e Taxas:** Adicione impostos e taxas por ingresso.
-- 📦 **Exportações de Dados:** Exporte dados de participantes e pedidos para XLSX ou CSV.
-- 💻 **API REST:** API REST completa para integrações personalizadas.
-- 🔍 **Ferramentas de SEO:** Personalize as configurações de SEO para cada evento.
-- 🛒 **Processo de Checkout Bonito:** Garanta uma experiência de checkout suave e agradável.
-- 🔐 **Acesso Baseado em Funções:** Suporte para vários papéis de usuário.
-- 💻 **Suporte para Eventos Online:** Ofereça instruções e links para eventos online.
-- ⏪ **Suporte a Reembolsos Totais e Parciais:** Gerencie facilmente reembolsos totais e parciais.
-- 📧 **Notificações por E-mail:** Mantenha os participantes informados com notificações automáticas por e-mail.
-- 📱 **Adaptável a Dispositivos Móveis:** Desfrute de uma experiência contínua em qualquer dispositivo.
-- 🌐 **Suporte Multilíngue:** Suporte para vários idiomas.
-- 🎉 **E muito mais!**
+[![Deploy no DigitalOcean](https://www.deploytodo.com/do-btn-blue.svg)](https://github.com/HiEventsDev/hi.events-digitalocean)
+[![Deploy no Render](https://render.com/images/deploy-to-render-button.svg)](https://github.com/HiEventsDev/hi.events-render.com)
+[![Deploy no Railway](https://railway.app/button.svg)](https://railway.app/template/8CGKmu?referralCode=KvSr11)
+[![Deploy no Zeabur](https://zeabur.com/button.svg)](https://zeabur.com/templates/8DIRY6)
+
+## 🌟 Principais Funcionalidades
+
+<a href="https://hi.events">Hi.Events</a> oferece ferramentas completas para simplificar a gestão dos seus eventos:
+
+### 🎟 Venda de Ingressos e Produtos
+- **Tipos de ingressos:** gratuitos, pagos, por doação e em camadas.
+- **Gestão de capacidade:** por ingresso ou por evento.
+- **Atribuições de capacidade:** compartilhe capacidade entre diferentes ingressos.
+- **Códigos promocionais:** descontos e acessos antecipados.
+- **Venda de produtos:** camisetas, brindes e complementos.
+- **Taxas e impostos:** personalizáveis por produto ou pedido.
+
+### 🏆 Gestão e Personalização de Eventos
+- **Painel do evento:** dados em tempo real sobre vendas e participantes.
+- **Editor da página inicial:** com visualização ao vivo.
+- **Widget incorporável:** integre o processo de compra no seu site.
+- **SEO personalizado:** melhore o ranqueamento nos motores de busca.
+- **Categorias de produtos:** organização eficiente.
+- **Suporte a eventos presenciais:** com instruções específicas.
+
+### 📧 Gestão de Participantes e Pedidos
+- **Formulários personalizados:** colete informações específicas.
+- **Gerenciar participantes:** buscar, editar, cancelar, enviar mensagens.
+- **Gestão de pedidos:** reembolsos, cancelamentos, reenvio de e-mails.
+- **Mensagens em massa:** para todos ou por tipo de ingresso.
+- **Exportação de dados:** em CSV/XLSX.
+
+### 📱 Ferramentas Móveis e Check-in
+- **Check-in por QR Code:** ferramenta web/mobile amigável.
+- **Listas de check-in:** com controle de acesso.
+- **Acesso multiusuário:** com controle de permissões.
+
+### 🔧 Integrações e Automação
+- **Webhooks:** conecte com Zapier, Make, CRMs e mais.
+- **Stripe Connect:** pagamentos imediatos para organizadores.
+
+### 📊 Recursos Avançados
+- **Multilíngue:** Português, Inglês, Espanhol, Francês, Alemão, Chinês, etc.
+- **Reembolsos parciais e totais:** com controle detalhado.
+- **Gestão de usuários:** com diferentes papéis.
+- **API REST:** integrações personalizadas.
+- **Faturamento:** com impostos, termos de pagamento e vencimentos.
+- **Pagamento offline:** transferência, dinheiro, etc.
+- **Arquivamento de eventos:** mantenha seu painel limpo.
+- **Bloqueio avançado de ingressos:** por código promocional.
+- **Relatórios detalhados:** vendas diárias, impostos, promoções, etc.
 
 ## 🚀 Primeiros Passos
 
-Para obter instruções detalhadas de instalação, consulte nossa [documentação](https://hi.events/docs/getting-started). Para
-um início rápido, siga estas etapas:
-
-### Implantações com Um Clique
-
-[![Implantar no DigitalOcean](https://www.deploytodo.com/do-btn-blue.svg)](https://github.com/HiEventsDev/hi.events-digitalocean)
-
-[![Implantar no Render](https://render.com/images/deploy-to-render-button.svg)](https://github.com/HiEventsDev/hi.events-render.com)
-
-[![Implantar no Railway](https://railway.app/button.svg)](https://railway.app/template/8CGKmu?referralCode=KvSr11)
-
-[![Implantar no Zeabur](https://zeabur.com/button.svg)](https://zeabur.com/templates/8DIRY6)
-
-### 🐳 Início Rápido com Docker
+### 🐳 Início com Docker
 
 > [!IMPORTANTE]  
-> Certifique-se de ter o Docker e o Docker Compose instalados em seu sistema. Caso contrário, você pode baixá-los do
-> site oficial do Docker: [Docker](https://www.docker.com/get-started).
+> Certifique-se de ter o Docker e o Docker Compose instalados.  
+> Baixe em: [Docker](https://www.docker.com/get-started)
 
-1. **Clonar o Repositório:**
+1. **Clone o repositório:**
    ```bash
    git clone git@github.com:HiEventsDev/hi.events.git
    ```
 
-2. **Navegar para o Diretório Docker:**
+2. **Acesse o diretório Docker:**
    ```bash
    cd hi.events/docker/all-in-one
    ```
 
-3. **Iniciar os Contêineres Docker:**
+3. **Gere `APP_KEY` e `JWT_SECRET`:**
+
+   **Linux/macOS:**
+   ```bash
+   echo base64:$(openssl rand -base64 32)  # Para APP_KEY
+   openssl rand -base64 32                 # Para JWT_SECRET
+   ```
+
+   **Windows:**
+   Consulte o arquivo *./docker/all-in-one/README.md*.
+
+4. **Inicie os containers:**
    ```bash
    docker compose up -d
    ```
-4. **Criar uma conta:**
-   ```bash
-   Abra o seu navegador e vá para http://localhost:8123/auth/register.
+
+5. **Crie uma conta:**
+   ```
+   Acesse http://localhost:8123/auth/register no seu navegador
    ```
 
-ℹ️ Consulte o [guia de primeiros passos](https://hi.events/docs/getting-started) para outros métodos de instalação e
-para configurar um ambiente de produção ou desenvolvimento local.
+ℹ️ Para instruções completas, veja o [guia de introdução](https://hi.events/docs/getting-started).
+
+## 💜 Patrocinadores
+
+### Apoie o Projeto
+
+Se o Hi.Events foi útil para você, ajude-nos a continuar desenvolvendo:
+
+<a href="https://www.buymeacoffee.com/hi.events" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;"></a>
+
+Ou nos apoie via: <a href="https://github.com/sponsors/HiEventsDev" target="_blank">GitHub Sponsors</a> | <a href="https://opencollective.com/hievents" target="_blank">Open Collective</a>
 
 ## 📝 Registro de Alterações
 
-Mantenha-se atualizado com nossas melhorias contínuas e adições de recursos em nossa [página de lançamentos no GitHub](https://github.com/HiEventsDev/hi.events/releases).
+Fique por dentro das novidades em nossa [página de versões no GitHub](https://github.com/HiEventsDev/hi.events/releases).
 
-## 🤝 Contribuições
+## 🤝 Contribuindo
 
-Aceitamos contribuições, sugestões e relatórios de erros! Antes de propor um novo recurso ou extensão,
-abra uma issue para discuti-lo.
+Contribuições são bem-vindas! Veja nosso [guia de contribuição](CONTRIBUTING.md).
 
 ## ❓ FAQ
 
-Tem perguntas? Nossa [documentação](https://hi.events/docs) tem respostas. Se você não encontrar o que procura, sinta-se à vontade para
-nos contatar em [hello@hi.events](mailto:hello@hi.events).
+Dúvidas? Veja nossa [documentação](https://hi.events/docs?utm_source=gh-readme&utm_content=faq-docs-link)  
+Ou entre em contato: [hello@hi.events](mailto:hello@hi.events)
 
 ## 📜 Licença
 
-Hi.Events está licenciado sob os termos da [AGPL-3.0](https://github.com/HiEventsDev/hi.events/blob/main/LICENCE).
+Hi.Events está licenciado sob [AGPL-3.0](https://github.com/HiEventsDev/hi.events/blob/main/LICENCE)
 
-Para mais informações sobre licenças, incluindo opções de licenciamento comercial, visite nossa página de licenças [aqui](https://hi.events/licensing).
+Para informações sobre licenças comerciais, acesse [nossa página de licenças](https://hi.events/licensing).
