@@ -81,7 +81,9 @@ class MarkOrderAsPaidService
 
             $this->updateOrderInvoice($orderId);
 
-            $updatedOrder = $this->orderRepository->findById($orderId);
+            $updatedOrder = $this->orderRepository
+                ->loadRelation(OrderItemDomainObject::class)
+                ->findById($orderId);
 
             $this->updateAttendeeStatuses($updatedOrder);
 
@@ -168,9 +170,8 @@ class MarkOrderAsPaidService
         $this->orderApplicationFeeService->createOrderApplicationFee(
             orderId: $updatedOrder->getId(),
             applicationFeeAmountMinorUnit: $this->orderApplicationFeeCalculationService->calculateApplicationFee(
-                $config,
-                $updatedOrder->getTotalGross(),
-                $event->getCurrency(),
+                accountConfiguration: $config,
+                order: $updatedOrder,
             )->toMinorUnit(),
             orderApplicationFeeStatus: OrderApplicationFeeStatus::AWAITING_PAYMENT,
             paymentMethod: PaymentProviders::OFFLINE,
