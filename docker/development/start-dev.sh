@@ -67,15 +67,6 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-cho -e "${GREEN}Running yarn install in the frontend service...${NC}"
-
-$COMPOSE_CMD exec -T frontend yarn install --frozen-lockfile
-
-if [ $? -ne 0 ]; then
-    echo -e "${RED}Yarn install failed within the frontend service.${NC}"
-    exit 1
-fi
-
 echo -e "${GREEN}Waiting for the database to be ready...${NC}"
 while ! $COMPOSE_CMD logs pgsql | grep "ready to accept connections" > /dev/null; do
   echo -n '.'
