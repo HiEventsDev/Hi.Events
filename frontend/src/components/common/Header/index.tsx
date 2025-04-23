@@ -12,12 +12,12 @@ export const Header = ({rightContent, fullWidth = false}: HeaderProps) => {
         <header className={classes.header}>
             <Container size="md" className={classes.inner} fluid={fullWidth}>
                 <NavLink className={classes.logo} to={'/manage/events'}>
-                    <img src="/logo-text-only-white-text.png" alt="Hi.Events logo" className={classes.logo}/>
+                    {/* <img src="/logo-text-only-white-text.png" alt="Garba Groove logo" className={classes.logo}/> */}
                 </NavLink>
 
-                <div className={classes.rightContent}>
+                {/* <div className={classes.rightContent}>
                     {rightContent}
-                </div>
+                </div> */}
             </Container>
         </header>
     );

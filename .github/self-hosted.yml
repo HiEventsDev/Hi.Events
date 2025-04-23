@@ -1,0 +1,28 @@
+name: Docker All-in-One Workflow
+
+on:
+  push:
+    branches: [ prod ]
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    
+    steps:
+      - name: Update local repository
+        working-directory: /Users/usman/coders-boutique/events
+        run: |
+          git checkout prod
+          git pull origin prod
+      
+      - name: Build and start Docker containers
+        working-directory: /Users/usman/coders-boutique/events/docker/all-in-one
+        run: |
+          # Stop any running containers (if needed)
+          docker-compose down || true
+          
+          # Build and start containers
+          docker-compose up -d
+          
+          # Print running containers
+          docker ps

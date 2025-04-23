@@ -32,6 +32,7 @@ import {Tooltip} from "../../common/Tooltip";
 import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
 import {useGetEventSettings} from "../../../queries/useGetEventSettings.ts";
 import {EventStatusBadge} from "../../common/EventStatusBadge";
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 
 interface NavItem {
     link?: string;
@@ -137,8 +138,9 @@ const EventLayout = () => {
                             size={'sm'}/>
                 </div>
                 <div className={classes.logo}>
-                    <NavLink to={'/manage/events'}>
-                        <img src={'/logo-text-only-white-text.png'} alt={''}/>
+                    <NavLink to={'/manage/events'} style={{color:'#fff',fontSize:'24px',textWrap:'nowrap', fontWeight:'1000', display:'flex', alignItems:'center'}}>
+                        {/* <img src={'/logo-text-only-white-text.png'} alt={''}/> */}
+                        Garba Groove
                     </NavLink>
                 </div>
                 <div className={classes.breadcrumbs}>
@@ -194,9 +196,21 @@ const EventLayout = () => {
             </div>
             <div className={classes.sidebar}>
                 <div className={classes.logo}>
-                    <NavLink to={'/manage/events'}>
-                        <img style={{maxWidth: '120px', margin: "20px auto"}}
-                             src={'/logo.svg'} alt={''}/>
+                    <NavLink to={'/manage/events'} style={{flexDirection: 'column', alignItems: 'center'}}>
+                        {/* <img style={{maxWidth: '120px', margin: "20px auto", marginLeft:'0px',border:'1px solid #fff', borderRadius:'5px'}} className={classes.logo}
+                             src={'/logo.svg'} alt={''}/> */}
+                        <div    style={{ margin: "0px auto", width:'131px', height:'100px', overflow:'hidden'}}>
+                          <DotLottieReact
+                                src="/logo.lottie"
+                                loop
+                                autoplay 
+                                backgroundColor={'transparent'}
+                             
+                                // className={classes.lottieInner}
+                                />
+                            </div>
+                            <h2 style={{backgroundColor:'#FBF8D0',padding:'0 10px',borderRadius:'0px 0px 8px 8px', fontSize:'17px',marginTop:'-13px'}}>Garba Groove</h2>
+                        {/* </div> */}
                     </NavLink>
                 </div>
                 <div className={classes.nav}>

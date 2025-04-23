@@ -44,13 +44,13 @@ export const EventNotAvailable = () => {
                             </Text>
                             <Button
                                 component="a"
-                                href="https://hi.events?utm_source=app.hi.events&utm_content=event-not-available"
+                                href="https://garbagroove?utm_source=app.hi.events&utm_content=event-not-available"
                                 leftSection={<IconHome size={18}/>}
                                 variant="gradient"
                                 gradient={{from: 'purple', to: 'pink'}}
                                 className={classes.button}
                             >
-                                {t`Go to Hi.Events`}
+                                {t`Go to Garba Groove`}
                             </Button>
                         </Stack>
 

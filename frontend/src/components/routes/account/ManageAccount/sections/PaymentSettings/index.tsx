@@ -40,7 +40,7 @@ const FeePlanDisplay = ({configuration}: FeePlanDisplayProps) => {
             <Title mb={10} order={3}>{t`Platform Fees`}</Title>
 
             <Text size="sm" c="dimmed" mb="lg">
-                {t`Hi.Events charges platform fees to maintain and improve our services. These fees are automatically deducted from each transaction.`}
+                {t`Garba Groove charges platform fees to maintain and improve our services. These fees are automatically deducted from each transaction.`}
             </Text>
 
             <Card variant={'lightGray'}>

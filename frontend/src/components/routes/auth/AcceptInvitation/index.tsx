@@ -108,7 +108,7 @@ const AcceptInvitation = () => {
                     <Switch {...form.getInputProps('terms', {type: 'checkbox'})}
                             label={(
                                 <Trans>
-                                    I agree to the <Anchor target={'_blank'} href={'https://hi.events/terms-of-service'}>terms and conditions</Anchor>
+                                    I agree to the <Anchor target={'_blank'} href={'/terms-of-service'}>terms and conditions</Anchor>
                                 </Trans>
                             )}/>
 

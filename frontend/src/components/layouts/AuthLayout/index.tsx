@@ -4,6 +4,7 @@ import {t} from "@lingui/macro";
 import {useGetMe} from "../../../queries/useGetMe.ts";
 import {PoweredByFooter} from "../../common/PoweredByFooter";
 import {LanguageSwitcher} from "../../common/LanguageSwitcher";
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import {
     IconBuildingStore,
     IconChartBar,
@@ -127,8 +128,15 @@ const AuthLayout = () => {
             <div className={classes.splitLayout}>
                 <div className={classes.leftPanel}>
                     <main className={classes.container}>
-                        <div className={classes.logo}>
-                            <img src={'/logo-dark.svg'} alt={t`hi.events logo`}/>
+                        <div className={classes.lottie}>
+                            {/* <img src={'/logo-dark.svg'} alt={t`hi.events logo`}/> */}
+                            <DotLottieReact
+                                src="/logo.lottie"
+                                loop
+                                autoplay
+                                className={classes.lottieInner}
+                                />
+                                {/* <h2 className={classes.logoText}>Garba Groove</h2> */}
                         </div>
                         <div className={classes.wrapper}>
                             <Outlet/>

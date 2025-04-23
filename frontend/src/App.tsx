@@ -88,7 +88,7 @@ export const App: FC<
                             <ThirdPartyScripts/>
                             <ModalsProvider>
                                 <Helmet>
-                                    <title>Hi.Events</title>
+                                    <title>Garba Groove</title>
                                 </Helmet>
                                 {props.children}
                             </ModalsProvider>

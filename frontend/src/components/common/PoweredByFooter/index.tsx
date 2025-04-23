@@ -5,7 +5,7 @@ import React from "react";
 import {iHavePurchasedALicence} from "../../../utilites/helpers.ts";
 
 /**
- * (c) Hi.Events Ltd 2025
+ * (c) Garba Groove Ltd 2025
  *
  * PLEASE NOTE:
  *
@@ -27,10 +27,10 @@ export const PoweredByFooter = (props: React.DetailedHTMLProps<React.HTMLAttribu
             <div className={classes.poweredByText}>
                 {t`Powered by`}{'  '}
                 {/* eslint-disable-next-line lingui/no-unlocalized-strings */}
-                <a href="https://hi.events?utm_source=app-powered-by-footer"
+                <a href="https://garbagroove?utm_source=app-powered-by-footer"
                    target="_blank"
-                   title={'Effortlessly manage events and sell tickets online with Hi.Events'}>
-                    Hi.Events
+                   title={'Effortlessly manage events and sell tickets online with Garba Groove'}>
+                    Garba Groove
                 </a> 🚀
             </div>
         </div>

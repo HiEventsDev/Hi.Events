@@ -123,7 +123,7 @@ const Welcome = () => {
         <>
             <h1>
                 <Trans>
-                    Welcome to Hi.Events, {userData?.first_name} 👋
+                    Welcome to Garba Groove, {userData?.first_name} 👋
                 </Trans>
             </h1>
             <Card>
