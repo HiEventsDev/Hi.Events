@@ -99,7 +99,7 @@ abstract class BaseRepository implements RepositoryInterface
 
     public function simplePaginateWhere(
         array $where,
-        ?int   $limit = null,
+        ?int  $limit = null,
         array $columns = self::DEFAULT_COLUMNS,
     ): Paginator
     {
@@ -131,9 +131,9 @@ abstract class BaseRepository implements RepositoryInterface
     }
 
     public function findFirstByField(
-        string $field,
+        string  $field,
         ?string $value = null,
-        array  $columns = ['*']
+        array   $columns = ['*']
     ): ?DomainObjectInterface
     {
         $model = $this->model->where($field, '=', $value)->first($columns);
