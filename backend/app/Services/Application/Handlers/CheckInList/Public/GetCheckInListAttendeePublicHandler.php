@@ -26,7 +26,7 @@ class GetCheckInListAttendeePublicHandler
     /**
      * @throws CannotCheckInException
      */
-    public function handle(string $shortId, string $attendeePublicId): AttendeeDomainObject
+    public function handle(string $shortId, string $attendeePublicId): ?AttendeeDomainObject
     {
         $checkInList = $this->checkInListRepository
             ->loadRelation(ProductDomainObject::class)
@@ -41,10 +41,16 @@ class GetCheckInListAttendeePublicHandler
 
         $this->validateCheckInListIsActive($checkInList);
 
-        return $this->attendeeRepository->findFirstWhere([
+        $attendee = $this->attendeeRepository->findFirstWhere([
             'public_id' => $attendeePublicId,
             'event_id' => $checkInList->getEventId(),
         ]);
+
+        if (!$attendee) {
+            throw new ResourceNotFoundException(__('Attendee not found'));
+        }
+
+        return $attendee;
     }
 
     /**
