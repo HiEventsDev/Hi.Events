@@ -165,7 +165,6 @@ const CheckIn = () => {
             return;
         }
 
-        console.log(attendee);
         handleCheckInAction(attendee, 'check-in');
     };
 
