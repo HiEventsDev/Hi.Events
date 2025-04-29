@@ -18,12 +18,16 @@ export const LanguageSwitcher = () => {
                 return t`Spanish`;
             case "fr":
                 return t`French`;
+            case "nl":
+                return t`Dutch`;
             case "pt":
                 return t`Portuguese`;
             case "pt-br":
                 return t`Brazilian Portuguese`;
             case "zh-cn":
                 return t`Chinese (Simplified)`;
+            case "zh-hk":
+                return t`Chinese (Traditional)`;
             case "vi":
                 return t`Vietnamese`;
         }

@@ -118,7 +118,7 @@ class AttendeeRepository extends BaseRepository implements AttendeeRepositoryInt
 
         return $this->simplePaginateWhere(
             where: $where,
-            limit: 100,
+            limit: min($params->per_page, 250),
         );
     }
 }

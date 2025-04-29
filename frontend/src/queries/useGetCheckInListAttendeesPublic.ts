@@ -8,8 +8,7 @@ export const useGetCheckInListAttendees = (checkInListShortId: IdParam, paginati
     return useQuery<GenericPaginatedResponse<Attendee>>({
         queryKey: [GET_CHECK_IN_LIST_ATTENDEES_PUBLIC_QUERY_KEY, checkInListShortId, pagination],
         queryFn: async () => {
-            const data = await publicCheckInClient.getCheckInListAttendees(checkInListShortId, pagination);
-            return data;
+            return await publicCheckInClient.getCheckInListAttendees(checkInListShortId, pagination);
         },
         enabled: enabled,
     });
