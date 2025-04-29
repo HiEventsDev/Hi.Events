@@ -300,10 +300,6 @@ create index promo_codes_code_index
 create index promo_codes_event_id_index
     on promo_codes (event_id);
 
--- TODO: INDEX ON JSON PATH
--- create index promo_codes_applicable_ticket_ids_index
---     on promo_codes (applicable_ticket_ids);
-
 create table if not exists orders
 (
     id                     BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -623,12 +619,7 @@ create FULLTEXT index idx_attendees_email_fulltext
 create FULLTEXT index idx_attendees_public_id_fulltext
     on attendees (public_id);
 
-ALTER TABLE attendees
-    ADD COLUMN public_id_lower VARCHAR(255) GENERATED ALWAYS AS (LOWER(public_id)) STORED;
-
-CREATE INDEX idx_attendees_public_id_lower
-    ON attendees (public_id_lower);
--- TODO: code has to use column public_id_lower instead of public_id when using strtolower
+create index idx_attendees_public_id ON attendees (public_id(190));
 
 create table if not exists question_answers
 (
