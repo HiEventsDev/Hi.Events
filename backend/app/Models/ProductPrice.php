@@ -13,6 +13,8 @@ class ProductPrice extends BaseModel
     {
         return [
             'price' => 'float',
+            'sale_start_date' => 'datetime',
+            'sale_end_date' => 'datetime',
             'is_hidden' => 'boolean',
         ];
     }

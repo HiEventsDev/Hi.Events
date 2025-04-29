@@ -26,6 +26,8 @@ class Product extends BaseModel
             ProductDomainObjectAbstract::IS_HIDDEN_WITHOUT_PROMO_CODE => 'boolean',
             ProductDomainObjectAbstract::IS_HIDDEN => 'boolean',
             ProductDomainObjectAbstract::START_COLLAPSED => 'boolean',
+            ProductDomainObjectAbstract::SALE_START_DATE => 'datetime',
+            ProductDomainObjectAbstract::SALE_END_DATE => 'datetime',
         ];
     }
 

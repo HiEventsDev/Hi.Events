@@ -13,6 +13,7 @@ class OrderApplicationFee extends BaseModel
     {
         return [
             'metadata' => 'array',
+            'paid_at' => 'datetime',
         ];
     }
 

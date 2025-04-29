@@ -58,6 +58,8 @@ class Order extends BaseModel
             'point_in_time_data' => 'array',
             'address' => 'array',
             'taxes_and_fees_rollup' => 'array',
+            'is_manually_created' => 'boolean',
+            'reserved_until' => 'datetime',
         ];
     }
 
