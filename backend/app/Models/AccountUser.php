@@ -20,4 +20,11 @@ class AccountUser extends BaseModel
     {
         return $this->belongsTo(User::class);
     }
+
+    protected function getCastMap(): array
+    {
+        return [
+            'is_account_owner' => 'boolean',
+        ];
+    }
 }

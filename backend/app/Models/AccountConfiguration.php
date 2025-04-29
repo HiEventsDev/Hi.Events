@@ -14,6 +14,7 @@ class AccountConfiguration extends BaseModel
     protected function getCastMap(): array
     {
         return [
+            'is_system_default' => 'boolean',
             'application_fees' => 'array',
         ];
     }

@@ -32,4 +32,12 @@ class Account extends BaseModel
             foreignKey: 'account_configuration_id',
         );
     }
+
+    protected function getCastMap(): array
+    {
+        return [
+            'stripe_connect_setup_complete' => 'boolean',
+            'is_manually_verified' => 'boolean',
+        ];
+    }
 }

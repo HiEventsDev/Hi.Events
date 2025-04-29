@@ -19,6 +19,13 @@ class Product extends BaseModel
         return [
             ProductDomainObjectAbstract::SALES_VOLUME => 'float',
             ProductDomainObjectAbstract::SALES_TAX_VOLUME => 'float',
+            ProductDomainObjectAbstract::HIDE_BEFORE_SALE_START_DATE => 'boolean',
+            ProductDomainObjectAbstract::HIDE_AFTER_SALE_END_DATE => 'boolean',
+            ProductDomainObjectAbstract::HIDE_WHEN_SOLD_OUT => 'boolean',
+            ProductDomainObjectAbstract::SHOW_QUANTITY_REMAINING => 'boolean',
+            ProductDomainObjectAbstract::IS_HIDDEN_WITHOUT_PROMO_CODE => 'boolean',
+            ProductDomainObjectAbstract::IS_HIDDEN => 'boolean',
+            ProductDomainObjectAbstract::START_COLLAPSED => 'boolean',
         ];
     }
 
