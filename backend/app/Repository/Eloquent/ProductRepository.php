@@ -73,13 +73,14 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
             ) AS quantity_remaining,
             product_prices.initial_quantity_available IS NULL AS unlimited_products_available
         FROM product_prices
-        WHERE product_prices.id = :productPriceId
+        WHERE product_prices.id = :productPriceId2
         AND product_prices.product_id = :productId
         AND product_prices.deleted_at IS NULL
     SQL;
 
         $result = $this->db->selectOne($query, [
             'productPriceId' => $productPriceId,
+            'productPriceId2' => $productPriceId,
             'productId' => $productId
         ]);
 
@@ -91,7 +92,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
             return Constants::INFINITE;
         }
 
-        return (int)$result->quantity_remaining;
+        return (int) $result->quantity_remaining;
     }
 
     public function getTaxesByProductId(int $productId): Collection

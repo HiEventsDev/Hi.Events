@@ -11,11 +11,10 @@ use Illuminate\Support\Collection;
 abstract class AbstractReportService
 {
     public function __construct(
-        private readonly Repository               $cache,
-        private readonly DatabaseManager          $queryBuilder,
+        private readonly Repository $cache,
+        private readonly DatabaseManager $queryBuilder,
         private readonly EventRepositoryInterface $eventRepository,
-    )
-    {
+    ) {
     }
 
     public function generateReport(int $eventId, ?Carbon $startDate = null, ?Carbon $endDate = null): Collection
@@ -26,18 +25,30 @@ abstract class AbstractReportService
         $endDate = Carbon::parse($endDate ?? now(), $timezone);
         $startDate = Carbon::parse($startDate ?? $endDate->copy()->subDays(30), $timezone);
 
+        $sqlQuery = $this->getSqlQuery($startDate, $endDate);
+
         $reportResults = $this->cache->remember(
             key: $this->getCacheKey($eventId, $startDate, $endDate),
             ttl: Carbon::now()->addSeconds(20),
             callback: fn() => $this->queryBuilder->select(
-                $this->getSqlQuery($startDate, $endDate),
-                [
-                    'event_id' => $eventId,
-                ]
+                $sqlQuery,
+                $this->repeatParameter($sqlQuery, $eventId),
             )
         );
 
         return collect($reportResults);
+    }
+
+    protected function repeatParameter($sqlQuery, $value, $key = 'event_id')
+    {
+        $parameterArray = [];
+        $parameterOccourances = substr_count($sqlQuery, ':' . $key);
+
+        for ($i = 1; $i <= $parameterOccourances; $i++) {
+            $arrayKey = $i == 1 ? $key : ($key . $i);
+            $parameterArray[$arrayKey] = $value;
+        }
+        return $parameterArray;
     }
 
     abstract protected function getSqlQuery(Carbon $startDate, Carbon $endDate): string;

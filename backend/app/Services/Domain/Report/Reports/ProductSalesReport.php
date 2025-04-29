@@ -39,7 +39,7 @@ class ProductSalesReport extends AbstractReportService
             COALESCE(SUM(fo.quantity), 0) AS number_sold
         FROM products p
         LEFT JOIN filtered_orders fo ON fo.product_id = p.id
-        WHERE p.event_id = :event_id
+        WHERE p.event_id = :event_id2
             AND p.deleted_at IS NULL
         GROUP BY p.id, p.title, p.type
         ORDER BY p."order"

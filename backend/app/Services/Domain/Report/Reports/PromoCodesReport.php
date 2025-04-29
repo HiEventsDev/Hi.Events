@@ -87,7 +87,7 @@ class PromoCodesReport extends AbstractReportService
                           LEFT JOIN order_totals ot ON pc.id = ot.promo_code_id
                  WHERE
                      pc.deleted_at IS NULL
-                   AND pc.event_id = :event_id
+                   AND pc.event_id = :event_id2
                  GROUP BY
                      pc.id,
                      COALESCE(pc.code, ot.promo_code),

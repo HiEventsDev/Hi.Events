@@ -44,7 +44,7 @@ class CheckInListRepository extends BaseRepository implements CheckInListReposit
                                  JOIN event_settings es ON cil.event_id = es.event_id
                      WHERE a.deleted_at IS NULL
                         AND pcil.deleted_at IS NULL
-                        AND pcil.check_in_list_id = :check_in_list_id
+                        AND pcil.check_in_list_id = :check_in_list_id2
                         AND (
                             (es.allow_orders_awaiting_offline_payment_to_check_in = true AND a.status in ('ACTIVE', 'AWAITING_PAYMENT') AND o.status IN ('COMPLETED', 'AWAITING_OFFLINE_PAYMENT'))
                             OR
@@ -63,7 +63,7 @@ class CheckInListRepository extends BaseRepository implements CheckInListReposit
             GROUP BY cil.id;
         SQL;
 
-        $query = $this->db->selectOne($sql, ['check_in_list_id' => $checkInListId]);
+        $query = $this->db->selectOne($sql, ['check_in_list_id' => $checkInListId, 'check_in_list_id2' => $checkInListId]);
 
         return new CheckedInAttendeesCountDTO(
             checkInListId: $checkInListId,
