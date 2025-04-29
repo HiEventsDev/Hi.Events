@@ -2,6 +2,7 @@
 
 namespace HiEvents\Services\Domain\Order;
 
+use Brick\Math\Exception\MathException;
 use HiEvents\DomainObjects\AccountConfigurationDomainObject;
 use HiEvents\DomainObjects\AccountDomainObject;
 use HiEvents\DomainObjects\AttendeeDomainObject;
@@ -80,7 +81,9 @@ class MarkOrderAsPaidService
 
             $this->updateOrderInvoice($orderId);
 
-            $updatedOrder = $this->orderRepository->findById($orderId);
+            $updatedOrder = $this->orderRepository
+                ->loadRelation(OrderItemDomainObject::class)
+                ->findById($orderId);
 
             $this->updateAttendeeStatuses($updatedOrder);
 
@@ -142,6 +145,9 @@ class MarkOrderAsPaidService
         );
     }
 
+    /**
+     * @throws MathException
+     */
     private function storeApplicationFeePayment(OrderDomainObject $updatedOrder): void
     {
         /** @var EventDomainObject $event */
@@ -163,13 +169,13 @@ class MarkOrderAsPaidService
 
         $this->orderApplicationFeeService->createOrderApplicationFee(
             orderId: $updatedOrder->getId(),
-            applicationFeeAmount: $this->orderApplicationFeeCalculationService->calculateApplicationFee(
-                $config,
-                $updatedOrder->getTotalGross(),
-                $event->getCurrency(),
-            )->toFloat(),
+            applicationFeeAmountMinorUnit: $this->orderApplicationFeeCalculationService->calculateApplicationFee(
+                accountConfiguration: $config,
+                order: $updatedOrder,
+            )->toMinorUnit(),
             orderApplicationFeeStatus: OrderApplicationFeeStatus::AWAITING_PAYMENT,
             paymentMethod: PaymentProviders::OFFLINE,
+            currency: $updatedOrder->getCurrency(),
         );
     }
 }

@@ -11,6 +11,7 @@ use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Helper\AddressHelper;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use RuntimeException;
 
 class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements IsSortable, IsFilterable
 {
@@ -227,6 +228,15 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
     {
         $this->questionAndAnswerViews = $questionAndAnswerViews;
         return $this;
+    }
+
+    public function getTotalQuantity(): int
+    {
+        if ($this->getOrderItems() === null) {
+            throw new RuntimeException('Cannot calculate total quantity, order items are null');
+        }
+
+        return $this->getOrderItems()->sum(fn(OrderItemDomainObject $item) => $item->getQuantity());
     }
 
     public function getQuestionAndAnswerViews(): ?Collection

@@ -18,6 +18,10 @@ export const publicCheckInClient = {
         const response = await publicApi.get<GenericPaginatedResponse<Attendee>>(`/check-in-lists/${checkInListShortId}/attendees` + queryParamsHelper.buildQueryString(pagination));
         return response.data;
     },
+    getCheckInListAttendee: async (checkInListShortId: IdParam, attendeePublicId: IdParam) => {
+        const response = await publicApi.get<GenericDataResponse<Attendee>>(`/check-in-lists/${checkInListShortId}/attendees/${attendeePublicId}`);
+        return response.data;
+    },
     createCheckIn: async (checkInListShortId: IdParam, attendeePublicId: IdParam, action: 'check-in' | 'check-in-and-mark-order-as-paid') => {
         const response = await publicApi.post<GenericDataResponse<PublicCheckIn[]>>(`/check-in-lists/${checkInListShortId}/check-ins`, {
             "attendees": [

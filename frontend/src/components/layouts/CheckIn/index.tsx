@@ -25,6 +25,7 @@ import {NoResultsSplash} from "../../common/NoResultsSplash";
 import {Countdown} from "../../common/Countdown";
 import Truncate from "../../common/Truncate";
 import {Header} from "../../common/Header";
+import {publicCheckInClient} from "../../../api/check-in.client.ts";
 
 const CheckIn = () => {
     const networkStatus = useNetwork();
@@ -49,7 +50,7 @@ const CheckIn = () => {
     const queryFilters: QueryFilters = {
         pageNumber: 1,
         query: searchQueryDebounced,
-        perPage: 100,
+        perPage: 150,
         filterFields: {
             status: {operator: 'eq', value: 'ACTIVE'},
         },
@@ -134,11 +135,21 @@ const CheckIn = () => {
 
     const handleQrCheckIn = async (attendeePublicId: string) => {
         // Find the attendee in the current list or fetch them
-        const attendee = attendees?.find(a => a.public_id === attendeePublicId);
+        let attendee = attendees?.find(a => a.public_id === attendeePublicId);
 
         if (!attendee) {
-            showError(t`Attendee not found`);
-            return;
+            try {
+                const {data} = await publicCheckInClient.getCheckInListAttendee(checkInListShortId, attendeePublicId);
+                attendee = data;
+            } catch (error) {
+                showError(t`Unable to fetch attendee`);
+                return;
+            }
+
+            if (!attendee) {
+                showError(t`Attendee not found`);
+                return;
+            }
         }
 
         const isAttendeeAwaitingPayment = attendee.status === 'AWAITING_PAYMENT';
