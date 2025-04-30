@@ -100,8 +100,10 @@ export interface Image {
     url: string;
     size: number;
     mime_type: string;
-    type: string;
+    type: ImageType;
 }
+
+export type ImageType = 'EVENT_COVER' | 'EDITOR_IMAGE';
 
 export type PaymentProvider = 'STRIPE' | 'OFFLINE';
 

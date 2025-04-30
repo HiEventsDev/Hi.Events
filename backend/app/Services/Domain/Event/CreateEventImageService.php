@@ -27,11 +27,11 @@ class CreateEventImageService
     public function createImage(
         int            $eventId,
         UploadedFile   $image,
-        EventImageType $type,
+        EventImageType $imageType,
     ): ImageDomainObject
     {
-        return $this->databaseManager->transaction(function () use ($image, $eventId, $type) {
-            if ($type === EventImageType::EVENT_COVER) {
+        return $this->databaseManager->transaction(function () use ($entityType, $image, $eventId, $imageType) {
+            if ($imageType === EventImageType::EVENT_COVER) {
                 $this->imageRepository->deleteWhere([
                     'entity_id' => $eventId,
                     'entity_type' => EventDomainObject::class,
@@ -43,7 +43,7 @@ class CreateEventImageService
                 image: $image,
                 entityId: $eventId,
                 entityType: EventDomainObject::class,
-                imageType: $type->name,
+                imageType: $imageType->name,
             );
         });
     }

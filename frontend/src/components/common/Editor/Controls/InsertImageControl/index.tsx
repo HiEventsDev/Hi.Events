@@ -1,49 +1,91 @@
 import {RichTextEditor, useRichTextEditorContext} from "@mantine/tiptap";
-import {useCallback, useState} from "react";
+import {useState} from "react";
 import {t} from "@lingui/macro";
 import {IconPhotoPlus} from "@tabler/icons-react";
-import {Button, Group, Modal, Portal, TextInput} from "@mantine/core";
+import {Button, FileButton, Group, Image, Modal, Portal, Stack, Tabs, Text, TextInput} from "@mantine/core";
+import {useUploadImage} from "../../../../../mutations/useUploadImage.ts";
 
 export const InsertImageControl = () => {
     const editor = useRichTextEditorContext();
     const [isModalOpen, setModalOpen] = useState(false);
+    const [tab, setTab] = useState<string>('url');
     const [imageUrl, setImageUrl] = useState('');
-    const [imageError, setImageError] = useState<string | null>(null);
+    const [uploadedImageUrl, setUploadedImageUrl] = useState('');
+    const [urlError, setUrlError] = useState<string | null>(null);
+    const [uploadError, setUploadError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
 
-    // Function to validate if the URL is an actual image
+    const uploadMutation = useUploadImage();
+
     const checkImageExists = (url: string) => {
         return new Promise((resolve, reject) => {
-            const img = new Image();
+            const img = document.createElement('img') as HTMLImageElement;
             img.onload = () => resolve(true);
             img.onerror = () => reject(false);
             img.src = url;
         });
     };
 
-    const handleImageInsert = useCallback(async () => {
+    const handleImageInsert = async () => {
         setLoading(true);
         try {
-            await checkImageExists(imageUrl);
+            const finalUrl = uploadedImageUrl || imageUrl;
+            if (!finalUrl) {
+                setUrlError(t`Please provide an image.`);
+                return;
+            }
+            await checkImageExists(finalUrl);
             if (editor) {
-                editor.editor!.commands.setImage({src: imageUrl});
+                editor.editor!.commands.setImage({src: finalUrl});
             }
             setModalOpen(false);
-            setImageError(null);
-            setImageUrl('');
-        } catch {
-            setImageError(t`Please enter a valid image URL that points to an image.`);
+            resetState();
+        } catch (error) {
+            console.log(error)
+            setUrlError(t`Please enter a valid image URL that points to an image.`);
         } finally {
             setLoading(false);
         }
-    }, [editor, imageUrl]);
+    };
+
+    const handleFileUpload = async (file: File) => {
+        if (!file) {
+            setUploadError(t`Please select an image.`);
+            return;
+        }
+        setLoading(true);
+        try {
+            uploadMutation.mutate({image: file}, {
+                onSuccess: ({data}) => {
+                    setUploadedImageUrl(data.url);
+                    setUploadError(null);
+                },
+                onError: (error: any) => {
+                    const message = error?.response?.data?.message ?? t`Failed to upload image.`;
+                    setUploadError(message);
+                }
+            });
+        } catch {
+            setUploadError(t`Failed to upload image.`);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const resetState = () => {
+        setTab('url');
+        setImageUrl('');
+        setUploadedImageUrl('');
+        setUrlError(null);
+        setUploadError(null);
+    };
 
     return (
         <>
             <RichTextEditor.Control
                 onClick={() => setModalOpen(true)}
-                aria-label="Insert star emoji"
-                title="Insert star emoji"
+                aria-label="Insert image"
+                title="Insert image"
             >
                 <IconPhotoPlus stroke={1.5} size="1rem"/>
             </RichTextEditor.Control>
@@ -51,21 +93,76 @@ export const InsertImageControl = () => {
             <Portal>
                 <Modal
                     opened={isModalOpen}
-                    onClose={() => setModalOpen(false)}
+                    onClose={() => {
+                        setModalOpen(false);
+                        resetState();
+                    }}
                     title={t`Insert Image`}
                 >
-                    <TextInput
-                        label={t`Image URL`}
-                        placeholder="https://example.com/image.jpg"
-                        value={imageUrl}
-                        onChange={(event) => setImageUrl(event.currentTarget.value)}
-                        error={imageError}
-                    />
-                    <Group mt="md">
-                        <Button onClick={handleImageInsert} loading={loading}>
-                            {t`Insert Image`}
-                        </Button>
-                    </Group>
+                    <Tabs value={tab} onChange={setTab} variant="outline">
+                        <Tabs.List grow>
+                            <Tabs.Tab value="url">{t`Paste URL`}</Tabs.Tab>
+                            <Tabs.Tab value="upload">{t`Upload Image`}</Tabs.Tab>
+                        </Tabs.List>
+
+                        <Tabs.Panel value="url" pt="md">
+                            <Stack>
+                                <TextInput
+                                    label={t`Image URL`}
+                                    placeholder="https://example.com/image.jpg"
+                                    value={imageUrl}
+                                    onChange={(event) => {
+                                        setImageUrl(event.currentTarget.value);
+                                        setUrlError(null);
+                                    }}
+                                    error={urlError}
+                                />
+                                <Button onClick={handleImageInsert} loading={loading}>
+                                    {t`Insert Image`}
+                                </Button>
+                            </Stack>
+                        </Tabs.Panel>
+
+                        <Tabs.Panel value="upload" pt="md">
+                            <Stack>
+                                {uploadedImageUrl ? (
+                                    <>
+                                        <Image
+                                            src={uploadedImageUrl}
+                                            alt="Uploaded preview"
+                                            radius="md"
+                                        />
+                                        <Group grow>
+                                            <Button onClick={handleImageInsert} loading={loading}>
+                                                {t`Insert Image`}
+                                            </Button>
+                                            <Button variant="outline" color="red" onClick={resetState}>
+                                                {t`Remove`}
+                                            </Button>
+                                        </Group>
+                                    </>
+                                ) : (
+                                    <>
+                                        <FileButton onChange={(file: File | null) => {
+                                            setUploadError(null);
+                                            file && handleFileUpload(file);
+                                        }} accept="image/*">
+                                            {(props) => (
+                                                <Button {...props} variant="outline" loading={loading}>
+                                                    {t`Upload Image`}
+                                                </Button>
+                                            )}
+                                        </FileButton>
+                                        {uploadError && (
+                                            <Text c="red" size="sm">
+                                                {uploadError}
+                                            </Text>
+                                        )}
+                                    </>
+                                )}
+                            </Stack>
+                        </Tabs.Panel>
+                    </Tabs>
                 </Modal>
             </Portal>
         </>

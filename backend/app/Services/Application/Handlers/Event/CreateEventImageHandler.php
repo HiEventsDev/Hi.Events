@@ -23,7 +23,7 @@ class CreateEventImageHandler
         return $this->createEventImageService->createImage(
             eventId: $imageData->event_id,
             image: $imageData->image,
-            type: $imageData->type,
+            imageType: $imageData->imageType,
         );
     }
 }

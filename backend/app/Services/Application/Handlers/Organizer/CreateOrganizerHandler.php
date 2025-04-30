@@ -49,7 +49,7 @@ readonly class CreateOrganizerHandler
                 image: $organizerData->logo,
                 entityId: $organizer->getId(),
                 entityType: OrganizerDomainObject::class,
-                imageType: OrganizerImageType::LOGO->name,
+                imageType: OrganizerImageType::LOGO,
             );
         }
 
