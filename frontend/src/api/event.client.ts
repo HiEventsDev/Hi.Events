@@ -1,12 +1,14 @@
 import {api} from "./client";
 import {
     CheckInStats,
-    Event, EventDuplicatePayload,
+    Event,
+    EventDuplicatePayload,
     EventStats,
     GenericDataResponse,
     GenericPaginatedResponse,
     IdParam,
     Image,
+    ImageType,
     QueryFilters,
 } from "../types";
 import {publicApi} from "./public-client.ts";
@@ -50,10 +52,10 @@ export const eventsClient = {
         return response.data;
     },
 
-    uploadEventImage: async (eventId: IdParam, image: File) => {
+    uploadEventImage: async (eventId: IdParam, image: File, type: ImageType = 'EVENT_COVER') => {
         const formData = new FormData();
         formData.append('image', image);
-        formData.append('type', 'EVENT_COVER');
+        formData.append('type', type);
         const response = await api.post<GenericDataResponse<Image>>('events/' + eventId + '/images', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'

@@ -11,7 +11,7 @@ class CreateEventImageDTO extends BaseDTO
     public function __construct(
         public readonly int            $event_id,
         public readonly UploadedFile   $image,
-        public readonly EventImageType $type,
+        public readonly EventImageType $imageType,
     )
     {
     }
