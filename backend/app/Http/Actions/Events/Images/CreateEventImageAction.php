@@ -2,6 +2,7 @@
 
 namespace HiEvents\Http\Actions\Events\Images;
 
+use HiEvents\DomainObjects\Enums\EventImageType;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Event\CreateEventImageRequest;
@@ -27,7 +28,11 @@ class CreateEventImageAction extends BaseAction
             'event_id' => $eventId,
         ]);
 
-        $image = $this->createEventImageHandler->handle(CreateEventImageDTO::fromArray($payload));
+        $image = $this->createEventImageHandler->handle(new CreateEventImageDTO(
+            event_id: $payload['event_id'],
+            image: $request->file('image'),
+            imageType: EventImageType::fromName($payload['type']),
+        ));
 
         return $this->resourceResponse(ImageResource::class, $image);
     }
