@@ -10,12 +10,12 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
 use Psr\Log\LoggerInterface;
 
-readonly class ImageStorageService
+class ImageStorageService
 {
     public function __construct(
-        private FilesystemManager $filesystemManager,
-        private Repository        $config,
-        private LoggerInterface   $logger,
+        private readonly FilesystemManager $filesystemManager,
+        private readonly Repository        $config,
+        private readonly LoggerInterface   $logger,
     )
     {
     }

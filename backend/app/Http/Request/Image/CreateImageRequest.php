@@ -1,19 +1,16 @@
 <?php
 
-namespace HiEvents\Http\Request\Event;
+namespace HiEvents\Http\Request\Image;
 
-use HiEvents\DomainObjects\Enums\EventImageType;
 use HiEvents\Validators\Rules\RulesHelper;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class CreateEventImageRequest extends FormRequest
+class CreateImageRequest extends FormRequest
 {
     public function rules(): array
     {
         return [
             'image' => RulesHelper::IMAGE_RULES,
-            'type' => Rule::in(EventImageType::valuesArray()),
         ];
     }
 

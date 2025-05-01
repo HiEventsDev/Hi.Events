@@ -17,4 +17,12 @@ class RulesHelper
     public const REQUIRED_EMAIL = ['email' , 'required', 'max:100'];
 
     public const OPTIONAL_TEXT_MEDIUM_LENGTH = ['string', 'max:2000', 'nullable'];
+
+    public const IMAGE_RULES = [
+        'required',
+        'image',
+        'max:8192', //8mb
+        'dimensions:min_width=600,min_height=50,max_width=4000,max_height=4000',
+        'mimes:jpeg,png,jpg,webp',
+    ];
 }

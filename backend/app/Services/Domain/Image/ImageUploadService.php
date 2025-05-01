@@ -8,11 +8,11 @@ use HiEvents\Services\Infrastructure\Image\Exception\CouldNotUploadImageExceptio
 use HiEvents\Services\Infrastructure\Image\ImageStorageService;
 use Illuminate\Http\UploadedFile;
 
-readonly class ImageUploadService
+class ImageUploadService
 {
     public function __construct(
-        private ImageStorageService      $imageStorageService,
-        private ImageRepositoryInterface $imageRepository
+        private readonly ImageStorageService      $imageStorageService,
+        private readonly ImageRepositoryInterface $imageRepository
     )
     {
     }
