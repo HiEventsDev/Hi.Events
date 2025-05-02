@@ -5,6 +5,7 @@ namespace HiEvents\Services\Domain\Report\Reports;
 use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Services\Domain\Report\AbstractReportService;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class ProductSalesReport extends AbstractReportService
 {
@@ -14,7 +15,7 @@ class ProductSalesReport extends AbstractReportService
         $endDateString = $endDate->format('Y-m-d H:i:s');
         $completedStatus = OrderStatus::COMPLETED->name;
 
-        return <<<SQL
+        return str_replace('"', DB::getDriverName() === 'mysql' ? '`' : "", <<<SQL
         WITH filtered_orders AS (
             SELECT
                 oi.product_id,
@@ -43,6 +44,6 @@ class ProductSalesReport extends AbstractReportService
             AND p.deleted_at IS NULL
         GROUP BY p.id, p.title, p.type
         ORDER BY p."order"
-SQL;
+SQL);
     }
 }
