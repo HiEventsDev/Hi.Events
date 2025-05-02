@@ -14,6 +14,7 @@ class Webhook extends BaseModel
     {
         return [
             'event_types' => 'array',
+            'last_triggered_at' => 'datetime',
         ];
     }
 
