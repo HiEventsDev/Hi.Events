@@ -62,6 +62,21 @@ Get started in minutes with our one-click deployment options:
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/8CGKmu?referralCode=KvSr11)
 [![Deploy on Zeabur](https://zeabur.com/button.svg)](https://zeabur.com/templates/8DIRY6)
 
+## ☁️ Hi.Events Cloud
+
+Looking for a faster way to get started?
+
+**[Hi.Events Cloud](https://app.hi.events/auth/register?utm_source=gh-readme&utm_content=try-cloud-section)** is the fully managed version of Hi.Events — no setup, no servers, just instant access to everything you need to run your event.
+
+- ✅ No installation required
+- 🔐 Secure, scalable infrastructure
+- 🚀 Automatic updates & new features
+- 🧰 Ideal for event organizers who want to focus on their event, not their servers
+
+Create your account in seconds and explore the platform right away:
+
+👉 [Try Hi.Events Cloud](https://app.hi.events/auth/register?utm_source=gh-readme&utm_content=try-cloud-section)
+
 ## 🌟 Key Features
 
 <a href="https://hi.events">Hi.Events</a> offers comprehensive tools to streamline your event management:
