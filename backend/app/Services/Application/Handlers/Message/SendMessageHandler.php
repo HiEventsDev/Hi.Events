@@ -4,7 +4,6 @@ namespace HiEvents\Services\Application\Handlers\Message;
 
 use Carbon\Carbon;
 use HiEvents\DomainObjects\MessageDomainObject;
-use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\DomainObjects\Status\MessageStatus;
 use HiEvents\Exceptions\AccountNotVerifiedException;
 use HiEvents\Jobs\Event\SendMessagesJob;
@@ -98,7 +97,6 @@ class SendMessageHandler
             values: $messageData->attendee_ids,
             additionalWhere: [
                 'event_id' => $messageData->event_id,
-                'status' => AttendeeStatus::ACTIVE->name,
             ],
             columns: ['id']
         );
