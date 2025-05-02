@@ -14,11 +14,11 @@ class DailySalesReport extends AbstractReportService
         $endDateStr = $endDate->toDateString();
 
         $withDateRange = DB::getDriverName() === 'mysql' ? "WITH RECURSIVE date_range AS (
-                SELECT DATE($startDateStr) AS date
+                SELECT DATE('$startDateStr') AS date
                 UNION ALL
                 SELECT DATE_ADD(date, INTERVAL 1 DAY)
                 FROM date_range
-                WHERE date < DATE($endDateStr)
+                WHERE date < DATE('$endDateStr')
             )" : "WITH date_range AS (
                 SELECT generate_series('$startDateStr'::date, '$endDateStr'::date, '1 day'::interval) AS date
             )";
