@@ -58,12 +58,12 @@ class CheckInListRepository extends BaseRepository implements CheckInListReposit
             FROM check_in_lists cil
                      LEFT JOIN valid_attendees va ON va.check_in_list_id = cil.id
                      LEFT JOIN valid_check_ins vci ON vci.attendee_id = va.id
-            WHERE cil.id = :check_in_list_id
+            WHERE cil.id = :check_in_list_id3
               AND cil.deleted_at IS NULL
             GROUP BY cil.id;
         SQL;
 
-        $query = $this->db->selectOne($sql, ['check_in_list_id' => $checkInListId, 'check_in_list_id2' => $checkInListId]);
+        $query = $this->db->selectOne($sql, ['check_in_list_id' => $checkInListId, 'check_in_list_id2' => $checkInListId, 'check_in_list_id3' => $checkInListId]);
 
         return new CheckedInAttendeesCountDTO(
             checkInListId: $checkInListId,
