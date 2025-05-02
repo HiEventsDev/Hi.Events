@@ -1,4 +1,4 @@
-@import "../../../styles/mixins.scss";
+@use "../../../styles/mixins.scss";
 
 .sortableCategory {
   margin-bottom: 20px;
@@ -7,7 +7,7 @@
   padding: var(--tk-spacing-lg);
   box-shadow: 0 3px 0 #dddddd;
   border: 1px solid #e3e3e3;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
 }
 
 .categoryHeader {
@@ -19,8 +19,8 @@
 }
 
 .categoryActions {
-    display: flex;
-    gap: 5px;
+  display: flex;
+  gap: 5px;
 }
 
 .categoryAction {
@@ -66,7 +66,8 @@
 }
 
 .dragOverlay {
-  .sortableCategory, .productCard {
+  .sortableCategory,
+  .productCard {
     transform: scale(1.05);
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
   }
@@ -81,7 +82,7 @@
   box-sizing: border-box;
   border-radius: var(--tk-radius-sm);
   border: 1px solid #e3e3e3;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   display: grid;
   padding: 20px;
   margin-bottom: 20px;
@@ -91,9 +92,10 @@
   grid-template-areas: "dragHanlde productInfo action";
   grid-template-columns: 40px 1fr 40px;
 
-  @include respond-below(lg) {
-    grid-template-areas: "dragHanlde productInfo"
-                         "dragHanlde action";
+  @include mixins.respond-below(lg) {
+    grid-template-areas:
+      "dragHanlde productInfo"
+      "dragHanlde action";
   }
 
   .halfCircle {
@@ -142,18 +144,18 @@
       flex-wrap: wrap;
       grid-template-columns: 1fr 1fr 1fr 1fr;
 
-      @include respond-below(lg) {
+      @include mixins.respond-below(lg) {
         flex-direction: column;
         align-items: flex-start;
         grid-template-columns: 1fr 1fr;
         gap: 20px;
       }
 
-      @include respond-below(sm) {
+      @include mixins.respond-below(sm) {
         gap: 10px;
       }
 
-      @include respond-below(xs) {
+      @include mixins.respond-below(xs) {
         gap: 20px;
         grid-template-columns: 1fr;
       }
@@ -162,7 +164,7 @@
         flex: 1;
         min-width: 125px;
 
-        @include respond-below(sm) {
+        @include mixins.respond-below(sm) {
           min-width: 100px;
         }
       }
@@ -170,7 +172,7 @@
       .heading {
         text-transform: uppercase;
         color: #9ca3af;
-        font-size: .8em;
+        font-size: 0.8em;
       }
 
       .status {
@@ -204,19 +206,19 @@
     display: flex;
     grid-area: action;
 
-    @include respond-below(lg) {
+    @include mixins.respond-below(lg) {
       margin-top: 10px;
     }
 
     .desktopAction {
-      @include respond-below(lg) {
+      @include mixins.respond-below(lg) {
         display: none;
       }
     }
 
     .mobileAction {
       display: none;
-      @include respond-below(lg) {
+      @include mixins.respond-below(lg) {
         display: block;
       }
     }

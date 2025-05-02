@@ -1,11 +1,11 @@
-@import '../../../styles/mixins';
+@use "../../../styles/mixins";
 
 .toolbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
 
-  @include respond-below(md) {
+  @include mixins.respond-below(md) {
     flex-direction: column;
     align-items: flex-start;
   }
@@ -15,7 +15,7 @@
     margin-right: 20px;
     max-width: 320px;
 
-    @include respond-below(md) {
+    @include mixins.respond-below(md) {
       width: 100%;
       margin-bottom: 20px;
       max-width: 100%;
@@ -30,7 +30,7 @@
       height: 42px;
     }
 
-    @include respond-below(md) {
+    @include mixins.respond-below(md) {
       width: 100%;
     }
   }
@@ -91,9 +91,7 @@
       }
 
       .checkInListActions {
-
       }
     }
   }
 }
-

@@ -1,10 +1,10 @@
-@import "../../../styles/mixins";
+@use "../../../styles/mixins";
 
 .container {
   display: grid;
   grid-template-areas:
-          "topbar"
-           "main";
+    "topbar"
+    "main";
   grid-template-rows: 55px 1fr;
   grid-template-columns: 1fr;
   height: 100vh;
@@ -16,18 +16,18 @@
 
   @media (min-width: 768px) {
     grid-template-areas:
-            "sidebar topbar"
-            "sidebar main"
-            "sidebar main";
+      "sidebar topbar"
+      "sidebar main"
+      "sidebar main";
     grid-template-rows: 55px 1fr;
     grid-template-columns: 275px 1fr;
 
     &.closed {
       transform: none;
       grid-template-areas:
-            "topbar"
-            "main"
-            "main";
+        "topbar"
+        "main"
+        "main";
       grid-template-columns: 1fr;
     }
   }
@@ -48,12 +48,12 @@
       font-weight: 500;
       display: flex;
 
-      @include respond-below(md) {
+      @include mixins.respond-below(md) {
         display: none;
       }
     }
 
-    @include respond-below(md) {
+    @include mixins.respond-below(md) {
       background-color: var(--tk-primary);
     }
 
@@ -62,8 +62,8 @@
     }
 
     .burger {
-      --burger-color : var(--tk-color-white);
-      @include respond-above(md) {
+      --burger-color: var(--tk-color-white);
+      @include mixins.respond-above(md) {
         display: none;
       }
     }
@@ -83,7 +83,7 @@
         max-width: 120px;
       }
 
-      @include respond-above(md) {
+      @include mixins.respond-above(md) {
         display: none;
       }
     }
@@ -94,19 +94,19 @@
       justify-content: flex-end;
 
       .eventPageButton {
-        @include respond-below(md) {
+        @include mixins.respond-below(md) {
           color: var(--tk-color-white);
         }
       }
     }
 
-    @include respond-above(md) {
+    @include mixins.respond-above(md) {
       background-color: white;
     }
   }
 
   &.closed {
-    @include respond-above(md) {
+    @include mixins.respond-above(md) {
       .sidebar {
         display: none;
       }
@@ -142,7 +142,7 @@
       background: transparent;
     }
 
-    @include respond-below(md) {
+    @include mixins.respond-below(md) {
       position: fixed;
       width: 275px;
       height: 100vh;
@@ -173,7 +173,7 @@
         text-decoration: none;
         margin: 4px 10px;
         border-radius: var(--tk-radius-md);
-        font-size: .9em;
+        font-size: 0.9em;
         font-weight: 600;
 
         &.loading {
@@ -182,7 +182,8 @@
           height: 33px;
         }
 
-        &.linkActive, &:hover {
+        &.linkActive,
+        &:hover {
           background: #00000020;
           color: var(--tk-color-white);
         }
@@ -202,7 +203,7 @@
       right: -5px;
       top: 50%;
 
-      @include respond-below(md) {
+      @include mixins.respond-below(md) {
         display: none;
       }
     }
@@ -218,7 +219,7 @@
     left: -5px;
     top: 50%;
 
-    @include respond-below(md) {
+    @include mixins.respond-below(md) {
       display: none;
     }
   }
@@ -228,9 +229,9 @@
     padding: var(--tk-spacing-lg);
     overflow: auto;
 
-    @include scrollbar;
+    @include mixins.scrollbar;
 
-    @include respond-below(md) {
+    @include mixins.respond-below(md) {
       height: calc(100vh - 55px);
     }
   }

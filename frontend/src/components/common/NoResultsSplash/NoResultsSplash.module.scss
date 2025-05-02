@@ -1,4 +1,4 @@
-@import "../../../styles/mixins";
+@use "../../../styles/mixins";
 
 .container {
   display: flex;
@@ -14,7 +14,7 @@
     width: 240px;
     height: 240px;
 
-    @include respond-below(md) {
+    @include mixins.respond-below(md) {
       width: 170px;
       height: 170px;
     }

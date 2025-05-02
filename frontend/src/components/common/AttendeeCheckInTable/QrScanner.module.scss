@@ -1,4 +1,4 @@
-@import "../../../styles/mixins";
+@use "../../../styles/mixins";
 
 @keyframes colorfulBorder {
   0% {
@@ -8,7 +8,7 @@
     border-color: #00000050;
   }
   100% {
-    border-color: #ffffff50
+    border-color: #ffffff50;
   }
 }
 
@@ -70,13 +70,13 @@
     animation: colorfulBorder 10s infinite;
     border-radius: 10px;
     outline: solid 50vmax rgb(71 46 120 / 50%);
-    transition: outline-color .2s ease-out;
+    transition: outline-color 0.2s ease-out;
     min-width: 200px;
     min-height: 200px;
 
-    @include respond-above(md) {
-        width: 40vw;
-        height: 40vw;
+    @include mixins.respond-above(md) {
+      width: 40vw;
+      height: 40vw;
     }
   }
 
