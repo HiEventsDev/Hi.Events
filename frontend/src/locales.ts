@@ -1,111 +1,54 @@
-// @ts-ignore
-import {messages as en} from "./locales/en.po";
-// @ts-ignore
-import {messages as de} from "./locales/de.po";
-// @ts-ignore
-import {messages as fr} from "./locales/fr.po";
-// @ts-ignore
-import {messages as nl} from "./locales/nl.po";
-// @ts-ignore
-import {messages as pt} from "./locales/pt.po";
-// @ts-ignore
-import {messages as es} from "./locales/es.po";
-// @ts-ignore
-import {messages as zhCn} from "./locales/zh-cn.po";
-// @ts-ignore
-import {messages as zhHk} from "./locales/zh-hk.po";
-// @ts-ignore
-import {messages as ptBr} from "./locales/pt-br.po";
-// @ts-ignore
-import {messages as vi} from "./locales/vi.po";
 import {i18n} from "@lingui/core";
-import {t} from "@lingui/macro";
 
-export type SupportedLocales = "en" | "de" | "fr" | "nl" | "pt" | "es" | "zh-cn" | "pt-br" | "vi" |"zh-hk";
-
-export const localeMessages: Record<string, any> = {
-    en: en,
-    de: de,
-    fr: fr,
-    nl: nl,
-    pt: pt,
-    es: es,
-    "zh-cn": zhCn,
-    "zh-hk": zhHk,
-    "pt-br": ptBr,
-    vi: vi,
-};
+export type SupportedLocales =
+    | "en" | "de" | "fr" | "nl" | "pt" | "es"
+    | "zh-cn" | "zh-hk" | "pt-br" | "vi";
 
 export const localeToFlagEmojiMap: Record<SupportedLocales, string> = {
-    en: '🇬🇧',
-    de: '🇩🇪',
-    fr: '🇫🇷',
-    nl: '🇳🇱',
-    pt: '🇵🇹',
-    es: '🇪🇸',
-    "zh-cn": '🇨🇳',
-    "zh-hk": '🇭🇰',
-    "pt-br": '🇧🇷',
-    vi: '🇻🇳',
+    en: '🇬🇧', de: '🇩🇪', fr: '🇫🇷', nl: '🇳🇱', pt: '🇵🇹',
+    es: '🇪🇸', "zh-cn": '🇨🇳', "zh-hk": '🇭🇰',
+    "pt-br": '🇧🇷', vi: '🇻🇳',
 };
 
 export const localeToNameMap: Record<SupportedLocales, string> = {
-    en: `English`,
-    de: `German`,
-    fr: `French`,
-    nl: `Dutch`,
-    pt: `Portuguese`,
-    es: `Spanish`,
-    "zh-cn": `Chinese`,
-    "zh-hk": `Cantonese`,
-    "pt-br": `Portuguese (Brazil)`,
-    vi: `Vietnamese`,
+    en: `English`, de: `German`, fr: `French`, nl: `Dutch`,
+    pt: `Portuguese`, es: `Spanish`, "zh-cn": `Chinese`,
+    "zh-hk": `Cantonese`, "pt-br": `Portuguese (Brazil)`, vi: `Vietnamese`,
 };
 
-export const getLocaleName = (locale: SupportedLocales) => {
-    return t`${localeToNameMap[locale]}`
-}
+export const getLocaleName = (locale: SupportedLocales) => localeToNameMap[locale];
 
-export const getClientLocale = () => {
+export const getClientLocale = (): SupportedLocales => {
     if (typeof window !== "undefined") {
-        const storedLocale = document
-            .cookie
-            .split(";")
-            .find((c) => c.includes("locale="))
-            ?.split("=")[1];
-
-        if (storedLocale) {
-            return getSupportedLocale(storedLocale);
-        }
-
-        return getSupportedLocale(window.navigator.language);
+        const storedLocale = document.cookie.split(";")
+            .find((c) => c.includes("locale="))?.split("=")[1];
+        return getSupportedLocale(storedLocale || window.navigator.language);
     }
-
     return "en";
+};
+
+export const getSupportedLocale = (userLocale: string): SupportedLocales => {
+    const supported: SupportedLocales[] = [
+        "en", "de", "fr", "nl", "pt", "es", "zh-cn", "zh-hk", "pt-br", "vi"
+    ];
+
+    const normalized = userLocale.toLowerCase();
+    if (supported.includes(normalized as SupportedLocales)) return normalized as SupportedLocales;
+
+    const mainLang = normalized.split('-')[0];
+    return supported.find(l => l.startsWith(mainLang)) || "en";
 };
 
 export async function dynamicActivateLocale(locale: string) {
+    const safeLocale = getSupportedLocale(locale);
     try {
-        const messages = localeMessages[locale] || localeMessages["en"];
-        i18n.load(locale, messages);
-        i18n.activate(locale);
-    } catch (error) {
+        const {messages} = await import(
+            /* @vite-ignore */
+            `./locales/${safeLocale}.po`
+            );
+        i18n.load(safeLocale, messages);
+        i18n.activate(safeLocale);
+    } catch {
         i18n.activate("en");
     }
 }
-
-export const getSupportedLocale = (userLocale: string) => {
-    const normalizedLocale = userLocale.toLowerCase();
-
-    if (localeMessages[normalizedLocale]) {
-        return normalizedLocale;
-    }
-
-    const mainLanguage = normalizedLocale.split('-')[0];
-    const mainLocale = Object.keys(localeMessages).find(locale => locale.startsWith(mainLanguage));
-    if (mainLocale) {
-        return mainLocale;
-    }
-
-    return "en";
-};
