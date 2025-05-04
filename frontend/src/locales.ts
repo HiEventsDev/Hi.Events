@@ -5,6 +5,8 @@ import {messages as de} from "./locales/de.po";
 // @ts-ignore
 import {messages as fr} from "./locales/fr.po";
 // @ts-ignore
+import {messages as it} from "./locales/it.po";
+// @ts-ignore
 import {messages as nl} from "./locales/nl.po";
 // @ts-ignore
 import {messages as pt} from "./locales/pt.po";
@@ -21,12 +23,13 @@ import {messages as vi} from "./locales/vi.po";
 import {i18n} from "@lingui/core";
 import {t} from "@lingui/macro";
 
-export type SupportedLocales = "en" | "de" | "fr" | "nl" | "pt" | "es" | "zh-cn" | "pt-br" | "vi" |"zh-hk";
+export type SupportedLocales = "en" | "de" | "fr" | "it" | "nl" | "pt" | "es" | "zh-cn" | "pt-br" | "vi" |"zh-hk";
 
 export const localeMessages: Record<string, any> = {
     en: en,
     de: de,
     fr: fr,
+    it: it,
     nl: nl,
     pt: pt,
     es: es,
@@ -40,6 +43,7 @@ export const localeToFlagEmojiMap: Record<SupportedLocales, string> = {
     en: '🇬🇧',
     de: '🇩🇪',
     fr: '🇫🇷',
+    it: '🇮🇹',
     nl: '🇳🇱',
     pt: '🇵🇹',
     es: '🇪🇸',
@@ -53,6 +57,7 @@ export const localeToNameMap: Record<SupportedLocales, string> = {
     en: `English`,
     de: `German`,
     fr: `French`,
+    it: `Italian`,
     nl: `Dutch`,
     pt: `Portuguese`,
     es: `Spanish`,
