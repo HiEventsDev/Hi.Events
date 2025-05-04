@@ -84,7 +84,7 @@ return new class extends Migration {
         $this->renameIndex('order_items', 'order_items_ticket_id_index', 'order_items_product_id_index');
         $this->renameIndex('order_items', 'order_items_ticket_price_id_index', 'order_items_product_price_id_index');
         $this->renameIndex('attendees', 'idx_attendees_ticket_id_deleted_at', 'idx_attendees_product_id_deleted_at');
-        $this->renameIndex('procut_tax_and_fees', 'ticket_tax_and_fees_ticket_id_index', 'product_tax_and_fees_product_id_index');
+        $this->renameIndex('product_taxes_and_fees', 'ticket_tax_and_fees_ticket_id_index', 'product_tax_and_fees_product_id_index');
         $this->renameIndex('product_questions', 'idx_ticket_questions_active', 'idx_product_questions_active');
         $this->renameIndex('product_check_in_lists', 'ticket_check_in_lists_ticket_id_check_in_list_id_index', 'product_check_in_lists_product_id_check_in_list_id_index');
         $this->renameIndex('product_check_in_lists', 'idx_ticket_check_in_lists_ticket_id_deleted_at', 'idx_product_check_in_lists_product_id_deleted_at');
@@ -171,7 +171,7 @@ return new class extends Migration {
         $this->renameIndex('order_items', 'order_items_product_id_index', 'order_items_ticket_id_index');
         $this->renameIndex('order_items', 'order_items_product_price_id_index', 'order_items_ticket_price_id_index');
         $this->renameIndex('attendees', 'idx_attendees_product_id_deleted_at', 'idx_attendees_ticket_id_deleted_at');
-        $this->renameIndex('ticket_tax_tax_and_fees', 'product_tax_and_fees_product_id_index', 'ticket_tax_and_fees_ticket_id_index');
+        $this->renameIndex('ticket_taxes_and_fees', 'product_tax_and_fees_product_id_index', 'ticket_tax_and_fees_ticket_id_index');
         $this->renameIndex('ticket_questions', 'idx_product_questions_active', 'idx_ticket_questions_active');
         $this->renameIndex('ticket_check_in_lists', 'product_check_in_lists_product_id_check_in_list_id_index', 'ticket_check_in_lists_ticket_id_check_in_list_id_index');
         $this->renameIndex('ticket_check_in_lists', 'idx_product_check_in_lists_product_id_deleted_at', 'idx_ticket_check_in_lists_ticket_id_deleted_at');
