@@ -52,6 +52,13 @@ const EventHomepage = ({colors, continueButtonText, backgroundType, ...loaderDat
 
     return (
         <div style={styleOverrides} key={`${event.id}`}>
+            <style>
+                {`
+                :root {
+                    --ssr-loader-background: ${styleOverrides["--homepage-body-background-color"]};
+                }
+                `}
+            </style>
             {event && <EventDocumentHead event={event}/>}
             {(coverImage && backgroundType === 'MIRROR_COVER_IMAGE') && (
                 <div
