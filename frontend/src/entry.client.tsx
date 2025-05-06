@@ -5,7 +5,7 @@ import {hydrate} from "@tanstack/react-query";
 import {router} from "./router";
 import {App} from "./App";
 import {queryClient} from "./utilites/queryClient";
-import {getClientLocale} from "./locales.ts";
+import {dynamicActivateLocale, getClientLocale, getSupportedLocale} from "./locales.ts";
 
 declare global {
     interface Window {
@@ -18,6 +18,7 @@ if (window.__REHYDRATED_STATE__) {
 }
 
 async function initClientApp() {
+    dynamicActivateLocale(getSupportedLocale(getClientLocale()));
     // Determine if any of the initial routes are lazy
     const lazyMatches = matchRoutes(router, window.location)?.filter(
         (m) => m.route.lazy
