@@ -1,4 +1,4 @@
-@import "../../../../styles/mixins";
+@use "../../../../styles/mixins";
 
 .preHeading {
   text-transform: uppercase;
@@ -13,7 +13,7 @@
     color: var(--homepage-secondary-color, var(--tk-color-black));
   }
 
-  @include respond-below(sm) {
+  @include mixins.respond-below(sm) {
     font-size: 0.8rem;
   }
 }
@@ -24,7 +24,7 @@
   margin-bottom: 20px;
   margin-top: 0;
 
-  @include respond-below(sm) {
+  @include mixins.respond-below(sm) {
     font-size: 1.5rem;
   }
 }
@@ -60,7 +60,7 @@
   }
 
   h2 {
-    @include respond-below(sm) {
+    @include mixins.respond-below(sm) {
       font-size: 1rem;
     }
   }

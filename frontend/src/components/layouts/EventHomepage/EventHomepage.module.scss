@@ -1,4 +1,4 @@
-@import "../../../styles/mixins.scss";
+@use "../../../styles/mixins.scss";
 
 .background {
   position: fixed;
@@ -15,7 +15,7 @@
   top: 0;
   bottom: 0;
 
-  @include respond-below(sm) {
+  @include mixins.respond-below(sm) {
     display: none;
   }
 }
@@ -35,18 +35,18 @@
   overflow: hidden;
   box-shadow: 0px 0px 6px 0px #00000025;
 
-  @include respond-above(md) {
+  @include mixins.respond-above(md) {
     min-width: 730px;
   }
 
-  @include respond-below(md) {
+  @include mixins.respond-below(md) {
     margin: 0;
     border-radius: 0;
     box-shadow: none;
     width: 100%;
   }
 
-  @include respond-below(sm) {
+  @include mixins.respond-below(sm) {
     border-radius: 0;
     margin: 0;
   }
@@ -61,7 +61,7 @@
     padding: 35px;
     width: 100%;
 
-    @include respond-below(md) {
+    @include mixins.respond-below(md) {
       min-height: 100vh;
       justify-content: space-between;
       padding: 20px;

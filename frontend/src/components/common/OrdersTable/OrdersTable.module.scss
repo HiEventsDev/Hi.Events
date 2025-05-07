@@ -1,4 +1,4 @@
-@import "../../../styles/mixins.scss";
+@use "../../../styles/mixins.scss";
 
 .paymentStatus {
   text-transform: capitalize;
@@ -12,7 +12,7 @@
   margin-bottom: 15px;
   align-items: center;
 
-  @include respond-below(md) {
+  @include mixins.respond-below(md) {
     flex-direction: column;
     align-items: flex-start;
   }
@@ -20,10 +20,10 @@
   & .colDetails {
     display: flex;
     flex-direction: column;
-    font-size: .9em;
+    font-size: 0.9em;
     max-width: 100%;
 
-    @include respond-below(md) {
+    @include mixins.respond-below(md) {
       margin-top: 10px;
       margin-bottom: 10px;
     }
@@ -32,12 +32,12 @@
       font-size: 1.1em;
       font-weight: 600;
       color: #333333;
-      @include ellipsis;
+      @include mixins.ellipsis;
     }
 
     .email {
       font-size: 0.9em;
-      @include ellipsis;
+      @include mixins.ellipsis;
     }
 
     .reference {
@@ -62,7 +62,7 @@
     align-items: flex-end;
     place-self: flex-start;
 
-    @include respond-below(md) {
+    @include mixins.respond-below(md) {
       width: 100%;
       align-items: flex-start;
     }
@@ -72,23 +72,23 @@
 
       .desktopAction {
         display: none;
-        @include respond-below(md) {
+        @include mixins.respond-below(md) {
           display: none;
         }
       }
 
       .mobileAction {
         display: none;
-        @include respond-below(md) {
+        @include mixins.respond-below(md) {
           display: block;
         }
       }
 
-      @include respond-above(md) {
+      @include mixins.respond-above(md) {
         place-content: flex-end;
       }
 
-      @include respond-below(md) {
+      @include mixins.respond-below(md) {
         width: 100%;
         > div {
           width: 100%;
@@ -104,7 +104,7 @@
       display: flex;
       margin-bottom: 20px;
 
-      @include respond-above(md) {
+      @include mixins.respond-above(md) {
         place-content: flex-end;
         margin-bottom: 35px;
       }

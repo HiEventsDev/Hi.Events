@@ -1,4 +1,4 @@
-@import "../../../styles/mixins.scss";
+@use "../../../styles/mixins.scss";
 
 .authLayout {
   display: flex;
@@ -24,7 +24,7 @@
   background: transparent;
   overflow-y: auto;
 
-  @include respond-below(md) {
+  @include mixins.respond-below(md) {
     width: 100%;
   }
 }
@@ -33,19 +33,19 @@
   width: 50%;
   position: relative;
   overflow: hidden;
-  background-image: url('/login-background.jpg');
+  background-image: url("/login-background.jpg");
   background-size: cover;
   background-position: center;
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     inset: 0;
     background: linear-gradient(135deg, var(--tk-pink) 0%, #6d28d9 100%);
     opacity: 0.95;
   }
 
-  @include respond-below(md) {
+  @include mixins.respond-below(md) {
     display: none;
   }
 }
@@ -145,7 +145,7 @@
   padding: 0 20px;
   min-width: 250px;
 
-  @include respond-below(md) {
+  @include mixins.respond-below(md) {
     height: auto;
   }
 
@@ -155,14 +155,14 @@
     align-items: center;
     padding: 40px;
 
-    @include respond-below(md) {
+    @include mixins.respond-below(md) {
       padding: 20px;
     }
 
     img {
       width: 140px;
 
-      @include respond-below(md) {
+      @include mixins.respond-below(md) {
         width: 110px;
       }
     }
@@ -174,7 +174,7 @@
     margin-bottom: 3rem;
     position: relative;
 
-    @include respond-below(md) {
+    @include mixins.respond-below(md) {
       min-width: 80%;
       margin: 1rem;
     }

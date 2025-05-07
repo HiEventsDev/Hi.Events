@@ -1,4 +1,4 @@
-@import "../../../styles/mixins.scss";
+@use "../../../styles/mixins.scss";
 
 .outer {
   container-type: inline-size;
@@ -7,7 +7,7 @@
     gap: 15px;
     display: flex;
 
-    @include respond-below(sm) {
+    @include mixins.respond-below(sm) {
       flex-direction: column;
     }
 
@@ -17,7 +17,7 @@
       align-items: center;
 
       .hiddenCount {
-        font-size: .9em;
+        font-size: 0.9em;
       }
 
       :global(.mantine-Switch-root) {
@@ -31,7 +31,7 @@
     flex-direction: row;
     gap: 20px;
 
-    @include respond-below(sm, true) {
+    @include mixins.respond-below(sm, true) {
       flex-direction: column;
     }
 
@@ -71,7 +71,6 @@
     }
 
     .defaultQuestionAlert {
-
     }
 
     .questions {
@@ -132,9 +131,4 @@
       }
     }
   }
-
 }
-
-
-
-
