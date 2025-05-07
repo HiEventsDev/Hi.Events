@@ -1,4 +1,4 @@
-@import "../../../../styles/mixins.scss";
+@use "../../../../styles/mixins.scss";
 
 .main {
   position: relative;
@@ -6,17 +6,17 @@
   overflow-y: auto;
   padding: 20px 60px;
 
+  @include mixins.scrollbar();
+
   &.hasFooter {
     height: calc(100vh - 60px);
 
-    @include respond-below(md) {
+    @include mixins.respond-below(md) {
       height: calc(100vh - 110px);
     }
   }
 
-  @include scrollbar();
-
-  @include respond-below(md) {
+  @include mixins.respond-below(md) {
     padding: 20px;
   }
 

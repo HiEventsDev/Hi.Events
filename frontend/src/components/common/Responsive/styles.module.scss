@@ -1,9 +1,9 @@
-@import '../../../styles/mixins';
+@use "../../../styles/mixins";
 
 .showForDesktop {
   display: none;
 
-  @include respond-above('md') {
+  @include mixins.respond-above("md") {
     display: block;
   }
 }
@@ -11,7 +11,7 @@
 .showForMobile {
   display: block;
 
-  @include respond-above('md') {
+  @include mixins.respond-above("md") {
     display: none;
   }
 }
@@ -19,7 +19,7 @@
 .hideForDesktop {
   display: block;
 
-  @include respond-above('md') {
+  @include mixins.respond-above("md") {
     display: none;
   }
 }
@@ -27,7 +27,7 @@
 .hideForMobile {
   display: none;
 
-  @include respond-above('md') {
+  @include mixins.respond-above("md") {
     display: block;
   }
 }

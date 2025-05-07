@@ -1,9 +1,8 @@
-@import '../../../styles/mixins';
+@use "../../../styles/mixins";
 
 .container {
   min-width: 300px;
 }
-
 
 .header {
   position: sticky;
@@ -43,14 +42,14 @@
       }
 
       .scanButton {
-        @include respond-below(sm) {
+        @include mixins.respond-below(sm) {
           display: none;
         }
       }
 
       .scanIcon {
         display: none;
-        @include respond-below(sm) {
+        @include mixins.respond-below(sm) {
           display: flex;
         }
       }
@@ -62,7 +61,8 @@
   }
 }
 
-.loading, .noResults {
+.loading,
+.noResults {
   display: flex;
   justify-content: center;
   align-items: center;

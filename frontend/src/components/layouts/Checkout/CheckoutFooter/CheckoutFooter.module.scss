@@ -1,4 +1,4 @@
-@import '../../../../styles/mixins';
+@use "../../../../styles/mixins";
 
 .sidebar {
   width: auto !important;
@@ -17,7 +17,7 @@
   right: 0;
   z-index: 1;
   height: 100vh;
-  width: 100vw
+  width: 100vw;
 }
 
 .footer {
@@ -25,25 +25,11 @@
   bottom: 0;
   z-index: 2;
 
-  @include respond-below(md) {
+  @include mixins.respond-below(md) {
     width: 100%;
   }
 
   .buttons {
-    .orderSummaryToggle {
-      display: block;
-
-      @include respond-above(md) {
-        display: none;
-      }
-    }
-
-    .continueButton {
-      margin-top: 20px;
-      flex: 1;
-      max-width: 700px;
-    }
-
     display: flex;
     gap: 10px;
     justify-content: center;
@@ -54,6 +40,20 @@
     box-shadow: 0px -5px 5px 0 rgba(0, 0, 0, 0.0392156863);
     border-top: 1px solid #e0e0e0;
 
+    .orderSummaryToggle {
+      display: block;
+
+      @include mixins.respond-above(md) {
+        display: none;
+      }
+    }
+
+    .continueButton {
+      margin-top: 20px;
+      flex: 1;
+      max-width: 700px;
+    }
+
     .continueButton {
       margin-top: 0;
     }
@@ -61,7 +61,7 @@
 }
 
 .orderComplete {
-  @include respond-above(md) {
+  @include mixins.respond-above(md) {
     display: none !important;
   }
 }

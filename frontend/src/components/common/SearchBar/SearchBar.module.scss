@@ -1,11 +1,11 @@
-@import "../../../styles/mixins";
+@use "../../../styles/mixins";
 
 .searchBarWrapper {
   display: flex;
   align-items: center;
   gap: 10px;
 
-  @include respond-below(sm, true) {
+  @include mixins.respond-below(sm, true) {
     flex-direction: column;
   }
 
@@ -13,13 +13,12 @@
     margin-bottom: 0 !important;
     width: 100%;
 
-    @include respond-below(sm, true) {
+    @include mixins.respond-below(sm, true) {
       width: 100%;
     }
 
-    @include respond-below(md) {
+    @include mixins.respond-below(md) {
       max-width: 100%;
     }
   }
 }
-

@@ -1,4 +1,4 @@
-@import "../../../styles/mixins";
+@use "../../../styles/mixins";
 
 .selectWrapper {
   width: 100%;
@@ -6,13 +6,12 @@
 
   .select {
     margin-bottom: 0 !important;
-    @include respond-above(lg) {
+    @include mixins.respond-above(lg) {
       max-width: 180px;
     }
 
     input {
-      font-size: .9em;
+      font-size: 0.9em;
     }
   }
 }
-

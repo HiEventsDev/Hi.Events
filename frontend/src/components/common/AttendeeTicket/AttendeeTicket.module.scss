@@ -1,10 +1,10 @@
-@import "../../../styles/mixins";
+@use "../../../styles/mixins";
 
 .attendee {
   display: flex;
   justify-content: space-between;
   border-radius: 10px;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   border: 1px solid #ddd;
   overflow: hidden;
   padding: 0;
@@ -20,7 +20,7 @@
     }
   }
 
-  @include respond-below(sm) {
+  @include mixins.respond-below(sm) {
     flex-direction: column-reverse;
   }
 
@@ -51,7 +51,7 @@
 
       .productPrice {
         .badge {
-          background-color: #8BC34A;
+          background-color: #8bc34a;
           color: #fff;
           padding: 5px 10px;
           border-radius: 10px;
@@ -71,7 +71,7 @@
     }
 
     a {
-      font-size: .9em;
+      font-size: 0.9em;
     }
   }
 
@@ -91,12 +91,11 @@
     border-left: 1px solid #ddd;
     padding: 15px;
 
-    @include respond-below(sm) {
+    @include mixins.respond-below(sm) {
       border-left: none;
     }
 
-    .qrImage
-    {
+    .qrImage {
       svg {
         width: 140px;
         height: 140px;

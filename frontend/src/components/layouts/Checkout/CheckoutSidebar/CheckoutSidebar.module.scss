@@ -1,4 +1,4 @@
-@import "../../../../styles/mixins.scss";
+@use "../../../../styles/mixins.scss";
 
 .sidebar {
   width: 350px;
@@ -6,7 +6,7 @@
   background-color: #ffffff;
   max-height: 100vh;
   overflow-y: auto;
-  @include scrollbar();
+  @include mixins.scrollbar();
 
   .coverImage {
     img {
