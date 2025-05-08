@@ -750,7 +750,7 @@ create index idx_account_users_user_id
 create index idx_account_users_role
     on account_users (role);
 
-create view question_and_answer_views
+create or replace view question_and_answer_views
         (question_id, event_id, belongs_to, question_type, first_name, last_name, attendee_id, order_id, title,
          answer, question_answer_id)
 as
