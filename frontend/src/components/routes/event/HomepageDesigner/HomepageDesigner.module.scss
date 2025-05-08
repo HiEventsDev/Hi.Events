@@ -1,6 +1,6 @@
-@import "../../../../styles/mixins.scss";
+@use "../../../../styles/mixins.scss";
 
-@include respond-below(sm) {
+@include mixins.respond-below(sm) {
   :global(#event-manage-main) {
     overflow: auto;
   }
@@ -15,7 +15,7 @@
     margin-bottom: 0;
   }
 
-  @include respond-below(sm) {
+  @include mixins.respond-below(sm) {
     flex-direction: column;
   }
 
@@ -29,7 +29,7 @@
     position: sticky;
     top: 0;
 
-    @include respond-below(sm) {
+    @include mixins.respond-below(sm) {
       width: 100%;
       min-width: unset;
       max-width: unset;
@@ -53,7 +53,7 @@
     overflow: hidden;
     min-width: 400px;
 
-    @include respond-below(sm) {
+    @include mixins.respond-below(sm) {
       padding: 20px;
     }
 
@@ -68,7 +68,7 @@
       width: 100%;
       height: 100%;
       min-height: 500px;
-      --scale: .75;
+      --scale: 0.75;
 
       iframe {
         transform: scale(var(--scale));
@@ -85,7 +85,7 @@
       display: none;
     }
 
-    @include respond-below(sm) {
+    @include mixins.respond-below(sm) {
       > h2 {
         display: block;
       }

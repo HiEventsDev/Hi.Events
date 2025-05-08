@@ -1,4 +1,4 @@
-@import "../../../styles/mixins.scss";
+@use "../../../styles/mixins.scss";
 
 .card {
   display: flex;
@@ -6,7 +6,7 @@
   overflow: hidden;
   padding: var(--mantine-spacing-sm) !important;
 
-  @include respond-below(sm) {
+  @include mixins.respond-below(sm) {
     flex-direction: column;
     gap: 0px;
     padding: var(--mantine-spacing-md) !important;
@@ -31,7 +31,7 @@
     overflow: hidden;
     transition: background-size 15s ease;
 
-    @include respond-below(sm) {
+    @include mixins.respond-below(sm) {
       flex-direction: row;
       gap: 20px;
       align-items: flex-start;
@@ -68,7 +68,7 @@
         font-weight: 500;
       }
 
-      @include respond-below(sm) {
+      @include mixins.respond-below(sm) {
         .day {
           font-size: 1.2em;
         }
@@ -83,7 +83,7 @@
     padding: var(--mantine-spacing-xs);
     flex: 1;
 
-    @include respond-below(sm) {
+    @include mixins.respond-below(sm) {
       padding-left: 0;
       padding-bottom: 0;
     }
@@ -104,7 +104,7 @@
         }
       }
 
-      @include respond-below(sm) {
+      @include mixins.respond-below(sm) {
         flex-direction: column;
         align-items: flex-start;
         gap: 10px;
@@ -123,7 +123,7 @@
     justify-content: flex-end;
     margin: 0 10px;
 
-    @include respond-below(sm) {
+    @include mixins.respond-below(sm) {
       align-items: flex-start;
       justify-content: flex-start;
       margin-bottom: var(--mantine-spacing-md);
@@ -137,7 +137,7 @@
       }
     }
 
-    @include respond-above(sm) {
+    @include mixins.respond-above(sm) {
       .mobileButton {
         display: none;
       }

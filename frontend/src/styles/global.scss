@@ -1,4 +1,4 @@
-@import "mixins";
+@use "mixins";
 
 :root {
   --tk-text: #4b3b5d;
@@ -34,7 +34,7 @@
 }
 
 html {
-  height:auto;
+  height: auto;
 }
 
 body {
@@ -64,7 +64,7 @@ a {
 }
 
 .mantine-Modal-content {
-  @include scrollbar();
+  @include mixins.scrollbar();
 }
 
 .mantine-SimpleGrid-root {

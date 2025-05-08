@@ -1,4 +1,4 @@
-@import "../../../styles/mixins";
+@use "../../../styles/mixins";
 
 .refundSummary {
   display: flex;
@@ -9,7 +9,7 @@
   border-radius: var(--tk-radius-lg);
   border: 3px solid var(--tk-secondary);
 
-  @include respond-below(md) {
+  @include mixins.respond-below(md) {
     flex-direction: column;
 
     .block {

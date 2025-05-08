@@ -1,3 +1,5 @@
+@use "sass:map";
+
 $breakpoints: (
         'xs': 320px,
         'sm': 576px,
@@ -9,8 +11,8 @@ $breakpoints: (
 
 // Option to specify if the query should be a container query
 @mixin respond-above($breakpoint, $container-query: false) {
-  @if map-has-key($breakpoints, $breakpoint) {
-    $value: map-get($breakpoints, $breakpoint);
+  @if map.has-key($breakpoints, $breakpoint) {
+    $value: map.get($breakpoints, $breakpoint);
 
     @if $container-query {
       // Use container query
@@ -30,8 +32,8 @@ $breakpoints: (
 
 // Option to specify if the query should be a container query
 @mixin respond-below($breakpoint, $container-query: false) {
-  @if map-has-key($breakpoints, $breakpoint) {
-    $value: map-get($breakpoints, $breakpoint) - 1px;
+  @if map.has-key($breakpoints, $breakpoint) {
+    $value: map.get($breakpoints, $breakpoint) - 1px;
 
     @if $container-query {
       // Use container query

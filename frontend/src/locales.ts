@@ -1,45 +1,15 @@
-// @ts-ignore
-import {messages as en} from "./locales/en.po";
-// @ts-ignore
-import {messages as de} from "./locales/de.po";
-// @ts-ignore
-import {messages as fr} from "./locales/fr.po";
-// @ts-ignore
-import {messages as nl} from "./locales/nl.po";
-// @ts-ignore
-import {messages as pt} from "./locales/pt.po";
-// @ts-ignore
-import {messages as es} from "./locales/es.po";
-// @ts-ignore
-import {messages as zhCn} from "./locales/zh-cn.po";
-// @ts-ignore
-import {messages as zhHk} from "./locales/zh-hk.po";
-// @ts-ignore
-import {messages as ptBr} from "./locales/pt-br.po";
-// @ts-ignore
-import {messages as vi} from "./locales/vi.po";
 import {i18n} from "@lingui/core";
 import {t} from "@lingui/macro";
 
-export type SupportedLocales = "en" | "de" | "fr" | "nl" | "pt" | "es" | "zh-cn" | "pt-br" | "vi" |"zh-hk";
+export type SupportedLocales = "en" | "de" | "fr" | "it" | "nl" | "pt" | "es" | "zh-cn" | "pt-br" | "vi" |"zh-hk";
 
-export const localeMessages: Record<string, any> = {
-    en: en,
-    de: de,
-    fr: fr,
-    nl: nl,
-    pt: pt,
-    es: es,
-    "zh-cn": zhCn,
-    "zh-hk": zhHk,
-    "pt-br": ptBr,
-    vi: vi,
-};
+export const availableLocales = ["en", "de", "fr", "it", "nl", "pt", "es", "zh-cn", "zh-hk", "pt-br", "vi",];
 
 export const localeToFlagEmojiMap: Record<SupportedLocales, string> = {
     en: '🇬🇧',
     de: '🇩🇪',
     fr: '🇫🇷',
+    it: '🇮🇹',
     nl: '🇳🇱',
     pt: '🇵🇹',
     es: '🇪🇸',
@@ -53,6 +23,7 @@ export const localeToNameMap: Record<SupportedLocales, string> = {
     en: `English`,
     de: `German`,
     fr: `French`,
+    it: `Italian`,
     nl: `Dutch`,
     pt: `Portuguese`,
     es: `Spanish`,
@@ -85,24 +56,21 @@ export const getClientLocale = () => {
 };
 
 export async function dynamicActivateLocale(locale: string) {
-    try {
-        const messages = localeMessages[locale] || localeMessages["en"];
-        i18n.load(locale, messages);
+        locale = availableLocales.includes(locale) ? locale : "en";
+        const module = (await import(`./locales/${locale}.po`));
+        i18n.load(locale, module.messages);
         i18n.activate(locale);
-    } catch (error) {
-        i18n.activate("en");
-    }
 }
 
 export const getSupportedLocale = (userLocale: string) => {
     const normalizedLocale = userLocale.toLowerCase();
 
-    if (localeMessages[normalizedLocale]) {
+    if (availableLocales.includes(normalizedLocale)) {
         return normalizedLocale;
     }
 
     const mainLanguage = normalizedLocale.split('-')[0];
-    const mainLocale = Object.keys(localeMessages).find(locale => locale.startsWith(mainLanguage));
+    const mainLocale = availableLocales.find(locale => locale.startsWith(mainLanguage));
     if (mainLocale) {
         return mainLocale;
     }

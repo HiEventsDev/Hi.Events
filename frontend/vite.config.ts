@@ -31,4 +31,11 @@ export default defineConfig({
     ssr: {
         noExternal: ["react-helmet-async"],
     },
+    css: {
+        preprocessorOptions: {
+            scss: {
+                api: "modern-compiler",
+            }
+        }
+    }
 });
