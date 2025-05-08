@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace HiEvents\Models;
 
 use HiEvents\DomainObjects\Enums\Role;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -12,6 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Account extends BaseModel
 {
     use SoftDeletes;
+    use HasFactory;
 
     public function users(): BelongsToMany
     {

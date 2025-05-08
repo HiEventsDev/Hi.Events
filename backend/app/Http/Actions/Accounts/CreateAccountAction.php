@@ -17,6 +17,7 @@ use HiEvents\Services\Application\Handlers\Account\Exceptions\AccountRegistratio
 use HiEvents\Services\Application\Handlers\Auth\DTO\LoginCredentialsDTO;
 use HiEvents\Services\Application\Handlers\Auth\LoginHandler;
 use HiEvents\Services\Application\Locale\LocaleService;
+use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 use Throwable;
@@ -53,6 +54,10 @@ class CreateAccountAction extends BaseAuthAction
         } catch (EmailAlreadyExists $e) {
             throw ValidationException::withMessages([
                 'email' => $e->getMessage(),
+            ]);
+        } catch (DecryptException $e) {
+            throw ValidationException::withMessages([
+                'invite_token' => __('Invalid invite token'),
             ]);
         } catch (AccountRegistrationDisabledException) {
             return $this->errorResponse(

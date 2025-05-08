@@ -2,6 +2,7 @@
 
 namespace HiEvents\Http\Actions\Auth;
 
+use HiEvents\Exceptions\InvalidPasswordResetTokenException;
 use HiEvents\Exceptions\PasswordInvalidException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Auth\ResetPasswordRequest;
@@ -37,6 +38,8 @@ class ResetPasswordAction extends BaseAction
             throw ValidationException::withMessages([
                 'current_password' => $exception->getMessage(),
             ]);
+        } catch (InvalidPasswordResetTokenException $e) {
+            throw new ResourceNotFoundException($e->getMessage());
         }
 
         return $this->jsonResponse(
