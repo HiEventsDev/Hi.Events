@@ -69,11 +69,6 @@ class RegisterTest extends TestCase
         $response->assertHeader('X-Auth-Token');
     }
 
-    // public function test_register_user_with_invite_token(): void
-    // {
-    //     $this->fail("Not implemented");
-    // }
-
     public function test_registration_disabled(): void
     {
         $password = fake()->password(16);
