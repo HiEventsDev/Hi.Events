@@ -68,7 +68,7 @@ const EventHomepage = ({ colors, continueButtonText, backgroundType, ...loaderDa
                 id={"event-homepage"}
                 className={classes.styleContainer}
             >
-                <div className={classes.container}>
+                <div className={classes.container} style={{maxWidth: '1000px', margin: '30px auto'}}>
                     <Header event={event} />
                     <div className={classes.innerContainer}>
                         <div className={classes.eventInfo}>

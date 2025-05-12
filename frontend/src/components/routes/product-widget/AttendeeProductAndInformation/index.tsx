@@ -32,7 +32,7 @@ export const AttendeeProductAndInformation = () => {
      */
     return (
         <Container>
-            <h2>{t`Your product for`} {event.title}</h2>
+            <h2>{t`Your ticket for`} {event.title}</h2>
 
             <AttendeeTicket
                 attendee={attendee as Attendee}

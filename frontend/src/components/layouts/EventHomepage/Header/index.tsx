@@ -16,6 +16,7 @@ export const Header: FC<{
         <>
             <header className={classes.header}>
                 <img
+                    style={{maxWidth: '1000px'}}
                     alt={event?.title}
                     src={coverImage.url}
                 />
