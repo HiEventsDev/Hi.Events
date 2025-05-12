@@ -21,7 +21,6 @@ const GettingStarted = () => {
     const navigate = useNavigate();
     const [showConfetti, setShowConfetti] = useState(false);
 
-    // Check for new_event parameter in URL
     useEffect(() => {
         const searchParams = new URLSearchParams(location.search);
         if (searchParams.get('new_event') === 'true') {

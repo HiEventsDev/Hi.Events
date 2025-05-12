@@ -26,6 +26,12 @@
   }
 
   @include mixins.respond-below(sm) {
+    &::before {
+      display: none;
+    }
+  }
+
+  @include mixins.respond-below(sm) {
     padding: 24px;
 
     &::before {
@@ -71,9 +77,15 @@
 }
 
 @keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.1); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 .subtitle {
@@ -113,12 +125,11 @@
   z-index: 9999;
   pointer-events: none;
   animation: confettiAnimation 4s ease-in-out forwards;
-  background-image:
-          radial-gradient(circle at 25% 25%, #ff4a4a 2px, transparent 0),
-          radial-gradient(circle at 75% 75%, #4a4aff 2px, transparent 0),
-          radial-gradient(circle at 25% 75%, #4aff4a 3px, transparent 0),
-          radial-gradient(circle at 75% 25%, #ffff4a 3px, transparent 0),
-          radial-gradient(circle at 50% 50%, #ff4aff 4px, transparent 0);
+  background-image: radial-gradient(circle at 25% 25%, #ff4a4a 2px, transparent 0),
+  radial-gradient(circle at 75% 75%, #4a4aff 2px, transparent 0),
+  radial-gradient(circle at 25% 75%, #4aff4a 3px, transparent 0),
+  radial-gradient(circle at 75% 25%, #ffff4a 3px, transparent 0),
+  radial-gradient(circle at 50% 50%, #ff4aff 4px, transparent 0);
   background-size: 10% 10%;
 }
 
