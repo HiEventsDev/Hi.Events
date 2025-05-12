@@ -1,23 +1,28 @@
-import {useEffect, useRef, useState} from 'react';
+import {FC, useEffect, useRef, useState} from 'react';
 
-const ConfettiAnimation = ({duration = 4000}) => {
-    const canvasRef = useRef(null);
-    const [isActive, setIsActive] = useState(true);
+interface ConfettiAnimationProps {
+    duration?: number;
+}
+
+const ConfettiAnimation: FC<ConfettiAnimationProps> = ({duration = 4000}) => {
+    const canvasRef = useRef<HTMLCanvasElement | null>(null);
+    const [isActive, setIsActive] = useState<boolean>(true);
 
     useEffect(() => {
         if (!canvasRef.current || !isActive) return;
 
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
-        let animationFrameId;
-        let particles = [];
+        if (!ctx) {
+            return;
+        }
+        let animationFrameId: number;
+        let particles: Particle[] = [];
 
-        // Track animation state
         let shouldContinueGenerating = true;
         let lastParticleTime = Date.now();
-        const particleGenerationInterval = 50; // ms between new particle batches
+        const particleGenerationInterval = 50;
 
-        // Set canvas to full window size
         const resizeCanvas = () => {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
@@ -26,68 +31,59 @@ const ConfettiAnimation = ({duration = 4000}) => {
         resizeCanvas();
         window.addEventListener('resize', resizeCanvas);
 
-        // Confetti particle class
         class Particle {
+            x: number;
+            y: number;
+            color: string;
+            size: number;
+            speedY: number;
+            speedX: number;
+            spinSpeed: number;
+            spinAngle: number;
+            opacity: number;
+            fadeSpeed: number;
+            gravity: number;
+            shape: number;
+
             constructor(forceNew = false) {
-                // Start position - either at the top or slightly above the visible area
-                if (forceNew) {
-                    // Start new particles from the top
-                    this.x = Math.random() * canvas.width;
-                    this.y = -20; // Just above the visible area
-                } else {
-                    // Initial particles can start anywhere in the top portion
-                    this.x = Math.random() * canvas.width;
-                    this.y = Math.random() * canvas.height * 0.3 - canvas.height * 0.3;
-                }
+                this.x = Math.random() * canvas.width;
+                this.y = forceNew ? -20 : Math.random() * canvas.height * 0.3 - canvas.height * 0.3;
 
-                // Appearance
                 this.color = `hsl(${Math.random() * 360}, 80%, 60%)`;
-                this.size = Math.random() * 10 + 5; // Slightly larger particles
+                this.size = Math.random() * 10 + 5;
 
-                // Movement
-                this.speedY = Math.random() * 2 + 0.5; // Slower fall
-                this.speedX = (Math.random() - 0.5) * 1.5; // Gentler horizontal movement
+                this.speedY = Math.random() * 2 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 1.5;
                 this.spinSpeed = Math.random() * 0.2 - 0.1;
                 this.spinAngle = Math.random() * Math.PI * 2;
 
-                // Lifespan management
                 this.opacity = 1;
-                this.fadeSpeed = Math.random() * 0.01 + 0.005; // Much slower fade
-                this.gravity = 0.03; // Less gravity
-
-                // Shape variety
-                this.shape = Math.floor(Math.random() * 4); // 0: square, 1: circle, 2: line, 3: star
+                this.fadeSpeed = Math.random() * 0.01 + 0.005;
+                this.gravity = 0.03;
+                this.shape = Math.floor(Math.random() * 4);
             }
 
-            update() {
+            update(): boolean {
                 this.y += this.speedY;
                 this.x += this.speedX;
                 this.spinAngle += this.spinSpeed;
-
-                // Apply a gentler gravity effect
                 this.speedY += this.gravity;
-
-                // Apply very slight wind effect with directional change
                 this.speedX += (Math.random() - 0.5) * 0.05;
 
-                // Slow down particles as they fall (air resistance simulation)
                 if (this.speedY > 2) {
                     this.speedY *= 0.99;
                 }
 
-                // Only start fading after they've been visible for a while
                 if (this.y > canvas.height * 0.3) {
                     this.opacity -= this.fadeSpeed;
                 }
 
-                // Reset particle if it goes offscreen or becomes invisible
-                if (this.y > canvas.height + 50 || this.opacity <= 0) {
-                    return false;
-                }
-                return true;
+                return this.y <= canvas.height + 50 && this.opacity > 0;
             }
 
-            draw() {
+            draw(): void {
+                if (!ctx) return;
+
                 ctx.save();
                 ctx.translate(this.x, this.y);
                 ctx.rotate(this.spinAngle);
@@ -95,18 +91,18 @@ const ConfettiAnimation = ({duration = 4000}) => {
                 ctx.fillStyle = this.color;
 
                 switch (this.shape) {
-                    case 0: // square
+                    case 0:
                         ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size);
                         break;
-                    case 1: // circle
+                    case 1:
                         ctx.beginPath();
                         ctx.arc(0, 0, this.size / 2, 0, Math.PI * 2);
                         ctx.fill();
                         break;
-                    case 2: // rectangle
+                    case 2:
                         ctx.fillRect(-this.size, -this.size / 6, this.size * 2, this.size / 3);
                         break;
-                    case 3: // star
+                    case 3:
                         this.drawStar(0, 0, 5, this.size / 2, this.size / 4);
                         break;
                 }
@@ -114,11 +110,13 @@ const ConfettiAnimation = ({duration = 4000}) => {
                 ctx.restore();
             }
 
-            drawStar(cx, cy, spikes, outerRadius, innerRadius) {
+            drawStar(cx: number, cy: number, spikes: number, outerRadius: number, innerRadius: number): void {
+                if (!ctx) return;
+
                 let rot = Math.PI / 2 * 3;
                 let x = cx;
                 let y = cy;
-                let step = Math.PI / spikes;
+                const step = Math.PI / spikes;
 
                 ctx.beginPath();
                 ctx.moveTo(cx, cy - outerRadius);
@@ -141,14 +139,12 @@ const ConfettiAnimation = ({duration = 4000}) => {
             }
         }
 
-        // Initialize particles
         const createInitialParticles = () => {
             for (let i = 0; i < 150; i++) {
                 particles.push(new Particle());
             }
         };
 
-        // Add more particles periodically
         const addMoreParticles = () => {
             const now = Date.now();
             if (shouldContinueGenerating && now - lastParticleTime > particleGenerationInterval) {
@@ -160,31 +156,23 @@ const ConfettiAnimation = ({duration = 4000}) => {
         };
 
         createInitialParticles();
-
-        // Animation loop
         const startTime = Date.now();
 
         const animate = () => {
-            // Clear the canvas completely for a transparent background
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            // Add more particles if needed
             addMoreParticles();
 
-            // Update and draw particles
-            particles = particles.filter(particle => {
+            particles = particles.filter((particle) => {
                 const isAlive = particle.update();
                 if (isAlive) particle.draw();
                 return isAlive;
             });
 
-            // Check if we should continue generating new particles
             const elapsedTime = Date.now() - startTime;
             if (elapsedTime > duration) {
                 shouldContinueGenerating = false;
             }
 
-            // Continue animation as long as there are particles or we're still generating
             if (particles.length > 0 || shouldContinueGenerating) {
                 animationFrameId = requestAnimationFrame(animate);
             } else {
@@ -200,7 +188,6 @@ const ConfettiAnimation = ({duration = 4000}) => {
         };
     }, [duration, isActive]);
 
-    // Only render the canvas when active
     if (!isActive) return null;
 
     return (
