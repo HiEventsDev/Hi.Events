@@ -1,40 +1,211 @@
 @use "../../../../styles/mixins.scss";
 
 .headerCard {
-  background-image: url("/images/balloons.svg"), linear-gradient(358deg, #eee5ff, white);
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position:
-    95% 30px,
-    0 0;
-  box-shadow: none !important;
-  padding: 30px;
+  background: linear-gradient(135deg, #f8f9ff 0%, #eee5ff 100%);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(149, 157, 165, 0.08) !important;
+  padding: 32px;
+  margin-bottom: 32px;
+  border: none;
+  position: relative;
+  overflow: hidden;
 
-  h2 {
-    margin-bottom: 0px;
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 240px;
+    height: 240px;
+    background-image: url("/images/balloons.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: top right;
+    opacity: 0.7;
+    z-index: 0;
   }
 
   @include mixins.respond-below(sm) {
-    background-image: linear-gradient(358deg, #eee5ff, white);
+    padding: 24px;
+
+    &::before {
+      width: 180px;
+      height: 180px;
+      opacity: 0.5;
+    }
+  }
+}
+
+.headerContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  position: relative;
+  z-index: 1;
+
+  @include mixins.respond-below(sm) {
+    flex-direction: column;
+    gap: 24px;
+  }
+}
+
+.headerTitle {
+  flex: 1;
+}
+
+.mainTitle {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0;
+  line-height: 1.2;
+
+  @include mixins.respond-below(sm) {
+    font-size: 24px;
+  }
+}
+
+.confettiIcon {
+  color: #8a6eff;
+  animation: pulse 2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.subtitle {
+  margin-top: 12px;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #4a4a6a;
+  max-width: 600px;
+}
+
+.progressBarContainer {
+  margin-top: 24px;
+  max-width: 600px;
+
+  @include mixins.respond-below(sm) {
+    display: none;
+  }
+}
+
+.progressBar {
+  height: 8px;
+  background-color: rgba(138, 110, 255, 0.1);
+
+  [role="progressbar"] {
+    background: linear-gradient(90deg, #8a6eff, #b57aff);
+    box-shadow: 0 0 8px rgba(138, 110, 255, 0.4);
+    transition: width 0.5s ease-in-out;
+  }
+}
+
+.confettiContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  pointer-events: none;
+  animation: confettiAnimation 4s ease-in-out forwards;
+  background-image:
+          radial-gradient(circle at 25% 25%, #ff4a4a 2px, transparent 0),
+          radial-gradient(circle at 75% 75%, #4a4aff 2px, transparent 0),
+          radial-gradient(circle at 25% 75%, #4aff4a 3px, transparent 0),
+          radial-gradient(circle at 75% 25%, #ffff4a 3px, transparent 0),
+          radial-gradient(circle at 50% 50%, #ff4aff 4px, transparent 0);
+  background-size: 10% 10%;
+}
+
+@keyframes confettiAnimation {
+  0% {
+    background-position: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  100% {
+    background-position: 0% 100%, 0% 100%, 0% 100%, 0% 100%, 0% 100%;
+    opacity: 0;
   }
 }
 
 .actionItems {
-  display: flex;
-  gap: 20px;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(calc(50% - 16px), 1fr));
+  gap: 24px;
 
   @include mixins.respond-below(sm) {
-    flex-direction: column;
+    grid-template-columns: 1fr;
+    gap: 16px;
   }
 
-  & div {
-    margin-bottom: 0px;
-    width: calc(50% - 10px);
-    @include mixins.respond-below(sm) {
-      width: 100%;
+  & > div {
+    margin-bottom: 0;
+    position: relative;
+    padding: 28px;
+    border: 1px solid #eaeaea;
+    border-radius: 12px;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+      transform: translateY(-2px);
     }
+
+    h2 {
+      margin-top: 0;
+      margin-bottom: 12px;
+      font-size: 18px;
+      font-weight: 600;
+      color: #1a1a2e;
+    }
+
+    p {
+      margin-bottom: 20px;
+      color: #4a4a6a;
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    @include mixins.respond-below(sm) {
+      padding: 20px;
+    }
+  }
+}
+
+.completedCard {
+  background-color: rgba(52, 199, 89, 0.03);
+  border-color: rgba(52, 199, 89, 0.2);
+}
+
+.completedBadge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background-color: rgba(52, 199, 89, 0.15);
+  color: #34c759;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: rgba(52, 199, 89, 0.25);
+    transform: scale(1.05);
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
   }
 }

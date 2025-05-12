@@ -2,7 +2,7 @@ import {t} from "@lingui/macro";
 import classes from "./FloatingPoweredBy.module.scss";
 import classNames from "classnames";
 import React from "react";
-import {iHavePurchasedALicence} from "../../../utilites/helpers.ts";
+import {iHavePurchasedALicence, isHiEvents} from "../../../utilites/helpers.ts";
 
 /**
  * (c) Hi.Events Ltd 2025
@@ -25,7 +25,7 @@ export const PoweredByFooter = (props: React.DetailedHTMLProps<React.HTMLAttribu
     return (
         <div {...props} className={classNames(classes.poweredBy, props.className)}>
             <div className={classes.poweredByText}>
-                {t`Powered by`}{'  '}
+                {isHiEvents() ? t`Event Ticketing by` : t`Powered by`} {'  '}
                 {/* eslint-disable-next-line lingui/no-unlocalized-strings */}
                 <a href="https://hi.events?utm_source=app-powered-by-footer"
                    target="_blank"

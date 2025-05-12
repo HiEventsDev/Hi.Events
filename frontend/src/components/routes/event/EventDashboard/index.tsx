@@ -12,9 +12,8 @@ import {useGetEventStats} from "../../../../queries/useGetEventStats.ts";
 import {formatCurrency} from "../../../../utilites/currency.ts";
 import {formatDate} from "../../../../utilites/dates.ts";
 import {Button, Group, Skeleton} from "@mantine/core";
-import {useDisclosure, useMediaQuery} from "@mantine/hooks";
-import {IconShare, IconX} from "@tabler/icons-react";
-import {ShareModal} from "../../../modals/ShareModal";
+import {useMediaQuery} from "@mantine/hooks";
+import {IconX} from "@tabler/icons-react";
 import {useGetAccount} from "../../../../queries/useGetAccount.ts";
 import {useUpdateEventStatus} from "../../../../mutations/useUpdateEventStatus.ts";
 import {confirmationDialog} from "../../../../utilites/confirmationDialog.tsx";
@@ -38,7 +37,6 @@ export const EventDashboard = () => {
     const event = eventQuery?.data;
     const eventStatsQuery = useGetEventStats(eventId);
     const {data: eventStats} = eventStatsQuery;
-    const [opened, {open, close}] = useDisclosure(false);
     const isMobile = useMediaQuery('(max-width: 768px)');
     const {data: account, isFetched: accountIsFetched} = useGetAccount();
     const statusToggleMutation = useUpdateEventStatus();
@@ -106,23 +104,6 @@ export const EventDashboard = () => {
                         </Trans>
                     )}
                 </PageTitle>
-                {event && (
-                    <>
-                        <Button
-                            onClick={open}
-                            variant="transparent"
-                            leftSection={<IconShare size={16}/>}
-                        >
-                            {t`Share Event`}
-                        </Button>
-
-                        {event && <ShareModal
-                            event={event}
-                            opened={opened}
-                            onClose={close}
-                        />}
-                    </>
-                )}
             </Group>
 
             {!event && <DashBoardSkeleton/>}

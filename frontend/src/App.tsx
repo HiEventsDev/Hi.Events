@@ -1,4 +1,4 @@
-import React, {FC, PropsWithChildren, useEffect, useRef, useState} from "react";
+import React, {FC, PropsWithChildren, useEffect} from "react";
 import {MantineProvider} from "@mantine/core";
 import {Notifications} from "@mantine/notifications";
 import {i18n} from "@lingui/core";
@@ -15,7 +15,6 @@ import "@mantine/dropzone/styles.css";
 import "@mantine/charts/styles.css";
 import "./styles/global.scss";
 import {isSsr} from "./utilites/helpers.ts";
-import {dynamicActivateLocale, getSupportedLocale} from "./locales";
 import {StartupChecks} from "./StartupChecks.tsx";
 import {ThirdPartyScripts} from "./components/common/ThirdPartyScripts";
 
@@ -33,26 +32,22 @@ export const App: FC<
     }>
 > = (props) => {
     const [isLoadedOnBrowser, setIsLoadedOnBrowser] = React.useState(false);
-    const localeActivated = useRef(false);
-    const [loaded, setLoaded] = useState(isSsr());
 
     useEffect(() => {
-        if (!localeActivated.current && typeof window !== "undefined") {
-            localeActivated.current = true;
-            dynamicActivateLocale(getSupportedLocale(props.locale)).then(() => setLoaded(true));
-        }
         setIsLoadedOnBrowser(!isSsr());
     }, []);
-
-    if (!loaded) {
-        return <></>;
-    }
 
     return (
         <React.StrictMode>
             <div
                 className="ssr-loader"
                 style={{
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    margin: 0,
+                    padding: 0,
                     width: "100vw",
                     height: "100vh",
                     position: "fixed",
