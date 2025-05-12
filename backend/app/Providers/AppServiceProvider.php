@@ -12,21 +12,16 @@ use HiEvents\Models\Organizer;
 use HiEvents\Services\Infrastructure\CurrencyConversion\CurrencyConversionClientInterface;
 use HiEvents\Services\Infrastructure\CurrencyConversion\NoOpCurrencyConversionClient;
 use HiEvents\Services\Infrastructure\CurrencyConversion\OpenExchangeRatesCurrencyConversionClient;
-use Illuminate\Cache\RateLimiting\Limit;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Stripe\StripeClient;
 
 class AppServiceProvider extends ServiceProvider
 {
-    public const MAIL_RATE_LIMIT_PER_SECOND = 'mail-rate-limit-per-second';
-
     public function register(): void
     {
         $this->bindDoctrineConnection();
@@ -46,18 +41,6 @@ class AppServiceProvider extends ServiceProvider
         $this->disableLazyLoading();
 
         $this->registerMorphMaps();
-
-        $this->registerJobRateLimiters();
-    }
-
-    private function registerJobRateLimiters(): void
-    {
-        RateLimiter::for(
-            name: self::MAIL_RATE_LIMIT_PER_SECOND,
-            callback: static fn(ShouldQueue $job) => Limit::perMinute(
-                maxAttempts: config('mail.rate_limit_per_second')
-            )
-        );
     }
 
     private function bindDoctrineConnection(): void
