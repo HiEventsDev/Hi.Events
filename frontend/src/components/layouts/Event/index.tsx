@@ -1,4 +1,4 @@
-import {Badge, Breadcrumbs, Burger, Button, UnstyledButton, VisuallyHidden} from '@mantine/core';
+import {ActionIcon, Badge, Breadcrumbs, Burger, Button, UnstyledButton, VisuallyHidden} from '@mantine/core';
 import {NavLink, Outlet, useLocation, useParams} from "react-router";
 import {
     IconChartPie,
@@ -202,13 +202,16 @@ const EventLayout = () => {
                             variant={'transparent'}
                             leftSection={<IconExternalLink size={17}/>}
                             className={classes.eventPageButton}
+                            title={t`Preview Event page`}
                         >
-                            <ShowForDesktop>
-                                {t`Preview Event page`}
-                            </ShowForDesktop>
-                            <ShowForMobile>
-                                {t`Event page`}
-                            </ShowForMobile>
+                            <div className={classes.eventPageButtonText}>
+                                <span className={classes.desktop}>
+                                    {t`Preview Event page`}
+                                </span>
+                                <span className={classes.mobile}>
+                                    {t`Event Page`}
+                                </span>
+                            </div>
 
                         </Button>
                         <div className={classes.menu}>

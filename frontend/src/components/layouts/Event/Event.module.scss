@@ -96,7 +96,7 @@
       }
 
       @include mixins.respond-below(md) {
-          display: none;
+        display: none;
 
       }
     }
@@ -506,9 +506,29 @@
       transform: translateY(-1px);
     }
 
-    @include mixins.respond-below(sm) {
-      span {
+    .eventPageButtonText {
+      // Default: hide both
+      .mobile,
+      .desktop {
         display: none;
+      }
+
+      // Show mobile text from sm and up
+      @include mixins.respond-above(sm) {
+        .mobile {
+          display: block;
+        }
+      }
+
+      // Switch to desktop text at md and up
+      @include mixins.respond-above(md) {
+        .mobile {
+          display: none;
+        }
+
+        .desktop {
+          display: block;
+        }
       }
     }
   }
