@@ -1,14 +1,14 @@
-import { Header } from "./Header";
+import {Header} from "./Header";
 import "./styles.scss";
-import { EventInformation } from "./EventInformation";
+import {EventInformation} from "./EventInformation";
 import classes from "./EventHomepage.module.scss";
 import SelectProducts from "../../routes/product-widget/SelectProducts";
 import "../../../styles/widget/default.scss";
 import React from "react";
-import { EventDocumentHead } from "../../common/EventDocumentHead";
-import { eventCoverImageUrl } from "../../../utilites/urlHelper.ts";
-import { Event } from "../../../types.ts";
-import { EventNotAvailable } from "./EventNotAvailable";
+import {EventDocumentHead} from "../../common/EventDocumentHead";
+import {eventCoverImageUrl} from "../../../utilites/urlHelper.ts";
+import {Event} from "../../../types.ts";
+import {EventNotAvailable} from "./EventNotAvailable";
 
 interface EventHomepageProps {
     colors?: {
@@ -26,8 +26,8 @@ interface EventHomepageProps {
     promoCode?: string;
 }
 
-const EventHomepage = ({ colors, continueButtonText, backgroundType, ...loaderData }: EventHomepageProps) => {
-    const { event, promoCodeValid, promoCode } = loaderData;
+const EventHomepage = ({colors, continueButtonText, backgroundType, ...loaderData}: EventHomepageProps) => {
+    const {event, promoCodeValid, promoCode} = loaderData;
 
     const styleOverrides = {
         "--homepage-body-background-color":
@@ -45,7 +45,7 @@ const EventHomepage = ({ colors, continueButtonText, backgroundType, ...loaderDa
     } as React.CSSProperties;
 
     if (!event) {
-        return <EventNotAvailable />;
+        return <EventNotAvailable/>;
     }
 
     const coverImage = eventCoverImageUrl(event);
@@ -56,23 +56,35 @@ const EventHomepage = ({ colors, continueButtonText, backgroundType, ...loaderDa
             {(coverImage && backgroundType === 'MIRROR_COVER_IMAGE') && (
                 <div
                     className={classes.background}
-                    style={{ backgroundImage: `url(${coverImage})` }}
+                    style={{backgroundImage: `url(${coverImage})`}}
                 />
             )}
             {(!coverImage || backgroundType === 'COLOR') &&
                 <div className={classes.background}
-                    style={{ backgroundColor: 'var(--homepage-body-background-color)' }}
+                     style={{backgroundColor: 'var(--homepage-body-background-color)'}}
                 />
             }
             <div
                 id={"event-homepage"}
                 className={classes.styleContainer}
             >
-                <div className={classes.container}>
-                    <Header event={event} />
+                <style>
+                    {`
+                        .initialContainerStyle {
+                            max-width: 1000px;
+                            margin: 30px auto;
+                            
+                            @media (max-width: 767px) {
+                                margin: 0;
+                            }
+                        }
+                    `}
+                </style>
+                <div className={`initialContainerStyle ${classes.container}`}>
+                    <Header event={event}/>
                     <div className={classes.innerContainer}>
                         <div className={classes.eventInfo}>
-                            <EventInformation event={event} />
+                            <EventInformation event={event}/>
                         </div>
 
                         <div className={classes.productContainer}>

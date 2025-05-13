@@ -5,7 +5,6 @@ namespace HiEvents\Jobs\Event;
 use HiEvents\DomainObjects\Generated\OutgoingMessageDomainObjectAbstract;
 use HiEvents\DomainObjects\Status\OutgoingMessageStatus;
 use HiEvents\Mail\Event\EventMessage;
-use HiEvents\Providers\AppServiceProvider;
 use HiEvents\Repository\Interfaces\OutgoingMessageRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Message\DTO\SendMessageDTO;
 use Illuminate\Bus\Queueable;
@@ -13,7 +12,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Mail\Mailer;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\Middleware\RateLimited;
 use Illuminate\Queue\SerializesModels;
 use Throwable;
 
@@ -28,13 +26,6 @@ class SendEventEmailJob implements ShouldQueue
         private readonly SendMessageDTO $messageData,
     )
     {
-    }
-
-    public function middleware(): array
-    {
-        return [
-            (new RateLimited(AppServiceProvider::MAIL_RATE_LIMIT_PER_SECOND)),
-        ];
     }
 
     /**
