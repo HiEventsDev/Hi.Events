@@ -233,7 +233,7 @@ class PaymentIntentSucceededHandler
     {
         $this->orderApplicationFeeService->createOrderApplicationFee(
             orderId: $updatedOrder->getId(),
-            applicationFeeAmountMinorUnit: $paymentIntent->application_fee_amount,
+            applicationFeeAmountMinorUnit: $paymentIntent->application_fee_amount ?? 0,
             orderApplicationFeeStatus: OrderApplicationFeeStatus::PAID,
             paymentMethod: PaymentProviders::STRIPE,
             currency: $updatedOrder->getCurrency(),
