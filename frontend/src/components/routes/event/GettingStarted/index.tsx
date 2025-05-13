@@ -14,16 +14,20 @@ import {showError, showSuccess} from "../../../../utilites/notifications.tsx";
 import {getProductsFromEvent} from "../../../../utilites/helpers.ts";
 import {useEffect, useState} from 'react';
 import ConfettiAnimation from "./ConfettiAnimaiton";
+import {Browser, useBrowser} from "../../../../hooks/useGetBrowser.ts";
 
 const GettingStarted = () => {
     const {eventId} = useParams();
     const location = useLocation();
     const navigate = useNavigate();
     const [showConfetti, setShowConfetti] = useState(false);
+    const browser = useBrowser();
 
     useEffect(() => {
         const searchParams = new URLSearchParams(location.search);
-        if (searchParams.get('new_event') === 'true') {
+        const isChromeOrFirefox = browser === Browser.Chrome || browser === Browser.Firefox;
+
+        if (searchParams.get('new_event') === 'true' && isChromeOrFirefox) {
             setShowConfetti(true);
 
             setTimeout(() => {
@@ -73,7 +77,7 @@ const GettingStarted = () => {
 
     return (
         <>
-            {showConfetti && <ConfettiAnimation duration={2000}/>}
+            {showConfetti && <ConfettiAnimation duration={1000}/>}
             <PageBody>
                 <Card className={classes.headerCard}>
                     <div className={classes.headerContent}>
