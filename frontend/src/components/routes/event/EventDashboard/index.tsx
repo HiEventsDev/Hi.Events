@@ -11,7 +11,7 @@ import classes from "./EventDashboard.module.scss";
 import {useGetEventStats} from "../../../../queries/useGetEventStats.ts";
 import {formatCurrency} from "../../../../utilites/currency.ts";
 import {formatDate} from "../../../../utilites/dates.ts";
-import {Button, Group, Skeleton} from "@mantine/core";
+import {Button, Skeleton} from "@mantine/core";
 import {useMediaQuery} from "@mantine/hooks";
 import {IconX} from "@tabler/icons-react";
 import {useGetAccount} from "../../../../queries/useGetAccount.ts";
@@ -90,21 +90,19 @@ export const EventDashboard = () => {
 
     return (
         <PageBody>
-            <Group justify="space-between" align="center" mb={'5px'}>
-                <PageTitle style={{marginBottom: 0}}>
-                    {!isMobile && (
-                        <Trans>
-                            Welcome back{me?.first_name && ', ' + me?.first_name} 👋
-                        </Trans>
-                    )}
+            <PageTitle style={{marginBottom: 0}}>
+                {!isMobile && (
+                    <Trans>
+                        Welcome back{me?.first_name && ', ' + me?.first_name} 👋
+                    </Trans>
+                )}
 
-                    {isMobile && (
-                        <Trans>
-                            Hi {me?.first_name && me?.first_name} 👋
-                        </Trans>
-                    )}
-                </PageTitle>
-            </Group>
+                {isMobile && (
+                    <Trans>
+                        Hi {me?.first_name && me?.first_name} 👋
+                    </Trans>
+                )}
+            </PageTitle>
 
             {!event && <DashBoardSkeleton/>}
 
