@@ -22,7 +22,9 @@ export const useExportAnswers = (eventId: IdParam) => {
     const query = useQuery({
         queryKey: ["exportStatus", jobUuid],
         queryFn: async () => {
-            if (!jobUuid) return null;
+            if (!jobUuid) {
+                return null;
+            }
 
             try {
                 const data = await questionClient.checkExportStatus(eventId, jobUuid);
@@ -46,10 +48,13 @@ export const useExportAnswers = (eventId: IdParam) => {
             }
         },
         enabled: !!jobUuid,
-        refetchInterval: (data) => (data?.status === "IN_PROGRESS"
-                ? 5000
-                : false
-        ),
+        refetchInterval: (data) => {
+            const status = data?.state?.data?.status;
+            return (status === "IN_PROGRESS"
+                    ? 5000
+                    : false
+            );
+        },
     });
 
     return {
