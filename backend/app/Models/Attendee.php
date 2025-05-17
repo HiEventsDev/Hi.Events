@@ -32,4 +32,11 @@ class Attendee extends BaseModel
     {
         return $this->hasOne(AttendeeCheckIn::class);
     }
+
+    public function getCastMap(): array
+    {
+        return [
+            'checked_in_at' => 'datetime',
+        ];
+    }
 }
