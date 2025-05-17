@@ -51,7 +51,7 @@ export const App: FC<
                     width: "100vw",
                     height: "100vh",
                     position: "fixed",
-                    background: "#ffffff",
+                    background: "var(--ssr-loader-background, #fff)",
                     zIndex: 1000,
                     display: isLoadedOnBrowser ? "none" : "block",
                 }}
