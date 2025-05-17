@@ -50,7 +50,7 @@ const GenericFeatures = () => {
     const allFeatures = [
         {
             icon: IconChartBar,
-            title: t`Smart Dashboard`,
+            title: t`In-depth Analytics`,
             description: t`Track revenue, page views, and sales with detailed analytics and exportable reports`
         },
         {
@@ -65,7 +65,7 @@ const GenericFeatures = () => {
         },
         {
             icon: IconBuildingStore,
-            title: t`Complete Store`,
+            title: t`Sell Anything`,
             description: t`Sell merchandise alongside tickets with integrated tax and promo code support`
         },
         {
@@ -80,12 +80,12 @@ const GenericFeatures = () => {
         },
         {
             icon: IconPalette,
-            title: t`Brand Control`,
+            title: t`Match Your Brand`,
             description: t`Customize your event page and widget design to match your brand perfectly`
         },
         {
             icon: IconWebhook,
-            title: t`Auto Workflow`,
+            title: t`Fully Integrated`,
             description: t`Connect with CRM and automate tasks using webhooks and integrations`
         }
     ];
