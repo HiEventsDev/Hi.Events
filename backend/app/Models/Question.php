@@ -14,6 +14,8 @@ class Question extends BaseModel
     {
         return [
             QuestionDomainObjectAbstract::OPTIONS => 'array',
+            QuestionDomainObjectAbstract::REQUIRED => 'boolean',
+            QuestionDomainObjectAbstract::IS_HIDDEN => 'boolean',
         ];
     }
 

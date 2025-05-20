@@ -11,6 +11,7 @@ use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class QuestionRepository extends BaseRepository implements QuestionRepositoryInterface
 {
@@ -84,14 +85,14 @@ class QuestionRepository extends BaseRepository implements QuestionRepositoryInt
             'orders' => '{' . implode(',', range(1, count($orderedQuestionIds))) . '}',
         ];
 
-        $query = "WITH new_order AS (
+        $query = str_replace('"', DB::getDriverName() === 'mysql' ? '`' : "", "WITH new_order AS (
                   SELECT unnest(:questionIds::bigint[]) AS question_id,
                          unnest(:orders::int[]) AS order
               )
               UPDATE questions
               SET \"order\" = new_order.order
               FROM new_order
-              WHERE questions.id = new_order.question_id AND questions.event_id = :eventId";
+              WHERE questions.id = new_order.question_id AND questions.event_id = :eventId");
 
         $this->db->update($query, $parameters);
     }
