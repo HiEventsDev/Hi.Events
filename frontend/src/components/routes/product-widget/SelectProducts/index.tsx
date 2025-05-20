@@ -274,27 +274,84 @@ const SelectProducts = (props: SelectProductsProps) => {
                 </div>
             )}
             {orderInProcessOverlayVisible && (
-                <Modal withCloseButton={false} opened={true} onClose={() => setOrderInProcessOverlayVisible(false)}>
-                    <div style={{textAlign: 'center', padding: '20px'}}>
-                        <img style={{width: '110px'}} src={'/stopwatch-product-icon.svg'} alt={''}/>
-                        <div>
-                            <h4 style={{margin: '0'}}>
+                <Modal
+                    withCloseButton={false}
+                    opened={true}
+                    onClose={() => setOrderInProcessOverlayVisible(false)}
+                    styles={{
+                        body: {
+                            padding: '30px 24px'
+                        },
+                        content: {
+                            borderRadius: '8px',
+                            backgroundColor: props.colors?.background || 'white'
+                        }
+                    }}
+                >
+                    <div style={{
+                        textAlign: 'center',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        gap: '16px',
+                        color: props.colors?.primaryText || 'inherit'
+                    }}>
+                        <div style={{width: '100%'}}>
+                            <h3 style={{
+                                margin: '0 0 12px 0',
+                                fontSize: '20px',
+                                fontWeight: '600',
+                                color: props.colors?.primaryText || 'inherit'
+                            }}>
                                 {t`Please continue in the new tab`}
-                            </h4>
-                            <Trans>
-                                If a new tab did not open, please {' '}
-                                <a href={'/checkout/' + eventId + '/' + productMutation.data?.data.short_id + '/details' + '?session_identifier=' + productMutation.data?.data.session_identifier}
-                                   target={'_blank'} rel={'noopener noreferrer'}>
-                                    <b>{t`click here`}</b>.
-                                </a>
-                            </Trans>
+                            </h3>
+
+                            <p style={{
+                                margin: '0 0 20px 0',
+                                fontSize: '15px',
+                                lineHeight: '1.5',
+                                color: props.colors?.primaryText || 'inherit'
+                            }}>
+                                {t`If a new tab did not open automatically, please click the button below to continue to checkout.`}
+                            </p>
+
                             <Button
-                                style={{marginTop: '20px'}}
-                                onClick={() => setOrderInProcessOverlayVisible(false)}
-                                variant={'transparent'}
-                                size={'xs'}
+                                component="a"
+                                href={'/checkout/' + eventId + '/' + productMutation.data?.data.short_id + '/details' + '?session_identifier=' + productMutation.data?.data.session_identifier}
+                                target={'_blank'}
+                                rel={'noopener noreferrer'}
+                                fullWidth
+                                size="md"
+                                styles={{
+                                    root: {
+                                        backgroundColor: props.colors?.secondary || '#228be6',
+                                        color: props.colors?.secondaryText || 'white',
+                                        fontWeight: 600,
+                                        marginBottom: '12px',
+                                        '&:hover': {
+                                            backgroundColor: props.colors?.secondary || '#1c7ed6',
+                                        }
+                                    }
+                                }}
                             >
-                                {t`Dismiss`}
+                                {t`Continue to Checkout`}
+                            </Button>
+
+                            <Button
+                                onClick={() => setOrderInProcessOverlayVisible(false)}
+                                variant={'subtle'}
+                                size={'sm'}
+                                styles={{
+                                    root: {
+                                        color: props.colors?.primaryText || '#228be6',
+                                        '&:hover': {
+                                            backgroundColor: 'transparent',
+                                            textDecoration: 'underline'
+                                        }
+                                    }
+                                }}
+                            >
+                                {t`Dismiss this message`}
                             </Button>
                         </div>
                     </div>
