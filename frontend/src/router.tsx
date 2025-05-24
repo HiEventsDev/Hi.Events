@@ -1,9 +1,10 @@
-import {Navigate, RouteObject} from "react-router";
+import { createBrowserRouter, Navigate, RouteObject} from "react-router";
 import ErrorPage from "./error-page.tsx";
 import {eventsClientPublic} from "./api/event.client.ts";
 import {promoCodeClientPublic} from "./api/promo-code.client.ts";
 import {useEffect, useState} from "react";
 import {useGetMe} from "./queries/useGetMe.ts";
+import { getBasePath } from "./utilites/basePath.ts";
 
 const Root = () => {
     const [redirectPath, setRedirectPath] = useState<string | null>(null);
@@ -20,7 +21,11 @@ const Root = () => {
     }
 };
 
-export const router: RouteObject[] = [
+export const options: Parameters<typeof createBrowserRouter>[1] = {
+	basename: getBasePath(),
+};
+
+export const routes: RouteObject[] = [
     {
         path: "",
         element: <Root/>,

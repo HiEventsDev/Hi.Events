@@ -17,6 +17,7 @@ import "./styles/global.scss";
 import {isSsr} from "./utilites/helpers.ts";
 import {StartupChecks} from "./StartupChecks.tsx";
 import {ThirdPartyScripts} from "./components/common/ThirdPartyScripts";
+import { getBasePath } from "./utilites/basePath.ts";
 
 declare global {
     interface Window {
@@ -32,10 +33,20 @@ export const App: FC<
     }>
 > = (props) => {
     const [isLoadedOnBrowser, setIsLoadedOnBrowser] = React.useState(false);
+    const basePath = getBasePath();
 
     useEffect(() => {
         setIsLoadedOnBrowser(!isSsr());
-    }, []);
+
+        // Ensure that the client is always accessing via the base path
+        // This is to ensure that the app is always served from the correct base path
+        if (!window.location.pathname.startsWith(basePath)) {
+            window.location.replace(basePath);
+        }
+    }, [] );
+
+   
+   
 
     return (
         <React.StrictMode>

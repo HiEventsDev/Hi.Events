@@ -2,7 +2,7 @@ import {hydrateRoot} from "react-dom/client";
 import {createBrowserRouter, matchRoutes, RouterProvider} from "react-router-dom";
 import {hydrate} from "@tanstack/react-query";
 
-import {router} from "./router";
+import {options, routes} from "./router";
 import {App} from "./App";
 import {queryClient} from "./utilites/queryClient";
 import {dynamicActivateLocale, getClientLocale, getSupportedLocale,} from "./locales.ts";
@@ -23,7 +23,7 @@ async function initClientApp() {
     await dynamicActivateLocale(locale);
 
     // Resolve lazy-loaded routes before hydration
-    const matches = matchRoutes(router, window.location)?.filter((m) => m.route.lazy);
+    const matches = matchRoutes(routes, window.location)?.filter((m) => m.route.lazy);
     if (matches && matches.length > 0) {
         await Promise.all(
             matches.map(async (m) => {
@@ -33,7 +33,7 @@ async function initClientApp() {
         );
     }
 
-    const browserRouter = createBrowserRouter(router);
+    const browserRouter = createBrowserRouter(routes, options);
 
     hydrateRoot(
         document.getElementById("app") as HTMLElement,
