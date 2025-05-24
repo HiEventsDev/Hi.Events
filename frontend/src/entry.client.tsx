@@ -2,7 +2,7 @@ import {hydrateRoot} from "react-dom/client";
 import {createBrowserRouter, matchRoutes, RouterProvider} from "react-router-dom";
 import {hydrate} from "@tanstack/react-query";
 
-import {routes} from "./router";
+import {options, routes} from "./router";
 import {App} from "./App";
 import {queryClient} from "./utilites/queryClient";
 import {dynamicActivateLocale, getClientLocale, getSupportedLocale,} from "./locales.ts";
@@ -33,7 +33,7 @@ async function initClientApp() {
         );
     }
 
-    const browserRouter = createBrowserRouter(routes);
+    const browserRouter = createBrowserRouter(routes, options);
 
     hydrateRoot(
         document.getElementById("app") as HTMLElement,
