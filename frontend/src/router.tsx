@@ -1,4 +1,4 @@
-import {Navigate, RouteObject} from "react-router";
+import { Navigate, RouteObject} from "react-router";
 import ErrorPage from "./error-page.tsx";
 import {eventsClientPublic} from "./api/event.client.ts";
 import {promoCodeClientPublic} from "./api/promo-code.client.ts";
@@ -20,7 +20,7 @@ const Root = () => {
     }
 };
 
-export const router: RouteObject[] = [
+export const routes: RouteObject[] = [
     {
         path: "",
         element: <Root/>,
