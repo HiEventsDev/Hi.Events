@@ -1,5 +1,7 @@
+import { getConfig } from "./config";
+
 export function getBasePath() {
-	const frontendUrl: string = import.meta.env.VITE_FRONTEND_URL || "/"; // The env should be set but if not, fallback to root
+	const frontendUrl: string = getConfig("VITE_FRONTEND_URL") as string;
 
 	try {
 		const url = new URL(frontendUrl);
@@ -11,10 +13,10 @@ export function getBasePath() {
 		}
 
 		return basePath || "/";
-	} catch (e) {
+	} catch ( e ) {
 		// If URL parsing fails, fallback to root
 		console.warn(
-			`Invalid frontend URL: ${frontendUrl}. This might be due to an incorrect environment variable 'VITE_FRONTEND_URL'.`
+			`Invalid frontend URL: ${frontendUrl}. This might be due to an incorrect environment variable 'VITE_FRONTEND_URL'.`, e
 		);
 
 		return "/";
