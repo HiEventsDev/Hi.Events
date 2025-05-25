@@ -1,8 +1,8 @@
 import { getConfig } from "./config";
 
 export function getBasePath() {
-	const frontendUrl: string = getConfig("VITE_FRONTEND_URL") as string;
-
+	const frontendUrl: string = getConfig( "VITE_FRONTEND_URL" ) as string || import.meta.env.VITE_FRONTEND_URL as string;
+	
 	try {
 		const url = new URL(frontendUrl);
 		let basePath: string = url.pathname;
