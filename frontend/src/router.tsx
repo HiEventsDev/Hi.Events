@@ -1,9 +1,14 @@
-import {Navigate, RouteObject} from "react-router";
+import {LoaderFunctionArgs, Navigate, RouteObject} from "react-router";
 import ErrorPage from "./error-page.tsx";
 import {eventsClientPublic} from "./api/event.client.ts";
 import {promoCodeClientPublic} from "./api/promo-code.client.ts";
 import {useEffect, useState} from "react";
 import {useGetMe} from "./queries/useGetMe.ts";
+import {organizerPublicClient} from "./api/organizer.client.ts";
+import {getOrganizerQuery, useGetOrganizer} from "./queries/useGetOrganizer.ts";
+import {queryClient} from "./utilites/queryClient.ts";
+import {getEventPublicQuery} from "./queries/useGetEventPublic.ts";
+import {publicEventRouteLoader} from "./routeLoaders/publicEventRouteLoader.ts";
 
 const Root = () => {
     const [redirectPath, setRedirectPath] = useState<string | null>(null);
@@ -86,13 +91,13 @@ export const router: RouteObject[] = [
                     return {Component: Dashboard.default};
                 },
             },
-            {
-                path: "organizer/:organizerId/events?/:eventsState?",
-                async lazy() {
-                    const OrganizerDashboard = await import("./components/routes/organizer/OrganizerDashboard");
-                    return {Component: OrganizerDashboard.default};
-                }
-            },
+            // {
+            //     path: "organizer/:organizerId/events?/:eventsState?",
+            //     async lazy() {
+            //         const OrganizerDashboard = await import("./components/routes/organizer/OrganizerDashboard");
+            //         return {Component: OrganizerDashboard.default};
+            //     }
+            // },
             {
                 path: "account",
                 async lazy() {
@@ -193,6 +198,44 @@ export const router: RouteObject[] = [
                 ]
             },
         ]
+    },
+    {
+        path: "/dashboard/:organizerId?",
+        async lazy() {
+            const Dashboard = await import("./components/layouts/OrganizerLayout");
+            return {Component: Dashboard.default};
+        },
+        errorElement: <ErrorPage/>,
+        children: [
+            {
+                path: "",
+                async lazy() {
+                    const OrganizerDashboard = await import("./components/routes/organizer/OrganizerDashboard");
+                    return {Component: OrganizerDashboard.default};
+                }
+            },
+            {
+                path: "events",
+                async lazy() {
+                    const Events = await import("./components/routes/organizer/Events");
+                    return {Component: Events.default};
+                }
+            },
+            {
+                path: "settings",
+                async lazy() {
+                    const Settings = await import("./components/routes/organizer/Settings");
+                    return {Component: Settings.default};
+                }
+            },
+            {
+                path: "organizer-homepage-designer",
+                async lazy() {
+                    const OrganizerHomepageDesigner = await import("./components/routes/organizer/OrganizerHomepageDesigner");
+                    return {Component: OrganizerHomepageDesigner.default};
+                }
+            }
+        ],
     },
     {
         path: "/manage/event/:eventId",
@@ -331,6 +374,19 @@ export const router: RouteObject[] = [
         ]
     },
     {
+        path: "/events/:organizerId/:organizerSlug",
+        loader: async ({params}: LoaderFunctionArgs) => {
+            const organizerId = params.organizerId!;
+            await queryClient.fetchQuery(getOrganizerQuery(organizerId));
+            return { organizerId };
+        },
+        async lazy() {
+            const PublicOrganizer = await import("./components/layouts/PublicOrganizer");
+            return {Component: PublicOrganizer.default};
+        },
+        errorElement: <ErrorPage/>,
+    },
+    {
         path: "/e/:eventId/:eventSlug",
         async lazy() {
             const EventHomepage = await import("./components/layouts/EventHomepage");
@@ -347,29 +403,7 @@ export const router: RouteObject[] = [
     },
     {
         path: "/event/:eventId/:eventSlug",
-        loader: async ({params, request}) => {
-            try {
-                const url = new URL(request.url)
-                const queryParams = new URLSearchParams(url.search);
-                const promoCode = queryParams.get("promo_code") ?? null
-                const {data: event} = await eventsClientPublic.findByID(params.eventId, promoCode);
-                let promoCodeValid: undefined | boolean = undefined;
-                if (promoCode) {
-                    promoCodeValid = (await promoCodeClientPublic.validateCode(params.eventId, promoCode)).valid;
-                }
-
-                return {event, promoCodeValid, promoCode};
-            } catch (error: any) {
-                // for 404s we want to return null so that the 404 page is shown
-                if (error?.response?.status === 404) {
-                    return {event: null, promoCodeValid: undefined, promoCode: null};
-                }
-
-                console.error(error);
-
-                throw error;
-            }
-        },
+        loader: publicEventRouteLoader,
         async lazy() {
             const PublicEvent = await import("./components/layouts/PublicEvent");
             return {Component: PublicEvent.default};

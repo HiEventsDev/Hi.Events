@@ -2,7 +2,7 @@
 
 namespace HiEvents\Services\Application\Handlers\Organizer;
 
-use HiEvents\DomainObjects\Enums\OrganizerImageType;
+use HiEvents\DomainObjects\Enums\ImageType;
 use HiEvents\DomainObjects\ImageDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
@@ -49,7 +49,7 @@ readonly class CreateOrganizerHandler
                 image: $organizerData->logo,
                 entityId: $organizer->getId(),
                 entityType: OrganizerDomainObject::class,
-                imageType: OrganizerImageType::LOGO,
+                imageType: ImageType::ORGANIZER_LOGO->name,
             );
         }
 

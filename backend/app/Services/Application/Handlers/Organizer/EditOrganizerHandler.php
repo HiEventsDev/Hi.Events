@@ -2,7 +2,7 @@
 
 namespace HiEvents\Services\Application\Handlers\Organizer;
 
-use HiEvents\DomainObjects\Enums\OrganizerImageType;
+use HiEvents\DomainObjects\Enums\ImageType;
 use HiEvents\DomainObjects\ImageDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Repository\Interfaces\ImageRepositoryInterface;
@@ -68,14 +68,14 @@ readonly class EditOrganizerHandler
         $this->imageRepository->deleteWhere([
             'entity_id' => $organizerData->id,
             'entity_type' => OrganizerDomainObject::class,
-            'type' => OrganizerImageType::LOGO->name,
+            'type' => ImageType::ORGANIZER_LOGO->name,
         ]);
 
         $this->imageUploadService->upload(
             image: $organizerData->logo,
             entityId: $organizerData->id,
             entityType: OrganizerDomainObject::class,
-            imageType: OrganizerImageType::LOGO->name,
+            imageType: ImageType::ORGANIZER_LOGO->name,
         );
     }
 }

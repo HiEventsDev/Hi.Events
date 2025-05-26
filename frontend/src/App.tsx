@@ -12,6 +12,7 @@ import "@mantine/core/styles.css";
 import "@mantine/notifications/styles.css";
 import "@mantine/tiptap/styles.css";
 import "@mantine/dropzone/styles.css";
+import '@mantine/dates/styles.css';
 import "@mantine/charts/styles.css";
 import "./styles/global.scss";
 import {isSsr} from "./utilites/helpers.ts";

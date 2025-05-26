@@ -1,6 +1,52 @@
+.statisticsContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); // Responsive grid
+  gap: var(--mantine-spacing-lg); // Use Mantine spacing
+  margin-bottom: var(--mantine-spacing-xl);
 
-.topLinks {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 1rem;
+  @media (min-width: 576px) { // Mantine 'sm' breakpoint for 2 columns
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media (min-width: 992px) { // Mantine 'md' breakpoint for 3 columns
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @media (min-width: 1200px) { // Mantine 'lg' breakpoint for 4 columns
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.statisticsSkeletonContainer {
+  @extend .statisticsContainer; // Inherit grid layout from above
+}
+
+.currencySwitcher {
+  min-width: 150px;
+  max-width: 200px;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    max-width: none;
+    margin-top: var(--mantine-spacing-sm);
+  }
+}
+
+.sectionTitle {
+  font-weight: 600;
+  color: var(--mantine-color-dark-6);
+  letter-spacing: -0.01em;
+}
+
+.listItemCard {
+  background-color: var(--mantine-color-body);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--mantine-shadow-sm);
+  }
+
+  .itemTitle {
+    color: var(--mantine-color-dark-7);
+    letter-spacing: -0.01em;
+  }
 }

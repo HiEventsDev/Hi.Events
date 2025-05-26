@@ -26,6 +26,10 @@ class OrganizerResource extends JsonResource
                 (bool)$this->getImages(),
                 fn() => ImageResource::collection($this->getImages())
             ),
+            'settings' => $this->when(
+                condition: !is_null($this->getOrganizerSettings()),
+                value: fn() => new OrganizerSettingsResource($this->getOrganizerSettings())
+            ),
         ];
     }
 }

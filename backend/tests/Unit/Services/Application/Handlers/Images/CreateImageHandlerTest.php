@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Services\Application\Handlers\Images;
 
-use HiEvents\DomainObjects\Enums\ImageTypes;
+use HiEvents\DomainObjects\Enums\ImageType;
 use HiEvents\DomainObjects\ImageDomainObject;
 use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Services\Application\Handlers\Images\CreateImageHandler;
@@ -45,7 +45,7 @@ class CreateImageHandlerTest extends TestCase
                 $uploadedFile,
                 42,
                 UserDomainObject::class,
-                ImageTypes::GENERIC->name,
+                ImageType::GENERIC->name,
             ])
             ->andReturn($imageDomainObject);
 

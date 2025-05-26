@@ -3,6 +3,7 @@
 namespace HiEvents\Resources\Organizer;
 
 use HiEvents\DomainObjects\OrganizerDomainObject;
+use HiEvents\Resources\Event\EventResourcePublic;
 use HiEvents\Resources\Image\ImageResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -21,6 +22,14 @@ class OrganizerResourcePublic extends JsonResource
             'images' => $this->when(
                 (bool)$this->getImages(),
                 fn() => ImageResource::collection($this->getImages())
+            ),
+            'events' => $this->when(
+                condition: !is_null($this->getEvents()),
+                value: fn() => EventResourcePublic::collection($this->getEvents())
+            ),
+            'settings' => $this->when(
+                condition: !is_null($this->getOrganizerSettings()),
+                value: fn() => new OrganizerSettingsPublicResource($this->getOrganizerSettings())
             ),
         ];
     }

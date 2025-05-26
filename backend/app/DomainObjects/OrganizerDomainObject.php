@@ -13,6 +13,8 @@ class OrganizerDomainObject extends Generated\OrganizerDomainObjectAbstract
      */
     private ?Collection $events = null;
 
+    private ?OrganizerSettingDomainObject $settings = null;
+
     public function getImages(): ?Collection
     {
         return $this->images;
@@ -33,6 +35,18 @@ class OrganizerDomainObject extends Generated\OrganizerDomainObjectAbstract
     public function setEvents(?Collection $events): self
     {
         $this->events = $events;
+
+        return $this;
+    }
+
+    public function getOrganizerSettings(): ?OrganizerSettingDomainObject
+    {
+        return $this->settings;
+    }
+
+    public function setOrganizerSettings(?OrganizerSettingDomainObject $settings): self
+    {
+        $this->settings = $settings;
 
         return $this;
     }

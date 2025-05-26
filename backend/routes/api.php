@@ -46,7 +46,6 @@ use HiEvents\Http\Actions\Events\GetOrganizerEventsPublicAction;
 use HiEvents\Http\Actions\Events\Images\CreateEventImageAction;
 use HiEvents\Http\Actions\Events\Images\DeleteEventImageAction;
 use HiEvents\Http\Actions\Events\Images\GetEventImagesAction;
-use HiEvents\Http\Actions\Events\Stats\GetEventCheckInStatsAction;
 use HiEvents\Http\Actions\Events\Stats\GetEventStatsAction;
 use HiEvents\Http\Actions\Events\UpdateEventAction;
 use HiEvents\Http\Actions\Events\UpdateEventStatusAction;
@@ -54,6 +53,7 @@ use HiEvents\Http\Actions\EventSettings\EditEventSettingsAction;
 use HiEvents\Http\Actions\EventSettings\GetEventSettingsAction;
 use HiEvents\Http\Actions\EventSettings\PartialEditEventSettingsAction;
 use HiEvents\Http\Actions\Images\CreateImageAction;
+use HiEvents\Http\Actions\Images\DeleteImageAction;
 use HiEvents\Http\Actions\Messages\GetMessagesAction;
 use HiEvents\Http\Actions\Messages\SendMessageAction;
 use HiEvents\Http\Actions\Orders\CancelOrderAction;
@@ -79,6 +79,10 @@ use HiEvents\Http\Actions\Organizers\GetOrganizerAction;
 use HiEvents\Http\Actions\Organizers\GetOrganizerEventsAction;
 use HiEvents\Http\Actions\Organizers\GetOrganizersAction;
 use HiEvents\Http\Actions\Organizers\GetPublicOrganizerAction;
+use HiEvents\Http\Actions\Organizers\Orders\GetOrganizerOrdersAction;
+use HiEvents\Http\Actions\Organizers\Settings\GetOrganizerSettingsAction;
+use HiEvents\Http\Actions\Organizers\Settings\PartialUpdateOrganizerSettingsAction;
+use HiEvents\Http\Actions\Organizers\Stats\GetOrganizerStatsAction;
 use HiEvents\Http\Actions\ProductCategories\CreateProductCategoryAction;
 use HiEvents\Http\Actions\ProductCategories\DeleteProductCategoryAction;
 use HiEvents\Http\Actions\ProductCategories\EditProductCategoryAction;
@@ -186,6 +190,10 @@ $router->middleware(['auth:api'])->group(
         $router->get('/organizers', GetOrganizersAction::class);
         $router->get('/organizers/{organizer_id}', GetOrganizerAction::class);
         $router->get('/organizers/{organizer_id}/events', GetOrganizerEventsAction::class);
+        $router->get('/organizers/{organizer_id}/stats', GetOrganizerStatsAction::class);
+        $router->get('/organizers/{organizer_id}/orders', GetOrganizerOrdersAction::class);
+        $router->get('/organizers/{organizer_id}/settings', GetOrganizerSettingsAction::class);
+        $router->patch('/organizers/{organizer_id}/settings', PartialUpdateOrganizerSettingsAction::class);
 
         // Taxes and Fees
         $router->post('/accounts/{account_id}/taxes-and-fees', CreateTaxOrFeeAction::class);
@@ -217,7 +225,6 @@ $router->middleware(['auth:api'])->group(
         $router->get('/events/{event_id}/products', GetProductsAction::class);
 
         // Stats
-        $router->get('/events/{event_id}/check_in_stats', GetEventCheckInStatsAction::class);
         $router->get('/events/{event_id}/stats', GetEventStatsAction::class);
 
         // Attendees
@@ -301,6 +308,7 @@ $router->middleware(['auth:api'])->group(
 
         // Images
         $router->post('/images', CreateImageAction::class);
+        $router->delete('/images/{image_id}', DeleteImageAction::class);
     }
 );
 

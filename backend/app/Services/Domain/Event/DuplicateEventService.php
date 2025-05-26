@@ -4,7 +4,7 @@ namespace HiEvents\Services\Domain\Event;
 
 use HiEvents\DomainObjects\CapacityAssignmentDomainObject;
 use HiEvents\DomainObjects\CheckInListDomainObject;
-use HiEvents\DomainObjects\Enums\EventImageType;
+use HiEvents\DomainObjects\Enums\ImageType;
 use HiEvents\DomainObjects\Enums\QuestionBelongsTo;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
@@ -305,12 +305,12 @@ class DuplicateEventService
     private function cloneEventCoverImage(EventDomainObject $event, int $newEventId): void
     {
         /** @var ImageDomainObject $coverImage */
-        $coverImage = $event->getImages()?->first(fn(ImageDomainObject $image) => $image->getType() === EventImageType::EVENT_COVER->name);
+        $coverImage = $event->getImages()?->first(fn(ImageDomainObject $image) => $image->getType() === ImageType::EVENT_COVER->name);
         if ($coverImage) {
             $this->imageRepository->create([
                 'entity_id' => $newEventId,
                 'entity_type' => EventDomainObject::class,
-                'type' => EventImageType::EVENT_COVER->name,
+                'type' => ImageType::EVENT_COVER->name,
                 'disk' => $coverImage->getDisk(),
                 'path' => $coverImage->getPath(),
                 'filename' => $coverImage->getFileName(),

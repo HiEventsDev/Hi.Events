@@ -1,0 +1,372 @@
+// EventCard.module.scss - Simplified version
+
+:root {
+  --status-success: #10b981;
+  --status-success-bg: #ecfdf5;
+  --status-warning: #f59e0b;
+  --status-warning-bg: #fffbeb;
+  --status-error: #ef4444;
+  --status-error-bg: #fef2f2;
+  --status-draft: #6b7280;
+  --status-draft-bg: #f9fafb;
+}
+
+.eventCard {
+  display: flex;
+  align-items: stretch;
+  gap: 1.5rem;
+  padding: 2rem;
+  background: linear-gradient(
+                  135deg,
+                  color-mix(in srgb, var(--homepage_background_color) 98%, var(--homepage_primary_color) 2%),
+                  color-mix(in srgb, var(--homepage_background_color) 95%, var(--homepage_secondary_color) 5%)
+  );
+  border-radius: 20px;
+  margin-bottom: 1.5rem;
+  border: 1px solid color-mix(in srgb, var(--homepage_secondary_color) 60%, transparent 40%);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  min-height: 140px;
+
+  &:hover {
+    border-color: color-mix(in srgb, var(--homepage_primary_color) 80%, transparent 20%);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3),
+    0 8px 16px color-mix(in srgb, var(--homepage_primary_color) 20%, transparent 80%);
+    transform: translateY(-4px);
+  }
+}
+
+.eventDate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100px; // Fixed square width
+  height: 100px; // Fixed square height
+  padding: 1rem;
+  background: linear-gradient(
+                  135deg,
+                  color-mix(in srgb, var(--homepage_background_color) 90%, var(--homepage_primary_color) 10%),
+                  color-mix(in srgb, var(--homepage_background_color) 95%, var(--homepage_secondary_color) 5%)
+  );
+  border-radius: 16px;
+  border: 2px solid color-mix(in srgb, var(--homepage_secondary_color) 40%, transparent 60%);
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+
+  .eventCard:hover & {
+    border-color: color-mix(in srgb, var(--homepage_primary_color) 60%, transparent 40%);
+    transform: scale(1.05);
+  }
+}
+
+.dateInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.25rem;
+}
+
+.month {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--homepage_primary_color);
+  line-height: 1.1;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.dayName {
+  font-size: 0.8rem;
+  color: var(--homepage_secondary_text_color);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+  opacity: 0.8;
+}
+
+.eventDetails {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.eventTime {
+  font-size: 0.95rem;
+  color: var(--homepage_secondary_text_color);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  &::before {
+    content: '🕐';
+    font-size: 0.9rem;
+  }
+}
+
+.endTime {
+  color: color-mix(in srgb, var(--homepage_secondary_text_color) 80%, transparent 20%);
+  font-weight: 500;
+}
+
+.eventTitle {
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin: 0;
+  color: var(--homepage_primary_text_color);
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.eventDescription {
+  font-size: 0.95rem;
+  color: color-mix(in srgb, var(--homepage_secondary_text_color) 90%, var(--homepage_primary_text_color) 10%);
+  line-height: 1.5;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.eventMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.location {
+  font-size: 0.9rem;
+  color: var(--homepage_secondary_text_color);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  padding: 0.25rem 0.75rem;
+  background: color-mix(in srgb, var(--homepage_secondary_color) 30%, transparent 70%);
+  border-radius: 20px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: color-mix(in srgb, var(--homepage_primary_color) 20%, transparent 80%);
+    color: var(--homepage_primary_text_color);
+  }
+}
+
+.organizer {
+  font-size: 0.9rem;
+  color: var(--homepage_secondary_text_color);
+  font-style: italic;
+  font-weight: 500;
+  opacity: 0.9;
+}
+
+.status {
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  &.published {
+    background: var(--status-success-bg);
+    color: var(--status-success);
+  }
+
+  &.draft {
+    background: var(--status-draft-bg);
+    color: var(--status-draft);
+  }
+
+  &.cancelled {
+    background: var(--status-error-bg);
+    color: var(--status-error);
+  }
+}
+
+.eventImage {
+  width: 120px;
+  height: 100px;
+  border-radius: 16px;
+  overflow: hidden;
+  flex-shrink: 0;
+  position: relative;
+  transition: all 0.3s ease;
+  align-self: flex-start;
+
+  .eventCard:hover & {
+    transform: scale(1.08);
+  }
+}
+
+.coverImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: all 0.3s ease;
+
+  .eventCard:hover & {
+    transform: scale(1.1);
+  }
+}
+
+.placeholderImage {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+                  135deg,
+                  color-mix(in srgb, var(--homepage_secondary_color) 70%, var(--homepage_primary_color) 30%),
+                  color-mix(in srgb, var(--homepage_secondary_color) 50%, var(--homepage_primary_color) 50%)
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  position: relative;
+
+  // Keep the sheen effect on placeholder
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+    animation: shimmer 2s infinite;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.placeholderIcon {
+  font-size: 2.5rem;
+  opacity: 0.9;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.timeUntilContainer {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 15;
+}
+
+.timeUntil {
+  padding: 0.4rem 0.9rem;
+  background: color-mix(in srgb, var(--homepage_background_color) 90%, transparent 10%);
+  color: var(--homepage_secondary_text_color);
+  border-radius: 16px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border: 1px solid color-mix(in srgb, var(--homepage_secondary_color) 50%, transparent 50%);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  &.eventSoon {
+    background: color-mix(in srgb, var(--homepage_primary_color) 15%, var(--homepage_background_color) 85%);
+    color: var(--homepage_primary_color);
+    border-color: color-mix(in srgb, var(--homepage_primary_color) 40%, transparent 60%);
+  }
+}
+
+.attendees {
+  background: color-mix(in srgb, var(--homepage_background_color) 85%, transparent 15%);
+  color: var(--homepage_primary_text_color);
+  padding: 0.5rem 0.875rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid color-mix(in srgb, var(--homepage_secondary_color) 50%, transparent 50%);
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: color-mix(in srgb, var(--homepage_primary_color) 80%, transparent 20%);
+    border-color: var(--homepage_primary_color);
+  }
+}
+
+.eventStats {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  display: flex;
+  gap: 0.75rem;
+  z-index: 10;
+}
+
+.liveIndicator {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 15;
+
+  span {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .eventCard {
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1.5rem;
+  }
+
+  .eventDate {
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    height: auto;
+    padding: 1rem 1.5rem;
+  }
+
+  .dateInfo {
+    flex-direction: row;
+    gap: 1rem;
+    align-items: baseline;
+  }
+
+  .eventImage {
+    width: 100%;
+    height: 140px;
+    order: -1;
+  }
+
+  .eventStats,
+  .timeUntilContainer {
+    position: relative;
+    top: auto;
+    right: auto;
+    justify-content: flex-start;
+    margin-top: 1rem;
+  }
+}
