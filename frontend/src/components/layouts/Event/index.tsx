@@ -36,6 +36,7 @@ import {useUpdateEventStatus} from "../../../mutations/useUpdateEventStatus.ts";
 import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {ShareModal} from "../../modals/ShareModal";
 import {useDisclosure} from "@mantine/hooks";
+import {TopBarButton} from "../../common/TopBarButton";
 
 const EventLayout = () => {
     const location = useLocation();
@@ -94,7 +95,7 @@ const EventLayout = () => {
         },
         ...(isEventFetched ? [
             {
-                link: `/manage/organizer/${event?.organizer?.id}`,
+                link: `/dashboard/${event?.organizer?.id}`,
                 content: <Truncate length={24} text={event?.organizer?.name} showTooltip={false}/>
             },
             {
@@ -134,10 +135,9 @@ const EventLayout = () => {
             topBarContent={(
                 <div className={classes.statusToggleContainer}>
                     {isEventFetched && (
-                        <Button
+                        <TopBarButton
                             onClick={handleStatusToggle}
                             size="sm"
-                            className={`${classes.statusToggleButton} ${event?.status === 'DRAFT' ? classes.draftButton : classes.liveButton}`}
                             leftSection={event?.status === 'DRAFT' ? <IconEyeOff size={16}/> : <IconEye size={16}/>}
                             rightSection={<IconChevronRight size={14}/>}
                         >
@@ -147,7 +147,7 @@ const EventLayout = () => {
                                 : <span>{t`Live`} <span
                                     className={classes.statusAction}>{t`- Click to Unpublish`}</span></span>
                             }
-                        </Button>
+                        </TopBarButton>
                     )}
                 </div>
             )}

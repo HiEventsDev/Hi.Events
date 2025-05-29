@@ -3,6 +3,7 @@
 namespace HiEvents\DomainObjects;
 
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class OrganizerDomainObject extends Generated\OrganizerDomainObjectAbstract
 {
@@ -49,5 +50,10 @@ class OrganizerDomainObject extends Generated\OrganizerDomainObjectAbstract
         $this->settings = $settings;
 
         return $this;
+    }
+
+    public function getSlug(): string
+    {
+        return Str::slug($this->name);
     }
 }

@@ -19,4 +19,9 @@ export const getOrganizerPublicQuery = (
     retry: false,
 });
 
-export const useGetOrganizerPublic = (organizerId: IdParam) => useQuery<Organizer, AxiosError>(getOrganizerPublicQuery(organizerId));
+export const useGetOrganizerPublic = (organizerId: IdParam | undefined, options?: {enabled?: boolean}) => {
+    return useQuery<Organizer, AxiosError>({
+        ...getOrganizerPublicQuery(organizerId || ''),
+        enabled: !!organizerId && (options?.enabled ?? true)
+    });
+};

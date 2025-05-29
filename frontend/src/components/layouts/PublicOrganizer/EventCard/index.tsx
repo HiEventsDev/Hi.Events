@@ -1,199 +1,192 @@
-import React, { useState, useEffect } from 'react';
-import { Event } from "../../../../types.ts";
+import React from 'react';
+import {Link} from "react-router";
+import {Event} from "../../../../types.ts";
 import classes from './EventCard.module.scss';
+import {formatDate} from "../../../../utilites/dates.ts";
+import {t} from "@lingui/macro";
+import {isLightColor} from "@mantine/core";
+import {formatCurrency} from "../../../../utilites/currency.ts";
+import {eventHomepagePath, eventHomepageUrl} from "../../../../utilites/urlHelper.ts";
+import {getProductsFromEvent} from "../../../../utilites/helpers.ts";
+import {ShareComponent} from "../../../common/ShareIcon";
+import dayjs from "dayjs";
+import {IconCalendar, IconClock, IconMapPin, IconTicket, IconWifi} from '@tabler/icons-react';
 
 interface EventCardProps {
     event: Event;
-    onClick?: () => void;
+    primaryColor?: string;
 }
 
-export const EventCard: React.FC<EventCardProps> = ({ event, onClick }) => {
-    const [timeUntilEvent, setTimeUntilEvent] = useState<string>('');
-    const [isEventSoon, setIsEventSoon] = useState<boolean>(false);
+const placeholderEmojis = ['🎉', '🎪', '🎸', '🎨', '🌟'];
 
-    const startDate = new Date(event.start_date);
-    const endDate = event.end_date ? new Date(event.end_date) : null;
+export const EventCard: React.FC<EventCardProps> = ({event, primaryColor = '#8b5cf6'}) => {
+    const dateTextColor = isLightColor(primaryColor) ? '#000000' : '#ffffff';
 
-    const formatDate = (date: Date) => ({
-        month: date.toLocaleDateString('en-US', { month: 'short' }),
-        day: date.getDate(),
-        dayName: date.toLocaleDateString('en-US', { weekday: 'long' }),
-        time: date.toLocaleTimeString('en-US', {
-            hour: 'numeric',
-            minute: '2-digit',
-            hour12: true
-        })
-    });
+    // Get emoji based on event ID for consistency
+    const emojiIndex = event.id ? Number(event.id) % placeholderEmojis.length : 0;
+    const placeholderEmoji = placeholderEmojis[emojiIndex];
 
-    const startDateFormatted = formatDate(startDate);
-    const endDateFormatted = endDate ? formatDate(endDate) : null;
+    // Format dates using the event's timezone
+    const startMonth = formatDate(event.start_date, "MMM", event.timezone);
+    const startDay = formatDate(event.start_date, "D", event.timezone);
+    const startTime = formatDate(event.start_date, "h:mm A", event.timezone);
+    const endTime = event.end_date ? formatDate(event.end_date, "h:mm A", event.timezone) : null;
 
-    useEffect(() => {
-        const updateTimeUntil = () => {
-            const now = new Date();
-            const timeDiff = startDate.getTime() - now.getTime();
-
-            if (timeDiff > 0) {
-                const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-
-                if (days > 0) {
-                    setTimeUntilEvent(`${days}d ${hours}h`);
-                    setIsEventSoon(days <= 7);
-                } else if (hours > 0) {
-                    setTimeUntilEvent(`${hours}h ${minutes}m`);
-                    setIsEventSoon(true);
-                } else if (minutes > 0) {
-                    setTimeUntilEvent(`${minutes}m`);
-                    setIsEventSoon(true);
-                } else {
-                    setTimeUntilEvent('Starting soon');
-                    setIsEventSoon(true);
-                }
-            } else {
-                const endTime = endDate ? endDate.getTime() : startDate.getTime() + (2 * 60 * 60 * 1000);
-                if (now.getTime() < endTime) {
-                    setTimeUntilEvent('Live now');
-                } else {
-                    setTimeUntilEvent('Ended');
-                }
-                setIsEventSoon(false);
-            }
-        };
-
-        updateTimeUntil();
-        const interval = setInterval(updateTimeUntil, 60000);
-        return () => clearInterval(interval);
-    }, [startDate, endDate]);
+    // Check if event spans multiple days
+    const isSameDay = event.end_date && event.start_date.substring(0, 10) === event.end_date.substring(0, 10);
+    const endMonth = event.end_date ? formatDate(event.end_date, "MMM", event.timezone) : null;
+    const endDay = event.end_date ? formatDate(event.end_date, "D", event.timezone) : null;
 
     const coverImage = event.images?.find(img => img.type === 'EVENT_COVER');
-    const location = event.location_details?.city || event.location_details?.venue_name;
+    const location = event?.settings?.location_details?.city || event?.settings?.location_details?.venue_name;
     const isOnlineEvent = event.settings?.is_online_event;
-    const attendeeCount = event.statistics?.attendee_count;
 
-    const formatAttendeeCount = (count: number) => {
-        return count >= 1000 ? `${(count / 1000).toFixed(1)}k` : count.toString();
-    };
+    // Check if event is live
+    const now = dayjs();
+    const startDate = dayjs(event.start_date);
+    const endDate = event.end_date ? dayjs(event.end_date) : startDate.add(2, 'hour');
+    const isLive = now.isAfter(startDate) && now.isBefore(endDate);
 
-    const getStatusDisplay = () => {
-        if (event.status === 'LIVE') return 'published';
-        if (event.status === 'DRAFT') return 'draft';
-        if (event.status === 'ARCHIVED') return 'cancelled';
-        return event.status?.toLowerCase() || 'draft';
-    };
+    // Get products from event categories
+    const products = getProductsFromEvent(event) || [];
 
-    const getStatusText = () => {
-        if (event.status === 'LIVE') return 'Published';
-        if (event.status === 'DRAFT') return 'Draft';
-        if (event.status === 'ARCHIVED') return 'Archived';
-        return event.status?.replace('_', ' ') || 'Draft';
-    };
+    // Calculate price range from products
+    let lowestPrice: number | null = null;
+    let highestPrice: number | null = null;
 
-    const handleClick = () => onClick?.();
+    products.forEach(product => {
+        if (product.prices && product.prices.length > 0) {
+            product.prices.forEach(price => {
+                const priceValue = price.price || 0;
+                if (lowestPrice === null || priceValue < lowestPrice) {
+                    lowestPrice = priceValue;
+                }
+                if (highestPrice === null || priceValue > highestPrice) {
+                    highestPrice = priceValue;
+                }
+            });
+        } else {
+            const priceValue = product.price || 0;
+            if (lowestPrice === null || priceValue < lowestPrice) {
+                lowestPrice = priceValue;
+            }
+            if (highestPrice === null || priceValue > highestPrice) {
+                highestPrice = priceValue;
+            }
+        }
+    });
+
+    const eventPath = eventHomepagePath(event);
 
     return (
-        <article
-            className={classes.eventCard}
-            onClick={handleClick}
-            role={onClick ? "button" : undefined}
-            tabIndex={onClick ? 0 : undefined}
-            onKeyDown={onClick ? (e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    handleClick();
-                }
-            } : undefined}
-            aria-label={`Event: ${event.title}`}
-        >
-            <div className={classes.eventDate}>
-                <div className={classes.dateInfo}>
-                    <span className={classes.month}>{startDateFormatted.month} {startDateFormatted.day}</span>
-                    <span className={classes.dayName}>{startDateFormatted.dayName}</span>
-                </div>
-            </div>
+        <Link to={eventPath} className={classes.eventCardLink}>
+            <article className={classes.eventCard}>
+                {/* Image Section */}
+                <div className={classes.eventImage}>
+                    <div className={classes.imageWrapper}>
+                        {coverImage ? (
+                            <img
+                                src={coverImage.url}
+                                alt={event.title}
+                                loading="lazy"
+                            />
+                        ) : (
+                            <div className={classes.placeholderImage}
+                                 style={{'--date-text-color': dateTextColor} as React.CSSProperties}>
+                                <div className={classes.placeholderContent}>
+                                    <span className={classes.placeholderIcon}>{placeholderEmoji}</span>
+                                    <div className={classes.sparkles}>
+                                        <span className={classes.sparkle}>✨</span>
+                                        <span className={classes.sparkle}>✨</span>
+                                        <span className={classes.sparkle}>✨</span>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
 
-            <div className={classes.eventDetails}>
-                <div className={classes.eventTime}>
-                    {startDateFormatted.time}
-                    {endDateFormatted && (
-                        <span className={classes.endTime}>
-                            {startDateFormatted.day !== endDateFormatted.day
-                                ? ` - ${endDateFormatted.month} ${endDateFormatted.day}, ${endDateFormatted.time}`
-                                : ` - ${endDateFormatted.time}`
-                            }
-                        </span>
-                    )}
-                </div>
-
-                <h3 className={classes.eventTitle}>{event.title}</h3>
-
-                {event.description_preview && (
-                    <p className={classes.eventDescription}>
-                        {event.description_preview}
-                    </p>
-                )}
-
-                <div className={classes.eventMeta}>
-                    {(location || isOnlineEvent) && (
-                        <span className={classes.location}>
-                            {isOnlineEvent ? '🌐 Online Event' : `📍 ${location}`}
-                        </span>
-                    )}
-
-                    {event.organizer?.name && (
-                        <span className={classes.organizer}>
-                            by {event.organizer.name}
-                        </span>
-                    )}
-                </div>
-
-                <div className={classes.statusBadge}>
-                    <span className={`${classes.status} ${classes[getStatusDisplay()]}`}>
-                        {getStatusText()}
-                    </span>
-                </div>
-            </div>
-
-            <div className={classes.eventImage}>
-                {coverImage ? (
-                    <img
-                        src={coverImage.url}
-                        alt={`${event.title} cover image`}
-                        className={classes.coverImage}
-                        loading="lazy"
-                    />
-                ) : (
-                    <div className={classes.placeholderImage}>
-                        <span className={classes.placeholderIcon}>🎉</span>
+                        {/* Floating elements on image */}
+                        <div className={classes.imageOverlay}>
+                            {isLive && (
+                                <div className={classes.liveIndicator}>
+                                    <span className={classes.liveDot}></span>
+                                    <span className={classes.liveText}>{t`LIVE`}</span>
+                                </div>
+                            )}
+                            <div className={classes.shareButton} onClick={(e) => e.preventDefault()}>
+                                <ShareComponent
+                                    title={event.title}
+                                    text={event.description_preview || ''}
+                                    url={eventHomepageUrl(event)}
+                                    hideShareButtonText={true}
+                                />
+                            </div>
+                        </div>
                     </div>
-                )}
-            </div>
 
-            {timeUntilEvent && (
-                <div className={classes.timeUntilContainer}>
-                    <span
-                        className={`${classes.timeUntil} ${isEventSoon ? classes.eventSoon : ''}`}
-                        title={`Time until event: ${timeUntilEvent}`}
-                    >
-                        {timeUntilEvent}
-                    </span>
+                    {/* Date badge - positioned outside of imageWrapper */}
+                    <div className={classes.dateBadge}>
+                        <IconCalendar size={16}/>
+                        <span>{startMonth} {startDay}</span>
+                    </div>
                 </div>
-            )}
 
-            {(attendeeCount !== undefined && attendeeCount > 0) && (
-                <div className={classes.eventStats}>
-                    <span className={classes.attendees} title={`${attendeeCount} attendees`}>
-                        👥 {formatAttendeeCount(attendeeCount)}
-                    </span>
-                </div>
-            )}
+                {/* Content Section */}
+                <div className={classes.eventContent}>
+                    <div className={classes.eventHeader}>
+                        <h3 className={classes.eventTitle}>{event.title}</h3>
 
-            {timeUntilEvent === 'Live now' && (
-                <div className={classes.liveIndicator}>
-                    <span>🔴 LIVE</span>
+                        <div className={classes.eventDateTime}>
+                            <IconClock size={14}/>
+                            <span>
+                                {startTime}
+                                {endTime && (
+                                    <>
+                                        {!isSameDay
+                                            ? ` - ${endMonth} ${endDay}, ${endTime}`
+                                            : ` - ${endTime}`
+                                        }
+                                    </>
+                                )}
+                            </span>
+                        </div>
+                    </div>
+
+                    {event.description_preview && (
+                        <p className={classes.eventDescription}>
+                            {event.description_preview}
+                        </p>
+                    )}
+
+                    <div className={classes.eventFooter}>
+                        <div className={classes.eventMeta}>
+                            {(location || isOnlineEvent) && (
+                                <div className={classes.location}>
+                                    {isOnlineEvent ? (
+                                        <><IconWifi size={14}/><span>{t`Online Event`}</span></>
+                                    ) : (
+                                        <><IconMapPin size={14}/><span>{location}</span></>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+
+                        {lowestPrice !== null && (
+                            <div className={classes.priceSection}>
+                                <IconTicket size={14}/>
+                                <span className={lowestPrice === 0 ? classes.free : classes.price}>
+                                    {lowestPrice === 0 ? (
+                                        t`Free`
+                                    ) : highestPrice !== null && highestPrice !== lowestPrice ? (
+                                        `${formatCurrency(lowestPrice, event.currency)} - ${formatCurrency(highestPrice, event.currency)}`
+                                    ) : (
+                                        formatCurrency(lowestPrice, event.currency)
+                                    )}
+                                </span>
+                            </div>
+                        )}
+                    </div>
                 </div>
-            )}
-        </article>
+            </article>
+        </Link>
     );
 };

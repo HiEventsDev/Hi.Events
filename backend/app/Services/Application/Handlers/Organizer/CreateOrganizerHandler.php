@@ -2,21 +2,21 @@
 
 namespace HiEvents\Services\Application\Handlers\Organizer;
 
-use HiEvents\DomainObjects\Enums\ImageType;
+use HiEvents\DomainObjects\Enums\OrganizerHomepageVisibility;
 use HiEvents\DomainObjects\ImageDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
+use HiEvents\Repository\Interfaces\OrganizerSettingsRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Organizer\DTO\CreateOrganizerDTO;
-use HiEvents\Services\Domain\Image\ImageUploadService;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
 
-readonly class CreateOrganizerHandler
+class CreateOrganizerHandler
 {
     public function __construct(
-        private OrganizerRepositoryInterface $organizerRepository,
-        private ImageUploadService           $imageUploadService,
-        private DatabaseManager              $databaseManager,
+        private readonly OrganizerRepositoryInterface         $organizerRepository,
+        private readonly DatabaseManager                      $databaseManager,
+        private readonly OrganizerSettingsRepositoryInterface $organizerSettingsRepository
     )
     {
     }
@@ -44,17 +44,27 @@ readonly class CreateOrganizerHandler
             'currency' => $organizerData->currency,
         ]);
 
-        if ($organizerData->logo !== null) {
-            $this->imageUploadService->upload(
-                image: $organizerData->logo,
-                entityId: $organizer->getId(),
-                entityType: OrganizerDomainObject::class,
-                imageType: ImageType::ORGANIZER_LOGO->name,
-            );
-        }
+        $this->createOrganizerSettings($organizer);
 
         return $this->organizerRepository
             ->loadRelation(ImageDomainObject::class)
             ->findById($organizer->getId());
+    }
+
+    public function createOrganizerSettings(OrganizerDomainObject $organizer): void
+    {
+        $this->organizerSettingsRepository->create([
+            'organizer_id' => $organizer->getId(),
+            'homepage_visibility' => OrganizerHomepageVisibility::PUBLIC->name,
+
+            'homepage_theme_settings' => [
+                'homepage_background_color' => '#faf5ff',
+                'homepage_content_background_color' => '#ffffff',
+                'homepage_primary_color' => '#7c3aed',
+                'homepage_primary_text_color' => '#1f2937',
+                'homepage_secondary_color' => '#8b5cf6',
+                'homepage_secondary_text_color' => '#6b7280',
+            ],
+        ]);
     }
 }

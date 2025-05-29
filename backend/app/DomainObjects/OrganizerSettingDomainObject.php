@@ -11,10 +11,10 @@ class OrganizerSettingDomainObject extends Generated\OrganizerSettingDomainObjec
         return $handles[$platform] ?? null;
     }
 
-    public function getHomepageThemeSetting(string $key): ?string
+    public function getHomepageThemeSetting(string $key, string $default = ''): ?string
     {
         $settings = $this->getHomepageThemeSettings();
 
-        return $settings[$key] ?? null;
+        return $settings[$key] ?? $default;
     }
 }

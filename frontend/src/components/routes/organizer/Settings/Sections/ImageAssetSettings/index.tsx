@@ -12,6 +12,10 @@ const Settings = () => {
     const organizerLogo = organizer?.images?.find((image) => image.type === 'ORGANIZER_LOGO');
     const organizerCover = organizer?.images?.find((image) => image.type === 'ORGANIZER_COVER');
 
+    const handleImageChange = () => {
+        organizerQuery.refetch();
+    };
+
     return (
         <>
             <Card>
@@ -24,6 +28,7 @@ const Settings = () => {
                     helpText={t`Upload a logo for your organizer`}
                     imageType={'ORGANIZER_LOGO'}
                     entityId={organizerId}
+                    onUploadSuccess={handleImageChange}
                     existingImageData={{
                         url: organizerLogo?.url,
                         id: organizerLogo?.id,
@@ -34,6 +39,7 @@ const Settings = () => {
                     helpText={t`Upload a cover image for your organizer`}
                     imageType={'ORGANIZER_COVER'}
                     entityId={organizerId}
+                    onUploadSuccess={handleImageChange}
                     existingImageData={{
                         url: organizerCover?.url,
                         id: organizerCover?.id,

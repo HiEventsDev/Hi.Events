@@ -1,0 +1,19 @@
+@use "../../../styles/mixins.scss";
+
+.viewHomepageButton {
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-weight: 500;
+  transition: color 0.2s ease;
+  
+  &:hover {
+    color: #ffffff !important;
+  }
+
+  @include mixins.respond-below(md) {
+    color: var(--mantine-color-dark-0) !important;
+    
+    &:hover {
+      color: var(--mantine-color-dark-9) !important;
+    }
+  }
+}

@@ -4,68 +4,13 @@
   display: flex;
   align-items: center;
   position: relative;
-  margin-left: 16px;
+  margin-left: 0px;
   margin-right: auto;
 
   @include mixins.respond-below(md) {
     margin-left: 16px;
   }
 
-  .statusToggleButton {
-    display: flex;
-    align-items: center;
-    padding: 0 12px;
-    height: 34px;
-    font-weight: 600;
-    border-radius: 17px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    position: relative;
-    overflow: hidden;
-
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: radial-gradient(circle at center, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 70%);
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-
-      &::before {
-        opacity: 1;
-      }
-    }
-
-    &:active {
-      transform: translateY(0);
-    }
-
-    @include mixins.respond-below(sm) {
-      .statusAction {
-        display: none;
-      }
-    }
-  }
-
-  .draftButton,
-  .liveButton {
-    color: white;
-    background: rgba(255, 255, 255, 0.15) !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-
-    &:hover {
-      background: rgba(255, 255, 255, 0.2) !important;
-    }
-  }
   .statusAction {
     margin-left: 4px;
     font-weight: 400;
@@ -112,7 +57,6 @@
     }
   }
 }
-
 
 .shareButton {
   margin-left: 16px;

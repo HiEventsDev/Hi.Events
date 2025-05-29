@@ -55,7 +55,7 @@ const Events = () => {
             </ToolBar>
 
             <EventsDashboardStatusButtons
-                baseUrl={`/manage/organizer/${organizerId}/events`}
+                baseUrl={`/dashboard/${organizerId}/events`}
                 eventsState={eventsState as string}
             />
 

@@ -1,126 +1,355 @@
-// EventCard.module.scss - Simplified version
+@use "../../../../styles/mixins.scss";
 
-:root {
-  --status-success: #10b981;
-  --status-success-bg: #ecfdf5;
-  --status-warning: #f59e0b;
-  --status-warning-bg: #fffbeb;
-  --status-error: #ef4444;
-  --status-error-bg: #fef2f2;
-  --status-draft: #6b7280;
-  --status-draft-bg: #f9fafb;
+.eventCardLink {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+
+  &:hover {
+    .eventCard {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
+
+      .imageWrapper {
+        img {
+          transform: scale(1.05);
+        }
+
+        .placeholderContent {
+          transform: scale(1.05);
+        }
+      }
+
+      .shareButton {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+  }
 }
 
 .eventCard {
-  display: flex;
-  align-items: stretch;
-  gap: 1.5rem;
-  padding: 2rem;
-  background: linear-gradient(
-                  135deg,
-                  color-mix(in srgb, var(--homepage_background_color) 98%, var(--homepage_primary_color) 2%),
-                  color-mix(in srgb, var(--homepage_background_color) 95%, var(--homepage_secondary_color) 5%)
-  );
-  border-radius: 20px;
-  margin-bottom: 1.5rem;
-  border: 1px solid color-mix(in srgb, var(--homepage_secondary_color) 60%, transparent 40%);
-  transition: all 0.3s ease;
-  cursor: pointer;
-  position: relative;
-  min-height: 140px;
+  // Inherit CSS variables from parent
+  --primary-color: inherit;
+  --primary-text-color: inherit;
+  --secondary-color: inherit;
+  --secondary-text-color: inherit;
+  --bg-color: inherit;
+  --content-bg-color: inherit;
 
-  &:hover {
-    border-color: color-mix(in srgb, var(--homepage_primary_color) 80%, transparent 20%);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3),
-    0 8px 16px color-mix(in srgb, var(--homepage_primary_color) 20%, transparent 80%);
-    transform: translateY(-4px);
+  background: var(--content-bg-color);
+  border-radius: 20px;
+  overflow: visible;
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 12px;
+  gap: 16px;
+
+  @include mixins.respond-above('sm') {
+    flex-direction: row;
+    height: 180px;
+    padding: 16px;
+    gap: 20px;
   }
 }
 
-.eventDate {
+// Image Section
+.eventImage {
+  position: relative;
+  flex: 0 0 auto;
+
+  @include mixins.respond-below('sm') {
+    height: 200px;
+  }
+
+  @include mixins.respond-above('sm') {
+    width: 240px;
+    height: 100%;
+  }
+}
+
+// Image wrapper with its own border radius
+.imageWrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--bg-color);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  }
+}
+
+// Placeholder when no image
+.placeholderImage {
+  width: 100%;
+  height: 100%;
+  background: var(--bg-color);
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100px; // Fixed square width
-  height: 100px; // Fixed square height
-  padding: 1rem;
-  background: linear-gradient(
-                  135deg,
-                  color-mix(in srgb, var(--homepage_background_color) 90%, var(--homepage_primary_color) 10%),
-                  color-mix(in srgb, var(--homepage_background_color) 95%, var(--homepage_secondary_color) 5%)
-  );
-  border-radius: 16px;
-  border: 2px solid color-mix(in srgb, var(--homepage_secondary_color) 40%, transparent 60%);
-  transition: all 0.3s ease;
-  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
 
-  .eventCard:hover & {
-    border-color: color-mix(in srgb, var(--homepage_primary_color) 60%, transparent 40%);
-    transform: scale(1.05);
+  //&::before {
+  //  content: '';
+  //  position: absolute;
+  //  inset: 0;
+  //  background:
+  //    radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.3), transparent 50%),
+  //    radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.2), transparent 50%);
+  //}
+}
+
+.placeholderContent {
+  position: relative;
+  transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.placeholderIcon {
+  font-size: 3rem;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.2));
+  color: var(--badge-text, white);
+  animation: float 4s ease-in-out infinite;
+
+  @media (max-width: 640px) {
+    font-size: 2.5rem;
   }
 }
 
-.dateInfo {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 0.25rem;
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-8px) rotate(-3deg);
+  }
+  75% {
+    transform: translateY(4px) rotate(3deg);
+  }
 }
 
-.month {
-  font-size: 1.1rem;
-  font-weight: 800;
-  color: var(--homepage_primary_color);
-  line-height: 1.1;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+// Sparkles
+.sparkles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
 }
 
-.dayName {
-  font-size: 0.8rem;
-  color: var(--homepage_secondary_text_color);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  font-weight: 600;
-  opacity: 0.8;
+.sparkle {
+  position: absolute;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.2rem;
+  animation: sparkle 3s ease-in-out infinite;
+
+  &:nth-child(1) {
+    top: 15%;
+    left: 20%;
+    animation-delay: 0s;
+  }
+
+  &:nth-child(2) {
+    top: 70%;
+    right: 25%;
+    animation-delay: 1s;
+  }
+
+  &:nth-child(3) {
+    bottom: 25%;
+    left: 30%;
+    animation-delay: 2s;
+  }
 }
 
-.eventDetails {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+@keyframes sparkle {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1) rotate(180deg);
+  }
 }
 
-.eventTime {
-  font-size: 0.95rem;
-  color: var(--homepage_secondary_text_color);
-  font-weight: 600;
+// Image Overlay - contains floating elements
+.imageOverlay {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  z-index: 10;
+}
 
-  &::before {
-    content: '🕐';
-    font-size: 0.9rem;
+// Share button
+.shareButton {
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 0.25rem;
+
+  @media (max-width: 640px) {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
-.endTime {
-  color: color-mix(in srgb, var(--homepage_secondary_text_color) 80%, transparent 20%);
-  font-weight: 500;
+// Live indicator
+.liveIndicator {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  background: #ef4444;
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+}
+
+.liveText {
+  color: white;
+  font-size: 0.625rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.liveDot {
+  width: 6px;
+  height: 6px;
+  background: white;
+  border-radius: 50%;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 0.5;
+  }
+}
+
+// Date badge - positioned outside image on mobile, inside on desktop
+.dateBadge {
+  position: absolute;
+  background: var(--content-bg-color);
+  color: var(--primary-color);
+  border: 2px solid var(--primary-color);
+  padding: 0.5rem 0.875rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-weight: 700;
+  font-size: 0.8125rem;
+  z-index: 10;
+  transition: all 0.3s ease;
+
+  // Mobile: positioned at top right corner of image
+  @include mixins.respond-below('sm') {
+    top: -8px;
+    right: -8px;
+  }
+
+  // Desktop: positioned at bottom left of image
+  @include mixins.respond-above('sm') {
+    bottom: 12px;
+    left: 12px;
+    backdrop-filter: blur(10px);
+    border: none;
+    color: var(--primary-text-color);
+  }
+
+  svg {
+    opacity: 0.8;
+    color: var(--secondary-color);
+  }
+
+  // Hover effect
+  .eventCard:hover & {
+    transform: scale(1.05);
+
+    @include mixins.respond-above('sm') {
+      background: var(--content-bg-color);
+    }
+  }
+}
+
+// Content Section
+.eventContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  min-width: 0; // Prevent flex children from overflowing
+
+  @include mixins.respond-below('sm') {
+    padding: 0;
+  }
+
+  @include mixins.respond-above('sm') {
+    padding-right: 0.5rem;
+  }
+}
+
+.eventHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
 }
 
 .eventTitle {
-  font-size: 1.4rem;
-  font-weight: 800;
+  font-size: 1.25rem;
+  font-weight: 700;
   margin: 0;
-  color: var(--homepage_primary_text_color);
-  line-height: 1.25;
-  letter-spacing: -0.025em;
+  color: var(--primary-text-color);
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+
+  @include mixins.respond-below('sm') {
+    font-size: 1.125rem;
+  }
+}
+
+.eventDateTime {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  color: var(--secondary-text-color);
+  font-size: 0.875rem;
+  font-weight: 500;
+
+  svg {
+    color: var(--secondary-color);
+    opacity: 0.7;
+    flex-shrink: 0;
+  }
+}
+
+.eventDescription {
+  font-size: 0.875rem;
+  color: var(--secondary-text-color);
+  line-height: 1.4;
+  margin: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
@@ -128,245 +357,66 @@
   -webkit-box-orient: vertical;
 }
 
-.eventDescription {
-  font-size: 0.95rem;
-  color: color-mix(in srgb, var(--homepage_secondary_text_color) 90%, var(--homepage_primary_text_color) 10%);
-  line-height: 1.5;
-  margin: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+// Footer section
+.eventFooter {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+
+  @include mixins.respond-below('sm') {
+    gap: 0.75rem;
+  }
 }
 
 .eventMeta {
   display: flex;
-  flex-wrap: wrap;
-  gap: 1.5rem;
   align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
 }
 
 .location {
-  font-size: 0.9rem;
-  color: var(--homepage_secondary_text_color);
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.375rem;
+  color: var(--secondary-text-color);
+  font-size: 0.875rem;
   font-weight: 500;
-  padding: 0.25rem 0.75rem;
-  background: color-mix(in srgb, var(--homepage_secondary_color) 30%, transparent 70%);
-  border-radius: 20px;
-  transition: all 0.3s ease;
 
-  &:hover {
-    background: color-mix(in srgb, var(--homepage_primary_color) 20%, transparent 80%);
-    color: var(--homepage_primary_text_color);
+  svg {
+    color: var(--secondary-color);
+    opacity: 0.7;
+    flex-shrink: 0;
   }
 }
 
-.organizer {
-  font-size: 0.9rem;
-  color: var(--homepage_secondary_text_color);
-  font-style: italic;
-  font-weight: 500;
-  opacity: 0.9;
-}
-
-.status {
-  padding: 0.5rem 1rem;
-  border-radius: 25px;
-  font-size: 0.8rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-
-  &.published {
-    background: var(--status-success-bg);
-    color: var(--status-success);
-  }
-
-  &.draft {
-    background: var(--status-draft-bg);
-    color: var(--status-draft);
-  }
-
-  &.cancelled {
-    background: var(--status-error-bg);
-    color: var(--status-error);
-  }
-}
-
-.eventImage {
-  width: 120px;
-  height: 100px;
-  border-radius: 16px;
-  overflow: hidden;
-  flex-shrink: 0;
-  position: relative;
-  transition: all 0.3s ease;
-  align-self: flex-start;
-
-  .eventCard:hover & {
-    transform: scale(1.08);
-  }
-}
-
-.coverImage {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: all 0.3s ease;
-
-  .eventCard:hover & {
-    transform: scale(1.1);
-  }
-}
-
-.placeholderImage {
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-                  135deg,
-                  color-mix(in srgb, var(--homepage_secondary_color) 70%, var(--homepage_primary_color) 30%),
-                  color-mix(in srgb, var(--homepage_secondary_color) 50%, var(--homepage_primary_color) 50%)
-  );
+// Price section
+.priceSection {
   display: flex;
   align-items: center;
-  justify-content: center;
-  border-radius: 16px;
-  position: relative;
-
-  // Keep the sheen effect on placeholder
-  &::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
-    animation: shimmer 2s infinite;
-  }
-}
-
-@keyframes shimmer {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(100%);
-  }
-}
-
-.placeholderIcon {
-  font-size: 2.5rem;
-  opacity: 0.9;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
-}
-
-.timeUntilContainer {
-  position: absolute;
-  top: 1.5rem;
-  right: 1.5rem;
-  z-index: 15;
-}
-
-.timeUntil {
-  padding: 0.4rem 0.9rem;
-  background: color-mix(in srgb, var(--homepage_background_color) 90%, transparent 10%);
-  color: var(--homepage_secondary_text_color);
-  border-radius: 16px;
-  font-size: 0.8rem;
+  gap: 0.375rem;
   font-weight: 700;
-  border: 1px solid color-mix(in srgb, var(--homepage_secondary_color) 50%, transparent 50%);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  font-size: 0.9375rem;
+  color: var(--primary-text-color);
+  padding: 0.375rem 0.75rem;
+  background: var(--bg-color);
+  border-radius: 8px;
+  white-space: nowrap;
 
-  &.eventSoon {
-    background: color-mix(in srgb, var(--homepage_primary_color) 15%, var(--homepage_background_color) 85%);
-    color: var(--homepage_primary_color);
-    border-color: color-mix(in srgb, var(--homepage_primary_color) 40%, transparent 60%);
-  }
-}
-
-.attendees {
-  background: color-mix(in srgb, var(--homepage_background_color) 85%, transparent 15%);
-  color: var(--homepage_primary_text_color);
-  padding: 0.5rem 0.875rem;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  border: 1px solid color-mix(in srgb, var(--homepage_secondary_color) 50%, transparent 50%);
-  transition: all 0.3s ease;
-
-  &:hover {
-    background: color-mix(in srgb, var(--homepage_primary_color) 80%, transparent 20%);
-    border-color: var(--homepage_primary_color);
-  }
-}
-
-.eventStats {
-  position: absolute;
-  top: 1.5rem;
-  right: 1.5rem;
-  display: flex;
-  gap: 0.75rem;
-  z-index: 10;
-}
-
-.liveIndicator {
-  position: absolute;
-  top: 0.75rem;
-  left: 0.75rem;
-  z-index: 15;
-
-  span {
-    background: linear-gradient(135deg, #ef4444, #dc2626);
-    color: white;
-    padding: 0.25rem 0.75rem;
-    border-radius: 20px;
-    font-size: 0.7rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-}
-
-// Responsive design
-@media (max-width: 768px) {
-  .eventCard {
-    flex-direction: column;
-    gap: 1.5rem;
-    padding: 1.5rem;
+  svg {
+    color: var(--secondary-color);
+    opacity: 0.8;
+    flex-shrink: 0;
   }
 
-  .eventDate {
-    flex-direction: row;
-    justify-content: center;
-    width: 100%;
-    height: auto;
-    padding: 1rem 1.5rem;
+  .price {
+    color: var(--primary-text-color);
   }
 
-  .dateInfo {
-    flex-direction: row;
-    gap: 1rem;
-    align-items: baseline;
-  }
-
-  .eventImage {
-    width: 100%;
-    height: 140px;
-    order: -1;
-  }
-
-  .eventStats,
-  .timeUntilContainer {
-    position: relative;
-    top: auto;
-    right: auto;
-    justify-content: flex-start;
-    margin-top: 1rem;
+  .free {
+    font-weight: 600;
   }
 }

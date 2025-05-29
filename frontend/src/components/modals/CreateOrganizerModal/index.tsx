@@ -19,7 +19,7 @@ export const CreateOrganizerModal = ({onClose}: CreateOrganizerModalProps) => {
         >
             <OrganizerCreateForm onSuccess={(organizer: Organizer) => {
                 onClose();
-                navigate(`/manage/organizer/${organizer.id}`);
+                navigate(`/dashboard/${organizer.id}`);
             }}/>
         </Modal>
     )

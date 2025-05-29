@@ -1,52 +1,230 @@
+@use "../../../../styles/mixins.scss";
+
+// Header section
+.headerSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  gap: 1rem;
+
+  @include mixins.respond-below(md) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.pageTitle {
+  margin: 0;
+  flex: 1;
+}
+
+.currencySwitcher {
+  min-width: 200px;
+
+  @include mixins.respond-below(md) {
+    width: 100%;
+  }
+}
+
+// Statistics grid
 .statisticsContainer {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); // Responsive grid
-  gap: var(--mantine-spacing-lg); // Use Mantine spacing
-  margin-bottom: var(--mantine-spacing-xl);
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
 
-  @media (min-width: 576px) { // Mantine 'sm' breakpoint for 2 columns
+  @include mixins.respond-above(sm) {
     grid-template-columns: repeat(2, 1fr);
   }
-  @media (min-width: 992px) { // Mantine 'md' breakpoint for 3 columns
-    grid-template-columns: repeat(3, 1fr);
-  }
-  @media (min-width: 1200px) { // Mantine 'lg' breakpoint for 4 columns
+
+  @include mixins.respond-above(md) {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
 .statisticsSkeletonContainer {
-  @extend .statisticsContainer; // Inherit grid layout from above
+  @extend .statisticsContainer;
 }
 
-.currencySwitcher {
-  min-width: 150px;
-  max-width: 200px;
+// Recent items section
+.recentItemsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
 
-  @media (max-width: 768px) {
-    width: 100%;
-    max-width: none;
-    margin-top: var(--mantine-spacing-sm);
+  @include mixins.respond-above(lg) {
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: stretch;
   }
+}
+
+.recentSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  height: 100%;
 }
 
 .sectionTitle {
+  font-size: 1.25rem;
   font-weight: 600;
-  color: var(--mantine-color-dark-6);
-  letter-spacing: -0.01em;
+  color: #1a1a2e;
+  margin: 0;
+  letter-spacing: -0.02em;
 }
 
-.listItemCard {
-  background-color: var(--mantine-color-body);
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+// Orders list
+.ordersList {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.orderCard {
+  transition: all 0.2s ease;
+  margin-bottom: 10px;
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: var(--mantine-shadow-sm);
+  }
+}
+
+.orderHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.orderInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.orderId {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #1a1a2e;
+  letter-spacing: -0.01em;
+}
+
+.customerName {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.875rem;
+  color: #6c757d;
+
+  svg {
+    flex-shrink: 0;
+  }
+}
+
+.orderFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.orderMeta {
+  font-size: 0.875rem;
+  color: #6c757d;
+}
+
+// Events list
+.eventsList {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+// Empty states
+.emptyState {
+  background: linear-gradient(135deg, #f8f9ff 0%, #eee5ff 100%);
+  border-radius: 16px;
+  padding: 3rem 2rem;
+  text-align: center;
+  border: 2px dashed #e0d5ff;
+  position: relative;
+  overflow: hidden;
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+      background: radial-gradient(circle, rgba(138, 110, 255, 0.05) 0%, transparent 70%);
+    animation: pulse 4s ease-in-out infinite;
   }
 
-  .itemTitle {
-    color: var(--mantine-color-dark-7);
-    letter-spacing: -0.01em;
+  @keyframes pulse {
+    0%, 100% {
+      transform: scale(0.8);
+      opacity: 0.5;
+    }
+    50% {
+      transform: scale(1.2);
+      opacity: 0.3;
+    }
   }
+
+  h4 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1a1a2e;
+    margin: 1rem 0 0.5rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  p {
+    font-size: 0.875rem;
+    color: #6c757d;
+    margin: 0;
+    max-width: 300px;
+    margin: 0 auto;
+    line-height: 1.5;
+    position: relative;
+    z-index: 1;
+  }
+
+  button {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+.emptyStateIcon {
+  font-size: 3rem;
+  animation: float 3s ease-in-out infinite;
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+}
+
+// Skeleton loading
+.skeletonStack {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }

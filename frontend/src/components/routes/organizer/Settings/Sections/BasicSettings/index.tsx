@@ -4,22 +4,21 @@ import {t} from "@lingui/macro";
 import {useEffect} from "react";
 import {useParams} from "react-router";
 import {showSuccess} from "../../../../../../utilites/notifications.tsx";
-import {useCreateOrganizer} from "../../../../../../mutations/useCreateOrganizer.ts";
 import {useFormErrorResponseHandler} from "../../../../../../hooks/useFormErrorResponseHandler.tsx";
 import {Card} from "../../../../../common/Card";
 import {HeadingWithDescription} from "../../../../../common/Card/CardHeading";
-import {OrganizerForm} from "../../../../../forms/OrganizerForm";
 import {Organizer} from "../../../../../../types.ts";
 import {useGetOrganizer} from "../../../../../../queries/useGetOrganizer.ts";
 import {InputGroup} from "../../../../../common/InputGroup";
 import {currencies} from "../../../../../../../data/currencies.ts";
 import {timezones} from "../../../../../../../data/timezones.ts";
 import {Editor} from "../../../../../common/Editor";
+import {useUpdateOrganizer} from "../../../../../../mutations/useUpdateOrganizer.ts";
 
 const Settings = () => {
     const {organizerId} = useParams();
     const {data: organizer} = useGetOrganizer(organizerId);
-    const organizerMutation = useCreateOrganizer();
+    const organizerMutation = useUpdateOrganizer(organizerId);
     const form = useForm({
         initialValues: {
             name: '',
@@ -34,6 +33,7 @@ const Settings = () => {
 
     const handleSubmit = (values: Partial<Organizer>) => {
         organizerMutation.mutate({
+            organizerId: organizerId,
             organizerData: values,
         }, {
             onSuccess: () => {
@@ -51,6 +51,9 @@ const Settings = () => {
             email: String(organizer?.email),
             currency: String(organizer?.currency),
             timezone: String(organizer?.timezone),
+            phone: String(organizer?.phone || ''),
+            website: String(organizer?.website || ''),
+            description: String(organizer?.description || ''),
         })
     }, [organizer]);
 
@@ -85,6 +88,7 @@ const Settings = () => {
                         editorType={'simple'}
                         description={t`A short description of your organizer that will be displayed to your users.`}
                         onChange={(value) => form.setFieldValue('description', value)}
+                        maxLength={1000}
                     />
 
                     <InputGroup>

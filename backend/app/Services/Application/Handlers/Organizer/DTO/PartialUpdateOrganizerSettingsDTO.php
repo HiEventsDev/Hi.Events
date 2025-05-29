@@ -3,6 +3,7 @@
 namespace HiEvents\Services\Application\Handlers\Organizer\DTO;
 
 use HiEvents\DataTransferObjects\BaseDataObject;
+use HiEvents\DataTransferObjects\AddressDTO;
 use HiEvents\DomainObjects\Enums\OrganizerHomepageVisibility;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Mappers\SnakeCaseMapper;
@@ -41,10 +42,14 @@ class PartialUpdateOrganizerSettingsDTO extends BaseDataObject
         // Website
         public readonly string|Optional|null                      $websiteUrl,
 
+        // Location details
+        public readonly AddressDTO|Optional|null                  $locationDetails,
+
         // Homepage settings
         public readonly OrganizerHomepageVisibility|Optional|null $homepageVisibility,
 
         public readonly string|Optional|null                      $homepageBackgroundColor,
+        public readonly string|Optional|null                      $homepageContentBackgroundColor,
         public readonly string|Optional|null                      $homepagePrimaryColor,
         public readonly string|Optional|null                      $homepagePrimaryTextColor,
         public readonly string|Optional|null                      $homepageSecondaryColor,

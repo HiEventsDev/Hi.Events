@@ -66,6 +66,13 @@ export const organizerPublicClient = {
         );
         return response.data;
     },
+
+    getEvents: async (organizerId: IdParam, pagination: QueryFilters) => {
+        const response = await publicApi.get<GenericPaginatedResponse<Event>>(
+            'organizers/' + organizerId + '/events' + queryParamsHelper.buildQueryString(pagination)
+        );
+        return response.data;
+    }
 }
 
 export const organizerSettingsClient = {

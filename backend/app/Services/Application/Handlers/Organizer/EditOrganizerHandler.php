@@ -2,23 +2,20 @@
 
 namespace HiEvents\Services\Application\Handlers\Organizer;
 
-use HiEvents\DomainObjects\Enums\ImageType;
 use HiEvents\DomainObjects\ImageDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
-use HiEvents\Repository\Interfaces\ImageRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Organizer\DTO\EditOrganizerDTO;
-use HiEvents\Services\Domain\Image\ImageUploadService;
+use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
 
-readonly class EditOrganizerHandler
+class EditOrganizerHandler
 {
     public function __construct(
-        private OrganizerRepositoryInterface $organizerRepository,
-        private ImageUploadService           $imageUploadService,
-        private DatabaseManager              $databaseManager,
-        private ImageRepositoryInterface     $imageRepository,
+        private readonly OrganizerRepositoryInterface $organizerRepository,
+        private readonly DatabaseManager              $databaseManager,
+        private readonly HtmlPurifierService          $htmlPurifierService,
     )
     {
     }
@@ -41,7 +38,7 @@ readonly class EditOrganizerHandler
                 'email' => $organizerData->email,
                 'phone' => $organizerData->phone,
                 'website' => $organizerData->website,
-                'description' => $organizerData->description,
+                'description' => $this->htmlPurifierService->purify($organizerData->description),
                 'account_id' => $organizerData->account_id,
                 'timezone' => $organizerData->timezone,
                 'currency' => $organizerData->currency,
@@ -52,30 +49,8 @@ readonly class EditOrganizerHandler
             ]
         );
 
-        $this->handleLogo($organizerData);
-
         return $this->organizerRepository
             ->loadRelation(ImageDomainObject::class)
             ->findById($organizerData->id);
-    }
-
-    private function handleLogo(EditOrganizerDTO $organizerData): void
-    {
-        if ($organizerData->logo === null) {
-            return;
-        }
-
-        $this->imageRepository->deleteWhere([
-            'entity_id' => $organizerData->id,
-            'entity_type' => OrganizerDomainObject::class,
-            'type' => ImageType::ORGANIZER_LOGO->name,
-        ]);
-
-        $this->imageUploadService->upload(
-            image: $organizerData->logo,
-            entityId: $organizerData->id,
-            entityType: OrganizerDomainObject::class,
-            imageType: ImageType::ORGANIZER_LOGO->name,
-        );
     }
 }

@@ -1,14 +1,11 @@
 import {LoaderFunctionArgs, Navigate, RouteObject} from "react-router";
 import ErrorPage from "./error-page.tsx";
-import {eventsClientPublic} from "./api/event.client.ts";
-import {promoCodeClientPublic} from "./api/promo-code.client.ts";
 import {useEffect, useState} from "react";
 import {useGetMe} from "./queries/useGetMe.ts";
-import {organizerPublicClient} from "./api/organizer.client.ts";
-import {getOrganizerQuery, useGetOrganizer} from "./queries/useGetOrganizer.ts";
+import {getOrganizerQuery} from "./queries/useGetOrganizer.ts";
 import {queryClient} from "./utilites/queryClient.ts";
-import {getEventPublicQuery} from "./queries/useGetEventPublic.ts";
 import {publicEventRouteLoader} from "./routeLoaders/publicEventRouteLoader.ts";
+import {publicOrganizerRouteLoader} from "./routeLoaders/publicOrganizerRouteLoader.ts";
 
 const Root = () => {
     const [redirectPath, setRedirectPath] = useState<string | null>(null);
@@ -375,11 +372,7 @@ export const router: RouteObject[] = [
     },
     {
         path: "/events/:organizerId/:organizerSlug",
-        loader: async ({params}: LoaderFunctionArgs) => {
-            const organizerId = params.organizerId!;
-            await queryClient.fetchQuery(getOrganizerQuery(organizerId));
-            return { organizerId };
-        },
+        loader: publicOrganizerRouteLoader,
         async lazy() {
             const PublicOrganizer = await import("./components/layouts/PublicOrganizer");
             return {Component: PublicOrganizer.default};
@@ -399,6 +392,13 @@ export const router: RouteObject[] = [
         async lazy() {
             const EventHomepagePreview = await import("./components/layouts/EventHomepagePreview");
             return {Component: EventHomepagePreview.default};
+        },
+    },
+    {
+        path: "/organizer/:organizerId/preview",
+        async lazy() {
+            const OrganizerHomepagePreview = await import("./components/layouts/OrganizerHomepagePreview");
+            return {Component: OrganizerHomepagePreview.default};
         },
     },
     {

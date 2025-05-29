@@ -1,9 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {NavLink, useParams} from "react-router";
-import {Badge, Button, Grid, Group, Paper, Select, Skeleton, Stack, Text, Title, Tooltip} from '@mantine/core';
+import {Badge, Button, Group, Select, Skeleton, Tooltip} from '@mantine/core';
 import {
     IconBuildingStore,
-    IconCalendarEvent,
     IconCash,
     IconChevronRight,
     IconReceiptTax,
@@ -19,13 +18,17 @@ import {PageBody} from "../../../common/PageBody";
 import {useGetOrganizerStats} from "../../../../queries/useGetOrganizerStats.ts";
 import {useGetEvents} from "../../../../queries/useGetEvents.ts";
 import {formatCurrency} from "../../../../utilites/currency.ts";
-import {formatDate, relativeDate} from "../../../../utilites/dates.ts";
+import {relativeDate} from "../../../../utilites/dates.ts";
 import {formatNumber} from "../../../../utilites/helpers.ts";
-import {Event, EventStatus, Order, QueryFilterOperator} from '../../../../types';
+import {Event, Order, QueryFilterOperator} from '../../../../types';
 import {useGetOrganizerOrders} from "../../../../queries/useGetOrganizerOrders.ts";
 import classes from './OrganizerDashboard.module.scss';
 import {StatBox} from "../../../common/StatBoxes";
-import {useGetOrganizers} from "../../../../queries/useGetOrganizers.ts";
+import {useGetOrganizer} from "../../../../queries/useGetOrganizer.ts";
+import {EventCard} from "../../../common/EventCard";
+import {currenciesMap} from "../../../../../data/currencies.ts";
+import {Card} from "../../../common/Card";
+import {CreateEventModal} from "../../../modals/CreateEventModal";
 
 interface OrganizerStatDisplayItem {
     value: string | number;
@@ -42,26 +45,23 @@ export const DashboardSkeleton = () => {
                 <Skeleton height={36} radius="md" width="150px"/>
             </Group>
 
-            {/* Skeleton for Stats Area */}
             <div className={classes.statisticsSkeletonContainer}>
-                {[...Array(4)].map((_, index) => (
-                    <Skeleton key={index} height={105} radius="md"/> // Simplified StatBox skeleton
+                {[...Array(6)].map((_, index) => (
+                    <Skeleton key={index} height={105} radius="md"/>
                 ))}
             </div>
-
-            {/* Skeleton for Recent Orders/Events Lists */}
-            <Grid gutter="xl" mt="xl">
+            <div className={classes.recentItemsGrid}>
                 {[...Array(2)].map((_, colIndex) => (
-                    <Grid.Col span={{base: 12, lg: 6}} key={colIndex}>
+                    <div key={colIndex} className={classes.recentSection}>
                         <Skeleton height={30} radius="sm" mb="lg" width="40%"/>
-                        <Stack gap="md">
+                        <div className={classes.skeletonStack}>
                             {[...Array(3)].map((_, itemIndex) => (
                                 <Skeleton key={itemIndex} height={100} radius="md"/>
                             ))}
-                        </Stack>
-                    </Grid.Col>
+                        </div>
+                    </div>
                 ))}
-            </Grid>
+            </div>
         </PageBody>
     );
 };
@@ -69,61 +69,47 @@ export const DashboardSkeleton = () => {
 
 export const OrganizerDashboard = () => {
     const {organizerId} = useParams<{ organizerId: string }>();
-    const {data: organizerData, isLoading: isLoadingOrganizer} = useGetOrganizers();
-    const organizers = organizerData?.data;
-    const organizer = organizers?.find(o => o.id === organizerId);
-    // get an array of all currencies from the organizers
-    const organizerCurrencies = organizers
-        ?.map(o => o.currency).filter((value, index, self) => self.indexOf(value) === index);
+    const {data: organizer} = useGetOrganizer(organizerId);
+    const [showCreateEventModal, setShowCreateEventModal] = useState(false);
 
-    console.log(organizerCurrencies);
-
-    const DUMMY_CURRENCIES = [
-        {value: 'USD', label: 'USD'},
-        {value: 'EUR', label: 'EUR'},
-        {value: 'GBP', label: 'GBP'},
-    ];
-
-    const [selectedCurrency, setSelectedCurrency] = useState<string | undefined>();
+    const [selectedCurrency, setSelectedCurrency] = useState<string>(
+        organizer?.currency || 'USD'
+    );
 
     useEffect(() => {
-        if (organizer?.currency) {
-            setSelectedCurrency(prev => prev ?? organizer.currency);
-        } else if (DUMMY_CURRENCIES.length > 0 && !selectedCurrency) {
-            setSelectedCurrency(DUMMY_CURRENCIES[0].value);
+        if (organizer?.currency && selectedCurrency !== organizer.currency) {
+            setSelectedCurrency(organizer.currency);
         }
-    }, [organizer, selectedCurrency, DUMMY_CURRENCIES]); // Added DUMMY_CURRENCIES to dependencies
+    }, [organizer?.currency]);
 
     const organizerStatsQuery = useGetOrganizerStats(organizerId, selectedCurrency);
     const stats = organizerStatsQuery.data;
 
     const ordersQuery = useGetOrganizerOrders(organizerId, {
-        perPage: 3,
+        perPage: 10,
         sortBy: 'created_at',
         sortDirection: 'desc',
     });
+
     const recentOrders = ordersQuery.data?.data;
     const isLoadingOrders = ordersQuery.isLoading;
 
     const {data: eventsResponse, isLoading: isLoadingEvents} = useGetEvents({
-        perPage: 3,
+        perPage: 10,
         filterFields: organizerId ? {
             organizer_id: {
                 operator: QueryFilterOperator.Equals,
                 value: organizerId
             }
         } : undefined,
-        sortBy: 'created_at', // Consider 'start_date' for "upcoming" if more relevant
+        sortBy: 'created_at',
         sortDirection: 'desc',
     });
     const recentEvents = eventsResponse?.data;
 
-    const showOverallSkeleton = isLoadingOrganizer ||
-        (organizerStatsQuery.isLoading && !stats) ||
-        isLoadingOrders ||
-        isLoadingEvents;
+    const showOverallSkeleton = organizerStatsQuery.isLoading || isLoadingOrders || isLoadingEvents;
 
-    if (showOverallSkeleton && !organizer && !stats && !recentOrders && !recentEvents) {
+    if (showOverallSkeleton && !stats && !recentOrders && !recentEvents) {
         return <DashboardSkeleton/>;
     }
 
@@ -171,20 +157,21 @@ export const OrganizerDashboard = () => {
 
     return (
         <PageBody>
-            <Group justify="space-between" align="center">
-                <PageTitle style={{marginBottom: 0, flexGrow: 1}}>
+            <div className={classes.headerSection}>
+                <PageTitle className={classes.pageTitle}>
                     {organizer ? `${organizer.name} - ${t`Dashboard`}` : t`Organizer Dashboard`}
                 </PageTitle>
                 <Select
-                    data={DUMMY_CURRENCIES}
+                    data={currenciesMap}
                     value={selectedCurrency}
-                    onChange={(value) => setSelectedCurrency(value || undefined)}
+                    onChange={(value) => setSelectedCurrency(value || 'USD')}
                     placeholder={t`Select currency`}
                     className={classes.currencySwitcher}
                     checkIconPosition="right"
                     disabled={organizerStatsQuery.isLoading}
+                    searchable
                 />
-            </Group>
+            </div>
 
             {/* Stats Section */}
             {organizerStatsQuery.isLoading && !stats && (
@@ -208,45 +195,44 @@ export const OrganizerDashboard = () => {
                 </div>
             )}
             {!stats && !organizerStatsQuery.isLoading && (
-                <Text c="dimmed" ta="center" my="xl">
+                <Card>
                     <Trans>Organizer statistics are not available for the selected currency or an error
                         occurred.</Trans>
-                </Text>
+                </Card>
             )}
 
             {/* Recent Orders and Events Lists */}
-            <Grid gutter="xl" mt="xl">
-                <Grid.Col span={{base: 12, lg: 6}}>
-                    <Title order={3} className={classes.sectionTitle} mb="lg"><Trans>Recent Orders</Trans></Title>
+            <div className={classes.recentItemsGrid}>
+                <div className={classes.recentSection}>
+                    <h3 className={classes.sectionTitle}><Trans>Recent Orders</Trans></h3>
                     {isLoadingOrders && (
-                        <Stack gap="md">
+                        <div className={classes.skeletonStack}>
                             {[...Array(3)].map((_, i) => <Skeleton key={i} height={100} radius="md"/>)}
-                        </Stack>
+                        </div>
                     )}
                     {!isLoadingOrders && recentOrders && recentOrders.length > 0 && (
-                        <Stack gap="md">
+                        <div className={classes.ordersList}>
                             {recentOrders.map((order: Order) => (
-                                <Paper key={order.id} p="md" radius="md" withBorder className={classes.listItemCard}>
-                                    <Group justify="space-between" align="flex-start">
-                                        <Stack gap={0}>
+                                <Card key={order.id} className={classes.orderCard}>
+                                    <div className={classes.orderHeader}>
+                                        <div className={classes.orderInfo}>
                                             <Tooltip label={t`Order ID: ${order.public_id}`} openDelay={500}>
-                                                <Text fw={600} size="md"
-                                                      className={classes.itemTitle}>{order.public_id}</Text>
+                                                <span className={classes.orderId}>{order.public_id}</span>
                                             </Tooltip>
-                                            <Text size="sm" c="dimmed" display="flex" style={{alignItems: 'center'}}>
-                                                <IconUserCircle size={16} style={{marginRight: '4px'}}/>
+                                            <span className={classes.customerName}>
+                                                <IconUserCircle size={16}/>
                                                 {order.first_name} {order.last_name}
-                                            </Text>
-                                        </Stack>
+                                            </span>
+                                        </div>
                                         <Badge color={getOrderStatusColor(order.status, order.payment_status)}
                                                variant="light" radius="sm">
                                             {formatOrderStatus(order.status, order.payment_status)}
                                         </Badge>
-                                    </Group>
-                                    <Group justify="space-between" mt="sm" align="center">
-                                        <Text size="sm" c="dimmed">
+                                    </div>
+                                    <div className={classes.orderFooter}>
+                                        <span className={classes.orderMeta}>
                                             {relativeDate(order.created_at)} • {formatCurrency(order.total_gross, order.currency)}
-                                        </Text>
+                                        </span>
                                         <Button
                                             variant="subtle"
                                             size="xs"
@@ -256,64 +242,58 @@ export const OrganizerDashboard = () => {
                                         >
                                             <Trans>View</Trans>
                                         </Button>
-                                    </Group>
-                                </Paper>
+                                    </div>
+                                </Card>
                             ))}
-                        </Stack>
+                        </div>
                     )}
                     {!isLoadingOrders && (!recentOrders || recentOrders.length === 0) && (
-                        <Text c="dimmed" ta="center" py="lg"><Trans>No recent orders found.</Trans></Text>
+                        <div className={classes.emptyState}>
+                            <div className={classes.emptyStateIcon}>📦</div>
+                            <h4><Trans>No orders yet</Trans></h4>
+                            <p><Trans>When customers purchase tickets, their orders will appear here.</Trans></p>
+                        </div>
                     )}
-                </Grid.Col>
+                </div>
 
-                <Grid.Col span={{base: 12, lg: 6}}>
-                    <Title order={3} className={classes.sectionTitle} mb="lg"><Trans>Upcoming Events</Trans></Title>
+                <div className={classes.recentSection}>
+                    <h3 className={classes.sectionTitle}><Trans>Recent Events</Trans></h3>
                     {isLoadingEvents && (
-                        <Stack gap="md">
+                        <div className={classes.skeletonStack}>
                             {[...Array(3)].map((_, i) => <Skeleton key={i} height={100} radius="md"/>)}
-                        </Stack>
+                        </div>
                     )}
                     {!isLoadingEvents && recentEvents && recentEvents.length > 0 && (
-                        <Stack gap="md">
+                        <div className={classes.eventsList}>
                             {recentEvents.map((event: Event) => (
-                                <Paper key={event.id} p="md" radius="md" withBorder className={classes.listItemCard}>
-                                    <Group justify="space-between" align="flex-start">
-                                        <Stack gap={0}>
-                                            <Text fw={600} size="md" className={classes.itemTitle}>{event.title}</Text>
-                                            <Text size="sm" c="dimmed" display="flex" style={{alignItems: 'center'}}>
-                                                <IconCalendarEvent size={16} style={{marginRight: '4px'}}/>
-                                                {formatDate(event.start_date, 'MMM DD, YYYY', event.timezone)}
-                                            </Text>
-                                        </Stack>
-                                        <Badge color={getEventStatusColor(event.status)} variant="light" radius="sm">
-                                            {event.status ? event.status.charAt(0).toUpperCase() + event.status.slice(1).toLowerCase() : t`Unknown`}
-                                        </Badge>
-                                    </Group>
-                                    <Group justify="space-between" mt="sm" align="center">
-                                        <Text size="sm" c="dimmed">
-                                            <Trans>
-                                                3 products
-                                            </Trans>
-                                        </Text>
-                                        <Button
-                                            component={NavLink}
-                                            to={`/manage/event/${event.id}/dashboard`}
-                                            variant="subtle"
-                                            size="xs"
-                                            rightSection={<IconChevronRight size={14}/>}
-                                        >
-                                            <Trans>Manage</Trans>
-                                        </Button>
-                                    </Group>
-                                </Paper>
+                                <EventCard key={event.id} event={event}/>
                             ))}
-                        </Stack>
+                        </div>
                     )}
                     {!isLoadingEvents && (!recentEvents || recentEvents.length === 0) && (
-                        <Text c="dimmed" ta="center" py="lg"><Trans>No recent events found.</Trans></Text>
+                        <div className={classes.emptyState}>
+                            <div className={classes.emptyStateIcon}>🎉</div>
+                            <h4><Trans>No events yet</Trans></h4>
+                            <p><Trans>Create your first event to start selling tickets and managing attendees.</Trans>
+                            </p>
+                            <Button
+                                onClick={() => setShowCreateEventModal(true)}
+                                variant="light"
+                                size="sm"
+                                mt="md"
+                            >
+                                <Trans>Create Event</Trans>
+                            </Button>
+                        </div>
                     )}
-                </Grid.Col>
-            </Grid>
+                </div>
+            </div>
+            {showCreateEventModal && (
+                <CreateEventModal
+                    onClose={() => setShowCreateEventModal(false)}
+                    organizerId={organizerId}
+                />
+            )}
         </PageBody>
     );
 };
@@ -348,19 +328,5 @@ const formatOrderStatus = (status: Order['status'], paymentStatus?: Order['payme
     return status ? status.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) : t`Unknown`;
 };
 
-const getEventStatusColor = (status?: EventStatus): string => {
-    switch (status) {
-        case EventStatus.LIVE:
-            return 'green';
-        case EventStatus.DRAFT:
-            return 'gray';
-        case EventStatus.PAUSED:
-            return 'orange';
-        case EventStatus.ARCHIVED:
-            return 'grape';
-        default:
-            return 'blue';
-    }
-};
 
 export default OrganizerDashboard;

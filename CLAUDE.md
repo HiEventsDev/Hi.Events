@@ -9,6 +9,9 @@ Hi.Events is an open-source event management and ticketing platform with a Larav
 ## Key Commands
 
 ### Backend (Laravel)
+
+Commands should be executed in the `backend` docker container.
+
 ```bash
 # Navigate to backend directory first
 cd backend
@@ -66,6 +69,11 @@ cd scripts && ./list_untranslated_strings.sh  # List untranslated strings
 cd docker/development
 ./start-dev.sh              # Generate unsigned SSL certs
 ./start-dev.sh --certs=signed  # Generate signed certs with mkcert
+
+# Running commands in containers
+cd docker/development
+docker-compose -f docker-compose.dev.yml exec backend php artisan migrate
+docker-compose -f docker-compose.dev.yml exec backend php artisan test
 
 # All-in-one deployment from docker/all-in-one directory
 cd docker/all-in-one

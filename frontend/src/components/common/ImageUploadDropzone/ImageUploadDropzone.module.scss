@@ -74,3 +74,46 @@
   justify-content: center;
   min-height: 120px;
 }
+
+// Compact mode styles
+.compact {
+  .dropzoneInner {
+    min-height: 60px;
+    padding: 12px;
+  }
+  
+  .previewImage {
+    max-height: 80px;
+  }
+  
+  .loadingContainer {
+    min-height: 60px;
+  }
+  
+  .iconWrapper {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+.emptyDropzoneCompact {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+// Error states
+.dropzoneError {
+  border-color: var(--mantine-color-red-3) !important;
+  background-color: var(--mantine-color-red-0);
+  
+  &:hover {
+    border-color: var(--mantine-color-red-4) !important;
+  }
+}
+
+.errorContainer {
+  padding: 0 4px;
+  margin-top: 4px;
+}

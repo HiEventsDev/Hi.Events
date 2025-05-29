@@ -14,6 +14,7 @@ abstract class OrganizerSettingDomainObjectAbstract extends \HiEvents\DomainObje
     final public const ORGANIZER_ID = 'organizer_id';
     final public const SOCIAL_MEDIA_HANDLES = 'social_media_handles';
     final public const WEBSITE_URL = 'website_url';
+    final public const LOCATION_DETAILS = 'location_details';
     final public const HOMEPAGE_THEME_SETTINGS = 'homepage_theme_settings';
     final public const HOMEPAGE_VISIBILITY = 'homepage_visibility';
     final public const HOMEPAGE_PASSWORD = 'homepage_password';
@@ -29,6 +30,7 @@ abstract class OrganizerSettingDomainObjectAbstract extends \HiEvents\DomainObje
     protected int $organizer_id;
     protected array|string|null $social_media_handles = null;
     protected ?string $website_url = null;
+    protected array|string|null $location_details = null;
     protected array|string|null $homepage_theme_settings = null;
     protected string $homepage_visibility = 'PUBLIC';
     protected ?string $homepage_password = null;
@@ -47,6 +49,7 @@ abstract class OrganizerSettingDomainObjectAbstract extends \HiEvents\DomainObje
                     'organizer_id' => $this->organizer_id ?? null,
                     'social_media_handles' => $this->social_media_handles ?? null,
                     'website_url' => $this->website_url ?? null,
+                    'location_details' => $this->location_details ?? null,
                     'homepage_theme_settings' => $this->homepage_theme_settings ?? null,
                     'homepage_visibility' => $this->homepage_visibility ?? null,
                     'homepage_password' => $this->homepage_password ?? null,
@@ -102,6 +105,17 @@ abstract class OrganizerSettingDomainObjectAbstract extends \HiEvents\DomainObje
     public function getWebsiteUrl(): ?string
     {
         return $this->website_url;
+    }
+
+    public function setLocationDetails(array|string|null $location_details): self
+    {
+        $this->location_details = $location_details;
+        return $this;
+    }
+
+    public function getLocationDetails(): array|string|null
+    {
+        return $this->location_details;
     }
 
     public function setHomepageThemeSettings(array|string|null $homepage_theme_settings): self

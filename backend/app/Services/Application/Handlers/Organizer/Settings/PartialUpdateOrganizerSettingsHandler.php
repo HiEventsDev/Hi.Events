@@ -7,6 +7,7 @@ use HiEvents\DomainObjects\OrganizerSettingDomainObject;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerSettingsRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Organizer\DTO\PartialUpdateOrganizerSettingsDTO;
+use Spatie\LaravelData\Data;
 
 class PartialUpdateOrganizerSettingsHandler
 {
@@ -29,6 +30,16 @@ class PartialUpdateOrganizerSettingsHandler
         $organizerSettings = $this->organizerSettingsRepository->findFirstWhere([
             'organizer_id' => $organizer->getId(),
         ]);
+
+        $locationDetails = $dto->getProvided('locationDetails', $organizerSettings->getLocationDetails());
+
+        if ($locationDetails instanceof Data) {
+            $locationDetails = $locationDetails->toArray();
+        } elseif (is_array($locationDetails)) {
+            $locationDetails = array_filter($locationDetails);
+        } else {
+            $locationDetails = [];
+        }
 
         $this->organizerSettingsRepository->updateWhere([
             'social_media_handles' => array_filter([
@@ -57,10 +68,13 @@ class PartialUpdateOrganizerSettingsHandler
 
             'website_url' => $dto->getProvided('websiteUrl', $organizerSettings->getWebsiteUrl()),
 
+            'location_details' => $locationDetails,
+
             'homepage_visibility' => $dto->getProvided('homepageVisibility', $organizerSettings->getHomepageVisibility()),
 
             'homepage_theme_settings' => [
                 'homepage_background_color' => $dto->getProvided('homepageBackgroundColor', $organizerSettings->getHomepageThemeSetting('homepage_background_color')),
+                'homepage_content_background_color' => $dto->getProvided('homepageContentBackgroundColor', $organizerSettings->getHomepageThemeSetting('homepage_content_background_color')),
                 'homepage_primary_color' => $dto->getProvided('homepagePrimaryColor', $organizerSettings->getHomepageThemeSetting('homepage_primary_color')),
                 'homepage_primary_text_color' => $dto->getProvided('homepagePrimaryTextColor', $organizerSettings->getHomepageThemeSetting('homepage_primary_text_color')),
                 'homepage_secondary_color' => $dto->getProvided('homepageSecondaryColor', $organizerSettings->getHomepageThemeSetting('homepage_secondary_color')),

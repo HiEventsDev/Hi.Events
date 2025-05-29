@@ -1,7 +1,7 @@
 import {
-    IconCalendar, IconCalendarPlus,
+    IconCalendar,
+    IconCalendarPlus,
     IconDashboard,
-    IconDeviceDesktopSearch,
     IconExternalLink,
     IconPaint,
     IconSettings
@@ -9,10 +9,19 @@ import {
 import {t} from "@lingui/macro";
 import {BreadcrumbItem, NavItem} from "../AppLayout/types.ts";
 import AppLayout from "../AppLayout";
-import {NavLink} from "react-router";
+import {NavLink, useParams} from "react-router";
 import {Button} from "@mantine/core";
+import {useGetOrganizer} from "../../../queries/useGetOrganizer.ts";
+import {useState} from "react";
+import {CreateEventModal} from "../../modals/CreateEventModal";
+import {TopBarButton} from "../../common/TopBarButton";
+import classes from "./OrganizerLayout.module.scss";
 
 const OrganizerLayout = () => {
+    const {organizerId} = useParams();
+    const {data: organizer} = useGetOrganizer(organizerId);
+    const [showCreateEventModal, setShowCreateEventModal] = useState(false);
+
     const navItems: NavItem[] = [
         {label: 'Overview'},
         {link: '', label: t`Dashboard`, icon: IconDashboard},
@@ -20,7 +29,7 @@ const OrganizerLayout = () => {
         {label: t`Manage`},
         {link: 'events', label: t`Events`, icon: IconCalendar},
         {link: 'settings', label: t`Settings`, icon: IconSettings},
-        {link: 'organizer-homepage-designer', label: t`Organizer Homepage`, icon: IconDeviceDesktopSearch},
+        {link: 'organizer-homepage-designer', label: t`Homepage Designer`, icon: IconPaint},
     ];
 
     const breadcrumbItems: BreadcrumbItem[] = [
@@ -28,6 +37,10 @@ const OrganizerLayout = () => {
             link: '/manage/events',
             content: t`Events`
         },
+        {
+            link: `/dashboard/${organizerId}/${organizer?.slug || ''}`,
+            content: organizer?.name || t`Organizer`
+        }
     ];
 
     return (
@@ -37,17 +50,19 @@ const OrganizerLayout = () => {
             entityType="organizer"
             topBarContent={(
                 <>
-                    <Button
-                        component={NavLink}
-                        to={`/organizer/`}
-                        target={'_blank'}
-                        variant={'filled'}
-                        color={'green'}
+                    <TopBarButton
+                        onClick={() => setShowCreateEventModal(true)}
                         leftSection={<IconCalendarPlus size={17}/>}
                         title={t`Create Event`}
                     >
                         {t`Create Event`}
-                    </Button>
+                    </TopBarButton>
+                    {showCreateEventModal && (
+                        <CreateEventModal
+                            onClose={() => setShowCreateEventModal(false)}
+                            organizerId={organizerId}
+                        />
+                    )}
                 </>
             )}
             breadcrumbContentRight={(
@@ -57,15 +72,14 @@ const OrganizerLayout = () => {
             actionGroupContent={(
                 <Button
                     component={NavLink}
-                    to={`/event/`}
+                    to={`/events/${organizerId}/${organizer?.slug || ''}`}
                     target={'_blank'}
                     variant={'transparent'}
+                    className={classes.viewHomepageButton}
                     leftSection={<IconExternalLink size={17}/>}
-                    title={t`Organizer Homepage`}
+                    title={t`View Organizer Homepage`}
                 >
-                    <div className={''}>
-                        {t`Organizer Homepage`}
-                    </div>
+                    {t`View Homepage`}
                 </Button>
             )}
         />

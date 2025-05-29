@@ -7,6 +7,7 @@ use HiEvents\DomainObjects\Enums\PaymentProviders;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
+use HiEvents\DomainObjects\OrganizerSettingDomainObject;
 use HiEvents\Exceptions\OrganizerNotFoundException;
 use HiEvents\Helper\DateHelper;
 use HiEvents\Helper\IdHelper;
@@ -64,10 +65,12 @@ class CreateEventService
      */
     private function getOrganizer(int $organizerId, int $accountId): OrganizerDomainObject
     {
-        $organizer = $this->organizerRepository->findFirstWhere([
-            'id' => $organizerId,
-            'account_id' => $accountId,
-        ]);
+        $organizer = $this->organizerRepository
+            ->loadRelation(OrganizerSettingDomainObject::class)
+            ->findFirstWhere([
+                'id' => $organizerId,
+                'account_id' => $accountId,
+            ]);
 
         if ($organizer === null) {
             throw new OrganizerNotFoundException(
@@ -129,15 +132,36 @@ class CreateEventService
             return;
         }
 
+        $organizerSettings = $organizer->getOrganizerSettings();
+
         $this->eventSettingsRepository->create([
             'event_id' => $event->getId(),
-            'homepage_background_color' => '#ffffff',
-            'homepage_primary_text_color' => '#000000',
-            'homepage_primary_color' => '#7b5db8',
-            'homepage_secondary_text_color' => '#ffffff',
-            'homepage_secondary_color' => '#7b5eb9',
+            'homepage_background_color' => $organizerSettings->getHomepageThemeSetting(
+                'homepage_content_background_color',
+                '#ffffff'
+            ),
+            'homepage_primary_text_color' => $organizerSettings->getHomepageThemeSetting(
+                'homepage_primary_text_color',
+                '#000000'
+            ),
+            'homepage_primary_color' => $organizerSettings->getHomepageThemeSetting(
+                'homepage_primary_color',
+                '#7b5db8'
+            ),
+            'homepage_secondary_text_color' => $organizerSettings->getHomepageThemeSetting(
+                'homepage_secondary_text_color',
+                '#ffffff'
+            ),
+            'homepage_secondary_color' => $organizerSettings->getHomepageThemeSetting(
+                'homepage_secondary_color',
+                '#7a5eb9'
+            ),
+            'homepage_body_background_color' => $organizerSettings->getHomepageThemeSetting(
+                'homepage_background_color',
+                '#ffffff'
+            ),
+
             'homepage_background_type' => HomepageBackgroundType::COLOR->name,
-            'homepage_body_background_color' => '#7a5eb9',
             'continue_button_text' => __('Continue'),
             'support_email' => $organizer->getEmail(),
 

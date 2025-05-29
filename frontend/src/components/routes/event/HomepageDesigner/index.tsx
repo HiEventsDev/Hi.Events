@@ -9,13 +9,15 @@ import {showSuccess} from "../../../../utilites/notifications.tsx";
 import {t} from "@lingui/macro";
 import {useForm} from "@mantine/form";
 import {Button, ColorInput, Group, TextInput} from "@mantine/core";
-import {CoverUpload} from "./CoverUpload";
 import {IconColorPicker, IconHelp, IconPhoto} from "@tabler/icons-react";
 import {Tooltip} from "../../../common/Tooltip";
 import {CustomSelect} from "../../../common/CustomSelect";
-import {useGetEventImages} from "../../../../queries/useGetEventImages.ts";
+import {GET_EVENT_IMAGES_QUERY_KEY, useGetEventImages} from "../../../../queries/useGetEventImages.ts";
 import {eventPreviewPath} from "../../../../utilites/urlHelper.ts";
 import {LoadingMask} from "../../../common/LoadingMask";
+import {ImageUploadDropzone} from "../../../common/ImageUploadDropzone";
+import {queryClient} from "../../../../utilites/queryClient.ts";
+import {GET_EVENT_PUBLIC_QUERY_KEY} from "../../../../queries/useGetEventPublic.ts";
 
 const HomepageDesigner = () => {
     const {eventId} = useParams();
@@ -119,7 +121,24 @@ const HomepageDesigner = () => {
                             <IconHelp size={20}/>
                         </Tooltip>
                     </Group>
-                    <CoverUpload/>
+                    <ImageUploadDropzone
+                        imageType="EVENT_COVER"
+                        entityId={eventId}
+                        onUploadSuccess={() => Promise.all([
+                            queryClient.invalidateQueries({
+                                queryKey: [GET_EVENT_IMAGES_QUERY_KEY, eventId]
+                            }),
+                            queryClient.invalidateQueries({
+                                queryKey: [GET_EVENT_PUBLIC_QUERY_KEY, eventId]
+                            })
+                        ])}
+                        existingImageData={{
+                            url: existingCover?.url,
+                            id: existingCover?.id,
+                        }}
+                        helpText={t`Cover image will be displayed at the top of your organizer page`}
+                        displayMode="compact"
+                    />
 
                     <h3>{t`Colors`}</h3>
                     <form onSubmit={form.onSubmit(handleSubmit as any)}>
