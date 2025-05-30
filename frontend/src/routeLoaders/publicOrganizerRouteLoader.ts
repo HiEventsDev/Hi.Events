@@ -1,5 +1,5 @@
 import {LoaderFunctionArgs} from "react-router";
-import {queryClient} from "../utilites/queryClient.ts";
+import {getQueryClient} from "../utilites/ssrQueryClient.ts";
 import {getOrganizerPublicQuery} from "../queries/useGetOrganizerPublic.ts";
 import {getOrganizerPublicEventsQuery} from "../queries/useGetOrganizerEventsPublic.ts";
 import {QueryFilterOperator} from "../types.ts";
@@ -12,9 +12,9 @@ export const publicOrganizerRouteLoader = async ({params}: LoaderFunctionArgs) =
     }
 
     try {
-        const organizer = await queryClient.fetchQuery(getOrganizerPublicQuery(organizerId));
+        const organizer = await getQueryClient().fetchQuery(getOrganizerPublicQuery(organizerId));
 
-        const upcomingEventsData = await queryClient.fetchQuery(
+        const upcomingEventsData = await getQueryClient().fetchQuery(
             getOrganizerPublicEventsQuery(organizerId, {
                 pageNumber: 1,
                 perPage: 25,

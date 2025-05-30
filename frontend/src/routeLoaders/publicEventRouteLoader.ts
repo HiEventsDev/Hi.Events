@@ -1,7 +1,7 @@
 import {LoaderFunctionArgs} from "react-router";
 import {promoCodeClientPublic} from "../api/promo-code.client.ts";
 import {getEventPublicQuery} from "../queries/useGetEventPublic.ts";
-import {queryClient} from "../utilites/queryClient.ts"; // adjust path as needed
+import {getQueryClient} from "../utilites/ssrQueryClient.ts";
 
 export const publicEventRouteLoader = async ({params, request}: LoaderFunctionArgs) => {
     try {
@@ -21,7 +21,7 @@ export const publicEventRouteLoader = async ({params, request}: LoaderFunctionAr
             promoCode,
             promoCodeValid ?? false,
         );
-        const event = await queryClient.fetchQuery(eventQuery);
+        const event = await getQueryClient().fetchQuery(eventQuery);
 
         return {event, promoCodeValid, promoCode};
     } catch (error: any) {

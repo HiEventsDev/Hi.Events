@@ -4,7 +4,7 @@ import {Notifications} from "@mantine/notifications";
 import {i18n} from "@lingui/core";
 import {I18nProvider} from "@lingui/react";
 import {ModalsProvider} from "@mantine/modals";
-import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
+import {QueryClient, QueryClientProvider, HydrationBoundary} from "@tanstack/react-query";
 import {Helmet, HelmetProvider} from "react-helmet-async";
 
 import "@mantine/core/styles/global.css";
@@ -30,6 +30,7 @@ export const App: FC<
         queryClient: QueryClient;
         locale: string;
         helmetContext?: any;
+        dehydratedState?: unknown;
     }>
 > = (props) => {
     const [isLoadedOnBrowser, setIsLoadedOnBrowser] = React.useState(false);
@@ -80,15 +81,17 @@ export const App: FC<
                 <HelmetProvider context={props.helmetContext}>
                     <I18nProvider i18n={i18n}>
                         <QueryClientProvider client={props.queryClient}>
-                            <StartupChecks/>
-                            <ThirdPartyScripts/>
-                            <ModalsProvider>
-                                <Helmet>
-                                    <title>Hi.Events</title>
-                                </Helmet>
-                                {props.children}
-                            </ModalsProvider>
-                            <Notifications/>
+                            <HydrationBoundary state={props.dehydratedState}>
+                                <StartupChecks/>
+                                <ThirdPartyScripts/>
+                                <ModalsProvider>
+                                    <Helmet>
+                                        <title>Hi.Events</title>
+                                    </Helmet>
+                                    {props.children}
+                                </ModalsProvider>
+                                <Notifications/>
+                            </HydrationBoundary>
                         </QueryClientProvider>
                     </I18nProvider>
                 </HelmetProvider>
