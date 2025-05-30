@@ -91,7 +91,7 @@ const EventLayout = () => {
     const breadcrumbItems: BreadcrumbItem[] = [
         {
             link: '/manage/events',
-            content: t`Events`
+            content: t`Home`
         },
         ...(isEventFetched ? [
             {

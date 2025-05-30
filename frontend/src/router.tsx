@@ -1,9 +1,7 @@
-import {LoaderFunctionArgs, Navigate, RouteObject} from "react-router";
+import {Navigate, RouteObject} from "react-router";
 import ErrorPage from "./error-page.tsx";
 import {useEffect, useState} from "react";
 import {useGetMe} from "./queries/useGetMe.ts";
-import {getOrganizerQuery} from "./queries/useGetOrganizer.ts";
-import {queryClient} from "./utilites/queryClient.ts";
 import {publicEventRouteLoader} from "./routeLoaders/publicEventRouteLoader.ts";
 import {publicOrganizerRouteLoader} from "./routeLoaders/publicOrganizerRouteLoader.ts";
 

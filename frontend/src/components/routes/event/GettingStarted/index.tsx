@@ -27,6 +27,8 @@ const GettingStarted = () => {
         const searchParams = new URLSearchParams(location.search);
         const isChromeOrFirefox = browser === Browser.Chrome || browser === Browser.Firefox;
 
+        console.log('Browser:', browser, 'isChromeOrFirefox:', isChromeOrFirefox);
+
         if (searchParams.get('new_event') === 'true' && isChromeOrFirefox) {
             setShowConfetti(true);
 

@@ -1,7 +1,7 @@
 import {useMemo} from "react";
 
 export enum Browser {
-    Chrome = "Chrome",
+    Chrome = "Chromium",
     Firefox = "Firefox",
     Edge = "Edge",
     Brave = "Brave",

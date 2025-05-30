@@ -13,6 +13,7 @@ import classNames from "classnames";
 import {Trans} from "@lingui/macro";
 import {InsertImageControl} from "./Controls/InsertImageControl";
 import {ImageResize} from "./Extensions/ImageResizeExtension";
+import {MantineFontSize} from "@mantine/core/lib/core";
 
 interface EditorProps {
     onChange: (value: string) => void;
@@ -24,6 +25,7 @@ interface EditorProps {
     error?: string;
     editorType?: 'full' | 'simple';
     maxLength?: number;
+    size?: MantineFontSize;
 }
 
 export const Editor = ({
@@ -36,6 +38,7 @@ export const Editor = ({
                            description = '',
                            editorType = 'full',
                            maxLength,
+                           size = 'md',
                        }: EditorProps) => {
     const [charError, setCharError] = useState<string | null | React.ReactNode>(null);
 
@@ -81,10 +84,11 @@ export const Editor = ({
 
     return (
         <div className={classNames([classes.inputWrapper, className])}>
-            {label && <InputLabel required={required} onClick={() => editor?.commands.focus()}>{label}</InputLabel>}
+            {label && <InputLabel size={size} required={required}
+                                  onClick={() => editor?.commands.focus()}>{label}</InputLabel>}
             {description && (
                 <div style={{marginBottom: 5}}>
-                    <InputDescription>{description}</InputDescription>
+                    <InputDescription size={size}>{description}</InputDescription>
                 </div>
             )}
             <RichTextEditor editor={editor}>

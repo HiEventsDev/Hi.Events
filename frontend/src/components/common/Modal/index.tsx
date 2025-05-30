@@ -20,6 +20,7 @@ export const Modal = (props: MantineModalProps & ModalProps) => {
             closeOnClickOutside={false}
             classNames={{
                 title: classes.modalTitle,
+                ...props.classNames
             }}
         >
             <div style={{padding: '15px', paddingTop: 0}}>

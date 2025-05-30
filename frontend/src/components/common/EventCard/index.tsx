@@ -21,7 +21,7 @@ import {EventStatusBadge} from "../EventStatusBadge";
 import {useDisclosure} from "@mantine/hooks";
 import {DuplicateEventModal} from "../../modals/DuplicateEventModal";
 import {useState} from "react";
-import {ActionMenu, MenuItem} from '../ActionMenu';
+import {ActionMenu, ActionMenuItemsGroup, MenuItem} from '../ActionMenu';
 import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
 import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {useUpdateEventStatus} from "../../../mutations/useUpdateEventStatus.ts";
@@ -73,6 +73,41 @@ export function EventCard({event}: EventCardProps) {
         })
     }
 
+    const menuItems: ActionMenuItemsGroup[] = [
+        {
+            label: '',
+            items: [
+                {
+                    label: t`View event page`,
+                    icon: <IconEye size={14}/>,
+                    onClick: () => window.location.href = eventHomepagePath(event),
+                },
+                {
+                    label: t`Manage event`,
+                    icon: <IconSettings size={14}/>,
+                    onClick: () => navigate(`/manage/event/${event.id}`),
+                },
+                ((event.lifecycle_status === 'UPCOMING' || event.lifecycle_status === 'ONGOING')
+                    && event.status === 'LIVE') && {
+                    label: t`Check-in`,
+                    icon: <IconQrcode size={14}/>,
+                    onClick: () => navigate(`/manage/event/${event.id}/check-in`),
+                    visible: true,
+                },
+                {
+                    label: t`Duplicate event`,
+                    icon: <IconCopy size={14}/>,
+                    onClick: () => handleDuplicate(event),
+                },
+                {
+                    label: event?.status === 'ARCHIVED' ? t`Restore event` : t`Archive event`,
+                    icon: <IconArchive size={14}/>,
+                    onClick: handleStatusToggle(event)
+                },
+            ].filter(Boolean) as MenuItem[],
+        },
+    ];
+
     return (
         <>
             <Card className={classes.eventCard}>
@@ -117,40 +152,7 @@ export function EventCard({event}: EventCardProps) {
                     </div>
                     <div className={classes.actionContainer}>
                         <ActionMenu
-                            itemsGroups={[
-                                {
-                                    label: '',
-                                    items: [
-                                        {
-                                            label: t`View event page`,
-                                            icon: <IconEye size={14}/>,
-                                            onClick: () => window.location.href = eventHomepagePath(event),
-                                        },
-                                        {
-                                            label: t`Manage event`,
-                                            icon: <IconSettings size={14}/>,
-                                            onClick: () => navigate(`/manage/event/${event.id}`),
-                                        },
-                                        ((event.lifecycle_status === 'UPCOMING' || event.lifecycle_status === 'ONGOING')
-                                            && event.status === 'LIVE') && {
-                                            label: t`Check-in`,
-                                            icon: <IconQrcode size={14}/>,
-                                            onClick: () => navigate(`/manage/event/${event.id}/check-in`),
-                                            visible: true,
-                                        },
-                                        {
-                                            label: t`Duplicate event`,
-                                            icon: <IconCopy size={14}/>,
-                                            onClick: () => handleDuplicate(event),
-                                        },
-                                        {
-                                            label: event?.status === 'ARCHIVED' ? t`Restore event` : t`Archive event`,
-                                            icon: <IconArchive size={14}/>,
-                                            onClick: handleStatusToggle(event)
-                                        },
-                                    ].filter(Boolean) as MenuItem[],
-                                },
-                            ]}
+                            itemsGroups={menuItems}
                             target={
                                 <ActionIcon className={classes.actionButton} size={"lg"} variant={"subtle"}>
                                     <IconDotsVertical/>
@@ -191,40 +193,7 @@ export function EventCard({event}: EventCardProps) {
 
                     <div className={classes.mobileActionWrapper}>
                         <ActionMenu
-                            itemsGroups={[
-                                {
-                                    label: '',
-                                    items: [
-                                        {
-                                            label: t`View event page`,
-                                            icon: <IconEye size={14}/>,
-                                            onClick: () => window.location.href = eventHomepagePath(event),
-                                        },
-                                        {
-                                            label: t`Manage event`,
-                                            icon: <IconSettings size={14}/>,
-                                            onClick: () => navigate(`/manage/event/${event.id}`),
-                                        },
-                                        ((event.lifecycle_status === 'UPCOMING' || event.lifecycle_status === 'ONGOING')
-                                            && event.status === 'LIVE') && {
-                                            label: t`Check-in`,
-                                            icon: <IconQrcode size={14}/>,
-                                            onClick: () => navigate(`/manage/event/${event.id}/check-in`),
-                                            visible: true,
-                                        },
-                                        {
-                                            label: t`Duplicate event`,
-                                            icon: <IconCopy size={14}/>,
-                                            onClick: () => handleDuplicate(event),
-                                        },
-                                        {
-                                            label: event?.status === 'ARCHIVED' ? t`Restore event` : t`Archive event`,
-                                            icon: <IconArchive size={14}/>,
-                                            onClick: handleStatusToggle(event)
-                                        },
-                                    ].filter(Boolean) as MenuItem[],
-                                },
-                            ]}
+                            itemsGroups={menuItems}
                             target={
                                 <Button
                                     variant="light"
