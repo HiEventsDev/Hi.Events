@@ -18,7 +18,7 @@
   display: flex;
   gap: 1rem;
   padding: 1rem;
-  
+
   @include mixins.respond-below(sm) {
     flex-direction: column;
   }
@@ -58,8 +58,12 @@
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 // Main content section
@@ -76,7 +80,7 @@
   align-items: flex-start;
   gap: 0.75rem;
   justify-content: space-between;
-  
+
   @include mixins.respond-below(sm) {
     flex-wrap: wrap;
     gap: 0.5rem;
@@ -87,9 +91,9 @@
   flex: 1;
   text-decoration: none;
   color: inherit;
-  
+
   &:hover .eventTitle {
-    color: var(--mantine-color-blue-6);
+    color: var(--tk-primary);
   }
 }
 
@@ -100,7 +104,7 @@
   line-height: 1.3;
   color: var(--mantine-color-dark-9);
   transition: color 0.2s ease;
-  
+
   @include mixins.respond-below(sm) {
     font-size: 1rem;
   }
@@ -116,7 +120,7 @@
   text-decoration: none;
   transition: color 0.2s ease;
   display: inline;
-  
+
   &:hover {
     color: var(--mantine-color-blue-6);
     text-decoration: underline;
@@ -177,7 +181,7 @@
 // Action button
 .actionContainer {
   flex-shrink: 0;
-  
+
   @include mixins.respond-below(sm) {
     display: none;
   }
@@ -185,7 +189,7 @@
 
 .actionButton {
   color: var(--mantine-color-gray-6);
-  
+
   &:hover {
     background: var(--mantine-color-gray-1);
     color: var(--mantine-color-dark-9);
@@ -206,7 +210,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 1rem;
-  
+
   @include mixins.respond-below(sm) {
     grid-template-columns: 1fr 1fr;
     gap: 0.75rem;

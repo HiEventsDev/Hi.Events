@@ -9,7 +9,7 @@ import {
     IconDiscount2,
     IconExternalLink,
     IconEye,
-    IconEyeOff,
+    IconEyeOff, IconMailCheck, IconMailForward,
     IconPaint,
     IconQrcode,
     IconReceipt,
@@ -43,6 +43,9 @@ import {useWindowWidth} from "../../../hooks/useWindowWidth.ts";
 import {SidebarCallout} from "../../common/SidebarCallout";
 import {StripeConnectButton} from "../../common/StripeConnectButton";
 import {useGetAccount} from "../../../queries/useGetAccount";
+import {useGetMe} from "../../../queries/useGetMe.ts";
+import {useResendEmailConfirmation} from "../../../mutations/useResendEmailConfirmation.ts";
+import {useState} from "react";
 
 const EventLayout = () => {
     const location = useLocation();
@@ -55,7 +58,24 @@ const EventLayout = () => {
     const {data: event, isFetched: isEventFetched} = useGetEvent(eventId);
     const {data: eventSettings, isFetched: isEventSettingsFetched} = useGetEventSettings(eventId);
     const {data: eventStats} = useGetEventStats(eventId);
-    const {data: account} = useGetAccount();
+    const {data: me} = useGetMe();
+
+    const resendEmailConfirmationMutation = useResendEmailConfirmation();
+    const [emailConfirmationResent, setEmailConfirmationResent] = useState(false);
+
+    const handleEmailConfirmationResend = () => {
+        resendEmailConfirmationMutation.mutate({
+            userId: me?.id
+        }, {
+            onSuccess: () => {
+                showSuccess(t`Email confirmation resent successfully`);
+                setEmailConfirmationResent(true);
+            },
+            onError: () => {
+                showError(t`Something went wrong. Please try again.`);
+            }
+        })
+    }
 
     const navItems: NavItem[] = [
         {link: '/manage/organizer/' + event?.organizer?.id, label: t`Organizer Dashboard`, icon: IconArrowLeft},
@@ -204,23 +224,16 @@ const EventLayout = () => {
                 </Button>
             )}
             sidebarFooter={
-                (!account?.stripe_connect_setup_complete) && eventId ? (
+                (me && !me.is_email_verified && !emailConfirmationResent ? (
                     <SidebarCallout
-                        icon={<IconBrandStripe size={20}/>}
-                        heading={t`Connect Stripe`}
-                        description={t`Connect your Stripe account to accept payments for tickets and products.`}
-                        storageKey={`event-${eventId}-stripe-callout-dismissed`}
-                        customButton={
-                            <StripeConnectButton
-                                fullWidth
-                                variant="white"
-                                buttonIcon={<IconCreditCard size={16}/>}
-                                buttonText={t`Connect Stripe`}
-                                className={classes.calloutButton}
-                            />
-                        }
+                        icon={<IconMailCheck size={20}/>}
+                        heading={t`Verify your email`}
+                        description={t`Confirm your email to access all features.`}
+                        buttonIcon={<IconMailForward size={16}/>}
+                        buttonText={t`Resend email`}
+                        onClick={() => handleEmailConfirmationResend()}
                     />
-                ) : null
+                ) : null)
             }
         />
     );

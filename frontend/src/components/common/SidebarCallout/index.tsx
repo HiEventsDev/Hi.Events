@@ -12,6 +12,7 @@ interface SidebarCalloutProps {
     onClose?: () => void;
     storageKey?: string;
     customButton?: React.ReactNode;
+    isDismissible?: boolean;
 }
 
 export const SidebarCallout: React.FC<SidebarCalloutProps> = ({
@@ -23,7 +24,8 @@ export const SidebarCallout: React.FC<SidebarCalloutProps> = ({
                                                                   onClick,
                                                                   onClose,
                                                                   storageKey = 'sidebar-callout-dismissed',
-                                                                  customButton
+                                                                  customButton,
+                                                                  isDismissible = true,
                                                               }) => {
     const [isVisible, setIsVisible] = useState<boolean | null>(null);
 
@@ -48,12 +50,14 @@ export const SidebarCallout: React.FC<SidebarCalloutProps> = ({
 
     return (
         <div className={classes.calloutBox}>
-            <CloseButton
-                className={classes.closeButton}
-                onClick={handleClose}
-                size="sm"
-                iconSize={16}
-            />
+            {isDismissible && (
+                <CloseButton
+                    className={classes.closeButton}
+                    onClick={handleClose}
+                    size="sm"
+                    iconSize={16}
+                />
+            )}
             <div className={classes.calloutIcon}>
                 {icon}
             </div>

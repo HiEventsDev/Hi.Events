@@ -1,18 +1,19 @@
 import {
     IconArrowsHorizontal,
+    IconBrandStripe,
     IconCalendar,
     IconCalendarPlus,
+    IconCreditCard,
     IconDashboard,
     IconExternalLink,
     IconPaint,
     IconSettings,
-    IconSparkles,
     IconUsersGroup
 } from "@tabler/icons-react";
 import {t} from "@lingui/macro";
 import {BreadcrumbItem, NavItem} from "../AppLayout/types.ts";
 import AppLayout from "../AppLayout";
-import {NavLink, useNavigate, useParams} from "react-router";
+import {NavLink, useParams} from "react-router";
 import {Button} from "@mantine/core";
 import {useGetOrganizer} from "../../../queries/useGetOrganizer.ts";
 import {useState} from "react";
@@ -24,16 +25,18 @@ import {InviteUserModal} from "../../modals/InviteUserModal";
 import {useDisclosure} from "@mantine/hooks";
 import {SwitchOrganizerModal} from "../../modals/SwitchOrganizerModal";
 import {useGetOrganizers} from "../../../queries/useGetOrganizers.ts";
+import {useGetAccount} from "../../../queries/useGetAccount.ts";
+import {StripeConnectButton} from "../../common/StripeConnectButton";
 
 const OrganizerLayout = () => {
     const {organizerId} = useParams();
     const {data: organizer} = useGetOrganizer(organizerId);
-    const navigate = useNavigate();
     const [showCreateEventModal, setShowCreateEventModal] = useState(false);
     const [createModalOpen, {open: openCreateModal, close: closeCreateModal}] = useDisclosure(false);
     const [switchOrganizerModalOpen, {open: openSwitchModal, close: closeSwitchModal}] = useDisclosure(false);
     const {data: organizerResposne} = useGetOrganizers();
     const organizers = organizerResposne?.data;
+    const {data: account} = useGetAccount();
 
     const navItems: NavItem[] = [
         {
@@ -85,16 +88,25 @@ const OrganizerLayout = () => {
             },
             storageKey: `organizer-${organizerId}-team-callout-dismissed`
         },
-        {
-            icon: <IconSparkles size={20}/>,
-            heading: t`Design Your Homepage`,
-            description: t`Customize your organizer homepage to showcase your brand.`,
-            buttonIcon: <IconPaint size={16}/>,
-            buttonText: t`Customize Homepage`,
-            onClick: () => navigate(`/manage/organizer/${organizerId}/organizer-homepage-designer`),
-            storageKey: `organizer-${organizerId}-homepage-callout-dismissed`
-        }
     ];
+
+    if (account && !account?.stripe_connect_setup_complete) {
+        callouts.unshift({
+            icon: <IconBrandStripe size={20}/>,
+            heading: t`Connect Stripe`,
+            description: t`Connect your Stripe account to accept payments for tickets and products.`,
+            storageKey: `stripe-callout-dismissed`,
+            customButton:
+                <StripeConnectButton
+                    fullWidth
+                    variant="white"
+                    buttonIcon={<IconCreditCard size={16}/>}
+                    buttonText={t`Connect Stripe`}
+                    className={classes.calloutButton}
+                />
+        });
+    }
+
 
     return (
         <>

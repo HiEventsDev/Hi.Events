@@ -63,7 +63,7 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
     public function findByOrganizerId(int $organizerId, QueryParamsDTO $params): LengthAwarePaginator
     {
         $where = [
-            ['events.status', '!=', OrderStatus::RESERVED->name],
+            ['orders.status', '!=', OrderStatus::RESERVED->name],
         ];
 
         if ($params->query) {
