@@ -195,7 +195,7 @@ export const router: RouteObject[] = [
         ]
     },
     {
-        path: "/dashboard/:organizerId?",
+        path: "/manage/organizer/:organizerId?",
         async lazy() {
             const Dashboard = await import("./components/layouts/OrganizerLayout");
             return {Component: Dashboard.default};
@@ -203,7 +203,7 @@ export const router: RouteObject[] = [
         errorElement: <ErrorPage/>,
         children: [
             {
-                path: "",
+                path: "dashboard?",
                 async lazy() {
                     const OrganizerDashboard = await import("./components/routes/organizer/OrganizerDashboard");
                     return {Component: OrganizerDashboard.default};

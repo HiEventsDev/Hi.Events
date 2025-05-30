@@ -16,6 +16,10 @@
     font-weight: 400;
     font-size: 0.85em;
     opacity: 0.9;
+
+    @include mixins.respond-below(md) {
+      display: none;
+    }
   }
 }
 
@@ -71,9 +75,21 @@
 
   @include mixins.respond-below(md) {
     display: none;
-
   }
 }
 
-
-
+.calloutButton {
+  background: rgba(255, 255, 255, 0.2) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  color: white !important;
+  font-weight: 600;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
+  z-index: 1;
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.25) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+}

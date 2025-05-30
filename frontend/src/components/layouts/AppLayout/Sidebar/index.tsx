@@ -5,21 +5,24 @@ import {t} from "@lingui/macro";
 import classes from './Sidebar.module.scss';
 import {NavItem} from "../types";
 import {NavLink} from "react-router";
+import classNames from "classnames";
 
 interface SidebarProps {
     sidebarOpen: boolean;
     setSidebarOpen: (open: boolean) => void;
     navItems: NavItem[];
+    sidebarFooter?: React.ReactNode;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
                                                     sidebarOpen,
                                                     setSidebarOpen,
                                                     navItems,
+                                                    sidebarFooter,
                                                 }) => {
     const renderLinks = () => {
         return navItems.map((item) => {
-            if (!item.link && item.link !== "") {
+            if (!item.link && item.link !== "" && item.onClick === undefined) {
                 return (
                     <div className={classes.sectionHeading} key={item.label}>
                         {item.label}
@@ -32,7 +35,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             }
 
             if (item.loading) {
-                return <div key={item.label} className={classes.loading}></div>;
+                return <a key={item.label} className={classNames(classes.loading, classes.link)}>&nbsp;</a>;
             }
 
             return (
@@ -60,19 +63,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
         });
     };
 
-    if (sidebarOpen) {
-        return (
-            <UnstyledButton
-                className={classes.sidebarOpen}
-                onClick={() => setSidebarOpen(!sidebarOpen)}>
-                <IconChevronLeft size={20}/>
-                <VisuallyHidden>{t`Open sidebar`}</VisuallyHidden>
-            </UnstyledButton>
-        );
-    }
-
     return (
         <div className={classes.sidebar}>
+
             <div className={classes.logo}>
                 <NavLink to={`/manage/events`}>
                     <img style={{maxWidth: '160px', margin: "10px auto"}}
@@ -82,6 +75,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <div className={classes.nav}>
                 {renderLinks()}
             </div>
+            {sidebarFooter && (
+                <div className={classes.sidebarFooter}>
+                    {sidebarFooter}
+                </div>
+            )}
             {!sidebarOpen && (
                 <UnstyledButton
                     className={classes.sidebarClose}

@@ -1,12 +1,12 @@
 import {Avatar, Menu, UnstyledButton} from "@mantine/core";
 import {getInitials} from "../../../utilites/helpers.ts";
-import {IconLifebuoy, IconLogout, IconSettingsCog, IconUser,} from "@tabler/icons-react";
+import {IconLifebuoy, IconLogout, IconSettingsCog, IconUser, IconUsers,} from "@tabler/icons-react";
 import {useGetMe} from "../../../queries/useGetMe.ts";
 import {NavLink} from "react-router";
 import {t} from "@lingui/macro";
 import {authClient} from "../../../api/auth.client.ts";
 import {useDisclosure} from "@mantine/hooks";
-import {AboutModal} from "../../modals/AboutModal/index.tsx";
+import {AboutModal} from "../../modals/AboutModal";
 import {getConfig} from "../../../utilites/config.ts";
 
 interface Link {
@@ -33,7 +33,16 @@ export const GlobalMenu = () => {
             icon: IconSettingsCog,
             link: `/account/settings`,
         },
+
     ];
+
+    if (me?.role === 'ADMIN') {
+        links.push({
+            label: t`User Management`,
+            icon: IconUsers,
+            link: `/account/users`
+        })
+    }
 
     if (!getConfig("VITE_HIDE_ABOUT_LINK")) {
         links.push({

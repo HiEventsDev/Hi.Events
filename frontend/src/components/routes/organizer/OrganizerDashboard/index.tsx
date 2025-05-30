@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {NavLink, useParams} from "react-router";
 import {Badge, Button, Group, Select, Skeleton, Tooltip} from '@mantine/core';
 import {
@@ -20,7 +20,7 @@ import {useGetEvents} from "../../../../queries/useGetEvents.ts";
 import {formatCurrency} from "../../../../utilites/currency.ts";
 import {relativeDate} from "../../../../utilites/dates.ts";
 import {formatNumber} from "../../../../utilites/helpers.ts";
-import {Event, Order, QueryFilterOperator} from '../../../../types';
+import {Event, Order, QueryFilters} from '../../../../types';
 import {useGetOrganizerOrders} from "../../../../queries/useGetOrganizerOrders.ts";
 import classes from './OrganizerDashboard.module.scss';
 import {StatBox} from "../../../common/StatBoxes";
@@ -29,6 +29,7 @@ import {EventCard} from "../../../common/EventCard";
 import {currenciesMap} from "../../../../../data/currencies.ts";
 import {Card} from "../../../common/Card";
 import {CreateEventModal} from "../../../modals/CreateEventModal";
+import {getEventQueryFilters} from "../../../../utilites/eventsPageFiltersHelper.ts";
 
 interface OrganizerStatDisplayItem {
     value: string | number;
@@ -94,22 +95,15 @@ export const OrganizerDashboard = () => {
     const recentOrders = ordersQuery.data?.data;
     const isLoadingOrders = ordersQuery.isLoading;
 
-    const {data: eventsResponse, isLoading: isLoadingEvents} = useGetEvents({
-        perPage: 10,
-        filterFields: organizerId ? {
-            organizer_id: {
-                operator: QueryFilterOperator.Equals,
-                value: organizerId
-            }
-        } : undefined,
-        sortBy: 'created_at',
-        sortDirection: 'desc',
-    });
+    const {
+        data: eventsResponse,
+        isFetching: isLoadingEvents,
+    } = useGetEvents(getEventQueryFilters({}) as QueryFilters);
     const recentEvents = eventsResponse?.data;
 
     const showOverallSkeleton = organizerStatsQuery.isLoading || isLoadingOrders || isLoadingEvents;
 
-    if (showOverallSkeleton && !stats && !recentOrders && !recentEvents) {
+    if (showOverallSkeleton || !stats || !recentOrders || !recentEvents || !organizer) {
         return <DashboardSkeleton/>;
     }
 
@@ -203,7 +197,41 @@ export const OrganizerDashboard = () => {
 
             {/* Recent Orders and Events Lists */}
             <div className={classes.recentItemsGrid}>
-                <div className={classes.recentSection}>
+                {/* Events Section - First on mobile, second on desktop */}
+                <div className={`${classes.recentSection} ${classes.eventsSection}`}>
+                    <h3 className={classes.sectionTitle}><Trans>Upcoming Events</Trans></h3>
+                    {isLoadingEvents && (
+                        <div className={classes.skeletonStack}>
+                            {[...Array(3)].map((_, i) => <Skeleton key={i} height={100} radius="md"/>)}
+                        </div>
+                    )}
+                    {!isLoadingEvents && recentEvents && recentEvents.length > 0 && (
+                        <div className={classes.eventsList}>
+                            {recentEvents.map((event: Event) => (
+                                <EventCard key={event.id} event={event}/>
+                            ))}
+                        </div>
+                    )}
+                    {!isLoadingEvents && (!recentEvents || recentEvents.length === 0) && (
+                        <div className={classes.emptyState}>
+                            <div className={classes.emptyStateIcon}>🎉</div>
+                            <h4><Trans>No events yet</Trans></h4>
+                            <p><Trans>Create your first event to start selling tickets and managing attendees.</Trans>
+                            </p>
+                            <Button
+                                onClick={() => setShowCreateEventModal(true)}
+                                variant="light"
+                                size="sm"
+                                mt="md"
+                            >
+                                <Trans>Create Event</Trans>
+                            </Button>
+                        </div>
+                    )}
+                </div>
+
+                {/* Orders Section - Second on mobile, first on desktop */}
+                <div className={`${classes.recentSection} ${classes.ordersSection}`}>
                     <h3 className={classes.sectionTitle}><Trans>Recent Orders</Trans></h3>
                     {isLoadingOrders && (
                         <div className={classes.skeletonStack}>
@@ -252,38 +280,6 @@ export const OrganizerDashboard = () => {
                             <div className={classes.emptyStateIcon}>📦</div>
                             <h4><Trans>No orders yet</Trans></h4>
                             <p><Trans>When customers purchase tickets, their orders will appear here.</Trans></p>
-                        </div>
-                    )}
-                </div>
-
-                <div className={classes.recentSection}>
-                    <h3 className={classes.sectionTitle}><Trans>Recent Events</Trans></h3>
-                    {isLoadingEvents && (
-                        <div className={classes.skeletonStack}>
-                            {[...Array(3)].map((_, i) => <Skeleton key={i} height={100} radius="md"/>)}
-                        </div>
-                    )}
-                    {!isLoadingEvents && recentEvents && recentEvents.length > 0 && (
-                        <div className={classes.eventsList}>
-                            {recentEvents.map((event: Event) => (
-                                <EventCard key={event.id} event={event}/>
-                            ))}
-                        </div>
-                    )}
-                    {!isLoadingEvents && (!recentEvents || recentEvents.length === 0) && (
-                        <div className={classes.emptyState}>
-                            <div className={classes.emptyStateIcon}>🎉</div>
-                            <h4><Trans>No events yet</Trans></h4>
-                            <p><Trans>Create your first event to start selling tickets and managing attendees.</Trans>
-                            </p>
-                            <Button
-                                onClick={() => setShowCreateEventModal(true)}
-                                variant="light"
-                                size="sm"
-                                mt="md"
-                            >
-                                <Trans>Create Event</Trans>
-                            </Button>
                         </div>
                     )}
                 </div>

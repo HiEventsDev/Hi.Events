@@ -9,7 +9,7 @@ export interface NavItem {
     isActive?: (isActive: boolean) => boolean;
     badge?: string | number | null | undefined;
     onClick?: () => void;
-    showWhen?: () => boolean;
+    showWhen?: () => boolean | undefined;
     loading?: boolean;
 }
 

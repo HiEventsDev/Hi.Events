@@ -15,6 +15,7 @@ interface AppLayoutProps {
     topBarContent?: React.ReactNode;
     breadcrumbContentRight?: React.ReactNode;
     actionGroupContent?: React.ReactNode;
+    sidebarFooter?: React.ReactNode;
 }
 
 interface SidebarToggleButtonProps {
@@ -44,7 +45,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({
                                                  topBarContent = null,
                                                  breadcrumbContentRight = null,
                                                  actionGroupContent = null,
-
+                                                 sidebarFooter = null,
                                              }) => {
     const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
     const [topBarShadow, setTopBarShadow] = useState<boolean>(false);
@@ -81,6 +82,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({
                 sidebarOpen={sidebarOpen}
                 setSidebarOpen={setSidebarOpen}
                 navItems={navItems}
+                sidebarFooter={sidebarFooter}
             />
 
             {sidebarOpen && (

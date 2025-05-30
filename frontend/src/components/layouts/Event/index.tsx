@@ -1,7 +1,9 @@
 import {
     IconArrowLeft,
+    IconBrandStripe,
     IconChartPie,
     IconChevronRight,
+    IconCreditCard,
     IconDashboard,
     IconDeviceTabletCode,
     IconDiscount2,
@@ -37,6 +39,10 @@ import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {ShareModal} from "../../modals/ShareModal";
 import {useDisclosure} from "@mantine/hooks";
 import {TopBarButton} from "../../common/TopBarButton";
+import {useWindowWidth} from "../../../hooks/useWindowWidth.ts";
+import {SidebarCallout} from "../../common/SidebarCallout";
+import {StripeConnectButton} from "../../common/StripeConnectButton";
+import {useGetAccount} from "../../../queries/useGetAccount";
 
 const EventLayout = () => {
     const location = useLocation();
@@ -49,9 +55,10 @@ const EventLayout = () => {
     const {data: event, isFetched: isEventFetched} = useGetEvent(eventId);
     const {data: eventSettings, isFetched: isEventSettingsFetched} = useGetEventSettings(eventId);
     const {data: eventStats} = useGetEventStats(eventId);
+    const {data: account} = useGetAccount();
 
     const navItems: NavItem[] = [
-        {link: '/dashboard/' + event?.organizer?.id, label: t`Organizer Dashboard`, icon: IconArrowLeft},
+        {link: '/manage/organizer/' + event?.organizer?.id, label: t`Organizer Dashboard`, icon: IconArrowLeft},
         {label: t`Overview`},
         {
             link: 'getting-started',
@@ -88,6 +95,9 @@ const EventLayout = () => {
         ? navItems.map(item => item.link ? {...item, loading: true} : item)
         : navItems;
 
+    const screenWidth = useWindowWidth();
+    const breadcrumbItemsWidth = screenWidth > 1100 ? 60 : 23;
+
     const breadcrumbItems: BreadcrumbItem[] = [
         {
             link: '/manage/events',
@@ -95,12 +105,12 @@ const EventLayout = () => {
         },
         ...(isEventFetched ? [
             {
-                link: `/dashboard/${event?.organizer?.id}`,
-                content: <Truncate length={24} text={event?.organizer?.name} showTooltip={false}/>
+                link: `/manage/organizer/${event?.organizer?.id}`,
+                content: <Truncate length={breadcrumbItemsWidth} text={event?.organizer?.name} showTooltip={false}/>
             },
             {
                 link: `/manage/event/${event?.id}`,
-                content: <Truncate length={20} text={event?.title} showTooltip={false}/>
+                content: <Truncate length={breadcrumbItemsWidth} text={event?.title} showTooltip={false}/>
             }
         ] : [
             {link: '#', content: '...'}
@@ -193,7 +203,25 @@ const EventLayout = () => {
 
                 </Button>
             )}
-
+            sidebarFooter={
+                (!account?.stripe_connect_setup_complete) && eventId ? (
+                    <SidebarCallout
+                        icon={<IconBrandStripe size={20}/>}
+                        heading={t`Connect Stripe`}
+                        description={t`Connect your Stripe account to accept payments for tickets and products.`}
+                        storageKey={`event-${eventId}-stripe-callout-dismissed`}
+                        customButton={
+                            <StripeConnectButton
+                                fullWidth
+                                variant="white"
+                                buttonIcon={<IconCreditCard size={16}/>}
+                                buttonText={t`Connect Stripe`}
+                                className={classes.calloutButton}
+                            />
+                        }
+                    />
+                ) : null
+            }
         />
     );
 };

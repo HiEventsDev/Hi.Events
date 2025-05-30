@@ -5,7 +5,7 @@ import {useParams} from "react-router";
 import {t} from "@lingui/macro";
 import {ToolBar} from "../../../common/ToolBar";
 import {SearchBarWrapper} from "../../../common/SearchBar";
-import {Button} from "@mantine/core";
+import {Button, Skeleton} from "@mantine/core";
 import {IconCalendarPlus} from "@tabler/icons-react";
 import {EventCard} from "../../../common/EventCard";
 import {Pagination} from "../../../common/Pagination";
@@ -26,6 +26,16 @@ const Events = () => {
     );
     const pagination = eventsData?.meta;
     const events = eventsData?.data;
+
+    const SkeletonEvents = () => {
+        return (
+            <div>
+                {Array.from({length: 6}).map((_, index) => (
+                    <Skeleton key={index} height={190} mb={10}/>
+                ))}
+            </div>
+        );
+    }
 
     return (
         <PageBody>
@@ -55,12 +65,14 @@ const Events = () => {
             </ToolBar>
 
             <EventsDashboardStatusButtons
-                baseUrl={`/dashboard/${organizerId}/events`}
+                baseUrl={`/manage/organizer/${organizerId}/events`}
                 eventsState={eventsState as string}
             />
 
             {(events?.length === 0 && isEventsFetched)
                 && <NoEventsBlankSlate openCreateModal={openCreateModal} eventsState={eventsState}/>}
+
+            {!isEventsFetched && <SkeletonEvents/>}
 
             <div>
                 {events?.map((event: Event) => (

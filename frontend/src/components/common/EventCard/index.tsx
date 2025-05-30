@@ -129,7 +129,7 @@ export function EventCard({event}: EventCardProps) {
                         </div>
 
                         <div className={classes.organizerWrapper}>
-                            <NavLink to={`/dashboard/${event?.organizer?.id}`} className={classes.organizerLink}>
+                            <NavLink to={`/manage/organizer/${event?.organizer?.id}`} className={classes.organizerLink}>
                                 {event?.organizer?.name}
                             </NavLink>
                         </div>
