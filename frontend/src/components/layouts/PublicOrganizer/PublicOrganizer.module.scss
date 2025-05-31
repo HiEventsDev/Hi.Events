@@ -117,7 +117,7 @@
 }
 
 .location {
-  color: var(--secondary-text-color);
+  color: var(--secondary-color);
   font-size: 0.9rem;
   font-weight: 600;
   display: block;
@@ -127,7 +127,7 @@
 }
 
 .description {
-  color: var(--secondary-text-color);
+  color: var(--secondary-color);
   font-size: 1rem;
   margin: 0 0 1.5rem 0;
   line-height: 1.6;
@@ -153,28 +153,36 @@
 
 .socialIcon {
   background: transparent;
-  color: var(--secondary-color);
-  border: 1px solid var(--secondary-color);
+  color: var(--primary--color);
+  border: 1px solid var(--primary-color);
   transition: all 0.2s ease;
 
+  svg {
+    color: var(--primary-color);
+  }
+
   &:hover {
-    background: var(--primary-color);
+    background: var(--secondary-color);
     color: white;
-    border-color: var(--primary-color);
+    border-color: var(--secondary-color);
     transform: translateY(-1px);
+
+    svg {
+      color: var(--content-bg-color);
+    }
   }
 }
 
 .contactButton {
-  border-color: var(--primary-text-color);
-  color: var(--primary-text-color);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
   background: transparent;
   transition: all 0.2s ease;
   font-weight: 500;
 
   &:hover {
-    background: var(--primary-color);
-    color: white;
+    background: var(--secondary-color);
+    color: var(--content-bg-color);
   }
 
   @media (max-width: 479px) {
@@ -226,20 +234,6 @@
   }
 }
 
-.eventFilterControl {
-  background: var(--content-bg-color);
-  border: 2px solid var(--primary-color);
-
-  :global(.mantine-SegmentedControl-label) {
-    color: var(--primary-text-color);
-    font-weight: 600;
-    padding: 0.5rem 1.25rem;
-
-    &[data-active] {
-      color: var(--content-bg-color);
-    }
-  }
-}
 
 .eventsContainer {
   display: flex;
@@ -251,7 +245,7 @@
 .noEvents {
   text-align: center;
   padding: 3rem 1rem;
-  color: var(--secondary-text-color);
+  color: var(--secondary-color);
   font-size: 1.1rem;
   background: var(--content-bg-color);
   border-radius: 12px;
@@ -275,6 +269,22 @@
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.poweredBy {
+  text-align: center;
+  margin-top: 2rem;
+  color: var(--primary-color);
+
+  a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }
 

@@ -1,15 +1,5 @@
 import {useLoaderData} from "react-router";
-import {
-    ActionIcon,
-    Button,
-    Container,
-    Group,
-    isLightColor,
-    Modal,
-    SegmentedControl,
-    Textarea,
-    TextInput
-} from '@mantine/core';
+import {ActionIcon, Button, Container, Group, Modal, Textarea, TextInput} from '@mantine/core';
 import {EventCard} from './EventCard';
 import classes from './PublicOrganizer.module.scss';
 import React, {useEffect, useMemo, useState} from 'react';
@@ -226,6 +216,13 @@ export const PublicOrganizer = ({previewData, isPreview}: PublicOrganizerProps) 
 
     return (
         <main className={classes.container} style={themeStyles}>
+            <style>
+                {`
+                    body, .ssr-loader {
+                        background-color: ${themeSettings?.homepage_background_color || '#f5f5f5'} !important;
+                    }
+                `}
+            </style>
             <div className={classes.wrapper}>
                 <header className={classes.header}>
                     {organizerCover && (
@@ -309,24 +306,36 @@ export const PublicOrganizer = ({previewData, isPreview}: PublicOrganizerProps) 
                     <div className={classes.eventsHeader}>
                         <h2>{t`Events`}</h2>
                         <div className={classes.eventsControls}>
-                            <SegmentedControl
-                                value={eventFilter}
-                                onChange={(value) => handleFilterChange(value as 'upcoming' | 'past')}
-                                data={[
-                                    {label: t`Upcoming`, value: 'upcoming'},
-                                    {label: t`Past`, value: 'past'}
-                                ]}
-                                size="sm"
-                                className={classes.eventFilterControl}
-                                styles={{
-                                    indicator: {
-                                        background: themeSettings?.homepage_primary_color || 'var(--primary-color)',
-                                    },
-                                    label: {
-                                        color: themeSettings?.homepage_primary_color && isLightColor(themeSettings.homepage_primary_color) ? '#000' : '#fff',
-                                    },
-                                }}
-                            />
+                            <Button.Group>
+                                <Button
+                                    variant={eventFilter === 'upcoming' ? 'filled' : 'default'}
+                                    onClick={() => handleFilterChange('upcoming')}
+                                    size="sm"
+                                    style={{
+                                        backgroundColor: eventFilter === 'upcoming' ? themeSettings?.homepage_secondary_color : 'transparent',
+                                        color: eventFilter === 'upcoming'
+                                            ? themeSettings?.homepage_secondary_text_color
+                                            : themeSettings?.homepage_primary_color,
+                                        borderColor: themeSettings?.homepage_secondary_color,
+                                    }}
+                                >
+                                    {t`Upcoming`}
+                                </Button>
+                                <Button
+                                    variant={eventFilter === 'past' ? 'filled' : 'default'}
+                                    onClick={() => handleFilterChange('past')}
+                                    size="sm"
+                                    style={{
+                                        backgroundColor: eventFilter === 'past' ? themeSettings?.homepage_secondary_color : 'transparent',
+                                        color: eventFilter === 'past'
+                                            ? themeSettings?.homepage_secondary_text_color
+                                            : themeSettings?.homepage_primary_color,
+                                        borderColor: themeSettings?.homepage_secondary_color,
+                                    }}
+                                >
+                                    {t`Past`}
+                                </Button>
+                            </Button.Group>
                         </div>
                     </div>
 
@@ -362,7 +371,7 @@ export const PublicOrganizer = ({previewData, isPreview}: PublicOrganizerProps) 
                         </div>
                     )}
                 </div>
-                <PoweredByFooter/>
+                <PoweredByFooter className={classes.poweredBy}/>
             </div>
 
             {/* Contact Modal */}

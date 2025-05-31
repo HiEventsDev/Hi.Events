@@ -32,12 +32,12 @@ const colorThemes: ColorTheme[] = [
     {
         name: t`Modern`,
         colors: {
-            homepage_background_color: '#fafbfc',
+            homepage_background_color: '#fafafa',
             homepage_content_background_color: '#ffffff',
-            homepage_primary_color: '#2563eb',
-            homepage_primary_text_color: '#1e293b',
-            homepage_secondary_color: '#64748b',
-            homepage_secondary_text_color: '#475569',
+            homepage_primary_color: '#171717',
+            homepage_primary_text_color: '#171717',
+            homepage_secondary_color: '#737373',
+            homepage_secondary_text_color: '#000000',
         }
     },
     {
@@ -45,10 +45,10 @@ const colorThemes: ColorTheme[] = [
         colors: {
             homepage_background_color: '#f0f9ff',
             homepage_content_background_color: '#ffffff',
-            homepage_primary_color: '#0891b2',
-            homepage_primary_text_color: '#164e63',
-            homepage_secondary_color: '#06b6d4',
-            homepage_secondary_text_color: '#155e75',
+            homepage_primary_color: '#0ea5e9',
+            homepage_primary_text_color: '#075985',
+            homepage_secondary_color: '#0891b2',
+            homepage_secondary_text_color: '#e9f6ff',
         }
     },
     {
@@ -56,10 +56,10 @@ const colorThemes: ColorTheme[] = [
         colors: {
             homepage_background_color: '#f0fdf4',
             homepage_content_background_color: '#ffffff',
-            homepage_primary_color: '#16a34a',
+            homepage_primary_color: '#22c55e',
             homepage_primary_text_color: '#14532d',
-            homepage_secondary_color: '#22c55e',
-            homepage_secondary_text_color: '#166534',
+            homepage_secondary_color: '#16a34a',
+            homepage_secondary_text_color: '#eefff3',
         }
     },
     {
@@ -69,19 +69,19 @@ const colorThemes: ColorTheme[] = [
             homepage_content_background_color: '#ffffff',
             homepage_primary_color: '#f97316',
             homepage_primary_text_color: '#7c2d12',
-            homepage_secondary_color: '#fb923c',
-            homepage_secondary_text_color: '#92400e',
+            homepage_secondary_color: '#ea580c',
+            homepage_secondary_text_color: '#fad9cd',
         }
     },
     {
         name: t`Midnight`,
         colors: {
-            homepage_background_color: '#0f0f23',
-            homepage_content_background_color: '#1a1a2e',
+            homepage_background_color: '#020617',
+            homepage_content_background_color: '#0f172a',
             homepage_primary_color: '#818cf8',
-            homepage_primary_text_color: '#e0e7ff',
-            homepage_secondary_color: '#6366f1',
-            homepage_secondary_text_color: '#c7d2fe',
+            homepage_primary_text_color: '#e2e8f0',
+            homepage_secondary_color: '#94a3b8',
+            homepage_secondary_text_color: '#ffffff',
         }
     },
     {
@@ -89,10 +89,10 @@ const colorThemes: ColorTheme[] = [
         colors: {
             homepage_background_color: '#faf5ff',
             homepage_content_background_color: '#ffffff',
-            homepage_primary_color: '#9333ea',
+            homepage_primary_color: '#a855f7',
             homepage_primary_text_color: '#581c87',
-            homepage_secondary_color: '#a855f7',
-            homepage_secondary_text_color: '#6b21a8',
+            homepage_secondary_color: '#9333ea',
+            homepage_secondary_text_color: '#f6eeff',
         }
     },
     {
@@ -100,10 +100,10 @@ const colorThemes: ColorTheme[] = [
         colors: {
             homepage_background_color: '#fef2f2',
             homepage_content_background_color: '#ffffff',
-            homepage_primary_color: '#ef4444',
-            homepage_primary_text_color: '#7f1d1d',
-            homepage_secondary_color: '#f87171',
-            homepage_secondary_text_color: '#991b1b',
+            homepage_primary_color: '#f87171',
+            homepage_primary_text_color: '#991b1b',
+            homepage_secondary_color: '#ef4444',
+            homepage_secondary_text_color: '#ffd4d4',
         }
     },
     {
@@ -113,8 +113,8 @@ const colorThemes: ColorTheme[] = [
             homepage_content_background_color: '#ffffff',
             homepage_primary_color: '#14b8a6',
             homepage_primary_text_color: '#134e4a',
-            homepage_secondary_color: '#2dd4bf',
-            homepage_secondary_text_color: '#115e59',
+            homepage_secondary_color: '#0d9488',
+            homepage_secondary_text_color: '#ffffff',
         }
     },
     {
@@ -122,10 +122,10 @@ const colorThemes: ColorTheme[] = [
         colors: {
             homepage_background_color: '#09090b',
             homepage_content_background_color: '#18181b',
-            homepage_primary_color: '#ef4444',
+            homepage_primary_color: '#f87171',
             homepage_primary_text_color: '#fafafa',
             homepage_secondary_color: '#a1a1aa',
-            homepage_secondary_text_color: '#e4e4e7',
+            homepage_secondary_text_color: '#d4d4d8',
         }
     }
 ];
@@ -151,12 +151,12 @@ const OrganizerHomepageDesigner = () => {
 
     const form = useForm({
         initialValues: {
-            homepage_background_color: '#ffffff',
+            homepage_background_color: '#fafafa',
             homepage_content_background_color: '#ffffff',
-            homepage_primary_color: '#444444',
-            homepage_primary_text_color: '#000000',
-            homepage_secondary_color: '#444444',
-            homepage_secondary_text_color: '#ffffff',
+            homepage_primary_color: '#171717',
+            homepage_primary_text_color: '#171717',
+            homepage_secondary_color: '#737373',
+            homepage_secondary_text_color: '#525252',
         }
     });
 
@@ -179,12 +179,12 @@ const OrganizerHomepageDesigner = () => {
     useEffect(() => {
         if (organizerSettingsQuery?.isFetched && organizerSettingsQuery?.data) {
             form.setValues({
-                homepage_background_color: organizerSettingsQuery.data.homepage_theme_settings?.homepage_background_color || '#ffffff',
+                homepage_background_color: organizerSettingsQuery.data.homepage_theme_settings?.homepage_background_color || '#fafafa',
                 homepage_content_background_color: organizerSettingsQuery.data.homepage_theme_settings?.homepage_content_background_color || '#ffffff',
-                homepage_primary_color: organizerSettingsQuery.data.homepage_theme_settings?.homepage_primary_color || '#444444',
-                homepage_primary_text_color: organizerSettingsQuery.data.homepage_theme_settings?.homepage_primary_text_color || '#000000',
-                homepage_secondary_color: organizerSettingsQuery.data.homepage_theme_settings?.homepage_secondary_color || '#444444',
-                homepage_secondary_text_color: organizerSettingsQuery.data.homepage_theme_settings?.homepage_secondary_text_color || '#ffffff',
+                homepage_primary_color: organizerSettingsQuery.data.homepage_theme_settings?.homepage_primary_color || '#171717',
+                homepage_primary_text_color: organizerSettingsQuery.data.homepage_theme_settings?.homepage_primary_text_color || '#171717',
+                homepage_secondary_color: organizerSettingsQuery.data.homepage_theme_settings?.homepage_secondary_color || '#737373',
+                homepage_secondary_text_color: organizerSettingsQuery.data.homepage_theme_settings?.homepage_secondary_text_color || '#525252',
             });
         }
     }, [organizerSettingsQuery.isFetched, organizerSettingsQuery.data]);
