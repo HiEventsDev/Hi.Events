@@ -86,13 +86,6 @@ export const router: RouteObject[] = [
                     return {Component: Dashboard.default};
                 },
             },
-            // {
-            //     path: "organizer/:organizerId/events?/:eventsState?",
-            //     async lazy() {
-            //         const OrganizerDashboard = await import("./components/routes/organizer/OrganizerDashboard");
-            //         return {Component: OrganizerDashboard.default};
-            //     }
-            // },
             {
                 path: "account",
                 async lazy() {

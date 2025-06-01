@@ -1,4 +1,3 @@
-// src/components/layout/Topbar/index.tsx
 import React from "react";
 import {NavLink} from "react-router";
 import {Breadcrumbs, Burger} from '@mantine/core';

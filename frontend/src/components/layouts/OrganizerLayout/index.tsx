@@ -107,7 +107,6 @@ const OrganizerLayout = () => {
         });
     }
 
-
     return (
         <>
             <AppLayout
