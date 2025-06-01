@@ -6,6 +6,7 @@ import React, {useEffect, useMemo, useState} from 'react';
 import {Event, Organizer, QueryFilterOperator} from "../../../types.ts";
 import {useForm} from "@mantine/form";
 import {useGetOrganizerPublicEvents} from "../../../queries/useGetOrganizerEventsPublic.ts";
+import {OrganizerDocumentHead} from "../../common/OrganizerDocumentHead";
 import {
     IconArrowRight,
     IconBrandDiscord,
@@ -215,15 +216,17 @@ export const PublicOrganizer = ({previewData, isPreview}: PublicOrganizerProps) 
     } as React.CSSProperties : {};
 
     return (
-        <main className={classes.container} style={themeStyles}>
-            <style>
-                {`
-                    body, .ssr-loader {
-                        background-color: ${themeSettings?.homepage_background_color || '#f5f5f5'} !important;
-                    }
-                `}
-            </style>
-            <div className={classes.wrapper}>
+        <>
+            {organizer && <OrganizerDocumentHead organizer={organizer} />}
+            <main className={classes.container} style={themeStyles}>
+                <style>
+                    {`
+                        body, .ssr-loader {
+                            background-color: ${themeSettings?.homepage_background_color || '#f5f5f5'} !important;
+                        }
+                    `}
+                </style>
+                <div className={classes.wrapper}>
                 <header className={classes.header}>
                     {organizerCover && (
                         <div className={classes.coverImage}>
@@ -432,6 +435,7 @@ export const PublicOrganizer = ({previewData, isPreview}: PublicOrganizerProps) 
                 </form>
             </Modal>
         </main>
+        </>
     );
 };
 

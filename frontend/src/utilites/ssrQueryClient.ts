@@ -1,5 +1,6 @@
 import { QueryClient } from "@tanstack/react-query";
 import {isSsr} from "./helpers.ts";
+import {queryClient} from "./queryClient.ts";
 
 let ssrQueryClient: QueryClient | null = null;
 
@@ -16,7 +17,5 @@ export function getQueryClient(): QueryClient {
         return ssrQueryClient;
     }
     
-    // Client-side or fallback: use the singleton
-    const { queryClient } = require('./queryClient');
     return queryClient;
 }
