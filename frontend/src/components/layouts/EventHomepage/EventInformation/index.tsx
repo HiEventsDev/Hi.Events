@@ -2,27 +2,45 @@ import {IconCalendar, IconExternalLink, IconMapPin} from "@tabler/icons-react";
 import classes from "./EventInformation.module.scss";
 import {formatAddress} from "../../../../utilites/formatAddress.tsx";
 import {t} from "@lingui/macro";
-import {Button} from "@mantine/core";
+import {Anchor, Button} from "@mantine/core";
 import {LoadingMask} from "../../../common/LoadingMask";
 import {ShareComponent} from "../../../common/ShareIcon";
-import {eventCoverImageUrl, eventHomepageUrl} from "../../../../utilites/urlHelper.ts";
-import {FC} from "react";
-import {Event} from "../../../../types.ts";
+import {eventCoverImageUrl, eventHomepageUrl, imageUrl, organizerHomepageUrl} from "../../../../utilites/urlHelper.ts";
+import React, {FC} from "react";
+import {Event, Organizer} from "../../../../types.ts";
 import {EventDateRange} from "../../../common/EventDateRange";
 
 export const EventInformation: FC<{
-    event: Event
-}> = ({event}) => {
+    event: Event,
+    organizer: Organizer,
+}> = ({event, organizer}) => {
 
-    if (!event) {
+    if (!event || !organizer) {
         return <LoadingMask/>;
     }
+
+    const organizerLogo = imageUrl('ORGANIZER_LOGO', organizer?.images);
 
     return (
         <>
             <div className={classes.preHeading}>
                 <div className={classes.organizer}>
-                    {event.organizer?.name}
+                    {organizerLogo && (
+                        <div className={classes.organizerLogo}>
+                            <img
+                                src={organizerLogo}
+                                alt={organizer.name}
+                            />
+                        </div>
+                    )}
+                    <h2 className={classes.organizerName}>
+                        <Anchor
+                            href={organizerHomepageUrl(organizer)}
+                        >
+                            {organizer.name}
+                        </Anchor>
+                    </h2>
+
                 </div>
                 <div className={classes.shareButtons}>
                     <ShareComponent
@@ -70,15 +88,6 @@ export const EventInformation: FC<{
                     </div>
                 )}
             </div>
-
-            {event?.description && (
-                <div className={classes.eventDescription}>
-                    <h2>{t`About`}</h2>
-                    <div dangerouslySetInnerHTML={{
-                        __html: event.description || '',
-                    }}/>
-                </div>
-            )}
         </>
     )
 }

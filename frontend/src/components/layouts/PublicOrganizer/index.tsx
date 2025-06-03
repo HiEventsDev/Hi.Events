@@ -9,60 +9,17 @@ import {useGetOrganizerPublicEvents} from "../../../queries/useGetOrganizerEvent
 import {OrganizerDocumentHead} from "../../common/OrganizerDocumentHead";
 import {
     IconArrowRight,
-    IconBrandDiscord,
-    IconBrandFacebook,
-    IconBrandFlickr,
-    IconBrandGithub,
-    IconBrandInstagram,
-    IconBrandLinkedin,
-    IconBrandPinterest,
-    IconBrandReddit,
-    IconBrandSnapchat,
-    IconBrandTelegram,
-    IconBrandTiktok,
-    IconBrandTumblr,
-    IconBrandTwitch,
-    IconBrandVimeo,
-    IconBrandVk,
-    IconBrandWechat,
-    IconBrandWeibo,
-    IconBrandWhatsapp,
-    IconBrandX,
-    IconBrandYoutube,
     IconMail,
     IconWorld
 } from '@tabler/icons-react';
 import {t} from "@lingui/macro";
 import {PoweredByFooter} from "../../common/PoweredByFooter";
+import {socialMediaConfig} from "../../../constants/socialMediaConfig";
 
 interface PublicOrganizerProps {
     previewData?: Organizer;
     isPreview?: boolean;
 }
-
-const socialMediaConfig = {
-    facebook: {icon: IconBrandFacebook, baseUrl: 'https://facebook.com/'},
-    instagram: {icon: IconBrandInstagram, baseUrl: 'https://instagram.com/'},
-    twitter: {icon: IconBrandX, baseUrl: 'https://twitter.com/'},
-    linkedin: {icon: IconBrandLinkedin, baseUrl: 'https://linkedin.com/in/'},
-    discord: {icon: IconBrandDiscord, baseUrl: 'https://discord.com/users/'},
-    tiktok: {icon: IconBrandTiktok, baseUrl: 'https://tiktok.com/@'},
-    youtube: {icon: IconBrandYoutube, baseUrl: 'https://youtube.com/@'},
-    snapchat: {icon: IconBrandSnapchat, baseUrl: 'https://snapchat.com/add/'},
-    twitch: {icon: IconBrandTwitch, baseUrl: 'https://twitch.tv/'},
-    reddit: {icon: IconBrandReddit, baseUrl: 'https://reddit.com/u/'},
-    pinterest: {icon: IconBrandPinterest, baseUrl: 'https://pinterest.com/'},
-    whatsapp: {icon: IconBrandWhatsapp, baseUrl: 'https://wa.me/'},
-    telegram: {icon: IconBrandTelegram, baseUrl: 'https://t.me/'},
-    vk: {icon: IconBrandVk, baseUrl: 'https://vk.com/'},
-    weibo: {icon: IconBrandWeibo, baseUrl: 'https://weibo.com/'},
-    wechat: {icon: IconBrandWechat, baseUrl: '#'}, // WeChat doesn't have direct URLs
-    flickr: {icon: IconBrandFlickr, baseUrl: 'https://flickr.com/people/'},
-    tumblr: {icon: IconBrandTumblr, baseUrl: 'https://tumblr.com/blog/'},
-    // quora: { icon: IconBrandQuora, baseUrl: 'https://quora.com/profile/' },
-    vimeo: {icon: IconBrandVimeo, baseUrl: 'https://vimeo.com/'},
-    github: {icon: IconBrandGithub, baseUrl: 'https://github.com/'},
-};
 
 export const PublicOrganizer = ({previewData, isPreview}: PublicOrganizerProps) => {
     const loaderData = useLoaderData() as {
