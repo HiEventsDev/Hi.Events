@@ -33,39 +33,27 @@
   }
 }
 
-// Cover section - standalone
-.coverSection {
-  padding: 20px 20px 0;
-
+// Cover wrapper inside content sections
+.coverWrapper {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
+  
   @include mixins.respond-below(md) {
-    padding: 0;
-    margin: 12px 8px;
-    border-radius: 12px;
+    height: 240px;
   }
-
-  .coverWrapper {
-    overflow: hidden;
-    border-radius: 20px;
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
-
-    @include mixins.respond-below(md) {
-      border-radius: 0;
-      box-shadow: none;
-    }
-
-    .coverImage {
-      width: 100%;
-      height: auto;
-      display: block;
-      object-fit: cover;
-      max-height: 500px;
-      border-radius: 12px;
-
-      @include mixins.respond-below(md) {
-        max-height: 300px;
-      }
-    }
+  
+  @include mixins.respond-below(sm) {
+    height: 200px;
   }
+}
+
+.coverImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
 }
 
 // Content sections
@@ -76,6 +64,7 @@
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
   overflow: hidden;
   transition: all 0.3s ease;
+  color: var(--homepage-primary-text-color);
 
   @include mixins.respond-below(md) {
     margin: 16px 12px;
@@ -211,17 +200,17 @@
     display: flex;
     align-items: center;
     gap: 4px;
-    color: var(--homepage-secondary-color, #6c757d);
+    color: var(--homepage-secondary-color);
     font-size: 0.95rem;
     margin-bottom: 8px;
     
     svg {
-      color: var(--homepage-secondary-color, #6c757d);
+      color: var(--homepage-secondary-color);
     }
   }
 
   .organizerWebsite {
-    color: var(--homepage-primary-color, #228be6);
+    color: var(--homepage-primary-text-color);
     text-decoration: none;
     font-size: 0.95rem;
 
@@ -273,6 +262,10 @@
 
 // Footer section
 .footerSection {
+  .footerContent {
+    text-align: center;
+  }
+
   .footerLinks {
     display: flex;
     justify-content: center;
@@ -282,13 +275,13 @@
   }
 
   .footerLink {
-    color: var(--homepage-primary-color);
+    color: var(--homepage-primary-text-color);
     text-decoration: none;
     font-size: 0.875rem;
     transition: color 0.2s ease;
 
     &:hover {
-      color: var(--homepage-primary-color);
+      color: var(--homepage-primary-text-color);
       text-decoration: underline;
     }
   }
@@ -299,7 +292,7 @@
   }
 
   .poweredByFooter {
-    color: var(--homepage-primary-color);
+    color: var(--homepage-primary-text-color);
     margin-top: 1em;
 
     a {
@@ -311,5 +304,41 @@
         text-decoration: underline;
       }
     }
+  }
+}
+
+// Floating scroll to tickets button
+.scrollToTicketsButton {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 100;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+  animation: fadeInUp 0.5s ease-out;
+  transition: all 0.3s ease;
+  
+  @include mixins.respond-below(sm) {
+    bottom: 20px;
+    right: 20px;
+  }
+  
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.2);
+  }
+  
+  &:active {
+    transform: translateY(-1px);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

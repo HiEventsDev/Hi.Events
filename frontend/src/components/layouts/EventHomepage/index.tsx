@@ -3,13 +3,13 @@ import {EventInformation} from "./EventInformation";
 import classes from "./EventHomepage.module.scss";
 import SelectProducts from "../../routes/product-widget/SelectProducts";
 import "../../../styles/widget/default.scss";
-import React from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {EventDocumentHead} from "../../common/EventDocumentHead";
 import {eventCoverImageUrl, imageUrl, organizerHomepageUrl} from "../../../utilites/urlHelper.ts";
 import {Event} from "../../../types.ts";
 import {EventNotAvailable} from "./EventNotAvailable";
-import {IconMapPin, IconWorld} from "@tabler/icons-react";
-import {Anchor} from "@mantine/core";
+import {IconMapPin, IconTicket, IconWorld} from "@tabler/icons-react";
+import {Anchor, Button} from "@mantine/core";
 import {t} from "@lingui/macro";
 import {PoweredByFooter} from "../../common/PoweredByFooter";
 import {socialMediaConfig} from "../../../constants/socialMediaConfig";
@@ -33,6 +33,36 @@ interface EventHomepageProps {
 
 const EventHomepage = ({colors, continueButtonText, backgroundType, ...loaderData}: EventHomepageProps) => {
     const {event, promoCodeValid, promoCode} = loaderData;
+    const [showScrollButton, setShowScrollButton] = useState(false);
+    const ticketsSectionRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        // Show button after 2 seconds
+        const showTimer = setTimeout(() => {
+            setShowScrollButton(true);
+        }, 2000);
+
+        // Check scroll position to hide button when tickets are visible
+        const handleScroll = () => {
+            if (ticketsSectionRef.current) {
+                const rect = ticketsSectionRef.current.getBoundingClientRect();
+                const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+                setShowScrollButton(!isVisible);
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        handleScroll();
+
+        return () => {
+            clearTimeout(showTimer);
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
+
+    const scrollToTickets = () => {
+        ticketsSectionRef.current?.scrollIntoView({behavior: 'smooth', block: 'start'});
+    };
 
     const styleOverrides = {
         "--homepage-body-background-color":
@@ -59,7 +89,7 @@ const EventHomepage = ({colors, continueButtonText, backgroundType, ...loaderDat
     const organizerLogo = imageUrl('ORGANIZER_LOGO', organizer?.images);
     const organizerLocation = organizer?.settings?.location_details;
     const websiteUrl = organizer?.website;
-    
+
     // Process social links
     const socialLinks = organizerSocials ? Object.entries(organizerSocials)
         .filter(([platform, handle]) => handle && socialMediaConfig[platform as keyof typeof socialMediaConfig])
@@ -71,6 +101,13 @@ const EventHomepage = ({colors, continueButtonText, backgroundType, ...loaderDat
 
     return (
         <div style={styleOverrides} key={`${event.id}`} className={classes.pageWrapper}>
+            <style>
+                {`
+                        body, .ssr-loader {
+                            background-color: ${colors?.bodyBackground || event?.settings?.homepage_body_background_color || '#f5f5f5'} !important;
+                        }
+                    `}
+            </style>
             {event && <EventDocumentHead event={event}/>}
             {(coverImage && backgroundType === 'MIRROR_COVER_IMAGE') && (
                 <div
@@ -84,9 +121,9 @@ const EventHomepage = ({colors, continueButtonText, backgroundType, ...loaderDat
                 />
             }
             <div id={"event-homepage"} className={classes.mainContainer}>
-                {/* Cover Image Section - Standalone */}
-                {coverImage && (
-                    <div className={classes.coverSection}>
+                {/* Hero Section - Combined Cover and Event Details */}
+                <div className={classes.contentSection}>
+                    {coverImage && (
                         <div className={classes.coverWrapper}>
                             <img
                                 alt={event?.title}
@@ -94,21 +131,17 @@ const EventHomepage = ({colors, continueButtonText, backgroundType, ...loaderDat
                                 className={classes.coverImage}
                             />
                         </div>
-                    </div>
-                )}
-
-                {/* Event Details Section */}
-                <div className={classes.contentSection}>
+                    )}
                     <div className={classes.sectionContent}>
                         <EventInformation event={event} organizer={organizer}/>
                     </div>
                 </div>
 
-                {/* About Section */}
+                {/* About Section - Separate */}
                 {event?.description && (
                     <div className={classes.contentSection}>
                         <div className={classes.sectionContent}>
-                            <h2 className={classes.sectionTitle}>{t`About this event`}</h2>
+                            <h2 className={classes.sectionTitle}>{t`About`}</h2>
                             <div
                                 className={classes.eventDescription}
                                 dangerouslySetInnerHTML={{
@@ -119,8 +152,8 @@ const EventHomepage = ({colors, continueButtonText, backgroundType, ...loaderDat
                     </div>
                 )}
 
-                {/* Tickets Section */}
-                <div className={classes.contentSection}>
+                {/* Tickets Section - Separate */}
+                <div className={classes.contentSection} ref={ticketsSectionRef}>
                     <div className={classes.sectionContent}>
                         <SelectProducts
                             colors={{
@@ -162,10 +195,10 @@ const EventHomepage = ({colors, continueButtonText, backgroundType, ...loaderDat
                                                 {organizer.name}
                                             </Anchor>
                                         </h3>
-                                        
+
                                         {organizerLocation?.city && (
                                             <div className={classes.organizerLocation}>
-                                                <IconMapPin size={16} />
+                                                <IconMapPin size={16}/>
                                                 <span>
                                                     {formatAddress(organizerLocation)}
                                                 </span>
@@ -200,10 +233,10 @@ const EventHomepage = ({colors, continueButtonText, backgroundType, ...loaderDat
                                                 rel="noopener noreferrer"
                                                 className={classes.socialLink}
                                             >
-                                                <IconWorld size={24} />
+                                                <IconWorld size={24}/>
                                             </Anchor>
                                         )}
-                                        {socialLinks.map(({ platform, handle, config }) => {
+                                        {socialLinks.map(({platform, handle, config}) => {
                                             const IconComponent = config.icon;
                                             const url = config.baseUrl + handle;
                                             return (
@@ -214,7 +247,7 @@ const EventHomepage = ({colors, continueButtonText, backgroundType, ...loaderDat
                                                     rel="noopener noreferrer"
                                                     className={classes.socialLink}
                                                 >
-                                                    <IconComponent size={24} />
+                                                    <IconComponent size={24}/>
                                                 </Anchor>
                                             );
                                         })}
@@ -252,6 +285,23 @@ const EventHomepage = ({colors, continueButtonText, backgroundType, ...loaderDat
                         </footer>
                     </div>
                 </div>
+
+                {/* Floating Scroll to Tickets Button */}
+                {showScrollButton && (
+                    <Button
+                        className={classes.scrollToTicketsButton}
+                        onClick={scrollToTickets}
+                        leftSection={<IconTicket size={20}/>}
+                        size="md"
+                        radius="xl"
+                        style={{
+                            background: 'var(--homepage-background-color)',
+                            color: 'var(--homepage-primary-text-color)',
+                        }}
+                    >
+                        {t`Scroll to Tickets`}
+                    </Button>
+                )}
             </div>
         </div>
     );

@@ -1,17 +1,13 @@
 import {useLoaderData} from "react-router";
-import {ActionIcon, Button, Container, Group, Modal, Textarea, TextInput} from '@mantine/core';
+import {ActionIcon, Button, Group, Modal, Textarea, TextInput} from '@mantine/core';
 import {EventCard} from './EventCard';
 import classes from './PublicOrganizer.module.scss';
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import {Event, Organizer, QueryFilterOperator} from "../../../types.ts";
 import {useForm} from "@mantine/form";
 import {useGetOrganizerPublicEvents} from "../../../queries/useGetOrganizerEventsPublic.ts";
 import {OrganizerDocumentHead} from "../../common/OrganizerDocumentHead";
-import {
-    IconArrowRight,
-    IconMail,
-    IconWorld
-} from '@tabler/icons-react';
+import {IconArrowRight, IconMail, IconMapPin, IconWorld} from '@tabler/icons-react';
 import {t} from "@lingui/macro";
 import {PoweredByFooter} from "../../common/PoweredByFooter";
 import {socialMediaConfig} from "../../../constants/socialMediaConfig";
@@ -67,37 +63,26 @@ export const PublicOrganizer = ({previewData, isPreview}: PublicOrganizerProps) 
         }
     }), [upcomingPage, currentDate]);
 
-    // Fetch past events only when past tab is selected
-    const {data: pastEventsData} = useGetOrganizerPublicEvents(
-        organizerId!,
-        pastQueryFilters,
-        {
-            enabled: !!organizerId && !isPreview && eventFilter === 'past'
-        }
-    );
+    // For preview mode or initial load, don't fetch
+    const skipUpcomingQuery = isPreview || upcomingPage === 1;
 
-    // Fetch more upcoming events only when paginating beyond initial load
-    const {data: moreUpcomingEventsData} = useGetOrganizerPublicEvents(
-        organizerId!,
-        upcomingQueryFilters,
-        {
-            enabled: !!organizerId && !isPreview && eventFilter === 'upcoming' && upcomingPage > 1
-        }
-    );
+    // Fetch upcoming events (skip on first page since we have SSR data)
+    const {
+        data: upcomingEventsData,
+        isLoading: isLoadingUpcoming
+    } = useGetOrganizerPublicEvents(organizerId!, upcomingQueryFilters, {
+        enabled: !skipUpcomingQuery && !!organizerId && eventFilter === 'upcoming',
+    });
 
-    // Use loader data for initial upcoming events, then paginated data
-    const eventsData = eventFilter === 'upcoming'
-        ? (upcomingPage === 1 ? upcomingEventsFromLoader : moreUpcomingEventsData)
-        : pastEventsData;
+    // Fetch past events (only when selected)
+    const {
+        data: pastEventsData,
+        isLoading: isLoadingPast
+    } = useGetOrganizerPublicEvents(organizerId!, pastQueryFilters, {
+        enabled: !!organizerId && eventFilter === 'past' && !isPreview,
+    });
 
-    useEffect(() => {
-        if (eventFilter === 'upcoming') {
-            setUpcomingPage(1);
-        } else {
-            setPastPage(1);
-        }
-    }, [eventFilter]);
-
+    // Contact form
     const contactForm = useForm({
         initialValues: {
             name: '',
@@ -105,12 +90,18 @@ export const PublicOrganizer = ({previewData, isPreview}: PublicOrganizerProps) 
             subject: '',
             message: '',
         },
-        validate: {
-            email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
-            name: (value) => (value.length < 2 ? 'Name must have at least 2 letters' : null),
-            message: (value) => (value.length < 10 ? 'Message must be at least 10 characters' : null),
-        },
     });
+
+    const handleContactSubmit = (values: any) => {
+        // Handle contact form submission
+        console.log('Contact form:', values);
+        setContactModalOpen(false);
+        contactForm.reset();
+    };
+
+    if (!organizer) {
+        return null;
+    }
 
     const handleFilterChange = (filter: 'upcoming' | 'past') => {
         setEventFilter(filter);
@@ -124,35 +115,45 @@ export const PublicOrganizer = ({previewData, isPreview}: PublicOrganizerProps) 
         }
     };
 
-    const handleContactSubmit = (values: typeof contactForm.values) => {
-        // TODO: Implement contact form submission
-        console.log('Contact form submitted:', values);
-        setContactModalOpen(false);
-        contactForm.reset();
-    };
+    // Get the appropriate events data based on filter
+    let eventsData: any;
+    if (eventFilter === 'upcoming') {
+        // Use SSR data for first page, fetched data for subsequent pages
+        eventsData = upcomingPage === 1 ? upcomingEventsFromLoader : upcomingEventsData;
+    } else {
+        eventsData = pastEventsData;
+    }
 
-    const organizerLogo = organizer?.images?.find((image) => image.type === 'ORGANIZER_LOGO');
-    const organizerCover = organizer?.images?.find((image) => image.type === 'ORGANIZER_COVER');
+    const isLoading = eventFilter === 'upcoming' ? isLoadingUpcoming : isLoadingPast;
 
-    // Get social media links that have values
-    const socialLinks = organizer?.settings?.social_media_handles ? Object.entries(organizer.settings.social_media_handles)
-        .filter(([_, handle]) => handle && handle.trim())
+    // Social links processing
+    const socialLinks = organizer.settings?.social_media_handles ? Object.entries(organizer.settings.social_media_handles)
+        .filter(([platform, handle]) => handle && socialMediaConfig[platform as keyof typeof socialMediaConfig])
         .map(([platform, handle]) => ({
             platform,
-            handle: handle!,
+            handle: handle as string,
             config: socialMediaConfig[platform as keyof typeof socialMediaConfig]
-        }))
-        .filter(item => item.config) : [];
+        })) : [];
 
-    const websiteUrl = organizer?.settings?.website_url;
+    const websiteUrl = organizer.website;
 
-    // Since we're using SSR, we should have data from the loader
-    // Only show loading state if we're in preview mode and don't have data
-    if (!organizer && !isPreview) {
+    // Images
+    const organizerLogo = organizer.images?.find(img => img.type === 'ORGANIZER_LOGO');
+    const organizerCover = organizer.images?.find(img => img.type === 'ORGANIZER_COVER');
+
+    // Loading state
+    if (isLoading && (
+        (eventFilter === 'upcoming' && upcomingPage > 1) ||
+        (eventFilter === 'past' && pastPage === 1)
+    )) {
         return (
-            <Container size="lg" className={classes.container}>
-                <div>Organizer not found</div>
-            </Container>
+            <main className={classes.container}>
+                <div className={classes.wrapper}>
+                    <div className={classes.loadingMessage}>
+                        {t`Loading events...`}
+                    </div>
+                </div>
+            </main>
         );
     }
 
@@ -174,7 +175,7 @@ export const PublicOrganizer = ({previewData, isPreview}: PublicOrganizerProps) 
 
     return (
         <>
-            {organizer && <OrganizerDocumentHead organizer={organizer} />}
+            {organizer && <OrganizerDocumentHead organizer={organizer}/>}
             <main className={classes.container} style={themeStyles}>
                 <style>
                     {`
@@ -184,214 +185,238 @@ export const PublicOrganizer = ({previewData, isPreview}: PublicOrganizerProps) 
                     `}
                 </style>
                 <div className={classes.wrapper}>
-                <header className={classes.header}>
-                    {organizerCover && (
-                        <div className={classes.coverImage}>
-                            <img
-                                src={organizerCover.url}
-                                alt="Cover"
-                            />
-                        </div>
-                    )}
-                    <div className={classes.organizerContent}>
-                        {organizerLogo && (
-                            <div className={classes.logo}>
+                    {/* Combined Cover and Organizer Info Section */}
+                    <div className={classes.heroSection}>
+                        {organizerCover && (
+                            <div className={classes.coverWrapper}>
                                 <img
-                                    src={organizerLogo.url}
-                                    alt="Logo"
+                                    src={organizerCover.url}
+                                    alt="Cover"
+                                    className={classes.coverImage}
                                 />
+                                <div className={classes.coverOverlay}/>
                             </div>
                         )}
-                        <div className={classes.organizerInfo}>
-                            <h1>{organizer?.name}</h1>
-                            <div className={classes.organizerDetails}>
-                                {organizer?.settings?.location_details?.city && (
-                                    <span
-                                        className={classes.location}>📍 {organizer.settings.location_details.city}</span>
-                                )}
-                                <p className={classes.description}
-                                   dangerouslySetInnerHTML={organizer?.description ? {__html: organizer.description} : {__html: ''}}/>
-
-                                {/* Social Links and Contact */}
-                                <div className={classes.organizerActions}>
-                                    {(socialLinks.length > 0 || websiteUrl) && (
-                                        <div className={classes.socialLinks}>
-                                            {websiteUrl && (
-                                                <ActionIcon
-                                                    component="a"
-                                                    href={websiteUrl}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className={classes.socialIcon}
-                                                    size="lg"
+                        <div className={classes.organizerContentWrapper}>
+                            <div className={classes.organizerContent}>
+                                {/* Sophisticated Left-Aligned Layout */}
+                                <div className={classes.organizerProfile}>
+                                    <div className={classes.profileMain}>
+                                        {organizerLogo && (
+                                            <div className={classes.logoWrapper}>
+                                                <img
+                                                    src={organizerLogo.url}
+                                                    alt="Logo"
+                                                    className={classes.logo}
+                                                />
+                                            </div>
+                                        )}
+                                        <div className={classes.organizerInfo}>
+                                            <div className={classes.nameSection}>
+                                                <h1>{organizer?.name}</h1>
+                                                <div className={classes.organizerMeta}>
+                                                    {organizer?.settings?.location_details?.city && (
+                                                        <div className={classes.metaItem}>
+                                                            <IconMapPin size={16} className={classes.metaIcon}/>
+                                                            <span>{organizer.settings.location_details.city}</span>
+                                                        </div>
+                                                    )}
+                                                    {websiteUrl && (
+                                                        <a
+                                                            href={websiteUrl}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className={classes.metaItem}
+                                                        >
+                                                            <IconWorld size={16} className={classes.metaIcon}/>
+                                                            <span>{new URL(websiteUrl).hostname}</span>
+                                                        </a>
+                                                    )}
+                                                </div>
+                                            </div>
+                                            {/* Actions moved here for better flow */}
+                                            <div className={classes.profileActions}>
+                                                {(socialLinks.length > 0) && (
+                                                    <div className={classes.socialLinks}>
+                                                        {socialLinks.map(({platform, handle, config}) => {
+                                                            const IconComponent = config.icon;
+                                                            const url = config.baseUrl + handle;
+                                                            return (
+                                                                <ActionIcon
+                                                                    key={platform}
+                                                                    component="a"
+                                                                    href={url}
+                                                                    target="_blank"
+                                                                    rel="noopener noreferrer"
+                                                                    className={classes.socialIcon}
+                                                                    size="lg"
+                                                                >
+                                                                    <IconComponent size={18}/>
+                                                                </ActionIcon>
+                                                            );
+                                                        })}
+                                                    </div>
+                                                )}
+                                                <Button
+                                                    leftSection={<IconMail size={16}/>}
+                                                    onClick={() => setContactModalOpen(true)}
+                                                    className={classes.contactButton}
+                                                    variant="outline"
+                                                    size="sm"
                                                 >
-                                                    <IconWorld size={20}/>
-                                                </ActionIcon>
-                                            )}
-                                            {socialLinks.map(({platform, handle, config}) => {
-                                                const IconComponent = config.icon;
-                                                const url = config.baseUrl + handle;
-                                                return (
-                                                    <ActionIcon
-                                                        key={platform}
-                                                        component="a"
-                                                        href={url}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className={classes.socialIcon}
-                                                        size="lg"
-                                                    >
-                                                        <IconComponent size={20}/>
-                                                    </ActionIcon>
-                                                );
-                                            })}
+                                                    {t`Contact`}
+                                                </Button>
+                                            </div>
                                         </div>
-                                    )}
-
-                                    <Button
-                                        leftSection={<IconMail size={16}/>}
-                                        onClick={() => setContactModalOpen(true)}
-                                        className={classes.contactButton}
-                                        variant="outline"
-                                    >
-                                        {t`Contact Organizer`}
-                                    </Button>
+                                    </div>
                                 </div>
+                                {/* Description flows naturally below */}
+                                {organizer?.description && (
+                                    <div className={classes.description}
+                                         dangerouslySetInnerHTML={{__html: organizer.description}}/>
+                                )}
                             </div>
                         </div>
                     </div>
-                </header>
 
-                <div className={classes.content}>
-                    <div className={classes.eventsHeader}>
-                        <h2>{t`Events`}</h2>
-                        <div className={classes.eventsControls}>
-                            <Button.Group>
-                                <Button
-                                    variant={eventFilter === 'upcoming' ? 'filled' : 'default'}
-                                    onClick={() => handleFilterChange('upcoming')}
-                                    size="sm"
-                                    style={{
-                                        backgroundColor: eventFilter === 'upcoming' ? themeSettings?.homepage_secondary_color : 'transparent',
-                                        color: eventFilter === 'upcoming'
-                                            ? themeSettings?.homepage_secondary_text_color
-                                            : themeSettings?.homepage_primary_color,
-                                        borderColor: themeSettings?.homepage_secondary_color,
-                                    }}
-                                >
-                                    {t`Upcoming`}
-                                </Button>
-                                <Button
-                                    variant={eventFilter === 'past' ? 'filled' : 'default'}
-                                    onClick={() => handleFilterChange('past')}
-                                    size="sm"
-                                    style={{
-                                        backgroundColor: eventFilter === 'past' ? themeSettings?.homepage_secondary_color : 'transparent',
-                                        color: eventFilter === 'past'
-                                            ? themeSettings?.homepage_secondary_text_color
-                                            : themeSettings?.homepage_primary_color,
-                                        borderColor: themeSettings?.homepage_secondary_color,
-                                    }}
-                                >
-                                    {t`Past`}
-                                </Button>
-                            </Button.Group>
+                    {/* Events Header Card - Compact Section */}
+                    <div className={classes.eventsHeaderSection}>
+                        <div className={classes.eventsHeaderCard}>
+                            <h2 className={classes.eventsTitle}>{t`Events`}</h2>
+                            <div className={classes.eventsControls}>
+                                <Button.Group>
+                                    <Button
+                                        variant={eventFilter === 'upcoming' ? 'filled' : 'default'}
+                                        onClick={() => handleFilterChange('upcoming')}
+                                        size="sm"
+                                        style={{
+                                            backgroundColor: eventFilter === 'upcoming' ? themeSettings?.homepage_primary_color : 'transparent',
+                                            color: eventFilter === 'upcoming'
+                                                ? themeSettings?.homepage_content_background_color
+                                                : themeSettings?.homepage_primary_color,
+                                            borderColor: themeSettings?.homepage_secondary_color,
+                                        }}
+                                    >
+                                        {t`Upcoming`}
+                                    </Button>
+                                    <Button
+                                        variant={eventFilter === 'past' ? 'filled' : 'default'}
+                                        onClick={() => handleFilterChange('past')}
+                                        size="sm"
+                                        style={{
+                                            backgroundColor: eventFilter === 'past' ? themeSettings?.homepage_primary_color : 'transparent',
+                                            color: eventFilter === 'past'
+                                                ? themeSettings?.homepage_content_background_color
+                                                : themeSettings?.homepage_primary_color,
+                                            borderColor: themeSettings?.homepage_secondary_color,
+                                        }}
+                                    >
+                                        {t`Past`}
+                                    </Button>
+                                </Button.Group>
+                            </div>
                         </div>
                     </div>
 
-                    <div className={classes.eventsContainer}>
-                        {events.length === 0 ? (
-                            <div className={classes.noEvents}>
-                                <p>{eventFilter === 'upcoming' ? t`No upcoming events` : t`No past events`}</p>
+                    {/* Individual Event Cards - Floating */}
+                    <div className={classes.eventsListSection}>
+                        <div className={classes.eventsContainer}>
+                            {events.length === 0 ? (
+                                <div className={classes.noEvents}>
+                                    <p>{eventFilter === 'upcoming' ? t`No upcoming events` : t`No past events`}</p>
+                                </div>
+                            ) : (
+                                events.map((event) => (
+                                    <EventCard
+                                        key={event.id}
+                                        event={event as Event}
+                                        primaryColor={themeSettings?.homepage_primary_color || '#8b5cf6'}
+                                    />
+                                ))
+                            )}
+                        </div>
+
+                        {hasMorePages && (
+                            <div className={classes.loadMoreContainer}>
+                                <Button
+                                    onClick={handleNextPage}
+                                    rightSection={<IconArrowRight size={16}/>}
+                                    size="lg"
+                                    className={classes.loadMoreButton}
+                                    style={{
+                                        background: themeSettings?.homepage_primary_color || 'var(--primary-color)',
+                                    }}
+                                >
+                                    {t`Show More Events`}
+                                </Button>
                             </div>
-                        ) : (
-                            events.map((event) => (
-                                <EventCard
-                                    key={event.id}
-                                    event={event as Event}
-                                    primaryColor={themeSettings?.homepage_primary_color || '#8b5cf6'}
-                                />
-                            ))
                         )}
                     </div>
 
-                    {hasMorePages && (
-                        <div className={classes.loadMoreContainer}>
-                            <Button
-                                onClick={handleNextPage}
-                                rightSection={<IconArrowRight size={16}/>}
-                                size="lg"
-                                className={classes.loadMoreButton}
-                                style={{
-                                    background: themeSettings?.homepage_primary_color || 'var(--primary-color)',
-                                }}
-                            >
-                                {t`Show More Events`}
-                            </Button>
-                        </div>
-                    )}
+                    {/* Footer Section */}
+                    <div className={classes.footerSection}>
+                        <PoweredByFooter className={classes.poweredBy}/>
+                    </div>
                 </div>
-                <PoweredByFooter className={classes.poweredBy}/>
-            </div>
 
-            {/* Contact Modal */}
-            <Modal
-                opened={contactModalOpen}
-                onClose={() => setContactModalOpen(false)}
-                title={t`Contact ${organizer?.name || 'Organizer'}`}
-                size="md"
-                className={classes.contactModal}
-            >
-                <form onSubmit={contactForm.onSubmit(handleContactSubmit)}>
-                    <Group grow mb="md">
+                {/* Contact Modal */}
+                <Modal
+                    opened={contactModalOpen}
+                    onClose={() => setContactModalOpen(false)}
+                    title={t`Contact ${organizer?.name || 'Organizer'}`}
+                    size="md"
+                    className={classes.contactModal}
+                >
+                    <form onSubmit={contactForm.onSubmit(handleContactSubmit)}>
+                        <Group grow mb="md">
+                            <TextInput
+                                label={t`Your Name`}
+                                placeholder={t`Enter your name`}
+                                required
+                                {...contactForm.getInputProps('name')}
+                            />
+                            <TextInput
+                                label={t`Your Email`}
+                                placeholder={t`Enter your email`}
+                                required
+                                type="email"
+                                {...contactForm.getInputProps('email')}
+                            />
+                        </Group>
+
                         <TextInput
-                            label={t`Your Name`}
-                            placeholder={t`Enter your name`}
-                            required
-                            {...contactForm.getInputProps('name')}
+                            label={t`Subject`}
+                            placeholder={t`What is this about?`}
+                            mb="md"
+                            {...contactForm.getInputProps('subject')}
                         />
-                        <TextInput
-                            label={t`Your Email`}
-                            placeholder={t`Enter your email`}
+
+                        <Textarea
+                            label={t`Message`}
+                            placeholder={t`Write your message here...`}
                             required
-                            type="email"
-                            {...contactForm.getInputProps('email')}
+                            minRows={4}
+                            mb="md"
+                            {...contactForm.getInputProps('message')}
                         />
-                    </Group>
 
-                    <TextInput
-                        label={t`Subject`}
-                        placeholder={t`What is this about?`}
-                        mb="md"
-                        {...contactForm.getInputProps('subject')}
-                    />
-
-                    <Textarea
-                        label={t`Message`}
-                        placeholder={t`Write your message here...`}
-                        required
-                        minRows={4}
-                        mb="md"
-                        {...contactForm.getInputProps('message')}
-                    />
-
-                    <Group justify="flex-end">
-                        <Button
-                            variant="subtle"
-                            onClick={() => setContactModalOpen(false)}
-                        >
-                            {t`Cancel`}
-                        </Button>
-                        <Button
-                            type="submit"
-                            className={classes.submitButton}
-                        >
-                            {t`Send Message`}
-                        </Button>
-                    </Group>
-                </form>
-            </Modal>
-        </main>
+                        <Group justify="flex-end">
+                            <Button
+                                variant="subtle"
+                                onClick={() => setContactModalOpen(false)}
+                            >
+                                {t`Cancel`}
+                            </Button>
+                            <Button
+                                type="submit"
+                                className={classes.submitButton}
+                            >
+                                {t`Send Message`}
+                            </Button>
+                        </Group>
+                    </form>
+                </Modal>
+            </main>
         </>
     );
 };
