@@ -1,0 +1,15 @@
+{
+  "framework": "vite",
+  "buildCommand": "cd frontend && npm install && npm run build",
+  "outputDirectory": "frontend/dist/client",
+  "routes": [
+    {
+      "src": "/assets/(.*)",
+      "dest": "/frontend/dist/client/assets/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/frontend/server.js"
+    }
+  ]
+} 
