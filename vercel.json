@@ -1,16 +1,7 @@
 {
   "framework": "vite",
+  "buildCommand": "cd frontend && npm install && npm run build",
   "outputDirectory": "frontend/dist/client",
-  "builds": [
-    {
-      "src": "frontend/server.js",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "frontend/dist/client/**",
-      "use": "@vercel/static"
-    }
-  ],
   "routes": [
     {
       "src": "/assets/(.*)",
