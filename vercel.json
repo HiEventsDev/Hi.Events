@@ -1,4 +1,24 @@
 {
   "framework": "vite",
-  "outputDirectory": "frontend/dist/client"
+  "outputDirectory": "frontend/dist/client",
+  "builds": [
+    {
+      "src": "frontend/server.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "frontend/dist/client/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/assets/(.*)",
+      "dest": "/frontend/dist/client/assets/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/frontend/server.js"
+    }
+  ]
 } 
