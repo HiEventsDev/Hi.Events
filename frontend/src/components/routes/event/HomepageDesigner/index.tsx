@@ -117,7 +117,7 @@ const HomepageDesigner = () => {
                     <h2>{t`Homepage Design`}</h2>
                     <Group justify={'space-between'}>
                         <h3>{t`Cover`}</h3>
-                        <Tooltip label={t`We recommend dimensions of 2160px by 1080px, and a maximum file size of 5MB`}>
+                        <Tooltip label={t`We recommend dimensions of 1950px by 650px, a ratio of 3:1, and a maximum file size of 5MB`}>
                             <IconHelp size={20}/>
                         </Tooltip>
                     </Group>

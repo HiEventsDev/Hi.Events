@@ -297,15 +297,7 @@ export interface OrganizerSettings {
         homepage_content_background_color: string;
     }
     website_url?: string;
-    location_details?: {
-        venue_name?: string;
-        address_line_1?: string;
-        address_line_2?: string;
-        city?: string;
-        state_or_region?: string;
-        zip_or_postal_code?: string;
-        country?: string;
-    };
+    location_details?: VenueAddress;
     social_media_handles?: {
         facebook?: string;
         instagram?: string;

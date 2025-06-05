@@ -8,12 +8,13 @@ import {EventDocumentHead} from "../../common/EventDocumentHead";
 import {eventCoverImageUrl, imageUrl, organizerHomepageUrl} from "../../../utilites/urlHelper.ts";
 import {Event} from "../../../types.ts";
 import {EventNotAvailable} from "./EventNotAvailable";
-import {IconMapPin, IconTicket, IconWorld} from "@tabler/icons-react";
+import {IconExternalLink, IconMail, IconMapPin, IconTicket, IconWorld} from "@tabler/icons-react";
 import {Anchor, Button} from "@mantine/core";
 import {t} from "@lingui/macro";
 import {PoweredByFooter} from "../../common/PoweredByFooter";
+import {ContactOrganizerModal} from "../../common/ContactOrganizerModal";
 import {socialMediaConfig} from "../../../constants/socialMediaConfig";
-import {formatAddress} from "../../../utilites/formatAddress.tsx";
+import {getGoogleMapsUrl, getShortLocationDisplay} from "../../../utilites/addressUtilities.ts";
 
 interface EventHomepageProps {
     colors?: {
@@ -34,29 +35,43 @@ interface EventHomepageProps {
 const EventHomepage = ({colors, continueButtonText, backgroundType, ...loaderData}: EventHomepageProps) => {
     const {event, promoCodeValid, promoCode} = loaderData;
     const [showScrollButton, setShowScrollButton] = useState(false);
+    const [contactModalOpen, setContactModalOpen] = useState(false);
     const ticketsSectionRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        // Show button after 2 seconds
-        const showTimer = setTimeout(() => {
-            setShowScrollButton(true);
-        }, 2000);
+        let showTimer: NodeJS.Timeout;
 
-        // Check scroll position to hide button when tickets are visible
-        const handleScroll = () => {
+        const checkTicketsPosition = () => {
             if (ticketsSectionRef.current) {
                 const rect = ticketsSectionRef.current.getBoundingClientRect();
-                const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
-                setShowScrollButton(!isVisible);
+                // Check if tickets section is below the fold or out of view
+                const isBelowFold = rect.top > window.innerHeight;
+                const isAboveView = rect.bottom < 0;
+                const shouldShowButton = isBelowFold || isAboveView;
+
+                setShowScrollButton(shouldShowButton);
             }
         };
 
+        showTimer = setTimeout(() => {
+            checkTicketsPosition();
+        }, 500);
+
+        const handleScroll = () => {
+            checkTicketsPosition();
+        };
+
+        const handleResize = () => {
+            checkTicketsPosition();
+        };
+
         window.addEventListener('scroll', handleScroll);
-        handleScroll();
+        window.addEventListener('resize', handleResize);
 
         return () => {
             clearTimeout(showTimer);
             window.removeEventListener('scroll', handleScroll);
+            window.removeEventListener('resize', handleResize);
         };
     }, []);
 
@@ -196,23 +211,32 @@ const EventHomepage = ({colors, continueButtonText, backgroundType, ...loaderDat
                                             </Anchor>
                                         </h3>
 
-                                        {organizerLocation?.city && (
+                                        {getShortLocationDisplay(organizerLocation) && (
                                             <div className={classes.organizerLocation}>
                                                 <IconMapPin size={16}/>
-                                                <span>
-                                                    {formatAddress(organizerLocation)}
-                                                </span>
+                                                <span>{getShortLocationDisplay(organizerLocation)}</span>
+                                                <Anchor
+                                                    href={getGoogleMapsUrl(organizerLocation!)}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className={classes.mapLink}
+                                                >
+                                                    <IconExternalLink size={14}/>
+                                                </Anchor>
                                             </div>
                                         )}
 
                                         {websiteUrl && (
-                                            <Anchor
-                                                href={websiteUrl}
-                                                target="_blank"
-                                                className={classes.organizerWebsite}
-                                            >
-                                                {websiteUrl}
-                                            </Anchor>
+                                            <div className={classes.organizerWebsite}>
+                                                <IconWorld size={16}/>
+                                                <Anchor
+                                                    href={websiteUrl}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                >
+                                                    {new URL(websiteUrl).hostname}
+                                                </Anchor>
+                                            </div>
                                         )}
                                     </div>
                                 </div>
@@ -226,16 +250,6 @@ const EventHomepage = ({colors, continueButtonText, backgroundType, ...loaderDat
                                 )}
                                 {(socialLinks.length > 0 || websiteUrl) && (
                                     <div className={classes.organizerSocials}>
-                                        {websiteUrl && (
-                                            <Anchor
-                                                href={websiteUrl}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className={classes.socialLink}
-                                            >
-                                                <IconWorld size={24}/>
-                                            </Anchor>
-                                        )}
                                         {socialLinks.map(({platform, handle, config}) => {
                                             const IconComponent = config.icon;
                                             const url = config.baseUrl + handle;
@@ -251,6 +265,15 @@ const EventHomepage = ({colors, continueButtonText, backgroundType, ...loaderDat
                                                 </Anchor>
                                             );
                                         })}
+                                        <Button
+                                            leftSection={<IconMail size={16}/>}
+                                            onClick={() => setContactModalOpen(true)}
+                                            className={classes.contactButton}
+                                            variant="outline"
+                                            size="sm"
+                                        >
+                                            {t`Contact`}
+                                        </Button>
                                     </div>
                                 )}
                             </div>
@@ -303,6 +326,13 @@ const EventHomepage = ({colors, continueButtonText, backgroundType, ...loaderDat
                     </Button>
                 )}
             </div>
+
+            {/* Contact Modal */}
+            <ContactOrganizerModal
+                opened={contactModalOpen}
+                onClose={() => setContactModalOpen(false)}
+                organizer={organizer}
+            />
         </div>
     );
 };

@@ -42,6 +42,18 @@ enum ImageType
         ];
     }
 
+    public static function getMinimumDimensionsMap(ImageType $imageType): array
+    {
+        $map = [
+            self::GENERIC->name => [50, 50],
+            self::EVENT_COVER->name => [600, 50],
+            self::ORGANIZER_LOGO->name => [100, 100],
+            self::ORGANIZER_COVER->name => [600, 50],
+        ];
+
+        return $map[$imageType->name] ?? $map[self::GENERIC->name];
+    }
+
     public function getEntityType(): string
     {
         if (in_array($this, self::eventImageTypes())) {

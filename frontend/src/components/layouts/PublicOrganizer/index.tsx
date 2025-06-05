@@ -1,16 +1,17 @@
 import {useLoaderData} from "react-router";
-import {ActionIcon, Button, Group, Modal, Textarea, TextInput} from '@mantine/core';
+import {ActionIcon, Button} from '@mantine/core';
 import {EventCard} from './EventCard';
 import classes from './PublicOrganizer.module.scss';
 import React, {useMemo, useState} from 'react';
 import {Event, Organizer, QueryFilterOperator} from "../../../types.ts";
-import {useForm} from "@mantine/form";
 import {useGetOrganizerPublicEvents} from "../../../queries/useGetOrganizerEventsPublic.ts";
 import {OrganizerDocumentHead} from "../../common/OrganizerDocumentHead";
-import {IconArrowRight, IconMail, IconMapPin, IconWorld} from '@tabler/icons-react';
+import {IconArrowRight, IconExternalLink, IconMail, IconMapPin, IconWorld} from '@tabler/icons-react';
 import {t} from "@lingui/macro";
 import {PoweredByFooter} from "../../common/PoweredByFooter";
 import {socialMediaConfig} from "../../../constants/socialMediaConfig";
+import {ContactOrganizerModal} from "../../common/ContactOrganizerModal";
+import {formatAddress, getShortLocationDisplay} from "../../../utilites/addressUtilities.ts";
 
 interface PublicOrganizerProps {
     previewData?: Organizer;
@@ -82,22 +83,6 @@ export const PublicOrganizer = ({previewData, isPreview}: PublicOrganizerProps) 
         enabled: !!organizerId && eventFilter === 'past' && !isPreview,
     });
 
-    // Contact form
-    const contactForm = useForm({
-        initialValues: {
-            name: '',
-            email: '',
-            subject: '',
-            message: '',
-        },
-    });
-
-    const handleContactSubmit = (values: any) => {
-        // Handle contact form submission
-        console.log('Contact form:', values);
-        setContactModalOpen(false);
-        contactForm.reset();
-    };
 
     if (!organizer) {
         return null;
@@ -136,6 +121,27 @@ export const PublicOrganizer = ({previewData, isPreview}: PublicOrganizerProps) 
         })) : [];
 
     const websiteUrl = organizer.website;
+
+    // Process location details - show venue name + city only
+    const getLocationDisplay = (locationDetails: any) => {
+        if (!locationDetails) return null;
+
+        const parts = [];
+        if (locationDetails.venue_name) {
+            parts.push(locationDetails.venue_name);
+        }
+        if (locationDetails.city) {
+            parts.push(locationDetails.city);
+        }
+
+        return parts.length > 0 ? parts.join(', ') : null;
+    };
+
+    // Create Google Maps URL using full address like in OrderSummaryAndProducts
+    const getGoogleMapsUrl = (locationDetails: any) => {
+        if (!locationDetails) return '';
+        return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(formatAddress(locationDetails))}`;
+    };
 
     // Images
     const organizerLogo = organizer.images?.find(img => img.type === 'ORGANIZER_LOGO');
@@ -215,22 +221,31 @@ export const PublicOrganizer = ({previewData, isPreview}: PublicOrganizerProps) 
                                             <div className={classes.nameSection}>
                                                 <h1>{organizer?.name}</h1>
                                                 <div className={classes.organizerMeta}>
-                                                    {organizer?.settings?.location_details?.city && (
+                                                    {getShortLocationDisplay(organizer?.settings?.location_details) && (
                                                         <div className={classes.metaItem}>
                                                             <IconMapPin size={16} className={classes.metaIcon}/>
-                                                            <span>{organizer.settings.location_details.city}</span>
+                                                            <span>{getShortLocationDisplay(organizer.settings!.location_details)}</span>
+                                                            <a
+                                                                href={getGoogleMapsUrl(organizer.settings!.location_details)}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                className={classes.mapLink}
+                                                            >
+                                                                <IconExternalLink size={14}/>
+                                                            </a>
                                                         </div>
                                                     )}
                                                     {websiteUrl && (
-                                                        <a
-                                                            href={websiteUrl}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            className={classes.metaItem}
-                                                        >
+                                                        <div className={classes.metaItem}>
                                                             <IconWorld size={16} className={classes.metaIcon}/>
-                                                            <span>{new URL(websiteUrl).hostname}</span>
-                                                        </a>
+                                                            <a
+                                                                href={websiteUrl}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                            >
+                                                                {new URL(websiteUrl).hostname}
+                                                            </a>
+                                                        </div>
                                                     )}
                                                 </div>
                                             </div>
@@ -360,62 +375,11 @@ export const PublicOrganizer = ({previewData, isPreview}: PublicOrganizerProps) 
                 </div>
 
                 {/* Contact Modal */}
-                <Modal
+                <ContactOrganizerModal
                     opened={contactModalOpen}
                     onClose={() => setContactModalOpen(false)}
-                    title={t`Contact ${organizer?.name || 'Organizer'}`}
-                    size="md"
-                    className={classes.contactModal}
-                >
-                    <form onSubmit={contactForm.onSubmit(handleContactSubmit)}>
-                        <Group grow mb="md">
-                            <TextInput
-                                label={t`Your Name`}
-                                placeholder={t`Enter your name`}
-                                required
-                                {...contactForm.getInputProps('name')}
-                            />
-                            <TextInput
-                                label={t`Your Email`}
-                                placeholder={t`Enter your email`}
-                                required
-                                type="email"
-                                {...contactForm.getInputProps('email')}
-                            />
-                        </Group>
-
-                        <TextInput
-                            label={t`Subject`}
-                            placeholder={t`What is this about?`}
-                            mb="md"
-                            {...contactForm.getInputProps('subject')}
-                        />
-
-                        <Textarea
-                            label={t`Message`}
-                            placeholder={t`Write your message here...`}
-                            required
-                            minRows={4}
-                            mb="md"
-                            {...contactForm.getInputProps('message')}
-                        />
-
-                        <Group justify="flex-end">
-                            <Button
-                                variant="subtle"
-                                onClick={() => setContactModalOpen(false)}
-                            >
-                                {t`Cancel`}
-                            </Button>
-                            <Button
-                                type="submit"
-                                className={classes.submitButton}
-                            >
-                                {t`Send Message`}
-                            </Button>
-                        </Group>
-                    </form>
-                </Modal>
+                    organizer={organizer}
+                />
             </main>
         </>
     );

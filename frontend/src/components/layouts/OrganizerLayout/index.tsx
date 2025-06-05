@@ -8,6 +8,7 @@ import {
     IconExternalLink,
     IconPaint,
     IconSettings,
+    IconShare,
     IconUsersGroup
 } from "@tabler/icons-react";
 import {t} from "@lingui/macro";
@@ -27,6 +28,8 @@ import {SwitchOrganizerModal} from "../../modals/SwitchOrganizerModal";
 import {useGetOrganizers} from "../../../queries/useGetOrganizers.ts";
 import {useGetAccount} from "../../../queries/useGetAccount.ts";
 import {StripeConnectButton} from "../../common/StripeConnectButton";
+import {ShareModal} from "../../modals/ShareModal";
+import {organizerHomepageUrl} from "../../../utilites/urlHelper";
 
 const OrganizerLayout = () => {
     const {organizerId} = useParams();
@@ -34,6 +37,7 @@ const OrganizerLayout = () => {
     const [showCreateEventModal, setShowCreateEventModal] = useState(false);
     const [createModalOpen, {open: openCreateModal, close: closeCreateModal}] = useDisclosure(false);
     const [switchOrganizerModalOpen, {open: openSwitchModal, close: closeSwitchModal}] = useDisclosure(false);
+    const [shareModalOpen, {open: openShareModal, close: closeShareModal}] = useDisclosure(false);
     const {data: organizerResposne} = useGetOrganizers();
     const organizers = organizerResposne?.data;
     const {data: account} = useGetAccount();
@@ -139,6 +143,17 @@ const OrganizerLayout = () => {
                 )}
                 breadcrumbContentRight={(
                     <>
+                        {organizer && (
+                            <>
+                                <Button
+                                    onClick={openShareModal}
+                                    variant="transparent"
+                                    leftSection={<IconShare size={16}/>}
+                                >
+                                    {t`Share Organizer Page`}
+                                </Button>
+                            </>
+                        )}
                     </>
                 )}
                 actionGroupContent={(
@@ -162,6 +177,15 @@ const OrganizerLayout = () => {
             {createModalOpen && <InviteUserModal onClose={closeCreateModal}/>}
             {switchOrganizerModalOpen &&
                 <SwitchOrganizerModal opened={switchOrganizerModalOpen} onClose={closeSwitchModal}/>}
+            {organizer && shareModalOpen && (
+                <ShareModal
+                    url={organizerHomepageUrl(organizer)}
+                    title={organizer.name}
+                    modalTitle={t`Share Organizer Page`}
+                    opened={shareModalOpen}
+                    onClose={closeShareModal}
+                />
+            )}
         </>
     );
 };

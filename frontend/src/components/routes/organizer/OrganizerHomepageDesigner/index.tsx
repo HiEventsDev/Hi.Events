@@ -32,18 +32,18 @@ const colorThemes: ColorTheme[] = [
     {
         name: t`Modern`,
         colors: {
-            homepage_background_color: '#fafafa',
-            homepage_content_background_color: '#ffffff',
-            homepage_primary_color: '#171717',
-            homepage_primary_text_color: '#171717',
-            homepage_secondary_color: '#737373',
-            homepage_secondary_text_color: '#000000',
+            homepage_background_color: '#2c0838',
+            homepage_content_background_color: '#32174f',
+            homepage_primary_color: '#c7a2db',
+            homepage_primary_text_color: '#ffffff',
+            homepage_secondary_color: '#c7a2db',
+            homepage_secondary_text_color: '#ffffff',
         }
     },
     {
         name: t`Ocean`,
         colors: {
-            homepage_background_color: '#f0f9ff',
+            homepage_background_color: '#e0f2fe',
             homepage_content_background_color: '#ffffff',
             homepage_primary_color: '#0ea5e9',
             homepage_primary_text_color: '#075985',
@@ -54,7 +54,7 @@ const colorThemes: ColorTheme[] = [
     {
         name: t`Forest`,
         colors: {
-            homepage_background_color: '#f0fdf4',
+            homepage_background_color: '#dcfce7',
             homepage_content_background_color: '#ffffff',
             homepage_primary_color: '#22c55e',
             homepage_primary_text_color: '#14532d',
@@ -65,7 +65,7 @@ const colorThemes: ColorTheme[] = [
     {
         name: t`Sunset`,
         colors: {
-            homepage_background_color: '#fff7ed',
+            homepage_background_color: '#fef3c7',
             homepage_content_background_color: '#ffffff',
             homepage_primary_color: '#f97316',
             homepage_primary_text_color: '#7c2d12',
@@ -87,7 +87,7 @@ const colorThemes: ColorTheme[] = [
     {
         name: t`Royal`,
         colors: {
-            homepage_background_color: '#faf5ff',
+            homepage_background_color: '#f3e8ff',
             homepage_content_background_color: '#ffffff',
             homepage_primary_color: '#a855f7',
             homepage_primary_text_color: '#581c87',
@@ -98,7 +98,7 @@ const colorThemes: ColorTheme[] = [
     {
         name: t`Coral`,
         colors: {
-            homepage_background_color: '#fef2f2',
+            homepage_background_color: '#ffe4e6',
             homepage_content_background_color: '#ffffff',
             homepage_primary_color: '#f87171',
             homepage_primary_text_color: '#991b1b',
@@ -109,7 +109,7 @@ const colorThemes: ColorTheme[] = [
     {
         name: t`Arctic`,
         colors: {
-            homepage_background_color: '#f0fdfa',
+            homepage_background_color: '#ccfbf1',
             homepage_content_background_color: '#ffffff',
             homepage_primary_color: '#14b8a6',
             homepage_primary_text_color: '#134e4a',
@@ -263,7 +263,7 @@ const OrganizerHomepageDesigner = () => {
 
                     <Group justify={'space-between'}>
                         <h3>{t`Cover Image`}</h3>
-                        <Tooltip label={t`We recommend dimensions of 2160px by 1080px, and a maximum file size of 5MB`}>
+                        <Tooltip label={t`We recommend dimensions of 1950px by 650px, a ratio of 3:1, and a maximum file size of 5MB`}>
                             <IconHelp size={20}/>
                         </Tooltip>
                     </Group>

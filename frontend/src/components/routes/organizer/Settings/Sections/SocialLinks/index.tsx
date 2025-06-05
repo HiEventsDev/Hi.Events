@@ -29,7 +29,6 @@ import {
     IconBrandYoutube,
     IconChevronDown,
     IconChevronUp,
-    IconWorld,
 } from '@tabler/icons-react';
 import {InputGroup} from "../../../../../common/InputGroup";
 
@@ -43,7 +42,6 @@ interface SocialPlatform {
 
 const socialPlatforms: SocialPlatform[] = [
     // Primary platforms (always visible)
-    {name: t`Website`, field: 'website_url', icon: IconWorld, placeholder: 'https://example.com', priority: 'primary'},
     {
         name: t`Facebook`,
         field: 'facebook_handle',
@@ -69,7 +67,7 @@ const socialPlatforms: SocialPlatform[] = [
     {name: t`YouTube`, field: 'youtube_handle', icon: IconBrandYoutube, placeholder: 'channel', priority: 'primary'},
 
     // Secondary platforms (collapsible)
-    {name: t`TikTok`, field: 'tiktok_handle', icon: IconBrandTiktok, placeholder: 'username', priority: 'secondary'},
+    {name: t`TikTok`, field: 'tiktok_handle', icon: IconBrandTiktok, placeholder: 'username', priority: 'primary'},
     {name: t`Discord`, field: 'discord_handle', icon: IconBrandDiscord, placeholder: 'user_id', priority: 'secondary'},
     {
         name: t`Snapchat`,

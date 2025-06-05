@@ -59,7 +59,7 @@
 // Content sections
 .contentSection {
   margin: 24px 20px;
-  background-color: var(--homepage-background-color, #fff);
+  background-color: var(--homepage-background-color);
   border-radius: 20px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
   overflow: hidden;
@@ -96,7 +96,7 @@
     font-size: 1.75rem;
     font-weight: 600;
     margin: 0 0 24px 0;
-    color: var(--homepage-primary-text-color, #1a1a1a);
+    color: var(--homepage-primary-text-color);
 
     @include mixins.respond-below(md) {
       font-size: 1.5rem;
@@ -112,11 +112,11 @@
 
 // Event description
 .eventDescription {
-  color: var(--homepage-primary-text-color, #1a1a1a);
+  color: var(--homepage-primary-text-color);
   line-height: 1.6;
 
   h1, h2, h3, h4, h5, h6 {
-    color: var(--homepage-primary-text-color, #1a1a1a);
+    color: var(--homepage-primary-text-color);
     margin-top: 1.5em;
     margin-bottom: 0.75em;
 
@@ -141,7 +141,7 @@
   }
 
   a {
-    color: var(--homepage-primary-color, #228be6);
+    color: var(--homepage-primary-color);
     text-decoration: none;
 
     &:hover {
@@ -189,6 +189,11 @@
       font-size: 1.25rem;
       font-weight: 600;
       color: var(--homepage-primary-text-color, #1a1a1a);
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
     }
 
     @include mixins.respond-below(sm) {
@@ -199,29 +204,66 @@
   .organizerLocation {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 6px;
     color: var(--homepage-secondary-color);
     font-size: 0.95rem;
     margin-bottom: 8px;
     
+    @include mixins.respond-below(sm) {
+      justify-content: center;
+    }
+    
     svg {
       color: var(--homepage-secondary-color);
+      flex-shrink: 0;
+    }
+
+    span {
+      margin-right: 4px;
+    }
+  }
+
+  .mapLink {
+    color: var(--homepage-secondary-color);
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+
+    &:hover {
+      opacity: 1;
     }
   }
 
   .organizerWebsite {
-    color: var(--homepage-primary-text-color);
-    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--homepage-secondary-color);
     font-size: 0.95rem;
+    margin-bottom: 8px;
+    
+    @include mixins.respond-below(sm) {
+      justify-content: center;
+    }
 
-    &:hover {
-      text-decoration: underline;
+    svg {
+      color: var(--homepage-secondary-color);
+      flex-shrink: 0;
+    }
+
+    a {
+      color: var(--homepage-secondary-color);
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
     }
   }
 
   .organizerDescription {
     line-height: 1.6;
     margin-bottom: 20px;
+    color: var(--homepage-primary-text-color);
 
     p {
       margin-bottom: 0.75em;
@@ -230,10 +272,20 @@
         margin-bottom: 0;
       }
     }
+    
+    a {
+      color: var(--homepage-primary-color);
+      text-decoration: none;
+      
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
 
   .organizerSocials {
     display: flex;
+    align-items: center;
     gap: 12px;
     margin-top: 20px;
 
@@ -250,11 +302,25 @@
     height: 40px;
     border-radius: 8px;
     color: var(--homepage-secondary-color);
-    transition: all 0.2s ease;
+    transition: transform 0.2s ease;
 
     &:hover {
-      background-color: var(--homepage-primary-color);
-      color: var(--homepage-primary-text-color);
+      transform: translateY(-2px);
+    }
+  }
+
+  .contactButton {
+    border-color: var(--homepage-secondary-color);
+    color: var(--homepage-secondary-color);
+    background: transparent;
+    transition: all 0.2s ease;
+    font-weight: 500;
+    border-radius: 10px;
+    font-size: 0.875rem;
+    padding: 6px 16px;
+    height: 36px;
+
+    &:hover {
       transform: translateY(-2px);
     }
   }

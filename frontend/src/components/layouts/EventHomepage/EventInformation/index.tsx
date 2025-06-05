@@ -1,12 +1,12 @@
-import {IconCalendar, IconExternalLink, IconMapPin} from "@tabler/icons-react";
+import {IconCalendar, IconExternalLink, IconMapPin, IconWorld} from "@tabler/icons-react";
 import classes from "./EventInformation.module.scss";
-import {formatAddress} from "../../../../utilites/formatAddress.tsx";
+import {formatAddress} from "../../../../utilites/addressUtilities.ts";
 import {t} from "@lingui/macro";
 import {Anchor, Button} from "@mantine/core";
 import {LoadingMask} from "../../../common/LoadingMask";
 import {ShareComponent} from "../../../common/ShareIcon";
 import {eventCoverImageUrl, eventHomepageUrl, imageUrl, organizerHomepageUrl} from "../../../../utilites/urlHelper.ts";
-import React, {FC} from "react";
+import {FC} from "react";
 import {Event, Organizer} from "../../../../types.ts";
 import {EventDateRange} from "../../../common/EventDateRange";
 
@@ -62,7 +62,19 @@ export const EventInformation: FC<{
                     </div>
                 </div>
 
-                {event.settings?.location_details && (
+
+                {event.settings?.is_online_event && (
+                    <div className={classes.eventDetail}>
+                        <div className={classes.details}>
+                            <IconWorld size={20}/>
+                            <div className={classes.detail}>
+                                <b>{t`Online Event`}</b>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {event.settings?.location_details && !event.settings?.is_online_event && (
                     <div className={classes.eventDetail}>
                         <div className={classes.details}>
                             <IconMapPin size={20}/>

@@ -4,6 +4,7 @@ use HiEvents\DomainObjects\Enums\OrganizerHomepageVisibility;
 use HiEvents\Models\Organizer;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
@@ -33,8 +34,25 @@ return new class extends Migration {
             $table->softDeletes();
         });
 
-        Organizer::all()->each(static function (Organizer $organizer) {
-            $organizer->organizer_settings()->create();
+        $defaultThemeColors = config('app.organizer_homepage_default_theme_colors');
+
+        // Create default settings for all existing organizers
+        DB::transaction(static function () use ($defaultThemeColors) {
+            Organizer::all()->each(static function (Organizer $organizer) use ($defaultThemeColors) {
+                $organizer->organizer_settings()->create([
+                    'homepage_visibility' => OrganizerHomepageVisibility::PUBLIC->name,
+
+                    // Use the "Modern" theme as default
+                    'homepage_theme_settings' => [
+                        'homepage_background_color' => $defaultThemeColors['homepage_background_color'] ?? '#2c0838',
+                        'homepage_content_background_color' => $defaultThemeColors['homepage_content_background_color'] ?? '#32174f',
+                        'homepage_primary_color' => $defaultThemeColors['homepage_primary_color'] ?? '#c7a2db',
+                        'homepage_primary_text_color' => $defaultThemeColors['homepage_primary_text_color'] ?? '#ffffff',
+                        'homepage_secondary_color' => $defaultThemeColors['homepage_secondary_color'] ?? '#c7a2db',
+                        'homepage_secondary_text_color' => $defaultThemeColors['homepage_secondary_text_color'] ?? '#ffffff',
+                    ],
+                ]);
+            });
         });
     }
 

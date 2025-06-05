@@ -1,15 +1,15 @@
 import {
     IconArrowLeft,
-    IconBrandStripe,
     IconChartPie,
     IconChevronRight,
-    IconCreditCard,
     IconDashboard,
     IconDeviceTabletCode,
     IconDiscount2,
     IconExternalLink,
     IconEye,
-    IconEyeOff, IconMailCheck, IconMailForward,
+    IconEyeOff,
+    IconMailCheck,
+    IconMailForward,
     IconPaint,
     IconQrcode,
     IconReceipt,
@@ -41,11 +41,10 @@ import {useDisclosure} from "@mantine/hooks";
 import {TopBarButton} from "../../common/TopBarButton";
 import {useWindowWidth} from "../../../hooks/useWindowWidth.ts";
 import {SidebarCallout} from "../../common/SidebarCallout";
-import {StripeConnectButton} from "../../common/StripeConnectButton";
-import {useGetAccount} from "../../../queries/useGetAccount";
 import {useGetMe} from "../../../queries/useGetMe.ts";
 import {useResendEmailConfirmation} from "../../../mutations/useResendEmailConfirmation.ts";
 import {useState} from "react";
+import {eventHomepageUrl} from "../../../utilites/urlHelper.ts";
 
 const EventLayout = () => {
     const location = useLocation();
@@ -194,7 +193,9 @@ const EventLayout = () => {
                             </Button>
 
                             {event && <ShareModal
-                                event={event}
+                                url={eventHomepageUrl(event)}
+                                title={event.title}
+                                modalTitle={t`Share Event`}
                                 opened={opened}
                                 onClose={close}
                             />}

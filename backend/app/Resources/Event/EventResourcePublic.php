@@ -15,11 +15,20 @@ use Illuminate\Http\Request;
  */
 class EventResourcePublic extends BaseResource
 {
+    private readonly bool $includePostCheckoutData;
+
     public function __construct(
-        mixed                 $resource,
-        private readonly bool $includePostCheckoutData = false,
+        mixed $resource,
+        mixed $maybeKeyOrIncludePostCheckoutData = false,
     )
     {
+        // This is a hackyworkaround to handle the fact that when this resource is called
+        // When internally within Laravel the second param is the collection key (numeric)
+        // When called normally, second param is includePostCheckoutData (boolean)
+        $this->includePostCheckoutData = is_bool($maybeKeyOrIncludePostCheckoutData)
+            ? $maybeKeyOrIncludePostCheckoutData
+            : false;
+
         parent::__construct($resource);
     }
 
