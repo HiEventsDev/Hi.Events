@@ -4,11 +4,11 @@ namespace HiEvents\DomainObjects\Status;
 
 use HiEvents\DomainObjects\Enums\BaseEnum;
 
-enum OrganizerStatus
+enum OrganizerStatus: string
 {
     use BaseEnum;
 
-    case DRAFT;
-    case LIVE;
-    case ARCHIVED;
+    case DRAFT = 'DRAFT';
+    case LIVE = 'LIVE';
+    case ARCHIVED = 'ARCHIVED';
 }

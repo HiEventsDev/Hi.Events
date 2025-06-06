@@ -27,7 +27,7 @@ class GetPublicOrganizerAction extends BaseAction
 
         if (!$this->canUserViewOrganizer($organizer)) {
             $this->logger->debug(__('Organizer with ID :organizerId is not live and user is not authenticated', [
-                'organizerId' => $organizer
+                'organizerId' => $organizer->getId(),
             ]));
 
             return $this->notFoundResponse();

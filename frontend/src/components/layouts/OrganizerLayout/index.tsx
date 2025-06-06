@@ -3,9 +3,12 @@ import {
     IconBrandStripe,
     IconCalendar,
     IconCalendarPlus,
+    IconChevronRight,
     IconCreditCard,
     IconDashboard,
     IconExternalLink,
+    IconEye,
+    IconEyeOff,
     IconPaint,
     IconSettings,
     IconShare,
@@ -15,7 +18,7 @@ import {t} from "@lingui/macro";
 import {BreadcrumbItem, NavItem} from "../AppLayout/types.ts";
 import AppLayout from "../AppLayout";
 import {NavLink, useParams} from "react-router";
-import {Button} from "@mantine/core";
+import {Button, Modal, Text, Stack} from "@mantine/core";
 import {useGetOrganizer} from "../../../queries/useGetOrganizer.ts";
 import {useState} from "react";
 import {CreateEventModal} from "../../modals/CreateEventModal";
@@ -30,6 +33,11 @@ import {useGetAccount} from "../../../queries/useGetAccount.ts";
 import {StripeConnectButton} from "../../common/StripeConnectButton";
 import {ShareModal} from "../../modals/ShareModal";
 import {organizerHomepageUrl} from "../../../utilites/urlHelper";
+import {useUpdateOrganizerStatus} from "../../../mutations/useUpdateOrganizerStatus.ts";
+import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
+import {showError, showSuccess} from "../../../utilites/notifications.tsx";
+import {useResendEmailConfirmation} from "../../../mutations/useResendEmailConfirmation.ts";
+import {useGetMe} from "../../../queries/useGetMe.ts";
 
 const OrganizerLayout = () => {
     const {organizerId} = useParams();
@@ -38,9 +46,16 @@ const OrganizerLayout = () => {
     const [createModalOpen, {open: openCreateModal, close: closeCreateModal}] = useDisclosure(false);
     const [switchOrganizerModalOpen, {open: openSwitchModal, close: closeSwitchModal}] = useDisclosure(false);
     const [shareModalOpen, {open: openShareModal, close: closeShareModal}] = useDisclosure(false);
+    const [emailVerificationModalOpen, {open: openEmailVerificationModal, close: closeEmailVerificationModal}] = useDisclosure(false);
     const {data: organizerResposne} = useGetOrganizers();
     const organizers = organizerResposne?.data;
     const {data: account} = useGetAccount();
+    const resendEmailConfirmationMutation = useResendEmailConfirmation();
+    const [emailConfirmationResent, setEmailConfirmationResent] = useState(false);
+    const {data: me} = useGetMe();
+    const isUserEmailVerfied = me?.is_email_verified;
+
+    const statusToggleMutation = useUpdateOrganizerStatus();
 
     const navItems: NavItem[] = [
         {
@@ -59,6 +74,20 @@ const OrganizerLayout = () => {
         {link: 'organizer-homepage-designer', label: t`Homepage Designer`, icon: IconPaint},
     ];
 
+    const handleEmailConfirmationResend = () => {
+        resendEmailConfirmationMutation.mutate({
+            userId: me?.id
+        }, {
+            onSuccess: () => {
+                showSuccess(t`Email confirmation resent successfully`);
+                setEmailConfirmationResent(true);
+            },
+            onError: () => {
+                showError(t`Something went wrong. Please try again.`);
+            }
+        })
+    }
+
     const navItemsWithLoading: NavItem[] = navItems.map(item => {
         if (!organizer) {
             return {
@@ -69,6 +98,32 @@ const OrganizerLayout = () => {
         return item;
     });
 
+    const handleStatusToggle = () => {
+        // Check if user email is verified
+        if (!isUserEmailVerfied) {
+            openEmailVerificationModal();
+            return;
+        }
+
+        const message = organizer?.status === 'LIVE'
+            ? t`Are you sure you want to make this organizer draft? This will make the organizer page invisible to the public`
+            : t`Are you sure you want to make this organizer public? This will make the organizer page visible to the public`;
+
+        confirmationDialog(message, () => {
+            statusToggleMutation.mutate({
+                organizerId,
+                status: organizer?.status === 'LIVE' ? 'DRAFT' : 'LIVE'
+            }, {
+                onSuccess: () => {
+                    showSuccess(t`Organizer status updated`);
+                },
+                onError: (error: any) => {
+                    showError(error?.response?.data?.message || t`Organizer status update failed. Please try again later`);
+                }
+            });
+        });
+    };
+
     const breadcrumbItems: BreadcrumbItem[] = [
         {
             link: '/manage/events',
@@ -77,6 +132,16 @@ const OrganizerLayout = () => {
         {
             link: `/manage/organizer/${organizerId}`,
             content: organizer?.name,
+        },
+        {
+            content: (
+                <span 
+                    className={classes.createEventBreadcrumb}
+                    onClick={() => setShowCreateEventModal(true)}
+                >
+                    <IconCalendarPlus size={16} /> {t`Create Event`}
+                </span>
+            ),
         }
     ];
 
@@ -118,28 +183,23 @@ const OrganizerLayout = () => {
                 breadcrumbItems={breadcrumbItems}
                 entityType="organizer"
                 topBarContent={(
-                    <>
-                        <TopBarButton
-                            onClick={() => setShowCreateEventModal(true)}
-                            leftSection={<IconCalendarPlus size={17}/>}
-                            title={t`Create Event`}
-                            className={classes.createEventButton}
-                        >
-                            <span className={classes.createEventButtonTextMobile}>
-                            {t`Event`}
-                            </span>
-
-                            <span className={classes.createEventButtonTextDesktop}>
-                            {t`Create Event`}
-                            </span>
-                        </TopBarButton>
-                        {showCreateEventModal && (
-                            <CreateEventModal
-                                onClose={() => setShowCreateEventModal(false)}
-                                organizerId={organizerId}
-                            />
+                    <div className={classes.statusToggleContainer}>
+                        {organizer && (
+                            <TopBarButton
+                                onClick={handleStatusToggle}
+                                size="sm"
+                                leftSection={organizer?.status === 'DRAFT' ? <IconEyeOff size={16}/> : <IconEye size={16}/>}
+                                rightSection={<IconChevronRight size={14}/>}
+                            >
+                                {organizer?.status === 'DRAFT'
+                                    ? <span>{t`Draft`} <span
+                                        className={classes.statusAction}>{t`- Click to Publish`}</span></span>
+                                    : <span>{t`Live`} <span
+                                        className={classes.statusAction}>{t`- Click to Unpublish`}</span></span>
+                                }
+                            </TopBarButton>
                         )}
-                    </>
+                    </div>
                 )}
                 breadcrumbContentRight={(
                     <>
@@ -186,6 +246,42 @@ const OrganizerLayout = () => {
                     onClose={closeShareModal}
                 />
             )}
+            {showCreateEventModal && (
+                <CreateEventModal
+                    onClose={() => setShowCreateEventModal(false)}
+                    organizerId={organizerId}
+                />
+            )}
+
+            <Modal
+                opened={emailVerificationModalOpen}
+                onClose={closeEmailVerificationModal}
+                title={t`Email Verification Required`}
+                size="md"
+                centered
+            >
+                <Stack gap="md">
+                    <Text size="sm" c="dimmed">
+                        {t`You must verify your email address before you can update the organizer status.`}
+                    </Text>
+                    
+                    {!emailConfirmationResent ? (
+                        <Button 
+                            variant="light" 
+                            onClick={() => {
+                                handleEmailConfirmationResend();
+                            }}
+                            loading={resendEmailConfirmationMutation.isPending}
+                        >
+                            {t`Resend Confirmation Email`}
+                        </Button>
+                    ) : (
+                        <Text size="sm">
+                            {t`Confirmation email sent! Please check your inbox.`}
+                        </Text>
+                    )}
+                </Stack>
+            </Modal>
         </>
     );
 };

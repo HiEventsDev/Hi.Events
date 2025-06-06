@@ -30,13 +30,12 @@ export const publicOrganizerRouteLoader = async ({params}: LoaderFunctionArgs) =
         );
 
         return {
-            organizerId,
             organizer,
             upcomingEventsData
         };
     } catch (error: any) {
         if (error?.response?.status === 404) {
-            return {organizerId, organizer: null, upcomingEventsData: null};
+            return {organizer: null, upcomingEventsData: null};
         }
         throw error;
     }

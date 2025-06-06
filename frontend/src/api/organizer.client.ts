@@ -34,6 +34,13 @@ export const organizerClient = {
         return response.data;
     },
 
+    updateStatus: async (organizerId: IdParam, status: string) => {
+        const response = await api.put<GenericDataResponse<Organizer>>('organizers/' + organizerId + '/status', {
+            status
+        });
+        return response.data;
+    },
+
     findEventsByOrganizerId: async (organizerId: IdParam, pagination: QueryFilters) => {
         const response = await api.get<GenericPaginatedResponse<Event>>(
             'organizers/' + organizerId + '/events' + queryParamsHelper.buildQueryString(pagination)

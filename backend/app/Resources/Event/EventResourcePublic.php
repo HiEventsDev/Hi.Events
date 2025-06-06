@@ -19,14 +19,14 @@ class EventResourcePublic extends BaseResource
 
     public function __construct(
         mixed $resource,
-        mixed $maybeKeyOrIncludePostCheckoutData = false,
+        mixed $includePostCheckoutData = false,
     )
     {
         // This is a hackyworkaround to handle the fact that when this resource is called
         // When internally within Laravel the second param is the collection key (numeric)
         // When called normally, second param is includePostCheckoutData (boolean)
-        $this->includePostCheckoutData = is_bool($maybeKeyOrIncludePostCheckoutData)
-            ? $maybeKeyOrIncludePostCheckoutData
+        $this->includePostCheckoutData = is_bool($includePostCheckoutData)
+            ? $includePostCheckoutData
             : false;
 
         parent::__construct($resource);

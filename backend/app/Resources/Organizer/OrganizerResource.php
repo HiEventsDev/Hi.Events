@@ -23,6 +23,7 @@ class OrganizerResource extends JsonResource
             'timezone' => $this->getTimezone(),
             'currency' => $this->getCurrency(),
             'slug' => $this->getSlug(),
+            'status' => $this->getStatus(),
             'images' => $this->when(
                 (bool)$this->getImages(),
                 fn() => ImageResource::collection($this->getImages())

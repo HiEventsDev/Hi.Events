@@ -14,7 +14,7 @@ export interface NavItem {
 }
 
 export interface BreadcrumbItem {
-    link: string;
+    link?: string;
     content: ReactNode;
 }
 

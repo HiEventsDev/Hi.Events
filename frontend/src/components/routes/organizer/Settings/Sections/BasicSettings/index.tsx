@@ -18,7 +18,7 @@ import {useUpdateOrganizer} from "../../../../../../mutations/useUpdateOrganizer
 const Settings = () => {
     const {organizerId} = useParams();
     const {data: organizer} = useGetOrganizer(organizerId);
-    const organizerMutation = useUpdateOrganizer(organizerId);
+    const organizerMutation = useUpdateOrganizer();
     const form = useForm({
         initialValues: {
             name: '',

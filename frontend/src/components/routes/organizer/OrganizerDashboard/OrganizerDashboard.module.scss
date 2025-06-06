@@ -19,12 +19,117 @@
   flex: 1;
 }
 
-.currencySwitcher {
-  min-width: 200px;
+.currencySelector {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6c757d;
+  background: transparent;
+  border: 1px solid rgba(108, 117, 125, 0.2);
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  
+  &:hover:not(:disabled) {
+    background: rgba(108, 117, 125, 0.05);
+    border-color: rgba(108, 117, 125, 0.3);
+    color: #495057;
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 
   @include mixins.respond-below(md) {
-    width: 100%;
+    margin-left: auto;
   }
+}
+
+.currencyText {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', monospace;
+  letter-spacing: 0.02em;
+}
+
+.currencyIcon {
+  opacity: 0.6;
+  transition: transform 0.2s ease;
+}
+
+.currencySelector:hover .currencyIcon {
+  transform: translateY(1px);
+}
+
+.currencyOption {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-width: 0; // Allow flexbox shrinking
+}
+
+.currencyCode {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', monospace;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #1a1a2e;
+  min-width: 45px;
+  flex-shrink: 0;
+}
+
+.currencyLabel {
+  font-size: 0.75rem;
+  color: #6c757d;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+  min-width: 0; // Allow text truncation
+}
+
+.selectedCurrency {
+  background: rgba(73, 80, 246, 0.05);
+  
+  .currencyCode {
+    color: #4950f6;
+  }
+}
+
+.currencyDropdown {
+  padding: 4px;
+  max-height: 320px;
+  overflow: hidden;
+}
+
+.currencyScrollArea {
+  max-height: 312px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  
+  // Custom scrollbar styling
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 3px;
+    
+    &:hover {
+      background: rgba(0, 0, 0, 0.25);
+    }
+  }
+  
+  // Firefox scrollbar styling
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
 }
 
 // Statistics grid

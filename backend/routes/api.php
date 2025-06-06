@@ -76,6 +76,7 @@ use HiEvents\Http\Actions\Orders\ResendOrderConfirmationAction;
 use HiEvents\Http\Actions\Organizers\CreateOrganizerAction;
 use HiEvents\Http\Actions\Organizers\EditOrganizerAction;
 use HiEvents\Http\Actions\Organizers\GetOrganizerAction;
+use HiEvents\Http\Actions\Organizers\UpdateOrganizerStatusAction;
 use HiEvents\Http\Actions\Organizers\GetOrganizerEventsAction;
 use HiEvents\Http\Actions\Organizers\GetOrganizersAction;
 use HiEvents\Http\Actions\Organizers\GetPublicOrganizerAction;
@@ -187,6 +188,7 @@ $router->middleware(['auth:api'])->group(
         $router->post('/organizers', CreateOrganizerAction::class);
         // This is POST instead of PUT because you can't upload files via PUT in PHP (at least not easily)
         $router->post('/organizers/{organizer_id}', EditOrganizerAction::class);
+        $router->put('/organizers/{organizer_id}/status', UpdateOrganizerStatusAction::class);
         $router->get('/organizers', GetOrganizersAction::class);
         $router->get('/organizers/{organizer_id}', GetOrganizerAction::class);
         $router->get('/organizers/{organizer_id}/events', GetOrganizerEventsAction::class);

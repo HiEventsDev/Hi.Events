@@ -188,6 +188,12 @@ export enum EventStatus {
     ARCHIVED = 'ARCHIVED'
 }
 
+export enum OrganizerStatus {
+    DRAFT = 'DRAFT',
+    LIVE = 'LIVE',
+    ARCHIVED = 'ARCHIVED'
+}
+
 export enum EventLifecycleStatus {
     ONGOING = 'ONGOING',
     UPCOMING = 'UPCOMING',
@@ -266,6 +272,7 @@ export interface OrganizerStats {
     total_fees: number;
     total_views: number;
     total_refunded: number;
+    all_organizers_currencies: string[];
 }
 
 export interface Organizer {
@@ -282,6 +289,7 @@ export interface Organizer {
     events?: Event[];
     settings?: OrganizerSettings;
     location_details?: VenueAddress;
+    status?: 'LIVE' | 'DRAFT';
 }
 
 export interface OrganizerSettings {

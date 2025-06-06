@@ -2,12 +2,12 @@
 
 namespace HiEvents\Services\Application\Handlers\User\DTO;
 
+use HiEvents\DataTransferObjects\BaseDataObject;
 use HiEvents\DomainObjects\Enums\Role;
 use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Casts\EnumCast;
-use Spatie\LaravelData\Data;
 
-class CreateUserDTO extends Data
+class CreateUserDTO extends BaseDataObject
 {
     public function __construct(
         public string  $first_name,

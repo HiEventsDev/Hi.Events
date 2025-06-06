@@ -47,6 +47,18 @@ class OrganizerRepository extends BaseRepository implements OrganizerRepositoryI
             'currencyCode' => $currencyCode,
         ]);
 
+        $allOrganizersCurrenciesQuery = <<<SQL
+        SELECT DISTINCT e.currency FROM events e
+        WHERE e.organizer_id = :organizerId
+          AND e.account_id = :accountId
+          AND e.deleted_at IS NULL;
+SQL;
+
+        $allOrganizersCurrencies = $this->db->select($allOrganizersCurrenciesQuery, [
+            'organizerId' => $organizerId,
+            'accountId' => $accountId,
+        ]);
+
         return new OrganizerStatsResponseDTO(
             total_products_sold: (int)($totalsResult->total_products_sold ?? 0),
             total_attendees_registered: (int)($totalsResult->attendees_registered ?? 0),
@@ -57,6 +69,10 @@ class OrganizerRepository extends BaseRepository implements OrganizerRepositoryI
             total_views: (int)($totalsResult->total_views ?? 0),
             total_refunded: (float)($totalsResult->total_refunded ?? 0),
             currency_code: $currencyCode,
+            all_organizers_currencies: array_map(
+                static fn($currency) => $currency->currency,
+                $allOrganizersCurrencies
+            ),
         );
     }
 }

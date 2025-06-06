@@ -16,6 +16,8 @@ class OrganizerStatsResponseDTO
         public float $total_refunded,
 
         public string $currency_code,
+
+        public array $all_organizers_currencies = [],
     )
     {
     }

@@ -1,4 +1,3 @@
-import "./styles.scss";
 import {EventInformation} from "./EventInformation";
 import classes from "./EventHomepage.module.scss";
 import SelectProducts from "../../routes/product-widget/SelectProducts";
@@ -6,7 +5,7 @@ import "../../../styles/widget/default.scss";
 import React, {useEffect, useRef, useState} from "react";
 import {EventDocumentHead} from "../../common/EventDocumentHead";
 import {eventCoverImageUrl, imageUrl, organizerHomepageUrl} from "../../../utilites/urlHelper.ts";
-import {Event} from "../../../types.ts";
+import {Event, OrganizerStatus} from "../../../types.ts";
 import {EventNotAvailable} from "./EventNotAvailable";
 import {IconExternalLink, IconMail, IconMapPin, IconTicket, IconWorld} from "@tabler/icons-react";
 import {Anchor, Button} from "@mantine/core";
@@ -190,7 +189,7 @@ const EventHomepage = ({colors, continueButtonText, backgroundType, ...loaderDat
                 </div>
 
                 {/* Organizer Section */}
-                {organizer && (
+                {organizer && organizer.status === OrganizerStatus.LIVE && (
                     <div className={classes.contentSection}>
                         <div className={classes.sectionContent}>
                             <div className={classes.organizerInfo}>

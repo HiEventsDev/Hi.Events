@@ -2,8 +2,8 @@ import {useEffect, useState} from "react";
 import {useParams} from "react-router";
 import {useGetOrganizerSettings} from "../../../queries/useGetOrganizerSettings.ts";
 import {LoadingMask} from "../../common/LoadingMask";
-import PublicOrganizer from "../PublicOrganizer";
 import {useGetOrganizerPublic} from "../../../queries/useGetOrganizerPublic.ts";
+import OrganizerHomepage from "../OrganizerHomepage";
 
 const OrganizerHomepagePreview = () => {
     const {organizerId} = useParams();
@@ -51,7 +51,11 @@ const OrganizerHomepagePreview = () => {
         }
     };
 
-    return <PublicOrganizer previewData={previewOrganizer} isPreview={true}/>;
+    return <OrganizerHomepage
+        organizer={previewOrganizer}
+        upcomingEventsData={previewOrganizer.events}
+        isPreview={true}
+    />;
 };
 
 export default OrganizerHomepagePreview;

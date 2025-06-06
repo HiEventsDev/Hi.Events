@@ -4,7 +4,7 @@ import {useParams} from "react-router";
 import {useGetOrganizerSettings} from "../../../../queries/useGetOrganizerSettings.ts";
 import {useUpdateOrganizerSettings} from "../../../../mutations/useUpdateOrganizerSettings.ts";
 import {useFormErrorResponseHandler} from "../../../../hooks/useFormErrorResponseHandler.tsx";
-import {OrganizerSettings} from "../../../../types.ts";
+import {IdParam, OrganizerSettings} from "../../../../types.ts";
 import {showSuccess} from "../../../../utilites/notifications.tsx";
 import {t} from "@lingui/macro";
 import {useForm} from "@mantine/form";
@@ -12,9 +12,11 @@ import {Button, Collapse, ColorInput, Group, Text, UnstyledButton} from "@mantin
 import {IconCheck, IconChevronDown, IconChevronUp, IconHelp} from "@tabler/icons-react";
 import {Tooltip} from "../../../common/Tooltip";
 import {LoadingMask} from "../../../common/LoadingMask";
-import {useGetOrganizer} from "../../../../queries/useGetOrganizer.ts";
+import {GET_ORGANIZER_QUERY_KEY, useGetOrganizer} from "../../../../queries/useGetOrganizer.ts";
 import {ImageUploadDropzone} from "../../../common/ImageUploadDropzone";
 import {organizerPreviewPath} from "../../../../utilites/urlHelper.ts";
+import {queryClient} from "../../../../utilites/queryClient.ts";
+import {GET_ORGANIZER_PUBLIC_QUERY_KEY} from "../../../../queries/useGetOrganizerPublic.ts";
 
 interface ColorTheme {
     name: string;
@@ -145,6 +147,8 @@ const OrganizerHomepageDesigner = () => {
     const [iframeLoaded, setIframeLoaded] = useState(false);
     const [selectedTheme, setSelectedTheme] = useState<string | null>(null);
     const [colorInputsExpanded, setColorInputsExpanded] = useState(false);
+    const [lastCoverId, setLastCoverId] = useState<IdParam | null>(null);
+    const [lastLogoId, setLastLogoId] = useState<IdParam | null>(null);
 
     const existingLogo = organizerData?.images?.find((image) => image.type === 'ORGANIZER_LOGO');
     const existingCover = organizerData?.images?.find((image) => image.type === 'ORGANIZER_COVER');
@@ -240,8 +244,23 @@ const OrganizerHomepageDesigner = () => {
         sendSettingsToIframe();
     }, [iframeLoaded, form.values, existingLogo?.url, existingCover?.url]);
 
+    useEffect(() => {
+        if (((existingCover?.id !== lastCoverId) || existingLogo !== lastLogoId) && iframeSrc) {
+            setLastCoverId(existingCover?.id);
+            setLastLogoId(existingLogo?.id);
+            setIframeSrc(organizerPreviewPath(organizerId) + `?cover_image_id=${existingCover?.id}&logo_image_id=${existingLogo?.id}`);
+            setIframeLoaded(false);
+        }
+    }, [existingCover?.id, existingLogo?.id]);
+
+
     const handleImageChange = () => {
-        organizerQuery.refetch();
+        queryClient.invalidateQueries({
+            queryKey: [GET_ORGANIZER_PUBLIC_QUERY_KEY, organizerId],
+        });
+        queryClient.invalidateQueries({
+            queryKey: [GET_ORGANIZER_QUERY_KEY, organizerId],
+        });
     };
 
     const applyTheme = (theme: ColorTheme) => {
@@ -263,7 +282,8 @@ const OrganizerHomepageDesigner = () => {
 
                     <Group justify={'space-between'}>
                         <h3>{t`Cover Image`}</h3>
-                        <Tooltip label={t`We recommend dimensions of 1950px by 650px, a ratio of 3:1, and a maximum file size of 5MB`}>
+                        <Tooltip
+                            label={t`We recommend dimensions of 1950px by 650px, a ratio of 3:1, and a maximum file size of 5MB`}>
                             <IconHelp size={20}/>
                         </Tooltip>
                     </Group>

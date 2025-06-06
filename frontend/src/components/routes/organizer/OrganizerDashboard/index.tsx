@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {NavLink, useParams} from "react-router";
-import {Badge, Button, Group, Select, Skeleton, Tooltip} from '@mantine/core';
+import {Badge, Button, Group, Menu, Skeleton, Tooltip, UnstyledButton} from '@mantine/core';
 import {
     IconBuildingStore,
     IconCash,
+    IconChevronDown,
     IconChevronRight,
     IconReceiptTax,
     IconReportMoney,
@@ -85,6 +86,9 @@ export const OrganizerDashboard = () => {
 
     const organizerStatsQuery = useGetOrganizerStats(organizerId, selectedCurrency);
     const stats = organizerStatsQuery.data;
+    const allOrganizersCurrencies = organizerStatsQuery?.data?.all_organizers_currencies;
+    const currencies = currenciesMap
+        .filter((currency) => allOrganizersCurrencies?.includes(currency.value))
 
     const ordersQuery = useGetOrganizerOrders(organizerId, {
         perPage: 10,
@@ -155,16 +159,42 @@ export const OrganizerDashboard = () => {
                 <PageTitle className={classes.pageTitle}>
                     {organizer ? `${organizer.name} - ${t`Dashboard`}` : t`Organizer Dashboard`}
                 </PageTitle>
-                <Select
-                    data={currenciesMap}
-                    value={selectedCurrency}
-                    onChange={(value) => setSelectedCurrency(value || 'USD')}
-                    placeholder={t`Select currency`}
-                    className={classes.currencySwitcher}
-                    checkIconPosition="right"
-                    disabled={organizerStatsQuery.isLoading}
-                    searchable
-                />
+                {currencies?.length > 1 && (
+                    <Menu
+                        shadow="md"
+                        width={240}
+                        position="bottom-end"
+                        disabled={organizerStatsQuery.isLoading}
+                        withinPortal
+                    >
+                        <Menu.Target>
+                            <UnstyledButton className={classes.currencySelector}
+                                            disabled={organizerStatsQuery.isLoading}>
+                            <span className={classes.currencyText}>
+                                {selectedCurrency}
+                            </span>
+                                <IconChevronDown size={14} className={classes.currencyIcon}/>
+                            </UnstyledButton>
+                        </Menu.Target>
+                        <Menu.Dropdown className={classes.currencyDropdown}>
+                            <div className={classes.currencyScrollArea}>
+                                {currencies
+                                    .map((currency) => (
+                                        <Menu.Item
+                                            key={currency.value}
+                                            onClick={() => setSelectedCurrency(currency.value)}
+                                            className={selectedCurrency === currency.value ? classes.selectedCurrency : ''}
+                                        >
+                                    <span className={classes.currencyOption}>
+                                        <span className={classes.currencyCode}>{currency.value}</span>
+                                        <span className={classes.currencyLabel}>{currency.label}</span>
+                                    </span>
+                                        </Menu.Item>
+                                    ))}
+                            </div>
+                        </Menu.Dropdown>
+                    </Menu>
+                )}
             </div>
 
             {/* Stats Section */}
