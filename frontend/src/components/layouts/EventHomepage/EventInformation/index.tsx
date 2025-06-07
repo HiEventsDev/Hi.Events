@@ -1,6 +1,6 @@
 import {IconCalendar, IconExternalLink, IconMapPin, IconWorld} from "@tabler/icons-react";
 import classes from "./EventInformation.module.scss";
-import {formatAddress} from "../../../../utilites/addressUtilities.ts";
+import {formatAddress, isAddressSet} from "../../../../utilites/addressUtilities.ts";
 import {t} from "@lingui/macro";
 import {Anchor, Button} from "@mantine/core";
 import {LoadingMask} from "../../../common/LoadingMask";
@@ -74,13 +74,13 @@ export const EventInformation: FC<{
                     </div>
                 )}
 
-                {event.settings?.location_details && !event.settings?.is_online_event && (
+                {isAddressSet(event.settings?.location_details) && !event.settings?.is_online_event && (
                     <div className={classes.eventDetail}>
                         <div className={classes.details}>
                             <IconMapPin size={20}/>
                             <div className={classes.detail}>
                                 <b>{event.settings?.location_details?.venue_name}</b>
-                                <div>{formatAddress(event.settings?.location_details)}</div>
+                                <div>{formatAddress(event.settings.location_details)}</div>
                                 <div>
                                     <Button
                                         className={classes.viewOnGoogleMaps}
