@@ -1,5 +1,5 @@
 import {useParams} from "react-router";
-import {ActionIcon, Button} from '@mantine/core';
+import {ActionIcon, Anchor, Button} from '@mantine/core';
 import {EventCard} from './EventCard';
 import classes from './OrganizerHomepage.module.scss';
 import React, {useMemo, useState} from 'react';
@@ -80,7 +80,6 @@ export const OrganizerHomepage = ({
         enabled: !!organizerId && eventFilter === 'past' && !isPreview,
     });
 
-
     if (!organizer) {
         return null;
     }
@@ -119,7 +118,6 @@ export const OrganizerHomepage = ({
 
     const websiteUrl = organizer.website;
 
-    // Create Google Maps URL using full address like in OrderSummaryAndProducts
     const getGoogleMapsUrl = (locationDetails: any) => {
         if (!locationDetails) return '';
         return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(formatAddress(locationDetails))}`;
@@ -129,7 +127,6 @@ export const OrganizerHomepage = ({
     const organizerLogo = organizer.images?.find(img => img.type === 'ORGANIZER_LOGO');
     const organizerCover = organizer.images?.find(img => img.type === 'ORGANIZER_COVER');
 
-    // Loading state
     if (isLoading && (
         (eventFilter === 'upcoming' && upcomingPage > 1) ||
         (eventFilter === 'past' && pastPage === 1)
@@ -152,6 +149,7 @@ export const OrganizerHomepage = ({
 
     // Apply theme settings if available
     const themeSettings = organizer?.settings?.homepage_theme_settings;
+    const backgroundType = themeSettings?.homepage_background_type || 'COLOR';
     const themeStyles = themeSettings ? {
         '--organizer-bg-color': themeSettings.homepage_background_color || '#f5f5f5',
         '--organizer-content-bg-color': themeSettings.homepage_content_background_color || '#ffffff',
@@ -164,7 +162,7 @@ export const OrganizerHomepage = ({
     return (
         <>
             {organizer && <OrganizerDocumentHead organizer={organizer}/>}
-            <main className={classes.container} style={themeStyles}>
+            <main className={classes.pageWrapper} style={themeStyles}>
                 <style>
                     {`
                         body, .ssr-loader {
@@ -172,7 +170,19 @@ export const OrganizerHomepage = ({
                         }
                     `}
                 </style>
-                <div className={classes.wrapper}>
+                {(organizerCover && backgroundType === 'MIRROR_COVER_IMAGE') && (
+                    <div
+                        className={classes.background}
+                        style={{backgroundImage: `url(${organizerCover.url})`}}
+                    />
+                )}
+                {(!organizerCover || backgroundType === 'COLOR') &&
+                    <div className={classes.background}
+                         style={{backgroundColor: 'var(--organizer-bg-color)'}}
+                    />
+                }
+                <div className={classes.container}>
+                    <div className={classes.wrapper}>
                     {/* Combined Cover and Organizer Info Section */}
                     <div className={classes.heroSection}>
                         {organizerCover && (
@@ -182,7 +192,6 @@ export const OrganizerHomepage = ({
                                     alt="Cover"
                                     className={classes.coverImage}
                                 />
-                                <div className={classes.coverOverlay}/>
                             </div>
                         )}
                         <div className={classes.organizerContentWrapper}>
@@ -352,7 +361,26 @@ export const OrganizerHomepage = ({
 
                     {/* Footer Section */}
                     <div className={classes.footerSection}>
-                        <PoweredByFooter className={classes.poweredBy}/>
+                        <div className={classes.footerContent}>
+                            <div className={classes.footerLinks}>
+                                <Anchor
+                                    href="https://hi.events/privacy-policy?utm_source=app-organizer-footer"
+                                    className={classes.footerLink}
+                                >
+                                    {t`Privacy Policy`}
+                                </Anchor>
+                                <span className={classes.footerSeparator}>•</span>
+                                <Anchor
+                                    href="https://hi.events/terms-of-service?utm_source=app-organizer-footer"
+                                    className={classes.footerLink}
+                                >
+                                    {t`Terms of Service`}
+                                </Anchor>
+                            </div>
+                            <PoweredByFooter
+                                className={classes.poweredByFooter}
+                            />
+                        </div>
                     </div>
                 </div>
 
@@ -362,6 +390,7 @@ export const OrganizerHomepage = ({
                     onClose={() => setContactModalOpen(false)}
                     organizer={organizer}
                 />
+                </div>
             </main>
         </>
     );

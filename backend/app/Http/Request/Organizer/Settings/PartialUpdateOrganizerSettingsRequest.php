@@ -2,6 +2,7 @@
 
 namespace HiEvents\Http\Request\Organizer\Settings;
 
+use HiEvents\DomainObjects\Enums\HomepageBackgroundType;
 use HiEvents\DomainObjects\Enums\OrganizerHomepageVisibility;
 use HiEvents\Http\Request\BaseRequest;
 use HiEvents\Validators\Rules\RulesHelper;
@@ -55,6 +56,7 @@ class PartialUpdateOrganizerSettingsRequest extends BaseRequest
             'homepage_secondary_color' => ['nullable', ...RulesHelper::HEX_COLOR],
             'homepage_secondary_text_color' => ['nullable', ...RulesHelper::HEX_COLOR],
             'homepage_content_background_color' => ['nullable', ...RulesHelper::HEX_COLOR],
+            'homepage_background_type' => ['nullable', Rule::in(HomepageBackgroundType::valuesArray())],
 
             // SEO
             'seo_keywords' => ['sometimes', 'nullable', 'string', 'max:255'],

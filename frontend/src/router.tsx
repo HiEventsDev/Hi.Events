@@ -203,7 +203,7 @@ export const router: RouteObject[] = [
                 }
             },
             {
-                path: "events",
+                path: "events/:eventsState?",
                 async lazy() {
                     const Events = await import("./components/routes/organizer/Events");
                     return {Component: Events.default};

@@ -2,10 +2,13 @@
 
 namespace HiEvents\Services\Application\Handlers\Organizer\DTO;
 
-use HiEvents\DataTransferObjects\BaseDataObject;
 use HiEvents\DataTransferObjects\AddressDTO;
+use HiEvents\DataTransferObjects\BaseDataObject;
+use HiEvents\DomainObjects\Enums\HomepageBackgroundType;
 use HiEvents\DomainObjects\Enums\OrganizerHomepageVisibility;
 use Spatie\LaravelData\Attributes\MapInputName;
+use Spatie\LaravelData\Attributes\WithCast;
+use Spatie\LaravelData\Casts\EnumCast;
 use Spatie\LaravelData\Mappers\SnakeCaseMapper;
 use Spatie\LaravelData\Optional;
 
@@ -54,6 +57,9 @@ class PartialUpdateOrganizerSettingsDTO extends BaseDataObject
         public readonly string|Optional|null                      $homepagePrimaryTextColor,
         public readonly string|Optional|null                      $homepageSecondaryColor,
         public readonly string|Optional|null                      $homepageSecondaryTextColor,
+
+        #[WithCast(EnumCast::class)]
+        public readonly HomepageBackgroundType|Optional|null      $homepageBackgroundType,
 
         // SEO
         public readonly string|Optional|null                      $seoKeywords,

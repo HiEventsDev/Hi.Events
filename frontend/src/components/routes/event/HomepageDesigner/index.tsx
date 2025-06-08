@@ -166,18 +166,19 @@ const HomepageDesigner = () => {
 
                             {form.values.homepage_background_type === 'COLOR' && (
                                 <ColorInput
+                                    format={'hexa'}
                                     label={t`Page background color`}
                                     {...form.getInputProps('homepage_body_background_color')}
                                 />
                             )}
-                            <ColorInput
+                            <ColorInput format={'hexa'}
                                 label={t`Content background color`} {...form.getInputProps('homepage_background_color')} />
-                            <ColorInput label={t`Primary Colour`} {...form.getInputProps('homepage_primary_color')} />
-                            <ColorInput
+                            <ColorInput format={'hexa'} label={t`Primary Colour`} {...form.getInputProps('homepage_primary_color')} />
+                            <ColorInput format={'hexa'}
                                 label={t`Primary Text Color`} {...form.getInputProps('homepage_primary_text_color')} />
-                            <ColorInput
+                            <ColorInput format={'hexa'}
                                 label={t`Secondary color`} {...form.getInputProps('homepage_secondary_color')} />
-                            <ColorInput
+                            <ColorInput format={'hexa'}
                                 label={t`Secondary text color`} {...form.getInputProps('homepage_secondary_text_color')} />
                             <TextInput
                                 label={t`Continue button text`} {...form.getInputProps('continue_button_text')} />

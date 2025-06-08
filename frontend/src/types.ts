@@ -303,6 +303,7 @@ export interface OrganizerSettings {
         homepage_secondary_color: string;
         homepage_secondary_text_color: string;
         homepage_content_background_color: string;
+        homepage_background_type?: 'COLOR' | 'MIRROR_COVER_IMAGE';
     }
     website_url?: string;
     location_details?: VenueAddress;

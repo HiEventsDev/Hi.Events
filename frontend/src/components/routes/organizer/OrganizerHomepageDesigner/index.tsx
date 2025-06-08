@@ -9,9 +9,10 @@ import {showSuccess} from "../../../../utilites/notifications.tsx";
 import {t} from "@lingui/macro";
 import {useForm} from "@mantine/form";
 import {Button, Collapse, ColorInput, Group, Text, UnstyledButton} from "@mantine/core";
-import {IconCheck, IconChevronDown, IconChevronUp, IconHelp} from "@tabler/icons-react";
+import {IconCheck, IconChevronDown, IconChevronUp, IconColorPicker, IconHelp, IconPhoto} from "@tabler/icons-react";
 import {Tooltip} from "../../../common/Tooltip";
 import {LoadingMask} from "../../../common/LoadingMask";
+import {CustomSelect} from "../../../common/CustomSelect";
 import {GET_ORGANIZER_QUERY_KEY, useGetOrganizer} from "../../../../queries/useGetOrganizer.ts";
 import {ImageUploadDropzone} from "../../../common/ImageUploadDropzone";
 import {organizerPreviewPath} from "../../../../utilites/urlHelper.ts";
@@ -161,6 +162,7 @@ const OrganizerHomepageDesigner = () => {
             homepage_primary_text_color: '#171717',
             homepage_secondary_color: '#737373',
             homepage_secondary_text_color: '#525252',
+            homepage_background_type: 'COLOR' as 'COLOR' | 'MIRROR_COVER_IMAGE',
         }
     });
 
@@ -189,6 +191,7 @@ const OrganizerHomepageDesigner = () => {
                 homepage_primary_text_color: organizerSettingsQuery.data.homepage_theme_settings?.homepage_primary_text_color || '#171717',
                 homepage_secondary_color: organizerSettingsQuery.data.homepage_theme_settings?.homepage_secondary_color || '#737373',
                 homepage_secondary_text_color: organizerSettingsQuery.data.homepage_theme_settings?.homepage_secondary_text_color || '#525252',
+                homepage_background_type: organizerSettingsQuery.data.homepage_theme_settings?.homepage_background_type || 'COLOR',
             });
         }
     }, [organizerSettingsQuery.isFetched, organizerSettingsQuery.data]);
@@ -401,6 +404,27 @@ const OrganizerHomepageDesigner = () => {
 
                     <form onSubmit={form.onSubmit(handleSubmit)}>
                         <fieldset disabled={organizerSettingsQuery.isLoading || updateMutation.isPending}>
+                            <CustomSelect
+                                optionList={[
+                                    {
+                                        icon: <IconColorPicker/>,
+                                        label: t`Color`,
+                                        value: 'COLOR',
+                                        description: t`Choose a color for your background`,
+                                    },
+                                    {
+                                        icon: <IconPhoto/>,
+                                        label: t`Use cover image`,
+                                        value: 'MIRROR_COVER_IMAGE',
+                                        description: t`Use a blurred version of the cover image as the background`,
+                                        disabled: !existingCover,
+                                    },
+                                ]}
+                                form={form}
+                                label={t`Background Type`}
+                                name={'homepage_background_type'}
+                            />
+
                             {/* Collapsible toggle for color inputs */}
                             {selectedTheme !== 'Custom' && (
                                 <Button
@@ -417,34 +441,42 @@ const OrganizerHomepageDesigner = () => {
 
                             <Collapse in={colorInputsExpanded}>
                                 <div>
+                                    {form.values.homepage_background_type === 'COLOR' && (
+                                        <ColorInput
+                                            format="hexa"
+                                            mb="md"
+                                            label={t`Page Background Color`}
+                                            description={t`The background color of the entire page`}
+                                            {...form.getInputProps('homepage_background_color')}
+                                        />
+                                    )}
                                     <ColorInput
-                                        mb="md"
-                                        label={t`Page Background Color`}
-                                        description={t`The background color of the entire page`}
-                                        {...form.getInputProps('homepage_background_color')}
-                                    />
-                                    <ColorInput
+                                        format="hexa"
                                         mb="md"
                                         label={t`Content Background Color`}
                                         description={t`The background color of content areas (cards, header, etc.)`}
                                         {...form.getInputProps('homepage_content_background_color')}
                                     />
                                     <ColorInput
+                                        format="hexa"
                                         mb="md"
                                         label={t`Primary Color`}
                                         {...form.getInputProps('homepage_primary_color')}
                                     />
                                     <ColorInput
+                                        format="hexa"
                                         mb="md"
                                         label={t`Primary Text Color`}
                                         {...form.getInputProps('homepage_primary_text_color')}
                                     />
                                     <ColorInput
                                         mb="md"
+                                        format="hexa"
                                         label={t`Secondary Color`}
                                         {...form.getInputProps('homepage_secondary_color')}
                                     />
                                     <ColorInput
+                                        format="hexa"
                                         mb="md"
                                         label={t`Secondary Text Color`}
                                         {...form.getInputProps('homepage_secondary_text_color')}

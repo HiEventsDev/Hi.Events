@@ -79,7 +79,7 @@ class PartialUpdateOrganizerSettingsHandler
                 'homepage_primary_text_color' => $dto->getProvided('homepagePrimaryTextColor', $organizerSettings->getHomepageThemeSetting('homepage_primary_text_color')),
                 'homepage_secondary_color' => $dto->getProvided('homepageSecondaryColor', $organizerSettings->getHomepageThemeSetting('homepage_secondary_color')),
                 'homepage_secondary_text_color' => $dto->getProvided('homepageSecondaryTextColor', $organizerSettings->getHomepageThemeSetting('homepage_secondary_text_color')),
-
+                'homepage_background_type' => $dto->getProvided('homepageBackgroundType', $organizerSettings->getHomepageThemeSetting('homepage_background_type')),
             ],
 
             'seo_keywords' => $dto->getProvided('seoKeywords', $organizerSettings->getSeoKeywords()),
