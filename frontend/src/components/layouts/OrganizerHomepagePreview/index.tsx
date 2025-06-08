@@ -53,8 +53,8 @@ const OrganizerHomepagePreview = () => {
 
     return <OrganizerHomepage
         organizer={previewOrganizer}
-        upcomingEventsData={previewOrganizer.events}
-        isPreview={true}
+        eventsData={previewOrganizer.events}
+        isPastEvents={false}
     />;
 };
 

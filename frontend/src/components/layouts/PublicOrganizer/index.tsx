@@ -6,7 +6,8 @@ import {OrganizerNotFound} from "./OrganizerNotFound";
 export const PublicOrganizer = () => {
     const loaderData = useLoaderData() as {
         organizer: Organizer | null;
-        upcomingEventsData: any;
+        eventsData: any;
+        isPastEvents: boolean;
     };
 
     if (!loaderData?.organizer) {
@@ -16,8 +17,8 @@ export const PublicOrganizer = () => {
     return (
         <OrganizerHomepage
             organizer={loaderData.organizer}
-            upcomingEventsData={loaderData.upcomingEventsData}
-            isPreview={false}
+            eventsData={loaderData.eventsData}
+            isPastEvents={loaderData.isPastEvents}
         />
     );
 };

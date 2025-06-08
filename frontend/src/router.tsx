@@ -371,6 +371,15 @@ export const router: RouteObject[] = [
         errorElement: <ErrorPage/>,
     },
     {
+        path: "/events/:organizerId/:organizerSlug/past-events",
+        loader: publicOrganizerRouteLoader,
+        async lazy() {
+            const PublicOrganizer = await import("./components/layouts/PublicOrganizer");
+            return {Component: PublicOrganizer.default};
+        },
+        errorElement: <ErrorPage/>,
+    },
+    {
         path: "/e/:eventId/:eventSlug",
         async lazy() {
             const EventHomepage = await import("./components/layouts/EventHomepage");
