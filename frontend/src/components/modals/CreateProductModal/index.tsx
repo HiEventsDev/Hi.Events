@@ -75,7 +75,7 @@ export const CreateProductModal = ({onClose, selectedCategoryId = undefined}: Cr
     return (
         <Modal
             onClose={onClose}
-            heading={t`Create Product`}
+            heading={t`Create Ticket or Product`}
             opened
             size={'lg'}
             withCloseButton

@@ -17,6 +17,7 @@ interface ImageUploadDropzoneProps {
     imageType: ImageType;
     entityId: IdParam;
     onUploadSuccess?: () => void;
+    onDeleteSuccess?: () => void;
     existingImageData?: {
         url?: string;
         id?: IdParam;
@@ -31,6 +32,7 @@ export const ImageUploadDropzone = ({
                                         entityId,
                                         existingImageData,
                                         onUploadSuccess,
+                                        onDeleteSuccess,
                                         displayMode = 'normal'
                                     }: ImageUploadDropzoneProps) => {
     const [loading, setLoading] = useState(false);
@@ -105,8 +107,8 @@ export const ImageUploadDropzone = ({
                     setPreviewImage(null);
                     setImageId(null);
                     showSuccess(t`Image deleted successfully`);
-                    onUploadSuccess?.();
                     setErrors([]);
+                    onDeleteSuccess?.();
                 },
                 onError: (error) => {
                     console.error(error);

@@ -256,7 +256,6 @@ const OrganizerHomepageDesigner = () => {
         }
     }, [existingCover?.id, existingLogo?.id]);
 
-
     const handleImageChange = () => {
         queryClient.invalidateQueries({
             queryKey: [GET_ORGANIZER_PUBLIC_QUERY_KEY, organizerId],
@@ -295,6 +294,7 @@ const OrganizerHomepageDesigner = () => {
                             imageType="ORGANIZER_COVER"
                             entityId={organizerId}
                             onUploadSuccess={handleImageChange}
+                            onDeleteSuccess={handleImageChange}
                             existingImageData={{
                                 url: existingCover?.url,
                                 id: existingCover?.id,
@@ -315,6 +315,7 @@ const OrganizerHomepageDesigner = () => {
                             imageType="ORGANIZER_LOGO"
                             entityId={organizerId}
                             onUploadSuccess={handleImageChange}
+                            onDeleteSuccess={handleImageChange}
                             existingImageData={{
                                 url: existingLogo?.url,
                                 id: existingLogo?.id,

@@ -92,6 +92,15 @@ const HomepageDesigner = () => {
         );
     };
 
+    const handleImageChange = () => {
+        queryClient.invalidateQueries({
+            queryKey: [GET_EVENT_IMAGES_QUERY_KEY, eventId]
+        });
+        queryClient.invalidateQueries({
+            queryKey: [GET_EVENT_PUBLIC_QUERY_KEY, eventId]
+        });
+    };
+
     const sendSettingsToIframe = () => {
         if (iframeRef.current?.contentWindow && iframeLoaded) {
             const settingsToSend = form.values;
@@ -117,21 +126,16 @@ const HomepageDesigner = () => {
                     <h2>{t`Homepage Design`}</h2>
                     <Group justify={'space-between'}>
                         <h3>{t`Cover`}</h3>
-                        <Tooltip label={t`We recommend dimensions of 1950px by 650px, a ratio of 3:1, and a maximum file size of 5MB`}>
+                        <Tooltip
+                            label={t`We recommend dimensions of 1950px by 650px, a ratio of 3:1, and a maximum file size of 5MB`}>
                             <IconHelp size={20}/>
                         </Tooltip>
                     </Group>
                     <ImageUploadDropzone
                         imageType="EVENT_COVER"
                         entityId={eventId}
-                        onUploadSuccess={() => Promise.all([
-                            queryClient.invalidateQueries({
-                                queryKey: [GET_EVENT_IMAGES_QUERY_KEY, eventId]
-                            }),
-                            queryClient.invalidateQueries({
-                                queryKey: [GET_EVENT_PUBLIC_QUERY_KEY, eventId]
-                            })
-                        ])}
+                        onUploadSuccess={handleImageChange}
+                        onDeleteSuccess={handleImageChange}
                         existingImageData={{
                             url: existingCover?.url,
                             id: existingCover?.id,
@@ -172,14 +176,15 @@ const HomepageDesigner = () => {
                                 />
                             )}
                             <ColorInput format={'hexa'}
-                                label={t`Content background color`} {...form.getInputProps('homepage_background_color')} />
-                            <ColorInput format={'hexa'} label={t`Primary Colour`} {...form.getInputProps('homepage_primary_color')} />
+                                        label={t`Content background color`} {...form.getInputProps('homepage_background_color')} />
                             <ColorInput format={'hexa'}
-                                label={t`Primary Text Color`} {...form.getInputProps('homepage_primary_text_color')} />
+                                        label={t`Primary Colour`} {...form.getInputProps('homepage_primary_color')} />
                             <ColorInput format={'hexa'}
-                                label={t`Secondary color`} {...form.getInputProps('homepage_secondary_color')} />
+                                        label={t`Primary Text Color`} {...form.getInputProps('homepage_primary_text_color')} />
                             <ColorInput format={'hexa'}
-                                label={t`Secondary text color`} {...form.getInputProps('homepage_secondary_text_color')} />
+                                        label={t`Secondary color`} {...form.getInputProps('homepage_secondary_color')} />
+                            <ColorInput format={'hexa'}
+                                        label={t`Secondary text color`} {...form.getInputProps('homepage_secondary_text_color')} />
                             <TextInput
                                 label={t`Continue button text`} {...form.getInputProps('continue_button_text')} />
                             <Button loading={updateMutation.isPending} type={'submit'}>
