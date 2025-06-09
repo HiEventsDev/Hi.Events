@@ -101,3 +101,18 @@
   }
 }
 
+.shareButtonTextDesktop {
+    display: inline;
+
+    @include mixins.respond-below(md) {
+        display: none;
+    }
+}
+
+.shareButtonTextMobile {
+    display: none;
+
+    @include mixins.respond-below(md) {
+        display: inline;
+    }
+}

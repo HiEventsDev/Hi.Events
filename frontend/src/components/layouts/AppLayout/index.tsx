@@ -47,7 +47,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({
                                                  actionGroupContent = null,
                                                  sidebarFooter = null,
                                              }) => {
-    const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
+    const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
     const [topBarShadow, setTopBarShadow] = useState<boolean>(false);
 
     useEffect(() => {
@@ -63,7 +63,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({
 
     return (
         <div id={`${entityType}-manage-container`}
-             className={`${classes.container} ${sidebarOpen ? classes.closed : ''}`}>
+             className={`${classes.container} ${sidebarOpen ? classes.open : classes.closed}`}>
             <Topbar
                 sidebarOpen={sidebarOpen}
                 setSidebarOpen={setSidebarOpen}
@@ -85,7 +85,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({
                 sidebarFooter={sidebarFooter}
             />
 
-            {sidebarOpen && (
+            {!sidebarOpen && (
                 <SidebarToggleButton
                     open={true}
                     onClick={() => setSidebarOpen(!sidebarOpen)}

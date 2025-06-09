@@ -210,7 +210,12 @@ const OrganizerLayout = () => {
                                     variant="transparent"
                                     leftSection={<IconShare size={16}/>}
                                 >
-                                    {t`Share Organizer Page`}
+                                    <span className={classes.shareButtonTextDesktop}>
+                                        {t`Share Organizer Page`}
+                                    </span>
+                                    <span className={classes.shareButtonTextMobile}>
+                                        {t`Share`}
+                                    </span>
                                 </Button>
                             </>
                         )}

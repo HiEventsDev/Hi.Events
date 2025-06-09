@@ -54,7 +54,7 @@ export const Topbar: React.FC<TopbarProps> = ({
 
             <div className={classes.breadcrumbsRow}>
                 <div className={classes.breadcrumbs}>
-                    <IconHome size={16} style={{marginRight: '8px', opacity: 0.6}}/>
+                    <IconHome size={16} style={{marginRight: '8px', opacity: 0.6, minWidth: '16px'}}/>
                     <Breadcrumbs separator={<span style={{margin: '0 0px', color: '#aaa'}}>/</span>}>
                         {breadcrumbItems.map((item, index) => (
                             <NavLink key={index} to={item.link}>

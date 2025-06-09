@@ -259,7 +259,7 @@ export const CreateEventModal = ({onClose, organizerId}: CreateEventModalProps) 
                                 className={classes.createButton}
                                 leftSection={<IconCalendarEvent size={24}/>}
                             >
-                                {t`Continue Event Setup`}
+                                {t`Continue Setup`}
                             </Button>
                         </form>
                     </div>

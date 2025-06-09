@@ -7,13 +7,12 @@ import Image from '@tiptap/extension-image';
 import TextStyle from '@tiptap/extension-text-style';
 import Color from '@tiptap/extension-color';
 import React, {useEffect, useState} from "react";
-import {InputDescription, InputError, InputLabel} from "@mantine/core";
+import {InputDescription, InputError, InputLabel, MantineFontSize} from "@mantine/core";
 import classes from "./Editor.module.scss";
 import classNames from "classnames";
 import {Trans} from "@lingui/macro";
 import {InsertImageControl} from "./Controls/InsertImageControl";
 import {ImageResize} from "./Extensions/ImageResizeExtension";
-import {MantineFontSize} from "@mantine/core/lib/core";
 
 interface EditorProps {
     onChange: (value: string) => void;

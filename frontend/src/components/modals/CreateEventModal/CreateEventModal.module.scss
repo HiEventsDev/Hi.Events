@@ -14,7 +14,7 @@
   align-items: center;
   justify-content: center;
   padding: 2rem;
-  z-index: 10000;
+  z-index: 10;
   animation: fadeIn 0.3s ease-out;
   
   @include mixins.respond-below(md) {
@@ -288,6 +288,12 @@
   text-transform: uppercase !important;
   box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3) !important;
   padding: 0 2rem !important;
+
+  @include mixins.respond-below(sm) {
+    height: 56px !important;
+    font-size: 1rem !important;
+    padding: 0 1.5rem !important;
+  }
 
   &::before {
     content: '';

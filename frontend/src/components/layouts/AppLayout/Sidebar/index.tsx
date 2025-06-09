@@ -64,8 +64,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     };
 
     return (
-        <div className={classes.sidebar}>
-
+        <div className={classNames(`${classes.sidebar} ${sidebarOpen ? classes.open : classes.closed}`)}>
             <div className={classes.logo}>
                 <NavLink to={`/manage/events`}>
                     <img style={{maxWidth: '160px', margin: "10px auto"}}
@@ -80,7 +79,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     {sidebarFooter}
                 </div>
             )}
-            {!sidebarOpen && (
+            {sidebarOpen && (
                 <UnstyledButton
                     className={classes.sidebarClose}
                     onClick={() => setSidebarOpen(!sidebarOpen)}>

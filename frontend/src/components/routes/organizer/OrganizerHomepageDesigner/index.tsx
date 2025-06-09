@@ -57,9 +57,9 @@ const colorThemes: ColorTheme[] = [
     {
         name: t`Forest`,
         colors: {
-            homepage_background_color: '#dcfce7',
+            homepage_background_color: '#91b89e',
             homepage_content_background_color: '#ffffff',
-            homepage_primary_color: '#22c55e',
+            homepage_primary_color: '#91b89e',
             homepage_primary_text_color: '#14532d',
             homepage_secondary_color: '#16a34a',
             homepage_secondary_text_color: '#eefff3',
