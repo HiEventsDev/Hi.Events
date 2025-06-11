@@ -5,12 +5,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
   gap: 1rem;
 
   @include mixins.respond-below(md) {
     flex-direction: column;
     align-items: stretch;
+    font-size: 0.7rem;
   }
 }
 
@@ -136,8 +136,8 @@
 .statisticsContainer {
   display: flex;
   flex-wrap: wrap;
-  gap: 1.5rem;
-  margin-bottom: 3rem;
+  gap: 1.2rem;
+  margin-bottom: 2rem;
 
   > * {
     flex: 1 1 300px;
@@ -145,6 +145,8 @@
   }
 
   @include mixins.respond-below(sm) {
+    gap: 1rem;
+
     > * {
       flex: 1 1 100%;
     }

@@ -209,7 +209,7 @@ export const OrganizerHomepage = ({
                                         <Button
                                             variant={!isPastEvents ? 'filled' : 'default'}
                                             onClick={() => handleFilterChange(false)}
-                                            size="sm"
+                                            size="xs"
                                             style={{
                                                 backgroundColor: !isPastEvents ? themeSettings?.homepage_primary_color : 'transparent',
                                                 color: !isPastEvents
@@ -223,7 +223,7 @@ export const OrganizerHomepage = ({
                                         <Button
                                             variant={isPastEvents ? 'filled' : 'default'}
                                             onClick={() => handleFilterChange(true)}
-                                            size="sm"
+                                            size="xs"
                                             style={{
                                                 backgroundColor: isPastEvents ? themeSettings?.homepage_primary_color : 'transparent',
                                                 color: isPastEvents

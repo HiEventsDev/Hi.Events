@@ -2,7 +2,7 @@ import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHa
 import {useNavigate} from "react-router";
 import {useGetAccount} from "../../../queries/useGetAccount.ts";
 import {Event, GenericModalProps, IdParam, Organizer} from "../../../types.ts";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {t} from "@lingui/macro";
 import {Anchor, Button, Select, TextInput} from "@mantine/core";
 import {hasLength, useForm} from "@mantine/form";
@@ -25,21 +25,12 @@ export const CreateEventModal = ({onClose, organizerId}: CreateEventModalProps) 
     const {data: account, isFetched: isAccountFetched} = useGetAccount();
     const organizersQuery = useGetOrganizers();
 
-    // Set default start date to tomorrow at 9PM
-    const getDefaultStartDate = () => {
-        return dayjs().add(1, 'day').hour(21).minute(0).second(0).toDate();
-    };
-
-    const getDefaultEndDate = () => {
-        return dayjs().add(1, 'day').hour(23).minute(0).second(0).toDate();
-    };
-
     const form = useForm<Partial<Event>>({
         initialValues: {
             title: '',
             status: undefined,
-            start_date: getDefaultStartDate(),
-            end_date: getDefaultEndDate(),
+            start_date: dayjs().add(1, 'day').hour(21).minute(0).second(0).toISOString(),
+            end_date: undefined,
             description: undefined,
             organizer_id: organizerId ? String(organizerId) : undefined,
         },
@@ -91,15 +82,8 @@ export const CreateEventModal = ({onClose, organizerId}: CreateEventModalProps) 
     }, [form.values.organizer_id]);
 
     const handleCreate = (values: Partial<Event>) => {
-        // Convert Date objects to ISO strings for API
-        const eventData = {
-            ...values,
-            start_date: values.start_date instanceof Date ? values.start_date.toISOString() : values.start_date,
-            end_date: values.end_date instanceof Date ? values.end_date.toISOString() : values.end_date,
-        };
-
         eventMutation.mutateAsync({
-            eventData,
+            eventData: values,
         }).then((data) => {
             navigate(`/manage/event/${data.data.id}/getting-started?new_event=true`)
         }).catch((error) => {
@@ -185,17 +169,14 @@ export const CreateEventModal = ({onClose, organizerId}: CreateEventModalProps) 
                         )}
 
                         <form onSubmit={form.onSubmit(handleCreate)}>
-                            <div>
-                                <TextInput
-                                    {...form.getInputProps('title')}
-                                    label={t`Event Name`}
-                                    placeholder={t`Summer Music Festival ${new Date().getFullYear()}`}
-                                    description={t`Maximum 150 characters`}
-                                    required
-                                    size="lg"
-                                    leftSection={<IconSparkles size={18}/>}
-                                />
-                            </div>
+                            <TextInput
+                                {...form.getInputProps('title')}
+                                label={t`Event Name`}
+                                placeholder={t`Summer Music Festival ${new Date().getFullYear()}`}
+                                required
+                                size="lg"
+                                leftSection={<IconSparkles size={18}/>}
+                            />
 
                             <div className={classes.editorField}>
                                 <Editor
@@ -211,8 +192,7 @@ export const CreateEventModal = ({onClose, organizerId}: CreateEventModalProps) 
                             </div>
 
                             <div className={classes.dateTimeGrid}>
-                                <div className={classes.dateTimeCard}>
-                                    <DateTimePicker
+                                <DateTimePicker
                                         label={t`Start Date & Time`}
                                         {...form.getInputProps('start_date')}
                                         required
@@ -220,35 +200,35 @@ export const CreateEventModal = ({onClose, organizerId}: CreateEventModalProps) 
                                         placeholder={t`Select start date and time`}
                                         valueFormat="MMM DD, YYYY [at] h:mm A"
                                         clearable
-                                        dropdownType={'popover'}
+                                        dropdownType="modal"
                                         timePickerProps={{
                                             format: '12h',
                                             withDropdown: true,
                                         }}
                                         onChange={(value) => {
                                             form.setFieldValue('start_date', value);
+
                                             // Auto-adjust end date if it's before new start date
                                             if (form.values.end_date && value && dayjs(form.values.end_date).isBefore(dayjs(value))) {
-                                                form.setFieldValue('end_date', dayjs(value).add(2, 'hours').toDate());
+                                                form.setFieldValue('end_date', dayjs(value).add(2, 'hours').toISOString());
                                             }
                                         }}
-                                    />
-                                </div>
-                                <div className={classes.dateTimeCard}>
-                                    <DateTimePicker
+                                />
+                                <DateTimePicker
                                         label={t`End Date & Time (optional)`}
                                         {...form.getInputProps('end_date')}
                                         size="md"
                                         placeholder={t`Select end date and time`}
                                         valueFormat="MMM DD, YYYY [at] h:mm A"
                                         clearable
+                                        dropdownType="modal"
                                         timePickerProps={{
                                             format: '12h',
                                             withDropdown: true,
                                         }}
-                                        minDate={form.values.start_date ? dayjs(form.values.start_date).toDate() : undefined}
-                                    />
-                                </div>
+                                        minDate={form.values.start_date ?? undefined}
+                                        date={form.values.start_date ? dayjs(form.values.start_date).toDate() : undefined}
+                                />
                             </div>
 
                             <Button

@@ -25,7 +25,7 @@ class GetPublicEventsHandler
 
     public function handle(GetPublicOrganizerEventsDTO $dto): LengthAwarePaginator
     {
-        return $this->eventRepository
+        $query = $this->eventRepository
             ->loadRelation(
                 new Relationship(ProductCategoryDomainObject::class, [
                     new Relationship(ProductDomainObject::class,
@@ -40,13 +40,22 @@ class GetPublicEventsHandler
                 ])
             )
             ->loadRelation(new Relationship(EventSettingDomainObject::class))
-            ->loadRelation(new Relationship(ImageDomainObject::class))
-            ->findEvents(
-                where: [
-                    'organizer_id' => $dto->organizerId,
-                    'status' => EventStatus::LIVE->name,
-                ],
+            ->loadRelation(new Relationship(ImageDomainObject::class));
+
+        if ($dto->authenticatedAccountId) {
+            return $query->findEventsForOrganizer(
+                organizerId: $dto->organizerId,
+                accountId: $dto->authenticatedAccountId,
                 params: $dto->queryParams
             );
+        }
+
+        return $query->findEvents(
+            where: [
+                'organizer_id' => $dto->organizerId,
+                'status' => EventStatus::LIVE->name,
+            ],
+            params: $dto->queryParams
+        );
     }
 }

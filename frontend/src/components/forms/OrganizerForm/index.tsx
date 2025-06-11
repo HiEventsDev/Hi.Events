@@ -60,7 +60,7 @@ export const OrganizerForm = ({form}: { form: UseFormReturnType<Partial<Organize
     )
 }
 
-export const OrganizerCreateForm = ({onSuccess}: OrganizerFormProps) => {
+export const OrganizerCreateForm = ({onSuccess, onCancel}: OrganizerFormProps) => {
     const organizerMutation = useCreateOrganizer();
     const {data: account, isFetched: accountFetched} = useGetAccount();
     const {data: me, isFetched: meFetched} = useGetMe();
@@ -106,10 +106,22 @@ export const OrganizerCreateForm = ({onSuccess}: OrganizerFormProps) => {
                     <OrganizerForm form={form as any}/>
 
                     <Group gap={10}>
-                        <Button fullWidth loading={organizerMutation.isPending}
-                                type={'submit'}
-                                color={'green'}>{t`Create Organizer`}
+                        <Button 
+                            fullWidth 
+                            loading={organizerMutation.isPending}
+                            type={'submit'}
+                            color={'green'}>
+                            {t`Create Organizer`}
                         </Button>
+                        {onCancel && (
+                            <Button 
+                                fullWidth 
+                                variant="default"
+                                onClick={onCancel}
+                                disabled={organizerMutation.isPending}>
+                                {t`Cancel`}
+                            </Button>
+                        )}
                     </Group>
                 </fieldset>
             </form>

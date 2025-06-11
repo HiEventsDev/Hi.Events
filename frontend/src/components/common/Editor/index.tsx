@@ -90,8 +90,8 @@ export const Editor = ({
                     <InputDescription size={size}>{description}</InputDescription>
                 </div>
             )}
-            <RichTextEditor editor={editor}>
-                <RichTextEditor.Toolbar>
+            <RichTextEditor variant={'subtle'} editor={editor}>
+                <RichTextEditor.Toolbar sticky className={classes.toolbar}>
                     {editorType === 'full' && (
                         <>
                             <RichTextEditor.ControlsGroup>
@@ -189,6 +189,9 @@ export const Editor = ({
                             <RichTextEditor.ControlsGroup>
                                 <RichTextEditor.BulletList/>
                                 <RichTextEditor.OrderedList/>
+                            </RichTextEditor.ControlsGroup>
+                            <RichTextEditor.ControlsGroup>
+                                <InsertImageControl/>
                             </RichTextEditor.ControlsGroup>
                         </>
                     )}

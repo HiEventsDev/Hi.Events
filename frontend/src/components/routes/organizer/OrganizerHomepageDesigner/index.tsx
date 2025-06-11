@@ -46,7 +46,7 @@ const colorThemes: ColorTheme[] = [
     {
         name: t`Ocean`,
         colors: {
-            homepage_background_color: '#e0f2fe',
+            homepage_background_color: '#c3e3f7',
             homepage_content_background_color: '#ffffff',
             homepage_primary_color: '#0ea5e9',
             homepage_primary_text_color: '#075985',
@@ -68,7 +68,7 @@ const colorThemes: ColorTheme[] = [
     {
         name: t`Sunset`,
         colors: {
-            homepage_background_color: '#fef3c7',
+            homepage_background_color: '#e8c47b',
             homepage_content_background_color: '#ffffff',
             homepage_primary_color: '#f97316',
             homepage_primary_text_color: '#7c2d12',
@@ -112,7 +112,7 @@ const colorThemes: ColorTheme[] = [
     {
         name: t`Arctic`,
         colors: {
-            homepage_background_color: '#ccfbf1',
+            homepage_background_color: '#71bdad',
             homepage_content_background_color: '#ffffff',
             homepage_primary_color: '#14b8a6',
             homepage_primary_text_color: '#134e4a',
@@ -488,7 +488,6 @@ const OrganizerHomepageDesigner = () => {
                             <Button
                                 loading={updateMutation.isPending}
                                 type={'submit'}
-                                mt="md"
                             >
                                 {t`Save Changes`}
                             </Button>

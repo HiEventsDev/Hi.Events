@@ -43,7 +43,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     to={item.comingSoon ? '#' : item.link}
                     key={item.label}
                     onClick={() => {
-                        setSidebarOpen(false);
+                        setSidebarOpen(!!sidebarOpen);
                         if (item.onClick) item.onClick();
                     }}
                     className={({isActive}) =>
