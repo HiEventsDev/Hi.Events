@@ -396,6 +396,7 @@ export const router: RouteObject[] = [
     },
     {
         path: "/organizer/:organizerId/preview",
+        loader: publicOrganizerRouteLoader,
         async lazy() {
             const OrganizerHomepagePreview = await import("./components/layouts/OrganizerHomepagePreview");
             return {Component: OrganizerHomepagePreview.default};

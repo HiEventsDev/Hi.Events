@@ -22,8 +22,8 @@ class EventResourcePublic extends BaseResource
         mixed $includePostCheckoutData = false,
     )
     {
-        // This is a hackyworkaround to handle the fact that when this resource is called
-        // When internally within Laravel the second param is the collection key (numeric)
+        // This is a hacky workaround to handle when this resource is instantiated
+        // internally within Laravel the second param is the collection key (numeric)
         // When called normally, second param is includePostCheckoutData (boolean)
         $this->includePostCheckoutData = is_bool($includePostCheckoutData)
             ? $includePostCheckoutData

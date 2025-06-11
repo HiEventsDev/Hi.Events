@@ -60,7 +60,7 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
         );
     }
 
-    public function findByOrganizerId(int $organizerId, QueryParamsDTO $params): LengthAwarePaginator
+    public function findByOrganizerId(int $organizerId, int $accountId, QueryParamsDTO $params): LengthAwarePaginator
     {
         $where = [
             ['orders.status', '!=', OrderStatus::RESERVED->name],
@@ -90,7 +90,8 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
         $this->model = $this->model
             ->select('orders.*')
             ->join('events', 'orders.event_id', '=', 'events.id')
-            ->where('events.organizer_id', $organizerId);
+            ->where('events.organizer_id', $organizerId)
+            ->where('events.account_id', $accountId);
 
         $this->model = $this->model->orderBy(
             column: $params->sort_by ? 'orders.' . $params->sort_by : 'orders.' . OrderDomainObject::getDefaultSort(),

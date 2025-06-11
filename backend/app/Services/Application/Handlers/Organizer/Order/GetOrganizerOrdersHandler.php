@@ -17,7 +17,7 @@ class GetOrganizerOrdersHandler
     {
     }
 
-    public function handle(int $organizer, QueryParamsDTO $queryParams): LengthAwarePaginator
+    public function handle(int $organizer, int $accountId, QueryParamsDTO $queryParams): LengthAwarePaginator
     {
         return $this->orderRepository
             ->loadRelation(OrderItemDomainObject::class)
@@ -25,6 +25,7 @@ class GetOrganizerOrdersHandler
             ->loadRelation(InvoiceDomainObject::class)
             ->findByOrganizerId(
                 organizerId: $organizer,
+                accountId: $accountId,
                 params: $queryParams,
             );
     }

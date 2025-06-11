@@ -24,6 +24,7 @@ class GetOrganizerOrdersAction extends BaseAction
 
         $orders = $this->handler->handle(
             organizer: $organizerId,
+            accountId: $this->getAuthenticatedAccountId(),
             queryParams: $this->getPaginationQueryParams($request)
         );
 

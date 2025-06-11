@@ -29,5 +29,4 @@ class GetOrganizerSettingsAction extends BaseAction
 
         return $this->resourceResponse(OrganizerSettingsResource::class, $settings);
     }
-
 }

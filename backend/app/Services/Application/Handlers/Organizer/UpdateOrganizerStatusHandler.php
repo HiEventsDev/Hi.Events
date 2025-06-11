@@ -11,13 +11,13 @@ use Illuminate\Database\DatabaseManager;
 use Psr\Log\LoggerInterface;
 use Throwable;
 
-readonly class UpdateOrganizerStatusHandler
+class UpdateOrganizerStatusHandler
 {
     public function __construct(
-        private OrganizerRepositoryInterface $organizerRepository,
-        private AccountRepositoryInterface   $accountRepository,
-        private LoggerInterface              $logger,
-        private DatabaseManager              $databaseManager,
+        private readonly OrganizerRepositoryInterface $organizerRepository,
+        private readonly AccountRepositoryInterface   $accountRepository,
+        private readonly LoggerInterface              $logger,
+        private readonly DatabaseManager              $databaseManager,
     )
     {
     }

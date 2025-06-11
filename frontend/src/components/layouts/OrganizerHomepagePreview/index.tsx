@@ -1,13 +1,19 @@
 import {useEffect, useState} from "react";
-import {useParams} from "react-router";
+import {useLoaderData, useParams} from "react-router";
 import {useGetOrganizerSettings} from "../../../queries/useGetOrganizerSettings.ts";
 import {LoadingMask} from "../../common/LoadingMask";
-import {useGetOrganizerPublic} from "../../../queries/useGetOrganizerPublic.ts";
 import OrganizerHomepage from "../OrganizerHomepage";
+import {Organizer} from "../../../types.ts";
 
 const OrganizerHomepagePreview = () => {
     const {organizerId} = useParams();
-    const organizerQuery = useGetOrganizerPublic(organizerId);
+
+    const {organizer, eventsData, isPastEvents} = useLoaderData() as {
+        organizer: Organizer | null;
+        eventsData: any;
+        isPastEvents: boolean;
+    };
+
     const organizerSettingsQuery = useGetOrganizerSettings(organizerId);
     const [previewSettings, setPreviewSettings] = useState<any>(null);
 
@@ -22,18 +28,18 @@ const OrganizerHomepagePreview = () => {
         return () => window.removeEventListener("message", handleMessage);
     }, []);
 
-    if (organizerQuery.isLoading || organizerSettingsQuery.isLoading) {
+    if (!organizer || organizerSettingsQuery.isLoading) {
         return <LoadingMask/>;
     }
 
-    if (!organizerQuery.data || !organizerSettingsQuery.data) {
+    if (!organizer || !organizerSettingsQuery.data) {
         return null;
     }
 
     // Merge preview settings with actual data
     const previewOrganizer = {
-        ...organizerQuery.data,
-        images: organizerQuery.data.images?.map(img => {
+        ...organizer,
+        images: organizer.images?.map(img => {
             if (img.type === 'ORGANIZER_LOGO' && previewSettings?.logoUrl) {
                 return {...img, url: previewSettings.logoUrl};
             }
@@ -53,7 +59,7 @@ const OrganizerHomepagePreview = () => {
 
     return <OrganizerHomepage
         organizer={previewOrganizer}
-        eventsData={previewOrganizer.events}
+        eventsData={eventsData}
         isPastEvents={false}
     />;
 };
