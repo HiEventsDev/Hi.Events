@@ -12,6 +12,7 @@ import {socialMediaConfig} from "../../../constants/socialMediaConfig";
 import {ContactOrganizerModal} from "../../common/ContactOrganizerModal";
 import {formatAddress, getShortLocationDisplay} from "../../../utilites/addressUtilities.ts";
 import {organizerHomepagePath} from "../../../utilites/urlHelper.ts";
+import {removeTransparency} from "../../../utilites/colorHelper.ts";
 
 interface OrganizerHomepageProps {
     organizer?: Organizer;
@@ -81,7 +82,7 @@ export const OrganizerHomepage = ({
                 <style>
                     {`
                         body, .ssr-loader {
-                            background-color: ${themeSettings?.homepage_background_color || '#f5f5f5'} !important;
+                            background-color: ${removeTransparency(themeSettings?.homepage_background_color!)} !important;
                         }
                     `}
                 </style>
