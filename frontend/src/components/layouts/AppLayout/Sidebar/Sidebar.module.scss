@@ -11,7 +11,9 @@
   height: 100vh;
 
   &.closed {
-      display: none;
+      @media (min-width: 768px) {
+        display: none;
+      }
   }
 
   .logo {
@@ -77,9 +79,9 @@
       display: flex;
       align-items: center;
       color: rgba(255, 255, 255, 0.85);
-      padding: 7px 10px;
+      padding: 4px 10px;
       text-decoration: none;
-      margin: 4px 10px;
+      margin: 3px 10px;
       border-radius: var(--tk-radius-md);
       font-size: 0.9em;
       font-weight: 500;
@@ -171,8 +173,14 @@
     position: fixed;
     width: 280px;
     height: 100vh;
-    z-index: 100;
+    z-index: 200;
     transform: translateX(-100%);
+    top: 0;
+    left: 0;
+    
+    &.open {
+      transform: translateX(0);
+    }
   }
 
   .sidebarClose {
@@ -185,17 +193,24 @@
     position: absolute;
     right: -2px;
     top: 50%;
+    transform: translateY(-50%);
     transition: all 0.2s ease;
     z-index: 5;
     flex-shrink: 0;
 
     &:hover {
-      transform: scale(1.4);
+      transform: translateY(-50%) scale(1.4);
       color: white;
     }
 
     @media (max-width: 767px) {
-      display: none;
+      right: 16px;
+      top: 28px;
+      transform: none;
+      
+      &:hover {
+        transform: scale(1.1);
+      }
     }
   }
 }

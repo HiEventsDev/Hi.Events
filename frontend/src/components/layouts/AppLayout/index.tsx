@@ -4,7 +4,7 @@ import classes from './AppLayout.module.scss';
 import {Topbar} from "./Topbar";
 import {Sidebar} from "./Sidebar";
 import {BreadcrumbItem, NavItem} from "./types.ts";
-import {IconChevronLeft, IconLayoutSidebar} from "@tabler/icons-react";
+import {IconLayoutSidebar} from "@tabler/icons-react";
 import {UnstyledButton, VisuallyHidden} from "@mantine/core";
 import {t} from "@lingui/macro";
 
@@ -24,15 +24,15 @@ interface SidebarToggleButtonProps {
 }
 
 const SidebarToggleButton: React.FC<SidebarToggleButtonProps> = ({open, onClick}) => {
-    const Icon = open ? IconLayoutSidebar : IconChevronLeft;
-    const label = open ? t`Open sidebar` : t`Close sidebar`;
+    const Icon = IconLayoutSidebar;
+    const label = t`Open sidebar`;
 
     return (
         <UnstyledButton
             className={open ? classes.sidebarOpen : classes.sidebarClose}
             onClick={onClick}
         >
-            <Icon size={open ? 16 : 20}/>
+            <Icon size={16}/>
             <VisuallyHidden>{label}</VisuallyHidden>
         </UnstyledButton>
     );
@@ -47,7 +47,10 @@ const AppLayout: React.FC<AppLayoutProps> = ({
                                                  actionGroupContent = null,
                                                  sidebarFooter = null,
                                              }) => {
-    const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
+    const [sidebarOpen, setSidebarOpen] = useState<boolean>(() => {
+        if (typeof window === 'undefined') return true; // SSR default
+        return window.innerWidth >= 768; // Desktop open, mobile closed
+    });
     const [topBarShadow, setTopBarShadow] = useState<boolean>(false);
 
     useEffect(() => {
@@ -59,6 +62,19 @@ const AppLayout: React.FC<AppLayoutProps> = ({
             mainElement.addEventListener('scroll', handleScroll);
             return () => mainElement.removeEventListener('scroll', handleScroll);
         }
+    }, []);
+
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth >= 768) {
+                setSidebarOpen(true);
+            } else {
+                setSidebarOpen(false);
+            }
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
     }, []);
 
     return (
@@ -85,10 +101,17 @@ const AppLayout: React.FC<AppLayoutProps> = ({
                 sidebarFooter={sidebarFooter}
             />
 
+            {sidebarOpen && (
+                <div
+                    className={`${classes.overlay} ${sidebarOpen ? classes.open : ''}`}
+                    onClick={() => setSidebarOpen(false)}
+                />
+            )}
+
             {!sidebarOpen && (
                 <SidebarToggleButton
-                    open={true}
-                    onClick={() => setSidebarOpen(!sidebarOpen)}
+                    open={false}
+                    onClick={() => setSidebarOpen(true)}
                 />
             )}
         </div>

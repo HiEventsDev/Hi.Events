@@ -6,6 +6,7 @@ import classes from './Sidebar.module.scss';
 import {NavItem} from "../types";
 import {NavLink} from "react-router";
 import classNames from "classnames";
+import {useMediaQuery} from "@mantine/hooks";
 
 interface SidebarProps {
     sidebarOpen: boolean;
@@ -22,6 +23,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                                                 }) => {
     const renderLinks = () => {
         return navItems.map((item) => {
+            const isMobile = useMediaQuery('(max-width: 768px)');
+
             if (!item.link && item.link !== "" && item.onClick === undefined) {
                 return (
                     <div className={classes.sectionHeading} key={item.label}>
@@ -38,12 +41,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 return <a key={item.label} className={classNames(classes.loading, classes.link)}>&nbsp;</a>;
             }
 
+
             return (
                 <NavLink
                     to={item.comingSoon ? '#' : item.link}
                     key={item.label}
                     onClick={() => {
-                        setSidebarOpen(!!sidebarOpen);
+                        if (isMobile) {
+                            setSidebarOpen(false);
+                        }
                         if (item.onClick) item.onClick();
                     }}
                     className={({isActive}) =>
