@@ -42,6 +42,7 @@ class ImageUploadServiceTest extends TestCase
             mime_type: 'image/jpeg'
         );
         $imageDomainObject = m::mock(ImageDomainObject::class);
+        $accountId = 123;
 
         $this->imageStorageService
             ->shouldReceive('store')
@@ -53,6 +54,7 @@ class ImageUploadServiceTest extends TestCase
             ->shouldReceive('create')
             ->once()
             ->with([
+                'account_id' => $accountId,
                 'entity_id' => 1,
                 'entity_type' => 'user',
                 'type' => 'profile',
@@ -64,7 +66,7 @@ class ImageUploadServiceTest extends TestCase
             ])
             ->andReturn($imageDomainObject);
 
-        $result = $this->service->upload($uploadedFile, 1, 'user', 'profile');
+        $result = $this->service->upload($uploadedFile, 1, 'user', 'profile', $accountId);
 
         $this->assertSame($imageDomainObject, $result);
     }
@@ -74,6 +76,7 @@ class ImageUploadServiceTest extends TestCase
         $this->expectException(CouldNotUploadImageException::class);
 
         $uploadedFile = m::mock(UploadedFile::class);
+        $accountId = 123;
 
         $this->imageStorageService
             ->shouldReceive('store')
@@ -81,7 +84,7 @@ class ImageUploadServiceTest extends TestCase
             ->with($uploadedFile, 'profile')
             ->andThrow(new CouldNotUploadImageException('Failed to store image'));
 
-        $this->service->upload($uploadedFile, 1, 'user', 'profile');
+        $this->service->upload($uploadedFile, 1, 'user', 'profile', $accountId);
     }
 
     protected function tearDown(): void

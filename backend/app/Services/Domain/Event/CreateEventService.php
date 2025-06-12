@@ -37,7 +37,7 @@ class CreateEventService
      */
     public function createEvent(
         EventDomainObject        $eventData,
-        EventSettingDomainObject $eventSettings = null
+        ?EventSettingDomainObject $eventSettings = null
     ): EventDomainObject
     {
         return $this->databaseManager->transaction(function () use ($eventData, $eventSettings) {

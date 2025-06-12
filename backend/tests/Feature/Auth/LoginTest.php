@@ -2,30 +2,33 @@
 
 declare(strict_types=1);
 
-namespace Tests\Feature;
+namespace Tests\Feature\Auth;
 
-use Illuminate\Foundation\Testing\DatabaseTruncation;
 use HiEvents\Models\AccountConfiguration;
 use HiEvents\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class LoginTest extends TestCase
 {
-    use DatabaseTruncation;
+    use RefreshDatabase;
 
-    private const API_PREFIX = '';
-    private const LOGIN_ROUTE = self::API_PREFIX . '/auth/login';
-    private const LOGOUT_ROUTE = self::API_PREFIX . '/auth/logout';
-    private const USERS_ME_ROUTE = self::API_PREFIX . '/users/me';
+    private const LOGIN_ROUTE = '/auth/login';
+    private const LOGOUT_ROUTE = '/auth/logout';
+    private const USERS_ME_ROUTE = '/users/me';
 
     public function setUp(): void
     {
         parent::setUp();
+
         AccountConfiguration::firstOrCreate(['id' => 1], [
             'id' => 1,
             'name' => 'Default',
             'is_system_default' => true,
-            'application_fees' => json_encode(['percentage' => 1.5, 'fixed' => 0]),
+            'application_fees' => [
+                'percentage' => 1.5,
+                'fixed' => 0,
+            ]
         ]);
     }
 
@@ -34,11 +37,12 @@ class LoginTest extends TestCase
         $password = fake()->password(16);
         $user = User::factory()->password($password)->withAccount()->create();
 
-        $response = $this->postJson(self::LOGIN_ROUTE, [
+        $response = $this->postJson(route('auth.login'), [
             'email' => $user->email,
             'password' => $password,
         ]);
 
+        $response->assertSuccessful();
         $response->assertCookie('token');
         $response->assertHeader('X-Auth-Token');
         $response->assertJsonStructure([
@@ -48,9 +52,6 @@ class LoginTest extends TestCase
             'user',
             'accounts'
         ]);
-
-        // removes warning "This test did not perform any assertions"
-        $this->assertTrue(true);
     }
 
     public function test_login_with_invalid_credentials(): void

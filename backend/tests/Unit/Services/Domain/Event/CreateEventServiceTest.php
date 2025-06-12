@@ -6,6 +6,7 @@ use HiEvents\DomainObjects\Enums\HomepageBackgroundType;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
+use HiEvents\DomainObjects\OrganizerSettingDomainObject;
 use HiEvents\Exceptions\OrganizerNotFoundException;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
@@ -66,7 +67,13 @@ class CreateEventServiceTest extends TestCase
             return $callback();
         });
 
-        $this->organizerRepository->shouldReceive('findFirstWhere')
+        $this->organizerRepository
+            ->shouldReceive('loadRelation')
+            ->with(OrganizerSettingDomainObject::class)
+            ->once()
+            ->andReturnSelf()
+            ->getMock()
+            ->shouldReceive('findFirstWhere')
             ->with([
                 'id' => $eventData->getOrganizerId(),
                 'account_id' => $eventData->getAccountId(),
@@ -112,13 +119,24 @@ class CreateEventServiceTest extends TestCase
     public function testCreateEventWithoutEventSettings(): void
     {
         $eventData = $this->createMockEventDomainObject();
-        $organizer = $this->createMockOrganizerDomainObject();
+        $organizer = $this->createMockOrganizerDomainObject()
+            ->shouldReceive('getOrganizerSettings')
+            ->andReturn(new OrganizerSettingDomainObject())
+            ->getMock();
 
         $this->databaseManager->shouldReceive('transaction')->once()->andReturnUsing(function ($callback) {
             return $callback();
         });
 
-        $this->organizerRepository->shouldReceive('findFirstWhere')->andReturn($organizer);
+        $this->organizerRepository
+            ->shouldReceive('loadRelation')
+            ->with(OrganizerSettingDomainObject::class)
+            ->once()
+            ->andReturnSelf()
+            ->getMock()
+            ->shouldReceive('findFirstWhere')
+            ->andReturn($organizer);
+
         $this->eventRepository->shouldReceive('create')->andReturn($eventData);
 
         $this->purifier->shouldReceive('purify')->andReturn('Test Description');
@@ -154,7 +172,14 @@ class CreateEventServiceTest extends TestCase
             return $callback();
         });
 
-        $this->organizerRepository->shouldReceive('findFirstWhere')->andReturnNull();
+        $this->organizerRepository
+            ->shouldReceive('loadRelation')
+            ->with(OrganizerSettingDomainObject::class)
+            ->once()
+            ->andReturnSelf()
+            ->getMock()
+            ->shouldReceive('findFirstWhere')
+            ->andReturnNull();
 
         $this->expectException(OrganizerNotFoundException::class);
 
@@ -191,7 +216,7 @@ class CreateEventServiceTest extends TestCase
         });
     }
 
-    private function createMockOrganizerDomainObject(): OrganizerDomainObject
+    private function createMockOrganizerDomainObject(): OrganizerDomainObject|Mockery\Mock
     {
         return Mockery::mock(OrganizerDomainObject::class, function ($mock) {
             $mock->shouldReceive('getEmail')->andReturn('organizer@example.com');

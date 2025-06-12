@@ -76,7 +76,6 @@ use HiEvents\Http\Actions\Orders\ResendOrderConfirmationAction;
 use HiEvents\Http\Actions\Organizers\CreateOrganizerAction;
 use HiEvents\Http\Actions\Organizers\EditOrganizerAction;
 use HiEvents\Http\Actions\Organizers\GetOrganizerAction;
-use HiEvents\Http\Actions\Organizers\UpdateOrganizerStatusAction;
 use HiEvents\Http\Actions\Organizers\GetOrganizerEventsAction;
 use HiEvents\Http\Actions\Organizers\GetOrganizersAction;
 use HiEvents\Http\Actions\Organizers\GetPublicOrganizerAction;
@@ -84,6 +83,7 @@ use HiEvents\Http\Actions\Organizers\Orders\GetOrganizerOrdersAction;
 use HiEvents\Http\Actions\Organizers\Settings\GetOrganizerSettingsAction;
 use HiEvents\Http\Actions\Organizers\Settings\PartialUpdateOrganizerSettingsAction;
 use HiEvents\Http\Actions\Organizers\Stats\GetOrganizerStatsAction;
+use HiEvents\Http\Actions\Organizers\UpdateOrganizerStatusAction;
 use HiEvents\Http\Actions\ProductCategories\CreateProductCategoryAction;
 use HiEvents\Http\Actions\ProductCategories\DeleteProductCategoryAction;
 use HiEvents\Http\Actions\ProductCategories\EditProductCategoryAction;
@@ -141,18 +141,18 @@ $router = app()->get('router');
 $router->prefix('/auth')->group(
     function (Router $router): void {
         // Auth
-        $router->post('/login', LoginAction::class)->name('login');
-        $router->post('/logout', LogoutAction::class);
-        $router->post('/register', CreateAccountAction::class);
-        $router->post('/forgot-password', ForgotPasswordAction::class);
+        $router->post('/login', LoginAction::class)->name('auth.login');
+        $router->post('/logout', LogoutAction::class)->name('auth.logout');
+        $router->post('/register', CreateAccountAction::class)->name('auth.register');
+        $router->post('/forgot-password', ForgotPasswordAction::class)->name('auth.forgot-password');
 
         // Invitations
-        $router->get('/invitation/{invite_token}', GetUserInvitationAction::class);
-        $router->post('/invitation/{invite_token}', AcceptInvitationAction::class);
+        $router->get('/invitation/{invite_token}', GetUserInvitationAction::class)->name('auth.invitation');
+        $router->post('/invitation/{invite_token}', AcceptInvitationAction::class)->name('auth.accept-invitation');
 
         // Reset Passwords
-        $router->get('/reset-password/{reset_token}', ValidateResetPasswordTokenAction::class);
-        $router->post('/reset-password/{reset_token}', ResetPasswordAction::class);
+        $router->get('/reset-password/{reset_token}', ValidateResetPasswordTokenAction::class)->name('auth.validate-reset-password-token');
+        $router->post('/reset-password/{reset_token}', ResetPasswordAction::class)->name('auth.reset-password');
     }
 );
 
