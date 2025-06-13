@@ -29,9 +29,26 @@ class Url
         return self::addQueryParamsToUrl($queryParams, $url);
     }
 
+    /**
+    * Generates a CDN URL for the given path if a CDN URL is configured.
+    * Falls back to generating a URL using the specified or default filesystem disk.
+    *
+    * @param string $path The relative path to the asset.
+    * @return string The fully qualified URL to the asset, either via CDN or storage disk.
+    */
     public static function getCdnUrl(string $path): string
     {
-        return config('app.cnd_url') . '/' . $path;
+        // Fetch the CDN URL from environment variables
+        // Checking against the env variable instead of config() as config falls back to the default value
+        // and we want to ensure that if the env variable is not set, we do not use a default value.
+        $envCDNUrl = env('CDN_URL'); 
+
+        if ($envCDNUrl) {
+            return  $envCDNUrl . '/' . $path;
+         }
+
+        $disk = config('filesystems.public', 'public');
+        return app('filesystem')->disk($disk)->url($path);
     }
 
     private static function addQueryParamsToUrl(array $queryParams, mixed $url): mixed
