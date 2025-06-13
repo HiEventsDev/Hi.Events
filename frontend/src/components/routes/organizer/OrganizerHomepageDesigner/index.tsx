@@ -8,8 +8,8 @@ import {IdParam, OrganizerSettings} from "../../../../types.ts";
 import {showSuccess} from "../../../../utilites/notifications.tsx";
 import {t} from "@lingui/macro";
 import {useForm} from "@mantine/form";
-import {Button, Collapse, ColorInput, Group, Text, UnstyledButton} from "@mantine/core";
-import {IconCheck, IconChevronDown, IconChevronUp, IconColorPicker, IconHelp, IconPhoto} from "@tabler/icons-react";
+import {Button, Collapse, ColorInput, Group, Text, UnstyledButton, Accordion, Stack} from "@mantine/core";
+import {IconCheck, IconChevronDown, IconChevronUp, IconColorPicker, IconHelp, IconPhoto, IconPalette} from "@tabler/icons-react";
 import {Tooltip} from "../../../common/Tooltip";
 import {LoadingMask} from "../../../common/LoadingMask";
 import {CustomSelect} from "../../../common/CustomSelect";
@@ -148,6 +148,7 @@ const OrganizerHomepageDesigner = () => {
     const [iframeLoaded, setIframeLoaded] = useState(false);
     const [selectedTheme, setSelectedTheme] = useState<string | null>(null);
     const [colorInputsExpanded, setColorInputsExpanded] = useState(false);
+    const [accordionValue, setAccordionValue] = useState<string[]>(['images']);
     const [lastCoverId, setLastCoverId] = useState<IdParam | null>(null);
     const [lastLogoId, setLastLogoId] = useState<IdParam | null>(null);
 
@@ -280,219 +281,254 @@ const OrganizerHomepageDesigner = () => {
         <div className={classes.container}>
             <div className={classes.sidebar}>
                 <div className={classes.sticky}>
-                    <h2>{t`Homepage Design`}</h2>
-
-                    <Group justify={'space-between'}>
-                        <h3>{t`Cover Image`}</h3>
-                        <Tooltip
-                            label={t`We recommend dimensions of 1950px by 650px, a ratio of 3:1, and a maximum file size of 5MB`}>
-                            <IconHelp size={20}/>
-                        </Tooltip>
-                    </Group>
-                    <div className={classes.imageUploadWrapper}>
-                        <ImageUploadDropzone
-                            imageType="ORGANIZER_COVER"
-                            entityId={organizerId}
-                            onUploadSuccess={handleImageChange}
-                            onDeleteSuccess={handleImageChange}
-                            existingImageData={{
-                                url: existingCover?.url,
-                                id: existingCover?.id,
-                            }}
-                            helpText={t`Cover image will be displayed at the top of your organizer page`}
-                            displayMode="compact"
-                        />
+                    <div className={classes.header}>
+                        <h2>{t`Homepage Design`}</h2>
+                        <Text c="dimmed" size="sm">{t`Customize your organizer page appearance`}</Text>
                     </div>
 
-                    <Group justify={'space-between'}>
-                        <h3>{t`Logo`}</h3>
-                        <Tooltip label={t`We recommend dimensions of 400px by 400px, and a maximum file size of 5MB`}>
-                            <IconHelp size={20}/>
-                        </Tooltip>
-                    </Group>
-                    <div className={classes.imageUploadWrapper}>
-                        <ImageUploadDropzone
-                            imageType="ORGANIZER_LOGO"
-                            entityId={organizerId}
-                            onUploadSuccess={handleImageChange}
-                            onDeleteSuccess={handleImageChange}
-                            existingImageData={{
-                                url: existingLogo?.url,
-                                id: existingLogo?.id,
-                            }}
-                            helpText={t`Logo will be displayed in the header`}
-                            displayMode="compact"
-                        />
-                    </div>
-
-                    <h3>{t`Color Palette`}</h3>
-
-                    {/* Theme presets - subtle presentation */}
-                    <div className={classes.themePresets}>
-                        <Group gap={12} wrap="wrap">
-                            {colorThemes.map((theme) => (
-                                <UnstyledButton
-                                    key={theme.name}
-                                    onClick={() => applyTheme(theme)}
-                                    className={classes.themeButton}
-                                    data-selected={selectedTheme === theme.name}
-                                >
-                                    <div className={classes.themeCircle}>
-                                        <div
-                                            className={classes.themeOuter}
-                                            style={{
-                                                background: theme.colors.homepage_background_color,
+                    <Accordion 
+                        multiple
+                        value={accordionValue}
+                        onChange={setAccordionValue}
+                        variant="contained"
+                        className={classes.accordion}
+                    >
+                        <Accordion.Item value="images" className={classes.accordionItem}>
+                            <Accordion.Control icon={<IconPhoto size={20} />}>
+                                <Text fw={500}>{t`Images`}</Text>
+                            </Accordion.Control>
+                            <Accordion.Panel>
+                                <Stack gap="lg">
+                                    <div>
+                                        <Group justify={'space-between'} mb="xs">
+                                            <Text fw={500} size="sm">{t`Cover Image`}</Text>
+                                            <Tooltip
+                                                label={t`We recommend dimensions of 1950px by 650px, a ratio of 3:1, and a maximum file size of 5MB`}>
+                                                <IconHelp size={16} style={{ color: 'var(--mantine-color-gray-6)' }}/>
+                                            </Tooltip>
+                                        </Group>
+                                        <ImageUploadDropzone
+                                            imageType="ORGANIZER_COVER"
+                                            entityId={organizerId}
+                                            onUploadSuccess={handleImageChange}
+                                            onDeleteSuccess={handleImageChange}
+                                            existingImageData={{
+                                                url: existingCover?.url,
+                                                id: existingCover?.id,
                                             }}
-                                        >
-                                            <div
-                                                className={classes.themeInner}
-                                                style={{
-                                                    background: theme.colors.homepage_content_background_color,
-                                                }}
-                                            >
-                                                <div
-                                                    className={classes.themeDot}
-                                                    style={{
-                                                        background: theme.colors.homepage_primary_color,
-                                                    }}
-                                                />
-                                            </div>
-                                        </div>
-                                        {selectedTheme === theme.name && (
-                                            <div className={classes.themeCheckmark}>
-                                                <IconCheck size={14} stroke={3}/>
-                                            </div>
-                                        )}
-                                    </div>
-                                    <Text size="xs" c="dimmed" mt={6}>{theme.name}</Text>
-                                </UnstyledButton>
-                            ))}
-                            {/* Custom option */}
-                            <UnstyledButton
-                                onClick={handleCustomTheme}
-                                className={classes.themeButton}
-                                data-selected={selectedTheme === 'Custom'}
-                            >
-                                <div className={classes.themeCircle}>
-                                    <div
-                                        className={classes.themeOuter}
-                                        style={{
-                                            background: `linear-gradient(135deg, ${form.values.homepage_background_color} 50%, ${form.values.homepage_content_background_color} 50%)`,
-                                        }}
-                                    >
-                                        <div
-                                            className={classes.themeInner}
-                                            style={{
-                                                background: 'transparent',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                            }}
-                                        >
-                                            <Text size="xs" fw={600} c={form.values.homepage_primary_color}>?</Text>
-                                        </div>
-                                    </div>
-                                    {selectedTheme === 'Custom' && (
-                                        <div className={classes.themeCheckmark}>
-                                            <IconCheck size={14} stroke={3}/>
-                                        </div>
-                                    )}
-                                </div>
-                                <Text size="xs" c="dimmed" mt={6}>{t`Custom`}</Text>
-                            </UnstyledButton>
-                        </Group>
-                    </div>
-
-                    <form onSubmit={form.onSubmit(handleSubmit)}>
-                        <fieldset disabled={organizerSettingsQuery.isLoading || updateMutation.isPending}>
-                            <CustomSelect
-                                optionList={[
-                                    {
-                                        icon: <IconColorPicker/>,
-                                        label: t`Color`,
-                                        value: 'COLOR',
-                                        description: t`Choose a color for your background`,
-                                    },
-                                    {
-                                        icon: <IconPhoto/>,
-                                        label: t`Use cover image`,
-                                        value: 'MIRROR_COVER_IMAGE',
-                                        description: t`Use a blurred version of the cover image as the background`,
-                                        disabled: !existingCover,
-                                    },
-                                ]}
-                                form={form}
-                                label={t`Background Type`}
-                                name={'homepage_background_type'}
-                            />
-
-                            {/* Collapsible toggle for color inputs */}
-                            {selectedTheme !== 'Custom' && (
-                                <Button
-                                    variant="subtle"
-                                    onClick={() => setColorInputsExpanded(!colorInputsExpanded)}
-                                    rightSection={colorInputsExpanded ? <IconChevronUp size={16}/> :
-                                        <IconChevronDown size={16}/>}
-                                    fullWidth
-                                    mb="sm"
-                                >
-                                    {colorInputsExpanded ? t`Hide color settings` : t`Show color settings`}
-                                </Button>
-                            )}
-
-                            <Collapse in={colorInputsExpanded}>
-                                <div>
-                                    {form.values.homepage_background_type === 'COLOR' && (
-                                        <ColorInput
-                                            format="hexa"
-                                            mb="md"
-                                            label={t`Page Background Color`}
-                                            description={t`The background color of the entire page`}
-                                            {...form.getInputProps('homepage_background_color')}
+                                            helpText={t`Cover image will be displayed at the top of your organizer page`}
+                                            displayMode="compact"
                                         />
-                                    )}
-                                    <ColorInput
-                                        format="hexa"
-                                        mb="md"
-                                        label={t`Content Background Color`}
-                                        description={t`The background color of content areas (cards, header, etc.)`}
-                                        {...form.getInputProps('homepage_content_background_color')}
-                                    />
-                                    <ColorInput
-                                        format="hexa"
-                                        mb="md"
-                                        label={t`Primary Color`}
-                                        {...form.getInputProps('homepage_primary_color')}
-                                    />
-                                    <ColorInput
-                                        format="hexa"
-                                        mb="md"
-                                        label={t`Primary Text Color`}
-                                        {...form.getInputProps('homepage_primary_text_color')}
-                                    />
-                                    <ColorInput
-                                        mb="md"
-                                        format="hexa"
-                                        label={t`Secondary Color`}
-                                        {...form.getInputProps('homepage_secondary_color')}
-                                    />
-                                    <ColorInput
-                                        format="hexa"
-                                        mb="md"
-                                        label={t`Secondary Text Color`}
-                                        {...form.getInputProps('homepage_secondary_text_color')}
-                                    />
-                                </div>
-                            </Collapse>
+                                    </div>
 
-                            <Button
-                                loading={updateMutation.isPending}
-                                type={'submit'}
-                            >
-                                {t`Save Changes`}
-                            </Button>
-                        </fieldset>
-                    </form>
+                                    <div>
+                                        <Group justify={'space-between'} mb="xs">
+                                            <Text fw={500} size="sm">{t`Logo`}</Text>
+                                            <Tooltip label={t`We recommend dimensions of 400px by 400px, and a maximum file size of 5MB`}>
+                                                <IconHelp size={16} style={{ color: 'var(--mantine-color-gray-6)' }}/>
+                                            </Tooltip>
+                                        </Group>
+                                        <ImageUploadDropzone
+                                            imageType="ORGANIZER_LOGO"
+                                            entityId={organizerId}
+                                            onUploadSuccess={handleImageChange}
+                                            onDeleteSuccess={handleImageChange}
+                                            existingImageData={{
+                                                url: existingLogo?.url,
+                                                id: existingLogo?.id,
+                                            }}
+                                            helpText={t`Logo will be displayed in the header`}
+                                            displayMode="compact"
+                                        />
+                                    </div>
+                                </Stack>
+                            </Accordion.Panel>
+                        </Accordion.Item>
+
+                        <Accordion.Item value="theme" className={classes.accordionItem}>
+                            <Accordion.Control icon={<IconPalette size={20} />}>
+                                <Text fw={500}>{t`Theme & Colors`}</Text>
+                            </Accordion.Control>
+                            <Accordion.Panel>
+                                <Stack gap="lg">
+
+                                    <div>
+                                        <Text fw={500} size="sm" mb="xs">{t`Color Presets`}</Text>
+                                        <Text size="xs" c="dimmed" mb="md">{t`Choose from predefined color schemes`}</Text>
+                                        
+                                        <div className={classes.themePresets}>
+                                            <Group gap={12} wrap="wrap">
+                                                {colorThemes.map((theme) => (
+                                                    <UnstyledButton
+                                                        key={theme.name}
+                                                        onClick={() => applyTheme(theme)}
+                                                        className={classes.themeButton}
+                                                        data-selected={selectedTheme === theme.name}
+                                                    >
+                                                        <div className={classes.themeCircle}>
+                                                            <div
+                                                                className={classes.themeOuter}
+                                                                style={{
+                                                                    background: theme.colors.homepage_background_color,
+                                                                }}
+                                                            >
+                                                                <div
+                                                                    className={classes.themeInner}
+                                                                    style={{
+                                                                        background: theme.colors.homepage_content_background_color,
+                                                                    }}
+                                                                >
+                                                                    <div
+                                                                        className={classes.themeDot}
+                                                                        style={{
+                                                                            background: theme.colors.homepage_primary_color,
+                                                                        }}
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                            {selectedTheme === theme.name && (
+                                                                <div className={classes.themeCheckmark}>
+                                                                    <IconCheck size={14} stroke={3}/>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                        <Text size="xs" c="dimmed" mt={6}>{theme.name}</Text>
+                                                    </UnstyledButton>
+                                                ))}
+                                                <UnstyledButton
+                                                    onClick={handleCustomTheme}
+                                                    className={classes.themeButton}
+                                                    data-selected={selectedTheme === 'Custom'}
+                                                >
+                                                    <div className={classes.themeCircle}>
+                                                        <div
+                                                            className={classes.themeOuter}
+                                                            style={{
+                                                                background: `linear-gradient(135deg, ${form.values.homepage_background_color} 50%, ${form.values.homepage_content_background_color} 50%)`,
+                                                            }}
+                                                        >
+                                                            <div
+                                                                className={classes.themeInner}
+                                                                style={{
+                                                                    background: 'transparent',
+                                                                    display: 'flex',
+                                                                    alignItems: 'center',
+                                                                    justifyContent: 'center',
+                                                                }}
+                                                            >
+                                                                <Text size="xs" fw={600} c={form.values.homepage_primary_color}>?</Text>
+                                                            </div>
+                                                        </div>
+                                                        {selectedTheme === 'Custom' && (
+                                                            <div className={classes.themeCheckmark}>
+                                                                <IconCheck size={14} stroke={3}/>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                    <Text size="xs" c="dimmed" mt={6}>{t`Custom`}</Text>
+                                                </UnstyledButton>
+                                            </Group>
+                                        </div>
+                                    </div>
+
+                                    <form onSubmit={form.onSubmit(handleSubmit)}>
+                                        <fieldset disabled={organizerSettingsQuery.isLoading || updateMutation.isPending} className={classes.fieldset}>
+                                            <Stack gap="md">
+                                                <CustomSelect
+                                                    optionList={[
+                                                        {
+                                                            icon: <IconColorPicker/>,
+                                                            label: t`Color`,
+                                                            value: 'COLOR',
+                                                            description: t`Choose a color for your background`,
+                                                        },
+                                                        {
+                                                            icon: <IconPhoto/>,
+                                                            label: t`Use cover image`,
+                                                            value: 'MIRROR_COVER_IMAGE',
+                                                            description: t`Use a blurred version of the cover image as the background`,
+                                                            disabled: !existingCover,
+                                                        },
+                                                    ]}
+                                                    form={form}
+                                                    label={t`Background Type`}
+                                                    name={'homepage_background_type'}
+                                                />
+
+                                                {selectedTheme !== 'Custom' && (
+                                                    <Button
+                                                        variant="light"
+                                                        onClick={() => setColorInputsExpanded(!colorInputsExpanded)}
+                                                        rightSection={colorInputsExpanded ? <IconChevronUp size={16}/> :
+                                                            <IconChevronDown size={16}/>}
+                                                        fullWidth
+                                                        size="sm"
+                                                    >
+                                                        {colorInputsExpanded ? t`Hide color settings` : t`Show color settings`}
+                                                    </Button>
+                                                )}
+
+                                                <Collapse in={colorInputsExpanded}>
+                                                    <Stack gap="sm">
+                                                        {form.values.homepage_background_type === 'COLOR' && (
+                                                            <ColorInput
+                                                                format="hexa"
+                                                                label={t`Page Background Color`}
+                                                                description={t`The background color of the entire page`}
+                                                                size="sm"
+                                                                {...form.getInputProps('homepage_background_color')}
+                                                            />
+                                                        )}
+                                                        <ColorInput
+                                                            format="hexa"
+                                                            label={t`Content Background Color`}
+                                                            description={t`The background color of content areas (cards, header, etc.)`}
+                                                            size="sm"
+                                                            {...form.getInputProps('homepage_content_background_color')}
+                                                        />
+                                                        <ColorInput
+                                                            format="hexa"
+                                                            label={t`Primary Color`}
+                                                            size="sm"
+                                                            {...form.getInputProps('homepage_primary_color')}
+                                                        />
+                                                        <ColorInput
+                                                            format="hexa"
+                                                            label={t`Primary Text Color`}
+                                                            size="sm"
+                                                            {...form.getInputProps('homepage_primary_text_color')}
+                                                        />
+                                                        <ColorInput
+                                                            format="hexa"
+                                                            label={t`Secondary Color`}
+                                                            size="sm"
+                                                            {...form.getInputProps('homepage_secondary_color')}
+                                                        />
+                                                        <ColorInput
+                                                            format="hexa"
+                                                            label={t`Secondary Text Color`}
+                                                            size="sm"
+                                                            {...form.getInputProps('homepage_secondary_text_color')}
+                                                        />
+                                                    </Stack>
+                                                </Collapse>
+                                            </Stack>
+                                        </fieldset>
+                                    </form>
+                                </Stack>
+                            </Accordion.Panel>
+                        </Accordion.Item>
+                    </Accordion>
+
+                    <Button
+                        loading={updateMutation.isPending}
+                        type={'submit'}
+                        fullWidth
+                        mt="md"
+                        onClick={() => form.onSubmit(handleSubmit)()}
+                    >
+                        {t`Save Changes`}
+                    </Button>
                 </div>
             </div>
 

@@ -20,14 +20,15 @@
   }
 
   .sidebar {
-    min-width: 350px;
-    max-width: 350px;
+    min-width: 380px;
+    max-width: 380px;
     background-color: #ffffff;
-    padding: 20px;
+    padding: var(--tk-spacing-lg);
     height: calc(100vh - 55px);
     overflow-y: auto;
     position: sticky;
     top: 0;
+    border-right: 1px solid var(--mantine-color-gray-2);
 
     @include mixins.respond-below(sm) {
       width: 100%;
@@ -36,83 +37,122 @@
       position: relative;
       overflow: auto;
       height: auto;
+      border-right: none;
+      border-bottom: 1px solid var(--mantine-color-gray-2);
     }
 
-    h2 {
-      margin-top: 0;
-    }
-
-    h3 {
-      margin-top: 1.5rem;
-      margin-bottom: 0.5rem;
-      font-size: 1rem;
-      font-weight: 600;
-    }
-    
-    h3:first-of-type {
-      margin-top: 1rem;
-    }
-
-    div.sticky {
+    .sticky {
       position: sticky;
       top: 0;
     }
 
-    .imageUploadWrapper {
-      margin-bottom: 1.5rem;
+    .header {
+      margin-bottom: var(--tk-spacing-lg);
+      padding-bottom: var(--tk-spacing-md);
+      border-bottom: 1px solid var(--mantine-color-gray-2);
+      
+      h2 {
+        margin: 0 0 var(--tk-spacing-xs) 0;
+        font-size: 1.375rem;
+        font-weight: 600;
+        color: var(--mantine-color-gray-9);
+      }
     }
 
-    form {
-      margin-top: 1rem;
+    .accordion {
+      margin-bottom: 0;
       
-      fieldset {
-        border: none;
-        padding: 0;
-        margin: 0;
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-
-        // Fix large margins on ColorInput components
-        :global(.mantine-ColorInput-root) {
-          margin-bottom: 0;
+      .accordionItem {
+        border: 1px solid var(--mantine-color-gray-3);
+        border-radius: var(--mantine-radius-md);
+        overflow: hidden;
+        
+        &:not(:last-child) {
+          margin-bottom: var(--tk-spacing-md);
         }
+
+        :global(.mantine-Accordion-control) {
+          padding: var(--tk-spacing-md);
+          background: var(--mantine-color-gray-0);
+          
+          &:hover {
+            background: var(--mantine-color-gray-1);
+          }
+          
+          &[data-active] {
+            border-bottom: 1px solid var(--mantine-color-gray-2);
+          }
+        }
+
+        :global(.mantine-Accordion-panel) {
+          padding: 0;
+          background: white;
+        }
+
+        :global(.mantine-Accordion-content) {
+          padding: var(--tk-spacing-lg);
+        }
+      }
+    }
+
+    .fieldset {
+      border: none;
+      padding: 0;
+      margin: 0;
+
+      // Fix large margins on ColorInput components
+      :global(.mantine-ColorInput-root) {
+        margin-bottom: 0;
+      }
+
+      :global(.mantine-ColorInput-label) {
+        font-weight: 500;
+        font-size: 0.875rem;
+      }
+
+      :global(.mantine-ColorInput-description) {
+        font-size: 0.8125rem;
+        margin-top: 0.25rem;
       }
     }
     
     .themePresets {
-      margin-bottom: 1.5rem;
-      
       .themeButton {
         display: flex;
         flex-direction: column;
         align-items: center;
-        transition: transform 0.2s ease;
+        transition: all 0.2s ease;
         position: relative;
+        padding: var(--tk-spacing-xs);
+        border-radius: var(--mantine-radius-sm);
         
         &:hover {
-          transform: scale(1.05);
+          transform: translateY(-2px);
+          background: var(--mantine-color-gray-0);
           
           .themeCircle {
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
           }
         }
         
         &[data-selected="true"] {
+          background: var(--mantine-color-blue-0);
+          
           .themeCircle {
-            box-shadow: 0 0 0 2px var(--mantine-color-blue-5);
+            box-shadow: 0 0 0 3px var(--mantine-color-blue-5);
           }
         }
       }
       
       .themeCircle {
-        width: 48px;
-        height: 48px;
+        width: 52px;
+        height: 52px;
         position: relative;
         border-radius: 50%;
         overflow: hidden;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         transition: all 0.2s ease;
+        border: 2px solid white;
       }
       
       .themeOuter {
@@ -125,8 +165,8 @@
       }
       
       .themeInner {
-        width: 32px;
-        height: 32px;
+        width: 34px;
+        height: 34px;
         border-radius: 50%;
         position: relative;
         display: flex;
@@ -136,9 +176,10 @@
       }
       
       .themeDot {
-        width: 16px;
-        height: 16px;
+        width: 18px;
+        height: 18px;
         border-radius: 50%;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
       }
       
       .themeCheckmark {
@@ -146,15 +187,16 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 24px;
-        height: 24px;
+        width: 26px;
+        height: 26px;
         background: white;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
         color: var(--mantine-color-blue-6);
+        border: 1px solid var(--mantine-color-blue-2);
       }
     }
   }
