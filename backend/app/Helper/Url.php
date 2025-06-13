@@ -41,7 +41,7 @@ class Url
         // Fetch the CDN URL from environment variables
         // Checking against the env variable instead of config() as config falls back to the default value
         // and we want to ensure that if the env variable is not set, we do not use a default value.
-        $envCDNUrl = env('CDN_URL'); 
+        $envCDNUrl = env('APP_CDN_URL'); 
 
         if ($envCDNUrl) {
             return  $envCDNUrl . '/' . $path;
