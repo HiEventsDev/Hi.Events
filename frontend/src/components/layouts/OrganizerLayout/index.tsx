@@ -26,7 +26,7 @@ import {TopBarButton} from "../../common/TopBarButton";
 import classes from "./OrganizerLayout.module.scss";
 import {CalloutConfig, SidebarCalloutQueue} from "../../common/SidebarCallout/SidebarCalloutQueue";
 import {InviteUserModal} from "../../modals/InviteUserModal";
-import {useDisclosure} from "@mantine/hooks";
+import {useDisclosure, useMediaQuery} from "@mantine/hooks";
 import {SwitchOrganizerModal} from "../../modals/SwitchOrganizerModal";
 import {useGetOrganizers} from "../../../queries/useGetOrganizers.ts";
 import {useGetAccount} from "../../../queries/useGetAccount.ts";
@@ -54,6 +54,7 @@ const OrganizerLayout = () => {
     const [emailConfirmationResent, setEmailConfirmationResent] = useState(false);
     const {data: me} = useGetMe();
     const isUserEmailVerfied = me?.is_email_verified;
+    const isMobile = useMediaQuery('(max-width: 768px)');
 
     const statusToggleMutation = useUpdateOrganizerStatus();
 
@@ -203,7 +204,7 @@ const OrganizerLayout = () => {
                 )}
                 breadcrumbContentRight={(
                     <>
-                        {organizer && (
+                        {organizer && !isMobile && (
                             <>
                                 <Button
                                     onClick={openShareModal}
