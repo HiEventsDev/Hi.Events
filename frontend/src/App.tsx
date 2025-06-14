@@ -17,6 +17,7 @@ import { StartupChecks } from "./StartupChecks.tsx";
 import { ThirdPartyScripts } from "./components/common/ThirdPartyScripts";
 import "./styles/global.scss";
 import { isSsr } from "./utilites/helpers.ts";
+import { getConfig } from "./utilites/config.ts";
 
 declare global {
 	interface Window {
@@ -83,7 +84,7 @@ export const App: FC<
 							<ThirdPartyScripts />
 							<ModalsProvider>
 								<Helmet>
-									<title>Hi.Events</title>
+									<title>{getConfig("VITE_APP_NAME")}</title>
 								</Helmet>
 								{props.children}
 							</ModalsProvider>
