@@ -32,7 +32,7 @@
 {{ __('at') }} <a href="mailto:{{$eventSettings->getSupportEmail()}}">{{$eventSettings->getSupportEmail()}}</a>.
 
 {{ __('Best regards,') }}<br>
-{{ config('app.name') }}
+{{ config('mail.from.name') }}
 
 <script type="application/ld+json">
         {

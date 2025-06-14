@@ -57,8 +57,8 @@
     {{ __('View Order Summary & Tickets') }}
 </x-mail::button>
 
-{{ __('If you have any questions or need assistance, feel free to reach out to our friendly support team at') }} <a href="mailto:{{ $organizer->getEmail() }}">{{ $organizer->getEmail() }}</a>.
+{{ __('If you have any questions or need assistance, please contact') }} <a href="mailto:{{ $organizer->getEmail() }}">{{ $organizer->getEmail() }}</a>.
 
 {{ __('Best regards,') }}<br>
-{{ config('app.name') }}
+{{ config('mail.from.name') }}
 </x-mail::message>
