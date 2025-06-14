@@ -6,6 +6,8 @@ services:
     container_name: all-in-one
     ports:
       - "8123:80"
+    networks:
+      - hi-events-network
     environment:
       - VITE_FRONTEND_URL=${VITE_FRONTEND_URL}
       - VITE_API_URL_CLIENT=${VITE_API_URL_CLIENT}
@@ -35,6 +37,9 @@ services:
       - FILESYSTEM_PUBLIC_DISK=${FILESYSTEM_PUBLIC_DISK}
       - FILESYSTEM_PRIVATE_DISK=${FILESYSTEM_PRIVATE_DISK}
       - DATABASE_URL=postgresql://postgres:secret@postgres:5432/hi-events
+      - REDIS_HOST=redis
+      - REDIS_PASSWORD=
+      - REDIS_PORT=6379
       - STRIPE_PUBLIC_KEY=${STRIPE_PUBLIC_KEY}
       - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
       - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
@@ -42,10 +47,29 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    networks:
+      - hi-events-network
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
 
   postgres:
     image: postgres:latest
     container_name: postgres
+    networks:
+      - hi-events-network
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U postgres" ]
       interval: 10s
@@ -58,5 +82,12 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
+networks:
+  hi-events-network:
+    driver: bridge
+
 volumes:
   pgdata:
+    driver: local
+  redisdata:
+    driver: local
