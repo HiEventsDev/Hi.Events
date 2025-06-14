@@ -11,6 +11,7 @@ import {showError, showSuccess} from "../../../../utilites/notifications.tsx";
 import {AcceptInvitationRequest} from "../../../../types.ts";
 import {Card} from "../../../common/Card";
 import {InputGroup} from "../../../common/InputGroup";
+import { getConfig } from "../../../../utilites/config.ts";
 
 const AcceptInvitation = () => {
     const navigate = useNavigate();
@@ -117,7 +118,7 @@ const AcceptInvitation = () => {
                             label={(
                                 <Trans>
                                     I agree to the <Anchor target={'_blank'}
-                                                           href={'https://hi.events/terms-of-service'}>terms and
+                                                           href={getConfig("VITE_TOS_URL",'https://hi.events/terms-of-service')}>terms and
                                     conditions</Anchor>
                                 </Trans>
                             )}/>
