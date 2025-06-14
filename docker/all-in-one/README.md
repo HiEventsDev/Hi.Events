@@ -50,7 +50,7 @@ JWT_SECRET=your_generated_jwt_secret
 ### Step 4: Start the Docker Containers
 
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 ### Step 5: Create an Account
