@@ -6,6 +6,7 @@ import { Notifications } from "@mantine/notifications";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React, { FC, PropsWithChildren, useEffect } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
+import { generateColors } from '@mantine/colors-generator';
 
 import "@mantine/charts/styles.css";
 import "@mantine/core/styles.css";
@@ -60,20 +61,11 @@ export const App: FC<
 			<MantineProvider
 				theme={{
 					colors: {
-						purple: [
-							"#8260C6",
-							"#734DBF",
-							"#6741B2",
-							"#5E3CA1",
-							"#563792",
-							"#4E3284",
-							"#472E78",
-							"#40296C",
-							"#392562",
-							"#332158",
-						],
+						primary: generateColors( getConfig( "VITE_APP_PRIMARY_COLOR", "#40296C" ) as string ),
+						secondary: generateColors( getConfig( "VITE_APP_SECONDARY_COLOR", "#5A1065" ) as string ),
+						
 					},
-					primaryColor: "purple",
+					primaryColor: "primary",
 					fontFamily: "'Varela Round', sans-serif",
 				}}
 			>
