@@ -84,7 +84,7 @@ export const App: FC<
 							<ThirdPartyScripts />
 							<ModalsProvider>
 								<Helmet>
-									<title>{getConfig("VITE_APP_NAME")}</title>
+									<title>{getConfig("VITE_APP_NAME", "Hi.Events")}</title>
 								</Helmet>
 								{props.children}
 							</ModalsProvider>
