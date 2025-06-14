@@ -65,7 +65,7 @@ Hi.Events has two main directories: `backend` (Laravel) and `frontend` (React).
    MAIL_PASSWORD=your_mailtrap_password
    MAIL_ENCRYPTION=tls
    MAIL_FROM_ADDRESS=your_email
-   MAIL_FROM_NAME="${APP_NAME}"
+   MAIL_FROM_NAME="${VITE_APP_NAME}"
 
    # Alternatively use just this value to log emails locally:
    MAIL_MAILER=log
