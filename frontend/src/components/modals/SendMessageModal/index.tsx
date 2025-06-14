@@ -160,7 +160,9 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
                          Please contact us to request access.`}
                             <Button
                                 mt={20}
-                                onClick={() => window.open('mailto:support@hi.events')}
+                                onClick={() => window.open(`mailto:support@${
+							process.env.VITE_APP_PLATFORM_SUPPORT_EMAIL
+						}`)}
                                 variant={'outline'}
                                 fullWidth
                             >
