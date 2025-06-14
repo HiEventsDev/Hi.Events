@@ -12,6 +12,7 @@ import {useEffect} from "react";
 import {useGetEvents} from "../../../queries/useGetEvents.ts";
 import {LoadingContainer} from "../../common/LoadingContainer";
 import {OrganizerCreateForm} from "../../forms/OrganizerForm";
+import { getConfig } from "../../../utilites/config.ts";
 
 export const CreateOrganizer = () => {
     return (
@@ -123,7 +124,7 @@ const Welcome = () => {
         <>
             <h1>
                 <Trans>
-                    Welcome to Hi.Events, {userData?.first_name} 👋
+                    Welcome to {getConfig("VITE_APP_NAME", "Hi.Events")}, {userData?.first_name} 👋
                 </Trans>
             </h1>
             <Card>

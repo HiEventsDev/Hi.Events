@@ -5,6 +5,7 @@ import classes from './ErrorDisplay.module.scss';
 import {Helmet} from "react-helmet-async";
 import {useRouteError} from "react-router";
 import {PoweredByFooter} from "../PoweredByFooter";
+import { getConfig } from '../../../utilites/config';
 
 export const ErrorDisplay = () => {
     const error = useRouteError() as any;
@@ -37,8 +38,8 @@ export const ErrorDisplay = () => {
                 <Container size="md" className={classes.root}>
                     <Stack gap="xl" align="center">
                         <Image
-                            src="/logo-dark.svg"
-                            alt="Error"
+                            src={ getConfig("VITE_APP_LOGO_DARK", "/logo-dark.svg") }
+                            alt={ t`${ getConfig("VITE_APP_NAME", "Hi.Events") } logo` }
                             w={rem(140)}
                             h="auto"
                             fit="contain"

@@ -127,7 +127,7 @@ export const CreateEventModal = ({onClose, organizerId}: CreateEventModalProps) 
                 <TextInput
                     {...form.getInputProps('title')}
                     label={t`Name`}
-                    placeholder={t`Hi.Events Conference ${new Date().getFullYear()}`}
+                    placeholder={t`London Conference ${new Date().getFullYear()}`}
                     required
                 />
 

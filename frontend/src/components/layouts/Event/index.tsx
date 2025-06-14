@@ -39,6 +39,7 @@ import {useGetEventStats} from "../../../queries/useGetEventStats.ts";
 import {ShareModal} from "../../modals/ShareModal";
 import {useDisclosure} from "@mantine/hooks";
 import {ShowForDesktop, ShowForMobile} from "../../common/Responsive/ShowHideComponents.tsx";
+import { getConfig } from '../../../utilites/config.ts';
 
 interface NavItem {
     link?: string;
@@ -170,7 +171,8 @@ const EventLayout = () => {
                     </div>
                     <div className={classes.logo}>
                         <NavLink to={'/manage/events'}>
-                            <img src={'/logo-text-only-white-text.png'} alt={''}/>
+                            src={ getConfig("VITE_APP_LOGO_LIGHT", "/logo-text-only-white-text.png") }
+                            alt={ t`${getConfig("VITE_APP_NAME", "Hi.Events") } logo` }
                         </NavLink>
                     </div>
 
@@ -267,8 +269,11 @@ const EventLayout = () => {
             <div className={classes.sidebar}>
                 <div className={classes.logo}>
                     <NavLink to={'/manage/events'}>
-                        <img style={{maxWidth: '160px', margin: "10px auto"}}
-                             src={'/logo-wide-white-text.svg'} alt={''}/>
+                        <img
+                            style={ { maxWidth: '160px', margin: "10px auto" } }
+                            src={ getConfig("VITE_APP_LOGO_LIGHT", "/logo-wide-white-text.svg") }
+                            alt={ t`${getConfig("VITE_APP_NAME", "Hi.Events") } logo` }
+                        />
                     </NavLink>
                 </div>
                 <div className={classes.nav}>
