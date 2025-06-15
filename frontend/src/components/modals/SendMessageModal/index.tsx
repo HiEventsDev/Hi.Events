@@ -15,6 +15,7 @@ import {useSendEventMessage} from "../../../mutations/useSendEventMessage.ts";
 import {ProductSelector} from "../../common/ProductSelector";
 import {useEffect} from "react";
 import {useGetAccount} from "../../../queries/useGetAccount.ts";
+import { getConfig } from "../../../utilites/config.ts";
 
 interface EventMessageModalProps extends GenericModalProps {
     orderId?: IdParam,
@@ -160,9 +161,7 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
                          Please contact us to request access.`}
                             <Button
                                 mt={20}
-                                onClick={() => window.open(`mailto:support@${
-							process.env.VITE_APP_PLATFORM_SUPPORT_EMAIL
-						}`)}
+                                onClick={() => window.open(`mailto:${getConfig("VITE_APP_PLATFORM_SUPPORT_EMAIL", "support@hi.events")}`)}
                                 variant={'outline'}
                                 fullWidth
                             >
