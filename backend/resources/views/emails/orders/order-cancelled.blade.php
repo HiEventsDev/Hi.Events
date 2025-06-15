@@ -17,7 +17,7 @@
 {{ __('If you have any questions or need assistance, please respond to this email.') }}
 <br><br>
 {{ __('Thank you') }},<br>
-{{ config('mail.from.name') }}
+{{ $event->getOrganizer()->getName() ?: config('app.name') }}
 
 {!! $eventSettings->getGetEmailFooterHtml() !!}
 </x-mail::message>

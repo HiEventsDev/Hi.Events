@@ -60,5 +60,5 @@
 {{ __('If you have any questions or need assistance, please contact') }} <a href="mailto:{{ $organizer->getEmail() }}">{{ $organizer->getEmail() }}</a>.
 
 {{ __('Best regards,') }}<br>
-{{ config('mail.from.name') }}
+{{ $event->getOrganizer()->getName() ?: config('app.name') }}
 </x-mail::message>

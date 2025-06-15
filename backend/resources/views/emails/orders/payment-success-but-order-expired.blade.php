@@ -20,7 +20,7 @@
 </x-mail::button>
 
 {{ __('Best regards') }},<br>
-{{ config('mail.from.name') }}
+{{ $organizer->getName() ?: config('app.name') }}
 
 {!! $eventSettings->getGetEmailFooterHtml() !!}
 </x-mail::message>

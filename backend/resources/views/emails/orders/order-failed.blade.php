@@ -18,7 +18,7 @@
 {{ __('at') }} {{ $supportEmail ?? 'hello@hi.events' }}.
 
 {{ __('Best regards') }},<br>
-{{ config('mail.from.name') }}
+{{ $event->getOrganizer()->getName() ?: config('app.name') }}
 
 {!! $eventSettings->getGetEmailFooterHtml() !!}
 </x-mail::message>
