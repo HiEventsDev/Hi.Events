@@ -1,6 +1,6 @@
 import {Avatar, Menu, UnstyledButton} from "@mantine/core";
 import {getInitials} from "../../../utilites/helpers.ts";
-import {IconLifebuoy, IconLogout, IconSettingsCog, IconUser, IconUsers,} from "@tabler/icons-react";
+import {IconLifebuoy, IconLogout, IconPlus, IconSettingsCog, IconUser, IconUsers,} from "@tabler/icons-react";
 import {useGetMe} from "../../../queries/useGetMe.ts";
 import {NavLink} from "react-router";
 import {t} from "@lingui/macro";
@@ -8,6 +8,7 @@ import {authClient} from "../../../api/auth.client.ts";
 import {useDisclosure} from "@mantine/hooks";
 import {AboutModal} from "../../modals/AboutModal";
 import {getConfig} from "../../../utilites/config.ts";
+import {CreateOrganizerModal} from "../../modals/CreateOrganizerModal";
 
 interface Link {
     label: string;
@@ -19,8 +20,12 @@ interface Link {
 
 export const GlobalMenu = () => {
     const {data: me} = useGetMe();
-    const [aboutModalOpen, {open: openAboutModal, close: closeAboutModal}] =
-        useDisclosure(false);
+    const [aboutModalOpen, {open: openAboutModal, close: closeAboutModal}] = useDisclosure(false);
+    const [createOrganizerModalOpen, {
+        open: openCreateOrganizerModal,
+        close: closeCreateOrganizerModal
+    }] = useDisclosure(false);
+
 
     const links: Link[] = [
         {
@@ -33,7 +38,14 @@ export const GlobalMenu = () => {
             icon: IconSettingsCog,
             link: `/account/settings`,
         },
-
+        {
+            label: t`Create Organizer`,
+            icon: IconPlus,
+            onClick: (event: any) => {
+                event.preventDefault();
+                openCreateOrganizerModal();
+            }
+        },
     ];
 
     if (me?.role === 'ADMIN') {
@@ -90,6 +102,7 @@ export const GlobalMenu = () => {
                 </Menu.Dropdown>
             </Menu>
             {aboutModalOpen && <AboutModal onClose={closeAboutModal}/>}
+            {createOrganizerModalOpen && <CreateOrganizerModal onClose={closeCreateOrganizerModal}/>}
         </>
     );
 };
