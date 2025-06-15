@@ -50,7 +50,7 @@ export const EventNotAvailable = () => {
                                     href="https://hi.events?utm_source=app.hi.events&utm_content=event-not-available"
                                     leftSection={ <IconHome size={ 18 } /> }
                                     variant="gradient"
-                                    gradient={ { from: 'purple', to: 'pink' } }
+                                    gradient={ { from: 'primary', to: 'secondary' } }
                                     className={ classes.button }
                                 >
                                     { t`Go to Hi.Events` }

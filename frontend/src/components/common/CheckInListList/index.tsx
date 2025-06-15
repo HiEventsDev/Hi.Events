@@ -130,7 +130,7 @@ export const CheckInListList = ({checkInLists, openCreateModal}: CheckInListList
                                     <Progress
                                         value={checkInLists.length === 0 ? 0 : (list.checked_in_attendees / list.total_attendees) * 100}
                                         radius={'xl'}
-                                        color={list.checked_in_attendees === list.total_attendees ? 'purple' : 'green'}
+                                        color={list.checked_in_attendees === list.total_attendees ? 'primary' : 'green'}
                                         size={'xl'}
                                         style={{marginTop: '10px'}}
                                     />

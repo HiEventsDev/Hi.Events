@@ -59,7 +59,7 @@ export const ErrorDisplay = () => {
                                 href="/"
                                 leftSection={<IconHome size={18}/>}
                                 variant="gradient"
-                                gradient={{from: 'purple', to: 'pink'}}
+                                gradient={{from: 'primary', to: 'secondary'}}
                                 className={classes.button}
                             >
                                 {t`Go to home page`}

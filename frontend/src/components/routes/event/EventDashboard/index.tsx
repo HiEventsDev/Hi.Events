@@ -270,7 +270,7 @@ export const EventDashboard = () => {
                         withLegend
                         legendProps={{verticalAlign: 'bottom', height: 50}}
                         series={[
-                            {name: 'total_fees', label: t`Total Fees`, color: 'purple.3'},
+                            {name: 'total_fees', label: t`Total Fees`, color: 'primary.3'},
                             {name: 'total_sales_gross', label: t`Gross Sales`, color: 'grape.5'},
                             {name: 'total_tax', label: t`Total Tax`, color: 'grape.7'},
                             {name: 'total_refunded', label: t`Total Refunded`, color: 'red.6'},
