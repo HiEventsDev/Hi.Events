@@ -38,14 +38,6 @@ export const GlobalMenu = () => {
             icon: IconSettingsCog,
             link: `/account/settings`,
         },
-        {
-            label: t`Create Organizer`,
-            icon: IconPlus,
-            onClick: (event: any) => {
-                event.preventDefault();
-                openCreateOrganizerModal();
-            }
-        },
     ];
 
     if (me?.role === 'ADMIN') {
@@ -63,6 +55,15 @@ export const GlobalMenu = () => {
             onClick: openAboutModal,
         });
     }
+
+    links.push({
+        label: t`Create Organizer`,
+        icon: IconPlus,
+        onClick: (event: any) => {
+            event.preventDefault();
+            openCreateOrganizerModal();
+        }
+    });
 
     links.push({
         label: t`Logout`,

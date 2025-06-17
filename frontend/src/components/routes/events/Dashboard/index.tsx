@@ -256,9 +256,6 @@ export function Dashboard() {
                                     )}
                                 </div>
                                 <h3 className={classes.organizerModalName}>{organizer.name}</h3>
-                                <p className={classes.organizerModalEvents}>
-                                    {organizer.events_count} {organizer.events_count === 1 ? t`event` : t`events`}
-                                </p>
                             </button>
                         ))}
                     </div>
