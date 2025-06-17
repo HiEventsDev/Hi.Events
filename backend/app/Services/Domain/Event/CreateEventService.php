@@ -15,6 +15,8 @@ use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
 use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
+use HiEvents\Services\Domain\ProductCategory\CreateProductCategoryService;
+use HTMLPurifier;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
 
@@ -27,6 +29,7 @@ class CreateEventService
         private readonly DatabaseManager                   $databaseManager,
         private readonly EventStatisticRepositoryInterface $eventStatisticsRepository,
         private readonly HtmlPurifierService               $purifier,
+        private readonly CreateProductCategoryService      $createProductCategoryService,
     )
     {
     }
@@ -54,6 +57,8 @@ class CreateEventService
             );
 
             $this->createEventStatistics($event);
+
+            $this->createDefaultProductCategory($event);
 
             return $event;
         });
@@ -153,5 +158,16 @@ class CreateEventService
             'organization_address' => null,
             'invoice_tax_details' => null,
         ]);
+    }
+
+    private function createDefaultProductCategory(EventDomainObject $event): void
+    {
+        $this->createProductCategoryService->createCategory(
+            name: __('Tickets'),
+            isHidden: false,
+            eventId: $event->getId(),
+            description: null,
+            noProductsMessage: __('There are no tickets available for this event.'),
+        );
     }
 }

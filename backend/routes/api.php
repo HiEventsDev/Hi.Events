@@ -14,11 +14,14 @@ use HiEvents\Http\Actions\Attendees\GetAttendeesAction;
 use HiEvents\Http\Actions\Attendees\PartialEditAttendeeAction;
 use HiEvents\Http\Actions\Attendees\ResendAttendeeTicketAction;
 use HiEvents\Http\Actions\Auth\AcceptInvitationAction;
+use HiEvents\Http\Actions\Auth\CreateApiKeyAction;
 use HiEvents\Http\Actions\Auth\ForgotPasswordAction;
+use HiEvents\Http\Actions\Auth\GetApiKeysAction;
 use HiEvents\Http\Actions\Auth\GetUserInvitationAction;
 use HiEvents\Http\Actions\Auth\LoginAction;
 use HiEvents\Http\Actions\Auth\LogoutAction;
 use HiEvents\Http\Actions\Auth\RefreshTokenAction;
+use HiEvents\Http\Actions\Auth\RevokeApiKeyAction;
 use HiEvents\Http\Actions\Auth\ResetPasswordAction;
 use HiEvents\Http\Actions\Auth\ValidateResetPasswordTokenAction;
 use HiEvents\Http\Actions\CapacityAssignments\CreateCapacityAssignmentAction;
@@ -152,7 +155,7 @@ $router->prefix('/auth')->group(
 );
 
 /**
- * Logged In Routes
+ * Routes only for authenticated users (not API keys)
  */
 $router->middleware(['auth:api'])->group(
     function (Router $router): void {
@@ -350,5 +353,7 @@ $router->prefix('/public')->group(
         $router->delete('/check-in-lists/{check_in_list_short_id}/check-ins/{check_in_short_id}', DeleteAttendeeCheckInPublicAction::class);
     }
 );
+
+$router->get('/csrf-cookie', 'Laravel\Sanctum\Http\Controllers\CsrfCookieController@show');
 
 include_once __DIR__ . '/mail.php';

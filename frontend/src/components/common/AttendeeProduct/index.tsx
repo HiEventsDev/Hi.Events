@@ -7,16 +7,16 @@ import {prettyDate} from "../../../utilites/dates.ts";
 import QRCode from "react-qr-code";
 import {IconCopy, IconPrinter} from "@tabler/icons-react";
 import {Attendee, Event, Product} from "../../../types.ts";
-import classes from './AttendeeTicket.module.scss';
+import classes from './AttendeeProduct.module.scss';
 
-interface AttendeeTicketProps {
+interface AttendeeProductProps {
     event: Event;
     attendee: Attendee;
     product: Product;
     hideButtons?: boolean;
 }
 
-export const AttendeeTicket = ({attendee, product, event, hideButtons = false}: AttendeeTicketProps) => {
+export const AttendeeProduct = ({attendee, product, event, hideButtons = false}: AttendeeProductProps) => {
     const productPrice = getAttendeeProductPrice(attendee, product);
 
     return (

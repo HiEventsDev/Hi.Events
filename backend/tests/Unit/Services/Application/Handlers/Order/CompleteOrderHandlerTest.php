@@ -257,10 +257,10 @@ class CompleteOrderHandlerTest extends TestCase
         );
 
         $attendeeDTO = new CompleteOrderProductDataDTO(
-            product_price_id: 1,
             first_name: 'John',
             last_name: 'Doe',
-            email: 'john@example.com'
+            email: 'john@example.com',
+            product_price_id: 1
         );
 
         return new CompleteOrderDTO(

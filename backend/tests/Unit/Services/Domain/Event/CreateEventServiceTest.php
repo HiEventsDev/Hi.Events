@@ -47,6 +47,7 @@ class CreateEventServiceTest extends TestCase
             $this->databaseManager,
             $this->eventStatisticsRepository,
             $this->purifier,
+            $this->createProductCategoryService,
         );
     }
 

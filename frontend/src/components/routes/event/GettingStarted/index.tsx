@@ -116,15 +116,14 @@ const GettingStarted = () => {
                     <Card className={hasProducts ? classes.completedCard : ''}>
                         {hasProducts && <CompletedBadge/>}
                         <h2>
-                            {t`🎟️ Add tickets`}
+                            {t`🎟️ Add products`}
                         </h2>
                         <p>
-                            {t`Create tickets for your event, set prices, and manage available quantity.`}
+                            {t`Create products for your event, set prices, and manage available quantity.`}
                         </p>
 
-                        <Button variant={'light'} component={'a'}
-                                href={'/manage/event/' + eventId + '/products#create-product'}>
-                            {hasProducts ? t`Add More tickets` : t`Add tickets`}
+                        <Button variant={'light'} component={'a'} href={'/manage/event/' + eventId + '/products#create-product'}>
+                            {hasProducts ? t`Add More products` : t`Add products`}
                         </Button>
                     </Card>
 

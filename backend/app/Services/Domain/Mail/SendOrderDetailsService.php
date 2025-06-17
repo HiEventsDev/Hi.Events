@@ -29,7 +29,7 @@ class SendOrderDetailsService
     {
     }
 
-    public function sendOrderSummaryAndTicketEmails(OrderDomainObject $order): void
+    public function sendOrderSummaryAndProductEmails(OrderDomainObject $order): void
     {
         $order = $this->orderRepository
             ->loadRelation(OrderItemDomainObject::class)

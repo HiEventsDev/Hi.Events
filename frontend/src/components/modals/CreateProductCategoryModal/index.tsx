@@ -6,7 +6,7 @@ import {useForm} from "@mantine/form";
 import {useCreateProductCategory} from "../../../mutations/useCreateProductCategory.ts";
 import {ProductCategoryForm} from "../../forms/ProductCategoryForm";
 import {showSuccess} from "../../../utilites/notifications.tsx";
-import {useParams} from "react-router";
+import {useParams} from "react-router-dom";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
 import {IconInfoCircle} from "@tabler/icons-react";
 

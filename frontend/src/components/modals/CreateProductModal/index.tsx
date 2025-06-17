@@ -55,7 +55,6 @@ export const CreateProductModal = ({onClose, selectedCategoryId = undefined}: Cr
                 form.reset();
                 onClose();
             },
-
             onError: (error: any) => {
                 if (error?.response?.data?.errors) {
                     form.setErrors(error.response.data.errors);

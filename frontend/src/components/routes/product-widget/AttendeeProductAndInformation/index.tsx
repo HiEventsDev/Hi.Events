@@ -1,7 +1,8 @@
+import React from 'react';
 import {useGetEventPublic} from "../../../../queries/useGetEventPublic.ts";
 import {useParams} from "react-router";
 import {useGetAttendeePublic} from "../../../../queries/useGetAttendeePublic.ts";
-import {AttendeeTicket} from "../../../common/AttendeeTicket";
+import {AttendeeProduct} from "../../../common/AttendeeProduct";
 import {Attendee, Product} from "../../../../types.ts";
 import {Container} from "@mantine/core";
 import {t} from "@lingui/macro";
@@ -32,9 +33,9 @@ export const AttendeeProductAndInformation = () => {
      */
     return (
         <Container>
-            <h2>{t`Your ticket for`} {event.title}</h2>
+            <h2>{t`Your product for`} {event.title}</h2>
 
-            <AttendeeTicket
+            <AttendeeProduct
                 attendee={attendee as Attendee}
                 product={attendee.product as Product}
                 event={event}

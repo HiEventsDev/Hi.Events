@@ -22,6 +22,11 @@ class Product extends BaseModel
         ];
     }
 
+    protected function getFillableFields(): array
+    {
+        return [];
+    }
+
     public function questions(): BelongsToMany
     {
         return $this->belongsToMany(Question::class, 'product_questions');

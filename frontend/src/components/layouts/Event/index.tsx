@@ -1,5 +1,5 @@
 import {ActionIcon, Badge, Breadcrumbs, Burger, Button, UnstyledButton, VisuallyHidden} from '@mantine/core';
-import {NavLink, Outlet, useLocation, useParams} from "react-router";
+import {NavLink, Outlet, useLocation, useParams} from "react-router-dom";
 import {
     IconChartPie,
     IconChevronLeft,
@@ -49,6 +49,14 @@ interface NavItem {
     badge?: string | undefined | number | null;
     onClick?: () => void;
     showWhen?: () => boolean;
+}
+
+interface NavItem {
+    link?: string;
+    label: string;
+    icon?: any;
+    comingSoon?: boolean;
+    isActive?: (isActive: boolean) => boolean;
 }
 
 const EventLayout = () => {
@@ -170,7 +178,8 @@ const EventLayout = () => {
                     </div>
                     <div className={classes.logo}>
                         <NavLink to={'/manage/events'}>
-                            <img src={'/logo-text-only-white-text.png'} alt={''}/>
+                            <img style={{maxWidth: '160px', margin: "10px auto"}}
+                                 src={'/logo-wide-white-text.svg'} alt={''}/>
                         </NavLink>
                     </div>
 
@@ -267,8 +276,8 @@ const EventLayout = () => {
             <div className={classes.sidebar}>
                 <div className={classes.logo}>
                     <NavLink to={'/manage/events'}>
-                        <img style={{maxWidth: '160px', margin: "10px auto"}}
-                             src={'/logo-wide-white-text.svg'} alt={''}/>
+                        <img style={{maxWidth: '120px', margin: "20px auto"}}
+                             src={'/logo.svg'} alt={''}/>
                     </NavLink>
                 </div>
                 <div className={classes.nav}>
