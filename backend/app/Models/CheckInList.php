@@ -22,4 +22,12 @@ class CheckInList extends BaseModel
     {
         return $this->belongsTo(Event::class);
     }
+
+    public function getCastMap(): array
+    {
+        return [
+            'expires_at' => 'datetime',
+            'activates_at' => 'datetime',
+        ];
+    }
 }

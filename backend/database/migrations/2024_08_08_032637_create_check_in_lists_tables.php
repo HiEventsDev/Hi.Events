@@ -76,10 +76,22 @@ return new class extends Migration {
             //            $table->dropColumn('checked_out_by');
         });
 
-        DB::statement('CREATE INDEX idx_attendees_ticket_id_deleted_at ON attendees(ticket_id) WHERE deleted_at IS NULL');
-        DB::statement('CREATE INDEX idx_ticket_check_in_lists_ticket_id_deleted_at ON ticket_check_in_lists(ticket_id, check_in_list_id) WHERE deleted_at IS NULL');
-        DB::statement('CREATE INDEX idx_attendee_check_ins_attendee_id_check_in_list_id_deleted_at ON attendee_check_ins(attendee_id, check_in_list_id) WHERE deleted_at IS NULL');
-
+        // mysql does not support where clauses in indecies
+        if (DB::getDriverName() === 'mysql') {
+            Schema::table('attendees', static function (Blueprint $table) {
+                $table->index(['ticket_id', 'deleted_at'], 'idx_attendees_ticket_id_deleted_at');
+            });
+            Schema::table('ticket_check_in_lists', static function (Blueprint $table) {
+                $table->index(['ticket_id', 'check_in_list_id', 'deleted_at'], 'idx_ticket_check_in_lists_ticket_id_deleted_at');
+            });
+            Schema::table('attendee_check_ins', static function (Blueprint $table) {
+                $table->index(['attendee_id', 'check_in_list_id', 'deleted_at'], 'idx_attendee_check_ins_attendee_id_check_in_list_id_deleted_at');
+            });
+        } else {
+            DB::statement('CREATE INDEX idx_attendees_ticket_id_deleted_at ON attendees(ticket_id) WHERE deleted_at IS NULL');
+            DB::statement('CREATE INDEX idx_ticket_check_in_lists_ticket_id_deleted_at ON ticket_check_in_lists(ticket_id, check_in_list_id) WHERE deleted_at IS NULL');
+            DB::statement('CREATE INDEX idx_attendee_check_ins_attendee_id_check_in_list_id_deleted_at ON attendee_check_ins(attendee_id, check_in_list_id) WHERE deleted_at IS NULL');
+        }
     }
 
     public function down(): void
@@ -94,8 +106,19 @@ return new class extends Migration {
         Schema::dropIfExists('ticket_check_in_lists');
         Schema::dropIfExists('check_in_lists');
 
-        DB::statement('DROP INDEX IF EXISTS idx_attendees_ticket_id_deleted_at');
-        DB::statement('DROP INDEX IF EXISTS idx_ticket_check_in_lists_ticket_id_deleted_at');
-        DB::statement('DROP INDEX IF EXISTS idx_attendee_check_ins_attendee_id_check_in_list_id_deleted_at');
+        if (DB::getDriverName() === 'mysql') {
+            Schema::table('attendees', static function (Blueprint $table) {
+                // must delete foreing key before dropping index
+                $table->dropForeign('fk_attendees_ticket_id');
+                $table->dropIndex('idx_attendees_ticket_id_deleted_at');
+                // restore foreign key
+                $table->foreign('ticket_id', 'fk_attendees_ticket_id')->references('id')->on('tickets')->onDelete('cascade');
+            });
+            // the other indecies get deleted by drop table
+        } else {
+            DB::statement('DROP INDEX IF EXISTS idx_attendees_ticket_id_deleted_at');
+            DB::statement('DROP INDEX IF EXISTS idx_ticket_check_in_lists_ticket_id_deleted_at');
+            DB::statement('DROP INDEX IF EXISTS idx_attendee_check_ins_attendee_id_check_in_list_id_deleted_at');
+        }
     }
 };
