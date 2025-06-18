@@ -2,7 +2,7 @@ import type * as express from "express";
 import ReactDOMServer from "react-dom/server";
 import {dehydrate} from "@tanstack/react-query";
 
-import {router} from "./router";
+import {routes} from "./router";
 import {App} from "./App";
 import {queryClient} from "./utilites/queryClient";
 import {setAuthToken} from "./utilites/apiClient.ts";
@@ -26,7 +26,7 @@ export async function render(params: {
 }) {
     setAuthToken(params.req.cookies.token);
 
-    const {query, dataRoutes} = createStaticHandler(router);
+    const {query, dataRoutes} = createStaticHandler(routes);
     const remixRequest = createFetchRequest(params.req, params.res);
     const context = await query(remixRequest);
 
