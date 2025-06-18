@@ -23,6 +23,7 @@ use HiEvents\Repository\Eloquent\OrderItemRepository;
 use HiEvents\Repository\Eloquent\OrderRefundRepository;
 use HiEvents\Repository\Eloquent\OrderRepository;
 use HiEvents\Repository\Eloquent\OrganizerRepository;
+use HiEvents\Repository\Eloquent\OrganizerSettingsRepository;
 use HiEvents\Repository\Eloquent\OutgoingMessageRepository;
 use HiEvents\Repository\Eloquent\PasswordResetRepository;
 use HiEvents\Repository\Eloquent\PasswordResetTokenRepository;
@@ -58,6 +59,7 @@ use HiEvents\Repository\Interfaces\OrderItemRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRefundRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
+use HiEvents\Repository\Interfaces\OrganizerSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\OutgoingMessageRepositoryInterface;
 use HiEvents\Repository\Interfaces\PasswordResetRepositoryInterface;
 use HiEvents\Repository\Interfaces\PasswordResetTokenRepositoryInterface;
@@ -117,6 +119,7 @@ class RepositoryServiceProvider extends ServiceProvider
         AccountConfigurationRepositoryInterface::class => AccountConfigurationRepository::class,
         QuestionAndAnswerViewRepositoryInterface::class => QuestionAndAnswerViewRepository::class,
         OutgoingMessageRepositoryInterface::class => OutgoingMessageRepository::class,
+        OrganizerSettingsRepositoryInterface::class => OrganizerSettingsRepository::class,
     ];
 
     public function register(): void

@@ -17,6 +17,8 @@ export const ErrorDisplay = () => {
         ? t`The page you are looking for does not exist`
         : t`An error occurred while loading the page`;
 
+    console.log('ErrorDisplay error:', error);
+
     return (
         <>
             <Helmet

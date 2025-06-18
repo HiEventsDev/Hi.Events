@@ -1,13 +1,14 @@
 import {Avatar, Menu, UnstyledButton} from "@mantine/core";
 import {getInitials} from "../../../utilites/helpers.ts";
-import {IconLifebuoy, IconLogout, IconSettingsCog, IconUser,} from "@tabler/icons-react";
+import {IconLifebuoy, IconLogout, IconPlus, IconSettingsCog, IconUser, IconUsers,} from "@tabler/icons-react";
 import {useGetMe} from "../../../queries/useGetMe.ts";
 import {NavLink} from "react-router";
 import {t} from "@lingui/macro";
 import {authClient} from "../../../api/auth.client.ts";
 import {useDisclosure} from "@mantine/hooks";
-import {AboutModal} from "../../modals/AboutModal/index.tsx";
+import {AboutModal} from "../../modals/AboutModal";
 import {getConfig} from "../../../utilites/config.ts";
+import {CreateOrganizerModal} from "../../modals/CreateOrganizerModal";
 
 interface Link {
     label: string;
@@ -19,8 +20,12 @@ interface Link {
 
 export const GlobalMenu = () => {
     const {data: me} = useGetMe();
-    const [aboutModalOpen, {open: openAboutModal, close: closeAboutModal}] =
-        useDisclosure(false);
+    const [aboutModalOpen, {open: openAboutModal, close: closeAboutModal}] = useDisclosure(false);
+    const [createOrganizerModalOpen, {
+        open: openCreateOrganizerModal,
+        close: closeCreateOrganizerModal
+    }] = useDisclosure(false);
+
 
     const links: Link[] = [
         {
@@ -35,6 +40,14 @@ export const GlobalMenu = () => {
         },
     ];
 
+    if (me?.role === 'ADMIN') {
+        links.push({
+            label: t`User Management`,
+            icon: IconUsers,
+            link: `/account/users`
+        })
+    }
+
     if (!getConfig("VITE_HIDE_ABOUT_LINK")) {
         links.push({
             label: `About & Support`,
@@ -42,6 +55,15 @@ export const GlobalMenu = () => {
             onClick: openAboutModal,
         });
     }
+
+    links.push({
+        label: t`Create Organizer`,
+        icon: IconPlus,
+        onClick: (event: any) => {
+            event.preventDefault();
+            openCreateOrganizerModal();
+        }
+    });
 
     links.push({
         label: t`Logout`,
@@ -81,6 +103,7 @@ export const GlobalMenu = () => {
                 </Menu.Dropdown>
             </Menu>
             {aboutModalOpen && <AboutModal onClose={closeAboutModal}/>}
+            {createOrganizerModalOpen && <CreateOrganizerModal onClose={closeCreateOrganizerModal}/>}
         </>
     );
 };

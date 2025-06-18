@@ -21,7 +21,8 @@ class CreateEventImageHandler
     public function handle(CreateEventImageDTO $imageData): ImageDomainObject
     {
         return $this->createEventImageService->createImage(
-            eventId: $imageData->event_id,
+            eventId: $imageData->eventId,
+            accountId: $imageData->accountId,
             image: $imageData->image,
             imageType: $imageData->imageType,
         );

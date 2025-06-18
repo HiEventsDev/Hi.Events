@@ -19,7 +19,7 @@ import {
 import {useGetOrderPublic} from "../../../../queries/useGetOrderPublic.ts";
 import {eventCheckoutPath} from "../../../../utilites/urlHelper.ts";
 import {dateToBrowserTz} from "../../../../utilites/dates.ts";
-import {formatAddress} from "../../../../utilites/formatAddress.tsx";
+import {formatAddress} from "../../../../utilites/addressUtilities.ts";
 
 import {Card} from "../../../common/Card";
 import {LoadingMask} from "../../../common/LoadingMask";

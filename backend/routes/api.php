@@ -46,7 +46,6 @@ use HiEvents\Http\Actions\Events\GetOrganizerEventsPublicAction;
 use HiEvents\Http\Actions\Events\Images\CreateEventImageAction;
 use HiEvents\Http\Actions\Events\Images\DeleteEventImageAction;
 use HiEvents\Http\Actions\Events\Images\GetEventImagesAction;
-use HiEvents\Http\Actions\Events\Stats\GetEventCheckInStatsAction;
 use HiEvents\Http\Actions\Events\Stats\GetEventStatsAction;
 use HiEvents\Http\Actions\Events\UpdateEventAction;
 use HiEvents\Http\Actions\Events\UpdateEventStatusAction;
@@ -54,6 +53,7 @@ use HiEvents\Http\Actions\EventSettings\EditEventSettingsAction;
 use HiEvents\Http\Actions\EventSettings\GetEventSettingsAction;
 use HiEvents\Http\Actions\EventSettings\PartialEditEventSettingsAction;
 use HiEvents\Http\Actions\Images\CreateImageAction;
+use HiEvents\Http\Actions\Images\DeleteImageAction;
 use HiEvents\Http\Actions\Messages\GetMessagesAction;
 use HiEvents\Http\Actions\Messages\SendMessageAction;
 use HiEvents\Http\Actions\Orders\CancelOrderAction;
@@ -79,6 +79,11 @@ use HiEvents\Http\Actions\Organizers\GetOrganizerAction;
 use HiEvents\Http\Actions\Organizers\GetOrganizerEventsAction;
 use HiEvents\Http\Actions\Organizers\GetOrganizersAction;
 use HiEvents\Http\Actions\Organizers\GetPublicOrganizerAction;
+use HiEvents\Http\Actions\Organizers\Orders\GetOrganizerOrdersAction;
+use HiEvents\Http\Actions\Organizers\Settings\GetOrganizerSettingsAction;
+use HiEvents\Http\Actions\Organizers\Settings\PartialUpdateOrganizerSettingsAction;
+use HiEvents\Http\Actions\Organizers\Stats\GetOrganizerStatsAction;
+use HiEvents\Http\Actions\Organizers\UpdateOrganizerStatusAction;
 use HiEvents\Http\Actions\ProductCategories\CreateProductCategoryAction;
 use HiEvents\Http\Actions\ProductCategories\DeleteProductCategoryAction;
 use HiEvents\Http\Actions\ProductCategories\EditProductCategoryAction;
@@ -136,18 +141,18 @@ $router = app()->get('router');
 $router->prefix('/auth')->group(
     function (Router $router): void {
         // Auth
-        $router->post('/login', LoginAction::class)->name('login');
-        $router->post('/logout', LogoutAction::class);
-        $router->post('/register', CreateAccountAction::class);
-        $router->post('/forgot-password', ForgotPasswordAction::class);
+        $router->post('/login', LoginAction::class)->name('auth.login');
+        $router->post('/logout', LogoutAction::class)->name('auth.logout');
+        $router->post('/register', CreateAccountAction::class)->name('auth.register');
+        $router->post('/forgot-password', ForgotPasswordAction::class)->name('auth.forgot-password');
 
         // Invitations
-        $router->get('/invitation/{invite_token}', GetUserInvitationAction::class);
-        $router->post('/invitation/{invite_token}', AcceptInvitationAction::class);
+        $router->get('/invitation/{invite_token}', GetUserInvitationAction::class)->name('auth.invitation');
+        $router->post('/invitation/{invite_token}', AcceptInvitationAction::class)->name('auth.accept-invitation');
 
         // Reset Passwords
-        $router->get('/reset-password/{reset_token}', ValidateResetPasswordTokenAction::class);
-        $router->post('/reset-password/{reset_token}', ResetPasswordAction::class);
+        $router->get('/reset-password/{reset_token}', ValidateResetPasswordTokenAction::class)->name('auth.validate-reset-password-token');
+        $router->post('/reset-password/{reset_token}', ResetPasswordAction::class)->name('auth.reset-password');
     }
 );
 
@@ -183,9 +188,14 @@ $router->middleware(['auth:api'])->group(
         $router->post('/organizers', CreateOrganizerAction::class);
         // This is POST instead of PUT because you can't upload files via PUT in PHP (at least not easily)
         $router->post('/organizers/{organizer_id}', EditOrganizerAction::class);
+        $router->put('/organizers/{organizer_id}/status', UpdateOrganizerStatusAction::class);
         $router->get('/organizers', GetOrganizersAction::class);
         $router->get('/organizers/{organizer_id}', GetOrganizerAction::class);
         $router->get('/organizers/{organizer_id}/events', GetOrganizerEventsAction::class);
+        $router->get('/organizers/{organizer_id}/stats', GetOrganizerStatsAction::class);
+        $router->get('/organizers/{organizer_id}/orders', GetOrganizerOrdersAction::class);
+        $router->get('/organizers/{organizer_id}/settings', GetOrganizerSettingsAction::class);
+        $router->patch('/organizers/{organizer_id}/settings', PartialUpdateOrganizerSettingsAction::class);
 
         // Taxes and Fees
         $router->post('/accounts/{account_id}/taxes-and-fees', CreateTaxOrFeeAction::class);
@@ -217,7 +227,6 @@ $router->middleware(['auth:api'])->group(
         $router->get('/events/{event_id}/products', GetProductsAction::class);
 
         // Stats
-        $router->get('/events/{event_id}/check_in_stats', GetEventCheckInStatsAction::class);
         $router->get('/events/{event_id}/stats', GetEventStatsAction::class);
 
         // Attendees
@@ -301,6 +310,7 @@ $router->middleware(['auth:api'])->group(
 
         // Images
         $router->post('/images', CreateImageAction::class);
+        $router->delete('/images/{image_id}', DeleteImageAction::class);
     }
 );
 

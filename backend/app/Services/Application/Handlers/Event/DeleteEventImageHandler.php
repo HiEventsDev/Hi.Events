@@ -2,8 +2,8 @@
 
 namespace HiEvents\Services\Application\Handlers\Event;
 
-use HiEvents\DomainObjects\Enums\EventImageType;
 use HiEvents\DomainObjects\Enums\HomepageBackgroundType;
+use HiEvents\DomainObjects\Enums\ImageType;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\ImageRepositoryInterface;
@@ -44,7 +44,7 @@ class DeleteEventImageHandler
         $this->imageRepository->deleteWhere([
             'entity_id' => $deleteEventImageDTO->eventId,
             'entity_type' => EventDomainObject::class,
-            'type' => EventImageType::EVENT_COVER->name,
+            'type' => ImageType::EVENT_COVER->name,
             'id' => $deleteEventImageDTO->imageId,
         ]);
 

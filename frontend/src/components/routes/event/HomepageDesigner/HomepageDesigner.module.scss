@@ -20,14 +20,15 @@
   }
 
   .sidebar {
-    min-width: 350px;
-    max-width: 350px;
+    min-width: 380px;
+    max-width: 380px;
     background-color: #ffffff;
-    padding: 20px;
+    padding: var(--tk-spacing-lg);
     height: calc(100vh - 55px);
     overflow-y: auto;
     position: sticky;
     top: 0;
+    border-right: 1px solid var(--mantine-color-gray-2);
 
     @include mixins.respond-below(sm) {
       width: 100%;
@@ -36,14 +37,94 @@
       position: relative;
       overflow: auto;
       height: auto;
+      border-right: none;
+      border-bottom: 1px solid var(--mantine-color-gray-2);
     }
 
-    h2 {
-      margin-top: 0;
+    .sticky {
+      position: sticky;
+      top: 0;
     }
 
-    div.scrollable {
-      overflow-y: auto;
+    .header {
+      margin-bottom: var(--tk-spacing-lg);
+      padding-bottom: var(--tk-spacing-md);
+      border-bottom: 1px solid var(--mantine-color-gray-2);
+      
+      h2 {
+        margin: 0 0 var(--tk-spacing-xs) 0;
+        font-size: 1.375rem;
+        font-weight: 600;
+        color: var(--mantine-color-gray-9);
+      }
+    }
+
+    .accordion {
+      margin-bottom: 0;
+      
+      .accordionItem {
+        border: 1px solid var(--mantine-color-gray-3);
+        border-radius: var(--mantine-radius-md);
+        overflow: hidden;
+        
+        &:not(:last-child) {
+          margin-bottom: var(--tk-spacing-md);
+        }
+
+        :global(.mantine-Accordion-control) {
+          padding: var(--tk-spacing-md);
+          background: var(--mantine-color-gray-0);
+          
+          &:hover {
+            background: var(--mantine-color-gray-1);
+          }
+          
+          &[data-active] {
+            border-bottom: 1px solid var(--mantine-color-gray-2);
+          }
+        }
+
+        :global(.mantine-Accordion-panel) {
+          padding: 0;
+          background: white;
+        }
+
+        :global(.mantine-Accordion-content) {
+          padding: var(--tk-spacing-lg);
+        }
+      }
+    }
+
+    .fieldset {
+      border: none;
+      padding: 0;
+      margin: 0;
+
+      // Fix large margins on ColorInput components
+      :global(.mantine-ColorInput-root) {
+        margin-bottom: 0;
+      }
+
+      :global(.mantine-ColorInput-label) {
+        font-weight: 500;
+        font-size: 0.875rem;
+      }
+
+      :global(.mantine-ColorInput-description) {
+        font-size: 0.8125rem;
+        margin-top: 0.25rem;
+      }
+
+      // TextInput styling
+      :global(.mantine-TextInput-label) {
+        font-weight: 500;
+        font-size: 0.875rem;
+      }
+
+      :global(.mantine-TextInput-description) {
+        font-size: 0.8125rem;
+        margin-top: 0.25rem;
+      }
     }
   }
 

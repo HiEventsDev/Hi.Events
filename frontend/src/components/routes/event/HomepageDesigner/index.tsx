@@ -8,14 +8,16 @@ import {EventSettings, IdParam} from "../../../../types.ts";
 import {showSuccess} from "../../../../utilites/notifications.tsx";
 import {t} from "@lingui/macro";
 import {useForm} from "@mantine/form";
-import {Button, ColorInput, Group, TextInput} from "@mantine/core";
-import {CoverUpload} from "./CoverUpload";
-import {IconColorPicker, IconHelp, IconPhoto} from "@tabler/icons-react";
+import {Button, ColorInput, Group, TextInput, Accordion, Stack, Text} from "@mantine/core";
+import {IconColorPicker, IconHelp, IconPhoto, IconPalette, IconTypography} from "@tabler/icons-react";
 import {Tooltip} from "../../../common/Tooltip";
 import {CustomSelect} from "../../../common/CustomSelect";
-import {useGetEventImages} from "../../../../queries/useGetEventImages.ts";
+import {GET_EVENT_IMAGES_QUERY_KEY, useGetEventImages} from "../../../../queries/useGetEventImages.ts";
 import {eventPreviewPath} from "../../../../utilites/urlHelper.ts";
 import {LoadingMask} from "../../../common/LoadingMask";
+import {ImageUploadDropzone} from "../../../common/ImageUploadDropzone";
+import {queryClient} from "../../../../utilites/queryClient.ts";
+import {GET_EVENT_PUBLIC_QUERY_KEY} from "../../../../queries/useGetEventPublic.ts";
 
 const HomepageDesigner = () => {
     const {eventId} = useParams();
@@ -29,6 +31,7 @@ const HomepageDesigner = () => {
     const [iframeSrc, setIframeSrc] = useState<string | null>(null);
     const [iframeLoaded, setIframeLoaded] = useState(false);
     const [lastCoverId, setLastCoverId] = useState<IdParam | null>(null);
+    const [accordionValue, setAccordionValue] = useState<string[]>(['images', 'colors', 'button']);
 
     const existingCover = eventImagesQuery.data?.find((image) => image.type === 'EVENT_COVER');
 
@@ -90,6 +93,15 @@ const HomepageDesigner = () => {
         );
     };
 
+    const handleImageChange = () => {
+        queryClient.invalidateQueries({
+            queryKey: [GET_EVENT_IMAGES_QUERY_KEY, eventId]
+        });
+        queryClient.invalidateQueries({
+            queryKey: [GET_EVENT_PUBLIC_QUERY_KEY, eventId]
+        });
+    };
+
     const sendSettingsToIframe = () => {
         if (iframeRef.current?.contentWindow && iframeLoaded) {
             const settingsToSend = form.values;
@@ -112,61 +124,155 @@ const HomepageDesigner = () => {
         <div className={classes.container}>
             <div className={classes.sidebar}>
                 <div className={classes.sticky}>
-                    <h2>{t`Homepage Design`}</h2>
-                    <Group justify={'space-between'}>
-                        <h3>{t`Cover`}</h3>
-                        <Tooltip label={t`We recommend dimensions of 2160px by 1080px, and a maximum file size of 5MB`}>
-                            <IconHelp size={20}/>
-                        </Tooltip>
-                    </Group>
-                    <CoverUpload/>
+                    <div className={classes.header}>
+                        <h2>{t`Homepage Design`}</h2>
+                        <Text c="dimmed" size="sm">{t`Customize your event page appearance`}</Text>
+                    </div>
 
-                    <h3>{t`Colors`}</h3>
-                    <form onSubmit={form.onSubmit(handleSubmit as any)}>
-                        <fieldset disabled={eventSettingsQuery.isLoading || updateMutation.isPending}>
-                            <CustomSelect
-                                optionList={[
-                                    {
-                                        icon: <IconColorPicker/>,
-                                        label: t`Color`,
-                                        value: 'COLOR',
-                                        description: t`Choose a color for your background`,
-                                    },
-                                    {
-                                        icon: <IconPhoto/>,
-                                        label: t`Use cover image`,
-                                        value: 'MIRROR_COVER_IMAGE',
-                                        description: t`Use a blurred version of the cover image as the background`,
-                                        disabled: !existingCover,
-                                    },
-                                ]}
-                                form={form}
-                                label={t`Background Type`}
-                                name={'homepage_background_type'}
-                            />
+                    <Accordion 
+                        multiple 
+                        value={accordionValue} 
+                        onChange={setAccordionValue}
+                        variant="contained"
+                        className={classes.accordion}
+                    >
+                        <Accordion.Item value="images" className={classes.accordionItem}>
+                            <Accordion.Control icon={<IconPhoto size={20} />}>
+                                <Text fw={500}>{t`Images`}</Text>
+                            </Accordion.Control>
+                            <Accordion.Panel>
+                                <Stack gap="lg">
+                                    <div>
+                                        <Group justify={'space-between'} mb="xs">
+                                            <Text fw={500} size="sm">{t`Cover Image`}</Text>
+                                            <Tooltip
+                                                label={t`We recommend dimensions of 1950px by 650px, a ratio of 3:1, and a maximum file size of 5MB`}>
+                                                <IconHelp size={16} style={{ color: 'var(--mantine-color-gray-6)' }}/>
+                                            </Tooltip>
+                                        </Group>
+                                        <ImageUploadDropzone
+                                            imageType="EVENT_COVER"
+                                            entityId={eventId}
+                                            onUploadSuccess={handleImageChange}
+                                            onDeleteSuccess={handleImageChange}
+                                            existingImageData={{
+                                                url: existingCover?.url,
+                                                id: existingCover?.id,
+                                            }}
+                                            helpText={t`Cover image will be displayed at the top of your event page`}
+                                            displayMode="compact"
+                                        />
+                                    </div>
+                                </Stack>
+                            </Accordion.Panel>
+                        </Accordion.Item>
 
-                            {form.values.homepage_background_type === 'COLOR' && (
-                                <ColorInput
-                                    label={t`Page background color`}
-                                    {...form.getInputProps('homepage_body_background_color')}
-                                />
-                            )}
-                            <ColorInput
-                                label={t`Content background color`} {...form.getInputProps('homepage_background_color')} />
-                            <ColorInput label={t`Primary Colour`} {...form.getInputProps('homepage_primary_color')} />
-                            <ColorInput
-                                label={t`Primary Text Color`} {...form.getInputProps('homepage_primary_text_color')} />
-                            <ColorInput
-                                label={t`Secondary color`} {...form.getInputProps('homepage_secondary_color')} />
-                            <ColorInput
-                                label={t`Secondary text color`} {...form.getInputProps('homepage_secondary_text_color')} />
-                            <TextInput
-                                label={t`Continue button text`} {...form.getInputProps('continue_button_text')} />
-                            <Button loading={updateMutation.isPending} type={'submit'}>
-                                {t`Save Changes`}
-                            </Button>
-                        </fieldset>
-                    </form>
+                        <Accordion.Item value="colors" className={classes.accordionItem}>
+                            <Accordion.Control icon={<IconPalette size={20} />}>
+                                <Text fw={500}>{t`Theme & Colors`}</Text>
+                            </Accordion.Control>
+                            <Accordion.Panel>
+                                <form onSubmit={form.onSubmit(handleSubmit as any)}>
+                                    <fieldset disabled={eventSettingsQuery.isLoading || updateMutation.isPending} className={classes.fieldset}>
+                                        <Stack gap="md">
+                                            <CustomSelect
+                                                optionList={[
+                                                    {
+                                                        icon: <IconColorPicker/>,
+                                                        label: t`Color`,
+                                                        value: 'COLOR',
+                                                        description: t`Choose a color for your background`,
+                                                    },
+                                                    {
+                                                        icon: <IconPhoto/>,
+                                                        label: t`Use cover image`,
+                                                        value: 'MIRROR_COVER_IMAGE',
+                                                        description: t`Use a blurred version of the cover image as the background`,
+                                                        disabled: !existingCover,
+                                                    },
+                                                ]}
+                                                form={form}
+                                                label={t`Background Type`}
+                                                name={'homepage_background_type'}
+                                            />
+
+                                            {form.values.homepage_background_type === 'COLOR' && (
+                                                <ColorInput
+                                                    format="hexa"
+                                                    label={t`Page Background Color`}
+                                                    description={t`The background color of the entire page`}
+                                                    size="sm"
+                                                    {...form.getInputProps('homepage_body_background_color')}
+                                                />
+                                            )}
+                                            <ColorInput 
+                                                format="hexa"
+                                                label={t`Content Background Color`}
+                                                description={t`The background color of content areas`}
+                                                size="sm"
+                                                {...form.getInputProps('homepage_background_color')} 
+                                            />
+                                            <ColorInput 
+                                                format="hexa"
+                                                label={t`Primary Color`}
+                                                size="sm"
+                                                {...form.getInputProps('homepage_primary_color')} 
+                                            />
+                                            <ColorInput 
+                                                format="hexa"
+                                                label={t`Primary Text Color`}
+                                                size="sm"
+                                                {...form.getInputProps('homepage_primary_text_color')} 
+                                            />
+                                            <ColorInput 
+                                                format="hexa"
+                                                label={t`Secondary Color`}
+                                                size="sm"
+                                                {...form.getInputProps('homepage_secondary_color')} 
+                                            />
+                                            <ColorInput 
+                                                format="hexa"
+                                                label={t`Secondary Text Color`}
+                                                size="sm"
+                                                {...form.getInputProps('homepage_secondary_text_color')} 
+                                            />
+                                        </Stack>
+                                    </fieldset>
+                                </form>
+                            </Accordion.Panel>
+                        </Accordion.Item>
+
+                        <Accordion.Item value="button" className={classes.accordionItem}>
+                            <Accordion.Control icon={<IconTypography size={20} />}>
+                                <Text fw={500}>{t`Button Text`}</Text>
+                            </Accordion.Control>
+                            <Accordion.Panel>
+                                <form onSubmit={form.onSubmit(handleSubmit as any)}>
+                                    <fieldset disabled={eventSettingsQuery.isLoading || updateMutation.isPending} className={classes.fieldset}>
+                                        <Stack gap="md">
+                                            <TextInput
+                                                label={t`Continue Button Text`}
+                                                description={t`Customize the text shown on the continue button`}
+                                                placeholder={t`e.g., Get Tickets, Register Now`}
+                                                size="sm"
+                                                {...form.getInputProps('continue_button_text')} 
+                                            />
+                                        </Stack>
+                                    </fieldset>
+                                </form>
+                            </Accordion.Panel>
+                        </Accordion.Item>
+                    </Accordion>
+
+                    <Button 
+                        loading={updateMutation.isPending} 
+                        type="submit"
+                        fullWidth
+                        mt="md"
+                        onClick={() => form.onSubmit(handleSubmit as any)()}
+                    >
+                        {t`Save Changes`}
+                    </Button>
                 </div>
             </div>
 

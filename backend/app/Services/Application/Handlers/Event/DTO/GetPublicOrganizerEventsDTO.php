@@ -10,6 +10,7 @@ class GetPublicOrganizerEventsDTO extends BaseDTO
     public function __construct(
         public int            $organizerId,
         public QueryParamsDTO $queryParams,
+        public ?int           $authenticatedAccountId = null,
     )
     {
     }

@@ -1,8 +1,6 @@
-import {ActionIcon, Badge, Breadcrumbs, Burger, Button, UnstyledButton, VisuallyHidden} from '@mantine/core';
-import {NavLink, Outlet, useLocation, useParams} from "react-router";
 import {
+    IconArrowLeft,
     IconChartPie,
-    IconChevronLeft,
     IconChevronRight,
     IconDashboard,
     IconDeviceTabletCode,
@@ -10,8 +8,8 @@ import {
     IconExternalLink,
     IconEye,
     IconEyeOff,
-    IconHome,
-    IconLayoutSidebar,
+    IconMailCheck,
+    IconMailForward,
     IconPaint,
     IconQrcode,
     IconReceipt,
@@ -25,67 +23,68 @@ import {
     IconUsersGroup,
     IconWebhook
 } from "@tabler/icons-react";
-import {useEffect, useState} from "react";
-import classes from './Event.module.scss';
-import {GlobalMenu} from "../../common/GlobalMenu";
 import {t} from "@lingui/macro";
-import {useGetEvent} from "../../../queries/useGetEvent.ts";
+import {useGetEvent} from "../../../queries/useGetEvent";
+import {useGetEventSettings} from "../../../queries/useGetEventSettings";
+import {useGetEventStats} from "../../../queries/useGetEventStats";
 import Truncate from "../../common/Truncate";
+import {BreadcrumbItem, NavItem} from "../AppLayout/types.ts";
+import AppLayout from "../AppLayout";
+import {NavLink, useLocation, useParams} from "react-router";
+import classes from './Event.module.scss';
+import {Button} from "@mantine/core";
+import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
 import {useUpdateEventStatus} from "../../../mutations/useUpdateEventStatus.ts";
 import {showError, showSuccess} from "../../../utilites/notifications.tsx";
-import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
-import {useGetEventSettings} from "../../../queries/useGetEventSettings.ts";
-import {useGetEventStats} from "../../../queries/useGetEventStats.ts";
 import {ShareModal} from "../../modals/ShareModal";
 import {useDisclosure} from "@mantine/hooks";
-import {ShowForDesktop, ShowForMobile} from "../../common/Responsive/ShowHideComponents.tsx";
-
-interface NavItem {
-    link?: string;
-    label: string;
-    icon?: any;
-    comingSoon?: boolean;
-    isActive?: (isActive: boolean) => boolean;
-    badge?: string | undefined | number | null;
-    onClick?: () => void;
-    showWhen?: () => boolean;
-}
+import {TopBarButton} from "../../common/TopBarButton";
+import {useWindowWidth} from "../../../hooks/useWindowWidth.ts";
+import {SidebarCallout} from "../../common/SidebarCallout";
+import {useGetMe} from "../../../queries/useGetMe.ts";
+import {useResendEmailConfirmation} from "../../../mutations/useResendEmailConfirmation.ts";
+import {useState} from "react";
+import {eventHomepageUrl} from "../../../utilites/urlHelper.ts";
 
 const EventLayout = () => {
     const location = useLocation();
-    const [sidebarOpen, setSidebarOpen] = useState(false);
-    const [topBarShadow, setTopBarShadow] = useState(false);
     const {eventId} = useParams();
-    const {data: event, isFetched: isEventFetched} = useGetEvent(eventId);
-    const {data: eventSettings, isFetched: isEventSettingsFetched} = useGetEventSettings(eventId);
-    const statusToggleMutation = useUpdateEventStatus();
-    const eventStatsQuery = useGetEventStats(eventId);
-    const {data: eventStats} = eventStatsQuery;
+
     const [opened, {open, close}] = useDisclosure(false);
 
-    const handleStatusToggle = () => {
-        const message = event?.status === 'LIVE'
-            ? t`Are you sure you want to make this event draft? This will make the event invisible to the public`
-            : t`Are you sure you want to make this event public? This will make the event visible to the public`;
+    const statusToggleMutation = useUpdateEventStatus();
 
-        confirmationDialog(message, () => {
-            statusToggleMutation.mutate({
-                eventId,
-                status: event?.status === 'LIVE' ? 'DRAFT' : 'LIVE'
-            }, {
-                onSuccess: () => {
-                    showSuccess(t`Event status updated`);
-                },
-                onError: (error: any) => {
-                    showError(error?.response?.data?.message || t`Event status update failed. Please try again later`);
-                }
-            });
-        });
-    };
+    const {data: event, isFetched: isEventFetched} = useGetEvent(eventId);
+    const {data: eventSettings, isFetched: isEventSettingsFetched} = useGetEventSettings(eventId);
+    const {data: eventStats} = useGetEventStats(eventId);
+    const {data: me} = useGetMe();
 
-    const data: NavItem[] = [
+    const resendEmailConfirmationMutation = useResendEmailConfirmation();
+    const [emailConfirmationResent, setEmailConfirmationResent] = useState(false);
+
+    const handleEmailConfirmationResend = () => {
+        resendEmailConfirmationMutation.mutate({
+            userId: me?.id
+        }, {
+            onSuccess: () => {
+                showSuccess(t`Email confirmation resent successfully`);
+                setEmailConfirmationResent(true);
+            },
+            onError: () => {
+                showError(t`Something went wrong. Please try again.`);
+            }
+        })
+    }
+
+    const navItems: NavItem[] = [
+        {link: '/manage/organizer/' + event?.organizer?.id, label: t`Organizer Dashboard`, icon: IconArrowLeft},
         {label: t`Overview`},
-        {link: 'getting-started', label: t`Getting Started`, icon: IconStar},
+        {
+            link: 'getting-started',
+            label: t`Getting Started`,
+            icon: IconStar,
+            showWhen: () => !eventSettings?.hide_getting_started_page
+        },
         {link: 'dashboard', label: t`Dashboard`, icon: IconDashboard},
         {
             link: 'reports',
@@ -111,184 +110,134 @@ const EventLayout = () => {
         {link: 'webhooks', label: t`Webhooks`, icon: IconWebhook},
     ];
 
-    useEffect(() => {
-        const mainElement = document.getElementById('event-manage-main');
-        if (mainElement) {
-            const handleScroll = () => {
-                setTopBarShadow(mainElement.scrollTop > 10);
-            };
-            mainElement.addEventListener('scroll', handleScroll);
-            return () => mainElement.removeEventListener('scroll', handleScroll);
-        }
-    }, []);
+    const navItemsWithLoading = !isEventSettingsFetched || !isEventFetched
+        ? navItems.map(item => item.link ? {...item, loading: true} : item)
+        : navItems;
 
-    const links = data.map((item) => {
-        if (!item.link) {
-            return (
-                <div className={classes.sectionHeading} key={item.label}>
-                    {item.label}
-                </div>
-            );
-        }
+    const screenWidth = useWindowWidth();
+    const breadcrumbItemsWidth = screenWidth > 1100 ? 60 : 23;
 
-        if (!isEventSettingsFetched || !isEventFetched) {
-            return <a key={item.label} className={classes.loading}></a>;
-        }
+    const breadcrumbItems: BreadcrumbItem[] = [
+        {
+            link: '/manage/events',
+            content: t`Home`
+        },
+        ...(isEventFetched ? [
+            {
+                link: `/manage/organizer/${event?.organizer?.id}`,
+                content: <Truncate length={breadcrumbItemsWidth} text={event?.organizer?.name} showTooltip={false}/>
+            },
+            {
+                link: `/manage/event/${event?.id}`,
+                content: <Truncate length={breadcrumbItemsWidth} text={event?.title} showTooltip={false}/>
+            }
+        ] : [
+            {link: '#', content: '...'}
+        ])
+    ];
 
-        if (item.link === 'getting-started' && eventSettings?.hide_getting_started_page) {
-            return null;
-        }
+    const handleStatusToggle = () => {
+        const message = event?.status === 'LIVE'
+            ? t`Are you sure you want to make this event draft? This will make the event invisible to the public`
+            : t`Are you sure you want to make this event public? This will make the event visible to the public`;
 
-        return (
-            <NavLink
-                to={item.comingSoon ? '#' : item.link}
-                key={item.label}
-                onClick={() => setSidebarOpen(false)}
-                className={({isActive}) =>
-                    `${((item.isActive ? item.isActive(isActive) : isActive) && !item.comingSoon)
-                        ? classes.linkActive
-                        : ""} ${classes.link}`
+        confirmationDialog(message, () => {
+            statusToggleMutation.mutate({
+                eventId,
+                status: event?.status === 'LIVE' ? 'DRAFT' : 'LIVE'
+            }, {
+                onSuccess: () => {
+                    showSuccess(t`Event status updated`);
+                },
+                onError: (error: any) => {
+                    showError(error?.response?.data?.message || t`Event status update failed. Please try again later`);
                 }
-            >
-                <item.icon size={20} className={classes.linkIcon} stroke={1.5}/>
-                <span>{item.label}</span>
-                {item.badge !== undefined &&
-                    <Badge size="xs" radius="xl" className={classes.navBadge}>{item.badge}</Badge>}
-                {item.comingSoon &&
-                    <Badge ml={'4px'} size={'xs'} className={classes.comingSoonBadge}>{t`Coming Soon`}</Badge>}
-            </NavLink>
-        );
-    });
+            });
+        });
+    };
 
     return (
-        <div id={'event-manage-container'} className={`${classes.container} ${sidebarOpen ? classes.closed : ''}`}>
-            <div className={`${classes.topBar} ${topBarShadow ? classes.withShadow : ''}`}>
-                <div className={classes.topBarMain}>
-                    <div className={classes.burger}>
-                        <Burger color={'#fff'} opened={sidebarOpen} onClick={() => setSidebarOpen(!sidebarOpen)}
-                                size={'sm'}/>
-                    </div>
-                    <div className={classes.logo}>
-                        <NavLink to={'/manage/events'}>
-                            <img src={'/logo-text-only-white-text.png'} alt={''}/>
-                        </NavLink>
-                    </div>
-
-                    {/* Status toggle - now on the left side */}
-                    <div className={classes.statusToggleContainer}>
-                        {isEventFetched && (
-                            <Button
-                                onClick={handleStatusToggle}
-                                size="sm"
-                                className={`${classes.statusToggleButton} ${event?.status === 'DRAFT' ? classes.draftButton : classes.liveButton}`}
-                                leftSection={event?.status === 'DRAFT' ? <IconEyeOff size={16}/> : <IconEye size={16}/>}
-                                rightSection={<IconChevronRight size={14}/>}
-                            >
-                                {event?.status === 'DRAFT'
-                                    ? <span>{t`Draft`} <span
-                                        className={classes.statusAction}>{t`- Click to Publish`}</span></span>
-                                    : <span>{t`Live`} <span
-                                        className={classes.statusAction}>{t`- Click to Unpublish`}</span></span>
-                                }
-                            </Button>
-                        )}
-                    </div>
-
-                    <div className={classes.actionGroup}>
-                        <Button
-                            component={NavLink}
-                            to={`/event/${eventId}/${event?.slug}`}
-                            target={'_blank'}
-                            variant={'transparent'}
-                            leftSection={<IconExternalLink size={17}/>}
-                            className={classes.eventPageButton}
-                            title={t`Preview Event page`}
+        <AppLayout
+            navItems={navItemsWithLoading}
+            breadcrumbItems={breadcrumbItems}
+            entityType="event"
+            topBarContent={(
+                <div className={classes.statusToggleContainer}>
+                    {isEventFetched && (
+                        <TopBarButton
+                            onClick={handleStatusToggle}
+                            size="sm"
+                            leftSection={event?.status === 'DRAFT' ? <IconEyeOff size={16}/> : <IconEye size={16}/>}
+                            rightSection={<IconChevronRight size={14}/>}
                         >
-                            <div className={classes.eventPageButtonText}>
+                            {event?.status === 'DRAFT'
+                                ? <span>{t`Draft`} <span
+                                    className={classes.statusAction}>{t`- Click to Publish`}</span></span>
+                                : <span>{t`Live`} <span
+                                    className={classes.statusAction}>{t`- Click to Unpublish`}</span></span>
+                            }
+                        </TopBarButton>
+                    )}
+                </div>
+            )}
+            breadcrumbContentRight={(
+                <div className={classes.shareButton}>
+                    {event && (
+                        <>
+                            <Button
+                                onClick={open}
+                                variant="transparent"
+                                leftSection={<IconShare size={16}/>}
+                            >
+                                {t`Share Event`}
+                            </Button>
+
+                            {event && <ShareModal
+                                url={eventHomepageUrl(event)}
+                                title={event.title}
+                                modalTitle={t`Share Event`}
+                                opened={opened}
+                                onClose={close}
+                            />}
+                        </>
+                    )}
+                </div>
+            )}
+            actionGroupContent={(
+                <Button
+                    component={NavLink}
+                    to={`/event/${eventId}/${event?.slug}`}
+                    target={'_blank'}
+                    variant={'transparent'}
+                    leftSection={<IconExternalLink size={17}/>}
+                    className={classes.eventPageButton}
+                    title={t`Preview Event page`}
+                >
+                    <div className={classes.eventPageButtonText}>
                                 <span className={classes.desktop}>
                                     {t`Preview Event page`}
                                 </span>
-                                <span className={classes.mobile}>
+                        <span className={classes.mobile}>
                                     {t`Event Page`}
                                 </span>
-                            </div>
-
-                        </Button>
-                        <div className={classes.menu}>
-                            <GlobalMenu/>
-                        </div>
                     </div>
-                </div>
-                <div className={classes.breadcrumbsRow}>
-                    <div className={classes.breadcrumbs}>
-                        <IconHome size={16} style={{marginRight: '8px', opacity: 0.6}}/>
-                        <Breadcrumbs separator={<span style={{margin: '0 0px', color: '#aaa'}}>/</span>}>
-                            <NavLink to={'/manage/events'}>{t`Events`}</NavLink>
 
-                            {isEventFetched && (
-                                <NavLink to={`/manage/organizer/${event?.organizer?.id}`}>
-                                    <Truncate length={24} text={event?.organizer?.name} showTooltip={false}/>
-                                </NavLink>
-                            )}
-
-                            {isEventFetched && (
-                                <NavLink to={`/manage/event/${event?.id}`}>
-                                    <Truncate length={20} text={event?.title} showTooltip={false}/>
-                                </NavLink>
-                            )}
-
-                            {!isEventFetched && <span>... </span>}
-                        </Breadcrumbs>
-                    </div>
-                    <div className={classes.shareButton}>
-                        {event && (
-                            <>
-                                <Button
-                                    onClick={open}
-                                    variant="transparent"
-                                    leftSection={<IconShare size={16}/>}
-                                >
-                                    {t`Share Event`}
-                                </Button>
-
-                                {event && <ShareModal
-                                    event={event}
-                                    opened={opened}
-                                    onClose={close}
-                                />}
-                            </>
-                        )}
-                    </div>
-                </div>
-            </div>
-            <div className={classes.main} id={'event-manage-main'}>
-                <Outlet/>
-            </div>
-            <div className={classes.sidebar}>
-                <div className={classes.logo}>
-                    <NavLink to={'/manage/events'}>
-                        <img style={{maxWidth: '160px', margin: "10px auto"}}
-                             src={'/logo-wide-white-text.svg'} alt={''}/>
-                    </NavLink>
-                </div>
-                <div className={classes.nav}>
-                    {links}
-                </div>
-                <UnstyledButton
-                    className={classes.sidebarClose}
-                    onClick={() => setSidebarOpen(!sidebarOpen)}>
-                    <IconChevronLeft size={20}/>
-                    <VisuallyHidden>{t`Close sidebar`}</VisuallyHidden>
-                </UnstyledButton>
-            </div>
-            {sidebarOpen && <UnstyledButton
-                className={classes.sidebarOpen}
-                onClick={() => setSidebarOpen(!sidebarOpen)}>
-                <IconLayoutSidebar size={16}/>
-                <VisuallyHidden>{t`Open sidebar`}</VisuallyHidden>
-            </UnstyledButton>}
-        </div>
-    )
-}
+                </Button>
+            )}
+            sidebarFooter={
+                (me && !me.is_email_verified && !emailConfirmationResent ? (
+                    <SidebarCallout
+                        icon={<IconMailCheck size={20}/>}
+                        heading={t`Verify your email`}
+                        description={t`Confirm your email to access all features.`}
+                        buttonIcon={<IconMailForward size={16}/>}
+                        buttonText={t`Resend email`}
+                        onClick={() => handleEmailConfirmationResend()}
+                    />
+                ) : null)
+            }
+        />
+    );
+};
 
 export default EventLayout;

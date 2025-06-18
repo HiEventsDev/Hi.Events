@@ -47,7 +47,6 @@ readonly class EventStatsFetchService
             daily_stats: $this->getDailyEventStats($requestData),
             start_date: $requestData->start_date,
             end_date: $requestData->end_date,
-            check_in_stats: $this->getCheckedInStats($eventId),
             total_products_sold: $totalsResult->total_products_sold ?? 0,
             total_attendees_registered: $totalsResult->attendees_registered ?? 0,
             total_orders: $totalsResult->total_orders ?? 0,

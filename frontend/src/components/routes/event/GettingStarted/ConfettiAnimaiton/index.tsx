@@ -4,6 +4,8 @@ interface ConfettiAnimationProps {
     duration?: number;
 }
 
+const EVENT_EMOJIS = ['🎸', '🎉', '🎊', '🎈', '🎆', '✨', '🎵', '🎶', '🎤', '🎭', '🎪', '🎯', '🏆'];
+
 const ConfettiAnimation: FC<ConfettiAnimationProps> = ({duration = 4000}) => {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const [isActive, setIsActive] = useState<boolean>(true);
@@ -13,167 +15,99 @@ const ConfettiAnimation: FC<ConfettiAnimationProps> = ({duration = 4000}) => {
 
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
-        if (!ctx) {
-            return;
-        }
+        if (!ctx) return;
+
         let animationFrameId: number;
-        let particles: Particle[] = [];
+        const particles: Particle[] = [];
+        const startTime = Date.now();
 
-        let shouldContinueGenerating = true;
-        let lastParticleTime = Date.now();
-        const particleGenerationInterval = 50;
-
+        // Set canvas size
         const resizeCanvas = () => {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
         };
-
         resizeCanvas();
         window.addEventListener('resize', resizeCanvas);
 
         class Particle {
             x: number;
             y: number;
-            color: string;
+            emoji: string;
             size: number;
-            speedY: number;
-            speedX: number;
-            spinSpeed: number;
-            spinAngle: number;
+            velocityY: number;
+            velocityX: number;
+            rotation: number;
+            rotationSpeed: number;
             opacity: number;
-            fadeSpeed: number;
-            gravity: number;
-            shape: number;
 
-            constructor(forceNew = false) {
+            constructor() {
                 this.x = Math.random() * canvas.width;
-                this.y = forceNew ? -20 : Math.random() * canvas.height * 0.3 - canvas.height * 0.3;
-
-                this.color = `hsl(${Math.random() * 360}, 80%, 60%)`;
-                this.size = Math.random() * 10 + 5;
-
-                this.speedY = Math.random() * 2 + 0.5;
-                this.speedX = (Math.random() - 0.5) * 1.5;
-                this.spinSpeed = Math.random() * 0.2 - 0.1;
-                this.spinAngle = Math.random() * Math.PI * 2;
-
+                this.y = -50;
+                this.emoji = EVENT_EMOJIS[Math.floor(Math.random() * EVENT_EMOJIS.length)];
+                this.size = Math.random() * 20 + 20; // 20-40px
+                this.velocityY = Math.random() * 3 + 2; // 2-5 px/frame
+                this.velocityX = (Math.random() - 0.5) * 2; // -1 to 1 px/frame
+                this.rotation = Math.random() * Math.PI * 2;
+                this.rotationSpeed = (Math.random() - 0.5) * 0.2;
                 this.opacity = 1;
-                this.fadeSpeed = Math.random() * 0.01 + 0.005;
-                this.gravity = 0.03;
-                this.shape = Math.floor(Math.random() * 4);
             }
 
             update(): boolean {
-                this.y += this.speedY;
-                this.x += this.speedX;
-                this.spinAngle += this.spinSpeed;
-                this.speedY += this.gravity;
-                this.speedX += (Math.random() - 0.5) * 0.05;
-
-                if (this.speedY > 2) {
-                    this.speedY *= 0.99;
+                // Physics
+                this.y += this.velocityY;
+                this.x += this.velocityX;
+                this.rotation += this.rotationSpeed;
+                this.velocityY += 0.1; // gravity
+                
+                // Fade out when reaching bottom third of screen
+                if (this.y > canvas.height * 0.7) {
+                    this.opacity -= 0.02;
                 }
 
-                if (this.y > canvas.height * 0.3) {
-                    this.opacity -= this.fadeSpeed;
-                }
-
-                return this.y <= canvas.height + 50 && this.opacity > 0;
+                // Remove if off screen or fully transparent
+                return this.y < canvas.height + 50 && this.opacity > 0;
             }
 
             draw(): void {
-                if (!ctx) return;
-
                 ctx.save();
-                ctx.translate(this.x, this.y);
-                ctx.rotate(this.spinAngle);
                 ctx.globalAlpha = this.opacity;
-                ctx.fillStyle = this.color;
-
-                switch (this.shape) {
-                    case 0:
-                        ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size);
-                        break;
-                    case 1:
-                        ctx.beginPath();
-                        ctx.arc(0, 0, this.size / 2, 0, Math.PI * 2);
-                        ctx.fill();
-                        break;
-                    case 2:
-                        ctx.fillRect(-this.size, -this.size / 6, this.size * 2, this.size / 3);
-                        break;
-                    case 3:
-                        this.drawStar(0, 0, 5, this.size / 2, this.size / 4);
-                        break;
-                }
-
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation);
+                ctx.font = `${this.size}px sans-serif`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(this.emoji, 0, 0);
                 ctx.restore();
-            }
-
-            drawStar(cx: number, cy: number, spikes: number, outerRadius: number, innerRadius: number): void {
-                if (!ctx) return;
-
-                let rot = Math.PI / 2 * 3;
-                let x = cx;
-                let y = cy;
-                const step = Math.PI / spikes;
-
-                ctx.beginPath();
-                ctx.moveTo(cx, cy - outerRadius);
-
-                for (let i = 0; i < spikes; i++) {
-                    x = cx + Math.cos(rot) * outerRadius;
-                    y = cy + Math.sin(rot) * outerRadius;
-                    ctx.lineTo(x, y);
-                    rot += step;
-
-                    x = cx + Math.cos(rot) * innerRadius;
-                    y = cy + Math.sin(rot) * innerRadius;
-                    ctx.lineTo(x, y);
-                    rot += step;
-                }
-
-                ctx.lineTo(cx, cy - outerRadius);
-                ctx.closePath();
-                ctx.fill();
             }
         }
 
-        const createInitialParticles = () => {
-            for (let i = 0; i < 150; i++) {
-                particles.push(new Particle());
-            }
-        };
+        // Create initial burst of particles
+        for (let i = 0; i < 50; i++) {
+            particles.push(new Particle());
+        }
 
-        const addMoreParticles = () => {
-            const now = Date.now();
-            if (shouldContinueGenerating && now - lastParticleTime > particleGenerationInterval) {
-                for (let i = 0; i < 10; i++) {
-                    particles.push(new Particle(true));
-                }
-                lastParticleTime = now;
-            }
-        };
-
-        createInitialParticles();
-        const startTime = Date.now();
-
+        // Animation loop
         const animate = () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            addMoreParticles();
 
-            particles = particles.filter((particle) => {
-                const isAlive = particle.update();
-                if (isAlive) particle.draw();
-                return isAlive;
-            });
-
-            const elapsedTime = Date.now() - startTime;
-            if (elapsedTime > duration) {
-                shouldContinueGenerating = false;
+            // Add new particles periodically
+            const elapsed = Date.now() - startTime;
+            if (elapsed < duration && Math.random() < 0.3) {
+                particles.push(new Particle());
             }
 
-            if (particles.length > 0 || shouldContinueGenerating) {
+            // Update and draw particles
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const particle = particles[i];
+                if (particle.update()) {
+                    particle.draw();
+                } else {
+                    particles.splice(i, 1);
+                }
+            }
+
+            // Continue animation if particles exist or still generating
+            if (particles.length > 0 || elapsed < duration) {
                 animationFrameId = requestAnimationFrame(animate);
             } else {
                 setIsActive(false);
