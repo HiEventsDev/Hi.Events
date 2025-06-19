@@ -32,6 +32,8 @@ class DuplicateEventHandler
             duplicateCapacityAssignments: $data->duplicateCapacityAssignments,
             duplicateCheckInLists: $data->duplicateCheckInLists,
             duplicateEventCoverImage: $data->duplicateEventCoverImage,
+            duplicateWebhooks: $data->duplicateWebhooks,
+            duplicateAffiliates: $data->duplicateAffiliates,
             description: $data->description,
             endDate: $data->endDate,
         );

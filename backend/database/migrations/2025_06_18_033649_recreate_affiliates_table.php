@@ -19,7 +19,7 @@ return new class extends Migration {
             $table->foreignId('event_id')->constrained('events')->onDelete('cascade');
             $table->foreignId('account_id')->constrained('accounts')->onDelete('cascade');
             $table->string('name');
-            $table->string('code', 50)->unique();
+            $table->string('code', 50);
             $table->string('email')->nullable();
             $table->integer('total_sales')->default(0);
             $table->float('total_sales_gross')->default(0);
