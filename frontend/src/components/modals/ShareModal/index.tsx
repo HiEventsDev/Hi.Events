@@ -241,6 +241,7 @@ export const ShareModal = ({
                                         paddingRight: '120px'
                                     }
                                 }}
+                                rightSectionWidth={'auto'}
                                 rightSection={(
                                     <CopyButton value={url} timeout={2000}>
                                         {({copied, copy}) => (

@@ -7,6 +7,7 @@ namespace HiEvents\Providers;
 use HiEvents\Repository\Eloquent\AccountConfigurationRepository;
 use HiEvents\Repository\Eloquent\AccountRepository;
 use HiEvents\Repository\Eloquent\AccountUserRepository;
+use HiEvents\Repository\Eloquent\AffiliateRepository;
 use HiEvents\Repository\Eloquent\AttendeeCheckInRepository;
 use HiEvents\Repository\Eloquent\AttendeeRepository;
 use HiEvents\Repository\Eloquent\CapacityAssignmentRepository;
@@ -43,6 +44,7 @@ use HiEvents\Repository\Eloquent\WebhookRepository;
 use HiEvents\Repository\Interfaces\AccountConfigurationRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
+use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
 use HiEvents\Repository\Interfaces\AttendeeCheckInRepositoryInterface;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\CapacityAssignmentRepositoryInterface;
@@ -90,6 +92,7 @@ class RepositoryServiceProvider extends ServiceProvider
         ProductRepositoryInterface::class => ProductRepository::class,
         OrderRepositoryInterface::class => OrderRepository::class,
         AttendeeRepositoryInterface::class => AttendeeRepository::class,
+        AffiliateRepositoryInterface::class => AffiliateRepository::class,
         OrderItemRepositoryInterface::class => OrderItemRepository::class,
         QuestionRepositoryInterface::class => QuestionRepository::class,
         QuestionAnswerRepositoryInterface::class => QuestionAnswerRepository::class,

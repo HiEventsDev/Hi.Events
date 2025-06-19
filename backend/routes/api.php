@@ -4,6 +4,12 @@ use HiEvents\Http\Actions\Accounts\CreateAccountAction;
 use HiEvents\Http\Actions\Accounts\GetAccountAction;
 use HiEvents\Http\Actions\Accounts\Stripe\CreateStripeConnectAccountAction;
 use HiEvents\Http\Actions\Accounts\UpdateAccountAction;
+use HiEvents\Http\Actions\Affiliates\CreateAffiliateAction;
+use HiEvents\Http\Actions\Affiliates\DeleteAffiliateAction;
+use HiEvents\Http\Actions\Affiliates\ExportAffiliatesAction;
+use HiEvents\Http\Actions\Affiliates\GetAffiliateAction;
+use HiEvents\Http\Actions\Affiliates\GetAffiliatesAction;
+use HiEvents\Http\Actions\Affiliates\UpdateAffiliateAction;
 use HiEvents\Http\Actions\Attendees\CheckInAttendeeAction;
 use HiEvents\Http\Actions\Attendees\CreateAttendeeAction;
 use HiEvents\Http\Actions\Attendees\EditAttendeeAction;
@@ -273,6 +279,14 @@ $router->middleware(['auth:api'])->group(
         $router->get('/events/{event_id}/promo-codes', GetPromoCodesAction::class);
         $router->get('/events/{event_id}/promo-codes/{promo_code_id}', GetPromoCodeAction::class);
         $router->delete('/events/{event_id}/promo-codes/{promo_code_id}', DeletePromoCodeAction::class);
+
+        // Affiliates
+        $router->post('/events/{event_id}/affiliates', CreateAffiliateAction::class);
+        $router->put('/events/{event_id}/affiliates/{affiliate_id}', UpdateAffiliateAction::class);
+        $router->get('/events/{event_id}/affiliates', GetAffiliatesAction::class);
+        $router->get('/events/{event_id}/affiliates/{affiliate_id}', GetAffiliateAction::class);
+        $router->delete('/events/{event_id}/affiliates/{affiliate_id}', DeleteAffiliateAction::class);
+        $router->post('/events/{event_id}/affiliates/export', ExportAffiliatesAction::class);
 
         // Messages
         $router->post('/events/{event_id}/messages', SendMessageAction::class);
