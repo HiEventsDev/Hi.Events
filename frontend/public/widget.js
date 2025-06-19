@@ -39,7 +39,7 @@
                 ' allow-presentation'
             );
 
-            iframe.setAttribute('title', 'Hi.Events Widget');
+            iframe.setAttribute('title', 'Event Widget');
             iframe.style.border = 'none';
             iframe.style.width = '100%';
 

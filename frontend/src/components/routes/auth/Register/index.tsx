@@ -12,6 +12,7 @@ import {getClientLocale} from "../../../../locales.ts";
 import React, {useEffect} from "react";
 import {getUserCurrency} from "../../../../utilites/currency.ts";
 import {IconLock, IconMail} from "@tabler/icons-react";
+import { getConfig } from "../../../../utilites/config.ts";
 
 export const Register = () => {
     const navigate = useNavigate();
@@ -64,7 +65,7 @@ export const Register = () => {
     return (
         <>
             <header className={classes.header}>
-                <h2>{t`Welcome to Hi.Events 👋`}</h2>
+                <h2>{t`Welcome to ${getConfig("VITE_APP_NAME", "Hi.Events")} 👋`}</h2>
                 <p>
                     <Trans>
                         Create an account or <NavLink to={'/auth/login'}>
@@ -132,10 +133,10 @@ export const Register = () => {
                 <footer>
                     <Trans>
                         By registering you agree to our <NavLink target={'_blank'}
-                                                                 to={'https://hi.events/terms-of-service?utm_source=app-register-footer'}>Terms
+                                                                 to={getConfig("VITE_TOS_URL", "https://hi.events/terms-of-service?utm_source=app-register-footer") as string}>Terms
                         of Service</NavLink> and <NavLink
                         target={'_blank'}
-                        to={'https://hi.events/privacy-policy?utm_source=app-register-footer'}>Privacy Policy</NavLink>.
+                        to={getConfig("VITE_PRIVACY_URL", 'https://hi.events/privacy-policy?utm_source=app-register-footer') as string}>Privacy Policy</NavLink>.
                     </Trans>
                 </footer>
             </div>

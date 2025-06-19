@@ -4,6 +4,8 @@ import {IconHome} from '@tabler/icons-react';
 import classes from './EventNotAvailable.module.scss';
 import {PoweredByFooter} from "../../../common/PoweredByFooter";
 import {Helmet} from "react-helmet-async";
+import { getConfig } from '../../../../utilites/config';
+import { isHiEvents } from '../../../../utilites/helpers';
 
 export const EventNotAvailable = () => {
     return (
@@ -26,8 +28,8 @@ export const EventNotAvailable = () => {
                 <Container size="md" className={classes.root}>
                     <Stack gap="xl" align="center">
                         <Image
-                            src="/logo-dark.svg"
-                            alt="Logo"
+                            src={ getConfig("VITE_APP_LOGO_DARK", "/logo-dark.svg")}
+                            alt={ t`${ getConfig("VITE_APP_NAME", "Hi.Events") } logo` }
                             w={rem(140)}
                             h="auto"
                             fit="contain"
@@ -42,16 +44,18 @@ export const EventNotAvailable = () => {
                             <Text size="lg" c="dimmed" className={classes.description}>
                                 {t`The event you're looking for is not available at the moment. It may have been removed, expired, or the URL might be incorrect.`}
                             </Text>
-                            <Button
-                                component="a"
-                                href="https://hi.events?utm_source=app.hi.events&utm_content=event-not-available"
-                                leftSection={<IconHome size={18}/>}
-                                variant="gradient"
-                                gradient={{from: 'purple', to: 'pink'}}
-                                className={classes.button}
-                            >
-                                {t`Go to Hi.Events`}
-                            </Button>
+                            { isHiEvents() && (
+                                <Button
+                                    component="a"
+                                    href="https://hi.events?utm_source=app.hi.events&utm_content=event-not-available"
+                                    leftSection={ <IconHome size={ 18 } /> }
+                                    variant="gradient"
+                                    gradient={ { from: 'primary', to: 'secondary' } }
+                                    className={ classes.button }
+                                >
+                                    { t`Go to Hi.Events` }
+                                </Button>
+                            )}
                         </Stack>
 
                         <PoweredByFooter/>

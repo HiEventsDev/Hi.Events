@@ -12,6 +12,7 @@ import {useEffect, useState} from "react";
 import {IconAlertCircle, IconBrandStripe, IconCheck, IconExternalLink} from '@tabler/icons-react';
 import {formatCurrency} from "../../../../../../utilites/currency.ts";
 import {showSuccess} from "../../../../../../utilites/notifications.tsx";
+import { getConfig } from "../../../../../../utilites/config.ts";
 
 interface FeePlanDisplayProps {
     configuration?: {
@@ -40,7 +41,7 @@ const FeePlanDisplay = ({configuration}: FeePlanDisplayProps) => {
             <Title mb={10} order={3}>{t`Platform Fees`}</Title>
 
             <Text size="sm" c="dimmed" mb="lg">
-                {t`Hi.Events charges platform fees to maintain and improve our services. These fees are automatically deducted from each transaction.`}
+                {t`${getConfig("VITE_APP_NAME", "Hi.Events")} charges platform fees to maintain and improve our services. These fees are automatically deducted from each transaction.`}
             </Text>
 
             <Card variant={'lightGray'}>
