@@ -2,7 +2,7 @@
 
 namespace HiEvents\Http\Request\Event;
 
-use HiEvents\DomainObjects\Enums\EventImageType;
+use HiEvents\DomainObjects\Enums\ImageType;
 use HiEvents\Validators\Rules\RulesHelper;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -13,7 +13,7 @@ class CreateEventImageRequest extends FormRequest
     {
         return [
             'image' => RulesHelper::IMAGE_RULES,
-            'type' => Rule::in(EventImageType::valuesArray()),
+            'type' => Rule::in(ImageType::eventImageTypes()),
         ];
     }
 

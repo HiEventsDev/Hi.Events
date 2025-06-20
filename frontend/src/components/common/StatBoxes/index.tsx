@@ -7,6 +7,30 @@ import {t} from "@lingui/macro";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {formatCurrency} from "../../../utilites/currency.ts";
 import {formatNumber} from "../../../utilites/helpers.ts";
+import React from "react";
+
+interface StatBoxProps {
+    number: string;
+    description: string;
+    icon: React.ReactNode;
+    backgroundColor: string;
+}
+
+export const StatBox = ({number, description, icon, backgroundColor}: StatBoxProps) => {
+    return (
+        <Card className={classes.statistic}>
+            <div className={classes.leftPanel}>
+                <div className={classes.number}>{number}</div>
+                <div className={classes.description}>{description}</div>
+            </div>
+            <div className={classes.rightPanel}>
+                <div className={classes.icon} style={{backgroundColor}}>
+                    {icon}
+                </div>
+            </div>
+        </Card>
+    );
+};
 
 export const StatBoxes = () => {
     const {eventId} = useParams();
@@ -54,25 +78,17 @@ export const StatBoxes = () => {
         }
     ];
 
-    const stats = data.map((stat) => {
-        return (
-            <Card className={classes.statistic} key={stat.description}>
-                <div className={classes.leftPanel}>
-                    <div className={classes.number}>{stat.number}</div>
-                    <div className={classes.description}>{stat.description}</div>
-                </div>
-                <div className={classes.rightPanel}>
-                    <div className={classes.icon} style={{backgroundColor: stat.backgroundColor}}>
-                        {stat.icon}
-                    </div>
-                </div>
-            </Card>
-        )
-    })
-
     return (
         <div className={classes.statistics}>
-            {stats}
+            {data.map((stat) => (
+                <StatBox
+                    key={stat.description}
+                    number={stat.number}
+                    description={stat.description}
+                    icon={stat.icon}
+                    backgroundColor={stat.backgroundColor}
+                />
+            ))}
         </div>
     );
 };

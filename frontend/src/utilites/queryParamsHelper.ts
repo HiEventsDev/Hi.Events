@@ -1,4 +1,4 @@
-import {QueryFilterCondition, QueryFilters} from "../types.ts";
+import {QueryFilterCondition, QueryFilters, QueryFilterOperator} from "../types.ts";
 
 export const queryParamsHelper = {
     PER_PAGE_PARAM: "per_page",
@@ -18,7 +18,11 @@ export const queryParamsHelper = {
      * @param defaultReturn {*}
      */
     getParam: (param: string, defaultReturn: string | number = ''): string | number => {
-        const urlParams = new URLSearchParams(window?.location.search);
+        if (typeof window === 'undefined') {
+            return defaultReturn;
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
         return urlParams.get(param) || defaultReturn;
     },
 
@@ -69,5 +73,5 @@ export const queryParamsHelper = {
         const combinedParams = {...baseParams, ...filterParams, ...additionalParamsProcessed};
 
         return '?' + new URLSearchParams(combinedParams).toString();
-    }
+    },
 };

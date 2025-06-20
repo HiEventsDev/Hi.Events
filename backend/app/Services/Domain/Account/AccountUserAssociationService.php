@@ -21,7 +21,7 @@ readonly class AccountUserAssociationService
         UserDomainObject    $user,
         AccountDomainObject $account,
         Role                $role,
-        UserStatus          $status = null,
+        ?UserStatus         $status = null,
         ?int                $invitedByUserId = null,
         bool                $isAccountOwner = false,
     ): AccountUserDomainObject

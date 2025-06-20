@@ -46,6 +46,7 @@ export interface ProductFormValue {
 export interface ProductFormPayload {
     products?: ProductFormValue[],
     promo_code: string | null,
+    affiliate_code?: string | null,
     session_identifier?: string,
 }
 

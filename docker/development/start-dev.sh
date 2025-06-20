@@ -1,6 +1,6 @@
 #!/bin/bash
 
-COMPOSE_CMD="docker-compose -f docker-compose.dev.yml"
+COMPOSE_CMD="docker compose -f docker-compose.dev.yml"
 CERTS_FLAG="$1"
 
 RED='\033[0;31m'

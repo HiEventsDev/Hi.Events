@@ -25,6 +25,21 @@ class EventRepository extends BaseRepository implements EventRepositoryInterface
         return EventDomainObject::class;
     }
 
+    public function findEventsForOrganizer(int $organizerId, int $accountId, QueryParamsDTO $params): LengthAwarePaginator
+    {
+        $where[] = static function (Builder $builder) use ($accountId, $organizerId) {
+            $builder
+                ->whereIn(EventDomainObjectAbstract::STATUS, [
+                    EventStatus::LIVE->name,
+                    EventStatus::DRAFT->name,
+                ])
+                ->where(EventDomainObjectAbstract::ORGANIZER_ID, $organizerId)
+                ->where(EventDomainObjectAbstract::ACCOUNT_ID, $accountId);
+        };
+
+        return $this->findEvents($where, $params);
+    }
+
     public function findEvents(array $where, QueryParamsDTO $params): LengthAwarePaginator
     {
         if (!empty($params->query)) {
@@ -51,7 +66,7 @@ class EventRepository extends BaseRepository implements EventRepositoryInterface
                     });
             };
 
-            $organizerId = $params->filter_fields->first(fn ($filter) => $filter->field === EventDomainObjectAbstract::ORGANIZER_ID)?->value;
+            $organizerId = $params->filter_fields->first(fn($filter) => $filter->field === EventDomainObjectAbstract::ORGANIZER_ID)?->value;
             if ($organizerId) {
                 $this->model = $this->model->where(EventDomainObjectAbstract::ORGANIZER_ID, $organizerId);
             }

@@ -24,12 +24,14 @@ class ImageUploadService
         UploadedFile $image,
         int          $entityId,
         string       $entityType,
-        string       $imageType
+        string       $imageType,
+        int          $accountId,
     ): ImageDomainObject
     {
         $storedImage = $this->imageStorageService->store($image, $imageType);
 
         return $this->imageRepository->create([
+            'account_id' => $accountId,
             'entity_id' => $entityId,
             'entity_type' => $entityType,
             'type' => $imageType,

@@ -77,7 +77,7 @@ const GettingStarted = () => {
 
     return (
         <>
-            {showConfetti && <ConfettiAnimation duration={1000}/>}
+            {showConfetti && <ConfettiAnimation duration={2000}/>}
             <PageBody>
                 <Card className={classes.headerCard}>
                     <div className={classes.headerContent}>

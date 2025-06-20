@@ -1,6 +1,5 @@
 import {hydrateRoot} from "react-dom/client";
 import {createBrowserRouter, matchRoutes, RouterProvider} from "react-router-dom";
-import {hydrate} from "@tanstack/react-query";
 
 import {router} from "./router";
 import {App} from "./App";
@@ -13,9 +12,7 @@ declare global {
     }
 }
 
-if (window.__REHYDRATED_STATE__) {
-    hydrate(queryClient, window.__REHYDRATED_STATE__);
-}
+const dehydratedState = window.__REHYDRATED_STATE__;
 
 async function initClientApp() {
     const rawLocale = getClientLocale();
@@ -37,7 +34,7 @@ async function initClientApp() {
 
     hydrateRoot(
         document.getElementById("app") as HTMLElement,
-        <App queryClient={queryClient} locale={rawLocale}>
+        <App queryClient={queryClient} locale={rawLocale} dehydratedState={dehydratedState}>
             <RouterProvider router={browserRouter}/>
         </App>
     );

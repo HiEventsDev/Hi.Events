@@ -42,6 +42,7 @@ class OrderResource extends BaseResource
             'notes' => $this->getNotes(),
             'payment_provider' => $this->getPaymentProvider(),
             'promo_code' => $this->getPromoCode(),
+            'event_id' => $this->getEventId(),
             'order_items' => $this->when(
                 !is_null($this->getOrderItems()),
                 fn() => OrderItemResource::collection($this->getOrderItems())

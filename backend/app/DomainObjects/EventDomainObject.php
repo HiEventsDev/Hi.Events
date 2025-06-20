@@ -30,6 +30,8 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
 
     private ?Collection $capacityAssignments = null;
 
+    private ?Collection $affiliates = null;
+
     private ?EventSettingDomainObject $settings = null;
 
     private ?OrganizerDomainObject $organizer = null;
@@ -296,6 +298,17 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
     public function setWebhooks(?Collection $webhooks): EventDomainObject
     {
         $this->webhooks = $webhooks;
+        return $this;
+    }
+
+    public function getAffiliates(): ?Collection
+    {
+        return $this->affiliates;
+    }
+
+    public function setAffiliates(?Collection $affiliates): EventDomainObject
+    {
+        $this->affiliates = $affiliates;
         return $this;
     }
 }

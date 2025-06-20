@@ -1,6 +1,6 @@
 <?php
 
-namespace Unit\Services\Infrastructure\Session;
+namespace Tests\Unit\Services\Infrastructure\Session;
 
 use HiEvents\Services\Infrastructure\Session\CheckoutSessionManagementService;
 use Illuminate\Config\Repository;

@@ -12,16 +12,14 @@ import {AddToEventCalendarButton} from "../../common/AddEventToCalendarButton";
 import {useMediaQuery} from "@mantine/hooks";
 import {useState} from "react";
 import {Invoice} from "../../../types.ts";
-import {orderClient, orderClientPublic} from "../../../api/order.client.ts";
+import {orderClientPublic} from "../../../api/order.client.ts";
 import {downloadBinary} from "../../../utilites/download.ts";
-import {showError} from "../../../utilites/notifications.tsx";
 import {withLoadingNotification} from "../../../utilites/withLoadingNotification.tsx";
 
 const Checkout = () => {
     const {eventId, orderShortId} = useParams();
     const {data: order} = useGetOrderPublic(eventId, orderShortId, ['event']);
     const event = order?.event;
-    const eventSettings = event?.settings;
     const navigate = useNavigate();
     const orderIsCompleted = order?.status === 'COMPLETED';
     const orderIsReserved = order?.status === 'RESERVED';

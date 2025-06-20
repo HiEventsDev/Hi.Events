@@ -2,6 +2,7 @@
 
 namespace HiEvents\Services\Application\Handlers\EventSettings;
 
+use HiEvents\DataTransferObjects\AddressDTO;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\Exceptions\RefundNotPossibleException;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
@@ -31,7 +32,7 @@ readonly class PartialUpdateEventSettingsHandler
             throw new RefundNotPossibleException('Event settings not found');
         }
 
-        $locationDetails = $eventSettingsDTO->settings['location_details'] ?? $existingSettings->getLocationDetails();
+        $locationDetails = AddressDTO::from($eventSettingsDTO->settings['location_details'] ?? $existingSettings->getLocationDetails());
         $isOnlineEvent = $eventSettingsDTO->settings['is_online_event'] ?? $existingSettings->getIsOnlineEvent();
 
         if ($isOnlineEvent) {

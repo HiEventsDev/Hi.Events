@@ -3,6 +3,14 @@ import {useParams} from "react-router";
 
 export const getEventQueryFilters = (searchParams: Partial<QueryFilters>) => {
     const {eventsState, organizerId} = useParams();
+    return getEventQueryFiltersWithParams(searchParams, eventsState, organizerId);
+};
+
+export const getEventQueryFiltersWithParams = (
+    searchParams: Partial<QueryFilters>, 
+    eventsState?: string, 
+    organizerId?: string
+) => {
     let filter = {};
     if (eventsState === 'upcoming' || !eventsState) {
         filter = {
@@ -41,4 +49,4 @@ export const getEventQueryFilters = (searchParams: Partial<QueryFilters>) => {
         ...searchParams,
         ...filter,
     };
-}
+};

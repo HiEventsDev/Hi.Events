@@ -103,7 +103,7 @@ export interface Image {
     type: ImageType;
 }
 
-export type ImageType = 'EVENT_COVER' | 'EDITOR_IMAGE';
+export type ImageType = 'EVENT_COVER' | 'EDITOR_IMAGE' | 'ORGANIZER_LOGO' | 'ORGANIZER_COVER' | 'ORGANIZER_IMAGE';
 
 export type PaymentProvider = 'STRIPE' | 'OFFLINE';
 
@@ -188,6 +188,12 @@ export enum EventStatus {
     ARCHIVED = 'ARCHIVED'
 }
 
+export enum OrganizerStatus {
+    DRAFT = 'DRAFT',
+    LIVE = 'LIVE',
+    ARCHIVED = 'ARCHIVED'
+}
+
 export enum EventLifecycleStatus {
     ONGOING = 'ONGOING',
     UPCOMING = 'UPCOMING',
@@ -257,17 +263,72 @@ export interface EventStats {
     total_refunded: number;
 }
 
+export interface OrganizerStats {
+    total_products_sold: number;
+    total_attendees_registered: number;
+    total_orders: number;
+    total_gross_sales: number;
+    total_tax: number;
+    total_fees: number;
+    total_views: number;
+    total_refunded: number;
+    all_organizers_currencies: string[];
+}
+
 export interface Organizer {
-    id?: number;
+    id?: IdParam;
     name: string;
     email: string;
     description?: string;
     website?: string;
     timezone?: string;
     currency?: string;
+    slug?: string;
     phone?: string;
     images?: Image[];
     events?: Event[];
+    settings?: OrganizerSettings;
+    location_details?: VenueAddress;
+    status?: 'LIVE' | 'DRAFT';
+}
+
+export interface OrganizerSettings {
+    id: IdParam;
+    organizer_id: IdParam;
+    homepage_visibility: 'PUBLIC' | 'PRIVATE' | 'PASSWORD_PROTECTED';
+    homepage_theme_settings: {
+        homepage_background_color: string;
+        homepage_primary_color: string;
+        homepage_primary_text_color: string;
+        homepage_secondary_color: string;
+        homepage_secondary_text_color: string;
+        homepage_content_background_color: string;
+        homepage_background_type?: 'COLOR' | 'MIRROR_COVER_IMAGE';
+    }
+    website_url?: string;
+    location_details?: VenueAddress;
+    social_media_handles?: {
+        facebook?: string;
+        instagram?: string;
+        twitter?: string;
+        linkedin?: string;
+        youtube?: string;
+        tiktok?: string;
+        snapchat?: string;
+        twitch?: string;
+        discord?: string;
+        github?: string;
+        reddit?: string;
+        pinterest?: string;
+        whatsapp?: string;
+        telegram?: string;
+        wechat?: string;
+        weibo?: string;
+    },
+    seo_keywords?: string;
+    seo_description?: string;
+    seo_title?: string;
+    allow_search_engine_indexing?: boolean;
 }
 
 export interface SortDirectionLabel {
@@ -443,8 +504,9 @@ interface TaxesAndFeesRollup {
 }
 
 export interface Order {
-    id: number;
+    id: IdParam;
     short_id: string;
+    event_id: IdParam;
     first_name: string;
     last_name: string;
     company_name: string;

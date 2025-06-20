@@ -49,8 +49,53 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
         }
 
         $this->model = $this->model->orderBy(
-            $params->sort_by ?? OrderDomainObject::getDefaultSort(),
-            $params->sort_direction ?? 'desc',
+            column: $params->sort_by ?? OrderDomainObject::getDefaultSort(),
+            direction: $params->sort_direction ?? 'desc',
+        );
+
+        return $this->paginateWhere(
+            where: $where,
+            limit: $params->per_page,
+            page: $params->page,
+        );
+    }
+
+    public function findByOrganizerId(int $organizerId, int $accountId, QueryParamsDTO $params): LengthAwarePaginator
+    {
+        $where = [
+            ['orders.status', '!=', OrderStatus::RESERVED->name],
+        ];
+
+        if ($params->query) {
+            $where[] = static function (Builder $builder) use ($params) {
+                $builder
+                    ->where(
+                        DB::raw(
+                            sprintf(
+                                "(%s||' '||%s)",
+                                OrderDomainObjectAbstract::FIRST_NAME,
+                                OrderDomainObjectAbstract::LAST_NAME
+                            )
+                        ), 'ilike', '%' . $params->query . '%')
+                    ->orWhere(OrderDomainObjectAbstract::LAST_NAME, 'ilike', '%' . $params->query . '%')
+                    ->orWhere(OrderDomainObjectAbstract::PUBLIC_ID, 'ilike', '%' . $params->query . '%')
+                    ->orWhere(OrderDomainObjectAbstract::EMAIL, 'ilike', '%' . $params->query . '%');
+            };
+        }
+
+        if (!empty($params->filter_fields)) {
+            $this->applyFilterFields($params, OrderDomainObject::getAllowedFilterFields());
+        }
+
+        $this->model = $this->model
+            ->select('orders.*')
+            ->join('events', 'orders.event_id', '=', 'events.id')
+            ->where('events.organizer_id', $organizerId)
+            ->where('events.account_id', $accountId);
+
+        $this->model = $this->model->orderBy(
+            column: $params->sort_by ? 'orders.' . $params->sort_by : 'orders.' . OrderDomainObject::getDefaultSort(),
+            direction: $params->sort_direction ?? 'desc',
         );
 
         return $this->paginateWhere(

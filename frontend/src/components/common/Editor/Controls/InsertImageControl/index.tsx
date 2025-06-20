@@ -2,7 +2,7 @@ import {RichTextEditor, useRichTextEditorContext} from "@mantine/tiptap";
 import {useState} from "react";
 import {t} from "@lingui/macro";
 import {IconPhotoPlus} from "@tabler/icons-react";
-import {Button, FileButton, Group, Image, Modal, Portal, Stack, Tabs, Text, TextInput} from "@mantine/core";
+import {Button, FileButton, Group, Image, Loader, Modal, Portal, Stack, Tabs, Text, TextInput} from "@mantine/core";
 import {useUploadImage} from "../../../../../mutations/useUploadImage.ts";
 
 export const InsertImageControl = () => {
@@ -14,6 +14,7 @@ export const InsertImageControl = () => {
     const [urlError, setUrlError] = useState<string | null>(null);
     const [uploadError, setUploadError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
+    const [isUploading, setIsUploading] = useState(false);
 
     const uploadMutation = useUploadImage();
 
@@ -53,23 +54,20 @@ export const InsertImageControl = () => {
             setUploadError(t`Please select an image.`);
             return;
         }
-        setLoading(true);
-        try {
-            uploadMutation.mutate({image: file}, {
-                onSuccess: ({data}) => {
-                    setUploadedImageUrl(data.url);
-                    setUploadError(null);
-                },
-                onError: (error: any) => {
-                    const message = error?.response?.data?.message ?? t`Failed to upload image.`;
-                    setUploadError(message);
-                }
-            });
-        } catch {
-            setUploadError(t`Failed to upload image.`);
-        } finally {
-            setLoading(false);
-        }
+        setIsUploading(true);
+        setUploadError(null);
+        uploadMutation.mutate({image: file}, {
+            onSuccess: ({data}) => {
+                setUploadedImageUrl(data.url);
+                setUploadError(null);
+                setIsUploading(false);
+            },
+            onError: (error: any) => {
+                const message = error?.response?.data?.message ?? t`Failed to upload image.`;
+                setUploadError(message);
+                setIsUploading(false);
+            }
+        });
     };
 
     const resetState = () => {
@@ -78,6 +76,7 @@ export const InsertImageControl = () => {
         setUploadedImageUrl('');
         setUrlError(null);
         setUploadError(null);
+        setIsUploading(false);
     };
 
     return (
@@ -125,7 +124,14 @@ export const InsertImageControl = () => {
 
                         <Tabs.Panel value="upload" pt="md">
                             <Stack>
-                                {uploadedImageUrl ? (
+                                {isUploading ? (
+                                    <Stack align="center" py="xl">
+                                        <Loader size="lg" />
+                                        <Text size="sm" c="dimmed">
+                                            {t`Uploading image...`}
+                                        </Text>
+                                    </Stack>
+                                ) : uploadedImageUrl ? (
                                     <>
                                         <Image
                                             src={uploadedImageUrl}
@@ -148,7 +154,7 @@ export const InsertImageControl = () => {
                                             file && handleFileUpload(file);
                                         }} accept="image/*">
                                             {(props) => (
-                                                <Button {...props} variant="outline" loading={loading}>
+                                                <Button {...props} variant="outline">
                                                     {t`Upload Image`}
                                                 </Button>
                                             )}

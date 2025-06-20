@@ -121,7 +121,7 @@ readonly class EventStatisticsUpdateService
             $this->promoCodeRepository->increment(
                 id: $order->getPromoCodeId(),
                 column: PromoCodeDomainObjectAbstract::ATTENDEE_USAGE_COUNT,
-                amount: $order->getOrderItems()?->sum('quantity'),
+                amount: $order->getOrderItems()?->sum(fn(OrderItemDomainObject $orderItem) => $orderItem->getQuantity()) ?: 0,
             );
         }
     }

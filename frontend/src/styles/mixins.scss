@@ -1,4 +1,6 @@
 @use "sass:map";
+@use "sass:math";
+@use "sass:color";
 
 $breakpoints: (
         'xs': 320px,
@@ -79,5 +81,36 @@ $breakpoints: (
 
   &::-webkit-scrollbar-track {
     background: transparent;
+  }
+}
+
+@function luminance($color) {
+  $red: color.red($color) / 255;
+  $green: color.green($color) / 255;
+  $blue: color.blue($color) / 255;
+  
+  // Apply gamma correction
+  $red: if($red <= 0.03928, $red / 12.92, math.pow(($red + 0.055) / 1.055, 2.4));
+  $green: if($green <= 0.03928, $green / 12.92, math.pow(($green + 0.055) / 1.055, 2.4));
+  $blue: if($blue <= 0.03928, $blue / 12.92, math.pow(($blue + 0.055) / 1.055, 2.4));
+  
+  @return 0.2126 * $red + 0.7152 * $green + 0.0722 * $blue;
+}
+
+@function contrast-color($bg-color) {
+  @if luminance($bg-color) > 0.5 {
+    @return #000000;
+  } @else {
+    @return #ffffff;
+  }
+}
+
+@function get-contrast-color($bg-color) {
+  $lightness: color.lightness($bg-color);
+  
+  @if $lightness > 50% {
+    @return #000000; // Dark text for light backgrounds
+  } @else {
+    @return #ffffff; // Light text for dark backgrounds
   }
 }

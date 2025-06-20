@@ -9,6 +9,9 @@ use ReflectionProperty;
 use RuntimeException;
 use Throwable;
 
+/**
+ * @deprecated Please use BaseDataObject instead.
+ */
 abstract class BaseDTO
 {
     /**

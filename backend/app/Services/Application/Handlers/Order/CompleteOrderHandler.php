@@ -22,6 +22,7 @@ use HiEvents\Events\OrderStatusChangedEvent;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Helper\IdHelper;
 use HiEvents\Repository\Eloquent\Value\Relationship;
+use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductPriceRepositoryInterface;
@@ -48,6 +49,7 @@ class CompleteOrderHandler
 {
     public function __construct(
         private readonly OrderRepositoryInterface          $orderRepository,
+        private readonly AffiliateRepositoryInterface      $affiliateRepository,
         private readonly AttendeeRepositoryInterface       $attendeeRepository,
         private readonly QuestionAnswerRepositoryInterface $questionAnswersRepository,
         private readonly ProductQuantityUpdateService      $productQuantityUpdateService,
@@ -274,7 +276,7 @@ class CompleteOrderHandler
 
     private function updateOrder(OrderDomainObject $order, CompleteOrderOrderDTO $orderDTO): OrderDomainObject
     {
-        return $this->orderRepository
+        $updatedOrder = $this->orderRepository
             ->loadRelation(OrderItemDomainObject::class)
             ->updateFromArray(
                 $order->getId(),
@@ -291,6 +293,16 @@ class CompleteOrderHandler
                         : OrderStatus::COMPLETED->name,
                 ]
             );
+
+        // Update affiliate sales if this is a free order (no payment required) and has an affiliate
+        if (!$order->isPaymentRequired() && $updatedOrder->getAffiliateId()) {
+            $this->affiliateRepository->incrementSales(
+                $updatedOrder->getAffiliateId(),
+                $updatedOrder->getTotalGross()
+            );
+        }
+
+        return $updatedOrder;
     }
 
     /**

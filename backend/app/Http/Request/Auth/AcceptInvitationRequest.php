@@ -11,7 +11,7 @@ class AcceptInvitationRequest extends BaseRequest
     {
         return [
             'first_name' => RulesHelper::REQUIRED_STRING,
-            'last_name' => RulesHelper::REQUIRED_STRING,
+            'last_name' => RulesHelper::STRING,
             'password' => 'required|string|min:8|confirmed',
             'timezone' => ['required', 'timezone:all'],
         ];

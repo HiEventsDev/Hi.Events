@@ -10,7 +10,7 @@ class RulesHelper
 
     public const REQUIRED_NUMERIC= ['numeric' , 'required'];
 
-    public const STRING = ['string', 'max:100', 'min:1'];
+    public const STRING = ['string', 'max:100', 'min:1', 'nullable'];
 
     public const HEX_COLOR = ['string', 'max:9', 'min:4', 'regex:/\#(?:[0-9a-fA-F]{3}){1,2}$|^\#(?:[0-9a-fA-F]{4}){1,2}$/'];
 

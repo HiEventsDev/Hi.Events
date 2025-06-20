@@ -22,6 +22,7 @@ abstract class OrganizerDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
     final public const DELETED_AT = 'deleted_at';
     final public const CURRENCY = 'currency';
     final public const TIMEZONE = 'timezone';
+    final public const STATUS = 'status';
 
     protected int $id;
     protected int $account_id;
@@ -35,6 +36,7 @@ abstract class OrganizerDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
     protected ?string $deleted_at = null;
     protected string $currency = 'USD';
     protected string $timezone;
+    protected string $status = 'DRAFT';
 
     public function toArray(): array
     {
@@ -51,6 +53,7 @@ abstract class OrganizerDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
                     'deleted_at' => $this->deleted_at ?? null,
                     'currency' => $this->currency ?? null,
                     'timezone' => $this->timezone ?? null,
+                    'status' => $this->status ?? null,
                 ];
     }
 
@@ -184,5 +187,16 @@ abstract class OrganizerDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
     public function getTimezone(): string
     {
         return $this->timezone;
+    }
+
+    public function setStatus(string $status): self
+    {
+        $this->status = $status;
+        return $this;
+    }
+
+    public function getStatus(): string
+    {
+        return $this->status;
     }
 }

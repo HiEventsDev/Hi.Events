@@ -1,6 +1,6 @@
 import {UseFormReturnType} from "@mantine/form";
-import {Alert, NumberInput, Select, TextInput} from "@mantine/core";
-import {IconAlertCircle, IconPercentage, IconTicket} from "@tabler/icons-react";
+import {Alert, Button, NumberInput, Select, TextInput} from "@mantine/core";
+import {IconAlertCircle, IconPercentage, IconRefresh, IconTicket} from "@tabler/icons-react";
 import {ProductType, PromoCode, PromoCodeDiscountType} from "../../../types.ts";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {useParams} from "react-router";
@@ -9,6 +9,7 @@ import {t} from "@lingui/macro";
 import {InputGroup} from "../../common/InputGroup";
 import {getCurrencySymbol} from "../../../utilites/currency.ts";
 import {ProductSelector} from "../../common/ProductSelector";
+import {ShowForDesktop, ShowForMobile} from "../../common/Responsive/ShowHideComponents.tsx";
 
 interface PromoCodeFormProps {
     form: UseFormReturnType<PromoCode>,
@@ -29,9 +30,38 @@ export const PromoCodeForm = ({form}: PromoCodeFormProps) => {
         return <LoadingMask/>
     }
 
+    const generateRandomCode = () => {
+        const randomCode = Math.random().toString(36).substring(2, 10).toUpperCase();
+        form.setFieldValue('code', randomCode);
+    };
+
     return (
         <>
-            <TextInput {...form.getInputProps('code')} label={t`Code`} placeholder="20OFF" required/>
+            <TextInput
+                {...form.getInputProps('code')}
+                label={t`Code`}
+                placeholder="20OFF"
+                required
+                rightSection={(
+                    <Button
+                        variant="subtle"
+                        size="xs"
+                        color="gray"
+                        onClick={generateRandomCode}
+                        style={{fontWeight: 400}}
+                        title={t`Generate code`}
+                        leftSection={<IconRefresh size={16}/>}
+                    >
+                        <ShowForMobile>
+                            {t`Generate`}
+                        </ShowForMobile>
+                        <ShowForDesktop>
+                            {t`Generate code`}
+                        </ShowForDesktop>
+                    </Button>
+                )}
+                rightSectionWidth={'auto'}
+            />
 
             <Alert variant={'light'} mt={20} mb={20} icon={<IconAlertCircle size="1rem"/>} title={t`TIP`}>
                 {t`A promo code with no discount can be used to reveal hidden products.`}

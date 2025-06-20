@@ -4,12 +4,16 @@ declare(strict_types=1);
 
 namespace HiEvents\Services\Application\Handlers\Order;
 
+use HiEvents\DomainObjects\AffiliateDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
+use HiEvents\DomainObjects\Generated\AffiliateDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\PromoCodeDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\PromoCodeDomainObject;
+use HiEvents\DomainObjects\Status\AffiliateStatus;
 use HiEvents\DomainObjects\Status\EventStatus;
+use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Order\DTO\CreateOrderPublicDTO;
@@ -24,6 +28,7 @@ class CreateOrderHandler
     public function __construct(
         private readonly EventRepositoryInterface     $eventRepository,
         private readonly PromoCodeRepositoryInterface $promoCodeRepository,
+        private readonly AffiliateRepositoryInterface $affiliateRepository,
         private readonly OrderManagementService       $orderManagementService,
         private readonly OrderItemProcessingService   $orderItemProcessingService,
         private readonly DatabaseManager              $databaseManager,
@@ -48,6 +53,7 @@ class CreateOrderHandler
             $this->validateEventStatus($event, $createOrderPublicDTO);
 
             $promoCode = $this->getPromoCode($createOrderPublicDTO, $eventId);
+            $affiliate = $this->getAffiliate($createOrderPublicDTO, $eventId);
 
             if ($deleteExistingOrdersForSession) {
                 $this->orderManagementService->deleteExistingOrders($eventId, $createOrderPublicDTO->session_identifier);
@@ -59,6 +65,7 @@ class CreateOrderHandler
                 timeOutMinutes: $event->getEventSettings()?->getOrderTimeoutInMinutes(),
                 locale: $createOrderPublicDTO->order_locale,
                 promoCode: $promoCode,
+                affiliate: $affiliate,
                 sessionId: $createOrderPublicDTO->session_identifier,
             );
 
@@ -89,6 +96,19 @@ class CreateOrderHandler
         }
 
         return null;
+    }
+
+    private function getAffiliate(CreateOrderPublicDTO $createOrderPublicDTO, int $eventId): ?AffiliateDomainObject
+    {
+        if ($createOrderPublicDTO->affiliate_code === null) {
+            return null;
+        }
+
+        return $this->affiliateRepository->findFirstWhere([
+            AffiliateDomainObjectAbstract::CODE => strtoupper(trim($createOrderPublicDTO->affiliate_code)),
+            AffiliateDomainObjectAbstract::EVENT_ID => $eventId,
+            AffiliateDomainObjectAbstract::STATUS => AffiliateStatus::ACTIVE->value,
+        ]);
     }
 
     public function validateEventStatus(EventDomainObject $event, CreateOrderPublicDTO $createOrderPublicDTO): void

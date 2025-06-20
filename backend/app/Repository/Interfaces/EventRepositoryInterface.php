@@ -14,5 +14,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
  */
 interface EventRepositoryInterface extends RepositoryInterface
 {
+    public function findEventsForOrganizer(int $organizerId, int $accountId, QueryParamsDTO $params): LengthAwarePaginator;
+
     public function findEvents(array $where, QueryParamsDTO $params): LengthAwarePaginator;
 }

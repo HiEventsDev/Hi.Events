@@ -2,6 +2,7 @@
 
 namespace HiEvents\Http\Actions\Images;
 
+use HiEvents\DomainObjects\Enums\ImageType;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Image\CreateImageRequest;
 use HiEvents\Resources\Image\ImageResource;
@@ -25,7 +26,10 @@ class CreateImageAction extends BaseAction
     {
         $image = $this->createImageHandler->handle(new CreateImageDTO(
             userId: $this->getAuthenticatedUser()->getId(),
+            accountId: $this->getAuthenticatedAccountId(),
             image: $request->file('image'),
+            imageType: $request->has('image_type') ? ImageType::fromName($request->input('image_type')) : null,
+            entityId: $request->input('entity_id'),
         ));
 
         return $this->resourceResponse(ImageResource::class, $image);

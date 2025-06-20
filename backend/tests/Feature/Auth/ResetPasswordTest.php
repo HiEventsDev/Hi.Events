@@ -2,24 +2,23 @@
 
 declare(strict_types=1);
 
-namespace Tests\Feature;
+namespace Tests\Feature\Auth;
 
 use HiEvents\Mail\User\ForgotPassword;
 use HiEvents\Mail\User\ResetPasswordSuccess;
 use HiEvents\Models\AccountConfiguration;
 use HiEvents\Models\User;
-use Illuminate\Foundation\Testing\DatabaseTruncation;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Mail;
 use ReflectionClass;
 use Tests\TestCase;
 
 class ResetPasswordTest extends TestCase
 {
-    use DatabaseTruncation;
+    use RefreshDatabase;
 
-    private const API_PREFIX = '';
-    private const RESET_PASSWORD_ROUTE = self::API_PREFIX . '/auth/reset-password';
-    private const FORGOT_PASSWORD_ROUTE = self::API_PREFIX . '/auth/forgot-password';
+    private const RESET_PASSWORD_ROUTE = '/auth/reset-password';
+    private const FORGOT_PASSWORD_ROUTE = '/auth/forgot-password';
 
     public function setUp(): void
     {

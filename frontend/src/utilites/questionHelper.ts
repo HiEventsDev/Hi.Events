@@ -1,4 +1,4 @@
-import {formatAddress} from "./formatAddress.tsx";
+import {formatAddress} from "./addressUtilities.ts";
 
 export const isAddress = (obj: any) => {
     if (!obj || typeof obj !== 'object') return false;

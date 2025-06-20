@@ -37,7 +37,7 @@ class CreateUserAction extends BaseAction
         ]);
 
         try {
-            $user = $this->createUserHandler->handle(CreateUserDTO::fromArray($data));
+            $user = $this->createUserHandler->handle(CreateUserDTO::from($data));
         } catch (ResourceConflictException $e) {
             throw ValidationException::withMessages([
                 'email' => $e->getMessage(),
