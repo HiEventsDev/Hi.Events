@@ -1,11 +1,12 @@
 import {t} from "@lingui/macro";
 import {Badge, Button, Group, Table as MantineTable, Text} from '@mantine/core';
 import {IdParam} from "../../../types.ts";
-import {IconCopy, IconCurrencyDollar, IconPencil, IconPlus, IconTrash, IconUsers} from "@tabler/icons-react";
+import {IconCopy, IconCurrencyDollar, IconPencil, IconPlus, IconShare, IconTrash, IconUsers} from "@tabler/icons-react";
 import {useClipboard, useDisclosure} from "@mantine/hooks";
 import {useState} from "react";
 import {NoResultsSplash} from "../NoResultsSplash";
 import {EditAffiliateModal} from "../../modals/EditAffiliateModal";
+import {ShareModal} from "../../modals/ShareModal";
 import {useDeleteAffiliate} from "../../../mutations/useDeleteAffiliate";
 import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
@@ -24,7 +25,9 @@ interface AffiliateTableProps {
 
 export const AffiliateTable = ({affiliates, openCreateModal}: AffiliateTableProps) => {
     const [editModalOpen, {open: openEditModal, close: closeEditModal}] = useDisclosure(false);
+    const [shareModalOpen, {open: openShareModal, close: closeShareModal}] = useDisclosure(false);
     const [selectedAffiliateId, setSelectedAffiliateId] = useState<IdParam>();
+    const [selectedAffiliate, setSelectedAffiliate] = useState<Affiliate>();
     const deleteMutation = useDeleteAffiliate();
     const {eventId} = useParams();
     const copy = useClipboard()
@@ -97,10 +100,10 @@ export const AffiliateTable = ({affiliates, openCreateModal}: AffiliateTableProp
                                             variant="subtle"
                                             color="gray"
                                             leftSection={<IconCopy size={12}/>}
-                                            onClick={() => copyToClipboard(affiliate.code)}
+                                            onClick={() => copyToClipboard(eventHomepageUrl(event!) + `?aff=${affiliate.code}`)}
                                             className={classes.copyButton}
                                         >
-                                            {t`Copy`}
+                                            {t`Copy URL`}
                                         </Button>
                                     </div>
                                 </div>
@@ -184,6 +187,14 @@ export const AffiliateTable = ({affiliates, openCreateModal}: AffiliateTableProp
                                                     )
                                                 },
                                                 {
+                                                    label: t`Share Affiliate Link`,
+                                                    icon: <IconShare size={14}/>,
+                                                    onClick: () => {
+                                                        setSelectedAffiliate(affiliate);
+                                                        openShareModal();
+                                                    }
+                                                },
+                                                {
                                                     label: t`Delete Affiliate`,
                                                     icon: <IconTrash size={14}/>,
                                                     color: "red",
@@ -206,6 +217,17 @@ export const AffiliateTable = ({affiliates, openCreateModal}: AffiliateTableProp
                 <EditAffiliateModal
                     affiliateId={selectedAffiliateId}
                     onClose={closeEditModal}
+                />
+            )}
+
+            {shareModalOpen && selectedAffiliate && event && (
+                <ShareModal
+                    opened={shareModalOpen}
+                    onClose={closeShareModal}
+                    url={eventHomepageUrl(event) + `?aff=${selectedAffiliate.code}`}
+                    title={event.title}
+                    modalTitle={t`Share Affiliate Link`}
+                    shareText={t`Here is your affiliate link`}
                 />
             )}
         </>
