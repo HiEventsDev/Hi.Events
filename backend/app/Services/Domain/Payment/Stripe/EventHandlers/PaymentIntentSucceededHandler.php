@@ -20,6 +20,7 @@ use HiEvents\Events\OrderStatusChangedEvent;
 use HiEvents\Exceptions\CannotAcceptPaymentException;
 use HiEvents\Repository\Eloquent\StripePaymentsRepository;
 use HiEvents\Repository\Eloquent\Value\Relationship;
+use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Domain\Order\OrderApplicationFeeService;
@@ -40,6 +41,7 @@ class PaymentIntentSucceededHandler
     public function __construct(
         private readonly OrderRepositoryInterface        $orderRepository,
         private readonly StripePaymentsRepository        $stripePaymentsRepository,
+        private readonly AffiliateRepositoryInterface    $affiliateRepository,
         private readonly ProductQuantityUpdateService    $quantityUpdateService,
         private readonly StripeRefundExpiredOrderService $refundExpiredOrderService,
         private readonly AttendeeRepositoryInterface     $attendeeRepository,
@@ -108,13 +110,23 @@ class PaymentIntentSucceededHandler
 
     private function updateOrderStatuses(StripePaymentDomainObjectAbstract $stripePayment): OrderDomainObject
     {
-        return $this->orderRepository
+        $updatedOrder = $this->orderRepository
             ->loadRelation(OrderItemDomainObject::class)
             ->updateFromArray($stripePayment->getOrderId(), [
                 OrderDomainObjectAbstract::PAYMENT_STATUS => OrderPaymentStatus::PAYMENT_RECEIVED->name,
                 OrderDomainObjectAbstract::STATUS => OrderStatus::COMPLETED->name,
                 OrderDomainObjectAbstract::PAYMENT_PROVIDER => PaymentProviders::STRIPE->value,
             ]);
+
+        // Update affiliate sales if this order has an affiliate
+        if ($updatedOrder->getAffiliateId()) {
+            $this->affiliateRepository->incrementSales(
+                affiliateId: $updatedOrder->getAffiliateId(),
+                amount: $updatedOrder->getTotalGross()
+            );
+        }
+
+        return $updatedOrder;
     }
 
     private function updateStripePaymentInfo(PaymentIntent $paymentIntent, StripePaymentDomainObjectAbstract $stripePayment): void

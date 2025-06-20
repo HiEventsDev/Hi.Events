@@ -18,6 +18,7 @@ import {
     IconShare,
     IconStar,
     IconTicket,
+    IconTrendingUp,
     IconUserQuestion,
     IconUsers,
     IconUsersGroup,
@@ -103,6 +104,7 @@ const EventLayout = () => {
         {link: 'check-in', label: t`Check-In Lists`, icon: IconQrcode},
         {link: 'messages', label: t`Messages`, icon: IconSend},
         {link: 'promo-codes', label: t`Promo Codes`, icon: IconDiscount2},
+        {link: 'affiliates', label: t`Affiliates`, icon: IconTrendingUp},
 
         {label: t`Tools`},
         {link: 'homepage-designer', label: t`Homepage Designer`, icon: IconPaint},

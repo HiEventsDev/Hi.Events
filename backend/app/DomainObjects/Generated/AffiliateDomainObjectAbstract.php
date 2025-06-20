@@ -12,33 +12,42 @@ abstract class AffiliateDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
     final public const PLURAL_NAME = 'affiliates';
     final public const ID = 'id';
     final public const EVENT_ID = 'event_id';
+    final public const ACCOUNT_ID = 'account_id';
+    final public const NAME = 'name';
     final public const CODE = 'code';
-    final public const SALES_VOLUME = 'sales_volume';
-    final public const UNIQUE_VISITORS = 'unique_visitors';
+    final public const EMAIL = 'email';
+    final public const TOTAL_SALES = 'total_sales';
+    final public const TOTAL_SALES_GROSS = 'total_sales_gross';
+    final public const STATUS = 'status';
     final public const CREATED_AT = 'created_at';
     final public const UPDATED_AT = 'updated_at';
-    final public const DELETED_AT = 'deleted_at';
 
     protected int $id;
-    protected ?int $event_id = null;
+    protected int $event_id;
+    protected int $account_id;
+    protected string $name;
     protected string $code;
-    protected ?float $sales_volume = null;
-    protected int $unique_visitors = 0;
-    protected string $created_at;
+    protected ?string $email = null;
+    protected int $total_sales = 0;
+    protected float $total_sales_gross = 0.0;
+    protected string $status = 'active';
+    protected ?string $created_at = null;
     protected ?string $updated_at = null;
-    protected ?string $deleted_at = null;
 
     public function toArray(): array
     {
         return [
                     'id' => $this->id ?? null,
                     'event_id' => $this->event_id ?? null,
+                    'account_id' => $this->account_id ?? null,
+                    'name' => $this->name ?? null,
                     'code' => $this->code ?? null,
-                    'sales_volume' => $this->sales_volume ?? null,
-                    'unique_visitors' => $this->unique_visitors ?? null,
+                    'email' => $this->email ?? null,
+                    'total_sales' => $this->total_sales ?? null,
+                    'total_sales_gross' => $this->total_sales_gross ?? null,
+                    'status' => $this->status ?? null,
                     'created_at' => $this->created_at ?? null,
                     'updated_at' => $this->updated_at ?? null,
-                    'deleted_at' => $this->deleted_at ?? null,
                 ];
     }
 
@@ -53,15 +62,37 @@ abstract class AffiliateDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
         return $this->id;
     }
 
-    public function setEventId(?int $event_id): self
+    public function setEventId(int $event_id): self
     {
         $this->event_id = $event_id;
         return $this;
     }
 
-    public function getEventId(): ?int
+    public function getEventId(): int
     {
         return $this->event_id;
+    }
+
+    public function setAccountId(int $account_id): self
+    {
+        $this->account_id = $account_id;
+        return $this;
+    }
+
+    public function getAccountId(): int
+    {
+        return $this->account_id;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+        return $this;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
     }
 
     public function setCode(string $code): self
@@ -75,35 +106,57 @@ abstract class AffiliateDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
         return $this->code;
     }
 
-    public function setSalesVolume(?float $sales_volume): self
+    public function setEmail(?string $email): self
     {
-        $this->sales_volume = $sales_volume;
+        $this->email = $email;
         return $this;
     }
 
-    public function getSalesVolume(): ?float
+    public function getEmail(): ?string
     {
-        return $this->sales_volume;
+        return $this->email;
     }
 
-    public function setUniqueVisitors(int $unique_visitors): self
+    public function setTotalSales(int $total_sales): self
     {
-        $this->unique_visitors = $unique_visitors;
+        $this->total_sales = $total_sales;
         return $this;
     }
 
-    public function getUniqueVisitors(): int
+    public function getTotalSales(): int
     {
-        return $this->unique_visitors;
+        return $this->total_sales;
     }
 
-    public function setCreatedAt(string $created_at): self
+    public function setTotalSalesGross(float $total_sales_gross): self
+    {
+        $this->total_sales_gross = $total_sales_gross;
+        return $this;
+    }
+
+    public function getTotalSalesGross(): float
+    {
+        return $this->total_sales_gross;
+    }
+
+    public function setStatus(string $status): self
+    {
+        $this->status = $status;
+        return $this;
+    }
+
+    public function getStatus(): string
+    {
+        return $this->status;
+    }
+
+    public function setCreatedAt(?string $created_at): self
     {
         $this->created_at = $created_at;
         return $this;
     }
 
-    public function getCreatedAt(): string
+    public function getCreatedAt(): ?string
     {
         return $this->created_at;
     }
@@ -117,16 +170,5 @@ abstract class AffiliateDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
     public function getUpdatedAt(): ?string
     {
         return $this->updated_at;
-    }
-
-    public function setDeletedAt(?string $deleted_at): self
-    {
-        $this->deleted_at = $deleted_at;
-        return $this;
-    }
-
-    public function getDeletedAt(): ?string
-    {
-        return $this->deleted_at;
     }
 }

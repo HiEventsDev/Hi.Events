@@ -299,7 +299,7 @@ export const router: RouteObject[] = [
             {
                 path: "affiliates",
                 async lazy() {
-                    const Affiliates = await import("./components/routes/event/affiliates");
+                    const Affiliates = await import("./components/routes/event/Affiliates");
                     return {Component: Affiliates.default};
                 }
             },

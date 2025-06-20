@@ -2,6 +2,7 @@
 
 namespace HiEvents\Services\Domain\Event;
 
+use HiEvents\DomainObjects\AffiliateDomainObject;
 use HiEvents\DomainObjects\CapacityAssignmentDomainObject;
 use HiEvents\DomainObjects\CheckInListDomainObject;
 use HiEvents\DomainObjects\Enums\ImageType;
@@ -18,6 +19,7 @@ use HiEvents\DomainObjects\Status\EventStatus;
 use HiEvents\DomainObjects\TaxAndFeesDomainObject;
 use HiEvents\DomainObjects\WebhookDomainObject;
 use HiEvents\Repository\Eloquent\Value\Relationship;
+use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\ImageRepositoryInterface;
 use HiEvents\Services\Domain\CapacityAssignment\CreateCapacityAssignmentService;
@@ -46,6 +48,7 @@ class DuplicateEventService
         private readonly HtmlPurifierService             $purifier,
         private readonly CreateProductCategoryService    $createProductCategoryService,
         private readonly CreateWebhookService            $createWebhookService,
+        private readonly AffiliateRepositoryInterface    $affiliateRepository,
     )
     {
     }
@@ -66,6 +69,7 @@ class DuplicateEventService
         bool    $duplicateCheckInLists = true,
         bool    $duplicateEventCoverImage = true,
         bool    $duplicateWebhooks = true,
+        bool    $duplicateAffiliates = true,
         ?string $description = null,
         ?string $endDate = null,
     ): EventDomainObject
@@ -110,6 +114,10 @@ class DuplicateEventService
 
             if ($duplicateWebhooks) {
                 $this->duplicateWebhooks($event, $newEvent);
+            }
+
+            if ($duplicateAffiliates) {
+                $this->duplicateAffiliates($event, $newEvent);
             }
 
             $this->databaseManager->commit();
@@ -344,6 +352,7 @@ class DuplicateEventService
             ]))
             ->loadRelation(ImageDomainObject::class)
             ->loadRelation(WebhookDomainObject::class)
+            ->loadRelation(AffiliateDomainObject::class)
             ->findFirstWhere([
                 'id' => $eventId,
                 'account_id' => $accountId,
@@ -363,6 +372,20 @@ class DuplicateEventService
                     ->setAccountId($newEvent->getAccountId())
                     ->setUserId($newEvent->getUserId()),
             );
+        });
+    }
+
+    private function duplicateAffiliates(EventDomainObject $event, EventDomainObject $newEvent): void
+    {
+        $event->getAffiliates()?->each(function (AffiliateDomainObject $affiliate) use ($newEvent) {
+            $this->affiliateRepository->create([
+                'event_id' => $newEvent->getId(),
+                'account_id' => $newEvent->getAccountId(),
+                'name' => $affiliate->getName(),
+                'code' => $affiliate->getCode(),
+                'email' => $affiliate->getEmail(),
+                'status' => $affiliate->getStatus(),
+            ]);
         });
     }
 }

@@ -37,6 +37,8 @@ import {IconChevronRight, IconX} from "@tabler/icons-react"
 import {getSessionIdentifier} from "../../../../utilites/sessionIdentifier.ts";
 import {Constants} from "../../../../constants.ts";
 
+const AFFILIATE_EXPIRY_DAYS = 30;
+
 const sendHeightToIframeWidgets = () => {
     const height = document.documentElement.scrollHeight;
     const widgetHeight = document.querySelector('.hi-product-widget-container')?.getBoundingClientRect().height || 0;
@@ -86,13 +88,48 @@ const SelectProducts = (props: SelectProductsProps) => {
     const [orderInProcessOverlayVisible, setOrderInProcessOverlayVisible] = useState(false);
     const [resizeRef, resizeObserverRect] = useResizeObserver();
     const [collapsedProducts, setCollapsedProducts] = useState<{ [key: number]: boolean }>({});
+    const [affiliateCode, setAffiliateCode] = useState<string | null>(null);
 
     useEffect(() => sendHeightToIframeWidgets(), [resizeObserverRect.height]);
+
+    useEffect(() => {
+        const storageKey = 'affiliate_code_' + eventId;
+
+        const now = Date.now();
+        const affiliateCodeFromUrl = new URLSearchParams(window.location.search).get('aff');
+
+        if (affiliateCodeFromUrl) {
+            const data = {code: affiliateCodeFromUrl, timestamp: now};
+            localStorage.setItem(storageKey, JSON.stringify(data));
+            setAffiliateCode(affiliateCodeFromUrl);
+            return;
+        }
+
+        const storedData = localStorage.getItem(storageKey);
+        if (storedData) {
+            try {
+                const parsed = JSON.parse(storedData);
+                const ageInDays = (now - parsed.timestamp) / (1000 * 60 * 60 * 24);
+                if (ageInDays <= AFFILIATE_EXPIRY_DAYS) {
+                    setAffiliateCode(parsed.code);
+                } else {
+                    localStorage.removeItem(storageKey);
+                }
+            } catch {
+                localStorage.removeItem(storageKey);
+            }
+        }
+    }, []);
+
+    useEffect(() => {
+        form.setFieldValue('affiliate_code', affiliateCode || null);
+    }, [affiliateCode]);
 
     const form = useForm<ProductFormPayload>({
         initialValues: {
             products: undefined,
             promo_code: props.promoCodeValid ? props.promoCode || null : null,
+            affiliate_code: affiliateCode || null,
             session_identifier: undefined,
         },
     });
@@ -361,6 +398,7 @@ const SelectProducts = (props: SelectProductsProps) => {
             {(event && productAreAvailable) && (
                 <form target={'__blank'} onSubmit={form.onSubmit(handleProductSelection as any)}>
                     <Input type={'hidden'} {...form.getInputProps('promo_code')} />
+                    <Input type={'hidden'} {...form.getInputProps('affiliate_code')} />
                     <div className={'hi-product-category-rows'}>
                         {productCategories && productCategories.map((category) => {
                             return (
@@ -540,6 +578,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                     </Group>
                 )}
             </div>
+
             {
                 /**
                  * (c) Hi.Events Ltd 2025
