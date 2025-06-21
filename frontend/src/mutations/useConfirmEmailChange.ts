@@ -11,7 +11,7 @@ export const useConfirmEmailChange = () => {
             userClient.confirmEmailChange(userId, token),
 
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: [GET_ME_QUERY_KEY]});
+            return queryClient.invalidateQueries({queryKey: [GET_ME_QUERY_KEY]});
         }
     });
 };

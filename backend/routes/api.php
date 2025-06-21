@@ -124,6 +124,7 @@ use HiEvents\Http\Actions\TaxesAndFees\GetTaxOrFeeAction;
 use HiEvents\Http\Actions\Users\CancelEmailChangeAction;
 use HiEvents\Http\Actions\Users\ConfirmEmailAddressAction;
 use HiEvents\Http\Actions\Users\ConfirmEmailChangeAction;
+use HiEvents\Http\Actions\Users\ConfirmEmailWithCodeAction;
 use HiEvents\Http\Actions\Users\CreateUserAction;
 use HiEvents\Http\Actions\Users\DeleteInvitationAction;
 use HiEvents\Http\Actions\Users\GetMeAction;
@@ -184,6 +185,7 @@ $router->middleware(['auth:api'])->group(
         $router->delete('/users/{user_id}/email-change', CancelEmailChangeAction::class);
         $router->post('/users/{user_id}/confirm-email/{resetToken}', ConfirmEmailAddressAction::class);
         $router->post('/users/{user_id}/resend-email-confirmation', ResendEmailConfirmationAction::class);
+        $router->post('/users/{user_id}/confirm-email-with-code', ConfirmEmailWithCodeAction::class);
 
         // Accounts
         $router->get('/accounts/{account_id?}', GetAccountAction::class);
