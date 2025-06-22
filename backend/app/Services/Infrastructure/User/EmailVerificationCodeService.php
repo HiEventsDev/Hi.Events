@@ -42,9 +42,9 @@ class EmailVerificationCodeService
         return $this->cacheRepository->get($this->getCacheKey($email));
     }
 
-    private function generateNumericCode(int $length = 5): string
+    private function generateNumericCode(): int
     {
-        return str_pad(random_int(0, 99999), $length, '0', STR_PAD_LEFT);
+        return random_int(10000, 99999);
     }
 
     private function getCacheKey(string $email): string

@@ -119,8 +119,8 @@ export const router: RouteObject[] = [
     {
         path: "welcome",
         async lazy() {
-            const DefaultLayout = await import("./components/layouts/DefaultLayout");
-            return {Component: DefaultLayout.default};
+            const WelcomeLayout = await import("./components/layouts/WelcomeLayout");
+            return {Component: WelcomeLayout.default};
         },
         errorElement: <ErrorPage/>,
         children: [

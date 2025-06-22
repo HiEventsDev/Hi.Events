@@ -3,6 +3,7 @@
 namespace HiEvents\Services\Domain\Event;
 
 use HiEvents\DomainObjects\Enums\HomepageBackgroundType;
+use HiEvents\DomainObjects\Enums\ImageType;
 use HiEvents\DomainObjects\Enums\PaymentProviders;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
@@ -14,9 +15,12 @@ use HiEvents\Helper\IdHelper;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventStatisticRepositoryInterface;
+use HiEvents\Repository\Interfaces\ImageRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
 use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
+use Illuminate\Config\Repository;
 use Illuminate\Database\DatabaseManager;
+use Illuminate\Filesystem\FilesystemManager;
 use Throwable;
 
 class CreateEventService
@@ -28,6 +32,9 @@ class CreateEventService
         private readonly DatabaseManager                   $databaseManager,
         private readonly EventStatisticRepositoryInterface $eventStatisticsRepository,
         private readonly HtmlPurifierService               $purifier,
+        private readonly ImageRepositoryInterface          $imageRepository,
+        private readonly Repository                        $config,
+        private readonly FilesystemManager                 $filesystemManager,
     )
     {
     }
@@ -36,7 +43,7 @@ class CreateEventService
      * @throws Throwable
      */
     public function createEvent(
-        EventDomainObject        $eventData,
+        EventDomainObject         $eventData,
         ?EventSettingDomainObject $eventSettings = null
     ): EventDomainObject
     {
@@ -55,6 +62,8 @@ class CreateEventService
             );
 
             $this->createEventStatistics($event);
+
+            $this->createEventCover($event);
 
             return $event;
         });
@@ -93,6 +102,7 @@ class CreateEventService
             'description' => $this->purifier->purify($eventData->getDescription()),
             'timezone' => $eventData->getTimezone(),
             'currency' => $eventData->getCurrency(),
+            'category' => $eventData->getCategory(),
             'location_details' => $eventData->getLocationDetails(),
             'account_id' => $eventData->getAccountId(),
             'user_id' => $eventData->getUserId(),
@@ -112,6 +122,37 @@ class CreateEventService
             'total_tax' => 0,
             'total_fee' => 0,
             'orders_created' => 0,
+        ]);
+    }
+
+    /**
+     * If a default cover image exists for the event category, it will be created.
+     *
+     * @param EventDomainObject $event
+     * @return void
+     */
+    private function createEventCover(EventDomainObject $event): void
+    {
+        $disk = $this->config->get('filesystems.public');
+        $defaultCoversPath = $this->config->get('app.event_categories_cover_images_path');
+
+        $imageFilename = $event->getCategory() . '.jpg';
+        $imagePath = $defaultCoversPath . '/' . $imageFilename;
+
+        if (!$this->filesystemManager->disk($disk)->exists($imagePath)) {
+            return;
+        }
+
+        $this->imageRepository->create([
+            'account_id' => $event->getAccountId(),
+            'entity_id' => $event->getId(),
+            'entity_type' => EventDomainObject::class,
+            'type' => ImageType::EVENT_COVER->name,
+            'filename' => $imageFilename,
+            'disk' => $this->config->get('filesystems.default'),
+            'path' => $imagePath,
+            'size' => 139673,
+            'mime_type' => 'image/jpg',
         ]);
     }
 
@@ -161,7 +202,7 @@ class CreateEventService
                 '#ffffff'
             ),
 
-            'homepage_background_type' => HomepageBackgroundType::COLOR->name,
+            'homepage_background_type' => HomepageBackgroundType::MIRROR_COVER_IMAGE->name,
             'continue_button_text' => __('Continue'),
             'support_email' => $organizer->getEmail(),
 

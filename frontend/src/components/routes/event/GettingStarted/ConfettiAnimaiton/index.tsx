@@ -1,4 +1,4 @@
-import {FC, useEffect, useRef, useState} from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 
 interface ConfettiAnimationProps {
     duration?: number;
@@ -6,9 +6,9 @@ interface ConfettiAnimationProps {
 
 const EVENT_EMOJIS = ['🎸', '🎉', '🎊', '🎈', '🎆', '✨', '🎵', '🎶', '🎤', '🎭', '🎪', '🎯', '🏆'];
 
-const ConfettiAnimation: FC<ConfettiAnimationProps> = ({duration = 4000}) => {
+const ConfettiAnimation: FC<ConfettiAnimationProps> = ({ duration = 4000 }) => {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
-    const [isActive, setIsActive] = useState<boolean>(true);
+    const [isActive, setIsActive] = useState(true);
 
     useEffect(() => {
         if (!canvasRef.current || !isActive) return;
@@ -19,12 +19,14 @@ const ConfettiAnimation: FC<ConfettiAnimationProps> = ({duration = 4000}) => {
 
         let animationFrameId: number;
         const particles: Particle[] = [];
-        const startTime = Date.now();
+        const maxParticles = 80;
+        const startTime = performance.now();
 
-        // Set canvas size
         const resizeCanvas = () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+            const ratio = window.devicePixelRatio || 1;
+            canvas.width = window.innerWidth * ratio;
+            canvas.height = window.innerHeight * ratio;
+            ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
         };
         resizeCanvas();
         window.addEventListener('resize', resizeCanvas);
@@ -36,77 +38,62 @@ const ConfettiAnimation: FC<ConfettiAnimationProps> = ({duration = 4000}) => {
             size: number;
             velocityY: number;
             velocityX: number;
-            rotation: number;
-            rotationSpeed: number;
             opacity: number;
 
             constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = -50;
+                this.x = Math.random() * window.innerWidth;
+                this.y = -30;
                 this.emoji = EVENT_EMOJIS[Math.floor(Math.random() * EVENT_EMOJIS.length)];
-                this.size = Math.random() * 20 + 20; // 20-40px
-                this.velocityY = Math.random() * 3 + 2; // 2-5 px/frame
-                this.velocityX = (Math.random() - 0.5) * 2; // -1 to 1 px/frame
-                this.rotation = Math.random() * Math.PI * 2;
-                this.rotationSpeed = (Math.random() - 0.5) * 0.2;
+                this.size = Math.random() * 15 + 20; // 20–35px
+                this.velocityY = Math.random() * 2 + 1; // slower: 1–3 px/frame
+                this.velocityX = (Math.random() - 0.5) * 1.5; // gentle drift
                 this.opacity = 1;
             }
 
             update(): boolean {
-                // Physics
                 this.y += this.velocityY;
                 this.x += this.velocityX;
-                this.rotation += this.rotationSpeed;
-                this.velocityY += 0.1; // gravity
-                
-                // Fade out when reaching bottom third of screen
-                if (this.y > canvas.height * 0.7) {
-                    this.opacity -= 0.02;
+                this.velocityY += 0.05; // gentle gravity
+
+                if (this.y > window.innerHeight * 0.7) {
+                    this.opacity -= 0.015;
                 }
 
-                // Remove if off screen or fully transparent
-                return this.y < canvas.height + 50 && this.opacity > 0;
+                return this.y < window.innerHeight + 40 && this.opacity > 0;
             }
 
             draw(): void {
                 ctx.save();
                 ctx.globalAlpha = this.opacity;
-                ctx.translate(this.x, this.y);
-                ctx.rotate(this.rotation);
                 ctx.font = `${this.size}px sans-serif`;
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
-                ctx.fillText(this.emoji, 0, 0);
+                ctx.fillText(this.emoji, this.x, this.y);
                 ctx.restore();
             }
         }
 
-        // Create initial burst of particles
-        for (let i = 0; i < 50; i++) {
+        for (let i = 0; i < 40; i++) {
             particles.push(new Particle());
         }
 
-        // Animation loop
-        const animate = () => {
+        const animate = (time: number) => {
+            const elapsed = time - startTime;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Add new particles periodically
-            const elapsed = Date.now() - startTime;
-            if (elapsed < duration && Math.random() < 0.3) {
+            if (elapsed < duration && Math.random() < 0.05 && particles.length < maxParticles) {
                 particles.push(new Particle());
             }
 
-            // Update and draw particles
             for (let i = particles.length - 1; i >= 0; i--) {
-                const particle = particles[i];
-                if (particle.update()) {
-                    particle.draw();
+                const p = particles[i];
+                if (p.update()) {
+                    p.draw();
                 } else {
                     particles.splice(i, 1);
                 }
             }
 
-            // Continue animation if particles exist or still generating
             if (particles.length > 0 || elapsed < duration) {
                 animationFrameId = requestAnimationFrame(animate);
             } else {
@@ -114,7 +101,7 @@ const ConfettiAnimation: FC<ConfettiAnimationProps> = ({duration = 4000}) => {
             }
         };
 
-        animate();
+        animationFrameId = requestAnimationFrame(animate);
 
         return () => {
             window.removeEventListener('resize', resizeCanvas);

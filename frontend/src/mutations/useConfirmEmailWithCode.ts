@@ -7,7 +7,7 @@ export const useConfirmEmailWithCode = () => {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: async ({userId, code}: { userId: IdParam, code: number }) => {
+        mutationFn: async ({userId, code}: { userId: IdParam, code: IdParam }) => {
             return userClient.confirmEmailAddressWithCode(userId, code);
         },
         onSuccess: () => {

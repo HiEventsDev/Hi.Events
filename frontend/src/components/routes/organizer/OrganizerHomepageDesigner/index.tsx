@@ -4,7 +4,7 @@ import {useParams} from "react-router";
 import {useGetOrganizerSettings} from "../../../../queries/useGetOrganizerSettings.ts";
 import {useUpdateOrganizerSettings} from "../../../../mutations/useUpdateOrganizerSettings.ts";
 import {useFormErrorResponseHandler} from "../../../../hooks/useFormErrorResponseHandler.tsx";
-import {IdParam, OrganizerSettings} from "../../../../types.ts";
+import {IdParam, OrganizerSettings, ColorTheme} from "../../../../types.ts";
 import {showSuccess} from "../../../../utilites/notifications.tsx";
 import {t} from "@lingui/macro";
 import {useForm} from "@mantine/form";
@@ -18,125 +18,13 @@ import {ImageUploadDropzone} from "../../../common/ImageUploadDropzone";
 import {organizerPreviewPath} from "../../../../utilites/urlHelper.ts";
 import {queryClient} from "../../../../utilites/queryClient.ts";
 import {GET_ORGANIZER_PUBLIC_QUERY_KEY} from "../../../../queries/useGetOrganizerPublic.ts";
-
-interface ColorTheme {
-    name: string;
-    colors: {
-        homepage_background_color: string;
-        homepage_content_background_color: string;
-        homepage_primary_color: string;
-        homepage_primary_text_color: string;
-        homepage_secondary_color: string;
-        homepage_secondary_text_color: string;
-    };
-}
-
-const colorThemes: ColorTheme[] = [
-    {
-        name: t`Modern`,
-        colors: {
-            homepage_background_color: '#2c0838',
-            homepage_content_background_color: '#32174f',
-            homepage_primary_color: '#c7a2db',
-            homepage_primary_text_color: '#ffffff',
-            homepage_secondary_color: '#c7a2db',
-            homepage_secondary_text_color: '#ffffff',
-        }
-    },
-    {
-        name: t`Ocean`,
-        colors: {
-            homepage_background_color: '#c3e3f7',
-            homepage_content_background_color: '#ffffff',
-            homepage_primary_color: '#0ea5e9',
-            homepage_primary_text_color: '#075985',
-            homepage_secondary_color: '#0891b2',
-            homepage_secondary_text_color: '#e9f6ff',
-        }
-    },
-    {
-        name: t`Forest`,
-        colors: {
-            homepage_background_color: '#91b89e',
-            homepage_content_background_color: '#ffffff',
-            homepage_primary_color: '#91b89e',
-            homepage_primary_text_color: '#14532d',
-            homepage_secondary_color: '#16a34a',
-            homepage_secondary_text_color: '#eefff3',
-        }
-    },
-    {
-        name: t`Sunset`,
-        colors: {
-            homepage_background_color: '#e8c47b',
-            homepage_content_background_color: '#ffffff',
-            homepage_primary_color: '#f97316',
-            homepage_primary_text_color: '#7c2d12',
-            homepage_secondary_color: '#ea580c',
-            homepage_secondary_text_color: '#fad9cd',
-        }
-    },
-    {
-        name: t`Midnight`,
-        colors: {
-            homepage_background_color: '#020617',
-            homepage_content_background_color: '#0f172a',
-            homepage_primary_color: '#818cf8',
-            homepage_primary_text_color: '#e2e8f0',
-            homepage_secondary_color: '#94a3b8',
-            homepage_secondary_text_color: '#ffffff',
-        }
-    },
-    {
-        name: t`Royal`,
-        colors: {
-            homepage_background_color: '#f3e8ff',
-            homepage_content_background_color: '#ffffff',
-            homepage_primary_color: '#a855f7',
-            homepage_primary_text_color: '#581c87',
-            homepage_secondary_color: '#9333ea',
-            homepage_secondary_text_color: '#f6eeff',
-        }
-    },
-    {
-        name: t`Coral`,
-        colors: {
-            homepage_background_color: '#ffe4e6',
-            homepage_content_background_color: '#ffffff',
-            homepage_primary_color: '#f87171',
-            homepage_primary_text_color: '#991b1b',
-            homepage_secondary_color: '#ef4444',
-            homepage_secondary_text_color: '#ffd4d4',
-        }
-    },
-    {
-        name: t`Arctic`,
-        colors: {
-            homepage_background_color: '#71bdad',
-            homepage_content_background_color: '#ffffff',
-            homepage_primary_color: '#14b8a6',
-            homepage_primary_text_color: '#134e4a',
-            homepage_secondary_color: '#0d9488',
-            homepage_secondary_text_color: '#ffffff',
-        }
-    },
-    {
-        name: t`Noir`,
-        colors: {
-            homepage_background_color: '#09090b',
-            homepage_content_background_color: '#18181b',
-            homepage_primary_color: '#f87171',
-            homepage_primary_text_color: '#fafafa',
-            homepage_secondary_color: '#a1a1aa',
-            homepage_secondary_text_color: '#d4d4d8',
-        }
-    }
-];
+import {useGetColorThemes} from "../../../../queries/useGetColorThemes.ts";
 
 const OrganizerHomepageDesigner = () => {
     const {organizerId} = useParams();
     const organizerSettingsQuery = useGetOrganizerSettings(organizerId);
     const organizerQuery = useGetOrganizer(organizerId);
+    const colorThemesQuery = useGetColorThemes();
     const updateMutation = useUpdateOrganizerSettings();
 
     const organizerData = organizerQuery.data;
@@ -158,7 +46,7 @@ const OrganizerHomepageDesigner = () => {
     const form = useForm({
         initialValues: {
             homepage_background_color: '#fafafa',
-            homepage_content_background_color: '#ffffff',
+            homepage_content_background_color: '#ffffffbf',
             homepage_primary_color: '#171717',
             homepage_primary_text_color: '#171717',
             homepage_secondary_color: '#737373',
@@ -169,19 +57,23 @@ const OrganizerHomepageDesigner = () => {
 
     const formErrorHandle = useFormErrorResponseHandler();
 
-    // Detect if current colors match any preset theme
     const detectedTheme = useMemo(() => {
+        if (!colorThemesQuery.data) return 'Custom';
+        
         const currentColors = form.values;
 
         // Check if colors match any theme
-        const matchingTheme = colorThemes.find(theme =>
-            Object.keys(theme.colors).every(key =>
-                currentColors[key as keyof typeof currentColors] === theme.colors[key as keyof typeof theme.colors]
-            )
+        const matchingTheme = colorThemesQuery.data.find(theme =>
+            theme.homepage_background_color === currentColors.homepage_background_color &&
+            theme.homepage_content_background_color === currentColors.homepage_content_background_color &&
+            theme.homepage_primary_color === currentColors.homepage_primary_color &&
+            theme.homepage_primary_text_color === currentColors.homepage_primary_text_color &&
+            theme.homepage_secondary_color === currentColors.homepage_secondary_color &&
+            theme.homepage_secondary_text_color === currentColors.homepage_secondary_text_color
         );
 
         return matchingTheme?.name || 'Custom';
-    }, [form.values]);
+    }, [form.values, colorThemesQuery.data]);
 
     useEffect(() => {
         if (organizerSettingsQuery?.isFetched && organizerSettingsQuery?.data) {
@@ -267,7 +159,14 @@ const OrganizerHomepageDesigner = () => {
     };
 
     const applyTheme = (theme: ColorTheme) => {
-        form.setValues(theme.colors);
+        form.setValues({
+            homepage_background_color: theme.homepage_background_color,
+            homepage_content_background_color: theme.homepage_content_background_color,
+            homepage_primary_color: theme.homepage_primary_color,
+            homepage_primary_text_color: theme.homepage_primary_text_color,
+            homepage_secondary_color: theme.homepage_secondary_color,
+            homepage_secondary_text_color: theme.homepage_secondary_text_color,
+        });
         setSelectedTheme(theme.name);
         setColorInputsExpanded(false);
     };
@@ -358,7 +257,10 @@ const OrganizerHomepageDesigner = () => {
                                         
                                         <div className={classes.themePresets}>
                                             <Group gap={12} wrap="wrap">
-                                                {colorThemes.map((theme) => (
+                                                {colorThemesQuery.isLoading && (
+                                                    <Text size="sm" c="dimmed">{t`Loading themes...`}</Text>
+                                                )}
+                                                {colorThemesQuery.data?.map((theme) => (
                                                     <UnstyledButton
                                                         key={theme.name}
                                                         onClick={() => applyTheme(theme)}
@@ -369,19 +271,19 @@ const OrganizerHomepageDesigner = () => {
                                                             <div
                                                                 className={classes.themeOuter}
                                                                 style={{
-                                                                    background: theme.colors.homepage_background_color,
+                                                                    background: theme.homepage_background_color,
                                                                 }}
                                                             >
                                                                 <div
                                                                     className={classes.themeInner}
                                                                     style={{
-                                                                        background: theme.colors.homepage_content_background_color,
+                                                                        background: theme.homepage_content_background_color,
                                                                     }}
                                                                 >
                                                                     <div
                                                                         className={classes.themeDot}
                                                                         style={{
-                                                                            background: theme.colors.homepage_primary_color,
+                                                                            background: theme.homepage_primary_color,
                                                                         }}
                                                                     />
                                                                 </div>

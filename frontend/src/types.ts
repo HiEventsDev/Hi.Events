@@ -30,6 +30,16 @@ export interface ResetPasswordRequest {
     password_confirmation: string;
 }
 
+export interface ColorTheme {
+    name: string;
+    homepage_background_color: string;
+    homepage_content_background_color: string;
+    homepage_primary_color: string;
+    homepage_primary_text_color: string;
+    homepage_secondary_color: string;
+    homepage_secondary_text_color: string;
+}
+
 export interface LoginResponse {
     token?: string;
     token_type: string;
@@ -167,6 +177,7 @@ export interface VenueAddress {
 export interface EventBase {
     title: string;
     description?: string;
+    category?: string;
     start_date: string;
     end_date?: string;
 }

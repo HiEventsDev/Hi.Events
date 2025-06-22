@@ -1,5 +1,6 @@
 <?php
 
+use HiEvents\DomainObjects\Enums\ColorTheme;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
 
@@ -53,14 +54,9 @@ return [
     'email_logo_link_url' => env('APP_EMAIL_LOGO_LINK_URL', env('APP_FRONTEND_URL', 'http://localhost')),
     'email_footer_text' => env('APP_EMAIL_FOOTER_TEXT'),
 
-    'organizer_homepage_default_theme_colors' => [
-        'homepage_background_color' => '#2c0838',
-        'homepage_content_background_color' => '#32174f',
-        'homepage_primary_color' => '#c7a2db',
-        'homepage_primary_text_color' => '#ffffff',
-        'homepage_secondary_color' => '#c7a2db',
-        'homepage_secondary_text_color' => '#ffffff',
-    ],
+    'organizer_homepage_default_theme' => ColorTheme::MIDNIGHT,
+
+    'event_categories_cover_images_path' => '/event_cover/system-covers',
 
     /*
     |--------------------------------------------------------------------------

@@ -68,7 +68,7 @@ export const userClient = {
         const response = await api.post(`users/${userId}/resend-email-confirmation`);
         return response.data;
     },
-    confirmEmailAddressWithCode: async (userId: IdParam, code: number) => {
+    confirmEmailAddressWithCode: async (userId: IdParam, code: IdParam) => {
         const response = await api.post(`users/${userId}/confirm-email-with-code`, {code});
         return response.data;
     },

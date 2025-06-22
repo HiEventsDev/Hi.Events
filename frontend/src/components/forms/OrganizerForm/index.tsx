@@ -5,12 +5,13 @@ import {Organizer} from "../../../types.ts";
 import {useEffect} from "react";
 import {LoadingContainer} from "../../common/LoadingContainer";
 import {t} from "@lingui/macro";
-import {InputGroup} from "../../common/InputGroup";
-import {Button, Group, Select, TextInput} from "@mantine/core";
+import {Button, Select, Stack, TextInput} from "@mantine/core";
 import {currencies} from "../../../../data/currencies.ts";
 import {timezones} from "../../../../data/timezones.ts";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
 import {useGetMe} from "../../../queries/useGetMe.ts";
+import {IconBuilding} from "@tabler/icons-react";
+import classes from "../../routes/welcome/Welcome.module.scss";
 
 interface OrganizerFormProps {
     onSuccess?: (organizer: Organizer) => void;
@@ -19,32 +20,35 @@ interface OrganizerFormProps {
 
 export const OrganizerForm = ({form}: { form: UseFormReturnType<Partial<Organizer>> }) => {
     return (
-        <>
-            <InputGroup>
-                <TextInput
-                    {...form.getInputProps('name')}
-                    required
-                    label={t`Organizer Name`}
-                    placeholder={t`Awesome Organizer Ltd.`}
-                />
-                <TextInput
-                    {...form.getInputProps('email')}
-                    label={t`Email`}
-                    placeholder={t`hello@awesome-events.com`}
-                />
-            </InputGroup>
-            <InputGroup>
+        <Stack gap={24}>
+            <TextInput
+                {...form.getInputProps('name')}
+                required
+                label={t`Organization Name`}
+                placeholder={t`Awesome Events Ltd.`}
+                size="lg"
+            />
+            <TextInput
+                {...form.getInputProps('email')}
+                required
+                label={t`Contact Email`}
+                placeholder={t`hello@awesome-events.com`}
+                size="lg"
+                type="email"
+            />
+
+            <div className={classes.dateTimeGrid}>
                 <Select
                     {...form.getInputProps('currency')}
                     searchable
                     required
                     data={Object.entries(currencies).map(([key, value]) => ({
                         value: value,
-                        label: key,
+                        label: `${key} (${value})`,
                     }))}
                     label={t`Currency`}
-                    placeholder={t`EUR`}
-                    description={t`The default currency for your events.`}
+                    placeholder={t`Select currency`}
+                    size="lg"
                 />
                 <Select
                     {...form.getInputProps('timezone')}
@@ -52,11 +56,11 @@ export const OrganizerForm = ({form}: { form: UseFormReturnType<Partial<Organize
                     required
                     data={timezones}
                     label={t`Timezone`}
-                    placeholder={t`UTC`}
-                    description={t`The default timezone for your events.`}
+                    placeholder={t`Select timezone`}
+                    size="lg"
                 />
-            </InputGroup>
-        </>
+            </div>
+        </Stack>
     )
 }
 
@@ -105,24 +109,19 @@ export const OrganizerCreateForm = ({onSuccess, onCancel}: OrganizerFormProps) =
                 <fieldset disabled={organizerMutation.isPending || !accountFetched || !meFetched}>
                     <OrganizerForm form={form as any}/>
 
-                    <Group gap={10}>
-                        <Button 
-                            fullWidth 
-                            loading={organizerMutation.isPending}
-                            type={'submit'}
-                            color={'green'}>
-                            {t`Create Organizer`}
-                        </Button>
-                        {onCancel && (
-                            <Button 
-                                fullWidth 
-                                variant="default"
-                                onClick={onCancel}
-                                disabled={organizerMutation.isPending}>
-                                {t`Cancel`}
-                            </Button>
-                        )}
-                    </Group>
+                    <Button
+                        type={'submit'}
+                        fullWidth
+                        size="lg"
+                        loading={organizerMutation.isPending}
+                        leftSection={organizerMutation.isPending ? null : <IconBuilding size={20}/>}
+                        className={classes.primaryButton}
+                        disabled={organizerMutation.isPending}
+                        style={{marginTop: '1.5rem'}}
+                        aria-label={organizerMutation.isPending ? t`Creating your organizer profile, please wait` : t`Continue to event creation`}
+                    >
+                        {organizerMutation.isPending ? t`Creating Organizer...` : t`Continue Setup`}
+                    </Button>
                 </fieldset>
             </form>
         </LoadingContainer>

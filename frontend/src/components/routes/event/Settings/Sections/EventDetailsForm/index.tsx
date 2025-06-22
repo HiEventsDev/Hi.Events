@@ -15,6 +15,7 @@ import {useFormErrorResponseHandler} from "../../../../../../hooks/useFormErrorR
 import {currenciesMap} from "../../../../../../../data/currencies.ts";
 import {timezones} from "../../../../../../../data/timezones.ts";
 import {HeadingWithDescription} from "../../../../../common/Card/CardHeading";
+import {EventCategories} from "../../../../../../constants/eventCategories.ts";
 
 export const EventDetailsForm = () => {
     const {eventId} = useParams();
@@ -28,6 +29,7 @@ export const EventDetailsForm = () => {
             end_date: '',
             timezone: '',
             currency: '',
+            category: '',
         }
     });
     const formErrorHandle = useFormErrorResponseHandler();
@@ -41,6 +43,7 @@ export const EventDetailsForm = () => {
                 end_date: utcToTz(eventQuery.data.end_date, eventQuery.data.timezone),
                 timezone: eventQuery.data.timezone,
                 currency: eventQuery.data.currency,
+                category: eventQuery.data.category,
             });
         }
     }, [eventQuery.isFetched]);
@@ -72,6 +75,18 @@ export const EventDetailsForm = () => {
                         label={t`Name`}
                         placeholder={t`Hi.Events Conference ${new Date().getFullYear()}`}
                         required
+                    />
+                    
+                    <Select
+                        {...form.getInputProps('category')}
+                        label={t`Category`}
+                        placeholder={t`Select a category`}
+                        data={EventCategories.map((category) => ({
+                            value: category.id,
+                            label: `${category.emoji} ${category.name}`,
+                        }))}
+                        searchable
+                        clearable
                     />
 
                     <Editor
