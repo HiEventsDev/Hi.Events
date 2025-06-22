@@ -30,7 +30,7 @@ abstract class AffiliateDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
     protected ?string $email = null;
     protected int $total_sales = 0;
     protected float $total_sales_gross = 0.0;
-    protected string $status = 'active';
+    protected string $status = 'ACTIVE';
     protected ?string $created_at = null;
     protected ?string $updated_at = null;
 

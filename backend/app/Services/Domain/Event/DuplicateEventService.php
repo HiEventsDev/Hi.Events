@@ -143,6 +143,7 @@ class DuplicateEventService
                 ->setAccountId($event->getAccountId())
                 ->setUserId($event->getUserId())
                 ->setTitle($event->getTitle())
+                ->setCategory($event->getCategory())
                 ->setStartDate($event->getStartDate())
                 ->setEndDate($event->getEndDate())
                 ->setDescription($event->getDescription())

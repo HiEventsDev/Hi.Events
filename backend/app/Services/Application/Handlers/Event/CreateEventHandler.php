@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace HiEvents\Services\Application\Handlers\Event;
 
+use HiEvents\DomainObjects\Enums\EventCategory;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Exceptions\OrganizerNotFoundException;
 use HiEvents\Services\Application\Handlers\Event\DTO\CreateEventDTO;
@@ -55,6 +56,7 @@ class CreateEventHandler
             ->setAttributes($eventData->attributes?->toArray())
             ->setTimezone($eventData->timezone ?? $organizer->getTimezone())
             ->setCurrency($eventData->currency ?? $organizer->getCurrency())
+            ->setCategory($eventData->category?->value ?? EventCategory::OTHER->value)
             ->setStatus($eventData->status)
             ->setEventSettings($eventData->event_settings)
             ->setLocationDetails($eventData->location_details?->toArray());

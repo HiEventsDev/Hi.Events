@@ -42,6 +42,7 @@ use HiEvents\Http\Actions\CheckInLists\Public\GetCheckInListAttendeePublicAction
 use HiEvents\Http\Actions\CheckInLists\Public\GetCheckInListAttendeesPublicAction;
 use HiEvents\Http\Actions\CheckInLists\Public\GetCheckInListPublicAction;
 use HiEvents\Http\Actions\CheckInLists\UpdateCheckInListAction;
+use HiEvents\Http\Actions\Common\GetColorThemesAction;
 use HiEvents\Http\Actions\Common\Webhooks\StripeIncomingWebhookAction;
 use HiEvents\Http\Actions\Events\CreateEventAction;
 use HiEvents\Http\Actions\Events\DuplicateEventAction;
@@ -124,6 +125,7 @@ use HiEvents\Http\Actions\TaxesAndFees\GetTaxOrFeeAction;
 use HiEvents\Http\Actions\Users\CancelEmailChangeAction;
 use HiEvents\Http\Actions\Users\ConfirmEmailAddressAction;
 use HiEvents\Http\Actions\Users\ConfirmEmailChangeAction;
+use HiEvents\Http\Actions\Users\ConfirmEmailWithCodeAction;
 use HiEvents\Http\Actions\Users\CreateUserAction;
 use HiEvents\Http\Actions\Users\DeleteInvitationAction;
 use HiEvents\Http\Actions\Users\GetMeAction;
@@ -184,6 +186,7 @@ $router->middleware(['auth:api'])->group(
         $router->delete('/users/{user_id}/email-change', CancelEmailChangeAction::class);
         $router->post('/users/{user_id}/confirm-email/{resetToken}', ConfirmEmailAddressAction::class);
         $router->post('/users/{user_id}/resend-email-confirmation', ResendEmailConfirmationAction::class);
+        $router->post('/users/{user_id}/confirm-email-with-code', ConfirmEmailWithCodeAction::class);
 
         // Accounts
         $router->get('/accounts/{account_id?}', GetAccountAction::class);
@@ -372,6 +375,9 @@ $router->prefix('/public')->group(
         $router->get('/check-in-lists/{check_in_list_short_id}/attendees/{attendee_public_id}', GetCheckInListAttendeePublicAction::class);
         $router->post('/check-in-lists/{check_in_list_short_id}/check-ins', CreateAttendeeCheckInPublicAction::class);
         $router->delete('/check-in-lists/{check_in_list_short_id}/check-ins/{check_in_short_id}', DeleteAttendeeCheckInPublicAction::class);
+
+        // Color themes
+        $router->get('/color-themes', GetColorThemesAction::class);
     }
 );
 

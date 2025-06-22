@@ -14,6 +14,7 @@ import classes from "./CreateEventModal.module.scss";
 import {OrganizerCreateForm} from "../../forms/OrganizerForm";
 import dayjs from "dayjs";
 import {DateTimePicker} from "@mantine/dates";
+import {EventCategories} from "../../../constants/eventCategories.ts";
 
 interface CreateEventModalProps extends GenericModalProps {
     organizerId?: IdParam;
@@ -33,6 +34,7 @@ export const CreateEventModal = ({onClose, organizerId}: CreateEventModalProps) 
             end_date: undefined,
             description: undefined,
             organizer_id: organizerId ? String(organizerId) : undefined,
+            category: undefined,
         },
         validate: {
             title: hasLength({max: 150}, t`Event name should be less than 150 characters`),
@@ -176,6 +178,18 @@ export const CreateEventModal = ({onClose, organizerId}: CreateEventModalProps) 
                                 required
                                 size="lg"
                                 leftSection={<IconSparkles size={18}/>}
+                            />
+                            
+                            <Select
+                                {...form.getInputProps('category')}
+                                label={t`Event Category`}
+                                placeholder={t`Select a category`}
+                                data={EventCategories.map((category) => ({
+                                    value: category.id,
+                                    label: `${category.emoji} ${category.name}`,
+                                }))}
+                                size="lg"
+                                searchable
                             />
 
                             <div className={classes.editorField}>
