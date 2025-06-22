@@ -54,6 +54,7 @@ class SendOrderDetailsService
                 ->send(new OrderFailed(
                     order: $order,
                     event: $event,
+                    organizer: $event->getOrganizer(),
                     eventSettings: $event->getEventSettings(),
                 ));
         }

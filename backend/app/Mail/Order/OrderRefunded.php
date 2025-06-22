@@ -5,6 +5,7 @@ namespace HiEvents\Mail\Order;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Mail\BaseMail;
 use HiEvents\Values\MoneyValue;
 use Illuminate\Mail\Mailables\Content;
@@ -16,10 +17,11 @@ use Illuminate\Mail\Mailables\Envelope;
 class OrderRefunded extends BaseMail
 {
     public function __construct(
-        private readonly OrderDomainObject $order,
-        private readonly EventDomainObject $event,
+        private readonly OrderDomainObject        $order,
+        private readonly EventDomainObject        $event,
+        private readonly OrganizerDomainObject    $organizer,
         private readonly EventSettingDomainObject $eventSettings,
-        private readonly MoneyValue        $refundAmount,
+        private readonly MoneyValue               $refundAmount,
     )
     {
         parent::__construct();
@@ -40,6 +42,7 @@ class OrderRefunded extends BaseMail
             with: [
                 'event' => $this->event,
                 'order' => $this->order,
+                'organizer' => $this->organizer,
                 'eventSettings' => $this->eventSettings,
                 'refundAmount' => $this->refundAmount,
             ]

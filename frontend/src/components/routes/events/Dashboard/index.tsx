@@ -1,7 +1,7 @@
 import {Event, QueryFilters} from "../../../../types.ts";
 import {useGetEvents} from "../../../../queries/useGetEvents.ts";
 import {EventCard} from "../../../common/EventCard";
-import {t} from "@lingui/macro";
+import {t, Trans} from "@lingui/macro";
 import {SearchBarWrapper} from "../../../common/SearchBar";
 import {Button, Menu, Modal, Skeleton} from "@mantine/core";
 import {
@@ -25,6 +25,7 @@ import {getEventQueryFilters} from "../../../../utilites/eventsPageFiltersHelper
 import {EventsDashboardStatusButtons} from "../../../common/EventsDashboardStatusButtons";
 import {NoEventsBlankSlate} from "../../../common/NoEventsBlankSlate";
 import {useState} from "react";
+import {getConfig} from "../../../../utilites/config.ts";
 
 const DashboardSkeleton = () => {
     return (
@@ -82,7 +83,7 @@ export function Dashboard() {
                 <div className={classes.headerContent}>
                     <h1 className={classes.pageTitle}>{getHeading()}</h1>
                     <p className={classes.welcomeMessage}>
-                        {t`Welcome to Hi.Events, here's a listing of all your events.`}
+                        <Trans>Welcome to {getConfig('VITE_APP_NAME', 'Hi.Events')}, here's a listing of all your events</Trans>
                     </p>
                 </div>
 

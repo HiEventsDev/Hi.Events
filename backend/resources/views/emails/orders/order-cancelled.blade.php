@@ -1,4 +1,5 @@
 @php /** @var \HiEvents\DomainObjects\OrderDomainObject $order */ @endphp
+@php /** @var \HiEvents\DomainObjects\OrganizerDomainObject $organizer */ @endphp
 @php /** @var \HiEvents\DomainObjects\EventDomainObject $event */ @endphp
 @php /** @var \HiEvents\DomainObjects\EventSettingDomainObject $eventSettings */ @endphp
 @php /** @var string $ticketUrl */ @endphp
@@ -17,7 +18,7 @@
 {{ __('If you have any questions or need assistance, please respond to this email.') }}
 <br><br>
 {{ __('Thank you') }},<br>
-{{ $event->getOrganizer()->getName() ?: config('app.name') }}
+{{ $organizer->getName() ?: config('app.name') }}
 
 {!! $eventSettings->getGetEmailFooterHtml() !!}
 </x-mail::message>

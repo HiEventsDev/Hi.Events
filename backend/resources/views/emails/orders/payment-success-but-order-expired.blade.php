@@ -2,6 +2,7 @@
 @php /** @var \HiEvents\DomainObjects\EventDomainObject $event */ @endphp
 @php /** @var \HiEvents\DomainObjects\OrganizerDomainObject $organizer */ @endphp
 @php /** @var \HiEvents\DomainObjects\EventSettingDomainObject $eventSettings */ @endphp
+
 @php /** @see \HiEvents\Mail\Order\PaymentSuccessButOrderExpiredMail */ @endphp
 
 <x-mail::message>

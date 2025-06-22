@@ -161,7 +161,7 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
                          Please contact us to request access.`}
                             <Button
                                 mt={20}
-                                onClick={() => window.open(`mailto:${getConfig("APP_PLATFORM_SUPPORT_EMAIL", "support@hi.events")}`)}
+                                onClick={() => window.open(`mailto:${getConfig("VITE_PLATFORM_SUPPORT_EMAIL", "support@hi.events")}`)}
                                 variant={'outline'}
                                 fullWidth
                             >
