@@ -2,10 +2,10 @@
 
 namespace HiEvents\DomainObjects\Enums;
 
-enum Role
+enum Role: string
 {
     use BaseEnum;
 
-    case ADMIN;
-    case ORGANIZER;
+    case ADMIN = 'ADMIN';
+    case ORGANIZER = 'ORGANIZER';
 }

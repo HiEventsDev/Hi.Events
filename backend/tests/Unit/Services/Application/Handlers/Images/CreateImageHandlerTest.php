@@ -2,9 +2,12 @@
 
 namespace Tests\Unit\Services\Application\Handlers\Images;
 
-use HiEvents\DomainObjects\Enums\ImageTypes;
+use HiEvents\DomainObjects\Enums\ImageType;
 use HiEvents\DomainObjects\ImageDomainObject;
 use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\Repository\Interfaces\EventRepositoryInterface;
+use HiEvents\Repository\Interfaces\ImageRepositoryInterface;
+use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Images\CreateImageHandler;
 use HiEvents\Services\Application\Handlers\Images\DTO\CreateImageDTO;
 use HiEvents\Services\Domain\Image\ImageUploadService;
@@ -22,9 +25,15 @@ class CreateImageHandlerTest extends TestCase
         parent::setUp();
 
         $this->imageUploadService = m::mock(ImageUploadService::class);
+        $organizerRepository = m::mock(OrganizerRepositoryInterface::class);
+        $eventRepository = m::mock(EventRepositoryInterface::class);
+        $imageRepository = m::mock(ImageRepositoryInterface::class);
 
         $this->handler = new CreateImageHandler(
-            $this->imageUploadService
+            $this->imageUploadService,
+            $organizerRepository,
+            $eventRepository,
+            $imageRepository
         );
     }
 
@@ -32,9 +41,11 @@ class CreateImageHandlerTest extends TestCase
     {
         $uploadedFile = m::mock(UploadedFile::class);
         $imageDomainObject = m::mock(ImageDomainObject::class);
+        $accountId = 123;
 
         $dto = new CreateImageDTO(
             userId: 42,
+            accountId: $accountId,
             image: $uploadedFile
         );
 
@@ -45,12 +56,19 @@ class CreateImageHandlerTest extends TestCase
                 $uploadedFile,
                 42,
                 UserDomainObject::class,
-                ImageTypes::GENERIC->name,
+                ImageType::GENERIC->name,
+                $accountId,
             ])
             ->andReturn($imageDomainObject);
 
         $result = $this->handler->handle($dto);
 
         $this->assertSame($imageDomainObject, $result);
+    }
+
+    protected function tearDown(): void
+    {
+        m::close();
+        parent::tearDown();
     }
 }

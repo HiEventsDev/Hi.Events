@@ -76,7 +76,12 @@ class Event extends BaseModel
         return $this->hasMany(Webhook::class);
     }
 
-    public static function boot()
+    public function affiliates(): HasMany
+    {
+        return $this->hasMany(Affiliate::class);
+    }
+
+    public static function boot(): void
     {
         parent::boot();
 
@@ -96,10 +101,5 @@ class Event extends BaseModel
             EventDomainObjectAbstract::ATTRIBUTES => 'array',
             EventDomainObjectAbstract::LOCATION_DETAILS => 'array',
         ];
-    }
-
-    protected function getFillableFields(): array
-    {
-        return [];
     }
 }

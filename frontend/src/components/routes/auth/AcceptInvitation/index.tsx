@@ -91,7 +91,7 @@ const AcceptInvitation = () => {
                     <InputGroup>
                         <TextInput required {...form.getInputProps('first_name')}
                                    label={t`First Name`}/>
-                        <TextInput required {...form.getInputProps('last_name')}
+                        <TextInput {...form.getInputProps('last_name')}
                                    label={t`Last Name`}/>
                     </InputGroup>
 

@@ -1,0 +1,119 @@
+.outerContainer {
+  width: 100%;
+}
+
+.container {
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+.dropzone {
+  width: 100%;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+
+  &:hover {
+    border-color: var(--mantine-color-blue-6);
+  }
+}
+
+.dropzoneRoot {
+  border: 2px dashed var(--mantine-color-gray-4);
+  background-color: var(--mantine-color-gray-0);
+  border-radius: 8px;
+  transition: border 0.2s ease;
+}
+
+.dropzoneInner {
+  min-height: 140px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+}
+
+.emptyDropzone {
+  text-align: center;
+}
+
+.iconWrapper {
+  background-color: var(--mantine-color-blue-0);
+  color: var(--mantine-color-blue-6);
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.previewContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  text-align: center;
+}
+
+.previewImage {
+  max-width: 100%;
+  max-height: 240px;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+.replaceButton {
+  margin-top: 0.25rem;
+}
+
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 120px;
+}
+
+// Compact mode styles
+.compact {
+  .dropzoneInner {
+    min-height: 60px;
+    padding: 12px;
+  }
+  
+  .previewImage {
+    max-height: 80px;
+  }
+  
+  .loadingContainer {
+    min-height: 60px;
+  }
+  
+  .iconWrapper {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+.emptyDropzoneCompact {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+// Error states
+.dropzoneError {
+  border-color: var(--mantine-color-red-3) !important;
+  background-color: var(--mantine-color-red-0);
+  
+  &:hover {
+    border-color: var(--mantine-color-red-4) !important;
+  }
+}
+
+.errorContainer {
+  padding: 0 4px;
+  margin-top: 4px;
+}

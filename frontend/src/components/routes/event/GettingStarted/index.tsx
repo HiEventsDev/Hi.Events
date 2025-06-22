@@ -3,7 +3,7 @@ import {Card} from "../../../common/Card";
 import {t} from "@lingui/macro"
 import {Button, Group, Progress, Text} from "@mantine/core";
 import classes from "./GettingStarted.module.scss";
-import {useLocation, useNavigate, useParams} from "react-router";
+import {NavLink, useLocation, useNavigate, useParams} from "react-router";
 import {IconCheck, IconConfetti} from "@tabler/icons-react";
 import {useGetEvent} from "../../../../queries/useGetEvent.ts";
 import {useGetEventImages} from "../../../../queries/useGetEventImages.ts";
@@ -77,7 +77,7 @@ const GettingStarted = () => {
 
     return (
         <>
-            {showConfetti && <ConfettiAnimation duration={1000}/>}
+            {showConfetti && <ConfettiAnimation duration={2000}/>}
             <PageBody>
                 <Card className={classes.headerCard}>
                     <div className={classes.headerContent}>
@@ -136,7 +136,7 @@ const GettingStarted = () => {
                         <p>
                             {t`Add event details and manage event settings.`}
                         </p>
-                        <Button variant={'light'} component={'a'} href={'/manage/event/' + eventId + '/settings'}>
+                        <Button variant={'light'} component={NavLink} to={'/manage/event/' + eventId + '/settings'}>
                             {event?.description ? t`Continue set up` : t`Set up your event`}
                         </Button>
                     </Card>
@@ -150,7 +150,7 @@ const GettingStarted = () => {
                             {t`Connect your Stripe account to start receiving payments.`}
                         </p>
                         {!account?.stripe_connect_setup_complete && (
-                            <Button variant={'light'} component={'a'} href={'/account/payment'}>
+                            <Button variant={'light'} component={NavLink} to={'/account/payment'}>
                                 {t`Connect with Stripe`}
                             </Button>)
                         }
@@ -164,8 +164,8 @@ const GettingStarted = () => {
                         <p>
                             {t`Customize your event page to match your brand and style.`}
                         </p>
-                        <Button component={'a'} variant={'light'}
-                                href={'/manage/event/' + eventId + '/homepage-designer'}>
+                        <Button component={NavLink} variant={'light'}
+                                to={'/manage/event/' + eventId + '/homepage-designer'}>
                             {t`Customize your event page`}
                         </Button>
                     </Card>
@@ -183,19 +183,6 @@ const GettingStarted = () => {
                                     {t`Set your event live`}
                                 </Button>
                             )}
-                    </Card>
-                    <Card className={account?.is_account_email_confirmed ? classes.completedCard : ''}>
-                        {account?.is_account_email_confirmed && <CompletedBadge/>}
-                        <h2>
-                            {t`✉️ Confirm your email address`}
-                        </h2>
-                        <p>
-                            {t`You must confirm your email address before your event can go live.`}
-                        </p>
-                        {!account?.is_account_email_confirmed && (
-                            <Button variant={'light'} component={'a'} href={'/account/payment'}>
-                                {t`Resend confirmation email`}
-                            </Button>)}
                     </Card>
                 </div>
             </PageBody>

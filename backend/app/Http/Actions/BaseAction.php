@@ -126,8 +126,18 @@ abstract class BaseAction extends Controller
         ], $statusCode);
     }
 
-    protected function jsonResponse(mixed $data, $statusCode = ResponseCodes::HTTP_OK): JsonResponse
+    protected function jsonResponse(
+        mixed $data,
+        int $statusCode = ResponseCodes::HTTP_OK,
+        bool $wrapInData = false,
+    ): JsonResponse
     {
+        if ($wrapInData) {
+            $data = [
+                'data' => $data,
+            ];
+        }
+
         return new JsonResponse($data, $statusCode);
     }
 

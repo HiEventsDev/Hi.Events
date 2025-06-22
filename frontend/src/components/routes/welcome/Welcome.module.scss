@@ -1,14 +1,469 @@
-.sectionHeadings {
-  margin-top: 0;
-  margin-bottom: 0;
+.welcomeContainer {
+  :global {
+    .mantine-InputWrapper-root {
+      margin-bottom: 0 !important;
+    }
+  }
+
+  min-height: 100vh;
+  background: var(--tk-gradient);
+  padding: 3rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  @media (max-width: 768px) {
+    justify-content: flex-start;
+    padding: 3rem 1rem 2rem;
+  }
 }
 
-.sectionDescription {
-  margin-top: 0;
+.welcomeContent {
+  width: 100%;
+  max-width: 850px;
+  min-width: 550px;
+  margin: 0 auto;
+
+  @media (max-width: 768px) {
+    max-width: 100%;
+    min-width: auto;
+  }
 }
 
-.skip {
+// Header Section
+.welcomeHeader {
   text-align: center;
-  padding: 10px;
-  font-size: .9em;
+  margin-bottom: 2rem;
+
+  @media (max-width: 768px) {
+    margin-bottom: 1.5rem;
+  }
 }
+
+.logo {
+  margin-bottom: 1rem;
+  opacity: 0.9;
+
+  img {
+    height: 55px;
+    width: auto;
+  }
+
+  @media (max-width: 768px) {
+    margin-bottom: 0.75rem;
+
+    img {
+      height: 36px;
+    }
+  }
+}
+
+.welcomeTitle {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--tk-color-white);
+  margin: 0;
+  line-height: 1.2;
+
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
+  }
+}
+
+// Clean Main Card
+.welcomeCard {
+  background: var(--tk-color-white);
+  border-radius: 16px !important;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
+  border: none !important;
+
+  @media (max-width: 768px) {
+    border-radius: 12px !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1) !important;
+  }
+}
+
+// Clean focus styles
+.categoryCard:focus-visible {
+  outline: 2px solid var(--tk-primary);
+  outline-offset: 2px;
+}
+
+// Clean Step Layout
+.stepContainer {
+  padding: 1.5rem 2rem;
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
+}
+
+// Progress Container
+.progressContainer {
+  margin-bottom: 2rem;
+
+  @media (max-width: 768px) {
+    margin-bottom: 1.5rem;
+  }
+}
+
+// Progress Bar
+.progressBar {
+  width: 100%;
+  height: 6px;
+  background-color: var(--tk-color-gray-2);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--tk-gradient);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.stepHeader {
+  text-align: center;
+  margin-bottom: 2em;
+
+  @media (max-width: 768px) {
+    margin-bottom: 1rem;
+  }
+}
+
+.stepTitle {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--tk-text);
+  margin: 0 0 0.5rem 0;
+  line-height: 1.3;
+  text-align: center;
+
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+}
+
+.stepDescription {
+  font-size: 1rem;
+  color: var(--tk-secondary-text);
+  margin: 0;
+  line-height: 1.5;
+
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+  }
+}
+
+.stepContent {
+  max-width: 720px;
+  margin: 0 auto;
+
+  @media (max-width: 768px) {
+    max-width: 100%;
+  }
+
+  // Reduce stack gaps on mobile
+  :global(.mantine-Stack-root) {
+    @media (max-width: 768px) {
+      gap: 1rem !important;
+    }
+  }
+
+  // Clean, minimal form inputs (exclude PinInput)
+  :global(.mantine-DateTimePicker-input),
+  :global(.mantine-TextInput-input),
+  :global(.mantine-Select-input) {
+    min-height: 56px !important;
+    height: 56px !important;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    padding: 0 16px !important;
+    border: 1px solid var(--tk-color-gray-2) !important;
+    border-radius: 8px !important;
+    background: var(--tk-color-white) !important;
+    font-size: 1rem !important;
+    color: var(--tk-text) !important;
+    transition: border-color 0.15s ease !important;
+
+    &:focus {
+      border-color: var(--tk-primary) !important;
+      outline: none !important;
+    }
+
+    &::placeholder {
+      color: var(--tk-color-gray-dark) !important;
+    }
+
+    @media (max-width: 768px) {
+      min-height: 48px !important;
+      height: 48px !important;
+      font-size: 16px !important; // Prevent zoom on iOS
+    }
+  }
+
+  // Clean labels (exclude PinInput)
+  :global(.mantine-DateTimePicker-label),
+  :global(.mantine-TextInput-label),
+  :global(.mantine-Select-label) {
+    font-weight: 500 !important;
+    font-size: 0.95rem !important;
+    color: var(--tk-text) !important;
+    margin-bottom: 8px !important;
+  }
+}
+
+// Clean Category Grid
+.categoryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.75rem;
+
+  @media (max-width: 768px) {
+    display: none; // Hide grid on mobile
+  }
+}
+
+// Mobile dropdown for categories
+.categoryDropdown {
+  display: none;
+
+  @media (max-width: 768px) {
+    display: block;
+  }
+}
+
+.categoryCard {
+  background: var(--tk-color-white);
+  border: 1px solid var(--tk-color-gray-2);
+  border-radius: 8px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 72px;
+
+  &:hover {
+    border-color: var(--tk-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0.75rem 0.4rem;
+    min-height: 56px;
+    gap: 0.25rem;
+  }
+}
+
+.categoryCardSelected {
+  border-color: var(--tk-primary) !important;
+  background: var(--tk-secondary) !important;
+}
+
+.categoryEmoji {
+  font-size: 1.5rem;
+  line-height: 1;
+
+  @media (max-width: 768px) {
+    font-size: 1.1rem;
+  }
+}
+
+.categoryText {
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+
+  @media (max-width: 768px) {
+    font-size: 0.75rem;
+  }
+}
+
+// Email Verification Specific
+.emailDisplay {
+  background: var(--tk-color-gray);
+  border: 1px solid var(--tk-color-gray-2);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 0;
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', monospace;
+  font-size: 0.9rem;
+  color: var(--tk-text);
+  font-weight: 500;
+  text-align: center;
+  word-break: break-all;
+  overflow-wrap: break-word;
+
+  @media (max-width: 768px) {
+    font-size: 0.8rem;
+    padding: 0.75rem;
+    margin-top: 0.75rem;
+    margin-bottom: 0;
+  }
+}
+
+.pinInput {
+  // Clean PinInput styling
+  :global(.mantine-PinInput-input) {
+    border: 1px solid var(--tk-color-gray-2);
+    border-radius: 8px;
+    font-weight: 600;
+    text-align: center;
+    background: var(--tk-color-white);
+    color: var(--tk-text);
+
+    &:focus {
+      border-color: var(--tk-primary);
+      outline: none;
+    }
+
+    // Force smaller size on mobile
+    @media (max-width: 768px) {
+      width: 36px !important;
+      font-size: 1rem !important;
+    }
+  }
+}
+
+.helpText {
+  max-width: 280px;
+  margin: 0 auto;
+
+  @media (max-width: 768px) {
+    max-width: 100%;
+    font-size: 0.75rem;
+  }
+}
+
+// Form Elements
+
+.dateTimeGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  align-items: start;
+  margin-bottom: 1em;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  // Enhanced DateTimePicker and Select styling
+  :global(.mantine-DateTimePicker-root),
+  :global(.mantine-Select-root) {
+    width: 100%;
+  }
+
+  :global(.mantine-DateTimePicker-input),
+  :global(.mantine-Select-input) {
+    cursor: pointer;
+    width: 100%;
+  }
+
+  :global(.mantine-Input-input) {
+    cursor: pointer;
+  }
+
+  // Clean dropdown styling
+  :global(.mantine-Select-dropdown) {
+    border: 1px solid var(--tk-color-gray-2) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+    padding: 4px !important;
+  }
+
+  :global(.mantine-Select-item) {
+    border-radius: 4px !important;
+    padding: 8px 12px !important;
+    font-size: 0.95rem !important;
+
+    &:hover {
+      background: var(--tk-color-gray) !important;
+    }
+
+    &[data-selected] {
+      background: var(--tk-primary) !important;
+      color: var(--tk-color-white) !important;
+    }
+  }
+
+  :global(.mantine-DateTimePicker-input input),
+  :global(.mantine-Select-input input) {
+    font-size: 1rem !important;
+  }
+}
+
+
+// Clean button
+.primaryButton {
+  background: var(--tk-primary) !important;
+  border: none !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  font-size: 1rem !important;
+  height: 48px !important;
+  transition: all 0.2s ease !important;
+  margin-top: 1em;
+
+  &:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--tk-primary) 85%, var(--tk-primary-alt) 15%) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  }
+
+  &:disabled {
+    background: var(--tk-color-gray-dark) !important;
+    opacity: 0.7 !important;
+  }
+
+  @media (max-width: 768px) {
+    height: 44px !important;
+  }
+}
+
+// Clean Skip Section
+.skipSection {
+  margin-top: 1.5rem;
+
+  :global(.mantine-Button-root) {
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-size: 0.9rem !important;
+    background: transparent !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    border-radius: 6px !important;
+    padding: 8px 16px !important;
+    transition: opacity 0.15s ease !important;
+
+    &:hover {
+      color: white !important;
+      opacity: 0.8 !important;
+    }
+  }
+
+  @media (max-width: 768px) {
+    margin-top: 1rem;
+  }
+}
+
+

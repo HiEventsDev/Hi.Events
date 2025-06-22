@@ -1,7 +1,6 @@
 import {Button} from "@mantine/core";
 import {GenericModalProps, IdParam, Product, ProductPriceType, ProductType, TaxAndFee} from "../../../types.ts";
 import {useForm} from "@mantine/form";
-import {useQueryClient} from "@tanstack/react-query";
 import {useParams} from "react-router";
 import {Modal} from "../../common/Modal";
 import {ProductForm} from "../../forms/ProductForm";
@@ -17,7 +16,6 @@ interface CreateProductModalProps extends GenericModalProps {
 
 export const CreateProductModal = ({onClose, selectedCategoryId = undefined}: CreateProductModalProps) => {
     const {eventId} = useParams();
-    const queryClient = useQueryClient();
     const {data: taxesAndFees, isFetched: taxesAndFeesLoaded} = useGetTaxesAndFees();
     const createProductMutation = useCreateProduct();
     const form = useForm<Product>({
@@ -77,7 +75,7 @@ export const CreateProductModal = ({onClose, selectedCategoryId = undefined}: Cr
     return (
         <Modal
             onClose={onClose}
-            heading={t`Create Product`}
+            heading={t`Create Ticket or Product`}
             opened
             size={'lg'}
             withCloseButton
