@@ -55,15 +55,16 @@ class CreateEventService
 
             $event = $this->handleEventCreate($eventData);
 
+            $eventCoverCreated = $this->createEventCover($event);
+
             $this->createEventSettings(
                 eventSettings: $eventSettings,
                 event: $event,
-                organizer: $organizer
+                organizer: $organizer,
+                eventCoverCreated: $eventCoverCreated,
             );
 
             $this->createEventStatistics($event);
-
-            $this->createEventCover($event);
 
             return $event;
         });
@@ -129,9 +130,9 @@ class CreateEventService
      * If a default cover image exists for the event category, it will be created.
      *
      * @param EventDomainObject $event
-     * @return void
+     * @return bool
      */
-    private function createEventCover(EventDomainObject $event): void
+    private function createEventCover(EventDomainObject $event): bool
     {
         $disk = $this->config->get('filesystems.public');
         $defaultCoversPath = $this->config->get('app.event_categories_cover_images_path');
@@ -140,7 +141,7 @@ class CreateEventService
         $imagePath = $defaultCoversPath . '/' . $imageFilename;
 
         if (!$this->filesystemManager->disk($disk)->exists($imagePath)) {
-            return;
+            return false;
         }
 
         $this->imageRepository->create([
@@ -154,12 +155,15 @@ class CreateEventService
             'size' => 139673,
             'mime_type' => 'image/jpg',
         ]);
+
+        return true;
     }
 
     private function createEventSettings(
         ?EventSettingDomainObject $eventSettings,
         EventDomainObject         $event,
-        OrganizerDomainObject     $organizer
+        OrganizerDomainObject     $organizer,
+        bool                      $eventCoverCreated = false
     ): void
     {
         if ($eventSettings !== null) {
@@ -202,7 +206,9 @@ class CreateEventService
                 '#ffffff'
             ),
 
-            'homepage_background_type' => HomepageBackgroundType::MIRROR_COVER_IMAGE->name,
+            'homepage_background_type' => $eventCoverCreated
+                ? HomepageBackgroundType::MIRROR_COVER_IMAGE->name
+                : HomepageBackgroundType::COLOR->name,
             'continue_button_text' => __('Continue'),
             'support_email' => $organizer->getEmail(),
 
