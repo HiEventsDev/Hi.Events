@@ -80,7 +80,7 @@ const Login = () => {
                             {t`Forgot password?`}
                         </NavLink>
                     </p>
-                    <Button color={'var(--tk-pink)'} type="submit" fullWidth loading={isPending} disabled={isPending}>
+                    <Button color={'var(--hi-pink)'} type="submit" fullWidth loading={isPending} disabled={isPending}>
                         {isPending ? t`Logging in` : t`Log in`}
                     </Button>
                 </form>

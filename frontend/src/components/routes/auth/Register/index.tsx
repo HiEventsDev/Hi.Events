@@ -126,7 +126,7 @@ export const Register = () => {
                         {...form.getInputProps('timezone')}
                         type="hidden"
                     />
-                    <Button color={'var(--tk-pink)'} type="submit" fullWidth disabled={mutate.isPending}>
+                    <Button color={'var(--hi-pink)'} type="submit" fullWidth disabled={mutate.isPending}>
                         {mutate.isPending ? t`Working...` : t`Register`}
                     </Button>
                 </form>

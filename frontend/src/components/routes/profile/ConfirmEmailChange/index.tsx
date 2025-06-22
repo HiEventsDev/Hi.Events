@@ -7,7 +7,7 @@ import {showError, showSuccess} from "../../../../utilites/notifications.tsx";
 import {t, Trans} from "@lingui/macro";
 
 const MessageCard = ({message, linkText, linkHref}: { message: string, linkText: string, linkHref: string }) => (
-    <Card style={{marginTop: 'var(--tk-spacing-lg)'}}>
+    <Card style={{marginTop: 'var(--hi-spacing-lg)'}}>
         {message} <Anchor href={linkHref}>{linkText}</Anchor>.
     </Card>
 );
@@ -49,7 +49,7 @@ export const ConfirmEmailChange = () => {
             {isFetched && (
                 <>
                     <h2>{t`Confirm Email Change`}</h2>
-                    <Card style={{marginTop: 'var(--tk-spacing-lg)'}}>
+                    <Card style={{marginTop: 'var(--hi-spacing-lg)'}}>
                         <Trans>You are changing your email to <b>{userData?.pending_email}</b>.</Trans>
                         <p>
                             <Button onClick={confirmChange}>

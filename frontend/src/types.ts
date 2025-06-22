@@ -9,6 +9,7 @@ export type ConfigKeys = 'VITE_FRONTEND_URL'
     | 'VITE_API_URL_SERVER'
     | 'VITE_CHATWOOT_WEBSITE_TOKEN'
     | 'VITE_CHATWOOT_BASE_URL'
+    | 'VITE_APP_NAME'
     | string;
 
 export type IdParam = string | undefined | number;

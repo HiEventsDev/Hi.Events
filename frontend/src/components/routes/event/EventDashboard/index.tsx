@@ -133,7 +133,7 @@ export const EventDashboard = () => {
                                             <div className={classes.checkboxContainer}>
                                                 <div
                                                     className={classes.checkbox}
-                                                    style={{backgroundColor: event?.status === 'LIVE' ? 'var(--tk-primary)' : 'transparent'}}
+                                                    style={{backgroundColor: event?.status === 'LIVE' ? 'var(--hi-primary)' : 'transparent'}}
                                                 >
                                                     {event?.status === 'LIVE' && (
                                                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
@@ -177,7 +177,7 @@ export const EventDashboard = () => {
                                             <div className={classes.checkboxContainer}>
                                                 <div
                                                     className={classes.checkbox}
-                                                    style={{backgroundColor: account?.stripe_connect_setup_complete ? 'var(--tk-primary)' : 'transparent'}}
+                                                    style={{backgroundColor: account?.stripe_connect_setup_complete ? 'var(--hi-primary)' : 'transparent'}}
                                                 >
                                                     {account?.stripe_connect_setup_complete && (
                                                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none"

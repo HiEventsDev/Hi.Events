@@ -6,6 +6,7 @@ import {I18nProvider} from "@lingui/react";
 import {ModalsProvider} from "@mantine/modals";
 import {QueryClient, QueryClientProvider, HydrationBoundary} from "@tanstack/react-query";
 import {Helmet, HelmetProvider} from "react-helmet-async";
+import { generateColors } from '@mantine/colors-generator';
 
 import "@mantine/core/styles/global.css";
 import "@mantine/core/styles.css";
@@ -18,6 +19,7 @@ import "./styles/global.scss";
 import {isSsr} from "./utilites/helpers.ts";
 import {StartupChecks} from "./StartupChecks.tsx";
 import {ThirdPartyScripts} from "./components/common/ThirdPartyScripts";
+import {getConfig} from "./utilites/config.ts";
 
 declare global {
     interface Window {
@@ -61,21 +63,12 @@ export const App: FC<
             <MantineProvider
                 theme={{
                     colors: {
-                        purple: [
-                            "#8260C6",
-                            "#734DBF",
-                            "#6741B2",
-                            "#5E3CA1",
-                            "#563792",
-                            "#4E3284",
-                            "#472E78",
-                            "#40296C",
-                            "#392562",
-                            "#332158",
-                        ],
+                        primary: generateColors( getConfig( "VITE_APP_PRIMARY_COLOR", "#40296C" ) as string ),
+                        secondary: generateColors( getConfig( "VITE_APP_SECONDARY_COLOR", "#5A1065" ) as string ),
                     },
-                    primaryColor: "purple",
+                    primaryColor: "primary",
                     fontFamily: "'Varela Round', sans-serif",
+                    primaryShade: 7
                 }}
             >
                 <HelmetProvider context={props.helmetContext}>

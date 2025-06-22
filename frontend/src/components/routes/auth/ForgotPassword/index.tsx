@@ -51,7 +51,7 @@ export const ForgotPassword = () => {
                     <form onSubmit={form.onSubmit((values) => mutate.mutate(values.email))}>
                         <TextInput type={'email'} {...form.getInputProps('email')} label={t`Your Email`}
                                    placeholder="joe@bloggs.com" required/>
-                        <Button color={'var(--tk-pink)'} fullWidth type="submit" disabled={mutate.isPending}>
+                        <Button color={'var(--hi-pink)'} fullWidth type="submit" disabled={mutate.isPending}>
                             {mutate.isPending ? t`Working...` : t`Reset password`}
                         </Button>
                     </form>

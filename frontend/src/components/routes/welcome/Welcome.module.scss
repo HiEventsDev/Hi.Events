@@ -6,7 +6,7 @@
   }
 
   min-height: 100vh;
-  background: var(--tk-gradient);
+  background: var(--hi-gradient);
   padding: 3rem 1rem;
   display: flex;
   flex-direction: column;
@@ -62,7 +62,7 @@
 .welcomeTitle {
   font-size: 1.75rem;
   font-weight: 700;
-  color: var(--tk-color-white);
+  color: var(--hi-color-white);
   margin: 0;
   line-height: 1.2;
 
@@ -73,7 +73,7 @@
 
 // Clean Main Card
 .welcomeCard {
-  background: var(--tk-color-white);
+  background: var(--hi-color-white);
   border-radius: 16px !important;
   overflow: hidden;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
@@ -87,7 +87,7 @@
 
 // Clean focus styles
 .categoryCard:focus-visible {
-  outline: 2px solid var(--tk-primary);
+  outline: 2px solid var(--hi-primary);
   outline-offset: 2px;
 }
 
@@ -113,7 +113,7 @@
 .progressBar {
   width: 100%;
   height: 6px;
-  background-color: var(--tk-color-gray-2);
+  background-color: var(--hi-color-gray-2);
   border-radius: 3px;
   overflow: hidden;
   margin-bottom: 0.5rem;
@@ -121,7 +121,7 @@
 
 .progressFill {
   height: 100%;
-  background: var(--tk-gradient);
+  background: var(--hi-gradient);
   border-radius: 3px;
   transition: width 0.3s ease;
 }
@@ -138,7 +138,7 @@
 .stepTitle {
   font-size: 1.75rem;
   font-weight: 700;
-  color: var(--tk-text);
+  color: var(--hi-text);
   margin: 0 0 0.5rem 0;
   line-height: 1.3;
   text-align: center;
@@ -151,7 +151,7 @@
 
 .stepDescription {
   font-size: 1rem;
-  color: var(--tk-secondary-text);
+  color: var(--hi-secondary-text);
   margin: 0;
   line-height: 1.5;
 
@@ -185,20 +185,20 @@
     display: flex;
     align-items: center;
     padding: 0 16px !important;
-    border: 1px solid var(--tk-color-gray-2) !important;
+    border: 1px solid var(--hi-color-gray-2) !important;
     border-radius: 8px !important;
-    background: var(--tk-color-white) !important;
+    background: var(--hi-color-white) !important;
     font-size: 1rem !important;
-    color: var(--tk-text) !important;
+    color: var(--hi-text) !important;
     transition: border-color 0.15s ease !important;
 
     &:focus {
-      border-color: var(--tk-primary) !important;
+      border-color: var(--hi-primary) !important;
       outline: none !important;
     }
 
     &::placeholder {
-      color: var(--tk-color-gray-dark) !important;
+      color: var(--hi-color-gray-dark) !important;
     }
 
     @media (max-width: 768px) {
@@ -214,7 +214,7 @@
   :global(.mantine-Select-label) {
     font-weight: 500 !important;
     font-size: 0.95rem !important;
-    color: var(--tk-text) !important;
+    color: var(--hi-text) !important;
     margin-bottom: 8px !important;
   }
 }
@@ -240,8 +240,8 @@
 }
 
 .categoryCard {
-  background: var(--tk-color-white);
-  border: 1px solid var(--tk-color-gray-2);
+  background: var(--hi-color-white);
+  border: 1px solid var(--hi-color-gray-2);
   border-radius: 8px;
   padding: 1rem;
   display: flex;
@@ -253,7 +253,7 @@
   min-height: 72px;
 
   &:hover {
-    border-color: var(--tk-primary);
+    border-color: var(--hi-primary);
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
@@ -271,8 +271,8 @@
 }
 
 .categoryCardSelected {
-  border-color: var(--tk-primary) !important;
-  background: var(--tk-secondary) !important;
+  border-color: var(--hi-primary) !important;
+  background: var(--hi-secondary) !important;
 }
 
 .categoryEmoji {
@@ -300,15 +300,15 @@
 
 // Email Verification Specific
 .emailDisplay {
-  background: var(--tk-color-gray);
-  border: 1px solid var(--tk-color-gray-2);
+  background: var(--hi-color-gray);
+  border: 1px solid var(--hi-color-gray-2);
   border-radius: 8px;
   padding: 1rem;
   margin-top: 1rem;
   margin-bottom: 0;
   font-family: 'SF Mono', 'Monaco', 'Inconsolata', monospace;
   font-size: 0.9rem;
-  color: var(--tk-text);
+  color: var(--hi-text);
   font-weight: 500;
   text-align: center;
   word-break: break-all;
@@ -325,15 +325,15 @@
 .pinInput {
   // Clean PinInput styling
   :global(.mantine-PinInput-input) {
-    border: 1px solid var(--tk-color-gray-2);
+    border: 1px solid var(--hi-color-gray-2);
     border-radius: 8px;
     font-weight: 600;
     text-align: center;
-    background: var(--tk-color-white);
-    color: var(--tk-text);
+    background: var(--hi-color-white);
+    color: var(--hi-text);
 
     &:focus {
-      border-color: var(--tk-primary);
+      border-color: var(--hi-primary);
       outline: none;
     }
 
@@ -387,7 +387,7 @@
 
   // Clean dropdown styling
   :global(.mantine-Select-dropdown) {
-    border: 1px solid var(--tk-color-gray-2) !important;
+    border: 1px solid var(--hi-color-gray-2) !important;
     border-radius: 8px !important;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
     padding: 4px !important;
@@ -399,12 +399,12 @@
     font-size: 0.95rem !important;
 
     &:hover {
-      background: var(--tk-color-gray) !important;
+      background: var(--hi-color-gray) !important;
     }
 
     &[data-selected] {
-      background: var(--tk-primary) !important;
-      color: var(--tk-color-white) !important;
+      background: var(--hi-primary) !important;
+      color: var(--hi-color-white) !important;
     }
   }
 
@@ -417,7 +417,7 @@
 
 // Clean button
 .primaryButton {
-  background: var(--tk-primary) !important;
+  background: var(--hi-primary) !important;
   border: none !important;
   border-radius: 8px !important;
   font-weight: 600 !important;
@@ -427,13 +427,13 @@
   margin-top: 1em;
 
   &:hover:not(:disabled) {
-    background: color-mix(in srgb, var(--tk-primary) 85%, var(--tk-primary-alt) 15%) !important;
+    background: color-mix(in srgb, var(--hi-primary) 85%, var(--hi-primary-alt) 15%) !important;
     transform: translateY(-1px) !important;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
   }
 
   &:disabled {
-    background: var(--tk-color-gray-dark) !important;
+    background: var(--hi-color-gray-dark) !important;
     opacity: 0.7 !important;
   }
 

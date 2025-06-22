@@ -20,6 +20,7 @@ import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {DateTimePicker} from "@mantine/dates";
 import dayjs from "dayjs";
 import {EventCategories} from "../../../constants/eventCategories.ts";
+import {getConfig} from "../../../utilites/config.ts";
 
 export const CreateOrganizer = ({progressInfo}: {
     progressInfo?: { currentStep: number, totalSteps: number, progressPercentage: number }
@@ -435,7 +436,7 @@ const Welcome = () => {
                     </div>
                     <h1 className={classes.welcomeTitle}>
                         <Trans>
-                            Welcome to Hi.Events, {userData?.first_name} 👋
+                            Welcome to {getConfig("VITE_APP_NAME", "Hi.Events")}, {userData?.first_name} 👋
                         </Trans>
                     </h1>
                 </div>
