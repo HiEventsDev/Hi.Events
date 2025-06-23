@@ -122,8 +122,8 @@ const GettingStarted = () => {
                             {t`Create tickets for your event, set prices, and manage available quantity.`}
                         </p>
 
-                        <Button variant={'light'} component={'a'}
-                                href={'/manage/event/' + eventId + '/products#create-product'}>
+                        <Button variant={'light'} component={NavLink}
+                                to={'/manage/event/' + eventId + '/products#create-product'}>
                             {hasProducts ? t`Add More tickets` : t`Add tickets`}
                         </Button>
                     </Card>
