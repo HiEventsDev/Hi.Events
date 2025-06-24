@@ -22,6 +22,7 @@ class QuestionResourcePublic extends BaseResource
             'required' => $this->getRequired(),
             'event_id' => $this->getEventId(),
             'belongs_to' => $this->getBelongsTo(),
+            'order' => $this->getOrder(),
             'product_ids' => $this->when(
                 !is_null($this->getProducts()),
                 fn() => $this->getProducts()->map(fn($product) => $product->getId())
