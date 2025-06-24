@@ -4,9 +4,9 @@ import {Notifications} from "@mantine/notifications";
 import {i18n} from "@lingui/core";
 import {I18nProvider} from "@lingui/react";
 import {ModalsProvider} from "@mantine/modals";
-import {QueryClient, QueryClientProvider, HydrationBoundary} from "@tanstack/react-query";
+import {HydrationBoundary, QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {Helmet, HelmetProvider} from "react-helmet-async";
-import { generateColors } from '@mantine/colors-generator';
+import {generateColors} from '@mantine/colors-generator';
 
 import "@mantine/core/styles/global.css";
 import "@mantine/core/styles.css";
@@ -63,8 +63,8 @@ export const App: FC<
             <MantineProvider
                 theme={{
                     colors: {
-                        primary: generateColors( getConfig( "VITE_APP_PRIMARY_COLOR", "#40296C" ) as string ),
-                        secondary: generateColors( getConfig( "VITE_APP_SECONDARY_COLOR", "#5A1065" ) as string ),
+                        primary: generateColors(getConfig("VITE_APP_PRIMARY_COLOR", "#40296C") as string),
+                        secondary: generateColors(getConfig("VITE_APP_SECONDARY_COLOR", "#5A1065") as string),
                     },
                     primaryColor: "primary",
                     fontFamily: "'Varela Round', sans-serif",
@@ -79,7 +79,11 @@ export const App: FC<
                                 <ThirdPartyScripts/>
                                 <ModalsProvider>
                                     <Helmet>
-                                        <title>Hi.Events</title>
+                                        <title>{getConfig("VITE_APP_NAME", "Hi.Events")}</title>
+                                        <link rel="icon"
+                                              type="image/svg+xml"
+                                              href={getConfig("VITE_APP_FAVICON", "/favicon.svg")}
+                                        />
                                     </Helmet>
                                     {props.children}
                                 </ModalsProvider>
