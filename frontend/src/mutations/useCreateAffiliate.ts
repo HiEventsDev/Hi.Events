@@ -15,8 +15,10 @@ export const useCreateAffiliate = () => {
         }) => affiliateClient.create(eventId, affiliateData),
 
         onSuccess: (_, variables) => {
-            queryClient.invalidateQueries({queryKey: [GET_EVENT_QUERY_KEY, variables.eventId]})
-            return queryClient.invalidateQueries({queryKey: [GET_AFFILIATES_QUERY_KEY]});
+            return Promise.all([
+                queryClient.invalidateQueries({queryKey: [GET_EVENT_QUERY_KEY, variables.eventId]}),
+                queryClient.invalidateQueries({queryKey: [GET_AFFILIATES_QUERY_KEY]})
+            ]);
         }
     });
 }
