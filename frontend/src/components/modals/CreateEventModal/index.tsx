@@ -179,7 +179,7 @@ export const CreateEventModal = ({onClose, organizerId}: CreateEventModalProps) 
                                 size="lg"
                                 leftSection={<IconSparkles size={18}/>}
                             />
-                            
+
                             <Select
                                 {...form.getInputProps('category')}
                                 label={t`Event Category`}
@@ -207,41 +207,41 @@ export const CreateEventModal = ({onClose, organizerId}: CreateEventModalProps) 
 
                             <div className={classes.dateTimeGrid}>
                                 <DateTimePicker
-                                        label={t`Start Date & Time`}
-                                        {...form.getInputProps('start_date')}
-                                        required
-                                        size="md"
-                                        placeholder={t`Select start date and time`}
-                                        valueFormat="MMM DD, YYYY [at] h:mm A"
-                                        clearable
-                                        dropdownType="modal"
-                                        timePickerProps={{
-                                            format: '12h',
-                                            withDropdown: true,
-                                        }}
-                                        onChange={(value) => {
-                                            form.setFieldValue('start_date', value);
+                                    label={t`Start Date & Time`}
+                                    {...form.getInputProps('start_date')}
+                                    required
+                                    size="md"
+                                    placeholder={t`Select start date and time`}
+                                    valueFormat="MMM DD, YYYY [at] h:mm A"
+                                    clearable
+                                    dropdownType="modal"
+                                    timePickerProps={{
+                                        format: '12h',
+                                        withDropdown: true,
+                                    }}
+                                    onChange={(value) => {
+                                        form.setFieldValue('start_date', value);
 
-                                            // Auto-adjust end date if it's before new start date
-                                            if (form.values.end_date && value && dayjs(form.values.end_date).isBefore(dayjs(value))) {
-                                                form.setFieldValue('end_date', dayjs(value).add(2, 'hours').toISOString());
-                                            }
-                                        }}
+                                        // Auto-adjust end date if it's before new start date
+                                        if (form.values.end_date && value && dayjs(form.values.end_date).isBefore(dayjs(value))) {
+                                            form.setFieldValue('end_date', dayjs(value).add(2, 'hours').toISOString());
+                                        }
+                                    }}
                                 />
                                 <DateTimePicker
-                                        label={t`End Date & Time (optional)`}
-                                        {...form.getInputProps('end_date')}
-                                        size="md"
-                                        placeholder={t`Select end date and time`}
-                                        valueFormat="MMM DD, YYYY [at] h:mm A"
-                                        clearable
-                                        dropdownType="modal"
-                                        timePickerProps={{
-                                            format: '12h',
-                                            withDropdown: true,
-                                        }}
-                                        minDate={form.values.start_date ?? undefined}
-                                        date={form.values.start_date ? dayjs(form.values.start_date).toDate() : undefined}
+                                    label={t`End Date & Time (optional)`}
+                                    {...form.getInputProps('end_date')}
+                                    size="md"
+                                    placeholder={t`Select end date and time`}
+                                    valueFormat="MMM DD, YYYY [at] h:mm A"
+                                    clearable
+                                    dropdownType="modal"
+                                    timePickerProps={{
+                                        format: '12h',
+                                        withDropdown: true,
+                                    }}
+                                    minDate={form.values.start_date ?? undefined}
+                                    date={form.values.start_date ? dayjs(form.values.start_date).toDate() : undefined}
                                 />
                             </div>
 

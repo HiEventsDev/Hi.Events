@@ -73,7 +73,7 @@ export const EventDetailsForm = () => {
                     <TextInput
                         {...form.getInputProps('title')}
                         label={t`Name`}
-                        placeholder={t`Hi.Events Conference ${new Date().getFullYear()}`}
+                        placeholder={t`Summer Music Festival ${new Date().getFullYear()}`}
                         required
                     />
                     

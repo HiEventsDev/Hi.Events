@@ -3,8 +3,9 @@ import {Box, Button, Container, Image, rem, Stack, Text, Title} from '@mantine/c
 import {IconHome} from '@tabler/icons-react';
 import classes from './ErrorDisplay.module.scss';
 import {Helmet} from "react-helmet-async";
-import {useRouteError} from "react-router";
+import {NavLink, useRouteError} from "react-router";
 import {PoweredByFooter} from "../PoweredByFooter";
+import {getConfig} from '../../../utilites/config';
 
 export const ErrorDisplay = () => {
     const error = useRouteError() as any;
@@ -39,8 +40,8 @@ export const ErrorDisplay = () => {
                 <Container size="md" className={classes.root}>
                     <Stack gap="xl" align="center">
                         <Image
-                            src="/logo-dark.svg"
-                            alt="Error"
+                            src={getConfig("VITE_APP_LOGO_DARK", "/logo-dark.svg")}
+                            alt={getConfig("VITE_APP_NAME", "Hi.Events") + " Logo"}
                             w={rem(140)}
                             h="auto"
                             fit="contain"
@@ -56,11 +57,11 @@ export const ErrorDisplay = () => {
                                 {description}
                             </Text>
                             <Button
-                                component="a"
-                                href="/"
+                                component={NavLink}
+                                to="/"
                                 leftSection={<IconHome size={18}/>}
                                 variant="gradient"
-                                gradient={{from: 'purple', to: 'pink'}}
+                                gradient={{from: 'primary', to: 'secondary'}}
                                 className={classes.button}
                             >
                                 {t`Go to home page`}

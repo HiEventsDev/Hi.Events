@@ -16,10 +16,10 @@ use Illuminate\Mail\Mailables\Envelope;
 class PaymentSuccessButOrderExpiredMail extends BaseMail
 {
     public function __construct(
-        private readonly OrderDomainObject     $order,
-        private readonly EventDomainObject     $event,
+        private readonly OrderDomainObject        $order,
+        private readonly EventDomainObject        $event,
         private readonly EventSettingDomainObject $eventSettings,
-        private readonly OrganizerDomainObject $organizer,
+        private readonly OrganizerDomainObject    $organizer,
     )
     {
         parent::__construct();

@@ -128,7 +128,7 @@ export const PromoCodeTable = ({event, promoCodes, openCreateModal}: PromoCodeTa
                                 <MantineTable.Td>
                                     <div style={{cursor: 'pointer'}}>
                                         {code.applicable_product_ids?.length === 0 && (
-                                            <Badge variant={'light'} color={'pink'}>{t`All Products`}</Badge>
+                                            <Badge variant={'light'} color={'primary'}>{t`All Products`}</Badge>
                                         )}
 
                                         {Number(code.applicable_product_ids?.length) > 0 && (

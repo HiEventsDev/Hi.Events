@@ -58,7 +58,7 @@ export const ResetPassword = () => {
                 <form onSubmit={form.onSubmit(handleSubmit)}>
                     <PasswordInput {...form.getInputProps('password')} label={t`New Password`} required/>
                     <PasswordInput {...form.getInputProps('password_confirmation')} label={t`Confirm Password`} required/>
-                    <Button color={'var(--tk-pink)'} type="submit" fullWidth disabled={mutate.isPending}>
+                    <Button color={'var(--hi-pink)'} type="submit" fullWidth disabled={mutate.isPending}>
                         {mutate.isPending ? t`Working...` : t`Reset password`}
                     </Button>
                 </form>
