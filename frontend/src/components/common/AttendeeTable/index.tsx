@@ -7,7 +7,7 @@ import {useDisclosure} from "@mantine/hooks";
 import {SendMessageModal} from "../../modals/SendMessageModal";
 import {useState} from "react";
 import {NoResultsSplash} from "../NoResultsSplash";
-import {useParams} from "react-router";
+import {NavLink, useParams} from "react-router";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import Truncate from "../Truncate";
 import {notifications} from "@mantine/notifications";
@@ -137,8 +137,9 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
                                 </MantineTable.Td>
                                 <MantineTable.Td>
                                     <Anchor
-                                        href={`/manage/event/${eventId}/orders#order-${attendee.order?.id}`}>
-                                        <Badge variant={'outline'}>
+                                        component={NavLink}
+                                        to={`/manage/event/${eventId}/orders#order-${attendee.order?.id}`}>
+                                        <Badge variant={'outline'} style={{cursor: 'pointer'}}>
                                             {attendee.order?.public_id}
                                         </Badge>
                                     </Anchor>
