@@ -403,11 +403,19 @@ const SelectProducts = (props: SelectProductsProps) => {
                         {productCategories && productCategories.map((category) => {
                             return (
                                 <div className={'hi-product-category-row'} key={category.id}>
-                                    <h2 className={'hi-product-category-title'}>
+                                    <h2 className={'hi-product-category-title'} style={category.description ? {
+                                        marginBottom: '0px'
+                                    } : {}}>
                                         {category.name}
                                     </h2>
+                                    {category.description && (
+                                        <div className={'hi-product-category-description'}>
+                                            <Spoiler maxHeight={500} showLabel={t`Show more`} hideLabel={t`Hide`}>
+                                                <div dangerouslySetInnerHTML={{__html: category.description}}/>
+                                            </Spoiler>
+                                        </div>
+                                    )}
                                     <div className={'hi-product-rows'}>
-
                                         {category.products?.length === 0 && (
                                             <div className={'hi-no-products'}>
                                                 <p className={'hi-no-products-message'}>
