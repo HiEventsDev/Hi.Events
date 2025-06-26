@@ -278,12 +278,16 @@ export const OrganizerDashboard = () => {
                                                 <span className={classes.orderId}>{order.public_id}</span>
                                             </Tooltip>
                                             <span className={classes.customerName}>
-                                                <IconUserCircle size={16}/>
+                                                <IconUserCircle size={14}/>
                                                 {order.first_name} {order.last_name}
                                             </span>
                                         </div>
-                                        <Badge color={getOrderStatusColor(order.status, order.payment_status)}
-                                               variant="light" radius="sm">
+                                        <Badge
+                                            color={getOrderStatusColor(order.status, order.payment_status)}
+                                            variant="light"
+                                            radius="sm"
+                                            size="sm"
+                                        >
                                             {formatOrderStatus(order.status, order.payment_status)}
                                         </Badge>
                                     </div>
@@ -294,9 +298,15 @@ export const OrganizerDashboard = () => {
                                         <Button
                                             variant="subtle"
                                             size="xs"
-                                            rightSection={<IconChevronRight size={14}/>}
+                                            rightSection={<IconChevronRight size={14} style={{marginLeft: '2px'}}/>}
                                             component={NavLink}
                                             to={`/manage/event/${order.event_id}/orders#order-${order.id}`}
+                                            styles={{
+                                                root: {
+                                                    padding: '0.375rem 0.75rem',
+                                                    fontSize: '0.8125rem',
+                                                }
+                                            }}
                                         >
                                             <Trans>View</Trans>
                                         </Button>
@@ -326,7 +336,7 @@ export const OrganizerDashboard = () => {
 
 const getOrderStatusColor = (status: Order['status'], paymentStatus?: Order['payment_status']): string => {
     if (status === 'COMPLETED' || paymentStatus === 'PAYMENT_RECEIVED') {
-        return 'green';
+        return 'teal';
     }
     if (status === 'CANCELLED' || paymentStatus === 'PAYMENT_FAILED') {
         return 'red';

@@ -214,9 +214,24 @@
 .orderCard {
   transition: all 0.2s ease;
   margin-bottom: 10px;
+  border: 1px solid var(--mantine-color-gray-2);
+  position: relative;
 
   &:hover {
-    transform: translateY(-2px);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-color: var(--mantine-color-gray-3);
+  }
+
+  &:focus-within {
+    outline: 2px solid var(--mantine-color-primary-3);
+    outline-offset: 2px;
+  }
+
+  @include mixins.respond-below(md) {
+    &:active {
+      transform: scale(0.99);
+    }
   }
 }
 
@@ -225,20 +240,32 @@
   justify-content: space-between;
   align-items: flex-start;
   gap: 1rem;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
+
+  @include mixins.respond-below(md) {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+
+    > :first-child {
+      flex: 1;
+    }
+  }
 }
 
 .orderInfo {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.125rem;
 }
 
 .orderId {
   font-weight: 600;
-  font-size: 1rem;
-  color: #1a1a2e;
-  letter-spacing: -0.01em;
+  font-size: 0.9375rem;
+  color: var(--mantine-color-dark-9);
+  font-family: 'SF Mono', Monaco, 'Cascadia Mono', 'Roboto Mono', monospace;
+  letter-spacing: 0.02em;
 }
 
 .customerName {
@@ -246,10 +273,14 @@
   align-items: center;
   gap: 0.25rem;
   font-size: 0.875rem;
-  color: #6c757d;
+  color: var(--mantine-color-gray-6);
+  font-weight: 400;
+  opacity: 0.85;
 
   svg {
     flex-shrink: 0;
+    width: 14px;
+    height: 14px;
   }
 }
 
@@ -258,11 +289,24 @@
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
+
+  @include mixins.respond-below(md) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+
+    button {
+      width: 100%;
+      justify-content: center;
+      min-height: 2.5rem;
+    }
+  }
 }
 
 .orderMeta {
-  font-size: 0.875rem;
-  color: #6c757d;
+  font-size: 0.8125rem;
+  color: var(--mantine-color-gray-6);
+  white-space: nowrap;
 }
 
 // Events list

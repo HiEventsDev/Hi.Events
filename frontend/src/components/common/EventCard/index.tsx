@@ -166,7 +166,7 @@ export function EventCard({event}: EventCardProps) {
                     <div className={classes.statsGrid}>
                         {event.settings?.location_details?.venue_name && (
                             <div className={classes.statItem}>
-                                <IconMap size={16} className={classes.statIcon}/>
+                                <IconMap size={14} className={classes.statIcon}/>
                                 <span className={classes.statText}>
                                     {event.settings?.location_details?.venue_name}
                                 </span>
@@ -174,18 +174,18 @@ export function EventCard({event}: EventCardProps) {
                         )}
                         {event.settings?.is_online_event && (
                             <div className={classes.statItem}>
-                                <IconWorld size={16} className={classes.statIcon}/>
+                                <IconWorld size={14} className={classes.statIcon}/>
                                 <span className={classes.statText}>{t`Online event`}</span>
                             </div>
                         )}
                         <div className={classes.statItem}>
-                            <IconUsers size={16} className={classes.statIcon}/>
+                            <IconUsers size={14} className={classes.statIcon}/>
                             <span
                                 className={classes.statValue}>{formatNumber(event?.statistics?.products_sold || 0)}</span>
                             <span className={classes.statLabel}>{t`sold`}</span>
                         </div>
                         <div className={classes.statItem}>
-                            <IconCash size={16} className={classes.statIcon}/>
+                            <IconCash size={14} className={classes.statIcon}/>
                             <span
                                 className={classes.statValue}>{formatCurrency(event?.statistics?.sales_total_gross || 0, event?.currency)}</span>
                         </div>
