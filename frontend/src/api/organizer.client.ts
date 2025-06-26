@@ -79,7 +79,19 @@ export const organizerPublicClient = {
             'organizers/' + organizerId + '/events' + queryParamsHelper.buildQueryString(pagination)
         );
         return response.data;
-    }
+    },
+
+    contactOrganizer: async (organizerId: IdParam, contactData: {
+        name: string;
+        email: string;
+        message: string;
+    }) => {
+        const response = await publicApi.post<GenericDataResponse<any>>(
+            `organizers/${organizerId}/contact`, 
+            contactData
+        );
+        return response.data;
+    },
 }
 
 export const organizerSettingsClient = {

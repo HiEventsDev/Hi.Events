@@ -1,0 +1,74 @@
+@use "../../../styles/mixins.scss";
+
+.banner {
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  background: rgba(0, 0, 0, 0.44);
+  backdrop-filter: blur(8px);
+  padding: 0.75rem 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  animation: slideDown 0.3s ease-out;
+
+  @keyframes slideDown {
+    from {
+      transform: translateY(-100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  @include mixins.respond-below(sm) {
+    padding: 0.5rem 0.75rem;
+  }
+}
+
+.content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+
+  @include mixins.respond-below(sm) {
+    gap: 0.75rem;
+  }
+}
+
+.message {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.875rem;
+  font-weight: 400;
+
+  @include mixins.respond-below(sm) {
+    font-size: 0.8125rem;
+  }
+}
+
+.publishButton {
+  font-size: 0.8125rem;
+  padding: 0.25rem 0.75rem;
+  height: auto;
+  min-height: 28px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: white;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.35);
+    transform: translateY(-1px);
+    color: white;
+  }
+
+  @include mixins.respond-below(sm) {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.625rem;
+    min-height: 26px;
+  }
+}

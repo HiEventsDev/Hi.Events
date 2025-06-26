@@ -11,6 +11,8 @@ export type ConfigKeys = 'VITE_FRONTEND_URL'
     | 'VITE_CHATWOOT_BASE_URL'
     | 'VITE_APP_NAME'
     | 'VITE_PLATFORM_SUPPORT_EMAIL'
+    | 'VITE_TOS_URL'
+    | 'VITE_PRIVACY_URL'
     | string;
 
 export type IdParam = string | undefined | number;

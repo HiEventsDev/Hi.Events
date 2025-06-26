@@ -13,6 +13,8 @@ import {ContactOrganizerModal} from "../../common/ContactOrganizerModal";
 import {formatAddress, getShortLocationDisplay} from "../../../utilites/addressUtilities.ts";
 import {organizerHomepagePath} from "../../../utilites/urlHelper.ts";
 import {removeTransparency} from "../../../utilites/colorHelper.ts";
+import {StatusToggle} from "../../common/StatusToggle";
+import {useGetMe} from "../../../queries/useGetMe";
 
 interface OrganizerHomepageProps {
     organizer?: Organizer;
@@ -28,6 +30,7 @@ export const OrganizerHomepage = ({
                                   }: OrganizerHomepageProps) => {
     const navigate = useNavigate();
     const [contactModalOpen, setContactModalOpen] = useState(false);
+    const {data: me} = useGetMe();
 
     if (!organizer) {
         return null;
@@ -77,6 +80,20 @@ export const OrganizerHomepage = ({
 
     return (
         <>
+            {/* Status Toggle Banner */}
+            {organizer?.status && organizer?.id && (
+                <StatusToggle
+                    entityType="organizer"
+                    entityId={organizer.id}
+                    currentStatus={organizer.status as 'DRAFT' | 'LIVE'}
+                    entityName={organizer.name}
+                    onSuccess={() =>
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1000)}
+                />
+            )}
+
             {organizer && <OrganizerDocumentHead organizer={organizer}/>}
             <main className={classes.pageWrapper} style={themeStyles}>
                 <style>
