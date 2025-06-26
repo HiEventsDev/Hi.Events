@@ -142,6 +142,10 @@
 
     img {
       max-width: 120px;
+
+      @include mixins.respond-below(sm) {
+        max-width: 100px;
+      }
     }
 
     @include mixins.respond-above(md) {

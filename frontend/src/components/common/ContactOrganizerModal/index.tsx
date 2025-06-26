@@ -3,6 +3,8 @@ import {Modal, TextInput, Textarea, Group, Button} from '@mantine/core';
 import {useForm} from '@mantine/form';
 import {t} from '@lingui/macro';
 import {Organizer} from '../../../types';
+import {useContactOrganizer} from '../../../mutations/useContactOrganizer';
+import {showSuccess, showError} from '../../../utilites/notifications';
 import classes from './ContactOrganizerModal.module.scss';
 
 interface ContactOrganizerModalProps {
@@ -16,19 +18,39 @@ export const ContactOrganizerModal: React.FC<ContactOrganizerModalProps> = ({
     onClose,
     organizer
 }) => {
+    const contactMutation = useContactOrganizer();
+    
     const contactForm = useForm({
         initialValues: {
             name: '',
             email: '',
             message: '',
         },
+        validate: {
+            name: (value) => !value ? t`Name is required` : null,
+            email: (value) => {
+                if (!value) return t`Email is required`;
+                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return t`Invalid email`;
+                return null;
+            },
+            message: (value) => !value ? t`Message is required` : null,
+        },
     });
 
-    const handleContactSubmit = (values: any) => {
-        // Handle contact form submission
-        console.log('Contact form:', values);
-        onClose();
-        contactForm.reset();
+    const handleContactSubmit = (values: typeof contactForm.values) => {
+        contactMutation.mutate({
+            organizerId: organizer.id,
+            contactData: values,
+        }, {
+            onSuccess: () => {
+                showSuccess(t`Your message has been sent successfully!`);
+                onClose();
+                contactForm.reset();
+            },
+            onError: (error: any) => {
+                showError(error?.response?.data?.message || t`Failed to send message. Please try again.`);
+            },
+        });
     };
 
     return (
@@ -76,6 +98,8 @@ export const ContactOrganizerModal: React.FC<ContactOrganizerModalProps> = ({
                     <Button
                         type="submit"
                         className={classes.submitButton}
+                        loading={contactMutation.isPending}
+                        disabled={contactMutation.isPending}
                     >
                         {t`Send Message`}
                     </Button>

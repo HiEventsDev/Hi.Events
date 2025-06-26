@@ -1,5 +1,20 @@
 @use "../../../styles/mixins.scss";
 
+.eventStatusNotice {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  width: 100px;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 8px 12px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-size: 0.875rem;
+  color: var(--homepage-primary-text-color);
+  font-weight: 500;
+  z-index: 10;
+}
+
 // Background styles
 .background {
   position: fixed;
@@ -200,7 +215,7 @@
       font-size: 1.1rem;
     }
   }
-  
+
   .organizerLocation {
     display: flex;
     align-items: center;
@@ -208,11 +223,11 @@
     color: var(--homepage-secondary-color);
     font-size: 0.95rem;
     margin-bottom: 8px;
-    
+
     @include mixins.respond-below(sm) {
       justify-content: center;
     }
-    
+
     svg {
       color: var(--homepage-secondary-color);
       flex-shrink: 0;
@@ -240,7 +255,7 @@
     color: var(--homepage-secondary-color);
     font-size: 0.95rem;
     margin-bottom: 8px;
-    
+
     @include mixins.respond-below(sm) {
       justify-content: center;
     }
@@ -272,11 +287,11 @@
         margin-bottom: 0;
       }
     }
-    
+
     a {
       color: var(--homepage-primary-color);
       text-decoration: none;
-      
+
       &:hover {
         text-decoration: underline;
       }
@@ -382,17 +397,17 @@
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
   animation: fadeInUp 0.5s ease-out;
   transition: all 0.3s ease;
-  
+
   @include mixins.respond-below(sm) {
     bottom: 20px;
     right: 20px;
   }
-  
+
   &:hover {
     transform: translateY(-3px);
     box-shadow: 0 6px 30px rgba(0, 0, 0, 0.2);
   }
-  
+
   &:active {
     transform: translateY(-1px);
   }

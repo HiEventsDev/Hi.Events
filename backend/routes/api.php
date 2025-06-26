@@ -87,6 +87,7 @@ use HiEvents\Http\Actions\Organizers\GetOrganizerEventsAction;
 use HiEvents\Http\Actions\Organizers\GetOrganizersAction;
 use HiEvents\Http\Actions\Organizers\GetPublicOrganizerAction;
 use HiEvents\Http\Actions\Organizers\Orders\GetOrganizerOrdersAction;
+use HiEvents\Http\Actions\Organizers\Public\SendOrganizerContactMessagePublicAction;
 use HiEvents\Http\Actions\Organizers\Settings\GetOrganizerSettingsAction;
 use HiEvents\Http\Actions\Organizers\Settings\PartialUpdateOrganizerSettingsAction;
 use HiEvents\Http\Actions\Organizers\Stats\GetOrganizerStatsAction;
@@ -342,6 +343,7 @@ $router->prefix('/public')->group(
         // Organizers
         $router->get('/organizers/{organizer_id}', GetPublicOrganizerAction::class);
         $router->get('/organizers/{organizer_id}/events', GetOrganizerEventsPublicAction::class);
+        $router->post('/organizers/{organizer_id}/contact', SendOrganizerContactMessagePublicAction::class);
 
         // Products
         $router->get('/events/{event_id}/products', GetEventPublicAction::class);
