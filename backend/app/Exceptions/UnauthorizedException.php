@@ -10,7 +10,7 @@ class UnauthorizedException extends AccessDeniedHttpException
 {
     public function __construct(
         string $message = 'This action is unauthorized',
-        Throwable $previous = null,
+        ?Throwable $previous = null,
         int $code = ResponseCodes::HTTP_FORBIDDEN,
         array $headers = []
     )

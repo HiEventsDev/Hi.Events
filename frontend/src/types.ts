@@ -9,6 +9,10 @@ export type ConfigKeys = 'VITE_FRONTEND_URL'
     | 'VITE_API_URL_SERVER'
     | 'VITE_CHATWOOT_WEBSITE_TOKEN'
     | 'VITE_CHATWOOT_BASE_URL'
+    | 'VITE_APP_NAME'
+    | 'VITE_PLATFORM_SUPPORT_EMAIL'
+    | 'VITE_TOS_URL'
+    | 'VITE_PRIVACY_URL'
     | string;
 
 export type IdParam = string | undefined | number;
@@ -30,6 +34,16 @@ export interface ResetPasswordRequest {
     password_confirmation: string;
 }
 
+export interface ColorTheme {
+    name: string;
+    homepage_background_color: string;
+    homepage_content_background_color: string;
+    homepage_primary_color: string;
+    homepage_primary_text_color: string;
+    homepage_secondary_color: string;
+    homepage_secondary_text_color: string;
+}
+
 export interface LoginResponse {
     token?: string;
     token_type: string;
@@ -49,6 +63,7 @@ export interface User {
     password?: string;
     is_email_verified?: boolean;
     has_pending_email_change?: boolean;
+    enforce_email_confirmation_during_registration?: boolean;
     pending_email?: string;
     last_login_at?: string;
     status?: 'ACTIVE' | 'INACTIVE' | 'INVITED';
@@ -103,7 +118,7 @@ export interface Image {
     type: ImageType;
 }
 
-export type ImageType = 'EVENT_COVER' | 'EDITOR_IMAGE';
+export type ImageType = 'EVENT_COVER' | 'EDITOR_IMAGE' | 'ORGANIZER_LOGO' | 'ORGANIZER_COVER' | 'ORGANIZER_IMAGE';
 
 export type PaymentProvider = 'STRIPE' | 'OFFLINE';
 
@@ -166,6 +181,7 @@ export interface VenueAddress {
 export interface EventBase {
     title: string;
     description?: string;
+    category?: string;
     start_date: string;
     end_date?: string;
 }
@@ -185,6 +201,12 @@ export enum EventStatus {
     DRAFT = 'DRAFT',
     LIVE = 'LIVE',
     PAUSED = 'PAUSED',
+    ARCHIVED = 'ARCHIVED'
+}
+
+export enum OrganizerStatus {
+    DRAFT = 'DRAFT',
+    LIVE = 'LIVE',
     ARCHIVED = 'ARCHIVED'
 }
 
@@ -257,17 +279,72 @@ export interface EventStats {
     total_refunded: number;
 }
 
+export interface OrganizerStats {
+    total_products_sold: number;
+    total_attendees_registered: number;
+    total_orders: number;
+    total_gross_sales: number;
+    total_tax: number;
+    total_fees: number;
+    total_views: number;
+    total_refunded: number;
+    all_organizers_currencies: string[];
+}
+
 export interface Organizer {
-    id?: number;
+    id?: IdParam;
     name: string;
     email: string;
     description?: string;
     website?: string;
     timezone?: string;
     currency?: string;
+    slug?: string;
     phone?: string;
     images?: Image[];
     events?: Event[];
+    settings?: OrganizerSettings;
+    location_details?: VenueAddress;
+    status?: 'LIVE' | 'DRAFT';
+}
+
+export interface OrganizerSettings {
+    id: IdParam;
+    organizer_id: IdParam;
+    homepage_visibility: 'PUBLIC' | 'PRIVATE' | 'PASSWORD_PROTECTED';
+    homepage_theme_settings: {
+        homepage_background_color: string;
+        homepage_primary_color: string;
+        homepage_primary_text_color: string;
+        homepage_secondary_color: string;
+        homepage_secondary_text_color: string;
+        homepage_content_background_color: string;
+        homepage_background_type?: 'COLOR' | 'MIRROR_COVER_IMAGE';
+    }
+    website_url?: string;
+    location_details?: VenueAddress;
+    social_media_handles?: {
+        facebook?: string;
+        instagram?: string;
+        twitter?: string;
+        linkedin?: string;
+        youtube?: string;
+        tiktok?: string;
+        snapchat?: string;
+        twitch?: string;
+        discord?: string;
+        github?: string;
+        reddit?: string;
+        pinterest?: string;
+        whatsapp?: string;
+        telegram?: string;
+        wechat?: string;
+        weibo?: string;
+    },
+    seo_keywords?: string;
+    seo_description?: string;
+    seo_title?: string;
+    allow_search_engine_indexing?: boolean;
 }
 
 export interface SortDirectionLabel {
@@ -443,8 +520,9 @@ interface TaxesAndFeesRollup {
 }
 
 export interface Order {
-    id: number;
+    id: IdParam;
     short_id: string;
+    event_id: IdParam;
     first_name: string;
     last_name: string;
     company_name: string;

@@ -3,6 +3,7 @@
 namespace HiEvents\Services\Domain\Order;
 
 use Carbon\Carbon;
+use HiEvents\DomainObjects\AffiliateDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
@@ -38,6 +39,7 @@ class OrderManagementService
         int                    $timeOutMinutes,
         string                 $locale,
         ?PromoCodeDomainObject $promoCode,
+        ?AffiliateDomainObject $affiliate = null,
         string                 $sessionId = null,
     ): OrderDomainObject
     {
@@ -53,6 +55,7 @@ class OrderManagementService
             'public_id' => IdHelper::publicId(IdHelper::ORDER_PREFIX),
             'promo_code_id' => $promoCode?->getId(),
             'promo_code' => $promoCode?->getCode(),
+            'affiliate_id' => $affiliate?->getId(),
             'locale' => $locale,
         ]);
     }

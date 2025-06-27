@@ -6,6 +6,7 @@ use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\Mail\Order\OrderCancelled;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
@@ -88,9 +89,10 @@ class OrderCancelServiceTest extends TestCase
 
         $event = new EventDomainObject();
         $event->setEventSettings(new EventSettingDomainObject());
+        $event->setOrganizer(new OrganizerDomainObject());
         $this->eventRepository
             ->shouldReceive('loadRelation')
-            ->once()
+            ->twice()
             ->andReturnSelf()
             ->getMock()
             ->shouldReceive('findById')->once()->andReturn($event);
@@ -161,9 +163,10 @@ class OrderCancelServiceTest extends TestCase
 
         $event = new EventDomainObject();
         $event->setEventSettings(new EventSettingDomainObject());
+        $event->setOrganizer(new OrganizerDomainObject());
         $this->eventRepository
             ->shouldReceive('loadRelation')
-            ->once()
+            ->twice()
             ->andReturnSelf()
             ->getMock()
             ->shouldReceive('findById')->once()->andReturn($event);

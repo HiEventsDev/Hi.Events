@@ -37,6 +37,8 @@ import {IconChevronRight, IconX} from "@tabler/icons-react"
 import {getSessionIdentifier} from "../../../../utilites/sessionIdentifier.ts";
 import {Constants} from "../../../../constants.ts";
 
+const AFFILIATE_EXPIRY_DAYS = 30;
+
 const sendHeightToIframeWidgets = () => {
     const height = document.documentElement.scrollHeight;
     const widgetHeight = document.querySelector('.hi-product-widget-container')?.getBoundingClientRect().height || 0;
@@ -72,6 +74,7 @@ interface SelectProductsProps {
     padding?: string;
     continueButtonText?: string;
     widgetMode?: 'preview' | 'normal' | 'embedded';
+    showPoweredBy?: boolean;
 }
 
 const SelectProducts = (props: SelectProductsProps) => {
@@ -85,13 +88,48 @@ const SelectProducts = (props: SelectProductsProps) => {
     const [orderInProcessOverlayVisible, setOrderInProcessOverlayVisible] = useState(false);
     const [resizeRef, resizeObserverRect] = useResizeObserver();
     const [collapsedProducts, setCollapsedProducts] = useState<{ [key: number]: boolean }>({});
+    const [affiliateCode, setAffiliateCode] = useState<string | null>(null);
 
     useEffect(() => sendHeightToIframeWidgets(), [resizeObserverRect.height]);
+
+    useEffect(() => {
+        const storageKey = 'affiliate_code_' + eventId;
+
+        const now = Date.now();
+        const affiliateCodeFromUrl = new URLSearchParams(window.location.search).get('aff');
+
+        if (affiliateCodeFromUrl) {
+            const data = {code: affiliateCodeFromUrl, timestamp: now};
+            localStorage.setItem(storageKey, JSON.stringify(data));
+            setAffiliateCode(affiliateCodeFromUrl);
+            return;
+        }
+
+        const storedData = localStorage.getItem(storageKey);
+        if (storedData) {
+            try {
+                const parsed = JSON.parse(storedData);
+                const ageInDays = (now - parsed.timestamp) / (1000 * 60 * 60 * 24);
+                if (ageInDays <= AFFILIATE_EXPIRY_DAYS) {
+                    setAffiliateCode(parsed.code);
+                } else {
+                    localStorage.removeItem(storageKey);
+                }
+            } catch {
+                localStorage.removeItem(storageKey);
+            }
+        }
+    }, []);
+
+    useEffect(() => {
+        form.setFieldValue('affiliate_code', affiliateCode || null);
+    }, [affiliateCode]);
 
     const form = useForm<ProductFormPayload>({
         initialValues: {
             products: undefined,
             promo_code: props.promoCodeValid ? props.promoCode || null : null,
+            affiliate_code: affiliateCode || null,
             session_identifier: undefined,
         },
     });
@@ -360,15 +398,24 @@ const SelectProducts = (props: SelectProductsProps) => {
             {(event && productAreAvailable) && (
                 <form target={'__blank'} onSubmit={form.onSubmit(handleProductSelection as any)}>
                     <Input type={'hidden'} {...form.getInputProps('promo_code')} />
+                    <Input type={'hidden'} {...form.getInputProps('affiliate_code')} />
                     <div className={'hi-product-category-rows'}>
                         {productCategories && productCategories.map((category) => {
                             return (
                                 <div className={'hi-product-category-row'} key={category.id}>
-                                    <h2 className={'hi-product-category-title'}>
+                                    <h2 className={'hi-product-category-title'} style={category.description ? {
+                                        marginBottom: '0px'
+                                    } : {}}>
                                         {category.name}
                                     </h2>
+                                    {category.description && (
+                                        <div className={'hi-product-category-description'}>
+                                            <Spoiler maxHeight={500} showLabel={t`Show more`} hideLabel={t`Hide`}>
+                                                <div dangerouslySetInnerHTML={{__html: category.description}}/>
+                                            </Spoiler>
+                                        </div>
+                                    )}
                                     <div className={'hi-product-rows'}>
-
                                         {category.products?.length === 0 && (
                                             <div className={'hi-no-products'}>
                                                 <p className={'hi-no-products-message'}>
@@ -539,6 +586,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                     </Group>
                 )}
             </div>
+
             {
                 /**
                  * (c) Hi.Events Ltd 2025
@@ -554,9 +602,11 @@ const SelectProducts = (props: SelectProductsProps) => {
                  * If you wish to remove this notice, a commercial license is available at: https://hi.events/licensing
                  */
             }
-            <PoweredByFooter style={{
-                'color': props.colors?.primaryText || '#000',
-            }}/>
+            {(props.showPoweredBy ?? true) && (
+                <PoweredByFooter style={{
+                    'color': props.colors?.primaryText || '#000',
+                }}/>
+            )}
         </div>
     );
 }

@@ -32,7 +32,7 @@ const ConfirmEmailAddress = () => {
     useEffect(() => confirmEmail(), [isFetched]);
 
     return (
-        <Card style={{marginTop: 'var(--tk-spacing-lg)'}}>
+        <Card style={{marginTop: 'var(--hi-spacing-lg)'}}>
             <p>{t`Confirming email address...`}</p>
         </Card>
     );

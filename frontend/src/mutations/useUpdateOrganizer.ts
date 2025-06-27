@@ -13,13 +13,14 @@ export const useUpdateOrganizer = () => {
             organizerData: Partial<Organizer>,
         }) => organizerClient.update(organizerId, organizerData),
 
-        onSuccess: (_, variables) => {
-            queryClient.invalidateQueries({
-                queryKey: [GET_ORGANIZER_QUERY_KEY, variables.organizerId]
-            });
-            queryClient.invalidateQueries({
-                queryKey: [GET_ORGANIZERS_QUERY_KEY]
-            });
-        }
+        onSuccess: (_, variables) =>
+            Promise.all([
+                queryClient.invalidateQueries({
+                    queryKey: [GET_ORGANIZER_QUERY_KEY, variables.organizerId]
+                }),
+                queryClient.invalidateQueries({
+                    queryKey: [GET_ORGANIZERS_QUERY_KEY]
+                })
+            ])
     });
 }

@@ -1,0 +1,206 @@
+@use "../../../../styles/mixins";
+
+.topBar {
+  grid-area: topbar;
+  background: linear-gradient(90deg, var(--mantine-color-primary-9), var(--mantine-color-secondary-9));
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.3s ease;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+
+  .topBarMain {
+    display: flex;
+    align-items: center;
+    padding: var(--hi-spacing-md);
+    height: 60px;
+  }
+
+  .breadcrumbsRow {
+    padding: 6px var(--hi-spacing-md) 8px;
+    padding-top: 7px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    background-color: #fff;
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top-left-radius: var(--hi-radius-md);
+    box-shadow: 3px 0px 8px rgb(0 0 0 / 8%);
+    position: relative;
+    z-index: 5;
+    min-height: 50px;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: -1px;
+      left: 0;
+      width: 16px;
+      height: 16px;
+      background-color: #fff;
+      border-top-left-radius: 16px;
+      z-index: -1;
+    }
+
+    @include mixins.respond-below(md) {
+      border-top-left-radius: 0;
+
+      &::before {
+        display: none;
+      }
+    }
+  }
+
+  .breadcrumbs {
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    font-size: 0.85rem;
+    color: var(--hi-text-light);
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    a {
+      color: var(--hi-text-light);
+      transition: color 0.2s ease;
+      position: relative;
+
+      &:hover {
+        color: var(--hi-text);
+      }
+
+      &:last-child {
+        color: var(--hi-text);
+        font-weight: 600;
+      }
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 0;
+        height: 1px;
+        background-color: var(--hi-primary);
+        transition: width 0.2s ease;
+      }
+
+      &:hover::after {
+        width: 100%;
+      }
+    }
+  }
+
+  .actionGroup {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+  }
+
+  .statusToggleContainer {
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin-left: 16px;
+    margin-right: auto;
+
+    @include mixins.respond-below(md) {
+      margin-left: 16px;
+    }
+  }
+
+  &.withShadow {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  .burger {
+    --burger-color: var(--hi-color-white);
+    @include mixins.respond-above(md) {
+      display: none;
+    }
+  }
+
+  .logo {
+    color: var(--hi-color-white);
+    font-weight: bold;
+    font-size: 1.2em;
+    display: flex;
+    justify-content: center;
+
+    a {
+      display: flex;
+    }
+
+    img {
+      max-width: 120px;
+
+      @include mixins.respond-below(sm) {
+        max-width: 100px;
+      }
+    }
+
+    @include mixins.respond-above(md) {
+      display: none;
+    }
+  }
+
+  .menu {
+    display: flex;
+    align-items: center;
+    color: var(--hi-color-white);
+  }
+
+  @include mixins.respond-below(md) {
+    .topBarMain {
+      background: linear-gradient(90deg, var(--mantine-color-primary-9), var(--mantine-color-secondary-9));
+    }
+  }
+
+  .entityPageButton {
+    margin-right: 8px;
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+    transition: transform 0.2s ease;
+    color: #fff;
+
+    &:hover {
+      transform: translateY(-1px);
+    }
+
+    .entityPageButtonText {
+      // Default: hide both
+      .mobile,
+      .desktop {
+        display: none;
+      }
+
+      // Show mobile text from sm and up
+      @include mixins.respond-above(sm) {
+        .mobile {
+          display: block;
+        }
+      }
+
+      // Switch to desktop text at md and up
+      @include mixins.respond-above(md) {
+        .mobile {
+          display: none;
+        }
+
+        .desktop {
+          display: block;
+        }
+      }
+    }
+  }
+}

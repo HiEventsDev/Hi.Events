@@ -5,6 +5,7 @@ namespace HiEvents\Services\Infrastructure\Authorization;
 use HiEvents\DomainObjects\AccountDomainObject;
 use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\ImageDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\DomainObjects\Status\UserStatus;
 use HiEvents\DomainObjects\TaxAndFeesDomainObject;
@@ -13,6 +14,7 @@ use HiEvents\Exceptions\UnauthorizedException;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
+use HiEvents\Repository\Interfaces\ImageRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
 use HiEvents\Repository\Interfaces\TaxAndFeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
@@ -57,12 +59,14 @@ readonly class IsAuthorizedService
             UserDomainObject::class => $this->app->make(UserRepositoryInterface::class),
             TaxAndFeesDomainObject::class => $this->app->make(TaxAndFeeRepositoryInterface::class),
             OrganizerDomainObject::class => $this->app->make(OrganizerRepositoryInterface::class),
+            ImageDomainObject::class => $this->app->make(ImageRepositoryInterface::class),
         };
 
         $entity = $repository->findById($entityId);
 
         $result = match ($entityType) {
             EventDomainObject::class,
+            ImageDomainObject::class,
             OrganizerDomainObject::class => $entity?->getAccountId() === $authAccountId,
             AccountDomainObject::class => $entity?->getId() === $authAccountId,
             UserDomainObject::class => $this->validateUserUpdate($entity, $authAccountId),

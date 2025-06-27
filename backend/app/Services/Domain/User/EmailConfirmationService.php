@@ -5,26 +5,27 @@ namespace HiEvents\Services\Domain\User;
 use Carbon\Carbon;
 use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Mail\Account\ConfirmEmailAddressEmail;
-use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
-use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
+use HiEvents\Mail\Account\EmailConfirmationCodeEmail;
+use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Services\Infrastructure\Encryption\EncryptedPayloadService;
 use HiEvents\Services\Infrastructure\Encryption\Exception\DecryptionFailedException;
 use HiEvents\Services\Infrastructure\Encryption\Exception\EncryptedPayloadExpiredException;
+use HiEvents\Services\Infrastructure\User\EmailVerificationCodeService;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Database\DatabaseManager;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Throwable;
 
-readonly class EmailConfirmationService
+class EmailConfirmationService
 {
     public function __construct(
-        private Mailer                         $mailer,
-        private EncryptedPayloadService        $encryptedPayloadService,
-        private UserRepositoryInterface        $userRepository,
-        private AccountRepositoryInterface     $accountRepository,
-        private DatabaseManager                $databaseManager,
-        private AccountUserRepositoryInterface $accountUserRepository,
+        private readonly Mailer                       $mailer,
+        private readonly EncryptedPayloadService      $encryptedPayloadService,
+        private readonly UserRepositoryInterface      $userRepository,
+        private readonly DatabaseManager              $databaseManager,
+        private readonly EmailVerificationCodeService $emailVerificationCodeService,
+        private readonly VerifyUserEmailService       $verifyUserEmailService,
+        private readonly EventRepositoryInterface     $eventRepository,
     )
     {
     }
@@ -40,12 +41,29 @@ readonly class EmailConfirmationService
 
             $user = $this->userRepository->findByIdAndAccountId($userId, $accountId);
 
-            $this->verifyAccountEmail($user, $accountId);
+            $this->verifyUserEmailService->markEmailAsVerified($user, $accountId);
         });
     }
 
-    public function sendConfirmation(UserDomainObject $user): void
+    public function sendConfirmation(UserDomainObject $user, int $accountId): void
     {
+        // If there are no events, we assume the user is registering for the first time
+        $events = $this->eventRepository->findWhere([
+            'account_id' => $accountId,
+        ]);
+
+        if (config('app.enforce_email_confirmation_during_registration') && $events->isEmpty()) {
+            $this->mailer
+                ->to($user->getEmail())
+                ->locale($user->getLocale())
+                ->send(new EmailConfirmationCodeEmail(
+                    $user,
+                    $this->emailVerificationCodeService->storeAndReturnCode($user->getEmail()),
+                ));
+
+            return;
+        }
+
         $token = $this->encryptedPayloadService->encryptPayload([
             'id' => $user->getId(),
         ], Carbon::now()->addMonths(6));
@@ -53,39 +71,5 @@ readonly class EmailConfirmationService
         $this->mailer
             ->to($user->getEmail())
             ->send(new ConfirmEmailAddressEmail($user, $token));
-    }
-
-    private function verifyAccountEmail(UserDomainObject $user, int $accountId): void
-    {
-        $this->userRepository->updateWhere(
-            attributes: [
-                'email_verified_at' => now(),
-            ],
-            where: [
-                'id' => $user->getId(),
-            ],
-        );
-
-        $accountUser = $this->accountUserRepository->findFirstWhere(
-            where: [
-                'user_id' => $user->getId(),
-                'account_id' => $accountId,
-            ]
-        );
-
-        if ($accountUser === null) {
-            throw new ResourceNotFoundException();
-        }
-
-        if ($accountUser->getIsAccountOwner()) {
-            $this->accountRepository->updateWhere(
-                attributes: [
-                    'account_verified_at' => now(),
-                ],
-                where: [
-                    'id' => $accountId,
-                ]
-            );
-        }
     }
 }

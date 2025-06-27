@@ -1,5 +1,21 @@
 @use "../../../styles/mixins.scss";
 
+.eventStatusNotice {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  width: 100px;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 8px 12px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-size: 0.875rem;
+  color: var(--homepage-primary-text-color);
+  font-weight: 500;
+  z-index: 10;
+}
+
+// Background styles
 .background {
   position: fixed;
   width: 100%;
@@ -14,81 +30,396 @@
   right: 0;
   top: 0;
   bottom: 0;
-
-  @include mixins.respond-below(sm) {
-    display: none;
-  }
 }
 
-.styleContainer {
-  display: flex;
-  justify-content: center;
+// Main page wrapper
+.pageWrapper {
+  min-height: 100vh;
 }
 
-.container {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
+// Main container
+.mainContainer {
   max-width: 1000px;
-  border-radius: 5px;
-  margin: 30px;
-  overflow: hidden;
-  box-shadow: 0px 0px 6px 0px #00000025;
+  margin: 0 auto;
+  padding: 0;
 
-  @include mixins.respond-above(md) {
-    min-width: 730px;
+  @include mixins.respond-below(lg) {
+    max-width: 100%;
   }
+}
+
+// Cover wrapper inside content sections
+.coverWrapper {
+  position: relative;
+  width: 100%;
+  max-height: 560px;
+  overflow: hidden;
 
   @include mixins.respond-below(md) {
-    margin: 0;
-    border-radius: 0;
-    box-shadow: none;
-    width: 100%;
+    max-height: 400px;
   }
 
   @include mixins.respond-below(sm) {
-    border-radius: 0;
-    margin: 0;
+    max-height: 350px;
+  }
+}
+
+.coverImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+// Content sections
+.contentSection {
+  margin: 24px 20px;
+  background-color: var(--homepage-background-color);
+  border-radius: 20px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  color: var(--homepage-primary-text-color);
+
+  @include mixins.respond-below(md) {
+    margin: 16px 12px;
+    border-radius: 16px;
   }
 
-  .innerContainer {
-    display: flex;
-    flex-direction: column;
-    max-width: 1000px;
-    place-self: center;
-    background-color: var(--homepage-background-color, var(--tk-color-white));
-    color: var(--homepage-primary-text-color, var(--tk-primary));
-    padding: 35px;
-    width: 100%;
+  @include mixins.respond-below(sm) {
+    margin: 12px 8px;
+    border-radius: 12px;
+  }
+
+  &:hover {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+  }
+
+  .sectionContent {
+    padding: 32px;
 
     @include mixins.respond-below(md) {
-      min-height: 100vh;
-      justify-content: space-between;
+      padding: 24px;
+    }
+
+    @include mixins.respond-below(sm) {
       padding: 20px;
+    }
+  }
+
+  .sectionTitle {
+    font-size: 1.75rem;
+    font-weight: 600;
+    margin: 0 0 24px 0;
+    color: var(--homepage-primary-text-color);
+
+    @include mixins.respond-below(md) {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+    }
+
+    @include mixins.respond-below(sm) {
+      font-size: 1.25rem;
+      margin-bottom: 16px;
+    }
+  }
+}
+
+// Event description
+.eventDescription {
+  color: var(--homepage-primary-text-color);
+  line-height: 1.6;
+
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--homepage-primary-text-color);
+    margin-top: 1.5em;
+    margin-bottom: 0.75em;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
+  p {
+    margin-bottom: 1em;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin: 1em 0;
+  }
+
+  a {
+    color: var(--homepage-primary-color);
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+// Organizer section
+.organizerInfo {
+  .organizerHeader {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 20px;
+
+    @include mixins.respond-below(sm) {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+  }
+
+  .organizerLogo {
+    width: 80px;
+    height: 80px;
+    border-radius: 12px;
+    object-fit: contain;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+    @include mixins.respond-below(sm) {
+      width: 60px;
+      height: 60px;
+    }
+  }
+
+  .organizerDetails {
+    flex: 1;
+  }
+
+  .organizerName {
+    margin: 0 0 8px 0;
+
+    a {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--homepage-primary-text-color, #1a1a1a);
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    @include mixins.respond-below(sm) {
+      font-size: 1.1rem;
+    }
+  }
+
+  .organizerLocation {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--homepage-secondary-color);
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+
+    @include mixins.respond-below(sm) {
+      justify-content: center;
+    }
+
+    svg {
+      color: var(--homepage-secondary-color);
+      flex-shrink: 0;
+    }
+
+    span {
+      margin-right: 4px;
+    }
+  }
+
+  .mapLink {
+    color: var(--homepage-secondary-color);
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  .organizerWebsite {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--homepage-secondary-color);
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+
+    @include mixins.respond-below(sm) {
+      justify-content: center;
+    }
+
+    svg {
+      color: var(--homepage-secondary-color);
+      flex-shrink: 0;
     }
 
     a {
-      color: var(--homepage-primary-text-color, var(--tk-primary)) !important;
-    }
+      color: var(--homepage-secondary-color);
+      text-decoration: none;
 
-    .eventInfo {
-      width: 100%;
-    }
-
-    .productSelection {
-      .buyProductsBox {
-        border-radius: 10px;
-        border: 1px solid #ddd;
-        position: sticky;
-        top: 20px;
-        width: 300px;
-
-        .priceRange {
-          text-align: center;
-          font-weight: 600;
-          padding: 0 10px 10px;
-        }
+      &:hover {
+        text-decoration: underline;
       }
     }
+  }
+
+  .organizerDescription {
+    line-height: 1.6;
+    margin-bottom: 20px;
+    color: var(--homepage-primary-text-color);
+
+    p {
+      margin-bottom: 0.75em;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    a {
+      color: var(--homepage-primary-color);
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .organizerSocials {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 20px;
+
+    @include mixins.respond-below(sm) {
+      justify-content: center;
+    }
+  }
+
+  .socialLink {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    color: var(--homepage-secondary-color);
+    transition: transform 0.2s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+    }
+  }
+
+  .contactButton {
+    border-color: var(--homepage-secondary-color);
+    color: var(--homepage-secondary-color);
+    background: transparent;
+    transition: all 0.2s ease;
+    font-weight: 500;
+    border-radius: 10px;
+    font-size: 0.875rem;
+    padding: 6px 16px;
+    height: 36px;
+
+    &:hover {
+      transform: translateY(-2px);
+    }
+  }
+}
+
+// Footer section
+.footerSection {
+  .footerContent {
+    text-align: center;
+  }
+
+  .footerLinks {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .footerLink {
+    color: var(--homepage-primary-text-color);
+    text-decoration: none;
+    font-size: 0.875rem;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: var(--homepage-primary-text-color);
+      text-decoration: underline;
+    }
+  }
+
+  .footerSeparator {
+    color: var(--homepage-secondary-color);
+    font-size: 0.75rem;
+  }
+
+  .poweredByFooter {
+    color: var(--homepage-primary-text-color);
+    margin-top: 1em;
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      font-weight: 600;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+// Floating scroll to tickets button
+.scrollToTicketsButton {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 100;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+  animation: fadeInUp 0.5s ease-out;
+  transition: all 0.3s ease;
+
+  @include mixins.respond-below(sm) {
+    bottom: 20px;
+    right: 20px;
+  }
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  &:active {
+    transform: translateY(-1px);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

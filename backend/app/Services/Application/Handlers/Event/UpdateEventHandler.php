@@ -70,6 +70,7 @@ readonly class UpdateEventHandler
         $this->eventRepository->updateWhere(
             attributes: [
                 'title' => $eventData->title,
+                'category' => $eventData->category?->value ?? $existingEvent->getCategory(),
                 'start_date' => DateHelper::convertToUTC($eventData->start_date, $eventData->timezone),
                 'end_date' => $eventData->end_date
                     ? DateHelper::convertToUTC($eventData->end_date, $eventData->timezone)

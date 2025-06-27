@@ -1,28 +1,46 @@
-import {IconCalendar, IconExternalLink, IconMapPin} from "@tabler/icons-react";
+import {IconCalendar, IconExternalLink, IconMapPin, IconWorld} from "@tabler/icons-react";
 import classes from "./EventInformation.module.scss";
-import {formatAddress} from "../../../../utilites/formatAddress.tsx";
+import {formatAddress, isAddressSet} from "../../../../utilites/addressUtilities.ts";
 import {t} from "@lingui/macro";
-import {Button} from "@mantine/core";
+import {Anchor, Button} from "@mantine/core";
 import {LoadingMask} from "../../../common/LoadingMask";
 import {ShareComponent} from "../../../common/ShareIcon";
-import {eventCoverImageUrl, eventHomepageUrl} from "../../../../utilites/urlHelper.ts";
+import {eventCoverImageUrl, eventHomepageUrl, imageUrl, organizerHomepageUrl} from "../../../../utilites/urlHelper.ts";
 import {FC} from "react";
-import {Event} from "../../../../types.ts";
+import {Event, Organizer} from "../../../../types.ts";
 import {EventDateRange} from "../../../common/EventDateRange";
 
 export const EventInformation: FC<{
-    event: Event
-}> = ({event}) => {
+    event: Event,
+    organizer: Organizer,
+}> = ({event, organizer}) => {
 
-    if (!event) {
+    if (!event || !organizer) {
         return <LoadingMask/>;
     }
+
+    const organizerLogo = imageUrl('ORGANIZER_LOGO', organizer?.images);
 
     return (
         <>
             <div className={classes.preHeading}>
                 <div className={classes.organizer}>
-                    {event.organizer?.name}
+                    {organizerLogo && (
+                        <div className={classes.organizerLogo}>
+                            <img
+                                src={organizerLogo}
+                                alt={organizer.name}
+                            />
+                        </div>
+                    )}
+                    <h2 className={classes.organizerName}>
+                        <Anchor
+                            href={organizerHomepageUrl(organizer)}
+                        >
+                            {organizer.name}
+                        </Anchor>
+                    </h2>
+
                 </div>
                 <div className={classes.shareButtons}>
                     <ShareComponent
@@ -44,13 +62,25 @@ export const EventInformation: FC<{
                     </div>
                 </div>
 
-                {event.settings?.location_details && (
+
+                {event.settings?.is_online_event && (
+                    <div className={classes.eventDetail}>
+                        <div className={classes.details}>
+                            <IconWorld size={20}/>
+                            <div className={classes.detail}>
+                                <b>{t`Online Event`}</b>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {isAddressSet(event.settings?.location_details) && !event.settings?.is_online_event && (
                     <div className={classes.eventDetail}>
                         <div className={classes.details}>
                             <IconMapPin size={20}/>
                             <div className={classes.detail}>
                                 <b>{event.settings?.location_details?.venue_name}</b>
-                                <div>{formatAddress(event.settings?.location_details)}</div>
+                                <div>{formatAddress(event.settings.location_details)}</div>
                                 <div>
                                     <Button
                                         className={classes.viewOnGoogleMaps}
@@ -70,15 +100,6 @@ export const EventInformation: FC<{
                     </div>
                 )}
             </div>
-
-            {event?.description && (
-                <div className={classes.eventDescription}>
-                    <h2>{t`About`}</h2>
-                    <div dangerouslySetInnerHTML={{
-                        __html: event.description || '',
-                    }}/>
-                </div>
-            )}
         </>
     )
 }

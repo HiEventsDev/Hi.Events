@@ -13,8 +13,8 @@ class ResendEmailConfirmationHandler
     {
     }
 
-    public function handle(UserDomainObject $user): void
+    public function handle(UserDomainObject $user, int $accountId): void
     {
-        $this->emailConfirmationService->sendConfirmation($user);
+        $this->emailConfirmationService->sendConfirmation($user, $accountId);
     }
 }

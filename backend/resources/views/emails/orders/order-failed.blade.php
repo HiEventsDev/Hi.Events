@@ -1,4 +1,5 @@
 @php /** @var \HiEvents\DomainObjects\OrderDomainObject $order */ @endphp
+@php /** @var \HiEvents\DomainObjects\OrganizerDomainObject $organizer */ @endphp
 @php /** @var \HiEvents\DomainObjects\EventDomainObject $event */ @endphp
 @php /** @var \HiEvents\DomainObjects\EventSettingDomainObject $eventSettings */ @endphp
 @php /** @var string $eventUrl */ @endphp
@@ -18,7 +19,7 @@
 {{ __('at') }} {{ $supportEmail ?? 'hello@hi.events' }}.
 
 {{ __('Best regards') }},<br>
-{{ config('app.name') }}
+{{ $organizer->getName() ?: config('app.name') }}
 
 {!! $eventSettings->getGetEmailFooterHtml() !!}
 </x-mail::message>

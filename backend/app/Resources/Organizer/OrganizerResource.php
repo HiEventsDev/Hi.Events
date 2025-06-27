@@ -22,9 +22,15 @@ class OrganizerResource extends JsonResource
             'description' => $this->getDescription(),
             'timezone' => $this->getTimezone(),
             'currency' => $this->getCurrency(),
+            'slug' => $this->getSlug(),
+            'status' => $this->getStatus(),
             'images' => $this->when(
                 (bool)$this->getImages(),
                 fn() => ImageResource::collection($this->getImages())
+            ),
+            'settings' => $this->when(
+                condition: !is_null($this->getOrganizerSettings()),
+                value: fn() => new OrganizerSettingsResource($this->getOrganizerSettings())
             ),
         ];
     }

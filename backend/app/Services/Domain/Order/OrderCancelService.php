@@ -5,9 +5,11 @@ namespace HiEvents\Services\Domain\Order;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Mail\Order\OrderCancelled;
+use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
@@ -44,6 +46,7 @@ class OrderCancelService
             $this->updateOrderStatus($order);
 
             $event = $this->eventRepository
+                ->loadRelation(new Relationship(OrganizerDomainObject::class, name: 'organizer'))
                 ->loadRelation(EventSettingDomainObject::class)
                 ->findById($order->getEventId());
 
@@ -53,6 +56,7 @@ class OrderCancelService
                 ->send(new OrderCancelled(
                     order: $order,
                     event: $event,
+                    organizer: $event->getOrganizer(),
                     eventSettings: $event->getEventSettings(),
                 ));
 

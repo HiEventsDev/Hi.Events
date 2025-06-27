@@ -17,7 +17,7 @@ class EncryptedPayloadService
         $this->encrypter = $encrypter;
     }
 
-    public function encryptPayload(array $payload, Carbon $expiry = null): string
+    public function encryptPayload(array $payload, ?Carbon $expiry = null): string
     {
         $expiryTime = $expiry ? $expiry->toIso8601String() : Carbon::now()->addHours(48)->toIso8601String();
         $payload['exp'] = $expiryTime;
