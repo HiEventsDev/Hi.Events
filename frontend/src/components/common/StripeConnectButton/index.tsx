@@ -57,6 +57,11 @@ export const StripeConnectButton: React.FC<StripeConnectButtonProps> = ({
         if (!stripeDetails) {
             setFetchStripeDetails(true);
         } else {
+            if (stripeDetails.is_connect_setup_complete) {
+                showSuccess(t`Stripe setup is already complete.`);
+                return;
+            }
+
             if (typeof window !== 'undefined') {
                 showSuccess(t`Redirecting to Stripe...`);
                 window.location.href = String(stripeDetails.connect_url);
