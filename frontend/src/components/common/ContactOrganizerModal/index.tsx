@@ -6,6 +6,7 @@ import {Organizer} from '../../../types';
 import {useContactOrganizer} from '../../../mutations/useContactOrganizer';
 import {showSuccess, showError} from '../../../utilites/notifications';
 import classes from './ContactOrganizerModal.module.scss';
+import {InputGroup} from "../InputGroup";
 
 interface ContactOrganizerModalProps {
     opened: boolean;
@@ -26,6 +27,7 @@ export const ContactOrganizerModal: React.FC<ContactOrganizerModalProps> = ({
             email: '',
             message: '',
         },
+        validateInputOnBlur: true,
         validate: {
             name: (value) => !value ? t`Name is required` : null,
             email: (value) => {
@@ -33,7 +35,11 @@ export const ContactOrganizerModal: React.FC<ContactOrganizerModalProps> = ({
                 if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return t`Invalid email`;
                 return null;
             },
-            message: (value) => !value ? t`Message is required` : null,
+            message: (value) => {
+                if (value.length > 5000) return t`Message cannot exceed 5000 characters`;
+
+                return !value ? t`Message is required` : null;
+            },
         },
     });
 
@@ -62,7 +68,7 @@ export const ContactOrganizerModal: React.FC<ContactOrganizerModalProps> = ({
             className={classes.contactModal}
         >
             <form onSubmit={contactForm.onSubmit(handleContactSubmit)}>
-                <Group grow mb="md">
+                <InputGroup>
                     <TextInput
                         label={t`Your Name`}
                         placeholder={t`Enter your name`}
@@ -76,13 +82,15 @@ export const ContactOrganizerModal: React.FC<ContactOrganizerModalProps> = ({
                         type="email"
                         {...contactForm.getInputProps('email')}
                     />
-                </Group>
+                </InputGroup>
 
                 <Textarea
                     label={t`Message`}
                     placeholder={t`Write your message here...`}
                     required
                     minRows={4}
+                    autosize
+                    maxLength={5001}
                     mb="md"
                     {...contactForm.getInputProps('message')}
                 />
