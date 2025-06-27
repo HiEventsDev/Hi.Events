@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Mail\Account\ConfirmEmailAddressEmail;
 use HiEvents\Mail\Account\EmailConfirmationCodeEmail;
+use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Services\Infrastructure\Encryption\EncryptedPayloadService;
 use HiEvents\Services\Infrastructure\Encryption\Exception\DecryptionFailedException;
@@ -24,6 +25,7 @@ class EmailConfirmationService
         private readonly DatabaseManager              $databaseManager,
         private readonly EmailVerificationCodeService $emailVerificationCodeService,
         private readonly VerifyUserEmailService       $verifyUserEmailService,
+        private readonly EventRepositoryInterface     $eventRepository,
     )
     {
     }
@@ -43,9 +45,14 @@ class EmailConfirmationService
         });
     }
 
-    public function sendConfirmation(UserDomainObject $user): void
+    public function sendConfirmation(UserDomainObject $user, int $accountId): void
     {
-        if (config('app.enforce_email_confirmation_during_registration')) {
+        // If there are no events, we assume the user is registering for the first time
+        $events = $this->eventRepository->findWhere([
+            'account_id' => $accountId,
+        ]);
+
+        if (config('app.enforce_email_confirmation_during_registration') && $events->isEmpty()) {
             $this->mailer
                 ->to($user->getEmail())
                 ->locale($user->getLocale())

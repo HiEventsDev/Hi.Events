@@ -264,34 +264,32 @@ const EventHomepage = ({colors, continueButtonText, backgroundType, ...loaderDat
                                             }}
                                         />
                                     )}
-                                    {(socialLinks.length > 0 || websiteUrl) && (
-                                        <div className={classes.organizerSocials}>
-                                            {socialLinks.map(({platform, handle, config}) => {
-                                                const IconComponent = config.icon;
-                                                const url = config.baseUrl + handle;
-                                                return (
-                                                    <Anchor
-                                                        key={platform}
-                                                        href={url}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className={classes.socialLink}
-                                                    >
-                                                        <IconComponent size={24}/>
-                                                    </Anchor>
-                                                );
-                                            })}
-                                            <Button
-                                                leftSection={<IconMail size={16}/>}
-                                                onClick={() => setContactModalOpen(true)}
-                                                className={classes.contactButton}
-                                                variant="outline"
-                                                size="sm"
-                                            >
-                                                {t`Contact`}
-                                            </Button>
-                                        </div>
-                                    )}
+                                    <div className={classes.organizerSocials}>
+                                        {socialLinks.map(({platform, handle, config}) => {
+                                            const IconComponent = config.icon;
+                                            const url = config.baseUrl + handle;
+                                            return (
+                                                <Anchor
+                                                    key={platform}
+                                                    href={url}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className={classes.socialLink}
+                                                >
+                                                    <IconComponent size={24}/>
+                                                </Anchor>
+                                            );
+                                        })}
+                                        <Button
+                                            leftSection={<IconMail size={16}/>}
+                                            onClick={() => setContactModalOpen(true)}
+                                            className={classes.contactButton}
+                                            variant="outline"
+                                            size="sm"
+                                        >
+                                            {t`Contact`}
+                                        </Button>
+                                    </div>
                                 </div>
                             </div>
                         </div>

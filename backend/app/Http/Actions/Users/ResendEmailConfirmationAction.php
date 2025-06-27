@@ -33,7 +33,7 @@ class ResendEmailConfirmationAction extends BaseAction
         // Set the cooldown for 30 seconds
         Cache::put($cacheKey, now()->addSeconds(30)->timestamp, 30);
 
-        $this->resendEmailConfirmationHandler->handle($user);
+        $this->resendEmailConfirmationHandler->handle($user, $this->getAuthenticatedAccountId());
 
         return $this->noContentResponse();
     }
