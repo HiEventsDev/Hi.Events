@@ -18,6 +18,7 @@ import {
 } from '@tabler/icons-react';
 import {useMemo} from "react";
 import { getConfig } from "../../../utilites/config.ts";
+import {isHiEvents} from "../../../utilites/helpers.ts";
 
 const RegisterFeatures = () => (
     <div className={classes.featureGrid}>
@@ -148,7 +149,7 @@ const AuthLayout = () => {
                                 * If you wish to remove this notice, a commercial license is available at: https://hi.events/licensing
                                 */
                             }
-                            <PoweredByFooter/>
+                            {!isHiEvents() && <PoweredByFooter/>}
                             <div className={classes.languageSwitcher}>
                                 <LanguageSwitcher/>
                             </div>

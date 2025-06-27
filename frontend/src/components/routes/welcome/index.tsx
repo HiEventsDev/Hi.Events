@@ -5,7 +5,7 @@ import {Card} from "../../common/Card";
 import {Button, Center, Container, PinInput, Select, Stack, Text, TextInput} from "@mantine/core";
 import classes from "./Welcome.module.scss";
 import {useForm} from "@mantine/form";
-import {useMediaQuery} from "@mantine/hooks";
+import {useDebouncedValue, useMediaQuery} from "@mantine/hooks";
 import {Event} from "../../../types.ts";
 import {useCreateEvent} from "../../../mutations/useCreateEvent.ts";
 import {NavLink, useNavigate} from "react-router";
@@ -57,6 +57,7 @@ const ConfirmVerificationPin = ({progressInfo}: {
     const confirmEmailMutation = useConfirmEmailWithCode();
     const resendMutation = useResendEmailConfirmation();
     const [resendCooldown, setResendCooldown] = useState(0);
+    const [completedPin, setCompletedPin] = useState('');
     const isMobile = useMediaQuery('(max-width: 768px)');
 
     const form = useForm({
@@ -67,6 +68,16 @@ const ConfirmVerificationPin = ({progressInfo}: {
             pin: (value) => value.length !== 5 ? t`Please enter the 5-digit code` : null,
         }
     });
+
+    // Debounce the completed pin value
+    const [debouncedPin] = useDebouncedValue(completedPin, 800);
+
+    // Auto-submit when debounced pin is complete
+    useEffect(() => {
+        if (debouncedPin.length === 5 && !confirmEmailMutation.isPending) {
+            handleSubmit({pin: debouncedPin});
+        }
+    }, [debouncedPin]);
 
     useEffect(() => {
         if (resendCooldown > 0) {
@@ -83,9 +94,13 @@ const ConfirmVerificationPin = ({progressInfo}: {
                 onSuccess: () => {
                     showSuccess(t`Email verified successfully!`);
                     form.reset();
+                    setCompletedPin('');
                 },
                 onError: (error) => {
                     showError(error.response?.data?.message || t`Failed to verify email`);
+                    // Clear the pin on error so user can try again
+                    form.reset();
+                    setCompletedPin('');
                 }
             }
         );
@@ -148,9 +163,13 @@ const ConfirmVerificationPin = ({progressInfo}: {
                                 error={!!form.errors.pin}
                                 className={classes.pinInput}
                                 gap={isMobile ? 8 : "sm"}
-                                onComplete={(value) => {
+                                onChange={(value) => {
                                     form.setFieldValue('pin', value);
-                                    handleSubmit({pin: value});
+                                    if (value.length === 5) {
+                                        setCompletedPin(value);
+                                    } else {
+                                        setCompletedPin('');
+                                    }
                                 }}
                             />
                         </Center>
