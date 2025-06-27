@@ -4,3 +4,42 @@
     margin-top: 15px;
     margin-bottom: 5px;
 }
+
+// Branded modal header styles
+.brandedHeader {
+    background: var(--hi-gradient) !important;
+    padding: 30px 24px !important;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.brandedTitle {
+    color: white !important;
+    font-size: 1.75rem !important;
+    font-weight: 700 !important;
+    margin: 0 !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15), 0 0 20px rgba(255, 255, 255, 0.2);
+    position: relative;
+    z-index: 1;
+    letter-spacing: -0.02em;
+}
+
+.brandedClose {
+    color: white !important;
+    position: relative;
+    z-index: 2;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    
+    &:hover {
+        background-color: rgba(255, 255, 255, 0.15) !important;
+        transform: rotate(90deg) scale(1.1);
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+    }
+    
+    svg {
+        stroke-width: 2.5;
+        filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+    }
+}
+

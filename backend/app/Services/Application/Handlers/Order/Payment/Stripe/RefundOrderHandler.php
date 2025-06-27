@@ -10,6 +10,7 @@ use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\DomainObjects\Status\OrderRefundStatus;
 use HiEvents\DomainObjects\StripePaymentDomainObject;
 use HiEvents\Exceptions\RefundNotPossibleException;
@@ -88,6 +89,7 @@ readonly class RefundOrderHandler
             ->send(new OrderRefunded(
                 order: $order,
                 event: $event,
+                organizer: $event->getOrganizer(),
                 eventSettings: $event->getEventSettings(),
                 refundAmount: $amount
             ));
@@ -116,8 +118,10 @@ readonly class RefundOrderHandler
     {
         $order = $this->fetchOrder($refundOrderDTO->event_id, $refundOrderDTO->order_id);
         $event = $this->eventRepository
+            ->loadRelation(new Relationship(OrganizerDomainObject::class, name: 'organizer'))
             ->loadRelation(EventSettingDomainObject::class)
             ->findById($refundOrderDTO->event_id);
+
         $amount = MoneyValue::fromFloat($refundOrderDTO->amount, $order->getCurrency());
 
         $this->validateRefundability($order);

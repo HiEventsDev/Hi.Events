@@ -2,21 +2,20 @@
 
 namespace HiEvents\Services\Application\Handlers\Organizer;
 
-use HiEvents\DomainObjects\Enums\OrganizerImageType;
 use HiEvents\DomainObjects\ImageDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Organizer\DTO\CreateOrganizerDTO;
-use HiEvents\Services\Domain\Image\ImageUploadService;
+use HiEvents\Services\Domain\Organizer\CreateDefaultOrganizerSettingsService;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
 
-readonly class CreateOrganizerHandler
+class CreateOrganizerHandler
 {
     public function __construct(
-        private OrganizerRepositoryInterface $organizerRepository,
-        private ImageUploadService           $imageUploadService,
-        private DatabaseManager              $databaseManager,
+        private readonly OrganizerRepositoryInterface          $organizerRepository,
+        private readonly DatabaseManager                       $databaseManager,
+        private readonly CreateDefaultOrganizerSettingsService $createDefaultOrganizerSettingsService,
     )
     {
     }
@@ -44,14 +43,7 @@ readonly class CreateOrganizerHandler
             'currency' => $organizerData->currency,
         ]);
 
-        if ($organizerData->logo !== null) {
-            $this->imageUploadService->upload(
-                image: $organizerData->logo,
-                entityId: $organizer->getId(),
-                entityType: OrganizerDomainObject::class,
-                imageType: OrganizerImageType::LOGO,
-            );
-        }
+        $this->createDefaultOrganizerSettingsService->createOrganizerSettings($organizer);
 
         return $this->organizerRepository
             ->loadRelation(ImageDomainObject::class)

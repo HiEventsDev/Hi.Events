@@ -16,6 +16,7 @@ export const CreateOrganizerModal = ({onClose}: CreateOrganizerModalProps) => {
             heading={t`Create Organizer`}
             opened
             size={'lg'}
+            modalHeader={'branded'}
         >
             <OrganizerCreateForm onSuccess={(organizer: Organizer) => {
                 onClose();

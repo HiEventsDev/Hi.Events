@@ -64,6 +64,11 @@ readonly class CreateStripeConnectAccountHandler
         );
 
         if ($response->isConnectSetupComplete) {
+            // If setup is complete, but this isn't reflected in the account, update it.
+            if ($account->getStripeConnectSetupComplete() === false) {
+                $this->updateAccountStripeSetupCompletionStatus($account, $stripeConnectAccount);
+            }
+
             return $response;
         }
 
@@ -154,5 +159,26 @@ readonly class CreateStripeConnectAccountHandler
         }
 
         return $accountLink->url;
+    }
+
+    private function updateAccountStripeSetupCompletionStatus(
+        AccountDomainObject $account,
+        Account             $stripeConnectAccount,
+    ): void
+    {
+        $this->accountRepository->updateWhere(
+            attributes: [
+                AccountDomainObjectAbstract::STRIPE_CONNECT_SETUP_COMPLETE => true,
+            ],
+            where: [
+                'id' => $account->getId(),
+            ]
+        );
+
+        $this->logger->info(sprintf(
+            'Stripe Connect account setup completed for account %s with Stripe account ID %s',
+            $account->getId(),
+            $stripeConnectAccount->id
+        ));
     }
 }

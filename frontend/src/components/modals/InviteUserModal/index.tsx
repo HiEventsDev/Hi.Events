@@ -51,11 +51,11 @@ export const InviteUserModal = ({onClose}: GenericModalProps) => {
     ];
 
     return (
-        <Modal heading={t`Invite User`} onClose={onClose} opened>
+        <Modal heading={t`Invite a team member`} onClose={onClose} opened modalHeader={'branded'}>
             <form onSubmit={form.onSubmit(values => handleCreate(values))}>
-                <SimpleGrid cols={2} >
+                <SimpleGrid cols={2}>
                     <TextInput required {...form.getInputProps('first_name')} label={t`First Name`}/>
-                    <TextInput required {...form.getInputProps('last_name')} label={t`Last Name`}/>
+                    <TextInput  {...form.getInputProps('last_name')} label={t`Last Name`}/>
                 </SimpleGrid>
 
                 <TextInput required type={'email'}  {...form.getInputProps('email')} label={t`Email`}/>
@@ -71,7 +71,7 @@ export const InviteUserModal = ({onClose}: GenericModalProps) => {
                     fullWidth
                     loading={createMutation.isPending}
                     type={'submit'}>
-                    {t`Invite User`}
+                    {t`Invite Team Member`}
                 </Button>
             </form>
         </Modal>

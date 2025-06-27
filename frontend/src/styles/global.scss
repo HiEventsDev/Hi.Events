@@ -1,32 +1,35 @@
 @use "mixins";
 
 :root {
-  --tk-text: #4b3b5d;
-  --tk-primary: #472e78;
-  --tk-secondary: #efebf7;
-  --tk-secondary-text: #7c7091;
-  --tk-color-gray: #f7f6f8;
-  --tk-color-gray-2: #e2e2e2;
-  --tk-color-gray-dark: #838383;
-  --tk-color-money-green: #00b894;
-  --tk-color-blue: rgba(23, 62, 161, 0.62);
-  --tk-link-color: var(--tk-primary);
-  --tk-pink: #d6499c;
+  --hi-text: var(--mantine-color-primary-9);
+  --hi-primary: var(--mantine-color-primary-9);
+  --hi-secondary:  var(--mantine-color-secondary-1);
+  --hi-secondary-text: var(--mantine-color-primary-8);
+  --hi-color-gray: #f7f6f8;
+  --hi-color-gray-2: #e2e2e2;
+  --hi-color-gray-dark: #838383;
+  --hi-color-money-green: #00b894;
+  --hi-color-blue: var(--mantine-color-primary-4);
+  --hi-link-color: var(--hi-primary);
+  --hi-pink: var(--mantine-color-primary-5);
+  --hi-primary-alt: var(--mantine-color-primary-6);
+  --hi-gradient: linear-gradient(135deg, var(--hi-primary), var(--hi-primary-alt));
+  --hi-scrollbar-thumb: #e1e1e1;
 
-  --tk-color-white: #ffffff;
-  --tk-color-black: #000000;
+  --hi-color-white: #ffffff;
+  --hi-color-black: #000000;
 
-  --tk-spacing-xs: 3px;
-  --tk-spacing-sm: 5px;
-  --tk-spacing-md: 10px;
-  --tk-spacing-lg: 20px;
-  --tk-spacing-xl: 25px;
+  --hi-spacing-xs: 3px;
+  --hi-spacing-sm: 5px;
+  --hi-spacing-md: 10px;
+  --hi-spacing-lg: 20px;
+  --hi-spacing-xl: 25px;
 
-  --tk-radius-xs: 3px;
-  --tk-radius-sm: 5px;
-  --tk-radius-md: 7px;
-  --tk-radius-lg: 10px;
-  --tk-radius-xl: 15px;
+  --hi-radius-xs: 3px;
+  --hi-radius-sm: 5px;
+  --hi-radius-md: 7px;
+  --hi-radius-lg: 10px;
+  --hi-radius-xl: 15px;
 }
 
 * {
@@ -39,8 +42,8 @@ html {
 
 body {
   font-family: 'Varela Round', sans-serif;
-  color: var(--tk-text);
-  background-color: var(--tk-color-gray) !important;
+  color: var(--hi-text);
+  background-color: var(--hi-color-gray) !important;
   height: auto;
 }
 
@@ -51,16 +54,16 @@ fieldset {
 
 a {
   text-decoration: none;
-  color: var(--tk-link-color);
+  color: var(--hi-link-color);
 }
 
 // Mantine overrides
 .mantine-InputWrapper-root, .mantine-Switch-root {
-  margin-bottom: var(--tk-spacing-lg);
+  margin-bottom: var(--hi-spacing-lg);
 }
 
 .mantine-ScrollArea-viewport {
-  padding-bottom: 0;
+  padding-bottom: 0 !important;
 }
 
 .mantine-Modal-content {

@@ -1,6 +1,6 @@
 import {t} from "@lingui/macro";
 import {EventDuplicatePayload, GenericModalProps, IdParam} from "../../../types.ts";
-import {Button, Switch, TextInput} from "@mantine/core";
+import {Button, Switch, TextInput, Group, ActionIcon, Tooltip, Grid} from "@mantine/core";
 import {Modal} from "../../common/Modal";
 import {useForm} from "@mantine/form";
 import {useDuplicateEvent} from "../../../mutations/useDuplicateEvent.ts";
@@ -13,12 +13,25 @@ import {utcToTz} from "../../../utilites/dates.ts";
 import {showSuccess} from "../../../utilites/notifications.tsx";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
 import {Card} from "../../common/Card";
+import {IconCheckbox, IconSquare} from "@tabler/icons-react";
 
 interface DuplicateEventModalProps extends GenericModalProps {
     eventId: IdParam;
 }
 
 export const DuplicateEventModal = ({onClose, eventId}: DuplicateEventModalProps) => {
+    const duplicateOptions = [
+        { key: 'duplicate_products', label: t`Products` },
+        { key: 'duplicate_questions', label: t`Questions` },
+        { key: 'duplicate_settings', label: t`Settings` },
+        { key: 'duplicate_promo_codes', label: t`Promo Codes` },
+        { key: 'duplicate_capacity_assignments', label: t`Capacity Assignments` },
+        { key: 'duplicate_check_in_lists', label: t`Check-In Lists` },
+        { key: 'duplicate_event_cover_image', label: t`Event Cover Image` },
+        { key: 'duplicate_webhooks', label: t`Webhooks` },
+        { key: 'duplicate_affiliates', label: t`Affiliates` },
+    ];
+
     const form = useForm({
         initialValues: {
             title: '',
@@ -33,12 +46,28 @@ export const DuplicateEventModal = ({onClose, eventId}: DuplicateEventModalProps
             duplicate_check_in_lists: true,
             duplicate_event_cover_image: true,
             duplicate_webhooks: true,
+            duplicate_affiliates: true,
         }
     });
     const mutation = useDuplicateEvent();
     const eventQuery = useGetEvent(eventId);
     const nav = useNavigate();
     const errorHandler = useFormErrorResponseHandler();
+
+    const handleSelectAll = () => {
+        duplicateOptions.forEach(option => {
+            form.setFieldValue(option.key, true);
+        });
+    };
+
+    const handleDeselectAll = () => {
+        duplicateOptions.forEach(option => {
+            form.setFieldValue(option.key, false);
+        });
+    };
+
+    const allSelected = duplicateOptions.every(option => form.values[option.key]);
+    const noneSelected = duplicateOptions.every(option => !form.values[option.key]);
 
     useEffect(() => {
         if (eventQuery?.data) {
@@ -76,7 +105,7 @@ export const DuplicateEventModal = ({onClose, eventId}: DuplicateEventModalProps
                     <TextInput
                         {...form.getInputProps('title')}
                         label={t`Name`}
-                        placeholder={t`Hi.Events Conference ${new Date().getFullYear()}`}
+                        placeholder={t`Summer Music Festival ${new Date().getFullYear()}`}
                         required
                     />
 
@@ -99,43 +128,47 @@ export const DuplicateEventModal = ({onClose, eventId}: DuplicateEventModalProps
                         />
                     </InputGroup>
 
-                    <h3 style={{marginTop: 0, marginBottom: 15}}>
-                        {t`Duplicate Options`}
-                    </h3>
+                    <Group justify="space-between" align="center" mb="md">
+                        <h3 style={{margin: 0}}>
+                            {t`Duplicate Options`}
+                        </h3>
+                        <Group gap="xs">
+                            <Tooltip label={t`Select All`}>
+                                <ActionIcon
+                                    variant="light"
+                                    size="sm"
+                                    onClick={handleSelectAll}
+                                    disabled={allSelected}
+                                    color="blue"
+                                >
+                                    <IconCheckbox size={16} />
+                                </ActionIcon>
+                            </Tooltip>
+                            <Tooltip label={t`Deselect All`}>
+                                <ActionIcon
+                                    variant="light"
+                                    size="sm"
+                                    onClick={handleDeselectAll}
+                                    disabled={noneSelected}
+                                    color="gray"
+                                >
+                                    <IconSquare size={16} />
+                                </ActionIcon>
+                            </Tooltip>
+                        </Group>
+                    </Group>
                     <Card variant={'lightGray'}>
-                        <Switch
-                            {...form.getInputProps('duplicate_products', {type: 'checkbox'})}
-                            label={t`Duplicate Products`}
-                        />
-                        <Switch
-                            {...form.getInputProps('duplicate_questions', {type: 'checkbox'})}
-                            label={t`Duplicate Questions`}
-                        />
-                        <Switch
-                            {...form.getInputProps('duplicate_settings', {type: 'checkbox'})}
-                            label={t`Duplicate Settings`}
-                        />
-                        <Switch
-                            {...form.getInputProps('duplicate_promo_codes', {type: 'checkbox'})}
-                            label={t`Duplicate Promo Codes`}
-                        />
-                        <Switch
-                            {...form.getInputProps('duplicate_capacity_assignments', {type: 'checkbox'})}
-                            label={t`Duplicate Capacity Assignments`}
-                        />
-                        <Switch
-                            {...form.getInputProps('duplicate_check_in_lists', {type: 'checkbox'})}
-                            label={t`Duplicate Check-In Lists`}
-                        />
-                        <Switch
-                            {...form.getInputProps('duplicate_event_cover_image', {type: 'checkbox'})}
-                            label={t`Duplicate Event Cover Image`}
-                        />
-                        <Switch
-                            mb={0}
-                            {...form.getInputProps('duplicate_webhooks', {type: 'checkbox'})}
-                            label={t`Duplicate Webhooks`}
-                        />
+                        <Grid>
+                            {duplicateOptions.map((option, index) => (
+                                <Grid.Col key={option.key} span={{ base: 12, sm: 6 }}>
+                                    <Switch
+                                        {...form.getInputProps(option.key, {type: 'checkbox'})}
+                                        label={option.label}
+                                        mb={index === duplicateOptions.length - 1 || index === duplicateOptions.length - 2 ? 0 : "xs"}
+                                    />
+                                </Grid.Col>
+                            ))}
+                        </Grid>
                     </Card>
                 </fieldset>
                 <Button type="submit" fullWidth disabled={mutation.isPending}>

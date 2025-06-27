@@ -16,8 +16,6 @@ class EventStatsResponseDTO extends BaseDTO
         public readonly string              $start_date,
         public readonly string              $end_date,
 
-        public EventCheckInStatsResponseDTO $check_in_stats,
-
         public int                          $total_products_sold,
         public int                          $total_attendees_registered,
 

@@ -86,7 +86,7 @@ class CreateAccountHandler
                 isAccountOwner: true
             );
 
-            $this->emailConfirmationService->sendConfirmation($user);
+            $this->emailConfirmationService->sendConfirmation($user, $account->getId());
 
             return $account;
         });

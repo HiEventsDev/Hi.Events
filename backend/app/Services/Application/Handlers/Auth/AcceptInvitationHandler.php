@@ -12,17 +12,19 @@ use HiEvents\Services\Infrastructure\Encryption\Exception\DecryptionFailedExcept
 use HiEvents\Services\Infrastructure\Encryption\Exception\EncryptedPayloadExpiredException;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Database\DatabaseManager;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Throwable;
 
-readonly class AcceptInvitationHandler
+class AcceptInvitationHandler
 {
     public function __construct(
-        private EncryptedPayloadService        $encryptedPayloadService,
-        private UserRepositoryInterface        $userRepository,
-        private AccountUserRepositoryInterface $accountUserRepository,
-        private Hasher                         $hasher,
-        private DatabaseManager                $databaseManager,
+        private readonly EncryptedPayloadService        $encryptedPayloadService,
+        private readonly UserRepositoryInterface        $userRepository,
+        private readonly AccountUserRepositoryInterface $accountUserRepository,
+        private readonly Hasher                         $hasher,
+        private readonly DatabaseManager                $databaseManager,
+        private readonly LoggerInterface                $logger
     )
     {
     }
@@ -47,9 +49,9 @@ readonly class AcceptInvitationHandler
     {
         ['user_id' => $userId, 'account_id' => $accountId] = $this->encryptedPayloadService->decryptPayload($invitationData->invitation_token);
 
-        $user = $this->userRepository->findByIdAndAccountId($userId, $accountId);
-
-        if ($user === null) {
+        try {
+            $user = $this->userRepository->findByIdAndAccountId($userId, $accountId);
+        } catch (ResourceNotFoundException) {
             throw new ResourceNotFoundException(__('The invitation does not exist'));
         }
 
@@ -79,5 +81,10 @@ readonly class AcceptInvitationHandler
                 'account_id' => $accountId,
             ]
         );
+
+        $this->logger->info('User accepted invitation', [
+            'user_id' => $userId,
+            'account_id' => $accountId,
+        ]);
     }
 }
