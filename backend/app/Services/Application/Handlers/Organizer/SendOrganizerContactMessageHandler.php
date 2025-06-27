@@ -24,7 +24,7 @@ class SendOrganizerContactMessageHandler
     {
         $organizer = $this->organizerRepository->findById($dto->organizer_id);
 
-        // Don't allow people to context organizers that are not live, except for the organizer's own account
+        // Don't allow people to contact organizers that are not live, except for the organizer's own account
         if ($organizer->getStatus() !== OrganizerStatus::LIVE->value && $dto->account_id !== $organizer->getAccountId()) {
             throw new ResourceNotFoundException(__('Organizer not found'));
         }
