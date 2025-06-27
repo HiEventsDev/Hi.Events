@@ -2,6 +2,7 @@
 
 namespace HiEvents\Http\Actions\CheckInLists;
 
+use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\CheckInList\UpsertCheckInListRequest;
 use HiEvents\Resources\CheckInList\CheckInListResource;
@@ -21,6 +22,8 @@ class CreateCheckInListAction extends BaseAction
 
     public function __invoke(UpsertCheckInListRequest $request, int $eventId): JsonResponse
     {
+        $this->isActionAuthorized($eventId, EventDomainObject::class);
+
         try {
             $checkInList = $this->checkInListHandler->handle(
                 new UpsertCheckInListDTO(
