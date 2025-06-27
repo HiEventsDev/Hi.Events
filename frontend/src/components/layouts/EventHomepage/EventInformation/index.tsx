@@ -35,7 +35,7 @@ export const EventInformation: FC<{
                     )}
                     <h2 className={classes.organizerName}>
                         <Anchor
-                            href={organizerHomepageUrl(organizer)}
+                            href={organizer?.status === 'LIVE' ? organizerHomepageUrl(organizer) : '#'}
                         >
                             {organizer.name}
                         </Anchor>
