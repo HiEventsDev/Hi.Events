@@ -56,7 +56,7 @@ return [
 
     'organizer_homepage_default_theme' => ColorTheme::MIDNIGHT,
 
-    'event_categories_cover_images_path' => '/event_cover/system-covers',
+    'event_categories_cover_images_path' => 'event_cover/system-covers',
 
     /*
     |--------------------------------------------------------------------------
