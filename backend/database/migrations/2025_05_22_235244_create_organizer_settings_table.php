@@ -1,5 +1,6 @@
 <?php
 
+use HiEvents\DomainObjects\Enums\ColorTheme;
 use HiEvents\DomainObjects\Enums\OrganizerHomepageVisibility;
 use HiEvents\Models\Organizer;
 use Illuminate\Database\Migrations\Migration;
@@ -34,15 +35,17 @@ return new class extends Migration {
             $table->softDeletes();
         });
 
-        $defaultThemeColors = config('app.organizer_homepage_default_theme_colors');
+        $defaultTheme = config('app.organizer_homepage_default_theme');
 
         // Create default settings for all existing organizers
-        DB::transaction(static function () use ($defaultThemeColors) {
-            Organizer::all()->each(static function (Organizer $organizer) use ($defaultThemeColors) {
+        DB::transaction(static function () use ($defaultTheme) {
+            Organizer::all()->each(static function (Organizer $organizer) use ($defaultTheme) {
+                /** @var ColorTheme $defaultTheme */
+                $defaultThemeColors = $defaultTheme->getThemeData();
+
                 $organizer->organizer_settings()->create([
                     'homepage_visibility' => OrganizerHomepageVisibility::PUBLIC->name,
 
-                    // Use the "Modern" theme as default
                     'homepage_theme_settings' => [
                         'homepage_background_color' => $defaultThemeColors['homepage_background_color'] ?? '#2c0838',
                         'homepage_content_background_color' => $defaultThemeColors['homepage_content_background_color'] ?? '#32174f',

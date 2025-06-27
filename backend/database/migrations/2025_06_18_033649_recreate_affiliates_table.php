@@ -11,7 +11,6 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        // Drop existing affiliates table if it exists
         Schema::dropIfExists('affiliates');
 
         Schema::create('affiliates', function (Blueprint $table) {
@@ -26,7 +25,6 @@ return new class extends Migration {
             $table->enum('status', AffiliateStatus::valuesArray())->default(AffiliateStatus::ACTIVE->value);
             $table->timestamps();
 
-            // Indexes
             $table->index('event_id');
             $table->index('account_id');
             $table->index('code');
