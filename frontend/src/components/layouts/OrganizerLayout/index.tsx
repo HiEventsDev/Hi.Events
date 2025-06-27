@@ -72,6 +72,8 @@ const OrganizerLayout = () => {
         {label: t`Manage`},
         {link: 'events', label: t`Events`, icon: IconCalendar},
         {link: 'settings', label: t`Settings`, icon: IconSettings},
+
+        {label: t`Tools`},
         {link: 'organizer-homepage-designer', label: t`Homepage Designer`, icon: IconPaint},
     ];
 

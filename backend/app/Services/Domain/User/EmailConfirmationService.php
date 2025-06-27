@@ -48,6 +48,7 @@ class EmailConfirmationService
         if (config('app.enforce_email_confirmation_during_registration')) {
             $this->mailer
                 ->to($user->getEmail())
+                ->locale($user->getLocale())
                 ->send(new EmailConfirmationCodeEmail(
                     $user,
                     $this->emailVerificationCodeService->storeAndReturnCode($user->getEmail()),

@@ -241,7 +241,15 @@ export const CreateEventModal = ({onClose, organizerId}: CreateEventModalProps) 
                                         withDropdown: true,
                                     }}
                                     minDate={form.values.start_date ?? undefined}
-                                    date={form.values.start_date ? dayjs(form.values.start_date).toDate() : undefined}
+                                    onFocus={
+                                        () => {
+                                            if (!form.values.end_date && form.values.start_date) {
+                                                // Set default end date to 2 hours after start date
+                                                form.setFieldValue('end_date', dayjs(form.values.start_date).add(2, 'hours').toISOString());
+                                            }
+                                        }
+                                    }
+
                                 />
                             </div>
 

@@ -263,6 +263,10 @@
   left: 12px;
   backdrop-filter: blur(10px);
 
+  @include mixins.respond-below('sm') {
+    left: 0;
+  }
+
   svg {
     opacity: 0.8;
     color: var(--secondary-color);
@@ -327,6 +331,10 @@
     opacity: 0.7;
     flex-shrink: 0;
   }
+}
+
+.timezone {
+    font-weight: 500;
 }
 
 .eventDescription {

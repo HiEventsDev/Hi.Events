@@ -22,7 +22,6 @@ const placeholderEmojis = ['🎉', '🎪', '🎸', '🎨', '🌟'];
 export const EventCard: React.FC<EventCardProps> = ({event, primaryColor = '#8b5cf6'}) => {
     const dateTextColor = isLightColor(primaryColor) ? '#000000' : '#ffffff';
 
-    // Get emoji based on event ID for consistency
     const emojiIndex = event.id ? Number(event.id) % placeholderEmojis.length : 0;
     const placeholderEmoji = placeholderEmojis[emojiIndex];
 
@@ -31,8 +30,8 @@ export const EventCard: React.FC<EventCardProps> = ({event, primaryColor = '#8b5
     const startDay = formatDate(event.start_date, "D", event.timezone);
     const startTime = formatDate(event.start_date, "h:mm A", event.timezone);
     const endTime = event.end_date ? formatDate(event.end_date, "h:mm A", event.timezone) : null;
+    const prettyTimezone = formatDate(event.start_date, "z", event.timezone);
 
-    // Check if event spans multiple days
     const isSameDay = event.end_date && event.start_date.substring(0, 10) === event.end_date.substring(0, 10);
     const endMonth = event.end_date ? formatDate(event.end_date, "MMM", event.timezone) : null;
     const endDay = event.end_date ? formatDate(event.end_date, "D", event.timezone) : null;
@@ -123,7 +122,6 @@ export const EventCard: React.FC<EventCardProps> = ({event, primaryColor = '#8b5
                         </div>
                     </div>
 
-                    {/* Date badge - positioned outside of imageWrapper */}
                     <div className={classes.dateBadge}>
                         <IconCalendar size={16}/>
                         <span>{startMonth} {startDay}</span>
@@ -146,6 +144,9 @@ export const EventCard: React.FC<EventCardProps> = ({event, primaryColor = '#8b5
                                             : ` - ${endTime}`
                                         }
                                     </>
+                                )}
+                                {prettyTimezone && (
+                                    <span title={event.timezone} className={classes.timezone}> ({prettyTimezone})</span>
                                 )}
                             </span>
                         </div>

@@ -1,8 +1,8 @@
-import {useNavigate} from "react-router";
+import {useLocation, useNavigate} from "react-router";
 import {ActionIcon, Anchor, Button} from '@mantine/core';
 import {EventCard} from './EventCard';
 import classes from './OrganizerHomepage.module.scss';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Event, GenericPaginatedResponse, Organizer} from "../../../types.ts";
 import {OrganizerDocumentHead} from "../../common/OrganizerDocumentHead";
 import {IconExternalLink, IconMail, IconMapPin, IconWorld} from '@tabler/icons-react';
@@ -14,13 +14,26 @@ import {formatAddress, getShortLocationDisplay} from "../../../utilites/addressU
 import {organizerHomepagePath} from "../../../utilites/urlHelper.ts";
 import {removeTransparency} from "../../../utilites/colorHelper.ts";
 import {StatusToggle} from "../../common/StatusToggle";
-import {useGetMe} from "../../../queries/useGetMe";
+import {getConfig} from "../../../utilites/config.ts";
+import {Pagination} from "../../common/Pagination";
 
 interface OrganizerHomepageProps {
     organizer?: Organizer;
     eventsData?: GenericPaginatedResponse<Event>
     isPastEvents?: boolean;
     isPreview?: boolean;
+}
+
+const ScrollToTop = () => {
+    const { pathname } = useLocation();
+
+    useEffect(() => {
+        setTimeout(() => {
+            window.scrollTo(0, 0);
+        }, 100); // Delay to ensure the scroll happens after the page is rendered
+    }, [pathname]);
+
+    return null;
 }
 
 export const OrganizerHomepage = ({
@@ -30,7 +43,6 @@ export const OrganizerHomepage = ({
                                   }: OrganizerHomepageProps) => {
     const navigate = useNavigate();
     const [contactModalOpen, setContactModalOpen] = useState(false);
-    const {data: me} = useGetMe();
 
     if (!organizer) {
         return null;
@@ -80,6 +92,7 @@ export const OrganizerHomepage = ({
 
     return (
         <>
+            <ScrollToTop />
             {/* Status Toggle Banner */}
             {organizer?.status && organizer?.id && (
                 <StatusToggle
@@ -269,26 +282,71 @@ export const OrganizerHomepage = ({
                                         <EventCard
                                             key={event.id}
                                             event={event as Event}
-                                            primaryColor={themeSettings?.homepage_primary_color || '#8b5cf6'}
+                                            primaryColor={themeSettings?.homepage_primary_color}
                                         />
                                     ))
                                 )}
                             </div>
                         </div>
 
+                        {/* Pagination Section */}
+                        {eventsData && eventsData.meta.total > eventsData.meta.per_page && (
+                            <div className={classes.paginationSection}>
+                                <div className={classes.paginationCard}>
+                                    <Pagination
+                                        size="md"
+                                        siblings={1}
+                                        marginTop={0}
+                                        total={eventsData.meta.last_page}
+                                        value={eventsData.meta.current_page}
+                                        onChange={(page) => {
+                                            const newPath = isPastEvents
+                                                ? `${organizerHomepagePath(organizer)}/past-events?page=${page}`
+                                                : `${organizerHomepagePath(organizer)}?page=${page}`;
+                                            navigate(newPath);
+                                        }}
+                                        className={classes.paginationComponent}
+                                        styles={{
+                                            control: {
+                                                backgroundColor: 'var(--content-bg-color)',
+                                                border: '1px solid rgba(0, 0, 0, 0.1)',
+                                                color: 'var(--secondary-text-color)',
+                                                fontSize: '0.875rem',
+                                                fontWeight: 500,
+                                                borderRadius: '8px',
+                                                transition: 'all 0.2s ease',
+                                                '&[data-active]': {
+                                                    backgroundColor: themeSettings?.homepage_primary_color || 'var(--primary-color)',
+                                                    borderColor: themeSettings?.homepage_primary_color || 'var(--primary-color)',
+                                                    color: themeSettings?.homepage_content_background_color || 'white',
+                                                },
+                                                '&:hover': {
+                                                    backgroundColor: 'rgba(0, 0, 0, 0.05)',
+                                                    borderColor: 'rgba(0, 0, 0, 0.15)',
+                                                },
+                                            },
+                                            dots: {
+                                                color: 'var(--secondary-text-color)',
+                                            },
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                        )}
+
                         {/* Footer Section */}
                         <div className={classes.footerSection}>
                             <div className={classes.footerContent}>
                                 <div className={classes.footerLinks}>
                                     <Anchor
-                                        href="https://hi.events/privacy-policy?utm_source=app-organizer-footer"
+                                        href={getConfig('VITE_PRIVACY_URL', 'https://hi.events/privacy-policy?utm_source=app-organizer-footer')}
                                         className={classes.footerLink}
                                     >
                                         {t`Privacy Policy`}
                                     </Anchor>
                                     <span className={classes.footerSeparator}>•</span>
                                     <Anchor
-                                        href="https://hi.events/terms-of-service?utm_source=app-organizer-footer"
+                                        href={getConfig('VITE_TOS_URL', 'https://hi.events/terms-of-service?utm_source=app-organizer-footer')}
                                         className={classes.footerLink}
                                     >
                                         {t`Terms of Service`}
