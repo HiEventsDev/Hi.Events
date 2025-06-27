@@ -9,6 +9,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Affiliate extends BaseModel
 {
+    protected function getCastMap(): array
+    {
+        return [
+            'total_sales_gross' => 'float',
+        ];
+    }
+
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class);
