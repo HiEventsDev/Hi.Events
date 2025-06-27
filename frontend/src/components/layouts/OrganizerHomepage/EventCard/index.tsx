@@ -174,8 +174,8 @@ export const EventCard: React.FC<EventCardProps> = ({event, primaryColor = '#8b5
                         {lowestPrice !== null && (
                             <div className={classes.priceSection}>
                                 <IconTicket size={14}/>
-                                <span className={lowestPrice === 0 ? classes.free : classes.price}>
-                                    {lowestPrice === 0 ? (
+                                <span className={lowestPrice === 0 && highestPrice === 0 ? classes.free : classes.price}>
+                                    {lowestPrice === 0 && highestPrice === 0 ? (
                                         t`Free`
                                     ) : highestPrice !== null && highestPrice !== lowestPrice ? (
                                         `${formatCurrency(lowestPrice, event.currency)} - ${formatCurrency(highestPrice, event.currency)}`

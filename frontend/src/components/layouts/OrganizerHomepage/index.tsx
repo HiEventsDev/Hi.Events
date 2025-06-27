@@ -25,12 +25,12 @@ interface OrganizerHomepageProps {
 }
 
 const ScrollToTop = () => {
-    const { pathname } = useLocation();
+    const {pathname} = useLocation();
 
     useEffect(() => {
         setTimeout(() => {
             window.scrollTo(0, 0);
-        }, 100); // Delay to ensure the scroll happens after the page is rendered
+        }, 100);
     }, [pathname]);
 
     return null;
@@ -92,7 +92,7 @@ export const OrganizerHomepage = ({
 
     return (
         <>
-            <ScrollToTop />
+            <ScrollToTop/>
             {/* Status Toggle Banner */}
             {organizer?.status && organizer?.id && (
                 <StatusToggle
