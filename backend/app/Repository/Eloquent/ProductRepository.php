@@ -19,6 +19,7 @@ use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use RuntimeException;
 use Throwable;
 
@@ -72,13 +73,14 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
             ) AS quantity_remaining,
             product_prices.initial_quantity_available IS NULL AS unlimited_products_available
         FROM product_prices
-        WHERE product_prices.id = :productPriceId
+        WHERE product_prices.id = :productPriceId2
         AND product_prices.product_id = :productId
         AND product_prices.deleted_at IS NULL
     SQL;
 
         $result = $this->db->selectOne($query, [
             'productPriceId' => $productPriceId,
+            'productPriceId2' => $productPriceId,
             'productId' => $productId
         ]);
 
@@ -90,7 +92,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
             return Constants::INFINITE;
         }
 
-        return (int)$result->quantity_remaining;
+        return (int) $result->quantity_remaining;
     }
 
     public function getTaxesByProductId(int $productId): Collection
@@ -203,14 +205,30 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
             $productOrders = range(1, count($productUpdates));
             $productCategoryIds = array_column($productUpdates, 'product_category_id');
 
-            $productParameters = [
-                'eventId' => $eventId,
-                'productIds' => '{' . implode(',', $productIds) . '}',
-                'productOrders' => '{' . implode(',', $productOrders) . '}',
-                'productCategoryIds' => '{' . implode(',', $productCategoryIds) . '}',
-            ];
+            if (DB::getDriverName() === 'mysql') {
+                for ($i = 0; $i < count($productIds); $i++) {
+                    $this->db->update("UPDATE products
+                                SET `order` = :productOrder,
+                                    product_category_id = :productCategoryId,
+                                    updated_at = NOW()
+                                WHERE products.id = :productId AND products.event_id = :eventId
+                    ", [
+                        "productOrder" => $productOrders[$i],
+                        "productCategoryId" => $productCategoryIds[$i],
+                        "productId" => $productIds[$i],
+                        "eventId" => $eventId,
+                    ]);
+                }
+            } else {
 
-            $productUpdateQuery = "WITH new_order AS (
+                $productParameters = [
+                    'eventId' => $eventId,
+                    'productIds' => '{' . implode(',', $productIds) . '}',
+                    'productOrders' => '{' . implode(',', $productOrders) . '}',
+                    'productCategoryIds' => '{' . implode(',', $productCategoryIds) . '}',
+                ];
+
+                $productUpdateQuery = "WITH new_order AS (
                                   SELECT unnest(:productIds::bigint[]) AS product_id,
                                          unnest(:productOrders::int[]) AS order,
                                          unnest(:productCategoryIds::bigint[]) AS category_id
@@ -222,18 +240,33 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
                               FROM new_order
                               WHERE products.id = new_order.product_id AND products.event_id = :eventId";
 
-            $this->db->update($productUpdateQuery, $productParameters);
+                $this->db->update($productUpdateQuery, $productParameters);
+            }
 
             $categoryIds = array_column($categoryUpdates, 'id');
             $categoryOrders = array_column($categoryUpdates, 'order');
 
-            $categoryParameters = [
-                'eventId' => $eventId,
-                'categoryIds' => '{' . implode(',', $categoryIds) . '}',
-                'categoryOrders' => '{' . implode(',', $categoryOrders) . '}',
-            ];
+            if (DB::getDriverName() === 'mysql') {
+                for ($i = 0; $i < count($categoryIds); $i++) {
+                    $this->db->update("UPDATE product_categories
+                                SET `order` = :categoryOrder,
+                                    updated_at = NOW()
+                                WHERE product_categories.id = :categoryId AND product_categories.event_id = :eventId
+                    ", [
+                        "categoryOrder" => $categoryOrders[$i],
+                        "categoryId" => $categoryIds[$i],
+                        "eventId" => $eventId,
+                    ]);
+                }
+            } else {
 
-            $categoryUpdateQuery = "WITH new_category_order AS (
+                $categoryParameters = [
+                    'eventId' => $eventId,
+                    'categoryIds' => '{' . implode(',', $categoryIds) . '}',
+                    'categoryOrders' => '{' . implode(',', $categoryOrders) . '}',
+                ];
+
+                $categoryUpdateQuery = "WITH new_category_order AS (
                                   SELECT unnest(:categoryIds::bigint[]) AS category_id,
                                          unnest(:categoryOrders::int[]) AS order
                               )
@@ -243,7 +276,8 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
                               FROM new_category_order
                               WHERE product_categories.id = new_category_order.category_id AND product_categories.event_id = :eventId";
 
-            $this->db->update($categoryUpdateQuery, $categoryParameters);
+                $this->db->update($categoryUpdateQuery, $categoryParameters);
+            }
 
             $this->db->commit();
         } catch (Exception $e) {
