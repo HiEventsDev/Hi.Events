@@ -53,7 +53,7 @@ export const OrganizerDocumentHead = ({organizer}: OrganizerDocumentHeadProps) =
         if (socialHandles.facebook) sameAs.push(`https://facebook.com/${socialHandles.facebook}`);
         if (socialHandles.twitter) sameAs.push(`https://twitter.com/${socialHandles.twitter}`);
         if (socialHandles.instagram) sameAs.push(`https://instagram.com/${socialHandles.instagram}`);
-        if (socialHandles.linkedin) sameAs.push(`https://linkedin.com/in/${socialHandles.linkedin}`);
+        if (socialHandles.linkedin) sameAs.push(`https://linkedin.com/company/${socialHandles.linkedin}`);
         if (socialHandles.youtube) sameAs.push(`https://youtube.com/@${socialHandles.youtube}`);
         if (socialHandles.github) sameAs.push(`https://github.com/${socialHandles.github}`);
     }

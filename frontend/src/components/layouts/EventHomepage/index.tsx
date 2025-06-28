@@ -230,13 +230,14 @@ const EventHomepage = ({colors, continueButtonText, backgroundType, ...loaderDat
                                             {getShortLocationDisplay(organizerLocation) && (
                                                 <div className={classes.organizerLocation}>
                                                     <IconMapPin size={16}/>
-                                                    <span>{getShortLocationDisplay(organizerLocation)}</span>
                                                     <Anchor
                                                         href={getGoogleMapsUrl(organizerLocation!)}
                                                         target="_blank"
                                                         rel="noopener noreferrer"
                                                         className={classes.mapLink}
                                                     >
+                                                        <span>{getShortLocationDisplay(organizerLocation)}</span>
+                                                        &nbsp;
                                                         <IconExternalLink size={14}/>
                                                     </Anchor>
                                                 </div>

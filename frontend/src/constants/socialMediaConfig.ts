@@ -25,7 +25,7 @@ export const socialMediaConfig = {
     facebook: {icon: IconBrandFacebook, baseUrl: 'https://facebook.com/'},
     instagram: {icon: IconBrandInstagram, baseUrl: 'https://instagram.com/'},
     twitter: {icon: IconBrandX, baseUrl: 'https://twitter.com/'},
-    linkedin: {icon: IconBrandLinkedin, baseUrl: 'https://linkedin.com/in/'},
+    linkedin: {icon: IconBrandLinkedin, baseUrl: 'https://linkedin.com/company/'},
     discord: {icon: IconBrandDiscord, baseUrl: 'https://discord.com/users/'},
     tiktok: {icon: IconBrandTiktok, baseUrl: 'https://tiktok.com/@'},
     youtube: {icon: IconBrandYoutube, baseUrl: 'https://youtube.com/@'},
