@@ -20,6 +20,8 @@ export const clientBuildEnv: { [K in ConfigKeys]: string } = {
     'VITE_I_HAVE_PURCHASED_A_LICENCE': import.meta.env.VITE_I_HAVE_PURCHASED_A_LICENCE,
     'VITE_FRONTEND_URL': import.meta.env.VITE_FRONTEND_URL,
     'VITE_DEFAULT_IMAGE_URL': import.meta.env.VITE_DEFAULT_IMAGE_URL,
+    'VITE_API_URL_SERVER': import.meta.env.VITE_API_URL_SERVER,
+    'VITE_API_URL_CLIENT': import.meta.env.VITE_API_URL_CLIENT
 }
 
 export const getConfig = (key: ConfigKeys, fallback?: string): string | undefined => {

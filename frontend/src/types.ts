@@ -4,6 +4,8 @@
 import {SupportedLocales} from "./locales.ts";
 
 export type ConfigKeys = 
+    | 'VITE_API_URL_SERVER'
+    | 'VITE_API_URL_CLIENT'
     | 'VITE_FRONTEND_URL'
     | 'VITE_APP_PRIMARY_COLOR'
     | 'VITE_APP_SECONDARY_COLOR'
