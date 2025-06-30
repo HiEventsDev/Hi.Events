@@ -3,17 +3,25 @@
  */
 import {SupportedLocales} from "./locales.ts";
 
-export type ConfigKeys = 'VITE_FRONTEND_URL'
-    | 'VITE_API_URL_CLIENT'
-    | 'VITE_STRIPE_PUBLISHABLE_KEY'
+export type ConfigKeys = 
     | 'VITE_API_URL_SERVER'
-    | 'VITE_CHATWOOT_WEBSITE_TOKEN'
-    | 'VITE_CHATWOOT_BASE_URL'
+    | 'VITE_API_URL_CLIENT'
+    | 'VITE_FRONTEND_URL'
+    | 'VITE_APP_PRIMARY_COLOR'
+    | 'VITE_APP_SECONDARY_COLOR'
     | 'VITE_APP_NAME'
-    | 'VITE_PLATFORM_SUPPORT_EMAIL'
+    | 'VITE_APP_FAVICON'
+    | 'VITE_APP_LOGO_DARK'
+    | 'VITE_APP_LOGO_LIGHT'
+    | 'VITE_CHATWOOT_BASE_URL'
+    | 'VITE_CHATWOOT_WEBSITE_TOKEN'
+    | 'VITE_HIDE_ABOUT_LINK'
     | 'VITE_TOS_URL'
     | 'VITE_PRIVACY_URL'
-    | string;
+    | 'VITE_PLATFORM_SUPPORT_EMAIL'
+    | 'VITE_STRIPE_PUBLISHABLE_KEY'
+    | 'VITE_I_HAVE_PURCHASED_A_LICENCE'
+    | 'VITE_DEFAULT_IMAGE_URL';
 
 export type IdParam = string | undefined | number;
 
