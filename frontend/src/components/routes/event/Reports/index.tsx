@@ -7,7 +7,7 @@ import classes from './Reports.module.scss';
 import {Card} from "../../../common/Card";
 import {Avatar, UnstyledButton} from "@mantine/core";
 import {Link, useParams} from "react-router-dom";
-import {ReportTypes} from "../../../../types.ts";
+import {ReportTypes} from "../../../../types";
 
 const Reports = () => {
     const {eventId} = useParams();

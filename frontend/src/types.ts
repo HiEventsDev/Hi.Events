@@ -779,3 +779,9 @@ export interface NewApiKey {
     accessToken: ApiKey;
     plainTextToken: string;
 }
+
+export enum ReportTypes {
+    ProductSales = 'product-sales',
+    DailySales = 'daily-sales',
+    PromoCodes = 'promo-codes',
+}

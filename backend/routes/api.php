@@ -163,6 +163,11 @@ $router->middleware(['auth:api'])->group(
         $router->get('/auth/logout', LogoutAction::class);
         $router->post('/auth/refresh', RefreshTokenAction::class);
 
+        // API Keys
+        $router->post('/api-keys', CreateApiKeyAction::class);
+        $router->get('/api-keys', GetApiKeysAction::class);
+        $router->delete('/api-keys/{token_id}', RevokeApiKeyAction::class);
+
         // Users
         $router->get('/users/me', GetMeAction::class);
         $router->put('/users/me', UpdateMeAction::class);

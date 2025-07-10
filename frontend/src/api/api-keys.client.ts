@@ -1,5 +1,5 @@
 import {api} from "./client.ts";
-import {GenericDataResponse, IdParam, CreateApiKeyReques, ApiKey} from "../types.ts";
+import {GenericDataResponse, IdParam, CreateApiKeyRequest, ApiKey} from "../types.ts";
 
 export const apiKeysClient = {
     create: async (request: CreateApiKeyRequest) => {
