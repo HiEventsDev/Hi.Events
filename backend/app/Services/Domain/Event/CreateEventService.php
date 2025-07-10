@@ -162,12 +162,6 @@ class CreateEventService
 
     private function createDefaultProductCategory(EventDomainObject $event): void
     {
-        $this->createProductCategoryService->createCategory(
-            name: __('Tickets'),
-            isHidden: false,
-            eventId: $event->getId(),
-            description: null,
-            noProductsMessage: __('There are no tickets available for this event.'),
-        );
+        $this->createProductCategoryService->createDefaultProductCategory($event);
     }
 }
