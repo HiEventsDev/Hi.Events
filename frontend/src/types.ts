@@ -656,7 +656,7 @@ export interface Message {
     subject: string;
     message: string;
     message_preview: string;
-    type: MessageType;
+    type: MessageType | 'PRODUCT' | 'EVENT';
     is_test: boolean;
     order_id?: number;
     attendee_ids?: IdParam[];
@@ -733,6 +733,10 @@ export enum MessageType {
     TicketHolders = 'TICKET_HOLDERS',
     AllAttendees = 'ALL_ATTENDEES',
     OrderOwnersWithProduct = 'ORDER_OWNERS_WITH_PRODUCT',
+    Attendee = 'ATTENDEE',
+    Order = 'ORDER',
+    Product = 'PRODUCT',
+    Event = 'EVENT',
 }
 
 export interface PromoCode {
@@ -808,12 +812,6 @@ export interface QuestionAnswer {
     question_options?: string[];
 }
 
-export enum ReportTypes {
-    ProductSales = 'product_sales',
-    DailySales = 'daily_sales_report',
-    PromoCodes = 'promo_codes_report',
-}
-
 export interface Webhook {
     id: IdParam;
     event_id: IdParam;
@@ -836,4 +834,32 @@ export interface WebhookLog {
     response_body?: string;
     event_type: string;
     created_at: string;
+}
+
+export interface CreateApiKeyRequest {
+    token_name: string;
+    abilities?: string[];
+    expires_at?: string;
+}
+
+export interface ApiKey {
+    id?: number;
+    name: string;
+    abilities: string[];
+    tokenable_id: number;
+    tokenable_type: string;
+    expires_at?: string;
+    created_at?: string;
+    updated_at?: string;
+}
+
+export interface NewApiKey {
+    accessToken: ApiKey;
+    plainTextToken: string;
+}
+
+export enum ReportTypes {
+    ProductSales = 'product-sales',
+    DailySales = 'daily-sales',
+    PromoCodes = 'promo-codes',
 }

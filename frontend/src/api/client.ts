@@ -24,6 +24,7 @@ const ALLOWED_UNAUTHENTICATED_PATHS = [
     '/product/',
     'check-in',
     '/events/'
+    'csrf-cookie',
 ];
 
 export const api = axios.create({
@@ -32,6 +33,7 @@ export const api = axios.create({
         'Content-Type': 'application/json'
     },
     withCredentials: true,
+    withXSRFToken: true,
 });
 
 api.interceptors.response.use(

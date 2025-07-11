@@ -17,8 +17,12 @@ use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
+use Laravel\Sanctum\HasApiTokens;
+use Laravel\Sanctum\NewAccessToken;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 use RuntimeException;
+use DateTimeInterface;
 
 class User extends BaseModel implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract, JWTSubject
 {
@@ -28,6 +32,7 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
     use Authorizable;
     use CanResetPassword;
     use MustVerifyEmail;
+    use HasApiTokens;
     use HasFactory;
 
     /** @var array */
@@ -83,5 +88,20 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
     {
         return $this->hasOne(AccountUser::class)
             ->where('account_id', static::getCurrentAccountId());
+    }
+
+    public function createToken(string $name, array $abilities = ['*'], ?DateTimeInterface $expiresAt = null)
+    {
+        $plainTextToken = $this->generateTokenString();
+
+        $token = $this->tokens()->create([
+            'name' => $name,
+            'token' => hash('sha256', $plainTextToken),
+            'abilities' => $abilities,
+            'expires_at' => $expiresAt,
+            'account_id' => $this->getCurrentAccountId(),
+        ]);
+
+        return new NewAccessToken($token, $token->getKey().'|'.$plainTextToken);
     }
 }

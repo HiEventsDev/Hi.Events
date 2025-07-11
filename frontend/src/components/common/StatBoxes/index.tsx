@@ -2,7 +2,7 @@ import classes from "./StatBoxes.module.scss";
 import {IconCash, IconCreditCardRefund, IconEye, IconReceipt, IconShoppingCart, IconUsers} from "@tabler/icons-react";
 import {Card} from "../Card";
 import {useGetEventStats} from "../../../queries/useGetEventStats.ts";
-import {useParams} from "react-router";
+import {useParams} from "react-router-dom";
 import {t} from "@lingui/macro";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {formatCurrency} from "../../../utilites/currency.ts";

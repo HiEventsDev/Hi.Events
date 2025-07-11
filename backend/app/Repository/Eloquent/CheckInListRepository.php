@@ -38,10 +38,10 @@ class CheckInListRepository extends BaseRepository implements CheckInListReposit
                  valid_attendees AS (
                      SELECT a.id, pcil.check_in_list_id
                      FROM attendees a
-                                 JOIN product_check_in_lists pcil ON a.product_id = pcil.product_id
-                                 JOIN orders o ON a.order_id = o.id
-                                 JOIN check_in_lists cil ON pcil.check_in_list_id = cil.id
-                                 JOIN event_settings es ON cil.event_id = es.event_id
+                              JOIN product_check_in_lists pcil ON a.product_id = pcil.product_id
+                              JOIN orders o ON a.order_id = o.id
+                              JOIN check_in_lists cil ON pcil.check_in_list_id = cil.id
+                              JOIN event_settings es ON cil.event_id = es.event_id
                      WHERE a.deleted_at IS NULL
                         AND pcil.deleted_at IS NULL
                         AND pcil.check_in_list_id = :check_in_list_id

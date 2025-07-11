@@ -10,6 +10,11 @@ class CheckInList extends BaseModel
 {
     use SoftDeletes;
 
+    protected function getFillableFields(): array
+    {
+        return [];
+    }
+
     public function products(): BelongsToMany
     {
         return $this->belongsToMany(

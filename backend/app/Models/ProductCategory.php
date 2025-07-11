@@ -21,6 +21,16 @@ class ProductCategory extends BaseModel
         'event_id',
     ];
 
+    protected function getCastMap(): array
+    {
+        return [];
+    }
+
+    protected function getFillableFields(): array
+    {
+        return [];
+    }
+
     public function products(): HasMany
     {
         return $this->hasMany(Product::class);

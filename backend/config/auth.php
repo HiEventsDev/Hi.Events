@@ -44,6 +44,10 @@ return [
             'driver' => 'jwt',
             'provider' => 'users',
         ],
+        'sanctum' => [
+            'driver' => 'sanctum', // For Sanctum
+            'provider' => 'users',
+        ],
     ],
 
     /*

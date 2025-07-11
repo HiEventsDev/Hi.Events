@@ -1,0 +1,1448 @@
+openapi: 3.0.3
+info:
+  title: Hi.Events - Event Registration API
+  description: |
+    Complete API specification for event registration process in Hi.Events.
+    This covers the 3-step process: Get Products → Create Order → Complete Order.
+    
+    ## Registration Flow
+    1. **Get Events**: List all available events (requires API key)
+    2. **Get Products**: Retrieve available tickets/products for an event
+    3. **Create Order**: Reserve tickets and create an order
+    4. **Complete Order**: Provide attendee details and finalize registration
+    
+    ## Authentication
+    - **API Key**: Required for events listing (Bearer token)
+    - **Public endpoints**: No authentication required for registration steps
+    - **Self-signed SSL certificates**: Use -k flag with curl
+    
+    ## Base URL
+    - Development: `https://localhost:8443/api`
+  version: 1.0.0
+  contact:
+    name: Hi.Events API Support
+    email: support@hi.events
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: https://localhost:8443/api
+    description: Local Development Server
+
+paths:
+  /events:
+    get:
+      tags:
+        - Event Discovery
+      summary: Get All Events
+      description: |
+        **Step 1: Get Events**
+        
+        Retrieve a list of all available events. This is typically the first step
+        to discover which events are available for registration.
+        
+        **Use this to:**
+        - Browse all available events
+        - Get event IDs for product discovery
+        - Filter events by status, dates, or other criteria
+        - Display events to users for selection
+        
+        **Authentication Required:**
+        This endpoint requires an API key (Bearer token) for authentication.
+        
+        **Response includes:**
+        - Event basic information (id, title, description, dates)
+        - Event status and lifecycle information
+        - Organizer details
+        - Event statistics
+        - Pagination metadata
+      operationId: getEvents
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: Page number for pagination
+          schema:
+            type: integer
+            default: 1
+            example: 1
+        - name: per_page
+          in: query
+          description: Number of items per page
+          schema:
+            type: integer
+            default: 25
+            maximum: 100
+            example: 25
+        - name: sort
+          in: query
+          description: Sort field
+          schema:
+            type: string
+            enum: [start_date, end_date, created_at, updated_at, title]
+            default: start_date
+            example: start_date
+        - name: sort_direction
+          in: query
+          description: Sort direction
+          schema:
+            type: string
+            enum: [asc, desc]
+            default: asc
+            example: asc
+        - name: filter[title]
+          in: query
+          description: Filter by event title
+          schema:
+            type: string
+            example: "conference"
+        - name: filter[status]
+          in: query
+          description: Filter by event status
+          schema:
+            type: string
+            enum: [DRAFT, LIVE, ARCHIVED]
+            example: LIVE
+        - name: filter[organizer_id]
+          in: query
+          description: Filter by organizer ID
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Successfully retrieved events list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventsListResponse'
+              example:
+                data:
+                  - id: 1
+                    title: "Summer Conference 2025"
+                    description: "<p>Join us for an amazing conference</p>"
+                    start_date: "2025-07-11T22:35:00.000000Z"
+                    end_date: "2025-07-11T23:35:00.000000Z"
+                    status: "LIVE"
+                    lifecycle_status: "UPCOMING"
+                    currency: "GBP"
+                    timezone: "America/Sao_Paulo"
+                    slug: "summer-conference-2025"
+                    organizer:
+                      id: 1
+                      name: "Event Organizer"
+                      email: "organizer@example.com"
+                    statistics:
+                      unique_views: 150
+                      total_views: 300
+                      sales_total_gross: 5000
+                      attendees_registered: 25
+                  - id: 2
+                    title: "Winter Workshop"
+                    description: "<p>Learn new skills</p>"
+                    start_date: "2025-12-15T14:00:00.000000Z"
+                    end_date: "2025-12-15T18:00:00.000000Z"
+                    status: "LIVE"
+                    lifecycle_status: "UPCOMING"
+                    currency: "GBP"
+                    timezone: "America/Sao_Paulo"
+                    slug: "winter-workshop"
+                    organizer:
+                      id: 1
+                      name: "Event Organizer"
+                      email: "organizer@example.com"
+                    statistics:
+                      unique_views: 75
+                      total_views: 120
+                      sales_total_gross: 2500
+                      attendees_registered: 15
+                links:
+                  first: "https://localhost:8443/api/events?page=1"
+                  last: "https://localhost:8443/api/events?page=1"
+                  prev: null
+                  next: null
+                meta:
+                  current_page: 1
+                  from: 1
+                  last_page: 1
+                  per_page: 25
+                  to: 2
+                  total: 2
+                  allowed_filter_fields: ["title", "start_date", "end_date", "created_at", "updated_at", "status", "organizer_id"]
+                  allowed_sorts:
+                    start_date:
+                      asc: "Closest start date"
+                      desc: "Furthest start date"
+                    end_date:
+                      asc: "Closest end date"
+                      desc: "Furthest end date"
+                    created_at:
+                      asc: "Oldest first"
+                      desc: "Newest first"
+                    updated_at:
+                      asc: "Least Recently Updated"
+                      desc: "Recently Updated"
+                  default_sort: "start_date"
+                  default_sort_direction: "asc"
+        '401':
+          description: Unauthorized - Invalid or missing API key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: "Unauthenticated."
+        '403':
+          description: Forbidden - API key lacks required permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: "This action is unauthorized."
+
+  /public/events/{event_id}/products:
+    get:
+      tags:
+        - Event Registration
+      summary: Get Available Products for Event
+      description: |
+        **Step 1: Get Products**
+        
+        Retrieve all available products (tickets) for a specific event.
+        This endpoint returns product categories, pricing tiers, availability status,
+        and all necessary information to create an order.
+        
+        **Use this to:**
+        - Display available tickets to users
+        - Get product_id and price_id for order creation
+        - Check availability and pricing
+        - Understand event settings and requirements
+      operationId: getEventProducts
+      parameters:
+        - name: event_id
+          in: path
+          required: true
+          description: The unique identifier of the event
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Successfully retrieved event products
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventProductsResponse'
+              example:
+                data:
+                  id: 1
+                  title: "Summer Conference 2025"
+                  description: "<p>Join us for an amazing conference</p>"
+                  start_date: "2025-07-11T22:35:00.000000Z"
+                  end_date: "2025-07-11T23:35:00.000000Z"
+                  currency: "GBP"
+                  slug: "summer-conference-2025"
+                  status: "LIVE"
+                  lifecycle_status: "UPCOMING"
+                  timezone: "America/Sao_Paulo"
+                  product_categories:
+                    - id: 1
+                      name: "Tickets"
+                      description: null
+                      is_hidden: false
+                      order: 0
+                      no_products_message: "There are no tickets available for this event"
+                      products:
+                        - id: 3
+                          title: "General Admission"
+                          type: "FREE"
+                          product_type: "GENERAL"
+                          description: "Standard entry ticket"
+                          price: 0
+                          max_per_order: 100
+                          min_per_order: 1
+                          is_available: true
+                          is_sold_out: false
+                          prices:
+                            - id: 3
+                              price: 0
+                              price_including_taxes_and_fees: 0
+                              is_available: true
+                              is_sold_out: false
+                  settings:
+                    required_attendee_details: true
+                    continue_button_text: "Continue"
+                    support_email: "support@example.com"
+                    order_timeout_in_minutes: 15
+                    is_online_event: true
+                    payment_providers: []
+        '404':
+          description: Event not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: "Event not found"
+                errors: {}
+
+  /public/events/{event_id}/order:
+    post:
+      tags:
+        - Event Registration
+      summary: Create Order (Reserve Tickets)
+      description: |
+        **Step 2: Create Order**
+        
+        Create a new order to reserve tickets for the event. This creates a temporary
+        reservation that expires after the timeout period (usually 15 minutes).
+        
+        **Important:**
+        - Order is created with status "RESERVED"
+        - Payment is not required at this stage
+        - Use product_id and price_id from Step 1
+        - Returns order_short_id needed for Step 3
+        
+        **Request Format:**
+        - products: Array of products to order
+        - Each product needs product_id and quantities array
+        - Each quantity needs price_id and quantity number
+      operationId: createOrder
+      parameters:
+        - name: event_id
+          in: path
+          required: true
+          description: The unique identifier of the event
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrderRequest'
+            example:
+              products:
+                - product_id: 3
+                  quantities:
+                    - price_id: 3
+                      quantity: 1
+      responses:
+        '201':
+          description: Order created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateOrderResponse'
+              example:
+                data:
+                  short_id: "o_4WWzp2nNQyjjI"
+                  total_before_additions: 0
+                  total_tax: 0
+                  total_gross: 0
+                  total_fee: 0
+                  status: "RESERVED"
+                  refund_status: null
+                  payment_status: null
+                  currency: "GBP"
+                  reserved_until: "2025-07-11 00:46:02"
+                  is_expired: false
+                  is_payment_required: false
+                  public_id: "O-GAIAVHF"
+                  promo_code: null
+                  first_name: null
+                  last_name: null
+                  email: null
+                  order_items:
+                    - id: 3
+                      order_id: 3
+                      total_before_additions: 0
+                      price: 0
+                      quantity: 1
+                      product_id: 3
+                      product_price_id: 3
+                      item_name: "General Admission"
+                      total_service_fee: 0
+                      total_tax: 0
+                      total_gross: 0
+                  session_identifier: "184dae31bbd792b5400c67772597627c08bc69cd"
+        '400':
+          description: Bad request - validation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+              example:
+                message: "The products.0.quantities field is required."
+                errors:
+                  "products.0.quantities": ["The products.0.quantities field is required."]
+        '422':
+          description: Unprocessable Entity - business logic validation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+
+  /public/events/{event_id}/order/{order_short_id}:
+    put:
+      tags:
+        - Event Registration
+      summary: Complete Order (Finalize Registration)
+      description: |
+        **Step 3: Complete Order**
+        
+        Complete the order by providing attendee details and finalizing the registration.
+        This converts the reserved order into a confirmed registration.
+        
+        **Important:**
+        - Use the short_id from Step 2 response
+        - Must provide attendee details for each ticket
+        - Order moves from "RESERVED" to "COMPLETED" status
+        - Attendee confirmation emails are sent
+        
+        **Required Fields:**
+        - order.first_name, order.last_name, order.email (order holder)
+        - attendees array with details for each ticket
+        - product_id and product_price_id from original order
+        
+        **Note:** For free events, no payment processing is required.
+      operationId: completeOrder
+      parameters:
+        - name: event_id
+          in: path
+          required: true
+          description: The unique identifier of the event
+          schema:
+            type: integer
+            example: 1
+        - name: order_short_id
+          in: path
+          required: true
+          description: The short ID of the order from Step 2
+          schema:
+            type: string
+            example: "o_4WWzp2nNQyjjI"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompleteOrderRequest'
+            example:
+              order:
+                first_name: "John"
+                last_name: "Doe"
+                email: "john.doe@example.com"
+              products:
+                - product_id: 3
+                  product_price_id: 3
+                  quantity: 1
+                  attendees:
+                    - first_name: "John"
+                      last_name: "Doe"
+                      email: "john.doe@example.com"
+      responses:
+        '200':
+          description: Order completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompleteOrderResponse'
+              example:
+                data:
+                  short_id: "o_4WWzp2nNQyjjI"
+                  total_gross: 0
+                  status: "COMPLETED"
+                  payment_status: "COMPLETED"
+                  currency: "GBP"
+                  first_name: "John"
+                  last_name: "Doe"
+                  email: "john.doe@example.com"
+                  public_id: "O-GAIAVHF"
+                  is_payment_required: false
+                  attendees:
+                    - first_name: "John"
+                      last_name: "Doe"
+                      email: "john.doe@example.com"
+                      ticket_reference: "T-ABC123"
+                      public_id: "A-XYZ789"
+                  order_items:
+                    - id: 3
+                      item_name: "General Admission"
+                      quantity: 1
+                      price: 0
+                      total_gross: 0
+        '400':
+          description: Bad request - validation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+        '404':
+          description: Order not found or expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Conflict - order already completed or expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    get:
+      tags:
+        - Event Registration
+      summary: Get Order Status
+      description: |
+        **Optional: Get Order Status**
+        
+        Retrieve the current status of an order. Useful for checking order details
+        before completion or after completion for confirmation.
+      operationId: getOrderStatus
+      parameters:
+        - name: event_id
+          in: path
+          required: true
+          description: The unique identifier of the event
+          schema:
+            type: integer
+            example: 1
+        - name: order_short_id
+          in: path
+          required: true
+          description: The short ID of the order
+          schema:
+            type: string
+            example: "o_4WWzp2nNQyjjI"
+      responses:
+        '200':
+          description: Order status retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderStatusResponse'
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: token
+      description: |
+        API key authentication using Bearer token format.
+        
+        **Format:** `Bearer {your_api_key}`
+        
+        **Example:** `Bearer 1|DBhrdNsgpn46IlYEwn4WdMhuhkR9eOMh30xTbQBBe5b9a2d7`
+        
+        **How to get an API key:**
+        1. Login to Hi.Events dashboard
+        2. Navigate to API Keys section
+        3. Create new API key
+        4. Copy the generated token
+        
+        **curl example:**
+        ```bash
+        curl -H "Authorization: Bearer YOUR_API_KEY" https://localhost:8443/api/events
+        ```
+
+  schemas:
+    EventsListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventSummary'
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    
+    EventSummary:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+          description: "Event ID - use this for product discovery"
+        title:
+          type: string
+          example: "Summer Conference 2025"
+        description:
+          type: string
+          example: "<p>Join us for an amazing conference</p>"
+        description_preview:
+          type: string
+          example: "Join us for an amazing conference"
+        start_date:
+          type: string
+          format: date-time
+          example: "2025-07-11T22:35:00.000000Z"
+        end_date:
+          type: string
+          format: date-time
+          example: "2025-07-11T23:35:00.000000Z"
+        status:
+          type: string
+          enum: ["DRAFT", "LIVE", "ARCHIVED"]
+          example: "LIVE"
+        lifecycle_status:
+          type: string
+          enum: ["UPCOMING", "ONGOING", "ENDED"]
+          example: "UPCOMING"
+        currency:
+          type: string
+          example: "GBP"
+        timezone:
+          type: string
+          example: "America/Sao_Paulo"
+        slug:
+          type: string
+          example: "summer-conference-2025"
+        images:
+          type: array
+          items:
+            type: string
+          example: []
+        settings:
+          $ref: '#/components/schemas/EventSettingsSummary'
+        organizer:
+          $ref: '#/components/schemas/Organizer'
+        statistics:
+          $ref: '#/components/schemas/EventStatistics'
+    
+    EventSettingsSummary:
+      type: object
+      properties:
+        pre_checkout_message:
+          type: string
+          example: ""
+        post_checkout_message:
+          type: string
+          example: ""
+        support_email:
+          type: string
+          format: email
+          example: "support@example.com"
+        order_timeout_in_minutes:
+          type: integer
+          example: 15
+        is_online_event:
+          type: boolean
+          example: true
+        payment_providers:
+          type: array
+          items:
+            type: string
+          example: ["STRIPE"]
+        homepage_background_color:
+          type: string
+          example: "#ffffff"
+        homepage_primary_color:
+          type: string
+          example: "#7b5db8"
+    
+    EventStatistics:
+      type: object
+      properties:
+        unique_views:
+          type: integer
+          example: 150
+        total_views:
+          type: integer
+          example: 300
+        sales_total_gross:
+          type: number
+          format: float
+          example: 5000
+        total_tax:
+          type: number
+          format: float
+          example: 0
+        sales_total_before_additions:
+          type: number
+          format: float
+          example: 5000
+        total_fee:
+          type: number
+          format: float
+          example: 0
+        products_sold:
+          type: integer
+          example: 25
+        attendees_registered:
+          type: integer
+          example: 25
+        total_refunded:
+          type: number
+          format: float
+          example: 0
+    
+    PaginationLinks:
+      type: object
+      properties:
+        first:
+          type: string
+          example: "https://localhost:8443/api/events?page=1"
+        last:
+          type: string
+          example: "https://localhost:8443/api/events?page=1"
+        prev:
+          type: string
+          nullable: true
+          example: null
+        next:
+          type: string
+          nullable: true
+          example: null
+    
+    PaginationMeta:
+      type: object
+      properties:
+        current_page:
+          type: integer
+          example: 1
+        from:
+          type: integer
+          example: 1
+        last_page:
+          type: integer
+          example: 1
+        per_page:
+          type: integer
+          example: 25
+        to:
+          type: integer
+          example: 2
+        total:
+          type: integer
+          example: 2
+        allowed_filter_fields:
+          type: array
+          items:
+            type: string
+          example: ["title", "start_date", "end_date", "created_at", "updated_at", "status", "organizer_id"]
+        allowed_sorts:
+          type: object
+          additionalProperties:
+            type: object
+            properties:
+              asc:
+                type: string
+              desc:
+                type: string
+          example:
+            start_date:
+              asc: "Closest start date"
+              desc: "Furthest start date"
+            end_date:
+              asc: "Closest end date"
+              desc: "Furthest end date"
+        default_sort:
+          type: string
+          example: "start_date"
+        default_sort_direction:
+          type: string
+          example: "asc"
+
+    EventProductsResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/EventDetails'
+    
+    EventDetails:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: "Summer Conference 2025"
+        description:
+          type: string
+          example: "<p>Join us for an amazing conference</p>"
+        start_date:
+          type: string
+          format: date-time
+          example: "2025-07-11T22:35:00.000000Z"
+        end_date:
+          type: string
+          format: date-time
+          example: "2025-07-11T23:35:00.000000Z"
+        currency:
+          type: string
+          example: "GBP"
+        slug:
+          type: string
+          example: "summer-conference-2025"
+        status:
+          type: string
+          enum: ["DRAFT", "LIVE", "ARCHIVED"]
+          example: "LIVE"
+        lifecycle_status:
+          type: string
+          enum: ["UPCOMING", "ONGOING", "ENDED"]
+          example: "UPCOMING"
+        timezone:
+          type: string
+          example: "America/Sao_Paulo"
+        product_categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductCategory'
+        settings:
+          $ref: '#/components/schemas/EventSettings'
+        organizer:
+          $ref: '#/components/schemas/Organizer'
+    
+    ProductCategory:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Tickets"
+        description:
+          type: string
+          nullable: true
+          example: null
+        is_hidden:
+          type: boolean
+          example: false
+        order:
+          type: integer
+          example: 0
+        no_products_message:
+          type: string
+          example: "There are no tickets available for this event"
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+    
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 3
+          description: "Product ID - use this in order creation"
+        title:
+          type: string
+          example: "General Admission"
+        type:
+          type: string
+          enum: ["FREE", "PAID", "DONATION"]
+          example: "FREE"
+        product_type:
+          type: string
+          enum: ["GENERAL", "VIP", "EARLY_BIRD"]
+          example: "GENERAL"
+        description:
+          type: string
+          example: "Standard entry ticket"
+        price:
+          type: number
+          format: float
+          example: 0
+        max_per_order:
+          type: integer
+          example: 100
+        min_per_order:
+          type: integer
+          example: 1
+        is_available:
+          type: boolean
+          example: true
+        is_sold_out:
+          type: boolean
+          example: false
+        prices:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductPrice'
+    
+    ProductPrice:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 3
+          description: "Price ID - use this in order creation"
+        price:
+          type: number
+          format: float
+          example: 0
+        price_including_taxes_and_fees:
+          type: number
+          format: float
+          example: 0
+        is_available:
+          type: boolean
+          example: true
+        is_sold_out:
+          type: boolean
+          example: false
+        sale_start_date:
+          type: string
+          format: date-time
+          nullable: true
+          example: null
+        sale_end_date:
+          type: string
+          format: date-time
+          nullable: true
+          example: null
+    
+    EventSettings:
+      type: object
+      properties:
+        required_attendee_details:
+          type: boolean
+          example: true
+        continue_button_text:
+          type: string
+          example: "Continue"
+        support_email:
+          type: string
+          format: email
+          example: "support@example.com"
+        order_timeout_in_minutes:
+          type: integer
+          example: 15
+        is_online_event:
+          type: boolean
+          example: true
+        payment_providers:
+          type: array
+          items:
+            type: string
+          example: []
+    
+    Organizer:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Event Organizer"
+        email:
+          type: string
+          format: email
+          example: "organizer@example.com"
+        website:
+          type: string
+          nullable: true
+          example: null
+        description:
+          type: string
+          nullable: true
+          example: null
+    
+    CreateOrderRequest:
+      type: object
+      required:
+        - products
+      properties:
+        products:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/CreateOrderProduct'
+        promo_code:
+          type: string
+          nullable: true
+          example: null
+          description: "Optional promo code for discounts"
+    
+    CreateOrderProduct:
+      type: object
+      required:
+        - product_id
+        - quantities
+      properties:
+        product_id:
+          type: integer
+          example: 3
+          description: "Product ID from Step 1 response"
+        quantities:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/ProductQuantity'
+    
+    ProductQuantity:
+      type: object
+      required:
+        - price_id
+        - quantity
+      properties:
+        price_id:
+          type: integer
+          example: 3
+          description: "Price ID from Step 1 response"
+        quantity:
+          type: integer
+          minimum: 1
+          example: 1
+          description: "Number of tickets to order"
+    
+    CreateOrderResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/OrderData'
+    
+    OrderData:
+      type: object
+      properties:
+        short_id:
+          type: string
+          example: "o_4WWzp2nNQyjjI"
+          description: "Order short ID - use this in Step 3"
+        total_before_additions:
+          type: number
+          format: float
+          example: 0
+        total_tax:
+          type: number
+          format: float
+          example: 0
+        total_gross:
+          type: number
+          format: float
+          example: 0
+        total_fee:
+          type: number
+          format: float
+          example: 0
+        status:
+          type: string
+          enum: ["RESERVED", "COMPLETED", "CANCELLED", "AWAITING_PAYMENT"]
+          example: "RESERVED"
+        refund_status:
+          type: string
+          nullable: true
+          example: null
+        payment_status:
+          type: string
+          nullable: true
+          example: null
+        currency:
+          type: string
+          example: "GBP"
+        reserved_until:
+          type: string
+          format: date-time
+          example: "2025-07-11 00:46:02"
+        is_expired:
+          type: boolean
+          example: false
+        is_payment_required:
+          type: boolean
+          example: false
+        public_id:
+          type: string
+          example: "O-GAIAVHF"
+        promo_code:
+          type: string
+          nullable: true
+          example: null
+        first_name:
+          type: string
+          nullable: true
+          example: null
+        last_name:
+          type: string
+          nullable: true
+          example: null
+        email:
+          type: string
+          nullable: true
+          example: null
+        order_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItem'
+        session_identifier:
+          type: string
+          example: "184dae31bbd792b5400c67772597627c08bc69cd"
+    
+    OrderItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 3
+        order_id:
+          type: integer
+          example: 3
+        total_before_additions:
+          type: number
+          format: float
+          example: 0
+        price:
+          type: number
+          format: float
+          example: 0
+        quantity:
+          type: integer
+          example: 1
+        product_id:
+          type: integer
+          example: 3
+        product_price_id:
+          type: integer
+          example: 3
+        item_name:
+          type: string
+          example: "General Admission"
+        total_service_fee:
+          type: number
+          format: float
+          example: 0
+        total_tax:
+          type: number
+          format: float
+          example: 0
+        total_gross:
+          type: number
+          format: float
+          example: 0
+    
+    CompleteOrderRequest:
+      type: object
+      required:
+        - order
+        - products
+      properties:
+        order:
+          $ref: '#/components/schemas/OrderHolder'
+        products:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/CompleteOrderProduct'
+    
+    OrderHolder:
+      type: object
+      required:
+        - first_name
+        - last_name
+        - email
+      properties:
+        first_name:
+          type: string
+          example: "John"
+          description: "First name of the order holder"
+        last_name:
+          type: string
+          example: "Doe"
+          description: "Last name of the order holder"
+        email:
+          type: string
+          format: email
+          example: "john.doe@example.com"
+          description: "Email address of the order holder"
+        address:
+          $ref: '#/components/schemas/Address'
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Question'
+          description: "Optional custom questions"
+    
+    CompleteOrderProduct:
+      type: object
+      required:
+        - product_id
+        - product_price_id
+        - quantity
+        - attendees
+      properties:
+        product_id:
+          type: integer
+          example: 3
+          description: "Product ID from original order"
+        product_price_id:
+          type: integer
+          example: 3
+          description: "Price ID from original order"
+        quantity:
+          type: integer
+          example: 1
+          description: "Number of tickets (must match original order)"
+        attendees:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/Attendee'
+          description: "Attendee details for each ticket"
+    
+    Attendee:
+      type: object
+      required:
+        - first_name
+        - last_name
+        - email
+      properties:
+        first_name:
+          type: string
+          example: "John"
+          description: "First name of the attendee"
+        last_name:
+          type: string
+          example: "Doe"
+          description: "Last name of the attendee"
+        email:
+          type: string
+          format: email
+          example: "john.doe@example.com"
+          description: "Email address of the attendee"
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Question'
+          description: "Optional custom questions for this attendee"
+    
+    Address:
+      type: object
+      properties:
+        address_line_1:
+          type: string
+          example: "123 Main Street"
+        address_line_2:
+          type: string
+          example: "Apartment 4B"
+        city:
+          type: string
+          example: "New York"
+        state:
+          type: string
+          example: "NY"
+        zip:
+          type: string
+          example: "10001"
+        country:
+          type: string
+          example: "US"
+    
+    Question:
+      type: object
+      properties:
+        question_id:
+          type: integer
+          example: 1
+        answer:
+          type: string
+          example: "My answer"
+    
+    CompleteOrderResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/CompletedOrderData'
+    
+    CompletedOrderData:
+      type: object
+      properties:
+        short_id:
+          type: string
+          example: "o_4WWzp2nNQyjjI"
+        total_gross:
+          type: number
+          format: float
+          example: 0
+        status:
+          type: string
+          example: "COMPLETED"
+        payment_status:
+          type: string
+          example: "COMPLETED"
+        currency:
+          type: string
+          example: "GBP"
+        first_name:
+          type: string
+          example: "John"
+        last_name:
+          type: string
+          example: "Doe"
+        email:
+          type: string
+          example: "john.doe@example.com"
+        public_id:
+          type: string
+          example: "O-GAIAVHF"
+        is_payment_required:
+          type: boolean
+          example: false
+        attendees:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompletedAttendee'
+        order_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItem'
+    
+    CompletedAttendee:
+      type: object
+      properties:
+        first_name:
+          type: string
+          example: "John"
+        last_name:
+          type: string
+          example: "Doe"
+        email:
+          type: string
+          example: "john.doe@example.com"
+        ticket_reference:
+          type: string
+          example: "T-ABC123"
+        public_id:
+          type: string
+          example: "A-XYZ789"
+    
+    OrderStatusResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/OrderData'
+    
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "An error occurred"
+        errors:
+          type: object
+          example: {}
+    
+    ValidationErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "The given data was invalid."
+        errors:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+          example:
+            "products.0.quantities": ["The products.0.quantities field is required."]
+
+tags:
+  - name: Event Discovery
+    description: |
+      Event discovery and browsing functionality for finding events to register for.
+      
+      ## Purpose
+      
+      Use these endpoints to:
+      - Browse all available events
+      - Filter events by criteria (status, date, organizer)
+      - Get event IDs for the registration process
+      - Display event information to users
+      
+      ## Authentication
+      
+      Event discovery requires API key authentication using Bearer tokens.
+      
+  - name: Event Registration
+    description: |
+      Complete event registration workflow including product discovery, order creation, and completion.
+      
+      ## Workflow Overview
+      
+      1. **Get Events** - Browse available events (requires API key)
+      2. **Get Products** - Discover available tickets and pricing
+      3. **Create Order** - Reserve tickets (creates temporary hold)
+      4. **Complete Order** - Provide attendee details and finalize registration
+      
+      ## Error Handling
+      
+      - **400 Bad Request**: Invalid request format or missing required fields
+      - **404 Not Found**: Event or order not found
+      - **409 Conflict**: Order already completed or expired
+      - **422 Unprocessable Entity**: Business logic validation failed
+      - **500 Internal Server Error**: Server-side error occurred
+      
+      ## Rate Limiting
+      
+      API requests are rate-limited to prevent abuse. Standard limits apply.
+      
+      ## HTTPS and SSL
+      
+      All endpoints require HTTPS. For development with self-signed certificates, use the `-k` flag with curl.
+      
+      ## Complete Workflow Example
+      
+      ```bash
+      # Step 1: Get Events (requires API key)
+      curl -X GET "https://localhost:8443/api/events" \
+        -H "Authorization: Bearer YOUR_API_KEY" \
+        -H "Accept: application/json" \
+        -k
+      
+      # Step 2: Get Products for Event
+      curl -X GET "https://localhost:8443/api/public/events/1/products" \
+        -H "Accept: application/json" \
+        -k
+      
+      # Step 3: Create Order
+      curl -X POST "https://localhost:8443/api/public/events/1/order" \
+        -H "Content-Type: application/json" \
+        -k \
+        -d '{
+          "products": [{
+            "product_id": 3,
+            "quantities": [{"price_id": 3, "quantity": 1}]
+          }]
+        }'
+      
+      # Step 4: Complete Order (use short_id from step 3)
+      curl -X PUT "https://localhost:8443/api/public/events/1/order/o_4WWzp2nNQyjjI" \
+        -H "Content-Type: application/json" \
+        -k \
+        -d '{
+          "order": {
+            "first_name": "John",
+            "last_name": "Doe",
+            "email": "john.doe@example.com"
+          },
+          "products": [{
+            "product_id": 3,
+            "product_price_id": 3,
+            "quantity": 1,
+            "attendees": [{
+              "first_name": "John",
+              "last_name": "Doe",
+              "email": "john.doe@example.com"
+            }]
+          }]
+        }'
+      ``` 

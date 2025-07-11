@@ -18,8 +18,8 @@ class SendMessageRequest extends FormRequest
             'is_test' => 'boolean',
             'attendee_ids' => 'max:50,array|required_if:message_type,' . MessageTypeEnum::INDIVIDUAL_ATTENDEES->name,
             'attendee_ids.*' => 'integer',
-            'product_ids' => ['array', 'required_if:message_type,' . MessageTypeEnum::TICKET_HOLDERS->name],
-            'order_id' => 'integer|required_if:message_type,' . MessageTypeEnum::ORDER_OWNER->name,
+            'product_ids' => ['array', 'required_if:message_type,' . MessageTypeEnum::TICKET_HOLDERS->name, 'required_if:message_type,' . MessageTypeEnum::PRODUCT->name],
+            'order_id' => 'integer|required_if:message_type,' . MessageTypeEnum::ORDER_OWNER->name . '|required_if:message_type,' . MessageTypeEnum::ORDER->name,
             'product_ids.*' => 'integer',
             'order_statuses.*' => [
                 'required_if:message_type,' . MessageTypeEnum::ORDER_OWNERS_WITH_PRODUCT->name,

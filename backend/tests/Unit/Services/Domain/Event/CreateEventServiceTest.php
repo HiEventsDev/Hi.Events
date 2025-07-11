@@ -59,6 +59,7 @@ class CreateEventServiceTest extends TestCase
             $this->imageRepository,
             $this->config,
             $this->filesystemManager,
+            $this->createProductCategoryService,
         );
     }
 

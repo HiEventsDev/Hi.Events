@@ -1,7 +1,8 @@
-import {AttendeeTicket} from "../../../common/AttendeeTicket";
+import React from "react";
+import {AttendeeProduct} from "../../../common/AttendeeProduct";
 import {Product} from "../../../../types.ts";
 import {PoweredByFooter} from "../../../common/PoweredByFooter";
-import {useParams} from "react-router";
+import {useParams} from "react-router-dom";
 import {useGetOrderPublic} from "../../../../queries/useGetOrderPublic.ts";
 import {useGetEventPublic} from "../../../../queries/useGetEventPublic.ts";
 import {t} from "@lingui/macro";
@@ -41,15 +42,16 @@ export const PrintOrder = () => {
         <>
             <Container>
                 <h2>{t`Tickets for`} {event.title}</h2>
-                {order.attendees?.map((attendee) => {
+                {order.attendees?.map((attendee, idx) => {
                     return (
-                        <AttendeeTicket
-                            key={attendee.id}
-                            attendee={attendee}
-                            product={attendee.product as Product}
-                            event={event}
-                            hideButtons
-                        />
+                        <React.Fragment key={attendee.id}>
+                            <AttendeeProduct
+                                attendee={attendee}
+                                product={attendee.product as Product}
+                                event={event}
+                                hideButtons
+                            />
+                        </React.Fragment>
                     );
                 })}
 

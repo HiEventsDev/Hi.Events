@@ -41,19 +41,14 @@ const AFFILIATE_EXPIRY_DAYS = 30;
 
 const sendHeightToIframeWidgets = () => {
     const height = document.documentElement.scrollHeight;
-    const widgetHeight = document.querySelector('.hi-product-widget-container')?.getBoundingClientRect().height || 0;
     const urlParams = new URLSearchParams(window.location.search);
     const iframeId = urlParams.get('iframeId');
-
-    const finalHeight = Math.max(height, widgetHeight);
-
     if (!iframeId) {
         return;
     }
-
     window.parent.postMessage({
         type: 'resize',
-        height: finalHeight,
+        height: height,
         iframeId: iframeId
     }, '*');
 };
@@ -141,10 +136,7 @@ const SelectProducts = (props: SelectProductsProps) => {
             .then(() => {
                 const url = '/checkout/' + eventId + '/' + data.data.short_id + '/details';
                 if (props.widgetMode === 'embedded') {
-                    window.open(
-                        url + '?session_identifier=' + data.data.session_identifier + '&utm_source=embedded_widget',
-                        '_blank'
-                    );
+                    window.open(url, '_blank');
                     setOrderInProcessOverlayVisible(true);
                     return;
                 }
@@ -558,7 +550,6 @@ const SelectProducts = (props: SelectProductsProps) => {
                         </ActionIcon>
                     </div>
                 )}
-
                 {(showPromoCodeInput && !form.values.promo_code) && (
                     <Group className={'hi-promo-code-input-wrapper'} wrap={'nowrap'} gap={'20px'}>
                         {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}

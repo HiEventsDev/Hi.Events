@@ -1,4 +1,4 @@
-import {useParams} from "react-router";
+import {useParams} from "react-router-dom";
 import {useDisclosure} from "@mantine/hooks";
 import {Button, Menu} from "@mantine/core";
 import {IconCategory, IconChevronDown, IconPlus, IconShoppingCart} from "@tabler/icons-react";
@@ -43,7 +43,7 @@ export const Products = () => {
 
     return (
         <PageBody>
-            <PageTitle>{t`Tickets & Products`}</PageTitle>
+            <PageTitle>{t`Products`}</PageTitle>
 
             <ToolBar
                 searchComponent={() => (
@@ -83,7 +83,7 @@ export const Products = () => {
                             }
                             onClick={() => openCreateProduct(undefined)}
                         >
-                            {t`Ticket or Product`}
+                            {t`Product`}
                         </Menu.Item>
                         <Menu.Item
                             leftSection={
@@ -93,7 +93,7 @@ export const Products = () => {
                             }
                             onClick={openCreateProductCategoryModal}
                         >
-                            {t`Category`}
+                            {t`Product Category`}
                         </Menu.Item>
                     </Menu.Dropdown>
                 </Menu>
