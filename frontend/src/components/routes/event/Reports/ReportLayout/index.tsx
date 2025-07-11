@@ -1,4 +1,5 @@
-import {Link, useParams} from "react-router";
+import React from 'react';
+import {Link, useParams} from "react-router-dom";
 import {PageBody} from "../../../../common/PageBody";
 import {Button} from "@mantine/core";
 import {IconChevronLeft} from "@tabler/icons-react";

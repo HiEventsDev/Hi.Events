@@ -1,6 +1,6 @@
 import classes from './Header.module.scss'
-import { FC } from 'react';
-import { Event } from '../../../../types.ts';
+import {FC} from 'react';
+import {Event} from '../../../../types.ts';
 
 export const Header: FC<{
     event: Event

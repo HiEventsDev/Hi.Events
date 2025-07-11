@@ -177,7 +177,6 @@ class QuestionAndAnswerViewDomainObject extends AbstractDomainObject
     public function setAttendee(?AttendeeDomainObject $attendee): static
     {
         $this->attendee = $attendee;
-
         return $this;
     }
 
@@ -189,7 +188,6 @@ class QuestionAndAnswerViewDomainObject extends AbstractDomainObject
     public function setQuestion(?QuestionDomainObject $question): static
     {
         $this->question = $question;
-
         return $this;
     }
 
@@ -201,7 +199,6 @@ class QuestionAndAnswerViewDomainObject extends AbstractDomainObject
     public function setQuestionAnswerId(int $question_answer_id): QuestionAndAnswerViewDomainObject
     {
         $this->question_answer_id = $question_answer_id;
-
         return $this;
     }
 
@@ -213,7 +210,6 @@ class QuestionAndAnswerViewDomainObject extends AbstractDomainObject
     public function setQuestionDescription(?string $question_description): QuestionAndAnswerViewDomainObject
     {
         $this->question_description = $question_description;
-
         return $this;
     }
 
@@ -225,7 +221,6 @@ class QuestionAndAnswerViewDomainObject extends AbstractDomainObject
     public function setQuestionRequired(bool $question_required): QuestionAndAnswerViewDomainObject
     {
         $this->question_required = $question_required;
-
         return $this;
     }
 
@@ -237,7 +232,6 @@ class QuestionAndAnswerViewDomainObject extends AbstractDomainObject
     public function setQuestionOptions(?array $question_options): QuestionAndAnswerViewDomainObject
     {
         $this->question_options = $question_options;
-
         return $this;
     }
 
@@ -249,7 +243,6 @@ class QuestionAndAnswerViewDomainObject extends AbstractDomainObject
     public function setAttendeePublicId(?string $attendee_public_id): QuestionAndAnswerViewDomainObject
     {
         $this->attendee_public_id = $attendee_public_id;
-
         return $this;
     }
 
@@ -261,7 +254,6 @@ class QuestionAndAnswerViewDomainObject extends AbstractDomainObject
     public function setOrderFirstName(?string $order_first_name): QuestionAndAnswerViewDomainObject
     {
         $this->order_first_name = $order_first_name;
-
         return $this;
     }
 
@@ -273,7 +265,6 @@ class QuestionAndAnswerViewDomainObject extends AbstractDomainObject
     public function setOrderLastName(?string $order_last_name): QuestionAndAnswerViewDomainObject
     {
         $this->order_last_name = $order_last_name;
-
         return $this;
     }
 
@@ -285,7 +276,6 @@ class QuestionAndAnswerViewDomainObject extends AbstractDomainObject
     public function setOrderEmail(?string $order_email): QuestionAndAnswerViewDomainObject
     {
         $this->order_email = $order_email;
-
         return $this;
     }
 
@@ -297,7 +287,6 @@ class QuestionAndAnswerViewDomainObject extends AbstractDomainObject
     public function setOrderPublicId(?string $order_public_id): QuestionAndAnswerViewDomainObject
     {
         $this->order_public_id = $order_public_id;
-
         return $this;
     }
 
@@ -309,7 +298,6 @@ class QuestionAndAnswerViewDomainObject extends AbstractDomainObject
     public function setAttendeeEmail(?string $attendee_email): QuestionAndAnswerViewDomainObject
     {
         $this->attendee_email = $attendee_email;
-
         return $this;
     }
 

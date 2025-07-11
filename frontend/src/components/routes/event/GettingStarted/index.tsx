@@ -116,10 +116,10 @@ const GettingStarted = () => {
                     <Card className={hasProducts ? classes.completedCard : ''}>
                         {hasProducts && <CompletedBadge/>}
                         <h2>
-                            {t`🎟️ Add tickets`}
+                            {t`🎟️ Add products`}
                         </h2>
                         <p>
-                            {t`Create tickets for your event, set prices, and manage available quantity.`}
+                            {t`Create products for your event, set prices, and manage available quantity.`}
                         </p>
 
                         <Button variant={'light'} component={NavLink}

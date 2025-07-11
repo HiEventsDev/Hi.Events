@@ -20,11 +20,14 @@ use HiEvents\Http\Actions\Attendees\GetAttendeesAction;
 use HiEvents\Http\Actions\Attendees\PartialEditAttendeeAction;
 use HiEvents\Http\Actions\Attendees\ResendAttendeeTicketAction;
 use HiEvents\Http\Actions\Auth\AcceptInvitationAction;
+use HiEvents\Http\Actions\Auth\CreateApiKeyAction;
 use HiEvents\Http\Actions\Auth\ForgotPasswordAction;
+use HiEvents\Http\Actions\Auth\GetApiKeysAction;
 use HiEvents\Http\Actions\Auth\GetUserInvitationAction;
 use HiEvents\Http\Actions\Auth\LoginAction;
 use HiEvents\Http\Actions\Auth\LogoutAction;
 use HiEvents\Http\Actions\Auth\RefreshTokenAction;
+use HiEvents\Http\Actions\Auth\RevokeApiKeyAction;
 use HiEvents\Http\Actions\Auth\ResetPasswordAction;
 use HiEvents\Http\Actions\Auth\ValidateResetPasswordTokenAction;
 use HiEvents\Http\Actions\CapacityAssignments\CreateCapacityAssignmentAction;
@@ -166,13 +169,51 @@ $router->prefix('/auth')->group(
 );
 
 /**
- * Logged In Routes
+ * Routes for API key authentication (Sanctum)
+ */
+$router->middleware(['auth:sanctum'])->group(
+    function (Router $router): void {
+        // Events
+        $router->post('/events', CreateEventAction::class);
+        $router->get('/events', GetEventsAction::class);
+        $router->get('/events/{event_id}', GetEventAction::class);
+        $router->put('/events/{event_id}', UpdateEventAction::class);
+        $router->put('/events/{event_id}/status', UpdateEventStatusAction::class);
+        $router->post('/events/{event_id}/duplicate', DuplicateEventAction::class);
+
+        // Attendees
+        $router->post('/events/{event_id}/attendees', CreateAttendeeAction::class);
+        $router->get('/events/{event_id}/attendees', GetAttendeesAction::class);
+        $router->get('/events/{event_id}/attendees/{attendee_id}', GetAttendeeAction::class);
+        $router->put('/events/{event_id}/attendees/{attendee_id}', EditAttendeeAction::class);
+        $router->patch('/events/{event_id}/attendees/{attendee_id}', PartialEditAttendeeAction::class);
+        $router->post('/events/{event_id}/attendees/export', ExportAttendeesAction::class);
+
+        // Orders
+        $router->get('/events/{event_id}/orders', GetOrdersAction::class);
+        $router->get('/events/{event_id}/orders/{order_id}', GetOrderAction::class);
+        $router->put('/events/{event_id}/orders/{order_id}', EditOrderAction::class);
+        $router->post('/events/{event_id}/orders/export', ExportOrdersAction::class);
+
+        // Products
+        $router->get('/events/{event_id}/products', GetProductsAction::class);
+        $router->get('/events/{event_id}/products/{ticket_id}', GetProductAction::class);
+    }
+);
+
+/**
+ * Routes only for authenticated users (JWT not API keys)
  */
 $router->middleware(['auth:api'])->group(
     function (Router $router): void {
         // Auth
         $router->get('/auth/logout', LogoutAction::class);
         $router->post('/auth/refresh', RefreshTokenAction::class);
+
+        // API Keys
+        $router->post('/api-keys', CreateApiKeyAction::class);
+        $router->get('/api-keys', GetApiKeysAction::class);
+        $router->delete('/api-keys/{token_id}', RevokeApiKeyAction::class);
 
         // Users
         $router->get('/users/me', GetMeAction::class);
@@ -213,14 +254,6 @@ $router->middleware(['auth:api'])->group(
         $router->put('/accounts/{account_id}/taxes-and-fees/{tax_or_fee_id}', EditTaxOrFeeAction::class);
         $router->delete('/accounts/{account_id}/taxes-and-fees/{tax_or_fee_id}', DeleteTaxOrFeeAction::class);
 
-        // Events
-        $router->post('/events', CreateEventAction::class);
-        $router->get('/events', GetEventsAction::class);
-        $router->get('/events/{event_id}', GetEventAction::class);
-        $router->put('/events/{event_id}', UpdateEventAction::class);
-        $router->put('/events/{event_id}/status', UpdateEventStatusAction::class);
-        $router->post('/events/{event_id}/duplicate', DuplicateEventAction::class);
-
         // Product Categories
         $router->post('/events/{event_id}/product-categories', CreateProductCategoryAction::class);
         $router->get('/events/{event_id}/product-categories', GetProductCategoriesAction::class);
@@ -239,26 +272,16 @@ $router->middleware(['auth:api'])->group(
         // Stats
         $router->get('/events/{event_id}/stats', GetEventStatsAction::class);
 
-        // Attendees
-        $router->post('/events/{event_id}/attendees', CreateAttendeeAction::class);
-        $router->get('/events/{event_id}/attendees', GetAttendeesAction::class);
-        $router->get('/events/{event_id}/attendees/{attendee_id}', GetAttendeeAction::class);
-        $router->put('/events/{event_id}/attendees/{attendee_id}', EditAttendeeAction::class);
-        $router->patch('/events/{event_id}/attendees/{attendee_id}', PartialEditAttendeeAction::class);
-        $router->post('/events/{event_id}/attendees/export', ExportAttendeesAction::class);
+        // Attendees (additional actions not available via API keys)
         $router->post('/events/{event_id}/attendees/{attendee_public_id}/resend-ticket', ResendAttendeeTicketAction::class);
         $router->post('/events/{event_id}/attendees/{attendee_public_id}/check_in', CheckInAttendeeAction::class);
 
-        // Orders
-        $router->get('/events/{event_id}/orders', GetOrdersAction::class);
-        $router->get('/events/{event_id}/orders/{order_id}', GetOrderAction::class);
-        $router->put('/events/{event_id}/orders/{order_id}', EditOrderAction::class);
+        // Orders (additional actions not available via API keys)
         $router->post('/events/{event_id}/orders/{order_id}/message', MessageOrderAction::class);
         $router->post('/events/{event_id}/orders/{order_id}/refund', RefundOrderAction::class);
         $router->post('/events/{event_id}/orders/{order_id}/resend_confirmation', ResendOrderConfirmationAction::class);
         $router->post('/events/{event_id}/orders/{order_id}/cancel', CancelOrderAction::class);
         $router->post('/events/{event_id}/orders/{order_id}/mark-as-paid', MarkOrderAsPaidAction::class);
-        $router->post('/events/{event_id}/orders/export', ExportOrdersAction::class);
         $router->get('/events/{event_id}/orders/{order_id}/invoice', DownloadOrderInvoiceAction::class);
 
         // Questions
@@ -382,5 +405,7 @@ $router->prefix('/public')->group(
         $router->get('/color-themes', GetColorThemesAction::class);
     }
 );
+
+$router->get('/csrf-cookie', 'Laravel\Sanctum\Http\Controllers\CsrfCookieController@show');
 
 include_once __DIR__ . '/mail.php';

@@ -301,7 +301,6 @@ export const SortableProduct = ({product, currencyCode, category, categories}: S
                         <div className={`${classes.halfCircle} ${classes.right}`}/>
                     </>
                 )}
-
             </div>
             {isDuplicateModalOpen &&
                 <DuplicateProductModal originalProductId={productId} onClose={duplicateModal.close}/>}

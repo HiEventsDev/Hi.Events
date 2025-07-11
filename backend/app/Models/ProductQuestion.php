@@ -14,6 +14,11 @@ class ProductQuestion extends BaseModel
         return false;
     }
 
+    protected function getCastMap(): array
+    {
+        return [];
+    }
+
     protected function getFillableFields(): array
     {
         return [

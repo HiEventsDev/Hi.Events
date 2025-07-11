@@ -1,4 +1,5 @@
-import {useParams} from "react-router";
+import React from 'react';
+import {useParams} from "react-router-dom";
 import {useGetEvent} from "../../../../../queries/useGetEvent.ts";
 import {formatCurrency} from "../../../../../utilites/currency.ts";
 import ReportTable from "../../../../common/ReportTable";

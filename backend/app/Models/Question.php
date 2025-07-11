@@ -17,6 +17,11 @@ class Question extends BaseModel
         ];
     }
 
+    protected function getFillableFields(): array
+    {
+        return [];
+    }
+
     public function products(): BelongsToMany
     {
         return $this

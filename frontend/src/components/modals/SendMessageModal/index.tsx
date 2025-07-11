@@ -1,5 +1,5 @@
 import {GenericModalProps, IdParam, MessageType, ProductType} from "../../../types.ts";
-import {useParams} from "react-router";
+import {useParams} from "react-router-dom";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {useGetOrder} from "../../../queries/useGetOrder.ts";
 import {Modal} from "../../common/Modal";
@@ -88,7 +88,6 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
     const isAccountVerified = isAccountFetched && account?.is_account_email_confirmed;
     const accountRequiresManualVerification = isAccountFetched && account?.requires_manual_verification;
     const formIsDisabled = !isAccountVerified || accountRequiresManualVerification;
-
     const sendMessageMutation = useSendEventMessage();
 
     const form = useForm({

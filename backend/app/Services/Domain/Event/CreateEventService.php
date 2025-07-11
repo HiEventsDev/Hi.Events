@@ -19,6 +19,8 @@ use HiEvents\Repository\Interfaces\ImageRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
 use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 use Illuminate\Config\Repository;
+use HiEvents\Services\Domain\ProductCategory\CreateProductCategoryService;
+use HTMLPurifier;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Filesystem\FilesystemManager;
 use Throwable;
@@ -35,6 +37,7 @@ class CreateEventService
         private readonly ImageRepositoryInterface          $imageRepository,
         private readonly Repository                        $config,
         private readonly FilesystemManager                 $filesystemManager,
+        private readonly CreateProductCategoryService      $createProductCategoryService,
     )
     {
     }
@@ -65,6 +68,8 @@ class CreateEventService
             );
 
             $this->createEventStatistics($event);
+
+            $this->createDefaultProductCategory($event);
 
             return $event;
         });
@@ -224,5 +229,10 @@ class CreateEventService
             'organization_address' => null,
             'invoice_tax_details' => null,
         ]);
+    }
+
+    private function createDefaultProductCategory(EventDomainObject $event): void
+    {
+        $this->createProductCategoryService->createDefaultProductCategory($event);
     }
 }

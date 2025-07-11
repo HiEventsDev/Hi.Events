@@ -1,3 +1,4 @@
+import React from 'react';
 import {useGetEvent} from "../../../../queries/useGetEvent.ts";
 import {useParams} from "react-router";
 import {PageTitle} from "../../../common/PageTitle";
@@ -11,9 +12,10 @@ import classes from "./EventDashboard.module.scss";
 import {useGetEventStats} from "../../../../queries/useGetEventStats.ts";
 import {formatCurrency} from "../../../../utilites/currency.ts";
 import {formatDate} from "../../../../utilites/dates.ts";
-import {Button, Skeleton} from "@mantine/core";
-import {useMediaQuery} from "@mantine/hooks";
-import {IconX} from "@tabler/icons-react";
+import {Button, Group, Skeleton} from "@mantine/core";
+import {useDisclosure, useMediaQuery} from "@mantine/hooks";
+import {IconShare, IconX} from "@tabler/icons-react";
+import {ShareModal} from "../../../modals/ShareModal";
 import {useGetAccount} from "../../../../queries/useGetAccount.ts";
 import {useUpdateEventStatus} from "../../../../mutations/useUpdateEventStatus.ts";
 import {confirmationDialog} from "../../../../utilites/confirmationDialog.tsx";
@@ -37,10 +39,10 @@ export const EventDashboard = () => {
     const event = eventQuery?.data;
     const eventStatsQuery = useGetEventStats(eventId);
     const {data: eventStats} = eventStatsQuery;
+    const [opened, {open, close}] = useDisclosure(false);
     const isMobile = useMediaQuery('(max-width: 768px)');
     const {data: account, isFetched: accountIsFetched} = useGetAccount();
     const statusToggleMutation = useUpdateEventStatus();
-
     const [isChecklistVisible, setIsChecklistVisible] = useState(true);
     const [isMounted, setIsMounted] = useState(false);
 
@@ -63,7 +65,6 @@ export const EventDashboard = () => {
         const message = event?.status === 'LIVE'
             ? t`Are you sure you want to make this event draft? This will make the event invisible to the public`
             : t`Are you sure you want to make this event public? This will make the event visible to the public`;
-
         confirmationDialog(message, () => {
             statusToggleMutation.mutate({
                 eventId,
@@ -90,19 +91,31 @@ export const EventDashboard = () => {
 
     return (
         <PageBody>
-            <PageTitle style={{marginBottom: 0}}>
-                {!isMobile && (
-                    <Trans>
-                        Welcome back{me?.first_name && ', ' + me?.first_name} 👋
-                    </Trans>
+            <Group justify="space-between" align="center" mb={'5px'}>
+                <PageTitle style={{marginBottom: 0}}>
+                    {!isMobile && (
+                        <Trans>
+                            Welcome back{me?.first_name && ', ' + me?.first_name} 👋
+                        </Trans>
+                    )}
+                    {isMobile && (
+                        <Trans>
+                            Hi {me?.first_name && me?.first_name} 👋
+                        </Trans>
+                    )}
+                </PageTitle>
+                {event && (
+                    <>
+                        <Button
+                            onClick={open}
+                            variant="transparent"
+                            leftSection={<IconShare size={16}/>}>
+                            {t`Share Event`}
+                        </Button>
+                        {event && <ShareModal event={event} opened={opened} onClose={close}/>}
+                    </>
                 )}
-
-                {isMobile && (
-                    <Trans>
-                        Hi {me?.first_name && me?.first_name} 👋
-                    </Trans>
-                )}
-            </PageTitle>
+            </Group>
 
             {!event && <DashBoardSkeleton/>}
 
@@ -234,7 +247,7 @@ export const EventDashboard = () => {
                         legendProps={{verticalAlign: 'bottom', height: 50}}
 
                         series={[
-                            {name: 'orders_created', color: 'blue.6', label: t`Completed Orders`},
+                            {name: 'orders_created', color: 'blue.6', label: t`Orders Created`},
                             {name: 'products_sold', color: 'blue.2', label: t`Products Sold`},
                             {name: 'attendees_registered', color: 'blue.4', label: t`Attendees Registered`},
                         ]}
