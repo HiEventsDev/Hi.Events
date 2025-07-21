@@ -1,18 +1,18 @@
-import classes from './WidgetEditor.module.scss';
+import { t, Trans } from "@lingui/macro";
+import { ColorInput, Group, NumberInput, Switch, Tabs, Textarea, TextInput } from "@mantine/core";
+import { matches, useForm } from "@mantine/form";
+import { IconInfoCircle } from "@tabler/icons-react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router";
+import { useGetEvent } from "../../../queries/useGetEvent.ts";
+import { useGetEventSettings } from "../../../queries/useGetEventSettings.ts";
+import { Event } from '../../../types.ts';
 import SelectProducts from "../../routes/product-widget/SelectProducts";
-import {ColorInput, Group, NumberInput, Switch, Tabs, Textarea, TextInput} from "@mantine/core";
-import {t, Trans} from "@lingui/macro";
-import {matches, useForm} from "@mantine/form";
-import {useEffect, useState} from "react";
-import {CopyButton} from "../CopyButton";
-import {useParams} from "react-router";
-import {IconInfoCircle} from "@tabler/icons-react";
-import {useGetEventSettings} from "../../../queries/useGetEventSettings.ts";
-import {Popover} from "../Popover";
-import {LoadingMask} from '../LoadingMask';
-import {Event} from '../../../types.ts';
-import {useGetEvent} from "../../../queries/useGetEvent.ts";
-import {Card} from "../Card";
+import { Card } from "../Card";
+import { CopyButton } from "../CopyButton";
+import { LoadingMask } from '../LoadingMask';
+import { Popover } from "../Popover";
+import classes from './WidgetEditor.module.scss';
 
 export const WidgetEditor = () => {
     const {eventId} = useParams();
@@ -46,7 +46,7 @@ export const WidgetEditor = () => {
     const [reactUsageCode, setReactUsageCode] = useState<string>("");
     const currentLocation = typeof window !== "undefined" ? window?.location : undefined;
     const embedUrl = `${currentLocation?.protocol}//${currentLocation?.host}/widget.js`;
-    const embedScript = `<script async src="${embedUrl}"></script>`;
+    const embedScript = `<script id="hievent-widget-script" async src="${embedUrl}"></script>`;
 
     useEffect(() => {
         setHtmlEmbedCode(
