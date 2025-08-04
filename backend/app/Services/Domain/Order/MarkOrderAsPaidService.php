@@ -22,6 +22,7 @@ use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Events\OrderStatusChangedEvent;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Repository\Eloquent\Value\Relationship;
+use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\InvoiceRepositoryInterface;
@@ -38,6 +39,7 @@ class MarkOrderAsPaidService
     public function __construct(
         private readonly OrderRepositoryInterface              $orderRepository,
         private readonly DatabaseManager                       $databaseManager,
+        private readonly AffiliateRepositoryInterface          $affiliateRepository,
         private readonly InvoiceRepositoryInterface            $invoiceRepository,
         private readonly AttendeeRepositoryInterface           $attendeeRepository,
         private readonly DomainEventDispatcherService          $domainEventDispatcherService,
@@ -84,6 +86,14 @@ class MarkOrderAsPaidService
             $updatedOrder = $this->orderRepository
                 ->loadRelation(OrderItemDomainObject::class)
                 ->findById($orderId);
+
+            // Update affiliate sales if this order has an affiliate
+            if ($updatedOrder->getAffiliateId()) {
+                $this->affiliateRepository->incrementSales(
+                    $updatedOrder->getAffiliateId(),
+                    $updatedOrder->getTotalGross()
+                );
+            }
 
             $this->updateAttendeeStatuses($updatedOrder);
 

@@ -9,7 +9,7 @@ class ResourceConflictException extends Exception
     public function __construct(
         string $message = 'Resource conflict',
         int $code = 409,
-        Exception $previous = null
+        ?Exception $previous = null
     ) {
         parent::__construct($message, $code, $previous);
     }

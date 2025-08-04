@@ -27,7 +27,7 @@ class GetQuestionsPublicAction extends BaseAction
                 QuestionDomainObjectAbstract::EVENT_ID => $eventId,
                 QuestionDomainObjectAbstract::IS_HIDDEN => false,
             ])
-            ->sortBy('id');
+            ->sortBy(fn(QuestionDomainObjectAbstract $question) => $question->getOrder());
 
         return $this->resourceResponse(QuestionResourcePublic::class, $questions);
     }

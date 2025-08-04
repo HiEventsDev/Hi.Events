@@ -10,6 +10,7 @@ use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Exceptions\ResourceConflictException;
+use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductPriceRepositoryInterface;
@@ -21,7 +22,6 @@ use HiEvents\Services\Application\Handlers\Order\DTO\CompleteOrderProductDataDTO
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
-use HiEvents\Services\Infrastructure\DomainEvents\Events\BaseDomainEvent;
 use HiEvents\Services\Infrastructure\DomainEvents\Events\OrderEvent;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Collection;
@@ -43,6 +43,7 @@ class CompleteOrderHandlerTest extends TestCase
     private ProductPriceRepositoryInterface|MockInterface $productPriceRepository;
     private CompleteOrderHandler $completeOrderHandler;
     private DomainEventDispatcherService $domainEventDispatcherService;
+    private AffiliateRepositoryInterface|MockInterface $affiliateRepository;
 
     protected function setUp(): void
     {
@@ -58,9 +59,11 @@ class CompleteOrderHandlerTest extends TestCase
         $this->productQuantityUpdateService = Mockery::mock(ProductQuantityUpdateService::class);
         $this->productPriceRepository = Mockery::mock(ProductPriceRepositoryInterface::class);
         $this->domainEventDispatcherService = Mockery::mock(DomainEventDispatcherService::class);
+        $this->affiliateRepository = Mockery::mock(AffiliateRepositoryInterface::class);
 
         $this->completeOrderHandler = new CompleteOrderHandler(
             $this->orderRepository,
+            $this->affiliateRepository,
             $this->attendeeRepository,
             $this->questionAnswersRepository,
             $this->productQuantityUpdateService,

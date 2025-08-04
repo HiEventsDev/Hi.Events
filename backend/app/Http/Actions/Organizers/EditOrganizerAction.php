@@ -32,7 +32,7 @@ class EditOrganizerAction extends BaseAction
         );
 
         $organizer = $this->editOrganizerHandler->handle(
-            organizerData: EditOrganizerDTO::fromArray($organizerData),
+            organizerData: EditOrganizerDTO::from($organizerData),
         );
 
         return $this->resourceResponse(

@@ -4,13 +4,54 @@
   text-transform: uppercase;
   font-size: 1.1rem;
   font-weight: 600;
-  color: var(--homepage-secondary-color, var(--tk-color-black));
+  color: var(--homepage-secondary-color, var(--hi-color-black));
   display: flex;
   align-items: center;
   justify-content: space-between;
 
+  .organizer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-height: 40px;
+
+    .organizerLogo {
+      width: 30px;
+      height: 30px;
+      overflow: hidden;
+      margin-right: 8px;
+      display: flex;
+      vertical-align: middle;
+      align-items: center;
+
+      img {
+        width: 100%;
+        height: auto;
+        display: block;
+        object-fit: contain;
+      }
+    }
+
+    .organizerName {
+      margin: 0;
+      color: var(--homepage-secondary-color, #000);
+      font-weight: 600;
+      text-decoration: none;
+      font-size: 1em;
+
+      a {
+        color: inherit;
+        font-weight: 600;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+
   .shareButtons button {
-    color: var(--homepage-secondary-color, var(--tk-color-black));
+    color: var(--homepage-secondary-color, var(--hi-color-black));
   }
 
   @include mixins.respond-below(sm) {
@@ -35,6 +76,18 @@
     margin-bottom: 10px;
     flex-direction: column;
 
+    &:last-child {
+      margin-bottom: 0;
+
+      :first-child {
+        margin-bottom: 0;
+
+        .detail {
+          margin-bottom: 0;
+        }
+      }
+    }
+
     .details {
       display: flex;
       margin-bottom: 10px;
@@ -42,7 +95,7 @@
       svg {
         place-self: flex-start;
         margin-right: 10px;
-        color: var(--homepage-secondary-color, var(--tk-primary));
+        color: var(--homepage-secondary-color, var(--hi-primary));
         min-width: 20px;
       }
     }
@@ -67,6 +120,7 @@
 
   .viewOnGoogleMaps {
     padding: 0;
+    color: var(--homepage-secondary-color);
 
     svg {
       width: 15px !important;

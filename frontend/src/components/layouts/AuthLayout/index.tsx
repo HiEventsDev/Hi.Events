@@ -17,6 +17,8 @@ import {
     IconWebhook
 } from '@tabler/icons-react';
 import {useMemo} from "react";
+import { getConfig } from "../../../utilites/config.ts";
+import {isHiEvents} from "../../../utilites/helpers.ts";
 
 const RegisterFeatures = () => (
     <div className={classes.featureGrid}>
@@ -128,7 +130,7 @@ const AuthLayout = () => {
                 <div className={classes.leftPanel}>
                     <main className={classes.container}>
                         <div className={classes.logo}>
-                            <img src={'/logo-dark.svg'} alt={t`hi.events logo`}/>
+                            <img src={getConfig("VITE_APP_LOGO_DARK", "/logo-dark.svg")} alt={t`${getConfig("VITE_APP_NAME", "Hi.Events")} logo`}/>
                         </div>
                         <div className={classes.wrapper}>
                             <Outlet/>
@@ -147,7 +149,7 @@ const AuthLayout = () => {
                                 * If you wish to remove this notice, a commercial license is available at: https://hi.events/licensing
                                 */
                             }
-                            <PoweredByFooter/>
+                            {!isHiEvents() && <PoweredByFooter/>}
                             <div className={classes.languageSwitcher}>
                                 <LanguageSwitcher/>
                             </div>

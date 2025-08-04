@@ -11,6 +11,7 @@ abstract class ImageDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     final public const SINGULAR_NAME = 'image';
     final public const PLURAL_NAME = 'images';
     final public const ID = 'id';
+    final public const ACCOUNT_ID = 'account_id';
     final public const ENTITY_ID = 'entity_id';
     final public const ENTITY_TYPE = 'entity_type';
     final public const TYPE = 'type';
@@ -24,6 +25,7 @@ abstract class ImageDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     final public const DELETED_AT = 'deleted_at';
 
     protected int $id;
+    protected ?int $account_id = null;
     protected ?int $entity_id = null;
     protected ?string $entity_type = null;
     protected ?string $type = null;
@@ -40,6 +42,7 @@ abstract class ImageDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     {
         return [
                     'id' => $this->id ?? null,
+                    'account_id' => $this->account_id ?? null,
                     'entity_id' => $this->entity_id ?? null,
                     'entity_type' => $this->entity_type ?? null,
                     'type' => $this->type ?? null,
@@ -63,6 +66,17 @@ abstract class ImageDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     public function getId(): int
     {
         return $this->id;
+    }
+
+    public function setAccountId(?int $account_id): self
+    {
+        $this->account_id = $account_id;
+        return $this;
+    }
+
+    public function getAccountId(): ?int
+    {
+        return $this->account_id;
     }
 
     public function setEntityId(?int $entity_id): self

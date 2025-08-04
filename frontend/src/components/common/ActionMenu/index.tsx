@@ -32,7 +32,7 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({
                                                           target = <DefaultTarget/>
                                                       }) => {
     return (
-        <Group wrap={'nowrap'} gap={0} justify={'flex-end'}>
+        <>
             <Menu shadow="md" width={200}>
                 <Menu.Target>
                     <div style={{cursor: 'pointer'}}>
@@ -59,6 +59,6 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({
                     ))}
                 </Menu.Dropdown>
             </Menu>
-        </Group>
+        </>
     );
 };

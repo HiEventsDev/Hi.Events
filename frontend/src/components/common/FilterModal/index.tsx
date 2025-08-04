@@ -215,7 +215,7 @@ export const FilterModal: React.FC<FilterModalProps> = ({
         <>
             <Button
                 variant={hasActiveFilters ? 'outline' : 'light'}
-                color={hasActiveFilters ? 'purple' : 'gray'}
+                color={hasActiveFilters ? 'primary' : 'gray'}
                 leftSection={<IconFilter size={16}/>}
                 onClick={open}
                 size="sm"

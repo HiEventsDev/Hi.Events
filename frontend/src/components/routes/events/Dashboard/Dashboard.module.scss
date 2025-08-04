@@ -1,6 +1,244 @@
+@use "../../../../styles/mixins.scss";
 
 .eventsContainer {
+  margin-top: 0;
   margin-bottom: 20px;
+}
+
+// Page Header - Integrated design
+.pageHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-bottom: 1.2rem;
+  margin-top: 1.2rem;
+  
+  @include mixins.respond-below(md) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+}
+
+.headerContent {
+  flex: 1;
+}
+
+.pageTitle {
+  font-size: 2rem;
+  font-weight: 800;
+  margin: 0 0 0.375rem;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  
+  @include mixins.respond-below(sm) {
+    font-size: 1.5rem;
+  }
+}
+
+.welcomeMessage {
+  font-size: 0.9375rem;
+  color: var(--mantine-color-gray-6);
+  margin: 0;
+  line-height: 1.5;
+  
+  @include mixins.respond-below(sm) {
+    font-size: 0.875rem;
+  }
+}
+
+// Organizer Button - Compact and integrated
+.organizerButton {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--mantine-color-gray-0);
+  border: 1px solid var(--mantine-color-gray-3);
+  border-radius: 12px;
+  padding: 0.625rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  margin-top: 0.25rem; // Slight offset to align better
+  
+  @include mixins.respond-below(md) {
+    align-self: flex-start;
+    margin-top: 0;
+  }
+  
+  &:hover {
+    background: white;
+    border-color: var(--mantine-color-gray-4);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    
+    .arrowIcon {
+      transform: translateX(2px);
+    }
+  }
+  
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.organizerLogo {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: var(--mantine-color-gray-1);
+  
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.logoPlaceholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--mantine-color-gray-1);
+  color: var(--mantine-color-gray-6);
+}
+
+.organizerName {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--mantine-color-dark-9);
+}
+
+.organizerCount {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--mantine-color-dark-9);
+}
+
+.arrowIcon {
+  color: var(--mantine-color-gray-5);
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+// Multiple organizers - stacked logos
+.organizerLogos {
+  display: flex;
+  align-items: center;
+}
+
+.miniLogo {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: white;
+  border: 2px solid white;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  margin-left: -8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--mantine-color-gray-7);
+  background: var(--mantine-color-gray-1);
+  
+  &:first-child {
+    margin-left: 0;
+  }
+  
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+// Organizer Modal Styles
+.organizerModalContent {
+  padding: 0.5rem 0;
+}
+
+.modalDescription {
+  color: var(--mantine-color-gray-6);
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.organizerGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  
+  @include mixins.respond-below(sm) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.organizerModalCard {
+  background: var(--mantine-color-gray-0);
+  border: 2px solid transparent;
+  border-radius: 16px;
+  padding: 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background: white;
+    border-color: rgba(138, 110, 255, 0.3);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(138, 110, 255, 0.1);
+  }
+  
+  &:active {
+    transform: translateY(-2px);
+  }
+}
+
+.organizerModalLogo {
+  width: 80px;
+  height: 80px;
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 0 auto 1rem;
+  background: white;
+  
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.logoModalPlaceholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f0f0f5 0%, #e8e8f0 100%);
+  color: var(--mantine-color-gray-6);
+}
+
+.organizerModalName {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--mantine-color-dark-9);
+  margin: 0 0 0.5rem;
+  @include mixins.ellipsis();
+}
+
+.organizerModalEvents {
+  font-size: 0.875rem;
+  color: var(--mantine-color-gray-6);
+  margin: 0;
 }
 
 .card {

@@ -2,6 +2,7 @@
 
 namespace HiEvents\Validators;
 
+use HiEvents\DomainObjects\Enums\EventCategory;
 use Illuminate\Validation\Rule;
 
 trait EventRules
@@ -14,6 +15,7 @@ trait EventRules
             'timezone' => ['timezone:all'],
             'organizer_id' => ['required', 'integer'],
             'currency' => [Rule::in(array_values($currencies))],
+            'category' => ['nullable', Rule::in(EventCategory::valuesArray())],
             // todo - Revisit the 50k character limit
             'attributes.*.name' => ['string', 'min:1', 'max:50', 'required'],
             'attributes.*.value' => ['min:1', 'max:1000', 'required'],

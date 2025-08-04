@@ -7,7 +7,7 @@ import Image from '@tiptap/extension-image';
 import TextStyle from '@tiptap/extension-text-style';
 import Color from '@tiptap/extension-color';
 import React, {useEffect, useState} from "react";
-import {InputDescription, InputError, InputLabel} from "@mantine/core";
+import {InputDescription, InputError, InputLabel, MantineFontSize} from "@mantine/core";
 import classes from "./Editor.module.scss";
 import classNames from "classnames";
 import {Trans} from "@lingui/macro";
@@ -24,6 +24,7 @@ interface EditorProps {
     error?: string;
     editorType?: 'full' | 'simple';
     maxLength?: number;
+    size?: MantineFontSize;
 }
 
 export const Editor = ({
@@ -36,6 +37,7 @@ export const Editor = ({
                            description = '',
                            editorType = 'full',
                            maxLength,
+                           size = 'md',
                        }: EditorProps) => {
     const [charError, setCharError] = useState<string | null | React.ReactNode>(null);
 
@@ -81,14 +83,15 @@ export const Editor = ({
 
     return (
         <div className={classNames([classes.inputWrapper, className])}>
-            {label && <InputLabel required={required} onClick={() => editor?.commands.focus()}>{label}</InputLabel>}
+            {label && <InputLabel size={size} required={required}
+                                  onClick={() => editor?.commands.focus()}>{label}</InputLabel>}
             {description && (
                 <div style={{marginBottom: 5}}>
-                    <InputDescription>{description}</InputDescription>
+                    <InputDescription size={size}>{description}</InputDescription>
                 </div>
             )}
-            <RichTextEditor editor={editor}>
-                <RichTextEditor.Toolbar>
+            <RichTextEditor variant={'subtle'} editor={editor}>
+                <RichTextEditor.Toolbar sticky className={classes.toolbar}>
                     {editorType === 'full' && (
                         <>
                             <RichTextEditor.ControlsGroup>
@@ -186,6 +189,9 @@ export const Editor = ({
                             <RichTextEditor.ControlsGroup>
                                 <RichTextEditor.BulletList/>
                                 <RichTextEditor.OrderedList/>
+                            </RichTextEditor.ControlsGroup>
+                            <RichTextEditor.ControlsGroup>
+                                <InsertImageControl/>
                             </RichTextEditor.ControlsGroup>
                         </>
                     )}

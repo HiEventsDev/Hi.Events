@@ -29,6 +29,7 @@ abstract class EventDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     final public const LOCATION = 'location';
     final public const SHORT_ID = 'short_id';
     final public const TICKET_QUANTITY_AVAILABLE = 'ticket_quantity_available';
+    final public const CATEGORY = 'category';
 
     protected int $id;
     protected int $account_id;
@@ -49,6 +50,7 @@ abstract class EventDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     protected ?string $location = null;
     protected string $short_id;
     protected ?int $ticket_quantity_available = null;
+    protected string $category = 'OTHER';
 
     public function toArray(): array
     {
@@ -72,6 +74,7 @@ abstract class EventDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
                     'location' => $this->location ?? null,
                     'short_id' => $this->short_id ?? null,
                     'ticket_quantity_available' => $this->ticket_quantity_available ?? null,
+                    'category' => $this->category ?? null,
                 ];
     }
 
@@ -282,5 +285,16 @@ abstract class EventDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     public function getTicketQuantityAvailable(): ?int
     {
         return $this->ticket_quantity_available;
+    }
+
+    public function setCategory(string $category): self
+    {
+        $this->category = $category;
+        return $this;
+    }
+
+    public function getCategory(): string
+    {
+        return $this->category;
     }
 }

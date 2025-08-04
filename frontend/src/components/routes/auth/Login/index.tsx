@@ -66,7 +66,7 @@ const Login = () => {
                 <form onSubmit={form.onSubmit((values) => loginUser(values))}>
                     <TextInput {...form.getInputProps('email')}
                                label={t`Email`}
-                               placeholder="hello@hi.events"
+                               placeholder="hello@example.com"
                                required
                     />
                     <PasswordInput {...form.getInputProps('password')}
@@ -80,7 +80,7 @@ const Login = () => {
                             {t`Forgot password?`}
                         </NavLink>
                     </p>
-                    <Button color={'var(--tk-pink)'} type="submit" fullWidth loading={isPending} disabled={isPending}>
+                    <Button color={'var(--hi-pink)'} type="submit" fullWidth loading={isPending} disabled={isPending}>
                         {isPending ? t`Logging in` : t`Log in`}
                     </Button>
                 </form>

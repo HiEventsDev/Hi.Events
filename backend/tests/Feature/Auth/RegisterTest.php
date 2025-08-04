@@ -2,21 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Tests\Feature;
+namespace Tests\Feature\Auth;
 
 use HiEvents\Models\Account;
 use HiEvents\Models\AccountConfiguration;
 use HiEvents\Models\User;
-use Illuminate\Foundation\Testing\DatabaseTruncation;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
 use Tests\TestCase;
 
 class RegisterTest extends TestCase
 {
-    use DatabaseTruncation;
+    use RefreshDatabase;
 
-    private const API_PREFIX = '';
-    private const REGISTER_ROUTE = self::API_PREFIX . '/auth/register';
+    private const REGISTER_ROUTE = '/auth/register';
 
     public function setUp(): void
     {
@@ -25,7 +24,10 @@ class RegisterTest extends TestCase
             'id' => 1,
             'name' => 'Default',
             'is_system_default' => true,
-            'application_fees' => json_encode(['percentage' => 1.5, 'fixed' => 0]),
+            'application_fees' => [
+                'percentage' => 1.5,
+                'fixed' => 0,
+            ],
         ]);
     }
 
@@ -114,8 +116,9 @@ class RegisterTest extends TestCase
         $response = $this->post(self::REGISTER_ROUTE, $data);
         $response->assertStatus(201);
 
-        $this->refreshApplication();
         Config::set('app.disable_registration', false);
+
+        auth()->logout();
 
         $response2 = $this->post(self::REGISTER_ROUTE, $data, ['Accept' => 'application/json']);
         $response2->assertJsonValidationErrors(['email']);
