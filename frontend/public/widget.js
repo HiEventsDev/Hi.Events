@@ -7,7 +7,10 @@
 
        let scriptOrigin;
         try {
-            const script = document.getElementById('hievent-widget-script');
+let script = document.currentScript;
+if (!script) {
+   script = document.getElementById('hievents-widget-script');
+}```
             if (!script || !script.src) throw new Error('HiEvent widget error: Invalid script URL');
             scriptOrigin = new URL(script.src).origin;
         } catch (e) {
