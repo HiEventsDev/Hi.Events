@@ -46,7 +46,7 @@ export const WidgetEditor = () => {
     const [reactUsageCode, setReactUsageCode] = useState<string>("");
     const currentLocation = typeof window !== "undefined" ? window?.location : undefined;
     const embedUrl = `${currentLocation?.protocol}//${currentLocation?.host}/widget.js`;
-    const embedScript = `<script id="hievent-widget-script" async src="${embedUrl}"></script>`;
+    const embedScript = `<script id="hievents-widget-script" async src="${embedUrl}"></script>`;
 
     useEffect(() => {
         setHtmlEmbedCode(
