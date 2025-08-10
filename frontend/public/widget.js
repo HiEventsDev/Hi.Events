@@ -7,11 +7,11 @@
 
        let scriptOrigin;
         try {
-let script = document.currentScript;
-if (!script) {
-   script = document.getElementById('hievents-widget-script');
-}```
-            if (!script || !script.src) throw new Error('HiEvent widget error: Invalid script URL');
+            let script = document.currentScript;
+            if (!script) {
+               script = document.getElementById('hievents-widget-script');
+            }
+            if (!script?.src) throw new Error('HiEvent widget error: Invalid script URL');
             scriptOrigin = new URL(script.src).origin;
         } catch (e) {
             console.error('HiEvent widget error: Invalid script URL');
