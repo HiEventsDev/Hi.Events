@@ -10,6 +10,8 @@ export const LanguageSwitcher = () => {
     // Ideally these would be in the locales.ts file, but when they're there they don't translate
     const getLocaleName = (locale: SupportedLocales): string => {
         switch (locale) {
+            case "hu":
+                return t`Hungarian`;
             case "de":
                 return t`German`;
             case "en":
