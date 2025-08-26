@@ -18,6 +18,11 @@ services:
         fromDatabase:
           name: sandbox-hi-events-db
           property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: sandbox-hi-events-redis
+          property: connectionString
       - key: FILESYSTEM_PRIVATE_DISK
         sync: false
       - key: FILESYSTEM_PUBLIC_DISK
@@ -76,6 +81,15 @@ services:
     dockerContext: .
     dockerfilePath: ./Dockerfile.all-in-one
     autoDeployTrigger: commit
+
+  - type: redis
+    name: sandbox-hi-events-redis
+    plan: free
+    region: oregon
+    ipAllowList:
+      - source: 64.226.131.98/32
+        description: P81 Production network IP
+
 databases:
   - name: sandbox-hi-events-db
     databaseName: hi_events_db_7bs9
@@ -85,6 +99,4 @@ databases:
     ipAllowList:
       - source: 64.226.131.98/32
         description: P81 Production network IP
-      - source: 149.28.93.26/32
-        description: P81 Technology network IP
     postgresMajorVersion: "17"
