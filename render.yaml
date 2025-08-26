@@ -26,9 +26,9 @@ services:
           name: sandbox-hi-events-redis
           property: connectionString
       - key: FILESYSTEM_PRIVATE_DISK
-        sync: false
+        value: local
       - key: FILESYSTEM_PUBLIC_DISK
-        sync: false
+        value: public
       - key: MAIL_FROM_NAME
         sync: false
       - key: MAIL_FROM_ADDRESS
@@ -50,21 +50,21 @@ services:
       - key: CORS_ALLOWED_ORIGINS
         value: https://demo.helloteak.com,https://sandbox-hi-events-all-in-one.onrender.com
       - key: APP_SAAS_STRIPE_APPLICATION_FEE_FIXED
-        sync: false
+        value: 0
       - key: APP_SAAS_STRIPE_APPLICATION_FEE_PERCENT
-        sync: false
+        value: 0
       - key: APP_SAAS_MODE_ENABLED
-        sync: false
+        value: "false"
       - key: APP_DISABLE_REGISTRATION
-        sync: false
+        value: "false"
       - key: APP_FRONTEND_URL
-        sync: false
+        value: https://demo.helloteak.com
       - key: APP_CDN_URL
         sync: false
       - key: QUEUE_CONNECTION
-        sync: false
+        value: redis
       - key: LOG_CHANNEL
-        sync: false
+        value: stderr
       - key: VITE_APP_NAME
         value: Hi.Events Demo
       - key: VITE_STRIPE_PUBLISHABLE_KEY
@@ -133,21 +133,21 @@ services:
       - key: CORS_ALLOWED_ORIGINS
         value: https://demo.uat.helloteak.com,https://uat-hi-events-all-in-one.onrender.com
       - key: APP_SAAS_STRIPE_APPLICATION_FEE_FIXED
-        sync: false
+        value: 0
       - key: APP_SAAS_STRIPE_APPLICATION_FEE_PERCENT
-        sync: false
+        value: 0
       - key: APP_SAAS_MODE_ENABLED
-        sync: false
+        value: "false"
       - key: APP_DISABLE_REGISTRATION
-        sync: false
+        value: "false"
       - key: APP_FRONTEND_URL
-        sync: false
+        value: https://demo.uat.helloteak.com
       - key: APP_CDN_URL
         sync: false
       - key: QUEUE_CONNECTION
-        sync: false
+        value: redis
       - key: LOG_CHANNEL
-        sync: false
+        value: stderr
       - key: VITE_APP_NAME
         value: UAT Hi.Events Demo
       - key: VITE_STRIPE_PUBLISHABLE_KEY
