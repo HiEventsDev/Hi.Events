@@ -7,6 +7,8 @@ services:
     repo: https://github.com/TicketGuardian/Hi.Events
     branch: feat/render.com
     plan: starter
+    domains:
+      - demo.helloteak.com
     envVars:
       - key: STRIPE_WEBHOOK_SECRET
         sync: false
@@ -46,7 +48,7 @@ services:
       - key: MAIL_MAILER
         sync: false
       - key: CORS_ALLOWED_ORIGINS
-        sync: false
+        value: https://demo.helloteak.com,https://sandbox-hi-events-all-in-one.onrender.com
       - key: APP_SAAS_STRIPE_APPLICATION_FEE_FIXED
         sync: false
       - key: APP_SAAS_STRIPE_APPLICATION_FEE_PERCENT
@@ -88,6 +90,8 @@ services:
     repo: https://github.com/TicketGuardian/Hi.Events
     branch: feat/render.com
     plan: starter
+    domains:
+      - demo.uat.helloteak.com
     envVars:
       - key: STRIPE_WEBHOOK_SECRET
         sync: false
@@ -127,7 +131,7 @@ services:
       - key: MAIL_MAILER
         sync: false
       - key: CORS_ALLOWED_ORIGINS
-        sync: false
+        value: https://demo.uat.helloteak.com,https://uat-hi-events-all-in-one.onrender.com
       - key: APP_SAAS_STRIPE_APPLICATION_FEE_FIXED
         sync: false
       - key: APP_SAAS_STRIPE_APPLICATION_FEE_PERCENT
