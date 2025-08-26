@@ -2,7 +2,7 @@
 version: "1"
 services:
   - type: web
-    name: Hi.Events
+    name: hi.events-all-in-one
     runtime: docker
     repo: https://github.com/TicketGuardian/Hi.Events
     branch: feat/render.com
@@ -83,6 +83,6 @@ databases:
     plan: free
     region: oregon
     ipAllowList:
-      - source: 0.0.0.0/0
+      - source: 64.226.131.98/32
         description: everywhere
     postgresMajorVersion: "17"
