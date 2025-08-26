@@ -1,0 +1,88 @@
+# Exported from Render on 2025-08-25T23:55:40Z
+version: "1"
+services:
+  - type: web
+    name: Hi.Events
+    runtime: docker
+    repo: https://github.com/TicketGuardian/Hi.Events
+    branch: feat/render.com
+    plan: free
+    envVars:
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_PUBLIC_KEY
+        sync: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: hi-events-db
+          property: connectionString
+      - key: FILESYSTEM_PRIVATE_DISK
+        sync: false
+      - key: FILESYSTEM_PUBLIC_DISK
+        sync: false
+      - key: MAIL_FROM_NAME
+        sync: false
+      - key: MAIL_FROM_ADDRESS
+        sync: false
+      - key: MAIL_ENCRYPTION
+        sync: false
+      - key: MAIL_PASSWORD
+        sync: false
+      - key: MAIL_USERNAME
+        sync: false
+      - key: MAIL_PORT
+        sync: false
+      - key: MAIL_HOST
+        sync: false
+      - key: MAIL_DRIVER
+        sync: false
+      - key: MAIL_MAILER
+        sync: false
+      - key: CORS_ALLOWED_ORIGINS
+        sync: false
+      - key: APP_SAAS_STRIPE_APPLICATION_FEE_FIXED
+        sync: false
+      - key: APP_SAAS_STRIPE_APPLICATION_FEE_PERCENT
+        sync: false
+      - key: APP_SAAS_MODE_ENABLED
+        sync: false
+      - key: APP_DISABLE_REGISTRATION
+        sync: false
+      - key: APP_FRONTEND_URL
+        sync: false
+      - key: APP_CDN_URL
+        sync: false
+      - key: QUEUE_CONNECTION
+        sync: false
+      - key: LOG_CHANNEL
+        sync: false
+      - key: VITE_APP_NAME
+        sync: false
+      - key: VITE_STRIPE_PUBLISHABLE_KEY
+        sync: false
+      - key: VITE_API_URL_SERVER
+        sync: false
+      - key: VITE_API_URL_CLIENT
+        sync: false
+      - key: VITE_FRONTEND_URL
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: APP_KEY
+        sync: false
+    region: oregon
+    dockerContext: .
+    dockerfilePath: ./Dockerfile.all-in-one
+    autoDeployTrigger: commit
+databases:
+  - name: hi-events-db
+    databaseName: hi_events_db_7bs9
+    user: hi_events_db_7bs9_user
+    plan: free
+    region: oregon
+    ipAllowList:
+      - source: 0.0.0.0/0
+        description: everywhere
+    postgresMajorVersion: "17"
