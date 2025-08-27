@@ -1,0 +1,209 @@
+# Exported from Render on 2025-08-25T23:55:40Z
+version: "1"
+services:
+  - type: web
+    name: sandbox-hi.events-all-in-one
+    runtime: docker
+    repo: https://github.com/TicketGuardian/Hi.Events
+    branch: feat/render.com
+    plan: starter
+    domains:
+      - demo.helloteak.com
+    envVars:
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_PUBLIC_KEY
+        sync: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: sandbox-hi-events-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: sandbox-hi-events-redis
+          property: connectionString
+      - key: FILESYSTEM_PRIVATE_DISK
+        value: local
+      - key: FILESYSTEM_PUBLIC_DISK
+        value: public
+      - key: MAIL_FROM_NAME
+        sync: false
+      - key: MAIL_FROM_ADDRESS
+        sync: false
+      - key: MAIL_ENCRYPTION
+        sync: false
+      - key: MAIL_PASSWORD
+        sync: false
+      - key: MAIL_USERNAME
+        sync: false
+      - key: MAIL_PORT
+        sync: false
+      - key: MAIL_HOST
+        sync: false
+      - key: MAIL_DRIVER
+        sync: false
+      - key: MAIL_MAILER
+        sync: false
+      - key: CORS_ALLOWED_ORIGINS
+        value: https://demo.helloteak.com,https://sandbox-hi-events-all-in-one.onrender.com
+      - key: APP_SAAS_STRIPE_APPLICATION_FEE_FIXED
+        value: 0
+      - key: APP_SAAS_STRIPE_APPLICATION_FEE_PERCENT
+        value: 0
+      - key: APP_SAAS_MODE_ENABLED
+        value: "false"
+      - key: APP_DISABLE_REGISTRATION
+        value: "false"
+      - key: APP_FRONTEND_URL
+        value: https://demo.helloteak.com
+      - key: APP_CDN_URL
+        sync: false
+      - key: QUEUE_CONNECTION
+        value: redis
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: VITE_APP_NAME
+        value: Hi.Events Demo
+      - key: VITE_STRIPE_PUBLISHABLE_KEY
+        sync: false
+      - key: VITE_API_URL_SERVER
+        value: https://demo.helloteak.com/api
+      - key: VITE_API_URL_CLIENT
+        value: https://demo.helloteak.com/api
+      - key: VITE_FRONTEND_URL
+        value: https://demo.helloteak.com
+      - key: JWT_SECRET
+        sync: false
+      - key: APP_KEY
+        sync: false
+    region: oregon
+    dockerContext: .
+    dockerfilePath: ./Dockerfile.all-in-one
+    autoDeployTrigger: commit
+
+  - type: web
+    name: uat-hi.events-all-in-one
+    runtime: docker
+    repo: https://github.com/TicketGuardian/Hi.Events
+    branch: feat/render.com
+    plan: starter
+    domains:
+      - demo.uat.helloteak.com
+    envVars:
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_PUBLIC_KEY
+        sync: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: uat-hi-events-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: uat-hi-events-redis
+          property: connectionString
+      - key: FILESYSTEM_PRIVATE_DISK
+        sync: false
+      - key: FILESYSTEM_PUBLIC_DISK
+        sync: false
+      - key: MAIL_FROM_NAME
+        sync: false
+      - key: MAIL_FROM_ADDRESS
+        sync: false
+      - key: MAIL_ENCRYPTION
+        sync: false
+      - key: MAIL_PASSWORD
+        sync: false
+      - key: MAIL_USERNAME
+        sync: false
+      - key: MAIL_PORT
+        sync: false
+      - key: MAIL_HOST
+        sync: false
+      - key: MAIL_DRIVER
+        sync: false
+      - key: MAIL_MAILER
+        sync: false
+      - key: CORS_ALLOWED_ORIGINS
+        value: https://demo.uat.helloteak.com,https://uat-hi-events-all-in-one.onrender.com
+      - key: APP_SAAS_STRIPE_APPLICATION_FEE_FIXED
+        value: 0
+      - key: APP_SAAS_STRIPE_APPLICATION_FEE_PERCENT
+        value: 0
+      - key: APP_SAAS_MODE_ENABLED
+        value: "false"
+      - key: APP_DISABLE_REGISTRATION
+        value: "false"
+      - key: APP_FRONTEND_URL
+        value: https://demo.uat.helloteak.com
+      - key: APP_CDN_URL
+        sync: false
+      - key: QUEUE_CONNECTION
+        value: redis
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: VITE_APP_NAME
+        value: UAT Hi.Events Demo
+      - key: VITE_STRIPE_PUBLISHABLE_KEY
+        sync: false
+      - key: VITE_API_URL_SERVER
+        value: https://demo.uat.helloteak.com/api
+      - key: VITE_API_URL_CLIENT
+        value: https://demo.uat.helloteak.com/api
+      - key: VITE_FRONTEND_URL
+        value: https://demo.uat.helloteak.com
+      - key: JWT_SECRET
+        sync: false
+      - key: APP_KEY
+        sync: false
+    region: oregon
+    dockerContext: .
+    dockerfilePath: ./Dockerfile.all-in-one
+    autoDeployTrigger: commit
+
+  - type: redis
+    name: sandbox-hi-events-redis
+    plan: starter
+    region: oregon
+    ipAllowList:
+      - source: 64.226.131.98/32
+        description: P81 Production network IP
+
+  - type: redis
+    name: uat-hi-events-redis
+    plan: starter
+    region: oregon
+    ipAllowList:
+      - source: 64.226.131.98/32
+        description: P81 Production network IP
+      - source: 149.28.93.26/32
+        description: P81 Technology network IP
+
+databases:
+  - name: sandbox-hi-events-db
+    databaseName: hi_events_db_7bs9
+    user: hi_events_db_7bs9_user
+    plan: basic-1gb
+    region: oregon
+    ipAllowList:
+      - source: 64.226.131.98/32
+        description: P81 Production network IP
+    postgresMajorVersion: "17"
+
+  - name: uat-hi-events-db
+    databaseName: hi_events_db_uat
+    user: hi_events_db_uat_user
+    plan: basic-1gb
+    region: oregon
+    ipAllowList:
+      - source: 64.226.131.98/32
+        description: P81 Production network IP
+      - source: 149.28.93.26/32
+        description: P81 Technology network IP
+    postgresMajorVersion: "17"
