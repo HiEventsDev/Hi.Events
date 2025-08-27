@@ -28,15 +28,15 @@ use Stripe\Exception\ApiErrorException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Throwable;
 
-readonly class RefundOrderHandler
+class RefundOrderHandler
 {
     public function __construct(
-        private StripePaymentIntentRefundService $refundService,
-        private OrderRepositoryInterface         $orderRepository,
-        private EventRepositoryInterface         $eventRepository,
-        private Mailer                           $mailer,
-        private OrderCancelService               $orderCancelService,
-        private DatabaseManager                  $databaseManager,
+        private readonly StripePaymentIntentRefundService $refundService,
+        private readonly OrderRepositoryInterface         $orderRepository,
+        private readonly EventRepositoryInterface         $eventRepository,
+        private readonly Mailer                           $mailer,
+        private readonly OrderCancelService               $orderCancelService,
+        private readonly DatabaseManager                  $databaseManager,
     )
     {
     }
@@ -58,7 +58,10 @@ readonly class RefundOrderHandler
             ->findFirstWhere(['event_id' => $eventId, 'id' => $orderId]);
 
         if (!$order) {
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException(__('Order :id not found for event :eventId', [
+                'id' => $orderId,
+                'eventId' => $eventId,
+            ]));
         }
 
         return $order;
