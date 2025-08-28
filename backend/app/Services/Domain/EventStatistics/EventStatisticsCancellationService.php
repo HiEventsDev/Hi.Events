@@ -113,13 +113,13 @@ class EventStatisticsCancellationService
     public function decrementForCancelledAttendee(int $eventId, string $orderDate, int $attendeeCount = 1): void
     {
         $this->retrier->retry(
-            callableAction: function (int $attempt) use ($eventId, $orderDate, $attendeeCount): void {
-                $this->databaseManager->transaction(function () use ($eventId, $orderDate, $attendeeCount, $attempt): void {
+            callableAction: function () use ($eventId, $orderDate, $attendeeCount): void {
+                $this->databaseManager->transaction(function () use ($eventId, $orderDate, $attendeeCount): void {
                     // Decrement aggregate statistics
-                    $this->decrementAggregateAttendeeStatistics($eventId, $attendeeCount, $attempt);
-                    
+                    $this->decrementAggregateAttendeeStatistics($eventId, $attendeeCount);
+
                     // Decrement daily statistics
-                    $this->decrementDailyAttendeeStatistics($eventId, $orderDate, $attendeeCount, $attempt);
+                    $this->decrementDailyAttendeeStatistics($eventId, $orderDate, $attendeeCount);
                 });
             },
             onFailure: function (int $attempt, Throwable $e) use ($eventId, $orderDate, $attendeeCount): void {
@@ -226,7 +226,7 @@ class EventStatisticsCancellationService
      *
      * @throws EventStatisticsVersionMismatchException
      */
-    private function decrementAggregateAttendeeStatistics(int $eventId, int $attendeeCount, int $attempt): void
+    private function decrementAggregateAttendeeStatistics(int $eventId, int $attendeeCount): void
     {
         $eventStatistics = $this->eventStatisticsRepository->findFirstWhere([
             'event_id' => $eventId,
@@ -264,7 +264,6 @@ class EventStatisticsCancellationService
                 'event_id' => $eventId,
                 'attendees_decremented' => $attendeeCount,
                 'products_affected' => 0, // Products sold not affected by individual attendee cancellations
-                'attempt' => $attempt,
                 'new_version' => $eventStatistics->getVersion() + 1,
             ]
         );
@@ -339,7 +338,7 @@ class EventStatisticsCancellationService
      *
      * @throws EventStatisticsVersionMismatchException
      */
-    private function decrementDailyAttendeeStatistics(int $eventId, string $orderDate, int $attendeeCount, int $attempt): void
+    private function decrementDailyAttendeeStatistics(int $eventId, string $orderDate, int $attendeeCount): void
     {
         $formattedDate = (new Carbon($orderDate))->format('Y-m-d');
 
@@ -389,7 +388,6 @@ class EventStatisticsCancellationService
                 'date' => $formattedDate,
                 'attendees_decremented' => $attendeeCount,
                 'products_affected' => 0, // Products sold not affected by individual attendee cancellations
-                'attempt' => $attempt,
                 'new_version' => $eventDailyStatistic->getVersion() + 1,
             ]
         );

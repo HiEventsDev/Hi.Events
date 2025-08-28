@@ -77,7 +77,7 @@ class EventStatisticsIncrementService
      *
      * @throws EventStatisticsVersionMismatchException
      */
-    private function incrementAggregateStatistics(OrderDomainObject $order, int $attempt): void
+    private function incrementAggregateStatistics(OrderDomainObject $order): void
     {
         $eventStatistics = $this->eventStatisticsRepository->findFirstWhere([
             'event_id' => $order->getEventId(),
@@ -148,7 +148,6 @@ class EventStatisticsIncrementService
                 'order_id' => $order->getId(),
                 'products_sold' => $productsSold,
                 'attendees_registered' => $attendeesRegistered,
-                'attempt' => $attempt,
                 'new_version' => $eventStatistics->getVersion() + 1,
             ]
         );
@@ -159,7 +158,7 @@ class EventStatisticsIncrementService
      *
      * @throws EventStatisticsVersionMismatchException
      */
-    private function incrementDailyStatistics(OrderDomainObject $order, int $attempt): void
+    private function incrementDailyStatistics(OrderDomainObject $order): void
     {
         $orderDate = (new Carbon($order->getCreatedAt()))->format('Y-m-d');
 
@@ -237,7 +236,6 @@ class EventStatisticsIncrementService
                 'date' => $orderDate,
                 'products_sold' => $productsSold,
                 'attendees_registered' => $attendeesRegistered,
-                'attempt' => $attempt,
                 'new_version' => $eventDailyStatistic->getVersion() + 1,
             ]
         );
