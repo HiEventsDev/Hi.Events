@@ -5,6 +5,7 @@ namespace HiEvents\Http\Actions\Attendees;
 use HiEvents\DomainObjects\AttendeeCheckInDomainObject;
 use HiEvents\DomainObjects\Enums\QuestionBelongsTo;
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\QuestionAndAnswerViewDomainObject;
@@ -48,15 +49,29 @@ class ExportAttendeesAction extends BaseAction
                 ],
                 name: 'product'
             ))
+            ->loadRelation(new Relationship(
+                domainObject: OrderDomainObject::class,
+                nested: [
+                    new Relationship(
+                        domainObject: QuestionAndAnswerViewDomainObject::class
+                    )
+                ],
+                name: 'order'
+            ))
             ->findByEventIdForExport($eventId);
 
-        $questions = $this->questionRepository->findWhere([
+        $productQuestions = $this->questionRepository->findWhere([
             'event_id' => $eventId,
             'belongs_to' => QuestionBelongsTo::PRODUCT->name,
         ]);
 
+        $orderQuestions = $this->questionRepository->findWhere([
+            'event_id' => $eventId,
+            'belongs_to' => QuestionBelongsTo::ORDER->name,
+        ]);
+
         return Excel::download(
-            $this->export->withData($attendees, $questions),
+            $this->export->withData($attendees, $productQuestions, $orderQuestions),
             'attendees.xlsx'
         );
     }
