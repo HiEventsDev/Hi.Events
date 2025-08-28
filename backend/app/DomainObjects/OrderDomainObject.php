@@ -2,11 +2,13 @@
 
 namespace HiEvents\DomainObjects;
 
+use HiEvents\DomainObjects\Enums\PaymentProviders;
 use HiEvents\DomainObjects\Enums\ProductType;
 use HiEvents\DomainObjects\Interfaces\IsFilterable;
 use HiEvents\DomainObjects\Interfaces\IsSortable;
 use HiEvents\DomainObjects\SortingAndFiltering\AllowedSorts;
 use HiEvents\DomainObjects\Status\OrderPaymentStatus;
+use HiEvents\DomainObjects\Status\OrderRefundStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Helper\AddressHelper;
 use Illuminate\Support\Carbon;
@@ -275,5 +277,13 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
     public function getSessionIdentifier(): ?string
     {
         return $this->sessionIdentifier;
+    }
+
+    public function isRefundable(): bool
+    {
+        return !$this->isFreeOrder()
+            && $this->getStatus() !== OrderPaymentStatus::AWAITING_OFFLINE_PAYMENT->name
+            && $this->getPaymentProvider() === PaymentProviders::STRIPE->name
+            && $this->getRefundStatus() !== OrderRefundStatus::REFUNDED->name;
     }
 }
