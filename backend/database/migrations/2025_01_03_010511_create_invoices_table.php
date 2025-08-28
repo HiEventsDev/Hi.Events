@@ -19,13 +19,29 @@ return new class extends Migration {
             $table->string('status', 20)->default('PENDING');
             $table->jsonb('items');
             $table->jsonb('taxes_and_fees')->nullable();
-            $table->uuid()->default(DB::raw('gen_random_uuid()'));
+            $uuid = $table->uuid();
+            if (DB::getDriverName() !== 'mysql') {
+                $uuid->default(DB::raw('gen_random_uuid()'));
+            }
             $table->timestamps();
             $table->softDeletes();
 
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
             $table->foreign('account_id')->references('id')->on('accounts')->onDelete('cascade');
         });
+        if (DB::getDriverName() === 'mysql') {
+            // mysql can't use uuid() as a default for a column but this is a perfect substitute
+            DB::statement('
+                CREATE TRIGGER before_insert_invoices
+                    BEFORE INSERT ON invoices
+                    FOR EACH ROW
+                    BEGIN
+                        IF NEW.uuid IS NULL THEN
+                            SET NEW.uuid = UUID();
+                        END IF;
+                END;
+            ');
+        }
     }
 
     public function down(): void

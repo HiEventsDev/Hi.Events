@@ -15,16 +15,17 @@ use Illuminate\Config\Repository as Config;
 use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class AvailableProductQuantitiesFetchService
 {
     public function __construct(
-        private readonly DatabaseManager                       $db,
-        private readonly Config                                $config,
-        private readonly Cache                                 $cache,
+        private readonly DatabaseManager $db,
+        private readonly Config $config,
+        private readonly Cache $cache,
         private readonly CapacityAssignmentRepositoryInterface $capacityAssignmentRepository,
-    )
-    {
+    ) {
     }
 
     public function getAvailableProductQuantities(int $eventId, bool $ignoreCache = false): AvailableProductQuantitiesResponseDTO
@@ -120,12 +121,13 @@ class AvailableProductQuantitiesFetchService
         LEFT JOIN reserved_quantities ON products.id = reserved_quantities.product_id
             AND product_prices.id = reserved_quantities.product_price_id
         WHERE
-            products.event_id = :eventId
+            products.event_id = :eventId2
             AND products.deleted_at IS NULL
             AND product_prices.deleted_at IS NULL
         GROUP BY products.id, product_prices.id, reserved_quantities.quantity_reserved;
     SQL, [
             'eventId' => $eventId,
+            'eventId2' => $eventId,
             'reserved' => OrderStatus::RESERVED->name
         ]);
 
