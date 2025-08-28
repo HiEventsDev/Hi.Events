@@ -46,21 +46,20 @@ class AttendeesExport implements FromCollection, WithHeadings, WithMapping, With
         $questionTitles = $this->questions->map(fn($question) => $question->getTitle())->toArray();
 
         return array_merge([
-            __('ID'),
-            __('First Name'),
-            __('Last Name'),
-            __('Email'),
-            __('Status'),
-            __('Is Checked In'),
-            __('Checked In At'),
-            __('Product ID'),
-            __('Product Name'),
-            __('Event ID'),
-            __('Public ID'),
-            __('Short ID'),
-            __('Created Date'),
-            __('Last Updated Date'),
-            __('Notes'),
+            'ID',
+            'First Name',
+            'Last Name',
+            'Email',
+            'Status',
+            'Is Checked In',
+            'Checked In At',
+            'Product ID',
+            'Product Name',
+            'Event ID',
+            'Public ID',
+            'Short ID',
+            'Created Date',
+            'Last Updated Date'
         ], $questionTitles);
     }
 

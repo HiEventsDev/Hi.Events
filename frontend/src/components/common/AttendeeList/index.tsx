@@ -1,12 +1,12 @@
-import {ActionIcon, Avatar, Collapse, Group, Text, Tooltip} from "@mantine/core";
-import {getInitials} from "../../../utilites/helpers.ts";
-import {NavLink} from "react-router";
-import {IconChevronUp, IconExternalLink, IconMessageCircle2} from "@tabler/icons-react";
+import { ActionIcon, Avatar, Tooltip, Text, Group, Collapse } from "@mantine/core";
+import { getInitials } from "../../../utilites/helpers.ts";
+import { NavLink } from "react-router-dom";
+import { IconExternalLink, IconUsers, IconChevronUp, IconMessageCircle2 } from "@tabler/icons-react";
 import classes from './AttendeeList.module.scss';
-import {IdParam, Order, Product, QuestionAnswer} from "../../../types.ts";
-import {t} from "@lingui/macro";
-import {useState} from "react";
-import {QuestionList} from "../QuestionAndAnswerList";
+import { Order, Product, QuestionAnswer, IdParam } from "../../../types.ts";
+import { t } from "@lingui/macro";
+import { useState } from "react";
+import { QuestionList } from "../QuestionAndAnswerList";
 
 interface AttendeeListProps {
     order: Order;
@@ -15,7 +15,8 @@ interface AttendeeListProps {
     refetchOrder?: () => void;
 }
 
-export const AttendeeList = ({order, products, refetchOrder, questionAnswers = []}: AttendeeListProps) => {
+export const AttendeeList = ({ order, products, refetchOrder, questionAnswers = [] }: AttendeeListProps) => {
+    const attendeeCount = order.attendees?.length || 0;
     if (!order.attendees?.length) {
         return (
             <div className={classes.container}>
@@ -94,7 +95,7 @@ export const AttendeeList = ({order, products, refetchOrder, questionAnswers = [
                                             >
                                                 {isExpanded(attendee.id)
                                                     ? <IconChevronUp size={16} stroke={1.5}/>
-                                                    : <IconMessageCircle2 size={16} stroke={1.5}/>}
+                                                    : <IconMessageCircle2 size={16} stroke={1.5}/>} 
                                             </ActionIcon>
                                         </Tooltip>
                                     )}

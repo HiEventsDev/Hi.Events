@@ -4,6 +4,7 @@ import {useEffect, useState} from "react";
 import {useGetMe} from "./queries/useGetMe.ts";
 import {publicEventRouteLoader} from "./routeLoaders/publicEventRouteLoader.ts";
 import {publicOrganizerRouteLoader} from "./routeLoaders/publicOrganizerRouteLoader.ts";
+import ReportLayout from "./components/routes/event/Reports/ReportLayout";
 
 const Root = () => {
     const [redirectPath, setRedirectPath] = useState<string | null>(null);
@@ -181,6 +182,13 @@ export const router: RouteObject[] = [
                         async lazy() {
                             const PaymentSettings = await import("./components/routes/account/ManageAccount/sections/PaymentSettings");
                             return {Component: PaymentSettings.default};
+                        }
+                    },
+                    {
+                        path: "api-keys",
+                        async lazy() {
+                            const ApiKeys = await import("./components/routes/account/ManageAccount/sections/ApiKeys");
+                            return {Component: ApiKeys.default};
                         }
                     },
                 ]

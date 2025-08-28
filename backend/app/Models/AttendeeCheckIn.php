@@ -9,6 +9,11 @@ class AttendeeCheckIn extends BaseModel
 {
     use SoftDeletes;
 
+    protected function getFillableFields(): array
+    {
+        return [];
+    }
+
     public function products(): BelongsTo
     {
         return $this->belongsTo(

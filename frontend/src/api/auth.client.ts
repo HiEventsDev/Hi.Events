@@ -20,7 +20,9 @@ export const authClient = {
     },
 
     login: async (user: LoginData) => {
-        const response = await api.post<LoginResponse>('auth/login', user);
+        const response = await api.get('/csrf-cookie').then(async response => {
+            return api.post<LoginResponse>('auth/login', user);
+        });
         return response.data;
     },
 
