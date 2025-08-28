@@ -13,6 +13,7 @@ enum Locale: string
     case FR = 'fr';
     case IT = 'it';
     case NL = 'nl';
+    case HU = 'hu';
     case ES = 'es';
     case PT = 'pt';
     case PT_BR = 'pt-br';

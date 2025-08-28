@@ -1,9 +1,9 @@
 import {i18n} from "@lingui/core";
 import {t} from "@lingui/macro";
 
-export type SupportedLocales = "en" | "de" | "fr" | "it" | "nl" | "pt" | "es" | "zh-cn" | "pt-br" | "vi" |"zh-hk";
+export type SupportedLocales = "en" | "de" | "fr" | "it" | "nl" | "hu" | "pt" | "es" | "zh-cn" | "pt-br" | "vi" |"zh-hk";
 
-export const availableLocales = ["en", "de", "fr", "it", "nl", "pt", "es", "zh-cn", "zh-hk", "pt-br", "vi",];
+export const availableLocales = ["en", "de", "fr", "it", "nl", "hu", "pt", "es", "zh-cn", "zh-hk", "pt-br", "vi",];
 
 export const localeToFlagEmojiMap: Record<SupportedLocales, string> = {
     en: '🇬🇧',
@@ -11,6 +11,7 @@ export const localeToFlagEmojiMap: Record<SupportedLocales, string> = {
     fr: '🇫🇷',
     it: '🇮🇹',
     nl: '🇳🇱',
+	hu: '🇭🇺',
     pt: '🇵🇹',
     es: '🇪🇸',
     "zh-cn": '🇨🇳',
@@ -25,6 +26,7 @@ export const localeToNameMap: Record<SupportedLocales, string> = {
     fr: `French`,
     it: `Italian`,
     nl: `Dutch`,
+	hu: `Hungarian`,
     pt: `Portuguese`,
     es: `Spanish`,
     "zh-cn": `Chinese`,
@@ -56,10 +58,14 @@ export const getClientLocale = () => {
 };
 
 export async function dynamicActivateLocale(locale: string) {
+    try {
         locale = availableLocales.includes(locale) ? locale : "en";
         const module = (await import(`./locales/${locale}.po`));
         i18n.load(locale, module.messages);
         i18n.activate(locale);
+    } catch (error) {
+        i18n.activate("en");
+    }
 }
 
 export const getSupportedLocale = (userLocale: string) => {
