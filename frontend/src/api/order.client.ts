@@ -79,8 +79,10 @@ export const orderClient = {
         return response.data;
     },
 
-    cancel: async (eventId: IdParam, orderId: IdParam) => {
-        const response = await api.post<GenericDataResponse<Order>>('events/' + eventId + '/orders/' + orderId + '/cancel');
+    cancel: async (eventId: IdParam, orderId: IdParam, refund?: boolean) => {
+        const response = await api.post<GenericDataResponse<Order>>('events/' + eventId + '/orders/' + orderId + '/cancel', {
+            refund: refund ?? false
+        });
         return response.data;
     },
 

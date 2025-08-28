@@ -1,27 +1,6 @@
 @use "../../../styles/mixins";
 
-.refundSummary {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin-bottom: 20px;
-  padding: 15px;
-  border-radius: var(--hi-radius-lg);
-  border: 3px solid var(--hi-secondary);
-
-  @include mixins.respond-below(md) {
-    flex-direction: column;
-
-    .block {
-      margin-bottom: 10px;
-
-      &:last-of-type {
-        margin-bottom: 0;
-      }
-    }
-  }
-
-  .title {
-    font-weight: bold;
-  }
+.remainingRow {
+  padding-top: 12px;
+  border-top: 1px solid var(--mantine-color-gray-3);
 }

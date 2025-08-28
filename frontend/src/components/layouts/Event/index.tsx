@@ -96,7 +96,7 @@ const EventLayout = () => {
 
         {label: t`Manage`},
         {link: 'settings', label: t`Settings`, icon: IconSettings},
-        {link: 'attendees', label: t`Attendees`, icon: IconUsers, badge: eventStats?.total_products_sold},
+        {link: 'attendees', label: t`Attendees`, icon: IconUsers, badge: eventStats?.total_attendees_registered},
         {link: 'orders', label: t`Orders`, icon: IconReceipt, badge: eventStats?.total_orders},
         {link: 'products', label: t`Tickets & Products`, icon: IconTicket},
         {link: 'questions', label: t`Questions`, icon: IconUserQuestion},
