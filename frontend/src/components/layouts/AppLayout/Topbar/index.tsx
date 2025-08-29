@@ -5,6 +5,7 @@ import {IconHome} from "@tabler/icons-react";
 import classes from './Topbar.module.scss';
 import {BreadcrumbItem} from "../types";
 import {GlobalMenu} from "../../../common/GlobalMenu";
+import { getConfig } from "../../../../utilites/config";
 
 interface TopbarProps {
     sidebarOpen: boolean;
@@ -37,8 +38,8 @@ export const Topbar: React.FC<TopbarProps> = ({
                     />
                 </div>
                 <div className={classes.logo}>
-                    <NavLink to={`/manage/events`}>
-                        <img src={'/logo-text-only-white-text.png'} alt={''}/>
+                    <NavLink to={ `/manage/events` }>
+                        <img src={getConfig("VITE_APP_LOGO_LIGHT", "/logo-text-only-white-text.png")} alt={`${getConfig("VITE_APP_NAME", "Hi.Events")} logo`} className={classes.logo}/>
                     </NavLink>
                 </div>
 
