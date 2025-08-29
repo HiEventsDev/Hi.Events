@@ -13,7 +13,6 @@
 # {{ __('You\'re going to') }} {{ $event->getTitle() }}! 🎉
 <br>
 <br>
-
 @if($order->isOrderAwaitingOfflinePayment())
 <div style="border-radius: 4px; background-color: #f8d7da; color: #842029; margin-bottom: 1.5rem; padding: 1rem;">
 <p>
@@ -34,48 +33,4 @@
 {{ __('Best regards,') }}<br>
 {{ $organizer->getName() ?: config('app.name') }}
 
-<script type="application/ld+json">
-        {
-  "@context": "http://schema.org",
-  "@type": "EventReservation",
-  "reservationNumber": "{{ $attendee->getPublicId() }}",
-  "reservationStatus": "http://schema.org/Confirmed",
-  "underName": {
-    "@type": "Person",
-    "name": "{{ $attendee->getFirstName() }} {{ $attendee->getLastName() }}"
-  },
-  "reservationFor": {
-    "@type": "Event",
-    "name": "{{ $event->getTitle() }}",
-    "performer": {
-      "@type": "Organization",
-      "name": "{{ $organizer->getName() }}",
-    },
-    "startDate": "{{ DateHelper::convertFromUTC($event->getStartDate(), $event->getTimezone()) }}",
-
-    @if($event->getEndDate())
-      "endDate": "{{ DateHelper::convertFromUTC($event->getEndDate(), $event->getTimezone()) }}",
-    @endif
-
-    @if ($eventSettings->getLocationDetails())
-    "location": {
-      "@type": "Place",
-      "name": "{{ $eventSettings->getAddress()->venue_name }}",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "{{ $eventSettings->getAddress()->address_line_1 . ' ' . $eventSettings->getAddress()->address_line_2 }}",
-        "addressLocality": "{{ $eventSettings->getAddress()->city }}",
-        "addressRegion": "{{ $eventSettings->getAddress()->state_or_region }}",
-        "postalCode": "{{ $eventSettings->getAddress()->zip_or_postal_code }}",
-        "addressCountry": "{{ $eventSettings->getAddress()->country }}"
-      }
-    }
-  },
-  @endif
-
-  "ticketToken": "qrCode:{{ $attendee->getPublicId() }}",
-  "ticketNumber": "{{ $attendee->getPublicId() }}",
-  "ticketPrintUrl": "{{ $ticketUrl }}",
-}
-</script>
 </x-mail::message>
