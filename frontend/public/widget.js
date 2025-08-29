@@ -5,10 +5,14 @@
     const loadWidget = () => {
         window.hiEventWidgetLoaded = true;
 
-        let scriptOrigin;
+       let scriptOrigin;
         try {
-            const scriptURL = document.currentScript.src;
-            scriptOrigin = new URL(scriptURL).origin;
+            let script = document.currentScript;
+            if (!script) {
+               script = document.getElementById('hievents-widget-script');
+            }
+            if (!script?.src) throw new Error('HiEvent widget error: Invalid script URL');
+            scriptOrigin = new URL(script.src).origin;
         } catch (e) {
             console.error('HiEvent widget error: Invalid script URL');
             return;
