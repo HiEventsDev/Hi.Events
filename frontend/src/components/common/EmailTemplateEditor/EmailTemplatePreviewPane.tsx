@@ -1,4 +1,3 @@
-import React from 'react';
 import {Alert, Divider, LoadingOverlay, Stack, Text, TypographyStylesProvider} from '@mantine/core';
 import {IconAlertCircle, IconEye} from '@tabler/icons-react';
 import {Trans} from '@lingui/macro';

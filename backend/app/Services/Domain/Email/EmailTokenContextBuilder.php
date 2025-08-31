@@ -18,9 +18,6 @@ use HiEvents\Helper\Url;
 
 class EmailTokenContextBuilder
 {
-    /**
-     * Build context for order confirmation emails
-     */
     public function buildOrderConfirmationContext(
         OrderDomainObject        $order,
         EventDomainObject        $event,
@@ -31,42 +28,49 @@ class EmailTokenContextBuilder
         $eventDate = new Carbon(DateHelper::convertFromUTC($event->getStartDate(), $event->getTimezone()));
 
         return [
-            // Event tokens
-            'event_title' => $event->getTitle(),
-            'event_date' => $eventDate->format('F j, Y'),
-            'event_time' => $eventDate->format('g:i A'),
-            'event_location' => $eventSettings->getLocationDetails() ? AddressHelper::formatAddress($eventSettings->getLocationDetails()) : '',
-            'event_description' => $event->getDescription() ?? '',
+            // Event object
+            'event' => [
+                'title' => $event->getTitle(),
+                'date' => $eventDate->format('F j, Y'),
+                'time' => $eventDate->format('g:i A'),
+                'location' => $eventSettings->getLocationDetails() ? AddressHelper::formatAddress($eventSettings->getLocationDetails()) : '',
+                'description' => $event->getDescription() ?? '',
+            ],
 
-            // Order tokens
-            'order_url' => sprintf(
-                Url::getFrontEndUrlFromConfig(Url::ORDER_SUMMARY),
-                $event->getId(),
-                $order->getShortId()
-            ),
-            'order_number' => $order->getPublicId(),
-            'order_total' => Currency::format($order->getTotalGross(), $event->getCurrency()),
-            'order_date' => (new Carbon($order->getCreatedAt()))->format('F j, Y'),
-            'order_first_name' => $order->getFirstName() ?? '',
-            'order_last_name' => $order->getLastName() ?? '',
-            'order_email' => $order->getEmail() ?? '',
-            'order_is_pending' => $order->isOrderAwaitingOfflinePayment(),
+            // Order object
+            'order' => [
+                'url' => sprintf(
+                    Url::getFrontEndUrlFromConfig(Url::ORDER_SUMMARY),
+                    $event->getId(),
+                    $order->getShortId()
+                ),
+                'number' => $order->getPublicId(),
+                'total' => Currency::format($order->getTotalGross(), $event->getCurrency()),
+                'date' => (new Carbon($order->getCreatedAt()))->format('F j, Y'),
+                'first_name' => $order->getFirstName() ?? '',
+                'last_name' => $order->getLastName() ?? '',
+                'email' => $order->getEmail() ?? '',
+                'is_pending' => $order->isOrderAwaitingOfflinePayment(),
+            ],
+
+            // Organizer object
+            'organizer' => [
+                'name' => $organizer->getName() ?? '',
+                'email' => $organizer->getEmail() ?? '',
+            ],
+
+            // Settings object
+            'settings' => [
+                'support_email' => $eventSettings->getSupportEmail() ?? $organizer->getEmail() ?? '',
+                'offline_payment_instructions' => $eventSettings->getOfflinePaymentInstructions() ?? '',
+                'post_checkout_message' => $eventSettings->getPostCheckoutMessage() ?? '',
+            ],
+
+            // Top-level flags (for backward compatibility and convenience)
             'is_offline_payment' => $order->getPaymentProvider() === PaymentProviders::OFFLINE->value,
-
-            // Organizer tokens
-            'organizer_name' => $organizer->getName() ?? '',
-            'organizer_email' => $organizer->getEmail() ?? '',
-            'support_email' => $eventSettings->getSupportEmail() ?? $organizer->getEmail() ?? '',
-
-            // Additional context
-            'offline_payment_instructions' => $eventSettings->getOfflinePaymentInstructions() ?? '',
-            'post_checkout_message' => $eventSettings->getPostCheckoutMessage() ?? '',
         ];
     }
 
-    /**
-     * Build context for attendee ticket emails
-     */
     public function buildAttendeeTicketContext(
         AttendeeDomainObject     $attendee,
         OrderDomainObject        $order,
@@ -83,53 +87,67 @@ class EmailTokenContextBuilder
         $ticketPrice = Currency::format($orderItem?->getPrice(), $event->getCurrency());
         $ticketName = $orderItem->getItemName();
 
-        return array_merge($baseContext, [
-            // Attendee specific tokens
-            'attendee_name' => $attendee->getFirstName() . ' ' . $attendee->getLastName(),
-            'attendee_email' => $attendee->getEmail() ?? '',
-            'ticket_name' => $ticketName,
-            'ticket_price' => $ticketPrice,
-            'ticket_url' => sprintf(
+        // Add attendee and ticket objects
+        $baseContext['attendee'] = [
+            'name' => $attendee->getFirstName() . ' ' . $attendee->getLastName(),
+            'email' => $attendee->getEmail() ?? '',
+        ];
+
+        $baseContext['ticket'] = [
+            'name' => $ticketName,
+            'price' => $ticketPrice,
+            'url' => sprintf(
                 Url::getFrontEndUrlFromConfig(Url::ATTENDEE_TICKET),
                 $event->getId(),
                 $attendee->getShortId()
             ),
-        ]);
+        ];
+
+        return $baseContext;
     }
 
-    /**
-     * Build preview context with sample data
-     */
     public function buildPreviewContext(string $templateType): array
     {
         $baseContext = [
-            'event_title' => __('Summer Music Festival 2024'),
-            'event_date' => 'April 25, 2029',
-            'event_time' => '7:00 PM',
-            'event_location' => __('Madison Square Garden, New York'),
-            'event_description' => __('Join us for an unforgettable evening of live music featuring top artists from around the world.'),
-            'organizer_name' => 'ACME Events Inc.',
-            'organizer_email' => 'contact@example.com',
-            'support_email' => 'support@example.com',
-            'order_url' => 'https://example.com/order/ABC123',
-            'order_number' => IdHelper::publicId(IdHelper::ORDER_PREFIX),
-            'order_total' => '$150.00',
-            'order_date' => 'January 10, 2024',
-            'order_first_name' => 'John',
-            'order_last_name' => 'Smith',
-            'order_email' => 'john@example.com',
-            'order_is_pending' => false,
+            'event' => [
+                'title' => __('Summer Music Festival 2024'),
+                'date' => 'April 25, 2029',
+                'time' => '7:00 PM',
+                'location' => __('Madison Square Garden, New York'),
+                'description' => __('Join us for an unforgettable evening of live music featuring top artists from around the world.'),
+            ],
+            'order' => [
+                'url' => 'https://example.com/order/ABC123',
+                'number' => IdHelper::publicId(IdHelper::ORDER_PREFIX),
+                'total' => '$150.00',
+                'date' => 'January 10, 2024',
+                'first_name' => 'John',
+                'last_name' => 'Smith',
+                'email' => 'john@example.com',
+                'is_pending' => false,
+            ],
+            'organizer' => [
+                'name' => 'ACME Events Inc.',
+                'email' => 'contact@example.com',
+            ],
+            'settings' => [
+                'support_email' => 'support@example.com',
+                'offline_payment_instructions' => __('Please transfer the total amount to the following bank account within 5 business days.'),
+                'post_checkout_message' => __('Thank you for your purchase! We look forward to seeing you at the event.'),
+            ],
             'is_offline_payment' => false,
-            'offline_payment_instructions' => __('Please transfer the total amount to the following bank account within 5 business days.'),
-            'post_checkout_message' => __('Thank you for your purchase! We look forward to seeing you at the event.'),
         ];
 
         if ($templateType === 'attendee_ticket') {
-            $baseContext['attendee_name'] = 'John Smith';
-            $baseContext['attendee_email'] = 'john@example.com';
-            $baseContext['ticket_name'] = 'VIP Pass';
-            $baseContext['ticket_price'] = '$75.00';
-            $baseContext['ticket_url'] = 'https://example.com/ticket/XYZ789';
+            $baseContext['attendee'] = [
+                'name' => 'John Smith',
+                'email' => 'john@example.com',
+            ];
+            $baseContext['ticket'] = [
+                'name' => 'VIP Pass',
+                'price' => '$75.00',
+                'url' => 'https://example.com/ticket/XYZ789',
+            ];
         }
 
         return $baseContext;

@@ -32,6 +32,11 @@ class CreateEventEmailTemplateAction extends BaseEmailTemplateAction
         $validated = $this->validateEmailTemplateRequest($request);
 
         try {
+            $cta = [
+                'label' => $validated['ctaLabel'],
+                'url_token' => $validated['template_type'] === 'order_confirmation' ? 'order.url' : 'ticket.url',
+            ];
+            
             $template = $this->handler->handle(
                 new UpsertEmailTemplateDTO(
                     account_id: $this->getAuthenticatedAccountId(),
@@ -40,7 +45,8 @@ class CreateEventEmailTemplateAction extends BaseEmailTemplateAction
                     body: $validated['body'],
                     organizer_id: null,
                     event_id: $eventId,
-                    cta: $validated['cta'] ?? null,
+                    cta: $cta,
+                    is_active: $validated['isActive'] ?? true,
                 )
             );
         } catch (EmailTemplateValidationException $e) {

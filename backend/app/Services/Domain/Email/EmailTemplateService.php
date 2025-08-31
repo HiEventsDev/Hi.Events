@@ -35,9 +35,6 @@ class EmailTemplateService
         );
     }
 
-    /**
-     * Render a template with the given context
-     */
     public function renderTemplate(EmailTemplateDomainObject $template, array $context): RenderedEmailTemplateDTO
     {
         $renderedSubject = $this->liquidRenderer->render($template->getSubject(), $context);
@@ -50,7 +47,8 @@ class EmailTemplateService
             $templateCta = $template->getCta();
             if (isset($templateCta['label'], $templateCta['url_token'])) {
                 // Replace the URL token with actual value from context
-                $ctaUrl = $context[$templateCta['url_token']] ?? '#';
+                // Handle dot notation (e.g., 'order.url' -> $context['order']['url'])
+                $ctaUrl = $this->getValueFromDotNotation($context, $templateCta['url_token']) ?? '#';
                 $cta = [
                     'label' => $templateCta['label'],
                     'url' => $ctaUrl,
@@ -80,13 +78,28 @@ class EmailTemplateService
         return $template;
     }
 
-    public function previewTemplate(string $subject, string $body, EmailTemplateType $type): array
+    public function previewTemplate(string $subject, string $body, EmailTemplateType $type, ?array $cta = null): array
     {
         $context = $this->tokenBuilder->buildPreviewContext($type->value);
 
+        $renderedBody = $this->liquidRenderer->render($body, $context);
+
+        // Add CTA button if provided
+        if ($cta && isset($cta['label'])) {
+            $ctaUrl = $this->getValueFromDotNotation($context, $cta['url_token'] ?? '') ?? '#';
+            $ctaHtml = sprintf(
+                '<div style="text-align: center; margin: 30px 0;">
+                    <a href="%s" style="display: inline-block; padding: 12px 30px; background-color: #213850; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">%s</a>
+                </div>',
+                htmlspecialchars($ctaUrl),
+                htmlspecialchars($cta['label'])
+            );
+            $renderedBody .= $ctaHtml;
+        }
+
         return [
             'subject' => $this->liquidRenderer->render($subject, $context),
-            'body' => $this->liquidRenderer->render($body, $context),
+            'body' => $renderedBody,
             'context' => $context, // Return context for debugging
         ];
     }
@@ -112,25 +125,38 @@ class EmailTemplateService
     }
 
     /**
-     * Get default CTAs for each template type
+     * Get value from array using dot notation
+     * e.g., 'order.url' will get $array['order']['url']
      */
+    private function getValueFromDotNotation(array $array, string $key)
+    {
+        $keys = explode('.', $key);
+        $value = $array;
+
+        foreach ($keys as $k) {
+            if (!isset($value[$k])) {
+                return null;
+            }
+            $value = $value[$k];
+        }
+
+        return $value;
+    }
+
     private function getDefaultCTAs(): array
     {
         return [
             EmailTemplateType::ORDER_CONFIRMATION->value => [
-                'label' => 'View Order',
-                'url_token' => 'order_url',
+                'label' => __('View Order & Tickets'),
+                'url_token' => 'order.url',
             ],
             EmailTemplateType::ATTENDEE_TICKET->value => [
-                'label' => 'View Ticket',
-                'url_token' => 'ticket_url',
+                'label' => __('View Ticket'),
+                'url_token' => 'ticket.url',
             ],
         ];
     }
 
-    /**
-     * Get default templates for each type
-     */
     private function getDefaultTemplates(): array
     {
         return [
@@ -139,67 +165,67 @@ class EmailTemplateService
                 'body' => <<<'LIQUID'
 <strong>Your Order is Confirmed! 🎉</strong><br>
 
-{% if order_is_pending %}
+{% if order.is_pending %}
 <strong>ℹ️ Payment Pending:</strong> Your order is pending payment. Tickets have been issued but will not be valid until payment is received.<br>
 <strong>Payment Instructions</strong><br>
 Please follow the instructions below to complete your payment:<br>
-{% if offline_payment_instructions %}
-{{ offline_payment_instructions }}<br>
+{% if settings.offline_payment_instructions %}
+{{ settings.offline_payment_instructions }}<br>
 {% endif %}
 
 {% else %}
-Congratulations! Your order for <strong>{{ event_title }}</strong> on <strong>{{ event_date }}</strong> at <strong>{{ event_time }}</strong> was successful. Please find your order details below.<br>
+Congratulations! Your order for <strong>{{ event.title }}</strong> on <strong>{{ event.date }}</strong> at <strong>{{ event.time }}</strong> was successful. Please find your order details below.<br>
 {% endif %}
 
 <strong>Event Details</strong><br>
-<strong>Event Name:</strong> {{ event_title }}<br>
-<strong>Date & Time:</strong> {{ event_date }} at {{ event_time }}<br>
-{% if event_location %}<strong>Location:</strong> {{ event_location }}<br>{% endif %}
+<strong>Event Name:</strong> {{ event.title }}<br>
+<strong>Date & Time:</strong> {{ event.date }} at {{ event.time }}<br>
+{% if event.location %}<strong>Location:</strong> {{ event.location }}<br>{% endif %}
 <br>
 
-{% if post_checkout_message %}
+{% if settings.post_checkout_message %}
 <strong>Additional Information</strong><br>
-{{ post_checkout_message }}<br>
+{{ settings.post_checkout_message }}<br>
 {% endif %}
 
 <strong>Order Summary</strong><br>
-<strong>Order Number:</strong> {{ order_number }}<br>
-<strong>Total Amount:</strong> {{ order_total }}<br>
+<strong>Order Number:</strong> {{ order.number }}<br>
+<strong>Total Amount:</strong> {{ order.total }}<br>
 
-If you have any questions or need assistance, please contact <a href="mailto:{{ support_email }}">{{ support_email }}</a>.<br>
+If you have any questions or need assistance, please contact <a href="mailto:{{ settings.support_email }}">{{ settings.support_email }}</a>.<br>
 
 Best regards,<br>
-{{ organizer_name }}
+{{ organizer.name }}
 LIQUID
             ],
             EmailTemplateType::ATTENDEE_TICKET->value => [
-                'subject' => '🎟️ Your Ticket for {{ event_title }}',
+                'subject' => '🎟️ Your Ticket for {{ event.title }}',
                 'body' => <<<'LIQUID'
-<strong>You're going to {{ event_title }}! 🎉</strong><br>
+<strong>You're going to {{ event.title }}! 🎉</strong><br>
 
-{% if order_is_pending %}
+{% if order.is_pending %}
 <strong>ℹ️ Payment Pending:</strong> Your order is pending payment. Tickets have been issued but will not be valid until payment is received.<br>
 {% endif %}
 
-Hi {{ attendee_name }},<br>
+Hi {{ attendee.name }},<br>
 
 Please find your ticket details below.<br>
 
 <strong>Event Information</strong><br>
-<strong>Event:</strong> {{ event_title }}<br>
-<strong>Date:</strong> {{ event_date }}<br>
-<strong>Time:</strong> {{ event_time }}<br>
-{% if event_location %}<strong>Location:</strong> {{ event_location }}<br>{% endif %}
+<strong>Event:</strong> {{ event.title }}<br>
+<strong>Date:</strong> {{ event.date }}<br>
+<strong>Time:</strong> {{ event.time }}<br>
+{% if event.location %}<strong>Location:</strong> {{ event.location }}<br>{% endif %}
 <br>
 
 <strong>Your Ticket</strong><br>
-<strong>Ticket Type:</strong> {{ ticket_name }}<br>
-<strong>Price:</strong> {{ ticket_price }}<br>
-<strong>Attendee:</strong> {{ attendee_name }}<br>
+<strong>Ticket Type:</strong> {{ ticket.name }}<br>
+<strong>Price:</strong> {{ ticket.price }}<br>
+<strong>Attendee:</strong> {{ attendee.name }}<br>
 
 <strong>💡Remember:</strong> Please have your ticket ready when you arrive at the event.<br>
 
-If you have any questions or need assistance, please reply to this email or contact the event organizer at <a href="mailto:{{ support_email }}">{{ support_email }}</a>.<br>
+If you have any questions or need assistance, please reply to this email or contact the event organizer at <a href="mailto:{{ settings.support_email }}">{{ settings.support_email }}</a>.<br>
 
 LIQUID
             ],

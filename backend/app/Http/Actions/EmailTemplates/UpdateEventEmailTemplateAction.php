@@ -33,6 +33,11 @@ class UpdateEventEmailTemplateAction extends BaseEmailTemplateAction
         $validated = $this->validateUpdateEmailTemplateRequest($request);
 
         try {
+            $cta = [
+                'label' => $validated['ctaLabel'],
+                'url_token' => 'order.url', // This will be determined by template type during update
+            ];
+            
             $template = $this->handler->handle(
                 new UpsertEmailTemplateDTO(
                     account_id: $this->getAuthenticatedAccountId(),
@@ -42,8 +47,8 @@ class UpdateEventEmailTemplateAction extends BaseEmailTemplateAction
                     organizer_id: null,
                     event_id: $eventId,
                     id: $templateId,
-                    cta: $validated['cta'] ?? null,
-                    is_active: $validated['is_active'] ?? true,
+                    cta: $cta,
+                    is_active: $validated['isActive'] ?? true,
                 )
             );
         } catch (EmailTemplateValidationException $e) {

@@ -15,8 +15,8 @@ interface EmailTemplateEditorProps {
     templateType: EmailTemplateType;
     template?: EmailTemplate;
     defaultTemplate?: DefaultEmailTemplate;
-    onSave: (data: CreateEmailTemplateRequest | UpdateEmailTemplateRequest) => void;
-    onPreview: (data: { subject: string; body: string; template_type: EmailTemplateType }) => void;
+    onSave: (data: CreateEmailTemplateRequest | UpdateEmailTemplateRequest, form?: any) => void;
+    onPreview: (data: { subject: string; body: string; template_type: EmailTemplateType; ctaLabel: string }) => void;
     onClose?: () => void;
     isSaving?: boolean;
     isPreviewLoading?: boolean;
@@ -50,15 +50,15 @@ export const EmailTemplateEditor = ({
         },
     });
 
-    // Update form values when defaultTemplate is loaded (for new templates)
+    // Update form values when defaultTemplate is loaded (for new templates ONLY)
     useEffect(() => {
-        if (defaultTemplate && defaultTemplate.subject && defaultTemplate.body) {
+        if (!template && defaultTemplate && defaultTemplate.subject && defaultTemplate.body) {
             form.setFieldValue('subject', defaultTemplate.subject);
             form.setFieldValue('body', defaultTemplate.body);
             form.setFieldValue('ctaLabel', templateType === 'order_confirmation' ? t`View Order` : t`View Ticket`);
             form.setFieldValue('isActive', true);
         }
-    }, [defaultTemplate]);
+    }, [defaultTemplate, template]);
 
     // Manual preview trigger only when preview tab is active
     const triggerPreview = () => {
@@ -67,6 +67,7 @@ export const EmailTemplateEditor = ({
                 subject: form.values.subject,
                 body: form.values.body,
                 template_type: templateType,
+                ctaLabel: form.values.ctaLabel || (templateType === 'order_confirmation' ? t`View Order` : t`View Ticket`),
             });
         }
     };
@@ -83,14 +84,11 @@ export const EmailTemplateEditor = ({
             ...(template ? {} : {template_type: templateType}),
             subject: values.subject,
             body: values.body,
-            cta: {
-                label: values.ctaLabel,
-                url_token: templateType === 'order_confirmation' ? 'order_url' : 'ticket_url',
-            },
-            is_active: values.isActive,
+            ctaLabel: values.ctaLabel,
+            isActive: values.isActive,
         };
 
-        onSave(templateData as CreateEmailTemplateRequest | UpdateEmailTemplateRequest);
+        onSave(templateData as CreateEmailTemplateRequest | UpdateEmailTemplateRequest, form);
     };
 
     const templateTypeLabels: Record<EmailTemplateType, string> = {
@@ -133,7 +131,7 @@ export const EmailTemplateEditor = ({
                         {...form.getInputProps('subject')}
                     />
 
-                    <Tabs value={activeTab} onChange={setActiveTab}>
+                    <Tabs value={activeTab} onChange={(value) => setActiveTab(value || 'editor')}>
                         <Tabs.List>
                             <Tabs.Tab value="editor" leftSection={<IconBraces size={16}/>}>
                                 <Trans>Editor</Trans>
@@ -147,10 +145,10 @@ export const EmailTemplateEditor = ({
                             <Stack gap="md">
                                 <Editor
                                     value={form.values.body}
-                                    onChange={(value) => form.setFieldValue('body', value)}
+                                    onChange={(value: string) => form.setFieldValue('body', value)}
                                     error={form.errors.body}
                                     label={<Trans>Email Body</Trans>}
-                                    description={<Trans>Use Liquid templating to personalize your emails</Trans>}
+                                    description={<Trans>Use <a href={'https://shopify.github.io/liquid/'} target={'_blank'}>Liquid templating</a> to personalize your emails</Trans>}
                                     editorType="full"
                                     additionalToolbarControls={
                                         <RichTextEditor.ControlsGroup>

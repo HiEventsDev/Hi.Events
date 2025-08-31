@@ -45,7 +45,6 @@ class UpdateEmailTemplateHandler
             throw new EmailTemplateNotFoundException('Email template not found');
         }
 
-        // Update the template
         return $this->emailTemplateRepository->updateFromArray($template->getId(), [
             'subject' => $dto->subject,
             'body' => $dto->body,

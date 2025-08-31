@@ -24,8 +24,6 @@ class EmailTemplateResource extends BaseResource
             'cta' => $this->getCta(),
             'engine' => $this->getEngine(),
             'is_active' => $this->getIsActive(),
-            'created_at' => $this->getCreatedAt(),
-            'updated_at' => $this->getUpdatedAt(),
         ];
     }
 }

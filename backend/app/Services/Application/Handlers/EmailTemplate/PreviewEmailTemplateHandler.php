@@ -17,7 +17,8 @@ class PreviewEmailTemplateHandler
         return $this->emailTemplateService->previewTemplate(
             $dto->subject,
             $dto->body,
-            $dto->template_type
+            $dto->template_type,
+            $dto->cta
         );
     }
 }

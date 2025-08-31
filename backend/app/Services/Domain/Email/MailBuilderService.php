@@ -21,9 +21,6 @@ class MailBuilderService
     ) {
     }
 
-    /**
-     * Build attendee ticket email
-     */
     public function buildAttendeeTicketMail(
         AttendeeDomainObject $attendee,
         OrderDomainObject $order,
@@ -49,9 +46,6 @@ class MailBuilderService
         );
     }
 
-    /**
-     * Build order summary email
-     */
     public function buildOrderSummaryMail(
         OrderDomainObject $order,
         EventDomainObject $event,
@@ -76,9 +70,6 @@ class MailBuilderService
         );
     }
 
-    /**
-     * Render attendee ticket template
-     */
     private function renderAttendeeTicketTemplate(
         AttendeeDomainObject $attendee,
         OrderDomainObject $order,
@@ -108,9 +99,6 @@ class MailBuilderService
         return $this->emailTemplateService->renderTemplate($template, $context);
     }
 
-    /**
-     * Render order summary template
-     */
     private function renderOrderSummaryTemplate(
         OrderDomainObject $order,
         EventDomainObject $event,

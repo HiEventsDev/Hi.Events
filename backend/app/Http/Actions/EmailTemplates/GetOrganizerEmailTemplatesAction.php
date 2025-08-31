@@ -25,7 +25,7 @@ class GetOrganizerEmailTemplatesAction extends BaseAction
 
         $validated = $request->validate([
             'template_type' => ['nullable', new Enum(EmailTemplateType::class)],
-            'include_inactive' => ['boolean'],
+            'include_inactive' => ['in:true,false'],
         ]);
 
         $templates = $this->handler->handle(

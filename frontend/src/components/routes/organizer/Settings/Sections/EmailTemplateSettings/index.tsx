@@ -16,7 +16,7 @@ const EmailTemplateSettings = ({organizerId}: EmailTemplateSettingsProps) => {
     const [shouldFetchDefaults, setShouldFetchDefaults] = useState(false);
 
     // Queries
-    const {data: templatesData, isLoading} = useGetEmailTemplatesForOrganizer(organizerId);
+    const {data: templatesData, isLoading} = useGetEmailTemplatesForOrganizer(organizerId, {include_inactive: true});
     const {data: defaultTemplatesData} = useGetDefaultEmailTemplates(shouldFetchDefaults);
 
     // Mutations

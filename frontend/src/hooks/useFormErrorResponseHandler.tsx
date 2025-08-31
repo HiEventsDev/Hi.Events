@@ -19,15 +19,6 @@ export const useFormErrorResponseHandler = () => {
     ) => {
         if (error?.response?.data?.errors) {
             form.setErrors(error.response.data.errors);
-            
-            // Show specific field errors in addition to setting form errors
-            const errors = error.response.data.errors;
-            const errorMessages = Object.entries(errors).map(([field, message]) => 
-                `${field.charAt(0).toUpperCase() + field.slice(1)}: ${message}`
-            ).join('\n');
-            
-            showError(errorMessages);
-            return;
         }
 
         if (error?.response?.status && error.response.status >= 500) {

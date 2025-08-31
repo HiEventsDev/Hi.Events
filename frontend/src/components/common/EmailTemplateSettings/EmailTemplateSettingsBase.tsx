@@ -3,7 +3,6 @@ import {ActionIcon, Alert, Badge, Button, Group, LoadingOverlay, Modal, Paper, S
 import {IconEdit, IconInfoCircle, IconMail, IconPlus, IconTrash} from '@tabler/icons-react';
 import {t, Trans} from '@lingui/macro';
 import {useDisclosure} from '@mantine/hooks';
-import {useForm} from '@mantine/form';
 import {EmailTemplateEditor} from '../EmailTemplateEditor';
 import {confirmationDialog} from '../../../utilites/confirmationDialog';
 import {showSuccess, showError} from '../../../utilites/notifications';
@@ -73,11 +72,6 @@ export const EmailTemplateSettingsBase = ({
     const [editingTemplate, setEditingTemplate] = useState<EmailTemplate | null>(null);
     const [editingType, setEditingType] = useState<EmailTemplateType>('order_confirmation');
     const handleFormError = useFormErrorResponseHandler();
-    
-    // Dummy form for error handling
-    const form = useForm({
-        initialValues: {},
-    });
 
     const orderConfirmationTemplate = templates.find(t => t.template_type === 'order_confirmation');
     const attendeeTicketTemplate = templates.find(t => t.template_type === 'attendee_ticket');
@@ -122,7 +116,7 @@ export const EmailTemplateSettingsBase = ({
         );
     };
 
-    const handleSaveTemplate = (data: CreateEmailTemplateRequest | UpdateEmailTemplateRequest) => {
+    const handleSaveTemplate = (data: CreateEmailTemplateRequest | UpdateEmailTemplateRequest, editorForm?: any) => {
         if (editingTemplate) {
             const params = contextType === 'event'
                 ? {eventId: contextId, templateId: editingTemplate.id, templateData: data as UpdateEmailTemplateRequest}
@@ -135,7 +129,22 @@ export const EmailTemplateSettingsBase = ({
                     onSaveSuccess?.();
                 },
                 onError: (error: any) => {
-                    handleFormError(form, error, t`Failed to save template`);
+                    if (error.response?.data?.errors && editorForm) {
+                        const errors = error.response.data.errors;
+                        
+                        // Check if body field has syntax error
+                        if (errors.body) {
+                            // Set form error for the body field and show specific message
+                            editorForm.setFieldError('body', t`Invalid Liquid syntax. Please correct it and try again.`);
+                            showError(t`The template body contains invalid Liquid syntax. Please correct it and try again.`);
+                        } else {
+                            // Handle other field errors normally
+                            handleFormError(editorForm, error, t`Failed to save template`);
+                        }
+                    } else {
+                        showError(t`Failed to save template`);
+                    }
+                    
                     onError?.(error, t`Failed to save template`);
                 },
             });
@@ -151,14 +160,29 @@ export const EmailTemplateSettingsBase = ({
                     onSaveSuccess?.();
                 },
                 onError: (error: any) => {
-                    handleFormError(form, error, t`Failed to create template`);
+                    if (error.response?.data?.errors && editorForm) {
+                        const errors = error.response.data.errors;
+                        
+                        // Check if body field has syntax error
+                        if (errors.body) {
+                            // Set form error for the body field and show specific message
+                            editorForm.setFieldError('body', t`Invalid Liquid syntax. Please correct it and try again.`);
+                            showError(t`The template body contains invalid Liquid syntax. Please correct it and try again.`);
+                        } else {
+                            // Handle other field errors normally
+                            handleFormError(editorForm, error, t`Failed to save template`);
+                        }
+                    } else {
+                        showError(t`Failed to create template`);
+                    }
+                    
                     onError?.(error, t`Failed to create template`);
                 },
             });
         }
     };
 
-    const handlePreviewTemplate = (data: { subject: string; body: string; template_type: EmailTemplateType }) => {
+    const handlePreviewTemplate = (data: { subject: string; body: string; template_type: EmailTemplateType; ctaLabel: string }) => {
         const params = contextType === 'event'
             ? {eventId: contextId, previewData: data}
             : {organizerId: contextId, previewData: data};

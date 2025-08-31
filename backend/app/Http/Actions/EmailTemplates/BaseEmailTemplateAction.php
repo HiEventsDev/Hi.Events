@@ -18,9 +18,8 @@ abstract class BaseEmailTemplateAction extends BaseAction
             'template_type' => ['required', new Enum(EmailTemplateType::class)],
             'subject' => ['required', 'string', 'max:255'],
             'body' => ['required', 'string'],
-            'cta' => ['nullable', 'array'],
-            'cta.label' => ['required_with:cta', 'string', 'max:100'],
-            'cta.url_token' => ['required_with:cta', 'string', 'max:50'],
+            'ctaLabel' => ['required', 'string', 'max:100'],
+            'isActive' => ['boolean'],
         ]);
     }
 
@@ -29,10 +28,8 @@ abstract class BaseEmailTemplateAction extends BaseAction
         return $request->validate([
             'subject' => ['required', 'string', 'max:255'],
             'body' => ['required', 'string'],
-            'cta' => ['nullable', 'array'],
-            'cta.label' => ['required_with:cta', 'string', 'max:100'],
-            'cta.url_token' => ['required_with:cta', 'string', 'max:50'],
-            'is_active' => ['boolean'],
+            'ctaLabel' => ['required', 'string', 'max:100'],
+            'isActive' => ['boolean'],
         ]);
     }
 
@@ -42,9 +39,7 @@ abstract class BaseEmailTemplateAction extends BaseAction
             'template_type' => ['required', new Enum(EmailTemplateType::class)],
             'subject' => ['required', 'string', 'max:255'],
             'body' => ['required', 'string'],
-            'cta' => ['nullable', 'array'],
-            'cta.label' => ['required_with:cta', 'string', 'max:100'],
-            'cta.url_token' => ['required_with:cta', 'string', 'max:50'],
+            'ctaLabel' => ['required', 'string', 'max:100'],
         ]);
     }
 
@@ -52,12 +47,17 @@ abstract class BaseEmailTemplateAction extends BaseAction
     {
         $validated = $this->validatePreviewRequest($request);
 
+        $cta = [
+            'label' => $validated['ctaLabel'],
+            'url_token' => $validated['template_type'] === 'order_confirmation' ? 'order.url' : 'ticket.url',
+        ];
+
         $preview = $handler->handle(
             new PreviewEmailTemplateDTO(
                 subject: $validated['subject'],
                 body: $validated['body'],
                 template_type: EmailTemplateType::from($validated['template_type']),
-                cta: $validated['cta'] ?? null,
+                cta: $cta,
             )
         );
 
