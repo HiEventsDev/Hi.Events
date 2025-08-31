@@ -4,7 +4,7 @@ namespace HiEvents\Jobs\Event;
 
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\Exceptions\EventStatisticsVersionMismatchException;
-use HiEvents\Services\Domain\EventStatistics\EventStatisticsUpdateService;
+use HiEvents\Services\Domain\EventStatistics\EventStatisticsIncrementService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -30,9 +30,9 @@ class UpdateEventStatisticsJob implements ShouldQueue
     /**
      * @throws EventStatisticsVersionMismatchException|Throwable
      */
-    public function handle(EventStatisticsUpdateService $service): void
+    public function handle(EventStatisticsIncrementService $service): void
     {
-        $service->updateStatistics($this->order);
+        $service->incrementForOrder($this->order);
     }
 
     public function failed(Throwable $exception): void
