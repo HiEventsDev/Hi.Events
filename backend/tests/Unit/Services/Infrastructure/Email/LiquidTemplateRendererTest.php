@@ -104,11 +104,11 @@ class LiquidTemplateRendererTest extends TestCase
         $this->assertIsArray($tokens);
         $this->assertNotEmpty($tokens);
         
-        // Check that some expected tokens are present
+        // Check that some expected tokens are present with new dot notation
         $tokenStrings = array_column($tokens, 'token');
-        $this->assertContains('{{ order_number }}', $tokenStrings);
-        $this->assertContains('{{ event_title }}', $tokenStrings);
-        $this->assertContains('{{ organizer_name }}', $tokenStrings);
+        $this->assertContains('{{ order.number }}', $tokenStrings);
+        $this->assertContains('{{ event.title }}', $tokenStrings);
+        $this->assertContains('{{ organizer.name }}', $tokenStrings);
     }
 
     public function test_returns_available_tokens_for_attendee_ticket(): void
@@ -118,12 +118,12 @@ class LiquidTemplateRendererTest extends TestCase
         $this->assertIsArray($tokens);
         $this->assertNotEmpty($tokens);
         
-        // Check that some expected tokens are present
+        // Check that some expected tokens are present with new dot notation
         $tokenStrings = array_column($tokens, 'token');
-        $this->assertContains('{{ attendee_name }}', $tokenStrings);
-        $this->assertContains('{{ ticket_name }}', $tokenStrings);
-        $this->assertContains('{{ event_title }}', $tokenStrings);
-        $this->assertContains('{{ ticket_url }}', $tokenStrings);
+        $this->assertContains('{{ attendee.name }}', $tokenStrings);
+        $this->assertContains('{{ ticket.name }}', $tokenStrings);
+        $this->assertContains('{{ event.title }}', $tokenStrings);
+        $this->assertContains('{{ ticket.url }}', $tokenStrings);
     }
 
     public function test_token_structure_contains_required_fields(): void
