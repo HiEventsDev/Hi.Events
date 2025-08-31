@@ -22,7 +22,7 @@ class GetAvailableTokensAction extends BaseAction
         $type = EmailTemplateType::tryFrom($templateType);
 
         if (!$type) {
-            return $this->jsonResponse(['error' => 'Invalid template type'], ResponseCodes::HTTP_BAD_REQUEST);
+            return $this->jsonResponse(['error' => __('Invalid template type')], ResponseCodes::HTTP_BAD_REQUEST);
         }
 
         $tokens = $this->handler->handle($type);

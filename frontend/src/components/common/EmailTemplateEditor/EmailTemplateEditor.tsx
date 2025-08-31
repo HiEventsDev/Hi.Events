@@ -3,7 +3,7 @@ import {ActionIcon, Button, Divider, Group, Stack, Switch, Tabs, Text, TextInput
 import {useForm} from '@mantine/form';
 import {IconBraces, IconEye, IconX} from '@tabler/icons-react';
 import {t, Trans} from '@lingui/macro';
-import {CreateEmailTemplateRequest, EmailTemplate, EmailTemplateType, UpdateEmailTemplateRequest} from '../../../types';
+import {CreateEmailTemplateRequest, EmailTemplate, EmailTemplateType, UpdateEmailTemplateRequest, DefaultEmailTemplate} from '../../../types';
 import {EmailTemplatePreviewPane} from './EmailTemplatePreviewPane';
 import {CTAConfiguration} from './CTAConfiguration';
 import classes from './EmailTemplateEditor.module.scss';
@@ -14,7 +14,7 @@ import {InsertLiquidVariableControl} from '../Editor/Controls/InsertLiquidVariab
 interface EmailTemplateEditorProps {
     templateType: EmailTemplateType;
     template?: EmailTemplate;
-    defaultTemplate?: { subject: string; body: string };
+    defaultTemplate?: DefaultEmailTemplate;
     onSave: (data: CreateEmailTemplateRequest | UpdateEmailTemplateRequest) => void;
     onPreview: (data: { subject: string; body: string; template_type: EmailTemplateType }) => void;
     onClose?: () => void;

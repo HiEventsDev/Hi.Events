@@ -8,7 +8,8 @@ import {
     PreviewEmailTemplateRequest,
     GenericDataResponse,
     IdParam,
-    EmailTemplateType
+    EmailTemplateType,
+    DefaultEmailTemplate
 } from "../types";
 
 export const emailTemplateClient = {
@@ -86,7 +87,7 @@ export const emailTemplateClient = {
 
     // Get default templates
     getDefaultTemplates: async () => {
-        const response = await api.get<GenericDataResponse<Record<string, { type: string; subject: string; body: string }>>>('email-templates/defaults');
+        const response = await api.get<Record<EmailTemplateType, DefaultEmailTemplate>>('email-templates/defaults');
         return response.data;
     },
 };

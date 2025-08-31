@@ -7,6 +7,7 @@ use HiEvents\DomainObjects\Enums\EmailTemplateType;
 use HiEvents\Repository\Interfaces\EmailTemplateRepositoryInterface;
 use HiEvents\Services\Domain\Email\DTO\RenderedEmailTemplateDTO;
 use HiEvents\Services\Infrastructure\Email\LiquidTemplateRenderer;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class EmailTemplateService
 {
@@ -72,19 +73,13 @@ class EmailTemplateService
         $defaults = $this->getDefaultTemplates();
         $ctaDefaults = $this->getDefaultCTAs();
 
-        $template = $defaults[$type->value] ?? [
-            'subject' => 'Email from {{ organizer_name }}',
-            'body' => 'Hello {{ attendee_name }},\n\nThank you for your order.',
-        ];
+        $template = $defaults[$type->value] ?? throw new ResourceNotFoundException('No default template for type ' . $type->value);
 
         $template['cta'] = $ctaDefaults[$type->value] ?? null;
 
         return $template;
     }
 
-    /**
-     * Preview a template with sample data
-     */
     public function previewTemplate(string $subject, string $body, EmailTemplateType $type): array
     {
         $context = $this->tokenBuilder->buildPreviewContext($type->value);
@@ -96,9 +91,6 @@ class EmailTemplateService
         ];
     }
 
-    /**
-     * Validate template syntax
-     */
     public function validateTemplate(string $subject, string $body): array
     {
         $errors = [];
@@ -205,12 +197,10 @@ Please find your ticket details below.<br>
 <strong>Price:</strong> {{ ticket_price }}<br>
 <strong>Attendee:</strong> {{ attendee_name }}<br>
 
-<strong>💡 Remember:</strong> Please have your ticket ready when you arrive at the event.<br>
+<strong>💡Remember:</strong> Please have your ticket ready when you arrive at the event.<br>
 
 If you have any questions or need assistance, please reply to this email or contact the event organizer at <a href="mailto:{{ support_email }}">{{ support_email }}</a>.<br>
 
-Best regards,<br>
-{{ organizer_name }}
 LIQUID
             ],
         ];

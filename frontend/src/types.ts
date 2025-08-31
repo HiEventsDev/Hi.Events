@@ -909,3 +909,12 @@ export interface EmailTemplatePreview {
     body: string;
     context: Record<string, any>;
 }
+
+export interface DefaultEmailTemplate {
+    subject: string;
+    body: string;
+    cta?: {
+        label: string;
+        url_token: string;
+    };
+}
