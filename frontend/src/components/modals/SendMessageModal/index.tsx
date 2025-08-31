@@ -15,7 +15,6 @@ import {useSendEventMessage} from "../../../mutations/useSendEventMessage.ts";
 import {ProductSelector} from "../../common/ProductSelector";
 import {useEffect} from "react";
 import {useGetAccount} from "../../../queries/useGetAccount.ts";
-import { getConfig } from "../../../utilites/config.ts";
 import {StripeConnectButton} from "../../common/StripeConnectButton";
 
 interface EventMessageModalProps extends GenericModalProps {
