@@ -6,10 +6,10 @@ use Carbon\Carbon;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Enums\ProductPriceType;
 use HiEvents\DomainObjects\Enums\QuestionTypeEnum;
+use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\QuestionDomainObject;
-use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\Resources\Attendee\AttendeeResource;
 use HiEvents\Services\Domain\Question\QuestionAnswerFormatter;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -74,9 +74,8 @@ class AttendeesExport implements FromCollection, WithHeadings, WithMapping, With
      */
     public function map($attendee): array
     {
-
         $productAnswers = $this->productQuestions->map(function (QuestionDomainObject $question) use ($attendee) {
-           $answer = $attendee->getQuestionAndAnswerViews()
+            $answer = $attendee->getQuestionAndAnswerViews()
                 ->first(fn($qav) => $qav->getQuestionId() === $question->getId())?->getAnswer() ?? '';
 
             return $this->questionAnswerFormatter->getAnswerAsText(
@@ -85,10 +84,7 @@ class AttendeesExport implements FromCollection, WithHeadings, WithMapping, With
             );
         });
 
-
-
         $orderAnswers = $this->orderQuestions->map(function (QuestionDomainObject $question) use ($attendee) {
-
             /** @var OrderDomainObject $order */
             $order = $attendee->getOrder();
             $answer = $order->getQuestionAndAnswerViews()
