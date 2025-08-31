@@ -9,12 +9,12 @@ use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
 
-readonly class UpdateEventSettingsHandler
+class UpdateEventSettingsHandler
 {
     public function __construct(
-        private EventSettingsRepositoryInterface $eventSettingsRepository,
-        private HtmlPurifierService                     $purifier,
-        private DatabaseManager                  $databaseManager,
+        private readonly EventSettingsRepositoryInterface $eventSettingsRepository,
+        private readonly HtmlPurifierService              $purifier,
+        private readonly DatabaseManager                  $databaseManager,
     )
     {
     }
