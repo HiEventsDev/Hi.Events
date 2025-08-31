@@ -845,3 +845,76 @@ export interface WebhookLog {
     event_type: string;
     created_at: string;
 }
+
+// Email Template Types
+export type EmailTemplateType = 'order_confirmation' | 'attendee_ticket';
+export type EmailTemplateEngine = 'liquid' | 'blade';
+
+export interface EmailTemplate {
+    id: number;
+    account_id: number;
+    organizer_id?: number;
+    event_id?: number;
+    template_type: EmailTemplateType;
+    subject: string;
+    body: string;
+    cta?: {
+        label: string;
+        url_token: string;
+    };
+    engine: EmailTemplateEngine;
+    is_active: boolean;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface EmailTemplateToken {
+    token: string;
+    description: string;
+    example: string;
+}
+
+export interface CreateEmailTemplateRequest {
+    template_type: EmailTemplateType;
+    subject: string;
+    body: string;
+    cta?: {
+        label: string;
+        url_token: string;
+    };
+}
+
+export interface UpdateEmailTemplateRequest {
+    subject: string;
+    body: string;
+    cta?: {
+        label: string;
+        url_token: string;
+    };
+    is_active?: boolean;
+}
+
+export interface PreviewEmailTemplateRequest {
+    template_type: EmailTemplateType;
+    subject: string;
+    body: string;
+    cta?: {
+        label: string;
+        url_token: string;
+    };
+}
+
+export interface EmailTemplatePreview {
+    subject: string;
+    body: string;
+    context: Record<string, any>;
+}
+
+export interface DefaultEmailTemplate {
+    subject: string;
+    body: string;
+    cta?: {
+        label: string;
+        url_token: string;
+    };
+}

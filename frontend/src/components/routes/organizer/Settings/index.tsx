@@ -2,16 +2,20 @@ import {SeoSettings} from "./Sections/SeoSettings";
 import BasicSettings from "./Sections/BasicSettings";
 import {SocialLinks} from "./Sections/SocialLinks";
 import {AddressSettings} from "./Sections/AddressSettings";
+import EmailTemplateSettings from "./Sections/EmailTemplateSettings";
 import {PageBody} from "../../../common/PageBody";
 import {PageTitle} from "../../../common/PageTitle";
 import {t} from "@lingui/macro";
 import {Box, Group, NavLink as MantineNavLink, Stack} from "@mantine/core";
-import {IconBrandGoogleAnalytics, IconInfoCircle, IconMapPin, IconShare} from "@tabler/icons-react";
+import {IconBrandGoogleAnalytics, IconInfoCircle, IconMapPin, IconShare, IconMail} from "@tabler/icons-react";
 import {useMediaQuery} from "@mantine/hooks";
 import {useState} from "react";
 import {Card} from "../../../common/Card";
+import {useParams} from "react-router";
 
 const Settings = () => {
+    const { organizerId } = useParams();
+    
     const SECTIONS = [
         {
             id: 'basic-settings',
@@ -42,6 +46,12 @@ const Settings = () => {
             label: t`SEO`,
             icon: IconBrandGoogleAnalytics,
             component: SeoSettings
+        },
+        {
+            id: 'email-templates',
+            label: t`Email Templates`,
+            icon: IconMail,
+            component: () => <EmailTemplateSettings organizerId={organizerId!} />
         },
     ];
 

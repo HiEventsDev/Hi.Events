@@ -12,6 +12,7 @@ use HiEvents\Repository\Eloquent\AttendeeCheckInRepository;
 use HiEvents\Repository\Eloquent\AttendeeRepository;
 use HiEvents\Repository\Eloquent\CapacityAssignmentRepository;
 use HiEvents\Repository\Eloquent\CheckInListRepository;
+use HiEvents\Repository\Eloquent\EmailTemplateRepository;
 use HiEvents\Repository\Eloquent\EventDailyStatisticRepository;
 use HiEvents\Repository\Eloquent\EventRepository;
 use HiEvents\Repository\Eloquent\EventSettingsRepository;
@@ -49,6 +50,7 @@ use HiEvents\Repository\Interfaces\AttendeeCheckInRepositoryInterface;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\CapacityAssignmentRepositoryInterface;
 use HiEvents\Repository\Interfaces\CheckInListRepositoryInterface;
+use HiEvents\Repository\Interfaces\EmailTemplateRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventDailyStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
@@ -123,6 +125,7 @@ class RepositoryServiceProvider extends ServiceProvider
         QuestionAndAnswerViewRepositoryInterface::class => QuestionAndAnswerViewRepository::class,
         OutgoingMessageRepositoryInterface::class => OutgoingMessageRepository::class,
         OrganizerSettingsRepositoryInterface::class => OrganizerSettingsRepository::class,
+        EmailTemplateRepositoryInterface::class => EmailTemplateRepository::class,
     ];
 
     public function register(): void
