@@ -18,6 +18,9 @@ use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\StripePaymentsRepositoryInterface;
+use HiEvents\Services\Infrastructure\Stripe\StripeClientFactory;
+use HiEvents\Services\Infrastructure\Stripe\StripeConfigurationService;
+use HiEvents\DomainObjects\Enums\StripePlatform;
 use HiEvents\Services\Domain\Payment\Stripe\DTOs\CreatePaymentIntentRequestDTO;
 use HiEvents\Services\Domain\Payment\Stripe\DTOs\CreatePaymentIntentResponseDTO;
 use HiEvents\Services\Domain\Payment\Stripe\StripePaymentIntentCreationService;
@@ -34,6 +37,8 @@ readonly class CreatePaymentIntentHandler
         private CheckoutSessionManagementService   $sessionIdentifierService,
         private StripePaymentsRepositoryInterface  $stripePaymentsRepository,
         private AccountRepositoryInterface         $accountRepository,
+        private StripeClientFactory                $stripeClientFactory,
+        private StripeConfigurationService         $stripeConfigurationService,
     )
     {
     }
@@ -71,24 +76,35 @@ readonly class CreatePaymentIntentHandler
             ))
             ->findByEventId($order->getEventId());
 
+        // Get platform information from account
+        $stripePlatform = StripePlatform::fromString($account->getStripePlatform());
+        $stripeClient = $this->stripeClientFactory->createForPlatform($stripePlatform);
+        $publicKey = $this->stripeConfigurationService->getPublicKey($stripePlatform);
+
         // If we already have a Stripe session then re-fetch the client secret
         if ($order->getStripePayment() !== null) {
             return new CreatePaymentIntentResponseDTO(
                 paymentIntentId: $order->getStripePayment()->getPaymentIntentId(),
-                clientSecret: $this->stripePaymentService->retrievePaymentIntentClientSecret(
+                clientSecret: $this->stripePaymentService->retrievePaymentIntentClientSecretWithClient(
+                    $stripeClient,
                     $order->getStripePayment()->getPaymentIntentId(),
                     $account->getStripeAccountId()
                 ),
                 accountId: $account->getStripeAccountId(),
+                stripePlatform: $stripePlatform,
+                publicKey: $publicKey,
             );
         }
 
-        $paymentIntent = $this->stripePaymentService->createPaymentIntent(CreatePaymentIntentRequestDTO::fromArray([
-            'amount' => MoneyValue::fromFloat($order->getTotalGross(), $order->getCurrency()),
-            'currencyCode' => $order->getCurrency(),
-            'account' => $account,
-            'order' => $order,
-        ]));
+        $paymentIntent = $this->stripePaymentService->createPaymentIntentWithClient(
+            $stripeClient,
+            CreatePaymentIntentRequestDTO::fromArray([
+                'amount' => MoneyValue::fromFloat($order->getTotalGross(), $order->getCurrency()),
+                'currencyCode' => $order->getCurrency(),
+                'account' => $account,
+                'order' => $order,
+            ])
+        );
 
         $this->stripePaymentsRepository->create([
             StripePaymentDomainObjectAbstract::ORDER_ID => $order->getId(),
@@ -97,6 +113,13 @@ readonly class CreatePaymentIntentHandler
             StripePaymentDomainObjectAbstract::APPLICATION_FEE => $paymentIntent->applicationFeeAmount,
         ]);
 
-        return $paymentIntent;
+        return new CreatePaymentIntentResponseDTO(
+            paymentIntentId: $paymentIntent->paymentIntentId,
+            clientSecret: $paymentIntent->clientSecret,
+            accountId: $paymentIntent->accountId,
+            applicationFeeAmount: $paymentIntent->applicationFeeAmount,
+            stripePlatform: $stripePlatform,
+            publicKey: $publicKey,
+        );
     }
 }

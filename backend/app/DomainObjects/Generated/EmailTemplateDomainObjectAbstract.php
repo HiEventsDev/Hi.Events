@@ -22,6 +22,7 @@ abstract class EmailTemplateDomainObjectAbstract extends \HiEvents\DomainObjects
     final public const IS_ACTIVE = 'is_active';
     final public const CREATED_AT = 'created_at';
     final public const UPDATED_AT = 'updated_at';
+    final public const DELETED_AT = 'deleted_at';
 
     protected int $id;
     protected int $account_id;
@@ -35,6 +36,7 @@ abstract class EmailTemplateDomainObjectAbstract extends \HiEvents\DomainObjects
     protected bool $is_active = true;
     protected ?string $created_at = null;
     protected ?string $updated_at = null;
+    protected ?string $deleted_at = null;
 
     public function toArray(): array
     {
@@ -51,6 +53,7 @@ abstract class EmailTemplateDomainObjectAbstract extends \HiEvents\DomainObjects
                     'is_active' => $this->is_active ?? null,
                     'created_at' => $this->created_at ?? null,
                     'updated_at' => $this->updated_at ?? null,
+                    'deleted_at' => $this->deleted_at ?? null,
                 ];
     }
 
@@ -184,5 +187,16 @@ abstract class EmailTemplateDomainObjectAbstract extends \HiEvents\DomainObjects
     public function getUpdatedAt(): ?string
     {
         return $this->updated_at;
+    }
+
+    public function setDeletedAt(?string $deleted_at): self
+    {
+        $this->deleted_at = $deleted_at;
+        return $this;
+    }
+
+    public function getDeletedAt(): ?string
+    {
+        return $this->deleted_at;
     }
 }
