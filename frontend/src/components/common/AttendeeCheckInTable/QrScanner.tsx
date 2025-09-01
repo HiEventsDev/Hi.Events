@@ -10,6 +10,7 @@ import {t, Trans} from "@lingui/macro";
 interface QRScannerComponentProps {
     onAttendeeScanned: (attendeePublicId: string) => void;
     onClose: () => void;
+    isSoundOn?: boolean;
 }
 
 export const QRScannerComponent = (props: QRScannerComponentProps) => {
@@ -34,13 +35,27 @@ export const QRScannerComponent = (props: QRScannerComponentProps) => {
     const scanInProgressAudioRef = useRef<HTMLAudioElement | null>(null);
 
     const [isSoundOn, setIsSoundOn] = useState(() => {
-        const storedIsSoundOn = localStorage.getItem("qrScannerSoundOn");
+        // Use the prop value if provided, otherwise fallback to unified storage
+        if (props.isSoundOn !== undefined) {
+            return props.isSoundOn;
+        }
+        const storedIsSoundOn = localStorage.getItem("scannerSoundOn");
         return storedIsSoundOn === null ? true : JSON.parse(storedIsSoundOn);
     });
 
+    // Sync with prop changes
     useEffect(() => {
-        localStorage.setItem("qrScannerSoundOn", JSON.stringify(isSoundOn));
-    }, [isSoundOn]);
+        if (props.isSoundOn !== undefined) {
+            setIsSoundOn(props.isSoundOn);
+        }
+    }, [props.isSoundOn]);
+
+    useEffect(() => {
+        // Only save to localStorage if not controlled by props
+        if (props.isSoundOn === undefined) {
+            localStorage.setItem("scannerSoundOn", JSON.stringify(isSoundOn));
+        }
+    }, [isSoundOn, props.isSoundOn]);
 
     useEffect(() => {
         latestProcessedAttendeeIdsRef.current = processedAttendeeIds;
