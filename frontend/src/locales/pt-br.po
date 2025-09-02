@@ -32,11 +32,15 @@ msgstr "'Ainda não há nada para mostrar'"
 msgid "{0}"
 msgstr "{0}"
 
-#: src/components/layouts/CheckIn/index.tsx:82
+#: src/components/layouts/CheckIn/index.tsx:237
+msgid "{0} {1} is already checked in"
+msgstr ""
+
+#: src/components/layouts/CheckIn/index.tsx:133
 msgid "{0} <0>checked in</0> successfully"
 msgstr "{0} <0>registrado</0> com sucesso"
 
-#: src/components/layouts/CheckIn/index.tsx:106
+#: src/components/layouts/CheckIn/index.tsx:159
 msgid "{0} <0>checked out</0> successfully"
 msgstr "{0} <0>desmarcado</0> com sucesso"
 
@@ -65,7 +69,7 @@ msgstr "{0} organizadores"
 msgid "{0} updated successfully"
 msgstr "{0} atualizado com sucesso"
 
-#: src/components/layouts/CheckIn/index.tsx:449
+#: src/components/common/CheckIn/CheckInInfoModal.tsx:40
 msgid "{0}/{1} checked in"
 msgstr "{0}/{1} registrado"
 
@@ -144,10 +148,6 @@ msgstr "0 minutos e 0 segundos"
 #: src/components/routes/event/Webhooks/index.tsx:23
 msgid "1 Active Webhook"
 msgstr "1 webhook ativo"
-
-#: src/components/modals/RefundOrderModal/index.tsx:105
-msgid "10.00"
-msgstr "10.00"
 
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:123
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:81
@@ -474,7 +474,7 @@ msgstr "Todos os eventos arquivados"
 msgid "All attendees"
 msgstr "Todos os participantes"
 
-#: src/components/modals/SendMessageModal/index.tsx:188
+#: src/components/modals/SendMessageModal/index.tsx:182
 msgid "All attendees of this event"
 msgstr "Todos os participantes deste evento"
 
@@ -507,6 +507,18 @@ msgstr "Permitir que os mecanismos de pesquisa indexem esse evento"
 #: src/components/routes/product-widget/PaymentReturn/index.tsx:78
 msgid "Almost there! We're just waiting for your payment to be processed. This should only take a few seconds.."
 msgstr "Quase lá! Estamos apenas aguardando o processamento do seu pagamento. Isso deve levar apenas alguns segundos..."
+
+#: src/components/modals/RefundOrderModal/index.tsx:85
+msgid "Already Refunded"
+msgstr ""
+
+#: src/components/modals/RefundOrderModal/index.tsx:130
+msgid "Also cancel this order"
+msgstr ""
+
+#: src/components/modals/CancelOrderModal/index.tsx:76
+msgid "Also refund this order"
+msgstr ""
 
 #: src/components/routes/event/Settings/Sections/SeoSettings/index.tsx:77
 #: src/components/routes/organizer/Settings/Sections/SeoSettings/index.tsx:77
@@ -719,7 +731,7 @@ msgstr "Gestão de participantes"
 msgid "Attendee Name"
 msgstr "Nome do Participante"
 
-#: src/components/layouts/CheckIn/index.tsx:150
+#: src/components/layouts/CheckIn/index.tsx:228
 msgid "Attendee not found"
 msgstr "Participante não encontrado"
 
@@ -743,7 +755,7 @@ msgstr "Participante atualizado"
 
 #: src/components/common/OrdersTable/index.tsx:206
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:243
-#: src/components/common/StatBoxes/index.tsx:51
+#: src/components/common/StatBoxes/index.tsx:45
 #: src/components/layouts/Event/index.tsx:99
 #: src/components/modals/ManageOrderModal/index.tsx:126
 #: src/components/routes/event/attendees.tsx:59
@@ -759,7 +771,7 @@ msgstr "Participantes exportados"
 msgid "Attendees Registered"
 msgstr "Participantes Registrados"
 
-#: src/components/modals/SendMessageModal/index.tsx:184
+#: src/components/modals/SendMessageModal/index.tsx:178
 msgid "Attendees with a specific ticket"
 msgstr "Participantes com um tíquete específico"
 
@@ -775,12 +787,16 @@ msgstr "Gestão automatizada de entrada com várias listas de check-in e valida�
 msgid "Automatically resize the widget height based on the content. When disabled, the widget will fill the height of the container."
 msgstr "Redimensiona automaticamente a altura do widget com base no conteúdo. Quando desativado, o widget preencherá a altura do contêiner."
 
+#: src/components/modals/RefundOrderModal/index.tsx:92
+msgid "Available to Refund"
+msgstr ""
+
 #: src/components/common/Editor/Controls/LiquidTokenControl.tsx:76
 msgid "Available Tokens"
 msgstr "Tokens Disponíveis"
 
 #: src/components/common/OrderStatusBadge/index.tsx:15
-#: src/components/modals/SendMessageModal/index.tsx:232
+#: src/components/modals/SendMessageModal/index.tsx:226
 msgid "Awaiting offline payment"
 msgstr "Aguardando pagamento offline"
 
@@ -794,7 +810,7 @@ msgstr "Aguardando pagamento offline"
 msgid "Awaiting Offline Pmt."
 msgstr "Aguardando pagamento offline"
 
-#: src/components/layouts/CheckIn/index.tsx:263
+#: src/components/common/CheckIn/AttendeeList.tsx:82
 msgid "Awaiting payment"
 msgstr "Aguardando pagamento"
 
@@ -838,7 +854,7 @@ msgstr "Tipo de plano de fundo"
 msgid "Basic Information"
 msgstr "Informações básicas"
 
-#: src/components/modals/SendMessageModal/index.tsx:279
+#: src/components/modals/SendMessageModal/index.tsx:273
 msgid "Before you send!"
 msgstr "Antes de enviar!"
 
@@ -892,40 +908,48 @@ msgstr "Califórnia"
 msgid "Call-to-Action Button"
 msgstr "Botão de Chamada para Ação"
 
-#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:175
+#: src/components/common/AttendeeCheckInTable/PermissionDeniedMessage.tsx:16
 msgid "Camera permission was denied. <0>Request Permission</0> again, or if this doesn't work, you will need to <1>grant this page</1> access to your camera in your browser settings."
 msgstr "A permissão da câmera foi negada. <0>Solicite a permissão</0> novamente ou, se isso não funcionar, será necessário <1>conceder a esta página</1> acesso à sua câmera nas configurações do navegador."
 
+#: src/components/common/CheckIn/ScannerSelectionModal.tsx:35
+msgid "Camera Scanner"
+msgstr "Scanner de câmera"
+
 #: src/components/common/AttendeeTable/index.tsx:183
+#: src/components/common/CheckIn/CheckInOptionsModal.tsx:59
+#: src/components/common/CheckIn/ScannerSelectionModal.tsx:57
 #: src/components/common/ContactOrganizerModal/index.tsx:104
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:115
 #: src/components/common/PromoCodeTable/index.tsx:40
 #: src/components/common/QuestionAndAnswerList/index.tsx:149
-#: src/components/layouts/CheckIn/index.tsx:225
 #: src/utilites/confirmationDialog.tsx:11
 msgid "Cancel"
 msgstr "Cancelar"
+
+#: src/components/modals/RefundOrderModal/index.tsx:131
+msgid "Cancel all products and release them back to the pool"
+msgstr ""
 
 #: src/components/routes/profile/ManageProfile/index.tsx:126
 msgid "Cancel email change"
 msgstr "Cancelar alteração de e-mail"
 
 #: src/components/common/OrdersTable/index.tsx:190
-#: src/components/modals/RefundOrderModal/index.tsx:112
 msgid "Cancel order"
 msgstr "Cancelar pedido"
 
-#: src/components/modals/CancelOrderModal/index.tsx:59
+#: src/components/modals/CancelOrderModal/index.tsx:83
 msgid "Cancel Order"
 msgstr "Cancelar pedido"
 
-#: src/components/modals/CancelOrderModal/index.tsx:44
+#: src/components/modals/CancelOrderModal/index.tsx:57
 msgid "Cancel Order {0}"
 msgstr "Cancelar pedido {0}"
 
-#: src/components/modals/CancelOrderModal/index.tsx:54
-msgid "Canceling will cancel all products associated with this order, and release the products back into the available pool."
-msgstr "Cancelar irá cancelar todos os produtos associados a este pedido e devolver os produtos ao estoque disponível."
+#: src/components/modals/CancelOrderModal/index.tsx:67
+msgid "Canceling will cancel all attendees associated with this order, and release the tickets back into the available pool."
+msgstr ""
 
 #: src/components/common/AttendeeTicket/index.tsx:61
 #: src/components/common/OrderStatusBadge/index.tsx:12
@@ -934,9 +958,9 @@ msgstr "Cancelar irá cancelar todos os produtos associados a este pedido e devo
 msgid "Cancelled"
 msgstr "Cancelado"
 
-#: src/components/layouts/CheckIn/index.tsx:173
+#: src/components/common/CheckIn/AttendeeList.tsx:30
 msgid "Cannot Check In"
-msgstr "Não é possível fazer o check-in"
+msgstr "Não é possível fazer check-in"
 
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:42
 #: src/components/layouts/Event/index.tsx:103
@@ -988,25 +1012,25 @@ msgstr "Alterar senha"
 msgid "Charity"
 msgstr "Caridade"
 
-#: src/components/layouts/CheckIn/index.tsx:180
+#: src/components/common/CheckIn/AttendeeList.tsx:37
 msgid "Check In"
-msgstr "Check-in"
+msgstr "Fazer check-in"
 
-#: src/components/layouts/CheckIn/index.tsx:193
+#: src/components/common/CheckIn/CheckInOptionsModal.tsx:27
 msgid "Check in {0} {1}"
 msgstr "Fazer check-in de {0} {1}"
 
-#: src/components/layouts/CheckIn/index.tsx:218
+#: src/components/common/CheckIn/CheckInOptionsModal.tsx:52
 msgid "Check in and mark order as paid"
 msgstr "Fazer check-in e marcar pedido como pago"
 
-#: src/components/layouts/CheckIn/index.tsx:209
+#: src/components/common/CheckIn/CheckInOptionsModal.tsx:43
 msgid "Check in only"
 msgstr "Apenas fazer check-in"
 
-#: src/components/layouts/CheckIn/index.tsx:177
+#: src/components/common/CheckIn/AttendeeList.tsx:34
 msgid "Check Out"
-msgstr "Desmarcar"
+msgstr "Fazer check-out"
 
 #: src/components/layouts/Checkout/index.tsx:104
 msgid "Check out this event!"
@@ -1036,15 +1060,15 @@ msgstr "Lista de registro criada com sucesso"
 msgid "Check-In List deleted successfully"
 msgstr "Lista de registro excluída com sucesso"
 
-#: src/components/layouts/CheckIn/index.tsx:326
+#: src/components/layouts/CheckIn/index.tsx:365
 msgid "Check-in list has expired"
 msgstr "A lista de registro expirou"
 
-#: src/components/layouts/CheckIn/index.tsx:343
+#: src/components/layouts/CheckIn/index.tsx:382
 msgid "Check-in list is not active"
 msgstr "A lista de registro não está ativa"
 
-#: src/components/layouts/CheckIn/index.tsx:311
+#: src/components/layouts/CheckIn/index.tsx:350
 msgid "Check-in list not found"
 msgstr "Lista de check-in não encontrada"
 
@@ -1124,8 +1148,8 @@ msgstr "Clique para copiar"
 msgid "close"
 msgstr "fechar"
 
-#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:186
-#: src/components/modals/RefundOrderModal/index.tsx:125
+#: src/components/common/AttendeeCheckInTable/PermissionDeniedMessage.tsx:27
+#: src/components/modals/RefundOrderModal/index.tsx:168
 #: src/components/routes/product-widget/SelectProducts/index.tsx:581
 msgid "Close"
 msgstr "Fechar"
@@ -1227,7 +1251,7 @@ msgstr "Concluir configuração do Stripe"
 msgid "Complete these steps to start selling tickets for your event."
 msgstr "Complete estas etapas para começar a vender ingressos para o seu evento."
 
-#: src/components/modals/SendMessageModal/index.tsx:231
+#: src/components/modals/SendMessageModal/index.tsx:225
 #: src/components/routes/event/GettingStarted/index.tsx:70
 #: src/components/routes/event/orders.tsx:23
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:352
@@ -1310,6 +1334,10 @@ msgstr "Conectar processamento de pagamento"
 msgid "Connect Stripe"
 msgstr "Conectar faixa"
 
+#: src/components/modals/SendMessageModal/index.tsx:159
+msgid "Connect Stripe to enable messaging"
+msgstr ""
+
 #: src/components/routes/event/EventDashboard/index.tsx:205
 msgid "Connect to Stripe"
 msgstr "Conectar ao Stripe"
@@ -1357,14 +1385,6 @@ msgstr "Email de contacto"
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:73
 msgid "Contact email for support"
 msgstr "E-mail de contato para suporte"
-
-#: src/components/modals/SendMessageModal/index.tsx:168
-msgid "Contact Support"
-msgstr "Contactar o suporte"
-
-#: src/components/modals/SendMessageModal/index.tsx:159
-msgid "Contact us to enable messaging"
-msgstr "Entre em contato conosco para ativar a mensagem"
 
 #: src/components/routes/event/HomepageDesigner/index.tsx:210
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:386
@@ -1693,6 +1713,10 @@ msgstr "Modelo personalizado"
 msgid "Customer"
 msgstr "Cliente"
 
+#: src/components/modals/RefundOrderModal/index.tsx:124
+msgid "Customer will receive an email confirming the refund"
+msgstr ""
+
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:26
 msgid "Customer's email address"
 msgstr "Endereço de e-mail do cliente"
@@ -1953,11 +1977,9 @@ msgstr "Seleção suspensa"
 
 #: src/components/modals/SendMessageModal/index.tsx:160
 msgid ""
-"Due to the high risk of spam, we require manual verification before you can send messages.\n"
-"Please contact us to request access."
+"Due to the high risk of spam, you must connect a Stripe account before you can send messages to attendees.\n"
+"This is to ensure that all event organizers are verified and accountable."
 msgstr ""
-"Devido ao alto risco de spam, exigimos verificação manual antes que você possa enviar mensagens.\n"
-"Entre em contato conosco para solicitar acesso."
 
 #: src/components/common/EventCard/index.tsx:98
 msgid "Duplicate event"
@@ -2492,7 +2514,7 @@ msgstr "Facebook"
 msgid "Failed to cancel attendee"
 msgstr "Falha ao cancelar o participante"
 
-#: src/components/modals/CancelOrderModal/index.tsx:33
+#: src/components/modals/CancelOrderModal/index.tsx:46
 msgid "Failed to cancel order"
 msgstr "Falha ao cancelar o pedido"
 
@@ -2669,7 +2691,7 @@ msgstr "Valor fixo"
 msgid "Fixed Fee:"
 msgstr "Taxa fixa:"
 
-#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:123
+#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:138
 msgid "Flash is not available on this device"
 msgstr "O Flash não está disponível neste dispositivo"
 
@@ -2707,6 +2729,10 @@ msgstr "Produto gratuito, sem necessidade de informações de pagamento"
 #: src/components/common/LanguageSwitcher/index.tsx:20
 msgid "French"
 msgstr "Francês"
+
+#: src/components/modals/RefundOrderModal/index.tsx:109
+msgid "Full refund"
+msgstr ""
 
 #: src/components/layouts/AuthLayout/index.tsx:90
 msgid "Fully Integrated"
@@ -3108,10 +3134,6 @@ msgstr "Numeração da fatura"
 msgid "Invoice Settings"
 msgstr "Configurações da fatura"
 
-#: src/components/modals/RefundOrderModal/index.tsx:115
-msgid "Issue refund"
-msgstr "Emitir reembolso"
-
 #: src/components/common/LanguageSwitcher/index.tsx:22
 msgid "Italian"
 msgstr "Italiano"
@@ -3395,7 +3417,7 @@ msgstr "Participante da mensagem"
 msgid "Message Attendees"
 msgstr "Participantes da mensagem"
 
-#: src/components/modals/SendMessageModal/index.tsx:207
+#: src/components/modals/SendMessageModal/index.tsx:201
 msgid "Message attendees with specific tickets"
 msgstr "Enviar mensagens aos participantes com ingressos específicos"
 
@@ -3411,7 +3433,7 @@ msgstr "Comprador de mensagens"
 msgid "Message cannot exceed 5000 characters"
 msgstr "Mensagem não pode exceder 5000 caracteres"
 
-#: src/components/modals/SendMessageModal/index.tsx:251
+#: src/components/modals/SendMessageModal/index.tsx:245
 msgid "Message Content"
 msgstr "Conteúdo da mensagem"
 
@@ -3423,7 +3445,7 @@ msgstr "Mensagem para participantes individuais"
 msgid "Message is required"
 msgstr "A mensagem é obrigatória"
 
-#: src/components/modals/SendMessageModal/index.tsx:219
+#: src/components/modals/SendMessageModal/index.tsx:213
 msgid "Message order owners with specific products"
 msgstr "Enviar mensagem para proprietários de pedidos com produtos específicos"
 
@@ -3732,10 +3754,6 @@ msgstr "Nada para mostrar ainda"
 msgid "Notification Settings"
 msgstr "Configurações de notificação"
 
-#: src/components/modals/RefundOrderModal/index.tsx:108
-msgid "Notify buyer of refund"
-msgstr "Notificar o comprador sobre o reembolso"
-
 #: src/components/routes/event/Settings/Sections/EmailSettings/index.tsx:75
 msgid "Notify organizer of new orders"
 msgstr "Notificar o organizador sobre novos pedidos"
@@ -3822,7 +3840,7 @@ msgstr "Evento online"
 msgid "Online Event Details"
 msgstr "Detalhes do evento on-line"
 
-#: src/components/modals/SendMessageModal/index.tsx:280
+#: src/components/modals/SendMessageModal/index.tsx:274
 msgid ""
 "Only important emails, which are directly related to this event, should be sent using this form.\n"
 "Any misuse, including sending promotional emails, will lead to an immediate account ban."
@@ -3830,7 +3848,7 @@ msgstr ""
 "Somente e-mails importantes, diretamente relacionados a esse evento, devem ser enviados por meio desse formulário.\n"
 "Qualquer uso indevido, inclusive o envio de e-mails promocionais, levará ao banimento imediato da conta."
 
-#: src/components/modals/SendMessageModal/index.tsx:227
+#: src/components/modals/SendMessageModal/index.tsx:221
 msgid "Only send to orders with these statuses"
 msgstr "Enviar apenas para pedidos com esses status"
 
@@ -3914,7 +3932,11 @@ msgstr "E-mail do Pedido"
 msgid "Order First Name"
 msgstr "Primeiro Nome do Pedido"
 
-#: src/components/modals/CancelOrderModal/index.tsx:29
+#: src/components/modals/CancelOrderModal/index.tsx:40
+msgid "Order has been canceled and refunded. The order owner has been notified."
+msgstr ""
+
+#: src/components/modals/CancelOrderModal/index.tsx:41
 msgid "Order has been canceled and the order owner has been notified."
 msgstr "O pedido foi cancelado e o proprietário do pedido foi notificado."
 
@@ -3946,7 +3968,7 @@ msgstr "Número do Pedido"
 msgid "Order owner"
 msgstr "Proprietário do pedido"
 
-#: src/components/modals/SendMessageModal/index.tsx:192
+#: src/components/modals/SendMessageModal/index.tsx:186
 msgid "Order owners with a specific product"
 msgstr "Proprietários de pedidos com um produto específico"
 
@@ -3973,7 +3995,7 @@ msgstr "Pedido reembolsado"
 msgid "Order Status"
 msgstr "Status do pedido"
 
-#: src/components/modals/SendMessageModal/index.tsx:229
+#: src/components/modals/SendMessageModal/index.tsx:223
 msgid "Order statuses"
 msgstr "Status dos pedidos"
 
@@ -3987,6 +4009,7 @@ msgid "Order timeout"
 msgstr "Tempo limite do pedido"
 
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:22
+#: src/components/modals/RefundOrderModal/index.tsx:78
 msgid "Order Total"
 msgstr "Total do Pedido"
 
@@ -4133,6 +4156,10 @@ msgstr "pago"
 #: src/components/forms/ProductForm/index.tsx:145
 msgid "Paid Product"
 msgstr "Produto Pago"
+
+#: src/components/modals/RefundOrderModal/index.tsx:109
+msgid "Partial refund"
+msgstr ""
 
 #: src/components/routes/event/orders.tsx:30
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:54
@@ -4342,7 +4369,7 @@ msgstr "Por favor, introduza o código de 5 dígitos"
 msgid "Please enter your new password"
 msgstr "Digite sua nova senha"
 
-#: src/components/modals/CancelOrderModal/index.tsx:52
+#: src/components/modals/CancelOrderModal/index.tsx:65
 msgid "Please Note"
 msgstr "Observação"
 
@@ -4354,7 +4381,7 @@ msgstr "Por favor, forneça uma imagem."
 msgid "Please return to the event page to start over."
 msgstr "Por favor, volte para a página do evento para recomeçar."
 
-#: src/components/modals/SendMessageModal/index.tsx:196
+#: src/components/modals/SendMessageModal/index.tsx:190
 msgid "Please select"
 msgstr "Selecione"
 
@@ -4483,6 +4510,10 @@ msgstr "Imprimir ingressos"
 msgid "Privacy Policy"
 msgstr "Política de Privacidade"
 
+#: src/components/modals/RefundOrderModal/index.tsx:149
+msgid "Process Refund"
+msgstr ""
+
 #: src/components/common/AttendeeDetails/index.tsx:37
 #: src/components/modals/ManageAttendeeModal/index.tsx:119
 msgid "Product"
@@ -4551,7 +4582,7 @@ msgstr "Produto(s)"
 msgid "Products"
 msgstr "Produtos"
 
-#: src/components/common/StatBoxes/index.tsx:45
+#: src/components/common/StatBoxes/index.tsx:51
 msgid "Products sold"
 msgstr "Produtos vendidos"
 
@@ -4705,9 +4736,9 @@ msgstr "Referência"
 msgid "Refresh Preview"
 msgstr "Atualizar Visualização"
 
-#: src/components/modals/RefundOrderModal/index.tsx:104
-msgid "Refund amount ({0})"
-msgstr "Valor do reembolso ({0})"
+#: src/components/modals/RefundOrderModal/index.tsx:107
+msgid "Refund amount"
+msgstr ""
 
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:52
 msgid "Refund Failed"
@@ -4717,9 +4748,9 @@ msgstr "Reembolso falhou"
 msgid "Refund order"
 msgstr "Pedido de reembolso"
 
-#: src/components/modals/RefundOrderModal/index.tsx:151
-msgid "Refund Order"
-msgstr "Pedido de reembolso"
+#: src/components/modals/RefundOrderModal/index.tsx:197
+msgid "Refund Order {0}"
+msgstr ""
 
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:51
 msgid "Refund Pending"
@@ -4820,8 +4851,8 @@ msgstr "Redefina sua senha"
 msgid "Restore event"
 msgstr "Restaurar evento"
 
-#: src/components/routes/product-widget/Payment/PaymentMethods/Stripe/index.tsx:50
-#: src/components/routes/product-widget/Payment/PaymentMethods/Stripe/index.tsx:63
+#: src/components/routes/product-widget/Payment/PaymentMethods/Stripe/index.tsx:49
+#: src/components/routes/product-widget/Payment/PaymentMethods/Stripe/index.tsx:62
 msgid "Return to event page"
 msgstr "Retornar à página do evento"
 
@@ -4914,10 +4945,10 @@ msgstr "Salvar links sociais"
 msgid "Save Template"
 msgstr "Salvar Modelo"
 
-#: src/components/layouts/CheckIn/index.tsx:398
-#: src/components/layouts/CheckIn/index.tsx:400
-msgid "Scan QR Code"
-msgstr "Escanear código QR"
+#: src/components/layouts/CheckIn/index.tsx:445
+#: src/components/layouts/CheckIn/index.tsx:455
+msgid "Scan"
+msgstr ""
 
 #: src/components/layouts/EventHomepage/index.tsx:340
 msgid "Scroll to Tickets"
@@ -4940,7 +4971,7 @@ msgstr "Pesquisar por nome de evento..."
 msgid "Search by name, email, or order #..."
 msgstr "Pesquise por nome, e-mail ou número do pedido..."
 
-#: src/components/layouts/CheckIn/index.tsx:394
+#: src/components/layouts/CheckIn/index.tsx:441
 msgid "Search by name, order #, attendee # or email..."
 msgstr "Pesquise por nome, número do pedido, número do participante ou e-mail..."
 
@@ -4997,7 +5028,7 @@ msgstr "Selecionar tudo"
 msgid "Select an organizer to view their dashboard and events."
 msgstr "Selecione um organizador para ver seu painel e eventos."
 
-#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:214
+#: src/components/common/AttendeeCheckInTable/QrScannerControls.tsx:47
 msgid "Select Camera"
 msgstr "Selecione a câmera"
 
@@ -5038,9 +5069,13 @@ msgid "Select Product Tier"
 msgstr "Selecione o Nível do Produto"
 
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:49
-#: src/components/modals/SendMessageModal/index.tsx:220
+#: src/components/modals/SendMessageModal/index.tsx:214
 msgid "Select products"
 msgstr "Selecione os produtos"
+
+#: src/components/common/CheckIn/ScannerSelectionModal.tsx:25
+msgid "Select Scanner Type"
+msgstr "Selecionar tipo de scanner"
 
 #: src/components/modals/CreateEventModal/index.tsx:214
 msgid "Select start date and time"
@@ -5059,7 +5094,7 @@ msgid "Select Ticket"
 msgstr "Selecionar bilhete"
 
 #: src/components/forms/CheckInListForm/index.tsx:26
-#: src/components/modals/SendMessageModal/index.tsx:208
+#: src/components/modals/SendMessageModal/index.tsx:202
 msgid "Select tickets"
 msgstr "Selecionar ingressos"
 
@@ -5091,11 +5126,11 @@ msgstr "Venda produtos junto com ingressos com suporte integrado para impostos e
 msgid "Sell More Than Tickets"
 msgstr "Venda mais do que ingressos"
 
-#: src/components/modals/SendMessageModal/index.tsx:296
+#: src/components/modals/SendMessageModal/index.tsx:290
 msgid "Send"
 msgstr "Enviar"
 
-#: src/components/modals/SendMessageModal/index.tsx:260
+#: src/components/modals/SendMessageModal/index.tsx:254
 msgid "Send a copy to <0>{0}</0>"
 msgstr "Enviar uma cópia para <0>{0}</0>"
 
@@ -5103,7 +5138,7 @@ msgstr "Enviar uma cópia para <0>{0}</0>"
 msgid "Send a message"
 msgstr "Enviar uma mensagem"
 
-#: src/components/modals/SendMessageModal/index.tsx:270
+#: src/components/modals/SendMessageModal/index.tsx:264
 msgid "Send as a test. This will send the message to your email address instead of the recipients."
 msgstr "Enviar como um teste. Isso enviará a mensagem para seu endereço de e-mail em vez de para os destinatários."
 
@@ -5116,7 +5151,11 @@ msgstr "Enviar Mensagem"
 msgid "Send order confirmation and ticket email"
 msgstr "Enviar e-mail de confirmação do pedido e do tíquete"
 
-#: src/components/modals/SendMessageModal/index.tsx:296
+#: src/components/modals/RefundOrderModal/index.tsx:123
+msgid "Send refund notification email"
+msgstr ""
+
+#: src/components/modals/SendMessageModal/index.tsx:290
 msgid "Send Test"
 msgstr "Enviar teste"
 
@@ -5345,7 +5384,7 @@ msgstr "Algo deu errado."
 msgid "Something went wrong. Please try again."
 msgstr "Algo deu errado. Tente novamente."
 
-#: src/components/routes/product-widget/Payment/PaymentMethods/Stripe/index.tsx:61
+#: src/components/routes/product-widget/Payment/PaymentMethods/Stripe/index.tsx:60
 msgid "Sorry, something has gone wrong. Please restart the checkout process."
 msgstr "Desculpe, algo deu errado. Reinicie o processo de checkout."
 
@@ -5422,7 +5461,7 @@ msgstr "Status"
 msgid "Stripe"
 msgstr "Stripe"
 
-#: src/components/routes/product-widget/Payment/PaymentMethods/Stripe/index.tsx:48
+#: src/components/routes/product-widget/Payment/PaymentMethods/Stripe/index.tsx:47
 msgid "Stripe payments are not enabled for this event."
 msgstr "Os pagamentos via Stripe não estão ativados para este evento."
 
@@ -5431,7 +5470,7 @@ msgid "Stripe setup is already complete."
 msgstr "Configuração do Stripe já está completa."
 
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:128
-#: src/components/modals/SendMessageModal/index.tsx:246
+#: src/components/modals/SendMessageModal/index.tsx:240
 msgid "Subject"
 msgstr "Assunto"
 
@@ -5700,7 +5739,7 @@ msgstr "A cor de fundo das áreas de conteúdo (cartões, cabeçalho, etc.)"
 msgid "The background color of the entire page"
 msgstr "A cor de fundo de toda a página"
 
-#: src/components/layouts/CheckIn/index.tsx:316
+#: src/components/layouts/CheckIn/index.tsx:355
 msgid "The check-in list you are looking for does not exist."
 msgstr "A lista de check-in que você está procurando não existe."
 
@@ -5722,6 +5761,10 @@ msgstr "O fuso horário padrão para seus eventos."
 #: src/components/layouts/EventHomepage/EventNotAvailable/index.tsx:12
 msgid "The event you're looking for is not available at the moment. It may have been removed, expired, or the URL might be incorrect."
 msgstr "O evento que você está procurando não está disponível no momento. Ele pode ter sido removido, expirado ou a URL pode estar incorreta."
+
+#: src/components/modals/CancelOrderModal/index.tsx:77
+msgid "The full order amount will be refunded to the customer's original payment method."
+msgstr ""
 
 #: src/components/modals/CreateAttendeeModal/index.tsx:146
 msgid "The language the attendee will receive emails in."
@@ -5787,7 +5830,7 @@ msgstr "Não há produtos disponíveis para este evento"
 msgid "There are no products available in this category"
 msgstr "Não há produtos disponíveis nesta categoria"
 
-#: src/components/modals/RefundOrderModal/index.tsx:137
+#: src/components/modals/RefundOrderModal/index.tsx:180
 msgid "There is a refund pending. Please wait for it to complete before requesting another refund."
 msgstr "Há um reembolso pendente. Aguarde a conclusão do processo antes de solicitar outro reembolso."
 
@@ -5815,7 +5858,7 @@ msgstr "Estes modelos serão usados como padrão para todos os eventos em sua or
 msgid "These templates will override the organizer defaults for this event only. If no custom template is set here, the organizer template will be used instead."
 msgstr "Estes modelos substituirão os padrões do organizador apenas para este evento. Se nenhum modelo personalizado for definido aqui, o modelo do organizador será usado."
 
-#: src/components/layouts/CheckIn/index.tsx:201
+#: src/components/common/CheckIn/CheckInOptionsModal.tsx:35
 msgid "This attendee has an unpaid order."
 msgstr "Este participante tem um pedido não pago."
 
@@ -5831,7 +5874,7 @@ msgstr "Esta categoria está oculta da visualização pública"
 msgid "This check-in list has expired"
 msgstr "Esta lista de registro expirou"
 
-#: src/components/layouts/CheckIn/index.tsx:331
+#: src/components/layouts/CheckIn/index.tsx:370
 msgid "This check-in list has expired and is no longer available for check-ins."
 msgstr "Esta lista de registro expirou e não está mais disponível para registros."
 
@@ -5843,7 +5886,7 @@ msgstr "Esta lista de registro está ativa"
 msgid "This check-in list is not active yet"
 msgstr "Esta lista de registro ainda não está ativa"
 
-#: src/components/layouts/CheckIn/index.tsx:348
+#: src/components/layouts/CheckIn/index.tsx:387
 msgid "This check-in list is not yet active and is not available for check-ins."
 msgstr "Esta lista de registro ainda não está ativa e não está disponível para registros."
 
@@ -5855,7 +5898,7 @@ msgstr "Este código será usado para rastrear vendas. Apenas são permitidas le
 msgid "This description will be shown to the check-in staff"
 msgstr "Esta descrição será mostrada à equipe de registro"
 
-#: src/components/modals/SendMessageModal/index.tsx:286
+#: src/components/modals/SendMessageModal/index.tsx:280
 msgid "This email is not promotional and is directly related to the event."
 msgstr "Esse e-mail não é promocional e está diretamente relacionado ao evento."
 
@@ -5895,7 +5938,7 @@ msgstr "Esta mensagem só será mostrada se o pedido for concluído com sucesso.
 msgid "This order has already been paid."
 msgstr "Esse pedido já foi pago."
 
-#: src/components/modals/RefundOrderModal/index.tsx:141
+#: src/components/modals/RefundOrderModal/index.tsx:184
 msgid "This order has already been refunded."
 msgstr "Esse pedido já foi reembolsado."
 
@@ -5967,6 +6010,10 @@ msgstr "Esta pergunta é visível apenas para o organizador do evento"
 #: src/components/routes/auth/ResetPassword/index.tsx:29
 msgid "This reset password link is invalid or expired."
 msgstr "Este link de redefinição de senha é inválido ou expirou."
+
+#: src/components/layouts/CheckIn/index.tsx:205
+msgid "This ticket was just scanned. Please wait before scanning again."
+msgstr ""
 
 #: src/components/modals/EditUserModal/index.tsx:65
 msgid "This user is not active, as they have not accepted their invitation."
@@ -6115,7 +6162,6 @@ msgid "Total Gross Sales"
 msgstr "Total de vendas brutas"
 
 #: src/components/common/OrderDetails/index.tsx:59
-#: src/components/modals/RefundOrderModal/index.tsx:74
 msgid "Total order amount"
 msgstr "Valor total do pedido"
 
@@ -6124,17 +6170,12 @@ msgid "Total Orders"
 msgstr "Total de pedidos"
 
 #: src/components/common/OrderDetails/index.tsx:67
-#: src/components/modals/RefundOrderModal/index.tsx:82
 msgid "Total refunded"
 msgstr "Total reembolsado"
 
 #: src/components/routes/event/EventDashboard/index.tsx:276
 msgid "Total Refunded"
 msgstr "Total Reembolsado"
-
-#: src/components/modals/RefundOrderModal/index.tsx:90
-msgid "Total remaining"
-msgstr "Total restante"
 
 #: src/components/routes/event/EventDashboard/index.tsx:275
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:143
@@ -6163,6 +6204,14 @@ msgstr "Verdadeiro se pagamento pendente"
 msgid "Try Hi.Events Free"
 msgstr "Experimente Hi.Events Grátis"
 
+#: src/components/layouts/CheckIn/index.tsx:448
+msgid "Turn sound off"
+msgstr "Desativar som"
+
+#: src/components/layouts/CheckIn/index.tsx:448
+msgid "Turn sound on"
+msgstr "Ativar som"
+
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:79
 msgid "Twitch"
 msgstr "Twitch"
@@ -6175,11 +6224,12 @@ msgstr "Tipo"
 msgid "Type of ticket"
 msgstr "Tipo de ingresso"
 
-#: src/components/layouts/CheckIn/index.tsx:93
+#: src/components/layouts/CheckIn/index.tsx:146
 msgid "Unable to check in attendee"
 msgstr "Não foi possível registrar o participante"
 
-#: src/components/layouts/CheckIn/index.tsx:114
+#: src/components/layouts/CheckIn/index.tsx:170
+#: src/components/layouts/CheckIn/index.tsx:172
 msgid "Unable to check out attendee"
 msgstr "Não foi possível retirar o participante"
 
@@ -6199,7 +6249,7 @@ msgstr "Não foi possível criar a pergunta. Por favor, verifique seus detalhes"
 msgid "Unable to duplicate product. Please check the your details"
 msgstr "Não foi possível duplicar o produto. Por favor, verifique seus dados"
 
-#: src/components/layouts/CheckIn/index.tsx:145
+#: src/components/layouts/CheckIn/index.tsx:221
 msgid "Unable to fetch attendee"
 msgstr "Não foi possível buscar participante"
 
@@ -6245,7 +6295,7 @@ msgstr "Ilimitados disponíveis"
 msgid "Unlimited usages allowed"
 msgstr "Permite usos ilimitados"
 
-#: src/components/layouts/CheckIn/index.tsx:200
+#: src/components/common/CheckIn/CheckInOptionsModal.tsx:34
 msgid "Unpaid Order"
 msgstr "Pedido não pago"
 
@@ -6316,6 +6366,22 @@ msgstr "Exemplo de uso"
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:76
 msgid "Usage Limit"
 msgstr "Limite de uso"
+
+#: src/components/common/CheckIn/ScannerSelectionModal.tsx:50
+msgid "USB Scanner Already Active"
+msgstr "Scanner USB já ativo"
+
+#: src/components/common/CheckIn/ScannerSelectionModal.tsx:42
+msgid "USB Scanner mode activated. Start scanning tickets now."
+msgstr "Modo scanner USB ativado. Comece a escanear os ingressos agora."
+
+#: src/components/common/CheckIn/HidScannerStatus.tsx:48
+msgid "USB Scanner mode deactivated"
+msgstr "Modo scanner USB desativado"
+
+#: src/components/common/CheckIn/ScannerSelectionModal.tsx:50
+msgid "USB/HID Scanner"
+msgstr "Scanner USB/HID"
 
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:151
 msgid "Use <0>Liquid templating</0> to personalize your emails"
@@ -6688,7 +6754,7 @@ msgstr "Quais ingressos devem ser associados a esta lista de registro?"
 msgid "Who is organizing this event?"
 msgstr "Quem está organizando esse evento?"
 
-#: src/components/modals/SendMessageModal/index.tsx:195
+#: src/components/modals/SendMessageModal/index.tsx:189
 msgid "Who is this message to?"
 msgstr "Para quem é essa mensagem?"
 
@@ -6750,7 +6816,7 @@ msgstr "Sim"
 msgid "Yes, remove them"
 msgstr "Sim, remova-os"
 
-#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:77
+#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:92
 msgid "You already scanned this ticket"
 msgstr "Você já escaneou este ingresso"
 
@@ -6758,8 +6824,12 @@ msgstr "Você já escaneou este ingresso"
 msgid "You are changing your email to <0>{0}</0>."
 msgstr "Você está alterando seu e-mail para <0>{0}</0>."
 
-#: src/components/layouts/CheckIn/index.tsx:88
-#: src/components/layouts/CheckIn/index.tsx:110
+#: src/components/modals/RefundOrderModal/index.tsx:138
+msgid "You are issuing a partial refund. The customer will be refunded {0} {1}."
+msgstr ""
+
+#: src/components/layouts/CheckIn/index.tsx:141
+#: src/components/layouts/CheckIn/index.tsx:165
 msgid "You are offline"
 msgstr "Você está offline"
 
@@ -6771,8 +6841,8 @@ msgstr "Você pode criar um código promocional que direcione este produto no"
 msgid "You cannot change the product type as there are attendees associated with this product."
 msgstr "Você não pode mudar o tipo de produto, pois há participantes associados a este produto."
 
-#: src/components/layouts/CheckIn/index.tsx:129
-#: src/components/layouts/CheckIn/index.tsx:164
+#: src/components/layouts/CheckIn/index.tsx:188
+#: src/components/layouts/CheckIn/index.tsx:254
 msgid "You cannot check in attendees with unpaid orders. This setting can be changed in the event settings."
 msgstr "Você não pode registrar participantes com pedidos não pagos. Essa configuração pode ser alterada nas configurações do evento."
 
@@ -6788,7 +6858,7 @@ msgstr "Você não pode excluir este nível de preço porque já há produtos ve
 msgid "You cannot edit the role or status of the account owner."
 msgstr "Não é possível editar a função ou o status do proprietário da conta."
 
-#: src/components/modals/RefundOrderModal/index.tsx:132
+#: src/components/modals/RefundOrderModal/index.tsx:175
 msgid "You cannot refund a manually created order."
 msgstr "Não é possível reembolsar um pedido criado manualmente."
 
