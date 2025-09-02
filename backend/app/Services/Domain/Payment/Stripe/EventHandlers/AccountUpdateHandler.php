@@ -44,6 +44,7 @@ readonly class AccountUpdateHandler
         $this->accountRepository->updateWhere(
             attributes: [
                 'stripe_connect_setup_complete' => $isAccountSetupCompleted,
+                'is_manually_verified' => $isAccountSetupCompleted || $account->getIsManuallyVerified(),
             ],
             where: [
                 'stripe_account_id' => $stripeAccount->id,
