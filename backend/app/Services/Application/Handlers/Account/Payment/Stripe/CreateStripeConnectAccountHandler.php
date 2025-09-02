@@ -8,10 +8,14 @@ use HiEvents\DomainObjects\Generated\AccountDomainObjectAbstract;
 use HiEvents\Exceptions\CreateStripeConnectAccountFailedException;
 use HiEvents\Exceptions\CreateStripeConnectAccountLinksFailedException;
 use HiEvents\Exceptions\SaasModeEnabledException;
+use HiEvents\Exceptions\Stripe\StripeClientConfigurationException;
 use HiEvents\Helper\Url;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Account\Payment\Stripe\DTO\CreateStripeConnectAccountDTO;
 use HiEvents\Services\Application\Handlers\Account\Payment\Stripe\DTO\CreateStripeConnectAccountResponse;
+use HiEvents\Services\Infrastructure\Stripe\StripeClientFactory;
+use HiEvents\Services\Infrastructure\Stripe\StripeConfigurationService;
+use HiEvents\DomainObjects\Enums\StripePlatform;
 use Illuminate\Config\Repository;
 use Illuminate\Database\DatabaseManager;
 use Psr\Log\LoggerInterface;
@@ -24,9 +28,10 @@ readonly class CreateStripeConnectAccountHandler
     public function __construct(
         private AccountRepositoryInterface $accountRepository,
         private DatabaseManager            $databaseManager,
-        private StripeClient               $stripe,
         private LoggerInterface            $logger,
         private Repository                 $config,
+        private StripeClientFactory        $stripeClientFactory,
+        private StripeConfigurationService $stripeConfigurationService,
     )
     {
     }
@@ -47,13 +52,19 @@ readonly class CreateStripeConnectAccountHandler
 
     /**
      * @throws CreateStripeConnectAccountFailedException|CreateStripeConnectAccountLinksFailedException
+     * @throws StripeClientConfigurationException
      */
     private function createOrGetStripeConnectAccount(CreateStripeConnectAccountDTO $command): CreateStripeConnectAccountResponse
     {
         $account = $this->accountRepository->findById($command->accountId);
 
+        $primaryPlatform = $this->stripeConfigurationService->getPrimaryPlatform();
+        $stripeClient = $this->stripeClientFactory->createForPlatform($primaryPlatform);
+
         $stripeConnectAccount = $this->getOrCreateStripeConnectAccount(
             account: $account,
+            stripeClient: $stripeClient,
+            platform: $primaryPlatform,
         );
 
         $response = new CreateStripeConnectAccountResponse(
@@ -72,7 +83,7 @@ readonly class CreateStripeConnectAccountHandler
             return $response;
         }
 
-        $response->connectUrl = $this->getStripeAccountSetupUrl($stripeConnectAccount, $account);
+        $response->connectUrl = $this->getStripeAccountSetupUrl($stripeConnectAccount, $account, $stripeClient);
 
         return $response;
     }
@@ -80,14 +91,18 @@ readonly class CreateStripeConnectAccountHandler
     /**
      * @throws CreateStripeConnectAccountFailedException
      */
-    private function getOrCreateStripeConnectAccount(AccountDomainObject $account): Account
+    private function getOrCreateStripeConnectAccount(
+        AccountDomainObject $account,
+        StripeClient $stripeClient,
+        ?StripePlatform $platform
+    ): Account
     {
         try {
             if ($account->getStripeAccountId() !== null) {
-                return $this->stripe->accounts->retrieve($account->getStripeAccountId());
+                return $stripeClient->accounts->retrieve($account->getStripeAccountId());
             }
 
-            $stripeAccount = $this->stripe->accounts->create([
+            $stripeAccount = $stripeClient->accounts->create([
                 'type' => $this->config->get('app.stripe_connect_account_type')
                     ?? StripeConnectAccountType::EXPRESS->value,
             ]);
@@ -105,11 +120,18 @@ readonly class CreateStripeConnectAccountHandler
             );
         }
 
+        $updateAttributes = [
+            AccountDomainObjectAbstract::STRIPE_ACCOUNT_ID => $stripeAccount->id,
+            AccountDomainObjectAbstract::STRIPE_CONNECT_ACCOUNT_TYPE => $stripeAccount->type,
+        ];
+
+        // Set the platform that was actually used to create this account
+        if ($platform && $account->getStripePlatform() === null) {
+            $updateAttributes[AccountDomainObjectAbstract::STRIPE_PLATFORM] = $platform->value;
+        }
+
         $this->accountRepository->updateWhere(
-            attributes: [
-                AccountDomainObjectAbstract::STRIPE_ACCOUNT_ID => $stripeAccount->id,
-                AccountDomainObjectAbstract::STRIPE_CONNECT_ACCOUNT_TYPE => $stripeAccount->type,
-            ],
+            attributes: $updateAttributes,
             where: [
                 'id' => $account->getId(),
             ]
@@ -131,10 +153,10 @@ readonly class CreateStripeConnectAccountHandler
     /**
      * @throws CreateStripeConnectAccountLinksFailedException
      */
-    private function getStripeAccountSetupUrl(Account $stripAccount, AccountDomainObject $account): string
+    private function getStripeAccountSetupUrl(Account $stripAccount, AccountDomainObject $account, StripeClient $stripeClient): string
     {
         try {
-            $accountLink = $this->stripe->accountLinks->create([
+            $accountLink = $stripeClient->accountLinks->create([
                 'account' => $stripAccount->id,
                 'refresh_url' => Url::getFrontEndUrlFromConfig(Url::STRIPE_CONNECT_REFRESH_URL, [
                     'is_refresh' => true,

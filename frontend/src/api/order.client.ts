@@ -148,6 +148,8 @@ export const orderClientPublic = {
         const response = await publicApi.post<{
             client_secret: string,
             account_id?: string,
+            public_key: string,
+            stripe_platform?: string,
         }>(`events/${eventId}/order/${orderShortId}/stripe/payment_intent`);
         return response.data;
     },

@@ -35,6 +35,19 @@ return [
         'secret_key' => env('STRIPE_SECRET_KEY'),
         'public_key' => env('STRIPE_PUBLIC_KEY'),
         'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
+
+        // Canadian platform (Optional)
+        'ca_secret_key' => env('STRIPE_CA_SECRET_KEY'),
+        'ca_public_key' => env('STRIPE_CA_PUBLIC_KEY'),
+        'ca_webhook_secret' => env('STRIPE_CA_WEBHOOK_SECRET'),
+
+        // Irish platform (Optional)
+        'ie_secret_key' => env('STRIPE_IE_SECRET_KEY'),
+        'ie_public_key' => env('STRIPE_IE_PUBLIC_KEY'),
+        'ie_webhook_secret' => env('STRIPE_IE_WEBHOOK_SECRET'),
+
+        // Primary platform for new organizers
+        'primary_platform' => env('STRIPE_PRIMARY_PLATFORM'),
     ],
     'open_exchange_rates' => [
         'app_id' => env('OPEN_EXCHANGE_RATES_APP_ID'),
