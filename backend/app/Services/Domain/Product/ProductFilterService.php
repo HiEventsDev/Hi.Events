@@ -162,12 +162,15 @@ class ProductFilterService
 
     private function processProductPrice(ProductDomainObject $product, ProductPriceDomainObject $price): void
     {
-        $taxAndFees = $this->taxCalculationService
-            ->calculateTaxAndFeesForProductPrice($product, $price);
+        // If the product is free of charge, we don't charge service fees or taxes
+        if (!$price->isFree()) {
+            $taxAndFees = $this->taxCalculationService
+                ->calculateTaxAndFeesForProductPrice($product, $price);
 
-        $price
-            ->setTaxTotal(Currency::round($taxAndFees->taxTotal))
-            ->setFeeTotal(Currency::round($taxAndFees->feeTotal));
+            $price
+                ->setTaxTotal(Currency::round($taxAndFees->taxTotal))
+                ->setFeeTotal(Currency::round($taxAndFees->feeTotal));
+        }
 
         $price->setIsAvailable($this->getPriceAvailability($price, $product));
     }
