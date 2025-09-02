@@ -32,11 +32,15 @@ msgstr "There's nothing to show yet"
 msgid "{0}"
 msgstr "{0}"
 
-#: src/components/layouts/CheckIn/index.tsx:88
+#: src/components/layouts/CheckIn/index.tsx:237
+msgid "{0} {1} is already checked in"
+msgstr ""
+
+#: src/components/layouts/CheckIn/index.tsx:133
 msgid "{0} <0>checked in</0> successfully"
 msgstr "{0} <0>签到</0>成功"
 
-#: src/components/layouts/CheckIn/index.tsx:112
+#: src/components/layouts/CheckIn/index.tsx:159
 msgid "{0} <0>checked out</0> successfully"
 msgstr "{0} <0>签退</0>成功"
 
@@ -65,7 +69,7 @@ msgstr "{0} 位组织者"
 msgid "{0} updated successfully"
 msgstr "{0}更新成功"
 
-#: src/components/layouts/CheckIn/index.tsx:568
+#: src/components/common/CheckIn/CheckInInfoModal.tsx:40
 msgid "{0}/{1} checked in"
 msgstr "{0}/{1} 已签到"
 
@@ -727,7 +731,7 @@ msgstr "与会者管理"
 msgid "Attendee Name"
 msgstr "参会者姓名"
 
-#: src/components/layouts/CheckIn/index.tsx:161
+#: src/components/layouts/CheckIn/index.tsx:228
 msgid "Attendee not found"
 msgstr "未找到参与者"
 
@@ -806,7 +810,7 @@ msgstr "等待线下付款"
 msgid "Awaiting Offline Pmt."
 msgstr "等待线下付款"
 
-#: src/components/layouts/CheckIn/index.tsx:281
+#: src/components/common/CheckIn/AttendeeList.tsx:82
 msgid "Awaiting payment"
 msgstr "等待付款"
 
@@ -904,18 +908,21 @@ msgstr "加利福尼亚州"
 msgid "Call-to-Action Button"
 msgstr "行动号召按钮"
 
-#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:175
+#: src/components/common/AttendeeCheckInTable/PermissionDeniedMessage.tsx:16
 msgid "Camera permission was denied. <0>Request Permission</0> again, or if this doesn't work, you will need to <1>grant this page</1> access to your camera in your browser settings."
 msgstr "相机权限被拒绝。<0>再次请求权限</0>，如果还不行，则需要在浏览器设置中<1>授予此页面</1>访问相机的权限。"
 
+#: src/components/common/CheckIn/ScannerSelectionModal.tsx:35
+msgid "Camera Scanner"
+msgstr "相机扫描仪"
+
 #: src/components/common/AttendeeTable/index.tsx:183
+#: src/components/common/CheckIn/CheckInOptionsModal.tsx:59
+#: src/components/common/CheckIn/ScannerSelectionModal.tsx:57
 #: src/components/common/ContactOrganizerModal/index.tsx:104
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:115
 #: src/components/common/PromoCodeTable/index.tsx:40
 #: src/components/common/QuestionAndAnswerList/index.tsx:149
-#: src/components/layouts/CheckIn/index.tsx:243
-#: src/components/layouts/CheckIn/index.tsx:463
-#: src/components/layouts/CheckIn/index.tsx:524
 #: src/utilites/confirmationDialog.tsx:11
 msgid "Cancel"
 msgstr "取消"
@@ -951,7 +958,7 @@ msgstr ""
 msgid "Cancelled"
 msgstr "已取消"
 
-#: src/components/layouts/CheckIn/index.tsx:184
+#: src/components/common/CheckIn/AttendeeList.tsx:30
 msgid "Cannot Check In"
 msgstr "无法签到"
 
@@ -1005,25 +1012,25 @@ msgstr "更改密码"
 msgid "Charity"
 msgstr "慈善"
 
-#: src/components/layouts/CheckIn/index.tsx:191
+#: src/components/common/CheckIn/AttendeeList.tsx:37
 msgid "Check In"
-msgstr "报到"
+msgstr "签到"
 
-#: src/components/layouts/CheckIn/index.tsx:211
+#: src/components/common/CheckIn/CheckInOptionsModal.tsx:27
 msgid "Check in {0} {1}"
 msgstr "签到 {0} {1}"
 
-#: src/components/layouts/CheckIn/index.tsx:236
+#: src/components/common/CheckIn/CheckInOptionsModal.tsx:52
 msgid "Check in and mark order as paid"
-msgstr "签到并将订单标记为已支付"
+msgstr "签到并标记订单为已付款"
 
-#: src/components/layouts/CheckIn/index.tsx:227
+#: src/components/common/CheckIn/CheckInOptionsModal.tsx:43
 msgid "Check in only"
 msgstr "仅签到"
 
-#: src/components/layouts/CheckIn/index.tsx:188
+#: src/components/common/CheckIn/AttendeeList.tsx:34
 msgid "Check Out"
-msgstr "签退"
+msgstr "签出"
 
 #: src/components/layouts/Checkout/index.tsx:104
 msgid "Check out this event!"
@@ -1053,15 +1060,15 @@ msgstr "签到列表创建成功"
 msgid "Check-In List deleted successfully"
 msgstr "签到列表删除成功"
 
-#: src/components/layouts/CheckIn/index.tsx:344
+#: src/components/layouts/CheckIn/index.tsx:365
 msgid "Check-in list has expired"
 msgstr "签到列表已过期"
 
-#: src/components/layouts/CheckIn/index.tsx:361
+#: src/components/layouts/CheckIn/index.tsx:382
 msgid "Check-in list is not active"
 msgstr "签到列表未激活"
 
-#: src/components/layouts/CheckIn/index.tsx:329
+#: src/components/layouts/CheckIn/index.tsx:350
 msgid "Check-in list not found"
 msgstr "未找到签到列表"
 
@@ -1141,7 +1148,7 @@ msgstr "点击复制"
 msgid "close"
 msgstr "关闭"
 
-#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:186
+#: src/components/common/AttendeeCheckInTable/PermissionDeniedMessage.tsx:27
 #: src/components/modals/RefundOrderModal/index.tsx:168
 #: src/components/routes/product-widget/SelectProducts/index.tsx:581
 msgid "Close"
@@ -2684,7 +2691,7 @@ msgstr "固定金额"
 msgid "Fixed Fee:"
 msgstr "固定费用："
 
-#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:123
+#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:138
 msgid "Flash is not available on this device"
 msgstr "该设备不支持闪存"
 
@@ -4421,10 +4428,6 @@ msgstr "请稍候，我们正在准备导出您的订单..."
 msgid "Portuguese"
 msgstr "葡萄牙语"
 
-#: src/components/layouts/CheckIn/index.tsx:483
-msgid "Position your USB scanner and scan the barcode. The scanner will automatically submit when a barcode is detected."
-msgstr ""
-
 #: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:74
 msgid "Post Checkout message"
 msgstr "结账后信息"
@@ -4942,10 +4945,10 @@ msgstr "保存社交链接"
 msgid "Save Template"
 msgstr "保存模板"
 
-#: src/components/layouts/CheckIn/index.tsx:416
-#: src/components/layouts/CheckIn/index.tsx:418
-msgid "Scan QR Code"
-msgstr "扫描 QR 码"
+#: src/components/layouts/CheckIn/index.tsx:445
+#: src/components/layouts/CheckIn/index.tsx:455
+msgid "Scan"
+msgstr ""
 
 #: src/components/layouts/EventHomepage/index.tsx:340
 msgid "Scroll to Tickets"
@@ -4968,7 +4971,7 @@ msgstr "按活动名称搜索..."
 msgid "Search by name, email, or order #..."
 msgstr "按姓名、电子邮件或订单号搜索..."
 
-#: src/components/layouts/CheckIn/index.tsx:412
+#: src/components/layouts/CheckIn/index.tsx:441
 msgid "Search by name, order #, attendee # or email..."
 msgstr "按姓名、订单号、参与者号或电子邮件搜索..."
 
@@ -5025,7 +5028,7 @@ msgstr "全选"
 msgid "Select an organizer to view their dashboard and events."
 msgstr "选择一个组织者以查看其仪表板和活动。"
 
-#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:214
+#: src/components/common/AttendeeCheckInTable/QrScannerControls.tsx:47
 msgid "Select Camera"
 msgstr "选择相机"
 
@@ -5070,9 +5073,9 @@ msgstr "选择产品等级"
 msgid "Select products"
 msgstr "选择产品"
 
-#: src/components/layouts/CheckIn/index.tsx:432
+#: src/components/common/CheckIn/ScannerSelectionModal.tsx:25
 msgid "Select Scanner Type"
-msgstr ""
+msgstr "选择扫描仪类型"
 
 #: src/components/modals/CreateEventModal/index.tsx:214
 msgid "Select start date and time"
@@ -5736,7 +5739,7 @@ msgstr "内容区域（卡片、标题等）的背景颜色"
 msgid "The background color of the entire page"
 msgstr "整个页面的背景颜色"
 
-#: src/components/layouts/CheckIn/index.tsx:334
+#: src/components/layouts/CheckIn/index.tsx:355
 msgid "The check-in list you are looking for does not exist."
 msgstr "您查找的签到列表不存在。"
 
@@ -5855,9 +5858,9 @@ msgstr "这些模板将用作您组织中所有活动的默认模板。单个活
 msgid "These templates will override the organizer defaults for this event only. If no custom template is set here, the organizer template will be used instead."
 msgstr "这些模板将仅覆盖此活动的组织者默认设置。如果这里没有设置自定义模板，将使用组织者模板。"
 
-#: src/components/layouts/CheckIn/index.tsx:219
+#: src/components/common/CheckIn/CheckInOptionsModal.tsx:35
 msgid "This attendee has an unpaid order."
-msgstr "此与会者有未支付的订单。"
+msgstr "此参与者有未付款的订单。"
 
 #: src/components/common/ProductsTable/ProductsBlankSlate/index.tsx:61
 msgid "This category doesn't have any products yet."
@@ -5871,7 +5874,7 @@ msgstr "此类别对公众隐藏"
 msgid "This check-in list has expired"
 msgstr "此签到列表已过期"
 
-#: src/components/layouts/CheckIn/index.tsx:349
+#: src/components/layouts/CheckIn/index.tsx:370
 msgid "This check-in list has expired and is no longer available for check-ins."
 msgstr "此签到列表已过期，不再可用于签到。"
 
@@ -5883,7 +5886,7 @@ msgstr "此签到列表已激活"
 msgid "This check-in list is not active yet"
 msgstr "此签到列表尚未激活"
 
-#: src/components/layouts/CheckIn/index.tsx:366
+#: src/components/layouts/CheckIn/index.tsx:387
 msgid "This check-in list is not yet active and is not available for check-ins."
 msgstr "此签到列表尚未激活，不能用于签到。"
 
@@ -6007,6 +6010,10 @@ msgstr "此问题只有活动组织者可见"
 #: src/components/routes/auth/ResetPassword/index.tsx:29
 msgid "This reset password link is invalid or expired."
 msgstr "此重置密码链接无效或已过期。"
+
+#: src/components/layouts/CheckIn/index.tsx:205
+msgid "This ticket was just scanned. Please wait before scanning again."
+msgstr ""
 
 #: src/components/modals/EditUserModal/index.tsx:65
 msgid "This user is not active, as they have not accepted their invitation."
@@ -6197,6 +6204,14 @@ msgstr "如果付款待处理则为真"
 msgid "Try Hi.Events Free"
 msgstr "免费试用Hi.Events"
 
+#: src/components/layouts/CheckIn/index.tsx:448
+msgid "Turn sound off"
+msgstr "关闭声音"
+
+#: src/components/layouts/CheckIn/index.tsx:448
+msgid "Turn sound on"
+msgstr "开启声音"
+
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:79
 msgid "Twitch"
 msgstr "Twitch"
@@ -6209,11 +6224,12 @@ msgstr "类型"
 msgid "Type of ticket"
 msgstr "门票类型"
 
-#: src/components/layouts/CheckIn/index.tsx:99
+#: src/components/layouts/CheckIn/index.tsx:146
 msgid "Unable to check in attendee"
 msgstr "无法签到参与者"
 
-#: src/components/layouts/CheckIn/index.tsx:120
+#: src/components/layouts/CheckIn/index.tsx:170
+#: src/components/layouts/CheckIn/index.tsx:172
 msgid "Unable to check out attendee"
 msgstr "无法签退参与者"
 
@@ -6233,7 +6249,7 @@ msgstr "无法创建问题。请检查您的详细信息"
 msgid "Unable to duplicate product. Please check the your details"
 msgstr "无法复制产品。请检查您的详细信息"
 
-#: src/components/layouts/CheckIn/index.tsx:156
+#: src/components/layouts/CheckIn/index.tsx:221
 msgid "Unable to fetch attendee"
 msgstr "无法获取参与者"
 
@@ -6279,9 +6295,9 @@ msgstr "无限供应"
 msgid "Unlimited usages allowed"
 msgstr "允许无限次使用"
 
-#: src/components/layouts/CheckIn/index.tsx:218
+#: src/components/common/CheckIn/CheckInOptionsModal.tsx:34
 msgid "Unpaid Order"
-msgstr "未支付订单"
+msgstr "未付款订单"
 
 #: src/components/routes/event/EventDashboard/index.tsx:170
 msgid "Unpublish Event"
@@ -6351,9 +6367,21 @@ msgstr "使用示例"
 msgid "Usage Limit"
 msgstr "使用限制"
 
-#: src/components/layouts/CheckIn/index.tsx:475
-msgid "USB Scanner Active"
-msgstr ""
+#: src/components/common/CheckIn/ScannerSelectionModal.tsx:50
+msgid "USB Scanner Already Active"
+msgstr "USB扫描仪已激活"
+
+#: src/components/common/CheckIn/ScannerSelectionModal.tsx:42
+msgid "USB Scanner mode activated. Start scanning tickets now."
+msgstr "USB扫描仪模式已激活。现在开始扫描票券。"
+
+#: src/components/common/CheckIn/HidScannerStatus.tsx:48
+msgid "USB Scanner mode deactivated"
+msgstr "USB扫描仪模式已停用"
+
+#: src/components/common/CheckIn/ScannerSelectionModal.tsx:50
+msgid "USB/HID Scanner"
+msgstr "USB/HID扫描仪"
 
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:151
 msgid "Use <0>Liquid templating</0> to personalize your emails"
@@ -6364,18 +6392,10 @@ msgstr ""
 msgid "Use a blurred version of the cover image as the background"
 msgstr "使用封面图片的模糊版本作为背景"
 
-#: src/components/layouts/CheckIn/index.tsx:445
-msgid "Use Camera"
-msgstr ""
-
 #: src/components/routes/event/HomepageDesigner/index.tsx:188
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:349
 msgid "Use cover image"
 msgstr "使用封面图片"
-
-#: src/components/layouts/CheckIn/index.tsx:456
-msgid "Use USB Scanner"
-msgstr ""
 
 #: src/components/routes/account/ManageAccount/sections/Users/index.tsx:154
 msgid "User"
@@ -6514,10 +6534,6 @@ msgstr "可见性"
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:104
 msgid "VK"
 msgstr "VK"
-
-#: src/components/layouts/CheckIn/index.tsx:512
-msgid "Waiting for scan..."
-msgstr ""
 
 #: src/components/routes/product-widget/PaymentReturn/index.tsx:77
 msgid "We could not process your payment. Please try again or contact support."
@@ -6800,7 +6816,7 @@ msgstr "是"
 msgid "Yes, remove them"
 msgstr "是的，移除它们"
 
-#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:77
+#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:92
 msgid "You already scanned this ticket"
 msgstr "您已经扫描过此票"
 
@@ -6812,8 +6828,8 @@ msgstr "您正在将电子邮件更改为 <0>{0}</0>。"
 msgid "You are issuing a partial refund. The customer will be refunded {0} {1}."
 msgstr ""
 
-#: src/components/layouts/CheckIn/index.tsx:94
-#: src/components/layouts/CheckIn/index.tsx:116
+#: src/components/layouts/CheckIn/index.tsx:141
+#: src/components/layouts/CheckIn/index.tsx:165
 msgid "You are offline"
 msgstr "您处于离线状态"
 
@@ -6825,8 +6841,8 @@ msgstr "您可以创建一个促销代码，针对该产品"
 msgid "You cannot change the product type as there are attendees associated with this product."
 msgstr "您无法更改产品类型，因为有与该产品关联的参会者。"
 
-#: src/components/layouts/CheckIn/index.tsx:135
-#: src/components/layouts/CheckIn/index.tsx:175
+#: src/components/layouts/CheckIn/index.tsx:188
+#: src/components/layouts/CheckIn/index.tsx:254
 msgid "You cannot check in attendees with unpaid orders. This setting can be changed in the event settings."
 msgstr "您无法为未支付订单的与会者签到。此设置可在活动设置中更改。"
 
@@ -7046,23 +7062,3 @@ msgstr "邮政编码"
 #: src/components/routes/product-widget/CollectInformation/index.tsx:349
 msgid "ZIP or Postal Code"
 msgstr "邮政编码"
-
-#: src/components/layouts/CheckIn/index.tsx:432
-msgid "Select Scanner Type"
-msgstr "选择扫描器类型"
-
-#: src/components/layouts/CheckIn/index.tsx:445
-msgid "Use Camera"
-msgstr "使用相机"
-
-#: src/components/layouts/CheckIn/index.tsx:456
-msgid "Use USB Scanner"
-msgstr "使用USB扫描器"
-
-#: src/components/layouts/CheckIn/index.tsx:475
-msgid "USB Scanner Active"
-msgstr "USB扫描器已激活"
-
-#: src/components/layouts/CheckIn/index.tsx:483
-msgid "Position your USB scanner and scan the barcode. The scanner will automatically submit when a barcode is detected."
-msgstr "定位您的USB扫描器并扫描条形码。检测到条形码时，扫描器将自动提交。"

@@ -32,11 +32,15 @@ msgstr "„Hier gibt es noch nichts zu sehen“"
 msgid "{0}"
 msgstr "{0}"
 
-#: src/components/layouts/CheckIn/index.tsx:88
+#: src/components/layouts/CheckIn/index.tsx:237
+msgid "{0} {1} is already checked in"
+msgstr ""
+
+#: src/components/layouts/CheckIn/index.tsx:133
 msgid "{0} <0>checked in</0> successfully"
 msgstr "{0} <0>erfolgreich eingecheckt</0>"
 
-#: src/components/layouts/CheckIn/index.tsx:112
+#: src/components/layouts/CheckIn/index.tsx:159
 msgid "{0} <0>checked out</0> successfully"
 msgstr "{0} <0>erfolgreich ausgecheckt</0>"
 
@@ -65,7 +69,7 @@ msgstr "{0} Veranstalter"
 msgid "{0} updated successfully"
 msgstr "{0} erfolgreich aktualisiert"
 
-#: src/components/layouts/CheckIn/index.tsx:568
+#: src/components/common/CheckIn/CheckInInfoModal.tsx:40
 msgid "{0}/{1} checked in"
 msgstr "{0}/{1} eingecheckt"
 
@@ -727,7 +731,7 @@ msgstr "Teilnehmerverwaltung"
 msgid "Attendee Name"
 msgstr "Teilnehmername"
 
-#: src/components/layouts/CheckIn/index.tsx:161
+#: src/components/layouts/CheckIn/index.tsx:228
 msgid "Attendee not found"
 msgstr "Teilnehmer nicht gefunden"
 
@@ -806,7 +810,7 @@ msgstr "Warten auf Offline-Zahlung"
 msgid "Awaiting Offline Pmt."
 msgstr "Wartet auf Offline-Zahlung"
 
-#: src/components/layouts/CheckIn/index.tsx:281
+#: src/components/common/CheckIn/AttendeeList.tsx:82
 msgid "Awaiting payment"
 msgstr "Zahlung ausstehend"
 
@@ -904,21 +908,24 @@ msgstr "Kalifornien"
 msgid "Call-to-Action Button"
 msgstr "Aktionsschaltfläche"
 
-#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:175
+#: src/components/common/AttendeeCheckInTable/PermissionDeniedMessage.tsx:16
 msgid "Camera permission was denied. <0>Request Permission</0> again, or if this doesn't work, you will need to <1>grant this page</1> access to your camera in your browser settings."
 msgstr "Die Kameraberechtigung wurde verweigert. <0>Fordern Sie die Berechtigung erneut an</0>. Wenn dies nicht funktioniert, müssen Sie dieser Seite in Ihren Browsereinstellungen <1>Zugriff auf Ihre Kamera gewähren</1>."
 
+#: src/components/common/CheckIn/ScannerSelectionModal.tsx:35
+msgid "Camera Scanner"
+msgstr "Kamera-Scanner"
+
 #: src/components/common/AttendeeTable/index.tsx:183
+#: src/components/common/CheckIn/CheckInOptionsModal.tsx:59
+#: src/components/common/CheckIn/ScannerSelectionModal.tsx:57
 #: src/components/common/ContactOrganizerModal/index.tsx:104
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:115
 #: src/components/common/PromoCodeTable/index.tsx:40
 #: src/components/common/QuestionAndAnswerList/index.tsx:149
-#: src/components/layouts/CheckIn/index.tsx:243
-#: src/components/layouts/CheckIn/index.tsx:463
-#: src/components/layouts/CheckIn/index.tsx:524
 #: src/utilites/confirmationDialog.tsx:11
 msgid "Cancel"
-msgstr "Stornieren"
+msgstr "Abbrechen"
 
 #: src/components/modals/RefundOrderModal/index.tsx:131
 msgid "Cancel all products and release them back to the pool"
@@ -951,7 +958,7 @@ msgstr ""
 msgid "Cancelled"
 msgstr "Abgesagt"
 
-#: src/components/layouts/CheckIn/index.tsx:184
+#: src/components/common/CheckIn/AttendeeList.tsx:30
 msgid "Cannot Check In"
 msgstr "Check-in nicht möglich"
 
@@ -1005,23 +1012,23 @@ msgstr "Kennwort ändern"
 msgid "Charity"
 msgstr "Wohltätigkeit"
 
-#: src/components/layouts/CheckIn/index.tsx:191
+#: src/components/common/CheckIn/AttendeeList.tsx:37
 msgid "Check In"
 msgstr "Einchecken"
 
-#: src/components/layouts/CheckIn/index.tsx:211
+#: src/components/common/CheckIn/CheckInOptionsModal.tsx:27
 msgid "Check in {0} {1}"
 msgstr "Check-in {0} {1}"
 
-#: src/components/layouts/CheckIn/index.tsx:236
+#: src/components/common/CheckIn/CheckInOptionsModal.tsx:52
 msgid "Check in and mark order as paid"
 msgstr "Einchecken und Bestellung als bezahlt markieren"
 
-#: src/components/layouts/CheckIn/index.tsx:227
+#: src/components/common/CheckIn/CheckInOptionsModal.tsx:43
 msgid "Check in only"
 msgstr "Nur einchecken"
 
-#: src/components/layouts/CheckIn/index.tsx:188
+#: src/components/common/CheckIn/AttendeeList.tsx:34
 msgid "Check Out"
 msgstr "Auschecken"
 
@@ -1053,15 +1060,15 @@ msgstr "Eincheckliste erfolgreich erstellt"
 msgid "Check-In List deleted successfully"
 msgstr "Eincheckliste erfolgreich gelöscht"
 
-#: src/components/layouts/CheckIn/index.tsx:344
+#: src/components/layouts/CheckIn/index.tsx:365
 msgid "Check-in list has expired"
 msgstr "Die Eincheckliste ist abgelaufen"
 
-#: src/components/layouts/CheckIn/index.tsx:361
+#: src/components/layouts/CheckIn/index.tsx:382
 msgid "Check-in list is not active"
 msgstr "Die Eincheckliste ist nicht aktiv"
 
-#: src/components/layouts/CheckIn/index.tsx:329
+#: src/components/layouts/CheckIn/index.tsx:350
 msgid "Check-in list not found"
 msgstr "Eincheckliste nicht gefunden"
 
@@ -1141,7 +1148,7 @@ msgstr "Zum Kopieren klicken"
 msgid "close"
 msgstr "schließen"
 
-#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:186
+#: src/components/common/AttendeeCheckInTable/PermissionDeniedMessage.tsx:27
 #: src/components/modals/RefundOrderModal/index.tsx:168
 #: src/components/routes/product-widget/SelectProducts/index.tsx:581
 msgid "Close"
@@ -2684,7 +2691,7 @@ msgstr "Fester Betrag"
 msgid "Fixed Fee:"
 msgstr "Feste Gebühr:"
 
-#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:123
+#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:138
 msgid "Flash is not available on this device"
 msgstr "Flash ist auf diesem Gerät nicht verfügbar"
 
@@ -4421,10 +4428,6 @@ msgstr "Bitte warten Sie, während wir Ihre Bestellungen für den Export vorbere
 msgid "Portuguese"
 msgstr "Portugiesisch"
 
-#: src/components/layouts/CheckIn/index.tsx:483
-msgid "Position your USB scanner and scan the barcode. The scanner will automatically submit when a barcode is detected."
-msgstr ""
-
 #: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:74
 msgid "Post Checkout message"
 msgstr "Checkout-Nachricht veröffentlichen"
@@ -4942,10 +4945,10 @@ msgstr "Social-Media-Links speichern"
 msgid "Save Template"
 msgstr "Vorlage speichern"
 
-#: src/components/layouts/CheckIn/index.tsx:416
-#: src/components/layouts/CheckIn/index.tsx:418
-msgid "Scan QR Code"
-msgstr "QR-Code scannen"
+#: src/components/layouts/CheckIn/index.tsx:445
+#: src/components/layouts/CheckIn/index.tsx:455
+msgid "Scan"
+msgstr ""
 
 #: src/components/layouts/EventHomepage/index.tsx:340
 msgid "Scroll to Tickets"
@@ -4968,7 +4971,7 @@ msgstr "Suche nach Veranstaltungsnamen..."
 msgid "Search by name, email, or order #..."
 msgstr "Suchen Sie nach Namen, E-Mail oder Bestellnummer ..."
 
-#: src/components/layouts/CheckIn/index.tsx:412
+#: src/components/layouts/CheckIn/index.tsx:441
 msgid "Search by name, order #, attendee # or email..."
 msgstr "Suchen nach Name, Bestellnummer, Teilnehmernummer oder E-Mail..."
 
@@ -5025,7 +5028,7 @@ msgstr "Alle auswählen"
 msgid "Select an organizer to view their dashboard and events."
 msgstr "Wählen Sie einen Veranstalter, um dessen Dashboard und Veranstaltungen anzuzeigen."
 
-#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:214
+#: src/components/common/AttendeeCheckInTable/QrScannerControls.tsx:47
 msgid "Select Camera"
 msgstr "Kamera auswählen"
 
@@ -5070,9 +5073,9 @@ msgstr "Produktebene auswählen"
 msgid "Select products"
 msgstr "Produkte auswählen"
 
-#: src/components/layouts/CheckIn/index.tsx:432
+#: src/components/common/CheckIn/ScannerSelectionModal.tsx:25
 msgid "Select Scanner Type"
-msgstr ""
+msgstr "Scanner-Typ auswählen"
 
 #: src/components/modals/CreateEventModal/index.tsx:214
 msgid "Select start date and time"
@@ -5736,7 +5739,7 @@ msgstr "Die Hintergrundfarbe von Inhaltsbereichen (Karten, Kopfzeile usw.)"
 msgid "The background color of the entire page"
 msgstr "Die Hintergrundfarbe der gesamten Seite"
 
-#: src/components/layouts/CheckIn/index.tsx:334
+#: src/components/layouts/CheckIn/index.tsx:355
 msgid "The check-in list you are looking for does not exist."
 msgstr "Die gesuchte Eincheckliste existiert nicht."
 
@@ -5855,7 +5858,7 @@ msgstr "Diese Vorlagen werden als Standards für alle Veranstaltungen in Ihrer O
 msgid "These templates will override the organizer defaults for this event only. If no custom template is set here, the organizer template will be used instead."
 msgstr "Diese Vorlagen überschreiben die Veranstalter-Standards nur für diese Veranstaltung. Wenn hier keine benutzerdefinierte Vorlage festgelegt ist, wird stattdessen die Veranstaltervorlage verwendet."
 
-#: src/components/layouts/CheckIn/index.tsx:219
+#: src/components/common/CheckIn/CheckInOptionsModal.tsx:35
 msgid "This attendee has an unpaid order."
 msgstr "Dieser Teilnehmer hat eine unbezahlte Bestellung."
 
@@ -5871,7 +5874,7 @@ msgstr "Diese Kategorie ist vor der öffentlichen Ansicht verborgen"
 msgid "This check-in list has expired"
 msgstr "Diese Eincheckliste ist abgelaufen"
 
-#: src/components/layouts/CheckIn/index.tsx:349
+#: src/components/layouts/CheckIn/index.tsx:370
 msgid "This check-in list has expired and is no longer available for check-ins."
 msgstr "Diese Eincheckliste ist abgelaufen und steht nicht mehr für Eincheckungen zur Verfügung."
 
@@ -5883,7 +5886,7 @@ msgstr "Diese Eincheckliste ist aktiv"
 msgid "This check-in list is not active yet"
 msgstr "Diese Eincheckliste ist noch nicht aktiv"
 
-#: src/components/layouts/CheckIn/index.tsx:366
+#: src/components/layouts/CheckIn/index.tsx:387
 msgid "This check-in list is not yet active and is not available for check-ins."
 msgstr "Diese Eincheckliste ist noch nicht aktiv und steht nicht für Eincheckungen zur Verfügung."
 
@@ -6007,6 +6010,10 @@ msgstr "Diese Frage ist nur für den Veranstalter sichtbar"
 #: src/components/routes/auth/ResetPassword/index.tsx:29
 msgid "This reset password link is invalid or expired."
 msgstr "Dieser Link zum Zurücksetzen des Passworts ist ungültig oder abgelaufen."
+
+#: src/components/layouts/CheckIn/index.tsx:205
+msgid "This ticket was just scanned. Please wait before scanning again."
+msgstr ""
 
 #: src/components/modals/EditUserModal/index.tsx:65
 msgid "This user is not active, as they have not accepted their invitation."
@@ -6197,6 +6204,14 @@ msgstr "Wahr bei ausstehender Zahlung"
 msgid "Try Hi.Events Free"
 msgstr "Hi.Events kostenlos testen"
 
+#: src/components/layouts/CheckIn/index.tsx:448
+msgid "Turn sound off"
+msgstr "Ton ausschalten"
+
+#: src/components/layouts/CheckIn/index.tsx:448
+msgid "Turn sound on"
+msgstr "Ton einschalten"
+
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:79
 msgid "Twitch"
 msgstr "Twitch"
@@ -6209,11 +6224,12 @@ msgstr "Typ"
 msgid "Type of ticket"
 msgstr "Art des Tickets"
 
-#: src/components/layouts/CheckIn/index.tsx:99
+#: src/components/layouts/CheckIn/index.tsx:146
 msgid "Unable to check in attendee"
 msgstr "Teilnehmer konnte nicht eingecheckt werden"
 
-#: src/components/layouts/CheckIn/index.tsx:120
+#: src/components/layouts/CheckIn/index.tsx:170
+#: src/components/layouts/CheckIn/index.tsx:172
 msgid "Unable to check out attendee"
 msgstr "Teilnehmer konnte nicht ausgecheckt werden"
 
@@ -6233,7 +6249,7 @@ msgstr "Frage konnte nicht erstellt werden. Bitte überprüfen Sie Ihre Angaben"
 msgid "Unable to duplicate product. Please check the your details"
 msgstr "Produkt konnte nicht dupliziert werden. Bitte überprüfen Sie Ihre Angaben"
 
-#: src/components/layouts/CheckIn/index.tsx:156
+#: src/components/layouts/CheckIn/index.tsx:221
 msgid "Unable to fetch attendee"
 msgstr "Teilnehmer konnte nicht abgerufen werden"
 
@@ -6279,7 +6295,7 @@ msgstr "Unbegrenzt verfügbar"
 msgid "Unlimited usages allowed"
 msgstr "Unbegrenzte Nutzung erlaubt"
 
-#: src/components/layouts/CheckIn/index.tsx:218
+#: src/components/common/CheckIn/CheckInOptionsModal.tsx:34
 msgid "Unpaid Order"
 msgstr "Unbezahlte Bestellung"
 
@@ -6351,9 +6367,21 @@ msgstr "Anwendungsbeispiel"
 msgid "Usage Limit"
 msgstr "Verwendungslimit"
 
-#: src/components/layouts/CheckIn/index.tsx:475
-msgid "USB Scanner Active"
-msgstr ""
+#: src/components/common/CheckIn/ScannerSelectionModal.tsx:50
+msgid "USB Scanner Already Active"
+msgstr "USB-Scanner bereits aktiv"
+
+#: src/components/common/CheckIn/ScannerSelectionModal.tsx:42
+msgid "USB Scanner mode activated. Start scanning tickets now."
+msgstr "USB-Scanner-Modus aktiviert. Beginnen Sie jetzt mit dem Scannen von Tickets."
+
+#: src/components/common/CheckIn/HidScannerStatus.tsx:48
+msgid "USB Scanner mode deactivated"
+msgstr "USB-Scanner-Modus deaktiviert"
+
+#: src/components/common/CheckIn/ScannerSelectionModal.tsx:50
+msgid "USB/HID Scanner"
+msgstr "USB/HID-Scanner"
 
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:151
 msgid "Use <0>Liquid templating</0> to personalize your emails"
@@ -6364,18 +6392,10 @@ msgstr ""
 msgid "Use a blurred version of the cover image as the background"
 msgstr "Verwenden Sie eine unscharfe Version des Titelbilds als Hintergrund"
 
-#: src/components/layouts/CheckIn/index.tsx:445
-msgid "Use Camera"
-msgstr ""
-
 #: src/components/routes/event/HomepageDesigner/index.tsx:188
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:349
 msgid "Use cover image"
 msgstr "Titelbild verwenden"
-
-#: src/components/layouts/CheckIn/index.tsx:456
-msgid "Use USB Scanner"
-msgstr ""
 
 #: src/components/routes/account/ManageAccount/sections/Users/index.tsx:154
 msgid "User"
@@ -6514,10 +6534,6 @@ msgstr "Sichtweite"
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:104
 msgid "VK"
 msgstr "VK"
-
-#: src/components/layouts/CheckIn/index.tsx:512
-msgid "Waiting for scan..."
-msgstr ""
 
 #: src/components/routes/product-widget/PaymentReturn/index.tsx:77
 msgid "We could not process your payment. Please try again or contact support."
@@ -6800,7 +6816,7 @@ msgstr "Ja"
 msgid "Yes, remove them"
 msgstr "Ja, entfernen"
 
-#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:77
+#: src/components/common/AttendeeCheckInTable/QrScanner.tsx:92
 msgid "You already scanned this ticket"
 msgstr "Sie haben dieses Ticket bereits gescannt"
 
@@ -6812,8 +6828,8 @@ msgstr "Sie ändern Ihre E-Mail zu <0>{0}</0>."
 msgid "You are issuing a partial refund. The customer will be refunded {0} {1}."
 msgstr ""
 
-#: src/components/layouts/CheckIn/index.tsx:94
-#: src/components/layouts/CheckIn/index.tsx:116
+#: src/components/layouts/CheckIn/index.tsx:141
+#: src/components/layouts/CheckIn/index.tsx:165
 msgid "You are offline"
 msgstr "Sie sind offline"
 
@@ -6825,8 +6841,8 @@ msgstr "Sie können einen Promo-Code erstellen, der sich auf dieses Produkt rich
 msgid "You cannot change the product type as there are attendees associated with this product."
 msgstr "Sie können den Produkttyp nicht ändern, da Teilnehmer mit diesem Produkt verknüpft sind."
 
-#: src/components/layouts/CheckIn/index.tsx:135
-#: src/components/layouts/CheckIn/index.tsx:175
+#: src/components/layouts/CheckIn/index.tsx:188
+#: src/components/layouts/CheckIn/index.tsx:254
 msgid "You cannot check in attendees with unpaid orders. This setting can be changed in the event settings."
 msgstr "Sie können Teilnehmer mit unbezahlten Bestellungen nicht einchecken. Diese Einstellung kann in den Veranstaltungsdetails geändert werden."
 
@@ -7046,23 +7062,3 @@ msgstr "Postleitzahl"
 #: src/components/routes/product-widget/CollectInformation/index.tsx:349
 msgid "ZIP or Postal Code"
 msgstr "Postleitzahl"
-
-#: src/components/layouts/CheckIn/index.tsx:432
-msgid "Select Scanner Type"
-msgstr "Scanner-Typ auswählen"
-
-#: src/components/layouts/CheckIn/index.tsx:445
-msgid "Use Camera"
-msgstr "Kamera verwenden"
-
-#: src/components/layouts/CheckIn/index.tsx:456
-msgid "Use USB Scanner"
-msgstr "USB-Scanner verwenden"
-
-#: src/components/layouts/CheckIn/index.tsx:475
-msgid "USB Scanner Active"
-msgstr "USB-Scanner aktiv"
-
-#: src/components/layouts/CheckIn/index.tsx:483
-msgid "Position your USB scanner and scan the barcode. The scanner will automatically submit when a barcode is detected."
-msgstr "Positionieren Sie Ihren USB-Scanner und scannen Sie den Barcode. Der Scanner wird automatisch senden, wenn ein Barcode erkannt wird."

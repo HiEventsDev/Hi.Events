@@ -2,26 +2,14 @@ import {useParams} from "react-router";
 import {useGetCheckInListPublic} from "../../../queries/useGetCheckInListPublic.ts";
 import {useCallback, useEffect, useRef, useState} from "react";
 import {useDebouncedValue, useDisclosure, useNetwork} from "@mantine/hooks";
-import {Attendee, QueryFilters} from "../../../types.ts";
+import {Attendee, QueryFilters, QueryFilterOperator} from "../../../types.ts";
 import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {t, Trans} from "@lingui/macro";
 import {AxiosError} from "axios";
 import classes from "./CheckIn.module.scss";
-import {ActionIcon, Alert, Button, Loader, Modal, Progress, Stack} from "@mantine/core";
+import {ActionIcon, Modal} from "@mantine/core";
 import {SearchBar} from "../../common/SearchBar";
-import {
-    IconAlertCircle,
-    IconCamera,
-    IconCreditCard,
-    IconInfoCircle,
-    IconQrcode,
-    IconScan,
-    IconTicket,
-    IconUserCheck,
-    IconVolume,
-    IconVolumeOff,
-    IconX
-} from "@tabler/icons-react";
+import {IconInfoCircle, IconQrcode, IconVolume, IconVolumeOff} from "@tabler/icons-react";
 import {QRScannerComponent} from "../../common/AttendeeCheckInTable/QrScanner.tsx";
 import {useGetCheckInListAttendees} from "../../../queries/useGetCheckInListAttendeesPublic.ts";
 import {useCreateCheckInPublic} from "../../../mutations/useCreateCheckInPublic.ts";
@@ -32,6 +20,12 @@ import Truncate from "../../common/Truncate";
 import {Header} from "../../common/Header";
 import {publicCheckInClient} from "../../../api/check-in.client.ts";
 import {isSsr} from "../../../utilites/helpers.ts";
+import {AttendeeList} from "../../common/CheckIn/AttendeeList";
+import {CheckInOptionsModal} from "../../common/CheckIn/CheckInOptionsModal";
+import {ScannerSelectionModal} from "../../common/CheckIn/ScannerSelectionModal";
+import {CheckInInfoModal} from "../../common/CheckIn/CheckInInfoModal";
+import {HidScannerStatus} from "../../common/CheckIn/HidScannerStatus";
+import {Button} from "@mantine/core";
 
 const CheckIn = () => {
     const networkStatus = useNetwork();
@@ -74,7 +68,7 @@ const CheckIn = () => {
         query: searchQueryDebounced,
         perPage: 150,
         filterFields: {
-            status: {operator: 'eq', value: 'ACTIVE'},
+            status: {operator: QueryFilterOperator.Equals, value: 'ACTIVE'},
         },
     };
 
@@ -149,7 +143,7 @@ const CheckIn = () => {
                 }
 
                 if (error instanceof AxiosError) {
-                    showError(error?.response?.data.message || t`Unable to check in attendee`);
+                    showError(error?.response?.data?.message || t`Unable to check in attendee`);
                 }
             }
         });
@@ -172,7 +166,11 @@ const CheckIn = () => {
                         return;
                     }
 
-                    showError(error?.response?.data.message || t`Unable to check out attendee`);
+                    if (error instanceof AxiosError) {
+                        showError(error?.response?.data?.message || t`Unable to check out attendee`);
+                    } else {
+                        showError(t`Unable to check out attendee`);
+                    }
                 }
             });
             return;
@@ -271,17 +269,6 @@ const CheckIn = () => {
         isProcessingRef.current = false;
     }, [attendees, checkInListShortId, allowOrdersAwaitingOfflinePaymentToCheckIn, checkInModalHandlers, handleCheckInAction, playErrorSound]);
 
-    const checkInButtonText = (attendee: Attendee) => {
-        if (!allowOrdersAwaitingOfflinePaymentToCheckIn && attendee.status === 'AWAITING_PAYMENT') {
-            return t`Cannot Check In`;
-        }
-
-        if (attendee.check_in) {
-            return t`Check Out`;
-        }
-
-        return t`Check In`;
-    }
 
     // Process completed barcode
     const processBarcode = useCallback((barcode: string) => {
@@ -355,135 +342,9 @@ const CheckIn = () => {
         };
     }, [hidScannerMode, currentBarcode, processBarcode]);
 
-    const CheckInOptionsModal = () => {
-        if (!selectedAttendee) return null;
 
-        return (
-            <Modal
-                opened={checkInModalOpen}
-                onClose={() => {
-                    checkInModalHandlers.close();
-                    setSelectedAttendee(null);
-                }}
-                title={<Trans>Check in {selectedAttendee.first_name} {selectedAttendee.last_name}</Trans>}
-                size="md"
-            >
-                <Stack>
-                    <Alert
-                        icon={<IconAlertCircle size={20}/>}
-                        variant={'light'}
-                        title={t`Unpaid Order`}>
-                        {t`This attendee has an unpaid order.`}
-                    </Alert>
-                    <Button
-                        leftSection={<IconUserCheck size={20}/>}
-                        onClick={() => handleCheckInAction(selectedAttendee, 'check-in')}
-                        loading={checkInMutation.isPending}
-                        fullWidth
-                    >
-                        {t`Check in only`}
-                    </Button>
-                    <Button
-                        leftSection={<IconCreditCard size={20}/>}
-                        onClick={() => handleCheckInAction(selectedAttendee, 'check-in-and-mark-order-as-paid')}
-                        loading={checkInMutation.isPending}
-                        variant="filled"
-                        fullWidth
-                    >
-                        {t`Check in and mark order as paid`}
-                    </Button>
-                    <Button
-                        onClick={checkInModalHandlers.close}
-                        variant="light"
-                        fullWidth
-                    >
-                        {t`Cancel`}
-                    </Button>
-                </Stack>
-            </Modal>
-        );
-    };
 
-    const Attendees = () => {
-        const Container = () => {
-            if (attendeesQuery.isFetching || !attendees || !products) {
-                return (
-                    <div className={classes.loading}>
-                        <Loader size={40}/>
-                    </div>
-                )
-            }
-
-            if (attendees.length === 0) {
-                return (
-                    <div className={classes.noResults}>
-                        No attendees to show.
-                    </div>
-                );
-            }
-
-            return (
-                <div className={classes.attendees}>
-                    {attendees.map(attendee => {
-                        const isAttendeeAwaitingPayment = attendee.status === 'AWAITING_PAYMENT';
-
-                        return (
-                            <div className={classes.attendee} key={attendee.public_id}>
-                                <div className={classes.details}>
-                                    <div>
-                                        {attendee.first_name} {attendee.last_name}
-                                    </div>
-                                    {isAttendeeAwaitingPayment && (
-                                        <div className={classes.awaitingPayment}>
-                                            {t`Awaiting payment`}
-                                        </div>
-                                    )}
-                                    <div>
-                                        <b>{attendee.public_id}</b>
-                                    </div>
-                                    <div className={classes.product}>
-                                        <IconTicket
-                                            size={15}/> {products.find(product => product.id === attendee.product_id)?.title}
-                                    </div>
-                                </div>
-                                <div className={classes.actions}>
-                                    {<Button
-                                        onClick={() => {
-                                            playClickSound();
-                                            handleCheckInToggle(attendee);
-                                        }}
-                                        disabled={checkInMutation.isPending || deleteCheckInMutation.isPending}
-                                        loading={checkInMutation.isPending || deleteCheckInMutation.isPending}
-                                        color={(function () {
-                                                if (attendee.check_in) {
-                                                    return 'red';
-                                                }
-                                                if (isAttendeeAwaitingPayment && !allowOrdersAwaitingOfflinePaymentToCheckIn) {
-                                                    return 'gray';
-                                                }
-
-                                                return 'teal';
-                                            }
-                                        )()}
-                                    >
-                                        {checkInButtonText(attendee)}
-                                    </Button>}
-                                </div>
-                            </div>
-                        )
-                    })}
-                </div>
-            )
-        }
-
-        return (
-            <div style={{position: 'relative'}}>
-                <Container/>
-            </div>
-        );
-    }
-
-    if (CheckInListQuery.error && CheckInListQuery.error.response?.status === 404) {
+    if (CheckInListQuery.error && (CheckInListQuery.error as any).response?.status === 404) {
         return (
             <NoResultsSplash
                 heading={t`Check-in list not found`}
@@ -549,46 +410,20 @@ const CheckIn = () => {
                             <div className={classes.offline}/>
                         )}
                         <ActionIcon
+                            display={'flex'}
+                            variant={'transparent'}
+                            color={'white'}
                             onClick={() => infoModalHandlers.open()}
                         >
                             <IconInfoCircle/>
                         </ActionIcon>
                     </>
                 )}/>
-            {hidScannerMode && (
-                <div style={{
-                    backgroundColor: pageHasFocus ? '#12b886' : '#ffa94d',
-                    color: 'white',
-                    padding: '8px 16px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    fontSize: '14px',
-                    fontWeight: 500,
-                    transition: 'background-color 0.2s ease'
-                }}>
-                    <div style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
-                        <IconScan size={18}/>
-                        <span>
-                            {pageHasFocus
-                                ? 'USB Scanner Active - Ready to Scan'
-                                : 'USB Scanner Paused - Click here to resume scanning'}
-                        </span>
-                    </div>
-                    <Button
-                        size="xs"
-                        variant="white"
-                        color={pageHasFocus ? "teal" : "orange"}
-                        leftSection={<IconX size={14}/>}
-                        onClick={() => {
-                            setHidScannerMode(false);
-                            showSuccess(t`USB Scanner mode deactivated`);
-                        }}
-                    >
-                        Disable
-                    </Button>
-                </div>
-            )}
+            <HidScannerStatus
+                isActive={hidScannerMode}
+                pageHasFocus={pageHasFocus}
+                onDisable={() => setHidScannerMode(false)}
+            />
             <div className={classes.header}>
                 <div>
                     <h4 className={classes.title}>
@@ -614,7 +449,6 @@ const CheckIn = () => {
                             variant={'light'} 
                             size={'xl'}
                             onClick={() => setIsSoundOn(!isSoundOn)}
-                            style={{ marginLeft: '4px' }}
                         >
                             {isSoundOn ? <IconVolume size={24}/> : <IconVolumeOff size={24}/>}
                         </ActionIcon>
@@ -626,53 +460,41 @@ const CheckIn = () => {
                     </div>
                 </div>
             </div>
-            <Attendees/>
-            <CheckInOptionsModal/>
-            {scannerSelectionOpen && (
-                <Modal
-                    opened={scannerSelectionOpen}
-                    onClose={() => setScannerSelectionOpen(false)}
-                    title={t`Select Scanner Type`}
-                    size="sm"
-                >
-                    <Stack>
-                        <Button
-                            leftSection={<IconCamera size={20}/>}
-                            onClick={() => {
-                                setScannerSelectionOpen(false);
-                                setQrScannerOpen(true);
-                            }}
-                            fullWidth
-                            variant="light"
-                        >
-                            {t`Camera Scanner`}
-                        </Button>
-                        <Button
-                            leftSection={<IconScan size={20}/>}
-                            onClick={() => {
-                                setScannerSelectionOpen(false);
-                                if (!hidScannerMode) {
-                                    setHidScannerMode(true);
-                                    showSuccess(t`USB Scanner mode activated. Start scanning tickets now.`);
-                                }
-                            }}
-                            fullWidth
-                            variant="light"
-                            color={hidScannerMode ? "gray" : undefined}
-                            disabled={hidScannerMode}
-                        >
-                            {hidScannerMode ? t`USB Scanner Already Active` : t`USB/HID Scanner`}
-                        </Button>
-                        <Button
-                            onClick={() => setScannerSelectionOpen(false)}
-                            variant="subtle"
-                            fullWidth
-                        >
-                            {t`Cancel`}
-                        </Button>
-                    </Stack>
-                </Modal>
-            )}
+            <AttendeeList
+                attendees={attendees}
+                products={products}
+                isLoading={attendeesQuery.isFetching}
+                isCheckInPending={checkInMutation.isPending}
+                isDeletePending={deleteCheckInMutation.isPending}
+                allowOrdersAwaitingOfflinePaymentToCheckIn={allowOrdersAwaitingOfflinePaymentToCheckIn || false}
+                onCheckInToggle={handleCheckInToggle}
+                onClickSound={playClickSound}
+            />
+            <CheckInOptionsModal
+                isOpen={checkInModalOpen}
+                attendee={selectedAttendee}
+                isPending={checkInMutation.isPending}
+                onClose={() => {
+                    checkInModalHandlers.close();
+                    setSelectedAttendee(null);
+                }}
+                onCheckIn={(action) => selectedAttendee && handleCheckInAction(selectedAttendee, action)}
+            />
+            <ScannerSelectionModal
+                isOpen={scannerSelectionOpen}
+                isHidScannerActive={hidScannerMode}
+                onClose={() => setScannerSelectionOpen(false)}
+                onCameraSelect={() => {
+                    setScannerSelectionOpen(false);
+                    setQrScannerOpen(true);
+                }}
+                onHidScannerSelect={() => {
+                    setScannerSelectionOpen(false);
+                    if (!hidScannerMode) {
+                        setHidScannerMode(true);
+                    }
+                }}
+            />
             {qrScannerOpen && (
                 <Modal.Root
                     opened
@@ -692,53 +514,11 @@ const CheckIn = () => {
                     </Modal.Content>
                 </Modal.Root>
             )}
-            {infoModalOpen && (
-                <Modal.Root
-                    opened
-                    radius={0}
-                    onClose={infoModalHandlers.close}
-                    transitionProps={{transition: 'fade', duration: 200}}
-                    padding={'none'}
-                >
-                    <Modal.Overlay/>
-                    <Modal.Content>
-                        <Modal.Header>
-                            <Modal.Title>
-                                <Truncate text={checkInList?.name} length={30}/>
-                            </Modal.Title>
-                            <Modal.CloseButton/>
-                        </Modal.Header>
-                        <div className={classes.infoModal}>
-                            <div className={classes.checkInCount}>
-                                {checkInList && (
-                                    <>
-                                        <h4>
-                                            <Trans>
-                                                {`${checkInList.checked_in_attendees}/${checkInList.total_attendees}`} checked
-                                                in
-                                            </Trans>
-                                        </h4>
-
-                                        <Progress
-                                            value={checkInList.checked_in_attendees / checkInList.total_attendees * 100}
-                                            color={'teal'}
-                                            size={'xl'}
-                                            className={classes.progressBar}
-                                        />
-
-                                    </>
-                                )}
-                            </div>
-
-                            {checkInList?.description && (
-                                <div className={classes.description}>
-                                    {checkInList.description}
-                                </div>
-                            )}
-                        </div>
-                    </Modal.Content>
-                </Modal.Root>
-            )}
+            <CheckInInfoModal
+                isOpen={infoModalOpen}
+                checkInList={checkInList}
+                onClose={infoModalHandlers.close}
+            />
             {/* Audio elements for HID scanner sounds */}
             <audio ref={scanSuccessAudioRef} src="/sounds/scan-success.wav"/>
             <audio ref={scanErrorAudioRef} src="/sounds/scan-error.wav"/>
