@@ -476,7 +476,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                                                         </UnstyledButton>
                                                     </div>
                                                     <Collapse transitionDuration={100} in={!isProductCollapsed}
-                                                              className={'hi-product-content'}>
+                                                              className={'hi-product-content'} hidden={isProductCollapsed}>
                                                         <div className={'hi-price-tiers-rows'}>
                                                             <TieredPricing
                                                                 productIndex={productIndex++}
