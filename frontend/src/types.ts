@@ -126,7 +126,7 @@ export interface Image {
     type: ImageType;
 }
 
-export type ImageType = 'EVENT_COVER' | 'EDITOR_IMAGE' | 'ORGANIZER_LOGO' | 'ORGANIZER_COVER' | 'ORGANIZER_IMAGE';
+export type ImageType = 'EVENT_COVER' | 'EDITOR_IMAGE' | 'ORGANIZER_LOGO' | 'ORGANIZER_COVER' | 'ORGANIZER_IMAGE' | 'TICKET_LOGO';
 
 export type PaymentProvider = 'STRIPE' | 'OFFLINE';
 
@@ -174,6 +174,14 @@ export interface EventSettings {
     invoice_tax_details?: string;
     invoice_notes?: string;
     invoice_payment_terms_days?: number;
+    // Ticket design settings
+    ticket_design_settings?: {
+        accent_color?: string;
+        logo_image_id?: IdParam;
+        footer_text?: string;
+        layout_type?: 'default' | 'modern';
+        enabled?: boolean;
+    };
 }
 
 export interface VenueAddress {

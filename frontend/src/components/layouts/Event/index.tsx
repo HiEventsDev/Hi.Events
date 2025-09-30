@@ -108,6 +108,7 @@ const EventLayout = () => {
 
         {label: t`Tools`},
         {link: 'homepage-designer', label: t`Homepage Designer`, icon: IconPaint},
+        {link: 'ticket-designer', label: t`Ticket Design`, icon: IconTicket},
         {link: 'widget', label: t`Widget Embed`, icon: IconDeviceTabletCode},
         {link: 'webhooks', label: t`Webhooks`, icon: IconWebhook},
     ];

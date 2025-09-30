@@ -78,6 +78,9 @@ class UpdateEventSettingsHandler
                     'invoice_tax_details' => $this->purifier->purify($settings->invoice_tax_details),
                     'invoice_notes' => $this->purifier->purify($settings->invoice_notes),
                     'invoice_payment_terms_days' => $settings->invoice_payment_terms_days,
+                    
+                    // Ticket design settings
+                    'ticket_design_settings' => $settings->ticket_design_settings,
                 ],
                 where: [
                     'event_id' => $settings->event_id,
