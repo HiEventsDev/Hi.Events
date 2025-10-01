@@ -19,7 +19,7 @@ import {TicketPreview} from "./TicketPreview";
 
 interface TicketDesignSettings {
     accent_color: string;
-    logo_image_id: IdParam | null;
+    logo_image_id: IdParam;
     footer_text: string | null;
     enabled: boolean;
 }
@@ -37,7 +37,7 @@ const TicketDesigner = () => {
     const form = useForm<TicketDesignSettings>({
         initialValues: {
             accent_color: '#333333',
-            logo_image_id: null,
+            logo_image_id: undefined,
             footer_text: '',
             enabled: true,
         }
@@ -50,7 +50,7 @@ const TicketDesigner = () => {
             const settings = eventSettingsQuery.data.ticket_design_settings;
             form.setValues({
                 accent_color: settings.accent_color || '#333333',
-                logo_image_id: settings.logo_image_id || null,
+                logo_image_id: settings.logo_image_id || undefined,
                 footer_text: settings.footer_text || '',
                 enabled: settings.enabled !== false,
             });
@@ -72,7 +72,7 @@ const TicketDesigner = () => {
                     ticket_design_settings: {
                         accent_color: values.accent_color,
                         logo_image_id: values.logo_image_id,
-                        footer_text: values.footer_text || null,
+                        footer_text: values.footer_text || undefined,
                         enabled: values.enabled
                     }
                 },
@@ -94,8 +94,6 @@ const TicketDesigner = () => {
             queryKey: [GET_EVENT_IMAGES_QUERY_KEY, eventId]
         });
     };
-
-
 
     if (eventSettingsQuery.isLoading || eventImagesQuery.isLoading) {
         return <LoadingMask/>;
