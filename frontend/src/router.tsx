@@ -339,6 +339,13 @@ export const router: RouteObject[] = [
                 }
             },
             {
+                path: "ticket-designer",
+                async lazy() {
+                    const TicketDesigner = await import("./components/routes/event/TicketDesigner");
+                    return {Component: TicketDesigner.default};
+                }
+            },
+            {
                 path: "getting-started",
                 async lazy() {
                     const GettingStarted = await import("./components/routes/event/GettingStarted");
@@ -470,6 +477,14 @@ export const router: RouteObject[] = [
         async lazy() {
             const PrintProduct = await import("./components/routes/product-widget/PrintProduct");
             return {Component: PrintProduct.default};
+        },
+        errorElement: <ErrorPage/>
+    },
+    {
+        path: "/manage/event/:eventId/ticket-designer/print",
+        async lazy() {
+            const TicketDesignerPrint = await import("./components/routes/event/TicketDesigner/TicketDesignerPrint");
+            return {Component: TicketDesignerPrint.default};
         },
         errorElement: <ErrorPage/>
     },
