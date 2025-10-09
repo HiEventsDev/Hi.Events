@@ -23,6 +23,11 @@ export type ConfigKeys =
     | 'VITE_I_HAVE_PURCHASED_A_LICENCE'
     | 'VITE_DEFAULT_IMAGE_URL';
 
+export enum StripePlatform {
+    Canada = 'ca',
+    Ireland = 'ie',
+}
+
 export type IdParam = string | undefined | number;
 
 export interface AcceptInvitationRequest {
@@ -93,6 +98,7 @@ export interface Account {
     is_saas_mode_enabled?: boolean;
     configuration?: AccountConfiguration;
     requires_manual_verification?: boolean;
+    stripe_platform: string;
 }
 
 export interface AccountConfiguration {
@@ -109,7 +115,26 @@ export interface StripeConnectDetails {
     account: Account;
     stripe_account_id: string;
     is_connect_setup_complete: boolean;
-    connect_url: string;
+    connect_url: string | null;
+}
+
+export interface StripeConnectAccount {
+    stripe_account_id: string;
+    connect_url: string | null;
+    is_setup_complete: boolean;
+    platform: string | null;
+    account_type: string | null;
+    is_primary: boolean;
+}
+
+export interface StripeConnectAccountsResponse {
+    account: {
+        id: IdParam;
+        stripe_platform: string | null;
+    };
+    stripe_connect_accounts: StripeConnectAccount[];
+    primary_stripe_account_id: string | null;
+    has_completed_setup: boolean;
 }
 
 export interface LoginData {

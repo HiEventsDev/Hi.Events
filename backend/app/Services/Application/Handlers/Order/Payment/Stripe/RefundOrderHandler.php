@@ -21,6 +21,7 @@ use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Order\DTO\RefundOrderDTO;
 use HiEvents\Services\Domain\Order\OrderCancelService;
 use HiEvents\Services\Domain\Payment\Stripe\StripePaymentIntentRefundService;
+use HiEvents\Services\Infrastructure\Stripe\StripeClientFactory;
 use HiEvents\Values\MoneyValue;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Database\DatabaseManager;
@@ -37,6 +38,7 @@ class RefundOrderHandler
         private readonly Mailer                           $mailer,
         private readonly OrderCancelService               $orderCancelService,
         private readonly DatabaseManager                  $databaseManager,
+        private readonly StripeClientFactory              $stripeClientFactory,
     )
     {
     }
@@ -133,9 +135,17 @@ class RefundOrderHandler
             $this->orderCancelService->cancelOrder($order);
         }
 
+        // Determine the correct Stripe platform for this refund
+        // Use the platform that was used for the original payment
+        $paymentPlatform = $order->getStripePayment()->getStripePlatformEnum();
+
+        // Create Stripe client for the original payment's platform
+        $stripeClient = $this->stripeClientFactory->createForPlatform($paymentPlatform);
+
         $this->refundService->refundPayment(
             amount: $amount,
-            payment: $order->getStripePayment()
+            payment: $order->getStripePayment(),
+            stripeClient: $stripeClient
         );
 
         if ($refundOrderDTO->notify_buyer) {

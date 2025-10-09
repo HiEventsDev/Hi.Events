@@ -34,7 +34,7 @@ msgstr "{0}"
 
 #: src/components/layouts/CheckIn/index.tsx:237
 msgid "{0} {1} is already checked in"
-msgstr ""
+msgstr "{0} {1} já fez check-in"
 
 #: src/components/layouts/CheckIn/index.tsx:133
 msgid "{0} <0>checked in</0> successfully"
@@ -232,11 +232,13 @@ msgstr "Um imposto padrão, como IVA ou GST"
 msgid "About"
 msgstr "Sobre"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:212
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:427
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:456
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:674
 msgid "About Stripe Connect"
 msgstr "Sobre o Stripe Connect"
 
-#: src/components/routes/event/TicketDesigner/index.tsx:131
+#: src/components/routes/event/TicketDesigner/index.tsx:129
 msgid "Accent Color"
 msgstr "Cor de Destaque"
 
@@ -252,7 +254,8 @@ msgstr "Aceitar pagamentos com cartão de crédito através do Stripe"
 msgid "Accept Invitation"
 msgstr "Aceitar convite"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:126
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:350
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:602
 msgid "Access Denied"
 msgstr "Acesso negado"
 
@@ -260,6 +263,10 @@ msgstr "Acesso negado"
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:53
 msgid "Account"
 msgstr "Conta"
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:335
+msgid "Account already connected!"
+msgstr "Conta já conectada!"
 
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:62
 msgid "Account Name"
@@ -273,6 +280,10 @@ msgstr "Configurações da conta"
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:42
 msgid "Account updated successfully"
 msgstr "Conta atualizada com sucesso"
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:64
+msgid "Action Required: Reconnect Your Stripe Account"
+msgstr "Ação necessária: Reconecte sua conta Stripe"
 
 #: src/components/common/AffiliateTable/index.tsx:167
 #: src/components/common/AttendeeTable/index.tsx:159
@@ -482,6 +493,10 @@ msgstr "Todos os participantes"
 msgid "All attendees of this event"
 msgstr "Todos os participantes deste evento"
 
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:179
+msgid "All done! You're now using our upgraded payment system."
+msgstr "Tudo pronto! Agora você está usando nosso sistema de pagamentos atualizado."
+
 #: src/components/routes/events/Dashboard/index.tsx:74
 msgid "All Ended Events"
 msgstr "Todos os eventos encerrados"
@@ -508,21 +523,26 @@ msgstr "Permitir a indexação do mecanismo de pesquisa"
 msgid "Allow search engines to index this event"
 msgstr "Permitir que os mecanismos de pesquisa indexem esse evento"
 
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:199
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:410
+msgid "Almost there! Finish connecting your Stripe account to start accepting payments."
+msgstr "Quase lá! Termine de conectar sua conta Stripe para começar a aceitar pagamentos."
+
 #: src/components/routes/product-widget/PaymentReturn/index.tsx:78
 msgid "Almost there! We're just waiting for your payment to be processed. This should only take a few seconds.."
 msgstr "Quase lá! Estamos apenas aguardando o processamento do seu pagamento. Isso deve levar apenas alguns segundos..."
 
 #: src/components/modals/RefundOrderModal/index.tsx:85
 msgid "Already Refunded"
-msgstr ""
+msgstr "Já reembolsado"
 
 #: src/components/modals/RefundOrderModal/index.tsx:130
 msgid "Also cancel this order"
-msgstr ""
+msgstr "Também cancelar este pedido"
 
 #: src/components/modals/CancelOrderModal/index.tsx:76
 msgid "Also refund this order"
-msgstr ""
+msgstr "Também reembolsar este pedido"
 
 #: src/components/routes/event/Settings/Sections/SeoSettings/index.tsx:77
 #: src/components/routes/organizer/Settings/Sections/SeoSettings/index.tsx:77
@@ -644,12 +664,12 @@ msgid "Are you sure you want to delete this webhook?"
 msgstr "Tem certeza de que deseja excluir este webhook?"
 
 #: src/components/layouts/Event/index.tsx:144
-#: src/components/routes/event/EventDashboard/index.tsx:64
+#: src/components/routes/event/EventDashboard/index.tsx:71
 msgid "Are you sure you want to make this event draft? This will make the event invisible to the public"
 msgstr "Tem certeza de que deseja tornar este evento um rascunho? Isso tornará o evento invisível para o público"
 
 #: src/components/layouts/Event/index.tsx:145
-#: src/components/routes/event/EventDashboard/index.tsx:65
+#: src/components/routes/event/EventDashboard/index.tsx:72
 msgid "Are you sure you want to make this event public? This will make the event visible to the public"
 msgstr "Tem certeza de que deseja tornar este evento público? Isso tornará o evento visível para o público"
 
@@ -772,7 +792,7 @@ msgstr "Participantes"
 msgid "Attendees Exported"
 msgstr "Participantes exportados"
 
-#: src/components/routes/event/EventDashboard/index.tsx:239
+#: src/components/routes/event/EventDashboard/index.tsx:270
 msgid "Attendees Registered"
 msgstr "Participantes Registrados"
 
@@ -794,7 +814,7 @@ msgstr "Redimensiona automaticamente a altura do widget com base no conteúdo. Q
 
 #: src/components/modals/RefundOrderModal/index.tsx:92
 msgid "Available to Refund"
-msgstr ""
+msgstr "Disponível para reembolso"
 
 #: src/components/common/Editor/Controls/LiquidTokenControl.tsx:76
 msgid "Available Tokens"
@@ -934,7 +954,7 @@ msgstr "Cancelar"
 
 #: src/components/modals/RefundOrderModal/index.tsx:131
 msgid "Cancel all products and release them back to the pool"
-msgstr ""
+msgstr "Cancelar todos os produtos e devolvê-los ao pool disponível"
 
 #: src/components/routes/profile/ManageProfile/index.tsx:126
 msgid "Cancel email change"
@@ -954,7 +974,7 @@ msgstr "Cancelar pedido {0}"
 
 #: src/components/modals/CancelOrderModal/index.tsx:67
 msgid "Canceling will cancel all attendees associated with this order, and release the tickets back into the available pool."
-msgstr ""
+msgstr "Cancelar irá cancelar todos os participantes associados a este pedido e devolver os ingressos ao pool disponível."
 
 #: src/components/common/AttendeeTicket/index.tsx:108
 #: src/components/common/OrderStatusBadge/index.tsx:12
@@ -1246,13 +1266,16 @@ msgstr "Pagamento completo"
 msgid "Complete Payment"
 msgstr "Pagamento completo"
 
-#: src/components/common/StripeConnectButton/index.tsx:79
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:203
-#: src/components/routes/event/EventDashboard/index.tsx:205
+#: src/components/common/StripeConnectButton/index.tsx:87
+#: src/components/routes/event/EventDashboard/index.tsx:236
 msgid "Complete Stripe Setup"
 msgstr "Concluir configuração do Stripe"
 
-#: src/components/routes/event/EventDashboard/index.tsx:127
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:109
+msgid "Complete the setup below to continue"
+msgstr "Complete a configuração abaixo para continuar"
+
+#: src/components/routes/event/EventDashboard/index.tsx:158
 msgid "Complete these steps to start selling tickets for your event."
 msgstr "Complete estas etapas para começar a vender ingressos para o seu evento."
 
@@ -1267,7 +1290,7 @@ msgstr "Concluído"
 msgid "Completed orders"
 msgstr "Pedidos concluídos"
 
-#: src/components/routes/event/EventDashboard/index.tsx:237
+#: src/components/routes/event/EventDashboard/index.tsx:268
 msgid "Completed Orders"
 msgstr "Pedidos concluídos"
 
@@ -1326,11 +1349,15 @@ msgstr "Confirmação do endereço de e-mail..."
 msgid "Congratulations on creating an event!"
 msgstr "Parabéns por criar um evento!"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:174
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:229
+msgid "Connect & Upgrade"
+msgstr "Conectar e atualizar"
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:646
 msgid "Connect Documentation"
 msgstr "Documentação de conexão"
 
-#: src/components/routes/event/EventDashboard/index.tsx:192
+#: src/components/routes/event/EventDashboard/index.tsx:223
 msgid "Connect payment processing"
 msgstr "Conectar processamento de pagamento"
 
@@ -1341,9 +1368,9 @@ msgstr "Conectar faixa"
 
 #: src/components/modals/SendMessageModal/index.tsx:159
 msgid "Connect Stripe to enable messaging"
-msgstr ""
+msgstr "Conecte o Stripe para habilitar mensagens"
 
-#: src/components/routes/event/EventDashboard/index.tsx:205
+#: src/components/routes/event/EventDashboard/index.tsx:236
 msgid "Connect to Stripe"
 msgstr "Conectar ao Stripe"
 
@@ -1351,8 +1378,10 @@ msgstr "Conectar ao Stripe"
 msgid "Connect with CRM and automate tasks using webhooks and integrations"
 msgstr "Conecte-se ao CRM e automatize tarefas usando webhooks e integrações"
 
-#: src/components/common/StripeConnectButton/index.tsx:77
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:202
+#: src/components/common/StripeConnectButton/index.tsx:85
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:229
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:447
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:664
 #: src/components/routes/event/GettingStarted/index.tsx:154
 msgid "Connect with Stripe"
 msgstr "Conecte-se com o Stripe"
@@ -1361,11 +1390,24 @@ msgstr "Conecte-se com o Stripe"
 msgid "Connect your Stripe account to accept payments for tickets and products."
 msgstr "Conecte sua conta Stripe para aceitar pagamentos de ingressos e produtos."
 
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:217
+msgid "Connect your Stripe account to accept payments."
+msgstr "Conecte sua conta Stripe para aceitar pagamentos."
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:439
+msgid "Connect your Stripe account to start accepting payments for your events."
+msgstr "Conecte sua conta Stripe para começar a aceitar pagamentos para seus eventos."
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:215
+msgid "Connect your Stripe account to start accepting payments."
+msgstr "Conecte sua conta Stripe para começar a aceitar pagamentos."
+
 #: src/components/routes/event/GettingStarted/index.tsx:150
 msgid "Connect your Stripe account to start receiving payments."
 msgstr "Conecte sua conta Stripe para começar a receber pagamentos."
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:149
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:385
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:622
 msgid "Connected to Stripe"
 msgstr "Conectado ao Stripe"
 
@@ -1693,6 +1735,10 @@ msgstr "Moeda"
 msgid "Current Password"
 msgstr "Senha atual"
 
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:158
+msgid "Current payment processor"
+msgstr "Processador de pagamentos atual"
+
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:330
 msgid "Custom"
 msgstr "Personalizado"
@@ -1720,7 +1766,7 @@ msgstr "Cliente"
 
 #: src/components/modals/RefundOrderModal/index.tsx:124
 msgid "Customer will receive an email confirming the refund"
-msgstr ""
+msgstr "O cliente receberá um email confirmando o reembolso"
 
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:26
 msgid "Customer's email address"
@@ -1783,7 +1829,7 @@ msgstr "Personalize a página do evento para combinar com sua marca e estilo."
 msgid "Customize your organizer page appearance"
 msgstr "Personalize a aparência da sua página de organizador"
 
-#: src/components/routes/event/TicketDesigner/index.tsx:110
+#: src/components/routes/event/TicketDesigner/index.tsx:108
 msgid "Customize your ticket appearance"
 msgstr "Personalize a aparência do seu ingresso"
 
@@ -1821,7 +1867,7 @@ msgstr "Data"
 
 #: src/components/common/AttendeeTicket/index.tsx:58
 msgid "Date & Time"
-msgstr ""
+msgstr "Data e hora"
 
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:33
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:63
@@ -1830,7 +1876,7 @@ msgstr "Data do evento"
 
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:23
 msgid "Date order was placed"
-msgstr ""
+msgstr "Data em que o pedido foi feito"
 
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:38
 msgid "Day one capacity"
@@ -1902,7 +1948,7 @@ msgstr "Descrição para a equipe de registro"
 msgid "Deselect All"
 msgstr "Desselecionar tudo"
 
-#: src/components/routes/event/TicketDesigner/index.tsx:124
+#: src/components/routes/event/TicketDesigner/index.tsx:122
 msgid "Design Elements"
 msgstr "Elementos de Design"
 
@@ -1946,7 +1992,7 @@ msgstr "Fechar esta mensagem"
 msgid "Document Label"
 msgstr "Etiqueta do documento"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:223
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:685
 msgid "Documentation"
 msgstr "Documentação"
 
@@ -2439,7 +2485,7 @@ msgstr "Página do Evento"
 #: src/components/common/EventCard/index.tsx:70
 #: src/components/common/StatusToggle/index.tsx:59
 #: src/components/layouts/Event/index.tsx:156
-#: src/components/routes/event/EventDashboard/index.tsx:76
+#: src/components/routes/event/EventDashboard/index.tsx:83
 #: src/components/routes/event/GettingStarted/index.tsx:63
 msgid "Event status update failed. Please try again later"
 msgstr "Falha na atualização do status do evento. Tente novamente mais tarde"
@@ -2447,7 +2493,7 @@ msgstr "Falha na atualização do status do evento. Tente novamente mais tarde"
 #: src/components/common/EventCard/index.tsx:67
 #: src/components/common/StatusToggle/index.tsx:51
 #: src/components/layouts/Event/index.tsx:153
-#: src/components/routes/event/EventDashboard/index.tsx:73
+#: src/components/routes/event/EventDashboard/index.tsx:80
 #: src/components/routes/event/GettingStarted/index.tsx:60
 msgid "Event status updated"
 msgstr "Status do evento atualizado"
@@ -2639,7 +2685,7 @@ msgstr "Tarifa"
 msgid "Fees"
 msgstr "Tarifas"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:81
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:283
 msgid "Fees are subject to change. You will be notified of any changes to your fee structure."
 msgstr "As taxas estão sujeitas a alterações. Você será notificado sobre quaisquer mudanças na estrutura de taxas."
 
@@ -2659,6 +2705,15 @@ msgstr "Filtros"
 #: src/components/common/FilterModal/index.tsx:223
 msgid "Filters ({activeFilterCount})"
 msgstr "Filtros ({activeFilterCount})"
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:208
+msgid "Finish Setup"
+msgstr "Finalizar configuração"
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:418
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:665
+msgid "Finish Stripe Setup"
+msgstr "Finalizar configuração do Stripe"
 
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:206
 msgid "First Invoice Number"
@@ -2704,7 +2759,7 @@ msgstr "Fixo"
 msgid "Fixed amount"
 msgstr "Valor fixo"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:66
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:268
 msgid "Fixed Fee:"
 msgstr "Taxa fixa:"
 
@@ -2720,7 +2775,7 @@ msgstr "Bilhetagem flexível"
 msgid "Food & Drink"
 msgstr "Comida e bebida"
 
-#: src/components/routes/event/TicketDesigner/index.tsx:162
+#: src/components/routes/event/TicketDesigner/index.tsx:160
 msgid "Footer Text"
 msgstr "Texto do Rodapé"
 
@@ -2753,7 +2808,7 @@ msgstr "Francês"
 
 #: src/components/modals/RefundOrderModal/index.tsx:109
 msgid "Full refund"
-msgstr ""
+msgstr "Reembolso total"
 
 #: src/components/layouts/AuthLayout/index.tsx:90
 msgid "Fully Integrated"
@@ -2792,7 +2847,7 @@ msgstr "Alemão"
 msgid "Get started for free, no subscription fees"
 msgstr "Comece gratuitamente, sem taxas de assinatura"
 
-#: src/components/routes/event/EventDashboard/index.tsx:125
+#: src/components/routes/event/EventDashboard/index.tsx:156
 msgid "Get your event ready"
 msgstr "Prepare seu evento"
 
@@ -2817,10 +2872,6 @@ msgstr "Ir para a página inicial do evento"
 msgid "Go to home page"
 msgstr "Ir para a página inicial"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:163
-msgid "Go to Stripe Dashboard"
-msgstr "Ir para o painel do Stripe"
-
 #: src/components/common/AddEventToCalendarButton/index.tsx:128
 msgid "Google Calendar"
 msgstr "Google Agenda"
@@ -2829,7 +2880,7 @@ msgstr "Google Agenda"
 msgid "Gross sales"
 msgstr "Vendas brutas"
 
-#: src/components/routes/event/EventDashboard/index.tsx:274
+#: src/components/routes/event/EventDashboard/index.tsx:305
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:119
 msgid "Gross Sales"
 msgstr "Vendas brutas"
@@ -2859,7 +2910,11 @@ msgstr "Aqui está o componente React que você pode usar para incorporar o widg
 msgid "Here is your affiliate link"
 msgstr "Aqui está o seu link de afiliado"
 
-#: src/components/routes/event/EventDashboard/index.tsx:101
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:77
+msgid "Here's what to expect:"
+msgstr "Aqui está o que esperar:"
+
+#: src/components/routes/event/EventDashboard/index.tsx:108
 msgid "Hi {0} 👋"
 msgstr "Oi {0} 👋"
 
@@ -3045,6 +3100,10 @@ msgstr "URL da imagem"
 msgid "Images"
 msgstr "Imagens"
 
+#: src/components/routes/event/EventDashboard/index.tsx:124
+msgid "Important: Stripe reconnection required"
+msgstr "Importante: Reconexão do Stripe necessária"
+
 #: src/components/layouts/AuthLayout/index.tsx:55
 msgid "In-depth Analytics"
 msgstr "Análises detalhadas"
@@ -3176,6 +3235,10 @@ msgstr "João"
 msgid "Johnson"
 msgstr "Johnson"
 
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:114
+msgid "Just click the button below to reconnect your Stripe account."
+msgstr "Basta clicar no botão abaixo para reconectar sua conta Stripe."
+
 #: src/components/forms/ProductForm/index.tsx:77
 msgid "Label"
 msgstr "Rótulo"
@@ -3266,7 +3329,7 @@ msgstr "Link para detalhes do pedido"
 msgid "Link to ticket"
 msgstr "Link para ingresso"
 
-#: src/components/routes/event/EventDashboard/index.tsx:194
+#: src/components/routes/event/EventDashboard/index.tsx:225
 msgid "Link your Stripe account to receive funds from ticket sales."
 msgstr "Conecte sua conta Stripe para receber fundos das vendas de ingressos."
 
@@ -3285,7 +3348,7 @@ msgstr "AO VIVO"
 
 #: src/components/routes/event/TicketDesigner/TicketPreview.tsx:31
 msgid "Loading preview..."
-msgstr ""
+msgstr "Carregando visualização..."
 
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:261
 msgid "Loading themes..."
@@ -3318,7 +3381,7 @@ msgstr "Fazer login"
 msgid "Logging in"
 msgstr "Login"
 
-#: src/components/routes/event/TicketDesigner/index.tsx:140
+#: src/components/routes/event/TicketDesigner/index.tsx:138
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:225
 #: src/components/routes/organizer/Settings/Sections/ImageAssetSettings/index.tsx:26
 msgid "Logo"
@@ -3336,7 +3399,7 @@ msgstr "Logo e imagem de capa para seu organizador"
 msgid "Logo will be displayed in the header"
 msgstr "O logo será exibido no cabeçalho"
 
-#: src/components/routes/event/TicketDesigner/index.tsx:155
+#: src/components/routes/event/TicketDesigner/index.tsx:153
 msgid "Logo will be displayed on the ticket"
 msgstr "O logo será exibido no ingresso"
 
@@ -3356,7 +3419,7 @@ msgstr "Tornar o endereço de cobrança obrigatório durante o checkout"
 msgid "Make this question mandatory"
 msgstr "Tornar essa pergunta obrigatória"
 
-#: src/components/routes/event/EventDashboard/index.tsx:148
+#: src/components/routes/event/EventDashboard/index.tsx:179
 msgid "Make your event live"
 msgstr "Torne seu evento ao vivo"
 
@@ -3407,7 +3470,7 @@ msgstr "Gerenciar tíquetes"
 msgid "Manage your account details and default settings"
 msgstr "Gerenciar os detalhes de sua conta e as configurações padrão"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:242
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:719
 msgid "Manage your payment processing and view platform fees"
 msgstr "Gerencie seu processamento de pagamentos e visualize as taxas da plataforma"
 
@@ -3666,6 +3729,10 @@ msgstr "Nenhum evento ainda"
 msgid "No filters available"
 msgstr "Nenhum filtro disponível"
 
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:79
+msgid "No impact on your current or past transactions"
+msgstr "Sem impacto nas suas transações atuais ou passadas"
+
 #: src/components/modals/WebhookLogsModal/index.tsx:177
 msgid "No logs found"
 msgstr "Nenhum registro encontrado"
@@ -3846,6 +3913,10 @@ msgstr "À venda"
 msgid "On Sale"
 msgstr "À venda"
 
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:546
+msgid "Once you complete the upgrade, your old account will only be used for refunds."
+msgstr "Depois de completar a atualização, sua conta antiga será usada apenas para reembolsos."
+
 #: src/components/common/NoEventsBlankSlate/index.tsx:19
 msgid "Once you create an event, you'll see it here."
 msgstr "Depois de criar um evento, você o verá aqui."
@@ -3895,6 +3966,12 @@ msgstr "Abrir página de check-in"
 msgid "Open sidebar"
 msgstr "Abrir barra lateral"
 
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:190
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:398
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:635
+msgid "Open Stripe Dashboard"
+msgstr "Abrir painel do Stripe"
+
 #: src/components/forms/QuestionForm/index.tsx:45
 msgid "Option {i}"
 msgstr "Opção {i}"
@@ -3907,9 +3984,9 @@ msgstr "Informações adicionais opcionais a serem exibidas em todas as faturas 
 msgid "Optional prefix for invoice numbers (e.g., INV-)"
 msgstr "Prefixo opcional para os números das faturas (ex.: INV-)"
 
-#: src/components/routes/event/TicketDesigner/index.tsx:163
+#: src/components/routes/event/TicketDesigner/index.tsx:161
 msgid "Optional text for disclaimers, contact info, or thank you notes (single line only)"
-msgstr ""
+msgstr "Texto opcional para avisos legais, informações de contato ou notas de agradecimento (apenas uma linha)"
 
 #: src/components/forms/QuestionForm/index.tsx:28
 msgid "Options"
@@ -3973,7 +4050,7 @@ msgstr "Primeiro Nome do Pedido"
 
 #: src/components/modals/CancelOrderModal/index.tsx:40
 msgid "Order has been canceled and refunded. The order owner has been notified."
-msgstr ""
+msgstr "O pedido foi cancelado e reembolsado. O proprietário do pedido foi notificado."
 
 #: src/components/modals/CancelOrderModal/index.tsx:41
 msgid "Order has been canceled and the order owner has been notified."
@@ -4105,12 +4182,12 @@ msgstr "Painel do organizador"
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:40
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:70
 msgid "Organizer Email"
-msgstr ""
+msgstr "Email do organizador"
 
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:40
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:70
 msgid "Organizer email address"
-msgstr ""
+msgstr "Endereço de email do organizador"
 
 #: src/components/modals/CreateEventModal/index.tsx:48
 msgid "Organizer is required"
@@ -4198,7 +4275,7 @@ msgstr "Produto Pago"
 
 #: src/components/modals/RefundOrderModal/index.tsx:109
 msgid "Partial refund"
-msgstr ""
+msgstr "Reembolso parcial"
 
 #: src/components/routes/event/orders.tsx:30
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:54
@@ -4290,7 +4367,9 @@ msgstr "Instruções de pagamento"
 msgid "Payment Methods"
 msgstr "Métodos de pagamento"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:139
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:467
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:479
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:613
 msgid "Payment Processing"
 msgstr "Processamento de pagamento"
 
@@ -4302,7 +4381,7 @@ msgstr "Provedor de pagamento"
 msgid "Payment Received"
 msgstr "Pagamento recebido"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:241
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:718
 msgid "Payment Settings"
 msgstr "Configurações de pagamento"
 
@@ -4317,6 +4396,10 @@ msgstr "O pagamento foi bem-sucedido!"
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:214
 msgid "Payment Terms"
 msgstr "Termos de pagamento"
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:80
+msgid "Payments will continue to flow without interruption"
+msgstr "Os pagamentos continuarão fluindo sem interrupção"
 
 #: src/components/forms/PromoCodeForm/index.tsx:81
 #: src/components/forms/TaxAndFeeForm/index.tsx:27
@@ -4351,7 +4434,7 @@ msgstr "Coloque isso no <head> de seu site."
 msgid "Planning an event?"
 msgstr "Planejando um evento?"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:41
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:242
 msgid "Platform Fees"
 msgstr "Taxas da plataforma"
 
@@ -4486,7 +4569,7 @@ msgstr "Mensagem de pré-checkout"
 
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:140
 #: src/components/common/QuestionsTable/index.tsx:347
-#: src/components/routes/event/TicketDesigner/index.tsx:199
+#: src/components/routes/event/TicketDesigner/index.tsx:197
 msgid "Preview"
 msgstr "Visualização"
 
@@ -4541,7 +4624,7 @@ msgstr "Imprimir"
 msgid "Print All Tickets"
 msgstr "Imprimir todos os ingressos"
 
-#: src/components/routes/event/TicketDesigner/index.tsx:206
+#: src/components/routes/event/TicketDesigner/index.tsx:204
 msgid "Print Preview"
 msgstr "Visualizar Impressão"
 
@@ -4556,7 +4639,7 @@ msgstr "Política de Privacidade"
 
 #: src/components/modals/RefundOrderModal/index.tsx:149
 msgid "Process Refund"
-msgstr ""
+msgstr "Processar reembolso"
 
 #: src/components/common/AttendeeDetails/index.tsx:37
 #: src/components/modals/ManageAttendeeModal/index.tsx:119
@@ -4591,7 +4674,7 @@ msgstr "Tipo de Preço do Produto"
 msgid "Product questions"
 msgstr "Perguntas sobre o produto"
 
-#: src/components/routes/event/EventDashboard/index.tsx:217
+#: src/components/routes/event/EventDashboard/index.tsx:248
 #: src/components/routes/event/Reports/index.tsx:17
 msgid "Product Sales"
 msgstr "Vendas de Produtos"
@@ -4630,7 +4713,7 @@ msgstr "Produtos"
 msgid "Products sold"
 msgstr "Produtos vendidos"
 
-#: src/components/routes/event/EventDashboard/index.tsx:238
+#: src/components/routes/event/EventDashboard/index.tsx:269
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:125
 msgid "Products Sold"
 msgstr "Produtos Vendidos"
@@ -4696,7 +4779,7 @@ msgstr "Forneça contexto adicional ou instruções para esta pergunta. Use este
 msgid "Publish"
 msgstr "Publicar"
 
-#: src/components/routes/event/EventDashboard/index.tsx:159
+#: src/components/routes/event/EventDashboard/index.tsx:190
 msgid "Publish Event"
 msgstr "Publicar Evento"
 
@@ -4752,6 +4835,14 @@ msgstr "Opção de rádio"
 msgid "Read less"
 msgstr "Leia menos"
 
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:108
+msgid "Ready to Upgrade?"
+msgstr "Pronto para atualizar?"
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:218
+msgid "Ready to upgrade? This takes only a few minutes."
+msgstr "Pronto para atualizar? Isso leva apenas alguns minutos."
+
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:265
 msgid "Recent Orders"
 msgstr "Pedidos recentes"
@@ -4760,14 +4851,20 @@ msgstr "Pedidos recentes"
 msgid "Recipient"
 msgstr "Beneficiário"
 
+#: src/components/routes/event/EventDashboard/index.tsx:130
+msgid "Reconnect Stripe →"
+msgstr "Reconectar Stripe →"
+
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:80
 msgid "Reddit"
 msgstr "Reddit"
 
-#: src/components/common/StripeConnectButton/index.tsx:51
-#: src/components/common/StripeConnectButton/index.tsx:66
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:111
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:196
+#: src/components/common/StripeConnectButton/index.tsx:59
+#: src/components/common/StripeConnectButton/index.tsx:74
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:318
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:331
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:572
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:590
 msgid "Redirecting to Stripe..."
 msgstr "Redirecionando para o Stripe..."
 
@@ -4782,7 +4879,7 @@ msgstr "Atualizar Visualização"
 
 #: src/components/modals/RefundOrderModal/index.tsx:107
 msgid "Refund amount"
-msgstr ""
+msgstr "Valor do reembolso"
 
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:52
 msgid "Refund Failed"
@@ -4794,7 +4891,7 @@ msgstr "Pedido de reembolso"
 
 #: src/components/modals/RefundOrderModal/index.tsx:197
 msgid "Refund Order {0}"
-msgstr ""
+msgstr "Reembolsar pedido {0}"
 
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:51
 msgid "Refund Pending"
@@ -4905,7 +5002,7 @@ msgid "Return to Event Page"
 msgstr "Voltar para a página do evento"
 
 #: src/components/common/AffiliateTable/index.tsx:157
-#: src/components/routes/event/EventDashboard/index.tsx:249
+#: src/components/routes/event/EventDashboard/index.tsx:280
 msgid "Revenue"
 msgstr "Receita"
 
@@ -4989,14 +5086,14 @@ msgstr "Salvar links sociais"
 msgid "Save Template"
 msgstr "Salvar Modelo"
 
-#: src/components/routes/event/TicketDesigner/index.tsx:189
+#: src/components/routes/event/TicketDesigner/index.tsx:187
 msgid "Save Ticket Design"
 msgstr "Salvar Design do Ingresso"
 
 #: src/components/layouts/CheckIn/index.tsx:445
 #: src/components/layouts/CheckIn/index.tsx:455
 msgid "Scan"
-msgstr ""
+msgstr "Escanear"
 
 #: src/components/layouts/EventHomepage/index.tsx:340
 msgid "Scroll to Tickets"
@@ -5201,7 +5298,7 @@ msgstr "Enviar e-mail de confirmação do pedido e do tíquete"
 
 #: src/components/modals/RefundOrderModal/index.tsx:123
 msgid "Send refund notification email"
-msgstr ""
+msgstr "Enviar email de notificação de reembolso"
 
 #: src/components/modals/SendMessageModal/index.tsx:290
 msgid "Send Test"
@@ -5432,6 +5529,10 @@ msgstr "Algo deu errado."
 msgid "Something went wrong. Please try again."
 msgstr "Algo deu errado. Tente novamente."
 
+#: src/components/routes/event/EventDashboard/index.tsx:126
+msgid "Sorry for the inconvenience."
+msgstr "Desculpe o inconveniente."
+
 #: src/components/routes/product-widget/Payment/PaymentMethods/Stripe/index.tsx:60
 msgid "Sorry, something has gone wrong. Please restart the checkout process."
 msgstr "Desculpe, algo deu errado. Reinicie o processo de checkout."
@@ -5505,15 +5606,23 @@ msgstr "Estado ou região"
 msgid "Status"
 msgstr "Status"
 
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:177
+msgid "Still handling refunds for your older transactions."
+msgstr "Ainda processando reembolsos para suas transações mais antigas."
+
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:85
 msgid "Stripe"
 msgstr "Stripe"
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:156
+msgid "Stripe Connect"
+msgstr "Stripe Connect"
 
 #: src/components/routes/product-widget/Payment/PaymentMethods/Stripe/index.tsx:47
 msgid "Stripe payments are not enabled for this event."
 msgstr "Os pagamentos via Stripe não estão ativados para este evento."
 
-#: src/components/common/StripeConnectButton/index.tsx:61
+#: src/components/common/StripeConnectButton/index.tsx:69
 msgid "Stripe setup is already complete."
 msgstr "Configuração do Stripe já está completa."
 
@@ -5692,6 +5801,10 @@ msgstr "Trocar organizador"
 msgid "T-shirt"
 msgstr "Camiseta"
 
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:78
+msgid "Takes just a few minutes"
+msgstr "Leva apenas alguns minutos"
+
 #: src/components/forms/TaxAndFeeForm/index.tsx:12
 #: src/components/forms/TaxAndFeeForm/index.tsx:39
 #: src/components/modals/CreateTaxOrFeeModal/index.tsx:32
@@ -5769,9 +5882,13 @@ msgstr "Modelo salvo com sucesso"
 msgid "Terms of Service"
 msgstr "Termos de serviço"
 
-#: src/components/routes/event/TicketDesigner/index.tsx:164
+#: src/components/routes/event/TicketDesigner/index.tsx:162
 msgid "Thank you for attending!"
 msgstr "Obrigado por participar!"
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:84
+msgid "Thanks for your support as we continue to grow and improve Hi.Events!"
+msgstr "Obrigado pelo seu apoio enquanto continuamos a crescer e melhorar o Hi.Events!"
 
 #: src/components/routes/product-widget/SelectProducts/index.tsx:176
 #: src/components/routes/product-widget/SelectProducts/index.tsx:224
@@ -5816,7 +5933,7 @@ msgstr "O evento que você está procurando não está disponível no momento. E
 
 #: src/components/modals/CancelOrderModal/index.tsx:77
 msgid "The full order amount will be refunded to the customer's original payment method."
-msgstr ""
+msgstr "O valor total do pedido será reembolsado para o método de pagamento original do cliente."
 
 #: src/components/modals/CreateAttendeeModal/index.tsx:157
 msgid "The language the attendee will receive emails in."
@@ -6065,7 +6182,7 @@ msgstr "Este link de redefinição de senha é inválido ou expirou."
 
 #: src/components/layouts/CheckIn/index.tsx:205
 msgid "This ticket was just scanned. Please wait before scanning again."
-msgstr ""
+msgstr "Este ingresso acabou de ser escaneado. Aguarde antes de escanear novamente."
 
 #: src/components/modals/EditUserModal/index.tsx:65
 msgid "This user is not active, as they have not accepted their invitation."
@@ -6093,7 +6210,7 @@ msgid "Ticket"
 msgstr "Bilhete"
 
 #: src/components/layouts/Event/index.tsx:111
-#: src/components/routes/event/TicketDesigner/index.tsx:109
+#: src/components/routes/event/TicketDesigner/index.tsx:107
 msgid "Ticket Design"
 msgstr "Design do Ingresso"
 
@@ -6107,7 +6224,7 @@ msgstr "O e-mail do ingresso foi reenviado ao participante"
 
 #: src/components/routes/product-widget/PrintProduct/index.tsx:42
 msgid "Ticket for"
-msgstr ""
+msgstr "Ingresso para"
 
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:50
 msgid "Ticket holder's email"
@@ -6123,7 +6240,7 @@ msgstr "Portadores de ingressos"
 
 #: src/components/common/AttendeeTicket/index.tsx:122
 msgid "Ticket ID"
-msgstr ""
+msgstr "ID do ingresso"
 
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:53
 msgid "Ticket Name"
@@ -6135,7 +6252,7 @@ msgstr "Ingresso ou produto"
 
 #: src/components/routes/event/TicketDesigner/TicketDesignerPrint.tsx:85
 msgid "Ticket Preview for"
-msgstr ""
+msgstr "Visualização do ingresso para"
 
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:54
 msgid "Ticket Price"
@@ -6154,7 +6271,7 @@ msgstr "URL do Ingresso"
 msgid "Tickets & Products"
 msgstr "Ingressos e produtos"
 
-#: src/components/routes/product-widget/PrintOrder/index.tsx:41
+#: src/components/routes/product-widget/PrintOrder/index.tsx:40
 msgid "Tickets for"
 msgstr "Ingressos para"
 
@@ -6204,7 +6321,7 @@ msgstr "DICA"
 msgid "Title"
 msgstr "Título"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:183
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:655
 msgid "To receive credit card payments, you need to connect your Stripe account. Stripe is our payment processing partner that ensures secure transactions and timely payouts."
 msgstr "Para receber pagamentos com cartão de crédito, você precisa conectar sua conta do Stripe. O Stripe é nosso parceiro de processamento de pagamentos que garante transações seguras e pagamentos pontuais."
 
@@ -6229,7 +6346,7 @@ msgstr "Total antes de descontos"
 msgid "Total Discount Amount"
 msgstr "Montante total do desconto"
 
-#: src/components/routes/event/EventDashboard/index.tsx:273
+#: src/components/routes/event/EventDashboard/index.tsx:304
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:149
 msgid "Total Fees"
 msgstr "Total de taxas"
@@ -6250,11 +6367,11 @@ msgstr "Total de pedidos"
 msgid "Total refunded"
 msgstr "Total reembolsado"
 
-#: src/components/routes/event/EventDashboard/index.tsx:276
+#: src/components/routes/event/EventDashboard/index.tsx:307
 msgid "Total Refunded"
 msgstr "Total Reembolsado"
 
-#: src/components/routes/event/EventDashboard/index.tsx:275
+#: src/components/routes/event/EventDashboard/index.tsx:306
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:143
 msgid "Total Tax"
 msgstr "Imposto total"
@@ -6263,7 +6380,7 @@ msgstr "Imposto total"
 msgid "Track revenue, page views, and sales with detailed analytics and exportable reports"
 msgstr "Acompanhe receitas, visualizações de página e vendas com análises detalhadas e relatórios exportáveis"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:54
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:256
 msgid "Transaction Fee:"
 msgstr "Taxa de transação:"
 
@@ -6376,7 +6493,7 @@ msgstr "Permite usos ilimitados"
 msgid "Unpaid Order"
 msgstr "Pedido não pago"
 
-#: src/components/routes/event/EventDashboard/index.tsx:170
+#: src/components/routes/event/EventDashboard/index.tsx:201
 msgid "Unpublish Event"
 msgstr "Despublicar Evento"
 
@@ -6406,6 +6523,10 @@ msgstr "Atualizar o nome, a descrição e as datas do evento"
 #: src/components/routes/profile/ManageProfile/index.tsx:177
 msgid "Update profile"
 msgstr "Atualizar perfil"
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:164
+msgid "Upgrade Available"
+msgstr "Atualização disponível"
 
 #: src/components/routes/organizer/Settings/Sections/ImageAssetSettings/index.tsx:39
 msgid "Upload a cover image for your organizer"
@@ -6462,7 +6583,7 @@ msgstr "Scanner USB/HID"
 
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:151
 msgid "Use <0>Liquid templating</0> to personalize your emails"
-msgstr ""
+msgstr "Use <0>templates Liquid</0> para personalizar seus emails"
 
 #: src/components/routes/event/HomepageDesigner/index.tsx:190
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:351
@@ -6474,7 +6595,7 @@ msgstr "Use uma versão desfocada da imagem da capa como plano de fundo"
 msgid "Use cover image"
 msgstr "Usar imagem de capa"
 
-#: src/components/routes/event/TicketDesigner/index.tsx:132
+#: src/components/routes/event/TicketDesigner/index.tsx:130
 msgid "Used for borders, highlights, and QR code styling"
 msgstr "Usado para bordas, destaques e estilo do código QR"
 
@@ -6640,7 +6761,7 @@ msgstr "Não foi possível carregar os dados. Por favor, tente novamente."
 msgid "We couldn't reorder the categories. Please try again."
 msgstr "Não conseguimos reordenar as categorias. Por favor, tente novamente."
 
-#: src/components/routes/event/TicketDesigner/index.tsx:142
+#: src/components/routes/event/TicketDesigner/index.tsx:140
 msgid "We recommend a square logo with minimum dimensions of 200x200px"
 msgstr "Recomendamos um logo quadrado com dimensões mínimas de 200x200px"
 
@@ -6660,6 +6781,14 @@ msgstr "Não foi possível confirmar seu pagamento. Tente novamente ou entre em 
 #: src/components/routes/product-widget/PaymentReturn/index.tsx:79
 msgid "We're processing your order. Please wait..."
 msgstr "Estamos processando seu pedido. Por favor, aguarde..."
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:67
+msgid "We've officially moved our headquarters to Ireland 🇮🇪. As part of this transition, we're now using Stripe Ireland instead of Stripe Canada. To keep your payouts running smoothly, you'll need to reconnect your Stripe account."
+msgstr "Mudamos oficialmente nossa sede para a Irlanda 🇮🇪. Como parte desta transição, agora usamos o Stripe Irlanda em vez do Stripe Canadá. Para manter seus pagamentos funcionando sem problemas, você precisará reconectar sua conta Stripe."
+
+#: src/components/routes/event/EventDashboard/index.tsx:125
+msgid "We've relocated our headquarters to Ireland. As a result, we need you to reconnect your Stripe account. This quick process takes just a few minutes. Your sales and existing data remain completely unaffected."
+msgstr "Mudamos nossa sede para a Irlanda. Como resultado, precisamos que você reconecte sua conta Stripe. Este processo rápido leva apenas alguns minutos. Suas vendas e dados existentes permanecem completamente inalterados."
 
 #: src/components/routes/welcome/index.tsx:143
 msgid "We've sent a 5-digit verification code to:"
@@ -6711,7 +6840,7 @@ msgstr "Bem-vindo a bordo! Faça login para continuar."
 msgid "Welcome back 👋"
 msgstr "Bem-vindo de volta 👋"
 
-#: src/components/routes/event/EventDashboard/index.tsx:95
+#: src/components/routes/event/EventDashboard/index.tsx:102
 msgid "Welcome back{0} 👋"
 msgstr "Bem-vindo de volta{0} 👋"
 
@@ -6915,7 +7044,7 @@ msgstr "Você está alterando seu e-mail para <0>{0}</0>."
 
 #: src/components/modals/RefundOrderModal/index.tsx:138
 msgid "You are issuing a partial refund. The customer will be refunded {0} {1}."
-msgstr ""
+msgstr "Você está emitindo um reembolso parcial. O cliente será reembolsado em {0} {1}."
 
 #: src/components/layouts/CheckIn/index.tsx:141
 #: src/components/layouts/CheckIn/index.tsx:165
@@ -7027,6 +7156,10 @@ msgstr "Você precisará de um produto antes de poder criar uma atribuição de 
 msgid "You'll need at least one product to get started. Free, paid or let the user decide what to pay."
 msgstr "Você precisará de pelo menos um produto para começar. Grátis, pago ou deixe o usuário decidir o que pagar."
 
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:176
+msgid "You're all set! Your payments are being processed smoothly."
+msgstr "Está tudo pronto! Seus pagamentos estão sendo processados sem problemas."
+
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:93
 msgid "You're going to {0}! 🎉"
 msgstr "Você vai para {0}! 🎉"
@@ -7064,7 +7197,7 @@ msgstr "Seu e-mail"
 msgid "Your email request change to <0>{0}</0> is pending. Please check your email to confirm"
 msgstr "Sua solicitação de alteração de e-mail para <0>{0}</0> está pendente. Verifique seu e-mail para confirmar"
 
-#: src/components/routes/event/EventDashboard/index.tsx:150
+#: src/components/routes/event/EventDashboard/index.tsx:181
 msgid "Your event must be live before you can sell tickets to attendees."
 msgstr "Seu evento deve estar ativo antes que você possa vender ingressos para os participantes."
 
@@ -7125,7 +7258,12 @@ msgstr "Seu pagamento não foi bem-sucedido. Por favor, tente novamente."
 msgid "Your refund is processing."
 msgstr "Seu reembolso está sendo processado."
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:154
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:173
+msgid "Your Stripe account is connected and processing payments."
+msgstr "Sua conta Stripe está conectada e processando pagamentos."
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:389
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:626
 msgid "Your Stripe account is connected and ready to process payments."
 msgstr "Sua conta Stripe está conectada e pronta para processar pagamentos."
 
@@ -7150,7 +7288,3 @@ msgstr "CEP ou código postal"
 #: src/components/routes/product-widget/CollectInformation/index.tsx:349
 msgid "ZIP or Postal Code"
 msgstr "CEP ou Código Postal"
-
-#: src/components/routes/product-widget/PrintProduct/index.tsx:42
-msgid "Ticket for"
-msgstr "Ingresso para"

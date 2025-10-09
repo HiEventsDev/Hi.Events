@@ -96,7 +96,7 @@ class StripePaymentIntentCreationService
             return new CreatePaymentIntentResponseDTO(
                 paymentIntentId: $paymentIntent->id,
                 clientSecret: $paymentIntent->client_secret,
-                accountId: $paymentIntentDTO->account->getStripeAccountId(),
+                accountId: $paymentIntentDTO->stripeAccountId,
                 applicationFeeAmount: $applicationFee,
             );
         } catch (ApiErrorException $exception) {
@@ -126,7 +126,7 @@ class StripePaymentIntentCreationService
             return [];
         }
 
-        if ($paymentIntentDTO->account->getStripeAccountId() === null) {
+        if ($paymentIntentDTO->stripeAccountId === null) {
             $this->logger->error(
                 'Stripe Connect account not found for the event organizer, payment intent creation failed.
                 You will need to connect your Stripe account to receive payments.',
@@ -139,7 +139,7 @@ class StripePaymentIntentCreationService
         }
 
         return [
-            'stripe_account' => $paymentIntentDTO->account->getStripeAccountId()
+            'stripe_account' => $paymentIntentDTO->stripeAccountId
         ];
     }
 
@@ -153,7 +153,7 @@ class StripePaymentIntentCreationService
     {
         $customer = $this->stripeCustomerRepository->findFirstWhere([
             'email' => $paymentIntentDTO->order->getEmail(),
-            'stripe_account_id' => $paymentIntentDTO->account->getStripeAccountId(),
+            'stripe_account_id' => $paymentIntentDTO->stripeAccountId,
         ]);
 
         if ($customer === null) {
@@ -169,7 +169,7 @@ class StripePaymentIntentCreationService
                 'name' => $stripeCustomer->name,
                 'email' => $stripeCustomer->email,
                 'stripe_customer_id' => $stripeCustomer->id,
-                'stripe_account_id' => $paymentIntentDTO->account->getStripeAccountId(),
+                'stripe_account_id' => $paymentIntentDTO->stripeAccountId,
             ]);
         }
 

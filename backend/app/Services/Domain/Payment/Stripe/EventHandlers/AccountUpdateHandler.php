@@ -2,53 +2,35 @@
 
 namespace HiEvents\Services\Domain\Payment\Stripe\EventHandlers;
 
-use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
-use Psr\Log\LoggerInterface;
+use HiEvents\DomainObjects\AccountStripePlatformDomainObject;
+use HiEvents\DomainObjects\Generated\AccountStripePlatformDomainObjectAbstract;
+use HiEvents\Repository\Interfaces\AccountStripePlatformRepositoryInterface;
+use HiEvents\Services\Domain\Payment\Stripe\StripeAccountSyncService;
 use Stripe\Account;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
-readonly class AccountUpdateHandler
+class AccountUpdateHandler
 {
     public function __construct(
-        private LoggerInterface            $logger,
-        private AccountRepositoryInterface $accountRepository,
+        private readonly AccountStripePlatformRepositoryInterface $accountStripePlatformRepository,
+        private readonly StripeAccountSyncService                 $stripeAccountSyncService,
     )
     {
     }
 
     public function handleEvent(Account $stripeAccount): void
     {
-        $account = $this->accountRepository->findFirstWhere([
-            'stripe_account_id' => $stripeAccount->id,
+        /** @var AccountStripePlatformDomainObject $accountStripePlatform */
+        $accountStripePlatform = $this->accountStripePlatformRepository->findFirstWhere([
+            AccountStripePlatformDomainObjectAbstract::STRIPE_ACCOUNT_ID => $stripeAccount->id,
         ]);
 
-        if ($account === null) {
+        if ($accountStripePlatform === null) {
             throw new ResourceNotFoundException(
-                sprintf('Account with stripe account id %s not found', $stripeAccount->id)
+                sprintf('Account stripe platform with stripe account id %s not found', $stripeAccount->id)
             );
         }
 
-        $isAccountSetupCompleted = $stripeAccount->charges_enabled && $stripeAccount->payouts_enabled;
-
-        if ($account->getStripeConnectSetupComplete() === $isAccountSetupCompleted) {
-            return;
-        }
-
-        $this->logger->info(sprintf(
-                'Stripe connect account status change. Updating account %s with stripe account setup completed %s',
-                $stripeAccount->id,
-                $isAccountSetupCompleted ? 'true' : 'false'
-            )
-        );
-
-        $this->accountRepository->updateWhere(
-            attributes: [
-                'stripe_connect_setup_complete' => $isAccountSetupCompleted,
-                'is_manually_verified' => $isAccountSetupCompleted || $account->getIsManuallyVerified(),
-            ],
-            where: [
-                'stripe_account_id' => $stripeAccount->id,
-            ]
-        );
+        $this->stripeAccountSyncService->syncStripeAccountStatus($accountStripePlatform, $stripeAccount);
     }
 }

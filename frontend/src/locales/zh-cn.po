@@ -34,7 +34,7 @@ msgstr "{0}"
 
 #: src/components/layouts/CheckIn/index.tsx:237
 msgid "{0} {1} is already checked in"
-msgstr ""
+msgstr "{0} {1} 已签到"
 
 #: src/components/layouts/CheckIn/index.tsx:133
 msgid "{0} <0>checked in</0> successfully"
@@ -232,11 +232,13 @@ msgstr "标准税，如增值税或消费税"
 msgid "About"
 msgstr "关于"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:212
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:427
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:456
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:674
 msgid "About Stripe Connect"
 msgstr "关于 Stripe Connect"
 
-#: src/components/routes/event/TicketDesigner/index.tsx:131
+#: src/components/routes/event/TicketDesigner/index.tsx:129
 msgid "Accent Color"
 msgstr "强调色"
 
@@ -252,7 +254,8 @@ msgstr "通过 Stripe 接受信用卡支付"
 msgid "Accept Invitation"
 msgstr "接受邀请"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:126
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:350
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:602
 msgid "Access Denied"
 msgstr "访问被拒绝"
 
@@ -260,6 +263,10 @@ msgstr "访问被拒绝"
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:53
 msgid "Account"
 msgstr "账户"
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:335
+msgid "Account already connected!"
+msgstr "账户已连接！"
 
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:62
 msgid "Account Name"
@@ -273,6 +280,10 @@ msgstr "账户设置"
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:42
 msgid "Account updated successfully"
 msgstr "账户更新成功"
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:64
+msgid "Action Required: Reconnect Your Stripe Account"
+msgstr "需要操作：重新连接您的 Stripe 账户"
 
 #: src/components/common/AffiliateTable/index.tsx:167
 #: src/components/common/AttendeeTable/index.tsx:159
@@ -482,6 +493,10 @@ msgstr "所有与会者"
 msgid "All attendees of this event"
 msgstr "本次活动的所有与会者"
 
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:179
+msgid "All done! You're now using our upgraded payment system."
+msgstr "全部完成！您现在正在使用我们升级的支付系统。"
+
 #: src/components/routes/events/Dashboard/index.tsx:74
 msgid "All Ended Events"
 msgstr "所有已结束活动"
@@ -508,21 +523,26 @@ msgstr "允许搜索引擎索引"
 msgid "Allow search engines to index this event"
 msgstr "允许搜索引擎索引此事件"
 
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:199
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:410
+msgid "Almost there! Finish connecting your Stripe account to start accepting payments."
+msgstr "快完成了！完成连接您的 Stripe 账户以开始接受付款。"
+
 #: src/components/routes/product-widget/PaymentReturn/index.tsx:78
 msgid "Almost there! We're just waiting for your payment to be processed. This should only take a few seconds.."
 msgstr "快到了！我们正在等待处理您的付款。只需几秒钟。"
 
 #: src/components/modals/RefundOrderModal/index.tsx:85
 msgid "Already Refunded"
-msgstr ""
+msgstr "已退款"
 
 #: src/components/modals/RefundOrderModal/index.tsx:130
 msgid "Also cancel this order"
-msgstr ""
+msgstr "同时取消此订单"
 
 #: src/components/modals/CancelOrderModal/index.tsx:76
 msgid "Also refund this order"
-msgstr ""
+msgstr "同时退款此订单"
 
 #: src/components/routes/event/Settings/Sections/SeoSettings/index.tsx:77
 #: src/components/routes/organizer/Settings/Sections/SeoSettings/index.tsx:77
@@ -644,12 +664,12 @@ msgid "Are you sure you want to delete this webhook?"
 msgstr "您确定要删除此 Webhook 吗？"
 
 #: src/components/layouts/Event/index.tsx:144
-#: src/components/routes/event/EventDashboard/index.tsx:64
+#: src/components/routes/event/EventDashboard/index.tsx:71
 msgid "Are you sure you want to make this event draft? This will make the event invisible to the public"
 msgstr "您确定要将此活动设为草稿吗？这将使公众无法看到该活动"
 
 #: src/components/layouts/Event/index.tsx:145
-#: src/components/routes/event/EventDashboard/index.tsx:65
+#: src/components/routes/event/EventDashboard/index.tsx:72
 msgid "Are you sure you want to make this event public? This will make the event visible to the public"
 msgstr "您确定要将此事件公开吗？这将使事件对公众可见"
 
@@ -772,7 +792,7 @@ msgstr "与会者"
 msgid "Attendees Exported"
 msgstr "与会者已导出"
 
-#: src/components/routes/event/EventDashboard/index.tsx:239
+#: src/components/routes/event/EventDashboard/index.tsx:270
 msgid "Attendees Registered"
 msgstr "注册的参会者"
 
@@ -794,7 +814,7 @@ msgstr "根据内容自动调整 widget 高度。禁用时，窗口小部件将�
 
 #: src/components/modals/RefundOrderModal/index.tsx:92
 msgid "Available to Refund"
-msgstr ""
+msgstr "可退款"
 
 #: src/components/common/Editor/Controls/LiquidTokenControl.tsx:76
 msgid "Available Tokens"
@@ -934,7 +954,7 @@ msgstr "取消"
 
 #: src/components/modals/RefundOrderModal/index.tsx:131
 msgid "Cancel all products and release them back to the pool"
-msgstr ""
+msgstr "取消所有产品并释放回可用池"
 
 #: src/components/routes/profile/ManageProfile/index.tsx:126
 msgid "Cancel email change"
@@ -954,7 +974,7 @@ msgstr "取消订单 {0}"
 
 #: src/components/modals/CancelOrderModal/index.tsx:67
 msgid "Canceling will cancel all attendees associated with this order, and release the tickets back into the available pool."
-msgstr ""
+msgstr "取消将取消与此订单关联的所有参与者，并将门票释放回可用池。"
 
 #: src/components/common/AttendeeTicket/index.tsx:108
 #: src/components/common/OrderStatusBadge/index.tsx:12
@@ -1246,13 +1266,16 @@ msgstr "完成付款"
 msgid "Complete Payment"
 msgstr "完成付款"
 
-#: src/components/common/StripeConnectButton/index.tsx:79
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:203
-#: src/components/routes/event/EventDashboard/index.tsx:205
+#: src/components/common/StripeConnectButton/index.tsx:87
+#: src/components/routes/event/EventDashboard/index.tsx:236
 msgid "Complete Stripe Setup"
 msgstr "完成 Stripe 设置"
 
-#: src/components/routes/event/EventDashboard/index.tsx:127
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:109
+msgid "Complete the setup below to continue"
+msgstr "完成下面的设置以继续"
+
+#: src/components/routes/event/EventDashboard/index.tsx:158
 msgid "Complete these steps to start selling tickets for your event."
 msgstr "完成以下步骤即可开始销售您的活动门票。"
 
@@ -1267,7 +1290,7 @@ msgstr "已完成"
 msgid "Completed orders"
 msgstr "已完成订单"
 
-#: src/components/routes/event/EventDashboard/index.tsx:237
+#: src/components/routes/event/EventDashboard/index.tsx:268
 msgid "Completed Orders"
 msgstr "已完成订单"
 
@@ -1326,11 +1349,15 @@ msgstr "确认电子邮件地址..."
 msgid "Congratulations on creating an event!"
 msgstr "恭喜你创建了一个活动！"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:174
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:229
+msgid "Connect & Upgrade"
+msgstr "连接并升级"
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:646
 msgid "Connect Documentation"
 msgstr "连接文档"
 
-#: src/components/routes/event/EventDashboard/index.tsx:192
+#: src/components/routes/event/EventDashboard/index.tsx:223
 msgid "Connect payment processing"
 msgstr "连接支付处理"
 
@@ -1341,9 +1368,9 @@ msgstr "连接条纹"
 
 #: src/components/modals/SendMessageModal/index.tsx:159
 msgid "Connect Stripe to enable messaging"
-msgstr ""
+msgstr "连接 Stripe 以启用消息功能"
 
-#: src/components/routes/event/EventDashboard/index.tsx:205
+#: src/components/routes/event/EventDashboard/index.tsx:236
 msgid "Connect to Stripe"
 msgstr "连接到 Stripe"
 
@@ -1351,8 +1378,10 @@ msgstr "连接到 Stripe"
 msgid "Connect with CRM and automate tasks using webhooks and integrations"
 msgstr "连接 CRM 并使用 Webhook 和集成自动化任务"
 
-#: src/components/common/StripeConnectButton/index.tsx:77
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:202
+#: src/components/common/StripeConnectButton/index.tsx:85
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:229
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:447
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:664
 #: src/components/routes/event/GettingStarted/index.tsx:154
 msgid "Connect with Stripe"
 msgstr "与 Stripe 连接"
@@ -1361,11 +1390,24 @@ msgstr "与 Stripe 连接"
 msgid "Connect your Stripe account to accept payments for tickets and products."
 msgstr "连接您的 Stripe 账户以接受门票和产品付款。"
 
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:217
+msgid "Connect your Stripe account to accept payments."
+msgstr "连接您的 Stripe 账户以接受付款。"
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:439
+msgid "Connect your Stripe account to start accepting payments for your events."
+msgstr "连接您的 Stripe 账户以开始接受您活动的付款。"
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:215
+msgid "Connect your Stripe account to start accepting payments."
+msgstr "连接您的 Stripe 账户以开始接受付款。"
+
 #: src/components/routes/event/GettingStarted/index.tsx:150
 msgid "Connect your Stripe account to start receiving payments."
 msgstr "连接 Stripe 账户，开始接收付款。"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:149
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:385
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:622
 msgid "Connected to Stripe"
 msgstr "已连接到 Stripe"
 
@@ -1693,6 +1735,10 @@ msgstr "货币"
 msgid "Current Password"
 msgstr "当前密码"
 
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:158
+msgid "Current payment processor"
+msgstr "当前支付处理器"
+
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:330
 msgid "Custom"
 msgstr "自定义"
@@ -1720,7 +1766,7 @@ msgstr "客户"
 
 #: src/components/modals/RefundOrderModal/index.tsx:124
 msgid "Customer will receive an email confirming the refund"
-msgstr ""
+msgstr "客户将收到确认退款的电子邮件"
 
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:26
 msgid "Customer's email address"
@@ -1783,7 +1829,7 @@ msgstr "定制您的活动页面，以符合您的品牌和风格。"
 msgid "Customize your organizer page appearance"
 msgstr "自定义主办方页面外观"
 
-#: src/components/routes/event/TicketDesigner/index.tsx:110
+#: src/components/routes/event/TicketDesigner/index.tsx:108
 msgid "Customize your ticket appearance"
 msgstr "自定义您的票券外观"
 
@@ -1821,7 +1867,7 @@ msgstr "日期"
 
 #: src/components/common/AttendeeTicket/index.tsx:58
 msgid "Date & Time"
-msgstr ""
+msgstr "日期和时间"
 
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:33
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:63
@@ -1830,7 +1876,7 @@ msgstr "活动日期"
 
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:23
 msgid "Date order was placed"
-msgstr ""
+msgstr "下单日期"
 
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:38
 msgid "Day one capacity"
@@ -1902,7 +1948,7 @@ msgstr "签到工作人员的描述"
 msgid "Deselect All"
 msgstr "取消全选"
 
-#: src/components/routes/event/TicketDesigner/index.tsx:124
+#: src/components/routes/event/TicketDesigner/index.tsx:122
 msgid "Design Elements"
 msgstr "设计元素"
 
@@ -1946,7 +1992,7 @@ msgstr "关闭此消息"
 msgid "Document Label"
 msgstr "文档标签"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:223
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:685
 msgid "Documentation"
 msgstr "文档"
 
@@ -2439,7 +2485,7 @@ msgstr "活动页面"
 #: src/components/common/EventCard/index.tsx:70
 #: src/components/common/StatusToggle/index.tsx:59
 #: src/components/layouts/Event/index.tsx:156
-#: src/components/routes/event/EventDashboard/index.tsx:76
+#: src/components/routes/event/EventDashboard/index.tsx:83
 #: src/components/routes/event/GettingStarted/index.tsx:63
 msgid "Event status update failed. Please try again later"
 msgstr "活动状态更新失败。请稍后再试"
@@ -2447,7 +2493,7 @@ msgstr "活动状态更新失败。请稍后再试"
 #: src/components/common/EventCard/index.tsx:67
 #: src/components/common/StatusToggle/index.tsx:51
 #: src/components/layouts/Event/index.tsx:153
-#: src/components/routes/event/EventDashboard/index.tsx:73
+#: src/components/routes/event/EventDashboard/index.tsx:80
 #: src/components/routes/event/GettingStarted/index.tsx:60
 msgid "Event status updated"
 msgstr "事件状态已更新"
@@ -2639,7 +2685,7 @@ msgstr "费用"
 msgid "Fees"
 msgstr "费用"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:81
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:283
 msgid "Fees are subject to change. You will be notified of any changes to your fee structure."
 msgstr "费用可能会变更。如有变更，您将收到通知。"
 
@@ -2659,6 +2705,15 @@ msgstr "筛选器"
 #: src/components/common/FilterModal/index.tsx:223
 msgid "Filters ({activeFilterCount})"
 msgstr "筛选器 ({activeFilterCount})"
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:208
+msgid "Finish Setup"
+msgstr "完成设置"
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:418
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:665
+msgid "Finish Stripe Setup"
+msgstr "完成 Stripe 设置"
 
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:206
 msgid "First Invoice Number"
@@ -2704,7 +2759,7 @@ msgstr "固定式"
 msgid "Fixed amount"
 msgstr "固定金额"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:66
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:268
 msgid "Fixed Fee:"
 msgstr "固定费用："
 
@@ -2720,7 +2775,7 @@ msgstr "灵活的票务系统"
 msgid "Food & Drink"
 msgstr "美食美酒"
 
-#: src/components/routes/event/TicketDesigner/index.tsx:162
+#: src/components/routes/event/TicketDesigner/index.tsx:160
 msgid "Footer Text"
 msgstr "页脚文字"
 
@@ -2753,7 +2808,7 @@ msgstr "法语"
 
 #: src/components/modals/RefundOrderModal/index.tsx:109
 msgid "Full refund"
-msgstr ""
+msgstr "全额退款"
 
 #: src/components/layouts/AuthLayout/index.tsx:90
 msgid "Fully Integrated"
@@ -2792,7 +2847,7 @@ msgstr "德国"
 msgid "Get started for free, no subscription fees"
 msgstr "免费开始，无订阅费用"
 
-#: src/components/routes/event/EventDashboard/index.tsx:125
+#: src/components/routes/event/EventDashboard/index.tsx:156
 msgid "Get your event ready"
 msgstr "准备好您的活动"
 
@@ -2817,10 +2872,6 @@ msgstr "前往活动主页"
 msgid "Go to home page"
 msgstr "返回主页"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:163
-msgid "Go to Stripe Dashboard"
-msgstr "前往 Stripe 仪表板"
-
 #: src/components/common/AddEventToCalendarButton/index.tsx:128
 msgid "Google Calendar"
 msgstr "谷歌日历"
@@ -2829,7 +2880,7 @@ msgstr "谷歌日历"
 msgid "Gross sales"
 msgstr "销售总额"
 
-#: src/components/routes/event/EventDashboard/index.tsx:274
+#: src/components/routes/event/EventDashboard/index.tsx:305
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:119
 msgid "Gross Sales"
 msgstr "销售总额"
@@ -2859,7 +2910,11 @@ msgstr "下面是 React 组件，您可以用它在应用程序中嵌入 widget�
 msgid "Here is your affiliate link"
 msgstr "这是您的推广链接"
 
-#: src/components/routes/event/EventDashboard/index.tsx:101
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:77
+msgid "Here's what to expect:"
+msgstr "预期结果："
+
+#: src/components/routes/event/EventDashboard/index.tsx:108
 msgid "Hi {0} 👋"
 msgstr "你好 {0} 👋"
 
@@ -3045,6 +3100,10 @@ msgstr "图片网址"
 msgid "Images"
 msgstr "图片"
 
+#: src/components/routes/event/EventDashboard/index.tsx:124
+msgid "Important: Stripe reconnection required"
+msgstr "重要：需要重新连接 Stripe"
+
 #: src/components/layouts/AuthLayout/index.tsx:55
 msgid "In-depth Analytics"
 msgstr "深入分析"
@@ -3176,6 +3235,10 @@ msgstr "约翰"
 msgid "Johnson"
 msgstr "约翰逊"
 
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:114
+msgid "Just click the button below to reconnect your Stripe account."
+msgstr "只需点击下面的按钮重新连接您的 Stripe 账户。"
+
 #: src/components/forms/ProductForm/index.tsx:77
 msgid "Label"
 msgstr "标签"
@@ -3266,7 +3329,7 @@ msgstr "订单详情链接"
 msgid "Link to ticket"
 msgstr "门票链接"
 
-#: src/components/routes/event/EventDashboard/index.tsx:194
+#: src/components/routes/event/EventDashboard/index.tsx:225
 msgid "Link your Stripe account to receive funds from ticket sales."
 msgstr "链接您的 Stripe 账户以接收售票资金。"
 
@@ -3285,7 +3348,7 @@ msgstr "直播"
 
 #: src/components/routes/event/TicketDesigner/TicketPreview.tsx:31
 msgid "Loading preview..."
-msgstr ""
+msgstr "加载预览中..."
 
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:261
 msgid "Loading themes..."
@@ -3318,7 +3381,7 @@ msgstr "登录"
 msgid "Logging in"
 msgstr "登录"
 
-#: src/components/routes/event/TicketDesigner/index.tsx:140
+#: src/components/routes/event/TicketDesigner/index.tsx:138
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:225
 #: src/components/routes/organizer/Settings/Sections/ImageAssetSettings/index.tsx:26
 msgid "Logo"
@@ -3336,7 +3399,7 @@ msgstr "您的组织者的标志和封面图像"
 msgid "Logo will be displayed in the header"
 msgstr "标志将显示在页面头部"
 
-#: src/components/routes/event/TicketDesigner/index.tsx:155
+#: src/components/routes/event/TicketDesigner/index.tsx:153
 msgid "Logo will be displayed on the ticket"
 msgstr "标志将显示在票券上"
 
@@ -3356,7 +3419,7 @@ msgstr "在结账时强制要求填写账单地址"
 msgid "Make this question mandatory"
 msgstr "将此问题作为必答题"
 
-#: src/components/routes/event/EventDashboard/index.tsx:148
+#: src/components/routes/event/EventDashboard/index.tsx:179
 msgid "Make your event live"
 msgstr "让您的活动上线"
 
@@ -3407,7 +3470,7 @@ msgstr "管理机票"
 msgid "Manage your account details and default settings"
 msgstr "管理账户详情和默认设置"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:242
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:719
 msgid "Manage your payment processing and view platform fees"
 msgstr "管理您的支付处理并查看平台费用"
 
@@ -3666,6 +3729,10 @@ msgstr "尚无活动"
 msgid "No filters available"
 msgstr "没有可用筛选器"
 
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:79
+msgid "No impact on your current or past transactions"
+msgstr "不影响您当前或过去的交易"
+
 #: src/components/modals/WebhookLogsModal/index.tsx:177
 msgid "No logs found"
 msgstr "未找到日志"
@@ -3846,6 +3913,10 @@ msgstr "销售中"
 msgid "On Sale"
 msgstr "销售中"
 
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:546
+msgid "Once you complete the upgrade, your old account will only be used for refunds."
+msgstr "升级完成后，您的旧账户将仅用于退款。"
+
 #: src/components/common/NoEventsBlankSlate/index.tsx:19
 msgid "Once you create an event, you'll see it here."
 msgstr "创建事件后，您就可以在这里看到它。"
@@ -3895,6 +3966,12 @@ msgstr "打开签到页面"
 msgid "Open sidebar"
 msgstr "打开侧边栏"
 
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:190
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:398
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:635
+msgid "Open Stripe Dashboard"
+msgstr "打开 Stripe 仪表板"
+
 #: src/components/forms/QuestionForm/index.tsx:45
 msgid "Option {i}"
 msgstr "方案 {i}"
@@ -3907,9 +3984,9 @@ msgstr "所有发票上显示的可选附加信息（例如，付款条款、逾
 msgid "Optional prefix for invoice numbers (e.g., INV-)"
 msgstr "发票编号的可选前缀（例如，INV-）"
 
-#: src/components/routes/event/TicketDesigner/index.tsx:163
+#: src/components/routes/event/TicketDesigner/index.tsx:161
 msgid "Optional text for disclaimers, contact info, or thank you notes (single line only)"
-msgstr ""
+msgstr "免责声明、联系信息或感谢说明的可选文本（仅单行）"
 
 #: src/components/forms/QuestionForm/index.tsx:28
 msgid "Options"
@@ -3973,7 +4050,7 @@ msgstr "订单名字"
 
 #: src/components/modals/CancelOrderModal/index.tsx:40
 msgid "Order has been canceled and refunded. The order owner has been notified."
-msgstr ""
+msgstr "订单已取消并退款。订单所有者已收到通知。"
 
 #: src/components/modals/CancelOrderModal/index.tsx:41
 msgid "Order has been canceled and the order owner has been notified."
@@ -4105,12 +4182,12 @@ msgstr "组织者仪表板"
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:40
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:70
 msgid "Organizer Email"
-msgstr ""
+msgstr "组织者邮箱"
 
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:40
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:70
 msgid "Organizer email address"
-msgstr ""
+msgstr "组织者电子邮件地址"
 
 #: src/components/modals/CreateEventModal/index.tsx:48
 msgid "Organizer is required"
@@ -4198,7 +4275,7 @@ msgstr "付费产品"
 
 #: src/components/modals/RefundOrderModal/index.tsx:109
 msgid "Partial refund"
-msgstr ""
+msgstr "部分退款"
 
 #: src/components/routes/event/orders.tsx:30
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:54
@@ -4290,7 +4367,9 @@ msgstr "支付说明"
 msgid "Payment Methods"
 msgstr "支付方式"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:139
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:467
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:479
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:613
 msgid "Payment Processing"
 msgstr "支付处理"
 
@@ -4302,7 +4381,7 @@ msgstr "支付提供商"
 msgid "Payment Received"
 msgstr "已收到付款"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:241
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:718
 msgid "Payment Settings"
 msgstr "支付设置"
 
@@ -4317,6 +4396,10 @@ msgstr "付款成功！"
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:214
 msgid "Payment Terms"
 msgstr "付款条款"
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:80
+msgid "Payments will continue to flow without interruption"
+msgstr "付款将继续无中断流转"
 
 #: src/components/forms/PromoCodeForm/index.tsx:81
 #: src/components/forms/TaxAndFeeForm/index.tsx:27
@@ -4351,7 +4434,7 @@ msgstr "将其放在网站的 <head> 中。"
 msgid "Planning an event?"
 msgstr "计划举办活动？"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:41
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:242
 msgid "Platform Fees"
 msgstr "平台费用"
 
@@ -4486,7 +4569,7 @@ msgstr "结账前信息"
 
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:140
 #: src/components/common/QuestionsTable/index.tsx:347
-#: src/components/routes/event/TicketDesigner/index.tsx:199
+#: src/components/routes/event/TicketDesigner/index.tsx:197
 msgid "Preview"
 msgstr "预览"
 
@@ -4541,7 +4624,7 @@ msgstr "打印"
 msgid "Print All Tickets"
 msgstr "打印所有门票"
 
-#: src/components/routes/event/TicketDesigner/index.tsx:206
+#: src/components/routes/event/TicketDesigner/index.tsx:204
 msgid "Print Preview"
 msgstr "打印预览"
 
@@ -4556,7 +4639,7 @@ msgstr "隐私政策"
 
 #: src/components/modals/RefundOrderModal/index.tsx:149
 msgid "Process Refund"
-msgstr ""
+msgstr "处理退款"
 
 #: src/components/common/AttendeeDetails/index.tsx:37
 #: src/components/modals/ManageAttendeeModal/index.tsx:119
@@ -4591,7 +4674,7 @@ msgstr "产品价格类型"
 msgid "Product questions"
 msgstr "产品问题"
 
-#: src/components/routes/event/EventDashboard/index.tsx:217
+#: src/components/routes/event/EventDashboard/index.tsx:248
 #: src/components/routes/event/Reports/index.tsx:17
 msgid "Product Sales"
 msgstr "产品销售"
@@ -4630,7 +4713,7 @@ msgstr "产品"
 msgid "Products sold"
 msgstr "已售产品"
 
-#: src/components/routes/event/EventDashboard/index.tsx:238
+#: src/components/routes/event/EventDashboard/index.tsx:269
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:125
 msgid "Products Sold"
 msgstr "已售产品"
@@ -4696,7 +4779,7 @@ msgstr "提供此问题的附加背景或说明。使用此字段添加条款和
 msgid "Publish"
 msgstr "发布"
 
-#: src/components/routes/event/EventDashboard/index.tsx:159
+#: src/components/routes/event/EventDashboard/index.tsx:190
 msgid "Publish Event"
 msgstr "发布活动"
 
@@ -4752,6 +4835,14 @@ msgstr "无线电选项"
 msgid "Read less"
 msgstr "更多信息"
 
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:108
+msgid "Ready to Upgrade?"
+msgstr "准备升级？"
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:218
+msgid "Ready to upgrade? This takes only a few minutes."
+msgstr "准备升级？这只需要几分钟。"
+
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:265
 msgid "Recent Orders"
 msgstr "最近订单"
@@ -4760,14 +4851,20 @@ msgstr "最近订单"
 msgid "Recipient"
 msgstr "受援国"
 
+#: src/components/routes/event/EventDashboard/index.tsx:130
+msgid "Reconnect Stripe →"
+msgstr "重新连接 Stripe →"
+
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:80
 msgid "Reddit"
 msgstr "Reddit"
 
-#: src/components/common/StripeConnectButton/index.tsx:51
-#: src/components/common/StripeConnectButton/index.tsx:66
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:111
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:196
+#: src/components/common/StripeConnectButton/index.tsx:59
+#: src/components/common/StripeConnectButton/index.tsx:74
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:318
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:331
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:572
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:590
 msgid "Redirecting to Stripe..."
 msgstr "正在重定向到 Stripe..."
 
@@ -4782,7 +4879,7 @@ msgstr "刷新预览"
 
 #: src/components/modals/RefundOrderModal/index.tsx:107
 msgid "Refund amount"
-msgstr ""
+msgstr "退款金额"
 
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:52
 msgid "Refund Failed"
@@ -4794,7 +4891,7 @@ msgstr "退款订单"
 
 #: src/components/modals/RefundOrderModal/index.tsx:197
 msgid "Refund Order {0}"
-msgstr ""
+msgstr "退款订单 {0}"
 
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:51
 msgid "Refund Pending"
@@ -4905,7 +5002,7 @@ msgid "Return to Event Page"
 msgstr "返回活动页面"
 
 #: src/components/common/AffiliateTable/index.tsx:157
-#: src/components/routes/event/EventDashboard/index.tsx:249
+#: src/components/routes/event/EventDashboard/index.tsx:280
 msgid "Revenue"
 msgstr "收入"
 
@@ -4989,14 +5086,14 @@ msgstr "保存社交链接"
 msgid "Save Template"
 msgstr "保存模板"
 
-#: src/components/routes/event/TicketDesigner/index.tsx:189
+#: src/components/routes/event/TicketDesigner/index.tsx:187
 msgid "Save Ticket Design"
 msgstr "保存票券设计"
 
 #: src/components/layouts/CheckIn/index.tsx:445
 #: src/components/layouts/CheckIn/index.tsx:455
 msgid "Scan"
-msgstr ""
+msgstr "扫描"
 
 #: src/components/layouts/EventHomepage/index.tsx:340
 msgid "Scroll to Tickets"
@@ -5201,7 +5298,7 @@ msgstr "发送订单确认和票务电子邮件"
 
 #: src/components/modals/RefundOrderModal/index.tsx:123
 msgid "Send refund notification email"
-msgstr ""
+msgstr "发送退款通知邮件"
 
 #: src/components/modals/SendMessageModal/index.tsx:290
 msgid "Send Test"
@@ -5432,6 +5529,10 @@ msgstr "出问题了"
 msgid "Something went wrong. Please try again."
 msgstr "出错了。请重试。"
 
+#: src/components/routes/event/EventDashboard/index.tsx:126
+msgid "Sorry for the inconvenience."
+msgstr "对于给您带来的不便，我们深表歉意。"
+
 #: src/components/routes/product-widget/Payment/PaymentMethods/Stripe/index.tsx:60
 msgid "Sorry, something has gone wrong. Please restart the checkout process."
 msgstr "对不起，出了点问题。请重新开始结账。"
@@ -5505,15 +5606,23 @@ msgstr "州或地区"
 msgid "Status"
 msgstr "现状"
 
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:177
+msgid "Still handling refunds for your older transactions."
+msgstr "仍在处理您旧交易的退款。"
+
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:85
 msgid "Stripe"
 msgstr "Stripe"
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:156
+msgid "Stripe Connect"
+msgstr "Stripe Connect"
 
 #: src/components/routes/product-widget/Payment/PaymentMethods/Stripe/index.tsx:47
 msgid "Stripe payments are not enabled for this event."
 msgstr "此活动未启用 Stripe 支付。"
 
-#: src/components/common/StripeConnectButton/index.tsx:61
+#: src/components/common/StripeConnectButton/index.tsx:69
 msgid "Stripe setup is already complete."
 msgstr "Stripe设置已完成。"
 
@@ -5692,6 +5801,10 @@ msgstr "切换组织者"
 msgid "T-shirt"
 msgstr "T恤衫"
 
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:78
+msgid "Takes just a few minutes"
+msgstr "只需几分钟"
+
 #: src/components/forms/TaxAndFeeForm/index.tsx:12
 #: src/components/forms/TaxAndFeeForm/index.tsx:39
 #: src/components/modals/CreateTaxOrFeeModal/index.tsx:32
@@ -5769,9 +5882,13 @@ msgstr "模板保存成功"
 msgid "Terms of Service"
 msgstr "服务条款"
 
-#: src/components/routes/event/TicketDesigner/index.tsx:164
+#: src/components/routes/event/TicketDesigner/index.tsx:162
 msgid "Thank you for attending!"
 msgstr "感谢您的参与！"
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:84
+msgid "Thanks for your support as we continue to grow and improve Hi.Events!"
+msgstr "感谢您的支持，我们将继续发展和改进 Hi.Events！"
 
 #: src/components/routes/product-widget/SelectProducts/index.tsx:176
 #: src/components/routes/product-widget/SelectProducts/index.tsx:224
@@ -5816,7 +5933,7 @@ msgstr "您查找的活动目前不可用。它可能已被删除、过期或 UR
 
 #: src/components/modals/CancelOrderModal/index.tsx:77
 msgid "The full order amount will be refunded to the customer's original payment method."
-msgstr ""
+msgstr "订单全额将退款至客户的原始付款方式。"
 
 #: src/components/modals/CreateAttendeeModal/index.tsx:157
 msgid "The language the attendee will receive emails in."
@@ -6065,7 +6182,7 @@ msgstr "此重置密码链接无效或已过期。"
 
 #: src/components/layouts/CheckIn/index.tsx:205
 msgid "This ticket was just scanned. Please wait before scanning again."
-msgstr ""
+msgstr "此门票刚刚被扫描。请等待后再次扫描。"
 
 #: src/components/modals/EditUserModal/index.tsx:65
 msgid "This user is not active, as they have not accepted their invitation."
@@ -6093,7 +6210,7 @@ msgid "Ticket"
 msgstr "门票"
 
 #: src/components/layouts/Event/index.tsx:111
-#: src/components/routes/event/TicketDesigner/index.tsx:109
+#: src/components/routes/event/TicketDesigner/index.tsx:107
 msgid "Ticket Design"
 msgstr "票券设计"
 
@@ -6107,7 +6224,7 @@ msgstr "门票电子邮件已重新发送给与会者"
 
 #: src/components/routes/product-widget/PrintProduct/index.tsx:42
 msgid "Ticket for"
-msgstr ""
+msgstr "门票："
 
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:50
 msgid "Ticket holder's email"
@@ -6123,7 +6240,7 @@ msgstr "票务持有人"
 
 #: src/components/common/AttendeeTicket/index.tsx:122
 msgid "Ticket ID"
-msgstr ""
+msgstr "门票 ID"
 
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:53
 msgid "Ticket Name"
@@ -6135,7 +6252,7 @@ msgstr "票或商品"
 
 #: src/components/routes/event/TicketDesigner/TicketDesignerPrint.tsx:85
 msgid "Ticket Preview for"
-msgstr ""
+msgstr "门票预览："
 
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:54
 msgid "Ticket Price"
@@ -6154,7 +6271,7 @@ msgstr "门票链接"
 msgid "Tickets & Products"
 msgstr "票务与商品"
 
-#: src/components/routes/product-widget/PrintOrder/index.tsx:41
+#: src/components/routes/product-widget/PrintOrder/index.tsx:40
 msgid "Tickets for"
 msgstr "门票"
 
@@ -6204,7 +6321,7 @@ msgstr "TIP"
 msgid "Title"
 msgstr "标题"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:183
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:655
 msgid "To receive credit card payments, you need to connect your Stripe account. Stripe is our payment processing partner that ensures secure transactions and timely payouts."
 msgstr "要接受信用卡付款，您需要连接您的 Stripe 账户。Stripe 是我们的支付处理合作伙伴，确保安全交易和及时付款。"
 
@@ -6229,7 +6346,7 @@ msgstr "折扣前总计"
 msgid "Total Discount Amount"
 msgstr "折扣总金额"
 
-#: src/components/routes/event/EventDashboard/index.tsx:273
+#: src/components/routes/event/EventDashboard/index.tsx:304
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:149
 msgid "Total Fees"
 msgstr "总费用"
@@ -6250,11 +6367,11 @@ msgstr "总订单数"
 msgid "Total refunded"
 msgstr "退款总额"
 
-#: src/components/routes/event/EventDashboard/index.tsx:276
+#: src/components/routes/event/EventDashboard/index.tsx:307
 msgid "Total Refunded"
 msgstr "退款总额"
 
-#: src/components/routes/event/EventDashboard/index.tsx:275
+#: src/components/routes/event/EventDashboard/index.tsx:306
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:143
 msgid "Total Tax"
 msgstr "总税额"
@@ -6263,7 +6380,7 @@ msgstr "总税额"
 msgid "Track revenue, page views, and sales with detailed analytics and exportable reports"
 msgstr "通过详细的分析和可导出的报告跟踪收入、页面浏览量和销售情况"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:54
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:256
 msgid "Transaction Fee:"
 msgstr "交易手续费："
 
@@ -6376,7 +6493,7 @@ msgstr "允许无限次使用"
 msgid "Unpaid Order"
 msgstr "未付款订单"
 
-#: src/components/routes/event/EventDashboard/index.tsx:170
+#: src/components/routes/event/EventDashboard/index.tsx:201
 msgid "Unpublish Event"
 msgstr "取消发布活动"
 
@@ -6406,6 +6523,10 @@ msgstr "更新活动名称、说明和日期"
 #: src/components/routes/profile/ManageProfile/index.tsx:177
 msgid "Update profile"
 msgstr "更新个人资料"
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:164
+msgid "Upgrade Available"
+msgstr "可升级"
 
 #: src/components/routes/organizer/Settings/Sections/ImageAssetSettings/index.tsx:39
 msgid "Upload a cover image for your organizer"
@@ -6462,7 +6583,7 @@ msgstr "USB/HID扫描仪"
 
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:151
 msgid "Use <0>Liquid templating</0> to personalize your emails"
-msgstr ""
+msgstr "使用 <0>Liquid 模板</0> 个性化您的邮件"
 
 #: src/components/routes/event/HomepageDesigner/index.tsx:190
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:351
@@ -6474,7 +6595,7 @@ msgstr "使用封面图片的模糊版本作为背景"
 msgid "Use cover image"
 msgstr "使用封面图片"
 
-#: src/components/routes/event/TicketDesigner/index.tsx:132
+#: src/components/routes/event/TicketDesigner/index.tsx:130
 msgid "Used for borders, highlights, and QR code styling"
 msgstr "用于边框、高亮和二维码样式"
 
@@ -6640,7 +6761,7 @@ msgstr "我们无法加载数据。请重试。"
 msgid "We couldn't reorder the categories. Please try again."
 msgstr "我们无法重新排序类别。请再试一次。"
 
-#: src/components/routes/event/TicketDesigner/index.tsx:142
+#: src/components/routes/event/TicketDesigner/index.tsx:140
 msgid "We recommend a square logo with minimum dimensions of 200x200px"
 msgstr "我们建议使用最小尺寸为200x200像素的方形标志"
 
@@ -6660,6 +6781,14 @@ msgstr "我们无法确认您的付款。请重试或联系技术支持。"
 #: src/components/routes/product-widget/PaymentReturn/index.tsx:79
 msgid "We're processing your order. Please wait..."
 msgstr "我们正在处理您的订单。请稍候..."
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:67
+msgid "We've officially moved our headquarters to Ireland 🇮🇪. As part of this transition, we're now using Stripe Ireland instead of Stripe Canada. To keep your payouts running smoothly, you'll need to reconnect your Stripe account."
+msgstr "我们已正式将总部迁至爱尔兰 🇮🇪。作为此次过渡的一部分，我们现在使用 Stripe 爱尔兰而不是 Stripe 加拿大。为了保持您的付款顺利进行，您需要重新连接您的 Stripe 账户。"
+
+#: src/components/routes/event/EventDashboard/index.tsx:125
+msgid "We've relocated our headquarters to Ireland. As a result, we need you to reconnect your Stripe account. This quick process takes just a few minutes. Your sales and existing data remain completely unaffected."
+msgstr "我们已将总部搬迁至爱尔兰。因此，我们需要您重新连接您的 Stripe 账户。这个快速过程只需几分钟。您的销售和现有数据完全不受影响。"
 
 #: src/components/routes/welcome/index.tsx:143
 msgid "We've sent a 5-digit verification code to:"
@@ -6711,7 +6840,7 @@ msgstr "欢迎加入！请登录以继续。"
 msgid "Welcome back 👋"
 msgstr "欢迎回来 👋"
 
-#: src/components/routes/event/EventDashboard/index.tsx:95
+#: src/components/routes/event/EventDashboard/index.tsx:102
 msgid "Welcome back{0} 👋"
 msgstr "欢迎回来{0} 👋"
 
@@ -6915,7 +7044,7 @@ msgstr "您正在将电子邮件更改为 <0>{0}</0>。"
 
 #: src/components/modals/RefundOrderModal/index.tsx:138
 msgid "You are issuing a partial refund. The customer will be refunded {0} {1}."
-msgstr ""
+msgstr "您正在发出部分退款。客户将获得 {0} {1} 的退款。"
 
 #: src/components/layouts/CheckIn/index.tsx:141
 #: src/components/layouts/CheckIn/index.tsx:165
@@ -7027,6 +7156,10 @@ msgstr "在您创建容量分配之前，您需要一个产品。"
 msgid "You'll need at least one product to get started. Free, paid or let the user decide what to pay."
 msgstr "您需要至少一个产品才能开始。免费、付费或让用户决定支付金额。"
 
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:176
+msgid "You're all set! Your payments are being processed smoothly."
+msgstr "一切就绪！您的付款正在顺利处理。"
+
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:93
 msgid "You're going to {0}! 🎉"
 msgstr "你要去 {0}! 🎉"
@@ -7064,7 +7197,7 @@ msgstr "您的电子邮件"
 msgid "Your email request change to <0>{0}</0> is pending. Please check your email to confirm"
 msgstr "您要求将电子邮件更改为<0>{0}</0>的申请正在处理中。请检查您的电子邮件以确认"
 
-#: src/components/routes/event/EventDashboard/index.tsx:150
+#: src/components/routes/event/EventDashboard/index.tsx:181
 msgid "Your event must be live before you can sell tickets to attendees."
 msgstr "在向与会者销售门票之前，您的活动必须处于上线状态。"
 
@@ -7125,7 +7258,12 @@ msgstr "您的付款未成功。请重试。"
 msgid "Your refund is processing."
 msgstr "您的退款正在处理中。"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:154
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:173
+msgid "Your Stripe account is connected and processing payments."
+msgstr "您的 Stripe 账户已连接并正在处理付款。"
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:389
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:626
 msgid "Your Stripe account is connected and ready to process payments."
 msgstr "您的 Stripe 账户已连接并准备好处理支付。"
 
@@ -7150,7 +7288,3 @@ msgstr "邮政编码"
 #: src/components/routes/product-widget/CollectInformation/index.tsx:349
 msgid "ZIP or Postal Code"
 msgstr "邮政编码"
-
-#: src/components/routes/product-widget/PrintProduct/index.tsx:42
-msgid "Ticket for"
-msgstr "门票："

@@ -34,7 +34,7 @@ msgstr "{0}"
 
 #: src/components/layouts/CheckIn/index.tsx:237
 msgid "{0} {1} is already checked in"
-msgstr ""
+msgstr "{0} {1} đã check-in"
 
 #: src/components/layouts/CheckIn/index.tsx:133
 msgid "{0} <0>checked in</0> successfully"
@@ -232,11 +232,13 @@ msgstr "Thuế tiêu chuẩn, như VAT hoặc GST"
 msgid "About"
 msgstr "Thông tin sự kiện"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:212
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:427
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:456
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:674
 msgid "About Stripe Connect"
 msgstr "Giới thiệu về Stripe Connect"
 
-#: src/components/routes/event/TicketDesigner/index.tsx:131
+#: src/components/routes/event/TicketDesigner/index.tsx:129
 msgid "Accent Color"
 msgstr "Màu nhấn"
 
@@ -252,7 +254,8 @@ msgstr "Chấp nhận thanh toán thẻ tín dụng với Stripe"
 msgid "Accept Invitation"
 msgstr "Chấp nhận lời mời"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:126
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:350
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:602
 msgid "Access Denied"
 msgstr "Truy cập bị từ chối"
 
@@ -260,6 +263,10 @@ msgstr "Truy cập bị từ chối"
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:53
 msgid "Account"
 msgstr "Tài khoản"
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:335
+msgid "Account already connected!"
+msgstr "Tài khoản đã được kết nối!"
 
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:62
 msgid "Account Name"
@@ -273,6 +280,10 @@ msgstr "Cài đặt tài khoản"
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:42
 msgid "Account updated successfully"
 msgstr "Tài khoản được cập nhật thành công"
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:64
+msgid "Action Required: Reconnect Your Stripe Account"
+msgstr "Cần hành động: Kết nối lại tài khoản Stripe của bạn"
 
 #: src/components/common/AffiliateTable/index.tsx:167
 #: src/components/common/AttendeeTable/index.tsx:159
@@ -482,6 +493,10 @@ msgstr "Tất cả người tham dự"
 msgid "All attendees of this event"
 msgstr "Tất cả những người tham dự sự kiện này"
 
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:179
+msgid "All done! You're now using our upgraded payment system."
+msgstr "Hoàn thành! Bây giờ bạn đang sử dụng hệ thống thanh toán nâng cấp của chúng tôi."
+
 #: src/components/routes/events/Dashboard/index.tsx:74
 msgid "All Ended Events"
 msgstr "Tất cả sự kiện đã kết thúc"
@@ -508,21 +523,26 @@ msgstr "Cho phép công cụ tìm kiếm lập chỉ mục"
 msgid "Allow search engines to index this event"
 msgstr "Cho phép các công cụ tìm kiếm lập chỉ mục cho sự kiện này"
 
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:199
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:410
+msgid "Almost there! Finish connecting your Stripe account to start accepting payments."
+msgstr "Gần xong rồi! Hoàn thành kết nối tài khoản Stripe để bắt đầu nhận thanh toán."
+
 #: src/components/routes/product-widget/PaymentReturn/index.tsx:78
 msgid "Almost there! We're just waiting for your payment to be processed. This should only take a few seconds.."
 msgstr "Sắp xong rồi! Chúng tôi chỉ đang đợi xử lý thanh toán của bạn. Điều này chỉ tốn vài giây.. "
 
 #: src/components/modals/RefundOrderModal/index.tsx:85
 msgid "Already Refunded"
-msgstr ""
+msgstr "Đã hoàn tiền"
 
 #: src/components/modals/RefundOrderModal/index.tsx:130
 msgid "Also cancel this order"
-msgstr ""
+msgstr "Cũng hủy đơn hàng này"
 
 #: src/components/modals/CancelOrderModal/index.tsx:76
 msgid "Also refund this order"
-msgstr ""
+msgstr "Cũng hoàn tiền đơn hàng này"
 
 #: src/components/routes/event/Settings/Sections/SeoSettings/index.tsx:77
 #: src/components/routes/organizer/Settings/Sections/SeoSettings/index.tsx:77
@@ -644,12 +664,12 @@ msgid "Are you sure you want to delete this webhook?"
 msgstr "Bạn có chắc là bạn muốn xóa webhook này không?"
 
 #: src/components/layouts/Event/index.tsx:144
-#: src/components/routes/event/EventDashboard/index.tsx:64
+#: src/components/routes/event/EventDashboard/index.tsx:71
 msgid "Are you sure you want to make this event draft? This will make the event invisible to the public"
 msgstr "Bạn có chắc chắn muốn chuyển sự kiện này thành bản nháp không? Điều này sẽ làm cho sự kiện không hiển thị với công chúng."
 
 #: src/components/layouts/Event/index.tsx:145
-#: src/components/routes/event/EventDashboard/index.tsx:65
+#: src/components/routes/event/EventDashboard/index.tsx:72
 msgid "Are you sure you want to make this event public? This will make the event visible to the public"
 msgstr "Bạn có chắc mình muốn công khai sự kiện này không? "
 
@@ -772,7 +792,7 @@ msgstr "Người tham dự"
 msgid "Attendees Exported"
 msgstr "Danh sách người tham dự đã được xuất"
 
-#: src/components/routes/event/EventDashboard/index.tsx:239
+#: src/components/routes/event/EventDashboard/index.tsx:270
 msgid "Attendees Registered"
 msgstr "Người tham dự đã đăng ký"
 
@@ -794,7 +814,7 @@ msgstr "Tự động điều chỉnh chiều cao của widget dựa trên nội 
 
 #: src/components/modals/RefundOrderModal/index.tsx:92
 msgid "Available to Refund"
-msgstr ""
+msgstr "Có thể hoàn tiền"
 
 #: src/components/common/Editor/Controls/LiquidTokenControl.tsx:76
 msgid "Available Tokens"
@@ -934,7 +954,7 @@ msgstr "Hủy"
 
 #: src/components/modals/RefundOrderModal/index.tsx:131
 msgid "Cancel all products and release them back to the pool"
-msgstr ""
+msgstr "Hủy tất cả sản phẩm và trả lại pool có sẵn"
 
 #: src/components/routes/profile/ManageProfile/index.tsx:126
 msgid "Cancel email change"
@@ -954,7 +974,7 @@ msgstr "Hủy đơn hàng {0}"
 
 #: src/components/modals/CancelOrderModal/index.tsx:67
 msgid "Canceling will cancel all attendees associated with this order, and release the tickets back into the available pool."
-msgstr ""
+msgstr "Hủy sẽ hủy tất cả người tham dự liên quan đến đơn hàng này và trả vé về pool có sẵn."
 
 #: src/components/common/AttendeeTicket/index.tsx:108
 #: src/components/common/OrderStatusBadge/index.tsx:12
@@ -1246,13 +1266,16 @@ msgstr "Hoàn tất thanh toán"
 msgid "Complete Payment"
 msgstr "Hoàn tất thanh toán"
 
-#: src/components/common/StripeConnectButton/index.tsx:79
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:203
-#: src/components/routes/event/EventDashboard/index.tsx:205
+#: src/components/common/StripeConnectButton/index.tsx:87
+#: src/components/routes/event/EventDashboard/index.tsx:236
 msgid "Complete Stripe Setup"
 msgstr "Hoàn tất thiết lập Stripe"
 
-#: src/components/routes/event/EventDashboard/index.tsx:127
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:109
+msgid "Complete the setup below to continue"
+msgstr "Hoàn thành thiết lập bên dưới để tiếp tục"
+
+#: src/components/routes/event/EventDashboard/index.tsx:158
 msgid "Complete these steps to start selling tickets for your event."
 msgstr "Hoàn thành các bước này để bắt đầu bán vé cho sự kiện của bạn."
 
@@ -1267,7 +1290,7 @@ msgstr "Hoàn thành"
 msgid "Completed orders"
 msgstr "Đơn hàng đã hoàn thành"
 
-#: src/components/routes/event/EventDashboard/index.tsx:237
+#: src/components/routes/event/EventDashboard/index.tsx:268
 msgid "Completed Orders"
 msgstr "Đơn hàng đã hoàn thành"
 
@@ -1326,11 +1349,15 @@ msgstr "Đang xác nhận địa chỉ email..."
 msgid "Congratulations on creating an event!"
 msgstr "Chúc mừng bạn đã tạo sự kiện thành công!"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:174
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:229
+msgid "Connect & Upgrade"
+msgstr "Kết nối và nâng cấp"
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:646
 msgid "Connect Documentation"
 msgstr "Tài liệu kết nối"
 
-#: src/components/routes/event/EventDashboard/index.tsx:192
+#: src/components/routes/event/EventDashboard/index.tsx:223
 msgid "Connect payment processing"
 msgstr "Kết nối xử lý thanh toán"
 
@@ -1341,9 +1368,9 @@ msgstr "Kết nối Stripe"
 
 #: src/components/modals/SendMessageModal/index.tsx:159
 msgid "Connect Stripe to enable messaging"
-msgstr ""
+msgstr "Kết nối Stripe để bật tính năng nhắn tin"
 
-#: src/components/routes/event/EventDashboard/index.tsx:205
+#: src/components/routes/event/EventDashboard/index.tsx:236
 msgid "Connect to Stripe"
 msgstr "Kết nối với Stripe"
 
@@ -1351,8 +1378,10 @@ msgstr "Kết nối với Stripe"
 msgid "Connect with CRM and automate tasks using webhooks and integrations"
 msgstr "Kết nối với CRM và tự động hóa các tác vụ bằng webhooks và tích hợp"
 
-#: src/components/common/StripeConnectButton/index.tsx:77
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:202
+#: src/components/common/StripeConnectButton/index.tsx:85
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:229
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:447
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:664
 #: src/components/routes/event/GettingStarted/index.tsx:154
 msgid "Connect with Stripe"
 msgstr "Kết nối với Stripe"
@@ -1361,11 +1390,24 @@ msgstr "Kết nối với Stripe"
 msgid "Connect your Stripe account to accept payments for tickets and products."
 msgstr "Kết nối tài khoản Stripe để chấp nhận thanh toán cho vé và sản phẩm."
 
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:217
+msgid "Connect your Stripe account to accept payments."
+msgstr "Kết nối tài khoản Stripe để nhận thanh toán."
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:439
+msgid "Connect your Stripe account to start accepting payments for your events."
+msgstr "Kết nối tài khoản Stripe để bắt đầu nhận thanh toán cho sự kiện của bạn."
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:215
+msgid "Connect your Stripe account to start accepting payments."
+msgstr "Kết nối tài khoản Stripe để bắt đầu nhận thanh toán."
+
 #: src/components/routes/event/GettingStarted/index.tsx:150
 msgid "Connect your Stripe account to start receiving payments."
 msgstr "Kết nối tài khoản Stripe của bạn để bắt đầu nhận thanh toán."
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:149
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:385
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:622
 msgid "Connected to Stripe"
 msgstr "Đã kết nối với Stripe"
 
@@ -1693,6 +1735,10 @@ msgstr "Tiền tệ"
 msgid "Current Password"
 msgstr "Mật khẩu hiện tại"
 
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:158
+msgid "Current payment processor"
+msgstr "Bộ xử lý thanh toán hiện tại"
+
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:330
 msgid "Custom"
 msgstr "Tùy chỉnh"
@@ -1720,7 +1766,7 @@ msgstr "Khách hàng"
 
 #: src/components/modals/RefundOrderModal/index.tsx:124
 msgid "Customer will receive an email confirming the refund"
-msgstr ""
+msgstr "Khách hàng sẽ nhận email xác nhận hoàn tiền"
 
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:26
 msgid "Customer's email address"
@@ -1783,7 +1829,7 @@ msgstr "Tùy chỉnh trang sự kiện của bạn để phù hợp với thươ
 msgid "Customize your organizer page appearance"
 msgstr "Tùy chỉnh giao diện trang tổ chức của bạn"
 
-#: src/components/routes/event/TicketDesigner/index.tsx:110
+#: src/components/routes/event/TicketDesigner/index.tsx:108
 msgid "Customize your ticket appearance"
 msgstr "Tùy chỉnh giao diện vé của bạn"
 
@@ -1821,7 +1867,7 @@ msgstr "Ngày"
 
 #: src/components/common/AttendeeTicket/index.tsx:58
 msgid "Date & Time"
-msgstr ""
+msgstr "Ngày và giờ"
 
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:33
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:63
@@ -1830,7 +1876,7 @@ msgstr "Ngày của sự kiện"
 
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:23
 msgid "Date order was placed"
-msgstr ""
+msgstr "Ngày đặt đơn hàng"
 
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:38
 msgid "Day one capacity"
@@ -1902,7 +1948,7 @@ msgstr "Mô tả cho nhân viên làm thủ tục check-in"
 msgid "Deselect All"
 msgstr "Bỏ chọn tất cả"
 
-#: src/components/routes/event/TicketDesigner/index.tsx:124
+#: src/components/routes/event/TicketDesigner/index.tsx:122
 msgid "Design Elements"
 msgstr "Các yếu tố thiết kế"
 
@@ -1946,7 +1992,7 @@ msgstr "Bỏ qua thông báo này"
 msgid "Document Label"
 msgstr "Nhãn tài liệu"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:223
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:685
 msgid "Documentation"
 msgstr "Tài liệu"
 
@@ -2439,7 +2485,7 @@ msgstr "Trang sự kiện"
 #: src/components/common/EventCard/index.tsx:70
 #: src/components/common/StatusToggle/index.tsx:59
 #: src/components/layouts/Event/index.tsx:156
-#: src/components/routes/event/EventDashboard/index.tsx:76
+#: src/components/routes/event/EventDashboard/index.tsx:83
 #: src/components/routes/event/GettingStarted/index.tsx:63
 msgid "Event status update failed. Please try again later"
 msgstr "Cập nhật trạng thái sự kiện thất bại. Vui lòng thử lại sau"
@@ -2447,7 +2493,7 @@ msgstr "Cập nhật trạng thái sự kiện thất bại. Vui lòng thử l�
 #: src/components/common/EventCard/index.tsx:67
 #: src/components/common/StatusToggle/index.tsx:51
 #: src/components/layouts/Event/index.tsx:153
-#: src/components/routes/event/EventDashboard/index.tsx:73
+#: src/components/routes/event/EventDashboard/index.tsx:80
 #: src/components/routes/event/GettingStarted/index.tsx:60
 msgid "Event status updated"
 msgstr "Trạng thái sự kiện đã được cập nhật"
@@ -2639,7 +2685,7 @@ msgstr "Phí"
 msgid "Fees"
 msgstr "Các khoản phí"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:81
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:283
 msgid "Fees are subject to change. You will be notified of any changes to your fee structure."
 msgstr "Các khoản phí có thể thay đổi. Bạn sẽ được thông báo về bất kỳ thay đổi nào trong cấu trúc phí của mình."
 
@@ -2659,6 +2705,15 @@ msgstr "Bộ lọc"
 #: src/components/common/FilterModal/index.tsx:223
 msgid "Filters ({activeFilterCount})"
 msgstr "Bộ lọc ({activeFilterCount})"
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:208
+msgid "Finish Setup"
+msgstr "Hoàn thành thiết lập"
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:418
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:665
+msgid "Finish Stripe Setup"
+msgstr "Hoàn thành thiết lập Stripe"
 
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:206
 msgid "First Invoice Number"
@@ -2704,7 +2759,7 @@ msgstr "Đã sửa"
 msgid "Fixed amount"
 msgstr "Số tiền cố định"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:66
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:268
 msgid "Fixed Fee:"
 msgstr "Phí cố định:"
 
@@ -2720,7 +2775,7 @@ msgstr "Vé linh hoạt"
 msgid "Food & Drink"
 msgstr "Ẩm thực"
 
-#: src/components/routes/event/TicketDesigner/index.tsx:162
+#: src/components/routes/event/TicketDesigner/index.tsx:160
 msgid "Footer Text"
 msgstr "Văn bản chân trang"
 
@@ -2753,7 +2808,7 @@ msgstr "Tiếng Pháp"
 
 #: src/components/modals/RefundOrderModal/index.tsx:109
 msgid "Full refund"
-msgstr ""
+msgstr "Hoàn tiền toàn bộ"
 
 #: src/components/layouts/AuthLayout/index.tsx:90
 msgid "Fully Integrated"
@@ -2792,7 +2847,7 @@ msgstr "Tiếng Đức"
 msgid "Get started for free, no subscription fees"
 msgstr "Bắt đầu miễn phí, không có phí đăng ký"
 
-#: src/components/routes/event/EventDashboard/index.tsx:125
+#: src/components/routes/event/EventDashboard/index.tsx:156
 msgid "Get your event ready"
 msgstr "Chuẩn bị sự kiện của bạn"
 
@@ -2817,10 +2872,6 @@ msgstr "Đi đến trang chủ sự kiện"
 msgid "Go to home page"
 msgstr "Đi đến trang chủ"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:163
-msgid "Go to Stripe Dashboard"
-msgstr "Đi đến Bảng điều khiển Stripe"
-
 #: src/components/common/AddEventToCalendarButton/index.tsx:128
 msgid "Google Calendar"
 msgstr "Lịch Google"
@@ -2829,7 +2880,7 @@ msgstr "Lịch Google"
 msgid "Gross sales"
 msgstr "Tổng doanh số"
 
-#: src/components/routes/event/EventDashboard/index.tsx:274
+#: src/components/routes/event/EventDashboard/index.tsx:305
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:119
 msgid "Gross Sales"
 msgstr "Tổng doanh số"
@@ -2859,7 +2910,11 @@ msgstr "Đây là thành phần React bạn có thể sử dụng để nhúng t
 msgid "Here is your affiliate link"
 msgstr "Đây là liên kết đối tác của bạn"
 
-#: src/components/routes/event/EventDashboard/index.tsx:101
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:77
+msgid "Here's what to expect:"
+msgstr "Đây là những gì cần mong đợi:"
+
+#: src/components/routes/event/EventDashboard/index.tsx:108
 msgid "Hi {0} 👋"
 msgstr "Chào {0} 👋"
 
@@ -3045,6 +3100,10 @@ msgstr "URL hình ảnh"
 msgid "Images"
 msgstr "Hình ảnh"
 
+#: src/components/routes/event/EventDashboard/index.tsx:124
+msgid "Important: Stripe reconnection required"
+msgstr "Quan trọng: Cần kết nối lại Stripe"
+
 #: src/components/layouts/AuthLayout/index.tsx:55
 msgid "In-depth Analytics"
 msgstr "Phân tích chuyên sâu"
@@ -3176,6 +3235,10 @@ msgstr "John"
 msgid "Johnson"
 msgstr "Johnson"
 
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:114
+msgid "Just click the button below to reconnect your Stripe account."
+msgstr "Chỉ cần nhấn nút bên dưới để kết nối lại tài khoản Stripe của bạn."
+
 #: src/components/forms/ProductForm/index.tsx:77
 msgid "Label"
 msgstr "Nhãn"
@@ -3266,7 +3329,7 @@ msgstr "Liên kết đến chi tiết đơn hàng"
 msgid "Link to ticket"
 msgstr "Liên kết đến vé"
 
-#: src/components/routes/event/EventDashboard/index.tsx:194
+#: src/components/routes/event/EventDashboard/index.tsx:225
 msgid "Link your Stripe account to receive funds from ticket sales."
 msgstr "Liên kết tài khoản Stripe của bạn để nhận tiền từ việc bán vé."
 
@@ -3285,7 +3348,7 @@ msgstr "TRỰC TIẾP"
 
 #: src/components/routes/event/TicketDesigner/TicketPreview.tsx:31
 msgid "Loading preview..."
-msgstr ""
+msgstr "Đang tải xem trước..."
 
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:261
 msgid "Loading themes..."
@@ -3318,7 +3381,7 @@ msgstr "Đăng nhập"
 msgid "Logging in"
 msgstr "Đăng nhập"
 
-#: src/components/routes/event/TicketDesigner/index.tsx:140
+#: src/components/routes/event/TicketDesigner/index.tsx:138
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:225
 #: src/components/routes/organizer/Settings/Sections/ImageAssetSettings/index.tsx:26
 msgid "Logo"
@@ -3336,7 +3399,7 @@ msgstr "Logo và ảnh bìa cho nhà tổ chức của bạn"
 msgid "Logo will be displayed in the header"
 msgstr "Logo sẽ được hiển thị trong phần đầu trang"
 
-#: src/components/routes/event/TicketDesigner/index.tsx:155
+#: src/components/routes/event/TicketDesigner/index.tsx:153
 msgid "Logo will be displayed on the ticket"
 msgstr "Logo sẽ được hiển thị trên vé"
 
@@ -3356,7 +3419,7 @@ msgstr "Bắt buộc nhập địa chỉ thanh toán, trong khi thanh toán"
 msgid "Make this question mandatory"
 msgstr "Làm cho câu hỏi này bắt buộc"
 
-#: src/components/routes/event/EventDashboard/index.tsx:148
+#: src/components/routes/event/EventDashboard/index.tsx:179
 msgid "Make your event live"
 msgstr "Làm cho sự kiện của bạn hoạt động"
 
@@ -3407,7 +3470,7 @@ msgstr "Quản lý Vé"
 msgid "Manage your account details and default settings"
 msgstr "Quản lý chi tiết tài khoản của bạn và cài đặt mặc định"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:242
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:719
 msgid "Manage your payment processing and view platform fees"
 msgstr "Quản lý xử lý thanh toán và xem phí nền tảng của bạn"
 
@@ -3666,6 +3729,10 @@ msgstr "Chưa có sự kiện nào"
 msgid "No filters available"
 msgstr "Không có bộ lọc có sẵn"
 
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:79
+msgid "No impact on your current or past transactions"
+msgstr "Không ảnh hưởng đến giao dịch hiện tại hoặc quá khứ của bạn"
+
 #: src/components/modals/WebhookLogsModal/index.tsx:177
 msgid "No logs found"
 msgstr "Không tìm thấy nhật ký"
@@ -3846,6 +3913,10 @@ msgstr "Đang Bán"
 msgid "On Sale"
 msgstr "Đang Bán"
 
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:546
+msgid "Once you complete the upgrade, your old account will only be used for refunds."
+msgstr "Khi bạn hoàn thành nâng cấp, tài khoản cũ sẽ chỉ được sử dụng để hoàn tiền."
+
 #: src/components/common/NoEventsBlankSlate/index.tsx:19
 msgid "Once you create an event, you'll see it here."
 msgstr "Khi bạn tạo một sự kiện, bạn sẽ thấy nó ở đây."
@@ -3895,6 +3966,12 @@ msgstr "Mở trang Xác nhận tham dự (Check-In)"
 msgid "Open sidebar"
 msgstr "Mở thanh bên"
 
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:190
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:398
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:635
+msgid "Open Stripe Dashboard"
+msgstr "Mở bảng điều khiển Stripe"
+
 #: src/components/forms/QuestionForm/index.tsx:45
 msgid "Option {i}"
 msgstr "Tùy chọn {i}"
@@ -3907,9 +3984,9 @@ msgstr "Thông tin bổ sung tùy chọn xuất hiện trên tất cả các hó
 msgid "Optional prefix for invoice numbers (e.g., INV-)"
 msgstr "Tiền tố tùy chọn cho số hóa đơn (ví dụ: Inv-)"
 
-#: src/components/routes/event/TicketDesigner/index.tsx:163
+#: src/components/routes/event/TicketDesigner/index.tsx:161
 msgid "Optional text for disclaimers, contact info, or thank you notes (single line only)"
-msgstr ""
+msgstr "Văn bản tùy chọn cho tuyên bố từ chối, thông tin liên hệ hoặc ghi chú cảm ơn (chỉ một dòng)"
 
 #: src/components/forms/QuestionForm/index.tsx:28
 msgid "Options"
@@ -3973,7 +4050,7 @@ msgstr "Tên trong đơn hàng"
 
 #: src/components/modals/CancelOrderModal/index.tsx:40
 msgid "Order has been canceled and refunded. The order owner has been notified."
-msgstr ""
+msgstr "Đơn hàng đã được hủy và hoàn tiền. Chủ đơn hàng đã được thông báo."
 
 #: src/components/modals/CancelOrderModal/index.tsx:41
 msgid "Order has been canceled and the order owner has been notified."
@@ -4105,12 +4182,12 @@ msgstr "Bảng điều khiển nhà tổ chức"
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:40
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:70
 msgid "Organizer Email"
-msgstr ""
+msgstr "Email nhà tổ chức"
 
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:40
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:70
 msgid "Organizer email address"
-msgstr ""
+msgstr "Địa chỉ email nhà tổ chức"
 
 #: src/components/modals/CreateEventModal/index.tsx:48
 msgid "Organizer is required"
@@ -4198,7 +4275,7 @@ msgstr "Sản phẩm trả phí"
 
 #: src/components/modals/RefundOrderModal/index.tsx:109
 msgid "Partial refund"
-msgstr ""
+msgstr "Hoàn tiền một phần"
 
 #: src/components/routes/event/orders.tsx:30
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:54
@@ -4290,7 +4367,9 @@ msgstr "Hướng dẫn thanh toán"
 msgid "Payment Methods"
 msgstr "Phương thức thanh toán"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:139
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:467
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:479
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:613
 msgid "Payment Processing"
 msgstr "Thanh toán đang xử lý"
 
@@ -4302,7 +4381,7 @@ msgstr "Nhà cung cấp Thanh toán"
 msgid "Payment Received"
 msgstr "Thanh toán đã nhận"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:241
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:718
 msgid "Payment Settings"
 msgstr "Cài đặt thanh toán"
 
@@ -4317,6 +4396,10 @@ msgstr "Thanh toán thành công!"
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:214
 msgid "Payment Terms"
 msgstr "Điều khoản thanh toán"
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:80
+msgid "Payments will continue to flow without interruption"
+msgstr "Thanh toán sẽ tiếp tục diễn ra không bị gián đoạn"
 
 #: src/components/forms/PromoCodeForm/index.tsx:81
 #: src/components/forms/TaxAndFeeForm/index.tsx:27
@@ -4351,7 +4434,7 @@ msgstr "Đặt cái này vào <Head> của trang web của bạn."
 msgid "Planning an event?"
 msgstr "Đang lên kế hoạch cho một sự kiện?"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:41
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:242
 msgid "Platform Fees"
 msgstr "Phí nền tảng"
 
@@ -4486,7 +4569,7 @@ msgstr "Thông báo trước khi thanh toán"
 
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:140
 #: src/components/common/QuestionsTable/index.tsx:347
-#: src/components/routes/event/TicketDesigner/index.tsx:199
+#: src/components/routes/event/TicketDesigner/index.tsx:197
 msgid "Preview"
 msgstr "Xem trước"
 
@@ -4541,7 +4624,7 @@ msgstr "In"
 msgid "Print All Tickets"
 msgstr "In tất cả vé"
 
-#: src/components/routes/event/TicketDesigner/index.tsx:206
+#: src/components/routes/event/TicketDesigner/index.tsx:204
 msgid "Print Preview"
 msgstr "Xem trước khi in"
 
@@ -4556,7 +4639,7 @@ msgstr "Chính sách quyền riêng tư"
 
 #: src/components/modals/RefundOrderModal/index.tsx:149
 msgid "Process Refund"
-msgstr ""
+msgstr "Xử lý hoàn tiền"
 
 #: src/components/common/AttendeeDetails/index.tsx:37
 #: src/components/modals/ManageAttendeeModal/index.tsx:119
@@ -4591,7 +4674,7 @@ msgstr "Loại giá sản phẩm"
 msgid "Product questions"
 msgstr "Câu hỏi sản phẩm"
 
-#: src/components/routes/event/EventDashboard/index.tsx:217
+#: src/components/routes/event/EventDashboard/index.tsx:248
 #: src/components/routes/event/Reports/index.tsx:17
 msgid "Product Sales"
 msgstr "Bán Hàng"
@@ -4630,7 +4713,7 @@ msgstr "Sản phẩm"
 msgid "Products sold"
 msgstr "Sản phẩm đã bán"
 
-#: src/components/routes/event/EventDashboard/index.tsx:238
+#: src/components/routes/event/EventDashboard/index.tsx:269
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:125
 msgid "Products Sold"
 msgstr "Sản phẩm đã bán"
@@ -4696,7 +4779,7 @@ msgstr ""
 msgid "Publish"
 msgstr "Xuất bản"
 
-#: src/components/routes/event/EventDashboard/index.tsx:159
+#: src/components/routes/event/EventDashboard/index.tsx:190
 msgid "Publish Event"
 msgstr "Công bố sự kiện"
 
@@ -4752,6 +4835,14 @@ msgstr "Tùy chọn radio"
 msgid "Read less"
 msgstr "Đọc ít hơn"
 
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:108
+msgid "Ready to Upgrade?"
+msgstr "Sẵn sàng nâng cấp?"
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:218
+msgid "Ready to upgrade? This takes only a few minutes."
+msgstr "Sẵn sàng nâng cấp? Điều này chỉ mất vài phút."
+
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:265
 msgid "Recent Orders"
 msgstr "Đơn hàng gần đây"
@@ -4760,14 +4851,20 @@ msgstr "Đơn hàng gần đây"
 msgid "Recipient"
 msgstr "Người nhận"
 
+#: src/components/routes/event/EventDashboard/index.tsx:130
+msgid "Reconnect Stripe →"
+msgstr "Kết nối lại Stripe →"
+
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:80
 msgid "Reddit"
 msgstr "Reddit"
 
-#: src/components/common/StripeConnectButton/index.tsx:51
-#: src/components/common/StripeConnectButton/index.tsx:66
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:111
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:196
+#: src/components/common/StripeConnectButton/index.tsx:59
+#: src/components/common/StripeConnectButton/index.tsx:74
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:318
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:331
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:572
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:590
 msgid "Redirecting to Stripe..."
 msgstr "Đang chuyển hướng đến Stripe..."
 
@@ -4782,7 +4879,7 @@ msgstr "Làm mới xem trước"
 
 #: src/components/modals/RefundOrderModal/index.tsx:107
 msgid "Refund amount"
-msgstr ""
+msgstr "Số tiền hoàn lại"
 
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:52
 msgid "Refund Failed"
@@ -4794,7 +4891,7 @@ msgstr "Lệnh hoàn trả"
 
 #: src/components/modals/RefundOrderModal/index.tsx:197
 msgid "Refund Order {0}"
-msgstr ""
+msgstr "Hoàn tiền đơn hàng {0}"
 
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:51
 msgid "Refund Pending"
@@ -4905,7 +5002,7 @@ msgid "Return to Event Page"
 msgstr "Trở lại trang sự kiện"
 
 #: src/components/common/AffiliateTable/index.tsx:157
-#: src/components/routes/event/EventDashboard/index.tsx:249
+#: src/components/routes/event/EventDashboard/index.tsx:280
 msgid "Revenue"
 msgstr "Doanh thu"
 
@@ -4989,14 +5086,14 @@ msgstr "Lưu liên kết mạng xã hội"
 msgid "Save Template"
 msgstr "Lưu mẫu"
 
-#: src/components/routes/event/TicketDesigner/index.tsx:189
+#: src/components/routes/event/TicketDesigner/index.tsx:187
 msgid "Save Ticket Design"
 msgstr "Lưu thiết kế vé"
 
 #: src/components/layouts/CheckIn/index.tsx:445
 #: src/components/layouts/CheckIn/index.tsx:455
 msgid "Scan"
-msgstr ""
+msgstr "Quét"
 
 #: src/components/layouts/EventHomepage/index.tsx:340
 msgid "Scroll to Tickets"
@@ -5201,7 +5298,7 @@ msgstr "Gửi email xác nhận và vé"
 
 #: src/components/modals/RefundOrderModal/index.tsx:123
 msgid "Send refund notification email"
-msgstr ""
+msgstr "Gửi email thông báo hoàn tiền"
 
 #: src/components/modals/SendMessageModal/index.tsx:290
 msgid "Send Test"
@@ -5432,6 +5529,10 @@ msgstr "Có gì đó không ổn."
 msgid "Something went wrong. Please try again."
 msgstr "Có gì đó không ổn. Vui lòng thử lại"
 
+#: src/components/routes/event/EventDashboard/index.tsx:126
+msgid "Sorry for the inconvenience."
+msgstr "Xin lỗi vì sự bất tiện này."
+
 #: src/components/routes/product-widget/Payment/PaymentMethods/Stripe/index.tsx:60
 msgid "Sorry, something has gone wrong. Please restart the checkout process."
 msgstr "Xin lỗi, có gì đó không ổn. Vui lòng thử thanh toán lại"
@@ -5505,15 +5606,23 @@ msgstr "Nhà nước hoặc khu vực"
 msgid "Status"
 msgstr "Trạng thái"
 
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:177
+msgid "Still handling refunds for your older transactions."
+msgstr "Vẫn đang xử lý hoàn tiền cho các giao dịch cũ của bạn."
+
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:85
 msgid "Stripe"
 msgstr "Stripe"
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:156
+msgid "Stripe Connect"
+msgstr "Stripe Connect"
 
 #: src/components/routes/product-widget/Payment/PaymentMethods/Stripe/index.tsx:47
 msgid "Stripe payments are not enabled for this event."
 msgstr "Thanh toán Stripe không được kích hoạt cho sự kiện này."
 
-#: src/components/common/StripeConnectButton/index.tsx:61
+#: src/components/common/StripeConnectButton/index.tsx:69
 msgid "Stripe setup is already complete."
 msgstr "Thiết lập Stripe đã hoàn tất."
 
@@ -5692,6 +5801,10 @@ msgstr "Chuyển đổi nhà tổ chức"
 msgid "T-shirt"
 msgstr "Áo thun"
 
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:78
+msgid "Takes just a few minutes"
+msgstr "Chỉ mất vài phút"
+
 #: src/components/forms/TaxAndFeeForm/index.tsx:12
 #: src/components/forms/TaxAndFeeForm/index.tsx:39
 #: src/components/modals/CreateTaxOrFeeModal/index.tsx:32
@@ -5769,9 +5882,13 @@ msgstr "Lưu mẫu thành công"
 msgid "Terms of Service"
 msgstr "Điều khoản dịch vụ"
 
-#: src/components/routes/event/TicketDesigner/index.tsx:164
+#: src/components/routes/event/TicketDesigner/index.tsx:162
 msgid "Thank you for attending!"
 msgstr "Cảm ơn bạn đã tham dự!"
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:84
+msgid "Thanks for your support as we continue to grow and improve Hi.Events!"
+msgstr "Cảm ơn sự hỗ trợ của bạn khi chúng tôi tiếp tục phát triển và cải thiện Hi.Events!"
 
 #: src/components/routes/product-widget/SelectProducts/index.tsx:176
 #: src/components/routes/product-widget/SelectProducts/index.tsx:224
@@ -5816,7 +5933,7 @@ msgstr "Sự kiện bạn đang tìm kiếm hiện không khả dụng. Nó có 
 
 #: src/components/modals/CancelOrderModal/index.tsx:77
 msgid "The full order amount will be refunded to the customer's original payment method."
-msgstr ""
+msgstr "Toàn bộ số tiền đơn hàng sẽ được hoàn lại phương thức thanh toán gốc của khách hàng."
 
 #: src/components/modals/CreateAttendeeModal/index.tsx:157
 msgid "The language the attendee will receive emails in."
@@ -6065,7 +6182,7 @@ msgstr "Liên kết mật khẩu đặt lại này không hợp lệ hoặc hế
 
 #: src/components/layouts/CheckIn/index.tsx:205
 msgid "This ticket was just scanned. Please wait before scanning again."
-msgstr ""
+msgstr "Vé này vừa được quét. Vui lòng chờ trước khi quét lại."
 
 #: src/components/modals/EditUserModal/index.tsx:65
 msgid "This user is not active, as they have not accepted their invitation."
@@ -6093,7 +6210,7 @@ msgid "Ticket"
 msgstr "Vé"
 
 #: src/components/layouts/Event/index.tsx:111
-#: src/components/routes/event/TicketDesigner/index.tsx:109
+#: src/components/routes/event/TicketDesigner/index.tsx:107
 msgid "Ticket Design"
 msgstr "Thiết kế vé"
 
@@ -6107,7 +6224,7 @@ msgstr "Email vé đã được gửi lại với người tham dự"
 
 #: src/components/routes/product-widget/PrintProduct/index.tsx:42
 msgid "Ticket for"
-msgstr ""
+msgstr "Vé cho"
 
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:50
 msgid "Ticket holder's email"
@@ -6123,7 +6240,7 @@ msgstr "Người sở hữu vé"
 
 #: src/components/common/AttendeeTicket/index.tsx:122
 msgid "Ticket ID"
-msgstr ""
+msgstr "ID vé"
 
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:53
 msgid "Ticket Name"
@@ -6135,7 +6252,7 @@ msgstr "Vé hoặc sản phẩm"
 
 #: src/components/routes/event/TicketDesigner/TicketDesignerPrint.tsx:85
 msgid "Ticket Preview for"
-msgstr ""
+msgstr "Xem trước vé cho"
 
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:54
 msgid "Ticket Price"
@@ -6154,7 +6271,7 @@ msgstr "URL vé"
 msgid "Tickets & Products"
 msgstr "Vé & Sản phẩm"
 
-#: src/components/routes/product-widget/PrintOrder/index.tsx:41
+#: src/components/routes/product-widget/PrintOrder/index.tsx:40
 msgid "Tickets for"
 msgstr "Vé cho"
 
@@ -6204,7 +6321,7 @@ msgstr "Tip"
 msgid "Title"
 msgstr "Tiêu đề"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:183
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:655
 msgid "To receive credit card payments, you need to connect your Stripe account. Stripe is our payment processing partner that ensures secure transactions and timely payouts."
 msgstr "Để nhận thanh toán bằng thẻ tín dụng, bạn cần kết nối tài khoản Stripe của mình. Stripe là đối tác xử lý thanh toán của chúng tôi, đảm bảo giao dịch an toàn và thanh toán kịp thời."
 
@@ -6229,7 +6346,7 @@ msgstr "Tổng trước khi giảm giá"
 msgid "Total Discount Amount"
 msgstr "Tổng tiền chiết khấu"
 
-#: src/components/routes/event/EventDashboard/index.tsx:273
+#: src/components/routes/event/EventDashboard/index.tsx:304
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:149
 msgid "Total Fees"
 msgstr "Tổng phí"
@@ -6250,11 +6367,11 @@ msgstr "Tổng số đơn hàng"
 msgid "Total refunded"
 msgstr "Tổng đã hoàn lại"
 
-#: src/components/routes/event/EventDashboard/index.tsx:276
+#: src/components/routes/event/EventDashboard/index.tsx:307
 msgid "Total Refunded"
 msgstr "Tổng đã hoàn lại"
 
-#: src/components/routes/event/EventDashboard/index.tsx:275
+#: src/components/routes/event/EventDashboard/index.tsx:306
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:143
 msgid "Total Tax"
 msgstr "Tổng thuế"
@@ -6263,7 +6380,7 @@ msgstr "Tổng thuế"
 msgid "Track revenue, page views, and sales with detailed analytics and exportable reports"
 msgstr "Theo dõi doanh thu, lượt xem trang và bán hàng với các phân tích chi tiết và báo cáo có thể xuất khẩu"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:54
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:256
 msgid "Transaction Fee:"
 msgstr "Phí giao dịch:"
 
@@ -6376,7 +6493,7 @@ msgstr "Sử dụng không giới hạn"
 msgid "Unpaid Order"
 msgstr "Đơn hàng chưa thanh toán"
 
-#: src/components/routes/event/EventDashboard/index.tsx:170
+#: src/components/routes/event/EventDashboard/index.tsx:201
 msgid "Unpublish Event"
 msgstr "Hủy công bố sự kiện"
 
@@ -6406,6 +6523,10 @@ msgstr "Cập nhật tên sự kiện, mô tả và ngày"
 #: src/components/routes/profile/ManageProfile/index.tsx:177
 msgid "Update profile"
 msgstr "Cập nhật hồ sơ"
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:164
+msgid "Upgrade Available"
+msgstr "Có nâng cấp"
 
 #: src/components/routes/organizer/Settings/Sections/ImageAssetSettings/index.tsx:39
 msgid "Upload a cover image for your organizer"
@@ -6462,7 +6583,7 @@ msgstr "Máy quét USB/HID"
 
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:151
 msgid "Use <0>Liquid templating</0> to personalize your emails"
-msgstr ""
+msgstr "Sử dụng <0>mẫu Liquid</0> để cá nhân hóa email của bạn"
 
 #: src/components/routes/event/HomepageDesigner/index.tsx:190
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:351
@@ -6474,7 +6595,7 @@ msgstr "Sử dụng phiên bản làm mờ của ảnh bìa làm nền"
 msgid "Use cover image"
 msgstr "Sử dụng hình ảnh bìa"
 
-#: src/components/routes/event/TicketDesigner/index.tsx:132
+#: src/components/routes/event/TicketDesigner/index.tsx:130
 msgid "Used for borders, highlights, and QR code styling"
 msgstr "Được sử dụng cho viền, vùng tô sáng và kiểu mã QR"
 
@@ -6640,7 +6761,7 @@ msgstr "Chúng tôi không thể tải dữ liệu. Vui lòng thử lại."
 msgid "We couldn't reorder the categories. Please try again."
 msgstr "Chúng tôi không thể sắp xếp lại các danh mục. Vui lòng thử lại."
 
-#: src/components/routes/event/TicketDesigner/index.tsx:142
+#: src/components/routes/event/TicketDesigner/index.tsx:140
 msgid "We recommend a square logo with minimum dimensions of 200x200px"
 msgstr "Chúng tôi khuyến nghị logo hình vuông với kích thước tối thiểu 200x200px"
 
@@ -6660,6 +6781,14 @@ msgstr "Chúng tôi không thể xác nhận thanh toán của bạn. Vui lòng 
 #: src/components/routes/product-widget/PaymentReturn/index.tsx:79
 msgid "We're processing your order. Please wait..."
 msgstr "Chúng tôi đang xử lý đơn hàng của bạn. Đợi một chút..."
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:67
+msgid "We've officially moved our headquarters to Ireland 🇮🇪. As part of this transition, we're now using Stripe Ireland instead of Stripe Canada. To keep your payouts running smoothly, you'll need to reconnect your Stripe account."
+msgstr "Chúng tôi đã chính thức chuyển trụ sở chính đến Ireland 🇮🇪. Như một phần của quá trình chuyển đổi này, chúng tôi hiện sử dụng Stripe Ireland thay vì Stripe Canada. Để giữ cho các khoản thanh toán của bạn diễn ra suôn sẻ, bạn cần kết nối lại tài khoản Stripe của mình."
+
+#: src/components/routes/event/EventDashboard/index.tsx:125
+msgid "We've relocated our headquarters to Ireland. As a result, we need you to reconnect your Stripe account. This quick process takes just a few minutes. Your sales and existing data remain completely unaffected."
+msgstr "Chúng tôi đã chuyển trụ sở chính đến Ireland. Do đó, chúng tôi cần bạn kết nối lại tài khoản Stripe. Quy trình nhanh này chỉ mất vài phút. Doanh số và dữ liệu hiện tại của bạn hoàn toàn không bị ảnh hưởng."
 
 #: src/components/routes/welcome/index.tsx:143
 msgid "We've sent a 5-digit verification code to:"
@@ -6711,7 +6840,7 @@ msgstr "Chào mừng bạn! Vui lòng đăng nhập để tiếp tục."
 msgid "Welcome back 👋"
 msgstr "Chào mừng trở lại 👋"
 
-#: src/components/routes/event/EventDashboard/index.tsx:95
+#: src/components/routes/event/EventDashboard/index.tsx:102
 msgid "Welcome back{0} 👋"
 msgstr "Chào mừng trở lại{0} 👋"
 
@@ -6915,7 +7044,7 @@ msgstr "Bạn đang thay đổi email của mình thành <0>{0}</0>."
 
 #: src/components/modals/RefundOrderModal/index.tsx:138
 msgid "You are issuing a partial refund. The customer will be refunded {0} {1}."
-msgstr ""
+msgstr "Bạn đang thực hiện hoàn tiền một phần. Khách hàng sẽ được hoàn lại {0} {1}."
 
 #: src/components/layouts/CheckIn/index.tsx:141
 #: src/components/layouts/CheckIn/index.tsx:165
@@ -7027,6 +7156,10 @@ msgstr "Bạn sẽ cần tại một sản phẩm trước khi bạn có thể t
 msgid "You'll need at least one product to get started. Free, paid or let the user decide what to pay."
 msgstr "Bạn cần ít nhất một sản phẩm để bắt đầu. Miễn phí, trả phí hoặc để người dùng quyết định số tiền thanh toán."
 
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:176
+msgid "You're all set! Your payments are being processed smoothly."
+msgstr "Bạn đã sẵn sàng! Thanh toán của bạn đang được xử lý suôn sẻ."
+
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:93
 msgid "You're going to {0}! 🎉"
 msgstr "Bạn sẽ đến {0}! 🎉"
@@ -7064,7 +7197,7 @@ msgstr "Email của bạn"
 msgid "Your email request change to <0>{0}</0> is pending. Please check your email to confirm"
 msgstr "Yêu cầu email của bạn thay đổi thành <0>{0}</0> đang chờ xử lý. "
 
-#: src/components/routes/event/EventDashboard/index.tsx:150
+#: src/components/routes/event/EventDashboard/index.tsx:181
 msgid "Your event must be live before you can sell tickets to attendees."
 msgstr "Sự kiện của bạn phải được phát trực tiếp trước khi bạn có thể bán vé cho người tham dự."
 
@@ -7125,7 +7258,12 @@ msgstr "Thanh toán của bạn không thành công. Vui lòng thử lại."
 msgid "Your refund is processing."
 msgstr "Hoàn lại tiền của bạn đang xử lý."
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:154
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:173
+msgid "Your Stripe account is connected and processing payments."
+msgstr "Tài khoản Stripe của bạn đã được kết nối và đang xử lý thanh toán."
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:389
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:626
 msgid "Your Stripe account is connected and ready to process payments."
 msgstr "Tài khoản Stripe của bạn được kết nối và sẵn sàng xử lý thanh toán."
 
@@ -7151,6 +7289,6 @@ msgstr "mã zip hoặc bưu điện"
 msgid "ZIP or Postal Code"
 msgstr "mã zip hoặc bưu điện"
 
-#: src/components/routes/product-widget/PrintProduct/index.tsx:42
-msgid "Ticket for"
-msgstr "Vé cho"
+#: src/components/common/StripeConnectButton/index.tsx:30
+msgid "You have uploaded {0} tickets"
+msgstr "Bạn đã tải lên {0} vé"
