@@ -113,4 +113,9 @@ class ProductPriceDomainObject extends Generated\ProductPriceDomainObjectAbstrac
     {
         return $this->offSaleReason;
     }
+
+    public function isFree(): bool
+    {
+        return $this->getPrice() === 0.00;
+    }
 }

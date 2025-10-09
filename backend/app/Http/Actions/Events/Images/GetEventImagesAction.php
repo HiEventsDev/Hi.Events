@@ -2,7 +2,6 @@
 
 namespace HiEvents\Http\Actions\Events\Images;
 
-use HiEvents\DomainObjects\Enums\ImageType;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Repository\Interfaces\ImageRepositoryInterface;
@@ -22,7 +21,6 @@ class GetEventImagesAction extends BaseAction
         $images = $this->imageRepository->findWhere([
             'entity_id' => $eventId,
             'entity_type' => EventDomainObject::class,
-            'type' => ImageType::EVENT_COVER->name,
         ]);
 
         return $this->resourceResponse(ImageResource::class, $images);

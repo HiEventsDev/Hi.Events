@@ -1,140 +1,443 @@
 @use "../../../styles/mixins";
 
-.attendee {
-  display: flex;
-  justify-content: space-between;
-  border-radius: 10px;
-  background-color: #ffffff;
-  border: 1px solid #ddd;
+@media print {
+  @page {
+    size: A4;
+    margin: 0.5in;
+  }
+  
+  body {
+    font-size: 12pt;
+    line-height: 1.4;
+  }
+}
+
+.ticket {
+  background: #ffffff;
+  border-radius: var(--mantine-radius-md);
+  border: 1px solid var(--mantine-color-gray-3);
+  max-width: 750px;
+  margin: 0 auto;
   overflow: hidden;
-  padding: 0;
-  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
 
   @media print {
+    box-shadow: none;
+    border: none;
+    border-radius: 0;
+    max-width: 100%;
+    width: 100%;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    page-break-after: avoid;
     page-break-inside: avoid;
-    break-inside: avoid;
-    margin-bottom: 100px;
+  }
+}
 
-    &:last-child {
-      margin-bottom: 0;
-    }
+// Header
+.header {
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 24px 32px;
+
+  @include mixins.respond-below(sm) {
+    padding: 20px;
+  }
+
+  @media print {
+    background: #ffffff;
+    border-bottom: 2px solid #e0e0e0;
+    padding: 0 0 30px 0;
+    margin-bottom: 30px;
+  }
+}
+
+.headerContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+
+  @include mixins.respond-below(sm) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+}
+
+.eventTitle {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+
+  @include mixins.respond-below(sm) {
+    font-size: 20px;
+  }
+
+  @media print {
+    font-size: 32px;
+    margin-bottom: 10px;
+  }
+}
+
+.priceDisplay {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--accent);
+  white-space: nowrap;
+
+  @include mixins.respond-below(sm) {
+    font-size: 16px;
+  }
+
+  @media print {
+    font-size: 24px;
+    color: #1e293b;
+    font-weight: 700;
+  }
+}
+
+// Content
+.content {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 32px;
+  padding: 32px;
+  flex: 1;
+  align-items: start;
+
+  @include mixins.respond-below(md) {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 24px 20px;
+  }
+
+  @media print {
+    grid-template-columns: 2fr 1fr;
+    padding: 0;
+    gap: 50px;
+    flex: 1;
+    align-items: center;
+  }
+}
+
+.contentLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+
+  @include mixins.respond-below(sm) {
+    gap: 20px;
+  }
+
+  @media print {
+    gap: 40px;
+    justify-content: center;
+  }
+}
+
+// Event Details
+.eventDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  @include mixins.respond-below(sm) {
+    gap: 18px;
+  }
+
+  @media print {
+    gap: 30px;
+  }
+}
+
+.detailRow {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.detailLabel {
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #64748b;
+
+  @media print {
+    font-size: 14px;
+    color: #666666;
+    font-weight: 600;
+  }
+}
+
+.detailValue {
+  font-size: 16px;
+  font-weight: 500;
+  color: #1e293b;
+  line-height: 1.4;
+
+  @include mixins.respond-below(sm) {
+    font-size: 15px;
+  }
+
+  @media print {
+    font-size: 20px;
+    font-weight: 600;
+  }
+}
+
+// Attendee Section
+.attendeeSection {
+  background: #f1f5f9;
+  padding: 24px;
+  border-radius: 4px;
+  margin-top: auto;
+
+  @include mixins.respond-below(sm) {
+    padding: 20px;
+  }
+
+  @media print {
+    background: #ffffff;
+    padding: 35px;
+    border-radius: 8px;
+    border: 1px solid #d0d0d0;
+  }
+}
+
+.attendeeName {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 8px 0 4px;
+
+  @include mixins.respond-below(sm) {
+    font-size: 17px;
+  }
+
+  @media print {
+    font-size: 24px;
+    margin: 12px 0 8px;
+    font-weight: 700;
+  }
+}
+
+.attendeeEmail {
+  font-size: 14px;
+  color: #64748b;
+
+  @media print {
+    font-size: 18px;
+    color: #666666;
+  }
+}
+
+// Footer Text
+.footerText {
+  font-size: 14px;
+  color: #475569;
+  line-height: 1.5;
+  flex: 1;
+
+  @include mixins.respond-below(sm) {
+    font-size: 13px;
+  }
+
+  @media print {
+    color: #555555;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+}
+
+// Right Section - QR Code
+.contentRight {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+
+  @include mixins.respond-below(md) {
+    order: -1;
+    justify-content: center;
+    padding: 20px 0;
+  }
+}
+
+.qrSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  justify-content: center;
+
+  @media print {
+    gap: 30px;
+    justify-content: flex-start;
+  }
+}
+
+.logoContainer {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.logo {
+  max-width: 250px;
+  max-height: 200px;
+  object-fit: contain;
+
+  //@include mixins.respond-below(sm) {
+  //  max-width: 250px;
+  //  max-height: 80px;
+  //}
+  //
+  //@media print {
+  //  max-width: 250px;
+  //  max-height: 80px;
+  //}
+}
+
+.qrContainer {
+  position: relative;
+  padding: 16px;
+  background: #ffffff;
+  border: 3px solid var(--accent);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @include mixins.respond-below(sm) {
+    padding: 14px;
+  }
+
+  @media print {
+    border-color: var(--accent);
+    padding: 25px;
+    border-width: 4px;
+  }
+}
+
+.statusOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 3px;
+}
+
+.cancelled {
+  color: #dc2626;
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.pending {
+  color: #ea580c;
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: center;
+}
+
+.ticketId {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ticketIdValue {
+  font-family: 'SF Mono', 'Monaco', 'Menlo', 'Consolas', monospace;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent);
+  background: #f8fafc;
+  padding: 8px 16px;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
+
+  @include mixins.respond-below(sm) {
+    font-size: 13px;
+    padding: 6px 12px;
+  }
+
+  @media print {
+    color: var(--accent);
+    background: #f0f0f0;
+    font-size: 18px;
+    padding: 12px 20px;
+    font-weight: 700;
+  }
+}
+
+// Footer
+.footer {
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  padding: 20px 32px;
+
+  @include mixins.respond-below(sm) {
+    padding: 16px 20px;
+  }
+
+  @media print {
+    background: #ffffff;
+    border-top: 2px solid #e0e0e0;
+    padding: 30px 0 0 0;
+    margin-top: 30px;
+  }
+}
+
+.footerContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+
+  @include mixins.respond-below(md) {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+}
+
+
+.actions {
+  display: flex;
+  gap: 12px;
+
+  @include mixins.respond-below(md) {
+    width: 100%;
+    justify-content: center;
   }
 
   @include mixins.respond-below(sm) {
-    flex-direction: column-reverse;
-  }
-
-  .attendeeInfo {
-    display: flex;
     flex-direction: column;
-    justify-content: center;
-    padding: 20px;
-    flex: 1;
-    place-content: space-between;
+    max-width: 280px;
+    gap: 8px;
 
-    .attendeeNameAndPrice {
-      place-self: flex-start;
-      display: flex;
-      justify-content: space-between;
-      flex-direction: row;
+    button {
       width: 100%;
-
-      .attendeeName {
-        flex: 1;
-      }
-
-      .productName {
-        font-size: 0.9em;
-        font-weight: 900;
-        margin-bottom: 5px;
-      }
-
-      .productPrice {
-        .badge {
-          background-color: #8bc34a;
-          color: #fff;
-          padding: 5px 10px;
-          border-radius: 10px;
-          font-size: 0.8em;
-        }
-      }
-
-      h2 {
-        margin: 0;
-      }
-    }
-
-    .eventInfo {
-      .eventName {
-        font-weight: 900;
-      }
-    }
-
-    a {
-      font-size: 0.9em;
     }
   }
 
-  .qrCode {
-    .attendeeCode {
-      padding: 5px;
-      margin-bottom: 20px;
-      font-weight: 900;
-      font-size: 0.8em;
-    }
-
-    justify-content: flex-end;
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    background-color: #f8f8f8;
-    border-left: 1px solid #ddd;
-    padding: 15px;
-
-    @include mixins.respond-below(sm) {
-      border-left: none;
-    }
-
-    .qrImage {
-      svg {
-        width: 180px;
-        height: 180px;
-      }
-
-      @media print {
-        svg {
-          width: 220px;
-          height: 220px;
-        }
-      }
-
-      .cancelled {
-        height: 140px;
-        padding: 20px;
-        font-size: 1.1em;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: #d64646;
-        width: 140px;
-      }
-
-      .awaitingPayment {
-        font-size: 1em;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: #e09300;
-        font-weight: 900;
-        margin-bottom: 10px;
-      }
-    }
-
-    .productButtons {
-      background: #ffffff;
-      border-radius: 5px;
-      margin-top: 20px;
-      border: 1px solid #d1d1d1;
-    }
+  @media print {
+    display: none;
   }
 }
