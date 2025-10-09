@@ -23,6 +23,11 @@ export type ConfigKeys =
     | 'VITE_I_HAVE_PURCHASED_A_LICENCE'
     | 'VITE_DEFAULT_IMAGE_URL';
 
+export enum StripePlatform {
+    Canada = 'ca',
+    Ireland = 'ie',
+}
+
 export type IdParam = string | undefined | number;
 
 export interface AcceptInvitationRequest {
