@@ -5,12 +5,12 @@ import { AxiosError } from "axios";
 
 export const GET_STRIPE_CONNECT_ACCOUNT_DETAILS = 'getStripeConnectAccountDetails';
 
-export const useCreateOrGetStripeConnectDetails = (accountId: IdParam, enabled: boolean) => {
+export const useCreateOrGetStripeConnectDetails = (accountId: IdParam, enabled: boolean, platform?: string) => {
     return useQuery<StripeConnectDetails, AxiosError>({
-        queryKey: [GET_STRIPE_CONNECT_ACCOUNT_DETAILS, accountId],
+        queryKey: [GET_STRIPE_CONNECT_ACCOUNT_DETAILS, accountId, platform],
 
         queryFn: async (): Promise<StripeConnectDetails> => {
-            const { data } = await accountClient.getStripeConnectDetails(accountId);
+            const { data } = await accountClient.getStripeConnectDetails(accountId, platform);
             return data;
         },
 

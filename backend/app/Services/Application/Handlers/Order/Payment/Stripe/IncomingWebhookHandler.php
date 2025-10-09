@@ -23,8 +23,8 @@ class IncomingWebhookHandler
     private static array $validEvents = [
         Event::PAYMENT_INTENT_SUCCEEDED,
         Event::PAYMENT_INTENT_PAYMENT_FAILED,
-        Event::CHARGE_REFUND_UPDATED,
         Event::ACCOUNT_UPDATED,
+        Event::REFUND_UPDATED,
     ];
 
     public function __construct(
@@ -79,7 +79,7 @@ class IncomingWebhookHandler
                 case Event::PAYMENT_INTENT_PAYMENT_FAILED:
                     $this->paymentIntentFailedHandler->handleEvent($event->data->object);
                     break;
-                case Event::CHARGE_REFUND_UPDATED:
+                case Event::REFUND_UPDATED:
                     $this->refundEventHandlerService->handleEvent($event->data->object);
                     break;
                 case Event::ACCOUNT_UPDATED:
