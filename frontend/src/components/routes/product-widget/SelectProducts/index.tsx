@@ -537,7 +537,7 @@ const SelectProducts = (props: SelectProductsProps) => {
             )}
             <div className={'hi-promo-code-row'}>
                 {(!showPromoCodeInput && !form.values.promo_code) && (
-                    <Anchor className={'hi-have-a-promo-code-link'}
+                    <Anchor className={'hi-have-a-promo-code-link'} underline={'always'}
                             onClick={() => setShowPromoCodeInput(true)}>
                         {t`Have a promo code?`}
                     </Anchor>
