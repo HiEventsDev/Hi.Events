@@ -311,7 +311,7 @@ export const OrganizerHomepage = ({
                                             control: {
                                                 backgroundColor: 'var(--content-bg-color)',
                                                 border: '1px solid rgba(0, 0, 0, 0.1)',
-                                                color: 'var(--secondary-text-color)',
+                                                color: 'var(--primary-text-color)',
                                                 fontSize: '0.875rem',
                                                 fontWeight: 500,
                                                 borderRadius: '8px',

@@ -19,6 +19,7 @@ interface ShareComponentProps {
     imageUrl?: string;
     shareButtonText?: string;
     hideShareButtonText?: boolean;
+    className?: string;
 }
 
 export const ShareComponent = ({
@@ -27,6 +28,7 @@ export const ShareComponent = ({
                                    url,
                                    shareButtonText = t`Share`,
                                    hideShareButtonText = false,
+                                   className,
                                }: ShareComponentProps) => {
     const [opened, setOpened] = useState(false);
 
@@ -60,13 +62,13 @@ export const ShareComponent = ({
             <Popover.Target>
                 <div style={{display: 'flex'}}>
                     {hideShareButtonText && (
-                        <ActionIcon variant={'transparent'} onClick={handleShareClick}>
+                        <ActionIcon variant={'transparent'} onClick={handleShareClick} className={className}>
                             <IconShare size={20}/>
                         </ActionIcon>
                     )}
 
                     {!hideShareButtonText && (
-                        <Button variant={'transparent'} leftSection={<IconShare size={20}/>} onClick={handleShareClick}>
+                        <Button variant={'transparent'} leftSection={<IconShare size={20}/>} onClick={handleShareClick} className={className}>
                             {hideShareButtonText ? '' : shareButtonText}
                         </Button>)}
                 </div>
