@@ -66,6 +66,9 @@ class UpdateEventSettingsDTO extends BaseDTO
         public readonly ?string                 $invoice_tax_details = null,
         public readonly ?string                 $invoice_notes = null,
         public readonly ?int                    $invoice_payment_terms_days = null,
+
+        // Ticket design settings
+        public readonly ?array                  $ticket_design_settings = null,
     )
     {
     }
@@ -121,6 +124,15 @@ class UpdateEventSettingsDTO extends BaseDTO
             invoice_tax_details: null,
             invoice_notes: null,
             invoice_payment_terms_days: null,
+
+            // Ticket design defaults
+            ticket_design_settings: [
+                'accent_color' => '#333333',
+                'logo_image_id' => null,
+                'footer_text' => null,
+                'layout_type' => 'classic',
+                'enabled' => true,
+            ],
         );
     }
 }

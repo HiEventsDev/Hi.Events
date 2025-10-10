@@ -88,7 +88,7 @@ export const PromoCodeForm = ({form}: PromoCodeFormProps) => {
                 <NumberInput
                     disabled={form.values.discount_type === PromoCodeDiscountType.None}
                     decimalScale={2} min={0}
-                    leftSection={<DiscountIcon/>}
+                    rightSection={<DiscountIcon/>}
                     {...form.getInputProps('discount')}
                     label={(form.values.discount_type === 'PERCENTAGE' ? t`Discount %` : t`Discount in ${event.currency}`)}
                     placeholder="0.00"/>

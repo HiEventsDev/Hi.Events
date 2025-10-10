@@ -12,7 +12,7 @@ import {IconEdit, IconNotebook, IconQuestionMark, IconReceipt, IconTicket, IconU
 import {LoadingMask} from "../../common/LoadingMask";
 import {AttendeeDetails} from "../../common/AttendeeDetails";
 import {OrderDetails} from "../../common/OrderDetails";
-import {QuestionAndAnswerList, QuestionList} from "../../common/QuestionAndAnswerList";
+import {QuestionList} from "../../common/QuestionAndAnswerList";
 import {AttendeeTicket} from "../../common/AttendeeTicket";
 import {getInitials} from "../../../utilites/helpers.ts";
 import {t} from "@lingui/macro";
@@ -72,7 +72,7 @@ export const ManageAttendeeModal = ({onClose, attendeeId}: ManageAttendeeModalPr
         }
         let productPriceId = event?.product_categories
             ?.flatMap(category => category.products)
-            .find(product => product.id == form.values.product_id)?.prices?.[0]?.id;
+            .find(product => product.id === form.values.product_id)?.prices?.[0]?.id;
 
         form.setValues({
             ...form.values,

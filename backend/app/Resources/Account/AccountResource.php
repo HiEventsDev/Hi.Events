@@ -13,6 +13,8 @@ class AccountResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
+        $activeStripePlatform = $this->getPrimaryStripePlatform();
+
         return [
             'id' => $this->getId(),
             'name' => $this->getName(),
@@ -23,10 +25,13 @@ class AccountResource extends JsonResource
             'is_account_email_confirmed' => $this->getAccountVerifiedAt() !== null,
             'is_saas_mode_enabled' => config('app.saas_mode_enabled'),
 
-            $this->mergeWhen(config('app.saas_mode_enabled'), [
-                'stripe_account_id' => $this->getStripeAccountId(),
-                'stripe_connect_setup_complete' => $this->getStripeConnectSetupComplete(),
+            $this->mergeWhen(config('app.saas_mode_enabled') && $activeStripePlatform, fn() => [
+                'stripe_account_id' => $activeStripePlatform->getStripeAccountId(),
+                'stripe_connect_setup_complete' => $activeStripePlatform->getStripeSetupCompletedAt() !== null,
+                'stripe_account_details' => $activeStripePlatform->getStripeAccountDetails(),
+                'stripe_platform' => $this->getActiveStripePlatform()?->value,
             ]),
+
             $this->mergeWhen($this->getConfiguration() !== null, fn() => [
                 'configuration' => new AccountConfigurationResource($this->getConfiguration()),
             ]),

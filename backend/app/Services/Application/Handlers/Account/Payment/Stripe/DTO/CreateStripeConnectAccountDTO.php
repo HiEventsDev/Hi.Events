@@ -2,12 +2,14 @@
 
 namespace HiEvents\Services\Application\Handlers\Account\Payment\Stripe\DTO;
 
-use HiEvents\DataTransferObjects\BaseDTO;
+use HiEvents\DataTransferObjects\BaseDataObject;
+use HiEvents\DomainObjects\Enums\StripePlatform;
 
-class CreateStripeConnectAccountDTO extends BaseDTO
+class CreateStripeConnectAccountDTO extends BaseDataObject
 {
     public function __construct(
-        public readonly int $accountId,
+        public readonly int                 $accountId,
+        public readonly StripePlatform|null $platform = null,
     )
     {
     }
