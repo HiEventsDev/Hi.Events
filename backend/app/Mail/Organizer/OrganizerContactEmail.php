@@ -36,6 +36,9 @@ class OrganizerContactEmail extends BaseMail
                 'organizerName' => $this->organizer->getName(),
                 'senderName' => $this->senderName,
                 'senderEmail' => $this->senderEmail,
+                'replySubject' => urlencode(__('Response from :organizerName', [
+                    'organizerName' => $this->organizer->getName(),
+                ])),
                 'messageContent' => $this->messageContent,
             ],
         );
