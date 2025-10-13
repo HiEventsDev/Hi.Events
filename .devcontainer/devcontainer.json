@@ -1,0 +1,24 @@
+{
+  "name": "Hi.Events Dev",
+  "dockerComposeFile":["../docker/development/docker-compose.dev.yml"],
+  "service": "frontend",
+  "workspaceFolder": "/app",
+  "remoteUser": "root",
+  "postCreateCommand": "npm install",
+  "forwardPorts": [5678],
+  "mounts": [
+    "source=${localWorkspaceFolder}/frontend,target=/app/frontend,type=bind",
+    "source=${localWorkspaceFolder}/backend,target=/app/backend,type=bind"
+  ],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "bmewburn.vscode-intelephense-client",
+        "ms-azuretools.vscode-docker",
+        "formulahendry.auto-rename-tag"
+      ]
+    }
+  }
+}

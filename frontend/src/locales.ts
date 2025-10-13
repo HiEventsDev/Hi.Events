@@ -1,11 +1,12 @@
 import {i18n} from "@lingui/core";
 import {t} from "@lingui/macro";
 
-export type SupportedLocales = "en" | "de" | "fr" | "it" | "nl" | "pt" | "es" | "zh-cn" | "pt-br" | "vi" |"zh-hk";
+export type SupportedLocales =  "pl" | "en" | "de" | "fr" | "it" | "nl" | "pt" | "es" | "zh-cn" | "pt-br" | "vi" |"zh-hk";
 
-export const availableLocales = ["en", "de", "fr", "it", "nl", "pt", "es", "zh-cn", "zh-hk", "pt-br", "vi",];
+export const availableLocales = ["pl", "en", "de", "fr", "it", "nl", "pt", "es", "zh-cn", "zh-hk", "pt-br", "vi"];
 
 export const localeToFlagEmojiMap: Record<SupportedLocales, string> = {
+    pl: '🇵🇱',
     en: '🇬🇧',
     de: '🇩🇪',
     fr: '🇫🇷',
@@ -20,6 +21,7 @@ export const localeToFlagEmojiMap: Record<SupportedLocales, string> = {
 };
 
 export const localeToNameMap: Record<SupportedLocales, string> = {
+    pl: `Polish`,
     en: `English`,
     de: `German`,
     fr: `French`,
