@@ -58,18 +58,63 @@ class LiquidTemplateRenderer
             ],
             [
                 'token' => '{{ event.date }}',
-                'description' => __('The event date'),
+                'description' => __('The event start date'),
                 'example' => 'January 15, 2024',
             ],
             [
                 'token' => '{{ event.time }}',
-                'description' => __('The event time'),
+                'description' => __('The event start time'),
                 'example' => '7:00 PM',
             ],
             [
-                'token' => '{{ event.location }}',
-                'description' => __('The event location'),
-                'example' => 'Madison Square Garden',
+                'token' => '{{ event.end_date }}',
+                'description' => __('The event end date'),
+                'example' => 'January 16, 2024',
+            ],
+            [
+                'token' => '{{ event.end_time }}',
+                'description' => __('The event end time'),
+                'example' => '11:00 PM',
+            ],
+            [
+                'token' => '{{ event.full_address }}',
+                'description' => __('The full event address'),
+                'example' => '3 Arena, North Wall Quay, Dublin 1, D01 T0X4, Ireland',
+            ],
+            [
+                'token' => '{{ event.location_details.venue_name }}',
+                'description' => __('The event venue name'),
+                'example' => '3 Arena',
+            ],
+            [
+                'token' => '{{ event.location_details.address_line_1 }}',
+                'description' => __('The venue address line 1'),
+                'example' => 'North Wall Quay',
+            ],
+            [
+                'token' => '{{ event.location_details.address_line_2 }}',
+                'description' => __('The venue address line 2'),
+                'example' => '',
+            ],
+            [
+                'token' => '{{ event.location_details.city }}',
+                'description' => __('The venue city'),
+                'example' => 'Dublin',
+            ],
+            [
+                'token' => '{{ event.location_details.state_or_region }}',
+                'description' => __('The venue state or region'),
+                'example' => 'Dublin 1',
+            ],
+            [
+                'token' => '{{ event.location_details.zip_or_postal_code }}',
+                'description' => __('The venue ZIP or postal code'),
+                'example' => 'D01 T0X4',
+            ],
+            [
+                'token' => '{{ event.location_details.country }}',
+                'description' => __('The venue country code'),
+                'example' => 'IE',
             ],
             [
                 'token' => '{{ event.description }}',
@@ -138,16 +183,6 @@ class LiquidTemplateRenderer
                 'token' => '{{ order.email }}',
                 'description' => __('The email of the person who placed the order'),
                 'example' => 'john@example.com',
-            ],
-            [
-                'token' => '{% if order.is_pending %}',
-                'description' => __('Conditional: Check if order is pending payment'),
-                'example' => '{% if order.is_pending %}Payment pending{% endif %}',
-            ],
-            [
-                'token' => '{% if is_offline_payment %}',
-                'description' => __('Conditional: Check if payment is offline'),
-                'example' => '{% if is_offline_payment %}Offline payment{% endif %}',
             ],
         ];
 
