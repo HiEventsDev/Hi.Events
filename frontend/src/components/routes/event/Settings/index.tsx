@@ -3,7 +3,6 @@ import {EventDetailsForm} from "./Sections/EventDetailsForm";
 import {LocationSettings} from "./Sections/LocationSettings";
 import {HomepageAndCheckoutSettings} from "./Sections/HomepageAndCheckoutSettings";
 import {EmailSettings} from "./Sections/EmailSettings";
-import {EmailTemplateSettings} from "./Sections/EmailTemplateSettings";
 import {PageTitle} from "../../../common/PageTitle";
 import {t} from "@lingui/macro";
 import {SeoSettings} from "./Sections/SeoSettings";
@@ -16,7 +15,6 @@ import {
     IconBuildingStore, IconCreditCard,
     IconHome,
     IconMapPin,
-    IconMail,
 } from "@tabler/icons-react";
 import {useMediaQuery} from "@mantine/hooks";
 import {useState} from "react";
@@ -51,15 +49,9 @@ export const Settings = () => {
         },
         {
             id: 'email-settings',
-            label: t`Email`,
+            label: t`Email & Templates`,
             icon: IconAt,
             component: EmailSettings
-        },
-        {
-            id: 'email-templates',
-            label: t`Email Templates`,
-            icon: IconMail,
-            component: EmailTemplateSettings
         },
         {
             id: 'misc-settings',

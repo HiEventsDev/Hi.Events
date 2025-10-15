@@ -28,7 +28,7 @@ msgid "'There\\'s nothing to show yet'"
 msgstr "„Hier gibt es noch nichts zu sehen“"
 
 #: src/components/common/ReportTable/index.tsx:303
-#: src/locales.ts:37
+#: src/locales.ts:39
 msgid "{0}"
 msgstr "{0}"
 
@@ -587,7 +587,7 @@ msgstr "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut."
 msgid "Answer updated successfully."
 msgstr "Antwort erfolgreich aktualisiert."
 
-#: src/components/routes/event/Settings/Sections/EmailSettings/index.tsx:61
+#: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:61
 msgid "Any queries from product holders will be sent to this email address. This will also be used as the \"reply-to\" address for all emails sent from this event"
 msgstr "Alle Anfragen von Produktinhabern werden an diese E-Mail-Adresse gesendet. Diese wird auch als „Antwort-an“-Adresse für alle von dieser Veranstaltung gesendeten E-Mails verwendet."
 
@@ -726,8 +726,8 @@ msgid "At least one event type must be selected"
 msgstr "Mindestens ein Ereignistyp muss ausgewählt werden"
 
 #: src/components/common/AttendeeTicket/index.tsx:86
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:49
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:50
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:54
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:55
 #: src/components/routes/product-widget/CollectInformation/index.tsx:386
 msgid "Attendee"
 msgstr "Teilnehmer"
@@ -744,7 +744,7 @@ msgstr "Teilnehmer erstellt"
 msgid "Attendee Details"
 msgstr "Teilnehmerdetails"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:50
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:55
 msgid "Attendee Email"
 msgstr "Teilnehmer-E-Mail"
 
@@ -752,7 +752,7 @@ msgstr "Teilnehmer-E-Mail"
 msgid "Attendee Management"
 msgstr "Teilnehmerverwaltung"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:49
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:54
 msgid "Attendee Name"
 msgstr "Teilnehmername"
 
@@ -768,7 +768,7 @@ msgstr "Teilnehmernotizen"
 msgid "Attendee questions"
 msgstr "Fragen der Teilnehmer"
 
-#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:96
+#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:95
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:195
 #: src/components/modals/ManageAttendeeModal/index.tsx:172
 msgid "Attendee Ticket"
@@ -816,7 +816,7 @@ msgstr "Passen Sie die Widgethöhe automatisch an den Inhalt an. Wenn diese Opti
 msgid "Available to Refund"
 msgstr "Zur Erstattung verfügbar"
 
-#: src/components/common/Editor/Controls/LiquidTokenControl.tsx:76
+#: src/components/common/Editor/Controls/LiquidTokenControl.tsx:49
 msgid "Available Tokens"
 msgstr "Verfügbare Token"
 
@@ -896,7 +896,7 @@ msgstr "Rechnungsadresse"
 msgid "Billing Settings"
 msgstr "Rechnungseinstellungen"
 
-#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:48
+#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:47
 msgid "Body is required"
 msgstr "Inhalt ist erforderlich"
 
@@ -1120,7 +1120,7 @@ msgid "Checked In"
 msgstr "Eingecheckt"
 
 #: src/components/layouts/Checkout/index.tsx:81
-#: src/components/routes/event/Settings/index.tsx:42
+#: src/components/routes/event/Settings/index.tsx:40
 msgid "Checkout"
 msgstr "Zur Kasse"
 
@@ -1298,10 +1298,6 @@ msgstr "Abgeschlossene Bestellungen"
 msgid "Component Code"
 msgstr "Komponentencode"
 
-#: src/components/common/Editor/Controls/LiquidTokenControl.tsx:110
-msgid "Conditional Blocks"
-msgstr "Bedingte Blöcke"
-
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:117
 msgid "Conference Center"
 msgstr "Konferenzzentrum"
@@ -1428,8 +1424,8 @@ msgstr "Kontakt {0}"
 msgid "Contact Email"
 msgstr "Kontakt-E-Mail"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:43
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:73
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:48
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:81
 msgid "Contact email for support"
 msgstr "Kontakt-E-Mail für Support"
 
@@ -1563,7 +1559,7 @@ msgstr "Erstellen"
 msgid "Create {0}"
 msgstr "Erstellen Sie {0}"
 
-#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:109
+#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:108
 msgid "Create {0} Template"
 msgstr "{0}-Vorlage erstellen"
 
@@ -1720,7 +1716,7 @@ msgstr "Ihre Veranstaltung wird erstellt, bitte warten"
 msgid "Creating your organizer profile, please wait"
 msgstr "Ihr Veranstalterprofil wird erstellt, bitte warten"
 
-#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:49
+#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:48
 msgid "CTA label is required"
 msgstr "CTA-Beschriftung ist erforderlich"
 
@@ -1747,8 +1743,8 @@ msgstr "Benutzerdefiniert"
 msgid "Custom Maps URL"
 msgstr "Benutzerdefinierte Karten-URL"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:45
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:75
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:50
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:83
 msgid "Custom message after checkout"
 msgstr "Benutzerdefinierte Nachricht nach dem Checkout"
 
@@ -1780,7 +1776,7 @@ msgstr "Vorname des Kunden"
 msgid "Customer's last name"
 msgstr "Nachname des Kunden"
 
-#: src/components/routes/event/Settings/Sections/EmailSettings/index.tsx:55
+#: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:55
 msgid "Customize the email and notification settings for this event"
 msgstr "Passen Sie die E-Mail- und Benachrichtigungseinstellungen für dieses Ereignis an"
 
@@ -1805,7 +1801,7 @@ msgstr "Passen Sie die SEO-Einstellungen für dieses Event an"
 msgid "Customize the text shown on the continue button"
 msgstr "Passen Sie den Text auf dem Weiter-Button an"
 
-#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:113
+#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:112
 msgid "Customize your email template using Liquid templating"
 msgstr "Passen Sie Ihre E-Mail-Vorlage mit Liquid-Vorlagen an"
 
@@ -1869,8 +1865,8 @@ msgstr "Datum"
 msgid "Date & Time"
 msgstr "Datum & Zeit"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:33
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:63
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:35
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:69
 msgid "Date of the event"
 msgstr "Datum der Veranstaltung"
 
@@ -2043,6 +2039,8 @@ msgid ""
 "Due to the high risk of spam, you must connect a Stripe account before you can send messages to attendees.\n"
 "This is to ensure that all event organizers are verified and accountable."
 msgstr ""
+"Aufgrund des hohen Spam-Risikos müssen Sie ein Stripe-Konto verbinden, bevor Sie Nachrichten an Teilnehmer senden können.\n"
+"Dies stellt sicher, dass alle Veranstalter verifiziert und rechenschaftspflichtig sind."
 
 #: src/components/common/EventCard/index.tsx:98
 msgid "Duplicate event"
@@ -2085,7 +2083,7 @@ msgstr "Bearbeiten"
 msgid "Edit {0}"
 msgstr "Bearbeiten {0}"
 
-#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:107
+#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:106
 msgid "Edit {0} Template"
 msgstr "{0}-Vorlage bearbeiten"
 
@@ -2170,7 +2168,7 @@ msgstr "Webhook bearbeiten"
 msgid "Edit Webhook"
 msgstr "Webhook bearbeiten"
 
-#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:137
+#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:136
 msgid "Editor"
 msgstr "Editor"
 
@@ -2195,16 +2193,19 @@ msgstr "z.B. 23,5 für 23,5 %"
 #: src/components/routes/auth/AcceptInvitation/index.tsx:99
 #: src/components/routes/auth/Login/index.tsx:68
 #: src/components/routes/auth/Register/index.tsx:98
-#: src/components/routes/event/Settings/index.tsx:54
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:78
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:117
 #: src/components/routes/profile/ManageProfile/index.tsx:138
 msgid "Email"
 msgstr "Email"
 
-#: src/components/routes/event/Settings/Sections/EmailSettings/index.tsx:54
+#: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:54
 msgid "Email & Notification Settings"
 msgstr "E-Mail- und Benachrichtigungseinstellungen"
+
+#: src/components/routes/event/Settings/index.tsx:52
+msgid "Email & Templates"
+msgstr "E-Mail & Vorlagen"
 
 #: src/components/modals/CreateAttendeeModal/index.tsx:143
 #: src/components/modals/ManageAttendeeModal/index.tsx:114
@@ -2221,7 +2222,7 @@ msgstr "E-Mail-Adresse"
 msgid "Email Address"
 msgstr "E-Mail-Adresse"
 
-#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:150
+#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:149
 msgid "Email Body"
 msgstr "E-Mail-Inhalt"
 
@@ -2243,7 +2244,7 @@ msgstr "E-Mail-Bestätigung erneut gesendet"
 msgid "Email confirmation resent successfully"
 msgstr "E-Mail-Bestätigung erfolgreich erneut gesendet"
 
-#: src/components/routes/event/Settings/Sections/EmailSettings/index.tsx:66
+#: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:66
 msgid "Email footer message"
 msgstr "E-Mail-Fußzeilennachricht"
 
@@ -2260,7 +2261,6 @@ msgid "Email Preview"
 msgstr "E-Mail-Vorschau"
 
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:327
-#: src/components/routes/event/Settings/index.tsx:60
 #: src/components/routes/organizer/Settings/index.tsx:52
 msgid "Email Templates"
 msgstr "E-Mail-Vorlagen"
@@ -2289,7 +2289,7 @@ msgstr "Rechnungsstellung aktivieren"
 msgid "Enable this capacity to stop product sales when the limit is reached"
 msgstr "Aktivieren Sie diese Kapazität, um den Produktverkauf zu stoppen, wenn das Limit erreicht ist"
 
-#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:194
+#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:191
 msgid "Enable this template for sending emails"
 msgstr "Diese Vorlage für das Senden von E-Mails aktivieren"
 
@@ -2321,7 +2321,7 @@ msgid "Ended"
 msgstr "Beendet"
 
 #: src/components/common/LanguageSwitcher/index.tsx:16
-#: src/components/common/LanguageSwitcher/index.tsx:50
+#: src/components/common/LanguageSwitcher/index.tsx:52
 #: src/components/modals/CreateAttendeeModal/index.tsx:156
 #: src/components/routes/profile/ManageProfile/index.tsx:173
 msgid "English"
@@ -2343,7 +2343,7 @@ msgstr "Partnername eingeben"
 msgid "Enter an amount excluding taxes and fees."
 msgstr "Geben Sie einen Betrag ohne Steuern und Gebühren ein."
 
-#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:129
+#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:128
 msgid "Enter email subject..."
 msgstr "E-Mail-Betreff eingeben..."
 
@@ -2382,16 +2382,20 @@ msgstr "Fehler beim Laden der Protokolle"
 msgid "EUR"
 msgstr "EUR"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:32
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:33
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:34
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:35
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:36
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:62
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:63
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:64
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:65
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:66
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:37
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:38
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:39
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:40
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:68
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:69
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:70
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:71
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:72
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:73
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:74
 #: src/components/routes/events/Dashboard/index.tsx:183
 msgid "Event"
 msgstr "Ereignis"
@@ -2408,8 +2412,8 @@ msgstr "Veranstaltungs-Titelbild"
 msgid "Event custom template"
 msgstr "Event-benutzerdefinierte Vorlage"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:33
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:63
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:35
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:69
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:161
 msgid "Event Date"
 msgstr "Veranstaltungsdatum"
@@ -2418,18 +2422,18 @@ msgstr "Veranstaltungsdatum"
 msgid "Event Defaults"
 msgstr "Ereignisstandards"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:36
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:66
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:38
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:72
 #: src/components/modals/CreateEventModal/index.tsx:197
 msgid "Event Description"
 msgstr "Veranstaltungsbeschreibung"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:36
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:66
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:38
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:72
 msgid "Event details"
 msgstr "Veranstaltungsdetails"
 
-#: src/components/routes/event/Settings/index.tsx:30
+#: src/components/routes/event/Settings/index.tsx:28
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:68
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:276
 msgid "Event Details"
@@ -2439,12 +2443,15 @@ msgstr "Veranstaltungsdetails"
 msgid "Event duplicated successfully"
 msgstr "Ereignis erfolgreich dupliziert"
 
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:37
+msgid "Event Full Address"
+msgstr "Vollständige Veranstaltungsadresse"
+
 #: src/components/layouts/Checkout/index.tsx:77
 msgid "Event Homepage"
 msgstr "Veranstaltungsstartseite"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:35
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:65
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:71
 msgid "Event Location"
 msgstr "Veranstaltungsort"
 
@@ -2473,8 +2480,8 @@ msgstr "Der Veranstaltungsname sollte weniger als 150 Zeichen lang sein"
 msgid "Event Not Available"
 msgstr "Veranstaltung nicht verfügbar"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:39
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:69
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:44
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:77
 msgid "Event organizer name"
 msgstr "Name des Veranstalters"
 
@@ -2498,13 +2505,23 @@ msgstr "Die Aktualisierung des Ereignisstatus ist fehlgeschlagen. Bitte versuche
 msgid "Event status updated"
 msgstr "Veranstaltungsstatus aktualisiert"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:34
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:64
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:36
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:70
 msgid "Event Time"
 msgstr "Veranstaltungszeit"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:32
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:62
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:39
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:73
+msgid "Event timezone"
+msgstr "Veranstaltungszeitzone"
+
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:39
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:73
+msgid "Event Timezone"
+msgstr "Veranstaltungszeitzone"
+
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:34
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:68
 msgid "Event Title"
 msgstr "Veranstaltungstitel"
 
@@ -2512,6 +2529,11 @@ msgstr "Veranstaltungstitel"
 #: src/components/forms/WebhookForm/index.tsx:122
 msgid "Event Types"
 msgstr "Ereignistypen"
+
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:40
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:74
+msgid "Event Venue"
+msgstr "Veranstaltungsort"
 
 #: src/components/layouts/OrganizerLayout/index.tsx:73
 #: src/components/layouts/OrganizerLayout/index.tsx:133
@@ -2789,7 +2811,7 @@ msgstr "Passwort vergessen?"
 #: src/components/common/OrderSummary/index.tsx:99
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:93
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:103
-#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:179
+#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:180
 #: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:53
 msgid "Free"
 msgstr "Frei"
@@ -3024,8 +3046,8 @@ msgstr "Wie viele Minuten hat der Kunde Zeit, um seine Bestellung abzuschließen
 msgid "How many times can this code be used?"
 msgstr "Wie oft kann dieser Code verwendet werden?"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:44
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:74
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:49
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:82
 msgid "How to pay offline"
 msgstr "Wie man offline zahlt"
 
@@ -3069,7 +3091,7 @@ msgstr "Wenn leer, wird die Adresse verwendet, um einen Google Maps-Link zu erst
 msgid "If enabled, check-in staff can either mark attendees as checked in or mark the order as paid and check in the attendees. If disabled, attendees associated with unpaid orders cannot be checked in."
 msgstr "Wenn aktiviert, kann das Check-in-Personal Teilnehmer entweder als eingecheckt markieren oder die Bestellung als bezahlt markieren und die Teilnehmer einchecken. Wenn deaktiviert, können Teilnehmer mit unbezahlten Bestellungen nicht eingecheckt werden."
 
-#: src/components/routes/event/Settings/Sections/EmailSettings/index.tsx:76
+#: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:76
 msgid "If enabled, the organizer will receive an email notification when a new order is placed"
 msgstr "Wenn aktiviert, erhält der Veranstalter eine E-Mail-Benachrichtigung, wenn eine neue Bestellung aufgegeben wird"
 
@@ -3147,12 +3169,13 @@ msgstr "Einzelne Teilnehmer"
 msgid "Insert Image"
 msgstr "Bild einfügen"
 
-#: src/components/common/Editor/Controls/LiquidTokenControl.tsx:64
+#: src/components/common/Editor/Controls/LiquidTokenControl.tsx:40
+#: src/components/common/Editor/Controls/LiquidTokenControl.tsx:41
 msgid "Insert Liquid Token"
 msgstr "Liquid-Token einfügen"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:102
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:103
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:110
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:111
 msgid "Insert Variable"
 msgstr "Variable einfügen"
 
@@ -3325,7 +3348,7 @@ msgstr "Leer lassen, um das Standardwort \"Rechnung\" zu verwenden"
 msgid "Link to order details"
 msgstr "Link zu Bestelldetails"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:55
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:60
 msgid "Link to ticket"
 msgstr "Link zum Ticket"
 
@@ -3354,7 +3377,8 @@ msgstr "Vorschau wird geladen..."
 msgid "Loading themes..."
 msgstr "Designs werden geladen..."
 
-#: src/components/common/Editor/Controls/LiquidTokenControl.tsx:44
+#: src/components/common/Editor/Controls/LiquidTokenControl.tsx:25
+#: src/components/common/Editor/Controls/LiquidTokenControl.tsx:26
 msgid "Loading tokens..."
 msgstr "Token werden geladen..."
 
@@ -3366,7 +3390,7 @@ msgstr "Webhooks werden geladen"
 msgid "Loading..."
 msgstr "Wird geladen..."
 
-#: src/components/routes/event/Settings/index.tsx:36
+#: src/components/routes/event/Settings/index.tsx:34
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:84
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:167
 msgid "Location"
@@ -3564,7 +3588,7 @@ msgstr "Mindestbestellwert"
 msgid "Minimum Price"
 msgstr "Minimaler Preis"
 
-#: src/components/routes/event/Settings/index.tsx:66
+#: src/components/routes/event/Settings/index.tsx:58
 msgid "Miscellaneous"
 msgstr "Sonstiges"
 
@@ -3631,8 +3655,8 @@ msgstr "Name"
 msgid "Name is required"
 msgstr "Name ist erforderlich"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:32
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:62
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:34
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:68
 msgid "Name of the event"
 msgstr "Name der Veranstaltung"
 
@@ -3852,11 +3876,11 @@ msgstr "Notizen"
 msgid "Nothing to show yet"
 msgstr "Noch nichts zu zeigen"
 
-#: src/components/routes/event/Settings/Sections/EmailSettings/index.tsx:72
+#: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:72
 msgid "Notification Settings"
 msgstr "Benachrichtigungseinstellungen"
 
-#: src/components/routes/event/Settings/Sections/EmailSettings/index.tsx:75
+#: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:75
 msgid "Notify organizer of new orders"
 msgstr "Veranstalter über neue Bestellungen benachrichtigen"
 
@@ -3877,8 +3901,8 @@ msgstr "Name des Büros oder Veranstaltungsorts"
 msgid "Offline orders are not reflected in event statistics until the order is marked as paid."
 msgstr "Offline-Bestellungen werden in der Veranstaltungsstatistik erst berücksichtigt, wenn die Bestellung als bezahlt markiert wurde."
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:29
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:59
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:31
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:65
 msgid "Offline Payment"
 msgstr "Offline-Zahlung"
 
@@ -3886,8 +3910,8 @@ msgstr "Offline-Zahlung"
 msgid "Offline payment failed. Please try again or contact the event organizer."
 msgstr "Offline-Zahlung fehlgeschlagen. Bitte versuchen Sie es erneut oder kontaktieren Sie den Veranstalter."
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:44
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:74
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:49
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:82
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:151
 msgid "Offline Payment Instructions"
 msgstr "Offline-Zahlungsanweisungen"
@@ -3938,7 +3962,7 @@ msgid "Online event"
 msgstr "Online-Veranstaltung"
 
 #: src/components/layouts/EventHomepage/EventInformation/index.tsx:71
-#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:166
+#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:167
 msgid "Online Event"
 msgstr "Online-Veranstaltung"
 
@@ -4006,8 +4030,11 @@ msgstr "oder"
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:27
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:28
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:29
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:58
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:59
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:30
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:31
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:63
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:64
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:65
 msgid "Order"
 msgstr "Befehl"
 
@@ -4020,7 +4047,7 @@ msgstr "Bestellung storniert"
 msgid "Order Completed"
 msgstr "Bestellung abgeschlossen"
 
-#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:95
+#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:94
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:194
 msgid "Order Confirmation"
 msgstr "Bestellbestätigung"
@@ -4028,6 +4055,10 @@ msgstr "Bestellbestätigung"
 #: src/components/forms/WebhookForm/index.tsx:52
 msgid "Order Created"
 msgstr "Bestellung erstellt"
+
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:30
+msgid "Order Currency"
+msgstr "Bestellwährung"
 
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:23
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:122
@@ -4060,9 +4091,17 @@ msgstr "Die Bestellung wurde storniert und der Bestellinhaber wurde benachrichti
 msgid "Order ID: {0}"
 msgstr "Bestellnummer: {0}"
 
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:28
+msgid "Order Is Awaiting Offline Payment"
+msgstr "Bestellung wartet auf Offline-Zahlung"
+
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:25
 msgid "Order Last Name"
 msgstr "Nachname der Bestellung"
+
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:29
+msgid "Order Locale"
+msgstr "Bestellsprache"
 
 #: src/components/common/OrdersTable/index.tsx:79
 msgid "Order marked as paid"
@@ -4092,6 +4131,10 @@ msgstr "Bestelleigentümer mit einem bestimmten Produkt"
 msgid "Order owners with products"
 msgstr "Bestelleigentümer mit Produkten"
 
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:63
+msgid "Order Payment Pending"
+msgstr "Bestellzahlung ausstehend"
+
 #: src/components/common/QuestionsTable/index.tsx:313
 #: src/components/common/QuestionsTable/index.tsx:355
 msgid "Order questions"
@@ -4105,8 +4148,8 @@ msgstr "Bestellnummer"
 msgid "Order Refunded"
 msgstr "Bestellung erstattet"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:28
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:58
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:64
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:64
 #: src/components/routes/event/orders.tsx:45
 msgid "Order Status"
 msgstr "Bestellstatus"
@@ -4146,10 +4189,10 @@ msgstr "Aufträge"
 msgid "Orders Exported"
 msgstr "Bestellungen exportiert"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:39
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:40
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:69
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:70
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:44
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:45
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:77
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:78
 msgid "Organization"
 msgstr "Organisation"
 
@@ -4179,13 +4222,13 @@ msgstr "Veranstalter"
 msgid "Organizer Dashboard"
 msgstr "Veranstalter-Dashboard"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:40
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:70
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:45
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:78
 msgid "Organizer Email"
 msgstr "Veranstalter-E-Mail"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:40
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:70
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:45
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:78
 msgid "Organizer email address"
 msgstr "E-Mail-Adresse des Veranstalters"
 
@@ -4193,8 +4236,8 @@ msgstr "E-Mail-Adresse des Veranstalters"
 msgid "Organizer is required"
 msgstr "Veranstalter ist erforderlich"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:39
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:69
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:44
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:77
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:72
 msgid "Organizer Name"
 msgstr "Name des Organisators"
@@ -4231,7 +4274,7 @@ msgstr "Veranstalter-/Standardvorlage wird verwendet"
 msgid "Organizers can only manage events and products. They cannot manage users, account settings or billing information."
 msgstr "Organisatoren können nur Veranstaltungen und Produkte verwalten. Sie können keine Benutzer, Kontoeinstellungen oder Abrechnungsinformationen verwalten."
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:90
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:98
 #: src/constants/eventCategories.ts:22
 msgid "Other"
 msgstr "Sonstiges"
@@ -4337,7 +4380,7 @@ msgstr "Pausiert"
 msgid "Payment"
 msgstr "Zahlung"
 
-#: src/components/routes/event/Settings/index.tsx:72
+#: src/components/routes/event/Settings/index.tsx:64
 msgid "Payment & Invoicing"
 msgstr "Zahlung & Rechnungsstellung"
 
@@ -4554,8 +4597,8 @@ msgstr "Portugiesisch"
 msgid "Post Checkout message"
 msgstr "Checkout-Nachricht veröffentlichen"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:45
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:75
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:50
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:83
 msgid "Post Checkout Message"
 msgstr "Nach-Checkout-Nachricht"
 
@@ -4567,7 +4610,7 @@ msgstr "Powered by"
 msgid "Pre Checkout message"
 msgstr "Nachricht vor dem Checkout"
 
-#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:140
+#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:139
 #: src/components/common/QuestionsTable/index.tsx:347
 #: src/components/routes/event/TicketDesigner/index.tsx:197
 msgid "Preview"
@@ -4592,7 +4635,7 @@ msgstr "Preisanzeigemodus"
 msgid "Price not set"
 msgstr "Preis nicht festgelegt"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:54
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:59
 msgid "Price of the ticket"
 msgstr "Preis des Tickets"
 
@@ -4873,7 +4916,7 @@ msgstr "Weiterleitung zu Stripe..."
 msgid "Reference"
 msgstr "Referenz"
 
-#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:178
+#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:175
 msgid "Refresh Preview"
 msgstr "Vorschau aktualisieren"
 
@@ -5050,7 +5093,7 @@ msgid "San Francisco"
 msgstr "San Francisco"
 
 #: src/components/common/QuestionAndAnswerList/index.tsx:142
-#: src/components/routes/event/Settings/Sections/EmailSettings/index.tsx:80
+#: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:80
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:129
 #: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:96
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:166
@@ -5082,7 +5125,7 @@ msgstr "Einstellungen speichern"
 msgid "Save Social Links"
 msgstr "Social-Media-Links speichern"
 
-#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:203
+#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:200
 msgid "Save Template"
 msgstr "Vorlage speichern"
 
@@ -5312,7 +5355,7 @@ msgstr "An Kunden gesendet, wenn sie eine Bestellung aufgeben"
 msgid "Sent to each attendee with their ticket details"
 msgstr "An jeden Teilnehmer mit seinen Ticketdetails gesendet"
 
-#: src/components/routes/event/Settings/index.tsx:48
+#: src/components/routes/event/Settings/index.tsx:46
 #: src/components/routes/organizer/Settings/index.tsx:46
 msgid "SEO"
 msgstr "SEO"
@@ -5361,16 +5404,16 @@ msgstr "Richten Sie Ihre Organisation ein"
 msgid "Set your event live"
 msgstr "Schalten Sie Ihr Event live"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:43
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:44
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:45
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:73
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:74
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:75
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:48
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:49
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:50
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:81
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:82
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:83
 #: src/components/layouts/Event/index.tsx:98
 #: src/components/layouts/OrganizerLayout/index.tsx:74
 #: src/components/modals/DuplicateEventModal/index.tsx:26
-#: src/components/routes/event/Settings/index.tsx:111
+#: src/components/routes/event/Settings/index.tsx:103
 msgid "Settings"
 msgstr "Einstellungen"
 
@@ -5378,7 +5421,7 @@ msgstr "Einstellungen"
 msgid "Setup in Minutes"
 msgstr "Einrichtung in Minuten"
 
-#: src/components/common/ShareIcon/index.tsx:28
+#: src/components/common/ShareIcon/index.tsx:29
 #: src/components/layouts/OrganizerLayout/index.tsx:220
 #: src/components/modals/ShareModal/index.tsx:37
 #: src/components/modals/ShareModal/index.tsx:165
@@ -5578,8 +5621,8 @@ msgstr "Startdatum & -zeit"
 msgid "Start date is required"
 msgstr "Startdatum ist erforderlich"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:34
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:64
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:36
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:70
 msgid "Start time of the event"
 msgstr "Startzeit der Veranstaltung"
 
@@ -5626,12 +5669,12 @@ msgstr "Stripe-Zahlungen sind für diese Veranstaltung nicht aktiviert."
 msgid "Stripe setup is already complete."
 msgstr "Stripe-Einrichtung ist bereits abgeschlossen."
 
-#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:128
+#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:127
 #: src/components/modals/SendMessageModal/index.tsx:240
 msgid "Subject"
 msgstr "Thema"
 
-#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:47
+#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:46
 msgid "Subject is required"
 msgstr "Betreff ist erforderlich"
 
@@ -5706,7 +5749,7 @@ msgstr "Kapazitätszuweisung erfolgreich aktualisiert"
 msgid "Successfully updated Check-In List"
 msgstr "Eincheckliste erfolgreich aktualisiert"
 
-#: src/components/routes/event/Settings/Sections/EmailSettings/index.tsx:43
+#: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:43
 msgid "Successfully Updated Email Settings"
 msgstr "E-Mail-Einstellungen erfolgreich aktualisiert"
 
@@ -5782,9 +5825,9 @@ msgstr "Sommermusikfestival {0}"
 msgid "Summer Music Festival 2025"
 msgstr "Sommer Musik Festival 2025"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:43
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:73
-#: src/components/routes/event/Settings/Sections/EmailSettings/index.tsx:62
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:48
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:81
+#: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:62
 msgid "Support Email"
 msgstr "Support-E-Mail"
 
@@ -5861,7 +5904,7 @@ msgstr "Erzählen Sie uns von Ihrer Veranstaltung"
 msgid "Tell us about your organization. This information will be displayed on your event pages."
 msgstr "Erzählen Sie uns von Ihrer Organisation. Diese Informationen werden auf Ihren Veranstaltungsseiten angezeigt."
 
-#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:193
+#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:190
 msgid "Template Active"
 msgstr "Vorlage aktiv"
 
@@ -5916,6 +5959,10 @@ msgstr "Die gesuchte Eincheckliste existiert nicht."
 msgid "The code will expire in 10 minutes. Check your spam folder if you don't see the email."
 msgstr "Der Code läuft in 10 Minuten ab. Überprüfen Sie Ihren Spam-Ordner, falls Sie die E-Mail nicht sehen."
 
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:30
+msgid "The currency of the order"
+msgstr "Die Währung der Bestellung"
+
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:75
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:118
 msgid "The default currency for your events."
@@ -5926,10 +5973,20 @@ msgstr "Die Standardwährung für Ihre Ereignisse."
 msgid "The default timezone for your events."
 msgstr "Die Standardzeitzone für Ihre Ereignisse."
 
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:40
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:74
+msgid "The event venue"
+msgstr "Der Veranstaltungsort"
+
 #: src/components/layouts/EventHomepage/EventNotAvailable/index.tsx:10
 #: src/components/layouts/EventHomepage/EventNotAvailable/index.tsx:12
 msgid "The event you're looking for is not available at the moment. It may have been removed, expired, or the URL might be incorrect."
 msgstr "Die gesuchte Veranstaltung ist derzeit nicht verfügbar. Sie wurde möglicherweise entfernt, ist abgelaufen oder die URL ist falsch."
+
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:37
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:71
+msgid "The full event address"
+msgstr "Die vollständige Veranstaltungsadresse"
 
 #: src/components/modals/CancelOrderModal/index.tsx:77
 msgid "The full order amount will be refunded to the customer's original payment method."
@@ -5942,6 +5999,10 @@ msgstr "Die Sprache, in der der Teilnehmer die E-Mails erhalten soll."
 #: src/components/routes/profile/ConfirmEmailChange/index.tsx:22
 msgid "The link you clicked is invalid."
 msgstr "Der Link, auf den Sie geklickt haben, ist ungültig."
+
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:29
+msgid "The locale of the customer"
+msgstr "Die Sprache des Kunden"
 
 #: src/components/routes/product-widget/SelectProducts/index.tsx:491
 msgid "The maximum number of products for {0}is {1}"
@@ -6095,7 +6156,7 @@ msgstr "Dies ist der Name Ihres Veranstalters, der Ihren Nutzern angezeigt wird.
 msgid "This list will no longer be available for check-ins after this date"
 msgstr "Diese Liste wird nach diesem Datum nicht mehr für Eincheckungen verfügbar sein"
 
-#: src/components/routes/event/Settings/Sections/EmailSettings/index.tsx:68
+#: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:68
 msgid "This message will be included in the footer of all emails sent from this event"
 msgstr "Diese Nachricht wird in die Fußzeile aller E-Mails aufgenommen, die von dieser Veranstaltung gesendet werden."
 
@@ -6201,9 +6262,9 @@ msgid "ticket"
 msgstr "Fahrkarte"
 
 #: src/components/common/AttendeeTable/index.tsx:111
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:53
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:54
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:55
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:58
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:59
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:60
 #: src/components/forms/ProductForm/index.tsx:130
 #: src/components/modals/CreateAttendeeModal/index.tsx:162
 msgid "Ticket"
@@ -6226,11 +6287,11 @@ msgstr "Die Ticket-E-Mail wurde erneut an den Teilnehmer gesendet."
 msgid "Ticket for"
 msgstr "Ticket für"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:50
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:55
 msgid "Ticket holder's email"
 msgstr "E-Mail des Ticketinhabers"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:49
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:54
 msgid "Ticket holder's name"
 msgstr "Name des Ticketinhabers"
 
@@ -6242,7 +6303,7 @@ msgstr "Ticketinhaber"
 msgid "Ticket ID"
 msgstr "Ticket-ID"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:53
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:58
 msgid "Ticket Name"
 msgstr "Ticketname"
 
@@ -6254,7 +6315,7 @@ msgstr "Ticket oder Produkt"
 msgid "Ticket Preview for"
 msgstr "Ticket-Vorschau für"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:54
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:59
 msgid "Ticket Price"
 msgstr "Ticketpreis"
 
@@ -6262,7 +6323,7 @@ msgstr "Ticketpreis"
 msgid "Ticket Type"
 msgstr "Tickettyp"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:55
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:60
 msgid "Ticket URL"
 msgstr "Ticket-URL"
 
@@ -6384,19 +6445,23 @@ msgstr "Verfolgen Sie Einnahmen, Seitenaufrufe und Verkäufe mit detaillierten A
 msgid "Transaction Fee:"
 msgstr "Transaktionsgebühr:"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:29
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:59
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:31
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:65
 msgid "True if offline payment"
 msgstr "Wahr bei Offline-Zahlung"
 
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:28
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:58
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:63
 msgid "True if payment pending"
 msgstr "Wahr bei ausstehender Zahlung"
 
 #: src/components/common/PoweredByFooter/index.tsx:32
 msgid "Try Hi.Events Free"
 msgstr "Hi.Events kostenlos testen"
+
+#: src/components/common/LanguageSwitcher/index.tsx:36
+msgid "Turkish"
+msgstr "Türkisch"
 
 #: src/components/layouts/CheckIn/index.tsx:448
 msgid "Turn sound off"
@@ -6414,7 +6479,7 @@ msgstr "Twitch"
 msgid "Type"
 msgstr "Typ"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:53
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:58
 msgid "Type of ticket"
 msgstr "Art des Tickets"
 
@@ -6581,7 +6646,7 @@ msgstr "USB-Scanner-Modus deaktiviert"
 msgid "USB/HID Scanner"
 msgstr "USB/HID-Scanner"
 
-#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:151
+#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:150
 msgid "Use <0>Liquid templating</0> to personalize your emails"
 msgstr "Verwenden Sie <0>Liquid-Templating</0>, um Ihre E-Mails zu personalisieren"
 
@@ -6635,11 +6700,6 @@ msgstr "Veranstaltungsort"
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:116
 msgid "Venue Name"
 msgstr "Veranstaltungsort Namen"
-
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:35
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:65
-msgid "Venue or address"
-msgstr "Veranstaltungsort oder Adresse"
 
 #: src/components/routes/welcome/index.tsx:157
 msgid "Verification code"
@@ -6700,8 +6760,8 @@ msgid "View on Google Maps"
 msgstr "Auf Google Maps anzeigen"
 
 #: src/components/common/EmailTemplateEditor/CTAConfiguration.tsx:28
-#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:58
-#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:70
+#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:57
+#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:69
 msgid "View Order"
 msgstr "Bestellung anzeigen"
 
@@ -6716,8 +6776,8 @@ msgstr "Bestell Details ansehen"
 msgid "View Organizer Homepage"
 msgstr "Veranstalter-Startseite anzeigen"
 
-#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:58
-#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:70
+#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:57
+#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:69
 msgid "View Ticket"
 msgstr "Ticket anzeigen"
 
