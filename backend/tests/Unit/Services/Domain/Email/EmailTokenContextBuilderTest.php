@@ -176,6 +176,8 @@ class EmailTokenContextBuilderTest extends TestCase
             'isOrderAwaitingOfflinePayment' => false,
             'getPaymentProvider' => PaymentProviders::STRIPE->value,
             'getOrderItems' => $orderItems,
+            'getCurrency' => 'USD',
+            'getLocale' => 'en',
         ]);
     }
 
@@ -185,6 +187,7 @@ class EmailTokenContextBuilderTest extends TestCase
             'getTitle' => 'Amazing Event',
             'getDescription' => 'This is an amazing event',
             'getStartDate' => '2024-02-15 19:00:00',
+            'getEndDate' => '2024-02-15 22:00:00',
             'getTimezone' => 'America/New_York',
             'getCurrency' => 'USD',
             'getId' => 1,
