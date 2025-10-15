@@ -9,9 +9,8 @@ import {usePreviewEmailTemplateForEvent} from '../../../../../../mutations/usePr
 import {useUpdateEmailTemplateForEvent} from "../../../../../../mutations/useUpdateEmailTemplate.ts";
 import {useDeleteEmailTemplateForEvent} from "../../../../../../mutations/useDeleteEmailTemplate.ts";
 import {EmailTemplateSettingsBase} from '../../../../../common/EmailTemplateSettings';
-import {EmailTemplateType} from '../../../../../../types';
 
-export const EmailTemplateSettings = () => {
+export const TemplateSettings = () => {
     const {eventId} = useParams();
     const [shouldFetchDefaults, setShouldFetchDefaults] = useState(false);
 
@@ -27,7 +26,7 @@ export const EmailTemplateSettings = () => {
 
     const templates = templatesData?.data || [];
 
-    const handleCreateTemplate = (type: EmailTemplateType) => {
+    const handleCreateTemplate = () => {
         // Enable fetching default templates if not already fetched
         if (!defaultTemplatesData) {
             setShouldFetchDefaults(true);
@@ -49,5 +48,3 @@ export const EmailTemplateSettings = () => {
         />
     );
 };
-
-export default EmailTemplateSettings;

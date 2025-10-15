@@ -77,7 +77,7 @@ class MailBuilderService
         EventSettingDomainObject $eventSettings,
         OrganizerDomainObject $organizer
     ): ?RenderedEmailTemplateDTO {
-        $template = $this->emailTemplateService->getTemplate(
+        $template = $this->emailTemplateService->getTemplateByType(
             type: EmailTemplateType::ATTENDEE_TICKET,
             accountId: $event->getAccountId(),
             eventId: $event->getId(),
@@ -105,7 +105,7 @@ class MailBuilderService
         EventSettingDomainObject $eventSettings,
         OrganizerDomainObject $organizer
     ): ?RenderedEmailTemplateDTO {
-        $template = $this->emailTemplateService->getTemplate(
+        $template = $this->emailTemplateService->getTemplateByType(
             type: EmailTemplateType::ORDER_CONFIRMATION,
             accountId: $event->getAccountId(),
             eventId: $event->getId(),

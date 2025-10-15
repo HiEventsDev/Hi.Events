@@ -15,6 +15,7 @@ use HiEvents\Helper\Currency;
 use HiEvents\Helper\DateHelper;
 use HiEvents\Helper\IdHelper;
 use HiEvents\Helper\Url;
+use HiEvents\Locale;
 
 class EmailTokenContextBuilder
 {
@@ -25,16 +26,21 @@ class EmailTokenContextBuilder
         EventSettingDomainObject $eventSettings
     ): array
     {
-        $eventDate = new Carbon(DateHelper::convertFromUTC($event->getStartDate(), $event->getTimezone()));
+        $eventStartDate = new Carbon(DateHelper::convertFromUTC($event->getStartDate(), $event->getTimezone()));
+        $eventEndDate = $event->getEndDate() ? new Carbon(DateHelper::convertFromUTC($event->getEndDate(), $event->getTimezone())) : null;
 
         return [
             // Event object
             'event' => [
                 'title' => $event->getTitle(),
-                'date' => $eventDate->format('F j, Y'),
-                'time' => $eventDate->format('g:i A'),
-                'location' => $eventSettings->getLocationDetails() ? AddressHelper::formatAddress($eventSettings->getLocationDetails()) : '',
+                'date' => $eventStartDate->format('F j, Y'),
+                'time' => $eventStartDate->format('g:i A'),
+                'end_date' => $eventEndDate?->format('F j, Y') ?? '',
+                'end_time' => $eventEndDate?->format('g:i A') ?? '',
+                'full_address' => $eventSettings->getLocationDetails() ? AddressHelper::formatAddress($eventSettings->getLocationDetails()) : '',
+                'location_details' => $eventSettings->getLocationDetails(),
                 'description' => $event->getDescription() ?? '',
+                'timezone' => $event->getTimezone(),
             ],
 
             // Order object
@@ -47,10 +53,13 @@ class EmailTokenContextBuilder
                 'number' => $order->getPublicId(),
                 'total' => Currency::format($order->getTotalGross(), $event->getCurrency()),
                 'date' => (new Carbon($order->getCreatedAt()))->format('F j, Y'),
+                'currency' => $order->getCurrency(), // added
+                'locale' => $order->getLocale(), // added
                 'first_name' => $order->getFirstName() ?? '',
                 'last_name' => $order->getLastName() ?? '',
                 'email' => $order->getEmail() ?? '',
-                'is_pending' => $order->isOrderAwaitingOfflinePayment(),
+                'is_awaiting_offline_payment' => $order->isOrderAwaitingOfflinePayment(),
+                'is_offline_payment' => $order->getPaymentProvider() === PaymentProviders::OFFLINE->value,
             ],
 
             // Organizer object
@@ -65,9 +74,6 @@ class EmailTokenContextBuilder
                 'offline_payment_instructions' => $eventSettings->getOfflinePaymentInstructions() ?? '',
                 'post_checkout_message' => $eventSettings->getPostCheckoutMessage() ?? '',
             ],
-
-            // Top-level flags (for backward compatibility and convenience)
-            'is_offline_payment' => $order->getPaymentProvider() === PaymentProviders::OFFLINE->value,
         ];
     }
 
@@ -113,8 +119,20 @@ class EmailTokenContextBuilder
                 'title' => __('Summer Music Festival 2024'),
                 'date' => 'April 25, 2029',
                 'time' => '7:00 PM',
-                'location' => __('Madison Square Garden, New York'),
+                'end_date' => 'April 26, 2029',
+                'end_time' => '11:00 PM',
+                'full_address' => __('3 Arena, North Wall Quay, Dublin 1, Ireland'),
                 'description' => __('Join us for an unforgettable evening of live music featuring top artists from around the world.'),
+                'timezone' => 'UTC',
+                'location_details' => [
+                    'venue_name' => '3 Arena',
+                    'address_line_1' => 'North Wall Quay',
+                    'address_line_2' => '',
+                    'city' => 'Dublin',
+                    'state_or_region' => 'Dublin 1',
+                    'zip_or_postal_code' => 'D01 T0X4',
+                    'country' => 'IE',
+                ]
             ],
             'order' => [
                 'url' => 'https://example.com/order/ABC123',
@@ -124,7 +142,10 @@ class EmailTokenContextBuilder
                 'first_name' => 'John',
                 'last_name' => 'Smith',
                 'email' => 'john@example.com',
-                'is_pending' => false,
+                'is_awaiting_offline_payment' => false,
+                'is_offline_payment' => false,
+                'locale' => Locale::EN->value,
+                'currency' => 'USD'
             ],
             'organizer' => [
                 'name' => 'ACME Events Inc.',
@@ -135,7 +156,6 @@ class EmailTokenContextBuilder
                 'offline_payment_instructions' => __('Please transfer the total amount to the following bank account within 5 business days.'),
                 'post_checkout_message' => __('Thank you for your purchase! We look forward to seeing you at the event.'),
             ],
-            'is_offline_payment' => false,
         ];
 
         if ($templateType === 'attendee_ticket') {

@@ -1,6 +1,6 @@
 import {RichTextEditor, useRichTextEditorContext} from '@mantine/tiptap';
 import {IconBraces} from '@tabler/icons-react';
-import {Group, Menu, ScrollArea, Stack, Text} from '@mantine/core';
+import {Menu, ScrollArea, Stack, Text} from '@mantine/core';
 import {EmailTemplateType} from '../../../../types';
 import {t} from '@lingui/macro';
 
@@ -25,15 +25,20 @@ const TEMPLATE_VARIABLES: Record<EmailTemplateType, TemplateVariable[]> = {
         {label: t`Order Last Name`, value: 'order.last_name', description: t`Customer's last name`, category: t`Order`},
         {label: t`Order Email`, value: 'order.email', description: t`Customer's email address`, category: t`Order`},
         {label: t`Order URL`, value: 'order.url', description: t`Link to order details`, category: t`Order`},
-        {label: t`Order Status`, value: 'order.is_pending', description: t`True if payment pending`, category: t`Order`},
-        {label: t`Offline Payment`, value: 'is_offline_payment', description: t`True if offline payment`, category: t`Order`},
+        {label: t`Order Is Awaiting Offline Payment`, value: 'order.is_awaiting_offline_payment', description: t`True if payment pending`, category: t`Order`},
+        {label: t`Order Locale`, value: 'order.locale', description: t`The locale of the customer`, category: t`Order`},
+        {label: t`Order Currency`, value: 'order.currency', description: t`The currency of the order`, category: t`Order`},
+        {label: t`Offline Payment`, value: 'order.is_offline_payment', description: t`True if offline payment`, category: t`Order`},
 
         // Event Information
         {label: t`Event Title`, value: 'event.title', description: t`Name of the event`, category: t`Event`},
         {label: t`Event Date`, value: 'event.date', description: t`Date of the event`, category: t`Event`},
         {label: t`Event Time`, value: 'event.time', description: t`Start time of the event`, category: t`Event`},
-        {label: t`Event Location`, value: 'event.location', description: t`Venue or address`, category: t`Event`},
+        {label: t`Event Full Address`, value: 'event.full_address', description: t`The full event address`, category: t`Event`},
         {label: t`Event Description`, value: 'event.description', description: t`Event details`, category: t`Event`},
+        {label: t`Event Timezone`, value: 'event.timezone', description: t`Event timezone`, category: t`Event`},
+        {label: t`Event Venue`, value: 'event.location_details.venue_name', description: t`The event venue`, category: t`Event`},
+
 
         // Organization
         {label: t`Organizer Name`, value: 'organizer.name', description: t`Event organizer name`, category: t`Organization`},
@@ -55,15 +60,18 @@ const TEMPLATE_VARIABLES: Record<EmailTemplateType, TemplateVariable[]> = {
         {label: t`Ticket URL`, value: 'ticket.url', description: t`Link to ticket`, category: t`Ticket`},
 
         // Order Information
-        {label: t`Order Status`, value: 'order.is_pending', description: t`True if payment pending`, category: t`Order`},
+        {label: t`Order Payment Pending`, value: 'order.is_awaiting_offline_payment', description: t`True if payment pending`, category: t`Order`},
+        {label: t`Order Status`, value: 'order.status', description: t`Order Status`, category: t`Order`},
         {label: t`Offline Payment`, value: 'is_offline_payment', description: t`True if offline payment`, category: t`Order`},
 
         // Event Information
         {label: t`Event Title`, value: 'event.title', description: t`Name of the event`, category: t`Event`},
         {label: t`Event Date`, value: 'event.date', description: t`Date of the event`, category: t`Event`},
         {label: t`Event Time`, value: 'event.time', description: t`Start time of the event`, category: t`Event`},
-        {label: t`Event Location`, value: 'event.location', description: t`Venue or address`, category: t`Event`},
+        {label: t`Event Location`, value: 'event.full_address', description: t`The full event address`, category: t`Event`},
         {label: t`Event Description`, value: 'event.description', description: t`Event details`, category: t`Event`},
+        {label: t`Event Timezone`, value: 'event.timezone', description: t`Event timezone`, category: t`Event`},
+        {label: t`Event Venue`, value: 'event.location_details.venue_name', description: t`The event venue`, category: t`Event`},
 
         // Organization
         {label: t`Organizer Name`, value: 'organizer.name', description: t`Event organizer name`, category: t`Organization`},

@@ -21,11 +21,11 @@ class EmailTemplateServiceTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         $this->mockRepository = Mockery::mock(EmailTemplateRepositoryInterface::class);
         $this->mockLiquidRenderer = Mockery::mock(LiquidTemplateRenderer::class);
         $this->mockTokenBuilder = Mockery::mock(EmailTokenContextBuilder::class);
-        
+
         $this->emailTemplateService = new EmailTemplateService(
             $this->mockRepository,
             $this->mockLiquidRenderer,
@@ -55,7 +55,7 @@ class EmailTemplateServiceTest extends TestCase
             ->once()
             ->andReturn($eventTemplate);
 
-        $result = $this->emailTemplateService->getTemplate(
+        $result = $this->emailTemplateService->getTemplateByType(
             EmailTemplateType::ORDER_CONFIRMATION,
             1, // accountId
             1, // eventId
@@ -87,7 +87,7 @@ class EmailTemplateServiceTest extends TestCase
             ->once()
             ->andReturn($organizerTemplate);
 
-        $result = $this->emailTemplateService->getTemplate(
+        $result = $this->emailTemplateService->getTemplateByType(
             EmailTemplateType::ORDER_CONFIRMATION,
             1, // accountId
             1, // eventId
@@ -110,7 +110,7 @@ class EmailTemplateServiceTest extends TestCase
             ->once()
             ->andReturn(null);
 
-        $result = $this->emailTemplateService->getTemplate(
+        $result = $this->emailTemplateService->getTemplateByType(
             EmailTemplateType::ORDER_CONFIRMATION,
             1, // accountId
             1, // eventId
@@ -142,7 +142,7 @@ class EmailTemplateServiceTest extends TestCase
             ->once()
             ->andReturn($organizerTemplate);
 
-        $result = $this->emailTemplateService->getTemplate(
+        $result = $this->emailTemplateService->getTemplateByType(
             EmailTemplateType::ATTENDEE_TICKET,
             1, // accountId
             null, // eventId
@@ -174,7 +174,7 @@ class EmailTemplateServiceTest extends TestCase
             ->once()
             ->andReturn($activeTemplate);
 
-        $result = $this->emailTemplateService->getTemplate(
+        $result = $this->emailTemplateService->getTemplateByType(
             EmailTemplateType::ORDER_CONFIRMATION,
             1, // accountId
             1, // eventId
@@ -207,7 +207,7 @@ class EmailTemplateServiceTest extends TestCase
             ->once()
             ->andReturn($attendeeTicketTemplate);
 
-        $result = $this->emailTemplateService->getTemplate(
+        $result = $this->emailTemplateService->getTemplateByType(
             EmailTemplateType::ATTENDEE_TICKET,
             1, // accountId
             null, // eventId

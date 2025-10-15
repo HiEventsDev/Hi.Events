@@ -7,4 +7,7 @@
     {{ $renderedCta['label'] }}
 </x-mail::button>
 @endif
+
+{!! $eventSettings->getGetEmailFooterHtml() !!}
+
 </x-mail::message>
