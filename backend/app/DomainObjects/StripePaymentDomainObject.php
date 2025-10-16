@@ -2,6 +2,8 @@
 
 namespace HiEvents\DomainObjects;
 
+use HiEvents\DomainObjects\Enums\StripePlatform;
+
 class StripePaymentDomainObject extends Generated\StripePaymentDomainObjectAbstract
 {
     private ?OrderDomainObject $order = null;
@@ -15,5 +17,15 @@ class StripePaymentDomainObject extends Generated\StripePaymentDomainObjectAbstr
     {
         $this->order = $order;
         return $this;
+    }
+
+    /**
+     * Get the Stripe platform enum for this payment
+     */
+    public function getStripePlatformEnum(): ?StripePlatform
+    {
+        return $this->getStripePlatform() 
+            ? StripePlatform::fromString($this->getStripePlatform())
+            : null;
     }
 }

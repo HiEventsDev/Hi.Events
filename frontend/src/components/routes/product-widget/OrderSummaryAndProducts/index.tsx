@@ -290,13 +290,14 @@ export const OrderSummaryAndProducts = () => {
                     </Group>
                 )}
 
-                {order.attendees?.map((attendee) => (
-                    <AttendeeTicket
-                        key={attendee.id}
-                        attendee={attendee}
-                        product={attendee.product as Product}
-                        event={event}
-                    />
+                {order.attendees?.map((attendee, index) => (
+                    <div key={attendee.id} style={{ marginBottom: index < order.attendees.length - 1 ? '24px' : '0' }}>
+                        <AttendeeTicket
+                            attendee={attendee}
+                            product={attendee.product as Product}
+                            event={event}
+                        />
+                    </div>
                 ))}
 
                 <PoweredByFooter/>

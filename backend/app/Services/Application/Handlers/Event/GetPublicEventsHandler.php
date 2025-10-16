@@ -12,19 +12,23 @@ use HiEvents\DomainObjects\TaxAndFeesDomainObject;
 use HiEvents\Repository\Eloquent\Value\OrderAndDirection;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
+use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Event\DTO\GetPublicOrganizerEventsDTO;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class GetPublicEventsHandler
 {
     public function __construct(
-        private readonly EventRepositoryInterface $eventRepository,
+        private readonly EventRepositoryInterface     $eventRepository,
+        private readonly OrganizerRepositoryInterface $organizerRepository,
     )
     {
     }
 
     public function handle(GetPublicOrganizerEventsDTO $dto): LengthAwarePaginator
     {
+        $organizer = $this->organizerRepository->findById($dto->organizerId);
+
         $query = $this->eventRepository
             ->loadRelation(
                 new Relationship(ProductCategoryDomainObject::class, [
@@ -42,7 +46,8 @@ class GetPublicEventsHandler
             ->loadRelation(new Relationship(EventSettingDomainObject::class))
             ->loadRelation(new Relationship(ImageDomainObject::class));
 
-        if ($dto->authenticatedAccountId) {
+        // If the organizer is viewing their own profile, we show all events, even those in draft
+        if ($dto->authenticatedAccountId && $organizer->getAccountId() === $dto->authenticatedAccountId) {
             return $query->findEventsForOrganizer(
                 organizerId: $dto->organizerId,
                 accountId: $dto->authenticatedAccountId,

@@ -79,8 +79,10 @@ export const orderClient = {
         return response.data;
     },
 
-    cancel: async (eventId: IdParam, orderId: IdParam) => {
-        const response = await api.post<GenericDataResponse<Order>>('events/' + eventId + '/orders/' + orderId + '/cancel');
+    cancel: async (eventId: IdParam, orderId: IdParam, refund?: boolean) => {
+        const response = await api.post<GenericDataResponse<Order>>('events/' + eventId + '/orders/' + orderId + '/cancel', {
+            refund: refund ?? false
+        });
         return response.data;
     },
 
@@ -146,6 +148,8 @@ export const orderClientPublic = {
         const response = await publicApi.post<{
             client_secret: string,
             account_id?: string,
+            public_key: string,
+            stripe_platform?: string,
         }>(`events/${eventId}/order/${orderShortId}/stripe/payment_intent`);
         return response.data;
     },

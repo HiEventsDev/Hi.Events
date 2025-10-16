@@ -15,6 +15,7 @@ enum ImageType
 
     // Event images
     case EVENT_COVER;
+    case TICKET_LOGO;
 
     // Organizer images
     case ORGANIZER_LOGO;
@@ -24,6 +25,7 @@ enum ImageType
     {
         return [
             self::EVENT_COVER,
+            self::TICKET_LOGO,
         ];
     }
 
@@ -47,6 +49,7 @@ enum ImageType
         $map = [
             self::GENERIC->name => [50, 50],
             self::EVENT_COVER->name => [600, 50],
+            self::TICKET_LOGO->name => [100, 100],
             self::ORGANIZER_LOGO->name => [100, 100],
             self::ORGANIZER_COVER->name => [600, 50],
         ];
