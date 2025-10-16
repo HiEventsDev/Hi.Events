@@ -75,7 +75,11 @@ const TicketDesignerPrint = () => {
         ...event,
         settings: {
             ...event.settings,
-            ticket_design_settings: settings.ticket_design_settings
+            ticket_design_settings: settings.ticket_design_settings,
+            location_details: event.settings?.location_details || {
+                venue_name: t`Sample Venue`,
+                address_line_1: t`123 Sample Street`,
+            }
         },
         images: images || []
     };

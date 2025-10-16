@@ -60,6 +60,14 @@ export const AttendeeTicket = ({
                                 {prettyDate(event.start_date, event.timezone)}
                             </div>
                         </div>
+                        {event?.organizer?.name && (
+                            <div className={classes.detailRow}>
+                                <div className={classes.detailLabel}>{t`Organizer`}</div>
+                                <div className={classes.detailValue}>
+                                    {event?.organizer?.name}
+                                </div>
+                            </div>
+                        )}
 
                         {hasVenue && (
                             <div className={classes.detailRow}>
@@ -147,7 +155,8 @@ export const AttendeeTicket = ({
                                     {t`Print`}
                                 </Button>
 
-                                <CopyButton value={`${window?.location.origin}/product/${event.id}/${attendee.short_id}`}>
+                                <CopyButton
+                                    value={`${window?.location.origin}/product/${event.id}/${attendee.short_id}`}>
                                     {({copied, copy}) => (
                                         <Button
                                             variant="default"
