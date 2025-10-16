@@ -14,6 +14,7 @@ class AccountResource extends JsonResource
     public function toArray(Request $request): array
     {
         $activeStripePlatform = $this->getPrimaryStripePlatform();
+        $isHiEvents = config('app.is_hi_events', false);
 
         return [
             'id' => $this->getId(),
@@ -30,6 +31,9 @@ class AccountResource extends JsonResource
                 'stripe_connect_setup_complete' => $activeStripePlatform->getStripeSetupCompletedAt() !== null,
                 'stripe_account_details' => $activeStripePlatform->getStripeAccountDetails(),
                 'stripe_platform' => $this->getActiveStripePlatform()?->value,
+            ]),
+            $this->mergeWhen($isHiEvents,  fn() => [
+                'stripe_hi_events_primary_platform' => config('services.stripe.primary_platform')
             ]),
 
             $this->mergeWhen($this->getConfiguration() !== null, fn() => [

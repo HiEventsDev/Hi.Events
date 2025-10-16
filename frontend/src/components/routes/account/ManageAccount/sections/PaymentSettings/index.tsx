@@ -105,8 +105,7 @@ const MigrationBanner = ({stripeData}: { stripeData: StripeConnectAccountsRespon
                     <IconInfoCircle size={20}/>
                 </ThemeIcon>
                 <div>
-                    <Title order={3}>{t`Ready to Upgrade?`}</Title>
-                    <Text size="sm" c="dimmed">{t`Complete the setup below to continue`}</Text>
+                    <Title order={3}>{t`Complete the setup below to continue`}</Title>
                 </div>
             </Group>
 
@@ -370,7 +369,6 @@ const HiEventsConnectStatus = ({account}: { account: Account }) => {
         const hasIrelandAccount = !!ieAccount;
         const isIrelandComplete = ieAccount?.is_setup_complete === true;
 
-        // Build the appropriate UI based on clear conditions
         let content;
 
         if (isIrelandComplete) {
@@ -442,7 +440,7 @@ const HiEventsConnectStatus = ({account}: { account: Account }) => {
                         variant="light"
                         size="sm"
                         leftSection={<IconBrandStripe size={20}/>}
-                        onClick={() => handleSetupStripe('ie')}
+                        onClick={() => handleSetupStripe((account?.stripe_hi_events_primary_platform || 'ie') as 'ca' | 'ie')}
                     >
                         {t`Connect with Stripe`}
                     </Button>
