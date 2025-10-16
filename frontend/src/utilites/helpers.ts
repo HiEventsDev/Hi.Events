@@ -111,7 +111,7 @@ export const iHavePurchasedALicence = () => {
 }
 
 export const isHiEvents = () => {
-    return true;
+    return getConfig('VITE_FRONTEND_URL')?.includes('.hi.events');
 }
 
 export const isEmptyHtml = (content: string) => {
