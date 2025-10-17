@@ -3,6 +3,7 @@
 namespace HiEvents\Http\Actions\Attendees;
 
 use HiEvents\DomainObjects\AttendeeCheckInDomainObject;
+use HiEvents\DomainObjects\CheckInListDomainObject;
 use HiEvents\DomainObjects\Enums\QuestionBelongsTo;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
@@ -38,7 +39,13 @@ class ExportAttendeesAction extends BaseAction
             ->loadRelation(QuestionAndAnswerViewDomainObject::class)
             ->loadRelation(new Relationship(
                 domainObject: AttendeeCheckInDomainObject::class,
-                name: 'check_in',
+                nested: [
+                    new Relationship(
+                        domainObject: CheckInListDomainObject::class,
+                        name: 'check_in_list',
+                    ),
+                ],
+                name: 'check_ins',
             ))
             ->loadRelation(new Relationship(
                 domainObject: ProductDomainObject::class,

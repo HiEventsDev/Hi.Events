@@ -27,7 +27,6 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
-use Spatie\LaravelData\Data;
 
 abstract class BaseAction extends Controller
 {

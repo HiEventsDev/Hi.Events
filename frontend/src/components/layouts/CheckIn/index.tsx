@@ -342,8 +342,6 @@ const CheckIn = () => {
         };
     }, [hidScannerMode, currentBarcode, processBarcode]);
 
-
-
     if (CheckInListQuery.error && (CheckInListQuery.error as any).response?.status === 404) {
         return (
             <NoResultsSplash
