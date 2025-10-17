@@ -127,7 +127,7 @@ Comienza en minutos con nuestras opciones de despliegue con un solo clic:
 1. **Clona el repositorio:**
 
    ```bash
-   gh repo clone Shakil1081/Hi.Events
+   git clone git@github.com:HiEventsDev/hi.events.git
    ```
 
 2. **Ve al directorio Docker:**
