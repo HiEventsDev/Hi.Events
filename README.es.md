@@ -30,6 +30,7 @@
 </p>
 
 <a href="https://trendshift.io/repositories/10563" target="_blank"><img src="https://trendshift.io/api/badge/repositories/10563" alt="HiEventsDev%2Fhi.events | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
+
 </div>
 
 <hr/>
@@ -67,6 +68,7 @@ Comienza en minutos con nuestras opciones de despliegue con un solo clic:
 <a href="https://hi.events">Hi.Events</a> ofrece herramientas completas para facilitar la gestión de tus eventos:
 
 ### 🎟 Venta de Entradas y Productos
+
 - **Tipos de entradas:** gratuitas, pagadas, por donación y escalonadas.
 - **Gestión de capacidad:** por evento o por entrada.
 - **Asignaciones de capacidad:** comparte cupos entre entradas.
@@ -75,6 +77,7 @@ Comienza en minutos con nuestras opciones de despliegue con un solo clic:
 - **Impuestos y tarifas:** personalizados por producto o pedido.
 
 ### 🏆 Gestión de Eventos y Personalización
+
 - **Panel del evento:** estadísticas en tiempo real.
 - **Diseñador de portada:** edita la página con vista previa en vivo.
 - **Widget embebible:** integra el proceso de venta en tu web.
@@ -83,6 +86,7 @@ Comienza en minutos con nuestras opciones de despliegue con un solo clic:
 - **Soporte para eventos presenciales:** con instrucciones personalizadas.
 
 ### 📧 Gestión de Asistentes y Pedidos
+
 - **Formularios personalizados:** recoge datos específicos.
 - **Gestión de asistentes:** buscar, editar, cancelar, contactar.
 - **Gestión de pedidos:** reembolsos, cancelaciones, reenvíos.
@@ -90,15 +94,18 @@ Comienza en minutos con nuestras opciones de despliegue con un solo clic:
 - **Exportación de datos:** en formatos CSV/XLSX.
 
 ### 📱 Acceso Móvil y Control de Entrada
+
 - **Check-in QR:** herramienta web y móvil.
 - **Listas de entrada:** compartibles con control de acceso.
 - **Acceso multiusuario:** gestión de roles y permisos.
 
 ### 🔧 Integraciones y Automatización
+
 - **Webhooks:** automatiza con Zapier, Make, CRMs, etc.
 - **Stripe Connect:** pagos instantáneos para organizadores.
 
 ### 📊 Funcionalidades Avanzadas
+
 - **Soporte multilingüe:** Español, Inglés, Francés, Portugués, Alemán, Chino y más.
 - **Reembolsos completos y parciales:** con seguimiento.
 - **Gestión de usuarios:** con roles y permisos.
@@ -118,11 +125,13 @@ Comienza en minutos con nuestras opciones de despliegue con un solo clic:
 > Descárgalo en: [Docker](https://www.docker.com/get-started)
 
 1. **Clona el repositorio:**
+
    ```bash
-   git clone git@github.com:HiEventsDev/hi.events.git
+   gh repo clone Shakil1081/Hi.Events
    ```
 
 2. **Ve al directorio Docker:**
+
    ```bash
    cd hi.events/docker/all-in-one
    ```
@@ -130,15 +139,17 @@ Comienza en minutos con nuestras opciones de despliegue con un solo clic:
 3. **Genera `APP_KEY` y `JWT_SECRET`:**
 
    **Linux/macOS:**
+
    ```bash
    echo base64:$(openssl rand -base64 32)  # Para APP_KEY
    openssl rand -base64 32                 # Para JWT_SECRET
    ```
 
    **Windows:**
-   Revisa *./docker/all-in-one/README.md* para las instrucciones.
+   Revisa _./docker/all-in-one/README.md_ para las instrucciones.
 
 4. **Inicia los contenedores:**
+
    ```bash
    docker compose up -d
    ```
