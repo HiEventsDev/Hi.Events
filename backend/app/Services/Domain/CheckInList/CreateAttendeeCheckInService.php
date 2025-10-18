@@ -55,7 +55,7 @@ class CreateAttendeeCheckInService
 
         $attendees = $this->fetchAttendees($attendeesAndActions);
         $eventSettings = $this->fetchEventSettings($checkInList->getEventId());
-        $existingCheckIns = $this->fetchExistingCheckIns($attendees, $checkInList->getEventId());
+        $existingCheckIns = $this->fetchExistingCheckIns($attendees, $checkInList);
 
         return $this->processAttendeeCheckIns(
             $attendees,
@@ -103,11 +103,11 @@ class CreateAttendeeCheckInService
 
     /**
      * @param Collection<int, AttendeeDomainObject> $attendees
-     * @param int $eventId
+     * @param CheckInListDomainObject $checkInList
      * @return Collection
      * @throws Exception
      */
-    private function fetchExistingCheckIns(Collection $attendees, int $eventId): Collection
+    private function fetchExistingCheckIns(Collection $attendees, CheckInListDomainObject $checkInList): Collection
     {
         $attendeeIds = $attendees->map(fn(AttendeeDomainObject $attendee) => $attendee->getId())->toArray();
 
@@ -115,7 +115,8 @@ class CreateAttendeeCheckInService
             field: AttendeeCheckInDomainObjectAbstract::ATTENDEE_ID,
             values: $attendeeIds,
             additionalWhere: [
-                AttendeeCheckInDomainObjectAbstract::EVENT_ID => $eventId,
+                AttendeeCheckInDomainObjectAbstract::EVENT_ID => $checkInList->getEventId(),
+                AttendeeCheckInDomainObjectAbstract::CHECK_IN_LIST_ID => $checkInList->getId(),
             ],
         );
     }
