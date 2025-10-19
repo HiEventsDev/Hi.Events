@@ -68,7 +68,6 @@ class DuplicateEventService
         bool    $duplicateCapacityAssignments = true,
         bool    $duplicateCheckInLists = true,
         bool    $duplicateEventCoverImage = true,
-        bool    $duplicateTicketLogo = true,
         bool    $duplicateWebhooks = true,
         bool    $duplicateAffiliates = true,
         ?string $description = null,
@@ -111,10 +110,6 @@ class DuplicateEventService
 
             if ($duplicateEventCoverImage) {
                 $this->cloneEventCoverImage($event, $newEvent->getId());
-            }
-
-            if ($duplicateTicketLogo) {
-                $this->cloneTicketLogo($event, $newEvent->getId());
             }
 
             if ($duplicateWebhooks) {
@@ -330,24 +325,6 @@ class DuplicateEventService
                 'filename' => $coverImage->getFileName(),
                 'size' => $coverImage->getSize(),
                 'mime_type' => $coverImage->getMimeType(),
-            ]);
-        }
-    }
-
-    private function cloneTicketLogo(EventDomainObject $event, int $newEventId): void
-    {
-        /** @var ImageDomainObject $ticketLogo */
-        $ticketLogo = $event->getImages()?->first(fn(ImageDomainObject $image) => $image->getType() === ImageType::TICKET_LOGO->name);
-        if ($ticketLogo) {
-            $this->imageRepository->create([
-                'entity_id' => $newEventId,
-                'entity_type' => EventDomainObject::class,
-                'type' => ImageType::TICKET_LOGO->name,
-                'disk' => $ticketLogo->getDisk(),
-                'path' => $ticketLogo->getPath(),
-                'filename' => $ticketLogo->getFileName(),
-                'size' => $ticketLogo->getSize(),
-                'mime_type' => $ticketLogo->getMimeType(),
             ]);
         }
     }

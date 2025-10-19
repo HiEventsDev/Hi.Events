@@ -49,7 +49,7 @@ export const Settings = () => {
         },
         {
             id: 'email-settings',
-            label: t`Email & Templates`,
+            label: t`Email`,
             icon: IconAt,
             component: EmailSettings
         },

@@ -28,8 +28,8 @@ class Attendee extends BaseModel
         return $this->belongsTo(Product::class);
     }
 
-    public function check_ins(): HasMany
+    public function check_in(): HasOne
     {
-        return $this->hasMany(AttendeeCheckIn::class);
+        return $this->hasOne(AttendeeCheckIn::class);
     }
 }

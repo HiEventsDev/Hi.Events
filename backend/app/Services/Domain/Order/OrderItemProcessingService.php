@@ -19,13 +19,13 @@ use HiEvents\Services\Domain\Tax\TaxAndFeeCalculationService;
 use Illuminate\Support\Collection;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
-class OrderItemProcessingService
+readonly class OrderItemProcessingService
 {
     public function __construct(
-        private readonly OrderRepositoryInterface    $orderRepository,
-        private readonly ProductRepositoryInterface  $productRepository,
-        private readonly TaxAndFeeCalculationService $taxCalculationService,
-        private readonly ProductPriceService         $productPriceService,
+        private OrderRepositoryInterface    $orderRepository,
+        private ProductRepositoryInterface  $productRepository,
+        private TaxAndFeeCalculationService $taxCalculationService,
+        private ProductPriceService         $productPriceService,
     )
     {
     }

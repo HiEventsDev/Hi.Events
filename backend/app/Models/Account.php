@@ -8,7 +8,6 @@ use HiEvents\DomainObjects\Enums\Role;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Account extends BaseModel
@@ -34,10 +33,5 @@ class Account extends BaseModel
             related: AccountConfiguration::class,
             foreignKey: 'account_configuration_id',
         );
-    }
-
-    public function account_stripe_platforms(): HasMany
-    {
-        return $this->hasMany(AccountStripePlatform::class);
     }
 }

@@ -84,10 +84,8 @@ class CompleteOrderValidator extends BaseValidator
     public function messages(): array
     {
         return [
-            'order.first_name.max' => 'First name must be under 40 characters',
-            'order.last_name.max' => 'Last name must be under 40 characters',
-            'order.first_name.required' => __('First name is required'),
-            'order.last_name.required' => __('Last name is required'),
+            'order.first_name' => __('First name is required'),
+            'order.last_name' => __('Last name is required'),
             'order.email' => __('A valid email is required'),
             'order.address.address_line_1.required' => __('Address line 1 is required'),
             'order.address.city.required' => __('City is required'),

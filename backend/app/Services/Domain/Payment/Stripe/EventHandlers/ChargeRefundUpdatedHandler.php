@@ -10,7 +10,7 @@ use HiEvents\DomainObjects\Status\OrderRefundStatus;
 use HiEvents\Repository\Interfaces\OrderRefundRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\StripePaymentsRepositoryInterface;
-use HiEvents\Services\Domain\EventStatistics\EventStatisticsRefundService;
+use HiEvents\Services\Domain\EventStatistics\EventStatisticsUpdateService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use HiEvents\Services\Infrastructure\DomainEvents\Events\OrderEvent;
@@ -27,7 +27,7 @@ class ChargeRefundUpdatedHandler
         private readonly StripePaymentsRepositoryInterface $stripePaymentsRepository,
         private readonly Logger                            $logger,
         private readonly DatabaseManager                   $databaseManager,
-        private readonly EventStatisticsRefundService      $eventStatisticsRefundService,
+        private readonly EventStatisticsUpdateService      $eventStatisticsUpdateService,
         private readonly OrderRefundRepositoryInterface    $orderRefundRepository,
         private readonly DomainEventDispatcherService      $domainEventDispatcherService,
     )
@@ -99,7 +99,7 @@ class ChargeRefundUpdatedHandler
 
     private function updateEventStatistics(OrderDomainObject $order, MoneyValue $amount): void
     {
-        $this->eventStatisticsRefundService->updateForRefund($order, $amount);
+        $this->eventStatisticsUpdateService->updateEventStatsTotalRefunded($order, $amount);
     }
 
     private function updateOrderRefundedAmount(int $orderId, float $refundedAmount): void

@@ -117,7 +117,6 @@ export const EventCard: React.FC<EventCardProps> = ({event, primaryColor = '#8b5
                                     text={event.description_preview || ''}
                                     url={eventHomepageUrl(event)}
                                     hideShareButtonText={true}
-                                    className={classes.shareIcon}
                                 />
                             </div>
                         </div>

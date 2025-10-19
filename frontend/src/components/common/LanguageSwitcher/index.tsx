@@ -32,8 +32,6 @@ export const LanguageSwitcher = () => {
                 return t`Chinese (Traditional)`;
             case "vi":
                 return t`Vietnamese`;
-            case "tr":
-                return t`Turkish`;
         }
     };
 

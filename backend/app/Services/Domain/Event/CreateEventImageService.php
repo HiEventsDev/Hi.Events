@@ -11,9 +11,6 @@ use Illuminate\Database\DatabaseManager;
 use Illuminate\Http\UploadedFile;
 use Throwable;
 
-/**
- * @deprecated use CreateImageAction
- */
 class CreateEventImageService
 {
     public function __construct(

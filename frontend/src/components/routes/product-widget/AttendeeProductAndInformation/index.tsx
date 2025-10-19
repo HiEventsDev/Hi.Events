@@ -7,7 +7,6 @@ import {Container} from "@mantine/core";
 import {t} from "@lingui/macro";
 import {PoweredByFooter} from "../../../common/PoweredByFooter";
 import {OnlineEventDetails} from "../../../common/OnlineEventDetails";
-import classes from './AttendeeProductAndInformation.module.scss';
 
 export const AttendeeProductAndInformation = () => {
     const {eventId, attendeeShortId} = useParams();
@@ -33,7 +32,7 @@ export const AttendeeProductAndInformation = () => {
      */
     return (
         <Container>
-            <h2 className={classes.title}>{t`Your ticket for`} {event.title}</h2>
+            <h2>{t`Your ticket for`} {event.title}</h2>
 
             <AttendeeTicket
                 attendee={attendee as Attendee}

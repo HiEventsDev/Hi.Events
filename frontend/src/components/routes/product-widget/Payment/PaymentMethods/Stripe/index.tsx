@@ -3,6 +3,7 @@ import {useCreateStripePaymentIntent} from "../../../../../../queries/useCreateS
 import {useEffect, useState} from "react";
 import {loadStripe, Stripe} from "@stripe/stripe-js";
 import {useGetEventPublic} from "../../../../../../queries/useGetEventPublic.ts";
+import {getConfig} from "../../../../../../utilites/config.ts";
 import {CheckoutContent} from "../../../../../layouts/Checkout/CheckoutContent";
 import {HomepageInfoMessage} from "../../../../../common/HomepageInfoMessage";
 import {t} from "@lingui/macro";
@@ -28,7 +29,7 @@ export const StripePaymentMethod = ({enabled, setSubmitHandler}: StripePaymentMe
     const {data: event} = useGetEventPublic(eventId);
 
     useEffect(() => {
-        if (!stripeData?.client_secret || !stripeData?.public_key) {
+        if (!stripeData?.client_secret) {
             return;
         }
 
@@ -37,7 +38,7 @@ export const StripePaymentMethod = ({enabled, setSubmitHandler}: StripePaymentMe
             stripeAccount: stripeAccount
         } : {};
 
-        setStripePromise(loadStripe(stripeData.public_key, options));
+        setStripePromise(loadStripe(getConfig('VITE_STRIPE_PUBLISHABLE_KEY') as string, options));
     }, [stripeData]);
 
     if (!enabled) {

@@ -11,10 +11,11 @@ use Stripe\Exception\ApiErrorException;
 use Stripe\Refund;
 use Stripe\StripeClient;
 
-class StripePaymentIntentRefundService
+readonly class StripePaymentIntentRefundService
 {
     public function __construct(
-        private readonly Repository   $config,
+        private StripeClient $stripeClient,
+        private Repository   $config,
     )
     {
     }
@@ -27,10 +28,9 @@ class StripePaymentIntentRefundService
     public function refundPayment(
         MoneyValue                $amount,
         StripePaymentDomainObject $payment,
-        StripeClient              $stripeClient,
     ): Refund
     {
-        return $stripeClient->refunds->create(
+        return $this->stripeClient->refunds->create(
             params: [
                 'payment_intent' => $payment->getPaymentIntentId(),
                 'amount' => $amount->toMinorUnit()

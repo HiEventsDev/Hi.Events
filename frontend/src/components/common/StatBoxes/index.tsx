@@ -41,16 +41,16 @@ export const StatBoxes = () => {
 
     const data = [
         {
-            number: formatNumber(eventStats?.total_attendees_registered as number),
-            description: t`Attendees`,
-            icon: <IconUsers size={18}/>,
-            backgroundColor: '#E6677E' // Rose pink
-        },
-        {
             number: formatNumber(eventStats?.total_products_sold as number),
             description: t`Products sold`,
             icon: <IconShoppingCart size={18}/>,
             backgroundColor: '#4B7BE5' // Deep blue
+        },
+        {
+            number: formatNumber(eventStats?.total_attendees_registered as number),
+            description: t`Attendees`,
+            icon: <IconUsers size={18}/>,
+            backgroundColor: '#E6677E' // Rose pink
         },
         {
             number: formatCurrency(eventStats?.total_refunded as number || 0, event?.currency),

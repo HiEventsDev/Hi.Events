@@ -30,7 +30,6 @@ class StripePayment extends BaseModel
             StripePaymentDomainObjectAbstract::PAYMENT_INTENT_ID,
             StripePaymentDomainObjectAbstract::PAYMENT_METHOD_ID,
             StripePaymentDomainObjectAbstract::CONNECTED_ACCOUNT_ID,
-            StripePaymentDomainObjectAbstract::STRIPE_PLATFORM,
         ];
     }
 

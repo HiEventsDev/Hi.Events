@@ -61,7 +61,7 @@ class InvoiceCreateService
         ]);
     }
 
-    private function getLatestInvoiceNumber(int $eventId, EventSettingDomainObject $eventSettings): string
+    public function getLatestInvoiceNumber(int $eventId, EventSettingDomainObject $eventSettings): string
     {
         $latestInvoice = $this->invoiceRepository->findLatestInvoiceForEvent($eventId);
 
@@ -76,4 +76,5 @@ class InvoiceCreateService
 
         return $prefix . $nextInvoiceNumber;
     }
+
 }

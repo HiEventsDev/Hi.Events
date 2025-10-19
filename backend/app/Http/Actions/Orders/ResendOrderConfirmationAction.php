@@ -13,7 +13,6 @@ use HiEvents\Mail\Order\OrderSummary;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
-use HiEvents\Services\Domain\Email\MailBuilderService;
 use Illuminate\Http\Response;
 use Illuminate\Mail\Mailer;
 
@@ -23,7 +22,6 @@ class ResendOrderConfirmationAction extends BaseAction
         private readonly EventRepositoryInterface $eventRepository,
         private readonly OrderRepositoryInterface $orderRepository,
         private readonly Mailer                   $mailer,
-        private readonly MailBuilderService       $mailBuilderService,
     )
     {
     }
@@ -53,18 +51,16 @@ class ResendOrderConfirmationAction extends BaseAction
                 ->loadRelation(new Relationship(EventSettingDomainObject::class))
                 ->findById($order->getEventId());
 
-            $mail = $this->mailBuilderService->buildOrderSummaryMail(
-                $order,
-                $event,
-                $event->getEventSettings(),
-                $event->getOrganizer(),
-                $order->getLatestInvoice()
-            );
-
             $this->mailer
                 ->to($order->getEmail())
                 ->locale($order->getLocale())
-                ->send($mail);
+                ->send(new OrderSummary(
+                    order: $order,
+                    event: $event,
+                    organizer: $event->getOrganizer(),
+                    eventSettings: $event->getEventSettings(),
+                    invoice: $order->getLatestInvoice(),
+                ));
         }
 
         return $this->noContentResponse();

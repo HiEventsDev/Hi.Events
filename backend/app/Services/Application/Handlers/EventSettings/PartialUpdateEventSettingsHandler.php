@@ -10,11 +10,11 @@ use HiEvents\Services\Application\Handlers\EventSettings\DTO\PartialUpdateEventS
 use HiEvents\Services\Application\Handlers\EventSettings\DTO\UpdateEventSettingsDTO;
 use Throwable;
 
-class PartialUpdateEventSettingsHandler
+readonly class PartialUpdateEventSettingsHandler
 {
     public function __construct(
-        private readonly UpdateEventSettingsHandler       $eventSettingsHandler,
-        private readonly EventSettingsRepositoryInterface $eventSettingsRepository,
+        private UpdateEventSettingsHandler       $eventSettingsHandler,
+        private EventSettingsRepositoryInterface $eventSettingsRepository,
     )
     {
     }
@@ -116,12 +116,7 @@ class PartialUpdateEventSettingsHandler
                     : $existingSettings->getInvoiceNotes(),
                 'invoice_payment_terms_days' => array_key_exists('invoice_payment_terms_days', $eventSettingsDTO->settings)
                     ? $eventSettingsDTO->settings['invoice_payment_terms_days']
-                    : $existingSettings->getInvoicePaymentTermsDays(),
-
-                // Ticket design settings
-                'ticket_design_settings' => array_key_exists('ticket_design_settings', $eventSettingsDTO->settings)
-                    ? $eventSettingsDTO->settings['ticket_design_settings']
-                    : $existingSettings->getTicketDesignSettings()
+                    : $existingSettings->getInvoicePaymentTermsDays()
             ]),
         );
     }

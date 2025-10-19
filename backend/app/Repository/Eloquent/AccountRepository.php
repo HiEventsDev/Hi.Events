@@ -24,7 +24,6 @@ class AccountRepository extends BaseRepository implements AccountRepositoryInter
     {
         $account = $this
             ->model
-            ->select('accounts.*')
             ->join('events', 'accounts.id', '=', 'events.account_id')
             ->where('events.id', $eventId)
             ->first();

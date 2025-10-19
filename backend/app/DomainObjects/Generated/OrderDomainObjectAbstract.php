@@ -42,7 +42,6 @@ abstract class OrderDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     final public const LOCALE = 'locale';
     final public const PAYMENT_PROVIDER = 'payment_provider';
     final public const NOTES = 'notes';
-    final public const STATISTICS_DECREMENTED_AT = 'statistics_decremented_at';
 
     protected int $id;
     protected int $event_id;
@@ -76,7 +75,6 @@ abstract class OrderDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     protected string $locale = 'en';
     protected ?string $payment_provider = null;
     protected ?string $notes = null;
-    protected ?string $statistics_decremented_at = null;
 
     public function toArray(): array
     {
@@ -113,7 +111,6 @@ abstract class OrderDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
                     'locale' => $this->locale ?? null,
                     'payment_provider' => $this->payment_provider ?? null,
                     'notes' => $this->notes ?? null,
-                    'statistics_decremented_at' => $this->statistics_decremented_at ?? null,
                 ];
     }
 
@@ -467,16 +464,5 @@ abstract class OrderDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     public function getNotes(): ?string
     {
         return $this->notes;
-    }
-
-    public function setStatisticsDecrementedAt(?string $statistics_decremented_at): self
-    {
-        $this->statistics_decremented_at = $statistics_decremented_at;
-        return $this;
-    }
-
-    public function getStatisticsDecrementedAt(): ?string
-    {
-        return $this->statistics_decremented_at;
     }
 }

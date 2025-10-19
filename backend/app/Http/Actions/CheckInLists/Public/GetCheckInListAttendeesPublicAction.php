@@ -19,11 +19,11 @@ class GetCheckInListAttendeesPublicAction extends BaseAction
     {
     }
 
-    public function __invoke(string $checkInListShortId, Request $request): JsonResponse
+    public function __invoke(string $uuid, Request $request): JsonResponse
     {
         try {
             $attendees = $this->getCheckInListAttendeesPublicHandler->handle(
-                shortId: $checkInListShortId,
+                shortId: $uuid,
                 queryParams: QueryParamsDTO::fromArray($request->query->all())
             );
         } catch (CannotCheckInException $e) {

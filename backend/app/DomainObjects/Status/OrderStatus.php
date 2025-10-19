@@ -2,12 +2,8 @@
 
 namespace HiEvents\DomainObjects\Status;
 
-use HiEvents\DomainObjects\Enums\BaseEnum;
-
 enum OrderStatus
 {
-    use BaseEnum;
-
     case RESERVED;
     case CANCELLED;
     case COMPLETED;

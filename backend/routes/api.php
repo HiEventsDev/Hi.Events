@@ -3,7 +3,6 @@
 use HiEvents\Http\Actions\Accounts\CreateAccountAction;
 use HiEvents\Http\Actions\Accounts\GetAccountAction;
 use HiEvents\Http\Actions\Accounts\Stripe\CreateStripeConnectAccountAction;
-use HiEvents\Http\Actions\Accounts\Stripe\GetStripeConnectAccountsAction;
 use HiEvents\Http\Actions\Accounts\UpdateAccountAction;
 use HiEvents\Http\Actions\Affiliates\CreateAffiliateAction;
 use HiEvents\Http\Actions\Affiliates\DeleteAffiliateAction;
@@ -59,18 +58,6 @@ use HiEvents\Http\Actions\Events\UpdateEventAction;
 use HiEvents\Http\Actions\Events\UpdateEventStatusAction;
 use HiEvents\Http\Actions\EventSettings\EditEventSettingsAction;
 use HiEvents\Http\Actions\EventSettings\GetEventSettingsAction;
-use HiEvents\Http\Actions\EmailTemplates\CreateOrganizerEmailTemplateAction;
-use HiEvents\Http\Actions\EmailTemplates\CreateEventEmailTemplateAction;
-use HiEvents\Http\Actions\EmailTemplates\UpdateOrganizerEmailTemplateAction;
-use HiEvents\Http\Actions\EmailTemplates\UpdateEventEmailTemplateAction;
-use HiEvents\Http\Actions\EmailTemplates\GetOrganizerEmailTemplatesAction;
-use HiEvents\Http\Actions\EmailTemplates\GetEventEmailTemplatesAction;
-use HiEvents\Http\Actions\EmailTemplates\DeleteOrganizerEmailTemplateAction;
-use HiEvents\Http\Actions\EmailTemplates\DeleteEventEmailTemplateAction;
-use HiEvents\Http\Actions\EmailTemplates\PreviewOrganizerEmailTemplateAction;
-use HiEvents\Http\Actions\EmailTemplates\PreviewEventEmailTemplateAction;
-use HiEvents\Http\Actions\EmailTemplates\GetAvailableTokensAction;
-use HiEvents\Http\Actions\EmailTemplates\GetDefaultEmailTemplateAction;
 use HiEvents\Http\Actions\EventSettings\PartialEditEventSettingsAction;
 use HiEvents\Http\Actions\Images\CreateImageAction;
 use HiEvents\Http\Actions\Images\DeleteImageAction;
@@ -205,7 +192,6 @@ $router->middleware(['auth:api'])->group(
         // Accounts
         $router->get('/accounts/{account_id?}', GetAccountAction::class);
         $router->put('/accounts/{account_id?}', UpdateAccountAction::class);
-        $router->get('/accounts/{account_id}/stripe/connect_accounts', GetStripeConnectAccountsAction::class);
         $router->post('/accounts/{account_id}/stripe/connect', CreateStripeConnectAccountAction::class);
 
         // Organizers
@@ -220,15 +206,6 @@ $router->middleware(['auth:api'])->group(
         $router->get('/organizers/{organizer_id}/orders', GetOrganizerOrdersAction::class);
         $router->get('/organizers/{organizer_id}/settings', GetOrganizerSettingsAction::class);
         $router->patch('/organizers/{organizer_id}/settings', PartialUpdateOrganizerSettingsAction::class);
-
-        // Email Templates - Organizer level
-        $router->get('/organizers/{organizerId}/email-templates', GetOrganizerEmailTemplatesAction::class);
-        $router->get('/email-templates/defaults', GetDefaultEmailTemplateAction::class);
-        $router->post('/organizers/{organizerId}/email-templates', CreateOrganizerEmailTemplateAction::class);
-        $router->put('/organizers/{organizerId}/email-templates/{templateId}', UpdateOrganizerEmailTemplateAction::class);
-        $router->delete('/organizers/{organizerId}/email-templates/{templateId}', DeleteOrganizerEmailTemplateAction::class);
-        $router->post('/organizers/{organizerId}/email-templates/preview', PreviewOrganizerEmailTemplateAction::class);
-        $router->get('/email-templates/tokens/{templateType}', GetAvailableTokensAction::class);
 
         // Taxes and Fees
         $router->post('/accounts/{account_id}/taxes-and-fees', CreateTaxOrFeeAction::class);
@@ -261,13 +238,6 @@ $router->middleware(['auth:api'])->group(
 
         // Stats
         $router->get('/events/{event_id}/stats', GetEventStatsAction::class);
-
-        // Email Templates - Event level
-        $router->get('/events/{eventId}/email-templates', GetEventEmailTemplatesAction::class);
-        $router->post('/events/{eventId}/email-templates', CreateEventEmailTemplateAction::class);
-        $router->put('/events/{eventId}/email-templates/{templateId}', UpdateEventEmailTemplateAction::class);
-        $router->delete('/events/{eventId}/email-templates/{templateId}', DeleteEventEmailTemplateAction::class);
-        $router->post('/events/{eventId}/email-templates/preview', PreviewEventEmailTemplateAction::class);
 
         // Attendees
         $router->post('/events/{event_id}/attendees', CreateAttendeeAction::class);

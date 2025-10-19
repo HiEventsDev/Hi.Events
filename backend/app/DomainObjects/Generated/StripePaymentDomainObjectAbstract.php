@@ -22,7 +22,6 @@ abstract class StripePaymentDomainObjectAbstract extends \HiEvents\DomainObjects
     final public const LAST_ERROR = 'last_error';
     final public const CONNECTED_ACCOUNT_ID = 'connected_account_id';
     final public const APPLICATION_FEE = 'application_fee';
-    final public const STRIPE_PLATFORM = 'stripe_platform';
 
     protected int $id;
     protected int $order_id;
@@ -36,7 +35,6 @@ abstract class StripePaymentDomainObjectAbstract extends \HiEvents\DomainObjects
     protected array|string|null $last_error = null;
     protected ?string $connected_account_id = null;
     protected int $application_fee = 0;
-    protected ?string $stripe_platform = null;
 
     public function toArray(): array
     {
@@ -53,7 +51,6 @@ abstract class StripePaymentDomainObjectAbstract extends \HiEvents\DomainObjects
                     'last_error' => $this->last_error ?? null,
                     'connected_account_id' => $this->connected_account_id ?? null,
                     'application_fee' => $this->application_fee ?? null,
-                    'stripe_platform' => $this->stripe_platform ?? null,
                 ];
     }
 
@@ -187,16 +184,5 @@ abstract class StripePaymentDomainObjectAbstract extends \HiEvents\DomainObjects
     public function getApplicationFee(): int
     {
         return $this->application_fee;
-    }
-
-    public function setStripePlatform(?string $stripe_platform): self
-    {
-        $this->stripe_platform = $stripe_platform;
-        return $this;
-    }
-
-    public function getStripePlatform(): ?string
-    {
-        return $this->stripe_platform;
     }
 }

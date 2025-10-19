@@ -8,11 +8,10 @@ export const useCancelOrder = () => {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: ({eventId, orderId, refund}: {
+        mutationFn: ({eventId, orderId}: {
             eventId: IdParam,
             orderId: IdParam,
-            refund?: boolean,
-        }) => orderClient.cancel(eventId, orderId, refund),
+        }) => orderClient.cancel(eventId, orderId),
 
         onSuccess: (_, variables) => {
             queryClient.invalidateQueries({

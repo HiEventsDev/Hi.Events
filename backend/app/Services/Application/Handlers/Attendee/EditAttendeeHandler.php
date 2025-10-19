@@ -39,9 +39,9 @@ class EditAttendeeHandler
     public function handle(EditAttendeeDTO $editAttendeeDTO): AttendeeDomainObject
     {
         return $this->databaseManager->transaction(function () use ($editAttendeeDTO) {
-            $attendee = $this->getAttendee($editAttendeeDTO);
+            $this->validateProductId($editAttendeeDTO);
 
-            $this->validateProductId($editAttendeeDTO, $attendee);
+            $attendee = $this->getAttendee($editAttendeeDTO);
 
             $this->adjustProductQuantities($attendee, $editAttendeeDTO);
 
@@ -84,10 +84,7 @@ class EditAttendeeHandler
      * @throws ValidationException
      * @throws NoTicketsAvailableException
      */
-    private function validateProductId(
-        EditAttendeeDTO $editAttendeeDTO,
-        AttendeeDomainObject $attendee,
-    ): void
+    private function validateProductId(EditAttendeeDTO $editAttendeeDTO): void
     {
         /** @var ProductDomainObject $product */
         $product = $this->productRepository
@@ -107,11 +104,6 @@ class EditAttendeeHandler
             throw ValidationException::withMessages([
                 'product_price_id' => __('Product price ID is not valid'),
             ]);
-        }
-
-        // No need to check availability if the product price hasn't changed
-        if ($attendee->getProductPriceId() === $editAttendeeDTO->product_price_id) {
-            return;
         }
 
         $availableQuantity = $this->productRepository->getQuantityRemainingForProductPrice(

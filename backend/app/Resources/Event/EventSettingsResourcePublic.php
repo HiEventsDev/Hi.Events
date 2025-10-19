@@ -53,9 +53,6 @@ class EventSettingsResourcePublic extends JsonResource
             'location_details' => $this->getLocationDetails(),
             'is_online_event' => $this->getIsOnlineEvent(),
 
-            // Ticket design settings
-            'ticket_design_settings' => $this->getTicketDesignSettings(),
-
             // SEO settings
             'seo_title' => $this->getSeoTitle(),
             'seo_description' => $this->getSeoDescription(),

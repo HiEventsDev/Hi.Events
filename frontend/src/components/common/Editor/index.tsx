@@ -13,7 +13,6 @@ import classNames from "classnames";
 import {Trans} from "@lingui/macro";
 import {InsertImageControl} from "./Controls/InsertImageControl";
 import {ImageResize} from "./Extensions/ImageResizeExtension";
-import {Extension} from '@tiptap/core';
 
 interface EditorProps {
     onChange: (value: string) => void;
@@ -22,12 +21,10 @@ interface EditorProps {
     description?: React.ReactNode;
     required?: boolean;
     className?: string;
-    error?: string | React.ReactNode;
+    error?: string;
     editorType?: 'full' | 'simple';
     maxLength?: number;
     size?: MantineFontSize;
-    additionalExtensions?: Extension[];
-    additionalToolbarControls?: React.ReactNode;
 }
 
 export const Editor = ({
@@ -41,33 +38,19 @@ export const Editor = ({
                            editorType = 'full',
                            maxLength,
                            size = 'md',
-                           additionalExtensions = [],
-                           additionalToolbarControls,
                        }: EditorProps) => {
     const [charError, setCharError] = useState<string | null | React.ReactNode>(null);
 
     const editor = useEditor({
         extensions: [
-            StarterKit.configure({
-                paragraph: {
-                    HTMLAttributes: {
-                        style: 'margin: 0.5em 0;'
-                    }
-                },
-                hardBreak: {
-                    HTMLAttributes: {
-                        'data-type': 'hard-break'
-                    }
-                }
-            }),
+            StarterKit,
             Underline,
             Link,
             TextAlign.configure({types: ['heading', 'paragraph']}),
             Image,
             ImageResize,
             TextStyle,
-            Color,
-            ...additionalExtensions
+            Color
         ],
         onUpdate: ({editor}) => {
             const html = editor.getHTML();
@@ -212,8 +195,6 @@ export const Editor = ({
                             </RichTextEditor.ControlsGroup>
                         </>
                     )}
-                    
-                    {additionalToolbarControls}
                 </RichTextEditor.Toolbar>
 
                 <RichTextEditor.Content/>

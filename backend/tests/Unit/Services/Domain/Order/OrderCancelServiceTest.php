@@ -17,7 +17,6 @@ use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use HiEvents\Services\Infrastructure\DomainEvents\Events\OrderEvent;
-use HiEvents\Services\Domain\EventStatistics\EventStatisticsCancellationService;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Collection;
@@ -35,7 +34,6 @@ class OrderCancelServiceTest extends TestCase
     private ProductQuantityUpdateService $productQuantityService;
     private OrderCancelService $service;
     private DomainEventDispatcherService $domainEventDispatcherService;
-    private EventStatisticsCancellationService $eventStatisticsCancellationService;
 
     protected function setUp(): void
     {
@@ -48,7 +46,6 @@ class OrderCancelServiceTest extends TestCase
         $this->databaseManager = m::mock(DatabaseManager::class);
         $this->productQuantityService = m::mock(ProductQuantityUpdateService::class);
         $this->domainEventDispatcherService = m::mock(DomainEventDispatcherService::class);
-        $this->eventStatisticsCancellationService = m::mock(EventStatisticsCancellationService::class);
 
         $this->service = new OrderCancelService(
             mailer: $this->mailer,
@@ -58,7 +55,6 @@ class OrderCancelServiceTest extends TestCase
             databaseManager: $this->databaseManager,
             productQuantityService: $this->productQuantityService,
             domainEventDispatcherService: $this->domainEventDispatcherService,
-            eventStatisticsCancellationService: $this->eventStatisticsCancellationService,
         );
     }
 
@@ -90,10 +86,6 @@ class OrderCancelServiceTest extends TestCase
         $this->productQuantityService->shouldReceive('decreaseQuantitySold')->twice();
 
         $this->orderRepository->shouldReceive('updateWhere')->once();
-
-        $this->eventStatisticsCancellationService->shouldReceive('decrementForCancelledOrder')
-            ->once()
-            ->with($order);
 
         $event = new EventDomainObject();
         $event->setEventSettings(new EventSettingDomainObject());
@@ -168,10 +160,6 @@ class OrderCancelServiceTest extends TestCase
         $this->productQuantityService->shouldReceive('decreaseQuantitySold')->twice();
 
         $this->orderRepository->shouldReceive('updateWhere')->once();
-
-        $this->eventStatisticsCancellationService->shouldReceive('decrementForCancelledOrder')
-            ->once()
-            ->with($order);
 
         $event = new EventDomainObject();
         $event->setEventSettings(new EventSettingDomainObject());

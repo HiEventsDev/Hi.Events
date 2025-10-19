@@ -11,7 +11,6 @@ use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Helper\StringHelper;
 use HiEvents\Helper\Url;
 use HiEvents\Mail\BaseMail;
-use HiEvents\Services\Domain\Email\DTO\RenderedEmailTemplateDTO;
 use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
@@ -24,47 +23,29 @@ use Spatie\IcalendarGenerator\Components\Event;
  */
 class AttendeeTicketMail extends BaseMail
 {
-    private readonly ?RenderedEmailTemplateDTO $renderedTemplate;
-
     public function __construct(
         private readonly OrderDomainObject        $order,
         private readonly AttendeeDomainObject     $attendee,
         private readonly EventDomainObject        $event,
         private readonly EventSettingDomainObject $eventSettings,
         private readonly OrganizerDomainObject    $organizer,
-        ?RenderedEmailTemplateDTO                 $renderedTemplate = null,
     )
     {
         parent::__construct();
-        $this->renderedTemplate = $renderedTemplate;
     }
 
     public function envelope(): Envelope
     {
-        $subject = $this->renderedTemplate?->subject ?? __('🎟️ Your Ticket for :event', [
-            'event' => Str::limit($this->event->getTitle(), 50)
-        ]);
-
         return new Envelope(
             replyTo: $this->eventSettings->getSupportEmail(),
-            subject: $subject,
+            subject: __('🎟️ Your Ticket for :event', [
+                'event' => Str::limit($this->event->getTitle(), 50)
+            ]),
         );
     }
 
     public function content(): Content
     {
-        if ($this->renderedTemplate) {
-            return new Content(
-                markdown: 'emails.custom-template',
-                with: [
-                    'renderedBody' => $this->renderedTemplate->body,
-                    'renderedCta' => $this->renderedTemplate->cta,
-                    'eventSettings' => $this->eventSettings,
-                ]
-            );
-        }
-
-        // If no template is provided, use the default blade template
         return new Content(
             markdown: 'emails.orders.attendee-ticket',
             with: [

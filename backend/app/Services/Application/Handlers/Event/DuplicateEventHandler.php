@@ -32,7 +32,6 @@ class DuplicateEventHandler
             duplicateCapacityAssignments: $data->duplicateCapacityAssignments,
             duplicateCheckInLists: $data->duplicateCheckInLists,
             duplicateEventCoverImage: $data->duplicateEventCoverImage,
-            duplicateTicketLogo: $data->duplicateTicketLogo,
             duplicateWebhooks: $data->duplicateWebhooks,
             duplicateAffiliates: $data->duplicateAffiliates,
             description: $data->description,

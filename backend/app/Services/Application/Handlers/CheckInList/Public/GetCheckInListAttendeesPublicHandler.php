@@ -2,7 +2,6 @@
 
 namespace HiEvents\Services\Application\Handlers\CheckInList\Public;
 
-use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\CheckInListDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\Generated\CheckInListDomainObjectAbstract;
@@ -43,15 +42,7 @@ class GetCheckInListAttendeesPublicHandler
 
         $this->validateCheckInListIsActive($checkInList);
 
-        $attendees = $this->attendeeRepository->getAttendeesByCheckInShortId($shortId, $queryParams);
-
-        // Set the check-in for each attendee
-        $attendees->getCollection()->transform(function (AttendeeDomainObject $attendee) use ($checkInList) {
-            $attendee->setCheckIn($attendee->getCheckIns()?->first(fn ($checkIn) => $checkIn->getCheckInListId() === $checkInList->getId()));
-            return $attendee;
-        });
-
-        return $attendees;
+        return $this->attendeeRepository->getAttendeesByCheckInShortId($shortId, $queryParams);
     }
 
     /**

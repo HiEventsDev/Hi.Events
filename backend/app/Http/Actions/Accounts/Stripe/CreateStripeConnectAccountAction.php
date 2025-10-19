@@ -4,7 +4,6 @@ namespace HiEvents\Http\Actions\Accounts\Stripe;
 
 use HiEvents\DomainObjects\AccountDomainObject;
 use HiEvents\DomainObjects\Enums\Role;
-use HiEvents\DomainObjects\Enums\StripePlatform;
 use HiEvents\Exceptions\CreateStripeConnectAccountFailedException;
 use HiEvents\Exceptions\CreateStripeConnectAccountLinksFailedException;
 use HiEvents\Exceptions\SaasModeEnabledException;
@@ -13,7 +12,6 @@ use HiEvents\Resources\Account\Stripe\StripeConnectAccountResponseResource;
 use HiEvents\Services\Application\Handlers\Account\Payment\Stripe\CreateStripeConnectAccountHandler;
 use HiEvents\Services\Application\Handlers\Account\Payment\Stripe\DTO\CreateStripeConnectAccountDTO;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
@@ -28,16 +26,13 @@ class CreateStripeConnectAccountAction extends BaseAction
     /**
      * @throws Throwable
      */
-    public function __invoke(int $accountId, Request $request): JsonResponse
+    public function __invoke(int $accountId): JsonResponse
     {
         $this->isActionAuthorized($accountId, AccountDomainObject::class, Role::ADMIN);
 
         try {
-            $accountResult = $this->createStripeConnectAccountHandler->handle(CreateStripeConnectAccountDTO::from([
+            $accountResult = $this->createStripeConnectAccountHandler->handle(CreateStripeConnectAccountDTO::fromArray([
                 'accountId' => $this->getAuthenticatedAccountId(),
-                'platform' => $request->has('platform')
-                    ? StripePlatform::from($request->get('platform'))
-                    : null,
             ]));
         } catch (CreateStripeConnectAccountLinksFailedException|CreateStripeConnectAccountFailedException $e) {
             return $this->errorResponse(

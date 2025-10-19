@@ -1,5 +1,5 @@
 import {Modal} from "../../common/Modal";
-import {GenericModalProps, IdParam, ProductCategory, ProductType} from "../../../types.ts";
+import {GenericModalProps, ProductCategory, ProductType} from "../../../types.ts";
 import {Button} from "../../common/Button";
 import {useNavigate, useParams} from "react-router";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
@@ -72,17 +72,6 @@ export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
             );
         }
     }, [form.values.product_id]);
-
-    useEffect(() => {
-        if (form.values.product_price_id && !form.values.amount_paid) {
-            form.setFieldValue(
-                'amount_paid',
-                Number(eventProducts
-                    ?.find(product => product.id == form.values.product_id)?.prices
-                    ?.find(productPrice => (productPrice.id as IdParam) = form.values.product_price_id)?.price)
-            );
-        }
-    }, [form.values.product_price_id]);
 
     const handleSubmit = (values: CreateAttendeeRequest) => {
         mutation.mutate({

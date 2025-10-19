@@ -12,7 +12,7 @@ import {IconEdit, IconNotebook, IconQuestionMark, IconReceipt, IconTicket, IconU
 import {LoadingMask} from "../../common/LoadingMask";
 import {AttendeeDetails} from "../../common/AttendeeDetails";
 import {OrderDetails} from "../../common/OrderDetails";
-import {QuestionList} from "../../common/QuestionAndAnswerList";
+import {QuestionAndAnswerList, QuestionList} from "../../common/QuestionAndAnswerList";
 import {AttendeeTicket} from "../../common/AttendeeTicket";
 import {getInitials} from "../../../utilites/helpers.ts";
 import {t} from "@lingui/macro";
@@ -61,7 +61,7 @@ export const ManageAttendeeModal = ({onClose, attendeeId}: ManageAttendeeModalPr
                 email: attendee.email,
                 notes: attendee.notes || "",
                 product_id: String(attendee.product_id),
-                product_price_id: attendee.product_price_id ? String(attendee.product_price_id) : "",
+                product_price_id: String(attendee.product_price_id),
             });
         }
     }, [attendee]);
@@ -72,11 +72,11 @@ export const ManageAttendeeModal = ({onClose, attendeeId}: ManageAttendeeModalPr
         }
         let productPriceId = event?.product_categories
             ?.flatMap(category => category.products)
-            .find(product => String(product?.id) === String(form.values.product_id))?.prices?.[0]?.id;
+            .find(product => product.id == form.values.product_id)?.prices?.[0]?.id;
 
         form.setValues({
             ...form.values,
-            product_price_id: productPriceId ? String(productPriceId) : "",
+            product_price_id: String(productPriceId),
         });
     }, [form.values.product_id]);
 

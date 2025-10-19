@@ -7,14 +7,13 @@ use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
-use HiEvents\Services\Domain\Email\MailBuilderService;
+use HiEvents\Mail\Attendee\AttendeeTicketMail;
 use Illuminate\Contracts\Mail\Mailer;
 
 class SendAttendeeTicketService
 {
     public function __construct(
-        private readonly Mailer             $mailer,
-        private readonly MailBuilderService $mailBuilderService,
+        private readonly Mailer $mailer
     )
     {
     }
@@ -27,17 +26,15 @@ class SendAttendeeTicketService
         OrganizerDomainObject    $organizer,
     ): void
     {
-        $mail = $this->mailBuilderService->buildAttendeeTicketMail(
-            $attendee,
-            $order,
-            $event,
-            $eventSettings,
-            $organizer
-        );
-
         $this->mailer
             ->to($attendee->getEmail())
             ->locale($attendee->getLocale())
-            ->send($mail);
+            ->send(new AttendeeTicketMail(
+                order: $order,
+                attendee: $attendee,
+                event: $event,
+                eventSettings: $eventSettings,
+                organizer: $organizer,
+            ));
     }
 }

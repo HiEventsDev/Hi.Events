@@ -18,6 +18,7 @@ use Throwable;
 class StripePaymentIntentCreationService
 {
     public function __construct(
+        private readonly StripeClient                          $stripeClient,
         private readonly LoggerInterface                       $logger,
         private readonly Repository                            $config,
         private readonly StripeCustomerRepositoryInterface     $stripeCustomerRepository,
@@ -30,14 +31,13 @@ class StripePaymentIntentCreationService
     /**
      * @throws CreatePaymentIntentFailedException
      */
-    public function retrievePaymentIntentClientSecretWithClient(
-        StripeClient $stripeClient,
-        string       $paymentIntentId,
-        ?string      $accountId = null,
+    public function retrievePaymentIntentClientSecret(
+        string  $paymentIntentId,
+        ?string $accountId = null,
     ): string
     {
         try {
-            return $stripeClient->paymentIntents->retrieve(
+            return $this->stripeClient->paymentIntents->retrieve(
                 id: $paymentIntentId,
                 opts: $accountId ? ['stripe_account' => $accountId] : []
             )->client_secret;
@@ -57,10 +57,7 @@ class StripePaymentIntentCreationService
      * @throws CreatePaymentIntentFailedException
      * @throws ApiErrorException|Throwable
      */
-    public function createPaymentIntentWithClient(
-        StripeClient                  $stripeClient,
-        CreatePaymentIntentRequestDTO $paymentIntentDTO
-    ): CreatePaymentIntentResponseDTO
+    public function createPaymentIntent(CreatePaymentIntentRequestDTO $paymentIntentDTO): CreatePaymentIntentResponseDTO
     {
         try {
             $this->databaseManager->beginTransaction();
@@ -70,10 +67,10 @@ class StripePaymentIntentCreationService
                 order: $paymentIntentDTO->order,
             )->toMinorUnit();
 
-            $paymentIntent = $stripeClient->paymentIntents->create([
+            $paymentIntent = $this->stripeClient->paymentIntents->create([
                 'amount' => $paymentIntentDTO->amount->toMinorUnit(),
                 'currency' => $paymentIntentDTO->currencyCode,
-                'customer' => $this->upsertStripeCustomerWithClient($stripeClient, $paymentIntentDTO)->getStripeCustomerId(),
+                'customer' => $this->upsertStripeCustomer($paymentIntentDTO)->getStripeCustomerId(),
                 'metadata' => [
                     'order_id' => $paymentIntentDTO->order->getId(),
                     'event_id' => $paymentIntentDTO->order->getEventId(),
@@ -96,7 +93,7 @@ class StripePaymentIntentCreationService
             return new CreatePaymentIntentResponseDTO(
                 paymentIntentId: $paymentIntent->id,
                 clientSecret: $paymentIntent->client_secret,
-                accountId: $paymentIntentDTO->stripeAccountId,
+                accountId: $paymentIntentDTO->account->getStripeAccountId(),
                 applicationFeeAmount: $applicationFee,
             );
         } catch (ApiErrorException $exception) {
@@ -126,7 +123,7 @@ class StripePaymentIntentCreationService
             return [];
         }
 
-        if ($paymentIntentDTO->stripeAccountId === null) {
+        if ($paymentIntentDTO->account->getStripeAccountId() === null) {
             $this->logger->error(
                 'Stripe Connect account not found for the event organizer, payment intent creation failed.
                 You will need to connect your Stripe account to receive payments.',
@@ -139,25 +136,22 @@ class StripePaymentIntentCreationService
         }
 
         return [
-            'stripe_account' => $paymentIntentDTO->stripeAccountId
+            'stripe_account' => $paymentIntentDTO->account->getStripeAccountId()
         ];
     }
 
     /**
      * @throws ApiErrorException|CreatePaymentIntentFailedException
      */
-    private function upsertStripeCustomerWithClient(
-        StripeClient                  $stripeClient,
-        CreatePaymentIntentRequestDTO $paymentIntentDTO
-    ): StripeCustomerDomainObject
+    private function upsertStripeCustomer(CreatePaymentIntentRequestDTO $paymentIntentDTO): StripeCustomerDomainObject
     {
         $customer = $this->stripeCustomerRepository->findFirstWhere([
             'email' => $paymentIntentDTO->order->getEmail(),
-            'stripe_account_id' => $paymentIntentDTO->stripeAccountId,
+            'stripe_account_id' => $paymentIntentDTO->account->getStripeAccountId(),
         ]);
 
         if ($customer === null) {
-            $stripeCustomer = $stripeClient->customers->create(
+            $stripeCustomer = $this->stripeClient->customers->create(
                 params: [
                     'email' => $paymentIntentDTO->order->getEmail(),
                     'name' => $paymentIntentDTO->order->getFullName(),
@@ -169,7 +163,7 @@ class StripePaymentIntentCreationService
                 'name' => $stripeCustomer->name,
                 'email' => $stripeCustomer->email,
                 'stripe_customer_id' => $stripeCustomer->id,
-                'stripe_account_id' => $paymentIntentDTO->stripeAccountId,
+                'stripe_account_id' => $paymentIntentDTO->account->getStripeAccountId(),
             ]);
         }
 
@@ -177,7 +171,7 @@ class StripePaymentIntentCreationService
             return $customer;
         }
 
-        $stripeCustomer = $stripeClient->customers->update(
+        $stripeCustomer = $this->stripeClient->customers->update(
             id: $customer->getStripeCustomerId(),
             params: ['name' => $paymentIntentDTO->order->getFullName()],
             opts: $this->getStripeAccountData($paymentIntentDTO),

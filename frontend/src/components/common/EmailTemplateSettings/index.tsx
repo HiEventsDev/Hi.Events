@@ -1,1 +1,0 @@
-export { EmailTemplateSettingsBase } from './EmailTemplateSettingsBase';

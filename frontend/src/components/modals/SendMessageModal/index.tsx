@@ -15,7 +15,7 @@ import {useSendEventMessage} from "../../../mutations/useSendEventMessage.ts";
 import {ProductSelector} from "../../common/ProductSelector";
 import {useEffect} from "react";
 import {useGetAccount} from "../../../queries/useGetAccount.ts";
-import {StripeConnectButton} from "../../common/StripeConnectButton";
+import { getConfig } from "../../../utilites/config.ts";
 
 interface EventMessageModalProps extends GenericModalProps {
     orderId?: IdParam,
@@ -156,11 +156,17 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
                 {accountRequiresManualVerification && (
                     <>
                         <Alert mt={20} variant={'light'} icon={<IconAlertCircle size="1rem"/>}
-                               title={t`Connect Stripe to enable messaging`}>
-                            {t`Due to the high risk of spam, you must connect a Stripe account before you can send messages to attendees.
-                             This is to ensure that all event organizers are verified and accountable.`}
-                            <br/><br/>
-                            <StripeConnectButton/>
+                               title={t`Contact us to enable messaging`}>
+                            {t`Due to the high risk of spam, we require manual verification before you can send messages.
+                         Please contact us to request access.`}
+                            <Button
+                                mt={20}
+                                onClick={() => window.open(`mailto:${getConfig("VITE_PLATFORM_SUPPORT_EMAIL", "support@hi.events")}`)}
+                                variant={'outline'}
+                                fullWidth
+                            >
+                                {t`Contact Support`}
+                            </Button>
                         </Alert>
 
                     </>

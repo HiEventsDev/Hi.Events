@@ -1,5 +1,6 @@
+import {Card} from "../Card";
 import {getAttendeeProductPrice, getAttendeeProductTitle} from "../../../utilites/products.ts";
-import {Button, CopyButton} from "@mantine/core";
+import {Anchor, Button, CopyButton} from "@mantine/core";
 import {formatCurrency} from "../../../utilites/currency.ts";
 import {t} from "@lingui/macro";
 import {prettyDate} from "../../../utilites/dates.ts";
@@ -7,7 +8,6 @@ import QRCode from "react-qr-code";
 import {IconCopy, IconPrinter} from "@tabler/icons-react";
 import {Attendee, Event, Product} from "../../../types.ts";
 import classes from './AttendeeTicket.module.scss';
-import {imageUrl} from "../../../utilites/urlHelper.ts";
 
 interface AttendeeTicketProps {
     event: Event;
@@ -16,163 +16,85 @@ interface AttendeeTicketProps {
     hideButtons?: boolean;
 }
 
-export const AttendeeTicket = ({
-                                   attendee,
-                                   product,
-                                   event,
-                                   hideButtons = false,
-                               }: AttendeeTicketProps) => {
+export const AttendeeTicket = ({attendee, product, event, hideButtons = false}: AttendeeTicketProps) => {
     const productPrice = getAttendeeProductPrice(attendee, product);
-    const hasVenue = event?.settings?.location_details?.venue_name || event?.settings?.location_details?.address_line_1;
-
-    const ticketDesignSettings = event?.settings?.ticket_design_settings;
-    const accentColor = ticketDesignSettings?.accent_color || '#6B46C1';
-    const footerText = ticketDesignSettings?.footer_text;
-    const logoUrl = imageUrl('TICKET_LOGO', event?.images);
-
-    const ticketStyle = {
-        '--accent': accentColor,
-    } as React.CSSProperties;
-
-    const isCancelled = attendee.status === 'CANCELLED';
-    const isAwaitingPayment = attendee.status === 'AWAITING_PAYMENT';
 
     return (
-        <div className={classes.ticket} style={ticketStyle}>
-            {/* Header */}
-            <div className={classes.header}>
-                <div className={classes.headerContent}>
-                    <h1 className={classes.eventTitle}>{event?.title}</h1>
-                    <div className={classes.priceDisplay}>
-                        {productPrice > 0 ? formatCurrency(productPrice, event?.currency) : t`Free`}
-                    </div>
-                </div>
-            </div>
-
-            {/* Main Content */}
-            <div className={classes.content}>
-                <div className={classes.contentLeft}>
-                    {/* Event Details */}
-                    <div className={classes.eventDetails}>
-                        <div className={classes.detailRow}>
-                            <div className={classes.detailLabel}>{t`Date & Time`}</div>
-                            <div className={classes.detailValue}>
-                                {prettyDate(event.start_date, event.timezone)}
-                            </div>
-                        </div>
-                        {event?.organizer?.name && (
-                            <div className={classes.detailRow}>
-                                <div className={classes.detailLabel}>{t`Organizer`}</div>
-                                <div className={classes.detailValue}>
-                                    {event?.organizer?.name}
-                                </div>
-                            </div>
-                        )}
-
-                        {hasVenue && (
-                            <div className={classes.detailRow}>
-                                <div className={classes.detailLabel}>{t`Venue`}</div>
-                                <div className={classes.detailValue}>
-                                    {event?.settings?.location_details?.venue_name}
-                                    {event?.settings?.location_details?.address_line_1 && (
-                                        <>, {event?.settings?.location_details?.address_line_1}</>
-                                    )}
-                                </div>
-                            </div>
-                        )}
-
-                        <div className={classes.detailRow}>
-                            <div className={classes.detailLabel}>{t`Ticket Type`}</div>
-                            <div className={classes.detailValue}>
-                                {getAttendeeProductTitle(attendee, product)}
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Attendee Information */}
-                    <div className={classes.attendeeSection}>
-                        <div className={classes.detailLabel}>{t`Attendee`}</div>
-                        <div className={classes.attendeeName}>
+        <Card className={classes.attendee}>
+            <div className={classes.attendeeInfo}>
+                <div className={classes.attendeeNameAndPrice}>
+                    <div className={classes.attendeeName}>
+                        <h2>
                             {attendee.first_name} {attendee.last_name}
+                        </h2>
+                        <div className={classes.productName}>
+                            {getAttendeeProductTitle(attendee)}
                         </div>
-                        <div className={classes.attendeeEmail}>{attendee.email}</div>
+                        <Anchor href={`mailto:${attendee.email}`}>
+                            {attendee.email}
+                        </Anchor>
                     </div>
-
+                    <div className={classes.productPrice}>
+                        <div className={classes.badge}>
+                            {productPrice > 0 && formatCurrency(productPrice, event?.currency)}
+                            {productPrice === 0 && t`Free`}
+                        </div>
+                    </div>
                 </div>
-
-                {/* Right Section - Logo & QR Code */}
-                <div className={classes.contentRight}>
-                    <div className={classes.qrSection}>
-                        {logoUrl && (
-                            <div className={classes.logoContainer}>
-                                <img src={logoUrl} alt="Event Logo" className={classes.logo}/>
-                            </div>
-                        )}
-
-                        <div className={classes.qrContainer}>
-                            {(isCancelled || isAwaitingPayment) ? (
-                                <div className={classes.statusOverlay}>
-                                    <span className={isCancelled ? classes.cancelled : classes.pending}>
-                                        {isCancelled ? t`Cancelled` : t`Awaiting Payment`}
-                                    </span>
-                                </div>
-                            ) : (
-                                <QRCode
-                                    value={String(attendee.public_id)}
-                                    size={180}
-                                    level="M"
-                                    style={{height: "auto", maxWidth: "100%", width: "100%"}}
-                                />
-                            )}
-                        </div>
-
-                        <div className={classes.ticketId}>
-                            <div className={classes.detailLabel}>{t`Ticket ID`}</div>
-                            <div className={classes.ticketIdValue}>{attendee.public_id}</div>
-                        </div>
+                <div className={classes.eventInfo}>
+                    <div className={classes.eventName}>
+                        {event?.title}
+                    </div>
+                    <div className={classes.eventDate}>
+                        {prettyDate(event.start_date, event.timezone)}
                     </div>
                 </div>
             </div>
-
-            {/* Footer - Only show if there's footer text or buttons */}
-            {(footerText || !hideButtons) && (
-                <div className={classes.footer}>
-                    <div className={classes.footerContent}>
-                        {footerText && (
-                            <div className={classes.footerText}>
-                                {footerText}
-                            </div>
-                        )}
-
-                        {!hideButtons && (
-                            <div className={classes.actions}>
-                                <Button
-                                    variant="default"
-                                    size="sm"
-                                    onClick={() => window?.open(`/product/${event.id}/${attendee.short_id}/print`, '_blank')}
-                                    leftSection={<IconPrinter size={16}/>}
-                                >
-                                    {t`Print`}
-                                </Button>
-
-                                <CopyButton
-                                    value={`${window?.location.origin}/product/${event.id}/${attendee.short_id}`}>
-                                    {({copied, copy}) => (
-                                        <Button
-                                            variant="default"
-                                            size="sm"
-                                            onClick={copy}
-                                            leftSection={<IconCopy size={16}/>}
-                                        >
-                                            {copied ? t`Copied` : t`Copy Link`}
-                                        </Button>
-                                    )}
-                                </CopyButton>
-                            </div>
-                        )}
-                    </div>
+            <div className={classes.qrCode}>
+                <div className={classes.attendeeCode}>
+                    {attendee.public_id}
                 </div>
-            )}
-        </div>
+
+                <div className={classes.qrImage}>
+                    {attendee.status === 'CANCELLED' && (
+                        <div className={classes.cancelled}>
+                            {t`Cancelled`}
+                        </div>
+                    )}
+
+                    {attendee.status === 'AWAITING_PAYMENT' && (
+                        <div className={classes.awaitingPayment}>
+                            {t`Awaiting Payment`}
+                        </div>
+                    )}
+                    {attendee.status !== 'CANCELLED' && <QRCode value={String(attendee.public_id)}/>}
+
+                </div>
+
+                {!hideButtons && (
+                    <div className={classes.productButtons}>
+                        <Button variant={'transparent'}
+                                size={'sm'}
+                                onClick={() => window?.open(`/product/${event.id}/${attendee.short_id}/print`, '_blank', 'noopener,noreferrer')}
+                                leftSection={<IconPrinter size={18}/>
+                                }>
+                            {t`Print`}
+                        </Button>
+
+                        <CopyButton value={`${window?.location.origin}/product/${event.id}/${attendee.short_id}`}>
+                            {({copied, copy}) => (
+                                <Button variant={'transparent'}
+                                        size={'sm'}
+                                        onClick={copy}
+                                        leftSection={<IconCopy size={18}/>
+                                        }>
+                                    {copied ? t`Copied` : t`Copy Link`}
+                                </Button>
+                            )}
+                        </CopyButton>
+                    </div>
+                )}
+            </div>
+        </Card>
     );
 }

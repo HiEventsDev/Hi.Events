@@ -2,15 +2,14 @@ import {useEffect, useRef, useState} from 'react';
 import QrScanner from 'qr-scanner';
 import {useDebouncedValue} from '@mantine/hooks';
 import classes from './QrScanner.module.scss';
+import {IconBulb, IconBulbOff, IconCameraRotate, IconVolume, IconVolumeOff, IconX} from "@tabler/icons-react";
+import {Anchor, Button, Menu} from "@mantine/core";
 import {showError} from "../../../utilites/notifications.tsx";
-import {t} from "@lingui/macro";
-import {QrScannerControls} from './QrScannerControls';
-import {PermissionDeniedMessage} from './PermissionDeniedMessage';
+import {t, Trans} from "@lingui/macro";
 
 interface QRScannerComponentProps {
     onAttendeeScanned: (attendeePublicId: string) => void;
     onClose: () => void;
-    isSoundOn?: boolean;
 }
 
 export const QRScannerComponent = (props: QRScannerComponentProps) => {
@@ -35,27 +34,13 @@ export const QRScannerComponent = (props: QRScannerComponentProps) => {
     const scanInProgressAudioRef = useRef<HTMLAudioElement | null>(null);
 
     const [isSoundOn, setIsSoundOn] = useState(() => {
-        // Use the prop value if provided, otherwise fallback to unified storage
-        if (props.isSoundOn !== undefined) {
-            return props.isSoundOn;
-        }
-        const storedIsSoundOn = localStorage.getItem("scannerSoundOn");
+        const storedIsSoundOn = localStorage.getItem("qrScannerSoundOn");
         return storedIsSoundOn === null ? true : JSON.parse(storedIsSoundOn);
     });
 
-    // Sync with prop changes
     useEffect(() => {
-        if (props.isSoundOn !== undefined) {
-            setIsSoundOn(props.isSoundOn);
-        }
-    }, [props.isSoundOn]);
-
-    useEffect(() => {
-        // Only save to localStorage if not controlled by props
-        if (props.isSoundOn === undefined) {
-            localStorage.setItem("scannerSoundOn", JSON.stringify(isSoundOn));
-        }
-    }, [isSoundOn, props.isSoundOn]);
+        localStorage.setItem("qrScannerSoundOn", JSON.stringify(isSoundOn));
+    }, [isSoundOn]);
 
     useEffect(() => {
         latestProcessedAttendeeIdsRef.current = processedAttendeeIds;
@@ -178,7 +163,7 @@ export const QRScannerComponent = (props: QRScannerComponentProps) => {
         };
     }, []);
 
-    const handleCameraSelection = (camera: QrScanner.Camera) => {
+    const handleCameraSelection = (camera: QrScanner.Camera) => () => {
         return qrScannerRef.current?.setCamera(camera.id)
             .then(() => updateFlashAvailability().catch(console.error));
     };
@@ -186,29 +171,55 @@ export const QRScannerComponent = (props: QRScannerComponentProps) => {
     return (
         <div className={classes.videoContainer}>
             {permissionDenied && (
-                <PermissionDeniedMessage
-                    onRequestPermission={requestPermission}
-                    onClose={handleClose}
-                />
+                <div className={classes.permissionMessage}>
+                    <Trans>
+                        Camera permission was denied. <Anchor onClick={requestPermission}>Request
+                        Permission</Anchor> again,
+                        or if this doesn't work,
+                        you will need to <Anchor target={'_blank'}
+                                                 href={'https://support.onemob.com/hc/en-us/articles/360037342154-How-do-I-grant-permission-for-Camera-and-Microphone-in-my-web-browser-'}>grant
+                        this page</Anchor> access to your camera in your browser settings.
+                    </Trans>
+
+                    <div>
+                        <Button color={'green'} mt={20} onClick={handleClose} variant={'filled'}>
+                            {t`Close`}
+                        </Button>
+                    </div>
+                </div>
             )}
 
             <video className={classes.video} ref={videoRef}></video>
 
-            <QrScannerControls
-                isFlashAvailable={isFlashAvailable}
-                isFlashOn={isFlashOn}
-                isSoundOn={isSoundOn}
-                cameraList={cameraList}
-                onFlashToggle={handleFlashToggle}
-                onSoundToggle={handleSoundToggle}
-                onCameraSelect={handleCameraSelection}
-                onClose={handleClose}
-            />
-
+            <Button onClick={handleFlashToggle} variant={'transparent'} className={classes.flashToggle}>
+                {!isFlashAvailable && <IconBulbOff color={'#ffffff95'} size={30}/>}
+                {isFlashAvailable && <IconBulb color={isFlashOn ? 'yellow' : '#ffffff95'} size={30}/>}
+            </Button>
+            <Button onClick={handleSoundToggle} variant={'transparent'} className={classes.soundToggle}>
+                {isSoundOn && <IconVolume color={'#ffffff95'} size={30}/>}
+                {!isSoundOn && <IconVolumeOff color={'#ffffff95'} size={30}/>}
+            </Button>
             <audio ref={scanSuccessAudioRef} src="/sounds/scan-success.wav"/>
             <audio ref={scanErrorAudioRef} src="/sounds/scan-error.wav"/>
             <audio ref={scanInProgressAudioRef} src="/sounds/scan-in-progress.wav"/>
-            
+            <Button onClick={handleClose} variant={'transparent'} className={classes.closeButton}>
+                <IconX color={'#ffffff95'} size={30}/>
+            </Button>
+            <Button variant={'transparent'} className={classes.switchCameraButton}>
+                <Menu shadow="md" width={200}>
+                    <Menu.Target>
+                        <IconCameraRotate color={'#ffffff95'} size={30}/>
+                    </Menu.Target>
+                    <Menu.Dropdown>
+                        <Menu.Label>{t`Select Camera`}</Menu.Label>
+                        {cameraList?.map((camera, index) => (
+                            <Menu.Item key={index} onClick={handleCameraSelection(camera)}>
+                                {camera.label}
+                            </Menu.Item>
+                        ))}
+                    </Menu.Dropdown>
+                </Menu>
+            </Button>
             <div className={`${classes.scannerOverlay} ${isScanSucceeded ? classes.success : ""} ${isScanFailed ? classes.failure : ""} ${isCheckingIn ? classes.checkingIn : ""}`}/>
         </div>
     );

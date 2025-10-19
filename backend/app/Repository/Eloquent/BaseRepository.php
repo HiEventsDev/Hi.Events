@@ -308,15 +308,6 @@ abstract class BaseRepository implements RepositoryInterface
         return $deleted;
     }
 
-    public function countWhere(array $conditions): int
-    {
-        $this->applyConditions($conditions);
-        $count = $this->model->count();
-        $this->resetModel();
-
-        return $count;
-    }
-
     public function loadRelation(string|Relationship $relationship): static
     {
         if (is_string($relationship)) {

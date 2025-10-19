@@ -3,9 +3,9 @@
 namespace HiEvents\Services\Domain\Tax;
 
 use HiEvents\DomainObjects\Enums\TaxCalculationType;
+use HiEvents\DomainObjects\TaxAndFeesDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
-use HiEvents\DomainObjects\TaxAndFeesDomainObject;
 use HiEvents\Services\Domain\Tax\DTO\TaxCalculationResponse;
 use InvalidArgumentException;
 
@@ -49,13 +49,6 @@ class TaxAndFeeCalculationService
 
     private function calculateFee(TaxAndFeesDomainObject $taxOrFee, float $price, int $quantity): float
     {
-        // We do not charge a tax or fee on items which are free of charge
-        if ($price === 0.00) {
-            $this->taxRollupService->addToRollUp($taxOrFee, 0);
-
-            return 0.00;
-        }
-
         $amount = match ($taxOrFee->getCalculationType()) {
             TaxCalculationType::FIXED->name => $taxOrFee->getRate(),
             TaxCalculationType::PERCENTAGE->name => ($price * $taxOrFee->getRate()) / 100,

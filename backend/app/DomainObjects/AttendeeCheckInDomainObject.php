@@ -6,8 +6,6 @@ class AttendeeCheckInDomainObject extends Generated\AttendeeCheckInDomainObjectA
 {
     private ?AttendeeDomainObject $attendee = null;
 
-    private ?CheckInListDomainObject $checkInList = null;
-
     public function getAttendee(): ?AttendeeDomainObject
     {
         return $this->attendee;
@@ -17,16 +15,5 @@ class AttendeeCheckInDomainObject extends Generated\AttendeeCheckInDomainObjectA
     {
         $this->attendee = $attendee;
         return $this;
-    }
-
-    public function setCheckInList(?CheckInListDomainObject $checkInList): AttendeeCheckInDomainObject
-    {
-        $this->checkInList = $checkInList;
-        return $this;
-    }
-
-    public function getCheckInList(): ?CheckInListDomainObject
-    {
-        return $this->checkInList;
     }
 }

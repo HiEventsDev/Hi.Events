@@ -19,15 +19,13 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Stripe\StripeClient;
-use HiEvents\Services\Infrastructure\Stripe\StripeConfigurationService;
-use HiEvents\Services\Infrastructure\Stripe\StripeClientFactory;
 
 class AppServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
         $this->bindDoctrineConnection();
-        $this->bindStripeServices();
+        $this->bindStripeClient();
         $this->bindCurrencyConversionClient();
     }
 
@@ -69,11 +67,8 @@ class AppServiceProvider extends ServiceProvider
         );
     }
 
-    private function bindStripeServices(): void
+    private function bindStripeClient(): void
     {
-        $this->app->singleton(StripeConfigurationService::class);
-        $this->app->singleton(StripeClientFactory::class);
-        
         if (!config('services.stripe.secret_key')) {
             logger()?->debug('Stripe secret key is not set in the configuration file. Payment processing will not work.');
             return;

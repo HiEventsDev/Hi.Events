@@ -1,23 +1,21 @@
-import {CheckInList, CheckInListRequest, GenericModalProps, Product, ProductCategory} from "../../../types.ts";
+import {CheckInListRequest, GenericModalProps, Product, ProductCategory} from "../../../types.ts";
 import {Modal} from "../../common/Modal";
 import {t} from "@lingui/macro";
 import {CheckInListForm} from "../../forms/CheckInListForm";
 import {useForm} from "@mantine/form";
 import {Button} from "@mantine/core";
 import {useCreateCheckInList} from "../../../mutations/useCreateCheckInList.ts";
+import {showSuccess} from "../../../utilites/notifications.tsx";
 import {useParams} from "react-router";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {NoResultsSplash} from "../../common/NoResultsSplash";
 import {IconPlus} from "@tabler/icons-react";
-import {CheckInListSuccessModal} from "../CheckInListSuccessModal";
-import {useState} from "react";
 
 export const CreateCheckInListModal = ({onClose}: GenericModalProps) => {
     const {eventId} = useParams();
     const errorHandler = useFormErrorResponseHandler();
     const {data: event} = useGetEvent(eventId);
-    const [createdCheckInList, setCreatedCheckInList] = useState<CheckInList | null>(null);
     const form = useForm<CheckInListRequest>({
         initialValues: {
             name: '',
@@ -38,8 +36,9 @@ export const CreateCheckInListModal = ({onClose}: GenericModalProps) => {
             eventId: eventId,
             checkInListData: requestData,
         }, {
-            onSuccess: (response) => {
-                setCreatedCheckInList(response.data);
+            onSuccess: () => {
+                showSuccess(t`Check-In List created successfully`);
+                onClose();
             },
             onError: (error) => errorHandler(form, error),
         })
@@ -69,32 +68,16 @@ export const CreateCheckInListModal = ({onClose}: GenericModalProps) => {
         );
     }
 
-    if (createdCheckInList) {
-        return (
-            <CheckInListSuccessModal
-                onClose={onClose}
-                checkInListName={createdCheckInList.name}
-                checkInListShortId={createdCheckInList.short_id}
-            />
-        );
-    }
-
     return (
         <Modal opened onClose={onClose} heading={eventHasTickets ? t`Create Check-In List` : null}>
             {!eventHasTickets && <NoProducts/>}
             {eventHasTickets && (
                 <form onSubmit={form.onSubmit(handleSubmit)}>
-                    {event && (
-                        <CheckInListForm
-                            form={form}
-                            productCategories={event.product_categories as ProductCategory[]}
-                        />
-                    )}
+                    {event && <CheckInListForm form={form} productCategories={event.product_categories as ProductCategory[]}/>}
                     <Button
                         type={'submit'}
                         fullWidth
                         loading={createMutation.isPending}
-                        mt="md"
                     >
                         {t`Create Check-In List`}
                     </Button>

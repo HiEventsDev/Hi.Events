@@ -12,7 +12,6 @@ class OrderRefund extends BaseModel
     {
         return [
             'metadata' => 'array',
-            'amount' => 'float',
         ];
     }
 

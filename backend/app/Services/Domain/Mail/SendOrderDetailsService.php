@@ -16,7 +16,6 @@ use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Domain\Attendee\SendAttendeeTicketService;
-use HiEvents\Services\Domain\Email\MailBuilderService;
 use Illuminate\Mail\Mailer;
 
 class SendOrderDetailsService
@@ -26,7 +25,6 @@ class SendOrderDetailsService
         private readonly OrderRepositoryInterface  $orderRepository,
         private readonly Mailer                    $mailer,
         private readonly SendAttendeeTicketService $sendAttendeeTicketService,
-        private readonly MailBuilderService        $mailBuilderService,
     )
     {
     }
@@ -70,18 +68,16 @@ class SendOrderDetailsService
         ?InvoiceDomainObject     $invoice = null
     ): void
     {
-        $mail = $this->mailBuilderService->buildOrderSummaryMail(
-            $order,
-            $event,
-            $eventSettings,
-            $organizer,
-            $invoice
-        );
-
         $this->mailer
             ->to($order->getEmail())
             ->locale($order->getLocale())
-            ->send($mail);
+            ->send(new OrderSummary(
+                order: $order,
+                event: $event,
+                organizer: $organizer,
+                eventSettings: $eventSettings,
+                invoice: $invoice,
+            ));
     }
 
     private function sendAttendeeTicketEmails(OrderDomainObject $order, EventDomainObject $event): void

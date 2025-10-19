@@ -9,7 +9,6 @@ jobs:
   push_to_registry:
     name: Push Docker images to Docker Hub
     runs-on: ubuntu-latest
-
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
@@ -29,9 +28,6 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           images: daveearley/hi.events-all-in-one
-          tags: |
-            type=ref,event=tag
-            type=raw,value=latest,enable=${{ github.event.release.prerelease == false }}
 
       - name: Build and push All-in-one Docker image
         uses: docker/build-push-action@v3
@@ -48,9 +44,6 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           images: daveearley/hi.events-backend
-          tags: |
-            type=ref,event=tag
-            type=raw,value=latest,enable=${{ github.event.release.prerelease == false }}
 
       - name: Build and push Backend Docker image
         uses: docker/build-push-action@v3
@@ -67,9 +60,6 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           images: daveearley/hi.events-frontend
-          tags: |
-            type=ref,event=tag
-            type=raw,value=latest,enable=${{ github.event.release.prerelease == false }}
 
       - name: Build and push Frontend Docker image
         uses: docker/build-push-action@v3

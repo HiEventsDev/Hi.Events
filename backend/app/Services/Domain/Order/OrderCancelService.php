@@ -17,7 +17,6 @@ use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use HiEvents\Services\Infrastructure\DomainEvents\Events\OrderEvent;
-use HiEvents\Services\Domain\EventStatistics\EventStatisticsCancellationService;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
@@ -25,14 +24,13 @@ use Throwable;
 class OrderCancelService
 {
     public function __construct(
-        private readonly Mailer                              $mailer,
-        private readonly AttendeeRepositoryInterface         $attendeeRepository,
-        private readonly EventRepositoryInterface            $eventRepository,
-        private readonly OrderRepositoryInterface            $orderRepository,
-        private readonly DatabaseManager                     $databaseManager,
-        private readonly ProductQuantityUpdateService        $productQuantityService,
-        private readonly DomainEventDispatcherService        $domainEventDispatcherService,
-        private readonly EventStatisticsCancellationService  $eventStatisticsCancellationService,
+        private readonly Mailer                       $mailer,
+        private readonly AttendeeRepositoryInterface  $attendeeRepository,
+        private readonly EventRepositoryInterface     $eventRepository,
+        private readonly OrderRepositoryInterface     $orderRepository,
+        private readonly DatabaseManager              $databaseManager,
+        private readonly ProductQuantityUpdateService $productQuantityService,
+        private readonly DomainEventDispatcherService $domainEventDispatcherService,
     )
     {
     }
@@ -43,9 +41,6 @@ class OrderCancelService
     public function cancelOrder(OrderDomainObject $order): void
     {
         $this->databaseManager->transaction(function () use ($order) {
-            // Order of operations matters here. We must decrement the stats first.
-            $this->eventStatisticsCancellationService->decrementForCancelledOrder($order);
-
             $this->adjustProductQuantities($order);
             $this->cancelAttendees($order);
             $this->updateOrderStatus($order);

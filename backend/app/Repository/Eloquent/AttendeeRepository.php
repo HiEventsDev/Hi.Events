@@ -118,7 +118,7 @@ class AttendeeRepository extends BaseRepository implements AttendeeRepositoryInt
             ->whereIn('attendees.status',[AttendeeStatus::ACTIVE->name, AttendeeStatus::CANCELLED->name, AttendeeStatus::AWAITING_PAYMENT->name])
             ->whereIn('orders.status', [OrderStatus::COMPLETED->name, OrderStatus::AWAITING_OFFLINE_PAYMENT->name]);
 
-        $this->loadRelation(new Relationship(AttendeeCheckInDomainObject::class, name: 'check_ins'));
+        $this->loadRelation(new Relationship(AttendeeCheckInDomainObject::class, name: 'check_in'));
 
         return $this->simplePaginateWhere(
             where: $where,

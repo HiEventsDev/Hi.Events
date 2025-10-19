@@ -31,9 +31,6 @@ class DeleteAttendeeCheckInService
             ->loadRelation(new Relationship(AttendeeDomainObject::class, name: 'attendee'))
             ->findFirstWhere([
                 AttendeeCheckInDomainObjectAbstract::SHORT_ID => $checkInShortId,
-                AttendeeCheckInDomainObjectAbstract::CHECK_IN_LIST_ID => $this
-                    ->checkInListDataService
-                    ->getCheckInList($checkInListShortId)->getId(),
             ]);
 
         if ($checkIn === null) {

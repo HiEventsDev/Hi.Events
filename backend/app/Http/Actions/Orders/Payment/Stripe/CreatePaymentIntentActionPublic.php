@@ -10,10 +10,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CreatePaymentIntentActionPublic extends BaseAction
 {
-    public function __construct(
-        private readonly CreatePaymentIntentHandler $createPaymentIntentHandler,
-    )
+    private CreatePaymentIntentHandler $createPaymentIntentHandler;
+
+    public function __construct(CreatePaymentIntentHandler $createPaymentIntentHandler)
     {
+        $this->createPaymentIntentHandler = $createPaymentIntentHandler;
     }
 
     public function __invoke(int $eventId, string $orderShortId): JsonResponse
@@ -27,8 +28,6 @@ class CreatePaymentIntentActionPublic extends BaseAction
         return $this->jsonResponse([
             'client_secret' => $createIntent->clientSecret,
             'account_id' => $createIntent->accountId,
-            'public_key' => $createIntent->publicKey,
-            'stripe_platform' => $createIntent->stripePlatform?->value,
         ]);
     }
 }

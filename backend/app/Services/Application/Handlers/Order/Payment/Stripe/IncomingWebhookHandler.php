@@ -16,15 +16,14 @@ use Stripe\Exception\SignatureVerificationException;
 use Stripe\Webhook;
 use Throwable;
 use UnexpectedValueException;
-use HiEvents\Services\Infrastructure\Stripe\StripeConfigurationService;
 
 class IncomingWebhookHandler
 {
     private static array $validEvents = [
         Event::PAYMENT_INTENT_SUCCEEDED,
         Event::PAYMENT_INTENT_PAYMENT_FAILED,
+        Event::CHARGE_REFUND_UPDATED,
         Event::ACCOUNT_UPDATED,
-        Event::REFUND_UPDATED,
     ];
 
     public function __construct(
@@ -34,7 +33,6 @@ class IncomingWebhookHandler
         private readonly AccountUpdateHandler          $accountUpdateHandler,
         private readonly Logger                        $logger,
         private readonly Repository                    $cache,
-        private readonly StripeConfigurationService    $stripeConfigurationService,
     )
     {
     }
@@ -47,7 +45,11 @@ class IncomingWebhookHandler
     public function handle(StripeWebhookDTO $webhookDTO): void
     {
         try {
-            $event = $this->constructEventWithValidPlatform($webhookDTO);
+            $event = Webhook::constructEvent(
+                $webhookDTO->payload,
+                $webhookDTO->headerSignature,
+                config('services.stripe.webhook_secret'),
+            );
 
             if (!in_array($event->type, self::$validEvents, true)) {
                 $this->logger->debug(__('Received a :event Stripe event, which has no handler', [
@@ -79,7 +81,7 @@ class IncomingWebhookHandler
                 case Event::PAYMENT_INTENT_PAYMENT_FAILED:
                     $this->paymentIntentFailedHandler->handleEvent($event->data->object);
                     break;
-                case Event::REFUND_UPDATED:
+                case Event::CHARGE_REFUND_UPDATED:
                     $this->refundEventHandlerService->handleEvent($event->data->object);
                     break;
                 case Event::ACCOUNT_UPDATED:
@@ -115,38 +117,6 @@ class IncomingWebhookHandler
             ]);
             throw $exception;
         }
-    }
-
-    private function constructEventWithValidPlatform(StripeWebhookDTO $webhookDTO): Event
-    {
-        $webhookSecrets = $this->stripeConfigurationService->getAllWebhookSecrets();
-        $lastException = null;
-
-        foreach ($webhookSecrets as $platform => $webhookSecret) {
-            try {
-                if (!$webhookSecret) {
-                    continue;
-                }
-
-                $event = Webhook::constructEvent(
-                    $webhookDTO->payload,
-                    $webhookDTO->headerSignature,
-                    $webhookSecret
-                );
-
-                $this->logger->debug('Webhook validated with platform: ' . $platform, [
-                    'event_id' => $event->id,
-                    'platform' => $platform,
-                ]);
-
-                return $event;
-            } catch (SignatureVerificationException $exception) {
-                $lastException = $exception;
-                continue;
-            }
-        }
-
-        throw $lastException ?? new SignatureVerificationException(__('Unable to verify Stripe signature with any platform'));
     }
 
     private function hasEventBeenHandled(Event $event): bool

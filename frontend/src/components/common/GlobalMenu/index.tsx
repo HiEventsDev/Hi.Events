@@ -68,9 +68,9 @@ export const GlobalMenu = () => {
     links.push({
         label: t`Logout`,
         icon: IconLogout,
-        onClick: async (event: any) => {
+        onClick: (event: any) => {
             event.preventDefault();
-            await authClient.logout();
+            authClient.logout();
             localStorage.removeItem("token");
             window.location.href = "/auth/login";
         },

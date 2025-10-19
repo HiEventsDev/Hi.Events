@@ -13,15 +13,12 @@ import {formatCurrency} from "../../../../utilites/currency.ts";
 import {formatDate} from "../../../../utilites/dates.ts";
 import {Button, Skeleton} from "@mantine/core";
 import {useMediaQuery} from "@mantine/hooks";
-import {IconAlertCircle, IconX} from "@tabler/icons-react";
+import {IconX} from "@tabler/icons-react";
 import {useGetAccount} from "../../../../queries/useGetAccount.ts";
 import {useUpdateEventStatus} from "../../../../mutations/useUpdateEventStatus.ts";
 import {confirmationDialog} from "../../../../utilites/confirmationDialog.tsx";
 import {showError, showSuccess} from "../../../../utilites/notifications.tsx";
 import {useEffect, useState} from 'react';
-import {StripePlatform} from "../../../../types.ts";
-import {isHiEvents} from "../../../../utilites/helpers.ts";
-import {StripeConnectButton} from "../../../common/StripeConnectButton";
 
 export const DashBoardSkeleton = () => {
     return (
@@ -46,10 +43,6 @@ export const EventDashboard = () => {
 
     const [isChecklistVisible, setIsChecklistVisible] = useState(true);
     const [isMounted, setIsMounted] = useState(false);
-
-    const showStripeUpgradeNotice = account?.stripe_platform === StripePlatform.Canada.valueOf()
-        && account?.stripe_connect_setup_complete
-        && isHiEvents();
 
     useEffect(() => {
         setIsMounted(true);
@@ -112,30 +105,6 @@ export const EventDashboard = () => {
             </PageTitle>
 
             {!event && <DashBoardSkeleton/>}
-
-            {showStripeUpgradeNotice && (
-                <Card className={classes.stripeUpgradeCard}>
-                    <div className={classes.stripeUpgradeContent}>
-                        <div className={classes.stripeIcon}>
-                            <IconAlertCircle/>
-                        </div>
-                        <div className={classes.stripeTextContainer}>
-                            <div className={classes.stripeText}>
-                                <h3>{t`Important: Stripe reconnection required`}</h3>
-                                <p>{t`We've relocated our headquarters to Ireland. As a result, we need you to reconnect your Stripe account. This quick process takes just a few minutes. Your sales and existing data remain completely unaffected.`}</p>
-                                <p className={classes.stripeApology}>{t`Sorry for the inconvenience.`}</p>
-                            </div>
-                            <StripeConnectButton
-                                className={classes.stripeButton}
-                                buttonText={t`Reconnect Stripe →`}
-                                variant="filled"
-                                size="md"
-                                platform="ie"
-                            />
-                        </div>
-                    </div>
-                </Card>
-            )}
 
             {event && (<>
                 <StatBoxes/>
