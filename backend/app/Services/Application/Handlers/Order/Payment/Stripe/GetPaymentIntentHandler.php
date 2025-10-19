@@ -2,21 +2,22 @@
 
 namespace HiEvents\Services\Application\Handlers\Order\Payment\Stripe;
 
+use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\Status\OrderPaymentStatus;
 use HiEvents\DomainObjects\StripePaymentDomainObject;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Order\Payment\Stripe\DTO\StripePaymentIntentPublicDTO;
 use HiEvents\Services\Domain\Payment\Stripe\EventHandlers\PaymentIntentSucceededHandler;
+use HiEvents\Services\Infrastructure\Stripe\StripeClientFactory;
 use Psr\Log\LoggerInterface;
 use Stripe\Exception\ApiErrorException;
-use Stripe\StripeClient;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class GetPaymentIntentHandler
 {
     public function __construct(
-        private readonly StripeClient                  $stripeClient,
+        private readonly StripeClientFactory           $stripeClientFactory,
         private readonly OrderRepositoryInterface      $orderRepository,
         private readonly LoggerInterface               $logger,
         private readonly PaymentIntentSucceededHandler $paymentIntentSucceededHandler,
@@ -26,6 +27,7 @@ class GetPaymentIntentHandler
 
     public function handle(int $eventId, string $orderShortId): StripePaymentIntentPublicDTO
     {
+        /** @var OrderDomainObject $order */
         $order = $this->orderRepository
             ->loadRelation(new Relationship(
                 domainObject: StripePaymentDomainObject::class,
@@ -37,9 +39,11 @@ class GetPaymentIntentHandler
             ]);
 
         $accountId = $order->getStripePayment()->getConnectedAccountId();
+        $paymentPlatform = $order->getStripePayment()->getStripePlatformEnum();
 
         try {
-            $paymentIntent = $this->stripeClient->paymentIntents->retrieve(
+            $stripeClient = $this->stripeClientFactory->createForPlatform($paymentPlatform);
+            $paymentIntent = $stripeClient->paymentIntents->retrieve(
                 id: $order->getStripePayment()->getPaymentIntentId(),
                 opts: $accountId ? ['stripe_account' => $accountId] : []
             );

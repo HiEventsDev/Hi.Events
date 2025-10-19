@@ -1,19 +1,36 @@
-import {Textarea, TextInput} from "@mantine/core";
+import {Alert, Textarea, TextInput} from "@mantine/core";
 import {t} from "@lingui/macro";
 import {UseFormReturnType} from "@mantine/form";
 import {CheckInListRequest, ProductCategory, ProductType} from "../../../types.ts";
-import {InputLabelWithHelp} from "../../common/InputLabelWithHelp";
 import {InputGroup} from "../../common/InputGroup";
 import {ProductSelector} from "../../common/ProductSelector";
+import {useEffect, useMemo} from "react";
+import {IconInfoCircle} from "@tabler/icons-react";
 
 interface CheckInListFormProps {
     form: UseFormReturnType<CheckInListRequest>;
-    productCategories: ProductCategory[],
+    productCategories: ProductCategory[];
 }
 
 export const CheckInListForm = ({form, productCategories}: CheckInListFormProps) => {
+    const tickets = useMemo(() => {
+        return productCategories
+            .flatMap(category => category.products || [])
+            .filter(product => product.product_type === ProductType.Ticket);
+    }, [productCategories]);
+
+    useEffect(() => {
+        if (tickets.length === 1 && (!form.values.product_ids || form.values.product_ids.length === 0)) {
+            form.setFieldValue('product_ids', [String(tickets[0].id)]);
+        }
+    }, [tickets]);
+
     return (
         <>
+            <Alert mb={20} icon={<IconInfoCircle size={16}/>} color="blue" variant="light">
+                {t`Check-in lists let you control entry across days, areas, or ticket types. You can share a secure check-in link with staff — no account required.`}
+            </Alert>
+
             <TextInput
                 {...form.getInputProps('name')}
                 required
@@ -32,31 +49,24 @@ export const CheckInListForm = ({form, productCategories}: CheckInListFormProps)
 
             <Textarea
                 {...form.getInputProps('description')}
-                label={<InputLabelWithHelp
-                    label={t`Description for check-in staff`}
-                    helpText={t`This description will be shown to the check-in staff`}
-                />}
+                label={t`Description for check-in staff`}
                 placeholder={t`Add a description for this check-in list`}
+                description={t`Visible to check-in staff only. Helps identify this list during check-in.`}
+                minRows={2}
             />
 
             <InputGroup>
                 <TextInput
                     {...form.getInputProps('activates_at')}
                     type="datetime-local"
-                    label={<InputLabelWithHelp
-                        label={t`Activation date`}
-                        helpText={t`No attendees will be able to check in before this date using this list`}
-                    />}
-                    placeholder={t`What date should this check-in list become active?`}
+                    label={t`Activation date`}
+                    description={t`When check-in opens`}
                 />
                 <TextInput
                     {...form.getInputProps('expires_at')}
                     type="datetime-local"
-                    label={<InputLabelWithHelp
-                        label={t`Expiration date`}
-                        helpText={t`This list will no longer be available for check-ins after this date`}
-                    />}
-                    placeholder={t`When should this check-in list expire?`}
+                    label={t`Expiration date`}
+                    description={t`When check-in closes`}
                 />
             </InputGroup>
         </>

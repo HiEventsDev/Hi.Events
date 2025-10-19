@@ -18,6 +18,9 @@ class AttendeeDomainObject extends Generated\AttendeeDomainObjectAbstract implem
 
     public ?AttendeeCheckInDomainObject $checkIn = null;
 
+    /** @var Collection<AttendeeCheckInDomainObject>|null */
+    private ?Collection $checkIns = null;
+
     public static function getDefaultSort(): string
     {
         return self::CREATED_AT;
@@ -108,8 +111,24 @@ class AttendeeDomainObject extends Generated\AttendeeDomainObjectAbstract implem
         return $this;
     }
 
+    /**
+     * Only use in the context when a single check-in is expected (e.g., when loading a list of attendees for a specific check-in list).
+     *
+     * @return AttendeeCheckInDomainObject|null
+     */
     public function getCheckIn(): ?AttendeeCheckInDomainObject
     {
         return $this->checkIn;
+    }
+
+    public function setCheckIns(?Collection $checkIns): AttendeeDomainObject
+    {
+        $this->checkIns = $checkIns;
+        return $this;
+    }
+
+    public function getCheckIns(): ?Collection
+    {
+        return $this->checkIns;
     }
 }
