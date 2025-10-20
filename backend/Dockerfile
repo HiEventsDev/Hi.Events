@@ -14,6 +14,8 @@ RUN install-php-extensions intl
 COPY --chown=www-data:www-data . .
 
 RUN chmod -R 755 storage  \
+    && touch storage/logs/laravel.log \
+    && chown -R www-data:www-data storage/logs/laravel.log \
     && mkdir -p bootstrap/cache \
     && chmod -R 775 bootstrap/cache \
     && mkdir -p /var/lib/nginx/tmp \
