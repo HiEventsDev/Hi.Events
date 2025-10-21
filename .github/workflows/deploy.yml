@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - develop
+      - feature/vapor-env-updates
   workflow_dispatch:
     inputs:
       environment:
@@ -73,6 +74,21 @@ jobs:
           echo "🚀 Deploying to Vapor environment: ${{ env.VAPOR_ENV }}"
           echo "🧪 Test mode: ${{ env.TEST_MODE }}"
 
+      - name: Configure AWS Credentials
+        if: env.TEST_MODE != 'true'
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-1
+
+      - name: Download Encrypted Environment File from S3
+        if: env.TEST_MODE != 'true'
+        working-directory: ./backend
+        run: |
+          aws s3 cp s3://hi.events-env-secrets/.env.${{ env.VAPOR_ENV }}.encrypted .env.${{ env.VAPOR_ENV }}.encrypted
+          echo "✅ Downloaded .env.${{ env.VAPOR_ENV }}.encrypted from S3"
+
       - name: Validate Deployment Configuration
         working-directory: ./backend
         run: |
@@ -83,6 +99,7 @@ jobs:
           fi
 
       - name: Deploy to Vapor
+        if: env.TEST_MODE != 'true'
         working-directory: ./backend
         run: vapor deploy ${{ env.VAPOR_ENV }}
         env:
