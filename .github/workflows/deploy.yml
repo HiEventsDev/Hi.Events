@@ -125,11 +125,14 @@ jobs:
               echo "DO_APP_ID=${{ secrets.DIGITALOCEAN_PRODUCTION_APP_ID }}" >> "$GITHUB_ENV"
             fi
             echo "TEST_MODE=${{ github.event.inputs.test_mode }}" >> "$GITHUB_ENV"
+          elif [[ "${{ github.ref_name }}" == "main" ]]; then
+            echo "DO_APP_ID=${{ secrets.DIGITALOCEAN_PRODUCTION_APP_ID }}" >> "$GITHUB_ENV"
+            echo "TEST_MODE=false" >> "$GITHUB_ENV"
           elif [[ "${{ github.ref_name }}" == "develop" ]]; then
             echo "DO_APP_ID=${{ secrets.DIGITALOCEAN_STAGING_APP_ID }}" >> "$GITHUB_ENV"
             echo "TEST_MODE=false" >> "$GITHUB_ENV"
           else
-            echo "DO_APP_ID=${{ secrets.DIGITALOCEAN_PRODUCTION_APP_ID }}" >> "$GITHUB_ENV"
+            echo "DO_APP_ID=${{ secrets.DIGITALOCEAN_STAGING_APP_ID }}" >> "$GITHUB_ENV"
             echo "TEST_MODE=false" >> "$GITHUB_ENV"
           fi
 
