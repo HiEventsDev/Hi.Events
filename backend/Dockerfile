@@ -11,6 +11,10 @@ RUN echo "" >> /usr/local/etc/php-fpm.d/docker-php-serversideup-pool.conf && \
 
 RUN install-php-extensions intl
 
+RUN apk add --no-cache envsubst
+
+COPY nginx.conf.template /etc/nginx/templates/nginx.conf.template
+
 COPY --chown=www-data:www-data . .
 
 RUN chmod -R 755 storage  \
@@ -34,3 +38,5 @@ RUN mkdir -p /var/www/html/vendor/ezyang/htmlpurifier/library/HTMLPurifier/Defin
     && chown -R www-data:www-data /var/www/html/vendor/ezyang/htmlpurifier/library/HTMLPurifier/DefinitionCache/Serializer
 
 EXPOSE 8080
+
+CMD ["sh", "-c", "envsubst < /etc/nginx/templates/nginx.conf.template > /etc/nginx/nginx.conf", "&&", "php-fpm -D", "&&", "nginx", "-g", "'daemon off;'"]

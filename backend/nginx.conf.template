@@ -1,0 +1,60 @@
+worker_processes 1;
+
+events { worker_connections 1024; }
+
+http {
+  include       mime.types;
+  default_type  application/octet-stream;
+  sendfile      on;
+
+  server {
+    # Heroku injects $PORT
+    listen ${PORT};
+    server_name _;
+
+    root /var/www/html/public;
+    index index.php index.html;
+
+    # ---- Global CORS headers (added on every response) ----
+    add_header 'Access-Control-Allow-Origin' $cors_origin always;
+    add_header 'Access-Control-Allow-Credentials' 'true' always;
+    add_header 'Access-Control-Expose-Headers' 'Authorization, Content-Length, X-Total-Count' always;
+
+    # For API routes only (adjust prefix if your API lives elsewhere)
+    location / {
+      # Handle CORS preflight fast-path
+
+      if ($request_method = "OPTIONS") {
+        add_header 'Access-Control-Allow-Origin' $cors_origin always;
+        add_header 'Access-Control-Allow-Credentials' 'true' always;
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, PUT, PATCH, DELETE, OPTIONS' always;
+        add_header 'Access-Control-Allow-Headers' 'Authorization, Content-Type, X-Requested-With, X-CSRF-Token' always;
+        add_header 'Access-Control-Max-Age' 86400 always;
+        return 204;
+      }
+
+      try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    # ---- PHP to FPM ----
+    location ~ \.php$ {
+      include fastcgi_params;
+      fastcgi_pass 127.0.0.1:9000;
+      fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+
+      # Re-apply CORS on PHP responses
+      add_header 'Access-Control-Allow-Origin' $cors_origin always;
+      add_header 'Access-Control-Allow-Credentials' 'true' always;
+      add_header 'Access-Control-Expose-Headers' 'Authorization, Content-Length, X-Total-Count' always;
+    }
+
+    # Static files (optional cache)
+    location ~* \.(?:css|js|png|jpg|jpeg|gif|svg|woff2?)$ {
+      try_files $uri =404;
+      add_header 'Access-Control-Allow-Origin' $cors_origin always;
+      expires 7d;
+      access_log off;
+    }
+  }
+}
+
