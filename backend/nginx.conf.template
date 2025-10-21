@@ -7,9 +7,16 @@ http {
   default_type  application/octet-stream;
   sendfile      on;
 
+  # --- CORS allowlist: only areapass.xyz (and www) ---
+  map $http_origin $cors_origin {
+    default                       "";
+    "https://areapass.xyz"        "https://areapass.xyz";
+    "https://www.areapass.xyz"    "https://www.areapass.xyz";
+  }
+
   server {
     # Heroku injects $PORT
-    listen ${PORT};
+    include /etc/nginx/port.conf;
     server_name _;
 
     root /var/www/html/public;
@@ -23,8 +30,7 @@ http {
     # For API routes only (adjust prefix if your API lives elsewhere)
     location / {
       # Handle CORS preflight fast-path
-
-      if ($request_method = "OPTIONS") {
+      if ($request_method = OPTIONS) {
         add_header 'Access-Control-Allow-Origin' $cors_origin always;
         add_header 'Access-Control-Allow-Credentials' 'true' always;
         add_header 'Access-Control-Allow-Methods' 'GET, POST, PUT, PATCH, DELETE, OPTIONS' always;

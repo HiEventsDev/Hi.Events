@@ -11,9 +11,17 @@ RUN echo "" >> /usr/local/etc/php-fpm.d/docker-php-serversideup-pool.conf && \
 
 RUN install-php-extensions intl
 
-RUN apk add --no-cache envsubst
+RUN apk add --no-cache gettext
 
 COPY nginx.conf.template /etc/nginx/templates/nginx.conf.template
+COPY port.conf.template /etc/nginx/templates/port.conf.template
+
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+
+# Supervisor configs
+COPY supervisord.conf /etc/supervisord.conf
+
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 COPY --chown=www-data:www-data . .
 
@@ -39,4 +47,6 @@ RUN mkdir -p /var/www/html/vendor/ezyang/htmlpurifier/library/HTMLPurifier/Defin
 
 EXPOSE 8080
 
-CMD ["sh", "-c", "envsubst < /etc/nginx/templates/nginx.conf.template > /etc/nginx/nginx.conf", "&&", "php-fpm -D", "&&", "nginx", "-g", "'daemon off;'"]
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+
+CMD ["nginx", "-g", "daemon off;"]
