@@ -61,11 +61,14 @@ jobs:
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
             echo "VAPOR_ENV=${{ github.event.inputs.environment }}" >> "$GITHUB_ENV"
             echo "TEST_MODE=${{ github.event.inputs.test_mode }}" >> "$GITHUB_ENV"
+          elif [[ "${{ github.ref_name }}" == "main" ]]; then
+            echo "VAPOR_ENV=production" >> "$GITHUB_ENV"
+            echo "TEST_MODE=false" >> "$GITHUB_ENV"
           elif [[ "${{ github.ref_name }}" == "develop" ]]; then
             echo "VAPOR_ENV=staging" >> "$GITHUB_ENV"
             echo "TEST_MODE=false" >> "$GITHUB_ENV"
           else
-            echo "VAPOR_ENV=production" >> "$GITHUB_ENV"
+            echo "VAPOR_ENV=staging" >> "$GITHUB_ENV"
             echo "TEST_MODE=false" >> "$GITHUB_ENV"
           fi
 
