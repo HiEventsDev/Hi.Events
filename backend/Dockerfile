@@ -17,10 +17,6 @@ COPY nginx.conf.template /etc/nginx/templates/nginx.conf.template
 COPY port.conf.template /etc/nginx/templates/port.conf.template
 
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-
-# Supervisor configs
-COPY supervisord.conf /etc/supervisord.conf
-
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 COPY --chown=www-data:www-data . .

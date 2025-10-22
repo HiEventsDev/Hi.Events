@@ -12,8 +12,6 @@ envsubst '$SERVER_PORT' < "/etc/nginx/templates/port.conf.template" > "/etc/ngin
 
 cp /etc/nginx/templates/nginx.conf.template /etc/nginx/nginx.conf
 
-envsubst '$SERVER_PORT' < /etc/nginx/templates/port.conf.template
-
 php-fpm -D
 
 exec nginx -g 'daemon off;'
