@@ -22,6 +22,8 @@ enum Locale: string
     case ZH_HK = 'zh-hk';
     case VI = 'vi';
 
+    case TR = 'tr';
+
     public static function getSupportedLocales(): array
     {
         return self::valuesArray();

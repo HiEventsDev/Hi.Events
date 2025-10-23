@@ -1,5 +1,5 @@
 import {Anchor} from "@mantine/core";
-import {Attendee} from "../../../types.ts";
+import {Attendee, Product} from "../../../types.ts";
 import classes from "./AttendeeDetails.module.scss";
 import {t} from "@lingui/macro";
 import {getAttendeeProductTitle} from "../../../utilites/products.ts";
@@ -37,7 +37,7 @@ export const AttendeeDetails = ({attendee}: { attendee: Attendee }) => {
                     {t`Product`}
                 </div>
                 <div className={classes.amount}>
-                    {getAttendeeProductTitle(attendee)}
+                    {getAttendeeProductTitle(attendee, attendee.product as Product)}
                 </div>
             </div>
             <div className={classes.block}>

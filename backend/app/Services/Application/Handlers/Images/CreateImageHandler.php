@@ -20,6 +20,7 @@ class CreateImageHandler
         ImageType::ORGANIZER_LOGO,
         ImageType::ORGANIZER_COVER,
         ImageType::EVENT_COVER,
+        ImageType::TICKET_LOGO,
     ];
 
     public function __construct(

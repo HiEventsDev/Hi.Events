@@ -21,6 +21,7 @@ use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Order\DTO\RefundOrderDTO;
 use HiEvents\Services\Domain\Order\OrderCancelService;
 use HiEvents\Services\Domain\Payment\Stripe\StripePaymentIntentRefundService;
+use HiEvents\Services\Infrastructure\Stripe\StripeClientFactory;
 use HiEvents\Values\MoneyValue;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Database\DatabaseManager;
@@ -28,15 +29,16 @@ use Stripe\Exception\ApiErrorException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Throwable;
 
-readonly class RefundOrderHandler
+class RefundOrderHandler
 {
     public function __construct(
-        private StripePaymentIntentRefundService $refundService,
-        private OrderRepositoryInterface         $orderRepository,
-        private EventRepositoryInterface         $eventRepository,
-        private Mailer                           $mailer,
-        private OrderCancelService               $orderCancelService,
-        private DatabaseManager                  $databaseManager,
+        private readonly StripePaymentIntentRefundService $refundService,
+        private readonly OrderRepositoryInterface         $orderRepository,
+        private readonly EventRepositoryInterface         $eventRepository,
+        private readonly Mailer                           $mailer,
+        private readonly OrderCancelService               $orderCancelService,
+        private readonly DatabaseManager                  $databaseManager,
+        private readonly StripeClientFactory              $stripeClientFactory,
     )
     {
     }
@@ -58,7 +60,10 @@ readonly class RefundOrderHandler
             ->findFirstWhere(['event_id' => $eventId, 'id' => $orderId]);
 
         if (!$order) {
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException(__('Order :id not found for event :eventId', [
+                'id' => $orderId,
+                'eventId' => $eventId,
+            ]));
         }
 
         return $order;
@@ -130,9 +135,17 @@ readonly class RefundOrderHandler
             $this->orderCancelService->cancelOrder($order);
         }
 
+        // Determine the correct Stripe platform for this refund
+        // Use the platform that was used for the original payment
+        $paymentPlatform = $order->getStripePayment()->getStripePlatformEnum();
+
+        // Create Stripe client for the original payment's platform
+        $stripeClient = $this->stripeClientFactory->createForPlatform($paymentPlatform);
+
         $this->refundService->refundPayment(
             amount: $amount,
-            payment: $order->getStripePayment()
+            payment: $order->getStripePayment(),
+            stripeClient: $stripeClient
         );
 
         if ($refundOrderDTO->notify_buyer) {

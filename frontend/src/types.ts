@@ -23,6 +23,11 @@ export type ConfigKeys =
     | 'VITE_I_HAVE_PURCHASED_A_LICENCE'
     | 'VITE_DEFAULT_IMAGE_URL';
 
+export enum StripePlatform {
+    Canada = 'ca',
+    Ireland = 'ie',
+}
+
 export type IdParam = string | undefined | number;
 
 export interface AcceptInvitationRequest {
@@ -93,6 +98,8 @@ export interface Account {
     is_saas_mode_enabled?: boolean;
     configuration?: AccountConfiguration;
     requires_manual_verification?: boolean;
+    stripe_platform: string;
+    stripe_hi_events_primary_platform?: string;
 }
 
 export interface AccountConfiguration {
@@ -109,7 +116,26 @@ export interface StripeConnectDetails {
     account: Account;
     stripe_account_id: string;
     is_connect_setup_complete: boolean;
-    connect_url: string;
+    connect_url: string | null;
+}
+
+export interface StripeConnectAccount {
+    stripe_account_id: string;
+    connect_url: string | null;
+    is_setup_complete: boolean;
+    platform: string | null;
+    account_type: string | null;
+    is_primary: boolean;
+}
+
+export interface StripeConnectAccountsResponse {
+    account: {
+        id: IdParam;
+        stripe_platform: string | null;
+    };
+    stripe_connect_accounts: StripeConnectAccount[];
+    primary_stripe_account_id: string | null;
+    has_completed_setup: boolean;
 }
 
 export interface LoginData {
@@ -126,7 +152,7 @@ export interface Image {
     type: ImageType;
 }
 
-export type ImageType = 'EVENT_COVER' | 'EDITOR_IMAGE' | 'ORGANIZER_LOGO' | 'ORGANIZER_COVER' | 'ORGANIZER_IMAGE';
+export type ImageType = 'EVENT_COVER' | 'EDITOR_IMAGE' | 'ORGANIZER_LOGO' | 'ORGANIZER_COVER' | 'ORGANIZER_IMAGE' | 'TICKET_LOGO';
 
 export type PaymentProvider = 'STRIPE' | 'OFFLINE';
 
@@ -174,6 +200,14 @@ export interface EventSettings {
     invoice_tax_details?: string;
     invoice_notes?: string;
     invoice_payment_terms_days?: number;
+    // Ticket design settings
+    ticket_design_settings?: {
+        accent_color?: string;
+        logo_image_id?: IdParam;
+        footer_text?: string;
+        layout_type?: 'default' | 'modern';
+        enabled?: boolean;
+    };
 }
 
 export interface VenueAddress {
@@ -202,7 +236,9 @@ export interface EventDuplicatePayload extends EventBase {
     duplicate_capacity_assignments: boolean;
     duplicate_check_in_lists: boolean;
     duplicate_event_cover_image: boolean;
+    duplicate_ticket_logo: boolean;
     duplicate_webhooks: boolean;
+    duplicate_affiliates: boolean;
 }
 
 export enum EventStatus {
@@ -844,4 +880,77 @@ export interface WebhookLog {
     response_body?: string;
     event_type: string;
     created_at: string;
+}
+
+// Email Template Types
+export type EmailTemplateType = 'order_confirmation' | 'attendee_ticket';
+export type EmailTemplateEngine = 'liquid' | 'blade';
+
+export interface EmailTemplate {
+    id: number;
+    account_id: number;
+    organizer_id?: number;
+    event_id?: number;
+    template_type: EmailTemplateType;
+    subject: string;
+    body: string;
+    cta?: {
+        label: string;
+        url_token: string;
+    };
+    engine: EmailTemplateEngine;
+    is_active: boolean;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface EmailTemplateToken {
+    token: string;
+    description: string;
+    example: string;
+}
+
+export interface CreateEmailTemplateRequest {
+    template_type: EmailTemplateType;
+    subject: string;
+    body: string;
+    cta?: {
+        label: string;
+        url_token: string;
+    };
+}
+
+export interface UpdateEmailTemplateRequest {
+    subject: string;
+    body: string;
+    cta?: {
+        label: string;
+        url_token: string;
+    };
+    is_active?: boolean;
+}
+
+export interface PreviewEmailTemplateRequest {
+    template_type: EmailTemplateType;
+    subject: string;
+    body: string;
+    cta?: {
+        label: string;
+        url_token: string;
+    };
+}
+
+export interface EmailTemplatePreview {
+    subject: string;
+    body: string;
+    context: Record<string, any>;
+}
+
+export interface DefaultEmailTemplate {
+    subject: string;
+    body: string;
+    cta?: {
+        label: string;
+        url_token: string;
+    };
 }

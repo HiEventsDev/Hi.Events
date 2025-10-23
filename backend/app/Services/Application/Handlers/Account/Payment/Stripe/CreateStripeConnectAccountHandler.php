@@ -3,15 +3,21 @@
 namespace HiEvents\Services\Application\Handlers\Account\Payment\Stripe;
 
 use HiEvents\DomainObjects\AccountDomainObject;
+use HiEvents\DomainObjects\AccountStripePlatformDomainObject;
 use HiEvents\DomainObjects\Enums\StripeConnectAccountType;
-use HiEvents\DomainObjects\Generated\AccountDomainObjectAbstract;
+use HiEvents\DomainObjects\Enums\StripePlatform;
+use HiEvents\DomainObjects\Generated\AccountStripePlatformDomainObjectAbstract;
 use HiEvents\Exceptions\CreateStripeConnectAccountFailedException;
 use HiEvents\Exceptions\CreateStripeConnectAccountLinksFailedException;
 use HiEvents\Exceptions\SaasModeEnabledException;
-use HiEvents\Helper\Url;
+use HiEvents\Exceptions\Stripe\StripeClientConfigurationException;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
+use HiEvents\Repository\Interfaces\AccountStripePlatformRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Account\Payment\Stripe\DTO\CreateStripeConnectAccountDTO;
 use HiEvents\Services\Application\Handlers\Account\Payment\Stripe\DTO\CreateStripeConnectAccountResponse;
+use HiEvents\Services\Domain\Payment\Stripe\StripeAccountSyncService;
+use HiEvents\Services\Infrastructure\Stripe\StripeClientFactory;
+use HiEvents\Services\Infrastructure\Stripe\StripeConfigurationService;
 use Illuminate\Config\Repository;
 use Illuminate\Database\DatabaseManager;
 use Psr\Log\LoggerInterface;
@@ -19,14 +25,17 @@ use Stripe\Account;
 use Stripe\StripeClient;
 use Throwable;
 
-readonly class CreateStripeConnectAccountHandler
+class CreateStripeConnectAccountHandler
 {
     public function __construct(
-        private AccountRepositoryInterface $accountRepository,
-        private DatabaseManager            $databaseManager,
-        private StripeClient               $stripe,
-        private LoggerInterface            $logger,
-        private Repository                 $config,
+        private readonly AccountRepositoryInterface               $accountRepository,
+        private readonly AccountStripePlatformRepositoryInterface $accountStripePlatformRepository,
+        private readonly DatabaseManager                          $databaseManager,
+        private readonly LoggerInterface                          $logger,
+        private readonly Repository                               $config,
+        private readonly StripeClientFactory                      $stripeClientFactory,
+        private readonly StripeConfigurationService               $stripeConfigurationService,
+        private readonly StripeAccountSyncService                 $stripeAccountSyncService,
     )
     {
     }
@@ -47,32 +56,61 @@ readonly class CreateStripeConnectAccountHandler
 
     /**
      * @throws CreateStripeConnectAccountFailedException|CreateStripeConnectAccountLinksFailedException
+     * @throws StripeClientConfigurationException
      */
     private function createOrGetStripeConnectAccount(CreateStripeConnectAccountDTO $command): CreateStripeConnectAccountResponse
     {
-        $account = $this->accountRepository->findById($command->accountId);
+        $account = $this->accountRepository
+            ->loadRelation(AccountStripePlatformDomainObject::class)
+            ->findById($command->accountId);
+
+        // If platform is explicitly specified (e.g., for Ireland migration), use it
+        // Otherwise, use the primary platform from environment (Or null for open-source installations)
+        if ($command->platform) {
+            $platformToUse = StripePlatform::fromString($command->platform->value);
+        } else {
+            $platformToUse = $this->stripeConfigurationService->getPrimaryPlatform();
+        }
+
+        // Try to find existing platform record for the requested platform
+        // This works for both null (open-source) and specific platforms
+        $accountStripePlatform = $account->getStripePlatformByType($platformToUse);
+
+        // Open-source installations without platform configuration should still work
+        // They will use default Stripe keys instead of platform-specific ones
+        $stripeClient = $this->stripeClientFactory->createForPlatform($platformToUse);
 
         $stripeConnectAccount = $this->getOrCreateStripeConnectAccount(
             account: $account,
+            accountStripePlatform: $accountStripePlatform,
+            stripeClient: $stripeClient,
+            platform: $platformToUse,
         );
 
         $response = new CreateStripeConnectAccountResponse(
             stripeConnectAccountType: $stripeConnectAccount->type,
             stripeAccountId: $stripeConnectAccount->id,
             account: $account,
-            isConnectSetupComplete: $this->isStripeAccountComplete($stripeConnectAccount),
+            isConnectSetupComplete: $this->stripeAccountSyncService->isStripeAccountComplete($stripeConnectAccount),
         );
 
         if ($response->isConnectSetupComplete) {
-            // If setup is complete, but this isn't reflected in the account, update it.
-            if ($account->getStripeConnectSetupComplete() === false) {
-                $this->updateAccountStripeSetupCompletionStatus($account, $stripeConnectAccount);
+            // If setup is complete, but this isn't reflected in the account stripe platform, update it.
+            if ($accountStripePlatform && $accountStripePlatform->getStripeSetupCompletedAt() === null) {
+                $this->stripeAccountSyncService->markAccountAsComplete($accountStripePlatform, $stripeConnectAccount);
             }
 
             return $response;
         }
 
-        $response->connectUrl = $this->getStripeAccountSetupUrl($stripeConnectAccount, $account);
+        $connectUrl = $this->stripeAccountSyncService->createStripeAccountSetupUrl($stripeConnectAccount, $stripeClient);
+        if ($connectUrl === null) {
+            throw new CreateStripeConnectAccountLinksFailedException(
+                message: __('There are issues with creating the Stripe Connect Account Link. Please try again.'),
+            );
+        }
+
+        $response->connectUrl = $connectUrl;
 
         return $response;
     }
@@ -80,22 +118,28 @@ readonly class CreateStripeConnectAccountHandler
     /**
      * @throws CreateStripeConnectAccountFailedException
      */
-    private function getOrCreateStripeConnectAccount(AccountDomainObject $account): Account
+    private function getOrCreateStripeConnectAccount(
+        AccountDomainObject                $account,
+        ?AccountStripePlatformDomainObject $accountStripePlatform,
+        StripeClient                       $stripeClient,
+        ?StripePlatform                    $platform
+    ): Account
     {
         try {
-            if ($account->getStripeAccountId() !== null) {
-                return $this->stripe->accounts->retrieve($account->getStripeAccountId());
+            if ($accountStripePlatform && $accountStripePlatform->getStripeAccountId() !== null) {
+                return $stripeClient->accounts->retrieve($accountStripePlatform->getStripeAccountId());
             }
 
-            $stripeAccount = $this->stripe->accounts->create([
+            $stripeAccount = $stripeClient->accounts->create([
                 'type' => $this->config->get('app.stripe_connect_account_type')
                     ?? StripeConnectAccountType::EXPRESS->value,
             ]);
         } catch (Throwable $e) {
             $this->logger->error('Failed to create or fetch Stripe Connect Account: ' . $e->getMessage(), [
                 'accountId' => $account->getId(),
-                'stripeAccountId' => $account->getStripeAccountId() ?? 'null',
-                'accountExists' => $account->getStripeAccountId() !== null ? 'true' : 'false',
+                'stripeAccountId' => $accountStripePlatform?->getStripeAccountId() ?? 'null',
+                'accountExists' => $accountStripePlatform?->getStripeAccountId() !== null ? 'true' : 'false',
+                'platform' => $platform?->value ?? 'null',
                 'exception' => $e,
             ]);
 
@@ -105,80 +149,28 @@ readonly class CreateStripeConnectAccountHandler
             );
         }
 
-        $this->accountRepository->updateWhere(
-            attributes: [
-                AccountDomainObjectAbstract::STRIPE_ACCOUNT_ID => $stripeAccount->id,
-                AccountDomainObjectAbstract::STRIPE_CONNECT_ACCOUNT_TYPE => $stripeAccount->type,
-            ],
-            where: [
-                'id' => $account->getId(),
-            ]
-        );
+        // Create or update account stripe platform record
+        if (!$accountStripePlatform) {
+            $this->accountStripePlatformRepository->create([
+                AccountStripePlatformDomainObjectAbstract::ACCOUNT_ID => $account->getId(),
+                AccountStripePlatformDomainObjectAbstract::STRIPE_ACCOUNT_ID => $stripeAccount->id,
+                AccountStripePlatformDomainObjectAbstract::STRIPE_CONNECT_ACCOUNT_TYPE => $stripeAccount->type,
+                AccountStripePlatformDomainObjectAbstract::STRIPE_CONNECT_PLATFORM => $platform?->value,
+            ]);
+        } else {
+            $this->accountStripePlatformRepository->updateWhere(
+                attributes: [
+                    AccountStripePlatformDomainObjectAbstract::STRIPE_ACCOUNT_ID => $stripeAccount->id,
+                    AccountStripePlatformDomainObjectAbstract::STRIPE_CONNECT_ACCOUNT_TYPE => $stripeAccount->type,
+                ],
+                where: [
+                    'id' => $accountStripePlatform->getId(),
+                ]
+            );
+        }
 
         return $stripeAccount;
     }
 
-    /**
-     * @param Account $stripAccount
-     * @return bool
-     */
-    private function isStripeAccountComplete(Account $stripAccount): bool
-    {
-        return $stripAccount->charges_enabled
-            && $stripAccount->payouts_enabled;
-    }
 
-    /**
-     * @throws CreateStripeConnectAccountLinksFailedException
-     */
-    private function getStripeAccountSetupUrl(Account $stripAccount, AccountDomainObject $account): string
-    {
-        try {
-            $accountLink = $this->stripe->accountLinks->create([
-                'account' => $stripAccount->id,
-                'refresh_url' => Url::getFrontEndUrlFromConfig(Url::STRIPE_CONNECT_REFRESH_URL, [
-                    'is_refresh' => true,
-                ]),
-                'return_url' => Url::getFrontEndUrlFromConfig(Url::STRIPE_CONNECT_RETURN_URL, [
-                    'is_return' => true,
-                ]),
-                'type' => 'account_onboarding',
-            ]);
-
-        } catch (Throwable $e) {
-            $this->logger->error('Failed to create Stripe Connect Account Link: ' . $e->getMessage(), [
-                'accountId' => $account->getId(),
-                'stripeAccountId' => $stripAccount->id,
-                'exception' => $e,
-            ]);
-
-            throw new CreateStripeConnectAccountLinksFailedException(
-                message: __('There are issues with creating the Stripe Connect Account Link. Please try again.'),
-                previous: $e,
-            );
-        }
-
-        return $accountLink->url;
-    }
-
-    private function updateAccountStripeSetupCompletionStatus(
-        AccountDomainObject $account,
-        Account             $stripeConnectAccount,
-    ): void
-    {
-        $this->accountRepository->updateWhere(
-            attributes: [
-                AccountDomainObjectAbstract::STRIPE_CONNECT_SETUP_COMPLETE => true,
-            ],
-            where: [
-                'id' => $account->getId(),
-            ]
-        );
-
-        $this->logger->info(sprintf(
-            'Stripe Connect account setup completed for account %s with Stripe account ID %s',
-            $account->getId(),
-            $stripeConnectAccount->id
-        ));
-    }
 }
