@@ -32,7 +32,7 @@ return new class extends Migration
         // For Hi.Events installations, set platform to 'ca' (Canada), otherwise leave as NULL for open-source
         $isHiEvents = config('app.is_hi_events', false);
         $platform = $isHiEvents ? "'ca'" : 'NULL';
-        
+
         DB::statement("
             INSERT INTO account_stripe_platforms (
                 account_id,
@@ -69,7 +69,6 @@ return new class extends Migration
             UPDATE accounts a
             SET
                 stripe_connect_account_type = asp.stripe_connect_account_type,
-                stripe_platform = asp.stripe_connect_platform,
                 stripe_account_id = asp.stripe_account_id,
                 stripe_connect_setup_complete = CASE
                     WHEN asp.stripe_setup_completed_at IS NOT NULL THEN true

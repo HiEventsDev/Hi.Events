@@ -112,7 +112,11 @@ class StripeAccountSyncService
             'charges_enabled' => $stripeAccount->charges_enabled,
             'payouts_enabled' => $stripeAccount->payouts_enabled,
             'country' => $stripeAccount->country,
-            'capabilities' => $stripeAccount->capabilities?->toArray(),
+            'capabilities' => is_array($stripeAccount->capabilities)
+                ? $stripeAccount->capabilities
+                : ($stripeAccount->capabilities && method_exists($stripeAccount->capabilities, 'toArray')
+                    ? $stripeAccount->capabilities->toArray()
+                    : null),
             'type' => $stripeAccount->type,
             'business_type' => $stripeAccount->business_type,
             'requirements' => [

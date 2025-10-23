@@ -103,8 +103,8 @@ msgid "<0>Capacity assignments let you manage capacity across tickets or an enti
 msgstr "<0>Met capaciteitstoewijzingen kun je de capaciteit van tickets of een heel evenement beheren. Ideaal voor meerdaagse evenementen, workshops en meer, waar het beheersen van bezoekersaantallen cruciaal is.</0><1>Je kunt bijvoorbeeld een capaciteitstoewijzing koppelen aan een <2>Dag één</2> en <3>Alle dagen</3> ticket. Zodra de capaciteit is bereikt, zijn beide tickets automatisch niet meer beschikbaar voor verkoop.</1>"
 
 #: src/components/common/CheckInListList/index.tsx:49
-msgid "<0>Check-in lists help manage attendee entry for your event. You can associate multiple tickets with a check-in list and ensure only those with valid tickets can enter.</0>"
-msgstr "<0>Inchecklijsten helpen bij het beheren van de toegang van bezoekers voor je evenement. Je kunt meerdere tickets aan een inchecklijst koppelen en ervoor zorgen dat alleen personen met geldige tickets naar binnen kunnen.</0>"
+msgid "<0>Check-in lists help you manage event entry by day, area, or ticket type. You can link tickets to specific lists such as VIP zones or Day 1 passes and share a secure check-in link with staff. No account is required. Check-in works on mobile, desktop, or tablet, using a device camera or HID USB scanner.                                </0>"
+msgstr ""
 
 #: src/components/common/WidgetEditor/index.tsx:324
 msgid "<0>https://</0>your-website.com"
@@ -233,9 +233,9 @@ msgstr "Een standaardbelasting, zoals BTW of GST"
 msgid "About"
 msgstr "Over"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:427
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:456
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:674
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:425
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:454
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:672
 msgid "About Stripe Connect"
 msgstr "Over Stripe Connect"
 
@@ -255,8 +255,8 @@ msgstr "Accepteer creditcardbetalingen met Stripe"
 msgid "Accept Invitation"
 msgstr "Uitnodiging accepteren"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:350
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:602
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:349
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:600
 msgid "Access Denied"
 msgstr "Toegang geweigerd"
 
@@ -265,7 +265,7 @@ msgstr "Toegang geweigerd"
 msgid "Account"
 msgstr "Account"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:335
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:334
 msgid "Account already connected!"
 msgstr "Account al verbonden!"
 
@@ -297,12 +297,12 @@ msgstr "Acties"
 msgid "Activate"
 msgstr "Activeer"
 
-#: src/components/forms/CheckInListForm/index.tsx:47
+#: src/components/forms/CheckInListForm/index.tsx:74
 msgid "Activation date"
 msgstr "Activeringsdatum"
 
 #: src/components/common/AffiliateTable/index.tsx:131
-#: src/components/common/CheckInListList/index.tsx:116
+#: src/components/common/CheckInListList/index.tsx:114
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:261
 #: src/components/forms/AffiliateForm/index.tsx:21
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:19
@@ -310,7 +310,7 @@ msgstr "Activeringsdatum"
 msgid "Active"
 msgstr "Actief"
 
-#: src/components/forms/CheckInListForm/index.tsx:39
+#: src/components/forms/CheckInListForm/index.tsx:65
 msgid "Add a description for this check-in list"
 msgstr "Voeg een beschrijving toe voor deze check-in lijst"
 
@@ -494,7 +494,7 @@ msgstr "Alle deelnemers"
 msgid "All attendees of this event"
 msgstr "Alle deelnemers aan dit evenement"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:179
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:178
 msgid "All done! You're now using our upgraded payment system."
 msgstr "Klaar! U gebruikt nu ons verbeterde betalingssysteem."
 
@@ -524,8 +524,8 @@ msgstr "Indexering door zoekmachines toestaan"
 msgid "Allow search engines to index this event"
 msgstr "Laat zoekmachines dit evenement indexeren"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:199
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:410
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:198
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:408
 msgid "Almost there! Finish connecting your Stripe account to start accepting payments."
 msgstr "Bijna klaar! Voltooi het verbinden van uw Stripe-account om betalingen te accepteren."
 
@@ -706,7 +706,7 @@ msgstr "Weet je zeker dat je de publicatie van dit organisatorprofiel wilt onged
 msgid "Are you sure you would like to delete this Capacity Assignment?"
 msgstr "Weet je zeker dat je deze Capaciteitstoewijzing wilt verwijderen?"
 
-#: src/components/common/CheckInListList/index.tsx:183
+#: src/components/common/CheckInListList/index.tsx:181
 msgid "Are you sure you would like to delete this Check-In List?"
 msgstr "Weet je zeker dat je deze Check-In lijst wilt verwijderen?"
 
@@ -1078,23 +1078,27 @@ msgstr "Gecreëerd inchecken"
 msgid "Check-in Deleted"
 msgstr "Check-in verwijderd"
 
-#: src/components/modals/CreateCheckInListModal/index.tsx:40
-msgid "Check-In List created successfully"
-msgstr "Check-in lijst succesvol aangemaakt"
+#: src/components/forms/CheckInListForm/index.tsx:35
+msgid "Check-In List"
+msgstr ""
+
+#: src/components/modals/CheckInListSuccessModal/index.tsx:20
+msgid "Check-In List Created"
+msgstr "Check-In Lijst Aangemaakt!"
 
 #: src/components/common/CheckInListList/index.tsx:33
 msgid "Check-In List deleted successfully"
 msgstr "Check-in lijst succesvol verwijderd"
 
-#: src/components/layouts/CheckIn/index.tsx:365
+#: src/components/layouts/CheckIn/index.tsx:363
 msgid "Check-in list has expired"
 msgstr "Check-in lijst is verlopen"
 
-#: src/components/layouts/CheckIn/index.tsx:382
+#: src/components/layouts/CheckIn/index.tsx:380
 msgid "Check-in list is not active"
 msgstr "Check-in lijst is niet actief"
 
-#: src/components/layouts/CheckIn/index.tsx:350
+#: src/components/layouts/CheckIn/index.tsx:348
 msgid "Check-in list not found"
 msgstr "Check-in lijst niet gevonden"
 
@@ -1104,9 +1108,17 @@ msgstr "Check-in lijst niet gevonden"
 msgid "Check-In Lists"
 msgstr "Inchecklijsten"
 
-#: src/components/common/CheckInListList/index.tsx:162
+#: src/components/forms/CheckInListForm/index.tsx:43
+msgid "Check-in lists let you control entry across days, areas, or ticket types. You can share a secure check-in link with staff — no account required."
+msgstr "Check-in lijsten laten je toegang controleren per dag, gebied of tickettype. Je kunt een beveiligde check-in link delen met personeel — geen account vereist."
+
+#: src/components/common/CheckInListList/index.tsx:160
 msgid "Check-In URL copied to clipboard"
 msgstr "Check-In URL gekopieerd naar klembord"
+
+#: src/components/common/AttendeeDetails/index.tsx:47
+msgid "Check-Ins"
+msgstr ""
 
 #: src/components/forms/QuestionForm/index.tsx:114
 msgid "Checkbox options allow multiple selections"
@@ -1115,10 +1127,6 @@ msgstr "Selectievakjes maken meerdere selecties mogelijk"
 #: src/components/forms/QuestionForm/index.tsx:112
 msgid "Checkboxes"
 msgstr "Selectievakjes"
-
-#: src/components/common/AttendeeDetails/index.tsx:29
-msgid "Checked In"
-msgstr "Ingecheckt"
 
 #: src/components/layouts/Checkout/index.tsx:81
 #: src/components/routes/event/Settings/index.tsx:40
@@ -1272,7 +1280,7 @@ msgstr "Volledige betaling"
 msgid "Complete Stripe Setup"
 msgstr "Volledige Stripe-instelling"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:109
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:108
 msgid "Complete the setup below to continue"
 msgstr "Voltooi de onderstaande instelling om door te gaan"
 
@@ -1346,11 +1354,11 @@ msgstr "E-mailadres bevestigen..."
 msgid "Congratulations on creating an event!"
 msgstr "Gefeliciteerd met het aanmaken van een evenement!"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:229
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:228
 msgid "Connect & Upgrade"
 msgstr "Verbinden en upgraden"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:646
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:644
 msgid "Connect Documentation"
 msgstr "Documentatie aansluiten"
 
@@ -1376,9 +1384,9 @@ msgid "Connect with CRM and automate tasks using webhooks and integrations"
 msgstr "Verbinding maken met CRM en taken automatiseren met webhooks en integraties"
 
 #: src/components/common/StripeConnectButton/index.tsx:85
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:229
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:447
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:664
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:228
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:445
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:662
 #: src/components/routes/event/GettingStarted/index.tsx:154
 msgid "Connect with Stripe"
 msgstr "Maak verbinding met Stripe"
@@ -1387,15 +1395,15 @@ msgstr "Maak verbinding met Stripe"
 msgid "Connect your Stripe account to accept payments for tickets and products."
 msgstr "Koppel je Stripe-account om betalingen voor tickets en producten te accepteren."
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:217
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:216
 msgid "Connect your Stripe account to accept payments."
 msgstr "Verbind uw Stripe-account om betalingen te accepteren."
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:439
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:437
 msgid "Connect your Stripe account to start accepting payments for your events."
 msgstr "Verbind uw Stripe-account om betalingen voor uw evenementen te accepteren."
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:215
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:214
 msgid "Connect your Stripe account to start accepting payments."
 msgstr "Verbind uw Stripe-account om betalingen te accepteren."
 
@@ -1403,8 +1411,8 @@ msgstr "Verbind uw Stripe-account om betalingen te accepteren."
 msgid "Connect your Stripe account to start receiving payments."
 msgstr "Maak verbinding met je Stripe-account om betalingen te ontvangen."
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:385
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:622
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:383
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:620
 msgid "Connected to Stripe"
 msgstr "Verbonden met Stripe"
 
@@ -1472,6 +1480,7 @@ msgstr "Ga door naar de volgende stap"
 
 #: src/components/common/AttendeeTicket/index.tsx:158
 #: src/components/common/CopyButton/index.tsx:13
+#: src/components/modals/CheckInListSuccessModal/index.tsx:42
 #: src/components/modals/ShareModal/index.tsx:255
 msgid "Copied"
 msgstr "Gekopieerd"
@@ -1489,6 +1498,7 @@ msgid "Copied!"
 msgstr "Gekopieerd!"
 
 #: src/components/common/CopyButton/index.tsx:13
+#: src/components/modals/CheckInListSuccessModal/index.tsx:42
 #: src/components/modals/ShareModal/index.tsx:255
 msgid "Copy"
 msgstr "Kopie"
@@ -1497,7 +1507,7 @@ msgstr "Kopie"
 msgid "Copy Affiliate Link"
 msgstr "Kopieer affiliatelink"
 
-#: src/components/common/CheckInListList/index.tsx:156
+#: src/components/common/CheckInListList/index.tsx:154
 msgid "Copy Check-In URL"
 msgstr "Check-in URL kopiëren"
 
@@ -1572,7 +1582,7 @@ msgstr "Een product maken"
 msgid "Create a Promo Code"
 msgstr "Maak een Promo Code"
 
-#: src/components/modals/CreateCheckInListModal/index.tsx:63
+#: src/components/modals/CreateCheckInListModal/index.tsx:64
 msgid "Create a Ticket"
 msgstr "Een ticket maken"
 
@@ -1616,9 +1626,9 @@ msgstr "Categorie maken"
 msgid "Create Category"
 msgstr "Categorie maken"
 
-#: src/components/common/CheckInListList/index.tsx:61
-#: src/components/modals/CreateCheckInListModal/index.tsx:72
-#: src/components/modals/CreateCheckInListModal/index.tsx:82
+#: src/components/common/CheckInListList/index.tsx:59
+#: src/components/modals/CreateCheckInListModal/index.tsx:83
+#: src/components/modals/CreateCheckInListModal/index.tsx:99
 #: src/components/routes/event/CheckInLists/index.tsx:46
 msgid "Create Check-In List"
 msgstr "Check-in lijst maken"
@@ -1732,7 +1742,7 @@ msgstr "Valuta"
 msgid "Current Password"
 msgstr "Huidig wachtwoord"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:158
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:157
 msgid "Current payment processor"
 msgstr "Huidige betalingsverwerker"
 
@@ -1839,7 +1849,7 @@ msgid "Daily sales, tax, and fee breakdown"
 msgstr "Dagelijkse uitsplitsing naar verkoop, belasting en kosten"
 
 #: src/components/common/CapacityAssignmentList/index.tsx:156
-#: src/components/common/CheckInListList/index.tsx:176
+#: src/components/common/CheckInListList/index.tsx:174
 #: src/components/common/OrdersTable/index.tsx:186
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:287
 #: src/components/common/PromoCodeTable/index.tsx:181
@@ -1901,7 +1911,7 @@ msgstr "Capaciteit verwijderen"
 msgid "Delete category"
 msgstr "Categorie verwijderen"
 
-#: src/components/common/CheckInListList/index.tsx:179
+#: src/components/common/CheckInListList/index.tsx:177
 msgid "Delete Check-In List"
 msgstr "Check-in lijst verwijderen"
 
@@ -1937,7 +1947,7 @@ msgstr "Webhook verwijderen"
 msgid "Description"
 msgstr "Beschrijving"
 
-#: src/components/forms/CheckInListForm/index.tsx:36
+#: src/components/forms/CheckInListForm/index.tsx:64
 msgid "Description for check-in staff"
 msgstr "Beschrijving voor incheckpersoneel"
 
@@ -1989,7 +1999,7 @@ msgstr "Dit bericht negeren"
 msgid "Document Label"
 msgstr "Documentlabel"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:685
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:683
 msgid "Documentation"
 msgstr "Documentatie"
 
@@ -2000,6 +2010,10 @@ msgstr "Heb je geen account? <0>Aanmelden</0>"
 #: src/components/forms/ProductForm/index.tsx:157
 msgid "Donation / Pay what you'd like product"
 msgstr "Donatie / Betaal wat je wilt product"
+
+#: src/components/modals/CheckInListSuccessModal/index.tsx:59
+msgid "Done"
+msgstr "Klaar"
 
 #: src/components/common/AddEventToCalendarButton/index.tsx:137
 msgid "Download .ics"
@@ -2112,9 +2126,9 @@ msgstr "Capaciteitstoewijzing bewerken"
 msgid "Edit category"
 msgstr "Categorie bewerken"
 
-#: src/components/common/CheckInListList/index.tsx:148
+#: src/components/common/CheckInListList/index.tsx:146
 #: src/components/modals/EditCheckInListModal/index.tsx:69
-#: src/components/modals/EditCheckInListModal/index.tsx:91
+#: src/components/modals/EditCheckInListModal/index.tsx:95
 msgid "Edit Check-In List"
 msgstr "Check-in lijst bewerken"
 
@@ -2185,7 +2199,7 @@ msgstr "bijv. 2,50 voor $2,50"
 msgid "eg. 23.5 for 23.5%"
 msgstr "bijv. 23,5 voor 23,5%"
 
-#: src/components/common/AttendeeDetails/index.tsx:21
+#: src/components/common/AttendeeDetails/index.tsx:22
 #: src/components/common/AttendeeTable/index.tsx:109
 #: src/components/common/OrderDetails/index.tsx:31
 #: src/components/forms/AffiliateForm/index.tsx:89
@@ -2546,7 +2560,7 @@ msgstr "Evenementen"
 msgid "Every email template must include a call-to-action button that links to the appropriate page"
 msgstr "Elke e-mailsjabloon moet een call-to-action knop bevatten die linkt naar de juiste pagina"
 
-#: src/components/forms/CheckInListForm/index.tsx:56
+#: src/components/forms/CheckInListForm/index.tsx:80
 msgid "Expiration date"
 msgstr "Vervaldatum"
 
@@ -2708,7 +2722,7 @@ msgstr "Tarief"
 msgid "Fees"
 msgstr "Tarieven"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:283
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:282
 msgid "Fees are subject to change. You will be notified of any changes to your fee structure."
 msgstr "Tarieven kunnen worden gewijzigd. Je wordt op de hoogte gebracht van wijzigingen in je tarievenstructuur."
 
@@ -2729,12 +2743,12 @@ msgstr "Filters"
 msgid "Filters ({activeFilterCount})"
 msgstr "Filters ({activeFilterCount})"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:208
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:207
 msgid "Finish Setup"
 msgstr "Instelling voltooien"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:418
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:665
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:416
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:663
 msgid "Finish Stripe Setup"
 msgstr "Stripe-instelling voltooien"
 
@@ -2782,7 +2796,7 @@ msgstr "Vast"
 msgid "Fixed amount"
 msgstr "Vast bedrag"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:268
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:267
 msgid "Fixed Fee:"
 msgstr "Vast tarief:"
 
@@ -3132,7 +3146,7 @@ msgid "In-depth Analytics"
 msgstr "Diepgaande analyses"
 
 #: src/components/common/AffiliateTable/index.tsx:131
-#: src/components/common/CheckInListList/index.tsx:116
+#: src/components/common/CheckInListList/index.tsx:114
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:261
 #: src/components/forms/AffiliateForm/index.tsx:27
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:25
@@ -3152,11 +3166,11 @@ msgstr "Vermeld verbindingsgegevens voor je online evenement. Deze gegevens word
 msgid "Include tax and fees in the price"
 msgstr "Belastingen en toeslagen in de prijs opnemen"
 
-#: src/components/common/CheckInListList/index.tsx:103
+#: src/components/common/CheckInListList/index.tsx:101
 msgid "Includes {0} products"
 msgstr "Inclusief {0} producten"
 
-#: src/components/common/CheckInListList/index.tsx:104
+#: src/components/common/CheckInListList/index.tsx:102
 msgid "Includes 1 product"
 msgstr "Omvat 1 product"
 
@@ -3259,7 +3273,7 @@ msgstr "Jan"
 msgid "Johnson"
 msgstr "Jansen"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:114
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:113
 msgid "Just click the button below to reconnect your Stripe account."
 msgstr "Klik gewoon op de knop hieronder om uw Stripe-account opnieuw te verbinden."
 
@@ -3267,7 +3281,7 @@ msgstr "Klik gewoon op de knop hieronder om uw Stripe-account opnieuw te verbind
 msgid "Label"
 msgstr "Label"
 
-#: src/components/common/AttendeeDetails/index.tsx:45
+#: src/components/common/AttendeeDetails/index.tsx:38
 #: src/components/modals/CreateAttendeeModal/index.tsx:155
 #: src/components/routes/profile/ManageProfile/index.tsx:172
 msgid "Language"
@@ -3449,7 +3463,7 @@ msgid "Make your event live"
 msgstr "Maak je evenement live"
 
 #: src/components/common/CapacityAssignmentList/index.tsx:143
-#: src/components/common/CheckInListList/index.tsx:145
+#: src/components/common/CheckInListList/index.tsx:143
 #: src/components/common/OrdersTable/index.tsx:139
 #: src/components/common/OrdersTable/index.tsx:154
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:256
@@ -3495,7 +3509,7 @@ msgstr "Tickets beheren"
 msgid "Manage your account details and default settings"
 msgstr "Beheer je accountgegevens en standaardinstellingen"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:719
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:717
 msgid "Manage your payment processing and view platform fees"
 msgstr "Beheer uw betalingsverwerking en bekijk de platformkosten"
 
@@ -3635,12 +3649,12 @@ msgstr "N.V.T."
 msgid "Nam placerat elementum..."
 msgstr "Nam placerat elementum..."
 
-#: src/components/common/AttendeeDetails/index.tsx:13
+#: src/components/common/AttendeeDetails/index.tsx:14
 #: src/components/common/AttendeeTable/index.tsx:108
 #: src/components/common/OrderDetails/index.tsx:23
 #: src/components/forms/AffiliateForm/index.tsx:81
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:37
-#: src/components/forms/CheckInListForm/index.tsx:20
+#: src/components/forms/CheckInListForm/index.tsx:49
 #: src/components/forms/ProductForm/index.tsx:253
 #: src/components/forms/TaxAndFeeForm/index.tsx:61
 #: src/components/modals/DuplicateEventModal/index.tsx:109
@@ -3682,10 +3696,6 @@ msgstr "Nieuw wachtwoord"
 msgid "Nightlife"
 msgstr "Nachtleven"
 
-#: src/components/common/AttendeeDetails/index.tsx:32
-msgid "No"
-msgstr "Geen"
-
 #: src/components/routes/event/Webhooks/index.tsx:22
 msgid "No Active Webhooks"
 msgstr "Geen actieve webhooks"
@@ -3709,10 +3719,6 @@ msgstr "Er zijn geen deelnemers aan deze bestelling toegevoegd."
 #: src/components/common/AttendeeTable/index.tsx:56
 msgid "No Attendees to show"
 msgstr "Geen aanwezigen"
-
-#: src/components/forms/CheckInListForm/index.tsx:48
-msgid "No attendees will be able to check in before this date using this list"
-msgstr "Bezoekers kunnen niet voor deze datum inchecken met deze lijst"
 
 #: src/components/common/CapacityAssignmentList/index.tsx:42
 msgid "No Capacity Assignments"
@@ -3938,7 +3944,7 @@ msgstr "Te koop"
 msgid "On Sale"
 msgstr "In de uitverkoop"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:546
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:544
 msgid "Once you complete the upgrade, your old account will only be used for refunds."
 msgstr "Zodra u de upgrade voltooit, wordt uw oude account alleen gebruikt voor terugbetalingen."
 
@@ -3981,17 +3987,18 @@ msgstr "Stuur alleen belangrijke e-mails die direct verband houden met dit evene
 msgid "Only send to orders with these statuses"
 msgstr "Alleen verzenden naar orders met deze statussen"
 
-#: src/components/common/CheckInListList/index.tsx:167
+#: src/components/common/CheckInListList/index.tsx:165
+#: src/components/modals/CheckInListSuccessModal/index.tsx:56
 msgid "Open Check-In Page"
-msgstr "Check-in pagina openen"
+msgstr "Open Check-In Pagina"
 
 #: src/components/layouts/AppLayout/index.tsx:28
 msgid "Open sidebar"
 msgstr "Zijbalk openen"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:190
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:398
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:635
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:189
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:396
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:633
 msgid "Open Stripe Dashboard"
 msgstr "Stripe-dashboard openen"
 
@@ -4409,9 +4416,9 @@ msgstr "Betalingsinstructies"
 msgid "Payment Methods"
 msgstr "Betaalmethoden"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:467
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:479
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:613
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:465
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:477
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:611
 msgid "Payment Processing"
 msgstr "Verwerking van betalingen"
 
@@ -4423,7 +4430,7 @@ msgstr "Betalingsprovider"
 msgid "Payment Received"
 msgstr "Ontvangen betaling"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:718
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:716
 msgid "Payment Settings"
 msgstr "Betalingsinstellingen"
 
@@ -4472,11 +4479,11 @@ msgstr "Bestelling plaatsen"
 msgid "Place this in the <head> of your website."
 msgstr "Plaats dit in de <head> van je website."
 
-#: src/components/common/PoweredByFooter/index.tsx:27
+#: src/components/common/PoweredByFooter/index.tsx:48
 msgid "Planning an event?"
 msgstr "Een evenement plannen?"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:242
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:241
 msgid "Platform Fees"
 msgstr "Platformkosten"
 
@@ -4513,7 +4520,7 @@ msgstr "Ga verder in het nieuwe tabblad"
 msgid "Please create a product"
 msgstr "Maak een product"
 
-#: src/components/modals/CreateCheckInListModal/index.tsx:51
+#: src/components/modals/CreateCheckInListModal/index.tsx:52
 msgid "Please create a ticket"
 msgstr "Maak een ticket aan"
 
@@ -4601,7 +4608,7 @@ msgstr "Post Checkout-bericht"
 msgid "Post Checkout Message"
 msgstr "Post-Checkout Bericht"
 
-#: src/components/common/PoweredByFooter/index.tsx:37
+#: src/components/common/PoweredByFooter/index.tsx:60
 msgid "Powered by"
 msgstr "Aangedreven door"
 
@@ -4683,7 +4690,7 @@ msgstr "Privacybeleid"
 msgid "Process Refund"
 msgstr "Terugbetaling verwerken"
 
-#: src/components/common/AttendeeDetails/index.tsx:37
+#: src/components/common/AttendeeDetails/index.tsx:30
 #: src/components/modals/ManageAttendeeModal/index.tsx:119
 msgid "Product"
 msgstr "Product"
@@ -4877,11 +4884,7 @@ msgstr "Radio-optie"
 msgid "Read less"
 msgstr "Minder lezen"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:108
-msgid "Ready to Upgrade?"
-msgstr "Klaar om te upgraden?"
-
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:218
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:217
 msgid "Ready to upgrade? This takes only a few minutes."
 msgstr "Klaar om te upgraden? Dit duurt slechts een paar minuten."
 
@@ -4903,10 +4906,10 @@ msgstr "Reddit"
 
 #: src/components/common/StripeConnectButton/index.tsx:59
 #: src/components/common/StripeConnectButton/index.tsx:74
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:318
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:331
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:572
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:590
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:317
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:330
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:570
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:588
 msgid "Redirecting to Stripe..."
 msgstr "Doorverwijzen naar Stripe..."
 
@@ -5132,8 +5135,8 @@ msgstr "Sjabloon Opslaan"
 msgid "Save Ticket Design"
 msgstr "Ticketontwerp Opslaan"
 
-#: src/components/layouts/CheckIn/index.tsx:445
-#: src/components/layouts/CheckIn/index.tsx:455
+#: src/components/layouts/CheckIn/index.tsx:443
+#: src/components/layouts/CheckIn/index.tsx:453
 msgid "Scan"
 msgstr "Scannen"
 
@@ -5158,7 +5161,7 @@ msgstr "Zoeken op evenementnaam..."
 msgid "Search by name, email, or order #..."
 msgstr "Zoeken op naam, e-mail of bestelnummer..."
 
-#: src/components/layouts/CheckIn/index.tsx:441
+#: src/components/layouts/CheckIn/index.tsx:439
 msgid "Search by name, order #, attendee # or email..."
 msgstr "Zoek op naam, ordernummer, aanwezigheidsnummer of e-mail..."
 
@@ -5280,7 +5283,7 @@ msgstr "Selecteer status"
 msgid "Select Ticket"
 msgstr "Selecteer ticket"
 
-#: src/components/forms/CheckInListForm/index.tsx:26
+#: src/components/forms/CheckInListForm/index.tsx:55
 #: src/components/modals/SendMessageModal/index.tsx:202
 msgid "Select tickets"
 msgstr "Kies tickets"
@@ -5648,7 +5651,7 @@ msgstr "Staat of regio"
 msgid "Status"
 msgstr "Status"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:177
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:176
 msgid "Still handling refunds for your older transactions."
 msgstr "Behandelt nog steeds terugbetalingen voor uw oudere transacties."
 
@@ -5656,7 +5659,7 @@ msgstr "Behandelt nog steeds terugbetalingen voor uw oudere transacties."
 msgid "Stripe"
 msgstr "Stripe"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:156
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:155
 msgid "Stripe Connect"
 msgstr "Stripe Connect"
 
@@ -5950,7 +5953,7 @@ msgstr "De achtergrondkleur van inhoudsgebieden (kaarten, koptekst, enz.)"
 msgid "The background color of the entire page"
 msgstr "De achtergrondkleur van de volledige pagina"
 
-#: src/components/layouts/CheckIn/index.tsx:355
+#: src/components/layouts/CheckIn/index.tsx:353
 msgid "The check-in list you are looking for does not exist."
 msgstr "De check-in lijst die je zoekt bestaat niet."
 
@@ -6099,33 +6102,29 @@ msgstr "Deze categorie heeft nog geen producten."
 msgid "This category is hidden from public view"
 msgstr "Deze categorie is niet zichtbaar voor het publiek"
 
-#: src/components/common/CheckInListList/index.tsx:75
+#: src/components/common/CheckInListList/index.tsx:73
 msgid "This check-in list has expired"
 msgstr "Deze check-in lijst is verlopen"
 
-#: src/components/layouts/CheckIn/index.tsx:370
+#: src/components/layouts/CheckIn/index.tsx:368
 msgid "This check-in list has expired and is no longer available for check-ins."
 msgstr "Deze check-ins lijst is verlopen en niet langer beschikbaar voor check-ins."
 
-#: src/components/common/CheckInListList/index.tsx:82
+#: src/components/common/CheckInListList/index.tsx:80
 msgid "This check-in list is active"
 msgstr "Deze check-in lijst is actief"
 
-#: src/components/common/CheckInListList/index.tsx:79
+#: src/components/common/CheckInListList/index.tsx:77
 msgid "This check-in list is not active yet"
 msgstr "Deze check-in lijst is nog niet actief"
 
-#: src/components/layouts/CheckIn/index.tsx:387
+#: src/components/layouts/CheckIn/index.tsx:385
 msgid "This check-in list is not yet active and is not available for check-ins."
 msgstr "Deze check-ins lijst is nog niet actief en is niet beschikbaar voor check-ins."
 
 #: src/components/forms/AffiliateForm/index.tsx:41
 msgid "This code will be used to track sales. Only letters, numbers, hyphens, and underscores allowed."
 msgstr "Deze code wordt gebruikt om verkopen bij te houden. Alleen letters, cijfers, streepjes en underscores toegestaan."
-
-#: src/components/forms/CheckInListForm/index.tsx:37
-msgid "This description will be shown to the check-in staff"
-msgstr "Deze beschrijving wordt getoond aan het incheckpersoneel"
 
 #: src/components/modals/SendMessageModal/index.tsx:280
 msgid "This email is not promotional and is directly related to the event."
@@ -6150,10 +6149,6 @@ msgstr "Dit is een online evenement"
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:73
 msgid "This is the name of your organizer that will be displayed to your users."
 msgstr "Dit is de naam van je organisator die aan je gebruikers wordt getoond."
-
-#: src/components/forms/CheckInListForm/index.tsx:57
-msgid "This list will no longer be available for check-ins after this date"
-msgstr "Deze lijst is na deze datum niet meer beschikbaar voor check-ins"
 
 #: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:68
 msgid "This message will be included in the footer of all emails sent from this event"
@@ -6385,7 +6380,7 @@ msgstr "TIP"
 msgid "Title"
 msgstr "Titel"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:655
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:653
 msgid "To receive credit card payments, you need to connect your Stripe account. Stripe is our payment processing partner that ensures secure transactions and timely payouts."
 msgstr "Om creditcardbetalingen te ontvangen, moet je je Stripe-account koppelen. Stripe is onze partner voor betalingsverwerking die veilige transacties en tijdige uitbetalingen garandeert."
 
@@ -6444,7 +6439,7 @@ msgstr "Totale belasting"
 msgid "Track revenue, page views, and sales with detailed analytics and exportable reports"
 msgstr "Inkomsten, paginaweergaves en verkopen bijhouden met gedetailleerde analyses en exporteerbare rapporten"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:256
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:255
 msgid "Transaction Fee:"
 msgstr "Transactiekosten:"
 
@@ -6458,7 +6453,7 @@ msgstr "Waar als offline betaling"
 msgid "True if payment pending"
 msgstr "Waar als betaling in behandeling"
 
-#: src/components/common/PoweredByFooter/index.tsx:32
+#: src/components/common/PoweredByFooter/index.tsx:55
 msgid "Try Hi.Events Free"
 msgstr "Probeer Hi.Events Gratis"
 
@@ -6466,11 +6461,11 @@ msgstr "Probeer Hi.Events Gratis"
 msgid "Turkish"
 msgstr "Turks"
 
-#: src/components/layouts/CheckIn/index.tsx:448
+#: src/components/layouts/CheckIn/index.tsx:446
 msgid "Turn sound off"
 msgstr "Geluid uitschakelen"
 
-#: src/components/layouts/CheckIn/index.tsx:448
+#: src/components/layouts/CheckIn/index.tsx:446
 msgid "Turn sound on"
 msgstr "Geluid inschakelen"
 
@@ -6592,7 +6587,7 @@ msgstr "Naam, beschrijving en data van evenement bijwerken"
 msgid "Update profile"
 msgstr "Profiel bijwerken"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:164
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:163
 msgid "Upgrade Available"
 msgstr "Upgrade beschikbaar"
 
@@ -6788,7 +6783,7 @@ msgstr "Ticket Bekijken"
 msgid "Vimeo"
 msgstr "Vimeo"
 
-#: src/components/forms/CheckInListForm/index.tsx:21
+#: src/components/forms/CheckInListForm/index.tsx:50
 msgid "VIP check-in list"
 msgstr "VIP check-in lijst"
 
@@ -6799,6 +6794,10 @@ msgstr "VIP-ticket"
 #: src/components/forms/ProductForm/index.tsx:394
 msgid "Visibility"
 msgstr "Zichtbaarheid"
+
+#: src/components/forms/CheckInListForm/index.tsx:66
+msgid "Visible to check-in staff only. Helps identify this list during check-in."
+msgstr "Alleen zichtbaar voor check-in personeel. Helpt deze lijst te identificeren tijdens check-in."
 
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:104
 msgid "VK"
@@ -6923,10 +6922,6 @@ msgstr "Welkom bij {0}, hier is een overzicht van al je evenementen"
 msgid "What are Tiered Products?"
 msgstr "Wat zijn gelaagde producten?"
 
-#: src/components/forms/CheckInListForm/index.tsx:50
-msgid "What date should this check-in list become active?"
-msgstr "Op welke datum moet deze check-in lijst actief worden?"
-
 #: src/components/modals/CreateProductCategoryModal/index.tsx:53
 msgid "What is a Category?"
 msgstr "Wat is een categorie?"
@@ -7011,6 +7006,14 @@ msgstr "Wanneer een bestelling wordt terugbetaald"
 msgid "When an order is updated"
 msgstr "Wanneer een bestelling wordt bijgewerkt"
 
+#: src/components/forms/CheckInListForm/index.tsx:81
+msgid "When check-in closes"
+msgstr "Wanneer check-in sluit"
+
+#: src/components/forms/CheckInListForm/index.tsx:75
+msgid "When check-in opens"
+msgstr "Wanneer check-in opent"
+
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:322
 msgid "When customers purchase tickets, their orders will appear here."
 msgstr "Wanneer klanten tickets kopen, verschijnen hun bestellingen hier."
@@ -7023,11 +7026,7 @@ msgstr "Als deze optie is ingeschakeld, worden facturen gegenereerd voor ticketb
 msgid "When offline payments are enabled, users will be able to complete their orders and receive their tickets. Their tickets will clearly indicate the order is not paid, and the check-in tool will notify the check-in staff if an order requires payment."
 msgstr "Als offline betalingen zijn ingeschakeld, kunnen gebruikers hun bestellingen afronden en hun tickets ontvangen. Hun tickets zullen duidelijk aangeven dat de bestelling niet betaald is en de check-in tool zal het check-in personeel informeren als een bestelling betaald moet worden."
 
-#: src/components/forms/CheckInListForm/index.tsx:59
-msgid "When should this check-in list expire?"
-msgstr "Wanneer moet deze check-in lijst verlopen?"
-
-#: src/components/forms/CheckInListForm/index.tsx:25
+#: src/components/forms/CheckInListForm/index.tsx:54
 msgid "Which tickets should be associated with this check-in list?"
 msgstr "Welke tickets moeten aan deze inchecklijst worden gekoppeld?"
 
@@ -7088,10 +7087,6 @@ msgstr "X (Twitter)"
 #: src/components/common/ReportTable/index.tsx:51
 msgid "Year to date"
 msgstr "Jaar tot nu toe"
-
-#: src/components/common/AttendeeDetails/index.tsx:32
-msgid "Yes"
-msgstr "Ja"
 
 #: src/components/forms/ProductForm/index.tsx:376
 msgid "Yes, remove them"
@@ -7207,7 +7202,7 @@ msgstr "U moet het e-mailadres van uw account verifiëren voordat u berichten ku
 msgid "You will have to mark an order as paid manually. This can be done on the manage order page."
 msgstr "Je moet een bestelling handmatig als betaald markeren. Dit kun je doen op de pagina Bestelling beheren."
 
-#: src/components/modals/CreateCheckInListModal/index.tsx:55
+#: src/components/modals/CreateCheckInListModal/index.tsx:56
 msgid "You'll need a ticket before you can create a check-in list."
 msgstr "Je hebt een ticket nodig voordat je een inchecklijst kunt maken."
 
@@ -7219,7 +7214,7 @@ msgstr "U hebt een product nodig voordat u een capaciteitstoewijzing kunt maken.
 msgid "You'll need at least one product to get started. Free, paid or let the user decide what to pay."
 msgstr "Je hebt minstens één product nodig om te beginnen. Gratis, betaald of laat de gebruiker beslissen wat hij wil betalen."
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:176
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:175
 msgid "You're all set! Your payments are being processed smoothly."
 msgstr "U bent helemaal klaar! Uw betalingen worden soepel verwerkt."
 
@@ -7246,6 +7241,10 @@ msgstr "Je bezoekers verschijnen hier zodra ze zich hebben geregistreerd voor je
 #: src/components/common/WidgetEditor/index.tsx:329
 msgid "Your awesome website 🎉"
 msgstr "Uw geweldige website 🎉"
+
+#: src/components/modals/CheckInListSuccessModal/index.tsx:23
+msgid "Your check-in list has been created successfully. Share the link below with your check-in staff."
+msgstr "Je check-in lijst is succesvol aangemaakt. Deel de onderstaande link met je check-in personeel."
 
 #: src/components/routes/product-widget/CollectInformation/index.tsx:276
 msgid "Your Details"
@@ -7321,12 +7320,12 @@ msgstr "Uw betaling is mislukt. Probeer het opnieuw."
 msgid "Your refund is processing."
 msgstr "Je terugbetaling wordt verwerkt."
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:173
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:172
 msgid "Your Stripe account is connected and processing payments."
 msgstr "Uw Stripe-account is verbonden en verwerkt betalingen."
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:389
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:626
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:387
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:624
 msgid "Your Stripe account is connected and ready to process payments."
 msgstr "Je Stripe-account is verbonden en klaar om betalingen te verwerken."
 

@@ -55,8 +55,7 @@ class AttendeesExport implements FromCollection, WithHeadings, WithMapping, With
             __('Last Name'),
             __('Email'),
             __('Status'),
-            __('Is Checked In'),
-            __('Checked In At'),
+            __('Check Ins'),
             __('Product ID'),
             __('Product Name'),
             __('Event ID'),
@@ -106,16 +105,23 @@ class AttendeesExport implements FromCollection, WithHeadings, WithMapping, With
                     ->getLabel();
         }
 
+        $checkIns = $attendee->getCheckIns()
+            ? $attendee->getCheckIns()
+                ->map(fn($checkIn) => sprintf(
+                    '%s (%s)',
+                    $checkIn->getCheckInList()?->getName() ?? __('Unknown'),
+                    Carbon::parse($checkIn->getCreatedAt())->format('Y-m-d H:i:s')
+                ))
+                ->join(', ')
+            : '';
+
         return array_merge([
             $attendee->getId(),
             $attendee->getFirstName(),
             $attendee->getLastName(),
             $attendee->getEmail(),
             $attendee->getStatus(),
-            $attendee->getCheckIn() ? 'Yes' : 'No',
-            $attendee->getCheckIn()
-                ? Carbon::parse($attendee->getCheckIn()->getCreatedAt())->format('Y-m-d H:i:s')
-                : '',
+            $checkIns,
             $attendee->getProductId(),
             $ticketName,
             $attendee->getEventId(),

@@ -528,7 +528,8 @@ export interface Attendee {
     checked_in_by?: number;
     question_answers?: QuestionAnswer[];
     locale?: SupportedLocales;
-    check_in?: AttendeeCheckIn;
+    check_in?: AttendeeCheckIn; // Use in contexts where a single check is expected, like dealing with a check-in list
+    check_ins?: AttendeeCheckIn[];
 }
 
 export type PublicCheckIn = Pick<AttendeeCheckIn, 'id' | 'order_id' | 'attendee_id' | 'check_in_list_id' | 'product_id' | 'event_id'>;
@@ -542,6 +543,7 @@ export interface AttendeeCheckIn {
     short_id: IdParam;
     order_id: IdParam;
     created_at: string;
+    check_in_list?: CheckInList;
 }
 
 export interface Address {
