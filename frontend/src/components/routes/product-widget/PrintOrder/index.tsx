@@ -46,10 +46,8 @@ export const PrintOrder = () => {
                             product={attendee.product as Product}
                             event={event}
                             hideButtons
+                            showPoweredBy
                         />
-                        <div className={classes.poweredBy}>
-                            <PoweredByFooter/>
-                        </div>
                     </div>
                 );
             })}

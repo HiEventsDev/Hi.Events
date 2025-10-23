@@ -39,6 +39,7 @@ export const AttendeeProductAndInformation = () => {
                 attendee={attendee as Attendee}
                 product={attendee.product as Product}
                 event={event}
+                showPoweredBy
             />
 
             {(event?.settings?.is_online_event && <OnlineEventDetails eventSettings={event.settings}/>)}
