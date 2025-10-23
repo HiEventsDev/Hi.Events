@@ -10,9 +10,11 @@ use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\DomainObjects\StripePaymentDomainObject;
+use HiEvents\Exceptions\Stripe\StripeClientConfigurationException;
 use HiEvents\Mail\Order\PaymentSuccessButOrderExpiredMail;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
+use HiEvents\Services\Infrastructure\Stripe\StripeClientFactory;
 use HiEvents\Values\MoneyValue;
 use Illuminate\Contracts\Mail\Mailer;
 use Psr\Log\LoggerInterface;
@@ -26,6 +28,8 @@ readonly class StripeRefundExpiredOrderService
         private Mailer                           $mailer,
         private LoggerInterface                  $logger,
         private EventRepositoryInterface         $eventRepository,
+        private StripeClientFactory              $stripeClientFactory,
+
     )
     {
     }
@@ -36,6 +40,7 @@ readonly class StripeRefundExpiredOrderService
      * @throws MathException
      * @throws UnknownCurrencyException
      * @throws NumberFormatException
+     * @throws StripeClientConfigurationException
      */
     public function refundExpiredOrder(
         PaymentIntent             $paymentIntent,
@@ -48,10 +53,17 @@ readonly class StripeRefundExpiredOrderService
             ->loadRelation(new Relationship(OrganizerDomainObject::class, name: 'organizer'))
             ->findById($order->getEventId());
 
+        // Determine the correct Stripe platform for this refund
+        // Use the platform that was used for the original payment
+        $paymentPlatform = $stripePayment->getStripePlatformEnum();
+
+        // Create Stripe client for the original payment's platform
+        $stripeClient = $this->stripeClientFactory->createForPlatform($paymentPlatform);
 
         $this->refundService->refundPayment(
             MoneyValue::fromMinorUnit($paymentIntent->amount, strtoupper($paymentIntent->currency)),
             $stripePayment,
+            $stripeClient
         );
 
         $this->mailer
