@@ -25,22 +25,17 @@
 
 .ticketPage {
   margin-bottom: 30px;
-  
+
   @media print {
     margin-bottom: 0;
     page-break-after: always;
     page-break-inside: avoid;
-    padding: 20px;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    
-    &:last-child {
+
+    &:last-of-type {
       page-break-after: auto;
     }
   }
-  
+
   @media screen {
     &:last-child {
       margin-bottom: 0;
