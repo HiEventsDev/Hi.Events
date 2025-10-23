@@ -28,7 +28,7 @@ msgid "'There\\'s nothing to show yet'"
 msgstr "\"Il n'y a rien à montrer pour l'instant\""
 
 #: src/components/common/ReportTable/index.tsx:303
-#: src/locales.ts:37
+#: src/locales.ts:39
 msgid "{0}"
 msgstr "{0}"
 
@@ -102,8 +102,8 @@ msgid "<0>Capacity assignments let you manage capacity across tickets or an enti
 msgstr "<0>Les affectations de capacité vous permettent de gérer la capacité des billets ou d'un événement entier. Idéal pour les événements de plusieurs jours, les ateliers et plus encore, où le contrôle de l'assistance est crucial.</0><1>Par exemple, vous pouvez associer une affectation de capacité avec un billet <2>Jour Un</2> et <3>Tous les Jours</3>. Une fois la capacité atteinte, les deux billets ne seront plus disponibles à la vente.</1>"
 
 #: src/components/common/CheckInListList/index.tsx:49
-msgid "<0>Check-in lists help manage attendee entry for your event. You can associate multiple tickets with a check-in list and ensure only those with valid tickets can enter.</0>"
-msgstr "<0>Les listes de pointage aident à gérer l'entrée des participants à votre événement. Vous pouvez associer plusieurs billets à une liste de pointage et vous assurer que seuls ceux avec des billets valides peuvent entrer.</0>"
+msgid "<0>Check-in lists help you manage event entry by day, area, or ticket type. You can link tickets to specific lists such as VIP zones or Day 1 passes and share a secure check-in link with staff. No account is required. Check-in works on mobile, desktop, or tablet, using a device camera or HID USB scanner.                                </0>"
+msgstr ""
 
 #: src/components/common/WidgetEditor/index.tsx:324
 msgid "<0>https://</0>your-website.com"
@@ -153,6 +153,11 @@ msgstr "1 webhook actif"
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:81
 msgid "123 Main Street"
 msgstr "123, rue Principale"
+
+#: src/components/routes/event/TicketDesigner/TicketDesignerPrint.tsx:81
+#: src/components/routes/event/TicketDesigner/TicketPreview.tsx:89
+msgid "123 Sample Street"
+msgstr ""
 
 #: src/components/common/WidgetEditor/index.tsx:226
 msgid "20"
@@ -232,9 +237,9 @@ msgstr "Une taxe standard, comme la TVA ou la TPS"
 msgid "About"
 msgstr "À propos"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:427
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:456
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:674
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:425
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:454
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:672
 msgid "About Stripe Connect"
 msgstr "À propos de Stripe Connect"
 
@@ -254,8 +259,8 @@ msgstr "Accepter les paiements par carte bancaire avec Stripe"
 msgid "Accept Invitation"
 msgstr "Accepter l'invitation"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:350
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:602
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:349
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:600
 msgid "Access Denied"
 msgstr "Accès refusé"
 
@@ -264,7 +269,7 @@ msgstr "Accès refusé"
 msgid "Account"
 msgstr "Compte"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:335
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:334
 msgid "Account already connected!"
 msgstr "Compte déjà connecté !"
 
@@ -296,12 +301,12 @@ msgstr "Actions"
 msgid "Activate"
 msgstr "Activer"
 
-#: src/components/forms/CheckInListForm/index.tsx:47
+#: src/components/forms/CheckInListForm/index.tsx:62
 msgid "Activation date"
 msgstr "Date d'activation"
 
 #: src/components/common/AffiliateTable/index.tsx:131
-#: src/components/common/CheckInListList/index.tsx:116
+#: src/components/common/CheckInListList/index.tsx:114
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:261
 #: src/components/forms/AffiliateForm/index.tsx:21
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:19
@@ -309,7 +314,7 @@ msgstr "Date d'activation"
 msgid "Active"
 msgstr "Actif"
 
-#: src/components/forms/CheckInListForm/index.tsx:39
+#: src/components/forms/CheckInListForm/index.tsx:53
 msgid "Add a description for this check-in list"
 msgstr "Ajouter une description pour cette liste de pointage"
 
@@ -468,7 +473,7 @@ msgid "Affiliate updated successfully"
 msgstr "Affilié mis à jour avec succès"
 
 #: src/components/layouts/Event/index.tsx:107
-#: src/components/modals/DuplicateEventModal/index.tsx:32
+#: src/components/modals/DuplicateEventModal/index.tsx:33
 #: src/components/routes/event/Affiliates/index.tsx:61
 msgid "Affiliates"
 msgstr "Affiliés"
@@ -493,7 +498,7 @@ msgstr "Tous les participants"
 msgid "All attendees of this event"
 msgstr "Tous les participants à cet événement"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:179
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:178
 msgid "All done! You're now using our upgraded payment system."
 msgstr "Terminé ! Vous utilisez maintenant notre système de paiement amélioré."
 
@@ -523,8 +528,8 @@ msgstr "Autoriser l'indexation des moteurs de recherche"
 msgid "Allow search engines to index this event"
 msgstr "Autoriser les moteurs de recherche à indexer cet événement"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:199
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:410
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:198
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:408
 msgid "Almost there! Finish connecting your Stripe account to start accepting payments."
 msgstr "Presque fini ! Terminez la connexion de votre compte Stripe pour commencer à accepter les paiements."
 
@@ -587,7 +592,7 @@ msgstr "Une erreur inattendue est apparue. Veuillez réessayer."
 msgid "Answer updated successfully."
 msgstr "Réponse mise à jour avec succès."
 
-#: src/components/routes/event/Settings/Sections/EmailSettings/index.tsx:61
+#: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:61
 msgid "Any queries from product holders will be sent to this email address. This will also be used as the \"reply-to\" address for all emails sent from this event"
 msgstr "Toute question des détenteurs de produits sera envoyée à cette adresse e-mail. Elle sera également utilisée comme adresse de réponse pour tous les e-mails envoyés depuis cet événement"
 
@@ -705,7 +710,7 @@ msgstr "Êtes-vous sûr de vouloir dépublier ce profil d'organisateur ? Il ne s
 msgid "Are you sure you would like to delete this Capacity Assignment?"
 msgstr "Êtes-vous sûr de vouloir supprimer cette Affectation de Capacité?"
 
-#: src/components/common/CheckInListList/index.tsx:183
+#: src/components/common/CheckInListList/index.tsx:181
 msgid "Are you sure you would like to delete this Check-In List?"
 msgstr "Êtes-vous sûr de vouloir supprimer cette liste de pointage ?"
 
@@ -725,9 +730,9 @@ msgstr "Demander une fois par produit"
 msgid "At least one event type must be selected"
 msgstr "Au moins un type d'événement doit être sélectionné"
 
-#: src/components/common/AttendeeTicket/index.tsx:86
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:49
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:50
+#: src/components/common/AttendeeTicket/index.tsx:94
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:54
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:55
 #: src/components/routes/product-widget/CollectInformation/index.tsx:386
 msgid "Attendee"
 msgstr "Participant"
@@ -744,7 +749,7 @@ msgstr "Participant créé"
 msgid "Attendee Details"
 msgstr "Détails des participants"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:50
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:55
 msgid "Attendee Email"
 msgstr "Email du participant"
 
@@ -752,7 +757,7 @@ msgstr "Email du participant"
 msgid "Attendee Management"
 msgstr "Gestion des participants"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:49
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:54
 msgid "Attendee Name"
 msgstr "Nom du participant"
 
@@ -768,7 +773,7 @@ msgstr "Notes du participant"
 msgid "Attendee questions"
 msgstr "Questions des participants"
 
-#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:96
+#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:95
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:195
 #: src/components/modals/ManageAttendeeModal/index.tsx:172
 msgid "Attendee Ticket"
@@ -816,7 +821,7 @@ msgstr "Redimensionnez automatiquement la hauteur du widget en fonction du conte
 msgid "Available to Refund"
 msgstr "Disponible pour remboursement"
 
-#: src/components/common/Editor/Controls/LiquidTokenControl.tsx:76
+#: src/components/common/Editor/Controls/LiquidTokenControl.tsx:49
 msgid "Available Tokens"
 msgstr "Jetons disponibles"
 
@@ -839,7 +844,7 @@ msgstr "Paiement hors ligne en attente"
 msgid "Awaiting payment"
 msgstr "En attente de paiement"
 
-#: src/components/common/AttendeeTicket/index.tsx:108
+#: src/components/common/AttendeeTicket/index.tsx:116
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:358
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:40
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:65
@@ -896,11 +901,11 @@ msgstr "Adresse de facturation"
 msgid "Billing Settings"
 msgstr "Paramètres de facturation"
 
-#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:48
+#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:47
 msgid "Body is required"
 msgstr "Le corps est requis"
 
-#: src/components/common/LanguageSwitcher/index.tsx:28
+#: src/components/common/LanguageSwitcher/index.tsx:30
 msgid "Brazilian Portuguese"
 msgstr "Portugais brésilien"
 
@@ -976,7 +981,7 @@ msgstr "Annuler la commande {0}"
 msgid "Canceling will cancel all attendees associated with this order, and release the tickets back into the available pool."
 msgstr "L'annulation annulera tous les participants associés à cette commande et remettra les billets dans le pool disponible."
 
-#: src/components/common/AttendeeTicket/index.tsx:108
+#: src/components/common/AttendeeTicket/index.tsx:116
 #: src/components/common/OrderStatusBadge/index.tsx:12
 #: src/components/routes/event/orders.tsx:24
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:355
@@ -1077,23 +1082,27 @@ msgstr "Enregistrement créé"
 msgid "Check-in Deleted"
 msgstr "Enregistrement supprimé"
 
-#: src/components/modals/CreateCheckInListModal/index.tsx:40
-msgid "Check-In List created successfully"
-msgstr "Liste de pointage créée avec succès"
+#: src/components/forms/CheckInListForm/index.tsx:35
+#~ msgid "Check-In List"
+#~ msgstr ""
+
+#: src/components/modals/CheckInListSuccessModal/index.tsx:20
+msgid "Check-In List Created"
+msgstr "Liste d'Enregistrement Créée !"
 
 #: src/components/common/CheckInListList/index.tsx:33
 msgid "Check-In List deleted successfully"
 msgstr "Liste de pointage supprimée avec succès"
 
-#: src/components/layouts/CheckIn/index.tsx:365
+#: src/components/layouts/CheckIn/index.tsx:363
 msgid "Check-in list has expired"
 msgstr "La liste de pointage a expiré"
 
-#: src/components/layouts/CheckIn/index.tsx:382
+#: src/components/layouts/CheckIn/index.tsx:380
 msgid "Check-in list is not active"
 msgstr "La liste de pointage n'est pas active"
 
-#: src/components/layouts/CheckIn/index.tsx:350
+#: src/components/layouts/CheckIn/index.tsx:348
 msgid "Check-in list not found"
 msgstr "Liste de pointage non trouvée"
 
@@ -1103,9 +1112,17 @@ msgstr "Liste de pointage non trouvée"
 msgid "Check-In Lists"
 msgstr "Listes de pointage"
 
-#: src/components/common/CheckInListList/index.tsx:162
+#: src/components/forms/CheckInListForm/index.tsx:31
+msgid "Check-in lists let you control entry across days, areas, or ticket types. You can share a secure check-in link with staff — no account required."
+msgstr "Les listes d'enregistrement vous permettent de contrôler l'entrée par jours, zones ou types de billets. Vous pouvez partager un lien sécurisé avec le personnel — aucun compte requis."
+
+#: src/components/common/CheckInListList/index.tsx:160
 msgid "Check-In URL copied to clipboard"
 msgstr "URL de pointage copiée dans le presse-papiers"
+
+#: src/components/common/AttendeeDetails/index.tsx:47
+msgid "Check-Ins"
+msgstr ""
 
 #: src/components/forms/QuestionForm/index.tsx:114
 msgid "Checkbox options allow multiple selections"
@@ -1115,12 +1132,8 @@ msgstr "Les options de case à cocher permettent plusieurs sélections"
 msgid "Checkboxes"
 msgstr "Cases à cocher"
 
-#: src/components/common/AttendeeDetails/index.tsx:29
-msgid "Checked In"
-msgstr "Enregistré"
-
 #: src/components/layouts/Checkout/index.tsx:81
-#: src/components/routes/event/Settings/index.tsx:42
+#: src/components/routes/event/Settings/index.tsx:40
 msgid "Checkout"
 msgstr "Paiement"
 
@@ -1128,11 +1141,11 @@ msgstr "Paiement"
 msgid "Checkout Settings"
 msgstr "Paramètres de paiement"
 
-#: src/components/common/LanguageSwitcher/index.tsx:30
+#: src/components/common/LanguageSwitcher/index.tsx:32
 msgid "Chinese (Simplified)"
 msgstr "Chinois simplifié"
 
-#: src/components/common/LanguageSwitcher/index.tsx:32
+#: src/components/common/LanguageSwitcher/index.tsx:34
 msgid "Chinese (Traditional)"
 msgstr "Chinois (traditionnel)"
 
@@ -1271,7 +1284,7 @@ msgstr "Paiement complet"
 msgid "Complete Stripe Setup"
 msgstr "Finaliser la configuration de Stripe"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:109
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:108
 msgid "Complete the setup below to continue"
 msgstr "Complétez la configuration ci-dessous pour continuer"
 
@@ -1297,10 +1310,6 @@ msgstr "Commandes terminées"
 #: src/components/common/WidgetEditor/index.tsx:287
 msgid "Component Code"
 msgstr "Code composant"
-
-#: src/components/common/Editor/Controls/LiquidTokenControl.tsx:110
-msgid "Conditional Blocks"
-msgstr "Blocs conditionnels"
 
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:117
 msgid "Conference Center"
@@ -1349,11 +1358,11 @@ msgstr "Confirmation de l'adresse e-mail..."
 msgid "Congratulations on creating an event!"
 msgstr "Félicitations pour la création de votre événement !"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:229
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:228
 msgid "Connect & Upgrade"
 msgstr "Connecter et mettre à niveau"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:646
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:644
 msgid "Connect Documentation"
 msgstr "Documentation de connexion"
 
@@ -1379,9 +1388,9 @@ msgid "Connect with CRM and automate tasks using webhooks and integrations"
 msgstr "Connectez-vous au CRM et automatisez les tâches à l'aide de webhooks et d'intégrations"
 
 #: src/components/common/StripeConnectButton/index.tsx:85
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:229
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:447
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:664
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:228
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:445
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:662
 #: src/components/routes/event/GettingStarted/index.tsx:154
 msgid "Connect with Stripe"
 msgstr "Connectez-vous avec Stripe"
@@ -1390,15 +1399,15 @@ msgstr "Connectez-vous avec Stripe"
 msgid "Connect your Stripe account to accept payments for tickets and products."
 msgstr "Connectez votre compte Stripe pour accepter les paiements des billets et produits."
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:217
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:216
 msgid "Connect your Stripe account to accept payments."
 msgstr "Connectez votre compte Stripe pour accepter les paiements."
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:439
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:437
 msgid "Connect your Stripe account to start accepting payments for your events."
 msgstr "Connectez votre compte Stripe pour commencer à accepter les paiements pour vos événements."
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:215
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:214
 msgid "Connect your Stripe account to start accepting payments."
 msgstr "Connectez votre compte Stripe pour commencer à accepter les paiements."
 
@@ -1406,8 +1415,8 @@ msgstr "Connectez votre compte Stripe pour commencer à accepter les paiements."
 msgid "Connect your Stripe account to start receiving payments."
 msgstr "Connectez votre compte Stripe pour commencer à recevoir des paiements."
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:385
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:622
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:383
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:620
 msgid "Connected to Stripe"
 msgstr "Connecté à Stripe"
 
@@ -1428,8 +1437,8 @@ msgstr "Contacter {0}"
 msgid "Contact Email"
 msgstr "E-mail de contact"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:43
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:73
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:48
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:81
 msgid "Contact email for support"
 msgstr "Email de contact pour le support"
 
@@ -1473,8 +1482,9 @@ msgstr "Continuer vers la création d'événement"
 msgid "Continue to next step"
 msgstr "Continuer à l'étape suivante"
 
-#: src/components/common/AttendeeTicket/index.tsx:158
+#: src/components/common/AttendeeTicket/index.tsx:167
 #: src/components/common/CopyButton/index.tsx:13
+#: src/components/modals/CheckInListSuccessModal/index.tsx:42
 #: src/components/modals/ShareModal/index.tsx:255
 msgid "Copied"
 msgstr "Copié"
@@ -1492,6 +1502,7 @@ msgid "Copied!"
 msgstr "Copié !"
 
 #: src/components/common/CopyButton/index.tsx:13
+#: src/components/modals/CheckInListSuccessModal/index.tsx:42
 #: src/components/modals/ShareModal/index.tsx:255
 msgid "Copy"
 msgstr "Copie"
@@ -1500,7 +1511,7 @@ msgstr "Copie"
 msgid "Copy Affiliate Link"
 msgstr "Copier le lien d'affiliation"
 
-#: src/components/common/CheckInListList/index.tsx:156
+#: src/components/common/CheckInListList/index.tsx:154
 msgid "Copy Check-In URL"
 msgstr "Copier l'URL de pointage"
 
@@ -1512,7 +1523,7 @@ msgstr "Copier le code"
 msgid "Copy details to all attendees"
 msgstr "Copier les détails à tous les participants"
 
-#: src/components/common/AttendeeTicket/index.tsx:158
+#: src/components/common/AttendeeTicket/index.tsx:167
 #: src/components/modals/ShareModal/index.tsx:171
 msgid "Copy Link"
 msgstr "Copier le lien"
@@ -1563,7 +1574,7 @@ msgstr "Créer"
 msgid "Create {0}"
 msgstr "Créer {0}"
 
-#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:109
+#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:108
 msgid "Create {0} Template"
 msgstr "Créer le modèle {0}"
 
@@ -1575,7 +1586,7 @@ msgstr "Créer un produit"
 msgid "Create a Promo Code"
 msgstr "Créer un code promotionnel"
 
-#: src/components/modals/CreateCheckInListModal/index.tsx:63
+#: src/components/modals/CreateCheckInListModal/index.tsx:64
 msgid "Create a Ticket"
 msgstr "Créer un billet"
 
@@ -1619,9 +1630,9 @@ msgstr "Créer une catégorie"
 msgid "Create Category"
 msgstr "Créer une catégorie"
 
-#: src/components/common/CheckInListList/index.tsx:61
-#: src/components/modals/CreateCheckInListModal/index.tsx:72
-#: src/components/modals/CreateCheckInListModal/index.tsx:82
+#: src/components/common/CheckInListList/index.tsx:59
+#: src/components/modals/CreateCheckInListModal/index.tsx:83
+#: src/components/modals/CreateCheckInListModal/index.tsx:99
 #: src/components/routes/event/CheckInLists/index.tsx:46
 msgid "Create Check-In List"
 msgstr "Créer une liste de pointage"
@@ -1720,7 +1731,7 @@ msgstr "Création de votre événement en cours, veuillez patienter"
 msgid "Creating your organizer profile, please wait"
 msgstr "Création de votre profil d'organisateur en cours, veuillez patienter"
 
-#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:49
+#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:48
 msgid "CTA label is required"
 msgstr "Le libellé CTA est requis"
 
@@ -1735,7 +1746,7 @@ msgstr "Devise"
 msgid "Current Password"
 msgstr "Mot de passe actuel"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:158
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:157
 msgid "Current payment processor"
 msgstr "Processeur de paiement actuel"
 
@@ -1747,8 +1758,8 @@ msgstr "Personnalisé"
 msgid "Custom Maps URL"
 msgstr "URL des cartes personnalisées"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:45
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:75
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:50
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:83
 msgid "Custom message after checkout"
 msgstr "Message personnalisé après la commande"
 
@@ -1780,7 +1791,7 @@ msgstr "Prénom du client"
 msgid "Customer's last name"
 msgstr "Nom de famille du client"
 
-#: src/components/routes/event/Settings/Sections/EmailSettings/index.tsx:55
+#: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:55
 msgid "Customize the email and notification settings for this event"
 msgstr "Personnaliser les paramètres de courrier électronique et de notification pour cet événement"
 
@@ -1805,7 +1816,7 @@ msgstr "Personnalisez les paramètres SEO pour cet événement"
 msgid "Customize the text shown on the continue button"
 msgstr "Personnalisez le texte affiché sur le bouton continuer"
 
-#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:113
+#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:112
 msgid "Customize your email template using Liquid templating"
 msgstr "Personnalisez votre modèle d'e-mail en utilisant des modèles Liquid"
 
@@ -1842,7 +1853,7 @@ msgid "Daily sales, tax, and fee breakdown"
 msgstr "Détail des ventes quotidiennes, taxes et frais"
 
 #: src/components/common/CapacityAssignmentList/index.tsx:156
-#: src/components/common/CheckInListList/index.tsx:176
+#: src/components/common/CheckInListList/index.tsx:174
 #: src/components/common/OrdersTable/index.tsx:186
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:287
 #: src/components/common/PromoCodeTable/index.tsx:181
@@ -1869,8 +1880,8 @@ msgstr "Date"
 msgid "Date & Time"
 msgstr "Date et heure"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:33
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:63
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:35
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:69
 msgid "Date of the event"
 msgstr "Date de l'événement"
 
@@ -1904,7 +1915,7 @@ msgstr "Supprimer la Capacité"
 msgid "Delete category"
 msgstr "Supprimer la catégorie"
 
-#: src/components/common/CheckInListList/index.tsx:179
+#: src/components/common/CheckInListList/index.tsx:177
 msgid "Delete Check-In List"
 msgstr "Supprimer la liste de pointage"
 
@@ -1934,17 +1945,17 @@ msgstr "Supprimer le webhook"
 
 #: src/components/forms/ProductForm/index.tsx:258
 #: src/components/forms/TaxAndFeeForm/index.tsx:81
-#: src/components/modals/DuplicateEventModal/index.tsx:113
+#: src/components/modals/DuplicateEventModal/index.tsx:115
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:93
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:86
 msgid "Description"
 msgstr "Description"
 
-#: src/components/forms/CheckInListForm/index.tsx:36
+#: src/components/forms/CheckInListForm/index.tsx:52
 msgid "Description for check-in staff"
 msgstr "Description pour le personnel de pointage"
 
-#: src/components/modals/DuplicateEventModal/index.tsx:147
+#: src/components/modals/DuplicateEventModal/index.tsx:149
 msgid "Deselect All"
 msgstr "Tout désélectionner"
 
@@ -1992,7 +2003,7 @@ msgstr "Ignorer ce message"
 msgid "Document Label"
 msgstr "Étiquette du document"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:685
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:683
 msgid "Documentation"
 msgstr "Documentation"
 
@@ -2003,6 +2014,10 @@ msgstr "Vous n'avez pas de compte ?   <0>Inscrivez-vous</0>"
 #: src/components/forms/ProductForm/index.tsx:157
 msgid "Donation / Pay what you'd like product"
 msgstr "Produit de don / Payez ce que vous voulez"
+
+#: src/components/modals/CheckInListSuccessModal/index.tsx:59
+msgid "Done"
+msgstr "Terminé"
 
 #: src/components/common/AddEventToCalendarButton/index.tsx:137
 msgid "Download .ics"
@@ -2043,17 +2058,19 @@ msgid ""
 "Due to the high risk of spam, you must connect a Stripe account before you can send messages to attendees.\n"
 "This is to ensure that all event organizers are verified and accountable."
 msgstr ""
+"En raison du risque élevé de spam, vous devez connecter un compte Stripe avant de pouvoir envoyer des messages aux participants.\n"
+"Ceci est pour garantir que tous les organisateurs d'événements sont vérifiés et responsables."
 
 #: src/components/common/EventCard/index.tsx:98
 msgid "Duplicate event"
 msgstr "Dupliquer l'événement"
 
-#: src/components/modals/DuplicateEventModal/index.tsx:98
-#: src/components/modals/DuplicateEventModal/index.tsx:175
+#: src/components/modals/DuplicateEventModal/index.tsx:100
+#: src/components/modals/DuplicateEventModal/index.tsx:177
 msgid "Duplicate Event"
 msgstr "Dupliquer l'événement"
 
-#: src/components/modals/DuplicateEventModal/index.tsx:133
+#: src/components/modals/DuplicateEventModal/index.tsx:135
 msgid "Duplicate Options"
 msgstr "Options de duplication"
 
@@ -2063,7 +2080,7 @@ msgstr "Options de duplication"
 msgid "Duplicate Product"
 msgstr "Dupliquer le produit"
 
-#: src/components/common/LanguageSwitcher/index.tsx:24
+#: src/components/common/LanguageSwitcher/index.tsx:26
 msgid "Dutch"
 msgstr "Néerlandais"
 
@@ -2085,7 +2102,7 @@ msgstr "Modifier"
 msgid "Edit {0}"
 msgstr "Modifier {0}"
 
-#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:107
+#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:106
 msgid "Edit {0} Template"
 msgstr "Modifier le modèle {0}"
 
@@ -2113,9 +2130,9 @@ msgstr "Modifier l'Affectation de Capacité"
 msgid "Edit category"
 msgstr "Modifier la catégorie"
 
-#: src/components/common/CheckInListList/index.tsx:148
+#: src/components/common/CheckInListList/index.tsx:146
 #: src/components/modals/EditCheckInListModal/index.tsx:69
-#: src/components/modals/EditCheckInListModal/index.tsx:91
+#: src/components/modals/EditCheckInListModal/index.tsx:95
 msgid "Edit Check-In List"
 msgstr "Modifier la liste de pointage"
 
@@ -2170,7 +2187,7 @@ msgstr "Modifier le webhook"
 msgid "Edit Webhook"
 msgstr "Modifier le webhook"
 
-#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:137
+#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:136
 msgid "Editor"
 msgstr "Éditeur"
 
@@ -2186,7 +2203,7 @@ msgstr "par exemple. 2,50 pour 2,50$"
 msgid "eg. 23.5 for 23.5%"
 msgstr "par exemple. 23,5 pour 23,5%"
 
-#: src/components/common/AttendeeDetails/index.tsx:21
+#: src/components/common/AttendeeDetails/index.tsx:22
 #: src/components/common/AttendeeTable/index.tsx:109
 #: src/components/common/OrderDetails/index.tsx:31
 #: src/components/forms/AffiliateForm/index.tsx:89
@@ -2195,16 +2212,19 @@ msgstr "par exemple. 23,5 pour 23,5%"
 #: src/components/routes/auth/AcceptInvitation/index.tsx:99
 #: src/components/routes/auth/Login/index.tsx:68
 #: src/components/routes/auth/Register/index.tsx:98
-#: src/components/routes/event/Settings/index.tsx:54
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:78
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:117
 #: src/components/routes/profile/ManageProfile/index.tsx:138
 msgid "Email"
 msgstr "E-mail"
 
-#: src/components/routes/event/Settings/Sections/EmailSettings/index.tsx:54
+#: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:54
 msgid "Email & Notification Settings"
 msgstr "Paramètres de courrier électronique et de notification"
+
+#: src/components/routes/event/Settings/index.tsx:52
+msgid "Email & Templates"
+msgstr "E-mail et Modèles"
 
 #: src/components/modals/CreateAttendeeModal/index.tsx:143
 #: src/components/modals/ManageAttendeeModal/index.tsx:114
@@ -2221,7 +2241,7 @@ msgstr "Adresse e-mail"
 msgid "Email Address"
 msgstr "Adresse e-mail"
 
-#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:150
+#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:149
 msgid "Email Body"
 msgstr "Corps de l'e-mail"
 
@@ -2243,7 +2263,7 @@ msgstr "E-mail de confirmation renvoyé"
 msgid "Email confirmation resent successfully"
 msgstr "E-mail de confirmation renvoyé avec succès"
 
-#: src/components/routes/event/Settings/Sections/EmailSettings/index.tsx:66
+#: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:66
 msgid "Email footer message"
 msgstr "Message de pied de page de l'e-mail"
 
@@ -2260,7 +2280,6 @@ msgid "Email Preview"
 msgstr "Aperçu de l'e-mail"
 
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:327
-#: src/components/routes/event/Settings/index.tsx:60
 #: src/components/routes/organizer/Settings/index.tsx:52
 msgid "Email Templates"
 msgstr "Modèles d'e-mail"
@@ -2289,7 +2308,7 @@ msgstr "Activer la facturation"
 msgid "Enable this capacity to stop product sales when the limit is reached"
 msgstr "Activer cette capacité pour arrêter les ventes de produits lorsque la limite est atteinte"
 
-#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:194
+#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:191
 msgid "Enable this template for sending emails"
 msgstr "Activer ce modèle pour l'envoi d'e-mails"
 
@@ -2297,7 +2316,7 @@ msgstr "Activer ce modèle pour l'envoi d'e-mails"
 msgid "Enabled"
 msgstr "Activé"
 
-#: src/components/modals/DuplicateEventModal/index.tsx:127
+#: src/components/modals/DuplicateEventModal/index.tsx:129
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:107
 msgid "End Date"
 msgstr "Date de fin"
@@ -2320,8 +2339,8 @@ msgstr "Heure de fin (facultatif)"
 msgid "Ended"
 msgstr "Terminé"
 
-#: src/components/common/LanguageSwitcher/index.tsx:16
-#: src/components/common/LanguageSwitcher/index.tsx:50
+#: src/components/common/LanguageSwitcher/index.tsx:18
+#: src/components/common/LanguageSwitcher/index.tsx:54
 #: src/components/modals/CreateAttendeeModal/index.tsx:156
 #: src/components/routes/profile/ManageProfile/index.tsx:173
 msgid "English"
@@ -2343,7 +2362,7 @@ msgstr "Saisir le nom de l'affilié"
 msgid "Enter an amount excluding taxes and fees."
 msgstr "Saisissez un montant hors taxes et frais."
 
-#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:129
+#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:128
 msgid "Enter email subject..."
 msgstr "Entrez le sujet de l'e-mail..."
 
@@ -2382,16 +2401,20 @@ msgstr "Erreur lors du chargement des journaux"
 msgid "EUR"
 msgstr "EUR"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:32
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:33
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:34
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:35
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:36
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:62
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:63
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:64
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:65
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:66
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:37
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:38
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:39
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:40
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:68
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:69
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:70
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:71
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:72
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:73
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:74
 #: src/components/routes/events/Dashboard/index.tsx:183
 msgid "Event"
 msgstr "Événement"
@@ -2408,8 +2431,8 @@ msgstr "Image de couverture de l'événement"
 msgid "Event custom template"
 msgstr "Modèle personnalisé d'événement"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:33
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:63
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:35
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:69
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:161
 msgid "Event Date"
 msgstr "Date de l'Événement"
@@ -2418,33 +2441,36 @@ msgstr "Date de l'Événement"
 msgid "Event Defaults"
 msgstr "Valeurs par défaut des événements"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:36
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:66
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:38
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:72
 #: src/components/modals/CreateEventModal/index.tsx:197
 msgid "Event Description"
 msgstr "Description de l'événement"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:36
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:66
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:38
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:72
 msgid "Event details"
 msgstr "Détails de l'événement"
 
-#: src/components/routes/event/Settings/index.tsx:30
+#: src/components/routes/event/Settings/index.tsx:28
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:68
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:276
 msgid "Event Details"
 msgstr "Détails de l'événement"
 
-#: src/components/modals/DuplicateEventModal/index.tsx:87
+#: src/components/modals/DuplicateEventModal/index.tsx:89
 msgid "Event duplicated successfully"
 msgstr "Événement dupliqué avec succès"
+
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:37
+msgid "Event Full Address"
+msgstr "Adresse Complète de l'Événement"
 
 #: src/components/layouts/Checkout/index.tsx:77
 msgid "Event Homepage"
 msgstr "Page d'accueil de l'événement"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:35
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:65
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:71
 msgid "Event Location"
 msgstr "Lieu de l'événement"
 
@@ -2473,8 +2499,8 @@ msgstr "Le nom de l'événement doit contenir moins de 150 caractères"
 msgid "Event Not Available"
 msgstr "Événement non disponible"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:39
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:69
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:44
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:77
 msgid "Event organizer name"
 msgstr "Nom de l'organisateur de l'événement"
 
@@ -2498,13 +2524,23 @@ msgstr "La mise à jour du statut de l'événement a échoué. Veuillez réessay
 msgid "Event status updated"
 msgstr "Statut de l'événement mis à jour"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:34
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:64
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:36
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:70
 msgid "Event Time"
 msgstr "Heure de l'événement"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:32
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:62
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:39
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:73
+msgid "Event timezone"
+msgstr "Fuseau horaire de l'événement"
+
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:39
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:73
+msgid "Event Timezone"
+msgstr "Fuseau Horaire de l'Événement"
+
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:34
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:68
 msgid "Event Title"
 msgstr "Titre de l'Événement"
 
@@ -2512,6 +2548,11 @@ msgstr "Titre de l'Événement"
 #: src/components/forms/WebhookForm/index.tsx:122
 msgid "Event Types"
 msgstr "Types d'événements"
+
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:40
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:74
+msgid "Event Venue"
+msgstr "Lieu de l'Événement"
 
 #: src/components/layouts/OrganizerLayout/index.tsx:73
 #: src/components/layouts/OrganizerLayout/index.tsx:133
@@ -2523,7 +2564,7 @@ msgstr "Événements"
 msgid "Every email template must include a call-to-action button that links to the appropriate page"
 msgstr "Chaque modèle d'e-mail doit inclure un bouton d'appel à l'action qui renvoie vers la page appropriée"
 
-#: src/components/forms/CheckInListForm/index.tsx:56
+#: src/components/forms/CheckInListForm/index.tsx:68
 msgid "Expiration date"
 msgstr "Date d'expiration"
 
@@ -2685,7 +2726,7 @@ msgstr "Frais"
 msgid "Fees"
 msgstr "Frais"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:283
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:282
 msgid "Fees are subject to change. You will be notified of any changes to your fee structure."
 msgstr "Les frais sont susceptibles de changer. Vous serez informé de toute modification de votre structure tarifaire."
 
@@ -2706,12 +2747,12 @@ msgstr "Filtres"
 msgid "Filters ({activeFilterCount})"
 msgstr "Filtres ({activeFilterCount})"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:208
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:207
 msgid "Finish Setup"
 msgstr "Terminer la configuration"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:418
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:665
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:416
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:663
 msgid "Finish Stripe Setup"
 msgstr "Terminer la configuration Stripe"
 
@@ -2759,7 +2800,7 @@ msgstr "Fixé"
 msgid "Fixed amount"
 msgstr "Montant fixé"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:268
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:267
 msgid "Fixed Fee:"
 msgstr "Frais fixes :"
 
@@ -2789,7 +2830,7 @@ msgstr "Mot de passe oublié?"
 #: src/components/common/OrderSummary/index.tsx:99
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:93
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:103
-#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:179
+#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:180
 #: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:53
 msgid "Free"
 msgstr "Gratuit"
@@ -2802,7 +2843,7 @@ msgstr "Produit gratuit"
 msgid "Free product, no payment information required"
 msgstr "Produit gratuit, aucune information de paiement requise"
 
-#: src/components/common/LanguageSwitcher/index.tsx:20
+#: src/components/common/LanguageSwitcher/index.tsx:22
 msgid "French"
 msgstr "Français"
 
@@ -2819,7 +2860,7 @@ msgid "General"
 msgstr "Général"
 
 #: src/components/routes/event/TicketDesigner/TicketDesignerPrint.tsx:36
-#: src/components/routes/event/TicketDesigner/TicketPreview.tsx:38
+#: src/components/routes/event/TicketDesigner/TicketPreview.tsx:41
 msgid "General Admission"
 msgstr "Admission Générale"
 
@@ -2839,7 +2880,7 @@ msgstr "Générer"
 msgid "Generate code"
 msgstr "Générer un code"
 
-#: src/components/common/LanguageSwitcher/index.tsx:14
+#: src/components/common/LanguageSwitcher/index.tsx:16
 msgid "German"
 msgstr "Allemand"
 
@@ -3024,8 +3065,8 @@ msgstr "De combien de minutes le client dispose pour finaliser sa commande. Nous
 msgid "How many times can this code be used?"
 msgstr "Combien de fois ce code peut-il être utilisé ?"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:44
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:74
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:49
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:82
 msgid "How to pay offline"
 msgstr "Comment payer hors ligne"
 
@@ -3044,6 +3085,10 @@ msgstr "https://exemple-maps-service.com/..."
 #: src/components/forms/WebhookForm/index.tsx:118
 msgid "https://webhook-domain.com/webhook"
 msgstr "https://webhook-domain.com/webhook"
+
+#: src/components/common/LanguageSwitcher/index.tsx:14
+msgid "Hungarian"
+msgstr ""
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:119
 msgid "I agree to the <0>terms and conditions</0>"
@@ -3069,7 +3114,7 @@ msgstr "Si vide, l'adresse sera utilisée pour générer un lien Google Maps"
 msgid "If enabled, check-in staff can either mark attendees as checked in or mark the order as paid and check in the attendees. If disabled, attendees associated with unpaid orders cannot be checked in."
 msgstr "Si activé, le personnel d'enregistrement peut marquer les participants comme enregistrés ou marquer la commande comme payée et enregistrer les participants. Si désactivé, les participants associés à des commandes impayées ne peuvent pas être enregistrés."
 
-#: src/components/routes/event/Settings/Sections/EmailSettings/index.tsx:76
+#: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:76
 msgid "If enabled, the organizer will receive an email notification when a new order is placed"
 msgstr "Si activé, l'organisateur recevra une notification par e-mail lorsqu'une nouvelle commande sera passée"
 
@@ -3109,7 +3154,7 @@ msgid "In-depth Analytics"
 msgstr "Analyses approfondies"
 
 #: src/components/common/AffiliateTable/index.tsx:131
-#: src/components/common/CheckInListList/index.tsx:116
+#: src/components/common/CheckInListList/index.tsx:114
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:261
 #: src/components/forms/AffiliateForm/index.tsx:27
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:25
@@ -3129,11 +3174,11 @@ msgstr "Incluez les détails de connexion pour votre événement en ligne. Ces d
 msgid "Include tax and fees in the price"
 msgstr "Inclure les taxes et les frais dans le prix"
 
-#: src/components/common/CheckInListList/index.tsx:103
+#: src/components/common/CheckInListList/index.tsx:101
 msgid "Includes {0} products"
 msgstr "Comprend {0} produits"
 
-#: src/components/common/CheckInListList/index.tsx:104
+#: src/components/common/CheckInListList/index.tsx:102
 msgid "Includes 1 product"
 msgstr "Comprend 1 produit"
 
@@ -3147,12 +3192,13 @@ msgstr "Participants individuels"
 msgid "Insert Image"
 msgstr "Insérer une image"
 
-#: src/components/common/Editor/Controls/LiquidTokenControl.tsx:64
+#: src/components/common/Editor/Controls/LiquidTokenControl.tsx:40
+#: src/components/common/Editor/Controls/LiquidTokenControl.tsx:41
 msgid "Insert Liquid Token"
 msgstr "Insérer un jeton Liquid"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:102
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:103
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:110
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:111
 msgid "Insert Variable"
 msgstr "Insérer une variable"
 
@@ -3219,7 +3265,7 @@ msgstr "Numérotation des factures"
 msgid "Invoice Settings"
 msgstr "Paramètres de facturation"
 
-#: src/components/common/LanguageSwitcher/index.tsx:22
+#: src/components/common/LanguageSwitcher/index.tsx:24
 msgid "Italian"
 msgstr "Italien"
 
@@ -3235,7 +3281,7 @@ msgstr "John"
 msgid "Johnson"
 msgstr "Johnson"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:114
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:113
 msgid "Just click the button below to reconnect your Stripe account."
 msgstr "Cliquez simplement sur le bouton ci-dessous pour reconnecter votre compte Stripe."
 
@@ -3243,7 +3289,7 @@ msgstr "Cliquez simplement sur le bouton ci-dessous pour reconnecter votre compt
 msgid "Label"
 msgstr "Étiquette"
 
-#: src/components/common/AttendeeDetails/index.tsx:45
+#: src/components/common/AttendeeDetails/index.tsx:38
 #: src/components/modals/CreateAttendeeModal/index.tsx:155
 #: src/components/routes/profile/ManageProfile/index.tsx:172
 msgid "Language"
@@ -3325,7 +3371,7 @@ msgstr "Laisser vide pour utiliser le mot par défaut \"Facture\""
 msgid "Link to order details"
 msgstr "Lien vers les détails de la commande"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:55
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:60
 msgid "Link to ticket"
 msgstr "Lien vers le billet"
 
@@ -3346,7 +3392,7 @@ msgstr "En ligne"
 msgid "LIVE"
 msgstr "EN DIRECT"
 
-#: src/components/routes/event/TicketDesigner/TicketPreview.tsx:31
+#: src/components/routes/event/TicketDesigner/TicketPreview.tsx:34
 msgid "Loading preview..."
 msgstr "Chargement de l'aperçu..."
 
@@ -3354,7 +3400,8 @@ msgstr "Chargement de l'aperçu..."
 msgid "Loading themes..."
 msgstr "Chargement des thèmes..."
 
-#: src/components/common/Editor/Controls/LiquidTokenControl.tsx:44
+#: src/components/common/Editor/Controls/LiquidTokenControl.tsx:25
+#: src/components/common/Editor/Controls/LiquidTokenControl.tsx:26
 msgid "Loading tokens..."
 msgstr "Chargement des jetons..."
 
@@ -3366,7 +3413,7 @@ msgstr "Chargement des webhooks"
 msgid "Loading..."
 msgstr "Chargement..."
 
-#: src/components/routes/event/Settings/index.tsx:36
+#: src/components/routes/event/Settings/index.tsx:34
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:84
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:167
 msgid "Location"
@@ -3424,7 +3471,7 @@ msgid "Make your event live"
 msgstr "Rendre votre événement public"
 
 #: src/components/common/CapacityAssignmentList/index.tsx:143
-#: src/components/common/CheckInListList/index.tsx:145
+#: src/components/common/CheckInListList/index.tsx:143
 #: src/components/common/OrdersTable/index.tsx:139
 #: src/components/common/OrdersTable/index.tsx:154
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:256
@@ -3470,7 +3517,7 @@ msgstr "Gérer les billets"
 msgid "Manage your account details and default settings"
 msgstr "Gérez les détails de votre compte et les paramètres par défaut"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:719
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:717
 msgid "Manage your payment processing and view platform fees"
 msgstr "Gérez votre traitement des paiements et consultez les frais de plateforme"
 
@@ -3564,7 +3611,7 @@ msgstr "Minimum par commande"
 msgid "Minimum Price"
 msgstr "Prix minimum"
 
-#: src/components/routes/event/Settings/index.tsx:66
+#: src/components/routes/event/Settings/index.tsx:58
 msgid "Miscellaneous"
 msgstr "Divers"
 
@@ -3610,15 +3657,15 @@ msgstr "N/A"
 msgid "Nam placerat elementum..."
 msgstr "Nom placerat elementum..."
 
-#: src/components/common/AttendeeDetails/index.tsx:13
+#: src/components/common/AttendeeDetails/index.tsx:14
 #: src/components/common/AttendeeTable/index.tsx:108
 #: src/components/common/OrderDetails/index.tsx:23
 #: src/components/forms/AffiliateForm/index.tsx:81
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:37
-#: src/components/forms/CheckInListForm/index.tsx:20
+#: src/components/forms/CheckInListForm/index.tsx:37
 #: src/components/forms/ProductForm/index.tsx:253
 #: src/components/forms/TaxAndFeeForm/index.tsx:61
-#: src/components/modals/DuplicateEventModal/index.tsx:107
+#: src/components/modals/DuplicateEventModal/index.tsx:109
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:63
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:75
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:107
@@ -3631,8 +3678,8 @@ msgstr "Nom"
 msgid "Name is required"
 msgstr "Le nom est obligatoire"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:32
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:62
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:34
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:68
 msgid "Name of the event"
 msgstr "Nom de l'événement"
 
@@ -3657,10 +3704,6 @@ msgstr "nouveau mot de passe"
 msgid "Nightlife"
 msgstr "Vie nocturne"
 
-#: src/components/common/AttendeeDetails/index.tsx:32
-msgid "No"
-msgstr "Non"
-
 #: src/components/routes/event/Webhooks/index.tsx:22
 msgid "No Active Webhooks"
 msgstr "Aucun webhook actif"
@@ -3684,10 +3727,6 @@ msgstr "Aucun invité n'a été ajouté à cette commande."
 #: src/components/common/AttendeeTable/index.tsx:56
 msgid "No Attendees to show"
 msgstr "Aucun participant à afficher"
-
-#: src/components/forms/CheckInListForm/index.tsx:48
-msgid "No attendees will be able to check in before this date using this list"
-msgstr "Aucun participant ne pourra s'enregistrer avant cette date en utilisant cette liste"
 
 #: src/components/common/CapacityAssignmentList/index.tsx:42
 msgid "No Capacity Assignments"
@@ -3852,11 +3891,11 @@ msgstr "Notes"
 msgid "Nothing to show yet"
 msgstr "Rien à montrer pour le moment"
 
-#: src/components/routes/event/Settings/Sections/EmailSettings/index.tsx:72
+#: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:72
 msgid "Notification Settings"
 msgstr "Paramètres de notification"
 
-#: src/components/routes/event/Settings/Sections/EmailSettings/index.tsx:75
+#: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:75
 msgid "Notify organizer of new orders"
 msgstr "Informer l'organisateur des nouvelles commandes"
 
@@ -3877,8 +3916,8 @@ msgstr "Nom du bureau ou du lieu"
 msgid "Offline orders are not reflected in event statistics until the order is marked as paid."
 msgstr "Les commandes hors ligne ne sont pas reflétées dans les statistiques de l'événement tant que la commande n'est pas marquée comme payée."
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:29
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:59
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:31
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:65
 msgid "Offline Payment"
 msgstr "Paiement hors ligne"
 
@@ -3886,8 +3925,8 @@ msgstr "Paiement hors ligne"
 msgid "Offline payment failed. Please try again or contact the event organizer."
 msgstr "Le paiement hors ligne a échoué. Veuillez réessayer ou contacter l'organisateur de l'événement."
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:44
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:74
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:49
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:82
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:151
 msgid "Offline Payment Instructions"
 msgstr "Instructions de Paiement Hors Ligne"
@@ -3913,7 +3952,7 @@ msgstr "En soldes"
 msgid "On Sale"
 msgstr "En soldes"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:546
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:544
 msgid "Once you complete the upgrade, your old account will only be used for refunds."
 msgstr "Une fois la mise à niveau terminée, votre ancien compte ne sera utilisé que pour les remboursements."
 
@@ -3938,7 +3977,7 @@ msgid "Online event"
 msgstr "Événement en ligne"
 
 #: src/components/layouts/EventHomepage/EventInformation/index.tsx:71
-#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:166
+#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:167
 msgid "Online Event"
 msgstr "Événement en ligne"
 
@@ -3958,17 +3997,18 @@ msgstr ""
 msgid "Only send to orders with these statuses"
 msgstr "Envoyer uniquement aux commandes avec ces statuts"
 
-#: src/components/common/CheckInListList/index.tsx:167
+#: src/components/common/CheckInListList/index.tsx:165
+#: src/components/modals/CheckInListSuccessModal/index.tsx:56
 msgid "Open Check-In Page"
-msgstr "Ouvrir la page de pointage"
+msgstr "Ouvrir la Page d'Enregistrement"
 
 #: src/components/layouts/AppLayout/index.tsx:28
 msgid "Open sidebar"
 msgstr "Ouvrir la barre latérale"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:190
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:398
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:635
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:189
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:396
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:633
 msgid "Open Stripe Dashboard"
 msgstr "Ouvrir le tableau de bord Stripe"
 
@@ -4006,8 +4046,11 @@ msgstr "ou"
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:27
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:28
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:29
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:58
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:59
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:30
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:31
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:63
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:64
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:65
 msgid "Order"
 msgstr "Commande"
 
@@ -4020,7 +4063,7 @@ msgstr "Commande annulée"
 msgid "Order Completed"
 msgstr "Commande terminée"
 
-#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:95
+#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:94
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:194
 msgid "Order Confirmation"
 msgstr "Confirmation de commande"
@@ -4028,6 +4071,10 @@ msgstr "Confirmation de commande"
 #: src/components/forms/WebhookForm/index.tsx:52
 msgid "Order Created"
 msgstr "Commande créée"
+
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:30
+msgid "Order Currency"
+msgstr "Devise de la Commande"
 
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:23
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:122
@@ -4060,9 +4107,17 @@ msgstr "La commande a été annulée et le propriétaire de la commande a été 
 msgid "Order ID: {0}"
 msgstr "ID de commande : {0}"
 
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:28
+msgid "Order Is Awaiting Offline Payment"
+msgstr "Commande en Attente de Paiement Hors Ligne"
+
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:25
 msgid "Order Last Name"
 msgstr "Nom de famille de la commande"
+
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:29
+msgid "Order Locale"
+msgstr "Langue de la Commande"
 
 #: src/components/common/OrdersTable/index.tsx:79
 msgid "Order marked as paid"
@@ -4092,6 +4147,10 @@ msgstr "Propriétaires de commandes avec un produit spécifique"
 msgid "Order owners with products"
 msgstr "Propriétaires de commandes avec des produits"
 
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:63
+msgid "Order Payment Pending"
+msgstr "Paiement de la Commande en Attente"
+
 #: src/components/common/QuestionsTable/index.tsx:313
 #: src/components/common/QuestionsTable/index.tsx:355
 msgid "Order questions"
@@ -4105,8 +4164,8 @@ msgstr "Référence de l'achat"
 msgid "Order Refunded"
 msgstr "Commande remboursée"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:28
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:58
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:64
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:64
 #: src/components/routes/event/orders.tsx:45
 msgid "Order Status"
 msgstr "Statut de la commande"
@@ -4146,10 +4205,10 @@ msgstr "Ordres"
 msgid "Orders Exported"
 msgstr "Commandes exportées"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:39
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:40
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:69
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:70
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:44
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:45
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:77
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:78
 msgid "Organization"
 msgstr "Organisation"
 
@@ -4166,6 +4225,7 @@ msgstr "Détails de l'organisation"
 msgid "Organization Name"
 msgstr "Nom de l'organisation"
 
+#: src/components/common/AttendeeTicket/index.tsx:65
 #: src/components/modals/EditUserModal/index.tsx:55
 #: src/components/modals/InviteUserModal/index.tsx:47
 #: src/components/routes/events/Dashboard/index.tsx:193
@@ -4179,13 +4239,13 @@ msgstr "Organisateur"
 msgid "Organizer Dashboard"
 msgstr "Tableau de bord de l'organisateur"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:40
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:70
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:45
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:78
 msgid "Organizer Email"
 msgstr "E-mail de l'organisateur"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:40
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:70
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:45
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:78
 msgid "Organizer email address"
 msgstr "Adresse e-mail de l'organisateur"
 
@@ -4193,8 +4253,8 @@ msgstr "Adresse e-mail de l'organisateur"
 msgid "Organizer is required"
 msgstr "Un organisateur est requis"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:39
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:69
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:44
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:77
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:72
 msgid "Organizer Name"
 msgstr "Nom de l'organisateur"
@@ -4231,7 +4291,7 @@ msgstr "Le modèle de l'organisateur/par défaut sera utilisé"
 msgid "Organizers can only manage events and products. They cannot manage users, account settings or billing information."
 msgstr "Les organisateurs ne peuvent gérer que les événements et les produits. Ils ne peuvent pas gérer les utilisateurs, les paramètres du compte ou les informations de facturation."
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:90
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:98
 #: src/constants/eventCategories.ts:22
 msgid "Other"
 msgstr "Autre"
@@ -4337,7 +4397,7 @@ msgstr "En pause"
 msgid "Payment"
 msgstr "Paiement"
 
-#: src/components/routes/event/Settings/index.tsx:72
+#: src/components/routes/event/Settings/index.tsx:64
 msgid "Payment & Invoicing"
 msgstr "Paiement et facturation"
 
@@ -4367,9 +4427,9 @@ msgstr "Instructions de paiement"
 msgid "Payment Methods"
 msgstr "Méthodes de paiement"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:467
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:479
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:613
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:465
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:477
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:611
 msgid "Payment Processing"
 msgstr "Traitement des paiements"
 
@@ -4381,7 +4441,7 @@ msgstr "Fournisseur de paiement"
 msgid "Payment Received"
 msgstr "Paiement reçu"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:718
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:716
 msgid "Payment Settings"
 msgstr "Paramètres de paiement"
 
@@ -4430,11 +4490,11 @@ msgstr "Passer commande"
 msgid "Place this in the <head> of your website."
 msgstr "Placez-le dans le <head> de votre site Web."
 
-#: src/components/common/PoweredByFooter/index.tsx:27
+#: src/components/common/PoweredByFooter/index.tsx:48
 msgid "Planning an event?"
 msgstr "Planifier un événement ?"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:242
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:241
 msgid "Platform Fees"
 msgstr "Frais de plateforme"
 
@@ -4471,7 +4531,7 @@ msgstr "Veuillez continuer dans le nouvel onglet"
 msgid "Please create a product"
 msgstr "Veuillez créer un produit"
 
-#: src/components/modals/CreateCheckInListModal/index.tsx:51
+#: src/components/modals/CreateCheckInListModal/index.tsx:52
 msgid "Please create a ticket"
 msgstr "Veuillez créer un billet"
 
@@ -4546,7 +4606,7 @@ msgstr "Veuillez patienter pendant que nous préparons votre facture..."
 msgid "Please wait while we prepare your orders for export..."
 msgstr "Veuillez patienter pendant que nous préparons l'exportation de vos commandes..."
 
-#: src/components/common/LanguageSwitcher/index.tsx:26
+#: src/components/common/LanguageSwitcher/index.tsx:28
 msgid "Portuguese"
 msgstr "Portugais"
 
@@ -4554,12 +4614,12 @@ msgstr "Portugais"
 msgid "Post Checkout message"
 msgstr "Message après le paiement"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:45
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:75
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:50
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:83
 msgid "Post Checkout Message"
 msgstr "Message Post-Commande"
 
-#: src/components/common/PoweredByFooter/index.tsx:37
+#: src/components/common/PoweredByFooter/index.tsx:60
 msgid "Powered by"
 msgstr "Alimenté par"
 
@@ -4567,7 +4627,7 @@ msgstr "Alimenté par"
 msgid "Pre Checkout message"
 msgstr "Message de pré-commande"
 
-#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:140
+#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:139
 #: src/components/common/QuestionsTable/index.tsx:347
 #: src/components/routes/event/TicketDesigner/index.tsx:197
 msgid "Preview"
@@ -4592,7 +4652,7 @@ msgstr "Mode d'affichage des prix"
 msgid "Price not set"
 msgstr "Prix non défini"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:54
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:59
 msgid "Price of the ticket"
 msgstr "Prix du billet"
 
@@ -4616,7 +4676,7 @@ msgstr "Couleur primaire"
 msgid "Primary Text Color"
 msgstr "Couleur du texte principal"
 
-#: src/components/common/AttendeeTicket/index.tsx:147
+#: src/components/common/AttendeeTicket/index.tsx:155
 msgid "Print"
 msgstr "Imprimer"
 
@@ -4641,7 +4701,7 @@ msgstr "Politique de confidentialité"
 msgid "Process Refund"
 msgstr "Traiter le remboursement"
 
-#: src/components/common/AttendeeDetails/index.tsx:37
+#: src/components/common/AttendeeDetails/index.tsx:30
 #: src/components/modals/ManageAttendeeModal/index.tsx:119
 msgid "Product"
 msgstr "Produit"
@@ -4835,11 +4895,7 @@ msgstr "Option radio"
 msgid "Read less"
 msgstr "Lire moins"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:108
-msgid "Ready to Upgrade?"
-msgstr "Prêt à mettre à niveau ?"
-
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:218
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:217
 msgid "Ready to upgrade? This takes only a few minutes."
 msgstr "Prêt à mettre à niveau ? Cela ne prend que quelques minutes."
 
@@ -4861,10 +4917,10 @@ msgstr "Reddit"
 
 #: src/components/common/StripeConnectButton/index.tsx:59
 #: src/components/common/StripeConnectButton/index.tsx:74
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:318
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:331
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:572
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:590
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:317
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:330
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:570
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:588
 msgid "Redirecting to Stripe..."
 msgstr "Redirection vers Stripe..."
 
@@ -4873,7 +4929,7 @@ msgstr "Redirection vers Stripe..."
 msgid "Reference"
 msgstr "Référence"
 
-#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:178
+#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:175
 msgid "Refresh Preview"
 msgstr "Actualiser l'aperçu"
 
@@ -5044,13 +5100,18 @@ msgstr "Ventes terminées"
 msgid "Sales start"
 msgstr "Début des ventes"
 
+#: src/components/routes/event/TicketDesigner/TicketDesignerPrint.tsx:80
+#: src/components/routes/event/TicketDesigner/TicketPreview.tsx:88
+msgid "Sample Venue"
+msgstr ""
+
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:135
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:93
 msgid "San Francisco"
 msgstr "San Francisco"
 
 #: src/components/common/QuestionAndAnswerList/index.tsx:142
-#: src/components/routes/event/Settings/Sections/EmailSettings/index.tsx:80
+#: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:80
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:129
 #: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:96
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:166
@@ -5082,7 +5143,7 @@ msgstr "Enregistrer les paramètres"
 msgid "Save Social Links"
 msgstr "Enregistrer les liens sociaux"
 
-#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:203
+#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:200
 msgid "Save Template"
 msgstr "Sauvegarder le modèle"
 
@@ -5090,8 +5151,8 @@ msgstr "Sauvegarder le modèle"
 msgid "Save Ticket Design"
 msgstr "Enregistrer le Design du Billet"
 
-#: src/components/layouts/CheckIn/index.tsx:445
-#: src/components/layouts/CheckIn/index.tsx:455
+#: src/components/layouts/CheckIn/index.tsx:443
+#: src/components/layouts/CheckIn/index.tsx:453
 msgid "Scan"
 msgstr "Scanner"
 
@@ -5116,7 +5177,7 @@ msgstr "Rechercher par nom d'événement..."
 msgid "Search by name, email, or order #..."
 msgstr "Recherchez par nom, e-mail ou numéro de commande..."
 
-#: src/components/layouts/CheckIn/index.tsx:441
+#: src/components/layouts/CheckIn/index.tsx:439
 msgid "Search by name, order #, attendee # or email..."
 msgstr "Rechercher par nom, numéro de commande, numéro de participant ou e-mail..."
 
@@ -5165,7 +5226,7 @@ msgstr "Sélectionner {0}"
 msgid "Select a category"
 msgstr "Sélectionner une catégorie"
 
-#: src/components/modals/DuplicateEventModal/index.tsx:136
+#: src/components/modals/DuplicateEventModal/index.tsx:138
 msgid "Select All"
 msgstr "Tout sélectionner"
 
@@ -5238,7 +5299,7 @@ msgstr "Sélectionnez le statut"
 msgid "Select Ticket"
 msgstr "Sélectionnez un billet"
 
-#: src/components/forms/CheckInListForm/index.tsx:26
+#: src/components/forms/CheckInListForm/index.tsx:43
 #: src/components/modals/SendMessageModal/index.tsx:202
 msgid "Select tickets"
 msgstr "Sélectionner des billets"
@@ -5312,7 +5373,7 @@ msgstr "Envoyé aux clients lorsqu'ils passent une commande"
 msgid "Sent to each attendee with their ticket details"
 msgstr "Envoyé à chaque participant avec les détails de son billet"
 
-#: src/components/routes/event/Settings/index.tsx:48
+#: src/components/routes/event/Settings/index.tsx:46
 #: src/components/routes/organizer/Settings/index.tsx:46
 msgid "SEO"
 msgstr "SEO"
@@ -5361,16 +5422,16 @@ msgstr "Configurer votre organisation"
 msgid "Set your event live"
 msgstr "Mettez votre événement en direct"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:43
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:44
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:45
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:73
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:74
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:75
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:48
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:49
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:50
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:81
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:82
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:83
 #: src/components/layouts/Event/index.tsx:98
 #: src/components/layouts/OrganizerLayout/index.tsx:74
 #: src/components/modals/DuplicateEventModal/index.tsx:26
-#: src/components/routes/event/Settings/index.tsx:111
+#: src/components/routes/event/Settings/index.tsx:103
 msgid "Settings"
 msgstr "Paramètres"
 
@@ -5378,7 +5439,7 @@ msgstr "Paramètres"
 msgid "Setup in Minutes"
 msgstr "Configuration en quelques minutes"
 
-#: src/components/common/ShareIcon/index.tsx:28
+#: src/components/common/ShareIcon/index.tsx:29
 #: src/components/layouts/OrganizerLayout/index.tsx:220
 #: src/components/modals/ShareModal/index.tsx:37
 #: src/components/modals/ShareModal/index.tsx:165
@@ -5549,7 +5610,7 @@ msgstr "Désolé, cette commande n'existe plus."
 msgid "Sorry, this promo code is not recognized"
 msgstr "Désolé, ce code promo n'est pas reconnu"
 
-#: src/components/common/LanguageSwitcher/index.tsx:18
+#: src/components/common/LanguageSwitcher/index.tsx:20
 msgid "Spanish"
 msgstr "Espagnol"
 
@@ -5561,7 +5622,7 @@ msgstr "Sports"
 msgid "Standard product with a fixed price"
 msgstr "Produit standard avec un prix fixe"
 
-#: src/components/modals/DuplicateEventModal/index.tsx:122
+#: src/components/modals/DuplicateEventModal/index.tsx:124
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:102
 msgid "Start Date"
 msgstr "Date de début"
@@ -5578,8 +5639,8 @@ msgstr "Date et heure de début"
 msgid "Start date is required"
 msgstr "La date de début est obligatoire"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:34
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:64
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:36
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:70
 msgid "Start time of the event"
 msgstr "Heure de début de l'événement"
 
@@ -5606,7 +5667,7 @@ msgstr "État ou région"
 msgid "Status"
 msgstr "Statut"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:177
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:176
 msgid "Still handling refunds for your older transactions."
 msgstr "Gère toujours les remboursements pour vos anciennes transactions."
 
@@ -5614,7 +5675,7 @@ msgstr "Gère toujours les remboursements pour vos anciennes transactions."
 msgid "Stripe"
 msgstr "Stripe"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:156
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:155
 msgid "Stripe Connect"
 msgstr "Stripe Connect"
 
@@ -5626,12 +5687,12 @@ msgstr "Les paiements Stripe ne sont pas activés pour cet événement."
 msgid "Stripe setup is already complete."
 msgstr "La configuration Stripe est déjà terminée."
 
-#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:128
+#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:127
 #: src/components/modals/SendMessageModal/index.tsx:240
 msgid "Subject"
 msgstr "Sujet"
 
-#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:47
+#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:46
 msgid "Subject is required"
 msgstr "Le sujet est requis"
 
@@ -5706,7 +5767,7 @@ msgstr "Affectation de Capacité mise à jour avec succès"
 msgid "Successfully updated Check-In List"
 msgstr "Liste de pointage mise à jour avec succès"
 
-#: src/components/routes/event/Settings/Sections/EmailSettings/index.tsx:43
+#: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:43
 msgid "Successfully Updated Email Settings"
 msgstr "Paramètres de messagerie mis à jour avec succès"
 
@@ -5773,7 +5834,7 @@ msgid "Suite 100"
 msgstr "Suite 100"
 
 #: src/components/modals/CreateEventModal/index.tsx:177
-#: src/components/modals/DuplicateEventModal/index.tsx:108
+#: src/components/modals/DuplicateEventModal/index.tsx:110
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:76
 msgid "Summer Music Festival {0}"
 msgstr "Festival de musique d'été {0}"
@@ -5782,9 +5843,9 @@ msgstr "Festival de musique d'été {0}"
 msgid "Summer Music Festival 2025"
 msgstr "Festival de Musique d'Été 2025"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:43
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:73
-#: src/components/routes/event/Settings/Sections/EmailSettings/index.tsx:62
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:48
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:81
+#: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:62
 msgid "Support Email"
 msgstr "E-mail d'assistance"
 
@@ -5861,7 +5922,7 @@ msgstr "Parlez-nous de votre événement"
 msgid "Tell us about your organization. This information will be displayed on your event pages."
 msgstr "Parlez-nous de votre organisation. Ces informations seront affichées sur vos pages d'événement."
 
-#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:193
+#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:190
 msgid "Template Active"
 msgstr "Modèle actif"
 
@@ -5908,13 +5969,17 @@ msgstr "La couleur de fond des zones de contenu (cartes, en-tête, etc.)"
 msgid "The background color of the entire page"
 msgstr "La couleur de fond de toute la page"
 
-#: src/components/layouts/CheckIn/index.tsx:355
+#: src/components/layouts/CheckIn/index.tsx:353
 msgid "The check-in list you are looking for does not exist."
 msgstr "La liste de pointage que vous recherchez n'existe pas."
 
 #: src/components/routes/welcome/index.tsx:209
 msgid "The code will expire in 10 minutes. Check your spam folder if you don't see the email."
 msgstr "Le code expirera dans 10 minutes. Vérifiez votre dossier spam si vous ne voyez pas l'e-mail."
+
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:30
+msgid "The currency of the order"
+msgstr "La devise de la commande"
 
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:75
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:118
@@ -5926,10 +5991,20 @@ msgstr "La devise par défaut de vos événements."
 msgid "The default timezone for your events."
 msgstr "Le fuseau horaire par défaut pour vos événements."
 
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:40
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:74
+msgid "The event venue"
+msgstr "Le lieu de l'événement"
+
 #: src/components/layouts/EventHomepage/EventNotAvailable/index.tsx:10
 #: src/components/layouts/EventHomepage/EventNotAvailable/index.tsx:12
 msgid "The event you're looking for is not available at the moment. It may have been removed, expired, or the URL might be incorrect."
 msgstr "L'événement que vous recherchez n'est pas disponible pour le moment. Il a peut-être été supprimé, expiré ou l'URL est incorrecte."
+
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:37
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:71
+msgid "The full event address"
+msgstr "L'adresse complète de l'événement"
 
 #: src/components/modals/CancelOrderModal/index.tsx:77
 msgid "The full order amount will be refunded to the customer's original payment method."
@@ -5942,6 +6017,10 @@ msgstr "La langue dans laquelle le participant recevra ses courriels."
 #: src/components/routes/profile/ConfirmEmailChange/index.tsx:22
 msgid "The link you clicked is invalid."
 msgstr "Le lien sur lequel vous avez cliqué n'est pas valide."
+
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:29
+msgid "The locale of the customer"
+msgstr "La langue du client"
 
 #: src/components/routes/product-widget/SelectProducts/index.tsx:491
 msgid "The maximum number of products for {0}is {1}"
@@ -6039,33 +6118,29 @@ msgstr "Cette catégorie n'a pas encore de produits."
 msgid "This category is hidden from public view"
 msgstr "Cette catégorie est masquée de la vue publique"
 
-#: src/components/common/CheckInListList/index.tsx:75
+#: src/components/common/CheckInListList/index.tsx:73
 msgid "This check-in list has expired"
 msgstr "Cette liste de pointage a expiré"
 
-#: src/components/layouts/CheckIn/index.tsx:370
+#: src/components/layouts/CheckIn/index.tsx:368
 msgid "This check-in list has expired and is no longer available for check-ins."
 msgstr "Cette liste de pointage a expiré et n'est plus disponible pour les enregistrements."
 
-#: src/components/common/CheckInListList/index.tsx:82
+#: src/components/common/CheckInListList/index.tsx:80
 msgid "This check-in list is active"
 msgstr "Cette liste de pointage est active"
 
-#: src/components/common/CheckInListList/index.tsx:79
+#: src/components/common/CheckInListList/index.tsx:77
 msgid "This check-in list is not active yet"
 msgstr "Cette liste de pointage n'est pas encore active"
 
-#: src/components/layouts/CheckIn/index.tsx:387
+#: src/components/layouts/CheckIn/index.tsx:385
 msgid "This check-in list is not yet active and is not available for check-ins."
 msgstr "Cette liste de pointage n'est pas encore active et n'est pas disponible pour les enregistrements."
 
 #: src/components/forms/AffiliateForm/index.tsx:41
 msgid "This code will be used to track sales. Only letters, numbers, hyphens, and underscores allowed."
 msgstr "Ce code sera utilisé pour suivre les ventes. Seuls les lettres, chiffres, tirets et traits de soulignement sont autorisés."
-
-#: src/components/forms/CheckInListForm/index.tsx:37
-msgid "This description will be shown to the check-in staff"
-msgstr "Cette description sera affichée au personnel de pointage"
 
 #: src/components/modals/SendMessageModal/index.tsx:280
 msgid "This email is not promotional and is directly related to the event."
@@ -6091,11 +6166,7 @@ msgstr "Ceci est un événement en ligne"
 msgid "This is the name of your organizer that will be displayed to your users."
 msgstr "Ceci est le nom de votre organisateur qui sera affiché à vos utilisateurs."
 
-#: src/components/forms/CheckInListForm/index.tsx:57
-msgid "This list will no longer be available for check-ins after this date"
-msgstr "Cette liste ne sera plus disponible pour les enregistrements après cette date"
-
-#: src/components/routes/event/Settings/Sections/EmailSettings/index.tsx:68
+#: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:68
 msgid "This message will be included in the footer of all emails sent from this event"
 msgstr "Ce message sera inclus dans le pied de page de tous les e-mails envoyés à partir de cet événement"
 
@@ -6201,9 +6272,9 @@ msgid "ticket"
 msgstr "billet"
 
 #: src/components/common/AttendeeTable/index.tsx:111
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:53
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:54
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:55
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:58
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:59
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:60
 #: src/components/forms/ProductForm/index.tsx:130
 #: src/components/modals/CreateAttendeeModal/index.tsx:162
 msgid "Ticket"
@@ -6226,11 +6297,11 @@ msgstr "L'e-mail du ticket a été renvoyé au participant"
 msgid "Ticket for"
 msgstr "Billet pour"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:50
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:55
 msgid "Ticket holder's email"
 msgstr "Email du détenteur du billet"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:49
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:54
 msgid "Ticket holder's name"
 msgstr "Nom du détenteur du billet"
 
@@ -6238,11 +6309,15 @@ msgstr "Nom du détenteur du billet"
 msgid "Ticket holders"
 msgstr "Détenteurs de billets"
 
-#: src/components/common/AttendeeTicket/index.tsx:122
+#: src/components/common/AttendeeTicket/index.tsx:130
 msgid "Ticket ID"
 msgstr "ID du billet"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:53
+#: src/components/modals/DuplicateEventModal/index.tsx:31
+msgid "Ticket Logo"
+msgstr "Logo du Billet"
+
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:58
 msgid "Ticket Name"
 msgstr "Nom du billet"
 
@@ -6250,19 +6325,19 @@ msgstr "Nom du billet"
 msgid "Ticket or Product"
 msgstr "Billet ou produit"
 
-#: src/components/routes/event/TicketDesigner/TicketDesignerPrint.tsx:85
+#: src/components/routes/event/TicketDesigner/TicketDesignerPrint.tsx:89
 msgid "Ticket Preview for"
 msgstr "Aperçu du billet pour"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:54
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:59
 msgid "Ticket Price"
 msgstr "Prix du billet"
 
-#: src/components/common/AttendeeTicket/index.tsx:77
+#: src/components/common/AttendeeTicket/index.tsx:85
 msgid "Ticket Type"
 msgstr "Type de Billet"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:55
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:60
 msgid "Ticket URL"
 msgstr "URL du billet"
 
@@ -6321,7 +6396,7 @@ msgstr "CONSEIL"
 msgid "Title"
 msgstr "Titre"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:655
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:653
 msgid "To receive credit card payments, you need to connect your Stripe account. Stripe is our payment processing partner that ensures secure transactions and timely payouts."
 msgstr "Pour recevoir des paiements par carte bancaire, vous devez connecter votre compte Stripe. Stripe est notre partenaire de traitement des paiements qui garantit des transactions sécurisées et des paiements rapides."
 
@@ -6380,29 +6455,33 @@ msgstr "Taxe total"
 msgid "Track revenue, page views, and sales with detailed analytics and exportable reports"
 msgstr "Suivez les revenus, les vues de page et les ventes avec des analyses détaillées et des rapports exportables"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:256
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:255
 msgid "Transaction Fee:"
 msgstr "Frais de transaction :"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:29
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:59
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:31
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:65
 msgid "True if offline payment"
 msgstr "Vrai si paiement hors ligne"
 
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:28
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:58
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:63
 msgid "True if payment pending"
 msgstr "Vrai si paiement en attente"
 
-#: src/components/common/PoweredByFooter/index.tsx:32
+#: src/components/common/PoweredByFooter/index.tsx:55
 msgid "Try Hi.Events Free"
 msgstr "Essayer Hi.Events gratuitement"
 
-#: src/components/layouts/CheckIn/index.tsx:448
+#: src/components/common/LanguageSwitcher/index.tsx:38
+msgid "Turkish"
+msgstr "Turc"
+
+#: src/components/layouts/CheckIn/index.tsx:446
 msgid "Turn sound off"
 msgstr "Désactiver le son"
 
-#: src/components/layouts/CheckIn/index.tsx:448
+#: src/components/layouts/CheckIn/index.tsx:446
 msgid "Turn sound on"
 msgstr "Activer le son"
 
@@ -6414,7 +6493,7 @@ msgstr "Twitch"
 msgid "Type"
 msgstr "Taper"
 
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:53
+#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:58
 msgid "Type of ticket"
 msgstr "Type de billet"
 
@@ -6524,7 +6603,7 @@ msgstr "Mettre à jour le nom, la description et les dates de l'événement"
 msgid "Update profile"
 msgstr "Mettre à jour le profil"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:164
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:163
 msgid "Upgrade Available"
 msgstr "Mise à niveau disponible"
 
@@ -6581,7 +6660,7 @@ msgstr "Mode scanner USB désactivé"
 msgid "USB/HID Scanner"
 msgstr "Scanner USB/HID"
 
-#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:151
+#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:150
 msgid "Use <0>Liquid templating</0> to personalize your emails"
 msgstr "Utilisez <0>les modèles Liquid</0> pour personnaliser vos e-mails"
 
@@ -6628,18 +6707,13 @@ msgstr "UTC"
 msgid "VAT"
 msgstr "T.V.A."
 
-#: src/components/common/AttendeeTicket/index.tsx:66
+#: src/components/common/AttendeeTicket/index.tsx:74
 msgid "Venue"
 msgstr "Lieu"
 
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:116
 msgid "Venue Name"
 msgstr "nom de la place"
-
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:35
-#: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:65
-msgid "Venue or address"
-msgstr "Lieu ou adresse"
 
 #: src/components/routes/welcome/index.tsx:157
 msgid "Verification code"
@@ -6657,7 +6731,7 @@ msgstr "Vérifiez votre e-mail"
 msgid "Verifying..."
 msgstr "Vérification..."
 
-#: src/components/common/LanguageSwitcher/index.tsx:34
+#: src/components/common/LanguageSwitcher/index.tsx:36
 msgid "Vietnamese"
 msgstr "Vietnamien"
 
@@ -6700,8 +6774,8 @@ msgid "View on Google Maps"
 msgstr "Afficher sur Google Maps"
 
 #: src/components/common/EmailTemplateEditor/CTAConfiguration.tsx:28
-#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:58
-#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:70
+#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:57
+#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:69
 msgid "View Order"
 msgstr "Voir la commande"
 
@@ -6716,8 +6790,8 @@ msgstr "Voir d'autres détails"
 msgid "View Organizer Homepage"
 msgstr "Voir la page d'accueil de l'organisateur"
 
-#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:58
-#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:70
+#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:57
+#: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:69
 msgid "View Ticket"
 msgstr "Voir le billet"
 
@@ -6725,7 +6799,7 @@ msgstr "Voir le billet"
 msgid "Vimeo"
 msgstr "Vimeo"
 
-#: src/components/forms/CheckInListForm/index.tsx:21
+#: src/components/forms/CheckInListForm/index.tsx:38
 msgid "VIP check-in list"
 msgstr "Liste de pointage VIP"
 
@@ -6736,6 +6810,10 @@ msgstr "Billet VIP"
 #: src/components/forms/ProductForm/index.tsx:394
 msgid "Visibility"
 msgstr "Visibilité"
+
+#: src/components/forms/CheckInListForm/index.tsx:54
+msgid "Visible to check-in staff only. Helps identify this list during check-in."
+msgstr "Visible uniquement par le personnel d'enregistrement. Aide à identifier cette liste lors de l'enregistrement."
 
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:104
 msgid "VK"
@@ -6819,7 +6897,7 @@ msgid "Webhook will send notifications"
 msgstr "Le webhook enverra des notifications"
 
 #: src/components/layouts/Event/index.tsx:113
-#: src/components/modals/DuplicateEventModal/index.tsx:31
+#: src/components/modals/DuplicateEventModal/index.tsx:32
 #: src/components/routes/event/Webhooks/index.tsx:30
 msgid "Webhooks"
 msgstr "Webhooks"
@@ -6859,10 +6937,6 @@ msgstr "Bienvenue sur {0}, voici une liste de tous vos événements"
 #: src/components/forms/ProductForm/index.tsx:242
 msgid "What are Tiered Products?"
 msgstr "Quels sont les produits par paliers ?"
-
-#: src/components/forms/CheckInListForm/index.tsx:50
-msgid "What date should this check-in list become active?"
-msgstr "À quelle date cette liste de pointage doit-elle devenir active ?"
 
 #: src/components/modals/CreateProductCategoryModal/index.tsx:53
 msgid "What is a Category?"
@@ -6948,6 +7022,14 @@ msgstr "Lorsqu'une commande est remboursée"
 msgid "When an order is updated"
 msgstr "Lorsqu'une commande est mise à jour"
 
+#: src/components/forms/CheckInListForm/index.tsx:69
+msgid "When check-in closes"
+msgstr "Quand l'enregistrement ferme"
+
+#: src/components/forms/CheckInListForm/index.tsx:63
+msgid "When check-in opens"
+msgstr "Quand l'enregistrement ouvre"
+
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:322
 msgid "When customers purchase tickets, their orders will appear here."
 msgstr "Lorsque les clients achètent des billets, leurs commandes apparaîtront ici."
@@ -6960,11 +7042,7 @@ msgstr "Lorsque activé, des factures seront générées pour les commandes de b
 msgid "When offline payments are enabled, users will be able to complete their orders and receive their tickets. Their tickets will clearly indicate the order is not paid, and the check-in tool will notify the check-in staff if an order requires payment."
 msgstr "Lorsque les paiements hors ligne sont activés, les utilisateurs pourront finaliser leurs commandes et recevoir leurs billets. Leurs billets indiqueront clairement que la commande n'est pas payée, et l'outil d'enregistrement informera le personnel si une commande nécessite un paiement."
 
-#: src/components/forms/CheckInListForm/index.tsx:59
-msgid "When should this check-in list expire?"
-msgstr "Quand cette liste de pointage doit-elle expirer ?"
-
-#: src/components/forms/CheckInListForm/index.tsx:25
+#: src/components/forms/CheckInListForm/index.tsx:42
 msgid "Which tickets should be associated with this check-in list?"
 msgstr "Quels billets doivent être associés à cette liste de pointage ?"
 
@@ -6996,7 +7074,7 @@ msgstr "Fonctionnement"
 #: src/components/modals/CreateProductModal/index.tsx:86
 #: src/components/modals/CreatePromoCodeModal/index.tsx:56
 #: src/components/modals/CreateQuestionModal/index.tsx:74
-#: src/components/modals/DuplicateEventModal/index.tsx:175
+#: src/components/modals/DuplicateEventModal/index.tsx:177
 #: src/components/modals/DuplicateProductModal/index.tsx:113
 #: src/components/modals/EditProductCategoryModal/index.tsx:70
 #: src/components/modals/EditProductModal/index.tsx:108
@@ -7025,10 +7103,6 @@ msgstr "X (Twitter)"
 #: src/components/common/ReportTable/index.tsx:51
 msgid "Year to date"
 msgstr "Année à ce jour"
-
-#: src/components/common/AttendeeDetails/index.tsx:32
-msgid "Yes"
-msgstr "Oui"
 
 #: src/components/forms/ProductForm/index.tsx:376
 msgid "Yes, remove them"
@@ -7144,7 +7218,7 @@ msgstr "Vous devez vérifier l'adresse e-mail de votre compte avant de pouvoir e
 msgid "You will have to mark an order as paid manually. This can be done on the manage order page."
 msgstr "Vous devrez marquer une commande comme payée manuellement. Cela peut être fait sur la page de gestion des commandes."
 
-#: src/components/modals/CreateCheckInListModal/index.tsx:55
+#: src/components/modals/CreateCheckInListModal/index.tsx:56
 msgid "You'll need a ticket before you can create a check-in list."
 msgstr "Vous aurez besoin d'un billet avant de pouvoir créer une liste de pointage."
 
@@ -7156,7 +7230,7 @@ msgstr "Vous aurez besoin d'un produit avant de pouvoir créer une affectation d
 msgid "You'll need at least one product to get started. Free, paid or let the user decide what to pay."
 msgstr "Vous aurez besoin d'au moins un produit pour commencer. Gratuit, payant ou laissez l'utilisateur décider du montant à payer."
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:176
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:175
 msgid "You're all set! Your payments are being processed smoothly."
 msgstr "Tout est prêt ! Vos paiements sont traités en douceur."
 
@@ -7183,6 +7257,10 @@ msgstr "Vos participants apparaîtront ici une fois qu’ils se seront inscrits 
 #: src/components/common/WidgetEditor/index.tsx:329
 msgid "Your awesome website 🎉"
 msgstr "Votre superbe site internet 🎉"
+
+#: src/components/modals/CheckInListSuccessModal/index.tsx:23
+msgid "Your check-in list has been created successfully. Share the link below with your check-in staff."
+msgstr "Votre liste d'enregistrement a été créée avec succès. Partagez le lien ci-dessous avec votre personnel d'enregistrement."
 
 #: src/components/routes/product-widget/CollectInformation/index.tsx:276
 msgid "Your Details"
@@ -7258,16 +7336,16 @@ msgstr "Votre paiement a échoué. Veuillez réessayer."
 msgid "Your refund is processing."
 msgstr "Votre remboursement est en cours de traitement."
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:173
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:172
 msgid "Your Stripe account is connected and processing payments."
 msgstr "Votre compte Stripe est connecté et traite les paiements."
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:389
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:626
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:387
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:624
 msgid "Your Stripe account is connected and ready to process payments."
 msgstr "Votre compte Stripe est connecté et prêt à traiter les paiements."
 
-#: src/components/routes/product-widget/AttendeeProductAndInformation/index.tsx:35
+#: src/components/routes/product-widget/AttendeeProductAndInformation/index.tsx:36
 msgid "Your ticket for"
 msgstr "Votre billet pour"
 

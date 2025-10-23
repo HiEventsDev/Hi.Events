@@ -51,7 +51,7 @@ export const Settings = () => {
         },
         {
             id: 'email-settings',
-            label: t`Email`,
+            label: t`Email & Templates`,
             icon: IconAt,
             component: EmailSettings
         },

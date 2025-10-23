@@ -36,6 +36,7 @@ class DuplicateEventAction extends BaseAction
             duplicateCapacityAssignments: $request->validated('duplicate_capacity_assignments'),
             duplicateCheckInLists: $request->validated('duplicate_check_in_lists'),
             duplicateEventCoverImage: $request->validated('duplicate_event_cover_image'),
+            duplicateTicketLogo: $request->validated('duplicate_ticket_logo'),
             duplicateWebhooks: $request->validated('duplicate_webhooks'),
             duplicateAffiliates: $request->validated('duplicate_affiliates'),
             description: $request->validated('description'),

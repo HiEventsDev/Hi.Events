@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - develop
+      - feature/vapor-env-updates
   workflow_dispatch:
     inputs:
       environment:
@@ -60,11 +61,14 @@ jobs:
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
             echo "VAPOR_ENV=${{ github.event.inputs.environment }}" >> "$GITHUB_ENV"
             echo "TEST_MODE=${{ github.event.inputs.test_mode }}" >> "$GITHUB_ENV"
+          elif [[ "${{ github.ref_name }}" == "main" ]]; then
+            echo "VAPOR_ENV=production" >> "$GITHUB_ENV"
+            echo "TEST_MODE=false" >> "$GITHUB_ENV"
           elif [[ "${{ github.ref_name }}" == "develop" ]]; then
             echo "VAPOR_ENV=staging" >> "$GITHUB_ENV"
             echo "TEST_MODE=false" >> "$GITHUB_ENV"
           else
-            echo "VAPOR_ENV=production" >> "$GITHUB_ENV"
+            echo "VAPOR_ENV=staging" >> "$GITHUB_ENV"
             echo "TEST_MODE=false" >> "$GITHUB_ENV"
           fi
 
@@ -72,6 +76,21 @@ jobs:
         run: |
           echo "🚀 Deploying to Vapor environment: ${{ env.VAPOR_ENV }}"
           echo "🧪 Test mode: ${{ env.TEST_MODE }}"
+
+      - name: Configure AWS Credentials
+        if: env.TEST_MODE != 'true'
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_ID }}
+          aws-region: eu-west-1
+
+      - name: Download Encrypted Environment File from S3
+        if: env.TEST_MODE != 'true'
+        working-directory: ./backend
+        run: |
+          aws s3 cp s3://hi.events-env-secrets/.env.${{ env.VAPOR_ENV }}.encrypted .env.${{ env.VAPOR_ENV }}.encrypted
+          echo "✅ Downloaded .env.${{ env.VAPOR_ENV }}.encrypted from S3"
 
       - name: Validate Deployment Configuration
         working-directory: ./backend
@@ -83,6 +102,7 @@ jobs:
           fi
 
       - name: Deploy to Vapor
+        if: env.TEST_MODE != 'true'
         working-directory: ./backend
         run: vapor deploy ${{ env.VAPOR_ENV }}
         env:
@@ -105,11 +125,14 @@ jobs:
               echo "DO_APP_ID=${{ secrets.DIGITALOCEAN_PRODUCTION_APP_ID }}" >> "$GITHUB_ENV"
             fi
             echo "TEST_MODE=${{ github.event.inputs.test_mode }}" >> "$GITHUB_ENV"
+          elif [[ "${{ github.ref_name }}" == "main" ]]; then
+            echo "DO_APP_ID=${{ secrets.DIGITALOCEAN_PRODUCTION_APP_ID }}" >> "$GITHUB_ENV"
+            echo "TEST_MODE=false" >> "$GITHUB_ENV"
           elif [[ "${{ github.ref_name }}" == "develop" ]]; then
             echo "DO_APP_ID=${{ secrets.DIGITALOCEAN_STAGING_APP_ID }}" >> "$GITHUB_ENV"
             echo "TEST_MODE=false" >> "$GITHUB_ENV"
           else
-            echo "DO_APP_ID=${{ secrets.DIGITALOCEAN_PRODUCTION_APP_ID }}" >> "$GITHUB_ENV"
+            echo "DO_APP_ID=${{ secrets.DIGITALOCEAN_STAGING_APP_ID }}" >> "$GITHUB_ENV"
             echo "TEST_MODE=false" >> "$GITHUB_ENV"
           fi
 

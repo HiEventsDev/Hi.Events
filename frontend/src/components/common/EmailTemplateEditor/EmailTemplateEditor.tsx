@@ -8,8 +8,7 @@ import {EmailTemplatePreviewPane} from './EmailTemplatePreviewPane';
 import {CTAConfiguration} from './CTAConfiguration';
 import classes from './EmailTemplateEditor.module.scss';
 import {Editor} from "../Editor";
-import {RichTextEditor} from '@mantine/tiptap';
-import {InsertLiquidVariableControl} from '../Editor/Controls/InsertLiquidVariableControl';
+import {LiquidTokenControl} from '../Editor/Controls/LiquidTokenControl';
 
 interface EmailTemplateEditorProps {
     templateType: EmailTemplateType;
@@ -151,9 +150,7 @@ export const EmailTemplateEditor = ({
                                     description={<Trans>Use <a href={'https://shopify.github.io/liquid/'} target={'_blank'}>Liquid templating</a> to personalize your emails</Trans>}
                                     editorType="full"
                                     additionalToolbarControls={
-                                        <RichTextEditor.ControlsGroup>
-                                            <InsertLiquidVariableControl templateType={templateType} />
-                                        </RichTextEditor.ControlsGroup>
+                                        <LiquidTokenControl templateType={templateType} />
                                     }
                                 />
 

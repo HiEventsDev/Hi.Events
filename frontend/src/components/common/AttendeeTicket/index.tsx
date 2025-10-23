@@ -5,15 +5,18 @@ import {t} from "@lingui/macro";
 import {prettyDate} from "../../../utilites/dates.ts";
 import QRCode from "react-qr-code";
 import {IconCopy, IconPrinter} from "@tabler/icons-react";
-import {Attendee, Event, Product} from "../../../types.ts";
+import {Address, Attendee, Event, Product} from "../../../types.ts";
 import classes from './AttendeeTicket.module.scss';
 import {imageUrl} from "../../../utilites/urlHelper.ts";
+import {formatAddress} from "../../../utilites/addressUtilities.ts";
+import {PoweredByFooter} from "../PoweredByFooter";
 
 interface AttendeeTicketProps {
     event: Event;
     attendee: Attendee;
     product: Product;
     hideButtons?: boolean;
+    showPoweredBy?: boolean;
 }
 
 export const AttendeeTicket = ({
@@ -21,6 +24,7 @@ export const AttendeeTicket = ({
                                    product,
                                    event,
                                    hideButtons = false,
+                                   showPoweredBy = false,
                                }: AttendeeTicketProps) => {
     const productPrice = getAttendeeProductPrice(attendee, product);
     const hasVenue = event?.settings?.location_details?.venue_name || event?.settings?.location_details?.address_line_1;
@@ -60,15 +64,20 @@ export const AttendeeTicket = ({
                                 {prettyDate(event.start_date, event.timezone)}
                             </div>
                         </div>
+                        {event?.organizer?.name && (
+                            <div className={classes.detailRow}>
+                                <div className={classes.detailLabel}>{t`Organizer`}</div>
+                                <div className={classes.detailValue}>
+                                    {event?.organizer?.name}
+                                </div>
+                            </div>
+                        )}
 
                         {hasVenue && (
                             <div className={classes.detailRow}>
-                                <div className={classes.detailLabel}>{t`Venue`}</div>
+                                <div className={classes.detailLabel}>{t`Location`}</div>
                                 <div className={classes.detailValue}>
-                                    {event?.settings?.location_details?.venue_name}
-                                    {event?.settings?.location_details?.address_line_1 && (
-                                        <>, {event?.settings?.location_details?.address_line_1}</>
-                                    )}
+                                    {formatAddress(event?.settings?.location_details as Address)}
                                 </div>
                             </div>
                         )}
@@ -101,7 +110,10 @@ export const AttendeeTicket = ({
                             </div>
                         )}
 
-                        <div className={classes.qrContainer}>
+                        <div
+                            className={classes.qrContainer}
+                            style={{borderColor: accentColor}}
+                        >
                             {(isCancelled || isAwaitingPayment) ? (
                                 <div className={classes.statusOverlay}>
                                     <span className={isCancelled ? classes.cancelled : classes.pending}>
@@ -120,7 +132,10 @@ export const AttendeeTicket = ({
 
                         <div className={classes.ticketId}>
                             <div className={classes.detailLabel}>{t`Ticket ID`}</div>
-                            <div className={classes.ticketIdValue}>{attendee.public_id}</div>
+                            <div
+                                className={classes.ticketIdValue}
+                                style={{color: accentColor}}
+                            >{attendee.public_id}</div>
                         </div>
                     </div>
                 </div>
@@ -147,7 +162,8 @@ export const AttendeeTicket = ({
                                     {t`Print`}
                                 </Button>
 
-                                <CopyButton value={`${window?.location.origin}/product/${event.id}/${attendee.short_id}`}>
+                                <CopyButton
+                                    value={`${window?.location.origin}/product/${event.id}/${attendee.short_id}`}>
                                     {({copied, copy}) => (
                                         <Button
                                             variant="default"
@@ -162,6 +178,13 @@ export const AttendeeTicket = ({
                             </div>
                         )}
                     </div>
+                </div>
+            )}
+
+            {/* Powered By - Only shown in print mode */}
+            {showPoweredBy && (
+                <div className={classes.poweredByInTicket}>
+                    <PoweredByFooter/>
                 </div>
             )}
         </div>

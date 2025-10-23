@@ -16,7 +16,7 @@ class AttendeeCheckIn extends BaseModel
         );
     }
 
-    public function checkInList(): BelongsTo
+    public function check_in_list(): BelongsTo
     {
         return $this->belongsTo(CheckInList::class);
     }

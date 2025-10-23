@@ -99,6 +99,7 @@ export interface Account {
     configuration?: AccountConfiguration;
     requires_manual_verification?: boolean;
     stripe_platform: string;
+    stripe_hi_events_primary_platform?: string;
 }
 
 export interface AccountConfiguration {
@@ -235,7 +236,9 @@ export interface EventDuplicatePayload extends EventBase {
     duplicate_capacity_assignments: boolean;
     duplicate_check_in_lists: boolean;
     duplicate_event_cover_image: boolean;
+    duplicate_ticket_logo: boolean;
     duplicate_webhooks: boolean;
+    duplicate_affiliates: boolean;
 }
 
 export enum EventStatus {
@@ -525,7 +528,8 @@ export interface Attendee {
     checked_in_by?: number;
     question_answers?: QuestionAnswer[];
     locale?: SupportedLocales;
-    check_in?: AttendeeCheckIn;
+    check_in?: AttendeeCheckIn; // Use in contexts where a single check is expected, like dealing with a check-in list
+    check_ins?: AttendeeCheckIn[];
 }
 
 export type PublicCheckIn = Pick<AttendeeCheckIn, 'id' | 'order_id' | 'attendee_id' | 'check_in_list_id' | 'product_id' | 'event_id'>;
@@ -539,6 +543,7 @@ export interface AttendeeCheckIn {
     short_id: IdParam;
     order_id: IdParam;
     created_at: string;
+    check_in_list?: CheckInList;
 }
 
 export interface Address {

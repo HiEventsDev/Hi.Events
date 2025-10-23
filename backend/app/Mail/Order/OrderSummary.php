@@ -54,6 +54,7 @@ class OrderSummary extends BaseMail
                 with: [
                     'renderedBody' => $this->renderedTemplate->body,
                     'renderedCta' => $this->renderedTemplate->cta,
+                    'eventSettings' => $this->eventSettings,
                 ]
             );
         }

@@ -18,10 +18,7 @@ class EmailTemplateService
     ) {
     }
 
-    /**
-     * Get a template for the given type and scope
-     */
-    public function getTemplate(
+    public function getTemplateByType(
         EmailTemplateType $type,
         int $accountId,
         ?int $eventId = null,
@@ -165,7 +162,7 @@ class EmailTemplateService
                 'body' => <<<'LIQUID'
 <strong>Your Order is Confirmed! 🎉</strong><br>
 
-{% if order.is_pending %}
+{% if order.is_awaiting_offline_payment %}
 <strong>ℹ️ Payment Pending:</strong> Your order is pending payment. Tickets have been issued but will not be valid until payment is received.<br>
 <strong>Payment Instructions</strong><br>
 Please follow the instructions below to complete your payment:<br>
@@ -180,7 +177,7 @@ Congratulations! Your order for <strong>{{ event.title }}</strong> on <strong>{{
 <strong>Event Details</strong><br>
 <strong>Event Name:</strong> {{ event.title }}<br>
 <strong>Date & Time:</strong> {{ event.date }} at {{ event.time }}<br>
-{% if event.location %}<strong>Location:</strong> {{ event.location }}<br>{% endif %}
+{% if event.full_address %}<strong>Location:</strong> {{ event.full_address }}<br>{% endif %}
 <br>
 
 {% if settings.post_checkout_message %}
@@ -203,7 +200,7 @@ LIQUID
                 'body' => <<<'LIQUID'
 <strong>You're going to {{ event.title }}! 🎉</strong><br>
 
-{% if order.is_pending %}
+{% if order.is_awaiting_offline_payment %}
 <strong>ℹ️ Payment Pending:</strong> Your order is pending payment. Tickets have been issued but will not be valid until payment is received.<br>
 {% endif %}
 
@@ -215,7 +212,7 @@ Please find your ticket details below.<br>
 <strong>Event:</strong> {{ event.title }}<br>
 <strong>Date:</strong> {{ event.date }}<br>
 <strong>Time:</strong> {{ event.time }}<br>
-{% if event.location %}<strong>Location:</strong> {{ event.location }}<br>{% endif %}
+{% if event.full_address %}<strong>Location:</strong> {{ event.full_address }}<br>{% endif %}
 <br>
 
 <strong>Your Ticket</strong><br>
