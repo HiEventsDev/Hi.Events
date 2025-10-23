@@ -5,10 +5,18 @@
     size: A4;
     margin: 0.5in;
   }
-  
+
   body {
-    font-size: 12pt;
-    line-height: 1.4;
+    font-size: 11pt;
+    line-height: 1.3;
+    margin: 0;
+    padding: 0;
+  }
+
+  html, body {
+    height: auto;
+    margin: 0;
+    padding: 0;
   }
 }
 
@@ -27,15 +35,14 @@
     border: none;
     border-radius: 0;
     max-width: 100%;
-    width: 100%;
+    width: auto;
     height: auto;
-    margin: 0;
+    min-height: 0;
+    margin: 20px;
     padding: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    page-break-after: avoid;
+    display: block;
     page-break-inside: avoid;
+    break-inside: avoid;
   }
 }
 
@@ -52,10 +59,12 @@
   @media print {
     background: #ffffff;
     border-bottom: 2px solid #e0e0e0;
-    padding: 15px 0;
-    margin-bottom: 20px;
+    padding: 8px 0;
+    margin-bottom: 30px;
     display: flex;
     justify-content: center;
+    page-break-inside: avoid;
+    break-inside: avoid;
   }
 }
 
@@ -80,14 +89,18 @@
   margin: 0;
   line-height: 1.3;
   letter-spacing: -0.01em;
+  word-wrap: break-word;
+  word-break: break-word;
+  overflow-wrap: break-word;
 
   @include mixins.respond-below(sm) {
     font-size: 20px;
   }
 
   @media print {
-    font-size: 32px;
-    margin-bottom: 10px;
+    font-size: 24px;
+    margin-bottom: 5px;
+    line-height: 1.2;
   }
 }
 
@@ -102,7 +115,7 @@
   }
 
   @media print {
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 700;
   }
 }
@@ -125,9 +138,10 @@
   @media print {
     grid-template-columns: 2fr 1fr;
     padding: 0;
-    gap: 50px;
-    flex: 1;
-    align-items: center;
+    gap: 30px;
+    align-items: start;
+    page-break-inside: avoid;
+    break-inside: avoid;
   }
 }
 
@@ -141,7 +155,7 @@
   }
 
   @media print {
-    gap: 40px;
+    gap: 20px;
     justify-content: center;
   }
 }
@@ -157,7 +171,7 @@
   }
 
   @media print {
-    gap: 30px;
+    gap: 15px;
   }
 }
 
@@ -175,7 +189,7 @@
   color: #64748b;
 
   @media print {
-    font-size: 14px;
+    font-size: 11px;
     color: #666666;
     font-weight: 600;
   }
@@ -192,7 +206,7 @@
   }
 
   @media print {
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 600;
   }
 }
@@ -210,7 +224,7 @@
 
   @media print {
     background: #ffffff;
-    padding: 35px;
+    padding: 20px;
     border-radius: 8px;
     border: 1px solid #d0d0d0;
   }
@@ -227,8 +241,8 @@
   }
 
   @media print {
-    font-size: 24px;
-    margin: 12px 0 8px;
+    font-size: 18px;
+    margin: 8px 0 4px;
     font-weight: 700;
   }
 }
@@ -238,7 +252,7 @@
   color: #64748b;
 
   @media print {
-    font-size: 18px;
+    font-size: 14px;
     color: #666666;
   }
 }
@@ -256,8 +270,8 @@
 
   @media print {
     color: #555555;
-    font-size: 16px;
-    line-height: 1.6;
+    font-size: 13px;
+    line-height: 1.5;
   }
 }
 
@@ -282,7 +296,7 @@
   justify-content: center;
 
   @media print {
-    gap: 30px;
+    gap: 15px;
     justify-content: flex-start;
   }
 }
@@ -318,6 +332,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  min-width: 160px;
+  min-height: 160px;
+  max-width: 220px;
+  max-height: 220px;
 
   @include mixins.respond-below(sm) {
     padding: 14px;
@@ -325,8 +343,8 @@
 
   @media print {
     border-color: var(--accent);
-    padding: 25px;
-    border-width: 4px;
+    padding: 15px;
+    border-width: 3px;
   }
 }
 
@@ -382,8 +400,8 @@
   @media print {
     color: var(--accent);
     background: #f0f0f0;
-    font-size: 18px;
-    padding: 12px 20px;
+    font-size: 14px;
+    padding: 8px 16px;
     font-weight: 700;
   }
 }
@@ -401,8 +419,10 @@
   @media print {
     background: #ffffff;
     border-top: 2px solid #e0e0e0;
-    padding: 30px 0 0 0;
-    margin-top: 30px;
+    padding: 12px 0;
+    margin-top: 12px;
+    page-break-inside: avoid;
+    break-inside: avoid;
   }
 }
 
@@ -416,6 +436,10 @@
     flex-direction: column;
     gap: 16px;
     text-align: center;
+  }
+
+  @media print {
+    justify-content: center;
   }
 }
 
@@ -441,5 +465,17 @@
 
   @media print {
     display: none;
+  }
+}
+
+.poweredByInTicket {
+  display: none;
+
+  @media print {
+    display: block;
+    margin-top: 20px;
+    text-align: center;
+    page-break-inside: avoid;
+    break-inside: avoid;
   }
 }
