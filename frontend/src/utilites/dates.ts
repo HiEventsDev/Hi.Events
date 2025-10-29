@@ -15,9 +15,9 @@ dayjs.extend(relativeTime);
 dayjs.extend(timezone);
 dayjs.extend(advanced)
 
-export const prettyDate = (date: string, tz: string): string => {
+export const prettyDate = (date: string, tz: string, showTimezoneOffset: boolean = false): string => {
     // eslint-disable-next-line lingui/no-unlocalized-strings
-    return dayjs.utc(date).tz(tz).format('MMM D, YYYY h:mma');
+    return dayjs.utc(date).tz(tz).format('MMM D, YYYY h:mma' + (showTimezoneOffset ? ' (z)' : ''));
 };
 
 export const formatDate = (date: string, format: string, tz: string): string => {
