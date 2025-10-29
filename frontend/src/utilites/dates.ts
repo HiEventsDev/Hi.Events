@@ -57,3 +57,7 @@ export const dateToBrowserTz = (date: string, fallbackTz: string): string => {
 
     return dayjs.utc(date).tz(userTimezone).format('MMM D, YYYY h:mma z');
 };
+
+export const isDateInFuture = (date: string): boolean => {
+    return dayjs.utc(date).diff(dayjs()) > 0;
+};
