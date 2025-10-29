@@ -216,6 +216,14 @@ export const CollectInformation = () => {
         return <LoadingSkeleton/>
     }
 
+    if (order?.status === 'ABANDONED') {
+        return <HomepageInfoMessage
+            message={t`This order has been abandoned`}
+            link={eventHomepagePath(event as Event)}
+            linkText={t`Go to event homepage`}
+        />;
+    }
+
     if (order?.payment_status === 'AWAITING_PAYMENT') {
         return <HomepageInfoMessage
             message={t`This order is awaiting payment`}

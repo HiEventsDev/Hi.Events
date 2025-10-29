@@ -425,6 +425,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                                         )}
 
                                         {(category.products) && category.products.map((product) => {
+                                            const currentProductIndex = productIndex;
                                             const quantityRange = range(product.min_per_order || 1, product.max_per_order || 25)
                                                 .map((n) => n.toString());
                                             quantityRange.unshift("0");
@@ -486,7 +487,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                                                             />
                                                         </div>
 
-                                                        {product.max_per_order && form.values.products && isObjectEmpty(form.errors) && (form.values.products[productIndex]?.quantities.reduce((acc, {quantity}) => acc + Number(quantity), 0) > product.max_per_order) && (
+                                                        {product.max_per_order && form.values.products && isObjectEmpty(form.errors) && (form.values.products[currentProductIndex]?.quantities.reduce((acc, {quantity}) => acc + Number(quantity), 0) > product.max_per_order) && (
                                                             <div className={'hi-product-quantity-error'}>
                                                                 <Trans>The maximum number of products
                                                                     for {product.title}
@@ -494,9 +495,9 @@ const SelectProducts = (props: SelectProductsProps) => {
                                                             </div>
                                                         )}
 
-                                                        {form.errors[`products.${productIndex}`] && (
+                                                        {form.errors[`products.${currentProductIndex}`] && (
                                                             <div className={'hi-product-quantity-error'}>
-                                                                {form.errors[`products.${productIndex}`]}
+                                                                {form.errors[`products.${currentProductIndex}`]}
                                                             </div>
                                                         )}
 
