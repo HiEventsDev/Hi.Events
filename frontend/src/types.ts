@@ -588,7 +588,7 @@ export interface Order {
     attendees?: Attendee[];
     created_at: string;
     currency: string;
-    status: 'RESERVED' | 'CANCELLED' | 'COMPLETED' | 'AWAITING_OFFLINE_PAYMENT';
+    status: 'RESERVED' | 'CANCELLED' | 'COMPLETED' | 'AWAITING_OFFLINE_PAYMENT' | 'ABANDONED';
     refund_status?: 'REFUND_PENDING' | 'REFUND_FAILED' | 'REFUNDED' | 'PARTIALLY_REFUNDED';
     payment_status?: 'NO_PAYMENT_REQUIRED' | 'AWAITING_PAYMENT' | 'PAYMENT_FAILED' | 'PAYMENT_RECEIVED' | 'AWAITING_OFFLINE_PAYMENT';
     public_id: string;
