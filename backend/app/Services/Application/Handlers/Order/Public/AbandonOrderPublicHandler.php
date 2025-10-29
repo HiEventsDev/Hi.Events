@@ -47,7 +47,7 @@ class AbandonOrderPublicHandler
             OrderDomainObjectAbstract::STATUS => OrderStatus::ABANDONED->name,
         ]);
 
-        $this->logger->info(__('Order abandoned'), [
+        $this->logger->info('Order abandoned by customer', [
             'order_id' => $order->getId(),
             'order_short_id' => $orderShortId,
             'event_id' => $order->getEventId(),
