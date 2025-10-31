@@ -23,6 +23,7 @@ use HiEvents\Repository\Eloquent\InvoiceRepository;
 use HiEvents\Repository\Eloquent\MessageRepository;
 use HiEvents\Repository\Eloquent\OrderApplicationFeeRepository;
 use HiEvents\Repository\Eloquent\OrderItemRepository;
+use HiEvents\Repository\Eloquent\OrderPaymentPlatformFeeRepository;
 use HiEvents\Repository\Eloquent\OrderRefundRepository;
 use HiEvents\Repository\Eloquent\OrderRepository;
 use HiEvents\Repository\Eloquent\OrganizerRepository;
@@ -62,6 +63,7 @@ use HiEvents\Repository\Interfaces\InvoiceRepositoryInterface;
 use HiEvents\Repository\Interfaces\MessageRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderApplicationFeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderItemRepositoryInterface;
+use HiEvents\Repository\Interfaces\OrderPaymentPlatformFeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRefundRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
@@ -123,6 +125,7 @@ class RepositoryServiceProvider extends ServiceProvider
         WebhookRepositoryInterface::class => WebhookRepository::class,
         WebhookLogRepositoryInterface::class => WebhookLogRepository::class,
         OrderApplicationFeeRepositoryInterface::class => OrderApplicationFeeRepository::class,
+        OrderPaymentPlatformFeeRepositoryInterface::class => OrderPaymentPlatformFeeRepository::class,
         AccountConfigurationRepositoryInterface::class => AccountConfigurationRepository::class,
         QuestionAndAnswerViewRepositoryInterface::class => QuestionAndAnswerViewRepository::class,
         OutgoingMessageRepositoryInterface::class => OutgoingMessageRepository::class,
