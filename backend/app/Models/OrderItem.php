@@ -34,11 +34,6 @@ class OrderItem extends BaseModel
         ];
     }
 
-    protected function getFillableFields(): array
-    {
-        return [];
-    }
-
     public function product_price(): HasOne
     {
         return $this->hasOne(ProductPrice::class);

@@ -6,6 +6,7 @@ use HiEvents\Exceptions\CannotAcceptPaymentException;
 use HiEvents\Services\Application\Handlers\Order\Payment\Stripe\DTO\StripeWebhookDTO;
 use HiEvents\Services\Domain\Payment\Stripe\EventHandlers\AccountUpdateHandler;
 use HiEvents\Services\Domain\Payment\Stripe\EventHandlers\ChargeRefundUpdatedHandler;
+use HiEvents\Services\Domain\Payment\Stripe\EventHandlers\ChargeSucceededHandler;
 use HiEvents\Services\Domain\Payment\Stripe\EventHandlers\PaymentIntentFailedHandler;
 use HiEvents\Services\Domain\Payment\Stripe\EventHandlers\PaymentIntentSucceededHandler;
 use Illuminate\Cache\Repository;
@@ -25,10 +26,13 @@ class IncomingWebhookHandler
         Event::PAYMENT_INTENT_PAYMENT_FAILED,
         Event::ACCOUNT_UPDATED,
         Event::REFUND_UPDATED,
+        Event::CHARGE_SUCCEEDED,
+        Event::CHARGE_UPDATED,
     ];
 
     public function __construct(
         private readonly ChargeRefundUpdatedHandler    $refundEventHandlerService,
+        private readonly ChargeSucceededHandler        $chargeSucceededHandler,
         private readonly PaymentIntentSucceededHandler $paymentIntentSucceededHandler,
         private readonly PaymentIntentFailedHandler    $paymentIntentFailedHandler,
         private readonly AccountUpdateHandler          $accountUpdateHandler,
@@ -70,7 +74,7 @@ class IncomingWebhookHandler
                 return;
             }
 
-            $this->logger->debug('Stripe event received', $event->data->object->toArray());
+            $this->logger->debug('Stripe event received: ' . $event->type, $event->data->object->toArray());
 
             switch ($event->type) {
                 case Event::PAYMENT_INTENT_SUCCEEDED:
@@ -78,6 +82,10 @@ class IncomingWebhookHandler
                     break;
                 case Event::PAYMENT_INTENT_PAYMENT_FAILED:
                     $this->paymentIntentFailedHandler->handleEvent($event->data->object);
+                    break;
+                case Event::CHARGE_SUCCEEDED:
+                case Event::CHARGE_UPDATED:
+                    $this->chargeSucceededHandler->handleEvent($event->data->object);
                     break;
                 case Event::REFUND_UPDATED:
                     $this->refundEventHandlerService->handleEvent($event->data->object);

@@ -39,17 +39,17 @@ use Throwable;
 class PaymentIntentSucceededHandler
 {
     public function __construct(
-        private readonly OrderRepositoryInterface        $orderRepository,
-        private readonly StripePaymentsRepository        $stripePaymentsRepository,
-        private readonly AffiliateRepositoryInterface    $affiliateRepository,
-        private readonly ProductQuantityUpdateService    $quantityUpdateService,
-        private readonly StripeRefundExpiredOrderService $refundExpiredOrderService,
-        private readonly AttendeeRepositoryInterface     $attendeeRepository,
-        private readonly DatabaseManager                 $databaseManager,
-        private readonly LoggerInterface                 $logger,
-        private readonly Repository                      $cache,
-        private readonly DomainEventDispatcherService    $domainEventDispatcherService,
-        private readonly OrderApplicationFeeService      $orderApplicationFeeService,
+        private readonly OrderRepositoryInterface                        $orderRepository,
+        private readonly StripePaymentsRepository                        $stripePaymentsRepository,
+        private readonly AffiliateRepositoryInterface                    $affiliateRepository,
+        private readonly ProductQuantityUpdateService                    $quantityUpdateService,
+        private readonly StripeRefundExpiredOrderService                 $refundExpiredOrderService,
+        private readonly AttendeeRepositoryInterface                     $attendeeRepository,
+        private readonly DatabaseManager                                 $databaseManager,
+        private readonly LoggerInterface                                 $logger,
+        private readonly Repository                                      $cache,
+        private readonly DomainEventDispatcherService                    $domainEventDispatcherService,
+        private readonly OrderApplicationFeeService                      $orderApplicationFeeService,
     )
     {
     }
