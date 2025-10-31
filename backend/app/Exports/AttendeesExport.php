@@ -97,12 +97,16 @@ class AttendeesExport implements FromCollection, WithHeadings, WithMapping, With
 
         /** @var ProductDomainObject $ticket */
         $ticket = $attendee->getProduct();
-        $ticketName = $ticket->getTitle();
-        if ($ticket->getType() === ProductPriceType::TIERED->name) {
+        $ticketName = $ticket?->getTitle();
+        if ($ticket && $ticket->getType() === ProductPriceType::TIERED->name) {
             $ticketName .= ' - ' . $ticket
                     ->getProductPrices()
                     ->first(fn(ProductPriceDomainObject $tp) => $tp->getId() === $attendee->getProductPriceId())
                     ->getLabel();
+        }
+
+        if (!$ticketName) {
+            $ticketName = __('Unknown');
         }
 
         $checkIns = $attendee->getCheckIns()
