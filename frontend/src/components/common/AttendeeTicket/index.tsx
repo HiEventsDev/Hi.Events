@@ -61,7 +61,7 @@ export const AttendeeTicket = ({
                         <div className={classes.detailRow}>
                             <div className={classes.detailLabel}>{t`Date & Time`}</div>
                             <div className={classes.detailValue}>
-                                {prettyDate(event.start_date, event.timezone)}
+                                {prettyDate(event.start_date, event.timezone, true)}
                             </div>
                         </div>
                         {event?.organizer?.name && (
