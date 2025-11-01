@@ -302,7 +302,7 @@ const EventHomepage = ({colors, continueButtonText, backgroundType, ...loaderDat
                             <footer className={classes.footerSection}>
                                 <div className={classes.footerContent}>
                                     <div className={classes.footerLinks}>
-                                        <Anchor
+                                        {/* <Anchor
                                             href={getConfig('VITE_TOS_URL', 'https://hi.events/terms-of-service?utm_source=event=homepage-footer') as string}
                                             className={classes.footerLink}
                                         >
@@ -314,7 +314,7 @@ const EventHomepage = ({colors, continueButtonText, backgroundType, ...loaderDat
                                             className={classes.footerLink}
                                         >
                                             {t`Terms of Service`}
-                                        </Anchor>
+                                        </Anchor> */}
                                     </div>
                                     <PoweredByFooter
                                         className={classes.poweredByFooter}

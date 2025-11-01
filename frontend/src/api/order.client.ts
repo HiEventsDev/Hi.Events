@@ -190,25 +190,15 @@ export const orderClientPublic = {
     }>(`events/${eventId}/order/${orderShortId}/stripe/payment_intent`);
     return response.data;
   },
+
   createGrubchainPaymentIntent: async (
     eventId: number,
     orderShortId: string,
   ) => {
-    //const response = await grubchainApi.post<{
-    //client_secret: string;
-    //account_id?: string;
-    //}>(`events/${eventId}/order/${orderShortId}/stripe/payment_intent`);
-
-    const response = {
-      data: {
-        data: {
-          client_secret: "SomethingToWorkOn",
-          business_id: "the_business_id",
-          eventId,
-          orderShortId,
-        },
-      },
-    };
+    const response = await grubchainApi.post<{
+    client_secret: string;
+    account_id?: string;
+    }>(`events/${eventId}/order/${orderShortId}/grubchain/payment_intent`);
     return response.data;
   },
 

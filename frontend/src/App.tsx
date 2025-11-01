@@ -63,8 +63,11 @@ export const App: FC<
             <MantineProvider
                 theme={{
                     colors: {
-                        primary: generateColors(getConfig("VITE_APP_PRIMARY_COLOR", "#40296C") as string),
-                        secondary: generateColors(getConfig("VITE_APP_SECONDARY_COLOR", "#5A1065") as string),
+                        primary: generateColors(getConfig("VITE_APP_PRIMARY_COLOR", "#000000") as string),
+                        secondary: generateColors(getConfig("VITE_APP_SECONDARY_COLOR", "#0E0CFF") as string),
+                    },
+                    variables: {
+                        '--primary-blue':getConfig("VITE_APP_PRIMARY_COLOR", "#0E0CFF")
                     },
                     primaryColor: "primary",
                     fontFamily: "'Varela Round', sans-serif",

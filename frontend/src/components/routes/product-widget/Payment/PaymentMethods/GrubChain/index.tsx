@@ -12,6 +12,7 @@ import { LoadingMask } from "../../../../../common/LoadingMask";
 import { Elements } from "@stripe/react-stripe-js";
 import GrubchainCheckoutForm from "../../../../../forms/GrubChainCheckoutForm"
 import { Event } from "../../../../../../types.ts";
+import { useGetOrderPublic } from "../../../../../../queries/useGetOrderPublic.ts";
 
 interface GrubChainPaymentMethodProps {
   enabled: boolean;
@@ -20,6 +21,7 @@ interface GrubChainPaymentMethodProps {
 
 export const GrubChainPaymentMethod = ({ enabled, setSubmitHandler }: GrubChainPaymentMethodProps) => {
   const { eventId, orderShortId } = useParams();
+  const { orderData: order, isFetched: isOrderFetched } = useGetOrderPublic(eventId, orderShortId, ['event']);
   const {
     data: grubchainData,
     isFetched: isGrubchainFetched,
@@ -32,6 +34,7 @@ export const GrubChainPaymentMethod = ({ enabled, setSubmitHandler }: GrubChainP
     console.log(grubchainData, "Grub Data", "isFetched: ", isGrubchainFetched, "error: ", grubchainPaymentIntentError)
 
     if (!grubchainData?.client_secret) {
+      
       console.log("there is nothing in the grubchain data")
       //return;
     }
@@ -72,7 +75,7 @@ export const GrubChainPaymentMethod = ({ enabled, setSubmitHandler }: GrubChainP
 
   if (!isGrubchainFetched) {
     console.log("Grubchain is not fetched")
-    //return <LoadingMask />;
+    // return <LoadingMask />;
   }
 
   //return (

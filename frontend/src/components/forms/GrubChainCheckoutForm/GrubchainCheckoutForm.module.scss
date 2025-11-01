@@ -1,0 +1,151 @@
+.checkout-container {
+  display: flex;
+  justify-content: center;
+  padding: 40px;
+}
+
+.checkout-form {
+  width: 420px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 0 0 1px #e8e8e8, 0 2px 6px rgba(0, 0, 0, 0.05);
+  padding: 32px;
+  font-family: "Inter", sans-serif;
+}
+
+.checkout-form h2 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.input-row {
+  display: flex;
+  gap: 12px;
+}
+
+.input-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group label {
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+  // color: #444;
+}
+
+.input-group input {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.input-group input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+h4 {
+  margin-top: 24px;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.payment-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+  color: #0e0cff;
+}
+
+.payment-option {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.95rem;
+  background: #fff;
+}
+
+.payment-option input[type="radio"] {
+  accent-color: #000;
+}
+
+.payment-option.coming-soon {
+  background: #F4EBFF;
+  border-color: #e0d3ff;
+  border-radius: 5px;
+  // flex-direction: column;
+  // align-items: flex-start;
+  padding: 20px;
+  font-size: 0.9rem;
+  margin-top: 15px;
+  margin-bottom: 10px;
+}
+
+.payment-option.coming-soon .notify {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  font-size: 0.85rem;
+  // color: #444;
+}
+
+.agreements {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.85rem;
+}
+
+.agreements input[type="checkbox"] {
+  accent-color: #000;
+}
+
+.buttons {
+  margin-top: 24px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.button {
+  font-size: 0.95rem;
+  font-weight: 500;
+  border-radius: 8px;
+  padding: 10px 18px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.cancel {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.checkout {
+  background-color: #0e0cff;
+  color: white;
+}
+
+
+.notify, .checkAgree, .checkAllow{
+  color: #0e0cff;
+}
+
+.pay-with-crypto{
+  background: #F4EBFF;
+  border-radius: 5px;
+  border-width: 0;
+}

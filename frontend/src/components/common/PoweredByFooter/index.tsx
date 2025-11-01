@@ -34,12 +34,12 @@ export const PoweredByFooter = (props: React.DetailedHTMLProps<React.HTMLAttribu
         </>
     ) : (
         <>
-            {t`Powered by`} {' '}
-            <a href="https://hi.events?utm_source=app-powered-by-footer"
+            
+            <a href="https://www.grubchain.xyz/"
                target="_blank"
-               title={'Effortlessly manage events and sell tickets online with Hi.Events'}>
-                Hi.Events
-            </a> 🚀
+               title={'Grubchain'}>
+                <img src="/images/poweredByGrubchain.png"/>
+            </a>
         </>
     );
 

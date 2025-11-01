@@ -73,28 +73,32 @@ export const PaymentAndInvoicingSettings = () => {
       onSuccess: () => {
         showSuccess(t`Successfully Updated Payment & Invoicing Settings`);
       },
-      onError: (error) => {
+      onError: (error:any) => {
         formErrorHandle(form, error);
       },
     });
   };
 
   const paymentOptions = [
-    //{
-    //value: "STRIPE",
-    //label: t`Stripe`,
-    //description: t`Accept credit card payments with Stripe`
-    //},
+    /*
+    {
+    value: "STRIPE",
+    label: t`Stripe`,
+    description: t`Accept credit card payments with Stripe`
+    },
+    */
     {
       value: "GRUBCHAIN",
       label: t`GrubChain`,
       description: t`Accept credit card payments with GrubChain`
     },
-    //{
-    //value: "OFFLINE",
-    //label: t`Offline Payments`,
-    //description: t`Accept bank transfers, checks, or other offline payment methods`
-    //},
+    /*
+    {
+    value: "OFFLINE",
+    label: t`Offline Payments`,
+    description: t`Accept bank transfers, checks, or other offline payment methods`
+    },
+    */
   ];
 
   return (
