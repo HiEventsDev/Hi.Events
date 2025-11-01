@@ -277,7 +277,7 @@ msgstr "账户已连接！"
 msgid "Account Name"
 msgstr "账户名称"
 
-#: src/components/common/GlobalMenu/index.tsx:37
+#: src/components/common/GlobalMenu/index.tsx:45
 #: src/components/routes/account/ManageAccount/index.tsx:19
 msgid "Account Settings"
 msgstr "账户设置"
@@ -285,6 +285,12 @@ msgstr "账户设置"
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:42
 msgid "Account updated successfully"
 msgstr "账户更新成功"
+
+#: src/components/common/AdminUsersTable/index.tsx:127
+#: src/components/layouts/Admin/index.tsx:14
+#: src/components/routes/admin/Accounts/index.tsx:31
+msgid "Accounts"
+msgstr "账户"
 
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:64
 msgid "Action Required: Reconnect Your Stripe Account"
@@ -434,10 +440,17 @@ msgstr "地址第 2 行"
 msgid "Address Line 2"
 msgstr "地址第 2 行"
 
+#: src/components/layouts/Admin/index.tsx:12
 #: src/components/modals/EditUserModal/index.tsx:49
 #: src/components/modals/InviteUserModal/index.tsx:41
 msgid "Admin"
 msgstr "管理员"
+
+#: src/components/common/GlobalMenu/index.tsx:61
+#: src/components/layouts/Admin/index.tsx:21
+#: src/components/routes/admin/Dashboard/index.tsx:16
+msgid "Admin Dashboard"
+msgstr "管理仪表板"
 
 #: src/components/modals/EditUserModal/index.tsx:51
 #: src/components/modals/InviteUserModal/index.tsx:43
@@ -1656,7 +1669,7 @@ msgstr "创建活动"
 msgid "Create new"
 msgstr "创建新的"
 
-#: src/components/common/GlobalMenu/index.tsx:60
+#: src/components/common/GlobalMenu/index.tsx:76
 #: src/components/modals/CreateEventModal/index.tsx:138
 #: src/components/modals/CreateOrganizerModal/index.tsx:16
 msgid "Create Organizer"
@@ -1866,10 +1879,11 @@ msgstr "危险区"
 msgid "Danger Zone"
 msgstr "危险区"
 
+#: src/components/layouts/Admin/index.tsx:13
 #: src/components/layouts/Event/index.tsx:89
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:160
 msgid "Dashboard"
-msgstr "仪表板"
+msgstr "Dashboard"
 
 #: src/components/common/OrderDetails/index.tsx:39
 #: src/components/forms/QuestionForm/index.tsx:136
@@ -2554,6 +2568,7 @@ msgstr "事件类型"
 msgid "Event Venue"
 msgstr "活动场地"
 
+#: src/components/common/AdminAccountsTable/index.tsx:42
 #: src/components/layouts/OrganizerLayout/index.tsx:73
 #: src/components/layouts/OrganizerLayout/index.tsx:133
 #: src/components/routes/organizer/Events/index.tsx:43
@@ -2695,6 +2710,14 @@ msgstr "产品排序失败"
 #: src/mutations/useExportAnswers.ts:15
 msgid "Failed to start export job"
 msgstr "无法启动导出任务"
+
+#: src/components/routes/admin/Users/index.tsx:48
+msgid "Failed to start impersonation. Please try again."
+msgstr "无法开始模拟。请重试。"
+
+#: src/components/common/ImpersonationBanner/index.tsx:29
+msgid "Failed to stop impersonation. Please try again."
+msgstr "无法停止模拟。请重试。"
 
 #: src/components/modals/EditAffiliateModal/index.tsx:70
 msgid "Failed to update affiliate"
@@ -2939,6 +2962,10 @@ msgstr "宾客"
 msgid "Have a promo code?"
 msgstr "有促销代码吗？"
 
+#: src/components/routes/admin/Dashboard/index.tsx:20
+msgid "Hello {0}, manage your platform from here."
+msgstr "您好 {0}，从这里管理您的平台。"
+
 #: src/components/forms/OrganizerForm/index.tsx:35
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:81
 msgid "hello@awesome-events.com"
@@ -3149,6 +3176,19 @@ msgstr "图片网址"
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:197
 msgid "Images"
 msgstr "图片"
+
+#: src/components/common/AdminUsersTable/index.tsx:84
+#: src/components/common/AdminUsersTable/index.tsx:96
+msgid "Impersonate"
+msgstr "模拟"
+
+#: src/components/routes/admin/Users/index.tsx:38
+msgid "Impersonation started"
+msgstr "模拟已开始"
+
+#: src/components/common/ImpersonationBanner/index.tsx:23
+msgid "Impersonation stopped"
+msgstr "模拟已停止"
 
 #: src/components/routes/event/EventDashboard/index.tsx:124
 msgid "Important: Stripe reconnection required"
@@ -3397,6 +3437,10 @@ msgstr "上线"
 msgid "LIVE"
 msgstr "直播"
 
+#: src/components/routes/admin/Dashboard/index.tsx:67
+msgid "Live Events"
+msgstr "直播活动"
+
 #: src/components/routes/event/TicketDesigner/TicketPreview.tsx:34
 msgid "Loading preview..."
 msgstr "加载预览中..."
@@ -3456,7 +3500,7 @@ msgstr "标志将显示在页面头部"
 msgid "Logo will be displayed on the ticket"
 msgstr "标志将显示在票券上"
 
-#: src/components/common/GlobalMenu/index.tsx:69
+#: src/components/common/GlobalMenu/index.tsx:85
 msgid "Logout"
 msgstr "注销"
 
@@ -3651,7 +3695,7 @@ msgstr "我的精彩活动描述"
 msgid "My amazing event title..."
 msgstr "我的精彩活动标题..."
 
-#: src/components/common/GlobalMenu/index.tsx:32
+#: src/components/common/GlobalMenu/index.tsx:40
 msgid "My Profile"
 msgstr "我的简介"
 
@@ -3709,6 +3753,14 @@ msgstr "新密码"
 #: src/constants/eventCategories.ts:4
 msgid "Nightlife"
 msgstr "夜生活"
+
+#: src/components/common/AdminUsersTable/index.tsx:143
+msgid "No accounts"
+msgstr "无账户"
+
+#: src/components/common/AdminAccountsTable/index.tsx:15
+msgid "No accounts found"
+msgstr "未找到账户"
 
 #: src/components/routes/event/Webhooks/index.tsx:22
 msgid "No Active Webhooks"
@@ -3866,6 +3918,10 @@ msgstr "未加收任何税费。"
 msgid "No upcoming events"
 msgstr "没有即将到来的活动"
 
+#: src/components/common/AdminUsersTable/index.tsx:18
+msgid "No users found"
+msgstr "未找到用户"
+
 #: src/components/modals/WebhookLogsModal/index.tsx:180
 msgid "No webhook events have been recorded for this endpoint yet. Events will appear here once they are triggered."
 msgstr "此端点尚未记录任何 Webhook 事件。事件触发后将显示在此处。"
@@ -4012,7 +4068,7 @@ msgstr "仅发送给具有这些状态的订单"
 msgid "Open Check-In Page"
 msgstr "打开签到页面"
 
-#: src/components/layouts/AppLayout/index.tsx:28
+#: src/components/layouts/AppLayout/index.tsx:29
 msgid "Open sidebar"
 msgstr "打开侧边栏"
 
@@ -5174,6 +5230,10 @@ msgstr "滚动至门票"
 msgid "Search affiliates..."
 msgstr "搜索推广员..."
 
+#: src/components/routes/admin/Accounts/index.tsx:34
+msgid "Search by account name or email..."
+msgstr "按账户名称或电子邮件搜索..."
+
 #: src/components/routes/event/attendees.tsx:64
 msgid "Search by attendee name, email or order #..."
 msgstr "按与会者姓名、电子邮件或订单号搜索..."
@@ -5182,6 +5242,10 @@ msgstr "按与会者姓名、电子邮件或订单号搜索..."
 #: src/components/routes/organizer/Events/index.tsx:47
 msgid "Search by event name..."
 msgstr "按活动名称搜索..."
+
+#: src/components/routes/admin/Users/index.tsx:60
+msgid "Search by name, email, or account..."
+msgstr "按姓名、电子邮件或账户搜索..."
 
 #: src/components/routes/event/orders.tsx:126
 msgid "Search by name, email, or order #..."
@@ -5235,6 +5299,10 @@ msgstr "选择 {0}"
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:83
 msgid "Select a category"
 msgstr "选择类别"
+
+#: src/components/common/AdminUsersTable/index.tsx:100
+msgid "Select Account"
+msgstr "选择账户"
 
 #: src/components/modals/DuplicateEventModal/index.tsx:138
 msgid "Select All"
@@ -5680,6 +5748,10 @@ msgstr "现状"
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:176
 msgid "Still handling refunds for your older transactions."
 msgstr "仍在处理您旧交易的退款。"
+
+#: src/components/common/ImpersonationBanner/index.tsx:53
+msgid "Stop Impersonating"
+msgstr "停止模拟"
 
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:85
 msgid "Stripe"
@@ -6364,6 +6436,10 @@ msgstr "票务与商品"
 msgid "Tickets for"
 msgstr "门票"
 
+#: src/components/routes/admin/Dashboard/index.tsx:85
+msgid "Tickets Sold"
+msgstr "已售票数"
+
 #: src/components/forms/ProductForm/index.tsx:67
 msgid "Tier {0}"
 msgstr "{0}级"
@@ -6423,6 +6499,10 @@ msgstr "工具"
 msgid "Total"
 msgstr "总计"
 
+#: src/components/routes/admin/Dashboard/index.tsx:49
+msgid "Total Accounts"
+msgstr "总账户数"
+
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:22
 msgid "Total amount paid"
 msgstr "支付总金额"
@@ -6464,6 +6544,10 @@ msgstr "退款总额"
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:143
 msgid "Total Tax"
 msgstr "总税额"
+
+#: src/components/routes/admin/Dashboard/index.tsx:31
+msgid "Total Users"
+msgstr "总用户数"
 
 #: src/components/layouts/AuthLayout/index.tsx:56
 msgid "Track revenue, page views, and sales with detailed analytics and exportable reports"
@@ -6696,12 +6780,15 @@ msgstr "用于边框、高亮和二维码样式"
 msgid "User"
 msgstr "用户"
 
-#: src/components/common/GlobalMenu/index.tsx:45
+#: src/components/common/GlobalMenu/index.tsx:53
 #: src/components/routes/account/ManageAccount/sections/Users/index.tsx:142
 msgid "User Management"
 msgstr "用户管理"
 
+#: src/components/common/AdminAccountsTable/index.tsx:49
+#: src/components/layouts/Admin/index.tsx:15
 #: src/components/routes/account/ManageAccount/index.tsx:32
+#: src/components/routes/admin/Users/index.tsx:57
 msgid "Users"
 msgstr "用户"
 
@@ -7129,6 +7216,10 @@ msgstr "您已经扫描过此票"
 #: src/components/routes/profile/ConfirmEmailChange/index.tsx:53
 msgid "You are changing your email to <0>{0}</0>."
 msgstr "您正在将电子邮件更改为 <0>{0}</0>。"
+
+#: src/components/common/ImpersonationBanner/index.tsx:40
+msgid "You are impersonating <0>{0}</0> ({1})"
+msgstr "您正在模拟 <0>{0}</0> ({1})"
 
 #: src/components/modals/RefundOrderModal/index.tsx:138
 msgid "You are issuing a partial refund. The customer will be refunded {0} {1}."
