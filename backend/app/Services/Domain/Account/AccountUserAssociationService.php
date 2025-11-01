@@ -7,6 +7,7 @@ use HiEvents\DomainObjects\AccountUserDomainObject;
 use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\Status\UserStatus;
 use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\Exceptions\UnauthorizedException;
 use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
 
 readonly class AccountUserAssociationService
@@ -26,6 +27,10 @@ readonly class AccountUserAssociationService
         bool                $isAccountOwner = false,
     ): AccountUserDomainObject
     {
+        if ($role === Role::SUPERADMIN) {
+            throw new UnauthorizedException(__('Cannot associate a user with SUPERADMIN role to an account'));
+        }
+
         $data = [
             'user_id' => $user->getId(),
             'account_id' => $account->getId(),

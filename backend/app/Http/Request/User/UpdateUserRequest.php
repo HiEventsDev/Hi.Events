@@ -16,7 +16,7 @@ class UpdateUserRequest extends BaseRequest
             'first_name' => RulesHelper::STRING,
             'last_name' => RulesHelper::STRING,
             'status' => Rule::in([UserStatus::INACTIVE->name, UserStatus::ACTIVE->name]), // don't allow INVITED
-            'role' => Rule::in(Role::valuesArray())
+            'role' => Rule::in(Role::getAssignableRoles())
         ];
     }
 }

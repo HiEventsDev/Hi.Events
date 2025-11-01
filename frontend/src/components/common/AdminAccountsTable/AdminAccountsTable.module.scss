@@ -1,0 +1,85 @@
+.cardsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.accountCard {
+    background: var(--mantine-color-body);
+    border: 1px solid var(--mantine-color-default-border);
+    border-radius: var(--mantine-radius-md);
+    padding: 1.5rem;
+    transition: box-shadow 0.2s;
+
+    &:hover {
+        box-shadow: var(--mantine-shadow-sm);
+    }
+}
+
+.cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.accountInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.accountName {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin: 0;
+    color: var(--mantine-color-text);
+}
+
+.accountEmail {
+    font-size: 0.875rem;
+    color: var(--mantine-color-dimmed);
+}
+
+.cardBody {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.statsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
+}
+
+.statItem {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--mantine-color-blue-6);
+}
+
+.cardFooter {
+    padding-top: 1rem;
+    border-top: 1px solid var(--mantine-color-default-border);
+}
+
+.footerInfo {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.footerItem {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: 0.875rem;
+    color: var(--mantine-color-dimmed);
+}
+
+.emptyState {
+    text-align: center;
+    padding: 3rem 1rem;
+}

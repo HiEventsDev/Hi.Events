@@ -9,6 +9,7 @@ use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Models\AccountUser;
 use HiEvents\Models\User;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -56,5 +57,26 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         $users = $this->handleResults($users);
 
         return $users->sortByDesc(fn(UserDomainObject $user) => $user->getUpdatedAt());
+    }
+
+    public function getAllUsersWithAccounts(?string $search, int $perPage): LengthAwarePaginator
+    {
+        $query = $this->model->query()
+            ->with(['accounts' => function ($query) {
+                $query->withPivot('role', 'is_account_owner', 'last_login_at', 'status');
+            }]);
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('first_name', 'ilike', "%$search%")
+                    ->orWhere('last_name', 'ilike', "%$search%")
+                    ->orWhere('email', 'ilike', "%$search%")
+                    ->orWhereHas('accounts', function ($accountQuery) use ($search) {
+                        $accountQuery->where('name', 'ilike', "%$search%");
+                    });
+            });
+        }
+
+        return $query->orderBy('created_at', 'desc')->paginate($perPage);
     }
 }

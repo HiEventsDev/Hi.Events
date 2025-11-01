@@ -3,9 +3,11 @@
 namespace HiEvents\Services\Application\Handlers\User;
 
 use HiEvents\DomainObjects\AccountDomainObject;
+use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\Status\UserStatus;
 use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Exceptions\ResourceConflictException;
+use HiEvents\Exceptions\UnauthorizedException;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Services\Application\Handlers\User\DTO\CreateUserDTO;
@@ -29,9 +31,16 @@ readonly class CreateUserHandler
     /**
      * @throws ResourceConflictException
      * @throws Throwable
+     * @throws UnauthorizedException
      */
     public function handle(CreateUserDTO $userData): UserDomainObject
     {
+        if ($userData->role === Role::SUPERADMIN) {
+            throw new UnauthorizedException(
+                __('SUPERADMIN users cannot be created through the application')
+            );
+        }
+
         return $this->databaseManager->transaction(function () use ($userData) {
             $existingUser = $this->getExistingUser($userData);
 

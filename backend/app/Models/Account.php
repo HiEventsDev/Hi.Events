@@ -28,6 +28,11 @@ class Account extends BaseModel
         return $this->users()->wherePivot('role', '=', $roleName->name);
     }
 
+    public function events(): HasMany
+    {
+        return $this->hasMany(Event::class);
+    }
+
     public function configuration(): BelongsTo
     {
         return $this->belongsTo(

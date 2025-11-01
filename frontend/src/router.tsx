@@ -134,6 +134,37 @@ export const router: RouteObject[] = [
         ]
     },
     {
+        path: "admin",
+        errorElement: <ErrorPage/>,
+        async lazy() {
+            const AdminLayout = await import("./components/layouts/Admin");
+            return {Component: AdminLayout.default};
+        },
+        children: [
+            {
+                path: "",
+                async lazy() {
+                    const Dashboard = await import("./components/routes/admin/Dashboard");
+                    return {Component: Dashboard.default};
+                }
+            },
+            {
+                path: "accounts",
+                async lazy() {
+                    const Accounts = await import("./components/routes/admin/Accounts");
+                    return {Component: Accounts.default};
+                }
+            },
+            {
+                path: "users",
+                async lazy() {
+                    const Users = await import("./components/routes/admin/Users");
+                    return {Component: Users.default};
+                }
+            }
+        ]
+    },
+    {
         path: "account",
         errorElement: <ErrorPage/>,
         async lazy() {

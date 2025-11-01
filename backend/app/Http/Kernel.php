@@ -5,6 +5,7 @@ namespace HiEvents\Http;
 use HiEvents\Http\Middleware\Authenticate;
 use HiEvents\Http\Middleware\EncryptCookies;
 use HiEvents\Http\Middleware\HandleDeprecatedTimezones;
+use HiEvents\Http\Middleware\LogImpersonationMiddleware;
 use HiEvents\Http\Middleware\PreventRequestsDuringMaintenance;
 use HiEvents\Http\Middleware\RedirectIfAuthenticated;
 use HiEvents\Http\Middleware\SetAccountContext;
@@ -71,6 +72,7 @@ class Kernel extends HttpKernel
             SubstituteBindings::class,
             SetAccountContext::class,
             SetUserLocaleMiddleware::class,
+            LogImpersonationMiddleware::class,
         ],
     ];
 
