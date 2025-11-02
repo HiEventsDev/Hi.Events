@@ -277,7 +277,7 @@ msgstr "Tài khoản đã được kết nối!"
 msgid "Account Name"
 msgstr "Tên tài khoản"
 
-#: src/components/common/GlobalMenu/index.tsx:37
+#: src/components/common/GlobalMenu/index.tsx:45
 #: src/components/routes/account/ManageAccount/index.tsx:19
 msgid "Account Settings"
 msgstr "Cài đặt tài khoản"
@@ -285,6 +285,12 @@ msgstr "Cài đặt tài khoản"
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:42
 msgid "Account updated successfully"
 msgstr "Tài khoản được cập nhật thành công"
+
+#: src/components/common/AdminUsersTable/index.tsx:127
+#: src/components/layouts/Admin/index.tsx:14
+#: src/components/routes/admin/Accounts/index.tsx:31
+msgid "Accounts"
+msgstr "Tài Khoản"
 
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:64
 msgid "Action Required: Reconnect Your Stripe Account"
@@ -434,10 +440,17 @@ msgstr "Dòng địa chỉ 2"
 msgid "Address Line 2"
 msgstr "Dòng địa chỉ 2"
 
+#: src/components/layouts/Admin/index.tsx:12
 #: src/components/modals/EditUserModal/index.tsx:49
 #: src/components/modals/InviteUserModal/index.tsx:41
 msgid "Admin"
 msgstr "Quản trị viên"
+
+#: src/components/common/GlobalMenu/index.tsx:61
+#: src/components/layouts/Admin/index.tsx:21
+#: src/components/routes/admin/Dashboard/index.tsx:16
+msgid "Admin Dashboard"
+msgstr "Bảng Điều Khiển Quản Trị"
 
 #: src/components/modals/EditUserModal/index.tsx:51
 #: src/components/modals/InviteUserModal/index.tsx:43
@@ -1656,7 +1669,7 @@ msgstr "Tạo sự kiện"
 msgid "Create new"
 msgstr "Tạo mới"
 
-#: src/components/common/GlobalMenu/index.tsx:60
+#: src/components/common/GlobalMenu/index.tsx:76
 #: src/components/modals/CreateEventModal/index.tsx:138
 #: src/components/modals/CreateOrganizerModal/index.tsx:16
 msgid "Create Organizer"
@@ -1866,10 +1879,11 @@ msgstr "Vùng nguy hiểm"
 msgid "Danger Zone"
 msgstr "Vùng nguy hiểm"
 
+#: src/components/layouts/Admin/index.tsx:13
 #: src/components/layouts/Event/index.tsx:89
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:160
 msgid "Dashboard"
-msgstr "Bảng điều khiển"
+msgstr "Dashboard"
 
 #: src/components/common/OrderDetails/index.tsx:39
 #: src/components/forms/QuestionForm/index.tsx:136
@@ -2554,6 +2568,7 @@ msgstr "Loại sự kiện"
 msgid "Event Venue"
 msgstr "Địa Điểm Sự Kiện"
 
+#: src/components/common/AdminAccountsTable/index.tsx:42
 #: src/components/layouts/OrganizerLayout/index.tsx:73
 #: src/components/layouts/OrganizerLayout/index.tsx:133
 #: src/components/routes/organizer/Events/index.tsx:43
@@ -2695,6 +2710,14 @@ msgstr "Không thể sắp xếp sản phẩm"
 #: src/mutations/useExportAnswers.ts:15
 msgid "Failed to start export job"
 msgstr "Không thể bắt đầu quá trình xuất"
+
+#: src/components/routes/admin/Users/index.tsx:48
+msgid "Failed to start impersonation. Please try again."
+msgstr "Không thể bắt đầu mạo danh. Vui lòng thử lại."
+
+#: src/components/common/ImpersonationBanner/index.tsx:29
+msgid "Failed to stop impersonation. Please try again."
+msgstr "Không thể dừng mạo danh. Vui lòng thử lại."
 
 #: src/components/modals/EditAffiliateModal/index.tsx:70
 msgid "Failed to update affiliate"
@@ -2939,6 +2962,10 @@ msgstr "Người được mời"
 msgid "Have a promo code?"
 msgstr "Nhập mã khuyến mãi?"
 
+#: src/components/routes/admin/Dashboard/index.tsx:20
+msgid "Hello {0}, manage your platform from here."
+msgstr "Xin chào {0}, quản lý nền tảng của bạn từ đây."
+
 #: src/components/forms/OrganizerForm/index.tsx:35
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:81
 msgid "hello@awesome-events.com"
@@ -3149,6 +3176,19 @@ msgstr "URL hình ảnh"
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:197
 msgid "Images"
 msgstr "Hình ảnh"
+
+#: src/components/common/AdminUsersTable/index.tsx:84
+#: src/components/common/AdminUsersTable/index.tsx:96
+msgid "Impersonate"
+msgstr "Mạo danh"
+
+#: src/components/routes/admin/Users/index.tsx:38
+msgid "Impersonation started"
+msgstr "Đã bắt đầu mạo danh"
+
+#: src/components/common/ImpersonationBanner/index.tsx:23
+msgid "Impersonation stopped"
+msgstr "Đã dừng mạo danh"
 
 #: src/components/routes/event/EventDashboard/index.tsx:124
 msgid "Important: Stripe reconnection required"
@@ -3397,6 +3437,10 @@ msgstr "Trực tiếp"
 msgid "LIVE"
 msgstr "TRỰC TIẾP"
 
+#: src/components/routes/admin/Dashboard/index.tsx:67
+msgid "Live Events"
+msgstr "Sự Kiện Trực Tiếp"
+
 #: src/components/routes/event/TicketDesigner/TicketPreview.tsx:34
 msgid "Loading preview..."
 msgstr "Đang tải xem trước..."
@@ -3456,7 +3500,7 @@ msgstr "Logo sẽ được hiển thị trong phần đầu trang"
 msgid "Logo will be displayed on the ticket"
 msgstr "Logo sẽ được hiển thị trên vé"
 
-#: src/components/common/GlobalMenu/index.tsx:69
+#: src/components/common/GlobalMenu/index.tsx:85
 msgid "Logout"
 msgstr "Đăng xuất"
 
@@ -3651,7 +3695,7 @@ msgstr "Mô tả sự kiện tuyệt vời của tôi ..."
 msgid "My amazing event title..."
 msgstr "Tiêu đề sự kiện tuyệt vời của tôi ..."
 
-#: src/components/common/GlobalMenu/index.tsx:32
+#: src/components/common/GlobalMenu/index.tsx:40
 msgid "My Profile"
 msgstr "Hồ sơ của tôi"
 
@@ -3709,6 +3753,14 @@ msgstr "Mật khẩu mới"
 #: src/constants/eventCategories.ts:4
 msgid "Nightlife"
 msgstr "Cuộc sống về đêm"
+
+#: src/components/common/AdminUsersTable/index.tsx:143
+msgid "No accounts"
+msgstr "Không có tài khoản"
+
+#: src/components/common/AdminAccountsTable/index.tsx:15
+msgid "No accounts found"
+msgstr "Không tìm thấy tài khoản"
 
 #: src/components/routes/event/Webhooks/index.tsx:22
 msgid "No Active Webhooks"
@@ -3866,6 +3918,10 @@ msgstr "Không có thuế hoặc phí đã được thêm vào."
 msgid "No upcoming events"
 msgstr "Không có sự kiện sắp tới"
 
+#: src/components/common/AdminUsersTable/index.tsx:18
+msgid "No users found"
+msgstr "Không tìm thấy người dùng"
+
 #: src/components/modals/WebhookLogsModal/index.tsx:180
 msgid "No webhook events have been recorded for this endpoint yet. Events will appear here once they are triggered."
 msgstr "Chưa có sự kiện webhook nào được ghi nhận cho điểm cuối này. Sự kiện sẽ xuất hiện ở đây khi chúng được kích hoạt."
@@ -4012,7 +4068,7 @@ msgstr "Chỉ gửi đến các đơn hàng có trạng thái này"
 msgid "Open Check-In Page"
 msgstr "Mở Trang Check-In"
 
-#: src/components/layouts/AppLayout/index.tsx:28
+#: src/components/layouts/AppLayout/index.tsx:29
 msgid "Open sidebar"
 msgstr "Mở thanh bên"
 
@@ -5176,6 +5232,10 @@ msgstr "Cuộn đến vé"
 msgid "Search affiliates..."
 msgstr "Tìm kiếm đối tác..."
 
+#: src/components/routes/admin/Accounts/index.tsx:34
+msgid "Search by account name or email..."
+msgstr "Tìm kiếm theo tên tài khoản hoặc email..."
+
 #: src/components/routes/event/attendees.tsx:64
 msgid "Search by attendee name, email or order #..."
 msgstr "Tìm kiếm theo tên người tham dự, email hoặc đơn hàng"
@@ -5184,6 +5244,10 @@ msgstr "Tìm kiếm theo tên người tham dự, email hoặc đơn hàng"
 #: src/components/routes/organizer/Events/index.tsx:47
 msgid "Search by event name..."
 msgstr "Tìm kiếm theo tên sự kiện"
+
+#: src/components/routes/admin/Users/index.tsx:60
+msgid "Search by name, email, or account..."
+msgstr "Tìm kiếm theo tên, email hoặc tài khoản..."
 
 #: src/components/routes/event/orders.tsx:126
 msgid "Search by name, email, or order #..."
@@ -5237,6 +5301,10 @@ msgstr "Chọn {0}"
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:83
 msgid "Select a category"
 msgstr "Chọn danh mục"
+
+#: src/components/common/AdminUsersTable/index.tsx:100
+msgid "Select Account"
+msgstr "Chọn Tài Khoản"
 
 #: src/components/modals/DuplicateEventModal/index.tsx:138
 msgid "Select All"
@@ -5682,6 +5750,10 @@ msgstr "Trạng thái"
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:176
 msgid "Still handling refunds for your older transactions."
 msgstr "Vẫn đang xử lý hoàn tiền cho các giao dịch cũ của bạn."
+
+#: src/components/common/ImpersonationBanner/index.tsx:53
+msgid "Stop Impersonating"
+msgstr "Dừng Mạo Danh"
 
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:85
 msgid "Stripe"
@@ -6366,6 +6438,10 @@ msgstr "Vé & Sản phẩm"
 msgid "Tickets for"
 msgstr "Vé cho"
 
+#: src/components/routes/admin/Dashboard/index.tsx:85
+msgid "Tickets Sold"
+msgstr "Vé Đã Bán"
+
 #: src/components/forms/ProductForm/index.tsx:67
 msgid "Tier {0}"
 msgstr "Cấp {0}"
@@ -6425,6 +6501,10 @@ msgstr "Công cụ"
 msgid "Total"
 msgstr "Tổng"
 
+#: src/components/routes/admin/Dashboard/index.tsx:49
+msgid "Total Accounts"
+msgstr "Tổng Tài Khoản"
+
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:22
 msgid "Total amount paid"
 msgstr "Tổng số tiền đã trả"
@@ -6466,6 +6546,10 @@ msgstr "Tổng đã hoàn lại"
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:143
 msgid "Total Tax"
 msgstr "Tổng thuế"
+
+#: src/components/routes/admin/Dashboard/index.tsx:31
+msgid "Total Users"
+msgstr "Tổng Người Dùng"
 
 #: src/components/layouts/AuthLayout/index.tsx:56
 msgid "Track revenue, page views, and sales with detailed analytics and exportable reports"
@@ -6698,12 +6782,15 @@ msgstr "Được sử dụng cho viền, vùng tô sáng và kiểu mã QR"
 msgid "User"
 msgstr "Người dùng"
 
-#: src/components/common/GlobalMenu/index.tsx:45
+#: src/components/common/GlobalMenu/index.tsx:53
 #: src/components/routes/account/ManageAccount/sections/Users/index.tsx:142
 msgid "User Management"
 msgstr "Quản lý người dùng"
 
+#: src/components/common/AdminAccountsTable/index.tsx:49
+#: src/components/layouts/Admin/index.tsx:15
 #: src/components/routes/account/ManageAccount/index.tsx:32
+#: src/components/routes/admin/Users/index.tsx:57
 msgid "Users"
 msgstr "Người dùng"
 
@@ -7131,6 +7218,10 @@ msgstr "Bạn đã quét vé này rồi"
 #: src/components/routes/profile/ConfirmEmailChange/index.tsx:53
 msgid "You are changing your email to <0>{0}</0>."
 msgstr "Bạn đang thay đổi email của mình thành <0>{0}</0>."
+
+#: src/components/common/ImpersonationBanner/index.tsx:40
+msgid "You are impersonating <0>{0}</0> ({1})"
+msgstr "Bạn đang mạo danh <0>{0}</0> ({1})"
 
 #: src/components/modals/RefundOrderModal/index.tsx:138
 msgid "You are issuing a partial refund. The customer will be refunded {0} {1}."

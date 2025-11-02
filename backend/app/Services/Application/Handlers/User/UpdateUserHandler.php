@@ -14,13 +14,13 @@ use Illuminate\Database\DatabaseManager;
 use Psr\Log\LoggerInterface;
 use Throwable;
 
-readonly class UpdateUserHandler
+class UpdateUserHandler
 {
     public function __construct(
-        private UserRepositoryInterface        $userRepository,
-        private LoggerInterface                $logger,
-        private AccountUserRepositoryInterface $accountUserRepository,
-        private DatabaseManager                $databaseManager,
+        private readonly UserRepositoryInterface        $userRepository,
+        private readonly LoggerInterface                $logger,
+        private readonly AccountUserRepositoryInterface $accountUserRepository,
+        private readonly DatabaseManager                $databaseManager,
     )
     {
     }
@@ -40,6 +40,12 @@ readonly class UpdateUserHandler
      */
     private function updateUser(UpdateUserDTO $updateUserData): UserDomainObject
     {
+        if ($updateUserData->role === Role::SUPERADMIN) {
+            throw new CannotUpdateResourceException(__(
+                'You cannot assign the Super Admin role to a user'
+            ));
+        }
+
         /** @var AccountUserDomainObject $accountUser */
         $accountUser = $this->accountUserRepository->findFirstWhere(
             where: [

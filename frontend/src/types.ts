@@ -76,11 +76,13 @@ export interface User {
     password?: string;
     is_email_verified?: boolean;
     has_pending_email_change?: boolean;
+    is_impersonating?: boolean;
+    impersonator_id?: IdParam;
     enforce_email_confirmation_during_registration?: boolean;
     pending_email?: string;
     last_login_at?: string;
     status?: 'ACTIVE' | 'INACTIVE' | 'INVITED';
-    role?: 'ADMIN' | 'ORGANIZER';
+    role?: 'ADMIN' | 'ORGANIZER' | 'SUPERADMIN';
     is_account_owner?: boolean;
     locale?: SupportedLocales;
 }

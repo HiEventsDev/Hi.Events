@@ -48,10 +48,10 @@ class EventStatisticsIncrementService
             ->findById($order->getId());
 
         $this->retrier->retry(
-            callableAction: function (int $attempt) use ($order): void {
-                $this->databaseManager->transaction(function () use ($order, $attempt): void {
-                    $this->incrementAggregateStatistics($order, $attempt);
-                    $this->incrementDailyStatistics($order, $attempt);
+            callableAction: function () use ($order): void {
+                $this->databaseManager->transaction(function () use ($order): void {
+                    $this->incrementAggregateStatistics($order);
+                    $this->incrementDailyStatistics($order);
                     $this->incrementPromoCodeUsage($order);
                     $this->incrementProductStatistics($order);
                 });
