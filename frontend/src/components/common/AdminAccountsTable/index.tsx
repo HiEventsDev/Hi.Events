@@ -1,14 +1,17 @@
-import {Badge, Stack, Text} from "@mantine/core";
+import {Badge, Button, Stack, Text} from "@mantine/core";
 import {t} from "@lingui/macro";
 import {AdminAccount} from "../../../api/admin.client";
 import {IconCalendar, IconWorld, IconBuildingBank, IconUsers} from "@tabler/icons-react";
 import classes from "./AdminAccountsTable.module.scss";
+import {IdParam} from "../../../types";
 
 interface AdminAccountsTableProps {
     accounts: AdminAccount[];
+    onImpersonate: (userId: IdParam, accountId: IdParam) => void;
+    isLoading?: boolean;
 }
 
-const AdminAccountsTable = ({accounts}: AdminAccountsTableProps) => {
+const AdminAccountsTable = ({accounts, onImpersonate, isLoading}: AdminAccountsTableProps) => {
     if (!accounts || accounts.length === 0) {
         return (
             <div className={classes.emptyState}>
@@ -22,6 +25,24 @@ const AdminAccountsTable = ({accounts}: AdminAccountsTableProps) => {
         const date = new Date(dateString);
         return date.toLocaleDateString();
     };
+
+    const getRoleBadgeColor = (role: string) => {
+        switch (role) {
+            case 'ADMIN':
+                return 'blue';
+            case 'ORGANIZER':
+                return 'green';
+            case 'SUPERADMIN':
+                return 'red';
+            default:
+                return 'gray';
+        }
+    };
+
+    const canImpersonate = (role: string) => {
+        return role !== 'SUPERADMIN';
+    };
+
 
     return (
         <div className={classes.cardsContainer}>
@@ -51,6 +72,41 @@ const AdminAccountsTable = ({accounts}: AdminAccountsTableProps) => {
                                 </Stack>
                             </div>
                         </div>
+
+                        {account.users && account.users.length > 0 && (
+                            <div className={classes.usersSection}>
+                                <Text size="sm" fw={600} mb="xs">{t`Users`}</Text>
+                                <div className={classes.usersList}>
+                                    {account.users.map((user) => (
+                                        <div key={user.id} className={classes.userItem}>
+                                            <div className={classes.userDetails}>
+                                                <Text size="sm" fw={500}>
+                                                    {user.first_name} {user.last_name}
+                                                </Text>
+                                                <Text size="xs" c="dimmed">{user.email}</Text>
+                                                <Badge
+                                                    size="xs"
+                                                    color={getRoleBadgeColor(user.role)}
+                                                    mt={4}
+                                                >
+                                                    {user.role}
+                                                </Badge>
+                                            </div>
+                                            {canImpersonate(user.role) && (
+                                                <Button
+                                                    size="xs"
+                                                    variant="light"
+                                                    onClick={() => onImpersonate(user.id, account.id)}
+                                                    disabled={isLoading}
+                                                >
+                                                    {t`Impersonate`}
+                                                </Button>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
 
                         <div className={classes.cardFooter}>
                             <div className={classes.footerInfo}>

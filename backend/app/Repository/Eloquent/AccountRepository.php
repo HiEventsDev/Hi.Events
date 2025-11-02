@@ -37,12 +37,19 @@ class AccountRepository extends BaseRepository implements AccountRepositoryInter
     {
         $query = $this->model
             ->select('accounts.*')
-            ->withCount(['events', 'users']);
+            ->withCount(['events', 'users'])
+            ->with(['users' => function ($query) {
+                $query->select('users.id', 'users.first_name', 'users.last_name', 'users.email')
+                    ->withPivot('role');
+            }]);
 
         if ($search) {
             $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('email', 'like', "%{$search}%");
+                $q->where('accounts.name', 'like', "{$search}%")
+                    ->orWhere('accounts.email', 'like', "{$search}%")
+                    ->orWhereHas('users', function ($userQuery) use ($search) {
+                        $userQuery->where('users.email', 'like', "{$search}%");
+                    });
             });
         }
 

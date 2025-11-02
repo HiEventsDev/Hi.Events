@@ -151,6 +151,7 @@ use HiEvents\Http\Actions\Users\ResendInvitationAction;
 use HiEvents\Http\Actions\Users\UpdateMeAction;
 use HiEvents\Http\Actions\Users\UpdateUserAction;
 use HiEvents\Http\Actions\Admin\Accounts\GetAllAccountsAction;
+use HiEvents\Http\Actions\Admin\Events\GetUpcomingEventsAction;
 use HiEvents\Http\Actions\Admin\Stats\GetAdminStatsAction;
 use HiEvents\Http\Actions\Admin\Users\GetAllUsersAction;
 use HiEvents\Http\Actions\Admin\Users\StartImpersonationAction;
@@ -373,6 +374,7 @@ $router->prefix('/admin')->middleware(['auth:api'])->group(
         $router->get('/stats', GetAdminStatsAction::class);
         $router->get('/accounts', GetAllAccountsAction::class);
         $router->get('/users', GetAllUsersAction::class);
+        $router->get('/events/upcoming', GetUpcomingEventsAction::class);
         $router->post('/impersonate/{user_id}', StartImpersonationAction::class);
         $router->post('/stop-impersonation', StopImpersonationAction::class);
     }
