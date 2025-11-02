@@ -1,5 +1,5 @@
 import {api} from "./client";
-import {GenericDataResponse, GenericPaginatedResponse, IdParam, User} from "../types";
+import {GenericPaginatedResponse, IdParam, User} from "../types";
 
 export interface AdminUser extends User {
     accounts?: AccountWithRole[];
@@ -12,6 +12,14 @@ export interface AccountWithRole {
     role: string;
 }
 
+export interface AdminAccountUser {
+    id: IdParam;
+    first_name: string;
+    last_name: string;
+    email: string;
+    role: string;
+}
+
 export interface AdminAccount {
     id: IdParam;
     name: string;
@@ -21,6 +29,7 @@ export interface AdminAccount {
     created_at: string;
     events_count: number;
     users_count: number;
+    users: AdminAccountUser[];
 }
 
 export interface AdminStats {
@@ -81,6 +90,15 @@ export const adminClient = {
                 page: params.page || 1,
                 per_page: params.per_page || 20,
                 search: params.search || undefined,
+            }
+        });
+        return response.data;
+    },
+
+    getUpcomingEvents: async (perPage: number = 10) => {
+        const response = await api.get<GenericPaginatedResponse<any>>('admin/events/upcoming', {
+            params: {
+                per_page: perPage,
             }
         });
         return response.data;

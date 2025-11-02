@@ -3,9 +3,14 @@ import {t} from "@lingui/macro";
 import {IconSearch} from "@tabler/icons-react";
 import {useState, useEffect} from "react";
 import {useGetAllAccounts} from "../../../../queries/useGetAllAccounts";
+import {useStartImpersonation} from "../../../../mutations/useStartImpersonation";
 import AdminAccountsTable from "../../../common/AdminAccountsTable";
+import {showError, showSuccess} from "../../../../utilites/notifications";
+import {IdParam} from "../../../../types";
+import {useNavigate} from "react-router";
 
 const Accounts = () => {
+    const navigate = useNavigate();
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState("");
     const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -16,6 +21,8 @@ const Accounts = () => {
         search: debouncedSearch
     });
 
+    const startImpersonationMutation = useStartImpersonation();
+
     useEffect(() => {
         const timer = setTimeout(() => {
             setDebouncedSearch(search);
@@ -24,6 +31,25 @@ const Accounts = () => {
 
         return () => clearTimeout(timer);
     }, [search]);
+
+    const handleImpersonate = (userId: IdParam, accountId: IdParam) => {
+        startImpersonationMutation.mutate({userId, accountId}, {
+            onSuccess: (response) => {
+                showSuccess(response.message || t`Impersonation started`);
+                if (response.redirect_url) {
+                    window.location.href = response.redirect_url;
+                } else {
+                    navigate('/manage/events');
+                }
+            },
+            onError: (error: any) => {
+                showError(
+                    error?.response?.data?.message ||
+                    t`Failed to start impersonation. Please try again.`
+                );
+            }
+        });
+    };
 
     return (
         <Container size="xl" p="xl">
@@ -44,7 +70,11 @@ const Accounts = () => {
                         <Skeleton height={180} radius="md" />
                     </Stack>
                 ) : (
-                    <AdminAccountsTable accounts={accountsData?.data || []} />
+                    <AdminAccountsTable
+                        accounts={accountsData?.data || []}
+                        onImpersonate={handleImpersonate}
+                        isLoading={startImpersonationMutation.isPending}
+                    />
                 )}
 
                 {accountsData?.meta && accountsData.meta.last_page > 1 && (

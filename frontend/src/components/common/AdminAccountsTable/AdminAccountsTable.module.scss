@@ -83,3 +83,35 @@
     text-align: center;
     padding: 3rem 1rem;
 }
+
+.usersSection {
+    padding-top: 1rem;
+    border-top: 1px solid var(--mantine-color-default-border);
+}
+
+.usersList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.userItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    background: var(--mantine-color-gray-0);
+    border-radius: var(--mantine-radius-sm);
+    transition: background-color 0.2s;
+
+    &:hover {
+        background: var(--mantine-color-gray-1);
+    }
+}
+
+.userDetails {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    flex: 1;
+}

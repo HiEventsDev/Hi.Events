@@ -83,4 +83,22 @@ class EventRepository extends BaseRepository implements EventRepositoryInterface
             page: $params->page,
         );
     }
+
+    public function getUpcomingEventsForAdmin(int $perPage): LengthAwarePaginator
+    {
+        $now = now();
+        $next24Hours = now()->addDay();
+
+        return $this->handleResults($this->model
+            ->select('events.*')
+            ->with(['account', 'organizer'])
+            ->where(EventDomainObjectAbstract::START_DATE, '>=', $now)
+            ->where(EventDomainObjectAbstract::START_DATE, '<=', $next24Hours)
+            ->whereIn(EventDomainObjectAbstract::STATUS, [
+                EventStatus::LIVE->name,
+                EventStatus::DRAFT->name,
+            ])
+            ->orderBy(EventDomainObjectAbstract::START_DATE, 'asc')
+            ->paginate($perPage));
+    }
 }
