@@ -288,7 +288,7 @@ msgstr "Tài khoản được cập nhật thành công"
 
 #: src/components/common/AdminUsersTable/index.tsx:127
 #: src/components/layouts/Admin/index.tsx:14
-#: src/components/routes/admin/Accounts/index.tsx:31
+#: src/components/routes/admin/Accounts/index.tsx:57
 msgid "Accounts"
 msgstr "Tài Khoản"
 
@@ -448,7 +448,7 @@ msgstr "Quản trị viên"
 
 #: src/components/common/GlobalMenu/index.tsx:61
 #: src/components/layouts/Admin/index.tsx:21
-#: src/components/routes/admin/Dashboard/index.tsx:16
+#: src/components/routes/admin/Dashboard/index.tsx:42
 msgid "Admin Dashboard"
 msgstr "Bảng Điều Khiển Quản Trị"
 
@@ -2354,7 +2354,7 @@ msgid "Ended"
 msgstr "Kết thúc"
 
 #: src/components/common/LanguageSwitcher/index.tsx:18
-#: src/components/common/LanguageSwitcher/index.tsx:54
+#: src/components/common/LanguageSwitcher/index.tsx:56
 #: src/components/modals/CreateAttendeeModal/index.tsx:156
 #: src/components/routes/profile/ManageProfile/index.tsx:173
 msgid "English"
@@ -2568,12 +2568,16 @@ msgstr "Loại sự kiện"
 msgid "Event Venue"
 msgstr "Địa Điểm Sự Kiện"
 
-#: src/components/common/AdminAccountsTable/index.tsx:42
+#: src/components/common/AdminAccountsTable/index.tsx:63
 #: src/components/layouts/OrganizerLayout/index.tsx:73
 #: src/components/layouts/OrganizerLayout/index.tsx:133
 #: src/components/routes/organizer/Events/index.tsx:43
 msgid "Events"
 msgstr "Sự kiện"
+
+#: src/components/routes/admin/Dashboard/index.tsx:129
+msgid "Events Starting in Next 24 Hours"
+msgstr ""
 
 #: src/components/common/EmailTemplateEditor/CTAConfiguration.tsx:23
 msgid "Every email template must include a call-to-action button that links to the appropriate page"
@@ -2711,6 +2715,7 @@ msgstr "Không thể sắp xếp sản phẩm"
 msgid "Failed to start export job"
 msgstr "Không thể bắt đầu quá trình xuất"
 
+#: src/components/routes/admin/Accounts/index.tsx:48
 #: src/components/routes/admin/Users/index.tsx:48
 msgid "Failed to start impersonation. Please try again."
 msgstr "Không thể bắt đầu mạo danh. Vui lòng thử lại."
@@ -2962,7 +2967,7 @@ msgstr "Người được mời"
 msgid "Have a promo code?"
 msgstr "Nhập mã khuyến mãi?"
 
-#: src/components/routes/admin/Dashboard/index.tsx:20
+#: src/components/routes/admin/Dashboard/index.tsx:46
 msgid "Hello {0}, manage your platform from here."
 msgstr "Xin chào {0}, quản lý nền tảng của bạn từ đây."
 
@@ -3177,11 +3182,13 @@ msgstr "URL hình ảnh"
 msgid "Images"
 msgstr "Hình ảnh"
 
+#: src/components/common/AdminAccountsTable/index.tsx:102
 #: src/components/common/AdminUsersTable/index.tsx:84
 #: src/components/common/AdminUsersTable/index.tsx:96
 msgid "Impersonate"
 msgstr "Mạo danh"
 
+#: src/components/routes/admin/Accounts/index.tsx:38
 #: src/components/routes/admin/Users/index.tsx:38
 msgid "Impersonation started"
 msgstr "Đã bắt đầu mạo danh"
@@ -3193,6 +3200,14 @@ msgstr "Đã dừng mạo danh"
 #: src/components/routes/event/EventDashboard/index.tsx:124
 msgid "Important: Stripe reconnection required"
 msgstr "Quan trọng: Cần kết nối lại Stripe"
+
+#: src/components/routes/admin/Dashboard/index.tsx:29
+msgid "In {diffHours} hours"
+msgstr ""
+
+#: src/components/routes/admin/Dashboard/index.tsx:27
+msgid "In {diffMinutes} minutes"
+msgstr ""
 
 #: src/components/layouts/AuthLayout/index.tsx:55
 msgid "In-depth Analytics"
@@ -3437,7 +3452,7 @@ msgstr "Trực tiếp"
 msgid "LIVE"
 msgstr "TRỰC TIẾP"
 
-#: src/components/routes/admin/Dashboard/index.tsx:67
+#: src/components/routes/admin/Dashboard/index.tsx:93
 msgid "Live Events"
 msgstr "Sự Kiện Trực Tiếp"
 
@@ -3758,7 +3773,7 @@ msgstr "Cuộc sống về đêm"
 msgid "No accounts"
 msgstr "Không có tài khoản"
 
-#: src/components/common/AdminAccountsTable/index.tsx:15
+#: src/components/common/AdminAccountsTable/index.tsx:18
 msgid "No accounts found"
 msgstr "Không tìm thấy tài khoản"
 
@@ -3813,6 +3828,10 @@ msgstr "Không giảm giá"
 #: src/components/common/NoEventsBlankSlate/index.tsx:20
 msgid "No ended events to show."
 msgstr "Không có sự kiện đã kết thúc để hiển thị."
+
+#: src/components/routes/admin/Dashboard/index.tsx:168
+msgid "No events starting in the next 24 hours"
+msgstr ""
 
 #: src/components/common/NoEventsBlankSlate/index.tsx:14
 msgid "No events to show"
@@ -5232,7 +5251,7 @@ msgstr "Cuộn đến vé"
 msgid "Search affiliates..."
 msgstr "Tìm kiếm đối tác..."
 
-#: src/components/routes/admin/Accounts/index.tsx:34
+#: src/components/routes/admin/Accounts/index.tsx:60
 msgid "Search by account name or email..."
 msgstr "Tìm kiếm theo tên tài khoản hoặc email..."
 
@@ -5937,6 +5956,10 @@ msgstr "Email hỗ trợ"
 msgid "Support for tiered, donation-based, and product sales with customizable pricing and capacity"
 msgstr "Hỗ trợ bán hàng theo bậc, dựa trên quyên góp và bán sản phẩm với giá và sức chứa tùy chỉnh"
 
+#: src/components/common/LanguageSwitcher/index.tsx:40
+msgid "Swedish"
+msgstr ""
+
 #: src/components/layouts/OrganizerLayout/index.tsx:63
 #: src/components/modals/SwitchOrganizerModal/index.tsx:33
 msgid "Switch Organizer"
@@ -6438,7 +6461,7 @@ msgstr "Vé & Sản phẩm"
 msgid "Tickets for"
 msgstr "Vé cho"
 
-#: src/components/routes/admin/Dashboard/index.tsx:85
+#: src/components/routes/admin/Dashboard/index.tsx:111
 msgid "Tickets Sold"
 msgstr "Vé Đã Bán"
 
@@ -6501,7 +6524,7 @@ msgstr "Công cụ"
 msgid "Total"
 msgstr "Tổng"
 
-#: src/components/routes/admin/Dashboard/index.tsx:49
+#: src/components/routes/admin/Dashboard/index.tsx:75
 msgid "Total Accounts"
 msgstr "Tổng Tài Khoản"
 
@@ -6547,7 +6570,7 @@ msgstr "Tổng đã hoàn lại"
 msgid "Total Tax"
 msgstr "Tổng thuế"
 
-#: src/components/routes/admin/Dashboard/index.tsx:31
+#: src/components/routes/admin/Dashboard/index.tsx:57
 msgid "Total Users"
 msgstr "Tổng Người Dùng"
 
@@ -6787,7 +6810,8 @@ msgstr "Người dùng"
 msgid "User Management"
 msgstr "Quản lý người dùng"
 
-#: src/components/common/AdminAccountsTable/index.tsx:49
+#: src/components/common/AdminAccountsTable/index.tsx:70
+#: src/components/common/AdminAccountsTable/index.tsx:78
 #: src/components/layouts/Admin/index.tsx:15
 #: src/components/routes/account/ManageAccount/index.tsx:32
 #: src/components/routes/admin/Users/index.tsx:57
@@ -6851,6 +6875,10 @@ msgstr "Xem câu trả lời"
 #: src/components/common/AttendeeList/index.tsx:103
 msgid "View Attendee Details"
 msgstr "Xem chi tiết người tham dự"
+
+#: src/components/routes/admin/Dashboard/index.tsx:157
+msgid "View Event"
+msgstr ""
 
 #: src/components/common/EventCard/index.tsx:81
 msgid "View event page"
