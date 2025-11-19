@@ -63,7 +63,7 @@ abstract class BaseAction extends Controller
 
     /**
      * @param class-string<BaseResource> $resource
-     * @param Collection|DomainObjectInterface|LengthAwarePaginator|BaseDTO|Paginator $data
+     * @param Collection|DomainObjectInterface|LengthAwarePaginator|BaseDTO|Paginator|BaseDataObject $data
      * @param int $statusCode
      * @param array $meta
      * @param array $headers

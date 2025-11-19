@@ -5,6 +5,7 @@ namespace HiEvents\Services\Domain\Payment\Stripe;
 use HiEvents\DomainObjects\StripeCustomerDomainObject;
 use HiEvents\Exceptions\Stripe\CreatePaymentIntentFailedException;
 use HiEvents\Repository\Interfaces\StripeCustomerRepositoryInterface;
+use HiEvents\Services\Domain\Order\DTO\ApplicationFeeValuesDTO;
 use HiEvents\Services\Domain\Order\OrderApplicationFeeCalculationService;
 use HiEvents\Services\Domain\Payment\Stripe\DTOs\CreatePaymentIntentRequestDTO;
 use HiEvents\Services\Domain\Payment\Stripe\DTOs\CreatePaymentIntentResponseDTO;
@@ -68,22 +69,18 @@ class StripePaymentIntentCreationService
             $applicationFee = $this->orderApplicationFeeCalculationService->calculateApplicationFee(
                 accountConfiguration: $paymentIntentDTO->account->getConfiguration(),
                 order: $paymentIntentDTO->order,
-            )->toMinorUnit();
+                vatSettings: $paymentIntentDTO->vatSettings,
+            );
 
             $paymentIntent = $stripeClient->paymentIntents->create([
                 'amount' => $paymentIntentDTO->amount->toMinorUnit(),
                 'currency' => $paymentIntentDTO->currencyCode,
                 'customer' => $this->upsertStripeCustomerWithClient($stripeClient, $paymentIntentDTO)->getStripeCustomerId(),
-                'metadata' => [
-                    'order_id' => $paymentIntentDTO->order->getId(),
-                    'event_id' => $paymentIntentDTO->order->getEventId(),
-                    'order_short_id' => $paymentIntentDTO->order->getShortId(),
-                    'account_id' => $paymentIntentDTO->account->getId(),
-                ],
+                'metadata' => $this->getPaymentIntentMetadata($paymentIntentDTO, $applicationFee),
                 'automatic_payment_methods' => [
                     'enabled' => true,
                 ],
-                $applicationFee ? ['application_fee_amount' => $applicationFee] : [],
+                $applicationFee ? ['application_fee_amount' => $applicationFee->grossApplicationFee->toMinorUnit()] : [],
             ], $this->getStripeAccountData($paymentIntentDTO));
 
             $this->logger->debug('Stripe payment intent created', [
@@ -97,7 +94,7 @@ class StripePaymentIntentCreationService
                 paymentIntentId: $paymentIntent->id,
                 clientSecret: $paymentIntent->client_secret,
                 accountId: $paymentIntentDTO->stripeAccountId,
-                applicationFeeAmount: $applicationFee,
+                applicationFeeData: $applicationFee,
             );
         } catch (ApiErrorException $exception) {
             $this->logger->error("Stripe payment intent creation failed: {$exception->getMessage()}", [
@@ -188,5 +185,28 @@ class StripePaymentIntentCreationService
         ]);
 
         return $customer;
+    }
+
+    private function getPaymentIntentMetadata(
+        CreatePaymentIntentRequestDTO $paymentIntentDTO,
+        ?ApplicationFeeValuesDTO      $applicationFee
+    ): array
+    {
+        $metaData = [
+            'order_id' => $paymentIntentDTO->order->getId(),
+            'event_id' => $paymentIntentDTO->order->getEventId(),
+            'order_short_id' => $paymentIntentDTO->order->getShortId(),
+            'account_id' => $paymentIntentDTO->account->getId(),
+
+        ];
+
+        if ($applicationFee) {
+            $metaData['application_fee_gross_amount'] = $applicationFee->grossApplicationFee?->toFloat();
+            $metaData['application_fee_vat_amount'] = $applicationFee->applicationFeeVatAmount?->toFloat();
+            $metaData['application_fee_net_amount'] = $applicationFee->netApplicationFee?->toFloat();
+            $metaData['application_fee_vat_rate'] = $applicationFee->applicationFeeVatRate;
+        }
+
+        return $metaData;
     }
 }

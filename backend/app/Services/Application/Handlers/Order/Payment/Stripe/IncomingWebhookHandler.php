@@ -9,6 +9,7 @@ use HiEvents\Services\Domain\Payment\Stripe\EventHandlers\ChargeRefundUpdatedHan
 use HiEvents\Services\Domain\Payment\Stripe\EventHandlers\ChargeSucceededHandler;
 use HiEvents\Services\Domain\Payment\Stripe\EventHandlers\PaymentIntentFailedHandler;
 use HiEvents\Services\Domain\Payment\Stripe\EventHandlers\PaymentIntentSucceededHandler;
+use HiEvents\Services\Domain\Payment\Stripe\EventHandlers\PayoutPaidHandler;
 use Illuminate\Cache\Repository;
 use Illuminate\Log\Logger;
 use JsonException;
@@ -28,6 +29,8 @@ class IncomingWebhookHandler
         Event::REFUND_UPDATED,
         Event::CHARGE_SUCCEEDED,
         Event::CHARGE_UPDATED,
+        Event::PAYOUT_PAID,
+        Event::PAYOUT_UPDATED,
     ];
 
     public function __construct(
@@ -36,6 +39,7 @@ class IncomingWebhookHandler
         private readonly PaymentIntentSucceededHandler $paymentIntentSucceededHandler,
         private readonly PaymentIntentFailedHandler    $paymentIntentFailedHandler,
         private readonly AccountUpdateHandler          $accountUpdateHandler,
+        private readonly PayoutPaidHandler             $payoutPaidHandler,
         private readonly Logger                        $logger,
         private readonly Repository                    $cache,
         private readonly StripeConfigurationService    $stripeConfigurationService,
@@ -71,7 +75,7 @@ class IncomingWebhookHandler
                     'data' => $event->data->object->toArray(),
                 ]);
 
-                return;
+//                return;
             }
 
             $this->logger->debug('Stripe event received: ' . $event->type, $event->data->object->toArray());
@@ -92,6 +96,10 @@ class IncomingWebhookHandler
                     break;
                 case Event::ACCOUNT_UPDATED:
                     $this->accountUpdateHandler->handleEvent($event->data->object);
+                    break;
+                case Event::PAYOUT_PAID:
+                case Event::PAYOUT_UPDATED:
+                    $this->payoutPaidHandler->handleEvent($event->data->object);
                     break;
             }
 

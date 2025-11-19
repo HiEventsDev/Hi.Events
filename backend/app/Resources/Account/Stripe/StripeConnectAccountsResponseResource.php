@@ -27,6 +27,7 @@ class StripeConnectAccountsResponseResource extends BaseResource
                     'platform' => $account->platform?->value,
                     'account_type' => $account->accountType,
                     'is_primary' => $account->isPrimary,
+                    'country' => $account->country,
                 ];
             })->toArray(),
             'primary_stripe_account_id' => $this->primaryStripeAccountId,

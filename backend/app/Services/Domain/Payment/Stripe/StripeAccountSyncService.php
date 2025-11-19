@@ -4,9 +4,12 @@ namespace HiEvents\Services\Domain\Payment\Stripe;
 
 use HiEvents\DomainObjects\AccountStripePlatformDomainObject;
 use HiEvents\DomainObjects\Generated\AccountStripePlatformDomainObjectAbstract;
+use HiEvents\DomainObjects\Generated\AccountVatSettingDomainObjectAbstract;
 use HiEvents\Helper\Url;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountStripePlatformRepositoryInterface;
+use HiEvents\Repository\Interfaces\AccountVatSettingRepositoryInterface;
+use Illuminate\Config\Repository;
 use Psr\Log\LoggerInterface;
 use Stripe\Account;
 use Stripe\StripeClient;
@@ -18,6 +21,8 @@ class StripeAccountSyncService
         private readonly LoggerInterface                          $logger,
         private readonly AccountRepositoryInterface               $accountRepository,
         private readonly AccountStripePlatformRepositoryInterface $accountStripePlatformRepository,
+        private readonly AccountVatSettingRepositoryInterface     $vatSettingRepository,
+        private readonly Repository                               $config,
     )
     {
     }
@@ -27,29 +32,28 @@ class StripeAccountSyncService
      */
     public function syncStripeAccountStatus(
         AccountStripePlatformDomainObject $accountStripePlatform,
-        Account $stripeAccount
-    ): void {
+        Account                           $stripeAccount
+    ): void
+    {
         $isAccountSetupCompleted = $this->isStripeAccountComplete($stripeAccount);
         $isCurrentlyComplete = $accountStripePlatform->getStripeSetupCompletedAt() !== null;
 
         // Only update if status has actually changed
         if ($isCurrentlyComplete === $isAccountSetupCompleted) {
             // Still update account details even if status hasn't changed
-            $this->updateAccountDetails($accountStripePlatform, $stripeAccount);
+            $this->updateAccountDetails($stripeAccount);
             return;
         }
 
-        $this->logger->info(sprintf(
-            'Stripe Connect account status change. Updating account stripe platform %s with stripe account setup completed %s',
-            $stripeAccount->id,
-            $isAccountSetupCompleted ? 'true' : 'false'
-        ));
-
-        $this->updateAccountStatusAndDetails($accountStripePlatform, $stripeAccount, $isAccountSetupCompleted);
-
-        // Also update account verification status if setup is complete
         if ($isAccountSetupCompleted) {
-            $this->updateAccountVerificationStatus($accountStripePlatform);
+            $this->markAccountAsComplete($accountStripePlatform, $stripeAccount);
+        } else {
+            $this->logger->info(sprintf(
+                'Stripe Connect account is no longer complete. Updating account stripe platform %s',
+                $stripeAccount->id
+            ));
+            $this->updateAccountStatusAndDetails($stripeAccount, isAccountSetupCompleted: false);
+            $this->updateAccountDetails($stripeAccount);
         }
     }
 
@@ -59,16 +63,18 @@ class StripeAccountSyncService
      */
     public function markAccountAsComplete(
         AccountStripePlatformDomainObject $accountStripePlatform,
-        Account $stripeAccount
-    ): void {
+        Account                           $stripeAccount
+    ): void
+    {
         $this->logger->info(sprintf(
             'Marking Stripe Connect account as complete for account stripe platform %s with Stripe account ID %s',
             $accountStripePlatform->getId(),
             $stripeAccount->id
         ));
 
-        $this->updateAccountStatusAndDetails($accountStripePlatform, $stripeAccount, true);
-        $this->updateAccountVerificationStatus($accountStripePlatform);
+        $this->updateAccountStatusAndDetails($stripeAccount, isAccountSetupCompleted: true);
+        $this->updateAccountCountryAndVerificationStatus($accountStripePlatform, $stripeAccount);
+        $this->createVatSettingIfMissing($accountStripePlatform);
     }
 
     public function isStripeAccountComplete(Account $stripeAccount): bool
@@ -77,10 +83,10 @@ class StripeAccountSyncService
     }
 
     private function updateAccountStatusAndDetails(
-        AccountStripePlatformDomainObject $accountStripePlatform,
         Account $stripeAccount,
-        bool $isAccountSetupCompleted
-    ): void {
+        bool    $isAccountSetupCompleted
+    ): void
+    {
         $this->accountStripePlatformRepository->updateWhere(
             attributes: [
                 AccountStripePlatformDomainObjectAbstract::STRIPE_SETUP_COMPLETED_AT => $isAccountSetupCompleted ? now() : null,
@@ -92,10 +98,8 @@ class StripeAccountSyncService
         );
     }
 
-    private function updateAccountDetails(
-        AccountStripePlatformDomainObject $accountStripePlatform,
-        Account $stripeAccount
-    ): void {
+    private function updateAccountDetails(Account $stripeAccount): void
+    {
         $this->accountStripePlatformRepository->updateWhere(
             attributes: [
                 AccountStripePlatformDomainObjectAbstract::STRIPE_ACCOUNT_DETAILS => $this->buildAccountDetails($stripeAccount),
@@ -152,18 +156,53 @@ class StripeAccountSyncService
         }
     }
 
-    private function updateAccountVerificationStatus(AccountStripePlatformDomainObject $accountStripePlatform): void
+    private function updateAccountCountryAndVerificationStatus(
+        AccountStripePlatformDomainObject $accountStripePlatform,
+        Account                           $stripeAccount,
+    ): void
     {
         $account = $this->accountRepository->findById($accountStripePlatform->getAccountId());
+
+        $updates = [];
+        if (!$account->getCountry()) {
+            $updates['country'] = strtoupper($stripeAccount->country);
+        }
+
         if (!$account->getIsManuallyVerified()) {
+            $updates['is_manually_verified'] = true;
+        }
+
+        if (!empty($updates)) {
             $this->accountRepository->updateWhere(
-                attributes: [
-                    'is_manually_verified' => true,
-                ],
+                attributes: $updates,
                 where: [
                     'id' => $accountStripePlatform->getAccountId(),
                 ]
             );
+        }
+    }
+
+    private function createVatSettingIfMissing(AccountStripePlatformDomainObject $accountStripePlatform): void
+    {
+        if ($this->config->get('app.tax.eu_vat_handling_enabled') !== true) {
+            $this->logger->info('EU VAT handling is disabled, skipping VAT setting creation.', [
+                'account_stripe_platform_id' => $accountStripePlatform->getId(),
+                'account_id' => $accountStripePlatform->getAccountId(),
+            ]);
+            return;
+        }
+
+        $existingVatSetting = $this->vatSettingRepository->findFirstWhere([
+            AccountVatSettingDomainObjectAbstract::ACCOUNT_ID => $accountStripePlatform->getAccountId(),
+        ]);
+
+        if ($existingVatSetting === null) {
+            $this->vatSettingRepository->create([
+                AccountVatSettingDomainObjectAbstract::ACCOUNT_ID => $accountStripePlatform->getAccountId(),
+                AccountVatSettingDomainObjectAbstract::VAT_VALIDATED => false,
+                AccountVatSettingDomainObjectAbstract::VAT_COUNTRY_CODE => $accountStripePlatform
+                        ->getStripeAccountDetails()['country'] ?? null,
+            ]);
         }
     }
 }

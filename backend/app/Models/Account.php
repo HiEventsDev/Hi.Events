@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Account extends BaseModel
@@ -44,5 +45,10 @@ class Account extends BaseModel
     public function account_stripe_platforms(): HasMany
     {
         return $this->hasMany(AccountStripePlatform::class);
+    }
+
+    public function account_vat_setting(): HasOne
+    {
+        return $this->hasOne(AccountVatSetting::class);
     }
 }

@@ -13,6 +13,10 @@ class OrderPaymentPlatformFee extends BaseModel
     {
         return [
             'fee_rollup' => 'array',
+            'payment_platform_fee_amount' => 'float',
+            'application_fee_gross_amount' => 'float',
+            'application_fee_net_amount' => 'float',
+            'application_fee_vat_amount' => 'float',
         ];
     }
 
