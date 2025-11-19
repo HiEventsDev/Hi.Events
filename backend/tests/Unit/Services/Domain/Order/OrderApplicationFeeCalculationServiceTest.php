@@ -6,6 +6,7 @@ use HiEvents\DomainObjects\AccountConfigurationDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\Services\Domain\Order\OrderApplicationFeeCalculationService;
+use HiEvents\Services\Domain\Order\Vat\VatRateDeterminationService;
 use HiEvents\Services\Infrastructure\CurrencyConversion\CurrencyConversionClientInterface;
 use HiEvents\Values\MoneyValue;
 use Illuminate\Config\Repository;
@@ -16,12 +17,18 @@ class OrderApplicationFeeCalculationServiceTest extends TestCase
     private Repository $config;
     private CurrencyConversionClientInterface $currencyConversionClient;
     private OrderApplicationFeeCalculationService $service;
+    private VatRateDeterminationService $vatRateDeterminationService;
 
     protected function setUp(): void
     {
         $this->config = $this->createMock(Repository::class);
         $this->currencyConversionClient = $this->createMock(CurrencyConversionClientInterface::class);
-        $this->service = new OrderApplicationFeeCalculationService($this->config, $this->currencyConversionClient);
+        $this->vatRateDeterminationService = $this->createMock(VatRateDeterminationService::class);
+        $this->service = new OrderApplicationFeeCalculationService(
+            $this->config,
+            $this->currencyConversionClient,
+            $this->vatRateDeterminationService
+        );
     }
 
     private function createOrderWithItems(array $items, string $currency = 'USD'): OrderDomainObject
@@ -67,7 +74,7 @@ class OrderApplicationFeeCalculationServiceTest extends TestCase
 
         $fee = $this->service->calculateApplicationFee($account, $order);
 
-        $this->assertEquals(0.0, $fee->toFloat());
+        $this->assertNull($fee->grossApplicationFee);
     }
 
     public function testNoFeeForFreeOrder(): void
@@ -79,7 +86,7 @@ class OrderApplicationFeeCalculationServiceTest extends TestCase
 
         $fee = $this->service->calculateApplicationFee($account, $order);
 
-        $this->assertEquals(0.0, $fee->toFloat());
+        $this->assertEquals(0.0, $fee->grossApplicationFee->toFloat());
     }
 
     public function testFixedAndPercentageFeeSameCurrency(): void
@@ -99,7 +106,7 @@ class OrderApplicationFeeCalculationServiceTest extends TestCase
         // Total = $6.50
         $fee = $this->service->calculateApplicationFee($account, $order);
 
-        $this->assertEquals(6.50, $fee->toFloat());
+        $this->assertEquals(6.50, $fee->grossApplicationFee->toFloat());
     }
 
     public function testCurrencyConversionForFixedFee(): void
@@ -121,6 +128,6 @@ class OrderApplicationFeeCalculationServiceTest extends TestCase
         // Total = €5
         $fee = $this->service->calculateApplicationFee($account, $order);
 
-        $this->assertEquals(5.00, $fee->toFloat());
+        $this->assertEquals(5.00, $fee->grossApplicationFee->toFloat());
     }
 }
