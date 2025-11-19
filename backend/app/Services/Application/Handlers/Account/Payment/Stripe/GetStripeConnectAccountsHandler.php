@@ -97,6 +97,7 @@ class GetStripeConnectAccountsHandler
                 platform: $platform,
                 accountType: $stripeAccount->type,
                 isPrimary: $stripePlatform->getStripeSetupCompletedAt() !== null,
+                country: is_array($stripePlatform->getStripeAccountDetails()) ? ($stripePlatform->getStripeAccountDetails()['country'] ?? null) : null,
             );
         } catch (StripeClientConfigurationException $e) {
             $this->logger->warning('Failed to retrieve Stripe account due to configuration issue', [

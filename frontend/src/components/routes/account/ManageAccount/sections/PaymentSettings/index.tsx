@@ -15,6 +15,8 @@ import {formatCurrency} from "../../../../../../utilites/currency.ts";
 import {showSuccess} from "../../../../../../utilites/notifications.tsx";
 import {getConfig} from "../../../../../../utilites/config.ts";
 import {isHiEvents} from "../../../../../../utilites/helpers.ts";
+import {VatSettings} from './VatSettings';
+import {VatNotice} from './VatNotice';
 
 interface FeePlanDisplayProps {
     configuration?: {
@@ -25,6 +27,7 @@ interface FeePlanDisplayProps {
         };
         is_system_default: boolean;
     };
+    stripeCountry?: string;
 }
 
 const formatPercentage = (value: number) => {
@@ -233,7 +236,7 @@ const PlatformPanel = ({
     );
 };
 
-const FeePlanDisplay = ({configuration}: FeePlanDisplayProps) => {
+const FeePlanDisplay = ({configuration, stripeCountry}: FeePlanDisplayProps) => {
     if (!configuration) return null;
 
     return (
@@ -244,6 +247,8 @@ const FeePlanDisplay = ({configuration}: FeePlanDisplayProps) => {
                 {getConfig("VITE_APP_NAME", "Hi.Events")} charges platform fees to maintain and improve our services.
                 These fees are automatically deducted from each transaction.
             </Text>
+
+            <VatNotice stripeCountry={stripeCountry} />
 
             <Card variant={'lightGray'}>
                 <Title order={4}>{configuration.name}</Title>
@@ -724,6 +729,7 @@ const PaymentSettings = () => {
                 <LoadingMask/>
                 {(accountQuery.data) && (
                     <Grid gutter="xl">
+
                         <Grid.Col span={{base: 12, md: 6}}>
                             {accountQuery.isFetched && (
                                 <ConnectStatus account={accountQuery.data}/>
@@ -731,7 +737,26 @@ const PaymentSettings = () => {
                         </Grid.Col>
                         <Grid.Col span={{base: 12, md: 6}}>
                             {accountQuery.data?.configuration && (
-                                <FeePlanDisplay configuration={accountQuery.data.configuration}/>
+                                <FeePlanDisplay
+                                    configuration={accountQuery.data.configuration}
+                                    stripeCountry={
+                                        stripeAccountsQuery.data?.stripe_connect_accounts.find(
+                                            acc => acc.is_setup_complete
+                                        )?.country
+                                    }
+                                />
+                            )}
+                        </Grid.Col>
+                        <Grid.Col span={{base: 12}}>
+                            {accountQuery.data && stripeAccountsQuery.data && (
+                                <VatSettings
+                                    account={accountQuery.data}
+                                    stripeCountry={
+                                        stripeAccountsQuery.data.stripe_connect_accounts.find(
+                                            acc => acc.is_setup_complete
+                                        )?.country
+                                    }
+                                />
                             )}
                         </Grid.Col>
                     </Grid>

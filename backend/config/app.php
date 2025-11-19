@@ -37,6 +37,9 @@ return [
      */
     'homepage_product_quantities_cache_ttl' => env('APP_HOMEPAGE_TICKET_QUANTITIES_CACHE_TTL', 2),
 
+    /**
+     * Frontend URL patterns for various actions. It is unlikely you will need to change these
+     */
     'frontend_urls' => [
         'confirm_email_address' => '/manage/profile/confirm-email-address/%s',
         'reset_password' => '/auth/reset-password/%s',
@@ -50,13 +53,31 @@ return [
         'organizer_order_summary' => '/manage/event/%d/orders#order-%d',
     ],
 
+    /**
+     * Email customization settings
+     */
     'email_logo_url' => env('APP_EMAIL_LOGO_URL'),
     'email_logo_link_url' => env('APP_EMAIL_LOGO_LINK_URL', env('APP_FRONTEND_URL', 'http://localhost')),
     'email_footer_text' => env('APP_EMAIL_FOOTER_TEXT'),
 
+    /**
+     * Default color theme for organizer homepages
+     */
     'organizer_homepage_default_theme' => ColorTheme::MIDNIGHT,
 
+    /**
+     * Path to default event category cover images
+     */
     'event_categories_cover_images_path' => 'event_cover/system-covers',
+
+    /**
+     * Tax Settings - Unlikely you will need these unless EU based and using SAAS mode and charging tax
+     */
+    'tax' => [
+        'eu_vat_handling_enabled' => env('APP_TAX_EU_VAT_HANDLING_ENABLED', env('APP_IS_HI_EVENTS')),
+        'default_vat_rate' => env('APP_TAX_DEFAULT_VAT_RATE', 0.23),
+        'default_vat_country' => env('APP_TAX_DEFAULT_VAT_COUNTRY', 'IE'),
+    ],
 
     /*
     |--------------------------------------------------------------------------

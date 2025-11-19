@@ -21,6 +21,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use TypeError;
 
 /**
  * @template T
@@ -69,7 +70,7 @@ abstract class BaseRepository implements RepositoryInterface
     }
 
     public function paginate(
-        ?int   $limit = null,
+        ?int  $limit = null,
         array $columns = self::DEFAULT_COLUMNS
     ): LengthAwarePaginator
     {
@@ -81,9 +82,9 @@ abstract class BaseRepository implements RepositoryInterface
 
     public function paginateWhere(
         array $where,
-        ?int   $limit = null,
+        ?int  $limit = null,
         array $columns = self::DEFAULT_COLUMNS,
-        ?int   $page = null,
+        ?int  $page = null,
     ): LengthAwarePaginator
     {
         $this->applyConditions($where);
@@ -112,7 +113,7 @@ abstract class BaseRepository implements RepositoryInterface
 
     public function paginateEloquentRelation(
         Relation $relation,
-        ?int      $limit = null,
+        ?int     $limit = null,
         array    $columns = self::DEFAULT_COLUMNS
     ): LengthAwarePaginator
     {
@@ -343,8 +344,35 @@ abstract class BaseRepository implements RepositoryInterface
                 $this->model = $this->model->where($value);
             } elseif (is_array($value)) {
                 [$field, $condition, $val] = $value;
-                $this->model = $this->model->where($field, $condition, $val);
+                $condition = strtolower($condition);
+
+                switch ($condition) {
+                    case 'in':
+                        if (is_array($val)) {
+                            $this->model = $this->model->whereIn($field, $val);
+                        }
+                        break;
+
+                    case 'not in':
+                        if (is_array($val)) {
+                            $this->model = $this->model->whereNotIn($field, $val);
+                        }
+                        break;
+
+                    case 'null':
+                        $this->model = $this->model->whereNull($field);
+                        break;
+
+                    case 'not null':
+                        $this->model = $this->model->whereNotNull($field);
+                        break;
+
+                    default:
+                        $this->model = $this->model->where($field, $condition, $val);
+                        break;
+                }
             } else {
+                // Simple equality condition
                 $this->model = $this->model->where($field, '=', $value);
             }
         }
@@ -377,7 +405,7 @@ abstract class BaseRepository implements RepositoryInterface
 
     protected function handleSingleResult(
         ?BaseModel $model,
-        ?string     $domainObjectOverride = null
+        ?string    $domainObjectOverride = null
     ): ?DomainObjectInterface
     {
         if (!$model) {
@@ -458,9 +486,9 @@ abstract class BaseRepository implements RepositoryInterface
      * @todo use hydrate method from AbstractDomainObject
      */
     private function hydrateDomainObjectFromModel(
-        Model  $model,
+        Model   $model,
         ?string $domainObjectOverride = null,
-        ?array $relationships = null,
+        ?array  $relationships = null,
     ): DomainObjectInterface
     {
         /** @var DomainObjectInterface $object */
@@ -470,7 +498,22 @@ abstract class BaseRepository implements RepositoryInterface
         foreach ($model->attributesToArray() as $attribute => $value) {
             $method = 'set' . ucfirst(Str::camel($attribute));
             if (is_callable(array($object, $method))) {
-                $object->$method($value);
+                try {
+                    $object->$method($value);
+                } catch (TypeError $e) {
+                    throw new TypeError(
+                        sprintf(
+                            'Type error when calling %s::%s with value %s: %s',
+                            get_class($object),
+                            $method,
+                            var_export($value, true),
+                            $e->getMessage()
+                        ),
+                        (int)$e->getCode(),
+                        $e
+                    );
+                }
+
             }
         }
 
