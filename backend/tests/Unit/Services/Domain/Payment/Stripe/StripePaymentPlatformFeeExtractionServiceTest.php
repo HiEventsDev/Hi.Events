@@ -224,6 +224,8 @@ class StripePaymentPlatformFeeExtractionServiceTest extends TestCase
         $order->shouldReceive('getCurrency')->andReturn('gbp');
 
         $stripePayment = m::mock(StripePaymentDomainObject::class);
+        $stripePayment->shouldReceive('getApplicationFeeNet')->andReturn(417);
+        $stripePayment->shouldReceive('getApplicationFeeVat')->andReturn(83);
 
         $balanceTransaction = (object)[
             'id' => 'txn_123',
@@ -312,6 +314,8 @@ class StripePaymentPlatformFeeExtractionServiceTest extends TestCase
         $order->shouldReceive('getCurrency')->andReturn('eur');
 
         $stripePayment = m::mock(StripePaymentDomainObject::class);
+        $stripePayment->shouldReceive('getApplicationFeeNet')->never();
+        $stripePayment->shouldReceive('getApplicationFeeVat')->never();
 
         $balanceTransaction = (object)[
             'id' => 'txn_123',

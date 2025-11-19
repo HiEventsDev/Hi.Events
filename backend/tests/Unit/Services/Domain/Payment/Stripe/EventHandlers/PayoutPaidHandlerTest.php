@@ -24,7 +24,7 @@ class PayoutPaidHandlerTest extends TestCase
     private StripePaymentsRepository $stripePaymentsRepository;
     private StripeClientFactory $stripeClientFactory;
     private LoggerInterface $logger;
-    private $stripeConfigurationService;
+    private StripeConfigurationService $stripeConfigurationService;
     private StripePayoutService $stripePayoutService;
 
     protected function setUp(): void
@@ -125,11 +125,10 @@ class PayoutPaidHandlerTest extends TestCase
 
         $this->stripePaymentsRepository->shouldReceive('updateWhere')
             ->with(
-                m::on(fn($attrs) =>
-                    $attrs[StripePaymentDomainObjectAbstract::PAYOUT_ID] === 'po_123' &&
+                m::on(fn($attrs) => $attrs[StripePaymentDomainObjectAbstract::PAYOUT_ID] === 'po_123' &&
                     $attrs[StripePaymentDomainObjectAbstract::BALANCE_TRANSACTION_ID] === 'txn_123' &&
                     $attrs[StripePaymentDomainObjectAbstract::PAYOUT_STRIPE_FEE] === 50 &&
-                    $attrs[StripePaymentDomainObjectAbstract::PAYOUT_NET_AMOUNT] === 535.0 &&
+                    $attrs[StripePaymentDomainObjectAbstract::PAYOUT_NET_AMOUNT] === 535 &&
                     $attrs[StripePaymentDomainObjectAbstract::PAYOUT_CURRENCY] === 'EUR' &&
                     $attrs[StripePaymentDomainObjectAbstract::PAYOUT_EXCHANGE_RATE] === null
                 ),
@@ -139,11 +138,10 @@ class PayoutPaidHandlerTest extends TestCase
 
         $this->stripePaymentsRepository->shouldReceive('updateWhere')
             ->with(
-                m::on(fn($attrs) =>
-                    $attrs[StripePaymentDomainObjectAbstract::PAYOUT_ID] === 'po_123' &&
+                m::on(fn($attrs) => $attrs[StripePaymentDomainObjectAbstract::PAYOUT_ID] === 'po_123' &&
                     $attrs[StripePaymentDomainObjectAbstract::BALANCE_TRANSACTION_ID] === 'txn_456' &&
                     $attrs[StripePaymentDomainObjectAbstract::PAYOUT_STRIPE_FEE] === 100 &&
-                    $attrs[StripePaymentDomainObjectAbstract::PAYOUT_NET_AMOUNT] === 1070.0 &&
+                    $attrs[StripePaymentDomainObjectAbstract::PAYOUT_NET_AMOUNT] === 1070 &&
                     $attrs[StripePaymentDomainObjectAbstract::PAYOUT_CURRENCY] === 'EUR' &&
                     $attrs[StripePaymentDomainObjectAbstract::PAYOUT_EXCHANGE_RATE] === null
                 ),
@@ -157,7 +155,7 @@ class PayoutPaidHandlerTest extends TestCase
 
         $this->stripePayoutService->shouldReceive('createOrUpdatePayout')
             ->once()
-            ->with(m::on(function($dto) {
+            ->with(m::on(function ($dto) {
                 $this->assertEquals('po_123', $dto->payoutId);
                 return true;
             }));
