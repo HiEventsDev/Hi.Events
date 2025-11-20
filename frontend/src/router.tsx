@@ -161,6 +161,13 @@ export const router: RouteObject[] = [
                     const Users = await import("./components/routes/admin/Users");
                     return {Component: Users.default};
                 }
+            },
+            {
+                path: "events",
+                async lazy() {
+                    const Events = await import("./components/routes/admin/Events");
+                    return {Component: Events.default};
+                }
             }
         ]
     },

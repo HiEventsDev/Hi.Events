@@ -32,7 +32,7 @@ msgstr "„Hier gibt es noch nichts zu sehen“"
 msgid "{0}"
 msgstr "{0}"
 
-#: src/components/common/CheckInStatusModal/index.tsx:144
+#: src/components/common/CheckInStatusModal/index.tsx:145
 msgid "{0} {1}"
 msgstr ""
 
@@ -300,14 +300,15 @@ msgstr "Konten"
 msgid "Action Required: Reconnect Your Stripe Account"
 msgstr "Handlung erforderlich: Verbinden Sie Ihr Stripe-Konto erneut"
 
+#: src/components/common/AdminEventsTable/index.tsx:108
 #: src/components/common/AffiliateTable/index.tsx:167
-#: src/components/common/AttendeeTable/index.tsx:297
+#: src/components/common/AttendeeTable/index.tsx:307
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:267
 #: src/components/common/QuestionsTable/index.tsx:108
 msgid "Actions"
 msgstr "Aktionen"
 
-#: src/components/common/AttendeeTable/index.tsx:321
+#: src/components/common/AttendeeTable/index.tsx:331
 msgid "Activate"
 msgstr "Aktivieren"
 
@@ -452,7 +453,7 @@ msgid "Admin"
 msgstr "Administrator"
 
 #: src/components/common/GlobalMenu/index.tsx:61
-#: src/components/layouts/Admin/index.tsx:21
+#: src/components/layouts/Admin/index.tsx:22
 #: src/components/routes/admin/Dashboard/index.tsx:42
 msgid "Admin Dashboard"
 msgstr "Admin Dashboard"
@@ -650,7 +651,7 @@ msgstr "Veranstaltung archivieren"
 msgid "Archived"
 msgstr "Archiviert"
 
-#: src/components/common/AttendeeTable/index.tsx:81
+#: src/components/common/AttendeeTable/index.tsx:85
 msgid "Are you sure you want to activate this attendee?"
 msgstr "Möchten Sie diesen Teilnehmer wirklich aktivieren?"
 
@@ -658,7 +659,7 @@ msgstr "Möchten Sie diesen Teilnehmer wirklich aktivieren?"
 msgid "Are you sure you want to archive this event?"
 msgstr "Sind Sie sicher, dass Sie diese Veranstaltung archivieren möchten?"
 
-#: src/components/common/AttendeeTable/index.tsx:82
+#: src/components/common/AttendeeTable/index.tsx:86
 msgid "Are you sure you want to cancel this attendee? This will void their ticket"
 msgstr "Möchten Sie diesen Teilnehmer wirklich stornieren? Dadurch wird sein Ticket ungültig."
 
@@ -809,7 +810,7 @@ msgstr "Teilnehmer-Ticket"
 msgid "Attendee Updated"
 msgstr "Teilnehmer aktualisiert"
 
-#: src/components/common/CheckInStatusModal/index.tsx:100
+#: src/components/common/CheckInStatusModal/index.tsx:101
 msgid "Attendee's ticket not included in this list"
 msgstr "Ticket des Teilnehmers nicht in dieser Liste enthalten"
 
@@ -834,6 +835,10 @@ msgstr "Registrierte Teilnehmer"
 #: src/components/modals/SendMessageModal/index.tsx:178
 msgid "Attendees with a specific ticket"
 msgstr "Teilnehmer mit einem bestimmten Ticket"
+
+#: src/components/common/AdminEventsTable/index.tsx:134
+msgid "Attendees:"
+msgstr "Teilnehmer:"
 
 #: src/components/common/WidgetEditor/index.tsx:233
 msgid "Auto Resize"
@@ -977,7 +982,7 @@ msgstr "Die Kameraberechtigung wurde verweigert. <0>Fordern Sie die Berechtigung
 msgid "Camera Scanner"
 msgstr "Kamera-Scanner"
 
-#: src/components/common/AttendeeTable/index.tsx:321
+#: src/components/common/AttendeeTable/index.tsx:331
 #: src/components/common/CheckIn/CheckInOptionsModal.tsx:59
 #: src/components/common/CheckIn/ScannerSelectionModal.tsx:57
 #: src/components/common/ContactOrganizerModal/index.tsx:104
@@ -1110,10 +1115,6 @@ msgstr "Überprüfen Sie Ihre E-Mail"
 msgid "Check-in"
 msgstr "Einchecken"
 
-#: src/components/common/AttendeeTable/index.tsx:137
-msgid "Check-In"
-msgstr "Check-In"
-
 #: src/components/forms/WebhookForm/index.tsx:100
 msgid "Check-in Created"
 msgstr "Check-in erstellt"
@@ -1152,8 +1153,9 @@ msgstr "Einchecklisten"
 msgid "Check-in lists let you control entry across days, areas, or ticket types. You can share a secure check-in link with staff — no account required."
 msgstr "Check-In-Listen ermöglichen die Kontrolle des Einlasses über Tage, Bereiche oder Tickettypen hinweg. Sie können einen sicheren Check-In-Link mit dem Personal teilen – kein Konto erforderlich."
 
-#: src/components/common/CheckInStatusModal/index.tsx:39
-#: src/components/common/CheckInStatusModal/index.tsx:135
+#: src/components/common/AttendeeTable/index.tsx:146
+#: src/components/common/CheckInStatusModal/index.tsx:38
+#: src/components/common/CheckInStatusModal/index.tsx:136
 msgid "Check-In Status"
 msgstr "Check-In-Status"
 
@@ -1173,11 +1175,11 @@ msgstr "Kontrollkästchenoptionen ermöglichen Mehrfachauswahl"
 msgid "Checkboxes"
 msgstr "Kontrollkästchen"
 
-#: src/components/common/CheckInStatusModal/index.tsx:111
+#: src/components/common/CheckInStatusModal/index.tsx:112
 msgid "Checked In"
 msgstr "Eingecheckt"
 
-#: src/components/common/AttendeeTable/index.tsx:235
+#: src/components/common/AttendeeTable/index.tsx:245
 msgid "Checked into {checkInCount} list(s)"
 msgstr ""
 
@@ -1231,7 +1233,7 @@ msgstr "Suchtext löschen"
 msgid "Click to copy"
 msgstr "Zum Kopieren klicken"
 
-#: src/components/common/AttendeeTable/index.tsx:273
+#: src/components/common/AttendeeTable/index.tsx:283
 msgid "Click to view notes"
 msgstr "Klicken, um Notizen anzuzeigen"
 
@@ -1576,7 +1578,7 @@ msgstr "Code kopieren"
 msgid "Copy details to all attendees"
 msgstr "Details auf alle Teilnehmer anwenden"
 
-#: src/components/common/AttendeeTable/index.tsx:198
+#: src/components/common/AttendeeTable/index.tsx:207
 msgid "Copy Email"
 msgstr "E-Mail Kopieren"
 
@@ -1919,7 +1921,7 @@ msgstr "Aufschlüsselung der täglichen Verkäufe, Steuern und Gebühren"
 msgid "Danger zone"
 msgstr "Gefahrenzone"
 
-#: src/components/common/AttendeeTable/index.tsx:318
+#: src/components/common/AttendeeTable/index.tsx:328
 msgid "Danger Zone"
 msgstr "Gefahrenzone"
 
@@ -2261,12 +2263,12 @@ msgstr "z.B. 2,50 für 2,50 $"
 msgid "eg. 23.5 for 23.5%"
 msgstr "z.B. 23,5 für 23,5 %"
 
-#: src/components/common/CheckInStatusModal/index.tsx:163
+#: src/components/common/CheckInStatusModal/index.tsx:164
 msgid "Eligible Check-In Lists"
 msgstr "Berechtigte Check-In-Listen"
 
 #: src/components/common/AttendeeDetails/index.tsx:22
-#: src/components/common/AttendeeTable/index.tsx:133
+#: src/components/common/AttendeeTable/index.tsx:142
 #: src/components/common/OrderDetails/index.tsx:31
 #: src/components/forms/AffiliateForm/index.tsx:89
 #: src/components/modals/EditUserModal/index.tsx:80
@@ -2303,7 +2305,7 @@ msgstr "E-Mail-Adresse"
 msgid "Email Address"
 msgstr "E-Mail-Adresse"
 
-#: src/components/common/AttendeeTable/index.tsx:117
+#: src/components/common/AttendeeTable/index.tsx:121
 msgid "Email address copied to clipboard"
 msgstr "E-Mail-Adresse in Zwischenablage kopiert"
 
@@ -2382,10 +2384,11 @@ msgstr "Diese Vorlage für das Senden von E-Mails aktivieren"
 msgid "Enabled"
 msgstr "Aktiviert"
 
+#: src/components/common/AdminEventsTable/index.tsx:103
 #: src/components/modals/DuplicateEventModal/index.tsx:129
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:107
 msgid "End Date"
-msgstr "Endtermin"
+msgstr "Enddatum"
 
 #: src/components/modals/CreateEventModal/index.tsx:232
 msgid "End Date & Time (optional)"
@@ -2605,6 +2608,7 @@ msgstr "Veranstaltungszeitzone"
 msgid "Event Timezone"
 msgstr "Veranstaltungszeitzone"
 
+#: src/components/common/AdminEventsTable/index.tsx:82
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:34
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:68
 msgid "Event Title"
@@ -2621,8 +2625,10 @@ msgid "Event Venue"
 msgstr "Veranstaltungsort"
 
 #: src/components/common/AdminAccountsTable/index.tsx:63
+#: src/components/layouts/Admin/index.tsx:16
 #: src/components/layouts/OrganizerLayout/index.tsx:73
 #: src/components/layouts/OrganizerLayout/index.tsx:133
+#: src/components/routes/admin/Events/index.tsx:77
 #: src/components/routes/organizer/Events/index.tsx:43
 msgid "Events"
 msgstr "Veranstaltungen"
@@ -2689,7 +2695,7 @@ msgstr "Facebook"
 msgid "Failed to abandon order. Please try again."
 msgstr "Bestellung konnte nicht abgebrochen werden. Bitte versuchen Sie es erneut."
 
-#: src/components/common/AttendeeTable/index.tsx:102
+#: src/components/common/AttendeeTable/index.tsx:106
 msgid "Failed to cancel attendee"
 msgstr "Teilnehmer konnte nicht abgesagt werden"
 
@@ -2740,7 +2746,7 @@ msgstr "Laden der Eincheckliste fehlgeschlagen"
 msgid "Failed to load Webhook"
 msgstr "Webhook konnte nicht geladen werden"
 
-#: src/components/common/AttendeeTable/index.tsx:55
+#: src/components/common/AttendeeTable/index.tsx:59
 msgid "Failed to resend ticket email"
 msgstr "Ticket-E-Mail konnte nicht erneut gesendet werden"
 
@@ -2768,6 +2774,7 @@ msgid "Failed to start export job"
 msgstr "Exportauftrag konnte nicht gestartet werden"
 
 #: src/components/routes/admin/Accounts/index.tsx:48
+#: src/components/routes/admin/Events/index.tsx:68
 #: src/components/routes/admin/Users/index.tsx:48
 msgid "Failed to start impersonation. Please try again."
 msgstr "Fehler beim Starten der Identitätswechsel. Bitte versuchen Sie es erneut."
@@ -3013,7 +3020,7 @@ msgstr "Bruttoumsatz"
 #: src/components/routes/event/EventDashboard/index.tsx:305
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:119
 msgid "Gross Sales"
-msgstr "Bruttoumsatz"
+msgstr "Bruttoverkäufe"
 
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:281
 msgid "Guests"
@@ -3244,7 +3251,12 @@ msgstr "Bilder"
 msgid "Impersonate"
 msgstr "Identität annehmen"
 
+#: src/components/common/AdminEventsTable/index.tsx:162
+msgid "Impersonate User"
+msgstr "Benutzer verkörpern"
+
 #: src/components/routes/admin/Accounts/index.tsx:38
+#: src/components/routes/admin/Events/index.tsx:58
 #: src/components/routes/admin/Users/index.tsx:38
 msgid "Impersonation started"
 msgstr "Identitätswechsel gestartet"
@@ -3602,7 +3614,7 @@ msgstr "Machen Sie Ihre Veranstaltung live"
 msgid "Manage"
 msgstr "Verwalten"
 
-#: src/components/common/AttendeeTable/index.tsx:300
+#: src/components/common/AttendeeTable/index.tsx:310
 msgid "Manage attendee"
 msgstr "Teilnehmer verwalten"
 
@@ -3650,7 +3662,7 @@ msgstr "Verwalten Sie Ihre Benutzer und deren Berechtigungen"
 msgid "Mandatory questions must be answered before the customer can checkout."
 msgstr "Bevor der Kunde zur Kasse gehen kann, müssen obligatorische Fragen beantwortet werden."
 
-#: src/components/common/AttendeeTable/index.tsx:72
+#: src/components/common/AttendeeTable/index.tsx:76
 msgid "Manually add an Attendee"
 msgstr "Einen Teilnehmer manuell hinzufügen"
 
@@ -3671,12 +3683,12 @@ msgstr "Match Your Brand"
 msgid "Maximum Per Order"
 msgstr "Maximal pro Bestellung"
 
-#: src/components/common/AttendeeTable/index.tsx:189
+#: src/components/common/AttendeeTable/index.tsx:198
 #: src/components/common/ContactOrganizerModal/index.tsx:88
 msgid "Message"
 msgstr "Nachricht"
 
-#: src/components/common/AttendeeTable/index.tsx:305
+#: src/components/common/AttendeeTable/index.tsx:315
 msgid "Message attendee"
 msgstr "Nachricht an Teilnehmer"
 
@@ -3780,7 +3792,7 @@ msgid "Nam placerat elementum..."
 msgstr "Ich habe das Element platziert …"
 
 #: src/components/common/AttendeeDetails/index.tsx:14
-#: src/components/common/AttendeeTable/index.tsx:132
+#: src/components/common/AttendeeTable/index.tsx:141
 #: src/components/common/OrderDetails/index.tsx:23
 #: src/components/forms/AffiliateForm/index.tsx:81
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:37
@@ -3854,7 +3866,7 @@ msgstr "Für diese Bestellung wurden keine Teilnehmer gefunden."
 msgid "No attendees have been added to this order."
 msgstr "Zu dieser Bestellung wurden keine Teilnehmer hinzugefügt."
 
-#: src/components/common/AttendeeTable/index.tsx:61
+#: src/components/common/AttendeeTable/index.tsx:65
 msgid "No Attendees to show"
 msgstr "Keine Teilnehmer zum Anzeigen"
 
@@ -3866,7 +3878,7 @@ msgstr "Keine Kapazitätszuweisungen"
 msgid "No Check-In Lists"
 msgstr "Keine Einchecklisten"
 
-#: src/components/common/CheckInStatusModal/index.tsx:155
+#: src/components/common/CheckInStatusModal/index.tsx:156
 msgid "No check-in lists available for this event."
 msgstr "Keine Check-In-Listen für diese Veranstaltung verfügbar."
 
@@ -3889,6 +3901,10 @@ msgstr "Kein Rabatt"
 #: src/components/common/NoEventsBlankSlate/index.tsx:20
 msgid "No ended events to show."
 msgstr "Keine beendeten Veranstaltungen anzuzeigen."
+
+#: src/components/common/AdminEventsTable/index.tsx:22
+msgid "No events found"
+msgstr "Keine Events gefunden"
 
 #: src/components/routes/admin/Dashboard/index.tsx:168
 msgid "No events starting in the next 24 hours"
@@ -4023,15 +4039,15 @@ msgstr "Keiner"
 msgid "Not available"
 msgstr "Nicht verfügbar"
 
-#: src/components/common/AttendeeTable/index.tsx:236
+#: src/components/common/AttendeeTable/index.tsx:246
 msgid "Not checked in"
 msgstr "Nicht eingecheckt"
 
-#: src/components/common/CheckInStatusModal/index.tsx:111
+#: src/components/common/CheckInStatusModal/index.tsx:112
 msgid "Not Checked In"
 msgstr "Nicht Eingecheckt"
 
-#: src/components/common/CheckInStatusModal/index.tsx:119
+#: src/components/common/CheckInStatusModal/index.tsx:120
 msgid "Not Eligible"
 msgstr "Nicht Berechtigt"
 
@@ -4194,7 +4210,7 @@ msgstr "Optionen"
 msgid "or"
 msgstr "oder"
 
-#: src/components/common/AttendeeTable/index.tsx:134
+#: src/components/common/AttendeeTable/index.tsx:143
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:21
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:22
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:23
@@ -4239,7 +4255,7 @@ msgstr "Bestellwährung"
 msgid "Order Date"
 msgstr "Auftragsdatum"
 
-#: src/components/common/AttendeeTable/index.tsx:209
+#: src/components/common/AttendeeTable/index.tsx:218
 msgid "Order details"
 msgstr "Bestelldetails"
 
@@ -4367,6 +4383,10 @@ msgstr "Aufträge"
 msgid "Orders Exported"
 msgstr "Bestellungen exportiert"
 
+#: src/components/common/AdminEventsTable/index.tsx:138
+msgid "Orders:"
+msgstr "Bestellungen:"
+
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:44
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:45
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:77
@@ -4387,6 +4407,7 @@ msgstr "Organisationsdetails"
 msgid "Organization Name"
 msgstr "Organisationsname"
 
+#: src/components/common/AdminEventsTable/index.tsx:85
 #: src/components/common/AttendeeTicket/index.tsx:69
 #: src/components/modals/EditUserModal/index.tsx:55
 #: src/components/modals/InviteUserModal/index.tsx:47
@@ -4458,7 +4479,7 @@ msgstr "Organisatoren können nur Veranstaltungen und Produkte verwalten. Sie k�
 msgid "Other"
 msgstr "Sonstiges"
 
-#: src/components/common/CheckInStatusModal/index.tsx:172
+#: src/components/common/CheckInStatusModal/index.tsx:173
 msgid "Other Lists (Ticket Not Included)"
 msgstr "Andere Listen (Ticket Nicht Enthalten)"
 
@@ -5135,7 +5156,7 @@ msgstr "Rückerstattung"
 msgid "Register"
 msgstr "Registrieren"
 
-#: src/components/common/AttendeeTable/index.tsx:208
+#: src/components/common/AttendeeTable/index.tsx:217
 msgid "Registered: {0}"
 msgstr ""
 
@@ -5189,7 +5210,7 @@ msgstr "Einladung erneut versenden"
 msgid "Resend order email"
 msgstr "Bestell-E-Mail erneut senden"
 
-#: src/components/common/AttendeeTable/index.tsx:310
+#: src/components/common/AttendeeTable/index.tsx:320
 msgid "Resend ticket email"
 msgstr "Ticket-E-Mail erneut senden"
 
@@ -5270,6 +5291,10 @@ msgstr "Verkauf beendet"
 msgid "Sales start"
 msgstr "Verkaufsstart"
 
+#: src/components/common/AdminEventsTable/index.tsx:130
+msgid "Sales:"
+msgstr "Verkäufe:"
+
 #: src/components/routes/event/TicketDesigner/TicketDesignerPrint.tsx:80
 #: src/components/routes/event/TicketDesigner/TicketPreview.tsx:88
 msgid "Sample Venue"
@@ -5346,6 +5371,10 @@ msgstr "Suche nach Teilnehmername, E-Mail oder Bestellnummer ..."
 #: src/components/routes/organizer/Events/index.tsx:47
 msgid "Search by event name..."
 msgstr "Suche nach Veranstaltungsnamen..."
+
+#: src/components/routes/admin/Events/index.tsx:80
+msgid "Search by event title or organizer..."
+msgstr "Suche nach Veranstaltungstitel oder Veranstalter..."
 
 #: src/components/routes/admin/Users/index.tsx:60
 msgid "Search by name, email, or account..."
@@ -5805,6 +5834,7 @@ msgstr "Sport"
 msgid "Standard product with a fixed price"
 msgstr "Standardprodukt mit festem Preis"
 
+#: src/components/common/AdminEventsTable/index.tsx:93
 #: src/components/modals/DuplicateEventModal/index.tsx:124
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:102
 msgid "Start Date"
@@ -5835,8 +5865,13 @@ msgstr "Startzeit der Veranstaltung"
 msgid "State or Region"
 msgstr "Staat oder Region"
 
+#: src/components/common/AdminEventsTable/index.tsx:106
+msgid "Statistics"
+msgstr "Statistiken"
+
+#: src/components/common/AdminEventsTable/index.tsx:107
 #: src/components/common/AffiliateTable/index.tsx:83
-#: src/components/common/AttendeeTable/index.tsx:136
+#: src/components/common/AttendeeTable/index.tsx:145
 #: src/components/common/OrderDetails/index.tsx:51
 #: src/components/common/OrdersTable/index.tsx:209
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:222
@@ -5905,7 +5940,7 @@ msgstr "Erfolg"
 msgid "Success! {0} will receive an email shortly."
 msgstr "Erfolgreich! {0} erhält in Kürze eine E-Mail."
 
-#: src/components/common/AttendeeTable/index.tsx:95
+#: src/components/common/AttendeeTable/index.tsx:99
 msgid "Successfully {0} attendee"
 msgstr "Erfolgreich {0} Teilnehmer"
 
@@ -6458,11 +6493,11 @@ msgstr "Dies wird für Benachrichtigungen und die Kommunikation mit Ihren Nutzer
 msgid "This will not be visible to customers, but helps you identify the affiliate."
 msgstr "Dies ist für Kunden nicht sichtbar, hilft Ihnen aber, den Partner zu identifizieren."
 
-#: src/components/common/AttendeeTable/index.tsx:321
+#: src/components/common/AttendeeTable/index.tsx:331
 msgid "ticket"
 msgstr "Fahrkarte"
 
-#: src/components/common/AttendeeTable/index.tsx:135
+#: src/components/common/AttendeeTable/index.tsx:144
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:58
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:59
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:60
@@ -6484,7 +6519,7 @@ msgstr "Ticketdesign"
 msgid "Ticket design saved successfully"
 msgstr "Ticketdesign erfolgreich gespeichert"
 
-#: src/components/common/AttendeeTable/index.tsx:54
+#: src/components/common/AttendeeTable/index.tsx:58
 msgid "Ticket email has been resent to attendee"
 msgstr "Die Ticket-E-Mail wurde erneut an den Teilnehmer gesendet."
 
@@ -6961,13 +6996,14 @@ msgstr "Antworten anzeigen"
 msgid "View Attendee Details"
 msgstr "Teilnehmerdetails anzeigen"
 
-#: src/components/common/AttendeeTable/index.tsx:244
+#: src/components/common/AttendeeTable/index.tsx:254
 msgid "View check-in status"
 msgstr "Check-In-Status anzeigen"
 
+#: src/components/common/AdminEventsTable/index.tsx:153
 #: src/components/routes/admin/Dashboard/index.tsx:157
 msgid "View Event"
-msgstr ""
+msgstr "Veranstaltung ansehen"
 
 #: src/components/common/EventCard/index.tsx:81
 msgid "View event page"
@@ -6985,7 +7021,7 @@ msgstr "Protokolle anzeigen"
 msgid "View map"
 msgstr "Ansichts Karte"
 
-#: src/components/common/AttendeeTable/index.tsx:287
+#: src/components/common/AttendeeTable/index.tsx:297
 msgid "View notes"
 msgstr "Notizen anzeigen"
 
@@ -7478,7 +7514,7 @@ msgstr "Ihre Partner wurden erfolgreich exportiert."
 msgid "Your attendees have been exported successfully."
 msgstr "Deine Teilnehmer wurden erfolgreich exportiert."
 
-#: src/components/common/AttendeeTable/index.tsx:66
+#: src/components/common/AttendeeTable/index.tsx:70
 msgid "Your attendees will appear here once they have registered for your event. You can also manually add attendees."
 msgstr "Ihre Teilnehmer werden hier angezeigt, sobald sie sich für Ihre Veranstaltung registriert haben. Sie können Teilnehmer auch manuell hinzufügen."
 
