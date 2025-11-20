@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Group, Modal, MultiSelect, Stack, Text, TextInput} from '@mantine/core';
+import {Button, Group, Modal, MultiSelect, Select, Stack, Text, TextInput} from '@mantine/core';
 import {useDisclosure} from '@mantine/hooks';
 import {IconFilter} from '@tabler/icons-react';
 import {t} from '@lingui/macro';
@@ -25,7 +25,7 @@ interface FilterModalProps {
 
 const normalizeFilterValue = (value: any, type: string): any => {
     if (value === undefined || value === null) {
-        return [];
+        return type === 'multi-select' ? [] : null;
     }
 
     switch (type) {
@@ -46,6 +46,18 @@ const normalizeFilterValue = (value: any, type: string): any => {
             }
 
             return [];
+        }
+
+        case 'single-select': {
+            if (Array.isArray(value)) {
+                return value[0] || null;
+            }
+
+            if (value?.value) {
+                return typeof value.value === 'string' ? value.value : null;
+            }
+
+            return typeof value === 'string' ? value : null;
         }
 
         case 'text': {
@@ -154,6 +166,25 @@ export const FilterModal: React.FC<FilterModalProps> = ({
                         value={normalizedValue}
                         onChange={(value) => {
                             handleFilterChange(filter.field, value || []);
+                        }}
+                        clearable
+                        searchable
+                        w="100%"
+                        style={{marginBottom: 0}}
+                    />
+                );
+            }
+
+            case 'single-select': {
+                return (
+                    <Select
+                        placeholder={t`Select ${filter.label.toLowerCase()}`}
+                        key={filter.field}
+                        label={filter.label}
+                        data={filter.options || []}
+                        value={normalizedValue}
+                        onChange={(value) => {
+                            handleFilterChange(filter.field, value || null);
                         }}
                         clearable
                         searchable
