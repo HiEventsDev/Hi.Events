@@ -22,10 +22,9 @@ export const CheckInStatusModal = ({
     isOpen,
     onClose
 }: CheckInStatusModalProps) => {
-    const {data: checkInListsResponse, isLoading} = useGetEventCheckInLists(
-        eventId,
-        {pageNumber: 1, perPage: 100}
-    );
+    const {data: checkInListsResponse, isLoading, ...rest} = useGetEventCheckInLists(eventId);
+
+    console.log('CheckInStatusModal - checkInListsResponse:', checkInListsResponse, 'isLoading:', isLoading, 'rest:', rest);
 
     if (isLoading) {
         return (
@@ -42,7 +41,9 @@ export const CheckInStatusModal = ({
                         <Modal.CloseButton/>
                     </Modal.Header>
                     <Modal.Body>
-                        <LoadingMask/>
+                        <div style={{position: 'relative', minHeight: '200px'}}>
+                            <LoadingMask/>
+                        </div>
                     </Modal.Body>
                 </Modal.Content>
             </Modal.Root>
