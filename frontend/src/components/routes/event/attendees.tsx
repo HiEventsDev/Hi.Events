@@ -10,7 +10,7 @@ import {IconDownload, IconPlus} from "@tabler/icons-react";
 import {ToolBar} from "../../common/ToolBar";
 import {TableSkeleton} from "../../common/TableSkeleton";
 import {useFilterQueryParamSync} from "../../../hooks/useFilterQueryParamSync.ts";
-import {IdParam, QueryFilters, QueryFilterOperator} from "../../../types.ts";
+import {IdParam, QueryFilters, QueryFilterOperator, ProductType} from "../../../types.ts";
 import {useDisclosure} from "@mantine/hooks";
 import {CreateAttendeeModal} from "../../modals/CreateAttendeeModal";
 import {downloadBinary} from "../../../utilites/download.ts";
@@ -38,7 +38,9 @@ const Attendees = () => {
     const [downloadPending, setDownloadPending] = useState(false);
     const {data: event} = useGetEvent(eventId);
 
-    const productOptions = getProductsFromEvent(event)?.flatMap(product => {
+    const productOptions = getProductsFromEvent(event)
+        ?.filter(product => product.product_type === ProductType.Ticket)
+        ?.flatMap(product => {
         const options = [];
 
         options.push({

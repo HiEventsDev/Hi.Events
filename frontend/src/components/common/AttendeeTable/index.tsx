@@ -1,9 +1,19 @@
-import {Anchor, Avatar, Badge, Button, Table as MantineTable, Tooltip, ActionIcon, Popover, Group} from '@mantine/core';
-import {Attendee, MessageType} from "../../../types.ts";
-import {IconMailForward, IconPlus, IconSend, IconTrash, IconUserCog, IconQrcode, IconNote, IconCopy} from "@tabler/icons-react";
+import {ActionIcon, Anchor, Avatar, Badge, Button, Group, Popover, Table as MantineTable, Tooltip} from '@mantine/core';
+import {Attendee, IdParam, MessageType} from "../../../types.ts";
+import {
+    IconCopy,
+    IconMailForward,
+    IconNote,
+    IconPlus,
+    IconQrcode,
+    IconQrcodeOff,
+    IconSend,
+    IconTrash,
+    IconUserCog
+} from "@tabler/icons-react";
 import {getInitials, getProductFromEvent} from "../../../utilites/helpers.ts";
 import {Table, TableHead} from "../Table";
-import {useDisclosure, useClipboard} from "@mantine/hooks";
+import {useClipboard, useDisclosure} from "@mantine/hooks";
 import {SendMessageModal} from "../../modals/SendMessageModal";
 import {useState} from "react";
 import {NoResultsSplash} from "../NoResultsSplash";
@@ -22,7 +32,6 @@ import {ActionMenu} from '../ActionMenu';
 import {AttendeeStatusBadge} from "../AttendeeStatusBadge";
 import {CheckInStatusModal} from "../CheckInStatusModal";
 import {prettyDate} from "../../../utilites/dates.ts";
-import {IdParam} from "../../../types.ts";
 
 interface AttendeeTableProps {
     attendees: Attendee[];
@@ -116,7 +125,7 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
         return getCheckInCount(attendee) > 0;
     };
 
-    const handleCopyEmail = (email: string, attendeeId: number | undefined) => {
+    const handleCopyEmail = (email: string) => {
         clipboard.copy(email);
         showSuccess(t`Email address copied to clipboard`);
         setEmailPopoverId(null);
@@ -202,7 +211,7 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
                                                     variant="light"
                                                     color="gray"
                                                     leftSection={<IconCopy size={16}/>}
-                                                    onClick={() => handleCopyEmail(attendee.email, attendee.id)}
+                                                    onClick={() => handleCopyEmail(attendee.email)}
                                                 >
                                                     {t`Copy Email`}
                                                 </Button>
@@ -253,7 +262,8 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
                                             onClick={() => handleModalClick(attendee, checkInModal)}
                                             aria-label={t`View check-in status`}
                                         >
-                                            <IconQrcode size={18}/>
+                                            {!hasChecked && <IconQrcodeOff size={18}/>}
+                                            {hasChecked && <IconQrcode size={18}/>}
                                             {hasChecked && (
                                                 <Badge
                                                     size="xs"
