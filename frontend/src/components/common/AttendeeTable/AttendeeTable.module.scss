@@ -3,13 +3,21 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
+}
+
+.nameRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .attendeeName {
+  font-size: 15px;
   font-weight: 600;
   line-height: 1.3;
   text-decoration: none;
+  color: var(--mantine-color-text);
 
   &:hover {
     text-decoration: underline;
@@ -17,30 +25,98 @@
 }
 
 .attendeeId {
-  font-size: 0.85rem;
+  font-size: 12px;
   color: var(--mantine-color-dimmed);
+  font-family: 'Courier New', monospace;
   line-height: 1.3;
 }
 
+.emailRow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .attendeeEmail {
-  font-size: 0.85rem;
+  font-size: 13px;
   line-height: 1.3;
+  color: var(--mantine-color-dimmed);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 250px;
+}
+
+.emailActions {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.actionIcon {
+  flex-shrink: 0;
 }
 
 .orderTicketContainer {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
 }
 
 .ticketName {
-  font-size: 0.85rem;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--mantine-color-text);
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.orderId {
+  font-size: 11px;
+  color: var(--mantine-color-dimmed);
+  font-family: 'Courier New', monospace;
+  line-height: 1.3;
+
+  :hover {
+    text-decoration: underline;
+  }
+}
+
+.registrationDate {
+  font-size: 12px;
   color: var(--mantine-color-dimmed);
   line-height: 1.3;
 }
 
-.registrationDate {
-  font-size: 0.75rem;
-  color: var(--mantine-color-dimmed);
-  line-height: 1.3;
+.checkInButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: 1.5px solid var(--mantine-color-default-border);
+  border-radius: 8px;
+  background: var(--mantine-color-body);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+
+  &.checkedIn {
+    border-color: var(--mantine-color-green-6);
+    background: var(--mantine-color-green-0);
+    color: var(--mantine-color-green-9);
+  }
+
+  &.notCheckedIn {
+    color: var(--mantine-color-dimmed);
+  }
+}
+
+.actionsMenu {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }

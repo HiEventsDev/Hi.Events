@@ -1,12 +1,12 @@
-import {ActionIcon, Anchor, Avatar, Badge, Button, Group, Popover, Tooltip} from '@mantine/core';
+import {ActionIcon, Anchor, Avatar, Button, Group, Popover, Tooltip} from '@mantine/core';
 import {Attendee, IdParam, MessageType} from "../../../types.ts";
 import {
+    IconCheck,
+    IconClipboardList,
     IconCopy,
     IconMailForward,
     IconNote,
     IconPlus,
-    IconQrcode,
-    IconQrcodeOff,
     IconSend,
     IconTrash,
     IconUserCog
@@ -157,24 +157,26 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
                     enableHiding: false,
                     cell: (info: CellContext<Attendee, unknown>) => (
                         <Group gap="sm" wrap="nowrap">
-                            <Avatar size={40}>
+                            <Avatar size={44} radius={10} color="primary" variant="light">
                                 {getInitials(info.row.original.first_name + ' ' + info.row.original.last_name)}
                             </Avatar>
                             <div className={classes.attendeeDetails}>
-                                <Anchor
-                                    className={classes.attendeeName}
-                                    onClick={() => handleModalClick(info.row.original, viewModalOpen)}
-                                    style={{cursor: 'pointer'}}
-                                >
-                                    <Truncate
-                                        length={30}
-                                        text={info.row.original.first_name + ' ' + info.row.original.last_name}
-                                    />
-                                </Anchor>
-                                <div className={classes.attendeeId}>
-                                    {info.row.original.public_id}
+                                <div className={classes.nameRow}>
+                                    <Anchor
+                                        className={classes.attendeeName}
+                                        onClick={() => handleModalClick(info.row.original, viewModalOpen)}
+                                        style={{cursor: 'pointer'}}
+                                    >
+                                        <Truncate
+                                            length={30}
+                                            text={info.row.original.first_name + ' ' + info.row.original.last_name}
+                                        />
+                                    </Anchor>
+                                    <div className={classes.attendeeId}>
+                                        {info.row.original.public_id}
+                                    </div>
                                 </div>
-                                <Group gap={6} wrap="nowrap">
+                                <div className={classes.emailRow}>
                                     <Popover
                                         opened={emailPopoverId === info.row.original.id}
                                         onChange={(opened) => {
@@ -191,7 +193,7 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
                                                 className={classes.attendeeEmail}
                                                 style={{cursor: 'pointer'}}
                                             >
-                                                <Truncate length={30} text={info.row.original.email}/>
+                                                {info.row.original.email}
                                             </Anchor>
                                         </Popover.Target>
                                         <Popover.Dropdown>
@@ -216,44 +218,39 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
                                             </Group>
                                         </Popover.Dropdown>
                                     </Popover>
-                                    <ActionIcon
-                                        size="xs"
-                                        variant="subtle"
-                                        onClick={() => handleMessageFromEmail(info.row.original)}
-                                    >
-                                        <IconSend size={14}/>
-                                    </ActionIcon>
-                                    {info.row.original.notes && (
-                                        <Tooltip
-                                            label={
-                                                info.row.original.notes.length > 100
-                                                    ? t`Click to view notes`
-                                                    : info.row.original.notes
-                                            }
-                                            multiline
-                                            w={info.row.original.notes.length > 100 ? 'auto' : 300}
-                                            withArrow
-                                        >
-                                            <ActionIcon
-                                                size="xs"
-                                                variant="subtle"
-                                                color="gray"
-                                                onClick={() => {
-                                                    if (info.row.original.notes && info.row.original.notes.length > 100) {
-                                                        handleModalClick(info.row.original, viewModalOpen);
-                                                    }
-                                                }}
+                                    <div className={classes.emailActions}>
+                                        {info.row.original.notes && (
+                                            <Tooltip
+                                                label={
+                                                    info.row.original.notes.length > 100
+                                                        ? t`Click to view notes`
+                                                        : info.row.original.notes
+                                                }
+                                                multiline
+                                                w={info.row.original.notes.length > 100 ? 'auto' : 300}
+                                                withArrow
                                             >
-                                                <IconNote size={14}/>
-                                            </ActionIcon>
-                                        </Tooltip>
-                                    )}
-                                </Group>
+                                                <ActionIcon
+                                                    className={classes.actionIcon}
+                                                    size="xs"
+                                                    variant="subtle"
+                                                    color="green"
+                                                    onClick={() => {
+                                                        if (info.row.original.notes && info.row.original.notes.length > 100) {
+                                                            handleModalClick(info.row.original, viewModalOpen);
+                                                        }
+                                                    }}
+                                                >
+                                                    <IconNote size={16}/>
+                                                </ActionIcon>
+                                            </Tooltip>
+                                        )}
+                                    </div>
+                                </div>
                             </div>
                         </Group>
                     ),
                     meta: {
-                        sticky: 'left',
                         headerStyle: {minWidth: 300},
                     },
                 },
@@ -261,30 +258,32 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
                     id: 'orderAndTicket',
                     header: t`Order & Ticket`,
                     enableHiding: true,
-                    cell: (info: CellContext<Attendee, unknown>) => (
-                        <div className={classes.orderTicketContainer}>
-                            <Anchor
-                                onClick={() => handleOrderClick(info.row.original.order_id)}
-                                style={{cursor: 'pointer', display: 'inline-block'}}
-                            >
-                                <Badge variant={'outline'} style={{cursor: 'pointer'}}>
-                                    {info.row.original.order?.public_id}
-                                </Badge>
-                            </Anchor>
-
-                            <div className={classes.ticketName}>
-                                <Truncate
-                                    text={getProductFromEvent(info.row.original.product_id, event)?.title}
-                                    length={25}
-                                />
-                            </div>
-                            {info.row.original.order?.created_at && event?.timezone && (
-                                <div className={classes.registrationDate}>
-                                    {prettyDate(info.row.original.order.created_at, event.timezone)}
+                    cell: (info: CellContext<Attendee, unknown>) => {
+                        const ticketTitle = getProductFromEvent(info.row.original.product_id, event)?.title;
+                        return (
+                            <div className={classes.orderTicketContainer}>
+                                <div className={classes.ticketName}>
+                                    <Truncate
+                                        text={ticketTitle}
+                                        length={25}
+                                    />
                                 </div>
-                            )}
-                        </div>
-                    ),
+                                <div className={classes.orderId}>
+                                    <Anchor
+                                        onClick={() => handleOrderClick(info.row.original.order_id)}
+                                        style={{cursor: 'pointer', color: 'inherit', textDecoration: 'none'}}
+                                    >
+                                        {info.row.original.order?.public_id}
+                                    </Anchor>
+                                </div>
+                                {info.row.original.order?.created_at && event?.timezone && (
+                                    <div className={classes.registrationDate}>
+                                        {prettyDate(info.row.original.order.created_at, event.timezone)}
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    },
                     meta: {
                         headerStyle: {minWidth: 160},
                     },
@@ -305,45 +304,25 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
                     cell: (info: CellContext<Attendee, unknown>) => {
                         const checkInCount = getCheckInCount(info.row.original);
                         const hasChecked = hasCheckIns(info.row.original);
+                        const totalLists = checkInLists?.data?.length || 0;
 
                         return (
-                            <Tooltip
-                                label={
-                                    hasChecked
-                                        ? t`Checked into ${checkInCount} list(s)`
-                                        : t`Not checked in`
-                                }
-                                withArrow
+                            <button
+                                className={`${classes.checkInButton} ${hasChecked ? classes.checkedIn : classes.notCheckedIn}`}
+                                onClick={() => handleModalClick(info.row.original, checkInModal)}
                             >
-                                <ActionIcon
-                                    size="md"
-                                    variant="subtle"
-                                    color={hasChecked ? 'green' : 'gray'}
-                                    onClick={() => handleModalClick(info.row.original, checkInModal)}
-                                    aria-label={t`View check-in status`}
-                                >
-                                    {!hasChecked && <IconQrcodeOff size={16}/>}
-                                    {hasChecked && <IconQrcode size={16}/>}
-                                    {hasChecked && (
-                                        <Badge
-                                            size="xs"
-                                            circle
-                                            variant="filled"
-                                            color="green"
-                                            style={{
-                                                position: 'absolute',
-                                                top: -2,
-                                                right: -2,
-                                                minWidth: 16,
-                                                height: 16,
-                                                padding: '0 4px'
-                                            }}
-                                        >
-                                            {checkInCount}
-                                        </Badge>
-                                    )}
-                                </ActionIcon>
-                            </Tooltip>
+                                {hasChecked ? (
+                                    <>
+                                        <IconCheck size={16}/>
+                                        {t`Checked In`} ({checkInCount}/{totalLists})
+                                    </>
+                                ) : (
+                                    <>
+                                        <IconClipboardList size={16}/>
+                                        {t`Not Checked In`}
+                                    </>
+                                )}
+                            </button>
                         );
                     },
                     meta: {
@@ -356,40 +335,42 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
                     header: '',
                     enableHiding: false,
                     cell: (info: CellContext<Attendee, unknown>) => (
-                        <ActionMenu itemsGroups={[
-                            {
-                                label: t`Actions`,
-                                items: [
-                                    {
-                                        label: t`Manage attendee`,
-                                        icon: <IconUserCog size={14}/>,
-                                        onClick: () => handleModalClick(info.row.original, viewModalOpen),
-                                    },
-                                    {
-                                        label: t`Message attendee`,
-                                        icon: <IconSend size={14}/>,
-                                        onClick: () => handleModalClick(info.row.original, messageModal),
-                                    },
-                                    {
-                                        label: t`Resend ticket email`,
-                                        icon: <IconMailForward size={14}/>,
-                                        onClick: () => handleResendTicket(info.row.original),
-                                        visible: info.row.original.status === 'ACTIVE',
-                                    },
-                                ],
-                            },
-                            {
-                                label: t`Danger Zone`,
-                                items: [
-                                    {
-                                        label: info.row.original.status === 'CANCELLED' ? t`Activate` : t`Cancel` + ` ` + t`ticket`,
-                                        icon: <IconTrash size={14}/>,
-                                        onClick: () => handleCancel(info.row.original),
-                                        color: info.row.original.status === 'CANCELLED' ? 'green' : 'red',
-                                    },
-                                ],
-                            },
-                        ]}/>
+                        <div className={classes.actionsMenu}>
+                            <ActionMenu itemsGroups={[
+                                {
+                                    label: t`Actions`,
+                                    items: [
+                                        {
+                                            label: t`Manage attendee`,
+                                            icon: <IconUserCog size={14}/>,
+                                            onClick: () => handleModalClick(info.row.original, viewModalOpen),
+                                        },
+                                        {
+                                            label: t`Message attendee`,
+                                            icon: <IconSend size={14}/>,
+                                            onClick: () => handleModalClick(info.row.original, messageModal),
+                                        },
+                                        {
+                                            label: t`Resend ticket email`,
+                                            icon: <IconMailForward size={14}/>,
+                                            onClick: () => handleResendTicket(info.row.original),
+                                            visible: info.row.original.status === 'ACTIVE',
+                                        },
+                                    ],
+                                },
+                                {
+                                    label: t`Danger Zone`,
+                                    items: [
+                                        {
+                                            label: info.row.original.status === 'CANCELLED' ? t`Activate` : t`Cancel` + ` ` + t`ticket`,
+                                            icon: <IconTrash size={14}/>,
+                                            onClick: () => handleCancel(info.row.original),
+                                            color: info.row.original.status === 'CANCELLED' ? 'green' : 'red',
+                                        },
+                                    ],
+                                },
+                            ]}/>
+                        </div>
                     ),
                     meta: {
                         sticky: 'right',
