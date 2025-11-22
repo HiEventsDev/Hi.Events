@@ -4,6 +4,7 @@ namespace HiEvents\Services\Domain\Auth;
 
 use HiEvents\DomainObjects\AccountDomainObject;
 use HiEvents\DomainObjects\AccountUserDomainObject;
+use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\Status\UserStatus;
 use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Exceptions\UnauthorizedException;
@@ -56,9 +57,17 @@ readonly class LoginService
             $this->validateUserStatus($accountId, $userAccounts);
         }
 
+        $userRole = $this->getUserRole($accountId, $userAccounts);
+
         return new LoginResponse(
             accounts: $accounts,
-            token: $this->getToken($accounts, $email, $password, $requestedAccountId),
+            token: $this->getToken(
+                accounts: $accounts,
+                email: $email,
+                password: $password,
+                requestedAccountId: $requestedAccountId,
+                userRole: $userRole,
+            ),
             user: $user,
             accountId: $accountId,
         );
@@ -83,7 +92,13 @@ readonly class LoginService
         return null;
     }
 
-    private function getToken(Collection $accounts, string $email, string $password, ?int $requestedAccountId): ?string
+    private function getToken(
+        Collection $accounts,
+        string     $email,
+        string     $password,
+        ?int       $requestedAccountId,
+        ?Role      $userRole,
+    ): ?string
     {
         $accountId = $this->getAccountId($accounts, $requestedAccountId);
 
@@ -92,9 +107,13 @@ readonly class LoginService
             return null;
         }
 
-        $token = $this->jwtAuth->claims([
-            'account_id' => $accountId,
-        ])->attempt([
+        $claims = ['account_id' => $accountId];
+
+        if ($userRole !== null) {
+            $claims['role'] = $userRole->value;
+        }
+
+        $token = $this->jwtAuth->claims($claims)->attempt([
             'email' => strtolower($email),
             'password' => $password,
         ]);
@@ -117,5 +136,18 @@ readonly class LoginService
 
             throw new UnauthorizedException(__('User account is not active'));
         }
+    }
+
+    private function getUserRole(?int $accountId, Collection $userAccounts): ?Role
+    {
+        if ($accountId === null) {
+            return null;
+        }
+
+        /** @var AccountUserDomainObject $currentAccount */
+        $currentAccount = $userAccounts
+            ->first(fn(AccountUserDomainObject $userAccount) => $userAccount->getAccountId() === $accountId);
+
+        return Role::from($currentAccount?->getRole());
     }
 }

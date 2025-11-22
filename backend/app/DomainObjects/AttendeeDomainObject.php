@@ -9,6 +9,8 @@ use Illuminate\Support\Collection;
 
 class AttendeeDomainObject extends Generated\AttendeeDomainObjectAbstract implements IsSortable, IsFilterable
 {
+    public const TICKET_NAME_SORT_KEY = 'ticket_name';
+
     private ?OrderDomainObject $order = null;
 
     private ?ProductDomainObject $product = null;
@@ -30,6 +32,10 @@ class AttendeeDomainObject extends Generated\AttendeeDomainObjectAbstract implem
     {
         return new AllowedSorts(
             [
+               self::TICKET_NAME_SORT_KEY => [
+                    'asc' => __('Ticket Name A-Z'),
+                    'desc' => __('Ticket Name Z-A'),
+                ],
                 self::CREATED_AT => [
                     'asc' => __('Older First'),
                     'desc' => __('Newest First'),
@@ -64,6 +70,7 @@ class AttendeeDomainObject extends Generated\AttendeeDomainObjectAbstract implem
         return [
             self::STATUS,
             self::PRODUCT_ID,
+            self::PRODUCT_PRICE_ID,
         ];
     }
 
