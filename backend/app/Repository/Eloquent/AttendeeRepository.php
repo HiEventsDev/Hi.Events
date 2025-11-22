@@ -7,7 +7,6 @@ use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
-use HiEvents\Http\DTO\FilterFieldDTO;
 use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Models\Attendee;
 use HiEvents\Repository\Eloquent\Value\Relationship;
