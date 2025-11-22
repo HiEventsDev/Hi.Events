@@ -1,29 +1,46 @@
-.tableContainer {
-  overflow-x: auto;
+.attendeeDetails {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
-.table {
-  width: 100%;
-  position: relative;
+.attendeeName {
+  font-weight: 600;
+  line-height: 1.3;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
-.stickyActionColumn {
-  position: sticky;
-  right: 0;
-  background: white;
-  box-shadow: -4px 0 6px rgba(0, 0, 0, 0.1);
-  z-index: 2;
+.attendeeId {
+  font-size: 0.85rem;
+  color: var(--mantine-color-dimmed);
+  line-height: 1.3;
 }
 
-.tableContainer::-webkit-scrollbar {
-  height: 10px;
+.attendeeEmail {
+  font-size: 0.85rem;
+  line-height: 1.3;
 }
 
-.tableContainer::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 5px;
+.orderTicketContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
-.tableContainer::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.05);
+.ticketName {
+  font-size: 0.85rem;
+  color: var(--mantine-color-dimmed);
+  line-height: 1.3;
+}
+
+.registrationDate {
+  font-size: 0.75rem;
+  color: var(--mantine-color-dimmed);
+  line-height: 1.3;
 }
