@@ -1,10 +1,15 @@
-import {useCallback, useEffect, useState} from 'react';
-import {useSearchParams} from 'react-router';
-import {QueryFilters} from "../types";
+import { useCallback, useMemo } from 'react';
+import { useSearchParams } from 'react-router';
+import { QueryFilters } from "../types";
 
-const debounce = (func: Function, delay: number) => {
+type FilterCondition = {
+    operator: string;
+    value: string | string[];
+};
+
+const debounce = <T extends (...args: any[]) => void>(func: T, delay: number) => {
     let timerId: ReturnType<typeof setTimeout>;
-    return (...args: any[]) => {
+    return (...args: Parameters<T>) => {
         if (timerId) clearTimeout(timerId);
         timerId = setTimeout(() => func(...args), delay);
     };
@@ -15,32 +20,31 @@ export const useFilterQueryParamSync = (): [
     (updates: Partial<QueryFilters>, replace?: boolean) => void
 ] => {
     const [searchParams, setSearchParams] = useSearchParams();
-    const [queryParams, setQueryParams] = useState<Partial<QueryFilters>>({});
 
-    useEffect(() => {
-        const parsedParams: Partial<QueryFilters> = {};
+    const queryParams = useMemo(() => {
+        const parsedParams: Partial<QueryFilters> & Record<string, any> = {};
 
         searchParams.forEach((value, key) => {
             if (key.startsWith('filterFields[')) {
                 const match = key.match(/^filterFields\[(.+)\]\[(.+)\]$/);
                 if (match) {
-                    const [_, fieldName, operator] = match;
+                    const [, fieldName, operator] = match;
+
                     if (!parsedParams.filterFields) {
                         parsedParams.filterFields = {};
                     }
-                    // @ts-ignore
-                    parsedParams.filterFields[fieldName] = {
+
+                    (parsedParams.filterFields as Record<string, FilterCondition>)[fieldName] = {
                         operator,
                         value: value.includes(',') ? value.split(',') : value
                     };
                 }
             } else {
-                // @ts-ignore - Handle non-filterFields params
                 parsedParams[key] = value;
             }
         });
 
-        setQueryParams(parsedParams);
+        return parsedParams;
     }, [searchParams]);
 
     const debouncedSetSearchParams = useCallback(
@@ -52,22 +56,22 @@ export const useFilterQueryParamSync = (): [
 
     const updateSearchParams = useCallback(
         (updates: Partial<QueryFilters>, replace: boolean = false) => {
+            // Create new params based on current URL state
             const newParams = replace ? new URLSearchParams() : new URLSearchParams(searchParams);
 
-            // Clear existing filter fields if replacing
             if (replace) {
-                searchParams.forEach((_, key) => {
+                // Clean up existing filter fields
+                Array.from(newParams.keys()).forEach((key) => {
                     if (key.startsWith('filterFields[')) {
                         newParams.delete(key);
                     }
                 });
             }
 
-            // Update params
             Object.entries(updates).forEach(([key, value]) => {
                 if (key === 'filterFields' && value) {
                     Object.entries(value).forEach(([field, condition]) => {
-                        if (condition) {
+                        if (condition && typeof condition === 'object' && 'operator' in condition) {
                             const paramKey = `filterFields[${field}][${condition.operator}]`;
                             if (Array.isArray(condition.value)) {
                                 newParams.set(paramKey, condition.value.join(','));
@@ -76,7 +80,7 @@ export const useFilterQueryParamSync = (): [
                             }
                         }
                     });
-                } else if (value !== undefined) {
+                } else if (value !== undefined && value !== null) {
                     newParams.set(key, String(value));
                 }
             });

@@ -2,6 +2,8 @@
 
 namespace HiEvents\Services\Domain\Auth;
 
+use Exception;
+use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\Interfaces\DomainObjectInterface;
 use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Models\User;
@@ -36,6 +38,26 @@ readonly class AuthUserService
         }
 
         return $payload->get('account_id');
+    }
+
+    public function getAuthenticatedUserRole(): ?Role
+    {
+        if (!$this->authManager->check()) {
+            return null;
+        }
+
+        try {
+            /** @var Payload $payload */
+            $payload = $this->authManager->payload();
+        } catch (JWTException) {
+            return null;
+        }
+
+        try {
+            return Role::from($payload->get('role'));
+        } catch (Exception) {
+            return null;
+        }
     }
 
     public function getUser(): UserDomainObject|DomainObjectInterface|null

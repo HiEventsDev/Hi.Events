@@ -1,13 +1,23 @@
-import {Anchor, Avatar, Badge, Button, Table as MantineTable,} from '@mantine/core';
-import {Attendee, MessageType} from "../../../types.ts";
-import {IconMailForward, IconPlus, IconSend, IconTrash, IconUserCog} from "@tabler/icons-react";
+import {ActionIcon, Anchor, Avatar, Badge, Button, Group, Popover, Table as MantineTable, Tooltip} from '@mantine/core';
+import {Attendee, IdParam, MessageType} from "../../../types.ts";
+import {
+    IconCopy,
+    IconMailForward,
+    IconNote,
+    IconPlus,
+    IconQrcode,
+    IconQrcodeOff,
+    IconSend,
+    IconTrash,
+    IconUserCog
+} from "@tabler/icons-react";
 import {getInitials, getProductFromEvent} from "../../../utilites/helpers.ts";
 import {Table, TableHead} from "../Table";
-import {useDisclosure} from "@mantine/hooks";
+import {useClipboard, useDisclosure} from "@mantine/hooks";
 import {SendMessageModal} from "../../modals/SendMessageModal";
 import {useState} from "react";
 import {NoResultsSplash} from "../NoResultsSplash";
-import {NavLink, useParams} from "react-router";
+import {useParams} from "react-router";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import Truncate from "../Truncate";
 import {notifications} from "@mantine/notifications";
@@ -17,8 +27,11 @@ import {t, Trans} from "@lingui/macro";
 import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
 import {useResendAttendeeTicket} from "../../../mutations/useResendAttendeeTicket.ts";
 import {ManageAttendeeModal} from "../../modals/ManageAttendeeModal";
+import {ManageOrderModal} from "../../modals/ManageOrderModal";
 import {ActionMenu} from '../ActionMenu';
 import {AttendeeStatusBadge} from "../AttendeeStatusBadge";
+import {CheckInStatusModal} from "../CheckInStatusModal";
+import {prettyDate} from "../../../utilites/dates.ts";
 
 interface AttendeeTableProps {
     attendees: Attendee[];
@@ -29,10 +42,15 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
     const {eventId} = useParams();
     const [isMessageModalOpen, messageModal] = useDisclosure(false);
     const [isViewModalOpen, viewModalOpen] = useDisclosure(false);
+    const [isCheckInModalOpen, checkInModal] = useDisclosure(false);
+    const [isOrderModalOpen, orderModal] = useDisclosure(false);
+    const [emailPopoverId, setEmailPopoverId] = useState<number | null>(null);
     const [selectedAttendee, setSelectedAttendee] = useState<Attendee>();
+    const [selectedOrderId, setSelectedOrderId] = useState<IdParam>();
     const {data: event} = useGetEvent(eventId);
     const modifyMutation = useModifyAttendee();
     const resendTicketMutation = useResendAttendeeTicket();
+    const clipboard = useClipboard({timeout: 2000});
 
     const handleModalClick = (attendee: Attendee, modal: {
         open: () => void
@@ -99,6 +117,30 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
         })
     };
 
+    const getCheckInCount = (attendee: Attendee) => {
+        return attendee.check_ins?.length || 0;
+    };
+
+    const hasCheckIns = (attendee: Attendee) => {
+        return getCheckInCount(attendee) > 0;
+    };
+
+    const handleCopyEmail = (email: string) => {
+        clipboard.copy(email);
+        showSuccess(t`Email address copied to clipboard`);
+        setEmailPopoverId(null);
+    };
+
+    const handleMessageFromEmail = (attendee: Attendee) => {
+        setEmailPopoverId(null);
+        handleModalClick(attendee, messageModal);
+    };
+
+    const handleOrderClick = (orderId: IdParam) => {
+        setSelectedOrderId(orderId);
+        orderModal.open();
+    };
+
     return (
         <>
             <Table>
@@ -110,11 +152,16 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
                         <MantineTable.Th miw={140}>{t`Order`}</MantineTable.Th>
                         <MantineTable.Th>{t`Ticket`}</MantineTable.Th>
                         <MantineTable.Th miw={120}>{t`Status`}</MantineTable.Th>
+                        <MantineTable.Th w={60} style={{textAlign: 'center'}}>{t`Check-In Status`}</MantineTable.Th>
+                        <MantineTable.Th w={60}></MantineTable.Th>
                         <MantineTable.Th></MantineTable.Th>
                     </MantineTable.Tr>
                 </TableHead>
                 <MantineTable.Tbody>
                     {attendees.map((attendee) => {
+                        const checkInCount = getCheckInCount(attendee);
+                        const hasChecked = hasCheckIns(attendee);
+
                         return (
                             <MantineTable.Tr key={attendee.id}>
                                 <MantineTable.Td>
@@ -131,18 +178,65 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
                                     </div>
                                 </MantineTable.Td>
                                 <MantineTable.Td>
-                                    <Anchor target={'_blank'} href={`mailto:${attendee.email}`}>
-                                        <Truncate length={25} text={attendee.email}/>
-                                    </Anchor>
+                                    <Popover
+                                        opened={emailPopoverId === attendee.id}
+                                        onChange={(opened) => {
+                                            if (!opened) setEmailPopoverId(null);
+                                        }}
+                                        width={200}
+                                        position="bottom"
+                                        withArrow
+                                        shadow="md"
+                                    >
+                                        <Popover.Target>
+                                            <Anchor
+                                                onClick={() => setEmailPopoverId(attendee.id || null)}
+                                                style={{cursor: 'pointer'}}
+                                            >
+                                                <Truncate length={25} text={attendee.email}/>
+                                            </Anchor>
+                                        </Popover.Target>
+                                        <Popover.Dropdown>
+                                            <Group gap="xs" style={{flexDirection: 'column', width: '100%'}}>
+                                                <Button
+                                                    fullWidth
+                                                    variant="light"
+                                                    leftSection={<IconSend size={16}/>}
+                                                    onClick={() => handleMessageFromEmail(attendee)}
+                                                >
+                                                    {t`Message`}
+                                                </Button>
+                                                <Button
+                                                    fullWidth
+                                                    variant="light"
+                                                    color="gray"
+                                                    leftSection={<IconCopy size={16}/>}
+                                                    onClick={() => handleCopyEmail(attendee.email)}
+                                                >
+                                                    {t`Copy Email`}
+                                                </Button>
+                                            </Group>
+                                        </Popover.Dropdown>
+                                    </Popover>
                                 </MantineTable.Td>
                                 <MantineTable.Td>
-                                    <Anchor
-                                        component={NavLink}
-                                        to={`/manage/event/${eventId}/orders#order-${attendee.order?.id}`}>
-                                        <Badge variant={'outline'} style={{cursor: 'pointer'}}>
-                                            {attendee.order?.public_id}
-                                        </Badge>
-                                    </Anchor>
+                                    <Tooltip
+                                        label={
+                                            attendee.order?.created_at && event?.timezone
+                                                ? t`Registered: ${prettyDate(attendee.order.created_at, event.timezone)}`
+                                                : t`Order details`
+                                        }
+                                        withArrow
+                                    >
+                                        <Anchor
+                                            onClick={() => handleOrderClick(attendee.order_id)}
+                                            style={{cursor: 'pointer'}}
+                                        >
+                                            <Badge variant={'outline'} style={{cursor: 'pointer'}}>
+                                                {attendee.order?.public_id}
+                                            </Badge>
+                                        </Anchor>
+                                    </Tooltip>
                                 </MantineTable.Td>
                                 <MantineTable.Td>
                                     <Truncate
@@ -152,6 +246,70 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
                                 </MantineTable.Td>
                                 <MantineTable.Td>
                                     <AttendeeStatusBadge attendee={attendee}/>
+                                </MantineTable.Td>
+                                <MantineTable.Td style={{textAlign: 'center'}}>
+                                    <Tooltip
+                                        label={
+                                            hasChecked
+                                                ? t`Checked into ${checkInCount} list(s)`
+                                                : t`Not checked in`
+                                        }
+                                        withArrow
+                                    >
+                                        <ActionIcon
+                                            variant="subtle"
+                                            color={hasChecked ? 'green' : 'gray'}
+                                            onClick={() => handleModalClick(attendee, checkInModal)}
+                                            aria-label={t`View check-in status`}
+                                        >
+                                            {!hasChecked && <IconQrcodeOff size={18}/>}
+                                            {hasChecked && <IconQrcode size={18}/>}
+                                            {hasChecked && (
+                                                <Badge
+                                                    size="xs"
+                                                    circle
+                                                    variant="filled"
+                                                    color="green"
+                                                    style={{
+                                                        position: 'absolute',
+                                                        top: -2,
+                                                        right: -2,
+                                                        minWidth: 16,
+                                                        height: 16,
+                                                        padding: '0 4px'
+                                                    }}
+                                                >
+                                                    {checkInCount}
+                                                </Badge>
+                                            )}
+                                        </ActionIcon>
+                                    </Tooltip>
+                                </MantineTable.Td>
+                                <MantineTable.Td style={{textAlign: 'center'}}>
+                                    {attendee.notes && (
+                                        <Tooltip
+                                            label={
+                                                attendee.notes.length > 100
+                                                    ? t`Click to view notes`
+                                                    : attendee.notes
+                                            }
+                                            multiline
+                                            w={attendee.notes.length > 100 ? 'auto' : 300}
+                                            withArrow
+                                        >
+                                            <ActionIcon
+                                                variant="subtle"
+                                                onClick={() => {
+                                                    if (attendee.notes && attendee.notes.length > 100) {
+                                                        handleModalClick(attendee, viewModalOpen);
+                                                    }
+                                                }}
+                                                aria-label={t`View notes`}
+                                            >
+                                                <IconNote size={18}/>
+                                            </ActionIcon>
+                                        </Tooltip>
+                                    )}
                                 </MantineTable.Td>
                                 <MantineTable.Td style={{paddingRight: 0}}>
                                     <ActionMenu itemsGroups={[
@@ -203,6 +361,17 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
             {(selectedAttendee?.id && isViewModalOpen) && <ManageAttendeeModal
                 attendeeId={selectedAttendee.id}
                 onClose={viewModalOpen.close}
+            />}
+            {(selectedAttendee && isCheckInModalOpen && event?.timezone) && <CheckInStatusModal
+                attendee={selectedAttendee}
+                eventTimezone={event.timezone}
+                eventId={eventId}
+                isOpen={isCheckInModalOpen}
+                onClose={checkInModal.close}
+            />}
+            {(selectedOrderId && isOrderModalOpen) && <ManageOrderModal
+                orderId={selectedOrderId}
+                onClose={orderModal.close}
             />}
         </>
 

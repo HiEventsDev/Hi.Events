@@ -177,6 +177,23 @@ abstract class BaseAction extends Controller
         throw new UnauthorizedException();
     }
 
+    protected function getAuthenticatedUserRole(): Role
+    {
+        if (Auth::check()) {
+            /** @var AuthUserService $service */
+            $service = app(AuthUserService::class);
+            $role = $service->getAuthenticatedUserRole();
+
+            if ($role === null) {
+                throw new UnauthorizedException(__('No user role found in token'));
+            }
+
+            return $role;
+        }
+
+        throw new UnauthorizedException();
+    }
+
     protected function getAuthenticatedUser(): UserDomainObject|DomainObjectInterface
     {
         if (Auth::check()) {
