@@ -68,18 +68,6 @@ export const OrdersTable = ({orders, event}: OrdersTableProps) => {
         viewModal.open();
     }));
 
-    if (orders.length === 0) {
-        return <NoResultsSplash
-            imageHref={'/blank-slate/orders.svg'}
-            heading={t`No orders to show`}
-            subHeading={(
-                <p>
-                    {t`Your orders will appear here once they start rolling in.`}
-                </p>
-            )}
-        />
-    }
-
     const handleModalClick = (orderId: IdParam, modal: { open: () => void }) => {
         setOrderId(orderId);
         modal.open();
@@ -452,6 +440,18 @@ export const OrdersTable = ({orders, event}: OrdersTableProps) => {
         ],
         [event.id, emailPopoverId]
     );
+
+    if (orders.length === 0) {
+        return <NoResultsSplash
+            imageHref={'/blank-slate/orders.svg'}
+            heading={t`No orders to show`}
+            subHeading={(
+                <p>
+                    {t`Your orders will appear here once they start rolling in.`}
+                </p>
+            )}
+        />
+    }
 
     return (
         <>
