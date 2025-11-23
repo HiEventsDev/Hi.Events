@@ -77,26 +77,6 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
         });
     }
 
-    if (attendees.length === 0) {
-        return <NoResultsSplash
-            heading={t`No Attendees to show`}
-            imageHref={'/blank-slate/attendees.svg'}
-            subHeading={(
-                <>
-                    <p>
-                        {t`Your attendees will appear here once they have registered for your event. You can also manually add attendees.`}
-                    </p>
-                    <Button
-                        size={'xs'}
-                        leftSection={<IconPlus/>}
-                        color={'green'}
-                        onClick={() => openCreateModal()}>{t`Manually add an Attendee`}
-                    </Button>
-                </>
-            )}
-        />
-    }
-
     const handleCancel = (attendee: Attendee) => {
         const message = attendee.status === 'CANCELLED'
             ? t`Are you sure you want to activate this attendee?`
@@ -413,6 +393,26 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
         },
         [emailPopoverId, event, hasCheckInLists]
     );
+
+    if (attendees.length === 0) {
+        return <NoResultsSplash
+            heading={t`No Attendees to show`}
+            imageHref={'/blank-slate/attendees.svg'}
+            subHeading={(
+                <>
+                    <p>
+                        {t`Your attendees will appear here once they have registered for your event. You can also manually add attendees.`}
+                    </p>
+                    <Button
+                        size={'xs'}
+                        leftSection={<IconPlus/>}
+                        color={'green'}
+                        onClick={() => openCreateModal()}>{t`Manually add an Attendee`}
+                    </Button>
+                </>
+            )}
+        />
+    }
 
     return (
         <>
