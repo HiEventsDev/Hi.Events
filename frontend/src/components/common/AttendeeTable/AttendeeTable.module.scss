@@ -115,6 +115,32 @@
   }
 }
 
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+
+  &[data-status="ACTIVE"] {
+    background: var(--mantine-color-green-1);
+    color: var(--mantine-color-green-9);
+  }
+
+  &[data-status="AWAITING_PAYMENT"] {
+    background: var(--mantine-color-yellow-1);
+    color: var(--mantine-color-yellow-9);
+  }
+
+  &[data-status="CANCELLED"] {
+    background: var(--mantine-color-red-1);
+    color: var(--mantine-color-red-9);
+  }
+}
+
 .actionsMenu {
   display: flex;
   align-items: center;

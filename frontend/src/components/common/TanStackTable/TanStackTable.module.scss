@@ -66,28 +66,18 @@
     bottom: 0;
     width: 1px;
     background: linear-gradient(
-      to right,
-      rgba(0, 0, 0, 0.1),
-      rgba(0, 0, 0, 0)
+                    to right,
+                    rgba(255, 255, 255, 0.1),
+                    rgba(255, 255, 255, 0)
     );
     pointer-events: none;
-  }
-
-  @media (prefers-color-scheme: dark) {
-    &::after {
-      background: linear-gradient(
-        to right,
-        rgba(255, 255, 255, 0.1),
-        rgba(255, 255, 255, 0)
-      );
-    }
   }
 }
 
 .stickyRight {
   position: sticky;
   right: 0;
-  z-index: 9;
+  z-index: 2;
   background: var(--mantine-color-body);
 
   &::before {
@@ -98,29 +88,15 @@
     bottom: 0;
     width: 1px;
     background: linear-gradient(
-      to left,
-      rgba(0, 0, 0, 0.1),
-      rgba(0, 0, 0, 0)
+                    to left,
+                    rgba(255, 255, 255, 0.1),
+                    rgba(255, 255, 255, 0)
     );
     pointer-events: none;
-  }
-
-  @media (prefers-color-scheme: dark) {
-    &::before {
-      background: linear-gradient(
-        to left,
-        rgba(255, 255, 255, 0.1),
-        rgba(255, 255, 255, 0)
-      );
-    }
   }
 }
 
 .tableHead .stickyLeft,
 .tableHead .stickyRight {
-  background-color: #462e7812;
-
-  @media (prefers-color-scheme: dark) {
-    background-color: #f2f0f5;
-  }
+  background-color: #f2f0f5;
 }
