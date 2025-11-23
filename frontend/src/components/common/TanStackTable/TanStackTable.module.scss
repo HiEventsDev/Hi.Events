@@ -19,7 +19,7 @@
   th {
     background-color: #f2f0f5;
     color: var(--hi-secondary-text) !important;
-    padding: 0.75rem 0.625rem !important;
+    padding: 20px !important;
   }
 }
 
@@ -29,6 +29,10 @@
 
   :global(.mantine-ScrollArea-viewport) {
     padding-bottom: 0;
+  }
+
+  :global(.mantine-ScrollArea-scrollbar) {
+    z-index: 20 !important;
   }
 }
 
@@ -83,7 +87,7 @@
 .stickyRight {
   position: sticky;
   right: 0;
-  z-index: 10;
+  z-index: 9;
   background: var(--mantine-color-body);
 
   &::before {

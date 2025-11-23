@@ -1,10 +1,4 @@
-import {
-    ColumnDef,
-    flexRender,
-    getCoreRowModel,
-    useReactTable,
-    VisibilityState,
-} from '@tanstack/react-table';
+import {ColumnDef, flexRender, getCoreRowModel, useReactTable, VisibilityState,} from '@tanstack/react-table';
 import {Table as MantineTable} from '@mantine/core';
 import React, {useEffect, useState} from 'react';
 import {Card} from '../Card';
@@ -29,12 +23,12 @@ interface TanStackTableProps<TData> {
 }
 
 export function TanStackTable<TData>({
-    data,
-    columns,
-    storageKey,
-    enableColumnVisibility = false,
-    renderColumnVisibilityToggle,
-}: TanStackTableProps<TData>) {
+                                         data,
+                                         columns,
+                                         storageKey,
+                                         enableColumnVisibility = false,
+                                         renderColumnVisibilityToggle,
+                                     }: TanStackTableProps<TData>) {
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(() => {
         if (storageKey && enableColumnVisibility) {
             const stored = localStorage.getItem(`${storageKey}-column-visibility`);
@@ -74,7 +68,9 @@ export function TanStackTable<TData>({
                 </div>
             )}
             <Card className={classes.card}>
-                <MantineTable.ScrollContainer minWidth={200}>
+                <MantineTable.ScrollContainer minWidth={200} scrollAreaProps={{
+                    type: 'hover',
+                }}>
                     <MantineTable className={classes.table}>
                         <MantineTable.Thead className={classes.tableHead}>
                             {table.getHeaderGroups().map((headerGroup) => (
@@ -84,8 +80,8 @@ export function TanStackTable<TData>({
                                         const stickyClass = columnMeta?.sticky === 'left'
                                             ? classes.stickyLeft
                                             : columnMeta?.sticky === 'right'
-                                            ? classes.stickyRight
-                                            : '';
+                                                ? classes.stickyRight
+                                                : '';
 
                                         return (
                                             <MantineTable.Th
@@ -115,8 +111,8 @@ export function TanStackTable<TData>({
                                         const stickyClass = columnMeta?.sticky === 'left'
                                             ? classes.stickyLeft
                                             : columnMeta?.sticky === 'right'
-                                            ? classes.stickyRight
-                                            : '';
+                                                ? classes.stickyRight
+                                                : '';
 
                                         return (
                                             <MantineTable.Td
