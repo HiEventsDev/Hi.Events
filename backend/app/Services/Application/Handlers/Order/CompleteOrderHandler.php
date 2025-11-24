@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Exception;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Enums\ProductType;
+use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\ProductPriceDomainObjectAbstract;
@@ -24,6 +25,7 @@ use HiEvents\Helper\IdHelper;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductPriceRepositoryInterface;
 use HiEvents\Repository\Interfaces\QuestionAnswerRepositoryInterface;
@@ -55,6 +57,7 @@ class CompleteOrderHandler
         private readonly ProductQuantityUpdateService      $productQuantityUpdateService,
         private readonly ProductPriceRepositoryInterface   $productPriceRepository,
         private readonly DomainEventDispatcherService      $domainEventDispatcherService,
+        private readonly EventSettingsRepositoryInterface  $eventSettingsRepository,
     )
     {
     }
@@ -90,7 +93,16 @@ class CompleteOrderHandler
             return $updatedOrder;
         });
 
-        OrderStatusChangedEvent::dispatch($updatedOrder);
+        /** @var EventSettingDomainObject $eventSettings */
+        $eventSettings = $this->eventSettingsRepository->findFirstWhere([
+            'event_id' => $orderData->event_id,
+        ]);
+
+        event(new OrderStatusChangedEvent(
+            order: $updatedOrder,
+            sendEmails: true,
+            createInvoice: $eventSettings->getEnableInvoicing(),
+        ));
 
         if ($updatedOrder->isOrderCompleted()) {
             $this->domainEventDispatcherService->dispatch(

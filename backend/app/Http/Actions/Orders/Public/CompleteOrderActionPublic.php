@@ -34,6 +34,7 @@ class CompleteOrderActionPublic extends BaseAction
                         : null,
                 ]),
                 'products' => $request->input('products'),
+                'event_id' => $eventId,
             ]));
         } catch (ResourceConflictException $e) {
             return $this->errorResponse($e->getMessage(), Response::HTTP_CONFLICT);
