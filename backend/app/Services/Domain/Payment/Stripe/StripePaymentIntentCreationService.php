@@ -80,7 +80,7 @@ class StripePaymentIntentCreationService
                 'automatic_payment_methods' => [
                     'enabled' => true,
                 ],
-                $applicationFee ? ['application_fee_amount' => $applicationFee->grossApplicationFee->toMinorUnit()] : [],
+                ...($applicationFee ? ['application_fee_amount' => $applicationFee->grossApplicationFee->toMinorUnit()] : []),
             ], $this->getStripeAccountData($paymentIntentDTO));
 
             $this->logger->debug('Stripe payment intent created', [

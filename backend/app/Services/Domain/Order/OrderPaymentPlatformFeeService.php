@@ -39,12 +39,16 @@ class OrderPaymentPlatformFeeService
 
         $applicationFeeNetAmount = null;
         if ($applicationFeeNetAmountMinorUnit !== null) {
-            $applicationFeeNetAmount = $applicationFeeNetAmountMinorUnit / 100;
+            $applicationFeeNetAmount = $isZeroDecimalCurrency
+                ? $applicationFeeNetAmountMinorUnit
+                : $applicationFeeNetAmountMinorUnit / 100;
         }
 
         $applicationFeeVatAmount = null;
         if ($applicationFeeVatAmountMinorUnit !== null) {
-            $applicationFeeVatAmount = $applicationFeeVatAmountMinorUnit / 100;
+            $applicationFeeVatAmount = $isZeroDecimalCurrency
+                ? $applicationFeeVatAmountMinorUnit
+                : $applicationFeeVatAmountMinorUnit / 100;
         }
 
         $this->orderPaymentPlatformFeeRepository->create([

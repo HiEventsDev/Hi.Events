@@ -74,7 +74,7 @@ class OrderApplicationFeeCalculationServiceTest extends TestCase
 
         $fee = $this->service->calculateApplicationFee($account, $order);
 
-        $this->assertNull($fee->grossApplicationFee);
+        $this->assertNull($fee);
     }
 
     public function testNoFeeForFreeOrder(): void
