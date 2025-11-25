@@ -29,31 +29,31 @@ const RevenueSummaryReport = () => {
             key: 'gross_sales' as const,
             label: t`Gross Sales`,
             sortable: true,
-            render: (value: string) => formatCurrency(value)
+            render: (value: string, _row: any, context: { currency: string }) => formatCurrency(value, context.currency)
         },
         {
             key: 'net_revenue' as const,
             label: t`Net Revenue`,
             sortable: true,
-            render: (value: string) => formatCurrency(value)
+            render: (value: string, _row: any, context: { currency: string }) => formatCurrency(value, context.currency)
         },
         {
             key: 'total_refunded' as const,
             label: t`Refunds`,
             sortable: true,
-            render: (value: string) => formatCurrency(value)
+            render: (value: string, _row: any, context: { currency: string }) => formatCurrency(value, context.currency)
         },
         {
             key: 'total_tax' as const,
             label: t`Taxes`,
             sortable: true,
-            render: (value: string) => formatCurrency(value)
+            render: (value: string, _row: any, context: { currency: string }) => formatCurrency(value, context.currency)
         },
         {
             key: 'total_fee' as const,
             label: t`Fees`,
             sortable: true,
-            render: (value: string) => formatCurrency(value)
+            render: (value: string, _row: any, context: { currency: string }) => formatCurrency(value, context.currency)
         },
         {
             key: 'order_count' as const,

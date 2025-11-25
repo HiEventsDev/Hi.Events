@@ -18,10 +18,14 @@ import classes from './OrganizerReportTable.module.scss';
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
+export interface RenderContext {
+    currency: string;
+}
+
 interface Column<T> {
     key: keyof T;
     label: string;
-    render?: (value: any, row: T) => React.ReactNode;
+    render?: (value: any, row: T, context: RenderContext) => React.ReactNode;
     sortable?: boolean;
 }
 
@@ -321,7 +325,7 @@ const OrganizerReportTable = <T extends Record<string, any>>({
                             {columns.map((column) => (
                                 <MantineTable.Td key={String(column.key)}>
                                     {column.render
-                                        ? column.render(row[column.key], row)
+                                        ? column.render(row[column.key], row, { currency: selectedCurrency || organizer.currency || 'USD' })
                                         : row[column.key]
                                     }
                                 </MantineTable.Td>
