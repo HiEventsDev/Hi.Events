@@ -260,6 +260,20 @@ export const router: RouteObject[] = [
                     const OrganizerHomepageDesigner = await import("./components/routes/organizer/OrganizerHomepageDesigner");
                     return {Component: OrganizerHomepageDesigner.default};
                 }
+            },
+            {
+                path: "reports",
+                async lazy() {
+                    const OrganizerReports = await import("./components/routes/organizer/Reports");
+                    return {Component: OrganizerReports.default};
+                }
+            },
+            {
+                path: "report/:reportType",
+                async lazy() {
+                    const OrganizerReportLayout = await import("./components/routes/organizer/Reports/ReportLayout");
+                    return {Component: OrganizerReportLayout.default};
+                }
             }
         ],
     },

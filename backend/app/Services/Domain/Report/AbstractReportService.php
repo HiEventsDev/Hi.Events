@@ -23,8 +23,12 @@ abstract class AbstractReportService
         $event = $this->eventRepository->findById($eventId);
         $timezone = $event->getTimezone();
 
-        $endDate = Carbon::parse($endDate ?? now(), $timezone);
-        $startDate = Carbon::parse($startDate ?? $endDate->copy()->subDays(30), $timezone);
+        $endDate = $endDate
+            ? $endDate->copy()->setTimezone($timezone)->startOfDay()
+            : now($timezone)->startOfDay();
+        $startDate = $startDate
+            ? $startDate->copy()->setTimezone($timezone)->startOfDay()
+            : $endDate->copy()->subDays(30)->startOfDay();
 
         $reportResults = $this->cache->remember(
             key: $this->getCacheKey($eventId, $startDate, $endDate),

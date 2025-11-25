@@ -862,6 +862,13 @@ export enum ReportTypes {
     PromoCodes = 'promo_codes_report',
 }
 
+export enum OrganizerReportTypes {
+    RevenueSummary = 'revenue_summary',
+    EventsPerformance = 'events_performance',
+    TaxSummary = 'tax_summary',
+    CheckInSummary = 'check_in_summary',
+}
+
 export interface Webhook {
     id: IdParam;
     event_id: IdParam;
