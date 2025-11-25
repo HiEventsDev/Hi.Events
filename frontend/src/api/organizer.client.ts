@@ -59,6 +59,25 @@ export const organizerClient = {
         );
         return response.data;
     },
+
+    getOrganizerReport: async (
+        organizerId: IdParam,
+        reportType: string,
+        startDate?: string | null,
+        endDate?: string | null,
+        currency?: string | null
+    ) => {
+        const params = new URLSearchParams();
+        if (startDate) params.append('start_date', startDate);
+        if (endDate) params.append('end_date', endDate);
+        if (currency) params.append('currency', currency);
+
+        const queryString = params.toString() ? `?${params.toString()}` : '';
+        const response = await api.get<GenericDataResponse<any>>(
+            `organizers/${organizerId}/reports/${reportType}${queryString}`
+        );
+        return response.data;
+    },
 }
 
 export const organizerPublicClient = {
