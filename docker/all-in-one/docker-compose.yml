@@ -68,7 +68,7 @@ services:
       - redisdata:/data
 
   postgres:
-    image: postgres:latest
+    image: postgres:17
     container_name: postgres
     networks:
       - hi-events-network
