@@ -19,9 +19,13 @@ abstract class AccountDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     final public const DELETED_AT = 'deleted_at';
     final public const NAME = 'name';
     final public const EMAIL = 'email';
+    final public const STRIPE_ACCOUNT_ID = 'stripe_account_id';
     final public const SHORT_ID = 'short_id';
+    final public const STRIPE_CONNECT_SETUP_COMPLETE = 'stripe_connect_setup_complete';
     final public const ACCOUNT_VERIFIED_AT = 'account_verified_at';
+    final public const STRIPE_CONNECT_ACCOUNT_TYPE = 'stripe_connect_account_type';
     final public const IS_MANUALLY_VERIFIED = 'is_manually_verified';
+    final public const COUNTRY = 'country';
 
     protected int $id;
     protected ?int $account_configuration_id = null;
@@ -32,9 +36,13 @@ abstract class AccountDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     protected ?string $deleted_at = null;
     protected string $name;
     protected string $email;
+    protected ?string $stripe_account_id = null;
     protected string $short_id;
+    protected ?bool $stripe_connect_setup_complete = false;
     protected ?string $account_verified_at = null;
+    protected ?string $stripe_connect_account_type = null;
     protected bool $is_manually_verified = false;
+    protected ?string $country = null;
 
     public function toArray(): array
     {
@@ -48,9 +56,13 @@ abstract class AccountDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
                     'deleted_at' => $this->deleted_at ?? null,
                     'name' => $this->name ?? null,
                     'email' => $this->email ?? null,
+                    'stripe_account_id' => $this->stripe_account_id ?? null,
                     'short_id' => $this->short_id ?? null,
+                    'stripe_connect_setup_complete' => $this->stripe_connect_setup_complete ?? null,
                     'account_verified_at' => $this->account_verified_at ?? null,
+                    'stripe_connect_account_type' => $this->stripe_connect_account_type ?? null,
                     'is_manually_verified' => $this->is_manually_verified ?? null,
+                    'country' => $this->country ?? null,
                 ];
     }
 
@@ -153,6 +165,17 @@ abstract class AccountDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
         return $this->email;
     }
 
+    public function setStripeAccountId(?string $stripe_account_id): self
+    {
+        $this->stripe_account_id = $stripe_account_id;
+        return $this;
+    }
+
+    public function getStripeAccountId(): ?string
+    {
+        return $this->stripe_account_id;
+    }
+
     public function setShortId(string $short_id): self
     {
         $this->short_id = $short_id;
@@ -162,6 +185,17 @@ abstract class AccountDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     public function getShortId(): string
     {
         return $this->short_id;
+    }
+
+    public function setStripeConnectSetupComplete(?bool $stripe_connect_setup_complete): self
+    {
+        $this->stripe_connect_setup_complete = $stripe_connect_setup_complete;
+        return $this;
+    }
+
+    public function getStripeConnectSetupComplete(): ?bool
+    {
+        return $this->stripe_connect_setup_complete;
     }
 
     public function setAccountVerifiedAt(?string $account_verified_at): self
@@ -175,6 +209,17 @@ abstract class AccountDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
         return $this->account_verified_at;
     }
 
+    public function setStripeConnectAccountType(?string $stripe_connect_account_type): self
+    {
+        $this->stripe_connect_account_type = $stripe_connect_account_type;
+        return $this;
+    }
+
+    public function getStripeConnectAccountType(): ?string
+    {
+        return $this->stripe_connect_account_type;
+    }
+
     public function setIsManuallyVerified(bool $is_manually_verified): self
     {
         $this->is_manually_verified = $is_manually_verified;
@@ -184,5 +229,16 @@ abstract class AccountDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     public function getIsManuallyVerified(): bool
     {
         return $this->is_manually_verified;
+    }
+
+    public function setCountry(?string $country): self
+    {
+        $this->country = $country;
+        return $this;
+    }
+
+    public function getCountry(): ?string
+    {
+        return $this->country;
     }
 }

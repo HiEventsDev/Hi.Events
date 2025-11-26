@@ -15,26 +15,32 @@ abstract class OrderPaymentPlatformFeeDomainObjectAbstract extends \HiEvents\Dom
     final public const PAYMENT_PLATFORM = 'payment_platform';
     final public const FEE_ROLLUP = 'fee_rollup';
     final public const PAYMENT_PLATFORM_FEE_AMOUNT = 'payment_platform_fee_amount';
-    final public const APPLICATION_FEE_AMOUNT = 'application_fee_amount';
+    final public const APPLICATION_FEE_GROSS_AMOUNT = 'application_fee_gross_amount';
     final public const CURRENCY = 'currency';
     final public const TRANSACTION_ID = 'transaction_id';
     final public const PAID_AT = 'paid_at';
     final public const DELETED_AT = 'deleted_at';
     final public const CREATED_AT = 'created_at';
     final public const UPDATED_AT = 'updated_at';
+    final public const APPLICATION_FEE_NET_AMOUNT = 'application_fee_net_amount';
+    final public const APPLICATION_FEE_VAT_AMOUNT = 'application_fee_vat_amount';
+    final public const CHARGE_ID = 'charge_id';
 
     protected int $id;
     protected int $order_id;
     protected string $payment_platform;
     protected array|string|null $fee_rollup = null;
     protected float $payment_platform_fee_amount;
-    protected float $application_fee_amount = 0.0;
+    protected float $application_fee_gross_amount = 0.0;
     protected string $currency = 'USD';
     protected ?string $transaction_id = null;
     protected ?string $paid_at = null;
     protected ?string $deleted_at = null;
     protected ?string $created_at = null;
     protected ?string $updated_at = null;
+    protected ?float $application_fee_net_amount = null;
+    protected ?float $application_fee_vat_amount = null;
+    protected ?string $charge_id = null;
 
     public function toArray(): array
     {
@@ -44,13 +50,16 @@ abstract class OrderPaymentPlatformFeeDomainObjectAbstract extends \HiEvents\Dom
                     'payment_platform' => $this->payment_platform ?? null,
                     'fee_rollup' => $this->fee_rollup ?? null,
                     'payment_platform_fee_amount' => $this->payment_platform_fee_amount ?? null,
-                    'application_fee_amount' => $this->application_fee_amount ?? null,
+                    'application_fee_gross_amount' => $this->application_fee_gross_amount ?? null,
                     'currency' => $this->currency ?? null,
                     'transaction_id' => $this->transaction_id ?? null,
                     'paid_at' => $this->paid_at ?? null,
                     'deleted_at' => $this->deleted_at ?? null,
                     'created_at' => $this->created_at ?? null,
                     'updated_at' => $this->updated_at ?? null,
+                    'application_fee_net_amount' => $this->application_fee_net_amount ?? null,
+                    'application_fee_vat_amount' => $this->application_fee_vat_amount ?? null,
+                    'charge_id' => $this->charge_id ?? null,
                 ];
     }
 
@@ -109,15 +118,15 @@ abstract class OrderPaymentPlatformFeeDomainObjectAbstract extends \HiEvents\Dom
         return $this->payment_platform_fee_amount;
     }
 
-    public function setApplicationFeeAmount(float $application_fee_amount): self
+    public function setApplicationFeeGrossAmount(float $application_fee_gross_amount): self
     {
-        $this->application_fee_amount = $application_fee_amount;
+        $this->application_fee_gross_amount = $application_fee_gross_amount;
         return $this;
     }
 
-    public function getApplicationFeeAmount(): float
+    public function getApplicationFeeGrossAmount(): float
     {
-        return $this->application_fee_amount;
+        return $this->application_fee_gross_amount;
     }
 
     public function setCurrency(string $currency): self
@@ -184,5 +193,38 @@ abstract class OrderPaymentPlatformFeeDomainObjectAbstract extends \HiEvents\Dom
     public function getUpdatedAt(): ?string
     {
         return $this->updated_at;
+    }
+
+    public function setApplicationFeeNetAmount(?float $application_fee_net_amount): self
+    {
+        $this->application_fee_net_amount = $application_fee_net_amount;
+        return $this;
+    }
+
+    public function getApplicationFeeNetAmount(): ?float
+    {
+        return $this->application_fee_net_amount;
+    }
+
+    public function setApplicationFeeVatAmount(?float $application_fee_vat_amount): self
+    {
+        $this->application_fee_vat_amount = $application_fee_vat_amount;
+        return $this;
+    }
+
+    public function getApplicationFeeVatAmount(): ?float
+    {
+        return $this->application_fee_vat_amount;
+    }
+
+    public function setChargeId(?string $charge_id): self
+    {
+        $this->charge_id = $charge_id;
+        return $this;
+    }
+
+    public function getChargeId(): ?string
+    {
+        return $this->charge_id;
     }
 }

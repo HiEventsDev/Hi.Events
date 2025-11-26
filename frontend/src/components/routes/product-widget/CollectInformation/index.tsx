@@ -1,7 +1,7 @@
 import {useMutation} from "@tanstack/react-query";
 import {FinaliseOrderPayload, orderClientPublic} from "../../../../api/order.client.ts";
 import {useNavigate, useParams} from "react-router";
-import {Button, Group, NativeSelect, Skeleton, TextInput} from "@mantine/core";
+import {Button, Checkbox, Group, NativeSelect, Skeleton, TextInput} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import {notifications} from "@mantine/notifications";
 import {useGetOrderPublic} from "../../../../queries/useGetOrderPublic.ts";
@@ -56,6 +56,7 @@ export const CollectInformation = () => {
     const orderQuestions = questions?.filter(question => question.belongs_to === "ORDER");
     const products = productCategories?.flatMap(category => category.products);
     const requireBillingAddress = event?.settings?.require_billing_address;
+    const isPerOrderCollection = event?.settings?.attendee_details_collection_method === 'PER_ORDER';
 
     let productIndex = 0;
 
@@ -65,18 +66,38 @@ export const CollectInformation = () => {
                 first_name: "",
                 last_name: "",
                 email: "",
+                email_confirmation: "",
                 address: {},
                 questions: {},
+                opted_into_marketing: false,
             },
             products: [{
                 first_name: "",
                 last_name: "",
                 email: "",
+                email_confirmation: "",
                 product_price_id: "",
                 product_id: "",
                 questions: {},
             }],
         },
+        validate: {
+            order: {
+                email_confirmation: (value, values) =>
+                    value !== values.order.email ? t`Email addresses do not match` : null,
+            },
+            products: {
+                email_confirmation: (value, values, path) => {
+                    const index = parseInt(path.split('.')[1]);
+                    const product = values.products[index];
+                    if (product && product.email !== value) {
+                        return t`Email addresses do not match`;
+                    }
+                    return null;
+                },
+            },
+        },
+        validateInputOnBlur: true,
     });
 
     const copyDetailsToAllAttendees = () => {
@@ -97,6 +118,7 @@ export const CollectInformation = () => {
                     first_name: form.values.order.first_name,
                     last_name: form.values.order.last_name,
                     email: form.values.order.email,
+                    email_confirmation: form.values.order.email,
                 };
             }
             return product;
@@ -159,6 +181,7 @@ export const CollectInformation = () => {
                     first_name: "",
                     last_name: "",
                     email: "",
+                    email_confirmation: "",
                     questions: productIdToQuestionMap.get(orderItem?.product_id)?.map((question: Question) => {
                         return {
                             question_id: question.id,
@@ -300,15 +323,26 @@ export const CollectInformation = () => {
                         />
                     </InputGroup>
 
-                    <TextInput
-                        withAsterisk
-                        type={"email"}
-                        label={t`Email Address`}
-                        placeholder={t`Email Address`}
-                        {...form.getInputProps("order.email")}
-                    />
+                    <InputGroup>
+                        <TextInput
+                            withAsterisk
+                            type={"email"}
+                            label={t`Email Address`}
+                            placeholder={t`Email Address`}
+                            {...form.getInputProps("order.email")}
+                            mb={0}
+                        />
+                        <TextInput
+                            withAsterisk
+                            type={"email"}
+                            label={t`Confirm Email Address`}
+                            placeholder={t`Confirm Email Address`}
+                            {...form.getInputProps("order.email_confirmation")}
+                            mb={0}
+                        />
+                    </InputGroup>
 
-                    {orderRequiresAttendeeDetails && (
+                    {orderRequiresAttendeeDetails && !isPerOrderCollection && (
                         <Button p={0} ml={0} size={'sm'} variant={'transparent'} leftSection={<IconCopy size={14}/>}
                                 onClick={copyDetailsToAllAttendees}>
                             {t`Copy details to all attendees`}
@@ -368,11 +402,19 @@ export const CollectInformation = () => {
                     )}
 
                     {orderQuestions && <CheckoutOrderQuestions form={form} questions={orderQuestions}/>}
+
+                    {event?.settings?.show_marketing_opt_in && (
+                        <Checkbox
+                            mt="md"
+                            label={t`Keep me updated on more events and news from this event organizer.`}
+                            {...form.getInputProps('order.opted_into_marketing', {type: 'checkbox'})}
+                        />
+                    )}
                 </Card>
 
                 {orderItems?.map(orderItem => {
                     const product = products?.find(product => product!.id === orderItem.product_id);
-                    const productRequiresDetails = product?.product_type === 'TICKET';
+                    const productRequiresDetails = product?.product_type === 'TICKET' && !isPerOrderCollection;
                     const productHasQuestions = productQuestions?.some(question => question.product_ids?.includes(orderItem.product_id));
 
                     if (!product) {
@@ -411,12 +453,22 @@ export const CollectInformation = () => {
                                                         />
                                                     </InputGroup>
 
-                                                    <TextInput
-                                                        withAsterisk
-                                                        label={t`Email Address`}
-                                                        placeholder={t`Email Address`}
-                                                        {...form.getInputProps(`products.${productIndex}.email`)}
-                                                    />
+                                                    <InputGroup>
+                                                        <TextInput
+                                                            withAsterisk
+                                                            type={"email"}
+                                                            label={t`Email Address`}
+                                                            placeholder={t`Email Address`}
+                                                            {...form.getInputProps(`products.${productIndex}.email`)}
+                                                        />
+                                                        <TextInput
+                                                            withAsterisk
+                                                            type={"email"}
+                                                            label={t`Confirm Email Address`}
+                                                            placeholder={t`Confirm Email Address`}
+                                                            {...form.getInputProps(`products.${productIndex}.email_confirmation`)}
+                                                        />
+                                                    </InputGroup>
                                                 </>
                                             )}
 

@@ -4,6 +4,7 @@ namespace HiEvents\Services\Application\Handlers\Organizer\DTO;
 
 use HiEvents\DataTransferObjects\AddressDTO;
 use HiEvents\DataTransferObjects\BaseDataObject;
+use HiEvents\DomainObjects\Enums\AttendeeDetailsCollectionMethod;
 use HiEvents\DomainObjects\Enums\HomepageBackgroundType;
 use HiEvents\DomainObjects\Enums\OrganizerHomepageVisibility;
 use Spatie\LaravelData\Attributes\MapInputName;
@@ -18,6 +19,11 @@ class PartialUpdateOrganizerSettingsDTO extends BaseDataObject
     public function __construct(
         public readonly int                                       $organizerId,
         public readonly string                                    $accountId,
+
+        // Event defaults
+        #[WithCast(EnumCast::class)]
+        public readonly AttendeeDetailsCollectionMethod|Optional|null $defaultAttendeeDetailsCollectionMethod,
+        public readonly bool|Optional|null                        $defaultShowMarketingOptIn,
 
         // Social
         public readonly string|Optional|null                      $facebookHandle,

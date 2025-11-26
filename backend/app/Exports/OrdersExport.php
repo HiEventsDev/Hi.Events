@@ -66,6 +66,7 @@ class OrdersExport implements FromCollection, WithHeadings, WithMapping, WithSty
             __('Billing Address'),
             __('Notes'),
             __('Promo Code'),
+            __('Opted In To Marketing'),
         ], $questionTitles);
     }
 
@@ -109,6 +110,7 @@ class OrdersExport implements FromCollection, WithHeadings, WithMapping, WithSty
             $order->getBillingAddressString(),
             $order->getNotes(),
             $order->getPromoCode(),
+            $order->getOptedIntoMarketingAt() ? 'Yes' : 'No',
         ], $answers->toArray());
     }
 

@@ -18,6 +18,7 @@ class EventSettingsResource extends JsonResource
             'product_page_message' => $this->getProductPageMessage(),
             'continue_button_text' => $this->getContinueButtonText(),
             'required_attendee_details' => $this->getRequireAttendeeDetails(),
+            'attendee_details_collection_method' => $this->getAttendeeDetailsCollectionMethod(),
             'email_footer_message' => $this->getEmailFooterMessage(),
             'support_email' => $this->getSupportEmail(),
             'order_timeout_in_minutes' => $this->getOrderTimeoutInMinutes(),
@@ -66,6 +67,9 @@ class EventSettingsResource extends JsonResource
             'invoice_tax_details' => $this->getInvoiceTaxDetails(),
             'invoice_notes' => $this->getInvoiceNotes(),
             'invoice_payment_terms_days' => $this->getInvoicePaymentTermsDays(),
+
+            // Marketing settings
+            'show_marketing_opt_in' => $this->getShowMarketingOptIn(),
         ];
     }
 }

@@ -23,6 +23,15 @@ abstract class StripePaymentDomainObjectAbstract extends \HiEvents\DomainObjects
     final public const CONNECTED_ACCOUNT_ID = 'connected_account_id';
     final public const APPLICATION_FEE = 'application_fee';
     final public const STRIPE_PLATFORM = 'stripe_platform';
+    final public const APPLICATION_FEE_NET = 'application_fee_net';
+    final public const APPLICATION_FEE_VAT = 'application_fee_vat';
+    final public const CURRENCY = 'currency';
+    final public const PAYOUT_ID = 'payout_id';
+    final public const PAYOUT_STRIPE_FEE = 'payout_stripe_fee';
+    final public const PAYOUT_NET_AMOUNT = 'payout_net_amount';
+    final public const PAYOUT_CURRENCY = 'payout_currency';
+    final public const PAYOUT_EXCHANGE_RATE = 'payout_exchange_rate';
+    final public const BALANCE_TRANSACTION_ID = 'balance_transaction_id';
 
     protected int $id;
     protected int $order_id;
@@ -37,6 +46,15 @@ abstract class StripePaymentDomainObjectAbstract extends \HiEvents\DomainObjects
     protected ?string $connected_account_id = null;
     protected int $application_fee = 0;
     protected ?string $stripe_platform = null;
+    protected ?int $application_fee_net = null;
+    protected ?int $application_fee_vat = null;
+    protected ?string $currency = null;
+    protected ?string $payout_id = null;
+    protected ?int $payout_stripe_fee = null;
+    protected ?int $payout_net_amount = null;
+    protected ?string $payout_currency = null;
+    protected ?float $payout_exchange_rate = null;
+    protected ?string $balance_transaction_id = null;
 
     public function toArray(): array
     {
@@ -54,6 +72,15 @@ abstract class StripePaymentDomainObjectAbstract extends \HiEvents\DomainObjects
                     'connected_account_id' => $this->connected_account_id ?? null,
                     'application_fee' => $this->application_fee ?? null,
                     'stripe_platform' => $this->stripe_platform ?? null,
+                    'application_fee_net' => $this->application_fee_net ?? null,
+                    'application_fee_vat' => $this->application_fee_vat ?? null,
+                    'currency' => $this->currency ?? null,
+                    'payout_id' => $this->payout_id ?? null,
+                    'payout_stripe_fee' => $this->payout_stripe_fee ?? null,
+                    'payout_net_amount' => $this->payout_net_amount ?? null,
+                    'payout_currency' => $this->payout_currency ?? null,
+                    'payout_exchange_rate' => $this->payout_exchange_rate ?? null,
+                    'balance_transaction_id' => $this->balance_transaction_id ?? null,
                 ];
     }
 
@@ -198,5 +225,104 @@ abstract class StripePaymentDomainObjectAbstract extends \HiEvents\DomainObjects
     public function getStripePlatform(): ?string
     {
         return $this->stripe_platform;
+    }
+
+    public function setApplicationFeeNet(?int $application_fee_net): self
+    {
+        $this->application_fee_net = $application_fee_net;
+        return $this;
+    }
+
+    public function getApplicationFeeNet(): ?int
+    {
+        return $this->application_fee_net;
+    }
+
+    public function setApplicationFeeVat(?int $application_fee_vat): self
+    {
+        $this->application_fee_vat = $application_fee_vat;
+        return $this;
+    }
+
+    public function getApplicationFeeVat(): ?int
+    {
+        return $this->application_fee_vat;
+    }
+
+    public function setCurrency(?string $currency): self
+    {
+        $this->currency = $currency;
+        return $this;
+    }
+
+    public function getCurrency(): ?string
+    {
+        return $this->currency;
+    }
+
+    public function setPayoutId(?string $payout_id): self
+    {
+        $this->payout_id = $payout_id;
+        return $this;
+    }
+
+    public function getPayoutId(): ?string
+    {
+        return $this->payout_id;
+    }
+
+    public function setPayoutStripeFee(?int $payout_stripe_fee): self
+    {
+        $this->payout_stripe_fee = $payout_stripe_fee;
+        return $this;
+    }
+
+    public function getPayoutStripeFee(): ?int
+    {
+        return $this->payout_stripe_fee;
+    }
+
+    public function setPayoutNetAmount(?int $payout_net_amount): self
+    {
+        $this->payout_net_amount = $payout_net_amount;
+        return $this;
+    }
+
+    public function getPayoutNetAmount(): ?int
+    {
+        return $this->payout_net_amount;
+    }
+
+    public function setPayoutCurrency(?string $payout_currency): self
+    {
+        $this->payout_currency = $payout_currency;
+        return $this;
+    }
+
+    public function getPayoutCurrency(): ?string
+    {
+        return $this->payout_currency;
+    }
+
+    public function setPayoutExchangeRate(?float $payout_exchange_rate): self
+    {
+        $this->payout_exchange_rate = $payout_exchange_rate;
+        return $this;
+    }
+
+    public function getPayoutExchangeRate(): ?float
+    {
+        return $this->payout_exchange_rate;
+    }
+
+    public function setBalanceTransactionId(?string $balance_transaction_id): self
+    {
+        $this->balance_transaction_id = $balance_transaction_id;
+        return $this;
+    }
+
+    public function getBalanceTransactionId(): ?string
+    {
+        return $this->balance_transaction_id;
     }
 }

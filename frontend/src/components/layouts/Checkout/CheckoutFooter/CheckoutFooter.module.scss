@@ -34,11 +34,26 @@
     gap: 10px;
     justify-content: center;
     align-items: center;
+    flex-wrap: wrap;
 
     background-color: var(--hi-color-white);
     padding: 10px;
     box-shadow: 0px -5px 5px 0 rgba(0, 0, 0, 0.0392156863);
     border-top: 1px solid #e0e0e0;
+
+    .tosNotice {
+      width: 100%;
+      text-align: center;
+
+      a {
+        color: var(--mantine-color-blue-6);
+        text-decoration: none;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
 
     .orderSummaryToggle {
       display: block;
