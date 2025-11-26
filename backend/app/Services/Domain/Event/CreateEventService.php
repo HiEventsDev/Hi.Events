@@ -223,6 +223,9 @@ class CreateEventService
             'organization_name' => $organizer->getName(),
             'organization_address' => null,
             'invoice_tax_details' => null,
+
+            'attendee_details_collection_method' => $organizerSettings->getDefaultAttendeeDetailsCollectionMethod(),
+            'show_marketing_opt_in' => $organizerSettings->getDefaultShowMarketingOptIn(),
         ]);
     }
 }

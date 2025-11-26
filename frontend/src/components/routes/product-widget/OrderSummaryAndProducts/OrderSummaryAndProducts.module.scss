@@ -1,22 +1,80 @@
 @use "../../../../styles/mixins";
 
 .welcomeHeader {
-  margin-bottom: 20px;
-  padding: 20px;
-  font-size: 1.5rem;
+  margin-bottom: 24px;
+  padding: 32px 20px 24px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.confettiIcon {
+  font-size: 48px;
+  line-height: 1;
+  margin-bottom: 8px;
+  animation: bounceIn 0.6s ease-out, subtleBounce 2s ease-in-out 0.6s infinite;
+
+  span {
+    display: inline-block;
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes subtleBounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.welcomeMessage {
+  font-size: 24px;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 4px;
+}
+
+.confirmationText {
+  font-size: 15px;
+  color: #6B7280;
+
+  strong {
+    font-weight: 500;
+    color: #374151;
+  }
 }
 
 .actionBar {
-  background-color: #800080;
+  background-color: var(--mantine-primary-color-filled);
   padding: var(--hi-spacing-md);
   color: #fff;
 }
 
 .heading {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 600;
-  margin-top: 20px;
+  margin-top: 24px;
+  margin-bottom: 0;
 }
 
 .subHeading {
@@ -26,8 +84,8 @@
 .orderSummaryContainer {
   padding: var(--hi-spacing-lg);
   border-radius: var(--hi-radius-lg);
-  background-color: #fff9ff;
-  border: 1px solid #800080;
+  background-color: var(--mantine-primary-color-light);
+  border: 1px solid var(--mantine-primary-color-filled);
 }
 
 .detailItem {

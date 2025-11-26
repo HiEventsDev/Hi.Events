@@ -1,14 +1,14 @@
-import {Outlet, useBlocker, useNavigate, useParams} from "react-router";
+import {Outlet, useBlocker, useLocation, useNavigate, useParams} from "react-router";
 import classes from './Checkout.module.scss';
 import {useGetOrderPublic} from "../../../queries/useGetOrderPublic.ts";
 import {t} from "@lingui/macro";
 import {Countdown} from "../../common/Countdown";
-import {CheckoutSidebar} from "./CheckoutSidebar";
 import {ActionIcon, Button, Group, Modal, Tooltip} from "@mantine/core";
 import {IconArrowLeft, IconPrinter, IconReceipt} from "@tabler/icons-react";
 import {eventHomepagePath, eventHomepageUrl} from "../../../utilites/urlHelper.ts";
 import {ShareComponent} from "../../common/ShareIcon";
 import {AddToEventCalendarButton} from "../../common/AddEventToCalendarButton";
+import {ProgressStepper} from "../../common/ProgressStepper";
 import {useMediaQuery} from "@mantine/hooks";
 import {useEffect, useState} from "react";
 import {Invoice} from "../../../types.ts";
@@ -24,6 +24,7 @@ const Checkout = () => {
     const {data: order} = useGetOrderPublic(eventId, orderShortId, ['event']);
     const event = order?.event;
     const navigate = useNavigate();
+    const location = useLocation();
     const orderIsCompleted = order?.status === 'COMPLETED';
     const orderIsReserved = order?.status === 'RESERVED';
     const orderIsAwaitingOfflinePayment = order?.status === 'AWAITING_OFFLINE_PAYMENT';
@@ -34,6 +35,14 @@ const Checkout = () => {
     const [pendingNavigation, setPendingNavigation] = useState<string | null>(null);
     const [isAbandoning, setIsAbandoning] = useState(false);
     const abandonOrderMutation = useAbandonOrderPublic();
+
+    const getCurrentStep = (): 'details' | 'payment' | 'summary' => {
+        const pathname = location.pathname;
+        if (pathname.includes('/payment')) return 'payment';
+        if (pathname.includes('/summary')) return 'summary';
+        return 'details';
+    };
+    const currentStep = getCurrentStep();
 
     const isOrderReservedAndNotExpired = orderIsReserved && order?.reserved_until
         && isDateInFuture(order.reserved_until);
@@ -146,14 +155,22 @@ const Checkout = () => {
                                         {!isMobile && t`Event Homepage`}
                                     </Button>
 
-                                    <span className={classes.title}>
-                                        {order.status === 'RESERVED' && t`Checkout`}
-                                        {order.status === 'COMPLETED' && t`Your Order`}
-                                    </span>
+                                    {orderIsReserved && (
+                                        <ProgressStepper
+                                            isPaymentRequired={!!order.is_payment_required}
+                                            currentStep={currentStep}
+                                        />
+                                    )}
+
+                                    {(orderIsCompleted || orderIsAwaitingOfflinePayment) && (
+                                        <span className={classes.title}>
+                                            {t`Your Order`}
+                                        </span>
+                                    )}
 
                                     {orderIsReserved && (
-                                        <Group gap="5px">
-                                            <span>
+                                        <Group gap="5px" className={classes.timerGroup}>
+                                            <span className={classes.timerLabel}>
                                                 {t`Time left:`}
                                             </span>
                                             <Countdown
@@ -207,8 +224,6 @@ const Checkout = () => {
                     </header>
                     <Outlet/>
                 </div>
-
-                {(order && event) && <CheckoutSidebar className={classes.sidebar} event={event} order={order}/>}
             </div>
 
             <Modal

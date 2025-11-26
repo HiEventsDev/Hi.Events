@@ -116,6 +116,7 @@ class CompleteOrderHandlerTest extends TestCase
         $orderShortId = 'NONEXISTENT';
         $orderData = $this->createMockCompleteOrderDTO();
 
+        $this->eventSettingsRepository->shouldReceive('findFirstWhere')->andReturn($this->createMockEventSetting());
         $this->orderRepository->shouldReceive('findByShortId')->with($orderShortId)->andReturnNull();
         $this->orderRepository->shouldReceive('loadRelation')->andReturnSelf();
 
@@ -134,6 +135,7 @@ class CompleteOrderHandlerTest extends TestCase
         $order->setEmail('d@d.com');
         $order->setTotalGross(0);
 
+        $this->eventSettingsRepository->shouldReceive('findFirstWhere')->andReturn($this->createMockEventSetting());
         $this->orderRepository->shouldReceive('findByShortId')->with($orderShortId)->andReturn($order);
         $this->orderRepository->shouldReceive('loadRelation')->andReturnSelf();
 
@@ -151,6 +153,7 @@ class CompleteOrderHandlerTest extends TestCase
         $order->setReservedUntil(Carbon::now()->subHour()->toDateTimeString());
         $order->setTotalGross(100);
 
+        $this->eventSettingsRepository->shouldReceive('findFirstWhere')->andReturn($this->createMockEventSetting());
         $this->orderRepository->shouldReceive('findByShortId')->with($orderShortId)->andReturn($order);
         $this->orderRepository->shouldReceive('loadRelation')->andReturnSelf();
 
@@ -226,6 +229,7 @@ class CompleteOrderHandlerTest extends TestCase
         $order = $this->createMockOrder();
         $updatedOrder = $this->createMockOrder();
 
+        $this->eventSettingsRepository->shouldReceive('findFirstWhere')->andReturn($this->createMockEventSetting());
         $this->orderRepository->shouldReceive('findByShortId')->with($orderShortId)->andReturn($order);
         $this->orderRepository->shouldReceive('loadRelation')->andReturnSelf();
         $this->orderRepository->shouldReceive('updateFromArray')->andReturn($updatedOrder);
@@ -249,6 +253,7 @@ class CompleteOrderHandlerTest extends TestCase
 
         $order->getOrderItems()->first()->setQuantity(2);
 
+        $this->eventSettingsRepository->shouldReceive('findFirstWhere')->andReturn($this->createMockEventSetting());
         $this->orderRepository->shouldReceive('findByShortId')->with($orderShortId)->andReturn($order);
         $this->orderRepository->shouldReceive('loadRelation')->andReturnSelf();
         $this->orderRepository->shouldReceive('updateFromArray')->andReturn($updatedOrder);

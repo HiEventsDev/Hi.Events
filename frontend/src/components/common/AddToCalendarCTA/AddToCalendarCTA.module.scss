@@ -1,0 +1,52 @@
+@use "../../../styles/mixins";
+
+.container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: #EEF2FF;
+  border: 1px solid #E0E7FF;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 32px;
+  margin-bottom: 32px;
+
+  @include mixins.respond-below(sm) {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+.iconContainer {
+  width: 40px;
+  height: 40px;
+  background: #E0E7FF;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #4F46E5;
+  flex-shrink: 0;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  @include mixins.respond-below(sm) {
+    align-items: center;
+  }
+}
+
+.title {
+  font-size: 15px;
+  font-weight: 500;
+  color: #111827;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #6B7280;
+}

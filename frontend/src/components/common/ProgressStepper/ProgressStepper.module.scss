@@ -1,0 +1,71 @@
+@use "../../../styles/mixins";
+
+.stepper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+}
+
+.stepContainer {
+  display: flex;
+  align-items: center;
+}
+
+.stepItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 600;
+  background-color: #E5E7EB;
+  color: #6B7280;
+  transition: all 0.15s ease;
+
+  &.active {
+    background-color: var(--mantine-primary-color-filled);
+    color: #ffffff;
+  }
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #6B7280;
+  transition: color 0.15s ease;
+
+  @include mixins.respond-below(sm) {
+    display: none;
+  }
+
+  &.activeLabel {
+    color: #111827;
+  }
+}
+
+.connector {
+  width: 40px;
+  height: 2px;
+  background-color: #D1D5DB;
+  margin: 0 8px;
+  border-radius: 1px;
+  transition: background-color 0.15s ease;
+
+  @include mixins.respond-below(sm) {
+    width: 28px;
+    margin: 0 6px;
+  }
+
+  &.activeConnector {
+    background-color: var(--mantine-primary-color-filled);
+  }
+}

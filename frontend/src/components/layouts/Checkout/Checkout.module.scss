@@ -3,13 +3,7 @@
 .container {
   display: flex;
   background-color: #3c2b5c05 !important;
-  height: 100vh;
-
-  .sidebar {
-    @include mixins.respond-below(md) {
-      display: none;
-    }
-  }
+  min-height: 100vh;
 
   .countdown {
     color: #0ca678;
@@ -19,6 +13,16 @@
     color: #ad2f26;
   }
 
+  .timerGroup {
+    flex-shrink: 0;
+  }
+
+  .timerLabel {
+    @include mixins.respond-below(sm) {
+      display: none;
+    }
+  }
+
   .subTitle {
     font-size: 0.95em;
     margin-top: 10px;
@@ -26,8 +30,6 @@
 
   .mainContent {
     flex: 1;
-    border-right: 1px solid #e0e0e0;
-    //height: 100vh;
 
     .header {
       height: 60px;
@@ -52,7 +54,8 @@
 
       h1 {
         font-size: 1.3em;
-        width: calc(100vw - 350px);
+        width: 100%;
+        max-width: 700px;
         padding: 0 15px;
 
         overflow: hidden;
@@ -60,32 +63,9 @@
         text-overflow: ellipsis;
 
         @include mixins.respond-below(md) {
-          width: calc(100vw - 60px);
           font-size: 1em;
         }
       }
-    }
-
-    .main {
-      position: relative;
-      height: calc(100vh - 90px);
-      overflow-y: auto;
-      padding: 20px 60px;
-      @include mixins.scrollbar();
-
-      @include mixins.respond-below(md) {
-        padding: 20px;
-      }
-
-      .innerContainer {
-        max-width: 700px;
-        margin: 0 auto;
-      }
-    }
-
-    .footer {
-      height: 100px;
-      background-color: #ffffff;
     }
   }
 }
