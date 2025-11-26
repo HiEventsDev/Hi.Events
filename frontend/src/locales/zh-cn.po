@@ -27,7 +27,7 @@ msgstr "- 点击取消发布"
 msgid "'There\\'s nothing to show yet'"
 msgstr "There's nothing to show yet"
 
-#: src/components/common/OrganizerReportTable/index.tsx:310
+#: src/components/common/OrganizerReportTable/index.tsx:314
 #: src/components/common/ReportTable/index.tsx:303
 #: src/locales.ts:54
 msgid "{0}"
@@ -69,6 +69,10 @@ msgstr "{0} 标志"
 #: src/components/routes/events/Dashboard/index.tsx:140
 msgid "{0} organizers"
 msgstr "{0} 位组织者"
+
+#: src/components/routes/product-widget/CollectInformation/index.tsx:550
+msgid "{0} tickets"
+msgstr "{0}张门票"
 
 #: src/components/modals/EditTaxOrFeeModal/index.tsx:42
 msgid "{0} updated successfully"
@@ -154,6 +158,10 @@ msgstr "0 分 0 秒"
 msgid "1 Active Webhook"
 msgstr "1 个活动的 Webhook"
 
+#: src/components/routes/product-widget/CollectInformation/index.tsx:549
+msgid "1 ticket"
+msgstr "1张门票"
+
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:123
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:81
 msgid "123 Main Street"
@@ -172,6 +180,10 @@ msgstr "20"
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:105
 msgid "94103"
 msgstr "94103"
+
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:133
+msgid "A cancellation notice has been sent to"
+msgstr "取消通知已发送至"
 
 #: src/components/forms/QuestionForm/index.tsx:138
 msgid "A date input. Perfect for asking for a date of birth etc."
@@ -310,7 +322,7 @@ msgstr "需要操作：重新连接您的 Stripe 账户"
 #: src/components/common/AttendeeTable/index.tsx:346
 #: src/components/common/OrdersTable/index.tsx:426
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:267
-#: src/components/common/QuestionsTable/index.tsx:108
+#: src/components/common/QuestionsTable/index.tsx:109
 msgid "Actions"
 msgstr "操作"
 
@@ -385,13 +397,17 @@ msgstr "添加产品"
 msgid "Add Product to Category"
 msgstr "将产品添加到类别"
 
-#: src/components/common/QuestionsTable/index.tsx:281
+#: src/components/common/QuestionsTable/index.tsx:293
 msgid "Add question"
 msgstr "添加问题"
 
 #: src/components/routes/account/ManageAccount/sections/TaxSettings/index.tsx:18
 msgid "Add Tax or Fee"
 msgstr "加税或费用"
+
+#: src/components/common/AddToCalendarCTA/index.tsx:20
+msgid "Add this event to your calendar"
+msgstr "将此活动添加到您的日历"
 
 #: src/components/routes/event/GettingStarted/index.tsx:127
 msgid "Add tickets"
@@ -401,8 +417,8 @@ msgstr "添加机票"
 msgid "Add tier"
 msgstr "增加层级"
 
-#: src/components/common/AddEventToCalendarButton/index.tsx:112
-#: src/components/common/AddEventToCalendarButton/index.tsx:120
+#: src/components/common/AddEventToCalendarButton/index.tsx:14
+#: src/components/common/AddToCalendarCTA/index.tsx:24
 msgid "Add to Calendar"
 msgstr "添加到日历"
 
@@ -415,7 +431,7 @@ msgstr "添加 Webhook"
 msgid "Add your social media handles and website URL. These will be displayed on your public organizer page."
 msgstr "添加您的社交媒体账号和网站链接。这些信息将显示在您的公开组织者页面上。"
 
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:219
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:273
 msgid "Additional Information"
 msgstr "附加信息"
 
@@ -426,7 +442,7 @@ msgstr "附加选项"
 
 #: src/components/common/OrderDetails/index.tsx:96
 #: src/components/forms/QuestionForm/index.tsx:130
-#: src/components/routes/organizer/Settings/index.tsx:28
+#: src/components/routes/organizer/Settings/index.tsx:35
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:67
 msgid "Address"
 msgstr "地址"
@@ -437,8 +453,8 @@ msgstr "地址第 1 行"
 
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:122
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:80
-#: src/components/routes/product-widget/CollectInformation/index.tsx:327
-#: src/components/routes/product-widget/CollectInformation/index.tsx:328
+#: src/components/routes/product-widget/CollectInformation/index.tsx:476
+#: src/components/routes/product-widget/CollectInformation/index.tsx:477
 msgid "Address Line 1"
 msgstr "地址 1"
 
@@ -448,8 +464,8 @@ msgstr "地址第 2 行"
 
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:127
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:85
-#: src/components/routes/product-widget/CollectInformation/index.tsx:332
-#: src/components/routes/product-widget/CollectInformation/index.tsx:333
+#: src/components/routes/product-widget/CollectInformation/index.tsx:481
+#: src/components/routes/product-widget/CollectInformation/index.tsx:482
 msgid "Address Line 2"
 msgstr "地址第 2 行"
 
@@ -517,14 +533,15 @@ msgid "All Archived Events"
 msgstr "所有已归档活动"
 
 #: src/components/common/MessageList/index.tsx:21
+#: src/components/routes/product-widget/CollectInformation/index.tsx:458
 msgid "All attendees"
-msgstr "所有与会者"
+msgstr "所有参与者"
 
 #: src/components/modals/SendMessageModal/index.tsx:182
 msgid "All attendees of this event"
 msgstr "本次活动的所有与会者"
 
-#: src/components/common/OrganizerReportTable/index.tsx:245
+#: src/components/common/OrganizerReportTable/index.tsx:249
 msgid "All Currencies"
 msgstr "所有货币"
 
@@ -564,8 +581,8 @@ msgid "Almost there! Finish connecting your Stripe account to start accepting pa
 msgstr "快完成了！完成连接您的 Stripe 账户以开始接受付款。"
 
 #: src/components/routes/product-widget/PaymentReturn/index.tsx:78
-msgid "Almost there! We're just waiting for your payment to be processed. This should only take a few seconds.."
-msgstr "快到了！我们正在等待处理您的付款。只需几秒钟。"
+msgid "Almost there! We're just waiting for your payment to be processed. This should only take a few seconds."
+msgstr "快完成了！我们正在等待您的付款处理。这只需要几秒钟。"
 
 #: src/components/modals/RefundOrderModal/index.tsx:85
 msgid "Already Refunded"
@@ -606,7 +623,7 @@ msgstr "检查导出状态时发生错误。"
 msgid "An error occurred while loading the page"
 msgstr "加载页面时出现错误"
 
-#: src/components/common/QuestionsTable/index.tsx:148
+#: src/components/common/QuestionsTable/index.tsx:149
 msgid "An error occurred while sorting the questions. Please try again or refresh the page"
 msgstr "问题排序时发生错误。请重试或刷新页面"
 
@@ -682,7 +699,7 @@ msgstr "您确定要删除此推广员吗？此操作无法撤销。"
 msgid "Are you sure you want to delete this promo code?"
 msgstr "您确定要删除此促销代码吗？"
 
-#: src/components/common/QuestionsTable/index.tsx:164
+#: src/components/common/QuestionsTable/index.tsx:165
 msgid "Are you sure you want to delete this question?"
 msgstr "您确定要删除这个问题吗？"
 
@@ -698,7 +715,7 @@ msgstr "确定要删除此模板吗？此操作无法撤消，邮件将回退到
 msgid "Are you sure you want to delete this webhook?"
 msgstr "您确定要删除此 Webhook 吗？"
 
-#: src/components/layouts/Checkout/index.tsx:246
+#: src/components/layouts/Checkout/index.tsx:261
 msgid "Are you sure you want to leave?"
 msgstr "您确定要离开吗？"
 
@@ -771,7 +788,7 @@ msgstr "所有活动的出席率和签到率"
 #: src/components/common/AttendeeTicket/index.tsx:95
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:54
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:55
-#: src/components/routes/product-widget/CollectInformation/index.tsx:394
+#: src/components/routes/product-widget/CollectInformation/index.tsx:573
 msgid "Attendee"
 msgstr "参与者"
 
@@ -788,9 +805,21 @@ msgstr "与会者已创建"
 msgid "Attendee Details"
 msgstr "与会者详情"
 
+#: src/components/common/QuestionsTable/index.tsx:397
+msgid "Attendee details will be copied from order information."
+msgstr ""
+
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:55
 msgid "Attendee Email"
 msgstr "参会者邮箱"
+
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:114
+msgid "Attendee information collection"
+msgstr ""
+
+#: src/components/common/QuestionsTable/index.tsx:362
+msgid "Attendee information collection is set to \"Per order\". Attendee details will be copied from the order information."
+msgstr ""
 
 #: src/components/layouts/AuthLayout/index.tsx:75
 msgid "Attendee Management"
@@ -808,7 +837,7 @@ msgstr "未找到参与者"
 msgid "Attendee Notes"
 msgstr "与会者备注"
 
-#: src/components/common/QuestionsTable/index.tsx:369
+#: src/components/common/QuestionsTable/index.tsx:384
 msgid "Attendee questions"
 msgstr "与会者提问"
 
@@ -912,9 +941,14 @@ msgstr "精彩活动有限公司"
 msgid "Awesome Organizer Ltd."
 msgstr "Awesome Organizer Ltd."
 
-#: src/components/layouts/Checkout/index.tsx:141
-#: src/components/routes/product-widget/CollectInformation/index.tsx:257
-#: src/components/routes/product-widget/CollectInformation/index.tsx:269
+#: src/components/forms/StripeCheckoutForm/index.tsx:108
+#: src/components/routes/product-widget/CollectInformation/index.tsx:315
+#: src/components/routes/product-widget/CollectInformation/index.tsx:345
+#: src/components/routes/product-widget/CollectInformation/index.tsx:368
+msgid "Back to Event"
+msgstr "返回活动"
+
+#: src/components/layouts/Checkout/index.tsx:150
 msgid "Back to event page"
 msgstr "返回活动页面"
 
@@ -936,7 +970,7 @@ msgstr "背景颜色"
 msgid "Background Type"
 msgstr "背景类型"
 
-#: src/components/routes/organizer/Settings/index.tsx:22
+#: src/components/routes/organizer/Settings/index.tsx:23
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:63
 msgid "Basic Information"
 msgstr "基本信息"
@@ -949,8 +983,8 @@ msgstr "发送之前"
 msgid "Before your event can go live, there are a few things you need to do. Complete all the steps below to get started."
 msgstr "在您的活动可以上线之前，您需要完成以下几项任务。请完成以下所有步骤以开始。"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:321
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:142
+#: src/components/routes/product-widget/CollectInformation/index.tsx:470
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:180
 msgid "Billing Address"
 msgstr "账单地址"
 
@@ -977,6 +1011,11 @@ msgstr "按钮标签"
 #: src/components/routes/event/HomepageDesigner/index.tsx:247
 msgid "Button Text"
 msgstr "按钮文字"
+
+#: src/components/routes/product-widget/CollectInformation/index.tsx:675
+#: src/components/routes/product-widget/Payment/index.tsx:145
+msgid "By continuing, you agree to the <0>{0} Terms of Service</0>"
+msgstr ""
 
 #: src/components/routes/auth/Register/index.tsx:134
 msgid "By registering you agree to our <0>Terms of Service</0> and <1>Privacy Policy</1>."
@@ -1126,7 +1165,7 @@ msgstr "仅签到"
 msgid "Check Out"
 msgstr "签出"
 
-#: src/components/layouts/Checkout/index.tsx:173
+#: src/components/layouts/Checkout/index.tsx:190
 msgid "Check out this event!"
 msgstr "看看这个活动吧！"
 
@@ -1217,12 +1256,11 @@ msgstr "复选框"
 msgid "Checked In"
 msgstr "已签到"
 
-#: src/components/layouts/Checkout/index.tsx:150
 #: src/components/routes/event/Settings/index.tsx:40
 msgid "Checkout"
 msgstr "结账"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:61
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:82
 msgid "Checkout Settings"
 msgstr "结账设置"
 
@@ -1247,6 +1285,10 @@ msgstr "选择账户"
 msgid "Choose an Organizer"
 msgstr "选择一个组织者"
 
+#: src/components/common/CalendarOptionsPopover/index.tsx:21
+msgid "Choose calendar"
+msgstr "选择日历"
+
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:256
 msgid "Choose from predefined color schemes"
 msgstr "从预设的配色方案中选择"
@@ -1254,8 +1296,8 @@ msgstr "从预设的配色方案中选择"
 #: src/components/common/CheckoutQuestion/index.tsx:162
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:134
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:92
-#: src/components/routes/product-widget/CollectInformation/index.tsx:341
-#: src/components/routes/product-widget/CollectInformation/index.tsx:342
+#: src/components/routes/product-widget/CollectInformation/index.tsx:490
+#: src/components/routes/product-widget/CollectInformation/index.tsx:491
 msgid "City"
 msgstr "城市"
 
@@ -1326,6 +1368,11 @@ msgstr "与您的团队协作，共同创建精彩的活动。"
 msgid "Collapse this product when the event page is initially loaded"
 msgstr "当活动页面初始加载时折叠此产品"
 
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:42
+#: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:32
+msgid "Collect attendee details for each ticket purchased."
+msgstr ""
+
 #: src/components/routes/event/HomepageDesigner/index.tsx:182
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:343
 msgid "Color"
@@ -1360,15 +1407,12 @@ msgstr "即将推出"
 msgid "Comma seperated keywords that describe the event. These will be used by search engines to help categorize and index the event"
 msgstr "以逗号分隔的描述活动的关键字。搜索引擎将使用这些关键字来帮助对活动进行分类和索引"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:461
+#: src/components/routes/product-widget/CollectInformation/index.tsx:670
 msgid "Complete Order"
 msgstr "完整订单"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:231
-msgid "Complete payment"
-msgstr "完成付款"
-
-#: src/components/routes/product-widget/Payment/index.tsx:131
+#: src/components/routes/product-widget/CollectInformation/index.tsx:325
+#: src/components/routes/product-widget/Payment/index.tsx:142
 msgid "Complete Payment"
 msgstr "完成付款"
 
@@ -1384,6 +1428,10 @@ msgstr "完成下面的设置以继续"
 #: src/components/routes/event/EventDashboard/index.tsx:158
 msgid "Complete these steps to start selling tickets for your event."
 msgstr "完成以下步骤即可开始销售您的活动门票。"
+
+#: src/components/routes/product-widget/CollectInformation/index.tsx:323
+msgid "Complete your payment to secure your tickets."
+msgstr "完成付款以确保您的门票。"
 
 #: src/components/common/OrdersTable/index.tsx:393
 #: src/components/modals/SendMessageModal/index.tsx:225
@@ -1417,6 +1465,15 @@ msgstr "已配置折扣"
 msgid "Confirm"
 msgstr "确认"
 
+#: src/components/common/QuestionsTable/index.tsx:228
+#: src/components/common/QuestionsTable/index.tsx:229
+#: src/components/routes/product-widget/CollectInformation/index.tsx:416
+#: src/components/routes/product-widget/CollectInformation/index.tsx:417
+#: src/components/routes/product-widget/CollectInformation/index.tsx:622
+#: src/components/routes/product-widget/CollectInformation/index.tsx:623
+msgid "Confirm Email Address"
+msgstr "确认电子邮件地址"
+
 #: src/components/routes/profile/ConfirmEmailChange/index.tsx:51
 #: src/components/routes/profile/ConfirmEmailChange/index.tsx:56
 msgid "Confirm Email Change"
@@ -1443,6 +1500,10 @@ msgstr "请确认您的邮箱以访问所有功能。"
 #: src/components/layouts/OrganizerLayout/index.tsx:296
 msgid "Confirmation email sent! Please check your inbox."
 msgstr "确认邮件已发送！请检查您的收件箱。"
+
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:128
+msgid "Confirmation sent to"
+msgstr "确认已发送至"
 
 #: src/components/routes/profile/ConfirmEmailAddress/index.tsx:36
 msgid "Confirming email address..."
@@ -1543,8 +1604,6 @@ msgstr "内容背景颜色"
 
 #: src/components/common/WidgetEditor/index.tsx:31
 #: src/components/common/WidgetEditor/index.tsx:217
-#: src/components/layouts/Checkout/CheckoutFooter/index.tsx:38
-#: src/components/routes/product-widget/CollectInformation/index.tsx:452
 #: src/components/routes/product-widget/SelectProducts/index.tsx:534
 msgid "Continue"
 msgstr "继续"
@@ -1576,12 +1635,20 @@ msgstr "继续创建活动"
 msgid "Continue to next step"
 msgstr "继续下一步"
 
+#: src/components/routes/product-widget/CollectInformation/index.tsx:664
+msgid "Continue to Payment"
+msgstr "继续付款"
+
 #: src/components/common/AttendeeTicket/index.tsx:174
 #: src/components/common/CopyButton/index.tsx:13
 #: src/components/modals/CheckInListSuccessModal/index.tsx:42
 #: src/components/modals/ShareModal/index.tsx:255
 msgid "Copied"
 msgstr "复制的"
+
+#: src/components/routes/product-widget/CollectInformation/index.tsx:582
+msgid "Copied from above"
+msgstr "从上方复制"
 
 #: src/components/common/PromoCodeTable/index.tsx:106
 msgid "copied to clipboard"
@@ -1613,9 +1680,9 @@ msgstr "复制签到链接"
 msgid "Copy Code"
 msgstr "复制代码"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:314
-msgid "Copy details to all attendees"
-msgstr "将详细信息抄送给所有与会者"
+#: src/components/routes/product-widget/CollectInformation/index.tsx:435
+msgid "Copy details to first attendee"
+msgstr "将详情复制到第一位参与者"
 
 #: src/components/common/AttendeeTable/index.tsx:197
 #: src/components/common/OrdersTable/index.tsx:257
@@ -1626,6 +1693,10 @@ msgstr "复制邮箱"
 #: src/components/modals/ShareModal/index.tsx:171
 msgid "Copy Link"
 msgstr "复制链接"
+
+#: src/components/routes/product-widget/CollectInformation/index.tsx:444
+msgid "Copy my details to:"
+msgstr "复制我的信息到："
 
 #: src/components/modals/ShareModal/index.tsx:264
 msgid "Copy this link to share it anywhere"
@@ -1643,7 +1714,7 @@ msgstr "复制 URL"
 #: src/components/common/CheckoutQuestion/index.tsx:174
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:152
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:110
-#: src/components/routes/product-widget/CollectInformation/index.tsx:362
+#: src/components/routes/product-widget/CollectInformation/index.tsx:511
 msgid "Country"
 msgstr "国家"
 
@@ -1829,7 +1900,7 @@ msgstr "正在创建您的主办方资料，请稍候"
 msgid "CTA label is required"
 msgstr "CTA标签是必需的"
 
-#: src/components/common/OrganizerReportTable/index.tsx:257
+#: src/components/common/OrganizerReportTable/index.tsx:261
 #: src/components/forms/OrganizerForm/index.tsx:49
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:73
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:115
@@ -1860,7 +1931,7 @@ msgstr "自定义地图 URL"
 msgid "Custom message after checkout"
 msgstr "结账后自定义消息"
 
-#: src/components/common/OrganizerReportTable/index.tsx:54
+#: src/components/common/OrganizerReportTable/index.tsx:58
 #: src/components/common/ReportTable/index.tsx:53
 msgid "Custom Range"
 msgstr "自定义范围"
@@ -1901,7 +1972,7 @@ msgstr "自定义此事件的电子邮件和通知设置"
 msgid "Customize the emails sent to your customers using Liquid templating. These templates will be used as defaults for all events in your organization."
 msgstr "使用Liquid模板自定义发送给客户的邮件。这些模板将用作您组织中所有活动的默认模板。"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:62
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:83
 msgid "Customize the event homepage and checkout messaging"
 msgstr "定制活动主页和结账信息"
 
@@ -1963,7 +2034,7 @@ msgstr "每日销售、税费和费用明细"
 #: src/components/common/OrdersTable/index.tsx:183
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:287
 #: src/components/common/PromoCodeTable/index.tsx:181
-#: src/components/common/QuestionsTable/index.tsx:115
+#: src/components/common/QuestionsTable/index.tsx:116
 #: src/components/common/WebhookTable/index.tsx:116
 msgid "Danger zone"
 msgstr "危险区"
@@ -2001,6 +2072,10 @@ msgstr "下单日期"
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:38
 msgid "Day one capacity"
 msgstr "第一天容量"
+
+#: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:79
+msgid "Default attendee information collection"
+msgstr ""
 
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:207
 msgid "Default template will be used"
@@ -2040,7 +2115,7 @@ msgstr "删除图片"
 msgid "Delete product"
 msgstr "删除产品"
 
-#: src/components/common/QuestionsTable/index.tsx:120
+#: src/components/common/QuestionsTable/index.tsx:121
 msgid "Delete question"
 msgstr "删除问题"
 
@@ -2072,7 +2147,8 @@ msgstr "取消全选"
 msgid "Design Elements"
 msgstr "设计元素"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:394
+#: src/components/common/ProgressStepper/index.tsx:18
+#: src/components/common/ProgressStepper/index.tsx:23
 msgid "Details"
 msgstr "详细信息"
 
@@ -2108,6 +2184,10 @@ msgstr "折扣类型"
 msgid "Dismiss this message"
 msgstr "关闭此消息"
 
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:127
+msgid "Display a checkbox allowing customers to opt-in to receive marketing communications from this event organizer."
+msgstr "显示一个复选框，允许客户选择接收此活动组织者的营销通讯。"
+
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:190
 msgid "Document Label"
 msgstr "文档标签"
@@ -2115,6 +2195,10 @@ msgstr "文档标签"
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:683
 msgid "Documentation"
 msgstr "文档"
+
+#: src/components/common/AddToCalendarCTA/index.tsx:19
+msgid "Don't forget!"
+msgstr "别忘了！"
 
 #: src/components/routes/auth/Login/index.tsx:57
 msgid "Don't have an account?   <0>Sign up</0>"
@@ -2128,7 +2212,7 @@ msgstr "捐赠 / 自由定价产品"
 msgid "Done"
 msgstr "完成"
 
-#: src/components/common/AddEventToCalendarButton/index.tsx:137
+#: src/components/common/CalendarOptionsPopover/index.tsx:38
 msgid "Download .ics"
 msgstr "下载 .ics"
 
@@ -2140,7 +2224,7 @@ msgstr "下载 CSV"
 msgid "Download invoice"
 msgstr "下载发票"
 
-#: src/components/layouts/Checkout/index.tsx:193
+#: src/components/layouts/Checkout/index.tsx:210
 msgid "Download Invoice"
 msgstr "下载发票"
 
@@ -2149,7 +2233,7 @@ msgid "Download QR Code"
 msgstr "下载二维码"
 
 #: src/components/common/OrdersTable/index.tsx:98
-#: src/components/layouts/Checkout/index.tsx:69
+#: src/components/layouts/Checkout/index.tsx:78
 msgid "Downloading Invoice"
 msgstr "正在下载发票"
 
@@ -2269,7 +2353,7 @@ msgstr "编辑产品类别"
 msgid "Edit Promo Code"
 msgstr "编辑促销代码"
 
-#: src/components/common/QuestionsTable/index.tsx:112
+#: src/components/common/QuestionsTable/index.tsx:113
 msgid "Edit question"
 msgstr "编辑问题"
 
@@ -2325,7 +2409,7 @@ msgstr "符合条件的签到列表"
 #: src/components/routes/auth/Login/index.tsx:68
 #: src/components/routes/auth/Register/index.tsx:98
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:78
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:117
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:155
 #: src/components/routes/profile/ManageProfile/index.tsx:138
 msgid "Email"
 msgstr "电子邮件"
@@ -2344,12 +2428,12 @@ msgstr "电子邮件和模板"
 msgid "Email address"
 msgstr "电子邮件地址"
 
-#: src/components/common/QuestionsTable/index.tsx:220
-#: src/components/common/QuestionsTable/index.tsx:221
-#: src/components/routes/product-widget/CollectInformation/index.tsx:306
-#: src/components/routes/product-widget/CollectInformation/index.tsx:307
-#: src/components/routes/product-widget/CollectInformation/index.tsx:416
-#: src/components/routes/product-widget/CollectInformation/index.tsx:417
+#: src/components/common/QuestionsTable/index.tsx:222
+#: src/components/common/QuestionsTable/index.tsx:223
+#: src/components/routes/product-widget/CollectInformation/index.tsx:408
+#: src/components/routes/product-widget/CollectInformation/index.tsx:409
+#: src/components/routes/product-widget/CollectInformation/index.tsx:612
+#: src/components/routes/product-widget/CollectInformation/index.tsx:613
 msgid "Email Address"
 msgstr "电子邮件地址"
 
@@ -2357,6 +2441,11 @@ msgstr "电子邮件地址"
 #: src/components/common/OrdersTable/index.tsx:115
 msgid "Email address copied to clipboard"
 msgstr "邮箱地址已复制到剪贴板"
+
+#: src/components/routes/product-widget/CollectInformation/index.tsx:99
+#: src/components/routes/product-widget/CollectInformation/index.tsx:106
+msgid "Email addresses do not match"
+msgstr "电子邮件地址不匹配"
 
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:149
 msgid "Email Body"
@@ -2397,7 +2486,7 @@ msgid "Email Preview"
 msgstr "邮件预览"
 
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:327
-#: src/components/routes/organizer/Settings/index.tsx:52
+#: src/components/routes/organizer/Settings/index.tsx:59
 msgid "Email Templates"
 msgstr "邮件模板"
 
@@ -2497,7 +2586,7 @@ msgid "Enter your name"
 msgstr "输入您的姓名"
 
 #: src/components/common/OrdersTable/index.tsx:106
-#: src/components/layouts/Checkout/index.tsx:77
+#: src/components/layouts/Checkout/index.tsx:86
 msgid "Error"
 msgstr "错误"
 
@@ -2555,11 +2644,13 @@ msgstr "活动自定义模板"
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:35
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:69
 #: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:29
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:161
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:199
 msgid "Event Date"
 msgstr "活动日期"
 
 #: src/components/routes/account/ManageAccount/sections/EventDefaultsSettings/index.tsx:5
+#: src/components/routes/organizer/Settings/index.tsx:29
+#: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:70
 msgid "Event Defaults"
 msgstr "事件默认值"
 
@@ -2576,7 +2667,7 @@ msgstr "活动详情"
 
 #: src/components/routes/event/Settings/index.tsx:28
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:68
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:276
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:337
 msgid "Event Details"
 msgstr "活动详情"
 
@@ -2588,7 +2679,7 @@ msgstr "事件成功复制"
 msgid "Event Full Address"
 msgstr "活动完整地址"
 
-#: src/components/layouts/Checkout/index.tsx:146
+#: src/components/layouts/Checkout/index.tsx:155
 msgid "Event Homepage"
 msgstr "活动主页"
 
@@ -2717,7 +2808,7 @@ msgstr "有效期"
 msgid "Export"
 msgstr "出口"
 
-#: src/components/common/QuestionsTable/index.tsx:267
+#: src/components/common/QuestionsTable/index.tsx:279
 msgid "Export answers"
 msgstr "导出答案"
 
@@ -2749,7 +2840,7 @@ msgstr "正在导出订单"
 msgid "Facebook"
 msgstr "Facebook"
 
-#: src/components/layouts/Checkout/index.tsx:92
+#: src/components/layouts/Checkout/index.tsx:101
 msgid "Failed to abandon order. Please try again."
 msgstr "放弃订单失败。请重试。"
 
@@ -2770,7 +2861,7 @@ msgstr "创建推广员失败"
 msgid "Failed to create template"
 msgstr "创建模板失败"
 
-#: src/components/common/QuestionsTable/index.tsx:175
+#: src/components/common/QuestionsTable/index.tsx:176
 msgid "Failed to delete message. Please try again."
 msgstr "删除信息失败。请重试。"
 
@@ -2780,7 +2871,7 @@ msgid "Failed to delete template"
 msgstr "删除模板失败"
 
 #: src/components/common/OrdersTable/index.tsx:107
-#: src/components/layouts/Checkout/index.tsx:78
+#: src/components/layouts/Checkout/index.tsx:87
 msgid "Failed to download invoice. Please try again."
 msgstr "下载发票失败。请重试。"
 
@@ -2871,6 +2962,7 @@ msgstr "验证邮箱失败"
 msgid "Fee"
 msgstr "费用"
 
+#: src/components/common/InlineOrderSummary/index.tsx:131
 #: src/components/common/OrdersTable/index.tsx:342
 #: src/components/forms/ProductForm/index.tsx:366
 #: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:54
@@ -2884,6 +2976,11 @@ msgstr "费用可能会变更。如有变更，您将收到通知。"
 #: src/constants/eventCategories.ts:5
 msgid "Festival"
 msgstr "节日"
+
+#: src/components/routes/product-widget/CollectInformation/index.tsx:427
+#: src/components/routes/product-widget/CollectInformation/index.tsx:446
+msgid "Fill in your details above first"
+msgstr "请先在上方填写您的详细信息"
 
 #: src/components/routes/event/attendees.tsx:181
 msgid "Filter Attendees"
@@ -2911,26 +3008,30 @@ msgstr "完成设置"
 msgid "Finish Stripe Setup"
 msgstr "完成 Stripe 设置"
 
+#: src/components/routes/product-widget/CollectInformation/index.tsx:457
+msgid "First attendee"
+msgstr "第一位参与者"
+
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:206
 msgid "First Invoice Number"
 msgstr "第一张发票号码"
 
-#: src/components/common/QuestionsTable/index.tsx:208
+#: src/components/common/QuestionsTable/index.tsx:209
 #: src/components/modals/CreateAttendeeModal/index.tsx:129
 #: src/components/modals/ManageAttendeeModal/index.tsx:110
 #: src/components/modals/ManageOrderModal/index.tsx:144
-#: src/components/routes/product-widget/CollectInformation/index.tsx:292
-#: src/components/routes/product-widget/CollectInformation/index.tsx:403
+#: src/components/routes/product-widget/CollectInformation/index.tsx:393
+#: src/components/routes/product-widget/CollectInformation/index.tsx:593
 msgid "First name"
 msgstr "姓名"
 
-#: src/components/common/QuestionsTable/index.tsx:207
+#: src/components/common/QuestionsTable/index.tsx:208
 #: src/components/modals/EditUserModal/index.tsx:71
 #: src/components/modals/InviteUserModal/index.tsx:57
 #: src/components/routes/auth/AcceptInvitation/index.tsx:93
 #: src/components/routes/auth/Register/index.tsx:84
-#: src/components/routes/product-widget/CollectInformation/index.tsx:291
-#: src/components/routes/product-widget/CollectInformation/index.tsx:402
+#: src/components/routes/product-widget/CollectInformation/index.tsx:392
+#: src/components/routes/product-widget/CollectInformation/index.tsx:592
 #: src/components/routes/profile/ManageProfile/index.tsx:135
 msgid "First Name"
 msgstr "姓名"
@@ -2939,7 +3040,7 @@ msgstr "姓名"
 msgid "First name must be between 1 and 50 characters"
 msgstr "名字必须在 1 至 50 个字符之间"
 
-#: src/components/common/QuestionsTable/index.tsx:349
+#: src/components/common/QuestionsTable/index.tsx:363
 msgid "First Name, Last Name, and Email Address are default questions and are always included in the checkout process."
 msgstr "名字、姓氏和电子邮件地址为默认问题，在结账过程中始终包含。"
 
@@ -3060,16 +3161,15 @@ msgstr "GitHub"
 msgid "Go back to profile"
 msgstr "返回个人资料"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:223
-#: src/components/routes/product-widget/CollectInformation/index.tsx:247
-msgid "Go to event homepage"
-msgstr "前往活动主页"
+#: src/components/routes/product-widget/CollectInformation/index.tsx:356
+msgid "Go to Event Page"
+msgstr "前往活动页面"
 
 #: src/components/common/ErrorDisplay/index.tsx:67
 msgid "Go to home page"
 msgstr "返回主页"
 
-#: src/components/common/AddEventToCalendarButton/index.tsx:128
+#: src/components/common/CalendarOptionsPopover/index.tsx:29
 msgid "Google Calendar"
 msgstr "谷歌日历"
 
@@ -3087,7 +3187,7 @@ msgstr "销售总额"
 msgid "Gross Sales"
 msgstr "总销售额"
 
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:281
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:344
 msgid "Guests"
 msgstr "宾客"
 
@@ -3128,11 +3228,11 @@ msgstr "你好 {0} 👋"
 msgid "Hidden from public view"
 msgstr "隐藏于公众视线之外"
 
-#: src/components/common/QuestionsTable/index.tsx:290
+#: src/components/common/QuestionsTable/index.tsx:302
 msgid "hidden question"
 msgstr "隐藏问题"
 
-#: src/components/common/QuestionsTable/index.tsx:291
+#: src/components/common/QuestionsTable/index.tsx:303
 msgid "hidden questions"
 msgstr "隐藏问题"
 
@@ -3158,7 +3258,7 @@ msgstr "隐藏颜色设置"
 msgid "Hide getting started page"
 msgstr "隐藏入门页面"
 
-#: src/components/common/QuestionsTable/index.tsx:295
+#: src/components/common/QuestionsTable/index.tsx:307
 msgid "Hide hidden questions"
 msgstr "隐藏隐藏问题"
 
@@ -3222,7 +3322,7 @@ msgstr "主页预览"
 msgid "Homer"
 msgstr "荷马"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:91
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:120
 msgid "How many minutes the customer has to complete their order. We recommend at least 15 minutes"
 msgstr "客户有多少分钟来完成订单。我们建议至少 15 分钟"
 
@@ -3258,14 +3358,6 @@ msgstr "匈牙利语"
 #: src/components/routes/auth/AcceptInvitation/index.tsx:119
 msgid "I agree to the <0>terms and conditions</0>"
 msgstr "我同意<0>条款和条件</0>。"
-
-#: src/components/routes/product-widget/Payment/index.tsx:106
-msgid "I would like to pay using an offline method"
-msgstr "我想使用线下支付方式付款"
-
-#: src/components/routes/product-widget/Payment/index.tsx:107
-msgid "I would like to pay using an online method (credit card etc.)"
-msgstr "我想使用在线支付方式（如信用卡）付款"
 
 #: src/components/routes/product-widget/SelectProducts/index.tsx:353
 msgid "If a new tab did not open automatically, please click the button below to continue to checkout."
@@ -3446,7 +3538,7 @@ msgid "Invoice"
 msgstr ""
 
 #: src/components/common/OrdersTable/index.tsx:103
-#: src/components/layouts/Checkout/index.tsx:74
+#: src/components/layouts/Checkout/index.tsx:83
 msgid "Invoice downloaded successfully"
 msgstr "发票下载成功"
 
@@ -3466,7 +3558,7 @@ msgstr "发票设置"
 msgid "Italian"
 msgstr "意大利语"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:394
+#: src/components/routes/product-widget/CollectInformation/index.tsx:573
 msgid "Item"
 msgstr "项目"
 
@@ -3490,6 +3582,10 @@ msgstr "约翰逊"
 msgid "Just click the button below to reconnect your Stripe account."
 msgstr "只需点击下面的按钮重新连接您的 Stripe 账户。"
 
+#: src/components/routes/product-widget/CollectInformation/index.tsx:524
+msgid "Keep me updated on news and events from {0}"
+msgstr ""
+
 #: src/components/forms/ProductForm/index.tsx:77
 msgid "Label"
 msgstr "标签"
@@ -3500,42 +3596,42 @@ msgstr "标签"
 msgid "Language"
 msgstr "语言"
 
-#: src/components/common/OrganizerReportTable/index.tsx:53
+#: src/components/common/OrganizerReportTable/index.tsx:57
 #: src/components/common/ReportTable/index.tsx:52
 msgid "Last 12 months"
 msgstr "过去 12 个月"
 
-#: src/components/common/OrganizerReportTable/index.tsx:48
+#: src/components/common/OrganizerReportTable/index.tsx:52
 #: src/components/common/ReportTable/index.tsx:47
 msgid "Last 14 days"
 msgstr "过去 14 天"
 
-#: src/components/common/OrganizerReportTable/index.tsx:45
+#: src/components/common/OrganizerReportTable/index.tsx:49
 #: src/components/common/ReportTable/index.tsx:44
 msgid "Last 24 hours"
 msgstr "过去 24 小时"
 
-#: src/components/common/OrganizerReportTable/index.tsx:49
+#: src/components/common/OrganizerReportTable/index.tsx:53
 #: src/components/common/ReportTable/index.tsx:48
 msgid "Last 30 days"
 msgstr "过去 30 天"
 
-#: src/components/common/OrganizerReportTable/index.tsx:46
+#: src/components/common/OrganizerReportTable/index.tsx:50
 #: src/components/common/ReportTable/index.tsx:45
 msgid "Last 48 hours"
 msgstr "过去 48 小时"
 
-#: src/components/common/OrganizerReportTable/index.tsx:51
+#: src/components/common/OrganizerReportTable/index.tsx:55
 #: src/components/common/ReportTable/index.tsx:50
 msgid "Last 6 months"
 msgstr "过去 6 个月"
 
-#: src/components/common/OrganizerReportTable/index.tsx:47
+#: src/components/common/OrganizerReportTable/index.tsx:51
 #: src/components/common/ReportTable/index.tsx:46
 msgid "Last 7 days"
 msgstr "过去 7 天"
 
-#: src/components/common/OrganizerReportTable/index.tsx:50
+#: src/components/common/OrganizerReportTable/index.tsx:54
 #: src/components/common/ReportTable/index.tsx:49
 msgid "Last 90 days"
 msgstr "过去 90 天"
@@ -3550,16 +3646,16 @@ msgstr "最后登录"
 msgid "Last name"
 msgstr "姓氏"
 
-#: src/components/common/QuestionsTable/index.tsx:212
 #: src/components/common/QuestionsTable/index.tsx:213
+#: src/components/common/QuestionsTable/index.tsx:214
 #: src/components/modals/EditUserModal/index.tsx:72
 #: src/components/modals/InviteUserModal/index.tsx:58
 #: src/components/routes/auth/AcceptInvitation/index.tsx:95
 #: src/components/routes/auth/Register/index.tsx:90
-#: src/components/routes/product-widget/CollectInformation/index.tsx:297
-#: src/components/routes/product-widget/CollectInformation/index.tsx:298
-#: src/components/routes/product-widget/CollectInformation/index.tsx:408
-#: src/components/routes/product-widget/CollectInformation/index.tsx:409
+#: src/components/routes/product-widget/CollectInformation/index.tsx:398
+#: src/components/routes/product-widget/CollectInformation/index.tsx:399
+#: src/components/routes/product-widget/CollectInformation/index.tsx:600
+#: src/components/routes/product-widget/CollectInformation/index.tsx:601
 #: src/components/routes/profile/ManageProfile/index.tsx:137
 msgid "Last Name"
 msgstr "姓氏"
@@ -3626,7 +3722,7 @@ msgstr "加载令牌中..."
 msgid "Loading Webhooks"
 msgstr "正在加载 Webhook"
 
-#: src/components/common/OrganizerReportTable/index.tsx:219
+#: src/components/common/OrganizerReportTable/index.tsx:223
 #: src/components/common/ReportTable/index.tsx:210
 msgid "Loading..."
 msgstr "加载中..."
@@ -3634,7 +3730,7 @@ msgstr "加载中..."
 #: src/components/common/AttendeeTicket/index.tsx:78
 #: src/components/routes/event/Settings/index.tsx:34
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:84
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:167
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:205
 msgid "Location"
 msgstr "地点"
 
@@ -3887,7 +3983,7 @@ msgstr "Nam placerat elementum..."
 #: src/components/modals/DuplicateEventModal/index.tsx:109
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:63
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:75
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:107
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:145
 msgid "Name"
 msgstr "名称"
 
@@ -3980,7 +4076,7 @@ msgstr "无需信用卡"
 msgid "No data available"
 msgstr "无可用数据"
 
-#: src/components/common/OrganizerReportTable/index.tsx:226
+#: src/components/common/OrganizerReportTable/index.tsx:230
 msgid "No data found for the selected filters. Try adjusting the date range or currency."
 msgstr "未找到所选筛选条件的数据。请尝试调整日期范围或货币。"
 
@@ -4048,7 +4144,7 @@ msgstr "无其他可用组织者"
 msgid "No past events"
 msgstr "没有过去的活动"
 
-#: src/components/routes/product-widget/Payment/index.tsx:76
+#: src/components/routes/product-widget/Payment/index.tsx:84
 msgid "No payment methods are currently available. Please contact the event organizer for assistance."
 msgstr "当前没有可用的支付方式。请联系活动组织者以获取帮助。"
 
@@ -4124,11 +4220,12 @@ msgstr "此端点尚未记录任何 Webhook 事件。事件触发后将显示在
 msgid "No Webhooks"
 msgstr "没有 Webhooks"
 
-#: src/components/layouts/Checkout/index.tsx:256
+#: src/components/layouts/Checkout/index.tsx:271
 msgid "No, keep me here"
 msgstr "否，保留在此"
 
 #: src/components/common/PromoCodeTable/index.tsx:82
+#: src/components/routes/product-widget/CollectInformation/index.tsx:456
 msgid "None"
 msgstr "无"
 
@@ -4182,8 +4279,9 @@ msgid "Office or venue name"
 msgstr "办公室或场地名称"
 
 #: src/components/common/OrdersTable/index.tsx:370
+#: src/components/routes/product-widget/Payment/index.tsx:125
 msgid "Offline"
-msgstr ""
+msgstr "离线"
 
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:145
 msgid "Offline orders are not reflected in event statistics until the order is marked as paid."
@@ -4194,7 +4292,7 @@ msgstr "线下订单在标记为已支付之前不会反映在活动统计中。
 msgid "Offline Payment"
 msgstr "线下支付"
 
-#: src/components/routes/product-widget/Payment/index.tsx:66
+#: src/components/routes/product-widget/Payment/index.tsx:74
 msgid "Offline payment failed. Please try again or contact the event organizer."
 msgstr "线下支付失败。请重试或联系活动组织者。"
 
@@ -4246,6 +4344,10 @@ msgstr "一旦准备就绪，将您的活动上线并开始销售产品。"
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:31
 msgid "Ongoing"
 msgstr "持续进行"
+
+#: src/components/routes/product-widget/Payment/index.tsx:117
+msgid "Online"
+msgstr "在线"
 
 #: src/components/common/EventCard/index.tsx:178
 msgid "Online event"
@@ -4332,10 +4434,20 @@ msgstr "订购"
 msgid "Order & Ticket"
 msgstr ""
 
+#: src/components/routes/product-widget/CollectInformation/index.tsx:342
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:246
+msgid "Order cancelled"
+msgstr "订单已取消"
+
 #: src/components/forms/WebhookForm/index.tsx:76
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:63
 msgid "Order Cancelled"
 msgstr "取消订单"
+
+#: src/components/routes/product-widget/CollectInformation/index.tsx:332
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:256
+msgid "Order complete"
+msgstr "订单完成"
 
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:62
 msgid "Order Completed"
@@ -4355,14 +4467,14 @@ msgid "Order Currency"
 msgstr "订单货币"
 
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:23
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:122
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:160
 msgid "Order Date"
 msgstr "订购日期"
 
 #: src/components/common/OrdersTable/index.tsx:271
 #: src/components/modals/ManageAttendeeModal/index.tsx:166
 #: src/components/modals/ManageOrderModal/index.tsx:86
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:266
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:327
 msgid "Order Details"
 msgstr "订购详情"
 
@@ -4406,6 +4518,10 @@ msgstr "订单已标记为已支付"
 msgid "Order Marked as Paid"
 msgstr "订单标记为已支付"
 
+#: src/components/routes/product-widget/CollectInformation/index.tsx:353
+msgid "Order not found"
+msgstr "未找到订单"
+
 #: src/components/modals/ManageOrderModal/index.tsx:92
 msgid "Order Notes"
 msgstr "订单备注"
@@ -4430,12 +4546,12 @@ msgstr "具有产品的订单所有者"
 msgid "Order Payment Pending"
 msgstr "订单付款待处理"
 
-#: src/components/common/QuestionsTable/index.tsx:313
-#: src/components/common/QuestionsTable/index.tsx:355
+#: src/components/common/QuestionsTable/index.tsx:325
+#: src/components/common/QuestionsTable/index.tsx:370
 msgid "Order questions"
 msgstr "订购问题"
 
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:112
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:150
 msgid "Order Reference"
 msgstr "订购参考"
 
@@ -4453,12 +4569,12 @@ msgstr "订单状态"
 msgid "Order statuses"
 msgstr "订单状态"
 
-#: src/components/layouts/Checkout/CheckoutSidebar/index.tsx:28
+#: src/components/common/InlineOrderSummary/index.tsx:54
 #: src/components/modals/ManageOrderModal/index.tsx:105
 msgid "Order Summary"
 msgstr "订单摘要"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:90
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:119
 msgid "Order timeout"
 msgstr "订单超时"
 
@@ -4474,6 +4590,10 @@ msgstr "订单已更新"
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:27
 msgid "Order URL"
 msgstr "订单链接"
+
+#: src/components/routes/product-widget/CollectInformation/index.tsx:312
+msgid "Order was cancelled"
+msgstr "订单已被取消"
 
 #: src/components/layouts/Event/index.tsx:100
 #: src/components/routes/event/orders.tsx:113
@@ -4516,7 +4636,7 @@ msgstr "组织名称"
 #: src/components/modals/EditUserModal/index.tsx:55
 #: src/components/modals/InviteUserModal/index.tsx:47
 #: src/components/routes/events/Dashboard/index.tsx:193
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:186
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:224
 msgid "Organizer"
 msgstr "主办方"
 
@@ -4551,7 +4671,7 @@ msgstr "组织者姓名"
 msgid "Organizer Not Found"
 msgstr "未找到组织者"
 
-#: src/components/routes/organizer/Settings/index.tsx:91
+#: src/components/routes/organizer/Settings/index.tsx:98
 msgid "Organizer Settings"
 msgstr "组织者设置"
 
@@ -4600,6 +4720,10 @@ msgstr "衬垫"
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:378
 msgid "Page Background Color"
 msgstr "页面背景颜色"
+
+#: src/components/forms/StripeCheckoutForm/index.tsx:106
+msgid "Page no longer available"
+msgstr "页面不再可用"
 
 #: src/components/common/ErrorDisplay/index.tsx:14
 msgid "Page not found"
@@ -4690,8 +4814,13 @@ msgstr "patrick@acme.com"
 msgid "Paused"
 msgstr "已暂停"
 
+#: src/components/routes/product-widget/Payment/index.tsx:140
+msgid "Pay"
+msgstr "付款"
+
 #: src/components/common/OrdersTable/index.tsx:356
-#: src/components/forms/StripeCheckoutForm/index.tsx:123
+#: src/components/common/ProgressStepper/index.tsx:19
+#: src/components/forms/StripeCheckoutForm/index.tsx:127
 msgid "Payment"
 msgstr "付款方式"
 
@@ -4716,10 +4845,14 @@ msgstr "付款期限"
 msgid "Payment Failed"
 msgstr "付款失败"
 
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:228
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:282
 #: src/components/routes/product-widget/Payment/PaymentMethods/Offline/index.tsx:14
 msgid "Payment Instructions"
 msgstr "支付说明"
+
+#: src/components/routes/product-widget/Payment/index.tsx:108
+msgid "Payment method"
+msgstr "付款方式"
 
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:105
 msgid "Payment Methods"
@@ -4735,6 +4868,10 @@ msgstr "支付处理"
 msgid "Payment provider"
 msgstr "支付提供商"
 
+#: src/components/forms/StripeCheckoutForm/index.tsx:94
+msgid "Payment received"
+msgstr "已收到付款"
+
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:42
 msgid "Payment Received"
 msgstr "已收到付款"
@@ -4743,7 +4880,7 @@ msgstr "已收到付款"
 msgid "Payment Settings"
 msgstr "支付设置"
 
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:135
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:173
 msgid "Payment Status"
 msgstr "支付状态"
 
@@ -4755,9 +4892,23 @@ msgstr "付款成功！"
 msgid "Payment Terms"
 msgstr "付款条款"
 
+#: src/components/routes/product-widget/Payment/PaymentMethods/Stripe/index.tsx:48
+msgid "Payments not available"
+msgstr "付款不可用"
+
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:80
 msgid "Payments will continue to flow without interruption"
 msgstr "付款将继续无中断流转"
+
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:46
+#: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:36
+msgid "Per order"
+msgstr ""
+
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:40
+#: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:30
+msgid "Per ticket"
+msgstr ""
 
 #: src/components/forms/PromoCodeForm/index.tsx:81
 #: src/components/forms/TaxAndFeeForm/index.tsx:27
@@ -4779,10 +4930,6 @@ msgstr "电话"
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:82
 msgid "Pinterest"
 msgstr "Pinterest"
-
-#: src/components/routes/product-widget/Payment/index.tsx:122
-msgid "Place Order"
-msgstr "下单"
 
 #: src/components/common/WidgetEditor/index.tsx:257
 msgid "Place this in the <head> of your website."
@@ -4857,7 +5004,11 @@ msgstr "请注意"
 msgid "Please provide an image."
 msgstr "请提供一张图片。"
 
-#: src/components/layouts/Checkout/index.tsx:226
+#: src/components/routes/product-widget/Payment/PaymentMethods/Stripe/index.tsx:64
+msgid "Please restart the checkout process."
+msgstr "请重新开始结账流程。"
+
+#: src/components/layouts/Checkout/index.tsx:241
 msgid "Please return to the event page to start over."
 msgstr "请返回活动页面重新开始。"
 
@@ -4865,7 +5016,7 @@ msgstr "请返回活动页面重新开始。"
 msgid "Please select"
 msgstr "请选择"
 
-#: src/components/common/OrganizerReportTable/index.tsx:223
+#: src/components/common/OrganizerReportTable/index.tsx:227
 msgid "Please select a date range"
 msgstr ""
 
@@ -4900,7 +5051,7 @@ msgid "Please wait while we prepare your attendees for export..."
 msgstr "请稍候，我们正在准备导出您的与会者..."
 
 #: src/components/common/OrdersTable/index.tsx:99
-#: src/components/layouts/Checkout/index.tsx:70
+#: src/components/layouts/Checkout/index.tsx:79
 msgid "Please wait while we prepare your invoice..."
 msgstr "请稍候，我们正在准备您的发票..."
 
@@ -4912,7 +5063,7 @@ msgstr "请稍候，我们正在准备导出您的订单..."
 msgid "Portuguese"
 msgstr "葡萄牙语"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:74
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:95
 msgid "Post Checkout message"
 msgstr "结账后信息"
 
@@ -4925,12 +5076,12 @@ msgstr "结账后消息"
 msgid "Powered by"
 msgstr "技术支持"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:67
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:88
 msgid "Pre Checkout message"
 msgstr "结账前信息"
 
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:139
-#: src/components/common/QuestionsTable/index.tsx:347
+#: src/components/common/QuestionsTable/index.tsx:359
 #: src/components/routes/event/TicketDesigner/index.tsx:197
 msgid "Preview"
 msgstr "预览"
@@ -4978,11 +5129,7 @@ msgstr "原色"
 msgid "Primary Text Color"
 msgstr "主要文字颜色"
 
-#: src/components/common/AttendeeTicket/index.tsx:162
-msgid "Print"
-msgstr "打印"
-
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:288
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:351
 msgid "Print All Tickets"
 msgstr "打印所有门票"
 
@@ -4990,9 +5137,13 @@ msgstr "打印所有门票"
 msgid "Print Preview"
 msgstr "打印预览"
 
-#: src/components/layouts/Checkout/index.tsx:181
+#: src/components/layouts/Checkout/index.tsx:198
 msgid "Print Tickets"
 msgstr "打印票"
+
+#: src/components/common/AttendeeTicket/index.tsx:162
+msgid "Print to PDF"
+msgstr "打印为PDF"
 
 #: src/components/layouts/EventHomepage/index.tsx:309
 #: src/components/layouts/OrganizerHomepage/index.tsx:346
@@ -5002,6 +5153,10 @@ msgstr "隐私政策"
 #: src/components/modals/RefundOrderModal/index.tsx:149
 msgid "Process Refund"
 msgstr "处理退款"
+
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:265
+msgid "Processing order"
+msgstr "处理订单中"
 
 #: src/components/common/AttendeeDetails/index.tsx:30
 #: src/components/modals/ManageAttendeeModal/index.tsx:119
@@ -5032,7 +5187,7 @@ msgstr "产品删除成功"
 msgid "Product Price Type"
 msgstr "产品价格类型"
 
-#: src/components/common/QuestionsTable/index.tsx:328
+#: src/components/common/QuestionsTable/index.tsx:340
 msgid "Product questions"
 msgstr "产品问题"
 
@@ -5163,7 +5318,7 @@ msgstr "可用数量"
 msgid "Quantity Sold"
 msgstr "销售数量"
 
-#: src/components/common/QuestionsTable/index.tsx:170
+#: src/components/common/QuestionsTable/index.tsx:171
 msgid "Question deleted"
 msgstr "问题已删除"
 
@@ -5175,7 +5330,7 @@ msgstr "问题描述"
 msgid "Question Title"
 msgstr "问题标题"
 
-#: src/components/common/QuestionsTable/index.tsx:275
+#: src/components/common/QuestionsTable/index.tsx:287
 #: src/components/layouts/Event/index.tsx:102
 #: src/components/modals/DuplicateEventModal/index.tsx:25
 msgid "Questions"
@@ -5186,7 +5341,7 @@ msgstr "问题"
 msgid "Questions & Answers"
 msgstr "问与答"
 
-#: src/components/common/QuestionsTable/index.tsx:145
+#: src/components/common/QuestionsTable/index.tsx:146
 msgid "Questions sorted successfully"
 msgstr "问题已成功分类"
 
@@ -5256,7 +5411,7 @@ msgid "Refund Pending"
 msgstr "退款处理中"
 
 #: src/components/routes/event/orders.tsx:51
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:128
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:166
 msgid "Refund Status"
 msgstr "退款状态"
 
@@ -5347,7 +5502,7 @@ msgstr ""
 
 #: src/components/common/OrdersTable/index.tsx:306
 msgid "Reserved until"
-msgstr ""
+msgstr "保留至"
 
 #: src/components/common/FilterModal/index.tsx:279
 msgid "Reset"
@@ -5370,12 +5525,12 @@ msgstr "重置您的密码"
 msgid "Restore event"
 msgstr "恢复活动"
 
-#: src/components/routes/product-widget/Payment/PaymentMethods/Stripe/index.tsx:49
-#: src/components/routes/product-widget/Payment/PaymentMethods/Stripe/index.tsx:62
-msgid "Return to event page"
-msgstr "返回活动页面"
+#: src/components/routes/product-widget/Payment/PaymentMethods/Stripe/index.tsx:51
+#: src/components/routes/product-widget/Payment/PaymentMethods/Stripe/index.tsx:66
+msgid "Return to Event"
+msgstr "返回活动"
 
-#: src/components/layouts/Checkout/index.tsx:232
+#: src/components/layouts/Checkout/index.tsx:247
 msgid "Return to Event Page"
 msgstr "返回活动页面"
 
@@ -5448,13 +5603,14 @@ msgstr "旧金山"
 #: src/components/common/QuestionAndAnswerList/index.tsx:142
 #: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:80
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:129
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:96
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:132
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:166
 #: src/components/routes/event/Settings/Sections/MiscSettings/index.tsx:94
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:265
 #: src/components/routes/event/Settings/Sections/SeoSettings/index.tsx:85
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:116
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:132
+#: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:94
 #: src/components/routes/organizer/Settings/Sections/SeoSettings/index.tsx:85
 msgid "Save"
 msgstr "节省"
@@ -5656,7 +5812,7 @@ msgstr "选择机票"
 msgid "Select tickets"
 msgstr "选择票"
 
-#: src/components/common/OrganizerReportTable/index.tsx:268
+#: src/components/common/OrganizerReportTable/index.tsx:272
 #: src/components/common/ReportTable/index.tsx:261
 msgid "Select time period"
 msgstr "选择时间段"
@@ -5727,7 +5883,7 @@ msgid "Sent to each attendee with their ticket details"
 msgstr "发送给每位参会者及其门票详情"
 
 #: src/components/routes/event/Settings/index.tsx:46
-#: src/components/routes/organizer/Settings/index.tsx:46
+#: src/components/routes/organizer/Settings/index.tsx:53
 msgid "SEO"
 msgstr "SEO"
 
@@ -5758,6 +5914,10 @@ msgstr "服务费"
 #: src/components/forms/ProductForm/index.tsx:159
 msgid "Set a minimum price and let users pay more if they choose"
 msgstr "设定最低价格，用户可选择支付更高的价格"
+
+#: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:71
+msgid "Set default settings for new events created under this organizer."
+msgstr ""
 
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:207
 msgid "Set the starting number for invoice numbering. This cannot be changed once invoices have been generated."
@@ -5835,9 +5995,17 @@ msgstr "显示颜色设置"
 msgid "Show fewer platforms"
 msgstr "显示更少平台"
 
-#: src/components/common/QuestionsTable/index.tsx:295
+#: src/components/common/QuestionsTable/index.tsx:307
 msgid "Show hidden questions"
 msgstr "显示隐藏问题"
+
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:126
+msgid "Show marketing opt-in checkbox"
+msgstr "显示营销订阅复选框"
+
+#: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:85
+msgid "Show marketing opt-in checkbox by default"
+msgstr "默认显示营销订阅复选框"
 
 #: src/components/routes/product-widget/SelectProducts/index.tsx:413
 #: src/components/routes/product-widget/SelectProducts/index.tsx:507
@@ -5852,11 +6020,11 @@ msgstr "显示更多平台"
 msgid "Show tax and fees separately"
 msgstr "单独显示税费"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:79
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:100
 msgid "Shown to the customer after they checkout, on the order summary page."
 msgstr "结账后显示给客户，在订单摘要页面。"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:69
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:90
 msgid "Shown to the customer before they checkout"
 msgstr "在顾客结账前向他们展示"
 
@@ -5893,7 +6061,7 @@ msgstr "Snapchat"
 msgid "Social"
 msgstr "社交"
 
-#: src/components/routes/organizer/Settings/index.tsx:40
+#: src/components/routes/organizer/Settings/index.tsx:47
 msgid "Social Links"
 msgstr "社交链接"
 
@@ -5916,8 +6084,10 @@ msgstr "售罄"
 
 #: src/components/common/ErrorDisplay/index.tsx:15
 #: src/components/routes/auth/AcceptInvitation/index.tsx:48
+#: src/components/routes/product-widget/CollectInformation/index.tsx:365
+#: src/components/routes/product-widget/Payment/PaymentMethods/Stripe/index.tsx:63
 msgid "Something went wrong"
-msgstr "出了问题"
+msgstr "出了点问题"
 
 #: src/components/common/TaxAndFeeList/index.tsx:39
 msgid "Something went wrong while deleting the Tax or Fee"
@@ -5946,18 +6116,6 @@ msgstr "出错了。请重试。"
 #: src/components/routes/event/EventDashboard/index.tsx:126
 msgid "Sorry for the inconvenience."
 msgstr "对于给您带来的不便，我们深表歉意。"
-
-#: src/components/routes/product-widget/Payment/PaymentMethods/Stripe/index.tsx:60
-msgid "Sorry, something has gone wrong. Please restart the checkout process."
-msgstr "对不起，出了点问题。请重新开始结账。"
-
-#: src/components/routes/product-widget/CollectInformation/index.tsx:267
-msgid "Sorry, something went wrong loading this page."
-msgstr "抱歉，在加载此页面时出了点问题。"
-
-#: src/components/routes/product-widget/CollectInformation/index.tsx:255
-msgid "Sorry, this order no longer exists."
-msgstr "抱歉，此订单不再存在。"
 
 #: src/components/routes/product-widget/SelectProducts/index.tsx:284
 msgid "Sorry, this promo code is not recognized"
@@ -6001,8 +6159,8 @@ msgstr "活动开始时间"
 #: src/components/common/CheckoutQuestion/index.tsx:165
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:139
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:97
-#: src/components/routes/product-widget/CollectInformation/index.tsx:347
-#: src/components/routes/product-widget/CollectInformation/index.tsx:348
+#: src/components/routes/product-widget/CollectInformation/index.tsx:496
+#: src/components/routes/product-widget/CollectInformation/index.tsx:497
 msgid "State or Region"
 msgstr "州或地区"
 
@@ -6044,7 +6202,7 @@ msgstr "Stripe"
 msgid "Stripe Connect"
 msgstr "Stripe Connect"
 
-#: src/components/routes/product-widget/Payment/PaymentMethods/Stripe/index.tsx:47
+#: src/components/routes/product-widget/Payment/PaymentMethods/Stripe/index.tsx:49
 msgid "Stripe payments are not enabled for this event."
 msgstr "此活动未启用 Stripe 支付。"
 
@@ -6069,12 +6227,13 @@ msgstr "主题将显示在这里"
 msgid "Subject:"
 msgstr "主题："
 
+#: src/components/common/InlineOrderSummary/index.tsx:124
 #: src/components/common/OrderSummary/index.tsx:41
 msgid "Subtotal"
 msgstr "小计"
 
 #: src/components/common/OrdersTable/index.tsx:102
-#: src/components/layouts/Checkout/index.tsx:73
+#: src/components/layouts/Checkout/index.tsx:82
 msgid "Success"
 msgstr "成功"
 
@@ -6140,12 +6299,16 @@ msgstr "成功更新电子邮件设置"
 msgid "Successfully Updated Event"
 msgstr "成功更新活动"
 
+#: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:59
+msgid "Successfully Updated Event Defaults"
+msgstr ""
+
 #: src/components/routes/event/HomepageDesigner/index.tsx:87
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:112
 msgid "Successfully Updated Homepage Design"
 msgstr "成功更新主页设计"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:50
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:71
 msgid "Successfully Updated Homepage Settings"
 msgstr "成功更新主页设置"
 
@@ -6197,6 +6360,11 @@ msgstr "Webhook 更新成功"
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:86
 msgid "Suite 100"
 msgstr "100 号套房"
+
+#: src/components/common/ProgressStepper/index.tsx:20
+#: src/components/common/ProgressStepper/index.tsx:24
+msgid "Summary"
+msgstr "摘要"
 
 #: src/components/modals/CreateEventModal/index.tsx:177
 #: src/components/modals/DuplicateEventModal/index.tsx:110
@@ -6272,6 +6440,7 @@ msgstr "成功删除税费"
 msgid "Tax Summary"
 msgstr "税务摘要"
 
+#: src/components/common/InlineOrderSummary/index.tsx:141
 #: src/components/forms/ProductForm/index.tsx:363
 #: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:48
 msgid "Taxes"
@@ -6550,11 +6719,11 @@ msgstr "这是您的组织者名称，将展示给用户。"
 msgid "This message will be included in the footer of all emails sent from this event"
 msgstr "此信息将包含在本次活动发送的所有电子邮件的页脚中"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:82
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:103
 msgid "This message will only be shown if order is completed successfully. Orders awaiting payment will not show this message"
 msgstr "此消息仅在订单成功完成后显示。等待付款的订单不会显示此消息。"
 
-#: src/components/forms/StripeCheckoutForm/index.tsx:93
+#: src/components/forms/StripeCheckoutForm/index.tsx:95
 msgid "This order has already been paid."
 msgstr "此订单已付款。"
 
@@ -6562,42 +6731,33 @@ msgstr "此订单已付款。"
 msgid "This order has already been refunded."
 msgstr "此订单已退款。"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:221
-msgid "This order has been abandoned"
-msgstr "此订单已被放弃"
-
-#: src/components/routes/product-widget/CollectInformation/index.tsx:245
-msgid "This order has been cancelled"
-msgstr "此订单已取消"
-
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:209
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:247
 msgid "This order has been cancelled."
 msgstr "此订单已取消。"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:210
+#: src/components/routes/product-widget/CollectInformation/index.tsx:300
 msgid "This order has expired. Please start again."
 msgstr "此订单已过期。请重新开始。"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:229
-msgid "This order is awaiting payment"
-msgstr "此订单正在等待付款"
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:266
+msgid "This order is being processed."
+msgstr "此订单正在处理中。"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:237
-msgid "This order is complete"
-msgstr "此订单已完成"
-
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:211
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:257
 msgid "This order is complete."
 msgstr "此订单已完成。"
 
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:204
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:207
-msgid "This order is processing."
-msgstr "此订单正在处理中。"
-
-#: src/components/forms/StripeCheckoutForm/index.tsx:103
+#: src/components/forms/StripeCheckoutForm/index.tsx:107
 msgid "This order page is no longer available."
 msgstr "此订购页面已不可用。"
+
+#: src/components/routes/product-widget/CollectInformation/index.tsx:313
+msgid "This order was abandoned. You can start a new order anytime."
+msgstr ""
+
+#: src/components/routes/product-widget/CollectInformation/index.tsx:343
+msgid "This order was cancelled. You can start a new order anytime."
+msgstr "此订单已被取消。您可以随时开始新订单。"
 
 #: src/components/common/StatusToggle/index.tsx:79
 msgid "This organizer profile is not published yet"
@@ -6627,7 +6787,7 @@ msgstr "此产品对公众隐藏"
 msgid "This product is hidden unless targeted by a Promo Code"
 msgstr "除非由促销代码指定，否则此产品是隐藏的"
 
-#: src/components/common/QuestionsTable/index.tsx:90
+#: src/components/common/QuestionsTable/index.tsx:91
 msgid "This question is only visible to the event organizer"
 msgstr "此问题只有活动组织者可见"
 
@@ -6650,6 +6810,10 @@ msgstr "这将用于通知和与用户沟通。"
 #: src/components/forms/AffiliateForm/index.tsx:82
 msgid "This will not be visible to customers, but helps you identify the affiliate."
 msgstr "这对客户不可见，但有助于您识别推广员。"
+
+#: src/components/common/InlineOrderSummary/index.tsx:163
+msgid "Thousands of events hosted securely"
+msgstr "数千个活动安全托管"
 
 #: src/components/common/AttendeeTable/index.tsx:370
 msgid "ticket"
@@ -6758,7 +6922,7 @@ msgstr "分层产品允许您为同一产品提供多种价格选项。这非常
 msgid "TikTok"
 msgstr "TikTok"
 
-#: src/components/layouts/Checkout/index.tsx:157
+#: src/components/layouts/Checkout/index.tsx:174
 msgid "Time left:"
 msgstr "剩余时间："
 
@@ -6775,7 +6939,7 @@ msgstr "使用次数"
 #: src/components/routes/auth/AcceptInvitation/index.tsx:106
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:124
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:125
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:181
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:219
 #: src/components/routes/profile/ManageProfile/index.tsx:161
 msgid "Timezone"
 msgstr "时区"
@@ -6801,6 +6965,7 @@ msgstr ""
 msgid "Tools"
 msgstr "工具"
 
+#: src/components/common/InlineOrderSummary/index.tsx:149
 #: src/components/common/OrderSummary/index.tsx:92
 msgid "Total"
 msgstr "总计"
@@ -6882,6 +7047,10 @@ msgstr "如果是线下支付则为真"
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:63
 msgid "True if payment pending"
 msgstr "如果付款待处理则为真"
+
+#: src/components/common/InlineOrderSummary/index.tsx:161
+msgid "Trusted Platform"
+msgstr "可信赖的平台"
 
 #: src/components/common/PoweredByFooter/index.tsx:55
 msgid "Try Hi.Events Free"
@@ -7089,6 +7258,11 @@ msgstr "使用封面图片的模糊版本作为背景"
 msgid "Use cover image"
 msgstr "使用封面图片"
 
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:48
+#: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:38
+msgid "Use order details for all attendees. Attendee names and emails will match the buyer's information."
+msgstr ""
+
 #: src/components/routes/event/TicketDesigner/index.tsx:130
 msgid "Used for borders, highlights, and QR code styling"
 msgstr "用于边框、高亮和二维码样式"
@@ -7203,10 +7377,9 @@ msgstr "在谷歌地图上查看"
 msgid "View Order"
 msgstr "查看订单"
 
-#: src/components/forms/StripeCheckoutForm/index.tsx:94
-#: src/components/forms/StripeCheckoutForm/index.tsx:104
-#: src/components/routes/product-widget/CollectInformation/index.tsx:239
-msgid "View order details"
+#: src/components/forms/StripeCheckoutForm/index.tsx:96
+#: src/components/routes/product-widget/CollectInformation/index.tsx:335
+msgid "View Order Details"
 msgstr "查看订单详情"
 
 #: src/components/layouts/OrganizerLayout/index.tsx:243
@@ -7243,6 +7416,10 @@ msgstr "仅对签到工作人员可见。有助于在签到期间识别此列表
 msgid "VK"
 msgstr "VK"
 
+#: src/components/routes/product-widget/CollectInformation/index.tsx:322
+msgid "Waiting for payment"
+msgstr "等待付款"
+
 #: src/components/routes/product-widget/PaymentReturn/index.tsx:77
 msgid "We could not process your payment. Please try again or contact support."
 msgstr "我们无法处理您的付款。请重试或联系技术支持。"
@@ -7255,6 +7432,10 @@ msgstr "我们无法删除该类别。请再试一次。"
 msgid "We couldn't find any tickets matching {0}"
 msgstr "我们找不到与{0}匹配的任何门票"
 
+#: src/components/routes/product-widget/CollectInformation/index.tsx:354
+msgid "We couldn't find this order. It may have been removed."
+msgstr "我们找不到此订单。它可能已被删除。"
+
 #: src/components/common/ErrorLoadingMessage/index.tsx:13
 msgid "We couldn't load the data. Please try again."
 msgstr "我们无法加载数据。请重试。"
@@ -7262,6 +7443,10 @@ msgstr "我们无法加载数据。请重试。"
 #: src/components/common/ProductsTable/SortableCategory/index.tsx:94
 msgid "We couldn't reorder the categories. Please try again."
 msgstr "我们无法重新排序类别。请再试一次。"
+
+#: src/components/routes/product-widget/CollectInformation/index.tsx:366
+msgid "We hit a snag loading this page. Please try again."
+msgstr "加载此页面时遇到问题。请重试。"
 
 #: src/components/routes/event/TicketDesigner/index.tsx:140
 msgid "We recommend a square logo with minimum dimensions of 200x200px"
@@ -7276,9 +7461,13 @@ msgstr "我们建议尺寸为 2160px x 1080px，文件大小不超过 5MB"
 msgid "We recommend dimensions of 400px by 400px, and a maximum file size of 5MB"
 msgstr "建议尺寸为 400x400 像素，文件大小不超过 5MB"
 
-#: src/components/routes/product-widget/PaymentReturn/index.tsx:84
+#: src/components/routes/product-widget/PaymentReturn/index.tsx:88
 msgid "We were unable to confirm your payment. Please try again or contact support."
 msgstr "我们无法确认您的付款。请重试或联系技术支持。"
+
+#: src/components/routes/product-widget/CollectInformation/index.tsx:385
+msgid "We'll send your tickets to this email"
+msgstr "我们将把您的门票发送到此邮箱"
 
 #: src/components/routes/product-widget/PaymentReturn/index.tsx:79
 msgid "We're processing your order. Please wait..."
@@ -7462,6 +7651,10 @@ msgstr "当客户购买门票后，他们的订单将显示在此处。"
 msgid "When enabled, invoices will be generated for ticket orders. Invoices will sent along with the order confirmation email. Attendees can also download their invoices from the order confirmation page."
 msgstr "启用后，将为票务订单生成发票。发票将随订单确认邮件一起发送。参与"
 
+#: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:86
+msgid "When enabled, new events will display a marketing opt-in checkbox during checkout. This can be overridden per event."
+msgstr "启用后，新活动将在结账时显示营销订阅复选框。此设置可以针对每个活动单独覆盖。"
+
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:141
 msgid "When offline payments are enabled, users will be able to complete their orders and receive their tickets. Their tickets will clearly indicate the order is not paid, and the check-in tool will notify the check-in staff if an order requires payment."
 msgstr "启用线下支付后，用户可以完成订单并收到门票。他们的门票将清楚地显示订单未支付，签到工具会通知签到工作人员订单是否需要支付。"
@@ -7524,12 +7717,12 @@ msgstr "请在此输入您的消息..."
 msgid "X (Twitter)"
 msgstr "X（推特）"
 
-#: src/components/common/OrganizerReportTable/index.tsx:52
+#: src/components/common/OrganizerReportTable/index.tsx:56
 #: src/components/common/ReportTable/index.tsx:51
 msgid "Year to date"
 msgstr "年度至今"
 
-#: src/components/layouts/Checkout/index.tsx:264
+#: src/components/layouts/Checkout/index.tsx:279
 msgid "Yes, cancel my order"
 msgstr "是，取消我的订单"
 
@@ -7587,7 +7780,7 @@ msgstr "不能编辑账户所有者的角色或状态。"
 msgid "You cannot refund a manually created order."
 msgstr "您不能退还手动创建的订单。"
 
-#: src/components/common/QuestionsTable/index.tsx:252
+#: src/components/common/QuestionsTable/index.tsx:264
 msgid "You created a hidden question but disabled the option to show hidden questions. It has been enabled."
 msgstr "您创建了一个隐藏问题，但禁用了显示隐藏问题的选项。该选项已启用。"
 
@@ -7599,11 +7792,11 @@ msgstr "您可以访问多个账户。请选择一个继续。"
 msgid "You have already accepted this invitation. Please login to continue."
 msgstr "您已接受此邀请。请登录以继续。"
 
-#: src/components/common/QuestionsTable/index.tsx:338
+#: src/components/common/QuestionsTable/index.tsx:350
 msgid "You have no attendee questions."
 msgstr "没有与会者提问。"
 
-#: src/components/common/QuestionsTable/index.tsx:323
+#: src/components/common/QuestionsTable/index.tsx:335
 msgid "You have no order questions."
 msgstr "您没有订单问题。"
 
@@ -7611,7 +7804,7 @@ msgstr "您没有订单问题。"
 msgid "You have no pending email change."
 msgstr "您没有待处理的电子邮件更改。"
 
-#: src/components/layouts/Checkout/index.tsx:223
+#: src/components/layouts/Checkout/index.tsx:238
 msgid "You have run out of time to complete your order."
 msgstr "您已超时，未能完成订单。"
 
@@ -7667,9 +7860,9 @@ msgstr "您需要至少一个产品才能开始。免费、付费或让用户决
 msgid "You're all set! Your payments are being processed smoothly."
 msgstr "一切就绪！您的付款正在顺利处理。"
 
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:93
-msgid "You're going to {0}! 🎉"
-msgstr "你要去 {0}! 🎉"
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:97
+msgid "You're going to {0}!"
+msgstr "您将参加 {0}！"
 
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:64
 msgid "Your account name is used on event pages and in emails."
@@ -7695,11 +7888,11 @@ msgstr "您的网站真棒 🎉"
 msgid "Your check-in list has been created successfully. Share the link below with your check-in staff."
 msgstr "您的签到列表已成功创建。与您的签到工作人员共享以下链接。"
 
-#: src/components/layouts/Checkout/index.tsx:249
+#: src/components/layouts/Checkout/index.tsx:264
 msgid "Your current order will be lost."
 msgstr "您当前的订单将丢失。"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:284
+#: src/components/routes/product-widget/CollectInformation/index.tsx:382
 msgid "Your Details"
 msgstr "您的详细信息"
 
@@ -7728,21 +7921,21 @@ msgstr "您的消息已成功发送！"
 msgid "Your Name"
 msgstr "您的姓名"
 
-#: src/components/layouts/Checkout/index.tsx:151
+#: src/components/layouts/Checkout/index.tsx:167
 msgid "Your Order"
 msgstr "您的订单"
 
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:94
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:98
 msgid "Your order has been cancelled"
 msgstr "您的订单已被取消"
 
-#: src/components/layouts/Checkout/index.tsx:95
+#: src/components/layouts/Checkout/index.tsx:104
 msgid "Your order has been cancelled."
 msgstr "您的订单已被取消。"
 
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:96
-msgid "Your order is awaiting payment 🏦"
-msgstr "您的订单正在等待支付 🏦"
+#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:100
+msgid "Your order is awaiting payment"
+msgstr "您的订单正在等待付款"
 
 #: src/components/routes/event/orders.tsx:95
 msgid "Your orders have been exported successfully."
@@ -7769,7 +7962,7 @@ msgstr "您的付款正在处理中。"
 msgid "Your payment was not successful, please try again."
 msgstr "您的付款未成功，请重试。"
 
-#: src/components/forms/StripeCheckoutForm/index.tsx:126
+#: src/components/forms/StripeCheckoutForm/index.tsx:130
 msgid "Your payment was unsuccessful. Please try again."
 msgstr "您的付款未成功。请重试。"
 
@@ -7790,11 +7983,15 @@ msgstr "您的 Stripe 账户已连接并准备好处理支付。"
 msgid "Your ticket for"
 msgstr "您的入场券"
 
+#: src/components/routes/product-widget/CollectInformation/index.tsx:333
+msgid "Your tickets have been confirmed."
+msgstr "您的门票已确认。"
+
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:67
 msgid "YouTube"
 msgstr "YouTube"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:356
+#: src/components/routes/product-widget/CollectInformation/index.tsx:505
 msgid "ZIP / Postal Code"
 msgstr "邮政编码"
 
@@ -7804,6 +8001,6 @@ msgstr "邮政编码"
 msgid "Zip or Postal Code"
 msgstr "邮政编码"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:357
+#: src/components/routes/product-widget/CollectInformation/index.tsx:506
 msgid "ZIP or Postal Code"
 msgstr "邮政编码"

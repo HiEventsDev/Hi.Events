@@ -32,6 +32,7 @@ class CompleteOrderActionPublic extends BaseAction
                     'questions' => $request->has('order.questions')
                         ? $request->input('order.questions')
                         : null,
+                    'opted_into_marketing' => $request->boolean('order.opted_into_marketing'),
                 ]),
                 'products' => $request->input('products'),
                 'event_id' => $eventId,

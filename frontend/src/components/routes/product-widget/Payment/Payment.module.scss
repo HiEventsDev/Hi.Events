@@ -3,3 +3,82 @@
   margin: 0 auto;
   position: relative;
 }
+
+.paymentMethodSelector {
+  margin-top: 20px;
+  margin-bottom: 4px;
+}
+
+.paymentMethodLabel {
+  margin-bottom: 8px;
+}
+
+.paymentMethodTabs {
+  display: flex;
+  gap: 8px;
+}
+
+.paymentMethodTab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #6B7280;
+  transition: all 0.15s ease;
+
+  &:hover {
+    border-color: #D1D5DB;
+    background: #F9FAFB;
+  }
+
+  &.active {
+    border-color: var(--mantine-primary-color-filled);
+    background: var(--mantine-primary-color-light);
+    color: var(--mantine-primary-color-filled);
+  }
+}
+
+.checkoutActions {
+  margin-top: 32px;
+  margin-bottom: 24px;
+}
+
+.continueButton {
+  width: 100%;
+  height: 48px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 16px;
+  transition: background-color 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+}
+
+.tosNotice {
+  text-align: center;
+  margin-top: 12px;
+  font-size: 12px;
+  color: #6B7280;
+
+  a {
+    color: var(--mantine-primary-color-filled);
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

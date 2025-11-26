@@ -14,6 +14,7 @@ class CompleteOrderOrderDTO extends BaseDTO
      * @param string $email
      * @param Collection<OrderQuestionsDTO>|null $questions
      * @param array|null $address
+     * @param bool $opted_into_marketing
      */
     public function __construct(
         public readonly string      $first_name,
@@ -22,6 +23,7 @@ class CompleteOrderOrderDTO extends BaseDTO
         #[CollectionOf(OrderQuestionsDTO::class)]
         public readonly ?Collection $questions,
         public readonly ?array      $address = [],
+        public readonly bool        $opted_into_marketing = false,
     )
     {
     }

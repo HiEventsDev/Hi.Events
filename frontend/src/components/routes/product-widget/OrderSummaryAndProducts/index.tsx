@@ -1,4 +1,3 @@
-import React from "react";
 import {t} from "@lingui/macro";
 import {NavLink, useNavigate, useParams} from "react-router";
 import {Badge, Button, Group, SimpleGrid, Text} from "@mantine/core";
@@ -28,8 +27,9 @@ import {AttendeeTicket} from "../../../common/AttendeeTicket";
 import {PoweredByFooter} from "../../../common/PoweredByFooter";
 import {EventDateRange} from "../../../common/EventDateRange";
 import {OnlineEventDetails} from "../../../common/OnlineEventDetails";
+import {AddToCalendarCTA} from "../../../common/AddToCalendarCTA";
+import {InlineOrderSummary} from "../../../common/InlineOrderSummary";
 import {CheckoutContent} from "../../../layouts/Checkout/CheckoutContent";
-import {CheckoutFooter} from "../../../layouts/Checkout/CheckoutFooter";
 
 import {Event, Order, Product} from "../../../../types.ts";
 import classes from './OrderSummaryAndProducts.module.scss';
@@ -89,14 +89,53 @@ const DetailItem = ({icon: Icon, label, value}: { icon: any, label: string, valu
 );
 
 const WelcomeHeader = ({order, event}: { order: Order; event: Event }) => {
+    const isCompleted = order.status === 'COMPLETED';
+    const isAwaitingPayment = order.status === 'AWAITING_OFFLINE_PAYMENT';
+    const isCancelled = order.status === 'CANCELLED';
+
     const message = {
-        'COMPLETED': t`You're going to ${event.title}! 🎉`,
+        'COMPLETED': t`You're going to ${event.title}!`,
         'CANCELLED': t`Your order has been cancelled`,
         'RESERVED': null,
-        'AWAITING_OFFLINE_PAYMENT': t`Your order is awaiting payment 🏦`
+        'AWAITING_OFFLINE_PAYMENT': t`Your order is awaiting payment`,
+        'ABANDONED': null,
     }[order.status];
 
-    return message ? <div className={classes.welcomeHeader}>{message}</div> : null;
+    if (!message) return null;
+
+    return (
+        <div className={classes.welcomeHeader}>
+            {isCompleted && (
+                <div className={classes.confettiIcon}>
+                    {/* eslint-disable-next-line lingui/no-unlocalized-strings */}
+                    <span>🎉</span>
+                </div>
+            )}
+            {isAwaitingPayment && (
+                <div className={classes.confettiIcon}>
+                    {/* eslint-disable-next-line lingui/no-unlocalized-strings */}
+                    <span>⏳</span>
+                </div>
+            )}
+            {isCancelled && (
+                <div className={classes.confettiIcon}>
+                    {/* eslint-disable-next-line lingui/no-unlocalized-strings */}
+                    <span>😔</span>
+                </div>
+            )}
+            <div className={classes.welcomeMessage}>{message}</div>
+            {isCompleted && (
+                <div className={classes.confirmationText}>
+                    {t`Confirmation sent to`} <strong>{order.email}</strong>
+                </div>
+            )}
+            {isCancelled && (
+                <div className={classes.confirmationText}>
+                    {t`A cancellation notice has been sent to`} <strong>{order.email}</strong>
+                </div>
+            )}
+        </div>
+    );
 };
 
 const OrderDetails = ({order, event}: { order: Order, event: Event }) => (
@@ -201,17 +240,33 @@ const EventDetails = ({event}: { event: Event }) => {
 };
 
 const OrderStatus = ({order}: { order: Order }) => {
-    let message = t`This order is processing.`;
-
-    if (order?.payment_status === 'AWAITING_PAYMENT') {
-        message = t`This order is processing.`;
-    } else if (order?.status === 'CANCELLED') {
-        message = t`This order has been cancelled.`;
-    } else if (order?.status === 'COMPLETED') {
-        message = t`This order is complete.`;
+    if (order?.status === 'CANCELLED') {
+        return (
+            <HomepageInfoMessage
+                status="cancelled"
+                message={t`Order cancelled`}
+                subtitle={t`This order has been cancelled.`}
+            />
+        );
     }
 
-    return <HomepageInfoMessage message={message}/>;
+    if (order?.status === 'COMPLETED') {
+        return (
+            <HomepageInfoMessage
+                status="success"
+                message={t`Order complete`}
+                subtitle={t`This order is complete.`}
+            />
+        );
+    }
+
+    return (
+        <HomepageInfoMessage
+            status="processing"
+            message={t`Processing order`}
+            subtitle={t`This order is being processed.`}
+        />
+    );
 };
 
 const PostCheckoutMessage = ({ message }: { message: string }) => (
@@ -257,8 +312,15 @@ export const OrderSummaryAndProducts = () => {
 
     return (
         <>
-            <CheckoutContent hasFooter={true}>
+            <CheckoutContent>
                 <WelcomeHeader order={order} event={event}/>
+
+                <InlineOrderSummary
+                    event={event}
+                    order={order}
+                    showBuyerProtection={false}
+                    defaultExpanded={false}
+                />
 
                 {order?.status === 'AWAITING_OFFLINE_PAYMENT' && <OfflinePaymentInstructions event={event}/>}
 
@@ -275,6 +337,8 @@ export const OrderSummaryAndProducts = () => {
 
                 <h1 className={classes.heading}>{t`Event Details`}</h1>
                 <EventDetails event={event}/>
+
+                {order.status === 'COMPLETED' && <AddToCalendarCTA event={event}/>}
 
                 {(order?.attendees && order.attendees.length > 0) && (
                     <Group justify="space-between" align="center">
@@ -302,12 +366,6 @@ export const OrderSummaryAndProducts = () => {
 
                 <PoweredByFooter/>
             </CheckoutContent>
-            <CheckoutFooter
-                isOrderComplete={true}
-                isLoading={false}
-                event={event}
-                order={order}
-            />
         </>
     );
 };

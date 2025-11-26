@@ -2,6 +2,7 @@
 
 namespace HiEvents\Http\Request\EventSettings;
 
+use HiEvents\DomainObjects\Enums\AttendeeDetailsCollectionMethod;
 use HiEvents\DomainObjects\Enums\HomepageBackgroundType;
 use HiEvents\DomainObjects\Enums\PaymentProviders;
 use HiEvents\DomainObjects\Enums\PriceDisplayMode;
@@ -22,6 +23,7 @@ class UpdateEventSettingsRequest extends BaseRequest
             'continue_button_text' => ['string', 'nullable', 'max:100'],
             'support_email' => ['email', 'nullable'],
             'require_attendee_details' => ['boolean'],
+            'attendee_details_collection_method' => [Rule::in(AttendeeDetailsCollectionMethod::valuesArray())],
             'order_timeout_in_minutes' => ['numeric', "min:1", "max:120"],
 
             'homepage_background_color' => ['nullable', ...RulesHelper::HEX_COLOR],
@@ -83,6 +85,9 @@ class UpdateEventSettingsRequest extends BaseRequest
             'ticket_design_settings.footer_text' => ['nullable', 'string', 'max:500'],
             'ticket_design_settings.layout_type' => ['nullable', 'string', Rule::in(['default', 'modern'])],
             'ticket_design_settings.enabled' => ['boolean'],
+
+            // Marketing settings
+            'show_marketing_opt_in' => ['boolean'],
         ];
     }
 

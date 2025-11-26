@@ -158,6 +158,8 @@ export type ImageType = 'EVENT_COVER' | 'EDITOR_IMAGE' | 'ORGANIZER_LOGO' | 'ORG
 
 export type PaymentProvider = 'STRIPE' | 'OFFLINE';
 
+export type AttendeeDetailsCollectionMethod = 'PER_TICKET' | 'PER_ORDER';
+
 export interface EventSettings {
     event_id?: IdParam;
     id?: IdParam;
@@ -185,6 +187,7 @@ export interface EventSettings {
     allow_search_engine_indexing?: boolean;
     price_display_mode?: 'INCLUSIVE' | 'EXCLUSIVE';
     hide_getting_started_page: boolean;
+    attendee_details_collection_method?: AttendeeDetailsCollectionMethod;
 
     // Payment settings
     offline_payment_instructions: string;
@@ -210,6 +213,9 @@ export interface EventSettings {
         layout_type?: 'default' | 'modern';
         enabled?: boolean;
     };
+
+    // Marketing settings
+    show_marketing_opt_in?: boolean;
 }
 
 export interface VenueAddress {
@@ -357,6 +363,8 @@ export interface Organizer {
 export interface OrganizerSettings {
     id: IdParam;
     organizer_id: IdParam;
+    default_attendee_details_collection_method?: AttendeeDetailsCollectionMethod;
+    default_show_marketing_opt_in?: boolean;
     homepage_visibility: 'PUBLIC' | 'PRIVATE' | 'PASSWORD_PROTECTED';
     homepage_theme_settings: {
         homepage_background_color: string;
