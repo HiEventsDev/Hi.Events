@@ -4,17 +4,20 @@ import {useGetEventPublic} from "../../../../queries/useGetEventPublic.ts";
 import {CheckoutContent} from "../../../layouts/Checkout/CheckoutContent";
 import {StripePaymentMethod} from "./PaymentMethods/Stripe";
 import {OfflinePaymentMethod} from "./PaymentMethods/Offline";
-import {Event, Order} from "../../../../types.ts";
-import {CheckoutFooter} from "../../../layouts/Checkout/CheckoutFooter";
-import {Group} from "@mantine/core";
+import {Event} from "../../../../types.ts";
+import {Button, Group, Text} from "@mantine/core";
+import {IconBuildingBank, IconLock, IconWallet} from "@tabler/icons-react";
 import {formatCurrency} from "../../../../utilites/currency.ts";
-import {t} from "@lingui/macro";
+import {t, Trans} from "@lingui/macro";
 import {useGetOrderPublic} from "../../../../queries/useGetOrderPublic.ts";
 import {
     useTransitionOrderToOfflinePaymentPublic
 } from "../../../../mutations/useTransitionOrderToOfflinePaymentPublic.ts";
 import {Card} from "../../../common/Card";
+import {InlineOrderSummary} from "../../../common/InlineOrderSummary";
 import {showError} from "../../../../utilites/notifications.tsx";
+import {getConfig} from "../../../../utilites/config.ts";
+import classes from "./Payment.module.scss";
 
 const Payment = () => {
     const navigate = useNavigate();
@@ -40,6 +43,11 @@ const Payment = () => {
             setActivePaymentMethod(null); // No methods available
         }
     }, [isStripeEnabled, isOfflineEnabled]);
+
+    React.useEffect(() => {
+        // Scroll to top when payment page loads
+        window?.scrollTo(0, 0);
+    }, []);
 
     const handleParentSubmit = () => {
         if (submitHandler) {
@@ -82,6 +90,9 @@ const Payment = () => {
     return (
         <>
             <CheckoutContent>
+                {(event && order) && (
+                    <InlineOrderSummary event={event} order={order} defaultExpanded={false}/>
+                )}
                 {isStripeEnabled && (
                     <div style={{display: activePaymentMethod === 'STRIPE' ? 'block' : 'none'}}>
                         <StripePaymentMethod enabled={true} setSubmitHandler={setSubmitHandler}/>
@@ -95,41 +106,58 @@ const Payment = () => {
                 )}
 
                 {(isStripeEnabled && isOfflineEnabled) && (
-                    <div style={{marginTop: '20px'}}>
-                        <a
-                            onClick={() => setActivePaymentMethod(
-                                activePaymentMethod === 'STRIPE' ? 'OFFLINE' : 'STRIPE'
-                            )}
-                            style={{cursor: 'pointer'}}
-                        >
-                            {activePaymentMethod === 'STRIPE'
-                                ? t`I would like to pay using an offline method`
-                                : t`I would like to pay using an online method (credit card etc.)`
-                            }
-                        </a>
+                    <div className={classes.paymentMethodSelector}>
+                        <Text size="sm" c="dimmed" className={classes.paymentMethodLabel}>
+                            {t`Payment method`}
+                        </Text>
+                        <div className={classes.paymentMethodTabs}>
+                            <button
+                                type="button"
+                                className={`${classes.paymentMethodTab} ${activePaymentMethod === 'STRIPE' ? classes.active : ''}`}
+                                onClick={() => setActivePaymentMethod('STRIPE')}
+                            >
+                                <IconWallet size={18}/>
+                                <span>{t`Online`}</span>
+                            </button>
+                            <button
+                                type="button"
+                                className={`${classes.paymentMethodTab} ${activePaymentMethod === 'OFFLINE' ? classes.active : ''}`}
+                                onClick={() => setActivePaymentMethod('OFFLINE')}
+                            >
+                                <IconBuildingBank size={18}/>
+                                <span>{t`Offline`}</span>
+                            </button>
+                        </div>
                     </div>
                 )}
-            </CheckoutContent>
 
-            <CheckoutFooter
-                event={event as Event}
-                order={order as Order}
-                isLoading={isLoading || isPaymentLoading}
-                onClick={handleSubmit}
-                buttonContent={order?.is_payment_required ? (
-                    <Group gap={'10px'}>
-                        <div style={{fontWeight: "bold"}}>
-                            {t`Place Order`}
-                        </div>
-                        <div style={{fontSize: 14}}>
-                            {formatCurrency(order.total_gross, order.currency)}
-                        </div>
-                        <div style={{fontSize: 14, fontWeight: 500}}>
-                            {order.currency}
-                        </div>
-                    </Group>
-                ) : t`Complete Payment`}
-            />
+                <div className={classes.checkoutActions}>
+                    <Button
+                        className={classes.continueButton}
+                        loading={isLoading || isPaymentLoading}
+                        onClick={handleSubmit}
+                    >
+                        {order?.is_payment_required ? (
+                            <Group gap={8} wrap="nowrap">
+                                <IconLock size={16}/>
+                                <Text fw={600}>{t`Pay`} {formatCurrency(order.total_gross, order.currency)}</Text>
+                            </Group>
+                        ) : t`Complete Payment`}
+                    </Button>
+                    <p className={classes.tosNotice}>
+                        <Trans>
+                            By continuing, you agree to the{' '}
+                            <a
+                                href={getConfig('VITE_TOS_URL', 'https://hi.events/terms-of-service') as string}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                {getConfig('VITE_APP_NAME', 'Hi.Events')} Terms of Service
+                            </a>
+                        </Trans>
+                    </p>
+                </div>
+            </CheckoutContent>
         </>
     );
 }

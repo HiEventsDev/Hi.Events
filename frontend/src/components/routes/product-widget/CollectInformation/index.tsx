@@ -1,26 +1,28 @@
 import {useMutation} from "@tanstack/react-query";
 import {FinaliseOrderPayload, orderClientPublic} from "../../../../api/order.client.ts";
 import {useNavigate, useParams} from "react-router";
-import {Button, Checkbox, Group, NativeSelect, Skeleton, TextInput} from "@mantine/core";
+import {Button, Checkbox, Group, NativeSelect, SegmentedControl, Skeleton, Text, TextInput, Tooltip} from "@mantine/core";
+import {IconArrowRight, IconCheck, IconCircleCheck} from "@tabler/icons-react";
+import {Trans} from "@lingui/macro";
 import {useForm} from "@mantine/form";
 import {notifications} from "@mantine/notifications";
 import {useGetOrderPublic} from "../../../../queries/useGetOrderPublic.ts";
 import {useGetEventPublic} from "../../../../queries/useGetEventPublic.ts";
 import {useGetEventQuestionsPublic} from "../../../../queries/useGetEventQuestionsPublic.ts";
 import {CheckoutOrderQuestions, CheckoutProductQuestions} from "../../../common/CheckoutQuestion";
-import {Event, IdParam, Order, Question} from "../../../../types.ts";
-import {useEffect} from "react";
+import {Event, IdParam, Question} from "../../../../types.ts";
+import {useEffect, useState} from "react";
 import {t} from "@lingui/macro";
 import {InputGroup} from "../../../common/InputGroup";
 import {Card} from "../../../common/Card";
-import {IconCopy} from "@tabler/icons-react";
-import {CheckoutFooter} from "../../../layouts/Checkout/CheckoutFooter";
 import {CheckoutContent} from "../../../layouts/Checkout/CheckoutContent";
+import {getConfig} from "../../../../utilites/config.ts";
 import {HomepageInfoMessage} from "../../../common/HomepageInfoMessage";
+import {InlineOrderSummary} from "../../../common/InlineOrderSummary";
 import {eventCheckoutPath, eventHomepagePath} from "../../../../utilites/urlHelper.ts";
-import {formatCurrency} from "../../../../utilites/currency.ts";
 import {showInfo} from "../../../../utilites/notifications.tsx";
 import countries from "../../../../../data/countries.json";
+import classes from "./CollectInformation.module.scss";
 
 const LoadingSkeleton = () =>
     (
@@ -57,6 +59,16 @@ export const CollectInformation = () => {
     const products = productCategories?.flatMap(category => category.products);
     const requireBillingAddress = event?.settings?.require_billing_address;
     const isPerOrderCollection = event?.settings?.attendee_details_collection_method === 'PER_ORDER';
+    const [copyOption, setCopyOption] = useState<'none' | 'first' | 'all'>('none');
+
+    const isEmailValid = (email: string) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
+
+    const EmailCheckIcon = () => (
+        <IconCircleCheck size={18} style={{color: '#10B981'}}/>
+    );
 
     let productIndex = 0;
 
@@ -100,10 +112,8 @@ export const CollectInformation = () => {
         validateInputOnBlur: true,
     });
 
-    const copyDetailsToAllAttendees = () => {
-        if (!products) {
-            return;
-        }
+    const getTicketAttendeeIndices = (): number[] => {
+        if (!products || !form.values.products) return [];
 
         const attendeeProductIds = new Set<IdParam>(
             products
@@ -111,15 +121,52 @@ export const CollectInformation = () => {
                 .map(product => product.id)
         );
 
-        const updatedProducts = form.values.products.map(product => {
-            if (attendeeProductIds.has(product.product_id)) {
-                return {
-                    ...product,
-                    first_name: form.values.order.first_name,
-                    last_name: form.values.order.last_name,
-                    email: form.values.order.email,
-                    email_confirmation: form.values.order.email,
-                };
+        return form.values.products
+            .map((product, index) => attendeeProductIds.has(product.product_id) ? index : -1)
+            .filter(index => index !== -1);
+    };
+
+    const getFirstTicketAttendeeIndex = (): number => {
+        const indices = getTicketAttendeeIndices();
+        return indices.length > 0 ? indices[0] : -1;
+    };
+
+    const totalTicketAttendees = getTicketAttendeeIndices().length;
+
+    const areOrderDetailsComplete = () => {
+        const { first_name, last_name, email } = form.values.order;
+        return first_name.trim() !== '' && last_name.trim() !== '' && isEmailValid(email);
+    };
+
+    const copyDetailsToAttendees = (option: 'none' | 'first' | 'all') => {
+        if (!products) return;
+
+        const ticketIndices = getTicketAttendeeIndices();
+        if (ticketIndices.length === 0) return;
+
+        const updatedProducts = form.values.products.map((product, index) => {
+            const isTicketAttendee = ticketIndices.includes(index);
+            const isFirst = index === ticketIndices[0];
+            const shouldCopy = option === 'all' ? isTicketAttendee : (option === 'first' && isFirst);
+
+            if (isTicketAttendee) {
+                if (shouldCopy) {
+                    return {
+                        ...product,
+                        first_name: form.values.order.first_name,
+                        last_name: form.values.order.last_name,
+                        email: form.values.order.email,
+                        email_confirmation: form.values.order.email,
+                    };
+                } else {
+                    return {
+                        ...product,
+                        first_name: "",
+                        last_name: "",
+                        email: "",
+                        email_confirmation: "",
+                    };
+                }
             }
             return product;
         });
@@ -129,6 +176,26 @@ export const CollectInformation = () => {
             products: updatedProducts,
         });
     };
+
+    const handleCopyOptionChange = (value: string) => {
+        const option = value as 'none' | 'first' | 'all';
+
+        // Only allow copying if order details are complete
+        if (option !== 'none' && !areOrderDetailsComplete()) {
+            return;
+        }
+
+        setCopyOption(option);
+        copyDetailsToAttendees(option);
+    };
+
+    // Reset copy option if order details become incomplete
+    useEffect(() => {
+        if (copyOption !== 'none' && !areOrderDetailsComplete()) {
+            setCopyOption('none');
+            copyDetailsToAttendees('none');
+        }
+    }, [form.values.order.first_name, form.values.order.last_name, form.values.order.email]);
 
     const mutation = useMutation({
         mutationFn: (orderData: FinaliseOrderPayload) => orderClientPublic.finaliseOrder(Number(eventId), String(orderShortId), orderData),
@@ -241,57 +308,65 @@ export const CollectInformation = () => {
 
     if (order?.status === 'ABANDONED') {
         return <HomepageInfoMessage
-            message={t`This order has been abandoned`}
+            status="cancelled"
+            message={t`Order was cancelled`}
+            subtitle={t`This order was abandoned. You can start a new order anytime.`}
             link={eventHomepagePath(event as Event)}
-            linkText={t`Go to event homepage`}
+            linkText={t`Back to Event`}
         />;
     }
 
     if (order?.payment_status === 'AWAITING_PAYMENT') {
         return <HomepageInfoMessage
-            message={t`This order is awaiting payment`}
+            status="awaiting_payment"
+            message={t`Waiting for payment`}
+            subtitle={t`Complete your payment to secure your tickets.`}
             link={eventCheckoutPath(eventId, orderShortId, 'payment')}
-            linkText={t`Complete payment`}
+            linkText={t`Complete Payment`}
         />;
     }
 
     if (order?.status === 'COMPLETED') {
         return <HomepageInfoMessage
-            message={t`This order is complete`}
+            status="success"
+            message={t`Order complete`}
+            subtitle={t`Your tickets have been confirmed.`}
             link={eventCheckoutPath(eventId, orderShortId, 'summary')}
-            linkText={t`View order details`}
+            linkText={t`View Order Details`}
         />;
     }
 
     if (order?.status === 'CANCELLED') {
         return <HomepageInfoMessage
-            message={t`This order has been cancelled`}
+            status="cancelled"
+            message={t`Order cancelled`}
+            subtitle={t`This order was cancelled. You can start a new order anytime.`}
             link={eventHomepagePath(event as Event)}
-            linkText={t`Go to event homepage`}
+            linkText={t`Back to Event`}
         />;
     }
 
     if (isOrderError && orderError?.response?.status === 404) {
         return (
-            <>
-                <HomepageInfoMessage
-                    message={t`Sorry, this order no longer exists.`}
-                    link={eventHomepagePath(event as Event)}
-                    linkText={t`Back to event page`}
-                />
-            </>
+            <HomepageInfoMessage
+                status="not_found"
+                message={t`Order not found`}
+                subtitle={t`We couldn't find this order. It may have been removed.`}
+                link={eventHomepagePath(event as Event)}
+                linkText={t`Go to Event Page`}
+            />
         );
     }
 
     if (isOrderError || isEventError || isQuestionsError) {
         return (
-            <>
-                <HomepageInfoMessage
-                    message={t`Sorry, something went wrong loading this page.`}
-                    link={eventHomepagePath(event as Event)}
-                    linkText={t`Back to event page`}
-                />
-            </>
+            <HomepageInfoMessage
+                status="error"
+                message={t`Something went wrong`}
+                subtitle={t`We hit a snag loading this page. Please try again.`}
+                link={eventHomepagePath(event as Event)}
+                linkText={t`Back to Event`}
+            />
         );
     }
 
@@ -303,9 +378,16 @@ export const CollectInformation = () => {
     return (
         <form onSubmit={form.onSubmit(handleSubmit)}>
             <CheckoutContent>
-                <h2>
+                {(event && order) && (
+                    <InlineOrderSummary event={event} order={order} defaultExpanded={true}/>
+                )}
+
+                <h2 className={classes.sectionHeading}>
                     {t`Your Details`}
                 </h2>
+                <p className={classes.sectionHelper}>
+                    {t`We'll send your tickets to this email`}
+                </p>
 
                 <Card>
                     <InputGroup>
@@ -329,24 +411,61 @@ export const CollectInformation = () => {
                             type={"email"}
                             label={t`Email Address`}
                             placeholder={t`Email Address`}
+                            rightSection={isEmailValid(form.values.order.email) ? <EmailCheckIcon/> : null}
                             {...form.getInputProps("order.email")}
-                            mb={0}
                         />
                         <TextInput
                             withAsterisk
                             type={"email"}
                             label={t`Confirm Email Address`}
                             placeholder={t`Confirm Email Address`}
+                            rightSection={isEmailValid(form.values.order.email_confirmation) ? <EmailCheckIcon/> : null}
                             {...form.getInputProps("order.email_confirmation")}
-                            mb={0}
                         />
                     </InputGroup>
 
-                    {orderRequiresAttendeeDetails && !isPerOrderCollection && (
-                        <Button p={0} ml={0} size={'sm'} variant={'transparent'} leftSection={<IconCopy size={14}/>}
-                                onClick={copyDetailsToAllAttendees}>
-                            {t`Copy details to all attendees`}
-                        </Button>
+                    {orderRequiresAttendeeDetails && !isPerOrderCollection && totalTicketAttendees > 0 && (
+                        <div className={classes.copyDetailsSection}>
+                            {totalTicketAttendees === 1 ? (
+                                <Tooltip
+                                    label={t`Fill in your details above first`}
+                                    disabled={areOrderDetailsComplete()}
+                                    position="right"
+                                    withArrow
+                                >
+                                    <div style={{display: 'inline-block'}}>
+                                        <Checkbox
+                                            size="sm"
+                                            label={t`Copy details to first attendee`}
+                                            checked={copyOption === 'first'}
+                                            disabled={!areOrderDetailsComplete()}
+                                            onChange={(e) => handleCopyOptionChange(e.currentTarget.checked ? 'first' : 'none')}
+                                        />
+                                    </div>
+                                </Tooltip>
+                            ) : (
+                                <div className={classes.copyDetailsMultiple}>
+                                    <Text size="sm" c="dimmed" className={classes.copyLabel}>{t`Copy my details to:`}</Text>
+                                    <Tooltip
+                                        label={t`Fill in your details above first`}
+                                        disabled={areOrderDetailsComplete()}
+                                        withArrow
+                                    >
+                                        <SegmentedControl
+                                            size="xs"
+                                            value={copyOption}
+                                            onChange={handleCopyOptionChange}
+                                            disabled={!areOrderDetailsComplete()}
+                                            data={[
+                                                {label: t`None`, value: 'none'},
+                                                {label: t`First attendee`, value: 'first'},
+                                                {label: t`All attendees`, value: 'all'},
+                                            ]}
+                                        />
+                                    </Tooltip>
+                                </div>
+                            )}
+                        </div>
                     )}
 
                     {requireBillingAddress && (
@@ -406,7 +525,7 @@ export const CollectInformation = () => {
                     {event?.settings?.show_marketing_opt_in && (
                         <Checkbox
                             mt="md"
-                            label={t`Keep me updated on more events and news from this event organizer.`}
+                            label={t`Keep me updated on news and events from ${event?.organizer?.name || t`this organizer`}`}
                             {...form.getInputProps('order.opted_into_marketing', {type: 'checkbox'})}
                         />
                     )}
@@ -426,60 +545,102 @@ export const CollectInformation = () => {
                     }
 
                     return (
-                        <div key={orderItem.product_id + orderItem.id}>
-                            <h3>{orderItem?.item_name}</h3>
+                        <div key={orderItem.product_id + orderItem.id} className={classes.ticketSection}>
+                            <div className={classes.ticketTypeHeader}>
+                                <h3>{orderItem?.item_name}</h3>
+                                <span className={classes.ticketCountBadge}>
+                                    {orderItem.quantity === 1
+                                        ? t`1 ticket`
+                                        : t`${orderItem.quantity} tickets`}
+                                </span>
+                            </div>
                             {Array.from(Array(orderItem?.quantity)).map((_, index) => {
+                                const currentProductIndex = productIndex;
+                                const ticketIndices = getTicketAttendeeIndices();
+                                const isTicketAttendee = ticketIndices.includes(currentProductIndex);
+                                const isFirstTicketAttendee = currentProductIndex === getFirstTicketAttendeeIndex();
+                                const isCopied = isTicketAttendee && (
+                                    copyOption === 'all' || (copyOption === 'first' && isFirstTicketAttendee)
+                                );
+
+                                // Check if current values still match the order details
+                                const currentProduct = form.values.products[currentProductIndex];
+                                const valuesMatchOrder = currentProduct &&
+                                    currentProduct.first_name === form.values.order.first_name &&
+                                    currentProduct.last_name === form.values.order.last_name &&
+                                    currentProduct.email === form.values.order.email;
+
+                                // Only show badge if copied AND values still match
+                                const showCopiedBadge = isCopied && productRequiresDetails && valuesMatchOrder;
+
                                 const productInputs = (
-                                    <>
-                                        <Card key={`${orderItem.id} ${index}`}>
-                                            <h4 style={{marginTop: 0}}>
-                                                {product.product_type === 'TICKET' ? t`Attendee` : t`Item`} {index + 1} {t`Details`}
-                                            </h4>
-
-                                            {productRequiresDetails && (
-                                                <>
-                                                    <InputGroup>
-                                                        <TextInput
-                                                            withAsterisk
-                                                            label={t`First Name`}
-                                                            placeholder={t`First name`}
-                                                            {...form.getInputProps(`products.${productIndex}.first_name`)}
-                                                        />
-                                                        <TextInput
-                                                            withAsterisk
-                                                            label={t`Last Name`}
-                                                            placeholder={t`Last Name`}
-                                                            {...form.getInputProps(`products.${productIndex}.last_name`)}
-                                                        />
-                                                    </InputGroup>
-
-                                                    <InputGroup>
-                                                        <TextInput
-                                                            withAsterisk
-                                                            type={"email"}
-                                                            label={t`Email Address`}
-                                                            placeholder={t`Email Address`}
-                                                            {...form.getInputProps(`products.${productIndex}.email`)}
-                                                        />
-                                                        <TextInput
-                                                            withAsterisk
-                                                            type={"email"}
-                                                            label={t`Confirm Email Address`}
-                                                            placeholder={t`Confirm Email Address`}
-                                                            {...form.getInputProps(`products.${productIndex}.email_confirmation`)}
-                                                        />
-                                                    </InputGroup>
-                                                </>
+                                    <Card key={`${orderItem.id} ${index}`} className={classes.attendeeCard}>
+                                        <div className={classes.attendeeCardHeader}>
+                                            <div className={classes.attendeeHeaderLeft}>
+                                                <div className={classes.attendeeNumber}>
+                                                    {index + 1}
+                                                </div>
+                                                <div className={classes.attendeeInfo}>
+                                                    <h4>
+                                                        {product.product_type === 'TICKET' ? t`Attendee` : t`Item`} {index + 1}
+                                                    </h4>
+                                                    <span className={classes.attendeeTicketType}>
+                                                        {orderItem?.item_name}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            {showCopiedBadge && (
+                                                <span className={classes.copiedBadge}>
+                                                    {t`Copied from above`}
+                                                </span>
                                             )}
+                                        </div>
 
-                                            {productQuestions &&
-                                                <CheckoutProductQuestions
-                                                    index={productIndex}
-                                                    product={product}
-                                                    form={form}
-                                                    questions={productQuestions}/>}
-                                        </Card>
-                                    </>
+                                        {productRequiresDetails && (
+                                            <>
+                                                <InputGroup>
+                                                    <TextInput
+                                                        withAsterisk
+                                                        label={t`First Name`}
+                                                        placeholder={t`First name`}
+                                                        {...form.getInputProps(`products.${currentProductIndex}.first_name`)}
+                                                    />
+                                                    <TextInput
+                                                        withAsterisk
+                                                        label={t`Last Name`}
+                                                        placeholder={t`Last Name`}
+                                                        {...form.getInputProps(`products.${currentProductIndex}.last_name`)}
+                                                    />
+                                                </InputGroup>
+
+                                                <InputGroup>
+                                                    <TextInput
+                                                        withAsterisk
+                                                        type={"email"}
+                                                        label={t`Email Address`}
+                                                        placeholder={t`Email Address`}
+                                                        rightSection={isEmailValid(form.values.products[currentProductIndex]?.email || '') ? <EmailCheckIcon/> : null}
+                                                        {...form.getInputProps(`products.${currentProductIndex}.email`)}
+                                                    />
+                                                    <TextInput
+                                                        withAsterisk
+                                                        type={"email"}
+                                                        label={t`Confirm Email Address`}
+                                                        placeholder={t`Confirm Email Address`}
+                                                        rightSection={isEmailValid(form.values.products[currentProductIndex]?.email_confirmation || '') ? <EmailCheckIcon/> : null}
+                                                        {...form.getInputProps(`products.${currentProductIndex}.email_confirmation`)}
+                                                    />
+                                                </InputGroup>
+                                            </>
+                                        )}
+
+                                        {productQuestions &&
+                                            <CheckoutProductQuestions
+                                                index={currentProductIndex}
+                                                product={product}
+                                                form={form}
+                                                questions={productQuestions}/>}
+                                    </Card>
                                 );
 
                                 productIndex++;
@@ -495,25 +656,40 @@ export const CollectInformation = () => {
                         <div dangerouslySetInnerHTML={{__html: event?.settings?.pre_checkout_message}}/>
                     </Card>
                 )}
+
+                <div className={classes.checkoutActions}>
+                    <Button
+                        className={classes.continueButton}
+                        loading={mutation.isPending}
+                        type="submit"
+                    >
+                        {order?.is_payment_required ? (
+                            <Group gap={8} wrap="nowrap">
+                                <Text fw={600}>{t`Continue to Payment`}</Text>
+                                <IconArrowRight size={18}/>
+                            </Group>
+                        ) : (
+                            <Group gap={8} wrap="nowrap">
+                                <IconCheck size={18}/>
+                                <Text fw={600}>{t`Complete Order`}</Text>
+                            </Group>
+                        )}
+                    </Button>
+                    <p className={classes.tosNotice}>
+                        <Trans>
+                            By continuing, you agree to the{' '}
+                            <a
+                                href={getConfig('VITE_TOS_URL', 'https://hi.events/terms-of-service') as string}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                {getConfig('VITE_APP_NAME', 'Hi.Events')} Terms of Service
+                            </a>
+                        </Trans>
+                    </p>
+                </div>
+
             </CheckoutContent>
-            <CheckoutFooter
-                isLoading={mutation.isPending}
-                buttonContent={order?.is_payment_required ? (
-                    <Group gap={'10px'}>
-                        <div style={{fontWeight: "bold"}}>
-                            {t`Continue`}
-                        </div>
-                        <div style={{fontSize: 14}}>
-                            {formatCurrency(order.total_gross, order.currency)}
-                        </div>
-                        <div style={{fontSize: 14, fontWeight: 500}}>
-                            {order.currency}
-                        </div>
-                    </Group>
-                ) : t`Complete Order`}
-                event={event as Event}
-                order={order as Order}
-            />
         </form>
     );
 }
