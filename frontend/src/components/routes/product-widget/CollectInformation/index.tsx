@@ -1,9 +1,19 @@
 import {useMutation} from "@tanstack/react-query";
 import {FinaliseOrderPayload, orderClientPublic} from "../../../../api/order.client.ts";
 import {useNavigate, useParams} from "react-router";
-import {Button, Checkbox, Group, NativeSelect, SegmentedControl, Skeleton, Text, TextInput, Tooltip} from "@mantine/core";
+import {
+    Button,
+    Checkbox,
+    Group,
+    NativeSelect,
+    SegmentedControl,
+    Skeleton,
+    Text,
+    TextInput,
+    Tooltip
+} from "@mantine/core";
 import {IconArrowRight, IconCheck, IconCircleCheck} from "@tabler/icons-react";
-import {Trans} from "@lingui/macro";
+import {t, Trans} from "@lingui/macro";
 import {useForm} from "@mantine/form";
 import {notifications} from "@mantine/notifications";
 import {useGetOrderPublic} from "../../../../queries/useGetOrderPublic.ts";
@@ -12,7 +22,6 @@ import {useGetEventQuestionsPublic} from "../../../../queries/useGetEventQuestio
 import {CheckoutOrderQuestions, CheckoutProductQuestions} from "../../../common/CheckoutQuestion";
 import {Event, IdParam, Question} from "../../../../types.ts";
 import {useEffect, useState} from "react";
-import {t} from "@lingui/macro";
 import {InputGroup} from "../../../common/InputGroup";
 import {Card} from "../../../common/Card";
 import {CheckoutContent} from "../../../layouts/Checkout/CheckoutContent";
@@ -134,7 +143,7 @@ export const CollectInformation = () => {
     const totalTicketAttendees = getTicketAttendeeIndices().length;
 
     const areOrderDetailsComplete = () => {
-        const { first_name, last_name, email } = form.values.order;
+        const {first_name, last_name, email} = form.values.order;
         return first_name.trim() !== '' && last_name.trim() !== '' && isEmailValid(email);
     };
 
@@ -445,7 +454,8 @@ export const CollectInformation = () => {
                                 </Tooltip>
                             ) : (
                                 <div className={classes.copyDetailsMultiple}>
-                                    <Text size="sm" c="dimmed" className={classes.copyLabel}>{t`Copy my details to:`}</Text>
+                                    <Text size="sm" c="dimmed"
+                                          className={classes.copyLabel}>{t`Copy my details to:`}</Text>
                                     <Tooltip
                                         label={t`Fill in your details above first`}
                                         disabled={areOrderDetailsComplete()}
@@ -619,7 +629,8 @@ export const CollectInformation = () => {
                                                         type={"email"}
                                                         label={t`Email Address`}
                                                         placeholder={t`Email Address`}
-                                                        rightSection={isEmailValid(form.values.products[currentProductIndex]?.email || '') ? <EmailCheckIcon/> : null}
+                                                        rightSection={isEmailValid(form.values.products[currentProductIndex]?.email || '') ?
+                                                            <EmailCheckIcon/> : null}
                                                         {...form.getInputProps(`products.${currentProductIndex}.email`)}
                                                     />
                                                     <TextInput
@@ -627,7 +638,8 @@ export const CollectInformation = () => {
                                                         type={"email"}
                                                         label={t`Confirm Email Address`}
                                                         placeholder={t`Confirm Email Address`}
-                                                        rightSection={isEmailValid(form.values.products[currentProductIndex]?.email_confirmation || '') ? <EmailCheckIcon/> : null}
+                                                        rightSection={isEmailValid(form.values.products[currentProductIndex]?.email_confirmation || '') ?
+                                                            <EmailCheckIcon/> : null}
                                                         {...form.getInputProps(`products.${currentProductIndex}.email_confirmation`)}
                                                     />
                                                 </InputGroup>
@@ -675,18 +687,20 @@ export const CollectInformation = () => {
                             </Group>
                         )}
                     </Button>
-                    <p className={classes.tosNotice}>
-                        <Trans>
-                            By continuing, you agree to the{' '}
-                            <a
-                                href={getConfig('VITE_TOS_URL', 'https://hi.events/terms-of-service') as string}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                {getConfig('VITE_APP_NAME', 'Hi.Events')} Terms of Service
-                            </a>
-                        </Trans>
-                    </p>
+                    {!!getConfig('VITE_TOS_URL') && (
+                        <p className={classes.tosNotice}>
+                            <Trans>
+                                By continuing, you agree to the{' '}
+                                <a
+                                    href={getConfig('VITE_TOS_URL', 'https://hi.events/terms-of-service') as string}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    {getConfig('VITE_APP_NAME', 'Hi.Events')} Terms of Service
+                                </a>
+                            </Trans>
+                        </p>
+                    )}
                 </div>
 
             </CheckoutContent>

@@ -144,18 +144,20 @@ const Payment = () => {
                             </Group>
                         ) : t`Complete Payment`}
                     </Button>
-                    <p className={classes.tosNotice}>
-                        <Trans>
-                            By continuing, you agree to the{' '}
-                            <a
-                                href={getConfig('VITE_TOS_URL', 'https://hi.events/terms-of-service') as string}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                {getConfig('VITE_APP_NAME', 'Hi.Events')} Terms of Service
-                            </a>
-                        </Trans>
-                    </p>
+                    {getConfig('VITE_TOS_URL') && (
+                        <p className={classes.tosNotice}>
+                            <Trans>
+                                By continuing, you agree to the{' '}
+                                <a
+                                    href={getConfig('VITE_TOS_URL', 'https://hi.events/terms-of-service') as string}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    {getConfig('VITE_APP_NAME', 'Hi.Events')} Terms of Service
+                                </a>
+                            </Trans>
+                        </p>
+                    )}
                 </div>
             </CheckoutContent>
         </>
