@@ -12,6 +12,9 @@ return new class extends Migration
             $table->boolean('require_auth_for_checkout')
                 ->default(false)
                 ->after('require_attendee_details');
+            $table->boolean('require_auth_for_public_view')
+                ->default(true)
+                ->after('require_auth_for_checkout');
         });
 
         Schema::table('orders', static function (Blueprint $table) {

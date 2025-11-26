@@ -24,7 +24,7 @@ publicApi.interceptors.response.use(
         const status = error?.response?.status;
         const url = error?.config?.url ?? '';
 
-        if ((status === 401 || status === 403) && url.includes('/order')) {
+        if ((status === 401 || status === 403)) {
             startOidcLogin(typeof window !== 'undefined' ? window.location.href : undefined);
         }
 

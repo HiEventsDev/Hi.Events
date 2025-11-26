@@ -169,6 +169,7 @@ export interface EventSettings {
     support_email?: string;
     order_timeout_in_minutes?: number;
     require_auth_for_checkout?: boolean;
+    require_auth_for_public_view?: boolean;
     homepage_background_color: string;
     homepage_primary_color: string;
     homepage_primary_text_color: string;

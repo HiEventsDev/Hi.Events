@@ -32,6 +32,13 @@ class GetEventPublicAction extends BaseAction
             'isAuthenticated' => $this->isUserAuthenticated(),
         ]));
 
+        if ($this->requiresAuthenticationForViewing($event) && !$this->isUserAuthenticated()) {
+            return $this->errorResponse(
+                message: __('You must be logged in to view this event.'),
+                statusCode: Response::HTTP_UNAUTHORIZED,
+            );
+        }
+
         if (!$this->canUserViewEvent($event)) {
             $this->logger->debug(__('Event with ID :eventId is not live and user is not authenticated', [
                 'eventId' => $eventId
@@ -62,5 +69,10 @@ class GetEventPublicAction extends BaseAction
         }
 
         return false;
+    }
+
+    private function requiresAuthenticationForViewing(EventDomainObject $event): bool
+    {
+        return (bool)$event->getEventSettings()?->getRequireAuthForPublicView();
     }
 }

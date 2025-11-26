@@ -115,6 +115,13 @@ class CreateOrderHandler
     public function validateEventStatus(EventDomainObject $event, CreateOrderPublicDTO $createOrderPublicDTO): void
     {
         $requiresAuth = (bool)$event->getEventSettings()?->getRequireAuthForCheckout();
+        $requiresAuthForViewing = (bool)$event->getEventSettings()?->getRequireAuthForPublicView();
+
+        if ($requiresAuthForViewing && !$createOrderPublicDTO->is_user_authenticated) {
+            throw new UnauthorizedException(
+                __('You must be logged in to view this event.')
+            );
+        }
 
         if ($requiresAuth && !$createOrderPublicDTO->is_user_authenticated) {
             throw new UnauthorizedException(

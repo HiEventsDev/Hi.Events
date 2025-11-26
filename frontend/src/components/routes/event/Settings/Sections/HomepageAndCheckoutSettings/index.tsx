@@ -23,6 +23,7 @@ export const HomepageAndCheckoutSettings = () => {
             post_checkout_message: '',
             order_timeout_in_minutes: 15,
             require_auth_for_checkout: false,
+            require_auth_for_public_view: true,
         },
         transformValues: (values) => ({
             ...values,
@@ -39,6 +40,7 @@ export const HomepageAndCheckoutSettings = () => {
                 post_checkout_message: eventSettingsQuery.data.post_checkout_message,
                 order_timeout_in_minutes: eventSettingsQuery.data.order_timeout_in_minutes,
                 require_auth_for_checkout: !!eventSettingsQuery.data.require_auth_for_checkout,
+                require_auth_for_public_view: eventSettingsQuery.data.require_auth_for_public_view ?? true,
             });
         }
     }, [eventSettingsQuery.isFetched]);
@@ -100,6 +102,14 @@ export const HomepageAndCheckoutSettings = () => {
                         description={t`Customers will be redirected to Authentik before starting checkout when enabled.`}
                         checked={form.values.require_auth_for_checkout}
                         onChange={(event) => form.setFieldValue('require_auth_for_checkout', event.currentTarget.checked)}
+                    />
+
+                    <Switch
+                        mt="md"
+                        label={t`Require login to view event`}
+                        description={t`When enabled (default), visitors must log in before viewing the event page.`}
+                        checked={form.values.require_auth_for_public_view}
+                        onChange={(event) => form.setFieldValue('require_auth_for_public_view', event.currentTarget.checked)}
                     />
 
                     <Button loading={updateMutation.isPending} type={'submit'}>

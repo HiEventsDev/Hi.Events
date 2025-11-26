@@ -23,6 +23,7 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     final public const DELETED_AT = 'deleted_at';
     final public const REQUIRE_ATTENDEE_DETAILS = 'require_attendee_details';
     final public const REQUIRE_AUTH_FOR_CHECKOUT = 'require_auth_for_checkout';
+    final public const REQUIRE_AUTH_FOR_PUBLIC_VIEW = 'require_auth_for_public_view';
     final public const ORDER_TIMEOUT_IN_MINUTES = 'order_timeout_in_minutes';
     final public const WEBSITE_URL = 'website_url';
     final public const MAPS_URL = 'maps_url';
@@ -74,6 +75,7 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     protected ?string $deleted_at = null;
     protected bool $require_attendee_details = true;
     protected bool $require_auth_for_checkout = false;
+    protected bool $require_auth_for_public_view = true;
     protected int $order_timeout_in_minutes = 15;
     protected ?string $website_url = null;
     protected ?string $maps_url = null;
@@ -128,6 +130,7 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
                     'deleted_at' => $this->deleted_at ?? null,
                     'require_attendee_details' => $this->require_attendee_details ?? null,
                     'require_auth_for_checkout' => $this->require_auth_for_checkout ?? null,
+                    'require_auth_for_public_view' => $this->require_auth_for_public_view ?? null,
                     'order_timeout_in_minutes' => $this->order_timeout_in_minutes ?? null,
                     'website_url' => $this->website_url ?? null,
                     'maps_url' => $this->maps_url ?? null,
@@ -309,6 +312,17 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     public function getRequireAuthForCheckout(): bool
     {
         return $this->require_auth_for_checkout;
+    }
+
+    public function setRequireAuthForPublicView(bool $require_auth_for_public_view): self
+    {
+        $this->require_auth_for_public_view = $require_auth_for_public_view;
+        return $this;
+    }
+
+    public function getRequireAuthForPublicView(): bool
+    {
+        return $this->require_auth_for_public_view;
     }
 
     public function setOrderTimeoutInMinutes(int $order_timeout_in_minutes): self

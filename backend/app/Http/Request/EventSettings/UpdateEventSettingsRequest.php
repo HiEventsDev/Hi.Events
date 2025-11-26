@@ -23,6 +23,7 @@ class UpdateEventSettingsRequest extends BaseRequest
             'support_email' => ['email', 'nullable'],
             'require_attendee_details' => ['boolean'],
             'require_auth_for_checkout' => ['boolean'],
+            'require_auth_for_public_view' => ['boolean'],
             'order_timeout_in_minutes' => ['numeric', "min:1", "max:120"],
 
             'homepage_background_color' => ['nullable', ...RulesHelper::HEX_COLOR],
