@@ -326,7 +326,7 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
             )}
 
             {form.values.type === ProductPriceType.Tiered && (
-                <Fieldset legend={t`Price Tiers`} mt={20}>
+                <Fieldset legend={t`Price Tiers`} mt={20} mb={20}>
                     <div className={classes.priceTiers}>
                         <ProductPriceTierForm product={product} form={form} event={event}/>
                         <Button
