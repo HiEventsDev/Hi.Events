@@ -46,6 +46,11 @@ class Order extends BaseModel
         return $this->hasOne(OrderApplicationFee::class);
     }
 
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function affiliate(): BelongsTo
     {
         return $this->belongsTo(Affiliate::class);

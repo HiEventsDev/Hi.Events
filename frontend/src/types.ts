@@ -168,6 +168,7 @@ export interface EventSettings {
     post_checkout_message: string;
     support_email?: string;
     order_timeout_in_minutes?: number;
+    require_auth_for_checkout?: boolean;
     homepage_background_color: string;
     homepage_primary_color: string;
     homepage_primary_text_color: string;
@@ -604,6 +605,7 @@ export interface Order {
     event?: Event;
     latest_invoice?: Invoice;
     session_identifier?: string;
+    user_id?: IdParam;
 }
 
 export interface Invoice {

@@ -10,6 +10,7 @@ import classes from "./Login.module.scss";
 import {t, Trans} from "@lingui/macro";
 import {useEffect, useState} from "react";
 import {ChooseAccountModal} from "../../../modals/ChooseAccountModal";
+import {startOidcLogin} from "../../../../utilites/oidcLogin.ts";
 
 const Login = () => {
     const form = useForm({
@@ -82,6 +83,9 @@ const Login = () => {
                     </p>
                     <Button color={'var(--hi-pink)'} type="submit" fullWidth loading={isPending} disabled={isPending}>
                         {isPending ? t`Logging in` : t`Log in`}
+                    </Button>
+                    <Button variant="outline" fullWidth mt="sm" onClick={() => startOidcLogin()}>
+                        {t`Continue with Authentik`}
                     </Button>
                 </form>
             </div>

@@ -46,6 +46,7 @@ class CreateOrderActionPublic extends BaseAction
                 'products' => ProductOrderDetailsDTO::collectionFromArray($request->input('products')),
                 'session_identifier' => $sessionId,
                 'order_locale' => $this->localeService->getLocaleOrDefault($request->getPreferredLanguage()),
+                'user_id' => auth()->id(),
             ])
         );
 

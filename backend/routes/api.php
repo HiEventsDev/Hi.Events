@@ -25,6 +25,8 @@ use HiEvents\Http\Actions\Auth\ForgotPasswordAction;
 use HiEvents\Http\Actions\Auth\GetUserInvitationAction;
 use HiEvents\Http\Actions\Auth\LoginAction;
 use HiEvents\Http\Actions\Auth\LogoutAction;
+use HiEvents\Http\Actions\Auth\OidcCallbackAction;
+use HiEvents\Http\Actions\Auth\OidcRedirectAction;
 use HiEvents\Http\Actions\Auth\RefreshTokenAction;
 use HiEvents\Http\Actions\Auth\ResetPasswordAction;
 use HiEvents\Http\Actions\Auth\ValidateResetPasswordTokenAction;
@@ -175,6 +177,8 @@ $router->prefix('/auth')->group(
         $router->post('/logout', LogoutAction::class)->name('auth.logout');
         $router->post('/register', CreateAccountAction::class)->name('auth.register');
         $router->post('/forgot-password', ForgotPasswordAction::class)->name('auth.forgot-password');
+        $router->get('/oidc/redirect', OidcRedirectAction::class)->name('auth.oidc.redirect');
+        $router->get('/oidc/callback', OidcCallbackAction::class)->name('auth.oidc.callback');
 
         // Invitations
         $router->get('/invitation/{invite_token}', GetUserInvitationAction::class)->name('auth.invitation');

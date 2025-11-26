@@ -1,5 +1,5 @@
 import {t} from "@lingui/macro";
-import {Button, NumberInput} from "@mantine/core";
+import {Button, NumberInput, Switch} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import {useParams} from "react-router";
 import {useEffect} from "react";
@@ -22,6 +22,7 @@ export const HomepageAndCheckoutSettings = () => {
             pre_checkout_message: '',
             post_checkout_message: '',
             order_timeout_in_minutes: 15,
+            require_auth_for_checkout: false,
         },
         transformValues: (values) => ({
             ...values,
@@ -37,6 +38,7 @@ export const HomepageAndCheckoutSettings = () => {
                 pre_checkout_message: eventSettingsQuery.data.pre_checkout_message,
                 post_checkout_message: eventSettingsQuery.data.post_checkout_message,
                 order_timeout_in_minutes: eventSettingsQuery.data.order_timeout_in_minutes,
+                require_auth_for_checkout: !!eventSettingsQuery.data.require_auth_for_checkout,
             });
         }
     }, [eventSettingsQuery.isFetched]);
@@ -90,6 +92,14 @@ export const HomepageAndCheckoutSettings = () => {
                         label={t`Order timeout`}
                         description={t`How many minutes the customer has to complete their order. We recommend at least 15 minutes`}
                         {...form.getInputProps('order_timeout_in_minutes')}
+                    />
+
+                    <Switch
+                        mt="md"
+                        label={t`Require login to buy tickets`}
+                        description={t`Customers will be redirected to Authentik before starting checkout when enabled.`}
+                        checked={form.values.require_auth_for_checkout}
+                        onChange={(event) => form.setFieldValue('require_auth_for_checkout', event.currentTarget.checked)}
                     />
 
                     <Button loading={updateMutation.isPending} type={'submit'}>

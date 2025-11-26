@@ -66,6 +66,7 @@ class CreateOrderHandler
                 locale: $createOrderPublicDTO->order_locale,
                 promoCode: $promoCode,
                 affiliate: $affiliate,
+                userId: $createOrderPublicDTO->user_id,
                 sessionId: $createOrderPublicDTO->session_identifier,
             );
 
@@ -113,6 +114,14 @@ class CreateOrderHandler
 
     public function validateEventStatus(EventDomainObject $event, CreateOrderPublicDTO $createOrderPublicDTO): void
     {
+        $requiresAuth = (bool)$event->getEventSettings()?->getRequireAuthForCheckout();
+
+        if ($requiresAuth && !$createOrderPublicDTO->is_user_authenticated) {
+            throw new UnauthorizedException(
+                __('You must be logged in to purchase tickets for this event.')
+            );
+        }
+
         if (!$createOrderPublicDTO->is_user_authenticated && $event->getStatus() !== EventStatus::LIVE->name) {
             throw new UnauthorizedException(
                 __('This event is not live.')

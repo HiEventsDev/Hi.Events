@@ -18,6 +18,7 @@ class EventSettingsResource extends JsonResource
             'product_page_message' => $this->getProductPageMessage(),
             'continue_button_text' => $this->getContinueButtonText(),
             'required_attendee_details' => $this->getRequireAttendeeDetails(),
+            'require_auth_for_checkout' => $this->getRequireAuthForCheckout(),
             'email_footer_message' => $this->getEmailFooterMessage(),
             'support_email' => $this->getSupportEmail(),
             'order_timeout_in_minutes' => $this->getOrderTimeoutInMinutes(),

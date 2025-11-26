@@ -6,7 +6,7 @@ const BASE_URL = isSsr()
     ? getConfig('VITE_API_URL_SERVER')
     : getConfig('VITE_API_URL_CLIENT');
 const LOGIN_PATH = "/auth/login";
-const PREVIOUS_URL_KEY = 'previous_url';
+export const PREVIOUS_URL_KEY = 'previous_url';
 
 // todo - This isn't scalable, we need to better way to manage this
 const ALLOWED_UNAUTHENTICATED_PATHS = [

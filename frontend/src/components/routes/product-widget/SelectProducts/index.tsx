@@ -36,6 +36,7 @@ import {promoCodeClientPublic} from "../../../../api/promo-code.client.ts";
 import {IconChevronRight, IconX} from "@tabler/icons-react"
 import {getSessionIdentifier} from "../../../../utilites/sessionIdentifier.ts";
 import {Constants} from "../../../../constants.ts";
+import {startOidcLogin} from "../../../../utilites/oidcLogin.ts";
 
 const AFFILIATE_EXPIRY_DAYS = 30;
 
@@ -153,6 +154,11 @@ const SelectProducts = (props: SelectProductsProps) => {
             }),
 
         onError: (error: any) => {
+            if (error?.response?.status === 401) {
+                startOidcLogin(window?.location?.href);
+                return;
+            }
+
             if (error?.response?.data?.errors) {
                 form.setErrors(error.response.data.errors);
             }

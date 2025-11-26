@@ -40,6 +40,7 @@ class OrderManagementService
         string                 $locale,
         ?PromoCodeDomainObject $promoCode,
         ?AffiliateDomainObject $affiliate = null,
+        ?int                   $userId = null,
         string                 $sessionId = null,
     ): OrderDomainObject
     {
@@ -56,6 +57,7 @@ class OrderManagementService
             'promo_code_id' => $promoCode?->getId(),
             'promo_code' => $promoCode?->getCode(),
             'affiliate_id' => $affiliate?->getId(),
+            'user_id' => $userId,
             'locale' => $locale,
         ]);
     }
