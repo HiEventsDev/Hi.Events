@@ -1,0 +1,10 @@
+@use "../../../styles/mixins.scss";
+
+.periodSelect,
+.datePicker,
+.downloadButton,
+.currencySelect {
+  @include mixins.respond-below(sm) {
+    width: 100%;
+  }
+}
