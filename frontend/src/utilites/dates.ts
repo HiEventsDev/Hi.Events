@@ -10,7 +10,7 @@ import timezone from 'dayjs/plugin/timezone';
 import advanced from 'dayjs/plugin/advancedFormat';
 import { isSsr } from "./helpers.ts";
 import { getClientLocale, SupportedLocales } from "../locales.ts";
-import { localeFormats, localeToDatejsLocale } from "./dateLocales.ts";
+import { localeFormats } from "./dateLocales.ts";
 
 dayjs.extend(utc);
 dayjs.extend(relativeTime);
@@ -45,11 +45,9 @@ export const formatDateWithLocale = (
 ): string => {
     const resolvedLocale = locale || getClientLocale();
     const safeLocale = getSafeLocale(resolvedLocale);
-    const localeConfig = localeFormats[safeLocale];
-    const format = localeConfig[formatType];
-    const dayjsLocale = localeToDatejsLocale[safeLocale];
+    const format = localeFormats[safeLocale][formatType];
 
-    return dayjs.utc(date).tz(tz).locale(dayjsLocale).format(format);
+    return dayjs.utc(date).tz(tz).locale(safeLocale).format(format);
 };
 
 /**

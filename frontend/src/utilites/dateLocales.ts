@@ -20,25 +20,6 @@ import 'dayjs/locale/tr';
 import 'dayjs/locale/hu';
 
 /**
- * Maps our supported locales to Day.js locale codes
- */
-export const localeToDatejsLocale: Record<SupportedLocales, string> = {
-    'en': 'en',
-    'de': 'de',
-    'fr': 'fr',
-    'it': 'it',
-    'nl': 'nl',
-    'pt': 'pt',
-    'es': 'es',
-    'zh-cn': 'zh-cn',
-    'pt-br': 'pt-br',
-    'vi': 'vi',
-    'zh-hk': 'zh-hk',
-    'tr': 'tr',
-    'hu': 'hu',
-};
-
-/**
  * Locale-specific date formats following cultural conventions
  */
 export const localeFormats: Record<SupportedLocales, {
