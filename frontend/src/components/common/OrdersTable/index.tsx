@@ -1,5 +1,5 @@
 import {t} from "@lingui/macro";
-import {Anchor, Button, Group, Menu, Popover, Text} from '@mantine/core';
+import {Anchor, Button, Group, Menu, Popover, Text, Tooltip} from '@mantine/core';
 import {Event, IdParam, Invoice, MessageType, Order} from "../../../types.ts";
 import {
     IconAlertCircle,
@@ -10,7 +10,6 @@ import {
     IconClockPause,
     IconCopy,
     IconCreditCard,
-    IconCurrencyDollar,
     IconDotsVertical,
     IconFileInvoice,
     IconFileOff,
@@ -317,12 +316,23 @@ export const OrdersTable = ({orders, event}: OrdersTableProps) => {
                 enableHiding: true,
                 cell: (info: CellContext<Order, unknown>) => {
                     const order = info.row.original;
-                    const itemCount = order.order_items?.length || order.attendees?.length || 0;
+                    const totalQuantity = order.order_items?.reduce((sum, item) => sum + item.quantity, 0) || 0;
+                    const itemBreakdown = order.order_items?.map(item =>
+                        `${item.quantity}x ${item.item_name}`
+                    ).join('\n') || '';
+
                     return (
-                        <div className={classes.itemsBadge}>
-                            <IconTicket size={14}/>
-                            {formatNumber(itemCount)} {t`item(s)`}
-                        </div>
+                        <Tooltip
+                            label={itemBreakdown}
+                            multiline
+                            withArrow
+                            disabled={!itemBreakdown}
+                        >
+                            <div className={classes.itemsBadge}>
+                                <IconTicket size={14}/>
+                                {formatNumber(totalQuantity)} {t`item(s)`}
+                            </div>
+                        </Tooltip>
                     );
                 },
             },
@@ -341,10 +351,12 @@ export const OrdersTable = ({orders, event}: OrdersTableProps) => {
                                 {t`Tax`}: {formatCurrency(order.total_tax, order.currency)} •
                                 {' '}{t`Fees`}: {formatCurrency(order.total_fee, order.currency)}
                             </Text>
-                            {order.total_refunded > 0 && (
-                                <Text className={classes.refundedAmount}>
-                                    <IconCurrencyDollar size={12}/>
-                                    {t`Refunded`}: {formatCurrency(order.total_refunded, order.currency)}
+                            {order.refund_status && (
+                                <Text className={classes.refundedAmount} data-refund-status={order.refund_status}>
+                                    {order.refund_status === 'REFUNDED' && t`Refunded: ${formatCurrency(order.total_refunded, order.currency)}`}
+                                    {order.refund_status === 'PARTIALLY_REFUNDED' && t`Partially refunded: ${formatCurrency(order.total_refunded, order.currency)}`}
+                                    {order.refund_status === 'REFUND_PENDING' && t`Refund pending`}
+                                    {order.refund_status === 'REFUND_FAILED' && t`Refund failed`}
                                 </Text>
                             )}
                         </div>
