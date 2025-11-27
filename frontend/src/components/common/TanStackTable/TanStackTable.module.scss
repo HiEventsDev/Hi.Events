@@ -1,0 +1,102 @@
+@use "../../../styles/mixins";
+
+.tableWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tableHead {
+  white-space: nowrap;
+
+  th {
+    background-color: #f2f0f5;
+    color: var(--hi-secondary-text) !important;
+    padding: 20px !important;
+  }
+}
+
+.card {
+  padding: 0 !important;
+  overflow: hidden;
+
+  :global(.mantine-ScrollArea-viewport) {
+    padding-bottom: 0;
+  }
+
+  :global(.mantine-ScrollArea-scrollbar) {
+    z-index: 20 !important;
+  }
+}
+
+.table {
+  th {
+    white-space: nowrap;
+  }
+
+  tbody tr {
+
+    td {
+      padding: 20px !important;
+      white-space: nowrap;
+    }
+  }
+
+  position: relative;
+}
+
+.stickyLeft {
+  position: sticky;
+  left: 0;
+  z-index: 10;
+  background: var(--mantine-color-body);
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 1px;
+    background: linear-gradient(
+                    to right,
+                    rgba(255, 255, 255, 0.1),
+                    rgba(255, 255, 255, 0)
+    );
+    pointer-events: none;
+  }
+}
+
+.stickyRight {
+  position: sticky;
+  right: 0;
+  z-index: 2;
+  background: var(--mantine-color-body);
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 1px;
+    background: linear-gradient(
+                    to left,
+                    rgba(255, 255, 255, 0.1),
+                    rgba(255, 255, 255, 0)
+    );
+    pointer-events: none;
+  }
+}
+
+.tableHead .stickyLeft,
+.tableHead .stickyRight {
+  background-color: #f2f0f5;
+}

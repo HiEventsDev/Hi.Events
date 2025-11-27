@@ -91,9 +91,9 @@ export const formatDateForUser = (
 /**
  * Legacy function for backward compatibility
  */
-export const prettyDate = (date: string, tz: string): string => {
+export const prettyDate = (date: string, tz: string, showTimezoneOffset: boolean = false): string => {
     // eslint-disable-next-line lingui/no-unlocalized-strings
-    return dayjs.utc(date).tz(tz).format('MMM D, YYYY h:mma');
+    return dayjs.utc(date).tz(tz).format('MMM D, YYYY h:mma' + (showTimezoneOffset ? ' (z)' : ''));
 };
 
 /**
@@ -128,4 +128,8 @@ export const dateToBrowserTz = (date: string, fallbackTz: string): string => {
         : fallbackTz;
 
     return dayjs.utc(date).tz(userTimezone).format('MMM D, YYYY h:mma z');
+};
+
+export const isDateInFuture = (date: string): boolean => {
+    return dayjs.utc(date).diff(dayjs()) > 0;
 };

@@ -7,6 +7,7 @@ import {BreadcrumbItem, NavItem} from "./types.ts";
 import {IconLayoutSidebar} from "@tabler/icons-react";
 import {UnstyledButton, VisuallyHidden} from "@mantine/core";
 import {t} from "@lingui/macro";
+import ImpersonationBanner from "../../common/ImpersonationBanner";
 
 interface AppLayoutProps {
     navItems: NavItem[];
@@ -78,17 +79,19 @@ const AppLayout: React.FC<AppLayoutProps> = ({
     }, []);
 
     return (
-        <div id={`${entityType}-manage-container`}
-             className={`${classes.container} ${sidebarOpen ? classes.open : classes.closed}`}>
-            <Topbar
-                sidebarOpen={sidebarOpen}
-                setSidebarOpen={setSidebarOpen}
-                topBarShadow={topBarShadow}
-                breadcrumbItems={breadcrumbItems}
-                topBarContent={topBarContent}
-                breadcrumbContentRight={breadcrumbContentRight}
-                actionGroupContent={actionGroupContent}
-            />
+        <>
+            <ImpersonationBanner />
+            <div id={`${entityType}-manage-container`}
+                 className={`${classes.container} ${sidebarOpen ? classes.open : classes.closed}`}>
+                <Topbar
+                    sidebarOpen={sidebarOpen}
+                    setSidebarOpen={setSidebarOpen}
+                    topBarShadow={topBarShadow}
+                    breadcrumbItems={breadcrumbItems}
+                    topBarContent={topBarContent}
+                    breadcrumbContentRight={breadcrumbContentRight}
+                    actionGroupContent={actionGroupContent}
+                />
 
             <div className={classes.main} id={'app-manage-main'}>
                 <Outlet/>
@@ -114,7 +117,8 @@ const AppLayout: React.FC<AppLayoutProps> = ({
                     onClick={() => setSidebarOpen(true)}
                 />
             )}
-        </div>
+            </div>
+        </>
     );
 };
 

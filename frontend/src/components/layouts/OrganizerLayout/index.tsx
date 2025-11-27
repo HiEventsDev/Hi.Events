@@ -3,6 +3,7 @@ import {
     IconBrandStripe,
     IconCalendar,
     IconCalendarPlus,
+    IconChartBar,
     IconChevronRight,
     IconCreditCard,
     IconDashboard,
@@ -17,7 +18,7 @@ import {
 import {t} from "@lingui/macro";
 import {BreadcrumbItem, NavItem} from "../AppLayout/types.ts";
 import AppLayout from "../AppLayout";
-import {NavLink, useParams} from "react-router";
+import {NavLink, useLocation, useParams} from "react-router";
 import {Button, Modal, Text, Stack} from "@mantine/core";
 import {useGetOrganizer} from "../../../queries/useGetOrganizer.ts";
 import {useState} from "react";
@@ -41,6 +42,7 @@ import {useGetMe} from "../../../queries/useGetMe.ts";
 
 const OrganizerLayout = () => {
     const {organizerId} = useParams();
+    const location = useLocation();
     const {data: organizer} = useGetOrganizer(organizerId);
     const [showCreateEventModal, setShowCreateEventModal] = useState(false);
     const [createModalOpen, {open: openCreateModal, close: closeCreateModal}] = useDisclosure(false);
@@ -68,6 +70,12 @@ const OrganizerLayout = () => {
         },
         {label: 'Overview'},
         {link: 'dashboard', label: t`Organizer Dashboard`, icon: IconDashboard},
+        {
+            link: 'reports',
+            label: t`Reports`,
+            icon: IconChartBar,
+            isActive: (isActive) => isActive || location.pathname.includes('/report/')
+        },
 
         {label: t`Manage`},
         {link: 'events', label: t`Events`, icon: IconCalendar},

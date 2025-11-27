@@ -216,3 +216,140 @@
     height: 28px;
   }
 }
+
+.stripeUpgradeCard {
+  margin: 24px 0;
+  background: linear-gradient(135deg, #f8f5ff 0%, #fef3fb 100%);
+  border: 1px solid rgba(139, 92, 246, 0.15);
+  box-shadow: 0 4px 16px rgba(139, 92, 246, 0.08) !important;
+  color: #1f2937;
+  padding: 28px 32px;
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.05) 0%, transparent 70%);
+    border-radius: 50%;
+    transform: translate(50%, -50%);
+  }
+}
+
+.stripeUpgradeContent {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  position: relative;
+  z-index: 1;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 20px;
+  }
+}
+
+.stripeTextContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  @media (max-width: 768px) {
+    gap: 24px;
+  }
+}
+
+.stripeIcon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), rgba(219, 39, 119, 0.1));
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #7c3aed;
+  border: 1px solid rgba(139, 92, 246, 0.2);
+
+  svg {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+.stripeText {
+  flex: 1;
+
+  h3 {
+    margin: 0 0 8px 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1f2937;
+    letter-spacing: -0.02em;
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #4b5563;
+    max-width: 600px;
+  }
+
+  .stripeApology {
+    margin-top: 8px !important;
+    font-size: 0.875rem !important;
+    font-style: italic;
+    color: #6b7280 !important;
+  }
+}
+
+.stripeButton {
+  align-self: flex-start;
+
+  background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%) !important;
+  color: white !important;
+  font-weight: 600;
+  border: none !important;
+  padding: 12px 24px;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25), 0 2px 4px rgba(124, 58, 237, 0.1) !important;
+  min-width: 180px;
+  border-radius: 8px !important;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(124, 58, 237, 0.35), 0 4px 8px rgba(124, 58, 237, 0.15) !important;
+    background: linear-gradient(135deg, #6d28d9 0%, #9333ea 100%) !important;
+  }
+
+  &:disabled {
+    background: linear-gradient(135deg, #c4b5fd 0%, #ddd6fe 100%) !important;
+    color: #9ca3af !important;
+    transform: none;
+    box-shadow: 0 2px 8px rgba(139, 92, 246, 0.1) !important;
+    opacity: 0.7;
+  }
+
+  &[data-loading="true"] {
+    background: linear-gradient(135deg, #a78bfa 0%, #c4b5fd 100%) !important;
+    color: white !important;
+    box-shadow: 0 2px 8px rgba(139, 92, 246, 0.2) !important;
+  }
+
+  @media (max-width: 768px) {
+    align-self: stretch;
+
+    :global(button) {
+      width: 100%;
+      min-width: unset;
+    }
+  }
+}

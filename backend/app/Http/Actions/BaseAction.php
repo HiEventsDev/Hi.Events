@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions;
 
+use HiEvents\DataTransferObjects\BaseDataObject;
 use HiEvents\DataTransferObjects\BaseDTO;
 use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\Interfaces\DomainObjectInterface;
@@ -70,12 +71,12 @@ abstract class BaseAction extends Controller
      * @return JsonResponse
      */
     protected function resourceResponse(
-        string                                                                  $resource,
-        Collection|DomainObjectInterface|LengthAwarePaginator|BaseDTO|Paginator $data,
-        int                                                                     $statusCode = ResponseCodes::HTTP_OK,
-        array                                                                   $meta = [],
-        array                                                                   $headers = [],
-        array                                                                   $errors = [],
+        string                                                                                 $resource,
+        Collection|DomainObjectInterface|LengthAwarePaginator|BaseDTO|Paginator|BaseDataObject $data,
+        int                                                                                    $statusCode = ResponseCodes::HTTP_OK,
+        array                                                                                  $meta = [],
+        array                                                                                  $headers = [],
+        array                                                                                  $errors = [],
     ): JsonResponse
     {
         if ($data instanceof Collection || $data instanceof Paginator) {
@@ -128,8 +129,8 @@ abstract class BaseAction extends Controller
 
     protected function jsonResponse(
         mixed $data,
-        int $statusCode = ResponseCodes::HTTP_OK,
-        bool $wrapInData = false,
+        int   $statusCode = ResponseCodes::HTTP_OK,
+        bool  $wrapInData = false,
     ): JsonResponse
     {
         if ($wrapInData) {
@@ -171,6 +172,23 @@ abstract class BaseAction extends Controller
             }
 
             return $accountId;
+        }
+
+        throw new UnauthorizedException();
+    }
+
+    protected function getAuthenticatedUserRole(): Role
+    {
+        if (Auth::check()) {
+            /** @var AuthUserService $service */
+            $service = app(AuthUserService::class);
+            $role = $service->getAuthenticatedUserRole();
+
+            if ($role === null) {
+                throw new UnauthorizedException(__('No user role found in token'));
+            }
+
+            return $role;
         }
 
         throw new UnauthorizedException();

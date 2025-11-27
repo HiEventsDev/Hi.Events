@@ -5,6 +5,7 @@ namespace Tests\Unit\Services\Application\Handlers\Order;
 use Carbon\Carbon;
 use Exception;
 use HiEvents\DomainObjects\AttendeeDomainObject;
+use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
@@ -12,6 +13,7 @@ use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductPriceRepositoryInterface;
 use HiEvents\Repository\Interfaces\QuestionAnswerRepositoryInterface;
@@ -44,6 +46,7 @@ class CompleteOrderHandlerTest extends TestCase
     private CompleteOrderHandler $completeOrderHandler;
     private DomainEventDispatcherService $domainEventDispatcherService;
     private AffiliateRepositoryInterface|MockInterface $affiliateRepository;
+    private EventSettingsRepositoryInterface $eventSettingsRepository;
 
     protected function setUp(): void
     {
@@ -60,6 +63,7 @@ class CompleteOrderHandlerTest extends TestCase
         $this->productPriceRepository = Mockery::mock(ProductPriceRepositoryInterface::class);
         $this->domainEventDispatcherService = Mockery::mock(DomainEventDispatcherService::class);
         $this->affiliateRepository = Mockery::mock(AffiliateRepositoryInterface::class);
+        $this->eventSettingsRepository = Mockery::mock(EventSettingsRepositoryInterface::class);
 
         $this->completeOrderHandler = new CompleteOrderHandler(
             $this->orderRepository,
@@ -68,7 +72,8 @@ class CompleteOrderHandlerTest extends TestCase
             $this->questionAnswersRepository,
             $this->productQuantityUpdateService,
             $this->productPriceRepository,
-            $this->domainEventDispatcherService
+            $this->domainEventDispatcherService,
+            $this->eventSettingsRepository,
         );
     }
 
@@ -97,6 +102,8 @@ class CompleteOrderHandlerTest extends TestCase
 
         $this->productQuantityUpdateService->shouldReceive('updateQuantitiesFromOrder');
 
+        $this->eventSettingsRepository->shouldReceive('findFirstWhere')->andReturn($this->createMockEventSetting());
+
         $this->completeOrderHandler->handle($orderShortId, $orderData);
 
         $this->assertTrue(true);
@@ -109,6 +116,7 @@ class CompleteOrderHandlerTest extends TestCase
         $orderShortId = 'NONEXISTENT';
         $orderData = $this->createMockCompleteOrderDTO();
 
+        $this->eventSettingsRepository->shouldReceive('findFirstWhere')->andReturn($this->createMockEventSetting());
         $this->orderRepository->shouldReceive('findByShortId')->with($orderShortId)->andReturnNull();
         $this->orderRepository->shouldReceive('loadRelation')->andReturnSelf();
 
@@ -127,6 +135,7 @@ class CompleteOrderHandlerTest extends TestCase
         $order->setEmail('d@d.com');
         $order->setTotalGross(0);
 
+        $this->eventSettingsRepository->shouldReceive('findFirstWhere')->andReturn($this->createMockEventSetting());
         $this->orderRepository->shouldReceive('findByShortId')->with($orderShortId)->andReturn($order);
         $this->orderRepository->shouldReceive('loadRelation')->andReturnSelf();
 
@@ -144,6 +153,7 @@ class CompleteOrderHandlerTest extends TestCase
         $order->setReservedUntil(Carbon::now()->subHour()->toDateTimeString());
         $order->setTotalGross(100);
 
+        $this->eventSettingsRepository->shouldReceive('findFirstWhere')->andReturn($this->createMockEventSetting());
         $this->orderRepository->shouldReceive('findByShortId')->with($orderShortId)->andReturn($order);
         $this->orderRepository->shouldReceive('loadRelation')->andReturnSelf();
 
@@ -168,6 +178,8 @@ class CompleteOrderHandlerTest extends TestCase
         $this->attendeeRepository->shouldReceive('findWhereIn')->andReturn(new Collection([$this->createMockAttendee()]));
 
         $this->productQuantityUpdateService->shouldReceive('updateQuantitiesFromOrder')->once();
+
+        $this->eventSettingsRepository->shouldReceive('findFirstWhere')->andReturn($this->createMockEventSetting());
 
         $this->domainEventDispatcherService->shouldReceive('dispatch')
             ->withArgs(function (OrderEvent $event) use ($order) {
@@ -201,6 +213,8 @@ class CompleteOrderHandlerTest extends TestCase
 
         $this->productQuantityUpdateService->shouldNotReceive('updateQuantitiesFromOrder');
 
+        $this->eventSettingsRepository->shouldReceive('findFirstWhere')->andReturn($this->createMockEventSetting());
+
         $this->completeOrderHandler->handle($orderShortId, $orderData);
 
         $this->expectNotToPerformAssertions();
@@ -215,6 +229,7 @@ class CompleteOrderHandlerTest extends TestCase
         $order = $this->createMockOrder();
         $updatedOrder = $this->createMockOrder();
 
+        $this->eventSettingsRepository->shouldReceive('findFirstWhere')->andReturn($this->createMockEventSetting());
         $this->orderRepository->shouldReceive('findByShortId')->with($orderShortId)->andReturn($order);
         $this->orderRepository->shouldReceive('loadRelation')->andReturnSelf();
         $this->orderRepository->shouldReceive('updateFromArray')->andReturn($updatedOrder);
@@ -238,6 +253,7 @@ class CompleteOrderHandlerTest extends TestCase
 
         $order->getOrderItems()->first()->setQuantity(2);
 
+        $this->eventSettingsRepository->shouldReceive('findFirstWhere')->andReturn($this->createMockEventSetting());
         $this->orderRepository->shouldReceive('findByShortId')->with($orderShortId)->andReturn($order);
         $this->orderRepository->shouldReceive('loadRelation')->andReturnSelf();
         $this->orderRepository->shouldReceive('updateFromArray')->andReturn($updatedOrder);
@@ -269,6 +285,7 @@ class CompleteOrderHandlerTest extends TestCase
         return new CompleteOrderDTO(
             order: $orderDTO,
             products: new Collection([$attendeeDTO])
+            ,event_id: 1
         );
     }
 
@@ -312,5 +329,12 @@ class CompleteOrderHandlerTest extends TestCase
         $attendee->shouldReceive('getId')->andReturn(1);
         $attendee->shouldReceive('getProductId')->andReturn(1);
         return $attendee;
+    }
+
+    private function createMockEventSetting(): EventSettingDomainObject
+    {
+        return (new EventSettingDomainObject())
+            ->setId(1)
+            ->setEventId(1);
     }
 }

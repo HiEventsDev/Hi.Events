@@ -76,11 +76,22 @@ class AttendeeRepository extends BaseRepository implements AttendeeRepositoryInt
 
         $this->model = $this->model->select('attendees.*')
             ->join('orders', 'orders.id', '=', 'attendees.order_id')
-            ->whereIn('orders.status', [OrderStatus::COMPLETED->name, OrderStatus::CANCELLED->name, OrderStatus::AWAITING_OFFLINE_PAYMENT->name])
-            ->orderBy(
-                'attendees.' . ($params->sort_by ?? AttendeeDomainObject::getDefaultSort()),
-                $params->sort_direction ?? 'desc',
-            );
+            ->whereIn('orders.status', [OrderStatus::COMPLETED->name, OrderStatus::CANCELLED->name, OrderStatus::AWAITING_OFFLINE_PAYMENT->name]);
+
+        if ($params->filter_fields && $params->filter_fields->isNotEmpty()) {
+            $this->applyFilterFields($params, AttendeeDomainObject::getAllowedFilterFields(), prefix: 'attendees');
+        }
+
+        $sortBy = $params->sort_by ?? AttendeeDomainObject::getDefaultSort();
+        $sortDirection = $params->sort_direction ?? AttendeeDomainObject::getDefaultSortDirection();
+
+        if ($sortBy === AttendeeDomainObject::TICKET_NAME_SORT_KEY) {
+            $this->model = $this->model
+                ->leftJoin('products', 'products.id', '=', 'attendees.product_id')
+                ->orderBy('products.title', $sortDirection);
+        } else {
+            $this->model = $this->model->orderBy('attendees.' . $sortBy, $sortDirection);
+        }
 
         return $this->paginateWhere(
             where: $where,
@@ -118,7 +129,7 @@ class AttendeeRepository extends BaseRepository implements AttendeeRepositoryInt
             ->whereIn('attendees.status',[AttendeeStatus::ACTIVE->name, AttendeeStatus::CANCELLED->name, AttendeeStatus::AWAITING_PAYMENT->name])
             ->whereIn('orders.status', [OrderStatus::COMPLETED->name, OrderStatus::AWAITING_OFFLINE_PAYMENT->name]);
 
-        $this->loadRelation(new Relationship(AttendeeCheckInDomainObject::class, name: 'check_in'));
+        $this->loadRelation(new Relationship(AttendeeCheckInDomainObject::class, name: 'check_ins'));
 
         return $this->simplePaginateWhere(
             where: $where,

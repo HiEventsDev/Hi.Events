@@ -1,0 +1,152 @@
+@use "../../../../styles/mixins";
+
+.sectionHeading {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #111827;
+}
+
+.sectionHelper {
+  font-size: 14px;
+  color: #6B7280;
+  margin-bottom: 20px;
+}
+
+.copyDetailsSection {
+  padding-top: 16px;
+  border-top: 1px solid #F3F4F6;
+}
+
+.copyDetailsMultiple {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.copyLabel {
+  flex-shrink: 0;
+}
+
+.ticketSection {
+  margin-bottom: 24px;
+}
+
+.ticketTypeHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  margin-top: 24px;
+
+  h3 {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #111827;
+  }
+}
+
+.ticketCountBadge {
+  background: var(--mantine-primary-color-light);
+  color: var(--mantine-primary-color-filled);
+  font-size: 12px;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+.attendeeCard {
+  position: relative;
+}
+
+.attendeeCardHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.attendeeHeaderLeft {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.attendeeNumber {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--mantine-primary-color-light);
+  color: var(--mantine-primary-color-filled);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.attendeeInfo {
+  h4 {
+    margin: 0 0 2px 0;
+    font-size: 15px;
+    font-weight: 500;
+    color: #111827;
+  }
+}
+
+.attendeeTicketType {
+  font-size: 13px;
+  color: #6B7280;
+}
+
+.copiedBadge {
+  background: #D1FAE5;
+  color: #065F46;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.checkoutActions {
+  margin-top: 32px;
+  margin-bottom: 24px;
+}
+
+.continueButton {
+  width: 100%;
+  height: 48px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 16px;
+  transition: background-color 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+}
+
+.tosNotice {
+  text-align: center;
+  margin-top: 12px;
+  font-size: 12px;
+  color: #6B7280;
+
+  a {
+    color: var(--mantine-primary-color-filled);
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

@@ -134,6 +134,44 @@ export const router: RouteObject[] = [
         ]
     },
     {
+        path: "admin",
+        errorElement: <ErrorPage/>,
+        async lazy() {
+            const AdminLayout = await import("./components/layouts/Admin");
+            return {Component: AdminLayout.default};
+        },
+        children: [
+            {
+                path: "",
+                async lazy() {
+                    const Dashboard = await import("./components/routes/admin/Dashboard");
+                    return {Component: Dashboard.default};
+                }
+            },
+            {
+                path: "accounts",
+                async lazy() {
+                    const Accounts = await import("./components/routes/admin/Accounts");
+                    return {Component: Accounts.default};
+                }
+            },
+            {
+                path: "users",
+                async lazy() {
+                    const Users = await import("./components/routes/admin/Users");
+                    return {Component: Users.default};
+                }
+            },
+            {
+                path: "events",
+                async lazy() {
+                    const Events = await import("./components/routes/admin/Events");
+                    return {Component: Events.default};
+                }
+            }
+        ]
+    },
+    {
         path: "account",
         errorElement: <ErrorPage/>,
         async lazy() {
@@ -221,6 +259,20 @@ export const router: RouteObject[] = [
                 async lazy() {
                     const OrganizerHomepageDesigner = await import("./components/routes/organizer/OrganizerHomepageDesigner");
                     return {Component: OrganizerHomepageDesigner.default};
+                }
+            },
+            {
+                path: "reports",
+                async lazy() {
+                    const OrganizerReports = await import("./components/routes/organizer/Reports");
+                    return {Component: OrganizerReports.default};
+                }
+            },
+            {
+                path: "report/:reportType",
+                async lazy() {
+                    const OrganizerReportLayout = await import("./components/routes/organizer/Reports/ReportLayout");
+                    return {Component: OrganizerReportLayout.default};
                 }
             }
         ],
@@ -336,6 +388,13 @@ export const router: RouteObject[] = [
                 async lazy() {
                     const HomepageDesigner = await import("./components/routes/event/HomepageDesigner");
                     return {Component: HomepageDesigner.default};
+                }
+            },
+            {
+                path: "ticket-designer",
+                async lazy() {
+                    const TicketDesigner = await import("./components/routes/event/TicketDesigner");
+                    return {Component: TicketDesigner.default};
                 }
             },
             {
@@ -470,6 +529,14 @@ export const router: RouteObject[] = [
         async lazy() {
             const PrintProduct = await import("./components/routes/product-widget/PrintProduct");
             return {Component: PrintProduct.default};
+        },
+        errorElement: <ErrorPage/>
+    },
+    {
+        path: "/manage/event/:eventId/ticket-designer/print",
+        async lazy() {
+            const TicketDesignerPrint = await import("./components/routes/event/TicketDesigner/TicketDesignerPrint");
+            return {Component: TicketDesignerPrint.default};
         },
         errorElement: <ErrorPage/>
     },

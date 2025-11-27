@@ -28,6 +28,7 @@ export const DuplicateEventModal = ({onClose, eventId}: DuplicateEventModalProps
         { key: 'duplicate_capacity_assignments', label: t`Capacity Assignments` },
         { key: 'duplicate_check_in_lists', label: t`Check-In Lists` },
         { key: 'duplicate_event_cover_image', label: t`Event Cover Image` },
+        { key: 'duplicate_ticket_logo', label: t`Ticket Logo` },
         { key: 'duplicate_webhooks', label: t`Webhooks` },
         { key: 'duplicate_affiliates', label: t`Affiliates` },
     ];
@@ -45,6 +46,7 @@ export const DuplicateEventModal = ({onClose, eventId}: DuplicateEventModalProps
             duplicate_capacity_assignments: true,
             duplicate_check_in_lists: true,
             duplicate_event_cover_image: true,
+            duplicate_ticket_logo: true,
             duplicate_webhooks: true,
             duplicate_affiliates: true,
         }

@@ -1,0 +1,210 @@
+@use "../../../../styles/mixins.scss";
+
+.container {
+  display: flex;
+  flex-direction: row;
+  margin: calc(var(--hi-spacing-lg) * -1);
+  min-height: calc(100vh - 60px);
+
+  h2 {
+    margin-bottom: 0;
+  }
+
+  @include mixins.respond-below(lg) {
+    flex-direction: column;
+    margin: 0;
+    min-height: auto;
+  }
+}
+
+.sidebar {
+  min-width: 380px;
+  max-width: 380px;
+  background-color: #ffffff;
+  padding: var(--hi-spacing-lg);
+  height: calc(100vh - 55px);
+  overflow-y: auto;
+  position: sticky;
+  top: 0;
+  border-right: 1px solid var(--mantine-color-gray-2);
+
+  @include mixins.respond-below(lg) {
+    width: 100%;
+    min-width: unset;
+    max-width: unset;
+    position: relative;
+    overflow: auto;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--mantine-color-gray-2);
+    padding: var(--hi-spacing-md);
+  }
+}
+
+.sticky {
+  position: sticky;
+  top: 0;
+}
+
+.header {
+  margin-bottom: var(--hi-spacing-lg);
+  padding-bottom: var(--hi-spacing-md);
+  border-bottom: 1px solid var(--mantine-color-gray-2);
+  
+  h2 {
+    margin: 0 0 var(--hi-spacing-xs) 0;
+    font-size: 1.375rem;
+    font-weight: 600;
+    color: var(--mantine-color-gray-9);
+  }
+}
+
+.accordion {
+  margin-bottom: 0;
+  
+  .accordionItem {
+    border: 1px solid var(--mantine-color-gray-3);
+    border-radius: var(--mantine-radius-md);
+    overflow: hidden;
+    
+    &:not(:last-child) {
+      margin-bottom: var(--hi-spacing-md);
+    }
+
+    :global(.mantine-Accordion-control) {
+      padding: var(--hi-spacing-md);
+      background: var(--mantine-color-gray-0);
+      
+      &:hover {
+        background: var(--mantine-color-gray-1);
+      }
+      
+      &[data-active] {
+        border-bottom: 1px solid var(--mantine-color-gray-2);
+      }
+    }
+
+    :global(.mantine-Accordion-panel) {
+      padding: 0;
+      background: white;
+    }
+
+    :global(.mantine-Accordion-content) {
+      padding: var(--hi-spacing-lg);
+    }
+  }
+}
+
+.fieldset {
+  border: none;
+  padding: 0;
+  margin: 0;
+
+  // Fix large margins on ColorInput components
+  :global(.mantine-ColorInput-root) {
+    margin-bottom: 0;
+  }
+
+  :global(.mantine-ColorInput-label) {
+    font-weight: 500;
+    font-size: 0.875rem;
+  }
+
+  :global(.mantine-ColorInput-description) {
+    font-size: 0.8125rem;
+    margin-top: 0.25rem;
+  }
+
+  // TextInput styling
+  :global(.mantine-TextInput-label) {
+    font-weight: 500;
+    font-size: 0.875rem;
+  }
+
+  :global(.mantine-TextInput-description) {
+    font-size: 0.8125rem;
+    margin-top: 0.25rem;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+}
+
+.preview {
+  height: calc(100vh - 55px);
+  width: 100%;
+  overflow: hidden;
+  min-width: 500px;
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border-left: 1px solid var(--mantine-color-gray-2);
+
+  @include mixins.respond-below(lg) {
+    width: 100%;
+    min-width: unset;
+    max-width: unset;
+    position: relative;
+    overflow: auto;
+    height: auto;
+    border-left: none;
+    border-top: 1px solid var(--mantine-color-gray-2);
+    padding: 0;
+  }
+}
+
+.previewHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background: white;
+  border-bottom: 1px solid var(--mantine-color-gray-3);
+  
+  h3 {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+  }
+}
+
+.previewContent {
+  flex: 1;
+  overflow: auto;
+  display: flex;
+  background: var(--mantine-color-gray-0);
+  min-height: 0;
+  min-width: 0;
+  
+  @include mixins.respond-below(md) {
+    min-height: 400px;
+  }
+  
+  @include mixins.respond-below(sm) {
+    min-height: 350px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    height: auto;
+  }
+  
+  .sidebar {
+    width: 100%;
+    overflow-y: visible;
+    padding-right: 0;
+  }
+  
+  .preview {
+    min-height: 500px;
+    padding: 0;
+  }
+  
+  .previewHeader {
+    padding: 0.75rem 1rem;
+  }
+}

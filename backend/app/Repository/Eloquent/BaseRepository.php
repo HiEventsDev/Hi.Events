@@ -308,6 +308,15 @@ abstract class BaseRepository implements RepositoryInterface
         return $deleted;
     }
 
+    public function countWhere(array $conditions): int
+    {
+        $this->applyConditions($conditions);
+        $count = $this->model->count();
+        $this->resetModel();
+
+        return $count;
+    }
+
     public function loadRelation(string|Relationship $relationship): static
     {
         if (is_string($relationship)) {
@@ -378,10 +387,14 @@ abstract class BaseRepository implements RepositoryInterface
         return $this->hydrateDomainObjectFromModel($model, $domainObjectOverride);
     }
 
-    protected function applyFilterFields(QueryParamsDTO $params, array $allowedFilterFields = []): void
+    protected function applyFilterFields(
+        QueryParamsDTO $params,
+        array $allowedFilterFields = [],
+        ?string $prefix = null,
+    ): void
     {
         if ($params->filter_fields && $params->filter_fields->isNotEmpty()) {
-            $params->filter_fields->each(function ($filterField) use ($allowedFilterFields) {
+            $params->filter_fields->each(function ($filterField) use ($prefix, $allowedFilterFields) {
                 if (!in_array($filterField->field, $allowedFilterFields, true)) {
                     return;
                 }
@@ -403,6 +416,8 @@ abstract class BaseRepository implements RepositoryInterface
                     sprintf('Operator %s is not supported', $filterField->operator)
                 );
 
+                $field = $prefix ? $prefix . '.' . $filterField->field : $filterField->field;
+
                 // Special handling for IN operator
                 if ($operator === 'IN') {
                     // Ensure value is array or convert comma-separated string to array
@@ -411,12 +426,12 @@ abstract class BaseRepository implements RepositoryInterface
                         : explode(',', $filterField->value);
 
                     $this->model = $this->model->whereIn(
-                        column: $filterField->field,
+                        column: $field,
                         values: $value
                     );
                 } else {
                     $this->model = $this->model->where(
-                        column: $filterField->field,
+                        column: $field,
                         operator: $operator,
                         value: $isNull ? null : $filterField->value,
                     );

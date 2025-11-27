@@ -7,6 +7,7 @@ use Brick\Math\Exception\NumberFormatException;
 use Brick\Math\Exception\RoundingNecessaryException;
 use Brick\Money\Exception\UnknownCurrencyException;
 use HiEvents\DomainObjects\AccountConfigurationDomainObject;
+use HiEvents\DomainObjects\AccountStripePlatformDomainObject;
 use HiEvents\DomainObjects\Generated\StripePaymentDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\Status\OrderStatus;
@@ -18,6 +19,8 @@ use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\StripePaymentsRepositoryInterface;
+use HiEvents\Services\Infrastructure\Stripe\StripeClientFactory;
+use HiEvents\Services\Infrastructure\Stripe\StripeConfigurationService;
 use HiEvents\Services\Domain\Payment\Stripe\DTOs\CreatePaymentIntentRequestDTO;
 use HiEvents\Services\Domain\Payment\Stripe\DTOs\CreatePaymentIntentResponseDTO;
 use HiEvents\Services\Domain\Payment\Stripe\StripePaymentIntentCreationService;
@@ -34,6 +37,8 @@ readonly class CreatePaymentIntentHandler
         private CheckoutSessionManagementService   $sessionIdentifierService,
         private StripePaymentsRepositoryInterface  $stripePaymentsRepository,
         private AccountRepositoryInterface         $accountRepository,
+        private StripeClientFactory                $stripeClientFactory,
+        private StripeConfigurationService         $stripeConfigurationService,
     )
     {
     }
@@ -69,34 +74,63 @@ readonly class CreatePaymentIntentHandler
                 domainObject: AccountConfigurationDomainObject::class,
                 name: 'configuration',
             ))
+            ->loadRelation(AccountStripePlatformDomainObject::class)
             ->findByEventId($order->getEventId());
+
+        $stripePlatform = $account->getActiveStripePlatform()
+            ?? $this->stripeConfigurationService->getPrimaryPlatform();
+
+        $stripeAccountId = $account->getActiveStripeAccountId();
+
+        // If no platform is configured, we can still process payments with regular Stripe keys
+        if (!$stripePlatform) {
+            $stripePlatform = null; // This will use default keys in StripeClientFactory
+        }
+
+        $stripeClient = $this->stripeClientFactory->createForPlatform($stripePlatform);
+        $publicKey = $this->stripeConfigurationService->getPublicKey($stripePlatform);
 
         // If we already have a Stripe session then re-fetch the client secret
         if ($order->getStripePayment() !== null) {
             return new CreatePaymentIntentResponseDTO(
                 paymentIntentId: $order->getStripePayment()->getPaymentIntentId(),
-                clientSecret: $this->stripePaymentService->retrievePaymentIntentClientSecret(
+                clientSecret: $this->stripePaymentService->retrievePaymentIntentClientSecretWithClient(
+                    $stripeClient,
                     $order->getStripePayment()->getPaymentIntentId(),
-                    $account->getStripeAccountId()
+                    $stripeAccountId
                 ),
-                accountId: $account->getStripeAccountId(),
+                accountId: $stripeAccountId,
+                stripePlatform: $stripePlatform,
+                publicKey: $publicKey,
             );
         }
 
-        $paymentIntent = $this->stripePaymentService->createPaymentIntent(CreatePaymentIntentRequestDTO::fromArray([
-            'amount' => MoneyValue::fromFloat($order->getTotalGross(), $order->getCurrency()),
-            'currencyCode' => $order->getCurrency(),
-            'account' => $account,
-            'order' => $order,
-        ]));
+        $paymentIntent = $this->stripePaymentService->createPaymentIntentWithClient(
+            $stripeClient,
+            CreatePaymentIntentRequestDTO::fromArray([
+                'amount' => MoneyValue::fromFloat($order->getTotalGross(), $order->getCurrency()),
+                'currencyCode' => $order->getCurrency(),
+                'account' => $account,
+                'order' => $order,
+                'stripeAccountId' => $stripeAccountId,
+            ])
+        );
 
         $this->stripePaymentsRepository->create([
             StripePaymentDomainObjectAbstract::ORDER_ID => $order->getId(),
             StripePaymentDomainObjectAbstract::PAYMENT_INTENT_ID => $paymentIntent->paymentIntentId,
-            StripePaymentDomainObjectAbstract::CONNECTED_ACCOUNT_ID => $account->getStripeAccountId(),
+            StripePaymentDomainObjectAbstract::CONNECTED_ACCOUNT_ID => $stripeAccountId,
             StripePaymentDomainObjectAbstract::APPLICATION_FEE => $paymentIntent->applicationFeeAmount,
+            StripePaymentDomainObjectAbstract::STRIPE_PLATFORM => $stripePlatform?->value,
         ]);
 
-        return $paymentIntent;
+        return new CreatePaymentIntentResponseDTO(
+            paymentIntentId: $paymentIntent->paymentIntentId,
+            clientSecret: $paymentIntent->clientSecret,
+            accountId: $paymentIntent->accountId,
+            applicationFeeAmount: $paymentIntent->applicationFeeAmount,
+            stripePlatform: $stripePlatform,
+            publicKey: $publicKey,
+        );
     }
 }

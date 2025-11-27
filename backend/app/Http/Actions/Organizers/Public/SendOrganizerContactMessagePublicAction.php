@@ -30,7 +30,7 @@ class SendOrganizerContactMessagePublicAction extends BaseAction
 
         $this->handler->handle(SendOrganizerContactMessageDTO::from([
             'organizer_id' => $organizerId,
-            'account_id' => $this->getAuthenticatedAccountId(),
+            'account_id' => $this->isUserAuthenticated() ? $this->getAuthenticatedAccountId() : null,
             'name' => $data['name'],
             'email' => $data['email'],
             'message' => $data['message'],

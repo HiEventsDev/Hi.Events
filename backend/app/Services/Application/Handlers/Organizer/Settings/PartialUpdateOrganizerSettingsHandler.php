@@ -42,6 +42,16 @@ class PartialUpdateOrganizerSettingsHandler
         }
 
         $this->organizerSettingsRepository->updateWhere([
+            'default_attendee_details_collection_method' => $dto->getProvided(
+                'defaultAttendeeDetailsCollectionMethod',
+                $organizerSettings->getDefaultAttendeeDetailsCollectionMethod()
+            )?->name ?? $organizerSettings->getDefaultAttendeeDetailsCollectionMethod(),
+
+            'default_show_marketing_opt_in' => $dto->getProvided(
+                'defaultShowMarketingOptIn',
+                $organizerSettings->getDefaultShowMarketingOptIn()
+            ),
+
             'social_media_handles' => array_filter([
                 'facebook' => $dto->getProvided('facebookHandle', $organizerSettings->getSocialMediaHandle('facebook')),
                 'instagram' => $dto->getProvided('instagramHandle', $organizerSettings->getSocialMediaHandle('instagram')),

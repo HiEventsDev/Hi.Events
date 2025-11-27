@@ -25,6 +25,7 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
         $where = [
             [OrderDomainObjectAbstract::EVENT_ID, '=', $eventId],
             [OrderDomainObjectAbstract::STATUS, '!=', OrderStatus::RESERVED->name],
+            [OrderDomainObjectAbstract::STATUS, '!=', OrderStatus::ABANDONED->name],
         ];
 
         if ($params->query) {
@@ -64,6 +65,7 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
     {
         $where = [
             ['orders.status', '!=', OrderStatus::RESERVED->name],
+            ['orders.status', '!=', OrderStatus::ABANDONED->name],
         ];
 
         if ($params->query) {
