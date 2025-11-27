@@ -1,6 +1,6 @@
 import {Link, useParams} from "react-router";
 import {useGetOrganizer} from "../../../../../queries/useGetOrganizer.ts";
-import {formatDate} from "../../../../../utilites/dates.ts";
+import {formatDateWithLocale} from "../../../../../utilites/dates.ts";
 import OrganizerReportTable from "../../../../common/OrganizerReportTable";
 import {t} from "@lingui/macro";
 
@@ -28,7 +28,7 @@ const CheckInSummaryReport = () => {
             key: 'start_date' as const,
             label: t`Event Date`,
             sortable: true,
-            render: (value: string) => value ? formatDate(value, 'MMM D, YYYY', organizer?.timezone) : '-'
+            render: (value: string) => value ? formatDateWithLocale(value, 'shortDate', organizer?.timezone || 'UTC') : '-'
         },
         {
             key: 'total_attendees' as const,

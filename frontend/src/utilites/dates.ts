@@ -10,7 +10,7 @@ import timezone from 'dayjs/plugin/timezone';
 import advanced from 'dayjs/plugin/advancedFormat';
 import { isSsr } from "./helpers.ts";
 import { getClientLocale, SupportedLocales } from "../locales.ts";
-import { localeFormats, setDayjsLocale } from "./dateLocales.ts";
+import { localeFormats, localeToDatejsLocale } from "./dateLocales.ts";
 
 dayjs.extend(utc);
 dayjs.extend(relativeTime);
@@ -21,79 +21,63 @@ export const formatDate = (date: string, format: string, tz: string): string => 
     return dayjs.utc(date).tz(tz).format(format);
 };
 
+export type DateFormatType = 'fullDateTime' | 'shortDateTime' | 'shortDate' | 'chartDate' | 'monthShort' | 'dayOfMonth' | 'dayName' | 'timeOnly' | 'timezone';
+
 /**
- * Format date with locale-specific formatting
+ * Safely get a supported locale, falling back to 'en' if not supported.
+ */
+const getSafeLocale = (locale?: string): SupportedLocales => {
+    if (locale && locale in localeFormats) {
+        return locale as SupportedLocales;
+    }
+    return 'en';
+};
+
+/**
+ * Format date with locale-specific formatting.
+ * Uses locale() method on the dayjs instance to avoid global state mutation.
  */
 export const formatDateWithLocale = (
     date: string,
-    formatType: 'fullDateTime' | 'dayName' | 'timeOnly' | 'timezone',
+    formatType: DateFormatType,
     tz: string,
-    locale?: SupportedLocales
+    locale?: SupportedLocales | string
 ): string => {
-    try {
-        const userLocale = locale || getClientLocale() as SupportedLocales;
+    const resolvedLocale = locale || getClientLocale();
+    const safeLocale = getSafeLocale(resolvedLocale);
+    const localeConfig = localeFormats[safeLocale];
+    const format = localeConfig[formatType];
+    const dayjsLocale = localeToDatejsLocale[safeLocale];
 
-        // Ensure we have a valid locale and format
-        if (!userLocale || !localeFormats[userLocale] || !localeFormats[userLocale][formatType]) {
-            throw new Error(`Invalid locale or format: ${userLocale}, ${formatType}`);
-        }
-
-        // Set the Day.js locale for this operation
-        setDayjsLocale(userLocale);
-
-        const format = localeFormats[userLocale][formatType];
-        return dayjs.utc(date).tz(tz).format(format);
-    } catch (error) {
-        // Fallback to English formatting if there's any error
-        console.warn('Date localization failed, falling back to English:', error);
-        const fallbackFormats = {
-            fullDateTime: 'ddd, MMM D, YYYY h:mm A',
-            dayName: 'dddd, MMMM D',
-            timeOnly: 'h:mm A',
-            timezone: 'z'
-        };
-        return dayjs.utc(date).tz(tz).format(fallbackFormats[formatType]);
-    }
+    return dayjs.utc(date).tz(tz).locale(dayjsLocale).format(format);
 };
 
 /**
- * Format date with user's preferred locale (from user settings or browser)
- * This function can be enhanced to use data from useGetMe hook when available
+ * Format date with user's preferred locale (from user settings or browser).
+ * Priority: user settings > browser locale > English fallback.
  */
 export const formatDateForUser = (
     date: string,
-    formatType: 'fullDateTime' | 'dayName' | 'timeOnly' | 'timezone',
+    formatType: DateFormatType,
     tz: string,
     userLocaleFromSettings?: string
 ): string => {
-    // Priority: user settings > cookie > browser locale > fallback to English
-    let locale: SupportedLocales = 'en';
-
-    if (userLocaleFromSettings && userLocaleFromSettings in localeFormats) {
-        locale = userLocaleFromSettings as SupportedLocales;
-    } else {
-        locale = getClientLocale() as SupportedLocales;
-    }
-
-    // Debug logging to help identify the issue
-    if (typeof window !== 'undefined' && window.console) {
-        console.log('Date formatting debug:', {
-            userLocaleFromSettings,
-            detectedLocale: locale,
-            formatType,
-            availableFormats: Object.keys(localeFormats)
-        });
-    }
-
-    return formatDateWithLocale(date, formatType, tz, locale);
+    return formatDateWithLocale(date, formatType, tz, userLocaleFromSettings);
 };
 
 /**
- * Legacy function for backward compatibility
+ * Format date in a short, readable format with optional timezone.
+ * Uses locale-aware formatting.
  */
-export const prettyDate = (date: string, tz: string, showTimezoneOffset: boolean = false): string => {
-    // eslint-disable-next-line lingui/no-unlocalized-strings
-    return dayjs.utc(date).tz(tz).format('MMM D, YYYY h:mma' + (showTimezoneOffset ? ' (z)' : ''));
+export const prettyDate = (date: string, tz: string, showTimezoneOffset: boolean = false, locale?: string): string => {
+    const formatted = formatDateWithLocale(date, 'shortDateTime', tz, locale);
+
+    if (showTimezoneOffset) {
+        const tzAbbr = formatDateWithLocale(date, 'timezone', tz, locale);
+        return `${formatted} (${tzAbbr})`;
+    }
+
+    return formatted;
 };
 
 /**
@@ -117,17 +101,18 @@ export const utcToTz = (date: undefined | string | Date, tz: string): string | u
 };
 
 /**
- * Converts a datetime to the user's browser timezone, with a fallback timezone for SSR.
- *
- * @param date string
- * @param fallbackTz string
+ * Converts a datetime to the user's browser timezone with locale-aware formatting.
+ * Falls back to provided timezone for SSR.
  */
-export const dateToBrowserTz = (date: string, fallbackTz: string): string => {
+export const dateToBrowserTz = (date: string, fallbackTz: string, locale?: string): string => {
     const userTimezone = !isSsr()
         ? Intl.DateTimeFormat().resolvedOptions().timeZone
         : fallbackTz;
 
-    return dayjs.utc(date).tz(userTimezone).format('MMM D, YYYY h:mma z');
+    const formatted = formatDateWithLocale(date, 'shortDateTime', userTimezone, locale);
+    const tzAbbr = formatDateWithLocale(date, 'timezone', userTimezone, locale);
+
+    return `${formatted} ${tzAbbr}`;
 };
 
 export const isDateInFuture = (date: string): boolean => {

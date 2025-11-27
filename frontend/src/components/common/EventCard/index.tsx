@@ -27,7 +27,7 @@ import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {useUpdateEventStatus} from "../../../mutations/useUpdateEventStatus.ts";
 import {formatCurrency} from "../../../utilites/currency.ts";
 import {formatNumber} from "../../../utilites/helpers.ts";
-import {formatDate} from "../../../utilites/dates.ts";
+import {formatDateWithLocale} from "../../../utilites/dates.ts";
 
 const placeholderEmojis = ['🎉', '🎪', '🎸', '🎨', '🌟', '🎭', '🎯', '🎮', '🎲', '🎳'];
 
@@ -137,15 +137,15 @@ export function EventCard({event}: EventCardProps) {
                         <div className={classes.dateTime}>
                             <div className={classes.dateBox}>
                                 <span
-                                    className={classes.month}>{formatDate(event.start_date, 'MMM', event.timezone)}</span>
-                                <span className={classes.day}>{formatDate(event.start_date, 'D', event.timezone)}</span>
+                                    className={classes.month}>{formatDateWithLocale(event.start_date, 'monthShort', event.timezone)}</span>
+                                <span className={classes.day}>{formatDateWithLocale(event.start_date, 'dayOfMonth', event.timezone)}</span>
                             </div>
                             <div className={classes.timeInfo}>
                                 <span
-                                    className={classes.time}>{formatDate(event.start_date, 'h:mm A', event.timezone)}</span>
+                                    className={classes.time}>{formatDateWithLocale(event.start_date, 'timeOnly', event.timezone)}</span>
                                 {event.end_date && (
                                     <span
-                                        className={classes.endTime}>- {formatDate(event.end_date, 'h:mm A', event.timezone)}</span>
+                                        className={classes.endTime}>- {formatDateWithLocale(event.end_date, 'timeOnly', event.timezone)}</span>
                                 )}
                             </div>
                         </div>
