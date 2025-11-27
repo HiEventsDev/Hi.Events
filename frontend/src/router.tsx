@@ -4,6 +4,7 @@ import {useEffect, useState} from "react";
 import {useGetMe} from "./queries/useGetMe.ts";
 import {publicEventRouteLoader} from "./routeLoaders/publicEventRouteLoader.ts";
 import {publicOrganizerRouteLoader} from "./routeLoaders/publicOrganizerRouteLoader.ts";
+import {organizerPreviewRouteLoader} from "./routeLoaders/organizerPreviewRouteLoader.ts";
 
 const Root = () => {
     const [redirectPath, setRedirectPath] = useState<string | null>(null);
@@ -455,7 +456,7 @@ export const router: RouteObject[] = [
     },
     {
         path: "/organizer/:organizerId/preview",
-        loader: publicOrganizerRouteLoader,
+        loader: organizerPreviewRouteLoader,
         async lazy() {
             const OrganizerHomepagePreview = await import("./components/layouts/OrganizerHomepagePreview");
             return {Component: OrganizerHomepagePreview.default};
