@@ -2,6 +2,7 @@
 
 namespace HiEvents\Validators\Rules;
 
+use HiEvents\DomainObjects\Enums\AttendeeDetailsCollectionMethod;
 use HiEvents\DomainObjects\Enums\ProductType;
 use HiEvents\DomainObjects\QuestionDomainObject;
 use Illuminate\Support\Collection;
@@ -10,6 +11,17 @@ use Illuminate\Validation\ValidationException;
 
 class ProductQuestionRule extends BaseQuestionRule
 {
+    private bool $skipBasicAttendeeValidation = false;
+
+    public function __construct(
+        Collection $questions,
+        Collection $products,
+        ?string $attendeeDetailsCollectionMethod = null,
+    ) {
+        parent::__construct($questions, $products);
+
+        $this->skipBasicAttendeeValidation = $attendeeDetailsCollectionMethod === AttendeeDetailsCollectionMethod::PER_ORDER->name;
+    }
     /**
      * @throws ValidationException
      */
@@ -47,7 +59,7 @@ class ProductQuestionRule extends BaseQuestionRule
                 continue;
             }
 
-            if ($productDomainObject->getProductType() === ProductType::TICKET->name) {
+            if ($productDomainObject->getProductType() === ProductType::TICKET->name && !$this->skipBasicAttendeeValidation) {
                 $validationMessages = [
                     ...$validationMessages,
                     ...$this->validateBasicTicketFields($productRequestData, $productIndex),
@@ -93,6 +105,10 @@ class ProductQuestionRule extends BaseQuestionRule
             'first_name' => ['required', 'string', 'min:1', 'max:100'],
             'last_name' => ['required', 'string', 'min:1', 'max:100'],
             'email' => ['required', 'string', 'email', 'max:100'],
+            'email_confirmation' => ['required', 'string', 'email', 'max:100', 'same:email'],
+        ], [
+            'email_confirmation.required' => __('Please confirm the email address'),
+            'email_confirmation.same' => __('Email addresses do not match'),
         ]);
 
         if ($validator->fails()) {

@@ -1,7 +1,7 @@
 import {useParams} from "react-router";
 import {useGetEvent} from "../../../../../queries/useGetEvent.ts";
 import {formatCurrency} from "../../../../../utilites/currency.ts";
-import {formatDate} from "../../../../../utilites/dates.ts";
+import {formatDateWithLocale} from "../../../../../utilites/dates.ts";
 import ReportTable from "../../../../common/ReportTable";
 
 export const DailySalesReport = () => {
@@ -18,7 +18,7 @@ export const DailySalesReport = () => {
             key: 'date' as const,
             label: 'Date',
             sortable: true,
-            render: (value: string) => formatDate(value, 'MMM D, YYYY', event?.timezone)
+            render: (value: string) => formatDateWithLocale(value, 'shortDate', event?.timezone)
         },
         {
             key: 'sales_total_gross' as const,

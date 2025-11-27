@@ -311,16 +311,6 @@
   max-width: 250px;
   max-height: 200px;
   object-fit: contain;
-
-  //@include mixins.respond-below(sm) {
-  //  max-width: 250px;
-  //  max-height: 80px;
-  //}
-  //
-  //@media print {
-  //  max-width: 250px;
-  //  max-height: 80px;
-  //}
 }
 
 .qrContainer {
@@ -348,31 +338,107 @@
   }
 }
 
-.statusOverlay {
+// QR Placeholder States (Awaiting Payment / Cancelled)
+.qrPlaceholder {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  border-radius: 12px;
+  border: 2px solid;
+  overflow: hidden;
+
+  @include mixins.respond-below(sm) {
+    width: 140px;
+    height: 140px;
+  }
+
+  @media print {
+    width: 160px;
+    height: 160px;
+  }
+}
+
+.qrPlaceholderPending {
+  border-color: var(--mantine-primary-color-light-hover);
+  background-color: var(--mantine-primary-color-light);
+}
+
+.qrPlaceholderCancelled {
+  border-color: var(--mantine-color-red-3);
+  background-color: var(--mantine-color-red-0);
+}
+
+// Faded QR pattern background
+.qrPatternBackground {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 2px;
+  padding: 12px;
+  opacity: 0.1;
+}
+
+.qrPatternCell {
+  border-radius: 1px;
+}
+
+.qrPlaceholderPending .qrPatternCellFilled {
+  background-color: var(--mantine-primary-color-filled);
+}
+
+.qrPlaceholderCancelled .qrPatternCellFilled {
+  background-color: var(--mantine-color-red-9);
+}
+
+// Status content overlay
+.qrPlaceholderContent {
   position: absolute;
   inset: 0;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 3px;
+  gap: 8px;
 }
 
-.cancelled {
-  color: #dc2626;
-  font-weight: 600;
+.statusIconCircle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @include mixins.respond-below(sm) {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+.statusIconPending {
+  background-color: var(--mantine-primary-color-filled);
+}
+
+.statusIconCancelled {
+  background-color: var(--mantine-color-red-6);
+}
+
+.statusText {
   font-size: 14px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  font-weight: 700;
+
+  @include mixins.respond-below(sm) {
+    font-size: 13px;
+  }
 }
 
-.pending {
-  color: #ea580c;
-  font-weight: 600;
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  text-align: center;
+.statusTextPending {
+  color: var(--mantine-primary-color-filled);
+}
+
+.statusTextCancelled {
+  color: var(--mantine-color-red-7);
 }
 
 .ticketId {
@@ -442,7 +508,6 @@
     justify-content: center;
   }
 }
-
 
 .actions {
   display: flex;

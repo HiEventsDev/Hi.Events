@@ -35,6 +35,7 @@ class UpdateEventSettingsHandler
                         ?? $this->purifier->purify($settings->email_footer_message),
                     'support_email' => $settings->support_email,
                     'require_attendee_details' => $settings->require_attendee_details,
+                    'attendee_details_collection_method' => $settings->attendee_details_collection_method->name,
                     'continue_button_text' => trim($settings->continue_button_text),
 
                     'homepage_background_color' => $settings->homepage_background_color,
@@ -81,6 +82,9 @@ class UpdateEventSettingsHandler
                     
                     // Ticket design settings
                     'ticket_design_settings' => $settings->ticket_design_settings,
+
+                    // Marketing settings
+                    'show_marketing_opt_in' => $settings->show_marketing_opt_in,
                 ],
                 where: [
                     'event_id' => $settings->event_id,

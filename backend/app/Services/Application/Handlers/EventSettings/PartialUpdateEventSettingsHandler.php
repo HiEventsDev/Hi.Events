@@ -52,6 +52,7 @@ class PartialUpdateEventSettingsHandler
                 'email_footer_message' => $eventSettingsDTO->settings['email_footer_message'] ?? $existingSettings->getEmailFooterMessage(),
                 'support_email' => $eventSettingsDTO->settings['support_email'] ?? $existingSettings->getSupportEmail(),
                 'require_attendee_details' => $eventSettingsDTO->settings['require_attendee_details'] ?? $existingSettings->getRequireAttendeeDetails(),
+                'attendee_details_collection_method' => $eventSettingsDTO->settings['attendee_details_collection_method'] ?? $existingSettings->getAttendeeDetailsCollectionMethod(),
                 'continue_button_text' => array_key_exists('continue_button_text', $eventSettingsDTO->settings)
                     ? $eventSettingsDTO->settings['continue_button_text']
                     : $existingSettings->getContinueButtonText(),
@@ -121,7 +122,10 @@ class PartialUpdateEventSettingsHandler
                 // Ticket design settings
                 'ticket_design_settings' => array_key_exists('ticket_design_settings', $eventSettingsDTO->settings)
                     ? $eventSettingsDTO->settings['ticket_design_settings']
-                    : $existingSettings->getTicketDesignSettings()
+                    : $existingSettings->getTicketDesignSettings(),
+
+                // Marketing settings
+                'show_marketing_opt_in' => $eventSettingsDTO->settings['show_marketing_opt_in'] ?? $existingSettings->getShowMarketingOptIn(),
             ]),
         );
     }

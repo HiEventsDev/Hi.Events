@@ -71,17 +71,23 @@ export const PaymentReturn = () => {
             <div className={classes.container}>
                 {!cannotConfirmPayment && (
                     <HomepageInfoMessage
-                        iconType={'processing'}
+                        status="processing"
                         message={(
                             <>
                                 {(!shouldPoll && paymentIntentQuery.isFetched) && t`We could not process your payment. Please try again or contact support.`}
-                                {(!shouldPoll && !paymentIntentQuery.isFetched) && t`Almost there! We're just waiting for your payment to be processed. This should only take a few seconds..`}
+                                {(!shouldPoll && !paymentIntentQuery.isFetched) && t`Almost there! We're just waiting for your payment to be processed. This should only take a few seconds.`}
                                 {shouldPoll && t`We're processing your order. Please wait...`}
                             </>
-                        )}/>
+                        )}
+                    />
                 )}
 
-                {cannotConfirmPayment && t`We were unable to confirm your payment. Please try again or contact support.`}
+                {cannotConfirmPayment && (
+                    <HomepageInfoMessage
+                        status="error"
+                        message={t`We were unable to confirm your payment. Please try again or contact support.`}
+                    />
+                )}
             </div>
         </CheckoutContent>
     );

@@ -2,6 +2,7 @@
 
 namespace HiEvents\Http\Request\Organizer\Settings;
 
+use HiEvents\DomainObjects\Enums\AttendeeDetailsCollectionMethod;
 use HiEvents\DomainObjects\Enums\HomepageBackgroundType;
 use HiEvents\DomainObjects\Enums\OrganizerHomepageVisibility;
 use HiEvents\Http\Request\BaseRequest;
@@ -13,6 +14,10 @@ class PartialUpdateOrganizerSettingsRequest extends BaseRequest
     public static function rules(): array
     {
         return [
+            // Event defaults
+            'default_attendee_details_collection_method' => ['sometimes', 'nullable', Rule::in(AttendeeDetailsCollectionMethod::valuesArray())],
+            'default_show_marketing_opt_in' => ['sometimes', 'nullable', 'boolean'],
+
             // Social handles
             'facebook_handle' => ['sometimes', 'nullable', 'string', 'max:255'],
             'instagram_handle' => ['sometimes', 'nullable', 'string', 'max:255'],
