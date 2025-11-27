@@ -547,11 +547,14 @@ export const CollectInformation = () => {
                     const productHasQuestions = productQuestions?.some(question => question.product_ids?.includes(orderItem.product_id));
 
                     if (!product) {
-                        return;
+                        return null;
                     }
 
                     if (!productRequiresDetails && !productHasQuestions) {
-                        return;
+                        // Still increment productIndex for each item in the quantity
+                        // to maintain correct form field indices
+                        productIndex += orderItem.quantity ?? 0;
+                        return null;
                     }
 
                     return (
