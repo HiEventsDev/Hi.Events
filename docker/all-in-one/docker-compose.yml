@@ -3,11 +3,9 @@ services:
     build:
       context: ./../../
       dockerfile: Dockerfile.all-in-one
-    container_name: all-in-one
+    restart: unless-stopped
     ports:
       - "8123:80"
-    networks:
-      - hi-events-network
     environment:
       - VITE_FRONTEND_URL=${VITE_FRONTEND_URL}
       - VITE_API_URL_CLIENT=${VITE_API_URL_CLIENT}
@@ -37,7 +35,7 @@ services:
       - MAIL_FROM_NAME=${MAIL_FROM_NAME}
       - FILESYSTEM_PUBLIC_DISK=${FILESYSTEM_PUBLIC_DISK}
       - FILESYSTEM_PRIVATE_DISK=${FILESYSTEM_PRIVATE_DISK}
-      - DATABASE_URL=postgresql://postgres:secret@postgres:5432/hi-events
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-secret}@postgres:5432/${POSTGRES_DB:-hi-events}
       - REDIS_HOST=redis
       - REDIS_PASSWORD=
       - REDIS_PORT=6379
@@ -53,43 +51,31 @@ services:
         condition: service_healthy
 
   redis:
-    image: redis:latest
-    container_name: redis
-    networks:
-      - hi-events-network
+    image: redis:7-alpine
+    restart: unless-stopped
     healthcheck:
       test: [ "CMD", "redis-cli", "ping" ]
       interval: 10s
       timeout: 5s
       retries: 5
-    ports:
-      - "6379:6379"
     volumes:
       - redisdata:/data
 
   postgres:
-    image: postgres:17
-    container_name: postgres
-    networks:
-      - hi-events-network
+    image: postgres:17-alpine
+    restart: unless-stopped
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U postgres" ]
       interval: 10s
       timeout: 5s
       retries: 5
     environment:
-      POSTGRES_DB: hi-events
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: ${POSTGRES_DB:-hi-events}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-secret}
     volumes:
       - pgdata:/var/lib/postgresql/data
 
-networks:
-  hi-events-network:
-    driver: bridge
-
 volumes:
   pgdata:
-    driver: local
   redisdata:
-    driver: local
