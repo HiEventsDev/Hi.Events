@@ -2,7 +2,7 @@ import {Link, useParams} from "react-router";
 import {useGetOrganizer} from "../../../../../queries/useGetOrganizer.ts";
 import {useGetOrganizerStats} from "../../../../../queries/useGetOrganizerStats.ts";
 import {formatCurrency} from "../../../../../utilites/currency.ts";
-import {formatDate} from "../../../../../utilites/dates.ts";
+import {formatDateWithLocale} from "../../../../../utilites/dates.ts";
 import OrganizerReportTable from "../../../../common/OrganizerReportTable";
 import {t} from "@lingui/macro";
 import {Badge} from "@mantine/core";
@@ -55,7 +55,7 @@ const EventsPerformanceReport = () => {
             key: 'start_date' as const,
             label: t`Date`,
             sortable: true,
-            render: (value: string) => value ? formatDate(value, 'MMM D, YYYY', organizer?.timezone) : '-'
+            render: (value: string) => value ? formatDateWithLocale(value, 'shortDate', organizer?.timezone || 'UTC') : '-'
         },
         {
             key: 'event_state' as const,
