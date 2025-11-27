@@ -110,6 +110,7 @@ export const RefundOrderModal = ({onClose, orderId}: RefundOrderModalProps) => {
                         leftSection={<IconCash size={20}/>}
                         rightSectionWidth={50}
                         rightSection={<Text size="sm" c="dimmed">{order.currency}</Text>}
+                        required
                         styles={{
                             input: {
                                 fontWeight: 600,
@@ -133,9 +134,9 @@ export const RefundOrderModal = ({onClose, orderId}: RefundOrderModalProps) => {
                         )}
                     </Stack>
 
-                    {isPartialRefund && (
+                    {(isPartialRefund && Number(form.values.amount) > 0) && (
                         <Alert icon={<IconInfoCircle/>} color="blue" variant="light">
-                            {t`You are issuing a partial refund. The customer will be refunded ${form.values.amount.toFixed(2)} ${order.currency}.`}
+                            {t`You are issuing a partial refund. The customer will be refunded ${Number(form.values.amount).toFixed(2)} ${order.currency}.`}
                         </Alert>
                     )}
 

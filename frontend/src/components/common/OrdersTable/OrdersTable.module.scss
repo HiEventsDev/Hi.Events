@@ -148,8 +148,20 @@
   align-items: center;
   gap: 4px;
   font-size: 11px;
-  color: var(--mantine-color-red-9);
   line-height: 1.3;
+
+  &[data-refund-status="REFUNDED"],
+  &[data-refund-status="PARTIALLY_REFUNDED"] {
+    color: var(--mantine-color-orange-7);
+  }
+
+  &[data-refund-status="REFUND_PENDING"] {
+    color: var(--mantine-color-yellow-7);
+  }
+
+  &[data-refund-status="REFUND_FAILED"] {
+    color: var(--mantine-color-red-7);
+  }
 }
 
 // Payment Section
