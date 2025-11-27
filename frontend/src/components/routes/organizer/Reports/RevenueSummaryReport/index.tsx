@@ -2,7 +2,7 @@ import {useParams} from "react-router";
 import {useGetOrganizer} from "../../../../../queries/useGetOrganizer.ts";
 import {useGetOrganizerStats} from "../../../../../queries/useGetOrganizerStats.ts";
 import {formatCurrency} from "../../../../../utilites/currency.ts";
-import {formatDate} from "../../../../../utilites/dates.ts";
+import {formatDateWithLocale} from "../../../../../utilites/dates.ts";
 import OrganizerReportTable from "../../../../common/OrganizerReportTable";
 import {t} from "@lingui/macro";
 
@@ -23,7 +23,7 @@ const RevenueSummaryReport = () => {
             key: 'date' as const,
             label: t`Date`,
             sortable: true,
-            render: (value: string) => formatDate(value, 'MMM D, YYYY', organizer?.timezone)
+            render: (value: string) => formatDateWithLocale(value, 'shortDate', organizer?.timezone || 'UTC')
         },
         {
             key: 'gross_sales' as const,
