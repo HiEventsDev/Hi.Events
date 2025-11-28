@@ -85,6 +85,9 @@ class UpdateEventSettingsHandler
 
                     // Marketing settings
                     'show_marketing_opt_in' => $settings->show_marketing_opt_in,
+
+                    // Homepage theme settings
+                    'homepage_theme_settings' => $settings->homepage_theme_settings,
                 ],
                 where: [
                     'event_id' => $settings->event_id,

@@ -61,6 +61,7 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     final public const TICKET_DESIGN_SETTINGS = 'ticket_design_settings';
     final public const ATTENDEE_DETAILS_COLLECTION_METHOD = 'attendee_details_collection_method';
     final public const SHOW_MARKETING_OPT_IN = 'show_marketing_opt_in';
+    final public const HOMEPAGE_THEME_SETTINGS = 'homepage_theme_settings';
 
     protected int $id;
     protected int $event_id;
@@ -113,6 +114,7 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     protected array|string|null $ticket_design_settings = null;
     protected string $attendee_details_collection_method = 'PER_TICKET';
     protected bool $show_marketing_opt_in = true;
+    protected array|string|null $homepage_theme_settings = null;
 
     public function toArray(): array
     {
@@ -168,6 +170,7 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
                     'ticket_design_settings' => $this->ticket_design_settings ?? null,
                     'attendee_details_collection_method' => $this->attendee_details_collection_method ?? null,
                     'show_marketing_opt_in' => $this->show_marketing_opt_in ?? null,
+                    'homepage_theme_settings' => $this->homepage_theme_settings ?? null,
                 ];
     }
 
@@ -731,5 +734,16 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     public function getShowMarketingOptIn(): bool
     {
         return $this->show_marketing_opt_in;
+    }
+
+    public function setHomepageThemeSettings(array|string|null $homepage_theme_settings): self
+    {
+        $this->homepage_theme_settings = $homepage_theme_settings;
+        return $this;
+    }
+
+    public function getHomepageThemeSettings(): array|string|null
+    {
+        return $this->homepage_theme_settings;
     }
 }

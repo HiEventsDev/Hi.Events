@@ -88,6 +88,13 @@ class UpdateEventSettingsRequest extends BaseRequest
 
             // Marketing settings
             'show_marketing_opt_in' => ['boolean'],
+
+            // Homepage theme settings
+            'homepage_theme_settings' => ['nullable', 'array'],
+            'homepage_theme_settings.accent' => ['nullable', 'string', ...RulesHelper::HEX_COLOR],
+            'homepage_theme_settings.background' => ['nullable', 'string', ...RulesHelper::HEX_COLOR],
+            'homepage_theme_settings.mode' => ['nullable', 'string', Rule::in(['light', 'dark'])],
+            'homepage_theme_settings.background_type' => ['nullable', 'string', Rule::in(HomepageBackgroundType::valuesArray())],
         ];
     }
 
@@ -124,6 +131,12 @@ class UpdateEventSettingsRequest extends BaseRequest
             'ticket_design_settings.accent_color' => $colorMessage,
             'ticket_design_settings.footer_text.max' => __('The footer text may not be greater than 500 characters.'),
             'ticket_design_settings.layout_type.in' => __('The layout type must be default or modern.'),
+
+            // Homepage theme settings messages
+            'homepage_theme_settings.accent' => $colorMessage,
+            'homepage_theme_settings.background' => $colorMessage,
+            'homepage_theme_settings.mode.in' => __('The mode must be light or dark.'),
+            'homepage_theme_settings.background_type.in' => __('The background type must be COLOR or MIRROR_COVER_IMAGE.'),
         ];
     }
 }
