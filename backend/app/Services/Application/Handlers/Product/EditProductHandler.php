@@ -113,6 +113,8 @@ class EditProductHandler
                 'is_hidden_without_promo_code' => $productsData->is_hidden_without_promo_code,
                 'product_type' => $productsData->product_type->name,
                 'product_category_id' => $productCategory->getId(),
+                'is_highlighted' => $productsData->is_highlighted ?? false,
+                'highlight_message' => $productsData->highlight_message,
             ],
             where: $where
         );

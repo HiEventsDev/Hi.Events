@@ -22,6 +22,23 @@
       flex-flow: column;
       border: 3px solid var(--widget-primary-color, var(--hi-secondary));
       border-radius: 5px;
+      position: relative;
+      overflow: hidden;
+
+      &.hi-product-highlighted {
+        border-color: var(--widget-secondary-color, var(--hi-primary));
+        background-color: color-mix(in srgb, var(--widget-secondary-color, var(--hi-primary)) 10%, var(--widget-background-color, var(--hi-color-white)));
+      }
+
+      .hi-product-highlight-message {
+        background: var(--widget-secondary-color, var(--hi-primary));
+        color: var(--widget-secondary-text-color, var(--hi-color-white));
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 6px 16px;
+        text-align: center;
+        letter-spacing: 0.02em;
+      }
 
       .hi-product-description-row {
         font-size: .9em;

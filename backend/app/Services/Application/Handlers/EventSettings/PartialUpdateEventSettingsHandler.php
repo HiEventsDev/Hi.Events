@@ -126,6 +126,11 @@ class PartialUpdateEventSettingsHandler
 
                 // Marketing settings
                 'show_marketing_opt_in' => $eventSettingsDTO->settings['show_marketing_opt_in'] ?? $existingSettings->getShowMarketingOptIn(),
+
+                // Homepage theme settings
+                'homepage_theme_settings' => array_key_exists('homepage_theme_settings', $eventSettingsDTO->settings)
+                    ? $eventSettingsDTO->settings['homepage_theme_settings']
+                    : $existingSettings->getHomepageThemeSettings(),
             ]),
         );
     }

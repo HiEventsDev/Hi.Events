@@ -74,6 +74,9 @@ class UpdateEventSettingsDTO extends BaseDTO
 
         // Marketing settings
         public readonly bool                    $show_marketing_opt_in = true,
+
+        // Homepage theme settings
+        public readonly ?array                  $homepage_theme_settings = null,
     )
     {
     }
@@ -142,6 +145,15 @@ class UpdateEventSettingsDTO extends BaseDTO
 
             // Marketing defaults
             show_marketing_opt_in: true,
+
+            // Homepage theme defaults (simplified 2-color + mode system)
+            homepage_theme_settings: [
+                'accent' => '#8b5cf6',
+                'background' => '#f5f3ff',
+                'mode' => 'light',
+                'background_type' => 'COLOR',
+            ],
         );
     }
 }
+

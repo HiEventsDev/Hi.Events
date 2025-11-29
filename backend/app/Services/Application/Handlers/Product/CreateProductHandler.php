@@ -59,6 +59,8 @@ class CreateProductHandler
                 ->setHideWhenSoldOut($productsData->hide_when_sold_out)
                 ->setShowQuantityRemaining($productsData->show_quantity_remaining)
                 ->setIsHiddenWithoutPromoCode($productsData->is_hidden_without_promo_code)
+                ->setIsHighlighted($productsData->is_highlighted ?? false)
+                ->setHighlightMessage($productsData->highlight_message)
                 ->setProductPrices($productPrices)
                 ->setEventId($productsData->event_id)
                 ->setProductType($productsData->product_type->name)

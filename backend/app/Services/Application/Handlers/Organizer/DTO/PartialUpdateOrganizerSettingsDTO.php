@@ -5,7 +5,6 @@ namespace HiEvents\Services\Application\Handlers\Organizer\DTO;
 use HiEvents\DataTransferObjects\AddressDTO;
 use HiEvents\DataTransferObjects\BaseDataObject;
 use HiEvents\DomainObjects\Enums\AttendeeDetailsCollectionMethod;
-use HiEvents\DomainObjects\Enums\HomepageBackgroundType;
 use HiEvents\DomainObjects\Enums\OrganizerHomepageVisibility;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Attributes\WithCast;
@@ -57,15 +56,8 @@ class PartialUpdateOrganizerSettingsDTO extends BaseDataObject
         // Homepage settings
         public readonly OrganizerHomepageVisibility|Optional|null     $homepageVisibility,
 
-        public readonly string|Optional|null                          $homepageBackgroundColor,
-        public readonly string|Optional|null                          $homepageContentBackgroundColor,
-        public readonly string|Optional|null                          $homepagePrimaryColor,
-        public readonly string|Optional|null                          $homepagePrimaryTextColor,
-        public readonly string|Optional|null                          $homepageSecondaryColor,
-        public readonly string|Optional|null                          $homepageSecondaryTextColor,
-
-        #[WithCast(EnumCast::class, HomepageBackgroundType::class)]
-        public readonly HomepageBackgroundType|Optional|null          $homepageBackgroundType,
+        // Simplified homepage theme settings
+        public readonly array|Optional|null                           $homepageThemeSettings,
 
         // SEO
         public readonly string|Optional|null                          $seoKeywords,
