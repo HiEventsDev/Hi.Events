@@ -1,5 +1,17 @@
 @use "../../../../styles/mixins.scss";
 
+// Design tokens - matching OrganizerHomepage
+$font-display: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+$font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+$radius-lg: 20px;
+$radius-md: 14px;
+$radius-sm: 10px;
+$radius-xs: 6px;
+
+$transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+$transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
 .eventCardLink {
   text-decoration: none;
   color: inherit;
@@ -44,10 +56,11 @@
   --accent-muted: inherit;
   --accent-contrast: inherit;
 
+  font-family: $font-body;
   background: transparent;
-  border-radius: 12px;
+  border-radius: $radius-md;
   overflow: visible;
-  transition: all 0.2s ease;
+  transition: all $transition-fast;
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -83,7 +96,7 @@
   position: relative;
   width: 100%;
   height: 100%;
-  border-radius: 10px;
+  border-radius: $radius-sm;
   overflow: hidden;
   background: var(--bg-color);
 
@@ -95,7 +108,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.4s ease;
+    transition: transform $transition-slow;
   }
 }
 
@@ -113,7 +126,7 @@
 
 .placeholderContent {
   position: relative;
-  transition: transform 0.4s ease;
+  transition: transform $transition-slow;
 }
 
 .placeholderIcon {
@@ -197,10 +210,10 @@
 .shareButton {
   opacity: 0;
   transform: scale(0.8);
-  transition: all 0.2s ease;
+  transition: all $transition-fast;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
-  border-radius: 8px;
+  border-radius: $radius-xs;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   padding: 4px;
 
@@ -212,7 +225,7 @@
 
 .shareIcon {
   color: var(--secondary-color);
-  transition: all 0.2s ease;
+  transition: all $transition-fast;
 
   &:hover {
     transform: scale(1.1);
@@ -228,7 +241,7 @@
   padding: 4px 8px;
   background: #ef4444;
   backdrop-filter: blur(10px);
-  border-radius: 6px;
+  border-radius: $radius-xs;
   box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
 }
 
@@ -266,25 +279,26 @@
   color: var(--primary-text-color);
   border: 1px solid var(--border-color);
   padding: 6px 10px;
-  border-radius: 8px;
+  border-radius: $radius-xs;
   box-shadow: 0 2px 8px var(--border-color);
   display: flex;
   align-items: center;
   gap: 6px;
+  font-family: $font-display;
   font-weight: 600;
   font-size: 0.75rem;
   z-index: 10;
   bottom: 8px;
   left: 8px;
   backdrop-filter: blur(10px);
-  transition: border-color 0.2s ease;
+  transition: border-color $transition-fast;
 
   @include mixins.respond-below('sm') {
     left: 8px;
   }
 
   svg {
-    color: var(--accent-muted);
+    color: var(--primary-color);
   }
 }
 
@@ -313,15 +327,16 @@
 }
 
 .eventTitle {
-  font-size: 1rem;
-  font-weight: 600;
+  font-family: $font-display;
+  font-size: 1.05rem;
+  font-weight: 700;
   margin: 0;
   color: var(--primary-text-color);
   line-height: 1.3;
   letter-spacing: -0.01em;
 
   @include mixins.respond-below('sm') {
-    font-size: 0.9375rem;
+    font-size: 0.95rem;
   }
 }
 
@@ -397,16 +412,17 @@
   display: flex;
   align-items: center;
   gap: 5px;
-  font-weight: 600;
-  font-size: 0.8125rem;
+  font-family: $font-display;
+  font-weight: 700;
+  font-size: 0.85rem;
   color: var(--primary-text-color);
-  padding: 4px 10px;
+  padding: 6px 12px;
   background: var(--accent-soft);
-  border-radius: 6px;
+  border-radius: $radius-xs;
   white-space: nowrap;
 
   svg {
-    color: var(--accent-muted);
+    color: var(--primary-color);
     flex-shrink: 0;
   }
 
@@ -415,7 +431,7 @@
   }
 
   .free {
-    font-weight: 600;
+    font-weight: 700;
     color: var(--primary-color);
   }
 }

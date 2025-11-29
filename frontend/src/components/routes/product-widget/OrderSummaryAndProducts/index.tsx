@@ -1,17 +1,19 @@
 import {t} from "@lingui/macro";
 import {NavLink, useNavigate, useParams} from "react-router";
-import {Badge, Button, Group, SimpleGrid, Text} from "@mantine/core";
+import {ActionIcon, Button, Group, SimpleGrid, Text, Tooltip} from "@mantine/core";
 import {
     IconBuilding,
     IconCalendar,
     IconCalendarEvent,
     IconCash,
     IconClock,
+    IconExternalLink,
     IconId,
     IconMail,
     IconMapPin,
     IconMenuOrder,
     IconPrinter,
+    IconTicket,
     IconUser
 } from "@tabler/icons-react";
 
@@ -19,11 +21,11 @@ import {useGetOrderPublic} from "../../../../queries/useGetOrderPublic.ts";
 import {eventCheckoutPath} from "../../../../utilites/urlHelper.ts";
 import {dateToBrowserTz} from "../../../../utilites/dates.ts";
 import {formatAddress} from "../../../../utilites/addressUtilities.ts";
+import {getAttendeeProductTitle} from "../../../../utilites/products.ts";
 
 import {Card} from "../../../common/Card";
 import {LoadingMask} from "../../../common/LoadingMask";
 import {HomepageInfoMessage} from "../../../common/HomepageInfoMessage";
-import {AttendeeTicket} from "../../../common/AttendeeTicket";
 import {PoweredByFooter} from "../../../common/PoweredByFooter";
 import {EventDateRange} from "../../../common/EventDateRange";
 import {OnlineEventDetails} from "../../../common/OnlineEventDetails";
@@ -31,7 +33,7 @@ import {AddToCalendarCTA} from "../../../common/AddToCalendarCTA";
 import {InlineOrderSummary} from "../../../common/InlineOrderSummary";
 import {CheckoutContent} from "../../../layouts/Checkout/CheckoutContent";
 
-import {Event, Order, Product} from "../../../../types.ts";
+import {Attendee, Event, Order, Product} from "../../../../types.ts";
 import classes from './OrderSummaryAndProducts.module.scss';
 
 const PaymentStatus = ({order}: { order: Order }) => {
@@ -57,29 +59,48 @@ const RefundStatusType = ({order}: { order: Order }) => {
     return order?.refund_status ? <span>{refundStatuses[order.refund_status] || ''}</span> : null;
 };
 
-const OrderStatusType = ({order}: { order: Order }) => {
-    const statuses: Record<string, { label: string, color: string }> = {
-        'COMPLETED': {label: t`Order Completed`, color: 'green'},
-        'CANCELLED': {label: t`Order Cancelled`, color: 'red'},
-        'PAYMENT_FAILED': {label: t`Payment Failed`, color: 'red'},
-        'AWAITING_PAYMENT': {label: t`Awaiting Payment`, color: 'orange'},
-        'AWAITING_OFFLINE_PAYMENT': {label: t`Awaiting Offline Payment`, color: 'orange'},
-    };
-
-    const status = statuses[order?.status];
-    if (!status) return null;
+const GuestListItem = ({attendee, event}: { attendee: Attendee; event: Event }) => {
+    const productTitle = getAttendeeProductTitle(attendee, attendee.product as Product);
+    const isCancelled = attendee.status === 'CANCELLED';
 
     return (
-        <Badge variant="outline" color={status.color}>
-            {status.label}
-        </Badge>
+        <div className={`${classes.guestItem} ${isCancelled ? classes.guestItemCancelled : ''}`}>
+            <div className={classes.guestInfo}>
+                <div className={classes.guestName}>
+                    {attendee.first_name} {attendee.last_name}
+                    {isCancelled && <span className={classes.cancelledBadge}>{t`Cancelled`}</span>}
+                </div>
+                <div className={classes.guestDetails}>
+                    <span className={classes.guestEmail}>{attendee.email}</span>
+                    <span className={classes.guestProduct}>{productTitle}</span>
+                </div>
+            </div>
+            <div className={classes.guestActions}>
+                <Tooltip label={t`View Ticket`}>
+                    <ActionIcon
+                        variant="subtle"
+                        onClick={() => window?.open(`/product/${event.id}/${attendee.short_id}`, '_blank')}
+                    >
+                        <IconExternalLink size={18}/>
+                    </ActionIcon>
+                </Tooltip>
+                <Tooltip label={t`Print Ticket`}>
+                    <ActionIcon
+                        variant="subtle"
+                        onClick={() => window?.open(`/product/${event.id}/${attendee.short_id}/print`, '_blank')}
+                    >
+                        <IconPrinter size={18}/>
+                    </ActionIcon>
+                </Tooltip>
+            </div>
+        </div>
     );
 };
 
 const DetailItem = ({icon: Icon, label, value}: { icon: any, label: string, value: React.ReactNode }) => (
     <div className={classes.detailItem}>
         <Group gap="xs" wrap="nowrap">
-            <Icon size={20} style={{color: 'var(--mantine-color-gray-6)', flexShrink: 0}}/>
+            <Icon size={20} style={{color: 'var(--checkout-accent, var(--mantine-color-gray-6))', flexShrink: 0}}/>
             <div className={classes.detailContent}>
                 <Text size="sm" c="dimmed" className={classes.label}>{label}</Text>
                 <Text className={classes.value}>{value}</Text>
@@ -324,10 +345,7 @@ export const OrderSummaryAndProducts = () => {
 
                 {order?.status === 'AWAITING_OFFLINE_PAYMENT' && <OfflinePaymentInstructions event={event}/>}
 
-                <Group justify="space-between" align="center">
-                    <h1 className={classes.heading}>{t`Order Details`}</h1>
-                    <OrderStatusType order={order}/>
-                </Group>
+                <h1 className={classes.heading}>{t`Order Details`}</h1>
 
                 <OrderDetails order={order} event={event}/>
 
@@ -341,28 +359,37 @@ export const OrderSummaryAndProducts = () => {
                 {order.status === 'COMPLETED' && <AddToCalendarCTA event={event}/>}
 
                 {(order?.attendees && order.attendees.length > 0) && (
-                    <Group justify="space-between" align="center">
-                        <h1 className={classes.heading}>{t`Guests`}</h1>
-                        <Button
-                            size="sm"
-                            variant="transparent"
-                            leftSection={<IconPrinter size={16}/>}
-                            onClick={() => window?.open(`/order/${eventId}/${orderShortId}/print`, '_blank')}
-                        >
-                            {t`Print All Tickets`}
-                        </Button>
-                    </Group>
-                )}
+                    <>
+                        <Group justify="space-between" align="center">
+                            <h1 className={classes.heading}>
+                                <Group gap="xs">
+                                    <IconTicket size={20}/>
+                                    {t`Guests`}
+                                </Group>
+                            </h1>
+                            <Button
+                                size="sm"
+                                variant="subtle"
+                                leftSection={<IconPrinter size={16}/>}
+                                onClick={() => window?.open(`/order/${eventId}/${orderShortId}/print`, '_blank')}
+                            >
+                                {t`Print All Tickets`}
+                            </Button>
+                        </Group>
 
-                {order.attendees?.map((attendee, index) => (
-                    <div key={attendee.id} style={{ marginBottom: index < order.attendees.length - 1 ? '24px' : '0' }}>
-                        <AttendeeTicket
-                            attendee={attendee}
-                            product={attendee.product as Product}
-                            event={event}
-                        />
-                    </div>
-                ))}
+                        <Card>
+                            <div className={classes.guestList}>
+                                {order.attendees.map((attendee) => (
+                                    <GuestListItem
+                                        key={attendee.id}
+                                        attendee={attendee}
+                                        event={event}
+                                    />
+                                ))}
+                            </div>
+                        </Card>
+                    </>
+                )}
 
                 <PoweredByFooter/>
             </CheckoutContent>

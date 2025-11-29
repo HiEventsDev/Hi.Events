@@ -115,7 +115,7 @@ export const OrganizerHomepage = ({
             )}
 
             {organizer && <OrganizerDocumentHead organizer={organizer}/>}
-            <main className={classes.pageWrapper} style={themeStyles}>
+            <main className={classes.pageWrapper} style={themeStyles} data-mode={themeSettings.mode}>
                 <style>
                     {`
                         body, .ssr-loader {
@@ -136,6 +136,12 @@ export const OrganizerHomepage = ({
                         style={{backgroundColor: 'var(--organizer-bg-color)'}}
                     />
                 )}
+                <div
+                    className={classes.backgroundOverlay}
+                    style={backgroundType === 'MIRROR_COVER_IMAGE' ? {
+                        '--overlay-color': themeSettings.background
+                    } as React.CSSProperties : undefined}
+                />
 
                 <div className={classes.container}>
                     <div className={classes.wrapper}>

@@ -509,6 +509,8 @@ export interface Product {
     taxes_and_fees?: TaxAndFee[];
     is_hidden?: boolean;
     product_category_id?: IdParam;
+    is_highlighted?: boolean;
+    highlight_message?: string;
 }
 
 export interface ProductCategory {

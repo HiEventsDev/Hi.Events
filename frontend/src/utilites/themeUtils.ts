@@ -1,9 +1,4 @@
-export interface HomepageThemeSettings {
-    accent: string;
-    background: string;
-    mode: 'light' | 'dark';
-    background_type: 'COLOR' | 'MIRROR_COVER_IMAGE';
-}
+import {HomepageThemeSettings} from "../types.ts";
 
 export interface DerivedThemeColors {
     surface: string;
@@ -184,4 +179,86 @@ export function validateThemeSettings(
         mode: settings.mode || detectMode(settings.background || defaults.background),
         background_type: settings.background_type || defaults.background_type,
     };
+}
+
+/**
+ * Calculate relative luminance for WCAG contrast ratio
+ * Uses sRGB to linear conversion per WCAG 2.1 specification
+ */
+export function getRelativeLuminance(hex: string): number {
+    const rgb = hexToRgb(hex);
+    if (!rgb) return 0.5;
+
+    const toLinear = (c: number): number => {
+        const sRGB = c / 255;
+        return sRGB <= 0.03928
+            ? sRGB / 12.92
+            : Math.pow((sRGB + 0.055) / 1.055, 2.4);
+    };
+
+    const r = toLinear(rgb.r);
+    const g = toLinear(rgb.g);
+    const b = toLinear(rgb.b);
+
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
+
+/**
+ * Calculate WCAG contrast ratio between two colors
+ * Returns a value between 1 and 21
+ */
+export function getContrastRatio(foreground: string, background: string): number {
+    const l1 = getRelativeLuminance(foreground);
+    const l2 = getRelativeLuminance(background);
+
+    const lighter = Math.max(l1, l2);
+    const darker = Math.min(l1, l2);
+
+    return (lighter + 0.05) / (darker + 0.05);
+}
+
+export interface ContrastResult {
+    ratio: number;
+    passesAA: boolean;
+    passesAAA: boolean;
+    level: 'fail' | 'AA' | 'AAA';
+}
+
+/**
+ * Check if a color combination meets WCAG accessibility standards
+ * AA requires 4.5:1 for normal text, 3:1 for large text
+ * AAA requires 7:1 for normal text, 4.5:1 for large text
+ */
+export function checkContrast(foreground: string, background: string): ContrastResult {
+    const ratio = getContrastRatio(foreground, background);
+
+    return {
+        ratio: Math.round(ratio * 100) / 100,
+        passesAA: ratio >= 4.5,
+        passesAAA: ratio >= 7,
+        level: ratio >= 7 ? 'AAA' : ratio >= 4.5 ? 'AA' : 'fail',
+    };
+}
+
+/**
+ * Check if theme settings have any contrast issues
+ * Returns true if there are readability problems
+ */
+export function hasContrastIssues(settings: HomepageThemeSettings): boolean {
+    const derived = getDerivedColors(settings.mode);
+
+    // Check accent color on surface (buttons)
+    const accentContrast = getContrastColor(settings.accent);
+    const buttonTextContrast = checkContrast(accentContrast, settings.accent);
+    if (!buttonTextContrast.passesAA) {
+        return true;
+    }
+
+    // Check accent color on surface (links, icons) - needs at least 3:1
+    const accentOnSurface = checkContrast(settings.accent, derived.surface);
+    if (accentOnSurface.ratio < 3) {
+        return true;
+    }
+
+    return false;
 }

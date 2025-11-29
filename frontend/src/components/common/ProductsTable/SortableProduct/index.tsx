@@ -10,6 +10,7 @@ import {
     IconPencil,
     IconReceipt,
     IconSend,
+    IconSparkles,
     IconTicket,
     IconTrash,
 } from "@tabler/icons-react";
@@ -307,6 +308,21 @@ export const SortableProduct = ({product, currencyCode, category, categories}: S
                                             leftSection={product.is_hidden_without_promo_code ? <IconLock size={12} /> : <IconEyeOff size={12} />}
                                         >
                                             {product.is_hidden_without_promo_code ? t`Promo Only` : t`Hidden`}
+                                        </Badge>
+                                    </Tooltip>
+                                )}
+                                {product.is_highlighted && (
+                                    <Tooltip
+                                        label={product.highlight_message || t`This product is highlighted on the event page`}
+                                        withArrow
+                                    >
+                                        <Badge
+                                            variant="light"
+                                            color="yellow"
+                                            size="sm"
+                                            leftSection={<IconSparkles size={12} />}
+                                        >
+                                            {t`Highlighted`}
                                         </Badge>
                                     </Tooltip>
                                 )}

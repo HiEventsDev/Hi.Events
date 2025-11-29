@@ -4,8 +4,8 @@
   display: flex;
   align-items: center;
   gap: 16px;
-  background: #EEF2FF;
-  border: 1px solid #E0E7FF;
+  background: var(--checkout-accent-soft, rgba(99, 102, 241, 0.1));
+  border: 1px solid var(--checkout-border, rgba(99, 102, 241, 0.2));
   border-radius: 12px;
   padding: 20px;
   margin-top: 32px;
@@ -20,12 +20,12 @@
 .iconContainer {
   width: 40px;
   height: 40px;
-  background: #E0E7FF;
+  background: var(--checkout-accent-soft, rgba(99, 102, 241, 0.15));
   border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #4F46E5;
+  color: var(--checkout-accent, #4F46E5);
   flex-shrink: 0;
 }
 
@@ -43,10 +43,10 @@
 .title {
   font-size: 15px;
   font-weight: 500;
-  color: #111827;
+  color: var(--checkout-text-primary, #111827);
 }
 
 .subtitle {
   font-size: 14px;
-  color: #6B7280;
+  color: var(--checkout-text-secondary, #6B7280);
 }

@@ -1,9 +1,9 @@
-import {ColorInput, SegmentedControl, Stack, Text, Group} from "@mantine/core";
+import {ColorInput, SegmentedControl, Stack, Text, Group, Tooltip} from "@mantine/core";
 import {t} from "@lingui/macro";
 import {HomepageThemeSettings} from "../../../types.ts";
-import {detectMode} from "../../../utilites/themeUtils.ts";
-import {IconSun, IconMoon} from "@tabler/icons-react";
-import {useEffect} from "react";
+import {detectMode, validateThemeSettings, hasContrastIssues} from "../../../utilites/themeUtils.ts";
+import {IconSun, IconMoon, IconEyeCheck, IconEyeExclamation} from "@tabler/icons-react";
+import {useEffect, useMemo} from "react";
 
 interface ThemeColorControlsProps {
     values: Partial<HomepageThemeSettings>;
@@ -39,6 +39,11 @@ export const ThemeColorControls = ({
 
     const currentMode = values.mode || 'light';
 
+    const hasIssues = useMemo(() => {
+        const validated = validateThemeSettings(values);
+        return hasContrastIssues(validated);
+    }, [values.accent, values.background, values.mode]);
+
     return (
         <Stack gap="md">
             <ColorInput
@@ -54,7 +59,7 @@ export const ThemeColorControls = ({
             <ColorInput
                 format="hexa"
                 label={t`Background Color`}
-                description={t`The background color of the page`}
+                description={t`The background color of the page. When using cover image, this is applied as an overlay.`}
                 size="sm"
                 value={values.background || '#f5f3ff'}
                 onChange={handleBackgroundChange}
@@ -93,6 +98,22 @@ export const ThemeColorControls = ({
                     ]}
                 />
             </div>
+
+            <Group gap={6} style={{ minHeight: 20 }}>
+                {hasIssues ? (
+                    <Tooltip label={t`This color combination may be hard to read for some users`} multiline w={220}>
+                        <Group gap={6} style={{ cursor: 'help' }}>
+                            <IconEyeExclamation size={16} color="var(--mantine-color-yellow-6)" />
+                            <Text size="xs" c="yellow.7">{t`Text may be hard to read`}</Text>
+                        </Group>
+                    </Tooltip>
+                ) : (
+                    <Group gap={6}>
+                        <IconEyeCheck size={16} color="var(--mantine-color-teal-6)" />
+                        <Text size="xs" c="dimmed">{t`Good readability`}</Text>
+                    </Group>
+                )}
+            </Group>
         </Stack>
     );
 };

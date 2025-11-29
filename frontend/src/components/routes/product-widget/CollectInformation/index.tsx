@@ -4,7 +4,6 @@ import {useNavigate, useParams} from "react-router";
 import {
     Button,
     Checkbox,
-    Group,
     NativeSelect,
     SegmentedControl,
     Skeleton,
@@ -76,7 +75,7 @@ export const CollectInformation = () => {
     };
 
     const EmailCheckIcon = () => (
-        <IconCircleCheck size={18} style={{color: '#10B981'}}/>
+        <IconCircleCheck size={18} style={{color: 'var(--primary-color, #10B981)'}}/>
     );
 
     let productIndex = 0;
@@ -677,18 +676,10 @@ export const CollectInformation = () => {
                         className={classes.continueButton}
                         loading={mutation.isPending}
                         type="submit"
+                        rightSection={order?.is_payment_required ? <IconArrowRight size={18}/> : undefined}
+                        leftSection={!order?.is_payment_required ? <IconCheck size={18}/> : undefined}
                     >
-                        {order?.is_payment_required ? (
-                            <Group gap={8} wrap="nowrap">
-                                <Text fw={600}>{t`Continue to Payment`}</Text>
-                                <IconArrowRight size={18}/>
-                            </Group>
-                        ) : (
-                            <Group gap={8} wrap="nowrap">
-                                <IconCheck size={18}/>
-                                <Text fw={600}>{t`Complete Order`}</Text>
-                            </Group>
-                        )}
+                        {order?.is_payment_required ? t`Continue to Payment` : t`Complete Order`}
                     </Button>
                     {!!getConfig('VITE_TOS_URL') && (
                         <p className={classes.tosNotice}>

@@ -1,12 +1,12 @@
 @use "../../../styles/mixins";
 
 .inlineOrderSummary {
-  background: #FFFFFF;
-  border: 1px solid #E5E7EB;
-  border-radius: 12px;
+  background: var(--checkout-surface, #FFFFFF);
+  border: 1px solid var(--checkout-border, #E5E7EB);
+  border-radius: 14px;
   margin-bottom: 24px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
-  overflow: visible;
+  overflow: hidden;
 }
 
 // Header
@@ -18,12 +18,16 @@
   cursor: pointer;
   user-select: none;
   transition: background-color 0.15s ease;
+
+  &:hover {
+    background-color: var(--checkout-accent-soft, rgba(0, 0, 0, 0.02));
+  }
 }
 
 .headerTitle {
   font-weight: 600;
   font-size: 16px;
-  color: #111827;
+  color: var(--checkout-text-primary, #111827);
 }
 
 .headerRight {
@@ -35,11 +39,11 @@
 .headerTotal {
   font-weight: 600;
   font-size: 16px;
-  color: #111827;
+  color: var(--checkout-text-primary, #111827);
 }
 
 .chevron {
-  color: #6B7280;
+  color: var(--checkout-text-secondary, #6B7280);
   transition: transform 0.15s ease;
 }
 
@@ -50,7 +54,7 @@
 // Content
 .content {
   padding: 0 20px 20px 20px;
-  border-top: 1px solid #E5E7EB;
+  border-top: 1px solid var(--checkout-border, #E5E7EB);
 }
 
 // Event Info
@@ -63,7 +67,7 @@
 .eventImage {
   width: 56px;
   height: 56px;
-  border-radius: 8px;
+  border-radius: 6px;
   overflow: hidden;
   flex-shrink: 0;
 
@@ -77,11 +81,11 @@
 .eventImagePlaceholder {
   width: 100%;
   height: 100%;
-  background: #F3F4F6;
+  background: var(--checkout-accent-soft, #F3F4F6);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #9CA3AF;
+  color: var(--checkout-accent, #9CA3AF);
 }
 
 .eventDetails {
@@ -95,7 +99,7 @@
 .eventTitle {
   font-weight: 500;
   font-size: 14px;
-  color: #111827;
+  color: var(--checkout-text-primary, #111827);
   line-height: 1.3;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -105,7 +109,7 @@
 
 .eventMeta {
   font-size: 13px;
-  color: #6B7280;
+  color: var(--checkout-text-secondary, #6B7280);
   margin-top: 2px;
   line-height: 1.4;
   white-space: nowrap;
@@ -116,7 +120,7 @@
 // Divider
 .divider {
   height: 1px;
-  background-color: #F3F4F6;
+  background-color: var(--checkout-border, #F3F4F6);
 }
 
 // Line Items
@@ -144,7 +148,7 @@
 
 .lineItemName {
   font-size: 14px;
-  color: #374151;
+  color: var(--checkout-text-primary, #374151);
   font-weight: 500;
   white-space: nowrap;
   overflow: hidden;
@@ -153,7 +157,7 @@
 
 .lineItemQuantity {
   font-size: 14px;
-  color: #6B7280;
+  color: var(--checkout-text-secondary, #6B7280);
   flex-shrink: 0;
 }
 
@@ -167,24 +171,24 @@
 
 .lineItemPriceOriginal {
   font-size: 14px;
-  color: #9CA3AF;
+  color: var(--checkout-text-tertiary, #9CA3AF);
   text-decoration: line-through;
 }
 
 .lineItemPrice {
   font-size: 14px;
-  color: #111827;
+  color: var(--checkout-text-primary, #111827);
   font-weight: 500;
 }
 
-// Promo Code
+// Promo Code - uses accent colors
 .promoCode {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #FEF3C7;
-  border: 1px solid #FDE68A;
-  border-radius: 8px;
+  background-color: var(--checkout-accent-soft, #FEF3C7);
+  border: 1px solid var(--checkout-accent-muted, #FDE68A);
+  border-radius: 6px;
   padding: 10px 12px;
   margin: 16px 0;
 }
@@ -195,13 +199,13 @@
   gap: 8px;
   font-size: 14px;
   font-weight: 500;
-  color: #92400E;
+  color: var(--checkout-accent, #92400E);
 }
 
 .promoCodeDiscount {
   font-size: 14px;
   font-weight: 600;
-  color: #059669;
+  color: var(--checkout-accent, #059669);
 }
 
 // Totals
@@ -221,57 +225,57 @@
 
 .totalsLabel {
   font-size: 14px;
-  color: #6B7280;
+  color: var(--checkout-text-secondary, #6B7280);
 }
 
 .totalsValue {
   font-size: 14px;
-  color: #111827;
+  color: var(--checkout-text-primary, #111827);
 }
 
 .totalsValueFree {
-  color: #10B981;
+  color: var(--checkout-accent, #10B981);
 }
 
 .totalsRowFinal {
   margin-top: 12px;
   padding-top: 12px;
-  border-top: 1px solid #F3F4F6;
+  border-top: 1px solid var(--checkout-border, #F3F4F6);
 }
 
 .totalsFinalLabel {
   font-size: 16px;
   font-weight: 600;
-  color: #111827;
+  color: var(--checkout-text-primary, #111827);
 }
 
 .totalsFinalValue {
   font-size: 18px;
   font-weight: 600;
-  color: #111827;
+  color: var(--checkout-text-primary, #111827);
 }
 
 .totalsCurrency {
   font-size: 14px;
   font-weight: 400;
-  color: #6B7280;
+  color: var(--checkout-text-secondary, #6B7280);
   margin-left: 4px;
 }
 
-// Buyer Protection
+// Buyer Protection - uses accent colors
 .buyerProtection {
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  background-color: #ECFDF5;
-  border: 1px solid #D1FAE5;
-  border-radius: 8px;
+  background-color: var(--checkout-accent-soft, #ECFDF5);
+  border: 1px solid var(--checkout-accent-muted, #D1FAE5);
+  border-radius: 6px;
   padding: 12px 14px;
   margin-top: 16px;
 }
 
 .buyerProtectionIcon {
-  color: #059669;
+  color: var(--checkout-accent, #059669);
   flex-shrink: 0;
   margin-top: 1px;
 }
@@ -285,10 +289,10 @@
 .buyerProtectionTitle {
   font-size: 14px;
   font-weight: 500;
-  color: #065F46;
+  color: var(--checkout-text-primary, #065F46);
 }
 
 .buyerProtectionSubtitle {
   font-size: 12px;
-  color: #047857;
+  color: var(--checkout-text-secondary, #047857);
 }

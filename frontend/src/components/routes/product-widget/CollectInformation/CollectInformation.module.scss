@@ -1,21 +1,26 @@
 @use "../../../../styles/mixins";
 
+$font-display: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+$radius-sm: 10px;
+$transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+
 .sectionHeading {
+  font-family: $font-display;
   font-size: 1.125rem;
   font-weight: 600;
   margin-bottom: 8px;
-  color: #111827;
+  color: var(--checkout-text-primary, #111827);
 }
 
 .sectionHelper {
   font-size: 14px;
-  color: #6B7280;
+  color: var(--checkout-text-secondary, #6B7280);
   margin-bottom: 20px;
 }
 
 .copyDetailsSection {
   padding-top: 16px;
-  border-top: 1px solid #F3F4F6;
+  border-top: 1px solid var(--checkout-border, #F3F4F6);
 }
 
 .copyDetailsMultiple {
@@ -27,6 +32,7 @@
 
 .copyLabel {
   flex-shrink: 0;
+  color: var(--checkout-text-primary, #111827);
 }
 
 .ticketSection {
@@ -41,16 +47,17 @@
   margin-top: 24px;
 
   h3 {
+    font-family: $font-display;
     margin: 0;
     font-size: 1.125rem;
     font-weight: 600;
-    color: #111827;
+    color: var(--checkout-text-primary, #111827);
   }
 }
 
 .ticketCountBadge {
-  background: var(--mantine-primary-color-light);
-  color: var(--mantine-primary-color-filled);
+  background: var(--checkout-accent-soft, var(--mantine-primary-color-light));
+  color: var(--checkout-accent, var(--mantine-primary-color-filled));
   font-size: 12px;
   padding: 2px 10px;
   border-radius: 12px;
@@ -78,8 +85,8 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: var(--mantine-primary-color-light);
-  color: var(--mantine-primary-color-filled);
+  background: var(--checkout-accent-soft, var(--mantine-primary-color-light));
+  color: var(--checkout-accent, var(--mantine-primary-color-filled));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -93,18 +100,18 @@
     margin: 0 0 2px 0;
     font-size: 15px;
     font-weight: 500;
-    color: #111827;
+    color: var(--checkout-text-primary, #111827);
   }
 }
 
 .attendeeTicketType {
   font-size: 13px;
-  color: #6B7280;
+  color: var(--checkout-text-secondary, #6B7280);
 }
 
 .copiedBadge {
-  background: #D1FAE5;
-  color: #065F46;
+  background: var(--checkout-accent-soft, #D1FAE5);
+  color: var(--checkout-accent, #065F46);
   font-size: 12px;
   padding: 4px 8px;
   border-radius: 12px;
@@ -120,14 +127,16 @@
 .continueButton {
   width: 100%;
   height: 48px;
-  border-radius: 8px;
+  border-radius: $radius-sm;
+  font-family: $font-display;
   font-weight: 600;
   font-size: 16px;
-  transition: background-color 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+  transition: transform $transition-fast, box-shadow $transition-fast;
 
   &:hover:not(:disabled) {
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 12px var(--checkout-accent-soft, rgba(0, 0, 0, 0.15));
+    filter: brightness(1.05);
   }
 
   &:active:not(:disabled) {
@@ -139,10 +148,10 @@
   text-align: center;
   margin-top: 12px;
   font-size: 12px;
-  color: #6B7280;
+  color: var(--checkout-text-secondary, #6B7280);
 
   a {
-    color: var(--mantine-primary-color-filled);
+    color: var(--checkout-accent, var(--mantine-primary-color-filled));
     text-decoration: none;
 
     &:hover {
