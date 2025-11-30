@@ -19,8 +19,8 @@ $transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
 .card {
   width: 100%;
   max-width: 420px;
-  background: var(--content-bg-color, #FFFFFF);
-  border: 1px solid var(--border-color, #E5E7EB);
+  background: var(--content-bg-color, var(--checkout-surface, #FFFFFF));
+  border: 1px solid var(--border-color, var(--checkout-border, #E5E7EB));
   border-radius: $radius-lg;
   padding: 40px 32px;
   text-align: center;
@@ -39,7 +39,7 @@ $transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   align-items: center;
   justify-content: center;
   margin: 0 auto 24px;
-  background: var(--accent-soft, var(--mantine-primary-color-light));
+  background: var(--accent-soft, var(--checkout-accent-soft, var(--mantine-primary-color-light)));
 
   @include mixins.respond-below(sm) {
     width: 64px;
@@ -60,7 +60,7 @@ $transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   font-family: $font-display;
   font-size: 20px;
   font-weight: 600;
-  color: var(--primary-text-color, #111827);
+  color: var(--primary-text-color, var(--checkout-text-primary, #111827));
   margin: 0 0 8px 0;
   line-height: 1.4;
 
@@ -71,7 +71,7 @@ $transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
 
 .subtitle {
   font-size: 15px;
-  color: var(--secondary-color, #6B7280);
+  color: var(--secondary-color, var(--checkout-text-secondary, #6B7280));
   margin: 0 0 24px 0;
   line-height: 1.5;
 }
@@ -84,13 +84,13 @@ $transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   font-weight: 600 !important;
   font-size: 15px !important;
   margin-top: 16px;
-  background: var(--primary-color, var(--mantine-primary-color-filled)) !important;
-  color: var(--accent-contrast, #FFFFFF) !important;
+  background: var(--primary-color, var(--checkout-accent, var(--mantine-primary-color-filled))) !important;
+  color: var(--accent-contrast, var(--checkout-accent-contrast, #FFFFFF)) !important;
   transition: transform $transition-fast, box-shadow $transition-fast;
 
   &:hover {
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px var(--accent-soft, rgba(0, 0, 0, 0.15));
+    box-shadow: 0 4px 12px var(--accent-soft, var(--checkout-accent-soft, rgba(0, 0, 0, 0.15)));
     filter: brightness(1.05);
   }
 }
@@ -98,11 +98,11 @@ $transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
 .helpText {
   margin-top: 24px;
   font-size: 14px;
-  color: var(--secondary-color, #6B7280);
+  color: var(--secondary-color, var(--checkout-text-secondary, #6B7280));
 }
 
 .helpLink {
-  color: var(--primary-color, var(--mantine-primary-color-filled));
+  color: var(--primary-color, var(--checkout-accent, var(--mantine-primary-color-filled)));
   text-decoration: none;
 
   &:hover {
