@@ -244,15 +244,16 @@ const Checkout = () => {
                 size="m"
             >
                 <div style={{textAlign: 'center', padding: '20px 0'}}>
-                    <h3>
+                    <h3 style={{color: 'var(--checkout-text-primary)', margin: '0 0 8px 0'}}>
                         {t`You have run out of time to complete your order.`}
                     </h3>
-                    <p>
+                    <p style={{color: 'var(--checkout-text-secondary)', margin: '0'}}>
                         {t`Please return to the event page to start over.`}
                     </p>
                     <Button
                         onClick={handleReturn}
                         variant="filled"
+                        mt="xl"
                     >
                         {t`Return to Event Page`}
                     </Button>
@@ -267,10 +268,10 @@ const Checkout = () => {
                 size="m"
             >
                 <div style={{textAlign: 'center', padding: '20px 0'}}>
-                    <h3>
+                    <h3 style={{color: 'var(--checkout-text-primary)', margin: '0 0 8px 0'}}>
                         {t`Are you sure you want to leave?`}
                     </h3>
-                    <p>
+                    <p style={{color: 'var(--checkout-text-secondary)', margin: '0'}}>
                         {t`Your current order will be lost.`}
                     </p>
                     <Group justify="center" gap="md" mt="xl">
@@ -282,8 +283,8 @@ const Checkout = () => {
                         </Button>
                         <Button
                             onClick={handleAbandonConfirm}
-                            variant="filled"
-                            color="red"
+                            variant="outline"
+                            color="gray"
                             loading={abandonOrderMutation.isPending}
                         >
                             {t`Yes, cancel my order`}
