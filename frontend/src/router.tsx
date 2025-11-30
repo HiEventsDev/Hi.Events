@@ -556,6 +556,14 @@ export const router: RouteObject[] = [
             return {Component: CheckIn.default};
         },
         errorElement: <ErrorPage/>,
+    },
+    {
+        path: "/my-tickets/:token",
+        async lazy() {
+            const MyTickets = await import("./components/routes/my-tickets");
+            return {Component: MyTickets.default};
+        },
+        errorElement: <ErrorPage/>,
     }
 ];
 
