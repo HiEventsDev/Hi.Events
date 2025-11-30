@@ -14,6 +14,7 @@ class Url
     public const ATTENDEE_TICKET = 'app.frontend_urls.attendee_product';
     public const ORDER_SUMMARY = 'app.frontend_urls.order_summary';
     public const ORGANIZER_ORDER_SUMMARY = 'app.frontend_urls.organizer_order_summary';
+    public const TICKET_LOOKUP = 'app.frontend_urls.ticket_lookup';
 
     public static function getFrontEndUrlFromConfig(string $key, array $queryParams = []): string
     {
