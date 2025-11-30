@@ -96,7 +96,7 @@ class SendTicketLookupEmailHandlerTest extends TestCase
             ->andReturn($pendingMail);
 
         $pendingMail
-            ->shouldReceive('send')
+            ->shouldReceive('queue')
             ->once()
             ->with(m::type(TicketLookupEmail::class));
 
