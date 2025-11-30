@@ -1188,6 +1188,11 @@ msgstr "Xác nhận rời khỏi sự kiện này!"
 msgid "Check your email"
 msgstr "Kiểm tra email của bạn"
 
+#: src/components/routes/auth/Login/index.tsx:132
+#: src/components/routes/my-tickets/index.tsx:174
+msgid "Check your inbox! If tickets are associated with this email, you'll receive a link to view them."
+msgstr "Kiểm tra hộp thư của bạn! Nếu có vé liên kết với email này, bạn sẽ nhận được liên kết để xem."
+
 #: src/components/common/EventCard/index.tsx:92
 msgid "Check-in"
 msgstr "Check-in"
@@ -1448,6 +1453,7 @@ msgstr "Hoàn tất thanh toán để đảm bảo vé của bạn."
 #: src/components/modals/SendMessageModal/index.tsx:225
 #: src/components/routes/event/GettingStarted/index.tsx:70
 #: src/components/routes/event/orders.tsx:23
+#: src/components/routes/my-tickets/index.tsx:34
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:352
 msgid "Completed"
 msgstr "Hoàn thành"
@@ -2207,7 +2213,7 @@ msgstr "Tài liệu"
 msgid "Don't forget!"
 msgstr "Đừng quên!"
 
-#: src/components/routes/auth/Login/index.tsx:57
+#: src/components/routes/auth/Login/index.tsx:81
 msgid "Don't have an account?   <0>Sign up</0>"
 msgstr "Chưa có tài khoản? <0>Đăng ký</0>"
 
@@ -2420,7 +2426,7 @@ msgstr "Danh Sách Đăng Ký Đủ Điều Kiện"
 #: src/components/modals/EditUserModal/index.tsx:80
 #: src/components/modals/InviteUserModal/index.tsx:61
 #: src/components/routes/auth/AcceptInvitation/index.tsx:99
-#: src/components/routes/auth/Login/index.tsx:68
+#: src/components/routes/auth/Login/index.tsx:92
 #: src/components/routes/auth/Register/index.tsx:98
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:78
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:177
@@ -2593,6 +2599,8 @@ msgid "Enter unique affiliate code"
 msgstr "Nhập mã đối tác duy nhất"
 
 #: src/components/common/ContactOrganizerModal/index.tsx:80
+#: src/components/routes/auth/Login/index.tsx:149
+#: src/components/routes/my-tickets/index.tsx:192
 msgid "Enter your email"
 msgstr "Nhập email của bạn"
 
@@ -2658,6 +2666,7 @@ msgstr "Mẫu tùy chỉnh sự kiện"
 
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:35
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:69
+#: src/components/routes/my-tickets/index.tsx:62
 #: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:29
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:221
 msgid "Event Date"
@@ -2992,10 +3001,6 @@ msgstr "Các khoản phí có thể thay đổi. Bạn sẽ được thông báo
 msgid "Festival"
 msgstr "Lễ hội"
 
-#: src/components/layouts/EventHomepage/index.tsx:136
-#~ msgid "Few Left"
-#~ msgstr "Còn ít"
-
 #: src/components/routes/product-widget/CollectInformation/index.tsx:439
 #: src/components/routes/product-widget/CollectInformation/index.tsx:459
 msgid "Fill in your details above first"
@@ -3095,7 +3100,7 @@ msgstr "Ẩm thực"
 msgid "Footer Text"
 msgstr "Văn bản chân trang"
 
-#: src/components/routes/auth/Login/index.tsx:80
+#: src/components/routes/auth/Login/index.tsx:104
 msgid "Forgot password?"
 msgstr "Quên mật khẩu?"
 
@@ -3234,6 +3239,10 @@ msgstr "Xin chào {0}, quản lý nền tảng của bạn từ đây."
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:81
 msgid "hello@awesome-events.com"
 msgstr "hello@awesome-events.com"
+
+#: src/components/routes/my-tickets/index.tsx:238
+msgid "Here are all the tickets associated with your email address."
+msgstr "Đây là tất cả các vé liên kết với địa chỉ email của bạn."
 
 #: src/components/common/WidgetEditor/index.tsx:295
 msgid "Here is an example of how you can use the component in your application."
@@ -3642,6 +3651,10 @@ msgstr "Tham gia từ bất cứ đâu"
 msgid "Just click the button below to reconnect your Stripe account."
 msgstr "Chỉ cần nhấn nút bên dưới để kết nối lại tài khoản Stripe của bạn."
 
+#: src/components/routes/auth/Login/index.tsx:120
+msgid "Just looking for your tickets?"
+msgstr "Chỉ đang tìm vé của bạn?"
+
 #: src/components/routes/product-widget/CollectInformation/index.tsx:537
 msgid "Keep me updated on news and events from {0}"
 msgstr ""
@@ -3740,6 +3753,10 @@ msgstr "Để trống để sử dụng từ mặc định \"Hóa đơn\""
 msgid "Light"
 msgstr ""
 
+#: src/components/routes/my-tickets/index.tsx:160
+msgid "Link Expired or Invalid"
+msgstr "Liên kết hết hạn hoặc không hợp lệ"
+
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:27
 msgid "Link to order details"
 msgstr "Liên kết đến chi tiết đơn hàng"
@@ -3791,16 +3808,17 @@ msgstr "Đang tải ..."
 #: src/components/layouts/EventHomepage/index.tsx:369
 #: src/components/routes/event/Settings/index.tsx:34
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:84
+#: src/components/routes/my-tickets/index.tsx:73
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:227
 msgid "Location"
 msgstr "Vị trí"
 
-#: src/components/routes/auth/Login/index.tsx:84
+#: src/components/routes/auth/Login/index.tsx:108
 #: src/components/routes/auth/Register/index.tsx:72
 msgid "Log in"
 msgstr "Đăng nhập"
 
-#: src/components/routes/auth/Login/index.tsx:84
+#: src/components/routes/auth/Login/index.tsx:108
 msgid "Logging in"
 msgstr "Đăng nhập"
 
@@ -4025,6 +4043,10 @@ msgstr "Tiêu đề sự kiện tuyệt vời của tôi ..."
 #: src/components/common/GlobalMenu/index.tsx:40
 msgid "My Profile"
 msgstr "Hồ sơ của tôi"
+
+#: src/components/routes/my-tickets/index.tsx:236
+msgid "My Tickets"
+msgstr "Vé Của Tôi"
 
 #: src/components/common/QuestionAndAnswerList/index.tsx:178
 msgid "N/A"
@@ -4269,6 +4291,10 @@ msgstr "Không có kết quả tìm kiếm."
 msgid "No Taxes or Fees have been added."
 msgstr "Không có thuế hoặc phí đã được thêm vào."
 
+#: src/components/routes/my-tickets/index.tsx:220
+msgid "No Tickets Found"
+msgstr "Không tìm thấy vé"
+
 #: src/components/layouts/OrganizerHomepage/index.tsx:273
 msgid "No upcoming events"
 msgstr "Không có sự kiện sắp tới"
@@ -4491,6 +4517,7 @@ msgstr "Hoặc"
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:63
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:64
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:65
+#: src/components/routes/my-tickets/index.tsx:53
 msgid "Order"
 msgstr "Đơn hàng"
 
@@ -4511,10 +4538,6 @@ msgstr "Đơn hàng bị hủy"
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:278
 msgid "Order complete"
 msgstr "Đơn hàng hoàn tất"
-
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:62
-#~ msgid "Order Completed"
-#~ msgstr "Đơn hàng đã hoàn thành"
 
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:94
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:194
@@ -4829,7 +4852,7 @@ msgstr "Hoàn lại tiền một phần"
 msgid "Partially refunded: {0}"
 msgstr ""
 
-#: src/components/routes/auth/Login/index.tsx:73
+#: src/components/routes/auth/Login/index.tsx:97
 #: src/components/routes/auth/Register/index.tsx:107
 #: src/components/routes/profile/ManageProfile/index.tsx:114
 msgid "Password"
@@ -5022,7 +5045,7 @@ msgstr "Vui lòng thêm ít nhất một tùy chọn"
 msgid "Please check the provided information is correct"
 msgstr "Vui lòng kiểm tra thông tin được cung cấp là chính xác"
 
-#: src/components/routes/auth/Login/index.tsx:41
+#: src/components/routes/auth/Login/index.tsx:52
 msgid "Please check your email and password and try again"
 msgstr "Vui lòng kiểm tra email và mật khẩu của bạn và thử lại"
 
@@ -5209,6 +5232,7 @@ msgid "Print Ticket"
 msgstr ""
 
 #: src/components/layouts/Checkout/index.tsx:208
+#: src/components/routes/my-tickets/index.tsx:119
 msgid "Print Tickets"
 msgstr "In vé"
 
@@ -5380,6 +5404,10 @@ msgstr "Xuất bản"
 msgid "Publish Event"
 msgstr "Công bố sự kiện"
 
+#: src/components/routes/my-tickets/index.tsx:94
+msgid "Purchased"
+msgstr ""
+
 #: src/components/modals/ShareModal/index.tsx:168
 msgid "QR Code"
 msgstr "Mã QR"
@@ -5541,6 +5569,10 @@ msgstr "Không tìm thấy báo cáo"
 #: src/components/routes/organizer/Reports/index.tsx:45
 msgid "Reports"
 msgstr "Báo cáo"
+
+#: src/components/routes/my-tickets/index.tsx:169
+msgid "Request a new link"
+msgstr "Yêu cầu liên kết mới"
 
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:169
 msgid "Require Billing Address"
@@ -5949,6 +5981,8 @@ msgid "Selling fast 🔥"
 msgstr "Bán chạy 🔥"
 
 #: src/components/modals/SendMessageModal/index.tsx:290
+#: src/components/routes/auth/Login/index.tsx:159
+#: src/components/routes/my-tickets/index.tsx:202
 msgid "Send"
 msgstr "Gửi"
 
@@ -6217,6 +6251,8 @@ msgstr "Có gì đó không ổn."
 
 #: src/components/layouts/Event/index.tsx:75
 #: src/components/layouts/OrganizerLayout/index.tsx:97
+#: src/components/routes/auth/Login/index.tsx:71
+#: src/components/routes/my-tickets/index.tsx:145
 #: src/components/routes/profile/ManageProfile/index.tsx:85
 #: src/components/routes/profile/ManageProfile/index.tsx:99
 msgid "Something went wrong. Please try again."
@@ -6626,10 +6662,6 @@ msgstr "Cảm ơn sự hỗ trợ của bạn khi chúng tôi tiếp tục phát
 msgid "That promo code is invalid"
 msgstr "Mã khuyến mãi không hợp lệ"
 
-#: src/components/common/ThemeColorControls/index.tsx:57
-#~ msgid "The background color of the page"
-#~ msgstr ""
-
 #: src/components/common/ThemeColorControls/index.tsx:62
 msgid "The background color of the page. When using cover image, this is applied as an overlay."
 msgstr ""
@@ -6839,6 +6871,10 @@ msgstr "Đây là một sự kiện trực tuyến"
 msgid "This is the name of your organizer that will be displayed to your users."
 msgstr "Đây là tên nhà tổ chức sẽ hiển thị cho người dùng của bạn."
 
+#: src/components/routes/my-tickets/index.tsx:162
+msgid "This link is invalid or has expired."
+msgstr "Liên kết này không hợp lệ hoặc đã hết hạn."
+
 #: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:68
 msgid "This message will be included in the footer of all emails sent from this event"
 msgstr "Thông báo này sẽ được bao gồm trong phần chân trang của tất cả các email được gửi từ sự kiện này"
@@ -6936,6 +6972,7 @@ msgid "This will not be visible to customers, but helps you identify the affilia
 msgstr "Thông tin này sẽ không hiển thị với khách hàng, nhưng giúp bạn nhận diện đối tác."
 
 #: src/components/common/AttendeeTable/index.tsx:370
+#: src/components/routes/my-tickets/index.tsx:85
 msgid "ticket"
 msgstr "vé"
 
@@ -7015,7 +7052,12 @@ msgstr "Loại vé"
 msgid "Ticket URL"
 msgstr "URL vé"
 
+#: src/components/routes/my-tickets/index.tsx:85
+msgid "tickets"
+msgstr ""
+
 #: src/components/layouts/EventHomepage/index.tsx:424
+#: src/components/routes/my-tickets/index.tsx:84
 msgid "Tickets"
 msgstr ""
 
@@ -7173,6 +7215,11 @@ msgstr "Đúng nếu thanh toán ngoại tuyến"
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:63
 msgid "True if payment pending"
 msgstr "Đúng nếu thanh toán đang chờ xử lý"
+
+#: src/components/routes/auth/Login/index.tsx:140
+#: src/components/routes/my-tickets/index.tsx:183
+msgid "Try another email"
+msgstr "Thử email khác"
 
 #: src/components/common/PoweredByFooter/index.tsx:55
 msgid "Try Hi.Events Free"
@@ -7502,6 +7549,7 @@ msgstr "Xem trên Google Maps"
 #: src/components/common/EmailTemplateEditor/CTAConfiguration.tsx:28
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:57
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:69
+#: src/components/routes/my-tickets/index.tsx:110
 msgid "View Order"
 msgstr "Xem đơn hàng"
 
@@ -7556,6 +7604,10 @@ msgstr "Chúng tôi không thể xử lý thanh toán của bạn. Vui lòng th�
 #: src/components/common/ProductsTable/SortableCategory/index.tsx:53
 msgid "We couldn't delete the category. Please try again."
 msgstr "Chúng tôi không thể xóa danh mục. Vui lòng thử lại."
+
+#: src/components/routes/my-tickets/index.tsx:222
+msgid "We couldn't find any orders associated with this email address."
+msgstr "Chúng tôi không tìm thấy đơn hàng nào liên kết với địa chỉ email này."
 
 #: src/components/common/ProductsTable/ProductsBlankSlate/index.tsx:24
 msgid "We couldn't find any tickets matching {0}"
@@ -7656,7 +7708,7 @@ msgstr "Weibo"
 msgid "Welcome aboard! Please login to continue."
 msgstr "Chào mừng bạn! Vui lòng đăng nhập để tiếp tục."
 
-#: src/components/routes/auth/Login/index.tsx:55
+#: src/components/routes/auth/Login/index.tsx:79
 msgid "Welcome back 👋"
 msgstr "Chào mừng trở lại 👋"
 
@@ -8078,7 +8130,7 @@ msgstr "Đơn hàng của bạn sẽ xuất hiện ở đây sau khi chúng bắ
 msgid "Your organizer address"
 msgstr "Địa chỉ nhà tổ chức của bạn"
 
-#: src/components/routes/auth/Login/index.tsx:74
+#: src/components/routes/auth/Login/index.tsx:98
 #: src/components/routes/auth/Register/index.tsx:108
 msgid "Your password"
 msgstr "Mật khẩu của bạn"
