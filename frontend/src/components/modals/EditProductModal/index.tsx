@@ -33,6 +33,8 @@ export const EditProductModal = ({onClose, productId}: GenericModalProps & { pro
             show_quantity_remaining: undefined,
             hide_when_sold_out: undefined,
             is_hidden_without_promo_code: undefined,
+            is_highlighted: false,
+            highlight_message: undefined,
             type: ProductPriceType.Paid,
             tax_and_fee_ids: [],
             prices: [],
@@ -65,6 +67,8 @@ export const EditProductModal = ({onClose, productId}: GenericModalProps & { pro
             type: product.type,
             tax_and_fee_ids: product.taxes_and_fees?.map(t => String(t.id)) ?? [],
             is_hidden: product.is_hidden,
+            is_highlighted: product.is_highlighted,
+            highlight_message: product.highlight_message,
             product_type: product.product_type,
             product_category_id: String(product.product_category_id),
             prices: product.prices?.map(p => ({

@@ -10,7 +10,7 @@ import {ShareComponent} from "../../common/ShareIcon";
 import {AddToEventCalendarButton} from "../../common/AddEventToCalendarButton";
 import {ProgressStepper} from "../../common/ProgressStepper";
 import {useMediaQuery} from "@mantine/hooks";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Invoice} from "../../../types.ts";
 import {orderClientPublic} from "../../../api/order.client.ts";
 import {downloadBinary} from "../../../utilites/download.ts";
@@ -18,6 +18,10 @@ import {withLoadingNotification} from "../../../utilites/withLoadingNotification
 import {useAbandonOrderPublic} from "../../../mutations/useAbandonOrderPublic.ts";
 import {showError, showInfo} from "../../../utilites/notifications.tsx";
 import {isDateInFuture} from "../../../utilites/dates.ts";
+import {detectMode} from "../../../utilites/themeUtils.ts";
+import {CheckoutThemeProvider} from "./CheckoutThemeProvider.tsx";
+
+const DEFAULT_ACCENT = '#8b5cf6';
 
 const Checkout = () => {
     const {eventId, orderShortId} = useParams();
@@ -138,9 +142,15 @@ const Checkout = () => {
         }
     }, [blocker.state]);
 
+    // Get accent color from event settings, derive mode from homepage background
+    const homepageSettings = event?.settings?.homepage_theme_settings;
+    const accentColor = homepageSettings?.accent || DEFAULT_ACCENT;
+    // Mode is derived from the homepage background color (light homepage = light checkout)
+    const checkoutMode = homepageSettings?.mode || detectMode(homepageSettings?.background || '#ffffff');
+
     return (
-        <>
-            <div className={classes.container}>
+        <CheckoutThemeProvider accentColor={accentColor} mode={checkoutMode}>
+            <div className={classes.container} data-mode={checkoutMode}>
                 <div className={classes.mainContent}>
                     <header className={classes.header}>
                         {(event) && (
@@ -281,7 +291,7 @@ const Checkout = () => {
                     </Group>
                 </div>
             </Modal>
-        </>
+        </CheckoutThemeProvider>
     );
 }
 
