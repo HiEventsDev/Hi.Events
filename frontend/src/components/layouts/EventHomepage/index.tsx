@@ -135,10 +135,15 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
             return null;
         }
 
+        const availableProducts = products.filter(p => p.is_available && !p.is_sold_out);
         const allSoldOut = products.every(p => p.is_sold_out);
 
         if (allSoldOut) {
             return {text: t`Sold Out`, variant: 'danger'};
+        }
+
+        if (availableProducts.length === 0) {
+            return null;
         }
 
         return {text: t`Tickets Available`, variant: 'success'};
