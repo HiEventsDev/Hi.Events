@@ -41,6 +41,7 @@ use HiEvents\Repository\Eloquent\QuestionRepository;
 use HiEvents\Repository\Eloquent\StripeCustomerRepository;
 use HiEvents\Repository\Eloquent\StripePaymentsRepository;
 use HiEvents\Repository\Eloquent\TaxAndFeeRepository;
+use HiEvents\Repository\Eloquent\TicketLookupTokenRepository;
 use HiEvents\Repository\Eloquent\UserRepository;
 use HiEvents\Repository\Eloquent\WebhookLogRepository;
 use HiEvents\Repository\Eloquent\WebhookRepository;
@@ -81,6 +82,7 @@ use HiEvents\Repository\Interfaces\QuestionRepositoryInterface;
 use HiEvents\Repository\Interfaces\StripeCustomerRepositoryInterface;
 use HiEvents\Repository\Interfaces\StripePaymentsRepositoryInterface;
 use HiEvents\Repository\Interfaces\TaxAndFeeRepositoryInterface;
+use HiEvents\Repository\Interfaces\TicketLookupTokenRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Repository\Interfaces\WebhookLogRepositoryInterface;
 use HiEvents\Repository\Interfaces\WebhookRepositoryInterface;
@@ -132,6 +134,7 @@ class RepositoryServiceProvider extends ServiceProvider
         OrganizerSettingsRepositoryInterface::class => OrganizerSettingsRepository::class,
         EmailTemplateRepositoryInterface::class => EmailTemplateRepository::class,
         AccountStripePlatformRepositoryInterface::class => AccountStripePlatformRepository::class,
+        TicketLookupTokenRepositoryInterface::class => TicketLookupTokenRepository::class,
     ];
 
     public function register(): void

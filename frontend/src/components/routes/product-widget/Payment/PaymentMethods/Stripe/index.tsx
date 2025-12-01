@@ -11,6 +11,7 @@ import {LoadingMask} from "../../../../../common/LoadingMask";
 import {Elements} from "@stripe/react-stripe-js";
 import StripeCheckoutForm from "../../../../../forms/StripeCheckoutForm";
 import {Event} from "../../../../../../types.ts";
+import {validateThemeSettings} from "../../../../../../utilites/themeUtils.ts";
 
 interface StripePaymentMethodProps {
     enabled: boolean;
@@ -73,6 +74,9 @@ export const StripePaymentMethod = ({enabled, setSubmitHandler}: StripePaymentMe
         return <LoadingMask/>;
     }
 
+    const themeSettings = validateThemeSettings(event?.settings?.homepage_theme_settings);
+    const stripeTheme = themeSettings.mode === 'dark' ? 'night' : 'stripe';
+
     return (
         <>
             {(!stripePromise) && <LoadingMask/>}
@@ -81,6 +85,12 @@ export const StripePaymentMethod = ({enabled, setSubmitHandler}: StripePaymentMe
                 <Elements options={{
                     clientSecret: stripeData?.client_secret,
                     loader: 'always',
+                    appearance: {
+                        theme: stripeTheme,
+                        variables: {
+                            colorPrimary: themeSettings.accent,
+                        },
+                    },
                 }} stripe={stripePromise}>
                     <StripeCheckoutForm setSubmitHandler={setSubmitHandler} />
                 </Elements>

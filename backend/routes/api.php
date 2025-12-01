@@ -158,6 +158,8 @@ use HiEvents\Http\Actions\Admin\Stats\GetAdminStatsAction;
 use HiEvents\Http\Actions\Admin\Users\GetAllUsersAction;
 use HiEvents\Http\Actions\Admin\Users\StartImpersonationAction;
 use HiEvents\Http\Actions\Admin\Users\StopImpersonationAction;
+use HiEvents\Http\Actions\TicketLookup\GetOrdersByLookupTokenAction;
+use HiEvents\Http\Actions\TicketLookup\SendTicketLookupEmailAction;
 use HiEvents\Http\Actions\Webhooks\CreateWebhookAction;
 use HiEvents\Http\Actions\Webhooks\DeleteWebhookAction;
 use HiEvents\Http\Actions\Webhooks\EditWebhookAction;
@@ -433,6 +435,10 @@ $router->prefix('/public')->group(
 
         // Color themes
         $router->get('/color-themes', GetColorThemesAction::class);
+
+        // Ticket Lookup
+        $router->post('/ticket-lookup', SendTicketLookupEmailAction::class);
+        $router->get('/ticket-lookup/{token}', GetOrdersByLookupTokenAction::class);
     }
 );
 

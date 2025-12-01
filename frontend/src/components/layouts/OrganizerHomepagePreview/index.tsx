@@ -8,7 +8,7 @@ import {Organizer} from "../../../types.ts";
 const OrganizerHomepagePreview = () => {
     const {organizerId} = useParams();
 
-    const {organizer, eventsData, isPastEvents} = useLoaderData() as {
+    const {organizer, eventsData} = useLoaderData() as {
         organizer: Organizer | null;
         eventsData: any;
         isPastEvents: boolean;
@@ -50,10 +50,7 @@ const OrganizerHomepagePreview = () => {
         }),
         settings: {
             ...organizerSettingsQuery.data,
-            homepage_theme_settings: {
-                ...organizerSettingsQuery.data.homepage_theme_settings,
-                ...previewSettings
-            }
+            homepage_theme_settings: previewSettings?.homepage_theme_settings || organizerSettingsQuery.data.homepage_theme_settings,
         }
     };
 

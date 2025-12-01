@@ -1,3 +1,9 @@
+// Design tokens
+$font-display: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+$radius-sm: 10px;
+$radius-xs: 6px;
+$transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+
 .container {
   max-width: 500px;
   margin: 0 auto;
@@ -11,6 +17,7 @@
 
 .paymentMethodLabel {
   margin-bottom: 8px;
+  color: var(--checkout-text-primary, #111827);
 }
 
 .paymentMethodTabs {
@@ -23,24 +30,24 @@
   align-items: center;
   gap: 8px;
   padding: 10px 16px;
-  background: #FFFFFF;
-  border: 1px solid #E5E7EB;
-  border-radius: 8px;
+  background: var(--checkout-surface, #FFFFFF);
+  border: 1px solid var(--checkout-border, #E5E7EB);
+  border-radius: $radius-xs;
   cursor: pointer;
   font-size: 14px;
   font-weight: 500;
-  color: #6B7280;
-  transition: all 0.15s ease;
+  color: var(--checkout-text-secondary, #6B7280);
+  transition: all $transition-fast;
 
   &:hover {
-    border-color: #D1D5DB;
-    background: #F9FAFB;
+    border-color: var(--checkout-accent-muted, #D1D5DB);
+    background: var(--checkout-accent-soft, #F9FAFB);
   }
 
   &.active {
-    border-color: var(--mantine-primary-color-filled);
-    background: var(--mantine-primary-color-light);
-    color: var(--mantine-primary-color-filled);
+    border-color: var(--checkout-accent, var(--mantine-primary-color-filled));
+    background: var(--checkout-accent-soft, var(--mantine-primary-color-light));
+    color: var(--checkout-accent, var(--mantine-primary-color-filled));
   }
 }
 
@@ -52,14 +59,16 @@
 .continueButton {
   width: 100%;
   height: 48px;
-  border-radius: 8px;
+  border-radius: $radius-sm;
+  font-family: $font-display;
   font-weight: 600;
   font-size: 16px;
-  transition: background-color 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+  transition: transform $transition-fast, box-shadow $transition-fast;
 
   &:hover:not(:disabled) {
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 12px var(--checkout-accent-soft, rgba(0, 0, 0, 0.15));
+    filter: brightness(1.05);
   }
 
   &:active:not(:disabled) {
@@ -71,10 +80,10 @@
   text-align: center;
   margin-top: 12px;
   font-size: 12px;
-  color: #6B7280;
+  color: var(--checkout-text-secondary, #6B7280);
 
   a {
-    color: var(--mantine-primary-color-filled);
+    color: var(--checkout-accent, var(--mantine-primary-color-filled));
     text-decoration: none;
 
     &:hover {

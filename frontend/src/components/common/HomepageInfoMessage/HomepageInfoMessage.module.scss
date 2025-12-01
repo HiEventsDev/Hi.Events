@@ -1,5 +1,12 @@
 @use "../../../styles/mixins";
 
+// Design tokens
+$font-display: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+$radius-lg: 20px;
+$radius-md: 14px;
+$radius-sm: 10px;
+$transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+
 .container {
   display: flex;
   flex-direction: column;
@@ -12,9 +19,9 @@
 .card {
   width: 100%;
   max-width: 420px;
-  background: #FFFFFF;
-  border: 1px solid #E5E7EB;
-  border-radius: 16px;
+  background: var(--content-bg-color, var(--checkout-surface, #FFFFFF));
+  border: 1px solid var(--border-color, var(--checkout-border, #E5E7EB));
+  border-radius: $radius-lg;
   padding: 40px 32px;
   text-align: center;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
@@ -32,7 +39,7 @@
   align-items: center;
   justify-content: center;
   margin: 0 auto 24px;
-  background: var(--mantine-primary-color-light);
+  background: var(--accent-soft, var(--checkout-accent-soft, var(--mantine-primary-color-light)));
 
   @include mixins.respond-below(sm) {
     width: 64px;
@@ -50,9 +57,10 @@
 }
 
 .title {
+  font-family: $font-display;
   font-size: 20px;
   font-weight: 600;
-  color: #111827;
+  color: var(--primary-text-color, var(--checkout-text-primary, #111827));
   margin: 0 0 8px 0;
   line-height: 1.4;
 
@@ -63,7 +71,7 @@
 
 .subtitle {
   font-size: 15px;
-  color: #6B7280;
+  color: var(--secondary-color, var(--checkout-text-secondary, #6B7280));
   margin: 0 0 24px 0;
   line-height: 1.5;
 }
@@ -71,20 +79,30 @@
 .button {
   width: 100%;
   height: 44px;
-  border-radius: 10px;
-  font-weight: 500;
-  font-size: 15px;
+  border-radius: $radius-sm !important;
+  font-family: $font-display;
+  font-weight: 600 !important;
+  font-size: 15px !important;
   margin-top: 16px;
+  background: var(--primary-color, var(--checkout-accent, var(--mantine-primary-color-filled))) !important;
+  color: var(--accent-contrast, var(--checkout-accent-contrast, #FFFFFF)) !important;
+  transition: transform $transition-fast, box-shadow $transition-fast;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px var(--accent-soft, var(--checkout-accent-soft, rgba(0, 0, 0, 0.15)));
+    filter: brightness(1.05);
+  }
 }
 
 .helpText {
   margin-top: 24px;
   font-size: 14px;
-  color: #6B7280;
+  color: var(--secondary-color, var(--checkout-text-secondary, #6B7280));
 }
 
 .helpLink {
-  color: var(--mantine-primary-color-filled);
+  color: var(--primary-color, var(--checkout-accent, var(--mantine-primary-color-filled)));
   text-decoration: none;
 
   &:hover {

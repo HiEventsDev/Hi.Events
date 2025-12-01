@@ -76,6 +76,9 @@ class EventSettingsResourcePublic extends JsonResource
 
             // Marketing settings
             'show_marketing_opt_in' => $this->getShowMarketingOptIn(),
+
+            // Homepage theme settings
+            'homepage_theme_settings' => $this->getHomepageThemeSettings(),
         ];
     }
 }

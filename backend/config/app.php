@@ -48,6 +48,7 @@ return [
         'attendee_product' => '/product/%d/%s',
         'order_summary' => '/checkout/%d/%s/summary',
         'organizer_order_summary' => '/manage/event/%d/orders#order-%d',
+        'ticket_lookup' => '/my-tickets/%s',
     ],
 
     'email_logo_url' => env('APP_EMAIL_LOGO_URL'),

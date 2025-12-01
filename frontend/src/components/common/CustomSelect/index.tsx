@@ -13,7 +13,7 @@ export interface ItemProps {
 
 interface CustomSelectProps {
     optionList: ItemProps[];
-    form: UseFormReturnType<any>;
+    form?: UseFormReturnType<any>;
     name: string;
     label?: string;
     description?: string;
@@ -21,6 +21,8 @@ interface CustomSelectProps {
     required?: boolean;
     disabled?: boolean;
     multiple?: boolean;
+    value?: string | string[];
+    onChange?: (value: string | string[]) => void;
 }
 
 export const SelectOption = ({icon, description, label, selected}: ItemProps & { selected?: boolean }) => (
@@ -60,13 +62,17 @@ export const CustomSelect = ({
                                  required = false,
                                  disabled = false,
                                  multiple = false,
+                                 value: controlledValue,
+                                 onChange: controlledOnChange,
                              }: CustomSelectProps) => {
     const combobox = useCombobox({
         onDropdownClose: () => combobox.resetSelectedOption(),
     });
 
-    const selectedValues = multiple ? (form.values[name] || []) : [form.values[name]];
-    const error = form.errors[name];
+    // Support both controlled mode (value/onChange) and form mode (form prop)
+    const currentValue = controlledValue !== undefined ? controlledValue : (form ? form.values[name] : undefined);
+    const selectedValues = multiple ? (currentValue || []) : [currentValue];
+    const error = form?.errors[name];
 
     const options = optionList.map((item) => (
         <Combobox.Option
@@ -84,28 +90,36 @@ export const CustomSelect = ({
 
     const handleOptionSubmit = (val: string) => {
         if (multiple) {
-            const currentValues = form.values[name] || [];
+            const currentValues = (currentValue as string[]) || [];
             const newValues = currentValues.includes(val)
                 ? currentValues.filter((v: string) => v !== val)
                 : [...currentValues, val];
-            form.setFieldValue(name, newValues);
+            if (controlledOnChange) {
+                controlledOnChange(newValues);
+            } else if (form) {
+                form.setFieldValue(name, newValues);
+            }
         } else {
-            form.setFieldValue(name, val);
+            if (controlledOnChange) {
+                controlledOnChange(val);
+            } else if (form) {
+                form.setFieldValue(name, val);
+            }
             combobox.closeDropdown();
         }
     };
 
     const getSelectedContent = () => {
         if (multiple) {
-            const selectedValues = form.values[name] || [];
+            const vals = (currentValue as string[]) || [];
             const selectedOptions = optionList.filter(item =>
-                selectedValues.includes(item.value));
+                vals.includes(item.value!));
             return selectedOptions.length > 0
                 ? <MultiValueDisplay selectedOptions={selectedOptions}/>
                 : <Text c="dimmed" fz="sm">{placeholder || 'Select options...'}</Text>;
         }
 
-        const selectedOption = optionList.find(item => item.value === form.values[name]);
+        const selectedOption = optionList.find(item => item.value === currentValue);
         return selectedOption
             ? <SelectOption {...selectedOption} />
             : <Text c="dimmed" fz="sm">{placeholder || 'Select an option...'}</Text>;

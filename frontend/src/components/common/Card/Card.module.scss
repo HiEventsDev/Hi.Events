@@ -9,13 +9,15 @@
   }
 
   &.lightGray {
-    background-color: var(--hi-color-gray);
-    border: 1px solid var(--hi-color-gray-2);
+    // Use checkout variables if available, fallback to default colors
+    background-color: var(--checkout-accent-soft, var(--hi-color-gray));
+    border: 1px solid var(--checkout-border, var(--hi-color-gray-2));
   }
 
   &.default {
-    background-color: #FFFFFF;
-    border: 1px solid #E5E7EB;
+    // Use checkout variables if available, fallback to default colors
+    background-color: var(--checkout-surface, #FFFFFF);
+    border: 1px solid var(--checkout-border, #E5E7EB);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
     transition: box-shadow 0.15s ease;
   }

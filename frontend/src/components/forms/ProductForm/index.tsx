@@ -21,6 +21,7 @@ import {
     IconCoinOff,
     IconCoins,
     IconEye,
+    IconFlame,
     IconHeartDollar,
     IconInfoCircle,
     IconPlus,
@@ -458,6 +459,29 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                                 label={t`Hide this product from customers`}
                             />
                         </div>
+                    </Fieldset>
+
+                    <Fieldset legend={
+                        <span className={classes.fieldsetLegend}>
+                            <IconFlame size={16}/>
+                            {t`Highlight`}
+                        </span>
+                    }>
+                        <Switch
+                            {...form.getInputProps('is_highlighted', {type: 'checkbox'})}
+                            label={t`Highlight this product`}
+                            description={t`Highlighted products will have a different background color to make them stand out on the event page.`}
+                        />
+                        {form.values.is_highlighted && (
+                            <TextInput
+                                mt={15}
+                                {...form.getInputProps('highlight_message')}
+                                label={t`Highlight Message`}
+                                description={t`An optional message to display on the highlighted product, e.g. "Selling fast 🔥" or "Best value"`}
+                                placeholder={t`Selling fast 🔥`}
+                                maxLength={255}
+                            />
+                        )}
                     </Fieldset>
                 </div>
             </Collapse>

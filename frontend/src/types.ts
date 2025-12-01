@@ -57,6 +57,13 @@ export interface ColorTheme {
     homepage_secondary_text_color: string;
 }
 
+export interface HomepageThemeSettings {
+    accent: string;
+    background: string;
+    mode: 'light' | 'dark';
+    background_type: 'COLOR' | 'MIRROR_COVER_IMAGE';
+}
+
 export interface LoginResponse {
     token?: string;
     token_type: string;
@@ -216,6 +223,9 @@ export interface EventSettings {
 
     // Marketing settings
     show_marketing_opt_in?: boolean;
+
+    // Simplified homepage theme settings (new 2-color + mode system)
+    homepage_theme_settings?: HomepageThemeSettings;
 }
 
 export interface VenueAddress {
@@ -366,15 +376,7 @@ export interface OrganizerSettings {
     default_attendee_details_collection_method?: AttendeeDetailsCollectionMethod;
     default_show_marketing_opt_in?: boolean;
     homepage_visibility: 'PUBLIC' | 'PRIVATE' | 'PASSWORD_PROTECTED';
-    homepage_theme_settings: {
-        homepage_background_color: string;
-        homepage_primary_color: string;
-        homepage_primary_text_color: string;
-        homepage_secondary_color: string;
-        homepage_secondary_text_color: string;
-        homepage_content_background_color: string;
-        homepage_background_type?: 'COLOR' | 'MIRROR_COVER_IMAGE';
-    }
+    homepage_theme_settings: HomepageThemeSettings;
     website_url?: string;
     location_details?: VenueAddress;
     social_media_handles?: {
@@ -507,6 +509,8 @@ export interface Product {
     taxes_and_fees?: TaxAndFee[];
     is_hidden?: boolean;
     product_category_id?: IdParam;
+    is_highlighted?: boolean;
+    highlight_message?: string;
 }
 
 export interface ProductCategory {
