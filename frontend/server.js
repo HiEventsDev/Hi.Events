@@ -11,6 +11,7 @@ import {fileURLToPath} from "node:url";
 import * as nodePath from "node:path";
 import * as nodeUrl from "node:url";
 import "dotenv/config";
+import {sitemapIndexHandler, sitemapEventsHandler, sitemapOrganizersHandler} from "./src/sitemap/proxy.js";
 
 installGlobals();
 
@@ -60,6 +61,22 @@ async function main() {
         }
         return JSON.stringify(envVars);
     };
+
+    app.get('/robots.txt', (req, res) => {
+        const frontendUrl = process.env.VITE_FRONTEND_URL || `${req.protocol}://${req.get('host')}`;
+        const robotsTxt = `User-agent: *
+Allow: /
+
+Sitemap: ${frontendUrl}/sitemap.xml
+`;
+        res.setHeader('Content-Type', 'text/plain');
+        res.setHeader('Cache-Control', 'public, max-age=86400');
+        res.status(200).send(robotsTxt);
+    });
+
+    app.get('/sitemap.xml', sitemapIndexHandler);
+    app.get('/sitemap-events-:page.xml', sitemapEventsHandler);
+    app.get('/sitemap-organizers-:page.xml', sitemapOrganizersHandler);
 
     app.use("*", async (req, res) => {
         const url = req.originalUrl.replace(base, "");
