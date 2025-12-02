@@ -182,7 +182,7 @@ class MarkOrderAsPaidService
             applicationFeeAmountMinorUnit: $this->orderApplicationFeeCalculationService->calculateApplicationFee(
                 accountConfiguration: $config,
                 order: $updatedOrder,
-            )->toMinorUnit(),
+            )->netApplicationFee->toMinorUnit(),
             orderApplicationFeeStatus: OrderApplicationFeeStatus::AWAITING_PAYMENT,
             paymentMethod: PaymentProviders::OFFLINE,
             currency: $updatedOrder->getCurrency(),

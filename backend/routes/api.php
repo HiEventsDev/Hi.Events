@@ -5,6 +5,8 @@ use HiEvents\Http\Actions\Accounts\GetAccountAction;
 use HiEvents\Http\Actions\Accounts\Stripe\CreateStripeConnectAccountAction;
 use HiEvents\Http\Actions\Accounts\Stripe\GetStripeConnectAccountsAction;
 use HiEvents\Http\Actions\Accounts\UpdateAccountAction;
+use HiEvents\Http\Actions\Accounts\Vat\GetAccountVatSettingAction;
+use HiEvents\Http\Actions\Accounts\Vat\UpsertAccountVatSettingAction;
 use HiEvents\Http\Actions\Affiliates\CreateAffiliateAction;
 use HiEvents\Http\Actions\Affiliates\DeleteAffiliateAction;
 use HiEvents\Http\Actions\Affiliates\ExportAffiliatesAction;
@@ -221,6 +223,10 @@ $router->middleware(['auth:api'])->group(
         $router->put('/accounts/{account_id?}', UpdateAccountAction::class);
         $router->get('/accounts/{account_id}/stripe/connect_accounts', GetStripeConnectAccountsAction::class);
         $router->post('/accounts/{account_id}/stripe/connect', CreateStripeConnectAccountAction::class);
+
+        // VAT Settings
+        $router->get('/accounts/{account_id}/vat-settings', GetAccountVatSettingAction::class);
+        $router->post('/accounts/{account_id}/vat-settings', UpsertAccountVatSettingAction::class);
 
         // Organizers
         $router->post('/organizers', CreateOrganizerAction::class);

@@ -19,9 +19,12 @@ class OrderPaymentPlatformFeeService
         string  $paymentPlatform,
         ?array  $feeRollup,
         int     $paymentPlatformFeeAmountMinorUnit,
-        int     $applicationFeeAmountMinorUnit,
+        int     $applicationFeeGrossAmountMinorUnit,
         string  $currency,
         ?string $transactionId = null,
+        ?string $chargeId = null,
+        ?int    $applicationFeeNetAmountMinorUnit = null,
+        ?int    $applicationFeeVatAmountMinorUnit = null,
     ): void
     {
         $isZeroDecimalCurrency = Currency::isZeroDecimalCurrency($currency);
@@ -30,18 +33,35 @@ class OrderPaymentPlatformFeeService
             ? $paymentPlatformFeeAmountMinorUnit
             : $paymentPlatformFeeAmountMinorUnit / 100;
 
-        $applicationFeeAmount = $isZeroDecimalCurrency
-            ? $applicationFeeAmountMinorUnit
-            : $applicationFeeAmountMinorUnit / 100;
+        $applicationFeeGrossAmount = $isZeroDecimalCurrency
+            ? $applicationFeeGrossAmountMinorUnit
+            : $applicationFeeGrossAmountMinorUnit / 100;
+
+        $applicationFeeNetAmount = null;
+        if ($applicationFeeNetAmountMinorUnit !== null) {
+            $applicationFeeNetAmount = $isZeroDecimalCurrency
+                ? $applicationFeeNetAmountMinorUnit
+                : $applicationFeeNetAmountMinorUnit / 100;
+        }
+
+        $applicationFeeVatAmount = null;
+        if ($applicationFeeVatAmountMinorUnit !== null) {
+            $applicationFeeVatAmount = $isZeroDecimalCurrency
+                ? $applicationFeeVatAmountMinorUnit
+                : $applicationFeeVatAmountMinorUnit / 100;
+        }
 
         $this->orderPaymentPlatformFeeRepository->create([
             OrderPaymentPlatformFeeDomainObjectAbstract::ORDER_ID => $orderId,
             OrderPaymentPlatformFeeDomainObjectAbstract::PAYMENT_PLATFORM => $paymentPlatform,
             OrderPaymentPlatformFeeDomainObjectAbstract::FEE_ROLLUP => $feeRollup,
             OrderPaymentPlatformFeeDomainObjectAbstract::PAYMENT_PLATFORM_FEE_AMOUNT => $paymentPlatformFeeAmount,
-            OrderPaymentPlatformFeeDomainObjectAbstract::APPLICATION_FEE_AMOUNT => $applicationFeeAmount,
+            OrderPaymentPlatformFeeDomainObjectAbstract::APPLICATION_FEE_GROSS_AMOUNT => $applicationFeeGrossAmount,
+            OrderPaymentPlatformFeeDomainObjectAbstract::APPLICATION_FEE_NET_AMOUNT => $applicationFeeNetAmount,
+            OrderPaymentPlatformFeeDomainObjectAbstract::APPLICATION_FEE_VAT_AMOUNT => $applicationFeeVatAmount,
             OrderPaymentPlatformFeeDomainObjectAbstract::CURRENCY => strtoupper($currency),
             OrderPaymentPlatformFeeDomainObjectAbstract::TRANSACTION_ID => $transactionId,
+            OrderPaymentPlatformFeeDomainObjectAbstract::CHARGE_ID => $chargeId,
             OrderPaymentPlatformFeeDomainObjectAbstract::PAID_AT => now()->toDateTimeString(),
         ]);
     }
