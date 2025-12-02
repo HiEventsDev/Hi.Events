@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace HiEvents\Repository\Eloquent;
 
+use HiEvents\DomainObjects\Generated\OrganizerDomainObjectAbstract;
+use HiEvents\DomainObjects\Generated\OrganizerSettingDomainObjectAbstract;
 use HiEvents\DomainObjects\OrganizerDomainObject;
+use HiEvents\DomainObjects\Status\OrganizerStatus;
 use HiEvents\Models\Organizer;
 use HiEvents\Repository\DTO\Organizer\OrganizerStatsResponseDTO;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class OrganizerRepository extends BaseRepository implements OrganizerRepositoryInterface
 {
@@ -19,6 +23,33 @@ class OrganizerRepository extends BaseRepository implements OrganizerRepositoryI
     public function getDomainObject(): string
     {
         return OrganizerDomainObject::class;
+    }
+
+    public function getSitemapOrganizers(int $page, int $perPage): LengthAwarePaginator
+    {
+        return $this->handleResults($this->model
+            ->select([
+                'organizers.' . OrganizerDomainObjectAbstract::ID,
+                'organizers.' . OrganizerDomainObjectAbstract::NAME,
+                'organizers.' . OrganizerDomainObjectAbstract::UPDATED_AT,
+            ])
+            ->join('organizer_settings', 'organizers.id', '=', 'organizer_settings.organizer_id')
+            ->where('organizers.' . OrganizerDomainObjectAbstract::STATUS, OrganizerStatus::LIVE->name)
+            ->where('organizer_settings.' . OrganizerSettingDomainObjectAbstract::ALLOW_SEARCH_ENGINE_INDEXING, true)
+            ->whereNull('organizers.' . OrganizerDomainObjectAbstract::DELETED_AT)
+            ->orderBy('organizers.' . OrganizerDomainObjectAbstract::ID)
+            ->paginate($perPage, ['*'], 'page', $page));
+    }
+
+    public function getSitemapOrganizerCount(): int
+    {
+        return $this->model
+            ->newQuery()
+            ->join('organizer_settings', 'organizers.id', '=', 'organizer_settings.organizer_id')
+            ->where('organizers.' . OrganizerDomainObjectAbstract::STATUS, OrganizerStatus::LIVE->name)
+            ->where('organizer_settings.' . OrganizerSettingDomainObjectAbstract::ALLOW_SEARCH_ENGINE_INDEXING, true)
+            ->whereNull('organizers.' . OrganizerDomainObjectAbstract::DELETED_AT)
+            ->count();
     }
 
     public function getOrganizerStats(int $organizerId, int $accountId, string $currencyCode): OrganizerStatsResponseDTO
