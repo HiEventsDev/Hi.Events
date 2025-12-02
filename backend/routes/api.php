@@ -134,6 +134,9 @@ use HiEvents\Http\Actions\Questions\GetQuestionsPublicAction;
 use HiEvents\Http\Actions\Questions\SortQuestionsAction;
 use HiEvents\Http\Actions\Reports\GetOrganizerReportAction;
 use HiEvents\Http\Actions\Reports\GetReportAction;
+use HiEvents\Http\Actions\Sitemap\GetSitemapEventsAction;
+use HiEvents\Http\Actions\Sitemap\GetSitemapIndexAction;
+use HiEvents\Http\Actions\Sitemap\GetSitemapOrganizersAction;
 use HiEvents\Http\Actions\TaxesAndFees\CreateTaxOrFeeAction;
 use HiEvents\Http\Actions\TaxesAndFees\DeleteTaxOrFeeAction;
 use HiEvents\Http\Actions\TaxesAndFees\EditTaxOrFeeAction;
@@ -439,6 +442,11 @@ $router->prefix('/public')->group(
         // Ticket Lookup
         $router->post('/ticket-lookup', SendTicketLookupEmailAction::class);
         $router->get('/ticket-lookup/{token}', GetOrdersByLookupTokenAction::class);
+
+        // Sitemap
+        $router->get('/sitemap.xml', GetSitemapIndexAction::class);
+        $router->get('/sitemap-events-{page}.xml', GetSitemapEventsAction::class)->where('page', '[0-9]+');
+        $router->get('/sitemap-organizers-{page}.xml', GetSitemapOrganizersAction::class)->where('page', '[0-9]+');
     }
 );
 

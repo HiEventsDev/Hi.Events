@@ -8,6 +8,7 @@ use HiEvents\DomainObjects\AccountDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventStatisticDomainObject;
 use HiEvents\DomainObjects\Generated\EventDomainObjectAbstract;
+use HiEvents\DomainObjects\Generated\EventSettingDomainObjectAbstract;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\DomainObjects\Status\EventStatus;
 use HiEvents\Http\DTO\QueryParamsDTO;
@@ -135,5 +136,33 @@ class EventRepository extends BaseRepository implements EventRepositoryInterface
         $this->loadRelation(new Relationship(EventStatisticDomainObject::class, name: 'event_statistics'));
 
         return $this->paginate($perPage);
+    }
+
+    public function getSitemapEvents(int $page, int $perPage): LengthAwarePaginator
+    {
+        return $this->handleResults($this->model
+            ->select([
+                'events.' . EventDomainObjectAbstract::ID,
+                'events.' . EventDomainObjectAbstract::TITLE,
+                'events.' . EventDomainObjectAbstract::UPDATED_AT,
+                'events.' . EventDomainObjectAbstract::START_DATE,
+            ])
+            ->join('event_settings', 'events.id', '=', 'event_settings.event_id')
+            ->where('events.' . EventDomainObjectAbstract::STATUS, EventStatus::LIVE->name)
+            ->where('event_settings.' . EventSettingDomainObjectAbstract::ALLOW_SEARCH_ENGINE_INDEXING, true)
+            ->whereNull('events.' . EventDomainObjectAbstract::DELETED_AT)
+            ->orderBy('events.' . EventDomainObjectAbstract::ID)
+            ->paginate($perPage, ['*'], 'page', $page));
+    }
+
+    public function getSitemapEventCount(): int
+    {
+        return $this->model
+            ->newQuery()
+            ->join('event_settings', 'events.id', '=', 'event_settings.event_id')
+            ->where('events.' . EventDomainObjectAbstract::STATUS, EventStatus::LIVE->name)
+            ->where('event_settings.' . EventSettingDomainObjectAbstract::ALLOW_SEARCH_ENGINE_INDEXING, true)
+            ->whereNull('events.' . EventDomainObjectAbstract::DELETED_AT)
+            ->count();
     }
 }
