@@ -1,13 +1,10 @@
-import {useEffect, useState} from 'react';
 import {t} from '@lingui/macro';
-import {Alert, Button, Group, Radio, Stack, Text, TextInput, Title} from '@mantine/core';
-import {IconAlertCircle, IconCheck, IconInfoCircle} from '@tabler/icons-react';
-import {Card} from '../../../../../../common/Card';
-import {useGetAccountVatSetting} from '../../../../../../../queries/useGetAccountVatSetting.ts';
-import {useUpsertAccountVatSetting} from '../../../../../../../mutations/useUpsertAccountVatSetting.ts';
-import {showError, showSuccess} from '../../../../../../../utilites/notifications.tsx';
+import {Alert, Text, Title} from '@mantine/core';
+import {IconAlertCircle, IconInfoCircle} from '@tabler/icons-react';
 import {Account} from '../../../../../../../types.ts';
 import {getVatInfo} from '../VatNotice';
+import {VatSettingsForm} from './VatSettingsForm.tsx';
+import {useGetAccountVatSetting} from '../../../../../../../queries/useGetAccountVatSetting.ts';
 import classes from './VatSettings.module.scss';
 
 interface VatSettingsProps {
@@ -16,12 +13,7 @@ interface VatSettingsProps {
 }
 
 export const VatSettings = ({account, stripeCountry}: VatSettingsProps) => {
-    const [vatRegistered, setVatRegistered] = useState<string>('');
-    const [vatNumber, setVatNumber] = useState('');
-
     const vatSettingQuery = useGetAccountVatSetting(account.id);
-    const upsertMutation = useUpsertAccountVatSetting(account.id);
-
     const vatInfo = getVatInfo(stripeCountry);
 
     if (!vatInfo.isEU) {
@@ -29,48 +21,6 @@ export const VatSettings = ({account, stripeCountry}: VatSettingsProps) => {
     }
 
     const existingSettings = vatSettingQuery.data;
-
-    useEffect(() => {
-        if (existingSettings && !vatRegistered) {
-            setVatRegistered(existingSettings.vat_registered ? 'yes' : 'no');
-            setVatNumber(existingSettings.vat_number || '');
-        }
-    }, [existingSettings, vatRegistered]);
-
-    const handleSave = async () => {
-        if (vatRegistered === 'yes' && !vatNumber) {
-            showError(t`Please enter your VAT number`);
-            return;
-        }
-
-        if (vatRegistered === 'yes' && vatNumber.length < 10) {
-            showError(t`VAT number must be at least 10 characters`);
-            return;
-        }
-
-        try {
-            const result = await upsertMutation.mutateAsync({
-                vat_registered: vatRegistered === 'yes',
-                vat_number: vatRegistered === 'yes' ? vatNumber.toUpperCase() : null,
-            });
-
-            if (result.data.vat_registered && result.data.vat_validated) {
-                showSuccess(t`VAT settings saved and validated successfully`);
-            } else if (result.data.vat_registered && !result.data.vat_validated) {
-                showError(t`VAT settings saved but validation failed. Please check your VAT number.`);
-            } else {
-                showSuccess(t`VAT settings saved successfully`);
-            }
-        } catch (error) {
-            showError(t`Failed to save VAT settings. Please try again.`);
-        }
-    };
-
-    const canSave = vatRegistered && (
-        vatRegistered === 'no' ||
-        (vatRegistered === 'yes' && vatNumber.trim().length >= 10)
-    );
-
     const needsVatInfo = !existingSettings || existingSettings.vat_registered === null || existingSettings.vat_registered === undefined;
 
     // Irish customers: Show informational message only, no form
@@ -137,77 +87,7 @@ export const VatSettings = ({account, stripeCountry}: VatSettingsProps) => {
                 </Text>
             )}
 
-            <Card variant="lightGray">
-                <Stack gap="lg">
-                    <Radio.Group
-                        value={vatRegistered}
-                        onChange={setVatRegistered}
-                        label={t`Are you VAT registered in the EU?`}
-                        required
-                    >
-                        <Group mt="xs">
-                            <Radio
-                                value="no"
-                                label={t`No - I'm an individual or non-VAT registered business`}
-                            />
-                            <Radio
-                                value="yes"
-                                label={t`Yes - I have a valid EU VAT registration number`}
-                            />
-                        </Group>
-                    </Radio.Group>
-
-                    {vatRegistered === 'yes' && (
-                        <Stack gap="md">
-                            <TextInput
-                                label={t`VAT Number`}
-                                description={t`Enter your VAT number including the country code (e.g., IE1234567A for Ireland, DE123456789 for Germany)`}
-                                placeholder="IE1234567A"
-                                value={vatNumber}
-                                onChange={(e) => setVatNumber(e.target.value)}
-                                maxLength={17}
-                                required
-                            />
-
-                            {existingSettings?.vat_validated && (
-                                <Alert color="green" icon={<IconCheck />}>
-                                    <Text size="sm" fw={500}>
-                                        {t`Valid VAT number`}
-                                    </Text>
-                                    {existingSettings.business_name && (
-                                        <Text size="xs" c="dimmed">
-                                            {existingSettings.business_name}
-                                        </Text>
-                                    )}
-                                </Alert>
-                            )}
-
-                            {existingSettings?.vat_number && !existingSettings.vat_validated && (
-                                <Alert color="red" icon={<IconAlertCircle />}>
-                                    <Text size="sm">
-                                        {t`VAT number validation failed. Please check your number and try again.`}
-                                    </Text>
-                                </Alert>
-                            )}
-                        </Stack>
-                    )}
-
-                    <Group>
-                        <Button
-                            onClick={handleSave}
-                            loading={upsertMutation.isPending}
-                            disabled={!canSave}
-                        >
-                            {t`Save VAT Settings`}
-                        </Button>
-                        {vatRegistered === 'yes' && (
-                            <Text size="xs" c="dimmed">
-                                {t`Your VAT number will be validated automatically when you save`}
-                            </Text>
-                        )}
-                    </Group>
-                </Stack>
-            </Card>
+            <VatSettingsForm account={account} />
         </div>
     );
 };

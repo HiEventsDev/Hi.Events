@@ -16,7 +16,9 @@ import {showSuccess} from "../../../../../../utilites/notifications.tsx";
 import {getConfig} from "../../../../../../utilites/config.ts";
 import {isHiEvents} from "../../../../../../utilites/helpers.ts";
 import {VatSettings} from './VatSettings';
-import {VatNotice} from './VatNotice';
+import {VatSettingsModal} from './VatSettings/VatSettingsModal.tsx';
+import {VatNotice, getVatInfo} from './VatNotice';
+import {useGetAccountVatSetting} from '../../../../../../queries/useGetAccountVatSetting.ts';
 
 interface FeePlanDisplayProps {
     configuration?: {
@@ -714,9 +716,79 @@ const PaymentSettings = () => {
             enabled: !!accountQuery.data?.id
         }
     );
+    const vatSettingQuery = useGetAccountVatSetting(
+        accountQuery.data?.id || 0,
+        {
+            enabled: !!accountQuery.data?.id && isHiEvents()
+        }
+    );
+
+    const [showVatModal, setShowVatModal] = useState(false);
+    const [hasCheckedVatModal, setHasCheckedVatModal] = useState(false);
+
+    // Check if user is returning from Stripe and needs to fill VAT info
+    // Only for Hi.Events Cloud - open-source doesn't have VAT handling
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+        if (hasCheckedVatModal) return;
+        if (!isHiEvents()) {
+            setHasCheckedVatModal(true);
+            return;
+        }
+        if (!accountQuery.data || !stripeAccountsQuery.data || vatSettingQuery.isLoading) return;
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const isReturn = urlParams.get('is_return') === '1';
+
+        if (!isReturn) {
+            setHasCheckedVatModal(true);
+            return;
+        }
+
+        // Check if Stripe onboarding is complete
+        const completedAccount = stripeAccountsQuery.data.stripe_connect_accounts.find(
+            acc => acc.is_setup_complete
+        );
+
+        if (!completedAccount) {
+            setHasCheckedVatModal(true);
+            return;
+        }
+
+        // Check if user is in an EU country (not Ireland - they don't need the form)
+        const vatInfo = getVatInfo(completedAccount.country);
+        if (!vatInfo.isEU || vatInfo.isIreland) {
+            setHasCheckedVatModal(true);
+            return;
+        }
+
+        // Check if VAT info is already filled out
+        const existingSettings = vatSettingQuery.data;
+        if (existingSettings && existingSettings.vat_registered !== null && existingSettings.vat_registered !== undefined) {
+            setHasCheckedVatModal(true);
+            return;
+        }
+
+        // All conditions met - show the modal
+        setShowVatModal(true);
+        setHasCheckedVatModal(true);
+    }, [accountQuery.data, stripeAccountsQuery.data, vatSettingQuery.data, vatSettingQuery.isLoading, hasCheckedVatModal]);
+
+    const handleVatModalClose = () => {
+        setShowVatModal(false);
+        vatSettingQuery.refetch();
+    };
 
     return (
         <>
+            {isHiEvents() && accountQuery.data && (
+                <VatSettingsModal
+                    account={accountQuery.data}
+                    opened={showVatModal}
+                    onClose={handleVatModalClose}
+                />
+            )}
+
             <HeadingCard
                 heading={t`Payment Settings`}
                 subHeading={t`Manage your payment processing and view platform fees`}
@@ -747,18 +819,20 @@ const PaymentSettings = () => {
                                 />
                             )}
                         </Grid.Col>
-                        <Grid.Col span={{base: 12}}>
-                            {accountQuery.data && stripeAccountsQuery.data && (
-                                <VatSettings
-                                    account={accountQuery.data}
-                                    stripeCountry={
-                                        stripeAccountsQuery.data.stripe_connect_accounts.find(
-                                            acc => acc.is_setup_complete
-                                        )?.country
-                                    }
-                                />
-                            )}
-                        </Grid.Col>
+                        {isHiEvents() && (
+                            <Grid.Col span={{base: 12}}>
+                                {accountQuery.data && stripeAccountsQuery.data && (
+                                    <VatSettings
+                                        account={accountQuery.data}
+                                        stripeCountry={
+                                            stripeAccountsQuery.data.stripe_connect_accounts.find(
+                                                acc => acc.is_setup_complete
+                                            )?.country
+                                        }
+                                    />
+                                )}
+                            </Grid.Col>
+                        )}
                     </Grid>
                 )}
             </Card>
