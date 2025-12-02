@@ -43,6 +43,7 @@ abstract class OrderDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     final public const PAYMENT_PROVIDER = 'payment_provider';
     final public const NOTES = 'notes';
     final public const STATISTICS_DECREMENTED_AT = 'statistics_decremented_at';
+    final public const OPTED_INTO_MARKETING_AT = 'opted_into_marketing_at';
 
     protected int $id;
     protected int $event_id;
@@ -77,6 +78,7 @@ abstract class OrderDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     protected ?string $payment_provider = null;
     protected ?string $notes = null;
     protected ?string $statistics_decremented_at = null;
+    protected ?string $opted_into_marketing_at = null;
 
     public function toArray(): array
     {
@@ -114,6 +116,7 @@ abstract class OrderDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
                     'payment_provider' => $this->payment_provider ?? null,
                     'notes' => $this->notes ?? null,
                     'statistics_decremented_at' => $this->statistics_decremented_at ?? null,
+                    'opted_into_marketing_at' => $this->opted_into_marketing_at ?? null,
                 ];
     }
 
@@ -478,5 +481,16 @@ abstract class OrderDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     public function getStatisticsDecrementedAt(): ?string
     {
         return $this->statistics_decremented_at;
+    }
+
+    public function setOptedIntoMarketingAt(?string $opted_into_marketing_at): self
+    {
+        $this->opted_into_marketing_at = $opted_into_marketing_at;
+        return $this;
+    }
+
+    public function getOptedIntoMarketingAt(): ?string
+    {
+        return $this->opted_into_marketing_at;
     }
 }

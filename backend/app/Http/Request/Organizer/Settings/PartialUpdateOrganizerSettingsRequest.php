@@ -2,6 +2,7 @@
 
 namespace HiEvents\Http\Request\Organizer\Settings;
 
+use HiEvents\DomainObjects\Enums\AttendeeDetailsCollectionMethod;
 use HiEvents\DomainObjects\Enums\HomepageBackgroundType;
 use HiEvents\DomainObjects\Enums\OrganizerHomepageVisibility;
 use HiEvents\Http\Request\BaseRequest;
@@ -13,6 +14,10 @@ class PartialUpdateOrganizerSettingsRequest extends BaseRequest
     public static function rules(): array
     {
         return [
+            // Event defaults
+            'default_attendee_details_collection_method' => ['sometimes', 'nullable', Rule::in(AttendeeDetailsCollectionMethod::valuesArray())],
+            'default_show_marketing_opt_in' => ['sometimes', 'nullable', 'boolean'],
+
             // Social handles
             'facebook_handle' => ['sometimes', 'nullable', 'string', 'max:255'],
             'instagram_handle' => ['sometimes', 'nullable', 'string', 'max:255'],
@@ -50,13 +55,13 @@ class PartialUpdateOrganizerSettingsRequest extends BaseRequest
 
             // Homepage
             'homepage_visibility' => ['nullable', Rule::in(OrganizerHomepageVisibility::valuesArray())],
-            'homepage_background_color' => ['nullable', ...RulesHelper::HEX_COLOR],
-            'homepage_primary_color' => ['nullable', ...RulesHelper::HEX_COLOR],
-            'homepage_primary_text_color' => ['nullable', ...RulesHelper::HEX_COLOR],
-            'homepage_secondary_color' => ['nullable', ...RulesHelper::HEX_COLOR],
-            'homepage_secondary_text_color' => ['nullable', ...RulesHelper::HEX_COLOR],
-            'homepage_content_background_color' => ['nullable', ...RulesHelper::HEX_COLOR],
-            'homepage_background_type' => ['nullable', Rule::in(HomepageBackgroundType::valuesArray())],
+
+            // Homepage theme settings
+            'homepage_theme_settings' => ['nullable', 'array'],
+            'homepage_theme_settings.accent' => ['nullable', 'string', ...RulesHelper::HEX_COLOR],
+            'homepage_theme_settings.background' => ['nullable', 'string', ...RulesHelper::HEX_COLOR],
+            'homepage_theme_settings.mode' => ['nullable', 'string', Rule::in(['light', 'dark'])],
+            'homepage_theme_settings.background_type' => ['nullable', 'string', Rule::in(HomepageBackgroundType::valuesArray())],
 
             // SEO
             'seo_keywords' => ['sometimes', 'nullable', 'string', 'max:255'],

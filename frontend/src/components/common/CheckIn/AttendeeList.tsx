@@ -30,6 +30,10 @@ export const AttendeeList = ({
             return t`Cannot Check In`;
         }
 
+        if (attendee.status === 'CANCELLED') {
+            return t`Cannot Check In (Cancelled)`;
+        }
+
         if (attendee.check_in) {
             return t`Check Out`;
         }
@@ -38,7 +42,7 @@ export const AttendeeList = ({
     };
 
     const getButtonColor = (attendee: Attendee) => {
-        if (attendee.check_in) {
+        if (attendee.check_in || attendee.status === 'CANCELLED') {
             return 'red';
         }
         if (attendee.status === 'AWAITING_PAYMENT' && !allowOrdersAwaitingOfflinePaymentToCheckIn) {
@@ -74,6 +78,11 @@ export const AttendeeList = ({
                             <div>
                                 <b>{attendee.first_name} {attendee.last_name}</b>
                             </div>
+                            {attendee.status === 'CANCELLED' ? (
+                                <div style={{fontSize: '0.8em', color: 'red'}}>
+                                    {t`Ticket Cancelled`}
+                                </div>
+                            ) : null}
                             <div style={{fontSize: '0.8em', color: '#555'}}>
                                 {attendee.email}
                             </div>
@@ -96,7 +105,7 @@ export const AttendeeList = ({
                                     onClickSound?.();
                                     onCheckInToggle(attendee);
                                 }}
-                                disabled={isCheckInPending || isDeletePending}
+                                disabled={isCheckInPending || isDeletePending || attendee.status === 'CANCELLED'}
                                 loading={isCheckInPending || isDeletePending}
                                 color={getButtonColor(attendee)}
                             >

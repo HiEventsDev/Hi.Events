@@ -67,6 +67,38 @@ export interface GetAllAccountsParams {
     search?: string;
 }
 
+export interface GetAllEventsParams {
+    page?: number;
+    per_page?: number;
+    search?: string;
+    sort_by?: string;
+    sort_direction?: 'asc' | 'desc';
+}
+
+export interface AdminEventStatistics {
+    total_gross_sales: number;
+    products_sold: number;
+    attendees_registered: number;
+    orders_created: number;
+    orders_cancelled: number;
+}
+
+export interface AdminEvent {
+    id: IdParam;
+    title: string;
+    start_date: string;
+    end_date: string | null;
+    status: string;
+    organizer_name: string;
+    organizer_id: IdParam;
+    account_name: string;
+    account_id: IdParam;
+    user_id: IdParam;
+    attendees_count: number;
+    slug: string;
+    statistics: AdminEventStatistics | null;
+}
+
 export const adminClient = {
     getStats: async () => {
         const response = await api.get<AdminStats>('admin/stats');
@@ -99,6 +131,19 @@ export const adminClient = {
         const response = await api.get<GenericPaginatedResponse<any>>('admin/events/upcoming', {
             params: {
                 per_page: perPage,
+            }
+        });
+        return response.data;
+    },
+
+    getAllEvents: async (params: GetAllEventsParams = {}) => {
+        const response = await api.get<GenericPaginatedResponse<AdminEvent>>('admin/events', {
+            params: {
+                page: params.page || 1,
+                per_page: params.per_page || 20,
+                search: params.search || undefined,
+                sort_by: params.sort_by || 'start_date',
+                sort_direction: params.sort_direction || 'desc',
             }
         });
         return response.data;

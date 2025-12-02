@@ -63,7 +63,8 @@ class Order extends BaseModel
             'point_in_time_data' => 'array',
             'address' => 'array',
             'taxes_and_fees_rollup' => 'array',
-            'statistics_decremented_at' => 'datetime'
+            'statistics_decremented_at' => 'datetime',
+            'opted_into_marketing_at' => 'datetime',
         ];
     }
 }

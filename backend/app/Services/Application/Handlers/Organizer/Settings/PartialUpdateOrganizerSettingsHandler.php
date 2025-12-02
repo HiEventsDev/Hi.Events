@@ -42,6 +42,16 @@ class PartialUpdateOrganizerSettingsHandler
         }
 
         $this->organizerSettingsRepository->updateWhere([
+            'default_attendee_details_collection_method' => $dto->getProvided(
+                'defaultAttendeeDetailsCollectionMethod',
+                $organizerSettings->getDefaultAttendeeDetailsCollectionMethod()
+            )?->name ?? $organizerSettings->getDefaultAttendeeDetailsCollectionMethod(),
+
+            'default_show_marketing_opt_in' => $dto->getProvided(
+                'defaultShowMarketingOptIn',
+                $organizerSettings->getDefaultShowMarketingOptIn()
+            ),
+
             'social_media_handles' => array_filter([
                 'facebook' => $dto->getProvided('facebookHandle', $organizerSettings->getSocialMediaHandle('facebook')),
                 'instagram' => $dto->getProvided('instagramHandle', $organizerSettings->getSocialMediaHandle('instagram')),
@@ -72,15 +82,7 @@ class PartialUpdateOrganizerSettingsHandler
 
             'homepage_visibility' => $dto->getProvided('homepageVisibility', $organizerSettings->getHomepageVisibility()),
 
-            'homepage_theme_settings' => [
-                'homepage_background_color' => $dto->getProvided('homepageBackgroundColor', $organizerSettings->getHomepageThemeSetting('homepage_background_color')),
-                'homepage_content_background_color' => $dto->getProvided('homepageContentBackgroundColor', $organizerSettings->getHomepageThemeSetting('homepage_content_background_color')),
-                'homepage_primary_color' => $dto->getProvided('homepagePrimaryColor', $organizerSettings->getHomepageThemeSetting('homepage_primary_color')),
-                'homepage_primary_text_color' => $dto->getProvided('homepagePrimaryTextColor', $organizerSettings->getHomepageThemeSetting('homepage_primary_text_color')),
-                'homepage_secondary_color' => $dto->getProvided('homepageSecondaryColor', $organizerSettings->getHomepageThemeSetting('homepage_secondary_color')),
-                'homepage_secondary_text_color' => $dto->getProvided('homepageSecondaryTextColor', $organizerSettings->getHomepageThemeSetting('homepage_secondary_text_color')),
-                'homepage_background_type' => $dto->getProvided('homepageBackgroundType', $organizerSettings->getHomepageThemeSetting('homepage_background_type')),
-            ],
+            'homepage_theme_settings' => $dto->getProvided('homepageThemeSettings', $organizerSettings->getHomepageThemeSettings()),
 
             'seo_keywords' => $dto->getProvided('seoKeywords', $organizerSettings->getSeoKeywords()),
             'seo_title' => $dto->getProvided('seoTitle', $organizerSettings->getSeoTitle()),

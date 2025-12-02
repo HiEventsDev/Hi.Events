@@ -16,7 +16,13 @@ git clone git@github.com:HiEventsDev/hi.events.git
 cd hi.events/docker/all-in-one
 ```
 
-### Step 2: Generate the `APP_KEY` and `JWT_SECRET`
+### Step 2: Copy the Environment File
+
+```bash
+cp .env.example .env
+```
+
+### Step 3: Generate the `APP_KEY` and `JWT_SECRET`
 
 Generate the keys using the following commands:
 
@@ -38,7 +44,7 @@ for /f "tokens=*" %i in ('openssl rand -base64 32') do @echo JWT_SECRET=%i
 [Convert]::ToBase64String([System.Security.Cryptography.RandomNumberGenerator]::GetBytes(32))  # For JWT_SECRET
 ```
 
-### Step 3: Update the `.env` File
+### Step 4: Update the `.env` File
 
 Update the `.env` file located in `./docker/all-in-one/.env` with the generated `APP_KEY` and `JWT_SECRET`:
 
@@ -47,13 +53,13 @@ APP_KEY=your_generated_app_key
 JWT_SECRET=your_generated_jwt_secret
 ```
 
-### Step 4: Start the Docker Containers
+### Step 5: Start the Docker Containers
 
 ```bash
 docker compose up -d
 ```
 
-### Step 5: Create an Account
+### Step 6: Create an Account
 
 Visit [http://localhost:8123/auth/register](http://localhost:8123/auth/register) to create an account.
 

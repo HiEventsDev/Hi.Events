@@ -1,4 +1,4 @@
-import {Event} from "../types.ts";
+import {Event, Product} from "../types.ts";
 import {MantineColor} from "@mantine/core";
 import {getConfig} from "./config.ts";
 
@@ -28,7 +28,7 @@ export const getInitials = (fullName: string) => {
     }, '');
 };
 
-export const getProductsFromEvent = (event?: Event) => {
+export const getProductsFromEvent = (event?: Event): Product[] | undefined => {
     return event?.product_categories?.flatMap(category => category.products).filter(product => product !== undefined);
 }
 

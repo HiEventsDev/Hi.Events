@@ -134,7 +134,11 @@ use HiEvents\Http\Actions\Questions\GetQuestionAction;
 use HiEvents\Http\Actions\Questions\GetQuestionsAction;
 use HiEvents\Http\Actions\Questions\GetQuestionsPublicAction;
 use HiEvents\Http\Actions\Questions\SortQuestionsAction;
+use HiEvents\Http\Actions\Reports\GetOrganizerReportAction;
 use HiEvents\Http\Actions\Reports\GetReportAction;
+use HiEvents\Http\Actions\Sitemap\GetSitemapEventsAction;
+use HiEvents\Http\Actions\Sitemap\GetSitemapIndexAction;
+use HiEvents\Http\Actions\Sitemap\GetSitemapOrganizersAction;
 use HiEvents\Http\Actions\TaxesAndFees\CreateTaxOrFeeAction;
 use HiEvents\Http\Actions\TaxesAndFees\DeleteTaxOrFeeAction;
 use HiEvents\Http\Actions\TaxesAndFees\EditTaxOrFeeAction;
@@ -153,11 +157,14 @@ use HiEvents\Http\Actions\Users\ResendInvitationAction;
 use HiEvents\Http\Actions\Users\UpdateMeAction;
 use HiEvents\Http\Actions\Users\UpdateUserAction;
 use HiEvents\Http\Actions\Admin\Accounts\GetAllAccountsAction;
+use HiEvents\Http\Actions\Admin\Events\GetAllEventsAction;
 use HiEvents\Http\Actions\Admin\Events\GetUpcomingEventsAction;
 use HiEvents\Http\Actions\Admin\Stats\GetAdminStatsAction;
 use HiEvents\Http\Actions\Admin\Users\GetAllUsersAction;
 use HiEvents\Http\Actions\Admin\Users\StartImpersonationAction;
 use HiEvents\Http\Actions\Admin\Users\StopImpersonationAction;
+use HiEvents\Http\Actions\TicketLookup\GetOrdersByLookupTokenAction;
+use HiEvents\Http\Actions\TicketLookup\SendTicketLookupEmailAction;
 use HiEvents\Http\Actions\Webhooks\CreateWebhookAction;
 use HiEvents\Http\Actions\Webhooks\DeleteWebhookAction;
 use HiEvents\Http\Actions\Webhooks\EditWebhookAction;
@@ -233,6 +240,7 @@ $router->middleware(['auth:api'])->group(
         $router->get('/organizers/{organizer_id}/orders', GetOrganizerOrdersAction::class);
         $router->get('/organizers/{organizer_id}/settings', GetOrganizerSettingsAction::class);
         $router->patch('/organizers/{organizer_id}/settings', PartialUpdateOrganizerSettingsAction::class);
+        $router->get('/organizers/{organizer_id}/reports/{report_type}', GetOrganizerReportAction::class);
 
         // Email Templates - Organizer level
         $router->get('/organizers/{organizerId}/email-templates', GetOrganizerEmailTemplatesAction::class);
@@ -380,6 +388,7 @@ $router->prefix('/admin')->middleware(['auth:api'])->group(
         $router->get('/stats', GetAdminStatsAction::class);
         $router->get('/accounts', GetAllAccountsAction::class);
         $router->get('/users', GetAllUsersAction::class);
+        $router->get('/events', GetAllEventsAction::class);
         $router->get('/events/upcoming', GetUpcomingEventsAction::class);
         $router->post('/impersonate/{user_id}', StartImpersonationAction::class);
         $router->post('/stop-impersonation', StopImpersonationAction::class);
@@ -435,6 +444,15 @@ $router->prefix('/public')->group(
 
         // Color themes
         $router->get('/color-themes', GetColorThemesAction::class);
+
+        // Ticket Lookup
+        $router->post('/ticket-lookup', SendTicketLookupEmailAction::class);
+        $router->get('/ticket-lookup/{token}', GetOrdersByLookupTokenAction::class);
+
+        // Sitemap
+        $router->get('/sitemap.xml', GetSitemapIndexAction::class);
+        $router->get('/sitemap-events-{page}.xml', GetSitemapEventsAction::class)->where('page', '[0-9]+');
+        $router->get('/sitemap-organizers-{page}.xml', GetSitemapOrganizersAction::class)->where('page', '[0-9]+');
     }
 );
 

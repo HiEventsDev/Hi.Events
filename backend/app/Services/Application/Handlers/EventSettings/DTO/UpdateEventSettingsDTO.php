@@ -4,6 +4,7 @@ namespace HiEvents\Services\Application\Handlers\EventSettings\DTO;
 
 use HiEvents\DataTransferObjects\AddressDTO;
 use HiEvents\DataTransferObjects\BaseDTO;
+use HiEvents\DomainObjects\Enums\AttendeeDetailsCollectionMethod;
 use HiEvents\DomainObjects\Enums\HomepageBackgroundType;
 use HiEvents\DomainObjects\Enums\PaymentProviders;
 use HiEvents\DomainObjects\Enums\PriceDisplayMode;
@@ -31,6 +32,7 @@ class UpdateEventSettingsDTO extends BaseDTO
         public readonly ?HomepageBackgroundType $homepage_background_type,
 
         public readonly bool                    $require_attendee_details,
+        public readonly AttendeeDetailsCollectionMethod $attendee_details_collection_method,
         public readonly int                     $order_timeout_in_minutes,
         public readonly ?string                 $website_url,
         public readonly ?string                 $maps_url,
@@ -69,6 +71,12 @@ class UpdateEventSettingsDTO extends BaseDTO
 
         // Ticket design settings
         public readonly ?array                  $ticket_design_settings = null,
+
+        // Marketing settings
+        public readonly bool                    $show_marketing_opt_in = true,
+
+        // Homepage theme settings
+        public readonly ?array                  $homepage_theme_settings = null,
     )
     {
     }
@@ -95,6 +103,7 @@ class UpdateEventSettingsDTO extends BaseDTO
             homepage_body_background_color: '#7a5eb9',
             homepage_background_type: HomepageBackgroundType::COLOR,
             require_attendee_details: false,
+            attendee_details_collection_method: AttendeeDetailsCollectionMethod::PER_TICKET,
             order_timeout_in_minutes: 0,
             website_url: null,
             maps_url: null,
@@ -133,6 +142,18 @@ class UpdateEventSettingsDTO extends BaseDTO
                 'layout_type' => 'classic',
                 'enabled' => true,
             ],
+
+            // Marketing defaults
+            show_marketing_opt_in: true,
+
+            // Homepage theme defaults (simplified 2-color + mode system)
+            homepage_theme_settings: [
+                'accent' => '#8b5cf6',
+                'background' => '#f5f3ff',
+                'mode' => 'light',
+                'background_type' => 'COLOR',
+            ],
         );
     }
 }
+
