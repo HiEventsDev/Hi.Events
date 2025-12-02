@@ -1,10 +1,10 @@
 <?php
 
 use HiEvents\DomainObjects\Enums\CountryCode;
-use HiEvents\DomainObjects\Enums\StripePlatform;
 use HiEvents\Models\AccountStripePlatform;
 use HiEvents\Models\AccountVatSetting;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration {
@@ -13,6 +13,8 @@ return new class extends Migration {
      */
     public function up(): void
     {
+        Model::preventLazyLoading(false);
+
         if (!config('app.is_hi_events')) {
             return;
         }
