@@ -1,44 +1,73 @@
+@use "../auth-common" as auth;
 @use "../../../../styles/mixins.scss";
 
 .header {
-  text-align: center;
-  margin-bottom: 10px;
-
-  h2 {
-    margin: 0 0 5px;
-  }
-
-  p {
-    margin-top: 0;
-  }
+  @include auth.auth-header;
 }
 
 .loginCard {
+  @include auth.auth-card;
+
+  form {
+    @include auth.auth-inputs;
+    @include auth.auth-button;
+  }
+
+  // Forgot password link
+  p {
+    margin: 1rem 0 0;
+    text-align: center;
+
+    a {
+      font-size: 0.8125rem;
+      color: var(--hi-color-gray-dark);
+      font-weight: 500;
+      transition: color 0.2s ease;
+
+      &:hover {
+        color: var(--mantine-color-secondary-5);
+      }
+    }
+  }
 }
 
-// Ticket Lookup - Clean, subtle expandable section
+// Ticket Lookup Section
 .ticketLookup {
-  margin-top: 32px;
-  padding-top: 24px;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--hi-color-gray-2);
+
+  @include mixins.respond-below(sm) {
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+  }
 }
 
 .ticketLookupTrigger {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 0.5rem;
   width: 100%;
-  padding: 8px 0;
-  font-size: 0.875rem;
-  color: var(--mantine-color-dimmed);
+  padding: 0.5rem 0;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--hi-color-gray-dark);
   transition: color 0.2s ease;
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  @include mixins.respond-below(sm) {
+    font-size: 0.75rem;
+  }
 
   &:hover {
-    color: var(--hi-pink);
+    color: var(--mantine-color-secondary-5);
   }
 
   &[data-expanded="true"] {
-    color: var(--mantine-color-text);
+    color: var(--hi-text);
   }
 
   svg:first-child {
@@ -47,7 +76,7 @@
 }
 
 .chevron {
-  transition: transform 0.2s ease;
+  transition: transform 0.25s ease;
   opacity: 0.5;
 
   &[data-expanded="true"] {
@@ -56,17 +85,52 @@
 }
 
 .ticketLookupContent {
-  padding-top: 16px;
+  padding-top: 1rem;
 }
 
 .ticketLookupForm {
   display: flex;
-  gap: 8px;
+  gap: 0.625rem;
   align-items: flex-start;
 
   @include mixins.respond-below(sm) {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  :global(.mantine-TextInput-root) {
+    margin-bottom: 0;
+  }
+
+  :global(.mantine-TextInput-input) {
+    border-radius: var(--hi-radius-md);
+    border: 1.5px solid var(--hi-color-gray-2);
+    padding: 0.625rem 0.875rem;
+    font-size: 0.875rem;
+    background: white;
+
+    @include mixins.respond-below(sm) {
+      font-size: 1rem;
+    }
+
+    &:focus {
+      border-color: var(--mantine-color-secondary-5);
+      box-shadow: 0 0 0 3px var(--mantine-color-secondary-1);
+    }
+  }
+
+  :global(.mantine-Button-root) {
+    height: 38px;
+    border-radius: var(--hi-radius-md);
+    font-weight: 600;
+    font-size: 0.8125rem;
+    padding: 0 1.25rem;
+    white-space: nowrap;
+
+    @include mixins.respond-below(sm) {
+      height: 44px;
+      width: 100%;
+    }
   }
 }
 
@@ -76,31 +140,39 @@
 
 .successMessage {
   text-align: center;
-  padding: 16px;
-  background: linear-gradient(135deg, rgba(147, 51, 234, 0.06) 0%, rgba(236, 72, 153, 0.06) 100%);
-  border-radius: var(--mantine-radius-md);
-  border: 1px solid rgba(147, 51, 234, 0.15);
+  padding: 1.25rem;
+  background: var(--hi-color-gray);
+  border-radius: var(--hi-radius-lg);
+  border: 1px solid var(--hi-color-gray-2);
 
-  @media (prefers-color-scheme: dark) {
-    background: linear-gradient(135deg, rgba(147, 51, 234, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%);
-    border-color: rgba(147, 51, 234, 0.2);
+  @include mixins.respond-below(sm) {
+    padding: 1rem;
   }
 
   p {
-    margin: 0 0 8px;
+    margin: 0 0 0.75rem;
     font-size: 0.875rem;
-    line-height: 1.5;
-    color: var(--mantine-color-text);
+    line-height: 1.6;
+    color: var(--hi-text);
+    text-align: center;
+
+    @include mixins.respond-below(sm) {
+      font-size: 0.8125rem;
+    }
   }
 }
 
 .resetLink {
   font-size: 0.8125rem;
-  color: var(--mantine-color-dimmed);
+  color: var(--hi-color-gray-dark);
   text-decoration: underline;
   text-underline-offset: 2px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
 
   &:hover {
-    color: var(--hi-pink);
+    color: var(--mantine-color-secondary-5);
   }
 }

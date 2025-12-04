@@ -195,7 +195,7 @@ export const MyTickets = () => {
                                     />
                                     <Button
                                         type="submit"
-                                        color="var(--hi-pink)"
+                                        color="secondary.5"
                                         loading={ticketLookupMutation.isPending}
                                         disabled={ticketLookupMutation.isPending}
                                     >

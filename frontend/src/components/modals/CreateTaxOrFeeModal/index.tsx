@@ -8,7 +8,11 @@ import { useFormErrorResponseHandler } from "../../../hooks/useFormErrorResponse
 import { showSuccess } from "../../../utilites/notifications.tsx";
 import {t, Trans} from "@lingui/macro";
 
-export const CreateTaxOrFeeModal = ({ onClose }: GenericModalProps) => {
+interface CreateTaxOrFeeModalProps extends GenericModalProps {
+    onCreated?: (taxOrFee: TaxAndFee) => void;
+}
+
+export const CreateTaxOrFeeModal = ({ onClose, onCreated }: CreateTaxOrFeeModalProps) => {
     const createMutation = useCreateTaxOrFee();
     const formErrorHandler = useFormErrorResponseHandler();
 
@@ -28,9 +32,10 @@ export const CreateTaxOrFeeModal = ({ onClose }: GenericModalProps) => {
         createMutation.mutate({
             taxOrFeeData: values,
         }, {
-            onSuccess: () => {
+            onSuccess: (response) => {
                 showSuccess(<Trans>{form.values.type === TaxAndFeeType.Tax ? t`Tax` : t`Fee`} created successfully</Trans>);
                 form.reset();
+                onCreated?.(response.data);
                 onClose();
             },
             onError: (error) => formErrorHandler(form, error)
