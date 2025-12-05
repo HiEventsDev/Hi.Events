@@ -1,9 +1,10 @@
 import {Badge, Button, Stack, Text} from "@mantine/core";
 import {t} from "@lingui/macro";
 import {AdminAccount} from "../../../api/admin.client";
-import {IconCalendar, IconWorld, IconBuildingBank, IconUsers} from "@tabler/icons-react";
+import {IconCalendar, IconWorld, IconBuildingBank, IconUsers, IconEye} from "@tabler/icons-react";
 import classes from "./AdminAccountsTable.module.scss";
 import {IdParam} from "../../../types";
+import {useNavigate} from "react-router";
 
 interface AdminAccountsTableProps {
     accounts: AdminAccount[];
@@ -12,6 +13,8 @@ interface AdminAccountsTableProps {
 }
 
 const AdminAccountsTable = ({accounts, onImpersonate, isLoading}: AdminAccountsTableProps) => {
+    const navigate = useNavigate();
+
     if (!accounts || accounts.length === 0) {
         return (
             <div className={classes.emptyState}>
@@ -53,6 +56,14 @@ const AdminAccountsTable = ({accounts, onImpersonate, isLoading}: AdminAccountsT
                             <h3 className={classes.accountName}>{account.name}</h3>
                             <span className={classes.accountEmail}>{account.email}</span>
                         </div>
+                        <Button
+                            size="xs"
+                            variant="light"
+                            leftSection={<IconEye size={14} />}
+                            onClick={() => navigate(`/admin/accounts/${account.id}`)}
+                        >
+                            {t`View Details`}
+                        </Button>
                     </div>
 
                     <div className={classes.cardBody}>
