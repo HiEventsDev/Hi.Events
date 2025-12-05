@@ -14,6 +14,9 @@ use Illuminate\Support\Carbon;
  * @property bool $vat_registered
  * @property string|null $vat_number
  * @property bool $vat_validated
+ * @property string $vat_validation_status
+ * @property string|null $vat_validation_error
+ * @property int $vat_validation_attempts
  * @property Carbon|null $vat_validation_date
  * @property string|null $business_name
  * @property string|null $business_address
@@ -31,6 +34,9 @@ class AccountVatSetting extends BaseModel
             'vat_registered',
             'vat_number',
             'vat_validated',
+            'vat_validation_status',
+            'vat_validation_error',
+            'vat_validation_attempts',
             'vat_validation_date',
             'business_name',
             'business_address',
@@ -43,6 +49,7 @@ class AccountVatSetting extends BaseModel
         return [
             'vat_registered' => 'boolean',
             'vat_validated' => 'boolean',
+            'vat_validation_attempts' => 'integer',
             'vat_validation_date' => 'datetime',
         ];
     }
