@@ -157,6 +157,13 @@ export const router: RouteObject[] = [
                 }
             },
             {
+                path: "accounts/:accountId",
+                async lazy() {
+                    const AccountDetail = await import("./components/routes/admin/Accounts/AccountDetail");
+                    return {Component: AccountDetail.default};
+                }
+            },
+            {
                 path: "users",
                 async lazy() {
                     const Users = await import("./components/routes/admin/Users");
@@ -168,6 +175,20 @@ export const router: RouteObject[] = [
                 async lazy() {
                     const Events = await import("./components/routes/admin/Events");
                     return {Component: Events.default};
+                }
+            },
+            {
+                path: "orders",
+                async lazy() {
+                    const Orders = await import("./components/routes/admin/Orders");
+                    return {Component: Orders.default};
+                }
+            },
+            {
+                path: "configurations",
+                async lazy() {
+                    const Configurations = await import("./components/routes/admin/Configurations");
+                    return {Component: Configurations.default};
                 }
             }
         ]

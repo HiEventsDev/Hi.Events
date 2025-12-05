@@ -55,4 +55,19 @@ class AccountRepository extends BaseRepository implements AccountRepositoryInter
 
         return $query->orderBy('created_at', 'desc')->paginate($perPage);
     }
+
+    public function getAccountWithDetails(int $accountId): Account
+    {
+        return $this->model
+            ->withCount(['events', 'users'])
+            ->with([
+                'configuration',
+                'account_vat_setting',
+                'users' => function ($query) {
+                    $query->select('users.id', 'users.first_name', 'users.last_name', 'users.email')
+                        ->withPivot('role');
+                }
+            ])
+            ->findOrFail($accountId);
+    }
 }
