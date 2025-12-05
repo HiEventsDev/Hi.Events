@@ -22,6 +22,9 @@ abstract class AccountVatSettingDomainObjectAbstract extends \HiEvents\DomainObj
     final public const CREATED_AT = 'created_at';
     final public const UPDATED_AT = 'updated_at';
     final public const DELETED_AT = 'deleted_at';
+    final public const VAT_VALIDATION_STATUS = 'vat_validation_status';
+    final public const VAT_VALIDATION_ERROR = 'vat_validation_error';
+    final public const VAT_VALIDATION_ATTEMPTS = 'vat_validation_attempts';
 
     protected int $id;
     protected int $account_id;
@@ -35,6 +38,9 @@ abstract class AccountVatSettingDomainObjectAbstract extends \HiEvents\DomainObj
     protected ?string $created_at = null;
     protected ?string $updated_at = null;
     protected ?string $deleted_at = null;
+    protected string $vat_validation_status = 'PENDING';
+    protected ?string $vat_validation_error = null;
+    protected int $vat_validation_attempts = 0;
 
     public function toArray(): array
     {
@@ -51,6 +57,9 @@ abstract class AccountVatSettingDomainObjectAbstract extends \HiEvents\DomainObj
                     'created_at' => $this->created_at ?? null,
                     'updated_at' => $this->updated_at ?? null,
                     'deleted_at' => $this->deleted_at ?? null,
+                    'vat_validation_status' => $this->vat_validation_status ?? null,
+                    'vat_validation_error' => $this->vat_validation_error ?? null,
+                    'vat_validation_attempts' => $this->vat_validation_attempts ?? null,
                 ];
     }
 
@@ -184,5 +193,38 @@ abstract class AccountVatSettingDomainObjectAbstract extends \HiEvents\DomainObj
     public function getDeletedAt(): ?string
     {
         return $this->deleted_at;
+    }
+
+    public function setVatValidationStatus(string $vat_validation_status): self
+    {
+        $this->vat_validation_status = $vat_validation_status;
+        return $this;
+    }
+
+    public function getVatValidationStatus(): string
+    {
+        return $this->vat_validation_status;
+    }
+
+    public function setVatValidationError(?string $vat_validation_error): self
+    {
+        $this->vat_validation_error = $vat_validation_error;
+        return $this;
+    }
+
+    public function getVatValidationError(): ?string
+    {
+        return $this->vat_validation_error;
+    }
+
+    public function setVatValidationAttempts(int $vat_validation_attempts): self
+    {
+        $this->vat_validation_attempts = $vat_validation_attempts;
+        return $this;
+    }
+
+    public function getVatValidationAttempts(): int
+    {
+        return $this->vat_validation_attempts;
     }
 }

@@ -3,29 +3,41 @@
 namespace HiEvents\Tests\Unit\Services\Application\Handlers\Account\Vat;
 
 use HiEvents\DomainObjects\AccountVatSettingDomainObject;
+use HiEvents\DomainObjects\Status\VatValidationStatus;
+use HiEvents\Jobs\Vat\ValidateVatNumberJob;
 use HiEvents\Repository\Interfaces\AccountVatSettingRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Account\Vat\DTO\UpsertAccountVatSettingDTO;
 use HiEvents\Services\Application\Handlers\Account\Vat\DTO\ViesValidationResponseDTO;
 use HiEvents\Services\Application\Handlers\Account\Vat\UpsertAccountVatSettingHandler;
 use HiEvents\Services\Infrastructure\Vat\ViesValidationService;
+use Illuminate\Support\Facades\Queue;
 use Mockery;
+use Psr\Log\LoggerInterface;
 use Tests\TestCase;
 
 class UpsertAccountVatSettingHandlerTest extends TestCase
 {
     private AccountVatSettingRepositoryInterface $repository;
     private ViesValidationService $viesService;
+    private LoggerInterface $logger;
     private UpsertAccountVatSettingHandler $handler;
 
     protected function setUp(): void
     {
         parent::setUp();
+        Queue::fake();
         $this->repository = Mockery::mock(AccountVatSettingRepositoryInterface::class);
         $this->viesService = Mockery::mock(ViesValidationService::class);
-        $this->handler = new UpsertAccountVatSettingHandler($this->repository, $this->viesService);
+        $this->logger = Mockery::mock(LoggerInterface::class);
+        $this->logger->shouldReceive('info')->byDefault();
+        $this->handler = new UpsertAccountVatSettingHandler(
+            $this->repository,
+            $this->viesService,
+            $this->logger
+        );
     }
 
-    public function testHandleCreatesVatSettingWithValidatedNumber(): void
+    public function testHandleCreatesVatSettingWithSyncValidationSuccess(): void
     {
         $accountId = 123;
         $vatNumber = 'IE1234567A';
@@ -40,10 +52,12 @@ class UpsertAccountVatSettingHandlerTest extends TestCase
             businessName: 'Test Company Ltd',
             businessAddress: '123 Test Street',
             countryCode: 'IE',
-            vatNumber: '1234567A'
+            vatNumber: '1234567A',
+            isTransientError: false,
         );
 
         $vatSetting = Mockery::mock(AccountVatSettingDomainObject::class);
+        $vatSetting->shouldReceive('getId')->andReturn(1);
 
         $this->repository
             ->shouldReceive('findByAccountId')
@@ -65,20 +79,22 @@ class UpsertAccountVatSettingHandlerTest extends TestCase
                     && $data['vat_registered'] === true
                     && $data['vat_number'] === $vatNumber
                     && $data['vat_validated'] === true
+                    && $data['vat_validation_status'] === VatValidationStatus::VALID->value
                     && $data['business_name'] === 'Test Company Ltd'
-                    && isset($data['vat_validation_date']);
+                    && $data['vat_country_code'] === 'IE';
             })
             ->andReturn($vatSetting);
 
         $result = $this->handler->handle($dto);
 
         $this->assertSame($vatSetting, $result);
+        Queue::assertNotPushed(ValidateVatNumberJob::class);
     }
 
-    public function testHandleCreatesVatSettingWithInvalidNumber(): void
+    public function testHandleQueuesJobOnTransientError(): void
     {
         $accountId = 123;
-        $vatNumber = 'IE9999999ZZ';
+        $vatNumber = 'IE1234567A';
         $dto = new UpsertAccountVatSettingDTO(
             accountId: $accountId,
             vatRegistered: true,
@@ -88,10 +104,13 @@ class UpsertAccountVatSettingHandlerTest extends TestCase
         $validationResponse = new ViesValidationResponseDTO(
             valid: false,
             countryCode: 'IE',
-            vatNumber: '9999999ZZ'
+            vatNumber: '1234567A',
+            isTransientError: true,
+            errorMessage: 'VIES service is temporarily busy',
         );
 
         $vatSetting = Mockery::mock(AccountVatSettingDomainObject::class);
+        $vatSetting->shouldReceive('getId')->andReturn(1);
 
         $this->repository
             ->shouldReceive('findByAccountId')
@@ -113,13 +132,66 @@ class UpsertAccountVatSettingHandlerTest extends TestCase
                     && $data['vat_registered'] === true
                     && $data['vat_number'] === $vatNumber
                     && $data['vat_validated'] === false
-                    && $data['business_name'] === null;
+                    && $data['vat_validation_status'] === VatValidationStatus::PENDING->value
+                    && $data['vat_country_code'] === 'IE';
             })
             ->andReturn($vatSetting);
 
         $result = $this->handler->handle($dto);
 
         $this->assertSame($vatSetting, $result);
+        Queue::assertPushed(ValidateVatNumberJob::class);
+    }
+
+    public function testHandleDoesNotQueueJobOnInvalidVatNumber(): void
+    {
+        $accountId = 123;
+        $vatNumber = 'IE9999999ZZ';
+        $dto = new UpsertAccountVatSettingDTO(
+            accountId: $accountId,
+            vatRegistered: true,
+            vatNumber: $vatNumber,
+        );
+
+        $validationResponse = new ViesValidationResponseDTO(
+            valid: false,
+            countryCode: 'IE',
+            vatNumber: '9999999ZZ',
+            isTransientError: false,
+            errorMessage: 'VAT number not found',
+        );
+
+        $vatSetting = Mockery::mock(AccountVatSettingDomainObject::class);
+        $vatSetting->shouldReceive('getId')->andReturn(1);
+
+        $this->repository
+            ->shouldReceive('findByAccountId')
+            ->with($accountId)
+            ->once()
+            ->andReturn(null);
+
+        $this->viesService
+            ->shouldReceive('validateVatNumber')
+            ->with($vatNumber)
+            ->once()
+            ->andReturn($validationResponse);
+
+        $this->repository
+            ->shouldReceive('create')
+            ->once()
+            ->withArgs(function ($data) use ($accountId, $vatNumber) {
+                return $data['account_id'] === $accountId
+                    && $data['vat_registered'] === true
+                    && $data['vat_number'] === $vatNumber
+                    && $data['vat_validated'] === false
+                    && $data['vat_validation_status'] === VatValidationStatus::INVALID->value;
+            })
+            ->andReturn($vatSetting);
+
+        $result = $this->handler->handle($dto);
+
+        $this->assertSame($vatSetting, $result);
+        Queue::assertNotPushed(ValidateVatNumberJob::class);
     }
 
     public function testHandleCreatesVatSettingWithInvalidFormat(): void
@@ -133,6 +205,7 @@ class UpsertAccountVatSettingHandlerTest extends TestCase
         );
 
         $vatSetting = Mockery::mock(AccountVatSettingDomainObject::class);
+        $vatSetting->shouldReceive('getId')->andReturn(1);
 
         $this->repository
             ->shouldReceive('findByAccountId')
@@ -151,6 +224,7 @@ class UpsertAccountVatSettingHandlerTest extends TestCase
                     && $data['vat_registered'] === true
                     && $data['vat_number'] === 'INVALID'
                     && $data['vat_validated'] === false
+                    && $data['vat_validation_status'] === VatValidationStatus::INVALID->value
                     && $data['business_name'] === null;
             })
             ->andReturn($vatSetting);
@@ -158,6 +232,7 @@ class UpsertAccountVatSettingHandlerTest extends TestCase
         $result = $this->handler->handle($dto);
 
         $this->assertSame($vatSetting, $result);
+        Queue::assertNotPushed(ValidateVatNumberJob::class);
     }
 
     public function testHandleCreatesVatSettingForNonRegistered(): void
@@ -169,6 +244,7 @@ class UpsertAccountVatSettingHandlerTest extends TestCase
         );
 
         $vatSetting = Mockery::mock(AccountVatSettingDomainObject::class);
+        $vatSetting->shouldReceive('getId')->andReturn(1);
 
         $this->repository
             ->shouldReceive('findByAccountId')
@@ -193,9 +269,10 @@ class UpsertAccountVatSettingHandlerTest extends TestCase
         $result = $this->handler->handle($dto);
 
         $this->assertSame($vatSetting, $result);
+        Queue::assertNotPushed(ValidateVatNumberJob::class);
     }
 
-    public function testHandleUpdatesExistingVatSetting(): void
+    public function testHandleDoesNotValidateIfVatNumberUnchanged(): void
     {
         $accountId = 123;
         $existingId = 456;
@@ -203,6 +280,7 @@ class UpsertAccountVatSettingHandlerTest extends TestCase
 
         $existing = Mockery::mock(AccountVatSettingDomainObject::class);
         $existing->shouldReceive('getId')->andReturn($existingId);
+        $existing->shouldReceive('getVatNumber')->andReturn($vatNumber);
 
         $dto = new UpsertAccountVatSettingDTO(
             accountId: $accountId,
@@ -210,15 +288,8 @@ class UpsertAccountVatSettingHandlerTest extends TestCase
             vatNumber: $vatNumber,
         );
 
-        $validationResponse = new ViesValidationResponseDTO(
-            valid: true,
-            businessName: 'Test GmbH',
-            businessAddress: 'Berlin, Germany',
-            countryCode: 'DE',
-            vatNumber: '123456789'
-        );
-
         $updated = Mockery::mock(AccountVatSettingDomainObject::class);
+        $updated->shouldReceive('getId')->andReturn($existingId);
 
         $this->repository
             ->shouldReceive('findByAccountId')
@@ -227,10 +298,7 @@ class UpsertAccountVatSettingHandlerTest extends TestCase
             ->andReturn($existing);
 
         $this->viesService
-            ->shouldReceive('validateVatNumber')
-            ->with($vatNumber)
-            ->once()
-            ->andReturn($validationResponse);
+            ->shouldNotReceive('validateVatNumber');
 
         $this->repository
             ->shouldReceive('updateFromArray')
@@ -239,14 +307,14 @@ class UpsertAccountVatSettingHandlerTest extends TestCase
                 return $data['account_id'] === $accountId
                     && $data['vat_registered'] === true
                     && $data['vat_number'] === $vatNumber
-                    && $data['vat_validated'] === true
-                    && $data['business_name'] === 'Test GmbH';
+                    && !isset($data['vat_validated']);
             }))
             ->andReturn($updated);
 
         $result = $this->handler->handle($dto);
 
         $this->assertSame($updated, $result);
+        Queue::assertNotPushed(ValidateVatNumberJob::class);
     }
 
     protected function tearDown(): void

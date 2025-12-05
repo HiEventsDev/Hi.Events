@@ -4,7 +4,6 @@ namespace HiEvents\Tests\Unit\Services\Infrastructure\Vat;
 
 use HiEvents\Services\Infrastructure\Vat\ViesValidationService;
 use Illuminate\Http\Client\Factory as HttpClient;
-use Illuminate\Http\Client\Request;
 use Illuminate\Http\Client\Response;
 use Illuminate\Http\Client\ConnectionException;
 use Psr\Log\LoggerInterface;
@@ -22,6 +21,7 @@ class ViesValidationServiceTest extends TestCase
         parent::setUp();
         $this->httpClient = Mockery::mock(HttpClient::class);
         $this->logger = Mockery::mock(LoggerInterface::class);
+        $this->logger->shouldReceive('info')->byDefault();
         $this->service = new ViesValidationService($this->httpClient, $this->logger);
     }
 
@@ -32,7 +32,7 @@ class ViesValidationServiceTest extends TestCase
 
         $this->httpClient
             ->shouldReceive('timeout')
-            ->with(10)
+            ->with(15)
             ->andReturnSelf();
 
         $this->httpClient
@@ -49,6 +49,10 @@ class ViesValidationServiceTest extends TestCase
             ->andReturn(true);
 
         $response
+            ->shouldReceive('status')
+            ->andReturn(200);
+
+        $response
             ->shouldReceive('json')
             ->andReturn([
                 'valid' => true,
@@ -59,6 +63,7 @@ class ViesValidationServiceTest extends TestCase
         $result = $this->service->validateVatNumber($vatNumber);
 
         $this->assertTrue($result->valid);
+        $this->assertFalse($result->isTransientError);
         $this->assertEquals('Test Company Ltd', $result->businessName);
         $this->assertEquals('123 Test Street, Dublin', $result->businessAddress);
         $this->assertEquals('IE', $result->countryCode);
@@ -82,16 +87,143 @@ class ViesValidationServiceTest extends TestCase
             ->andReturn(true);
 
         $response
+            ->shouldReceive('status')
+            ->andReturn(200);
+
+        $response
             ->shouldReceive('json')
             ->andReturn(['valid' => false]);
 
         $result = $this->service->validateVatNumber($vatNumber);
 
         $this->assertFalse($result->valid);
+        $this->assertFalse($result->isTransientError);
         $this->assertNull($result->businessName);
     }
 
-    public function testApiErrorLogsWarningAndReturnsFalse(): void
+    public function testMsMaxConcurrentReqReturnsTransientError(): void
+    {
+        $vatNumber = 'DE123456789';
+        $response = Mockery::mock(Response::class);
+
+        $this->httpClient
+            ->shouldReceive('timeout')
+            ->andReturnSelf();
+
+        $this->httpClient
+            ->shouldReceive('post')
+            ->andReturn($response);
+
+        $response
+            ->shouldReceive('successful')
+            ->andReturn(true);
+
+        $response
+            ->shouldReceive('status')
+            ->andReturn(200);
+
+        $response
+            ->shouldReceive('json')
+            ->andReturn([
+                'actionSucceed' => false,
+                'errorWrappers' => [
+                    ['error' => 'MS_MAX_CONCURRENT_REQ']
+                ]
+            ]);
+
+        $this->logger
+            ->shouldReceive('warning')
+            ->once()
+            ->with('VIES API returned error', Mockery::any());
+
+        $result = $this->service->validateVatNumber($vatNumber);
+
+        $this->assertFalse($result->valid);
+        $this->assertTrue($result->isTransientError);
+        $this->assertNotNull($result->errorMessage);
+    }
+
+    public function testMsUnavailableReturnsTransientError(): void
+    {
+        $vatNumber = 'FR12345678901';
+        $response = Mockery::mock(Response::class);
+
+        $this->httpClient
+            ->shouldReceive('timeout')
+            ->andReturnSelf();
+
+        $this->httpClient
+            ->shouldReceive('post')
+            ->andReturn($response);
+
+        $response
+            ->shouldReceive('successful')
+            ->andReturn(true);
+
+        $response
+            ->shouldReceive('status')
+            ->andReturn(200);
+
+        $response
+            ->shouldReceive('json')
+            ->andReturn([
+                'actionSucceed' => false,
+                'errorWrappers' => [
+                    ['error' => 'MS_UNAVAILABLE']
+                ]
+            ]);
+
+        $this->logger
+            ->shouldReceive('warning')
+            ->once();
+
+        $result = $this->service->validateVatNumber($vatNumber);
+
+        $this->assertFalse($result->valid);
+        $this->assertTrue($result->isTransientError);
+    }
+
+    public function testInvalidInputReturnsNonTransientError(): void
+    {
+        $vatNumber = 'XX12345678';
+        $response = Mockery::mock(Response::class);
+
+        $this->httpClient
+            ->shouldReceive('timeout')
+            ->andReturnSelf();
+
+        $this->httpClient
+            ->shouldReceive('post')
+            ->andReturn($response);
+
+        $response
+            ->shouldReceive('successful')
+            ->andReturn(true);
+
+        $response
+            ->shouldReceive('status')
+            ->andReturn(200);
+
+        $response
+            ->shouldReceive('json')
+            ->andReturn([
+                'actionSucceed' => false,
+                'errorWrappers' => [
+                    ['error' => 'INVALID_INPUT']
+                ]
+            ]);
+
+        $this->logger
+            ->shouldReceive('warning')
+            ->once();
+
+        $result = $this->service->validateVatNumber($vatNumber);
+
+        $this->assertFalse($result->valid);
+        $this->assertFalse($result->isTransientError);
+    }
+
+    public function testHttpErrorReturnsTransientError(): void
     {
         $vatNumber = 'DE123456789';
         $response = Mockery::mock(Response::class);
@@ -116,20 +248,22 @@ class ViesValidationServiceTest extends TestCase
             ->shouldReceive('body')
             ->andReturn('Service Unavailable');
 
+        $response
+            ->shouldReceive('json')
+            ->andReturn([]);
+
         $this->logger
             ->shouldReceive('warning')
             ->once()
-            ->with('VIES API request failed', Mockery::on(function ($context) use ($vatNumber) {
-                return $context['status'] === 503
-                    && $context['vat_number'] === $vatNumber;
-            }));
+            ->with('VIES HTTP error response', Mockery::any());
 
         $result = $this->service->validateVatNumber($vatNumber);
 
         $this->assertFalse($result->valid);
+        $this->assertTrue($result->isTransientError);
     }
 
-    public function testConnectionExceptionLogsErrorAndReturnsFalse(): void
+    public function testConnectionExceptionReturnsTransientError(): void
     {
         $vatNumber = 'FR12345678901';
 
@@ -144,18 +278,16 @@ class ViesValidationServiceTest extends TestCase
         $this->logger
             ->shouldReceive('error')
             ->once()
-            ->with('VIES API connection error', Mockery::on(function ($context) use ($vatNumber) {
-                return str_contains($context['error'], 'Connection timeout')
-                    && $context['vat_number'] === $vatNumber;
-            }));
+            ->with('VIES connection error', Mockery::any());
 
         $result = $this->service->validateVatNumber($vatNumber);
 
         $this->assertFalse($result->valid);
+        $this->assertTrue($result->isTransientError);
         $this->assertEquals('FR', $result->countryCode);
     }
 
-    public function testUnexpectedExceptionLogsErrorAndReturnsFalse(): void
+    public function testUnexpectedExceptionReturnsTransientError(): void
     {
         $vatNumber = 'ES12345678';
 
@@ -170,13 +302,12 @@ class ViesValidationServiceTest extends TestCase
         $this->logger
             ->shouldReceive('error')
             ->once()
-            ->with('VIES validation exception', Mockery::on(function ($context) {
-                return str_contains($context['error'], 'Unexpected error');
-            }));
+            ->with('VIES validation exception', Mockery::any());
 
         $result = $this->service->validateVatNumber($vatNumber);
 
         $this->assertFalse($result->valid);
+        $this->assertTrue($result->isTransientError);
     }
 
     protected function tearDown(): void
