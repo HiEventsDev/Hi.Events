@@ -1,6 +1,6 @@
 <?php
 
-namespace HiEvents\Tests\Unit\Services\Application\Handlers\Admin;
+namespace Tests\Unit\Services\Application\Handlers\Admin;
 
 use HiEvents\Models\Account;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
