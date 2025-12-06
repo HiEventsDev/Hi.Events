@@ -1,127 +1,115 @@
-import {Navigate, Outlet, useLocation} from "react-router";
+import {Navigate, Outlet} from "react-router";
 import classes from "./Auth.module.scss";
 import {t} from "@lingui/macro";
 import {useGetMe} from "../../../queries/useGetMe.ts";
 import {PoweredByFooter} from "../../common/PoweredByFooter";
 import {LanguageSwitcher} from "../../common/LanguageSwitcher";
 import {
-    IconBuildingStore,
     IconChartBar,
-    IconClock,
     IconCreditCard,
     IconDeviceMobile,
-    IconMessages,
     IconPalette,
     IconQrcode,
+    IconShieldCheck,
+    IconSparkles,
     IconTicket,
-    IconWebhook
+    IconUsers,
 } from '@tabler/icons-react';
 import {useMemo} from "react";
-import { getConfig } from "../../../utilites/config.ts";
+import {getConfig} from "../../../utilites/config.ts";
 import {isHiEvents} from "../../../utilites/helpers.ts";
 
-const RegisterFeatures = () => (
-    <div className={classes.featureGrid}>
-        <div className={classes.feature}>
-            <IconClock size={16} className={classes.checkIcon}/>
-            <div className={classes.featureText}>
-                <h3>{t`Setup in Minutes`}</h3>
-                <p>{t`Create and customize your event page instantly`}</p>
-            </div>
-        </div>
+const allFeatures = [
+    {
+        icon: IconTicket,
+        title: t`Flexible Ticketing`,
+        description: t`Paid, free, tiered pricing, and donation-based tickets`
+    },
+    {
+        icon: IconQrcode,
+        title: t`QR Code Check-in`,
+        description: t`Mobile scanner with offline support and real-time tracking`
+    },
+    {
+        icon: IconCreditCard,
+        title: t`Instant Payouts`,
+        description: t`Get paid immediately via Stripe Connect`
+    },
+    {
+        icon: IconChartBar,
+        title: t`Real-Time Analytics`,
+        description: t`Track sales, revenue, and attendance with detailed reports`
+    },
+    {
+        icon: IconPalette,
+        title: t`Custom Branding`,
+        description: t`Your logo, colors, and style on every page`
+    },
+    {
+        icon: IconDeviceMobile,
+        title: t`Mobile Optimized`,
+        description: t`Beautiful checkout experience on any device`
+    },
+    {
+        icon: IconUsers,
+        title: t`Team Management`,
+        description: t`Invite unlimited team members with custom roles`
+    },
+    {
+        icon: IconShieldCheck,
+        title: t`Data Ownership`,
+        description: t`You own 100% of your attendee data, always`
+    },
+];
 
-        <div className={classes.feature}>
-            <IconCreditCard size={16} className={classes.checkIcon}/>
-            <div className={classes.featureText}>
-                <h3>{t`No Credit Card Required`}</h3>
-                <p>{t`Get started for free, no subscription fees`}</p>
-            </div>
-        </div>
-
-        <div className={classes.feature}>
-            <IconTicket size={16} className={classes.checkIcon}/>
-            <div className={classes.featureText}>
-                <h3>{t`Sell More Than Tickets`}</h3>
-                <p>{t`Products, merchandise, and flexible pricing options`}</p>
-            </div>
-        </div>
-    </div>
-);
-
-const GenericFeatures = () => {
-    const allFeatures = [
-        {
-            icon: IconChartBar,
-            title: t`In-depth Analytics`,
-            description: t`Track revenue, page views, and sales with detailed analytics and exportable reports`
-        },
-        {
-            icon: IconTicket,
-            title: t`Flexible Ticketing`,
-            description: t`Support for tiered, donation-based, and product sales with customizable pricing and capacity`
-        },
-        {
-            icon: IconDeviceMobile,
-            title: t`Mobile Check-in`,
-            description: t`QR code scanning with instant feedback and secure sharing for staff access`
-        },
-        {
-            icon: IconBuildingStore,
-            title: t`Sell Anything`,
-            description: t`Sell merchandise alongside tickets with integrated tax and promo code support`
-        },
-        {
-            icon: IconMessages,
-            title: t`Attendee Management`,
-            description: t`Message attendees, manage orders, and handle refunds all in one place`
-        },
-        {
-            icon: IconQrcode,
-            title: t`Smart Check-in`,
-            description: t`Automated entry management with multiple check-in lists and real-time validation`
-        },
-        {
-            icon: IconPalette,
-            title: t`Match Your Brand`,
-            description: t`Customize your event page and widget design to match your brand perfectly`
-        },
-        {
-            icon: IconWebhook,
-            title: t`Fully Integrated`,
-            description: t`Connect with CRM and automate tasks using webhooks and integrations`
-        }
-    ];
-
+const FeaturePanel = () => {
     const selectedFeatures = useMemo(() => {
         const shuffled = [...allFeatures].sort(() => 0.5 - Math.random());
-        return shuffled.slice(0, 3);
+        return shuffled.slice(0, 4);
     }, []);
 
     return (
-        <div className={classes.featureGrid}>
-            {selectedFeatures.map((feature, index) => {
-                const Icon = feature.icon;
-                return (
-                    <div key={index} className={classes.feature}>
-                        <Icon size={16} className={classes.checkIcon}/>
-                        <div className={classes.featureText}>
-                            <h3>{feature.title}</h3>
-                            <p>{feature.description}</p>
-                        </div>
+        <div className={classes.rightPanel}>
+            <div className={classes.backgroundImage} />
+            <div className={classes.backgroundOverlay} />
+            <div className={classes.gridPattern} />
+            <div className={`${classes.glowEffect} ${classes.glowTop}`} />
+            <div className={`${classes.glowEffect} ${classes.glowBottom}`} />
+
+            <div className={classes.overlay}>
+                <div className={classes.content}>
+                    <div className={classes.badge}>
+                        <IconSparkles size={14} />
+                        <span>{t`Event Management Platform`}</span>
                     </div>
-                );
-            })}
+
+                    <div className={classes.featureGrid}>
+                        {selectedFeatures.map((feature, index) => {
+                            const Icon = feature.icon;
+                            return (
+                                <div key={index} className={classes.feature}>
+                                    <div className={classes.featureIcon}>
+                                        <Icon size={18} />
+                                    </div>
+                                    <div className={classes.featureText}>
+                                        <h3>{feature.title}</h3>
+                                        <p>{feature.description}</p>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            </div>
         </div>
     );
 };
 
 const AuthLayout = () => {
     const me = useGetMe();
-    const location = useLocation();
-    const isRegisterPage = location.pathname === '/auth/register';
 
     if (me.isSuccess) {
-        return <Navigate to={'/manage/events'}/>
+        return <Navigate to={'/manage/events'} />
     }
 
     return (
@@ -130,40 +118,35 @@ const AuthLayout = () => {
                 <div className={classes.leftPanel}>
                     <main className={classes.container}>
                         <div className={classes.logo}>
-                            <img src={getConfig("VITE_APP_LOGO_DARK", "/logo-dark.svg")} alt={t`${getConfig("VITE_APP_NAME", "Hi.Events")} logo`}/>
+                            <img
+                                src={getConfig("VITE_APP_LOGO_DARK", "/logos/hi-events-stacked-light.svg")}
+                                alt={t`${getConfig("VITE_APP_NAME", "Hi.Events")} logo`}
+                            />
                         </div>
                         <div className={classes.wrapper}>
-                            <Outlet/>
-                            {
-                                /*
-                                * (c) Hi.Events Ltd 2025
-                                *
-                                * PLEASE NOTE:
-                                *
-                                * Hi.Events is licensed under the GNU Affero General Public License (AGPL) version 3.
-                                *
-                                * You can find the full license text at: https://github.com/HiEventsDev/hi.events/blob/main/LICENCE
-                                *
-                                * In accordance with Section 7(b) of the AGPL, we ask that you retain the "Powered by Hi.Events" notice.
-                                *
-                                * If you wish to remove this notice, a commercial license is available at: https://hi.events/licensing
-                                */
-                            }
-                            {!isHiEvents() && <PoweredByFooter/>}
+                            <Outlet />
+                            {/*
+                             * (c) Hi.Events Ltd 2025
+                             *
+                             * PLEASE NOTE:
+                             *
+                             * Hi.Events is licensed under the GNU Affero General Public License (AGPL) version 3.
+                             *
+                             * You can find the full license text at: https://github.com/HiEventsDev/hi.events/blob/main/LICENCE
+                             *
+                             * In accordance with Section 7(b) of the AGPL, we ask that you retain the "Powered by Hi.Events" notice.
+                             *
+                             * If you wish to remove this notice, a commercial license is available at: https://hi.events/licensing
+                             */}
+                            {!isHiEvents() && <PoweredByFooter />}
                             <div className={classes.languageSwitcher}>
-                                <LanguageSwitcher/>
+                                <LanguageSwitcher />
                             </div>
                         </div>
                     </main>
                 </div>
 
-                <div className={classes.rightPanel}>
-                    <div className={classes.overlay}>
-                        <div className={classes.content}>
-                            {isRegisterPage ? <RegisterFeatures/> : <GenericFeatures/>}
-                        </div>
-                    </div>
-                </div>
+                <FeaturePanel />
             </div>
         </div>
     );

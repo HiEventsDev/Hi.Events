@@ -91,6 +91,8 @@ class CreateProductService
             'is_hidden_without_promo_code' => $productsData->getIsHiddenWithoutPromoCode(),
             'event_id' => $productsData->getEventId(),
             'product_category_id' => $productsData->getProductCategoryId(),
+            'is_highlighted' => $productsData->getIsHighlighted(),
+            'highlight_message' => $productsData->getHighlightMessage(),
         ]);
     }
 

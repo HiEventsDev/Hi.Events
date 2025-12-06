@@ -1,18 +1,44 @@
+@use "../auth-common" as auth;
 @use "../../../../styles/mixins.scss";
 
 .header {
-  text-align: center;
-  margin-bottom: 10px;
-
-  h2 {
-    margin: 0 0 5px;
-  }
-
-  p {
-    margin-top: -0;
-  }
+  @include auth.auth-header;
 }
 
 .registerCard {
-  max-width: 500px;
+  @include auth.auth-card;
+  width: 100%;
+
+  form {
+    @include auth.auth-inputs;
+    @include auth.auth-button(0.5rem);
+
+    :global(.mantine-InputWrapper-root) {
+      margin-bottom: 0.875rem;
+    }
+
+    :global(.mantine-SimpleGrid-root) {
+      gap: 0.875rem;
+
+      @include mixins.respond-below(sm) {
+        gap: 0;
+      }
+
+      :global(.mantine-InputWrapper-root) {
+        margin-bottom: 0;
+
+        @include mixins.respond-below(sm) {
+          margin-bottom: 0.875rem;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+      }
+    }
+  }
+
+  footer {
+    @include auth.auth-footer-terms;
+  }
 }

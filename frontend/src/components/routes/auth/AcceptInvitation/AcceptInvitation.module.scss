@@ -1,0 +1,64 @@
+@use "../auth-common" as auth;
+@use "../../../../styles/mixins.scss";
+
+.header {
+  @include auth.auth-header;
+}
+
+.invitationCard {
+  @include auth.auth-card;
+  width: 100%;
+
+  form {
+    fieldset {
+      border: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    @include auth.auth-inputs;
+    @include auth.auth-button;
+
+    :global(.mantine-InputWrapper-root) {
+      margin-bottom: 0.875rem;
+    }
+
+    :global(.mantine-Switch-root) {
+      margin-bottom: 1.25rem;
+    }
+
+    :global(.mantine-Switch-label) {
+      font-size: 0.875rem;
+      color: var(--hi-color-gray-dark);
+
+      a {
+        color: var(--mantine-color-secondary-5);
+        font-weight: 500;
+
+        &:hover {
+          color: var(--mantine-color-secondary-7);
+        }
+      }
+    }
+  }
+}
+
+.inputGroup {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.875rem;
+  margin-bottom: 0.875rem;
+
+  @include mixins.respond-below(sm) {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  :global(.mantine-InputWrapper-root) {
+    margin-bottom: 0;
+
+    @include mixins.respond-below(sm) {
+      margin-bottom: 0.875rem;
+    }
+  }
+}

@@ -40,40 +40,84 @@
 
 .additionalToggle {
   display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: var(--hi-spacing-xs);
+  flex-direction: column;
+  gap: 4px;
   padding: var(--hi-spacing-sm) var(--hi-spacing-md);
-  margin-top: 0;
+  margin-top: var(--hi-spacing-sm);
   margin-bottom: var(--hi-spacing-xl);
   cursor: pointer;
   background: var(--mantine-color-gray-0);
-  border: 1px dashed var(--mantine-color-gray-3);
+  border: 1px solid var(--mantine-color-gray-2);
   border-radius: var(--mantine-radius-md);
-  transition: background 0.15s ease, border-color 0.15s ease;
+  transition: all 0.15s ease;
 
   &:hover {
     background: var(--mantine-color-gray-1);
-    border-color: var(--mantine-color-gray-4);
+    border-color: var(--mantine-color-gray-3);
+
+    .toggleLabel {
+      color: var(--mantine-color-gray-8);
+    }
+
+    svg {
+      color: var(--mantine-color-gray-6);
+    }
   }
 
-  svg {
-    flex-shrink: 0;
-    color: var(--mantine-color-gray-5);
+  &:focus-visible {
+    outline: 2px solid var(--mantine-color-violet-4);
+    outline-offset: 2px;
+  }
+
+  &.hasReminder {
+    border-color: var(--mantine-color-orange-3);
+    background: var(--mantine-color-orange-0);
+
+    &:hover {
+      background: var(--mantine-color-orange-1);
+      border-color: var(--mantine-color-orange-4);
+    }
+  }
+
+  .toggleMain {
+    display: flex;
+    align-items: center;
+    gap: var(--hi-spacing-xs);
+
+    svg {
+      flex-shrink: 0;
+      color: var(--mantine-color-gray-5);
+      transition: color 0.15s ease;
+    }
   }
 
   .toggleLabel {
     font-size: 0.875rem;
     font-weight: 500;
-    color: var(--mantine-color-gray-6);
+    color: var(--mantine-color-gray-7);
+    transition: color 0.15s ease;
+  }
+
+  .toggleMeta {
+    margin-left: calc(16px + var(--hi-spacing-xs));
   }
 
   .toggleDescription {
-    flex-basis: 100%;
     font-size: 0.8rem;
     color: var(--mantine-color-gray-5);
-    margin-left: calc(16px + var(--hi-spacing-xs));
-    margin-top: 2px;
+  }
+
+  .taxReminder {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--mantine-color-orange-7);
+
+    svg {
+      color: var(--mantine-color-orange-5);
+    }
   }
 }
 
@@ -92,4 +136,9 @@
   svg {
     flex-shrink: 0;
   }
+}
+
+.addTaxFeeButton {
+  margin-top: var(--hi-spacing-xs);
+  padding-left: 0;
 }

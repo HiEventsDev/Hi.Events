@@ -26,19 +26,19 @@
   padding: 6px 12px;
   font-size: 0.875rem;
   font-weight: 500;
-  color: #6c757d;
+  color: var(--mantine-color-gray-6);
   background: transparent;
-  border: 1px solid rgba(108, 117, 125, 0.2);
+  border: 1px solid var(--mantine-color-gray-3);
   border-radius: 6px;
   transition: all 0.2s ease;
   cursor: pointer;
-  
+
   &:hover:not(:disabled) {
-    background: rgba(108, 117, 125, 0.05);
-    border-color: rgba(108, 117, 125, 0.3);
-    color: #495057;
+    background: var(--mantine-color-gray-0);
+    border-color: var(--mantine-color-gray-4);
+    color: var(--mantine-color-gray-7);
   }
-  
+
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
@@ -75,14 +75,14 @@
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', monospace;
   font-weight: 600;
   font-size: 0.875rem;
-  color: #1a1a2e;
+  color: var(--mantine-color-gray-9);
   min-width: 45px;
   flex-shrink: 0;
 }
 
 .currencyLabel {
   font-size: 0.75rem;
-  color: #6c757d;
+  color: var(--mantine-color-gray-6);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -91,10 +91,10 @@
 }
 
 .selectedCurrency {
-  background: rgba(73, 80, 246, 0.05);
-  
+  background: var(--mantine-color-secondary-0);
+
   .currencyCode {
-    color: #4950f6;
+    color: var(--mantine-color-secondary-5);
   }
 }
 
@@ -199,7 +199,7 @@
 .sectionTitle {
   font-size: 1.25rem;
   font-weight: 600;
-  color: #1a1a2e;
+  color: var(--mantine-color-gray-9);
   margin: 0;
   letter-spacing: -0.02em;
 }
@@ -209,104 +209,119 @@
   display: flex;
   flex-direction: column;
   flex: 1;
+  gap: 0;
+}
+
+.orderCardLink {
+  text-decoration: none;
+  color: inherit;
+  display: block;
 }
 
 .orderCard {
-  transition: all 0.2s ease;
-  margin-bottom: 10px;
-  border: 1px solid var(--mantine-color-gray-2);
-  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  margin-bottom: 0;
+  transition: all 0.15s ease;
+  cursor: pointer;
 
   &:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    border-color: var(--mantine-color-gray-3);
-  }
+    border-color: var(--mantine-color-gray-4);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 
-  &:focus-within {
-    outline: 2px solid var(--mantine-color-primary-3);
-    outline-offset: 2px;
-  }
-
-  @include mixins.respond-below(md) {
-    &:active {
-      transform: scale(0.99);
+    .orderArrow {
+      transform: translateX(2px);
+      color: var(--mantine-color-primary-filled);
     }
+
+    .customerName {
+      color: var(--mantine-color-primary-filled);
+    }
+  }
+
+  &:active {
+    transform: scale(0.995);
   }
 }
 
-.orderHeader {
+.orderMain {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 1rem;
-  margin-bottom: 0.5rem;
-
-  @include mixins.respond-below(md) {
-    flex-direction: row;
-    align-items: flex-start;
-    gap: 0.75rem;
-    flex-wrap: wrap;
-
-    > :first-child {
-      flex: 1;
-    }
-  }
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  flex: 1;
 }
 
-.orderInfo {
+.orderAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--mantine-color-gray-1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--mantine-color-gray-5);
+}
+
+.orderDetails {
   display: flex;
   flex-direction: column;
-  gap: 0.125rem;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.orderCustomer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.customerName {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--mantine-color-text);
+  transition: color 0.15s ease;
+  @include mixins.ellipsis;
+}
+
+.orderMeta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--mantine-color-dimmed);
+}
+
+.orderAmount {
+  font-weight: 600;
+  color: var(--mantine-color-green-7);
+}
+
+.orderSeparator {
+  color: var(--mantine-color-gray-4);
+}
+
+.orderTime {
+  color: var(--mantine-color-dimmed);
 }
 
 .orderId {
-  font-weight: 600;
-  font-size: 0.9375rem;
-  color: var(--mantine-color-dark-9);
+  font-size: 11px;
+  color: var(--mantine-color-gray-5);
   font-family: 'SF Mono', Monaco, 'Cascadia Mono', 'Roboto Mono', monospace;
   letter-spacing: 0.02em;
 }
 
-.customerName {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  font-size: 0.875rem;
-  color: var(--mantine-color-gray-6);
-  font-weight: 400;
-  opacity: 0.85;
-
-  svg {
-    flex-shrink: 0;
-    width: 14px;
-    height: 14px;
-  }
-}
-
-.orderFooter {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-
-  @include mixins.respond-below(md) {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.75rem;
-
-    button {
-      width: 100%;
-      justify-content: center;
-      min-height: 2.5rem;
-    }
-  }
-}
-
-.orderMeta {
-  font-size: 0.8125rem;
-  color: var(--mantine-color-gray-6);
-  white-space: nowrap;
+.orderArrow {
+  flex-shrink: 0;
+  color: var(--mantine-color-gray-4);
+  transition: all 0.15s ease;
 }
 
 // Events list
@@ -318,11 +333,11 @@
 
 // Empty states
 .emptyState {
-  background: linear-gradient(135deg, #f8f9ff 0%, #eee5ff 100%);
+  background: linear-gradient(135deg, var(--mantine-color-primary-0) 0%, var(--mantine-color-secondary-0) 100%);
   border-radius: 16px;
   padding: 3rem 2rem;
   text-align: center;
-  border: 2px dashed #e0d5ff;
+  border: 2px dashed var(--mantine-color-primary-2);
   position: relative;
   overflow: hidden;
   min-height: 280px;
@@ -337,7 +352,7 @@
     position: absolute;
     top: -50%;
     right: -50%;
-      background: radial-gradient(circle, rgba(138, 110, 255, 0.05) 0%, transparent 70%);
+      background: radial-gradient(circle, var(--mantine-color-secondary-0) 0%, transparent 70%);
     animation: pulse 4s ease-in-out infinite;
   }
 
@@ -355,7 +370,7 @@
   h4 {
     font-size: 1.25rem;
     font-weight: 600;
-    color: #1a1a2e;
+    color: var(--mantine-color-gray-9);
     margin: 1rem 0 0.5rem;
     position: relative;
     z-index: 1;
@@ -363,7 +378,7 @@
 
   p {
     font-size: 0.875rem;
-    color: #6c757d;
+    color: var(--mantine-color-gray-6);
     max-width: 300px;
     margin: 0 auto;
     line-height: 1.5;

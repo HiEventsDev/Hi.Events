@@ -18,7 +18,7 @@
     margin: 20px 0 12px;
     font-size: 2rem;
     font-weight: 700;
-    background: linear-gradient(90deg, var(--hi-pink) 0%, #9333ea 100%);
+    background: linear-gradient(90deg, var(--mantine-color-secondary-5) 0%, var(--mantine-color-primary-6) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -31,9 +31,9 @@
 }
 
 .headerIcon {
-  color: var(--hi-pink);
+  color: var(--mantine-color-secondary-5);
   padding: 16px;
-  background: linear-gradient(135deg, rgba(147, 51, 234, 0.08) 0%, rgba(236, 72, 153, 0.08) 100%);
+  background: var(--mantine-color-primary-0);
   border-radius: 50%;
 
   @include mixins.respond-below(md) {
@@ -89,7 +89,7 @@
     left: 0;
     right: 0;
     height: 3px;
-    background: linear-gradient(90deg, var(--hi-pink) 0%, #9333ea 100%);
+    background: linear-gradient(90deg, var(--mantine-color-secondary-5) 0%, var(--mantine-color-primary-6) 100%);
     border-radius: var(--mantine-radius-md) var(--mantine-radius-md) 0 0;
   }
 }
@@ -167,7 +167,7 @@
   color: var(--mantine-color-text);
 
   svg {
-    color: var(--hi-pink);
+    color: var(--mantine-color-secondary-5);
   }
 }
 
@@ -189,13 +189,13 @@
 .successMessage {
   text-align: center;
   padding: 16px;
-  background: linear-gradient(135deg, rgba(147, 51, 234, 0.06) 0%, rgba(236, 72, 153, 0.06) 100%);
+  background: var(--mantine-color-primary-0);
   border-radius: var(--mantine-radius-md);
-  border: 1px solid rgba(147, 51, 234, 0.15);
+  border: 1px solid var(--mantine-color-primary-1);
 
   @media (prefers-color-scheme: dark) {
-    background: linear-gradient(135deg, rgba(147, 51, 234, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%);
-    border-color: rgba(147, 51, 234, 0.2);
+    background: var(--mantine-color-primary-1);
+    border-color: var(--mantine-color-primary-2);
   }
 
   p {

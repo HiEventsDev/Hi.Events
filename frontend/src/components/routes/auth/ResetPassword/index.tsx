@@ -1,4 +1,4 @@
-import {Button, LoadingOverlay, PasswordInput,} from "@mantine/core";
+import {Button, LoadingOverlay, PasswordInput} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import {NavLink, useNavigate, useParams} from "react-router";
 import {useResetPassword} from "../../../../mutations/useResetPassword.ts";
@@ -8,7 +8,6 @@ import {useEffect} from "react";
 import {ResetPasswordRequest} from "../../../../types.ts";
 import {useFormErrorResponseHandler} from "../../../../hooks/useFormErrorResponseHandler.tsx";
 import {t} from "@lingui/macro";
-import {Card} from "../../../common/Card";
 import classes from "./ResetPassword.module.scss";
 
 export const ResetPassword = () => {
@@ -32,7 +31,11 @@ export const ResetPassword = () => {
     }, [verifyQuery.isError]);
 
     if (verifyQuery.isLoading) {
-        return <LoadingOverlay visible/>
+        return (
+            <div className={classes.loadingWrapper}>
+                <LoadingOverlay visible />
+            </div>
+        );
     }
 
     const handleSubmit = (values: ResetPasswordRequest) => mutate.mutate({
@@ -51,24 +54,33 @@ export const ResetPassword = () => {
     return (
         <>
             <header className={classes.header}>
-                <h2>{t`Reset Password`}</h2>
-                <p>{t`Please enter your new password`}</p>
+                <h2>{t`Create new password`}</h2>
+                <p>{t`Your new password must be at least 8 characters long.`}</p>
             </header>
-            <Card>
+            <div className={classes.resetPasswordCard}>
                 <form onSubmit={form.onSubmit(handleSubmit)}>
-                    <PasswordInput {...form.getInputProps('password')} label={t`New Password`} required/>
-                    <PasswordInput {...form.getInputProps('password_confirmation')} label={t`Confirm Password`} required/>
-                    <Button color={'var(--hi-pink)'} type="submit" fullWidth disabled={mutate.isPending}>
-                        {mutate.isPending ? t`Working...` : t`Reset password`}
+                    <PasswordInput
+                        {...form.getInputProps('password')}
+                        label={t`New Password`}
+                        placeholder={t`Enter new password`}
+                        required
+                    />
+                    <PasswordInput
+                        {...form.getInputProps('password_confirmation')}
+                        label={t`Confirm Password`}
+                        placeholder={t`Confirm new password`}
+                        required
+                    />
+                    <Button color="secondary.5" type="submit" fullWidth loading={mutate.isPending} disabled={mutate.isPending}>
+                        {mutate.isPending ? t`Resetting...` : t`Reset password`}
                     </Button>
                 </form>
                 <footer>
                     <NavLink to={'/auth/login'}>{t`Back to login`}</NavLink>
                 </footer>
-            </Card>
+            </div>
         </>
-
-    )
+    );
 }
 
 export default ResetPassword;
