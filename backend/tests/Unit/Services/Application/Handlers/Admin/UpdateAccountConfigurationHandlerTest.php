@@ -1,6 +1,6 @@
 <?php
 
-namespace HiEvents\Tests\Unit\Services\Application\Handlers\Admin;
+namespace Tests\Unit\Services\Application\Handlers\Admin;
 
 use HiEvents\DataTransferObjects\UpdateAccountConfigurationDTO;
 use HiEvents\DomainObjects\AccountConfigurationDomainObject;
