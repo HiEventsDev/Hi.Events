@@ -1,6 +1,6 @@
 <?php
 
-namespace HiEvents\Tests\Unit\Jobs\Vat;
+namespace Tests\Unit\Jobs\Vat;
 
 use HiEvents\DomainObjects\AccountVatSettingDomainObject;
 use HiEvents\DomainObjects\Status\VatValidationStatus;

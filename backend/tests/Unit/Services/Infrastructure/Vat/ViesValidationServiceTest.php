@@ -1,6 +1,6 @@
 <?php
 
-namespace HiEvents\Tests\Unit\Services\Infrastructure\Vat;
+namespace Tests\Unit\Services\Infrastructure\Vat;
 
 use HiEvents\Services\Infrastructure\Vat\ViesValidationService;
 use Illuminate\Http\Client\Factory as HttpClient;

@@ -1,6 +1,6 @@
 <?php
 
-namespace HiEvents\Tests\Unit\Services\Application\Handlers\Admin;
+namespace Tests\Unit\Services\Application\Handlers\Admin;
 
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Admin\DTO\GetAllOrdersDTO;
