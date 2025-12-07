@@ -75,7 +75,7 @@ class IncomingWebhookHandler
                     'data' => $event->data->object->toArray(),
                 ]);
 
-//                return;
+                return;
             }
 
             $this->logger->debug('Stripe event received: ' . $event->type, $event->data->object->toArray());

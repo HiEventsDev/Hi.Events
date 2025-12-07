@@ -24,8 +24,9 @@ abstract class AbstractReportService
         $timezone = $event->getTimezone();
 
         $endDate = $endDate
-            ? $endDate->copy()->setTimezone($timezone)->startOfDay()
-            : now($timezone)->startOfDay();
+            ? $endDate->copy()->setTimezone($timezone)->endOfDay()
+            : now($timezone)->endOfDay();
+
         $startDate = $startDate
             ? $startDate->copy()->setTimezone($timezone)->startOfDay()
             : $endDate->copy()->subDays(30)->startOfDay();

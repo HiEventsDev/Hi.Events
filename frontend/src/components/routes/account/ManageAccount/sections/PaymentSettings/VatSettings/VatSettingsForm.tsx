@@ -1,12 +1,13 @@
 import {useEffect, useState} from 'react';
 import {t} from '@lingui/macro';
-import {Alert, Button, Group, Radio, Stack, Text, TextInput} from '@mantine/core';
-import {IconAlertCircle, IconCheck} from '@tabler/icons-react';
+import {Alert, Button, Group, Loader, Radio, Stack, Text, TextInput} from '@mantine/core';
+import {IconAlertCircle, IconCheck, IconClock, IconRefresh} from '@tabler/icons-react';
 import {Card} from '../../../../../../common/Card';
 import {useGetAccountVatSetting} from '../../../../../../../queries/useGetAccountVatSetting.ts';
 import {useUpsertAccountVatSetting} from '../../../../../../../mutations/useUpsertAccountVatSetting.ts';
 import {showError, showSuccess} from '../../../../../../../utilites/notifications.tsx';
 import {Account} from '../../../../../../../types.ts';
+import {VatValidationStatus} from '../../../../../../../api/vat.client.ts';
 
 interface VatSettingsFormProps {
     account: Account;
@@ -35,12 +36,96 @@ const validateVatNumber = (vatNumber: string): {valid: boolean; error?: string} 
     return {valid: true};
 };
 
+const ValidationStatusAlert = ({
+    status,
+    error,
+    businessName,
+    attempts,
+}: {
+    status: VatValidationStatus;
+    error: string | null;
+    businessName: string | null;
+    attempts: number;
+}) => {
+    switch (status) {
+        case 'VALID':
+            return (
+                <Alert color="green" icon={<IconCheck />}>
+                    <Text size="sm" fw={500}>
+                        {t`VAT number validated successfully`}
+                    </Text>
+                    {businessName && (
+                        <Text size="xs" c="dimmed">
+                            {businessName}
+                        </Text>
+                    )}
+                </Alert>
+            );
+
+        case 'PENDING':
+        case 'VALIDATING':
+            return (
+                <Alert color="blue" icon={status === 'VALIDATING' ? <Loader size="xs" /> : <IconClock />}>
+                    <Text size="sm" fw={500}>
+                        {status === 'VALIDATING'
+                            ? t`Validating your VAT number...`
+                            : t`Your VAT number is queued for validation`}
+                    </Text>
+                    <Text size="xs" c="dimmed">
+                        {t`We'll validate your VAT number in the background. If there are any issues, we'll let you know.`}
+                    </Text>
+                </Alert>
+            );
+
+        case 'INVALID':
+            return (
+                <Alert color="red" icon={<IconAlertCircle />}>
+                    <Text size="sm" fw={500}>
+                        {t`VAT number validation failed`}
+                    </Text>
+                    <Text size="xs" c="dimmed">
+                        {error || t`The VAT number could not be validated. Please check the number and try again.`}
+                    </Text>
+                </Alert>
+            );
+
+        case 'FAILED':
+            return (
+                <Alert color="orange" icon={<IconRefresh />}>
+                    <Text size="sm" fw={500}>
+                        {t`VAT validation service temporarily unavailable`}
+                    </Text>
+                    <Text size="xs" c="dimmed">
+                        {t`We were unable to validate your VAT number after multiple attempts. We'll continue trying in the background. Please check back later.`}
+                        {attempts > 0 && ` (${t`Attempts`}: ${attempts})`}
+                    </Text>
+                </Alert>
+            );
+
+        default:
+            return null;
+    }
+};
+
 export const VatSettingsForm = ({account, onSuccess, showCard = true}: VatSettingsFormProps) => {
     const [vatRegistered, setVatRegistered] = useState<string>('');
     const [vatNumber, setVatNumber] = useState('');
     const [vatError, setVatError] = useState<string | undefined>();
 
-    const vatSettingQuery = useGetAccountVatSetting(account.id);
+    const shouldPoll = vatNumber.trim().length > 0;
+
+    const vatSettingQuery = useGetAccountVatSetting(account.id, {
+        refetchInterval: (query) => {
+            if (!shouldPoll) {
+                return false;
+            }
+            const data = query.state.data;
+            if (data?.vat_validation_status === 'PENDING' || data?.vat_validation_status === 'VALIDATING') {
+                return 5000;
+            }
+            return false;
+        },
+    });
     const upsertMutation = useUpsertAccountVatSetting(account.id);
 
     const existingSettings = vatSettingQuery.data;
@@ -80,16 +165,20 @@ export const VatSettingsForm = ({account, onSuccess, showCard = true}: VatSettin
                 vat_number: vatRegistered === 'yes' ? vatNumber.toUpperCase().trim() : null,
             });
 
-            if (result.data.vat_registered && result.data.vat_validated) {
-                showSuccess(t`VAT settings saved and validated successfully`);
-            } else if (result.data.vat_registered && !result.data.vat_validated) {
-                showError(t`VAT settings saved but validation failed. Please check your VAT number.`);
+            if (!result.data.vat_registered) {
+                showSuccess(t`VAT settings saved successfully`);
+            } else if (result.data.vat_validation_status === 'VALID') {
+                showSuccess(t`VAT number validated successfully`);
+            } else if (result.data.vat_validation_status === 'INVALID') {
+                showError(t`VAT number validation failed. Please check your VAT number.`);
+            } else if (result.data.vat_validation_status === 'PENDING') {
+                showSuccess(t`VAT settings saved. We're validating your VAT number in the background.`);
             } else {
                 showSuccess(t`VAT settings saved successfully`);
             }
 
             onSuccess?.();
-        } catch (error) {
+        } catch {
             showError(t`Failed to save VAT settings. Please try again.`);
         }
     };
@@ -98,6 +187,8 @@ export const VatSettingsForm = ({account, onSuccess, showCard = true}: VatSettin
         vatRegistered === 'no' ||
         (vatRegistered === 'yes' && vatNumber.trim().length >= 10)
     );
+
+    const isCurrentVatNumber = existingSettings?.vat_number?.toUpperCase() === vatNumber.toUpperCase().trim();
 
     const formContent = (
         <Stack gap="lg">
@@ -132,27 +223,13 @@ export const VatSettingsForm = ({account, onSuccess, showCard = true}: VatSettin
                         error={vatError}
                     />
 
-                    {existingSettings?.vat_validated && !vatError &&
-                     existingSettings.vat_number?.toUpperCase() === vatNumber.toUpperCase().trim() && (
-                        <Alert color="green" icon={<IconCheck />}>
-                            <Text size="sm" fw={500}>
-                                {t`Valid VAT number`}
-                            </Text>
-                            {existingSettings.business_name && (
-                                <Text size="xs" c="dimmed">
-                                    {existingSettings.business_name}
-                                </Text>
-                            )}
-                        </Alert>
-                    )}
-
-                    {existingSettings?.vat_number && !existingSettings.vat_validated && !vatError &&
-                     existingSettings.vat_number?.toUpperCase() === vatNumber.toUpperCase().trim() && (
-                        <Alert color="red" icon={<IconAlertCircle />}>
-                            <Text size="sm">
-                                {t`VAT number validation failed. Please check your number and try again.`}
-                            </Text>
-                        </Alert>
+                    {existingSettings?.vat_number && !vatError && isCurrentVatNumber && (
+                        <ValidationStatusAlert
+                            status={existingSettings.vat_validation_status}
+                            error={existingSettings.vat_validation_error}
+                            businessName={existingSettings.business_name}
+                            attempts={existingSettings.vat_validation_attempts}
+                        />
                     )}
                 </Stack>
             )}
@@ -165,9 +242,9 @@ export const VatSettingsForm = ({account, onSuccess, showCard = true}: VatSettin
                 >
                     {t`Save VAT Settings`}
                 </Button>
-                {vatRegistered === 'yes' && (
+                {vatRegistered === 'yes' && !isCurrentVatNumber && (
                     <Text size="xs" c="dimmed">
-                        {t`Your VAT number will be validated automatically when you save`}
+                        {t`Your VAT number will be validated when you save`}
                     </Text>
                 )}
             </Group>

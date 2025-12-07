@@ -15,7 +15,7 @@ return new class extends Migration {
     {
         Model::preventLazyLoading(false);
 
-        if (!config('app.is_hi_events')) {
+        if (!config('app.tax.eu_vat_handling_enabled')) {
             return;
         }
 
@@ -27,7 +27,7 @@ return new class extends Migration {
         foreach ($stripeAccounts as $accountStripePlatform) {
             $stripeCountry = $accountStripePlatform->stripe_account_details['country'] ?? null;
 
-            if ($stripeCountry === null) {
+            if ($stripeCountry === null || $accountStripePlatform->account === null) {
                 continue;
             }
 

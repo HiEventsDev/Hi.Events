@@ -25,6 +25,7 @@ class OrderPaymentPlatformFeeService
         ?string $chargeId = null,
         ?int    $applicationFeeNetAmountMinorUnit = null,
         ?int    $applicationFeeVatAmountMinorUnit = null,
+        ?float  $applicationFeeVatRate = null,
     ): void
     {
         $isZeroDecimalCurrency = Currency::isZeroDecimalCurrency($currency);
@@ -59,6 +60,7 @@ class OrderPaymentPlatformFeeService
             OrderPaymentPlatformFeeDomainObjectAbstract::APPLICATION_FEE_GROSS_AMOUNT => $applicationFeeGrossAmount,
             OrderPaymentPlatformFeeDomainObjectAbstract::APPLICATION_FEE_NET_AMOUNT => $applicationFeeNetAmount,
             OrderPaymentPlatformFeeDomainObjectAbstract::APPLICATION_FEE_VAT_AMOUNT => $applicationFeeVatAmount,
+            OrderPaymentPlatformFeeDomainObjectAbstract::APPLICATION_FEE_VAT_RATE => $applicationFeeVatRate,
             OrderPaymentPlatformFeeDomainObjectAbstract::CURRENCY => strtoupper($currency),
             OrderPaymentPlatformFeeDomainObjectAbstract::TRANSACTION_ID => $transactionId,
             OrderPaymentPlatformFeeDomainObjectAbstract::CHARGE_ID => $chargeId,

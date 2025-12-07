@@ -1,12 +1,17 @@
 import {api} from "./client.ts";
 import {GenericDataResponse, IdParam} from "../types.ts";
 
+export type VatValidationStatus = 'PENDING' | 'VALIDATING' | 'VALID' | 'INVALID' | 'FAILED';
+
 export interface AccountVatSetting {
     id: number;
     account_id: number;
     vat_registered: boolean;
     vat_number: string | null;
     vat_validated: boolean;
+    vat_validation_status: VatValidationStatus;
+    vat_validation_error: string | null;
+    vat_validation_attempts: number;
     vat_validation_date: string | null;
     business_name: string | null;
     business_address: string | null;

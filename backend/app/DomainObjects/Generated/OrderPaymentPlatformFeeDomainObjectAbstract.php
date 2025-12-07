@@ -25,6 +25,7 @@ abstract class OrderPaymentPlatformFeeDomainObjectAbstract extends \HiEvents\Dom
     final public const APPLICATION_FEE_NET_AMOUNT = 'application_fee_net_amount';
     final public const APPLICATION_FEE_VAT_AMOUNT = 'application_fee_vat_amount';
     final public const CHARGE_ID = 'charge_id';
+    final public const APPLICATION_FEE_VAT_RATE = 'application_fee_vat_rate';
 
     protected int $id;
     protected int $order_id;
@@ -41,6 +42,7 @@ abstract class OrderPaymentPlatformFeeDomainObjectAbstract extends \HiEvents\Dom
     protected ?float $application_fee_net_amount = null;
     protected ?float $application_fee_vat_amount = null;
     protected ?string $charge_id = null;
+    protected ?float $application_fee_vat_rate = null;
 
     public function toArray(): array
     {
@@ -60,6 +62,7 @@ abstract class OrderPaymentPlatformFeeDomainObjectAbstract extends \HiEvents\Dom
                     'application_fee_net_amount' => $this->application_fee_net_amount ?? null,
                     'application_fee_vat_amount' => $this->application_fee_vat_amount ?? null,
                     'charge_id' => $this->charge_id ?? null,
+                    'application_fee_vat_rate' => $this->application_fee_vat_rate ?? null,
                 ];
     }
 
@@ -226,5 +229,16 @@ abstract class OrderPaymentPlatformFeeDomainObjectAbstract extends \HiEvents\Dom
     public function getChargeId(): ?string
     {
         return $this->charge_id;
+    }
+
+    public function setApplicationFeeVatRate(?float $application_fee_vat_rate): self
+    {
+        $this->application_fee_vat_rate = $application_fee_vat_rate;
+        return $this;
+    }
+
+    public function getApplicationFeeVatRate(): ?float
+    {
+        return $this->application_fee_vat_rate;
     }
 }

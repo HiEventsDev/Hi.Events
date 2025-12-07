@@ -128,9 +128,10 @@ readonly class CreatePaymentIntentHandler
             StripePaymentDomainObjectAbstract::ORDER_ID => $order->getId(),
             StripePaymentDomainObjectAbstract::PAYMENT_INTENT_ID => $paymentIntent->paymentIntentId,
             StripePaymentDomainObjectAbstract::CONNECTED_ACCOUNT_ID => $stripeAccountId,
-            StripePaymentDomainObjectAbstract::APPLICATION_FEE_GROSS => $applicationFeeData->grossApplicationFee?->toMinorUnit(),
-            StripePaymentDomainObjectAbstract::APPLICATION_FEE_NET => $applicationFeeData->netApplicationFee?->toMinorUnit(),
-            StripePaymentDomainObjectAbstract::APPLICATION_FEE_VAT => $applicationFeeData->applicationFeeVatAmount?->toMinorUnit(),
+            StripePaymentDomainObjectAbstract::APPLICATION_FEE_GROSS => $applicationFeeData?->grossApplicationFee?->toMinorUnit() ?? 0,
+            StripePaymentDomainObjectAbstract::APPLICATION_FEE_NET => $applicationFeeData?->netApplicationFee?->toMinorUnit() ?? 0,
+            StripePaymentDomainObjectAbstract::APPLICATION_FEE_VAT => $applicationFeeData?->applicationFeeVatAmount?->toMinorUnit() ?? 0,
+            StripePaymentDomainObjectAbstract::APPLICATION_FEE_VAT_RATE => $applicationFeeData?->applicationFeeVatRate,
             StripePaymentDomainObjectAbstract::CURRENCY => strtoupper($order->getCurrency()),
             StripePaymentDomainObjectAbstract::STRIPE_PLATFORM => $stripePlatform?->value,
         ]);
