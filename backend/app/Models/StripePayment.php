@@ -19,7 +19,7 @@ class StripePayment extends BaseModel
         return [
             'last_error' => 'array',
             'payout_exchange_rate' => 'float',
-
+            'application_fee_vat_rate' => 'float',
         ];
     }
 

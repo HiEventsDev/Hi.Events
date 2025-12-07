@@ -3,6 +3,7 @@
 namespace HiEvents\Services\Domain\Payment\Stripe;
 
 use HiEvents\DomainObjects\AccountStripePlatformDomainObject;
+use HiEvents\DomainObjects\Enums\CountryCode;
 use HiEvents\DomainObjects\Generated\AccountStripePlatformDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\AccountVatSettingDomainObjectAbstract;
 use HiEvents\Helper\Url;
@@ -60,6 +61,7 @@ class StripeAccountSyncService
     /**
      * Force update account status when we know it should be complete
      * (e.g., from GetStripeConnectAccountsHandler when Stripe says complete but DB doesn't)
+     * @throws NoStripeCountryCodeException
      */
     public function markAccountAsComplete(
         AccountStripePlatformDomainObject $accountStripePlatform,
@@ -182,12 +184,38 @@ class StripeAccountSyncService
         }
     }
 
+    /**
+     * @throws NoStripeCountryCodeException
+     */
     private function createVatSettingIfMissing(AccountStripePlatformDomainObject $accountStripePlatform): void
     {
         if ($this->config->get('app.tax.eu_vat_handling_enabled') !== true) {
             $this->logger->info('EU VAT handling is disabled, skipping VAT setting creation.', [
                 'account_stripe_platform_id' => $accountStripePlatform->getId(),
                 'account_id' => $accountStripePlatform->getAccountId(),
+            ]);
+            return;
+        }
+
+        $countryCode = $accountStripePlatform->getStripeAccountDetails()['country'];
+
+        if ($countryCode === null) {
+            $this->logger->error('Stripe account country code is missing, cannot create VAT setting.', [
+                'account_stripe_platform_id' => $accountStripePlatform->getId(),
+                'account_id' => $accountStripePlatform->getAccountId(),
+            ]);
+
+            throw new NoStripeCountryCodeException('Stripe account country code is missing. cannot create VAT setting.',
+                accountStripePlatformId: $accountStripePlatform->getId(),
+                accountId: $accountStripePlatform->getAccountId()
+            );
+        }
+
+        if (!CountryCode::isEuCountry(CountryCode::from($countryCode))) {
+            $this->logger->info('Account is not in an EU country, skipping VAT setting creation.', [
+                'account_stripe_platform_id' => $accountStripePlatform->getId(),
+                'account_id' => $accountStripePlatform->getAccountId(),
+                'country_code' => $countryCode,
             ]);
             return;
         }
@@ -200,8 +228,7 @@ class StripeAccountSyncService
             $this->vatSettingRepository->create([
                 AccountVatSettingDomainObjectAbstract::ACCOUNT_ID => $accountStripePlatform->getAccountId(),
                 AccountVatSettingDomainObjectAbstract::VAT_VALIDATED => false,
-                AccountVatSettingDomainObjectAbstract::VAT_COUNTRY_CODE => $accountStripePlatform
-                        ->getStripeAccountDetails()['country'] ?? null,
+                AccountVatSettingDomainObjectAbstract::VAT_COUNTRY_CODE => $countryCode,
             ]);
         }
     }
