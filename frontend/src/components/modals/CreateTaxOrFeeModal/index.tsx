@@ -42,17 +42,22 @@ export const CreateTaxOrFeeModal = ({ onClose, onCreated }: CreateTaxOrFeeModalP
         });
     };
 
+    const handleSubmit = () => {
+        form.validate();
+        if (form.isValid()) {
+            handleCreate(form.values);
+        }
+    };
+
     return (
         <Modal heading={t`Create Tax or Fee`} onClose={onClose} opened>
-            <form onSubmit={form.onSubmit(values => handleCreate(values))}>
-                <TaxAndFeeForm form={form} />
-                <Button
-                    fullWidth
-                    loading={createMutation.isPending}
-                    type={'submit'}>
-                    <Trans>Create {form.values.type === TaxAndFeeType.Tax ? t`Tax` : t`Fee`}</Trans>
-                </Button>
-            </form>
+            <TaxAndFeeForm form={form} />
+            <Button
+                fullWidth
+                loading={createMutation.isPending}
+                onClick={handleSubmit}>
+                <Trans>Create {form.values.type === TaxAndFeeType.Tax ? t`Tax` : t`Fee`}</Trans>
+            </Button>
         </Modal>
     )
 }

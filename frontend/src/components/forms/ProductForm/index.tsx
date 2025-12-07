@@ -216,11 +216,10 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
     };
 
     // Context-aware helpers
-    const isPaid = form.values.type === ProductPriceType.Paid || form.values.type === ProductPriceType.Tiered || form.values.type === ProductPriceType.Donation;
     const hasTaxes = form.values.tax_and_fee_ids && form.values.tax_and_fee_ids.length > 0;
     const hasLimits = form.values.min_per_order || form.values.max_per_order;
     const hasSalePeriod = form.values.sale_start_date || form.values.sale_end_date;
-    const showTaxReminder = isPaid && !hasTaxes && !opened;
+    const hasHighlight = form.values.is_highlighted;
 
     return (
         <>
@@ -365,9 +364,7 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
             )}
 
             <div
-                className={classNames(classes.additionalToggle, {
-                    [classes.hasReminder]: showTaxReminder,
-                })}
+                className={classes.additionalToggle}
                 onClick={toggle}
                 role="button"
                 tabIndex={0}
@@ -376,25 +373,19 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                 <div className={classes.toggleMain}>
                     {opened ? <IconChevronUp size={16}/> : <IconChevronDown size={16}/>}
                     <span className={classes.toggleLabel}>
-                        {opened ? t`Hide Options` : t`Taxes, Fees & More`}
+                        {opened ? t`Hide Options` : t`Taxes, Fees, Visibility, Sale Period, Product Highlight & Order Limits`}
                     </span>
                 </div>
                 {!opened && (
                     <div className={classes.toggleMeta}>
-                        {showTaxReminder ? (
-                            <span className={classes.taxReminder}>
-                                <IconReceipt size={14}/>
-                                {t`Don't forget to add taxes`}
-                            </span>
-                        ) : (
-                            <span className={classes.toggleDescription}>
-                                {[
-                                    hasTaxes && t`Taxes configured`,
-                                    hasLimits && t`Order limits set`,
-                                    hasSalePeriod && t`Sale period set`,
-                                ].filter(Boolean).join(' · ') || t`Sale period, order limits, visibility`}
-                            </span>
-                        )}
+                        <span className={classes.toggleDescription}>
+                            {[
+                                hasTaxes && t`Taxes configured`,
+                                hasLimits && t`Order limits set`,
+                                hasSalePeriod && t`Sale period set`,
+                                hasHighlight && t`Highlighted`,
+                            ].filter(Boolean).join(' · ') || t`Sale period, order limits, visibility`}
+                        </span>
                     </div>
                 )}
             </div>

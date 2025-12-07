@@ -425,9 +425,6 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                             {/* Tickets Section */}
                             <div className={`${classes.section} ${classes.ticketsSection}`} ref={ticketsSectionRef}
                                  id="tickets">
-                                <div className={classes.sectionHeader}>
-                                    <h2 className={classes.sectionTitle}>{t`Tickets`}</h2>
-                                </div>
                                 <SelectProducts
                                     colors={{
                                         background: "transparent",
