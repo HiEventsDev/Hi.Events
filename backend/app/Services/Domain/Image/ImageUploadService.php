@@ -5,6 +5,7 @@ namespace HiEvents\Services\Domain\Image;
 use HiEvents\DomainObjects\ImageDomainObject;
 use HiEvents\Repository\Interfaces\ImageRepositoryInterface;
 use HiEvents\Services\Infrastructure\Image\Exception\CouldNotUploadImageException;
+use HiEvents\Services\Infrastructure\Image\ImageMetadataService;
 use HiEvents\Services\Infrastructure\Image\ImageStorageService;
 use Illuminate\Http\UploadedFile;
 
@@ -12,9 +13,9 @@ class ImageUploadService
 {
     public function __construct(
         private readonly ImageStorageService      $imageStorageService,
-        private readonly ImageRepositoryInterface $imageRepository
-    )
-    {
+        private readonly ImageRepositoryInterface $imageRepository,
+        private readonly ImageMetadataService     $imageMetadataService,
+    ) {
     }
 
     /**
@@ -29,8 +30,9 @@ class ImageUploadService
     ): ImageDomainObject
     {
         $storedImage = $this->imageStorageService->store($image, $imageType);
+        $metadata = $this->imageMetadataService->extractMetadata($image);
 
-        return $this->imageRepository->create([
+        $data = [
             'account_id' => $accountId,
             'entity_id' => $entityId,
             'entity_type' => $entityType,
@@ -40,6 +42,15 @@ class ImageUploadService
             'path' => $storedImage->path,
             'size' => $storedImage->size,
             'mime_type' => $storedImage->mime_type,
-        ]);
+        ];
+
+        if ($metadata !== null) {
+            $data['width'] = $metadata->width;
+            $data['height'] = $metadata->height;
+            $data['avg_colour'] = $metadata->avg_colour;
+            $data['lqip_base64'] = $metadata->lqip_base64;
+        }
+
+        return $this->imageRepository->create($data);
     }
 }

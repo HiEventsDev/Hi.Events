@@ -1,9 +1,9 @@
 import classes from "./EventHomepage.module.scss";
 import SelectProducts from "../../routes/product-widget/SelectProducts";
 import "../../../styles/widget/default.scss";
-import {useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {EventDocumentHead} from "../../common/EventDocumentHead";
-import {eventCoverImageUrl, eventHomepageUrl, imageUrl, organizerHomepageUrl} from "../../../utilites/urlHelper.ts";
+import {eventCoverImage, eventHomepageUrl, imageUrl, organizerHomepageUrl} from "../../../utilites/urlHelper.ts";
 import {Event, OrganizerStatus} from "../../../types.ts";
 import {EventNotAvailable} from "./EventNotAvailable";
 import {
@@ -110,7 +110,8 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
         '--event-border-color': cssVars['--theme-border'],
     } as React.CSSProperties;
 
-    const coverImage = eventCoverImageUrl(event);
+    const coverImageData = eventCoverImage(event);
+    const coverImage = coverImageData?.url;
     const organizer = event.organizer!;
     const organizerSocials = organizer?.settings?.social_media_handles;
     const organizerLogo = imageUrl('ORGANIZER_LOGO', organizer?.images);
@@ -209,7 +210,20 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                             {/* Hero Section */}
                             <div className={classes.heroSection}>
                                 {coverImage && (
-                                    <div className={classes.coverWrapper}>
+                                    <div
+                                        className={classes.coverWrapper}
+                                        style={(coverImageData?.width && coverImageData?.height) ? {
+                                            '--cover-aspect-ratio': `${coverImageData.width} / ${coverImageData.height}`,
+                                        } as React.CSSProperties : undefined}
+                                    >
+                                        {coverImageData?.lqip_base64 && (
+                                            <img
+                                                src={coverImageData.lqip_base64}
+                                                alt=""
+                                                aria-hidden="true"
+                                                className={classes.coverLqip}
+                                            />
+                                        )}
                                         <img
                                             src={coverImage}
                                             alt={event.title}

@@ -160,6 +160,10 @@ export interface Image {
     size: number;
     mime_type: string;
     type: ImageType;
+    width?: number | null;
+    height?: number | null;
+    avg_colour?: string | null;
+    lqip_base64?: string | null;
 }
 
 export type ImageType = 'EVENT_COVER' | 'EDITOR_IMAGE' | 'ORGANIZER_LOGO' | 'ORGANIZER_COVER' | 'ORGANIZER_IMAGE' | 'TICKET_LOGO';

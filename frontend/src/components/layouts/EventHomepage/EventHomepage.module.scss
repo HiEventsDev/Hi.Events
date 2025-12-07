@@ -134,17 +134,47 @@ $transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   width: 100%;
   max-height: 560px;
   overflow: hidden;
+  background-color: var(--accent-soft);
+
+  // When aspect ratio is provided via CSS custom property, use it
+  // Otherwise fall back to auto sizing based on image
+  &[style*="--cover-aspect-ratio"] {
+    aspect-ratio: var(--cover-aspect-ratio);
+  }
 
   @include mixins.respond-below(md) {
     max-height: 400px;
   }
 }
 
+.coverLqip {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(20px);
+  transform: scale(1.1);
+  z-index: 0;
+}
+
 .coverImage {
   width: 100%;
-  height: auto;
   display: block;
   transition: transform $transition-slow;
+  z-index: 1;
+
+  // When wrapper has aspect ratio, image should fill it
+  .coverWrapper[style*="--cover-aspect-ratio"] & {
+    position: relative;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  // When no aspect ratio, let image determine height naturally
+  .coverWrapper:not([style*="--cover-aspect-ratio"]) & {
+    height: auto;
+  }
 
   .mainCard:hover & {
     transform: scale(1.02);
