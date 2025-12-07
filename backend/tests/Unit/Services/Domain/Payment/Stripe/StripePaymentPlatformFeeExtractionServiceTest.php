@@ -226,6 +226,7 @@ class StripePaymentPlatformFeeExtractionServiceTest extends TestCase
         $stripePayment = m::mock(StripePaymentDomainObject::class);
         $stripePayment->shouldReceive('getApplicationFeeNet')->andReturn(417);
         $stripePayment->shouldReceive('getApplicationFeeVat')->andReturn(83);
+        $stripePayment->shouldReceive('getApplicationFeeVatRate')->andReturn(0.20);
 
         $balanceTransaction = (object)[
             'id' => 'txn_123',
@@ -285,7 +286,8 @@ class StripePaymentPlatformFeeExtractionServiceTest extends TestCase
                 $transactionId,
                 $chargeId,
                 $applicationFeeNetAmountMinorUnit,
-                $applicationFeeVatAmountMinorUnit
+                $applicationFeeVatAmountMinorUnit,
+                $applicationFeeVatRate
             ) {
                 return $orderId === 123
                     && $paymentPlatformFeeAmountMinorUnit === 500
@@ -293,6 +295,7 @@ class StripePaymentPlatformFeeExtractionServiceTest extends TestCase
                     && $chargeId === 'ch_123'
                     && $applicationFeeNetAmountMinorUnit === 488
                     && $applicationFeeVatAmountMinorUnit === 97
+                    && $applicationFeeVatRate === 0.20
                     && $currency === 'eur';
             });
 
@@ -316,6 +319,7 @@ class StripePaymentPlatformFeeExtractionServiceTest extends TestCase
         $stripePayment = m::mock(StripePaymentDomainObject::class);
         $stripePayment->shouldReceive('getApplicationFeeNet')->never();
         $stripePayment->shouldReceive('getApplicationFeeVat')->never();
+        $stripePayment->shouldReceive('getApplicationFeeVatRate')->andReturn(null);
 
         $balanceTransaction = (object)[
             'id' => 'txn_123',
@@ -365,7 +369,8 @@ class StripePaymentPlatformFeeExtractionServiceTest extends TestCase
                 $transactionId,
                 $chargeId,
                 $applicationFeeNetAmountMinorUnit,
-                $applicationFeeVatAmountMinorUnit
+                $applicationFeeVatAmountMinorUnit,
+                $applicationFeeVatRate
             ) {
                 return $orderId === 123
                     && $paymentPlatformFeeAmountMinorUnit === 500
@@ -373,6 +378,7 @@ class StripePaymentPlatformFeeExtractionServiceTest extends TestCase
                     && $chargeId === 'ch_123'
                     && $applicationFeeNetAmountMinorUnit === null
                     && $applicationFeeVatAmountMinorUnit === null
+                    && $applicationFeeVatRate === null
                     && $currency === 'eur';
             });
 

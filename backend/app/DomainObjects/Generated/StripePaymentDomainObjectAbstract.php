@@ -32,6 +32,7 @@ abstract class StripePaymentDomainObjectAbstract extends \HiEvents\DomainObjects
     final public const PAYOUT_CURRENCY = 'payout_currency';
     final public const PAYOUT_EXCHANGE_RATE = 'payout_exchange_rate';
     final public const BALANCE_TRANSACTION_ID = 'balance_transaction_id';
+    final public const APPLICATION_FEE_VAT_RATE = 'application_fee_vat_rate';
 
     protected int $id;
     protected int $order_id;
@@ -48,13 +49,14 @@ abstract class StripePaymentDomainObjectAbstract extends \HiEvents\DomainObjects
     protected ?string $stripe_platform = null;
     protected ?int $application_fee_net = null;
     protected ?int $application_fee_vat = null;
-    protected string $currency = 'USD';
+    protected ?string $currency = null;
     protected ?string $payout_id = null;
     protected ?int $payout_stripe_fee = null;
     protected ?int $payout_net_amount = null;
     protected ?string $payout_currency = null;
     protected ?float $payout_exchange_rate = null;
     protected ?string $balance_transaction_id = null;
+    protected ?float $application_fee_vat_rate = null;
 
     public function toArray(): array
     {
@@ -81,6 +83,7 @@ abstract class StripePaymentDomainObjectAbstract extends \HiEvents\DomainObjects
                     'payout_currency' => $this->payout_currency ?? null,
                     'payout_exchange_rate' => $this->payout_exchange_rate ?? null,
                     'balance_transaction_id' => $this->balance_transaction_id ?? null,
+                    'application_fee_vat_rate' => $this->application_fee_vat_rate ?? null,
                 ];
     }
 
@@ -249,13 +252,13 @@ abstract class StripePaymentDomainObjectAbstract extends \HiEvents\DomainObjects
         return $this->application_fee_vat;
     }
 
-    public function setCurrency(string $currency): self
+    public function setCurrency(?string $currency): self
     {
         $this->currency = $currency;
         return $this;
     }
 
-    public function getCurrency(): string
+    public function getCurrency(): ?string
     {
         return $this->currency;
     }
@@ -324,5 +327,16 @@ abstract class StripePaymentDomainObjectAbstract extends \HiEvents\DomainObjects
     public function getBalanceTransactionId(): ?string
     {
         return $this->balance_transaction_id;
+    }
+
+    public function setApplicationFeeVatRate(?float $application_fee_vat_rate): self
+    {
+        $this->application_fee_vat_rate = $application_fee_vat_rate;
+        return $this;
+    }
+
+    public function getApplicationFeeVatRate(): ?float
+    {
+        return $this->application_fee_vat_rate;
     }
 }

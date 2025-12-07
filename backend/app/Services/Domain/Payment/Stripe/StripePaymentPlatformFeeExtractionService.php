@@ -111,6 +111,7 @@ class StripePaymentPlatformFeeExtractionService
                 chargeId: $charge->id ?? null,
                 applicationFeeNetAmountMinorUnit: $applicationFeeBreakdown['net'],
                 applicationFeeVatAmountMinorUnit: $applicationFeeBreakdown['vat'],
+                applicationFeeVatRate: $stripePayment->getApplicationFeeVatRate(),
             );
 
             $this->logger->info(__('Platform fee stored successfully'), [

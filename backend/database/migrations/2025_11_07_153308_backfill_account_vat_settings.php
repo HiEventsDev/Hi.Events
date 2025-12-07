@@ -15,7 +15,7 @@ return new class extends Migration {
     {
         Model::preventLazyLoading(false);
 
-        if (!config('app.is_hi_events')) {
+        if (!config('app.tax.eu_vat_handling_enabled')) {
             return;
         }
 

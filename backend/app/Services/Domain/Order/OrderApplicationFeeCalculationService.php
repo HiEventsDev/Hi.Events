@@ -109,6 +109,7 @@ class OrderApplicationFeeCalculationService
             return new ApplicationFeeValuesDTO(
                 grossApplicationFee: $netApplicationFee,
                 netApplicationFee: $netApplicationFee,
+                applicationFeeVatRate: $vatRate,
             );
         }
 

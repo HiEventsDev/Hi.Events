@@ -112,8 +112,13 @@ export const VatSettingsForm = ({account, onSuccess, showCard = true}: VatSettin
     const [vatNumber, setVatNumber] = useState('');
     const [vatError, setVatError] = useState<string | undefined>();
 
+    const shouldPoll = vatNumber.trim().length > 0;
+
     const vatSettingQuery = useGetAccountVatSetting(account.id, {
         refetchInterval: (query) => {
+            if (!shouldPoll) {
+                return false;
+            }
             const data = query.state.data;
             if (data?.vat_validation_status === 'PENDING' || data?.vat_validation_status === 'VALIDATING') {
                 return 5000;
