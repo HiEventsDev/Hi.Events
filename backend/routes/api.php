@@ -5,6 +5,8 @@ use HiEvents\Http\Actions\Accounts\GetAccountAction;
 use HiEvents\Http\Actions\Accounts\Stripe\CreateStripeConnectAccountAction;
 use HiEvents\Http\Actions\Accounts\Stripe\GetStripeConnectAccountsAction;
 use HiEvents\Http\Actions\Accounts\UpdateAccountAction;
+use HiEvents\Http\Actions\Accounts\Vat\GetAccountVatSettingAction;
+use HiEvents\Http\Actions\Accounts\Vat\UpsertAccountVatSettingAction;
 use HiEvents\Http\Actions\Affiliates\CreateAffiliateAction;
 use HiEvents\Http\Actions\Affiliates\DeleteAffiliateAction;
 use HiEvents\Http\Actions\Affiliates\ExportAffiliatesAction;
@@ -154,9 +156,17 @@ use HiEvents\Http\Actions\Users\ResendEmailConfirmationAction;
 use HiEvents\Http\Actions\Users\ResendInvitationAction;
 use HiEvents\Http\Actions\Users\UpdateMeAction;
 use HiEvents\Http\Actions\Users\UpdateUserAction;
-use HiEvents\Http\Actions\Admin\Accounts\GetAllAccountsAction;
-use HiEvents\Http\Actions\Admin\Events\GetAllEventsAction;
+use HiEvents\Http\Actions\Admin\Accounts\AssignConfigurationAction;
+use HiEvents\Http\Actions\Admin\Accounts\GetAccountAction as GetAdminAccountAction;
+use HiEvents\Http\Actions\Admin\Accounts\GetAllAccountsAction as GetAllAdminAccountsAction;
+use HiEvents\Http\Actions\Admin\Accounts\UpdateAccountVatSettingAction as UpdateAdminAccountVatSettingAction;
+use HiEvents\Http\Actions\Admin\Configurations\CreateConfigurationAction;
+use HiEvents\Http\Actions\Admin\Configurations\DeleteConfigurationAction;
+use HiEvents\Http\Actions\Admin\Configurations\GetAllConfigurationsAction;
+use HiEvents\Http\Actions\Admin\Configurations\UpdateConfigurationAction;
+use HiEvents\Http\Actions\Admin\Events\GetAllEventsAction as GetAllAdminEventsAction;
 use HiEvents\Http\Actions\Admin\Events\GetUpcomingEventsAction;
+use HiEvents\Http\Actions\Admin\Orders\GetAllOrdersAction;
 use HiEvents\Http\Actions\Admin\Stats\GetAdminStatsAction;
 use HiEvents\Http\Actions\Admin\Users\GetAllUsersAction;
 use HiEvents\Http\Actions\Admin\Users\StartImpersonationAction;
@@ -221,6 +231,10 @@ $router->middleware(['auth:api'])->group(
         $router->put('/accounts/{account_id?}', UpdateAccountAction::class);
         $router->get('/accounts/{account_id}/stripe/connect_accounts', GetStripeConnectAccountsAction::class);
         $router->post('/accounts/{account_id}/stripe/connect', CreateStripeConnectAccountAction::class);
+
+        // VAT Settings
+        $router->get('/accounts/{account_id}/vat-settings', GetAccountVatSettingAction::class);
+        $router->post('/accounts/{account_id}/vat-settings', UpsertAccountVatSettingAction::class);
 
         // Organizers
         $router->post('/organizers', CreateOrganizerAction::class);
@@ -380,10 +394,18 @@ $router->middleware(['auth:api'])->group(
 $router->prefix('/admin')->middleware(['auth:api'])->group(
     function (Router $router): void {
         $router->get('/stats', GetAdminStatsAction::class);
-        $router->get('/accounts', GetAllAccountsAction::class);
+        $router->get('/accounts', GetAllAdminAccountsAction::class);
+        $router->get('/accounts/{account_id}', GetAdminAccountAction::class);
+        $router->put('/accounts/{account_id}/vat-settings', UpdateAdminAccountVatSettingAction::class);
+        $router->put('/accounts/{account_id}/configuration', AssignConfigurationAction::class);
+        $router->get('/configurations', GetAllConfigurationsAction::class);
+        $router->post('/configurations', CreateConfigurationAction::class);
+        $router->put('/configurations/{configuration_id}', UpdateConfigurationAction::class);
+        $router->delete('/configurations/{configuration_id}', DeleteConfigurationAction::class);
         $router->get('/users', GetAllUsersAction::class);
-        $router->get('/events', GetAllEventsAction::class);
+        $router->get('/events', GetAllAdminEventsAction::class);
         $router->get('/events/upcoming', GetUpcomingEventsAction::class);
+        $router->get('/orders', GetAllOrdersAction::class);
         $router->post('/impersonate/{user_id}', StartImpersonationAction::class);
         $router->post('/stop-impersonation', StopImpersonationAction::class);
     }

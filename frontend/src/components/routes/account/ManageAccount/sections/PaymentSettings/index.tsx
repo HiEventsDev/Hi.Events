@@ -15,6 +15,10 @@ import {formatCurrency} from "../../../../../../utilites/currency.ts";
 import {showSuccess} from "../../../../../../utilites/notifications.tsx";
 import {getConfig} from "../../../../../../utilites/config.ts";
 import {isHiEvents} from "../../../../../../utilites/helpers.ts";
+import {VatSettings} from './VatSettings';
+import {VatSettingsModal} from './VatSettings/VatSettingsModal.tsx';
+import {VatNotice, getVatInfo} from './VatNotice';
+import {useGetAccountVatSetting} from '../../../../../../queries/useGetAccountVatSetting.ts';
 
 interface FeePlanDisplayProps {
     configuration?: {
@@ -25,6 +29,7 @@ interface FeePlanDisplayProps {
         };
         is_system_default: boolean;
     };
+    stripeCountry?: string;
 }
 
 const formatPercentage = (value: number) => {
@@ -233,7 +238,7 @@ const PlatformPanel = ({
     );
 };
 
-const FeePlanDisplay = ({configuration}: FeePlanDisplayProps) => {
+const FeePlanDisplay = ({configuration, stripeCountry}: FeePlanDisplayProps) => {
     if (!configuration) return null;
 
     return (
@@ -244,6 +249,8 @@ const FeePlanDisplay = ({configuration}: FeePlanDisplayProps) => {
                 {getConfig("VITE_APP_NAME", "Hi.Events")} charges platform fees to maintain and improve our services.
                 These fees are automatically deducted from each transaction.
             </Text>
+
+            <VatNotice stripeCountry={stripeCountry} />
 
             <Card variant={'lightGray'}>
                 <Title order={4}>{configuration.name}</Title>
@@ -709,9 +716,79 @@ const PaymentSettings = () => {
             enabled: !!accountQuery.data?.id
         }
     );
+    const vatSettingQuery = useGetAccountVatSetting(
+        accountQuery.data?.id || 0,
+        {
+            enabled: !!accountQuery.data?.id && isHiEvents()
+        }
+    );
+
+    const [showVatModal, setShowVatModal] = useState(false);
+    const [hasCheckedVatModal, setHasCheckedVatModal] = useState(false);
+
+    // Check if user is returning from Stripe and needs to fill VAT info
+    // Only for Hi.Events Cloud - open-source doesn't have VAT handling
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+        if (hasCheckedVatModal) return;
+        if (!isHiEvents()) {
+            setHasCheckedVatModal(true);
+            return;
+        }
+        if (!accountQuery.data || !stripeAccountsQuery.data || vatSettingQuery.isLoading) return;
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const isReturn = urlParams.get('is_return') === '1';
+
+        if (!isReturn) {
+            setHasCheckedVatModal(true);
+            return;
+        }
+
+        // Check if Stripe onboarding is complete
+        const completedAccount = stripeAccountsQuery.data.stripe_connect_accounts.find(
+            acc => acc.is_setup_complete
+        );
+
+        if (!completedAccount) {
+            setHasCheckedVatModal(true);
+            return;
+        }
+
+        // Check if user is in an EU country (not Ireland - they don't need the form)
+        const vatInfo = getVatInfo(completedAccount.country);
+        if (!vatInfo.isEU || vatInfo.isIreland) {
+            setHasCheckedVatModal(true);
+            return;
+        }
+
+        // Check if VAT info is already filled out
+        const existingSettings = vatSettingQuery.data;
+        if (existingSettings && existingSettings.vat_registered !== null && existingSettings.vat_registered !== undefined) {
+            setHasCheckedVatModal(true);
+            return;
+        }
+
+        // All conditions met - show the modal
+        setShowVatModal(true);
+        setHasCheckedVatModal(true);
+    }, [accountQuery.data, stripeAccountsQuery.data, vatSettingQuery.data, vatSettingQuery.isLoading, hasCheckedVatModal]);
+
+    const handleVatModalClose = () => {
+        setShowVatModal(false);
+        vatSettingQuery.refetch();
+    };
 
     return (
         <>
+            {isHiEvents() && accountQuery.data && (
+                <VatSettingsModal
+                    account={accountQuery.data}
+                    opened={showVatModal}
+                    onClose={handleVatModalClose}
+                />
+            )}
+
             <HeadingCard
                 heading={t`Payment Settings`}
                 subHeading={t`Manage your payment processing and view platform fees`}
@@ -724,6 +801,7 @@ const PaymentSettings = () => {
                 <LoadingMask/>
                 {(accountQuery.data) && (
                     <Grid gutter="xl">
+
                         <Grid.Col span={{base: 12, md: 6}}>
                             {accountQuery.isFetched && (
                                 <ConnectStatus account={accountQuery.data}/>
@@ -731,9 +809,30 @@ const PaymentSettings = () => {
                         </Grid.Col>
                         <Grid.Col span={{base: 12, md: 6}}>
                             {accountQuery.data?.configuration && (
-                                <FeePlanDisplay configuration={accountQuery.data.configuration}/>
+                                <FeePlanDisplay
+                                    configuration={accountQuery.data.configuration}
+                                    stripeCountry={
+                                        stripeAccountsQuery.data?.stripe_connect_accounts.find(
+                                            acc => acc.is_setup_complete
+                                        )?.country
+                                    }
+                                />
                             )}
                         </Grid.Col>
+                        {isHiEvents() && (
+                            <Grid.Col span={{base: 12}}>
+                                {accountQuery.data && stripeAccountsQuery.data && (
+                                    <VatSettings
+                                        account={accountQuery.data}
+                                        stripeCountry={
+                                            stripeAccountsQuery.data.stripe_connect_accounts.find(
+                                                acc => acc.is_setup_complete
+                                            )?.country
+                                        }
+                                    />
+                                )}
+                            </Grid.Col>
+                        )}
                     </Grid>
                 )}
             </Card>

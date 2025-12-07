@@ -135,6 +135,7 @@ export interface StripeConnectAccount {
     platform: string | null;
     account_type: string | null;
     is_primary: boolean;
+    country?: string;
 }
 
 export interface StripeConnectAccountsResponse {

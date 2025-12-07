@@ -8,6 +8,7 @@ use HiEvents\Repository\Interfaces\OrderPaymentPlatformFeeRepositoryInterface;
 use HiEvents\Services\Domain\Order\OrderPaymentPlatformFeeService;
 use HiEvents\Services\Domain\Payment\Stripe\StripePaymentPlatformFeeExtractionService;
 use HiEvents\Services\Infrastructure\Stripe\StripeClientFactory;
+use Illuminate\Support\Facades\Config;
 use Mockery as m;
 use Psr\Log\LoggerInterface;
 use Stripe\Charge;
@@ -212,6 +213,182 @@ class StripePaymentPlatformFeeExtractionServiceTest extends TestCase
         $this->expectException(\Exception::class);
 
         $this->service->extractAndStorePlatformFee($order, $charge, $stripePayment);
+    }
+
+    public function testExtractAndStorePlatformFeeWithVatAndExchangeRate(): void
+    {
+        Config::set('app.tax.eu_vat_handling_enabled', true);
+
+        $order = m::mock(OrderDomainObject::class);
+        $order->shouldReceive('getId')->andReturn(123);
+        $order->shouldReceive('getCurrency')->andReturn('gbp');
+
+        $stripePayment = m::mock(StripePaymentDomainObject::class);
+        $stripePayment->shouldReceive('getApplicationFeeNet')->andReturn(417);
+        $stripePayment->shouldReceive('getApplicationFeeVat')->andReturn(83);
+        $stripePayment->shouldReceive('getApplicationFeeVatRate')->andReturn(0.20);
+
+        $balanceTransaction = (object)[
+            'id' => 'txn_123',
+            'fee' => 1000,
+            'net' => 9000,
+            'currency' => 'eur',
+            'exchange_rate' => 1.17,
+            'fee_details' => [
+                (object)[
+                    'type' => 'stripe_fee',
+                    'amount' => 500,
+                    'currency' => 'eur',
+                    'description' => 'Stripe processing fee',
+                ],
+                (object)[
+                    'type' => 'application_fee',
+                    'amount' => 500,
+                    'currency' => 'eur',
+                    'description' => 'Application fee',
+                ],
+            ],
+        ];
+
+        $paymentIntent = (object)[
+            'metadata' => [
+                'application_fee_gross_amount' => 5.00,
+                'application_fee_net_amount' => 4.17,
+                'application_fee_vat_amount' => 0.83,
+                'application_fee_vat_rate' => 0.20,
+            ],
+        ];
+
+        $charge = Charge::constructFrom([
+            'id' => 'ch_123',
+            'balance_transaction' => $balanceTransaction,
+            'payment_intent' => $paymentIntent,
+            'metadata' => [],
+        ]);
+
+        $this->orderPaymentPlatformFeeRepository->shouldReceive('findFirstWhere')
+            ->once()
+            ->andReturn(null);
+
+        $this->logger->shouldReceive('info')
+            ->with(__('Extracting platform fee for order'), m::type('array'))
+            ->once();
+
+        $this->orderPaymentPlatformFeeService->shouldReceive('createOrderPaymentPlatformFee')
+            ->once()
+            ->withArgs(function (
+                $orderId,
+                $paymentPlatform,
+                $feeRollup,
+                $paymentPlatformFeeAmountMinorUnit,
+                $applicationFeeGrossAmountMinorUnit,
+                $currency,
+                $transactionId,
+                $chargeId,
+                $applicationFeeNetAmountMinorUnit,
+                $applicationFeeVatAmountMinorUnit,
+                $applicationFeeVatRate
+            ) {
+                return $orderId === 123
+                    && $paymentPlatformFeeAmountMinorUnit === 500
+                    && $applicationFeeGrossAmountMinorUnit === 500
+                    && $chargeId === 'ch_123'
+                    && $applicationFeeNetAmountMinorUnit === 488
+                    && $applicationFeeVatAmountMinorUnit === 97
+                    && $applicationFeeVatRate === 0.20
+                    && $currency === 'eur';
+            });
+
+        $this->logger->shouldReceive('info')
+            ->with(__('Platform fee stored successfully'), m::type('array'))
+            ->once();
+
+        $this->service->extractAndStorePlatformFee($order, $charge, $stripePayment);
+
+        $this->assertTrue(true);
+    }
+
+    public function testExtractAndStorePlatformFeeWithVatDisabled(): void
+    {
+        Config::set('app.tax.eu_vat_handling_enabled', false);
+
+        $order = m::mock(OrderDomainObject::class);
+        $order->shouldReceive('getId')->andReturn(123);
+        $order->shouldReceive('getCurrency')->andReturn('eur');
+
+        $stripePayment = m::mock(StripePaymentDomainObject::class);
+        $stripePayment->shouldReceive('getApplicationFeeNet')->never();
+        $stripePayment->shouldReceive('getApplicationFeeVat')->never();
+        $stripePayment->shouldReceive('getApplicationFeeVatRate')->andReturn(null);
+
+        $balanceTransaction = (object)[
+            'id' => 'txn_123',
+            'fee' => 1000,
+            'net' => 9000,
+            'currency' => 'eur',
+            'exchange_rate' => null,
+            'fee_details' => [
+                (object)[
+                    'type' => 'stripe_fee',
+                    'amount' => 500,
+                    'currency' => 'eur',
+                    'description' => 'Stripe processing fee',
+                ],
+                (object)[
+                    'type' => 'application_fee',
+                    'amount' => 500,
+                    'currency' => 'eur',
+                    'description' => 'Application fee',
+                ],
+            ],
+        ];
+
+        $charge = Charge::constructFrom([
+            'id' => 'ch_123',
+            'balance_transaction' => $balanceTransaction,
+            'metadata' => [],
+        ]);
+
+        $this->orderPaymentPlatformFeeRepository->shouldReceive('findFirstWhere')
+            ->once()
+            ->andReturn(null);
+
+        $this->logger->shouldReceive('info')
+            ->with(__('Extracting platform fee for order'), m::type('array'))
+            ->once();
+
+        $this->orderPaymentPlatformFeeService->shouldReceive('createOrderPaymentPlatformFee')
+            ->once()
+            ->withArgs(function (
+                $orderId,
+                $paymentPlatform,
+                $feeRollup,
+                $paymentPlatformFeeAmountMinorUnit,
+                $applicationFeeGrossAmountMinorUnit,
+                $currency,
+                $transactionId,
+                $chargeId,
+                $applicationFeeNetAmountMinorUnit,
+                $applicationFeeVatAmountMinorUnit,
+                $applicationFeeVatRate
+            ) {
+                return $orderId === 123
+                    && $paymentPlatformFeeAmountMinorUnit === 500
+                    && $applicationFeeGrossAmountMinorUnit === 500
+                    && $chargeId === 'ch_123'
+                    && $applicationFeeNetAmountMinorUnit === null
+                    && $applicationFeeVatAmountMinorUnit === null
+                    && $applicationFeeVatRate === null
+                    && $currency === 'eur';
+            });
+
+        $this->logger->shouldReceive('info')
+            ->with(__('Platform fee stored successfully'), m::type('array'))
+            ->once();
+
+        $this->service->extractAndStorePlatformFee($order, $charge, $stripePayment);
+
+        $this->assertTrue(true);
     }
 
     protected function tearDown(): void

@@ -12,11 +12,14 @@ use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Models\Order;
 use HiEvents\Models\OrderItem;
+use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\AccountDomainObject;
 
 class OrderRepository extends BaseRepository implements OrderRepositoryInterface
 {
@@ -160,5 +163,42 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
                 ->where('event_id', $eventId)
                 ->get()
         );
+    }
+
+    public function getAllOrdersForAdmin(
+        ?string $search = null,
+        int $perPage = 20,
+        ?string $sortBy = 'created_at',
+        ?string $sortDirection = 'desc'
+    ): LengthAwarePaginator {
+        $this->model = $this->model
+            ->select('orders.*')
+            ->join('events', 'orders.event_id', '=', 'events.id')
+            ->join('accounts', 'events.account_id', '=', 'accounts.id');
+
+        if ($search) {
+            $this->model = $this->model->where(function ($q) use ($search) {
+                $q->where(OrderDomainObjectAbstract::EMAIL, 'ilike', '%' . $search . '%')
+                    ->orWhere(OrderDomainObjectAbstract::FIRST_NAME, 'ilike', '%' . $search . '%')
+                    ->orWhere(OrderDomainObjectAbstract::LAST_NAME, 'ilike', '%' . $search . '%')
+                    ->orWhere(OrderDomainObjectAbstract::PUBLIC_ID, 'ilike', '%' . $search . '%')
+                    ->orWhere(OrderDomainObjectAbstract::SHORT_ID, 'ilike', '%' . $search . '%');
+            });
+        }
+
+        $this->model = $this->model->where('orders.status', '!=', OrderStatus::RESERVED->name)
+            ->where('orders.status', '!=', OrderStatus::ABANDONED->name);
+
+        $allowedSortColumns = ['created_at', 'total_gross', 'email', 'first_name', 'last_name'];
+        $sortColumn = in_array($sortBy, $allowedSortColumns, true) ? $sortBy : 'created_at';
+        $sortDir = in_array(strtolower($sortDirection), ['asc', 'desc']) ? $sortDirection : 'desc';
+
+        $this->model = $this->model->orderBy('orders.' . $sortColumn, $sortDir);
+
+        $this->loadRelation(new Relationship(EventDomainObject::class, nested: [
+            new Relationship(AccountDomainObject::class, name: 'account')
+        ], name: 'event'));
+
+        return $this->paginate($perPage);
     }
 }

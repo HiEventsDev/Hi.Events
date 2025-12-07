@@ -84,8 +84,13 @@ class StripePaymentPlatformFeeExtractionService
             $feeDetails = $this->extractFeeDetails($balanceTransaction);
 
             $totalFee = $balanceTransaction->fee ?? 0;
-            $applicationFee = $this->extractApplicationFee($feeDetails);
+            $applicationFeeGross = $this->extractApplicationFee($feeDetails);
             $paymentPlatformFee = $this->extractStripeFee($feeDetails);
+
+            $applicationFeeBreakdown = $this->convertApplicationFeeToSettlementCurrency(
+                stripePayment: $stripePayment,
+                balanceTransaction: $balanceTransaction
+            );
 
             $this->orderPaymentPlatformFeeService->createOrderPaymentPlatformFee(
                 orderId: $order->getId(),
@@ -93,22 +98,29 @@ class StripePaymentPlatformFeeExtractionService
                 feeRollup: [
                     'total_fee' => $totalFee,
                     'payment_platform_fee' => $paymentPlatformFee,
-                    'application_fee' => $applicationFee,
+                    'application_fee' => $applicationFeeGross,
                     'fee_details' => $feeDetails,
                     'net' => $balanceTransaction->net ?? 0,
+                    'gross' => $balanceTransaction->amount ?? 0,
                     'exchange_rate' => $balanceTransaction->exchange_rate ?? null,
                 ],
                 paymentPlatformFeeAmountMinorUnit: $paymentPlatformFee,
-                applicationFeeAmountMinorUnit: $applicationFee,
+                applicationFeeGrossAmountMinorUnit: $applicationFeeGross,
                 currency: $balanceTransaction->currency ?? $order->getCurrency(),
                 transactionId: $balanceTransaction->id ?? null,
+                chargeId: $charge->id ?? null,
+                applicationFeeNetAmountMinorUnit: $applicationFeeBreakdown['net'],
+                applicationFeeVatAmountMinorUnit: $applicationFeeBreakdown['vat'],
+                applicationFeeVatRate: $stripePayment->getApplicationFeeVatRate(),
             );
 
             $this->logger->info(__('Platform fee stored successfully'), [
                 'order_id' => $order->getId(),
                 'total_fee' => $totalFee,
                 'payment_platform_fee' => $paymentPlatformFee,
-                'application_fee' => $applicationFee,
+                'application_fee_gross' => $applicationFeeGross,
+                'application_fee_net' => $applicationFeeBreakdown['net'],
+                'application_fee_vat' => $applicationFeeBreakdown['vat'],
                 'currency' => strtoupper($balanceTransaction->currency ?? $order->getCurrency()),
             ]);
         } catch (Throwable $exception) {
@@ -160,5 +172,58 @@ class StripePaymentPlatformFeeExtractionService
         }
 
         return 0;
+    }
+
+    /**
+     * Convert application fee VAT breakdown from transaction currency to settlement currency.
+     *
+     * Retrieves VAT data from stripe_payments table (already stored in transaction currency, minor units)
+     * and converts to settlement currency using the exchange rate from the balance transaction.
+     */
+    private function convertApplicationFeeToSettlementCurrency(
+        StripePaymentDomainObject $stripePayment,
+        $balanceTransaction
+    ): array
+    {
+        if (!config('app.tax.eu_vat_handling_enabled')) {
+            return [
+                'net' => null,
+                'vat' => null,
+            ];
+        }
+
+        // Get VAT data from DB (transaction currency, minor units)
+        $netMinor = $stripePayment->getApplicationFeeNet();
+        $vatMinor = $stripePayment->getApplicationFeeVat();
+
+        if ($netMinor === null && $vatMinor === null) {
+            return [
+                'net' => null,
+                'vat' => null,
+            ];
+        }
+
+        $exchangeRate = $balanceTransaction->exchange_rate ?? null;
+
+        // Convert to major units (transaction currency)
+        $netMajor = $netMinor !== null ? $netMinor / 100 : null;
+        $vatMajor = $vatMinor !== null ? $vatMinor / 100 : null;
+
+        // Apply exchange rate to convert to settlement currency (major units)
+        $netConverted = $netMajor !== null && $exchangeRate
+            ? $netMajor * $exchangeRate
+            : $netMajor;
+        $vatConverted = $vatMajor !== null && $exchangeRate
+            ? $vatMajor * $exchangeRate
+            : $vatMajor;
+
+        // Convert to minor units (settlement currency)
+        $netAmountMinorUnit = $netConverted !== null ? (int)round($netConverted * 100) : null;
+        $vatAmountMinorUnit = $vatConverted !== null ? (int)round($vatConverted * 100) : null;
+
+        return [
+            'net' => $netAmountMinorUnit,
+            'vat' => $vatAmountMinorUnit,
+        ];
     }
 }

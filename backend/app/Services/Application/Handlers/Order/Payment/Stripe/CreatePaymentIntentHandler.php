@@ -8,6 +8,7 @@ use Brick\Math\Exception\RoundingNecessaryException;
 use Brick\Money\Exception\UnknownCurrencyException;
 use HiEvents\DomainObjects\AccountConfigurationDomainObject;
 use HiEvents\DomainObjects\AccountStripePlatformDomainObject;
+use HiEvents\DomainObjects\AccountVatSettingDomainObject;
 use HiEvents\DomainObjects\Generated\StripePaymentDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\Status\OrderStatus;
@@ -19,12 +20,12 @@ use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\StripePaymentsRepositoryInterface;
-use HiEvents\Services\Infrastructure\Stripe\StripeClientFactory;
-use HiEvents\Services\Infrastructure\Stripe\StripeConfigurationService;
 use HiEvents\Services\Domain\Payment\Stripe\DTOs\CreatePaymentIntentRequestDTO;
 use HiEvents\Services\Domain\Payment\Stripe\DTOs\CreatePaymentIntentResponseDTO;
 use HiEvents\Services\Domain\Payment\Stripe\StripePaymentIntentCreationService;
 use HiEvents\Services\Infrastructure\Session\CheckoutSessionManagementService;
+use HiEvents\Services\Infrastructure\Stripe\StripeClientFactory;
+use HiEvents\Services\Infrastructure\Stripe\StripeConfigurationService;
 use HiEvents\Values\MoneyValue;
 use Stripe\Exception\ApiErrorException;
 use Throwable;
@@ -75,6 +76,10 @@ readonly class CreatePaymentIntentHandler
                 name: 'configuration',
             ))
             ->loadRelation(AccountStripePlatformDomainObject::class)
+            ->loadRelation(new Relationship(
+                domainObject: AccountVatSettingDomainObject::class,
+                name: 'account_vat_setting',
+            ))
             ->findByEventId($order->getEventId());
 
         $stripePlatform = $account->getActiveStripePlatform()
@@ -113,14 +118,21 @@ readonly class CreatePaymentIntentHandler
                 'account' => $account,
                 'order' => $order,
                 'stripeAccountId' => $stripeAccountId,
+                'vatSettings' => $account->getAccountVatSetting(),
             ])
         );
+
+        $applicationFeeData = $paymentIntent->applicationFeeData;
 
         $this->stripePaymentsRepository->create([
             StripePaymentDomainObjectAbstract::ORDER_ID => $order->getId(),
             StripePaymentDomainObjectAbstract::PAYMENT_INTENT_ID => $paymentIntent->paymentIntentId,
             StripePaymentDomainObjectAbstract::CONNECTED_ACCOUNT_ID => $stripeAccountId,
-            StripePaymentDomainObjectAbstract::APPLICATION_FEE => $paymentIntent->applicationFeeAmount,
+            StripePaymentDomainObjectAbstract::APPLICATION_FEE_GROSS => $applicationFeeData?->grossApplicationFee?->toMinorUnit() ?? 0,
+            StripePaymentDomainObjectAbstract::APPLICATION_FEE_NET => $applicationFeeData?->netApplicationFee?->toMinorUnit() ?? 0,
+            StripePaymentDomainObjectAbstract::APPLICATION_FEE_VAT => $applicationFeeData?->applicationFeeVatAmount?->toMinorUnit() ?? 0,
+            StripePaymentDomainObjectAbstract::APPLICATION_FEE_VAT_RATE => $applicationFeeData?->applicationFeeVatRate,
+            StripePaymentDomainObjectAbstract::CURRENCY => strtoupper($order->getCurrency()),
             StripePaymentDomainObjectAbstract::STRIPE_PLATFORM => $stripePlatform?->value,
         ]);
 
@@ -128,7 +140,7 @@ readonly class CreatePaymentIntentHandler
             paymentIntentId: $paymentIntent->paymentIntentId,
             clientSecret: $paymentIntent->clientSecret,
             accountId: $paymentIntent->accountId,
-            applicationFeeAmount: $paymentIntent->applicationFeeAmount,
+            applicationFeeData: $paymentIntent->applicationFeeData,
             stripePlatform: $stripePlatform,
             publicKey: $publicKey,
         );

@@ -25,6 +25,7 @@ abstract class AccountDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     final public const ACCOUNT_VERIFIED_AT = 'account_verified_at';
     final public const STRIPE_CONNECT_ACCOUNT_TYPE = 'stripe_connect_account_type';
     final public const IS_MANUALLY_VERIFIED = 'is_manually_verified';
+    final public const COUNTRY = 'country';
 
     protected int $id;
     protected ?int $account_configuration_id = null;
@@ -41,6 +42,7 @@ abstract class AccountDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     protected ?string $account_verified_at = null;
     protected ?string $stripe_connect_account_type = null;
     protected bool $is_manually_verified = false;
+    protected ?string $country = null;
 
     public function toArray(): array
     {
@@ -60,6 +62,7 @@ abstract class AccountDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
                     'account_verified_at' => $this->account_verified_at ?? null,
                     'stripe_connect_account_type' => $this->stripe_connect_account_type ?? null,
                     'is_manually_verified' => $this->is_manually_verified ?? null,
+                    'country' => $this->country ?? null,
                 ];
     }
 
@@ -226,5 +229,16 @@ abstract class AccountDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     public function getIsManuallyVerified(): bool
     {
         return $this->is_manually_verified;
+    }
+
+    public function setCountry(?string $country): self
+    {
+        $this->country = $country;
+        return $this;
+    }
+
+    public function getCountry(): ?string
+    {
+        return $this->country;
     }
 }
