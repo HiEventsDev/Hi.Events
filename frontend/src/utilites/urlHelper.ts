@@ -29,6 +29,10 @@ export const eventCoverImageUrl = (event: Event) => {
     return event?.images?.find((image) => image.type === 'EVENT_COVER')?.url;
 }
 
+export const eventCoverImage = (event: Event): Image | undefined => {
+    return event?.images?.find((image) => image.type === 'EVENT_COVER');
+}
+
 export const imageUrl = (imageType: ImageType, images?: Image[], fallbackUrl?: string) => {
     if (!images || images.length === 0) {
         return fallbackUrl || getConfig('VITE_DEFAULT_IMAGE_URL');
