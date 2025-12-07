@@ -27,7 +27,7 @@ return new class extends Migration {
         foreach ($stripeAccounts as $accountStripePlatform) {
             $stripeCountry = $accountStripePlatform->stripe_account_details['country'] ?? null;
 
-            if ($stripeCountry === null) {
+            if ($stripeCountry === null || $accountStripePlatform->account === null) {
                 continue;
             }
 
