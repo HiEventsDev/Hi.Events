@@ -32,10 +32,6 @@ msgstr "'Még semmi sem látható'"
 msgid "{0}"
 msgstr "{0}"
 
-#: src/components/common/CheckInStatusModal/index.tsx:145
-msgid "{0} {1}"
-msgstr ""
-
 #: src/components/layouts/CheckIn/index.tsx:237
 msgid "{0} {1} is already checked in"
 msgstr ""
@@ -292,7 +288,7 @@ msgstr "Fiók sikeresen frissítve"
 
 #: src/components/common/AdminUsersTable/index.tsx:127
 #: src/components/layouts/Admin/index.tsx:14
-#: src/components/routes/admin/Accounts/index.tsx:57
+#: src/components/routes/admin/Accounts/index.tsx:31
 msgid "Accounts"
 msgstr ""
 
@@ -300,15 +296,14 @@ msgstr ""
 msgid "Action Required: Reconnect Your Stripe Account"
 msgstr ""
 
-#: src/components/common/AdminEventsTable/index.tsx:108
 #: src/components/common/AffiliateTable/index.tsx:167
-#: src/components/common/AttendeeTable/index.tsx:317
+#: src/components/common/AttendeeTable/index.tsx:159
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:267
 #: src/components/common/QuestionsTable/index.tsx:108
 msgid "Actions"
 msgstr "Műveletek"
 
-#: src/components/common/AttendeeTable/index.tsx:341
+#: src/components/common/AttendeeTable/index.tsx:183
 msgid "Activate"
 msgstr "Aktiválás"
 
@@ -322,7 +317,6 @@ msgstr "Aktiválás dátuma"
 #: src/components/forms/AffiliateForm/index.tsx:21
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:19
 #: src/components/modals/EditUserModal/index.tsx:110
-#: src/components/routes/event/attendees.tsx:26
 msgid "Active"
 msgstr "Aktív"
 
@@ -453,8 +447,8 @@ msgid "Admin"
 msgstr "Adminisztrátor"
 
 #: src/components/common/GlobalMenu/index.tsx:61
-#: src/components/layouts/Admin/index.tsx:22
-#: src/components/routes/admin/Dashboard/index.tsx:42
+#: src/components/layouts/Admin/index.tsx:21
+#: src/components/routes/admin/Dashboard/index.tsx:16
 msgid "Admin Dashboard"
 msgstr ""
 
@@ -631,7 +625,7 @@ msgstr "Alkalmazható {0} termékre"
 msgid "Applies to 1 product"
 msgstr "1 termékre vonatkozik"
 
-#: src/components/common/FilterModal/index.tsx:284
+#: src/components/common/FilterModal/index.tsx:253
 msgid "Apply"
 msgstr "Alkalmaz"
 
@@ -651,7 +645,7 @@ msgstr "Esemény archiválása"
 msgid "Archived"
 msgstr "Archivált"
 
-#: src/components/common/AttendeeTable/index.tsx:94
+#: src/components/common/AttendeeTable/index.tsx:76
 msgid "Are you sure you want to activate this attendee?"
 msgstr "Biztosan aktiválni szeretné ezt a résztvevőt?"
 
@@ -659,7 +653,7 @@ msgstr "Biztosan aktiválni szeretné ezt a résztvevőt?"
 msgid "Are you sure you want to archive this event?"
 msgstr "Biztosan archiválni szeretné ezt az eseményt?"
 
-#: src/components/common/AttendeeTable/index.tsx:95
+#: src/components/common/AttendeeTable/index.tsx:77
 msgid "Are you sure you want to cancel this attendee? This will void their ticket"
 msgstr "Biztosan törölni szeretné ezt a résztvevőt? Ez érvényteleníti a jegyét."
 
@@ -796,10 +790,6 @@ msgstr "Résztvevő megjegyzései"
 msgid "Attendee questions"
 msgstr "Résztvevői kérdések"
 
-#: src/components/routes/event/attendees.tsx:72
-msgid "Attendee Status"
-msgstr ""
-
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:95
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:195
 #: src/components/modals/ManageAttendeeModal/index.tsx:172
@@ -810,21 +800,17 @@ msgstr "Résztvevői jegy"
 msgid "Attendee Updated"
 msgstr "Résztvevő frissítve"
 
-#: src/components/common/CheckInStatusModal/index.tsx:101
-msgid "Attendee's ticket not included in this list"
-msgstr ""
-
 #: src/components/common/OrdersTable/index.tsx:206
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:243
 #: src/components/common/StatBoxes/index.tsx:45
 #: src/components/layouts/Event/index.tsx:99
 #: src/components/modals/ManageOrderModal/index.tsx:126
-#: src/components/routes/event/attendees.tsx:171
+#: src/components/routes/event/attendees.tsx:59
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:131
 msgid "Attendees"
 msgstr "Résztvevők"
 
-#: src/components/routes/event/attendees.tsx:131
+#: src/components/routes/event/attendees.tsx:43
 msgid "Attendees Exported"
 msgstr "Résztvevők exportálva"
 
@@ -835,10 +821,6 @@ msgstr "Regisztrált résztvevők"
 #: src/components/modals/SendMessageModal/index.tsx:178
 msgid "Attendees with a specific ticket"
 msgstr "Résztvevők meghatározott jeggyel"
-
-#: src/components/common/AdminEventsTable/index.tsx:134
-msgid "Attendees:"
-msgstr ""
 
 #: src/components/common/WidgetEditor/index.tsx:233
 msgid "Auto Resize"
@@ -875,12 +857,11 @@ msgstr "Offline fizetésre vár"
 msgid "Awaiting Offline Pmt."
 msgstr "Offline fizetésre vár."
 
-#: src/components/common/CheckIn/AttendeeList.tsx:91
+#: src/components/common/CheckIn/AttendeeList.tsx:82
 msgid "Awaiting payment"
 msgstr "Fizetésre vár"
 
 #: src/components/common/AttendeeTicket/index.tsx:120
-#: src/components/routes/event/attendees.tsx:28
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:358
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:40
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:65
@@ -982,7 +963,7 @@ msgstr "A kamera engedélyezése megtagadva. <0>Kérje újra az engedélyt</0>, 
 msgid "Camera Scanner"
 msgstr ""
 
-#: src/components/common/AttendeeTable/index.tsx:341
+#: src/components/common/AttendeeTable/index.tsx:183
 #: src/components/common/CheckIn/CheckInOptionsModal.tsx:59
 #: src/components/common/CheckIn/ScannerSelectionModal.tsx:57
 #: src/components/common/ContactOrganizerModal/index.tsx:104
@@ -1019,7 +1000,6 @@ msgstr ""
 
 #: src/components/common/AttendeeTicket/index.tsx:120
 #: src/components/common/OrderStatusBadge/index.tsx:12
-#: src/components/routes/event/attendees.tsx:27
 #: src/components/routes/event/orders.tsx:24
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:355
 msgid "Cancelled"
@@ -1028,10 +1008,6 @@ msgstr "Törölve"
 #: src/components/common/CheckIn/AttendeeList.tsx:30
 msgid "Cannot Check In"
 msgstr "Nem lehet bejelentkezni"
-
-#: src/components/common/CheckIn/AttendeeList.tsx:34
-msgid "Cannot Check In (Cancelled)"
-msgstr ""
 
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:42
 #: src/components/layouts/Event/index.tsx:103
@@ -1083,7 +1059,7 @@ msgstr "Jelszó módosítása"
 msgid "Charity"
 msgstr "Jótékonyság"
 
-#: src/components/common/CheckIn/AttendeeList.tsx:41
+#: src/components/common/CheckIn/AttendeeList.tsx:37
 msgid "Check In"
 msgstr "Bejelentkezés"
 
@@ -1099,7 +1075,7 @@ msgstr "Bejelentkezés és megrendelés fizetettként jelölése"
 msgid "Check in only"
 msgstr "Csak bejelentkezés"
 
-#: src/components/common/CheckIn/AttendeeList.tsx:38
+#: src/components/common/CheckIn/AttendeeList.tsx:34
 msgid "Check Out"
 msgstr "Kijelentkezés"
 
@@ -1153,12 +1129,6 @@ msgstr "Bejelentkezési listák"
 msgid "Check-in lists let you control entry across days, areas, or ticket types. You can share a secure check-in link with staff — no account required."
 msgstr ""
 
-#: src/components/common/AttendeeTable/index.tsx:155
-#: src/components/common/CheckInStatusModal/index.tsx:38
-#: src/components/common/CheckInStatusModal/index.tsx:136
-msgid "Check-In Status"
-msgstr ""
-
 #: src/components/common/CheckInListList/index.tsx:160
 msgid "Check-In URL copied to clipboard"
 msgstr "Bejelentkezési URL a vágólapra másolva"
@@ -1174,14 +1144,6 @@ msgstr "A jelölőnégyzet opciók több kiválasztást is lehetővé tesznek"
 #: src/components/forms/QuestionForm/index.tsx:112
 msgid "Checkboxes"
 msgstr "Jelölőnégyzetek"
-
-#: src/components/common/CheckInStatusModal/index.tsx:112
-msgid "Checked In"
-msgstr ""
-
-#: src/components/common/AttendeeTable/index.tsx:254
-msgid "Checked into {checkInCount} list(s)"
-msgstr ""
 
 #: src/components/layouts/Checkout/index.tsx:150
 #: src/components/routes/event/Settings/index.tsx:40
@@ -1232,10 +1194,6 @@ msgstr "Keresési szöveg törlése"
 #: src/components/common/PromoCodeTable/index.tsx:98
 msgid "Click to copy"
 msgstr "Kattintson a másoláshoz"
-
-#: src/components/common/AttendeeTable/index.tsx:293
-msgid "Click to view notes"
-msgstr ""
 
 #: src/components/routes/product-widget/SelectProducts/index.tsx:581
 msgid "close"
@@ -1578,10 +1536,6 @@ msgstr "Kód másolása"
 msgid "Copy details to all attendees"
 msgstr "Részletek másolása minden résztvevőnek"
 
-#: src/components/common/AttendeeTable/index.tsx:216
-msgid "Copy Email"
-msgstr ""
-
 #: src/components/common/AttendeeTicket/index.tsx:174
 #: src/components/modals/ShareModal/index.tsx:171
 msgid "Copy Link"
@@ -1624,7 +1578,7 @@ msgstr "A borítókép az eseményoldal tetején jelenik meg"
 msgid "Cover image will be displayed at the top of your organizer page"
 msgstr "A borítókép a szervezői oldal tetején jelenik meg"
 
-#: src/components/routes/event/attendees.tsx:194
+#: src/components/routes/event/attendees.tsx:71
 #: src/components/routes/event/products.tsx:74
 msgid "Create"
 msgstr "Létrehozás"
@@ -1921,7 +1875,7 @@ msgstr "Napi értékesítési, adó- és díj bontás."
 msgid "Danger zone"
 msgstr "Veszélyzóna"
 
-#: src/components/common/AttendeeTable/index.tsx:338
+#: src/components/common/AttendeeTable/index.tsx:180
 msgid "Danger Zone"
 msgstr "Veszélyzóna"
 
@@ -2261,12 +2215,8 @@ msgstr "pl. 2.50 2.50 dollárért"
 msgid "eg. 23.5 for 23.5%"
 msgstr "pl. 23.5 23.5%-ért"
 
-#: src/components/common/CheckInStatusModal/index.tsx:164
-msgid "Eligible Check-In Lists"
-msgstr ""
-
 #: src/components/common/AttendeeDetails/index.tsx:22
-#: src/components/common/AttendeeTable/index.tsx:151
+#: src/components/common/AttendeeTable/index.tsx:109
 #: src/components/common/OrderDetails/index.tsx:31
 #: src/components/forms/AffiliateForm/index.tsx:89
 #: src/components/modals/EditUserModal/index.tsx:80
@@ -2302,10 +2252,6 @@ msgstr "E-mail cím"
 #: src/components/routes/product-widget/CollectInformation/index.tsx:417
 msgid "Email Address"
 msgstr "E-mail cím"
-
-#: src/components/common/AttendeeTable/index.tsx:130
-msgid "Email address copied to clipboard"
-msgstr ""
 
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:149
 msgid "Email Body"
@@ -2382,7 +2328,6 @@ msgstr ""
 msgid "Enabled"
 msgstr "Engedélyezve"
 
-#: src/components/common/AdminEventsTable/index.tsx:103
 #: src/components/modals/DuplicateEventModal/index.tsx:129
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:107
 msgid "End Date"
@@ -2407,7 +2352,7 @@ msgid "Ended"
 msgstr "Befejezett"
 
 #: src/components/common/LanguageSwitcher/index.tsx:18
-#: src/components/common/LanguageSwitcher/index.tsx:56
+#: src/components/common/LanguageSwitcher/index.tsx:54
 #: src/components/modals/CreateAttendeeModal/index.tsx:156
 #: src/components/routes/profile/ManageProfile/index.tsx:173
 msgid "English"
@@ -2606,7 +2551,6 @@ msgstr ""
 msgid "Event Timezone"
 msgstr ""
 
-#: src/components/common/AdminEventsTable/index.tsx:82
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:34
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:68
 msgid "Event Title"
@@ -2622,18 +2566,12 @@ msgstr "Eseménytípusok"
 msgid "Event Venue"
 msgstr ""
 
-#: src/components/common/AdminAccountsTable/index.tsx:63
-#: src/components/layouts/Admin/index.tsx:16
+#: src/components/common/AdminAccountsTable/index.tsx:42
 #: src/components/layouts/OrganizerLayout/index.tsx:73
 #: src/components/layouts/OrganizerLayout/index.tsx:133
-#: src/components/routes/admin/Events/index.tsx:77
 #: src/components/routes/organizer/Events/index.tsx:43
 msgid "Events"
 msgstr "Események"
-
-#: src/components/routes/admin/Dashboard/index.tsx:129
-msgid "Events Starting in Next 24 Hours"
-msgstr ""
 
 #: src/components/common/EmailTemplateEditor/CTAConfiguration.tsx:23
 msgid "Every email template must include a call-to-action button that links to the appropriate page"
@@ -2652,7 +2590,7 @@ msgid "Expiry Date"
 msgstr "Lejárati dátum"
 
 #: src/components/routes/event/Affiliates/index.tsx:79
-#: src/components/routes/event/attendees.tsx:203
+#: src/components/routes/event/attendees.tsx:80
 #: src/components/routes/event/orders.tsx:140
 msgid "Export"
 msgstr "Exportálás"
@@ -2673,7 +2611,7 @@ msgstr "Exportálás elindítva. Fájl előkészítése..."
 msgid "Exporting Affiliates"
 msgstr "Partnerek exportálása"
 
-#: src/components/routes/event/attendees.tsx:127
+#: src/components/routes/event/attendees.tsx:39
 msgid "Exporting Attendees"
 msgstr "Résztvevők exportálása"
 
@@ -2693,7 +2631,7 @@ msgstr "Facebook"
 msgid "Failed to abandon order. Please try again."
 msgstr "A rendelés feladása sikertelen. Kérjük, próbálja újra."
 
-#: src/components/common/AttendeeTable/index.tsx:115
+#: src/components/common/AttendeeTable/index.tsx:97
 msgid "Failed to cancel attendee"
 msgstr "Nem sikerült törölni a résztvevőt."
 
@@ -2728,7 +2666,7 @@ msgstr "Nem sikerült letölteni a számlát. Kérjük, próbálja újra."
 msgid "Failed to export affiliates"
 msgstr "Nem sikerült exportálni a partnereket."
 
-#: src/components/routes/event/attendees.tsx:136
+#: src/components/routes/event/attendees.tsx:48
 msgid "Failed to export attendees"
 msgstr "Résztvevők exportálása sikertelen"
 
@@ -2744,7 +2682,7 @@ msgstr "Bejelentkezési lista betöltése sikertelen"
 msgid "Failed to load Webhook"
 msgstr "Webhook betöltése sikertelen"
 
-#: src/components/common/AttendeeTable/index.tsx:68
+#: src/components/common/AttendeeTable/index.tsx:50
 msgid "Failed to resend ticket email"
 msgstr "Jegy e-mail újraküldése sikertelen"
 
@@ -2771,8 +2709,6 @@ msgstr "Termékek rendezése sikertelen"
 msgid "Failed to start export job"
 msgstr "Exportálási feladat indítása sikertelen"
 
-#: src/components/routes/admin/Accounts/index.tsx:48
-#: src/components/routes/admin/Events/index.tsx:68
 #: src/components/routes/admin/Users/index.tsx:48
 msgid "Failed to start impersonation. Please try again."
 msgstr ""
@@ -2823,20 +2759,16 @@ msgstr "A díjak változhatnak. Értesítést kap minden díjstruktúrájában b
 msgid "Festival"
 msgstr "Fesztivál"
 
-#: src/components/routes/event/attendees.tsx:181
-msgid "Filter Attendees"
-msgstr ""
-
 #: src/components/routes/event/orders.tsx:121
 msgid "Filter Orders"
 msgstr "Megrendelések szűrése"
 
-#: src/components/common/FilterModal/index.tsx:87
-#: src/components/common/FilterModal/index.tsx:254
+#: src/components/common/FilterModal/index.tsx:75
+#: src/components/common/FilterModal/index.tsx:223
 msgid "Filters"
 msgstr "Szűrők"
 
-#: src/components/common/FilterModal/index.tsx:254
+#: src/components/common/FilterModal/index.tsx:223
 msgid "Filters ({activeFilterCount})"
 msgstr "Szűrők ({activeFilterCount})"
 
@@ -3028,7 +2960,7 @@ msgstr "Résztvevők"
 msgid "Have a promo code?"
 msgstr "Van promóciós kódja?"
 
-#: src/components/routes/admin/Dashboard/index.tsx:46
+#: src/components/routes/admin/Dashboard/index.tsx:20
 msgid "Hello {0}, manage your platform from here."
 msgstr ""
 
@@ -3243,18 +3175,11 @@ msgstr "Kép URL-címe"
 msgid "Images"
 msgstr "Képek"
 
-#: src/components/common/AdminAccountsTable/index.tsx:102
 #: src/components/common/AdminUsersTable/index.tsx:84
 #: src/components/common/AdminUsersTable/index.tsx:96
 msgid "Impersonate"
 msgstr ""
 
-#: src/components/common/AdminEventsTable/index.tsx:162
-msgid "Impersonate User"
-msgstr ""
-
-#: src/components/routes/admin/Accounts/index.tsx:38
-#: src/components/routes/admin/Events/index.tsx:58
 #: src/components/routes/admin/Users/index.tsx:38
 msgid "Impersonation started"
 msgstr ""
@@ -3265,14 +3190,6 @@ msgstr ""
 
 #: src/components/routes/event/EventDashboard/index.tsx:124
 msgid "Important: Stripe reconnection required"
-msgstr ""
-
-#: src/components/routes/admin/Dashboard/index.tsx:29
-msgid "In {diffHours} hours"
-msgstr ""
-
-#: src/components/routes/admin/Dashboard/index.tsx:27
-msgid "In {diffMinutes} minutes"
 msgstr ""
 
 #: src/components/layouts/AuthLayout/index.tsx:55
@@ -3518,7 +3435,7 @@ msgstr "Élő"
 msgid "LIVE"
 msgstr "ÉLŐ"
 
-#: src/components/routes/admin/Dashboard/index.tsx:93
+#: src/components/routes/admin/Dashboard/index.tsx:67
 msgid "Live Events"
 msgstr ""
 
@@ -3612,7 +3529,7 @@ msgstr "Tegye élővé eseményét"
 msgid "Manage"
 msgstr "Kezelés"
 
-#: src/components/common/AttendeeTable/index.tsx:320
+#: src/components/common/AttendeeTable/index.tsx:162
 msgid "Manage attendee"
 msgstr "Résztvevő kezelése"
 
@@ -3660,7 +3577,7 @@ msgstr "Kezelje felhasználóit és engedélyeiket."
 msgid "Mandatory questions must be answered before the customer can checkout."
 msgstr "A kötelező kérdésekre válaszolni kell, mielőtt az ügyfél fizethetne."
 
-#: src/components/common/AttendeeTable/index.tsx:85
+#: src/components/common/AttendeeTable/index.tsx:67
 msgid "Manually add an Attendee"
 msgstr "Résztvevő manuális hozzáadása"
 
@@ -3681,12 +3598,11 @@ msgstr "Illeszkedjen márkájához"
 msgid "Maximum Per Order"
 msgstr "Maximum megrendelésenként"
 
-#: src/components/common/AttendeeTable/index.tsx:207
 #: src/components/common/ContactOrganizerModal/index.tsx:88
 msgid "Message"
 msgstr "Üzenet"
 
-#: src/components/common/AttendeeTable/index.tsx:325
+#: src/components/common/AttendeeTable/index.tsx:167
 msgid "Message attendee"
 msgstr "Üzenet a résztvevőnek"
 
@@ -3790,7 +3706,7 @@ msgid "Nam placerat elementum..."
 msgstr "Nam placerat elementum..."
 
 #: src/components/common/AttendeeDetails/index.tsx:14
-#: src/components/common/AttendeeTable/index.tsx:150
+#: src/components/common/AttendeeTable/index.tsx:108
 #: src/components/common/OrderDetails/index.tsx:23
 #: src/components/forms/AffiliateForm/index.tsx:81
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:37
@@ -3840,7 +3756,7 @@ msgstr "Éjszakai élet"
 msgid "No accounts"
 msgstr ""
 
-#: src/components/common/AdminAccountsTable/index.tsx:18
+#: src/components/common/AdminAccountsTable/index.tsx:15
 msgid "No accounts found"
 msgstr ""
 
@@ -3864,7 +3780,7 @@ msgstr "Nincsenek résztvevők ehhez a megrendeléshez."
 msgid "No attendees have been added to this order."
 msgstr "Ehhez a megrendeléshez nem adtak hozzá résztvevőket."
 
-#: src/components/common/AttendeeTable/index.tsx:74
+#: src/components/common/AttendeeTable/index.tsx:56
 msgid "No Attendees to show"
 msgstr "Nincs megjeleníthető résztvevő"
 
@@ -3875,10 +3791,6 @@ msgstr "Nincs kapacitás-hozzárendelés"
 #: src/components/common/CheckInListList/index.tsx:44
 msgid "No Check-In Lists"
 msgstr "Nincsenek bejelentkezési listák"
-
-#: src/components/common/CheckInStatusModal/index.tsx:156
-msgid "No check-in lists available for this event."
-msgstr ""
 
 #: src/components/layouts/AuthLayout/index.tsx:36
 msgid "No Credit Card Required"
@@ -3900,14 +3812,6 @@ msgstr "Nincs kedvezmény"
 msgid "No ended events to show."
 msgstr "Nincs megjeleníthető befejezett esemény."
 
-#: src/components/common/AdminEventsTable/index.tsx:22
-msgid "No events found"
-msgstr ""
-
-#: src/components/routes/admin/Dashboard/index.tsx:168
-msgid "No events starting in the next 24 hours"
-msgstr ""
-
 #: src/components/common/NoEventsBlankSlate/index.tsx:14
 msgid "No events to show"
 msgstr "Nincs megjeleníthető esemény"
@@ -3916,7 +3820,7 @@ msgstr "Nincs megjeleníthető esemény"
 msgid "No events yet"
 msgstr "Még nincsenek események"
 
-#: src/components/common/FilterModal/index.tsx:261
+#: src/components/common/FilterModal/index.tsx:230
 msgid "No filters available"
 msgstr "Nincsenek elérhető szűrők"
 
@@ -4036,18 +3940,6 @@ msgstr "Nincs"
 #: src/components/common/ProductPriceAvailability/index.tsx:48
 msgid "Not available"
 msgstr "Nem elérhető"
-
-#: src/components/common/AttendeeTable/index.tsx:255
-msgid "Not checked in"
-msgstr ""
-
-#: src/components/common/CheckInStatusModal/index.tsx:112
-msgid "Not Checked In"
-msgstr ""
-
-#: src/components/common/CheckInStatusModal/index.tsx:120
-msgid "Not Eligible"
-msgstr ""
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:82
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:227
@@ -4208,7 +4100,7 @@ msgstr "Opciók"
 msgid "or"
 msgstr "vagy"
 
-#: src/components/common/AttendeeTable/index.tsx:152
+#: src/components/common/AttendeeTable/index.tsx:110
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:21
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:22
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:23
@@ -4252,10 +4144,6 @@ msgstr ""
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:122
 msgid "Order Date"
 msgstr "Megrendelés dátuma"
-
-#: src/components/common/AttendeeTable/index.tsx:227
-msgid "Order details"
-msgstr ""
 
 #: src/components/modals/ManageAttendeeModal/index.tsx:166
 #: src/components/modals/ManageOrderModal/index.tsx:86
@@ -4381,10 +4269,6 @@ msgstr "Megrendelések"
 msgid "Orders Exported"
 msgstr "Exportált megrendelések"
 
-#: src/components/common/AdminEventsTable/index.tsx:138
-msgid "Orders:"
-msgstr ""
-
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:44
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:45
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:77
@@ -4405,7 +4289,6 @@ msgstr "Szervezet részletei"
 msgid "Organization Name"
 msgstr "Szervezet neve"
 
-#: src/components/common/AdminEventsTable/index.tsx:85
 #: src/components/common/AttendeeTicket/index.tsx:69
 #: src/components/modals/EditUserModal/index.tsx:55
 #: src/components/modals/InviteUserModal/index.tsx:47
@@ -4476,10 +4359,6 @@ msgstr "A szervezők csak eseményeket és termékeket kezelhetnek. Nem kezelhet
 #: src/constants/eventCategories.ts:22
 msgid "Other"
 msgstr "Egyéb"
-
-#: src/components/common/CheckInStatusModal/index.tsx:173
-msgid "Other Lists (Ticket Not Included)"
-msgstr ""
 
 #: src/components/layouts/Event/index.tsx:82
 msgid "Overview"
@@ -4761,7 +4640,7 @@ msgid "Please select at least one product"
 msgstr "Kérjük, válasszon ki legalább egy terméket."
 
 #: src/components/routes/event/Affiliates/index.tsx:52
-#: src/components/routes/event/attendees.tsx:137
+#: src/components/routes/event/attendees.tsx:49
 #: src/components/routes/event/orders.tsx:100
 msgid "Please try again."
 msgstr "Kérjük, próbálja újra."
@@ -4778,7 +4657,7 @@ msgstr "Kérjük, várjon, mielőtt újabb kódot kér."
 msgid "Please wait while we prepare your affiliates for export..."
 msgstr "Kérjük, várjon, amíg előkészítjük partnereit az exportálásra..."
 
-#: src/components/routes/event/attendees.tsx:128
+#: src/components/routes/event/attendees.tsx:40
 msgid "Please wait while we prepare your attendees for export..."
 msgstr "Kérjük, várjon, amíg előkészítjük résztvevőit az exportálásra..."
 
@@ -5154,10 +5033,6 @@ msgstr "Visszatérítve"
 msgid "Register"
 msgstr "Regisztráció"
 
-#: src/components/common/AttendeeTable/index.tsx:226
-msgid "Registered: {0}"
-msgstr ""
-
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:82
 msgid "Remaining Uses"
 msgstr "Fennmaradó felhasználások"
@@ -5208,7 +5083,7 @@ msgstr "Meghívó újraküldése"
 msgid "Resend order email"
 msgstr "Megrendelés e-mail újraküldése"
 
-#: src/components/common/AttendeeTable/index.tsx:330
+#: src/components/common/AttendeeTable/index.tsx:172
 msgid "Resend ticket email"
 msgstr "Jegy e-mail újraküldése"
 
@@ -5216,7 +5091,7 @@ msgstr "Jegy e-mail újraküldése"
 msgid "Resending..."
 msgstr "Újraküldés..."
 
-#: src/components/common/FilterModal/index.tsx:279
+#: src/components/common/FilterModal/index.tsx:248
 msgid "Reset"
 msgstr "Visszaállítás"
 
@@ -5289,10 +5164,6 @@ msgstr "Értékesítés befejezve"
 msgid "Sales start"
 msgstr "Értékesítés kezdete"
 
-#: src/components/common/AdminEventsTable/index.tsx:130
-msgid "Sales:"
-msgstr ""
-
 #: src/components/routes/event/TicketDesigner/TicketDesignerPrint.tsx:80
 #: src/components/routes/event/TicketDesigner/TicketPreview.tsx:88
 msgid "Sample Venue"
@@ -5357,11 +5228,11 @@ msgstr "Görgetés a jegyekhez"
 msgid "Search affiliates..."
 msgstr "Partnerek keresése..."
 
-#: src/components/routes/admin/Accounts/index.tsx:60
+#: src/components/routes/admin/Accounts/index.tsx:34
 msgid "Search by account name or email..."
 msgstr ""
 
-#: src/components/routes/event/attendees.tsx:186
+#: src/components/routes/event/attendees.tsx:64
 msgid "Search by attendee name, email or order #..."
 msgstr "Keresés résztvevő neve, e-mail címe vagy rendelési száma alapján..."
 
@@ -5369,10 +5240,6 @@ msgstr "Keresés résztvevő neve, e-mail címe vagy rendelési száma alapján.
 #: src/components/routes/organizer/Events/index.tsx:47
 msgid "Search by event name..."
 msgstr "Keresés eseménynév alapján..."
-
-#: src/components/routes/admin/Events/index.tsx:80
-msgid "Search by event title or organizer..."
-msgstr ""
 
 #: src/components/routes/admin/Users/index.tsx:60
 msgid "Search by name, email, or account..."
@@ -5422,8 +5289,7 @@ msgstr "Másodlagos szín"
 msgid "Secondary Text Color"
 msgstr "Másodlagos szövegszín"
 
-#: src/components/common/FilterModal/index.tsx:162
-#: src/components/common/FilterModal/index.tsx:181
+#: src/components/common/FilterModal/index.tsx:150
 msgid "Select {0}"
 msgstr "Válasszon {0}"
 
@@ -5832,7 +5698,6 @@ msgstr "Sport"
 msgid "Standard product with a fixed price"
 msgstr "Standard termék fix árral"
 
-#: src/components/common/AdminEventsTable/index.tsx:93
 #: src/components/modals/DuplicateEventModal/index.tsx:124
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:102
 msgid "Start Date"
@@ -5863,13 +5728,8 @@ msgstr ""
 msgid "State or Region"
 msgstr "Állam vagy régió"
 
-#: src/components/common/AdminEventsTable/index.tsx:106
-msgid "Statistics"
-msgstr ""
-
-#: src/components/common/AdminEventsTable/index.tsx:107
 #: src/components/common/AffiliateTable/index.tsx:83
-#: src/components/common/AttendeeTable/index.tsx:154
+#: src/components/common/AttendeeTable/index.tsx:112
 #: src/components/common/OrderDetails/index.tsx:51
 #: src/components/common/OrdersTable/index.tsx:209
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:222
@@ -5938,7 +5798,7 @@ msgstr "Sikeres"
 msgid "Success! {0} will receive an email shortly."
 msgstr "Sikeres! {0} hamarosan e-mailt kap."
 
-#: src/components/common/AttendeeTable/index.tsx:108
+#: src/components/common/AttendeeTable/index.tsx:90
 msgid "Successfully {0} attendee"
 msgstr "Sikeresen {0} résztvevő"
 
@@ -6072,10 +5932,6 @@ msgstr "Támogatási e-mail"
 #: src/components/layouts/AuthLayout/index.tsx:61
 msgid "Support for tiered, donation-based, and product sales with customizable pricing and capacity"
 msgstr "Támogatás réteges, adományalapú és termékértékesítéshez, testreszabható árazással és kapacitással."
-
-#: src/components/common/LanguageSwitcher/index.tsx:40
-msgid "Swedish"
-msgstr ""
 
 #: src/components/layouts/OrganizerLayout/index.tsx:63
 #: src/components/modals/SwitchOrganizerModal/index.tsx:33
@@ -6495,11 +6351,11 @@ msgstr "Ez értesítésekhez és a felhasználókkal való kommunikációhoz les
 msgid "This will not be visible to customers, but helps you identify the affiliate."
 msgstr "Ez nem lesz látható az ügyfelek számára, de segít azonosítani a partnert."
 
-#: src/components/common/AttendeeTable/index.tsx:341
+#: src/components/common/AttendeeTable/index.tsx:183
 msgid "ticket"
 msgstr "jegy"
 
-#: src/components/common/AttendeeTable/index.tsx:153
+#: src/components/common/AttendeeTable/index.tsx:111
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:58
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:59
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:60
@@ -6507,10 +6363,6 @@ msgstr "jegy"
 #: src/components/modals/CreateAttendeeModal/index.tsx:162
 msgid "Ticket"
 msgstr "Jegy"
-
-#: src/components/common/CheckIn/AttendeeList.tsx:83
-msgid "Ticket Cancelled"
-msgstr ""
 
 #: src/components/layouts/Event/index.tsx:111
 #: src/components/routes/event/TicketDesigner/index.tsx:107
@@ -6521,7 +6373,7 @@ msgstr ""
 msgid "Ticket design saved successfully"
 msgstr ""
 
-#: src/components/common/AttendeeTable/index.tsx:67
+#: src/components/common/AttendeeTable/index.tsx:49
 msgid "Ticket email has been resent to attendee"
 msgstr "Jegy e-mailt újraküldték a résztvevőnek."
 
@@ -6566,7 +6418,6 @@ msgid "Ticket Price"
 msgstr ""
 
 #: src/components/common/AttendeeTicket/index.tsx:86
-#: src/components/routes/event/attendees.tsx:66
 msgid "Ticket Type"
 msgstr "Jegy típusa"
 
@@ -6583,7 +6434,7 @@ msgstr "Jegyek és termékek"
 msgid "Tickets for"
 msgstr "Jegyek ehhez:"
 
-#: src/components/routes/admin/Dashboard/index.tsx:111
+#: src/components/routes/admin/Dashboard/index.tsx:85
 msgid "Tickets Sold"
 msgstr ""
 
@@ -6646,7 +6497,7 @@ msgstr "Eszközök"
 msgid "Total"
 msgstr "Összesen"
 
-#: src/components/routes/admin/Dashboard/index.tsx:75
+#: src/components/routes/admin/Dashboard/index.tsx:49
 msgid "Total Accounts"
 msgstr ""
 
@@ -6692,7 +6543,7 @@ msgstr "Összes visszatérített"
 msgid "Total Tax"
 msgstr "Összes adó"
 
-#: src/components/routes/admin/Dashboard/index.tsx:57
+#: src/components/routes/admin/Dashboard/index.tsx:31
 msgid "Total Users"
 msgstr ""
 
@@ -6932,8 +6783,7 @@ msgstr "Felhasználó"
 msgid "User Management"
 msgstr "Felhasználókezelés"
 
-#: src/components/common/AdminAccountsTable/index.tsx:70
-#: src/components/common/AdminAccountsTable/index.tsx:78
+#: src/components/common/AdminAccountsTable/index.tsx:49
 #: src/components/layouts/Admin/index.tsx:15
 #: src/components/routes/account/ManageAccount/index.tsx:32
 #: src/components/routes/admin/Users/index.tsx:57
@@ -6998,15 +6848,6 @@ msgstr "Válaszok megtekintése"
 msgid "View Attendee Details"
 msgstr "Résztvevő adatainak megtekintése"
 
-#: src/components/common/AttendeeTable/index.tsx:263
-msgid "View check-in status"
-msgstr ""
-
-#: src/components/common/AdminEventsTable/index.tsx:153
-#: src/components/routes/admin/Dashboard/index.tsx:157
-msgid "View Event"
-msgstr ""
-
 #: src/components/common/EventCard/index.tsx:81
 msgid "View event page"
 msgstr "Eseményoldal megtekintése"
@@ -7022,10 +6863,6 @@ msgstr "Naplók megtekintése"
 #: src/components/layouts/EventHomepage/EventInformation/index.tsx:95
 msgid "View map"
 msgstr "Térkép megtekintése"
-
-#: src/components/common/AttendeeTable/index.tsx:307
-msgid "View notes"
-msgstr ""
 
 #: src/components/layouts/EventHomepage/EventInformation/index.tsx:95
 msgid "View on Google Maps"
@@ -7512,11 +7349,11 @@ msgstr "Fióknevét az eseményoldalakon és az e-mailekben használják."
 msgid "Your affiliates have been exported successfully."
 msgstr "Partnerei sikeresen exportálva."
 
-#: src/components/routes/event/attendees.tsx:132
+#: src/components/routes/event/attendees.tsx:44
 msgid "Your attendees have been exported successfully."
 msgstr "Résztvevői sikeresen exportálva."
 
-#: src/components/common/AttendeeTable/index.tsx:79
+#: src/components/common/AttendeeTable/index.tsx:61
 msgid "Your attendees will appear here once they have registered for your event. You can also manually add attendees."
 msgstr "Résztvevői itt jelennek meg, miután regisztráltak az eseményére. Manuálisan is hozzáadhat résztvevőket."
 
