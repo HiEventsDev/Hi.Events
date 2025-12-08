@@ -1,26 +1,53 @@
 @use "../../../styles/mixins.scss";
 
+// ==========================================
+// Variables & Design Tokens
+// ==========================================
+
+$card-radius: var(--hi-radius-md, 8px);
+$card-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
+$card-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
+$transition-fast: 150ms ease;
+$transition-base: 200ms ease;
+
+
+$color-text-primary: #1f2937;
+$color-text-secondary: #6b7280;
+$color-text-muted: #9ca3af;
+$color-border: #e5e7eb;
+$color-border-light: #f3f4f6;
+$color-success: #10b981;
+$color-money: #059669;
+
+// ==========================================
+// Category Container Styles
+// ==========================================
+
 .sortableCategory {
-  margin-bottom: 20px;
-  transition: transform 250ms ease;
-  border-radius: var(--hi-radius-sm);
+  margin-bottom: 24px;
+  transition: transform $transition-base, box-shadow $transition-base;
+  border-radius: $card-radius;
   padding: var(--hi-spacing-lg);
-  box-shadow: 0 3px 0 #dddddd;
-  border: 1px solid #e3e3e3;
+  box-shadow: $card-shadow;
+  border: 1px solid $color-border;
   background-color: #ffffff;
+
+  &:hover {
+    box-shadow: $card-shadow-hover;
+  }
 }
 
 .categoryHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 10px;
-  gap: 10px;
+  margin-bottom: 16px;
+  gap: 12px;
 }
 
 .categoryActions {
   display: flex;
-  gap: 5px;
+  gap: 8px;
 }
 
 .categoryAction {
@@ -31,11 +58,19 @@
   margin: 0;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
+  font-weight: 600;
+  color: $color-text-primary;
 }
 
 .categoryDragHandle {
   cursor: grab;
+  color: $color-text-muted;
+  transition: color $transition-fast;
+
+  &:hover {
+    color: $color-text-secondary;
+  }
 
   &:active {
     cursor: grabbing;
@@ -49,7 +84,7 @@
 
 .dragHandleDisabled {
   cursor: not-allowed;
-  opacity: 0.5;
+  opacity: 0.4;
 }
 
 .categoryContent {
@@ -57,202 +92,427 @@
 }
 
 .isOver {
-  background-color: #efefef;
+  background-color: $color-border-light;
 }
 
 .isDragging {
-  opacity: 0.5;
+  opacity: 0.6;
   z-index: 1000;
 }
 
 .dragOverlay {
   .sortableCategory,
   .productCard {
-    transform: scale(1.05);
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    transform: scale(1.02);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
   }
 }
 
 .cards {
   display: flex;
   flex-direction: column;
+  gap: 12px;
 }
 
+// ==========================================
+// Product Card Styles
+// ==========================================
+
 .productCard {
+  position: relative;
   box-sizing: border-box;
-  border-radius: var(--hi-radius-sm);
-  border: 1px solid #e3e3e3;
+  border-radius: $card-radius;
+  border: 1px solid $color-border;
   background-color: #ffffff;
   display: grid;
-  padding: 20px;
-  margin-bottom: 20px;
-  position: relative;
-  gap: 10px;
-  transition: transform 250ms ease;
-  grid-template-areas: "dragHanlde productInfo action";
-  grid-template-columns: 40px 1fr 40px;
+  padding: 0;
+  overflow: hidden;
+  transition:
+          transform $transition-base,
+          box-shadow $transition-base,
+          border-color $transition-base;
+  grid-template-areas: "sort content action";
+  grid-template-columns: 44px 1fr auto;
+
+  &:hover {
+    box-shadow: $card-shadow-hover;
+    border-color: darken($color-border, 5%);
+
+    .actionButton {
+      background-color: $color-border-light;
+    }
+  }
 
   @include mixins.respond-below(lg) {
     grid-template-areas:
-      "dragHanlde productInfo"
-      "dragHanlde action";
+      "sort content"
+      "sort action";
+    grid-template-columns: 40px 1fr;
   }
 
-  .halfCircle {
-    width: 20px;
-    height: 10px;
-    background-color: #fff;
-    border-top-left-radius: 110px;
-    border-top-right-radius: 110px;
-    border: 1px solid #ddd;
-    border-bottom: 0;
-    transform: rotate(90deg);
-    position: absolute;
-    left: -6px;
-    top: 44%;
-  }
+  @include mixins.respond-below(sm) {
+    grid-template-areas:
+      "content"
+      "action";
+    grid-template-columns: 1fr;
 
-  .halfCircle.right {
-    left: auto;
-    right: -6px;
-    transform: rotate(270deg);
-  }
-
-  .dragHandle {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: move;
-    grid-area: dragHanlde;
-    touch-action: none;
-  }
-
-  .dragHandleDisabled {
-    cursor: not-allowed;
-    opacity: 0.5;
-  }
-
-  .productInfo {
-    grid-area: productInfo;
-    display: flex;
-
-    .productDetails {
-      display: grid;
-      width: 100%;
-      align-items: center;
-      gap: 15px;
-      flex-wrap: wrap;
-      grid-template-columns: 1fr 1fr 1fr 1fr;
-
-      @include mixins.respond-below(lg) {
-        flex-direction: column;
-        align-items: flex-start;
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
-      }
-
-      @include mixins.respond-below(sm) {
-        gap: 10px;
-      }
-
-      @include mixins.respond-below(xs) {
-        gap: 20px;
-        grid-template-columns: 1fr;
-      }
-
-      > div {
-        flex: 1;
-        min-width: 125px;
-
-        @include mixins.respond-below(sm) {
-          min-width: 100px;
-        }
-      }
-
-      .heading {
-        text-transform: uppercase;
-        color: #9ca3af;
-        font-size: 0.8em;
-      }
-
-      .status {
-        max-width: 120px;
-        cursor: pointer;
-      }
-
-      .title {
-        text-wrap: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-
-      .price {
-        color: var(--hi-color-money-green);
-
-        .priceAmount {
-          font-weight: 600;
-          text-wrap: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
-      }
-
-      .availability {
-      }
-    }
-  }
-
-  .action {
-    display: flex;
-    grid-area: action;
-
-    @include mixins.respond-below(lg) {
-      margin-top: 10px;
-    }
-
-    .desktopAction {
-      @include mixins.respond-below(lg) {
-        display: none;
-      }
-    }
-
-    .mobileAction {
+    .sortControls {
       display: none;
-      @include mixins.respond-below(lg) {
-        display: block;
-      }
+    }
+  }
+
+  &.soldOut {
+    opacity: 0.7;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+                      -45deg,
+                      transparent,
+                      transparent 10px,
+                      rgba(0, 0, 0, 0.02) 10px,
+                      rgba(0, 0, 0, 0.02) 20px
+      );
+      pointer-events: none;
     }
   }
 }
 
+
+// Sort controls
+.sortControls {
+  grid-area: sort;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 0;
+  border-right: 1px solid $color-border-light;
+  background-color: #fafafa;
+}
+
+// Main content area
+.productContent {
+  grid-area: content;
+  display: flex;
+  flex-direction: column;
+  padding: 16px 20px;
+  gap: 14px;
+  min-width: 0;
+
+  @include mixins.respond-below(sm) {
+    padding: 14px 16px;
+    gap: 12px;
+  }
+}
+
+// Header section
+.productHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.badgeRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.typeBadges {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.productTitle {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: $color-text-primary;
+  line-height: 1.4;
+
+  @include mixins.respond-below(sm) {
+    font-size: 15px;
+  }
+}
+
+.statusBadge {
+  flex-shrink: 0;
+  font-weight: 500;
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+}
+
+// Details grid
+.detailsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+
+  @include mixins.respond-below(lg) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  @include mixins.respond-below(md) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+
+  @include mixins.respond-below(xs) {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+.detailItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.detailLabel {
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: $color-text-muted;
+}
+
+// Price styling
+.priceValue {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.priceAmount {
+  font-size: 16px;
+  font-weight: 700;
+  color: $color-money;
+  font-variant-numeric: tabular-nums;
+
+  @include mixins.respond-below(sm) {
+    font-size: 15px;
+  }
+}
+
+.freePrice {
+  color: $color-success;
+}
+
+.taxIndicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  background-color: #fef3c7;
+  color: #92400e;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: help;
+  transition: background-color $transition-fast;
+
+  &:hover {
+    background-color: #fde68a;
+  }
+
+  svg {
+    flex-shrink: 0;
+  }
+}
+
+// Sales styling
+.salesValue {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.salesWithProgress {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.salesCount {
+  font-size: 16px;
+  font-weight: 600;
+  color: $color-text-primary;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+
+  @include mixins.respond-below(sm) {
+    font-size: 15px;
+  }
+}
+
+.salesTotal {
+  font-size: 13px;
+  font-weight: 400;
+  color: $color-text-muted;
+}
+
+.unlimited {
+  font-size: 12px;
+  font-weight: 400;
+  color: $color-text-muted;
+  margin-left: 4px;
+}
+
+.salesProgress {
+  max-width: 120px;
+
+  @include mixins.respond-below(sm) {
+    max-width: 100%;
+  }
+}
+
+.lowStock {
+  font-size: 11px;
+  font-weight: 500;
+  color: #ea580c;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  &::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #ea580c;
+    animation: pulse 2s infinite;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+// Date styling
+.dateValue {
+  display: flex;
+  align-items: center;
+}
+
+.dateRange {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dateItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: $color-text-secondary;
+  cursor: help;
+
+  svg {
+    color: $color-text-muted;
+    flex-shrink: 0;
+  }
+}
+
+.alwaysAvailable,
+.noEndDate {
+  font-size: 13px;
+  color: $color-text-muted;
+  font-style: italic;
+}
+
+// Action section
+.actionSection {
+  grid-area: action;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+  border-left: 1px solid $color-border-light;
+  background-color: #fafafa;
+
+  @include mixins.respond-below(lg) {
+    border-left: none;
+    border-top: 1px solid $color-border-light;
+    padding: 12px 16px;
+    justify-content: flex-start;
+  }
+}
+
+.actionButton {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: background-color $transition-fast;
+
+  @include mixins.respond-below(lg) {
+    padding: 6px 12px;
+  }
+}
+
+.actionButtonText {
+  @include mixins.respond-above(lg) {
+    display: none;
+  }
+}
+
+.actionButtonIcon {
+  @include mixins.respond-below(lg) {
+    display: none;
+  }
+}
+
+
+// ==========================================
+// Drag Preview
+// ==========================================
+
 .dragPreview {
   background-color: #fff;
-  border: 1px solid #e3e3e3;
-  border-radius: var(--hi-radius-sm);
-  padding: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid $color-border;
+  border-radius: $card-radius;
+  padding: 12px 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
 
   h3 {
-    margin: 0 0 5px;
+    margin: 0 0 4px;
+    font-size: 14px;
+    font-weight: 600;
   }
 
   p {
     margin: 0;
-    color: #666;
+    color: $color-text-secondary;
+    font-size: 13px;
   }
 }
 
 .moreProducts {
-  background-color: #f0f0f0;
-  border-radius: var(--hi-radius-sm);
-  padding: 10px;
-  margin-top: 10px;
-  font-size: 14px;
-  color: #666;
+  background-color: $color-border-light;
+  border-radius: $card-radius;
+  padding: 12px 16px;
+  margin-top: 8px;
+  font-size: 13px;
+  color: $color-text-secondary;
   text-align: center;
 }
 
 .isDragging {
-  opacity: 0.6;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  opacity: 0.5;
+  box-shadow: $card-shadow;
 }

@@ -3,7 +3,7 @@ import {useGetEvent} from "../../../../../queries/useGetEvent.ts";
 import {formatCurrency} from "../../../../../utilites/currency.ts";
 import ReportTable from "../../../../common/ReportTable";
 import {t} from "@lingui/macro";
-import {formatDate} from "../../../../../utilites/dates.ts";
+import {formatDateWithLocale} from "../../../../../utilites/dates.ts";
 
 const PromoCodesReport = () => {
     const {eventId} = useParams();
@@ -63,13 +63,13 @@ const PromoCodesReport = () => {
             key: 'first_used_at' as const,
             label: t`First Used`,
             sortable: true,
-            render: (value: string) => value ? formatDate(value, 'MMM D, YYYY', event.timezone) : '-'
+            render: (value: string) => value ? formatDateWithLocale(value, 'shortDate', event.timezone) : '-'
         },
         {
             key: 'last_used_at' as const,
             label: t`Last Used`,
             sortable: true,
-            render: (value: string) => value ? formatDate(value, 'MMM D, YYYY', event.timezone) : '-'
+            render: (value: string) => value ? formatDateWithLocale(value, 'shortDate', event.timezone) : '-'
         },
         {
             key: 'max_allowed_usages' as const,

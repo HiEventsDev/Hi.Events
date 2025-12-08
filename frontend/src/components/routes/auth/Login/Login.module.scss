@@ -1,3 +1,5 @@
+@use "../../../../styles/mixins.scss";
+
 .header {
   text-align: center;
   margin-bottom: 10px;
@@ -7,10 +9,98 @@
   }
 
   p {
-    margin-top: -0;
+    margin-top: 0;
   }
 }
 
-
 .loginCard {
+}
+
+// Ticket Lookup - Clean, subtle expandable section
+.ticketLookup {
+  margin-top: 32px;
+  padding-top: 24px;
+}
+
+.ticketLookupTrigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 0;
+  font-size: 0.875rem;
+  color: var(--mantine-color-dimmed);
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: var(--hi-pink);
+  }
+
+  &[data-expanded="true"] {
+    color: var(--mantine-color-text);
+  }
+
+  svg:first-child {
+    opacity: 0.7;
+  }
+}
+
+.chevron {
+  transition: transform 0.2s ease;
+  opacity: 0.5;
+
+  &[data-expanded="true"] {
+    transform: rotate(180deg);
+  }
+}
+
+.ticketLookupContent {
+  padding-top: 16px;
+}
+
+.ticketLookupForm {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+
+  @include mixins.respond-below(sm) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.ticketEmailInput {
+  flex: 1;
+}
+
+.successMessage {
+  text-align: center;
+  padding: 16px;
+  background: linear-gradient(135deg, rgba(147, 51, 234, 0.06) 0%, rgba(236, 72, 153, 0.06) 100%);
+  border-radius: var(--mantine-radius-md);
+  border: 1px solid rgba(147, 51, 234, 0.15);
+
+  @media (prefers-color-scheme: dark) {
+    background: linear-gradient(135deg, rgba(147, 51, 234, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%);
+    border-color: rgba(147, 51, 234, 0.2);
+  }
+
+  p {
+    margin: 0 0 8px;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--mantine-color-text);
+  }
+}
+
+.resetLink {
+  font-size: 0.8125rem;
+  color: var(--mantine-color-dimmed);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+
+  &:hover {
+    color: var(--hi-pink);
+  }
 }

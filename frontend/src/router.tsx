@@ -4,6 +4,7 @@ import {useEffect, useState} from "react";
 import {useGetMe} from "./queries/useGetMe.ts";
 import {publicEventRouteLoader} from "./routeLoaders/publicEventRouteLoader.ts";
 import {publicOrganizerRouteLoader} from "./routeLoaders/publicOrganizerRouteLoader.ts";
+import {organizerPreviewRouteLoader} from "./routeLoaders/organizerPreviewRouteLoader.ts";
 
 const Root = () => {
     const [redirectPath, setRedirectPath] = useState<string | null>(null);
@@ -156,6 +157,13 @@ export const router: RouteObject[] = [
                 }
             },
             {
+                path: "accounts/:accountId",
+                async lazy() {
+                    const AccountDetail = await import("./components/routes/admin/Accounts/AccountDetail");
+                    return {Component: AccountDetail.default};
+                }
+            },
+            {
                 path: "users",
                 async lazy() {
                     const Users = await import("./components/routes/admin/Users");
@@ -167,6 +175,20 @@ export const router: RouteObject[] = [
                 async lazy() {
                     const Events = await import("./components/routes/admin/Events");
                     return {Component: Events.default};
+                }
+            },
+            {
+                path: "orders",
+                async lazy() {
+                    const Orders = await import("./components/routes/admin/Orders");
+                    return {Component: Orders.default};
+                }
+            },
+            {
+                path: "configurations",
+                async lazy() {
+                    const Configurations = await import("./components/routes/admin/Configurations");
+                    return {Component: Configurations.default};
                 }
             }
         ]
@@ -259,6 +281,20 @@ export const router: RouteObject[] = [
                 async lazy() {
                     const OrganizerHomepageDesigner = await import("./components/routes/organizer/OrganizerHomepageDesigner");
                     return {Component: OrganizerHomepageDesigner.default};
+                }
+            },
+            {
+                path: "reports",
+                async lazy() {
+                    const OrganizerReports = await import("./components/routes/organizer/Reports");
+                    return {Component: OrganizerReports.default};
+                }
+            },
+            {
+                path: "report/:reportType",
+                async lazy() {
+                    const OrganizerReportLayout = await import("./components/routes/organizer/Reports/ReportLayout");
+                    return {Component: OrganizerReportLayout.default};
                 }
             }
         ],
@@ -441,7 +477,7 @@ export const router: RouteObject[] = [
     },
     {
         path: "/organizer/:organizerId/preview",
-        loader: publicOrganizerRouteLoader,
+        loader: organizerPreviewRouteLoader,
         async lazy() {
             const OrganizerHomepagePreview = await import("./components/layouts/OrganizerHomepagePreview");
             return {Component: OrganizerHomepagePreview.default};
@@ -539,6 +575,14 @@ export const router: RouteObject[] = [
         async lazy() {
             const CheckIn = await import("./components/layouts/CheckIn");
             return {Component: CheckIn.default};
+        },
+        errorElement: <ErrorPage/>,
+    },
+    {
+        path: "/my-tickets/:token",
+        async lazy() {
+            const MyTickets = await import("./components/routes/my-tickets");
+            return {Component: MyTickets.default};
         },
         errorElement: <ErrorPage/>,
     }

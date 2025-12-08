@@ -1,5 +1,5 @@
 import {useLocation, useNavigate} from "react-router";
-import {ActionIcon, Anchor, Button} from '@mantine/core';
+import {ActionIcon, Anchor} from '@mantine/core';
 import {EventCard} from './EventCard';
 import classes from './OrganizerHomepage.module.scss';
 import React, {useEffect, useState} from 'react';
@@ -16,6 +16,7 @@ import {removeTransparency} from "../../../utilites/colorHelper.ts";
 import {StatusToggle} from "../../common/StatusToggle";
 import {getConfig} from "../../../utilites/config.ts";
 import {Pagination} from "../../common/Pagination";
+import {computeThemeVariables, validateThemeSettings} from "../../../utilites/themeUtils.ts";
 
 interface OrganizerHomepageProps {
     organizer?: Organizer;
@@ -56,7 +57,7 @@ export const OrganizerHomepage = ({
         }
     };
 
-    // Social links processing
+    // Social links
     const socialLinks = organizer.settings?.social_media_handles ? Object.entries(organizer.settings.social_media_handles)
         .filter(([platform, handle]) => handle && socialMediaConfig[platform as keyof typeof socialMediaConfig])
         .map(([platform, handle]) => ({
@@ -78,22 +79,28 @@ export const OrganizerHomepage = ({
 
     const events = eventsData?.data || [];
 
-    // Apply theme settings if available
-    const themeSettings = organizer?.settings?.homepage_theme_settings;
-    const backgroundType = themeSettings?.homepage_background_type || 'COLOR';
-    const themeStyles = themeSettings ? {
-        '--organizer-bg-color': themeSettings.homepage_background_color || '#f5f5f5',
-        '--organizer-content-bg-color': themeSettings.homepage_content_background_color || '#ffffff',
-        '--organizer-primary-color': themeSettings.homepage_primary_color || '#8b5cf6',
-        '--organizer-primary-text-color': themeSettings.homepage_primary_text_color || '#1a1a1a',
-        '--organizer-secondary-color': themeSettings.homepage_secondary_color || '#6366f1',
-        '--organizer-secondary-text-color': themeSettings.homepage_secondary_text_color || '#6b7280',
-    } as React.CSSProperties : {};
+    // Theme settings
+    const rawThemeSettings = organizer?.settings?.homepage_theme_settings;
+    const themeSettings = validateThemeSettings(rawThemeSettings);
+    const cssVars = computeThemeVariables(themeSettings);
+    const backgroundType = themeSettings.background_type;
+
+    const themeStyles = {
+        '--organizer-bg-color': themeSettings.background,
+        '--organizer-content-bg-color': cssVars['--theme-surface'],
+        '--organizer-primary-color': themeSettings.accent,
+        '--organizer-primary-text-color': cssVars['--theme-text-primary'],
+        '--organizer-secondary-color': cssVars['--theme-text-secondary'],
+        '--organizer-secondary-text-color': cssVars['--theme-text-tertiary'],
+        '--organizer-accent-contrast': cssVars['--theme-accent-contrast'],
+        '--organizer-accent-soft': cssVars['--theme-accent-soft'],
+        '--organizer-accent-muted': cssVars['--theme-accent-muted'],
+        '--organizer-border-color': cssVars['--theme-border'],
+    } as React.CSSProperties;
 
     return (
         <>
             <ScrollToTop/>
-            {/* Status Toggle Banner */}
             {organizer?.status && organizer?.id && (
                 <StatusToggle
                     entityType="organizer"
@@ -108,31 +115,53 @@ export const OrganizerHomepage = ({
             )}
 
             {organizer && <OrganizerDocumentHead organizer={organizer}/>}
-            <main className={classes.pageWrapper} style={themeStyles}>
+            <main className={classes.pageWrapper} style={themeStyles} data-mode={themeSettings.mode}>
                 <style>
                     {`
                         body, .ssr-loader {
-                            background-color: ${removeTransparency(themeSettings?.homepage_background_color!)} !important;
+                            background-color: ${removeTransparency(themeSettings.background)} !important;
                         }
                     `}
                 </style>
-                {(organizerCover && backgroundType === 'MIRROR_COVER_IMAGE') && (
+
+                {/* Background */}
+                {(organizerCover && backgroundType === 'MIRROR_COVER_IMAGE') ? (
                     <div
                         className={classes.background}
                         style={{backgroundImage: `url(${organizerCover.url})`}}
                     />
-                )}
-                {(!organizerCover || backgroundType === 'COLOR') &&
-                    <div className={classes.background}
-                         style={{backgroundColor: 'var(--organizer-bg-color)'}}
+                ) : (
+                    <div
+                        className={classes.background}
+                        style={{backgroundColor: 'var(--organizer-bg-color)'}}
                     />
-                }
+                )}
+                <div
+                    className={classes.backgroundOverlay}
+                    style={backgroundType === 'MIRROR_COVER_IMAGE' ? {
+                        '--overlay-color': themeSettings.background
+                    } as React.CSSProperties : undefined}
+                />
+
                 <div className={classes.container}>
                     <div className={classes.wrapper}>
-                        {/* Combined Cover and Organizer Info Section */}
+                        {/* Hero Section */}
                         <div className={classes.heroSection}>
                             {organizerCover && (
-                                <div className={classes.coverWrapper}>
+                                <div
+                                    className={classes.coverWrapper}
+                                    style={organizerCover?.width && organizerCover?.height ? {
+                                        '--cover-aspect-ratio': `${organizerCover.width} / ${organizerCover.height}`,
+                                    } as React.CSSProperties : undefined}
+                                >
+                                    {organizerCover?.lqip_base64 && (
+                                        <img
+                                            src={organizerCover.lqip_base64}
+                                            alt=""
+                                            aria-hidden="true"
+                                            className={classes.coverLqip}
+                                        />
+                                    )}
                                     <img
                                         src={organizerCover.url}
                                         alt="Cover"
@@ -142,7 +171,6 @@ export const OrganizerHomepage = ({
                             )}
                             <div className={classes.organizerContentWrapper}>
                                 <div className={classes.organizerContent}>
-                                    {/* Sophisticated Left-Aligned Layout */}
                                     <div className={classes.organizerProfile}>
                                         <div className={classes.profileMain}>
                                             {organizerLogo && (
@@ -160,7 +188,7 @@ export const OrganizerHomepage = ({
                                                     <div className={classes.organizerMeta}>
                                                         {getShortLocationDisplay(organizer?.settings?.location_details) && (
                                                             <div className={classes.metaItem}>
-                                                                <IconMapPin size={16} className={classes.metaIcon}/>
+                                                                <IconMapPin size={15} className={classes.metaIcon}/>
                                                                 <a
                                                                     href={getGoogleMapsUrl(organizer.settings!.location_details)}
                                                                     target="_blank"
@@ -168,14 +196,13 @@ export const OrganizerHomepage = ({
                                                                     className={classes.mapLink}
                                                                 >
                                                                     <span>{getShortLocationDisplay(organizer.settings!.location_details)}</span>
-                                                                    &nbsp;
-                                                                    <IconExternalLink size={14}/>
+                                                                    <IconExternalLink size={12}/>
                                                                 </a>
                                                             </div>
                                                         )}
                                                         {websiteUrl && (
                                                             <div className={classes.metaItem}>
-                                                                <IconWorld size={16} className={classes.metaIcon}/>
+                                                                <IconWorld size={15} className={classes.metaIcon}/>
                                                                 <a
                                                                     href={websiteUrl}
                                                                     target="_blank"
@@ -187,7 +214,6 @@ export const OrganizerHomepage = ({
                                                         )}
                                                     </div>
                                                 </div>
-                                                {/* Actions moved here for better flow */}
                                                 <div className={classes.profileActions}>
                                                     {(socialLinks.length > 0) && (
                                                         <div className={classes.socialLinks}>
@@ -202,100 +228,80 @@ export const OrganizerHomepage = ({
                                                                         target="_blank"
                                                                         rel="noopener noreferrer"
                                                                         className={classes.socialIcon}
-                                                                        size="lg"
+                                                                        variant="subtle"
+                                                                        size="md"
                                                                     >
-                                                                        <IconComponent size={18}/>
+                                                                        <IconComponent size={16}/>
                                                                     </ActionIcon>
                                                                 );
                                                             })}
                                                         </div>
                                                     )}
-                                                    <Button
-                                                        leftSection={<IconMail size={16}/>}
+                                                    <button
                                                         onClick={() => setContactModalOpen(true)}
                                                         className={classes.contactButton}
-                                                        variant="outline"
-                                                        size="sm"
                                                     >
+                                                        <IconMail size={14} style={{marginRight: 6}}/>
                                                         {t`Contact`}
-                                                    </Button>
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    {/* Description flows naturally below */}
                                     {organizer?.description && (
-                                        <div className={classes.description}
-                                             dangerouslySetInnerHTML={{__html: organizer.description}}/>
+                                        <div
+                                            className={classes.description}
+                                            dangerouslySetInnerHTML={{__html: organizer.description}}
+                                        />
                                     )}
                                 </div>
                             </div>
                         </div>
 
-                        {/* Events Header Card - Compact Section */}
-                        <div className={classes.eventsHeaderSection}>
-                            <div className={classes.eventsHeaderCard}>
-                                <h2 className={classes.eventsTitle}>{isPastEvents ? t`Past Events` : t`Upcoming Events`}</h2>
-                                <div className={classes.eventsControls}>
-                                    <Button.Group>
-                                        <Button
-                                            variant={!isPastEvents ? 'filled' : 'default'}
-                                            onClick={() => handleFilterChange(false)}
-                                            size="xs"
-                                            style={{
-                                                backgroundColor: !isPastEvents ? themeSettings?.homepage_primary_color : 'transparent',
-                                                color: !isPastEvents
-                                                    ? themeSettings?.homepage_content_background_color
-                                                    : themeSettings?.homepage_primary_color,
-                                                borderColor: themeSettings?.homepage_primary_color,
-                                            }}
-                                        >
-                                            {t`Upcoming`}
-                                        </Button>
-                                        <Button
-                                            variant={isPastEvents ? 'filled' : 'default'}
-                                            onClick={() => handleFilterChange(true)}
-                                            size="xs"
-                                            style={{
-                                                backgroundColor: isPastEvents ? themeSettings?.homepage_primary_color : 'transparent',
-                                                color: isPastEvents
-                                                    ? themeSettings?.homepage_content_background_color
-                                                    : themeSettings?.homepage_primary_color,
-                                                borderColor: themeSettings?.homepage_primary_color,
-                                            }}
-                                        >
-                                            {t`Past`}
-                                        </Button>
-                                    </Button.Group>
+                        {/* Events Section */}
+                        <div className={classes.eventsSection}>
+                            <div className={classes.eventsHeader}>
+                                <h2 className={classes.eventsTitle}>
+                                    {isPastEvents ? t`Past Events` : t`Upcoming Events`}
+                                </h2>
+                                <div className={classes.filterToggle}>
+                                    <button
+                                        className={`${classes.filterButton} ${!isPastEvents ? classes.filterButtonActive : ''}`}
+                                        onClick={() => handleFilterChange(false)}
+                                    >
+                                        {t`Upcoming`}
+                                    </button>
+                                    <button
+                                        className={`${classes.filterButton} ${isPastEvents ? classes.filterButtonActive : ''}`}
+                                        onClick={() => handleFilterChange(true)}
+                                    >
+                                        {t`Past`}
+                                    </button>
                                 </div>
                             </div>
-                        </div>
 
-                        {/* Individual Event Cards - Floating */}
-                        <div className={classes.eventsListSection}>
-                            <div className={classes.eventsContainer}>
+                            <div className={classes.eventsList}>
                                 {events.length === 0 ? (
                                     <div className={classes.noEvents}>
                                         <p>{isPastEvents ? t`No past events` : t`No upcoming events`}</p>
                                     </div>
                                 ) : (
-                                    events.map((event) => (
-                                        <EventCard
-                                            key={event.id}
-                                            event={event as Event}
-                                            primaryColor={themeSettings?.homepage_primary_color}
-                                        />
-                                    ))
+                                    <div className={classes.eventsContainer}>
+                                        {events.map((event) => (
+                                            <EventCard
+                                                key={event.id}
+                                                event={event as Event}
+                                                primaryColor={themeSettings.accent}
+                                            />
+                                        ))}
+                                    </div>
                                 )}
                             </div>
-                        </div>
 
-                        {/* Pagination Section */}
-                        {eventsData && eventsData.meta.total > eventsData.meta.per_page && (
-                            <div className={classes.paginationSection}>
-                                <div className={classes.paginationCard}>
+                            {eventsData && eventsData.meta.total > eventsData.meta.per_page && (
+                                <div className={classes.paginationWrapper}>
                                     <Pagination
-                                        size="md"
+                                        size="sm"
                                         siblings={1}
                                         marginTop={0}
                                         total={eventsData.meta.last_page}
@@ -307,56 +313,29 @@ export const OrganizerHomepage = ({
                                             navigate(newPath);
                                         }}
                                         className={classes.paginationComponent}
-                                        styles={{
-                                            control: {
-                                                backgroundColor: 'var(--content-bg-color)',
-                                                border: '1px solid rgba(0, 0, 0, 0.1)',
-                                                color: 'var(--primary-text-color)',
-                                                fontSize: '0.875rem',
-                                                fontWeight: 500,
-                                                borderRadius: '8px',
-                                                transition: 'all 0.2s ease',
-                                                '&[data-active]': {
-                                                    backgroundColor: themeSettings?.homepage_primary_color || 'var(--primary-color)',
-                                                    borderColor: themeSettings?.homepage_primary_color || 'var(--primary-color)',
-                                                    color: themeSettings?.homepage_content_background_color || 'white',
-                                                },
-                                                '&:hover': {
-                                                    backgroundColor: 'rgba(0, 0, 0, 0.05)',
-                                                    borderColor: 'rgba(0, 0, 0, 0.15)',
-                                                },
-                                            },
-                                            dots: {
-                                                color: 'var(--secondary-text-color)',
-                                            },
-                                        }}
                                     />
                                 </div>
-                            </div>
-                        )}
+                            )}
+                        </div>
 
-                        {/* Footer Section */}
+                        {/* Footer */}
                         <div className={classes.footerSection}>
-                            <div className={classes.footerContent}>
-                                <div className={classes.footerLinks}>
-                                    <Anchor
-                                        href={getConfig('VITE_PRIVACY_URL', 'https://hi.events/privacy-policy?utm_source=app-organizer-footer')}
-                                        className={classes.footerLink}
-                                    >
-                                        {t`Privacy Policy`}
-                                    </Anchor>
-                                    <span className={classes.footerSeparator}>•</span>
-                                    <Anchor
-                                        href={getConfig('VITE_TOS_URL', 'https://hi.events/terms-of-service?utm_source=app-organizer-footer')}
-                                        className={classes.footerLink}
-                                    >
-                                        {t`Terms of Service`}
-                                    </Anchor>
-                                </div>
-                                <PoweredByFooter
-                                    className={classes.poweredByFooter}
-                                />
+                            <div className={classes.footerLinks}>
+                                <Anchor
+                                    href={getConfig('VITE_PRIVACY_URL', 'https://hi.events/privacy-policy?utm_source=app-organizer-footer')}
+                                    className={classes.footerLink}
+                                >
+                                    {t`Privacy Policy`}
+                                </Anchor>
+                                <span className={classes.footerSeparator}>•</span>
+                                <Anchor
+                                    href={getConfig('VITE_TOS_URL', 'https://hi.events/terms-of-service?utm_source=app-organizer-footer')}
+                                    className={classes.footerLink}
+                                >
+                                    {t`Terms of Service`}
+                                </Anchor>
                             </div>
+                            <PoweredByFooter className={classes.poweredByFooter}/>
                         </div>
                     </div>
 

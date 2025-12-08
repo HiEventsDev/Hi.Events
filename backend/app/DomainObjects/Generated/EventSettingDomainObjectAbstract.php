@@ -59,6 +59,9 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     final public const INVOICE_PAYMENT_TERMS_DAYS = 'invoice_payment_terms_days';
     final public const INVOICE_NOTES = 'invoice_notes';
     final public const TICKET_DESIGN_SETTINGS = 'ticket_design_settings';
+    final public const ATTENDEE_DETAILS_COLLECTION_METHOD = 'attendee_details_collection_method';
+    final public const SHOW_MARKETING_OPT_IN = 'show_marketing_opt_in';
+    final public const HOMEPAGE_THEME_SETTINGS = 'homepage_theme_settings';
 
     protected int $id;
     protected int $event_id;
@@ -109,6 +112,9 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     protected ?int $invoice_payment_terms_days = null;
     protected ?string $invoice_notes = null;
     protected array|string|null $ticket_design_settings = null;
+    protected string $attendee_details_collection_method = 'PER_TICKET';
+    protected bool $show_marketing_opt_in = true;
+    protected array|string|null $homepage_theme_settings = null;
 
     public function toArray(): array
     {
@@ -162,6 +168,9 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
                     'invoice_payment_terms_days' => $this->invoice_payment_terms_days ?? null,
                     'invoice_notes' => $this->invoice_notes ?? null,
                     'ticket_design_settings' => $this->ticket_design_settings ?? null,
+                    'attendee_details_collection_method' => $this->attendee_details_collection_method ?? null,
+                    'show_marketing_opt_in' => $this->show_marketing_opt_in ?? null,
+                    'homepage_theme_settings' => $this->homepage_theme_settings ?? null,
                 ];
     }
 
@@ -703,5 +712,38 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     public function getTicketDesignSettings(): array|string|null
     {
         return $this->ticket_design_settings;
+    }
+
+    public function setAttendeeDetailsCollectionMethod(string $attendee_details_collection_method): self
+    {
+        $this->attendee_details_collection_method = $attendee_details_collection_method;
+        return $this;
+    }
+
+    public function getAttendeeDetailsCollectionMethod(): string
+    {
+        return $this->attendee_details_collection_method;
+    }
+
+    public function setShowMarketingOptIn(bool $show_marketing_opt_in): self
+    {
+        $this->show_marketing_opt_in = $show_marketing_opt_in;
+        return $this;
+    }
+
+    public function getShowMarketingOptIn(): bool
+    {
+        return $this->show_marketing_opt_in;
+    }
+
+    public function setHomepageThemeSettings(array|string|null $homepage_theme_settings): self
+    {
+        $this->homepage_theme_settings = $homepage_theme_settings;
+        return $this;
+    }
+
+    public function getHomepageThemeSettings(): array|string|null
+    {
+        return $this->homepage_theme_settings;
     }
 }

@@ -1,27 +1,21 @@
 @use "../../../../styles/mixins";
 
 .preHeading {
-  text-transform: uppercase;
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--homepage-secondary-color, var(--hi-color-black));
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 12px;
 
   .organizer {
     display: flex;
     align-items: center;
-    justify-content: center;
-    max-height: 40px;
+    gap: 8px;
 
     .organizerLogo {
-      width: 30px;
-      height: 30px;
+      width: 28px;
+      height: 28px;
       overflow: hidden;
-      margin-right: 8px;
       display: flex;
-      vertical-align: middle;
       align-items: center;
 
       img {
@@ -29,114 +23,113 @@
         height: auto;
         display: block;
         object-fit: contain;
+        border-radius: 4px;
       }
     }
 
     .organizerName {
       margin: 0;
-      color: var(--homepage-secondary-color, #000);
+      font-size: 0.875rem;
       font-weight: 600;
-      text-decoration: none;
-      font-size: 1em;
+      color: var(--secondary-color);
 
       a {
         color: inherit;
-        font-weight: 600;
+        text-decoration: none;
 
         &:hover {
-          text-decoration: underline;
+          color: var(--primary-color);
         }
       }
     }
   }
 
   .shareButtons button {
-    color: var(--homepage-secondary-color, var(--hi-color-black));
+    color: var(--accent-muted);
+
+    &:hover {
+      color: var(--primary-color);
+    }
   }
 
   @include mixins.respond-below(sm) {
-    font-size: 0.8rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
   }
 }
 
 .eventTitle {
-  font-size: 2.5rem;
-  font-weight: 600;
-  margin-bottom: 20px;
-  margin-top: 0;
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0 0 20px 0;
+  color: var(--primary-text-color);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+
+  @include mixins.respond-below(md) {
+    font-size: 1.75rem;
+  }
 
   @include mixins.respond-below(sm) {
     font-size: 1.5rem;
+    margin-bottom: 16px;
   }
 }
 
 .eventInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
   .eventDetail {
     display: flex;
-    margin-bottom: 10px;
     flex-direction: column;
-
-    &:last-child {
-      margin-bottom: 0;
-
-      :first-child {
-        margin-bottom: 0;
-
-        .detail {
-          margin-bottom: 0;
-        }
-      }
-    }
 
     .details {
       display: flex;
-      margin-bottom: 10px;
+      align-items: flex-start;
+      gap: 10px;
 
       svg {
-        place-self: flex-start;
-        margin-right: 10px;
-        color: var(--homepage-secondary-color, var(--hi-primary));
-        min-width: 20px;
+        color: var(--accent-muted);
+        flex-shrink: 0;
+        margin-top: 2px;
       }
     }
 
     .detail {
       display: flex;
-      margin-bottom: 10px;
       flex-direction: column;
-    }
+      color: var(--primary-text-color);
+      font-size: 0.9375rem;
 
-    h2 {
-      margin-bottom: 10px;
-      margin-top: 0;
-    }
-  }
+      b {
+        font-weight: 600;
+      }
 
-  h2 {
-    @include mixins.respond-below(sm) {
-      font-size: 1rem;
+      > div {
+        color: var(--secondary-color);
+        font-size: 0.875rem;
+        margin-top: 2px;
+      }
     }
   }
 
   .viewOnGoogleMaps {
     padding: 0;
-    color: var(--homepage-secondary-color);
+    margin-top: 4px;
+    color: var(--primary-color);
+    font-weight: 500;
+    height: auto;
+
+    &:hover {
+      text-decoration: underline;
+    }
 
     svg {
-      width: 15px !important;
+      color: var(--primary-color) !important;
+      width: 14px !important;
     }
-  }
-}
-
-.eventDescription {
-  margin-bottom: 20px;
-
-  img {
-    max-width: 100%;
-    height: auto;
-  }
-
-  h2 {
-    margin-top: 0;
   }
 }

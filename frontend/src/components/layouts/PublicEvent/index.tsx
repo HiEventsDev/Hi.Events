@@ -12,14 +12,11 @@ export const PublicEvent = () => {
     };
 
     return (
-        <>
-            <EventHomepage
-                event={event}
-                promoCodeValid={promoCodeValid}
-                promoCode={promoCode}
-                backgroundType={event?.settings?.homepage_background_type}
-            />
-        </>
+        <EventHomepage
+            event={event}
+            promoCodeValid={promoCodeValid}
+            promoCode={promoCode}
+        />
     );
 };
 

@@ -5,6 +5,8 @@ use HiEvents\Http\Actions\Accounts\GetAccountAction;
 use HiEvents\Http\Actions\Accounts\Stripe\CreateStripeConnectAccountAction;
 use HiEvents\Http\Actions\Accounts\Stripe\GetStripeConnectAccountsAction;
 use HiEvents\Http\Actions\Accounts\UpdateAccountAction;
+use HiEvents\Http\Actions\Accounts\Vat\GetAccountVatSettingAction;
+use HiEvents\Http\Actions\Accounts\Vat\UpsertAccountVatSettingAction;
 use HiEvents\Http\Actions\Affiliates\CreateAffiliateAction;
 use HiEvents\Http\Actions\Affiliates\DeleteAffiliateAction;
 use HiEvents\Http\Actions\Affiliates\ExportAffiliatesAction;
@@ -132,7 +134,11 @@ use HiEvents\Http\Actions\Questions\GetQuestionAction;
 use HiEvents\Http\Actions\Questions\GetQuestionsAction;
 use HiEvents\Http\Actions\Questions\GetQuestionsPublicAction;
 use HiEvents\Http\Actions\Questions\SortQuestionsAction;
+use HiEvents\Http\Actions\Reports\GetOrganizerReportAction;
 use HiEvents\Http\Actions\Reports\GetReportAction;
+use HiEvents\Http\Actions\Sitemap\GetSitemapEventsAction;
+use HiEvents\Http\Actions\Sitemap\GetSitemapIndexAction;
+use HiEvents\Http\Actions\Sitemap\GetSitemapOrganizersAction;
 use HiEvents\Http\Actions\TaxesAndFees\CreateTaxOrFeeAction;
 use HiEvents\Http\Actions\TaxesAndFees\DeleteTaxOrFeeAction;
 use HiEvents\Http\Actions\TaxesAndFees\EditTaxOrFeeAction;
@@ -150,13 +156,23 @@ use HiEvents\Http\Actions\Users\ResendEmailConfirmationAction;
 use HiEvents\Http\Actions\Users\ResendInvitationAction;
 use HiEvents\Http\Actions\Users\UpdateMeAction;
 use HiEvents\Http\Actions\Users\UpdateUserAction;
-use HiEvents\Http\Actions\Admin\Accounts\GetAllAccountsAction;
-use HiEvents\Http\Actions\Admin\Events\GetAllEventsAction;
+use HiEvents\Http\Actions\Admin\Accounts\AssignConfigurationAction;
+use HiEvents\Http\Actions\Admin\Accounts\GetAccountAction as GetAdminAccountAction;
+use HiEvents\Http\Actions\Admin\Accounts\GetAllAccountsAction as GetAllAdminAccountsAction;
+use HiEvents\Http\Actions\Admin\Accounts\UpdateAccountVatSettingAction as UpdateAdminAccountVatSettingAction;
+use HiEvents\Http\Actions\Admin\Configurations\CreateConfigurationAction;
+use HiEvents\Http\Actions\Admin\Configurations\DeleteConfigurationAction;
+use HiEvents\Http\Actions\Admin\Configurations\GetAllConfigurationsAction;
+use HiEvents\Http\Actions\Admin\Configurations\UpdateConfigurationAction;
+use HiEvents\Http\Actions\Admin\Events\GetAllEventsAction as GetAllAdminEventsAction;
 use HiEvents\Http\Actions\Admin\Events\GetUpcomingEventsAction;
+use HiEvents\Http\Actions\Admin\Orders\GetAllOrdersAction;
 use HiEvents\Http\Actions\Admin\Stats\GetAdminStatsAction;
 use HiEvents\Http\Actions\Admin\Users\GetAllUsersAction;
 use HiEvents\Http\Actions\Admin\Users\StartImpersonationAction;
 use HiEvents\Http\Actions\Admin\Users\StopImpersonationAction;
+use HiEvents\Http\Actions\TicketLookup\GetOrdersByLookupTokenAction;
+use HiEvents\Http\Actions\TicketLookup\SendTicketLookupEmailAction;
 use HiEvents\Http\Actions\Webhooks\CreateWebhookAction;
 use HiEvents\Http\Actions\Webhooks\DeleteWebhookAction;
 use HiEvents\Http\Actions\Webhooks\EditWebhookAction;
@@ -216,6 +232,10 @@ $router->middleware(['auth:api'])->group(
         $router->get('/accounts/{account_id}/stripe/connect_accounts', GetStripeConnectAccountsAction::class);
         $router->post('/accounts/{account_id}/stripe/connect', CreateStripeConnectAccountAction::class);
 
+        // VAT Settings
+        $router->get('/accounts/{account_id}/vat-settings', GetAccountVatSettingAction::class);
+        $router->post('/accounts/{account_id}/vat-settings', UpsertAccountVatSettingAction::class);
+
         // Organizers
         $router->post('/organizers', CreateOrganizerAction::class);
         // This is POST instead of PUT because you can't upload files via PUT in PHP (at least not easily)
@@ -228,6 +248,7 @@ $router->middleware(['auth:api'])->group(
         $router->get('/organizers/{organizer_id}/orders', GetOrganizerOrdersAction::class);
         $router->get('/organizers/{organizer_id}/settings', GetOrganizerSettingsAction::class);
         $router->patch('/organizers/{organizer_id}/settings', PartialUpdateOrganizerSettingsAction::class);
+        $router->get('/organizers/{organizer_id}/reports/{report_type}', GetOrganizerReportAction::class);
 
         // Email Templates - Organizer level
         $router->get('/organizers/{organizerId}/email-templates', GetOrganizerEmailTemplatesAction::class);
@@ -373,10 +394,18 @@ $router->middleware(['auth:api'])->group(
 $router->prefix('/admin')->middleware(['auth:api'])->group(
     function (Router $router): void {
         $router->get('/stats', GetAdminStatsAction::class);
-        $router->get('/accounts', GetAllAccountsAction::class);
+        $router->get('/accounts', GetAllAdminAccountsAction::class);
+        $router->get('/accounts/{account_id}', GetAdminAccountAction::class);
+        $router->put('/accounts/{account_id}/vat-settings', UpdateAdminAccountVatSettingAction::class);
+        $router->put('/accounts/{account_id}/configuration', AssignConfigurationAction::class);
+        $router->get('/configurations', GetAllConfigurationsAction::class);
+        $router->post('/configurations', CreateConfigurationAction::class);
+        $router->put('/configurations/{configuration_id}', UpdateConfigurationAction::class);
+        $router->delete('/configurations/{configuration_id}', DeleteConfigurationAction::class);
         $router->get('/users', GetAllUsersAction::class);
-        $router->get('/events', GetAllEventsAction::class);
+        $router->get('/events', GetAllAdminEventsAction::class);
         $router->get('/events/upcoming', GetUpcomingEventsAction::class);
+        $router->get('/orders', GetAllOrdersAction::class);
         $router->post('/impersonate/{user_id}', StartImpersonationAction::class);
         $router->post('/stop-impersonation', StopImpersonationAction::class);
     }
@@ -431,6 +460,15 @@ $router->prefix('/public')->group(
 
         // Color themes
         $router->get('/color-themes', GetColorThemesAction::class);
+
+        // Ticket Lookup
+        $router->post('/ticket-lookup', SendTicketLookupEmailAction::class);
+        $router->get('/ticket-lookup/{token}', GetOrdersByLookupTokenAction::class);
+
+        // Sitemap
+        $router->get('/sitemap.xml', GetSitemapIndexAction::class);
+        $router->get('/sitemap-events-{page}.xml', GetSitemapEventsAction::class)->where('page', '[0-9]+');
+        $router->get('/sitemap-organizers-{page}.xml', GetSitemapOrganizersAction::class)->where('page', '[0-9]+');
     }
 );
 

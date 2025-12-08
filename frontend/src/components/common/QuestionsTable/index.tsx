@@ -43,6 +43,7 @@ import {useSortQuestions} from "../../../mutations/useSortQuestions.ts";
 import classNames from "classnames";
 import {Popover} from "../Popover";
 import {useExportAnswers} from "../../../mutations/useExportAnswers.ts";
+import {useGetEventSettings} from "../../../queries/useGetEventSettings.ts";
 
 interface QuestionsTableProp {
     questions: Partial<Question>[];
@@ -214,16 +215,25 @@ const DefaultQuestions = () => (
             />
         </InputGroup>
 
-        <TextInput
-            withAsterisk
-            type={"email"}
-            label={t`Email Address`}
-            placeholder={t`Email Address`}
-        />
+        <InputGroup>
+            <TextInput
+                withAsterisk
+                type={"email"}
+                label={t`Email Address`}
+                placeholder={t`Email Address`}
+            />
+            <TextInput
+                withAsterisk
+                type={"email"}
+                label={t`Confirm Email Address`}
+                placeholder={t`Confirm Email Address`}
+            />
+        </InputGroup>
     </>
 );
 
 export const QuestionsTable = ({questions}: QuestionsTableProp) => {
+    const {eventId} = useParams();
     const productQuestions = questions.filter(question => question.belongs_to === "PRODUCT");
     const orderQuestions = questions.filter(question => question.belongs_to === "ORDER");
     const form = useForm();
@@ -231,6 +241,8 @@ export const QuestionsTable = ({questions}: QuestionsTableProp) => {
     const [editModalOpen, {open: openEditModal, close: closeEditModal}] = useDisclosure(false);
     const [questionId, setQuestionId] = useState<IdParam>();
     const [showHiddenQuestions, setShowHiddenQuestions] = useState(false);
+    const eventSettingsQuery = useGetEventSettings(eventId);
+    const isPerOrderCollection = eventSettingsQuery.data?.attendee_details_collection_method === 'PER_ORDER';
 
     // This disables the input fields in the preview
     form.getInputProps = (name: string) => ({
@@ -346,7 +358,10 @@ export const QuestionsTable = ({questions}: QuestionsTableProp) => {
                         <Group>
                             {t`Preview`}
                             <Popover width={'400px'}
-                                     title={t`First Name, Last Name, and Email Address are default questions and are always included in the checkout process.`}>
+                                     title={isPerOrderCollection
+                                         ? t`Attendee information collection is set to "Per order". Attendee details will be copied from the order information.`
+                                         : t`First Name, Last Name, and Email Address are default questions and are always included in the checkout process.`
+                                     }>
                                 <IconInfoCircle size={18}/>
                             </Popover>
                         </Group>
@@ -367,7 +382,7 @@ export const QuestionsTable = ({questions}: QuestionsTableProp) => {
                                 ))}
 
                             <h3>{t`Attendee questions`}</h3>
-                            <DefaultQuestions/>
+                            {!isPerOrderCollection && <DefaultQuestions/>}
                             {productQuestions
                                 .filter(question => showHiddenQuestions || !question.is_hidden)
                                 .map(question => (
@@ -377,6 +392,11 @@ export const QuestionsTable = ({questions}: QuestionsTableProp) => {
                                                    form={form}
                                     />
                                 ))}
+                            {isPerOrderCollection && productQuestions.filter(question => showHiddenQuestions || !question.is_hidden).length === 0 && (
+                                <p className={classes.perOrderNote}>
+                                    {t`Attendee details will be copied from order information.`}
+                                </p>
+                            )}
                         </div>
                     </Card>
                 </div>

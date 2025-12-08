@@ -1,16 +1,16 @@
-import {Outlet, useBlocker, useNavigate, useParams} from "react-router";
+import {Outlet, useBlocker, useLocation, useNavigate, useParams} from "react-router";
 import classes from './Checkout.module.scss';
 import {useGetOrderPublic} from "../../../queries/useGetOrderPublic.ts";
 import {t} from "@lingui/macro";
 import {Countdown} from "../../common/Countdown";
-import {CheckoutSidebar} from "./CheckoutSidebar";
 import {ActionIcon, Button, Group, Modal, Tooltip} from "@mantine/core";
 import {IconArrowLeft, IconPrinter, IconReceipt} from "@tabler/icons-react";
 import {eventHomepagePath, eventHomepageUrl} from "../../../utilites/urlHelper.ts";
 import {ShareComponent} from "../../common/ShareIcon";
 import {AddToEventCalendarButton} from "../../common/AddEventToCalendarButton";
+import {ProgressStepper} from "../../common/ProgressStepper";
 import {useMediaQuery} from "@mantine/hooks";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Invoice} from "../../../types.ts";
 import {orderClientPublic} from "../../../api/order.client.ts";
 import {downloadBinary} from "../../../utilites/download.ts";
@@ -18,12 +18,17 @@ import {withLoadingNotification} from "../../../utilites/withLoadingNotification
 import {useAbandonOrderPublic} from "../../../mutations/useAbandonOrderPublic.ts";
 import {showError, showInfo} from "../../../utilites/notifications.tsx";
 import {isDateInFuture} from "../../../utilites/dates.ts";
+import {detectMode} from "../../../utilites/themeUtils.ts";
+import {CheckoutThemeProvider} from "./CheckoutThemeProvider.tsx";
+
+const DEFAULT_ACCENT = '#8b5cf6';
 
 const Checkout = () => {
     const {eventId, orderShortId} = useParams();
     const {data: order} = useGetOrderPublic(eventId, orderShortId, ['event']);
     const event = order?.event;
     const navigate = useNavigate();
+    const location = useLocation();
     const orderIsCompleted = order?.status === 'COMPLETED';
     const orderIsReserved = order?.status === 'RESERVED';
     const orderIsAwaitingOfflinePayment = order?.status === 'AWAITING_OFFLINE_PAYMENT';
@@ -34,6 +39,14 @@ const Checkout = () => {
     const [pendingNavigation, setPendingNavigation] = useState<string | null>(null);
     const [isAbandoning, setIsAbandoning] = useState(false);
     const abandonOrderMutation = useAbandonOrderPublic();
+
+    const getCurrentStep = (): 'details' | 'payment' | 'summary' => {
+        const pathname = location.pathname;
+        if (pathname.includes('/payment')) return 'payment';
+        if (pathname.includes('/summary')) return 'summary';
+        return 'details';
+    };
+    const currentStep = getCurrentStep();
 
     const isOrderReservedAndNotExpired = orderIsReserved && order?.reserved_until
         && isDateInFuture(order.reserved_until);
@@ -129,9 +142,15 @@ const Checkout = () => {
         }
     }, [blocker.state]);
 
+    // Get accent color from event settings, derive mode from homepage background
+    const homepageSettings = event?.settings?.homepage_theme_settings;
+    const accentColor = homepageSettings?.accent || DEFAULT_ACCENT;
+    // Mode is derived from the homepage background color (light homepage = light checkout)
+    const checkoutMode = homepageSettings?.mode || detectMode(homepageSettings?.background || '#ffffff');
+
     return (
-        <>
-            <div className={classes.container}>
+        <CheckoutThemeProvider accentColor={accentColor} mode={checkoutMode}>
+            <div className={classes.container} data-mode={checkoutMode}>
                 <div className={classes.mainContent}>
                     <header className={classes.header}>
                         {(event) && (
@@ -146,14 +165,22 @@ const Checkout = () => {
                                         {!isMobile && t`Event Homepage`}
                                     </Button>
 
-                                    <span className={classes.title}>
-                                        {order.status === 'RESERVED' && t`Checkout`}
-                                        {order.status === 'COMPLETED' && t`Your Order`}
-                                    </span>
+                                    {orderIsReserved && (
+                                        <ProgressStepper
+                                            isPaymentRequired={!!order.is_payment_required}
+                                            currentStep={currentStep}
+                                        />
+                                    )}
+
+                                    {(orderIsCompleted || orderIsAwaitingOfflinePayment) && (
+                                        <span className={classes.title}>
+                                            {t`Your Order`}
+                                        </span>
+                                    )}
 
                                     {orderIsReserved && (
-                                        <Group gap="5px">
-                                            <span>
+                                        <Group gap="5px" className={classes.timerGroup}>
+                                            <span className={classes.timerLabel}>
                                                 {t`Time left:`}
                                             </span>
                                             <Countdown
@@ -207,8 +234,6 @@ const Checkout = () => {
                     </header>
                     <Outlet/>
                 </div>
-
-                {(order && event) && <CheckoutSidebar className={classes.sidebar} event={event} order={order}/>}
             </div>
 
             <Modal
@@ -219,15 +244,16 @@ const Checkout = () => {
                 size="m"
             >
                 <div style={{textAlign: 'center', padding: '20px 0'}}>
-                    <h3>
+                    <h3 style={{color: 'var(--checkout-text-primary)', margin: '0 0 8px 0'}}>
                         {t`You have run out of time to complete your order.`}
                     </h3>
-                    <p>
+                    <p style={{color: 'var(--checkout-text-secondary)', margin: '0'}}>
                         {t`Please return to the event page to start over.`}
                     </p>
                     <Button
                         onClick={handleReturn}
                         variant="filled"
+                        mt="xl"
                     >
                         {t`Return to Event Page`}
                     </Button>
@@ -242,10 +268,10 @@ const Checkout = () => {
                 size="m"
             >
                 <div style={{textAlign: 'center', padding: '20px 0'}}>
-                    <h3>
+                    <h3 style={{color: 'var(--checkout-text-primary)', margin: '0 0 8px 0'}}>
                         {t`Are you sure you want to leave?`}
                     </h3>
-                    <p>
+                    <p style={{color: 'var(--checkout-text-secondary)', margin: '0'}}>
                         {t`Your current order will be lost.`}
                     </p>
                     <Group justify="center" gap="md" mt="xl">
@@ -257,8 +283,8 @@ const Checkout = () => {
                         </Button>
                         <Button
                             onClick={handleAbandonConfirm}
-                            variant="filled"
-                            color="red"
+                            variant="outline"
+                            color="gray"
                             loading={abandonOrderMutation.isPending}
                         >
                             {t`Yes, cancel my order`}
@@ -266,7 +292,7 @@ const Checkout = () => {
                     </Group>
                 </div>
             </Modal>
-        </>
+        </CheckoutThemeProvider>
     );
 }
 
