@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import {ActionIcon, Alert, Badge, Button, Group, LoadingOverlay, Modal, Paper, Stack, Text} from '@mantine/core';
-import {IconEdit, IconInfoCircle, IconMail, IconPlus, IconTrash} from '@tabler/icons-react';
+import {IconAlertCircle, IconEdit, IconInfoCircle, IconMail, IconPlus, IconTrash} from '@tabler/icons-react';
 import {t, Trans} from '@lingui/macro';
 import {useDisclosure} from '@mantine/hooks';
 import {EmailTemplateEditor} from '../EmailTemplateEditor';
@@ -16,6 +16,8 @@ import {
 } from '../../../types';
 import {Card} from '../Card';
 import {HeadingWithDescription} from '../Card/CardHeading';
+import {useGetAccount} from '../../../queries/useGetAccount';
+import {StripeConnectButton} from '../StripeConnectButton';
 
 interface EmailTemplateSettingsBaseProps {
     // Context 
@@ -72,6 +74,10 @@ export const EmailTemplateSettingsBase = ({
     const [editingTemplate, setEditingTemplate] = useState<EmailTemplate | null>(null);
     const [editingType, setEditingType] = useState<EmailTemplateType>('order_confirmation');
     const handleFormError = useFormErrorResponseHandler();
+    const {data: account, isFetched: isAccountFetched} = useGetAccount();
+    const isAccountVerified = isAccountFetched && account?.is_account_email_confirmed;
+    const accountRequiresManualVerification = isAccountFetched && account?.requires_manual_verification;
+    const isModifyDisabled = !isAccountVerified || accountRequiresManualVerification;
 
     const orderConfirmationTemplate = templates.find(t => t.template_type === 'order_confirmation');
     const attendeeTicketTemplate = templates.find(t => t.template_type === 'attendee_ticket');
@@ -271,6 +277,7 @@ export const EmailTemplateSettingsBase = ({
                             <ActionIcon
                                 variant="subtle"
                                 onClick={() => handleEditTemplate(template)}
+                                disabled={isModifyDisabled}
                             >
                                 <IconEdit size={16}/>
                             </ActionIcon>
@@ -279,6 +286,7 @@ export const EmailTemplateSettingsBase = ({
                                 color="red"
                                 onClick={() => handleDeleteTemplate(template)}
                                 loading={deleteMutation.isPending}
+                                disabled={isModifyDisabled}
                             >
                                 <IconTrash size={16}/>
                             </ActionIcon>
@@ -288,6 +296,7 @@ export const EmailTemplateSettingsBase = ({
                             size="xs"
                             leftSection={<IconPlus size={16}/>}
                             onClick={() => handleCreateTemplate(type)}
+                            disabled={isModifyDisabled}
                         >
                             <Trans>Create Custom Template</Trans>
                         </Button>
@@ -327,6 +336,25 @@ export const EmailTemplateSettingsBase = ({
                 heading={t`Email Templates`}
                 description={getHeadingDescription()}
             />
+
+            {(!isAccountVerified && isAccountFetched) && (
+                <Alert icon={<IconAlertCircle size={16}/>} variant="light" mb="lg" color="orange">
+                    <Text size="sm">
+                        {t`You need to verify your account email before you can modify email templates.`}
+                    </Text>
+                </Alert>
+            )}
+
+            {accountRequiresManualVerification && (
+                <Alert icon={<IconAlertCircle size={16}/>} variant="light" mb="lg" color="orange" title={t`Connect Stripe to enable email template editing`}>
+                    <Text size="sm">
+                        {t`Due to the high risk of spam, you must connect a Stripe account before you can modify email templates. This is to ensure that all event organizers are verified and accountable.`}
+                    </Text>
+                    <div style={{marginTop: '0.75rem'}}>
+                        <StripeConnectButton/>
+                    </div>
+                </Alert>
+            )}
 
             <Alert icon={<IconInfoCircle size={16}/>} variant="light" mb="lg">
                 <Text size="sm">

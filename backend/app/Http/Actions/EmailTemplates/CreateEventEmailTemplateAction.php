@@ -4,6 +4,7 @@ namespace HiEvents\Http\Actions\EmailTemplates;
 
 use HiEvents\DomainObjects\Enums\EmailTemplateType;
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\Exceptions\AccountNotVerifiedException;
 use HiEvents\Exceptions\EmailTemplateValidationException;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Http\Resources\EmailTemplateResource;
@@ -13,6 +14,7 @@ use HiEvents\Services\Application\Handlers\EmailTemplate\DTO\UpsertEmailTemplate
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpFoundation\Response;
 
 class CreateEventEmailTemplateAction extends BaseEmailTemplateAction
 {
@@ -28,6 +30,12 @@ class CreateEventEmailTemplateAction extends BaseEmailTemplateAction
     public function __invoke(Request $request, int $eventId): JsonResponse
     {
         $this->isActionAuthorized($eventId, EventDomainObject::class);
+
+        try {
+            $this->verifyAccountCanModifyEmailTemplates();
+        } catch (AccountNotVerifiedException $e) {
+            return $this->errorResponse($e->getMessage(), Response::HTTP_UNAUTHORIZED);
+        }
 
         $validated = $this->validateEmailTemplateRequest($request);
 
