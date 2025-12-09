@@ -1,5 +1,5 @@
 import {useEffect, useRef, useState} from "react";
-import {Dropzone, IMAGE_MIME_TYPE} from "@mantine/dropzone";
+import {Dropzone, FileRejection, IMAGE_MIME_TYPE} from "@mantine/dropzone";
 import {useUploadImage} from "../../../mutations/useUploadImage.ts";
 import {useDeleteImage} from "../../../mutations/useDeleteImage.ts";
 import {showSuccess} from "../../../utilites/notifications.tsx";
@@ -50,6 +50,21 @@ export const ImageUploadDropzone = ({
             setImageId(existingImageData.id || null);
         }
     }, [existingImageData]);
+
+    const handleReject = (fileRejections: FileRejection[]) => {
+        const errorMessages = fileRejections.flatMap((rejection) =>
+            rejection.errors.map((error) => {
+                if (error.code === 'file-too-large') {
+                    return t`File is too large. Maximum size is 5MB.`;
+                }
+                if (error.code === 'file-invalid-type') {
+                    return t`Invalid file type. Please upload an image.`;
+                }
+                return error.message;
+            })
+        );
+        setErrors(errorMessages);
+    };
 
     const handleDrop = (files: File[]) => {
         const [file] = files;
@@ -199,6 +214,7 @@ export const ImageUploadDropzone = ({
             <div className={classes.container}>
                 <Dropzone
                     onDrop={handleDrop}
+                    onReject={handleReject}
                     accept={IMAGE_MIME_TYPE}
                     maxSize={MAX_UPLOAD_SIZE}
                     disabled={disabled || loading}

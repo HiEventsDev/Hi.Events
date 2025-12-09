@@ -47,6 +47,7 @@ import {InputGroup} from "../../common/InputGroup";
 import {showError} from "../../../utilites/notifications.tsx";
 import classNames from "classnames";
 import {InputLabelWithHelp} from "../../common/InputLabelWithHelp";
+import {CreateTaxOrFeeModal} from "../../modals/CreateTaxOrFeeModal";
 
 interface ProductFormProps {
     form: UseFormReturnType<Product>,
@@ -176,10 +177,16 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
 
     const {eventId} = useParams();
     const [opened, {toggle}] = useDisclosure(false);
+    const [taxFeeModalOpen, {open: openTaxFeeModal, close: closeTaxFeeModal}] = useDisclosure(false);
     const isFreeProduct = form.values.type === 'FREE';
     const isDonationProduct = form.values.type === 'DONATION';
     const {data: event} = useGetEvent(eventId);
     const {data: taxesAndFees} = useGetTaxesAndFees();
+
+    const handleTaxOrFeeCreated = (taxOrFee: TaxAndFee) => {
+        const currentIds = form.values.tax_and_fee_ids || [];
+        form.setFieldValue('tax_and_fee_ids', [...currentIds, String(taxOrFee.id)]);
+    };
 
     const taxAndFeeOptions = (type: TaxAndFeeType): ComboboxItem[] => {
         return taxesAndFees?.data
@@ -207,6 +214,12 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
     const removeTaxesAndFees = () => {
         form.setFieldValue('tax_and_fee_ids', []);
     };
+
+    // Context-aware helpers
+    const hasTaxes = form.values.tax_and_fee_ids && form.values.tax_and_fee_ids.length > 0;
+    const hasLimits = form.values.min_per_order || form.values.max_per_order;
+    const hasSalePeriod = form.values.sale_start_date || form.values.sale_end_date;
+    const hasHighlight = form.values.is_highlighted;
 
     return (
         <>
@@ -357,9 +370,24 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                 tabIndex={0}
                 onKeyDown={(e) => e.key === 'Enter' && toggle()}
             >
-                {opened ? <IconChevronUp size={16}/> : <IconChevronDown size={16}/>}
-                <span className={classes.toggleLabel}>{opened ? t`Hide Additional Options` : t`Show Additional Options`}</span>
-                {!opened && <span className={classes.toggleDescription}>{t`Taxes, fees, sale period, order limits, and visibility settings`}</span>}
+                <div className={classes.toggleMain}>
+                    {opened ? <IconChevronUp size={16}/> : <IconChevronDown size={16}/>}
+                    <span className={classes.toggleLabel}>
+                        {opened ? t`Hide Options` : t`Taxes, Fees, Visibility, Sale Period, Product Highlight & Order Limits`}
+                    </span>
+                </div>
+                {!opened && (
+                    <div className={classes.toggleMeta}>
+                        <span className={classes.toggleDescription}>
+                            {[
+                                hasTaxes && t`Taxes configured`,
+                                hasLimits && t`Order limits set`,
+                                hasSalePeriod && t`Sale period set`,
+                                hasHighlight && t`Highlighted`,
+                            ].filter(Boolean).join(' · ') || t`Sale period, order limits, visibility`}
+                        </span>
+                    </div>
+                )}
             </div>
 
             <Collapse in={opened}>
@@ -374,14 +402,6 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                             {...form.getInputProps('tax_and_fee_ids')}
                             label={t`Taxes and Fees`}
                             placeholder={t`Select...`}
-                            description={(
-                                <span>
-                                    {t`The taxes and fees to apply to this product. You can create new taxes and fees on the`}{'  '}
-                                    <NavLink
-                                        target={'_blank'}
-                                        to={'/account/taxes-and-fees'}>{t`Taxes and Fees`}</NavLink> {t`page.`}
-                                </span>
-                            )}
                             data={[{
                                 group: t`Taxes`,
                                 items: taxAndFeeOptions(TaxAndFeeType.Tax),
@@ -390,6 +410,15 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                                 items: taxAndFeeOptions(TaxAndFeeType.Fee),
                             }]}
                         />
+                        <Button
+                            variant="subtle"
+                            size="compact-sm"
+                            leftSection={<IconPlus size={14}/>}
+                            onClick={openTaxFeeModal}
+                            className={classes.addTaxFeeButton}
+                        >
+                            {t`Create Tax or Fee`}
+                        </Button>
 
                         {(form.values.type === ProductPriceType.Free && !!form.values.tax_and_fee_ids?.length) && (
                             <Alert mt={15}>
@@ -485,6 +514,13 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                     </Fieldset>
                 </div>
             </Collapse>
+
+            {taxFeeModalOpen && (
+                <CreateTaxOrFeeModal
+                    onClose={closeTaxFeeModal}
+                    onCreated={handleTaxOrFeeCreated}
+                />
+            )}
         </>
     );
 };

@@ -158,7 +158,7 @@ const HomepageDesigner = () => {
                 <div className={classes.sticky}>
                     <div className={classes.header}>
                         <h2>{t`Homepage Design`}</h2>
-                        <Text c="dimmed" size="sm">{t`Customize your event page appearance`}</Text>
+                        <Text c="dimmed" size="sm">{t`Customize the layout, colors, and branding of your event homepage.`}</Text>
                     </div>
 
                     <Accordion

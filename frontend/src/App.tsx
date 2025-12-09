@@ -64,11 +64,11 @@ export const App: FC<
                 theme={{
                     colors: {
                         primary: generateColors(getConfig("VITE_APP_PRIMARY_COLOR", "#40296C") as string),
-                        secondary: generateColors(getConfig("VITE_APP_SECONDARY_COLOR", "#5A1065") as string),
+                        secondary: generateColors(getConfig("VITE_APP_SECONDARY_COLOR", "#3d0b44") as string),
                     },
                     primaryColor: "primary",
-                    fontFamily: "'Varela Round', sans-serif",
-                    primaryShade: 7
+                    fontFamily: "Outfit, sans-serif",
+                    primaryShade: 8,
                 }}
             >
                 <HelmetProvider context={props.helmetContext}>

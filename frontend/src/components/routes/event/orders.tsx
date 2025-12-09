@@ -110,7 +110,9 @@ export const Orders: React.FC = () => {
 
     return (
         <PageBody>
-            <PageTitle>{t`Orders`}</PageTitle>
+            <PageTitle
+                subheading={t`View order details, issue refunds, and resend confirmations.`}
+            >{t`Orders`}</PageTitle>
             <ToolBar
                 filterComponent={
                     <FilterModal

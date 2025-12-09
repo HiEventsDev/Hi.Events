@@ -1,126 +1,206 @@
-<p align="center">
-  <img src="https://hievents-public.s3.us-west-1.amazonaws.com/website/hi-events-rainbow.png?v=1" alt="Hi.Events ロゴ" width="200px">
-</p>
-<h3 align="center">Hi.Events</h3>
-<p align="center">
-<a href="https://demo.hi.events/event/1/dog-conf-2030">デモイベント 🌟</a> <a href="https://hi.events?utm_source=gh-readme">ウェブサイト 🌎</a>  <a href="https://hi.events/docs">ドキュメント 📄</a>  <a href="https://hi.events/docs/getting-started?utm_source=gh-readme">インストール ⚙️</a>
-</p>
-
-<h3 align="center">
- 簡単にイベントを管理し、オンラインでチケットを販売します。
-</h3>
-
 <div align="center">
 
-[![Hi.Events ドキュメント](https://img.shields.io/badge/docs-hi.events-blue)](https://hi.events/docs)
-[![ライセンス: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://github.com/HiEventsDev/hi.events/LICENCE)
-[![GitHub リリース](https://img.shields.io/github/v/release/HiEventsDev/hi.events?include_prereleases)](https://github.com/HiEventsDev/hi.events/releases)
-[![ユニットテストの実行](https://github.com/HiEventsDev/hi.events/actions/workflows/unit-tests.yml/badge.svg?event=push)](https://github.com/HiEventsDev/hi.events/actions/workflows/unit-tests.yml)
-[![Docker ダウンロード数](https://img.shields.io/docker/pulls/daveearley/hi.events-all-in-one)](https://hub.docker.com/r/daveearley/hi.events-all-in-one)
+<img src="https://hievents-public.s3.us-west-1.amazonaws.com/website/github-banner.png?v=1" alt="Hi.Events - オープンソースイベントチケット販売プラットフォーム" width="100%">
+
+# Hi.Events
+
+### オープンソースイベントチケット販売・管理プラットフォーム
+
+カンファレンス、ナイトライフイベント、コンサート、クラブナイト、ワークショップ、フェスティバルのチケットをオンラインで販売。
+セルフホスティングまたはクラウド。あなたのイベント、あなたのブランド、あなたのデータ。
+
+[クラウド版を試す →](https://app.hi.events/auth/register?utm_source=gh-readme) · [ライブデモ](https://app.hi.events/event/2/hievents-conference-2030?utm_source=gh-readme) · [ドキュメント](https://hi.events/docs?utm_source=gh-readme) · [ウェブサイト](https://hi.events?utm_source=gh-readme)
+
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://github.com/HiEventsDev/Hi.Events/blob/develop/LICENCE)
+[![GitHub Release](https://img.shields.io/github/v/release/HiEventsDev/hi.events?include_prereleases)](https://github.com/HiEventsDev/hi.events/releases)
+[![Run Unit Tests](https://github.com/HiEventsDev/hi.events/actions/workflows/unit-tests.yml/badge.svg?event=push)](https://github.com/HiEventsDev/hi.events/actions/workflows/unit-tests.yml)
+[![Docker Pulls](https://img.shields.io/docker/pulls/daveearley/hi.events-all-in-one)](https://hub.docker.com/r/daveearley/hi.events-all-in-one)
+
+<a href="https://trendshift.io/repositories/10563" target="_blank">
+  <img src="https://trendshift.io/api/badge/repositories/10563" alt="HiEventsDev%2Fhi.events | Trendshift" width="250" height="55"/>
+</a>
+
+<p>
+<a href="README.de.md">Deutsch</a> · <a href="README.pt.md">Português</a> · <a href="README.pt-br.md">Português do Brasil</a> · <a href="README.fr.md">Français</a> · <a href="README.it.md">Italiano</a> · <a href="README.nl.md">Nederlands</a> · <a href="README.es.md">Español</a> · <a href="README.zh-cn.md">简体中文</a> · <a href="README.zh-hk.md">繁體中文（香港）</a> · <a href="README.vi.md">Tiếng Việt</a> · <a href="README.tr.md">Türkçe</a> · <a href="README.hu.md">Magyar</a> · <a href="README.ja.md">日本語</a>
+</p>
 
 </div>
 
-<div align="center">
- 🌟 スターを付けていただけると嬉しいです！ 🌟
-</div>
+<br>
 
-<hr/>
+## なぜHi.Eventsなのか？
 
-## 目次
+多くのチケット販売プラットフォームは、チケットごとの手数料を請求し、あなたのデータを自社のエコシステムに閉じ込めます。**Hi.Eventsは、Eventbrite、Tickettailor、Dice.fm、その他のチケット販売プラットフォームに代わる、モダンなオープンソースの代替品です。**ブランディング、チェックアウト、データ、インフラストラクチャを完全にコントロールしたい主催者向けです。
 
-- [紹介](#-紹介)
-- [機能](#-機能)
-- [クイックスタート](#-クイックスタート)
-- [変更履歴](#-変更履歴)
-- [貢献](#-貢献)
-- [FAQ](#-faq)
+ナイトライフプロモーター、フェスティバル主催者、会場、コミュニティグループ、カンファレンス主催者向けに構築されています。
 
-## 📚 紹介
+<br>
 
-<a href="https://hi.events">Hi.Events</a> は、機能豊富な自ホスト型イベント管理およびチケット販売プラットフォームです。会議からクラブナイトまで、Hi.Events はあらゆる規模のイベントの作成、管理、チケット販売を支援するように設計されています。
+<img alt="Hi.Eventsダッシュボード" src="https://hievents-public.s3.us-west-1.amazonaws.com/website/github-screenshot.png"/>
 
-<img alt="Hi.Events 自ホスト型チケット販売ダッシュボード" src="https://hievents-public.s3.us-west-1.amazonaws.com/website/dashboard-screenshot.png"/>
+<br>
 
-## 🌟 機能
+## 機能
 
-<a href="https://hi.events">Hi.Events</a> は、イベント管理とチケット販売を効率化するための機能が満載です：
+<table>
+<tr>
+<td width="50%" valign="top">
 
-- 📊 **イベント分析:** イベントのパフォーマンスとチケット販売に関する深い洞察を得る。
-- 🎟 **埋め込み可能なチケットウィジェット:** チケット販売を簡単に任意のウェブサイトに統合。
-- 🖥 **カスタマイズ可能なイベントホームページ:** 柔軟なデザインオプションで目を引くイベントページを作成。
-- 🔑 **直感的なチェックインツール:** Hi.Events の QR コードチェックインツールで簡単に参加者をチェックイン。
-- 💬 **イベントメッセージングツール:** 重要な更新やリマインダーを参加者に送信。
-- 📝 **カスタム注文フォーム:** チェックアウト時にカスタマイズされた質問で参加者情報を収集。
-- 🎫 **複数のチケットタイプ:** 無料、有料、寄付、または階層型のチケットタイプ。
-- 💸 **多用途なプロモコード:** 高度に多用途な割引コード。先行販売アクセス、複数の割引オプション。
-- 💰 **即時支払い:** シームレスな Stripe 統合で即時支払いを楽しむ。
-- 🧾 **税金と手数料の設定:** チケットごとに税金と手数料を追加。
-- 📦 **データエクスポート:** 参加者と注文データを XLSX または CSV にエクスポート。
-- 💻 **REST API:** カスタム統合のためのフル機能の REST API。
-- 🔍 **SEO ツール:** 各イベントの SEO 設定をカスタマイズ。
-- 🛒 **美しいチェックアウトプロセス:** スムーズで美しいチェックアウト体験を確保。
-- 🔐 **役割ベースのアクセス:** 複数のユーザーロールをサポート。
-- 💻 **オンラインイベントサポート:** オンラインイベントの指示とリンクを提供。
-- ⏪ **全額および部分的な払い戻しサポート:** 全額および部分的な払い戻しを簡単に管理。
-- 📧 **メール通知:** 自動メール通知で参加者を最新情報に保つ。
-- 📱 **モバイル対応:** どのデバイスでもシームレスな体験を楽しむ。
-- 🌐 **多言語サポート:** 複数の言語をサポート。
-- 🎉 **その他多数！**
+### 🎟️ チケット販売・販売管理
 
-## 🚀 クイックスタート
+- 柔軟なチケットタイプ（無料、有料、寄付、段階式）
+- プロモコードで隠されたロックされたチケット
+- プロモコードと先行販売アクセス
+- 製品アドオン（グッズ、アップグレード、追加オプション）
+- 整理のための製品カテゴリー
+- 完全な税金と手数料のサポート（VAT、サービス料）
+- 収容人数管理と共有制限
 
-詳細なインストール手順については、[ドキュメント](https://hi.events/docs/getting-started) を参照してください。クイックスタートのために、以下の手順に従ってください：
+</td>
+<td width="50%" valign="top">
+
+### 🎨 ブランディング・カスタマイズ
+
+- 美しく、コンバージョン最適化されたチェックアウト
+- カスタマイズ可能なPDFチケットデザイン
+- ブランド化された主催者ホームページ
+- ドラッグアンドドロップイベントページビルダー
+- 埋め込み可能なチケットウィジェット
+- SEOツール（メタタグ、Open Graph）
+
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
+
+### 👥 参加者管理
+
+- カスタムチェックアウト質問
+- 高度な検索、フィルタリング、エクスポート（CSV/XLSX）
+- 全額および部分的な払い戻し
+- チケットタイプ別の一括メッセージング
+- スキャンログ付きQRコードチェックイン
+- アクセス制御されたチェックインリスト
+
+</td>
+<td width="50%" valign="top">
+
+### 📊 分析・成長
+
+- リアルタイム販売ダッシュボード
+- アフィリエイトと紹介トラッキング
+- 高度なレポート（販売、税金、プロモ）
+- Webhook（Zapier、Make、CRM）
+
+</td>
+</tr>
+<tr>
+<td colspan="2" valign="top">
+
+### ⚙️ 運用管理
+
+マルチユーザーロールと権限 · Stripe Connect即時支払い · オフライン決済方法 · オフラインイベントサポート ·
+自動請求書発行 · イベントアーカイブ · 多言語サポート · 完全なREST API
+
+</td>
+</tr>
+</table>
+
+<br>
+
+## 比較
+
+| 機能                      | Hi.Events | Eventbrite | Tickettailor | Dice    |
+|:--------------------------|:----------|:-----------|:-------------|:--------|
+| セルフホスティングオプション | ✅         | ❌          | ❌            | ❌       |
+| オープンソース             | ✅         | ❌          | ❌            | ❌       |
+| チケット手数料なし（セルフホスティング） | ✅         | ❌          | ❌            | ❌       |
+| 完全なカスタムブランディング | ✅         | 制限あり    | ✅            | 制限あり |
+| アフィリエイトトラッキング   | ✅         | ✅          | ❌            | ❌       |
+| APIアクセス               | ✅         | ✅          | ✅            | 制限あり |
+| データを所有              | ✅         | ❌          | ❌            | ❌       |
+
+<br>
+
+## クイックスタート
 
 ### ワンクリックデプロイ
 
-[![DigitalOcean でデプロイ](https://www.deploytodo.com/do-btn-blue.svg)](https://github.com/HiEventsDev/hi.events-digitalocean)
+[![DigitalOceanでデプロイ](https://www.deploytodo.com/do-btn-blue.svg)](https://github.com/HiEventsDev/hi.events-digitalocean)
+[![Renderでデプロイ](https://render.com/images/deploy-to-render-button.svg)](https://github.com/HiEventsDev/hi.events-render.com)
+[![Railwayでデプロイ](https://railway.app/button.svg)](https://railway.app/template/8CGKmu?referralCode=KvSr11)
+[![Zeaburでデプロイ](https://zeabur.com/button.svg)](https://zeabur.com/templates/8DIRY6)
 
-[![Render でデプロイ](https://render.com/images/deploy-to-render-button.svg)](https://github.com/HiEventsDev/hi.events-render.com)
+### Docker
 
-[![Railway でデプロイ](https://railway.app/button.svg)](https://railway.app/template/8CGKmu?referralCode=KvSr11)
+```bash
+git clone git@github.com:HiEventsDev/hi.events.git
+cd hi.events/docker/all-in-one
 
-[![Zeabur でデプロイ](https://zeabur.com/button.svg)](https://zeabur.com/templates/8DIRY6)
+# キーの生成（Linux/macOS）
+echo "APP_KEY=base64:$(openssl rand -base64 32)" >> .env
+echo "JWT_SECRET=$(openssl rand -base64 32)" >> .env
 
-### 🐳 Docker を使用したクイックスタート
+docker compose up -d
+```
 
-> [!重要]  
-> システムに Docker および Docker Compose がインストールされていることを確認してください。インストールされていない場合は、公式 Docker ウェブサイトからダウンロードできます：[Docker](https://www.docker.com/get-started)。
+> [!TIP]
+> **Windowsユーザー:** キー生成の手順については、`./docker/all-in-one/README.md`を参照してください。
 
-1. **リポジトリをクローン：**
-   ```bash
-   git clone git@github.com:HiEventsDev/hi.events.git
-   ```
+`http://localhost:8123`を開いてアカウントを作成してください。
 
-2. **Docker ディレクトリに移動：**
-   ```bash
-   cd hi.events/docker/all-in-one
-   ```
+📖 [完全なインストールガイド](https://hi.events/docs/getting-started?utm_source=gh-readme)
 
-3. **Docker コンテナを起動：**
-   ```bash
-   docker compose up -d
-   ```
-4. **アカウントを作成：**
-   ```bash
-   ブラウザを開き、http://localhost:8123/auth/register に移動します。
-   ```
+<br>
 
-ℹ️ 他のインストール方法や、プロダクションまたはローカル開発環境の設定については、[クイックスタートガイド](https://hi.events/docs/getting-started) を参照してください。
+## Hi.Events Cloud
 
-## 📝 変更履歴
+セルフホスティングを希望しない場合は、**[Hi.Events Cloud](https://app.hi.events/auth/register?utm_source=gh-readme)**が完全に管理されたオプションで、セットアップなし、自動更新、管理されたインフラストラクチャを提供します。
 
-継続的な改善と機能追加については、[GitHub リリースページ](https://github.com/HiEventsDev/hi.events/releases) をご覧ください。
+[今すぐ始める →](https://app.hi.events/auth/register?utm_source=gh-readme)
 
-## 🤝 貢献
+<br>
 
-貢献、提案、バグ報告を歓迎します！新しい機能や拡張を提案する前に、ディスカッションのために issue を開いてください。
+## ドキュメント
 
-## ❓ FAQ
+| リソース       | リンク                                                                                          |
+|:---------------|:-----------------------------------------------------------------------------------------------|
+| はじめに       | [hi.events/docs/getting-started](https://hi.events/docs/getting-started?utm_source=gh-readme) |
+| 設定           | [hi.events/docs/configuration](https://hi.events/docs/configuration?utm_source=gh-readme)     |
+| APIリファレンス | [hi.events/docs/api](https://hi.events/docs/api?utm_source=gh-readme)                         |
+| Webhook        | [hi.events/docs/webhooks](https://hi.events/docs/webhooks?utm_source=gh-readme)               |
 
-質問がありますか？[ドキュメント](https://hi.events/docs) に答えがあります。探しているものが見つからない場合は、[hello@hi.events](mailto:hello@hi.events) までお気軽にお問い合わせください。
+<br>
 
-## 📜 ライセンス
+## 貢献
 
-Hi.Events は [AGPL-3.0](https://github.com/HiEventsDev/hi.events/blob/main/LICENCE) ライセンスの条件に基づいてライセンスされています。
+貢献を歓迎します。詳細については、[貢献ガイド](CONTRIBUTING.md)を参照してください。
 
-商用ライセンスオプションを含むライセンス情報の詳細については、[こちら](https://hi.events/licensing) のライセンスページをご覧ください。
+<br>
+
+## サポート
+
+📖 [ドキュメント](https://hi.events/docs?utm_source=gh-readme) · 📧 [hello@hi.events](mailto:hello@hi.events) ·
+🐛 [GitHub Issues](https://github.com/HiEventsDev/hi.events/issues)
+
+<br>
+
+## 変更履歴
+
+新機能と改善については、[リリースページ](https://github.com/HiEventsDev/hi.events/releases)で最新情報を入手してください。
+
+<br>
+
+## ライセンス
+
+Hi.Eventsは**AGPL-3.0（追加条項付き）**でライセンスされています。商用ライセンスも利用可能です。[詳細はこちら](https://hi.events/licensing)。
+
+<br>
+
+<div align="center">
+
+**[ウェブサイト](https://hi.events)** · **[ドキュメント](https://hi.events/docs)** · **[Twitter/X](https://x.com/HiEventsTickets)**
+
+Made with ☘️ in Ireland
+
+</div>

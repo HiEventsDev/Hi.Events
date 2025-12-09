@@ -35,7 +35,7 @@ const Reports = () => {
     return (
         <PageBody>
             <PageTitle
-                subheading={t`View and download reports for your event. Please note, only completed orders are included in these reports.`}>
+                subheading={t`Download sales, attendee, and financial reports for all completed orders.`}>
                 {t`Reports`}
             </PageTitle>
 

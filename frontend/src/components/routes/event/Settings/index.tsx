@@ -12,7 +12,8 @@ import {
     IconAdjustments,
     IconAt,
     IconBrandGoogleAnalytics,
-    IconBuildingStore, IconCreditCard,
+    IconBuildingStore,
+    IconCreditCard,
     IconHome,
     IconMapPin,
 } from "@tabler/icons-react";
@@ -100,7 +101,9 @@ export const Settings = () => {
 
     return (
         <PageBody>
-            <PageTitle>{t`Settings`}</PageTitle>
+            <PageTitle
+                subheading={t`Configure event details, location, checkout options, and email notifications.`}
+            >{t`Event Settings`}</PageTitle>
 
             {isLargeScreen ? (
                 <Group align="flex-start" gap="md">

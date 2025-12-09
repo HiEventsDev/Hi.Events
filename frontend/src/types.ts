@@ -160,6 +160,10 @@ export interface Image {
     size: number;
     mime_type: string;
     type: ImageType;
+    width?: number | null;
+    height?: number | null;
+    avg_colour?: string | null;
+    lqip_base64?: string | null;
 }
 
 export type ImageType = 'EVENT_COVER' | 'EDITOR_IMAGE' | 'ORGANIZER_LOGO' | 'ORGANIZER_COVER' | 'ORGANIZER_IMAGE' | 'TICKET_LOGO';
@@ -305,6 +309,7 @@ export interface EventStatistics {
     sales_total_before_additions: number;
     total_fee: number;
     products_sold: number;
+    attendees_registered: number;
     total_refunded: number;
 }
 

@@ -76,10 +76,10 @@ const Login = () => {
     return (
         <>
             <header className={classes.header}>
-                <h2>{t`Welcome back 👋`}</h2>
+                <h2>{t`Welcome back`}</h2>
                 <p>
                     <Trans>
-                        Don't have an account? {'  '}
+                        Don't have an account?{' '}
                         <NavLink to={'/auth/register'}>
                             Sign up
                         </NavLink>
@@ -99,14 +99,14 @@ const Login = () => {
                                    required
                                    mt="md"
                     />
+                    <Button color="secondary.5" type="submit" fullWidth loading={isPending} disabled={isPending} mt="lg">
+                        {isPending ? t`Logging in` : t`Log in`}
+                    </Button>
                     <p>
                         <NavLink to={`/auth/forgot-password`}>
                             {t`Forgot password?`}
                         </NavLink>
                     </p>
-                    <Button color={'var(--hi-pink)'} type="submit" fullWidth loading={isPending} disabled={isPending}>
-                        {isPending ? t`Logging in` : t`Log in`}
-                    </Button>
                 </form>
             </div>
 
@@ -152,7 +152,7 @@ const Login = () => {
                                     />
                                     <Button
                                         type="submit"
-                                        color="var(--hi-pink)"
+                                        color="secondary.5"
                                         loading={ticketLookupMutation.isPending}
                                         disabled={ticketLookupMutation.isPending}
                                     >

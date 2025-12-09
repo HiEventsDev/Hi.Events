@@ -9,7 +9,7 @@ RUN echo "" >> /usr/local/etc/php-fpm.d/docker-php-serversideup-pool.conf && \
     echo "user = www-data" >> /usr/local/etc/php-fpm.d/docker-php-serversideup-pool.conf && \
     echo "group = www-data" >> /usr/local/etc/php-fpm.d/docker-php-serversideup-pool.conf
 
-RUN install-php-extensions intl
+RUN install-php-extensions intl imagick
 
 COPY --chown=www-data:www-data . .
 
