@@ -148,7 +148,20 @@ export const OrganizerHomepage = ({
                         {/* Hero Section */}
                         <div className={classes.heroSection}>
                             {organizerCover && (
-                                <div className={classes.coverWrapper}>
+                                <div
+                                    className={classes.coverWrapper}
+                                    style={organizerCover?.width && organizerCover?.height ? {
+                                        '--cover-aspect-ratio': `${organizerCover.width} / ${organizerCover.height}`,
+                                    } as React.CSSProperties : undefined}
+                                >
+                                    {organizerCover?.lqip_base64 && (
+                                        <img
+                                            src={organizerCover.lqip_base64}
+                                            alt=""
+                                            aria-hidden="true"
+                                            className={classes.coverLqip}
+                                        />
+                                    )}
                                     <img
                                         src={organizerCover.url}
                                         alt="Cover"
