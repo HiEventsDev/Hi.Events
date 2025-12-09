@@ -455,7 +455,7 @@ $transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   padding: 4px;
 
   @include mixins.respond-below(sm) {
-    justify-content: center;
+    width: 100%;
   }
 }
 
@@ -472,6 +472,11 @@ $transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 
   &:hover:not(.filterButtonActive) {
     color: var(--primary-text-color);
+  }
+
+  @include mixins.respond-below(sm) {
+    flex: 1;
+    text-align: center;
   }
 }
 

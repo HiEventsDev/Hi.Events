@@ -309,6 +309,7 @@ export interface EventStatistics {
     sales_total_before_additions: number;
     total_fee: number;
     products_sold: number;
+    attendees_registered: number;
     total_refunded: number;
 }
 

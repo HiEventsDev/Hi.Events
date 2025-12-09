@@ -1,10 +1,10 @@
-import {Badge, Button, Group, Menu} from "@mantine/core";
+import {Badge, Button, Menu} from "@mantine/core";
 import classes from './TaxAndFeeList.module.scss';
 import {useGetTaxesAndFees} from "../../../queries/useGetTaxesAndFees.ts";
-import {TaxAndFee, TaxAndFeeCalculationType} from "../../../types.ts";
+import {TaxAndFee, TaxAndFeeCalculationType, TaxAndFeeType} from "../../../types.ts";
 import {formatCurrency} from "../../../utilites/currency.ts";
 import {useGetAccount} from "../../../queries/useGetAccount.ts";
-import {IconDotsVertical, IconPencil, IconTrash} from "@tabler/icons-react";
+import {IconDotsVertical, IconPencil, IconPercentage, IconReceipt, IconTrash} from "@tabler/icons-react";
 import {useDisclosure} from "@mantine/hooks";
 import {EditTaxOrFeeModal} from "../../modals/EditTaxOrFeeModal";
 import {useState} from "react";
@@ -43,18 +43,23 @@ export const TaxAndFeeList = () => {
 
     const TaxList = () => {
         return <div className={classes.taxes}>
-            {taxesAndFees.data.map((tax) => (
-                <div key={tax.id} className={classes.taxBlock}>
-                    <div className={classes.header}>
-                        <div className={classes.type}>
-                            {tax.type.toLocaleLowerCase()}
-                        </div>
-                        <div className={classes.action}>
-                            <Group wrap={'nowrap'} gap={0}>
+            {taxesAndFees.data.map((tax) => {
+                const isTax = tax.type === TaxAndFeeType.Tax;
+                return (
+                    <div key={tax.id} className={`${classes.taxBlock} ${isTax ? classes.taxType : classes.feeType}`}>
+                        <div className={classes.header}>
+                            <div className={classes.iconWrapper}>
+                                {isTax ? <IconPercentage size={16}/> : <IconReceipt size={16}/>}
+                            </div>
+                            <div className={classes.type}>
+                                {tax.type.toLocaleLowerCase()}
+                            </div>
+                            <div className={classes.action}>
                                 <Menu shadow="md" width={200}>
                                     <Menu.Target>
-                                        <Button size={'compact-xs'} variant={'transparent'}><IconDotsVertical
-                                            size={14}/></Button>
+                                        <Button size={'compact-xs'} variant={'transparent'} className={classes.menuButton}>
+                                            <IconDotsVertical size={14}/>
+                                        </Button>
                                     </Menu.Target>
 
                                     <Menu.Dropdown>
@@ -74,24 +79,23 @@ export const TaxAndFeeList = () => {
                                         </Menu.Item>
                                     </Menu.Dropdown>
                                 </Menu>
-                            </Group>
+                            </div>
                         </div>
-
+                        <div className={classes.body}>
+                            <div className={classes.name}>
+                                {tax.name}
+                            </div>
+                            <div className={classes.value}>
+                                <Badge variant={'light'} size="lg" className={classes.rateBadge}>
+                                    {tax.calculation_type === TaxAndFeeCalculationType.Percentage
+                                        ? tax.rate + '%'
+                                        : formatCurrency(Number(tax.rate), account?.currency_code)}
+                                </Badge>
+                            </div>
+                        </div>
                     </div>
-                    <div className={classes.body}>
-                        <div className={classes.name}>
-                            {tax.name}
-                        </div>
-                        <div className={classes.value}>
-                            <Badge variant={'light'}>
-                                {tax.calculation_type === TaxAndFeeCalculationType.Percentage
-                                    ? tax.rate + '%'
-                                    : formatCurrency(Number(tax.rate), account?.currency_code)}
-                            </Badge>
-                        </div>
-                    </div>
-                </div>
-            ))}
+                );
+            })}
         </div>;
     }
 

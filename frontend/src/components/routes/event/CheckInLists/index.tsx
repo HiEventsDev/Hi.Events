@@ -28,7 +28,9 @@ const CheckInLists = () => {
 
     return (
         <PageBody>
-            <PageTitle>
+            <PageTitle
+                subheading={t`Set up check-in lists for different entrances, sessions, or days.`}
+            >
                 {t`Check-In Lists`}
             </PageTitle>
 

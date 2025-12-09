@@ -105,7 +105,7 @@ const TicketDesigner = () => {
                 <div className={classes.sticky}>
                     <div className={classes.header}>
                         <h2>{t`Ticket Design`}</h2>
-                        <Text c="dimmed" size="sm">{t`Customize your ticket appearance`}</Text>
+                        <Text c="dimmed" size="sm">{t`Brand your tickets with a custom logo, colors, and footer message.`}</Text>
                     </div>
 
                     <form onSubmit={form.onSubmit(handleSubmit)}>
