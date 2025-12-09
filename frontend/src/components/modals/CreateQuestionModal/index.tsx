@@ -14,9 +14,10 @@ import {showError} from "../../../utilites/notifications.tsx";
 
 interface CreateQuestionModalProps extends GenericModalProps {
     onCompleted: (question: Question) => void;
+    defaultBelongsTo?: 'ORDER' | 'PRODUCT';
 }
 
-export const CreateQuestionModal = ({onClose, onCompleted}: CreateQuestionModalProps) => {
+export const CreateQuestionModal = ({onClose, onCompleted, defaultBelongsTo = 'ORDER'}: CreateQuestionModalProps) => {
     const {eventId} = useParams();
     const queryClient = useQueryClient();
 
@@ -32,7 +33,7 @@ export const CreateQuestionModal = ({onClose, onCompleted}: CreateQuestionModalP
             options: [],
             product_ids: [],
             apply_to_all_products: true,
-            belongs_to: "ORDER",
+            belongs_to: defaultBelongsTo,
             is_hidden: false,
         },
     });

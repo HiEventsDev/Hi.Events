@@ -28,7 +28,9 @@ export const Messages = () => {
     return (
         <>
             <PageBody isFluid={false}>
-                <PageTitle>{t`Messages`}</PageTitle>
+                <PageTitle
+                    subheading={t`Send emails to attendees and view your message history.`}
+                >{t`Messages`}</PageTitle>
                 <ToolBar searchComponent={() => (
                     <SearchBarWrapper
                         placeholder={t`Search by subject or content...`}

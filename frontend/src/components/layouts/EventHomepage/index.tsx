@@ -400,16 +400,33 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                                                 rel="noopener noreferrer"
                                                 className={classes.mapContainer}
                                             >
-                                                <div style={{
-                                                    width: '100%',
-                                                    height: '100%',
-                                                    background: 'var(--accent-soft)',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center'
-                                                }}>
-                                                    <IconMapPin size={32} style={{color: 'var(--primary-color)'}}/>
-                                                </div>
+                                                <svg
+                                                    viewBox="0 0 200 120"
+                                                    preserveAspectRatio="xMidYMid slice"
+                                                    style={{
+                                                        width: '100%',
+                                                        height: '100%',
+                                                        position: 'absolute',
+                                                        inset: 0,
+                                                    }}
+                                                >
+                                                    <rect width="200" height="120" fill="var(--accent-soft)"/>
+                                                    {/* River */}
+                                                    <path d="M-5 95 Q30 85, 50 90 Q80 100, 110 88 Q140 75, 170 82 Q190 86, 205 80" stroke="var(--border-color)" strokeWidth="2" fill="none" opacity="0.3"/>
+                                                    {/* Main roads */}
+                                                    <line x1="0" y1="50" x2="200" y2="50" stroke="var(--border-color)" strokeWidth="2" opacity="0.2"/>
+                                                    <line x1="100" y1="0" x2="100" y2="120" stroke="var(--border-color)" strokeWidth="2" opacity="0.2"/>
+                                                    {/* Secondary roads */}
+                                                    <line x1="0" y1="25" x2="200" y2="25" stroke="var(--border-color)" strokeWidth="1.5" opacity="0.2"/>
+                                                    <line x1="0" y1="70" x2="85" y2="70" stroke="var(--border-color)" strokeWidth="1.5" opacity="0.2"/>
+                                                    <line x1="115" y1="70" x2="200" y2="70" stroke="var(--border-color)" strokeWidth="1.5" opacity="0.2"/>
+                                                    <line x1="50" y1="0" x2="50" y2="120" stroke="var(--border-color)" strokeWidth="1.5" opacity="0.2"/>
+                                                    <line x1="150" y1="0" x2="150" y2="75" stroke="var(--border-color)" strokeWidth="1.5" opacity="0.2"/>
+                                                    {/* Blocks/buildings */}
+                                                    <rect x="110" y="28" width="14" height="10" fill="var(--border-color)" opacity="0.25" rx="1"/>
+                                                    <rect x="20" y="55" width="12" height="10" fill="var(--border-color)" opacity="0.25" rx="1"/>
+                                                </svg>
+                                                <IconMapPin size={32} className={classes.mapPin}/>
                                                 <div className={classes.mapOverlay}>
                                                     <span className={classes.mapOverlayLabel}>
                                                         <IconMaximize/>

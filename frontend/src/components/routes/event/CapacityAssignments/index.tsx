@@ -28,8 +28,10 @@ const CapacityAssignments = () => {
 
     return (
         <PageBody>
-            <PageTitle>
-                {t`Capacity Management`}
+            <PageTitle
+                subheading={t`Prevent overselling by sharing inventory across multiple ticket types.`}
+            >
+                {t`Shared Capacity Management`}
             </PageTitle>
 
             <ToolBar searchComponent={() => (

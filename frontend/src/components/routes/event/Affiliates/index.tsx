@@ -57,7 +57,9 @@ const Affiliates = () => {
 
     return (
         <PageBody>
-            <PageTitle>
+            <PageTitle
+                subheading={t`Create trackable links to reward partners who promote your event.`}
+            >
                 {t`Affiliates`}
             </PageTitle>
 

@@ -43,7 +43,9 @@ export const Products = () => {
 
     return (
         <PageBody>
-            <PageTitle>{t`Tickets & Products`}</PageTitle>
+            <PageTitle
+                subheading={t`Create and configure tickets and merchandise for sale.`}
+            >{t`Tickets & Products`}</PageTitle>
 
             <ToolBar
                 searchComponent={() => (
