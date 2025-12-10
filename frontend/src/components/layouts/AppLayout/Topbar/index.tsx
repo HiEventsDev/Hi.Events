@@ -1,7 +1,6 @@
 import React from "react";
 import {NavLink} from "react-router";
 import {Breadcrumbs, Burger} from '@mantine/core';
-import {IconHome} from "@tabler/icons-react";
 import classes from './Topbar.module.scss';
 import {BreadcrumbItem} from "../types";
 import {GlobalMenu} from "../../../common/GlobalMenu";
@@ -55,8 +54,7 @@ export const Topbar: React.FC<TopbarProps> = ({
 
             <div className={classes.breadcrumbsRow}>
                 <div className={classes.breadcrumbs}>
-                    <IconHome size={16} style={{marginRight: '8px', opacity: 0.6, minWidth: '16px'}}/>
-                    <Breadcrumbs separator={<span style={{margin: '0 0px', color: '#aaa'}}>/</span>}>
+                    <Breadcrumbs separator={<span style={{margin: '0 4px', color: '#aaa'}}>/</span>}>
                         {breadcrumbItems.map((item, index) => (
                             <NavLink key={index} to={item.link ?? '#'}>
                                 {item.content}
