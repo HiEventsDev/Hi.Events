@@ -137,16 +137,12 @@ const OrganizerLayout = () => {
 
     const breadcrumbItems: BreadcrumbItem[] = [
         {
-            link: '/manage/events',
-            content: t`Events`
-        },
-        {
             link: `/manage/organizer/${organizerId}`,
             content: organizer?.name,
         },
         {
             content: (
-                <span 
+                <span
                     className={classes.createEventBreadcrumb}
                     onClick={() => setShowCreateEventModal(true)}
                 >
