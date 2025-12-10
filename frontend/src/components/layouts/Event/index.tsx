@@ -131,23 +131,17 @@ const EventLayout = () => {
     const screenWidth = useWindowWidth();
     const breadcrumbItemsWidth = screenWidth > 1100 ? 60 : 23;
 
-    const breadcrumbItems: BreadcrumbItem[] = [
+    const breadcrumbItems: BreadcrumbItem[] = isEventFetched ? [
         {
-            link: '/manage/events',
-            content: t`Home`
+            link: `/manage/organizer/${event?.organizer?.id}`,
+            content: <Truncate length={breadcrumbItemsWidth} text={event?.organizer?.name} showTooltip={false}/>
         },
-        ...(isEventFetched ? [
-            {
-                link: `/manage/organizer/${event?.organizer?.id}`,
-                content: <Truncate length={breadcrumbItemsWidth} text={event?.organizer?.name} showTooltip={false}/>
-            },
-            {
-                link: `/manage/event/${event?.id}`,
-                content: <Truncate length={breadcrumbItemsWidth} text={event?.title} showTooltip={false}/>
-            }
-        ] : [
-            {link: '#', content: '...'}
-        ])
+        {
+            link: `/manage/event/${event?.id}`,
+            content: <Truncate length={breadcrumbItemsWidth} text={event?.title} showTooltip={false}/>
+        }
+    ] : [
+        {link: '#', content: '...'}
     ];
 
     const handleStatusToggle = () => {
