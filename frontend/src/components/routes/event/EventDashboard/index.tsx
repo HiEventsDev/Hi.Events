@@ -287,6 +287,8 @@ export const EventDashboard = () => {
 
                     <AreaChart
                         h={300}
+                        pl={40}
+                        pr={40}
                         data={eventStats?.daily_stats.map(stat => {
                             return ({
                                 date: formatDateWithLocale(stat.date, 'chartDate', event.timezone),

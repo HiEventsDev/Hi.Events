@@ -3,7 +3,7 @@ import {
     IconBrandStripe,
     IconCalendar,
     IconCalendarPlus,
-    IconChartBar,
+    IconChartPie,
     IconChevronRight,
     IconCreditCard,
     IconDashboard,
@@ -19,7 +19,7 @@ import {t} from "@lingui/macro";
 import {BreadcrumbItem, NavItem} from "../AppLayout/types.ts";
 import AppLayout from "../AppLayout";
 import {NavLink, useLocation, useParams} from "react-router";
-import {Button, Modal, Text, Stack} from "@mantine/core";
+import {Button, Modal, Stack, Text} from "@mantine/core";
 import {useGetOrganizer} from "../../../queries/useGetOrganizer.ts";
 import {useState} from "react";
 import {CreateEventModal} from "../../modals/CreateEventModal";
@@ -48,7 +48,10 @@ const OrganizerLayout = () => {
     const [createModalOpen, {open: openCreateModal, close: closeCreateModal}] = useDisclosure(false);
     const [switchOrganizerModalOpen, {open: openSwitchModal, close: closeSwitchModal}] = useDisclosure(false);
     const [shareModalOpen, {open: openShareModal, close: closeShareModal}] = useDisclosure(false);
-    const [emailVerificationModalOpen, {open: openEmailVerificationModal, close: closeEmailVerificationModal}] = useDisclosure(false);
+    const [emailVerificationModalOpen, {
+        open: openEmailVerificationModal,
+        close: closeEmailVerificationModal
+    }] = useDisclosure(false);
     const {data: organizerResposne} = useGetOrganizers();
     const organizers = organizerResposne?.data;
     const {data: account} = useGetAccount();
@@ -73,7 +76,7 @@ const OrganizerLayout = () => {
         {
             link: 'reports',
             label: t`Reports`,
-            icon: IconChartBar,
+            icon: IconChartPie,
             isActive: (isActive) => isActive || location.pathname.includes('/report/')
         },
 
@@ -146,7 +149,7 @@ const OrganizerLayout = () => {
                     className={classes.createEventBreadcrumb}
                     onClick={() => setShowCreateEventModal(true)}
                 >
-                    <IconCalendarPlus size={16} /> {t`Create Event`}
+                    <IconCalendarPlus size={16}/> {t`Create Event`}
                 </span>
             ),
         }
@@ -195,7 +198,8 @@ const OrganizerLayout = () => {
                             <TopBarButton
                                 onClick={handleStatusToggle}
                                 size="sm"
-                                leftSection={organizer?.status === 'DRAFT' ? <IconEyeOff size={16}/> : <IconEye size={16}/>}
+                                leftSection={organizer?.status === 'DRAFT' ? <IconEyeOff size={16}/> :
+                                    <IconEye size={16}/>}
                                 rightSection={<IconChevronRight size={14}/>}
                             >
                                 {organizer?.status === 'DRAFT'
@@ -276,10 +280,10 @@ const OrganizerLayout = () => {
                     <Text size="sm" c="dimmed">
                         {t`You must verify your email address before you can update the organizer status.`}
                     </Text>
-                    
+
                     {!emailConfirmationResent ? (
-                        <Button 
-                            variant="light" 
+                        <Button
+                            variant="light"
                             onClick={() => {
                                 handleEmailConfirmationResend();
                             }}

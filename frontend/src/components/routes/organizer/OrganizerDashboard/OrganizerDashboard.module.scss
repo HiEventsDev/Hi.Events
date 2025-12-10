@@ -163,8 +163,8 @@
   grid-template-columns: 1fr;
   gap: 3rem;
 
-  @include mixins.respond-above(md) {
-    grid-template-columns: 1fr 2fr;
+  @include mixins.respond-above(lg) {
+    grid-template-columns: minmax(300px, 1fr) 2fr;
     gap: 1.5rem;
     align-items: stretch;
   }
@@ -186,7 +186,7 @@
   order: 2;
 }
 
-@include mixins.respond-above(md) {
+@include mixins.respond-above(lg) {
   .eventsSection {
     order: 2;
   }
