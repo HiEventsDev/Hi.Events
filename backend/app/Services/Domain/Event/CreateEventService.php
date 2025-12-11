@@ -222,6 +222,7 @@ class CreateEventService
 
             'attendee_details_collection_method' => $organizerSettings->getDefaultAttendeeDetailsCollectionMethod(),
             'show_marketing_opt_in' => $organizerSettings->getDefaultShowMarketingOptIn(),
+            'pass_platform_fee_to_buyer' => $organizerSettings->getDefaultPassPlatformFeeToBuyer(),
             'ticket_design_settings' => [
                 'accent_color' => $homepageThemeSettings['accent'] ?? '#333',
             ],

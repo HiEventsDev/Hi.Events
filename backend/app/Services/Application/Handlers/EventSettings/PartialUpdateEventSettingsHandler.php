@@ -127,6 +127,9 @@ class PartialUpdateEventSettingsHandler
                 // Marketing settings
                 'show_marketing_opt_in' => $eventSettingsDTO->settings['show_marketing_opt_in'] ?? $existingSettings->getShowMarketingOptIn(),
 
+                // Platform fee settings
+                'pass_platform_fee_to_buyer' => $eventSettingsDTO->settings['pass_platform_fee_to_buyer'] ?? $existingSettings->getPassPlatformFeeToBuyer(),
+
                 // Homepage theme settings
                 'homepage_theme_settings' => array_key_exists('homepage_theme_settings', $eventSettingsDTO->settings)
                     ? $eventSettingsDTO->settings['homepage_theme_settings']

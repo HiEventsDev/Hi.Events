@@ -52,6 +52,11 @@ class PartialUpdateOrganizerSettingsHandler
                 $organizerSettings->getDefaultShowMarketingOptIn()
             ),
 
+            'default_pass_platform_fee_to_buyer' => $dto->getProvided(
+                'defaultPassPlatformFeeToBuyer',
+                $organizerSettings->getDefaultPassPlatformFeeToBuyer()
+            ),
+
             'social_media_handles' => array_filter([
                 'facebook' => $dto->getProvided('facebookHandle', $organizerSettings->getSocialMediaHandle('facebook')),
                 'instagram' => $dto->getProvided('instagramHandle', $organizerSettings->getSocialMediaHandle('instagram')),

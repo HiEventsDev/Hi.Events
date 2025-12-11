@@ -62,6 +62,7 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     final public const ATTENDEE_DETAILS_COLLECTION_METHOD = 'attendee_details_collection_method';
     final public const SHOW_MARKETING_OPT_IN = 'show_marketing_opt_in';
     final public const HOMEPAGE_THEME_SETTINGS = 'homepage_theme_settings';
+    final public const PASS_PLATFORM_FEE_TO_BUYER = 'pass_platform_fee_to_buyer';
 
     protected int $id;
     protected int $event_id;
@@ -115,6 +116,7 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     protected string $attendee_details_collection_method = 'PER_TICKET';
     protected bool $show_marketing_opt_in = true;
     protected array|string|null $homepage_theme_settings = null;
+    protected bool $pass_platform_fee_to_buyer = false;
 
     public function toArray(): array
     {
@@ -171,6 +173,7 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
                     'attendee_details_collection_method' => $this->attendee_details_collection_method ?? null,
                     'show_marketing_opt_in' => $this->show_marketing_opt_in ?? null,
                     'homepage_theme_settings' => $this->homepage_theme_settings ?? null,
+                    'pass_platform_fee_to_buyer' => $this->pass_platform_fee_to_buyer ?? null,
                 ];
     }
 
@@ -745,5 +748,16 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     public function getHomepageThemeSettings(): array|string|null
     {
         return $this->homepage_theme_settings;
+    }
+
+    public function setPassPlatformFeeToBuyer(bool $pass_platform_fee_to_buyer): self
+    {
+        $this->pass_platform_fee_to_buyer = $pass_platform_fee_to_buyer;
+        return $this;
+    }
+
+    public function getPassPlatformFeeToBuyer(): bool
+    {
+        return $this->pass_platform_fee_to_buyer;
     }
 }
