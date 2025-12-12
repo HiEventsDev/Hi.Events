@@ -25,6 +25,7 @@ class CreateAccountRequest extends BaseRequest
             'currency_code' => [Rule::in(array_values($currencies))],
             'locale' => ['nullable', Rule::in(Locale::getSupportedLocales())],
             'invite_token' => ['nullable', 'string'],
+            'marketing_opt_in' => 'boolean|nullable',
         ];
     }
 }

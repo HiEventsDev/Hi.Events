@@ -10,6 +10,7 @@ export interface UserMeRequest {
     password_confirmation: string;
     password_current: string;
     locale: string;
+    marketing_opt_in?: boolean;
 }
 
 export interface UpdateUserRequest {

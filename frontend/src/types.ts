@@ -36,6 +36,7 @@ export interface AcceptInvitationRequest {
     email: string;
     password: string;
     password_confirmation: string;
+    marketing_opt_in?: boolean;
 }
 
 export interface RegisterAccountRequest extends AcceptInvitationRequest {
@@ -92,6 +93,7 @@ export interface User {
     role?: 'ADMIN' | 'ORGANIZER' | 'SUPERADMIN';
     is_account_owner?: boolean;
     locale?: SupportedLocales;
+    marketing_opted_in_at?: string | null;
 }
 
 export interface Account {

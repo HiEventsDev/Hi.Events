@@ -76,6 +76,7 @@ class CreateAccountHandler
                 'timezone' => $this->getTimezone($accountData),
                 'email_verified_at' => $isSaasMode ? null : now()->toDateTimeString(),
                 'locale' => $accountData->locale,
+                'marketing_opted_in_at' => $accountData->marketing_opt_in ? now()->toDateTimeString() : null,
             ]);
 
             $this->accountUserAssociationService->associate(
