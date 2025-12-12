@@ -23,6 +23,7 @@ abstract class UserDomainObjectAbstract extends \HiEvents\DomainObjects\Abstract
     final public const PENDING_EMAIL = 'pending_email';
     final public const TIMEZONE = 'timezone';
     final public const LOCALE = 'locale';
+    final public const MARKETING_OPTED_IN_AT = 'marketing_opted_in_at';
 
     protected int $id;
     protected string $email;
@@ -37,6 +38,7 @@ abstract class UserDomainObjectAbstract extends \HiEvents\DomainObjects\Abstract
     protected ?string $pending_email = null;
     protected string $timezone;
     protected string $locale = 'en';
+    protected ?string $marketing_opted_in_at = null;
 
     public function toArray(): array
     {
@@ -54,6 +56,7 @@ abstract class UserDomainObjectAbstract extends \HiEvents\DomainObjects\Abstract
                     'pending_email' => $this->pending_email ?? null,
                     'timezone' => $this->timezone ?? null,
                     'locale' => $this->locale ?? null,
+                    'marketing_opted_in_at' => $this->marketing_opted_in_at ?? null,
                 ];
     }
 
@@ -198,5 +201,16 @@ abstract class UserDomainObjectAbstract extends \HiEvents\DomainObjects\Abstract
     public function getLocale(): string
     {
         return $this->locale;
+    }
+
+    public function setMarketingOptedInAt(?string $marketing_opted_in_at): self
+    {
+        $this->marketing_opted_in_at = $marketing_opted_in_at;
+        return $this;
+    }
+
+    public function getMarketingOptedInAt(): ?string
+    {
+        return $this->marketing_opted_in_at;
     }
 }

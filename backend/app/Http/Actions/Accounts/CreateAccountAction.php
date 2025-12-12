@@ -50,6 +50,7 @@ class CreateAccountAction extends BaseAuthAction
                     ? $request->validated('locale')
                     : $this->localeService->getLocaleOrDefault($request->getPreferredLanguage()),
                 'invite_token' => $request->validated('invite_token'),
+                'marketing_opt_in' => (bool) $request->validated('marketing_opt_in'),
             ]));
         } catch (EmailAlreadyExists $e) {
             throw ValidationException::withMessages([

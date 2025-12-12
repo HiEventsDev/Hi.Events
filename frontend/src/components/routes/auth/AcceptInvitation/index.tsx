@@ -1,4 +1,4 @@
-import {Anchor, Button, PasswordInput, Select, Switch, TextInput} from "@mantine/core";
+import {Anchor, Button, Checkbox, PasswordInput, Select, TextInput} from "@mantine/core";
 import {t, Trans} from "@lingui/macro";
 import {timezones} from "../../../../../data/timezones.ts";
 import {useNavigate, useParams} from "react-router";
@@ -24,6 +24,7 @@ const AcceptInvitation = () => {
             timezone: '',
             password_confirmation: '',
             terms: false,
+            marketing_opt_in: true,
         },
         validate: {
             first_name: hasLength({min: 1, max: 50}, t`First name must be between 1 and 50 characters`),
@@ -135,7 +136,7 @@ const AcceptInvitation = () => {
                             />
                         </div>
 
-                        <Switch
+                        <Checkbox
                             {...form.getInputProps('terms', {type: 'checkbox'})}
                             label={(
                                 <Trans>
@@ -148,6 +149,12 @@ const AcceptInvitation = () => {
                                     </Anchor>
                                 </Trans>
                             )}
+                        />
+
+                        <Checkbox
+                            mb="md"
+                            {...form.getInputProps('marketing_opt_in', {type: 'checkbox'})}
+                            label={<Trans>Receive product updates from {getConfig("VITE_APP_NAME", "Hi.Events")}.</Trans>}
                         />
 
                         <Button

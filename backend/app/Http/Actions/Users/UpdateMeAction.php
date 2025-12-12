@@ -36,6 +36,7 @@ class UpdateMeAction extends BaseAction
                 'current_password' => $request->validated('current_password'),
                 'timezone' => $request->validated('timezone'),
                 'locale' => $request->validated('locale'),
+                'marketing_opt_in' => $request->has('marketing_opt_in') ? (bool) $request->validated('marketing_opt_in') : null,
             ]));
 
             return $this->resourceResponse(UserResource::class, $user);

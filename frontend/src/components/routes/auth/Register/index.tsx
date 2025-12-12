@@ -1,4 +1,4 @@
-import {Button, PasswordInput, SimpleGrid, TextInput} from "@mantine/core";
+import {Button, Checkbox, PasswordInput, SimpleGrid, TextInput} from "@mantine/core";
 import {hasLength, isEmail, matchesField, useForm} from "@mantine/form";
 import {RegisterAccountRequest} from "../../../../types.ts";
 import {useFormErrorResponseHandler} from "../../../../hooks/useFormErrorResponseHandler.tsx";
@@ -29,6 +29,7 @@ export const Register = () => {
             locale: getClientLocale(),
             invite_token: '',
             currency_code: getUserCurrency(),
+            marketing_opt_in: true,
         },
         validate: {
             password: hasLength({min: 8}, t`Password must be at least 8 characters`),
@@ -118,6 +119,13 @@ export const Register = () => {
                         {...form.getInputProps('timezone')}
                         type="hidden"
                     />
+
+                    <Checkbox
+                        mb="md"
+                        {...form.getInputProps('marketing_opt_in', {type: 'checkbox'})}
+                        label={<Trans>Receive product updates from {getConfig("VITE_APP_NAME", "Hi.Events")}.</Trans>}
+                    />
+
                     <Button color="secondary.5" type="submit" fullWidth disabled={mutate.isPending}>
                         {mutate.isPending ? t`Working...` : t`Register`}
                     </Button>
