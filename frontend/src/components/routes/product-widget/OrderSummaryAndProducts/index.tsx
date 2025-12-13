@@ -1,8 +1,6 @@
 import {t} from "@lingui/macro";
 import {NavLink, useNavigate, useParams} from "react-router";
 import {ActionIcon, Button, Group, SimpleGrid, Text, Tooltip} from "@mantine/core";
-import {useEffect, useRef} from "react";
-import {trackEvent, AnalyticsEvents} from "../../../../utilites/analytics.ts";
 import {
     IconBuilding,
     IconCalendar,
@@ -319,29 +317,6 @@ export const OrderSummaryAndProducts = () => {
     const {data: order, isFetched: orderIsFetched} = useGetOrderPublic(eventId, orderShortId, ['event']);
     const event = order?.event;
     const navigate = useNavigate();
-    const hasTrackedPurchase = useRef(false);
-
-    useEffect(() => {
-        if (!order || hasTrackedPurchase.current) {
-            return;
-        }
-
-        const totalCents = Math.round((order.total_gross || 0) * 100);
-
-        if (order.status === 'COMPLETED') {
-            hasTrackedPurchase.current = true;
-            if (order.payment_status === 'NO_PAYMENT_REQUIRED' || totalCents === 0) {
-                trackEvent(AnalyticsEvents.PURCHASE_COMPLETED_FREE);
-            } else if (order.payment_status === 'PAYMENT_RECEIVED') {
-                trackEvent(AnalyticsEvents.PURCHASE_COMPLETED_PAID, { value: totalCents });
-            }
-        }
-
-        if (order.status === 'AWAITING_OFFLINE_PAYMENT') {
-            hasTrackedPurchase.current = true;
-            trackEvent(AnalyticsEvents.PURCHASE_COMPLETED_OFFLINE, { value: totalCents });
-        }
-    }, [order?.status, order?.payment_status, order?.total_gross]);
 
     if (!orderIsFetched || !order || !event) {
         return <LoadingMask/>;

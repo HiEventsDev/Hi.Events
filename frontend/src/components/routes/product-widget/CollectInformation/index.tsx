@@ -31,6 +31,7 @@ import {eventCheckoutPath, eventHomepagePath} from "../../../../utilites/urlHelp
 import {showInfo} from "../../../../utilites/notifications.tsx";
 import countries from "../../../../../data/countries.json";
 import classes from "./CollectInformation.module.scss";
+import {trackEvent, AnalyticsEvents} from "../../../../utilites/analytics.ts";
 
 const LoadingSkeleton = () =>
     (
@@ -210,6 +211,9 @@ export const CollectInformation = () => {
 
         onSuccess: (data) => {
             const nextPage = order?.is_payment_required ? 'payment' : 'summary';
+            if (nextPage === 'summary') {
+                trackEvent(AnalyticsEvents.PURCHASE_COMPLETED_FREE);
+            }
             navigate(eventCheckoutPath(eventId, data.data.short_id, nextPage));
         },
 
