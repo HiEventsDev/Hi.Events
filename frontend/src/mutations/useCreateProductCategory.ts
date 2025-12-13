@@ -13,11 +13,6 @@ export const useCreateProductCategory = () => {
         }) => productCategoryClient.create(eventId, productCategoryData),
 
         onSuccess: (_, variables) => {
-            console.log('Product category created successfully', {
-                eventId: variables.eventId,
-                productCategoryData: variables.productCategoryData,
-            });
-
             return queryClient
                 .invalidateQueries({queryKey: [GET_EVENT_PRODUCT_CATEGORIES_QUERY_KEY, variables.eventId]});
         }
