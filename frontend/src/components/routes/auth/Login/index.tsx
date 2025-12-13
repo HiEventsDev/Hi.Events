@@ -1,5 +1,5 @@
 import {Button, PasswordInput, TextInput, Collapse, UnstyledButton} from "@mantine/core";
-import {NavLink} from "react-router";
+import {NavLink, useLocation} from "react-router";
 import {useMutation} from "@tanstack/react-query";
 import {notifications} from '@mantine/notifications';
 import {authClient} from "../../../../api/auth.client.ts";
@@ -15,6 +15,7 @@ import {showError} from "../../../../utilites/notifications.tsx";
 import {IconTicket, IconChevronDown} from "@tabler/icons-react";
 
 const Login = () => {
+    const location = useLocation();
     const form = useForm({
         initialValues: {
             email: '',
@@ -80,7 +81,7 @@ const Login = () => {
                 <p>
                     <Trans>
                         Don't have an account?{' '}
-                        <NavLink to={'/auth/register'}>
+                        <NavLink to={`/auth/register${location.search}`}>
                             Sign up
                         </NavLink>
                     </Trans>
