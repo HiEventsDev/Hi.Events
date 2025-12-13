@@ -29,7 +29,7 @@ export const Register = () => {
             locale: getClientLocale(),
             invite_token: '',
             currency_code: getUserCurrency(),
-            marketing_opt_in: true,
+            marketing_opt_in: false,
         },
         validate: {
             password: hasLength({min: 8}, t`Password must be at least 8 characters`),
