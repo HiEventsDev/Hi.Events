@@ -2,16 +2,17 @@
 
 namespace HiEvents\Services\Domain\Order;
 
+use Brick\Money\Currency as BrickCurrency;
 use HiEvents\DomainObjects\AccountConfigurationDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
-use HiEvents\DomainObjects\OrderDomainObject;
-use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\Helper\Currency;
+use HiEvents\Services\Infrastructure\CurrencyConversion\CurrencyConversionClientInterface;
 use Illuminate\Config\Repository;
-use Illuminate\Support\Collection;
 
 class OrderPlatformFeePassThroughService
 {
+    private const BASE_CURRENCY = 'USD';
+
     public const PLATFORM_FEE_ID = 0;
 
     public static function getPlatformFeeName(): string
@@ -20,8 +21,8 @@ class OrderPlatformFeePassThroughService
     }
 
     public function __construct(
-        private readonly Repository                            $config,
-        private readonly OrderApplicationFeeCalculationService $applicationFeeCalculationService,
+        private readonly Repository                        $config,
+        private readonly CurrencyConversionClientInterface $currencyConversionClient,
     )
     {
     }
@@ -36,66 +37,53 @@ class OrderPlatformFeePassThroughService
     }
 
     /**
-     * Calculate the platform fee for a single product price (quantity = 1).
+     * Calculate platform fee that exactly covers Stripe's application fee.
+     *
+     * Formula: P = (fixed + total * r) / (1 - r)
+     * Where r = percentage rate, P = platform fee
+     *
+     * This ensures: Stripe fee on (total + P) = P
      */
-    public function calculateForProductPrice(
+    public function calculatePlatformFee(
         AccountConfigurationDomainObject $accountConfiguration,
         EventSettingDomainObject         $eventSettings,
-        float                            $priceWithFeesAndTaxes,
+        float                            $total,
+        int                              $quantity,
         string                           $currency,
     ): float
     {
-        if (!$this->isEnabled($eventSettings) || $priceWithFeesAndTaxes <= 0) {
+        if (!$this->isEnabled($eventSettings) || $total <= 0) {
             return 0.0;
         }
 
-        $order = (new OrderDomainObject())
-            ->setCurrency($currency)
-            ->setTotalGross($priceWithFeesAndTaxes);
+        $fixedFee = $this->getConvertedFixedFee($accountConfiguration, $currency);
+        $percentageRate = $accountConfiguration->getPercentageApplicationFee() / 100;
 
-        $orderItem = (new OrderItemDomainObject())
-            ->setPrice($priceWithFeesAndTaxes)
-            ->setQuantity(1)
-            ->setTotalGross($priceWithFeesAndTaxes);
+        if ($percentageRate >= 1) {
+            return Currency::round(($fixedFee * $quantity) + ($total * $percentageRate));
+        }
 
-        $order->setOrderItems(collect([$orderItem]));
+        $totalFixedFee = $fixedFee * $quantity;
+        $platformFee = ($totalFixedFee + ($total * $percentageRate)) / (1 - $percentageRate);
 
-        $result = $this->applicationFeeCalculationService->calculateApplicationFee(
-            $accountConfiguration,
-            $order,
-        );
-
-        return $result ? Currency::round($result->netApplicationFee->toFloat()) : 0.0;
+        return Currency::round($platformFee);
     }
 
-    /**
-     * Calculate the platform fee for an order.
-     *
-     * @param Collection<OrderItemDomainObject> $orderItems
-     */
-    public function calculateForOrder(
+    private function getConvertedFixedFee(
         AccountConfigurationDomainObject $accountConfiguration,
-        EventSettingDomainObject         $eventSettings,
-        Collection                       $orderItems,
-        string                           $currency,
+        string                           $currency
     ): float
     {
-        if (!$this->isEnabled($eventSettings)) {
-            return 0.0;
+        $baseFee = $accountConfiguration->getFixedApplicationFee();
+
+        if ($currency === self::BASE_CURRENCY) {
+            return $baseFee;
         }
 
-        $totalGross = $orderItems->sum(fn(OrderItemDomainObject $item) => $item->getTotalGross());
-
-        $order = (new OrderDomainObject())
-            ->setCurrency($currency)
-            ->setTotalGross($totalGross)
-            ->setOrderItems($orderItems);
-
-        $result = $this->applicationFeeCalculationService->calculateApplicationFee(
-            $accountConfiguration,
-            $order,
-        );
-
-        return $result ? Currency::round($result->netApplicationFee->toFloat()) : 0.0;
+        return $this->currencyConversionClient->convert(
+            fromCurrency: BrickCurrency::of(self::BASE_CURRENCY),
+            toCurrency: BrickCurrency::of($currency),
+            amount: $baseFee
+        )->toFloat();
     }
 }

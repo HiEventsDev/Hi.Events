@@ -26,7 +26,6 @@ export const HomepageAndCheckoutSettings = () => {
             order_timeout_in_minutes: 15,
             attendee_details_collection_method: 'PER_TICKET' as 'PER_TICKET' | 'PER_ORDER',
             show_marketing_opt_in: true,
-            pass_platform_fee_to_buyer: false,
         },
         transformValues: (values) => ({
             ...values,
@@ -59,7 +58,6 @@ export const HomepageAndCheckoutSettings = () => {
                 order_timeout_in_minutes: eventSettingsQuery.data.order_timeout_in_minutes,
                 attendee_details_collection_method: eventSettingsQuery.data.attendee_details_collection_method || 'PER_TICKET',
                 show_marketing_opt_in: eventSettingsQuery.data.show_marketing_opt_in ?? true,
-                pass_platform_fee_to_buyer: eventSettingsQuery.data.pass_platform_fee_to_buyer ?? false,
             });
         }
     }, [eventSettingsQuery.isFetched]);
@@ -128,13 +126,6 @@ export const HomepageAndCheckoutSettings = () => {
                         label={t`Show marketing opt-in checkbox`}
                         description={t`Display a checkbox allowing customers to opt-in to receive marketing communications from this event organizer.`}
                         {...form.getInputProps('show_marketing_opt_in', {type: 'checkbox'})}
-                    />
-
-                    <Switch
-                        mt="md"
-                        label={t`Pass platform fee to buyer`}
-                        description={t`When enabled, the platform fee will be added to the ticket price and paid by the buyer instead of being deducted from your payout.`}
-                        {...form.getInputProps('pass_platform_fee_to_buyer', {type: 'checkbox'})}
                     />
 
                     <Button loading={updateMutation.isPending} type={'submit'}>

@@ -92,13 +92,13 @@ class ProductFilterService
             ->findByEventId($eventId);
 
         $this->accountConfiguration = $account->getConfiguration();
-        $this->eventCurrency = $account->getCurrencyCode();
 
         $event = $this->eventRepository
             ->loadRelation(EventSettingDomainObject::class)
             ->findById($eventId);
 
         $this->eventSettings = $event->getEventSettings();
+        $this->eventCurrency = $event->getCurrency();
     }
 
     private function isHiddenByPromoCode(ProductDomainObject $product, ?PromoCodeDomainObject $promoCode): bool
@@ -147,8 +147,6 @@ class ProductFilterService
             );
         });
 
-        // If there is a capacity assigned to the product, we set the capacity to capacity available qty, or the sum of all
-        // product prices qty, whichever is lower
         $productQuantities->each(function (AvailableProductQuantitiesDTO $quantity) use ($product) {
             if ($quantity->capacities !== null && $quantity->capacities->isNotEmpty() && $quantity->product_id === $product->getId()) {
                 $product->setQuantityAvailable(
@@ -198,7 +196,6 @@ class ProductFilterService
 
     private function processProductPrice(ProductDomainObject $product, ProductPriceDomainObject $price): void
     {
-        // If the product is free of charge, we don't charge service fees or taxes
         if (!$price->isFree()) {
             $taxAndFees = $this->taxCalculationService
                 ->calculateTaxAndFeesForProductPrice($product, $price);
@@ -206,10 +203,10 @@ class ProductFilterService
             $feeTotal = $taxAndFees->feeTotal;
             $taxTotal = $taxAndFees->taxTotal;
 
-            $platformFee = $this->calculatePlatformFeeForPrice($price->getPrice(), $feeTotal, $taxTotal);
-            $feeTotal += $platformFee;
+            $platformFee = $this->calculatePlatformFee($price->getPrice() + $feeTotal + $taxTotal);
 
             if ($platformFee > 0) {
+                $feeTotal += $platformFee;
                 $this->addPlatformFeeToProduct($product);
             }
 
@@ -221,19 +218,18 @@ class ProductFilterService
         $price->setIsAvailable($this->getPriceAvailability($price, $product));
     }
 
-    private function calculatePlatformFeeForPrice(float $basePrice, float $feeTotal, float $taxTotal): float
+    private function calculatePlatformFee(float $total): float
     {
         if ($this->accountConfiguration === null || $this->eventSettings === null) {
             return 0.0;
         }
 
-        $priceWithFeesAndTaxes = $basePrice + $feeTotal + $taxTotal;
-
-        return $this->platformFeeService->calculateForProductPrice(
-            $this->accountConfiguration,
-            $this->eventSettings,
-            $priceWithFeesAndTaxes,
-            $this->eventCurrency,
+        return $this->platformFeeService->calculatePlatformFee(
+            accountConfiguration: $this->accountConfiguration,
+            eventSettings: $this->eventSettings,
+            total: $total,
+            quantity: 1,
+            currency: $this->eventCurrency,
         );
     }
 
@@ -302,13 +298,6 @@ class ProductFilterService
         );
     }
 
-    /**
-     * For non-tiered products, we can inherit the availability of the product.
-     *
-     * @param ProductPriceDomainObject $price
-     * @param ProductDomainObject $product
-     * @return bool
-     */
     private function getPriceAvailability(ProductPriceDomainObject $price, ProductDomainObject $product): bool
     {
         if ($product->isTieredType()) {

@@ -26,6 +26,9 @@ class CreateDefaultOrganizerSettingsService
 
             // Use the "Modern" theme as default
             'homepage_theme_settings' => $defaultTheme->getThemeData(),
+
+            // Platform fee pass-through default from config
+            'default_pass_platform_fee_to_buyer' => config('app.saas_default_pass_platform_fee_to_buyer', false),
         ]);
     }
 }
