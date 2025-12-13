@@ -1,6 +1,6 @@
 import {t} from "@lingui/macro";
 import {Anchor, Button, Grid, Group, NumberInput, SegmentedControl, Stack, Text, Title} from "@mantine/core";
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useState} from "react";
 import {Card} from "../Card";
 import {HeadingWithDescription} from "../Card/CardHeading";
 import {formatCurrency} from "../../../utilites/currency.ts";
@@ -92,8 +92,7 @@ export const PlatformFeesSettings = ({
     feeHandlingDescription,
 }: PlatformFeesSettingsProps) => {
     const [samplePrice, setSamplePrice] = useState<number | string>(50);
-    const [selectedOption, setSelectedOption] = useState<'pass' | 'absorb'>('absorb');
-    const initializedRef = useRef(false);
+    const [selectedOption, setSelectedOption] = useState<'pass' | 'absorb'>(currentValue ? 'pass' : 'absorb');
 
     const feePercentage = configuration?.application_fees?.percentage || 0;
     const fixedFee = configuration?.application_fees?.fixed || 0;
@@ -105,11 +104,10 @@ export const PlatformFeesSettings = ({
         onSave(selectedOption === 'pass');
     };
 
-    // Initialize selected option from currentValue only once after data loads
+    // Sync selected option when currentValue changes (e.g., after data loads)
     useEffect(() => {
-        if (!isLoading && !initializedRef.current) {
+        if (!isLoading) {
             setSelectedOption(currentValue ? 'pass' : 'absorb');
-            initializedRef.current = true;
         }
     }, [isLoading, currentValue]);
 
