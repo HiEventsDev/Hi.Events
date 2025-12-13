@@ -27,6 +27,7 @@ abstract class OrganizerSettingDomainObjectAbstract extends \HiEvents\DomainObje
     final public const LOCATION_DETAILS = 'location_details';
     final public const DEFAULT_ATTENDEE_DETAILS_COLLECTION_METHOD = 'default_attendee_details_collection_method';
     final public const DEFAULT_SHOW_MARKETING_OPT_IN = 'default_show_marketing_opt_in';
+    final public const DEFAULT_PASS_PLATFORM_FEE_TO_BUYER = 'default_pass_platform_fee_to_buyer';
 
     protected int $id;
     protected int $organizer_id;
@@ -45,6 +46,7 @@ abstract class OrganizerSettingDomainObjectAbstract extends \HiEvents\DomainObje
     protected array|string|null $location_details = null;
     protected string $default_attendee_details_collection_method = 'PER_TICKET';
     protected bool $default_show_marketing_opt_in = true;
+    protected bool $default_pass_platform_fee_to_buyer = false;
 
     public function toArray(): array
     {
@@ -66,6 +68,7 @@ abstract class OrganizerSettingDomainObjectAbstract extends \HiEvents\DomainObje
                     'location_details' => $this->location_details ?? null,
                     'default_attendee_details_collection_method' => $this->default_attendee_details_collection_method ?? null,
                     'default_show_marketing_opt_in' => $this->default_show_marketing_opt_in ?? null,
+                    'default_pass_platform_fee_to_buyer' => $this->default_pass_platform_fee_to_buyer ?? null,
                 ];
     }
 
@@ -255,5 +258,16 @@ abstract class OrganizerSettingDomainObjectAbstract extends \HiEvents\DomainObje
     public function getDefaultShowMarketingOptIn(): bool
     {
         return $this->default_show_marketing_opt_in;
+    }
+
+    public function setDefaultPassPlatformFeeToBuyer(bool $default_pass_platform_fee_to_buyer): self
+    {
+        $this->default_pass_platform_fee_to_buyer = $default_pass_platform_fee_to_buyer;
+        return $this;
+    }
+
+    public function getDefaultPassPlatformFeeToBuyer(): bool
+    {
+        return $this->default_pass_platform_fee_to_buyer;
     }
 }

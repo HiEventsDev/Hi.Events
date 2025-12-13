@@ -86,6 +86,9 @@ class UpdateEventSettingsHandler
                     // Marketing settings
                     'show_marketing_opt_in' => $settings->show_marketing_opt_in,
 
+                    // Platform fee settings
+                    'pass_platform_fee_to_buyer' => $settings->pass_platform_fee_to_buyer,
+
                     // Homepage theme settings
                     'homepage_theme_settings' => $settings->homepage_theme_settings,
                 ],

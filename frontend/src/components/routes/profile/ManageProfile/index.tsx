@@ -1,10 +1,10 @@
 import {Card} from "../../../common/Card";
 import {useForm, UseFormReturnType} from "@mantine/form";
 import {useGetMe} from "../../../../queries/useGetMe.ts";
-import {Alert, Button, NativeSelect, PasswordInput, Select, Tabs, TextInput} from "@mantine/core";
+import {Alert, Button, Checkbox, NativeSelect, PasswordInput, Select, Tabs, TextInput} from "@mantine/core";
 import classes from "./ManageProfile.module.scss";
 import {useEffect, useState} from "react";
-import {IconInfoCircle, IconPassword, IconUser} from "@tabler/icons-react";
+import {IconInfoCircle, IconMail, IconPassword, IconUser, IconWorld} from "@tabler/icons-react";
 import {timezones} from "../../../../../data/timezones.ts";
 import {useUpdateMe} from "../../../../mutations/useUpdateMe.ts";
 import {showError, showSuccess} from "../../../../utilites/notifications.tsx";
@@ -14,6 +14,9 @@ import {useFormErrorResponseHandler} from "../../../../hooks/useFormErrorRespons
 import {t, Trans} from "@lingui/macro";
 import {useResendEmailConfirmation} from "../../../../mutations/useResendEmailConfirmation.ts";
 import {localeToFlagEmojiMap, localeToNameMap, SupportedLocales} from "../../../../locales.ts";
+import {Fieldset} from "../../../common/Fieldset";
+import {InputGroup} from "../../../common/InputGroup";
+import {getConfig} from "../../../../utilites/config.ts";
 
 const localeSelectData = Object.keys(localeToNameMap).map(locale => ({
     value: locale,
@@ -34,6 +37,7 @@ export const ManageProfile = () => {
             email: me?.email,
             timezone: me?.timezone,
             locale: me?.locale,
+            marketing_opt_in: me?.marketing_opted_in_at !== null,
         },
     });
 
@@ -52,6 +56,7 @@ export const ManageProfile = () => {
             email: me?.email,
             timezone: me?.timezone,
             locale: me?.locale,
+            marketing_opt_in: me?.marketing_opted_in_at !== null,
         });
     }, [me]);
 
@@ -136,46 +141,76 @@ export const ManageProfile = () => {
                             <form
                                 onSubmit={profileForm.onSubmit((values) => handleProfileFormSubmit(values, profileForm))}>
                                 <fieldset disabled={isFetching}>
-                                    <TextInput required {...profileForm.getInputProps('first_name')}
-                                               label={t`First Name`}/>
-                                    <TextInput required {...profileForm.getInputProps('last_name')}
-                                               label={t`Last Name`}/>
-                                    <TextInput required {...profileForm.getInputProps('email')} label={t`Email`}/>
-                                    {(me && !me.is_email_verified && !emailConfirmationResent) && (
-                                        <Alert variant="light" mb={10}
-                                               title={t`Email not verified`} icon={<IconInfoCircle/>}>
-                                            <p>{t`Please verify your email address to access all features`}</p>
-                                            <Button size={'xs'} onClick={handleEmailConfirmationResend}>
-                                                {resendEmailConfirmationMutation.isPending ? t`Resending...` : t`Resend email confirmation`}
-                                            </Button>
-                                        </Alert>
-                                    )}
+                                    <Fieldset legend={
+                                        <span className={classes.fieldsetLegend}>
+                                            <IconUser size={16}/>
+                                            {t`Personal Information`}
+                                        </span>
+                                    }>
+                                        <InputGroup>
+                                            <TextInput required {...profileForm.getInputProps('first_name')}
+                                                       label={t`First Name`}/>
+                                            <TextInput required {...profileForm.getInputProps('last_name')}
+                                                       label={t`Last Name`}/>
+                                        </InputGroup>
+                                        <TextInput required {...profileForm.getInputProps('email')} label={t`Email`}/>
+                                        {(me && !me.is_email_verified && !emailConfirmationResent) && (
+                                            <Alert variant="light" mt={10}
+                                                   title={t`Email not verified`} icon={<IconInfoCircle/>}>
+                                                <p>{t`Please verify your email address to access all features`}</p>
+                                                <Button size={'xs'} onClick={handleEmailConfirmationResend}>
+                                                    {resendEmailConfirmationMutation.isPending ? t`Resending...` : t`Resend email confirmation`}
+                                                </Button>
+                                            </Alert>
+                                        )}
 
-                                    {emailConfirmationResent && (
-                                        <Alert variant="light" mb={10} color="green"
-                                               title={t`Email confirmation resent`} icon={<IconInfoCircle/>}>
-                                            <p>{t`Please check your email to confirm your email address`}</p>
-                                        </Alert>
-                                    )}
+                                        {emailConfirmationResent && (
+                                            <Alert variant="light" mt={10} color="green"
+                                                   title={t`Email confirmation resent`} icon={<IconInfoCircle/>}>
+                                                <p>{t`Please check your email to confirm your email address`}</p>
+                                            </Alert>
+                                        )}
+                                    </Fieldset>
 
-                                    <Select
-                                        required
-                                        searchable
-                                        data={timezones}
-                                        {...profileForm.getInputProps('timezone')}
-                                        label={t`Timezone`}
-                                        placeholder={t`UTC`}
-                                    />
+                                    <Fieldset mt={20} legend={
+                                        <span className={classes.fieldsetLegend}>
+                                            <IconWorld size={16}/>
+                                            {t`Regional Settings`}
+                                        </span>
+                                    }>
+                                        <InputGroup>
+                                            <Select
+                                                required
+                                                searchable
+                                                data={timezones}
+                                                {...profileForm.getInputProps('timezone')}
+                                                label={t`Timezone`}
+                                                placeholder={t`UTC`}
+                                            />
 
-                                    <NativeSelect
-                                        required
-                                        data={localeSelectData}
-                                        value={profileForm.values.locale || ''}
-                                        onChange={(e) => profileForm.setFieldValue('locale', e.target.value)}
-                                        label={t`Language`}
-                                    />
+                                            <NativeSelect
+                                                required
+                                                data={localeSelectData}
+                                                value={profileForm.values.locale || ''}
+                                                onChange={(e) => profileForm.setFieldValue('locale', e.target.value)}
+                                                label={t`Language`}
+                                            />
+                                        </InputGroup>
+                                    </Fieldset>
 
-                                    <Button fullWidth loading={mutation.isPending}
+                                    <Fieldset mt={20} legend={
+                                        <span className={classes.fieldsetLegend}>
+                                            <IconMail size={16}/>
+                                            {t`Communication Preferences`}
+                                        </span>
+                                    }>
+                                        <Checkbox
+                                            {...profileForm.getInputProps('marketing_opt_in', {type: 'checkbox'})}
+                                            label={<Trans>Receive product updates from {getConfig("VITE_APP_NAME", "Hi.Events")}.</Trans>}
+                                        />
+                                    </Fieldset>
+
+                                    <Button fullWidth loading={mutation.isPending} mt="lg"
                                             type={'submit'}>{t`Update profile`}</Button>
                                 </fieldset>
                             </form>

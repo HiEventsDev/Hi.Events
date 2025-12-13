@@ -50,6 +50,12 @@ readonly class UpdateMeHandler
             }
         }
 
+        if ($updateUserData->marketing_opt_in !== null) {
+            $updateArray['marketing_opted_in_at'] = $updateUserData->marketing_opt_in
+                ? now()->toDateTimeString()
+                : null;
+        }
+
         $this->userRepository->updateWhere(
             attributes: $updateArray,
             where: [

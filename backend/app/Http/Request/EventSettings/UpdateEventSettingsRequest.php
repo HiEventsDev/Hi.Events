@@ -89,6 +89,9 @@ class UpdateEventSettingsRequest extends BaseRequest
             // Marketing settings
             'show_marketing_opt_in' => ['boolean'],
 
+            // Platform fee settings
+            'pass_platform_fee_to_buyer' => ['boolean'],
+
             // Homepage theme settings
             'homepage_theme_settings' => ['nullable', 'array'],
             'homepage_theme_settings.accent' => ['nullable', 'string', ...RulesHelper::HEX_COLOR],

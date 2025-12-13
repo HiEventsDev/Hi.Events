@@ -36,6 +36,7 @@ export interface AcceptInvitationRequest {
     email: string;
     password: string;
     password_confirmation: string;
+    marketing_opt_in?: boolean;
 }
 
 export interface RegisterAccountRequest extends AcceptInvitationRequest {
@@ -92,6 +93,7 @@ export interface User {
     role?: 'ADMIN' | 'ORGANIZER' | 'SUPERADMIN';
     is_account_owner?: boolean;
     locale?: SupportedLocales;
+    marketing_opted_in_at?: string | null;
 }
 
 export interface Account {
@@ -228,6 +230,9 @@ export interface EventSettings {
 
     // Marketing settings
     show_marketing_opt_in?: boolean;
+
+    // Platform fee settings
+    pass_platform_fee_to_buyer?: boolean;
 
     // Simplified homepage theme settings (new 2-color + mode system)
     homepage_theme_settings?: HomepageThemeSettings;
@@ -381,6 +386,7 @@ export interface OrganizerSettings {
     organizer_id: IdParam;
     default_attendee_details_collection_method?: AttendeeDetailsCollectionMethod;
     default_show_marketing_opt_in?: boolean;
+    default_pass_platform_fee_to_buyer?: boolean;
     homepage_visibility: 'PUBLIC' | 'PRIVATE' | 'PASSWORD_PROTECTED';
     homepage_theme_settings: HomepageThemeSettings;
     website_url?: string;

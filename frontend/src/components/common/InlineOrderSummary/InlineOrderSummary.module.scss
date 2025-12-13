@@ -228,6 +228,56 @@
   color: var(--checkout-text-secondary, #6B7280);
 }
 
+.totalsLabelWithInfo {
+  font-size: 14px;
+  color: var(--checkout-text-secondary, #6B7280);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.infoIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--checkout-text-tertiary, #9CA3AF);
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.15s ease, color 0.15s ease;
+
+  &:hover {
+    opacity: 1;
+    color: var(--checkout-text-secondary, #6B7280);
+  }
+}
+
+.breakdownList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.breakdownItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.breakdownName {
+  font-size: 13px;
+  color: var(--mantine-color-dimmed, #6B7280);
+  flex: 1;
+  min-width: 0;
+}
+
+.breakdownValue {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--mantine-color-text, #111827);
+  flex-shrink: 0;
+}
+
 .totalsValue {
   font-size: 14px;
   color: var(--checkout-text-primary, #111827);

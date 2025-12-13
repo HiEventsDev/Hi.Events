@@ -66,6 +66,7 @@ class AcceptInvitationHandler
                 'password' => $this->hasher->make($invitationData->password),
                 'timezone' => $invitationData->timezone,
                 'email_verified_at' => now(),
+                'marketing_opted_in_at' => $invitationData->marketing_opt_in ? now()->toDateTimeString() : null,
             ],
             where: [
                 'id' => $userId,
