@@ -16,60 +16,79 @@ import {
     IconCreditCard,
     IconHome,
     IconMapPin,
+    IconPercentage,
 } from "@tabler/icons-react";
 import {useMediaQuery} from "@mantine/hooks";
-import {useState} from "react";
+import {useMemo, useState} from "react";
 import {Card} from "../../../common/Card";
 import {PaymentAndInvoicingSettings} from "./Sections/PaymentSettings";
+import {PlatformFeesSettings} from "./Sections/PlatformFeesSettings";
+import {useGetAccount} from "../../../../queries/useGetAccount.ts";
 
 export const Settings = () => {
-    const SECTIONS = [
-        {
-            id: 'event-details',
-            label: t`Event Details`,
-            icon: IconBuildingStore,
-            component: EventDetailsForm
-        },
-        {
-            id: 'location-settings',
-            label: t`Location`,
-            icon: IconMapPin,
-            component: LocationSettings
-        },
-        {
-            id: 'homepage-settings',
-            label: t`Checkout`,
-            icon: IconHome,
-            component: HomepageAndCheckoutSettings
-        },
-        {
-            id: 'seo-settings',
-            label: t`SEO`,
-            icon: IconBrandGoogleAnalytics,
-            component: SeoSettings
-        },
-        {
-            id: 'email-settings',
-            label: t`Email & Templates`,
-            icon: IconAt,
-            component: EmailSettings
-        },
-        {
-            id: 'misc-settings',
-            label: t`Miscellaneous`,
-            icon: IconAdjustments,
-            component: MiscSettings
-        },
-        {
-            id: 'payment-settings',
-            label: t`Payment & Invoicing`,
-            icon: IconCreditCard,
-            component: PaymentAndInvoicingSettings,
+    const {data: account} = useGetAccount();
+    const isSaasMode = account?.is_saas_mode_enabled;
+
+    const SECTIONS = useMemo(() => {
+        const baseSections = [
+            {
+                id: 'event-details',
+                label: t`Event Details`,
+                icon: IconBuildingStore,
+                component: EventDetailsForm
+            },
+            {
+                id: 'location-settings',
+                label: t`Location`,
+                icon: IconMapPin,
+                component: LocationSettings
+            },
+            {
+                id: 'homepage-settings',
+                label: t`Checkout`,
+                icon: IconHome,
+                component: HomepageAndCheckoutSettings
+            },
+            {
+                id: 'seo-settings',
+                label: t`SEO`,
+                icon: IconBrandGoogleAnalytics,
+                component: SeoSettings
+            },
+            {
+                id: 'email-settings',
+                label: t`Email & Templates`,
+                icon: IconAt,
+                component: EmailSettings
+            },
+            {
+                id: 'misc-settings',
+                label: t`Miscellaneous`,
+                icon: IconAdjustments,
+                component: MiscSettings
+            },
+            {
+                id: 'payment-settings',
+                label: t`Payment & Invoicing`,
+                icon: IconCreditCard,
+                component: PaymentAndInvoicingSettings,
+            }
+        ];
+
+        if (isSaasMode) {
+            baseSections.splice(baseSections.length - 1, 0, {
+                id: 'platform-fees',
+                label: t`Platform Fees`,
+                icon: IconPercentage,
+                component: PlatformFeesSettings,
+            });
         }
-    ];
+
+        return baseSections;
+    }, [isSaasMode]);
 
     const isLargeScreen = useMediaQuery('(min-width: 1200px)', true);
-    const [activeSection, setActiveSection] = useState(SECTIONS[0].id);
+    const [activeSection, setActiveSection] = useState('event-details');
 
     const handleClick = (sectionId: string) => {
         setActiveSection(sectionId);

@@ -283,6 +283,14 @@ msgstr "Rólunk"
 msgid "About Stripe Connect"
 msgstr "A Stripe Connectről"
 
+#: src/components/common/PlatformFeesSettings/index.tsx:162
+msgid "Absorb fee"
+msgstr "Díj átvállalása"
+
+#: src/components/common/PlatformFeesSettings/index.tsx:199
+msgid "Absorb Fee"
+msgstr "Díj átvállalása"
+
 #: src/components/common/ThemeColorControls/index.tsx:51
 #: src/components/routes/event/TicketDesigner/index.tsx:129
 msgid "Accent Color"
@@ -477,13 +485,17 @@ msgstr "Webhook hozzáadása"
 msgid "Add your social media handles and website URL. These will be displayed on your public organizer page."
 msgstr "Adja hozzá közösségi média hivatkozásait és weboldalának URL-jét. Ezek megjelennek a nyilvános szervezői oldalán."
 
+#: src/components/common/PlatformFeesSettings/index.tsx:227
+msgid "Additional Fees"
+msgstr "További díjak"
+
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:295
 msgid "Additional Information"
 msgstr "További információk"
 
 #: src/components/common/OrderDetails/index.tsx:96
 #: src/components/forms/QuestionForm/index.tsx:130
-#: src/components/routes/organizer/Settings/index.tsx:35
+#: src/components/routes/organizer/Settings/index.tsx:40
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:67
 msgid "Address"
 msgstr "Cím"
@@ -901,7 +913,7 @@ msgstr "Résztvevő e-mail"
 msgid "Attendee Information"
 msgstr "Résztvevő információk"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:116
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:114
 msgid "Attendee information collection"
 msgstr "Résztvevői információk gyűjtése"
 
@@ -1054,7 +1066,7 @@ msgstr "Háttérszín"
 msgid "Background Type"
 msgstr "Háttér típusa"
 
-#: src/components/routes/organizer/Settings/index.tsx:23
+#: src/components/routes/organizer/Settings/index.tsx:28
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:63
 msgid "Basic Information"
 msgstr "Alapvető információk"
@@ -1112,6 +1124,14 @@ msgstr "Gomb felirat"
 #: src/components/routes/event/HomepageDesigner/index.tsx:245
 msgid "Button Text"
 msgstr "Gomb szövege"
+
+#: src/components/common/PlatformFeesSettings/index.tsx:49
+msgid "Buyer pays"
+msgstr "A vevő fizet"
+
+#: src/components/common/PlatformFeesSettings/index.tsx:205
+msgid "Buyers see a clean price. The platform fee is deducted from your payout."
+msgstr "A vevők tiszta árat látnak. A platformdíjat a kifizetésből vonjuk le."
 
 #: src/components/routes/product-widget/CollectInformation/index.tsx:686
 #: src/components/routes/product-widget/Payment/index.tsx:149
@@ -1363,11 +1383,11 @@ msgstr "Jelölőnégyzetek"
 msgid "Checked In"
 msgstr "Bejelentkezve"
 
-#: src/components/routes/event/Settings/index.tsx:41
+#: src/components/routes/event/Settings/index.tsx:48
 msgid "Checkout"
 msgstr "Fizetés"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:84
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:82
 msgid "Checkout Settings"
 msgstr "Fizetési beállítások"
 
@@ -1395,6 +1415,14 @@ msgstr "Válasszon szervezőt"
 #: src/components/common/CalendarOptionsPopover/index.tsx:21
 msgid "Choose calendar"
 msgstr "Naptár kiválasztása"
+
+#: src/components/routes/organizer/Settings/Sections/PlatformFeesSettings/index.tsx:45
+msgid "Choose the default setting for new events. This can be overridden for individual events."
+msgstr "Válassza ki az alapértelmezett beállítást az új eseményekhez. Ez felülírható az egyes eseményeknél."
+
+#: src/components/routes/event/Settings/Sections/PlatformFeesSettings/index.tsx:45
+msgid "Choose who pays the platform fee. This does not affect additional fees you've configured in your account settings."
+msgstr "Válassza ki, ki fizeti a platformdíjat. Ez nem érinti a fiókbeállításokban konfigurált további díjakat."
 
 #: src/components/common/CheckoutQuestion/index.tsx:162
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:134
@@ -1471,8 +1499,8 @@ msgstr "Kollaboráljon csapatával, hogy csodálatos eseményeket hozzanak létr
 msgid "Collapse this product when the event page is initially loaded"
 msgstr "Összecsukja ezt a terméket, amikor az eseményoldal kezdetben betöltődik"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:43
-#: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:33
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:42
+#: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:32
 msgid "Collect attendee details for each ticket purchased."
 msgstr "Résztvevő adatok gyűjtése minden megvásárolt jegyhez."
 
@@ -1602,13 +1630,17 @@ msgstr "Konfiguráció sikeresen frissítve"
 msgid "Configurations"
 msgstr "Konfigurációk"
 
-#: src/components/routes/event/Settings/index.tsx:105
+#: src/components/routes/event/Settings/index.tsx:124
 msgid "Configure event details, location, checkout options, and email notifications."
 msgstr "Esemény részletek, helyszín, pénztári beállítások és e-mail értesítések konfigurálása."
 
 #: src/components/common/QuestionsTable/index.tsx:417
 msgid "Configure how attendee details are collected during checkout"
 msgstr "Állítsa be, hogyan gyűjtse a résztvevők adatait a pénztárnál"
+
+#: src/components/common/PlatformFeesSettings/index.tsx:234
+msgid "Configure Taxes & Fees"
+msgstr "Adók és díjak beállítása"
 
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:35
 msgid "Configured Discount"
@@ -1789,6 +1821,10 @@ msgstr "Folytatás a következő lépésre"
 #: src/components/routes/product-widget/CollectInformation/index.tsx:682
 msgid "Continue to Payment"
 msgstr "Tovább a fizetéshez"
+
+#: src/components/routes/event/Settings/Sections/PlatformFeesSettings/index.tsx:43
+msgid "Control how platform fees are handled for this event"
+msgstr "Szabályozza, hogyan kezelje a platformdíjakat ezen eseménynél"
 
 #: src/components/common/AttendeeTicket/index.tsx:208
 #: src/components/common/CopyButton/index.tsx:13
@@ -2168,7 +2204,7 @@ msgstr "Testreszabhatja az esemény e-mail és értesítési beállításait."
 msgid "Customize the emails sent to your customers using Liquid templating. These templates will be used as defaults for all events in your organization."
 msgstr "Testreszabhatja az ügyfeleknek küldött e-maileket Liquid sablonok használatával. Ezek a sablonok alapértelmezettként lesznek használva a szervezet összes eseményéhez."
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:85
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:83
 msgid "Customize the event homepage and checkout messaging"
 msgstr "Testreszabhatja az esemény honlapját és a fizetési üzeneteket."
 
@@ -2277,9 +2313,13 @@ msgstr "Első nap kapacitás"
 msgid "Default"
 msgstr "Alapértelmezett"
 
-#: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:81
+#: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:79
 msgid "Default attendee information collection"
 msgstr "Alapértelmezett résztvevői információgyűjtés"
+
+#: src/components/routes/organizer/Settings/Sections/PlatformFeesSettings/index.tsx:44
+msgid "Default Fee Handling"
+msgstr "Alapértelmezett díjkezelés"
 
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:213
 msgid "Default template will be used"
@@ -2386,7 +2426,7 @@ msgstr "Kedvezmény típusa"
 msgid "Dismiss this message"
 msgstr "Üzenet elvetése"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:129
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:127
 msgid "Display a checkbox allowing customers to opt-in to receive marketing communications from this event organizer."
 msgstr "Jelölőnégyzet megjelenítése, amely lehetővé teszi az ügyfelek számára, hogy feliratkozzanak a rendezvényszervező marketing kommunikációira."
 
@@ -2657,7 +2697,7 @@ msgstr "E-mail"
 msgid "Email & Notification Settings"
 msgstr "E-mail és értesítési beállítások"
 
-#: src/components/routes/event/Settings/index.tsx:53
+#: src/components/routes/event/Settings/index.tsx:60
 msgid "Email & Templates"
 msgstr "E-mail és sablonok"
 
@@ -2723,7 +2763,7 @@ msgid "Email Preview"
 msgstr "E-mail előnézet"
 
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:336
-#: src/components/routes/organizer/Settings/index.tsx:59
+#: src/components/routes/organizer/Settings/index.tsx:64
 msgid "Email Templates"
 msgstr "E-mail sablonok"
 
@@ -2922,8 +2962,8 @@ msgid "Event Date"
 msgstr "Esemény dátuma"
 
 #: src/components/routes/account/ManageAccount/sections/EventDefaultsSettings/index.tsx:5
-#: src/components/routes/organizer/Settings/index.tsx:29
-#: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:72
+#: src/components/routes/organizer/Settings/index.tsx:34
+#: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:70
 msgid "Event Defaults"
 msgstr "Esemény alapértelmezett beállításai"
 
@@ -2938,7 +2978,7 @@ msgstr "Esemény leírása"
 msgid "Event details"
 msgstr "Esemény részletei"
 
-#: src/components/routes/event/Settings/index.tsx:29
+#: src/components/routes/event/Settings/index.tsx:36
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:68
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:356
 msgid "Event Details"
@@ -2999,7 +3039,7 @@ msgid "Event Page"
 msgstr "Eseményoldal"
 
 #: src/components/layouts/Event/index.tsx:101
-#: src/components/routes/event/Settings/index.tsx:106
+#: src/components/routes/event/Settings/index.tsx:125
 msgid "Event Settings"
 msgstr "Esemény beállítások"
 
@@ -3288,7 +3328,11 @@ msgstr "E-mail ellenőrzése sikertelen"
 msgid "Fee"
 msgstr "Díj"
 
-#: src/components/common/InlineOrderSummary/index.tsx:138
+#: src/components/routes/event/Settings/Sections/PlatformFeesSettings/index.tsx:44
+msgid "Fee Handling"
+msgstr "Díjkezelés"
+
+#: src/components/common/InlineOrderSummary/index.tsx:139
 #: src/components/common/OrdersTable/index.tsx:352
 #: src/components/forms/ProductForm/index.tsx:409
 #: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:54
@@ -3708,7 +3752,7 @@ msgstr "Honlap előnézet"
 msgid "Homer"
 msgstr "Homer"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:122
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:120
 msgid "How many minutes the customer has to complete their order. We recommend at least 15 minutes"
 msgstr "Hány perc áll az ügyfél rendelkezésére a megrendelés befejezéséhez? Legalább 15 percet javaslunk."
 
@@ -4170,7 +4214,7 @@ msgstr "Betöltés..."
 
 #: src/components/common/AttendeeTicket/index.tsx:91
 #: src/components/layouts/EventHomepage/index.tsx:388
-#: src/components/routes/event/Settings/index.tsx:35
+#: src/components/routes/event/Settings/index.tsx:42
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:84
 #: src/components/routes/my-tickets/index.tsx:73
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:227
@@ -4354,7 +4398,7 @@ msgstr "Minimum megrendelésenként"
 msgid "Minimum Price"
 msgstr "Minimális ár"
 
-#: src/components/routes/event/Settings/index.tsx:59
+#: src/components/routes/event/Settings/index.tsx:66
 msgid "Miscellaneous"
 msgstr "Egyéb"
 
@@ -5045,7 +5089,7 @@ msgstr "Megrendelés állapotok"
 msgid "Order Summary"
 msgstr "Megrendelés összefoglaló"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:121
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:119
 msgid "Order timeout"
 msgstr "Megrendelés időtúllépés"
 
@@ -5145,7 +5189,7 @@ msgstr "Szervező neve"
 msgid "Organizer Not Found"
 msgstr "Szervező nem található"
 
-#: src/components/routes/organizer/Settings/index.tsx:98
+#: src/components/routes/organizer/Settings/index.tsx:115
 msgid "Organizer Settings"
 msgstr "Szervezői beállítások"
 
@@ -5235,13 +5279,13 @@ msgstr "Részben visszatérítve"
 msgid "Partially refunded: {0}"
 msgstr "Részben visszatérítve: {0}"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:135
-msgid "Pass platform fee to buyer"
-msgstr "Platform díj áthárítása a vásárlóra\""
+#: src/components/common/PlatformFeesSettings/index.tsx:161
+msgid "Pass fee to buyer"
+msgstr "Díj áthárítása a vevőre"
 
-#: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:94
-msgid "Pass platform fee to buyer by default"
-msgstr "Platform díj alapértelmezetten áthárítása a vásárlóra\""
+#: src/components/common/PlatformFeesSettings/index.tsx:176
+msgid "Pass to Buyer"
+msgstr "Áthárítás a vevőre"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:127
 #: src/components/routes/auth/Login/index.tsx:97
@@ -5311,7 +5355,7 @@ msgstr "Fizessen a feloldáshoz"
 msgid "Payment"
 msgstr "Fizetés"
 
-#: src/components/routes/event/Settings/index.tsx:65
+#: src/components/routes/event/Settings/index.tsx:72
 msgid "Payment & Invoicing"
 msgstr "Fizetés és számlázás"
 
@@ -5390,13 +5434,13 @@ msgstr "A fizetések megszakítás nélkül folytatódnak"
 msgid "Per Attendee"
 msgstr "Résztvevőnként"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:47
-#: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:37
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:46
+#: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:36
 msgid "Per order"
 msgstr "Rendelésenként"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:41
-#: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:31
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:40
+#: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:30
 msgid "Per ticket"
 msgstr "Jegyenként"
 
@@ -5456,7 +5500,20 @@ msgstr "Helyezze ezt a weboldalának <head> részébe."
 msgid "Planning an event?"
 msgstr "Eseményt tervez?"
 
+#: src/components/common/PlatformFeesSettings/index.tsx:43
+#: src/components/common/PlatformFeesSettings/index.tsx:128
+msgid "Platform fee"
+msgstr "Platformdíj"
+
+#: src/components/common/PlatformFeesSettings/index.tsx:59
+msgid "Platform fee of {0} deducted from your payout"
+msgstr "{0} platformdíj levonva a kifizetésből"
+
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:246
+#: src/components/routes/event/Settings/index.tsx:81
+#: src/components/routes/event/Settings/Sections/PlatformFeesSettings/index.tsx:42
+#: src/components/routes/organizer/Settings/index.tsx:73
+#: src/components/routes/organizer/Settings/Sections/PlatformFeesSettings/index.tsx:42
 msgid "Platform Fees"
 msgstr "Platformdíjak"
 
@@ -5572,7 +5629,7 @@ msgstr "Kérjük, várjon, amíg előkészítjük megrendeléseit az exportálá
 msgid "Portuguese"
 msgstr "Portugál"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:97
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:95
 msgid "Post Checkout message"
 msgstr "Fizetés utáni üzenet"
 
@@ -5585,7 +5642,7 @@ msgstr "Pénztár utáni üzenet"
 msgid "Powered by"
 msgstr "Működteti:"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:90
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:88
 msgid "Pre Checkout message"
 msgstr "Fizetés előtti üzenet"
 
@@ -6167,6 +6224,10 @@ msgstr "Értékesítések, rendelések és teljesítménymutatók minden esemén
 msgid "Sales:"
 msgstr "Értékesítések:"
 
+#: src/components/common/PlatformFeesSettings/index.tsx:145
+msgid "Sample ticket price"
+msgstr "Minta jegyár"
+
 #: src/components/routes/event/TicketDesigner/TicketDesignerPrint.tsx:80
 #: src/components/routes/event/TicketDesigner/TicketPreview.tsx:88
 msgid "Sample Venue"
@@ -6177,17 +6238,18 @@ msgstr "Minta helyszín"
 msgid "San Francisco"
 msgstr "San Francisco"
 
+#: src/components/common/PlatformFeesSettings/index.tsx:219
 #: src/components/common/QuestionAndAnswerList/index.tsx:142
 #: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:80
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:129
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:141
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:132
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:166
 #: src/components/routes/event/Settings/Sections/MiscSettings/index.tsx:94
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:265
 #: src/components/routes/event/Settings/Sections/SeoSettings/index.tsx:85
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:116
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:132
-#: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:103
+#: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:94
 #: src/components/routes/organizer/Settings/Sections/SeoSettings/index.tsx:85
 msgid "Save"
 msgstr "Mentés"
@@ -6307,7 +6369,7 @@ msgstr "Másodlagos szín"
 msgid "Secondary Text Color"
 msgstr "Másodlagos szövegszín"
 
-#: src/components/common/InlineOrderSummary/index.tsx:168
+#: src/components/common/InlineOrderSummary/index.tsx:214
 msgid "Secure Checkout"
 msgstr "Biztonságos pénztár"
 
@@ -6445,6 +6507,11 @@ msgstr "Válassza ki, melyik díj konfiguráció vonatkozik erre a fiókra. A d�
 msgid "Select..."
 msgstr "Válasszon..."
 
+#: src/components/common/PlatformFeesSettings/index.tsx:178
+#: src/components/common/PlatformFeesSettings/index.tsx:201
+msgid "Selected"
+msgstr "Kiválasztva"
+
 #: src/components/forms/ProductForm/index.tsx:510
 msgid "Selling fast 🔥"
 msgstr "Gyorsan fogy 🔥"
@@ -6508,8 +6575,8 @@ msgstr "Elküldve a vásárlóknak, amikor rendelést adnak le"
 msgid "Sent to each attendee with their ticket details"
 msgstr "Elküldve minden résztvevőnek a jegy részleteivel"
 
-#: src/components/routes/event/Settings/index.tsx:47
-#: src/components/routes/organizer/Settings/index.tsx:53
+#: src/components/routes/event/Settings/index.tsx:54
+#: src/components/routes/organizer/Settings/index.tsx:58
 msgid "SEO"
 msgstr "Keresőoptimalizálás"
 
@@ -6541,7 +6608,11 @@ msgstr "Szolgáltatási díj"
 msgid "Set a minimum price and let users pay more if they choose"
 msgstr "Adjon meg minimális árat, és hagyja, hogy a felhasználók többet fizessenek, ha úgy döntenek."
 
-#: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:73
+#: src/components/routes/organizer/Settings/Sections/PlatformFeesSettings/index.tsx:43
+msgid "Set default platform fee settings for new events created under this organizer."
+msgstr "Állítsa be az alapértelmezett platformdíj-beállításokat az ezen szervező alatt létrehozott új eseményekhez."
+
+#: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:71
 msgid "Set default settings for new events created under this organizer."
 msgstr "Alapértelmezett beállítások megadása az e szervező alatt létrehozott új eseményekhez."
 
@@ -6624,11 +6695,11 @@ msgstr "Elérhető termékmennyiség megjelenítése"
 msgid "Show fewer platforms"
 msgstr "Kevesebb platform megjelenítése"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:128
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:126
 msgid "Show marketing opt-in checkbox"
 msgstr "Marketing opt-in jelölőnégyzet megjelenítése"
 
-#: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:87
+#: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:85
 msgid "Show marketing opt-in checkbox by default"
 msgstr "Marketing opt-in jelölőnégyzet alapértelmezés szerinti megjelenítése"
 
@@ -6645,11 +6716,11 @@ msgstr "Több platform megjelenítése"
 msgid "Show tax and fees separately"
 msgstr "Adó és díjak külön megjelenítése"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:102
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:100
 msgid "Shown to the customer after they checkout, on the order summary page."
 msgstr "Az ügyfélnek a fizetés után, a rendelésösszegző oldalon jelenik meg."
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:92
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:90
 msgid "Shown to the customer before they checkout"
 msgstr "Az ügyfélnek a fizetés előtt jelenik meg."
 
@@ -6683,7 +6754,7 @@ msgstr "Snapchat"
 msgid "Social"
 msgstr "Közösségi"
 
-#: src/components/routes/organizer/Settings/index.tsx:47
+#: src/components/routes/organizer/Settings/index.tsx:52
 msgid "Social Links"
 msgstr "Közösségi linkek"
 
@@ -6925,7 +6996,7 @@ msgstr "E-mail beállítások sikeresen frissítve"
 msgid "Successfully Updated Event"
 msgstr "Esemény sikeresen frissítve"
 
-#: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:61
+#: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:59
 msgid "Successfully Updated Event Defaults"
 msgstr "Esemény alapértelmezések sikeresen frissítve"
 
@@ -6934,7 +7005,7 @@ msgstr "Esemény alapértelmezések sikeresen frissítve"
 msgid "Successfully Updated Homepage Design"
 msgstr "Honlapterv sikeresen frissítve"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:73
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:71
 msgid "Successfully Updated Homepage Settings"
 msgstr "Honlapbeállítások sikeresen frissítve"
 
@@ -6957,6 +7028,14 @@ msgstr "Szervező sikeresen frissítve"
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:74
 msgid "Successfully Updated Payment & Invoicing Settings"
 msgstr "Fizetési és számlázási beállítások sikeresen frissítve"
+
+#: src/components/routes/organizer/Settings/Sections/PlatformFeesSettings/index.tsx:29
+msgid "Successfully Updated Platform Fee Defaults"
+msgstr "Platformdíj alapértékek sikeresen frissítve"
+
+#: src/components/routes/event/Settings/Sections/PlatformFeesSettings/index.tsx:29
+msgid "Successfully Updated Platform Fee Settings"
+msgstr "Platformdíj beállítások sikeresen frissítve"
 
 #: src/components/modals/EditProductModal/index.tsx:93
 msgid "Successfully updated product"
@@ -7067,7 +7146,7 @@ msgstr "Adó vagy díj sikeresen törölve"
 msgid "Tax Summary"
 msgstr "Adó összefoglaló"
 
-#: src/components/common/InlineOrderSummary/index.tsx:148
+#: src/components/common/InlineOrderSummary/index.tsx:172
 #: src/components/forms/ProductForm/index.tsx:406
 #: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:48
 msgid "Taxes"
@@ -7222,6 +7301,10 @@ msgstr "A keresett szervező nem található. Lehet, hogy az oldalt áthelyezté
 msgid "The page you are looking for does not exist"
 msgstr "A keresett oldal nem létezik."
 
+#: src/components/common/PlatformFeesSettings/index.tsx:182
+msgid "The platform fee is added to the ticket price. Buyers pay more, but you receive the full ticket price."
+msgstr "A platformdíj hozzáadódik a jegyárhoz. A vevők többet fizetnek, de Ön megkapja a teljes jegyárat."
+
 #: src/components/routes/event/Settings/Sections/MiscSettings/index.tsx:56
 msgid "The price displayed to the customer will include taxes and fees."
 msgstr "Az ügyfélnek megjelenő ár tartalmazza az adókat és díjakat."
@@ -7365,7 +7448,7 @@ msgstr "Ez a link érvénytelen vagy lejárt."
 msgid "This message will be included in the footer of all emails sent from this event"
 msgstr "Ez az üzenet szerepelni fog az eseményről küldött összes e-mail láblécében."
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:105
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:103
 msgid "This message will only be shown if order is completed successfully. Orders awaiting payment will not show this message"
 msgstr "Ez az üzenet csak akkor jelenik meg, ha a megrendelés sikeresen befejeződött. A fizetésre váró megrendelések nem jelenítik meg ezt az üzenetet."
 
@@ -7528,6 +7611,10 @@ msgstr "Jegy vagy termék"
 msgid "Ticket Preview for"
 msgstr "Jegy előnézet ehhez:"
 
+#: src/components/common/PlatformFeesSettings/index.tsx:38
+msgid "Ticket price"
+msgstr "Jegyár"
+
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:59
 msgid "Ticket Price"
 msgstr "Jegy ára"
@@ -7630,7 +7717,7 @@ msgid "Tools"
 msgstr "Eszközök"
 
 #: src/components/common/AdminOrdersTable/index.tsx:78
-#: src/components/common/InlineOrderSummary/index.tsx:156
+#: src/components/common/InlineOrderSummary/index.tsx:202
 #: src/components/common/OrderSummary/index.tsx:92
 msgid "Total"
 msgstr "Összesen"
@@ -7925,8 +8012,8 @@ msgstr "Használja a borítókép elmosódott változatát háttérként."
 msgid "Use cover image"
 msgstr "Borítókép használata"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:49
-#: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:39
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:48
+#: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:38
 msgid "Use order details for all attendees. Attendee names and emails will match the buyer's information."
 msgstr "Rendelési adatok használata minden résztvevőhöz. A résztvevők nevei és e-mail címei meg fognak egyezni a vásárló információival."
 
@@ -8444,17 +8531,9 @@ msgstr "Amikor az ügyfelek jegyeket vásárolnak, megrendeléseik itt fognak me
 msgid "When enabled, invoices will be generated for ticket orders. Invoices will sent along with the order confirmation email. Attendees can also download their invoices from the order confirmation page."
 msgstr "Ha engedélyezve van, számlák készülnek a jegyrendelésekről. A számlákat a rendelés visszaigazoló e-maillel együtt küldjük el. A résztvevők a rendelés visszaigazoló oldaláról is letölthetik számláikat."
 
-#: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:88
+#: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:86
 msgid "When enabled, new events will display a marketing opt-in checkbox during checkout. This can be overridden per event."
 msgstr "Ha engedélyezve van, az új események marketing opt-in jelölőnégyzetet jelenítenek meg a fizetés során. Ez eseményenként felülírható."
-
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:136
-msgid "When enabled, the platform fee will be added to the ticket price and paid by the buyer instead of being deducted from your payout."
-msgstr "Ha engedélyezve van, a platform díj hozzáadódik a jegy árához és a vásárló fizeti, ahelyett hogy levonásra kerülne a kifizetésből.\""
-
-#: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:95
-msgid "When enabled, the platform fee will be added to the ticket price and paid by the buyer instead of being deducted from your payout. This can be overridden per event."
-msgstr "Ha engedélyezve van, a platform díj hozzáadódik a jegy árához és a vásárló fizeti, ahelyett hogy levonásra kerülne a kifizetésből. Ez eseményenként felülírható.\""
 
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:141
 msgid "When offline payments are enabled, users will be able to complete their orders and receive their tickets. Their tickets will clearly indicate the order is not paid, and the check-in tool will notify the check-in staff if an order requires payment."
@@ -8558,6 +8637,10 @@ msgstr "Részleges visszatérítést bocsát ki. A vásárló {0} {1} összeget 
 msgid "You are offline"
 msgstr "Offline állapotban van."
 
+#: src/components/common/PlatformFeesSettings/index.tsx:229
+msgid "You can configure additional service fees and taxes in your account settings."
+msgstr "További szolgáltatási díjakat és adókat konfigurálhat a fiókbeállításokban."
+
 #: src/components/forms/ProductForm/index.tsx:479
 msgid "You can create a promo code which targets this product on the"
 msgstr "Létrehozhat egy promóciós kódot, amely ezt a terméket célozza meg a"
@@ -8642,6 +8725,10 @@ msgstr "Ellenőriznie kell fiókja e-mail címét, mielőtt üzeneteket küldhet
 #: src/components/layouts/AuthLayout/index.tsx:61
 msgid "You own 100% of your attendee data, always"
 msgstr "Mindig Ön birtokolja a résztvevői adatok 100%-át"
+
+#: src/components/common/PlatformFeesSettings/index.tsx:53
+msgid "You receive"
+msgstr "Ön kap"
 
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:143
 msgid "You will have to mark an order as paid manually. This can be done on the manage order page."
@@ -8768,7 +8855,7 @@ msgstr "Az Ön jelszava"
 msgid "Your payment is processing."
 msgstr "Fizetése feldolgozás alatt áll."
 
-#: src/components/common/InlineOrderSummary/index.tsx:170
+#: src/components/common/InlineOrderSummary/index.tsx:216
 msgid "Your payment is protected with bank-level encryption"
 msgstr "A fizetése banki szintű titkosítással védett"
 
@@ -8779,6 +8866,10 @@ msgstr "Fizetése sikertelen volt, kérjük, próbálja újra."
 #: src/components/forms/StripeCheckoutForm/index.tsx:130
 msgid "Your payment was unsuccessful. Please try again."
 msgstr "Fizetése sikertelen volt. Kérjük, próbálja újra."
+
+#: src/components/common/PlatformFeesSettings/index.tsx:124
+msgid "Your Plan"
+msgstr "Az Ön csomagja"
 
 #: src/components/modals/RefundOrderModal/index.tsx:58
 msgid "Your refund is processing."
