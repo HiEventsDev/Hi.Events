@@ -8,7 +8,7 @@ import {Anchor, Button, Grid, Group, Text, ThemeIcon, Title} from "@mantine/core
 import {Account, StripeConnectAccountsResponse} from "../../../../../../types.ts";
 import paymentClasses from "./PaymentSettings.module.scss";
 import classes from "../../ManageAccount.module.scss";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {IconAlertCircle, IconBrandStripe, IconCheck, IconExternalLink, IconInfoCircle} from '@tabler/icons-react';
 import {Card} from "../../../../../common/Card";
 import {formatCurrency} from "../../../../../../utilites/currency.ts";
@@ -19,6 +19,7 @@ import {VatSettings} from './VatSettings';
 import {VatSettingsModal} from './VatSettings/VatSettingsModal.tsx';
 import {VatNotice, getVatInfo} from './VatNotice';
 import {useGetAccountVatSetting} from '../../../../../../queries/useGetAccountVatSetting.ts';
+import {trackEvent, AnalyticsEvents} from "../../../../../../utilites/analytics.ts";
 
 interface FeePlanDisplayProps {
     configuration?: {
@@ -725,6 +726,27 @@ const PaymentSettings = () => {
 
     const [showVatModal, setShowVatModal] = useState(false);
     const [hasCheckedVatModal, setHasCheckedVatModal] = useState(false);
+    const hasTrackedStripeConnection = useRef(false);
+
+    // Track Stripe connection when user returns with completed setup
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+        if (hasTrackedStripeConnection.current) return;
+        if (!stripeAccountsQuery.data) return;
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const isReturn = urlParams.get('is_return') === '1';
+        if (!isReturn) return;
+
+        const completedAccount = stripeAccountsQuery.data.stripe_connect_accounts.find(
+            acc => acc.is_setup_complete
+        );
+
+        if (completedAccount) {
+            hasTrackedStripeConnection.current = true;
+            trackEvent(AnalyticsEvents.STRIPE_CONNECTED);
+        }
+    }, [stripeAccountsQuery.data]);
 
     // Check if user is returning from Stripe and needs to fill VAT info
     // Only for Hi.Events Cloud - open-source doesn't have VAT handling

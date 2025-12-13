@@ -15,6 +15,7 @@ import {getProductsFromEvent} from "../../../../utilites/helpers.ts";
 import {useEffect, useState} from 'react';
 import ConfettiAnimation from "./ConfettiAnimaiton";
 import {Browser, useBrowser} from "../../../../hooks/useGetBrowser.ts";
+import {trackEvent, AnalyticsEvents} from "../../../../utilites/analytics.ts";
 
 const GettingStarted = () => {
     const {eventId} = useParams();
@@ -52,11 +53,15 @@ const GettingStarted = () => {
     const statusToggleMutation = useUpdateEventStatus();
 
     const handleStatusToggle = () => {
+        const newStatus = event?.status === 'LIVE' ? 'DRAFT' : 'LIVE';
         statusToggleMutation.mutate({
             eventId,
-            status: event?.status === 'LIVE' ? 'DRAFT' : 'LIVE'
+            status: newStatus
         }, {
             onSuccess: () => {
+                if (newStatus === 'LIVE') {
+                    trackEvent(AnalyticsEvents.EVENT_PUBLISHED);
+                }
                 showSuccess(t`Event status updated`);
             },
             onError: (error: any) => {
