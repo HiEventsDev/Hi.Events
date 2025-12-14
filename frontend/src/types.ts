@@ -41,6 +41,16 @@ export interface AcceptInvitationRequest {
 
 export interface RegisterAccountRequest extends AcceptInvitationRequest {
     locale: SupportedLocales;
+    utm_source?: string | null;
+    utm_medium?: string | null;
+    utm_campaign?: string | null;
+    utm_term?: string | null;
+    utm_content?: string | null;
+    referrer_url?: string | null;
+    landing_page?: string | null;
+    gclid?: string | null;
+    fbclid?: string | null;
+    utm_raw?: Record<string, string> | null;
 }
 
 export interface ResetPasswordRequest {

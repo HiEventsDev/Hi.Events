@@ -51,6 +51,16 @@ class CreateAccountAction extends BaseAuthAction
                     : $this->localeService->getLocaleOrDefault($request->getPreferredLanguage()),
                 'invite_token' => $request->validated('invite_token'),
                 'marketing_opt_in' => (bool) $request->validated('marketing_opt_in'),
+                'utm_source' => $request->validated('utm_source'),
+                'utm_medium' => $request->validated('utm_medium'),
+                'utm_campaign' => $request->validated('utm_campaign'),
+                'utm_term' => $request->validated('utm_term'),
+                'utm_content' => $request->validated('utm_content'),
+                'referrer_url' => $request->validated('referrer_url'),
+                'landing_page' => $request->validated('landing_page'),
+                'gclid' => $request->validated('gclid'),
+                'fbclid' => $request->validated('fbclid'),
+                'utm_raw' => $request->validated('utm_raw'),
             ]));
         } catch (EmailAlreadyExists $e) {
             throw ValidationException::withMessages([

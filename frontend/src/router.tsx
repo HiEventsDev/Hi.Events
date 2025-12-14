@@ -187,6 +187,13 @@ export const router: RouteObject[] = [
                 }
             },
             {
+                path: "attribution",
+                async lazy() {
+                    const Attribution = await import("./components/routes/admin/Attribution");
+                    return {Component: Attribution.default};
+                }
+            },
+            {
                 path: "configurations",
                 async lazy() {
                     const Configurations = await import("./components/routes/admin/Configurations");
