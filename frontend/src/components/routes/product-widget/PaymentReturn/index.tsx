@@ -1,6 +1,6 @@
 import {usePollGetOrderPublic} from "../../../../queries/usePollGetOrderPublic.ts";
 import {useNavigate, useParams} from "react-router";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import classes from './PaymentReturn.module.scss';
 import {t} from "@lingui/macro";
 import {useGetOrderStripePaymentIntentPublic} from "../../../../queries/useGetOrderStripePaymentIntentPublic.ts";
@@ -8,6 +8,7 @@ import {CheckoutContent} from "../../../layouts/Checkout/CheckoutContent";
 import {eventCheckoutPath} from "../../../../utilites/urlHelper.ts";
 import {HomepageInfoMessage} from "../../../common/HomepageInfoMessage";
 import {isSsr} from "../../../../utilites/helpers.ts";
+import {trackEvent, AnalyticsEvents} from "../../../../utilites/analytics.ts";
 
 /**
  * This component is responsible for handling the return from the payment provider.
@@ -24,6 +25,7 @@ export const PaymentReturn = () => {
     const [attemptManualConfirmation, setAttemptManualConfirmation] = useState(false);
     const paymentIntentQuery = useGetOrderStripePaymentIntentPublic(eventId, orderShortId, attemptManualConfirmation);
     const [cannotConfirmPayment, setCannotConfirmPayment] = useState(false);
+    const hasTrackedPurchase = useRef(false);
 
     useEffect(
         () => {
@@ -44,6 +46,11 @@ export const PaymentReturn = () => {
             return;
         }
         if (paymentIntentQuery.data?.status === 'succeeded') {
+            if (!hasTrackedPurchase.current && order) {
+                hasTrackedPurchase.current = true;
+                const totalCents = Math.round((order.total_gross || 0) * 100);
+                trackEvent(AnalyticsEvents.PURCHASE_COMPLETED_PAID, { value: totalCents });
+            }
             navigate(eventCheckoutPath(eventId, orderShortId, 'summary'));
         } else {
             // At this point we've tried multiple times to confirm the payment and failed.
@@ -59,6 +66,11 @@ export const PaymentReturn = () => {
         }
 
         if (order?.status === 'COMPLETED') {
+            if (!hasTrackedPurchase.current) {
+                hasTrackedPurchase.current = true;
+                const totalCents = Math.round((order.total_gross || 0) * 100);
+                trackEvent(AnalyticsEvents.PURCHASE_COMPLETED_PAID, { value: totalCents });
+            }
             navigate(eventCheckoutPath(eventId, orderShortId, 'summary'));
         }
         if (order?.payment_status === 'PAYMENT_FAILED' || (typeof window !== 'undefined' && window?.location.search.includes('failed'))) {

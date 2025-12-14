@@ -18,6 +18,7 @@ import {InlineOrderSummary} from "../../../common/InlineOrderSummary";
 import {showError} from "../../../../utilites/notifications.tsx";
 import {getConfig} from "../../../../utilites/config.ts";
 import classes from "./Payment.module.scss";
+import {trackEvent, AnalyticsEvents} from "../../../../utilites/analytics.ts";
 
 const Payment = () => {
     const navigate = useNavigate();
@@ -67,6 +68,8 @@ const Payment = () => {
                 orderShortId
             }, {
                 onSuccess: () => {
+                    const totalCents = Math.round((order?.total_gross || 0) * 100);
+                    trackEvent(AnalyticsEvents.PURCHASE_COMPLETED_OFFLINE, { value: totalCents });
                     navigate(`/checkout/${eventId}/${orderShortId}/summary`);
                 },
                 onError: (error: any) => {

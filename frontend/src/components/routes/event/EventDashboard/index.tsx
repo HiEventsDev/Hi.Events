@@ -22,6 +22,7 @@ import {useEffect, useState} from 'react';
 import {StripePlatform} from "../../../../types.ts";
 import {isHiEvents} from "../../../../utilites/helpers.ts";
 import {StripeConnectButton} from "../../../common/StripeConnectButton";
+import {trackEvent, AnalyticsEvents} from "../../../../utilites/analytics.ts";
 
 export const DashBoardSkeleton = () => {
     return (
@@ -67,6 +68,7 @@ export const EventDashboard = () => {
     };
 
     const handleStatusToggle = () => {
+        const newStatus = event?.status === 'LIVE' ? 'DRAFT' : 'LIVE';
         const message = event?.status === 'LIVE'
             ? t`Are you sure you want to make this event draft? This will make the event invisible to the public`
             : t`Are you sure you want to make this event public? This will make the event visible to the public`;
@@ -74,9 +76,12 @@ export const EventDashboard = () => {
         confirmationDialog(message, () => {
             statusToggleMutation.mutate({
                 eventId,
-                status: event?.status === 'LIVE' ? 'DRAFT' : 'LIVE'
+                status: newStatus
             }, {
                 onSuccess: () => {
+                    if (newStatus === 'LIVE') {
+                        trackEvent(AnalyticsEvents.EVENT_PUBLISHED);
+                    }
                     showSuccess(t`Event status updated`);
                 },
                 onError: (error: any) => {

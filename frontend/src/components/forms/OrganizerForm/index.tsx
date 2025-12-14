@@ -12,6 +12,7 @@ import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHa
 import {useGetMe} from "../../../queries/useGetMe.ts";
 import {IconBuilding} from "@tabler/icons-react";
 import classes from "../../routes/welcome/Welcome.module.scss";
+import {trackEvent, AnalyticsEvents} from "../../../utilites/analytics.ts";
 
 interface OrganizerFormProps {
     onSuccess?: (organizer: Organizer) => void;
@@ -82,6 +83,7 @@ export const OrganizerCreateForm = ({onSuccess, onCancel}: OrganizerFormProps) =
             organizerData: values,
         }, {
             onSuccess: ({data: organizer}) => {
+                trackEvent(AnalyticsEvents.ORGANIZER_CREATED);
                 if (onSuccess) {
                     onSuccess(organizer);
                 }

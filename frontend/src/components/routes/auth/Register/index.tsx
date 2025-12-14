@@ -29,7 +29,7 @@ export const Register = () => {
             locale: getClientLocale(),
             invite_token: '',
             currency_code: getUserCurrency(),
-            marketing_opt_in: true,
+            marketing_opt_in: false,
         },
         validate: {
             password: hasLength({min: 8}, t`Password must be at least 8 characters`),
@@ -43,7 +43,7 @@ export const Register = () => {
     const registerUser = (data: RegisterAccountRequest) => {
         mutate.mutate({registerData: data}, {
             onSuccess: () => {
-                navigate('/welcome');
+                navigate(`/welcome${location.search}`);
             },
             onError: (error: any) => {
                 errorHandler(form, error, error.response?.data?.message);
@@ -67,7 +67,7 @@ export const Register = () => {
                 <p>
                     <Trans>
                         Already have an account?{' '}
-                        <NavLink to={'/auth/login'}>
+                        <NavLink to={`/auth/login${location.search}`}>
                             {t`Log in`}
                         </NavLink>
                     </Trans>

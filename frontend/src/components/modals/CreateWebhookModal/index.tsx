@@ -37,7 +37,6 @@ export const CreateWebhookModal = ({onClose}: GenericModalProps) => {
     const createMutation = useCreateWebhook();
 
     const handleSubmit = (requestData: WebhookRequest) => {
-        console.log(eventId, requestData);
         createMutation.mutate({
             eventId: eventId as IdParam,
             webhook: requestData
