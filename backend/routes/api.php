@@ -167,6 +167,7 @@ use HiEvents\Http\Actions\Admin\Configurations\UpdateConfigurationAction;
 use HiEvents\Http\Actions\Admin\Events\GetAllEventsAction as GetAllAdminEventsAction;
 use HiEvents\Http\Actions\Admin\Events\GetUpcomingEventsAction;
 use HiEvents\Http\Actions\Admin\Orders\GetAllOrdersAction;
+use HiEvents\Http\Actions\Admin\Attribution\GetUtmAttributionStatsAction;
 use HiEvents\Http\Actions\Admin\Stats\GetAdminStatsAction;
 use HiEvents\Http\Actions\Admin\Users\GetAllUsersAction;
 use HiEvents\Http\Actions\Admin\Users\StartImpersonationAction;
@@ -394,6 +395,7 @@ $router->middleware(['auth:api'])->group(
 $router->prefix('/admin')->middleware(['auth:api'])->group(
     function (Router $router): void {
         $router->get('/stats', GetAdminStatsAction::class);
+        $router->get('/attribution/stats', GetUtmAttributionStatsAction::class);
         $router->get('/accounts', GetAllAdminAccountsAction::class);
         $router->get('/accounts/{account_id}', GetAdminAccountAction::class);
         $router->put('/accounts/{account_id}/vat-settings', UpdateAdminAccountVatSettingAction::class);

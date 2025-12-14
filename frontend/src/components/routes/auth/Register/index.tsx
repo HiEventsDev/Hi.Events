@@ -10,6 +10,7 @@ import {getClientLocale} from "../../../../locales.ts";
 import {useEffect} from "react";
 import {getUserCurrency} from "../../../../utilites/currency.ts";
 import {getConfig} from "../../../../utilites/config.ts";
+import {captureUtmData, getStoredUtmData, clearStoredUtmData} from "../../../../utilites/utm.ts";
 
 export const Register = () => {
     const navigate = useNavigate();
@@ -41,8 +42,12 @@ export const Register = () => {
     const mutate = useRegisterAccount();
 
     const registerUser = (data: RegisterAccountRequest) => {
-        mutate.mutate({registerData: data}, {
+        const utmData = getStoredUtmData();
+        const registrationData = utmData ? {...data, ...utmData} : data;
+
+        mutate.mutate({registerData: registrationData}, {
             onSuccess: () => {
+                clearStoredUtmData();
                 navigate(`/welcome${location.search}`);
             },
             onError: (error: any) => {
@@ -52,6 +57,8 @@ export const Register = () => {
     }
 
     useEffect(() => {
+        captureUtmData();
+
         const searchParams = new URLSearchParams(location.search);
         const token = searchParams.get('invite_token');
 
