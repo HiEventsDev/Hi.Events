@@ -9,6 +9,7 @@ import {EventNotAvailable} from "./EventNotAvailable";
 import {
     IconArrowUpRight,
     IconCalendar,
+    IconCalendarOff,
     IconCalendarPlus,
     IconExternalLink,
     IconMail,
@@ -36,6 +37,7 @@ import {removeTransparency} from "../../../utilites/colorHelper.ts";
 import {ShareComponent} from "../../common/ShareIcon";
 import {EventDateRange} from "../../common/EventDateRange";
 import {CalendarOptionsPopover} from "../../common/CalendarOptionsPopover";
+import {isDateInPast} from "../../../utilites/dates.ts";
 
 interface EventHomepageProps {
     event?: Event;
@@ -321,6 +323,18 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                                                 </button>
                                             </CalendarOptionsPopover>
                                         </div>
+
+                                        {/* Event Ended */}
+                                        {event.end_date && isDateInPast(event.end_date) && (
+                                            <div className={classes.metaItem}>
+                                                <div className={classes.metaIconBox}>
+                                                    <IconCalendarOff/>
+                                                </div>
+                                                <div className={classes.metaContent}>
+                                                    <div className={classes.metaPrimary}>{t`This event has ended`}</div>
+                                                </div>
+                                            </div>
+                                        )}
 
                                         {/* Online Event */}
                                         {isOnlineEvent && (
