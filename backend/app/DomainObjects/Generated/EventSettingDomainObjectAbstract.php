@@ -63,6 +63,7 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     final public const SHOW_MARKETING_OPT_IN = 'show_marketing_opt_in';
     final public const HOMEPAGE_THEME_SETTINGS = 'homepage_theme_settings';
     final public const PASS_PLATFORM_FEE_TO_BUYER = 'pass_platform_fee_to_buyer';
+    final public const ALLOW_ATTENDEE_SELF_EDIT = 'allow_attendee_self_edit';
 
     protected int $id;
     protected int $event_id;
@@ -117,6 +118,7 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     protected bool $show_marketing_opt_in = true;
     protected array|string|null $homepage_theme_settings = null;
     protected bool $pass_platform_fee_to_buyer = false;
+    protected bool $allow_attendee_self_edit = true;
 
     public function toArray(): array
     {
@@ -174,6 +176,7 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
                     'show_marketing_opt_in' => $this->show_marketing_opt_in ?? null,
                     'homepage_theme_settings' => $this->homepage_theme_settings ?? null,
                     'pass_platform_fee_to_buyer' => $this->pass_platform_fee_to_buyer ?? null,
+                    'allow_attendee_self_edit' => $this->allow_attendee_self_edit ?? null,
                 ];
     }
 
@@ -759,5 +762,16 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     public function getPassPlatformFeeToBuyer(): bool
     {
         return $this->pass_platform_fee_to_buyer;
+    }
+
+    public function setAllowAttendeeSelfEdit(bool $allow_attendee_self_edit): self
+    {
+        $this->allow_attendee_self_edit = $allow_attendee_self_edit;
+        return $this;
+    }
+
+    public function getAllowAttendeeSelfEdit(): bool
+    {
+        return $this->allow_attendee_self_edit;
     }
 }

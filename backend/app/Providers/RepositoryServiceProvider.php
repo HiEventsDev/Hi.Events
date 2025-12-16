@@ -24,6 +24,7 @@ use HiEvents\Repository\Eloquent\ImageRepository;
 use HiEvents\Repository\Eloquent\InvoiceRepository;
 use HiEvents\Repository\Eloquent\MessageRepository;
 use HiEvents\Repository\Eloquent\OrderApplicationFeeRepository;
+use HiEvents\Repository\Eloquent\OrderAuditLogRepository;
 use HiEvents\Repository\Eloquent\OrderItemRepository;
 use HiEvents\Repository\Eloquent\OrderPaymentPlatformFeeRepository;
 use HiEvents\Repository\Eloquent\OrderRefundRepository;
@@ -68,6 +69,7 @@ use HiEvents\Repository\Interfaces\ImageRepositoryInterface;
 use HiEvents\Repository\Interfaces\InvoiceRepositoryInterface;
 use HiEvents\Repository\Interfaces\MessageRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderApplicationFeeRepositoryInterface;
+use HiEvents\Repository\Interfaces\OrderAuditLogRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderItemRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderPaymentPlatformFeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRefundRepositoryInterface;
@@ -134,6 +136,7 @@ class RepositoryServiceProvider extends ServiceProvider
         WebhookRepositoryInterface::class => WebhookRepository::class,
         WebhookLogRepositoryInterface::class => WebhookLogRepository::class,
         OrderApplicationFeeRepositoryInterface::class => OrderApplicationFeeRepository::class,
+        OrderAuditLogRepositoryInterface::class => OrderAuditLogRepository::class,
         OrderPaymentPlatformFeeRepositoryInterface::class => OrderPaymentPlatformFeeRepository::class,
         StripePayoutsRepositoryInterface::class => StripePayoutsRepository::class,
         AccountConfigurationRepositoryInterface::class => AccountConfigurationRepository::class,

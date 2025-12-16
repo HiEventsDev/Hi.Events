@@ -80,6 +80,9 @@ class UpdateEventSettingsDTO extends BaseDTO
 
         // Homepage theme settings
         public readonly ?array                  $homepage_theme_settings = null,
+
+        // Self-service settings
+        public readonly bool                    $allow_attendee_self_edit = false,
     )
     {
     }
@@ -159,6 +162,9 @@ class UpdateEventSettingsDTO extends BaseDTO
                 'mode' => 'light',
                 'background_type' => 'COLOR',
             ],
+
+            // Self-service defaults
+            allow_attendee_self_edit: false,
         );
     }
 }

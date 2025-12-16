@@ -97,6 +97,10 @@ use HiEvents\Http\Actions\Orders\Public\GetOrderActionPublic;
 use HiEvents\Http\Actions\Orders\Public\TransitionOrderToOfflinePaymentPublicAction;
 use HiEvents\Http\Actions\Orders\ResendOrderConfirmationAction;
 use HiEvents\Http\Actions\Organizers\CreateOrganizerAction;
+use HiEvents\Http\Actions\SelfService\EditAttendeePublicAction;
+use HiEvents\Http\Actions\SelfService\EditOrderPublicAction;
+use HiEvents\Http\Actions\SelfService\ResendAttendeeTicketPublicAction;
+use HiEvents\Http\Actions\SelfService\ResendOrderConfirmationPublicAction;
 use HiEvents\Http\Actions\Organizers\EditOrganizerAction;
 use HiEvents\Http\Actions\Organizers\GetOrganizerAction;
 use HiEvents\Http\Actions\Organizers\GetOrganizerEventsAction;
@@ -466,6 +470,15 @@ $router->prefix('/public')->group(
         // Ticket Lookup
         $router->post('/ticket-lookup', SendTicketLookupEmailAction::class);
         $router->get('/ticket-lookup/{token}', GetOrdersByLookupTokenAction::class);
+
+        // Self-service order and attendee edits
+        $router->prefix('/events/{event_id}/order/{order_short_id}')->group(function (Router $router): void {
+            $router->patch('/', EditOrderPublicAction::class)->middleware('throttle:self-service-edit');
+            $router->post('/resend-confirmation', ResendOrderConfirmationPublicAction::class)->middleware('throttle:self-service-email');
+
+            $router->patch('/attendees/{attendee_short_id}', EditAttendeePublicAction::class)->middleware('throttle:self-service-edit');
+            $router->post('/attendees/{attendee_short_id}/resend-ticket', ResendAttendeeTicketPublicAction::class)->middleware('throttle:self-service-email');
+        });
 
         // Sitemap
         $router->get('/sitemap.xml', GetSitemapIndexAction::class);
