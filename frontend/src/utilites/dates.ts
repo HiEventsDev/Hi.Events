@@ -116,3 +116,7 @@ export const dateToBrowserTz = (date: string, fallbackTz: string, locale?: strin
 export const isDateInFuture = (date: string): boolean => {
     return dayjs.utc(date).diff(dayjs()) > 0;
 };
+
+export const isDateInPast = (date: string): boolean => {
+    return dayjs.utc(date).diff(dayjs()) < 0;
+}
