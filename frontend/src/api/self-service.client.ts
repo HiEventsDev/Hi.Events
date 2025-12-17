@@ -14,14 +14,12 @@ export interface EditAttendeeData {
     first_name?: string;
     last_name?: string;
     email?: string;
-    resend_email?: boolean;
 }
 
 export interface EditOrderData {
     first_name?: string;
     last_name?: string;
     email?: string;
-    resend_email?: boolean;
 }
 
 export const selfServiceClient = {

@@ -45,7 +45,6 @@ import {useEditAttendeePublic} from "../../../../mutations/useEditAttendeePublic
 import {useEditOrderPublic} from "../../../../mutations/useEditOrderPublic";
 import {useResendAttendeeTicketPublic} from "../../../../mutations/useResendAttendeeTicketPublic";
 import {useResendOrderConfirmationPublic} from "../../../../mutations/useResendOrderConfirmationPublic";
-import {confirmationDialog} from "../../../../utilites/confirmationDialog";
 
 import {Attendee, Event, Order, Product} from "../../../../types.ts";
 import classes from './OrderSummaryAndProducts.module.scss';
@@ -416,16 +415,13 @@ export const OrderSummaryAndProducts = () => {
 
     const allowSelfEdit = event?.settings?.allow_attendee_self_edit ?? false;
 
-    const handleEditAttendee = (attendee: Attendee, data: any, resendEmail: boolean) => {
+    const handleEditAttendee = (attendee: Attendee, data: any) => {
         editAttendeeMutation.mutate(
             {
                 eventId: eventId!,
                 orderShortId: orderShortId!,
                 attendeeShortId: attendee.short_id,
-                data: {
-                    ...data,
-                    resend_email: resendEmail,
-                },
+                data,
             },
             {
                 onSuccess: (result) => {
@@ -447,15 +443,12 @@ export const OrderSummaryAndProducts = () => {
         );
     };
 
-    const handleEditOrder = (data: any, resendEmail: boolean) => {
+    const handleEditOrder = (data: any) => {
         editOrderMutation.mutate(
             {
                 eventId: eventId!,
                 orderShortId: orderShortId!,
-                data: {
-                    ...data,
-                    resend_email: resendEmail,
-                },
+                data,
             },
             {
                 onSuccess: (result) => {
@@ -486,57 +479,51 @@ export const OrderSummaryAndProducts = () => {
     };
 
     const handleResendAttendeeTicket = (attendee: Attendee) => {
-        confirmationDialog(
-            t`Are you sure you want to resend the ticket to ${attendee.email}?`,
-            () => {
-                resendAttendeeTicketMutation.mutate(
-                    {
-                        eventId: eventId!,
-                        orderShortId: orderShortId!,
-                        attendeeShortId: attendee.short_id,
-                    },
-                    {
-                        onSuccess: (result) => {
-                            showSuccess(result.message || t`Ticket resent successfully`);
-                        },
-                        onError: (error: any) => {
-                            if (error?.response?.status === 429) {
-                                showError(t`Rate limit exceeded. Please try again later.`);
-                            } else {
-                                showError(error?.response?.data?.message || t`Failed to resend ticket`);
-                            }
-                        },
-                    }
-                );
+        if (!window.confirm(t`Are you sure you want to resend the ticket to ${attendee.email}?`)) {
+            return;
+        }
+        resendAttendeeTicketMutation.mutate(
+            {
+                eventId: eventId!,
+                orderShortId: orderShortId!,
+                attendeeShortId: attendee.short_id,
             },
-            {confirm: t`Resend`, cancel: t`Cancel`, useCheckoutColors: true}
+            {
+                onSuccess: (result) => {
+                    showSuccess(result.message || t`Ticket resent successfully`);
+                },
+                onError: (error: any) => {
+                    if (error?.response?.status === 429) {
+                        showError(t`Rate limit exceeded. Please try again later.`);
+                    } else {
+                        showError(error?.response?.data?.message || t`Failed to resend ticket`);
+                    }
+                },
+            }
         );
     };
 
     const handleResendOrderConfirmation = () => {
-        confirmationDialog(
-            t`Are you sure you want to resend the order confirmation to ${order?.email}?`,
-            () => {
-                resendOrderConfirmationMutation.mutate(
-                    {
-                        eventId: eventId!,
-                        orderShortId: orderShortId!,
-                    },
-                    {
-                        onSuccess: (result) => {
-                            showSuccess(result.message || t`Order confirmation resent successfully`);
-                        },
-                        onError: (error: any) => {
-                            if (error?.response?.status === 429) {
-                                showError(t`Rate limit exceeded. Please try again later.`);
-                            } else {
-                                showError(error?.response?.data?.message || t`Failed to resend order confirmation`);
-                            }
-                        },
-                    }
-                );
+        if (!window.confirm(t`Are you sure you want to resend the order confirmation to ${order?.email}?`)) {
+            return;
+        }
+        resendOrderConfirmationMutation.mutate(
+            {
+                eventId: eventId!,
+                orderShortId: orderShortId!,
             },
-            {confirm: t`Resend`, cancel: t`Cancel`, useCheckoutColors: true}
+            {
+                onSuccess: (result) => {
+                    showSuccess(result.message || t`Order confirmation resent successfully`);
+                },
+                onError: (error: any) => {
+                    if (error?.response?.status === 429) {
+                        showError(t`Rate limit exceeded. Please try again later.`);
+                    } else {
+                        showError(error?.response?.data?.message || t`Failed to resend order confirmation`);
+                    }
+                },
+            }
         );
     };
 
@@ -657,8 +644,8 @@ export const OrderSummaryAndProducts = () => {
                     opened={!!editingAttendee}
                     onClose={() => setEditingAttendee(null)}
                     attendee={editingAttendee}
-                    onSuccess={(values: any, resendEmail: boolean) => {
-                        handleEditAttendee(editingAttendee, values, resendEmail);
+                    onSuccess={(values: any) => {
+                        handleEditAttendee(editingAttendee, values);
                     }}
                 />
             )}
@@ -668,8 +655,8 @@ export const OrderSummaryAndProducts = () => {
                     opened={editOrderModalOpened}
                     onClose={() => setEditOrderModalOpened(false)}
                     order={order}
-                    onSuccess={(values: any, resendEmail: boolean) => {
-                        handleEditOrder(values, resendEmail);
+                    onSuccess={(values: any) => {
+                        handleEditOrder(values);
                     }}
                 />
             )}

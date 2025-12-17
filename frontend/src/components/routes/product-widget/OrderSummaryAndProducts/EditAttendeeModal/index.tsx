@@ -1,8 +1,7 @@
 import {t} from "@lingui/macro";
-import {Alert, Button, Checkbox, Group, Modal, Text, TextInput} from "@mantine/core";
+import {Alert, Button, Group, Modal, Text, TextInput} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import {IconInfoCircle} from "@tabler/icons-react";
-import {useState} from "react";
 import {Attendee} from "../../../../../types";
 import classes from "./EditAttendeeModal.module.scss";
 import {InputGroup} from "../../../../common/InputGroup";
@@ -11,7 +10,7 @@ interface EditAttendeeModalProps {
     opened: boolean;
     onClose: () => void;
     attendee: Attendee;
-    onSuccess: (values: any, resendEmail: boolean) => void;
+    onSuccess: (values: any) => void;
 }
 
 export const EditAttendeeModal = ({
@@ -20,8 +19,6 @@ export const EditAttendeeModal = ({
                                       attendee,
                                       onSuccess,
                                   }: EditAttendeeModalProps) => {
-    const [resendEmail, setResendEmail] = useState(false);
-
     const form = useForm({
         initialValues: {
             first_name: attendee.first_name,
@@ -41,10 +38,6 @@ export const EditAttendeeModal = ({
 
     const emailChanged = form.values.email !== attendee.email;
 
-    const handleSubmit = (values: typeof form.values) => {
-        onSuccess(values, emailChanged || resendEmail);
-    };
-
     return (
         <Modal
             opened={opened}
@@ -53,7 +46,7 @@ export const EditAttendeeModal = ({
             size="md"
             className={classes.modal}
         >
-            <form onSubmit={form.onSubmit(handleSubmit)}>
+            <form onSubmit={form.onSubmit(onSuccess)}>
                 <div>
                     <InputGroup>
                         <TextInput
@@ -87,16 +80,7 @@ export const EditAttendeeModal = ({
                         </Alert>
                     )}
 
-                    {!emailChanged && (
-                        <Checkbox
-                            label={t`Resend ticket email`}
-                            checked={resendEmail}
-                            mb={20}
-                            onChange={(e) => setResendEmail(e.currentTarget.checked)}
-                        />
-                    )}
-
-                    <Group justify="flex-end" gap="sm">
+                    <Group justify="flex-end" gap="sm" mt="md">
                         <Button variant="default" onClick={onClose}>
                             {t`Cancel`}
                         </Button>
