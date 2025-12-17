@@ -7,12 +7,23 @@ import {Container} from "@mantine/core";
 import {t} from "@lingui/macro";
 import {PoweredByFooter} from "../../../common/PoweredByFooter";
 import {OnlineEventDetails} from "../../../common/OnlineEventDetails";
+import {HomepageInfoMessage} from "../../../common/HomepageInfoMessage";
 import classes from './AttendeeProductAndInformation.module.scss';
 
 export const AttendeeProductAndInformation = () => {
     const {eventId, attendeeShortId} = useParams();
-    const {data: event} = useGetEventPublic(eventId);
-    const {data: attendee} = useGetAttendeePublic(eventId, String(attendeeShortId));
+    const {data: event, isError: eventError} = useGetEventPublic(eventId);
+    const {data: attendee, isError: attendeeError} = useGetAttendeePublic(eventId, String(attendeeShortId));
+
+    if (eventError || attendeeError) {
+        return (
+            <HomepageInfoMessage
+                status="not_found"
+                message={t`Ticket Not Found`}
+                subtitle={t`We couldn't find the ticket you're looking for. The link may have expired or the ticket details may have changed.`}
+            />
+        );
+    }
 
     if (!event || !attendee) {
         return null;

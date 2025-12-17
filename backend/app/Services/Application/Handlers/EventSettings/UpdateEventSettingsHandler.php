@@ -79,7 +79,7 @@ class UpdateEventSettingsHandler
                     'invoice_tax_details' => $this->purifier->purify($settings->invoice_tax_details),
                     'invoice_notes' => $this->purifier->purify($settings->invoice_notes),
                     'invoice_payment_terms_days' => $settings->invoice_payment_terms_days,
-                    
+
                     // Ticket design settings
                     'ticket_design_settings' => $settings->ticket_design_settings,
 
@@ -91,6 +91,9 @@ class UpdateEventSettingsHandler
 
                     // Homepage theme settings
                     'homepage_theme_settings' => $settings->homepage_theme_settings,
+
+                    // Self-service settings
+                    'allow_attendee_self_edit' => $settings->allow_attendee_self_edit
                 ],
                 where: [
                     'event_id' => $settings->event_id,

@@ -153,6 +153,10 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+
+  @include mixins.respond-below('sm') {
+    max-width: 220px;
+  }
 }
 
 .lineItemQuantity {

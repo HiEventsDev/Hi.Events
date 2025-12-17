@@ -244,6 +244,9 @@ export interface EventSettings {
     // Platform fee settings
     pass_platform_fee_to_buyer?: boolean;
 
+    // Self-service settings
+    allow_attendee_self_edit?: boolean;
+
     // Simplified homepage theme settings (new 2-color + mode system)
     homepage_theme_settings?: HomepageThemeSettings;
 }
@@ -397,6 +400,7 @@ export interface OrganizerSettings {
     default_attendee_details_collection_method?: AttendeeDetailsCollectionMethod;
     default_show_marketing_opt_in?: boolean;
     default_pass_platform_fee_to_buyer?: boolean;
+    default_allow_attendee_self_edit?: boolean;
     homepage_visibility: 'PUBLIC' | 'PRIVATE' | 'PASSWORD_PROTECTED';
     homepage_theme_settings: HomepageThemeSettings;
     website_url?: string;

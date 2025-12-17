@@ -94,7 +94,8 @@ export const InlineOrderSummary = ({
                         {order.order_items?.map((item) => (
                             <div key={item.id} className={classes.lineItem}>
                                 <div className={classes.lineItemLeft}>
-                                    <span className={classes.lineItemName}>{item.item_name}</span>
+                                    <span title={item.item_name}
+                                        className={classes.lineItemName}>{item.item_name}</span>
                                     {/* eslint-disable-next-line lingui/no-unlocalized-strings */}
                                     <span className={classes.lineItemQuantity}>× {item.quantity}</span>
                                 </div>
