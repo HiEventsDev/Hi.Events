@@ -71,8 +71,14 @@ class EventSettingsResource extends JsonResource
             // Marketing settings
             'show_marketing_opt_in' => $this->getShowMarketingOptIn(),
 
+            // Platform fee settings
+            'pass_platform_fee_to_buyer' => $this->getPassPlatformFeeToBuyer(),
+
             // Homepage theme settings
             'homepage_theme_settings' => $this->getHomepageThemeSettings(),
+
+            // Self-service settings
+            'allow_attendee_self_edit' => $this->getAllowAttendeeSelfEdit(),
         ];
     }
 }

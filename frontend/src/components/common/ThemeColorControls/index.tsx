@@ -103,13 +103,13 @@ export const ThemeColorControls = ({
                 {hasIssues ? (
                     <Tooltip label={t`This color combination may be hard to read for some users`} multiline w={220}>
                         <Group gap={6} style={{ cursor: 'help' }}>
-                            <IconEyeExclamation size={16} color="var(--mantine-color-yellow-6)" />
+                            <IconEyeExclamation size={30} color="var(--mantine-color-yellow-6)" />
                             <Text size="xs" c="yellow.7">{t`Text may be hard to read`}</Text>
                         </Group>
                     </Tooltip>
                 ) : (
                     <Group gap={6}>
-                        <IconEyeCheck size={16} color="var(--mantine-color-teal-6)" />
+                        <IconEyeCheck size={30} color="var(--mantine-color-teal-6)" />
                         <Text size="xs" c="dimmed">{t`Good readability`}</Text>
                     </Group>
                 )}

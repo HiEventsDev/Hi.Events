@@ -2,7 +2,7 @@
 
 // Design tokens
 $font-display: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-$font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+$font-body:  'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
 $radius-xl: 28px;
 $radius-lg: 20px;
@@ -601,6 +601,9 @@ $transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   position: relative;
   transition: all $transition-fast;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   @include mixins.respond-below(md) {
     display: none;
@@ -615,6 +618,18 @@ $transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+}
+
+.mapPin {
+  color: var(--primary-color);
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  transition: opacity $transition-fast;
+
+  .mapContainer:hover & {
+    opacity: 0;
   }
 }
 
@@ -672,10 +687,11 @@ $transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 
   :global(.hi-product-category-title) {
     font-family: $font-display;
-    font-size: 1.1rem;
+    font-size: 1.35rem;
     font-weight: 700;
+    letter-spacing: -0.01em;
     color: var(--primary-text-color);
-    margin: 0 0 12px;
+    margin: 0 0 18px;
   }
 
   :global(.hi-product-category-description) {

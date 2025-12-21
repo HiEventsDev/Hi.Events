@@ -75,8 +75,14 @@ class UpdateEventSettingsDTO extends BaseDTO
         // Marketing settings
         public readonly bool                    $show_marketing_opt_in = true,
 
+        // Platform fee settings
+        public readonly bool                    $pass_platform_fee_to_buyer = false,
+
         // Homepage theme settings
         public readonly ?array                  $homepage_theme_settings = null,
+
+        // Self-service settings
+        public readonly bool                    $allow_attendee_self_edit = false,
     )
     {
     }
@@ -146,6 +152,9 @@ class UpdateEventSettingsDTO extends BaseDTO
             // Marketing defaults
             show_marketing_opt_in: true,
 
+            // Platform fee defaults
+            pass_platform_fee_to_buyer: false,
+
             // Homepage theme defaults (simplified 2-color + mode system)
             homepage_theme_settings: [
                 'accent' => '#8b5cf6',
@@ -153,6 +162,9 @@ class UpdateEventSettingsDTO extends BaseDTO
                 'mode' => 'light',
                 'background_type' => 'COLOR',
             ],
+
+            // Self-service defaults
+            allow_attendee_self_edit: false,
         );
     }
 }

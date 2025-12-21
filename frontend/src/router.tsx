@@ -12,7 +12,9 @@ const Root = () => {
 
     useEffect(() => {
         if (me.isFetched) {
-            setRedirectPath(me.isSuccess ? "/manage/events" : "/auth/login");
+            const searchParams = typeof window !== 'undefined' ? window.location.search : '';
+            const basePath = me.isSuccess ? "/manage/events" : "/auth/login";
+            setRedirectPath(basePath + searchParams);
         }
     }, [me.isFetched]);
 
@@ -182,6 +184,13 @@ export const router: RouteObject[] = [
                 async lazy() {
                     const Orders = await import("./components/routes/admin/Orders");
                     return {Component: Orders.default};
+                }
+            },
+            {
+                path: "attribution",
+                async lazy() {
+                    const Attribution = await import("./components/routes/admin/Attribution");
+                    return {Component: Attribution.default};
                 }
             },
             {

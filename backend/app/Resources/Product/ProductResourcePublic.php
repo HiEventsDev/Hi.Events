@@ -41,6 +41,7 @@ class ProductResourcePublic extends JsonResource
                     ProductPriceResourcePublic::SHOW_QUANTITY_AVAILABLE => $this->getShowQuantityRemaining(),
                 ]),
             ),
+            // todo: this should be taxes_and_fees
             'taxes' => $this->when(
                 (bool)$this->getTaxAndFees(),
                 fn() => TaxAndFeeResource::collection($this->getTaxAndFees())

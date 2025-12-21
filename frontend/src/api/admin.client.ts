@@ -185,6 +185,54 @@ export interface AdminOrder {
     event_title: string;
 }
 
+export interface UtmAttributionStats {
+    attribution_value: string;
+    total_accounts: number;
+    total_events: number;
+    live_events: number;
+    stripe_connected: number;
+    verified_accounts: number;
+    total_revenue: number;
+    total_orders: number;
+}
+
+export interface UtmAttributionSummary {
+    paid_accounts: number;
+    organic_accounts: number;
+    referral_accounts: number;
+    attributed_accounts: number;
+    unattributed_accounts: number;
+    total_accounts: number;
+}
+
+export interface GetUtmAttributionStatsParams {
+    group_by?: 'source' | 'campaign' | 'medium' | 'source_type';
+    date_from?: string;
+    date_to?: string;
+    page?: number;
+    per_page?: number;
+}
+
+export interface LaravelPaginatedData<T> {
+    current_page: number;
+    data: T[];
+    first_page_url: string;
+    from: number | null;
+    last_page: number;
+    last_page_url: string;
+    next_page_url: string | null;
+    path: string;
+    per_page: number;
+    prev_page_url: string | null;
+    to: number | null;
+    total: number;
+}
+
+export interface UtmAttributionStatsResponse {
+    data: LaravelPaginatedData<UtmAttributionStats>;
+    summary: UtmAttributionSummary;
+}
+
 export const adminClient = {
     getStats: async () => {
         const response = await api.get<AdminStats>('admin/stats');
@@ -310,6 +358,14 @@ export const adminClient = {
         const response = await api.put<GenericDataResponse<AccountVatSetting>>(
             `admin/accounts/${accountId}/vat-settings`,
             data
+        );
+        return response.data;
+    },
+
+    getUtmAttributionStats: async (params: GetUtmAttributionStatsParams = {}) => {
+        const response = await api.get<UtmAttributionStatsResponse>(
+            'admin/attribution/stats',
+            { params }
         );
         return response.data;
     },

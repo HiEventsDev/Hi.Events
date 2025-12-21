@@ -61,6 +61,9 @@ class OrderManagementService
     }
 
     /**
+     * Update order totals by summing up all order items.
+     * Platform fee and its tax are included at the item level.
+     *
      * @param OrderDomainObject $order
      * @param Collection<OrderItemDomainObject> $orderItems
      * @return OrderDomainObject
@@ -79,12 +82,14 @@ class OrderManagementService
             $totalGross += $item->getTotalGross();
         }
 
+        $rollup = $this->taxAndFeeOrderRollupService->rollup($orderItems);
+
         $this->orderRepository->updateFromArray($order->getId(), [
             'total_before_additions' => $totalBeforeAdditions,
             'total_tax' => $totalTax,
             'total_fee' => $totalFee,
             'total_gross' => $totalGross,
-            'taxes_and_fees_rollup' => $this->taxAndFeeOrderRollupService->rollup($orderItems),
+            'taxes_and_fees_rollup' => $rollup,
         ]);
 
         return $this->orderRepository

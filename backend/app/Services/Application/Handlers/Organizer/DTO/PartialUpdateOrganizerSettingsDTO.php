@@ -23,6 +23,8 @@ class PartialUpdateOrganizerSettingsDTO extends BaseDataObject
         #[WithCast(EnumCast::class, AttendeeDetailsCollectionMethod::class)]
         public readonly AttendeeDetailsCollectionMethod|Optional|null $defaultAttendeeDetailsCollectionMethod,
         public readonly bool|Optional|null                            $defaultShowMarketingOptIn,
+        public readonly bool|Optional|null                            $defaultPassPlatformFeeToBuyer,
+        public readonly bool|Optional|null                            $defaultAllowAttendeeSelfEdit,
 
         // Social
         public readonly string|Optional|null                          $facebookHandle,

@@ -1,5 +1,5 @@
 import {Button, PasswordInput, TextInput, Collapse, UnstyledButton} from "@mantine/core";
-import {NavLink} from "react-router";
+import {NavLink, useLocation} from "react-router";
 import {useMutation} from "@tanstack/react-query";
 import {notifications} from '@mantine/notifications';
 import {authClient} from "../../../../api/auth.client.ts";
@@ -15,6 +15,7 @@ import {showError} from "../../../../utilites/notifications.tsx";
 import {IconTicket, IconChevronDown} from "@tabler/icons-react";
 
 const Login = () => {
+    const location = useLocation();
     const form = useForm({
         initialValues: {
             email: '',
@@ -76,11 +77,11 @@ const Login = () => {
     return (
         <>
             <header className={classes.header}>
-                <h2>{t`Welcome back 👋`}</h2>
+                <h2>{t`Welcome back`}</h2>
                 <p>
                     <Trans>
-                        Don't have an account? {'  '}
-                        <NavLink to={'/auth/register'}>
+                        Don't have an account?{' '}
+                        <NavLink to={`/auth/register${location.search}`}>
                             Sign up
                         </NavLink>
                     </Trans>
@@ -99,14 +100,14 @@ const Login = () => {
                                    required
                                    mt="md"
                     />
+                    <Button color="secondary.5" type="submit" fullWidth loading={isPending} disabled={isPending} mt="lg">
+                        {isPending ? t`Logging in` : t`Log in`}
+                    </Button>
                     <p>
                         <NavLink to={`/auth/forgot-password`}>
                             {t`Forgot password?`}
                         </NavLink>
                     </p>
-                    <Button color={'var(--hi-pink)'} type="submit" fullWidth loading={isPending} disabled={isPending}>
-                        {isPending ? t`Logging in` : t`Log in`}
-                    </Button>
                 </form>
             </div>
 
@@ -152,7 +153,7 @@ const Login = () => {
                                     />
                                     <Button
                                         type="submit"
-                                        color="var(--hi-pink)"
+                                        color="secondary.5"
                                         loading={ticketLookupMutation.isPending}
                                         disabled={ticketLookupMutation.isPending}
                                     >

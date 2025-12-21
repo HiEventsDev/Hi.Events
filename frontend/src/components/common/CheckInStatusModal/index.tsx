@@ -24,8 +24,6 @@ export const CheckInStatusModal = ({
 }: CheckInStatusModalProps) => {
     const {data: checkInListsResponse, isLoading, ...rest} = useGetEventCheckInLists(eventId);
 
-    console.log('CheckInStatusModal - checkInListsResponse:', checkInListsResponse, 'isLoading:', isLoading, 'rest:', rest);
-
     if (isLoading) {
         return (
             <Modal.Root opened={isOpen} onClose={onClose} size="md">

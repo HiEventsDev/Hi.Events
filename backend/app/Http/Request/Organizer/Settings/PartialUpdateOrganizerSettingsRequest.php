@@ -17,6 +17,8 @@ class PartialUpdateOrganizerSettingsRequest extends BaseRequest
             // Event defaults
             'default_attendee_details_collection_method' => ['sometimes', 'nullable', Rule::in(AttendeeDetailsCollectionMethod::valuesArray())],
             'default_show_marketing_opt_in' => ['sometimes', 'nullable', 'boolean'],
+            'default_pass_platform_fee_to_buyer' => ['sometimes', 'nullable', 'boolean'],
+            'default_allow_attendee_self_edit' => ['sometimes', 'nullable', 'boolean'],
 
             // Social handles
             'facebook_handle' => ['sometimes', 'nullable', 'string', 'max:255'],

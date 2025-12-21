@@ -16,6 +16,12 @@ export const useGetAttendeePublic = (eventId: IdParam, attendeeShortId: string) 
 
         refetchOnWindowFocus: false,
         retryOnMount: false,
-        staleTime: 0
+        staleTime: 0,
+        retry: (failureCount, error) => {
+            if (error?.response?.status === 404) {
+                return false;
+            }
+            return failureCount < 3;
+        },
     });
 };

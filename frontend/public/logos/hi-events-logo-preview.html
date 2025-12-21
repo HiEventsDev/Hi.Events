@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hi.Events Logo Variants</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #f5f5f5;
+      padding: 40px;
+      min-height: 100vh;
+    }
+    
+    h1 {
+      text-align: center;
+      color: #18181b;
+      margin-bottom: 12px;
+      font-size: 28px;
+      font-weight: 600;
+    }
+    
+    .subtitle {
+      text-align: center;
+      color: #71717a;
+      margin-bottom: 48px;
+      font-size: 14px;
+    }
+    
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 32px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .variant {
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    }
+    
+    .variant-header {
+      padding: 16px 20px;
+      background: #ffffff;
+      border-bottom: 1px solid #e4e4e7;
+    }
+    
+    .variant-header h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: #18181b;
+      margin-bottom: 4px;
+    }
+    
+    .variant-header code {
+      font-size: 12px;
+      color: #71717a;
+      background: #f4f4f5;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'SF Mono', 'Monaco', 'Inconsolata', monospace;
+    }
+    
+    .variant-preview {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 32px;
+      min-height: 180px;
+    }
+    
+    .variant-preview.light {
+      background: #ffffff;
+    }
+    
+    .variant-preview.dark {
+      background: #18181b;
+    }
+    
+    .variant-preview img {
+      max-width: 100%;
+      height: auto;
+    }
+    
+    .color-info {
+      text-align: center;
+      margin-top: 48px;
+      padding: 24px;
+      background: #ffffff;
+      border-radius: 12px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    
+    .color-info h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: #18181b;
+      margin-bottom: 16px;
+    }
+    
+    .color-swatches {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+    }
+    
+    .swatch {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .swatch-color {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+    
+    .swatch-label {
+      font-size: 13px;
+      color: #52525b;
+    }
+    
+    .swatch-label code {
+      display: block;
+      font-size: 11px;
+      color: #a1a1aa;
+      margin-top: 2px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Hi.Events Logo Variants</h1>
+  <p class="subtitle">Complete logo package with light and dark versions</p>
+  
+  <div class="grid">
+    <!-- Horizontal Light -->
+    <div class="variant">
+      <div class="variant-header">
+        <h3>Horizontal — Light Background</h3>
+        <code>hi-events-horizontal-light.svg</code>
+      </div>
+      <div class="variant-preview light">
+        <img src="hi-events-horizontal-light.svg" alt="Hi.Events Horizontal Light">
+      </div>
+    </div>
+    
+    <!-- Horizontal Dark -->
+    <div class="variant">
+      <div class="variant-header">
+        <h3>Horizontal — Dark Background</h3>
+        <code>hi-events-horizontal-dark.svg</code>
+      </div>
+      <div class="variant-preview dark">
+        <img src="hi-events-horizontal-dark.svg" alt="Hi.Events Horizontal Dark">
+      </div>
+    </div>
+    
+    <!-- Stacked Light -->
+    <div class="variant">
+      <div class="variant-header">
+        <h3>Stacked — Light Background</h3>
+        <code>hi-events-stacked-light.svg</code>
+      </div>
+      <div class="variant-preview light">
+        <img src="hi-events-stacked-light.svg" alt="Hi.Events Stacked Light">
+      </div>
+    </div>
+    
+    <!-- Stacked Dark -->
+    <div class="variant">
+      <div class="variant-header">
+        <h3>Stacked — Dark Background</h3>
+        <code>hi-events-stacked-dark.svg</code>
+      </div>
+      <div class="variant-preview dark">
+        <img src="hi-events-stacked-dark.svg" alt="Hi.Events Stacked Dark">
+      </div>
+    </div>
+    
+    <!-- Icon Light -->
+    <div class="variant">
+      <div class="variant-header">
+        <h3>Icon Only — Light Background</h3>
+        <code>hi-events-icon-light.svg</code>
+      </div>
+      <div class="variant-preview light">
+        <img src="hi-events-icon-light.svg" alt="Hi.Events Icon Light">
+      </div>
+    </div>
+    
+    <!-- Icon Dark -->
+    <div class="variant">
+      <div class="variant-header">
+        <h3>Icon Only — Dark Background</h3>
+        <code>hi-events-icon-dark.svg</code>
+      </div>
+      <div class="variant-preview dark">
+        <img src="hi-events-icon-dark.svg" alt="Hi.Events Icon Dark">
+      </div>
+    </div>
+    
+    <!-- Text Light -->
+    <div class="variant">
+      <div class="variant-header">
+        <h3>Text Only — Light Background</h3>
+        <code>hi-events-text-light.svg</code>
+      </div>
+      <div class="variant-preview light">
+        <img src="hi-events-text-light.svg" alt="Hi.Events Text Light">
+      </div>
+    </div>
+    
+    <!-- Text Dark -->
+    <div class="variant">
+      <div class="variant-header">
+        <h3>Text Only — Dark Background</h3>
+        <code>hi-events-text-dark.svg</code>
+      </div>
+      <div class="variant-preview dark">
+        <img src="hi-events-text-dark.svg" alt="Hi.Events Text Dark">
+      </div>
+    </div>
+  </div>
+  
+  <div class="color-info">
+    <h3>Brand Colors</h3>
+    <div class="color-swatches">
+      <div class="swatch">
+        <div class="swatch-color" style="background: #cd58dd;"></div>
+        <div class="swatch-label">
+          Accent
+          <code>#cd58dd</code>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: #18181b;"></div>
+        <div class="swatch-label">
+          Dark
+          <code>#18181b</code>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: #ffffff;"></div>
+        <div class="swatch-label">
+          Light
+          <code>#ffffff</code>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

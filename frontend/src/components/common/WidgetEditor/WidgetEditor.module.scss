@@ -1,50 +1,148 @@
-.widgetGrid {
-  display: grid;
-  grid-template-areas: 'form preview';
-  grid-template-columns: 320px 1fr;
-  margin-top: -15px;
-  margin-bottom: -15px;
-  margin-right: -15px;
+@use "../../../styles/mixins.scss";
 
-  @media (max-width: 760px) {
-    grid-template-areas:
-            'form'
-            'preview';
-    grid-template-columns: auto;
+@include mixins.respond-below(sm) {
+  :global(#event-manage-main) {
+    overflow: auto;
   }
 }
 
-.widgetForm {
-  padding: 20px;
-  grid-area: form;
-  margin-top: 20px;
+.container {
+  display: flex;
+  flex-direction: row;
+  margin: calc(var(--hi-spacing-lg) * -1);
 
-  .formHeader {
-    margin-top: 0;
+  h2 {
+    margin-bottom: 0;
+  }
+
+  @include mixins.respond-below(sm) {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    min-width: 380px;
+    max-width: 380px;
+    background-color: #ffffff;
+    padding: var(--hi-spacing-lg);
+    height: calc(100vh - 55px);
+    overflow-y: auto;
+    position: sticky;
+    top: 0;
+    border-right: 1px solid var(--mantine-color-gray-2);
+
+    @include mixins.respond-below(sm) {
+      width: 100%;
+      min-width: unset;
+      max-width: unset;
+      position: relative;
+      overflow: auto;
+      height: auto;
+      border-right: none;
+      border-bottom: 1px solid var(--mantine-color-gray-2);
+    }
+
+    .sticky {
+      position: sticky;
+      top: 0;
+    }
+
+    .header {
+      margin-bottom: var(--hi-spacing-lg);
+      padding-bottom: var(--hi-spacing-md);
+      border-bottom: 1px solid var(--mantine-color-gray-2);
+
+      h2 {
+        margin: 0 0 var(--hi-spacing-xs) 0;
+        font-size: 1.375rem;
+        font-weight: 600;
+        color: var(--mantine-color-gray-9);
+      }
+    }
+
+    .accordion {
+      margin-bottom: 0;
+
+      .accordionItem {
+        border: 1px solid var(--mantine-color-gray-3);
+        border-radius: var(--mantine-radius-md);
+        overflow: hidden;
+
+        &:not(:last-child) {
+          margin-bottom: var(--hi-spacing-md);
+        }
+
+        :global(.mantine-Accordion-control) {
+          padding: var(--hi-spacing-md);
+          background: var(--mantine-color-gray-0);
+
+          &:hover {
+            background: var(--mantine-color-gray-1);
+          }
+
+          &[data-active] {
+            border-bottom: 1px solid var(--mantine-color-gray-2);
+          }
+        }
+
+        :global(.mantine-Accordion-panel) {
+          padding: 0;
+          background: white;
+        }
+
+        :global(.mantine-Accordion-content) {
+          padding: var(--hi-spacing-lg);
+
+          :global(.mantine-ColorInput-root),
+          :global(.mantine-TextInput-root),
+          :global(.mantine-NumberInput-root),
+          :global(.mantine-Textarea-root),
+          :global(.mantine-Switch-root) {
+            margin-bottom: 0;
+          }
+        }
+      }
+    }
+  }
+
+  .previewContainer {
+    flex: 1;
+    padding: var(--hi-spacing-lg);
+    background: var(--mantine-color-gray-1);
+    min-width: 400px;
+
+    @include mixins.respond-below(sm) {
+      padding: var(--hi-spacing-md);
+      min-width: unset;
+    }
+
+    > h2 {
+      display: none;
+      margin-bottom: var(--hi-spacing-md);
+
+      @include mixins.respond-below(sm) {
+        display: block;
+      }
+    }
   }
 }
 
-.widgetContainer {
-  position: absolute;
-  bottom: 20px;
-  z-index: 4;
-
-  // You may need to write JavaScript to toggle between 'left' and 'right' based on props.campaign.tab_position.toString() === 'BOTTOM_LEFT' condition.
-}
-
-.previewPane {
-  grid-area: preview;
-  padding: 20px;
-  background: #f5f5f5;
+.stickyContainer {
+  position: sticky;
+  top: var(--hi-spacing-lg);
+  min-height: 80vh;
+  background-color: #ffffff;
+  border-radius: var(--hi-radius-lg);
+  border: 1px solid var(--mantine-color-gray-3);
+  overflow: hidden;
 }
 
 .browserChrome {
   width: 100%;
   background: #fff;
-  border-radius: 5px 5px 0 0;
+  border-radius: var(--hi-radius-lg) var(--hi-radius-lg) 0 0;
   height: 40px;
   display: flex;
-  border-bottom: 1px solid #dbdbdb;
+  border-bottom: 1px solid var(--mantine-color-gray-3);
 }
 
 .browserActionButtons {
@@ -55,12 +153,12 @@
   padding: 10px;
 
   div {
-    width: 15px;
-    height: 15px;
-    border-radius: 50px;
-    background-color: #eee;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: var(--mantine-color-gray-3);
     display: inline-block;
-    margin-right: 4px;
+    margin-right: 6px;
   }
 }
 
@@ -69,27 +167,19 @@
   align-self: center;
 
   div {
-    background-color: #f8f8f8;
-    border-radius: 5px;
+    background-color: var(--mantine-color-gray-1);
+    border-radius: var(--mantine-radius-sm);
     margin-right: 20%;
-    font-size: 0.9em;
-    padding: 2px 12px;
-    color: #909090;
+    font-size: 0.85em;
+    padding: 4px 12px;
+    color: var(--mantine-color-gray-6);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 
     span {
-      color: #6eb96e;
+      color: var(--mantine-color-green-6);
     }
-  }
-}
-
-.previewHeader {
-  img {
-    width: 20px;
-    height: 20px;
-    display: inline;
   }
 }
 
@@ -102,34 +192,23 @@
   height: 100%;
   width: 100%;
   z-index: 1;
-  padding: 20px;
-  overflow: scroll;
+  padding: var(--hi-spacing-lg);
+  overflow: auto;
+
+  h1 {
+    font-size: 1.25rem;
+    color: var(--mantine-color-gray-7);
+    margin-bottom: var(--hi-spacing-md);
+  }
 
   .widgetWrapper {
-    padding: 10px;
+    padding: var(--hi-spacing-sm);
+    margin: var(--hi-spacing-md) 0;
   }
-
-  // You may need to write JavaScript to change the opacity based on the widgetType prop.
 
   p.lorem {
-    color: #ddd;
-    margin-bottom: 20px;
+    color: var(--mantine-color-gray-4);
+    margin-bottom: var(--hi-spacing-md);
+    font-size: 0.9rem;
   }
-}
-
-.stickyContainer {
-  position: sticky;
-  top: 20px;
-  min-height: 80vh;
-  background-color: #ffffff;
-  border-radius: var(--hi-radius-lg);
-  border: 1px solid #dbdbdb;
-  overflow: hidden;
-}
-
-.sectionHeader {
-  color: #6eb96e;
-  letter-spacing: 2px;
-  margin: 20px 0;
-  font-size: 1.3em;
 }

@@ -36,10 +36,21 @@ export interface AcceptInvitationRequest {
     email: string;
     password: string;
     password_confirmation: string;
+    marketing_opt_in?: boolean;
 }
 
 export interface RegisterAccountRequest extends AcceptInvitationRequest {
     locale: SupportedLocales;
+    utm_source?: string | null;
+    utm_medium?: string | null;
+    utm_campaign?: string | null;
+    utm_term?: string | null;
+    utm_content?: string | null;
+    referrer_url?: string | null;
+    landing_page?: string | null;
+    gclid?: string | null;
+    fbclid?: string | null;
+    utm_raw?: Record<string, string> | null;
 }
 
 export interface ResetPasswordRequest {
@@ -92,6 +103,7 @@ export interface User {
     role?: 'ADMIN' | 'ORGANIZER' | 'SUPERADMIN';
     is_account_owner?: boolean;
     locale?: SupportedLocales;
+    marketing_opted_in_at?: string | null;
 }
 
 export interface Account {
@@ -229,6 +241,12 @@ export interface EventSettings {
     // Marketing settings
     show_marketing_opt_in?: boolean;
 
+    // Platform fee settings
+    pass_platform_fee_to_buyer?: boolean;
+
+    // Self-service settings
+    allow_attendee_self_edit?: boolean;
+
     // Simplified homepage theme settings (new 2-color + mode system)
     homepage_theme_settings?: HomepageThemeSettings;
 }
@@ -309,6 +327,7 @@ export interface EventStatistics {
     sales_total_before_additions: number;
     total_fee: number;
     products_sold: number;
+    attendees_registered: number;
     total_refunded: number;
 }
 
@@ -380,6 +399,8 @@ export interface OrganizerSettings {
     organizer_id: IdParam;
     default_attendee_details_collection_method?: AttendeeDetailsCollectionMethod;
     default_show_marketing_opt_in?: boolean;
+    default_pass_platform_fee_to_buyer?: boolean;
+    default_allow_attendee_self_edit?: boolean;
     homepage_visibility: 'PUBLIC' | 'PRIVATE' | 'PASSWORD_PROTECTED';
     homepage_theme_settings: HomepageThemeSettings;
     website_url?: string;

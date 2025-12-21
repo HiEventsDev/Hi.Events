@@ -22,9 +22,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
                                                     navItems,
                                                     sidebarFooter,
                                                 }) => {
+    const isMobile = useMediaQuery('(max-width: 768px)');
+
     const renderLinks = () => {
         return navItems.map((item) => {
-            const isMobile = useMediaQuery('(max-width: 768px)');
 
             if (!item.link && item.link !== "" && item.onClick === undefined) {
                 return (
@@ -45,7 +46,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
             return (
                 <NavLink
-                    to={item.comingSoon ? '#' : item.link}
+                    to={item.comingSoon ? '#' : (item.link ?? '#')}
                     key={item.label}
                     onClick={() => {
                         if (isMobile) {
@@ -76,7 +77,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <NavLink to={`/manage/events`}>
                     <img
                         style={{maxWidth: '160px', margin: "10px auto"}}
-                        src={getConfig("VITE_APP_LOGO_LIGHT", "/logo-wide-white-text.svg")}
+                        src={getConfig("VITE_APP_LOGO_LIGHT", "/logos/hi-events-text-dark.svg")}
                         alt={t`${getConfig("VITE_APP_NAME", "Hi.Events")} logo`}
                     />
                 </NavLink>

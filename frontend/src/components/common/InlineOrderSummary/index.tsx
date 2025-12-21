@@ -1,6 +1,6 @@
 import {useState} from "react";
-import {Collapse} from "@mantine/core";
-import {IconCalendarEvent, IconChevronDown, IconShieldCheck, IconTag} from "@tabler/icons-react";
+import {Collapse, Popover} from "@mantine/core";
+import {IconCalendarEvent, IconChevronDown, IconInfoCircle, IconShieldCheck, IconTag} from "@tabler/icons-react";
 import {t} from "@lingui/macro";
 import classNames from "classnames";
 import {Event, Order} from "../../../types.ts";
@@ -94,7 +94,8 @@ export const InlineOrderSummary = ({
                         {order.order_items?.map((item) => (
                             <div key={item.id} className={classes.lineItem}>
                                 <div className={classes.lineItemLeft}>
-                                    <span className={classes.lineItemName}>{item.item_name}</span>
+                                    <span title={item.item_name}
+                                        className={classes.lineItemName}>{item.item_name}</span>
                                     {/* eslint-disable-next-line lingui/no-unlocalized-strings */}
                                     <span className={classes.lineItemQuantity}>× {item.quantity}</span>
                                 </div>
@@ -135,7 +136,30 @@ export const InlineOrderSummary = ({
                         </div>
 
                         <div className={classes.totalsRow}>
-                            <span className={classes.totalsLabel}>{t`Fees`}</span>
+                            <span className={classes.totalsLabelWithInfo}>
+                                <span>{t`Fees`}</span>
+                                {order.taxes_and_fees_rollup?.fees && order.taxes_and_fees_rollup.fees.length > 0 && (
+                                    <Popover position="top" withArrow shadow="sm" width={220}>
+                                        <Popover.Target>
+                                            <span className={classes.infoIcon}>
+                                                <IconInfoCircle size={14} />
+                                            </span>
+                                        </Popover.Target>
+                                        <Popover.Dropdown>
+                                            <div className={classes.breakdownList}>
+                                                {order.taxes_and_fees_rollup.fees.map((fee, index) => (
+                                                    <div key={index} className={classes.breakdownItem}>
+                                                        <span className={classes.breakdownName}>{fee.name}</span>
+                                                        <span className={classes.breakdownValue}>
+                                                            {formatCurrency(fee.value, order.currency)}
+                                                        </span>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </Popover.Dropdown>
+                                    </Popover>
+                                )}
+                            </span>
                             <span className={classNames(classes.totalsValue, {
                                 [classes.totalsValueFree]: totalFee === 0
                             })}>
@@ -145,7 +169,30 @@ export const InlineOrderSummary = ({
 
                         {totalTax > 0 && (
                             <div className={classes.totalsRow}>
-                                <span className={classes.totalsLabel}>{t`Taxes`}</span>
+                                <span className={classes.totalsLabelWithInfo}>
+                                    <span>{t`Taxes`}</span>
+                                    {order.taxes_and_fees_rollup?.taxes && order.taxes_and_fees_rollup.taxes.length > 0 && (
+                                        <Popover position="top" withArrow shadow="sm" width={220}>
+                                            <Popover.Target>
+                                                <span className={classes.infoIcon}>
+                                                    <IconInfoCircle size={14} />
+                                                </span>
+                                            </Popover.Target>
+                                            <Popover.Dropdown>
+                                                <div className={classes.breakdownList}>
+                                                    {order.taxes_and_fees_rollup.taxes.map((tax, index) => (
+                                                        <div key={index} className={classes.breakdownItem}>
+                                                            <span className={classes.breakdownName}>{tax.name}</span>
+                                                            <span className={classes.breakdownValue}>
+                                                                {formatCurrency(tax.value, order.currency)}
+                                                            </span>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </Popover.Dropdown>
+                                        </Popover>
+                                    )}
+                                </span>
                                 <span className={classes.totalsValue}>
                                     {formatCurrency(totalTax, order.currency)}
                                 </span>

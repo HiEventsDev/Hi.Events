@@ -1,7 +1,7 @@
 @use "../../../../styles/mixins.scss";
 
 .headerCard {
-  background: linear-gradient(135deg, #f8f9ff 0%, #eee5ff 100%);
+  background: linear-gradient(135deg, var(--mantine-color-primary-0) 0%, var(--mantine-color-secondary-0) 100%);
   border-radius: 16px;
   box-shadow: 0 8px 24px rgba(149, 157, 165, 0.08) !important;
   padding: 32px;
@@ -62,7 +62,7 @@
 .mainTitle {
   font-size: 28px;
   font-weight: 700;
-  color: #1a1a2e;
+  color: var(--mantine-color-gray-9);
   margin: 0;
   line-height: 1.2;
 
@@ -72,7 +72,7 @@
 }
 
 .confettiIcon {
-  color: #8a6eff;
+  color: var(--mantine-color-secondary-5);
   animation: pulse 2s infinite ease-in-out;
 }
 
@@ -92,7 +92,7 @@
   margin-top: 12px;
   font-size: 16px;
   line-height: 1.5;
-  color: #4a4a6a;
+  color: var(--mantine-color-gray-7);
   max-width: 600px;
 }
 
@@ -107,11 +107,11 @@
 
 .progressBar {
   height: 8px;
-  background-color: rgba(138, 110, 255, 0.1);
+  background-color: var(--mantine-color-secondary-1);
 
   [role="progressbar"] {
-    background: linear-gradient(90deg, #8a6eff, #b57aff);
-    box-shadow: 0 0 8px rgba(138, 110, 255, 0.4);
+    background: linear-gradient(90deg, var(--mantine-color-secondary-5), var(--mantine-color-primary-5));
+    box-shadow: 0 0 8px var(--mantine-color-secondary-3);
     transition: width 0.5s ease-in-out;
   }
 }
@@ -161,7 +161,7 @@
     margin-bottom: 0;
     position: relative;
     padding: 28px;
-    border: 1px solid #eaeaea;
+    border: 1px solid var(--mantine-color-gray-2);
     border-radius: 12px;
     transition: all 0.2s ease-in-out;
 
@@ -175,12 +175,12 @@
       margin-bottom: 12px;
       font-size: 18px;
       font-weight: 600;
-      color: #1a1a2e;
+      color: var(--mantine-color-gray-9);
     }
 
     p {
       margin-bottom: 20px;
-      color: #4a4a6a;
+      color: var(--mantine-color-gray-7);
       line-height: 1.5;
       font-size: 14px;
     }
@@ -192,16 +192,16 @@
 }
 
 .completedCard {
-  background-color: rgba(52, 199, 89, 0.03);
-  border-color: rgba(52, 199, 89, 0.2);
+  background-color: var(--mantine-color-green-0);
+  border-color: var(--mantine-color-green-2);
 }
 
 .completedBadge {
   position: absolute;
   top: 12px;
   right: 12px;
-  background-color: rgba(52, 199, 89, 0.15);
-  color: #34c759;
+  background-color: var(--mantine-color-green-1);
+  color: var(--mantine-color-green-6);
   border-radius: 50%;
   width: 28px;
   height: 28px;
@@ -211,7 +211,7 @@
   transition: all 0.2s ease;
 
   &:hover {
-    background-color: rgba(52, 199, 89, 0.25);
+    background-color: var(--mantine-color-green-2);
     transform: scale(1.05);
   }
 

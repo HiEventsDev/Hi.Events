@@ -10,7 +10,7 @@ import {IconDownload, IconPlus} from "@tabler/icons-react";
 import {ToolBar} from "../../common/ToolBar";
 import {TableSkeleton} from "../../common/TableSkeleton";
 import {useFilterQueryParamSync} from "../../../hooks/useFilterQueryParamSync.ts";
-import {IdParam, QueryFilters, QueryFilterOperator, ProductType} from "../../../types.ts";
+import {IdParam, ProductType, QueryFilterOperator, QueryFilters} from "../../../types.ts";
 import {useDisclosure} from "@mantine/hooks";
 import {CreateAttendeeModal} from "../../modals/CreateAttendeeModal";
 import {downloadBinary} from "../../../utilites/download.ts";
@@ -41,24 +41,24 @@ const Attendees = () => {
     const productOptions = getProductsFromEvent(event)
         ?.filter(product => product.product_type === ProductType.Ticket)
         ?.flatMap(product => {
-        const options = [];
+            const options = [];
 
-        options.push({
-            label: product.title,
-            value: `product:${product.id}`
-        });
-
-        if (product.type === 'TIERED' && product.prices) {
-            product.prices.forEach(price => {
-                options.push({
-                    label: `${product.title} - ${price.label}`,
-                    value: `tier:${price.id}`
-                });
+            options.push({
+                label: product.title,
+                value: `product:${product.id}`
             });
-        }
 
-        return options;
-    }) || [];
+            if (product.type === 'TIERED' && product.prices) {
+                product.prices.forEach(price => {
+                    options.push({
+                        label: `${product.title} - ${price.label}`,
+                        value: `tier:${price.id}`
+                    });
+                });
+            }
+
+            return options;
+        }) || [];
 
     const filterOptions: FilterOption[] = [
         {
@@ -167,7 +167,9 @@ const Attendees = () => {
     return (
         <>
             <PageBody>
-                <PageTitle>
+                <PageTitle
+                    subheading={t`View, edit, and export your registered attendees.`}
+                >
                     {t`Attendees`}
                 </PageTitle>
 

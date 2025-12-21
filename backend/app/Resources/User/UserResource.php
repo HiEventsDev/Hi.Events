@@ -33,6 +33,7 @@ class UserResource extends BaseResource
             'is_email_verified' => $this->getEmailVerifiedAt() !== null,
             'has_pending_email_change' => $this->getPendingEmail() !== null,
             'locale' => $this->getLocale(),
+            'marketing_opted_in_at' => $this->getMarketingOptedInAt(),
             $this->mergeWhen($isImpersonating, [
                 'is_impersonating' => true,
                 'impersonator_id' => $impersonatorId,
