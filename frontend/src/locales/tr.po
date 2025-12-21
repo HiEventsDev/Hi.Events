@@ -261,7 +261,7 @@ msgstr "KDV veya ÖTV gibi standart vergi"
 msgid "Abandoned"
 msgstr "Terk edildi"
 
-#: src/components/layouts/EventHomepage/index.tsx:361
+#: src/components/layouts/EventHomepage/index.tsx:375
 msgid "About"
 msgstr "Hakkında"
 
@@ -303,7 +303,11 @@ msgstr "Hesap"
 msgid "Account already connected!"
 msgstr "Hesap zaten bağlı!"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:66
+#: src/components/modals/EditAccountConfigurationModal/index.tsx:70
+msgid "Account configuration updated successfully"
+msgstr ""
+
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:87
 msgid "Account Information"
 msgstr ""
 
@@ -311,7 +315,7 @@ msgstr ""
 msgid "Account Name"
 msgstr "Hesap Adı"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:42
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:58
 msgid "Account not found"
 msgstr ""
 
@@ -440,7 +444,7 @@ msgstr "Kademe ekle"
 
 #: src/components/common/AddEventToCalendarButton/index.tsx:14
 #: src/components/common/AddToCalendarCTA/index.tsx:24
-#: src/components/layouts/EventHomepage/index.tsx:306
+#: src/components/layouts/EventHomepage/index.tsx:320
 msgid "Add to Calendar"
 msgstr "Takvime Ekle"
 
@@ -493,7 +497,7 @@ msgid "Admin"
 msgstr "Yönetici"
 
 #: src/components/common/GlobalMenu/index.tsx:61
-#: src/components/layouts/Admin/index.tsx:23
+#: src/components/layouts/Admin/index.tsx:24
 #: src/components/routes/admin/Dashboard/index.tsx:42
 msgid "Admin Dashboard"
 msgstr "Yönetici Paneli"
@@ -673,7 +677,11 @@ msgid "Appearance"
 msgstr "Görünüm"
 
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:120
-msgid "Application Fees"
+#~ msgid "Application Fees"
+#~ msgstr ""
+
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:140
+msgid "Application Fees Configuration"
 msgstr ""
 
 #: src/components/routes/product-widget/SelectProducts/index.tsx:554
@@ -723,6 +731,10 @@ msgstr "Bu katılımcıyı iptal etmek istediğinizden emin misiniz? Bu işlem b
 #: src/components/common/AffiliateTable/index.tsx:202
 msgid "Are you sure you want to delete this affiliate? This action cannot be undone."
 msgstr "Bu bağlı kuruluşu silmek istediğinizden emin misiniz? Bu işlem geri alınamaz."
+
+#: src/components/routes/admin/Configurations/index.tsx:35
+msgid "Are you sure you want to delete this configuration? This may affect accounts using it."
+msgstr ""
 
 #: src/components/common/PromoCodeTable/index.tsx:37
 msgid "Are you sure you want to delete this promo code?"
@@ -794,7 +806,7 @@ msgstr "Bu Kapasite Atamasını silmek istediğinizden emin misiniz?"
 msgid "Are you sure you would like to delete this Check-In List?"
 msgstr "Bu Check-In Listesini silmek istediğinizden emin misiniz?"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:107
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:198
 msgid "Are you VAT registered in the EU?"
 msgstr "AB'de KDV kaydınız var mı?"
 
@@ -819,9 +831,17 @@ msgstr "Sipariş başına bir kez sor"
 msgid "Ask once per product"
 msgstr "Ürün başına bir kez sor"
 
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:143
+msgid "Assigned Configuration"
+msgstr ""
+
 #: src/components/modals/CreateWebhookModal/index.tsx:33
 msgid "At least one event type must be selected"
 msgstr "En az bir etkinlik türü seçilmelidir"
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:100
+msgid "Attempts"
+msgstr ""
 
 #: src/components/routes/organizer/Reports/index.tsx:36
 msgid "Attendance and check-in rates across all events"
@@ -984,7 +1004,7 @@ msgstr "Harika Etkinlikler Ltd."
 msgid "Awesome Organizer Ltd."
 msgstr "Harika Organizatör Ltd."
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:57
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:78
 msgid "Back to Accounts"
 msgstr ""
 
@@ -1052,7 +1072,16 @@ msgstr "Brezilya Portekizcesi"
 msgid "Business"
 msgstr "İş"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:188
+#: src/components/modals/EditAccountVatSettingsModal/index.tsx:147
+msgid "Business Address"
+msgstr ""
+
+#: src/components/modals/EditAccountVatSettingsModal/index.tsx:148
+msgid "Business address for VAT purposes"
+msgstr ""
+
+#: src/components/modals/EditAccountVatSettingsModal/index.tsx:140
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:211
 msgid "Business Name"
 msgstr ""
 
@@ -1147,6 +1176,10 @@ msgstr "Check-in Yapılamaz"
 #: src/components/common/CheckIn/AttendeeList.tsx:34
 msgid "Cannot Check In (Cancelled)"
 msgstr "Giriş Yapılamaz (İptal Edildi)"
+
+#: src/components/routes/admin/Configurations/index.tsx:31
+msgid "Cannot delete the system default configuration"
+msgstr ""
 
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:42
 #: src/components/layouts/Event/index.tsx:103
@@ -1512,6 +1545,31 @@ msgstr "Bileşen Kodu"
 msgid "Conference Center"
 msgstr "Konferans Merkezi"
 
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:36
+msgid "Configuration assigned successfully"
+msgstr ""
+
+#: src/components/routes/admin/Configurations/index.tsx:181
+msgid "Configuration created successfully"
+msgstr ""
+
+#: src/components/routes/admin/Configurations/index.tsx:37
+msgid "Configuration deleted successfully"
+msgstr ""
+
+#: src/components/routes/admin/Configurations/index.tsx:70
+msgid "Configuration names are visible to end users. The \"Fixed Fee\" and \"Percentage Fee\" are application fees charged in USD on all transactions."
+msgstr ""
+
+#: src/components/routes/admin/Configurations/index.tsx:181
+msgid "Configuration updated successfully"
+msgstr ""
+
+#: src/components/layouts/Admin/index.tsx:18
+#: src/components/routes/admin/Configurations/index.tsx:60
+msgid "Configurations"
+msgstr ""
+
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:35
 msgid "Configured Discount"
 msgstr "Yapılandırılmış İndirim"
@@ -1634,8 +1692,8 @@ msgstr "Stripe'a Bağlandı"
 msgid "Connection Details"
 msgstr "Bağlantı Detayları"
 
-#: src/components/layouts/EventHomepage/index.tsx:541
-#: src/components/layouts/OrganizerHomepage/index.tsx:232
+#: src/components/layouts/EventHomepage/index.tsx:555
+#: src/components/layouts/OrganizerHomepage/index.tsx:245
 msgid "Contact"
 msgstr "İletişim"
 
@@ -1857,6 +1915,12 @@ msgstr "Kategori Oluştur"
 msgid "Create Check-In List"
 msgstr "Check-In Listesi Oluştur"
 
+#: src/components/routes/admin/Configurations/index.tsx:65
+#: src/components/routes/admin/Configurations/index.tsx:192
+#: src/components/routes/admin/Configurations/index.tsx:240
+msgid "Create Configuration"
+msgstr ""
+
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:302
 msgid "Create custom email templates for this event that override the organizer defaults"
 msgstr "Organizatör varsayılanlarını geçersiz kılan bu etkinlik için özel e-posta şablonları oluşturun"
@@ -1930,7 +1994,7 @@ msgstr "Bilet satmaya ve katılımcıları yönetmeye başlamak için ilk etkinl
 msgid "Create your own event"
 msgstr "Kendi etkinliğinizi oluşturun"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:75
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:96
 msgid "Created"
 msgstr ""
 
@@ -1957,7 +2021,7 @@ msgstr "Harekete geçirici düğme etiketi gerekli"
 #: src/components/common/OrganizerReportTable/index.tsx:261
 #: src/components/forms/OrganizerForm/index.tsx:49
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:73
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:92
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:113
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:115
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:51
 #: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:33
@@ -1972,6 +2036,14 @@ msgstr "Mevcut Şifre"
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:162
 msgid "Current payment processor"
 msgstr "Mevcut ödeme işlemcisi"
+
+#: src/components/modals/EditAccountVatSettingsModal/index.tsx:156
+msgid "Current VAT number is validated"
+msgstr ""
+
+#: src/components/modals/EditAccountVatSettingsModal/index.tsx:157
+msgid "Current VAT number validation failed"
+msgstr ""
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:102
 msgid "Currently available for purchase"
@@ -2133,6 +2205,10 @@ msgstr "Siparişin verildiği tarih"
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:38
 msgid "Day one capacity"
 msgstr "Birinci gün kapasitesi"
+
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:65
+msgid "Default"
+msgstr ""
 
 #: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:79
 msgid "Default attendee information collection"
@@ -2344,6 +2420,10 @@ msgstr "Felemenkçe"
 msgid "e.g., Get Tickets, Register Now"
 msgstr "örn., Bilet Al, Şimdi Kaydol"
 
+#: src/components/routes/admin/Configurations/index.tsx:207
+msgid "e.g., Standard, Premium, Enterprise"
+msgstr ""
+
 #: src/components/forms/ProductForm/index.tsx:85
 msgid "Early bird"
 msgstr "Erken kuş"
@@ -2351,8 +2431,7 @@ msgstr "Erken kuş"
 #: src/components/common/TaxAndFeeList/index.tsx:65
 #: src/components/modals/ManageAttendeeModal/index.tsx:221
 #: src/components/modals/ManageOrderModal/index.tsx:203
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:127
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:162
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:185
 msgid "Edit"
 msgstr "Düzenle"
 
@@ -2374,6 +2453,10 @@ msgstr "Bağlı Kuruluşu Düzenle"
 #: src/components/common/QuestionAndAnswerList/index.tsx:159
 msgid "Edit Answer"
 msgstr "Cevabı Düzenle"
+
+#: src/components/modals/EditAccountConfigurationModal/index.tsx:85
+msgid "Edit Application Fees"
+msgstr ""
 
 #: src/components/common/CapacityAssignmentList/index.tsx:146
 msgid "Edit Capacity"
@@ -2398,6 +2481,10 @@ msgstr "Check-In Listesini Düzenle"
 #: src/components/common/PromoCodeTable/index.tsx:170
 msgid "Edit Code"
 msgstr "Kodu Düzenle"
+
+#: src/components/routes/admin/Configurations/index.tsx:192
+msgid "Edit Configuration"
+msgstr ""
 
 #: src/components/modals/EditOrganizerModal/index.tsx:63
 msgid "Edit Organizer"
@@ -2436,6 +2523,10 @@ msgstr "Kullanıcıyı düzenle"
 msgid "Edit User"
 msgstr "Kullanıcıyı Düzenle"
 
+#: src/components/modals/EditAccountVatSettingsModal/index.tsx:111
+msgid "Edit VAT Settings"
+msgstr ""
+
 #: src/components/common/WebhookTable/index.tsx:104
 msgid "Edit webhook"
 msgstr "Webhook'u düzenle"
@@ -2470,7 +2561,7 @@ msgstr "Uygun Giriş Listeleri"
 #: src/components/forms/AffiliateForm/index.tsx:89
 #: src/components/modals/EditUserModal/index.tsx:80
 #: src/components/modals/InviteUserModal/index.tsx:61
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:71
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:92
 #: src/components/routes/auth/AcceptInvitation/index.tsx:99
 #: src/components/routes/auth/Login/index.tsx:92
 #: src/components/routes/auth/Register/index.tsx:98
@@ -2615,7 +2706,7 @@ msgid "Ended"
 msgstr "Sona Erdi"
 
 #: src/components/common/LanguageSwitcher/index.tsx:18
-#: src/components/common/LanguageSwitcher/index.tsx:54
+#: src/components/common/LanguageSwitcher/index.tsx:56
 #: src/components/modals/CreateAttendeeModal/index.tsx:156
 msgid "English"
 msgstr "İngilizce"
@@ -2636,9 +2727,21 @@ msgstr "Bağlı kuruluş adını girin"
 msgid "Enter an amount excluding taxes and fees."
 msgstr "Vergiler ve ücretler hariç bir tutar girin."
 
+#: src/components/modals/EditAccountVatSettingsModal/index.tsx:149
+msgid "Enter business address"
+msgstr ""
+
+#: src/components/modals/EditAccountVatSettingsModal/index.tsx:142
+msgid "Enter business name"
+msgstr ""
+
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:128
 msgid "Enter email subject..."
 msgstr "E-posta konusunu girin..."
+
+#: src/components/modals/EditAccountVatSettingsModal/index.tsx:124
+msgid "Enter the VAT number including country code"
+msgstr ""
 
 #: src/components/forms/AffiliateForm/index.tsx:39
 msgid "Enter unique affiliate code"
@@ -2654,7 +2757,7 @@ msgstr "E-postanızı girin"
 msgid "Enter your name"
 msgstr "Adınızı girin"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:126
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:217
 msgid "Enter your VAT number including the country code, without spaces (e.g., IE1234567A, DE123456789)"
 msgstr ""
 
@@ -2848,11 +2951,11 @@ msgstr "Etkinlik Türleri"
 msgid "Event Venue"
 msgstr "Etkinlik Mekanı"
 
-#: src/components/common/AdminAccountsTable/index.tsx:63
+#: src/components/common/AdminAccountsTable/index.tsx:74
 #: src/components/layouts/Admin/index.tsx:16
 #: src/components/layouts/OrganizerLayout/index.tsx:81
 #: src/components/layouts/OrganizerLayout/index.tsx:141
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:102
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:123
 #: src/components/routes/admin/Events/index.tsx:77
 #: src/components/routes/organizer/Events/index.tsx:43
 msgid "Events"
@@ -2925,6 +3028,10 @@ msgstr "Facebook"
 msgid "Failed to abandon order. Please try again."
 msgstr "Sipariş terk edilemedi. Lütfen tekrar deneyin."
 
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:37
+msgid "Failed to assign configuration"
+msgstr ""
+
 #: src/components/common/AttendeeTable/index.tsx:103
 msgid "Failed to cancel attendee"
 msgstr "Katılımcı iptal edilemedi"
@@ -2937,10 +3044,18 @@ msgstr "Sipariş iptal edilemedi"
 msgid "Failed to create affiliate"
 msgstr "Bağlı kuruluş oluşturulamadı"
 
+#: src/components/routes/admin/Configurations/index.tsx:185
+msgid "Failed to create configuration"
+msgstr ""
+
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:176
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:179
 msgid "Failed to create template"
 msgstr "Şablon oluşturulamadı"
+
+#: src/components/routes/admin/Configurations/index.tsx:38
+msgid "Failed to delete configuration"
+msgstr ""
 
 #: src/components/common/QuestionsTable/index.tsx:176
 msgid "Failed to delete message. Please try again."
@@ -2991,7 +3106,7 @@ msgstr "Doğrulama kodu yeniden gönderilemedi"
 msgid "Failed to save template"
 msgstr "Şablon kaydedilemedi"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:93
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:182
 msgid "Failed to save VAT settings. Please try again."
 msgstr "KDV ayarları kaydedilemedi. Lütfen tekrar deneyin."
 
@@ -3017,6 +3132,10 @@ msgstr "Taklit başlatılamadı. Lütfen tekrar deneyin."
 msgid "Failed to stop impersonation. Please try again."
 msgstr "Taklit durdurulamadı. Lütfen tekrar deneyin."
 
+#: src/components/modals/EditAccountConfigurationModal/index.tsx:77
+msgid "Failed to update account configuration"
+msgstr ""
+
 #: src/components/modals/EditAffiliateModal/index.tsx:70
 msgid "Failed to update affiliate"
 msgstr "Bağlı kuruluş güncellenemedi"
@@ -3024,6 +3143,14 @@ msgstr "Bağlı kuruluş güncellenemedi"
 #: src/components/common/QuestionAndAnswerList/index.tsx:102
 msgid "Failed to update answer."
 msgstr "Cevap güncellenemedi."
+
+#: src/components/routes/admin/Configurations/index.tsx:185
+msgid "Failed to update configuration"
+msgstr ""
+
+#: src/components/modals/EditAccountVatSettingsModal/index.tsx:103
+msgid "Failed to update VAT settings"
+msgstr ""
 
 #: src/components/common/Editor/Controls/InsertImageControl/index.tsx:66
 msgid "Failed to upload image."
@@ -3141,8 +3268,27 @@ msgstr "Sabit"
 msgid "Fixed amount"
 msgstr "Sabit tutar"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:133
+#: src/components/modals/EditAccountConfigurationModal/index.tsx:89
 msgid "Fixed Fee"
+msgstr ""
+
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:155
+#: src/components/routes/admin/Configurations/index.tsx:86
+#: src/components/routes/admin/Configurations/index.tsx:213
+msgid "Fixed Fee (USD)"
+msgstr ""
+
+#: src/components/modals/EditAccountConfigurationModal/index.tsx:90
+msgid "Fixed fee amount in {currencyCode}"
+msgstr ""
+
+#: src/components/routes/admin/Configurations/index.tsx:214
+msgid "Fixed fee charged per transaction in USD"
+msgstr ""
+
+#: src/components/modals/EditAccountConfigurationModal/index.tsx:40
+#: src/components/routes/admin/Configurations/index.tsx:160
+msgid "Fixed fee must be 0 or greater"
 msgstr ""
 
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:274
@@ -3229,7 +3375,7 @@ msgstr "Kod oluştur"
 msgid "German"
 msgstr "Almanca"
 
-#: src/components/layouts/EventHomepage/index.tsx:392
+#: src/components/layouts/EventHomepage/index.tsx:406
 msgid "Get Directions"
 msgstr "Yol Tarifi Al"
 
@@ -3237,7 +3383,7 @@ msgstr "Yol Tarifi Al"
 msgid "Get started for free, no subscription fees"
 msgstr "Ücretsiz başlayın, abonelik ücreti yok"
 
-#: src/components/layouts/EventHomepage/index.tsx:577
+#: src/components/layouts/EventHomepage/index.tsx:591
 msgid "Get Tickets"
 msgstr "Bilet Al"
 
@@ -3536,7 +3682,7 @@ msgstr "Resim URL'si"
 msgid "Images"
 msgstr "Görseller"
 
-#: src/components/common/AdminAccountsTable/index.tsx:102
+#: src/components/common/AdminAccountsTable/index.tsx:113
 #: src/components/common/AdminUsersTable/index.tsx:84
 #: src/components/common/AdminUsersTable/index.tsx:96
 msgid "Impersonate"
@@ -3629,7 +3775,7 @@ msgstr "Değişken Ekle"
 msgid "Instagram"
 msgstr "Instagram"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:183
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:206
 msgid "Invalid"
 msgstr ""
 
@@ -3647,7 +3793,7 @@ msgstr "Geçersiz e-posta formatı"
 msgid "Invalid Liquid syntax. Please correct it and try again."
 msgstr "Geçersiz Liquid sözdizimi. Lütfen düzeltin ve tekrar deneyin."
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:72
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:157
 msgid "Invalid VAT number format"
 msgstr ""
 
@@ -3704,6 +3850,10 @@ msgstr "Fatura Ayarları"
 msgid "Irish VAT at 23% will be applied to platform fees (domestic supply)."
 msgstr "Platform ücretlerine %23 İrlanda KDV'si uygulanacaktır (yerel tedarik)."
 
+#: src/components/modals/EditAccountVatSettingsModal/index.tsx:116
+msgid "Is this account VAT registered in the EU?"
+msgstr ""
+
 #: src/components/common/LanguageSwitcher/index.tsx:24
 msgid "Italian"
 msgstr "İtalyanca"
@@ -3728,7 +3878,7 @@ msgstr "John"
 msgid "Johnson"
 msgstr "Johnson"
 
-#: src/components/layouts/EventHomepage/index.tsx:320
+#: src/components/layouts/EventHomepage/index.tsx:334
 msgid "Join from anywhere"
 msgstr "Her yerden katılın"
 
@@ -3834,6 +3984,10 @@ msgstr "Son Kullanım"
 msgid "Leave blank to use the default word \"Invoice\""
 msgstr "Varsayılan \"Fatura\" kelimesini kullanmak için boş bırakın"
 
+#: src/components/modals/EditAccountVatSettingsModal/index.tsx:141
+msgid "Legal business name for VAT purposes"
+msgstr ""
+
 #: src/components/common/ThemeColorControls/index.tsx:84
 msgid "Light"
 msgstr "Açık"
@@ -3890,7 +4044,7 @@ msgid "Loading..."
 msgstr "Yükleniyor..."
 
 #: src/components/common/AttendeeTicket/index.tsx:91
-#: src/components/layouts/EventHomepage/index.tsx:374
+#: src/components/layouts/EventHomepage/index.tsx:388
 #: src/components/routes/event/Settings/index.tsx:34
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:84
 #: src/components/routes/my-tickets/index.tsx:73
@@ -4150,6 +4304,7 @@ msgstr "Nam placerat elementum..."
 #: src/components/forms/TaxAndFeeForm/index.tsx:61
 #: src/components/modals/DuplicateEventModal/index.tsx:109
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:63
+#: src/components/routes/admin/Configurations/index.tsx:205
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:75
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:167
 msgid "Name"
@@ -4158,8 +4313,13 @@ msgstr "Ad"
 #: src/components/common/ContactOrganizerModal/index.tsx:32
 #: src/components/modals/CreateAffiliateModal/index.tsx:28
 #: src/components/modals/EditAffiliateModal/index.tsx:33
+#: src/components/routes/admin/Configurations/index.tsx:156
 msgid "Name is required"
 msgstr "Ad gerekli"
+
+#: src/components/routes/admin/Configurations/index.tsx:157
+msgid "Name must be less than 255 characters"
+msgstr ""
 
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:34
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:68
@@ -4192,11 +4352,11 @@ msgstr "Yeni Şifre"
 msgid "Nightlife"
 msgstr "Gece Hayatı"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:171
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:194
 msgid "No"
 msgstr ""
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:113
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:204
 msgid "No - I'm an individual or non-VAT registered business"
 msgstr "Hayır - Bireyim veya KDV kayıtlı olmayan bir işletmeyim"
 
@@ -4204,7 +4364,7 @@ msgstr "Hayır - Bireyim veya KDV kayıtlı olmayan bir işletmeyim"
 msgid "No accounts"
 msgstr "Hesap yok"
 
-#: src/components/common/AdminAccountsTable/index.tsx:18
+#: src/components/common/AdminAccountsTable/index.tsx:21
 msgid "No accounts found"
 msgstr "Hesap bulunamadı"
 
@@ -4243,6 +4403,10 @@ msgstr "Check-In Listesi Yok"
 #: src/components/common/CheckInStatusModal/index.tsx:156
 msgid "No check-in lists available for this event."
 msgstr "Bu etkinlik için kullanılabilir giriş listesi yok."
+
+#: src/components/routes/admin/Configurations/index.tsx:116
+msgid "No configurations found"
+msgstr ""
 
 #: src/components/layouts/AuthLayout/index.tsx:36
 msgid "No Credit Card Required"
@@ -4324,7 +4488,7 @@ msgstr "Henüz sipariş yok"
 msgid "No other organizers available"
 msgstr "Başka organizatör mevcut değil"
 
-#: src/components/layouts/OrganizerHomepage/index.tsx:273
+#: src/components/layouts/OrganizerHomepage/index.tsx:286
 msgid "No past events"
 msgstr "Geçmiş etkinlik yok"
 
@@ -4392,7 +4556,7 @@ msgstr "Hiçbir Vergi veya Ücret eklenmemiş."
 msgid "No Tickets Found"
 msgstr "Bilet Bulunamadı"
 
-#: src/components/layouts/OrganizerHomepage/index.tsx:273
+#: src/components/layouts/OrganizerHomepage/index.tsx:286
 msgid "No upcoming events"
 msgstr "Yaklaşan etkinlik yok"
 
@@ -4400,7 +4564,7 @@ msgstr "Yaklaşan etkinlik yok"
 msgid "No users found"
 msgstr "Kullanıcı bulunamadı"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:202
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:225
 msgid "No VAT settings configured"
 msgstr ""
 
@@ -4442,8 +4606,8 @@ msgstr "Uygun Değil"
 
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:137
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:145
-msgid "Not set"
-msgstr ""
+#~ msgid "Not set"
+#~ msgstr ""
 
 #: src/components/modals/ManageAttendeeModal/index.tsx:130
 #: src/components/modals/ManageOrderModal/index.tsx:164
@@ -4550,7 +4714,7 @@ msgid "Online event"
 msgstr "Online etkinlik"
 
 #: src/components/layouts/EventHomepage/EventInformation/index.tsx:71
-#: src/components/layouts/EventHomepage/index.tsx:318
+#: src/components/layouts/EventHomepage/index.tsx:332
 #: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:167
 msgid "Online Event"
 msgstr "Çevrimiçi Etkinlik"
@@ -4840,7 +5004,7 @@ msgstr "Organizasyon Adı"
 
 #: src/components/common/AdminEventsTable/index.tsx:85
 #: src/components/common/AttendeeTicket/index.tsx:82
-#: src/components/layouts/EventHomepage/index.tsx:453
+#: src/components/layouts/EventHomepage/index.tsx:467
 #: src/components/modals/EditUserModal/index.tsx:55
 #: src/components/modals/InviteUserModal/index.tsx:47
 #: src/components/routes/events/Dashboard/index.tsx:193
@@ -4992,12 +5156,12 @@ msgstr "Şifre başarıyla sıfırlandı. Lütfen yeni şifrenizle giriş yapın
 msgid "Passwords are not the same"
 msgstr "Şifreler aynı değil"
 
-#: src/components/layouts/OrganizerHomepage/index.tsx:265
+#: src/components/layouts/OrganizerHomepage/index.tsx:278
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:30
 msgid "Past"
 msgstr "Geçmiş"
 
-#: src/components/layouts/OrganizerHomepage/index.tsx:252
+#: src/components/layouts/OrganizerHomepage/index.tsx:265
 msgid "Past Events"
 msgstr "Geçmiş Etkinlikler"
 
@@ -5130,8 +5294,27 @@ msgstr "Yüzde"
 msgid "Percentage Amount"
 msgstr "Yüzde Miktarı"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:141
+#: src/components/modals/EditAccountConfigurationModal/index.tsx:99
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:161
+#: src/components/routes/admin/Configurations/index.tsx:90
+#: src/components/routes/admin/Configurations/index.tsx:224
 msgid "Percentage Fee"
+msgstr ""
+
+#: src/components/modals/EditAccountConfigurationModal/index.tsx:100
+msgid "Percentage fee (0-100%)"
+msgstr ""
+
+#: src/components/modals/EditAccountConfigurationModal/index.tsx:46
+msgid "Percentage fee must be between 0 and 100"
+msgstr ""
+
+#: src/components/routes/admin/Configurations/index.tsx:162
+msgid "Percentage must be between 0 and 100"
+msgstr ""
+
+#: src/components/routes/admin/Configurations/index.tsx:225
+msgid "Percentage of transaction amount"
 msgstr ""
 
 #: src/components/common/AffiliateTable/index.tsx:84
@@ -5211,7 +5394,7 @@ msgstr "Lütfen 5 haneli kodu girin"
 msgid "Please enter your new password"
 msgstr "Lütfen yeni şifrenizi girin"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:64
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:149
 msgid "Please enter your VAT number"
 msgstr "Lütfen KDV numaranızı girin"
 
@@ -5365,8 +5548,8 @@ msgstr "Biletleri Yazdır"
 msgid "Print to PDF"
 msgstr "PDF'ye Yazdır"
 
-#: src/components/layouts/EventHomepage/index.tsx:557
-#: src/components/layouts/OrganizerHomepage/index.tsx:315
+#: src/components/layouts/EventHomepage/index.tsx:571
+#: src/components/layouts/OrganizerHomepage/index.tsx:328
 msgid "Privacy Policy"
 msgstr "Gizlilik Politikası"
 
@@ -5877,10 +6060,15 @@ msgstr "Kaydet"
 
 #: src/components/modals/ManageAttendeeModal/index.tsx:231
 #: src/components/modals/ManageOrderModal/index.tsx:175
+#: src/components/routes/admin/Configurations/index.tsx:240
 #: src/components/routes/event/HomepageDesigner/index.tsx:272
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:283
 msgid "Save Changes"
 msgstr "Değişiklikleri Kaydet"
+
+#: src/components/modals/EditAccountConfigurationModal/index.tsx:115
+msgid "Save Configuration"
+msgstr ""
 
 #: src/components/modals/EditOrganizerModal/index.tsx:70
 msgid "Save Organizer"
@@ -5902,7 +6090,8 @@ msgstr "Şablonu Kaydet"
 msgid "Save Ticket Design"
 msgstr "Bilet Tasarımını Kaydet"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:166
+#: src/components/modals/EditAccountVatSettingsModal/index.tsx:168
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:243
 msgid "Save VAT Settings"
 msgstr "KDV Ayarlarını Kaydet"
 
@@ -5998,6 +6187,10 @@ msgstr "{0} seç"
 msgid "Select a category"
 msgstr "Bir kategori seçin"
 
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:148
+msgid "Select a configuration"
+msgstr ""
+
 #: src/components/common/AdminUsersTable/index.tsx:100
 msgid "Select Account"
 msgstr "Hesap Seç"
@@ -6017,6 +6210,10 @@ msgstr "Kamera Seç"
 #: src/components/forms/ProductForm/index.tsx:278
 msgid "Select category..."
 msgstr "Kategori seç..."
+
+#: src/components/modals/EditAccountVatSettingsModal/index.tsx:133
+msgid "Select country"
+msgstr ""
 
 #: src/components/forms/OrganizerForm/index.tsx:50
 msgid "Select currency"
@@ -6071,6 +6268,10 @@ msgstr "Başlangıç saatini seçin"
 msgid "Select status"
 msgstr "Durum seç"
 
+#: src/components/modals/EditAccountVatSettingsModal/index.tsx:132
+msgid "Select the country where VAT is registered"
+msgstr ""
+
 #: src/components/modals/CreateAttendeeModal/index.tsx:161
 msgid "Select Ticket"
 msgstr "Bilet Seç"
@@ -6092,6 +6293,10 @@ msgstr "Saat dilimi seçin"
 #: src/components/forms/WebhookForm/index.tsx:123
 msgid "Select which events will trigger this webhook"
 msgstr "Bu webhook'u tetikleyecek etkinlikleri seçin"
+
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:144
+msgid "Select which fee configuration applies to this account. Fees are always in USD."
+msgstr ""
 
 #: src/components/forms/ProductForm/index.tsx:376
 msgid "Select..."
@@ -6227,7 +6432,7 @@ msgid "Setup in Minutes"
 msgstr "Dakikalar İçinde Kurulum"
 
 #: src/components/common/ShareIcon/index.tsx:30
-#: src/components/layouts/EventHomepage/index.tsx:279
+#: src/components/layouts/EventHomepage/index.tsx:293
 #: src/components/layouts/OrganizerLayout/index.tsx:228
 #: src/components/modals/ShareModal/index.tsx:37
 #: src/components/modals/ShareModal/index.tsx:165
@@ -6354,7 +6559,7 @@ msgid "Sold out"
 msgstr "Tükendi"
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:81
-#: src/components/layouts/EventHomepage/index.tsx:142
+#: src/components/layouts/EventHomepage/index.tsx:143
 msgid "Sold Out"
 msgstr "Tükendi"
 
@@ -6664,10 +6869,18 @@ msgstr "Destek E-postası"
 msgid "Support for tiered, donation-based, and product sales with customizable pricing and capacity"
 msgstr ""
 
+#: src/components/common/LanguageSwitcher/index.tsx:40
+msgid "Swedish"
+msgstr ""
+
 #: src/components/layouts/OrganizerLayout/index.tsx:65
 #: src/components/modals/SwitchOrganizerModal/index.tsx:33
 msgid "Switch Organizer"
 msgstr "Organizatör Değiştir"
+
+#: src/components/routes/admin/Configurations/index.tsx:81
+msgid "System Default"
+msgstr ""
 
 #: src/components/forms/ProductForm/index.tsx:262
 msgid "T-shirt"
@@ -6775,8 +6988,8 @@ msgstr "Şablon başarıyla silindi"
 msgid "Template saved successfully"
 msgstr "Şablon başarıyla kaydedildi"
 
-#: src/components/layouts/EventHomepage/index.tsx:563
-#: src/components/layouts/OrganizerHomepage/index.tsx:322
+#: src/components/layouts/EventHomepage/index.tsx:577
+#: src/components/layouts/OrganizerHomepage/index.tsx:335
 msgid "Terms of Service"
 msgstr "Hizmet Koşulları"
 
@@ -6896,6 +7109,10 @@ msgstr "Şablon gövdesi geçersiz Liquid sözdizimi içeriyor. Lütfen düzelti
 #: src/components/routes/organizer/Settings/Sections/SeoSettings/index.tsx:63
 msgid "The title of the event that will be displayed in search engine results and when sharing on social media. By default, the event title will be used"
 msgstr "Arama motoru sonuçlarında ve sosyal medyada paylaşırken görüntülenecek etkinlik başlığı. Varsayılan olarak etkinlik başlığı kullanılacaktır"
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:87
+msgid "The VAT number could not be validated. Please check the number and try again."
+msgstr ""
 
 #: src/constants/eventCategories.ts:10
 msgid "Theater"
@@ -7017,6 +7234,10 @@ msgstr "Bu mesaj bu etkinlikten gönderilen tüm e-postaların altbilgisinde yer
 #: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:103
 msgid "This message will only be shown if order is completed successfully. Orders awaiting payment will not show this message"
 msgstr "Bu mesaj sadece sipariş başarılı bir şekilde tamamlandığında gösterilecek. Ödeme bekleyen siparişlerde bu mesaj gösterilmeyecek"
+
+#: src/components/routes/admin/Configurations/index.tsx:206
+msgid "This name is visible to end users"
+msgstr ""
 
 #: src/components/forms/StripeCheckoutForm/index.tsx:95
 msgid "This order has already been paid."
@@ -7191,7 +7412,7 @@ msgstr "Bilet URL'si"
 msgid "tickets"
 msgstr "bilet"
 
-#: src/components/layouts/EventHomepage/index.tsx:429
+#: src/components/layouts/EventHomepage/index.tsx:443
 #: src/components/routes/my-tickets/index.tsx:84
 msgid "Tickets"
 msgstr "Biletler"
@@ -7201,7 +7422,7 @@ msgstr "Biletler"
 msgid "Tickets & Products"
 msgstr "Biletler ve Ürünler"
 
-#: src/components/layouts/EventHomepage/index.tsx:149
+#: src/components/layouts/EventHomepage/index.tsx:150
 msgid "Tickets Available"
 msgstr "Mevcut Biletler"
 
@@ -7243,7 +7464,7 @@ msgstr "Kullanım Sayısı"
 
 #: src/components/forms/OrganizerForm/index.tsx:58
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:82
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:83
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:104
 #: src/components/routes/auth/AcceptInvitation/index.tsx:106
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:124
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:125
@@ -7255,6 +7476,10 @@ msgstr "Saat Dilimi"
 #: src/components/forms/PromoCodeForm/index.tsx:66
 msgid "TIP"
 msgstr "İPUCU"
+
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:170
+msgid "To edit configurations, go to the Configurations section in the admin menu."
+msgstr ""
 
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:660
 msgid "To receive credit card payments, you need to connect your Stripe account. Stripe is our payment processing partner that ensures secure transactions and timely payouts."
@@ -7468,12 +7693,12 @@ msgstr "Etkinliği Yayından Kaldır"
 
 #: src/components/common/EventsDashboardStatusButtons/index.tsx:20
 #: src/components/common/EventStatusBadge/index.tsx:16
-#: src/components/layouts/OrganizerHomepage/index.tsx:259
+#: src/components/layouts/OrganizerHomepage/index.tsx:272
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:33
 msgid "Upcoming"
 msgstr "Yaklaşan"
 
-#: src/components/layouts/OrganizerHomepage/index.tsx:252
+#: src/components/layouts/OrganizerHomepage/index.tsx:265
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:232
 msgid "Upcoming Events"
 msgstr "Yaklaşan Etkinlikler"
@@ -7583,12 +7808,12 @@ msgstr "Kullanıcı"
 msgid "User Management"
 msgstr "Kullanıcı Yönetimi"
 
-#: src/components/common/AdminAccountsTable/index.tsx:70
-#: src/components/common/AdminAccountsTable/index.tsx:78
+#: src/components/common/AdminAccountsTable/index.tsx:81
+#: src/components/common/AdminAccountsTable/index.tsx:89
 #: src/components/layouts/Admin/index.tsx:15
 #: src/components/routes/account/ManageAccount/index.tsx:32
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:109
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:210
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:130
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:233
 #: src/components/routes/admin/Users/index.tsx:57
 msgid "Users"
 msgstr "Kullanıcılar"
@@ -7605,23 +7830,28 @@ msgstr "Kullanıcılar e-postalarını <0>Profil Ayarları</0>'nda değiştirebi
 msgid "UTC"
 msgstr "UTC"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:183
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:206
 msgid "Valid"
 msgstr ""
 
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:139
-msgid "Valid VAT number"
-msgstr "Geçerli KDV numarası"
+#~ msgid "Valid VAT number"
+#~ msgstr "Geçerli KDV numarası"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:181
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:204
 msgid "Validated"
+msgstr ""
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:71
+msgid "Validating your VAT number..."
 msgstr ""
 
 #: src/components/forms/TaxAndFeeForm/index.tsx:62
 msgid "VAT"
 msgstr "KDV"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:194
+#: src/components/modals/EditAccountVatSettingsModal/index.tsx:131
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:217
 msgid "VAT Country"
 msgstr ""
 
@@ -7633,24 +7863,39 @@ msgstr "KDV Bilgisi"
 msgid "VAT may be applied to platform fees depending on your VAT registration status. Please complete the VAT information section below."
 msgstr ""
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:125
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:177
+#: src/components/modals/EditAccountVatSettingsModal/index.tsx:123
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:216
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:200
 msgid "VAT Number"
 msgstr "KDV Numarası"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:23
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:24
 msgid "VAT number must not contain spaces"
 msgstr ""
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:31
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:32
 msgid "VAT number must start with a 2-letter country code followed by 8-15 alphanumeric characters (e.g., DE123456789)"
 msgstr ""
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:153
-msgid "VAT number validation failed. Please check your number and try again."
-msgstr "KDV numarası doğrulaması başarısız oldu. Lütfen numaranızı kontrol edin ve tekrar deneyin."
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:55
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:171
+msgid "VAT number validated successfully"
+msgstr ""
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:169
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:84
+msgid "VAT number validation failed"
+msgstr ""
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:153
+#~ msgid "VAT number validation failed. Please check your number and try again."
+#~ msgstr "KDV numarası doğrulaması başarısız oldu. Lütfen numaranızı kontrol edin ve tekrar deneyin."
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:173
+msgid "VAT number validation failed. Please check your VAT number."
+msgstr ""
+
+#: src/components/modals/EditAccountVatSettingsModal/index.tsx:115
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:192
 msgid "VAT Registered"
 msgstr ""
 
@@ -7659,21 +7904,30 @@ msgstr ""
 msgid "VAT Registration Information"
 msgstr "KDV Kayıt Bilgisi"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:155
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:178
 msgid "VAT Settings"
 msgstr ""
 
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:84
-msgid "VAT settings saved and validated successfully"
-msgstr "KDV ayarları başarıyla kaydedildi ve doğrulandı"
+#~ msgid "VAT settings saved and validated successfully"
+#~ msgstr "KDV ayarları başarıyla kaydedildi ve doğrulandı"
 
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:86
-msgid "VAT settings saved but validation failed. Please check your VAT number."
-msgstr ""
+#~ msgid "VAT settings saved but validation failed. Please check your VAT number."
+#~ msgstr ""
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:88
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:169
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:177
 msgid "VAT settings saved successfully"
 msgstr "KDV ayarları başarıyla kaydedildi"
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:175
+msgid "VAT settings saved. We're validating your VAT number in the background."
+msgstr ""
+
+#: src/components/modals/EditAccountVatSettingsModal/index.tsx:96
+msgid "VAT settings updated successfully"
+msgstr ""
 
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/index.tsx:32
 msgid "VAT Treatment for Platform Fees"
@@ -7681,6 +7935,10 @@ msgstr "Platform Ücretleri için KDV Uygulaması"
 
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/index.tsx:86
 msgid "VAT treatment for platform fees: EU VAT-registered businesses can use the reverse charge mechanism (0% - Article 196 of VAT Directive 2006/112/EC). Non-VAT registered businesses are charged Irish VAT at 23%."
+msgstr ""
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:96
+msgid "VAT validation service temporarily unavailable"
 msgstr ""
 
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:116
@@ -7729,6 +7987,10 @@ msgstr "Cevapları Görüntüle"
 msgid "View Attendee Details"
 msgstr "Katılımcı Detaylarını Görüntüle"
 
+#: src/components/common/AdminAccountsTable/index.tsx:65
+msgid "View Details"
+msgstr ""
+
 #: src/components/common/AdminEventsTable/index.tsx:153
 #: src/components/routes/admin/Dashboard/index.tsx:157
 msgid "View Event"
@@ -7750,12 +8012,12 @@ msgstr "Günlükleri görüntüle"
 msgid "View map"
 msgstr "Haritayı görüntüle"
 
-#: src/components/layouts/EventHomepage/index.tsx:416
+#: src/components/layouts/EventHomepage/index.tsx:430
 msgid "View Map"
 msgstr "Haritayı Görüntüle"
 
 #: src/components/layouts/EventHomepage/EventInformation/index.tsx:95
-#: src/components/layouts/EventHomepage/index.tsx:346
+#: src/components/layouts/EventHomepage/index.tsx:360
 msgid "View on Google Maps"
 msgstr "Google Haritalar'da görüntüle"
 
@@ -7810,6 +8072,10 @@ msgstr "VK"
 msgid "Waiting for payment"
 msgstr "Ödeme bekleniyor"
 
+#: src/components/routes/admin/Configurations/index.tsx:198
+msgid "Warning: This is the system default configuration. Changes will affect all accounts that don't have a specific configuration assigned."
+msgstr ""
+
 #: src/components/routes/product-widget/PaymentReturn/index.tsx:77
 msgid "We could not process your payment. Please try again or contact support."
 msgstr "Ödemenizi işleyemedik. Lütfen tekrar deneyin veya destek ile iletişime geçin."
@@ -7859,9 +8125,17 @@ msgstr "400px x 400px boyutlarını ve maksimum 5MB dosya boyutunu öneriyoruz"
 msgid "We were unable to confirm your payment. Please try again or contact support."
 msgstr "Ödemenizi onaylayamadık. Lütfen tekrar deneyin veya destek ile iletişime geçin."
 
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:99
+msgid "We were unable to validate your VAT number after multiple attempts. We'll continue trying in the background. Please check back later."
+msgstr ""
+
 #: src/components/routes/product-widget/CollectInformation/index.tsx:397
 msgid "We'll send your tickets to this email"
 msgstr "Biletlerinizi bu e-postaya göndereceğiz"
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:75
+msgid "We'll validate your VAT number in the background. If there are any issues, we'll let you know."
+msgstr ""
 
 #: src/components/routes/product-widget/PaymentReturn/index.tsx:79
 msgid "We're processing your order. Please wait..."
@@ -8120,11 +8394,11 @@ msgstr "X (Twitter)"
 msgid "Year to date"
 msgstr "Yıl başından beri"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:171
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:194
 msgid "Yes"
 msgstr ""
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:117
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:208
 msgid "Yes - I have a valid EU VAT registration number"
 msgstr "Evet - Geçerli bir AB KDV kayıt numaram var"
 
@@ -8397,9 +8671,17 @@ msgstr "Biletiniz"
 msgid "Your tickets have been confirmed."
 msgstr "Biletleriniz onaylandı."
 
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:72
+msgid "Your VAT number is queued for validation"
+msgstr ""
+
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:170
-msgid "Your VAT number will be validated automatically when you save"
-msgstr "KDV numaranız kaydettiğinizde otomatik olarak doğrulanacaktır"
+#~ msgid "Your VAT number will be validated automatically when you save"
+#~ msgstr "KDV numaranız kaydettiğinizde otomatik olarak doğrulanacaktır"
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:247
+msgid "Your VAT number will be validated when you save"
+msgstr ""
 
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:67
 msgid "YouTube"

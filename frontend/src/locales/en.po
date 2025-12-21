@@ -261,7 +261,7 @@ msgstr "A standard tax, like VAT or GST"
 msgid "Abandoned"
 msgstr "Abandoned"
 
-#: src/components/layouts/EventHomepage/index.tsx:361
+#: src/components/layouts/EventHomepage/index.tsx:375
 msgid "About"
 msgstr "About"
 
@@ -303,7 +303,11 @@ msgstr "Account"
 msgid "Account already connected!"
 msgstr "Account already connected!"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:66
+#: src/components/modals/EditAccountConfigurationModal/index.tsx:70
+msgid "Account configuration updated successfully"
+msgstr "Account configuration updated successfully"
+
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:87
 msgid "Account Information"
 msgstr "Account Information"
 
@@ -311,7 +315,7 @@ msgstr "Account Information"
 msgid "Account Name"
 msgstr "Account Name"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:42
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:58
 msgid "Account not found"
 msgstr "Account not found"
 
@@ -440,7 +444,7 @@ msgstr "Add tier"
 
 #: src/components/common/AddEventToCalendarButton/index.tsx:14
 #: src/components/common/AddToCalendarCTA/index.tsx:24
-#: src/components/layouts/EventHomepage/index.tsx:306
+#: src/components/layouts/EventHomepage/index.tsx:320
 msgid "Add to Calendar"
 msgstr "Add to Calendar"
 
@@ -493,7 +497,7 @@ msgid "Admin"
 msgstr "Admin"
 
 #: src/components/common/GlobalMenu/index.tsx:61
-#: src/components/layouts/Admin/index.tsx:23
+#: src/components/layouts/Admin/index.tsx:24
 #: src/components/routes/admin/Dashboard/index.tsx:42
 msgid "Admin Dashboard"
 msgstr "Admin Dashboard"
@@ -673,8 +677,12 @@ msgid "Appearance"
 msgstr "Appearance"
 
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:120
-msgid "Application Fees"
-msgstr "Application Fees"
+#~ msgid "Application Fees"
+#~ msgstr "Application Fees"
+
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:140
+msgid "Application Fees Configuration"
+msgstr "Application Fees Configuration"
 
 #: src/components/routes/product-widget/SelectProducts/index.tsx:554
 msgid "applied"
@@ -723,6 +731,10 @@ msgstr "Are you sure you want to cancel this attendee? This will void their tick
 #: src/components/common/AffiliateTable/index.tsx:202
 msgid "Are you sure you want to delete this affiliate? This action cannot be undone."
 msgstr "Are you sure you want to delete this affiliate? This action cannot be undone."
+
+#: src/components/routes/admin/Configurations/index.tsx:35
+msgid "Are you sure you want to delete this configuration? This may affect accounts using it."
+msgstr "Are you sure you want to delete this configuration? This may affect accounts using it."
 
 #: src/components/common/PromoCodeTable/index.tsx:37
 msgid "Are you sure you want to delete this promo code?"
@@ -794,7 +806,7 @@ msgstr "Are you sure you would like to delete this Capacity Assignment?"
 msgid "Are you sure you would like to delete this Check-In List?"
 msgstr "Are you sure you would like to delete this Check-In List?"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:107
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:198
 msgid "Are you VAT registered in the EU?"
 msgstr "Are you VAT registered in the EU?"
 
@@ -819,9 +831,17 @@ msgstr "Ask once per order"
 msgid "Ask once per product"
 msgstr "Ask once per product"
 
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:143
+msgid "Assigned Configuration"
+msgstr "Assigned Configuration"
+
 #: src/components/modals/CreateWebhookModal/index.tsx:33
 msgid "At least one event type must be selected"
 msgstr "At least one event type must be selected"
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:100
+msgid "Attempts"
+msgstr "Attempts"
 
 #: src/components/routes/organizer/Reports/index.tsx:36
 msgid "Attendance and check-in rates across all events"
@@ -984,7 +1004,7 @@ msgstr "Awesome Events Ltd."
 msgid "Awesome Organizer Ltd."
 msgstr "Awesome Organizer Ltd."
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:57
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:78
 msgid "Back to Accounts"
 msgstr "Back to Accounts"
 
@@ -1052,7 +1072,16 @@ msgstr "Brazilian Portuguese"
 msgid "Business"
 msgstr "Business"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:188
+#: src/components/modals/EditAccountVatSettingsModal/index.tsx:147
+msgid "Business Address"
+msgstr "Business Address"
+
+#: src/components/modals/EditAccountVatSettingsModal/index.tsx:148
+msgid "Business address for VAT purposes"
+msgstr "Business address for VAT purposes"
+
+#: src/components/modals/EditAccountVatSettingsModal/index.tsx:140
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:211
 msgid "Business Name"
 msgstr "Business Name"
 
@@ -1147,6 +1176,10 @@ msgstr "Cannot Check In"
 #: src/components/common/CheckIn/AttendeeList.tsx:34
 msgid "Cannot Check In (Cancelled)"
 msgstr "Cannot Check In (Cancelled)"
+
+#: src/components/routes/admin/Configurations/index.tsx:31
+msgid "Cannot delete the system default configuration"
+msgstr "Cannot delete the system default configuration"
 
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:42
 #: src/components/layouts/Event/index.tsx:103
@@ -1512,6 +1545,31 @@ msgstr "Component Code"
 msgid "Conference Center"
 msgstr "Conference Center"
 
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:36
+msgid "Configuration assigned successfully"
+msgstr "Configuration assigned successfully"
+
+#: src/components/routes/admin/Configurations/index.tsx:181
+msgid "Configuration created successfully"
+msgstr "Configuration created successfully"
+
+#: src/components/routes/admin/Configurations/index.tsx:37
+msgid "Configuration deleted successfully"
+msgstr "Configuration deleted successfully"
+
+#: src/components/routes/admin/Configurations/index.tsx:70
+msgid "Configuration names are visible to end users. The \"Fixed Fee\" and \"Percentage Fee\" are application fees charged in USD on all transactions."
+msgstr "Configuration names are visible to end users. The \"Fixed Fee\" and \"Percentage Fee\" are application fees charged in USD on all transactions."
+
+#: src/components/routes/admin/Configurations/index.tsx:181
+msgid "Configuration updated successfully"
+msgstr "Configuration updated successfully"
+
+#: src/components/layouts/Admin/index.tsx:18
+#: src/components/routes/admin/Configurations/index.tsx:60
+msgid "Configurations"
+msgstr "Configurations"
+
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:35
 msgid "Configured Discount"
 msgstr "Configured Discount"
@@ -1634,8 +1692,8 @@ msgstr "Connected to Stripe"
 msgid "Connection Details"
 msgstr "Connection Details"
 
-#: src/components/layouts/EventHomepage/index.tsx:541
-#: src/components/layouts/OrganizerHomepage/index.tsx:232
+#: src/components/layouts/EventHomepage/index.tsx:555
+#: src/components/layouts/OrganizerHomepage/index.tsx:245
 msgid "Contact"
 msgstr "Contact"
 
@@ -1857,6 +1915,12 @@ msgstr "Create Category"
 msgid "Create Check-In List"
 msgstr "Create Check-In List"
 
+#: src/components/routes/admin/Configurations/index.tsx:65
+#: src/components/routes/admin/Configurations/index.tsx:192
+#: src/components/routes/admin/Configurations/index.tsx:240
+msgid "Create Configuration"
+msgstr "Create Configuration"
+
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:302
 msgid "Create custom email templates for this event that override the organizer defaults"
 msgstr "Create custom email templates for this event that override the organizer defaults"
@@ -1930,7 +1994,7 @@ msgstr "Create your first event to start selling tickets and managing attendees.
 msgid "Create your own event"
 msgstr "Create your own event"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:75
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:96
 msgid "Created"
 msgstr "Created"
 
@@ -1957,7 +2021,7 @@ msgstr "CTA label is required"
 #: src/components/common/OrganizerReportTable/index.tsx:261
 #: src/components/forms/OrganizerForm/index.tsx:49
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:73
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:92
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:113
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:115
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:51
 #: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:33
@@ -1972,6 +2036,14 @@ msgstr "Current Password"
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:162
 msgid "Current payment processor"
 msgstr "Current payment processor"
+
+#: src/components/modals/EditAccountVatSettingsModal/index.tsx:156
+msgid "Current VAT number is validated"
+msgstr "Current VAT number is validated"
+
+#: src/components/modals/EditAccountVatSettingsModal/index.tsx:157
+msgid "Current VAT number validation failed"
+msgstr "Current VAT number validation failed"
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:102
 msgid "Currently available for purchase"
@@ -2133,6 +2205,10 @@ msgstr "Date order was placed"
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:38
 msgid "Day one capacity"
 msgstr "Day one capacity"
+
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:65
+msgid "Default"
+msgstr "Default"
 
 #: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:79
 msgid "Default attendee information collection"
@@ -2346,6 +2422,10 @@ msgstr "Dutch"
 msgid "e.g., Get Tickets, Register Now"
 msgstr "e.g., Get Tickets, Register Now"
 
+#: src/components/routes/admin/Configurations/index.tsx:207
+msgid "e.g., Standard, Premium, Enterprise"
+msgstr "e.g., Standard, Premium, Enterprise"
+
 #: src/components/forms/ProductForm/index.tsx:85
 msgid "Early bird"
 msgstr "Early bird"
@@ -2353,8 +2433,7 @@ msgstr "Early bird"
 #: src/components/common/TaxAndFeeList/index.tsx:65
 #: src/components/modals/ManageAttendeeModal/index.tsx:221
 #: src/components/modals/ManageOrderModal/index.tsx:203
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:127
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:162
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:185
 msgid "Edit"
 msgstr "Edit"
 
@@ -2376,6 +2455,10 @@ msgstr "Edit Affiliate"
 #: src/components/common/QuestionAndAnswerList/index.tsx:159
 msgid "Edit Answer"
 msgstr "Edit Answer"
+
+#: src/components/modals/EditAccountConfigurationModal/index.tsx:85
+msgid "Edit Application Fees"
+msgstr "Edit Application Fees"
 
 #: src/components/common/CapacityAssignmentList/index.tsx:146
 msgid "Edit Capacity"
@@ -2400,6 +2483,10 @@ msgstr "Edit Check-In List"
 #: src/components/common/PromoCodeTable/index.tsx:170
 msgid "Edit Code"
 msgstr "Edit Code"
+
+#: src/components/routes/admin/Configurations/index.tsx:192
+msgid "Edit Configuration"
+msgstr "Edit Configuration"
 
 #: src/components/modals/EditOrganizerModal/index.tsx:63
 msgid "Edit Organizer"
@@ -2438,6 +2525,10 @@ msgstr "Edit user"
 msgid "Edit User"
 msgstr "Edit User"
 
+#: src/components/modals/EditAccountVatSettingsModal/index.tsx:111
+msgid "Edit VAT Settings"
+msgstr "Edit VAT Settings"
+
 #: src/components/common/WebhookTable/index.tsx:104
 msgid "Edit webhook"
 msgstr "Edit webhook"
@@ -2472,7 +2563,7 @@ msgstr "Eligible Check-In Lists"
 #: src/components/forms/AffiliateForm/index.tsx:89
 #: src/components/modals/EditUserModal/index.tsx:80
 #: src/components/modals/InviteUserModal/index.tsx:61
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:71
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:92
 #: src/components/routes/auth/AcceptInvitation/index.tsx:99
 #: src/components/routes/auth/Login/index.tsx:92
 #: src/components/routes/auth/Register/index.tsx:98
@@ -2617,7 +2708,7 @@ msgid "Ended"
 msgstr "Ended"
 
 #: src/components/common/LanguageSwitcher/index.tsx:18
-#: src/components/common/LanguageSwitcher/index.tsx:54
+#: src/components/common/LanguageSwitcher/index.tsx:56
 #: src/components/modals/CreateAttendeeModal/index.tsx:156
 msgid "English"
 msgstr "English"
@@ -2638,9 +2729,21 @@ msgstr "Enter affiliate name"
 msgid "Enter an amount excluding taxes and fees."
 msgstr "Enter an amount excluding taxes and fees."
 
+#: src/components/modals/EditAccountVatSettingsModal/index.tsx:149
+msgid "Enter business address"
+msgstr "Enter business address"
+
+#: src/components/modals/EditAccountVatSettingsModal/index.tsx:142
+msgid "Enter business name"
+msgstr "Enter business name"
+
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:128
 msgid "Enter email subject..."
 msgstr "Enter email subject..."
+
+#: src/components/modals/EditAccountVatSettingsModal/index.tsx:124
+msgid "Enter the VAT number including country code"
+msgstr "Enter the VAT number including country code"
 
 #: src/components/forms/AffiliateForm/index.tsx:39
 msgid "Enter unique affiliate code"
@@ -2656,7 +2759,7 @@ msgstr "Enter your email"
 msgid "Enter your name"
 msgstr "Enter your name"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:126
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:217
 msgid "Enter your VAT number including the country code, without spaces (e.g., IE1234567A, DE123456789)"
 msgstr "Enter your VAT number including the country code, without spaces (e.g., IE1234567A, DE123456789)"
 
@@ -2850,11 +2953,11 @@ msgstr "Event Types"
 msgid "Event Venue"
 msgstr "Event Venue"
 
-#: src/components/common/AdminAccountsTable/index.tsx:63
+#: src/components/common/AdminAccountsTable/index.tsx:74
 #: src/components/layouts/Admin/index.tsx:16
 #: src/components/layouts/OrganizerLayout/index.tsx:81
 #: src/components/layouts/OrganizerLayout/index.tsx:141
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:102
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:123
 #: src/components/routes/admin/Events/index.tsx:77
 #: src/components/routes/organizer/Events/index.tsx:43
 msgid "Events"
@@ -2927,6 +3030,10 @@ msgstr "Facebook"
 msgid "Failed to abandon order. Please try again."
 msgstr "Failed to abandon order. Please try again."
 
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:37
+msgid "Failed to assign configuration"
+msgstr "Failed to assign configuration"
+
 #: src/components/common/AttendeeTable/index.tsx:103
 msgid "Failed to cancel attendee"
 msgstr "Failed to cancel attendee"
@@ -2939,10 +3046,18 @@ msgstr "Failed to cancel order"
 msgid "Failed to create affiliate"
 msgstr "Failed to create affiliate"
 
+#: src/components/routes/admin/Configurations/index.tsx:185
+msgid "Failed to create configuration"
+msgstr "Failed to create configuration"
+
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:176
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:179
 msgid "Failed to create template"
 msgstr "Failed to create template"
+
+#: src/components/routes/admin/Configurations/index.tsx:38
+msgid "Failed to delete configuration"
+msgstr "Failed to delete configuration"
 
 #: src/components/common/QuestionsTable/index.tsx:176
 msgid "Failed to delete message. Please try again."
@@ -2993,7 +3108,7 @@ msgstr "Failed to resend verification code"
 msgid "Failed to save template"
 msgstr "Failed to save template"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:93
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:182
 msgid "Failed to save VAT settings. Please try again."
 msgstr "Failed to save VAT settings. Please try again."
 
@@ -3019,6 +3134,10 @@ msgstr "Failed to start impersonation. Please try again."
 msgid "Failed to stop impersonation. Please try again."
 msgstr "Failed to stop impersonation. Please try again."
 
+#: src/components/modals/EditAccountConfigurationModal/index.tsx:77
+msgid "Failed to update account configuration"
+msgstr "Failed to update account configuration"
+
 #: src/components/modals/EditAffiliateModal/index.tsx:70
 msgid "Failed to update affiliate"
 msgstr "Failed to update affiliate"
@@ -3026,6 +3145,14 @@ msgstr "Failed to update affiliate"
 #: src/components/common/QuestionAndAnswerList/index.tsx:102
 msgid "Failed to update answer."
 msgstr "Failed to update answer."
+
+#: src/components/routes/admin/Configurations/index.tsx:185
+msgid "Failed to update configuration"
+msgstr "Failed to update configuration"
+
+#: src/components/modals/EditAccountVatSettingsModal/index.tsx:103
+msgid "Failed to update VAT settings"
+msgstr "Failed to update VAT settings"
 
 #: src/components/common/Editor/Controls/InsertImageControl/index.tsx:66
 msgid "Failed to upload image."
@@ -3143,9 +3270,28 @@ msgstr "Fixed"
 msgid "Fixed amount"
 msgstr "Fixed amount"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:133
+#: src/components/modals/EditAccountConfigurationModal/index.tsx:89
 msgid "Fixed Fee"
 msgstr "Fixed Fee"
+
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:155
+#: src/components/routes/admin/Configurations/index.tsx:86
+#: src/components/routes/admin/Configurations/index.tsx:213
+msgid "Fixed Fee (USD)"
+msgstr "Fixed Fee (USD)"
+
+#: src/components/modals/EditAccountConfigurationModal/index.tsx:90
+msgid "Fixed fee amount in {currencyCode}"
+msgstr "Fixed fee amount in {currencyCode}"
+
+#: src/components/routes/admin/Configurations/index.tsx:214
+msgid "Fixed fee charged per transaction in USD"
+msgstr "Fixed fee charged per transaction in USD"
+
+#: src/components/modals/EditAccountConfigurationModal/index.tsx:40
+#: src/components/routes/admin/Configurations/index.tsx:160
+msgid "Fixed fee must be 0 or greater"
+msgstr "Fixed fee must be 0 or greater"
 
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:274
 msgid "Fixed Fee:"
@@ -3231,7 +3377,7 @@ msgstr "Generate code"
 msgid "German"
 msgstr "German"
 
-#: src/components/layouts/EventHomepage/index.tsx:392
+#: src/components/layouts/EventHomepage/index.tsx:406
 msgid "Get Directions"
 msgstr "Get Directions"
 
@@ -3239,7 +3385,7 @@ msgstr "Get Directions"
 msgid "Get started for free, no subscription fees"
 msgstr "Get started for free, no subscription fees"
 
-#: src/components/layouts/EventHomepage/index.tsx:577
+#: src/components/layouts/EventHomepage/index.tsx:591
 msgid "Get Tickets"
 msgstr "Get Tickets"
 
@@ -3540,7 +3686,7 @@ msgstr "Image URL"
 msgid "Images"
 msgstr "Images"
 
-#: src/components/common/AdminAccountsTable/index.tsx:102
+#: src/components/common/AdminAccountsTable/index.tsx:113
 #: src/components/common/AdminUsersTable/index.tsx:84
 #: src/components/common/AdminUsersTable/index.tsx:96
 msgid "Impersonate"
@@ -3633,7 +3779,7 @@ msgstr "Insert Variable"
 msgid "Instagram"
 msgstr "Instagram"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:183
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:206
 msgid "Invalid"
 msgstr "Invalid"
 
@@ -3651,7 +3797,7 @@ msgstr "Invalid email format"
 msgid "Invalid Liquid syntax. Please correct it and try again."
 msgstr "Invalid Liquid syntax. Please correct it and try again."
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:72
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:157
 msgid "Invalid VAT number format"
 msgstr "Invalid VAT number format"
 
@@ -3708,6 +3854,10 @@ msgstr "Invoice Settings"
 msgid "Irish VAT at 23% will be applied to platform fees (domestic supply)."
 msgstr "Irish VAT at 23% will be applied to platform fees (domestic supply)."
 
+#: src/components/modals/EditAccountVatSettingsModal/index.tsx:116
+msgid "Is this account VAT registered in the EU?"
+msgstr "Is this account VAT registered in the EU?"
+
 #: src/components/common/LanguageSwitcher/index.tsx:24
 msgid "Italian"
 msgstr "Italian"
@@ -3732,7 +3882,7 @@ msgstr "John"
 msgid "Johnson"
 msgstr "Johnson"
 
-#: src/components/layouts/EventHomepage/index.tsx:320
+#: src/components/layouts/EventHomepage/index.tsx:334
 msgid "Join from anywhere"
 msgstr "Join from anywhere"
 
@@ -3838,6 +3988,10 @@ msgstr "Last Used"
 msgid "Leave blank to use the default word \"Invoice\""
 msgstr "Leave blank to use the default word \"Invoice\""
 
+#: src/components/modals/EditAccountVatSettingsModal/index.tsx:141
+msgid "Legal business name for VAT purposes"
+msgstr "Legal business name for VAT purposes"
+
 #: src/components/common/ThemeColorControls/index.tsx:84
 msgid "Light"
 msgstr "Light"
@@ -3894,7 +4048,7 @@ msgid "Loading..."
 msgstr "Loading..."
 
 #: src/components/common/AttendeeTicket/index.tsx:91
-#: src/components/layouts/EventHomepage/index.tsx:374
+#: src/components/layouts/EventHomepage/index.tsx:388
 #: src/components/routes/event/Settings/index.tsx:34
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:84
 #: src/components/routes/my-tickets/index.tsx:73
@@ -4154,6 +4308,7 @@ msgstr "Nam placerat elementum..."
 #: src/components/forms/TaxAndFeeForm/index.tsx:61
 #: src/components/modals/DuplicateEventModal/index.tsx:109
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:63
+#: src/components/routes/admin/Configurations/index.tsx:205
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:75
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:167
 msgid "Name"
@@ -4162,8 +4317,13 @@ msgstr "Name"
 #: src/components/common/ContactOrganizerModal/index.tsx:32
 #: src/components/modals/CreateAffiliateModal/index.tsx:28
 #: src/components/modals/EditAffiliateModal/index.tsx:33
+#: src/components/routes/admin/Configurations/index.tsx:156
 msgid "Name is required"
 msgstr "Name is required"
+
+#: src/components/routes/admin/Configurations/index.tsx:157
+msgid "Name must be less than 255 characters"
+msgstr "Name must be less than 255 characters"
 
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:34
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:68
@@ -4196,11 +4356,11 @@ msgstr "New Password"
 msgid "Nightlife"
 msgstr "Nightlife"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:171
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:194
 msgid "No"
 msgstr "No"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:113
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:204
 msgid "No - I'm an individual or non-VAT registered business"
 msgstr "No - I'm an individual or non-VAT registered business"
 
@@ -4208,7 +4368,7 @@ msgstr "No - I'm an individual or non-VAT registered business"
 msgid "No accounts"
 msgstr "No accounts"
 
-#: src/components/common/AdminAccountsTable/index.tsx:18
+#: src/components/common/AdminAccountsTable/index.tsx:21
 msgid "No accounts found"
 msgstr "No accounts found"
 
@@ -4247,6 +4407,10 @@ msgstr "No Check-In Lists"
 #: src/components/common/CheckInStatusModal/index.tsx:156
 msgid "No check-in lists available for this event."
 msgstr "No check-in lists available for this event."
+
+#: src/components/routes/admin/Configurations/index.tsx:116
+msgid "No configurations found"
+msgstr "No configurations found"
 
 #: src/components/layouts/AuthLayout/index.tsx:36
 msgid "No Credit Card Required"
@@ -4328,7 +4492,7 @@ msgstr "No orders yet"
 msgid "No other organizers available"
 msgstr "No other organizers available"
 
-#: src/components/layouts/OrganizerHomepage/index.tsx:273
+#: src/components/layouts/OrganizerHomepage/index.tsx:286
 msgid "No past events"
 msgstr "No past events"
 
@@ -4396,7 +4560,7 @@ msgstr "No Taxes or Fees have been added."
 msgid "No Tickets Found"
 msgstr "No Tickets Found"
 
-#: src/components/layouts/OrganizerHomepage/index.tsx:273
+#: src/components/layouts/OrganizerHomepage/index.tsx:286
 msgid "No upcoming events"
 msgstr "No upcoming events"
 
@@ -4404,7 +4568,7 @@ msgstr "No upcoming events"
 msgid "No users found"
 msgstr "No users found"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:202
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:225
 msgid "No VAT settings configured"
 msgstr "No VAT settings configured"
 
@@ -4446,8 +4610,8 @@ msgstr "Not Eligible"
 
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:137
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:145
-msgid "Not set"
-msgstr "Not set"
+#~ msgid "Not set"
+#~ msgstr "Not set"
 
 #: src/components/modals/ManageAttendeeModal/index.tsx:130
 #: src/components/modals/ManageOrderModal/index.tsx:164
@@ -4554,7 +4718,7 @@ msgid "Online event"
 msgstr "Online event"
 
 #: src/components/layouts/EventHomepage/EventInformation/index.tsx:71
-#: src/components/layouts/EventHomepage/index.tsx:318
+#: src/components/layouts/EventHomepage/index.tsx:332
 #: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:167
 msgid "Online Event"
 msgstr "Online Event"
@@ -4844,7 +5008,7 @@ msgstr "Organization Name"
 
 #: src/components/common/AdminEventsTable/index.tsx:85
 #: src/components/common/AttendeeTicket/index.tsx:82
-#: src/components/layouts/EventHomepage/index.tsx:453
+#: src/components/layouts/EventHomepage/index.tsx:467
 #: src/components/modals/EditUserModal/index.tsx:55
 #: src/components/modals/InviteUserModal/index.tsx:47
 #: src/components/routes/events/Dashboard/index.tsx:193
@@ -4996,12 +5160,12 @@ msgstr "Password reset successfully. Please login with your new password."
 msgid "Passwords are not the same"
 msgstr "Passwords are not the same"
 
-#: src/components/layouts/OrganizerHomepage/index.tsx:265
+#: src/components/layouts/OrganizerHomepage/index.tsx:278
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:30
 msgid "Past"
 msgstr "Past"
 
-#: src/components/layouts/OrganizerHomepage/index.tsx:252
+#: src/components/layouts/OrganizerHomepage/index.tsx:265
 msgid "Past Events"
 msgstr "Past Events"
 
@@ -5134,9 +5298,28 @@ msgstr "Percentage"
 msgid "Percentage Amount"
 msgstr "Percentage Amount"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:141
+#: src/components/modals/EditAccountConfigurationModal/index.tsx:99
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:161
+#: src/components/routes/admin/Configurations/index.tsx:90
+#: src/components/routes/admin/Configurations/index.tsx:224
 msgid "Percentage Fee"
 msgstr "Percentage Fee"
+
+#: src/components/modals/EditAccountConfigurationModal/index.tsx:100
+msgid "Percentage fee (0-100%)"
+msgstr "Percentage fee (0-100%)"
+
+#: src/components/modals/EditAccountConfigurationModal/index.tsx:46
+msgid "Percentage fee must be between 0 and 100"
+msgstr "Percentage fee must be between 0 and 100"
+
+#: src/components/routes/admin/Configurations/index.tsx:162
+msgid "Percentage must be between 0 and 100"
+msgstr "Percentage must be between 0 and 100"
+
+#: src/components/routes/admin/Configurations/index.tsx:225
+msgid "Percentage of transaction amount"
+msgstr "Percentage of transaction amount"
 
 #: src/components/common/AffiliateTable/index.tsx:84
 msgid "Performance"
@@ -5215,7 +5398,7 @@ msgstr "Please enter the 5-digit code"
 msgid "Please enter your new password"
 msgstr "Please enter your new password"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:64
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:149
 msgid "Please enter your VAT number"
 msgstr "Please enter your VAT number"
 
@@ -5369,8 +5552,8 @@ msgstr "Print Tickets"
 msgid "Print to PDF"
 msgstr "Print to PDF"
 
-#: src/components/layouts/EventHomepage/index.tsx:557
-#: src/components/layouts/OrganizerHomepage/index.tsx:315
+#: src/components/layouts/EventHomepage/index.tsx:571
+#: src/components/layouts/OrganizerHomepage/index.tsx:328
 msgid "Privacy Policy"
 msgstr "Privacy Policy"
 
@@ -5881,10 +6064,15 @@ msgstr "Save"
 
 #: src/components/modals/ManageAttendeeModal/index.tsx:231
 #: src/components/modals/ManageOrderModal/index.tsx:175
+#: src/components/routes/admin/Configurations/index.tsx:240
 #: src/components/routes/event/HomepageDesigner/index.tsx:272
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:283
 msgid "Save Changes"
 msgstr "Save Changes"
+
+#: src/components/modals/EditAccountConfigurationModal/index.tsx:115
+msgid "Save Configuration"
+msgstr "Save Configuration"
 
 #: src/components/modals/EditOrganizerModal/index.tsx:70
 msgid "Save Organizer"
@@ -5906,7 +6094,8 @@ msgstr "Save Template"
 msgid "Save Ticket Design"
 msgstr "Save Ticket Design"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:166
+#: src/components/modals/EditAccountVatSettingsModal/index.tsx:168
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:243
 msgid "Save VAT Settings"
 msgstr "Save VAT Settings"
 
@@ -6002,6 +6191,10 @@ msgstr "Select {0}"
 msgid "Select a category"
 msgstr "Select a category"
 
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:148
+msgid "Select a configuration"
+msgstr "Select a configuration"
+
 #: src/components/common/AdminUsersTable/index.tsx:100
 msgid "Select Account"
 msgstr "Select Account"
@@ -6021,6 +6214,10 @@ msgstr "Select Camera"
 #: src/components/forms/ProductForm/index.tsx:278
 msgid "Select category..."
 msgstr "Select category..."
+
+#: src/components/modals/EditAccountVatSettingsModal/index.tsx:133
+msgid "Select country"
+msgstr "Select country"
 
 #: src/components/forms/OrganizerForm/index.tsx:50
 msgid "Select currency"
@@ -6075,6 +6272,10 @@ msgstr "Select start time"
 msgid "Select status"
 msgstr "Select status"
 
+#: src/components/modals/EditAccountVatSettingsModal/index.tsx:132
+msgid "Select the country where VAT is registered"
+msgstr "Select the country where VAT is registered"
+
 #: src/components/modals/CreateAttendeeModal/index.tsx:161
 msgid "Select Ticket"
 msgstr "Select Ticket"
@@ -6096,6 +6297,10 @@ msgstr "Select timezone"
 #: src/components/forms/WebhookForm/index.tsx:123
 msgid "Select which events will trigger this webhook"
 msgstr "Select which events will trigger this webhook"
+
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:144
+msgid "Select which fee configuration applies to this account. Fees are always in USD."
+msgstr "Select which fee configuration applies to this account. Fees are always in USD."
 
 #: src/components/forms/ProductForm/index.tsx:376
 msgid "Select..."
@@ -6231,7 +6436,7 @@ msgid "Setup in Minutes"
 msgstr "Setup in Minutes"
 
 #: src/components/common/ShareIcon/index.tsx:30
-#: src/components/layouts/EventHomepage/index.tsx:279
+#: src/components/layouts/EventHomepage/index.tsx:293
 #: src/components/layouts/OrganizerLayout/index.tsx:228
 #: src/components/modals/ShareModal/index.tsx:37
 #: src/components/modals/ShareModal/index.tsx:165
@@ -6358,7 +6563,7 @@ msgid "Sold out"
 msgstr "Sold out"
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:81
-#: src/components/layouts/EventHomepage/index.tsx:142
+#: src/components/layouts/EventHomepage/index.tsx:143
 msgid "Sold Out"
 msgstr "Sold Out"
 
@@ -6668,10 +6873,18 @@ msgstr "Support Email"
 msgid "Support for tiered, donation-based, and product sales with customizable pricing and capacity"
 msgstr "Support for tiered, donation-based, and product sales with customizable pricing and capacity"
 
+#: src/components/common/LanguageSwitcher/index.tsx:40
+msgid "Swedish"
+msgstr "Swedish"
+
 #: src/components/layouts/OrganizerLayout/index.tsx:65
 #: src/components/modals/SwitchOrganizerModal/index.tsx:33
 msgid "Switch Organizer"
 msgstr "Switch Organizer"
+
+#: src/components/routes/admin/Configurations/index.tsx:81
+msgid "System Default"
+msgstr "System Default"
 
 #: src/components/forms/ProductForm/index.tsx:262
 msgid "T-shirt"
@@ -6779,8 +6992,8 @@ msgstr "Template deleted successfully"
 msgid "Template saved successfully"
 msgstr "Template saved successfully"
 
-#: src/components/layouts/EventHomepage/index.tsx:563
-#: src/components/layouts/OrganizerHomepage/index.tsx:322
+#: src/components/layouts/EventHomepage/index.tsx:577
+#: src/components/layouts/OrganizerHomepage/index.tsx:335
 msgid "Terms of Service"
 msgstr "Terms of Service"
 
@@ -6900,6 +7113,10 @@ msgstr "The template body contains invalid Liquid syntax. Please correct it and 
 #: src/components/routes/organizer/Settings/Sections/SeoSettings/index.tsx:63
 msgid "The title of the event that will be displayed in search engine results and when sharing on social media. By default, the event title will be used"
 msgstr "The title of the event that will be displayed in search engine results and when sharing on social media. By default, the event title will be used"
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:87
+msgid "The VAT number could not be validated. Please check the number and try again."
+msgstr "The VAT number could not be validated. Please check the number and try again."
 
 #: src/constants/eventCategories.ts:10
 msgid "Theater"
@@ -7021,6 +7238,10 @@ msgstr "This message will be included in the footer of all emails sent from this
 #: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:103
 msgid "This message will only be shown if order is completed successfully. Orders awaiting payment will not show this message"
 msgstr "This message will only be shown if order is completed successfully. Orders awaiting payment will not show this message"
+
+#: src/components/routes/admin/Configurations/index.tsx:206
+msgid "This name is visible to end users"
+msgstr "This name is visible to end users"
 
 #: src/components/forms/StripeCheckoutForm/index.tsx:95
 msgid "This order has already been paid."
@@ -7195,7 +7416,7 @@ msgstr "Ticket URL"
 msgid "tickets"
 msgstr "tickets"
 
-#: src/components/layouts/EventHomepage/index.tsx:429
+#: src/components/layouts/EventHomepage/index.tsx:443
 #: src/components/routes/my-tickets/index.tsx:84
 msgid "Tickets"
 msgstr "Tickets"
@@ -7205,7 +7426,7 @@ msgstr "Tickets"
 msgid "Tickets & Products"
 msgstr "Tickets & Products"
 
-#: src/components/layouts/EventHomepage/index.tsx:149
+#: src/components/layouts/EventHomepage/index.tsx:150
 msgid "Tickets Available"
 msgstr "Tickets Available"
 
@@ -7247,7 +7468,7 @@ msgstr "Times Used"
 
 #: src/components/forms/OrganizerForm/index.tsx:58
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:82
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:83
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:104
 #: src/components/routes/auth/AcceptInvitation/index.tsx:106
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:124
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:125
@@ -7259,6 +7480,10 @@ msgstr "Timezone"
 #: src/components/forms/PromoCodeForm/index.tsx:66
 msgid "TIP"
 msgstr "TIP"
+
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:170
+msgid "To edit configurations, go to the Configurations section in the admin menu."
+msgstr "To edit configurations, go to the Configurations section in the admin menu."
 
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:660
 msgid "To receive credit card payments, you need to connect your Stripe account. Stripe is our payment processing partner that ensures secure transactions and timely payouts."
@@ -7472,12 +7697,12 @@ msgstr "Unpublish Event"
 
 #: src/components/common/EventsDashboardStatusButtons/index.tsx:20
 #: src/components/common/EventStatusBadge/index.tsx:16
-#: src/components/layouts/OrganizerHomepage/index.tsx:259
+#: src/components/layouts/OrganizerHomepage/index.tsx:272
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:33
 msgid "Upcoming"
 msgstr "Upcoming"
 
-#: src/components/layouts/OrganizerHomepage/index.tsx:252
+#: src/components/layouts/OrganizerHomepage/index.tsx:265
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:232
 msgid "Upcoming Events"
 msgstr "Upcoming Events"
@@ -7587,12 +7812,12 @@ msgstr "User"
 msgid "User Management"
 msgstr "User Management"
 
-#: src/components/common/AdminAccountsTable/index.tsx:70
-#: src/components/common/AdminAccountsTable/index.tsx:78
+#: src/components/common/AdminAccountsTable/index.tsx:81
+#: src/components/common/AdminAccountsTable/index.tsx:89
 #: src/components/layouts/Admin/index.tsx:15
 #: src/components/routes/account/ManageAccount/index.tsx:32
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:109
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:210
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:130
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:233
 #: src/components/routes/admin/Users/index.tsx:57
 msgid "Users"
 msgstr "Users"
@@ -7609,23 +7834,28 @@ msgstr "Users can change their email in <0>Profile Settings</0>"
 msgid "UTC"
 msgstr "UTC"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:183
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:206
 msgid "Valid"
 msgstr "Valid"
 
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:139
-msgid "Valid VAT number"
-msgstr "Valid VAT number"
+#~ msgid "Valid VAT number"
+#~ msgstr "Valid VAT number"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:181
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:204
 msgid "Validated"
 msgstr "Validated"
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:71
+msgid "Validating your VAT number..."
+msgstr "Validating your VAT number..."
 
 #: src/components/forms/TaxAndFeeForm/index.tsx:62
 msgid "VAT"
 msgstr "VAT"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:194
+#: src/components/modals/EditAccountVatSettingsModal/index.tsx:131
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:217
 msgid "VAT Country"
 msgstr "VAT Country"
 
@@ -7637,24 +7867,39 @@ msgstr "VAT Information"
 msgid "VAT may be applied to platform fees depending on your VAT registration status. Please complete the VAT information section below."
 msgstr "VAT may be applied to platform fees depending on your VAT registration status. Please complete the VAT information section below."
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:125
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:177
+#: src/components/modals/EditAccountVatSettingsModal/index.tsx:123
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:216
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:200
 msgid "VAT Number"
 msgstr "VAT Number"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:23
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:24
 msgid "VAT number must not contain spaces"
 msgstr "VAT number must not contain spaces"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:31
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:32
 msgid "VAT number must start with a 2-letter country code followed by 8-15 alphanumeric characters (e.g., DE123456789)"
 msgstr "VAT number must start with a 2-letter country code followed by 8-15 alphanumeric characters (e.g., DE123456789)"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:153
-msgid "VAT number validation failed. Please check your number and try again."
-msgstr "VAT number validation failed. Please check your number and try again."
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:55
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:171
+msgid "VAT number validated successfully"
+msgstr "VAT number validated successfully"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:169
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:84
+msgid "VAT number validation failed"
+msgstr "VAT number validation failed"
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:153
+#~ msgid "VAT number validation failed. Please check your number and try again."
+#~ msgstr "VAT number validation failed. Please check your number and try again."
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:173
+msgid "VAT number validation failed. Please check your VAT number."
+msgstr "VAT number validation failed. Please check your VAT number."
+
+#: src/components/modals/EditAccountVatSettingsModal/index.tsx:115
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:192
 msgid "VAT Registered"
 msgstr "VAT Registered"
 
@@ -7663,21 +7908,30 @@ msgstr "VAT Registered"
 msgid "VAT Registration Information"
 msgstr "VAT Registration Information"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:155
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:178
 msgid "VAT Settings"
 msgstr "VAT Settings"
 
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:84
-msgid "VAT settings saved and validated successfully"
-msgstr "VAT settings saved and validated successfully"
+#~ msgid "VAT settings saved and validated successfully"
+#~ msgstr "VAT settings saved and validated successfully"
 
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:86
-msgid "VAT settings saved but validation failed. Please check your VAT number."
-msgstr "VAT settings saved but validation failed. Please check your VAT number."
+#~ msgid "VAT settings saved but validation failed. Please check your VAT number."
+#~ msgstr "VAT settings saved but validation failed. Please check your VAT number."
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:88
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:169
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:177
 msgid "VAT settings saved successfully"
 msgstr "VAT settings saved successfully"
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:175
+msgid "VAT settings saved. We're validating your VAT number in the background."
+msgstr "VAT settings saved. We're validating your VAT number in the background."
+
+#: src/components/modals/EditAccountVatSettingsModal/index.tsx:96
+msgid "VAT settings updated successfully"
+msgstr "VAT settings updated successfully"
 
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/index.tsx:32
 msgid "VAT Treatment for Platform Fees"
@@ -7686,6 +7940,10 @@ msgstr "VAT Treatment for Platform Fees"
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/index.tsx:86
 msgid "VAT treatment for platform fees: EU VAT-registered businesses can use the reverse charge mechanism (0% - Article 196 of VAT Directive 2006/112/EC). Non-VAT registered businesses are charged Irish VAT at 23%."
 msgstr "VAT treatment for platform fees: EU VAT-registered businesses can use the reverse charge mechanism (0% - Article 196 of VAT Directive 2006/112/EC). Non-VAT registered businesses are charged Irish VAT at 23%."
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:96
+msgid "VAT validation service temporarily unavailable"
+msgstr "VAT validation service temporarily unavailable"
 
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:116
 msgid "Venue Name"
@@ -7733,6 +7991,10 @@ msgstr "View Answers"
 msgid "View Attendee Details"
 msgstr "View Attendee Details"
 
+#: src/components/common/AdminAccountsTable/index.tsx:65
+msgid "View Details"
+msgstr "View Details"
+
 #: src/components/common/AdminEventsTable/index.tsx:153
 #: src/components/routes/admin/Dashboard/index.tsx:157
 msgid "View Event"
@@ -7754,12 +8016,12 @@ msgstr "View logs"
 msgid "View map"
 msgstr "View map"
 
-#: src/components/layouts/EventHomepage/index.tsx:416
+#: src/components/layouts/EventHomepage/index.tsx:430
 msgid "View Map"
 msgstr "View Map"
 
 #: src/components/layouts/EventHomepage/EventInformation/index.tsx:95
-#: src/components/layouts/EventHomepage/index.tsx:346
+#: src/components/layouts/EventHomepage/index.tsx:360
 msgid "View on Google Maps"
 msgstr "View on Google Maps"
 
@@ -7814,6 +8076,10 @@ msgstr "VK"
 msgid "Waiting for payment"
 msgstr "Waiting for payment"
 
+#: src/components/routes/admin/Configurations/index.tsx:198
+msgid "Warning: This is the system default configuration. Changes will affect all accounts that don't have a specific configuration assigned."
+msgstr "Warning: This is the system default configuration. Changes will affect all accounts that don't have a specific configuration assigned."
+
 #: src/components/routes/product-widget/PaymentReturn/index.tsx:77
 msgid "We could not process your payment. Please try again or contact support."
 msgstr "We could not process your payment. Please try again or contact support."
@@ -7863,9 +8129,17 @@ msgstr "We recommend dimensions of 400px by 400px, and a maximum file size of 5M
 msgid "We were unable to confirm your payment. Please try again or contact support."
 msgstr "We were unable to confirm your payment. Please try again or contact support."
 
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:99
+msgid "We were unable to validate your VAT number after multiple attempts. We'll continue trying in the background. Please check back later."
+msgstr "We were unable to validate your VAT number after multiple attempts. We'll continue trying in the background. Please check back later."
+
 #: src/components/routes/product-widget/CollectInformation/index.tsx:397
 msgid "We'll send your tickets to this email"
 msgstr "We'll send your tickets to this email"
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:75
+msgid "We'll validate your VAT number in the background. If there are any issues, we'll let you know."
+msgstr "We'll validate your VAT number in the background. If there are any issues, we'll let you know."
 
 #: src/components/routes/product-widget/PaymentReturn/index.tsx:79
 msgid "We're processing your order. Please wait..."
@@ -8124,11 +8398,11 @@ msgstr "X (Twitter)"
 msgid "Year to date"
 msgstr "Year to date"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:171
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:194
 msgid "Yes"
 msgstr "Yes"
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:117
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:208
 msgid "Yes - I have a valid EU VAT registration number"
 msgstr "Yes - I have a valid EU VAT registration number"
 
@@ -8401,9 +8675,17 @@ msgstr "Your ticket for"
 msgid "Your tickets have been confirmed."
 msgstr "Your tickets have been confirmed."
 
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:72
+msgid "Your VAT number is queued for validation"
+msgstr "Your VAT number is queued for validation"
+
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:170
-msgid "Your VAT number will be validated automatically when you save"
-msgstr "Your VAT number will be validated automatically when you save"
+#~ msgid "Your VAT number will be validated automatically when you save"
+#~ msgstr "Your VAT number will be validated automatically when you save"
+
+#: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:247
+msgid "Your VAT number will be validated when you save"
+msgstr "Your VAT number will be validated when you save"
 
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:67
 msgid "YouTube"
