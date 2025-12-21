@@ -82,11 +82,15 @@ export const EditCheckInListModal = ({
 
             {event && checkInList && (
                 <form onSubmit={form.onSubmit(handleSubmit)}>
-                    <CheckInListForm form={form} productCategories={event.product_categories as ProductCategory[]}/>
+                    <CheckInListForm
+                        form={form}
+                        productCategories={event.product_categories as ProductCategory[]}
+                    />
                     <Button
                         type={'submit'}
                         fullWidth
                         loading={editMutation.isPending}
+                        mt="md"
                     >
                         {t`Edit Check-In List`}
                     </Button>

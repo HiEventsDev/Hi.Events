@@ -1,4 +1,4 @@
-import {Alert, Button, Checkbox, LoadingOverlay, NumberInput} from "@mantine/core";
+import {Alert, Button, Checkbox, Group, LoadingOverlay, NumberInput, Paper, Stack, Text, Title} from "@mantine/core";
 import {GenericModalProps, IdParam, Order} from "../../../types.ts";
 import {useForm, UseFormReturnType} from "@mantine/form";
 import {useParams} from "react-router";
@@ -8,7 +8,7 @@ import {Currency} from "../../common/Currency";
 import {useRefundOrder} from "../../../mutations/useRefundOrder.ts";
 import {RefundOrderPayload} from "../../../api/order.client.ts";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
-import {IconInfoCircle} from "@tabler/icons-react";
+import {IconCash, IconCreditCard, IconInfoCircle} from "@tabler/icons-react";
 import {showSuccess} from "../../../utilites/notifications.tsx";
 import {Modal} from "../../common/Modal";
 import classes from './RefundOrderModal.module.scss';
@@ -66,64 +66,108 @@ export const RefundOrderModal = ({onClose, orderId}: RefundOrderModalProps) => {
     );
 
     const modalForm = ({order, form}: { order: Order, form: UseFormReturnType<RefundOrderPayload> }) => {
+        const remainingAmount = order.total_gross - order.total_refunded;
+        const isPartialRefund = form.values.amount < remainingAmount;
+
         return (
             <form onSubmit={form.onSubmit(handleSubmit)}>
-                <div className={classes.refundSummary}>
-                    <div className={classes.block}>
-                        <div className={classes.title}>
-                            {t`Total order amount`}
-                        </div>
-                        <div className={classes.amount}>
-                            <Currency currency={order.currency} price={order.total_gross}/>
-                        </div>
-                    </div>
-                    <div className={classes.block}>
-                        <div className={classes.title}>
-                            {t`Total refunded`}
-                        </div>
-                        <div className={classes.amount}>
-                            <Currency currency={order.currency} price={order.total_refunded}/>
-                        </div>
-                    </div>
-                    <div className={classes.block}>
-                        <div className={classes.title}>
-                            {t`Total remaining`}
-                        </div>
-                        <div className={classes.amount}>
-                            <Currency currency={order.currency} price={order.total_gross - order.total_refunded}/>
-                        </div>
-                    </div>
-                </div>
+                <Stack gap="md">
+                    <Paper radius="md" p="md" withBorder>
+                        <Stack gap="sm">
+                            <Group justify="space-between">
+                                <Text size="sm" c="dimmed">{t`Order Total`}</Text>
+                                <Text size="lg" fw={600}>
+                                    <Currency currency={order.currency} price={order.total_gross}/>
+                                </Text>
+                            </Group>
+                            {order.total_refunded > 0 && (
+                                <Group justify="space-between">
+                                    <Text size="sm" c="dimmed">{t`Already Refunded`}</Text>
+                                    <Text size="lg" c="red">
+                                        -<Currency currency={order.currency} price={order.total_refunded}/>
+                                    </Text>
+                                </Group>
+                            )}
+                            <Group justify="space-between" className={classes.remainingRow}>
+                                <Text size="sm" fw={500}>{t`Available to Refund`}</Text>
+                                <Text size="lg" fw={700}>
+                                    <Currency currency={order.currency} price={remainingAmount}/>
+                                </Text>
+                            </Group>
+                        </Stack>
+                    </Paper>
 
-                <NumberInput
-                    max={order.total_gross - order.total_refunded}
-                    min={0}
-                    decimalScale={2}
-                    fixedDecimalScale
-                    {...form.getInputProps('amount')}
-                    label={t`Refund amount (${order?.currency})`}
-                    placeholder={t`10.00`}
-                />
-                <Checkbox mt={20} {...form.getInputProps('notify_buyer', {type: 'checkbox'})}
-                          label={t`Notify buyer of refund`}/>
+                    <NumberInput
+                        size="md"
+                        max={remainingAmount}
+                        min={0.01}
+                        decimalScale={2}
+                        fixedDecimalScale
+                        {...form.getInputProps('amount')}
+                        label={t`Refund amount`}
+                        placeholder={remainingAmount.toFixed(2)}
+                        description={isPartialRefund ? t`Partial refund` : t`Full refund`}
+                        leftSection={<IconCash size={20}/>}
+                        rightSectionWidth={50}
+                        rightSection={<Text size="sm" c="dimmed">{order.currency}</Text>}
+                        required
+                        styles={{
+                            input: {
+                                fontWeight: 600,
+                                fontSize: '1.1rem'
+                            }
+                        }}
+                    />
+                    <Stack gap="xs">
+                        <Checkbox
+                            {...form.getInputProps('notify_buyer', {type: 'checkbox'})}
+                            label={t`Send refund notification email`}
+                            description={t`Customer will receive an email confirming the refund`}
+                        />
 
-                {order.status !== 'CANCELLED' && (
-                    <Checkbox mt={20} {...form.getInputProps('cancel_order', {type: 'checkbox'})}
-                              label={t`Cancel order`}/>
-                )}
+                        {order.status !== 'CANCELLED' && (
+                            <Checkbox
+                                {...form.getInputProps('cancel_order', {type: 'checkbox'})}
+                                label={t`Also cancel this order`}
+                                description={t`Cancel all products and release them back to the pool`}
+                            />
+                        )}
+                    </Stack>
 
-                <Button loading={mutation.isPending} fullWidth mt={20} type={'submit'}>{t`Issue refund`}</Button>
+                    {(isPartialRefund && Number(form.values.amount) > 0) && (
+                        <Alert icon={<IconInfoCircle/>} color="blue" variant="light">
+                            {t`You are issuing a partial refund. The customer will be refunded ${Number(form.values.amount).toFixed(2)} ${order.currency}.`}
+                        </Alert>
+                    )}
+
+                    <Button
+                        loading={mutation.isPending}
+                        fullWidth
+                        size="md"
+                        type={'submit'}
+                        leftSection={<IconCreditCard size={20}/>}
+                    >
+                        {t`Process Refund`}
+                    </Button>
+                </Stack>
             </form>);
     };
 
     const CannotRefund = ({message}: { message: string }) => {
         return (
-            <>
-                <Alert icon={<IconInfoCircle/>} color={'blue'}>
+            <Stack gap="md">
+                <Alert
+                    icon={<IconInfoCircle size={24}/>}
+                    color={'blue'}
+                    variant="light"
+                    styles={{
+                        message: {fontSize: '0.95rem'}
+                    }}
+                >
                     {message}
                 </Alert>
-                <Button mt={20} fullWidth onClick={onClose}>{t`Close`}</Button>
-            </>
+                <Button fullWidth onClick={onClose} variant="light">{t`Close`}</Button>
+            </Stack>
         )
     }
 
@@ -148,7 +192,13 @@ export const RefundOrderModal = ({onClose, orderId}: RefundOrderModalProps) => {
         <Modal
             opened
             onClose={onClose}
-            heading={t`Refund Order`}
+            heading={
+                <Group gap="xs">
+                    <IconCreditCard size={24}/>
+                    <Title order={4}>{t`Refund Order ${order?.public_id || ''}`}</Title>
+                </Group>
+            }
+            size="md"
             padding={'lg'}
             overlayProps={{
                 opacity: 0.55,

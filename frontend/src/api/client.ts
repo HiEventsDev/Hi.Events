@@ -23,7 +23,8 @@ const ALLOWED_UNAUTHENTICATED_PATHS = [
     'widget',
     '/product/',
     'check-in',
-    '/events/'
+    '/events/',
+    'my-tickets',
 ];
 
 export const api = axios.create({

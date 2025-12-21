@@ -34,6 +34,7 @@ class EventSettingsResourcePublic extends JsonResource
             'product_page_message' => $this->getProductPageMessage(),
             'continue_button_text' => $this->getContinueButtonText(),
             'required_attendee_details' => $this->getRequireAttendeeDetails(),
+            'attendee_details_collection_method' => $this->getAttendeeDetailsCollectionMethod(),
             'email_footer_message' => $this->getEmailFooterMessage(),
             'support_email' => $this->getSupportEmail(),
             'order_timeout_in_minutes' => $this->getOrderTimeoutInMinutes(),
@@ -53,6 +54,9 @@ class EventSettingsResourcePublic extends JsonResource
             'location_details' => $this->getLocationDetails(),
             'is_online_event' => $this->getIsOnlineEvent(),
 
+            // Ticket design settings
+            'ticket_design_settings' => $this->getTicketDesignSettings(),
+
             // SEO settings
             'seo_title' => $this->getSeoTitle(),
             'seo_description' => $this->getSeoDescription(),
@@ -69,6 +73,12 @@ class EventSettingsResourcePublic extends JsonResource
             // Invoice settings
             'require_billing_address' => $this->getRequireBillingAddress(),
             'invoice_label' => $this->getInvoiceLabel(),
+
+            // Marketing settings
+            'show_marketing_opt_in' => $this->getShowMarketingOptIn(),
+
+            // Homepage theme settings
+            'homepage_theme_settings' => $this->getHomepageThemeSettings(),
         ];
     }
 }

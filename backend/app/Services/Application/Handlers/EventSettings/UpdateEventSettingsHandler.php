@@ -9,12 +9,12 @@ use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
 
-readonly class UpdateEventSettingsHandler
+class UpdateEventSettingsHandler
 {
     public function __construct(
-        private EventSettingsRepositoryInterface $eventSettingsRepository,
-        private HtmlPurifierService                     $purifier,
-        private DatabaseManager                  $databaseManager,
+        private readonly EventSettingsRepositoryInterface $eventSettingsRepository,
+        private readonly HtmlPurifierService              $purifier,
+        private readonly DatabaseManager                  $databaseManager,
     )
     {
     }
@@ -35,6 +35,7 @@ readonly class UpdateEventSettingsHandler
                         ?? $this->purifier->purify($settings->email_footer_message),
                     'support_email' => $settings->support_email,
                     'require_attendee_details' => $settings->require_attendee_details,
+                    'attendee_details_collection_method' => $settings->attendee_details_collection_method->name,
                     'continue_button_text' => trim($settings->continue_button_text),
 
                     'homepage_background_color' => $settings->homepage_background_color,
@@ -78,6 +79,15 @@ readonly class UpdateEventSettingsHandler
                     'invoice_tax_details' => $this->purifier->purify($settings->invoice_tax_details),
                     'invoice_notes' => $this->purifier->purify($settings->invoice_notes),
                     'invoice_payment_terms_days' => $settings->invoice_payment_terms_days,
+                    
+                    // Ticket design settings
+                    'ticket_design_settings' => $settings->ticket_design_settings,
+
+                    // Marketing settings
+                    'show_marketing_opt_in' => $settings->show_marketing_opt_in,
+
+                    // Homepage theme settings
+                    'homepage_theme_settings' => $settings->homepage_theme_settings,
                 ],
                 where: [
                     'event_id' => $settings->event_id,

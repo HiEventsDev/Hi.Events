@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Enums\ProductPriceType;
 use HiEvents\DomainObjects\Enums\QuestionTypeEnum;
+use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\QuestionDomainObject;
@@ -23,16 +24,18 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 class AttendeesExport implements FromCollection, WithHeadings, WithMapping, WithStyles
 {
     private LengthAwarePaginator|Collection $data;
-    private Collection $questions;
+    private Collection $productQuestions;
+    private Collection $orderQuestions;
 
     public function __construct(private QuestionAnswerFormatter $questionAnswerFormatter)
     {
     }
 
-    public function withData(LengthAwarePaginator|Collection $data, Collection $questions): AttendeesExport
+    public function withData(LengthAwarePaginator|Collection $data, Collection $productQuestions, Collection $orderQuestions): AttendeesExport
     {
         $this->data = $data;
-        $this->questions = $questions;
+        $this->productQuestions = $productQuestions;
+        $this->orderQuestions = $orderQuestions;
         return $this;
     }
 
@@ -43,7 +46,8 @@ class AttendeesExport implements FromCollection, WithHeadings, WithMapping, With
 
     public function headings(): array
     {
-        $questionTitles = $this->questions->map(fn($question) => $question->getTitle())->toArray();
+        $productQuestionTitles = $this->productQuestions->map(fn($question) => $question->getTitle())->toArray();
+        $orderQuestionsTitles = $this->orderQuestions->map(fn($orderQuestion) => $orderQuestion->getTitle())->toArray();
 
         return array_merge([
             __('ID'),
@@ -51,8 +55,7 @@ class AttendeesExport implements FromCollection, WithHeadings, WithMapping, With
             __('Last Name'),
             __('Email'),
             __('Status'),
-            __('Is Checked In'),
-            __('Checked In At'),
+            __('Check Ins'),
             __('Product ID'),
             __('Product Name'),
             __('Event ID'),
@@ -61,7 +64,7 @@ class AttendeesExport implements FromCollection, WithHeadings, WithMapping, With
             __('Created Date'),
             __('Last Updated Date'),
             __('Notes'),
-        ], $questionTitles);
+        ], $productQuestionTitles, $orderQuestionsTitles);
     }
 
     /**
@@ -70,8 +73,20 @@ class AttendeesExport implements FromCollection, WithHeadings, WithMapping, With
      */
     public function map($attendee): array
     {
-        $answers = $this->questions->map(function (QuestionDomainObject $question) use ($attendee) {
+        $productAnswers = $this->productQuestions->map(function (QuestionDomainObject $question) use ($attendee) {
             $answer = $attendee->getQuestionAndAnswerViews()
+                ->first(fn($qav) => $qav->getQuestionId() === $question->getId())?->getAnswer() ?? '';
+
+            return $this->questionAnswerFormatter->getAnswerAsText(
+                $answer,
+                QuestionTypeEnum::fromName($question->getType()),
+            );
+        });
+
+        $orderAnswers = $this->orderQuestions->map(function (QuestionDomainObject $question) use ($attendee) {
+            /** @var OrderDomainObject $order */
+            $order = $attendee->getOrder();
+            $answer = $order->getQuestionAndAnswerViews()
                 ->first(fn($qav) => $qav->getQuestionId() === $question->getId())?->getAnswer() ?? '';
 
             return $this->questionAnswerFormatter->getAnswerAsText(
@@ -82,13 +97,27 @@ class AttendeesExport implements FromCollection, WithHeadings, WithMapping, With
 
         /** @var ProductDomainObject $ticket */
         $ticket = $attendee->getProduct();
-        $ticketName = $ticket->getTitle();
-        if ($ticket->getType() === ProductPriceType::TIERED->name) {
+        $ticketName = $ticket?->getTitle();
+        if ($ticket && $ticket->getType() === ProductPriceType::TIERED->name) {
             $ticketName .= ' - ' . $ticket
                     ->getProductPrices()
                     ->first(fn(ProductPriceDomainObject $tp) => $tp->getId() === $attendee->getProductPriceId())
                     ->getLabel();
         }
+
+        if (!$ticketName) {
+            $ticketName = __('Unknown');
+        }
+
+        $checkIns = $attendee->getCheckIns()
+            ? $attendee->getCheckIns()
+                ->map(fn($checkIn) => sprintf(
+                    '%s (%s)',
+                    $checkIn->getCheckInList()?->getName() ?? __('Unknown'),
+                    Carbon::parse($checkIn->getCreatedAt())->format('Y-m-d H:i:s')
+                ))
+                ->join(', ')
+            : '';
 
         return array_merge([
             $attendee->getId(),
@@ -96,10 +125,7 @@ class AttendeesExport implements FromCollection, WithHeadings, WithMapping, With
             $attendee->getLastName(),
             $attendee->getEmail(),
             $attendee->getStatus(),
-            $attendee->getCheckIn() ? 'Yes' : 'No',
-            $attendee->getCheckIn()
-                ? Carbon::parse($attendee->getCheckIn()->getCreatedAt())->format('Y-m-d H:i:s')
-                : '',
+            $checkIns,
             $attendee->getProductId(),
             $ticketName,
             $attendee->getEventId(),
@@ -108,7 +134,7 @@ class AttendeesExport implements FromCollection, WithHeadings, WithMapping, With
             Carbon::parse($attendee->getCreatedAt())->format('Y-m-d H:i:s'),
             Carbon::parse($attendee->getUpdatedAt())->format('Y-m-d H:i:s'),
             $attendee->getNotes(),
-        ], $answers->toArray());
+        ], $productAnswers->toArray(), $orderAnswers->toArray());
     }
 
     public function styles(Worksheet $sheet): array

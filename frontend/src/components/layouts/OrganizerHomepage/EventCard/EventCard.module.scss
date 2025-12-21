@@ -1,5 +1,17 @@
 @use "../../../../styles/mixins.scss";
 
+// Design tokens - matching OrganizerHomepage
+$font-display: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+$font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+$radius-lg: 20px;
+$radius-md: 14px;
+$radius-sm: 10px;
+$radius-xs: 6px;
+
+$transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+$transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
 .eventCardLink {
   text-decoration: none;
   color: inherit;
@@ -7,22 +19,25 @@
 
   &:hover {
     .eventCard {
-      transform: translateY(-4px);
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
+      background: var(--accent-soft);
 
       .imageWrapper {
         img {
-          transform: scale(1.05);
+          transform: scale(1.03);
         }
 
         .placeholderContent {
-          transform: scale(1.05);
+          transform: scale(1.03);
         }
       }
 
       .shareButton {
         opacity: 1;
         transform: scale(1);
+      }
+
+      .dateBadge {
+        border-color: var(--primary-color);
       }
     }
   }
@@ -36,23 +51,28 @@
   --secondary-text-color: inherit;
   --bg-color: inherit;
   --content-bg-color: inherit;
+  --border-color: inherit;
+  --accent-soft: inherit;
+  --accent-muted: inherit;
+  --accent-contrast: inherit;
 
-  background: var(--content-bg-color);
-  border-radius: 20px;
+  font-family: $font-body;
+  background: transparent;
+  border-radius: $radius-md;
   overflow: visible;
-  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  transition: all $transition-fast;
   display: flex;
   flex-direction: column;
   height: 100%;
   padding: 12px;
-  gap: 16px;
+  gap: 12px;
 
   @include mixins.respond-above('sm') {
     flex-direction: row;
-    height: 180px;
-    padding: 16px;
-    gap: 20px;
+    height: auto;
+    min-height: 140px;
+    padding: 12px;
+    gap: 16px;
   }
 }
 
@@ -62,12 +82,12 @@
   flex: 0 0 auto;
 
   @include mixins.respond-below('sm') {
-    height: 200px;
+    height: 160px;
   }
 
   @include mixins.respond-above('sm') {
-    width: 240px;
-    height: 100%;
+    width: 200px;
+    height: 120px;
   }
 }
 
@@ -76,19 +96,19 @@
   position: relative;
   width: 100%;
   height: 100%;
-  border-radius: 12px;
+  border-radius: $radius-sm;
   overflow: hidden;
   background: var(--bg-color);
 
   @include mixins.respond-below('sm') {
-    max-height: 120px;
+    max-height: 160px;
   }
 
   img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+    transition: transform $transition-slow;
   }
 }
 
@@ -106,17 +126,17 @@
 
 .placeholderContent {
   position: relative;
-  transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: transform $transition-slow;
 }
 
 .placeholderIcon {
-  font-size: 3rem;
+  font-size: 2.5rem;
   filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.2));
   color: var(--badge-text, white);
   animation: float 4s ease-in-out infinite;
 
   @media (max-width: 640px) {
-    font-size: 2.5rem;
+    font-size: 2rem;
   }
 }
 
@@ -125,10 +145,10 @@
     transform: translateY(0) rotate(0deg);
   }
   25% {
-    transform: translateY(-8px) rotate(-3deg);
+    transform: translateY(-6px) rotate(-2deg);
   }
   75% {
-    transform: translateY(4px) rotate(3deg);
+    transform: translateY(3px) rotate(2deg);
   }
 }
 
@@ -142,7 +162,7 @@
 .sparkle {
   position: absolute;
   color: rgba(255, 255, 255, 0.9);
-  font-size: 1.2rem;
+  font-size: 1rem;
   animation: sparkle 3s ease-in-out infinite;
 
   &:nth-child(1) {
@@ -178,11 +198,11 @@
 // Image Overlay - contains floating elements
 .imageOverlay {
   position: absolute;
-  top: 0.75rem;
-  left: 0.75rem;
+  top: 8px;
+  left: 8px;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 6px;
   z-index: 10;
 }
 
@@ -190,12 +210,12 @@
 .shareButton {
   opacity: 0;
   transform: scale(0.8);
-  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: all $transition-fast;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
-  border-radius: 10px;
+  border-radius: $radius-xs;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  padding: 0.25rem;
+  padding: 4px;
 
   @media (max-width: 640px) {
     opacity: 1;
@@ -203,15 +223,25 @@
   }
 }
 
+.shareIcon {
+  color: var(--secondary-color);
+  transition: all $transition-fast;
+
+  &:hover {
+    transform: scale(1.1);
+    color: var(--primary-text-color);
+  }
+}
+
 // Live indicator
 .liveIndicator {
   display: flex;
   align-items: center;
-  gap: 0.25rem;
-  padding: 0.25rem 0.5rem;
+  gap: 4px;
+  padding: 4px 8px;
   background: #ef4444;
   backdrop-filter: blur(10px);
-  border-radius: 16px;
+  border-radius: $radius-xs;
   box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
 }
 
@@ -224,8 +254,8 @@
 }
 
 .liveDot {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
   background: white;
   border-radius: 50%;
   animation: pulse 1.5s ease-in-out infinite;
@@ -242,43 +272,33 @@
   }
 }
 
-// Date badge - positioned outside image on mobile, inside on desktop
+// Date badge
 .dateBadge {
   position: absolute;
   background: var(--content-bg-color);
   color: var(--primary-text-color);
-  opacity: 0.9;
-  border: none;
-  padding: 0.5rem 0.875rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--border-color);
+  padding: 6px 10px;
+  border-radius: $radius-xs;
+  box-shadow: 0 2px 8px var(--border-color);
   display: flex;
   align-items: center;
-  gap: 0.375rem;
-  font-weight: 700;
-  font-size: 0.8125rem;
+  gap: 6px;
+  font-family: $font-display;
+  font-weight: 600;
+  font-size: 0.75rem;
   z-index: 10;
-  transition: all 0.3s ease;
-  bottom: 12px;
-  left: 12px;
+  bottom: 8px;
+  left: 8px;
   backdrop-filter: blur(10px);
+  transition: border-color $transition-fast;
 
   @include mixins.respond-below('sm') {
-    left: 0;
+    left: 8px;
   }
 
   svg {
-    opacity: 0.8;
-    color: var(--secondary-color);
-  }
-
-  // Hover effect
-  .eventCard:hover & {
-    transform: scale(1.05);
-
-    @include mixins.respond-above('sm') {
-      background: var(--content-bg-color);
-    }
+    color: var(--primary-color);
   }
 }
 
@@ -287,66 +307,68 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 0.875rem;
-  min-width: 0; // Prevent flex children from overflowing
+  gap: 8px;
+  min-width: 0;
+  justify-content: center;
 
   @include mixins.respond-below('sm') {
-    padding: 0;
+    padding: 0 4px;
   }
 
   @include mixins.respond-above('sm') {
-    padding-right: 0.5rem;
+    padding-right: 4px;
   }
 }
 
 .eventHeader {
   display: flex;
   flex-direction: column;
-  gap: 0.375rem;
+  gap: 4px;
 }
 
 .eventTitle {
-  font-size: 1.25rem;
+  font-family: $font-display;
+  font-size: 1.05rem;
   font-weight: 700;
   margin: 0;
   color: var(--primary-text-color);
   line-height: 1.3;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
 
   @include mixins.respond-below('sm') {
-    font-size: 1.125rem;
+    font-size: 0.95rem;
   }
 }
 
 .eventDateTime {
   display: flex;
   align-items: center;
-  gap: 0.375rem;
+  gap: 6px;
   color: var(--secondary-color);
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   font-weight: 500;
 
   svg {
-    color: var(--secondary-color);
-    opacity: 0.7;
+    color: var(--accent-muted);
     flex-shrink: 0;
   }
 }
 
 .timezone {
-    font-weight: 500;
+  font-weight: 500;
+  opacity: 0.8;
 }
 
 .eventDescription {
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   color: var(--secondary-color);
-  line-height: 1.4;
+  line-height: 1.5;
   margin: 0;
   overflow: hidden;
   text-overflow: ellipsis;
+  display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
-  text-wrap-mode: nowrap;
 }
 
 // Footer section
@@ -355,32 +377,32 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 12px;
   flex-wrap: wrap;
+  padding-top: 4px;
 
   @include mixins.respond-below('sm') {
-    gap: 0.75rem;
+    gap: 8px;
   }
 }
 
 .eventMeta {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 12px;
   flex-wrap: wrap;
 }
 
 .location {
   display: flex;
   align-items: center;
-  gap: 0.375rem;
+  gap: 5px;
   color: var(--secondary-color);
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   font-weight: 500;
 
   svg {
-    color: var(--secondary-color);
-    opacity: 0.7;
+    color: var(--accent-muted);
     flex-shrink: 0;
   }
 }
@@ -389,18 +411,18 @@
 .priceSection {
   display: flex;
   align-items: center;
-  gap: 0.375rem;
+  gap: 5px;
+  font-family: $font-display;
   font-weight: 700;
-  font-size: 0.9375rem;
+  font-size: 0.85rem;
   color: var(--primary-text-color);
-  padding: 0.375rem 0.75rem;
-  background: var(--content-bg-color);
-  border-radius: 8px;
+  padding: 6px 12px;
+  background: var(--accent-soft);
+  border-radius: $radius-xs;
   white-space: nowrap;
 
   svg {
-    color: var(--secondary-color);
-    opacity: 0.8;
+    color: var(--primary-color);
     flex-shrink: 0;
   }
 
@@ -409,6 +431,7 @@
   }
 
   .free {
-    font-weight: 600;
+    font-weight: 700;
+    color: var(--primary-color);
   }
 }

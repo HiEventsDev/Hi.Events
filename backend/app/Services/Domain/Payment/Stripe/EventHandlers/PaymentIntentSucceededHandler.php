@@ -18,6 +18,7 @@ use HiEvents\DomainObjects\Status\OrderPaymentStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Events\OrderStatusChangedEvent;
 use HiEvents\Exceptions\CannotAcceptPaymentException;
+use HiEvents\Exceptions\Stripe\StripeClientConfigurationException;
 use HiEvents\Repository\Eloquent\StripePaymentsRepository;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
@@ -135,7 +136,6 @@ class PaymentIntentSucceededHandler
             attributes: [
                 StripePaymentDomainObjectAbstract::LAST_ERROR => $paymentIntent->last_payment_error?->toArray(),
                 StripePaymentDomainObjectAbstract::AMOUNT_RECEIVED => $paymentIntent->amount_received,
-                StripePaymentDomainObjectAbstract::APPLICATION_FEE => $paymentIntent->application_fee_amount ?? 0,
                 StripePaymentDomainObjectAbstract::PAYMENT_METHOD_ID => is_string($paymentIntent->payment_method)
                     ? $paymentIntent->payment_method
                     : $paymentIntent->payment_method?->id,
@@ -160,6 +160,7 @@ class PaymentIntentSucceededHandler
      * @throws MathException
      * @throws UnknownCurrencyException
      * @throws NumberFormatException
+     * @throws StripeClientConfigurationException
      * @todo We could check to see if there are products available, and if so, complete the order.
      *       This would be a better user experience.
      *
@@ -190,7 +191,7 @@ class PaymentIntentSucceededHandler
      * @throws CannotAcceptPaymentException
      * @throws MathException
      * @throws UnknownCurrencyException
-     * @throws NumberFormatException
+     * @throws NumberFormatException|StripeClientConfigurationException
      */
     private function validatePaymentAndOrderStatus(
         StripePaymentDomainObjectAbstract $stripePayment,

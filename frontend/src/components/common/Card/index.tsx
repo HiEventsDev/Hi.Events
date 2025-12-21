@@ -13,7 +13,7 @@ interface CardInterface {
 
 export const Card = ({children, className = '', style = {}, variant = 'default', ref = null}: CardInterface) => {
     return (
-        <div className={`${className} ${classes.card} ${classes[variant]}`}
+        <div className={`card ${variant} ${className} ${classes.card} ${classes[variant]}`}
              style={style}
              ref={ref}
         >

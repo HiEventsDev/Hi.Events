@@ -32,6 +32,8 @@ export const CreateProductModal = ({onClose, selectedCategoryId = undefined}: Cr
             show_quantity_remaining: false,
             hide_when_sold_out: false,
             is_hidden_without_promo_code: false,
+            is_highlighted: false,
+            highlight_message: undefined,
             type: ProductPriceType.Paid,
             product_type: ProductType.Ticket,
             tax_and_fee_ids: undefined,

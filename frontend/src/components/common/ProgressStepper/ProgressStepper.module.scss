@@ -1,0 +1,76 @@
+@use "../../../styles/mixins";
+
+// Design tokens
+$font-display: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+$transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+
+.stepper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+}
+
+.stepContainer {
+  display: flex;
+  align-items: center;
+}
+
+.stepItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: $font-display;
+  font-size: 13px;
+  font-weight: 600;
+  background-color: var(--checkout-border, #E5E7EB);
+  color: var(--checkout-text-secondary, #6B7280);
+  transition: all $transition-fast;
+
+  &.active {
+    background-color: var(--checkout-accent, var(--mantine-primary-color-filled));
+    color: var(--checkout-accent-contrast, #ffffff);
+  }
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--checkout-text-secondary, #6B7280);
+  transition: color $transition-fast;
+
+  @include mixins.respond-below(sm) {
+    display: none;
+  }
+
+  &.activeLabel {
+    color: var(--checkout-text-primary, #111827);
+  }
+}
+
+.connector {
+  width: 40px;
+  height: 2px;
+  background-color: var(--checkout-border, #D1D5DB);
+  margin: 0 8px;
+  border-radius: 1px;
+  transition: background-color $transition-fast;
+
+  @include mixins.respond-below(sm) {
+    width: 28px;
+    margin: 0 6px;
+  }
+
+  &.activeConnector {
+    background-color: var(--checkout-accent, var(--mantine-primary-color-filled));
+  }
+}

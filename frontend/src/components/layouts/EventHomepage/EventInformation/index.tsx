@@ -56,7 +56,7 @@ export const EventInformation: FC<{
                 <div className={classes.eventDetail}>
                     <div className={classes.details}>
                         <IconCalendar size={20}/>
-                        <div>
+                        <div className={classes.detail}>
                             <EventDateRange event={event}/>
                         </div>
                     </div>
@@ -74,12 +74,12 @@ export const EventInformation: FC<{
                     </div>
                 )}
 
-                {isAddressSet(event.settings?.location_details) && !event.settings?.is_online_event && (
+                {isAddressSet(event.settings?.location_details) && !event.settings?.is_online_event && event.settings?.location_details && (
                     <div className={classes.eventDetail}>
                         <div className={classes.details}>
                             <IconMapPin size={20}/>
                             <div className={classes.detail}>
-                                <b>{event.settings?.location_details?.venue_name}</b>
+                                <b>{event.settings.location_details.venue_name}</b>
                                 <div>{formatAddress(event.settings.location_details)}</div>
                                 <div>
                                     <Button
@@ -87,7 +87,7 @@ export const EventInformation: FC<{
                                         component="a"
                                         target="_blank"
                                         href={
-                                            event.settings.maps_url || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(formatAddress(event?.settings?.location_details))}`}
+                                            event.settings.maps_url || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(formatAddress(event.settings.location_details))}`}
                                         variant="transparent"
                                         size="xs"
                                         rightSection={<IconExternalLink size={15}/>}

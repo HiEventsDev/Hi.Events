@@ -96,7 +96,7 @@ const EventLayout = () => {
 
         {label: t`Manage`},
         {link: 'settings', label: t`Settings`, icon: IconSettings},
-        {link: 'attendees', label: t`Attendees`, icon: IconUsers, badge: eventStats?.total_products_sold},
+        {link: 'attendees', label: t`Attendees`, icon: IconUsers, badge: eventStats?.total_attendees_registered},
         {link: 'orders', label: t`Orders`, icon: IconReceipt, badge: eventStats?.total_orders},
         {link: 'products', label: t`Tickets & Products`, icon: IconTicket},
         {link: 'questions', label: t`Questions`, icon: IconUserQuestion},
@@ -108,6 +108,7 @@ const EventLayout = () => {
 
         {label: t`Tools`},
         {link: 'homepage-designer', label: t`Homepage Designer`, icon: IconPaint},
+        {link: 'ticket-designer', label: t`Ticket Design`, icon: IconTicket},
         {link: 'widget', label: t`Widget Embed`, icon: IconDeviceTabletCode},
         {link: 'webhooks', label: t`Webhooks`, icon: IconWebhook},
     ];

@@ -2,7 +2,7 @@ import React from 'react';
 import {Link} from "react-router";
 import {Event} from "../../../../types.ts";
 import classes from './EventCard.module.scss';
-import {formatDate} from "../../../../utilites/dates.ts";
+import {formatDateWithLocale} from "../../../../utilites/dates.ts";
 import {t} from "@lingui/macro";
 import {isLightColor} from "@mantine/core";
 import {formatCurrency} from "../../../../utilites/currency.ts";
@@ -26,15 +26,15 @@ export const EventCard: React.FC<EventCardProps> = ({event, primaryColor = '#8b5
     const placeholderEmoji = placeholderEmojis[emojiIndex];
 
     // Format dates using the event's timezone
-    const startMonth = formatDate(event.start_date, "MMM", event.timezone);
-    const startDay = formatDate(event.start_date, "D", event.timezone);
-    const startTime = formatDate(event.start_date, "h:mm A", event.timezone);
-    const endTime = event.end_date ? formatDate(event.end_date, "h:mm A", event.timezone) : null;
-    const prettyTimezone = formatDate(event.start_date, "z", event.timezone);
+    const startMonth = formatDateWithLocale(event.start_date, "monthShort", event.timezone);
+    const startDay = formatDateWithLocale(event.start_date, "dayOfMonth", event.timezone);
+    const startTime = formatDateWithLocale(event.start_date, "timeOnly", event.timezone);
+    const endTime = event.end_date ? formatDateWithLocale(event.end_date, "timeOnly", event.timezone) : null;
+    const prettyTimezone = formatDateWithLocale(event.start_date, "timezone", event.timezone);
 
     const isSameDay = event.end_date && event.start_date.substring(0, 10) === event.end_date.substring(0, 10);
-    const endMonth = event.end_date ? formatDate(event.end_date, "MMM", event.timezone) : null;
-    const endDay = event.end_date ? formatDate(event.end_date, "D", event.timezone) : null;
+    const endMonth = event.end_date ? formatDateWithLocale(event.end_date, "monthShort", event.timezone) : null;
+    const endDay = event.end_date ? formatDateWithLocale(event.end_date, "dayOfMonth", event.timezone) : null;
 
     const coverImage = event.images?.find(img => img.type === 'EVENT_COVER');
     const location = event?.settings?.location_details?.city || event?.settings?.location_details?.venue_name;
@@ -117,6 +117,7 @@ export const EventCard: React.FC<EventCardProps> = ({event, primaryColor = '#8b5
                                     text={event.description_preview || ''}
                                     url={eventHomepageUrl(event)}
                                     hideShareButtonText={true}
+                                    className={classes.shareIcon}
                                 />
                             </div>
                         </div>

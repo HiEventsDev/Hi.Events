@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {ReactNode, useState} from 'react';
 import {ActionIcon, Button, CopyButton, Group, Input, Popover} from '@mantine/core';
 import {
     IconBrandFacebook,
@@ -19,6 +19,8 @@ interface ShareComponentProps {
     imageUrl?: string;
     shareButtonText?: string;
     hideShareButtonText?: boolean;
+    className?: string;
+    children?: ReactNode;
 }
 
 export const ShareComponent = ({
@@ -27,6 +29,8 @@ export const ShareComponent = ({
                                    url,
                                    shareButtonText = t`Share`,
                                    hideShareButtonText = false,
+                                   className,
+                                   children,
                                }: ShareComponentProps) => {
     const [opened, setOpened] = useState(false);
 
@@ -58,17 +62,18 @@ export const ShareComponent = ({
             withArrow
         >
             <Popover.Target>
-                <div style={{display: 'flex'}}>
-                    {hideShareButtonText && (
-                        <ActionIcon variant={'transparent'} onClick={handleShareClick}>
+                <div style={{display: 'flex'}} onClick={handleShareClick}>
+                    {children ? (
+                        children
+                    ) : hideShareButtonText ? (
+                        <ActionIcon variant={'transparent'} className={className}>
                             <IconShare size={20}/>
                         </ActionIcon>
+                    ) : (
+                        <Button variant={'transparent'} leftSection={<IconShare size={20}/>} className={className}>
+                            {shareButtonText}
+                        </Button>
                     )}
-
-                    {!hideShareButtonText && (
-                        <Button variant={'transparent'} leftSection={<IconShare size={20}/>} onClick={handleShareClick}>
-                            {hideShareButtonText ? '' : shareButtonText}
-                        </Button>)}
                 </div>
             </Popover.Target>
 

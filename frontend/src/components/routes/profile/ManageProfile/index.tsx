@@ -1,7 +1,7 @@
 import {Card} from "../../../common/Card";
 import {useForm, UseFormReturnType} from "@mantine/form";
 import {useGetMe} from "../../../../queries/useGetMe.ts";
-import {Alert, Button, PasswordInput, Select, Tabs, TextInput} from "@mantine/core";
+import {Alert, Button, NativeSelect, PasswordInput, Select, Tabs, TextInput} from "@mantine/core";
 import classes from "./ManageProfile.module.scss";
 import {useEffect, useState} from "react";
 import {IconInfoCircle, IconPassword, IconUser} from "@tabler/icons-react";
@@ -13,7 +13,12 @@ import {useCancelEmailChange} from "../../../../mutations/useCancelEmailChange.t
 import {useFormErrorResponseHandler} from "../../../../hooks/useFormErrorResponseHandler.tsx";
 import {t, Trans} from "@lingui/macro";
 import {useResendEmailConfirmation} from "../../../../mutations/useResendEmailConfirmation.ts";
-import {getLocaleName, localeToFlagEmojiMap, localeToNameMap, SupportedLocales} from "../../../../locales.ts";
+import {localeToFlagEmojiMap, localeToNameMap, SupportedLocales} from "../../../../locales.ts";
+
+const localeSelectData = Object.keys(localeToNameMap).map(locale => ({
+    value: locale,
+    label: `${localeToFlagEmojiMap[locale as SupportedLocales]} ${localeToNameMap[locale as SupportedLocales]}`,
+}));
 
 export const ManageProfile = () => {
     const {data: me, isFetching} = useGetMe();
@@ -162,15 +167,12 @@ export const ManageProfile = () => {
                                         placeholder={t`UTC`}
                                     />
 
-                                    <Select
+                                    <NativeSelect
                                         required
-                                        data={Object.keys(localeToNameMap).map(locale => ({
-                                            value: locale,
-                                            label: localeToFlagEmojiMap[locale as SupportedLocales] + ' ' + getLocaleName(locale as SupportedLocales),
-                                        }))}
-                                        {...profileForm.getInputProps('locale')}
+                                        data={localeSelectData}
+                                        value={profileForm.values.locale || ''}
+                                        onChange={(e) => profileForm.setFieldValue('locale', e.target.value)}
                                         label={t`Language`}
-                                        placeholder={t`English`}
                                     />
 
                                     <Button fullWidth loading={mutation.isPending}

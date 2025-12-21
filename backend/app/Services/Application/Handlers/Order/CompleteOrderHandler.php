@@ -7,7 +7,9 @@ namespace HiEvents\Services\Application\Handlers\Order;
 use Carbon\Carbon;
 use Exception;
 use HiEvents\DomainObjects\AttendeeDomainObject;
+use HiEvents\DomainObjects\Enums\AttendeeDetailsCollectionMethod;
 use HiEvents\DomainObjects\Enums\ProductType;
+use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\ProductPriceDomainObjectAbstract;
@@ -24,6 +26,7 @@ use HiEvents\Helper\IdHelper;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductPriceRepositoryInterface;
 use HiEvents\Repository\Interfaces\QuestionAnswerRepositoryInterface;
@@ -55,6 +58,7 @@ class CompleteOrderHandler
         private readonly ProductQuantityUpdateService      $productQuantityUpdateService,
         private readonly ProductPriceRepositoryInterface   $productPriceRepository,
         private readonly DomainEventDispatcherService      $domainEventDispatcherService,
+        private readonly EventSettingsRepositoryInterface  $eventSettingsRepository,
     )
     {
     }
@@ -64,14 +68,19 @@ class CompleteOrderHandler
      */
     public function handle(string $orderShortId, CompleteOrderDTO $orderData): OrderDomainObject
     {
-        $updatedOrder = DB::transaction(function () use ($orderData, $orderShortId) {
+        /** @var EventSettingDomainObject $eventSettings */
+        $eventSettings = $this->eventSettingsRepository->findFirstWhere([
+            'event_id' => $orderData->event_id,
+        ]);
+
+        $updatedOrder = DB::transaction(function () use ($orderData, $orderShortId, $eventSettings) {
             $orderDTO = $orderData->order;
 
             $order = $this->getOrder($orderShortId);
 
             $updatedOrder = $this->updateOrder($order, $orderDTO);
 
-            $this->createAttendees($orderData->products, $order);
+            $this->createAttendees($orderData->products, $order, $orderDTO, $eventSettings);
 
             if ($orderData->order->questions) {
                 $this->createOrderQuestions($orderDTO->questions, $order);
@@ -90,7 +99,11 @@ class CompleteOrderHandler
             return $updatedOrder;
         });
 
-        OrderStatusChangedEvent::dispatch($updatedOrder);
+        event(new OrderStatusChangedEvent(
+            order: $updatedOrder,
+            sendEmails: true,
+            createInvoice: $eventSettings->getEnableInvoicing(),
+        ));
 
         if ($updatedOrder->isOrderCompleted()) {
             $this->domainEventDispatcherService->dispatch(
@@ -108,7 +121,12 @@ class CompleteOrderHandler
      * @param Collection<CompleteOrderProductDataDTO> $orderProducts
      * @throws Exception
      */
-    private function createAttendees(Collection $orderProducts, OrderDomainObject $order): void
+    private function createAttendees(
+        Collection                $orderProducts,
+        OrderDomainObject         $order,
+        CompleteOrderOrderDTO     $orderDTO,
+        EventSettingDomainObject  $eventSettings,
+    ): void
     {
         $inserts = [];
         $createdProductData = collect();
@@ -119,6 +137,8 @@ class CompleteOrderHandler
         );
 
         $this->validateProductPriceIdsMatchOrder($order, $productsPrices);
+
+        $isPerOrderCollection = $eventSettings->getAttendeeDetailsCollectionMethod() === AttendeeDetailsCollectionMethod::PER_ORDER->name;
         $this->validateTicketProductsCount($order, $orderProducts);
 
         foreach ($orderProducts as $attendee) {
@@ -146,9 +166,9 @@ class CompleteOrderHandler
                 AttendeeDomainObjectAbstract::STATUS => $order->isPaymentRequired()
                     ? AttendeeStatus::AWAITING_PAYMENT->name
                     : AttendeeStatus::ACTIVE->name,
-                AttendeeDomainObjectAbstract::EMAIL => $attendee->email,
-                AttendeeDomainObjectAbstract::FIRST_NAME => $attendee->first_name,
-                AttendeeDomainObjectAbstract::LAST_NAME => $attendee->last_name,
+                AttendeeDomainObjectAbstract::EMAIL => $isPerOrderCollection ? $orderDTO->email : $attendee->email,
+                AttendeeDomainObjectAbstract::FIRST_NAME => $isPerOrderCollection ? $orderDTO->first_name : $attendee->first_name,
+                AttendeeDomainObjectAbstract::LAST_NAME => $isPerOrderCollection ? $orderDTO->last_name : $attendee->last_name,
                 AttendeeDomainObjectAbstract::ORDER_ID => $order->getId(),
                 AttendeeDomainObjectAbstract::PUBLIC_ID => IdHelper::publicId(IdHelper::ATTENDEE_PREFIX),
                 AttendeeDomainObjectAbstract::SHORT_ID => $shortId,
@@ -291,6 +311,9 @@ class CompleteOrderHandler
                     OrderDomainObjectAbstract::STATUS => $order->isPaymentRequired()
                         ? OrderStatus::RESERVED->name
                         : OrderStatus::COMPLETED->name,
+                    OrderDomainObjectAbstract::OPTED_INTO_MARKETING_AT => $orderDTO->opted_into_marketing
+                        ? Carbon::now()
+                        : null,
                 ]
             );
 

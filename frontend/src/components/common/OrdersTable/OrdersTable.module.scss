@@ -1,10 +1,240 @@
 @use "../../../styles/mixins.scss";
 
-.paymentStatus {
-  text-transform: capitalize;
-  color: #777777;
+// Customer Section (Sticky Left)
+.customerDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  flex: 1;
 }
 
+.nameRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.customerName {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.3;
+  text-decoration: none;
+  color: var(--mantine-color-text);
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.companyName {
+  font-size: 12px;
+  color: var(--mantine-color-dimmed);
+  line-height: 1.3;
+}
+
+.customerEmail {
+  font-size: 13px;
+  line-height: 1.3;
+  color: var(--mantine-color-dimmed);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 280px;
+}
+
+// Order Details Section
+.orderDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.orderId {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--mantine-color-text);
+  font-family: 'Courier New', monospace;
+  line-height: 1.3;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.orderMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+}
+
+.createdDate {
+  font-size: 12px;
+  color: var(--mantine-color-dimmed);
+  line-height: 1.3;
+}
+
+.invoiceLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--mantine-color-primary-filled);
+  text-decoration: none;
+  font-weight: 500;
+  line-height: 1.3;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.noInvoice {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--mantine-color-dimmed);
+  line-height: 1.3;
+}
+
+.reservedUntil {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--mantine-color-yellow-9);
+  line-height: 1.3;
+}
+
+// Items Section
+.itemsBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  background: var(--mantine-color-gray-1);
+  border-radius: 4px;
+  font-size: 12px;
+  color: var(--mantine-color-gray-7);
+  font-weight: 500;
+}
+
+// Amount Section
+.amountDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.amountGross {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--mantine-color-text);
+  line-height: 1.3;
+}
+
+.amountBreakdown {
+  font-size: 11px;
+  color: var(--mantine-color-dimmed);
+  line-height: 1.3;
+}
+
+.refundedAmount {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  line-height: 1.3;
+
+  &[data-refund-status="REFUNDED"],
+  &[data-refund-status="PARTIALLY_REFUNDED"] {
+    color: var(--mantine-color-orange-7);
+  }
+
+  &[data-refund-status="REFUND_PENDING"] {
+    color: var(--mantine-color-yellow-7);
+  }
+
+  &[data-refund-status="REFUND_FAILED"] {
+    color: var(--mantine-color-red-7);
+  }
+}
+
+// Payment Section
+.paymentStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--mantine-color-dimmed);
+}
+
+// Status Section
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+
+  &[data-status="COMPLETED"] {
+    background: var(--mantine-color-green-1);
+    color: var(--mantine-color-green-9);
+  }
+
+  &[data-status="RESERVED"] {
+    background: var(--mantine-color-blue-1);
+    color: var(--mantine-color-blue-9);
+  }
+
+  &[data-status="AWAITING_OFFLINE_PAYMENT"] {
+    background: var(--mantine-color-yellow-1);
+    color: var(--mantine-color-yellow-9);
+  }
+
+  &[data-status="CANCELLED"] {
+    background: var(--mantine-color-red-1);
+    color: var(--mantine-color-red-9);
+  }
+
+  &[data-status="ABANDONED"] {
+    background: var(--mantine-color-gray-1);
+    color: var(--mantine-color-gray-9);
+  }
+}
+
+// Actions Section
+.actionsMenu {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+// Action menu helpers (for mobile/desktop)
+.action {
+  .desktopAction {
+    display: block;
+    @include mixins.respond-below(md) {
+      display: none;
+    }
+  }
+
+  .mobileAction {
+    display: none;
+    @include mixins.respond-below(md) {
+      display: block;
+    }
+  }
+}
+
+// Mobile Card Layout (preserve existing mobile view)
 .orderCard {
   display: flex;
   flex-direction: row;
@@ -53,6 +283,13 @@
 
     .amount {
       margin-bottom: 10px;
+      font-weight: 600;
+      font-size: 1.2em;
+    }
+
+    .name {
+      font-weight: 600;
+      margin-bottom: 5px;
     }
   }
 
@@ -69,20 +306,6 @@
 
     .actionButton {
       display: flex;
-
-      .desktopAction {
-        display: none;
-        @include mixins.respond-below(md) {
-          display: none;
-        }
-      }
-
-      .mobileAction {
-        display: none;
-        @include mixins.respond-below(md) {
-          display: block;
-        }
-      }
 
       @include mixins.respond-above(md) {
         place-content: flex-end;

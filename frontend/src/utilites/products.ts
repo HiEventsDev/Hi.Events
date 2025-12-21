@@ -1,7 +1,6 @@
 import {Attendee, Product, ProductPriceType} from "../types.ts";
 
-export const getAttendeeProductTitle = (attendee: Attendee): string => {
-    const product = attendee.product as Product;
+export const getAttendeeProductTitle = (attendee: Attendee, product: Product): string => {
     if (product.type !== ProductPriceType.Tiered) {
         return product.title;
     }

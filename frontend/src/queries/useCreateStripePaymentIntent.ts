@@ -1,7 +1,6 @@
 import {useQuery} from "@tanstack/react-query";
 import {orderClientPublic} from "../api/order.client.ts";
 import {IdParam} from "../types.ts";
-import {getSessionIdentifier} from "../utilites/sessionIdentifier.ts";
 
 export const GET_INITIATE_STRIPE_SESSION_PUBLIC_QUERY_KEY = 'getStripSessionPublic';
 
@@ -10,11 +9,11 @@ export const useCreateStripePaymentIntent = (eventId: IdParam, orderShortId: IdP
         queryKey: [GET_INITIATE_STRIPE_SESSION_PUBLIC_QUERY_KEY],
 
         queryFn: async () => {
-            const {client_secret, account_id} = await orderClientPublic.createStripePaymentIntent(
+            const {client_secret, account_id, public_key, stripe_platform} = await orderClientPublic.createStripePaymentIntent(
                 Number(eventId),
                 String(orderShortId),
             );
-            return {client_secret, account_id};
+            return {client_secret, account_id, public_key, stripe_platform};
         },
 
         retry: false,

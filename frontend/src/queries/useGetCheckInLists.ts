@@ -4,7 +4,7 @@ import {checkInListClient} from "../api/check-in-list.client.ts";
 
 export const GET_EVENT_CHECK_IN_LISTS_QUERY_KEY = 'getEventCheckInLists';
 
-export const useGetEventCheckInLists = (eventId: IdParam, pagination: QueryFilters) => {
+export const useGetEventCheckInLists = (eventId: IdParam, pagination: QueryFilters|null = null) => {
     return useQuery({
         queryKey: [GET_EVENT_CHECK_IN_LISTS_QUERY_KEY, eventId, pagination],
 

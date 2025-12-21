@@ -2,7 +2,6 @@
 
 namespace HiEvents\Models;
 
-use HiEvents\DomainObjects\Generated\StripePaymentDomainObjectAbstract;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -19,17 +18,8 @@ class StripePayment extends BaseModel
     {
         return [
             'last_error' => 'array',
-        ];
-    }
-
-    protected function getFillableFields(): array
-    {
-        return [
-            StripePaymentDomainObjectAbstract::ORDER_ID,
-            StripePaymentDomainObjectAbstract::CHARGE_ID,
-            StripePaymentDomainObjectAbstract::PAYMENT_INTENT_ID,
-            StripePaymentDomainObjectAbstract::PAYMENT_METHOD_ID,
-            StripePaymentDomainObjectAbstract::CONNECTED_ACCOUNT_ID,
+            'payout_exchange_rate' => 'float',
+            'application_fee_vat_rate' => 'float',
         ];
     }
 
