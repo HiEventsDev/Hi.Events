@@ -1,4 +1,4 @@
-import {i18n} from "@lingui/core";
+import { i18n } from "@lingui/core";
 
 export type SupportedLocales =
     "en"
@@ -13,9 +13,10 @@ export type SupportedLocales =
     | "vi"
     | "zh-hk"
     | "tr"
-    | "hu";
+    | "hu"
+    | "id";
 
-export const availableLocales = ["en", "de", "fr", "it", "nl", "pt", "es", "zh-cn", "zh-hk", "pt-br", "vi", "tr", "hu"];
+export const availableLocales = ["en", "de", "fr", "it", "nl", "pt", "es", "zh-cn", "zh-hk", "pt-br", "vi", "tr", "hu", "id"];
 
 export const localeToFlagEmojiMap: Record<SupportedLocales, string> = {
     en: '🇬🇧',
@@ -31,6 +32,7 @@ export const localeToFlagEmojiMap: Record<SupportedLocales, string> = {
     vi: '🇻🇳',
     tr: '🇹🇷',
     hu: '🇭🇺',
+    id: '🇮🇩',
 };
 
 export const localeToNameMap: Record<SupportedLocales, string> = {
@@ -47,6 +49,7 @@ export const localeToNameMap: Record<SupportedLocales, string> = {
     vi: `Vietnamese`,
     tr: `Turkish`,
     hu: `Hungarian`,
+    id: `Indonesian`,
 };
 
 export const getLocaleName = (locale: SupportedLocales) => {
