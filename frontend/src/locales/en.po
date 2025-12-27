@@ -31,7 +31,6 @@ msgstr "'There\\'s nothing to show yet'"
 msgid "(empty)"
 msgstr "(empty)"
 
-#: src/components/common/OrganizerReportTable/index.tsx:316
 #: src/components/common/ReportTable/index.tsx:303
 msgid "{0}"
 msgstr "{0}"
@@ -599,7 +598,7 @@ msgstr "All attendees"
 msgid "All attendees of this event"
 msgstr "All attendees of this event"
 
-#: src/components/common/OrganizerReportTable/index.tsx:251
+#: src/components/common/OrganizerReportTable/index.tsx:291
 msgid "All Currencies"
 msgstr "All Currencies"
 
@@ -669,6 +668,10 @@ msgstr "Also refund this order"
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:428
 msgid "Always available"
 msgstr "Always available"
+
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:118
+#~ msgid "Always consult with a tax professional before using this data for accounting or tax purposes. Please cross-reference with your Stripe dashboard as Hi.Events may be missing historical data."
+#~ msgstr "Always consult with a tax professional before using this data for accounting or tax purposes. Please cross-reference with your Stripe dashboard as Hi.Events may be missing historical data."
 
 #: src/components/routes/event/Settings/Sections/SeoSettings/index.tsx:77
 #: src/components/routes/organizer/Settings/Sections/SeoSettings/index.tsx:77
@@ -2165,7 +2168,7 @@ msgstr "Creating your organizer profile, please wait"
 msgid "CTA label is required"
 msgstr "CTA label is required"
 
-#: src/components/common/OrganizerReportTable/index.tsx:263
+#: src/components/common/OrganizerReportTable/index.tsx:306
 #: src/components/forms/OrganizerForm/index.tsx:50
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:73
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:113
@@ -2214,7 +2217,7 @@ msgstr "Custom message after checkout"
 msgid "Custom Questions"
 msgstr "Custom Questions"
 
-#: src/components/common/OrganizerReportTable/index.tsx:59
+#: src/components/common/OrganizerReportTable/index.tsx:61
 #: src/components/common/ReportTable/index.tsx:53
 msgid "Custom Range"
 msgstr "Custom Range"
@@ -3236,6 +3239,10 @@ msgstr "Export"
 msgid "Export Answers"
 msgstr "Export Answers"
 
+#: src/components/common/OrganizerReportTable/index.tsx:347
+msgid "Export CSV"
+msgstr "Export CSV"
+
 #: src/mutations/useExportAnswers.ts:39
 msgid "Export failed. Please try again."
 msgstr "Export failed. Please try again."
@@ -3243,6 +3250,10 @@ msgstr "Export failed. Please try again."
 #: src/mutations/useExportAnswers.ts:17
 msgid "Export started. Preparing file..."
 msgstr "Export started. Preparing file..."
+
+#: src/components/common/OrganizerReportTable/index.tsx:204
+msgid "Export successful"
+msgstr "Export successful"
 
 #: src/components/routes/event/Affiliates/index.tsx:42
 msgid "Exporting Affiliates"
@@ -3322,6 +3333,10 @@ msgstr "Failed to export attendees"
 #: src/components/routes/event/orders.tsx:99
 msgid "Failed to export orders"
 msgstr "Failed to export orders"
+
+#: src/components/common/OrganizerReportTable/index.tsx:206
+msgid "Failed to export report. Please try again."
+msgstr "Failed to export report. Please try again."
 
 #: src/components/modals/EditCheckInListModal/index.tsx:79
 msgid "Failed to load Check-In List"
@@ -4212,42 +4227,42 @@ msgstr "Label"
 msgid "Language"
 msgstr "Language"
 
-#: src/components/common/OrganizerReportTable/index.tsx:58
+#: src/components/common/OrganizerReportTable/index.tsx:60
 #: src/components/common/ReportTable/index.tsx:52
 msgid "Last 12 months"
 msgstr "Last 12 months"
 
-#: src/components/common/OrganizerReportTable/index.tsx:53
+#: src/components/common/OrganizerReportTable/index.tsx:55
 #: src/components/common/ReportTable/index.tsx:47
 msgid "Last 14 days"
 msgstr "Last 14 days"
 
-#: src/components/common/OrganizerReportTable/index.tsx:50
+#: src/components/common/OrganizerReportTable/index.tsx:52
 #: src/components/common/ReportTable/index.tsx:44
 msgid "Last 24 hours"
 msgstr "Last 24 hours"
 
-#: src/components/common/OrganizerReportTable/index.tsx:54
+#: src/components/common/OrganizerReportTable/index.tsx:56
 #: src/components/common/ReportTable/index.tsx:48
 msgid "Last 30 days"
 msgstr "Last 30 days"
 
-#: src/components/common/OrganizerReportTable/index.tsx:51
+#: src/components/common/OrganizerReportTable/index.tsx:53
 #: src/components/common/ReportTable/index.tsx:45
 msgid "Last 48 hours"
 msgstr "Last 48 hours"
 
-#: src/components/common/OrganizerReportTable/index.tsx:56
+#: src/components/common/OrganizerReportTable/index.tsx:58
 #: src/components/common/ReportTable/index.tsx:50
 msgid "Last 6 months"
 msgstr "Last 6 months"
 
-#: src/components/common/OrganizerReportTable/index.tsx:52
+#: src/components/common/OrganizerReportTable/index.tsx:54
 #: src/components/common/ReportTable/index.tsx:46
 msgid "Last 7 days"
 msgstr "Last 7 days"
 
-#: src/components/common/OrganizerReportTable/index.tsx:55
+#: src/components/common/OrganizerReportTable/index.tsx:57
 #: src/components/common/ReportTable/index.tsx:49
 msgid "Last 90 days"
 msgstr "Last 90 days"
@@ -4354,7 +4369,7 @@ msgstr "Loading tokens..."
 msgid "Loading Webhooks"
 msgstr "Loading Webhooks"
 
-#: src/components/common/OrganizerReportTable/index.tsx:225
+#: src/components/common/OrganizerReportTable/index.tsx:265
 #: src/components/common/ReportTable/index.tsx:210
 msgid "Loading..."
 msgstr "Loading..."
@@ -4731,7 +4746,7 @@ msgstr "No configurations found"
 msgid "No data available"
 msgstr "No data available"
 
-#: src/components/common/OrganizerReportTable/index.tsx:232
+#: src/components/common/OrganizerReportTable/index.tsx:272
 msgid "No data found for the selected filters. Try adjusting the date range or currency."
 msgstr "No data found for the selected filters. Try adjusting the date range or currency."
 
@@ -4947,6 +4962,10 @@ msgstr "Number of days allowed for payment (leave blank to omit payment terms fr
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:199
 msgid "Number Prefix"
 msgstr "Number Prefix"
+
+#: src/components/common/OrganizerReportTable/index.tsx:356
+msgid "of"
+msgstr "of"
 
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:74
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:75
@@ -5413,6 +5432,10 @@ msgstr "Overview"
 msgid "Padding"
 msgstr "Padding"
 
+#: src/components/common/OrganizerReportTable/index.tsx:356
+msgid "Page"
+msgstr "Page"
+
 #: src/components/forms/StripeCheckoutForm/index.tsx:106
 msgid "Page no longer available"
 msgstr "Page no longer available"
@@ -5774,7 +5797,7 @@ msgstr "Please restart the checkout process."
 msgid "Please return to the event page to start over."
 msgstr "Please return to the event page to start over."
 
-#: src/components/common/OrganizerReportTable/index.tsx:229
+#: src/components/common/OrganizerReportTable/index.tsx:269
 msgid "Please select a date range"
 msgstr "Please select a date range"
 
@@ -6701,7 +6724,7 @@ msgstr "Select Ticket"
 msgid "Select tickets"
 msgstr "Select tickets"
 
-#: src/components/common/OrganizerReportTable/index.tsx:274
+#: src/components/common/OrganizerReportTable/index.tsx:317
 #: src/components/common/ReportTable/index.tsx:261
 msgid "Select time period"
 msgstr "Select time period"
@@ -6935,6 +6958,10 @@ msgstr "Show more platforms"
 #: src/components/routes/event/Settings/Sections/MiscSettings/index.tsx:63
 msgid "Show tax and fees separately"
 msgstr "Show tax and fees separately"
+
+#: src/components/common/OrganizerReportTable/index.tsx:355
+msgid "Showing {0} of {totalRows} records"
+msgstr "Showing {0} of {totalRows} records"
 
 #: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:100
 msgid "Shown to the customer after they checkout, on the order summary page."
@@ -8895,7 +8922,7 @@ msgstr "Write your message here..."
 msgid "X (Twitter)"
 msgstr "X (Twitter)"
 
-#: src/components/common/OrganizerReportTable/index.tsx:57
+#: src/components/common/OrganizerReportTable/index.tsx:59
 #: src/components/common/ReportTable/index.tsx:51
 msgid "Year to date"
 msgstr "Year to date"

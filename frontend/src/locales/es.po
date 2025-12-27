@@ -31,7 +31,6 @@ msgstr "'No hay nada que mostrar todavía'"
 msgid "(empty)"
 msgstr "(vacío)"
 
-#: src/components/common/OrganizerReportTable/index.tsx:316
 #: src/components/common/ReportTable/index.tsx:303
 msgid "{0}"
 msgstr "{0}"
@@ -599,7 +598,7 @@ msgstr "Todos los asistentes"
 msgid "All attendees of this event"
 msgstr "Todos los asistentes a este evento."
 
-#: src/components/common/OrganizerReportTable/index.tsx:251
+#: src/components/common/OrganizerReportTable/index.tsx:291
 msgid "All Currencies"
 msgstr "Todas las monedas"
 
@@ -669,6 +668,10 @@ msgstr "También reembolsar este pedido"
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:428
 msgid "Always available"
 msgstr "Siempre disponible"
+
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:118
+#~ msgid "Always consult with a tax professional before using this data for accounting or tax purposes. Please cross-reference with your Stripe dashboard as Hi.Events may be missing historical data."
+#~ msgstr "Este informe es solo para fines informativos. Siempre consulte con un profesional de impuestos antes de usar estos datos para propósitos contables o fiscales. Por favor, cruce esta información con su panel de Stripe ya que Hi.Events puede carecer de datos históricos."
 
 #: src/components/routes/event/Settings/Sections/SeoSettings/index.tsx:77
 #: src/components/routes/organizer/Settings/Sections/SeoSettings/index.tsx:77
@@ -2165,7 +2168,7 @@ msgstr "Creando tu perfil de organizador, por favor espera"
 msgid "CTA label is required"
 msgstr "La etiqueta CTA es requerida"
 
-#: src/components/common/OrganizerReportTable/index.tsx:263
+#: src/components/common/OrganizerReportTable/index.tsx:306
 #: src/components/forms/OrganizerForm/index.tsx:50
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:73
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:113
@@ -2214,7 +2217,7 @@ msgstr "Mensaje personalizado después de la compra"
 msgid "Custom Questions"
 msgstr "Preguntas personalizadas"
 
-#: src/components/common/OrganizerReportTable/index.tsx:59
+#: src/components/common/OrganizerReportTable/index.tsx:61
 #: src/components/common/ReportTable/index.tsx:53
 msgid "Custom Range"
 msgstr "Rango personalizado"
@@ -3236,6 +3239,10 @@ msgstr "Exportar"
 msgid "Export Answers"
 msgstr "Exportar respuestas"
 
+#: src/components/common/OrganizerReportTable/index.tsx:347
+msgid "Export CSV"
+msgstr ""
+
 #: src/mutations/useExportAnswers.ts:39
 msgid "Export failed. Please try again."
 msgstr "Error en la exportación. Por favor, inténtelo de nuevo."
@@ -3243,6 +3250,10 @@ msgstr "Error en la exportación. Por favor, inténtelo de nuevo."
 #: src/mutations/useExportAnswers.ts:17
 msgid "Export started. Preparing file..."
 msgstr "Exportación iniciada. Preparando archivo..."
+
+#: src/components/common/OrganizerReportTable/index.tsx:204
+msgid "Export successful"
+msgstr ""
 
 #: src/components/routes/event/Affiliates/index.tsx:42
 msgid "Exporting Affiliates"
@@ -3322,6 +3333,10 @@ msgstr "Error al exportar asistentes"
 #: src/components/routes/event/orders.tsx:99
 msgid "Failed to export orders"
 msgstr "Error al exportar pedidos"
+
+#: src/components/common/OrganizerReportTable/index.tsx:206
+msgid "Failed to export report. Please try again."
+msgstr ""
 
 #: src/components/modals/EditCheckInListModal/index.tsx:79
 msgid "Failed to load Check-In List"
@@ -4212,42 +4227,42 @@ msgstr "Etiqueta"
 msgid "Language"
 msgstr "Idioma"
 
-#: src/components/common/OrganizerReportTable/index.tsx:58
+#: src/components/common/OrganizerReportTable/index.tsx:60
 #: src/components/common/ReportTable/index.tsx:52
 msgid "Last 12 months"
 msgstr "Últimos 12 meses"
 
-#: src/components/common/OrganizerReportTable/index.tsx:53
+#: src/components/common/OrganizerReportTable/index.tsx:55
 #: src/components/common/ReportTable/index.tsx:47
 msgid "Last 14 days"
 msgstr "Últimos 14 días"
 
-#: src/components/common/OrganizerReportTable/index.tsx:50
+#: src/components/common/OrganizerReportTable/index.tsx:52
 #: src/components/common/ReportTable/index.tsx:44
 msgid "Last 24 hours"
 msgstr "Últimas 24 horas"
 
-#: src/components/common/OrganizerReportTable/index.tsx:54
+#: src/components/common/OrganizerReportTable/index.tsx:56
 #: src/components/common/ReportTable/index.tsx:48
 msgid "Last 30 days"
 msgstr "Últimos 30 días"
 
-#: src/components/common/OrganizerReportTable/index.tsx:51
+#: src/components/common/OrganizerReportTable/index.tsx:53
 #: src/components/common/ReportTable/index.tsx:45
 msgid "Last 48 hours"
 msgstr "Últimas 48 horas"
 
-#: src/components/common/OrganizerReportTable/index.tsx:56
+#: src/components/common/OrganizerReportTable/index.tsx:58
 #: src/components/common/ReportTable/index.tsx:50
 msgid "Last 6 months"
 msgstr "Últimos 6 meses"
 
-#: src/components/common/OrganizerReportTable/index.tsx:52
+#: src/components/common/OrganizerReportTable/index.tsx:54
 #: src/components/common/ReportTable/index.tsx:46
 msgid "Last 7 days"
 msgstr "Últimos 7 días"
 
-#: src/components/common/OrganizerReportTable/index.tsx:55
+#: src/components/common/OrganizerReportTable/index.tsx:57
 #: src/components/common/ReportTable/index.tsx:49
 msgid "Last 90 days"
 msgstr "Últimos 90 días"
@@ -4354,7 +4369,7 @@ msgstr "Cargando tokens..."
 msgid "Loading Webhooks"
 msgstr "Cargando webhooks"
 
-#: src/components/common/OrganizerReportTable/index.tsx:225
+#: src/components/common/OrganizerReportTable/index.tsx:265
 #: src/components/common/ReportTable/index.tsx:210
 msgid "Loading..."
 msgstr "Cargando..."
@@ -4731,7 +4746,7 @@ msgstr "No se encontraron configuraciones"
 msgid "No data available"
 msgstr "No hay datos disponibles"
 
-#: src/components/common/OrganizerReportTable/index.tsx:232
+#: src/components/common/OrganizerReportTable/index.tsx:272
 msgid "No data found for the selected filters. Try adjusting the date range or currency."
 msgstr "No se encontraron datos para los filtros seleccionados. Intente ajustar el rango de fechas o la moneda."
 
@@ -4947,6 +4962,10 @@ msgstr "Número de días permitidos para el pago (dejar en blanco para omitir lo
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:199
 msgid "Number Prefix"
 msgstr "Prefijo del número"
+
+#: src/components/common/OrganizerReportTable/index.tsx:356
+msgid "of"
+msgstr ""
 
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:74
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:75
@@ -5413,6 +5432,10 @@ msgstr "Resumen"
 msgid "Padding"
 msgstr "Relleno"
 
+#: src/components/common/OrganizerReportTable/index.tsx:356
+msgid "Page"
+msgstr ""
+
 #: src/components/forms/StripeCheckoutForm/index.tsx:106
 msgid "Page no longer available"
 msgstr "Página ya no disponible"
@@ -5774,7 +5797,7 @@ msgstr "Por favor, reinicia el proceso de compra."
 msgid "Please return to the event page to start over."
 msgstr "Por favor, regresa a la página del evento para comenzar de nuevo."
 
-#: src/components/common/OrganizerReportTable/index.tsx:229
+#: src/components/common/OrganizerReportTable/index.tsx:269
 msgid "Please select a date range"
 msgstr "Por favor seleccione un rango de fechas"
 
@@ -6699,7 +6722,7 @@ msgstr "Seleccionar billete"
 msgid "Select tickets"
 msgstr "Seleccionar boletos"
 
-#: src/components/common/OrganizerReportTable/index.tsx:274
+#: src/components/common/OrganizerReportTable/index.tsx:317
 #: src/components/common/ReportTable/index.tsx:261
 msgid "Select time period"
 msgstr "Seleccionar período de tiempo"
@@ -6933,6 +6956,10 @@ msgstr "Mostrar más plataformas"
 #: src/components/routes/event/Settings/Sections/MiscSettings/index.tsx:63
 msgid "Show tax and fees separately"
 msgstr "Mostrar impuestos y tarifas por separado"
+
+#: src/components/common/OrganizerReportTable/index.tsx:355
+msgid "Showing {0} of {totalRows} records"
+msgstr ""
 
 #: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:100
 msgid "Shown to the customer after they checkout, on the order summary page."
@@ -7772,7 +7799,7 @@ msgstr "Este producto está agotado"
 
 #: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:118
 msgid "This report is for informational purposes only. Always consult with a tax professional before using this data for accounting or tax purposes. Please cross-reference with your Stripe dashboard as Hi.Events may be missing historical data."
-msgstr "Este informe es solo para fines informativos. Siempre consulte con un profesional de impuestos antes de usar estos datos para propósitos contables o fiscales. Por favor, cruce esta información con su panel de Stripe ya que Hi.Events puede carecer de datos históricos."
+msgstr ""
 
 #: src/components/routes/auth/ResetPassword/index.tsx:28
 msgid "This reset password link is invalid or expired."
@@ -8893,7 +8920,7 @@ msgstr "Escribe tu mensaje aquí..."
 msgid "X (Twitter)"
 msgstr "X (Twitter)"
 
-#: src/components/common/OrganizerReportTable/index.tsx:57
+#: src/components/common/OrganizerReportTable/index.tsx:59
 #: src/components/common/ReportTable/index.tsx:51
 msgid "Year to date"
 msgstr "Año hasta la fecha"
