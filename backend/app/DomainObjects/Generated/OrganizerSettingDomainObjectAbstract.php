@@ -28,15 +28,6 @@ abstract class OrganizerSettingDomainObjectAbstract extends \HiEvents\DomainObje
     final public const DEFAULT_ATTENDEE_DETAILS_COLLECTION_METHOD = 'default_attendee_details_collection_method';
     final public const DEFAULT_SHOW_MARKETING_OPT_IN = 'default_show_marketing_opt_in';
     final public const DEFAULT_PASS_PLATFORM_FEE_TO_BUYER = 'default_pass_platform_fee_to_buyer';
-    final public const ENABLE_INVOICING = 'enable_invoicing';
-    final public const INVOICE_LABEL = 'invoice_label';
-    final public const INVOICE_PREFIX = 'invoice_prefix';
-    final public const INVOICE_START_NUMBER = 'invoice_start_number';
-    final public const ORGANIZATION_NAME = 'organization_name';
-    final public const ORGANIZATION_ADDRESS = 'organization_address';
-    final public const INVOICE_TAX_DETAILS = 'invoice_tax_details';
-    final public const INVOICE_PAYMENT_TERMS_DAYS = 'invoice_payment_terms_days';
-    final public const INVOICE_NOTES = 'invoice_notes';
     final public const DEFAULT_ALLOW_ATTENDEE_SELF_EDIT = 'default_allow_attendee_self_edit';
 
     protected int $id;
@@ -57,15 +48,6 @@ abstract class OrganizerSettingDomainObjectAbstract extends \HiEvents\DomainObje
     protected string $default_attendee_details_collection_method = 'PER_TICKET';
     protected bool $default_show_marketing_opt_in = true;
     protected bool $default_pass_platform_fee_to_buyer = false;
-    protected bool $enable_invoicing = false;
-    protected ?string $invoice_label = null;
-    protected ?string $invoice_prefix = null;
-    protected int $invoice_start_number = 1;
-    protected ?string $organization_name = null;
-    protected ?string $organization_address = null;
-    protected ?string $invoice_tax_details = null;
-    protected ?int $invoice_payment_terms_days = null;
-    protected ?string $invoice_notes = null;
     protected bool $default_allow_attendee_self_edit = true;
 
     public function toArray(): array
@@ -89,15 +71,6 @@ abstract class OrganizerSettingDomainObjectAbstract extends \HiEvents\DomainObje
                     'default_attendee_details_collection_method' => $this->default_attendee_details_collection_method ?? null,
                     'default_show_marketing_opt_in' => $this->default_show_marketing_opt_in ?? null,
                     'default_pass_platform_fee_to_buyer' => $this->default_pass_platform_fee_to_buyer ?? null,
-                    'enable_invoicing' => $this->enable_invoicing ?? null,
-                    'invoice_label' => $this->invoice_label ?? null,
-                    'invoice_prefix' => $this->invoice_prefix ?? null,
-                    'invoice_start_number' => $this->invoice_start_number ?? null,
-                    'organization_name' => $this->organization_name ?? null,
-                    'organization_address' => $this->organization_address ?? null,
-                    'invoice_tax_details' => $this->invoice_tax_details ?? null,
-                    'invoice_payment_terms_days' => $this->invoice_payment_terms_days ?? null,
-                    'invoice_notes' => $this->invoice_notes ?? null,
                     'default_allow_attendee_self_edit' => $this->default_allow_attendee_self_edit ?? null,
                 ];
     }
@@ -299,105 +272,6 @@ abstract class OrganizerSettingDomainObjectAbstract extends \HiEvents\DomainObje
     public function getDefaultPassPlatformFeeToBuyer(): bool
     {
         return $this->default_pass_platform_fee_to_buyer;
-    }
-
-    public function setEnableInvoicing(bool $enable_invoicing): self
-    {
-        $this->enable_invoicing = $enable_invoicing;
-        return $this;
-    }
-
-    public function getEnableInvoicing(): bool
-    {
-        return $this->enable_invoicing;
-    }
-
-    public function setInvoiceLabel(?string $invoice_label): self
-    {
-        $this->invoice_label = $invoice_label;
-        return $this;
-    }
-
-    public function getInvoiceLabel(): ?string
-    {
-        return $this->invoice_label;
-    }
-
-    public function setInvoicePrefix(?string $invoice_prefix): self
-    {
-        $this->invoice_prefix = $invoice_prefix;
-        return $this;
-    }
-
-    public function getInvoicePrefix(): ?string
-    {
-        return $this->invoice_prefix;
-    }
-
-    public function setInvoiceStartNumber(int $invoice_start_number): self
-    {
-        $this->invoice_start_number = $invoice_start_number;
-        return $this;
-    }
-
-    public function getInvoiceStartNumber(): int
-    {
-        return $this->invoice_start_number;
-    }
-
-    public function setOrganizationName(?string $organization_name): self
-    {
-        $this->organization_name = $organization_name;
-        return $this;
-    }
-
-    public function getOrganizationName(): ?string
-    {
-        return $this->organization_name;
-    }
-
-    public function setOrganizationAddress(?string $organization_address): self
-    {
-        $this->organization_address = $organization_address;
-        return $this;
-    }
-
-    public function getOrganizationAddress(): ?string
-    {
-        return $this->organization_address;
-    }
-
-    public function setInvoiceTaxDetails(?string $invoice_tax_details): self
-    {
-        $this->invoice_tax_details = $invoice_tax_details;
-        return $this;
-    }
-
-    public function getInvoiceTaxDetails(): ?string
-    {
-        return $this->invoice_tax_details;
-    }
-
-    public function setInvoicePaymentTermsDays(?int $invoice_payment_terms_days): self
-    {
-        $this->invoice_payment_terms_days = $invoice_payment_terms_days;
-        return $this;
-    }
-
-    public function getInvoicePaymentTermsDays(): ?int
-    {
-        return $this->invoice_payment_terms_days;
-    }
-
-    public function setInvoiceNotes(?string $invoice_notes): self
-    {
-        $this->invoice_notes = $invoice_notes;
-        return $this;
-    }
-
-    public function getInvoiceNotes(): ?string
-    {
-        return $this->invoice_notes;
     }
 
     public function setDefaultAllowAttendeeSelfEdit(bool $default_allow_attendee_self_edit): self
