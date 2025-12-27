@@ -25,8 +25,6 @@ abstract class OrderItemDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
     final public const TOTAL_SERVICE_FEE = 'total_service_fee';
     final public const TAXES_AND_FEES_ROLLUP = 'taxes_and_fees_rollup';
     final public const PRODUCT_TYPE = 'product_type';
-    final public const BUNDLE_GROUP_ID = 'bundle_group_id';
-    final public const IS_BUNDLE_PRIMARY = 'is_bundle_primary';
 
     protected int $id;
     protected int $order_id;
@@ -43,8 +41,6 @@ abstract class OrderItemDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
     protected ?float $total_service_fee = 0.0;
     protected array|string|null $taxes_and_fees_rollup = null;
     protected string $product_type = 'TICKET';
-    protected ?string $bundle_group_id = null;
-    protected bool $is_bundle_primary = false;
 
     public function toArray(): array
     {
@@ -64,8 +60,6 @@ abstract class OrderItemDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
                     'total_service_fee' => $this->total_service_fee ?? null,
                     'taxes_and_fees_rollup' => $this->taxes_and_fees_rollup ?? null,
                     'product_type' => $this->product_type ?? null,
-                    'bundle_group_id' => $this->bundle_group_id ?? null,
-                    'is_bundle_primary' => $this->is_bundle_primary ?? null,
                 ];
     }
 
@@ -232,27 +226,5 @@ abstract class OrderItemDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
     public function getProductType(): string
     {
         return $this->product_type;
-    }
-
-    public function setBundleGroupId(?string $bundle_group_id): self
-    {
-        $this->bundle_group_id = $bundle_group_id;
-        return $this;
-    }
-
-    public function getBundleGroupId(): ?string
-    {
-        return $this->bundle_group_id;
-    }
-
-    public function setIsBundlePrimary(bool $is_bundle_primary): self
-    {
-        $this->is_bundle_primary = $is_bundle_primary;
-        return $this;
-    }
-
-    public function getIsBundlePrimary(): bool
-    {
-        return $this->is_bundle_primary;
     }
 }
