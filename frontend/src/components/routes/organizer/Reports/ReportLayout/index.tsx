@@ -7,6 +7,7 @@ import RevenueSummaryReport from "../RevenueSummaryReport";
 import EventsPerformanceReport from "../EventsPerformanceReport";
 import TaxSummaryReport from "../TaxSummaryReport";
 import CheckInSummaryReport from "../CheckInSummaryReport";
+import PlatformFeesReport from "../PlatformFeesReport";
 import {t} from "@lingui/macro";
 
 const renderReport = (reportType: string) => {
@@ -19,6 +20,8 @@ const renderReport = (reportType: string) => {
             return <TaxSummaryReport/>;
         case OrganizerReportTypes.CheckInSummary:
             return <CheckInSummaryReport/>;
+        case OrganizerReportTypes.PlatformFees:
+            return <PlatformFeesReport/>;
         default:
             return <div>{t`Report not found`}</div>;
     }

@@ -10,4 +10,5 @@ enum OrganizerReportTypes: string
     case EVENTS_PERFORMANCE = 'events_performance';
     case TAX_SUMMARY = 'tax_summary';
     case CHECK_IN_SUMMARY = 'check_in_summary';
+    case PLATFORM_FEES = 'platform_fees';
 }
