@@ -1,4 +1,4 @@
-import type {LinguiConfig} from "@lingui/conf";
+import type { LinguiConfig } from "@lingui/conf";
 
 const config: LinguiConfig = {
     locales: [
@@ -7,7 +7,7 @@ const config: LinguiConfig = {
         "es", // Spanish
         "fr", // French
         "nl", // Dutch
-		"hu", // Hungarian
+        "hu", // Hungarian
         "pt-br", // Portuguese (Brazil)
         "ru", // Russian
         "de", // German
@@ -19,7 +19,7 @@ const config: LinguiConfig = {
         // "pl", // Polish
         // "ja", // Japanese
         // "ko", // Korean
-        // "id", // Indonesian
+        "id", // Indonesian
         "zh-hk", // Cantonese Chinese (Hong Kong)
         // "cs", // Czech
         // "ga", // Irish
@@ -33,7 +33,7 @@ const config: LinguiConfig = {
     sourceLocale: "en",
     format: "po",
     fallbackLocales: {
-       default: "en",
+        default: "en",
     }
 };
 
