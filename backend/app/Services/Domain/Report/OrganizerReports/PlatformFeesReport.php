@@ -63,6 +63,8 @@ class PlatformFeesReport
         $data = collect($results)->map(function ($row) {
             $currencyCode = strtoupper($row->currency ?? 'USD');
             $divisor = Currency::isZeroDecimalCurrency($currencyCode) ? 1 : 100;
+            $gross = $row->application_fee_gross ?? 0;
+            $net = $row->application_fee_net ?? $gross;
 
             return (object) [
                 'event_name' => $row->event_name,
@@ -71,10 +73,10 @@ class PlatformFeesReport
                 'order_reference' => $row->order_reference,
                 'order_id' => $row->order_id,
                 'amount_paid' => Currency::round(($row->amount_received ?? 0) / $divisor),
-                'fee_amount' => Currency::round(($row->application_fee_net ?? 0) / $divisor),
-                'vat_rate' => $row->application_fee_vat_rate ?? 0,
+                'fee_amount' => Currency::round($net / $divisor),
+                'vat_rate' => $row->application_fee_vat_rate,
                 'vat_amount' => Currency::round(($row->application_fee_vat ?? 0) / $divisor),
-                'total_fee' => Currency::round(($row->application_fee_gross ?? 0) / $divisor),
+                'total_fee' => Currency::round($gross / $divisor),
                 'currency' => $currencyCode,
                 'payment_intent_id' => $row->payment_intent_id,
             ];
