@@ -1,27 +1,33 @@
 import {t} from "@lingui/macro";
-import {NavLink, useNavigate, useParams} from "react-router";
-import {ActionIcon, Button, Group, SimpleGrid, Text, Tooltip} from "@mantine/core";
+import {NavLink, useNavigate, useParams, useLocation} from "react-router";
+import {ActionIcon, Alert, Button, Group, SimpleGrid, Text, Tooltip} from "@mantine/core";
 import {
     IconBuilding,
     IconCalendar,
     IconCalendarEvent,
     IconCash,
+    IconCheck,
     IconClock,
+    IconEdit,
     IconExternalLink,
     IconId,
     IconMail,
     IconMapPin,
     IconMenuOrder,
     IconPrinter,
+    IconSend,
     IconTicket,
     IconUser
 } from "@tabler/icons-react";
+import {useState} from "react";
+import {useQueryClient} from "@tanstack/react-query";
 
-import {useGetOrderPublic} from "../../../../queries/useGetOrderPublic.ts";
+import {useGetOrderPublic, GET_ORDER_PUBLIC_QUERY_KEY} from "../../../../queries/useGetOrderPublic.ts";
 import {eventCheckoutPath} from "../../../../utilites/urlHelper.ts";
 import {dateToBrowserTz} from "../../../../utilites/dates.ts";
 import {formatAddress} from "../../../../utilites/addressUtilities.ts";
 import {getAttendeeProductTitle} from "../../../../utilites/products.ts";
+import {showSuccess, showError} from "../../../../utilites/notifications.tsx";
 
 import {Card} from "../../../common/Card";
 import {LoadingMask} from "../../../common/LoadingMask";
@@ -32,6 +38,13 @@ import {OnlineEventDetails} from "../../../common/OnlineEventDetails";
 import {AddToCalendarCTA} from "../../../common/AddToCalendarCTA";
 import {InlineOrderSummary} from "../../../common/InlineOrderSummary";
 import {CheckoutContent} from "../../../layouts/Checkout/CheckoutContent";
+import {EditAttendeeModal} from "./EditAttendeeModal";
+import {EditOrderModal} from "./EditOrderModal";
+
+import {useEditAttendeePublic} from "../../../../mutations/useEditAttendeePublic";
+import {useEditOrderPublic} from "../../../../mutations/useEditOrderPublic";
+import {useResendAttendeeTicketPublic} from "../../../../mutations/useResendAttendeeTicketPublic";
+import {useResendOrderConfirmationPublic} from "../../../../mutations/useResendOrderConfirmationPublic";
 
 import {Attendee, Event, Order, Product} from "../../../../types.ts";
 import classes from './OrderSummaryAndProducts.module.scss';
@@ -59,7 +72,19 @@ const RefundStatusType = ({order}: { order: Order }) => {
     return order?.refund_status ? <span>{refundStatuses[order.refund_status] || ''}</span> : null;
 };
 
-const GuestListItem = ({attendee, event}: { attendee: Attendee; event: Event }) => {
+const GuestListItem = ({
+    attendee,
+    event,
+    allowSelfEdit,
+    onEditClick,
+    onResendClick,
+}: {
+    attendee: Attendee;
+    event: Event;
+    allowSelfEdit: boolean;
+    onEditClick: () => void;
+    onResendClick: () => void;
+}) => {
     const productTitle = getAttendeeProductTitle(attendee, attendee.product as Product);
     const isCancelled = attendee.status === 'CANCELLED';
 
@@ -92,6 +117,26 @@ const GuestListItem = ({attendee, event}: { attendee: Attendee; event: Event }) 
                         <IconPrinter size={18}/>
                     </ActionIcon>
                 </Tooltip>
+                {allowSelfEdit && !isCancelled && (
+                    <>
+                        <Tooltip label={t`Edit Attendee`}>
+                            <ActionIcon
+                                variant="subtle"
+                                onClick={onEditClick}
+                            >
+                                <IconEdit size={18}/>
+                            </ActionIcon>
+                        </Tooltip>
+                        <Tooltip label={t`Resend Ticket`}>
+                            <ActionIcon
+                                variant="subtle"
+                                onClick={onResendClick}
+                            >
+                                <IconSend size={18}/>
+                            </ActionIcon>
+                        </Tooltip>
+                    </>
+                )}
             </div>
         </div>
     );
@@ -109,7 +154,7 @@ const DetailItem = ({icon: Icon, label, value}: { icon: any, label: string, valu
     </div>
 );
 
-const WelcomeHeader = ({order, event}: { order: Order; event: Event }) => {
+const WelcomeHeader = ({order, event, allowSelfEdit}: { order: Order; event: Event; allowSelfEdit: boolean }) => {
     const isCompleted = order.status === 'COMPLETED';
     const isAwaitingPayment = order.status === 'AWAITING_OFFLINE_PAYMENT';
     const isCancelled = order.status === 'CANCELLED';
@@ -150,6 +195,11 @@ const WelcomeHeader = ({order, event}: { order: Order; event: Event }) => {
                     {t`Confirmation sent to`} <strong>{order.email}</strong>
                 </div>
             )}
+            {isCompleted && allowSelfEdit && (
+                <div className={classes.selfServiceHint}>
+                    {t`Bookmark this page to manage your order anytime.`}
+                </div>
+            )}
             {isCancelled && (
                 <div className={classes.confirmationText}>
                     {t`A cancellation notice has been sent to`} <strong>{order.email}</strong>
@@ -159,13 +209,36 @@ const WelcomeHeader = ({order, event}: { order: Order; event: Event }) => {
     );
 };
 
-const OrderDetails = ({order, event}: { order: Order, event: Event }) => (
+const OrderDetails = ({
+    order,
+    event,
+    allowSelfEdit,
+    onEditClick,
+    onResendClick,
+}: {
+    order: Order;
+    event: Event;
+    allowSelfEdit: boolean;
+    onEditClick: () => void;
+    onResendClick: () => void;
+}) => (
     <Card style={{marginBottom: '40px'}}>
         <SimpleGrid cols={{base: 1, sm: 2}} spacing="md">
             <DetailItem
                 icon={IconUser}
                 label={t`Name`}
-                value={`${order.first_name} ${order.last_name}`}
+                value={
+                    <Group gap="xs" wrap="nowrap">
+                        <span>{order.first_name} {order.last_name}</span>
+                        {allowSelfEdit && order.status !== 'CANCELLED' && (
+                            <Tooltip label={t`Edit`}>
+                                <ActionIcon size="xs" variant="subtle" onClick={onEditClick}>
+                                    <IconEdit size={14}/>
+                                </ActionIcon>
+                            </Tooltip>
+                        )}
+                    </Group>
+                }
             />
             <DetailItem
                 icon={IconId}
@@ -175,7 +248,18 @@ const OrderDetails = ({order, event}: { order: Order, event: Event }) => (
             <DetailItem
                 icon={IconMail}
                 label={t`Email`}
-                value={order.email}
+                value={
+                    <Group gap="xs" wrap="nowrap">
+                        <span style={{wordBreak: 'break-all'}}>{order.email}</span>
+                        {allowSelfEdit && order.status !== 'CANCELLED' && (
+                            <Tooltip label={t`Resend Confirmation`}>
+                                <ActionIcon size="xs" variant="subtle" onClick={onResendClick}>
+                                    <IconSend size={14}/>
+                                </ActionIcon>
+                            </Tooltip>
+                        )}
+                    </Group>
+                }
             />
             <DetailItem
                 icon={IconCalendar}
@@ -227,7 +311,7 @@ const EventDetails = ({event}: { event: Event }) => {
                         label={t`Location`}
                         value={(
                             <NavLink
-                                to={event.settings?.maps_url || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(formatAddress(event?.settings?.location_details))}`}
+                                to={event.settings?.maps_url || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event?.settings?.location_details ? formatAddress(event.settings.location_details) : '')}`}
                                 target="_blank"
                             >
                                 {venueDetails}
@@ -314,9 +398,144 @@ const OfflinePaymentInstructions = ({ event }: { event: Event }) => (
 
 export const OrderSummaryAndProducts = () => {
     const {eventId, orderShortId} = useParams();
-    const {data: order, isFetched: orderIsFetched} = useGetOrderPublic(eventId, orderShortId, ['event']);
+    const location = useLocation();
+    const {data: order, isFetched: orderIsFetched, isError} = useGetOrderPublic(eventId, orderShortId, ['event']);
     const event = order?.event;
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
+    const emailUpdated = location.state?.emailUpdated === true;
+
+    const [editingAttendee, setEditingAttendee] = useState<Attendee | null>(null);
+    const [editOrderModalOpened, setEditOrderModalOpened] = useState(false);
+
+    const editAttendeeMutation = useEditAttendeePublic();
+    const editOrderMutation = useEditOrderPublic();
+    const resendAttendeeTicketMutation = useResendAttendeeTicketPublic();
+    const resendOrderConfirmationMutation = useResendOrderConfirmationPublic();
+
+    const allowSelfEdit = event?.settings?.allow_attendee_self_edit ?? false;
+
+    const handleEditAttendee = (attendee: Attendee, data: any) => {
+        editAttendeeMutation.mutate(
+            {
+                eventId: eventId!,
+                orderShortId: orderShortId!,
+                attendeeShortId: attendee.short_id,
+                data,
+            },
+            {
+                onSuccess: (result) => {
+                    queryClient.invalidateQueries({queryKey: [GET_ORDER_PUBLIC_QUERY_KEY]});
+                    setEditingAttendee(null);
+                    showSuccess(result.message || t`Attendee updated successfully`);
+                    if (result.warning) {
+                        showError(result.warning);
+                    }
+                },
+                onError: (error: any) => {
+                    if (error?.response?.status === 429) {
+                        showError(t`Rate limit exceeded. Please try again later.`);
+                    } else {
+                        showError(error?.response?.data?.message || t`Failed to update attendee`);
+                    }
+                },
+            }
+        );
+    };
+
+    const handleEditOrder = (data: any) => {
+        editOrderMutation.mutate(
+            {
+                eventId: eventId!,
+                orderShortId: orderShortId!,
+                data,
+            },
+            {
+                onSuccess: (result) => {
+                    setEditOrderModalOpened(false);
+                    showSuccess(result.message || t`Order updated successfully`);
+
+                    if (result.new_short_id) {
+                        navigate(`/checkout/${eventId}/${result.new_short_id}/summary`, {
+                            state: { emailUpdated: true }
+                        });
+                    } else {
+                        queryClient.invalidateQueries({queryKey: [GET_ORDER_PUBLIC_QUERY_KEY]});
+                    }
+
+                    if (result.warning) {
+                        showError(result.warning);
+                    }
+                },
+                onError: (error: any) => {
+                    if (error?.response?.status === 429) {
+                        showError(t`Rate limit exceeded. Please try again later.`);
+                    } else {
+                        showError(error?.response?.data?.message || t`Failed to update order`);
+                    }
+                },
+            }
+        );
+    };
+
+    const handleResendAttendeeTicket = (attendee: Attendee) => {
+        if (!window.confirm(t`Are you sure you want to resend the ticket to ${attendee.email}?`)) {
+            return;
+        }
+        resendAttendeeTicketMutation.mutate(
+            {
+                eventId: eventId!,
+                orderShortId: orderShortId!,
+                attendeeShortId: attendee.short_id,
+            },
+            {
+                onSuccess: (result) => {
+                    showSuccess(result.message || t`Ticket resent successfully`);
+                },
+                onError: (error: any) => {
+                    if (error?.response?.status === 429) {
+                        showError(t`Rate limit exceeded. Please try again later.`);
+                    } else {
+                        showError(error?.response?.data?.message || t`Failed to resend ticket`);
+                    }
+                },
+            }
+        );
+    };
+
+    const handleResendOrderConfirmation = () => {
+        if (!window.confirm(t`Are you sure you want to resend the order confirmation to ${order?.email}?`)) {
+            return;
+        }
+        resendOrderConfirmationMutation.mutate(
+            {
+                eventId: eventId!,
+                orderShortId: orderShortId!,
+            },
+            {
+                onSuccess: (result) => {
+                    showSuccess(result.message || t`Order confirmation resent successfully`);
+                },
+                onError: (error: any) => {
+                    if (error?.response?.status === 429) {
+                        showError(t`Rate limit exceeded. Please try again later.`);
+                    } else {
+                        showError(error?.response?.data?.message || t`Failed to resend order confirmation`);
+                    }
+                },
+            }
+        );
+    };
+
+    if (isError) {
+        return (
+            <HomepageInfoMessage
+                status="not_found"
+                message={t`Order Not Found`}
+                subtitle={t`We couldn't find the order you're looking for. The link may have expired or the order details may have changed.`}
+            />
+        );
+    }
 
     if (!orderIsFetched || !order || !event) {
         return <LoadingMask/>;
@@ -334,7 +553,24 @@ export const OrderSummaryAndProducts = () => {
     return (
         <>
             <CheckoutContent>
-                <WelcomeHeader order={order} event={event}/>
+                <WelcomeHeader order={order} event={event} allowSelfEdit={allowSelfEdit}/>
+
+                {emailUpdated && (
+                    <Alert
+                        icon={<IconCheck size={16}/>}
+                        color="green"
+                        mb="lg"
+                        radius="lg"
+                        style={{
+                            backgroundColor: 'var(--checkout-surface, #ECFDF5)',
+                            borderColor: 'var(--checkout-border, #D1FAE5)',
+                        }}
+                    >
+                        <Text size="sm" style={{color: 'var(--checkout-text-primary, #065F46)'}}>
+                            {t`Your order details have been updated. A confirmation email has been sent to the new email address.`}
+                        </Text>
+                    </Alert>
+                )}
 
                 <InlineOrderSummary
                     event={event}
@@ -347,7 +583,13 @@ export const OrderSummaryAndProducts = () => {
 
                 <h1 className={classes.heading}>{t`Order Details`}</h1>
 
-                <OrderDetails order={order} event={event}/>
+                <OrderDetails
+                    order={order}
+                    event={event}
+                    allowSelfEdit={allowSelfEdit}
+                    onEditClick={() => setEditOrderModalOpened(true)}
+                    onResendClick={handleResendOrderConfirmation}
+                />
 
                 {event?.settings?.is_online_event && <OnlineEventDetails eventSettings={event.settings}/>}
 
@@ -384,6 +626,9 @@ export const OrderSummaryAndProducts = () => {
                                         key={attendee.id}
                                         attendee={attendee}
                                         event={event}
+                                        allowSelfEdit={allowSelfEdit}
+                                        onEditClick={() => setEditingAttendee(attendee)}
+                                        onResendClick={() => handleResendAttendeeTicket(attendee)}
                                     />
                                 ))}
                             </div>
@@ -393,6 +638,28 @@ export const OrderSummaryAndProducts = () => {
 
                 <PoweredByFooter/>
             </CheckoutContent>
+
+            {editingAttendee && (
+                <EditAttendeeModal
+                    opened={!!editingAttendee}
+                    onClose={() => setEditingAttendee(null)}
+                    attendee={editingAttendee}
+                    onSuccess={(values: any) => {
+                        handleEditAttendee(editingAttendee, values);
+                    }}
+                />
+            )}
+
+            {order && (
+                <EditOrderModal
+                    opened={editOrderModalOpened}
+                    onClose={() => setEditOrderModalOpened(false)}
+                    order={order}
+                    onSuccess={(values: any) => {
+                        handleEditOrder(values);
+                    }}
+                />
+            )}
         </>
     );
 };

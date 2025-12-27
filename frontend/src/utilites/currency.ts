@@ -1,5 +1,6 @@
 export const formatCurrency = (value: number | string, currency = 'USD') => {
-    const formatter = new Intl.NumberFormat('en-US', {
+    const locale = typeof window !== 'undefined' ? navigator.language : 'en-US';
+    const formatter = new Intl.NumberFormat(locale, {
         style: 'currency',
         currency: currency,
         minimumFractionDigits: 2,

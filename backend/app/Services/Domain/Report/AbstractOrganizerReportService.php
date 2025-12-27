@@ -24,7 +24,7 @@ abstract class AbstractOrganizerReportService
         int     $organizerId,
         ?string $currency = null,
         ?Carbon $startDate = null,
-        ?Carbon $endDate = null
+        ?Carbon $endDate = null,
     ): Collection
     {
         $organizer = $this->organizerRepository->findById($organizerId);
