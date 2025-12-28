@@ -199,6 +199,20 @@ export const router: RouteObject[] = [
                     const Configurations = await import("./components/routes/admin/Configurations");
                     return {Component: Configurations.default};
                 }
+            },
+            {
+                path: "failed-jobs",
+                async lazy() {
+                    const FailedJobs = await import("./components/routes/admin/FailedJobs");
+                    return {Component: FailedJobs.default};
+                }
+            },
+            {
+                path: "messages",
+                async lazy() {
+                    const Messages = await import("./components/routes/admin/Messages");
+                    return {Component: Messages.default};
+                }
             }
         ]
     },
