@@ -323,6 +323,10 @@ msgstr "Accesso Negato"
 #: src/components/common/AdminOrdersTable/index.tsx:68
 #: src/components/routes/account/ManageAccount/index.tsx:24
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:53
+#: src/components/routes/admin/Dashboard/index.tsx:355
+#: src/components/routes/admin/Dashboard/index.tsx:402
+#: src/components/routes/admin/Messages/index.tsx:127
+#: src/components/routes/admin/Messages/index.tsx:228
 msgid "Account"
 msgstr "Account"
 
@@ -375,6 +379,7 @@ msgstr "Azione richiesta: Informazioni IVA necessarie"
 #: src/components/common/AttendeeTable/index.tsx:346
 #: src/components/common/OrdersTable/index.tsx:438
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:452
+#: src/components/routes/admin/FailedJobs/index.tsx:159
 msgid "Actions"
 msgstr "Azioni"
 
@@ -396,6 +401,10 @@ msgstr "Data di attivazione"
 #: src/components/routes/event/attendees.tsx:26
 msgid "Active"
 msgstr "Attivo"
+
+#: src/components/routes/admin/Dashboard/index.tsx:356
+msgid "Active Events"
+msgstr "Eventi attivi"
 
 #: src/components/forms/CheckInListForm/index.tsx:53
 msgid "Add a description for this check-in list"
@@ -533,8 +542,8 @@ msgid "Admin"
 msgstr "Amministratore"
 
 #: src/components/common/GlobalMenu/index.tsx:61
-#: src/components/layouts/Admin/index.tsx:25
-#: src/components/routes/admin/Dashboard/index.tsx:42
+#: src/components/layouts/Admin/index.tsx:27
+#: src/components/routes/admin/Dashboard/index.tsx:70
 msgid "Admin Dashboard"
 msgstr "Dashboard Amministratore"
 
@@ -614,6 +623,14 @@ msgstr "Tutti gli eventi terminati"
 msgid "All Events"
 msgstr "Tutti gli eventi"
 
+#: src/components/routes/admin/FailedJobs/index.tsx:86
+msgid "All failed jobs deleted"
+msgstr "Tutti i lavori falliti eliminati"
+
+#: src/components/routes/admin/FailedJobs/index.tsx:72
+msgid "All jobs queued for retry"
+msgstr "Tutti i lavori in coda per il nuovo tentativo"
+
 #: src/components/common/PromoCodeTable/index.tsx:131
 msgid "All Products"
 msgstr "Tutti i Prodotti"
@@ -668,10 +685,6 @@ msgstr "Rimborsa anche questo ordine"
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:428
 msgid "Always available"
 msgstr "Sempre disponibile"
-
-#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:118
-#~ msgid "Always consult with a tax professional before using this data for accounting or tax purposes. Please cross-reference with your Stripe dashboard as Hi.Events may be missing historical data."
-#~ msgstr "Questo report è solo a scopo informativo. Consulta sempre un professionista fiscale prima di utilizzare questi dati per scopi contabili o fiscali. Si prega di incrociare questi dati con la dashboard di Stripe poiché Hi.Events potrebbe non avere dati storici."
 
 #: src/components/routes/event/Settings/Sections/SeoSettings/index.tsx:77
 #: src/components/routes/organizer/Settings/Sections/SeoSettings/index.tsx:77
@@ -776,6 +789,10 @@ msgstr "Sei sicuro di voler archiviare questo evento?"
 #: src/components/common/AttendeeTable/index.tsx:83
 msgid "Are you sure you want to cancel this attendee? This will void their ticket"
 msgstr "Sei sicuro di voler cancellare questo partecipante? Questo annullerà il loro biglietto"
+
+#: src/components/routes/admin/FailedJobs/index.tsx:81
+msgid "Are you sure you want to delete all failed jobs?"
+msgstr "Sei sicuro di voler eliminare tutti i lavori falliti?"
 
 #: src/components/common/AffiliateTable/index.tsx:202
 msgid "Are you sure you want to delete this affiliate? This action cannot be undone."
@@ -984,6 +1001,8 @@ msgstr "Il biglietto del partecipante non è incluso in questa lista"
 #: src/components/common/StatBoxes/index.tsx:45
 #: src/components/layouts/Event/index.tsx:115
 #: src/components/modals/ManageOrderModal/index.tsx:126
+#: src/components/routes/admin/Messages/index.tsx:58
+#: src/components/routes/admin/Messages/index.tsx:106
 #: src/components/routes/event/attendees.tsx:173
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:131
 msgid "Attendees"
@@ -1679,7 +1698,7 @@ msgstr "I nomi delle configurazioni sono visibili agli utenti finali. La \"Commi
 msgid "Configuration updated successfully"
 msgstr "Configurazione aggiornata con successo"
 
-#: src/components/layouts/Admin/index.tsx:19
+#: src/components/layouts/Admin/index.tsx:21
 #: src/components/routes/admin/Configurations/index.tsx:60
 msgid "Configurations"
 msgstr "Configurazioni"
@@ -2145,6 +2164,8 @@ msgid "Create your own event"
 msgstr "Crea il tuo evento"
 
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:96
+#: src/components/routes/admin/Messages/index.tsx:132
+#: src/components/routes/admin/Messages/index.tsx:256
 msgid "Created"
 msgstr "Creato"
 
@@ -2384,12 +2405,17 @@ msgstr "Verrà utilizzato il modello predefinito"
 #: src/components/common/PromoCodeTable/index.tsx:40
 #: src/components/common/QuestionsTable/index.tsx:150
 #: src/components/common/TaxAndFeeList/index.tsx:78
+#: src/components/routes/admin/FailedJobs/index.tsx:201
 msgid "Delete"
 msgstr "Elimina"
 
 #: src/components/common/AffiliateTable/index.tsx:198
 msgid "Delete Affiliate"
 msgstr "Elimina affiliato"
+
+#: src/components/routes/admin/FailedJobs/index.tsx:131
+msgid "Delete All"
+msgstr "Elimina tutto"
 
 #: src/components/common/CapacityAssignmentList/index.tsx:156
 msgid "Delete Capacity"
@@ -2411,6 +2437,10 @@ msgstr "Elimina codice"
 #: src/components/common/ImageUploadDropzone/index.tsx:255
 msgid "Delete image"
 msgstr "Elimina immagine"
+
+#: src/components/routes/admin/FailedJobs/index.tsx:291
+msgid "Delete Job"
+msgstr "Elimina lavoro"
 
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:121
 msgid "Delete Template"
@@ -2751,6 +2781,7 @@ msgstr "Liste Check-In Idonee"
 #: src/components/modals/EditUserModal/index.tsx:80
 #: src/components/modals/InviteUserModal/index.tsx:61
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:92
+#: src/components/routes/admin/Dashboard/index.tsx:403
 #: src/components/routes/auth/AcceptInvitation/index.tsx:112
 #: src/components/routes/auth/ForgotPassword/index.tsx:65
 #: src/components/routes/auth/Login/index.tsx:93
@@ -3029,6 +3060,10 @@ msgstr "EUR"
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:72
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:73
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:74
+#: src/components/routes/admin/Dashboard/index.tsx:256
+#: src/components/routes/admin/Dashboard/index.tsx:305
+#: src/components/routes/admin/Messages/index.tsx:126
+#: src/components/routes/admin/Messages/index.tsx:224
 #: src/components/routes/events/Dashboard/index.tsx:183
 #: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:19
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:41
@@ -3191,6 +3226,7 @@ msgstr "Sede dell'Evento"
 #: src/components/layouts/OrganizerLayout/index.tsx:84
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:123
 #: src/components/routes/admin/Attribution/index.tsx:126
+#: src/components/routes/admin/Dashboard/index.tsx:405
 #: src/components/routes/admin/Events/index.tsx:77
 #: src/components/routes/organizer/Events/index.tsx:43
 msgid "Events"
@@ -3201,7 +3237,7 @@ msgstr "Eventi"
 msgid "Events Performance"
 msgstr "Performance Eventi"
 
-#: src/components/routes/admin/Dashboard/index.tsx:129
+#: src/components/routes/admin/Dashboard/index.tsx:452
 msgid "Events Starting in Next 24 Hours"
 msgstr "Eventi che iniziano nelle prossime 24 ore"
 
@@ -3216,6 +3252,11 @@ msgstr "Esempi: \"Come ci hai conosciuto?\", \"Nome azienda per fattura\""
 #: src/components/common/QuestionsTable/index.tsx:495
 msgid "Examples: \"T-shirt size\", \"Meal preference\", \"Job title\""
 msgstr "Esempi: \"Taglia maglietta\", \"Preferenza pasto\", \"Titolo professionale\""
+
+#: src/components/routes/admin/FailedJobs/index.tsx:158
+#: src/components/routes/admin/FailedJobs/index.tsx:255
+msgid "Exception"
+msgstr "Eccezione"
 
 #: src/components/forms/CheckInListForm/index.tsx:68
 msgid "Expiration date"
@@ -3275,6 +3316,20 @@ msgstr "Esportazione Ordini"
 msgid "Facebook"
 msgstr "Facebook"
 
+#: src/components/routes/admin/Messages/index.tsx:94
+msgid "Failed"
+msgstr "Fallito"
+
+#: src/components/routes/admin/FailedJobs/index.tsx:157
+#: src/components/routes/admin/FailedJobs/index.tsx:251
+msgid "Failed At"
+msgstr "Fallito il"
+
+#: src/components/layouts/Admin/index.tsx:20
+#: src/components/routes/admin/FailedJobs/index.tsx:110
+msgid "Failed Jobs"
+msgstr "Lavori falliti"
+
 #: src/components/layouts/Checkout/index.tsx:105
 msgid "Failed to abandon order. Please try again."
 msgstr "Impossibile abbandonare l'ordine. Riprova."
@@ -3307,6 +3362,14 @@ msgstr "Impossibile creare il modello"
 #: src/components/routes/admin/Configurations/index.tsx:38
 msgid "Failed to delete configuration"
 msgstr "Impossibile eliminare la configurazione"
+
+#: src/components/routes/admin/FailedJobs/index.tsx:64
+msgid "Failed to delete job"
+msgstr "Impossibile eliminare il lavoro"
+
+#: src/components/routes/admin/FailedJobs/index.tsx:89
+msgid "Failed to delete jobs"
+msgstr "Impossibile eliminare i lavori"
 
 #: src/components/common/QuestionsTable/index.tsx:203
 msgid "Failed to delete question"
@@ -3365,6 +3428,14 @@ msgstr "Impossibile reinviare l'email del biglietto"
 #: src/components/routes/welcome/index.tsx:125
 msgid "Failed to resend verification code"
 msgstr "Reinvio codice di verifica non riuscito"
+
+#: src/components/routes/admin/FailedJobs/index.tsx:53
+msgid "Failed to retry job"
+msgstr "Impossibile ritentare il lavoro"
+
+#: src/components/routes/admin/FailedJobs/index.tsx:75
+msgid "Failed to retry jobs"
+msgstr "Impossibile ritentare i lavori"
 
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:148
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:151
@@ -3725,6 +3796,7 @@ msgstr "Ricavi Lordi"
 msgid "Gross sales"
 msgstr "Vendite lorde"
 
+#: src/components/routes/admin/Dashboard/index.tsx:259
 #: src/components/routes/event/EventDashboard/index.tsx:312
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:119
 #: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:30
@@ -3743,7 +3815,7 @@ msgstr "Ospiti"
 msgid "Have a promo code?"
 msgstr "Hai un codice promozionale?"
 
-#: src/components/routes/admin/Dashboard/index.tsx:46
+#: src/components/routes/admin/Dashboard/index.tsx:74
 msgid "Hello {0}, manage your platform from here."
 msgstr "Ciao {0}, gestisci la tua piattaforma da qui."
 
@@ -4014,11 +4086,11 @@ msgstr "Importante: La modifica dell'indirizzo e-mail aggiornerà il link per ac
 msgid "Important: Stripe reconnection required"
 msgstr "Importante: Riconnessione Stripe richiesta"
 
-#: src/components/routes/admin/Dashboard/index.tsx:29
+#: src/components/routes/admin/Dashboard/index.tsx:44
 msgid "In {diffHours} hours"
 msgstr "Tra {diffHours} ore"
 
-#: src/components/routes/admin/Dashboard/index.tsx:27
+#: src/components/routes/admin/Dashboard/index.tsx:42
 msgid "In {diffMinutes} minutes"
 msgstr "Tra {diffMinutes} minuti"
 
@@ -4192,6 +4264,26 @@ msgstr "articolo(i)"
 msgid "Items"
 msgstr "Articoli"
 
+#: src/components/routes/admin/FailedJobs/index.tsx:155
+msgid "Job"
+msgstr "Lavoro"
+
+#: src/components/routes/admin/FailedJobs/index.tsx:61
+msgid "Job deleted"
+msgstr "Lavoro eliminato"
+
+#: src/components/routes/admin/FailedJobs/index.tsx:232
+msgid "Job Details"
+msgstr "Dettagli del lavoro"
+
+#: src/components/routes/admin/FailedJobs/index.tsx:238
+msgid "Job Name"
+msgstr "Nome del lavoro"
+
+#: src/components/routes/admin/FailedJobs/index.tsx:50
+msgid "Job queued for retry"
+msgstr "Lavoro in coda per il nuovo tentativo"
+
 #: src/components/routes/auth/AcceptInvitation/index.tsx:98
 #: src/components/routes/auth/Register/index.tsx:91
 msgid "John"
@@ -4235,6 +4327,10 @@ msgstr "Ultimi 12 mesi"
 #: src/components/common/OrganizerReportTable/index.tsx:55
 #: src/components/common/ReportTable/index.tsx:47
 msgid "Last 14 days"
+msgstr "Ultimi 14 giorni"
+
+#: src/components/routes/admin/Dashboard/index.tsx:159
+msgid "Last 14 Days"
 msgstr "Ultimi 14 giorni"
 
 #: src/components/common/OrganizerReportTable/index.tsx:52
@@ -4352,7 +4448,7 @@ msgid "LIVE"
 msgstr "LIVE"
 
 #: src/components/routes/admin/Attribution/index.tsx:127
-#: src/components/routes/admin/Dashboard/index.tsx:93
+#: src/components/routes/admin/Dashboard/index.tsx:122
 msgid "Live Events"
 msgstr "Eventi in Diretta"
 
@@ -4539,6 +4635,14 @@ msgstr "Messaggio all'acquirente"
 msgid "Message cannot exceed 5000 characters"
 msgstr "Il messaggio non può superare 5000 caratteri"
 
+#: src/components/routes/admin/Messages/index.tsx:261
+msgid "Message Content"
+msgstr ""
+
+#: src/components/routes/admin/Messages/index.tsx:213
+msgid "Message Details"
+msgstr ""
+
 #: src/components/modals/SendMessageModal/index.tsx:71
 msgid "Message individual attendees"
 msgstr "Invia messaggio ai singoli partecipanti"
@@ -4555,6 +4659,7 @@ msgstr "Invia messaggio ai proprietari degli ordini con prodotti specifici"
 msgid "Message Sent"
 msgstr "Messaggio Inviato"
 
+#: src/components/layouts/Admin/index.tsx:18
 #: src/components/layouts/Event/index.tsx:117
 #: src/components/routes/event/messages.tsx:33
 msgid "Messages"
@@ -4583,6 +4688,18 @@ msgstr "Ottimizzato per dispositivi mobili"
 #: src/components/layouts/AuthLayout/index.tsx:31
 msgid "Mobile scanner with offline support and real-time tracking"
 msgstr "Scanner mobile con supporto offline e tracciamento in tempo reale"
+
+#: src/components/routes/admin/Dashboard/index.tsx:163
+msgid "Monetary values are approximate totals across all currencies"
+msgstr "I valori monetari sono totali approssimativi in tutte le valute"
+
+#: src/components/routes/admin/FailedJobs/index.tsx:111
+msgid "Monitor and manage failed background jobs"
+msgstr "Monitora e gestisci i lavori in background falliti"
+
+#: src/components/routes/admin/Dashboard/index.tsx:294
+msgid "Most Viewed Events (Last 14 Days)"
+msgstr "Eventi più visti (Ultimi 14 giorni)"
 
 #: src/components/forms/QuestionForm/index.tsx:106
 msgid "Multi line text box"
@@ -4673,6 +4790,10 @@ msgstr "Mai"
 #: src/components/routes/profile/ManageProfile/index.tsx:232
 msgid "New Password"
 msgstr "Nuova Password"
+
+#: src/components/routes/admin/Dashboard/index.tsx:225
+msgid "New Signups"
+msgstr "Nuove iscrizioni"
 
 #: src/constants/eventCategories.ts:4
 msgid "Nightlife"
@@ -4770,7 +4891,7 @@ msgstr "Nessun evento terminato da mostrare."
 msgid "No events found"
 msgstr "Nessun evento trovato"
 
-#: src/components/routes/admin/Dashboard/index.tsx:168
+#: src/components/routes/admin/Dashboard/index.tsx:491
 msgid "No events starting in the next 24 hours"
 msgstr "Nessun evento in programma nelle prossime 24 ore"
 
@@ -4781,6 +4902,10 @@ msgstr "Nessun evento da mostrare"
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:248
 msgid "No events yet"
 msgstr "Nessun evento disponibile"
+
+#: src/components/routes/admin/FailedJobs/index.tsx:150
+msgid "No failed jobs"
+msgstr "Nessun lavoro fallito"
 
 #: src/components/common/FilterModal/index.tsx:261
 msgid "No filters available"
@@ -4797,6 +4922,10 @@ msgstr "Nessuna fattura"
 #: src/components/modals/WebhookLogsModal/index.tsx:177
 msgid "No logs found"
 msgstr "Nessun log trovato"
+
+#: src/components/routes/admin/Messages/index.tsx:120
+msgid "No messages found"
+msgstr "Nessun messaggio trovato"
 
 #: src/components/common/MessageList/index.tsx:69
 msgid "No messages to show"
@@ -4818,6 +4947,10 @@ msgstr "Nessun ordine da mostrare"
 msgid "No orders yet"
 msgstr "Nessun ordine disponibile"
 
+#: src/components/routes/admin/Dashboard/index.tsx:379
+msgid "No organizer activity in the last 14 days"
+msgstr "Nessuna attività dell'organizzatore negli ultimi 14 giorni"
+
 #: src/components/modals/SwitchOrganizerModal/index.tsx:44
 msgid "No other organizers available"
 msgstr "Nessun altro organizzatore disponibile"
@@ -4833,6 +4966,10 @@ msgstr "Nessun metodo di pagamento è attualmente disponibile. Contatta l'organi
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:54
 msgid "No Payment Required"
 msgstr "Nessun Pagamento Richiesto"
+
+#: src/components/routes/admin/Dashboard/index.tsx:282
+msgid "No popular events in the last 14 days"
+msgstr "Nessun evento popolare negli ultimi 14 giorni"
 
 #: src/components/modals/ManageAttendeeModal/index.tsx:177
 msgid "No product associated with this attendee."
@@ -4861,6 +4998,10 @@ msgstr "Nessuna domanda risposta da questo partecipante."
 #: src/components/modals/ManageOrderModal/index.tsx:119
 msgid "No questions have been asked for this order."
 msgstr "Nessuna domanda è stata posta per questo ordine."
+
+#: src/components/routes/admin/Dashboard/index.tsx:440
+msgid "No recent account signups"
+msgstr "Nessuna iscrizione recente"
 
 #: src/components/common/WebhookTable/index.tsx:174
 msgid "No response"
@@ -4901,6 +5042,10 @@ msgstr "Nessun utente trovato"
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:225
 msgid "No VAT settings configured"
 msgstr "Nessuna impostazione IVA configurata"
+
+#: src/components/routes/admin/Dashboard/index.tsx:331
+msgid "No viewed events in the last 14 days"
+msgstr "Nessun evento visualizzato negli ultimi 14 giorni"
 
 #: src/components/modals/WebhookLogsModal/index.tsx:180
 msgid "No webhook events have been recorded for this endpoint yet. Events will appear here once they are triggered."
@@ -5187,6 +5332,11 @@ msgstr "L'ordine è stato cancellato e rimborsato. Il proprietario dell'ordine �
 msgid "Order has been canceled and the order owner has been notified."
 msgstr "L'ordine è stato annullato e il proprietario dell'ordine è stato avvisato."
 
+#: src/components/routes/admin/Messages/index.tsx:56
+#: src/components/routes/admin/Messages/index.tsx:105
+msgid "Order Holders"
+msgstr "Titolari degli ordini"
+
 #: src/components/common/AdminOrdersTable/index.tsx:65
 msgid "Order ID"
 msgstr "ID ordine"
@@ -5314,9 +5464,17 @@ msgstr "L'ordine è stato annullato"
 msgid "Orders"
 msgstr "Ordini"
 
+#: src/components/routes/admin/Dashboard/index.tsx:189
+msgid "Orders Completed"
+msgstr "Ordini completati"
+
 #: src/components/routes/event/orders.tsx:94
 msgid "Orders Exported"
 msgstr "Ordini Esportati"
+
+#: src/components/routes/admin/Dashboard/index.tsx:207
+msgid "Orders Total"
+msgstr "Totale ordini"
 
 #: src/components/common/AdminEventsTable/index.tsx:138
 msgid "Orders:"
@@ -5351,6 +5509,9 @@ msgstr "Nome Organizzazione"
 #: src/components/layouts/EventHomepage/index.tsx:495
 #: src/components/modals/EditUserModal/index.tsx:55
 #: src/components/modals/InviteUserModal/index.tsx:47
+#: src/components/routes/admin/Dashboard/index.tsx:257
+#: src/components/routes/admin/Dashboard/index.tsx:306
+#: src/components/routes/admin/Dashboard/index.tsx:354
 #: src/components/routes/events/Dashboard/index.tsx:193
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:330
 msgid "Organizer"
@@ -5423,6 +5584,10 @@ msgstr "Altro"
 #: src/components/common/CheckInStatusModal/index.tsx:171
 msgid "Other Lists (Ticket Not Included)"
 msgstr "Altre Liste (Biglietto Non Incluso)"
+
+#: src/components/routes/admin/Messages/index.tsx:75
+msgid "Outgoing Messages"
+msgstr "Messaggi in uscita"
 
 #: src/components/layouts/Event/index.tsx:84
 msgid "Overview"
@@ -5555,6 +5720,10 @@ msgstr "Paga"
 msgid "Pay to unlock"
 msgstr "Paga per sbloccare"
 
+#: src/components/routes/admin/FailedJobs/index.tsx:263
+msgid "Payload"
+msgstr "Payload"
+
 #: src/components/common/OrdersTable/index.tsx:368
 #: src/components/common/ProgressStepper/index.tsx:19
 #: src/components/forms/StripeCheckoutForm/index.tsx:127
@@ -5639,6 +5808,10 @@ msgstr "Pagamenti non disponibili"
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:86
 msgid "Payments will continue to flow without interruption"
 msgstr "I pagamenti continueranno a fluire senza interruzioni"
+
+#: src/components/routes/admin/Messages/index.tsx:92
+msgid "Pending"
+msgstr "In sospeso"
 
 #: src/components/common/QuestionsTable/index.tsx:315
 msgid "Per Attendee"
@@ -5731,6 +5904,10 @@ msgstr "Commissioni piattaforma"
 #: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:134
 msgid "Platform Fees Report"
 msgstr "Report commissioni piattaforma"
+
+#: src/components/routes/admin/Dashboard/index.tsx:171
+msgid "Platform Revenue"
+msgstr "Ricavi della piattaforma"
 
 #: src/components/forms/QuestionForm/index.tsx:31
 msgid "Please add at least one option"
@@ -5839,6 +6016,10 @@ msgstr "Attendi mentre prepariamo la tua fattura..."
 #: src/components/routes/event/orders.tsx:91
 msgid "Please wait while we prepare your orders for export..."
 msgstr "Attendi mentre prepariamo i tuoi ordini per l'esportazione..."
+
+#: src/components/routes/admin/Dashboard/index.tsx:245
+msgid "Popular Events (Last 14 Days)"
+msgstr "Eventi popolari (Ultimi 14 giorni)"
 
 #: src/components/common/LanguageSwitcher/index.tsx:28
 msgid "Portuguese"
@@ -6013,6 +6194,8 @@ msgstr "Prodotti"
 msgid "Products sold"
 msgstr "Prodotti venduti"
 
+#: src/components/routes/admin/Dashboard/index.tsx:258
+#: src/components/routes/admin/Dashboard/index.tsx:357
 #: src/components/routes/event/EventDashboard/index.tsx:274
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:125
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:68
@@ -6132,6 +6315,15 @@ msgstr "Domande e Risposte"
 msgid "Questions reordered"
 msgstr "Domande riordinate"
 
+#: src/components/routes/admin/FailedJobs/index.tsx:156
+#: src/components/routes/admin/FailedJobs/index.tsx:247
+msgid "Queue"
+msgstr "Coda"
+
+#: src/components/routes/admin/Messages/index.tsx:93
+msgid "Queued"
+msgstr "In coda"
+
 #: src/components/forms/QuestionForm/index.tsx:118
 msgid "Radio Option"
 msgstr "Opzione Radio"
@@ -6165,6 +6357,10 @@ msgstr "Analytics in tempo reale"
 msgid "Receive product updates from {0}."
 msgstr "Ricevi aggiornamenti sui prodotti da {0}."
 
+#: src/components/routes/admin/Dashboard/index.tsx:391
+msgid "Recent Account Signups"
+msgstr "Iscrizioni recenti"
+
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:265
 msgid "Recent Orders"
 msgstr "Ordini recenti"
@@ -6174,6 +6370,8 @@ msgid "Recipient"
 msgstr "Destinatario"
 
 #: src/components/modals/SendMessageModal/index.tsx:184
+#: src/components/routes/admin/Messages/index.tsx:129
+#: src/components/routes/admin/Messages/index.tsx:246
 msgid "Recipients"
 msgstr "Destinatari"
 
@@ -6369,6 +6567,18 @@ msgstr "Reimpostazione in corso..."
 msgid "Restore event"
 msgstr "Ripristina evento"
 
+#: src/components/routes/admin/FailedJobs/index.tsx:191
+msgid "Retry"
+msgstr "Riprova"
+
+#: src/components/routes/admin/FailedJobs/index.tsx:122
+msgid "Retry All"
+msgstr "Riprova tutto"
+
+#: src/components/routes/admin/FailedJobs/index.tsx:280
+msgid "Retry Job"
+msgstr "Riprova lavoro"
+
 #: src/components/routes/product-widget/Payment/PaymentMethods/Stripe/index.tsx:52
 #: src/components/routes/product-widget/Payment/PaymentMethods/Stripe/index.tsx:67
 msgid "Return to Event"
@@ -6560,6 +6770,10 @@ msgstr "Cerca per nome evento..."
 msgid "Search by event title or organizer..."
 msgstr "Cerca per titolo evento o organizzatore..."
 
+#: src/components/routes/admin/FailedJobs/index.tsx:138
+msgid "Search by job name or exception..."
+msgstr "Cerca per nome lavoro o eccezione..."
+
 #: src/components/routes/admin/Users/index.tsx:60
 msgid "Search by name, email, or account..."
 msgstr "Cerca per nome, email o account..."
@@ -6583,6 +6797,10 @@ msgstr "Cerca per ID ordine, nome cliente o email..."
 #: src/components/routes/event/messages.tsx:36
 msgid "Search by subject or content..."
 msgstr "Cerca per oggetto o contenuto..."
+
+#: src/components/routes/admin/Messages/index.tsx:81
+msgid "Search by subject, event, or account..."
+msgstr "Cerca per oggetto, evento o account..."
 
 #: src/components/routes/event/CapacityAssignments/index.tsx:39
 msgid "Search capacity assignments..."
@@ -6810,6 +7028,15 @@ msgstr "Invia Test"
 msgid "Sending..."
 msgstr "Invio in corso..."
 
+#: src/components/routes/admin/Messages/index.tsx:91
+msgid "Sent"
+msgstr "Inviato"
+
+#: src/components/routes/admin/Messages/index.tsx:131
+#: src/components/routes/admin/Messages/index.tsx:252
+msgid "Sent By"
+msgstr "Inviato da"
+
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:205
 msgid "Sent to customers when they place an order"
 msgstr "Inviato ai clienti quando effettuano un ordine"
@@ -6975,6 +7202,10 @@ msgstr "Mostrato al cliente prima del checkout"
 msgid "Shows common address fields, including country"
 msgstr "Mostra i campi comuni dell'indirizzo, incluso il paese"
 
+#: src/components/routes/admin/Dashboard/index.tsx:404
+msgid "Signed Up"
+msgstr "Iscritto"
+
 #: src/components/modals/ManageAttendeeModal/index.tsx:111
 #: src/components/modals/ManageOrderModal/index.tsx:151
 msgid "Simpson"
@@ -7132,6 +7363,10 @@ msgstr "Le statistiche si basano sulla data di creazione dell'account"
 #: src/components/forms/WebhookForm/index.tsx:133
 #: src/components/modals/EditUserModal/index.tsx:103
 #: src/components/routes/account/ManageAccount/sections/Users/index.tsx:157
+#: src/components/routes/admin/Dashboard/index.tsx:407
+#: src/components/routes/admin/Messages/index.tsx:88
+#: src/components/routes/admin/Messages/index.tsx:130
+#: src/components/routes/admin/Messages/index.tsx:240
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:88
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:62
 msgid "Status"
@@ -7146,6 +7381,7 @@ msgid "Stop Impersonating"
 msgstr "Interrompi Impersonificazione"
 
 #: src/components/common/OrdersTable/index.tsx:377
+#: src/components/routes/admin/Dashboard/index.tsx:426
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:85
 msgid "Stripe"
 msgstr "Stripe"
@@ -7172,6 +7408,8 @@ msgstr "La configurazione di Stripe è già completa."
 
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:127
 #: src/components/modals/SendMessageModal/index.tsx:234
+#: src/components/routes/admin/Messages/index.tsx:125
+#: src/components/routes/admin/Messages/index.tsx:219
 msgid "Subject"
 msgstr "Oggetto"
 
@@ -7874,6 +8112,11 @@ msgstr "Nome del possessore del biglietto"
 msgid "Ticket holders"
 msgstr "Possessori di biglietti"
 
+#: src/components/routes/admin/Messages/index.tsx:54
+#: src/components/routes/admin/Messages/index.tsx:104
+msgid "Ticket Holders"
+msgstr "Titolari dei biglietti"
+
 #: src/components/common/AttendeeTicket/index.tsx:168
 msgid "Ticket ID"
 msgstr "ID biglietto"
@@ -7944,7 +8187,7 @@ msgstr "Biglietti disponibili"
 msgid "Tickets for"
 msgstr "Biglietti per"
 
-#: src/components/routes/admin/Dashboard/index.tsx:111
+#: src/components/routes/admin/Dashboard/index.tsx:140
 msgid "Tickets Sold"
 msgstr "Biglietti Venduti"
 
@@ -8007,13 +8250,17 @@ msgstr "Attiva colonne"
 msgid "Tools"
 msgstr "Strumenti"
 
+#: src/components/routes/admin/Dashboard/index.tsx:343
+msgid "Top Organizers (Last 14 Days)"
+msgstr "Migliori organizzatori (Ultimi 14 giorni)"
+
 #: src/components/common/AdminOrdersTable/index.tsx:78
 #: src/components/common/InlineOrderSummary/index.tsx:203
 #: src/components/common/OrderSummary/index.tsx:92
 msgid "Total"
 msgstr "Totale"
 
-#: src/components/routes/admin/Dashboard/index.tsx:75
+#: src/components/routes/admin/Dashboard/index.tsx:104
 msgid "Total Accounts"
 msgstr "Account Totali"
 
@@ -8073,9 +8320,13 @@ msgstr "Totale Rimborsato"
 msgid "Total Tax"
 msgstr "Tasse Totali"
 
-#: src/components/routes/admin/Dashboard/index.tsx:57
+#: src/components/routes/admin/Dashboard/index.tsx:86
 msgid "Total Users"
 msgstr "Utenti Totali"
+
+#: src/components/routes/admin/Dashboard/index.tsx:307
+msgid "Total Views"
+msgstr "Visualizzazioni totali"
 
 #: src/components/routes/admin/Attribution/index.tsx:32
 msgid "Track account growth and performance by attribution source"
@@ -8126,6 +8377,9 @@ msgstr "Twitch"
 
 #: src/components/forms/TaxAndFeeForm/index.tsx:44
 #: src/components/routes/admin/Attribution/index.tsx:109
+#: src/components/routes/admin/Messages/index.tsx:101
+#: src/components/routes/admin/Messages/index.tsx:128
+#: src/components/routes/admin/Messages/index.tsx:234
 msgid "Type"
 msgstr "Tipo"
 
@@ -8177,6 +8431,10 @@ msgstr "Clienti Unici"
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:21
 msgid "Unique order reference"
 msgstr "Riferimento ordine unico"
+
+#: src/components/routes/admin/Dashboard/index.tsx:308
+msgid "Unique Views"
+msgstr "Visualizzazioni uniche"
 
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:153
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:111
@@ -8344,6 +8602,7 @@ msgstr "Gestione Utenti"
 #: src/components/routes/account/ManageAccount/index.tsx:32
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:130
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:233
+#: src/components/routes/admin/Dashboard/index.tsx:406
 #: src/components/routes/admin/Users/index.tsx:57
 msgid "Users"
 msgstr "Utenti"
@@ -8359,9 +8618,13 @@ msgstr "Gli utenti possono modificare la loro email in <0>Impostazioni Profilo</
 msgid "UTC"
 msgstr "UTC"
 
-#: src/components/layouts/Admin/index.tsx:18
+#: src/components/layouts/Admin/index.tsx:19
 msgid "UTM Analytics"
 msgstr "Analisi UTM"
+
+#: src/components/routes/admin/FailedJobs/index.tsx:243
+msgid "UUID"
+msgstr "UUID"
 
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:206
 msgid "Valid"
@@ -8475,6 +8738,7 @@ msgid "Verification code"
 msgstr "Codice di verifica"
 
 #: src/components/routes/admin/Attribution/index.tsx:129
+#: src/components/routes/admin/Dashboard/index.tsx:423
 msgid "Verified"
 msgstr "Verificato"
 
@@ -8499,6 +8763,10 @@ msgstr "Vietnamita"
 msgid "View"
 msgstr "Visualizza"
 
+#: src/components/routes/admin/Messages/index.tsx:76
+msgid "View all messages sent across the platform"
+msgstr "Visualizza tutti i messaggi inviati sulla piattaforma"
+
 #: src/components/routes/organizer/Reports/index.tsx:50
 msgid "View and download reports across all your events. Only completed orders are included."
 msgstr "Visualizza e scarica report per tutti i tuoi eventi. Sono inclusi solo gli ordini completati."
@@ -8512,11 +8780,12 @@ msgid "View Attendee Details"
 msgstr "Visualizza Dettagli Partecipante"
 
 #: src/components/common/AdminAccountsTable/index.tsx:65
+#: src/components/routes/admin/FailedJobs/index.tsx:182
 msgid "View Details"
 msgstr "Visualizza dettagli"
 
 #: src/components/common/AdminEventsTable/index.tsx:153
-#: src/components/routes/admin/Dashboard/index.tsx:157
+#: src/components/routes/admin/Dashboard/index.tsx:480
 msgid "View Event"
 msgstr "Visualizza evento"
 
@@ -8535,6 +8804,10 @@ msgstr "Visualizza log"
 #: src/components/layouts/EventHomepage/index.tsx:461
 msgid "View Map"
 msgstr "Vedi mappa"
+
+#: src/components/routes/admin/Messages/index.tsx:184
+msgid "View Message"
+msgstr ""
 
 #: src/components/layouts/EventHomepage/index.tsx:374
 msgid "View on Google Maps"
@@ -9248,3 +9521,12 @@ msgstr "CAP o Codice Postale"
 #: src/components/routes/product-widget/CollectInformation/index.tsx:523
 msgid "ZIP or Postal Code"
 msgstr "CAP o Codice Postale"
+
+msgid "Message Content"
+msgstr "Contenuto del messaggio"
+
+msgid "Message Details"
+msgstr "Dettagli del messaggio"
+
+msgid "View Message"
+msgstr "Visualizza messaggio"
