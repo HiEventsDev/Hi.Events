@@ -171,8 +171,15 @@ use HiEvents\Http\Actions\Admin\Configurations\GetAllConfigurationsAction;
 use HiEvents\Http\Actions\Admin\Configurations\UpdateConfigurationAction;
 use HiEvents\Http\Actions\Admin\Events\GetAllEventsAction as GetAllAdminEventsAction;
 use HiEvents\Http\Actions\Admin\Events\GetUpcomingEventsAction;
+use HiEvents\Http\Actions\Admin\FailedJobs\DeleteAllFailedJobsAction;
+use HiEvents\Http\Actions\Admin\FailedJobs\DeleteFailedJobAction;
+use HiEvents\Http\Actions\Admin\FailedJobs\GetAllFailedJobsAction;
+use HiEvents\Http\Actions\Admin\FailedJobs\RetryAllFailedJobsAction;
+use HiEvents\Http\Actions\Admin\FailedJobs\RetryFailedJobAction;
+use HiEvents\Http\Actions\Admin\Messages\GetAllMessagesAction as GetAllAdminMessagesAction;
 use HiEvents\Http\Actions\Admin\Orders\GetAllOrdersAction;
 use HiEvents\Http\Actions\Admin\Attribution\GetUtmAttributionStatsAction;
+use HiEvents\Http\Actions\Admin\Stats\GetAdminDashboardDataAction;
 use HiEvents\Http\Actions\Admin\Stats\GetAdminStatsAction;
 use HiEvents\Http\Actions\Admin\Users\GetAllUsersAction;
 use HiEvents\Http\Actions\Admin\Users\StartImpersonationAction;
@@ -401,6 +408,7 @@ $router->middleware(['auth:api'])->group(
 $router->prefix('/admin')->middleware(['auth:api'])->group(
     function (Router $router): void {
         $router->get('/stats', GetAdminStatsAction::class);
+        $router->get('/dashboard', GetAdminDashboardDataAction::class);
         $router->get('/attribution/stats', GetUtmAttributionStatsAction::class);
         $router->get('/accounts', GetAllAdminAccountsAction::class);
         $router->get('/accounts/{account_id}', GetAdminAccountAction::class);
@@ -416,6 +424,16 @@ $router->prefix('/admin')->middleware(['auth:api'])->group(
         $router->get('/orders', GetAllOrdersAction::class);
         $router->post('/impersonate/{user_id}', StartImpersonationAction::class);
         $router->post('/stop-impersonation', StopImpersonationAction::class);
+
+        // Failed Jobs
+        $router->get('/failed-jobs', GetAllFailedJobsAction::class);
+        $router->delete('/failed-jobs/{jobId}', DeleteFailedJobAction::class);
+        $router->delete('/failed-jobs', DeleteAllFailedJobsAction::class);
+        $router->post('/failed-jobs/{jobId}/retry', RetryFailedJobAction::class);
+        $router->post('/failed-jobs/retry-all', RetryAllFailedJobsAction::class);
+
+        // Messages
+        $router->get('/messages', GetAllAdminMessagesAction::class);
     }
 );
 
