@@ -4,7 +4,7 @@ namespace HiEvents\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Sentry\Laravel\Facade as Sentry;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException as SymfonyResourceNotFoundException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -15,7 +15,8 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontReport = [
-        // Add exceptions that shouldn't be reported
+        ResourceNotFoundException::class,
+        SymfonyResourceNotFoundException::class,
     ];
 
     /**
@@ -54,7 +55,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
-        if ($exception instanceof ResourceNotFoundException) {
+        if ($exception instanceof ResourceNotFoundException || $exception instanceof SymfonyResourceNotFoundException) {
             return response()->json([
                 'message' => $exception->getMessage() ?: 'Resource not found',
             ], 404);
