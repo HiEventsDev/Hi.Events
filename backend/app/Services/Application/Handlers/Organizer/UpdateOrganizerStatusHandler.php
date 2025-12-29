@@ -48,7 +48,10 @@ class UpdateOrganizerStatusHandler
 
         $this->organizerRepository->updateWhere(
             attributes: ['status' => $updateOrganizerStatusDTO->status],
-            where: ['id' => $updateOrganizerStatusDTO->organizerId]
+            where: [
+                'id' => $updateOrganizerStatusDTO->organizerId,
+                'account_id' => $updateOrganizerStatusDTO->accountId,
+            ]
         );
 
         $this->logger->info('Organizer status updated', [
@@ -56,6 +59,9 @@ class UpdateOrganizerStatusHandler
             'status' => $updateOrganizerStatusDTO->status
         ]);
 
-        return $this->organizerRepository->findById($updateOrganizerStatusDTO->organizerId);
+        return $this->organizerRepository->findFirstWhere([
+            'id' => $updateOrganizerStatusDTO->organizerId,
+            'account_id' => $updateOrganizerStatusDTO->accountId,
+        ]);
     }
 }
