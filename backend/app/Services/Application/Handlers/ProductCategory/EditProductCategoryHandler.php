@@ -29,6 +29,9 @@ class EditProductCategoryHandler
             ],
         );
 
-        return $this->productCategoryRepository->findById($dto->product_category_id);
+        return $this->productCategoryRepository->findFirstWhere([
+            'id' => $dto->product_category_id,
+            'event_id' => $dto->event_id,
+        ]);
     }
 }

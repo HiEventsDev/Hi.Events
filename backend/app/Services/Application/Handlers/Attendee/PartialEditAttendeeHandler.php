@@ -102,7 +102,14 @@ class PartialEditAttendeeHandler
     {
         if ($data->status === AttendeeStatus::CANCELLED->name) {
             // Get the order to access the creation date for daily statistics
-            $order = $this->orderRepository->findById($attendee->getOrderId());
+            $order = $this->orderRepository->findFirstWhere([
+                'id' => $attendee->getOrderId(),
+                'event_id' => $attendee->getEventId(),
+            ]);
+
+            if ($order === null) {
+                return;
+            }
 
             $this->eventStatisticsCancellationService->decrementForCancelledAttendee(
                 eventId: $attendee->getEventId(),

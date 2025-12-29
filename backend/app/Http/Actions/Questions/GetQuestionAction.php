@@ -3,7 +3,9 @@
 namespace HiEvents\Http\Actions\Questions;
 
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\Generated\QuestionDomainObjectAbstract;
 use HiEvents\DomainObjects\ProductDomainObject;
+use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Repository\Interfaces\QuestionRepositoryInterface;
 use HiEvents\Resources\Question\QuestionResource;
@@ -19,14 +21,24 @@ class GetQuestionAction extends BaseAction
         $this->questionRepository = $questionRepository;
     }
 
+    /**
+     * @throws ResourceNotFoundException
+     */
     public function __invoke(Request $request, int $eventId, int $questionId): JsonResponse
     {
         $this->isActionAuthorized($eventId, EventDomainObject::class);
 
-        $questions = $this->questionRepository
+        $question = $this->questionRepository
             ->loadRelation(ProductDomainObject::class)
-            ->findById($questionId);
+            ->findFirstWhere([
+                QuestionDomainObjectAbstract::ID => $questionId,
+                QuestionDomainObjectAbstract::EVENT_ID => $eventId,
+            ]);
 
-        return $this->resourceResponse(QuestionResource::class, $questions);
+        if ($question === null) {
+            throw new ResourceNotFoundException(__('Question not found'));
+        }
+
+        return $this->resourceResponse(QuestionResource::class, $question);
     }
 }
