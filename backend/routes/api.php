@@ -176,7 +176,10 @@ use HiEvents\Http\Actions\Admin\FailedJobs\DeleteFailedJobAction;
 use HiEvents\Http\Actions\Admin\FailedJobs\GetAllFailedJobsAction;
 use HiEvents\Http\Actions\Admin\FailedJobs\RetryAllFailedJobsAction;
 use HiEvents\Http\Actions\Admin\FailedJobs\RetryFailedJobAction;
+use HiEvents\Http\Actions\Admin\Messages\ApproveMessageAction;
 use HiEvents\Http\Actions\Admin\Messages\GetAllMessagesAction as GetAllAdminMessagesAction;
+use HiEvents\Http\Actions\Admin\GetMessagingTiersAction;
+use HiEvents\Http\Actions\Admin\Accounts\UpdateAccountMessagingTierAction;
 use HiEvents\Http\Actions\Admin\Orders\GetAllOrdersAction;
 use HiEvents\Http\Actions\Admin\Attribution\GetUtmAttributionStatsAction;
 use HiEvents\Http\Actions\Admin\Stats\GetAdminDashboardDataAction;
@@ -434,6 +437,11 @@ $router->prefix('/admin')->middleware(['auth:api'])->group(
 
         // Messages
         $router->get('/messages', GetAllAdminMessagesAction::class);
+        $router->post('/messages/{message_id}/approve', ApproveMessageAction::class);
+
+        // Messaging Tiers
+        $router->get('/messaging-tiers', GetMessagingTiersAction::class);
+        $router->put('/accounts/{account_id}/messaging-tier', UpdateAccountMessagingTierAction::class);
     }
 );
 

@@ -24,6 +24,7 @@ class AdminMessageResource extends JsonResource
             'sent_by' => trim(($this->sent_by_first_name ?? '') . ' ' . ($this->sent_by_last_name ?? '')),
             'sent_at' => $this->sent_at,
             'created_at' => $this->created_at,
+            'eligibility_failures' => $this->eligibility_failures,
         ];
     }
 }

@@ -4,6 +4,7 @@ namespace HiEvents\Http\Actions\Messages;
 
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Exceptions\AccountNotVerifiedException;
+use HiEvents\Exceptions\MessagingTierLimitExceededException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Message\SendMessageRequest;
 use HiEvents\Resources\Message\MessageResource;
@@ -44,6 +45,8 @@ class SendMessageAction extends BaseAction
             ]));
         } catch (AccountNotVerifiedException $e) {
             return $this->errorResponse($e->getMessage(), Response::HTTP_UNAUTHORIZED);
+        } catch (MessagingTierLimitExceededException $e) {
+            return $this->errorResponse($e->getMessage(), Response::HTTP_TOO_MANY_REQUESTS);
         }
 
         return $this->resourceResponse(MessageResource::class, $message);

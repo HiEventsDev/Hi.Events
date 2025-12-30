@@ -8,6 +8,7 @@ use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
+use HiEvents\DomainObjects\Status\OrderPaymentStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Models\Order;
@@ -165,6 +166,21 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
         );
     }
 
+    public function countOrdersAssociatedWithProducts(int $eventId, array $productIds, array $orderStatuses): int
+    {
+        $count = $this->model
+            ->whereHas('order_items', static function (Builder $query) use ($productIds) {
+                $query->whereIn('product_id', $productIds);
+            })
+            ->whereIn('status', $orderStatuses)
+            ->where('event_id', $eventId)
+            ->count();
+
+        $this->resetModel();
+
+        return $count;
+    }
+
     public function getAllOrdersForAdmin(
         ?string $search = null,
         int $perPage = 20,
@@ -200,5 +216,20 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
         ], name: 'event'));
 
         return $this->paginate($perPage);
+    }
+
+    public function hasCompletedPaidOrderForAccount(int $accountId): bool
+    {
+        $exists = $this->model
+            ->join('events', 'orders.event_id', '=', 'events.id')
+            ->join('stripe_payments', 'orders.id', '=', 'stripe_payments.order_id')
+            ->where('events.account_id', $accountId)
+            ->where('orders.payment_status', OrderPaymentStatus::PAYMENT_RECEIVED->name)
+            ->whereNotNull('stripe_payments.payment_intent_id')
+            ->exists();
+
+        $this->resetModel();
+
+        return $exists;
     }
 }

@@ -15,6 +15,8 @@ class AccountDomainObject extends Generated\AccountDomainObjectAbstract
 
     private ?AccountVatSettingDomainObject $accountVatSetting = null;
 
+    private ?AccountMessagingTierDomainObject $messagingTier = null;
+
     public function getApplicationFee(): AccountApplicationFeeDTO
     {
         /** @var AccountConfigurationDomainObject $applicationFee */
@@ -54,6 +56,16 @@ class AccountDomainObject extends Generated\AccountDomainObjectAbstract
     public function setAccountVatSetting(AccountVatSettingDomainObject $accountVatSetting): void
     {
         $this->accountVatSetting = $accountVatSetting;
+    }
+
+    public function getMessagingTier(): ?AccountMessagingTierDomainObject
+    {
+        return $this->messagingTier;
+    }
+
+    public function setMessagingTier(AccountMessagingTierDomainObject $messagingTier): void
+    {
+        $this->messagingTier = $messagingTier;
     }
 
     /**
