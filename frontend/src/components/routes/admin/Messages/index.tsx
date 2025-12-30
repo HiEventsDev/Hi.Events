@@ -1,11 +1,14 @@
 import {Container, Title, TextInput, Skeleton, Pagination, Stack, Table, Text, Badge, Group, Select, Modal, ScrollArea, ActionIcon, Tooltip} from "@mantine/core";
 import {t} from "@lingui/macro";
-import {IconSearch, IconMail, IconUsers, IconEye} from "@tabler/icons-react";
+import {IconSearch, IconMail, IconUsers, IconEye, IconCheck} from "@tabler/icons-react";
 import {useState, useEffect} from "react";
 import {useGetAdminMessages} from "../../../../queries/useGetAdminMessages";
+import {useApproveMessage} from "../../../../mutations/useApproveMessage";
 import {relativeDate} from "../../../../utilites/dates";
 import {useDisclosure} from "@mantine/hooks";
 import {AdminMessage} from "../../../../api/admin.client";
+import {showSuccess} from "../../../../utilites/notifications";
+import {IdParam} from "../../../../types";
 
 const Messages = () => {
     const [page, setPage] = useState(1);
@@ -24,6 +27,16 @@ const Messages = () => {
         type: typeFilter || undefined,
     });
 
+    const approveMutation = useApproveMessage();
+
+    const handleApprove = (messageId: IdParam) => {
+        approveMutation.mutate(messageId, {
+            onSuccess: () => {
+                showSuccess(t`Message approved successfully`);
+            },
+        });
+    };
+
     useEffect(() => {
         const timer = setTimeout(() => {
             setDebouncedSearch(search);
@@ -38,6 +51,7 @@ const Messages = () => {
             case 'sent':
                 return 'green';
             case 'pending':
+            case 'pending_review':
                 return 'yellow';
             case 'failed':
                 return 'red';
@@ -45,6 +59,19 @@ const Messages = () => {
                 return 'blue';
             default:
                 return 'gray';
+        }
+    };
+
+    const getEligibilityFailureLabel = (failure: string): string => {
+        switch (failure) {
+            case 'stripe_not_connected':
+                return t`Stripe Not Connected`;
+            case 'no_paid_orders':
+                return t`No Paid Orders`;
+            case 'event_too_new':
+                return t`Event Too New`;
+            default:
+                return failure;
         }
     };
 
@@ -89,8 +116,7 @@ const Messages = () => {
                         clearable
                         data={[
                             {value: 'SENT', label: t`Sent`},
-                            {value: 'PENDING', label: t`Pending`},
-                            {value: 'QUEUED', label: t`Queued`},
+                            {value: 'PENDING_REVIEW', label: t`Pending Review`},
                             {value: 'FAILED', label: t`Failed`},
                         ]}
                         value={statusFilter}
@@ -181,15 +207,29 @@ const Messages = () => {
                                         <Text size="sm">{relativeDate(message.created_at)}</Text>
                                     </Table.Td>
                                     <Table.Td>
-                                        <Tooltip label={t`View Message`}>
-                                            <ActionIcon
-                                                variant="subtle"
-                                                color="gray"
-                                                onClick={() => handleViewMessage(message)}
-                                            >
-                                                <IconEye size={16} />
-                                            </ActionIcon>
-                                        </Tooltip>
+                                        <Group gap="xs">
+                                            <Tooltip label={t`View Message`}>
+                                                <ActionIcon
+                                                    variant="subtle"
+                                                    color="gray"
+                                                    onClick={() => handleViewMessage(message)}
+                                                >
+                                                    <IconEye size={16} />
+                                                </ActionIcon>
+                                            </Tooltip>
+                                            {message.status === 'PENDING_REVIEW' && (
+                                                <Tooltip label={t`Approve Message`}>
+                                                    <ActionIcon
+                                                        variant="subtle"
+                                                        color="green"
+                                                        onClick={() => handleApprove(message.id)}
+                                                        loading={approveMutation.isPending}
+                                                    >
+                                                        <IconCheck size={16} />
+                                                    </ActionIcon>
+                                                </Tooltip>
+                                            )}
+                                        </Group>
                                     </Table.Td>
                                 </Table.Tr>
                             ))}
@@ -266,6 +306,18 @@ const Messages = () => {
                                 />
                             </ScrollArea>
                         </div>
+                        {selectedMessage.eligibility_failures && selectedMessage.eligibility_failures.length > 0 && (
+                            <div>
+                                <Text size="sm" fw={500} c="dimmed" mb="xs">{t`Eligibility Failures`}</Text>
+                                <Group gap="xs">
+                                    {selectedMessage.eligibility_failures.map((failure) => (
+                                        <Badge key={failure} color="orange" variant="filled">
+                                            {getEligibilityFailureLabel(failure)}
+                                        </Badge>
+                                    ))}
+                                </Group>
+                            </div>
+                        )}
                     </Stack>
                 )}
             </Modal>

@@ -27,6 +27,10 @@ class AdminAccountResource extends BaseResource
                     'role' => $user->pivot->role,
                 ];
             }),
+            'messaging_tier' => $this->resource->messagingTier ? [
+                'id' => $this->resource->messagingTier->id,
+                'name' => $this->resource->messagingTier->name,
+            ] : null,
         ];
     }
 }

@@ -3,7 +3,9 @@ import {t} from "@lingui/macro";
 import {useParams, useNavigate} from "react-router";
 import {useGetAdminAccount} from "../../../../../queries/useGetAdminAccount";
 import {useGetAllConfigurations} from "../../../../../queries/useGetAllConfigurations";
+import {useGetMessagingTiers} from "../../../../../queries/useGetMessagingTiers";
 import {useAssignConfiguration} from "../../../../../mutations/useAssignConfiguration";
+import {useUpdateAccountMessagingTier} from "../../../../../mutations/useUpdateAccountMessagingTier";
 import {IconArrowLeft, IconCalendar, IconWorld, IconEdit, IconBuildingBank, IconUsers} from "@tabler/icons-react";
 import {useState} from "react";
 import {EditAccountVatSettingsModal} from "../../../../modals/EditAccountVatSettingsModal";
@@ -15,11 +17,14 @@ const AccountDetail = () => {
     const navigate = useNavigate();
     const {data: accountData, isLoading} = useGetAdminAccount(accountId);
     const {data: configurationsData} = useGetAllConfigurations();
+    const {data: messagingTiersData} = useGetMessagingTiers();
     const assignConfigMutation = useAssignConfiguration(accountId!);
+    const updateTierMutation = useUpdateAccountMessagingTier(accountId!);
     const [showVatModal, setShowVatModal] = useState(false);
 
     const account = accountData?.data;
     const configurations = configurationsData?.data || [];
+    const messagingTiers = messagingTiersData?.data || [];
 
     const formatDate = (dateString?: string) => {
         if (!dateString) return '-';
@@ -37,6 +42,29 @@ const AccountDetail = () => {
                 onError: () => showError(t`Failed to assign configuration`),
             }
         );
+    };
+
+    const handleMessagingTierChange = (value: string | null) => {
+        if (!value) return;
+
+        updateTierMutation.mutate(parseInt(value, 10), {
+            onSuccess: () => showSuccess(t`Messaging tier updated successfully`),
+            onError: () => showError(t`Failed to update messaging tier`),
+        });
+    };
+
+    const getTierBadgeColor = (tierName?: string) => {
+        if (!tierName) return 'gray';
+        const name = tierName.toLowerCase();
+        if (name.includes('premium')) return 'green';
+        if (name.includes('trusted')) return 'blue';
+        return 'gray';
+    };
+
+    const getSelectedTierDetails = () => {
+        const selectedTierId = account?.messaging_tier?.id;
+        if (!selectedTierId) return null;
+        return messagingTiers.find(tier => tier.id === selectedTierId);
     };
 
     if (isLoading) {
@@ -64,6 +92,13 @@ const AccountDetail = () => {
         value: String(config.id),
         label: config.is_system_default ? `${config.name} (${t`Default`})` : config.name,
     }));
+
+    const tierOptions = messagingTiers.map((tier) => ({
+        value: String(tier.id),
+        label: tier.name,
+    }));
+
+    const selectedTierDetails = getSelectedTierDetails();
 
     return (
         <>
@@ -169,6 +204,52 @@ const AccountDetail = () => {
                             <Text size="xs" c="dimmed">
                                 {t`To edit configurations, go to the Configurations section in the admin menu.`}
                             </Text>
+                        </Stack>
+                    </Card>
+
+                    <Card className={classes.accountCard}>
+                        <Stack gap="md">
+                            <Group justify="space-between">
+                                <Text size="lg" fw={600}>{t`Messaging Tier`}</Text>
+                                {account.messaging_tier && (
+                                    <Badge color={getTierBadgeColor(account.messaging_tier.name)}>
+                                        {account.messaging_tier.name}
+                                    </Badge>
+                                )}
+                            </Group>
+
+                            <Select
+                                label={t`Assigned Tier`}
+                                description={t`Select the messaging tier for this account. This controls message limits and link permissions.`}
+                                data={tierOptions}
+                                value={account.messaging_tier?.id ? String(account.messaging_tier.id) : null}
+                                onChange={handleMessagingTierChange}
+                                placeholder={t`Select a tier`}
+                                disabled={updateTierMutation.isPending}
+                            />
+
+                            {selectedTierDetails && (
+                                <div className={classes.infoGrid}>
+                                    <div className={classes.infoItem}>
+                                        <Text size="xs" c="dimmed">{t`Max Messages / 24h`}</Text>
+                                        <Text size="sm" fw={500}>
+                                            {selectedTierDetails.max_messages_per_24h}
+                                        </Text>
+                                    </div>
+                                    <div className={classes.infoItem}>
+                                        <Text size="xs" c="dimmed">{t`Max Recipients / Message`}</Text>
+                                        <Text size="sm" fw={500}>
+                                            {selectedTierDetails.max_recipients_per_message}
+                                        </Text>
+                                    </div>
+                                    <div className={classes.infoItem}>
+                                        <Text size="xs" c="dimmed">{t`Links Allowed`}</Text>
+                                        <Badge color={selectedTierDetails.links_allowed ? 'green' : 'gray'}>
+                                            {selectedTierDetails.links_allowed ? t`Yes` : t`No`}
+                                        </Badge>
+                                    </div>
+                                </div>
+                            )}
                         </Stack>
                     </Card>
 
