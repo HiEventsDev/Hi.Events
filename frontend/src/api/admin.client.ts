@@ -20,6 +20,14 @@ export interface AdminAccountUser {
     role: string;
 }
 
+export interface AccountMessagingTier {
+    id: number;
+    name: string;
+    max_messages_per_24h: number;
+    max_recipients_per_message: number;
+    links_allowed: boolean;
+}
+
 export interface AdminAccount {
     id: IdParam;
     name: string;
@@ -30,6 +38,10 @@ export interface AdminAccount {
     events_count: number;
     users_count: number;
     users: AdminAccountUser[];
+    messaging_tier?: {
+        id: number;
+        name: string;
+    };
 }
 
 export interface AccountConfiguration {
@@ -79,6 +91,7 @@ export interface AccountVatSetting {
 export interface AdminAccountDetail extends AdminAccount {
     configuration?: AccountConfiguration;
     vat_setting?: AccountVatSetting;
+    messaging_tier?: AccountMessagingTier;
 }
 
 
@@ -306,6 +319,7 @@ export interface AdminMessage {
     sent_by: string;
     sent_at: string | null;
     created_at: string;
+    eligibility_failures?: string[];
 }
 
 export interface GetAllAdminMessagesParams {
@@ -529,6 +543,23 @@ export const adminClient = {
                 sort_direction: params.sort_direction || 'desc',
             }
         });
+        return response.data;
+    },
+
+    approveMessage: async (messageId: IdParam) => {
+        const response = await api.post(`admin/messages/${messageId}/approve`);
+        return response.data;
+    },
+
+    updateAccountMessagingTier: async (accountId: IdParam, tierId: number) => {
+        const response = await api.put(`admin/accounts/${accountId}/messaging-tier`, {
+            messaging_tier_id: tierId
+        });
+        return response.data;
+    },
+
+    getMessagingTiers: async (): Promise<GenericDataResponse<AccountMessagingTier[]>> => {
+        const response = await api.get<GenericDataResponse<AccountMessagingTier[]>>('admin/messaging-tiers');
         return response.data;
     },
 };

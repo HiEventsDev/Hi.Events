@@ -12,6 +12,7 @@ abstract class AccountDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     final public const PLURAL_NAME = 'accounts';
     final public const ID = 'id';
     final public const ACCOUNT_CONFIGURATION_ID = 'account_configuration_id';
+    final public const ACCOUNT_MESSAGING_TIER_ID = 'account_messaging_tier_id';
     final public const CURRENCY_CODE = 'currency_code';
     final public const TIMEZONE = 'timezone';
     final public const CREATED_AT = 'created_at';
@@ -29,6 +30,7 @@ abstract class AccountDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
 
     protected int $id;
     protected ?int $account_configuration_id = null;
+    protected ?int $account_messaging_tier_id = null;
     protected string $currency_code = 'USD';
     protected ?string $timezone = null;
     protected ?string $created_at = null;
@@ -49,6 +51,7 @@ abstract class AccountDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
         return [
                     'id' => $this->id ?? null,
                     'account_configuration_id' => $this->account_configuration_id ?? null,
+                    'account_messaging_tier_id' => $this->account_messaging_tier_id ?? null,
                     'currency_code' => $this->currency_code ?? null,
                     'timezone' => $this->timezone ?? null,
                     'created_at' => $this->created_at ?? null,
@@ -86,6 +89,17 @@ abstract class AccountDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     public function getAccountConfigurationId(): ?int
     {
         return $this->account_configuration_id;
+    }
+
+    public function setAccountMessagingTierId(?int $account_messaging_tier_id): self
+    {
+        $this->account_messaging_tier_id = $account_messaging_tier_id;
+        return $this;
+    }
+
+    public function getAccountMessagingTierId(): ?int
+    {
+        return $this->account_messaging_tier_id;
     }
 
     public function setCurrencyCode(string $currency_code): self

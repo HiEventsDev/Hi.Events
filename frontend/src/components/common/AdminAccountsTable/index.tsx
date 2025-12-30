@@ -1,7 +1,7 @@
 import {Badge, Button, Stack, Text} from "@mantine/core";
 import {t} from "@lingui/macro";
 import {AdminAccount} from "../../../api/admin.client";
-import {IconCalendar, IconWorld, IconBuildingBank, IconUsers, IconEye} from "@tabler/icons-react";
+import {IconCalendar, IconWorld, IconBuildingBank, IconUsers, IconEye, IconMessage} from "@tabler/icons-react";
 import classes from "./AdminAccountsTable.module.scss";
 import {IdParam} from "../../../types";
 import {useNavigate} from "react-router";
@@ -46,6 +46,14 @@ const AdminAccountsTable = ({accounts, onImpersonate, isLoading}: AdminAccountsT
         return role !== 'SUPERADMIN';
     };
 
+    const getTierBadgeColor = (tierName?: string) => {
+        if (!tierName) return 'gray';
+        const name = tierName.toLowerCase();
+        if (name.includes('premium')) return 'green';
+        if (name.includes('trusted')) return 'blue';
+        return 'gray';
+    };
+
 
     return (
         <div className={classes.cardsContainer}>
@@ -80,6 +88,18 @@ const AdminAccountsTable = ({accounts, onImpersonate, isLoading}: AdminAccountsT
                                 <Stack gap={2}>
                                     <Text size="xs" c="dimmed">{t`Users`}</Text>
                                     <Text size="lg" fw={600}>{account.users_count}</Text>
+                                </Stack>
+                            </div>
+                            <div className={classes.statItem}>
+                                <IconMessage size={18} />
+                                <Stack gap={2}>
+                                    <Text size="xs" c="dimmed">{t`Messaging Tier`}</Text>
+                                    <Badge
+                                        size="sm"
+                                        color={getTierBadgeColor(account.messaging_tier?.name)}
+                                    >
+                                        {account.messaging_tier?.name || t`Untrusted`}
+                                    </Badge>
                                 </Stack>
                             </div>
                         </div>
