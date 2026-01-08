@@ -164,17 +164,6 @@ managed option with zero setup, automatic updates, and managed infrastructure.
 
 <br>
 
-## Documentation
-
-| Resource        | Link                                                                                          |
-|:----------------|:----------------------------------------------------------------------------------------------|
-| Getting Started | [hi.events/docs/getting-started](https://hi.events/docs/getting-started?utm_source=gh-readme) |
-| Configuration   | [hi.events/docs/configuration](https://hi.events/docs/configuration?utm_source=gh-readme)     |
-| API Reference   | [hi.events/docs/api](https://hi.events/docs/api?utm_source=gh-readme)                         |
-| Webhooks        | [hi.events/docs/webhooks](https://hi.events/docs/webhooks?utm_source=gh-readme)               |
-
-<br>
-
 ## Contributing
 
 We welcome contributions. See the [contributing guide](CONTRIBUTING.md) for details.
