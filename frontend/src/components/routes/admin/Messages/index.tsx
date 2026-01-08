@@ -9,6 +9,7 @@ import {useDisclosure} from "@mantine/hooks";
 import {AdminMessage} from "../../../../api/admin.client";
 import {showSuccess} from "../../../../utilites/notifications";
 import {IdParam} from "../../../../types";
+import tableStyles from "../../../../styles/admin-table.module.scss";
 
 const Messages = () => {
     const [page, setPage] = useState(1);
@@ -143,98 +144,104 @@ const Messages = () => {
                         <Skeleton height={400} radius="md" />
                     </Stack>
                 ) : totalMessages === 0 ? (
-                    <Text c="dimmed" ta="center" py="xl">{t`No messages found`}</Text>
+                    <div className={tableStyles.emptyState}>
+                        <Text c="dimmed" size="lg">{t`No messages found`}</Text>
+                    </div>
                 ) : (
-                    <Table striped highlightOnHover>
-                        <Table.Thead>
-                            <Table.Tr>
-                                <Table.Th>{t`Subject`}</Table.Th>
-                                <Table.Th>{t`Event`}</Table.Th>
-                                <Table.Th>{t`Account`}</Table.Th>
-                                <Table.Th>{t`Type`}</Table.Th>
-                                <Table.Th>{t`Recipients`}</Table.Th>
-                                <Table.Th>{t`Status`}</Table.Th>
-                                <Table.Th>{t`Sent By`}</Table.Th>
-                                <Table.Th>{t`Created`}</Table.Th>
-                                <Table.Th w={60}></Table.Th>
-                            </Table.Tr>
-                        </Table.Thead>
-                        <Table.Tbody>
-                            {messagesData?.data?.map((message) => (
-                                <Table.Tr key={message.id}>
-                                    <Table.Td>
-                                        <Group gap="xs">
-                                            <IconMail size={16} color="gray" />
-                                            <Text size="sm" fw={500} lineClamp={1} maw={200}>
-                                                {message.subject}
-                                            </Text>
-                                        </Group>
-                                    </Table.Td>
-                                    <Table.Td>
-                                        <Text size="sm" lineClamp={1} maw={150}>
-                                            {message.event_title}
-                                        </Text>
-                                    </Table.Td>
-                                    <Table.Td>
-                                        <Text size="sm" c="dimmed" lineClamp={1} maw={120}>
-                                            {message.account_name}
-                                        </Text>
-                                    </Table.Td>
-                                    <Table.Td>
-                                        <Badge variant="light" color="gray">
-                                            {getTypeLabel(message.type)}
-                                        </Badge>
-                                    </Table.Td>
-                                    <Table.Td>
-                                        <Group gap={4}>
-                                            <IconUsers size={14} color="gray" />
-                                            <Text size="sm" fw={500}>
-                                                {message.recipients_count}
-                                            </Text>
-                                        </Group>
-                                    </Table.Td>
-                                    <Table.Td>
-                                        <Badge color={getStatusColor(message.status)} variant="filled">
-                                            {message.status}
-                                        </Badge>
-                                    </Table.Td>
-                                    <Table.Td>
-                                        <Text size="sm" c="dimmed">
-                                            {message.sent_by || '-'}
-                                        </Text>
-                                    </Table.Td>
-                                    <Table.Td>
-                                        <Text size="sm">{relativeDate(message.created_at)}</Text>
-                                    </Table.Td>
-                                    <Table.Td>
-                                        <Group gap="xs">
-                                            <Tooltip label={t`View Message`}>
-                                                <ActionIcon
-                                                    variant="subtle"
-                                                    color="gray"
-                                                    onClick={() => handleViewMessage(message)}
-                                                >
-                                                    <IconEye size={16} />
-                                                </ActionIcon>
-                                            </Tooltip>
-                                            {message.status === 'PENDING_REVIEW' && (
-                                                <Tooltip label={t`Approve Message`}>
-                                                    <ActionIcon
-                                                        variant="subtle"
-                                                        color="green"
-                                                        onClick={() => handleApprove(message.id)}
-                                                        loading={approveMutation.isPending}
-                                                    >
-                                                        <IconCheck size={16} />
-                                                    </ActionIcon>
-                                                </Tooltip>
-                                            )}
-                                        </Group>
-                                    </Table.Td>
-                                </Table.Tr>
-                            ))}
-                        </Table.Tbody>
-                    </Table>
+                    <div className={tableStyles.tableWrapper}>
+                        <div className={tableStyles.tableScroll}>
+                            <Table className={tableStyles.table} highlightOnHover>
+                                <Table.Thead>
+                                    <Table.Tr>
+                                        <Table.Th>{t`Subject`}</Table.Th>
+                                        <Table.Th>{t`Event`}</Table.Th>
+                                        <Table.Th>{t`Account`}</Table.Th>
+                                        <Table.Th>{t`Type`}</Table.Th>
+                                        <Table.Th>{t`Recipients`}</Table.Th>
+                                        <Table.Th>{t`Status`}</Table.Th>
+                                        <Table.Th>{t`Sent By`}</Table.Th>
+                                        <Table.Th>{t`Created`}</Table.Th>
+                                        <Table.Th style={{width: 60}}></Table.Th>
+                                    </Table.Tr>
+                                </Table.Thead>
+                                <Table.Tbody>
+                                    {messagesData?.data?.map((message) => (
+                                        <Table.Tr key={message.id}>
+                                            <Table.Td>
+                                                <Group gap="xs">
+                                                    <IconMail size={16} color="gray" />
+                                                    <Text size="sm" fw={500} lineClamp={1} maw={200}>
+                                                        {message.subject}
+                                                    </Text>
+                                                </Group>
+                                            </Table.Td>
+                                            <Table.Td>
+                                                <Text size="sm" lineClamp={1} maw={150}>
+                                                    {message.event_title}
+                                                </Text>
+                                            </Table.Td>
+                                            <Table.Td>
+                                                <Text size="sm" c="dimmed" lineClamp={1} maw={120}>
+                                                    {message.account_name}
+                                                </Text>
+                                            </Table.Td>
+                                            <Table.Td>
+                                                <Badge variant="light" color="gray">
+                                                    {getTypeLabel(message.type)}
+                                                </Badge>
+                                            </Table.Td>
+                                            <Table.Td>
+                                                <Group gap={4}>
+                                                    <IconUsers size={14} color="gray" />
+                                                    <Text size="sm" fw={500}>
+                                                        {message.recipients_count}
+                                                    </Text>
+                                                </Group>
+                                            </Table.Td>
+                                            <Table.Td>
+                                                <Badge color={getStatusColor(message.status)} variant="light">
+                                                    {message.status}
+                                                </Badge>
+                                            </Table.Td>
+                                            <Table.Td>
+                                                <Text size="sm" c="dimmed">
+                                                    {message.sent_by || '-'}
+                                                </Text>
+                                            </Table.Td>
+                                            <Table.Td>
+                                                <Text size="sm">{relativeDate(message.created_at)}</Text>
+                                            </Table.Td>
+                                            <Table.Td>
+                                                <Group gap="xs">
+                                                    <Tooltip label={t`View Message`}>
+                                                        <ActionIcon
+                                                            variant="subtle"
+                                                            color="gray"
+                                                            onClick={() => handleViewMessage(message)}
+                                                        >
+                                                            <IconEye size={16} />
+                                                        </ActionIcon>
+                                                    </Tooltip>
+                                                    {message.status === 'PENDING_REVIEW' && (
+                                                        <Tooltip label={t`Approve Message`}>
+                                                            <ActionIcon
+                                                                variant="subtle"
+                                                                color="green"
+                                                                onClick={() => handleApprove(message.id)}
+                                                                loading={approveMutation.isPending}
+                                                            >
+                                                                <IconCheck size={16} />
+                                                            </ActionIcon>
+                                                        </Tooltip>
+                                                    )}
+                                                </Group>
+                                            </Table.Td>
+                                        </Table.Tr>
+                                    ))}
+                                </Table.Tbody>
+                            </Table>
+                        </div>
+                    </div>
                 )}
 
                 {messagesData?.meta && messagesData.meta.last_page > 1 && (
@@ -278,7 +285,7 @@ const Messages = () => {
                             </div>
                             <div>
                                 <Text size="sm" fw={500} c="dimmed">{t`Status`}</Text>
-                                <Badge color={getStatusColor(selectedMessage.status)} variant="filled">
+                                <Badge color={getStatusColor(selectedMessage.status)} variant="light">
                                     {selectedMessage.status}
                                 </Badge>
                             </div>
@@ -311,7 +318,7 @@ const Messages = () => {
                                 <Text size="sm" fw={500} c="dimmed" mb="xs">{t`Eligibility Failures`}</Text>
                                 <Group gap="xs">
                                     {selectedMessage.eligibility_failures.map((failure) => (
-                                        <Badge key={failure} color="orange" variant="filled">
+                                        <Badge key={failure} color="orange" variant="light">
                                             {getEligibilityFailureLabel(failure)}
                                         </Badge>
                                     ))}
