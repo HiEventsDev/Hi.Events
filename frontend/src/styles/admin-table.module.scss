@@ -1,0 +1,112 @@
+@use "./mixins" as *;
+
+.tableWrapper {
+    background: var(--mantine-color-body);
+    border: 1px solid var(--mantine-color-gray-2);
+    border-radius: var(--mantine-radius-md);
+    overflow: hidden;
+
+    [data-mantine-color-scheme="dark"] & {
+        border-color: var(--mantine-color-dark-4);
+    }
+}
+
+.tableScroll {
+    overflow-x: auto;
+    @include scrollbar();
+    min-width: 0;
+}
+
+.table {
+    :global {
+        thead tr th {
+            padding: 12px 16px;
+            font-weight: 500;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: var(--mantine-color-gray-6);
+            background: var(--mantine-color-gray-0);
+            border-bottom: 1px solid var(--mantine-color-gray-2);
+            white-space: nowrap;
+
+            [data-mantine-color-scheme="dark"] & {
+                background: var(--mantine-color-dark-6);
+                border-bottom-color: var(--mantine-color-dark-4);
+                color: var(--mantine-color-dark-2);
+            }
+        }
+
+        tbody tr td {
+            padding: 12px 16px;
+            vertical-align: middle;
+            border-bottom: 1px solid var(--mantine-color-gray-1);
+
+            [data-mantine-color-scheme="dark"] & {
+                border-bottom-color: var(--mantine-color-dark-5);
+            }
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        tbody tr:hover td {
+            background: rgba(0, 0, 0, 0.02);
+
+            [data-mantine-color-scheme="dark"] & {
+                background: rgba(255, 255, 255, 0.02);
+            }
+        }
+    }
+}
+
+.sortButton {
+    font-weight: 500;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--mantine-color-gray-6);
+    padding: 0;
+    height: auto;
+
+    [data-mantine-color-scheme="dark"] & {
+        color: var(--mantine-color-dark-2);
+    }
+
+    &:hover {
+        background: transparent;
+        color: var(--mantine-color-gray-8);
+
+        [data-mantine-color-scheme="dark"] & {
+            color: var(--mantine-color-gray-4);
+        }
+    }
+}
+
+.emptyState {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 48px 24px;
+    text-align: center;
+    background: var(--mantine-color-body);
+    border: 1px solid var(--mantine-color-gray-2);
+    border-radius: var(--mantine-radius-md);
+
+    [data-mantine-color-scheme="dark"] & {
+        border-color: var(--mantine-color-dark-4);
+    }
+}
+
+@include respond-below('md') {
+    .table {
+        :global {
+            thead tr th,
+            tbody tr td {
+                padding: 10px 12px;
+            }
+        }
+    }
+}
