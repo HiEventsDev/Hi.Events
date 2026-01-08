@@ -2,6 +2,8 @@
 
 namespace HiEvents\Resources\Account;
 
+use HiEvents\DomainObjects\AccountMessagingTierDomainObject;
+use HiEvents\Http\Resources\Admin\AccountMessagingTierResource;
 use HiEvents\Models\Account;
 use HiEvents\Resources\BaseResource;
 use Illuminate\Http\Request;
@@ -31,9 +33,9 @@ class AdminAccountDetailResource extends BaseResource
                 'name' => $configuration->name,
                 'is_system_default' => $configuration->is_system_default,
                 'application_fees' => $configuration->application_fees ?? [
-                    'percentage' => 0,
-                    'fixed' => 0,
-                ],
+                        'percentage' => 0,
+                        'fixed' => 0,
+                    ],
             ] : null,
             'vat_setting' => $vatSetting ? [
                 'id' => $vatSetting->id,
@@ -54,6 +56,11 @@ class AdminAccountDetailResource extends BaseResource
                     'role' => $user->pivot->role,
                 ];
             }),
+            'messaging_tier' => $this->resource->messagingTier
+                ? new AccountMessagingTierResource(
+                    AccountMessagingTierDomainObject::hydrateFromModel($this->resource->messagingTier)
+                )
+                : null,
         ];
     }
 }

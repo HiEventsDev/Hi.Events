@@ -61,7 +61,10 @@ class EditTaxHandler
         );
 
         /** @var TaxAndFeesDomainObject $tax */
-        $tax = $this->taxRepository->findById($data->id);
+        $tax = $this->taxRepository->findFirstWhere([
+            'id' => $data->id,
+            'account_id' => $data->account_id,
+        ]);
 
         $this->logger->info('Updated tax', [
             'id' => $tax->getId(),

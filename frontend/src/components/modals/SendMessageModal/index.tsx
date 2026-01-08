@@ -4,7 +4,7 @@ import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {useGetOrder} from "../../../queries/useGetOrder.ts";
 import {Modal} from "../../common/Modal";
 import {Alert, Button, Checkbox, ComboboxItemGroup, Group, LoadingOverlay, Menu, MultiSelect, Select, TextInput} from "@mantine/core";
-import {IconAlertCircle, IconCheck, IconChevronDown, IconCopy, IconSend, IconTestPipe} from "@tabler/icons-react";
+import {IconAlertCircle, IconCheck, IconChevronDown, IconCopy, IconInfoCircle, IconSend, IconTestPipe} from "@tabler/icons-react";
 import {useGetMe} from "../../../queries/useGetMe.ts";
 import {useForm, UseFormReturnType} from "@mantine/form";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
@@ -13,9 +13,10 @@ import {t} from "@lingui/macro";
 import {Editor} from "../../common/Editor";
 import {useSendEventMessage} from "../../../mutations/useSendEventMessage.ts";
 import {ProductSelector} from "../../common/ProductSelector";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {useGetAccount} from "../../../queries/useGetAccount.ts";
 import {StripeConnectButton} from "../../common/StripeConnectButton";
+import {getConfig} from "../../../utilites/config";
 import classes from "./SendMessageModal.module.scss";
 
 interface EventMessageModalProps extends GenericModalProps {
@@ -87,6 +88,8 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
     const isAccountVerified = isAccountFetched && account?.is_account_email_confirmed;
     const accountRequiresManualVerification = isAccountFetched && account?.requires_manual_verification;
     const formIsDisabled = !isAccountVerified || accountRequiresManualVerification;
+    const supportEmail = getConfig('VITE_PLATFORM_SUPPORT_EMAIL');
+    const [tierLimitError, setTierLimitError] = useState<string | null>(null);
 
     const sendMessageMutation = useSendEventMessage();
 
@@ -110,6 +113,7 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
     });
 
     const handleSend = (values: any) => {
+        setTierLimitError(null);
         sendMessageMutation.mutate({
             eventId: eventId,
             messageData: values,
@@ -119,7 +123,14 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
                 form.reset();
                 onClose();
             },
-            onError: (error: any) => errorHandler(form, error)
+            onError: (error: any) => {
+                if (error?.response?.status === 429) {
+                    const message = error?.response?.data?.message || t`You have reached your messaging limit.`;
+                    setTierLimitError(message);
+                } else {
+                    errorHandler(form, error);
+                }
+            }
         });
     }
 
@@ -159,6 +170,35 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
                         <div className={classes.stripeConnectButton}>
                             <StripeConnectButton/>
                         </div>
+                    </Alert>
+                )}
+
+                {tierLimitError && (
+                    <Alert
+                        variant="light"
+                        color="red"
+                        icon={<IconAlertCircle size="1rem" />}
+                        mb="md"
+                    >
+                        {tierLimitError}
+                        {supportEmail && (
+                            <>
+                                {' '}{t`To increase your limits, contact us at`}{' '}
+                                <a href={`mailto:${supportEmail}`}>{supportEmail}</a>
+                            </>
+                        )}
+                    </Alert>
+                )}
+
+                {!formIsDisabled && !tierLimitError && supportEmail && (
+                    <Alert
+                        variant="light"
+                        color="blue"
+                        icon={<IconInfoCircle size="1rem" />}
+                        mb="md"
+                    >
+                        {t`Your account has messaging limits. To increase your limits, contact us at`}{' '}
+                        <a href={`mailto:${supportEmail}`}>{supportEmail}</a>
                     </Alert>
                 )}
 

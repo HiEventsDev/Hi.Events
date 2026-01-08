@@ -1,19 +1,22 @@
-import {ComboboxItem, Group, Select, Skeleton, Table as MantineTable} from '@mantine/core';
+import {Button, ComboboxItem, Group, Select, Skeleton, Table as MantineTable, Text} from '@mantine/core';
 import {t} from '@lingui/macro';
 import {DatePickerInput} from "@mantine/dates";
-import {IconArrowDown, IconArrowsSort, IconArrowUp, IconCalendar} from "@tabler/icons-react";
+import {IconArrowDown, IconArrowsSort, IconArrowUp, IconCalendar, IconDownload} from "@tabler/icons-react";
 import {useMemo, useState} from "react";
 import {PageTitle} from "../PageTitle";
-import {DownloadCsvButton} from "../DownloadCsvButton";
 import {Table, TableHead} from "../Table";
+import {Pagination} from "../Pagination";
 import '@mantine/dates/styles.css';
 import {useGetOrganizerReport} from "../../../queries/useGetOrganizerReport.ts";
 import {useParams} from "react-router";
 import {Organizer} from "../../../types.ts";
+import {organizerClient} from "../../../api/organizer.client.ts";
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import classes from './OrganizerReportTable.module.scss';
+import {downloadBinary} from "../../../utilites/download.ts";
+import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -39,10 +42,10 @@ interface OrganizerReportProps<T> {
     defaultEndDate?: Date;
     onDateRangeChange?: (range: [Date | null, Date | null]) => void;
     enableDownload?: boolean;
-    downloadFileName?: string;
     showCustomDatePicker?: boolean;
     showCurrencyFilter?: boolean;
     availableCurrencies?: string[];
+    eventId?: number | null;
 }
 
 const TIME_PERIODS = [
@@ -58,6 +61,8 @@ const TIME_PERIODS = [
     {value: 'custom', label: t`Custom Range`}
 ];
 
+const ROWS_PER_PAGE = 1000;
+
 const OrganizerReportTable = <T extends Record<string, any>>({
                                                                  title,
                                                                  columns,
@@ -66,25 +71,38 @@ const OrganizerReportTable = <T extends Record<string, any>>({
                                                                  defaultEndDate = new Date(),
                                                                  onDateRangeChange,
                                                                  enableDownload = true,
-                                                                 downloadFileName = 'report.csv',
-                                                                 showCustomDatePicker = false,
                                                                  organizer,
                                                                  showCurrencyFilter = true,
                                                                  availableCurrencies = [],
+                                                                 eventId,
                                                              }: OrganizerReportProps<T>) => {
-    const timezone = organizer.timezone || 'UTC';
+    const tz = organizer.timezone || 'UTC';
     const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
-        dayjs(defaultStartDate).tz(timezone).toDate(),
-        dayjs(defaultEndDate).tz(timezone).toDate()
+        dayjs(defaultStartDate).tz(tz).toDate(),
+        dayjs(defaultEndDate).tz(tz).toDate()
     ]);
     const [selectedPeriod, setSelectedPeriod] = useState('90d');
-    const [showDatePickerInput, setShowDatePickerInput] = useState(showCustomDatePicker);
+    const [showDatePickerInput, setShowDatePickerInput] = useState(false);
     const [sortField, setSortField] = useState<keyof T | null>(null);
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | null>(null);
     const [selectedCurrency, setSelectedCurrency] = useState<string | null>(null);
+    const [currentPage, setCurrentPage] = useState(1);
     const {reportType, organizerId} = useParams();
-    const reportQuery = useGetOrganizerReport(organizerId, reportType || '', dateRange[0], dateRange[1], selectedCurrency);
-    const data = (reportQuery.data || []) as T[];
+
+    const reportQuery = useGetOrganizerReport(
+        organizerId,
+        reportType || '',
+        dateRange[0],
+        dateRange[1],
+        selectedCurrency,
+        eventId,
+        currentPage,
+        ROWS_PER_PAGE
+    );
+
+    const reportData = reportQuery.data;
+    const data = (reportData?.data || []) as T[];
+    const pagination = reportData?.pagination;
 
     const calculateDateRange = (period: string): [Date | null, Date | null] => {
         if (period === 'custom') {
@@ -93,8 +111,8 @@ const OrganizerReportTable = <T extends Record<string, any>>({
         }
         setShowDatePickerInput(false);
 
-        let end = dayjs().tz(timezone).endOf('day');
-        let start = dayjs().tz(timezone);
+        let end = dayjs().tz(tz).endOf('day');
+        let start = dayjs().tz(tz);
 
         switch (period) {
             case '24h':
@@ -138,13 +156,14 @@ const OrganizerReportTable = <T extends Record<string, any>>({
         setSelectedPeriod(value);
         const newRange = calculateDateRange(value);
         setDateRange(newRange);
+        setCurrentPage(1);
         onDateRangeChange?.(newRange);
     };
 
     const handleDateRangeChange = (newRange: [Date | null, Date | null]) => {
         const [start, end] = newRange;
-        const tzStart = start ? dayjs(start).tz(timezone) : null;
-        const tzEnd = end ? dayjs(end).tz(timezone) : null;
+        const tzStart = start ? dayjs(start).tz(tz) : null;
+        const tzEnd = end ? dayjs(end).tz(tz) : null;
 
         const tzRange: [Date | null, Date | null] = [
             tzStart?.toDate() || null,
@@ -152,11 +171,42 @@ const OrganizerReportTable = <T extends Record<string, any>>({
         ];
 
         setDateRange(tzRange);
+        setCurrentPage(1);
         onDateRangeChange?.(tzRange);
     };
 
     const handleCurrencyChange = (value: string | null) => {
         setSelectedCurrency(value === '' ? null : value);
+        setCurrentPage(1);
+    };
+
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+    };
+
+    const [isExporting, setIsExporting] = useState(false);
+
+    const handleExport = async () => {
+        if (!organizerId || !reportType) return;
+
+        setIsExporting(true);
+        try {
+            const blob = await organizerClient.exportOrganizerReport(
+                organizerId,
+                reportType,
+                dateRange[0]?.toISOString(),
+                dateRange[1]?.toISOString(),
+                selectedCurrency,
+                eventId
+            );
+            const filename = `${reportType}_${dayjs().format('YYYY-MM-DD_HH-mm-ss')}.csv`;
+            downloadBinary(blob, filename);
+            showSuccess(t`Export successful`);
+        } catch {
+            showError(t`Failed to export report. Please try again.`);
+        } finally {
+            setIsExporting(false);
+        }
     };
 
     const handleSort = (field: keyof T) => {
@@ -202,14 +252,6 @@ const OrganizerReportTable = <T extends Record<string, any>>({
         });
     }, [data, sortField, sortDirection]);
 
-    const csvHeaders = columns.map(col => col.label);
-    const csvData = sortedData.map(row =>
-        columns.map(col => {
-            const value = row[col.key];
-            return typeof value === 'number' ? value.toString() : value;
-        })
-    );
-
     const emptyStateMessage = () => {
         const wrapper = (message: React.ReactNode) => (
             <MantineTable.Tr>
@@ -250,6 +292,9 @@ const OrganizerReportTable = <T extends Record<string, any>>({
         ...availableCurrencies.map(curr => ({value: curr, label: curr}))
     ];
 
+    const totalPages = pagination?.last_page || 1;
+    const totalRows = pagination?.total || 0;
+
     return (
         <>
             <Group justify="space-between" mb="md">
@@ -286,21 +331,32 @@ const OrganizerReportTable = <T extends Record<string, any>>({
                             placeholder="Pick dates range"
                             value={dateRange}
                             onChange={handleDateRangeChange}
-                            minDate={dayjs().subtract(1, 'year').tz(timezone).toDate()}
-                            maxDate={dayjs().tz(timezone).toDate()}
+                            minDate={dayjs().subtract(1, 'year').tz(tz).toDate()}
+                            maxDate={dayjs().tz(tz).toDate()}
                             className={classes.datePicker}
                         />
                     )}
                     {enableDownload && (
-                        <DownloadCsvButton
-                            headers={csvHeaders}
-                            data={csvData}
-                            filename={downloadFileName}
+                        <Button
+                            leftSection={<IconDownload size={16}/>}
+                            variant="light"
+                            onClick={handleExport}
+                            loading={isExporting}
                             className={classes.downloadButton}
-                        />
+                        >
+                            {t`Export CSV`}
+                        </Button>
                     )}
                 </Group>
             </Group>
+
+            {totalRows > 0 && (
+                <Text size="sm" c="dimmed" mb="sm">
+                    {t`Showing ${sortedData.length} of ${totalRows} records`}
+                    {totalPages > 1 && ` (${t`Page`} ${currentPage} ${t`of`} ${totalPages})`}
+                </Text>
+            )}
+
             <Table>
                 <TableHead>
                     <MantineTable.Tr>
@@ -311,7 +367,7 @@ const OrganizerReportTable = <T extends Record<string, any>>({
                                 style={{cursor: column.sortable ? 'pointer' : 'default', minWidth: '180px'}}
                             >
                                 <Group gap="xs" wrap={'nowrap'}>
-                                    {t`${column.label}`}
+                                    {column.label}
                                     {column.sortable && getSortIcon(column.key)}
                                 </Group>
                             </MantineTable.Th>
@@ -334,6 +390,14 @@ const OrganizerReportTable = <T extends Record<string, any>>({
                     ))}
                 </MantineTable.Tbody>
             </Table>
+
+            {totalPages > 1 && (
+                <Pagination
+                    value={currentPage}
+                    onChange={handlePageChange}
+                    total={totalPages}
+                />
+            )}
         </>
     );
 };
