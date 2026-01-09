@@ -286,4 +286,40 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
             && $this->getPaymentProvider() === PaymentProviders::STRIPE->name
             && $this->getRefundStatus() !== OrderRefundStatus::REFUNDED->name;
     }
+
+    public function getAddressLine1(): ?string
+    {
+        $address = $this->getAddress();
+        return $address['address_line_1'] ?? null;
+    }
+
+    public function getAddressLine2(): ?string
+    {
+        $address = $this->getAddress();
+        return $address['address_line_2'] ?? null;
+    }
+
+    public function getCity(): ?string
+    {
+        $address = $this->getAddress();
+        return $address['city'] ?? null;
+    }
+
+    public function getState(): ?string
+    {
+        $address = $this->getAddress();
+        return $address['state_or_region'] ?? $address['state'] ?? null;
+    }
+
+    public function getPostalCode(): ?string
+    {
+        $address = $this->getAddress();
+        return $address['zip_or_postal_code'] ?? $address['postal_code'] ?? null;
+    }
+
+    public function getCountryCode(): ?string
+    {
+        $address = $this->getAddress();
+        return $address['country'] ?? null;
+    }
 }
