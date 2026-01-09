@@ -17,6 +17,7 @@ class CreatePaymentIntentRequestDTO extends BaseDTO
         public readonly OrderDomainObject              $order,
         public readonly ?string                        $stripeAccountId = null,
         public readonly ?AccountVatSettingDomainObject $vatSettings = null,
+        public readonly ?string                        $description = null,
     )
     {
     }

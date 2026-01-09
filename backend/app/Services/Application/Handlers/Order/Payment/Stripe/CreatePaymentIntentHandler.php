@@ -110,6 +110,17 @@ readonly class CreatePaymentIntentHandler
             );
         }
 
+        $description = sprintf(
+            'Event tickets - Order %s - %s ticket(s) - %s',
+            $orderShortId,
+            count($order->getOrderItems()),
+            $account->getName() ?? 'Event Registration'
+        );
+
+        if (strlen($description) > 1000) {
+            $description = substr($description, 0, 997) . '...';
+        }
+
         $paymentIntent = $this->stripePaymentService->createPaymentIntentWithClient(
             $stripeClient,
             CreatePaymentIntentRequestDTO::fromArray([
@@ -119,6 +130,7 @@ readonly class CreatePaymentIntentHandler
                 'order' => $order,
                 'stripeAccountId' => $stripeAccountId,
                 'vatSettings' => $account->getAccountVatSetting(),
+                'description' => $description,
             ])
         );
 
