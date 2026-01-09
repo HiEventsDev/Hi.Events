@@ -155,11 +155,25 @@ class StripePaymentIntentCreationService
         ]);
 
         if ($customer === null) {
+            $order = $paymentIntentDTO->order;
+
+            $customerData = [
+                'email' => $order->getEmail(),
+                'name' => $order->getFullName(),
+            ];
+            
+            if ($order->getAddressLine1() && $order->getCountryCode()) {
+                $customerData['address'] = [
+                    'line1' => $order->getAddressLine1(),
+                    'line2' => $order->getAddressLine2() ?? '',
+                    'city' => $order->getCity() ?? '',
+                    'state' => $order->getState() ?? '',
+                    'postal_code' => $order->getPostalCode() ?? '',
+                    'country' => $order->getCountryCode(),
+                ];
+            }
             $stripeCustomer = $stripeClient->customers->create(
-                params: [
-                    'email' => $paymentIntentDTO->order->getEmail(),
-                    'name' => $paymentIntentDTO->order->getFullName(),
-                ],
+                params: $customerData,
                 opts: $this->getStripeAccountData($paymentIntentDTO)
             );
 
