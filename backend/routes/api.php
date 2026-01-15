@@ -86,6 +86,8 @@ use HiEvents\Http\Actions\Orders\GetOrderAction;
 use HiEvents\Http\Actions\Orders\GetOrdersAction;
 use HiEvents\Http\Actions\Orders\MarkOrderAsPaidAction;
 use HiEvents\Http\Actions\Orders\MessageOrderAction;
+use HiEvents\Http\Actions\Orders\Payment\Razorpay\CreateRazorpayOrderActionPublic;
+use HiEvents\Http\Actions\Orders\Payment\Razorpay\VerifyRazorpayPaymentActionPublic;
 use HiEvents\Http\Actions\Orders\Payment\RefundOrderAction;
 use HiEvents\Http\Actions\Orders\Payment\Stripe\CreatePaymentIntentActionPublic;
 use HiEvents\Http\Actions\Orders\Payment\Stripe\GetPaymentIntentActionPublic;
@@ -478,6 +480,10 @@ $router->prefix('/public')->group(
         // Stripe payment gateway
         $router->post('/events/{event_id}/order/{order_short_id}/stripe/payment_intent', CreatePaymentIntentActionPublic::class);
         $router->get('/events/{event_id}/order/{order_short_id}/stripe/payment_intent', GetPaymentIntentActionPublic::class);
+        
+        // Razorpay payment gateway
+        $router->post('/events/{event_id}/order/{order_short_id}/razorpay/order', CreateRazorpayOrderActionPublic::class);
+        $router->post('/events/{event_id}/order/{order_short_id}/razorpay/verify', VerifyRazorpayPaymentActionPublic::class);
 
         // Questions
         $router->get('/events/{event_id}/questions', GetQuestionsPublicAction::class);

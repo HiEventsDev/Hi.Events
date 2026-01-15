@@ -154,6 +154,32 @@ export const orderClientPublic = {
         return response.data;
     },
 
+    createRazorpayOrder: async (eventId: number, orderShortId: string) => {
+        const response = await publicApi.post<{
+            razorpay_order_id: string,
+            key_id: string,
+            amount: number,
+            currency: string,
+        }>(`events/${eventId}/order/${orderShortId}/razorpay/order`);
+        return response.data;
+    },
+
+    verifyRazorpayPayment: async (
+        eventId: number, 
+        orderShortId: string, 
+        payload: {
+            razorpay_payment_id: string,
+            razorpay_order_id: string,
+            razorpay_signature: string,
+        }
+    ) => {
+        const response = await publicApi.post<GenericDataResponse<Order>>(
+            `events/${eventId}/order/${orderShortId}/razorpay/verify`,
+            payload
+        );
+        return response.data;
+    },
+
     finaliseOrder: async (
         eventId: number,
         orderShortId: string,

@@ -24,6 +24,8 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
     public ?Collection $attendees = null;
 
     public ?StripePaymentDomainObject $stripePayment = null;
+    
+    public ?RazorpayOrderDomainObject $razorpayOrder = null;
 
     /** @var Collection<QuestionAndAnswerViewDomainObject>|null */
     public ?Collection $questionAndAnswerViews = null;
@@ -180,6 +182,12 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
         $this->stripePayment = $stripePayment;
         return $this;
     }
+    
+    public function setRazorpayOrder(?RazorpayOrderDomainObject $razorpayOrder): OrderDomainObject
+    {
+        $this->razorpayOrder = $razorpayOrder;
+        return $this;
+    }
 
     public function isPartiallyRefunded(): bool
     {
@@ -219,6 +227,11 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
     public function getStripePayment(): ?StripePaymentDomainObject
     {
         return $this->stripePayment;
+    }
+    
+    public function getRazorpayOrder(): ?RazorpayOrderDomainObject
+    {
+        return $this->razorpayOrder;
     }
 
     public function isFreeOrder(): bool
@@ -285,5 +298,15 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
             && $this->getStatus() !== OrderPaymentStatus::AWAITING_OFFLINE_PAYMENT->name
             && $this->getPaymentProvider() === PaymentProviders::STRIPE->name
             && $this->getRefundStatus() !== OrderRefundStatus::REFUNDED->name;
+    }
+    
+    public function isRazorpayOrder(): bool
+    {
+        return $this->getPaymentProvider() === PaymentProviders::RAZORPAY->name;
+    }
+    
+    public function hasRazorpayOrder(): bool
+    {
+        return $this->razorpayOrder !== null;
     }
 }
