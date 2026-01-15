@@ -12,6 +12,9 @@ import {useGetOrderPublic} from "../../../../../../queries/useGetOrderPublic.ts"
 import {eventCheckoutPath} from "../../../../../../utilites/urlHelper.ts";
 import { useMutation } from "@tanstack/react-query";
 import { orderClientPublic } from "../../../../../../api/order.client.ts";
+import { Badge, Card, Divider, Group, Stack, Text, Title } from "@mantine/core";
+import { Image } from "@mantine/core";
+import { AxiosError } from "axios";
 
 declare global {
     interface Window {
@@ -143,11 +146,13 @@ export const RazorpayPaymentMethod = ({enabled, setSubmitHandler}: RazorpayPayme
     }
 
     if (razorpayOrderError && event) {
+        const errorMessage = (razorpayOrderError as AxiosError<any>)?.response?.data?.message ?? t`Something went wrong`;
+
         return (
             <CheckoutContent>
                 <HomepageInfoMessage
                     status="error"
-                    message={razorpayOrderError.response?.data?.message || t`Something went wrong`}
+                    message={ errorMessage || t`Something went wrong`}
                     subtitle={t`Please restart the checkout process.`}
                     link={eventHomepagePath(event)}
                     linkText={t`Return to Event`}
@@ -161,48 +166,76 @@ export const RazorpayPaymentMethod = ({enabled, setSubmitHandler}: RazorpayPayme
     }
 
     return (
-        <div>
-            <h2>{t`Payment`}</h2>
-            <p className="text-gray-600 mb-6">
-                {t`You will be redirected to Razorpay's secure payment page to complete your transaction.`}
-            </p>
-            
-            {isLoading && <LoadingMask/>}
-            
-            {/* Payment method details display */}
-            <div className="p-4 border rounded-lg bg-gray-50">
-                <div className="flex items-center gap-3 mb-2">
-                    <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                        <svg className="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                        </svg>
-                    </div>
-                    <div>
-                        <h3 className="font-medium">{t`Secure Payment`}</h3>
-                        <p className="text-sm text-gray-600">
-                            {t`Powered by Razorpay`}
-                        </p>
-                    </div>
-                </div>
-                
-                {razorpayData && (
-                    <div className="mt-4 text-sm text-gray-600">
-                        <div className="flex justify-between">
-                            <span>{t`Order ID:`}</span>
-                            <span className="font-mono">{order?.short_id}</span>
+    <>
+        <Stack gap="xs" mb="lg">
+            <Title order={3}>{t`Payment`}</Title>
+            <Text size="sm" c="dimmed">
+                {t`You will be redirected to Razorpay to securely complete your payment.`}
+            </Text>
+        </Stack>
+
+        {isLoading && <LoadingMask />}
+
+        {/* Payment Method Card */}
+        <Card withBorder radius="md" padding="lg">
+            <Stack gap="md">
+                {/* Method Header */}
+                <Group justify="space-between">
+                    <Group gap="sm">
+                        <Image
+                            src="https://razorpay.com/favicon.png"
+                            alt="Razorpay"
+                            w={32}
+                            h={32}
+                            fit="contain"
+                        />
+                        <div>
+                            <Text fw={500}>Razorpay</Text>
+                            <Text size="xs" c="dimmed">
+                                Cards • UPI • NetBanking • Wallets
+                            </Text>
                         </div>
-                        <div className="flex justify-between mt-1">
-                            <span>{t`Amount:`}</span>
-                            <span className="font-medium">
+                    </Group>
+
+                    <Badge color="green" variant="light">
+                        {t`Secure`}
+                    </Badge>
+                </Group>
+
+                <Divider />
+
+                {/* Order Summary */}
+                {razorpayData && (
+                    <Stack gap={6}>
+                        <Group justify="space-between">
+                            <Text size="sm" c="dimmed">
+                                {t`Order ID`}
+                            </Text>
+                            <Text size="sm" ff="monospace">
+                                {order?.short_id}
+                            </Text>
+                        </Group>
+
+                        <Group justify="space-between">
+                            <Text size="sm" c="dimmed">
+                                {t`Amount`}
+                            </Text>
+                            <Text size="sm" fw={500}>
                                 {new Intl.NumberFormat('en-IN', {
                                     style: 'currency',
-                                    currency: razorpayData.currency
+                                    currency: razorpayData.currency,
                                 }).format(razorpayData.amount / 100)}
-                            </span>
-                        </div>
-                    </div>
+                            </Text>
+                        </Group>
+                    </Stack>
                 )}
-            </div>
-        </div>
-    );
+            </Stack>
+        </Card>
+
+        {/* Footer Hint */}
+        <Text size="xs" c="dimmed" ta="center" mt="md">
+            {t`Payments are processed securely by Razorpay using industry-standard encryption.`}
+        </Text>
+    </>
+);
 };
