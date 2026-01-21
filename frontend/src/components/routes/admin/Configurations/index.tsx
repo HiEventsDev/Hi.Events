@@ -1,4 +1,4 @@
-import {Container, Title, Stack, Card, Text, Group, Button, Badge, ActionIcon, Alert, NumberInput, TextInput, Skeleton} from "@mantine/core";
+import {Container, Title, Stack, Card, Text, Group, Button, Badge, ActionIcon, Alert, NumberInput, TextInput, Skeleton, Switch} from "@mantine/core";
 import {t} from "@lingui/macro";
 import {useGetAllConfigurations} from "../../../../queries/useGetAllConfigurations";
 import {useCreateConfiguration} from "../../../../mutations/useCreateConfiguration";
@@ -16,6 +16,7 @@ interface ConfigurationFormValues {
     name: string;
     fixed_fee: number;
     percentage_fee: number;
+    bypass_application_fees: boolean;
 }
 
 const Configurations = () => {
@@ -79,6 +80,9 @@ const Configurations = () => {
                                             <Text fw={600}>{config.name}</Text>
                                             {config.is_system_default && (
                                                 <Badge color="blue" size="sm">{t`System Default`}</Badge>
+                                            )}
+                                            {config.bypass_application_fees && (
+                                                <Badge color="orange" size="sm">{t`Fees Bypassed`}</Badge>
                                             )}
                                         </Group>
                                         <Group gap="xl">
@@ -150,6 +154,7 @@ const ConfigurationModal = ({configuration, onClose}: ConfigurationModalProps) =
             name: configuration?.name || '',
             fixed_fee: configuration?.application_fees?.fixed || 0,
             percentage_fee: configuration?.application_fees?.percentage || 0,
+            bypass_application_fees: configuration?.bypass_application_fees || false,
         },
         validate: {
             name: (value) => {
@@ -172,6 +177,7 @@ const ConfigurationModal = ({configuration, onClose}: ConfigurationModalProps) =
                 fixed: values.fixed_fee,
                 percentage: values.percentage_fee,
             },
+            bypass_application_fees: values.bypass_application_fees,
         };
 
         const mutation = isEditing ? updateMutation : createMutation;
@@ -230,6 +236,12 @@ const ConfigurationModal = ({configuration, onClose}: ConfigurationModalProps) =
                         max={100}
                         suffix="%"
                         {...form.getInputProps('percentage_fee')}
+                    />
+
+                    <Switch
+                        label={t`Bypass Application Fees`}
+                        description={t`When enabled, no application fees will be charged on Stripe Connect transactions. Use this for countries where application fees are not supported.`}
+                        {...form.getInputProps('bypass_application_fees', { type: 'checkbox' })}
                     />
 
                     <Button
