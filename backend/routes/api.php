@@ -161,6 +161,7 @@ use HiEvents\Http\Actions\Users\ResendEmailConfirmationAction;
 use HiEvents\Http\Actions\Users\ResendInvitationAction;
 use HiEvents\Http\Actions\Users\UpdateMeAction;
 use HiEvents\Http\Actions\Users\UpdateUserAction;
+use HiEvents\Http\Actions\Users\DeleteAccountAction;
 use HiEvents\Http\Actions\Admin\Accounts\AssignConfigurationAction;
 use HiEvents\Http\Actions\Admin\Accounts\GetAccountAction as GetAdminAccountAction;
 use HiEvents\Http\Actions\Admin\Accounts\GetAllAccountsAction as GetAllAdminAccountsAction;
@@ -230,6 +231,10 @@ $router->middleware(['auth:api'])->group(
         // Users
         $router->get('/users/me', GetMeAction::class);
         $router->put('/users/me', UpdateMeAction::class);
+
+        // Account deletion (current user)
+        $router->delete('/settings/account', DeleteAccountAction::class)
+            ->middleware(['throttle:delete-account', 'csrf.origin']);
         $router->post('/users', CreateUserAction::class);
         $router->get('/users', GetUsersAction::class);
         $router->get('/users/{user_id}', GetUserAction::class);

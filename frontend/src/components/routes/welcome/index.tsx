@@ -2,24 +2,17 @@ import {useGetMe} from "../../../queries/useGetMe.ts";
 import {useGetOrganizers} from "../../../queries/useGetOrganizers.ts";
 import {t, Trans} from "@lingui/macro";
 import {Card} from "../../common/Card";
-import {Button, Center, Container, PinInput, Select, Stack, Text, TextInput} from "@mantine/core";
+import {Button, Center, Container, PinInput, Stack, Text} from "@mantine/core";
 import classes from "./Welcome.module.scss";
 import {useForm} from "@mantine/form";
 import {useDebouncedValue, useMediaQuery} from "@mantine/hooks";
-import {Event} from "../../../types.ts";
-import {useCreateEvent} from "../../../mutations/useCreateEvent.ts";
-import {NavLink, useNavigate} from "react-router";
+import {useNavigate} from "react-router";
 import {useEffect, useRef, useState} from "react";
-import {useGetEvents} from "../../../queries/useGetEvents.ts";
-import {LoadingContainer} from "../../common/LoadingContainer";
 import {OrganizerCreateForm} from "../../forms/OrganizerForm";
 import {useConfirmEmailWithCode} from "../../../mutations/useConfirmEmailWithCode.ts";
 import {useResendEmailConfirmation} from "../../../mutations/useResendEmailConfirmation.ts";
-import {IconClock, IconMailCheck, IconSparkles} from "@tabler/icons-react";
+import {IconClock, IconMailCheck} from "@tabler/icons-react";
 import {showError, showSuccess} from "../../../utilites/notifications.tsx";
-import {DateTimePicker} from "@mantine/dates";
-import dayjs from "dayjs";
-import {EventCategories} from "../../../constants/eventCategories.ts";
 import {getConfig} from "../../../utilites/config.ts";
 import {trackEvent, AnalyticsEvents} from "../../../utilites/analytics.ts";
 
@@ -217,217 +210,16 @@ const ConfirmVerificationPin = ({progressInfo}: {
     );
 }
 
-export const CreateEvent = ({progressInfo}: {
-    progressInfo?: { currentStep: number, totalSteps: number, progressPercentage: number }
-}) => {
-    const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-    const form = useForm({
-        initialValues: {
-            title: '',
-            start_date: dayjs().add(1, 'day').hour(19).minute(0).second(0).toDate(),
-            end_date: dayjs().add(1, 'day').hour(21).minute(0).second(0).toDate(),
-            category: '',
-        },
-        validate: {
-            title: (value) => !value ? t`Event name is required` : null,
-            start_date: (value) => !value ? t`Start date is required` : null,
-            end_date: (value, values) => {
-                if (value && values.start_date && dayjs(value).isBefore(dayjs(values.start_date))) {
-                    return t`End date must be after start date`;
-                }
-            },
-        }
-    });
-    const eventMutation = useCreateEvent();
-    const navigate = useNavigate();
-    const {data: organizers, isFetched: organizersFetched} = useGetOrganizers();
-    const {data: events, isFetched: eventsFetched} = useGetEvents({
-        pageNumber: 1,
-    });
-
-    const handleSubmit = (values: Partial<Event>) => {
-        const submitData = {
-            ...values,
-            start_date: values.start_date ? dayjs(values.start_date).toISOString() : undefined,
-            end_date: values.end_date ? dayjs(values.end_date).toISOString() : undefined,
-        };
-
-        eventMutation.mutate({
-            eventData: submitData,
-        }, {
-            onSuccess: (values) => {
-                trackEvent(AnalyticsEvents.FIRST_EVENT_CREATED);
-                navigate(`/manage/event/${values.data.id}/getting-started?new_event=true`)
-            }
-        });
-    }
-
-    useEffect(() => {
-        if (organizersFetched) {
-            const organizerName = organizers?.data?.[0].name
-            form.setFieldValue('organizer_id', organizers?.data?.[0].id);
-            form.setFieldValue('title', t`${organizerName}'s first event`);
-        }
-    }, [organizersFetched]);
-
-    const handleCategorySelect = (categoryId: string) => {
-        setSelectedCategory(categoryId);
-        form.setFieldValue('category', categoryId);
-
-        // Add haptic feedback on mobile
-        if ('vibrate' in navigator) {
-            navigator.vibrate(50);
-        }
-    };
-
-    useEffect(() => {
-        if (eventsFetched && events && events.data.length > 0) {
-            navigate(`/manage/events`);
-        }
-    }, [eventsFetched]);
-
-    return (
-        <LoadingContainer>
-            <div className={classes.stepContainer}>
-                <div className={classes.stepHeader}>
-                    {progressInfo && (
-                        <div className={classes.progressContainer}>
-                            <div className={classes.progressBar}>
-                                <div className={classes.progressFill}
-                                     style={{width: `${progressInfo.progressPercentage}%`}}></div>
-                            </div>
-                        </div>
-                    )}
-                    <h2 className={classes.stepTitle}>
-                        {t`Create your first event`}
-                    </h2>
-                </div>
-
-                <div className={classes.stepContent}>
-                    <form onSubmit={form.onSubmit(handleSubmit)}>
-                        <Stack gap={24}>
-                            {/* Event Category */}
-                            <div>
-                                <Text size="lg" fw={600} mb="lg">{t`What type of event?`}</Text>
-
-                                {/* Desktop Grid */}
-                                <div className={classes.categoryGrid}>
-                                    {EventCategories.map((category) => (
-                                        <button
-                                            key={category.id}
-                                            type="button"
-                                            className={`${classes.categoryCard} ${
-                                                selectedCategory === category.id ? classes.categoryCardSelected : ''
-                                            }`}
-                                            onClick={() => handleCategorySelect(category.id)}
-                                            disabled={eventMutation.isPending}
-                                        >
-                                            <div className={classes.categoryEmoji}>{category.emoji}</div>
-                                            <div className={classes.categoryText}>{category.name}</div>
-                                        </button>
-                                    ))}
-                                </div>
-
-                                {/* Mobile Dropdown */}
-                                <div className={classes.categoryDropdown}>
-                                    <Select
-                                        value={selectedCategory}
-                                        onChange={(value) => handleCategorySelect(value || '')}
-                                        data={EventCategories.map((category) => ({
-                                            value: category.id,
-                                            label: `${category.emoji} ${category.name}`,
-                                        }))}
-                                        placeholder={t`Select event category`}
-                                        size="lg"
-                                        required
-                                        disabled={eventMutation.isPending}
-                                    />
-                                </div>
-                            </div>
-
-                            {/* Event Name */}
-                            <div>
-                                <TextInput
-                                    {...form.getInputProps('title')}
-                                    label={t`Event name`}
-                                    placeholder={t`Summer Music Festival 2025`}
-                                    size="lg"
-                                    required
-                                    disabled={eventMutation.isPending}
-                                />
-                            </div>
-
-                            {/* Date & Time */}
-                            <div className={classes.dateTimeGrid}>
-                                <DateTimePicker
-                                    {...form.getInputProps('start_date')}
-                                    label={t`Start date & time`}
-                                    placeholder={t`Select start time`}
-                                    valueFormat="MMM DD, h:mm A"
-                                    size="lg"
-                                    required
-                                    dropdownType="modal"
-                                    timePickerProps={{
-                                        format: '12h',
-                                        withDropdown: true,
-                                    }}
-                                    onChange={(value) => {
-                                        form.setFieldValue('start_date', value);
-                                        if (form.values.end_date && value && dayjs(form.values.end_date).isBefore(dayjs(value))) {
-                                            form.setFieldValue('end_date', dayjs(value).add(2, 'hours').toDate());
-                                        }
-                                    }}
-                                    disabled={eventMutation.isPending}
-                                />
-
-                                <DateTimePicker
-                                    {...form.getInputProps('end_date')}
-                                    label={t`End time (optional)`}
-                                    placeholder={t`Select end time`}
-                                    valueFormat="MMM DD, h:mm A"
-                                    size="lg"
-                                    dropdownType="modal"
-                                    timePickerProps={{
-                                        format: '12h',
-                                        withDropdown: true,
-                                    }}
-                                    minDate={form.values.start_date ?? undefined}
-                                    date={form.values.start_date ?? undefined}
-                                    disabled={eventMutation.isPending}
-                                />
-                            </div>
-                        </Stack>
-                        <Button
-                            type={'submit'}
-                            fullWidth
-                            size="lg"
-                            loading={eventMutation.isPending}
-                            leftSection={eventMutation.isPending ? null : <IconSparkles size={20}/>}
-                            className={classes.primaryButton}
-                            disabled={eventMutation.isPending || !selectedCategory}
-                            aria-label={eventMutation.isPending ? t`Creating your event, please wait` : t`Continue to next step`}
-                        >
-                            {eventMutation.isPending ? t`Creating Event...` : t`Continue Setup`}
-                        </Button>
-                    </form>
-                </div>
-            </div>
-        </LoadingContainer>
-    );
-}
-
 // Helper function to get progress information
-const getProgressInfo = (requiresVerification: boolean, organizerExists: boolean, currentStep: 'verification' | 'organizer' | 'event') => {
-    const totalSteps = requiresVerification ? 3 : 2;
+const getProgressInfo = (requiresVerification: boolean, currentStep: 'verification' | 'organizer') => {
+    const totalSteps = requiresVerification ? 2 : 1;
     let currentStepNumber = 1;
 
     if (requiresVerification) {
         if (currentStep === 'verification') currentStepNumber = 1;
         else if (currentStep === 'organizer') currentStepNumber = 2;
-        else if (currentStep === 'event') currentStepNumber = 3;
     } else {
         if (currentStep === 'organizer') currentStepNumber = 1;
-        else if (currentStep === 'event') currentStepNumber = 2;
     }
 
     const progressPercentage = (currentStepNumber / totalSteps) * 100;
@@ -445,6 +237,7 @@ const Welcome = () => {
     const organizers = organizersQuery?.data?.data;
     const organizerExists = organizersQuery.isFetched && Number(organizers?.length) > 0;
     const hasTrackedSignup = useRef(false);
+    const navigate = useNavigate();
 
     const requiresVerification = userData
         && userData.enforce_email_confirmation_during_registration
@@ -462,6 +255,12 @@ const Welcome = () => {
         }
     }, [userData]);
 
+    useEffect(() => {
+        if (!requiresVerification && organizerExists) {
+            navigate('/manage/events', {replace: true});
+        }
+    }, [requiresVerification, organizerExists, navigate]);
+
     return (
         <div className={classes.welcomeContainer}>
             <Container size="sm" className={classes.welcomeContent}>
@@ -478,26 +277,10 @@ const Welcome = () => {
 
                 <Card className={classes.welcomeCard}>
                     {requiresVerification && <ConfirmVerificationPin
-                        progressInfo={getProgressInfo(requiresVerification, organizerExists, 'verification')}/>}
-                    {(!requiresVerification && organizerExists) &&
-                        <CreateEvent progressInfo={getProgressInfo(requiresVerification, organizerExists, 'event')}/>}
+                        progressInfo={getProgressInfo(requiresVerification, 'verification')}/>}
                     {(!requiresVerification && !organizerExists) && <CreateOrganizer
-                        progressInfo={getProgressInfo(requiresVerification, organizerExists, 'organizer')}/>}
+                        progressInfo={getProgressInfo(requiresVerification, 'organizer')}/>}
                 </Card>
-
-                {(!requiresVerification && organizerExists) && (
-                    <Center className={classes.skipSection}>
-                        <Button
-                            component={NavLink}
-                            to={'/manage/events'}
-                            variant="subtle"
-                            size="sm"
-                            c="dimmed"
-                        >
-                            {t`Skip this step`}
-                        </Button>
-                    </Center>
-                )}
             </Container>
         </div>
     )

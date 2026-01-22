@@ -73,4 +73,11 @@ export const userClient = {
         const response = await api.post(`users/${userId}/confirm-email-with-code`, {code});
         return response.data;
     },
+
+    deleteMyAccount: async (payload: { confirmation: string; password: string }) => {
+        const response = await api.delete(`settings/account`, {
+            data: payload,
+        });
+        return response.data;
+    },
 };

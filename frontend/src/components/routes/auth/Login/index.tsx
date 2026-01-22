@@ -60,6 +60,17 @@ const Login = () => {
     const ticketLookupMutation = useSendTicketLookupEmail();
 
     useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        if (params.get('account_deleted') === '1') {
+            notifications.show({
+                message: t`Your account has been deleted.`,
+                color: 'green',
+                position: 'top-center',
+            });
+        }
+    }, []);
+
+    useEffect(() => {
         form.values.account_id && loginUser(form.values);
     }, [form.values.account_id]);
 

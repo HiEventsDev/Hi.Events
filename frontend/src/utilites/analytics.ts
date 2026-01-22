@@ -14,7 +14,6 @@ interface TrackEventOptions {
 export const AnalyticsEvents = {
     SIGNUP_COMPLETED: 'signup_completed',
     ORGANIZER_CREATED: 'organizer_created',
-    FIRST_EVENT_CREATED: 'first_event_created',
     EVENT_PUBLISHED: 'event_published',
     STRIPE_CONNECTED: 'stripe_connected',
     PURCHASE_COMPLETED_PAID: 'purchase_completed_paid',

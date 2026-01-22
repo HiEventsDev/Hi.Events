@@ -1,10 +1,10 @@
 import {Card} from "../../../common/Card";
 import {useForm, UseFormReturnType} from "@mantine/form";
 import {useGetMe} from "../../../../queries/useGetMe.ts";
-import {Alert, Button, Checkbox, NativeSelect, PasswordInput, Select, Tabs, TextInput} from "@mantine/core";
+import {Alert, Button, Checkbox, Modal, NativeSelect, PasswordInput, Select, Tabs, Text, TextInput} from "@mantine/core";
 import classes from "./ManageProfile.module.scss";
 import {useEffect, useState} from "react";
-import {IconInfoCircle, IconMail, IconPassword, IconUser, IconWorld} from "@tabler/icons-react";
+import {IconAlertTriangle, IconInfoCircle, IconMail, IconPassword, IconTrash, IconUser, IconWorld} from "@tabler/icons-react";
 import {timezones} from "../../../../../data/timezones.ts";
 import {useUpdateMe} from "../../../../mutations/useUpdateMe.ts";
 import {showError, showSuccess} from "../../../../utilites/notifications.tsx";
@@ -17,6 +17,7 @@ import {localeToFlagEmojiMap, localeToNameMap, SupportedLocales} from "../../../
 import {Fieldset} from "../../../common/Fieldset";
 import {InputGroup} from "../../../common/InputGroup";
 import {getConfig} from "../../../../utilites/config.ts";
+import {useDeleteAccount} from "../../../../mutations/useDeleteAccount.ts";
 
 const localeSelectData = Object.keys(localeToNameMap).map(locale => ({
     value: locale,
@@ -28,8 +29,10 @@ export const ManageProfile = () => {
     const mutation = useUpdateMe();
     const cancelEmailChangeMutation = useCancelEmailChange();
     const resendEmailConfirmationMutation = useResendEmailConfirmation();
+    const deleteAccountMutation = useDeleteAccount();
     const errorHandler = useFormErrorResponseHandler();
     const [emailConfirmationResent, setEmailConfirmationResent] = useState(false);
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const profileForm = useForm({
         initialValues: {
             first_name: me?.first_name,
@@ -46,6 +49,17 @@ export const ManageProfile = () => {
             current_password: '',
             password: '',
             password_confirmation: '',
+        }
+    });
+
+    const deleteAccountForm = useForm({
+        initialValues: {
+            confirmation: '',
+            password: '',
+        },
+        validate: {
+            confirmation: (value) => (value.trim().toUpperCase() !== 'DELETE' ? t`Please type DELETE to confirm` : null),
+            password: (value) => (!value ? t`Password is required` : null),
         }
     });
 
@@ -117,6 +131,9 @@ export const ManageProfile = () => {
                         </Tabs.Tab>
                         <Tabs.Tab value="password" leftSection={<IconPassword/>}>
                             {t`Password`}
+                        </Tabs.Tab>
+                        <Tabs.Tab value="danger" leftSection={<IconAlertTriangle/>}>
+                            {t`Danger Zone`}
                         </Tabs.Tab>
                     </Tabs.List>
                     <Tabs.Panel value="profile">
@@ -238,6 +255,95 @@ export const ManageProfile = () => {
                                             type={'submit'}>{t`Change password`}</Button>
                                 </fieldset>
                             </form>
+                        </div>
+                    </Tabs.Panel>
+
+                    <Tabs.Panel value="danger">
+                        <div className={classes.tabWrapper}>
+                            <Fieldset legend={
+                                <span className={classes.fieldsetLegend}>
+                                    <IconTrash size={16}/>
+                                    {t`Delete account`}
+                                </span>
+                            }>
+                                <Text size="sm" c="dimmed">
+                                    <Trans>
+                                        This will permanently remove your account and revoke access. This action cannot be undone.
+                                    </Trans>
+                                </Text>
+
+                                <Button
+                                    mt="md"
+                                    color="red"
+                                    variant="filled"
+                                    onClick={() => {
+                                        deleteAccountForm.reset();
+                                        setDeleteModalOpen(true);
+                                    }}
+                                    leftSection={<IconTrash size={18}/>}
+                                >
+                                    {t`Delete my account`}
+                                </Button>
+                            </Fieldset>
+
+                            <Modal
+                                opened={deleteModalOpen}
+                                onClose={() => setDeleteModalOpen(false)}
+                                title={t`Confirm account deletion`}
+                                centered
+                            >
+                                <Text size="sm" mb="md">
+                                    <Trans>
+                                        To confirm, type <b>DELETE</b> and enter your password. If you are the only owner of an
+                                        organization that still has other members or published/upcoming events, deletion will be blocked.
+                                    </Trans>
+                                </Text>
+
+                                <form
+                                    onSubmit={deleteAccountForm.onSubmit((values) => {
+                                        deleteAccountMutation.mutate(values, {
+                                            onSuccess: () => {
+                                                showSuccess(t`Account deleted successfully`);
+                                                window.location.replace(`/auth/login?account_deleted=1`);
+                                            },
+                                            onError: (error: any) => {
+                                                if (error?.response?.status === 422) {
+                                                    errorHandler(deleteAccountForm, error);
+                                                    return;
+                                                }
+                                                showError(error?.response?.data?.message || t`Unable to delete account`);
+                                            }
+                                        });
+                                    })}
+                                >
+                                    <fieldset disabled={deleteAccountMutation.isPending}>
+                                        <TextInput
+                                            label={t`Type DELETE to confirm`}
+                                            placeholder={t`DELETE`}
+                                            {...deleteAccountForm.getInputProps('confirmation')}
+                                            required
+                                        />
+                                        <PasswordInput
+                                            mt="md"
+                                            label={t`Password`}
+                                            placeholder={t`Enter your password`}
+                                            {...deleteAccountForm.getInputProps('password')}
+                                            required
+                                        />
+
+                                        <Button
+                                            mt="lg"
+                                            fullWidth
+                                            color="red"
+                                            type="submit"
+                                            loading={deleteAccountMutation.isPending}
+                                            leftSection={deleteAccountMutation.isPending ? null : <IconTrash size={18}/>}
+                                        >
+                                            {deleteAccountMutation.isPending ? t`Deleting...` : t`Permanently delete my account`}
+                                        </Button>
+                                    </fieldset>
+                                </form>
+                            </Modal>
                         </div>
                     </Tabs.Panel>
                 </Tabs>

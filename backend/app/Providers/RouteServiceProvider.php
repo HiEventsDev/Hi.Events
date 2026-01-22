@@ -37,6 +37,10 @@ class RouteServiceProvider extends ServiceProvider
             return Limit::perHour(20)->by($request->route('order_short_id') ?? $request->ip());
         });
 
+        RateLimiter::for('delete-account', function (Request $request) {
+            return Limit::perHour(5)->by($request->user()?->id ?: $request->ip());
+        });
+
         $this->routes(function () {
             Route::middleware('api')
                 ->group(base_path('routes/api.php'));
