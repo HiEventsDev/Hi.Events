@@ -113,7 +113,6 @@ readonly class CreatePaymentIntentHandler
             );
         }
 
-
         $description = __(':item_count item(s) for event: :event_name (Order :order_short_id)', [
             'event_name' => Str::limit($order->getEvent()?->getTitle() ?? __('Event'), 75),
             'order_short_id' => $orderShortId,
