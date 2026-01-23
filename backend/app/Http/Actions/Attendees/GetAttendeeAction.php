@@ -3,6 +3,7 @@
 namespace HiEvents\Http\Actions\Attendees;
 
 use HiEvents\DomainObjects\AttendeeCheckInDomainObject;
+use HiEvents\DomainObjects\CheckInListDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
@@ -38,7 +39,13 @@ class GetAttendeeAction extends BaseAction
                 ], name: 'product'))
             ->loadRelation(new Relationship(
                 domainObject: AttendeeCheckInDomainObject::class,
-                name: 'check_in',
+                nested: [
+                    new Relationship(
+                        domainObject: CheckInListDomainObject::class,
+                        name: 'check_in_list',
+                    ),
+                ],
+                name: 'check_ins'
             ))
             ->findFirstWhere([
                 'id' => $attendeeId,

@@ -37,7 +37,7 @@
     flex: 1 1 auto;
     overflow: auto;
     position: relative;
-    padding: 8px 0;
+    padding: 8px 0 24px;
     scrollbar-width: thin;
     scrollbar-color: transparent transparent;
 
@@ -171,13 +171,14 @@
 
   @media (max-width: 767px) {
     position: fixed;
-    width: 280px;
+    width: 100%;
     height: 100vh;
+    height: 100dvh;
     z-index: 200;
     transform: translateX(-100%);
     top: 0;
     left: 0;
-    
+
     &.open {
       transform: translateX(0);
     }

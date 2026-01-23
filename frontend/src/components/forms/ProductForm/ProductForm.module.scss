@@ -1,26 +1,144 @@
 .priceTierCard {
   position: relative;
   padding: var(--hi-spacing-md) var(--hi-spacing-lg);
+  margin-bottom: var(--hi-spacing-md);
+  border-left: 3px solid var(--mantine-color-blue-5);
 
-  .mantine-InputWrapper-root {
-    margin-bottom: 0 !important;
+  h3 {
+    margin: 0 0 var(--hi-spacing-sm) 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--mantine-color-gray-7);
   }
+}
 
-  .mantine-SimpleGrid-root {
-    margin: 0 !important;
-  }
+.removeTier {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 10px;
+  cursor: pointer;
 
-  .removeTier {
-    position: absolute;
-    top: 0;
-    right: 0;
-    margin: 10px;
-    cursor: pointer;
-  }
-
-  .disabled {
+  &.disabled {
     svg {
       color: #b4b4b4;
     }
   }
+}
+
+.priceTiers {
+  .addTierButton {
+    margin-top: var(--hi-spacing-xs);
+  }
+}
+
+.visibilityOptions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--hi-spacing-sm);
+}
+
+.additionalToggle {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: var(--hi-spacing-sm) var(--hi-spacing-md);
+  margin-top: var(--hi-spacing-sm);
+  margin-bottom: var(--hi-spacing-xl);
+  cursor: pointer;
+  background: var(--mantine-color-gray-0);
+  border: 1px solid var(--mantine-color-gray-2);
+  border-radius: var(--mantine-radius-md);
+  transition: all 0.15s ease;
+
+  &:hover {
+    background: var(--mantine-color-gray-1);
+    border-color: var(--mantine-color-gray-3);
+
+    .toggleLabel {
+      color: var(--mantine-color-gray-8);
+    }
+
+    svg {
+      color: var(--mantine-color-gray-6);
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--mantine-color-violet-4);
+    outline-offset: 2px;
+  }
+
+  &.hasReminder {
+    border-color: var(--mantine-color-orange-3);
+    background: var(--mantine-color-orange-0);
+
+    &:hover {
+      background: var(--mantine-color-orange-1);
+      border-color: var(--mantine-color-orange-4);
+    }
+  }
+
+  .toggleMain {
+    display: flex;
+    align-items: center;
+    gap: var(--hi-spacing-xs);
+
+    svg {
+      flex-shrink: 0;
+      color: var(--mantine-color-gray-5);
+      transition: color 0.15s ease;
+    }
+  }
+
+  .toggleLabel {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--mantine-color-gray-7);
+    transition: color 0.15s ease;
+  }
+
+  .toggleMeta {
+    margin-left: calc(16px + var(--hi-spacing-xs));
+  }
+
+  .toggleDescription {
+    font-size: 0.8rem;
+    color: var(--mantine-color-gray-5);
+  }
+
+  .taxReminder {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--mantine-color-orange-7);
+
+    svg {
+      color: var(--mantine-color-orange-5);
+    }
+  }
+}
+
+.additionalOptionsContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--hi-spacing-lg);
+  margin-bottom: var(--hi-spacing-xl);
+}
+
+.fieldsetLegend {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--hi-spacing-xs);
+
+  svg {
+    flex-shrink: 0;
+  }
+}
+
+.addTaxFeeButton {
+  margin-top: var(--hi-spacing-xs);
+  padding-left: 0;
 }

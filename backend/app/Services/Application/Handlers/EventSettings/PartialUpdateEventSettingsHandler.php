@@ -10,11 +10,11 @@ use HiEvents\Services\Application\Handlers\EventSettings\DTO\PartialUpdateEventS
 use HiEvents\Services\Application\Handlers\EventSettings\DTO\UpdateEventSettingsDTO;
 use Throwable;
 
-readonly class PartialUpdateEventSettingsHandler
+class PartialUpdateEventSettingsHandler
 {
     public function __construct(
-        private UpdateEventSettingsHandler       $eventSettingsHandler,
-        private EventSettingsRepositoryInterface $eventSettingsRepository,
+        private readonly UpdateEventSettingsHandler       $eventSettingsHandler,
+        private readonly EventSettingsRepositoryInterface $eventSettingsRepository,
     )
     {
     }
@@ -52,6 +52,7 @@ readonly class PartialUpdateEventSettingsHandler
                 'email_footer_message' => $eventSettingsDTO->settings['email_footer_message'] ?? $existingSettings->getEmailFooterMessage(),
                 'support_email' => $eventSettingsDTO->settings['support_email'] ?? $existingSettings->getSupportEmail(),
                 'require_attendee_details' => $eventSettingsDTO->settings['require_attendee_details'] ?? $existingSettings->getRequireAttendeeDetails(),
+                'attendee_details_collection_method' => $eventSettingsDTO->settings['attendee_details_collection_method'] ?? $existingSettings->getAttendeeDetailsCollectionMethod(),
                 'continue_button_text' => array_key_exists('continue_button_text', $eventSettingsDTO->settings)
                     ? $eventSettingsDTO->settings['continue_button_text']
                     : $existingSettings->getContinueButtonText(),
@@ -116,7 +117,26 @@ readonly class PartialUpdateEventSettingsHandler
                     : $existingSettings->getInvoiceNotes(),
                 'invoice_payment_terms_days' => array_key_exists('invoice_payment_terms_days', $eventSettingsDTO->settings)
                     ? $eventSettingsDTO->settings['invoice_payment_terms_days']
-                    : $existingSettings->getInvoicePaymentTermsDays()
+                    : $existingSettings->getInvoicePaymentTermsDays(),
+
+                // Ticket design settings
+                'ticket_design_settings' => array_key_exists('ticket_design_settings', $eventSettingsDTO->settings)
+                    ? $eventSettingsDTO->settings['ticket_design_settings']
+                    : $existingSettings->getTicketDesignSettings(),
+
+                // Marketing settings
+                'show_marketing_opt_in' => $eventSettingsDTO->settings['show_marketing_opt_in'] ?? $existingSettings->getShowMarketingOptIn(),
+
+                // Platform fee settings
+                'pass_platform_fee_to_buyer' => $eventSettingsDTO->settings['pass_platform_fee_to_buyer'] ?? $existingSettings->getPassPlatformFeeToBuyer(),
+
+                // Homepage theme settings
+                'homepage_theme_settings' => array_key_exists('homepage_theme_settings', $eventSettingsDTO->settings)
+                    ? $eventSettingsDTO->settings['homepage_theme_settings']
+                    : $existingSettings->getHomepageThemeSettings(),
+
+                // Self-service settings
+                'allow_attendee_self_edit' => $eventSettingsDTO->settings['allow_attendee_self_edit'] ?? $existingSettings->getAllowAttendeeSelfEdit(),
             ]),
         );
     }

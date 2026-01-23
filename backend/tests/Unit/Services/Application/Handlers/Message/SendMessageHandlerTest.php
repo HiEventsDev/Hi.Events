@@ -18,6 +18,7 @@ use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Message\DTO\SendMessageDTO;
 use HiEvents\Services\Application\Handlers\Message\SendMessageHandler;
+use HiEvents\Services\Domain\Message\MessagingEligibilityService;
 use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 use Illuminate\Config\Repository;
 use Illuminate\Support\Facades\Bus;
@@ -33,6 +34,7 @@ class SendMessageHandlerTest extends TestCase
     private AccountRepositoryInterface $accountRepository;
     private HtmlPurifierService $purifier;
     private Repository $config;
+    private MessagingEligibilityService $eligibilityService;
 
     private SendMessageHandler $handler;
 
@@ -47,6 +49,7 @@ class SendMessageHandlerTest extends TestCase
         $this->accountRepository = m::mock(AccountRepositoryInterface::class);
         $this->purifier = m::mock(HtmlPurifierService::class);
         $this->config = m::mock(Repository::class);
+        $this->eligibilityService = m::mock(MessagingEligibilityService::class);
 
         $this->handler = new SendMessageHandler(
             $this->orderRepository,
@@ -55,7 +58,8 @@ class SendMessageHandlerTest extends TestCase
             $this->messageRepository,
             $this->accountRepository,
             $this->purifier,
-            $this->config
+            $this->config,
+            $this->eligibilityService
         );
     }
 
@@ -140,6 +144,10 @@ class SendMessageHandlerTest extends TestCase
         $this->accountRepository->shouldReceive('findById')->with(1)->andReturn($account);
         $this->config->shouldReceive('get')->with('app.saas_mode_enabled')->andReturn(false);
 
+        // Mock eligibility checks to pass (return null = no violations)
+        $this->eligibilityService->shouldReceive('checkTierLimits')->andReturn(null);
+        $this->eligibilityService->shouldReceive('checkEligibility')->andReturn(null);
+
         $this->purifier->shouldReceive('purify')->with('<p>Test</p>')->andReturn('<p>Test</p>');
 
         $attendee = new AttendeeDomainObject();
@@ -160,6 +168,7 @@ class SendMessageHandlerTest extends TestCase
         $message->shouldReceive('getOrderId')->andReturn(5);
         $message->shouldReceive('getAttendeeIds')->andReturn([10]);
         $message->shouldReceive('getProductIds')->andReturn([20]);
+        $message->shouldReceive('getStatus')->andReturn('PROCESSING');
 
         $this->messageRepository->shouldReceive('create')->andReturn($message);
 

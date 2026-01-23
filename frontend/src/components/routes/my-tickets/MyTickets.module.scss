@@ -1,0 +1,207 @@
+@use "../../../styles/mixins.scss";
+
+.container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 40px 20px;
+
+  @include mixins.respond-below(md) {
+    padding: 20px 16px;
+  }
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 40px;
+
+  h1 {
+    margin: 20px 0 12px;
+    font-size: 2rem;
+    font-weight: 700;
+    background: linear-gradient(90deg, var(--mantine-color-secondary-5) 0%, var(--mantine-color-primary-6) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+
+    @include mixins.respond-below(md) {
+      font-size: 1.5rem;
+      margin: 16px 0 10px;
+    }
+  }
+}
+
+.headerIcon {
+  color: var(--mantine-color-secondary-5);
+  padding: 16px;
+  background: var(--mantine-color-primary-0);
+  border-radius: 50%;
+
+  @include mixins.respond-below(md) {
+    padding: 12px;
+    width: 40px !important;
+    height: 40px !important;
+  }
+}
+
+.subtitle {
+  color: var(--mantine-color-dimmed);
+  font-size: 1rem;
+  margin: 0;
+  line-height: 1.6;
+
+  @include mixins.respond-below(md) {
+    font-size: 0.875rem;
+  }
+}
+
+.ordersList {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  @include mixins.respond-below(md) {
+    gap: 16px;
+  }
+}
+
+.orderCard {
+  position: relative;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid var(--mantine-color-gray-2);
+
+  @media (prefers-color-scheme: dark) {
+    border-color: var(--mantine-color-dark-4);
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+
+    @media (prefers-color-scheme: dark) {
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    }
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--mantine-color-secondary-5) 0%, var(--mantine-color-primary-6) 100%);
+    border-radius: var(--mantine-radius-md) var(--mantine-radius-md) 0 0;
+  }
+}
+
+.orderHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 12px;
+
+  @include mixins.respond-below(md) {
+    flex-direction: column;
+  }
+}
+
+.eventInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.eventTitle {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--mantine-color-text);
+
+  @include mixins.respond-below(md) {
+    font-size: 1.125rem;
+  }
+}
+
+.orderDetails {
+  padding-top: 16px;
+  border-top: 1px solid var(--mantine-color-gray-2);
+
+  @media (prefers-color-scheme: dark) {
+    border-color: var(--mantine-color-dark-4);
+  }
+}
+
+.detailItem {
+  min-width: 0;
+
+  @include mixins.respond-below(md) {
+    margin-bottom: 4px;
+  }
+}
+
+.headerIconError {
+  color: var(--mantine-color-red-6);
+  padding: 16px;
+  background: rgba(239, 68, 68, 0.08);
+  border-radius: 50%;
+
+  @include mixins.respond-below(md) {
+    padding: 12px;
+    width: 40px !important;
+    height: 40px !important;
+  }
+}
+
+.requestCard {
+  margin-top: 24px;
+}
+
+.requestHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  color: var(--mantine-color-text);
+
+  svg {
+    color: var(--mantine-color-secondary-5);
+  }
+}
+
+.requestForm {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+
+  @include mixins.respond-below(sm) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.emailInput {
+  flex: 1;
+}
+
+.successMessage {
+  text-align: center;
+  padding: 16px;
+  background: var(--mantine-color-primary-0);
+  border-radius: var(--mantine-radius-md);
+  border: 1px solid var(--mantine-color-primary-1);
+
+  @media (prefers-color-scheme: dark) {
+    background: var(--mantine-color-primary-1);
+    border-color: var(--mantine-color-primary-2);
+  }
+
+  p {
+    margin: 0 0 8px;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--mantine-color-text);
+  }
+}

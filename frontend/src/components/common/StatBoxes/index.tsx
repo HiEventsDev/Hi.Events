@@ -7,12 +7,12 @@ import {t} from "@lingui/macro";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {formatCurrency} from "../../../utilites/currency.ts";
 import {formatNumber} from "../../../utilites/helpers.ts";
-import React from "react";
+import {ReactNode} from "react";
 
 interface StatBoxProps {
-    number: string;
+    number: string | number;
     description: string;
-    icon: React.ReactNode;
+    icon: ReactNode;
     backgroundColor: string;
 }
 
@@ -41,40 +41,40 @@ export const StatBoxes = () => {
 
     const data = [
         {
-            number: formatNumber(eventStats?.total_products_sold as number),
-            description: t`Products sold`,
-            icon: <IconShoppingCart size={18}/>,
-            backgroundColor: '#4B7BE5' // Deep blue
-        },
-        {
             number: formatNumber(eventStats?.total_attendees_registered as number),
             description: t`Attendees`,
             icon: <IconUsers size={18}/>,
-            backgroundColor: '#E6677E' // Rose pink
+            backgroundColor: '#E6677E'
+        },
+        {
+            number: formatNumber(eventStats?.total_products_sold as number),
+            description: t`Products sold`,
+            icon: <IconShoppingCart size={18}/>,
+            backgroundColor: '#4B7BE5'
         },
         {
             number: formatCurrency(eventStats?.total_refunded as number || 0, event?.currency),
             description: t`Refunded`,
             icon: <IconCreditCardRefund size={18}/>,
-            backgroundColor: '#49A6B7' // Teal
+            backgroundColor: '#49A6B7'
         },
         {
             number: formatCurrency(eventStats?.total_gross_sales || 0, event?.currency),
             description: t`Gross sales`,
             icon: <IconCash size={18}/>,
-            backgroundColor: '#7C63E6' // Purple
+            backgroundColor: '#7C63E6'
         },
         {
             number: formatNumber(eventStats?.total_views as number),
             description: t`Page views`,
             icon: <IconEye size={18}/>,
-            backgroundColor: '#63B3A1' // Sage green
+            backgroundColor: '#63B3A1'
         },
         {
             number: formatNumber(eventStats?.total_orders as number),
             description: t`Completed orders`,
             icon: <IconReceipt size={18}/>,
-            backgroundColor: '#E67D49' // Coral orange
+            backgroundColor: '#E67D49'
         }
     ];
 

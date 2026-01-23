@@ -28,7 +28,9 @@ export const PromoCodes = () => {
     return (
         <>
             <PageBody>
-                <PageTitle>{t`Promo Codes`}</PageTitle>
+                <PageTitle
+                    subheading={t`Create discounts, access codes for hidden tickets, and special offers.`}
+                >{t`Promo Codes`}</PageTitle>
                 <ToolBar searchComponent={() => (
                     <SearchBarWrapper
                         placeholder={t`Search by name...`}

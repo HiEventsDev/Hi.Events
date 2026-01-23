@@ -5,6 +5,7 @@ import { t } from '@lingui/macro';
 import { useCreateOrGetStripeConnectDetails } from '../../../queries/useCreateOrGetStripeConnectDetails';
 import { useGetAccount } from '../../../queries/useGetAccount';
 import { showSuccess } from '../../../utilites/notifications';
+import { isHiEvents } from '../../../utilites/helpers';
 
 interface StripeConnectButtonProps {
     buttonText?: string;
@@ -13,6 +14,7 @@ interface StripeConnectButtonProps {
     size?: string;
     fullWidth?: boolean;
     className?: string;
+    platform?: string;
 }
 
 export const StripeConnectButton: React.FC<StripeConnectButtonProps> = ({
@@ -21,16 +23,22 @@ export const StripeConnectButton: React.FC<StripeConnectButtonProps> = ({
     variant = 'light',
     size = 'sm',
     fullWidth = false,
-    className
+    className,
+    platform
 }) => {
     const [fetchStripeDetails, setFetchStripeDetails] = useState(false);
     const [isReturningFromStripe, setIsReturningFromStripe] = useState(false);
     const accountQuery = useGetAccount();
     const account = accountQuery.data;
     
+    // For Hi.Events, use the new platform parameter for Ireland migration
+    // For open-source, use existing logic (no platform parameter)
+    const platformToUse = isHiEvents() ? platform || 'ie' : undefined;
+    
     const stripeDetailsQuery = useCreateOrGetStripeConnectDetails(
         account?.id || '',
-        (!!account?.stripe_account_id || fetchStripeDetails) && !!account?.id
+        (!!account?.stripe_account_id || fetchStripeDetails) && !!account?.id,
+        platformToUse
     );
 
     const stripeDetails = stripeDetailsQuery.data;

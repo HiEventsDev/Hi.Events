@@ -2,6 +2,7 @@
 
 namespace HiEvents\Http\Actions\Events;
 
+use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\Status\EventStatus;
 use HiEvents\Http\Actions\BaseAction;
@@ -49,6 +50,14 @@ class GetEventPublicAction extends BaseAction
         }
 
         if ($this->isUserAuthenticated() && $event->getAccountId() === $this->getAuthenticatedAccountId()) {
+            return true;
+        }
+
+        if ($this->isUserAuthenticated() && $this->getAuthenticatedUserRole() === Role::SUPERADMIN) {
+            $this->logger->debug(__('Superadmin user is viewing non-live event with ID :eventId', [
+                'eventId' => $event->getId(),
+                'accountId' => $this->getAuthenticatedAccountId(),
+            ]));
             return true;
         }
 

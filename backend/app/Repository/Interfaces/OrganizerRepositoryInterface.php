@@ -7,6 +7,7 @@ namespace HiEvents\Repository\Interfaces;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Repository\DTO\Organizer\OrganizerStatsResponseDTO;
 use HiEvents\Repository\Eloquent\BaseRepository;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 /**
  * @extends BaseRepository<OrganizerDomainObject>
@@ -14,4 +15,8 @@ use HiEvents\Repository\Eloquent\BaseRepository;
 interface OrganizerRepositoryInterface extends RepositoryInterface
 {
     public function getOrganizerStats(int $organizerId, int $accountId, string $currencyCode): OrganizerStatsResponseDTO;
+
+    public function getSitemapOrganizers(int $page, int $perPage): LengthAwarePaginator;
+
+    public function getSitemapOrganizerCount(): int;
 }

@@ -1,0 +1,52 @@
+@use "../../../styles/mixins";
+
+.container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--checkout-accent-soft, rgba(99, 102, 241, 0.1));
+  border: 1px solid var(--checkout-border, rgba(99, 102, 241, 0.2));
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 32px;
+  margin-bottom: 32px;
+
+  @include mixins.respond-below(sm) {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+.iconContainer {
+  width: 40px;
+  height: 40px;
+  background: var(--checkout-accent-soft, rgba(99, 102, 241, 0.15));
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--checkout-accent, #4F46E5);
+  flex-shrink: 0;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  @include mixins.respond-below(sm) {
+    align-items: center;
+  }
+}
+
+.title {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--checkout-text-primary, #111827);
+}
+
+.subtitle {
+  font-size: 14px;
+  color: var(--checkout-text-secondary, #6B7280);
+}

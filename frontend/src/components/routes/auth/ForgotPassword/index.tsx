@@ -1,12 +1,13 @@
-import {Button, TextInput,} from "@mantine/core";
+import {Button, TextInput} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import {useMutation} from "@tanstack/react-query";
 import {showError} from "../../../../utilites/notifications.tsx";
 import {authClient} from "../../../../api/auth.client.ts";
 import {useState} from "react";
 import {NavLink} from "react-router";
-import {Card} from "../../../common/Card";
 import {t} from "@lingui/macro";
+import classes from "./ForgotPassword.module.scss";
+import {IconArrowLeft, IconCheck} from "@tabler/icons-react";
 
 export const ForgotPassword = () => {
     const form = useForm({
@@ -32,36 +33,49 @@ export const ForgotPassword = () => {
         }
     });
 
-    return (
-        <div>
-            {showSuccessMessage && (
-                <div>
-                    <p>
-                        {t`If you have an account with us, you will receive an email with instructions on how to reset your
-                            password.`}
-                    </p>
-                    <p>
-                        <NavLink to={'/auth/login'}>Back to login</NavLink>
-                    </p>
+    if (showSuccessMessage) {
+        return (
+            <div className={classes.successMessage}>
+                <div className={classes.successIcon}>
+                    <IconCheck size={24} />
                 </div>
-            )}
-            {!showSuccessMessage && (
-                <>
-                    <h3>{t`Reset your password`}</h3>
-                    <form onSubmit={form.onSubmit((values) => mutate.mutate(values.email))}>
-                        <TextInput type={'email'} {...form.getInputProps('email')} label={t`Your Email`}
-                                   placeholder="joe@bloggs.com" required/>
-                        <Button color={'var(--hi-pink)'} fullWidth type="submit" disabled={mutate.isPending}>
-                            {mutate.isPending ? t`Working...` : t`Reset password`}
-                        </Button>
-                    </form>
-                    <footer>
-                        <NavLink to={'/auth/login'}>{t`Back to login`}</NavLink>
-                    </footer>
-                </>
-            )}
-        </div>
-    )
+                <h3>{t`Check your email`}</h3>
+                <p>
+                    {t`If you have an account with us, you will receive an email with instructions on how to reset your password.`}
+                </p>
+                <NavLink to={'/auth/login'}>
+                    <IconArrowLeft size={14} />
+                    {t`Back to login`}
+                </NavLink>
+            </div>
+        );
+    }
+
+    return (
+        <>
+            <header className={classes.header}>
+                <h2>{t`Reset password`}</h2>
+                <p>{t`Enter your email and we'll send you instructions to reset your password.`}</p>
+            </header>
+            <div className={classes.forgotPasswordCard}>
+                <form onSubmit={form.onSubmit((values) => mutate.mutate(values.email))}>
+                    <TextInput
+                        type="email"
+                        {...form.getInputProps('email')}
+                        label={t`Email`}
+                        placeholder="you@example.com"
+                        required
+                    />
+                    <Button color="secondary.5" type="submit" fullWidth loading={mutate.isPending} disabled={mutate.isPending}>
+                        {mutate.isPending ? t`Sending...` : t`Send reset link`}
+                    </Button>
+                </form>
+                <footer>
+                    <NavLink to={'/auth/login'}>{t`Back to login`}</NavLink>
+                </footer>
+            </div>
+        </>
+    );
 }
 
 export default ForgotPassword;

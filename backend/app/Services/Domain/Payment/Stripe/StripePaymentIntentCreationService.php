@@ -5,6 +5,7 @@ namespace HiEvents\Services\Domain\Payment\Stripe;
 use HiEvents\DomainObjects\StripeCustomerDomainObject;
 use HiEvents\Exceptions\Stripe\CreatePaymentIntentFailedException;
 use HiEvents\Repository\Interfaces\StripeCustomerRepositoryInterface;
+use HiEvents\Services\Domain\Order\DTO\ApplicationFeeValuesDTO;
 use HiEvents\Services\Domain\Order\OrderApplicationFeeCalculationService;
 use HiEvents\Services\Domain\Payment\Stripe\DTOs\CreatePaymentIntentRequestDTO;
 use HiEvents\Services\Domain\Payment\Stripe\DTOs\CreatePaymentIntentResponseDTO;
@@ -18,7 +19,6 @@ use Throwable;
 class StripePaymentIntentCreationService
 {
     public function __construct(
-        private readonly StripeClient                          $stripeClient,
         private readonly LoggerInterface                       $logger,
         private readonly Repository                            $config,
         private readonly StripeCustomerRepositoryInterface     $stripeCustomerRepository,
@@ -31,13 +31,14 @@ class StripePaymentIntentCreationService
     /**
      * @throws CreatePaymentIntentFailedException
      */
-    public function retrievePaymentIntentClientSecret(
-        string  $paymentIntentId,
-        ?string $accountId = null,
+    public function retrievePaymentIntentClientSecretWithClient(
+        StripeClient $stripeClient,
+        string       $paymentIntentId,
+        ?string      $accountId = null,
     ): string
     {
         try {
-            return $this->stripeClient->paymentIntents->retrieve(
+            return $stripeClient->paymentIntents->retrieve(
                 id: $paymentIntentId,
                 opts: $accountId ? ['stripe_account' => $accountId] : []
             )->client_secret;
@@ -57,30 +58,32 @@ class StripePaymentIntentCreationService
      * @throws CreatePaymentIntentFailedException
      * @throws ApiErrorException|Throwable
      */
-    public function createPaymentIntent(CreatePaymentIntentRequestDTO $paymentIntentDTO): CreatePaymentIntentResponseDTO
+    public function createPaymentIntentWithClient(
+        StripeClient                  $stripeClient,
+        CreatePaymentIntentRequestDTO $paymentIntentDTO
+    ): CreatePaymentIntentResponseDTO
     {
         try {
             $this->databaseManager->beginTransaction();
 
-            $applicationFee = $this->orderApplicationFeeCalculationService->calculateApplicationFee(
-                accountConfiguration: $paymentIntentDTO->account->getConfiguration(),
-                order: $paymentIntentDTO->order,
-            )->toMinorUnit();
+            $accountConfiguration = $paymentIntentDTO->account->getConfiguration();
+            $bypassApplicationFees = $accountConfiguration?->getBypassApplicationFees() ?? false;
 
-            $paymentIntent = $this->stripeClient->paymentIntents->create([
+            $applicationFee = $this->orderApplicationFeeCalculationService->calculateApplicationFee(
+                accountConfiguration: $accountConfiguration,
+                order: $paymentIntentDTO->order,
+                vatSettings: $paymentIntentDTO->vatSettings,
+            );
+
+            $paymentIntent = $stripeClient->paymentIntents->create([
                 'amount' => $paymentIntentDTO->amount->toMinorUnit(),
                 'currency' => $paymentIntentDTO->currencyCode,
-                'customer' => $this->upsertStripeCustomer($paymentIntentDTO)->getStripeCustomerId(),
-                'metadata' => [
-                    'order_id' => $paymentIntentDTO->order->getId(),
-                    'event_id' => $paymentIntentDTO->order->getEventId(),
-                    'order_short_id' => $paymentIntentDTO->order->getShortId(),
-                    'account_id' => $paymentIntentDTO->account->getId(),
-                ],
+                'customer' => $this->upsertStripeCustomerWithClient($stripeClient, $paymentIntentDTO)->getStripeCustomerId(),
+                'metadata' => $this->getPaymentIntentMetadata($paymentIntentDTO, $applicationFee),
                 'automatic_payment_methods' => [
                     'enabled' => true,
                 ],
-                $applicationFee ? ['application_fee_amount' => $applicationFee] : [],
+                ...($applicationFee && !$bypassApplicationFees ? ['application_fee_amount' => $applicationFee->grossApplicationFee->toMinorUnit()] : []),
             ], $this->getStripeAccountData($paymentIntentDTO));
 
             $this->logger->debug('Stripe payment intent created', [
@@ -93,8 +96,8 @@ class StripePaymentIntentCreationService
             return new CreatePaymentIntentResponseDTO(
                 paymentIntentId: $paymentIntent->id,
                 clientSecret: $paymentIntent->client_secret,
-                accountId: $paymentIntentDTO->account->getStripeAccountId(),
-                applicationFeeAmount: $applicationFee,
+                accountId: $paymentIntentDTO->stripeAccountId,
+                applicationFeeData: $applicationFee,
             );
         } catch (ApiErrorException $exception) {
             $this->logger->error("Stripe payment intent creation failed: {$exception->getMessage()}", [
@@ -123,7 +126,7 @@ class StripePaymentIntentCreationService
             return [];
         }
 
-        if ($paymentIntentDTO->account->getStripeAccountId() === null) {
+        if ($paymentIntentDTO->stripeAccountId === null) {
             $this->logger->error(
                 'Stripe Connect account not found for the event organizer, payment intent creation failed.
                 You will need to connect your Stripe account to receive payments.',
@@ -136,22 +139,25 @@ class StripePaymentIntentCreationService
         }
 
         return [
-            'stripe_account' => $paymentIntentDTO->account->getStripeAccountId()
+            'stripe_account' => $paymentIntentDTO->stripeAccountId
         ];
     }
 
     /**
      * @throws ApiErrorException|CreatePaymentIntentFailedException
      */
-    private function upsertStripeCustomer(CreatePaymentIntentRequestDTO $paymentIntentDTO): StripeCustomerDomainObject
+    private function upsertStripeCustomerWithClient(
+        StripeClient                  $stripeClient,
+        CreatePaymentIntentRequestDTO $paymentIntentDTO
+    ): StripeCustomerDomainObject
     {
         $customer = $this->stripeCustomerRepository->findFirstWhere([
             'email' => $paymentIntentDTO->order->getEmail(),
-            'stripe_account_id' => $paymentIntentDTO->account->getStripeAccountId(),
+            'stripe_account_id' => $paymentIntentDTO->stripeAccountId,
         ]);
 
         if ($customer === null) {
-            $stripeCustomer = $this->stripeClient->customers->create(
+            $stripeCustomer = $stripeClient->customers->create(
                 params: [
                     'email' => $paymentIntentDTO->order->getEmail(),
                     'name' => $paymentIntentDTO->order->getFullName(),
@@ -163,7 +169,7 @@ class StripePaymentIntentCreationService
                 'name' => $stripeCustomer->name,
                 'email' => $stripeCustomer->email,
                 'stripe_customer_id' => $stripeCustomer->id,
-                'stripe_account_id' => $paymentIntentDTO->account->getStripeAccountId(),
+                'stripe_account_id' => $paymentIntentDTO->stripeAccountId,
             ]);
         }
 
@@ -171,7 +177,7 @@ class StripePaymentIntentCreationService
             return $customer;
         }
 
-        $stripeCustomer = $this->stripeClient->customers->update(
+        $stripeCustomer = $stripeClient->customers->update(
             id: $customer->getStripeCustomerId(),
             params: ['name' => $paymentIntentDTO->order->getFullName()],
             opts: $this->getStripeAccountData($paymentIntentDTO),
@@ -182,5 +188,28 @@ class StripePaymentIntentCreationService
         ]);
 
         return $customer;
+    }
+
+    private function getPaymentIntentMetadata(
+        CreatePaymentIntentRequestDTO $paymentIntentDTO,
+        ?ApplicationFeeValuesDTO      $applicationFee
+    ): array
+    {
+        $metaData = [
+            'order_id' => $paymentIntentDTO->order->getId(),
+            'event_id' => $paymentIntentDTO->order->getEventId(),
+            'order_short_id' => $paymentIntentDTO->order->getShortId(),
+            'account_id' => $paymentIntentDTO->account->getId(),
+
+        ];
+
+        if ($applicationFee) {
+            $metaData['application_fee_gross_amount'] = $applicationFee->grossApplicationFee?->toFloat();
+            $metaData['application_fee_vat_amount'] = $applicationFee->applicationFeeVatAmount?->toFloat();
+            $metaData['application_fee_net_amount'] = $applicationFee->netApplicationFee?->toFloat();
+            $metaData['application_fee_vat_rate'] = $applicationFee->applicationFeeVatRate;
+        }
+
+        return $metaData;
     }
 }

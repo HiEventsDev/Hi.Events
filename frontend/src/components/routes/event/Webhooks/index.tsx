@@ -26,7 +26,9 @@ const Webhooks = () => {
 
     return (
         <PageBody>
-            <PageTitle>
+            <PageTitle
+                subheading={t`Send real-time order and attendee data to your external systems.`}
+            >
                 {t`Webhooks`}
             </PageTitle>
             <Card>

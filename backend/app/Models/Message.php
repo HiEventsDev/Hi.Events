@@ -26,6 +26,7 @@ class Message extends BaseModel
             'attendee_ids' => 'array',
             'product_ids' => 'array',
             'send_data' => 'array',
+            'eligibility_failures' => 'array',
         ];
     }
 }

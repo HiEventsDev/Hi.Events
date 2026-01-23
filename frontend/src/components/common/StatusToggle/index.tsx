@@ -8,6 +8,7 @@ import {useUpdateEventStatus} from '../../../mutations/useUpdateEventStatus';
 import {useUpdateOrganizerStatus} from '../../../mutations/useUpdateOrganizerStatus';
 import {IdParam} from '../../../types';
 import classes from './StatusToggle.module.scss';
+import {trackEvent, AnalyticsEvents} from '../../../utilites/analytics';
 
 interface StatusToggleProps {
     entityType: 'event' | 'organizer';
@@ -47,6 +48,9 @@ export const StatusToggle: React.FC<StatusToggleProps> = ({
 
             mutation.mutate(mutationParams as any, {
                 onSuccess: () => {
+                    if (entityType === 'event' && newStatus === 'LIVE') {
+                        trackEvent(AnalyticsEvents.EVENT_PUBLISHED);
+                    }
                     const successMessage = entityType === 'event'
                         ? t`Event status updated`
                         : t`Organizer status updated`;

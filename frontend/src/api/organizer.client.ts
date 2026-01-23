@@ -59,6 +59,62 @@ export const organizerClient = {
         );
         return response.data;
     },
+
+    getOrganizerReport: async (
+        organizerId: IdParam,
+        reportType: string,
+        startDate?: string | null,
+        endDate?: string | null,
+        currency?: string | null,
+        eventId?: IdParam | null,
+        page?: number,
+        perPage?: number
+    ) => {
+        const params = new URLSearchParams();
+        if (startDate) params.append('start_date', startDate);
+        if (endDate) params.append('end_date', endDate);
+        if (currency) params.append('currency', currency);
+        if (eventId) params.append('event_id', String(eventId));
+        if (page) params.append('page', String(page));
+        if (perPage) params.append('per_page', String(perPage));
+
+        const queryString = params.toString() ? `?${params.toString()}` : '';
+        const response = await api.get<{
+            data: any[];
+            pagination?: {
+                total: number;
+                page: number;
+                per_page: number;
+                last_page: number;
+            };
+        }>(
+            `organizers/${organizerId}/reports/${reportType}${queryString}`
+        );
+        return response.data;
+    },
+
+    exportOrganizerReport: async (
+        organizerId: IdParam,
+        reportType: string,
+        startDate?: string | null,
+        endDate?: string | null,
+        currency?: string | null,
+        eventId?: IdParam | null
+    ): Promise<Blob> => {
+        const params = new URLSearchParams();
+        if (startDate) params.append('start_date', startDate);
+        if (endDate) params.append('end_date', endDate);
+        if (currency) params.append('currency', currency);
+        if (eventId) params.append('event_id', String(eventId));
+
+        const queryString = params.toString() ? `?${params.toString()}` : '';
+        const response = await api.get(
+            `organizers/${organizerId}/reports/${reportType}/export${queryString}`,
+            { responseType: 'blob' }
+        );
+
+        return new Blob([response.data]);
+    },
 }
 
 export const organizerPublicClient = {

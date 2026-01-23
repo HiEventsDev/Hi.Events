@@ -1,39 +1,51 @@
-import {EventInformation} from "./EventInformation";
 import classes from "./EventHomepage.module.scss";
 import SelectProducts from "../../routes/product-widget/SelectProducts";
 import "../../../styles/widget/default.scss";
 import React, {useEffect, useRef, useState} from "react";
 import {EventDocumentHead} from "../../common/EventDocumentHead";
-import {eventCoverImageUrl, imageUrl, organizerHomepageUrl} from "../../../utilites/urlHelper.ts";
+import {eventCoverImage, eventHomepageUrl, imageUrl, organizerHomepageUrl} from "../../../utilites/urlHelper.ts";
 import {Event, OrganizerStatus} from "../../../types.ts";
 import {EventNotAvailable} from "./EventNotAvailable";
-import {IconExternalLink, IconMail, IconMapPin, IconTicket, IconWorld} from "@tabler/icons-react";
-import {Anchor, Button} from "@mantine/core";
+import {
+    IconArrowUpRight,
+    IconCalendar,
+    IconCalendarOff,
+    IconCalendarPlus,
+    IconExternalLink,
+    IconMail,
+    IconMapPin,
+    IconMaximize,
+    IconShare,
+    IconTicket,
+    IconWorld
+} from "@tabler/icons-react";
+import {Anchor} from "@mantine/core";
 import {t} from "@lingui/macro";
 import {PoweredByFooter} from "../../common/PoweredByFooter";
 import {ContactOrganizerModal} from "../../common/ContactOrganizerModal";
 import {socialMediaConfig} from "../../../constants/socialMediaConfig";
-import {getGoogleMapsUrl, getShortLocationDisplay} from "../../../utilites/addressUtilities.ts";
+import {
+    formatAddress,
+    getGoogleMapsUrl,
+    getShortLocationDisplay,
+    isAddressSet
+} from "../../../utilites/addressUtilities.ts";
 import {StatusToggle} from "../../common/StatusToggle";
 import {getConfig} from "../../../utilites/config.ts";
+import {computeThemeVariables, validateThemeSettings} from "../../../utilites/themeUtils.ts";
+import {removeTransparency} from "../../../utilites/colorHelper.ts";
+import {ShareComponent} from "../../common/ShareIcon";
+import {EventDateRange} from "../../common/EventDateRange";
+import {CalendarOptionsPopover} from "../../common/CalendarOptionsPopover";
+import {isDateInPast} from "../../../utilites/dates.ts";
 
 interface EventHomepageProps {
-    colors?: {
-        bodyBackground?: string;
-        background?: string;
-        primary?: string;
-        primaryText?: string;
-        secondary?: string;
-        secondaryText?: string;
-    };
-    backgroundType?: 'COLOR' | 'MIRROR_COVER_IMAGE',
-    continueButtonText?: string;
     event?: Event;
     promoCodeValid?: boolean;
     promoCode?: string;
 }
 
-const EventHomepage = ({colors, continueButtonText, backgroundType, ...loaderData}: EventHomepageProps) => {
+const EventHomepage = ({...loaderData}: EventHomepageProps) => {
     const {event, promoCodeValid, promoCode} = loaderData;
     const [showScrollButton, setShowScrollButton] = useState(false);
     const [contactModalOpen, setContactModalOpen] = useState(false);
@@ -45,11 +57,9 @@ const EventHomepage = ({colors, continueButtonText, backgroundType, ...loaderDat
         const checkTicketsPosition = () => {
             if (ticketsSectionRef.current) {
                 const rect = ticketsSectionRef.current.getBoundingClientRect();
-                // Check if tickets section is below the fold or out of view
                 const isBelowFold = rect.top > window.innerHeight;
                 const isAboveView = rect.bottom < 0;
                 const shouldShowButton = isBelowFold || isAboveView;
-
                 setShowScrollButton(shouldShowButton);
             }
         };
@@ -80,33 +90,39 @@ const EventHomepage = ({colors, continueButtonText, backgroundType, ...loaderDat
         ticketsSectionRef.current?.scrollIntoView({behavior: 'smooth', block: 'start'});
     };
 
-    const styleOverrides = {
-        "--homepage-body-background-color":
-            colors?.bodyBackground || event?.settings?.homepage_body_background_color,
-        "--homepage-background-color":
-            colors?.background || event?.settings?.homepage_background_color,
-        "--homepage-primary-color":
-            colors?.primary || event?.settings?.homepage_primary_color,
-        "--homepage-primary-text-color":
-            colors?.primaryText || event?.settings?.homepage_primary_text_color,
-        "--homepage-secondary-color":
-            colors?.secondary || event?.settings?.homepage_secondary_color,
-        "--homepage-secondary-text-color":
-            colors?.secondaryText || event?.settings?.homepage_secondary_text_color,
-    } as React.CSSProperties;
-
     if (!event) {
         return <EventNotAvailable/>;
     }
 
-    const coverImage = eventCoverImageUrl(event);
+    const rawThemeSettings = event?.settings?.homepage_theme_settings;
+    const themeSettings = validateThemeSettings(rawThemeSettings);
+    const cssVars = computeThemeVariables(themeSettings);
+    const backgroundType = themeSettings.background_type;
+
+    const themeStyles = {
+        '--event-bg-color': themeSettings.background,
+        '--event-content-bg-color': cssVars['--theme-surface'],
+        '--event-primary-color': themeSettings.accent,
+        '--event-primary-text-color': cssVars['--theme-text-primary'],
+        '--event-secondary-color': cssVars['--theme-text-secondary'],
+        '--event-secondary-text-color': cssVars['--theme-text-tertiary'],
+        '--event-accent-contrast': cssVars['--theme-accent-contrast'],
+        '--event-accent-soft': cssVars['--theme-accent-soft'],
+        '--event-accent-muted': cssVars['--theme-accent-muted'],
+        '--event-border-color': cssVars['--theme-border'],
+    } as React.CSSProperties;
+
+    const coverImageData = eventCoverImage(event);
+    const coverImage = coverImageData?.url;
     const organizer = event.organizer!;
     const organizerSocials = organizer?.settings?.social_media_handles;
     const organizerLogo = imageUrl('ORGANIZER_LOGO', organizer?.images);
     const organizerLocation = organizer?.settings?.location_details;
     const websiteUrl = organizer?.website;
+    const locationDetails = event.settings?.location_details;
+    const isOnlineEvent = event.settings?.is_online_event;
+    const hasLocation = isAddressSet(locationDetails) && !isOnlineEvent;
 
-    // Process social links
     const socialLinks = organizerSocials ? Object.entries(organizerSocials)
         .filter(([platform, handle]) => handle && socialMediaConfig[platform as keyof typeof socialMediaConfig])
         .map(([platform, handle]) => ({
@@ -115,9 +131,33 @@ const EventHomepage = ({colors, continueButtonText, backgroundType, ...loaderDat
             config: socialMediaConfig[platform as keyof typeof socialMediaConfig]
         })) : [];
 
+    const getStatusBadge = () => {
+        const products = event.products || event.product_categories?.flatMap(c => c.products || []) || [];
+
+        if (products.length === 0) {
+            return null;
+        }
+
+        const availableProducts = products.filter(p => p.is_available && !p.is_sold_out);
+        const allSoldOut = products.every(p => p.is_sold_out);
+
+        if (allSoldOut) {
+            return {text: t`Sold Out`, variant: 'danger'};
+        }
+
+        if (availableProducts.length === 0) {
+            return null;
+        }
+
+        return {text: t`Tickets Available`, variant: 'success'};
+    };
+
+    const statusBadge = getStatusBadge();
+
+    const mapUrl = event.settings?.maps_url || (locationDetails ? getGoogleMapsUrl(locationDetails) : null);
+
     return (
         <>
-            {/* Status Toggle Banner */}
             {event?.status && event?.id && (
                 <StatusToggle
                     entityType="event"
@@ -131,224 +171,463 @@ const EventHomepage = ({colors, continueButtonText, backgroundType, ...loaderDat
                 />
             )}
 
-            <div style={styleOverrides} key={`${event.id}`} className={classes.pageWrapper}>
+            <main
+                className={classes.pageWrapper}
+                style={themeStyles}
+                data-mode={themeSettings.mode}
+            >
                 <style>
                     {`
                         body, .ssr-loader {
-                            background-color: ${colors?.bodyBackground || event?.settings?.homepage_body_background_color || '#f5f5f5'} !important;
+                            background-color: ${removeTransparency(themeSettings.background)} !important;
                         }
                     `}
                 </style>
+
                 {event && <EventDocumentHead event={event}/>}
-                {(coverImage && backgroundType === 'MIRROR_COVER_IMAGE') && (
+
+                {/* Background */}
+                {(coverImage && backgroundType === 'MIRROR_COVER_IMAGE') ? (
                     <div
                         className={classes.background}
                         style={{backgroundImage: `url(${coverImage})`}}
                     />
-                )}
-                {(!coverImage || backgroundType === 'COLOR') &&
-                    <div className={classes.background}
-                         style={{backgroundColor: 'var(--homepage-body-background-color)'}}
+                ) : (
+                    <div
+                        className={classes.background}
+                        style={{backgroundColor: 'var(--event-bg-color)'}}
                     />
-                }
-                <div id={"event-homepage"} className={classes.mainContainer}>
-                    {/* Hero Section - Combined Cover and Event Details */}
-                    <div className={classes.contentSection}>
-                        {coverImage && (
-                            <div className={classes.coverWrapper}>
-                                <img
-                                    alt={event?.title}
-                                    src={coverImage}
-                                    className={classes.coverImage}
-                                />
-                            </div>
-                        )}
-                        <div className={classes.sectionContent}>
-                            <EventInformation event={event} organizer={organizer}/>
-                        </div>
-                    </div>
+                )}
+                <div
+                    className={classes.backgroundOverlay}
+                    style={backgroundType === 'MIRROR_COVER_IMAGE' ? {
+                        '--overlay-color': themeSettings.background
+                    } as React.CSSProperties : undefined}
+                />
 
-                    {/* About Section - Separate */}
-                    {event?.description && (
-                        <div className={classes.contentSection}>
-                            <div className={classes.sectionContent}>
-                                <h2 className={classes.sectionTitle}>{t`About`}</h2>
-                                <div
-                                    className={classes.eventDescription}
-                                    dangerouslySetInnerHTML={{
-                                        __html: event.description || '',
+                <div className={classes.container}>
+                    <div className={classes.wrapper}>
+                        {/* Main unified card */}
+                        <div className={classes.mainCard}>
+                            {/* Hero Section */}
+                            <div className={classes.heroSection}>
+                                {coverImage && (
+                                    <div
+                                        className={classes.coverWrapper}
+                                        style={(coverImageData?.width && coverImageData?.height) ? {
+                                            '--cover-aspect-ratio': `${coverImageData.width} / ${coverImageData.height}`,
+                                        } as React.CSSProperties : undefined}
+                                    >
+                                        {coverImageData?.lqip_base64 && (
+                                            <img
+                                                src={coverImageData.lqip_base64}
+                                                alt=""
+                                                aria-hidden="true"
+                                                className={classes.coverLqip}
+                                            />
+                                        )}
+                                        <img
+                                            src={coverImage}
+                                            alt={event.title}
+                                            className={classes.coverImage}
+                                        />
+                                        <div className={classes.heroGradient}/>
+                                        {statusBadge && (
+                                            <div className={classes.statusBadges}>
+                                                <span className={classes.statusBadge}>
+                                                    <IconTicket/>
+                                                    {statusBadge.text}
+                                                </span>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+
+                                {/* Event Header */}
+                                <div className={classes.eventHeader}>
+                                    <div className={classes.headerTopRow}>
+                                        {organizer && organizer.status === OrganizerStatus.LIVE ? (
+                                            <a
+                                                href={organizerHomepageUrl(organizer)}
+                                                className={classes.organizerPill}
+                                            >
+                                                {organizerLogo ? (
+                                                    <img
+                                                        src={organizerLogo}
+                                                        alt={organizer.name}
+                                                        className={classes.organizerPillAvatar}
+                                                    />
+                                                ) : (
+                                                    <span className={classes.organizerPillAvatarPlaceholder}>
+                                                        {organizer.name.charAt(0).toUpperCase()}
+                                                    </span>
+                                                )}
+                                                <span className={classes.organizerPillName}>
+                                                    {organizer.name}
+                                                </span>
+                                            </a>
+                                        ) : (
+                                            <div className={classes.organizerPill}>
+                                                {organizerLogo ? (
+                                                    <img
+                                                        src={organizerLogo}
+                                                        alt={organizer?.name || ''}
+                                                        className={classes.organizerPillAvatar}
+                                                    />
+                                                ) : (
+                                                    <span className={classes.organizerPillAvatarPlaceholder}>
+                                                        {organizer?.name?.charAt(0).toUpperCase() || '?'}
+                                                    </span>
+                                                )}
+                                                <span className={classes.organizerPillName}>
+                                                    {organizer?.name}
+                                                </span>
+                                            </div>
+                                        )}
+
+                                        <div className={classes.actionButtons}>
+                                            <ShareComponent
+                                                title={'Check out this event: ' + event.title}
+                                                text={'Check out this event: ' + event.title}
+                                                url={eventHomepageUrl(event)}
+                                                imageUrl={coverImage || undefined}
+                                            >
+                                                <button className={classes.actionButton} title={t`Share`}>
+                                                    <IconShare/>
+                                                </button>
+                                            </ShareComponent>
+                                            {/* Future enhancement: Favorite/Heart button */}
+                                            {/* <button className={`${classes.actionButton} ${classes.favoriteButton}`} title={t`Save`}>
+                                                <IconHeart />
+                                            </button> */}
+                                        </div>
+                                    </div>
+
+                                    <h1 className={classes.eventTitle}>{event.title}</h1>
+
+                                    <div className={classes.eventMeta}>
+                                        {/* Date/Time */}
+                                        <div className={classes.metaItem}>
+                                            <div className={classes.metaIconBox}>
+                                                <IconCalendar/>
+                                            </div>
+                                            <div className={classes.metaContent}>
+                                                <div className={classes.metaPrimary}>
+                                                    <EventDateRange event={event}/>
+                                                </div>
+                                            </div>
+                                            <CalendarOptionsPopover event={event}>
+                                                <button className={classes.addToCalendarButton}>
+                                                    <IconCalendarPlus/>
+                                                    {t`Add to Calendar`}
+                                                </button>
+                                            </CalendarOptionsPopover>
+                                        </div>
+
+                                        {/* Event Ended */}
+                                        {event.end_date && isDateInPast(event.end_date) && (
+                                            <div className={classes.metaItem}>
+                                                <div className={classes.metaIconBox}>
+                                                    <IconCalendarOff/>
+                                                </div>
+                                                <div className={classes.metaContent}>
+                                                    <div className={classes.metaPrimary}>{t`This event has ended`}</div>
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {/* Online Event */}
+                                        {isOnlineEvent && (
+                                            <div className={classes.metaItem}>
+                                                <div className={classes.metaIconBox}>
+                                                    <IconWorld/>
+                                                </div>
+                                                <div className={classes.metaContent}>
+                                                    <div className={classes.metaPrimary}>{t`Online Event`}</div>
+                                                    <div className={classes.metaSecondary}>
+                                                        {t`Join from anywhere`}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {/* Location */}
+                                        {hasLocation && locationDetails && (
+                                            <div className={classes.metaItem}>
+                                                <div className={classes.metaIconBox}>
+                                                    <IconMapPin/>
+                                                </div>
+                                                <div className={classes.metaContent}>
+                                                    <div className={classes.metaPrimary}>
+                                                        {locationDetails.venue_name}
+                                                    </div>
+                                                    <div className={classes.metaSecondary}>
+                                                        {formatAddress(locationDetails)}
+                                                    </div>
+                                                    {mapUrl && (
+                                                        <a
+                                                            href={mapUrl}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className={classes.metaLink}
+                                                        >
+                                                            {t`View on Google Maps`}
+                                                            <IconExternalLink/>
+                                                        </a>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* About Section */}
+                            {event?.description && (
+                                <div className={classes.section}>
+                                    <div className={classes.sectionHeader}>
+                                        <h2 className={classes.sectionTitle}>{t`About`}</h2>
+                                    </div>
+                                    <div
+                                        className={classes.description}
+                                        dangerouslySetInnerHTML={{__html: event.description}}
+                                    />
+                                </div>
+                            )}
+
+                            {/* Location Section (with map) */}
+                            {hasLocation && locationDetails && (
+                                <div className={classes.section}>
+                                    <div className={classes.sectionHeader}>
+                                        <h2 className={classes.sectionTitle}>{t`Location`}</h2>
+                                    </div>
+                                    <div className={classes.locationContent}>
+                                        <div className={classes.venueDetails}>
+                                            <div className={classes.venueName}>
+                                                {locationDetails.venue_name}
+                                            </div>
+                                            <div className={classes.venueAddress}>
+                                                {formatAddress(locationDetails)}
+                                            </div>
+                                            {mapUrl && (
+                                                <a
+                                                    href={mapUrl}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className={classes.directionsLink}
+                                                >
+                                                    <IconArrowUpRight/>
+                                                    {t`Get Directions`}
+                                                </a>
+                                            )}
+                                        </div>
+                                        {mapUrl && (
+                                            <a
+                                                href={mapUrl}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className={classes.mapContainer}
+                                            >
+                                                <svg
+                                                    viewBox="0 0 200 120"
+                                                    preserveAspectRatio="xMidYMid slice"
+                                                    style={{
+                                                        width: '100%',
+                                                        height: '100%',
+                                                        position: 'absolute',
+                                                        inset: 0,
+                                                    }}
+                                                >
+                                                    <rect width="200" height="120" fill="var(--accent-soft)"/>
+                                                    {/* River */}
+                                                    <path d="M-5 95 Q30 85, 50 90 Q80 100, 110 88 Q140 75, 170 82 Q190 86, 205 80" stroke="var(--border-color)" strokeWidth="2" fill="none" opacity="0.3"/>
+                                                    {/* Main roads */}
+                                                    <line x1="0" y1="50" x2="200" y2="50" stroke="var(--border-color)" strokeWidth="2" opacity="0.2"/>
+                                                    <line x1="100" y1="0" x2="100" y2="120" stroke="var(--border-color)" strokeWidth="2" opacity="0.2"/>
+                                                    {/* Secondary roads */}
+                                                    <line x1="0" y1="25" x2="200" y2="25" stroke="var(--border-color)" strokeWidth="1.5" opacity="0.2"/>
+                                                    <line x1="0" y1="70" x2="85" y2="70" stroke="var(--border-color)" strokeWidth="1.5" opacity="0.2"/>
+                                                    <line x1="115" y1="70" x2="200" y2="70" stroke="var(--border-color)" strokeWidth="1.5" opacity="0.2"/>
+                                                    <line x1="50" y1="0" x2="50" y2="120" stroke="var(--border-color)" strokeWidth="1.5" opacity="0.2"/>
+                                                    <line x1="150" y1="0" x2="150" y2="75" stroke="var(--border-color)" strokeWidth="1.5" opacity="0.2"/>
+                                                    {/* Blocks/buildings */}
+                                                    <rect x="110" y="28" width="14" height="10" fill="var(--border-color)" opacity="0.25" rx="1"/>
+                                                    <rect x="20" y="55" width="12" height="10" fill="var(--border-color)" opacity="0.25" rx="1"/>
+                                                </svg>
+                                                <IconMapPin size={32} className={classes.mapPin}/>
+                                                <div className={classes.mapOverlay}>
+                                                    <span className={classes.mapOverlayLabel}>
+                                                        <IconMaximize/>
+                                                        {t`View Map`}
+                                                    </span>
+                                                </div>
+                                            </a>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Tickets Section */}
+                            <div className={`${classes.section} ${classes.ticketsSection}`} ref={ticketsSectionRef}
+                                 id="tickets">
+                                <SelectProducts
+                                    colors={{
+                                        background: "transparent",
+                                        primary: "var(--event-primary-color)",
+                                        primaryText: "var(--event-primary-text-color)",
+                                        secondary: "var(--event-primary-color)",
+                                        secondaryText: "var(--event-accent-contrast)",
+                                        bodyBackground: "var(--event-bg-color)",
                                     }}
+                                    continueButtonText={event.settings?.continue_button_text}
+                                    padding={"0px"}
+                                    event={event}
+                                    promoCodeValid={promoCodeValid}
+                                    promoCode={promoCode}
+                                    showPoweredBy={false}
                                 />
                             </div>
-                        </div>
-                    )}
 
-                    {/* Tickets Section - Separate */}
-                    <div className={classes.contentSection} ref={ticketsSectionRef}>
-                        <div className={classes.sectionContent}>
-                            <SelectProducts
-                                colors={{
-                                    background: "transparent",
-                                    primary: "var(--homepage-primary-color)",
-                                    primaryText: "var(--homepage-primary-text-color)",
-                                    secondary: "var(--homepage-secondary-color)",
-                                    secondaryText: "var(--homepage-secondary-text-color)",
-                                    bodyBackground: "var(--homepage-body-background-color)",
-                                }}
-                                continueButtonText={continueButtonText}
-                                padding={"0px"}
-                                event={event}
-                                promoCodeValid={promoCodeValid}
-                                promoCode={promoCode}
-                                showPoweredBy={false}
-                            />
-                        </div>
-                    </div>
-
-                    {/* Organizer Section */}
-                    {organizer && organizer.status === OrganizerStatus.LIVE && (
-                        <div className={classes.contentSection}>
-                            <div className={classes.sectionContent}>
-                                <div className={classes.organizerInfo}>
-                                    <div className={classes.organizerHeader}>
-                                        {organizerLogo && (
+                            {/* Organizer Section */}
+                            {organizer && organizer.status === OrganizerStatus.LIVE && (
+                                <div className={classes.section} id="organizer">
+                                    <div className={classes.sectionHeader}>
+                                        <h2 className={classes.sectionTitle}>{t`Organizer`}</h2>
+                                    </div>
+                                    <div className={classes.organizerCard}>
+                                        {organizerLogo ? (
                                             <img
                                                 src={organizerLogo}
                                                 alt={organizer.name}
-                                                className={classes.organizerLogo}
+                                                className={classes.organizerAvatar}
                                             />
+                                        ) : (
+                                            <div className={classes.organizerAvatarPlaceholder}>
+                                                {organizer.name.charAt(0).toUpperCase()}
+                                            </div>
                                         )}
-                                        <div className={classes.organizerDetails}>
-                                            <h3 className={classes.organizerName}>
-                                                <Anchor
-                                                    href={organizerHomepageUrl(organizer)}
+                                        <div className={classes.organizerContent}>
+                                            <div className={classes.organizerHeader}>
+                                                <div>
+                                                    <h3 className={classes.organizerName}>
+                                                        <Anchor href={organizerHomepageUrl(organizer)}>
+                                                            {organizer.name}
+                                                        </Anchor>
+                                                    </h3>
+                                                    {getShortLocationDisplay(organizerLocation) && (
+                                                        <div className={classes.organizerLocation}>
+                                                            <IconMapPin/>
+                                                            <a
+                                                                href={getGoogleMapsUrl(organizerLocation!)}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                            >
+                                                                {getShortLocationDisplay(organizerLocation)}
+                                                            </a>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+
+                                            {organizer.description && (
+                                                <div
+                                                    className={classes.organizerBio}
+                                                    dangerouslySetInnerHTML={{__html: organizer.description}}
+                                                />
+                                            )}
+
+                                            <div className={classes.organizerActions}>
+                                                {socialLinks.length > 0 && (
+                                                    <div className={classes.socialLinks}>
+                                                        {socialLinks.map(({platform, handle, config}) => {
+                                                            const IconComponent = config.icon;
+                                                            const url = config.baseUrl + handle;
+                                                            return (
+                                                                <a
+                                                                    key={platform}
+                                                                    href={url}
+                                                                    target="_blank"
+                                                                    rel="noopener noreferrer"
+                                                                    className={classes.socialLink}
+                                                                    title={platform}
+                                                                >
+                                                                    <IconComponent size={18}/>
+                                                                </a>
+                                                            );
+                                                        })}
+                                                    </div>
+                                                )}
+                                                {websiteUrl && (() => {
+                                                    try {
+                                                        const hostname = new URL(websiteUrl).hostname;
+                                                        return (
+                                                            <a
+                                                                href={websiteUrl}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                className={classes.socialLink}
+                                                                title={hostname}
+                                                            >
+                                                                <IconWorld size={18}/>
+                                                            </a>
+                                                        );
+                                                    } catch {
+                                                        return null;
+                                                    }
+                                                })()}
+                                                <button
+                                                    onClick={() => setContactModalOpen(true)}
+                                                    className={classes.contactButton}
                                                 >
-                                                    {organizer.name}
-                                                </Anchor>
-                                            </h3>
-
-                                            {getShortLocationDisplay(organizerLocation) && (
-                                                <div className={classes.organizerLocation}>
-                                                    <IconMapPin size={16}/>
-                                                    <Anchor
-                                                        href={getGoogleMapsUrl(organizerLocation!)}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className={classes.mapLink}
-                                                    >
-                                                        <span>{getShortLocationDisplay(organizerLocation)}</span>
-                                                        &nbsp;
-                                                        <IconExternalLink size={14}/>
-                                                    </Anchor>
-                                                </div>
-                                            )}
-
-                                            {websiteUrl && (
-                                                <div className={classes.organizerWebsite}>
-                                                    <IconWorld size={16}/>
-                                                    <Anchor
-                                                        href={websiteUrl}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                    >
-                                                        {new URL(websiteUrl).hostname}
-                                                    </Anchor>
-                                                </div>
-                                            )}
+                                                    <IconMail/>
+                                                    {t`Contact`}
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
-                                    {organizer.description && (
-                                        <div
-                                            className={classes.organizerDescription}
-                                            dangerouslySetInnerHTML={{
-                                                __html: organizer.description
-                                            }}
-                                        />
-                                    )}
-                                    <div className={classes.organizerSocials}>
-                                        {socialLinks.map(({platform, handle, config}) => {
-                                            const IconComponent = config.icon;
-                                            const url = config.baseUrl + handle;
-                                            return (
-                                                <Anchor
-                                                    key={platform}
-                                                    href={url}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className={classes.socialLink}
-                                                >
-                                                    <IconComponent size={24}/>
-                                                </Anchor>
-                                            );
-                                        })}
-                                        <Button
-                                            leftSection={<IconMail size={16}/>}
-                                            onClick={() => setContactModalOpen(true)}
-                                            className={classes.contactButton}
-                                            variant="outline"
-                                            size="sm"
-                                        >
-                                            {t`Contact`}
-                                        </Button>
-                                    </div>
                                 </div>
-                            </div>
+                            )}
                         </div>
-                    )}
 
-                    {/* Footer Section */}
-                    <div className={classes.contentSection}>
-                        <div className={classes.sectionContent}>
-                            <footer className={classes.footerSection}>
-                                <div className={classes.footerContent}>
-                                    <div className={classes.footerLinks}>
-                                        <Anchor
-                                            href={getConfig('VITE_TOS_URL', 'https://hi.events/terms-of-service?utm_source=event=homepage-footer') as string}
-                                            className={classes.footerLink}
-                                        >
-                                            {t`Privacy Policy`}
-                                        </Anchor>
-                                        <span className={classes.footerSeparator}>•</span>
-                                        <Anchor
-                                            href={getConfig('VITE_PRIVACY_URL', 'https://hi.events/privacy-policy?utm_source=event=homepage-footer') as string}
-                                            className={classes.footerLink}
-                                        >
-                                            {t`Terms of Service`}
-                                        </Anchor>
-                                    </div>
-                                    <PoweredByFooter
-                                        className={classes.poweredByFooter}
-                                    />
-                                </div>
-                            </footer>
+                        {/* Footer */}
+                        <div className={classes.footerSection}>
+                            <div className={classes.footerLinks}>
+                                <Anchor
+                                    href={getConfig('VITE_PRIVACY_URL', 'https://hi.events/privacy-policy?utm_source=app-event-footer')}
+                                    className={classes.footerLink}
+                                >
+                                    {t`Privacy Policy`}
+                                </Anchor>
+                                <Anchor
+                                    href={getConfig('VITE_TOS_URL', 'https://hi.events/terms-of-service?utm_source=app-event-footer')}
+                                    className={classes.footerLink}
+                                >
+                                    {t`Terms of Service`}
+                                </Anchor>
+                            </div>
+                            <PoweredByFooter className={classes.poweredByFooter}/>
                         </div>
                     </div>
 
-                    {/* Floating Scroll to Tickets Button */}
+                    {/* Floating Scroll Button */}
                     {showScrollButton && (
-                        <Button
+                        <button
                             className={classes.scrollToTicketsButton}
                             onClick={scrollToTickets}
-                            leftSection={<IconTicket size={20}/>}
-                            size="md"
-                            radius="xl"
-                            style={{
-                                background: 'var(--homepage-background-color)',
-                                color: 'var(--homepage-primary-text-color)',
-                            }}
                         >
-                            {t`Scroll to Tickets`}
-                        </Button>
+                            <IconTicket size={18}/>
+                            {t`Get Tickets`}
+                        </button>
                     )}
-                </div>
 
-                {/* Contact Modal */}
-                <ContactOrganizerModal
-                    opened={contactModalOpen}
-                    onClose={() => setContactModalOpen(false)}
-                    organizer={organizer}
-                />
-            </div>
+                    {/* Contact Modal */}
+                    <ContactOrganizerModal
+                        opened={contactModalOpen}
+                        onClose={() => setContactModalOpen(false)}
+                        organizer={organizer}
+                    />
+                </div>
+            </main>
         </>
     );
 };

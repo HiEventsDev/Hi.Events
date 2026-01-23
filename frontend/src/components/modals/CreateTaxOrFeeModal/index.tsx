@@ -8,7 +8,11 @@ import { useFormErrorResponseHandler } from "../../../hooks/useFormErrorResponse
 import { showSuccess } from "../../../utilites/notifications.tsx";
 import {t, Trans} from "@lingui/macro";
 
-export const CreateTaxOrFeeModal = ({ onClose }: GenericModalProps) => {
+interface CreateTaxOrFeeModalProps extends GenericModalProps {
+    onCreated?: (taxOrFee: TaxAndFee) => void;
+}
+
+export const CreateTaxOrFeeModal = ({ onClose, onCreated }: CreateTaxOrFeeModalProps) => {
     const createMutation = useCreateTaxOrFee();
     const formErrorHandler = useFormErrorResponseHandler();
 
@@ -28,26 +32,32 @@ export const CreateTaxOrFeeModal = ({ onClose }: GenericModalProps) => {
         createMutation.mutate({
             taxOrFeeData: values,
         }, {
-            onSuccess: () => {
+            onSuccess: (response) => {
                 showSuccess(<Trans>{form.values.type === TaxAndFeeType.Tax ? t`Tax` : t`Fee`} created successfully</Trans>);
                 form.reset();
+                onCreated?.(response.data);
                 onClose();
             },
             onError: (error) => formErrorHandler(form, error)
         });
     };
 
+    const handleSubmit = () => {
+        form.validate();
+        if (form.isValid()) {
+            handleCreate(form.values);
+        }
+    };
+
     return (
         <Modal heading={t`Create Tax or Fee`} onClose={onClose} opened>
-            <form onSubmit={form.onSubmit(values => handleCreate(values))}>
-                <TaxAndFeeForm form={form} />
-                <Button
-                    fullWidth
-                    loading={createMutation.isPending}
-                    type={'submit'}>
-                    <Trans>Create {form.values.type === TaxAndFeeType.Tax ? t`Tax` : t`Fee`}</Trans>
-                </Button>
-            </form>
+            <TaxAndFeeForm form={form} />
+            <Button
+                fullWidth
+                loading={createMutation.isPending}
+                onClick={handleSubmit}>
+                <Trans>Create {form.values.type === TaxAndFeeType.Tax ? t`Tax` : t`Fee`}</Trans>
+            </Button>
         </Modal>
     )
 }

@@ -5,7 +5,9 @@ namespace HiEvents\Services\Application\Handlers\Attendee;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
+use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Attendee\DTO\PartialEditAttendeeDTO;
+use HiEvents\Services\Domain\EventStatistics\EventStatisticsCancellationService;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
@@ -17,10 +19,12 @@ use Throwable;
 class PartialEditAttendeeHandler
 {
     public function __construct(
-        private readonly AttendeeRepositoryInterface  $attendeeRepository,
-        private readonly ProductQuantityUpdateService $productQuantityService,
-        private readonly DatabaseManager              $databaseManager,
-        private readonly DomainEventDispatcherService $domainEventDispatcherService,
+        private readonly AttendeeRepositoryInterface       $attendeeRepository,
+        private readonly OrderRepositoryInterface          $orderRepository,
+        private readonly ProductQuantityUpdateService      $productQuantityService,
+        private readonly DatabaseManager                   $databaseManager,
+        private readonly DomainEventDispatcherService      $domainEventDispatcherService,
+        private readonly EventStatisticsCancellationService $eventStatisticsCancellationService,
     )
     {
     }
@@ -50,6 +54,7 @@ class PartialEditAttendeeHandler
 
         if ($statusIsUpdated) {
             $this->adjustProductQuantity($data, $attendee);
+            $this->adjustEventStatistics($data, $attendee);
         }
 
         if ($statusIsUpdated && $data->status === AttendeeStatus::CANCELLED->name) {
@@ -85,6 +90,31 @@ class PartialEditAttendeeHandler
             $this->productQuantityService->increaseQuantitySold($attendee->getProductPriceId());
         } elseif ($data->status === AttendeeStatus::CANCELLED->name) {
             $this->productQuantityService->decreaseQuantitySold($attendee->getProductPriceId());
+        }
+    }
+
+    /**
+     * Adjust event statistics when attendee status changes
+     *
+     * @throws Throwable
+     */
+    private function adjustEventStatistics(PartialEditAttendeeDTO $data, AttendeeDomainObject $attendee): void
+    {
+        if ($data->status === AttendeeStatus::CANCELLED->name) {
+            // Get the order to access the creation date for daily statistics
+            $order = $this->orderRepository->findFirstWhere([
+                'id' => $attendee->getOrderId(),
+                'event_id' => $attendee->getEventId(),
+            ]);
+
+            if ($order === null) {
+                return;
+            }
+
+            $this->eventStatisticsCancellationService->decrementForCancelledAttendee(
+                eventId: $attendee->getEventId(),
+                orderDate: $order->getCreatedAt()
+            );
         }
     }
 }

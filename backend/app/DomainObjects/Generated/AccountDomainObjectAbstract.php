@@ -12,6 +12,7 @@ abstract class AccountDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     final public const PLURAL_NAME = 'accounts';
     final public const ID = 'id';
     final public const ACCOUNT_CONFIGURATION_ID = 'account_configuration_id';
+    final public const ACCOUNT_MESSAGING_TIER_ID = 'account_messaging_tier_id';
     final public const CURRENCY_CODE = 'currency_code';
     final public const TIMEZONE = 'timezone';
     final public const CREATED_AT = 'created_at';
@@ -25,9 +26,11 @@ abstract class AccountDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     final public const ACCOUNT_VERIFIED_AT = 'account_verified_at';
     final public const STRIPE_CONNECT_ACCOUNT_TYPE = 'stripe_connect_account_type';
     final public const IS_MANUALLY_VERIFIED = 'is_manually_verified';
+    final public const COUNTRY = 'country';
 
     protected int $id;
     protected ?int $account_configuration_id = null;
+    protected ?int $account_messaging_tier_id = null;
     protected string $currency_code = 'USD';
     protected ?string $timezone = null;
     protected ?string $created_at = null;
@@ -41,12 +44,14 @@ abstract class AccountDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     protected ?string $account_verified_at = null;
     protected ?string $stripe_connect_account_type = null;
     protected bool $is_manually_verified = false;
+    protected ?string $country = null;
 
     public function toArray(): array
     {
         return [
                     'id' => $this->id ?? null,
                     'account_configuration_id' => $this->account_configuration_id ?? null,
+                    'account_messaging_tier_id' => $this->account_messaging_tier_id ?? null,
                     'currency_code' => $this->currency_code ?? null,
                     'timezone' => $this->timezone ?? null,
                     'created_at' => $this->created_at ?? null,
@@ -60,6 +65,7 @@ abstract class AccountDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
                     'account_verified_at' => $this->account_verified_at ?? null,
                     'stripe_connect_account_type' => $this->stripe_connect_account_type ?? null,
                     'is_manually_verified' => $this->is_manually_verified ?? null,
+                    'country' => $this->country ?? null,
                 ];
     }
 
@@ -83,6 +89,17 @@ abstract class AccountDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     public function getAccountConfigurationId(): ?int
     {
         return $this->account_configuration_id;
+    }
+
+    public function setAccountMessagingTierId(?int $account_messaging_tier_id): self
+    {
+        $this->account_messaging_tier_id = $account_messaging_tier_id;
+        return $this;
+    }
+
+    public function getAccountMessagingTierId(): ?int
+    {
+        return $this->account_messaging_tier_id;
     }
 
     public function setCurrencyCode(string $currency_code): self
@@ -226,5 +243,16 @@ abstract class AccountDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     public function getIsManuallyVerified(): bool
     {
         return $this->is_manually_verified;
+    }
+
+    public function setCountry(?string $country): self
+    {
+        $this->country = $country;
+        return $this;
+    }
+
+    public function getCountry(): ?string
+    {
+        return $this->country;
     }
 }

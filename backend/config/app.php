@@ -16,6 +16,7 @@ return [
     'saas_mode_enabled' => env('APP_SAAS_MODE_ENABLED', false),
     'saas_stripe_application_fee_percent' => env('APP_SAAS_STRIPE_APPLICATION_FEE_PERCENT', 1.5),
     'saas_stripe_application_fee_fixed' => env('APP_SAAS_STRIPE_APPLICATION_FEE_FIXED', 0),
+    'saas_default_pass_platform_fee_to_buyer' => env('APP_SAAS_DEFAULT_PASS_PLATFORM_FEE_TO_BUYER', false),
     'disable_registration' => env('APP_DISABLE_REGISTRATION', false),
     'api_rate_limit_per_minute' => env('APP_API_RATE_LIMIT_PER_MINUTE', 180),
     'stripe_connect_account_type' => env('APP_STRIPE_CONNECT_ACCOUNT_TYPE', 'express'),
@@ -37,6 +38,9 @@ return [
      */
     'homepage_product_quantities_cache_ttl' => env('APP_HOMEPAGE_TICKET_QUANTITIES_CACHE_TTL', 2),
 
+    /**
+     * Frontend URL patterns for various actions. It is unlikely you will need to change these
+     */
     'frontend_urls' => [
         'confirm_email_address' => '/manage/profile/confirm-email-address/%s',
         'reset_password' => '/auth/reset-password/%s',
@@ -48,15 +52,34 @@ return [
         'attendee_product' => '/product/%d/%s',
         'order_summary' => '/checkout/%d/%s/summary',
         'organizer_order_summary' => '/manage/event/%d/orders#order-%d',
+        'ticket_lookup' => '/my-tickets/%s',
     ],
 
+    /**
+     * Email customization settings
+     */
     'email_logo_url' => env('APP_EMAIL_LOGO_URL'),
     'email_logo_link_url' => env('APP_EMAIL_LOGO_LINK_URL', env('APP_FRONTEND_URL', 'http://localhost')),
     'email_footer_text' => env('APP_EMAIL_FOOTER_TEXT'),
 
+    /**
+     * Default color theme for organizer homepages
+     */
     'organizer_homepage_default_theme' => ColorTheme::MIDNIGHT,
 
+    /**
+     * Path to default event category cover images
+     */
     'event_categories_cover_images_path' => 'event_cover/system-covers',
+
+    /**
+     * Tax Settings - Unlikely you will need these unless EU based and using SAAS mode and charging tax
+     */
+    'tax' => [
+        'eu_vat_handling_enabled' => env('APP_TAX_EU_VAT_HANDLING_ENABLED', env('APP_IS_HI_EVENTS')),
+        'default_vat_rate' => env('APP_TAX_DEFAULT_VAT_RATE', 0.23),
+        'default_vat_country' => env('APP_TAX_DEFAULT_VAT_COUNTRY', 'IE'),
+    ],
 
     /*
     |--------------------------------------------------------------------------

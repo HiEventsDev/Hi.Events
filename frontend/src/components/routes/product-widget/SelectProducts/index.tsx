@@ -362,12 +362,13 @@ const SelectProducts = (props: SelectProductsProps) => {
                                 size="md"
                                 styles={{
                                     root: {
-                                        backgroundColor: props.colors?.secondary || '#228be6',
-                                        color: props.colors?.secondaryText || 'white',
+                                        backgroundColor: props.colors?.secondary || 'var(--primary-color, #228be6)',
+                                        color: props.colors?.secondaryText || 'var(--accent-contrast, white)',
                                         fontWeight: 600,
                                         marginBottom: '12px',
                                         '&:hover': {
-                                            backgroundColor: props.colors?.secondary || '#1c7ed6',
+                                            backgroundColor: props.colors?.secondary || 'var(--primary-color, #1c7ed6)',
+                                            filter: 'brightness(0.95)',
                                         }
                                     }
                                 }}
@@ -381,7 +382,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                                 size={'sm'}
                                 styles={{
                                     root: {
-                                        color: props.colors?.primaryText || '#228be6',
+                                        color: props.colors?.primaryText || 'var(--primary-color, #228be6)',
                                         '&:hover': {
                                             backgroundColor: 'transparent',
                                             textDecoration: 'underline'
@@ -425,6 +426,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                                         )}
 
                                         {(category.products) && category.products.map((product) => {
+                                            const currentProductIndex = productIndex;
                                             const quantityRange = range(product.min_per_order || 1, product.max_per_order || 25)
                                                 .map((n) => n.toString());
                                             quantityRange.unshift("0");
@@ -438,7 +440,12 @@ const SelectProducts = (props: SelectProductsProps) => {
                                             };
 
                                             return (
-                                                <div key={product.id} className={'hi-product-row'}>
+                                                <div key={product.id} className={`hi-product-row ${product.is_highlighted ? 'hi-product-highlighted' : ''}`}>
+                                                    {product.is_highlighted && product.highlight_message && (
+                                                        <div className={'hi-product-highlight-message'}>
+                                                            {product.highlight_message}
+                                                        </div>
+                                                    )}
                                                     <div className={'hi-title-row'}>
                                                         <UnstyledButton variant={'transparent'}
                                                                         className={'hi-product-title'}
@@ -476,7 +483,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                                                         </UnstyledButton>
                                                     </div>
                                                     <Collapse transitionDuration={100} in={!isProductCollapsed}
-                                                              className={'hi-product-content'}>
+                                                              className={'hi-product-content'} hidden={isProductCollapsed}>
                                                         <div className={'hi-price-tiers-rows'}>
                                                             <TieredPricing
                                                                 productIndex={productIndex++}
@@ -486,7 +493,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                                                             />
                                                         </div>
 
-                                                        {product.max_per_order && form.values.products && isObjectEmpty(form.errors) && (form.values.products[productIndex]?.quantities.reduce((acc, {quantity}) => acc + Number(quantity), 0) > product.max_per_order) && (
+                                                        {product.max_per_order && form.values.products && isObjectEmpty(form.errors) && (form.values.products[currentProductIndex]?.quantities.reduce((acc, {quantity}) => acc + Number(quantity), 0) > product.max_per_order) && (
                                                             <div className={'hi-product-quantity-error'}>
                                                                 <Trans>The maximum number of products
                                                                     for {product.title}
@@ -494,9 +501,9 @@ const SelectProducts = (props: SelectProductsProps) => {
                                                             </div>
                                                         )}
 
-                                                        {form.errors[`products.${productIndex}`] && (
+                                                        {form.errors[`products.${currentProductIndex}`] && (
                                                             <div className={'hi-product-quantity-error'}>
-                                                                {form.errors[`products.${productIndex}`]}
+                                                                {form.errors[`products.${currentProductIndex}`]}
                                                             </div>
                                                         )}
 
@@ -537,7 +544,7 @@ const SelectProducts = (props: SelectProductsProps) => {
             )}
             <div className={'hi-promo-code-row'}>
                 {(!showPromoCodeInput && !form.values.promo_code) && (
-                    <Anchor className={'hi-have-a-promo-code-link'}
+                    <Anchor className={'hi-have-a-promo-code-link'} underline={'always'}
                             onClick={() => setShowPromoCodeInput(true)}>
                         {t`Have a promo code?`}
                     </Anchor>

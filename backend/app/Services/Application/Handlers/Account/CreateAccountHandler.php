@@ -10,6 +10,7 @@ use HiEvents\DomainObjects\Status\UserStatus;
 use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Exceptions\EmailAlreadyExists;
 use HiEvents\Helper\IdHelper;
+use HiEvents\Repository\Interfaces\AccountAttributionRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountConfigurationRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
@@ -38,6 +39,7 @@ class CreateAccountHandler
         private readonly AccountUserAssociationService           $accountUserAssociationService,
         private readonly AccountUserRepositoryInterface          $accountUserRepository,
         private readonly AccountConfigurationRepositoryInterface $accountConfigurationRepository,
+        private readonly AccountAttributionRepositoryInterface   $accountAttributionRepository,
         private readonly LoggerInterface                         $logger,
     )
     {
@@ -62,10 +64,9 @@ class CreateAccountHandler
                 'name' => $accountData->first_name . ($accountData->last_name ? ' ' . $accountData->last_name : ''),
                 'email' => strtolower($accountData->email),
                 'short_id' => IdHelper::shortId(IdHelper::ACCOUNT_PREFIX),
-                // If the app is not running in SaaS mode, we can immediately verify the account.
-                // Same goes for the email verification below.
                 'account_verified_at' => $isSaasMode ? null : now()->toDateTimeString(),
                 'account_configuration_id' => $this->getAccountConfigurationId($accountData),
+                'account_messaging_tier_id' => $this->getDefaultMessagingTierId(),
             ]);
 
             $user = $this->getExistingUser($accountData) ?? $this->userRepository->create([
@@ -76,6 +77,7 @@ class CreateAccountHandler
                 'timezone' => $this->getTimezone($accountData),
                 'email_verified_at' => $isSaasMode ? null : now()->toDateTimeString(),
                 'locale' => $accountData->locale,
+                'marketing_opted_in_at' => $accountData->marketing_opt_in ? now()->toDateTimeString() : null,
             ]);
 
             $this->accountUserAssociationService->associate(
@@ -85,6 +87,23 @@ class CreateAccountHandler
                 status: UserStatus::ACTIVE,
                 isAccountOwner: true
             );
+
+            if ($this->hasUtmData($accountData)) {
+                $this->accountAttributionRepository->create([
+                    'account_id' => $account->getId(),
+                    'utm_source' => $this->normalizeUtmValue($accountData->utm_source),
+                    'utm_medium' => $this->normalizeUtmValue($accountData->utm_medium),
+                    'utm_campaign' => $this->normalizeUtmValue($accountData->utm_campaign),
+                    'utm_term' => $this->normalizeUtmValue($accountData->utm_term),
+                    'utm_content' => $this->normalizeUtmValue($accountData->utm_content),
+                    'referrer_url' => $accountData->referrer_url,
+                    'landing_page' => $accountData->landing_page,
+                    'gclid' => $accountData->gclid,
+                    'fbclid' => $accountData->fbclid,
+                    'source_type' => $this->classifySourceType($accountData),
+                    'utm_raw' => $accountData->utm_raw,
+                ]);
+            }
 
             $this->emailConfirmationService->sendConfirmation($user, $account->getId());
 
@@ -109,7 +128,6 @@ class CreateAccountHandler
             $numberFormatter = new NumberFormatter($accountData->locale, NumberFormatter::CURRENCY);
             $guessedCode = $numberFormatter->getTextAttribute(NumberFormatter::CURRENCY_CODE);
 
-            // 'XXX' denotes an unknown currency
             if ($guessedCode && $guessedCode !== 'XXX') {
                 return $guessedCode;
             }
@@ -180,5 +198,71 @@ class CreateAccountHandler
         }
 
         return $defaultConfiguration->getId();
+    }
+
+    private function normalizeUtmValue(?string $value): ?string
+    {
+        if ($value === null || trim($value) === '') {
+            return null;
+        }
+
+        return strtolower(trim($value));
+    }
+
+    private function hasUtmData(CreateAccountDTO $data): bool
+    {
+        return $data->utm_source !== null
+            || $data->utm_medium !== null
+            || $data->utm_campaign !== null
+            || $data->gclid !== null
+            || $data->fbclid !== null;
+    }
+
+    private function classifySourceType(CreateAccountDTO $data): string
+    {
+        if ($data->gclid !== null) {
+            return 'paid';
+        }
+
+        if ($data->fbclid !== null) {
+            return 'paid';
+        }
+
+        $paidMediums = ['cpc', 'ppc', 'paid', 'paidsocial', 'display', 'retargeting'];
+        $normalizedMedium = $this->normalizeUtmValue($data->utm_medium);
+
+        if ($normalizedMedium !== null && in_array($normalizedMedium, $paidMediums, true)) {
+            return 'paid';
+        }
+
+        if ($data->referrer_url !== null && !$this->isInternalReferrer($data->referrer_url)) {
+            return 'referral';
+        }
+
+        return 'organic';
+    }
+
+    private function isInternalReferrer(?string $referrer): bool
+    {
+        if ($referrer === null || trim($referrer) === '') {
+            return false;
+        }
+
+        $appUrl = $this->config->get('app.url');
+
+        if ($appUrl === null) {
+            return false;
+        }
+
+        $appHost = parse_url($appUrl, PHP_URL_HOST);
+        $referrerHost = parse_url($referrer, PHP_URL_HOST);
+
+        return $appHost === $referrerHost;
+    }
+
+    private function getDefaultMessagingTierId(): int
+    {
+        // Self-hosted instances get Premium tier, SaaS gets Untrusted
+        return $this->config->get('app.is_hi_events') ? 1 : 3;
     }
 }

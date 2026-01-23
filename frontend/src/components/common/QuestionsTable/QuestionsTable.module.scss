@@ -1,134 +1,270 @@
 @use "../../../styles/mixins.scss";
 
-.outer {
+.container {
   container-type: inline-size;
+  max-width: 800px;
+  margin: 0 auto;
+}
 
-  .actions {
-    gap: 15px;
-    display: flex;
+.questionsList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
 
-    @include mixins.respond-below(sm) {
-      flex-direction: column;
-    }
+.questionCard {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--mantine-color-gray-0);
+  border: 1px solid var(--mantine-color-gray-2);
+  border-radius: var(--mantine-radius-md);
+  transition: all 0.15s ease;
 
-    .hiddenToggle {
-      margin-left: auto;
-      display: flex;
-      align-items: center;
+  [data-mantine-color-scheme="dark"] & {
+    background: var(--mantine-color-dark-6);
+    border-color: var(--mantine-color-dark-4);
+  }
 
-      .hiddenCount {
-        font-size: 0.9em;
-      }
+  &:hover {
+    border-color: var(--mantine-color-gray-4);
 
-      :global(.mantine-Switch-root) {
-        margin: 0;
-      }
+    [data-mantine-color-scheme="dark"] & {
+      border-color: var(--mantine-color-dark-3);
     }
   }
 
-  .container {
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
+  &.hidden {
+    opacity: 0.5;
+    border-style: dashed;
 
-    @include mixins.respond-below(sm, true) {
-      flex-direction: column;
+    &:hover {
+      opacity: 0.7;
     }
+  }
 
-    .questionsContainer {
-      flex: 1;
+  &.dragging {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-color: var(--mantine-color-primary-5);
+    z-index: 100;
+  }
+}
+
+.dragHandle {
+  cursor: grab;
+  color: var(--mantine-color-gray-5);
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    color: var(--mantine-color-gray-7);
+  }
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.questionContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.questionHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.questionTitle {
+  font-size: 0.9rem;
+}
+
+.hiddenIcon {
+  color: var(--mantine-color-gray-5);
+}
+
+.questionMeta {
+  margin-top: 2px;
+  text-transform: capitalize;
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px;
+  text-align: center;
+  background: var(--mantine-color-gray-0);
+  border: 1px dashed var(--mantine-color-gray-3);
+  border-radius: var(--mantine-radius-md);
+
+  [data-mantine-color-scheme="dark"] & {
+    background: var(--mantine-color-dark-6);
+    border-color: var(--mantine-color-dark-4);
+  }
+}
+
+// Preview Card
+.previewCard {
+  padding: 0;
+}
+
+.previewToggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 14px 20px;
+  color: var(--mantine-color-gray-6);
+
+  [data-mantine-color-scheme="dark"] & {
+    color: var(--mantine-color-gray-5);
+  }
+
+  &:hover {
+    background: var(--mantine-color-gray-0);
+
+    [data-mantine-color-scheme="dark"] & {
+      background: var(--mantine-color-dark-6);
     }
+  }
+}
 
-    .previewContainer {
-      flex: 1;
+.previewContent {
+  padding: 14px 20px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 16px;
+  border-top: 1px solid var(--mantine-color-gray-2);
 
-      h3 {
-        margin-bottom: 8px;
-      }
+  [data-mantine-color-scheme="dark"] & {
+    border-color: var(--mantine-color-dark-5);
+  }
 
-      .previewCard {
-        padding: 20px;
+  @include mixins.respond-below(md) {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+}
 
-        label {
-          font-weight: 600;
-        }
+.previewPane {
+  min-width: 0;
 
-        h3:last-of-type {
-          margin-top: 20px;
-        }
+  :global(.mantine-TextInput-root),
+  :global(.mantine-Select-root),
+  :global(.mantine-Textarea-root),
+  :global(.mantine-Checkbox-root),
+  :global(.mantine-Radio-root) {
+    pointer-events: none;
+    opacity: 0.8;
+  }
 
-        .previewForm {
-          position: relative;
+  :global(.mantine-TextInput-input),
+  :global(.mantine-Select-input),
+  :global(.mantine-Textarea-input) {
+    background: var(--mantine-color-gray-1);
 
-          .mask {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-          }
-        }
-      }
+    [data-mantine-color-scheme="dark"] & {
+      background: var(--mantine-color-dark-5);
     }
+  }
+}
 
-    .defaultQuestionAlert {
-    }
+.previewDivider {
+  width: 1px;
+  background: var(--mantine-color-gray-2);
+  align-self: stretch;
 
-    .questions {
-      margin-bottom: 20px;
+  [data-mantine-color-scheme="dark"] & {
+    background: var(--mantine-color-dark-5);
+  }
 
-      h3 {
-        margin-bottom: 8px;
-      }
+  @include mixins.respond-below(md) {
+    width: 100%;
+    height: 1px;
+  }
+}
 
-      .noQuestionsAlert {
-        display: flex;
-        align-items: center;
+.previewQuestions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
 
-        svg {
-          margin-right: 5px;
-        }
-      }
+  :global(.mantine-InputWrapper-root) {
+    margin-bottom: 0;
+  }
 
-      .questionCard {
-        display: flex;
-        padding: 12px;
-        margin-bottom: 12px;
-        overflow: visible;
-        align-items: center;
+  :global(.mantine-Input-wrapper) {
+    margin-top: 2px;
+  }
 
-        &.hidden {
-          opacity: 0.8;
-          padding: 8px;
-        }
+  :global(.mantine-InputWrapper-label) {
+    font-size: 0.8rem;
+    margin-bottom: 2px;
+  }
 
-        .hiddenIcon {
-          margin-left: 10px;
-        }
+  :global(.mantine-InputWrapper-description) {
+    display: none;
+  }
+}
 
-        .dragHandle {
-          margin-right: 8px;
-          cursor: move;
-          display: flex;
-        }
+.defaultFields {
+  padding: 6px 10px;
+  background: var(--mantine-color-gray-1);
+  border-radius: var(--mantine-radius-sm);
+  border: 1px dashed var(--mantine-color-gray-3);
 
-        .title {
-          margin-right: 16px;
-          font-weight: 500;
-          text-align: left;
-          flex: 1;
-          display: flex;
-          align-items: center;
-        }
+  [data-mantine-color-scheme="dark"] & {
+    background: var(--mantine-color-dark-6);
+    border-color: var(--mantine-color-dark-4);
+  }
+}
 
-        .options {
-          display: flex;
-          flex-flow: column;
-          align-items: center;
-          justify-content: center;
-          margin-left: 16px;
-          margin-right: 16px;
-        }
-      }
-    }
+.defaultFieldsGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.fieldPill {
+  padding: 2px 8px;
+  background: var(--mantine-color-white);
+  border: 1px solid var(--mantine-color-gray-3);
+  border-radius: var(--mantine-radius-xl);
+  font-size: 0.75rem;
+  color: var(--mantine-color-gray-6);
+
+  [data-mantine-color-scheme="dark"] & {
+    background: var(--mantine-color-dark-5);
+    border-color: var(--mantine-color-dark-4);
+    color: var(--mantine-color-gray-5);
+  }
+}
+
+// Actions row
+.actionsRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+
+  @container (max-width: 500px) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.segmentedControl {
+  flex-shrink: 0;
+
+  @container (max-width: 500px) {
+    width: 100%;
   }
 }

@@ -12,6 +12,7 @@ import {useGetEventSettings} from "../../../../../../queries/useGetEventSettings
 import {HeadingWithDescription} from "../../../../../common/Card/CardHeading";
 import {CustomSelect, ItemProps} from "../../../../../common/CustomSelect";
 import {IconCoin, IconCoins} from "@tabler/icons-react";
+import {SelfServiceSettings} from "../../../../../common/SelfServiceSettings";
 
 export const MiscSettings = () => {
     const {eventId} = useParams();
@@ -21,6 +22,7 @@ export const MiscSettings = () => {
         initialValues: {
             price_display_mode: 'EXCLUSIVE',
             hide_getting_started_page: false,
+            allow_attendee_self_edit: false,
         }
     });
     const formErrorHandle = useFormErrorResponseHandler();
@@ -30,6 +32,7 @@ export const MiscSettings = () => {
             form.setValues({
                 price_display_mode: eventSettingsQuery.data.price_display_mode,
                 hide_getting_started_page: eventSettingsQuery.data.hide_getting_started_page,
+                allow_attendee_self_edit: eventSettingsQuery.data.allow_attendee_self_edit ?? false,
             });
         }
     }, [eventSettingsQuery.isFetched]);
@@ -88,6 +91,11 @@ export const MiscSettings = () => {
                         {...form.getInputProps('hide_getting_started_page', {type: 'checkbox'})}
                         label={t`Hide getting started page`}
                         description={t`Hide the getting started page from the sidebar`}
+                    />
+
+                    <SelfServiceSettings
+                        value={form.values.allow_attendee_self_edit}
+                        onChange={(value) => form.setFieldValue('allow_attendee_self_edit', value)}
                     />
 
                     <Button loading={updateMutation.isPending} type={'submit'}>

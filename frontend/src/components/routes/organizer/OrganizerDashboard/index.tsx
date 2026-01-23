@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import {ReactNode, useEffect, useState} from 'react';
 import {NavLink, useParams} from "react-router";
-import {Badge, Button, Group, Menu, Skeleton, Tooltip, UnstyledButton} from '@mantine/core';
+import {Badge, Button, Group, Menu, Skeleton, UnstyledButton} from '@mantine/core';
 import {
     IconBuildingStore,
     IconCash,
@@ -35,7 +35,7 @@ import {getEventQueryFilters} from "../../../../utilites/eventsPageFiltersHelper
 interface OrganizerStatDisplayItem {
     value: string | number;
     description: string;
-    icon: React.ReactNode;
+    icon: ReactNode;
     backgroundColor: string;
 }
 
@@ -271,47 +271,45 @@ export const OrganizerDashboard = () => {
                     {!isLoadingOrders && recentOrders && recentOrders.length > 0 && (
                         <div className={classes.ordersList}>
                             {recentOrders.map((order: Order) => (
-                                <Card key={order.id} className={classes.orderCard}>
-                                    <div className={classes.orderHeader}>
-                                        <div className={classes.orderInfo}>
-                                            <Tooltip label={t`Order ID: ${order.public_id}`} openDelay={500}>
-                                                <span className={classes.orderId}>{order.public_id}</span>
-                                            </Tooltip>
-                                            <span className={classes.customerName}>
-                                                <IconUserCircle size={14}/>
-                                                {order.first_name} {order.last_name}
-                                            </span>
+                                <NavLink
+                                    key={order.id}
+                                    to={`/manage/event/${order.event_id}/orders#order-${order.id}`}
+                                    className={classes.orderCardLink}
+                                >
+                                    <Card className={classes.orderCard}>
+                                        <div className={classes.orderMain}>
+                                            <div className={classes.orderAvatar}>
+                                                <IconUserCircle size={24} stroke={1.5}/>
+                                            </div>
+                                            <div className={classes.orderDetails}>
+                                                <div className={classes.orderCustomer}>
+                                                    <span className={classes.customerName}>
+                                                        {order.first_name} {order.last_name}
+                                                    </span>
+                                                    <Badge
+                                                        color={getOrderStatusColor(order.status, order.payment_status)}
+                                                        variant="light"
+                                                        radius="sm"
+                                                        size="xs"
+                                                    >
+                                                        {formatOrderStatus(order.status, order.payment_status)}
+                                                    </Badge>
+                                                </div>
+                                                <div className={classes.orderMeta}>
+                                                    <span className={classes.orderAmount}>
+                                                        {formatCurrency(order.total_gross, order.currency)}
+                                                    </span>
+                                                    <span className={classes.orderSeparator}>·</span>
+                                                    <span className={classes.orderTime}>
+                                                        {relativeDate(order.created_at)}
+                                                    </span>
+                                                </div>
+                                                <span className={classes.orderId}>#{order.public_id}</span>
+                                            </div>
                                         </div>
-                                        <Badge
-                                            color={getOrderStatusColor(order.status, order.payment_status)}
-                                            variant="light"
-                                            radius="sm"
-                                            size="sm"
-                                        >
-                                            {formatOrderStatus(order.status, order.payment_status)}
-                                        </Badge>
-                                    </div>
-                                    <div className={classes.orderFooter}>
-                                        <span className={classes.orderMeta}>
-                                            {relativeDate(order.created_at)} • {formatCurrency(order.total_gross, order.currency)}
-                                        </span>
-                                        <Button
-                                            variant="subtle"
-                                            size="xs"
-                                            rightSection={<IconChevronRight size={14} style={{marginLeft: '2px'}}/>}
-                                            component={NavLink}
-                                            to={`/manage/event/${order.event_id}/orders#order-${order.id}`}
-                                            styles={{
-                                                root: {
-                                                    padding: '0.375rem 0.75rem',
-                                                    fontSize: '0.8125rem',
-                                                }
-                                            }}
-                                        >
-                                            <Trans>View</Trans>
-                                        </Button>
-                                    </div>
-                                </Card>
+                                        <IconChevronRight size={18} className={classes.orderArrow}/>
+                                    </Card>
+                                </NavLink>
                             ))}
                         </div>
                     )}
@@ -335,11 +333,11 @@ export const OrganizerDashboard = () => {
 };
 
 const getOrderStatusColor = (status: Order['status'], paymentStatus?: Order['payment_status']): string => {
-    if (status === 'COMPLETED' || paymentStatus === 'PAYMENT_RECEIVED') {
-        return 'teal';
-    }
     if (status === 'CANCELLED' || paymentStatus === 'PAYMENT_FAILED') {
         return 'red';
+    }
+    if (status === 'COMPLETED' || paymentStatus === 'PAYMENT_RECEIVED') {
+        return 'teal';
     }
     if (status === 'AWAITING_OFFLINE_PAYMENT' || paymentStatus === 'AWAITING_OFFLINE_PAYMENT' || status === 'RESERVED' || paymentStatus === 'AWAITING_PAYMENT') {
         return 'orange';

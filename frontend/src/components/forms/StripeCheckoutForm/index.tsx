@@ -90,8 +90,10 @@ export default function StripeCheckoutForm({setSubmitHandler}: {
     if (order?.payment_status === 'PAYMENT_RECEIVED') {
         return (
             <HomepageInfoMessage
-                message={t`This order has already been paid.`}
-                linkText={t`View order details`}
+                status="success"
+                message={t`Payment received`}
+                subtitle={t`This order has already been paid.`}
+                linkText={t`View Order Details`}
                 link={eventCheckoutPath(eventId, orderShortId, 'summary')}
             />
         );
@@ -100,8 +102,10 @@ export default function StripeCheckoutForm({setSubmitHandler}: {
     if (order?.payment_status !== 'AWAITING_PAYMENT' && order?.payment_status !== 'PAYMENT_FAILED') {
         return (
             <HomepageInfoMessage
-                message={t`This order page is no longer available.`}
-                linkText={t`View order details`}
+                status="expired"
+                message={t`Page no longer available`}
+                subtitle={t`This order page is no longer available.`}
+                linkText={t`Back to Event`}
                 link={eventHomepagePath(event as Event)}
             />
         );
@@ -111,8 +115,8 @@ export default function StripeCheckoutForm({setSubmitHandler}: {
         layout: {
             type: "accordion",
             defaultCollapsed: false,
-            radios: true,
-            spacedAccordionItems: true,
+            radios: false,
+            spacedAccordionItems: false,
         },
     };
 

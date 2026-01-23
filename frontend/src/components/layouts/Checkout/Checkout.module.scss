@@ -1,43 +1,64 @@
 @use "../../../styles/mixins";
 
+$font-display: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+$font-body:  'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
 .container {
   display: flex;
-  background-color: #3c2b5c05 !important;
-  height: 100vh;
+  min-height: 100vh;
+  font-family: $font-body;
 
-  .sidebar {
-    @include mixins.respond-below(md) {
-      display: none;
-    }
-  }
+  // CSS variables are set by CheckoutThemeProvider via MantineProvider cssVariablesResolver
+  // Available variables:
+  // --checkout-accent, --checkout-accent-contrast, --checkout-accent-soft, --checkout-accent-muted
+  // --checkout-background, --checkout-surface
+  // --checkout-text-primary, --checkout-text-secondary, --checkout-text-tertiary
+  // --checkout-border
 
+  background-color: var(--checkout-background, #F9FAFB);
+  color: var(--checkout-text-primary, #1a1a1a);
+
+  // Countdown timer colors - semantic colors that don't change with theme
   .countdown {
-    color: #0ca678;
+    color: var(--mantine-color-teal-6, #0ca678);
+    font-weight: 600;
   }
 
   .countdownCloseToExpiry {
-    color: #ad2f26;
+    color: var(--mantine-color-red-7, #ad2f26);
+  }
+
+  .timerGroup {
+    flex-shrink: 0;
+  }
+
+  .timerLabel {
+    color: var(--checkout-text-secondary);
+    font-size: 0.875rem;
+
+    @include mixins.respond-below(sm) {
+      display: none;
+    }
   }
 
   .subTitle {
     font-size: 0.95em;
     margin-top: 10px;
+    color: var(--checkout-text-secondary);
   }
 
   .mainContent {
     flex: 1;
-    border-right: 1px solid #e0e0e0;
-    //height: 100vh;
 
     .header {
       height: 60px;
-      background-color: #ffffff;
-      border-bottom: 1px solid #e0e0e0;
+      background-color: var(--checkout-surface);
+      border-bottom: 1px solid var(--checkout-border);
       display: flex;
       justify-content: center;
       align-items: center;
       flex-direction: column;
-      box-shadow: 0 5px 5px 0 #0000000a;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
       text-align: center;
 
       .actionBar {
@@ -45,47 +66,42 @@
         width: 100%;
 
         .title {
+          font-family: $font-display;
           font-size: 1.2em;
-          font-weight: 500;
+          font-weight: 600;
+          color: var(--checkout-text-primary);
         }
       }
 
       h1 {
+        font-family: $font-display;
         font-size: 1.3em;
-        width: calc(100vw - 350px);
+        font-weight: 600;
+        width: 100%;
+        max-width: 700px;
         padding: 0 15px;
+        color: var(--checkout-text-primary);
 
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
 
         @include mixins.respond-below(md) {
-          width: calc(100vw - 60px);
           font-size: 1em;
         }
       }
     }
+  }
 
-    .main {
-      position: relative;
-      height: calc(100vh - 90px);
-      overflow-y: auto;
-      padding: 20px 60px;
-      @include mixins.scrollbar();
+  a:not([class]) {
+    color: var(--checkout-accent);
 
-      @include mixins.respond-below(md) {
-        padding: 20px;
-      }
-
-      .innerContainer {
-        max-width: 700px;
-        margin: 0 auto;
-      }
+    &:hover {
+      text-decoration: underline;
     }
+  }
 
-    .footer {
-      height: 100px;
-      background-color: #ffffff;
-    }
+  :global(.mantine-SegmentedControl-label[data-active]) {
+    color: var(--checkout-accent-contrast) !important;
   }
 }

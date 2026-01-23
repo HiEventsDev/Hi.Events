@@ -1,6 +1,14 @@
 import {Avatar, Menu, UnstyledButton} from "@mantine/core";
 import {getInitials} from "../../../utilites/helpers.ts";
-import {IconLifebuoy, IconLogout, IconPlus, IconSettingsCog, IconUser, IconUsers,} from "@tabler/icons-react";
+import {
+    IconLifebuoy,
+    IconLogout,
+    IconPlus,
+    IconSettingsCog,
+    IconShield,
+    IconUser,
+    IconUsers,
+} from "@tabler/icons-react";
 import {useGetMe} from "../../../queries/useGetMe.ts";
 import {NavLink} from "react-router";
 import {t} from "@lingui/macro";
@@ -40,11 +48,19 @@ export const GlobalMenu = () => {
         },
     ];
 
-    if (me?.role === 'ADMIN') {
+    if (me?.role === 'ADMIN' || me?.role === 'SUPERADMIN') {
         links.push({
             label: t`User Management`,
             icon: IconUsers,
             link: `/account/users`
+        })
+    }
+
+    if (me?.role === 'SUPERADMIN') {
+        links.push({
+            label: t`Admin Dashboard`,
+            icon: IconShield,
+            link: `/admin`
         })
     }
 
@@ -68,9 +84,9 @@ export const GlobalMenu = () => {
     links.push({
         label: t`Logout`,
         icon: IconLogout,
-        onClick: (event: any) => {
+        onClick: async (event: any) => {
             event.preventDefault();
-            authClient.logout();
+            await authClient.logout();
             localStorage.removeItem("token");
             window.location.href = "/auth/login";
         },

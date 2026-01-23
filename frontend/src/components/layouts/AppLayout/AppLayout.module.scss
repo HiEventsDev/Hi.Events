@@ -28,10 +28,15 @@
   .main {
     grid-area: main;
     padding: var(--hi-spacing-lg);
+    padding-bottom: calc(var(--hi-spacing-lg) + 40px);
     overflow: auto;
     background-color: #f9fafc;
 
     @include mixins.scrollbar;
+
+    @media (max-width: 767px) {
+      padding: 16px 16px 56px;
+    }
   }
 
   .sidebarOpen {

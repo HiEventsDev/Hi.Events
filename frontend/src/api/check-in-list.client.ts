@@ -4,7 +4,8 @@ import {
     CheckInListRequest,
     GenericDataResponse,
     GenericPaginatedResponse,
-    IdParam, QueryFilters,
+    IdParam,
+    QueryFilters,
 } from "../types";
 import {queryParamsHelper} from "../utilites/queryParamsHelper.ts";
 
@@ -17,8 +18,9 @@ export const checkInListClient = {
         const response = await api.put<GenericDataResponse<CheckInList>>(`events/${eventId}/check-in-lists/${checkInListId}`, checkInList);
         return response.data;
     },
-    all: async (eventId: IdParam, pagination: QueryFilters) => {
-        const response = await api.get<GenericPaginatedResponse<CheckInList>>(`events/${eventId}/check-in-lists` + queryParamsHelper.buildQueryString(pagination));
+    all: async (eventId: IdParam, pagination: QueryFilters | null = null) => {
+        const paginationQuery = (pagination) ? queryParamsHelper.buildQueryString(pagination as QueryFilters) : '';
+        const response = await api.get<GenericPaginatedResponse<CheckInList>>(`events/${eventId}/check-in-lists` + paginationQuery);
         return response.data;
     },
     get: async (eventId: IdParam, checkInListId: IdParam) => {

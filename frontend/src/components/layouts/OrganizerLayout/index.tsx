@@ -3,6 +3,7 @@ import {
     IconBrandStripe,
     IconCalendar,
     IconCalendarPlus,
+    IconChartPie,
     IconChevronRight,
     IconCreditCard,
     IconDashboard,
@@ -17,8 +18,8 @@ import {
 import {t} from "@lingui/macro";
 import {BreadcrumbItem, NavItem} from "../AppLayout/types.ts";
 import AppLayout from "../AppLayout";
-import {NavLink, useParams} from "react-router";
-import {Button, Modal, Text, Stack} from "@mantine/core";
+import {NavLink, useLocation, useParams} from "react-router";
+import {Button, Modal, Stack, Text} from "@mantine/core";
 import {useGetOrganizer} from "../../../queries/useGetOrganizer.ts";
 import {useState} from "react";
 import {CreateEventModal} from "../../modals/CreateEventModal";
@@ -41,12 +42,16 @@ import {useGetMe} from "../../../queries/useGetMe.ts";
 
 const OrganizerLayout = () => {
     const {organizerId} = useParams();
+    const location = useLocation();
     const {data: organizer} = useGetOrganizer(organizerId);
     const [showCreateEventModal, setShowCreateEventModal] = useState(false);
     const [createModalOpen, {open: openCreateModal, close: closeCreateModal}] = useDisclosure(false);
     const [switchOrganizerModalOpen, {open: openSwitchModal, close: closeSwitchModal}] = useDisclosure(false);
     const [shareModalOpen, {open: openShareModal, close: closeShareModal}] = useDisclosure(false);
-    const [emailVerificationModalOpen, {open: openEmailVerificationModal, close: closeEmailVerificationModal}] = useDisclosure(false);
+    const [emailVerificationModalOpen, {
+        open: openEmailVerificationModal,
+        close: closeEmailVerificationModal
+    }] = useDisclosure(false);
     const {data: organizerResposne} = useGetOrganizers();
     const organizers = organizerResposne?.data;
     const {data: account} = useGetAccount();
@@ -68,6 +73,12 @@ const OrganizerLayout = () => {
         },
         {label: 'Overview'},
         {link: 'dashboard', label: t`Organizer Dashboard`, icon: IconDashboard},
+        {
+            link: 'reports',
+            label: t`Reports`,
+            icon: IconChartPie,
+            isActive: (isActive) => isActive || location.pathname.includes('/report/')
+        },
 
         {label: t`Manage`},
         {link: 'events', label: t`Events`, icon: IconCalendar},
@@ -129,20 +140,16 @@ const OrganizerLayout = () => {
 
     const breadcrumbItems: BreadcrumbItem[] = [
         {
-            link: '/manage/events',
-            content: t`Events`
-        },
-        {
             link: `/manage/organizer/${organizerId}`,
             content: organizer?.name,
         },
         {
             content: (
-                <span 
+                <span
                     className={classes.createEventBreadcrumb}
                     onClick={() => setShowCreateEventModal(true)}
                 >
-                    <IconCalendarPlus size={16} /> {t`Create Event`}
+                    <IconCalendarPlus size={16}/> {t`Create Event`}
                 </span>
             ),
         }
@@ -191,7 +198,8 @@ const OrganizerLayout = () => {
                             <TopBarButton
                                 onClick={handleStatusToggle}
                                 size="sm"
-                                leftSection={organizer?.status === 'DRAFT' ? <IconEyeOff size={16}/> : <IconEye size={16}/>}
+                                leftSection={organizer?.status === 'DRAFT' ? <IconEyeOff size={16}/> :
+                                    <IconEye size={16}/>}
                                 rightSection={<IconChevronRight size={14}/>}
                             >
                                 {organizer?.status === 'DRAFT'
@@ -272,10 +280,10 @@ const OrganizerLayout = () => {
                     <Text size="sm" c="dimmed">
                         {t`You must verify your email address before you can update the organizer status.`}
                     </Text>
-                    
+
                     {!emailConfirmationResent ? (
-                        <Button 
-                            variant="light" 
+                        <Button
+                            variant="light"
                             onClick={() => {
                                 handleEmailConfirmationResend();
                             }}

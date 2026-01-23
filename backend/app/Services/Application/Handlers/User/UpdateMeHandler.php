@@ -50,6 +50,12 @@ readonly class UpdateMeHandler
             }
         }
 
+        if ($updateUserData->marketing_opt_in !== null) {
+            $updateArray['marketing_opted_in_at'] = $updateUserData->marketing_opt_in
+                ? now()->toDateTimeString()
+                : null;
+        }
+
         $this->userRepository->updateWhere(
             attributes: $updateArray,
             where: [
@@ -82,15 +88,10 @@ readonly class UpdateMeHandler
 
     private function getExistingUser(UpdateMeDTO $updateUserData): UserDomainObject
     {
-        $existingUser = $this->userRepository->findFirstWhere([
-            'id' => $updateUserData->id,
-        ]);
-
-        if ($existingUser === null) {
-            throw new ResourceNotFoundException();
-        }
-
-        return $existingUser;
+        return $this->userRepository->findByIdAndAccountId(
+            $updateUserData->id,
+            $updateUserData->account_id
+        );
     }
 
     private function sendEmailChangeConfirmation(UserDomainObject $existingUser): void

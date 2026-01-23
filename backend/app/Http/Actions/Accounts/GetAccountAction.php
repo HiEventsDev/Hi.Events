@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace HiEvents\Http\Actions\Accounts;
 
 use HiEvents\DomainObjects\AccountConfigurationDomainObject;
+use HiEvents\DomainObjects\AccountStripePlatformDomainObject;
 use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Repository\Eloquent\Value\Relationship;
@@ -30,6 +31,7 @@ class GetAccountAction extends BaseAction
                 domainObject: AccountConfigurationDomainObject::class,
                 name: 'configuration',
             ))
+            ->loadRelation(AccountStripePlatformDomainObject::class)
             ->findById($this->getAuthenticatedAccountId());
 
         return $this->resourceResponse(AccountResource::class, $account);

@@ -178,37 +178,33 @@ class CreateEventService
         }
 
         $organizerSettings = $organizer->getOrganizerSettings();
+        $organizerThemeSettings = $organizerSettings->getHomepageThemeSettings() ?? [];
+
+        // Build the new homepage_theme_settings from organizer settings
+        $homepageThemeSettings = [
+            'accent' => $organizerThemeSettings['accent'] ?? '#8b5cf6',
+            'background' => $organizerThemeSettings['background'] ?? '#f5f3ff',
+            'mode' => $organizerThemeSettings['mode'] ?? 'light',
+            'background_type' => $eventCoverCreated
+                ? HomepageBackgroundType::MIRROR_COVER_IMAGE->name
+                : ($organizerThemeSettings['background_type'] ?? HomepageBackgroundType::COLOR->name),
+        ];
 
         $this->eventSettingsRepository->create([
             'event_id' => $event->getId(),
-            'homepage_background_color' => $organizerSettings->getHomepageThemeSetting(
-                'homepage_content_background_color',
-                '#ffffff'
-            ),
-            'homepage_primary_text_color' => $organizerSettings->getHomepageThemeSetting(
-                'homepage_primary_text_color',
-                '#000000'
-            ),
-            'homepage_primary_color' => $organizerSettings->getHomepageThemeSetting(
-                'homepage_primary_color',
-                '#7b5db8'
-            ),
-            'homepage_secondary_text_color' => $organizerSettings->getHomepageThemeSetting(
-                'homepage_secondary_text_color',
-                '#ffffff'
-            ),
-            'homepage_secondary_color' => $organizerSettings->getHomepageThemeSetting(
-                'homepage_secondary_color',
-                '#7a5eb9'
-            ),
-            'homepage_body_background_color' => $organizerSettings->getHomepageThemeSetting(
-                'homepage_background_color',
-                '#ffffff'
-            ),
 
-            'homepage_background_type' => $eventCoverCreated
-                ? HomepageBackgroundType::MIRROR_COVER_IMAGE->name
-                : HomepageBackgroundType::COLOR->name,
+            // New theme settings JSON field
+            'homepage_theme_settings' => $homepageThemeSettings,
+
+            // Legacy fields for backward compatibility
+            'homepage_primary_color' => $homepageThemeSettings['accent'],
+            'homepage_body_background_color' => $homepageThemeSettings['background'],
+            'homepage_background_type' => $homepageThemeSettings['background_type'],
+            'homepage_background_color' => '#ffffff',
+            'homepage_primary_text_color' => '#000000',
+            'homepage_secondary_text_color' => '#ffffff',
+            'homepage_secondary_color' => $homepageThemeSettings['accent'],
+
             'continue_button_text' => __('Continue'),
             'support_email' => $organizer->getEmail(),
 
@@ -223,6 +219,14 @@ class CreateEventService
             'organization_name' => $organizer->getName(),
             'organization_address' => null,
             'invoice_tax_details' => null,
+
+            'attendee_details_collection_method' => $organizerSettings->getDefaultAttendeeDetailsCollectionMethod(),
+            'show_marketing_opt_in' => $organizerSettings->getDefaultShowMarketingOptIn(),
+            'pass_platform_fee_to_buyer' => $organizerSettings->getDefaultPassPlatformFeeToBuyer(),
+            'allow_attendee_self_edit' => $organizerSettings->getDefaultAllowAttendeeSelfEdit() ?? false,
+            'ticket_design_settings' => [
+                'accent_color' => $homepageThemeSettings['accent'] ?? '#333',
+            ],
         ]);
     }
 }

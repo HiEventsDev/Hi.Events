@@ -79,6 +79,8 @@ const EventLayout = () => {
 
     const navItems: NavItem[] = [
         {link: '/manage/organizer/' + event?.organizer?.id, label: t`Organizer Dashboard`, icon: IconArrowLeft},
+
+        // 1. OVERVIEW
         {label: t`Overview`},
         {
             link: 'getting-started',
@@ -94,24 +96,34 @@ const EventLayout = () => {
             isActive: (isActive) => isActive || location.pathname.includes('/report/')
         },
 
-        {label: t`Manage`},
-        {link: 'settings', label: t`Settings`, icon: IconSettings},
-        {link: 'attendees', label: t`Attendees`, icon: IconUsers, badge: eventStats?.total_products_sold},
-        {link: 'orders', label: t`Orders`, icon: IconReceipt, badge: eventStats?.total_orders},
+        // 2. EVENT SETUP
+        {label: t`Setup & Design`},
+        {link: 'settings', label: t`Event Settings`, icon: IconSettings},
+        {link: 'homepage-designer', label: t`Homepage Designer`, icon: IconPaint},
+        {link: 'ticket-designer', label: t`Ticket Designer`, icon: IconTicket},
+        {link: 'questions', label: t`Registration Questions`, icon: IconUserQuestion},
+
+        // 3. Ticketing & Sales
+        {label: t`Ticketing & Sales`},
         {link: 'products', label: t`Tickets & Products`, icon: IconTicket},
-        {link: 'questions', label: t`Questions`, icon: IconUserQuestion},
-        {link: 'capacity-assignments', label: t`Capacity`, icon: IconUsersGroup},
-        {link: 'check-in', label: t`Check-In Lists`, icon: IconQrcode},
-        {link: 'messages', label: t`Messages`, icon: IconSend},
+        {link: 'orders', label: t`Orders`, icon: IconReceipt, badge: eventStats?.total_orders},
         {link: 'promo-codes', label: t`Promo Codes`, icon: IconDiscount2},
         {link: 'affiliates', label: t`Affiliates`, icon: IconTrendingUp},
 
-        {label: t`Tools`},
-        {link: 'homepage-designer', label: t`Homepage Designer`, icon: IconPaint},
+        // 4. GUESTS
+        {label: t`Guest Management`},
+        {link: 'attendees', label: t`Attendees`, icon: IconUsers, badge: eventStats?.total_attendees_registered},
+        {link: 'check-in', label: t`Check-In Lists`, icon: IconQrcode},
+        {link: 'messages', label: t`Messages`, icon: IconSend},
+        {link: 'capacity-assignments', label: t`Capacity Management`, icon: IconUsersGroup},
+
+        // 5. INTEGRATIONS
+        {label: t`Integrations`},
         {link: 'widget', label: t`Widget Embed`, icon: IconDeviceTabletCode},
         {link: 'webhooks', label: t`Webhooks`, icon: IconWebhook},
-    ];
 
+
+    ];
     const navItemsWithLoading = !isEventSettingsFetched || !isEventFetched
         ? navItems.map(item => item.link ? {...item, loading: true} : item)
         : navItems;
@@ -119,23 +131,17 @@ const EventLayout = () => {
     const screenWidth = useWindowWidth();
     const breadcrumbItemsWidth = screenWidth > 1100 ? 60 : 23;
 
-    const breadcrumbItems: BreadcrumbItem[] = [
+    const breadcrumbItems: BreadcrumbItem[] = isEventFetched ? [
         {
-            link: '/manage/events',
-            content: t`Home`
+            link: `/manage/organizer/${event?.organizer?.id}`,
+            content: <Truncate length={breadcrumbItemsWidth} text={event?.organizer?.name} showTooltip={false}/>
         },
-        ...(isEventFetched ? [
-            {
-                link: `/manage/organizer/${event?.organizer?.id}`,
-                content: <Truncate length={breadcrumbItemsWidth} text={event?.organizer?.name} showTooltip={false}/>
-            },
-            {
-                link: `/manage/event/${event?.id}`,
-                content: <Truncate length={breadcrumbItemsWidth} text={event?.title} showTooltip={false}/>
-            }
-        ] : [
-            {link: '#', content: '...'}
-        ])
+        {
+            link: `/manage/event/${event?.id}`,
+            content: <Truncate length={breadcrumbItemsWidth} text={event?.title} showTooltip={false}/>
+        }
+    ] : [
+        {link: '#', content: '...'}
     ];
 
     const handleStatusToggle = () => {

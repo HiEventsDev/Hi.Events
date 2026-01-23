@@ -1,37 +1,89 @@
 @use "../../../../styles/mixins";
 
+$font-display: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
 .welcomeHeader {
-  margin-bottom: 20px;
-  padding: 20px;
-  font-size: 1.5rem;
+  margin-bottom: 24px;
+  padding: 32px 20px 24px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
 }
 
-.actionBar {
-  background-color: #800080;
-  padding: var(--hi-spacing-md);
-  color: #fff;
+.confettiIcon {
+  font-size: 48px;
+  line-height: 1;
+  margin-bottom: 8px;
+  animation: bounceIn 0.6s ease-out, subtleBounce 2s ease-in-out 0.6s infinite;
+
+  span {
+    display: inline-block;
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes subtleBounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.welcomeMessage {
+  font-family: $font-display;
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--checkout-text-primary, #111827);
+  margin-bottom: 4px;
+}
+
+.confirmationText {
+  font-size: 15px;
+  color: var(--checkout-text-secondary, #6B7280);
+
+  strong {
+    font-weight: 500;
+    color: var(--checkout-text-primary, #374151);
+  }
+}
+
+.selfServiceHint {
+  font-size: 13px;
+  color: var(--checkout-text-tertiary, #9CA3AF);
+  margin-top: 4px;
 }
 
 .heading {
-  font-size: 1.5rem;
+  font-family: $font-display;
+  font-size: 1.25rem;
   font-weight: 600;
-  margin-top: 20px;
-}
-
-.subHeading {
-  margin-bottom: 10px;
-}
-
-.orderSummaryContainer {
-  padding: var(--hi-spacing-lg);
-  border-radius: var(--hi-radius-lg);
-  background-color: #fff9ff;
-  border: 1px solid #800080;
+  margin-top: 24px;
+  margin-bottom: 5px;
+  color: var(--checkout-text-primary, #111827);
 }
 
 .detailItem {
-  min-width: 0; // Enable text truncation
+  min-width: 0;
   overflow: hidden;
 
   .detailContent {
@@ -41,11 +93,103 @@
 
   .label {
     margin-bottom: 0.25rem;
+    color: var(--checkout-text-secondary, #6B7280);
   }
 
   .value {
     word-wrap: break-word;
     overflow-wrap: break-word;
     white-space: normal;
+    color: var(--checkout-text-primary, #111827);
   }
+}
+
+.guestList {
+  display: flex;
+  flex-direction: column;
+}
+
+.guestItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--checkout-border, #e5e7eb);
+  gap: 12px;
+
+  &:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  &:first-child {
+    padding-top: 0;
+  }
+}
+
+.guestItemCancelled {
+  opacity: 0.6;
+
+  .guestName {
+    text-decoration: line-through;
+  }
+}
+
+.guestInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.guestName {
+  font-weight: 500;
+  color: var(--checkout-text-primary, #111827);
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.cancelledBadge {
+  font-size: 11px;
+  font-weight: 500;
+  color: #dc2626;
+  background: rgba(220, 38, 38, 0.1);
+  padding: 2px 8px;
+  border-radius: 4px;
+  text-decoration: none;
+}
+
+.guestDetails {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--checkout-text-secondary, #6B7280);
+}
+
+.guestEmail {
+  word-break: break-all;
+}
+
+.guestProduct {
+  &::before {
+    content: '•';
+    margin-right: 8px;
+    color: var(--checkout-text-tertiary, #9CA3AF);
+  }
+
+  @include mixins.respond-below(sm) {
+    &::before {
+      display: none;
+    }
+    display: block;
+    width: 100%;
+  }
+}
+
+.guestActions {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
 }

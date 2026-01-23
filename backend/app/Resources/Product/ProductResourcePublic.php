@@ -41,6 +41,7 @@ class ProductResourcePublic extends JsonResource
                     ProductPriceResourcePublic::SHOW_QUANTITY_AVAILABLE => $this->getShowQuantityRemaining(),
                 ]),
             ),
+            // todo: this should be taxes_and_fees
             'taxes' => $this->when(
                 (bool)$this->getTaxAndFees(),
                 fn() => TaxAndFeeResource::collection($this->getTaxAndFees())
@@ -50,6 +51,8 @@ class ProductResourcePublic extends JsonResource
                 'is_sold_out' => $this->isSoldOut(),
             ]),
             'product_category_id' => $this->getProductCategoryId(),
+            'is_highlighted' => $this->getIsHighlighted(),
+            'highlight_message' => $this->getHighlightMessage(),
         ];
     }
 }

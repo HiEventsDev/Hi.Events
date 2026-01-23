@@ -3,6 +3,7 @@
 namespace HiEvents\Services\Application\Handlers\User;
 
 use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Services\Application\Handlers\User\DTO\CancelEmailChangeDTO;
 use Psr\Log\LoggerInterface;
@@ -24,6 +25,12 @@ class CancelEmailChangeHandler
 
     public function handle(CancelEmailChangeDTO $data): UserDomainObject
     {
+        $user = $this->userRepository->findByIdAndAccountId($data->userId, $data->accountId);
+
+        if ($user === null) {
+            throw new ResourceNotFoundException(__('User not found'));
+        }
+
         $this->userRepository->updateWhere(
             attributes: [
                 'pending_email' => null,

@@ -3,22 +3,36 @@
 namespace HiEvents\Services\Domain\Product;
 
 use HiEvents\Constants;
+use HiEvents\DomainObjects\AccountConfigurationDomainObject;
 use HiEvents\DomainObjects\CapacityAssignmentDomainObject;
+use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\ProductCategoryDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\PromoCodeDomainObject;
+use HiEvents\DomainObjects\TaxAndFeesDomainObject;
 use HiEvents\Helper\Currency;
+use HiEvents\Repository\Eloquent\Value\Relationship;
+use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventRepositoryInterface;
+use HiEvents\Services\Domain\Order\OrderPlatformFeePassThroughService;
 use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesDTO;
 use HiEvents\Services\Domain\Tax\TaxAndFeeCalculationService;
 use Illuminate\Support\Collection;
 
 class ProductFilterService
 {
+    private ?AccountConfigurationDomainObject $accountConfiguration = null;
+    private ?EventSettingDomainObject $eventSettings = null;
+    private ?string $eventCurrency = null;
+
     public function __construct(
         private readonly TaxAndFeeCalculationService            $taxCalculationService,
         private readonly ProductPriceService                    $productPriceService,
         private readonly AvailableProductQuantitiesFetchService $fetchAvailableProductQuantitiesService,
+        private readonly OrderPlatformFeePassThroughService     $platformFeeService,
+        private readonly AccountRepositoryInterface             $accountRepository,
+        private readonly EventRepositoryInterface               $eventRepository,
     )
     {
     }
@@ -47,9 +61,12 @@ class ProductFilterService
                 ->reject(fn(ProductCategoryDomainObject $category) => $category->getIsHidden());
         }
 
+        $eventId = $products->first()->getEventId();
+        $this->loadAccountConfiguration($eventId);
+
         $productQuantities = $this
             ->fetchAvailableProductQuantitiesService
-            ->getAvailableProductQuantities($products->first()->getEventId());
+            ->getAvailableProductQuantities($eventId);
 
         $filteredProducts = $products
             ->map(fn(ProductDomainObject $product) => $this->processProduct($product, $productQuantities->productQuantities, $promoCode))
@@ -63,6 +80,25 @@ class ProductFilterService
                     static fn(ProductDomainObject $product) => $product->getProductCategoryId() === $category->getId()
                 )
             ));
+    }
+
+    private function loadAccountConfiguration(int $eventId): void
+    {
+        $account = $this->accountRepository
+            ->loadRelation(new Relationship(
+                domainObject: AccountConfigurationDomainObject::class,
+                name: 'configuration',
+            ))
+            ->findByEventId($eventId);
+
+        $this->accountConfiguration = $account->getConfiguration();
+
+        $event = $this->eventRepository
+            ->loadRelation(EventSettingDomainObject::class)
+            ->findById($eventId);
+
+        $this->eventSettings = $event->getEventSettings();
+        $this->eventCurrency = $event->getCurrency();
     }
 
     private function isHiddenByPromoCode(ProductDomainObject $product, ?PromoCodeDomainObject $promoCode): bool
@@ -111,8 +147,6 @@ class ProductFilterService
             );
         });
 
-        // If there is a capacity assigned to the product, we set the capacity to capacity available qty, or the sum of all
-        // product prices qty, whichever is lower
         $productQuantities->each(function (AvailableProductQuantitiesDTO $quantity) use ($product) {
             if ($quantity->capacities !== null && $quantity->capacities->isNotEmpty() && $quantity->product_id === $product->getId()) {
                 $product->setQuantityAvailable(
@@ -162,14 +196,62 @@ class ProductFilterService
 
     private function processProductPrice(ProductDomainObject $product, ProductPriceDomainObject $price): void
     {
-        $taxAndFees = $this->taxCalculationService
-            ->calculateTaxAndFeesForProductPrice($product, $price);
+        if (!$price->isFree()) {
+            $taxAndFees = $this->taxCalculationService
+                ->calculateTaxAndFeesForProductPrice($product, $price);
 
-        $price
-            ->setTaxTotal(Currency::round($taxAndFees->taxTotal))
-            ->setFeeTotal(Currency::round($taxAndFees->feeTotal));
+            $feeTotal = $taxAndFees->feeTotal;
+            $taxTotal = $taxAndFees->taxTotal;
+
+            $platformFee = $this->calculatePlatformFee($price->getPrice() + $feeTotal + $taxTotal);
+
+            if ($platformFee > 0) {
+                $feeTotal += $platformFee;
+                $this->addPlatformFeeToProduct($product);
+            }
+
+            $price
+                ->setTaxTotal(Currency::round($taxTotal))
+                ->setFeeTotal(Currency::round($feeTotal));
+        }
 
         $price->setIsAvailable($this->getPriceAvailability($price, $product));
+    }
+
+    private function calculatePlatformFee(float $total): float
+    {
+        if ($this->accountConfiguration === null || $this->eventSettings === null) {
+            return 0.0;
+        }
+
+        return $this->platformFeeService->calculatePlatformFee(
+            accountConfiguration: $this->accountConfiguration,
+            eventSettings: $this->eventSettings,
+            total: $total,
+            quantity: 1,
+            currency: $this->eventCurrency,
+        );
+    }
+
+    private function addPlatformFeeToProduct(ProductDomainObject $product): void
+    {
+        $existingTaxesAndFees = $product->getTaxAndFees() ?? collect();
+
+        $hasPlatformFee = $existingTaxesAndFees->contains(
+            fn(TaxAndFeesDomainObject $fee) => $fee->getId() === OrderPlatformFeePassThroughService::PLATFORM_FEE_ID
+        );
+
+        if (!$hasPlatformFee) {
+            $platformFeeDomainObject = (new TaxAndFeesDomainObject())
+                ->setId(OrderPlatformFeePassThroughService::PLATFORM_FEE_ID)
+                ->setAccountId(0)
+                ->setName(OrderPlatformFeePassThroughService::getPlatformFeeName())
+                ->setType('FEE')
+                ->setCalculationType('FIXED')
+                ->setRate(0);
+
+            $product->setTaxAndFees($existingTaxesAndFees->push($platformFeeDomainObject));
+        }
     }
 
     private function filterProductPrice(
@@ -216,13 +298,6 @@ class ProductFilterService
         );
     }
 
-    /**
-     * For non-tiered products, we can inherit the availability of the product.
-     *
-     * @param ProductPriceDomainObject $price
-     * @param ProductDomainObject $product
-     * @return bool
-     */
     private function getPriceAvailability(ProductPriceDomainObject $price, ProductDomainObject $product): bool
     {
         if ($product->isTieredType()) {

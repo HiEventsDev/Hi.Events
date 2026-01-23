@@ -25,6 +25,18 @@ class CreateAccountRequest extends BaseRequest
             'currency_code' => [Rule::in(array_values($currencies))],
             'locale' => ['nullable', Rule::in(Locale::getSupportedLocales())],
             'invite_token' => ['nullable', 'string'],
+            'marketing_opt_in' => 'boolean|nullable',
+            // UTM attribution fields
+            'utm_source' => ['nullable', 'string', 'max:255'],
+            'utm_medium' => ['nullable', 'string', 'max:255'],
+            'utm_campaign' => ['nullable', 'string', 'max:255'],
+            'utm_term' => ['nullable', 'string', 'max:255'],
+            'utm_content' => ['nullable', 'string', 'max:255'],
+            'referrer_url' => ['nullable', 'string', 'max:2048'],
+            'landing_page' => ['nullable', 'string', 'max:2048'],
+            'gclid' => ['nullable', 'string', 'max:255'],
+            'fbclid' => ['nullable', 'string', 'max:255'],
+            'utm_raw' => ['nullable', 'array'],
         ];
     }
 }

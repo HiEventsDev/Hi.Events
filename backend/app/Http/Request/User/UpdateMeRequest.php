@@ -30,6 +30,7 @@ class UpdateMeRequest extends BaseRequest
                 'confirmed',
                 Password::min(8)
             ],
+            'marketing_opt_in' => 'boolean|nullable',
         ];
     }
 }

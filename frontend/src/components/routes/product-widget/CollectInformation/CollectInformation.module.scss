@@ -1,0 +1,161 @@
+@use "../../../../styles/mixins";
+
+$font-display: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+$radius-sm: 10px;
+$transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+
+.sectionHeading {
+  font-family: $font-display;
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--checkout-text-primary, #111827);
+}
+
+.sectionHelper {
+  font-size: 14px;
+  color: var(--checkout-text-secondary, #6B7280);
+  margin-bottom: 20px;
+}
+
+.copyDetailsSection {
+  padding-top: 16px;
+  border-top: 1px solid var(--checkout-border, #F3F4F6);
+}
+
+.copyDetailsMultiple {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.copyLabel {
+  flex-shrink: 0;
+  color: var(--checkout-text-primary, #111827);
+}
+
+.ticketSection {
+  margin-bottom: 24px;
+}
+
+.ticketTypeHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  margin-top: 24px;
+
+  h3 {
+    font-family: $font-display;
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--checkout-text-primary, #111827);
+  }
+}
+
+.ticketCountBadge {
+  background: var(--checkout-accent-soft, var(--mantine-primary-color-light));
+  color: var(--checkout-accent, var(--mantine-primary-color-filled));
+  font-size: 12px;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+.attendeeCard {
+  position: relative;
+}
+
+.attendeeCardHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.attendeeHeaderLeft {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.attendeeNumber {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--checkout-accent-soft, var(--mantine-primary-color-light));
+  color: var(--checkout-accent, var(--mantine-primary-color-filled));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.attendeeInfo {
+  h4 {
+    margin: 0 0 2px 0;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--checkout-text-primary, #111827);
+  }
+}
+
+.attendeeTicketType {
+  font-size: 13px;
+  color: var(--checkout-text-secondary, #6B7280);
+}
+
+.copiedBadge {
+  background: var(--checkout-accent-soft, #D1FAE5);
+  color: var(--checkout-accent, #065F46);
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.checkoutActions {
+  margin-top: 32px;
+  margin-bottom: 24px;
+}
+
+.continueButton {
+  width: 100%;
+  height: 48px;
+  border-radius: $radius-sm;
+  font-family: $font-display;
+  font-weight: 600;
+  font-size: 16px;
+  transition: transform $transition-fast, box-shadow $transition-fast;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px var(--checkout-accent-soft, rgba(0, 0, 0, 0.15));
+    filter: brightness(1.05);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+}
+
+.tosNotice {
+  text-align: center;
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--checkout-text-secondary, #6B7280);
+
+  a {
+    color: var(--checkout-accent, var(--mantine-primary-color-filled));
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

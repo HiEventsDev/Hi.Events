@@ -23,7 +23,8 @@ const ALLOWED_UNAUTHENTICATED_PATHS = [
     'widget',
     '/product/',
     'check-in',
-    '/events/'
+    '/events/',
+    'my-tickets',
 ];
 
 export const api = axios.create({
@@ -46,7 +47,9 @@ api.interceptors.response.use(
         if (isAuthError && (!isAllowedUnauthenticatedPath || isManageEventPath)) {
             // Store the current URL before redirecting to the login page
             window?.localStorage?.setItem(PREVIOUS_URL_KEY, window?.location.href);
-            window?.location?.replace(LOGIN_PATH);
+            // Preserve query params (UTM tracking) during redirect
+            const searchParams = window?.location?.search || '';
+            window?.location?.replace(LOGIN_PATH + searchParams);
         }
 
         return Promise.reject(error);

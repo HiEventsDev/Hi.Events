@@ -8,16 +8,19 @@
     "require": {
         "php": "^8.2",
         "ext-intl": "*",
+        "ext-xmlwriter": "*",
         "barryvdh/laravel-dompdf": "^3.0",
         "brick/money": "^0.10.1",
         "doctrine/dbal": "^3.6",
         "ezyang/htmlpurifier": "^4.17",
         "guzzlehttp/guzzle": "^7.2",
+        "lab404/laravel-impersonate": "^1.7",
         "laravel/framework": "^12.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.8",
         "laravel/vapor-core": "^2.37",
         "league/flysystem-aws-s3-v3": "^3.0",
+        "liquid/liquid": "^1.4",
         "maatwebsite/excel": "^3.1",
         "nette/php-generator": "^4.0",
         "php-open-source-saver/jwt-auth": "^2.1",
@@ -25,7 +28,12 @@
         "spatie/icalendar-generator": "^3.0",
         "spatie/laravel-data": "^4.15",
         "spatie/laravel-webhook-server": "^3.8",
-        "stripe/stripe-php": "^17.0"
+        "stripe/stripe-php": "^17.0",
+        "symfony/http-client": "^7.4",
+        "symfony/postmark-mailer": "^7.4"
+    },
+    "suggest": {
+        "ext-imagick": "Required for image dimension extraction and LQIP generation"
     },
     "require-dev": {
         "druc/laravel-langscanner": "dev-l12-compatibility",

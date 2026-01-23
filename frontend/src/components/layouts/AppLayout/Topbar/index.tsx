@@ -1,10 +1,10 @@
 import React from "react";
 import {NavLink} from "react-router";
 import {Breadcrumbs, Burger} from '@mantine/core';
-import {IconHome} from "@tabler/icons-react";
 import classes from './Topbar.module.scss';
 import {BreadcrumbItem} from "../types";
 import {GlobalMenu} from "../../../common/GlobalMenu";
+import { getConfig } from "../../../../utilites/config";
 
 interface TopbarProps {
     sidebarOpen: boolean;
@@ -37,8 +37,8 @@ export const Topbar: React.FC<TopbarProps> = ({
                     />
                 </div>
                 <div className={classes.logo}>
-                    <NavLink to={`/manage/events`}>
-                        <img src={'/logo-text-only-white-text.png'} alt={''}/>
+                    <NavLink to={ `/manage/events` }>
+                        <img src={getConfig("VITE_APP_LOGO_LIGHT", "/logos/hi-events-text-dark.svg")} alt={`${getConfig("VITE_APP_NAME", "Hi.Events")} logo`} className={classes.logo}/>
                     </NavLink>
                 </div>
 
@@ -54,10 +54,9 @@ export const Topbar: React.FC<TopbarProps> = ({
 
             <div className={classes.breadcrumbsRow}>
                 <div className={classes.breadcrumbs}>
-                    <IconHome size={16} style={{marginRight: '8px', opacity: 0.6, minWidth: '16px'}}/>
-                    <Breadcrumbs separator={<span style={{margin: '0 0px', color: '#aaa'}}>/</span>}>
+                    <Breadcrumbs separator={<span style={{margin: '0 4px', color: '#aaa'}}>/</span>}>
                         {breadcrumbItems.map((item, index) => (
-                            <NavLink key={index} to={item.link}>
+                            <NavLink key={index} to={item.link ?? '#'}>
                                 {item.content}
                             </NavLink>
                         ))}

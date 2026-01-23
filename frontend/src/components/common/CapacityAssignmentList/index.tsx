@@ -46,13 +46,10 @@ export const CapacityAssignmentList = ({capacityAssignments, openCreateModal}: C
                         <p>
                             <Trans>
                                 <p>
-                                    Capacity assignments let you manage capacity across tickets or an entire event. Ideal
-                                    for multi-day events, workshops, and more, where controlling attendance is crucial.
+                                    Set a single total attendance limit that applies to multiple ticket types at once.
                                 </p>
                                 <p>
-                                    For instance, you can associate a capacity assignment with <b>Day One</b> and <b>All
-                                    Days</b> ticket. Once the capacity is reached, both tickets will automatically stop
-                                    being available for sale.
+                                    For example, if you link a <b>Day Pass</b> and a <b>Full Weekend</b> ticket, they will both draw from the same pool of spots. Once the limit is reached, all linked tickets automatically stop selling.
                                 </p>
                             </Trans>
                         </p>

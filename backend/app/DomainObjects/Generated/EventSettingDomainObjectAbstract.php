@@ -58,6 +58,12 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     final public const ALLOW_ORDERS_AWAITING_OFFLINE_PAYMENT_TO_CHECK_IN = 'allow_orders_awaiting_offline_payment_to_check_in';
     final public const INVOICE_PAYMENT_TERMS_DAYS = 'invoice_payment_terms_days';
     final public const INVOICE_NOTES = 'invoice_notes';
+    final public const TICKET_DESIGN_SETTINGS = 'ticket_design_settings';
+    final public const ATTENDEE_DETAILS_COLLECTION_METHOD = 'attendee_details_collection_method';
+    final public const SHOW_MARKETING_OPT_IN = 'show_marketing_opt_in';
+    final public const HOMEPAGE_THEME_SETTINGS = 'homepage_theme_settings';
+    final public const PASS_PLATFORM_FEE_TO_BUYER = 'pass_platform_fee_to_buyer';
+    final public const ALLOW_ATTENDEE_SELF_EDIT = 'allow_attendee_self_edit';
 
     protected int $id;
     protected int $event_id;
@@ -107,6 +113,12 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     protected bool $allow_orders_awaiting_offline_payment_to_check_in = false;
     protected ?int $invoice_payment_terms_days = null;
     protected ?string $invoice_notes = null;
+    protected array|string|null $ticket_design_settings = null;
+    protected string $attendee_details_collection_method = 'PER_TICKET';
+    protected bool $show_marketing_opt_in = true;
+    protected array|string|null $homepage_theme_settings = null;
+    protected bool $pass_platform_fee_to_buyer = false;
+    protected bool $allow_attendee_self_edit = true;
 
     public function toArray(): array
     {
@@ -159,6 +171,12 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
                     'allow_orders_awaiting_offline_payment_to_check_in' => $this->allow_orders_awaiting_offline_payment_to_check_in ?? null,
                     'invoice_payment_terms_days' => $this->invoice_payment_terms_days ?? null,
                     'invoice_notes' => $this->invoice_notes ?? null,
+                    'ticket_design_settings' => $this->ticket_design_settings ?? null,
+                    'attendee_details_collection_method' => $this->attendee_details_collection_method ?? null,
+                    'show_marketing_opt_in' => $this->show_marketing_opt_in ?? null,
+                    'homepage_theme_settings' => $this->homepage_theme_settings ?? null,
+                    'pass_platform_fee_to_buyer' => $this->pass_platform_fee_to_buyer ?? null,
+                    'allow_attendee_self_edit' => $this->allow_attendee_self_edit ?? null,
                 ];
     }
 
@@ -689,5 +707,71 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     public function getInvoiceNotes(): ?string
     {
         return $this->invoice_notes;
+    }
+
+    public function setTicketDesignSettings(array|string|null $ticket_design_settings): self
+    {
+        $this->ticket_design_settings = $ticket_design_settings;
+        return $this;
+    }
+
+    public function getTicketDesignSettings(): array|string|null
+    {
+        return $this->ticket_design_settings;
+    }
+
+    public function setAttendeeDetailsCollectionMethod(string $attendee_details_collection_method): self
+    {
+        $this->attendee_details_collection_method = $attendee_details_collection_method;
+        return $this;
+    }
+
+    public function getAttendeeDetailsCollectionMethod(): string
+    {
+        return $this->attendee_details_collection_method;
+    }
+
+    public function setShowMarketingOptIn(bool $show_marketing_opt_in): self
+    {
+        $this->show_marketing_opt_in = $show_marketing_opt_in;
+        return $this;
+    }
+
+    public function getShowMarketingOptIn(): bool
+    {
+        return $this->show_marketing_opt_in;
+    }
+
+    public function setHomepageThemeSettings(array|string|null $homepage_theme_settings): self
+    {
+        $this->homepage_theme_settings = $homepage_theme_settings;
+        return $this;
+    }
+
+    public function getHomepageThemeSettings(): array|string|null
+    {
+        return $this->homepage_theme_settings;
+    }
+
+    public function setPassPlatformFeeToBuyer(bool $pass_platform_fee_to_buyer): self
+    {
+        $this->pass_platform_fee_to_buyer = $pass_platform_fee_to_buyer;
+        return $this;
+    }
+
+    public function getPassPlatformFeeToBuyer(): bool
+    {
+        return $this->pass_platform_fee_to_buyer;
+    }
+
+    public function setAllowAttendeeSelfEdit(bool $allow_attendee_self_edit): self
+    {
+        $this->allow_attendee_self_edit = $allow_attendee_self_edit;
+        return $this;
+    }
+
+    public function getAllowAttendeeSelfEdit(): bool
+    {
+        return $this->allow_attendee_self_edit;
     }
 }

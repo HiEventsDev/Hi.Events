@@ -6,6 +6,7 @@ use HiEvents\DomainObjects\Enums\PromoCodeDiscountTypeEnum;
 use HiEvents\DomainObjects\Generated\PromoCodeDomainObjectAbstract;
 use HiEvents\DomainObjects\PromoCodeDomainObject;
 use HiEvents\Exceptions\ResourceConflictException;
+use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Helper\DateHelper;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
@@ -26,9 +27,19 @@ readonly class UpdatePromoCodeHandler
     /**
      * @throws ResourceConflictException
      * @throws UnrecognizedProductIdException
+     * @throws ResourceNotFoundException
      */
     public function handle(int $promoCodeId, UpsertPromoCodeDTO $promoCodeDTO): PromoCodeDomainObject
     {
+        $promoCode = $this->promoCodeRepository->findFirstWhere([
+            PromoCodeDomainObjectAbstract::ID => $promoCodeId,
+            PromoCodeDomainObjectAbstract::EVENT_ID => $promoCodeDTO->event_id,
+        ]);
+
+        if ($promoCode === null) {
+            throw new ResourceNotFoundException(__('Promo code not found'));
+        }
+
         $this->eventProductValidationService->validateProductIds(
             productIds: $promoCodeDTO->applicable_product_ids,
             eventId: $promoCodeDTO->event_id

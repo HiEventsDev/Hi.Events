@@ -4,11 +4,11 @@ import {useParams} from "react-router";
 import {useGetEventSettings} from "../../../../queries/useGetEventSettings.ts";
 import {useUpdateEventSettings} from "../../../../mutations/useUpdateEventSettings.ts";
 import {useFormErrorResponseHandler} from "../../../../hooks/useFormErrorResponseHandler.tsx";
-import {EventSettings, IdParam} from "../../../../types.ts";
+import {EventSettings, HomepageThemeSettings, IdParam} from "../../../../types.ts";
 import {showSuccess} from "../../../../utilites/notifications.tsx";
 import {t} from "@lingui/macro";
 import {useForm} from "@mantine/form";
-import {Button, ColorInput, Group, TextInput, Accordion, Stack, Text} from "@mantine/core";
+import {Button, Group, TextInput, Accordion, Stack, Text} from "@mantine/core";
 import {IconColorPicker, IconHelp, IconPhoto, IconPalette, IconTypography} from "@tabler/icons-react";
 import {Tooltip} from "../../../common/Tooltip";
 import {CustomSelect} from "../../../common/CustomSelect";
@@ -18,6 +18,13 @@ import {LoadingMask} from "../../../common/LoadingMask";
 import {ImageUploadDropzone} from "../../../common/ImageUploadDropzone";
 import {queryClient} from "../../../../utilites/queryClient.ts";
 import {GET_EVENT_PUBLIC_QUERY_KEY} from "../../../../queries/useGetEventPublic.ts";
+import {ThemeColorControls} from "../../../common/ThemeColorControls";
+import {validateThemeSettings} from "../../../../utilites/themeUtils.ts";
+
+interface FormValues {
+    homepage_theme_settings: Partial<HomepageThemeSettings>;
+    continue_button_text: string;
+}
 
 const HomepageDesigner = () => {
     const {eventId} = useParams();
@@ -26,7 +33,7 @@ const HomepageDesigner = () => {
     const updateMutation = useUpdateEventSettings();
 
     const iframeRef = useRef<HTMLIFrameElement>(null);
-    const lastSentSettings = useRef<Partial<EventSettings> | null>(null);
+    const lastSentSettings = useRef<string | null>(null);
 
     const [iframeSrc, setIframeSrc] = useState<string | null>(null);
     const [iframeLoaded, setIframeLoaded] = useState(false);
@@ -35,15 +42,14 @@ const HomepageDesigner = () => {
 
     const existingCover = eventImagesQuery.data?.find((image) => image.type === 'EVENT_COVER');
 
-    const form = useForm({
+    const form = useForm<FormValues>({
         initialValues: {
-            homepage_background_color: '#fff',
-            homepage_primary_color: '#444',
-            homepage_primary_text_color: '#000000',
-            homepage_secondary_color: '#444',
-            homepage_secondary_text_color: '#fff',
-            homepage_body_background_color: '#fff',
-            homepage_background_type: 'COLOR',
+            homepage_theme_settings: {
+                accent: '#8b5cf6',
+                background: '#f5f3ff',
+                mode: 'light',
+                background_type: 'COLOR',
+            },
             continue_button_text: '',
         }
     });
@@ -52,15 +58,12 @@ const HomepageDesigner = () => {
 
     useEffect(() => {
         if (eventSettingsQuery?.isFetched && eventSettingsQuery?.data) {
+            const settings = eventSettingsQuery.data;
+            const themeSettings = validateThemeSettings(settings.homepage_theme_settings);
+
             form.setValues({
-                homepage_background_color: eventSettingsQuery.data.homepage_background_color || '',
-                homepage_primary_color: eventSettingsQuery.data.homepage_primary_color || '',
-                homepage_primary_text_color: eventSettingsQuery.data.homepage_primary_text_color || '',
-                homepage_secondary_color: eventSettingsQuery.data.homepage_secondary_color || '',
-                homepage_secondary_text_color: eventSettingsQuery.data.homepage_secondary_text_color || '',
-                homepage_body_background_color: eventSettingsQuery.data.homepage_body_background_color || '',
-                homepage_background_type: eventSettingsQuery.data.homepage_background_type || 'COLOR',
-                continue_button_text: eventSettingsQuery.data.continue_button_text,
+                homepage_theme_settings: themeSettings,
+                continue_button_text: settings.continue_button_text,
             });
         }
     }, [eventSettingsQuery.isFetched]);
@@ -79,9 +82,20 @@ const HomepageDesigner = () => {
         }
     }, [existingCover?.id]);
 
-    const handleSubmit = (values: Partial<EventSettings>) => {
+    const handleSubmit = (values: FormValues) => {
+        const validatedTheme = validateThemeSettings(values.homepage_theme_settings);
+
+        const eventSettings: Partial<EventSettings> = {
+            homepage_theme_settings: validatedTheme,
+            continue_button_text: values.continue_button_text,
+            // Also update legacy fields for backward compatibility during transition
+            homepage_primary_color: validatedTheme.accent,
+            homepage_body_background_color: validatedTheme.background,
+            homepage_background_type: validatedTheme.background_type,
+        };
+
         updateMutation.mutate(
-            {eventSettings: values, eventId: eventId},
+            {eventSettings, eventId: eventId},
             {
                 onSuccess: () => {
                     showSuccess(t`Successfully Updated Homepage Design`);
@@ -104,14 +118,20 @@ const HomepageDesigner = () => {
 
     const sendSettingsToIframe = () => {
         if (iframeRef.current?.contentWindow && iframeLoaded) {
-            const settingsToSend = form.values;
+            const themeSettings = validateThemeSettings(form.values.homepage_theme_settings);
 
-            if (JSON.stringify(settingsToSend) !== JSON.stringify(lastSentSettings.current)) {
+            const settingsToSend = {
+                homepage_theme_settings: themeSettings,
+                continue_button_text: form.values.continue_button_text,
+            };
+
+            const settingsJson = JSON.stringify(settingsToSend);
+            if (settingsJson !== lastSentSettings.current) {
                 iframeRef.current.contentWindow.postMessage(
                     {type: "UPDATE_SETTINGS", settings: settingsToSend},
                     "*"
                 );
-                lastSentSettings.current = settingsToSend;
+                lastSentSettings.current = settingsJson;
             }
         }
     };
@@ -120,18 +140,30 @@ const HomepageDesigner = () => {
         sendSettingsToIframe();
     }, [iframeLoaded, form.values]);
 
+    const handleThemeChange = (themeSettings: Partial<HomepageThemeSettings>) => {
+        form.setFieldValue('homepage_theme_settings', themeSettings);
+    };
+
+    const handleBackgroundTypeChange = (backgroundType: string | string[]) => {
+        const value = Array.isArray(backgroundType) ? backgroundType[0] : backgroundType;
+        form.setFieldValue('homepage_theme_settings', {
+            ...form.values.homepage_theme_settings,
+            background_type: value as 'COLOR' | 'MIRROR_COVER_IMAGE',
+        });
+    };
+
     return (
         <div className={classes.container}>
             <div className={classes.sidebar}>
                 <div className={classes.sticky}>
                     <div className={classes.header}>
                         <h2>{t`Homepage Design`}</h2>
-                        <Text c="dimmed" size="sm">{t`Customize your event page appearance`}</Text>
+                        <Text c="dimmed" size="sm">{t`Customize the layout, colors, and branding of your event homepage.`}</Text>
                     </div>
 
-                    <Accordion 
-                        multiple 
-                        value={accordionValue} 
+                    <Accordion
+                        multiple
+                        value={accordionValue}
                         onChange={setAccordionValue}
                         variant="contained"
                         className={classes.accordion}
@@ -172,7 +204,7 @@ const HomepageDesigner = () => {
                                 <Text fw={500}>{t`Theme & Colors`}</Text>
                             </Accordion.Control>
                             <Accordion.Panel>
-                                <form onSubmit={form.onSubmit(handleSubmit as any)}>
+                                <form onSubmit={form.onSubmit(handleSubmit)}>
                                     <fieldset disabled={eventSettingsQuery.isLoading || updateMutation.isPending} className={classes.fieldset}>
                                         <Stack gap="md">
                                             <CustomSelect
@@ -191,50 +223,16 @@ const HomepageDesigner = () => {
                                                         disabled: !existingCover,
                                                     },
                                                 ]}
-                                                form={form}
                                                 label={t`Background Type`}
-                                                name={'homepage_background_type'}
+                                                name={'homepage_theme_settings.background_type'}
+                                                value={form.values.homepage_theme_settings.background_type || 'COLOR'}
+                                                onChange={handleBackgroundTypeChange}
                                             />
 
-                                            {form.values.homepage_background_type === 'COLOR' && (
-                                                <ColorInput
-                                                    format="hexa"
-                                                    label={t`Page Background Color`}
-                                                    description={t`The background color of the entire page`}
-                                                    size="sm"
-                                                    {...form.getInputProps('homepage_body_background_color')}
-                                                />
-                                            )}
-                                            <ColorInput 
-                                                format="hexa"
-                                                label={t`Content Background Color`}
-                                                description={t`The background color of content areas`}
-                                                size="sm"
-                                                {...form.getInputProps('homepage_background_color')} 
-                                            />
-                                            <ColorInput 
-                                                format="hexa"
-                                                label={t`Primary Color`}
-                                                size="sm"
-                                                {...form.getInputProps('homepage_primary_color')} 
-                                            />
-                                            <ColorInput 
-                                                format="hexa"
-                                                label={t`Primary Text Color`}
-                                                size="sm"
-                                                {...form.getInputProps('homepage_primary_text_color')} 
-                                            />
-                                            <ColorInput 
-                                                format="hexa"
-                                                label={t`Secondary Color`}
-                                                size="sm"
-                                                {...form.getInputProps('homepage_secondary_color')} 
-                                            />
-                                            <ColorInput 
-                                                format="hexa"
-                                                label={t`Secondary Text Color`}
-                                                size="sm"
-                                                {...form.getInputProps('homepage_secondary_text_color')} 
+                                            <ThemeColorControls
+                                                values={form.values.homepage_theme_settings}
+                                                onChange={handleThemeChange}
+                                                disabled={eventSettingsQuery.isLoading || updateMutation.isPending}
                                             />
                                         </Stack>
                                     </fieldset>
@@ -247,7 +245,7 @@ const HomepageDesigner = () => {
                                 <Text fw={500}>{t`Button Text`}</Text>
                             </Accordion.Control>
                             <Accordion.Panel>
-                                <form onSubmit={form.onSubmit(handleSubmit as any)}>
+                                <form onSubmit={form.onSubmit(handleSubmit)}>
                                     <fieldset disabled={eventSettingsQuery.isLoading || updateMutation.isPending} className={classes.fieldset}>
                                         <Stack gap="md">
                                             <TextInput
@@ -255,7 +253,7 @@ const HomepageDesigner = () => {
                                                 description={t`Customize the text shown on the continue button`}
                                                 placeholder={t`e.g., Get Tickets, Register Now`}
                                                 size="sm"
-                                                {...form.getInputProps('continue_button_text')} 
+                                                {...form.getInputProps('continue_button_text')}
                                             />
                                         </Stack>
                                     </fieldset>
@@ -264,12 +262,12 @@ const HomepageDesigner = () => {
                         </Accordion.Item>
                     </Accordion>
 
-                    <Button 
-                        loading={updateMutation.isPending} 
+                    <Button
+                        loading={updateMutation.isPending}
                         type="submit"
                         fullWidth
                         mt="md"
-                        onClick={() => form.onSubmit(handleSubmit as any)()}
+                        onClick={() => form.onSubmit(handleSubmit)()}
                     >
                         {t`Save Changes`}
                     </Button>
