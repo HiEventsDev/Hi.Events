@@ -2,6 +2,8 @@
 
 namespace HiEvents\DomainObjects;
 
+use Exception;
+use HiEvents\DataTransferObjects\AddressDTO;
 use HiEvents\DomainObjects\Enums\PaymentProviders;
 use HiEvents\DomainObjects\Enums\ProductType;
 use HiEvents\DomainObjects\Interfaces\IsFilterable;
@@ -287,39 +289,16 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
             && $this->getRefundStatus() !== OrderRefundStatus::REFUNDED->name;
     }
 
-    public function getAddressLine1(): ?string
+    public function getAddressDTO(): ?AddressDTO
     {
-        $address = $this->getAddress();
-        return $address['address_line_1'] ?? null;
-    }
+        if ($this->getAddress() === null) {
+            return null;
+        }
 
-    public function getAddressLine2(): ?string
-    {
-        $address = $this->getAddress();
-        return $address['address_line_2'] ?? null;
-    }
-
-    public function getCity(): ?string
-    {
-        $address = $this->getAddress();
-        return $address['city'] ?? null;
-    }
-
-    public function getState(): ?string
-    {
-        $address = $this->getAddress();
-        return $address['state_or_region'] ?? $address['state'] ?? null;
-    }
-
-    public function getPostalCode(): ?string
-    {
-        $address = $this->getAddress();
-        return $address['zip_or_postal_code'] ?? $address['postal_code'] ?? null;
-    }
-
-    public function getCountryCode(): ?string
-    {
-        $address = $this->getAddress();
-        return $address['country'] ?? null;
+        try {
+            return AddressDTO::from($this->getAddress());
+        } catch (Exception) {
+            return null;
+        }
     }
 }
