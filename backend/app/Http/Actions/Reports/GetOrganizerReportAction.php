@@ -8,6 +8,7 @@ use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Report\GetOrganizerReportRequest;
 use HiEvents\Services\Application\Handlers\Reports\DTO\GetOrganizerReportDTO;
 use HiEvents\Services\Application\Handlers\Reports\GetOrganizerReportHandler;
+use HiEvents\Services\Domain\Report\DTO\PaginatedReportDTO;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\ValidationException;
@@ -39,8 +40,17 @@ class GetOrganizerReportAction extends BaseAction
                 startDate: $request->validated('start_date'),
                 endDate: $request->validated('end_date'),
                 currency: $request->validated('currency'),
+                eventId: $request->validated('event_id'),
+                page: (int) $request->validated('page', 1),
+                perPage: (int) $request->validated('per_page', 1000),
             ),
         );
+
+        if ($reportData instanceof PaginatedReportDTO) {
+            return $this->jsonResponse(
+                data: $reportData->toArray(),
+            );
+        }
 
         return $this->jsonResponse(
             data: $reportData,

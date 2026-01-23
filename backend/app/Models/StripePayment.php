@@ -11,7 +11,7 @@ class StripePayment extends BaseModel
 
     protected function getTimestampsEnabled(): bool
     {
-        return false;
+        return true;
     }
 
     protected function getCastMap(): array

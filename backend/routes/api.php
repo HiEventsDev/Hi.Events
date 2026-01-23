@@ -138,6 +138,7 @@ use HiEvents\Http\Actions\Questions\GetQuestionAction;
 use HiEvents\Http\Actions\Questions\GetQuestionsAction;
 use HiEvents\Http\Actions\Questions\GetQuestionsPublicAction;
 use HiEvents\Http\Actions\Questions\SortQuestionsAction;
+use HiEvents\Http\Actions\Reports\ExportOrganizerReportAction;
 use HiEvents\Http\Actions\Reports\GetOrganizerReportAction;
 use HiEvents\Http\Actions\Reports\GetReportAction;
 use HiEvents\Http\Actions\Sitemap\GetSitemapEventsAction;
@@ -170,8 +171,18 @@ use HiEvents\Http\Actions\Admin\Configurations\GetAllConfigurationsAction;
 use HiEvents\Http\Actions\Admin\Configurations\UpdateConfigurationAction;
 use HiEvents\Http\Actions\Admin\Events\GetAllEventsAction as GetAllAdminEventsAction;
 use HiEvents\Http\Actions\Admin\Events\GetUpcomingEventsAction;
+use HiEvents\Http\Actions\Admin\FailedJobs\DeleteAllFailedJobsAction;
+use HiEvents\Http\Actions\Admin\FailedJobs\DeleteFailedJobAction;
+use HiEvents\Http\Actions\Admin\FailedJobs\GetAllFailedJobsAction;
+use HiEvents\Http\Actions\Admin\FailedJobs\RetryAllFailedJobsAction;
+use HiEvents\Http\Actions\Admin\FailedJobs\RetryFailedJobAction;
+use HiEvents\Http\Actions\Admin\Messages\ApproveMessageAction;
+use HiEvents\Http\Actions\Admin\Messages\GetAllMessagesAction as GetAllAdminMessagesAction;
+use HiEvents\Http\Actions\Admin\GetMessagingTiersAction;
+use HiEvents\Http\Actions\Admin\Accounts\UpdateAccountMessagingTierAction;
 use HiEvents\Http\Actions\Admin\Orders\GetAllOrdersAction;
 use HiEvents\Http\Actions\Admin\Attribution\GetUtmAttributionStatsAction;
+use HiEvents\Http\Actions\Admin\Stats\GetAdminDashboardDataAction;
 use HiEvents\Http\Actions\Admin\Stats\GetAdminStatsAction;
 use HiEvents\Http\Actions\Admin\Users\GetAllUsersAction;
 use HiEvents\Http\Actions\Admin\Users\StartImpersonationAction;
@@ -254,6 +265,7 @@ $router->middleware(['auth:api'])->group(
         $router->get('/organizers/{organizer_id}/settings', GetOrganizerSettingsAction::class);
         $router->patch('/organizers/{organizer_id}/settings', PartialUpdateOrganizerSettingsAction::class);
         $router->get('/organizers/{organizer_id}/reports/{report_type}', GetOrganizerReportAction::class);
+        $router->get('/organizers/{organizer_id}/reports/{report_type}/export', ExportOrganizerReportAction::class);
 
         // Email Templates - Organizer level
         $router->get('/organizers/{organizerId}/email-templates', GetOrganizerEmailTemplatesAction::class);
@@ -399,6 +411,7 @@ $router->middleware(['auth:api'])->group(
 $router->prefix('/admin')->middleware(['auth:api'])->group(
     function (Router $router): void {
         $router->get('/stats', GetAdminStatsAction::class);
+        $router->get('/dashboard', GetAdminDashboardDataAction::class);
         $router->get('/attribution/stats', GetUtmAttributionStatsAction::class);
         $router->get('/accounts', GetAllAdminAccountsAction::class);
         $router->get('/accounts/{account_id}', GetAdminAccountAction::class);
@@ -414,6 +427,21 @@ $router->prefix('/admin')->middleware(['auth:api'])->group(
         $router->get('/orders', GetAllOrdersAction::class);
         $router->post('/impersonate/{user_id}', StartImpersonationAction::class);
         $router->post('/stop-impersonation', StopImpersonationAction::class);
+
+        // Failed Jobs
+        $router->get('/failed-jobs', GetAllFailedJobsAction::class);
+        $router->delete('/failed-jobs/{jobId}', DeleteFailedJobAction::class);
+        $router->delete('/failed-jobs', DeleteAllFailedJobsAction::class);
+        $router->post('/failed-jobs/{jobId}/retry', RetryFailedJobAction::class);
+        $router->post('/failed-jobs/retry-all', RetryAllFailedJobsAction::class);
+
+        // Messages
+        $router->get('/messages', GetAllAdminMessagesAction::class);
+        $router->post('/messages/{message_id}/approve', ApproveMessageAction::class);
+
+        // Messaging Tiers
+        $router->get('/messaging-tiers', GetMessagingTiersAction::class);
+        $router->put('/accounts/{account_id}/messaging-tier', UpdateAccountMessagingTierAction::class);
     }
 );
 

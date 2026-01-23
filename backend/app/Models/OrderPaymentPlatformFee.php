@@ -17,6 +17,7 @@ class OrderPaymentPlatformFee extends BaseModel
             'application_fee_gross_amount' => 'float',
             'application_fee_net_amount' => 'float',
             'application_fee_vat_amount' => 'float',
+            'application_fee_vat_rate' => 'float',
         ];
     }
 

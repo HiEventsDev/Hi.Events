@@ -13,4 +13,6 @@ use Illuminate\Pagination\LengthAwarePaginator;
 interface MessageRepositoryInterface extends RepositoryInterface
 {
     public function findByEventId(int $eventId, QueryParamsDTO $params): LengthAwarePaginator;
+
+    public function countMessagesInLast24Hours(int $accountId): int;
 }

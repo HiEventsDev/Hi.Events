@@ -49,7 +49,10 @@ readonly class UpdateEventStatusHandler
 
         $this->eventRepository->updateWhere(
             attributes: ['status' => $updateEventStatusDTO->status],
-            where: ['id' => $updateEventStatusDTO->eventId]
+            where: [
+                'id' => $updateEventStatusDTO->eventId,
+                'account_id' => $updateEventStatusDTO->accountId,
+            ]
         );
 
         $this->logger->info('Event status updated', [
@@ -57,6 +60,9 @@ readonly class UpdateEventStatusHandler
             'status' => $updateEventStatusDTO->status
         ]);
 
-        return $this->eventRepository->findById($updateEventStatusDTO->eventId);
+        return $this->eventRepository->findFirstWhere([
+            'id' => $updateEventStatusDTO->eventId,
+            'account_id' => $updateEventStatusDTO->accountId,
+        ]);
     }
 }

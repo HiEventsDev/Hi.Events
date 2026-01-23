@@ -31,7 +31,6 @@ msgstr "'Még semmi sem látható'"
 msgid "(empty)"
 msgstr "(üres)"
 
-#: src/components/common/OrganizerReportTable/index.tsx:314
 #: src/components/common/ReportTable/index.tsx:303
 msgid "{0}"
 msgstr "{0}"
@@ -324,6 +323,10 @@ msgstr "Hozzáférés megtagadva"
 #: src/components/common/AdminOrdersTable/index.tsx:68
 #: src/components/routes/account/ManageAccount/index.tsx:24
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:53
+#: src/components/routes/admin/Dashboard/index.tsx:355
+#: src/components/routes/admin/Dashboard/index.tsx:402
+#: src/components/routes/admin/Messages/index.tsx:127
+#: src/components/routes/admin/Messages/index.tsx:228
 msgid "Account"
 msgstr "Fiók"
 
@@ -376,6 +379,7 @@ msgstr "Beavatkozás szükséges: ÁFA információ szükséges"
 #: src/components/common/AttendeeTable/index.tsx:346
 #: src/components/common/OrdersTable/index.tsx:438
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:452
+#: src/components/routes/admin/FailedJobs/index.tsx:159
 msgid "Actions"
 msgstr "Műveletek"
 
@@ -397,6 +401,10 @@ msgstr "Aktiválás dátuma"
 #: src/components/routes/event/attendees.tsx:26
 msgid "Active"
 msgstr "Aktív"
+
+#: src/components/routes/admin/Dashboard/index.tsx:356
+msgid "Active Events"
+msgstr "Aktív események"
 
 #: src/components/forms/CheckInListForm/index.tsx:53
 msgid "Add a description for this check-in list"
@@ -534,8 +542,8 @@ msgid "Admin"
 msgstr "Adminisztrátor"
 
 #: src/components/common/GlobalMenu/index.tsx:61
-#: src/components/layouts/Admin/index.tsx:25
-#: src/components/routes/admin/Dashboard/index.tsx:42
+#: src/components/layouts/Admin/index.tsx:27
+#: src/components/routes/admin/Dashboard/index.tsx:70
 msgid "Admin Dashboard"
 msgstr "Admin vezérlőpult"
 
@@ -599,7 +607,7 @@ msgstr "Minden résztvevő"
 msgid "All attendees of this event"
 msgstr "Az esemény összes résztvevője"
 
-#: src/components/common/OrganizerReportTable/index.tsx:249
+#: src/components/common/OrganizerReportTable/index.tsx:291
 msgid "All Currencies"
 msgstr "Minden pénznem"
 
@@ -610,6 +618,18 @@ msgstr "Kész! Most már a fejlesztett fizetési rendszerünket használja."
 #: src/components/routes/events/Dashboard/index.tsx:74
 msgid "All Ended Events"
 msgstr "Összes befejezett esemény"
+
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:33
+msgid "All Events"
+msgstr "Összes esemény"
+
+#: src/components/routes/admin/FailedJobs/index.tsx:86
+msgid "All failed jobs deleted"
+msgstr "Minden sikertelen feladat törölve"
+
+#: src/components/routes/admin/FailedJobs/index.tsx:72
+msgid "All jobs queued for retry"
+msgstr "Minden feladat újrapróbálásra sorba állítva"
 
 #: src/components/common/PromoCodeTable/index.tsx:131
 msgid "All Products"
@@ -676,6 +696,10 @@ msgstr "Csodálatos, esemény, kulcsszavak..."
 #: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:36
 msgid "Amount"
 msgstr "Összeg"
+
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:69
+msgid "Amount Paid"
+msgstr "Fizetett összeg"
 
 #: src/components/modals/CreateAttendeeModal/index.tsx:176
 msgid "Amount paid ({0})"
@@ -765,6 +789,10 @@ msgstr "Biztosan archiválni szeretné ezt az eseményt?"
 #: src/components/common/AttendeeTable/index.tsx:83
 msgid "Are you sure you want to cancel this attendee? This will void their ticket"
 msgstr "Biztosan törölni szeretné ezt a résztvevőt? Ez érvényteleníti a jegyét."
+
+#: src/components/routes/admin/FailedJobs/index.tsx:81
+msgid "Are you sure you want to delete all failed jobs?"
+msgstr "Biztosan törölni szeretné az összes sikertelen feladatot?"
 
 #: src/components/common/AffiliateTable/index.tsx:202
 msgid "Are you sure you want to delete this affiliate? This action cannot be undone."
@@ -973,6 +1001,8 @@ msgstr "A résztvevő jegye nincs ebben a listában"
 #: src/components/common/StatBoxes/index.tsx:45
 #: src/components/layouts/Event/index.tsx:115
 #: src/components/modals/ManageOrderModal/index.tsx:126
+#: src/components/routes/admin/Messages/index.tsx:58
+#: src/components/routes/admin/Messages/index.tsx:106
 #: src/components/routes/event/attendees.tsx:173
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:131
 msgid "Attendees"
@@ -1085,7 +1115,7 @@ msgstr "Vissza az esemény oldalára"
 msgid "Back to login"
 msgstr "Vissza a bejelentkezéshez"
 
-#: src/components/routes/organizer/Reports/ReportLayout/index.tsx:39
+#: src/components/routes/organizer/Reports/ReportLayout/index.tsx:42
 msgid "Back to Reports"
 msgstr "Vissza a jelentésekhez"
 
@@ -1668,7 +1698,7 @@ msgstr "A konfigurációs nevek láthatóak a végfelhasználók számára. A \"
 msgid "Configuration updated successfully"
 msgstr "Konfiguráció sikeresen frissítve"
 
-#: src/components/layouts/Admin/index.tsx:19
+#: src/components/layouts/Admin/index.tsx:21
 #: src/components/routes/admin/Configurations/index.tsx:60
 msgid "Configurations"
 msgstr "Konfigurációk"
@@ -2134,6 +2164,8 @@ msgid "Create your own event"
 msgstr "Hozza létre saját eseményét"
 
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:96
+#: src/components/routes/admin/Messages/index.tsx:132
+#: src/components/routes/admin/Messages/index.tsx:256
 msgid "Created"
 msgstr "Létrehozva"
 
@@ -2157,12 +2189,13 @@ msgstr "Szervezői profil létrehozása, kérjük, várjon."
 msgid "CTA label is required"
 msgstr "CTA címke kötelező"
 
-#: src/components/common/OrganizerReportTable/index.tsx:261
+#: src/components/common/OrganizerReportTable/index.tsx:306
 #: src/components/forms/OrganizerForm/index.tsx:50
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:73
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:113
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:115
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:51
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:99
 #: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:33
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:116
 msgid "Currency"
@@ -2205,7 +2238,7 @@ msgstr "Egyedi üzenet a pénztár után"
 msgid "Custom Questions"
 msgstr "Egyedi kérdések"
 
-#: src/components/common/OrganizerReportTable/index.tsx:58
+#: src/components/common/OrganizerReportTable/index.tsx:61
 #: src/components/common/ReportTable/index.tsx:53
 msgid "Custom Range"
 msgstr "Egyedi tartomány"
@@ -2372,12 +2405,17 @@ msgstr "Alapértelmezett sablon lesz használva"
 #: src/components/common/PromoCodeTable/index.tsx:40
 #: src/components/common/QuestionsTable/index.tsx:150
 #: src/components/common/TaxAndFeeList/index.tsx:78
+#: src/components/routes/admin/FailedJobs/index.tsx:201
 msgid "Delete"
 msgstr "Törlés"
 
 #: src/components/common/AffiliateTable/index.tsx:198
 msgid "Delete Affiliate"
 msgstr "Partner törlése"
+
+#: src/components/routes/admin/FailedJobs/index.tsx:131
+msgid "Delete All"
+msgstr "Összes törlése"
 
 #: src/components/common/CapacityAssignmentList/index.tsx:156
 msgid "Delete Capacity"
@@ -2399,6 +2437,10 @@ msgstr "Kód törlése"
 #: src/components/common/ImageUploadDropzone/index.tsx:255
 msgid "Delete image"
 msgstr "Kép törlése"
+
+#: src/components/routes/admin/FailedJobs/index.tsx:291
+msgid "Delete Job"
+msgstr "Feladat törlése"
 
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:121
 msgid "Delete Template"
@@ -2739,6 +2781,7 @@ msgstr "Jogosult bejelentkezési listák"
 #: src/components/modals/EditUserModal/index.tsx:80
 #: src/components/modals/InviteUserModal/index.tsx:61
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:92
+#: src/components/routes/admin/Dashboard/index.tsx:403
 #: src/components/routes/auth/AcceptInvitation/index.tsx:112
 #: src/components/routes/auth/ForgotPassword/index.tsx:65
 #: src/components/routes/auth/Login/index.tsx:93
@@ -2896,7 +2939,7 @@ msgid "Ended"
 msgstr "Befejezett"
 
 #: src/components/common/LanguageSwitcher/index.tsx:18
-#: src/components/common/LanguageSwitcher/index.tsx:56
+#: src/components/common/LanguageSwitcher/index.tsx:54
 #: src/components/modals/CreateAttendeeModal/index.tsx:156
 msgid "English"
 msgstr "Angol"
@@ -3017,9 +3060,14 @@ msgstr "EUR"
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:72
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:73
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:74
+#: src/components/routes/admin/Dashboard/index.tsx:256
+#: src/components/routes/admin/Dashboard/index.tsx:305
+#: src/components/routes/admin/Messages/index.tsx:126
+#: src/components/routes/admin/Messages/index.tsx:224
 #: src/components/routes/events/Dashboard/index.tsx:183
 #: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:19
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:41
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:43
 #: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:23
 msgid "Event"
 msgstr "Esemény"
@@ -3178,6 +3226,7 @@ msgstr "Esemény helyszíne"
 #: src/components/layouts/OrganizerLayout/index.tsx:84
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:123
 #: src/components/routes/admin/Attribution/index.tsx:126
+#: src/components/routes/admin/Dashboard/index.tsx:405
 #: src/components/routes/admin/Events/index.tsx:77
 #: src/components/routes/organizer/Events/index.tsx:43
 msgid "Events"
@@ -3188,7 +3237,7 @@ msgstr "Események"
 msgid "Events Performance"
 msgstr "Események teljesítménye"
 
-#: src/components/routes/admin/Dashboard/index.tsx:129
+#: src/components/routes/admin/Dashboard/index.tsx:452
 msgid "Events Starting in Next 24 Hours"
 msgstr "Következő 24 órában kezdődő események"
 
@@ -3203,6 +3252,11 @@ msgstr "Példák: \"Honnan hallott rólunk?\", \"Cégnév számlához\""
 #: src/components/common/QuestionsTable/index.tsx:495
 msgid "Examples: \"T-shirt size\", \"Meal preference\", \"Job title\""
 msgstr "Példák: \"Póló méret\", \"Étkezési preferencia\", \"Munkakör\""
+
+#: src/components/routes/admin/FailedJobs/index.tsx:158
+#: src/components/routes/admin/FailedJobs/index.tsx:255
+msgid "Exception"
+msgstr "Kivétel"
 
 #: src/components/forms/CheckInListForm/index.tsx:68
 msgid "Expiration date"
@@ -3226,6 +3280,10 @@ msgstr "Exportálás"
 msgid "Export Answers"
 msgstr "Válaszok exportálása"
 
+#: src/components/common/OrganizerReportTable/index.tsx:347
+msgid "Export CSV"
+msgstr ""
+
 #: src/mutations/useExportAnswers.ts:39
 msgid "Export failed. Please try again."
 msgstr "Exportálás sikertelen. Kérjük, próbálja újra."
@@ -3233,6 +3291,10 @@ msgstr "Exportálás sikertelen. Kérjük, próbálja újra."
 #: src/mutations/useExportAnswers.ts:17
 msgid "Export started. Preparing file..."
 msgstr "Exportálás elindítva. Fájl előkészítése..."
+
+#: src/components/common/OrganizerReportTable/index.tsx:204
+msgid "Export successful"
+msgstr ""
 
 #: src/components/routes/event/Affiliates/index.tsx:42
 msgid "Exporting Affiliates"
@@ -3253,6 +3315,20 @@ msgstr "Megrendelések exportálása"
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:46
 msgid "Facebook"
 msgstr "Facebook"
+
+#: src/components/routes/admin/Messages/index.tsx:94
+msgid "Failed"
+msgstr "Sikertelen"
+
+#: src/components/routes/admin/FailedJobs/index.tsx:157
+#: src/components/routes/admin/FailedJobs/index.tsx:251
+msgid "Failed At"
+msgstr "Sikertelen időpontja"
+
+#: src/components/layouts/Admin/index.tsx:20
+#: src/components/routes/admin/FailedJobs/index.tsx:110
+msgid "Failed Jobs"
+msgstr "Sikertelen feladatok"
 
 #: src/components/layouts/Checkout/index.tsx:105
 msgid "Failed to abandon order. Please try again."
@@ -3287,6 +3363,14 @@ msgstr "A sablon létrehozása sikertelen"
 msgid "Failed to delete configuration"
 msgstr "A konfiguráció törlése sikertelen"
 
+#: src/components/routes/admin/FailedJobs/index.tsx:64
+msgid "Failed to delete job"
+msgstr "A feladat törlése sikertelen"
+
+#: src/components/routes/admin/FailedJobs/index.tsx:89
+msgid "Failed to delete jobs"
+msgstr "A feladatok törlése sikertelen"
+
 #: src/components/common/QuestionsTable/index.tsx:203
 msgid "Failed to delete question"
 msgstr "A kérdés törlése sikertelen"
@@ -3312,6 +3396,10 @@ msgstr "Résztvevők exportálása sikertelen"
 #: src/components/routes/event/orders.tsx:99
 msgid "Failed to export orders"
 msgstr "Megrendelések exportálása sikertelen"
+
+#: src/components/common/OrganizerReportTable/index.tsx:206
+msgid "Failed to export report. Please try again."
+msgstr ""
 
 #: src/components/modals/EditCheckInListModal/index.tsx:79
 msgid "Failed to load Check-In List"
@@ -3340,6 +3428,14 @@ msgstr "Jegy e-mail újraküldése sikertelen"
 #: src/components/routes/welcome/index.tsx:125
 msgid "Failed to resend verification code"
 msgstr "Ellenőrző kód újraküldése sikertelen"
+
+#: src/components/routes/admin/FailedJobs/index.tsx:53
+msgid "Failed to retry job"
+msgstr "A feladat újrapróbálása sikertelen"
+
+#: src/components/routes/admin/FailedJobs/index.tsx:75
+msgid "Failed to retry jobs"
+msgstr "A feladatok újrapróbálása sikertelen"
 
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:148
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:151
@@ -3459,6 +3555,10 @@ msgstr "Először töltse ki az adatait fentebb"
 #: src/components/routes/event/attendees.tsx:183
 msgid "Filter Attendees"
 msgstr "Résztvevők szűrése"
+
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:123
+msgid "Filter by Event"
+msgstr "Szűrés esemény szerint"
 
 #: src/components/routes/event/orders.tsx:123
 msgid "Filter Orders"
@@ -3696,6 +3796,7 @@ msgstr "Bruttó bevétel"
 msgid "Gross sales"
 msgstr "Bruttó értékesítés"
 
+#: src/components/routes/admin/Dashboard/index.tsx:259
 #: src/components/routes/event/EventDashboard/index.tsx:312
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:119
 #: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:30
@@ -3714,7 +3815,7 @@ msgstr "Résztvevők"
 msgid "Have a promo code?"
 msgstr "Van promóciós kódja?"
 
-#: src/components/routes/admin/Dashboard/index.tsx:46
+#: src/components/routes/admin/Dashboard/index.tsx:74
 msgid "Hello {0}, manage your platform from here."
 msgstr "Helló {0}, innen kezelheti a platformot."
 
@@ -3746,6 +3847,14 @@ msgstr "Mire számíthat:"
 #: src/components/routes/event/EventDashboard/index.tsx:113
 msgid "Hi {0} 👋"
 msgstr "Szia {0} 👋"
+
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:75
+msgid "Hi.Events Fee"
+msgstr "Hi.Events díj"
+
+#: src/components/routes/organizer/Reports/index.tsx:42
+msgid "Hi.Events platform fees and VAT breakdown by transaction"
+msgstr "Hi.Events platform díjak és ÁFA bontás tranzakciónként"
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:90
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:310
@@ -3965,6 +4074,10 @@ msgstr "Megszemélyesítés elindítva"
 msgid "Impersonation stopped"
 msgstr "Megszemélyesítés leállítva"
 
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:114
+msgid "Important Notice"
+msgstr "Fontos megjegyzés"
+
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:78
 msgid "Important: Changing your email address will update the link to access this order. You will be redirected to the new order link after saving."
 msgstr "Fontos: Az e-mail cím módosítása frissíti a rendeléshez való hozzáférés linkjét. Mentés után átirányítjuk az új rendelési linkre."
@@ -3973,11 +4086,11 @@ msgstr "Fontos: Az e-mail cím módosítása frissíti a rendeléshez való hozz
 msgid "Important: Stripe reconnection required"
 msgstr "Fontos: Stripe újracsatlakozás szükséges"
 
-#: src/components/routes/admin/Dashboard/index.tsx:29
+#: src/components/routes/admin/Dashboard/index.tsx:44
 msgid "In {diffHours} hours"
 msgstr "{diffHours} óra múlva"
 
-#: src/components/routes/admin/Dashboard/index.tsx:27
+#: src/components/routes/admin/Dashboard/index.tsx:42
 msgid "In {diffMinutes} minutes"
 msgstr "{diffMinutes} perc múlva"
 
@@ -4151,6 +4264,26 @@ msgstr "tétel(ek)"
 msgid "Items"
 msgstr "Tételek"
 
+#: src/components/routes/admin/FailedJobs/index.tsx:155
+msgid "Job"
+msgstr "Feladat"
+
+#: src/components/routes/admin/FailedJobs/index.tsx:61
+msgid "Job deleted"
+msgstr "Feladat törölve"
+
+#: src/components/routes/admin/FailedJobs/index.tsx:232
+msgid "Job Details"
+msgstr "Feladat részletei"
+
+#: src/components/routes/admin/FailedJobs/index.tsx:238
+msgid "Job Name"
+msgstr "Feladat neve"
+
+#: src/components/routes/admin/FailedJobs/index.tsx:50
+msgid "Job queued for retry"
+msgstr "Feladat újrapróbálásra sorba állítva"
+
 #: src/components/routes/auth/AcceptInvitation/index.tsx:98
 #: src/components/routes/auth/Register/index.tsx:91
 msgid "John"
@@ -4186,42 +4319,46 @@ msgstr "Címke"
 msgid "Language"
 msgstr "Nyelv"
 
-#: src/components/common/OrganizerReportTable/index.tsx:57
+#: src/components/common/OrganizerReportTable/index.tsx:60
 #: src/components/common/ReportTable/index.tsx:52
 msgid "Last 12 months"
 msgstr "Utolsó 12 hónap"
 
-#: src/components/common/OrganizerReportTable/index.tsx:52
+#: src/components/common/OrganizerReportTable/index.tsx:55
 #: src/components/common/ReportTable/index.tsx:47
 msgid "Last 14 days"
 msgstr "Utolsó 14 nap"
 
-#: src/components/common/OrganizerReportTable/index.tsx:49
+#: src/components/routes/admin/Dashboard/index.tsx:159
+msgid "Last 14 Days"
+msgstr "Elmúlt 14 nap"
+
+#: src/components/common/OrganizerReportTable/index.tsx:52
 #: src/components/common/ReportTable/index.tsx:44
 msgid "Last 24 hours"
 msgstr "Utolsó 24 óra"
 
-#: src/components/common/OrganizerReportTable/index.tsx:53
+#: src/components/common/OrganizerReportTable/index.tsx:56
 #: src/components/common/ReportTable/index.tsx:48
 msgid "Last 30 days"
 msgstr "Utolsó 30 nap"
 
-#: src/components/common/OrganizerReportTable/index.tsx:50
+#: src/components/common/OrganizerReportTable/index.tsx:53
 #: src/components/common/ReportTable/index.tsx:45
 msgid "Last 48 hours"
 msgstr "Utolsó 48 óra"
 
-#: src/components/common/OrganizerReportTable/index.tsx:55
+#: src/components/common/OrganizerReportTable/index.tsx:58
 #: src/components/common/ReportTable/index.tsx:50
 msgid "Last 6 months"
 msgstr "Utolsó 6 hónap"
 
-#: src/components/common/OrganizerReportTable/index.tsx:51
+#: src/components/common/OrganizerReportTable/index.tsx:54
 #: src/components/common/ReportTable/index.tsx:46
 msgid "Last 7 days"
 msgstr "Utolsó 7 nap"
 
-#: src/components/common/OrganizerReportTable/index.tsx:54
+#: src/components/common/OrganizerReportTable/index.tsx:57
 #: src/components/common/ReportTable/index.tsx:49
 msgid "Last 90 days"
 msgstr "Utolsó 90 nap"
@@ -4311,7 +4448,7 @@ msgid "LIVE"
 msgstr "ÉLŐ"
 
 #: src/components/routes/admin/Attribution/index.tsx:127
-#: src/components/routes/admin/Dashboard/index.tsx:93
+#: src/components/routes/admin/Dashboard/index.tsx:122
 msgid "Live Events"
 msgstr "Élő események"
 
@@ -4328,7 +4465,7 @@ msgstr "Tokenek betöltése..."
 msgid "Loading Webhooks"
 msgstr "Webhookok betöltése"
 
-#: src/components/common/OrganizerReportTable/index.tsx:223
+#: src/components/common/OrganizerReportTable/index.tsx:265
 #: src/components/common/ReportTable/index.tsx:210
 msgid "Loading..."
 msgstr "Betöltés..."
@@ -4498,6 +4635,14 @@ msgstr "Üzenet a vásárlónak"
 msgid "Message cannot exceed 5000 characters"
 msgstr "Az üzenet nem haladhatja meg az 5000 karaktert"
 
+#: src/components/routes/admin/Messages/index.tsx:261
+msgid "Message Content"
+msgstr ""
+
+#: src/components/routes/admin/Messages/index.tsx:213
+msgid "Message Details"
+msgstr ""
+
 #: src/components/modals/SendMessageModal/index.tsx:71
 msgid "Message individual attendees"
 msgstr "Egyéni résztvevők üzenete"
@@ -4514,6 +4659,7 @@ msgstr "Üzenet a megrendelőknek meghatározott termékekkel"
 msgid "Message Sent"
 msgstr "Üzenet elküldve"
 
+#: src/components/layouts/Admin/index.tsx:18
 #: src/components/layouts/Event/index.tsx:117
 #: src/components/routes/event/messages.tsx:33
 msgid "Messages"
@@ -4542,6 +4688,18 @@ msgstr "Mobilra optimalizált"
 #: src/components/layouts/AuthLayout/index.tsx:31
 msgid "Mobile scanner with offline support and real-time tracking"
 msgstr "Mobil szkenner offline támogatással és valós idejű követéssel"
+
+#: src/components/routes/admin/Dashboard/index.tsx:163
+msgid "Monetary values are approximate totals across all currencies"
+msgstr "A pénzértékek az összes pénznem hozzávetőleges összegei"
+
+#: src/components/routes/admin/FailedJobs/index.tsx:111
+msgid "Monitor and manage failed background jobs"
+msgstr "Sikertelen háttérfeladatok figyelése és kezelése"
+
+#: src/components/routes/admin/Dashboard/index.tsx:294
+msgid "Most Viewed Events (Last 14 Days)"
+msgstr "Legnézettebb események (Elmúlt 14 nap)"
 
 #: src/components/forms/QuestionForm/index.tsx:106
 msgid "Multi line text box"
@@ -4633,6 +4791,10 @@ msgstr "Soha"
 msgid "New Password"
 msgstr "Új jelszó"
 
+#: src/components/routes/admin/Dashboard/index.tsx:225
+msgid "New Signups"
+msgstr "Új regisztrációk"
+
 #: src/constants/eventCategories.ts:4
 msgid "Nightlife"
 msgstr "Éjszakai élet"
@@ -4705,7 +4867,7 @@ msgstr "Nem találhatók konfigurációk"
 msgid "No data available"
 msgstr "Nincs adat"
 
-#: src/components/common/OrganizerReportTable/index.tsx:230
+#: src/components/common/OrganizerReportTable/index.tsx:272
 msgid "No data found for the selected filters. Try adjusting the date range or currency."
 msgstr "Nincs adat a kiválasztott szűrőkhöz. Próbálja meg módosítani a dátumtartományt vagy a pénznemet."
 
@@ -4729,7 +4891,7 @@ msgstr "Nincs megjeleníthető befejezett esemény."
 msgid "No events found"
 msgstr "Nem találhatók események"
 
-#: src/components/routes/admin/Dashboard/index.tsx:168
+#: src/components/routes/admin/Dashboard/index.tsx:491
 msgid "No events starting in the next 24 hours"
 msgstr "Nincs esemény, amely a következő 24 órában kezdődne"
 
@@ -4740,6 +4902,10 @@ msgstr "Nincs megjeleníthető esemény"
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:248
 msgid "No events yet"
 msgstr "Még nincsenek események"
+
+#: src/components/routes/admin/FailedJobs/index.tsx:150
+msgid "No failed jobs"
+msgstr "Nincs sikertelen feladat"
 
 #: src/components/common/FilterModal/index.tsx:261
 msgid "No filters available"
@@ -4756,6 +4922,10 @@ msgstr "Nincs számla"
 #: src/components/modals/WebhookLogsModal/index.tsx:177
 msgid "No logs found"
 msgstr "Nem található napló"
+
+#: src/components/routes/admin/Messages/index.tsx:120
+msgid "No messages found"
+msgstr "Nem található üzenet"
 
 #: src/components/common/MessageList/index.tsx:69
 msgid "No messages to show"
@@ -4777,6 +4947,10 @@ msgstr "Nincs megjeleníthető megrendelés"
 msgid "No orders yet"
 msgstr "Még nincsenek megrendelések"
 
+#: src/components/routes/admin/Dashboard/index.tsx:379
+msgid "No organizer activity in the last 14 days"
+msgstr "Nincs szervezői tevékenység az elmúlt 14 napban"
+
 #: src/components/modals/SwitchOrganizerModal/index.tsx:44
 msgid "No other organizers available"
 msgstr "Nincsenek más szervezők"
@@ -4792,6 +4966,10 @@ msgstr "Jelenleg nem állnak rendelkezésre fizetési módok. Kérjük, vegye fe
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:54
 msgid "No Payment Required"
 msgstr "Fizetés nem szükséges"
+
+#: src/components/routes/admin/Dashboard/index.tsx:282
+msgid "No popular events in the last 14 days"
+msgstr "Nincs népszerű esemény az elmúlt 14 napban"
 
 #: src/components/modals/ManageAttendeeModal/index.tsx:177
 msgid "No product associated with this attendee."
@@ -4820,6 +4998,10 @@ msgstr "Ehhez a résztvevőhöz nem érkezett válasz."
 #: src/components/modals/ManageOrderModal/index.tsx:119
 msgid "No questions have been asked for this order."
 msgstr "Ehhez a megrendeléshez nem tettek fel kérdéseket."
+
+#: src/components/routes/admin/Dashboard/index.tsx:440
+msgid "No recent account signups"
+msgstr "Nincs új fiók regisztráció"
 
 #: src/components/common/WebhookTable/index.tsx:174
 msgid "No response"
@@ -4860,6 +5042,10 @@ msgstr "Nem találhatók felhasználók"
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:225
 msgid "No VAT settings configured"
 msgstr "Nincsenek ÁFA beállítások konfigurálva"
+
+#: src/components/routes/admin/Dashboard/index.tsx:331
+msgid "No viewed events in the last 14 days"
+msgstr "Nincs megtekintett esemény az elmúlt 14 napban"
 
 #: src/components/modals/WebhookLogsModal/index.tsx:180
 msgid "No webhook events have been recorded for this endpoint yet. Events will appear here once they are triggered."
@@ -4921,6 +5107,10 @@ msgstr "Engedélyezett napok száma a fizetésre (hagyja üresen a fizetési fel
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:199
 msgid "Number Prefix"
 msgstr "Szám előtag"
+
+#: src/components/common/OrganizerReportTable/index.tsx:356
+msgid "of"
+msgstr ""
 
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:74
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:75
@@ -5142,6 +5332,11 @@ msgstr "A rendelés törölve és visszatérítve lett. A rendelés tulajdonosa 
 msgid "Order has been canceled and the order owner has been notified."
 msgstr "A megrendelés törölve lett, és a megrendelő értesítést kapott."
 
+#: src/components/routes/admin/Messages/index.tsx:56
+#: src/components/routes/admin/Messages/index.tsx:105
+msgid "Order Holders"
+msgstr "Rendelés tulajdonosok"
+
 #: src/components/common/AdminOrdersTable/index.tsx:65
 msgid "Order ID"
 msgstr "Rendelésszám"
@@ -5206,6 +5401,10 @@ msgstr "Megrendelők termékekkel"
 msgid "Order Payment Pending"
 msgstr "Rendelés fizetésre vár"
 
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:59
+msgid "Order Ref"
+msgstr "Rendelés hiv."
+
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:245
 msgid "Order Reference"
 msgstr "Rendelésszám"
@@ -5265,9 +5464,17 @@ msgstr "Rendelés törölve lett"
 msgid "Orders"
 msgstr "Megrendelések"
 
+#: src/components/routes/admin/Dashboard/index.tsx:189
+msgid "Orders Completed"
+msgstr "Befejezett rendelések"
+
 #: src/components/routes/event/orders.tsx:94
 msgid "Orders Exported"
 msgstr "Exportált megrendelések"
+
+#: src/components/routes/admin/Dashboard/index.tsx:207
+msgid "Orders Total"
+msgstr "Rendelések összesen"
 
 #: src/components/common/AdminEventsTable/index.tsx:138
 msgid "Orders:"
@@ -5302,6 +5509,9 @@ msgstr "Szervezet neve"
 #: src/components/layouts/EventHomepage/index.tsx:495
 #: src/components/modals/EditUserModal/index.tsx:55
 #: src/components/modals/InviteUserModal/index.tsx:47
+#: src/components/routes/admin/Dashboard/index.tsx:257
+#: src/components/routes/admin/Dashboard/index.tsx:306
+#: src/components/routes/admin/Dashboard/index.tsx:354
 #: src/components/routes/events/Dashboard/index.tsx:193
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:330
 msgid "Organizer"
@@ -5375,6 +5585,10 @@ msgstr "Egyéb"
 msgid "Other Lists (Ticket Not Included)"
 msgstr "Egyéb listák (Jegy nem szerepel)"
 
+#: src/components/routes/admin/Messages/index.tsx:75
+msgid "Outgoing Messages"
+msgstr "Kimenő üzenetek"
+
 #: src/components/layouts/Event/index.tsx:84
 msgid "Overview"
 msgstr "Áttekintés"
@@ -5382,6 +5596,10 @@ msgstr "Áttekintés"
 #: src/components/common/WidgetEditor/index.tsx:227
 msgid "Padding"
 msgstr "Kitöltés"
+
+#: src/components/common/OrganizerReportTable/index.tsx:356
+msgid "Page"
+msgstr ""
 
 #: src/components/forms/StripeCheckoutForm/index.tsx:106
 msgid "Page no longer available"
@@ -5502,6 +5720,10 @@ msgstr "Fizetés"
 msgid "Pay to unlock"
 msgstr "Fizessen a feloldáshoz"
 
+#: src/components/routes/admin/FailedJobs/index.tsx:263
+msgid "Payload"
+msgstr "Adattartalom"
+
 #: src/components/common/OrdersTable/index.tsx:368
 #: src/components/common/ProgressStepper/index.tsx:19
 #: src/components/forms/StripeCheckoutForm/index.tsx:127
@@ -5519,6 +5741,10 @@ msgstr "Fizetési és számlázási beállítások"
 #: src/components/routes/account/ManageAccount/index.tsx:38
 msgid "Payment & Plan"
 msgstr "Fizetés és terv"
+
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:53
+msgid "Payment Date"
+msgstr "Fizetés dátuma"
 
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:216
 msgid "Payment Due Period"
@@ -5582,6 +5808,10 @@ msgstr "Fizetések nem elérhetők"
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:86
 msgid "Payments will continue to flow without interruption"
 msgstr "A fizetések megszakítás nélkül folytatódnak"
+
+#: src/components/routes/admin/Messages/index.tsx:92
+msgid "Pending"
+msgstr "Függőben"
 
 #: src/components/common/QuestionsTable/index.tsx:315
 msgid "Per Attendee"
@@ -5665,10 +5895,19 @@ msgstr "{0} platformdíj levonva a kifizetésből"
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:247
 #: src/components/routes/event/Settings/index.tsx:81
 #: src/components/routes/event/Settings/Sections/PlatformFeesSettings/index.tsx:42
+#: src/components/routes/organizer/Reports/index.tsx:41
 #: src/components/routes/organizer/Settings/index.tsx:73
 #: src/components/routes/organizer/Settings/Sections/PlatformFeesSettings/index.tsx:42
 msgid "Platform Fees"
-msgstr "Platformdíjak"
+msgstr "Platform díjak"
+
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:134
+msgid "Platform Fees Report"
+msgstr "Platform díjak jelentés"
+
+#: src/components/routes/admin/Dashboard/index.tsx:171
+msgid "Platform Revenue"
+msgstr "Platform bevétel"
 
 #: src/components/forms/QuestionForm/index.tsx:31
 msgid "Please add at least one option"
@@ -5735,7 +5974,7 @@ msgstr "Kérjük, indítsa újra a pénztári folyamatot."
 msgid "Please return to the event page to start over."
 msgstr "Kérjük, térjen vissza az esemény oldalára az újrakezdéshez."
 
-#: src/components/common/OrganizerReportTable/index.tsx:227
+#: src/components/common/OrganizerReportTable/index.tsx:269
 msgid "Please select a date range"
 msgstr "Kérjük, válasszon dátumtartományt"
 
@@ -5777,6 +6016,10 @@ msgstr "Kérjük, várjon, amíg előkészítjük számláját..."
 #: src/components/routes/event/orders.tsx:91
 msgid "Please wait while we prepare your orders for export..."
 msgstr "Kérjük, várjon, amíg előkészítjük megrendeléseit az exportálásra..."
+
+#: src/components/routes/admin/Dashboard/index.tsx:245
+msgid "Popular Events (Last 14 Days)"
+msgstr "Népszerű események (Elmúlt 14 nap)"
 
 #: src/components/common/LanguageSwitcher/index.tsx:28
 msgid "Portuguese"
@@ -5951,6 +6194,8 @@ msgstr "Termékek"
 msgid "Products sold"
 msgstr "Eladott termékek"
 
+#: src/components/routes/admin/Dashboard/index.tsx:258
+#: src/components/routes/admin/Dashboard/index.tsx:357
 #: src/components/routes/event/EventDashboard/index.tsx:274
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:125
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:68
@@ -6068,6 +6313,15 @@ msgstr "Kérdések és válaszok"
 msgid "Questions reordered"
 msgstr "Kérdések átrendezve"
 
+#: src/components/routes/admin/FailedJobs/index.tsx:156
+#: src/components/routes/admin/FailedJobs/index.tsx:247
+msgid "Queue"
+msgstr "Várakozási sor"
+
+#: src/components/routes/admin/Messages/index.tsx:93
+msgid "Queued"
+msgstr "Sorban áll"
+
 #: src/components/forms/QuestionForm/index.tsx:118
 msgid "Radio Option"
 msgstr "Rádió opció"
@@ -6101,6 +6355,10 @@ msgstr "Valós idejű elemzések"
 msgid "Receive product updates from {0}."
 msgstr "Termékfrissítések fogadása a {0}-től."
 
+#: src/components/routes/admin/Dashboard/index.tsx:391
+msgid "Recent Account Signups"
+msgstr "Legutóbbi fiók regisztrációk"
+
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:265
 msgid "Recent Orders"
 msgstr "Legutóbbi megrendelések"
@@ -6110,6 +6368,8 @@ msgid "Recipient"
 msgstr "Címzett"
 
 #: src/components/modals/SendMessageModal/index.tsx:184
+#: src/components/routes/admin/Messages/index.tsx:129
+#: src/components/routes/admin/Messages/index.tsx:246
 msgid "Recipients"
 msgstr "Címzettek"
 
@@ -6213,14 +6473,14 @@ msgstr "eltávolítás"
 msgid "Remove"
 msgstr "Eltávolítás"
 
-#: src/components/routes/organizer/Reports/ReportLayout/index.tsx:23
+#: src/components/routes/organizer/Reports/ReportLayout/index.tsx:26
 msgid "Report not found"
 msgstr "Jelentés nem található"
 
 #: src/components/layouts/Event/index.tsx:94
 #: src/components/layouts/OrganizerLayout/index.tsx:78
 #: src/components/routes/event/Reports/index.tsx:39
-#: src/components/routes/organizer/Reports/index.tsx:45
+#: src/components/routes/organizer/Reports/index.tsx:51
 msgid "Reports"
 msgstr "Jelentések"
 
@@ -6235,11 +6495,6 @@ msgstr "Számlázási cím kötelező"
 #: src/components/common/QuestionsTable/index.tsx:118
 msgid "Required"
 msgstr "Kötelező"
-
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:512
-#: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:539
-#~ msgid "Resend"
-#~ msgstr "Újraküldés"
 
 #: src/components/routes/welcome/index.tsx:205
 msgid "Resend code"
@@ -6268,10 +6523,6 @@ msgstr "Újraküldés {resendCooldown} másodperc múlva"
 #: src/components/routes/account/ManageAccount/sections/Users/index.tsx:124
 msgid "Resend invitation"
 msgstr "Meghívó újraküldése"
-
-#: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:91
-#~ msgid "Resend order confirmation email"
-#~ msgstr "Rendelés visszaigazoló e-mail újraküldése"
 
 #: src/components/common/OrdersTable/index.tsx:175
 msgid "Resend order email"
@@ -6313,6 +6564,18 @@ msgstr "Visszaállítás..."
 #: src/components/common/EventCard/index.tsx:146
 msgid "Restore event"
 msgstr "Esemény visszaállítása"
+
+#: src/components/routes/admin/FailedJobs/index.tsx:191
+msgid "Retry"
+msgstr "Újrapróbálás"
+
+#: src/components/routes/admin/FailedJobs/index.tsx:122
+msgid "Retry All"
+msgstr "Összes újrapróbálása"
+
+#: src/components/routes/admin/FailedJobs/index.tsx:280
+msgid "Retry Job"
+msgstr "Feladat újrapróbálása"
 
 #: src/components/routes/product-widget/Payment/PaymentMethods/Stripe/index.tsx:52
 #: src/components/routes/product-widget/Payment/PaymentMethods/Stripe/index.tsx:67
@@ -6505,6 +6768,10 @@ msgstr "Keresés eseménynév alapján..."
 msgid "Search by event title or organizer..."
 msgstr "Keresés esemény cím vagy szervező alapján..."
 
+#: src/components/routes/admin/FailedJobs/index.tsx:138
+msgid "Search by job name or exception..."
+msgstr "Keresés feladat neve vagy kivétel alapján..."
+
 #: src/components/routes/admin/Users/index.tsx:60
 msgid "Search by name, email, or account..."
 msgstr "Keresés név, e-mail vagy fiók alapján..."
@@ -6528,6 +6795,10 @@ msgstr "Keresés rendelésszám, vásárló név vagy e-mail alapján..."
 #: src/components/routes/event/messages.tsx:36
 msgid "Search by subject or content..."
 msgstr "Keresés tárgy vagy tartalom alapján..."
+
+#: src/components/routes/admin/Messages/index.tsx:81
+msgid "Search by subject, event, or account..."
+msgstr "Keresés tárgy, esemény vagy fiók alapján..."
 
 #: src/components/routes/event/CapacityAssignments/index.tsx:39
 msgid "Search capacity assignments..."
@@ -6578,6 +6849,10 @@ msgstr "Fiók kiválasztása"
 #: src/components/modals/DuplicateEventModal/index.tsx:138
 msgid "Select All"
 msgstr "Összes kiválasztása"
+
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:124
+msgid "Select an event"
+msgstr "Válasszon eseményt"
 
 #: src/components/routes/events/Dashboard/index.tsx:235
 msgid "Select an organizer to view their dashboard and events."
@@ -6665,7 +6940,7 @@ msgstr "Jegy kiválasztása"
 msgid "Select tickets"
 msgstr "Jegyek kiválasztása"
 
-#: src/components/common/OrganizerReportTable/index.tsx:272
+#: src/components/common/OrganizerReportTable/index.tsx:317
 #: src/components/common/ReportTable/index.tsx:261
 msgid "Select time period"
 msgstr "Időszak kiválasztása"
@@ -6750,6 +7025,15 @@ msgstr "Teszt küldése"
 #: src/components/routes/auth/ForgotPassword/index.tsx:70
 msgid "Sending..."
 msgstr "Küldés..."
+
+#: src/components/routes/admin/Messages/index.tsx:91
+msgid "Sent"
+msgstr "Elküldve"
+
+#: src/components/routes/admin/Messages/index.tsx:131
+#: src/components/routes/admin/Messages/index.tsx:252
+msgid "Sent By"
+msgstr "Küldte"
 
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:205
 msgid "Sent to customers when they place an order"
@@ -6900,6 +7184,10 @@ msgstr "Több platform megjelenítése"
 msgid "Show tax and fees separately"
 msgstr "Adó és díjak külön megjelenítése"
 
+#: src/components/common/OrganizerReportTable/index.tsx:355
+msgid "Showing {0} of {totalRows} records"
+msgstr ""
+
 #: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:100
 msgid "Shown to the customer after they checkout, on the order summary page."
 msgstr "Az ügyfélnek a fizetés után, a rendelésösszegző oldalon jelenik meg."
@@ -6911,6 +7199,10 @@ msgstr "Az ügyfélnek a fizetés előtt jelenik meg."
 #: src/components/forms/QuestionForm/index.tsx:132
 msgid "Shows common address fields, including country"
 msgstr "Gyakori címmezőket mutat, beleértve az országot is."
+
+#: src/components/routes/admin/Dashboard/index.tsx:404
+msgid "Signed Up"
+msgstr "Regisztrált"
 
 #: src/components/modals/ManageAttendeeModal/index.tsx:111
 #: src/components/modals/ManageOrderModal/index.tsx:151
@@ -7069,6 +7361,10 @@ msgstr "A statisztikák a fiók létrehozásának dátumán alapulnak"
 #: src/components/forms/WebhookForm/index.tsx:133
 #: src/components/modals/EditUserModal/index.tsx:103
 #: src/components/routes/account/ManageAccount/sections/Users/index.tsx:157
+#: src/components/routes/admin/Dashboard/index.tsx:407
+#: src/components/routes/admin/Messages/index.tsx:88
+#: src/components/routes/admin/Messages/index.tsx:130
+#: src/components/routes/admin/Messages/index.tsx:240
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:88
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:62
 msgid "Status"
@@ -7083,6 +7379,7 @@ msgid "Stop Impersonating"
 msgstr "Megszemélyesítés leállítása"
 
 #: src/components/common/OrdersTable/index.tsx:377
+#: src/components/routes/admin/Dashboard/index.tsx:426
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:85
 msgid "Stripe"
 msgstr "Stripe"
@@ -7095,6 +7392,10 @@ msgstr "Stripe Connect"
 msgid "Stripe Connected"
 msgstr "Stripe csatlakoztatva"
 
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:104
+msgid "Stripe Payment ID"
+msgstr "Stripe fizetési azonosító"
+
 #: src/components/routes/product-widget/Payment/PaymentMethods/Stripe/index.tsx:50
 msgid "Stripe payments are not enabled for this event."
 msgstr "A Stripe fizetések nincsenek engedélyezve ehhez az eseményhez."
@@ -7105,6 +7406,8 @@ msgstr "A Stripe beállítás már kész."
 
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:127
 #: src/components/modals/SendMessageModal/index.tsx:234
+#: src/components/routes/admin/Messages/index.tsx:125
+#: src/components/routes/admin/Messages/index.tsx:219
 msgid "Subject"
 msgstr "Tárgy"
 
@@ -7283,10 +7586,6 @@ msgstr "Nyári Zenei Fesztivál 2025"
 msgid "Support Email"
 msgstr "Támogatási e-mail"
 
-#: src/components/common/LanguageSwitcher/index.tsx:40
-msgid "Swedish"
-msgstr ""
-
 #: src/components/layouts/OrganizerLayout/index.tsx:68
 #: src/components/modals/SwitchOrganizerModal/index.tsx:33
 msgid "Switch Organizer"
@@ -7457,10 +7756,6 @@ msgstr "Az események alapértelmezett pénzneme."
 msgid "The default timezone for your events."
 msgstr "Az események alapértelmezett időzónája."
 
-#: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:84
-#~ msgid "The email address has been changed. A confirmation will be sent to the updated email address."
-#~ msgstr "Az e-mail cím megváltozott. A visszaigazolás a frissített e-mail címre lesz elküldve."
-
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:78
 msgid "The email address has been changed. The attendee will receive a new ticket at the updated email address."
 msgstr "Az e-mail cím megváltozott. A résztvevő új jegyet kap a frissített e-mail címre."
@@ -7591,10 +7886,6 @@ msgstr "Ezek a sablonok alapértelmezettként lesznek használva a szervezet ös
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:319
 msgid "These templates will override the organizer defaults for this event only. If no custom template is set here, the organizer template will be used instead."
 msgstr "Ezek a sablonok csak ennél az eseménynél írják felül a szervező alapértelmezéseit. Ha itt nincs egyedi sablon beállítva, a szervező sablonját használjuk helyette."
-
-#: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:67
-#~ msgid "This attendee has already been checked in. Changes to their details will be saved, but their check-in status will remain."
-#~ msgstr "Ez a résztvevő már bejelentkezett. Az adataikban történt változtatások mentésre kerülnek, de a bejelentkezési állapotuk változatlan marad."
 
 #: src/components/common/CheckIn/CheckInOptionsModal.tsx:35
 msgid "This attendee has an unpaid order."
@@ -7744,6 +8035,10 @@ msgstr "Ez a termék kiemelten szerepel az esemény oldalán"
 msgid "This product is sold out"
 msgstr "Ez a termék elfogyott"
 
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:118
+msgid "This report is for informational purposes only. Always consult with a tax professional before using this data for accounting or tax purposes. Please cross-reference with your Stripe dashboard as Hi.Events may be missing historical data."
+msgstr ""
+
 #: src/components/routes/auth/ResetPassword/index.tsx:28
 msgid "This reset password link is invalid or expired."
 msgstr "Ez a jelszó-visszaállító link érvénytelen vagy lejárt."
@@ -7813,6 +8108,11 @@ msgstr "Jegytulajdonos neve"
 
 #: src/components/common/MessageList/index.tsx:22
 msgid "Ticket holders"
+msgstr "Jegytulajdonosok"
+
+#: src/components/routes/admin/Messages/index.tsx:54
+#: src/components/routes/admin/Messages/index.tsx:104
+msgid "Ticket Holders"
 msgstr "Jegytulajdonosok"
 
 #: src/components/common/AttendeeTicket/index.tsx:168
@@ -7885,7 +8185,7 @@ msgstr "Elérhető jegyek"
 msgid "Tickets for"
 msgstr "Jegyek ehhez:"
 
-#: src/components/routes/admin/Dashboard/index.tsx:111
+#: src/components/routes/admin/Dashboard/index.tsx:140
 msgid "Tickets Sold"
 msgstr "Eladott jegyek"
 
@@ -7948,13 +8248,17 @@ msgstr "Oszlopok kapcsolása"
 msgid "Tools"
 msgstr "Eszközök"
 
+#: src/components/routes/admin/Dashboard/index.tsx:343
+msgid "Top Organizers (Last 14 Days)"
+msgstr "Legjobb szervezők (Elmúlt 14 nap)"
+
 #: src/components/common/AdminOrdersTable/index.tsx:78
 #: src/components/common/InlineOrderSummary/index.tsx:203
 #: src/components/common/OrderSummary/index.tsx:92
 msgid "Total"
 msgstr "Összesen"
 
-#: src/components/routes/admin/Dashboard/index.tsx:75
+#: src/components/routes/admin/Dashboard/index.tsx:104
 msgid "Total Accounts"
 msgstr "Összes fiók"
 
@@ -7977,6 +8281,10 @@ msgstr "Összesen beszedve"
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:58
 msgid "Total Discount Amount"
 msgstr "Összes kedvezmény összege"
+
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:93
+msgid "Total Fee"
+msgstr "Összesített díj"
 
 #: src/components/routes/event/EventDashboard/index.tsx:311
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:149
@@ -8010,9 +8318,13 @@ msgstr "Összes visszatérített"
 msgid "Total Tax"
 msgstr "Összes adó"
 
-#: src/components/routes/admin/Dashboard/index.tsx:57
+#: src/components/routes/admin/Dashboard/index.tsx:86
 msgid "Total Users"
 msgstr "Összes felhasználó"
+
+#: src/components/routes/admin/Dashboard/index.tsx:307
+msgid "Total Views"
+msgstr "Összes megtekintés"
 
 #: src/components/routes/admin/Attribution/index.tsx:32
 msgid "Track account growth and performance by attribution source"
@@ -8063,6 +8375,9 @@ msgstr "Twitch"
 
 #: src/components/forms/TaxAndFeeForm/index.tsx:44
 #: src/components/routes/admin/Attribution/index.tsx:109
+#: src/components/routes/admin/Messages/index.tsx:101
+#: src/components/routes/admin/Messages/index.tsx:128
+#: src/components/routes/admin/Messages/index.tsx:234
 msgid "Type"
 msgstr "Típus"
 
@@ -8114,6 +8429,10 @@ msgstr "Egyedi ügyfelek"
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:21
 msgid "Unique order reference"
 msgstr "Egyedi rendelési hivatkozás"
+
+#: src/components/routes/admin/Dashboard/index.tsx:308
+msgid "Unique Views"
+msgstr "Egyedi megtekintések"
 
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:153
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:111
@@ -8281,6 +8600,7 @@ msgstr "Felhasználókezelés"
 #: src/components/routes/account/ManageAccount/index.tsx:32
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:130
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:233
+#: src/components/routes/admin/Dashboard/index.tsx:406
 #: src/components/routes/admin/Users/index.tsx:57
 msgid "Users"
 msgstr "Felhasználók"
@@ -8296,9 +8616,13 @@ msgstr "A felhasználók módosíthatják e-mail címüket a <0>Profilbeállít�
 msgid "UTC"
 msgstr "UTC"
 
-#: src/components/layouts/Admin/index.tsx:18
+#: src/components/layouts/Admin/index.tsx:19
 msgid "UTM Analytics"
 msgstr "UTM elemzés"
+
+#: src/components/routes/admin/FailedJobs/index.tsx:243
+msgid "UUID"
+msgstr "UUID"
 
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:206
 msgid "Valid"
@@ -8356,6 +8680,14 @@ msgstr "ÁFA szám érvényesítése sikertelen"
 msgid "VAT number validation failed. Please check your VAT number."
 msgstr "ÁFA szám érvényesítése sikertelen. Kérjük, ellenőrizze az ÁFA számát."
 
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:87
+msgid "VAT on Fee"
+msgstr "ÁFA a díjon"
+
+#: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:81
+msgid "VAT Rate"
+msgstr "ÁFA kulcs"
+
 #: src/components/modals/EditAccountVatSettingsModal/index.tsx:115
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:192
 msgid "VAT Registered"
@@ -8404,6 +8736,7 @@ msgid "Verification code"
 msgstr "Ellenőrző kód"
 
 #: src/components/routes/admin/Attribution/index.tsx:129
+#: src/components/routes/admin/Dashboard/index.tsx:423
 msgid "Verified"
 msgstr "Ellenőrzött"
 
@@ -8428,7 +8761,11 @@ msgstr "Vietnámi"
 msgid "View"
 msgstr "Megtekintés"
 
-#: src/components/routes/organizer/Reports/index.tsx:44
+#: src/components/routes/admin/Messages/index.tsx:76
+msgid "View all messages sent across the platform"
+msgstr "Platformon küldött összes üzenet megtekintése"
+
+#: src/components/routes/organizer/Reports/index.tsx:50
 msgid "View and download reports across all your events. Only completed orders are included."
 msgstr "Jelentések megtekintése és letöltése az összes eseményéhez. Csak a befejezett rendelések szerepelnek."
 
@@ -8441,11 +8778,12 @@ msgid "View Attendee Details"
 msgstr "Résztvevő adatainak megtekintése"
 
 #: src/components/common/AdminAccountsTable/index.tsx:65
+#: src/components/routes/admin/FailedJobs/index.tsx:182
 msgid "View Details"
 msgstr "Részletek megtekintése"
 
 #: src/components/common/AdminEventsTable/index.tsx:153
-#: src/components/routes/admin/Dashboard/index.tsx:157
+#: src/components/routes/admin/Dashboard/index.tsx:480
 msgid "View Event"
 msgstr "Esemény megtekintése"
 
@@ -8464,6 +8802,10 @@ msgstr "Naplók megtekintése"
 #: src/components/layouts/EventHomepage/index.tsx:461
 msgid "View Map"
 msgstr "Térkép megtekintése"
+
+#: src/components/routes/admin/Messages/index.tsx:184
+msgid "View Message"
+msgstr ""
 
 #: src/components/layouts/EventHomepage/index.tsx:374
 msgid "View on Google Maps"
@@ -8851,7 +9193,7 @@ msgstr "Írja ide üzenetét..."
 msgid "X (Twitter)"
 msgstr "X (Twitter)"
 
-#: src/components/common/OrganizerReportTable/index.tsx:56
+#: src/components/common/OrganizerReportTable/index.tsx:59
 #: src/components/common/ReportTable/index.tsx:51
 msgid "Year to date"
 msgstr "Év elejétől napjainkig"
@@ -9177,3 +9519,12 @@ msgstr "Irányítószám vagy postai irányítószám"
 #: src/components/routes/product-widget/CollectInformation/index.tsx:523
 msgid "ZIP or Postal Code"
 msgstr "Irányítószám vagy postai irányítószám"
+
+msgid "Message Content"
+msgstr "Üzenet tartalma"
+
+msgid "Message Details"
+msgstr "Üzenet részletei"
+
+msgid "View Message"
+msgstr "Üzenet megtekintése"

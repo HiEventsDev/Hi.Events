@@ -20,6 +20,14 @@ export interface AdminAccountUser {
     role: string;
 }
 
+export interface AccountMessagingTier {
+    id: number;
+    name: string;
+    max_messages_per_24h: number;
+    max_recipients_per_message: number;
+    links_allowed: boolean;
+}
+
 export interface AdminAccount {
     id: IdParam;
     name: string;
@@ -30,6 +38,10 @@ export interface AdminAccount {
     events_count: number;
     users_count: number;
     users: AdminAccountUser[];
+    messaging_tier?: {
+        id: number;
+        name: string;
+    };
 }
 
 export interface AccountConfiguration {
@@ -40,6 +52,7 @@ export interface AccountConfiguration {
         fixed: number;
         percentage: number;
     };
+    bypass_application_fees: boolean;
 }
 
 export interface CreateConfigurationData {
@@ -48,6 +61,7 @@ export interface CreateConfigurationData {
         fixed: number;
         percentage: number;
     };
+    bypass_application_fees?: boolean;
 }
 
 export interface UpdateConfigurationData {
@@ -56,6 +70,7 @@ export interface UpdateConfigurationData {
         fixed: number;
         percentage: number;
     };
+    bypass_application_fees?: boolean;
 }
 
 export interface AssignConfigurationData {
@@ -79,6 +94,7 @@ export interface AccountVatSetting {
 export interface AdminAccountDetail extends AdminAccount {
     configuration?: AccountConfiguration;
     vat_setting?: AccountVatSetting;
+    messaging_tier?: AccountMessagingTier;
 }
 
 
@@ -95,6 +111,66 @@ export interface AdminStats {
     total_accounts: number;
     total_live_events: number;
     total_tickets_sold: number;
+}
+
+export interface PopularEvent {
+    id: IdParam;
+    title: string;
+    start_date: string;
+    end_date: string | null;
+    status: string;
+    currency: string;
+    organizer_name: string | null;
+    account_name: string | null;
+    products_sold: number;
+    sales_total_gross: number;
+    orders_created: number;
+}
+
+export interface MostViewedEvent {
+    id: IdParam;
+    title: string;
+    start_date: string;
+    end_date: string | null;
+    status: string;
+    organizer_name: string | null;
+    account_name: string | null;
+    total_views: number;
+}
+
+export interface TopOrganizer {
+    id: IdParam;
+    name: string;
+    account_name: string | null;
+    events_count: number;
+    total_products_sold: number;
+}
+
+export interface RecentAccount {
+    id: IdParam;
+    name: string;
+    email: string;
+    created_at: string;
+    stripe_connect_setup_complete: boolean;
+    account_verified_at: string | null;
+    events_count: number;
+    users_count: number;
+}
+
+export interface AdminDashboardData {
+    popular_events: PopularEvent[];
+    most_viewed_events: MostViewedEvent[];
+    top_organizers: TopOrganizer[];
+    recent_accounts: RecentAccount[];
+    recent_revenue: number;
+    recent_orders_count: number;
+    recent_orders_total: number;
+    recent_signups_count: number;
+}
+
+export interface GetAdminDashboardParams {
+    days?: number;
+    limit?: number;
 }
 
 export interface StartImpersonationRequest {
@@ -213,6 +289,52 @@ export interface GetUtmAttributionStatsParams {
     per_page?: number;
 }
 
+export interface AdminFailedJob {
+    id: IdParam;
+    uuid: string;
+    connection: string;
+    queue: string;
+    job_name: string;
+    job_name_full: string;
+    payload: string;
+    exception_summary: string;
+    exception: string;
+    failed_at: string;
+}
+
+export interface GetAllFailedJobsParams {
+    page?: number;
+    per_page?: number;
+    search?: string;
+    queue?: string;
+}
+
+export interface AdminMessage {
+    id: IdParam;
+    event_id: IdParam;
+    event_title: string;
+    account_name: string;
+    subject: string;
+    message: string;
+    type: string;
+    status: string;
+    recipients_count: number;
+    sent_by: string;
+    sent_at: string | null;
+    created_at: string;
+    eligibility_failures?: string[];
+}
+
+export interface GetAllAdminMessagesParams {
+    page?: number;
+    per_page?: number;
+    search?: string;
+    status?: string;
+    type?: string;
+    sort_by?: string;
+    sort_direction?: 'asc' | 'desc';
+}
+
 export interface LaravelPaginatedData<T> {
     current_page: number;
     data: T[];
@@ -236,6 +358,16 @@ export interface UtmAttributionStatsResponse {
 export const adminClient = {
     getStats: async () => {
         const response = await api.get<AdminStats>('admin/stats');
+        return response.data;
+    },
+
+    getDashboardData: async (params: GetAdminDashboardParams = {}) => {
+        const response = await api.get<AdminDashboardData>('admin/dashboard', {
+            params: {
+                days: params.days || 14,
+                limit: params.limit || 10,
+            }
+        });
         return response.data;
     },
 
@@ -367,6 +499,70 @@ export const adminClient = {
             'admin/attribution/stats',
             { params }
         );
+        return response.data;
+    },
+
+    getAllFailedJobs: async (params: GetAllFailedJobsParams = {}) => {
+        const response = await api.get<GenericPaginatedResponse<AdminFailedJob>>('admin/failed-jobs', {
+            params: {
+                page: params.page || 1,
+                per_page: params.per_page || 20,
+                search: params.search || undefined,
+                queue: params.queue || undefined,
+            }
+        });
+        return response.data;
+    },
+
+    deleteFailedJob: async (jobId: IdParam) => {
+        const response = await api.delete(`admin/failed-jobs/${jobId}`);
+        return response.data;
+    },
+
+    deleteAllFailedJobs: async () => {
+        const response = await api.delete('admin/failed-jobs');
+        return response.data;
+    },
+
+    retryFailedJob: async (jobId: IdParam) => {
+        const response = await api.post(`admin/failed-jobs/${jobId}/retry`);
+        return response.data;
+    },
+
+    retryAllFailedJobs: async () => {
+        const response = await api.post('admin/failed-jobs/retry-all');
+        return response.data;
+    },
+
+    getAllAdminMessages: async (params: GetAllAdminMessagesParams = {}) => {
+        const response = await api.get<GenericPaginatedResponse<AdminMessage>>('admin/messages', {
+            params: {
+                page: params.page || 1,
+                per_page: params.per_page || 20,
+                search: params.search || undefined,
+                status: params.status || undefined,
+                type: params.type || undefined,
+                sort_by: params.sort_by || 'created_at',
+                sort_direction: params.sort_direction || 'desc',
+            }
+        });
+        return response.data;
+    },
+
+    approveMessage: async (messageId: IdParam) => {
+        const response = await api.post(`admin/messages/${messageId}/approve`);
+        return response.data;
+    },
+
+    updateAccountMessagingTier: async (accountId: IdParam, tierId: number) => {
+        const response = await api.put(`admin/accounts/${accountId}/messaging-tier`, {
+            messaging_tier_id: tierId
+        });
+        return response.data;
+    },
+
+    getMessagingTiers: async (): Promise<GenericDataResponse<AccountMessagingTier[]>> => {
+        const response = await api.get<GenericDataResponse<AccountMessagingTier[]>>('admin/messaging-tiers');
         return response.data;
     },
 };

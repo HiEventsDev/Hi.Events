@@ -2,8 +2,10 @@
 
 namespace HiEvents\Repository\Eloquent;
 
+use Carbon\Carbon;
 use HiEvents\DomainObjects\Generated\MessageDomainObjectAbstract;
 use HiEvents\DomainObjects\MessageDomainObject;
+use HiEvents\DomainObjects\Status\MessageStatus;
 use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Models\Message;
 use HiEvents\Repository\Interfaces\MessageRepositoryInterface;
@@ -48,4 +50,21 @@ class MessageRepository extends BaseRepository implements MessageRepositoryInter
         );
     }
 
+    public function countMessagesInLast24Hours(int $accountId): int
+    {
+        $count = $this->model
+            ->join('events', 'messages.event_id', '=', 'events.id')
+            ->where('events.account_id', $accountId)
+            ->where('messages.created_at', '>=', Carbon::now()->subHours(24))
+            ->whereIn('messages.status', [
+                MessageStatus::PROCESSING->name,
+                MessageStatus::SENT->name,
+                MessageStatus::PENDING_REVIEW->name,
+            ])
+            ->count();
+
+        $this->resetModel();
+
+        return $count;
+    }
 }

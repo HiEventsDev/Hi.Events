@@ -51,6 +51,9 @@ class EditOrganizerHandler
 
         return $this->organizerRepository
             ->loadRelation(ImageDomainObject::class)
-            ->findById($organizerData->id);
+            ->findFirstWhere([
+                'id' => $organizerData->id,
+                'account_id' => $organizerData->account_id,
+            ]);
     }
 }

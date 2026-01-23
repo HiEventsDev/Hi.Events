@@ -66,6 +66,7 @@ class CreateAccountHandler
                 'short_id' => IdHelper::shortId(IdHelper::ACCOUNT_PREFIX),
                 'account_verified_at' => $isSaasMode ? null : now()->toDateTimeString(),
                 'account_configuration_id' => $this->getAccountConfigurationId($accountData),
+                'account_messaging_tier_id' => $this->getDefaultMessagingTierId(),
             ]);
 
             $user = $this->getExistingUser($accountData) ?? $this->userRepository->create([
@@ -257,5 +258,11 @@ class CreateAccountHandler
         $referrerHost = parse_url($referrer, PHP_URL_HOST);
 
         return $appHost === $referrerHost;
+    }
+
+    private function getDefaultMessagingTierId(): int
+    {
+        // Self-hosted instances get Premium tier, SaaS gets Untrusted
+        return $this->config->get('app.is_hi_events') ? 1 : 3;
     }
 }

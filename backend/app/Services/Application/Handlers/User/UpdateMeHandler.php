@@ -88,15 +88,10 @@ readonly class UpdateMeHandler
 
     private function getExistingUser(UpdateMeDTO $updateUserData): UserDomainObject
     {
-        $existingUser = $this->userRepository->findFirstWhere([
-            'id' => $updateUserData->id,
-        ]);
-
-        if ($existingUser === null) {
-            throw new ResourceNotFoundException();
-        }
-
-        return $existingUser;
+        return $this->userRepository->findByIdAndAccountId(
+            $updateUserData->id,
+            $updateUserData->account_id
+        );
     }
 
     private function sendEmailChangeConfirmation(UserDomainObject $existingUser): void
