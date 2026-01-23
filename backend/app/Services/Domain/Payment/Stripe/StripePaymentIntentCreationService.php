@@ -66,8 +66,11 @@ class StripePaymentIntentCreationService
         try {
             $this->databaseManager->beginTransaction();
 
+            $accountConfiguration = $paymentIntentDTO->account->getConfiguration();
+            $bypassApplicationFees = $accountConfiguration?->getBypassApplicationFees() ?? false;
+
             $applicationFee = $this->orderApplicationFeeCalculationService->calculateApplicationFee(
-                accountConfiguration: $paymentIntentDTO->account->getConfiguration(),
+                accountConfiguration: $accountConfiguration,
                 order: $paymentIntentDTO->order,
                 vatSettings: $paymentIntentDTO->vatSettings,
             );
@@ -81,7 +84,7 @@ class StripePaymentIntentCreationService
                     'enabled' => true,
                 ],
                 ...($paymentIntentDTO->description ? ['description' => $paymentIntentDTO->description] : []),
-                ...($applicationFee ? ['application_fee_amount' => $applicationFee->grossApplicationFee->toMinorUnit()] : []),
+                ...($applicationFee && !$bypassApplicationFees ? ['application_fee_amount' => $applicationFee->grossApplicationFee->toMinorUnit()] : []),
             ], $this->getStripeAccountData($paymentIntentDTO));
 
             $this->logger->debug('Stripe payment intent created', [
