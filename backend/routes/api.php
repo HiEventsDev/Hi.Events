@@ -46,6 +46,7 @@ use HiEvents\Http\Actions\CheckInLists\Public\GetCheckInListAttendeesPublicActio
 use HiEvents\Http\Actions\CheckInLists\Public\GetCheckInListPublicAction;
 use HiEvents\Http\Actions\CheckInLists\UpdateCheckInListAction;
 use HiEvents\Http\Actions\Common\GetColorThemesAction;
+use HiEvents\Http\Actions\Common\Webhooks\RazorpayIncomingWebhookAction;
 use HiEvents\Http\Actions\Common\Webhooks\StripeIncomingWebhookAction;
 use HiEvents\Http\Actions\Events\CreateEventAction;
 use HiEvents\Http\Actions\Events\DuplicateEventAction;
@@ -484,6 +485,7 @@ $router->prefix('/public')->group(
         // Razorpay payment gateway
         $router->post('/events/{event_id}/order/{order_short_id}/razorpay/order', CreateRazorpayOrderActionPublic::class);
         $router->post('/events/{event_id}/order/{order_short_id}/razorpay/verify', VerifyRazorpayPaymentActionPublic::class);
+        $router->post('/webhooks/razorpay', RazorpayIncomingWebhookAction::class);
 
         // Questions
         $router->get('/events/{event_id}/questions', GetQuestionsPublicAction::class);
