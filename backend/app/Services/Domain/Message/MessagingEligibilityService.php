@@ -30,11 +30,18 @@ class MessagingEligibilityService
 
     public function checkEligibility(int $accountId, int $eventId): ?MessagingEligibilityFailureDTO
     {
-        $failures = [];
-
         $account = $this->accountRepository
             ->loadRelation(AccountStripePlatformDomainObject::class)
             ->findById($accountId);
+
+        $tier = $this->getAccountMessagingTier($account->getAccountMessagingTierId());
+
+        // Trusted and Premium tiers bypass eligibility checks
+        if ($tier->getName() !== self::UNTRUSTED_TIER_NAME) {
+            return null;
+        }
+
+        $failures = [];
 
         if (!$account->isStripeSetupComplete()) {
             $failures[] = MessagingEligibilityFailureEnum::STRIPE_NOT_CONNECTED;
@@ -69,11 +76,11 @@ class MessagingEligibilityService
 
         $messagesInLast24h = $this->messageRepository->countMessagesInLast24Hours($accountId);
         if ($messagesInLast24h >= $tier->getMaxMessagesPer24h()) {
-           // $violations[] = MessagingTierViolationEnum::MESSAGE_LIMIT_EXCEEDED;
+            $violations[] = MessagingTierViolationEnum::MESSAGE_LIMIT_EXCEEDED;
         }
 
         if ($recipientCount > $tier->getMaxRecipientsPerMessage()) {
-          //  $violations[] = MessagingTierViolationEnum::RECIPIENT_LIMIT_EXCEEDED;
+            $violations[] = MessagingTierViolationEnum::RECIPIENT_LIMIT_EXCEEDED;
         }
 
         if (!$tier->getLinksAllowed() && $this->containsLinks($messageContent)) {
