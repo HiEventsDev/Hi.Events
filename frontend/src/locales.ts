@@ -14,9 +14,10 @@ export type SupportedLocales =
     | "zh-hk"
     | "tr"
     | "hu"
-    | "pl";
+    | "pl"
+    | "se";
 
-export const availableLocales = ["en", "de", "fr", "it", "nl", "pt", "es", "zh-cn", "zh-hk", "pt-br", "vi", "tr", "hu", "pl"];
+export const availableLocales = ["en", "de", "fr", "it", "nl", "pt", "es", "zh-cn", "zh-hk", "pt-br", "vi", "tr", "hu", "pl", "se"];
 
 export const localeToFlagEmojiMap: Record<SupportedLocales, string> = {
     pl: '🇵🇱',
@@ -33,10 +34,10 @@ export const localeToFlagEmojiMap: Record<SupportedLocales, string> = {
     vi: '🇻🇳',
     tr: '🇹🇷',
     hu: '🇭🇺',
+    se: '🇸🇪',
 };
 
 export const localeToNameMap: Record<SupportedLocales, string> = {
-    pl: `Polish`,
     en: `English`,
     de: `German`,
     fr: `French`,
@@ -50,6 +51,8 @@ export const localeToNameMap: Record<SupportedLocales, string> = {
     vi: `Vietnamese`,
     tr: `Turkish`,
     hu: `Hungarian`,
+    se: `Swedish`,
+    pl: `Polish`,
 };
 
 export const getLocaleName = (locale: SupportedLocales) => {
