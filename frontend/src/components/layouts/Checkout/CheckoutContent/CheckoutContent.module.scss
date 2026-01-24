@@ -2,15 +2,22 @@
 
 .main {
   position: relative;
+  // Use dvh (dynamic viewport height) with fallback for older browsers
+  // This fixes iOS Safari where 100vh includes the address bar height,
+  // causing content (like the Complete Order button) to be cut off
   min-height: calc(100vh - 60px);
+  min-height: calc(100dvh - 60px);
   height: auto;
   overflow-y: auto;
   padding: 20px 60px 40px;
+  // Ensure content is visible above iOS safe area
+  padding-bottom: max(40px, env(safe-area-inset-bottom, 40px));
 
   @include mixins.scrollbar();
 
   @include mixins.respond-below(md) {
     padding: 20px 20px 40px;
+    padding-bottom: max(40px, env(safe-area-inset-bottom, 40px));
   }
 
   .innerContainer {
