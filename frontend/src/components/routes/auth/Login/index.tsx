@@ -91,7 +91,7 @@ const Login = () => {
                 <form onSubmit={form.onSubmit((values) => loginUser(values))}>
                     <TextInput {...form.getInputProps('email')}
                                label={t`Email`}
-                               placeholder="twoj.email@domena.pl"
+                               placeholder="hello@example.com"
                                required
                     />
                     <PasswordInput {...form.getInputProps('password')}
