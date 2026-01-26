@@ -24,6 +24,7 @@ enum Locale: string
     case VI = 'vi';
 
     case TR = 'tr';
+    case PL = 'pl';
 
     public static function getSupportedLocales(): array
     {
