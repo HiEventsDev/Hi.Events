@@ -193,6 +193,7 @@ export interface EventSettings {
     product_page_message: string;
     post_checkout_message: string;
     support_email?: string;
+    notify_organizer_of_new_orders: boolean;
     order_timeout_in_minutes?: number;
     homepage_background_color: string;
     homepage_primary_color: string;

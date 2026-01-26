@@ -30,6 +30,7 @@ export const GeneralEmailSettings = () => {
             form.setValues({
                 support_email: eventSettingsQuery.data.support_email,
                 email_footer_message: eventSettingsQuery.data.email_footer_message,
+                notify_organizer_of_new_orders: eventSettingsQuery.data.notify_organizer_of_new_orders,
             });
         }
     }, [eventSettingsQuery.isFetched]);
