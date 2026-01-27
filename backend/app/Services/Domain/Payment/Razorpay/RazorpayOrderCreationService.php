@@ -70,16 +70,22 @@ class RazorpayOrderCreationService
                 ],
             ];
 
-            // Add application fee if applicable (Razorpay handles fees differently)
-            if ($applicationFee && $this->config->get('services.razorpay.application_fee_enabled')) {
-                $orderData['transfers'] = [
-                    [
-                        'account' => $this->config->get('services.razorpay.platform_account_id'),
-                        'amount' => $applicationFee->grossApplicationFee->toMinorUnit(),
-                        'currency' => $orderDTO->currencyCode,
-                    ]
-                ];
-            }
+            // TODO: Fix for saas mode
+            // if ($applicationFee && $this->config->get('services.razorpay.application_fee_enabled')) {
+            //     $feeMinorUnit = $applicationFee->grossApplicationFee->toMinorUnit();
+
+            //     $orderData['transfers'] = [
+            //         [
+            //             'account' => $this->config->get('services.razorpay.platform_account_id'),
+            //             'amount'  => $feeMinorUnit,
+            //             'currency' => $orderDTO->currencyCode,
+            //             'notes'   => [
+            //                 'order_id' => $orderDTO->order->getId(),
+            //                 'type'     => 'application_fee'
+            //             ],
+            //         ]
+            //     ];
+            // }
 
             $razorpayOrder = $razorpayClient->order->create($orderData);
 
@@ -98,7 +104,6 @@ class RazorpayOrderCreationService
                 receipt: $razorpayOrder->receipt,
             );
         } catch (Error $exception) {
-            dd($exception);
             $this->logger->error("Razorpay order creation failed: {$exception->getMessage()}", [
                 'exception' => $exception,
                 'orderDTO' => $orderDTO->toArray(['account']),
