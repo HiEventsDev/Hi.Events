@@ -1336,3 +1336,68 @@ $transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     height: 0.9rem;
   }
 }
+
+// External registration styles
+.externalRegistrationCard {
+  background: var(--card-background);
+  border-radius: $radius-lg;
+  padding: 32px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+
+  @include mixins.respond-below(sm) {
+    padding: 24px;
+  }
+}
+
+.externalRegistrationHost {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin: 0;
+  line-height: 1.5;
+
+  strong {
+    color: var(--primary-text-color);
+    font-weight: 600;
+  }
+}
+
+.externalRegistrationMessage {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.externalRegistrationButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--primary-color);
+  color: var(--accent-contrast);
+  font-family: $font-display;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 14px 28px;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: all $transition-fast;
+  box-shadow: 0 2px 12px var(--accent-soft);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px var(--accent-soft);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  @include mixins.respond-below(sm) {
+    padding: 12px 24px;
+    font-size: 0.9375rem;
+  }
+}

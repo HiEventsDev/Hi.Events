@@ -1,5 +1,5 @@
 import classes from "./StatBoxes.module.scss";
-import {IconCash, IconCreditCardRefund, IconEye, IconReceipt, IconShoppingCart, IconUsers} from "@tabler/icons-react";
+import {IconCash, IconCreditCardRefund, IconEye, IconExternalLink, IconReceipt, IconShoppingCart, IconUsers} from "@tabler/icons-react";
 import {Card} from "../Card";
 import {useGetEventStats} from "../../../queries/useGetEventStats.ts";
 import {useParams} from "react-router";
@@ -8,6 +8,7 @@ import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {formatCurrency} from "../../../utilites/currency.ts";
 import {formatNumber} from "../../../utilites/helpers.ts";
 import {ReactNode} from "react";
+import {useGetEventSettings} from "../../../queries/useGetEventSettings.ts";
 
 interface StatBoxProps {
     number: string | number;
@@ -38,6 +39,7 @@ export const StatBoxes = () => {
     const eventQuery = useGetEvent(eventId);
     const event = eventQuery?.data;
     const {data: eventStats} = eventStatsQuery;
+    const {data: eventSettings} = useGetEventSettings(eventId);
 
     const data = [
         {
@@ -77,6 +79,15 @@ export const StatBoxes = () => {
             backgroundColor: '#E67D49'
         }
     ];
+
+    if (eventSettings?.is_external_registration) {
+        data.push({
+            number: formatNumber(eventStats?.total_external_registration_clicks as number),
+            description: t`Redirections`,
+            icon: <IconExternalLink size={18}/>,
+            backgroundColor: '#F59E0B'
+        });
+    }
 
     return (
         <div className={classes.statistics}>

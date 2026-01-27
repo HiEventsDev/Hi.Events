@@ -101,6 +101,31 @@ class UpdateEventSettingsRequest extends BaseRequest
 
             // Self-service settings
             'allow_attendee_self_edit' => ['boolean'],
+
+            // External registration settings
+            'is_external_registration' => ['boolean'],
+            'external_registration_url' => [
+                'nullable',
+                'url',
+                'max:500',
+                Rule::requiredIf(fn() => $this->input('is_external_registration') === true)
+            ],
+            'external_registration_button_text' => [
+                'nullable',
+                'string',
+                'max:100',
+                Rule::requiredIf(fn() => $this->input('is_external_registration') === true)
+            ],
+            'external_registration_message' => [
+                'nullable',
+                'string',
+                'max:500'
+            ],
+            'external_registration_host' => [
+                'nullable',
+                'string',
+                'max:255'
+            ],
         ];
     }
 
@@ -143,6 +168,13 @@ class UpdateEventSettingsRequest extends BaseRequest
             'homepage_theme_settings.background' => $colorMessage,
             'homepage_theme_settings.mode.in' => __('The mode must be light or dark.'),
             'homepage_theme_settings.background_type.in' => __('The background type must be COLOR or MIRROR_COVER_IMAGE.'),
+
+            // External registration messages
+            'external_registration_url.required' => __('The external registration URL is required when external registration is enabled.'),
+            'external_registration_url.url' => __('The external registration URL must be a valid URL.'),
+            'external_registration_url.max' => __('The external registration URL may not be greater than 500 characters.'),
+            'external_registration_button_text.required' => __('The button text is required when external registration is enabled.'),
+            'external_registration_button_text.max' => __('The button text may not be greater than 100 characters.'),
         ];
     }
 }

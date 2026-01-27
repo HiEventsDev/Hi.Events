@@ -137,6 +137,21 @@ class PartialUpdateEventSettingsHandler
 
                 // Self-service settings
                 'allow_attendee_self_edit' => $eventSettingsDTO->settings['allow_attendee_self_edit'] ?? $existingSettings->getAllowAttendeeSelfEdit(),
+
+                // External registration settings
+                'is_external_registration' => $eventSettingsDTO->settings['is_external_registration'] ?? $existingSettings->getIsExternalRegistration(),
+                'external_registration_url' => array_key_exists('external_registration_url', $eventSettingsDTO->settings)
+                    ? $eventSettingsDTO->settings['external_registration_url']
+                    : $existingSettings->getExternalRegistrationUrl(),
+                'external_registration_button_text' => array_key_exists('external_registration_button_text', $eventSettingsDTO->settings)
+                    ? $eventSettingsDTO->settings['external_registration_button_text']
+                    : $existingSettings->getExternalRegistrationButtonText(),
+                'external_registration_message' => array_key_exists('external_registration_message', $eventSettingsDTO->settings)
+                    ? $eventSettingsDTO->settings['external_registration_message']
+                    : $existingSettings->getExternalRegistrationMessage(),
+                'external_registration_host' => array_key_exists('external_registration_host', $eventSettingsDTO->settings)
+                    ? $eventSettingsDTO->settings['external_registration_host']
+                    : $existingSettings->getExternalRegistrationHost(),
             ]),
         );
     }

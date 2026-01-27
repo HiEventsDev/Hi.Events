@@ -27,6 +27,7 @@ abstract class EventDailyStatisticDomainObjectAbstract extends \HiEvents\DomainO
     final public const TOTAL_VIEWS = 'total_views';
     final public const ATTENDEES_REGISTERED = 'attendees_registered';
     final public const ORDERS_CANCELLED = 'orders_cancelled';
+    final public const EXTERNAL_REGISTRATION_CLICKS = 'external_registration_clicks';
 
     protected int $id;
     protected int $event_id;
@@ -45,6 +46,7 @@ abstract class EventDailyStatisticDomainObjectAbstract extends \HiEvents\DomainO
     protected int $total_views = 0;
     protected int $attendees_registered = 0;
     protected int $orders_cancelled = 0;
+    protected int $external_registration_clicks = 0;
 
     public function toArray(): array
     {
@@ -66,6 +68,7 @@ abstract class EventDailyStatisticDomainObjectAbstract extends \HiEvents\DomainO
                     'total_views' => $this->total_views ?? null,
                     'attendees_registered' => $this->attendees_registered ?? null,
                     'orders_cancelled' => $this->orders_cancelled ?? null,
+                    'external_registration_clicks' => $this->external_registration_clicks ?? null,
                 ];
     }
 
@@ -254,5 +257,16 @@ abstract class EventDailyStatisticDomainObjectAbstract extends \HiEvents\DomainO
     public function getOrdersCancelled(): int
     {
         return $this->orders_cancelled;
+    }
+
+    public function setExternalRegistrationClicks(int $external_registration_clicks): self
+    {
+        $this->external_registration_clicks = $external_registration_clicks;
+        return $this;
+    }
+
+    public function getExternalRegistrationClicks(): int
+    {
+        return $this->external_registration_clicks;
     }
 }

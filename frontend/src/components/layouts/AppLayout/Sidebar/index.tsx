@@ -27,16 +27,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
     const renderLinks = () => {
         return navItems.map((item) => {
 
+            if (item.showWhen && !item.showWhen()) {
+                return null;
+            }
+
             if (!item.link && item.link !== "" && item.onClick === undefined) {
                 return (
                     <div className={classes.sectionHeading} key={item.label}>
                         {item.label}
                     </div>
                 );
-            }
-
-            if (item.showWhen && !item.showWhen()) {
-                return null;
             }
 
             if (item.loading) {

@@ -297,4 +297,169 @@ class EventStatisticsIncrementService
             ]
         );
     }
+
+    /**
+     * Increment external registration click count for an event
+     *
+     * @throws EventStatisticsVersionMismatchException
+     * @throws Throwable
+     */
+    public function incrementExternalRegistrationClick(int $eventId): void
+    {
+        $this->retrier->retry(
+            callableAction: function () use ($eventId): void {
+                $this->databaseManager->transaction(function () use ($eventId): void {
+                    $this->incrementAggregateExternalClicks($eventId);
+                    $this->incrementDailyExternalClicks($eventId);
+                });
+            },
+            onFailure: function (int $attempt, Throwable $e) use ($eventId): void {
+                $this->logger->error(
+                    'Failed to increment external registration clicks after multiple attempts',
+                    [
+                        'event_id' => $eventId,
+                        'attempts' => $attempt,
+                        'exception' => $e::class,
+                        'message' => $e->getMessage(),
+                    ]
+                );
+            },
+            retryOn: [EventStatisticsVersionMismatchException::class]
+        );
+    }
+
+    /**
+     * Increment aggregate external registration clicks
+     *
+     * @throws EventStatisticsVersionMismatchException
+     */
+    private function incrementAggregateExternalClicks(int $eventId): void
+    {
+        $eventStatistics = $this->eventStatisticsRepository->findFirstWhere([
+            'event_id' => $eventId,
+        ]);
+
+        if ($eventStatistics === null) {
+            $this->eventStatisticsRepository->create([
+                'event_id' => $eventId,
+                'external_registration_clicks' => 1,
+                'products_sold' => 0,
+                'attendees_registered' => 0,
+                'sales_total_gross' => 0,
+                'sales_total_before_additions' => 0,
+                'total_tax' => 0,
+                'total_fee' => 0,
+                'orders_created' => 0,
+                'orders_cancelled' => 0,
+            ]);
+
+            $this->logger->info(
+                'Event aggregate statistics created for external registration click',
+                [
+                    'event_id' => $eventId,
+                ]
+            );
+
+            return;
+        }
+
+        $updates = [
+            'external_registration_clicks' => $eventStatistics->getExternalRegistrationClicks() + 1,
+            'version' => $eventStatistics->getVersion() + 1,
+        ];
+
+        $updated = $this->eventStatisticsRepository->updateWhere(
+            attributes: $updates,
+            where: [
+                'event_id' => $eventId,
+                'version' => $eventStatistics->getVersion(),
+            ]
+        );
+
+        if ($updated === 0) {
+            throw new EventStatisticsVersionMismatchException(
+                'Event statistics version mismatch. Expected version '
+                . $eventStatistics->getVersion() . ' but it was already updated.'
+            );
+        }
+
+        $this->logger->info(
+            'Event aggregate external registration clicks incremented',
+            [
+                'event_id' => $eventId,
+                'new_version' => $eventStatistics->getVersion() + 1,
+            ]
+        );
+    }
+
+    /**
+     * Increment daily external registration clicks
+     *
+     * @throws EventStatisticsVersionMismatchException
+     */
+    private function incrementDailyExternalClicks(int $eventId): void
+    {
+        $today = Carbon::now()->format('Y-m-d');
+
+        $eventDailyStatistic = $this->eventDailyStatisticRepository->findFirstWhere([
+            'event_id' => $eventId,
+            'date' => $today,
+        ]);
+
+        if ($eventDailyStatistic === null) {
+            $this->eventDailyStatisticRepository->create([
+                'event_id' => $eventId,
+                'date' => $today,
+                'external_registration_clicks' => 1,
+                'products_sold' => 0,
+                'attendees_registered' => 0,
+                'sales_total_gross' => 0,
+                'sales_total_before_additions' => 0,
+                'total_tax' => 0,
+                'total_fee' => 0,
+                'orders_created' => 0,
+                'orders_cancelled' => 0,
+            ]);
+
+            $this->logger->info(
+                'Event daily statistics created for external registration click',
+                [
+                    'event_id' => $eventId,
+                    'date' => $today,
+                ]
+            );
+
+            return;
+        }
+
+        $updates = [
+            'external_registration_clicks' => $eventDailyStatistic->getExternalRegistrationClicks() + 1,
+            'version' => $eventDailyStatistic->getVersion() + 1,
+        ];
+
+        $updated = $this->eventDailyStatisticRepository->updateWhere(
+            attributes: $updates,
+            where: [
+                'event_id' => $eventId,
+                'date' => $today,
+                'version' => $eventDailyStatistic->getVersion(),
+            ],
+        );
+
+        if ($updated === 0) {
+            throw new EventStatisticsVersionMismatchException(
+                'Event daily statistics version mismatch. Expected version '
+                . $eventDailyStatistic->getVersion() . ' but it was already updated.'
+            );
+        }
+
+        $this->logger->info(
+            'Event daily external registration clicks incremented',
+            [
+                'event_id' => $eventId,
+                'date' => $today,
+                'new_version' => $eventDailyStatistic->getVersion() + 1,
+            ]
+        );
+    }
 }

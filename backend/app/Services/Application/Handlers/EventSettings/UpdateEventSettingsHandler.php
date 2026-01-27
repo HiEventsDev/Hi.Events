@@ -93,7 +93,14 @@ class UpdateEventSettingsHandler
                     'homepage_theme_settings' => $settings->homepage_theme_settings,
 
                     // Self-service settings
-                    'allow_attendee_self_edit' => $settings->allow_attendee_self_edit
+                    'allow_attendee_self_edit' => $settings->allow_attendee_self_edit,
+
+                    // External registration settings
+                    'is_external_registration' => $settings->is_external_registration,
+                    'external_registration_url' => $settings->external_registration_url ? trim($settings->external_registration_url) : null,
+                    'external_registration_button_text' => $settings->external_registration_button_text ? trim($settings->external_registration_button_text) : null,
+                    'external_registration_message' => $settings->external_registration_message,
+                    'external_registration_host' => $settings->external_registration_host ? trim($settings->external_registration_host) : null,
                 ],
                 where: [
                     'event_id' => $settings->event_id,

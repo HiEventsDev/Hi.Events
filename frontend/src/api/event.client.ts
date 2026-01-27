@@ -102,4 +102,9 @@ export const eventsClientPublic = {
         const response = await publicApi.get<GenericDataResponse<Event>>('events/' + eventId + (promoCode ? '?promo_code=' + promoCode : ''));
         return response.data;
     },
+
+    trackExternalRegistrationClick: async (eventId: IdParam) => {
+        const response = await publicApi.post('events/' + eventId + '/external-registration-click');
+        return response.data;
+    },
 }
