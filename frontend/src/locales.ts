@@ -60,10 +60,6 @@ export const getLocaleName = (locale: SupportedLocales) => {
 }
 
 export const getClientLocale = () => {
-    // TEMPORARY: Force English locale - REVERT THIS LATER
-    return "en";
-
-    /* Original implementation - uncomment to restore language detection
     if (typeof window !== "undefined") {
         const storedLocale = document
             .cookie
@@ -79,7 +75,6 @@ export const getClientLocale = () => {
     }
 
     return "en";
-    */
 };
 
 export async function dynamicActivateLocale(locale: string) {
