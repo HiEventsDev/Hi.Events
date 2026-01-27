@@ -83,6 +83,13 @@ class UpdateEventSettingsDTO extends BaseDTO
 
         // Self-service settings
         public readonly bool                    $allow_attendee_self_edit = false,
+
+        // External registration settings
+        public readonly bool                    $is_external_registration = false,
+        public readonly ?string                 $external_registration_url = null,
+        public readonly ?string                 $external_registration_button_text = null,
+        public readonly ?string                 $external_registration_message = null,
+        public readonly ?string                 $external_registration_host = null,
     )
     {
     }
@@ -165,6 +172,13 @@ class UpdateEventSettingsDTO extends BaseDTO
 
             // Self-service defaults
             allow_attendee_self_edit: false,
+
+            // External registration defaults
+            is_external_registration: false,
+            external_registration_url: null,
+            external_registration_button_text: null,
+            external_registration_message: null,
+            external_registration_host: null,
         );
     }
 }

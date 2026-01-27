@@ -100,22 +100,69 @@ const EventLayout = () => {
         {label: t`Setup & Design`},
         {link: 'settings', label: t`Event Settings`, icon: IconSettings},
         {link: 'homepage-designer', label: t`Homepage Designer`, icon: IconPaint},
-        {link: 'ticket-designer', label: t`Ticket Designer`, icon: IconTicket},
-        {link: 'questions', label: t`Registration Questions`, icon: IconUserQuestion},
+        {
+            link: 'ticket-designer',
+            label: t`Ticket Designer`,
+            icon: IconTicket,
+            showWhen: () => !eventSettings?.is_external_registration
+        },
+        {
+            link: 'questions',
+            label: t`Registration Questions`,
+            icon: IconUserQuestion,
+            showWhen: () => !eventSettings?.is_external_registration
+        },
 
         // 3. Ticketing & Sales
         {label: t`Ticketing & Sales`},
-        {link: 'products', label: t`Tickets & Products`, icon: IconTicket},
-        {link: 'orders', label: t`Orders`, icon: IconReceipt, badge: eventStats?.total_orders},
-        {link: 'promo-codes', label: t`Promo Codes`, icon: IconDiscount2},
-        {link: 'affiliates', label: t`Affiliates`, icon: IconTrendingUp},
+        {
+            link: 'products',
+            label: t`Tickets & Products`,
+            icon: IconTicket
+        },
+        {
+            link: 'orders',
+            label: t`Orders`,
+            icon: IconReceipt,
+            badge: eventStats?.total_orders,
+            showWhen: () => !eventSettings?.is_external_registration
+        },
+        {
+            link: 'promo-codes',
+            label: t`Promo Codes`,
+            icon: IconDiscount2,
+            showWhen: () => !eventSettings?.is_external_registration
+        },
+        {
+            link: 'affiliates',
+            label: t`Affiliates`,
+            icon: IconTrendingUp,
+            showWhen: () => !eventSettings?.is_external_registration
+        },
 
         // 4. GUESTS
         {label: t`Guest Management`},
-        {link: 'attendees', label: t`Attendees`, icon: IconUsers, badge: eventStats?.total_attendees_registered},
-        {link: 'check-in', label: t`Check-In Lists`, icon: IconQrcode},
-        {link: 'messages', label: t`Messages`, icon: IconSend},
-        {link: 'capacity-assignments', label: t`Capacity Management`, icon: IconUsersGroup},
+        {
+            link: 'attendees',
+            label: t`Attendees`,
+            icon: IconUsers,
+            badge: eventStats?.total_attendees_registered
+        },
+        {
+            link: 'check-in',
+            label: t`Check-In Lists`,
+            icon: IconQrcode
+        },
+        {
+            link: 'messages',
+            label: t`Messages`,
+            icon: IconSend
+        },
+        {
+            link: 'capacity-assignments',
+            label: t`Capacity Management`,
+            icon: IconUsersGroup
+        },
 
         // 5. INTEGRATIONS
         {label: t`Integrations`},

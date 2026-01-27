@@ -23,6 +23,7 @@ class EventStatisticsResource extends JsonResource
             'products_sold' => $this->getProductsSold(),
             'attendees_registered' => $this->getAttendeesRegistered(),
             'total_refunded' => $this->getTotalRefunded(),
+            'external_registration_clicks' => $this->getExternalRegistrationClicks(),
         ];
     }
 }

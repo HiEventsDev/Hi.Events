@@ -165,6 +165,7 @@ export function EventCard({event}: EventCardProps) {
 
     const isEnded = event.lifecycle_status === 'ENDED';
     const isDraft = event.status === 'DRAFT';
+    const isExternalRegistration = event.settings?.is_external_registration;
 
     return (
         <>
@@ -219,6 +220,17 @@ export function EventCard({event}: EventCardProps) {
                                 )}
                             </div>
                         </div>
+
+                        {isExternalRegistration && (
+                            <div className={classes.externalManagementBadge}>
+                                <div className={classes.externalManagementText}>
+                                    <span className={classes.externalManagementLabel}>{t`Externally Managed by`}</span>
+                                    <span className={classes.externalManagementHost}>
+                                        {event.settings.external_registration_host || t`External Platform`}
+                                    </span>
+                                </div>
+                            </div>
+                        )}
 
                         <div className={classes.statsPanel}>
                             <Tooltip label={t`Attendees registered`} withArrow position="top">

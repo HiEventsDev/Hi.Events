@@ -5,6 +5,8 @@ import React, {useEffect, useRef, useState} from "react";
 import {EventDocumentHead} from "../../common/EventDocumentHead";
 import {eventCoverImage, eventHomepageUrl, imageUrl, organizerHomepageUrl} from "../../../utilites/urlHelper.ts";
 import {Event, OrganizerStatus} from "../../../types.ts";
+import {eventsClientPublic} from "../../../api/event.client.ts";
+import {trackEvent, AnalyticsEvents} from "../../../utilites/analytics.ts";
 import {EventNotAvailable} from "./EventNotAvailable";
 import {
     IconArrowUpRight,
@@ -88,6 +90,16 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
 
     const scrollToTickets = () => {
         ticketsSectionRef.current?.scrollIntoView({behavior: 'smooth', block: 'start'});
+    };
+
+    const handleExternalRegistrationClick = async () => {
+        trackEvent(AnalyticsEvents.EXTERNAL_REGISTRATION_CLICKED);
+        try {
+            await eventsClientPublic.trackExternalRegistrationClick(event?.id);
+        } catch (error) {
+            // Silent fail - don't block navigation
+            console.error('Failed to track click:', error);
+        }
     };
 
     if (!event) {
@@ -468,25 +480,57 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                             )}
 
                             {/* Tickets Section */}
-                            <div className={`${classes.section} ${classes.ticketsSection}`} ref={ticketsSectionRef}
-                                 id="tickets">
-                                <SelectProducts
-                                    colors={{
-                                        background: "transparent",
-                                        primary: "var(--event-primary-color)",
-                                        primaryText: "var(--event-primary-text-color)",
-                                        secondary: "var(--event-primary-color)",
-                                        secondaryText: "var(--event-accent-contrast)",
-                                        bodyBackground: "var(--event-bg-color)",
-                                    }}
-                                    continueButtonText={event.settings?.continue_button_text}
-                                    padding={"0px"}
-                                    event={event}
-                                    promoCodeValid={promoCodeValid}
-                                    promoCode={promoCode}
-                                    showPoweredBy={false}
-                                />
-                            </div>
+                            {!event.settings?.is_external_registration && (
+                                <div className={`${classes.section} ${classes.ticketsSection}`} ref={ticketsSectionRef}
+                                     id="tickets">
+                                    <SelectProducts
+                                        colors={{
+                                            background: "transparent",
+                                            primary: "var(--event-primary-color)",
+                                            primaryText: "var(--event-primary-text-color)",
+                                            secondary: "var(--event-primary-color)",
+                                            secondaryText: "var(--event-accent-contrast)",
+                                            bodyBackground: "var(--event-bg-color)",
+                                        }}
+                                        continueButtonText={event.settings?.continue_button_text}
+                                        padding={"0px"}
+                                        event={event}
+                                        promoCodeValid={promoCodeValid}
+                                        promoCode={promoCode}
+                                        showPoweredBy={false}
+                                    />
+                                </div>
+                            )}
+
+                            {/* External Registration Section */}
+                            {event.settings?.is_external_registration && (
+                                <div className={`${classes.section} ${classes.ticketsSection}`} ref={ticketsSectionRef}
+                                     id="tickets">
+                                    <div className={classes.sectionHeader}>
+                                        <h2 className={classes.sectionTitle}>{t`Registration`}</h2>
+                                    </div>
+                                    <div className={classes.externalRegistrationCard}>
+                                        {event.settings.external_registration_host && (
+                                            <p className={classes.externalRegistrationHost}>
+                                                <strong>{t`Hosted by:`}</strong> {event.settings.external_registration_host}
+                                            </p>
+                                        )}
+                                        <p className={classes.externalRegistrationMessage}>
+                                            {event.settings.external_registration_message || t`This event uses external registration.`}
+                                        </p>
+                                        <a
+                                            href={event.settings.external_registration_url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className={classes.externalRegistrationButton}
+                                            onClick={handleExternalRegistrationClick}
+                                        >
+                                            <IconExternalLink size={20}/>
+                                            {event.settings.external_registration_button_text || t`Register Externally`}
+                                        </a>
+                                    </div>
+                                </div>
+                            )}
 
                             {/* Organizer Section */}
                             {organizer && organizer.status === OrganizerStatus.LIVE && (
@@ -610,7 +654,7 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                     </div>
 
                     {/* Floating Scroll Button */}
-                    {showScrollButton && (
+                    {showScrollButton && !event.settings?.is_external_registration && (
                         <button
                             className={classes.scrollToTicketsButton}
                             onClick={scrollToTickets}
@@ -618,6 +662,20 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                             <IconTicket size={18}/>
                             {t`Get Tickets`}
                         </button>
+                    )}
+
+                    {/* Floating External Registration Button */}
+                    {showScrollButton && event.settings?.is_external_registration && (
+                        <a
+                            href={event.settings.external_registration_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={classes.scrollToTicketsButton}
+                            onClick={handleExternalRegistrationClick}
+                        >
+                            <IconExternalLink size={18}/>
+                            {event.settings.external_registration_button_text || t`Register Externally`}
+                        </a>
                     )}
 
                     {/* Contact Modal */}

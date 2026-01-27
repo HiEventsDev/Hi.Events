@@ -250,6 +250,13 @@ export interface EventSettings {
 
     // Simplified homepage theme settings (new 2-color + mode system)
     homepage_theme_settings?: HomepageThemeSettings;
+
+    // External registration settings
+    is_external_registration?: boolean;
+    external_registration_url?: string;
+    external_registration_button_text?: string;
+    external_registration_message?: string;
+    external_registration_host?: string;
 }
 
 export interface VenueAddress {
@@ -341,6 +348,7 @@ export interface EventDailyStats {
     attendees_registered: number;
     total_refunded: number;
     orders_created: number;
+    external_registration_clicks: number;
 }
 
 export interface CheckInStats {
@@ -364,6 +372,7 @@ export interface EventStats {
     total_fees: number;
     total_views: number;
     total_refunded: number;
+    total_external_registration_clicks: number;
 }
 
 export interface OrganizerStats {

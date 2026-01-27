@@ -79,6 +79,13 @@ class EventSettingsResource extends JsonResource
 
             // Self-service settings
             'allow_attendee_self_edit' => $this->getAllowAttendeeSelfEdit(),
+
+            // External registration settings
+            'is_external_registration' => $this->getIsExternalRegistration(),
+            'external_registration_url' => $this->getExternalRegistrationUrl(),
+            'external_registration_button_text' => $this->getExternalRegistrationButtonText(),
+            'external_registration_message' => $this->getExternalRegistrationMessage(),
+            'external_registration_host' => $this->getExternalRegistrationHost(),
         ];
     }
 }

@@ -32,7 +32,8 @@ readonly class EventStatsFetchService
             SUM(es.total_fee) AS total_fees,
             SUM(es.total_views) AS total_views,
             SUM(es.total_refunded) AS total_refunded,
-            SUM(es.attendees_registered) AS attendees_registered
+            SUM(es.attendees_registered) AS attendees_registered,
+            SUM(es.external_registration_clicks) AS total_external_registration_clicks
 
         FROM event_statistics es
         WHERE es.event_id = :eventId
@@ -55,6 +56,7 @@ readonly class EventStatsFetchService
             total_tax: $totalsResult->total_tax ?? 0,
             total_views: $totalsResult->total_views ?? 0,
             total_refunded: $totalsResult->total_refunded ?? 0,
+            total_external_registration_clicks: $totalsResult->total_external_registration_clicks ?? 0,
         );
     }
 
@@ -82,7 +84,8 @@ readonly class EventStatsFetchService
               COALESCE(SUM(eds.orders_created), 0) AS orders_created,
               COALESCE(SUM(eds.products_sold), 0) AS products_sold,
               COALESCE(SUM(eds.attendees_registered), 0) AS attendees_registered,
-              COALESCE(SUM(eds.total_refunded), 0) AS total_refunded
+              COALESCE(SUM(eds.total_refunded), 0) AS total_refunded,
+              COALESCE(SUM(eds.external_registration_clicks), 0) AS external_registration_clicks
             FROM date_series ds
             LEFT JOIN event_daily_statistics eds ON ds.date = eds.date AND eds.deleted_at IS NULL AND eds.event_id = :eventId
             GROUP BY ds.date
@@ -109,6 +112,7 @@ readonly class EventStatsFetchService
                 orders_created: $result->orders_created,
                 attendees_registered: $result->attendees_registered,
                 total_refunded: $result->total_refunded,
+                external_registration_clicks: $result->external_registration_clicks,
             );
         });
     }

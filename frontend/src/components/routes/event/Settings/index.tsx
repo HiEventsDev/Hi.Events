@@ -7,6 +7,7 @@ import {PageTitle} from "../../../common/PageTitle";
 import {t} from "@lingui/macro";
 import {SeoSettings} from "./Sections/SeoSettings";
 import {MiscSettings} from "./Sections/MiscSettings";
+import {RegistrationSettings} from "./Sections/RegistrationSettings";
 import {Box, Group, NavLink as MantineNavLink, Stack} from "@mantine/core";
 import {
     IconAdjustments,
@@ -17,6 +18,7 @@ import {
     IconHome,
     IconMapPin,
     IconPercentage,
+    IconTicket,
 } from "@tabler/icons-react";
 import {useMediaQuery} from "@mantine/hooks";
 import {useMemo, useState} from "react";
@@ -24,10 +26,15 @@ import {Card} from "../../../common/Card";
 import {PaymentAndInvoicingSettings} from "./Sections/PaymentSettings";
 import {PlatformFeesSettings} from "./Sections/PlatformFeesSettings";
 import {useGetAccount} from "../../../../queries/useGetAccount.ts";
+import {useParams} from "react-router";
+import {useGetEventSettings} from "../../../../queries/useGetEventSettings.ts";
 
 export const Settings = () => {
+    const {eventId} = useParams();
     const {data: account} = useGetAccount();
+    const {data: eventSettings} = useGetEventSettings(eventId);
     const isSaasMode = account?.is_saas_mode_enabled;
+    const isExternalRegistration = eventSettings?.is_external_registration;
 
     const SECTIONS = useMemo(() => {
         const baseSections = [
@@ -42,6 +49,12 @@ export const Settings = () => {
                 label: t`Location`,
                 icon: IconMapPin,
                 component: LocationSettings
+            },
+            {
+                id: 'registration-settings',
+                label: t`Registration`,
+                icon: IconTicket,
+                component: RegistrationSettings
             },
             {
                 id: 'homepage-settings',
@@ -84,8 +97,15 @@ export const Settings = () => {
             });
         }
 
+        // Hide certain sections when external registration is enabled
+        if (isExternalRegistration) {
+            return baseSections.filter(section =>
+                !['homepage-settings', 'seo-settings', 'email-settings', 'misc-settings', 'payment-settings', 'platform-fees'].includes(section.id)
+            );
+        }
+
         return baseSections;
-    }, [isSaasMode]);
+    }, [isSaasMode, isExternalRegistration]);
 
     const isLargeScreen = useMediaQuery('(min-width: 1200px)', true);
     const [activeSection, setActiveSection] = useState('event-details');

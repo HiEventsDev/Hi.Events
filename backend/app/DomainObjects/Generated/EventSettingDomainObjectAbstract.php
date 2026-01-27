@@ -64,6 +64,11 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     final public const HOMEPAGE_THEME_SETTINGS = 'homepage_theme_settings';
     final public const PASS_PLATFORM_FEE_TO_BUYER = 'pass_platform_fee_to_buyer';
     final public const ALLOW_ATTENDEE_SELF_EDIT = 'allow_attendee_self_edit';
+    final public const IS_EXTERNAL_REGISTRATION = 'is_external_registration';
+    final public const EXTERNAL_REGISTRATION_URL = 'external_registration_url';
+    final public const EXTERNAL_REGISTRATION_BUTTON_TEXT = 'external_registration_button_text';
+    final public const EXTERNAL_REGISTRATION_MESSAGE = 'external_registration_message';
+    final public const EXTERNAL_REGISTRATION_HOST = 'external_registration_host';
 
     protected int $id;
     protected int $event_id;
@@ -119,6 +124,11 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     protected array|string|null $homepage_theme_settings = null;
     protected bool $pass_platform_fee_to_buyer = false;
     protected bool $allow_attendee_self_edit = true;
+    protected bool $is_external_registration = false;
+    protected ?string $external_registration_url = null;
+    protected ?string $external_registration_button_text = null;
+    protected ?string $external_registration_message = null;
+    protected ?string $external_registration_host = null;
 
     public function toArray(): array
     {
@@ -177,6 +187,11 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
                     'homepage_theme_settings' => $this->homepage_theme_settings ?? null,
                     'pass_platform_fee_to_buyer' => $this->pass_platform_fee_to_buyer ?? null,
                     'allow_attendee_self_edit' => $this->allow_attendee_self_edit ?? null,
+                    'is_external_registration' => $this->is_external_registration ?? null,
+                    'external_registration_url' => $this->external_registration_url ?? null,
+                    'external_registration_button_text' => $this->external_registration_button_text ?? null,
+                    'external_registration_message' => $this->external_registration_message ?? null,
+                    'external_registration_host' => $this->external_registration_host ?? null,
                 ];
     }
 
@@ -773,5 +788,60 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     public function getAllowAttendeeSelfEdit(): bool
     {
         return $this->allow_attendee_self_edit;
+    }
+
+    public function setIsExternalRegistration(bool $is_external_registration): self
+    {
+        $this->is_external_registration = $is_external_registration;
+        return $this;
+    }
+
+    public function getIsExternalRegistration(): bool
+    {
+        return $this->is_external_registration;
+    }
+
+    public function setExternalRegistrationUrl(?string $external_registration_url): self
+    {
+        $this->external_registration_url = $external_registration_url;
+        return $this;
+    }
+
+    public function getExternalRegistrationUrl(): ?string
+    {
+        return $this->external_registration_url;
+    }
+
+    public function setExternalRegistrationButtonText(?string $external_registration_button_text): self
+    {
+        $this->external_registration_button_text = $external_registration_button_text;
+        return $this;
+    }
+
+    public function getExternalRegistrationButtonText(): ?string
+    {
+        return $this->external_registration_button_text;
+    }
+
+    public function setExternalRegistrationMessage(?string $external_registration_message): self
+    {
+        $this->external_registration_message = $external_registration_message;
+        return $this;
+    }
+
+    public function getExternalRegistrationMessage(): ?string
+    {
+        return $this->external_registration_message;
+    }
+
+    public function setExternalRegistrationHost(?string $external_registration_host): self
+    {
+        $this->external_registration_host = $external_registration_host;
+        return $this;
+    }
+
+    public function getExternalRegistrationHost(): ?string
+    {
+        return $this->external_registration_host;
     }
 }
