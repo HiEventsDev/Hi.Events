@@ -52,15 +52,16 @@ class OrderApplicationFeeCalculationServiceTest extends TestCase
         return $item;
     }
 
-    private function createAccountConfig(float $fixedFee = 0, float $percentageFee = 0): AccountConfigurationDomainObject
+    private function createAccountConfig(float $fixedFee = 0, float $percentageFee = 0, string $currency = 'USD'): AccountConfigurationDomainObject
     {
         $config = $this->getMockBuilder(AccountConfigurationDomainObject::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getFixedApplicationFee', 'getPercentageApplicationFee'])
+            ->onlyMethods(['getFixedApplicationFee', 'getPercentageApplicationFee', 'getApplicationFeeCurrency'])
             ->getMock();
 
         $config->method('getFixedApplicationFee')->willReturn($fixedFee);
         $config->method('getPercentageApplicationFee')->willReturn($percentageFee);
+        $config->method('getApplicationFeeCurrency')->willReturn($currency);
 
         return $config;
     }
@@ -129,5 +130,48 @@ class OrderApplicationFeeCalculationServiceTest extends TestCase
         $fee = $this->service->calculateApplicationFee($account, $order);
 
         $this->assertEquals(5.00, $fee->grossApplicationFee->toFloat());
+    }
+
+    public function testNoConversionWhenOrderCurrencyMatchesFeeCurrency(): void
+    {
+        $this->config->method('get')->willReturn(true);
+
+        $order = $this->createOrderWithItems([
+            $this->createItem(100, 1),
+        ], 'EUR');
+
+        // Fee is defined in EUR, order is in EUR - no conversion needed
+        $account = $this->createAccountConfig(2.00, 10, 'EUR');
+
+        $this->currencyConversionClient->expects($this->never())->method('convert');
+
+        // 1 chargeable × €2 fixed = €2
+        // €100 × 10% = €10
+        // Total = €12
+        $fee = $this->service->calculateApplicationFee($account, $order);
+
+        $this->assertEquals(12.00, $fee->grossApplicationFee->toFloat());
+    }
+
+    public function testConversionFromEurToUsd(): void
+    {
+        $this->config->method('get')->willReturn(true);
+
+        $order = $this->createOrderWithItems([
+            $this->createItem(100, 2),
+        ], 'USD');
+
+        // Fee is defined in EUR, order is in USD - conversion needed
+        $account = $this->createAccountConfig(1.00, 5, 'EUR');
+
+        $this->currencyConversionClient->method('convert')
+            ->willReturn(MoneyValue::fromFloat(1.10, 'USD')); // €1 = $1.10
+
+        // 2 chargeable × $1.10 fixed = $2.20
+        // $200 × 5% = $10
+        // Total = $12.20
+        $fee = $this->service->calculateApplicationFee($account, $order);
+
+        $this->assertEquals(12.20, $fee->grossApplicationFee->toFloat());
     }
 }

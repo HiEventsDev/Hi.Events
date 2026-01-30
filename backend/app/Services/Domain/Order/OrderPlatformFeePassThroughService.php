@@ -11,8 +11,6 @@ use Illuminate\Config\Repository;
 
 class OrderPlatformFeePassThroughService
 {
-    private const BASE_CURRENCY = 'USD';
-
     public const PLATFORM_FEE_ID = 0;
 
     public static function getPlatformFeeName(): string
@@ -37,12 +35,14 @@ class OrderPlatformFeePassThroughService
     }
 
     /**
-     * Calculate platform fee that exactly covers Stripe's application fee.
+     * Calculate the platform fee line item to show on the buyer's invoice.
      *
-     * Formula: P = (fixed + total * r) / (1 - r)
+     * Uses gross-up formula: P = (fixed + total * r) / (1 - r)
      * Where r = percentage rate, P = platform fee
      *
-     * This ensures: Stripe fee on (total + P) = P
+     * This ensures that when the platform fee (P) is added to the order total,
+     * the resulting Stripe application fee calculated on the new total equals P.
+     * In other words: application_fee(total + P) = P
      */
     public function calculatePlatformFee(
         AccountConfigurationDomainObject $accountConfiguration,
@@ -75,13 +75,14 @@ class OrderPlatformFeePassThroughService
     ): float
     {
         $baseFee = $accountConfiguration->getFixedApplicationFee();
+        $baseCurrency = $accountConfiguration->getApplicationFeeCurrency();
 
-        if ($currency === self::BASE_CURRENCY) {
+        if ($currency === $baseCurrency) {
             return $baseFee;
         }
 
         return $this->currencyConversionClient->convert(
-            fromCurrency: BrickCurrency::of(self::BASE_CURRENCY),
+            fromCurrency: BrickCurrency::of($baseCurrency),
             toCurrency: BrickCurrency::of($currency),
             amount: $baseFee
         )->toFloat();
