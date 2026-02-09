@@ -38,6 +38,10 @@ class MessageRepository extends BaseRepository implements MessageRepositoryInter
             };
         }
 
+        if ($params->filter_fields && $params->filter_fields->isNotEmpty()) {
+            $this->applyFilterFields($params, MessageDomainObject::getAllowedFilterFields());
+        }
+
         $this->model = $this->model->orderBy(
             $params->sort_by ?? MessageDomainObject::getDefaultSort(),
             $params->sort_direction ?? 'desc',

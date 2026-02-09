@@ -1,89 +1,99 @@
-import {Message, MessageType} from "../../../types.ts";
+import {IdParam, Message, MessageType} from "../../../types.ts";
 import classes from './MessageList.module.scss';
 import {relativeDate} from "../../../utilites/dates.ts";
-import {Card} from "../Card";
-import {Anchor, Avatar, Badge} from "@mantine/core";
+import {Avatar, Badge} from "@mantine/core";
 import {getInitials} from "../../../utilites/helpers.ts";
-import {NoResultsSplash} from "../NoResultsSplash";
 import {t} from "@lingui/macro";
-import {useState} from "react";
 
 interface MessageListProps {
     messages: Message[];
+    selectedId?: IdParam;
+    onSelect: (message: Message) => void;
 }
 
-const SingleMessage = ({message}: { message: Message }) => {
-    const [showFullMessage, setShowFullMessage] = useState(false);
+export const statusBadgeColor = (status?: string) => {
+    switch (status) {
+        case 'SENT': return 'green';
+        case 'PROCESSING': return 'orange';
+        case 'SCHEDULED': return 'blue';
+        case 'CANCELLED': return 'gray';
+        case 'FAILED': return 'red';
+        default: return 'orange';
+    }
+};
 
-    const typeToDescription = {
+export const typeLabel = (type: MessageType) => {
+    const map: Record<string, string> = {
         [MessageType.OrderOwnersWithProduct]: t`Order owners with products`,
         [MessageType.IndividualAttendees]: t`Individual attendees`,
         [MessageType.AllAttendees]: t`All attendees`,
         [MessageType.TicketHolders]: t`Ticket holders`,
         [MessageType.OrderOwner]: t`Order owner`,
-    }
+    };
+    return map[type] || type;
+};
+
+const MessageItem = ({message, isSelected, onSelect}: {
+    message: Message;
+    isSelected: boolean;
+    onSelect: () => void;
+}) => {
+    const isCancelled = message.status === 'CANCELLED';
+    const senderName = message.sent_by_user
+        ? `${message.sent_by_user.first_name} ${message.sent_by_user.last_name}`
+        : t`Unknown`;
+
+    const displayTimestamp = (message.status === 'SCHEDULED' || message.status === 'CANCELLED')
+        ? (message.scheduled_at ?? message.sent_at ?? message.created_at)
+        : (message.sent_at ?? message.created_at ?? message.scheduled_at);
+    const displayDate = displayTimestamp ? relativeDate(displayTimestamp) : t`Unknown`;
 
     return (
-        <Card className={classes.message}>
-            <div className={classes.avatar}>
-                <Avatar color={"grape"}
-                        size={40}>{getInitials(message.sent_by_user?.first_name + " " + message.sent_by_user?.last_name)}</Avatar>
-            </div>
-            <div className={classes.details}>
-
-                <div className={classes.status}>
-                    <Badge
-                        color={message.status === "SENT" ? "green" : "orange"}
-                        variant={"outline"}>
-                        {message.status}
-                    </Badge>
-                </div>
-                <div className={classes.date}>
-                    <div className={classes.date} title={message.sent_at}>
-                        {relativeDate(message.sent_at as string)}
-                    </div>
+        <div
+            className={`${classes.messageItem} ${isSelected ? classes.selected : ''} ${isCancelled ? classes.cancelled : ''}`}
+            onClick={onSelect}
+            role="option"
+            aria-selected={isSelected}
+            tabIndex={0}
+            onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    onSelect();
+                }
+            }}
+        >
+            <Avatar color="grape" size={36} radius="xl">
+                {getInitials(senderName)}
+            </Avatar>
+            <div className={classes.itemContent}>
+                <div className={classes.itemTopRow}>
+                    <span className={classes.sender}>{senderName}</span>
+                    <span className={classes.date}>{displayDate}</span>
                 </div>
                 <div className={classes.subject}>{message.subject}</div>
-                <div className={classes.type}>
-                    {typeToDescription[message.type]}
+                <div className={classes.preview}>{message.message_preview}</div>
+                <div className={classes.itemBottomRow}>
+                    <Badge size="xs" color={statusBadgeColor(message.status)} variant="outline">
+                        {message.status}
+                    </Badge>
+                    <span className={classes.typeLabel}>{typeLabel(message.type)}</span>
                 </div>
-                <div className={classes.content}>
-                    {showFullMessage
-                        ? <div dangerouslySetInnerHTML={{__html: message.message}}></div>
-                        : <div className={classes.preview}>{message.message_preview}</div>}
-                </div>
-                <Anchor
-                    className={classes.read_more}
-                    onClick={() => setShowFullMessage(!showFullMessage)}
-                >
-                    {showFullMessage ? t`Read less` : t`View full message`}
-                </Anchor>
             </div>
-        </Card>
+        </div>
     );
 };
 
-export const MessageList = ({messages}: MessageListProps) => {
-    if (messages.length === 0) {
-        return <NoResultsSplash
-            heading={t`No messages to show`}
-            imageHref={'/blank-slate/messages.svg'}
-            subHeading={(
-                <>
-                    <p>
-                        {t`You haven't sent any messages yet. You can send messages to all attendees, or to specific product holders.`}
-                    </p>
-                </>
-            )}
-        />
-    }
+export const MessageList = ({messages, selectedId, onSelect}: MessageListProps) => {
     return (
-        <div>
-            {messages.map((message) => {
-                return (
-                    <SingleMessage key={message.id} message={message}/>
-                )
-            })}
+        <div className={classes.listContainer} role="listbox">
+            {messages.map((message) => (
+                <MessageItem
+                    key={message.id}
+                    message={message}
+                    isSelected={message.id === selectedId}
+                    onSelect={() => onSelect(message)}
+                />
+            ))}
         </div>
-    )
-}
+    );
+};
