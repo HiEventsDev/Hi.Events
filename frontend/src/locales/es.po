@@ -176,6 +176,22 @@ msgstr "0 minutos y 0 segundos"
 msgid "1 Active Webhook"
 msgstr "1 webhook activo"
 
+#: src/components/modals/SendMessageModal/index.tsx:119
+msgid "1 day after end date"
+msgstr "1 día después de la fecha de finalización"
+
+#: src/components/modals/SendMessageModal/index.tsx:113
+msgid "1 day after start date"
+msgstr "1 día después de la fecha de inicio"
+
+#: src/components/modals/SendMessageModal/index.tsx:111
+msgid "1 day before event"
+msgstr "1 día antes del evento"
+
+#: src/components/modals/SendMessageModal/index.tsx:112
+msgid "1 hour before event"
+msgstr "1 hora antes del evento"
+
 #: src/components/routes/product-widget/CollectInformation/index.tsx:569
 msgid "1 ticket"
 msgstr "1 entrada"
@@ -183,6 +199,10 @@ msgstr "1 entrada"
 #: src/components/common/EventCard/index.tsx:119
 msgid "1 ticket type"
 msgstr "1 tipo de entrada"
+
+#: src/components/modals/SendMessageModal/index.tsx:110
+msgid "1 week before event"
+msgstr "1 semana antes del evento"
 
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:123
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:81
@@ -325,8 +345,8 @@ msgstr "Acceso denegado"
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:53
 #: src/components/routes/admin/Dashboard/index.tsx:353
 #: src/components/routes/admin/Dashboard/index.tsx:400
-#: src/components/routes/admin/Messages/index.tsx:158
-#: src/components/routes/admin/Messages/index.tsx:275
+#: src/components/routes/admin/Messages/index.tsx:164
+#: src/components/routes/admin/Messages/index.tsx:281
 msgid "Account"
 msgstr "Cuenta"
 
@@ -598,12 +618,12 @@ msgstr "Los afiliados te ayudan a rastrear las ventas generadas por socios e inf
 msgid "All Archived Events"
 msgstr "Todos los eventos archivados"
 
-#: src/components/common/MessageList/index.tsx:21
+#: src/components/common/MessageList/index.tsx:29
 #: src/components/routes/product-widget/CollectInformation/index.tsx:475
 msgid "All attendees"
 msgstr "Todos los asistentes"
 
-#: src/components/modals/SendMessageModal/index.tsx:217
+#: src/components/modals/SendMessageModal/index.tsx:292
 msgid "All attendees of this event"
 msgstr "Todos los asistentes a este evento."
 
@@ -733,7 +753,7 @@ msgstr "Ocurrió un error inesperado. Inténtalo de nuevo."
 msgid "Answer updated successfully."
 msgstr "Respuesta actualizada con éxito."
 
-#: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:61
+#: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:62
 msgid "Any queries from product holders will be sent to this email address. This will also be used as the \"reply-to\" address for all emails sent from this event"
 msgstr "Cualquier consulta de los titulares de productos se enviará a esta dirección de correo electrónico. Esta también se usará como la dirección de \"respuesta a\" para todos los correos electrónicos enviados desde este evento"
 
@@ -769,7 +789,7 @@ msgstr "Aplicar código promocional"
 msgid "Apply this {type} to all new products"
 msgstr "Aplicar este {type} a todos los nuevos productos"
 
-#: src/components/routes/admin/Messages/index.tsx:226
+#: src/components/routes/admin/Messages/index.tsx:232
 msgid "Approve Message"
 msgstr "Aprobar mensaje"
 
@@ -793,6 +813,10 @@ msgstr "¿Está seguro de que desea archivar este evento?"
 #: src/components/common/AttendeeTable/index.tsx:83
 msgid "Are you sure you want to cancel this attendee? This will void their ticket"
 msgstr "¿Está seguro de que desea cancelar este asistente? Esto anulará su boleto."
+
+#: src/components/routes/event/messages.tsx:33
+msgid "Are you sure you want to cancel this scheduled message?"
+msgstr "¿Está seguro de que desea cancelar este mensaje programado?"
 
 #: src/components/routes/admin/FailedJobs/index.tsx:85
 msgid "Are you sure you want to delete all failed jobs?"
@@ -1009,8 +1033,8 @@ msgstr "El ticket del asistente no está incluido en esta lista"
 #: src/components/common/StatBoxes/index.tsx:45
 #: src/components/layouts/Event/index.tsx:115
 #: src/components/modals/ManageOrderModal/index.tsx:126
-#: src/components/routes/admin/Messages/index.tsx:86
-#: src/components/routes/admin/Messages/index.tsx:133
+#: src/components/routes/admin/Messages/index.tsx:90
+#: src/components/routes/admin/Messages/index.tsx:139
 #: src/components/routes/event/attendees.tsx:173
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:131
 msgid "Attendees"
@@ -1028,7 +1052,7 @@ msgstr "Asistentes registrados"
 msgid "Attendees Registered"
 msgstr "Asistentes registrados"
 
-#: src/components/modals/SendMessageModal/index.tsx:213
+#: src/components/modals/SendMessageModal/index.tsx:288
 msgid "Attendees with a specific ticket"
 msgstr "Asistentes con entrada específica"
 
@@ -1069,7 +1093,7 @@ msgid "Available Tokens"
 msgstr "Tokens disponibles"
 
 #: src/components/common/OrderStatusBadge/index.tsx:15
-#: src/components/modals/SendMessageModal/index.tsx:261
+#: src/components/modals/SendMessageModal/index.tsx:336
 msgid "Awaiting offline payment"
 msgstr "Esperando pago offline"
 
@@ -1122,6 +1146,10 @@ msgstr "Volver a la página del evento"
 #: src/components/routes/auth/ResetPassword/index.tsx:79
 msgid "Back to login"
 msgstr "Atrás para iniciar sesión"
+
+#: src/components/routes/event/messages.tsx:54
+msgid "Back to messages"
+msgstr ""
 
 #: src/components/routes/organizer/Reports/ReportLayout/index.tsx:42
 msgid "Back to Reports"
@@ -1279,6 +1307,10 @@ msgstr "Cancelar orden"
 msgid "Cancel Order {0}"
 msgstr "Cancelar pedido {0}"
 
+#: src/components/routes/event/messages.tsx:111
+msgid "Cancel scheduled message"
+msgstr "Cancelar mensaje programado"
+
 #: src/components/modals/CancelOrderModal/index.tsx:67
 msgid "Canceling will cancel all attendees associated with this order, and release the tickets back into the available pool."
 msgstr "Cancelar anulará todos los asistentes asociados con este pedido y liberará los boletos de vuelta al grupo disponible."
@@ -1287,6 +1319,7 @@ msgstr "Cancelar anulará todos los asistentes asociados con este pedido y liber
 #: src/components/common/AttendeeTicket/index.tsx:149
 #: src/components/common/OrdersTable/index.tsx:423
 #: src/components/common/OrderStatusBadge/index.tsx:12
+#: src/components/routes/admin/Messages/index.tsx:126
 #: src/components/routes/event/attendees.tsx:27
 #: src/components/routes/event/orders.tsx:24
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:353
@@ -1666,7 +1699,7 @@ msgid "Complete your profile to join the team."
 msgstr "Completa tu perfil para unirte al equipo."
 
 #: src/components/common/OrdersTable/index.tsx:405
-#: src/components/modals/SendMessageModal/index.tsx:260
+#: src/components/modals/SendMessageModal/index.tsx:335
 #: src/components/routes/event/GettingStarted/index.tsx:75
 #: src/components/routes/event/orders.tsx:23
 #: src/components/routes/my-tickets/index.tsx:34
@@ -1685,6 +1718,11 @@ msgstr "Pedidos completados"
 #: src/components/common/WidgetEditor/index.tsx:293
 msgid "Component Code"
 msgstr "Código del componente"
+
+#: src/components/routes/event/messages.tsx:239
+#: src/components/routes/event/messages.tsx:284
+msgid "Compose"
+msgstr ""
 
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:117
 msgid "Conference Center"
@@ -1807,7 +1845,7 @@ msgstr "Conectar raya"
 msgid "Connect Stripe to enable email template editing"
 msgstr "Conecta Stripe para habilitar la edición de plantillas de correo"
 
-#: src/components/modals/SendMessageModal/index.tsx:167
+#: src/components/modals/SendMessageModal/index.tsx:242
 msgid "Connect Stripe to enable messaging"
 msgstr "Conecte Stripe para habilitar mensajería"
 
@@ -2176,8 +2214,8 @@ msgid "Create your own event"
 msgstr "Crea tu propio evento"
 
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:131
-#: src/components/routes/admin/Messages/index.tsx:163
-#: src/components/routes/admin/Messages/index.tsx:303
+#: src/components/routes/admin/Messages/index.tsx:169
+#: src/components/routes/admin/Messages/index.tsx:309
 msgid "Created"
 msgstr "Creado"
 
@@ -2237,6 +2275,10 @@ msgstr "Actualmente disponible para compra"
 msgid "Custom Branding"
 msgstr "Marca personalizada"
 
+#: src/components/modals/SendMessageModal/index.tsx:407
+msgid "Custom date and time"
+msgstr "Fecha y hora personalizada"
+
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:159
 msgid "Custom Maps URL"
 msgstr "URL de mapas personalizados"
@@ -2284,7 +2326,7 @@ msgstr "Apellido del cliente"
 msgid "Customers"
 msgstr "Clientes"
 
-#: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:55
+#: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:56
 msgid "Customize the email and notification settings for this event"
 msgstr "Personalice la configuración de correo electrónico y notificaciones para este evento"
 
@@ -2598,7 +2640,7 @@ msgstr "Selección desplegable"
 msgid "Due to the high risk of spam, you must connect a Stripe account before you can modify email templates. This is to ensure that all event organizers are verified and accountable."
 msgstr "Debido al alto riesgo de spam, debes conectar una cuenta de Stripe antes de poder modificar plantillas de correo. Esto es para garantizar que todos los organizadores de eventos estén verificados y sean responsables."
 
-#: src/components/modals/SendMessageModal/index.tsx:168
+#: src/components/modals/SendMessageModal/index.tsx:243
 msgid ""
 "Due to the high risk of spam, you must connect a Stripe account before you can send messages to attendees.\n"
 "This is to ensure that all event organizers are verified and accountable."
@@ -2636,7 +2678,7 @@ msgstr "Holandés"
 msgid "e.g., Get Tickets, Register Now"
 msgstr "p. ej., Conseguir entradas, Registrarse ahora"
 
-#: src/components/modals/SendMessageModal/index.tsx:275
+#: src/components/modals/SendMessageModal/index.tsx:350
 msgid "e.g., Important update about your tickets"
 msgstr "p. ej., Actualización importante sobre tus entradas"
 
@@ -2782,7 +2824,7 @@ msgstr "p.ej. 2,50 por $2,50"
 msgid "eg. 23.5 for 23.5%"
 msgstr "p.ej. 23,5 para 23,5%"
 
-#: src/components/routes/admin/Messages/index.tsx:318
+#: src/components/routes/admin/Messages/index.tsx:324
 msgid "Eligibility Failures"
 msgstr "Fallos de elegibilidad"
 
@@ -2810,7 +2852,7 @@ msgstr "Listas de Check-In Elegibles"
 msgid "Email"
 msgstr "Correo electrónico"
 
-#: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:54
+#: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:55
 msgid "Email & Notification Settings"
 msgstr "Configuración de correo electrónico y notificaciones"
 
@@ -2863,7 +2905,7 @@ msgstr "Confirmación por correo electrónico reenviada"
 msgid "Email confirmation resent successfully"
 msgstr "La confirmación por correo electrónico se reenvió correctamente"
 
-#: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:66
+#: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:67
 msgid "Email footer message"
 msgstr "Mensaje de pie de página de correo electrónico"
 
@@ -2955,7 +2997,7 @@ msgid "Ended"
 msgstr "Terminado"
 
 #: src/components/common/LanguageSwitcher/index.tsx:18
-#: src/components/common/LanguageSwitcher/index.tsx:56
+#: src/components/common/LanguageSwitcher/index.tsx:58
 #: src/components/modals/CreateAttendeeModal/index.tsx:156
 msgid "English"
 msgstr "Inglés"
@@ -3078,8 +3120,8 @@ msgstr "EUR"
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:74
 #: src/components/routes/admin/Dashboard/index.tsx:256
 #: src/components/routes/admin/Dashboard/index.tsx:305
-#: src/components/routes/admin/Messages/index.tsx:157
-#: src/components/routes/admin/Messages/index.tsx:271
+#: src/components/routes/admin/Messages/index.tsx:163
+#: src/components/routes/admin/Messages/index.tsx:277
 #: src/components/routes/events/Dashboard/index.tsx:183
 #: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:19
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:41
@@ -3227,7 +3269,7 @@ msgstr "Zona Horaria del Evento"
 msgid "Event Title"
 msgstr "Título del evento"
 
-#: src/components/routes/admin/Messages/index.tsx:73
+#: src/components/routes/admin/Messages/index.tsx:77
 msgid "Event Too New"
 msgstr "Evento demasiado nuevo"
 
@@ -3336,7 +3378,7 @@ msgstr "Exportando pedidos"
 msgid "Facebook"
 msgstr "Facebook"
 
-#: src/components/routes/admin/Messages/index.tsx:121
+#: src/components/routes/admin/Messages/index.tsx:127
 msgid "Failed"
 msgstr "Fallido"
 
@@ -3361,6 +3403,10 @@ msgstr "Error al asignar configuración"
 #: src/components/common/AttendeeTable/index.tsx:103
 msgid "Failed to cancel attendee"
 msgstr "No se pudo cancelar el asistente"
+
+#: src/components/routes/event/messages.tsx:41
+msgid "Failed to cancel message"
+msgstr "No se pudo cancelar el mensaje"
 
 #: src/components/modals/CancelOrderModal/index.tsx:46
 msgid "Failed to cancel order"
@@ -3424,6 +3470,10 @@ msgstr "Error al exportar el informe. Por favor, inténtelo de nuevo."
 #: src/components/modals/EditCheckInListModal/index.tsx:79
 msgid "Failed to load Check-In List"
 msgstr "No se pudo cargar la lista de registro"
+
+#: src/components/modals/MessageRecipientsModal/index.tsx:48
+msgid "Failed to load recipients"
+msgstr "No se pudieron cargar los destinatarios"
 
 #: src/components/modals/EditWebhookModal/index.tsx:75
 msgid "Failed to load Webhook"
@@ -4033,7 +4083,7 @@ msgstr "Húngaro"
 msgid "I agree to the <0>terms and conditions</0>"
 msgstr "Acepto los <0>términos y condiciones</0>"
 
-#: src/components/modals/SendMessageModal/index.tsx:290
+#: src/components/modals/SendMessageModal/index.tsx:441
 msgid "I confirm this is a transactional message related to this event"
 msgstr "Confirmo que este es un mensaje transaccional relacionado con este evento"
 
@@ -4049,7 +4099,7 @@ msgstr "Si está en blanco, se usará la dirección para generar un enlace de Go
 msgid "If enabled, check-in staff can either mark attendees as checked in or mark the order as paid and check in the attendees. If disabled, attendees associated with unpaid orders cannot be checked in."
 msgstr "Si está habilitado, el personal de registro puede marcar a los asistentes como registrados o marcar el pedido como pagado y registrar a los asistentes. Si está deshabilitado, los asistentes asociados con pedidos no pagados no pueden registrarse."
 
-#: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:76
+#: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:77
 msgid "If enabled, the organizer will receive an email notification when a new order is placed"
 msgstr "Si está habilitado, el organizador recibirá una notificación por correo electrónico cuando se realice un nuevo pedido."
 
@@ -4155,7 +4205,7 @@ msgstr "Incluye 1 producto"
 msgid "Indicate whether you're VAT-registered in the EU"
 msgstr "Indique si está registrado para el IVA en la UE"
 
-#: src/components/common/MessageList/index.tsx:20
+#: src/components/common/MessageList/index.tsx:28
 msgid "Individual attendees"
 msgstr "Asistentes individuales"
 
@@ -4651,7 +4701,7 @@ msgstr "Medio"
 #: src/components/common/AttendeeTable/index.tsx:188
 #: src/components/common/ContactOrganizerModal/index.tsx:88
 #: src/components/common/OrdersTable/index.tsx:247
-#: src/components/modals/SendMessageModal/index.tsx:280
+#: src/components/modals/SendMessageModal/index.tsx:355
 msgid "Message"
 msgstr "Mensaje"
 
@@ -4667,7 +4717,7 @@ msgstr "Asistente del mensaje"
 msgid "Message Attendees"
 msgstr "Mensaje a los asistentes"
 
-#: src/components/modals/SendMessageModal/index.tsx:237
+#: src/components/modals/SendMessageModal/index.tsx:312
 msgid "Message attendees with specific tickets"
 msgstr "Enviar mensajes a los asistentes con entradas específicas"
 
@@ -4675,19 +4725,23 @@ msgstr "Enviar mensajes a los asistentes con entradas específicas"
 msgid "Message buyer"
 msgstr "Mensaje del comprador"
 
+#: src/components/routes/event/messages.tsx:40
+msgid "Message cancelled"
+msgstr "Mensaje cancelado"
+
 #: src/components/common/ContactOrganizerModal/index.tsx:39
 msgid "Message cannot exceed 5000 characters"
 msgstr "El mensaje no puede exceder 5000 caracteres"
 
-#: src/components/routes/admin/Messages/index.tsx:308
+#: src/components/routes/admin/Messages/index.tsx:314
 msgid "Message Content"
 msgstr "Contenido del mensaje"
 
-#: src/components/routes/admin/Messages/index.tsx:260
+#: src/components/routes/admin/Messages/index.tsx:266
 msgid "Message Details"
 msgstr "Detalles del mensaje"
 
-#: src/components/modals/SendMessageModal/index.tsx:72
+#: src/components/modals/SendMessageModal/index.tsx:94
 msgid "Message individual attendees"
 msgstr "Enviar mensajes a asistentes individuales"
 
@@ -4695,17 +4749,21 @@ msgstr "Enviar mensajes a asistentes individuales"
 msgid "Message is required"
 msgstr "El mensaje es obligatorio"
 
-#: src/components/modals/SendMessageModal/index.tsx:249
+#: src/components/modals/SendMessageModal/index.tsx:324
 msgid "Message order owners with specific products"
 msgstr "Enviar mensajes a los propietarios de pedidos con productos específicos"
 
-#: src/components/modals/SendMessageModal/index.tsx:122
+#: src/components/modals/SendMessageModal/index.tsx:196
+msgid "Message Scheduled"
+msgstr "Mensaje programado"
+
+#: src/components/modals/SendMessageModal/index.tsx:196
 msgid "Message Sent"
 msgstr "Mensaje enviado"
 
 #: src/components/layouts/Admin/index.tsx:18
 #: src/components/layouts/Event/index.tsx:117
-#: src/components/routes/event/messages.tsx:33
+#: src/components/routes/event/messages.tsx:228
 msgid "Messages"
 msgstr "Mensajes"
 
@@ -4977,11 +5035,11 @@ msgstr "Sin factura"
 msgid "No logs found"
 msgstr "No se encontraron registros"
 
-#: src/components/routes/admin/Messages/index.tsx:148
+#: src/components/routes/admin/Messages/index.tsx:154
 msgid "No messages found"
 msgstr "No se encontraron mensajes"
 
-#: src/components/common/MessageList/index.tsx:69
+#: src/components/routes/event/messages.tsx:324
 msgid "No messages to show"
 msgstr "No hay mensajes para mostrar"
 
@@ -5009,7 +5067,7 @@ msgstr "Sin actividad de organizador en los últimos 14 días"
 msgid "No other organizers available"
 msgstr "No hay otros organizadores disponibles"
 
-#: src/components/routes/admin/Messages/index.tsx:71
+#: src/components/routes/admin/Messages/index.tsx:75
 msgid "No Paid Orders"
 msgstr "Sin pedidos pagados"
 
@@ -5060,6 +5118,10 @@ msgstr "No se han hecho preguntas para este pedido."
 #: src/components/routes/admin/Dashboard/index.tsx:438
 msgid "No recent account signups"
 msgstr "Sin registros de cuentas recientes"
+
+#: src/components/modals/MessageRecipientsModal/index.tsx:54
+msgid "No recipients found"
+msgstr "No se encontraron destinatarios"
 
 #: src/components/common/WebhookTable/index.tsx:174
 msgid "No response"
@@ -5150,11 +5212,11 @@ msgstr "Notas"
 msgid "Nothing to show yet"
 msgstr "Nada que mostrar aún"
 
-#: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:72
+#: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:73
 msgid "Notification Settings"
 msgstr "Configuración de las notificaciones"
 
-#: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:75
+#: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:76
 msgid "Notify organizer of new orders"
 msgstr "Notificar al organizador de nuevos pedidos"
 
@@ -5256,7 +5318,7 @@ msgstr "Evento en línea"
 msgid "Online Event Details"
 msgstr "Detalles del evento en línea"
 
-#: src/components/modals/SendMessageModal/index.tsx:257
+#: src/components/modals/SendMessageModal/index.tsx:332
 msgid "Only send to orders with these statuses"
 msgstr "Enviar solo a pedidos con estos estados"
 
@@ -5390,8 +5452,8 @@ msgstr "El pedido ha sido cancelado y reembolsado. El propietario del pedido ha 
 msgid "Order has been canceled and the order owner has been notified."
 msgstr "El pedido ha sido cancelado y se ha notificado al propietario del pedido."
 
-#: src/components/routes/admin/Messages/index.tsx:84
-#: src/components/routes/admin/Messages/index.tsx:132
+#: src/components/routes/admin/Messages/index.tsx:88
+#: src/components/routes/admin/Messages/index.tsx:138
 msgid "Order Holders"
 msgstr "Titulares de pedidos"
 
@@ -5443,15 +5505,15 @@ msgstr "Notas del pedido"
 msgid "Order Number"
 msgstr "Número de pedido"
 
-#: src/components/common/MessageList/index.tsx:23
+#: src/components/common/MessageList/index.tsx:31
 msgid "Order owner"
 msgstr "Propietario del pedido"
 
-#: src/components/modals/SendMessageModal/index.tsx:221
+#: src/components/modals/SendMessageModal/index.tsx:296
 msgid "Order owners with a specific product"
 msgstr "Propietarios de pedidos con un producto específico"
 
-#: src/components/common/MessageList/index.tsx:19
+#: src/components/common/MessageList/index.tsx:27
 msgid "Order owners with products"
 msgstr "Propietarios de pedidos con productos"
 
@@ -5477,7 +5539,7 @@ msgstr "Pedido reembolsado"
 msgid "Order Status"
 msgstr "Estado del pedido"
 
-#: src/components/modals/SendMessageModal/index.tsx:258
+#: src/components/modals/SendMessageModal/index.tsx:333
 msgid "Order statuses"
 msgstr "Estados de los pedidos"
 
@@ -5643,7 +5705,7 @@ msgstr "Otro"
 msgid "Other Lists (Ticket Not Included)"
 msgstr "Otras Listas (Ticket No Incluido)"
 
-#: src/components/routes/admin/Messages/index.tsx:103
+#: src/components/routes/admin/Messages/index.tsx:107
 msgid "Outgoing Messages"
 msgstr "Mensajes salientes"
 
@@ -5867,7 +5929,7 @@ msgstr "Pagos no disponibles"
 msgid "Payments will continue to flow without interruption"
 msgstr "Los pagos continuarán fluyendo sin interrupción"
 
-#: src/components/routes/admin/Messages/index.tsx:120
+#: src/components/routes/admin/Messages/index.tsx:124
 msgid "Pending Review"
 msgstr "Revisión pendiente"
 
@@ -6074,6 +6136,10 @@ msgstr "Por favor, espere mientras preparamos su factura..."
 #: src/components/routes/event/orders.tsx:91
 msgid "Please wait while we prepare your orders for export..."
 msgstr "Por favor, espera mientras preparamos la exportación de tus pedidos..."
+
+#: src/components/common/LanguageSwitcher/index.tsx:40
+msgid "Polish"
+msgstr ""
 
 #: src/components/routes/admin/Dashboard/index.tsx:245
 msgid "Popular Events (Last 14 Days)"
@@ -6311,7 +6377,7 @@ msgstr "Informe de códigos promocionales"
 msgid "Promo Only"
 msgstr "Solo Promocional"
 
-#: src/components/modals/SendMessageModal/index.tsx:332
+#: src/components/modals/SendMessageModal/index.tsx:485
 msgid "Promotional emails may result in account suspension"
 msgstr "Los correos promocionales pueden resultar en la suspensión de la cuenta"
 
@@ -6391,10 +6457,6 @@ msgstr "Tasa"
 msgid "Rate limit exceeded. Please try again later."
 msgstr "Límite de solicitudes excedido. Por favor, inténtelo de nuevo más tarde."
 
-#: src/components/common/MessageList/index.tsx:59
-msgid "Read less"
-msgstr "Leer menos"
-
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:223
 msgid "Ready to upgrade? This takes only a few minutes."
 msgstr "¿Listo para actualizar? Esto solo toma unos minutos."
@@ -6417,15 +6479,28 @@ msgstr "Registros de cuentas recientes"
 msgid "Recent Orders"
 msgstr "Pedidos recientes"
 
-#: src/components/modals/SendMessageModal/index.tsx:38
+#: src/components/modals/MessageRecipientsModal/index.tsx:62
+msgid "recipient"
+msgstr "destinatario"
+
+#: src/components/modals/SendMessageModal/index.tsx:60
 msgid "Recipient"
 msgstr "Recipiente"
 
-#: src/components/modals/SendMessageModal/index.tsx:224
-#: src/components/routes/admin/Messages/index.tsx:160
-#: src/components/routes/admin/Messages/index.tsx:293
+#: src/components/modals/MessageRecipientsModal/index.tsx:62
+msgid "recipients"
+msgstr "destinatarios"
+
+#: src/components/modals/MessageRecipientsModal/index.tsx:38
+#: src/components/modals/SendMessageModal/index.tsx:299
+#: src/components/routes/admin/Messages/index.tsx:166
+#: src/components/routes/admin/Messages/index.tsx:299
 msgid "Recipients"
 msgstr "Destinatarios"
+
+#: src/components/routes/event/messages.tsx:85
+msgid "Recipients are available after the message is sent"
+msgstr "Los destinatarios estarán disponibles después de enviar el mensaje"
 
 #: src/components/routes/event/EventDashboard/index.tsx:135
 msgid "Reconnect Stripe →"
@@ -6739,7 +6814,7 @@ msgstr "San Francisco"
 
 #: src/components/common/PlatformFeesSettings/index.tsx:221
 #: src/components/common/QuestionAndAnswerList/index.tsx:142
-#: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:80
+#: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:81
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:129
 #: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:132
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:166
@@ -6797,9 +6872,23 @@ msgstr "Guardar Configuración del IVA"
 msgid "Scan"
 msgstr "Escanear"
 
+#: src/components/modals/SendMessageModal/index.tsx:383
+msgid "Schedule for later"
+msgstr "Programar para más tarde"
+
+#: src/components/modals/SendMessageModal/index.tsx:452
+msgid "Schedule Message"
+msgstr "Programar mensaje"
+
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:84
+#: src/components/routes/admin/Messages/index.tsx:125
+#: src/components/routes/event/messages.tsx:62
 msgid "Scheduled"
 msgstr "Programado"
+
+#: src/components/modals/SendMessageModal/index.tsx:413
+msgid "Scheduled time"
+msgstr "Hora programada"
 
 #: src/components/routes/event/Affiliates/index.tsx:68
 msgid "Search affiliates..."
@@ -6846,11 +6935,7 @@ msgstr "Buscar por nombre..."
 msgid "Search by order ID, customer name, or email..."
 msgstr "Buscar por ID de pedido, nombre de cliente o correo electrónico..."
 
-#: src/components/routes/event/messages.tsx:36
-msgid "Search by subject or content..."
-msgstr "Buscar por tema o contenido..."
-
-#: src/components/routes/admin/Messages/index.tsx:109
+#: src/components/routes/admin/Messages/index.tsx:113
 msgid "Search by subject, event, or account..."
 msgstr "Buscar por asunto, evento o cuenta..."
 
@@ -6861,6 +6946,10 @@ msgstr "Buscar asignaciones de capacidad..."
 #: src/components/routes/event/CheckInLists/index.tsx:39
 msgid "Search check-in lists..."
 msgstr "Buscar listas de registro..."
+
+#: src/components/routes/event/messages.tsx:245
+msgid "Search messages..."
+msgstr ""
 
 #: src/components/routes/event/products.tsx:54
 msgid "Search products"
@@ -6896,6 +6985,10 @@ msgstr "Selecciona una categoría"
 msgid "Select a configuration"
 msgstr "Seleccionar una configuración"
 
+#: src/components/routes/event/messages.tsx:343
+msgid "Select a message to view its contents"
+msgstr ""
+
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:227
 msgid "Select a tier"
 msgstr "Seleccionar un nivel"
@@ -6916,7 +7009,7 @@ msgstr "Seleccionar un evento"
 msgid "Select an organizer to view their dashboard and events."
 msgstr "Selecciona un organizador para ver su panel y eventos."
 
-#: src/components/modals/SendMessageModal/index.tsx:226
+#: src/components/modals/SendMessageModal/index.tsx:301
 msgid "Select attendee group"
 msgstr "Seleccionar grupo de asistentes"
 
@@ -6965,7 +7058,7 @@ msgid "Select Product Tier"
 msgstr "Seleccionar nivel de producto"
 
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:49
-#: src/components/modals/SendMessageModal/index.tsx:250
+#: src/components/modals/SendMessageModal/index.tsx:325
 msgid "Select products"
 msgstr "Seleccionar productos"
 
@@ -6998,7 +7091,7 @@ msgid "Select Ticket"
 msgstr "Seleccionar billete"
 
 #: src/components/forms/CheckInListForm/index.tsx:43
-#: src/components/modals/SendMessageModal/index.tsx:238
+#: src/components/modals/SendMessageModal/index.tsx:313
 msgid "Select tickets"
 msgstr "Seleccionar boletos"
 
@@ -7012,7 +7105,7 @@ msgstr "Seleccionar período de tiempo"
 msgid "Select timezone"
 msgstr "Seleccionar zona horaria"
 
-#: src/components/modals/SendMessageModal/index.tsx:225
+#: src/components/modals/SendMessageModal/index.tsx:300
 msgid "Select which attendees should receive this message"
 msgstr "Selecciona qué asistentes deben recibir este mensaje"
 
@@ -7042,27 +7135,30 @@ msgstr "¡Se vende rápido! 🔥"
 msgid "Send"
 msgstr "Enviar"
 
-#: src/components/modals/SendMessageModal/index.tsx:150
+#: src/components/modals/SendMessageModal/index.tsx:224
 msgid "Send a message"
 msgstr "Enviar un mensaje"
 
-#: src/components/modals/SendMessageModal/index.tsx:318
+#: src/components/modals/SendMessageModal/index.tsx:470
 msgid "Send as test"
 msgstr "Enviar como prueba"
 
-#: src/components/routes/event/messages.tsx:32
-msgid "Send emails to attendees and view your message history."
-msgstr "Envíe correos electrónicos a los asistentes y vea su historial de mensajes."
+#: src/components/routes/event/messages.tsx:327
+msgid "Send emails to attendees, ticket holders, or order owners. Messages can be sent immediately or scheduled for later."
+msgstr ""
 
-#: src/components/modals/SendMessageModal/index.tsx:325
+#: src/components/modals/SendMessageModal/index.tsx:478
 msgid "Send me a copy"
 msgstr "Enviarme una copia"
 
 #: src/components/common/ContactOrganizerModal/index.tsx:112
-#: src/components/modals/SendMessageModal/index.tsx:301
-#: src/components/routes/event/messages.tsx:43
+#: src/components/modals/SendMessageModal/index.tsx:452
 msgid "Send Message"
 msgstr "Enviar Mensaje"
+
+#: src/components/modals/SendMessageModal/index.tsx:375
+msgid "Send now"
+msgstr "Enviar ahora"
 
 #: src/components/modals/CreateAttendeeModal/index.tsx:203
 msgid "Send order confirmation and ticket email"
@@ -7080,20 +7176,24 @@ msgstr "Enviar correo de notificación de reembolso"
 msgid "Send reset link"
 msgstr "Enviar enlace de restablecimiento"
 
-#: src/components/modals/SendMessageModal/index.tsx:301
+#: src/components/modals/SendMessageModal/index.tsx:452
 msgid "Send Test"
 msgstr "Enviar prueba"
+
+#: src/components/routes/event/messages.tsx:337
+msgid "Send your first message"
+msgstr ""
 
 #: src/components/routes/auth/ForgotPassword/index.tsx:70
 msgid "Sending..."
 msgstr "Enviando..."
 
-#: src/components/routes/admin/Messages/index.tsx:119
+#: src/components/routes/admin/Messages/index.tsx:123
 msgid "Sent"
 msgstr "Enviado"
 
-#: src/components/routes/admin/Messages/index.tsx:162
-#: src/components/routes/admin/Messages/index.tsx:299
+#: src/components/routes/admin/Messages/index.tsx:168
+#: src/components/routes/admin/Messages/index.tsx:305
 msgid "Sent By"
 msgstr "Enviado por"
 
@@ -7424,9 +7524,9 @@ msgstr "Las estadísticas se basan en la fecha de creación de la cuenta"
 #: src/components/modals/EditUserModal/index.tsx:103
 #: src/components/routes/account/ManageAccount/sections/Users/index.tsx:157
 #: src/components/routes/admin/Dashboard/index.tsx:405
-#: src/components/routes/admin/Messages/index.tsx:116
-#: src/components/routes/admin/Messages/index.tsx:161
-#: src/components/routes/admin/Messages/index.tsx:287
+#: src/components/routes/admin/Messages/index.tsx:120
+#: src/components/routes/admin/Messages/index.tsx:167
+#: src/components/routes/admin/Messages/index.tsx:293
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:88
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:62
 msgid "Status"
@@ -7454,7 +7554,7 @@ msgstr "Stripe Connect"
 msgid "Stripe Connected"
 msgstr "Stripe conectado"
 
-#: src/components/routes/admin/Messages/index.tsx:69
+#: src/components/routes/admin/Messages/index.tsx:73
 msgid "Stripe Not Connected"
 msgstr "Stripe no conectado"
 
@@ -7471,9 +7571,9 @@ msgid "Stripe setup is already complete."
 msgstr "La configuración de Stripe ya está completa."
 
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:127
-#: src/components/modals/SendMessageModal/index.tsx:274
-#: src/components/routes/admin/Messages/index.tsx:156
-#: src/components/routes/admin/Messages/index.tsx:266
+#: src/components/modals/SendMessageModal/index.tsx:349
+#: src/components/routes/admin/Messages/index.tsx:162
+#: src/components/routes/admin/Messages/index.tsx:272
 msgid "Subject"
 msgstr "Sujeto"
 
@@ -7553,7 +7653,7 @@ msgstr "Asignación de Capacidad actualizada con éxito"
 msgid "Successfully updated Check-In List"
 msgstr "Lista de registro actualizada con éxito"
 
-#: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:43
+#: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:44
 msgid "Successfully Updated Email Settings"
 msgstr "Configuración de correo electrónico actualizada correctamente"
 
@@ -7648,11 +7748,11 @@ msgstr "Festival de Música de Verano 2025"
 
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:48
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:81
-#: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:62
+#: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:63
 msgid "Support Email"
 msgstr "Correo electrónico de soporte"
 
-#: src/components/common/LanguageSwitcher/index.tsx:40
+#: src/components/common/LanguageSwitcher/index.tsx:42
 msgid "Swedish"
 msgstr "Sueco"
 
@@ -7894,6 +7994,14 @@ msgstr "El precio mostrado al cliente no incluirá impuestos ni tasas. Se mostra
 msgid "The primary brand color used for buttons and highlights"
 msgstr "El color principal de marca usado para botones y destacados"
 
+#: src/components/modals/SendMessageModal/index.tsx:172
+msgid "The scheduled time is required"
+msgstr "La hora programada es obligatoria"
+
+#: src/components/modals/SendMessageModal/index.tsx:173
+msgid "The scheduled time must be in the future"
+msgstr "La hora programada debe ser en el futuro"
+
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:145
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:176
 msgid "The template body contains invalid Liquid syntax. Please correct it and try again."
@@ -8029,7 +8137,7 @@ msgstr "Este enlace es inválido o ha caducado."
 msgid "This link is no longer valid"
 msgstr "Este enlace ya no es válido"
 
-#: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:68
+#: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:69
 msgid "This message will be included in the footer of all emails sent from this event"
 msgstr "Este mensaje se incluirá en el pie de página de todos los correos electrónicos enviados desde este evento."
 
@@ -8176,12 +8284,12 @@ msgstr "Email del portador del boleto"
 msgid "Ticket holder's name"
 msgstr "Nombre del portador del boleto"
 
-#: src/components/common/MessageList/index.tsx:22
+#: src/components/common/MessageList/index.tsx:30
 msgid "Ticket holders"
 msgstr "Poseedores de entradas"
 
-#: src/components/routes/admin/Messages/index.tsx:82
-#: src/components/routes/admin/Messages/index.tsx:131
+#: src/components/routes/admin/Messages/index.tsx:86
+#: src/components/routes/admin/Messages/index.tsx:137
 msgid "Ticket Holders"
 msgstr "Titulares de entradas"
 
@@ -8302,11 +8410,15 @@ msgstr "Zona horaria"
 msgid "TIP"
 msgstr "CONSEJO"
 
+#: src/components/routes/event/messages.tsx:82
+msgid "To"
+msgstr ""
+
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:205
 msgid "To edit configurations, go to the Configurations section in the admin menu."
 msgstr "Para editar configuraciones, ve a la sección de Configuraciones en el menú de administración."
 
-#: src/components/modals/SendMessageModal/index.tsx:186
+#: src/components/modals/SendMessageModal/index.tsx:261
 msgid "To increase your limits, contact us at"
 msgstr "Para aumentar sus límites, contáctenos en"
 
@@ -8449,9 +8561,9 @@ msgstr "Twitch"
 
 #: src/components/forms/TaxAndFeeForm/index.tsx:44
 #: src/components/routes/admin/Attribution/index.tsx:109
-#: src/components/routes/admin/Messages/index.tsx:128
-#: src/components/routes/admin/Messages/index.tsx:159
-#: src/components/routes/admin/Messages/index.tsx:281
+#: src/components/routes/admin/Messages/index.tsx:134
+#: src/components/routes/admin/Messages/index.tsx:165
+#: src/components/routes/admin/Messages/index.tsx:287
 msgid "Type"
 msgstr "Tipo"
 
@@ -8509,6 +8621,10 @@ msgstr "Referencia única del pedido"
 msgid "United States"
 msgstr "Estados Unidos"
 
+#: src/components/common/MessageList/index.tsx:44
+#: src/components/common/MessageList/index.tsx:49
+#: src/components/routes/event/messages.tsx:27
+#: src/components/routes/event/messages.tsx:66
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:362
 msgid "Unknown"
 msgstr "Desconocido"
@@ -8835,7 +8951,7 @@ msgstr "Vietnamita"
 msgid "View"
 msgstr "Ver"
 
-#: src/components/routes/admin/Messages/index.tsx:104
+#: src/components/routes/admin/Messages/index.tsx:108
 msgid "View all messages sent across the platform"
 msgstr "Ver todos los mensajes enviados en la plataforma"
 
@@ -8865,10 +8981,6 @@ msgstr "Ver evento"
 msgid "View event page"
 msgstr "Ver página del evento"
 
-#: src/components/common/MessageList/index.tsx:59
-msgid "View full message"
-msgstr "Ver mensaje completo"
-
 #: src/components/common/WebhookTable/index.tsx:113
 msgid "View logs"
 msgstr "Ver registros"
@@ -8877,7 +8989,7 @@ msgstr "Ver registros"
 msgid "View Map"
 msgstr "Ver mapa"
 
-#: src/components/routes/admin/Messages/index.tsx:216
+#: src/components/routes/admin/Messages/index.tsx:222
 msgid "View Message"
 msgstr "Ver mensaje"
 
@@ -9359,7 +9471,7 @@ msgstr "Ya has aceptado esta invitación. Por favor inicie sesión para continua
 msgid "You have no pending email change."
 msgstr "No tienes ningún cambio de correo electrónico pendiente."
 
-#: src/components/modals/SendMessageModal/index.tsx:128
+#: src/components/modals/SendMessageModal/index.tsx:202
 msgid "You have reached your messaging limit."
 msgstr "Ha alcanzado su límite de mensajería."
 
@@ -9371,11 +9483,7 @@ msgstr "Se te ha acabado el tiempo para completar tu pedido."
 msgid "You have taxes and fees added to a Free Product. Would you like to remove them?"
 msgstr "Has añadido impuestos y tarifas a un producto gratuito. ¿Te gustaría eliminarlos?"
 
-#: src/components/common/MessageList/index.tsx:74
-msgid "You haven't sent any messages yet. You can send messages to all attendees, or to specific product holders."
-msgstr "Aún no ha enviado ningún mensaje. Puede enviar mensajes a todos los asistentes o a titulares de productos específicos."
-
-#: src/components/modals/SendMessageModal/index.tsx:111
+#: src/components/modals/SendMessageModal/index.tsx:168
 msgid "You must acknowledge that this email is not promotional"
 msgstr "Debes reconocer que este correo electrónico no es promocional."
 
@@ -9399,7 +9507,7 @@ msgstr "Debes verificar tu dirección de correo electrónico antes de poder actu
 msgid "You need to verify your account email before you can modify email templates."
 msgstr "Necesitas verificar el correo electrónico de tu cuenta antes de poder modificar plantillas de correo."
 
-#: src/components/modals/SendMessageModal/index.tsx:161
+#: src/components/modals/SendMessageModal/index.tsx:236
 msgid "You need to verify your account email before you can send messages."
 msgstr "Debes verificar el correo electrónico de tu cuenta antes de poder enviar mensajes."
 
@@ -9435,7 +9543,7 @@ msgstr "¡Está todo listo! Sus pagos se están procesando sin problemas."
 msgid "You're going to {0}!"
 msgstr "¡Vas a ir a {0}!"
 
-#: src/components/modals/SendMessageModal/index.tsx:200
+#: src/components/modals/SendMessageModal/index.tsx:275
 msgid "Your account has messaging limits. To increase your limits, contact us at"
 msgstr "Su cuenta tiene límites de mensajería. Para aumentar sus límites, contáctenos en"
 
@@ -9494,6 +9602,10 @@ msgstr "Tu mensaje ha sido enviado"
 #: src/components/common/ContactOrganizerModal/index.tsx:52
 msgid "Your message has been sent successfully!"
 msgstr "¡Tu mensaje se ha enviado exitosamente!"
+
+#: src/components/routes/event/messages.tsx:277
+msgid "Your messages will appear here"
+msgstr ""
 
 #: src/components/common/ContactOrganizerModal/index.tsx:73
 msgid "Your Name"

@@ -12,4 +12,6 @@ enum MessageStatus
     case PROCESSING;
     case SENT;
     case FAILED;
+    case SCHEDULED;
+    case CANCELLED;
 }

@@ -2,11 +2,12 @@
 
 namespace HiEvents\DomainObjects;
 
+use HiEvents\DomainObjects\Interfaces\IsFilterable;
 use HiEvents\DomainObjects\Interfaces\IsSortable;
 use HiEvents\DomainObjects\SortingAndFiltering\AllowedSorts;
 use HiEvents\Helper\StringHelper;
 
-class MessageDomainObject extends Generated\MessageDomainObjectAbstract implements IsSortable
+class MessageDomainObject extends Generated\MessageDomainObjectAbstract implements IsSortable, IsFilterable
 {
     private ?UserDomainObject $sentByUser = null;
 
@@ -35,6 +36,13 @@ class MessageDomainObject extends Generated\MessageDomainObjectAbstract implemen
             ],
         );
 
+    }
+
+    public static function getAllowedFilterFields(): array
+    {
+        return [
+            self::STATUS,
+        ];
     }
 
     public function getSentByUser(): ?UserDomainObject

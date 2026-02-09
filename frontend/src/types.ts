@@ -751,8 +751,18 @@ export interface Message {
     created_at?: string;
     updated_at?: string;
     sent_at?: string;
+    scheduled_at?: string | null;
     sent_by_user?: User;
-    status?: 'SENT' | 'PROCESSING' | 'FAILED';
+    status?: 'SENT' | 'PROCESSING' | 'FAILED' | 'SCHEDULED' | 'CANCELLED' | 'PENDING_REVIEW';
+}
+
+export interface OutgoingMessage {
+    id?: IdParam;
+    message_id: number;
+    recipient: string;
+    status: string;
+    subject: string;
+    created_at?: string;
 }
 
 export enum QuestionType {
