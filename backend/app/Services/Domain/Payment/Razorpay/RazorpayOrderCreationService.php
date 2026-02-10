@@ -37,11 +37,11 @@ class RazorpayOrderCreationService
             $razorpayClient = $this->razorpayClientFactory->create();
 
             // Calculate application fee for Razorpay
-            $applicationFee = $this->orderApplicationFeeCalculationService->calculateApplicationFee(
-                accountConfiguration: $orderDTO->account->getConfiguration(),
-                order: $orderDTO->order,
-                vatSettings: $orderDTO->account->getAccountVatSetting(),
-            );
+            // $applicationFee = $this->orderApplicationFeeCalculationService->calculateApplicationFee(
+            //     accountConfiguration: $orderDTO->account->getConfiguration(),
+            //     order: $orderDTO->order,
+            //     vatSettings: $orderDTO->account->getAccountVatSetting(),
+            // );
 
             // Razorpay amount is in paise (Indian) or smallest currency unit
             $amountInSmallestUnit = $orderDTO->amount->toMinorUnit();
