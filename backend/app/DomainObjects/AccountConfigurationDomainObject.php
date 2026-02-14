@@ -13,4 +13,9 @@ class AccountConfigurationDomainObject extends Generated\AccountConfigurationDom
     {
         return $this->getApplicationFees()['percentage'] ?? config('app.default_application_fee_percentage');
     }
+
+    public function getApplicationFeeCurrency(): string
+    {
+        return $this->getApplicationFees()['currency'] ?? 'USD';
+    }
 }
