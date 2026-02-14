@@ -42,6 +42,7 @@ class SendMessageAction extends BaseAction
                 'send_copy_to_current_user' => $request->boolean('send_copy_to_current_user'),
                 'sent_by_user_id' => $user->getId(),
                 'account_id' => $this->getAuthenticatedAccountId(),
+                'scheduled_at' => $request->input('scheduled_at'),
             ]));
         } catch (AccountNotVerifiedException $e) {
             return $this->errorResponse($e->getMessage(), Response::HTTP_UNAUTHORIZED);

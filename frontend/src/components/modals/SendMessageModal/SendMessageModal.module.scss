@@ -6,10 +6,15 @@
     :global(.mantine-InputWrapper-root) {
         margin-bottom: 0;
     }
+
+    // Remove bottom margin from the Editor's wrapper
+    > div:last-child {
+        margin-bottom: 0;
+    }
 }
 
 .footerSection {
-    margin-top: 0.25rem;
+    margin-top: 0.875rem;
     display: flex;
     flex-direction: column;
     gap: 0.875rem;
@@ -47,4 +52,133 @@
 
 .stripeConnectButton {
     margin-top: 0.75rem;
+}
+
+.scheduleSection {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.sendToggle {
+    display: flex;
+    gap: 0;
+    border: 1px solid var(--mantine-color-gray-3);
+    border-radius: var(--mantine-radius-md);
+    overflow: hidden;
+    background: var(--mantine-color-gray-0);
+}
+
+.toggleOption {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 9px 12px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    border: none;
+    background: transparent;
+    color: var(--mantine-color-gray-6);
+    cursor: pointer;
+    transition: all 0.15s ease;
+
+    &:hover:not(.toggleActive) {
+        color: var(--mantine-color-gray-8);
+        background: var(--mantine-color-gray-1);
+    }
+}
+
+.toggleActive {
+    background: #fff;
+    color: var(--mantine-color-dark-8);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    border-radius: calc(var(--mantine-radius-md) - 1px);
+    position: relative;
+    z-index: 1;
+}
+
+.scheduleBody {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.presetChips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.presetChip {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 12px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    border: 1px solid var(--mantine-color-gray-3);
+    border-radius: 999px;
+    background: #fff;
+    color: var(--mantine-color-gray-7);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+
+    &:hover:not(.presetChipActive) {
+        border-color: var(--mantine-color-primary-3);
+        color: var(--mantine-color-primary-6);
+        background: var(--mantine-color-primary-0);
+    }
+}
+
+.presetChipActive {
+    border-color: var(--mantine-color-primary-5);
+    background: var(--mantine-color-primary-0);
+    color: var(--mantine-color-primary-7);
+    font-weight: 600;
+}
+
+.scheduledConfirmation {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    background: var(--mantine-color-primary-0);
+    border: 1px solid var(--mantine-color-primary-2);
+    border-radius: var(--mantine-radius-md);
+}
+
+.scheduledConfirmationIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--mantine-color-primary-1);
+    color: var(--mantine-color-primary-6);
+    flex-shrink: 0;
+}
+
+.scheduledConfirmationText {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.scheduledConfirmationDate {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--mantine-color-dark-7);
+}
+
+.scheduledConfirmationTime {
+    font-size: 0.78rem;
+    color: var(--mantine-color-gray-7);
+}
+
+.scheduledConfirmationTz {
+    font-size: 0.7rem;
+    color: var(--mantine-color-gray-5);
 }
