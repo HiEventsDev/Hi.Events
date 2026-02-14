@@ -163,10 +163,16 @@ class SendEventEmailMessagesService
 
     private function updateMessageStatus(SendMessageDTO $messageData, MessageStatus $status): void
     {
+        $attributes = [
+            'status' => $status->name,
+        ];
+
+        if ($status === MessageStatus::SENT) {
+            $attributes['sent_at'] = now()->toDateTimeString();
+        }
+
         $this->messageRepository->updateWhere(
-            attributes: [
-                'status' => $status->name,
-            ],
+            attributes: $attributes,
             where: [
                 'id' => $messageData->id,
             ]
