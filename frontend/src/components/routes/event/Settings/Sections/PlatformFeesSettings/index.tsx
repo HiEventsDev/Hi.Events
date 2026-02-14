@@ -5,6 +5,7 @@ import {showSuccess} from "../../../../../../utilites/notifications.tsx";
 import {useUpdateEventSettings} from "../../../../../../mutations/useUpdateEventSettings.ts";
 import {useGetEventSettings} from "../../../../../../queries/useGetEventSettings.ts";
 import {useGetAccount} from "../../../../../../queries/useGetAccount.ts";
+import {useGetPlatformFeePreview} from "../../../../../../queries/useGetPlatformFeePreview.ts";
 import {PlatformFeesSettings as PlatformFeesSettingsBase} from "../../../../../common/PlatformFeesSettings";
 
 export const PlatformFeesSettings = () => {
@@ -13,6 +14,9 @@ export const PlatformFeesSettings = () => {
     const accountQuery = useGetAccount();
     const updateMutation = useUpdateEventSettings();
     const [currentValue, setCurrentValue] = useState(false);
+    const [previewPrice, setPreviewPrice] = useState(50);
+
+    const feePreviewQuery = useGetPlatformFeePreview(eventId, previewPrice);
 
     useEffect(() => {
         if (eventSettingsQuery?.isFetched && eventSettingsQuery?.data) {
@@ -43,6 +47,8 @@ export const PlatformFeesSettings = () => {
             description={t`Control how platform fees are handled for this event`}
             feeHandlingLabel={t`Fee Handling`}
             feeHandlingDescription={t`Choose who pays the platform fee. This does not affect additional fees you've configured in your account settings.`}
+            feePreview={feePreviewQuery.data}
+            onPriceChange={setPreviewPrice}
         />
     );
 };

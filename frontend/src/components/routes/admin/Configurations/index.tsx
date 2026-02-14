@@ -1,4 +1,4 @@
-import {Container, Title, Stack, Card, Text, Group, Button, Badge, ActionIcon, Alert, NumberInput, TextInput, Skeleton, Switch} from "@mantine/core";
+import {Container, Title, Stack, Card, Text, Group, Button, Badge, ActionIcon, Alert, NumberInput, TextInput, Skeleton, Switch, Select} from "@mantine/core";
 import {t} from "@lingui/macro";
 import {useGetAllConfigurations} from "../../../../queries/useGetAllConfigurations";
 import {useCreateConfiguration} from "../../../../mutations/useCreateConfiguration";
@@ -10,12 +10,15 @@ import {Modal} from "../../../common/Modal";
 import {useForm} from "@mantine/form";
 import {showSuccess, showError} from "../../../../utilites/notifications";
 import {AccountConfiguration} from "../../../../api/admin.client";
+import {currenciesMap} from "../../../../../data/currencies";
+import {getCurrencySymbol} from "../../../../utilites/currency";
 import classes from "./Configurations.module.scss";
 
 interface ConfigurationFormValues {
     name: string;
     fixed_fee: number;
     percentage_fee: number;
+    currency: string;
     bypass_application_fees: boolean;
 }
 
@@ -68,7 +71,7 @@ const Configurations = () => {
                     </Group>
 
                     <Alert icon={<IconAlertTriangle size={16} />} color="yellow">
-                        {t`Configuration names are visible to end users. The "Fixed Fee" and "Percentage Fee" are application fees charged in USD on all transactions.`}
+                        {t`Configuration names are visible to end users. Fixed fees will be converted to the order currency at the current exchange rate.`}
                     </Alert>
 
                     <Stack gap="md">
@@ -87,8 +90,11 @@ const Configurations = () => {
                                         </Group>
                                         <Group gap="xl">
                                             <div>
-                                                <Text size="xs" c="dimmed">{t`Fixed Fee (USD)`}</Text>
-                                                <Text size="sm" fw={500}>${config.application_fees?.fixed || 0}</Text>
+                                                <Text size="xs" c="dimmed">{t`Fixed Fee`}</Text>
+                                                <Text size="sm" fw={500}>
+                                                    {getCurrencySymbol(config.application_fees?.currency || 'USD')}
+                                                    {config.application_fees?.fixed || 0} {config.application_fees?.currency || 'USD'}
+                                                </Text>
                                             </div>
                                             <div>
                                                 <Text size="xs" c="dimmed">{t`Percentage Fee`}</Text>
@@ -154,6 +160,7 @@ const ConfigurationModal = ({configuration, onClose}: ConfigurationModalProps) =
             name: configuration?.name || '',
             fixed_fee: configuration?.application_fees?.fixed || 0,
             percentage_fee: configuration?.application_fees?.percentage || 0,
+            currency: configuration?.application_fees?.currency || 'USD',
             bypass_application_fees: configuration?.bypass_application_fees || false,
         },
         validate: {
@@ -176,6 +183,7 @@ const ConfigurationModal = ({configuration, onClose}: ConfigurationModalProps) =
             application_fees: {
                 fixed: values.fixed_fee,
                 percentage: values.percentage_fee,
+                currency: values.currency,
             },
             bypass_application_fees: values.bypass_application_fees,
         };
@@ -215,14 +223,22 @@ const ConfigurationModal = ({configuration, onClose}: ConfigurationModalProps) =
                         {...form.getInputProps('name')}
                     />
 
+                    <Select
+                        label={t`Fee Currency`}
+                        description={t`The currency in which the fixed fee is defined. It will be converted to the order currency at checkout.`}
+                        data={currenciesMap}
+                        searchable
+                        {...form.getInputProps('currency')}
+                    />
+
                     <NumberInput
-                        label={t`Fixed Fee (USD)`}
-                        description={t`Fixed fee charged per transaction in USD`}
+                        label={t`Fixed Fee`}
+                        description={t`Fixed fee charged per transaction`}
                         placeholder="0.00"
                         decimalScale={2}
                         fixedDecimalScale
                         min={0}
-                        prefix="$"
+                        prefix={getCurrencySymbol(form.values.currency)}
                         {...form.getInputProps('fixed_fee')}
                     />
 

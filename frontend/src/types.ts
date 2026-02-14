@@ -129,6 +129,7 @@ export interface AccountConfiguration {
     application_fees: {
         percentage: number;
         fixed: number;
+        currency: string;
     },
     is_system_default: boolean;
 }

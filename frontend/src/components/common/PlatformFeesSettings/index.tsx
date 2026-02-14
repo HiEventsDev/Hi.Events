@@ -7,6 +7,7 @@ import {formatCurrency} from "../../../utilites/currency.ts";
 import {IconArrowRight} from "@tabler/icons-react";
 import classes from "./PlatformFeesSettings.module.scss";
 import {AccountConfiguration} from "../../../types.ts";
+import {PlatformFeePreview} from "../../../api/event-settings.client.ts";
 
 const formatPercentage = (value: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -26,11 +27,20 @@ interface FeeBreakdownProps {
 
 const FeeBreakdown = ({ticketPrice, feePercentage, fixedFee, currency, passToBuyer}: FeeBreakdownProps) => {
     const percentageRate = feePercentage / 100;
-    // Formula: P = (fixed + total * r) / (1 - r)
-    // This ensures the platform fee exactly covers what Stripe will charge
-    const platformFee = percentageRate >= 1
-        ? fixedFee + (ticketPrice * percentageRate)
-        : (fixedFee + (ticketPrice * percentageRate)) / (1 - percentageRate);
+
+    let platformFee: number;
+    if (passToBuyer) {
+        // Gross-up formula: P = (fixed + total * r) / (1 - r)
+        // When passing to buyer, we need to add enough so that after Stripe takes
+        // its percentage from the new total, the platform still receives the full fee
+        platformFee = percentageRate >= 1
+            ? fixedFee + (ticketPrice * percentageRate)
+            : (fixedFee + (ticketPrice * percentageRate)) / (1 - percentageRate);
+    } else {
+        // Simple formula: fee = fixed + (total * percentage)
+        // When absorbing, the fee is calculated directly on the ticket price
+        platformFee = fixedFee + (ticketPrice * percentageRate);
+    }
     const roundedPlatformFee = Math.round(platformFee * 100) / 100;
 
     const buyerPays = passToBuyer ? ticketPrice + roundedPlatformFee : ticketPrice;
@@ -78,6 +88,8 @@ export interface PlatformFeesSettingsProps {
     description: string;
     feeHandlingLabel: string;
     feeHandlingDescription: string;
+    feePreview?: PlatformFeePreview;
+    onPriceChange?: (price: number) => void;
 }
 
 export const PlatformFeesSettings = ({
@@ -90,15 +102,26 @@ export const PlatformFeesSettings = ({
     description,
     feeHandlingLabel,
     feeHandlingDescription,
+    feePreview,
+    onPriceChange,
 }: PlatformFeesSettingsProps) => {
     const [samplePrice, setSamplePrice] = useState<number | string>(50);
     const [selectedOption, setSelectedOption] = useState<'pass' | 'absorb'>(currentValue ? 'pass' : 'absorb');
 
-    const feePercentage = configuration?.application_fees?.percentage || 0;
-    const fixedFee = configuration?.application_fees?.fixed || 0;
-    const feeCurrency = 'USD'; // Platform fees are always in USD
+    const feePercentage = feePreview?.percentage_fee ?? configuration?.application_fees?.percentage ?? 0;
+    const fixedFee = feePreview?.fixed_fee_converted ?? configuration?.application_fees?.fixed ?? 0;
+    const feeCurrency = feePreview?.event_currency ?? configuration?.application_fees?.currency ?? 'USD';
+    const configCurrency = configuration?.application_fees?.currency ?? 'USD';
 
     const numericPrice = typeof samplePrice === 'number' ? samplePrice : parseFloat(samplePrice) || 0;
+
+    const handlePriceChange = (value: number | string) => {
+        setSamplePrice(value);
+        const price = typeof value === 'number' ? value : parseFloat(value) || 0;
+        if (onPriceChange && price > 0) {
+            onPriceChange(price);
+        }
+    };
 
     const handleSave = () => {
         onSave(selectedOption === 'pass');
@@ -130,8 +153,13 @@ export const PlatformFeesSettings = ({
                                 <Text size="sm" c="dimmed">{t`Platform fee`}</Text>
                                 <Text fw={600}>
                                     {formatPercentage(feePercentage)}
-                                    {fixedFee > 0 && ` + ${formatCurrency(fixedFee, feeCurrency)}`}
+                                    {configuration.application_fees?.fixed > 0 && ` + ${formatCurrency(configuration.application_fees.fixed, configCurrency)}`}
                                 </Text>
+                                {feePreview && configCurrency !== feeCurrency && configuration.application_fees?.fixed > 0 && (
+                                    <Text size="xs" c="dimmed">
+                                        {t`≈ ${formatCurrency(fixedFee, feeCurrency)} at current rate`}
+                                    </Text>
+                                )}
                             </div>
                         </Group>
                     </Card>
@@ -146,7 +174,7 @@ export const PlatformFeesSettings = ({
                     <NumberInput
                         label={t`Sample ticket price`}
                         value={samplePrice}
-                        onChange={setSamplePrice}
+                        onChange={handlePriceChange}
                         min={0}
                         max={10000}
                         decimalScale={2}
