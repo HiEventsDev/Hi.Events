@@ -56,6 +56,10 @@ const Messages = () => {
                 return 'yellow';
             case 'failed':
                 return 'red';
+            case 'scheduled':
+                return 'blue';
+            case 'cancelled':
+                return 'gray';
             case 'queued':
                 return 'blue';
             default:
@@ -118,6 +122,8 @@ const Messages = () => {
                         data={[
                             {value: 'SENT', label: t`Sent`},
                             {value: 'PENDING_REVIEW', label: t`Pending Review`},
+                            {value: 'SCHEDULED', label: t`Scheduled`},
+                            {value: 'CANCELLED', label: t`Cancelled`},
                             {value: 'FAILED', label: t`Failed`},
                         ]}
                         value={statusFilter}

@@ -1,0 +1,55 @@
+.recipientRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--mantine-color-gray-2);
+  gap: 12px;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.recipientEmail {
+  font-size: 0.88rem;
+  color: var(--mantine-color-dark-7);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  flex: 1;
+}
+
+.recipientRight {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.recipientDate {
+  font-size: 0.75rem;
+  color: var(--mantine-color-gray-5);
+  white-space: nowrap;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 32px 16px;
+  color: var(--mantine-color-gray-6);
+  font-size: 0.88rem;
+}
+
+.loadingState {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+}
+
+.headerCount {
+  font-size: 0.78rem;
+  color: var(--mantine-color-gray-6);
+  margin-bottom: 12px;
+}
