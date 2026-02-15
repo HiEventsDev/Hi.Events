@@ -61,6 +61,7 @@ use HiEvents\Http\Actions\Events\UpdateEventAction;
 use HiEvents\Http\Actions\Events\UpdateEventStatusAction;
 use HiEvents\Http\Actions\EventSettings\EditEventSettingsAction;
 use HiEvents\Http\Actions\EventSettings\GetEventSettingsAction;
+use HiEvents\Http\Actions\EventSettings\GetPlatformFeePreviewAction;
 use HiEvents\Http\Actions\EmailTemplates\CreateOrganizerEmailTemplateAction;
 use HiEvents\Http\Actions\EmailTemplates\CreateEventEmailTemplateAction;
 use HiEvents\Http\Actions\EmailTemplates\UpdateOrganizerEmailTemplateAction;
@@ -380,6 +381,7 @@ $router->middleware(['auth:api'])->group(
         $router->get('/events/{event_id}/settings', GetEventSettingsAction::class);
         $router->put('/events/{event_id}/settings', EditEventSettingsAction::class);
         $router->patch('/events/{event_id}/settings', PartialEditEventSettingsAction::class);
+        $router->get('/events/{event_id}/settings/platform-fee-preview', GetPlatformFeePreviewAction::class);
 
         // Capacity Assignments
         $router->post('/events/{event_id}/capacity-assignments', CreateCapacityAssignmentAction::class);

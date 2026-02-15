@@ -38,6 +38,7 @@ import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
 import {useUpdateEventStatus} from "../../../mutations/useUpdateEventStatus.ts";
 import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {ShareModal} from "../../modals/ShareModal";
+import {EventLiveCelebrationModal} from "../../modals/EventLiveCelebrationModal";
 import {useDisclosure} from "@mantine/hooks";
 import {TopBarButton} from "../../common/TopBarButton";
 import {useWindowWidth} from "../../../hooks/useWindowWidth.ts";
@@ -52,6 +53,7 @@ const EventLayout = () => {
     const {eventId} = useParams();
 
     const [opened, {open, close}] = useDisclosure(false);
+    const [celebrationOpened, {open: openCelebration, close: closeCelebration}] = useDisclosure(false);
 
     const statusToggleMutation = useUpdateEventStatus();
 
@@ -145,6 +147,7 @@ const EventLayout = () => {
     ];
 
     const handleStatusToggle = () => {
+        const isGoingLive = event?.status !== 'LIVE';
         const message = event?.status === 'LIVE'
             ? t`Are you sure you want to make this event draft? This will make the event invisible to the public`
             : t`Are you sure you want to make this event public? This will make the event visible to the public`;
@@ -155,7 +158,11 @@ const EventLayout = () => {
                 status: event?.status === 'LIVE' ? 'DRAFT' : 'LIVE'
             }, {
                 onSuccess: () => {
-                    showSuccess(t`Event status updated`);
+                    if (isGoingLive) {
+                        openCelebration();
+                    } else {
+                        showSuccess(t`Event status updated`);
+                    }
                 },
                 onError: (error: any) => {
                     showError(error?.response?.data?.message || t`Event status update failed. Please try again later`);
@@ -200,13 +207,21 @@ const EventLayout = () => {
                                 {t`Share Event`}
                             </Button>
 
-                            {event && <ShareModal
+                            <ShareModal
                                 url={eventHomepageUrl(event)}
                                 title={event.title}
                                 modalTitle={t`Share Event`}
                                 opened={opened}
                                 onClose={close}
-                            />}
+                            />
+
+                            <EventLiveCelebrationModal
+                                opened={celebrationOpened}
+                                onClose={closeCelebration}
+                                url={eventHomepageUrl(event)}
+                                eventTitle={event.title}
+                                eventId={String(event.id)}
+                            />
                         </>
                     )}
                 </div>

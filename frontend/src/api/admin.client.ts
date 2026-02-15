@@ -51,6 +51,7 @@ export interface AccountConfiguration {
     application_fees: {
         fixed: number;
         percentage: number;
+        currency: string;
     };
     bypass_application_fees: boolean;
 }
@@ -60,6 +61,7 @@ export interface CreateConfigurationData {
     application_fees: {
         fixed: number;
         percentage: number;
+        currency: string;
     };
     bypass_application_fees?: boolean;
 }
@@ -69,6 +71,7 @@ export interface UpdateConfigurationData {
     application_fees: {
         fixed: number;
         percentage: number;
+        currency: string;
     };
     bypass_application_fees?: boolean;
 }
