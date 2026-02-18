@@ -268,7 +268,7 @@ export const SortableProduct = ({product, currencyCode, category, categories}: S
                             <div className={classes.typeBadges}>
                                 {isTicket ? (
                                     <Badge
-                                        leftSection={<IconTicket size={12} />}
+                                        leftSection={<IconTicket size={12}/>}
                                         variant="light"
                                         color="violet"
                                         size="sm"
@@ -277,12 +277,22 @@ export const SortableProduct = ({product, currencyCode, category, categories}: S
                                     </Badge>
                                 ) : (
                                     <Badge
-                                        leftSection={<IconPackage size={12} />}
+                                        leftSection={<IconPackage size={12}/>}
                                         variant="light"
                                         color="cyan"
                                         size="sm"
                                     >
                                         {t`Product`}
+                                    </Badge>
+                                )}
+                                {product.waitlist_enabled && (
+                                    <Badge
+                                        variant="light"
+                                        color="secondary"
+                                        size="sm"
+                                        leftSection={<IconClock size={12}/>}
+                                    >
+                                        {t`Waitlist Enabled`}
                                     </Badge>
                                 )}
                                 {product.type === ProductPriceType.Donation && (
@@ -305,7 +315,8 @@ export const SortableProduct = ({product, currencyCode, category, categories}: S
                                             variant="light"
                                             color="gray"
                                             size="sm"
-                                            leftSection={product.is_hidden_without_promo_code ? <IconLock size={12} /> : <IconEyeOff size={12} />}
+                                            leftSection={product.is_hidden_without_promo_code ? <IconLock size={12}/> :
+                                                <IconEyeOff size={12}/>}
                                         >
                                             {product.is_hidden_without_promo_code ? t`Promo Only` : t`Hidden`}
                                         </Badge>
@@ -320,7 +331,7 @@ export const SortableProduct = ({product, currencyCode, category, categories}: S
                                             variant="light"
                                             color="yellow"
                                             size="sm"
-                                            leftSection={<IconSparkles size={12} />}
+                                            leftSection={<IconSparkles size={12}/>}
                                         >
                                             {t`Highlighted`}
                                         </Badge>
@@ -357,7 +368,7 @@ export const SortableProduct = ({product, currencyCode, category, categories}: S
                                 {hasTaxesOrFees() && (
                                     <Tooltip label={getTaxFeeTooltip()} withArrow>
                                         <div className={classes.taxIndicator}>
-                                            <IconReceipt size={14} />
+                                            <IconReceipt size={14}/>
                                             <span>{t`+Tax/Fees`}</span>
                                         </div>
                                     </Tooltip>
@@ -405,17 +416,21 @@ export const SortableProduct = ({product, currencyCode, category, categories}: S
                                 {product.sale_start_date || product.sale_end_date ? (
                                     <div className={classes.dateRange}>
                                         {product.is_before_sale_start_date && product.sale_start_date && (
-                                            <Tooltip label={t`Sale starts ${relativeDate(product.sale_start_date as string)}`} withArrow>
+                                            <Tooltip
+                                                label={t`Sale starts ${relativeDate(product.sale_start_date as string)}`}
+                                                withArrow>
                                                 <div className={classes.dateItem}>
-                                                    <IconClock size={14} />
+                                                    <IconClock size={14}/>
                                                     <span>{relativeDate(product.sale_start_date as string)}</span>
                                                 </div>
                                             </Tooltip>
                                         )}
                                         {!product.is_before_sale_start_date && product.sale_end_date && (
-                                            <Tooltip label={t`Sale ends ${relativeDate(product.sale_end_date as string)}`} withArrow>
+                                            <Tooltip
+                                                label={t`Sale ends ${relativeDate(product.sale_end_date as string)}`}
+                                                withArrow>
                                                 <div className={classes.dateItem}>
-                                                    <IconCalendarEvent size={14} />
+                                                    <IconCalendarEvent size={14}/>
                                                     <span>{product.is_after_sale_end_date ? t`Ended` : relativeDate(product.sale_end_date as string)}</span>
                                                 </div>
                                             </Tooltip>
@@ -444,7 +459,7 @@ export const SortableProduct = ({product, currencyCode, category, categories}: S
                                         className={classes.actionButton}
                                     >
                                         <span className={classes.actionButtonText}>{t`Manage`}</span>
-                                        <IconDotsVertical size={16} className={classes.actionButtonIcon} />
+                                        <IconDotsVertical size={16} className={classes.actionButtonIcon}/>
                                     </Button>
                                 </div>
                             </Menu.Target>
@@ -473,7 +488,7 @@ export const SortableProduct = ({product, currencyCode, category, categories}: S
                                     {t`Duplicate`}
                                 </Menu.Item>
 
-                                <Menu.Divider />
+                                <Menu.Divider/>
                                 <Menu.Label>{t`Danger zone`}</Menu.Label>
                                 <Menu.Item
                                     onClick={() => handleDeleteProduct(product.id, product.event_id)}

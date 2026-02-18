@@ -10,19 +10,21 @@ use HiEvents\DomainObjects\TaxAndFeesDomainObject;
 use HiEvents\Repository\Eloquent\Value\OrderAndDirection;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\ProductCategoryRepositoryInterface;
+use HiEvents\Services\Domain\Product\ProductFilterService;
 use Illuminate\Support\Collection;
 
 class GetProductCategoriesHandler
 {
     public function __construct(
         private readonly ProductCategoryRepositoryInterface $productCategoryRepository,
+        private readonly ProductFilterService               $productFilterService,
     )
     {
     }
 
     public function handle(int $eventId): Collection
     {
-        return $this->productCategoryRepository
+        $categories = $this->productCategoryRepository
             ->loadRelation(new Relationship(
                 domainObject: ProductDomainObject::class,
                 nested: [
@@ -45,5 +47,10 @@ class GetProductCategoriesHandler
                     ),
                 ],
             );
+
+        return $this->productFilterService->filter(
+            productsCategories: $categories,
+            hideSoldOutProducts: false,
+        );
     }
 }

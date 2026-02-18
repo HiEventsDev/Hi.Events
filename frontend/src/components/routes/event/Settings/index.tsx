@@ -15,6 +15,7 @@ import {
     IconBuildingStore,
     IconCreditCard,
     IconHome,
+    IconListCheck,
     IconMapPin,
     IconPercentage,
 } from "@tabler/icons-react";
@@ -23,6 +24,7 @@ import {useMemo, useState} from "react";
 import {Card} from "../../../common/Card";
 import {PaymentAndInvoicingSettings} from "./Sections/PaymentSettings";
 import {PlatformFeesSettings} from "./Sections/PlatformFeesSettings";
+import {WaitlistSettings} from "./Sections/WaitlistSettings";
 import {useGetAccount} from "../../../../queries/useGetAccount.ts";
 
 export const Settings = () => {
@@ -66,6 +68,12 @@ export const Settings = () => {
                 label: t`Miscellaneous`,
                 icon: IconAdjustments,
                 component: MiscSettings
+            },
+            {
+                id: 'waitlist-settings',
+                label: t`Waitlist`,
+                icon: IconListCheck,
+                component: WaitlistSettings,
             },
             {
                 id: 'payment-settings',
