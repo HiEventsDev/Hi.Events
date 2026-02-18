@@ -39,7 +39,7 @@ class RazorpayWebhookHandler
         try {
             // Verify webhook signature
             if (!$this->razorpayPaymentService->verifyWebhookSignature($payload, $signature)) {
-                throw new InvalidSignatureException('Invalid Razorpay webhook signature');
+                throw new InvalidSignatureException(__('Invalid Razorpay webhook signature'));
             }
 
             $data = json_decode($payload, true, 512, JSON_THROW_ON_ERROR);
