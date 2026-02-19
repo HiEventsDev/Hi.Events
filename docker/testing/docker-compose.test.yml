@@ -1,0 +1,80 @@
+services:
+  test-runner:
+    build:
+      context: ./../../backend
+      dockerfile: ../docker/testing/Dockerfile.test
+    container_name: hi-events-test-runner
+    volumes:
+      - ./../../backend:/var/www/html
+    environment:
+      APP_NAME: Hi.Events
+      APP_ENV: testing
+      APP_KEY: base64:DwMidgIu8YVSEg0BLMrh5JS2dk1POpCn3rvDaZk3fEQ=
+      APP_DEBUG: "true"
+      APP_URL: http://localhost
+      DB_CONNECTION: pgsql
+      DB_HOST: pgsql
+      DB_PORT: 5432
+      DB_DATABASE: hi_events_test
+      DB_USERNAME: postgres
+      DB_PASSWORD: secret
+      CACHE_DRIVER: array
+      QUEUE_CONNECTION: sync
+      SESSION_DRIVER: array
+      MAIL_MAILER: array
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      JWT_SECRET: test-jwt-secret-key-for-local-testing-only
+      JWT_ALGO: HS256
+      FILESYSTEM_PUBLIC_DISK: public
+      FILESYSTEM_PRIVATE_DISK: local
+      STRIPE_PUBLIC_KEY: pk_test_fake
+      STRIPE_SECRET_KEY: sk_test_fake
+      STRIPE_WEBHOOK_SECRET: whsec_test_fake
+    depends_on:
+      pgsql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - testing
+
+  pgsql:
+    image: postgres:17-alpine
+    container_name: hi-events-test-pgsql
+    environment:
+      POSTGRES_DB: hi_events_test
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secret
+    ports:
+      - "5433:5432"
+    volumes:
+      - test-pgdata:/var/lib/postgresql/data
+    networks:
+      - testing
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: hi-events-test-redis
+    ports:
+      - "6380:6379"
+    networks:
+      - testing
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+networks:
+  testing:
+    driver: bridge
+
+volumes:
+  test-pgdata:
+    driver: local
