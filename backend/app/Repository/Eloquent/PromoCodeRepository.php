@@ -10,6 +10,9 @@ use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 
+/**
+ * @extends BaseRepository<PromoCodeDomainObject>
+ */
 class PromoCodeRepository extends BaseRepository implements PromoCodeRepositoryInterface
 {
     protected function getModel(): string

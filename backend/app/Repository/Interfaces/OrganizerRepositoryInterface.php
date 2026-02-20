@@ -6,11 +6,10 @@ namespace HiEvents\Repository\Interfaces;
 
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Repository\DTO\Organizer\OrganizerStatsResponseDTO;
-use HiEvents\Repository\Eloquent\BaseRepository;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 /**
- * @extends BaseRepository<OrganizerDomainObject>
+ * @extends RepositoryInterface<OrganizerDomainObject>
  */
 interface OrganizerRepositoryInterface extends RepositoryInterface
 {

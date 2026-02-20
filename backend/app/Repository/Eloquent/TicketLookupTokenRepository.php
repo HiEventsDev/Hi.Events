@@ -6,6 +6,9 @@ use HiEvents\DomainObjects\TicketLookupTokenDomainObject;
 use HiEvents\Models\TicketLookupToken;
 use HiEvents\Repository\Interfaces\TicketLookupTokenRepositoryInterface;
 
+/**
+ * @extends BaseRepository<TicketLookupTokenDomainObject>
+ */
 class TicketLookupTokenRepository extends BaseRepository implements TicketLookupTokenRepositoryInterface
 {
     protected function getModel(): string

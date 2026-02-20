@@ -5,12 +5,11 @@ declare(strict_types=1);
 namespace HiEvents\Repository\Interfaces;
 
 use HiEvents\DomainObjects\UserDomainObject;
-use HiEvents\Repository\Eloquent\BaseRepository;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 /**
- * @extends BaseRepository<UserDomainObject>
+ * @extends RepositoryInterface<UserDomainObject>
  */
 interface UserRepositoryInterface extends RepositoryInterface
 {

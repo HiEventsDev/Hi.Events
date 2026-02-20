@@ -12,7 +12,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 /**
- * @template T
+ * @template T of DomainObjectInterface
  */
 interface RepositoryInterface
 {

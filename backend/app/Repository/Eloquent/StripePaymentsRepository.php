@@ -6,6 +6,9 @@ use HiEvents\DomainObjects\StripePaymentDomainObject;
 use HiEvents\Models\StripePayment;
 use HiEvents\Repository\Interfaces\StripePaymentsRepositoryInterface;
 
+/**
+ * @extends BaseRepository<StripePaymentDomainObject>
+ */
 class StripePaymentsRepository extends BaseRepository implements StripePaymentsRepositoryInterface
 {
     protected function getModel(): string

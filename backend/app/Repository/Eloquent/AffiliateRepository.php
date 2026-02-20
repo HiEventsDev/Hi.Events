@@ -13,6 +13,9 @@ use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 
+/**
+ * @extends BaseRepository<AffiliateDomainObject>
+ */
 class AffiliateRepository extends BaseRepository implements AffiliateRepositoryInterface
 {
     protected function getModel(): string

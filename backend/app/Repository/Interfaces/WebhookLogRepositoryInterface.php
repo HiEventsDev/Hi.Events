@@ -3,10 +3,9 @@
 namespace HiEvents\Repository\Interfaces;
 
 use HiEvents\DomainObjects\WebhookLogDomainObject;
-use HiEvents\Repository\Eloquent\BaseRepository;
 
 /**
- * @extends BaseRepository<WebhookLogDomainObject>
+ * @extends RepositoryInterface<WebhookLogDomainObject>
  */
 interface WebhookLogRepositoryInterface extends RepositoryInterface
 {

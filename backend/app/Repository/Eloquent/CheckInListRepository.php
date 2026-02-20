@@ -13,6 +13,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
+/**
+ * @extends BaseRepository<CheckInListDomainObject>
+ */
 class CheckInListRepository extends BaseRepository implements CheckInListRepositoryInterface
 {
     protected function getModel(): string

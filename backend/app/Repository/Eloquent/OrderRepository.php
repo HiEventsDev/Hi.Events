@@ -22,6 +22,9 @@ use Illuminate\Support\Facades\DB;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\AccountDomainObject;
 
+/**
+ * @extends BaseRepository<OrderDomainObject>
+ */
 class OrderRepository extends BaseRepository implements OrderRepositoryInterface
 {
     public function findByEventId(int $eventId, QueryParamsDTO $params): LengthAwarePaginator

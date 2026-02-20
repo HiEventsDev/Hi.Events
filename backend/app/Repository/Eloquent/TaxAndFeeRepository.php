@@ -6,6 +6,9 @@ use HiEvents\DomainObjects\TaxAndFeesDomainObject;
 use HiEvents\Models\TaxAndFee;
 use HiEvents\Repository\Interfaces\TaxAndFeeRepositoryInterface;
 
+/**
+ * @extends BaseRepository<TaxAndFeesDomainObject>
+ */
 class TaxAndFeeRepository extends BaseRepository implements TaxAndFeeRepositoryInterface
 {
     public function getDomainObject(): string
