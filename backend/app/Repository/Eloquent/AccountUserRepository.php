@@ -8,6 +8,9 @@ use HiEvents\DomainObjects\AccountUserDomainObject;
 use HiEvents\Models\AccountUser;
 use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
 
+/**
+ * @extends BaseRepository<AccountUserDomainObject>
+ */
 class AccountUserRepository extends BaseRepository implements AccountUserRepositoryInterface
 {
     protected function getModel(): string

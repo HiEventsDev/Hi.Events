@@ -6,6 +6,9 @@ use HiEvents\DomainObjects\InvoiceDomainObject;
 use HiEvents\Models\Invoice;
 use HiEvents\Repository\Interfaces\InvoiceRepositoryInterface;
 
+/**
+ * @extends BaseRepository<InvoiceDomainObject>
+ */
 class InvoiceRepository extends BaseRepository implements InvoiceRepositoryInterface
 {
     protected function getModel(): string

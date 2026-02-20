@@ -24,7 +24,7 @@ use Illuminate\Support\Str;
 use TypeError;
 
 /**
- * @template T
+ * @template T of DomainObjectInterface
  * @implements RepositoryInterface<T>
  */
 abstract class BaseRepository implements RepositoryInterface

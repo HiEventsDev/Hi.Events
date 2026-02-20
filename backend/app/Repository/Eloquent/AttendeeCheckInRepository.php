@@ -6,6 +6,9 @@ use HiEvents\DomainObjects\AttendeeCheckInDomainObject;
 use HiEvents\Models\AttendeeCheckIn;
 use HiEvents\Repository\Interfaces\AttendeeCheckInRepositoryInterface;
 
+/**
+ * @extends BaseRepository<AttendeeCheckInDomainObject>
+ */
 class AttendeeCheckInRepository extends BaseRepository implements AttendeeCheckInRepositoryInterface
 {
     protected function getModel(): string

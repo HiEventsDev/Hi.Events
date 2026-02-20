@@ -8,6 +8,9 @@ use HiEvents\Models\ProductCategory;
 use HiEvents\Repository\Interfaces\ProductCategoryRepositoryInterface;
 use Illuminate\Support\Collection;
 
+/**
+ * @extends BaseRepository<ProductCategoryDomainObject>
+ */
 class ProductCategoryRepository extends BaseRepository implements ProductCategoryRepositoryInterface
 {
     protected function getModel(): string

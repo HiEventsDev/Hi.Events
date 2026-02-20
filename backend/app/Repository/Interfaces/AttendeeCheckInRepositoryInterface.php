@@ -3,10 +3,9 @@
 namespace HiEvents\Repository\Interfaces;
 
 use HiEvents\DomainObjects\AttendeeCheckInDomainObject;
-use HiEvents\Repository\Eloquent\BaseRepository;
 
 /**
- * @extends BaseRepository<AttendeeCheckInDomainObject>
+ * @extends RepositoryInterface<AttendeeCheckInDomainObject>
  */
 interface AttendeeCheckInRepositoryInterface extends RepositoryInterface
 {

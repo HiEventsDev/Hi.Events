@@ -12,6 +12,9 @@ use Illuminate\Database\DatabaseManager;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Collection;
 
+/**
+ * @extends BaseRepository<QuestionDomainObject>
+ */
 class QuestionRepository extends BaseRepository implements QuestionRepositoryInterface
 {
     private ProductRepositoryInterface $productRepository;

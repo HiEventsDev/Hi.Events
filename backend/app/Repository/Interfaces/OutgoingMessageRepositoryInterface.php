@@ -3,10 +3,9 @@
 namespace HiEvents\Repository\Interfaces;
 
 use HiEvents\DomainObjects\OutgoingMessageDomainObject;
-use HiEvents\Repository\Eloquent\BaseRepository;
 
 /**
- * @extends BaseRepository<OutgoingMessageDomainObject>
+ * @extends RepositoryInterface<OutgoingMessageDomainObject>
  */
 interface OutgoingMessageRepositoryInterface extends RepositoryInterface
 {

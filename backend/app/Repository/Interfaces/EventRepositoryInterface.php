@@ -6,11 +6,10 @@ namespace HiEvents\Repository\Interfaces;
 
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\DTO\QueryParamsDTO;
-use HiEvents\Repository\Eloquent\BaseRepository;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 /**
- * @extends BaseRepository<EventDomainObject>
+ * @extends RepositoryInterface<EventDomainObject>
  */
 interface EventRepositoryInterface extends RepositoryInterface
 {

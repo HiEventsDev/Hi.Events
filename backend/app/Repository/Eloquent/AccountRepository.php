@@ -9,6 +9,9 @@ use HiEvents\Models\Account;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
+/**
+ * @extends BaseRepository<AccountDomainObject>
+ */
 class AccountRepository extends BaseRepository implements AccountRepositoryInterface
 {
     protected function getModel(): string
