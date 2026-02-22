@@ -40,7 +40,7 @@ class HandleProviderCallbackAction extends BaseAuthAction
             return response()->json(['message' => 'Missing identifier from provider'], 400);
         }
 
-        $user = User::where($identifierKey, $identifierValue)->first();
+        $user = User::where('email', $identifierValue)->first();
 
         if (!$user) {
             return response()->json(['message' => 'User not registered'], 403);
