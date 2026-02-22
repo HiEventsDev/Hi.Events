@@ -50,8 +50,8 @@ class OidcServiceProvider extends ServiceProvider
         // if using SocialiteProviders/Manager.
         $events = $this->app['events'];
         $events->listen(\SocialiteProviders\Manager\SocialiteWasCalled::class, function (\SocialiteProviders\Manager\SocialiteWasCalled $event) {
-            $event->extendSocialite('openid', \SocialiteProviders\Oidc\Provider::class);
-            $event->extendSocialite('oidc', \SocialiteProviders\Oidc\Provider::class);
+            $event->extendSocialite('openid', \SocialiteProviders\OIDC\Provider::class);
+            $event->extendSocialite('oidc', \SocialiteProviders\OIDC\Provider::class);
         });
     }
 }

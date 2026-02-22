@@ -6,7 +6,7 @@ import {
     ResetPasswordRequest,
     User
 } from "../types.ts";
-import {api} from './client.ts';
+import { api } from './client.ts';
 
 export const authClient = {
     refreshAccessTokenFn: async () => {
@@ -15,7 +15,7 @@ export const authClient = {
     },
 
     getConfig: async () => {
-        const response = await api.get<{ auth_disable_default: boolean; auth_providers: string[] }>('auth/config');
+        const response = await api.get<{ auth_disable_default: boolean; auth_providers: { id: string, name: string, logo_url: string | null }[] }>('auth/config');
         return response.data;
     },
 

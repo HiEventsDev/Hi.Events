@@ -12,7 +12,15 @@ import { useEffect, useState } from "react";
 import { ChooseAccountModal } from "../../../modals/ChooseAccountModal";
 import { useSendTicketLookupEmail } from "../../../../mutations/useSendTicketLookupEmail.ts";
 import { showError } from "../../../../utilites/notifications.tsx";
-import { IconTicket, IconChevronDown } from "@tabler/icons-react";
+import {
+    IconTicket,
+    IconChevronDown,
+    IconLock,
+    IconBrandGoogle,
+    IconBrandApple,
+    IconBrandGithub,
+    IconBrandWindows
+} from "@tabler/icons-react";
 import { useAuthConfigQuery } from "../../../../queries/useAuthConfigQuery.ts";
 import { getConfig } from "../../../../utilites/config.ts";
 
@@ -28,6 +36,24 @@ const Login = () => {
 
     // Fallback to empty api URL string if config is unset 
     const baseUrl = typeof window !== 'undefined' ? getConfig('VITE_API_URL_CLIENT') : '';
+
+    // Icon mapper for known providers
+    const getProviderIcon = (providerId: string, logoUrl: string | null) => {
+        if (logoUrl) {
+            return <img src={logoUrl} alt={`${providerId} logo`} width={20} height={20} style={{ objectFit: 'contain' }} />;
+        }
+
+        switch (providerId.toLowerCase()) {
+            case 'google': return <IconBrandGoogle size={20} />;
+            case 'apple': return <IconBrandApple size={20} />;
+            case 'github': return <IconBrandGithub size={20} />;
+            case 'microsoft':
+            case 'azure':
+            case 'entra': return <IconBrandWindows size={20} />;
+            default: return <IconLock size={20} />;
+        }
+    };
+
     const form = useForm({
         initialValues: {
             email: '',
@@ -105,15 +131,16 @@ const Login = () => {
             <div className={classes.loginCard}>
                 {authProviders.map((provider) => (
                     <Button
-                        key={provider}
+                        key={provider.id}
                         component="a"
-                        href={`${baseUrl}/auth/${provider}/redirect`}
+                        href={`${baseUrl}/auth/${provider.id}/redirect`}
                         color="secondary.5"
                         fullWidth
                         mb={hideDefaultForms ? "sm" : "lg"}
                         variant={hideDefaultForms ? "filled" : "outline"}
+                        leftSection={getProviderIcon(provider.id, provider.logo_url)}
                     >
-                        Log in with {provider.charAt(0).toUpperCase() + provider.slice(1)}
+                        Continue with {provider.name}
                     </Button>
                 ))}
 

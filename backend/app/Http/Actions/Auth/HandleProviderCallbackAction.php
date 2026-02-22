@@ -2,7 +2,6 @@
 
 namespace HiEvents\Http\Actions\Auth;
 
-use HiEvents\Http\Actions\BaseAuthAction;
 use HiEvents\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;

@@ -2,7 +2,6 @@
 
 namespace HiEvents\Http\Actions\Auth;
 
-use HiEvents\Http\Actions\BaseAuthAction;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
