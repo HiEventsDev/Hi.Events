@@ -21,11 +21,17 @@ For every provider key you listed in `AUTH_PROVIDERS` (e.g., `google`), you must
 
 > **Important:** The `{PROVIDER}` part of the variable name must be exactly the uppercase key from `AUTH_PROVIDERS`. For example, if you added `okta`, the variables must start with `AUTH_OKTA_`.
 
+### 🔗 Configuring the Redirect/Callback URI in your IdP
+
+When you set up your client application in Google, Keycloak, Okta, etc., you must securely whitelist where the IdP is allowed to send the user after a successful login.
+The system dynamically generates this absolute URL under the hood. You must register the following exact callback URI in your Identity Provider:
+**`https://<YOUR-APP-DOMAIN>/auth/<provider>/callback`**
+*(Example: `https://events.mycompany.com/auth/google/callback`)*
+
 | Variable | Required | Description |
 | :--- | :--- | :--- |
 | `AUTH_{PROVIDER}_CLIENT_ID` | **Yes** | The Client ID issued by your identity provider. |
 | `AUTH_{PROVIDER}_CLIENT_SECRET` | **Yes** | The Client Secret issued by your identity provider. |
-| `AUTH_{PROVIDER}_REDIRECT_URI` | No | The callback URL where the provider will send the user back. **Default:** `/api/v1/auth/{provider}/callback` <br>*Make sure your ID Provider marks this exact URL (with your App domain) as an authorized redirect URI.* |
 | `AUTH_{PROVIDER}_IDENTIFIER_KEY` | No | The attribute from the provider's token to use to uniquely identify the user in Hi.Events (must match an existing User column). <br>**Default:** `email` |
 | `AUTH_{PROVIDER}_SCOPE` | No | The OpenID scopes you want to request. <br>**Default:** `openid email profile` |
 | `AUTH_{PROVIDER}_ISSUER_URL` | No | The issuer/base URL of the OpenID Provider. Needed if you are using generic OpenID Connect providers like Keycloak or Authentik. |
@@ -73,3 +79,4 @@ In this mode, users visiting `/login` will *only* see a **"Continue with Corp_ss
 - **No Auto-Provisioning:** Hi.Events uses an explicit-allow model. If an unknown user successfully completes OIDC authentication, but their email is not recorded in the application database, the system will **reject** their login attempt.
 - **Pre-Registration Required:** You must invite or manually provision users inside Hi.Events first to let them log in via SSO.
 - **Auto-Verification:** If a user exists but hasn't verified their email, successfully passing an OIDC challenge will instantly auto-verify their email address in the database.
+- **PKCE & State:** Because the authentication flow runs on strictly stateless API routes, PKCE (Proof Key for Code Exchange) and state (nonce) validation are inherently disabled on the backend. The integration uses the standard authorization code flow authenticated symmetrically using your `CLIENT_ID` and `CLIENT_SECRET`.

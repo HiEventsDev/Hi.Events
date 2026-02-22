@@ -50,7 +50,6 @@ class OidcServiceProvider extends ServiceProvider
             $config = [
                 'client_id' => env("AUTH_{$providerUpper}_CLIENT_ID"),
                 'client_secret' => env("AUTH_{$providerUpper}_CLIENT_SECRET"),
-                'redirect' => env("AUTH_{$providerUpper}_REDIRECT_URI", "/api/v1/auth/{$provider}/callback"),
                 'identifier_key' => env("AUTH_{$providerUpper}_IDENTIFIER_KEY", 'email'),
                 'issuer_url' => env("AUTH_{$providerUpper}_ISSUER_URL"),
                 'base_url' => env("AUTH_{$providerUpper}_ISSUER_URL"),
@@ -85,6 +84,7 @@ class OidcServiceProvider extends ServiceProvider
                     if (in_array($driver, ['openid', 'oidc'])) {
                         $socialite->extend($provider, function ($app) use ($socialite, $provider) {
                             $config = $app['config']["services.{$provider}"];
+                            $config['redirect'] = route('auth.provider.callback', ['provider' => strtolower($provider)]);
                             $instance = $socialite->buildProvider(StatelessOidcProvider::class, $config);
                             $instance->setConfig(
                                 new \SocialiteProviders\Manager\Config(

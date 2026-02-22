@@ -12,6 +12,8 @@ class HandleProviderCallbackAction extends BaseAuthAction
 {
     public function __invoke(string $provider, Request $request): JsonResponse|RedirectResponse
     {
+        $provider = strtolower($provider);
+
         try {
             $socialUser = Socialite::driver($provider)->stateless()->user();
         } catch (\Exception $e) {

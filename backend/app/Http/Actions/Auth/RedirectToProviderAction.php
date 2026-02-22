@@ -10,6 +10,8 @@ class RedirectToProviderAction extends BaseAuthAction
 {
     public function __invoke(string $provider, Request $request): \Symfony\Component\HttpFoundation\RedirectResponse|RedirectResponse
     {
+        $provider = strtolower($provider);
+
         return Socialite::driver($provider)->stateless()->redirect();
     }
 }
