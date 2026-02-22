@@ -9,9 +9,8 @@ import { PageBody } from "../../../common/PageBody";
 import { PageTitle } from "../../../common/PageTitle";
 import { t } from "@lingui/macro";
 import { Box, Group, NavLink as MantineNavLink, Stack } from "@mantine/core";
-import { IconBrandGoogleAnalytics, IconInfoCircle, IconMapPin, IconShare, IconMail, IconCalendarEvent, IconPercentage, IconWebhook } from "@tabler/icons-react";
+import { IconBrandGoogleAnalytics, IconInfoCircle, IconMapPin, IconShare, IconMail, IconCalendarEvent, IconPercentage } from "@tabler/icons-react";
 import { useMediaQuery } from "@mantine/hooks";
-import { WebhookSettings } from "./Sections/WebhookSettings";
 import { useMemo, useState } from "react";
 import { Card } from "../../../common/Card";
 import { useParams } from "react-router";
@@ -65,12 +64,6 @@ const Settings = () => {
                 label: t`Email Templates`,
                 icon: IconMail,
                 component: () => <EmailTemplateSettings organizerId={organizerId!} />
-            },
-            {
-                id: 'webhooks',
-                label: t`Webhooks`,
-                icon: IconWebhook,
-                component: WebhookSettings
             },
         ];
 

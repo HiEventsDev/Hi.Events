@@ -14,9 +14,7 @@ class CreateWebhookService
     public function __construct(
         private readonly WebhookRepositoryInterface $webhookRepository,
         private readonly LoggerInterface            $logger,
-    )
-    {
-    }
+    ) {}
 
     public function createWebhook(WebhookDomainObject $webhookDomainObject): WebhookDomainObject
     {
@@ -26,6 +24,7 @@ class CreateWebhookService
             WebhookDomainObjectAbstract::ACCOUNT_ID => $webhookDomainObject->getAccountId(),
             WebhookDomainObjectAbstract::STATUS => $webhookDomainObject->getStatus(),
             WebhookDomainObjectAbstract::EVENT_ID => $webhookDomainObject->getEventId(),
+            WebhookDomainObjectAbstract::ORGANIZER_ID => $webhookDomainObject->getOrganizerId(),
             WebhookDomainObjectAbstract::USER_ID => $webhookDomainObject->getUserId(),
             WebhookDomainObjectAbstract::SECRET => Str::random(32),
         ]);
