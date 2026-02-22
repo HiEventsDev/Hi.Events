@@ -9,8 +9,10 @@ use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Exceptions\OrganizerNotFoundException;
 use HiEvents\Services\Application\Handlers\Event\DTO\CreateEventDTO;
 use HiEvents\Services\Domain\Event\CreateEventService;
-use HiEvents\Services\Domain\Organizer\OrganizerFetchService;
 use HiEvents\Services\Domain\ProductCategory\CreateProductCategoryService;
+use HiEvents\Services\Domain\Organizer\OrganizerFetchService;
+use HiEvents\Jobs\Event\Webhook\DispatchEventWebhookJob;
+use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
 
@@ -64,6 +66,11 @@ class CreateEventHandler
         $newEvent = $this->createEventService->createEvent($event);
 
         $this->createProductCategoryService->createDefaultProductCategory($newEvent);
+
+        DispatchEventWebhookJob::dispatch(
+            $newEvent->getId(),
+            DomainEventType::EVENT_CREATED,
+        );
 
         return $newEvent;
     }

@@ -21,4 +21,9 @@ class Organizer extends BaseModel
     {
         return $this->hasOne(OrganizerSetting::class);
     }
+
+    public function webhooks(): HasMany
+    {
+        return $this->hasMany(Webhook::class);
+    }
 }
