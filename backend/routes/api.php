@@ -211,6 +211,11 @@ $router = app()->get('router');
 
 $router->prefix('/auth')->group(
     function (Router $router): void {
+        // Auth Config & OIDC
+        $router->get('/config', \HiEvents\Http\Actions\Auth\GetAuthConfigAction::class)->name('auth.config');
+        $router->get('/{provider}/redirect', \HiEvents\Http\Actions\Auth\RedirectToProviderAction::class)->name('auth.provider.redirect');
+        $router->get('/{provider}/callback', \HiEvents\Http\Actions\Auth\HandleProviderCallbackAction::class)->name('auth.provider.callback');
+
         // Auth
         $router->post('/login', LoginAction::class)->name('auth.login');
         $router->post('/logout', LogoutAction::class)->name('auth.logout');

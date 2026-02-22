@@ -14,6 +14,11 @@ export const authClient = {
         return response.data;
     },
 
+    getConfig: async () => {
+        const response = await api.get<{ auth_disable_default: boolean; auth_providers: string[] }>('auth/config');
+        return response.data;
+    },
+
     register: async (registerData: RegisterAccountRequest) => {
         const response = await api.post<GenericDataResponse<User>>('auth/register', registerData);
         return response.data;

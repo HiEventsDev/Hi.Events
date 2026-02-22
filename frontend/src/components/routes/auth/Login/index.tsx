@@ -1,21 +1,33 @@
-import {Button, PasswordInput, TextInput, Collapse, UnstyledButton} from "@mantine/core";
-import {NavLink, useLocation} from "react-router";
-import {useMutation} from "@tanstack/react-query";
-import {notifications} from '@mantine/notifications';
-import {authClient} from "../../../../api/auth.client.ts";
-import {LoginData, LoginResponse} from "../../../../types.ts";
-import {useForm} from "@mantine/form";
-import {redirectToPreviousUrl} from "../../../../api/client.ts";
+import { Button, PasswordInput, TextInput, Collapse, UnstyledButton } from "@mantine/core";
+import { NavLink, useLocation, useSearchParams } from "react-router";
+import { useMutation } from "@tanstack/react-query";
+import { notifications } from '@mantine/notifications';
+import { authClient } from "../../../../api/auth.client.ts";
+import { LoginData, LoginResponse } from "../../../../types.ts";
+import { useForm } from "@mantine/form";
+import { redirectToPreviousUrl } from "../../../../api/client.ts";
 import classes from "./Login.module.scss";
-import {t, Trans} from "@lingui/macro";
-import {useEffect, useState} from "react";
-import {ChooseAccountModal} from "../../../modals/ChooseAccountModal";
-import {useSendTicketLookupEmail} from "../../../../mutations/useSendTicketLookupEmail.ts";
-import {showError} from "../../../../utilites/notifications.tsx";
-import {IconTicket, IconChevronDown} from "@tabler/icons-react";
+import { t, Trans } from "@lingui/macro";
+import { useEffect, useState } from "react";
+import { ChooseAccountModal } from "../../../modals/ChooseAccountModal";
+import { useSendTicketLookupEmail } from "../../../../mutations/useSendTicketLookupEmail.ts";
+import { showError } from "../../../../utilites/notifications.tsx";
+import { IconTicket, IconChevronDown } from "@tabler/icons-react";
+import { useAuthConfigQuery } from "../../../../queries/useAuthConfigQuery.ts";
+import { getConfig } from "../../../../utilites/config.ts";
 
 const Login = () => {
     const location = useLocation();
+    const [searchParams] = useSearchParams();
+    const showLoginBackdoor = searchParams.get('show_login') === '1';
+
+    const { data: authConfig, isLoading: isConfigLoading } = useAuthConfigQuery();
+
+    const hideDefaultForms = authConfig?.auth_disable_default && !showLoginBackdoor;
+    const authProviders = authConfig?.auth_providers || [];
+
+    // Fallback to empty api URL string if config is unset 
+    const baseUrl = typeof window !== 'undefined' ? getConfig('VITE_API_URL_CLIENT') : '';
     const form = useForm({
         initialValues: {
             email: '',
@@ -33,7 +45,7 @@ const Login = () => {
     });
     const [ticketLookupSuccess, setTicketLookupSuccess] = useState(false);
 
-    const {mutate: loginUser, isPending, data} = useMutation({
+    const { mutate: loginUser, isPending, data } = useMutation({
         mutationFn: (userData: LoginData) => authClient.login(userData),
 
         onSuccess: (response: LoginResponse) => {
@@ -78,37 +90,56 @@ const Login = () => {
         <>
             <header className={classes.header}>
                 <h2>{t`Welcome back`}</h2>
-                <p>
-                    <Trans>
-                        Don't have an account?{' '}
-                        <NavLink to={`/auth/register${location.search}`}>
-                            Sign up
-                        </NavLink>
-                    </Trans>
-                </p>
-            </header>
-            <div className={classes.loginCard}>
-                <form onSubmit={form.onSubmit((values) => loginUser(values))}>
-                    <TextInput {...form.getInputProps('email')}
-                               label={t`Email`}
-                               placeholder="hello@example.com"
-                               required
-                    />
-                    <PasswordInput {...form.getInputProps('password')}
-                                   label={t`Password`}
-                                   placeholder={t`Your password`}
-                                   required
-                                   mt="md"
-                    />
-                    <Button color="secondary.5" type="submit" fullWidth loading={isPending} disabled={isPending} mt="lg">
-                        {isPending ? t`Logging in` : t`Log in`}
-                    </Button>
+                {(!hideDefaultForms || showLoginBackdoor) && (
                     <p>
-                        <NavLink to={`/auth/forgot-password`}>
-                            {t`Forgot password?`}
-                        </NavLink>
+                        <Trans>
+                            Don't have an account?{' '}
+                            <NavLink to={`/auth/register${location.search}`}>
+                                Sign up
+                            </NavLink>
+                        </Trans>
                     </p>
-                </form>
+                )}
+            </header>
+
+            <div className={classes.loginCard}>
+                {authProviders.map((provider) => (
+                    <Button
+                        key={provider}
+                        component="a"
+                        href={`${baseUrl}/auth/${provider}/redirect`}
+                        color="secondary.5"
+                        fullWidth
+                        mb={hideDefaultForms ? "sm" : "lg"}
+                        variant={hideDefaultForms ? "filled" : "outline"}
+                    >
+                        Log in with {provider.charAt(0).toUpperCase() + provider.slice(1)}
+                    </Button>
+                ))}
+
+                {!hideDefaultForms && (
+                    <form onSubmit={form.onSubmit((values) => loginUser(values))}>
+                        <TextInput {...form.getInputProps('email')}
+                            label={t`Email`}
+                            placeholder="hello@example.com"
+                            required
+                        />
+                        <PasswordInput {...form.getInputProps('password')}
+                            label={t`Password`}
+                            placeholder={t`Your password`}
+                            required
+                            mt="md"
+                        />
+                        <Button color="secondary.5" type="submit" fullWidth loading={isPending} disabled={isPending} mt="lg">
+                            {isPending ? t`Logging in` : t`Log in`}
+                        </Button>
+                        <p>
+                            <NavLink to={`/auth/forgot-password`}>
+                                {t`Forgot password?`}
+                            </NavLink>
+                        </p>
+                    </form>
+                )}
             </div>
 
             <div className={classes.ticketLookup}>
@@ -169,7 +200,7 @@ const Login = () => {
             {(showChooseAccount && data) && <ChooseAccountModal onAccountChosen={(accountId) => {
                 form.setFieldValue('account_id', accountId as string);
             }
-            } accounts={data.accounts}/>}
+            } accounts={data.accounts} />}
         </>
     )
 }
