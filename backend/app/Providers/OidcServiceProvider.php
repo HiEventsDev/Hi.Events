@@ -46,12 +46,24 @@ class OidcServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Also register the Socialite event listener for OpenID connect
-        // if using SocialiteProviders/Manager.
-        $events = $this->app['events'];
-        $events->listen(\SocialiteProviders\Manager\SocialiteWasCalled::class, function (\SocialiteProviders\Manager\SocialiteWasCalled $event) {
-            $event->extendSocialite('openid', \SocialiteProviders\OIDC\Provider::class);
-            $event->extendSocialite('oidc', \SocialiteProviders\OIDC\Provider::class);
+        $this->app->booted(function () {
+            $socialite = $this->app->make(\Laravel\Socialite\Contracts\Factory::class);
+
+            $providersStr = env('AUTH_PROVIDERS', '');
+            if (!empty($providersStr)) {
+                $providers = array_filter(array_map('trim', explode(',', $providersStr)));
+
+                foreach ($providers as $provider) {
+                    $driver = env("AUTH_{$provider}_DRIVER", 'openid');
+
+                    if (in_array($driver, ['openid', 'oidc'])) {
+                        $socialite->extend($provider, function ($app) use ($socialite, $provider) {
+                            $config = $app['config']["services.{$provider}"];
+                            return $socialite->buildProvider(\SocialiteProviders\OIDC\Provider::class, $config);
+                        });
+                    }
+                }
+            }
         });
     }
 }
