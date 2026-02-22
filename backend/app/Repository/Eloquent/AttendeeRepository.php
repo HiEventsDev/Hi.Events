@@ -17,6 +17,9 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @extends BaseRepository<AttendeeDomainObject>
+ */
 class AttendeeRepository extends BaseRepository implements AttendeeRepositoryInterface
 {
     protected function getModel(): string

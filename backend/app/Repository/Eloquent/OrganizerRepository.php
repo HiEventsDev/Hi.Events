@@ -13,6 +13,9 @@ use HiEvents\Repository\DTO\Organizer\OrganizerStatsResponseDTO;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
 
+/**
+ * @extends BaseRepository<OrganizerDomainObject>
+ */
 class OrganizerRepository extends BaseRepository implements OrganizerRepositoryInterface
 {
     protected function getModel(): string

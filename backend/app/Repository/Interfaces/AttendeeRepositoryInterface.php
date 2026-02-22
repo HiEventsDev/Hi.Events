@@ -4,13 +4,12 @@ namespace HiEvents\Repository\Interfaces;
 
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\Http\DTO\QueryParamsDTO;
-use HiEvents\Repository\Eloquent\BaseRepository;
 use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 /**
- * @extends BaseRepository<AttendeeDomainObject>
+ * @extends RepositoryInterface<AttendeeDomainObject>
  */
 interface AttendeeRepositoryInterface extends RepositoryInterface
 {

@@ -11,6 +11,9 @@ use HiEvents\Repository\Interfaces\AccountAttributionRepositoryInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @extends BaseRepository<AccountAttributionDomainObject>
+ */
 class AccountAttributionRepository extends BaseRepository implements AccountAttributionRepositoryInterface
 {
     protected function getModel(): string

@@ -6,6 +6,9 @@ use HiEvents\DomainObjects\PasswordResetTokenDomainObject;
 use HiEvents\Models\PasswordResetToken;
 use HiEvents\Repository\Interfaces\PasswordResetTokenRepositoryInterface;
 
+/**
+ * @extends BaseRepository<PasswordResetTokenDomainObject>
+ */
 class PasswordResetTokenRepository extends BaseRepository implements PasswordResetTokenRepositoryInterface
 {
     protected function getModel(): string

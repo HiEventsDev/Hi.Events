@@ -18,6 +18,9 @@ use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 
+/**
+ * @extends BaseRepository<EventDomainObject>
+ */
 class EventRepository extends BaseRepository implements EventRepositoryInterface
 {
     protected function getModel(): string

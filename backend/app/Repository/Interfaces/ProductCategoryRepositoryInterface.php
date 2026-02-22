@@ -4,11 +4,10 @@ namespace HiEvents\Repository\Interfaces;
 
 use HiEvents\DomainObjects\ProductCategoryDomainObject;
 use HiEvents\Http\DTO\QueryParamsDTO;
-use HiEvents\Repository\Eloquent\BaseRepository;
 use Illuminate\Support\Collection;
 
 /**
- * @extends BaseRepository<ProductCategoryDomainObject>
+ * @extends RepositoryInterface<ProductCategoryDomainObject>
  */
 interface ProductCategoryRepositoryInterface extends RepositoryInterface
 {

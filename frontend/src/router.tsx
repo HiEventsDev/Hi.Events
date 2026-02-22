@@ -450,6 +450,13 @@ export const router: RouteObject[] = [
                 }
             },
             {
+                path: "sold-out-waitlist",
+                async lazy() {
+                    const SoldOutWaitlist = await import("./components/routes/event/SoldOutWaitlist");
+                    return {Component: SoldOutWaitlist.default};
+                }
+            },
+            {
                 path: "capacity-assignments",
                 async lazy() {
                     const CapacityAssignments = await import("./components/routes/event/CapacityAssignments");

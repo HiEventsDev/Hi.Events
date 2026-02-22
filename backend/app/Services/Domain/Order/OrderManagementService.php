@@ -40,7 +40,7 @@ class OrderManagementService
         string                 $locale,
         ?PromoCodeDomainObject $promoCode,
         ?AffiliateDomainObject $affiliate = null,
-        string                 $sessionId = null,
+        ?string                $sessionId = null,
     ): OrderDomainObject
     {
         $reservedUntil = Carbon::now()->addMinutes($timeOutMinutes);

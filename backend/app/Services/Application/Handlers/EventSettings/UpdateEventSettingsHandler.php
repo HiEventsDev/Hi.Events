@@ -93,7 +93,11 @@ class UpdateEventSettingsHandler
                     'homepage_theme_settings' => $settings->homepage_theme_settings,
 
                     // Self-service settings
-                    'allow_attendee_self_edit' => $settings->allow_attendee_self_edit
+                    'allow_attendee_self_edit' => $settings->allow_attendee_self_edit,
+
+                    // Waitlist settings
+                    'waitlist_auto_process' => $settings->waitlist_auto_process,
+                    'waitlist_offer_timeout_minutes' => $settings->waitlist_offer_timeout_minutes,
                 ],
                 where: [
                     'event_id' => $settings->event_id,

@@ -4,11 +4,10 @@ namespace HiEvents\Repository\Interfaces;
 
 use HiEvents\DomainObjects\MessageDomainObject;
 use HiEvents\Http\DTO\QueryParamsDTO;
-use HiEvents\Repository\Eloquent\BaseRepository;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 /**
- * @extends BaseRepository<MessageDomainObject>
+ * @extends RepositoryInterface<MessageDomainObject>
  */
 interface MessageRepositoryInterface extends RepositoryInterface
 {

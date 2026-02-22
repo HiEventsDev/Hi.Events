@@ -3,11 +3,13 @@
 namespace HiEvents\Services\Application\Handlers\Attendee;
 
 use HiEvents\DomainObjects\AttendeeDomainObject;
+use HiEvents\DomainObjects\Enums\CapacityChangeDirection;
 use HiEvents\DomainObjects\Enums\ProductPriceType;
 use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\ProductDomainObjectAbstract;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
+use HiEvents\Events\CapacityChangedEvent;
 use HiEvents\Exceptions\NoTicketsAvailableException;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
@@ -63,6 +65,13 @@ class EditAttendeeHandler
         if ($attendee->getProductPriceId() !== $editAttendeeDTO->product_price_id) {
             $this->productQuantityService->decreaseQuantitySold($attendee->getProductPriceId());
             $this->productQuantityService->increaseQuantitySold($editAttendeeDTO->product_price_id);
+
+            event(new CapacityChangedEvent(
+                eventId: $editAttendeeDTO->event_id,
+                direction: CapacityChangeDirection::INCREASED,
+                productId: $attendee->getProductId(),
+                productPriceId: $attendee->getProductPriceId(),
+            ));
         }
     }
 

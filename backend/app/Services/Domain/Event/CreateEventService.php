@@ -227,6 +227,9 @@ class CreateEventService
             'ticket_design_settings' => [
                 'accent_color' => $homepageThemeSettings['accent'] ?? '#333',
             ],
+
+            'waitlist_auto_process' => true,
+            'waitlist_offer_timeout_minutes' => 120,
         ]);
     }
 }

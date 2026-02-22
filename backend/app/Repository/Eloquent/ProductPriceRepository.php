@@ -6,6 +6,9 @@ use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\Models\ProductPrice;
 use HiEvents\Repository\Interfaces\ProductPriceRepositoryInterface;
 
+/**
+ * @extends BaseRepository<ProductPriceDomainObject>
+ */
 class ProductPriceRepository extends BaseRepository implements ProductPriceRepositoryInterface
 {
     protected function getModel(): string

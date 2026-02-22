@@ -192,6 +192,12 @@ use HiEvents\Http\Actions\Admin\Users\StartImpersonationAction;
 use HiEvents\Http\Actions\Admin\Users\StopImpersonationAction;
 use HiEvents\Http\Actions\TicketLookup\GetOrdersByLookupTokenAction;
 use HiEvents\Http\Actions\TicketLookup\SendTicketLookupEmailAction;
+use HiEvents\Http\Actions\Waitlist\Organizer\CancelWaitlistEntryAction;
+use HiEvents\Http\Actions\Waitlist\Organizer\GetWaitlistEntriesAction;
+use HiEvents\Http\Actions\Waitlist\Organizer\GetWaitlistStatsAction;
+use HiEvents\Http\Actions\Waitlist\Organizer\OfferWaitlistEntryAction;
+use HiEvents\Http\Actions\Waitlist\Public\CancelWaitlistEntryActionPublic;
+use HiEvents\Http\Actions\Waitlist\Public\CreateWaitlistEntryActionPublic;
 use HiEvents\Http\Actions\Webhooks\CreateWebhookAction;
 use HiEvents\Http\Actions\Webhooks\DeleteWebhookAction;
 use HiEvents\Http\Actions\Webhooks\EditWebhookAction;
@@ -408,6 +414,12 @@ $router->middleware(['auth:api'])->group(
         // Reports
         $router->get('/events/{event_id}/reports/{report_type}', GetReportAction::class);
 
+        // Waitlist
+        $router->get('/events/{event_id}/waitlist', GetWaitlistEntriesAction::class);
+        $router->get('/events/{event_id}/waitlist/stats', GetWaitlistStatsAction::class);
+        $router->post('/events/{event_id}/waitlist/offer-next', OfferWaitlistEntryAction::class);
+        $router->delete('/events/{event_id}/waitlist/{entry_id}', CancelWaitlistEntryAction::class);
+
         // Images
         $router->post('/images', CreateImageAction::class);
         $router->delete('/images/{image_id}', DeleteImageAction::class);
@@ -477,6 +489,12 @@ $router->prefix('/public')->group(
 
         // Attendees
         $router->get('/events/{event_id}/attendees/{attendee_short_id}', GetAttendeeActionPublic::class);
+
+        // Waitlist
+        $router->post('/events/{event_id}/waitlist', CreateWaitlistEntryActionPublic::class)
+            ->middleware('throttle:10,1');
+        $router->delete('/events/{event_id}/waitlist/{token}', CancelWaitlistEntryActionPublic::class)
+            ->middleware('throttle:10,1');
 
         // Promo codes
         $router->get('/events/{event_id}/promo-codes/{promo_code}', GetPromoCodePublic::class);

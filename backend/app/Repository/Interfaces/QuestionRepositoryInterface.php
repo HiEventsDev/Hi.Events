@@ -3,11 +3,10 @@
 namespace HiEvents\Repository\Interfaces;
 
 use HiEvents\DomainObjects\QuestionDomainObject;
-use HiEvents\Repository\Eloquent\BaseRepository;
 use Illuminate\Support\Collection;
 
 /**
- * @extends BaseRepository<QuestionDomainObject>
+ * @extends RepositoryInterface<QuestionDomainObject>
  */
 interface QuestionRepositoryInterface extends RepositoryInterface
 {

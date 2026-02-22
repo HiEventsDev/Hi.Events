@@ -41,6 +41,11 @@ class GetOrderPublicHandler
         }
 
         if ($order->getStatus() === OrderStatus::RESERVED->name) {
+            if ($order->getSessionId() === null) {
+                throw new UnauthorizedException(
+                    __('Sorry, we could not verify your session. Please restart your order.')
+                );
+            }
             $this->verifySessionId($order->getSessionId());
         }
 

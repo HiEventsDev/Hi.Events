@@ -3,9 +3,19 @@ import {t} from "@lingui/macro";
 import {Tooltip} from "@mantine/core";
 import {prettyDate, relativeDate} from "../../../utilites/dates.ts";
 import {IconInfoCircle} from "@tabler/icons-react";
+import {JoinWaitlistButton} from "../JoinWaitlistButton";
 
-const ProductPriceSaleDateMessage = ({price, event}: { price: ProductPrice, event: Event }) => {
+interface ProductPriceSaleDateMessageProps {
+    price: ProductPrice;
+    event: Event;
+    product: Product;
+}
+
+const ProductPriceSaleDateMessage = ({price, event, product}: ProductPriceSaleDateMessageProps) => {
     if (price.is_sold_out) {
+        if (product.waitlist_enabled) {
+            return <JoinWaitlistButton product={product} event={event} productPriceId={price.id} priceLabel={price.label}/>;
+        }
         return t`Sold out`;
     }
 
@@ -27,8 +37,16 @@ const ProductPriceSaleDateMessage = ({price, event}: { price: ProductPrice, even
     return t`Not available`;
 }
 
-export const ProductAvailabilityMessage = ({product, event}: { product: Product, event: Event }) => {
+interface ProductAvailabilityMessageProps {
+    product: Product;
+    event: Event;
+}
+
+export const ProductAvailabilityMessage = ({product, event}: ProductAvailabilityMessageProps) => {
     if (product.is_sold_out) {
+        if (product.waitlist_enabled && product.type !== 'TIERED') {
+            return <JoinWaitlistButton product={product} event={event} productPriceId={product.prices?.[0]?.id}/>;
+        }
         return t`Sold out`;
     }
     if (product.is_after_sale_end_date) {
@@ -57,7 +75,7 @@ interface ProductAndPriceAvailabilityProps {
 export const ProductPriceAvailability = ({product, price, event}: ProductAndPriceAvailabilityProps) => {
 
     if (product.type === 'TIERED') {
-        return <ProductPriceSaleDateMessage price={price} event={event}/>
+        return <ProductPriceSaleDateMessage price={price} event={event} product={product}/>
     }
 
     return <ProductAvailabilityMessage product={product} event={event}/>

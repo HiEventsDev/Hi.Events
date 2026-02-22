@@ -3,10 +3,9 @@
 namespace HiEvents\Repository\Interfaces;
 
 use HiEvents\DomainObjects\EventDailyStatisticDomainObject;
-use HiEvents\Repository\Eloquent\BaseRepository;
 
 /**
- * @extends BaseRepository<EventDailyStatisticDomainObject>
+ * @extends RepositoryInterface<EventDailyStatisticDomainObject>
  */
 interface EventDailyStatisticRepositoryInterface extends RepositoryInterface
 {

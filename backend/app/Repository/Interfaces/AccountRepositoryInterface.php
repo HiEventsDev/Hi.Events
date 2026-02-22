@@ -6,11 +6,10 @@ namespace HiEvents\Repository\Interfaces;
 
 use HiEvents\DomainObjects\AccountDomainObject;
 use HiEvents\Models\Account;
-use HiEvents\Repository\Eloquent\BaseRepository;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 /**
- * @extends BaseRepository<AccountDomainObject>
+ * @extends RepositoryInterface<AccountDomainObject>
  */
 interface AccountRepositoryInterface extends RepositoryInterface
 {

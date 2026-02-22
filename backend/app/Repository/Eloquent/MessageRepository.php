@@ -12,6 +12,9 @@ use HiEvents\Repository\Interfaces\MessageRepositoryInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 
+/**
+ * @extends BaseRepository<MessageDomainObject>
+ */
 class MessageRepository extends BaseRepository implements MessageRepositoryInterface
 {
     protected function getModel(): string

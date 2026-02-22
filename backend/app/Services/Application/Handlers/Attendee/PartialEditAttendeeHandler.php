@@ -3,7 +3,9 @@
 namespace HiEvents\Services\Application\Handlers\Attendee;
 
 use HiEvents\DomainObjects\AttendeeDomainObject;
+use HiEvents\DomainObjects\Enums\CapacityChangeDirection;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
+use HiEvents\Events\CapacityChangedEvent;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Attendee\DTO\PartialEditAttendeeDTO;
@@ -90,6 +92,13 @@ class PartialEditAttendeeHandler
             $this->productQuantityService->increaseQuantitySold($attendee->getProductPriceId());
         } elseif ($data->status === AttendeeStatus::CANCELLED->name) {
             $this->productQuantityService->decreaseQuantitySold($attendee->getProductPriceId());
+
+            event(new CapacityChangedEvent(
+                eventId: $attendee->getEventId(),
+                direction: CapacityChangeDirection::INCREASED,
+                productId: $attendee->getProductId(),
+                productPriceId: $attendee->getProductPriceId(),
+            ));
         }
     }
 

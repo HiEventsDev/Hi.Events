@@ -8,6 +8,9 @@ use HiEvents\DomainObjects\AccountStripePlatformDomainObject;
 use HiEvents\Models\AccountStripePlatform;
 use HiEvents\Repository\Interfaces\AccountStripePlatformRepositoryInterface;
 
+/**
+ * @extends BaseRepository<AccountStripePlatformDomainObject>
+ */
 class AccountStripePlatformRepository extends BaseRepository implements AccountStripePlatformRepositoryInterface
 {
     protected function getModel(): string
