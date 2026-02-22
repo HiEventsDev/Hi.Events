@@ -10,6 +10,13 @@ use Laravel\Socialite\Facades\Socialite;
 
 class HandleProviderCallbackAction extends BaseAuthAction
 {
+    private \PHPOpenSourceSaver\JWTAuth\JWTAuth $jwtAuth;
+
+    public function __construct(\PHPOpenSourceSaver\JWTAuth\JWTAuth $jwtAuth)
+    {
+        $this->jwtAuth = $jwtAuth;
+    }
+
     public function __invoke(string $provider, Request $request): JsonResponse|RedirectResponse
     {
         $provider = strtolower($provider);
@@ -17,13 +24,11 @@ class HandleProviderCallbackAction extends BaseAuthAction
         try {
             $socialUser = Socialite::driver($provider)->stateless()->user();
         } catch (\Exception $e) {
-            return redirect(config('app.frontend_url') . '/login?error=provider_auth_failed');
+            return response()->json(['message' => 'Provider authentication failed'], 401);
         }
 
         $identifierKey = config("services.{$provider}.identifier_key", 'email');
 
-        // Extract the identifier. Usually it's in the email property of Socialite user,
-        // or inside the raw user array.
         $identifierValue = null;
         if ($identifierKey === 'email') {
             $identifierValue = $socialUser->getEmail();
@@ -32,27 +37,49 @@ class HandleProviderCallbackAction extends BaseAuthAction
         }
 
         if (!$identifierValue) {
-            return redirect(config('app.frontend_url') . '/login?error=missing_identifier');
+            return response()->json(['message' => 'Missing identifier from provider'], 400);
         }
 
-        // Strictly check if the user exists
         $user = User::where($identifierKey, $identifierValue)->first();
 
-        // 1. IF DOES NOT EXIST: Reject. Do not auto-provision.
         if (!$user) {
-            return redirect(config('app.frontend_url') . '/login?error=user_not_registered');
+            return response()->json(['message' => 'User not registered'], 403);
         }
 
-        // 2. IF EXISTS: Auto-verify if unverified
         if (!$user->email_verified_at) {
             $user->email_verified_at = now();
             $user->save();
         }
 
-        // Generate token
-        $token = $user->createToken('auth_token')->plainTextToken;
+        $accounts = $user->accounts;
+        $accountId = null;
 
-        // Redirect to frontend auth handler
-        return redirect(config('app.frontend_url') . '/login/callback?token=' . urlencode($token));
+        // If user has exactly one account or explicitly requested one (not applicable for basic redirect yet)
+        if ($accounts->count() === 1) {
+            $accountId = $accounts->first()->id;
+        }
+
+        $token = null;
+
+        if ($accountId !== null) {
+            $currentAccount = $accounts->firstWhere('id', $accountId);
+            $role = $currentAccount?->pivot?->role;
+
+            $claims = ['account_id' => $accountId];
+            if ($role) {
+                $claims['role'] = $role;
+            }
+
+            $token = $this->jwtAuth->claims($claims)->fromUser($user);
+
+            \HiEvents\Models\AccountUser::where('user_id', $user->id)
+                ->where('account_id', $accountId)
+                ->update(['last_login_at' => now()]);
+
+            // auth login the web guard with the user so we can access it during request
+            auth()->login($user);
+        }
+
+        return $this->respondWithToken($token, $accounts);
     }
 }

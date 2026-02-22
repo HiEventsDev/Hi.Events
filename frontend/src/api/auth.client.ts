@@ -29,6 +29,11 @@ export const authClient = {
         return response.data;
     },
 
+    handleProviderCallback: async (provider: string, searchParams: string) => {
+        const response = await api.get<LoginResponse>(`auth/${provider}/callback${searchParams}`);
+        return response.data;
+    },
+
     logout: async () => {
         const response = await api.post('auth/logout');
         return response.data;
