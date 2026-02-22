@@ -158,6 +158,8 @@ class OrderCancelServiceTest extends TestCase
 
     public function testCancelOrderAwaitingOfflinePayment(): void
     {
+        Event::fake();
+
         $order = m::mock(OrderDomainObject::class);
         $order->shouldReceive('getEventId')->andReturn(1);
         $order->shouldReceive('getId')->andReturn(1);
