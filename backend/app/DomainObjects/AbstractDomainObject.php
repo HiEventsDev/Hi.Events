@@ -31,6 +31,20 @@ abstract class AbstractDomainObject implements DomainObjectInterface, Arrayable
     {
         $domainObject = new static();
         foreach ($array as $key => $value) {
+            if (is_array($value)) {
+                $setter = 'set' . str_replace('_', '', ucwords($key, '_'));
+                if (method_exists($domainObject, $setter)) {
+                    $reflection = new \ReflectionMethod($domainObject, $setter);
+                    $params = $reflection->getParameters();
+                    if (!empty($params)) {
+                        $type = $params[0]->getType();
+                        if ($type instanceof \ReflectionNamedType && is_a($type->getName(), \Illuminate\Support\Collection::class, true)) {
+                            $domainObject->{$key} = collect($value);
+                            continue;
+                        }
+                    }
+                }
+            }
             $domainObject->{$key} = $value;
         }
 
