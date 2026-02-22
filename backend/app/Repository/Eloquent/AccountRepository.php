@@ -33,6 +33,8 @@ class AccountRepository extends BaseRepository implements AccountRepositoryInter
             ->where('events.id', $eventId)
             ->first();
 
+        $this->resetModel();
+
         return $this->handleSingleResult($account, AccountDomainObject::class);
     }
 

@@ -251,6 +251,10 @@ export interface EventSettings {
 
     // Simplified homepage theme settings (new 2-color + mode system)
     homepage_theme_settings?: HomepageThemeSettings;
+
+    // Waitlist settings
+    waitlist_auto_process?: boolean;
+    waitlist_offer_timeout_minutes?: number | null;
 }
 
 export interface VenueAddress {
@@ -539,6 +543,9 @@ export interface Product {
     product_category_id?: IdParam;
     is_highlighted?: boolean;
     highlight_message?: string;
+    waitlist_enabled?: boolean | null;
+    has_waiting_entries?: boolean;
+    waitlist_entry_count?: number;
 }
 
 export interface ProductCategory {
@@ -1015,4 +1022,61 @@ export interface DefaultEmailTemplate {
         label: string;
         url_token: string;
     };
+}
+
+export enum WaitlistEntryStatus {
+    Waiting = 'WAITING',
+    Offered = 'OFFERED',
+    Purchased = 'PURCHASED',
+    Cancelled = 'CANCELLED',
+    OfferExpired = 'OFFER_EXPIRED',
+}
+
+export interface WaitlistEntry {
+    id?: number;
+    event_id?: number;
+    product_price_id?: number;
+    product?: Product;
+    product_price?: ProductPrice;
+    email?: string;
+    first_name?: string;
+    last_name?: string;
+    status?: WaitlistEntryStatus;
+    position?: number;
+    offered_at?: string;
+    offer_expires_at?: string;
+    purchased_at?: string;
+    cancelled_at?: string;
+    order_id?: number;
+    order_short_id?: string;
+    order_public_id?: string;
+    cancel_token?: string;
+    created_at?: string;
+    updated_at?: string;
+}
+
+export interface JoinWaitlistRequest {
+    product_price_id: number;
+    email: string;
+    first_name: string;
+    last_name?: string;
+    locale?: string;
+}
+
+export interface WaitlistProductStats {
+    product_price_id: number;
+    product_title: string;
+    waiting: number;
+    offered: number;
+    available: number | null;
+}
+
+export interface WaitlistStats {
+    total: number;
+    waiting: number;
+    offered: number;
+    purchased: number;
+    cancelled: number;
+    expired: number;
+    products: WaitlistProductStats[];
 }

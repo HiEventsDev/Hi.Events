@@ -8,6 +8,7 @@ use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
+use HiEvents\Events\CapacityChangedEvent;
 use HiEvents\Mail\Order\OrderCancelled;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
@@ -21,6 +22,7 @@ use HiEvents\Services\Domain\EventStatistics\EventStatisticsCancellationService;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Event;
 use Mockery as m;
 use Tests\TestCase;
 use Throwable;
@@ -64,6 +66,8 @@ class OrderCancelServiceTest extends TestCase
 
     public function testCancelOrder(): void
     {
+        Event::fake();
+
         $order = m::mock(OrderDomainObject::class);
         $order->shouldReceive('getEventId')->andReturn(1);
         $order->shouldReceive('getId')->andReturn(1);
@@ -72,14 +76,19 @@ class OrderCancelServiceTest extends TestCase
 
         $order->shouldReceive('getLocale')->andReturn('en');
 
-        $attendees = new Collection([
-            m::mock(AttendeeDomainObject::class)->shouldReceive('getproductPriceId')->andReturn(1)->mock(),
-            m::mock(AttendeeDomainObject::class)->shouldReceive('getproductPriceId')->andReturn(2)->mock(),
-        ]);
+        $attendee1 = m::mock(AttendeeDomainObject::class);
+        $attendee1->shouldReceive('getproductPriceId')->andReturn(1);
+        $attendee1->shouldReceive('getProductId')->andReturn(10);
+
+        $attendee2 = m::mock(AttendeeDomainObject::class);
+        $attendee2->shouldReceive('getproductPriceId')->andReturn(2);
+        $attendee2->shouldReceive('getProductId')->andReturn(20);
+
+        $attendees = new Collection([$attendee1, $attendee2]);
 
         $this->attendeeRepository
             ->shouldReceive('findWhere')
-            ->once()
+            ->twice()
             ->with([
                 'order_id' => $order->getId(),
             ])
@@ -138,11 +147,19 @@ class OrderCancelServiceTest extends TestCase
             $this->fail("Failed to cancel order: " . $e->getMessage());
         }
 
-        $this->assertTrue(true, "Order cancellation proceeded without throwing an exception.");
+        Event::assertDispatched(CapacityChangedEvent::class, 2);
+        Event::assertDispatched(CapacityChangedEvent::class, function ($e) {
+            return $e->eventId === 1 && $e->productId === 10;
+        });
+        Event::assertDispatched(CapacityChangedEvent::class, function ($e) {
+            return $e->eventId === 1 && $e->productId === 20;
+        });
     }
 
     public function testCancelOrderAwaitingOfflinePayment(): void
     {
+        Event::fake();
+
         $order = m::mock(OrderDomainObject::class);
         $order->shouldReceive('getEventId')->andReturn(1);
         $order->shouldReceive('getId')->andReturn(1);
@@ -150,14 +167,19 @@ class OrderCancelServiceTest extends TestCase
         $order->shouldReceive('isOrderAwaitingOfflinePayment')->andReturn(true);
         $order->shouldReceive('getLocale')->andReturn('en');
 
-        $attendees = new Collection([
-            m::mock(AttendeeDomainObject::class)->shouldReceive('getproductPriceId')->andReturn(1)->mock(),
-            m::mock(AttendeeDomainObject::class)->shouldReceive('getproductPriceId')->andReturn(2)->mock(),
-        ]);
+        $attendee1 = m::mock(AttendeeDomainObject::class);
+        $attendee1->shouldReceive('getproductPriceId')->andReturn(1);
+        $attendee1->shouldReceive('getProductId')->andReturn(10);
+
+        $attendee2 = m::mock(AttendeeDomainObject::class);
+        $attendee2->shouldReceive('getproductPriceId')->andReturn(2);
+        $attendee2->shouldReceive('getProductId')->andReturn(20);
+
+        $attendees = new Collection([$attendee1, $attendee2]);
 
         $this->attendeeRepository
             ->shouldReceive('findWhere')
-            ->once()
+            ->twice()
             ->with([
                 'order_id' => $order->getId(),
             ])

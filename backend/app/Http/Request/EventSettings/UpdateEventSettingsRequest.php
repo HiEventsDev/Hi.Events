@@ -101,6 +101,10 @@ class UpdateEventSettingsRequest extends BaseRequest
 
             // Self-service settings
             'allow_attendee_self_edit' => ['boolean'],
+
+            // Waitlist settings
+            'waitlist_auto_process' => ['boolean'],
+            'waitlist_offer_timeout_minutes' => ['nullable', 'integer', 'min:1', 'max:10080'],
         ];
     }
 
