@@ -4,6 +4,7 @@ namespace HiEvents\Services\Application\Handlers\Waitlist;
 
 use HiEvents\DomainObjects\WaitlistEntryDomainObject;
 use HiEvents\Exceptions\ResourceConflictException;
+use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Services\Domain\Waitlist\CancelWaitlistEntryService;
 
 class CancelWaitlistEntryHandler
@@ -16,6 +17,7 @@ class CancelWaitlistEntryHandler
 
     /**
      * @throws ResourceConflictException
+     * @throws ResourceNotFoundException
      */
     public function handleCancelByToken(string $cancelToken): WaitlistEntryDomainObject
     {
@@ -24,6 +26,7 @@ class CancelWaitlistEntryHandler
 
     /**
      * @throws ResourceConflictException
+     * @throws ResourceNotFoundException
      */
     public function handleCancelById(int $entryId, int $eventId): WaitlistEntryDomainObject
     {

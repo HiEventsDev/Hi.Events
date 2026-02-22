@@ -20,8 +20,8 @@
 
 {{ __('An order has been reserved for you. Click the button below to complete your purchase.') }}
 
-@if($entry->getOfferExpiresAt())
-{{ __('This offer expires on :date. Please complete your order before it expires.', ['date' => $entry->getOfferExpiresAt()]) }}
+@if($offerExpiresAtFormatted)
+{{ __('This offer expires on :date. Please complete your order before it expires.', ['date' => $offerExpiresAtFormatted]) }}
 @endif
 
 <x-mail::button :url="$checkoutUrl">

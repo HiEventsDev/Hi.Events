@@ -160,6 +160,11 @@ function createCSSVariablesResolver(accentColor: string, mode: 'light' | 'dark')
                 '--checkout-text-secondary': palette.textSecondary,
                 '--checkout-text-tertiary': palette.textTertiary,
                 '--checkout-border': palette.border,
+
+                // Override global --hi-text (set to accent in global.scss) and
+                // Mantine's default text color to use fixed palette instead
+                '--hi-text': palette.textPrimary,
+                '--mantine-color-text': palette.textPrimary,
             },
             light: {},
             dark: {},

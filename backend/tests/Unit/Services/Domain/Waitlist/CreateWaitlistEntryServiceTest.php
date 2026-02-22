@@ -73,6 +73,11 @@ class CreateWaitlistEntryServiceTest extends TestCase
             ->andReturnNull();
 
         $this->waitlistEntryRepository
+            ->shouldReceive('lockForProductPrice')
+            ->once()
+            ->with(10);
+
+        $this->waitlistEntryRepository
             ->shouldReceive('getMaxPosition')
             ->once()
             ->with(10)
@@ -169,6 +174,11 @@ class CreateWaitlistEntryServiceTest extends TestCase
             ->shouldReceive('findFirstWhere')
             ->once()
             ->andReturnNull();
+
+        $this->waitlistEntryRepository
+            ->shouldReceive('lockForProductPrice')
+            ->once()
+            ->with(10);
 
         $this->waitlistEntryRepository
             ->shouldReceive('getMaxPosition')

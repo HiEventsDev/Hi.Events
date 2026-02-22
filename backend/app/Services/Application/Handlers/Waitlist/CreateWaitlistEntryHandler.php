@@ -4,6 +4,7 @@ namespace HiEvents\Services\Application\Handlers\Waitlist;
 
 use HiEvents\DomainObjects\WaitlistEntryDomainObject;
 use HiEvents\Exceptions\ResourceConflictException;
+use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductPriceRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
@@ -23,6 +24,7 @@ class CreateWaitlistEntryHandler
 
     /**
      * @throws ResourceConflictException
+     * @throws ResourceNotFoundException
      */
     public function handle(CreateWaitlistEntryDTO $dto): WaitlistEntryDomainObject
     {
@@ -36,6 +38,10 @@ class CreateWaitlistEntryHandler
             'id' => $productPrice->getProductId(),
             'event_id' => $dto->event_id,
         ]);
+
+        if ($product === null) {
+            throw new ResourceNotFoundException(__('Product not found for this event'));
+        }
 
         return $this->createWaitlistEntryService->createEntry($dto, $eventSettings, $product);
     }

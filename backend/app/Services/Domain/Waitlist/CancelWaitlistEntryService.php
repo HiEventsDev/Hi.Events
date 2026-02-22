@@ -2,12 +2,13 @@
 
 namespace HiEvents\Services\Domain\Waitlist;
 
+use HiEvents\DomainObjects\Enums\CapacityChangeDirection;
 use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\DomainObjects\Status\WaitlistEntryStatus;
 use HiEvents\DomainObjects\WaitlistEntryDomainObject;
-use HiEvents\DomainObjects\Enums\CapacityChangeDirection;
 use HiEvents\Events\CapacityChangedEvent;
 use HiEvents\Exceptions\ResourceConflictException;
+use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductPriceRepositoryInterface;
 use HiEvents\Repository\Interfaces\WaitlistEntryRepositoryInterface;
@@ -26,6 +27,7 @@ class CancelWaitlistEntryService
 
     /**
      * @throws ResourceConflictException
+     * @throws ResourceNotFoundException
      */
     public function cancelByToken(string $cancelToken, ?int $eventId = null): WaitlistEntryDomainObject
     {
@@ -38,7 +40,7 @@ class CancelWaitlistEntryService
         $entry = $this->waitlistEntryRepository->findFirstWhere($conditions);
 
         if ($entry === null) {
-            throw new ResourceConflictException(__('Waitlist entry not found'));
+            throw new ResourceNotFoundException(__('Waitlist entry not found'));
         }
 
         return $this->cancelEntry($entry);
@@ -46,6 +48,7 @@ class CancelWaitlistEntryService
 
     /**
      * @throws ResourceConflictException
+     * @throws ResourceNotFoundException
      */
     public function cancelById(int $entryId, int $eventId): WaitlistEntryDomainObject
     {
@@ -55,7 +58,7 @@ class CancelWaitlistEntryService
         ]);
 
         if ($entry === null) {
-            throw new ResourceConflictException(__('Waitlist entry not found'));
+            throw new ResourceNotFoundException(__('Waitlist entry not found'));
         }
 
         return $this->cancelEntry($entry);
@@ -69,11 +72,13 @@ class CancelWaitlistEntryService
         if (!in_array($entry->getStatus(), [
             WaitlistEntryStatus::WAITING->name,
             WaitlistEntryStatus::OFFERED->name,
-        ])) {
+        ], true)) {
             throw new ResourceConflictException(__('This waitlist entry cannot be cancelled'));
         }
 
         return $this->databaseManager->transaction(function () use ($entry) {
+            $wasOffered = $entry->getStatus() === WaitlistEntryStatus::OFFERED->name;
+
             if ($entry->getOrderId() !== null) {
                 $this->orderRepository->deleteWhere([
                     'id' => $entry->getOrderId(),
@@ -90,14 +95,16 @@ class CancelWaitlistEntryService
                 where: ['id' => $entry->getId()],
             );
 
-            $productPrice = $this->productPriceRepository->findById($entry->getProductPriceId());
+            if ($wasOffered) {
+                $productPrice = $this->productPriceRepository->findById($entry->getProductPriceId());
 
-            event(new CapacityChangedEvent(
-                eventId: $entry->getEventId(),
-                direction: CapacityChangeDirection::INCREASED,
-                productId: $productPrice->getProductId(),
-                productPriceId: $entry->getProductPriceId(),
-            ));
+                event(new CapacityChangedEvent(
+                    eventId: $entry->getEventId(),
+                    direction: CapacityChangeDirection::INCREASED,
+                    productId: $productPrice->getProductId(),
+                    productPriceId: $entry->getProductPriceId(),
+                ));
+            }
 
             return $this->waitlistEntryRepository->findById($entry->getId());
         });

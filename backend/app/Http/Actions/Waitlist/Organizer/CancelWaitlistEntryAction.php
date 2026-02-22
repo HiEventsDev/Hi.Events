@@ -4,6 +4,7 @@ namespace HiEvents\Http\Actions\Waitlist\Organizer;
 
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Exceptions\ResourceConflictException;
+use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Services\Application\Handlers\Waitlist\CancelWaitlistEntryHandler;
 use Illuminate\Http\Response;
@@ -23,6 +24,11 @@ class CancelWaitlistEntryAction extends BaseAction
 
         try {
             $this->cancelWaitlistEntryHandler->handleCancelById($entryId, $eventId);
+        } catch (ResourceNotFoundException $e) {
+            return $this->errorResponse(
+                message: $e->getMessage(),
+                statusCode: SymfonyResponse::HTTP_NOT_FOUND,
+            );
         } catch (ResourceConflictException $e) {
             return $this->errorResponse(
                 message: $e->getMessage(),

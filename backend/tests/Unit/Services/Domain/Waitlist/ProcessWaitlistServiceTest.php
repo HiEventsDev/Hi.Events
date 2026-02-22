@@ -556,7 +556,7 @@ class ProcessWaitlistServiceTest extends TestCase
         $this->service->offerToNext($productPriceId, $quantity, $event, $eventSettings);
     }
 
-    public function testOfferExpiresAtIsNullWhenTimeoutNotSet(): void
+    public function testOfferExpiresAtUsesDefaultWhenTimeoutNotSet(): void
     {
         Bus::fake();
 
@@ -615,7 +615,7 @@ class ProcessWaitlistServiceTest extends TestCase
 
         $this->service->offerToNext($productPriceId, $quantity, $event, $eventSettings);
 
-        $this->assertNull($capturedAttributes['offer_expires_at']);
+        $this->assertNotNull($capturedAttributes['offer_expires_at']);
     }
 
     public function testOfferSpecificEntrySuccessfully(): void

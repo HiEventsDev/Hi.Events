@@ -2,6 +2,7 @@
 
 namespace HiEvents\Mail\Waitlist;
 
+use Carbon\Carbon;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
@@ -47,6 +48,7 @@ class WaitlistOfferMail extends BaseMail
                 'productName' => $this->buildProductName(),
                 'organizer' => $this->organizer,
                 'eventSettings' => $this->eventSettings,
+                'offerExpiresAtFormatted' => $this->formatOfferExpiry(),
                 'checkoutUrl' => sprintf(
                     Url::getFrontEndUrlFromConfig(Url::ORDER_DETAILS, [
                         'session_identifier' => $this->sessionIdentifier,
@@ -57,6 +59,17 @@ class WaitlistOfferMail extends BaseMail
                 ),
             ]
         );
+    }
+
+    private function formatOfferExpiry(): ?string
+    {
+        $expiresAt = $this->entry->getOfferExpiresAt();
+
+        if ($expiresAt === null) {
+            return null;
+        }
+
+        return Carbon::parse($expiresAt)->isoFormat('MMMM D, YYYY [at] h:mm A (z)');
     }
 
     private function buildProductName(): ?string

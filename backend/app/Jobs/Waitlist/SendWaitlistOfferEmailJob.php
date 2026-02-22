@@ -29,6 +29,7 @@ class SendWaitlistOfferEmailJob implements ShouldQueue
         private readonly string                    $sessionIdentifier,
     )
     {
+        $this->afterCommit = true;
     }
 
     public function handle(

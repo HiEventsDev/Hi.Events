@@ -36,6 +36,7 @@ class CreateWaitlistEntryService
 
         /** @var WaitlistEntryDomainObject $entry */
         $entry = $this->databaseManager->transaction(function () use ($dto) {
+            $this->waitlistEntryRepository->lockForProductPrice($dto->product_price_id);
             $position = $this->calculatePosition($dto);
 
             return $this->waitlistEntryRepository->create([

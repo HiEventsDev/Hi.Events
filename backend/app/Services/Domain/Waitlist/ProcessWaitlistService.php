@@ -246,13 +246,9 @@ class ProcessWaitlistService
         return 0;
     }
 
-    private function calculateOfferExpiry(EventSettingDomainObject $eventSettings): ?string
+    private function calculateOfferExpiry(EventSettingDomainObject $eventSettings): string
     {
-        $timeoutMinutes = $eventSettings->getWaitlistOfferTimeoutMinutes();
-
-        if ($timeoutMinutes === null) {
-            return null;
-        }
+        $timeoutMinutes = $eventSettings->getWaitlistOfferTimeoutMinutes() ?? self::DEFAULT_OFFER_TIMEOUT_MINUTES;
 
         return now()->addMinutes($timeoutMinutes)->toDateTimeString();
     }

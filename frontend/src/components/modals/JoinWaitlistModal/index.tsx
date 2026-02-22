@@ -11,6 +11,19 @@ import {detectMode} from "../../../utilites/themeUtils.ts";
 
 const DEFAULT_ACCENT = '#8b5cf6';
 
+const KEYFRAMES = `
+    @keyframes waitlistBounceIn {
+        0% { transform: scale(0); opacity: 0; }
+        50% { transform: scale(1.2); }
+        70% { transform: scale(0.9); }
+        100% { transform: scale(1); opacity: 1; }
+    }
+    @keyframes waitlistSubtleBounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-6px); }
+    }
+`;
+
 interface JoinWaitlistModalProps extends GenericModalProps {
     product: Product;
     event: Event;
@@ -110,18 +123,7 @@ export const JoinWaitlistModal = ({onClose, product, event, productPriceId, pric
                             {t`Close`}
                         </Button>
                     </div>
-                    <style>{`
-                        @keyframes waitlistBounceIn {
-                            0% { transform: scale(0); opacity: 0; }
-                            50% { transform: scale(1.2); }
-                            70% { transform: scale(0.9); }
-                            100% { transform: scale(1); opacity: 1; }
-                        }
-                        @keyframes waitlistSubtleBounce {
-                            0%, 100% { transform: translateY(0); }
-                            50% { transform: translateY(-6px); }
-                        }
-                    `}</style>
+                    <style>{KEYFRAMES}</style>
                 </MantineModal>
             </CheckoutThemeProvider>
         );
@@ -157,18 +159,7 @@ export const JoinWaitlistModal = ({onClose, product, event, productPriceId, pric
                             {t`Close`}
                         </Button>
                     </div>
-                    <style>{`
-                        @keyframes waitlistBounceIn {
-                            0% { transform: scale(0); opacity: 0; }
-                            50% { transform: scale(1.2); }
-                            70% { transform: scale(0.9); }
-                            100% { transform: scale(1); opacity: 1; }
-                        }
-                        @keyframes waitlistSubtleBounce {
-                            0%, 100% { transform: translateY(0); }
-                            50% { transform: translateY(-6px); }
-                        }
-                    `}</style>
+                    <style>{KEYFRAMES}</style>
                 </MantineModal>
             </CheckoutThemeProvider>
         );

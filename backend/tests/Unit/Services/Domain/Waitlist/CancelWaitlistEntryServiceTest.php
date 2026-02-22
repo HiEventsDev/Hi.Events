@@ -7,6 +7,7 @@ use HiEvents\DomainObjects\Status\WaitlistEntryStatus;
 use HiEvents\DomainObjects\WaitlistEntryDomainObject;
 use HiEvents\Events\CapacityChangedEvent;
 use HiEvents\Exceptions\ResourceConflictException;
+use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductPriceRepositoryInterface;
@@ -68,8 +69,6 @@ class CancelWaitlistEntryServiceTest extends TestCase
         $entry->shouldReceive('getId')->andReturn(1);
         $entry->shouldReceive('getStatus')->andReturn(WaitlistEntryStatus::WAITING->name);
         $entry->shouldReceive('getOrderId')->andReturn(null);
-        $entry->shouldReceive('getEventId')->andReturn(10);
-        $entry->shouldReceive('getProductPriceId')->andReturn(20);
 
         $this->waitlistEntryRepository
             ->shouldReceive('findFirstWhere')
@@ -104,9 +103,7 @@ class CancelWaitlistEntryServiceTest extends TestCase
         $this->assertInstanceOf(WaitlistEntryDomainObject::class, $result);
         $this->assertEquals(WaitlistEntryStatus::CANCELLED->name, $result->getStatus());
 
-        Event::assertDispatched(CapacityChangedEvent::class, function ($event) {
-            return $event->eventId === 10 && $event->productId === 99;
-        });
+        Event::assertNotDispatched(CapacityChangedEvent::class);
     }
 
     public function testSuccessfullyCancelsByTokenWhenStatusIsOfferedDeletesOrder(): void
@@ -179,8 +176,6 @@ class CancelWaitlistEntryServiceTest extends TestCase
         $entry->shouldReceive('getId')->andReturn($entryId);
         $entry->shouldReceive('getStatus')->andReturn(WaitlistEntryStatus::WAITING->name);
         $entry->shouldReceive('getOrderId')->andReturn(null);
-        $entry->shouldReceive('getEventId')->andReturn($eventId);
-        $entry->shouldReceive('getProductPriceId')->andReturn(20);
 
         $this->waitlistEntryRepository
             ->shouldReceive('findFirstWhere')
@@ -218,9 +213,7 @@ class CancelWaitlistEntryServiceTest extends TestCase
         $this->assertInstanceOf(WaitlistEntryDomainObject::class, $result);
         $this->assertEquals(WaitlistEntryStatus::CANCELLED->name, $result->getStatus());
 
-        Event::assertDispatched(CapacityChangedEvent::class, function ($event) use ($eventId) {
-            return $event->eventId === $eventId && $event->productId === 99;
-        });
+        Event::assertNotDispatched(CapacityChangedEvent::class);
     }
 
     public function testThrowsExceptionForInvalidToken(): void
@@ -233,7 +226,7 @@ class CancelWaitlistEntryServiceTest extends TestCase
             ->with(['cancel_token' => $invalidToken])
             ->andReturnNull();
 
-        $this->expectException(ResourceConflictException::class);
+        $this->expectException(ResourceNotFoundException::class);
         $this->expectExceptionMessage('Waitlist entry not found');
 
         $this->service->cancelByToken($invalidToken);
@@ -253,7 +246,7 @@ class CancelWaitlistEntryServiceTest extends TestCase
             ])
             ->andReturnNull();
 
-        $this->expectException(ResourceConflictException::class);
+        $this->expectException(ResourceNotFoundException::class);
         $this->expectExceptionMessage('Waitlist entry not found');
 
         $this->service->cancelById($entryId, $eventId);
