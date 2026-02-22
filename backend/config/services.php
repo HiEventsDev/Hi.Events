@@ -1,6 +1,6 @@
 <?php
 
-return [
+$services = [
 
     /*
     |--------------------------------------------------------------------------
@@ -53,3 +53,27 @@ return [
         'app_id' => env('OPEN_EXCHANGE_RATES_APP_ID'),
     ],
 ];
+
+// OIDC Dynamic Providers Config Generation
+$providersStr = env('AUTH_PROVIDERS');
+$services['auth_providers_list'] = [];
+
+if ($providersStr) {
+    $providers = array_filter(array_map('trim', explode(',', $providersStr)));
+    $services['auth_providers_list'] = $providers;
+
+    foreach ($providers as $provider) {
+        $providerUpper = strtoupper($provider);
+        $services[$provider] = [
+            'driver' => env("AUTH_{$providerUpper}_DRIVER", 'openid'),
+            'client_id' => env("AUTH_{$providerUpper}_CLIENT_ID"),
+            'client_secret' => env("AUTH_{$providerUpper}_CLIENT_SECRET"),
+            'identifier_key' => env("AUTH_{$providerUpper}_IDENTIFIER_KEY", 'email'),
+            'issuer_url' => env("AUTH_{$providerUpper}_ISSUER_URL"),
+            'base_url' => env("AUTH_{$providerUpper}_ISSUER_URL"),
+            'scope' => env("AUTH_{$providerUpper}_SCOPE", 'openid email profile'),
+        ];
+    }
+}
+
+return $services;

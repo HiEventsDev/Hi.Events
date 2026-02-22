@@ -34,35 +34,8 @@ class OidcServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        // Get the list of providers
-        $providersStr = env('AUTH_PROVIDERS', '');
-        if (empty($providersStr)) {
-            return;
-        }
-
-        $providers = array_filter(array_map('trim', explode(',', $providersStr)));
-
-        foreach ($providers as $provider) {
-            $providerUpper = strtoupper($provider);
-            $driver = env("AUTH_{$providerUpper}_DRIVER", 'openid');
-
-            // Set up config array dynamically
-            $config = [
-                'client_id' => env("AUTH_{$providerUpper}_CLIENT_ID"),
-                'client_secret' => env("AUTH_{$providerUpper}_CLIENT_SECRET"),
-                'identifier_key' => env("AUTH_{$providerUpper}_IDENTIFIER_KEY", 'email'),
-                'issuer_url' => env("AUTH_{$providerUpper}_ISSUER_URL"),
-                'base_url' => env("AUTH_{$providerUpper}_ISSUER_URL"),
-                'scope' => env("AUTH_{$providerUpper}_SCOPE", 'openid email profile'),
-            ];
-
-            // Some specific drivers might need different structures, we support openid by mapping it to 'oidc' if needed,
-            // or we just inject it into the service configuration array natively.
-            config(["services.{$provider}" => $config]);
-
-            // We explicitly inform Socialite if using socialiteproviders
-            // We usually set config['services.something'] which Socialite picks up automatically.
-        }
+        // Provider config array injection is now handled fully in config/services.php 
+        // to support php artisan config:cache on Vapor arrays.
     }
 
     /**
@@ -73,30 +46,28 @@ class OidcServiceProvider extends ServiceProvider
         $this->app->booted(function () {
             $socialite = $this->app->make(\Laravel\Socialite\Contracts\Factory::class);
 
-            $providersStr = env('AUTH_PROVIDERS', '');
-            if (!empty($providersStr)) {
-                $providers = array_filter(array_map('trim', explode(',', $providersStr)));
+            $providers = config('services.auth_providers_list', []);
 
-                foreach ($providers as $provider) {
-                    $providerUpper = strtoupper($provider);
-                    $driver = env("AUTH_{$providerUpper}_DRIVER", 'openid');
+            foreach ($providers as $provider) {
+                // Config arrays are mapped and hydrated safely via config/services.php
+                $config = config("services.{$provider}");
+                $driver = $config['driver'] ?? 'openid';
 
-                    if (in_array($driver, ['openid', 'oidc'])) {
-                        $socialite->extend($provider, function ($app) use ($socialite, $provider) {
-                            $config = $app['config']["services.{$provider}"];
-                            $config['redirect'] = route('auth.provider.callback', ['provider' => strtolower($provider)]);
-                            $instance = $socialite->buildProvider(StatelessOidcProvider::class, $config);
-                            $instance->setConfig(
-                                new \SocialiteProviders\Manager\Config(
-                                    $config['client_id'],
-                                    $config['client_secret'],
-                                    $config['redirect'],
-                                    $config
-                                )
-                            );
-                            return $instance;
-                        });
-                    }
+                if (in_array($driver, ['openid', 'oidc'])) {
+                    $socialite->extend($provider, function ($app) use ($socialite, $provider) {
+                        $config = $app['config']["services.{$provider}"];
+                        $config['redirect'] = route('auth.provider.callback', ['provider' => strtolower($provider)]);
+                        $instance = $socialite->buildProvider(StatelessOidcProvider::class, $config);
+                        $instance->setConfig(
+                            new \SocialiteProviders\Manager\Config(
+                                $config['client_id'],
+                                $config['client_secret'],
+                                $config['redirect'],
+                                $config
+                            )
+                        );
+                        return $instance;
+                    });
                 }
             }
         });
