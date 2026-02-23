@@ -50,8 +50,12 @@ If you only want Google to be used for logins, add this to your `.env`:
 AUTH_PROVIDERS=google
 AUTH_DISABLE_DEFAULT=false
 
-AUTH_GOOGLE_CLIENT_ID=your-google-client-id-here.apps.googleusercontent.com
-AUTH_GOOGLE_CLIENT_SECRET=your-google-client-secret-here
+AUTH_google_DRIVER="openid"
+AUTH_google_CLIENT_ID="123456789"
+AUTH_google_CLIENT_SECRET="secret"
+AUTH_google_ISSUER_URL="https://accounts.google.com"
+AUTH_google_IDENTIFIER_KEY="email"
+AUTH_google_SCOPE="openid email profile"
 # Google automatically returns 'email', so no IDENTIFIER_KEY is needed.
 # The UI will automatically detect "google" and use the official Google 'G' icon.
 ```
@@ -61,16 +65,19 @@ AUTH_GOOGLE_CLIENT_SECRET=your-google-client-secret-here
 If your company uses Keycloak for SSO and you want to completely lock out standard username/password logins:
 
 ```env
-AUTH_PROVIDERS=corp_sso
+AUTH_PROVIDERS=zitadel
 AUTH_DISABLE_DEFAULT=true
 
-AUTH_CORP_SSO_CLIENT_ID=my-hievents-app
-AUTH_CORP_SSO_CLIENT_SECRET=super-secret-string
-AUTH_CORP_SSO_ISSUER_URL=https://sso.mycompany.com/realms/master
-AUTH_CORP_SSO_LOGO_URL=https://mycompany.com/assets/logo-small.png
+AUTH_zitadel_DRIVER="openid"
+AUTH_zitadel_CLIENT_ID="123456789"
+AUTH_zitadel_CLIENT_SECRET="secret"
+AUTH_zitadel_ISSUER_URL="https://auth.example.com"
+AUTH_zitadel_IDENTIFIER_KEY="email"
+AUTH_zitadel_SCOPE="openid email profile"
+AUTH_zitadel_LOGO_URL="https://example.com/logo.svg" # If not set, the system will try to smartly guess the brand logo (e.g. Google, Apple) or fallback to a standard lock icon.
 ```
 
-In this mode, users visiting `/login` will *only* see a **"Continue with Corp_sso"** button styled with your brand logo, and the standard email form will vanish.
+In this mode, users visiting `/login` will *only* see a **"Continue with Zitadel"** button styled with your brand logo, and the standard email form will vanish.
 
 ---
 
