@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -17,13 +16,24 @@ return new class extends Migration
             $table->string('razorpay_order_id')->unique();
             $table->string('razorpay_payment_id')->nullable();
             $table->string('razorpay_signature')->nullable();
+
+            $table->string('method')->nullable();
+            $table->integer('fee')->nullable()->comment('Fee in paise');
+            $table->integer('tax')->nullable()->comment('Tax in paise');
+
             $table->integer('amount');
             $table->string('currency', 3);
             $table->string('receipt')->nullable();
-            $table->string('payment_status')->default('created');
+
+            $table->string('status')->default('created');
+
+            $table->string('failure_reason')->nullable()->after('tax');
+            $table->string('error_code')->nullable()->after('failure_reason');
+
             $table->timestamps();
-            
+
             $table->index(['order_id']);
+            $table->index('status');
         });
     }
 

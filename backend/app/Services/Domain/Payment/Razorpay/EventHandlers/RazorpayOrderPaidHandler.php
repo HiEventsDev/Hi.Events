@@ -16,7 +16,8 @@ use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\RazorpayOrdersRepositoryInterface;
 use HiEvents\Services\Domain\Order\OrderApplicationFeeService;
-use HiEvents\Services\Domain\Payment\Razorpay\DTOs\RazorpayPaymentEventDTO;
+use HiEvents\Services\Domain\Payment\Razorpay\DTOs\RazorpayOrderPaidEventDTO;
+use HiEvents\Services\Domain\Payment\Razorpay\DTOs\RazorpayOrderPaidPayload;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
@@ -26,89 +27,80 @@ use Illuminate\Database\DatabaseManager;
 use Illuminate\Log\Logger;
 use Throwable;
 
-class RazorpayPaymentCapturedHandler
+class RazorpayOrderPaidHandler
 {
     public function __construct(
-        private readonly OrderRepositoryInterface          $orderRepository,
+        private readonly OrderRepositoryInterface $orderRepository,
         private readonly RazorpayOrdersRepositoryInterface $razorpayOrdersRepository,
-        private readonly AffiliateRepositoryInterface      $affiliateRepository,
-        private readonly ProductQuantityUpdateService      $quantityUpdateService,
-        private readonly AttendeeRepositoryInterface       $attendeeRepository,
-        private readonly DatabaseManager                   $databaseManager,
-        private readonly Logger                            $logger,
-        private readonly Repository                        $cache,
-        private readonly DomainEventDispatcherService      $domainEventDispatcherService,
-        private readonly OrderApplicationFeeService        $orderApplicationFeeService,
+        private readonly AffiliateRepositoryInterface $affiliateRepository,
+        private readonly ProductQuantityUpdateService $quantityUpdateService,
+        private readonly AttendeeRepositoryInterface $attendeeRepository,
+        private readonly DatabaseManager $databaseManager,
+        private readonly Logger $logger,
+        private readonly Repository $cache,
+        private readonly DomainEventDispatcherService $domainEventDispatcherService,
+        private readonly OrderApplicationFeeService $orderApplicationFeeService,
     ) {
     }
 
     /**
      * @throws Throwable
      */
-    // TODO: Change param type to accept payload
-    public function handleEvent(RazorpayPaymentEventDTO $event): void
+    public function handleEvent(RazorpayOrderPaidPayload $event): void
     {
+        $orderEntity = $event->order;
         $paymentEntity = $event->payment;
 
-        // Idempotency check: avoid processing the same payment twice
-        if ($this->isPaymentAlreadyHandled($paymentEntity->id)) {
-            $this->logger->info('Razorpay payment already handled via webhook', [
+        // Use the Razorpay order ID as the idempotency key (or payment ID)
+        $idempotencyKey = 'razorpay_order_paid_' . $orderEntity->id;
+
+        if ($this->cache->has($idempotencyKey)) {
+            $this->logger->info('Razorpay order.paid event already handled', [
+                'razorpay_order_id' => $orderEntity->id,
                 'razorpay_payment_id' => $paymentEntity->id,
             ]);
             return;
         }
 
-        $this->databaseManager->transaction(function () use ($paymentEntity) {
-            // Find the local razorpay order record by the Razorpay payment ID
-            $razorpayOrder = $this->razorpayOrdersRepository->findByPaymentId($paymentEntity->id);
+        $this->databaseManager->transaction(function () use ($orderEntity, $paymentEntity) {
+            // Find local razorpay order record by the Razorpay order ID
+            $razorpayOrder = $this->razorpayOrdersRepository->findByRazorpayOrderId($orderEntity->id);
 
             if (!$razorpayOrder) {
-                $this->logger->warning('Razorpay order not found for webhook', [
-                    'razorpay_payment_id' => $paymentEntity->id,
+                $this->logger->warning('Razorpay order not found for order.paid webhook', [
+                    'razorpay_order_id' => $orderEntity->id,
                 ]);
                 return;
             }
 
-            // Extract the local order ID from the razorpay order record
-            $razorpayOrderArray = $razorpayOrder->toArray();
-            $orderId = $razorpayOrderArray['order_id'] ?? null;
+            $localOrderId = $razorpayOrder->getOrderId();
 
-            if (!$orderId) {
-                $this->logger->error('Could not get order ID from Razorpay order', [
-                    'razorpay_order' => $razorpayOrderArray,
-                ]);
-                return;
-            }
-
-            // Load the full order with its items
+            // Load the full local order with items
             $order = $this->orderRepository
                 ->loadRelation(new Relationship(OrderItemDomainObject::class))
-                ->findById($orderId);
+                ->findById($localOrderId);
 
             if (!$order) {
-                $this->logger->warning('Order not found for Razorpay payment', [
-                    'razorpay_payment_id' => $paymentEntity->id,
-                    'order_id' => $orderId,
+                $this->logger->warning('Local order not found for order.paid webhook', [
+                    'local_order_id' => $localOrderId,
+                    'razorpay_order_id' => $orderEntity->id,
                 ]);
                 return;
             }
 
-            // Update the razorpay_orders record with webhook data (all amounts in paise)
-            $this->razorpayOrdersRepository->updateByOrderId($orderId, [
+            // Update the razorpay_orders record with payment details (all amounts in paise)
+            $this->razorpayOrdersRepository->updateByOrderId($localOrderId, [
                 'razorpay_payment_id' => $paymentEntity->id,
-                'status'  => $paymentEntity->status,
-                'method'  => $paymentEntity->method,
-                'amount'  => $paymentEntity->amount,
+                'status' => $paymentEntity->status,
+                'method' => $paymentEntity->method,
+                'amount' => $paymentEntity->amount,
                 'currency' => $paymentEntity->currency,
-                'fee'     => $paymentEntity->fee,
-                'tax'     => $paymentEntity->tax,
+                'fee' => $paymentEntity->fee,
+                'tax' => $paymentEntity->tax,
             ]);
 
-            // If the order is not already marked as paid, update its status and related entities
-            $orderArray = $order->toArray();
-            $currentPaymentStatus = $orderArray['payment_status'] ?? null;
-
-            if ($currentPaymentStatus !== OrderPaymentStatus::PAYMENT_RECEIVED->name) {
+            // If order not already marked as paid, update its status and related entities
+            if ($order->getPaymentStatus() !== OrderPaymentStatus::PAYMENT_RECEIVED->name) {
                 $updatedOrder = $this->updateOrderStatuses($order);
 
                 $this->updateAttendeeStatuses($updatedOrder);
@@ -125,7 +117,7 @@ class RazorpayPaymentCapturedHandler
                 );
             }
 
-            // Store the application fee (fee is already in paise)
+            // Store application fee (fee is in paise)
             $this->orderApplicationFeeService->createOrderApplicationFee(
                 orderId: $order->getId(),
                 applicationFeeAmountMinorUnit: $paymentEntity->fee ?? 0,
@@ -134,9 +126,15 @@ class RazorpayPaymentCapturedHandler
                 currency: $paymentEntity->currency,
             );
 
-            // Final idempotency marker
-            $this->markPaymentAsHandled($paymentEntity->id, $order);
+            $this->logger->info('Razorpay order.paid webhook processed successfully', [
+                'razorpay_order_id' => $orderEntity->id,
+                'razorpay_payment_id' => $paymentEntity->id,
+                'local_order_id' => $order->getId(),
+            ]);
         });
+
+        // Mark as handled after successful transaction
+        $this->cache->put($idempotencyKey, true, now()->addHours(24));
     }
 
     private function updateOrderStatuses(OrderDomainObject $order): OrderDomainObject
@@ -144,7 +142,7 @@ class RazorpayPaymentCapturedHandler
         return $this->orderRepository
             ->updateFromArray($order->getId(), [
                 OrderDomainObjectAbstract::PAYMENT_STATUS => OrderPaymentStatus::PAYMENT_RECEIVED->name,
-                OrderDomainObjectAbstract::STATUS         => OrderStatus::COMPLETED->name,
+                OrderDomainObjectAbstract::STATUS => OrderStatus::COMPLETED->name,
                 OrderDomainObjectAbstract::PAYMENT_PROVIDER => PaymentProviders::RAZORPAY->value,
             ]);
     }
@@ -157,7 +155,7 @@ class RazorpayPaymentCapturedHandler
             ],
             where: [
                 'order_id' => $order->getId(),
-                'status'   => AttendeeStatus::AWAITING_PAYMENT->name,
+                'status' => AttendeeStatus::AWAITING_PAYMENT->name,
             ],
         );
     }
@@ -173,22 +171,5 @@ class RazorpayPaymentCapturedHandler
                 amount: $order->getTotalGross()
             );
         }
-    }
-
-    private function isPaymentAlreadyHandled(string $paymentId): bool
-    {
-        return $this->cache->has('razorpay_webhook_payment_' . $paymentId);
-    }
-
-    private function markPaymentAsHandled(string $paymentId, OrderDomainObject $order): void
-    {
-        $this->logger->info('Razorpay payment captured via webhook', [
-            'razorpay_payment_id' => $paymentId,
-            'order_id'            => $order->getId(),
-            'amount'              => $order->getTotalGross(),
-            'currency'            => $order->getCurrency(),
-        ]);
-
-        $this->cache->put('razorpay_webhook_payment_' . $paymentId, true, now()->addHours(24));
     }
 }

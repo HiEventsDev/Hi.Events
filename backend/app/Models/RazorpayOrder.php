@@ -2,7 +2,6 @@
 
 namespace HiEvents\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class RazorpayOrder extends BaseModel
@@ -14,14 +13,19 @@ class RazorpayOrder extends BaseModel
         'razorpay_order_id',
         'razorpay_payment_id',
         'razorpay_signature',
+        'method',
+        'fee',
+        'tax',
         'amount',
         'currency',
         'receipt',
-        'payment_status',
+        'status',
     ];
 
     protected $casts = [
         'amount' => 'integer',
+        'fee' => 'integer',
+        'tax' => 'integer',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
