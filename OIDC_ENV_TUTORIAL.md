@@ -1,6 +1,6 @@
 # OIDC Environment Variables Tutorial
 
-This guide explains how to dynamically configure OpenID Connect (OIDC) or standard Socialite providers (like Google, Github, Zitadel or OKTA) using environment variables.
+This guide explains how to dynamically configure OpenID Connect (OIDC) or standard Socialite providers (like Google, Github or OKTA) using environment variables.
 
 Hi.Events uses a dynamic configuration loader (`OidcServiceProvider`). This means you don't need to change any PHP code to add a new authentication provider. You simply add its configuration to your `.env` file!
 
