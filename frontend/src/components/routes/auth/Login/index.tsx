@@ -134,10 +134,11 @@ const Login = () => {
                         key={provider.id}
                         component="a"
                         href={`${baseUrl}/auth/${provider.id}/redirect`}
-                        color="secondary.5"
+                        color={hideDefaultForms ? undefined : "secondary.5"}
                         fullWidth
-                        mb={hideDefaultForms ? "sm" : "lg"}
-                        variant={hideDefaultForms ? "filled" : "outline"}
+                        size={hideDefaultForms ? "md" : "sm"}
+                        mb={hideDefaultForms ? "md" : "lg"}
+                        variant={hideDefaultForms ? "default" : "outline"}
                         leftSection={getProviderIcon(provider.id, provider.logo_url)}
                     >
                         Continue with {provider.name}
