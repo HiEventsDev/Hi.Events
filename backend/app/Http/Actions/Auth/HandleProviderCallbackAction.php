@@ -2,7 +2,8 @@
 
 namespace HiEvents\Http\Actions\Auth;
 
-use HiEvents\Models\User;
+use HiEvents\Exceptions\UnauthorizedException;
+use HiEvents\Services\Domain\Auth\LoginService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -10,11 +11,11 @@ use Laravel\Socialite\Facades\Socialite;
 
 class HandleProviderCallbackAction extends BaseAuthAction
 {
-    private \PHPOpenSourceSaver\JWTAuth\JWTAuth $jwtAuth;
+    private LoginService $loginService;
 
-    public function __construct(\PHPOpenSourceSaver\JWTAuth\JWTAuth $jwtAuth)
+    public function __construct(LoginService $loginService)
     {
-        $this->jwtAuth = $jwtAuth;
+        $this->loginService = $loginService;
     }
 
     public function __invoke(string $provider, Request $request): JsonResponse|RedirectResponse
@@ -40,46 +41,15 @@ class HandleProviderCallbackAction extends BaseAuthAction
             return response()->json(['message' => 'Missing identifier from provider'], 400);
         }
 
-        $user = User::where('email', $identifierValue)->first();
-
-        if (!$user) {
-            return response()->json(['message' => 'User not registered'], 403);
+        try {
+            $loginResponse = $this->loginService->authenticateOidc(
+                email: $identifierValue,
+                requestedAccountId: null
+            );
+        } catch (UnauthorizedException $e) {
+            return response()->json(['message' => $e->getMessage()], 403);
         }
 
-        if (!$user->email_verified_at) {
-            $user->email_verified_at = now();
-            $user->save();
-        }
-
-        $accounts = $user->accounts;
-        $accountId = null;
-
-        // If user has exactly one account or explicitly requested one (not applicable for basic redirect yet)
-        if ($accounts->count() === 1) {
-            $accountId = $accounts->first()->id;
-        }
-
-        $token = null;
-
-        if ($accountId !== null) {
-            $currentAccount = $accounts->firstWhere('id', $accountId);
-            $role = $currentAccount?->pivot?->role;
-
-            $claims = ['account_id' => $accountId];
-            if ($role) {
-                $claims['role'] = $role;
-            }
-
-            $token = $this->jwtAuth->claims($claims)->fromUser($user);
-
-            \HiEvents\Models\AccountUser::where('user_id', $user->id)
-                ->where('account_id', $accountId)
-                ->update(['last_login_at' => now()]);
-
-            // auth login the web guard with the user so we can access it during request
-            auth()->login($user);
-        }
-
-        return $this->respondWithToken($token, $accounts);
+        return $this->respondWithToken($loginResponse->token, $loginResponse->accounts);
     }
 }

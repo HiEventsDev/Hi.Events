@@ -21,9 +21,7 @@ readonly class LoginService
         private JWTAuth                        $jwtAuth,
         private LoggerInterface                $logger,
         private AccountUserRepositoryInterface $accountUserRepository,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws UnauthorizedException
@@ -98,8 +96,7 @@ readonly class LoginService
         string     $password,
         ?int       $requestedAccountId,
         ?Role      $userRole,
-    ): ?string
-    {
+    ): ?string {
         $accountId = $this->getAccountId($accounts, $requestedAccountId);
 
         // if there's no account, we can't generate a token. The user will be prompted to select an account
@@ -149,5 +146,66 @@ readonly class LoginService
             ->first(fn(AccountUserDomainObject $userAccount) => $userAccount->getAccountId() === $accountId);
 
         return Role::from($currentAccount?->getRole());
+    }
+
+    /**
+     * @throws UnauthorizedException
+     */
+    public function authenticateOidc(string $email, ?int $requestedAccountId = null): LoginResponse
+    {
+        $userModel = \HiEvents\Models\User::where('email', strtolower($email))->first();
+
+        if (!$userModel) {
+            throw new UnauthorizedException(__('User not found'));
+        }
+
+        if (!$userModel->email_verified_at) {
+            $userModel->email_verified_at = now();
+            $userModel->save();
+        }
+
+        /** @var UserDomainObject $user */
+        $user = UserDomainObject::hydrateFromModel($userModel);
+
+        $userAccounts = $this->accountUserRepository
+            ->loadRelation(new Relationship(domainObject: AccountDomainObject::class, name: 'account'))
+            ->findWhere([
+                'user_id' => $user->getId(),
+            ]);
+
+        $accounts = $userAccounts->map(fn($accountUser) => $accountUser->getAccount());
+
+        $accountId = $this->getAccountId($accounts, $requestedAccountId);
+
+        if ($accountId) {
+            $this->validateUserStatus($accountId, $userAccounts);
+        }
+
+        $userRole = $this->getUserRole($accountId, $userAccounts);
+
+        $token = null;
+
+        if ($accountId !== null) {
+            $claims = ['account_id' => $accountId];
+
+            if ($userRole !== null) {
+                $claims['role'] = $userRole->value;
+            }
+
+            $token = $this->jwtAuth->claims($claims)->fromUser($userModel);
+
+            \HiEvents\Models\AccountUser::where('user_id', $user->getId())
+                ->where('account_id', $accountId)
+                ->update(['last_login_at' => now()]);
+
+            auth()->login($userModel);
+        }
+
+        return new LoginResponse(
+            accounts: $accounts,
+            token: $token,
+            user: $user,
+            accountId: $accountId,
+        );
     }
 }

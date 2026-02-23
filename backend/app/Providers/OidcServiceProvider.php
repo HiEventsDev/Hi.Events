@@ -56,7 +56,8 @@ class OidcServiceProvider extends ServiceProvider
                 if (in_array($driver, ['openid', 'oidc'])) {
                     $socialite->extend($provider, function ($app) use ($socialite, $provider) {
                         $config = $app['config']["services.{$provider}"];
-                        $config['redirect'] = route('auth.provider.callback', ['provider' => strtolower($provider)]);
+                        $frontendUrl = rtrim(config('app.frontend_url', env('FRONTEND_URL', 'http://localhost:3000')), '/');
+                        $config['redirect'] = $frontendUrl . '/auth/' . strtolower($provider) . '/callback';
                         $instance = $socialite->buildProvider(StatelessOidcProvider::class, $config);
                         $instance->setConfig(
                             new \SocialiteProviders\Manager\Config(
