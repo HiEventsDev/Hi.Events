@@ -1,6 +1,6 @@
 # OIDC Environment Variables Tutorial
 
-This guide explains how to dynamically configure OpenID Connect (OIDC) or standard Socialite providers (like Google, Github, Apple, or OKTA) using environment variables.
+This guide explains how to dynamically configure OpenID Connect (OIDC) or standard Socialite providers (like Google, Github, Zitadel or OKTA) using environment variables.
 
 Hi.Events uses a dynamic configuration loader (`OidcServiceProvider`). This means you don't need to change any PHP code to add a new authentication provider. You simply add its configuration to your `.env` file!
 
@@ -35,7 +35,7 @@ The system dynamically generates this absolute URL under the hood. You must regi
 | `AUTH_{PROVIDER}_IDENTIFIER_KEY` | No | The attribute from the provider's token to use to uniquely identify the user in Hi.Events (must match an existing User column). <br>**Default:** `email` |
 | `AUTH_{PROVIDER}_SCOPE` | No | The OpenID scopes you want to request. <br>**Default:** `openid email profile` |
 | `AUTH_{PROVIDER}_ISSUER_URL` | No | The issuer/base URL of the OpenID Provider. Needed if you are using generic OpenID Connect providers like Keycloak or Authentik. |
-| `AUTH_{PROVIDER}_LOGO_URL` | No | A direct hyperlink to an image (PNG/SVG/JPG) to show on the login button. If omitted, the system will try to smartly guess the brand logo (e.g. Google, Apple) or fallback to a standard lock icon. |
+| `AUTH_{PROVIDER}_LOGO_URL` | No | A direct hyperlink to an image (PNG/SVG/JPG) to show on the login button. If omitted, the system will try to smartly guess the brand logo (e.g. Google, Microsoft) or fallback to a standard lock icon. |
 | `AUTH_{PROVIDER}_DRIVER` | No | The specific Socialite driver to use. <br>**Default:** `openid`. *Do not change this unless you are specifically targeting a Socialite provider extension instead of standard OpenID Connect.* |
 
 ---
@@ -74,7 +74,7 @@ AUTH_zitadel_CLIENT_SECRET="secret"
 AUTH_zitadel_ISSUER_URL="https://auth.example.com"
 AUTH_zitadel_IDENTIFIER_KEY="email"
 AUTH_zitadel_SCOPE="openid email profile"
-AUTH_zitadel_LOGO_URL="https://example.com/logo.svg" # If not set, the system will try to smartly guess the brand logo (e.g. Google, Apple) or fallback to a standard lock icon.
+AUTH_zitadel_LOGO_URL="https://example.com/logo.svg" # If not set, the system will try to smartly guess the brand logo (e.g. Google, Microsoft) or fallback to a standard lock icon.
 ```
 
 In this mode, users visiting `/login` will *only* see a **"Continue with Zitadel"** button styled with your brand logo, and the standard email form will vanish.
@@ -87,3 +87,9 @@ In this mode, users visiting `/login` will *only* see a **"Continue with Zitadel
 - **Pre-Registration Required:** You must invite or manually provision users inside Hi.Events first to let them log in via SSO.
 - **Auto-Verification:** If a user exists but hasn't verified their email, successfully passing an OIDC challenge will instantly auto-verify their email address in the database.
 - **PKCE & State:** Because the authentication flow runs on strictly stateless API routes, PKCE (Proof Key for Code Exchange) and state (nonce) validation are inherently disabled on the backend. The integration uses the standard authorization code flow authenticated symmetrically using your `CLIENT_ID` and `CLIENT_SECRET`.
+
+---
+
+### APPLE Notice
+
+Please note that Apple uses P12 keys for OIDC, which deviates from the standard used by other providers. For Apple Sign-In, I recommend using an external IdP (like Zitadel) as a bridge: integrate Apple there and then connect this application to the IdP via standard OIDC.
