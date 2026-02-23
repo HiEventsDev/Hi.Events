@@ -1,6 +1,6 @@
 <?php
 
-namespace HiEvents\Services\Application\Handlers\Order\DTO;
+namespace HiEvents\Services\Domain\Payment\Razorpay\DTOs;
 
 use HiEvents\DataTransferObjects\BaseDataObject;
 

@@ -5,8 +5,8 @@ namespace HiEvents\Http\Actions\Orders\Payment\Razorpay;
 use HiEvents\Exceptions\Razorpay\PaymentVerificationFailedException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Order\VerifyRazorpayPaymentRequest;
-use HiEvents\Services\Application\Handlers\Order\DTO\VerifyRazorpayPaymentDTO;
 use HiEvents\Services\Application\Handlers\Order\Payment\Razorpay\VerifyRazorpayPaymentHandler;
+use HiEvents\Services\Domain\Payment\Razorpay\DTOs\VerifyRazorpayPaymentDTO;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
