@@ -2,6 +2,7 @@
 
 namespace HiEvents\Http\Actions\Orders\Payment\Razorpay;
 
+use Backend\App\Services\Application\Handlers\Order\DTO\VerifyRazorpayPaymentDTO;
 use HiEvents\Exceptions\Razorpay\PaymentVerificationFailedException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Services\Application\Handlers\Order\Payment\Razorpay\VerifyRazorpayPaymentHandler;
@@ -12,16 +13,21 @@ class VerifyRazorpayPaymentActionPublic extends BaseAction
 {
     public function __construct(
         private readonly VerifyRazorpayPaymentHandler $verifyRazorpayPaymentHandler,
-    )
-    {
+    ) {
     }
 
     public function __invoke(int $eventId, string $orderShortId): JsonResponse
     {
         try {
+            $verifyRazorpayPaymentDTO = new VerifyRazorpayPaymentDTO(
+                razorpay_payment_id: request()->post('razorpay_payment_id'),
+                razorpay_order_id: request()->post('razorpay_order_id'),
+                razorpay_signature: request()->post('razorpay_signature'),
+            );
+
             $order = $this->verifyRazorpayPaymentHandler->handle(
                 $orderShortId,
-                request()->all()
+                $verifyRazorpayPaymentDTO
             );
         } catch (PaymentVerificationFailedException $e) {
             return $this->errorResponse($e->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY);

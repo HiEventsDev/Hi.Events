@@ -2,6 +2,7 @@
 
 namespace HiEvents\Services\Application\Handlers\Order\Payment\Razorpay;
 
+use Backend\App\Services\Application\Handlers\Order\DTO\VerifyRazorpayPaymentDTO;
 use HiEvents\DomainObjects\Enums\PaymentProviders;
 use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
@@ -54,12 +55,12 @@ readonly class VerifyRazorpayPaymentHandler
      * @throws PaymentVerificationFailedException
      * @throws Throwable
      */
-    public function handle(string $orderShortId, array $paymentData): OrderDomainObject
+    public function handle(string $orderShortId, VerifyRazorpayPaymentDTO $paymentData): OrderDomainObject
     {
         // Check for duplicate processing
         if ($this->hasPaymentBeenHandled($paymentData)) {
             $this->logger->info('Razorpay payment already handled', [
-                'razorpay_payment_id' => $paymentData['razorpay_payment_id'],
+                'razorpay_payment_id' => $paymentData->razorpay_payment_id,
                 'order_short_id' => $orderShortId,
             ]);
             
@@ -93,14 +94,14 @@ readonly class VerifyRazorpayPaymentHandler
 
             // Update Razorpay order with payment details
             $this->razorpayOrdersRepository->updateByOrderId($order->getId(), [
-                'razorpay_payment_id' => $paymentData['razorpay_payment_id'],
-                'razorpay_signature' => $paymentData['razorpay_signature'],
+                'razorpay_payment_id' => $paymentData->razorpay_payment_id,
+                'razorpay_signature' => $paymentData->razorpay_signature,
                 'payment_status' => 'captured',
             ]);
 
             // Fetch complete payment details from Razorpay API
             $paymentDetails = $this->razorpayPaymentService->fetchPaymentDetails(
-                $paymentData['razorpay_payment_id']
+                $paymentData->razorpay_payment_id
             );
 
             // Update order status to completed - THIS RETURNS THE UPDATED ORDER WITH ITEMS LOADED
@@ -119,7 +120,7 @@ readonly class VerifyRazorpayPaymentHandler
             $this->storeApplicationFeePayment($updatedOrder, $paymentDetails);
             
             // Dispatch events
-            $this->dispatchEvents($updatedOrder, $paymentData);
+            $this->dispatchEvents($updatedOrder);
             
             // Mark payment as handled
             $this->markPaymentAsHandled($paymentData, $updatedOrder);
@@ -176,7 +177,7 @@ readonly class VerifyRazorpayPaymentHandler
         );
     }
 
-    private function dispatchEvents(OrderDomainObject $order, array $paymentData): void
+    private function dispatchEvents(OrderDomainObject $order): void
     {
         // Dispatch Laravel event
         OrderStatusChangedEvent::dispatch($order);
@@ -190,9 +191,9 @@ readonly class VerifyRazorpayPaymentHandler
         );
     }
 
-    private function hasPaymentBeenHandled(array $paymentData): bool
+    private function hasPaymentBeenHandled(VerifyRazorpayPaymentDTO $paymentData): bool
     {
-        $paymentId = $paymentData['razorpay_payment_id'] ?? null;
+        $paymentId = $paymentData->razorpay_payment_id ?? null;
         if (!$paymentId) {
             return false;
         }
@@ -200,17 +201,17 @@ readonly class VerifyRazorpayPaymentHandler
         return $this->cache->has('razorpay_payment_handled_' . $paymentId);
     }
 
-    private function markPaymentAsHandled(array $paymentData, OrderDomainObject $order): void
+    private function markPaymentAsHandled(VerifyRazorpayPaymentDTO $paymentData, OrderDomainObject $order): void
     {
         $this->logger->info('Razorpay payment verification handled', [
-            'razorpay_payment_id' => $paymentData['razorpay_payment_id'],
+            'razorpay_payment_id' => $paymentData->razorpay_payment_id,
             'order_id' => $order->getId(),
             'amount' => $order->getTotalGross(),
             'currency' => $order->getCurrency(),
         ]);
 
         $this->cache->put(
-            'razorpay_payment_handled_' . $paymentData['razorpay_payment_id'],
+            'razorpay_payment_handled_' . $paymentData->razorpay_payment_id,
             true,
             now()->addHours(24)
         );

@@ -2,6 +2,7 @@
 
 namespace HiEvents\Services\Domain\Payment\Razorpay;
 
+use Backend\App\Services\Application\Handlers\Order\DTO\VerifyRazorpayPaymentDTO;
 use HiEvents\Exceptions\Razorpay\InvalidSignatureException;
 use HiEvents\Services\Infrastructure\Razorpay\RazorpayClientFactory;
 use Illuminate\Config\Repository;
@@ -15,20 +16,20 @@ class RazorpayPaymentVerificationService
         private readonly RazorpayClientFactory $razorpayClientFactory,
     ) {}
 
-    public function verifyPaymentSignature(array $paymentData): bool
+    public function verifyPaymentSignature(VerifyRazorpayPaymentDTO $paymentData): bool
     {
         $expectedSignature = hash_hmac(
             'sha256',
-            $paymentData['razorpay_order_id'] . '|' . $paymentData['razorpay_payment_id'],
+            $paymentData->razorpay_order_id . '|' . $paymentData->razorpay_payment_id,
             $this->config->get('services.razorpay.key_secret')
         );
 
-        if ($expectedSignature !== $paymentData['razorpay_signature']) {
+        if ($expectedSignature !== $paymentData->razorpay_signature) {
             $this->logger->error('Razorpay signature verification failed', [
                 'expected' => $expectedSignature,
-                'received' => $paymentData['razorpay_signature'],
-                'order_id' => $paymentData['razorpay_order_id'],
-                'payment_id' => $paymentData['razorpay_payment_id'],
+                'received' => $paymentData->razorpay_signature,
+                'order_id' => $paymentData->razorpay_order_id,
+                'payment_id' => $paymentData->razorpay_payment_id,
             ]);
 
             throw new InvalidSignatureException();
