@@ -4,6 +4,7 @@ namespace HiEvents\Http\Actions\Orders\Payment\Razorpay;
 
 use HiEvents\Exceptions\Razorpay\PaymentVerificationFailedException;
 use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\Request\Order\VerifyRazorpayPaymentRequest;
 use HiEvents\Services\Application\Handlers\Order\DTO\VerifyRazorpayPaymentDTO;
 use HiEvents\Services\Application\Handlers\Order\Payment\Razorpay\VerifyRazorpayPaymentHandler;
 use Illuminate\Http\JsonResponse;
@@ -16,13 +17,14 @@ class VerifyRazorpayPaymentActionPublic extends BaseAction
     ) {
     }
 
-    public function __invoke(int $eventId, string $orderShortId): JsonResponse
+    public function __invoke(int $eventId, string $orderShortId, VerifyRazorpayPaymentRequest $request): JsonResponse
     {
         try {
+            $validated = $request->validated();
             $verifyRazorpayPaymentDTO = new VerifyRazorpayPaymentDTO(
-                razorpay_payment_id: request()->post('razorpay_payment_id'),
-                razorpay_order_id: request()->post('razorpay_order_id'),
-                razorpay_signature: request()->post('razorpay_signature'),
+                razorpay_payment_id: $validated['razorpay_payment_id'],
+                razorpay_order_id: $validated['razorpay_order_id'],
+                razorpay_signature: $validated['razorpay_signature'],
             );
 
             $order = $this->verifyRazorpayPaymentHandler->handle(
