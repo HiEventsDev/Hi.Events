@@ -56,7 +56,6 @@ AUTH_google_CLIENT_SECRET="secret"
 AUTH_google_ISSUER_URL="https://accounts.google.com"
 AUTH_google_IDENTIFIER_KEY="email"
 AUTH_google_SCOPE="openid email profile"
-# Google automatically returns 'email', so no IDENTIFIER_KEY is needed.
 # The UI will automatically detect "google" and use the official Google 'G' icon.
 ```
 
