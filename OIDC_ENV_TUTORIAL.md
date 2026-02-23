@@ -25,8 +25,8 @@ For every provider key you listed in `AUTH_PROVIDERS` (e.g., `google`), you must
 
 When you set up your client application in Google, Keycloak, Okta, etc., you must securely whitelist where the IdP is allowed to send the user after a successful login.
 The system dynamically generates this absolute URL under the hood. You must register the following exact callback URI in your Identity Provider:
-**`https://<YOUR-APP-DOMAIN>/auth/<provider>/callback`**
-*(Example: `https://events.mycompany.com/auth/google/callback`)*
+**`https://<YOUR-APP-DOMAIN>/api/auth/<provider>/callback`**
+*(Example: `https://events.mycompany.com/api/auth/google/callback`)*
 
 | Variable | Required | Description |
 | :--- | :--- | :--- |
@@ -60,9 +60,9 @@ AUTH_google_SCOPE="openid email profile"
 # The UI will automatically detect "google" and use the official Google 'G' icon.
 ```
 
-### Example 2: Generic Enterprise Keycloak (Custom Logo)
+### Example 2: Generic
 
-If your company uses Keycloak for SSO and you want to completely lock out standard username/password logins:
+If your company uses Zitadel for SSO or another IdP and you want to completely lock out standard username/password logins:
 
 ```env
 AUTH_PROVIDERS=zitadel
