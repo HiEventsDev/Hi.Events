@@ -137,6 +137,12 @@ const EventHomepage = ({ ...loaderData }: EventHomepageProps) => {
     const textSecondary = cardTextSecondary;
     const proseClasses = cardProseClasses;
 
+    // Link specific text overrides to beat Mantine's global anchor styles
+    const linkTextPrimary = textPrimary.replace('text-', '!text-');
+    const linkTextSecondary = textSecondary.replace('text-', '!text-');
+    const bgLinkTextPrimary = bgTextPrimary.replace('text-', '!text-');
+    const bgLinkTextSecondary = bgTextSecondary.replace('text-', '!text-');
+
     const borderStyle = isCardDark ? 'border-white/10' : 'border-gray-200/80';
     const cardHover = isCardDark ? 'hover:bg-white/10' : 'hover:bg-gray-50';
     const iconWrapperBg = isCardDark ? 'bg-white/10 text-white' : 'bg-gray-100 text-gray-700';
@@ -271,13 +277,13 @@ const EventHomepage = ({ ...loaderData }: EventHomepageProps) => {
                                         </div>
                                     )}
                                     <div>
-                                        <Anchor href={organizerHomepageUrl(organizer)} className={`${textPrimary} font-semibold text-lg hover:underline decoration-2 underline-offset-4 decoration-current/30`}>
+                                        <Anchor href={organizerHomepageUrl(organizer)} className={`${linkTextPrimary} font-semibold text-lg hover:underline decoration-2 underline-offset-4 decoration-current/30`}>
                                             {organizer.name}
                                         </Anchor>
                                         {getShortLocationDisplay(organizerLocation) && (
                                             <div className={`${textSecondary} text-sm flex items-center gap-1 mt-0.5`}>
-                                                <IconMapPin size={14} />
-                                                <a href={getGoogleMapsUrl(organizerLocation!)} target="_blank" rel="noopener noreferrer" className={`hover:${textPrimary}`}>
+                                                <IconMapPin size={14} className={textSecondary} />
+                                                <a href={getGoogleMapsUrl(organizerLocation!)} target="_blank" rel="noopener noreferrer" className={`hover:${linkTextPrimary} ${linkTextSecondary}`}>
                                                     {getShortLocationDisplay(organizerLocation)}
                                                 </a>
                                             </div>
@@ -287,18 +293,18 @@ const EventHomepage = ({ ...loaderData }: EventHomepageProps) => {
 
                                 {/* Organizer Actions */}
                                 <div className="flex flex-wrap gap-2 mt-2">
-                                    <button onClick={() => setContactModalOpen(true)} className={`flex-1 py-2 px-4 rounded-xl text-sm font-medium transition flex justify-center items-center gap-2 border shadow-sm ${subtleBtnBg} ${subtleBtnBorder} ${textPrimary}`}>
+                                    <button onClick={() => setContactModalOpen(true)} className={`flex-1 py-2 px-4 rounded-xl text-sm font-medium transition flex justify-center items-center gap-2 border shadow-sm ${subtleBtnBg} ${subtleBtnBorder} ${linkTextPrimary}`}>
                                         <IconMail size={16} /> {t`Contact`}
                                     </button>
                                     {websiteUrl && (
-                                        <a href={websiteUrl} target="_blank" rel="noopener noreferrer" className={`h-[38px] w-[38px] flex items-center justify-center rounded-xl transition border shadow-sm ${subtleBtnBg} ${subtleBtnBorder} ${textPrimary}`}>
+                                        <a href={websiteUrl} target="_blank" rel="noopener noreferrer" className={`h-[38px] w-[38px] flex items-center justify-center rounded-xl transition border shadow-sm ${subtleBtnBg} ${subtleBtnBorder} ${linkTextPrimary}`}>
                                             <IconWorld size={18} />
                                         </a>
                                     )}
                                     {socialLinks.map(({ platform, handle, config }) => {
                                         const IconComponent = config.icon;
                                         return (
-                                            <a key={platform} href={config.baseUrl + handle} target="_blank" rel="noopener noreferrer" className={`h-[38px] w-[38px] flex items-center justify-center rounded-xl transition border shadow-sm ${subtleBtnBg} ${subtleBtnBorder} ${textPrimary}`} title={platform}>
+                                            <a key={platform} href={config.baseUrl + handle} target="_blank" rel="noopener noreferrer" className={`h-[38px] w-[38px] flex items-center justify-center rounded-xl transition border shadow-sm ${subtleBtnBg} ${subtleBtnBorder} ${linkTextPrimary}`} title={platform}>
                                                 <IconComponent size={18} />
                                             </a>
                                         );
@@ -328,7 +334,7 @@ const EventHomepage = ({ ...loaderData }: EventHomepageProps) => {
                                         {event.end_date && isDateInPast(event.end_date) ? t`This event has ended` : <EventDateRange event={event} />}
                                     </div>
                                     <CalendarOptionsPopover event={event}>
-                                        <button className={`text-sm font-medium ${cardTextSecondary} hover:${cardTextPrimary} flex items-center gap-1.5 transition`}>
+                                        <button className={`text-sm font-medium ${linkTextSecondary} hover:${linkTextPrimary} flex items-center gap-1.5 transition`}>
                                             <IconCalendarPlus size={16} /> {t`Add to Calendar`}
                                         </button>
                                     </CalendarOptionsPopover>
@@ -345,7 +351,7 @@ const EventHomepage = ({ ...loaderData }: EventHomepageProps) => {
                                         <div className={`font-medium text-base ${cardTextPrimary}`}>{locationDetails.venue_name}</div>
                                         <div className={`${cardTextSecondary} text-sm mt-0.5 line-clamp-2`}>{formatAddress(locationDetails)}</div>
                                         {mapUrl && (
-                                            <a href={mapUrl} target="_blank" rel="noopener noreferrer" className={`text-sm font-medium mt-1 inline-flex items-center gap-1 ${cardTextSecondary} hover:${cardTextPrimary} transition`}>
+                                            <a href={mapUrl} target="_blank" rel="noopener noreferrer" className={`text-sm font-medium mt-1 inline-flex items-center gap-1 ${linkTextSecondary} hover:${linkTextPrimary} transition`}>
                                                 {t`View Map`} <IconExternalLink size={14} />
                                             </a>
                                         )}
@@ -381,7 +387,7 @@ const EventHomepage = ({ ...loaderData }: EventHomepageProps) => {
                                     colors={{
                                         background: "transparent",
                                         primary: accentColor,
-                                        primaryText: cardTextPrimary.replace('text-', ''),
+                                        primaryText: isCardDark ? "#ffffff" : "#111827",
                                         secondary: accentColor,
                                         secondaryText: isAccentDark ? "#ffffff" : "#111827",
                                         bodyBackground: "transparent",
@@ -414,11 +420,11 @@ const EventHomepage = ({ ...loaderData }: EventHomepageProps) => {
                             <h2 className={`text-2xl font-bold mb-6 tracking-tight ${textPrimary}`}>{t`Location`}</h2>
                             <div className="flex flex-col sm:flex-row gap-6">
                                 <div className="flex-1 shrink-0">
-                                    <h3 className={`text-lg font-semibold mb-1 ${textPrimary}`}>{locationDetails.venue_name}</h3>
-                                    <p className={`whitespace-pre-line leading-relaxed mb-4 ${textSecondary}`}>{formatAddress(locationDetails)}</p>
+                                    <h3 className={`text-lg font-semibold mb-1 ${bgTextPrimary}`}>{locationDetails.venue_name}</h3>
+                                    <p className={`whitespace-pre-line leading-relaxed mb-4 ${bgTextSecondary}`}>{formatAddress(locationDetails)}</p>
                                     {mapUrl && (
-                                        <a href={mapUrl} target="_blank" rel="noopener noreferrer" className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium transition-colors border shadow-sm ${subtleBtnBg} ${subtleBtnBorder} ${textPrimary}`}>
-                                            <IconArrowUpRight size={18} /> {t`Get Directions`}
+                                        <a href={mapUrl} target="_blank" rel="noopener noreferrer" className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium transition-colors border shadow-sm ${subtleBtnBg} ${subtleBtnBorder} ${linkTextPrimary}`}>
+                                            {t`View on Google Maps`} <IconExternalLink size={16} />
                                         </a>
                                     )}
                                 </div>
@@ -451,13 +457,13 @@ const EventHomepage = ({ ...loaderData }: EventHomepageProps) => {
                                         </div>
                                     )}
                                     <div>
-                                        <Anchor href={organizerHomepageUrl(organizer)} className={`font-bold text-xl hover:underline decoration-2 underline-offset-4 decoration-current/30 ${textPrimary}`}>
+                                        <Anchor href={organizerHomepageUrl(organizer)} className={`font-bold text-xl hover:underline decoration-2 underline-offset-4 decoration-current/30 ${linkTextPrimary}`}>
                                             {organizer.name}
                                         </Anchor>
                                         {getShortLocationDisplay(organizerLocation) && (
                                             <div className={`${textSecondary} text-sm flex items-center gap-1 mt-1`}>
-                                                <IconMapPin size={16} />
-                                                <a href={getGoogleMapsUrl(organizerLocation!)} target="_blank" rel="noopener noreferrer" className={`hover:${textPrimary}`}>
+                                                <IconMapPin size={16} className={textSecondary} />
+                                                <a href={getGoogleMapsUrl(organizerLocation!)} target="_blank" rel="noopener noreferrer" className={`hover:${linkTextPrimary} ${linkTextSecondary}`}>
                                                     {getShortLocationDisplay(organizerLocation)}
                                                 </a>
                                             </div>
@@ -470,13 +476,13 @@ const EventHomepage = ({ ...loaderData }: EventHomepageProps) => {
                                 )}
 
                                 <div className={`flex flex-wrap gap-2 mt-2 pt-4 border-t ${borderStyle}`}>
-                                    <button onClick={() => setContactModalOpen(true)} className={`flex-1 py-2 px-4 rounded-xl text-sm font-medium transition flex items-center justify-center gap-2 border shadow-sm ${subtleBtnBg} ${subtleBtnBorder} ${textPrimary}`}>
+                                    <button onClick={() => setContactModalOpen(true)} className={`flex-1 py-2 px-4 rounded-xl text-sm font-medium transition flex items-center justify-center gap-2 border shadow-sm ${subtleBtnBg} ${subtleBtnBorder} ${linkTextPrimary}`}>
                                         <IconMail size={16} /> {t`Contact`}
                                     </button>
                                     {socialLinks.map(({ platform, handle, config }) => {
                                         const IconComponent = config.icon;
                                         return (
-                                            <a key={platform} href={config.baseUrl + handle} target="_blank" rel="noopener noreferrer" className={`h-[42px] w-[42px] flex items-center justify-center rounded-xl transition border shadow-sm ${subtleBtnBg} ${subtleBtnBorder} ${textPrimary}`} title={platform}>
+                                            <a key={platform} href={config.baseUrl + handle} target="_blank" rel="noopener noreferrer" className={`h-[42px] w-[42px] flex items-center justify-center rounded-xl transition border shadow-sm ${subtleBtnBg} ${subtleBtnBorder} ${linkTextPrimary}`} title={platform}>
                                                 <IconComponent size={20} />
                                             </a>
                                         );
@@ -491,14 +497,14 @@ const EventHomepage = ({ ...loaderData }: EventHomepageProps) => {
             {/* Footer */}
             <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 border-t flex flex-col sm:flex-row items-center justify-between gap-6 relative z-10 opacity-70 hover:opacity-100 transition-opacity ${borderStyle}`}>
                 <div className={`flex items-center gap-6 text-sm ${bgTextSecondary}`}>
-                    <Anchor href={getConfig('VITE_PRIVACY_URL', 'https://hi.events/privacy-policy')} className={`hover:${bgTextPrimary} transition text-inherit`}>
+                    <a href={getConfig('VITE_PRIVACY_URL', 'https://hi.events/privacy-policy')} className={`hover:${bgLinkTextPrimary} transition text-inherit !text-current`}>
                         {t`Privacy Policy`}
-                    </Anchor>
-                    <Anchor href={getConfig('VITE_TOS_URL', 'https://hi.events/terms-of-service')} className={`hover:${bgTextPrimary} transition text-inherit`}>
+                    </a>
+                    <a href={getConfig('VITE_TOS_URL', 'https://hi.events/terms-of-service')} className={`hover:${bgLinkTextPrimary} transition text-inherit !text-current`}>
                         {t`Terms of Service`}
-                    </Anchor>
+                    </a>
                 </div>
-                <PoweredByFooter className={`${bgTextSecondary} hover:${bgTextPrimary} transition`} />
+                <PoweredByFooter className={`${bgTextSecondary} hover:${bgLinkTextPrimary} transition`} />
             </div>
 
             {/* Floating Registration Button (Mobile) */}
