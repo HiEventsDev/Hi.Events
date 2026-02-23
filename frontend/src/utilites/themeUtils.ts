@@ -1,4 +1,4 @@
-import {HomepageThemeSettings} from "../types.ts";
+import { HomepageThemeSettings } from "../types.ts";
 
 export interface DerivedThemeColors {
     surface: string;
@@ -71,6 +71,46 @@ export function hexToRgb(hex: string): { r: number; g: number; b: number } | nul
     }
 
     return { r, g, b };
+}
+
+export function hexToHsl(hex: string): { h: number; s: number; l: number } | null {
+    const rgb = hexToRgb(hex);
+    if (!rgb) return null;
+    let { r, g, b } = rgb;
+    r /= 255;
+    g /= 255;
+    b /= 255;
+    const max = Math.max(r, g, b), min = Math.min(r, g, b);
+    let h = 0, s = 0, l = (max + min) / 2;
+
+    if (max !== min) {
+        const d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        switch (max) {
+            case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+            case g: h = (b - r) / d + 2; break;
+            case b: h = (r - g) / d + 4; break;
+        }
+        h /= 6;
+    }
+    return { h: h * 360, s: s * 100, l: l * 100 };
+}
+
+export function generateMeshColors(baseHex: string): string[] {
+    const hsl = hexToHsl(baseHex);
+    if (!hsl) return [baseHex, baseHex, baseHex];
+
+    // Shift hue by +40 and +80 degrees, slightly adjust saturation/lightness for depth.
+    // Color 1: Base Color (slightly more saturated)
+    const color1 = `hsl(${Math.round(hsl.h)}, ${Math.min(100, hsl.s + 10)}%, ${hsl.l}%)`;
+
+    // Color 2: Shift Hue + 40 (Analogous)
+    const color2 = `hsl(${Math.round((hsl.h + 40) % 360)}, ${Math.min(100, hsl.s + 20)}%, ${Math.max(0, hsl.l - 10)}%)`;
+
+    // Color 3: Shift Hue + 80
+    const color3 = `hsl(${Math.round((hsl.h + 80) % 360)}, ${Math.min(100, hsl.s + 15)}%, ${Math.min(100, hsl.l + 10)}%)`;
+
+    return [color1, color2, color3];
 }
 
 export function calculateLuminance(hex: string): number {

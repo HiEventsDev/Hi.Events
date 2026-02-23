@@ -1,5 +1,5 @@
-import {ReactNode, useState} from 'react';
-import {ActionIcon, Button, CopyButton, Group, Input, Popover} from '@mantine/core';
+import { ReactNode, useState } from 'react';
+import { ActionIcon, Button, CopyButton, Group, Input, Popover } from '@mantine/core';
 import {
     IconBrandFacebook,
     IconBrandLinkedin,
@@ -10,7 +10,7 @@ import {
     IconMail,
     IconShare
 } from "@tabler/icons-react";
-import {t} from "@lingui/macro";
+import { t } from "@lingui/macro";
 
 interface ShareComponentProps {
     title: string;
@@ -24,17 +24,17 @@ interface ShareComponentProps {
 }
 
 export const ShareComponent = ({
-                                   title,
-                                   text,
-                                   url,
-                                   shareButtonText = t`Share`,
-                                   hideShareButtonText = false,
-                                   className,
-                                   children,
-                               }: ShareComponentProps) => {
+    title,
+    text,
+    url,
+    shareButtonText = t`Share`,
+    hideShareButtonText = false,
+    className,
+    children,
+}: ShareComponentProps) => {
     const [opened, setOpened] = useState(false);
 
-    let shareText = text;
+    const shareText = text;
 
     const shareData = {
         title,
@@ -47,7 +47,11 @@ export const ShareComponent = ({
             try {
                 await navigator.share(shareData);
             } catch (error) {
+                // eslint-disable-next-line lingui/no-unlocalized-strings
                 console.error('Error sharing:', error);
+                if (error instanceof Error && error.name !== 'AbortError') {
+                    setOpened(!opened);
+                }
             }
         } else {
             setOpened(!opened);
@@ -62,58 +66,59 @@ export const ShareComponent = ({
             withArrow
         >
             <Popover.Target>
-                <div style={{display: 'flex'}} onClick={handleShareClick}>
+                <div style={{ display: 'flex' }} onClick={handleShareClick}>
                     {children ? (
                         children
                     ) : hideShareButtonText ? (
                         <ActionIcon variant={'transparent'} className={className}>
-                            <IconShare size={20}/>
+                            <IconShare size={20} />
                         </ActionIcon>
                     ) : (
-                        <Button variant={'transparent'} leftSection={<IconShare size={20}/>} className={className}>
+                        <Button variant={'transparent'} leftSection={<IconShare size={20} />} className={className}>
                             {shareButtonText}
                         </Button>
                     )}
                 </div>
             </Popover.Target>
 
-            <Popover.Dropdown style={{display: 'flex'}}>
+            {/* eslint-disable lingui/no-unlocalized-strings */}
+            <Popover.Dropdown style={{ display: 'flex' }}>
                 <Group>
                     <ActionIcon variant={'transparent'} component="a"
-                                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(url)}`}
-                                target="_blank" rel="noopener noreferrer">
-                        <IconBrandTwitter size={24}/>
+                        href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(url)}`}
+                        target="_blank" rel="noopener noreferrer">
+                        <IconBrandTwitter size={24} />
                     </ActionIcon>
                     <ActionIcon variant={'transparent'} component="a"
-                                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`}
-                                target="_blank" rel="noopener noreferrer">
-                        <IconBrandFacebook size={24}/>
+                        href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`}
+                        target="_blank" rel="noopener noreferrer">
+                        <IconBrandFacebook size={24} />
                     </ActionIcon>
                     <ActionIcon variant={'transparent'} component="a"
-                                href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}&summary=${encodeURIComponent(shareText)}&source=${encodeURIComponent(typeof window !== "undefined" ? window?.location?.hostname : "")}`}
-                                target="_blank" rel="noopener noreferrer">
-                        <IconBrandLinkedin size={24}/>
+                        href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}&summary=${encodeURIComponent(shareText)}`}
+                        target="_blank" rel="noopener noreferrer">
+                        <IconBrandLinkedin size={24} />
                     </ActionIcon>
                     <ActionIcon variant={'transparent'} component="a"
-                                href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`${shareText} ${url}`)}`}
-                                target="_blank" rel="noopener noreferrer">
-                        <IconBrandWhatsapp size={24}/>
+                        href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`${shareText} ${url}`)}`}
+                        target="_blank" rel="noopener noreferrer">
+                        <IconBrandWhatsapp size={24} />
                     </ActionIcon>
                     <ActionIcon variant={'transparent'} component="a"
-                                href={`mailto:?subject=${encodeURIComponent(title)}&body=${url}`}
-                                target="_blank" rel="noopener noreferrer">
-                        <IconMail size={24}/>
+                        href={`mailto:?subject=${encodeURIComponent(title)}&body=${url}`}
+                        target="_blank" rel="noopener noreferrer">
+                        <IconMail size={24} />
                     </ActionIcon>
                 </Group>
                 <Input rightSectionPointerEvents={'all'} mt={10} value={url} rightSection={(
                     <CopyButton value={url}>
-                        {({copied, copy}) => (
+                        {({ copied, copy }) => (
                             <ActionIcon variant={'transparent'} onClick={copy}>
-                                {copied ? <IconCheck/> : <IconCopy/>}
+                                {copied ? <IconCheck /> : <IconCopy />}
                             </ActionIcon>
                         )}
                     </CopyButton>
-                )}/>
+                )} />
             </Popover.Dropdown>
         </Popover>
     );

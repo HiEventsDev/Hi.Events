@@ -7,12 +7,23 @@
 
 
 .control {
-  background-color:#6319ff;
-  color: #fff;
+  background-color: transparent;
+  /* inherited */
+  color: inherit;
+  /* inherited */
+  border-radius: 9999px;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+
+  &:hover {
+    opacity: 0.8;
+  }
 
   &:disabled {
-    border-color: #ddd;
-    background-color: transparent;
+    border-color: rgba(255, 255, 255, 0.05);
+    /* very light hint */
+    background-color: transparent !important;
+    opacity: 0.4;
   }
 }
 
@@ -22,4 +33,9 @@
   height: 20px !important;
   flex: 1 !important;
   text-align: center !important;
+  font-weight: 500;
+  background-color: transparent !important;
+  color: inherit !important;
+  border: none !important;
+  outline: none !important;
 }

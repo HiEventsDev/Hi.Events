@@ -1,14 +1,14 @@
-import React, {useCallback} from 'react';
-import {Button} from '@mantine/core';
-import {IconEye} from '@tabler/icons-react';
-import {t} from '@lingui/macro';
-import {showError, showSuccess} from '../../../utilites/notifications';
-import {confirmationDialog} from '../../../utilites/confirmationDialog';
-import {useUpdateEventStatus} from '../../../mutations/useUpdateEventStatus';
-import {useUpdateOrganizerStatus} from '../../../mutations/useUpdateOrganizerStatus';
-import {IdParam} from '../../../types';
+import React, { useCallback } from 'react';
+import { Button } from '@mantine/core';
+import { IconEye } from '@tabler/icons-react';
+import { t } from '@lingui/macro';
+import { showError, showSuccess } from '../../../utilites/notifications';
+import { confirmationDialog } from '../../../utilites/confirmationDialog';
+import { useUpdateEventStatus } from '../../../mutations/useUpdateEventStatus';
+import { useUpdateOrganizerStatus } from '../../../mutations/useUpdateOrganizerStatus';
+import { IdParam } from '../../../types';
 import classes from './StatusToggle.module.scss';
-import {trackEvent, AnalyticsEvents} from '../../../utilites/analytics';
+import { trackEvent, AnalyticsEvents } from '../../../utilites/analytics';
 
 interface StatusToggleProps {
     entityType: 'event' | 'organizer';
@@ -16,14 +16,26 @@ interface StatusToggleProps {
     currentStatus: 'DRAFT' | 'LIVE';
     entityName?: string;
     onSuccess?: () => void;
+    className?: string;
+    contentClassName?: string;
+    textClassName?: string;
+    buttonClassName?: string;
+    buttonStyle?: React.CSSProperties;
+    hideIcon?: boolean;
 }
 
 export const StatusToggle: React.FC<StatusToggleProps> = ({
-                                                              entityType,
-                                                              entityId,
-                                                              currentStatus,
+    entityType,
+    entityId,
+    currentStatus,
     onSuccess,
-                                                          }) => {
+    className,
+    contentClassName,
+    textClassName,
+    buttonClassName,
+    buttonStyle,
+    hideIcon,
+}) => {
     const eventStatusMutation = useUpdateEventStatus();
     const organizerStatusMutation = useUpdateOrganizerStatus();
     const mutation = entityType === 'event' ? eventStatusMutation : organizerStatusMutation;
@@ -43,8 +55,8 @@ export const StatusToggle: React.FC<StatusToggleProps> = ({
 
         confirmationDialog(confirmMessage, () => {
             const mutationParams = entityType === 'event'
-                ? {eventId: entityId, status: newStatus}
-                : {organizerId: entityId, status: newStatus};
+                ? { eventId: entityId, status: newStatus }
+                : { organizerId: entityId, status: newStatus };
 
             mutation.mutate(mutationParams as any, {
                 onSuccess: () => {
@@ -83,16 +95,17 @@ export const StatusToggle: React.FC<StatusToggleProps> = ({
         : t`This organizer profile is not published yet`;
 
     return (
-        <div className={classes.banner}>
-            <div className={classes.content}>
-                <span className={classes.message}>{message}</span>
+        <div className={className || classes.banner}>
+            <div className={contentClassName || classes.content}>
+                <span className={textClassName || classes.message}>{message}</span>
                 <Button
                     onClick={handleToggle}
                     loading={mutation.isPending}
-                    size="xs"
-                    variant="white"
-                    leftSection={<IconEye size={14}/>}
-                    className={classes.publishButton}
+                    size={buttonClassName ? undefined : "xs"}
+                    variant={buttonClassName ? "unstyled" : "white"}
+                    leftSection={hideIcon ? undefined : <IconEye size={14} />}
+                    className={buttonClassName || classes.publishButton}
+                    style={buttonStyle}
                 >
                     {t`Publish`}
                 </Button>

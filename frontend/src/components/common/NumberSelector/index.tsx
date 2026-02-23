@@ -1,7 +1,7 @@
-import {ActionIcon, NumberInput, NumberInputHandlers, Select, TextInputProps} from "@mantine/core";
-import {useEffect, useRef, useState} from "react";
-import {UseFormReturnType} from "@mantine/form";
-import {IconMinus, IconPlus} from "@tabler/icons-react";
+import { ActionIcon, NumberInput, NumberInputHandlers, Select, TextInputProps } from "@mantine/core";
+import { useEffect, useRef, useState } from "react";
+import { UseFormReturnType } from "@mantine/form";
+import { IconMinus, IconPlus } from "@tabler/icons-react";
 import classes from './NumberSelector.module.scss';
 import classNames from "classnames";
 import _ from "lodash";
@@ -12,9 +12,11 @@ interface NumberSelectorProps extends TextInputProps {
     min?: number;
     max?: number;
     sharedValues?: SharedValues;
+    color?: string;
+    textColor?: string;
 }
 
-export const NumberSelector = ({formInstance, fieldName, min, max, sharedValues}: NumberSelectorProps) => {
+export const NumberSelector = ({ formInstance, fieldName, min, max, sharedValues, color, textColor, className, style }: NumberSelectorProps) => {
     const handlers = useRef<NumberInputHandlers>(null);
     // Start with 0, ensuring it's treated as number for consistency
     const [value, setValue] = useState<number>(0);
@@ -45,7 +47,7 @@ export const NumberSelector = ({formInstance, fieldName, min, max, sharedValues}
             // 3. If another NumberSelector is sharing this NumberSelector's SharedValues, and the amount
             //    selected on that NumberSelector is less than minValue, increment to an amount where the
             //    combined count across the NumberSelectors is minValue (or at least 1)
-            let adjustedMinimum = Math.max(1, minValue - sharedVals.currentValue)
+            const adjustedMinimum = Math.max(1, minValue - sharedVals.currentValue)
             setValue(sharedVals.changeValue(Math.min(adjustedMinimum, maxValue, sharedVals.quantityRemaining)))
         } else if (sharedVals.currentValue < minValue) {
             setValue(prevValue => prevValue + (sharedVals.changeValue(minValue - sharedVals.currentValue)))
@@ -65,20 +67,24 @@ export const NumberSelector = ({formInstance, fieldName, min, max, sharedValues}
     };
 
     const changeValue = (newValue: number) => {
-        let adjustedDifference = sharedVals.changeValue(newValue - value);
+        const adjustedDifference = sharedVals.changeValue(newValue - value);
         setValue(value + adjustedDifference);
     };
 
     return (
-        <div className={classNames(classes.wrapper, 'button-input')}>
+        <div className={classNames(classes.wrapper, 'button-input', className)} style={style}>
             <ActionIcon
                 size={28}
                 onClick={decrement}
                 disabled={value === 0}
                 onMouseDown={(event) => event.preventDefault()}
                 className={classes.control}
+                style={value > 0 ? {
+                    backgroundColor: color ? `${color}1A` : undefined, // 10% opacity
+                    color: color || undefined,
+                } : undefined}
             >
-                <IconMinus size="1rem" stroke={1.5}/>
+                <IconMinus size="1rem" stroke={1.5} />
             </ActionIcon>
 
             <NumberInput
@@ -90,7 +96,7 @@ export const NumberSelector = ({formInstance, fieldName, min, max, sharedValues}
                 value={value}
                 hideControls
                 onChange={changeValue}
-                classNames={{input: classes.input}}
+                classNames={{ input: classes.input }}
             />
 
             <ActionIcon
@@ -99,15 +105,19 @@ export const NumberSelector = ({formInstance, fieldName, min, max, sharedValues}
                 disabled={value >= maxValue || sharedVals.quantityRemaining == 0}
                 onMouseDown={(event) => event.preventDefault()}
                 className={classes.control}
+                style={value < maxValue && sharedVals.quantityRemaining > 0 ? {
+                    backgroundColor: color || undefined,
+                    color: textColor || undefined,
+                } : undefined}
             >
-                <IconPlus size="1rem" stroke={1.5}/>
+                <IconPlus size="1rem" stroke={1.5} />
             </ActionIcon>
         </div>
     );
 }
 
 /* todo: create an event setting to choose select over button */
-export const NumberSelectorSelect = ({formInstance, fieldName, min, max, className}: NumberSelectorProps) => {
+export const NumberSelectorSelect = ({ formInstance, fieldName, min, max, className }: NumberSelectorProps) => {
     const [value, setValue] = useState<string>('0');
 
     const minValue = min || 0;
@@ -120,13 +130,13 @@ export const NumberSelectorSelect = ({formInstance, fieldName, min, max, classNa
         }
     }, [value, formInstance, fieldName]);
 
-    let data = Array.from({length: maxValue - minValue + 1}, (_, i) => ({
+    let data = Array.from({ length: maxValue - minValue + 1 }, (_, i) => ({
         label: String(minValue + i),
         value: String(minValue + i),
     }));
 
     if (minValue > 0) {
-        data = [{label: '0', value: '0'}, ...data];
+        data = [{ label: '0', value: '0' }, ...data];
     }
 
     return (
@@ -161,7 +171,7 @@ export class SharedValues {
     }
 
     changeValue(difference: number) {
-        let adjustedDifference = Math.min(difference, this.sharedMax - this.currentValue);
+        const adjustedDifference = Math.min(difference, this.sharedMax - this.currentValue);
         this.currentValue += adjustedDifference;
 
         return adjustedDifference;
