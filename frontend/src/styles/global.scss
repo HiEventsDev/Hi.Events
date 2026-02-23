@@ -1,9 +1,13 @@
 @use "mixins";
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   --hi-text: var(--mantine-color-primary-9);
   --hi-primary: var(--mantine-color-primary-9);
-  --hi-secondary:  var(--mantine-color-secondary-1);
+  --hi-secondary: var(--mantine-color-secondary-1);
   --hi-secondary-text: var(--mantine-color-primary-8);
   --hi-color-gray: #f7f6f8;
   --hi-color-gray-2: #e2e2e2;
@@ -48,7 +52,9 @@ body {
   letter-spacing: 0.2px;
 }
 
-h1, h2, h3 {
+h1,
+h2,
+h3 {
   letter-spacing: 0.3px;
 }
 
@@ -63,7 +69,8 @@ a {
 }
 
 // Mantine overrides
-.mantine-InputWrapper-root, .mantine-Switch-root {
+.mantine-InputWrapper-root,
+.mantine-Switch-root {
   margin-bottom: var(--hi-spacing-lg);
 }
 
@@ -76,7 +83,9 @@ a {
 }
 
 .mantine-SimpleGrid-root {
-  .mantine-InputWrapper-root, .mantine-Switch-root {
+
+  .mantine-InputWrapper-root,
+  .mantine-Switch-root {
     //margin-bottom: 0;
   }
 }
