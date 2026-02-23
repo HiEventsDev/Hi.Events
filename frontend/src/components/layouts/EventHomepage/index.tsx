@@ -78,12 +78,44 @@ const EventHomepage = ({ ...loaderData }: EventHomepageProps) => {
 
     if (!event) { return <EventNotAvailable />; }
 
-    const rawThemeSettings = event?.settings?.homepage_theme_settings;
+    // --- Dynamic Theming Logic ---
+    const rawThemeSettings = event?.settings?.homepage_theme_settings || event?.organizer?.settings?.homepage_theme_settings;
     const themeSettings = validateThemeSettings(rawThemeSettings);
-    const cssVars = computeThemeVariables(themeSettings);
-    // Actually, Luma aesthetic demands dark theme predominantly. We will enforce Tailwind classes for mostly dark/glass styling, 
-    // but we can map some of these variables for colors if needed.
-    const customAccentColor = themeSettings.accent || '#ffffff';
+
+    const mode = themeSettings.mode || 'light';
+    const isDark = mode === 'dark';
+    const isMirror = themeSettings.background_type === 'MIRROR_COVER_IMAGE';
+
+    // Fallback to light theme defaults
+    const fallbackBg = isDark ? '#0a0a0a' : '#f4f5f6';
+    const backgroundColor = themeSettings.background || fallbackBg;
+    const accentColor = themeSettings.accent || '#40296C';
+
+    // Tailwind Class Variables mapping to theme
+    const textPrimary = isDark ? 'text-white' : 'text-gray-900';
+    const textSecondary = isDark ? 'text-gray-400' : 'text-gray-500';
+
+    // Card styles
+    const cardBg = isMirror
+        ? (isDark ? 'bg-black/60 backdrop-blur-2xl' : 'bg-white/80 backdrop-blur-2xl')
+        : (isDark ? 'bg-white/5 backdrop-blur-xl' : 'bg-white');
+
+    const ticketCardBg = isMirror
+        ? (isDark ? 'bg-black/70 backdrop-blur-3xl' : 'bg-white/95 backdrop-blur-3xl')
+        : (isDark ? 'bg-white/10 backdrop-blur-2xl' : 'bg-white');
+
+    const borderStyle = isDark ? 'border-white/10' : 'border-gray-200/80';
+    const cardHover = isDark ? 'hover:bg-white/10' : 'hover:bg-gray-50';
+
+    const iconWrapperBg = isDark ? 'bg-white/10 text-white' : 'bg-gray-100 text-gray-700';
+
+    const proseClasses = isDark
+        ? 'prose-invert text-gray-300 prose-headings:text-white prose-a:text-white hover:prose-a:text-gray-200'
+        : 'text-gray-600 prose-headings:text-gray-900 prose-a:text-gray-900 hover:prose-a:text-gray-700';
+
+    const subtleBtnBorder = isDark ? 'border-white/10' : 'border-gray-200';
+    const subtleBtnBg = isDark ? 'bg-white/10 hover:bg-white/20' : 'bg-white hover:bg-gray-50';
+    // -----------------------------
 
     const coverImageData = eventCoverImage(event);
     const coverImage = coverImageData?.url;
@@ -117,7 +149,10 @@ const EventHomepage = ({ ...loaderData }: EventHomepageProps) => {
     const mapUrl = event.settings?.maps_url || (locationDetails ? getGoogleMapsUrl(locationDetails) : null);
 
     return (
-        <div className="bg-[#0a0a0a] min-h-screen text-gray-200 font-sans selection:bg-white/20 relative overflow-x-hidden">
+        <div
+            className={`min-h-screen font-sans relative overflow-x-hidden ${isDark ? 'selection:bg-white/20' : 'selection:bg-black/10'}`}
+            style={{ backgroundColor }}
+        >
             {event?.status && event?.id && (
                 <StatusToggle
                     entityType="event"
@@ -130,80 +165,92 @@ const EventHomepage = ({ ...loaderData }: EventHomepageProps) => {
 
             <style>
                 {`
-                    body, .ssr-loader { background-color: #0a0a0a !important; }
-                    /* Make SelectProducts blend in natively */
-                    .hi-widget-container { background: transparent !important; color: white !important; }
-                    .hi-widget-product { background: rgba(255,255,255,0.05) !important; border: 1px solid rgba(255,255,255,0.1) !important; border-radius: 0.75rem !important; }
-                    .hi-widget-product:hover { background: rgba(255,255,255,0.08) !important; border-color: rgba(255,255,255,0.2) !important; }
+                    body, .ssr-loader { background-color: ${backgroundColor} !important; }
+                    /* Form elements in dark/light mode */
+                    .hi-widget-container { background: transparent !important; color: ${isDark ? 'white' : '#111827'} !important; }
+                    .hi-widget-product { 
+                        background: ${isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)'} !important; 
+                        border: 1px solid ${isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)'} !important; 
+                        border-radius: 0.75rem !important; 
+                    }
+                    .hi-widget-product:hover { 
+                        background: ${isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.04)'} !important; 
+                        border-color: ${isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.1)'} !important; 
+                    }
                 `}
             </style>
 
             {event && <EventDocumentHead event={event} />}
 
             {/* Ambient Background Glow */}
-            {coverImage && (
+            {coverImage && isMirror && (
                 <div className="absolute top-0 left-0 right-0 h-[600px] w-full overflow-hidden pointer-events-none z-0">
                     <div
                         className="absolute inset-0 bg-no-repeat bg-cover bg-center origin-top transform scale-125 opacity-30 blur-[100px]"
                         style={{ backgroundImage: `url(${coverImage})` }}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0a0a0a]/80 to-[#0a0a0a]" />
+                    <div
+                        className="absolute inset-0"
+                        style={{ background: `linear-gradient(to bottom, transparent, ${backgroundColor}80, ${backgroundColor})` }}
+                    />
                 </div>
             )}
 
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-24 relative z-10 flex flex-col lg:flex-row gap-12 lg:items-start mt-8">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-24 relative z-10 flex flex-col lg:flex-row gap-8 lg:gap-12 lg:items-start mt-8">
 
                 {/* Left Column - Fixed on Desktop */}
                 <div className="lg:w-1/3 flex flex-col gap-6 lg:sticky lg:top-8">
                     {/* Cover Image Card */}
                     {coverImage && (
-                        <div className="relative aspect-square w-full rounded-[2rem] overflow-hidden shadow-2xl border border-white/10 group bg-gray-900">
-                            {coverImageData?.lqip_base64 && (
-                                <img src={coverImageData.lqip_base64} alt="" aria-hidden="true" className="absolute inset-0 w-full h-full object-cover blur-md" />
-                            )}
-                            <img src={coverImage} alt={event.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-105" />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-black/30" />
+                        <div className={`relative aspect-square w-full rounded-[2rem] overflow-hidden shadow-xl border ${borderStyle} group ${isDark ? 'bg-gray-900' : 'bg-gray-100'}`}>
+                    {coverImageData?.lqip_base64 && (
+                        <img src={coverImageData.lqip_base64} alt="" aria-hidden="true" className="absolute inset-0 w-full h-full object-cover blur-md" />
+                    )}
+                    <img src={coverImage} alt={event.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-105" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/5 to-transparent" />
 
-                            {/* Status Badge Over Image */}
-                            {statusBadge && (
-                                <div className="absolute top-4 left-4">
-                                    <div className={`px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded-full flex items-center gap-1.5 backdrop-blur-md shadow-lg ${statusBadge.variant === 'danger' ? 'bg-red-500/80 text-white border border-red-400/30' : 'bg-white/20 text-white border border-white/20'}`}>
-                                        <IconTicket size={14} />
-                                        {statusBadge.text}
-                                    </div>
+                    {/* Status Badge Over Image */}
+                    {statusBadge && (
+                        <div className="absolute top-4 left-4">
+                            <div className={`px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded-full flex items-center gap-1.5 backdrop-blur-md shadow-lg ${statusBadge.variant === 'danger' ? 'bg-red-500/90 text-white border border-red-400/30' : 'bg-black/40 text-white border border-white/20'}`}>
+                            <IconTicket size={14} />
+                            {statusBadge.text}
+                        </div>
                                 </div>
                             )}
 
-                            <div className="absolute top-4 right-4 flex gap-2">
-                                <ShareComponent title={'Check out this event: ' + event.title} text={'Check out this event: ' + event.title} url={eventHomepageUrl(event)} imageUrl={coverImage || undefined}>
-                                    <button className="h-10 w-10 flex items-center justify-center rounded-full bg-black/40 backdrop-blur-md border border-white/10 text-white hover:bg-black/60 transition shadow-lg" title={t`Share`}>
-                                        <IconShare size={18} />
-                                    </button>
-                                </ShareComponent>
-                            </div>
-                        </div>
-                    )}
+                <div className="absolute top-4 right-4 flex gap-2">
+                    <ShareComponent title={'Check out this event: ' + event.title} text={'Check out this event: ' + event.title} url={eventHomepageUrl(event)} imageUrl={coverImage || undefined}>
+                        <button className="h-10 w-10 flex items-center justify-center rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-white hover:bg-black/60 transition shadow-lg" title={t`Share`}>
+                        <IconShare size={18} />
+                    </button>
+                </ShareComponent>
+            </div>
+        </div>
+    )
+}
 
-                    {/* Organizer Card Desktop */}
-                    {organizer && organizer.status === OrganizerStatus.LIVE && (
-                        <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-6 hidden lg:flex flex-col gap-4">
-                            <h3 className="text-sm font-semibold tracking-wider text-gray-400 uppercase">{t`Presented By`}</h3>
+{/* Organizer Card Desktop */ }
+{
+    organizer && organizer.status === OrganizerStatus.LIVE && (
+        <div className={`${cardBg} border ${borderStyle} rounded-3xl p-6 hidden lg:flex flex-col gap-4 shadow-sm`}>
+                            <h3 className={`text-sm font-semibold tracking-wider uppercase ${textSecondary}`}>{t`Presented By`}</h3>
                             <div className="flex items-center gap-3">
                                 {organizerLogo ? (
-                                    <img src={organizerLogo} alt={organizer.name} className="w-12 h-12 rounded-full border border-white/10 bg-gray-800 object-cover" />
+                                    <img src={organizerLogo} alt={organizer.name} className={`w-12 h-12 rounded-full border ${borderStyle} ${isDark ? 'bg-gray-800' : 'bg-white'} object-cover`} />
                                 ) : (
-                                    <div className="w-12 h-12 rounded-full border border-white/10 bg-gray-800 flex items-center justify-center text-xl font-bold text-gray-300">
+                                    <div className={`w-12 h-12 rounded-full border ${borderStyle} ${isDark ? 'bg-gray-800 text-gray-300' : 'bg-gray-100 text-gray-600'} flex items-center justify-center text-xl font-bold`}>
                                         {organizer.name.charAt(0).toUpperCase()}
                                     </div>
                                 )}
                                 <div>
-                                    <Anchor href={organizerHomepageUrl(organizer)} className="text-white font-semibold text-lg hover:underline decoration-white/30 decoration-2 underline-offset-4">
+                                    <Anchor href={organizerHomepageUrl(organizer)} className={`${textPrimary} font-semibold text-lg hover:underline decoration-2 underline-offset-4 decoration-current/30`}>
                                         {organizer.name}
                                     </Anchor>
                                     {getShortLocationDisplay(organizerLocation) && (
-                                        <div className="text-gray-400 text-sm flex items-center gap-1 mt-0.5">
+                                        <div className={`${textSecondary} text-sm flex items-center gap-1 mt-0.5`}>
                                             <IconMapPin size={14} />
-                                            <a href={getGoogleMapsUrl(organizerLocation!)} target="_blank" rel="noopener noreferrer" className="hover:text-gray-200">
+                                            <a href={getGoogleMapsUrl(organizerLocation!)} target="_blank" rel="noopener noreferrer" className={`hover:${textPrimary}`}>
                                                 {getShortLocationDisplay(organizerLocation)}
                                             </a>
                                         </div>
@@ -213,18 +260,18 @@ const EventHomepage = ({ ...loaderData }: EventHomepageProps) => {
 
                             {/* Organizer Actions */}
                             <div className="flex flex-wrap gap-2 mt-2">
-                                <button onClick={() => setContactModalOpen(true)} className="flex-1 py-2 px-4 rounded-xl bg-white/10 hover:bg-white/20 text-white text-sm font-medium transition flex justify-center items-center gap-2 border border-white/10">
+                                <button onClick={() => setContactModalOpen(true)} className={`flex-1 py-2 px-4 rounded-xl text-sm font-medium transition flex justify-center items-center gap-2 border shadow-sm ${subtleBtnBg} ${subtleBtnBorder} ${textPrimary}`}>
                                     <IconMail size={16} /> {t`Contact`}
                                 </button>
                                 {websiteUrl && (
-                                    <a href={websiteUrl} target="_blank" rel="noopener noreferrer" className="h-[38px] w-[38px] flex items-center justify-center rounded-xl bg-white/10 hover:bg-white/20 text-white transition border border-white/10">
+                                    <a href={websiteUrl} target="_blank" rel="noopener noreferrer" className={`h-[38px] w-[38px] flex items-center justify-center rounded-xl transition border shadow-sm ${subtleBtnBg} ${subtleBtnBorder} ${textPrimary}`}>
                                         <IconWorld size={18} />
                                     </a>
                                 )}
                                 {socialLinks.map(({ platform, handle, config }) => {
                                     const IconComponent = config.icon;
                                     return (
-                                        <a key={platform} href={config.baseUrl + handle} target="_blank" rel="noopener noreferrer" className="h-[38px] w-[38px] flex items-center justify-center rounded-xl bg-white/10 hover:bg-white/20 text-white transition border border-white/10" title={platform}>
+                                        <a key={platform} href={config.baseUrl + handle} target="_blank" rel="noopener noreferrer" className={`h-[38px] w-[38px] flex items-center justify-center rounded-xl transition border shadow-sm ${subtleBtnBg} ${subtleBtnBorder} ${textPrimary}`} title={platform}>
                                             <IconComponent size={18} />
                                         </a>
                                     );
@@ -239,22 +286,22 @@ const EventHomepage = ({ ...loaderData }: EventHomepageProps) => {
 
                     {/* Header Details */}
                     <div className="flex flex-col gap-6">
-                        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-[1.1]">
+                        <h1 className={`text-4xl sm:text-5xl lg:text-5xl xl:text-6xl font-black tracking-tight leading-[1.1] ${textPrimary}`}>
                             {event.title}
                         </h1>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             {/* Date Card */}
-                            <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[1.5rem] p-5 flex items-start gap-4 hover:bg-white/10 transition-colors shadow-sm">
-                                <div className="p-3 bg-white/10 rounded-2xl text-white">
+                            <div className={`${cardBg} border ${borderStyle} rounded-[1.5rem] p-5 flex items-start gap-4 transition-colors shadow-sm ${cardHover}`}>
+                                <div className={`p-3 rounded-2xl ${iconWrapperBg}`}>
                                     {event.end_date && isDateInPast(event.end_date) ? <IconCalendarOff size={24} /> : <IconCalendar size={24} />}
                                 </div>
                                 <div>
-                                    <div className="text-white font-medium text-base mb-1">
+                                    <div className={`font-medium text-base mb-1 ${textPrimary}`}>
                                         {event.end_date && isDateInPast(event.end_date) ? t`This event has ended` : <EventDateRange event={event} />}
                                     </div>
                                     <CalendarOptionsPopover event={event}>
-                                        <button className="text-sm font-medium text-gray-400 hover:text-white flex items-center gap-1.5 transition">
+                                        <button className={`text-sm font-medium ${textSecondary} hover:${textPrimary} flex items-center gap-1.5 transition`}>
                                             <IconCalendarPlus size={16} /> {t`Add to Calendar`}
                                         </button>
                                     </CalendarOptionsPopover>
@@ -263,15 +310,15 @@ const EventHomepage = ({ ...loaderData }: EventHomepageProps) => {
 
                             {/* Location Card */}
                             {hasLocation && locationDetails && (
-                                <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[1.5rem] p-5 flex items-start gap-4 hover:bg-white/10 transition-colors shadow-sm">
-                                    <div className="p-3 bg-white/10 rounded-2xl text-white">
+                                <div className={`${cardBg} border ${borderStyle} rounded-[1.5rem] p-5 flex items-start gap-4 transition-colors shadow-sm ${cardHover}`}>
+                                    <div className={`p-3 rounded-2xl ${iconWrapperBg}`}>
                                         <IconMapPin size={24} />
                                     </div>
                                     <div>
-                                        <div className="text-white font-medium text-base">{locationDetails.venue_name}</div>
-                                        <div className="text-gray-400 text-sm mt-0.5 line-clamp-2">{formatAddress(locationDetails)}</div>
+                                        <div className={`font-medium text-base ${textPrimary}`}>{locationDetails.venue_name}</div>
+                                        <div className={`${textSecondary} text-sm mt-0.5 line-clamp-2`}>{formatAddress(locationDetails)}</div>
                                         {mapUrl && (
-                                            <a href={mapUrl} target="_blank" rel="noopener noreferrer" className="text-sm font-medium mt-1 inline-flex items-center gap-1 text-gray-400 hover:text-white transition">
+                                            <a href={mapUrl} target="_blank" rel="noopener noreferrer" className={`text-sm font-medium mt-1 inline-flex items-center gap-1 ${textSecondary} hover:${textPrimary} transition`}>
                                                 {t`View Map`} <IconExternalLink size={14} />
                                             </a>
                                         )}
@@ -280,13 +327,13 @@ const EventHomepage = ({ ...loaderData }: EventHomepageProps) => {
                             )}
 
                             {isOnlineEvent && (
-                                <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[1.5rem] p-5 flex items-start gap-4 hover:bg-white/10 transition-colors shadow-sm">
-                                    <div className="p-3 bg-white/10 rounded-2xl text-white">
+                                <div className={`${cardBg} border ${borderStyle} rounded-[1.5rem] p-5 flex items-start gap-4 transition-colors shadow-sm ${cardHover}`}>
+                                    <div className={`p-3 rounded-2xl ${iconWrapperBg}`}>
                                         <IconWorld size={24} />
                                     </div>
                                     <div>
-                                        <div className="text-white font-medium text-base">{t`Online Event`}</div>
-                                        <div className="text-gray-400 text-sm mt-0.5">{t`Join from anywhere`}</div>
+                                        <div className={`font-medium text-base ${textPrimary}`}>{t`Online Event`}</div>
+                                        <div className={`${textSecondary} text-sm mt-0.5`}>{t`Join from anywhere`}</div>
                                     </div>
                                 </div>
                             )}
@@ -294,20 +341,22 @@ const EventHomepage = ({ ...loaderData }: EventHomepageProps) => {
                     </div>
 
                     {/* Registration / Tickets Section */}
-                    <div className="bg-white/5 backdrop-blur-2xl border border-white/20 rounded-[2rem] overflow-hidden shadow-2xl relative" ref={ticketsSectionRef} id="tickets">
-                        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-50"></div>
+                    <div className={`${ticketCardBg} border ${borderStyle} rounded-[2rem] overflow-hidden shadow-xl relative`} ref={ticketsSectionRef} id="tickets">
+                        {/* A very subtle top highlight line */}
+                        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-current to-transparent opacity-10" style={{ color: accentColor }}></div>
+                        
                         <div className="p-6 sm:p-8">
-                            <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
-                                <IconTicket className="text-gray-300" /> {t`Registration`}
+                            <h2 className={`text-2xl font-bold mb-6 flex items-center gap-3 ${textPrimary}`}>
+                                <IconTicket className={textSecondary} /> {t`Registration`}
                             </h2>
                             <div className="w-full">
                                 <SelectProducts
                                     colors={{
                                         background: "transparent",
-                                        primary: customAccentColor !== '#ffffff' ? customAccentColor : "rgba(255,255,255,0.2)",
+                                        primary: accentColor,
                                         primaryText: "#fff",
-                                        secondary: "rgba(255,255,255,0.1)",
-                                        secondaryText: "#e5e7eb",
+                                        secondary: isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.05)",
+                                        secondaryText: isDark ? "#e5e7eb" : "#374151",
                                         bodyBackground: "transparent",
                                     }}
                                     continueButtonText={event.settings?.continue_button_text}
@@ -323,38 +372,38 @@ const EventHomepage = ({ ...loaderData }: EventHomepageProps) => {
 
                     {/* About Section */}
                     {event?.description && (
-                        <div className="mt-4">
-                            <h2 className="text-2xl font-bold text-white mb-6 pl-1 tracking-tight">{t`About`}</h2>
-                            <div
-                                className="prose prose-invert prose-lg max-w-none text-gray-300 prose-a:text-white prose-a:font-semibold prose-a:underline hover:prose-a:text-gray-200 prose-headings:text-white prose-p:leading-relaxed"
+                         <div className="mt-4">
+                             <h2 className={`text-2xl font-bold mb-6 pl-1 tracking-tight ${textPrimary}`}>{t`About`}</h2>
+                             <div 
+                                className={`prose prose-lg max-w-none prose-p:leading-relaxed ${proseClasses}`}
                                 dangerouslySetInnerHTML={{ __html: event.description }}
-                            />
-                        </div>
+                             />
+                         </div>
                     )}
 
                     {/* Location Details block below description */}
                     {hasLocation && locationDetails && (
-                        <div className="mt-6 border-t border-white/10 pt-8 pl-1">
-                            <h2 className="text-2xl font-bold text-white mb-6 tracking-tight">{t`Location`}</h2>
+                        <div className={`mt-6 border-t pt-8 pl-1 ${borderStyle}`}>
+                            <h2 className={`text-2xl font-bold mb-6 tracking-tight ${textPrimary}`}>{t`Location`}</h2>
                             <div className="flex flex-col sm:flex-row gap-6">
                                 <div className="flex-1 shrink-0">
-                                    <h3 className="text-lg font-semibold text-white mb-1">{locationDetails.venue_name}</h3>
-                                    <p className="text-gray-400 whitespace-pre-line leading-relaxed mb-4">{formatAddress(locationDetails)}</p>
+                                    <h3 className={`text-lg font-semibold mb-1 ${textPrimary}`}>{locationDetails.venue_name}</h3>
+                                    <p className={`whitespace-pre-line leading-relaxed mb-4 ${textSecondary}`}>{formatAddress(locationDetails)}</p>
                                     {mapUrl && (
-                                        <a href={mapUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2.5 bg-white/10 hover:bg-white/20 text-white rounded-xl font-medium transition-colors border border-white/10 shadow-sm">
+                                        <a href={mapUrl} target="_blank" rel="noopener noreferrer" className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium transition-colors border shadow-sm ${subtleBtnBg} ${subtleBtnBorder} ${textPrimary}`}>
                                             <IconArrowUpRight size={18} /> {t`Get Directions`}
                                         </a>
                                     )}
                                 </div>
                                 {mapUrl && (
-                                    <a href={mapUrl} target="_blank" rel="noopener noreferrer" className="w-full sm:w-64 h-48 rounded-2xl overflow-hidden relative group block shrink-0 border border-white/10 bg-white/5 mx-auto sm:mx-0">
-                                        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+CjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0ibm9uZSI+PC9yZWN0Pgo8Y2lyY2xlIGN4PSIyIiBjeT0iMiIgcj0iMSIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjI1KSI+PC9jaXJjbGU+Cjwvc3ZnPg==')] opacity-30"></div>
-                                        <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                    <a href={mapUrl} target="_blank" rel="noopener noreferrer" className={`w-full sm:w-64 h-48 rounded-2xl overflow-hidden relative group block shrink-0 border ${borderStyle} ${isDark ? 'bg-white/5' : 'bg-gray-100'} mx-auto sm:mx-0`}>
+                                        <div className={`absolute inset-0 opacity-30 ${isDark ? "bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+CjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0ibm9uZSI+PC9yZWN0Pgo8Y2lyY2xlIGN4PSIyIiBjeT0iMiIgcj0iMSIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjI1KSI+PC9jaXJjbGU+Cjwvc3ZnPg==')]" : "bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+CjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0ibm9uZSI+PC9yZWN0Pgo8Y2lyY2xlIGN4PSIyIiBjeT0iMiIgcj0iMSIgZmlsbD0icmdiYSgwLDAsMCwwLjE1KSI+PC9jaXJjbGU+Cjwvc3ZnPg==')]"}`}></div>
+                                        <div className="absolute inset-0 flex items-center justify-center bg-black/20 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                             <span className="flex items-center gap-2 text-white font-medium bg-black/60 px-4 py-2 rounded-full backdrop-blur-md">
                                                 <IconMaximize size={18} /> {t`View Map`}
                                             </span>
                                         </div>
-                                        <IconMapPin size={36} className="absolute inset-0 m-auto text-white drop-shadow-2xl" />
+                                        <IconMapPin size={36} className="absolute inset-0 m-auto text-black/50 drop-shadow-[0_0_15px_rgba(255,255,255,0.5)] mix-blend-overlay"/>
                                     </a>
                                 )}
                             </div>
@@ -363,44 +412,44 @@ const EventHomepage = ({ ...loaderData }: EventHomepageProps) => {
 
                     {/* Organizer Card (Mobile View) */}
                     {organizer && organizer.status === OrganizerStatus.LIVE && (
-                        <div className="mt-8 pt-8 border-t border-white/10 lg:hidden pl-1">
-                            <h2 className="text-2xl font-bold text-white mb-6 tracking-tight">{t`Presented By`}</h2>
-                            <div className="flex bg-white/5 border border-white/10 p-6 rounded-3xl backdrop-blur-md flex-col gap-4">
+                        <div className={`mt-8 pt-8 border-t lg:hidden pl-1 ${borderStyle}`}>
+                            <h2 className={`text-2xl font-bold mb-6 tracking-tight ${textPrimary}`}>{t`Presented By`}</h2>
+                            <div className={`flex border p-6 rounded-3xl flex-col gap-4 shadow-sm ${cardBg} ${borderStyle}`}>
                                 <div className="flex items-center gap-4">
                                     {organizerLogo ? (
-                                        <img src={organizerLogo} alt={organizer.name} className="w-14 h-14 rounded-full border border-white/10 bg-gray-800 object-cover" />
+                                        <img src={organizerLogo} alt={organizer.name} className={`w-14 h-14 rounded-full border ${borderStyle} ${isDark ? 'bg-gray-800' : 'bg-white'} object-cover`} />
                                     ) : (
-                                        <div className="w-14 h-14 rounded-full border border-white/10 bg-gray-800 flex items-center justify-center text-xl font-bold text-gray-300">
+                                        <div className={`w-14 h-14 rounded-full border ${borderStyle} ${isDark ? 'bg-gray-800 text-gray-300' : 'bg-gray-100 text-gray-600'} flex items-center justify-center text-xl font-bold`}>
                                             {organizer.name.charAt(0).toUpperCase()}
                                         </div>
                                     )}
                                     <div>
-                                        <Anchor href={organizerHomepageUrl(organizer)} className="text-white font-bold text-xl hover:underline decoration-white/30 decoration-2 underline-offset-4">
+                                        <Anchor href={organizerHomepageUrl(organizer)} className={`font-bold text-xl hover:underline decoration-2 underline-offset-4 decoration-current/30 ${textPrimary}`}>
                                             {organizer.name}
                                         </Anchor>
                                         {getShortLocationDisplay(organizerLocation) && (
-                                            <div className="text-gray-400 text-sm flex items-center gap-1 mt-1">
+                                            <div className={`${textSecondary} text-sm flex items-center gap-1 mt-1`}>
                                                 <IconMapPin size={16} />
-                                                <a href={getGoogleMapsUrl(organizerLocation!)} target="_blank" rel="noopener noreferrer" className="hover:text-gray-200">
+                                                <a href={getGoogleMapsUrl(organizerLocation!)} target="_blank" rel="noopener noreferrer" className={`hover:${textPrimary}`}>
                                                     {getShortLocationDisplay(organizerLocation)}
                                                 </a>
                                             </div>
                                         )}
                                     </div>
                                 </div>
-
+                                
                                 {organizer.description && (
-                                    <div className="prose prose-invert prose-sm text-gray-300 line-clamp-3 mt-2" dangerouslySetInnerHTML={{ __html: organizer.description }} />
+                                    <div className={`prose prose-sm line-clamp-3 mt-2 ${proseClasses}`} dangerouslySetInnerHTML={{ __html: organizer.description }} />
                                 )}
 
-                                <div className="flex flex-wrap gap-2 mt-2 pt-4 border-t border-white/10">
-                                    <button onClick={() => setContactModalOpen(true)} className="flex-1 py-2 px-4 rounded-xl bg-white/10 hover:bg-white/20 text-white text-sm font-medium transition flex items-center justify-center gap-2 border border-white/10 shadow-sm">
+                                <div className={`flex flex-wrap gap-2 mt-2 pt-4 border-t ${borderStyle}`}>
+                                    <button onClick={() => setContactModalOpen(true)} className={`flex-1 py-2 px-4 rounded-xl text-sm font-medium transition flex items-center justify-center gap-2 border shadow-sm ${subtleBtnBg} ${subtleBtnBorder} ${textPrimary}`}>
                                         <IconMail size={16} /> {t`Contact`}
                                     </button>
                                     {socialLinks.map(({ platform, handle, config }) => {
                                         const IconComponent = config.icon;
                                         return (
-                                            <a key={platform} href={config.baseUrl + handle} target="_blank" rel="noopener noreferrer" className="h-[42px] w-[42px] flex items-center justify-center rounded-xl bg-white/10 hover:bg-white/20 text-white transition border border-white/10 shadow-sm" title={platform}>
+                                            <a key={platform} href={config.baseUrl + handle} target="_blank" rel="noopener noreferrer" className={`h-[42px] w-[42px] flex items-center justify-center rounded-xl transition border shadow-sm ${subtleBtnBg} ${subtleBtnBorder} ${textPrimary}`} title={platform}>
                                                 <IconComponent size={20} />
                                             </a>
                                         );
@@ -413,24 +462,28 @@ const EventHomepage = ({ ...loaderData }: EventHomepageProps) => {
             </div>
 
             {/* Footer */}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-6 relative z-10 opacity-70 hover:opacity-100 transition-opacity">
-                <div className="flex items-center gap-6 text-sm text-gray-400">
-                    <Anchor href={getConfig('VITE_PRIVACY_URL', 'https://hi.events/privacy-policy')} className="hover:text-white transition">
+            <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 border-t flex flex-col sm:flex-row items-center justify-between gap-6 relative z-10 opacity-70 hover:opacity-100 transition-opacity ${borderStyle}`}>
+                <div className={`flex items-center gap-6 text-sm ${textSecondary}`}>
+                    <Anchor href={getConfig('VITE_PRIVACY_URL', 'https://hi.events/privacy-policy')} className={`hover:${textPrimary} transition text-inherit`}>
                         {t`Privacy Policy`}
                     </Anchor>
-                    <Anchor href={getConfig('VITE_TOS_URL', 'https://hi.events/terms-of-service')} className="hover:text-white transition">
+                    <Anchor href={getConfig('VITE_TOS_URL', 'https://hi.events/terms-of-service')} className={`hover:${textPrimary} transition text-inherit`}>
                         {t`Terms of Service`}
                     </Anchor>
                 </div>
-                <PoweredByFooter className="text-gray-500 hover:text-gray-300 transition" />
+                <PoweredByFooter className={`${textSecondary} hover:${textPrimary} transition`} />
             </div>
 
             {/* Floating Registration Button (Mobile) */}
             {showScrollButton && (
-                <div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-[#0a0a0a]/95 via-[#0a0a0a]/90 to-transparent z-50 lg:hidden flex justify-center pb-safe pt-8 pointer-events-none">
-                    <button
+                <div 
+                    className="fixed bottom-0 left-0 right-0 p-4 z-50 lg:hidden flex justify-center pb-safe pt-8 pointer-events-none"
+                    style={{ background: `linear-gradient(to top, ${backgroundColor}f2, ${backgroundColor}e6 50%, transparent)` }}
+                >
+                    <button 
                         onClick={scrollToTickets}
-                        className="pointer-events-auto bg-white hover:bg-gray-100 text-black px-8 py-3.5 rounded-full font-bold shadow-[0_8px_30px_rgb(0,0,0,0.5)] flex items-center justify-center gap-2 w-full max-w-sm border border-white/20 transition-all active:scale-95"
+                        style={{ backgroundColor: accentColor, color: '#fff' }}
+                        className="pointer-events-auto px-8 py-3.5 rounded-full font-bold shadow-[0_8px_30px_rgb(0,0,0,0.2)] flex items-center justify-center gap-2 w-full max-w-sm transition-all active:scale-95 border border-black/10 hover:brightness-110"
                     >
                         <IconTicket size={20} /> {t`Get Tickets`}
                     </button>
