@@ -19,7 +19,7 @@ These master settings control how the authentication portal behaves.
 
 For every provider key you listed in `AUTH_PROVIDERS` (e.g., `google`), you must define its configuration block using the format `AUTH_{PROVIDER}_...`.
 
-> **Important:** The `{PROVIDER}` part of the variable name must be exactly the uppercase key from `AUTH_PROVIDERS`. For example, if you added `okta`, the variables must start with `AUTH_OKTA_`.
+> **Important:** The `{PROVIDER}` part of the variable name must be exactly the key from `AUTH_PROVIDERS`. For example, if you added `okta`, the variables must start with `AUTH_okta_`.
 
 ### 🔗 Configuring the Redirect/Callback URI in your IdP
 
