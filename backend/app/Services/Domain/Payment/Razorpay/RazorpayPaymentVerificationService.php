@@ -2,8 +2,8 @@
 
 namespace HiEvents\Services\Domain\Payment\Razorpay;
 
-use Backend\App\Services\Application\Handlers\Order\DTO\VerifyRazorpayPaymentDTO;
 use HiEvents\Exceptions\Razorpay\InvalidSignatureException;
+use HiEvents\Services\Application\Handlers\Order\DTO\VerifyRazorpayPaymentDTO;
 use HiEvents\Services\Infrastructure\Razorpay\RazorpayClientFactory;
 use Illuminate\Config\Repository;
 use Psr\Log\LoggerInterface;

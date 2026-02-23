@@ -2,7 +2,6 @@
 
 namespace HiEvents\Services\Application\Handlers\Order\Payment\Razorpay;
 
-use Backend\App\Services\Application\Handlers\Order\DTO\VerifyRazorpayPaymentDTO;
 use HiEvents\DomainObjects\Enums\PaymentProviders;
 use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
@@ -21,6 +20,7 @@ use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\RazorpayOrdersRepositoryInterface;
+use HiEvents\Services\Application\Handlers\Order\DTO\VerifyRazorpayPaymentDTO;
 use HiEvents\Services\Domain\Order\OrderApplicationFeeService;
 use HiEvents\Services\Domain\Payment\Razorpay\RazorpayPaymentVerificationService;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;

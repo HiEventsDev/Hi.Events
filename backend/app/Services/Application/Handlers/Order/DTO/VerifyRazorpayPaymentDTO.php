@@ -1,6 +1,6 @@
 <?php
 
-namespace Backend\App\Services\Application\Handlers\Order\DTO;
+namespace HiEvents\Services\Application\Handlers\Order\DTO;
 
 use HiEvents\DataTransferObjects\BaseDataObject;
 
