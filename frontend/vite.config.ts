@@ -1,7 +1,8 @@
-import {defineConfig} from "vite";
-import {lingui} from "@lingui/vite-plugin";
+import { defineConfig } from "vite";
+import { lingui } from "@lingui/vite-plugin";
 import react from "@vitejs/plugin-react";
-import {copy} from "vite-plugin-copy";
+import { copy } from "vite-plugin-copy";
+import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
     optimizeDeps: {
@@ -14,6 +15,7 @@ export default defineConfig({
         },
     },
     plugins: [
+        tailwindcss(),
         react({
             babel: {
                 plugins: ["macros"],
@@ -21,7 +23,7 @@ export default defineConfig({
         }),
         lingui(),
         copy({
-            targets: [{src: "src/embed/widget.js", dest: "public"}],
+            targets: [{ src: "src/embed/widget.js", dest: "public" }],
             hook: "writeBundle",
         }),
     ],

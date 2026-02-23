@@ -1,12 +1,13 @@
-import React, {FC, PropsWithChildren, useEffect} from "react";
-import {MantineProvider} from "@mantine/core";
-import {Notifications} from "@mantine/notifications";
-import {i18n} from "@lingui/core";
-import {I18nProvider} from "@lingui/react";
-import {ModalsProvider} from "@mantine/modals";
-import {HydrationBoundary, QueryClient, QueryClientProvider} from "@tanstack/react-query";
-import {Helmet, HelmetProvider} from "react-helmet-async";
-import {generateColors} from '@mantine/colors-generator';
+import React, { FC, PropsWithChildren, useEffect } from "react";
+import "./tailwind.css";
+import { MantineProvider } from "@mantine/core";
+import { Notifications } from "@mantine/notifications";
+import { i18n } from "@lingui/core";
+import { I18nProvider } from "@lingui/react";
+import { ModalsProvider } from "@mantine/modals";
+import { HydrationBoundary, QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Helmet, HelmetProvider } from "react-helmet-async";
+import { generateColors } from '@mantine/colors-generator';
 
 import "@mantine/core/styles/global.css";
 import "@mantine/core/styles.css";
@@ -16,10 +17,10 @@ import "@mantine/dropzone/styles.css";
 import '@mantine/dates/styles.css';
 import "@mantine/charts/styles.css";
 import "./styles/global.scss";
-import {isSsr} from "./utilites/helpers.ts";
-import {StartupChecks} from "./StartupChecks.tsx";
-import {ThirdPartyScripts} from "./components/common/ThirdPartyScripts";
-import {getConfig} from "./utilites/config.ts";
+import { isSsr } from "./utilites/helpers.ts";
+import { StartupChecks } from "./StartupChecks.tsx";
+import { ThirdPartyScripts } from "./components/common/ThirdPartyScripts";
+import { getConfig } from "./utilites/config.ts";
 
 declare global {
     interface Window {
@@ -75,19 +76,19 @@ export const App: FC<
                     <I18nProvider i18n={i18n}>
                         <QueryClientProvider client={props.queryClient}>
                             <HydrationBoundary state={props.dehydratedState}>
-                                <StartupChecks/>
-                                <ThirdPartyScripts/>
+                                <StartupChecks />
+                                <ThirdPartyScripts />
                                 <ModalsProvider>
                                     <Helmet>
                                         <title>{getConfig("VITE_APP_NAME", "Hi.Events")}</title>
                                         <link rel="icon"
-                                              type="image/svg+xml"
-                                              href={getConfig("VITE_APP_FAVICON", "/favicon.svg")}
+                                            type="image/svg+xml"
+                                            href={getConfig("VITE_APP_FAVICON", "/favicon.svg")}
                                         />
                                     </Helmet>
                                     {props.children}
                                 </ModalsProvider>
-                                <Notifications/>
+                                <Notifications />
                             </HydrationBoundary>
                         </QueryClientProvider>
                     </I18nProvider>
