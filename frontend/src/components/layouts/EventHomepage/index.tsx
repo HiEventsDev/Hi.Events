@@ -249,11 +249,11 @@ const EventHomepage = ({ ...loaderData }: EventHomepageProps) => {
                 <div className="md:w-[320px] shrink-0 flex flex-col gap-6 md:sticky md:top-8 z-20">
                     {/* Cover Image Card */}
                     {coverImage && (
-                        <div className={`relative aspect-[4/3] sm:aspect-square w-full rounded-2xl overflow-hidden shadow-sm border ${borderStyle} group ${isCardDark ? 'bg-gray-900' : 'bg-gray-100'}`}>
+                        <div className={`relative w-full rounded-2xl overflow-hidden shadow-sm border ${borderStyle} group ${isCardDark ? 'bg-gray-900' : 'bg-gray-100'}`}>
                             {coverImageData?.lqip_base64 && (
                                 <img src={coverImageData.lqip_base64} alt="" aria-hidden="true" className="absolute inset-0 w-full h-full object-cover blur-md" />
                             )}
-                            <img src={coverImage} alt={event.title} className="absolute inset-0 w-full h-full object-cover" />
+                            <img src={coverImage} alt={event.title} className="relative w-full h-auto block object-cover" />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent pointer-events-none" />
 
                             {/* Status Badge Over Image */}
@@ -462,10 +462,19 @@ const EventHomepage = ({ ...loaderData }: EventHomepageProps) => {
                                     )}
                                 </div>
                                 {mapUrl && (
-                                    <a href={mapUrl} target="_blank" rel="noopener noreferrer" className={`w-full sm:w-56 h-40 rounded-2xl overflow-hidden relative group flex flex-col items-center justify-center gap-3 shrink-0 border ${borderStyle} ${isCardDark ? 'bg-white/5 hover:bg-white/10' : 'bg-gray-50 hover:bg-gray-100'} transition-colors mx-auto sm:mx-0`}>
-                                        <IconMapPin size={28} className={textSecondary} />
-                                        <span className={`text-sm font-medium ${linkTextPrimary}`}>{t`View Map`}</span>
-                                    </a>
+                                    <div className={`w-full sm:w-64 h-48 rounded-2xl overflow-hidden relative border ${borderStyle} shadow-sm shrink-0`}>
+                                        <iframe
+                                            src={`https://maps.google.com/maps?q=${encodeURIComponent(formatAddress(locationDetails))}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
+                                            width="100%"
+                                            height="100%"
+                                            style={{ border: 0 }}
+                                            allowFullScreen={false}
+                                            loading="lazy"
+                                            referrerPolicy="no-referrer-when-downgrade"
+                                            title="Event Location Map"
+                                            className="absolute inset-0 grayscale-[20%] contrast-[1.1]"
+                                        />
+                                    </div>
                                 )}
                             </div>
                         </div>
