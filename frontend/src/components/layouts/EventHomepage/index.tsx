@@ -100,32 +100,11 @@ const EventHomepage = ({ ...loaderData }: EventHomepageProps) => {
         ? 'prose-invert text-gray-300 prose-headings:text-white prose-a:text-white hover:prose-a:text-gray-200'
         : 'text-gray-600 prose-headings:text-gray-900 prose-a:text-gray-900 hover:prose-a:text-gray-700';
 
-    // Card styles and colors
-    let cardBg = '';
-    let ticketCardBg = '';
-    let isCardDark = false;
-
-    if (isMirror) {
-        if (mode === 'dark') {
-            cardBg = 'bg-black/60 backdrop-blur-2xl';
-            ticketCardBg = 'bg-black/70 backdrop-blur-3xl';
-            isCardDark = true;
-        } else {
-            cardBg = 'bg-white/80 backdrop-blur-2xl';
-            ticketCardBg = 'bg-white/95 backdrop-blur-3xl';
-            isCardDark = false;
-        }
-    } else {
-        if (mode === 'dark') {
-            cardBg = 'bg-white/5 backdrop-blur-xl';
-            ticketCardBg = 'bg-white/10 backdrop-blur-2xl';
-            isCardDark = isBgDark; // Transparent cards rely on bg
-        } else {
-            cardBg = 'bg-white';
-            ticketCardBg = 'bg-white';
-            isCardDark = false; // Solid white card
-        }
-    }
+    // Use heavy glass-morphism cards to guarantee perfect text contrast 
+    // over any custom background color, regardless of whether a cover image is used.
+    const isCardDark = mode === 'dark';
+    const cardBg = isCardDark ? 'bg-black/60 backdrop-blur-2xl' : 'bg-white/80 backdrop-blur-2xl';
+    const ticketCardBg = isCardDark ? 'bg-black/70 backdrop-blur-3xl' : 'bg-white/90 backdrop-blur-3xl';
 
     const cardTextPrimary = isCardDark ? 'text-white' : 'text-gray-900';
     const cardTextSecondary = isCardDark ? 'text-gray-400' : 'text-gray-500';
