@@ -16,20 +16,20 @@ class RazorpayPaymentVerificationService
         private readonly RazorpayClientFactory $razorpayClientFactory,
     ) {}
 
-    public function verifyPaymentSignature(VerifyRazorpayPaymentDTO $paymentData): bool
+    public function verifyPaymentSignature(VerifyRazorpayPaymentDTO $verifyRazorpayPaymentData): bool
     {
         $expectedSignature = hash_hmac(
             'sha256',
-            $paymentData->razorpay_order_id . '|' . $paymentData->razorpay_payment_id,
+            $verifyRazorpayPaymentData->razorpay_order_id . '|' . $verifyRazorpayPaymentData->razorpay_payment_id,
             $this->config->get('services.razorpay.key_secret')
         );
 
-        if ($expectedSignature !== $paymentData->razorpay_signature) {
+        if ($expectedSignature !== $verifyRazorpayPaymentData->razorpay_signature) {
             $this->logger->error('Razorpay signature verification failed', [
                 'expected' => $expectedSignature,
-                'received' => $paymentData->razorpay_signature,
-                'order_id' => $paymentData->razorpay_order_id,
-                'payment_id' => $paymentData->razorpay_payment_id,
+                'received' => $verifyRazorpayPaymentData->razorpay_signature,
+                'order_id' => $verifyRazorpayPaymentData->razorpay_order_id,
+                'payment_id' => $verifyRazorpayPaymentData->razorpay_payment_id,
             ]);
 
             throw new InvalidSignatureException();

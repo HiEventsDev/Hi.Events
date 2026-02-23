@@ -55,12 +55,12 @@ readonly class VerifyRazorpayPaymentHandler
      * @throws PaymentVerificationFailedException
      * @throws Throwable
      */
-    public function handle(string $orderShortId, VerifyRazorpayPaymentDTO $paymentData): OrderDomainObject
+    public function handle(string $orderShortId, VerifyRazorpayPaymentDTO $verifyRazorpayPaymentData): OrderDomainObject
     {
         // Check for duplicate processing
-        if ($this->hasPaymentBeenHandled($paymentData)) {
+        if ($this->hasPaymentBeenHandled($verifyRazorpayPaymentData)) {
             $this->logger->info('Razorpay payment already handled', [
-                'razorpay_payment_id' => $paymentData->razorpay_payment_id,
+                'razorpay_payment_id' => $verifyRazorpayPaymentData->razorpay_payment_id,
                 'order_short_id' => $orderShortId,
             ]);
             
@@ -70,7 +70,7 @@ readonly class VerifyRazorpayPaymentHandler
                 ->findByShortId($orderShortId);
         }
 
-        return $this->databaseManager->transaction(function () use ($orderShortId, $paymentData) {
+        return $this->databaseManager->transaction(function () use ($orderShortId, $verifyRazorpayPaymentData) {
             // Load order with necessary relations
             $order = $this->orderRepository
                 ->loadRelation(new Relationship(OrderItemDomainObject::class))
@@ -86,7 +86,7 @@ readonly class VerifyRazorpayPaymentHandler
             }
 
             // Verify the payment signature
-            $isValid = $this->razorpayPaymentService->verifyPaymentSignature($paymentData);
+            $isValid = $this->razorpayPaymentService->verifyPaymentSignature($verifyRazorpayPaymentData);
 
             if (!$isValid) {
                 throw new PaymentVerificationFailedException(__('Payment verification failed. Please try again.'));
@@ -94,14 +94,14 @@ readonly class VerifyRazorpayPaymentHandler
 
             // Update Razorpay order with payment details
             $this->razorpayOrdersRepository->updateByOrderId($order->getId(), [
-                'razorpay_payment_id' => $paymentData->razorpay_payment_id,
-                'razorpay_signature' => $paymentData->razorpay_signature,
+                'razorpay_payment_id' => $verifyRazorpayPaymentData->razorpay_payment_id,
+                'razorpay_signature' => $verifyRazorpayPaymentData->razorpay_signature,
                 'payment_status' => 'captured',
             ]);
 
             // Fetch complete payment details from Razorpay API
             $paymentDetails = $this->razorpayPaymentService->fetchPaymentDetails(
-                $paymentData->razorpay_payment_id
+                $verifyRazorpayPaymentData->razorpay_payment_id
             );
 
             // Update order status to completed - THIS RETURNS THE UPDATED ORDER WITH ITEMS LOADED
@@ -123,7 +123,7 @@ readonly class VerifyRazorpayPaymentHandler
             $this->dispatchEvents($updatedOrder);
             
             // Mark payment as handled
-            $this->markPaymentAsHandled($paymentData, $updatedOrder);
+            $this->markPaymentAsHandled($verifyRazorpayPaymentData, $updatedOrder);
 
             return $updatedOrder;
         });
@@ -191,9 +191,9 @@ readonly class VerifyRazorpayPaymentHandler
         );
     }
 
-    private function hasPaymentBeenHandled(VerifyRazorpayPaymentDTO $paymentData): bool
+    private function hasPaymentBeenHandled(VerifyRazorpayPaymentDTO $verifyRazorpayPaymentData): bool
     {
-        $paymentId = $paymentData->razorpay_payment_id ?? null;
+        $paymentId = $verifyRazorpayPaymentData->razorpay_payment_id ?? null;
         if (!$paymentId) {
             return false;
         }
@@ -201,17 +201,17 @@ readonly class VerifyRazorpayPaymentHandler
         return $this->cache->has('razorpay_payment_handled_' . $paymentId);
     }
 
-    private function markPaymentAsHandled(VerifyRazorpayPaymentDTO $paymentData, OrderDomainObject $order): void
+    private function markPaymentAsHandled(VerifyRazorpayPaymentDTO $verifyRazorpayPaymentData, OrderDomainObject $order): void
     {
         $this->logger->info('Razorpay payment verification handled', [
-            'razorpay_payment_id' => $paymentData->razorpay_payment_id,
+            'razorpay_payment_id' => $verifyRazorpayPaymentData->razorpay_payment_id,
             'order_id' => $order->getId(),
             'amount' => $order->getTotalGross(),
             'currency' => $order->getCurrency(),
         ]);
 
         $this->cache->put(
-            'razorpay_payment_handled_' . $paymentData->razorpay_payment_id,
+            'razorpay_payment_handled_' . $verifyRazorpayPaymentData->razorpay_payment_id,
             true,
             now()->addHours(24)
         );
