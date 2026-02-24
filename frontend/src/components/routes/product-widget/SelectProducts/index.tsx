@@ -34,7 +34,7 @@ import { PoweredByFooter } from "../../../common/PoweredByFooter";
 import { Event, Product } from "../../../../types.ts";
 import { eventsClientPublic } from "../../../../api/event.client.ts";
 import { promoCodeClientPublic } from "../../../../api/promo-code.client.ts";
-import { IconChevronRight, IconX } from "@tabler/icons-react"
+import { IconChevronDown, IconChevronRight, IconX } from "@tabler/icons-react"
 import { getSessionIdentifier } from "../../../../utilites/sessionIdentifier.ts";
 import { Constants } from "../../../../constants.ts";
 
@@ -481,16 +481,18 @@ const SelectProducts = (props: SelectProductsProps) => {
                                             )}
 
                                             {(category.products) && category.products.map((product) => {
-                                                const currentProductIndex = productIndex;
+                                                const currentProductIndex = productIndex++;
                                                 const quantityRange = range(product.min_per_order || 1, product.max_per_order || 25)
                                                     .map((n) => n.toString());
                                                 quantityRange.unshift("0");
 
-                                                const isProductCollapsed = collapsedProducts[Number(product.id)] ?? product.start_collapsed;
-                                                const toggleCollapse = () => {
+                                                const isCollapsed = collapsedProducts[Number(product.id)] ?? product.start_collapsed;
+                                                const isExpanded = !isCollapsed;
+
+                                                const toggleExpanded = () => {
                                                     setCollapsedProducts(prev => ({
                                                         ...prev,
-                                                        [Number(product.id)]: !isProductCollapsed
+                                                        [Number(product.id)]: !isCollapsed
                                                     }));
                                                 };
 
@@ -498,6 +500,9 @@ const SelectProducts = (props: SelectProductsProps) => {
                                                 const productTotalQuantity = currentProductQuantities.reduce((acc, { quantity }) => acc + Number(quantity), 0);
                                                 const isSelected = productTotalQuantity > 0;
                                                 const hasMultiplePrices = (product.prices?.length ?? 0) > 1;
+
+                                                const hasAvailability = ((product.is_available && !!product.quantity_available) || (!product.is_available && product.type === 'TIERED'));
+                                                const hasCollapsibleContent = !!product.description || hasMultiplePrices || hasAvailability;
 
                                                 return (
                                                     <div key={product.id} className={`group relative rounded-2xl border transition-all duration-200 p-5 ${isSelected ? highlightCardClass : cardBgClass} ${product.is_highlighted ? 'border-primary ring-1 ring-primary/30' : ''}`}>
@@ -508,16 +513,26 @@ const SelectProducts = (props: SelectProductsProps) => {
                                                         )}
 
                                                         <div className="flex flex-col w-full gap-0">
+                                                            {/* Header Row */}
                                                             <div className="flex flex-row justify-between items-center w-full">
-                                                                <h3 className={`flex-1 text-lg font-bold ${textPrimaryClass} tracking-tight m-0 ${hasMultiplePrices ? 'cursor-pointer' : ''}`} onClick={hasMultiplePrices ? toggleCollapse : undefined}>
-                                                                    {product.title}
-                                                                </h3>
+                                                                {/* Title & Toggle */}
+                                                                <div
+                                                                    className={classNames("flex flex-row items-center gap-2 flex-1", hasCollapsibleContent ? "cursor-pointer group/title" : "")}
+                                                                    onClick={hasCollapsibleContent ? toggleExpanded : undefined}
+                                                                >
+                                                                    <h3 className={`text-lg font-bold ${textPrimaryClass} tracking-tight m-0`}>
+                                                                        {product.title}
+                                                                    </h3>
+                                                                    {hasCollapsibleContent && (
+                                                                        <IconChevronDown size={18} className={classNames("transition-transform duration-300", textSecondaryClass, isExpanded ? "rotate-180" : "rotate-0", "group-hover/title:text-gray-900", isDarkMode && "group-hover/title:text-white")} />
+                                                                    )}
+                                                                </div>
 
+                                                                {/* Controls - Only rendered in header if single price */}
                                                                 <div className="flex flex-row items-center gap-4 shrink-0">
-                                                                    {/* Single Price Inline Rendering */}
                                                                     {!hasMultiplePrices && (
                                                                         <TieredPricing
-                                                                            productIndex={productIndex++}
+                                                                            productIndex={currentProductIndex}
                                                                             key={product.id}
                                                                             event={event}
                                                                             product={product}
@@ -525,65 +540,68 @@ const SelectProducts = (props: SelectProductsProps) => {
                                                                             colors={props.colors}
                                                                         />
                                                                     )}
-
-                                                                    {/* Multiple Prices Toggle Button */}
-                                                                    {hasMultiplePrices && (
-                                                                        <UnstyledButton onClick={toggleCollapse} className={`${textSecondaryClass} ${mutedBgClass} hover:opacity-80 rounded-full p-2.5 transition-colors border`}>
-                                                                            <IconChevronRight size={18} className={`transition-transform duration-200 ${!isProductCollapsed ? 'rotate-90' : ''}`} />
-                                                                        </UnstyledButton>
-                                                                    )}
                                                                 </div>
                                                             </div>
 
-                                                            {((product.is_available && !!product.quantity_available) || (!product.is_available && product.type === 'TIERED')) && (
-                                                                <div className="flex items-center gap-3 flex-wrap">
-                                                                    {(product.is_available && !!product.quantity_available) && (
-                                                                        <div className={`text-sm font-medium ${textSecondaryClass} ${isDarkMode ? 'bg-white/10' : 'bg-gray-100'} px-2 py-0.5 rounded-md`}>
-                                                                            {product.quantity_available === Constants.INFINITE_TICKETS && (
-                                                                                <Trans>Unlimited available</Trans>
-                                                                            )}
-                                                                            {product.quantity_available !== Constants.INFINITE_TICKETS && (
-                                                                                <Trans>{product.quantity_available} available</Trans>
-                                                                            )}
-                                                                        </div>
-                                                                    )}
+                                                            {/* Collapsible Content using CSS Grid trick */}
+                                                            {hasCollapsibleContent && (
+                                                                <div className={`grid transition-all duration-300 ease-in-out ${isExpanded ? 'grid-rows-[1fr] opacity-100 mt-2' : 'grid-rows-[0fr] opacity-0 mt-0'}`}>
+                                                                    <div className="overflow-hidden">
 
-                                                                    {(!product.is_available && product.type === 'TIERED') && (
-                                                                        <div className={`text-sm font-medium ${textSecondaryClass} ${isDarkMode ? 'bg-white/10' : 'bg-gray-100'} px-2 py-0.5 rounded-md`}>
-                                                                            <ProductAvailabilityMessage product={product} event={event} />
-                                                                        </div>
-                                                                    )}
+                                                                        {/* Availability tags */}
+                                                                        {hasAvailability && (
+                                                                            <div className="flex items-center gap-3 flex-wrap mt-2 mb-1">
+                                                                                {(product.is_available && !!product.quantity_available) && (
+                                                                                    <div className={`text-sm font-medium ${textSecondaryClass} ${isDarkMode ? 'bg-white/10' : 'bg-gray-100'} px-2 py-0.5 rounded-md`}>
+                                                                                        {product.quantity_available === Constants.INFINITE_TICKETS && (
+                                                                                            <Trans>Unlimited available</Trans>
+                                                                                        )}
+                                                                                        {product.quantity_available !== Constants.INFINITE_TICKETS && (
+                                                                                            <Trans>{product.quantity_available} available</Trans>
+                                                                                        )}
+                                                                                    </div>
+                                                                                )}
+
+                                                                                {(!product.is_available && product.type === 'TIERED') && (
+                                                                                    <div className={`text-sm font-medium ${textSecondaryClass} ${isDarkMode ? 'bg-white/10' : 'bg-gray-100'} px-2 py-0.5 rounded-md`}>
+                                                                                        <ProductAvailabilityMessage product={product} event={event} />
+                                                                                    </div>
+                                                                                )}
+                                                                            </div>
+                                                                        )}
+
+                                                                        {/* Single Price Description */}
+                                                                        {!hasMultiplePrices && product.description && (
+                                                                            <div className={`mt-3 text-sm prose prose-sm max-w-none ${isDarkMode ? 'prose-invert text-gray-300 prose-headings:text-white prose-a:text-white hover:prose-a:text-gray-200' : 'text-gray-500 prose-headings:text-gray-900 prose-a:text-gray-900 hover:prose-a:text-gray-700'}`}>
+                                                                                <TextSpoiler html={product.description} isDarkMode={isDarkMode} />
+                                                                            </div>
+                                                                        )}
+
+                                                                        {/* Multiple Prices Extended Layout (Table + Description) */}
+                                                                        {hasMultiplePrices && (
+                                                                            <div className={`mt-4 pt-4 border-t ${isDarkMode ? 'border-white/10' : 'border-gray-100'}`}>
+                                                                                <TieredPricing
+                                                                                    productIndex={currentProductIndex}
+                                                                                    key={product.id}
+                                                                                    event={event}
+                                                                                    product={product}
+                                                                                    form={form}
+                                                                                    colors={props.colors}
+                                                                                />
+
+                                                                                {product.description && (
+                                                                                    <div className={`mt-4 text-sm prose prose-sm max-w-none border p-4 rounded-xl ${mutedBgClass} ${isDarkMode ? 'prose-invert text-gray-300 prose-headings:text-white prose-a:text-white hover:prose-a:text-gray-200' : 'text-gray-500 prose-headings:text-gray-900 prose-a:text-gray-900 hover:prose-a:text-gray-700'}`}>
+                                                                                        <TextSpoiler html={product.description} isDarkMode={isDarkMode} />
+                                                                                    </div>
+                                                                                )}
+                                                                            </div>
+                                                                        )}
+
+                                                                    </div>
                                                                 </div>
                                                             )}
 
-                                                            {!hasMultiplePrices && product.description && (
-                                                                <div className={`mt-1 text-sm prose prose-sm max-w-none ${isDarkMode ? 'prose-invert text-gray-300 prose-headings:text-white prose-a:text-white hover:prose-a:text-gray-200' : 'text-gray-500 prose-headings:text-gray-900 prose-a:text-gray-900 hover:prose-a:text-gray-700'}`}>
-                                                                    <TextSpoiler html={product.description} isDarkMode={isDarkMode} />
-                                                                </div>
-                                                            )}
                                                         </div>
-
-                                                        {/* Multiple Prices Expanded View & Description */}
-                                                        {hasMultiplePrices && (
-                                                            <Collapse transitionDuration={200} in={!isProductCollapsed} hidden={isProductCollapsed}>
-                                                                <div className={`mt-4 pt-4 border-t ${isDarkMode ? 'border-white/10' : 'border-gray-100'}`}>
-                                                                    <TieredPricing
-                                                                        productIndex={productIndex++}
-                                                                        key={product.id}
-                                                                        event={event}
-                                                                        product={product}
-                                                                        form={form}
-                                                                        colors={props.colors}
-                                                                    />
-
-                                                                    {product.description && (
-                                                                        <div className={`mt-4 text-sm prose prose-sm max-w-none border p-4 rounded-xl ${mutedBgClass} ${isDarkMode ? 'prose-invert text-gray-300 prose-headings:text-white prose-a:text-white hover:prose-a:text-gray-200' : 'text-gray-500 prose-headings:text-gray-900 prose-a:text-gray-900 hover:prose-a:text-gray-700'}`}>
-                                                                            <TextSpoiler html={product.description} isDarkMode={isDarkMode} />
-                                                                        </div>
-                                                                    )}
-                                                                </div>
-                                                            </Collapse>
-                                                        )}
 
                                                         {/* Validation Errors */}
                                                         {product.max_per_order && form.values.products && isObjectEmpty(form.errors) && (currentProductQuantities.reduce((acc, { quantity }) => acc + Number(quantity), 0) > product.max_per_order) && (
