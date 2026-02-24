@@ -134,7 +134,7 @@ const Payment = () => {
                                     <span>{t`Stripe`}</span>
                                 </button>
                             )}
-                            {(isStripeEnabled || isRazorpayEnabled) && (
+                            {isRazorpayEnabled && (
                                 <button
                                     type="button"
                                     className={`${classes.paymentMethodTab} ${activePaymentMethod === 'RAZORPAY' ? classes.active : ''}`}
