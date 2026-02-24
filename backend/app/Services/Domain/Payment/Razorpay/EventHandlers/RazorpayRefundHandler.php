@@ -2,18 +2,15 @@
 
 namespace HiEvents\Services\Domain\Payment\Razorpay\EventHandlers;
 
-use HiEvents\DomainObjects\Enums\PaymentProviders;
-use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
+use HiEvents\Services\Domain\Payment\Razorpay\DTOs\RazorpayRefundPayload;
+use HiEvents\DomainObjects\Status\OrderPaymentStatus;
 use HiEvents\DomainObjects\OrderDomainObject;
-use HiEvents\DomainObjects\Status\OrderRefundStatus;
-use HiEvents\Repository\Interfaces\OrderRefundRepositoryInterface;
+use HiEvents\DomainObjects\OrderItemDomainObject;
+use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\RazorpayOrdersRepositoryInterface;
-use HiEvents\Services\Domain\EventStatistics\EventStatisticsRefundService;
-use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
-use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
-use HiEvents\Services\Infrastructure\DomainEvents\Events\OrderEvent;
-use HiEvents\Values\MoneyValue;
+use HiEvents\Repository\Interfaces\OrderRefundRepositoryInterface;
+use Illuminate\Cache\Repository;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Log\Logger;
 use Throwable;
@@ -21,166 +18,110 @@ use Throwable;
 class RazorpayRefundHandler
 {
     public function __construct(
-        private readonly OrderRepositoryInterface          $orderRepository,
+        private readonly OrderRepositoryInterface $orderRepository,
         private readonly RazorpayOrdersRepositoryInterface $razorpayOrdersRepository,
-        private readonly Logger                            $logger,
-        private readonly DatabaseManager                   $databaseManager,
-        private readonly EventStatisticsRefundService      $eventStatisticsRefundService,
-        private readonly OrderRefundRepositoryInterface    $orderRefundRepository,
-        private readonly DomainEventDispatcherService      $domainEventDispatcherService,
+        private readonly OrderRefundRepositoryInterface $refundRepository,
+        private readonly DatabaseManager $databaseManager,
+        private readonly Logger $logger,
+        private readonly Repository $cache,
     ) {
     }
 
     /**
      * @throws Throwable
      */
-    public function handleEvent(array $refundData): void
+    public function handleEvent(RazorpayRefundPayload $payload): void
     {
-        $this->databaseManager->transaction(function () use ($refundData) {
-            // Find Razorpay order by payment_id
-            $razorpayOrder = $this->razorpayOrdersRepository->findByPaymentId($refundData['payment_id']);
+        $refundEntity = $payload->refund;
+        $paymentId = $refundEntity->payment_id;
+
+        // Idempotency key based on refund ID
+        $idempotencyKey = 'razorpay_refund_' . $refundEntity->id;
+
+        if ($this->cache->has($idempotencyKey)) {
+            $this->logger->info('Razorpay refund event already handled', [
+                'refund_id' => $refundEntity->id,
+                'payment_id' => $paymentId,
+            ]);
+            return;
+        }
+
+        $this->databaseManager->transaction(function () use ($refundEntity, $paymentId) {
+            // 1. Find the Razorpay order record by payment ID
+            $razorpayOrder = $this->razorpayOrdersRepository->findByPaymentId($paymentId);
 
             if (!$razorpayOrder) {
-                $this->logger->warning('Razorpay order not found for refund', [
-                    'refund_id' => $refundData['id'],
-                    'payment_id' => $refundData['payment_id'],
+                $this->logger->warning('Razorpay order not found for refund webhook', [
+                    'payment_id' => $paymentId,
+                    'refund_id' => $refundEntity->id,
                 ]);
                 return;
             }
 
-            $existingRefund = $this->orderRefundRepository->findFirstWhere([
-                'refund_id' => $refundData['id'],
+            $localOrderId = $razorpayOrder->getOrderId();
+
+            // 2. Load the full order with items
+            $order = $this->orderRepository
+                ->loadRelation(new Relationship(OrderItemDomainObject::class))
+                ->findById($localOrderId);
+
+            if (!$order) {
+                $this->logger->warning('Local order not found for refund webhook', [
+                    'local_order_id' => $localOrderId,
+                    'refund_id' => $refundEntity->id,
+                ]);
+                return;
+            }
+
+            // 3. Store refund details in order_refunds table using repository
+            $refundAmountInRupees = $refundEntity->amount / 100; // Convert paise to rupees
+            $this->refundRepository->create([
+                'order_id' => $order->getId(),
+                'payment_provider' => 'razorpay',
+                'refund_id' => $refundEntity->id,
+                'amount' => $refundAmountInRupees,
+                'currency' => $refundEntity->currency,
+                'status' => $refundEntity->status,
+                'reason' => $refundEntity->notes['reason'] ?? null,
+                'metadata' => [
+                    'razorpay_refund' => $refundEntity->toArray(),
+                ],
             ]);
 
-            if ($existingRefund) {
-                $this->logger->info(__('Refund already processed'), [
-                    'refund_id' => $refundData['id'],
-                    'payment_id' => $refundData['payment_id'],
-                ]);
-                return;
-            }
+            // 4. Update order payment status based on total refunded amount
+            $this->updateOrderPaymentStatus($order);
 
-            // Get order ID from razorpay order array
-            $razorpayOrderArray = $razorpayOrder->toArray();
-            $orderId = $razorpayOrderArray['order_id'] ?? null;
-            
-            if (!$orderId) {
-                $this->logger->error('Could not get order ID from Razorpay order for refund', [
-                    'razorpay_order' => $razorpayOrderArray,
-                    'refund_data' => $refundData,
-                ]);
-                return;
-            }
-
-            $order = $this->orderRepository->findById($orderId);
-
-            if ($refundData['status'] !== 'processed') {
-                $this->handleFailure($refundData, $order);
-                return;
-            }
-
-            // Convert from paise to rupees
-            $refundedAmount = $refundData['amount'] / 100;
-
-            // Get order ID from order array
-            $orderArray = $order->toArray();
-            $orderIdFromOrder = $orderArray['id'] ?? $orderId;
-
-            $this->updateOrderRefundedAmount($orderIdFromOrder, $refundedAmount);
-            $this->updateOrderStatus($order, $refundedAmount);
-            
-            // Update event statistics
-            $this->updateEventStatistics($order, $refundedAmount, $refundData['currency']);
-            
-            $this->createOrderRefund($refundData, $order, $refundedAmount, $orderIdFromOrder);
-
-            $this->logger->info(__('Razorpay refund successful'), [
-                'order_id' => $orderIdFromOrder,
-                'refunded_amount' => $refundedAmount,
-                'currency' => $refundData['currency'],
-                'refund_id' => $refundData['id'],
+            $this->logger->info('Razorpay refund processed successfully', [
+                'refund_id' => $refundEntity->id,
+                'payment_id' => $paymentId,
+                'order_id' => $order->getId(),
+                'amount' => $refundAmountInRupees,
+                'status' => $refundEntity->status,
             ]);
-
-            $this->domainEventDispatcherService->dispatch(
-                new OrderEvent(
-                    type: DomainEventType::ORDER_REFUNDED,
-                    orderId: $orderIdFromOrder
-                ),
-            );
         });
+
+        // Mark as handled after successful transaction
+        $this->cache->put($idempotencyKey, true, now()->addHours(24));
     }
 
-    private function updateEventStatistics(OrderDomainObject $order, float $amount, string $currency): void
+    private function updateOrderPaymentStatus(OrderDomainObject $order): void
     {
-        // Convert to minor units (paise)
-        $amountMinor = $amount * 100;
-        $moneyValue = MoneyValue::fromMinorUnit($amountMinor, $currency);
-        $this->eventStatisticsRefundService->updateForRefund($order, $moneyValue);
-    }
+        // Get total refunded amount for this order using repository method
+        $totalRefunded = $this->refundRepository->getTotalRefundedForOrder($order->getId());
+        $orderTotal = $order->getTotalGross(); // Assume returns in rupees
 
-    private function updateOrderRefundedAmount(int $orderId, float $refundedAmount): void
-    {
-        $this->orderRepository->increment(
-            id: $orderId,
-            column: OrderDomainObjectAbstract::TOTAL_REFUNDED,
-            amount: $refundedAmount
-        );
-    }
-
-    private function updateOrderStatus(OrderDomainObject $order, float $refundedAmount): void
-    {
-        // Get order array and extract ID
-        $orderArray = $order->toArray();
-        $orderId = $orderArray['id'] ?? null;
-        
-        if (!$orderId) {
-            $this->logger->error('Could not get ID from order for status update');
-            return;
+        if ($totalRefunded <= 0) {
+            return; // No change if no refunds
         }
 
-        // Get total refunded amount from order array
-        $totalRefunded = $orderArray['total_refunded'] ?? 0;
-        
-        // Get total gross from order array
-        $totalGross = $orderArray['total_gross'] ?? 0;
-
-        $status = $refundedAmount + $totalRefunded >= $totalGross
-            ? OrderRefundStatus::REFUNDED->name
-            : OrderRefundStatus::PARTIALLY_REFUNDED->name;
-
-        $this->orderRepository->updateFromArray($orderId, [
-            OrderDomainObjectAbstract::REFUND_STATUS => $status,
-        ]);
-    }
-
-    private function handleFailure(array $refundData, OrderDomainObject $order): void
-    {
-        // Get order ID from order array
-        $orderArray = $order->toArray();
-        $orderId = $orderArray['id'] ?? null;
-        
-        if (!$orderId) {
-            $this->logger->error('Could not get ID from order for failure handling');
-            return;
+        if ($totalRefunded >= $orderTotal) {
+            $newStatus = OrderPaymentStatus::REFUNDED->name;
+        } else {
+            $newStatus = OrderPaymentStatus::PARTIALLY_REFUNDED->name;
         }
 
-        $this->orderRepository->updateFromArray($orderId, [
-            OrderDomainObjectAbstract::REFUND_STATUS => OrderRefundStatus::REFUND_FAILED->name,
-        ]);
-
-        $this->logger->error(__('Failed to process Razorpay refund'), $refundData);
-    }
-
-    private function createOrderRefund(array $refundData, OrderDomainObject $order, float $refundedAmount, int $orderId): void
-    {
-        $this->orderRefundRepository->create([
-            'order_id' => $orderId,
-            'payment_provider' => PaymentProviders::RAZORPAY->value,
-            'refund_id' => $refundData['id'],
-            'amount' => $refundedAmount,
-            'currency' => $refundData['currency'],
-            'status' => $refundData['status'],
-            'metadata' => $refundData,
+        $this->orderRepository->updateFromArray($order->getId(), [
+            'payment_status' => $newStatus,
         ]);
     }
 }

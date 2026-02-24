@@ -7,7 +7,7 @@ use HiEvents\Exceptions\Razorpay\InvalidSignatureException;
 use HiEvents\Services\Domain\Payment\Razorpay\RazorpayPaymentVerificationService;
 use HiEvents\Services\Domain\Payment\Razorpay\EventHandlers\RazorpayPaymentCapturedHandler;
 use HiEvents\Services\Domain\Payment\Razorpay\EventHandlers\RazorpayOrderPaidHandler;
-// use HiEvents\Services\Domain\Payment\Razorpay\EventHandlers\RazorpayRefundHandler;
+use HiEvents\Services\Domain\Payment\Razorpay\EventHandlers\RazorpayRefundHandler;
 use HiEvents\Services\Domain\Payment\Razorpay\EventHandlers\RazorpayPaymentFailedHandler;
 use HiEvents\Services\Domain\Payment\Razorpay\EventHandlers\RazorpayPaymentAuthorizedHandler;
 use Illuminate\Cache\Repository;
@@ -29,7 +29,7 @@ class RazorpayWebhookHandler
     public function __construct(
         private readonly RazorpayPaymentCapturedHandler $paymentCapturedHandler,
         private readonly RazorpayOrderPaidHandler $orderPaidHandler,
-        // private readonly RazorpayRefundHandler               $refundHandler,
+        private readonly RazorpayRefundHandler $refundHandler,
         private readonly RazorpayPaymentFailedHandler $paymentFailedHandler,
         private readonly RazorpayPaymentAuthorizedHandler $paymentAuthorizedHandler,
         private readonly RazorpayPaymentVerificationService $razorpayPaymentService,
@@ -67,7 +67,7 @@ class RazorpayWebhookHandler
             $eventId = match ($event) {
                 'payment.captured', 'payment.failed', 'payment.authorized' => $envelope->payload->payment->id,
                 'order.paid' => $envelope->payload->order->id,
-                // 'refund.processed' => $envelope->payload->refund->id,
+                'refund.processed' => $envelope->payload->refund->id,
                 default => null,
             };
 
@@ -94,7 +94,7 @@ class RazorpayWebhookHandler
             match ($event) {
                 'payment.captured' => $this->paymentCapturedHandler->handleEvent($envelope->payload),
                 'order.paid' => $this->orderPaidHandler->handleEvent($envelope->payload),
-                // 'refund.processed' => $this->refundHandler->handleEvent($envelope->payload),
+                'refund.processed' => $this->refundHandler->handleEvent($envelope->payload),
                 'payment.failed' => $this->paymentFailedHandler->handleEvent($envelope->payload),
                 'payment.authorized' => $this->paymentAuthorizedHandler->handleEvent($envelope->payload),
                 default => $this->logger->debug('No handler for event', ['event' => $event]),
