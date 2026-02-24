@@ -167,18 +167,16 @@ const EventHomepage = ({ ...loaderData }: EventHomepageProps) => {
     return (
         <div className={`min-h-screen font-sans relative ${isCardDark ? 'selection:bg-white/20' : 'selection:bg-black/10'}`}>
             {isImageBg && coverImage ? (
-                <>
+                <div className="fixed inset-0 z-[-1] w-full h-full overflow-hidden" aria-hidden="true">
                     <div
-                        className="fixed inset-0 z-[-1] bg-cover bg-center bg-no-repeat scale-110 blur-3xl"
-                        style={{ backgroundImage: `url(${coverImage})`, opacity: isCardDark ? 0.3 : 0.6 }}
-                        aria-hidden="true"
+                        className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-125 blur-lg"
+                        style={{ backgroundImage: `url(${coverImage})` }}
                     />
                     <div
-                        className="fixed inset-0 z-[-1]"
-                        style={{ backgroundColor, opacity: 0.85 }}
-                        aria-hidden="true"
+                        className={`absolute inset-0 ${isCardDark ? 'bg-black/60' : 'bg-white/50'}`}
+                        style={{ backgroundColor, opacity: 0.75 }}
                     />
-                </>
+                </div>
             ) : isGradientBg ? (
                 <div
                     className="fixed inset-0 z-[-1] overflow-hidden"
