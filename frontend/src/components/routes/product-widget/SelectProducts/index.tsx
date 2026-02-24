@@ -507,13 +507,36 @@ const SelectProducts = (props: SelectProductsProps) => {
                                                             </div>
                                                         )}
 
-                                                        <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
-                                                            <div className={`flex-1 ${hasMultiplePrices ? 'cursor-pointer' : ''}`} onClick={hasMultiplePrices ? toggleCollapse : undefined}>
-                                                                <h3 className={`text-lg font-bold ${textPrimaryClass} tracking-tight`}>
+                                                        <div className="flex flex-col w-full gap-2">
+                                                            <div className="flex flex-row justify-between items-center w-full">
+                                                                <h3 className={`flex-1 text-lg font-bold ${textPrimaryClass} tracking-tight m-0 ${hasMultiplePrices ? 'cursor-pointer' : ''}`} onClick={hasMultiplePrices ? toggleCollapse : undefined}>
                                                                     {product.title}
                                                                 </h3>
 
-                                                                <div className="flex items-center gap-3 mt-0 flex-wrap">
+                                                                <div className="flex flex-row items-center gap-4 shrink-0">
+                                                                    {/* Single Price Inline Rendering */}
+                                                                    {!hasMultiplePrices && (
+                                                                        <TieredPricing
+                                                                            productIndex={productIndex++}
+                                                                            key={product.id}
+                                                                            event={event}
+                                                                            product={product}
+                                                                            form={form}
+                                                                            colors={props.colors}
+                                                                        />
+                                                                    )}
+
+                                                                    {/* Multiple Prices Toggle Button */}
+                                                                    {hasMultiplePrices && (
+                                                                        <UnstyledButton onClick={toggleCollapse} className={`${textSecondaryClass} ${mutedBgClass} hover:opacity-80 rounded-full p-2.5 transition-colors border`}>
+                                                                            <IconChevronRight size={18} className={`transition-transform duration-200 ${!isProductCollapsed ? 'rotate-90' : ''}`} />
+                                                                        </UnstyledButton>
+                                                                    )}
+                                                                </div>
+                                                            </div>
+
+                                                            {((product.is_available && !!product.quantity_available) || (!product.is_available && product.type === 'TIERED')) && (
+                                                                <div className="flex items-center gap-3 flex-wrap">
                                                                     {(product.is_available && !!product.quantity_available) && (
                                                                         <div className={`text-sm font-medium ${textSecondaryClass} ${isDarkMode ? 'bg-white/10' : 'bg-gray-100'} px-2 py-0.5 rounded-md`}>
                                                                             {product.quantity_available === Constants.INFINITE_TICKETS && (
@@ -531,34 +554,11 @@ const SelectProducts = (props: SelectProductsProps) => {
                                                                         </div>
                                                                     )}
                                                                 </div>
-
-                                                                {!hasMultiplePrices && product.description && (
-                                                                    <div className={`mt-0 text-sm prose prose-sm max-w-none ${isDarkMode ? 'prose-invert text-gray-300 prose-headings:text-white prose-a:text-white hover:prose-a:text-gray-200' : 'text-gray-500 prose-headings:text-gray-900 prose-a:text-gray-900 hover:prose-a:text-gray-700'}`}>
-                                                                        <TextSpoiler html={product.description} isDarkMode={isDarkMode} />
-                                                                    </div>
-                                                                )}
-                                                            </div>
-
-                                                            {/* Single Price Inline Rendering */}
-                                                            {!hasMultiplePrices && (
-                                                                <div className="shrink-0 w-full sm:w-auto min-w-[140px]">
-                                                                    <TieredPricing
-                                                                        productIndex={productIndex++}
-                                                                        key={product.id}
-                                                                        event={event}
-                                                                        product={product}
-                                                                        form={form}
-                                                                        colors={props.colors}
-                                                                    />
-                                                                </div>
                                                             )}
 
-                                                            {/* Multiple Prices Toggle Button */}
-                                                            {hasMultiplePrices && (
-                                                                <div className="shrink-0 hidden sm:flex items-center justify-end">
-                                                                    <UnstyledButton onClick={toggleCollapse} className={`${textSecondaryClass} ${mutedBgClass} hover:opacity-80 rounded-full p-2.5 transition-colors border`}>
-                                                                        <IconChevronRight size={18} className={`transition-transform duration-200 ${!isProductCollapsed ? 'rotate-90' : ''}`} />
-                                                                    </UnstyledButton>
+                                                            {!hasMultiplePrices && product.description && (
+                                                                <div className={`mt-1 text-sm prose prose-sm max-w-none ${isDarkMode ? 'prose-invert text-gray-300 prose-headings:text-white prose-a:text-white hover:prose-a:text-gray-200' : 'text-gray-500 prose-headings:text-gray-900 prose-a:text-gray-900 hover:prose-a:text-gray-700'}`}>
+                                                                    <TextSpoiler html={product.description} isDarkMode={isDarkMode} />
                                                                 </div>
                                                             )}
                                                         </div>

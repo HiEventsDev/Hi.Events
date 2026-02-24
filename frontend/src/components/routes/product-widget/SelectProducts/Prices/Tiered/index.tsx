@@ -9,6 +9,7 @@ import { UseFormReturnType } from "@mantine/form";
 import { t } from "@lingui/macro";
 import { ProductPriceAvailability } from "../../../../../common/ProductPriceAvailability";
 import { getCurrencySymbol } from "../../../../../../utilites/currency.ts";
+import { getContrastColor, hexToRgb } from "../../../../../../utilites/themeUtils";
 
 interface TieredPricingProps {
     event: Event;
@@ -186,87 +187,86 @@ export const TieredPricing = ({ event, product, form, productIndex, colors }: Ti
             </Modal>
             {product?.prices?.map((price, index) => {
                 return (
-                    <div key={index} className={`flex items-center justify-between gap-4 py-3 border-b ${borderClass} last:border-0 relative z-10`}>
-                        <Group justify={'space-between'} wrap={'nowrap'} className="flex-1">
-                            <div className="flex flex-col">
-                                {price.label && <div className={`text-sm font-semibold ${textPrimaryClass}`}>{price.label}</div>}
-                                <div className={`text-sm ${textSecondaryClass} mt-0.5 font-medium`}>
-                                    {product.type === 'DONATION' && (
-                                        <div className="mt-5 text-sm relative inline-block">
-                                            <div
-                                                className={`absolute left-1/2 -translate-x-1/2 bottom-[calc(100%+8px)] z-50 px-2.5 py-1.5 rounded-lg text-[11px] font-semibold whitespace-nowrap shadow-lg transition-all duration-300 ease-in-out border ${showHintIndex === index
-                                                    ? 'opacity-100 translate-y-0 scale-100'
-                                                    : 'opacity-0 translate-y-2 scale-95 pointer-events-none'
-                                                    } ${isDarkMode ? 'bg-black/90 text-white border-white/10 backdrop-blur-md' : 'bg-white text-gray-900 border-gray-200 shadow-xl'}`}
-                                            >
-                                                {t`Click here to edit donation`}
-                                                {/* Tooltip Arrow */}
-                                                <div className={`absolute left-1/2 -translate-x-1/2 -bottom-[5px] w-2 h-2 rotate-45 border-r border-b ${isDarkMode ? 'bg-black/90 border-white/10' : 'bg-white border-gray-200'}`}></div>
-                                            </div>
-
-                                            <div
-                                                className={`group inline-flex items-center gap-1.5 cursor-pointer transition-opacity hover:opacity-70 ${textPrimaryClass}`}
-                                                onClick={() => handleOpenDonationModal(index)}
-                                            >
-                                                <span className="text-base font-bold border-b border-dashed border-current pb-0.5">
-                                                    {getCurrencySymbol(event?.currency)}
-                                                    {form.values.products?.[productIndex]?.quantities?.[index]?.price || product.price || 0}
-                                                </span>
-                                                <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5 opacity-50 group-hover:opacity-100 transition-opacity" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                    <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4"></path>
-                                                    <path d="M13.5 6.5l4 4"></path>
-                                                </svg>
-                                            </div>
+                    <div key={index} className={`flex flex-row items-center justify-between gap-4 py-1 border-b ${borderClass} last:border-0 relative z-10 w-full`}>
+                        <div className="flex flex-row items-center gap-2">
+                            {price.label && <div className={`text-sm font-semibold ${textPrimaryClass}`}>{price.label}</div>}
+                            <div className={`text-sm ${textSecondaryClass} font-medium flex flex-row items-center`}>
+                                {product.type === 'DONATION' && (
+                                    <div className="relative flex items-center gap-1">
+                                        <div
+                                            className={`absolute left-1/2 -translate-x-1/2 bottom-[calc(100%+8px)] z-50 px-2.5 py-1.5 rounded-lg text-[11px] font-semibold whitespace-nowrap shadow-lg transition-all duration-300 ease-in-out border ${showHintIndex === index
+                                                ? 'opacity-100 translate-y-0 scale-100'
+                                                : 'opacity-0 translate-y-2 scale-95 pointer-events-none'
+                                                } ${isDarkMode ? 'bg-black/90 text-white border-white/10 backdrop-blur-md' : 'bg-white text-gray-900 border-gray-200 shadow-xl'}`}
+                                        >
+                                            {t`Click here to edit donation`}
+                                            {/* Tooltip Arrow */}
+                                            <div className={`absolute left-1/2 -translate-x-1/2 -bottom-[5px] w-2 h-2 rotate-45 border-r border-b ${isDarkMode ? 'bg-black/90 border-white/10' : 'bg-white border-gray-200'}`}></div>
                                         </div>
-                                    )}
-                                    {product.type !== 'DONATION' && (
-                                        <ProductPriceDisplay
-                                            price={price}
-                                            product={product}
+
+                                        <div
+                                            className={`group flex items-center gap-1 cursor-pointer transition-opacity hover:opacity-70 ${textPrimaryClass}`}
+                                            onClick={() => handleOpenDonationModal(index)}
+                                        >
+                                            <span className="text-base font-bold border-b border-dashed border-current pb-0.5 leading-none">
+                                                {getCurrencySymbol(event?.currency)}
+                                                {form.values.products?.[productIndex]?.quantities?.[index]?.price || product.price || 0}
+                                            </span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4"></path>
+                                                <path d="M13.5 6.5l4 4"></path>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                )}
+                                {product.type !== 'DONATION' && (
+                                    <ProductPriceDisplay
+                                        price={price}
+                                        product={product}
+                                        currency={event?.currency}
+                                        className={`${textPrimaryClass} font-medium`}
+                                        freeLabel={t`Free`}
+                                        taxAndServiceFeeDisplayType={event?.settings?.price_display_mode}
+                                    />
+                                )}
+                                {price.is_discounted && (
+                                    <div className="text-gray-400 line-through text-xs ml-2 inline-block">
+                                        <Currency
+                                            price={price.price_before_discount}
                                             currency={event?.currency}
-                                            className={`${textPrimaryClass} font-medium`}
-                                            freeLabel={t`Free`}
-                                            taxAndServiceFeeDisplayType={event?.settings?.price_display_mode}
                                         />
-                                    )}
-                                    {price.is_discounted && (
-                                        <div className="text-gray-400 line-through text-xs ml-2 inline-block">
-                                            <Currency
-                                                price={price.price_before_discount}
-                                                currency={event?.currency}
-                                            />
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                        <div className="shrink-0 flex flex-row items-center justify-end gap-2">
+                            {(product.is_available && price.is_available) && (
+                                <div className="flex items-center gap-2 relative">
+                                    <NumberSelector
+                                        className={'hi-product-quantity-selector'}
+                                        min={product.min_per_order ?? 0}
+                                        max={(Math.min(price.quantity_remaining ?? 50, product.max_per_order ?? 50))}
+                                        fieldName={`products.${productIndex}.quantities.${index}.quantity`}
+                                        formInstance={form}
+                                        color={colors?.primary}
+                                        textColor={getContrastColor(colors?.primary || (isDarkMode ? '#ffffff' : '#111827'))}
+                                        style={{ color: isDarkMode ? '#ffffff' : '#111827' }}
+
+                                    />
+                                    {form.errors[`products.${productIndex}.quantities.${index}.quantity`] && (
+                                        <div className="text-red-500 text-xs mt-1 absolute right-0 -bottom-4 whitespace-nowrap">
+                                            {form.errors[`products.${productIndex}.quantities.${index}.quantity`]}
                                         </div>
                                     )}
                                 </div>
-                            </div>
-                            <div className="shrink-0 flex items-center justify-end min-w-[100px]">
-                                {(product.is_available && price.is_available) && (
-                                    <>
-                                        <NumberSelector
-                                            className={'hi-product-quantity-selector'}
-                                            min={product.min_per_order ?? 0}
-                                            max={(Math.min(price.quantity_remaining ?? 50, product.max_per_order ?? 50))}
-                                            fieldName={`products.${productIndex}.quantities.${index}.quantity`}
-                                            formInstance={form}
-                                            color={colors?.primary}
-                                            textColor={isDarkMode ? '#ffffff' : '#111827'}
-                                            style={{ color: isDarkMode ? '#ffffff' : '#111827' }}
-                                        />
-                                        {form.errors[`products.${productIndex}.quantities.${index}.quantity`] && (
-                                            <div className="text-red-500 text-xs mt-1 absolute right-0 -bottom-4 whitespace-nowrap">
-                                                {form.errors[`products.${productIndex}.quantities.${index}.quantity`]}
-                                            </div>
-                                        )}
-                                    </>
-                                )}
-                                {(!product.is_available || !price.is_available) && (
-                                    <span className={`text-sm font-medium ${textSecondaryClass} ${mutedBgClass} px-3 py-1.5 rounded-lg whitespace-nowrap`}>
-                                        <ProductPriceAvailability product={product} price={price} event={event} />
-                                    </span>
-                                )}
-                            </div>
-                        </Group>
+                            )}
+                            {(!product.is_available || !price.is_available) && (
+                                <span className={`text-sm font-medium ${textSecondaryClass} ${mutedBgClass} px-3 py-1.5 rounded-lg whitespace-nowrap`}>
+                                    <ProductPriceAvailability product={product} price={price} event={event} />
+                                </span>
+                            )}
+                        </div>
                     </div>
                 );
             })}
