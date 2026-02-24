@@ -507,7 +507,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                                                             </div>
                                                         )}
 
-                                                        <div className="flex flex-col w-full gap-2">
+                                                        <div className="flex flex-col w-full gap-0">
                                                             <div className="flex flex-row justify-between items-center w-full">
                                                                 <h3 className={`flex-1 text-lg font-bold ${textPrimaryClass} tracking-tight m-0 ${hasMultiplePrices ? 'cursor-pointer' : ''}`} onClick={hasMultiplePrices ? toggleCollapse : undefined}>
                                                                     {product.title}
