@@ -16,7 +16,7 @@ use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\RazorpayOrdersRepositoryInterface;
 use HiEvents\Services\Domain\Order\OrderApplicationFeeService;
-use HiEvents\Services\Domain\Payment\Razorpay\DTOs\RazorpayPaymentEventDTO;
+use HiEvents\Services\Domain\Payment\Razorpay\DTOs\RazorpayPaymentPayload;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
@@ -45,8 +45,7 @@ class RazorpayPaymentCapturedHandler
     /**
      * @throws Throwable
      */
-    // TODO: Change param type to accept payload
-    public function handleEvent(RazorpayPaymentEventDTO $event): void
+    public function handleEvent(RazorpayPaymentPayload $event): void
     {
         $paymentEntity = $event->payment;
 

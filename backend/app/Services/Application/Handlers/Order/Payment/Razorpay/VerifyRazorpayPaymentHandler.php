@@ -96,7 +96,7 @@ readonly class VerifyRazorpayPaymentHandler
             $this->razorpayOrdersRepository->updateByOrderId($order->getId(), [
                 'razorpay_payment_id' => $verifyRazorpayPaymentData->razorpay_payment_id,
                 'razorpay_signature' => $verifyRazorpayPaymentData->razorpay_signature,
-                'payment_status' => 'captured',
+                'status' => 'captured',
             ]);
 
             // Fetch complete payment details from Razorpay API

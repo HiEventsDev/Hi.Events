@@ -3,7 +3,7 @@
 namespace HiEvents\Services\Domain\Payment\Razorpay\EventHandlers;
 
 use HiEvents\Repository\Interfaces\RazorpayOrdersRepositoryInterface;
-use HiEvents\Services\Domain\Payment\Razorpay\DTOs\RazorpayPaymentEventDTO;
+use HiEvents\Services\Domain\Payment\Razorpay\DTOs\RazorpayPaymentPayload;
 use Illuminate\Cache\Repository;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Log\Logger;
@@ -22,8 +22,7 @@ class RazorpayPaymentAuthorizedHandler
     /**
      * @throws Throwable
      */
-    // TODO: Change param type to accept payload
-    public function handleEvent(RazorpayPaymentEventDTO $event): void
+    public function handleEvent(RazorpayPaymentPayload $event): void
     {
         $paymentEntity = $event->payment;
         $idempotencyKey = 'razorpay_authorized_' . $paymentEntity->id;

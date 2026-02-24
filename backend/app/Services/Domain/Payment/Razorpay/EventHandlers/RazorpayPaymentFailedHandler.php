@@ -3,7 +3,7 @@
 namespace HiEvents\Services\Domain\Payment\Razorpay\EventHandlers;
 
 use HiEvents\Repository\Interfaces\RazorpayOrdersRepositoryInterface;
-use HiEvents\Services\Domain\Payment\Razorpay\DTOs\RazorpayPaymentEventDTO;
+use HiEvents\Services\Domain\Payment\Razorpay\DTOs\RazorpayPaymentPayload;
 use Illuminate\Cache\Repository;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Log\Logger;
@@ -21,8 +21,7 @@ class RazorpayPaymentFailedHandler
     /**
      * @throws Throwable
      */
-    // TODO: Change param type to accept payload
-    public function handleEvent(RazorpayPaymentEventDTO $event): void
+    public function handleEvent(RazorpayPaymentPayload $event): void
     {
         $paymentEntity = $event->payment;
         $idempotencyKey = 'razorpay_failed_' . $paymentEntity->id;
@@ -38,7 +37,7 @@ class RazorpayPaymentFailedHandler
             // Try to find by payment ID first (if this payment ID is already stored)
             // If not found, fallback to order ID (because payment ID might not be stored yet)
             $razorpayOrder = $this->razorpayOrdersRepository->findByPaymentId($paymentEntity->id)
-                ?? $this->razorpayOrdersRepository->findByOrderId($paymentEntity->order_id);
+                ?? $this->razorpayOrdersRepository->findByRazorpayOrderId($paymentEntity->order_id);
 
             if (!$razorpayOrder) {
                 $this->logger->warning('Razorpay order not found for payment.failed', [

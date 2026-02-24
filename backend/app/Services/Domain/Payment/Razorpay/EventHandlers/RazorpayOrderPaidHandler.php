@@ -16,7 +16,6 @@ use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\RazorpayOrdersRepositoryInterface;
 use HiEvents\Services\Domain\Order\OrderApplicationFeeService;
-use HiEvents\Services\Domain\Payment\Razorpay\DTOs\RazorpayOrderPaidEventDTO;
 use HiEvents\Services\Domain\Payment\Razorpay\DTOs\RazorpayOrderPaidPayload;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
