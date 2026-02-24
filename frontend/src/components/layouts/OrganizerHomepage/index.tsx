@@ -1,22 +1,22 @@
-import {useLocation, useNavigate} from "react-router";
-import {ActionIcon, Anchor} from '@mantine/core';
-import {EventCard} from './EventCard';
+import { useLocation, useNavigate } from "react-router";
+import { ActionIcon, Anchor } from '@mantine/core';
+import { EventCard } from './EventCard';
 import classes from './OrganizerHomepage.module.scss';
-import React, {useEffect, useState} from 'react';
-import {Event, GenericPaginatedResponse, Organizer} from "../../../types.ts";
-import {OrganizerDocumentHead} from "../../common/OrganizerDocumentHead";
-import {IconExternalLink, IconMail, IconMapPin, IconWorld} from '@tabler/icons-react';
-import {t} from "@lingui/macro";
-import {PoweredByFooter} from "../../common/PoweredByFooter";
-import {socialMediaConfig} from "../../../constants/socialMediaConfig";
-import {ContactOrganizerModal} from "../../common/ContactOrganizerModal";
-import {formatAddress, getShortLocationDisplay} from "../../../utilites/addressUtilities.ts";
-import {organizerHomepagePath} from "../../../utilites/urlHelper.ts";
-import {removeTransparency} from "../../../utilites/colorHelper.ts";
-import {StatusToggle} from "../../common/StatusToggle";
-import {getConfig} from "../../../utilites/config.ts";
-import {Pagination} from "../../common/Pagination";
-import {computeThemeVariables, validateThemeSettings} from "../../../utilites/themeUtils.ts";
+import React, { useEffect, useState } from 'react';
+import { Event, GenericPaginatedResponse, Organizer } from "../../../types.ts";
+import { OrganizerDocumentHead } from "../../common/OrganizerDocumentHead";
+import { IconExternalLink, IconMail, IconMapPin, IconWorld } from '@tabler/icons-react';
+import { t } from "@lingui/macro";
+import { PoweredByFooter } from "../../common/PoweredByFooter";
+import { socialMediaConfig } from "../../../constants/socialMediaConfig";
+import { ContactOrganizerModal } from "../../common/ContactOrganizerModal";
+import { formatAddress, getShortLocationDisplay } from "../../../utilites/addressUtilities.ts";
+import { organizerHomepagePath } from "../../../utilites/urlHelper.ts";
+import { removeTransparency } from "../../../utilites/colorHelper.ts";
+import { StatusToggle } from "../../common/StatusToggle";
+import { getConfig } from "../../../utilites/config.ts";
+import { Pagination } from "../../common/Pagination";
+import { computeThemeVariables, validateThemeSettings } from "../../../utilites/themeUtils.ts";
 
 interface OrganizerHomepageProps {
     organizer?: Organizer;
@@ -26,7 +26,7 @@ interface OrganizerHomepageProps {
 }
 
 const ScrollToTop = () => {
-    const {pathname} = useLocation();
+    const { pathname } = useLocation();
 
     useEffect(() => {
         setTimeout(() => {
@@ -38,10 +38,10 @@ const ScrollToTop = () => {
 }
 
 export const OrganizerHomepage = ({
-                                      organizer,
-                                      eventsData,
-                                      isPastEvents = false,
-                                  }: OrganizerHomepageProps) => {
+    organizer,
+    eventsData,
+    isPastEvents = false,
+}: OrganizerHomepageProps) => {
     const navigate = useNavigate();
     const [contactModalOpen, setContactModalOpen] = useState(false);
 
@@ -100,7 +100,7 @@ export const OrganizerHomepage = ({
 
     return (
         <>
-            <ScrollToTop/>
+            <ScrollToTop />
             {organizer?.status && organizer?.id && (
                 <StatusToggle
                     entityType="organizer"
@@ -114,7 +114,7 @@ export const OrganizerHomepage = ({
                 />
             )}
 
-            {organizer && <OrganizerDocumentHead organizer={organizer}/>}
+            {organizer && <OrganizerDocumentHead organizer={organizer} />}
             <main className={classes.pageWrapper} style={themeStyles} data-mode={themeSettings.mode}>
                 <style>
                     {`
@@ -125,20 +125,20 @@ export const OrganizerHomepage = ({
                 </style>
 
                 {/* Background */}
-                {(organizerCover && backgroundType === 'MIRROR_COVER_IMAGE') ? (
+                {(organizerCover && (backgroundType === 'image' || backgroundType === 'MIRROR_COVER_IMAGE')) ? (
                     <div
                         className={classes.background}
-                        style={{backgroundImage: `url(${organizerCover.url})`}}
+                        style={{ backgroundImage: `url(${organizerCover.url})` }}
                     />
                 ) : (
                     <div
                         className={classes.background}
-                        style={{backgroundColor: 'var(--organizer-bg-color)'}}
+                        style={{ backgroundColor: 'var(--organizer-bg-color)' }}
                     />
                 )}
                 <div
                     className={classes.backgroundOverlay}
-                    style={backgroundType === 'MIRROR_COVER_IMAGE' ? {
+                    style={(backgroundType === 'image' || backgroundType === 'MIRROR_COVER_IMAGE') ? {
                         '--overlay-color': themeSettings.background
                     } as React.CSSProperties : undefined}
                 />
@@ -188,7 +188,7 @@ export const OrganizerHomepage = ({
                                                     <div className={classes.organizerMeta}>
                                                         {getShortLocationDisplay(organizer?.settings?.location_details) && (
                                                             <div className={classes.metaItem}>
-                                                                <IconMapPin size={15} className={classes.metaIcon}/>
+                                                                <IconMapPin size={15} className={classes.metaIcon} />
                                                                 <a
                                                                     href={getGoogleMapsUrl(organizer.settings!.location_details)}
                                                                     target="_blank"
@@ -196,13 +196,13 @@ export const OrganizerHomepage = ({
                                                                     className={classes.mapLink}
                                                                 >
                                                                     <span>{getShortLocationDisplay(organizer.settings!.location_details)}</span>
-                                                                    <IconExternalLink size={12}/>
+                                                                    <IconExternalLink size={12} />
                                                                 </a>
                                                             </div>
                                                         )}
                                                         {websiteUrl && (
                                                             <div className={classes.metaItem}>
-                                                                <IconWorld size={15} className={classes.metaIcon}/>
+                                                                <IconWorld size={15} className={classes.metaIcon} />
                                                                 <a
                                                                     href={websiteUrl}
                                                                     target="_blank"
@@ -217,7 +217,7 @@ export const OrganizerHomepage = ({
                                                 <div className={classes.profileActions}>
                                                     {(socialLinks.length > 0) && (
                                                         <div className={classes.socialLinks}>
-                                                            {socialLinks.map(({platform, handle, config}) => {
+                                                            {socialLinks.map(({ platform, handle, config }) => {
                                                                 const IconComponent = config.icon;
                                                                 const url = config.baseUrl + handle;
                                                                 return (
@@ -231,7 +231,7 @@ export const OrganizerHomepage = ({
                                                                         variant="subtle"
                                                                         size="md"
                                                                     >
-                                                                        <IconComponent size={16}/>
+                                                                        <IconComponent size={16} />
                                                                     </ActionIcon>
                                                                 );
                                                             })}
@@ -241,7 +241,7 @@ export const OrganizerHomepage = ({
                                                         onClick={() => setContactModalOpen(true)}
                                                         className={classes.contactButton}
                                                     >
-                                                        <IconMail size={14} style={{marginRight: 6}}/>
+                                                        <IconMail size={14} style={{ marginRight: 6 }} />
                                                         {t`Contact`}
                                                     </button>
                                                 </div>
@@ -251,7 +251,7 @@ export const OrganizerHomepage = ({
                                     {organizer?.description && (
                                         <div
                                             className={classes.description}
-                                            dangerouslySetInnerHTML={{__html: organizer.description}}
+                                            dangerouslySetInnerHTML={{ __html: organizer.description }}
                                         />
                                     )}
                                 </div>
@@ -335,7 +335,7 @@ export const OrganizerHomepage = ({
                                     {t`Terms of Service`}
                                 </Anchor>
                             </div>
-                            <PoweredByFooter className={classes.poweredByFooter}/>
+                            <PoweredByFooter className={classes.poweredByFooter} />
                         </div>
                     </div>
 

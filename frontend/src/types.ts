@@ -1,9 +1,9 @@
 /**
  * @todo - This file needs to be organized better. Split into multiple files.
  */
-import {SupportedLocales} from "./locales.ts";
+import { SupportedLocales } from "./locales.ts";
 
-export type ConfigKeys = 
+export type ConfigKeys =
     | 'VITE_API_URL_SERVER'
     | 'VITE_API_URL_CLIENT'
     | 'VITE_FRONTEND_URL'
@@ -72,7 +72,7 @@ export interface HomepageThemeSettings {
     accent: string;
     background: string;
     mode: 'light' | 'dark';
-    background_type: 'COLOR' | 'MIRROR_COVER_IMAGE';
+    background_type: 'color' | 'gradient' | 'image';
 }
 
 export interface LoginResponse {
@@ -202,7 +202,7 @@ export interface EventSettings {
     homepage_secondary_color: string;
     homepage_secondary_text_color: string;
     homepage_body_background_color: string;
-    homepage_background_type: 'COLOR' | 'MIRROR_COVER_IMAGE';
+    homepage_background_type: 'color' | 'gradient' | 'image';
     location_details?: VenueAddress;
     is_online_event?: boolean;
     online_event_connection_details?: string;
@@ -732,8 +732,8 @@ export interface CheckInList {
 export type CheckInListRequest =
     Omit<CheckInList, 'event_id' | 'short_id' | 'id' | 'products' | 'total_attendees' | 'checked_in_attendees' | 'is_expired' | 'is_active'>
     & {
-    product_ids: IdParam[];
-};
+        product_ids: IdParam[];
+    };
 
 export interface QuestionRequestData {
     title: string;

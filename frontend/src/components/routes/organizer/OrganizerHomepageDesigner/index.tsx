@@ -1,32 +1,32 @@
-import {useEffect, useRef, useState} from "react";
+import { useEffect, useRef, useState } from "react";
 import classes from './OrganizerHomepageDesigner.module.scss';
-import {useParams} from "react-router";
-import {useGetOrganizerSettings} from "../../../../queries/useGetOrganizerSettings.ts";
-import {useUpdateOrganizerSettings} from "../../../../mutations/useUpdateOrganizerSettings.ts";
-import {useFormErrorResponseHandler} from "../../../../hooks/useFormErrorResponseHandler.tsx";
-import {HomepageThemeSettings, IdParam, OrganizerSettings} from "../../../../types.ts";
-import {showSuccess} from "../../../../utilites/notifications.tsx";
-import {t} from "@lingui/macro";
-import {useForm} from "@mantine/form";
-import {Accordion, Button, Group, Stack, Text} from "@mantine/core";
-import {IconColorPicker, IconHelp, IconPalette, IconPhoto} from "@tabler/icons-react";
-import {Tooltip} from "../../../common/Tooltip";
-import {LoadingMask} from "../../../common/LoadingMask";
-import {CustomSelect} from "../../../common/CustomSelect";
-import {GET_ORGANIZER_QUERY_KEY, useGetOrganizer} from "../../../../queries/useGetOrganizer.ts";
-import {ImageUploadDropzone} from "../../../common/ImageUploadDropzone";
-import {organizerPreviewPath} from "../../../../utilites/urlHelper.ts";
-import {queryClient} from "../../../../utilites/queryClient.ts";
-import {GET_ORGANIZER_PUBLIC_QUERY_KEY} from "../../../../queries/useGetOrganizerPublic.ts";
-import {ThemeColorControls} from "../../../common/ThemeColorControls";
-import {computeThemeVariables, validateThemeSettings} from "../../../../utilites/themeUtils.ts";
+import { useParams } from "react-router";
+import { useGetOrganizerSettings } from "../../../../queries/useGetOrganizerSettings.ts";
+import { useUpdateOrganizerSettings } from "../../../../mutations/useUpdateOrganizerSettings.ts";
+import { useFormErrorResponseHandler } from "../../../../hooks/useFormErrorResponseHandler.tsx";
+import { HomepageThemeSettings, IdParam, OrganizerSettings } from "../../../../types.ts";
+import { showSuccess } from "../../../../utilites/notifications.tsx";
+import { t } from "@lingui/macro";
+import { useForm } from "@mantine/form";
+import { Accordion, Button, Group, Stack, Text } from "@mantine/core";
+import { IconColorPicker, IconHelp, IconPalette, IconPhoto } from "@tabler/icons-react";
+import { Tooltip } from "../../../common/Tooltip";
+import { LoadingMask } from "../../../common/LoadingMask";
+import { CustomSelect } from "../../../common/CustomSelect";
+import { GET_ORGANIZER_QUERY_KEY, useGetOrganizer } from "../../../../queries/useGetOrganizer.ts";
+import { ImageUploadDropzone } from "../../../common/ImageUploadDropzone";
+import { organizerPreviewPath } from "../../../../utilites/urlHelper.ts";
+import { queryClient } from "../../../../utilites/queryClient.ts";
+import { GET_ORGANIZER_PUBLIC_QUERY_KEY } from "../../../../queries/useGetOrganizerPublic.ts";
+import { ThemeColorControls } from "../../../common/ThemeColorControls";
+import { computeThemeVariables, validateThemeSettings } from "../../../../utilites/themeUtils.ts";
 
 interface FormValues {
     homepage_theme_settings: Partial<HomepageThemeSettings>;
 }
 
 const OrganizerHomepageDesigner = () => {
-    const {organizerId} = useParams();
+    const { organizerId } = useParams();
     const organizerSettingsQuery = useGetOrganizerSettings(organizerId);
     const organizerQuery = useGetOrganizer(organizerId);
     const updateMutation = useUpdateOrganizerSettings();
@@ -51,7 +51,7 @@ const OrganizerHomepageDesigner = () => {
                 accent: '#8b5cf6',
                 background: '#f5f3ff',
                 mode: 'light',
-                background_type: 'COLOR',
+                background_type: 'color',
             },
         }
     });
@@ -120,7 +120,7 @@ const OrganizerHomepageDesigner = () => {
             const settingsJson = JSON.stringify(settingsToSend);
             if (settingsJson !== lastSentSettings.current) {
                 iframeRef.current.contentWindow.postMessage(
-                    {type: "UPDATE_ORGANIZER_SETTINGS", settings: settingsToSend},
+                    { type: "UPDATE_ORGANIZER_SETTINGS", settings: settingsToSend },
                     "*"
                 );
                 lastSentSettings.current = settingsJson;
@@ -158,7 +158,7 @@ const OrganizerHomepageDesigner = () => {
         const value = Array.isArray(backgroundType) ? backgroundType[0] : backgroundType;
         form.setFieldValue('homepage_theme_settings', {
             ...form.values.homepage_theme_settings,
-            background_type: value as 'COLOR' | 'MIRROR_COVER_IMAGE',
+            background_type: value as 'color' | 'gradient' | 'image',
         });
     };
 
@@ -179,7 +179,7 @@ const OrganizerHomepageDesigner = () => {
                         className={classes.accordion}
                     >
                         <Accordion.Item value="images" className={classes.accordionItem}>
-                            <Accordion.Control icon={<IconPhoto size={20}/>}>
+                            <Accordion.Control icon={<IconPhoto size={20} />}>
                                 <Text fw={500}>{t`Images`}</Text>
                             </Accordion.Control>
                             <Accordion.Panel>
@@ -189,7 +189,7 @@ const OrganizerHomepageDesigner = () => {
                                             <Text fw={500} size="sm">{t`Cover Image`}</Text>
                                             <Tooltip
                                                 label={t`We recommend dimensions of 1950px by 650px, a ratio of 3:1, and a maximum file size of 5MB`}>
-                                                <IconHelp size={16} style={{color: 'var(--mantine-color-gray-6)'}}/>
+                                                <IconHelp size={16} style={{ color: 'var(--mantine-color-gray-6)' }} />
                                             </Tooltip>
                                         </Group>
                                         <ImageUploadDropzone
@@ -210,7 +210,7 @@ const OrganizerHomepageDesigner = () => {
                                         <Group justify={'space-between'} mb="xs">
                                             <Text fw={500} size="sm">{t`Logo`}</Text>
                                             <Tooltip label={t`We recommend dimensions of 400px by 400px, and a maximum file size of 5MB`}>
-                                                <IconHelp size={16} style={{color: 'var(--mantine-color-gray-6)'}}/>
+                                                <IconHelp size={16} style={{ color: 'var(--mantine-color-gray-6)' }} />
                                             </Tooltip>
                                         </Group>
                                         <ImageUploadDropzone
@@ -231,33 +231,39 @@ const OrganizerHomepageDesigner = () => {
                         </Accordion.Item>
 
                         <Accordion.Item value="theme" className={classes.accordionItem}>
-                            <Accordion.Control icon={<IconPalette size={20}/>}>
+                            <Accordion.Control icon={<IconPalette size={20} />}>
                                 <Text fw={500}>{t`Theme & Colors`}</Text>
                             </Accordion.Control>
                             <Accordion.Panel>
                                 <form onSubmit={form.onSubmit(handleSubmit)}>
                                     <fieldset disabled={organizerSettingsQuery.isLoading || updateMutation.isPending}
-                                              className={classes.fieldset}>
+                                        className={classes.fieldset}>
                                         <Stack gap="md">
                                             <CustomSelect
                                                 optionList={[
                                                     {
-                                                        icon: <IconColorPicker/>,
-                                                        label: t`Color`,
-                                                        value: 'COLOR',
-                                                        description: t`Choose a color for your background`,
+                                                        icon: <IconColorPicker />,
+                                                        label: t`Solid Color`,
+                                                        value: 'color',
+                                                        description: t`Choose a solid color for your background`,
                                                     },
                                                     {
-                                                        icon: <IconPhoto/>,
-                                                        label: t`Use cover image`,
-                                                        value: 'MIRROR_COVER_IMAGE',
+                                                        icon: <IconColorPicker />,
+                                                        label: t`Animated Gradient`,
+                                                        value: 'gradient',
+                                                        description: t`A fluid, animated mesh gradient`,
+                                                    },
+                                                    {
+                                                        icon: <IconPhoto />,
+                                                        label: t`Cover Image`,
+                                                        value: 'image',
                                                         description: t`Use a blurred version of the cover image as the background`,
                                                         disabled: !existingCover,
                                                     },
                                                 ]}
                                                 label={t`Background Type`}
                                                 name={'homepage_theme_settings.background_type'}
-                                                value={form.values.homepage_theme_settings.background_type || 'COLOR'}
+                                                value={form.values.homepage_theme_settings.background_type || 'color'}
                                                 onChange={handleBackgroundTypeChange}
                                             />
 
@@ -296,7 +302,7 @@ const OrganizerHomepageDesigner = () => {
                             onLoad={() => setIframeLoaded(true)}
                         />
                     ) : (
-                        <LoadingMask/>
+                        <LoadingMask />
                     )}
                 </div>
             </div>

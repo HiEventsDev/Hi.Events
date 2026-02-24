@@ -146,7 +146,7 @@ class UpdateEventSettingsRequest extends BaseRequest
             'homepage_theme_settings.accent' => $colorMessage,
             'homepage_theme_settings.background' => $colorMessage,
             'homepage_theme_settings.mode.in' => __('The mode must be light or dark.'),
-            'homepage_theme_settings.background_type.in' => __('The background type must be COLOR or MIRROR_COVER_IMAGE.'),
+            'homepage_theme_settings.background_type.in' => __('The background type must be COLOR, GRADIENT, or MIRROR_COVER_IMAGE.'),
         ];
     }
 }

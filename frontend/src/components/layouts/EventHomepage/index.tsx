@@ -80,7 +80,7 @@ const EventHomepage = ({ ...loaderData }: EventHomepageProps) => {
     const rawThemeSettings = event?.settings?.homepage_theme_settings || event?.organizer?.settings?.homepage_theme_settings;
     const themeSettings = validateThemeSettings(rawThemeSettings);
 
-    const backgroundType = themeSettings.background_type || 'COLOR';
+    const backgroundType = themeSettings.background_type || 'color';
     const backgroundColor = themeSettings.background || (themeSettings.mode === 'dark' ? '#050505' : '#f9fafb');
 
     const mode = themeSettings.mode === 'auto' ? detectMode(backgroundColor) : (themeSettings.mode || 'light');
@@ -162,6 +162,7 @@ const EventHomepage = ({ ...loaderData }: EventHomepageProps) => {
     const mapUrl = event.settings?.maps_url || (locationDetails ? getGoogleMapsUrl(locationDetails) : null);
 
     const isImageBg = backgroundType === 'MIRROR_COVER_IMAGE' || backgroundType === 'IMAGE' || backgroundType === 'image';
+    const isGradientBg = backgroundType === 'gradient';
 
     return (
         <div className={`min-h-screen font-sans relative ${isCardDark ? 'selection:bg-white/20' : 'selection:bg-black/10'}`}>
@@ -178,10 +179,10 @@ const EventHomepage = ({ ...loaderData }: EventHomepageProps) => {
                         aria-hidden="true"
                     />
                 </>
-            ) : (
+            ) : isGradientBg ? (
                 <div
                     className="fixed inset-0 z-[-1] overflow-hidden"
-                    style={{ backgroundColor: isCardDark ? '#050505' : backgroundColor }}
+                    style={{ backgroundColor }}
                     aria-hidden="true"
                 >
                     <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vh] rounded-full opacity-70 animate-blob-1" style={{ backgroundColor: meshColors[0], filter: 'blur(100px)' }} />
@@ -189,6 +190,12 @@ const EventHomepage = ({ ...loaderData }: EventHomepageProps) => {
                     <div className="absolute bottom-[-20%] left-[10%] w-[55vw] h-[55vh] rounded-full opacity-70 animate-blob-3" style={{ backgroundColor: meshColors[2], filter: 'blur(110px)' }} />
                     <div className="absolute bottom-[-10%] right-[20%] w-[45vw] h-[45vh] rounded-full opacity-60 animate-blob-4" style={{ backgroundColor: meshColors[0], filter: 'blur(130px)' }} />
                 </div>
+            ) : (
+                <div
+                    className="fixed inset-0 z-[-1]"
+                    style={{ backgroundColor }}
+                    aria-hidden="true"
+                />
             )}
             <style>
                 {/* eslint-disable-next-line lingui/no-unlocalized-strings */}
