@@ -90,11 +90,13 @@ const EventHomepage = ({ ...loaderData }: EventHomepageProps) => {
 
     const meshColors = generateMeshColors(backgroundColor);
 
-    const isBgDark = isCardDark;
+    const isBgDark = backgroundType === 'MIRROR_COVER_IMAGE' || backgroundType === 'IMAGE'
+        ? isCardDark
+        : detectMode(backgroundColor) === 'dark';
 
     // Text colors for elements directly on the background
-    const bgTextPrimary = isBgDark ? 'text-white' : 'text-gray-900';
-    const bgTextSecondary = isBgDark ? 'text-white/70' : 'text-gray-600';
+    const bgTextPrimary = isBgDark ? '!text-white' : '!text-gray-900';
+    const bgTextSecondary = isBgDark ? '!text-white/70' : '!text-gray-600';
 
     // Heavy glassmorphism UI 
     const cardBg = isCardDark ? 'bg-black/20 backdrop-blur-2xl shadow-xl' : 'bg-white/40 backdrop-blur-2xl shadow-xl';
@@ -557,17 +559,27 @@ const EventHomepage = ({ ...loaderData }: EventHomepageProps) => {
             </div>
 
             {/* Footer */}
-            <div className={`max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 border-t flex flex-col sm:flex-row items-center justify-between gap-6 relative z-10 opacity-70 hover:opacity-100 transition-opacity ${borderStyle}`}>
-                <div className={`flex items-center gap-6 text-sm ${bgTextSecondary}`}>
-                    <a href={getConfig('VITE_PRIVACY_URL', 'https://hi.events/privacy-policy')} className={`hover:${bgLinkTextPrimary} transition text-inherit !text-current`}>
+            <footer className={`max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col sm:flex-row items-center justify-between w-full pt-8 pb-8 mt-12 border-t ${isBgDark ? 'border-white/10' : 'border-black/5'}`}>
+
+                {/* Left Side: Legal Links */}
+                <div className="flex items-center gap-6 mb-4 sm:mb-0">
+                    <a href={getConfig('VITE_PRIVACY_URL', 'https://hi.events/privacy-policy')} className={`text-sm transition-colors ${isBgDark ? '!text-white/70 hover:!text-white' : '!text-gray-600 hover:!text-gray-900'} !no-underline`} style={{ color: 'inherit' }}>
                         {t`Privacy Policy`}
                     </a>
-                    <a href={getConfig('VITE_TOS_URL', 'https://hi.events/terms-of-service')} className={`hover:${bgLinkTextPrimary} transition text-inherit !text-current`}>
+                    <a href={getConfig('VITE_TOS_URL', 'https://hi.events/terms-of-service')} className={`text-sm transition-colors ${isBgDark ? '!text-white/70 hover:!text-white' : '!text-gray-600 hover:!text-gray-900'} !no-underline`} style={{ color: 'inherit' }}>
                         {t`Terms of Service`}
                     </a>
                 </div>
-                <PoweredByFooter className={`${bgTextSecondary} hover:${bgLinkTextPrimary} transition`} />
-            </div>
+
+                {/* Right Side: Branding */}
+                <div className={`flex items-center text-sm ${isBgDark ? '!text-white/60' : '!text-gray-500'}`}>
+                    <span>{t`Powered by`}&nbsp;</span>
+                    <a href="https://hi.events" target="_blank" rel="noopener noreferrer" className={`font-semibold transition-colors ${isBgDark ? '!text-white hover:!text-white/80' : '!text-gray-900 hover:!text-gray-700'} !no-underline`} style={{ color: 'inherit' }}>
+                        Hi.Events 🚀
+                    </a>
+                </div>
+
+            </footer>
 
             {/* Floating Registration Button (Mobile) */}
             {showScrollButton && (
