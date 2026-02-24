@@ -104,9 +104,9 @@ const EventHomepage = ({ ...loaderData }: EventHomepageProps) => {
     const cardTextSecondary = isCardDark ? 'text-white/70' : 'text-gray-500';
     const cardProseClasses = isCardDark
         // eslint-disable-next-line lingui/no-unlocalized-strings
-        ? 'prose-invert text-white/80 prose-headings:text-white prose-a:text-white hover:prose-a:text-gray-200'
+        ? 'prose-invert text-white/80 prose-headings:text-white prose-headings:font-bold prose-a:text-[var(--prose-accent)] hover:prose-a:brightness-110'
         // eslint-disable-next-line lingui/no-unlocalized-strings
-        : 'text-gray-600 prose-headings:text-gray-900 prose-a:text-gray-900 hover:prose-a:text-gray-700';
+        : 'text-gray-600 prose-headings:text-gray-900 prose-headings:font-bold prose-a:text-[var(--prose-accent)] hover:prose-a:brightness-90';
 
     const textPrimary = cardTextPrimary;
     const textSecondary = cardTextSecondary;
@@ -193,7 +193,7 @@ const EventHomepage = ({ ...loaderData }: EventHomepageProps) => {
             <style>
                 {/* eslint-disable-next-line lingui/no-unlocalized-strings */}
                 {`
-                    body, .ssr-loader { background-color: ${backgroundColor} !important; }
+                    body, .ssr-loader { background-color: ${backgroundColor} !important; --prose-accent: ${accentColor}; }
                     /* Form elements in dark/light mode */
                     .hi-widget-container { background: transparent !important; color: ${cardTextPrimary.replace('text-', '')} !important; }
 
@@ -221,10 +221,10 @@ const EventHomepage = ({ ...loaderData }: EventHomepageProps) => {
                         66% { transform: translate(25vw, -15vh) scale(1.05); }
                         100% { transform: translate(0px, 0px) scale(1); }
                     }
-                    .animate-blob-1 { animation: blob1 17s infinite ease-in-out; }
-                    .animate-blob-2 { animation: blob2 23s infinite ease-in-out; }
-                    .animate-blob-3 { animation: blob3 29s infinite ease-in-out; }
-                    .animate-blob-4 { animation: blob4 31s infinite ease-in-out; }
+                    .animate-blob-1 { animation: blob1 8s infinite ease-in-out; }
+                    .animate-blob-2 { animation: blob2 13s infinite ease-in-out; }
+                    .animate-blob-3 { animation: blob3 19s infinite ease-in-out; }
+                    .animate-blob-4 { animation: blob4 21s infinite ease-in-out; }
                     .hi-widget-product { 
                         background: ${isCardDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)'} !important; 
                         border: 1px solid ${isCardDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)'} !important; 
@@ -439,9 +439,22 @@ const EventHomepage = ({ ...loaderData }: EventHomepageProps) => {
                     {/* About Section */}
                     {event?.description && (
                         <div className="mt-4">
-                            <h2 className={`text-xl font-bold mb-4 tracking-tight ${textPrimary}`}>{t`About`}</h2>
+                            <h2 className={`text-xl font-bold mb-4 tracking-tight ${textPrimary}`}>
+                                {t`About`}
+                            </h2>
                             <div
-                                className={`prose prose-lg max-w-none prose-p:leading-relaxed ${proseClasses}`}
+                                className={`
+                                    prose max-w-none 
+                                    prose-p:leading-relaxed 
+                                    prose-headings:font-bold 
+                                    prose-a:text-[var(--prose-accent)] 
+                                    hover:prose-a:brightness-110 
+                                    transition-all duration-300
+                                    ${isCardDark
+                                        ? 'prose-invert text-white/80 prose-hr:border-white/20 prose-blockquote:text-white/80 prose-blockquote:border-white/30 marker:text-white/50'
+                                        : 'text-gray-800 prose-hr:border-black/10 prose-blockquote:text-gray-600 prose-blockquote:border-black/10 marker:text-black/30'
+                                    }
+                                `}
                                 dangerouslySetInnerHTML={{ __html: event.description }}
                             />
                         </div>
