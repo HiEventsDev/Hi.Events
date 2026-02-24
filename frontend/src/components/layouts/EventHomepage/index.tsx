@@ -161,8 +161,8 @@ const EventHomepage = ({ ...loaderData }: EventHomepageProps) => {
     const statusBadge = getStatusBadge();
     const mapUrl = event.settings?.maps_url || (locationDetails ? getGoogleMapsUrl(locationDetails) : null);
 
-    const isImageBg = backgroundType === 'MIRROR_COVER_IMAGE' || backgroundType === 'IMAGE' || backgroundType === 'image';
-    const isGradientBg = backgroundType === 'gradient';
+    const isImageBg = backgroundType === 'MIRROR_COVER_IMAGE';
+    const isGradientBg = backgroundType === 'GRADIENT';
 
     return (
         <div className={`min-h-screen font-sans relative ${isCardDark ? 'selection:bg-white/20' : 'selection:bg-black/10'}`}>

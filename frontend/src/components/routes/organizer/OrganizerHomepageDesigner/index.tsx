@@ -51,7 +51,7 @@ const OrganizerHomepageDesigner = () => {
                 accent: '#8b5cf6',
                 background: '#f5f3ff',
                 mode: 'light',
-                background_type: 'color',
+                background_type: 'COLOR',
             },
         }
     });
@@ -158,7 +158,7 @@ const OrganizerHomepageDesigner = () => {
         const value = Array.isArray(backgroundType) ? backgroundType[0] : backgroundType;
         form.setFieldValue('homepage_theme_settings', {
             ...form.values.homepage_theme_settings,
-            background_type: value as 'color' | 'gradient' | 'image',
+            background_type: value as 'COLOR' | 'GRADIENT' | 'MIRROR_COVER_IMAGE',
         });
     };
 
@@ -244,26 +244,26 @@ const OrganizerHomepageDesigner = () => {
                                                     {
                                                         icon: <IconColorPicker />,
                                                         label: t`Solid Color`,
-                                                        value: 'color',
+                                                        value: 'COLOR',
                                                         description: t`Choose a solid color for your background`,
                                                     },
                                                     {
                                                         icon: <IconColorPicker />,
                                                         label: t`Animated Gradient`,
-                                                        value: 'gradient',
+                                                        value: 'GRADIENT',
                                                         description: t`A fluid, animated mesh gradient`,
                                                     },
                                                     {
                                                         icon: <IconPhoto />,
                                                         label: t`Cover Image`,
-                                                        value: 'image',
+                                                        value: 'MIRROR_COVER_IMAGE',
                                                         description: t`Use a blurred version of the cover image as the background`,
                                                         disabled: !existingCover,
                                                     },
                                                 ]}
                                                 label={t`Background Type`}
                                                 name={'homepage_theme_settings.background_type'}
-                                                value={form.values.homepage_theme_settings.background_type || 'color'}
+                                                value={form.values.homepage_theme_settings.background_type || 'COLOR'}
                                                 onChange={handleBackgroundTypeChange}
                                             />
 

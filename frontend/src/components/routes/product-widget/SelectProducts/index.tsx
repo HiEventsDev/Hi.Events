@@ -63,7 +63,7 @@ interface SelectProductsProps {
     event: Event;
     promoCodeValid?: boolean;
     promoCode?: string;
-    backgroundType?: 'color' | 'gradient' | 'image';
+    backgroundType?: 'COLOR' | 'GRADIENT' | 'MIRROR_COVER_IMAGE';
     colors?: {
         primary?: string;
         primaryText?: string;

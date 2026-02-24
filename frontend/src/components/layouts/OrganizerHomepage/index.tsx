@@ -125,7 +125,7 @@ export const OrganizerHomepage = ({
                 </style>
 
                 {/* Background */}
-                {(organizerCover && (backgroundType === 'image' || backgroundType === 'MIRROR_COVER_IMAGE')) ? (
+                {(organizerCover && (backgroundType === 'MIRROR_COVER_IMAGE')) ? (
                     <div
                         className={classes.background}
                         style={{ backgroundImage: `url(${organizerCover.url})` }}
@@ -138,7 +138,7 @@ export const OrganizerHomepage = ({
                 )}
                 <div
                     className={classes.backgroundOverlay}
-                    style={(backgroundType === 'image' || backgroundType === 'MIRROR_COVER_IMAGE') ? {
+                    style={(backgroundType === 'MIRROR_COVER_IMAGE') ? {
                         '--overlay-color': themeSettings.background
                     } as React.CSSProperties : undefined}
                 />

@@ -72,7 +72,7 @@ export interface HomepageThemeSettings {
     accent: string;
     background: string;
     mode: 'light' | 'dark';
-    background_type: 'color' | 'gradient' | 'image';
+    background_type: 'COLOR' | 'GRADIENT' | 'MIRROR_COVER_IMAGE';
 }
 
 export interface LoginResponse {
@@ -202,7 +202,7 @@ export interface EventSettings {
     homepage_secondary_color: string;
     homepage_secondary_text_color: string;
     homepage_body_background_color: string;
-    homepage_background_type: 'color' | 'gradient' | 'image';
+    homepage_background_type: 'COLOR' | 'GRADIENT' | 'MIRROR_COVER_IMAGE';
     location_details?: VenueAddress;
     is_online_event?: boolean;
     online_event_connection_details?: string;

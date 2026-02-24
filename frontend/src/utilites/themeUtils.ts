@@ -200,7 +200,7 @@ export function getDefaultThemeSettings(): HomepageThemeSettings {
         accent: '#8b5cf6',
         background: '#f5f3ff',
         mode: 'light',
-        background_type: 'color',
+        background_type: 'COLOR',
     };
 }
 
