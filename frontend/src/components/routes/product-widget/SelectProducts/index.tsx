@@ -78,6 +78,53 @@ interface SelectProductsProps {
     showPoweredBy?: boolean;
 }
 
+const TextSpoiler = ({ html, isDarkMode, lineClampClass = "line-clamp-3" }: { html: string, isDarkMode: boolean, lineClampClass?: string }) => {
+    const [expanded, setExpanded] = useState(false);
+    const [isTruncated, setIsTruncated] = useState(false);
+    const contentRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (!contentRef.current) return;
+
+        const checkTruncation = () => {
+            if (contentRef.current && !expanded) {
+                // Ensure text is considered truncated if it overflows visually
+                setIsTruncated(contentRef.current.scrollHeight > contentRef.current.clientHeight + 2);
+            }
+        };
+
+        checkTruncation();
+
+        const resizeObserver = new ResizeObserver(() => {
+            checkTruncation();
+        });
+        resizeObserver.observe(contentRef.current);
+        return () => resizeObserver.disconnect();
+    }, [expanded, html]);
+
+    return (
+        <div className="flex flex-col items-start w-full">
+            <div
+                ref={contentRef}
+                className={classNames('w-full', !expanded ? lineClampClass : '')}
+                dangerouslySetInnerHTML={{ __html: html }}
+            />
+            <div className={classNames('w-full', (isTruncated || expanded) ? 'mt-2' : '')}>
+                {(isTruncated || expanded) && (
+                    <button
+                        type="button"
+                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); setExpanded(!expanded); }}
+                        className="font-semibold underline underline-offset-2 opacity-80 hover:opacity-100 transition-opacity"
+                        style={{ color: isDarkMode ? '#e5e7eb' : '#374151' }}
+                    >
+                        {expanded ? t`Hide` : t`Show more`}
+                    </button>
+                )}
+            </div>
+        </div>
+    );
+};
+
 const SelectProducts = (props: SelectProductsProps) => {
     const { eventId } = useParams();
     const queryClient = useQueryClient();
@@ -421,9 +468,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                                         </h2>
                                         {category.description && (
                                             <div className={`text-sm mb-4 prose prose-sm max-w-none ${isDarkMode ? 'prose-invert text-gray-300 prose-headings:text-white prose-a:text-white hover:prose-a:text-gray-200' : 'text-gray-500 prose-headings:text-gray-900 prose-a:text-gray-900 hover:prose-a:text-gray-700'}`}>
-                                                <Spoiler styles={{ control: { color: isDarkMode ? '#e5e7eb' : '#374151' } }} maxHeight={500} showLabel={<span className="font-semibold underline underline-offset-2 opacity-80 hover:opacity-100 transition-opacity">{t`Show more`}</span>} hideLabel={<span className="font-semibold underline underline-offset-2 opacity-80 hover:opacity-100 transition-opacity">{t`Hide`}</span>}>
-                                                    <div dangerouslySetInnerHTML={{ __html: category.description }} />
-                                                </Spoiler>
+                                                <TextSpoiler html={category.description} isDarkMode={isDarkMode} lineClampClass="line-clamp-5" />
                                             </div>
                                         )}
                                         <div className="space-y-3">
@@ -489,9 +534,7 @@ const SelectProducts = (props: SelectProductsProps) => {
 
                                                                 {!hasMultiplePrices && product.description && (
                                                                     <div className={`mt-0 text-sm prose prose-sm max-w-none ${isDarkMode ? 'prose-invert text-gray-300 prose-headings:text-white prose-a:text-white hover:prose-a:text-gray-200' : 'text-gray-500 prose-headings:text-gray-900 prose-a:text-gray-900 hover:prose-a:text-gray-700'}`}>
-                                                                        <Spoiler styles={{ control: { color: isDarkMode ? '#e5e7eb' : '#374151', marginTop: '0.5rem' } }} maxHeight={100} showLabel={<span className="font-semibold underline underline-offset-2 opacity-80 hover:opacity-100 transition-opacity">{t`Show more`}</span>} hideLabel={<span className="font-semibold underline underline-offset-2 opacity-80 hover:opacity-100 transition-opacity">{t`Hide`}</span>}>
-                                                                            <div dangerouslySetInnerHTML={{ __html: product.description }} />
-                                                                        </Spoiler>
+                                                                        <TextSpoiler html={product.description} isDarkMode={isDarkMode} />
                                                                     </div>
                                                                 )}
                                                             </div>
@@ -535,9 +578,7 @@ const SelectProducts = (props: SelectProductsProps) => {
 
                                                                     {product.description && (
                                                                         <div className={`mt-4 text-sm prose prose-sm max-w-none border p-4 rounded-xl ${mutedBgClass} ${isDarkMode ? 'prose-invert text-gray-300 prose-headings:text-white prose-a:text-white hover:prose-a:text-gray-200' : 'text-gray-500 prose-headings:text-gray-900 prose-a:text-gray-900 hover:prose-a:text-gray-700'}`}>
-                                                                            <Spoiler styles={{ control: { color: isDarkMode ? '#e5e7eb' : '#374151', marginTop: '0.5rem' } }} maxHeight={100} showLabel={<span className="font-semibold underline underline-offset-2 opacity-80 hover:opacity-100 transition-opacity">{t`Show more`}</span>} hideLabel={<span className="font-semibold underline underline-offset-2 opacity-80 hover:opacity-100 transition-opacity">{t`Hide`}</span>}>
-                                                                                <div dangerouslySetInnerHTML={{ __html: product.description }} />
-                                                                            </Spoiler>
+                                                                            <TextSpoiler html={product.description} isDarkMode={isDarkMode} />
                                                                         </div>
                                                                     )}
                                                                 </div>
