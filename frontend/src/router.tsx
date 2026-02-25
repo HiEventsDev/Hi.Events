@@ -314,6 +314,13 @@ export const router: RouteObject[] = [
                 }
             },
             {
+                path: "webhooks",
+                async lazy() {
+                    const Webhooks = await import("./components/routes/organizer/Webhooks");
+                    return { Component: Webhooks.default };
+                }
+            },
+            {
                 path: "reports",
                 async lazy() {
                     const OrganizerReports = await import("./components/routes/organizer/Reports");

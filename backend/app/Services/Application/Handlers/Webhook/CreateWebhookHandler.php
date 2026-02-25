@@ -31,6 +31,7 @@ class CreateWebhookHandler
             ->setUrl($upsertWebhookDTO->url)
             ->setEventTypes($upsertWebhookDTO->eventTypes)
             ->setEventId($upsertWebhookDTO->eventId)
+            ->setOrganizerId($upsertWebhookDTO->organizerId)
             ->setUserId($upsertWebhookDTO->userId)
             ->setAccountId($upsertWebhookDTO->accountId)
             ->setStatus($upsertWebhookDTO->status->value);
