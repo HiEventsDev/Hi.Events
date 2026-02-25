@@ -10,6 +10,7 @@ import {
     IconExternalLink,
     IconMail,
     IconMapPin,
+    IconMaximize,
     IconShare,
     IconTicket,
     IconWorld
@@ -167,7 +168,7 @@ const EventHomepage = ({ ...loaderData }: EventHomepageProps) => {
     const isGradientBg = backgroundType === 'GRADIENT';
 
     return (
-        <div className={`min-h-screen font-sans relative ${isCardDark ? 'selection:bg-white/20' : 'selection:bg-black/10'}`}>
+        <div className={`min-h-[100dvh] font-sans relative ${isCardDark ? 'selection:bg-white/20' : 'selection:bg-black/10'}`}>
             {isImageBg && coverImage ? (
                 <div className="fixed inset-0 z-[-1] w-full h-full overflow-hidden" aria-hidden="true">
                     <div
@@ -482,19 +483,45 @@ const EventHomepage = ({ ...loaderData }: EventHomepageProps) => {
                                     )}
                                 </div>
                                 {mapUrl && (
-                                    <div className={`w-full sm:w-64 h-48 rounded-2xl overflow-hidden relative border ${borderStyle} shadow-sm shrink-0`}>
-                                        <iframe
-                                            src={`https://maps.google.com/maps?q=${encodeURIComponent(formatAddress(locationDetails))}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
-                                            width="100%"
-                                            height="100%"
-                                            style={{ border: 0 }}
-                                            allowFullScreen={false}
-                                            loading="lazy"
-                                            referrerPolicy="no-referrer-when-downgrade"
-                                            title="Event Location Map"
-                                            className="absolute inset-0 grayscale-[20%] contrast-[1.1]"
+                                    <a
+                                        href={mapUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className={`relative flex-1 rounded-xl overflow-hidden min-h-[140px] cursor-pointer group border ${borderStyle}`}
+                                    >
+                                        <svg
+                                            viewBox="0 0 200 120"
+                                            preserveAspectRatio="xMidYMid slice"
+                                            className="absolute inset-0 w-full h-full"
+                                        >
+                                            <rect width="200" height="120" fill={isCardDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)'} />
+                                            {/* River */}
+                                            <path d="M-5 95 Q30 85, 50 90 Q80 100, 110 88 Q140 75, 170 82 Q190 86, 205 80" stroke={isCardDark ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.35)'} strokeWidth="2" fill="none" opacity="0.5" />
+                                            {/* Main roads */}
+                                            <line x1="0" y1="50" x2="200" y2="50" stroke={isCardDark ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.25)'} strokeWidth="2" opacity="0.8" />
+                                            <line x1="100" y1="0" x2="100" y2="120" stroke={isCardDark ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.25)'} strokeWidth="2" opacity="0.8" />
+                                            {/* Secondary roads */}
+                                            <line x1="0" y1="25" x2="200" y2="25" stroke={isCardDark ? 'rgba(255,255,255,0.25)' : 'rgba(0,0,0,0.15)'} strokeWidth="1.5" opacity="0.8" />
+                                            <line x1="0" y1="70" x2="85" y2="70" stroke={isCardDark ? 'rgba(255,255,255,0.25)' : 'rgba(0,0,0,0.15)'} strokeWidth="1.5" opacity="0.8" />
+                                            <line x1="115" y1="70" x2="200" y2="70" stroke={isCardDark ? 'rgba(255,255,255,0.25)' : 'rgba(0,0,0,0.15)'} strokeWidth="1.5" opacity="0.8" />
+                                            <line x1="50" y1="0" x2="50" y2="120" stroke={isCardDark ? 'rgba(255,255,255,0.25)' : 'rgba(0,0,0,0.15)'} strokeWidth="1.5" opacity="0.8" />
+                                            <line x1="150" y1="0" x2="150" y2="75" stroke={isCardDark ? 'rgba(255,255,255,0.25)' : 'rgba(0,0,0,0.15)'} strokeWidth="1.5" opacity="0.8" />
+                                            {/* Blocks/buildings */}
+                                            <rect x="110" y="28" width="14" height="10" fill={isCardDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.15)'} opacity="1" rx="1" />
+                                            <rect x="20" y="55" width="12" height="10" fill={isCardDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.15)'} opacity="1" rx="1" />
+                                        </svg>
+                                        <IconMapPin
+                                            size={32}
+                                            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-full drop-shadow-md"
+                                            style={{ color: isCardDark ? '#ffffff' : '#111827' }}
                                         />
-                                    </div>
+                                        <div className="absolute inset-0 flex items-end justify-center pb-3 bg-black/0 group-hover:bg-black/30 transition-colors duration-200">
+                                            <span className="flex items-center gap-1.5 text-sm font-semibold px-3 py-1.5 rounded-lg bg-black/60 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                                <IconMaximize size={14} />
+                                                {t`View Map`}
+                                            </span>
+                                        </div>
+                                    </a>
                                 )}
                             </div>
                         </div>
@@ -573,7 +600,7 @@ const EventHomepage = ({ ...loaderData }: EventHomepageProps) => {
 
                 {/* Right Side: Branding */}
                 <div className={`flex items-center text-sm ${isBgDark ? '!text-white/60' : '!text-gray-500'}`}>
-                    <span>{t`Powered by`}&nbsp;</span>
+                    <span>{t`Powered by`} </span>
                     <a href="https://hi.events" target="_blank" rel="noopener noreferrer" className={`font-semibold transition-colors ${isBgDark ? '!text-white hover:!text-white/80' : '!text-gray-900 hover:!text-gray-700'} !no-underline`} style={{ color: 'inherit' }}>
                         Hi.Events 🚀
                     </a>
@@ -581,21 +608,24 @@ const EventHomepage = ({ ...loaderData }: EventHomepageProps) => {
 
             </footer>
 
-            {/* Floating Registration Button (Mobile) */}
-            {showScrollButton && (
-                <div
-                    className="fixed bottom-0 left-0 right-0 p-4 z-50 md:hidden flex justify-center pb-safe pt-8 pointer-events-none"
-                    style={{ background: `linear-gradient(to top, ${backgroundColor}f2, ${backgroundColor}e6 50%, transparent)` }}
+            {/* Floating Registration Button (Mobile) - Always rendered; CSS controls visibility to prevent CLS */}
+            <div
+                className="fixed bottom-0 left-0 right-0 p-4 z-50 md:hidden flex justify-center pb-safe pt-8 pointer-events-none"
+                style={{
+                    background: `linear-gradient(to top, ${backgroundColor}f2, ${backgroundColor}e6 50%, transparent)`,
+                    opacity: showScrollButton ? 1 : 0,
+                    transition: 'opacity 0.3s ease',
+                }}
+                aria-hidden={!showScrollButton}
+            >
+                <button
+                    onClick={scrollToTickets}
+                    style={{ backgroundColor: accentColor, color: getContrastColor(accentColor) }}
+                    className="pointer-events-auto px-8 py-3.5 rounded-full font-bold shadow-[0_8px_30px_rgb(0,0,0,0.2)] flex items-center justify-center gap-2 w-full max-w-sm transition-all active:scale-95 border border-black/10 hover:brightness-110"
                 >
-                    <button
-                        onClick={scrollToTickets}
-                        style={{ backgroundColor: accentColor, color: getContrastColor(accentColor) }}
-                        className="pointer-events-auto px-8 py-3.5 rounded-full font-bold shadow-[0_8px_30px_rgb(0,0,0,0.2)] flex items-center justify-center gap-2 w-full max-w-sm transition-all active:scale-95 border border-black/10 hover:brightness-110"
-                    >
-                        <IconTicket size={20} /> {t`Get Tickets`}
-                    </button>
-                </div>
-            )}
+                    <IconTicket size={20} /> {t`Get Tickets`}
+                </button>
+            </div>
 
             <ContactOrganizerModal opened={contactModalOpen} onClose={() => setContactModalOpen(false)} organizer={organizer} />
         </div>
