@@ -1,0 +1,209 @@
+src/components/common/Accordion/index.tsx(2,9): error TS2305: Module '"@tabler/icons-react"' has no exported member 'TablerIconsProps'.
+src/components/common/ActionMenu/index.tsx(2,17): error TS6133: 'Group' is declared but its value is never read.
+src/components/common/ChatwootWidget/index.tsx(31,28): error TS2339: Property 'chatwootSDK' does not exist on type 'Window & typeof globalThis'.
+src/components/common/ChatwootWidget/index.tsx(82,29): error TS2339: Property '$chatwoot' does not exist on type 'Window & typeof globalThis'.
+src/components/common/ChatwootWidget/index.tsx(84,24): error TS2339: Property '$chatwoot' does not exist on type 'Window & typeof globalThis'.
+src/components/common/ChatwootWidget/index.tsx(90,24): error TS2339: Property '$chatwoot' does not exist on type 'Window & typeof globalThis'.
+src/components/common/CheckInStatusModal/index.tsx(25,54): error TS6133: 'rest' is declared but its value is never read.
+src/components/common/Editor/Controls/InsertImageControl/index.tsx(101,39): error TS2322: Type 'Dispatch<SetStateAction<string>>' is not assignable to type '(value: string | null) => void'.
+  Types of parameters 'value' and 'value' are incompatible.
+    Type 'string | null' is not assignable to type 'SetStateAction<string>'.
+      Type 'null' is not assignable to type 'SetStateAction<string>'.
+src/components/common/Editor/Extensions/ImageResizeExtension/index.tsx(24,5): error TS2322: Type '(this: { name: string; options: ImageOptions; storage: any; editor: Editor; type: NodeType; parent: ((this: ...) => NodeViewRenderer) | null | undefined; }) => ({ node, editor, getPos }: NodeViewProps) => { ...; } | { ...; }' is not assignable to type '(this: { name: string; options: ImageOptions; storage: any; editor: Editor; type: NodeType; parent: ... | null | undefined; }) => NodeViewRenderer'.
+  Type '({ node, editor, getPos }: NodeViewProps) => { dom: HTMLDivElement; destroy?: undefined; } | { dom: HTMLDivElement; destroy(): void; }' is not assignable to type 'NodeViewRenderer'.
+    Types of parameters '__0' and 'props' are incompatible.
+      Type 'NodeViewRendererProps' is missing the following properties from type 'NodeViewProps': selected, updateAttributes, deleteNode
+src/components/common/Editor/Extensions/LiquidTokenExtension/index.tsx(51,38): error TS2345: Argument of type '({ node, selected }: TokenComponentProps) => JSX.Element' is not assignable to parameter of type 'ComponentType<ReactNodeViewProps<HTMLElement>>'.
+  Type '({ node, selected }: TokenComponentProps) => JSX.Element' is not assignable to type 'FunctionComponent<ReactNodeViewProps<HTMLElement>>'.
+    Types of parameters '__0' and 'props' are incompatible.
+      Type 'ReactNodeViewProps<HTMLElement>' is not assignable to type 'TokenComponentProps'.
+        The types of 'node.attrs' are incompatible between these types.
+          Type 'Attrs' is missing the following properties from type '{ tokenName: string; tokenDescription: string; }': tokenName, tokenDescription
+src/components/common/Editor/Extensions/LiquidVariableExtension.tsx(39,5): error TS2322: Type '(this: { name: string; options: any; storage: any; editor: Editor; type: NodeType; parent: (() => Partial<RawCommands>) | undefined; }) => { insertLiquidVariable: (variable: string) => ({ chain }: { ...; }) => any; }' is not assignable to type '(this: { name: string; options: any; storage: any; editor: Editor; type: NodeType; parent: (() => Partial<RawCommands>) | undefined; }) => Partial<RawCommands>'.
+  Type '{ insertLiquidVariable: (variable: string) => ({ chain }: { chain: any; }) => any; }' has no properties in common with type 'Partial<RawCommands>'.
+src/components/common/Editor/Extensions/LiquidVariableExtension.tsx(41,60): error TS7031: Binding element 'chain' implicitly has an 'any' type.
+src/components/common/NumberSelector/index.tsx(92,17): error TS2322: Type '(newValue: number) => void' is not assignable to type '(value: string | number) => void'.
+  Types of parameters 'newValue' and 'value' are incompatible.
+    Type 'string | number' is not assignable to type 'number'.
+      Type 'string' is not assignable to type 'number'.
+src/components/common/OrganizerReportTable/index.tsx(333,29): error TS2322: Type '(newRange: [Date | null, Date | null]) => void' is not assignable to type '(value: DatesRangeValue<string>) => void'.
+  Types of parameters 'newRange' and 'value' are incompatible.
+    Type 'DatesRangeValue<string>' is not assignable to type '[Date | null, Date | null]'.
+      Type at position 0 in source is not compatible with type at position 0 in target.
+        Type 'string | null' is not assignable to type 'Date | null'.
+          Type 'string' is not assignable to type 'Date'.
+src/components/common/ProductsTable/SortableCategory/index.tsx(49,28): error TS2339: Property 'response' does not exist on type 'Error'.
+src/components/common/ProductsTable/SortableCategory/index.tsx(49,54): error TS2339: Property 'response' does not exist on type 'Error'.
+src/components/common/ProductsTable/SortableCategory/index.tsx(49,88): error TS2339: Property 'response' does not exist on type 'Error'.
+src/components/common/ProductsTable/SortableCategory/index.tsx(50,38): error TS2339: Property 'response' does not exist on type 'Error'.
+src/components/common/ProductsTable/SortableCategory/index.tsx(87,17): error TS2322: Type '{ product_category_id: number; sorted_products: { id: number; sort_order: number; }[]; }[]' is not assignable to type '{ product_category_id: IdParam; sorted_products: SortableItem[]; }[]'.
+  Type '{ product_category_id: number; sorted_products: { id: number; sort_order: number; }[]; }' is not assignable to type '{ product_category_id: IdParam; sorted_products: SortableItem[]; }'.
+    Types of property 'sorted_products' are incompatible.
+      Type '{ id: number; sort_order: number; }[]' is not assignable to type 'SortableItem[]'.
+        Property 'order' is missing in type '{ id: number; sort_order: number; }' but required in type 'SortableItem'.
+src/components/common/PromoCodeTable/index.tsx(137,111): error TS18048: 'product' is possibly 'undefined'.
+src/components/common/PromoCodeTable/index.tsx(141,66): error TS18048: 'product' is possibly 'undefined'.
+src/components/common/ReportTable/index.tsx(277,29): error TS2322: Type '(newRange: [Date | null, Date | null]) => void' is not assignable to type '(value: DatesRangeValue<string>) => void'.
+  Types of parameters 'newRange' and 'value' are incompatible.
+    Type 'DatesRangeValue<string>' is not assignable to type '[Date | null, Date | null]'.
+      Type at position 0 in source is not compatible with type at position 0 in target.
+        Type 'string | null' is not assignable to type 'Date | null'.
+          Type 'string' is not assignable to type 'Date'.
+src/components/forms/OrganizerForm/index.tsx(68,49): error TS6133: 'onCancel' is declared but its value is never read.
+src/components/forms/PromoCodeForm/index.tsx(4,9): error TS6133: 'ProductType' is declared but its value is never read.
+src/components/layouts/AppLayout/types.ts(2,10): error TS2305: Module '"@tabler/icons-react"' has no exported member 'TablerIconsProps'.
+src/components/layouts/Event/index.tsx(185,29): error TS2322: Type '{ children: Element; onClick: () => void; size: "sm"; leftSection: Element; rightSection: Element; }' is not assignable to type 'IntrinsicAttributes & TopBarButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'onClick' does not exist on type 'IntrinsicAttributes & TopBarButtonProps & RefAttributes<HTMLButtonElement>'.
+src/components/layouts/OrganizerLayout/index.tsx(199,33): error TS2322: Type '{ children: Element; onClick: () => void; size: "sm"; leftSection: Element; rightSection: Element; }' is not assignable to type 'IntrinsicAttributes & TopBarButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'onClick' does not exist on type 'IntrinsicAttributes & TopBarButtonProps & RefAttributes<HTMLButtonElement>'.
+src/components/modals/CreateAffiliateModal/index.tsx(82,21): error TS2322: Type 'UseFormReturnType<CreateAffiliateRequest, (values: CreateAffiliateRequest) => CreateAffiliateRequest>' is not assignable to type 'UseFormReturnType<CreateAffiliateRequest | UpdateAffiliateRequest, (values: CreateAffiliateRequest | UpdateAffiliateRequest) => CreateAffiliateRequest | UpdateAffiliateRequest>'.
+  Types of property 'initialize' are incompatible.
+    Type 'Initialize<CreateAffiliateRequest>' is not assignable to type 'Initialize<CreateAffiliateRequest | UpdateAffiliateRequest>'.
+      Type 'CreateAffiliateRequest | UpdateAffiliateRequest' is not assignable to type 'CreateAffiliateRequest'.
+        Property 'code' is missing in type 'UpdateAffiliateRequest' but required in type 'CreateAffiliateRequest'.
+src/components/modals/CreateAttendeeModal/index.tsx(66,29): error TS2353: Object literal may only specify known properties, and 'tax_or_fee_id' does not exist in type 'TaxAndFee | ((prevValue: TaxAndFee) => TaxAndFee)'.
+src/components/modals/CreateCheckInListModal/index.tsx(32,54): error TS18048: 'category.products' is possibly 'undefined'.
+src/components/modals/CreateCheckInListModal/index.tsx(34,13): error TS2532: Object is possibly 'undefined'.
+src/components/modals/CreateEventModal/index.tsx(5,8): error TS6133: 'React' is declared but its value is never read.
+src/components/modals/CreateEventModal/index.tsx(223,74): error TS2345: Argument of type 'string | null' is not assignable to parameter of type 'string | ((prevValue: string | undefined) => string | undefined) | undefined'.
+  Type 'null' is not assignable to type 'string | ((prevValue: string | undefined) => string | undefined) | undefined'.
+src/components/modals/DuplicateEventModal/index.tsx(71,58): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ title: string; start_date: string; end_date: string; description: string; duplicate_products: boolean; duplicate_questions: boolean; duplicate_settings: boolean; duplicate_promo_codes: boolean; ... 5 more ...; duplicate_affiliates: boolean; }'.
+  No index signature with a parameter of type 'string' was found on type '{ title: string; start_date: string; end_date: string; description: string; duplicate_products: boolean; duplicate_questions: boolean; duplicate_settings: boolean; duplicate_promo_codes: boolean; ... 5 more ...; duplicate_affiliates: boolean; }'.
+src/components/modals/DuplicateEventModal/index.tsx(72,60): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ title: string; start_date: string; end_date: string; description: string; duplicate_products: boolean; duplicate_questions: boolean; duplicate_settings: boolean; duplicate_promo_codes: boolean; ... 5 more ...; duplicate_affiliates: boolean; }'.
+  No index signature with a parameter of type 'string' was found on type '{ title: string; start_date: string; end_date: string; description: string; duplicate_products: boolean; duplicate_questions: boolean; duplicate_settings: boolean; duplicate_promo_codes: boolean; ... 5 more ...; duplicate_affiliates: boolean; }'.
+src/components/modals/EditAffiliateModal/index.tsx(3,17): error TS6133: 'Group' is declared but its value is never read.
+src/components/modals/EditOrganizerWebhookModal/index.tsx(58,35): error TS2339: Property 'url' does not exist on type 'GenericDataResponse<Webhook>'.
+src/components/modals/EditOrganizerWebhookModal/index.tsx(59,43): error TS2339: Property 'event_types' does not exist on type 'GenericDataResponse<Webhook>'.
+src/components/modals/EditOrganizerWebhookModal/index.tsx(60,38): error TS2339: Property 'status' does not exist on type 'GenericDataResponse<Webhook>'.
+src/components/modals/EditQuestionModal/index.tsx(62,92): error TS2345: Argument of type 'Question' is not assignable to parameter of type 'QuestionRequestData'.
+  Types of property 'product_ids' are incompatible.
+    Type 'number[] | undefined' is not assignable to type 'string[] | undefined'.
+      Type 'number[]' is not assignable to type 'string[]'.
+        Type 'number' is not assignable to type 'string'.
+src/components/modals/ManageAttendeeModal/index.tsx(143,13): error TS2322: Type '({ value: string; icon: ForwardRefExoticComponent<IconProps & RefAttributes<Icon>>; title: string; content: Element; hidden?: undefined; count?: undefined; } | { ...; } | { ...; })[]' is not assignable to type 'AccordionItem[]'.
+  Type '{ value: string; icon: ForwardRefExoticComponent<IconProps & RefAttributes<Icon>>; title: string; content: Element; hidden?: undefined; count?: undefined; } | { ...; } | { ...; }' is not assignable to type 'AccordionItem'.
+    Type '{ value: string; icon: React.ForwardRefExoticComponent<IconProps & React.RefAttributes<Icon>>; title: string; content: JSX.Element; hidden?: undefined; count?: undefined; }' is not assignable to type 'AccordionItem'.
+      The types returned by 'icon(...)' are incompatible between these types.
+        Type 'ReactNode' is not assignable to type 'Element'.
+          Type 'undefined' is not assignable to type 'ReactElement<any, any>'.
+src/components/modals/ManageOrderModal/index.tsx(85,13): error TS2322: Type 'ForwardRefExoticComponent<IconProps & RefAttributes<Icon>>' is not assignable to type '(props: TablerIconsProps) => Element'.
+  Type 'ReactNode' is not assignable to type 'Element'.
+    Type 'undefined' is not assignable to type 'ReactElement<any, any>'.
+src/components/modals/ManageOrderModal/index.tsx(91,13): error TS2322: Type 'ForwardRefExoticComponent<IconProps & RefAttributes<Icon>>' is not assignable to type '(props: TablerIconsProps) => Element'.
+  Type 'ReactNode' is not assignable to type 'Element'.
+    Type 'undefined' is not assignable to type 'ReactElement<any, any>'.
+src/components/modals/ManageOrderModal/index.tsx(104,13): error TS2322: Type 'ForwardRefExoticComponent<IconProps & RefAttributes<Icon>>' is not assignable to type '(props: TablerIconsProps) => Element'.
+  Type 'ReactNode' is not assignable to type 'Element'.
+    Type 'undefined' is not assignable to type 'ReactElement<any, any>'.
+src/components/modals/ManageOrderModal/index.tsx(110,13): error TS2322: Type 'ForwardRefExoticComponent<IconProps & RefAttributes<Icon>>' is not assignable to type '(props: TablerIconsProps) => Element'.
+  Type 'ReactNode' is not assignable to type 'Element'.
+    Type 'undefined' is not assignable to type 'ReactElement<any, any>'.
+src/components/modals/ManageOrderModal/index.tsx(112,40): error TS18048: 'order.question_answers' is possibly 'undefined'.
+src/components/modals/ManageOrderModal/index.tsx(125,13): error TS2322: Type 'ForwardRefExoticComponent<IconProps & RefAttributes<Icon>>' is not assignable to type '(props: TablerIconsProps) => Element'.
+  Type 'ReactNode' is not assignable to type 'Element'.
+    Type 'undefined' is not assignable to type 'ReactElement<any, any>'.
+src/components/modals/ManageOrderModal/index.tsx(127,40): error TS18048: 'order.attendees' is possibly 'undefined'.
+src/components/modals/OrganizerWebhookLogsModal/index.tsx(174,27): error TS2339: Property 'length' does not exist on type 'GenericDataResponse<WebhookLog[]>'.
+src/components/modals/OrganizerWebhookLogsModal/index.tsx(185,27): error TS2339: Property 'length' does not exist on type 'GenericDataResponse<WebhookLog[]>'.
+src/components/modals/OrganizerWebhookLogsModal/index.tsx(187,27): error TS2339: Property 'map' does not exist on type 'GenericDataResponse<WebhookLog[]>'.
+src/components/modals/OrganizerWebhookLogsModal/index.tsx(187,32): error TS7006: Parameter 'log' implicitly has an 'any' type.
+src/components/modals/ShareModal/index.tsx(178,30): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+src/components/routes/event/GettingStarted/ConfettiAnimaiton/index.tsx(66,17): error TS18047: 'ctx' is possibly 'null'.
+src/components/routes/event/GettingStarted/ConfettiAnimaiton/index.tsx(67,17): error TS18047: 'ctx' is possibly 'null'.
+src/components/routes/event/GettingStarted/ConfettiAnimaiton/index.tsx(68,17): error TS18047: 'ctx' is possibly 'null'.
+src/components/routes/event/GettingStarted/ConfettiAnimaiton/index.tsx(69,17): error TS18047: 'ctx' is possibly 'null'.
+src/components/routes/event/GettingStarted/ConfettiAnimaiton/index.tsx(70,17): error TS18047: 'ctx' is possibly 'null'.
+src/components/routes/event/GettingStarted/ConfettiAnimaiton/index.tsx(71,17): error TS18047: 'ctx' is possibly 'null'.
+src/components/routes/event/GettingStarted/ConfettiAnimaiton/index.tsx(72,17): error TS18047: 'ctx' is possibly 'null'.
+src/components/routes/event/orders.tsx(107,52): error TS2339: Property 'value' does not exist on type 'QueryFilterCondition | QueryFilterCondition[]'.
+  Property 'value' does not exist on type 'QueryFilterCondition[]'.
+src/components/routes/event/orders.tsx(108,66): error TS2339: Property 'value' does not exist on type 'QueryFilterCondition | QueryFilterCondition[]'.
+  Property 'value' does not exist on type 'QueryFilterCondition[]'.
+src/components/routes/event/products.tsx(32,75): error TS2345: Argument of type 'null' is not assignable to parameter of type 'IdParam | (() => IdParam)'.
+src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx(2,38): error TS6133: 'Text' is declared but its value is never read.
+src/components/routes/event/TicketDesigner/index.tsx(64,49): error TS2345: Argument of type 'null' is not assignable to parameter of type 'IdParam | ((prevValue: IdParam) => IdParam)'.
+src/components/routes/event/TicketDesigner/TicketDesignerPrint.tsx(92,21): error TS2322: Type '{ id: number; public_id: string; short_id: string; first_name: string; last_name: string; email: string; status: "ACTIVE"; checked_in_at: null; product_id: number; product: { id: number; title: string; ... 10 more ...; is_hidden_without_promo_code: boolean; }; product_price_id: number; order_id: number; order: { ......' is not assignable to type 'Attendee'.
+  Types of property 'product' are incompatible.
+    Property 'product_type' is missing in type '{ id: number; title: string; price: number; type: "TICKET"; sale_start_date: null; sale_end_date: null; max_per_order: null; min_per_order: null; quantity_available: null; is_hidden: boolean; sort_order: number; description: string; is_hidden_without_promo_code: boolean; }' but required in type 'Product'.
+src/components/routes/event/TicketDesigner/TicketDesignerPrint.tsx(93,21): error TS2741: Property 'product_type' is missing in type '{ id: number; title: string; price: number; type: "TICKET"; sale_start_date: null; sale_end_date: null; max_per_order: null; min_per_order: null; quantity_available: null; is_hidden: boolean; sort_order: number; description: string; is_hidden_without_promo_code: boolean; }' but required in type 'Product'.
+src/components/routes/event/TicketDesigner/TicketDesignerPrint.tsx(94,21): error TS2322: Type '{ settings: { ticket_design_settings: { accent_color?: string; logo_image_id?: IdParam; footer_text?: string; layout_type?: "default" | "modern"; enabled?: boolean; } | undefined; ... 46 more ...; waitlist_offer_timeout_minutes?: number | null; }; ... 18 more ...; end_date?: string; }' is not assignable to type 'Event'.
+  The types of 'settings.continue_button_text' are incompatible between these types.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/components/routes/event/TicketDesigner/TicketPreview.tsx(107,17): error TS2322: Type '{ settings: { ticket_design_settings: { accent_color: string; logo_image_id: IdParam | null; footer_text: string | null; enabled: boolean; }; location_details: VenueAddress; ... 45 more ...; waitlist_offer_timeout_minutes?: number | null; }; ... 18 more ...; end_date?: string; }' is not assignable to type 'Event'.
+  The types of 'settings.continue_button_text' are incompatible between these types.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/components/routes/event/TicketDesigner/TicketPreview.tsx(108,17): error TS2322: Type '{ id: number; public_id: string; short_id: string; first_name: string; last_name: string; email: string; status: "ACTIVE"; checked_in_at: null; product_id: number; product: { id: number; title: string; ... 10 more ...; is_hidden_without_promo_code: boolean; }; product_price_id: number; order_id: number; order: { ......' is not assignable to type 'Attendee'.
+  Types of property 'product' are incompatible.
+    Property 'product_type' is missing in type '{ id: number; title: string; price: number; type: "TICKET"; sale_start_date: null; sale_end_date: null; max_per_order: null; min_per_order: null; quantity_available: null; is_hidden: boolean; sort_order: number; description: string; is_hidden_without_promo_code: boolean; }' but required in type 'Product'.
+src/components/routes/event/TicketDesigner/TicketPreview.tsx(109,17): error TS2741: Property 'product_type' is missing in type '{ id: number; title: string; price: number; type: "TICKET"; sale_start_date: null; sale_end_date: null; max_per_order: null; min_per_order: null; quantity_available: null; is_hidden: boolean; sort_order: number; description: string; is_hidden_without_promo_code: boolean; }' but required in type 'Product'.
+src/components/routes/organizer/OrganizerDashboard/index.tsx(221,45): error TS2339: Property 'isLoading' does not exist on type 'never'.
+src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx(61,13): error TS2322: Type '{ title: string; columns: ({ key: "event_name"; label: string; sortable: boolean; render: (value: string, row: any) => Element; } | { key: "start_date"; label: string; sortable: boolean; render: (value: string) => string; } | { ...; } | { ...; } | { ...; } | { ...; })[]; ... 4 more ...; showCurrencyFilter: false; }' is not assignable to type 'IntrinsicAttributes & OrganizerReportProps<any>'.
+  Property 'downloadFileName' does not exist on type 'IntrinsicAttributes & OrganizerReportProps<any>'.
+src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx(123,13): error TS2322: Type '{ title: string; columns: ({ key: "event_name"; label: string; sortable: boolean; render: (value: string, row: any) => Element; } | { key: "event_currency"; label: string; sortable: boolean; render?: undefined; } | ... 10 more ... | { ...; })[]; ... 5 more ...; availableCurrencies: string[]; }' is not assignable to type 'IntrinsicAttributes & OrganizerReportProps<any>'.
+  Property 'downloadFileName' does not exist on type 'IntrinsicAttributes & OrganizerReportProps<any>'.
+src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx(70,13): error TS2322: Type '{ title: string; columns: ({ key: "date"; label: string; sortable: boolean; render: (value: string) => string; } | { key: "gross_sales"; label: string; sortable: boolean; render: (value: string, _row: any, context: { ...; }) => string; } | ... 4 more ... | { ...; })[]; ... 5 more ...; availableCurrencies: string[]; }' is not assignable to type 'IntrinsicAttributes & OrganizerReportProps<any>'.
+  Property 'downloadFileName' does not exist on type 'IntrinsicAttributes & OrganizerReportProps<any>'.
+src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx(65,13): error TS2322: Type '{ title: string; columns: ({ key: "event_name"; label: string; sortable: boolean; render: (value: string, row: any) => Element; } | { key: "event_currency"; label: string; sortable: boolean; render?: undefined; } | { ...; } | { ...; } | { ...; } | { ...; })[]; ... 5 more ...; availableCurrencies: string[]; }' is not assignable to type 'IntrinsicAttributes & OrganizerReportProps<any>'.
+  Property 'downloadFileName' does not exist on type 'IntrinsicAttributes & OrganizerReportProps<any>'.
+src/components/routes/organizer/Settings/index.tsx(120,10): error TS2304: Cannot find name 'PageBody'.
+src/components/routes/organizer/Settings/index.tsx(136,11): error TS2304: Cannot find name 'PageBody'.
+src/components/routes/organizer/Settings/Sections/EmailTemplateSettings/index.tsx(30,35): error TS6133: 'type' is declared but its value is never read.
+src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx(139,29): error TS18048: 'organizerSettingsQuery.data.social_media_handles' is possibly 'undefined'.
+src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx(139,29): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ facebook?: string | undefined; instagram?: string | undefined; twitter?: string | undefined; linkedin?: string | undefined; youtube?: string | undefined; tiktok?: string | undefined; ... 9 more ...; weibo?: string | undefined; }'.
+  No index signature with a parameter of type 'string' was found on type '{ facebook?: string | undefined; instagram?: string | undefined; twitter?: string | undefined; linkedin?: string | undefined; youtube?: string | undefined; tiktok?: string | undefined; ... 9 more ...; weibo?: string | undefined; }'.
+src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx(140,58): error TS18048: 'organizerSettingsQuery.data.social_media_handles' is possibly 'undefined'.
+src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx(140,58): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ facebook?: string | undefined; instagram?: string | undefined; twitter?: string | undefined; linkedin?: string | undefined; youtube?: string | undefined; tiktok?: string | undefined; ... 9 more ...; weibo?: string | undefined; }'.
+  No index signature with a parameter of type 'string' was found on type '{ facebook?: string | undefined; instagram?: string | undefined; twitter?: string | undefined; linkedin?: string | undefined; youtube?: string | undefined; tiktok?: string | undefined; ... 9 more ...; weibo?: string | undefined; }'.
+src/components/routes/organizer/Settings/Sections/WebhookSettings.tsx(4,22): error TS2307: Cannot find module '../../../../../common/Card' or its corresponding type declarations.
+src/components/routes/organizer/Settings/Sections/WebhookSettings.tsx(6,39): error TS2307: Cannot find module '../../../../../common/OrganizerWebhookTable' or its corresponding type declarations.
+src/components/routes/organizer/Settings/Sections/WebhookSettings.tsx(7,41): error TS2307: Cannot find module '../../../../../../queries/useGetOrganizerWebhooks.ts' or its corresponding type declarations.
+src/components/routes/organizer/Settings/Sections/WebhookSettings.tsx(9,45): error TS2307: Cannot find module '../../../../../modals/CreateOrganizerWebhookModal' or its corresponding type declarations.
+src/components/routes/organizer/Settings/Sections/WebhookSettings.tsx(10,31): error TS2307: Cannot find module '../../../../../common/TableSkeleton' or its corresponding type declarations.
+src/components/routes/organizer/Settings/Sections/WebhookSettings.tsx(11,25): error TS2307: Cannot find module '../../../../../../types' or its corresponding type declarations.
+src/components/routes/product-widget/CollectInformation/index.tsx(132,33): error TS18048: 'product' is possibly 'undefined'.
+src/components/routes/product-widget/CollectInformation/index.tsx(363,37): error TS2339: Property 'response' does not exist on type 'Error'.
+src/components/routes/profile/ManageProfile/index.tsx(195,102): error TS2345: Argument of type 'string' is not assignable to parameter of type 'SupportedLocales | ((prevValue: SupportedLocales | undefined) => SupportedLocales | undefined) | undefined'.
+src/components/routes/welcome/index.tsx(102,37): error TS2339: Property 'response' does not exist on type 'Error'.
+src/components/routes/welcome/index.tsx(307,51): error TS2345: Argument of type '(values: Partial<Event>) => void' is not assignable to parameter of type '(values: { title: string; start_date: Date; end_date: Date; category: string; }, event: FormEvent<HTMLFormElement> | undefined) => void | Promise<...>'.
+  Types of parameters 'values' and 'values' are incompatible.
+    Type '{ title: string; start_date: Date; end_date: Date; category: string; }' is not assignable to type 'Partial<Event>'.
+      Types of property 'start_date' are incompatible.
+        Type 'Date' is not assignable to type 'string'.
+src/components/routes/welcome/index.tsx(375,74): error TS2345: Argument of type 'string | null' is not assignable to parameter of type 'Date | ((prevValue: Date) => Date)'.
+  Type 'null' is not assignable to type 'Date | ((prevValue: Date) => Date)'.
+src/components/routes/welcome/index.tsx(420,57): error TS6133: 'organizerExists' is declared but its value is never read.
+src/components/routes/welcome/index.tsx(483,68): error TS2345: Argument of type 'boolean | undefined' is not assignable to parameter of type 'boolean'.
+  Type 'undefined' is not assignable to type 'boolean'.
+src/components/routes/welcome/index.tsx(485,55): error TS2345: Argument of type 'boolean | undefined' is not assignable to parameter of type 'boolean'.
+  Type 'undefined' is not assignable to type 'boolean'.
+src/entry.client.tsx(27,51): error TS2349: This expression is not callable.
+  Not all constituents of type 'LazyRouteDefinition<RouteObject>' are callable.
+    Type 'LazyRouteObject<IndexRouteObject>' has no call signatures.
+src/mutations/useDeleteCheckInPublic.ts(14,32): error TS2339: Property 'response' does not exist on type 'Error'.
+src/mutations/useEditQuestionAnswer.ts(13,24): error TS6133: 'variables' is declared but its value is never read.
+src/mutations/useUpdateAccountConfiguration.ts(2,22): error TS2724: '"../api/admin.client"' has no exported member named 'UpdateAccountConfigurationData'. Did you mean 'UpdateConfigurationData'?
+src/mutations/useUpdateAccountConfiguration.ts(10,38): error TS2551: Property 'updateAccountConfiguration' does not exist on type '{ getStats: () => Promise<AdminStats>; getDashboardData: (params?: GetAdminDashboardParams) => Promise<AdminDashboardData>; ... 23 more ...; getMessagingTiers: () => Promise<...>; }'. Did you mean 'updateConfiguration'?
+src/queries/useGetCheckInListAttendeePublic.ts(10,9): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(options: DefinedInitialDataOptions<GenericPaginatedResponse<Attendee>, Error, GenericPaginatedResponse<Attendee>, readonly unknown[]>, queryClient?: QueryClient | undefined): DefinedUseQueryResult<...>', gave the following error.
+    Type '() => Promise<GenericDataResponse<Attendee>>' is not assignable to type 'QueryFunction<GenericPaginatedResponse<Attendee>, readonly unknown[]>'.
+      Type 'Promise<GenericDataResponse<Attendee>>' is not assignable to type 'GenericPaginatedResponse<Attendee> | Promise<GenericPaginatedResponse<Attendee>>'.
+        Type 'Promise<GenericDataResponse<Attendee>>' is not assignable to type 'Promise<GenericPaginatedResponse<Attendee>>'.
+          Property 'meta' is missing in type 'GenericDataResponse<Attendee>' but required in type 'GenericPaginatedResponse<Attendee>'.
+  Overload 2 of 3, '(options: UndefinedInitialDataOptions<GenericPaginatedResponse<Attendee>, Error, GenericPaginatedResponse<Attendee>, readonly unknown[]>, queryClient?: QueryClient | undefined): UseQueryResult<...>', gave the following error.
+    Type '() => Promise<GenericDataResponse<Attendee>>' is not assignable to type 'unique symbol | QueryFunction<GenericPaginatedResponse<Attendee>, readonly unknown[], never> | undefined'.
+      Type '() => Promise<GenericDataResponse<Attendee>>' is not assignable to type 'QueryFunction<GenericPaginatedResponse<Attendee>, readonly unknown[], never>'.
+        Type 'Promise<GenericDataResponse<Attendee>>' is not assignable to type 'GenericPaginatedResponse<Attendee> | Promise<GenericPaginatedResponse<Attendee>>'.
+          Type 'Promise<GenericDataResponse<Attendee>>' is not assignable to type 'Promise<GenericPaginatedResponse<Attendee>>'.
+            Property 'meta' is missing in type 'GenericDataResponse<Attendee>' but required in type 'GenericPaginatedResponse<Attendee>'.
+  Overload 3 of 3, '(options: UseQueryOptions<GenericPaginatedResponse<Attendee>, Error, GenericPaginatedResponse<Attendee>, readonly unknown[]>, queryClient?: QueryClient | undefined): UseQueryResult<...>', gave the following error.
+    Type '() => Promise<GenericDataResponse<Attendee>>' is not assignable to type 'unique symbol | QueryFunction<GenericPaginatedResponse<Attendee>, readonly unknown[], never> | undefined'.
+      Type '() => Promise<GenericDataResponse<Attendee>>' is not assignable to type 'QueryFunction<GenericPaginatedResponse<Attendee>, readonly unknown[], never>'.
+        Type 'Promise<GenericDataResponse<Attendee>>' is not assignable to type 'GenericPaginatedResponse<Attendee> | Promise<GenericPaginatedResponse<Attendee>>'.
+          Type 'Promise<GenericDataResponse<Attendee>>' is not assignable to type 'Promise<GenericPaginatedResponse<Attendee>>'.
+            Property 'meta' is missing in type 'GenericDataResponse<Attendee>' but required in type 'GenericPaginatedResponse<Attendee>'.
+src/stores/app.store.ts(1,22): error TS2307: Cannot find module 'zustand' or its corresponding type declarations.
+src/utilites/dateLocales.ts(25,14): error TS2739: Type '{ en: { fullDateTime: string; shortDateTime: string; shortDate: string; chartDate: string; monthShort: string; dayOfMonth: string; dayName: string; timeOnly: string; timezone: string; }; de: { fullDateTime: string; ... 7 more ...; timezone: string; }; ... 10 more ...; hu: { ...; }; }' is missing the following properties from type 'Record<SupportedLocales, { fullDateTime: string; shortDateTime: string; shortDate: string; chartDate: string; monthShort: string; dayOfMonth: string; dayName: string; timeOnly: string; timezone: string; }>': pl, se
+src/utilites/eventsPageFiltersHelper.ts(43,27): error TS2339: Property 'filterFields' does not exist on type '{}'.
+src/utilites/queryParamsHelper.ts(1,45): error TS6133: 'QueryFilterOperator' is declared but its value is never read.

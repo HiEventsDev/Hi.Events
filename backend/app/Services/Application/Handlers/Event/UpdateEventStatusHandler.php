@@ -7,6 +7,9 @@ use HiEvents\Exceptions\AccountNotVerifiedException;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Event\DTO\UpdateEventStatusDTO;
+use HiEvents\DomainObjects\Status\EventStatus;
+use HiEvents\Jobs\Event\Webhook\DispatchEventWebhookJob;
+use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use Illuminate\Database\DatabaseManager;
 use Psr\Log\LoggerInterface;
 use Throwable;
@@ -60,9 +63,20 @@ readonly class UpdateEventStatusHandler
             'status' => $updateEventStatusDTO->status
         ]);
 
-        return $this->eventRepository->findFirstWhere([
+        $event = $this->eventRepository->findFirstWhere([
             'id' => $updateEventStatusDTO->eventId,
             'account_id' => $updateEventStatusDTO->accountId,
         ]);
+
+        $eventType = $updateEventStatusDTO->status === EventStatus::ARCHIVED->name
+            ? DomainEventType::EVENT_ARCHIVED
+            : DomainEventType::EVENT_UPDATED;
+
+        DispatchEventWebhookJob::dispatch(
+            $event->getId(),
+            $eventType,
+        );
+
+        return $event;
     }
 }

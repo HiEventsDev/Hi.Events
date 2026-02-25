@@ -15,9 +15,7 @@ class WebhookResponseHandlerService
         private readonly LoggerInterface               $logger,
         private readonly WebhookLogRepositoryInterface $webhookLogRepository,
         private readonly DatabaseManager               $databaseManager,
-    )
-    {
-    }
+    ) {}
 
     public function handleResponse(
         int       $eventId,
@@ -25,12 +23,10 @@ class WebhookResponseHandlerService
         string    $eventType,
         array     $payload,
         ?Response $response
-    ): void
-    {
+    ): void {
         $this->databaseManager->transaction(function () use ($payload, $eventType, $eventId, $webhookId, $response) {
             $webhook = $this->webhookRepository->findFirstWhere([
                 'id' => $webhookId,
-                'event_id' => $eventId,
             ]);
 
             if (!$webhook) {
@@ -49,8 +45,8 @@ class WebhookResponseHandlerService
                 ],
                 where: [
                     'id' => $webhookId,
-                    'event_id' => $eventId,
-                ]);
+                ]
+            );
 
             $this->webhookLogRepository->create([
                 'webhook_id' => $webhook->getId(),

@@ -14,13 +14,18 @@ class GetWebhooksHandler
     {
     }
 
-    public function handler(int $accountId, int $eventId): Collection
+    public function handler(int $accountId, ?int $eventId = null, ?int $organizerId = null): Collection
     {
+        $where = ['account_id' => $accountId];
+        if ($eventId !== null) {
+            $where['event_id'] = $eventId;
+        }
+        if ($organizerId !== null) {
+            $where['organizer_id'] = $organizerId;
+        }
+
         return $this->webhookRepository->findWhere(
-            where: [
-                'account_id' => $accountId,
-                'event_id' => $eventId,
-            ],
+            where: $where,
             orderAndDirections: [
                 new OrderAndDirection('id', OrderAndDirection::DIRECTION_DESC),
             ]
