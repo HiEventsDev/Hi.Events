@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { EventDocumentHead } from "../../common/EventDocumentHead";
 import { eventCoverImage, eventHomepageUrl, imageUrl, organizerHomepageUrl } from "../../../utilites/urlHelper.ts";
 import { Event, OrganizerStatus } from "../../../types.ts";
@@ -44,36 +44,11 @@ interface EventHomepageProps {
     promoCode?: string;
 }
 
+
 const EventHomepage = ({ ...loaderData }: EventHomepageProps) => {
     const { event, promoCodeValid, promoCode } = loaderData;
-    const [showScrollButton, setShowScrollButton] = useState(false);
     const [contactModalOpen, setContactModalOpen] = useState(false);
     const ticketsSectionRef = useRef<HTMLDivElement>(null);
-
-    // Keep scroll logic for mobile "Get Tickets" sticky button
-    useEffect(() => {
-        const checkTicketsPosition = () => {
-            if (ticketsSectionRef.current) {
-                const rect = ticketsSectionRef.current.getBoundingClientRect();
-                const isBelowFold = rect.top > window.innerHeight;
-                const isAboveView = rect.bottom < 0;
-                setShowScrollButton(isBelowFold || isAboveView);
-            }
-        };
-
-        const showTimer = setTimeout(() => { checkTicketsPosition(); }, 500);
-        window.addEventListener('scroll', checkTicketsPosition);
-        window.addEventListener('resize', checkTicketsPosition);
-        return () => {
-            clearTimeout(showTimer);
-            window.removeEventListener('scroll', checkTicketsPosition);
-            window.removeEventListener('resize', checkTicketsPosition);
-        };
-    }, []);
-
-    const scrollToTickets = () => {
-        ticketsSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    };
 
     if (!event) { return <EventNotAvailable />; }
 
@@ -89,7 +64,8 @@ const EventHomepage = ({ ...loaderData }: EventHomepageProps) => {
 
     const accentColor = themeSettings.accent || '#40296C';
 
-    const meshColors = generateMeshColors(backgroundColor);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const meshColors = useMemo(() => generateMeshColors(backgroundColor), [backgroundColor]);
 
     const isBgDark = backgroundType === 'MIRROR_COVER_IMAGE' || backgroundType === 'IMAGE'
         ? isCardDark
@@ -607,25 +583,6 @@ const EventHomepage = ({ ...loaderData }: EventHomepageProps) => {
                 </div>
 
             </footer>
-
-            {/* Floating Registration Button (Mobile) - Always rendered; CSS controls visibility to prevent CLS */}
-            <div
-                className="fixed bottom-0 left-0 right-0 p-4 z-50 md:hidden flex justify-center pb-safe pt-8 pointer-events-none"
-                style={{
-                    background: `linear-gradient(to top, ${backgroundColor}f2, ${backgroundColor}e6 50%, transparent)`,
-                    opacity: showScrollButton ? 1 : 0,
-                    transition: 'opacity 0.3s ease',
-                }}
-                aria-hidden={!showScrollButton}
-            >
-                <button
-                    onClick={scrollToTickets}
-                    style={{ backgroundColor: accentColor, color: getContrastColor(accentColor) }}
-                    className="pointer-events-auto px-8 py-3.5 rounded-full font-bold shadow-[0_8px_30px_rgb(0,0,0,0.2)] flex items-center justify-center gap-2 w-full max-w-sm transition-all active:scale-95 border border-black/10 hover:brightness-110"
-                >
-                    <IconTicket size={20} /> {t`Get Tickets`}
-                </button>
-            </div>
 
             <ContactOrganizerModal opened={contactModalOpen} onClose={() => setContactModalOpen(false)} organizer={organizer} />
         </div>
