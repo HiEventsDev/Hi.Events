@@ -84,7 +84,7 @@ class RazorpayOrderCreationService
             //     ];
             // }
 
-            $razorpayOrder = $razorpayClient->order->create($orderData);
+            $razorpayOrder = $razorpayClient->createOrder($orderData);
 
             $this->logger->debug('Razorpay order created', [
                 'razorpayOrderId' => $razorpayOrder->id,

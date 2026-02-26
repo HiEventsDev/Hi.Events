@@ -53,7 +53,7 @@ class RazorpayPaymentVerificationService
     {
         try {
             $razorpayClient = $this->razorpayClientFactory->create();
-            $payment = $razorpayClient->payment->fetch($paymentId);
+            $payment = $razorpayClient->fetchPayment($paymentId);
             
             return [
                 'id' => $payment->id,
