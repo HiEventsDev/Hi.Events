@@ -6,7 +6,6 @@ use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\QuestionAndAnswerViewDomainObject;
-use HiEvents\DomainObjects\Status\WebhookStatus;
 use HiEvents\DomainObjects\TaxAndFeesDomainObject;
 use HiEvents\DomainObjects\WebhookDomainObject;
 use HiEvents\Repository\Eloquent\Value\Relationship;
@@ -15,13 +14,14 @@ use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Repository\Interfaces\WebhookRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Resources\Attendee\AttendeeResource;
+use HiEvents\Resources\Event\EventResource;
 use HiEvents\Resources\CheckInList\AttendeeCheckInResource;
 use HiEvents\Resources\Order\OrderResource;
 use HiEvents\Resources\Product\ProductResource;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Collection;
 use Psr\Log\LoggerInterface;
 use Spatie\WebhookServer\WebhookCall;
 
@@ -34,8 +34,20 @@ class WebhookDispatchService
         private readonly ProductRepositoryInterface         $productRepository,
         private readonly AttendeeRepositoryInterface        $attendeeRepository,
         private readonly AttendeeCheckInRepositoryInterface $attendeeCheckInRepository,
+        private readonly EventRepositoryInterface           $eventRepository,
     )
     {
+    }
+
+    public function dispatchEventWebhook(DomainEventType $eventType, int $eventId): void
+    {
+        $event = $this->eventRepository->findById($eventId);
+
+        $this->dispatchWebhook(
+            eventType: $eventType,
+            payload: new EventResource($event),
+            eventId: $eventId,
+        );
     }
 
     public function dispatchAttendeeWebhook(DomainEventType $eventType, int $attendeeId): void
@@ -132,11 +144,7 @@ class WebhookDispatchService
 
     private function dispatchWebhook(DomainEventType $eventType, JsonResource $payload, int $eventId): void
     {
-        /** @var Collection<WebhookDomainObject> $webhooks */
-        $webhooks = $this->webhookRepository->findWhere([
-            'event_id' => $eventId,
-            'status' => WebhookStatus::ENABLED->name,
-        ])
+        $webhooks = $this->webhookRepository->findEnabledByEventId($eventId)
             ->filter(fn(WebhookDomainObject $webhook) => in_array($eventType->value, $webhook->getEventTypes(), true));
 
         foreach ($webhooks as $webhook) {

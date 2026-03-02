@@ -13,6 +13,7 @@ abstract class WebhookDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     final public const ID = 'id';
     final public const USER_ID = 'user_id';
     final public const EVENT_ID = 'event_id';
+    final public const ORGANIZER_ID = 'organizer_id';
     final public const ACCOUNT_ID = 'account_id';
     final public const URL = 'url';
     final public const EVENT_TYPES = 'event_types';
@@ -27,7 +28,8 @@ abstract class WebhookDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
 
     protected int $id;
     protected int $user_id;
-    protected int $event_id;
+    protected ?int $event_id = null;
+    protected ?int $organizer_id = null;
     protected int $account_id;
     protected string $url;
     protected array|string $event_types;
@@ -46,6 +48,7 @@ abstract class WebhookDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
                     'id' => $this->id ?? null,
                     'user_id' => $this->user_id ?? null,
                     'event_id' => $this->event_id ?? null,
+                    'organizer_id' => $this->organizer_id ?? null,
                     'account_id' => $this->account_id ?? null,
                     'url' => $this->url ?? null,
                     'event_types' => $this->event_types ?? null,
@@ -82,15 +85,26 @@ abstract class WebhookDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
         return $this->user_id;
     }
 
-    public function setEventId(int $event_id): self
+    public function setEventId(?int $event_id): self
     {
         $this->event_id = $event_id;
         return $this;
     }
 
-    public function getEventId(): int
+    public function getEventId(): ?int
     {
         return $this->event_id;
+    }
+
+    public function setOrganizerId(?int $organizer_id): self
+    {
+        $this->organizer_id = $organizer_id;
+        return $this;
+    }
+
+    public function getOrganizerId(): ?int
+    {
+        return $this->organizer_id;
     }
 
     public function setAccountId(int $account_id): self
