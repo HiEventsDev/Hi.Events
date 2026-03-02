@@ -1,6 +1,6 @@
 <?php
 
-namespace Backend\App\Services\Infrastructure\Razorpay;
+namespace HiEvents\Services\Infrastructure\Razorpay;
 
 interface RazorpayClientInterface
 {
