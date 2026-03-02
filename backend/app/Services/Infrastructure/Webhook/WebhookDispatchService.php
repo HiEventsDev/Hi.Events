@@ -6,7 +6,6 @@ use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\QuestionAndAnswerViewDomainObject;
-use HiEvents\DomainObjects\Status\WebhookStatus;
 use HiEvents\DomainObjects\TaxAndFeesDomainObject;
 use HiEvents\DomainObjects\WebhookDomainObject;
 use HiEvents\Repository\Eloquent\Value\Relationship;
@@ -23,7 +22,6 @@ use HiEvents\Resources\Order\OrderResource;
 use HiEvents\Resources\Product\ProductResource;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Collection;
 use Psr\Log\LoggerInterface;
 use Spatie\WebhookServer\WebhookCall;
 
@@ -146,21 +144,7 @@ class WebhookDispatchService
 
     private function dispatchWebhook(DomainEventType $eventType, JsonResource $payload, int $eventId): void
     {
-        $event = $this->eventRepository->findById($eventId);
-
-        /** @var Collection<WebhookDomainObject> $eventWebhooks */
-        $eventWebhooks = $this->webhookRepository->findWhere([
-            'event_id' => $eventId,
-            'status' => WebhookStatus::ENABLED->name,
-        ]);
-
-        /** @var Collection<WebhookDomainObject> $orgWebhooks */
-        $orgWebhooks = $this->webhookRepository->findWhere([
-            'organizer_id' => $event->getOrganizerId(),
-            'status' => WebhookStatus::ENABLED->name,
-        ]);
-
-        $webhooks = $eventWebhooks->merge($orgWebhooks)
+        $webhooks = $this->webhookRepository->findEnabledByEventId($eventId)
             ->filter(fn(WebhookDomainObject $webhook) => in_array($eventType->value, $webhook->getEventTypes(), true));
 
         foreach ($webhooks as $webhook) {
