@@ -93,7 +93,7 @@ export const OrganizerWebhookTable = ({ webhooks, openCreateModal }: OrganizerWe
                 </Menu.Target>
 
                 <Menu.Dropdown>
-                    <Menu.Label>Manage</Menu.Label>
+                    <Menu.Label>{t`Manage`}</Menu.Label>
                     <Menu.Item
                         leftSection={<IconPencil size={14} />}
                         onClick={() => {
@@ -146,7 +146,7 @@ export const OrganizerWebhookTable = ({ webhooks, openCreateModal }: OrganizerWe
 
         const isSuccess = (webhook.last_response_code >= 200 && webhook.last_response_code < 300) && webhook.last_response_code !== 0;
         const statusColor = isSuccess ? 'green' : 'red';
-        const statusText = isSuccess ? 'Success' : 'Error';
+        const statusText = isSuccess ? t`Success` : t`Error`;
 
         return (
             <Popover width={400} position="bottom" withArrow>
@@ -165,7 +165,7 @@ export const OrganizerWebhookTable = ({ webhooks, openCreateModal }: OrganizerWe
                 <Popover.Dropdown>
                     <Stack gap="md">
                         <Group justify="space-between" align="center">
-                            <Text fw={500} size="sm">Response Details</Text>
+                            <Text fw={500} size="sm">{t`Response Details`}</Text>
                             <Badge
                                 variant="light"
                                 color={statusColor}

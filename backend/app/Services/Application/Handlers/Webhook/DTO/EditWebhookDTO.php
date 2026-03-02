@@ -10,21 +10,21 @@ class EditWebhookDTO extends CreateWebhookDTO
         public int    $webhookId,
         string        $url,
         array         $eventTypes,
-        ?int          $eventId = null,
-        ?int          $organizerId = null,
         int           $userId,
         int           $accountId,
         WebhookStatus $status,
+        ?int          $eventId = null,
+        ?int          $organizerId = null,
     )
     {
         parent::__construct(
             url: $url,
             eventTypes: $eventTypes,
-            eventId: $eventId,
-            organizerId: $organizerId,
             userId: $userId,
             accountId: $accountId,
             status: $status,
+            eventId: $eventId,
+            organizerId: $organizerId,
         );
     }
 }

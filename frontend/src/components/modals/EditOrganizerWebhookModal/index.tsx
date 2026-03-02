@@ -45,7 +45,6 @@ export const EditOrganizerWebhookModal = ({
                     onClose();
                 },
                 onError: (error) => {
-                    console.log(error);
                     errorHandler(form, error);
                 },
             }

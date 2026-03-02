@@ -87,6 +87,8 @@ const OrganizerLayout = () => {
 
         { label: t`Tools` },
         { link: 'organizer-homepage-designer', label: t`Homepage Designer`, icon: IconPaint },
+
+        { label: t`Integrations` },
         { link: 'webhooks', label: t`Webhooks`, icon: IconWebhook },
     ];
 
