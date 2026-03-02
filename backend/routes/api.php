@@ -115,6 +115,12 @@ use HiEvents\Http\Actions\Organizers\Settings\GetOrganizerSettingsAction;
 use HiEvents\Http\Actions\Organizers\Settings\PartialUpdateOrganizerSettingsAction;
 use HiEvents\Http\Actions\Organizers\Stats\GetOrganizerStatsAction;
 use HiEvents\Http\Actions\Organizers\UpdateOrganizerStatusAction;
+use HiEvents\Http\Actions\Organizers\Webhooks\CreateOrganizerWebhookAction;
+use HiEvents\Http\Actions\Organizers\Webhooks\DeleteOrganizerWebhookAction;
+use HiEvents\Http\Actions\Organizers\Webhooks\EditOrganizerWebhookAction;
+use HiEvents\Http\Actions\Organizers\Webhooks\GetOrganizerWebhookAction;
+use HiEvents\Http\Actions\Organizers\Webhooks\GetOrganizerWebhookLogsAction;
+use HiEvents\Http\Actions\Organizers\Webhooks\GetOrganizerWebhooksAction;
 use HiEvents\Http\Actions\ProductCategories\CreateProductCategoryAction;
 use HiEvents\Http\Actions\ProductCategories\DeleteProductCategoryAction;
 use HiEvents\Http\Actions\ProductCategories\EditProductCategoryAction;
@@ -211,6 +217,11 @@ $router = app()->get('router');
 
 $router->prefix('/auth')->group(
     function (Router $router): void {
+        // Auth Config & OIDC
+        $router->get('/config', \HiEvents\Http\Actions\Auth\GetAuthConfigAction::class)->name('auth.config');
+        $router->get('/{provider}/redirect', \HiEvents\Http\Actions\Auth\RedirectToProviderAction::class)->name('auth.provider.redirect');
+        $router->get('/{provider}/callback', \HiEvents\Http\Actions\Auth\HandleProviderCallbackAction::class)->name('auth.provider.callback');
+
         // Auth
         $router->post('/login', LoginAction::class)->name('auth.login');
         $router->post('/logout', LogoutAction::class)->name('auth.logout');
@@ -275,6 +286,12 @@ $router->middleware(['auth:api'])->group(
         $router->patch('/organizers/{organizer_id}/settings', PartialUpdateOrganizerSettingsAction::class);
         $router->get('/organizers/{organizer_id}/reports/{report_type}', GetOrganizerReportAction::class);
         $router->get('/organizers/{organizer_id}/reports/{report_type}/export', ExportOrganizerReportAction::class);
+        $router->post('/organizers/{organizer_id}/webhooks', CreateOrganizerWebhookAction::class);
+        $router->get('/organizers/{organizer_id}/webhooks', GetOrganizerWebhooksAction::class);
+        $router->put('/organizers/{organizer_id}/webhooks/{webhook_id}', EditOrganizerWebhookAction::class);
+        $router->get('/organizers/{organizer_id}/webhooks/{webhook_id}', GetOrganizerWebhookAction::class);
+        $router->delete('/organizers/{organizer_id}/webhooks/{webhook_id}', DeleteOrganizerWebhookAction::class);
+        $router->get('/organizers/{organizer_id}/webhooks/{webhook_id}/logs', GetOrganizerWebhookLogsAction::class);
 
         // Email Templates - Organizer level
         $router->get('/organizers/{organizerId}/email-templates', GetOrganizerEmailTemplatesAction::class);

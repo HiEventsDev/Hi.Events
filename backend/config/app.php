@@ -229,6 +229,7 @@ return [
          */
         \HiEvents\Providers\AppServiceProvider::class,
         \HiEvents\Providers\AuthServiceProvider::class,
+        \HiEvents\Providers\OidcServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
         \HiEvents\Providers\EventServiceProvider::class,
         \HiEvents\Providers\RouteServiceProvider::class,

@@ -32,6 +32,11 @@ class Webhook extends BaseModel
         return $this->belongsTo(Event::class);
     }
 
+    public function organizer(): BelongsTo
+    {
+        return $this->belongsTo(Organizer::class);
+    }
+
     public function account(): BelongsTo
     {
         return $this->belongsTo(Account::class);

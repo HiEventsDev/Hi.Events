@@ -15,7 +15,9 @@ use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Repository\Interfaces\WebhookRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Resources\Attendee\AttendeeResource;
+use HiEvents\Resources\Event\EventResource;
 use HiEvents\Resources\CheckInList\AttendeeCheckInResource;
 use HiEvents\Resources\Order\OrderResource;
 use HiEvents\Resources\Product\ProductResource;
@@ -34,8 +36,20 @@ class WebhookDispatchService
         private readonly ProductRepositoryInterface         $productRepository,
         private readonly AttendeeRepositoryInterface        $attendeeRepository,
         private readonly AttendeeCheckInRepositoryInterface $attendeeCheckInRepository,
+        private readonly EventRepositoryInterface           $eventRepository,
     )
     {
+    }
+
+    public function dispatchEventWebhook(DomainEventType $eventType, int $eventId): void
+    {
+        $event = $this->eventRepository->findById($eventId);
+
+        $this->dispatchWebhook(
+            eventType: $eventType,
+            payload: new EventResource($event),
+            eventId: $eventId,
+        );
     }
 
     public function dispatchAttendeeWebhook(DomainEventType $eventType, int $attendeeId): void
@@ -132,11 +146,21 @@ class WebhookDispatchService
 
     private function dispatchWebhook(DomainEventType $eventType, JsonResource $payload, int $eventId): void
     {
-        /** @var Collection<WebhookDomainObject> $webhooks */
-        $webhooks = $this->webhookRepository->findWhere([
+        $event = $this->eventRepository->findById($eventId);
+
+        /** @var Collection<WebhookDomainObject> $eventWebhooks */
+        $eventWebhooks = $this->webhookRepository->findWhere([
             'event_id' => $eventId,
             'status' => WebhookStatus::ENABLED->name,
-        ])
+        ]);
+
+        /** @var Collection<WebhookDomainObject> $orgWebhooks */
+        $orgWebhooks = $this->webhookRepository->findWhere([
+            'organizer_id' => $event->getOrganizerId(),
+            'status' => WebhookStatus::ENABLED->name,
+        ]);
+
+        $webhooks = $eventWebhooks->merge($orgWebhooks)
             ->filter(fn(WebhookDomainObject $webhook) => in_array($eventType->value, $webhook->getEventTypes(), true));
 
         foreach ($webhooks as $webhook) {

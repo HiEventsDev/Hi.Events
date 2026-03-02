@@ -1,20 +1,26 @@
-import {Button, Checkbox, PasswordInput, SimpleGrid, TextInput} from "@mantine/core";
-import {hasLength, isEmail, matchesField, useForm} from "@mantine/form";
-import {RegisterAccountRequest} from "../../../../types.ts";
-import {useFormErrorResponseHandler} from "../../../../hooks/useFormErrorResponseHandler.tsx";
-import {useRegisterAccount} from "../../../../mutations/useRegisterAccount.ts";
-import {NavLink, useLocation, useNavigate} from "react-router";
-import {t, Trans} from "@lingui/macro";
+import { Button, Checkbox, PasswordInput, SimpleGrid, TextInput } from "@mantine/core";
+import { hasLength, isEmail, matchesField, useForm } from "@mantine/form";
+import { RegisterAccountRequest } from "../../../../types.ts";
+import { useFormErrorResponseHandler } from "../../../../hooks/useFormErrorResponseHandler.tsx";
+import { useRegisterAccount } from "../../../../mutations/useRegisterAccount.ts";
+import { Navigate, NavLink, useLocation, useNavigate, useSearchParams } from "react-router";
+import { useAuthConfigQuery } from "../../../../queries/useAuthConfigQuery.ts";
+import { t, Trans } from "@lingui/macro";
 import classes from "./Register.module.scss";
-import {getClientLocale} from "../../../../locales.ts";
-import {useEffect} from "react";
-import {getUserCurrency} from "../../../../utilites/currency.ts";
-import {getConfig} from "../../../../utilites/config.ts";
-import {captureUtmData, getStoredUtmData, clearStoredUtmData} from "../../../../utilites/utm.ts";
+import { getClientLocale } from "../../../../locales.ts";
+import { useEffect } from "react";
+import { getUserCurrency } from "../../../../utilites/currency.ts";
+import { getConfig } from "../../../../utilites/config.ts";
+import { captureUtmData, getStoredUtmData, clearStoredUtmData } from "../../../../utilites/utm.ts";
 
 export const Register = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const [searchParamsHook] = useSearchParams();
+    const showLoginBackdoor = searchParamsHook.get('show_login') === '1';
+
+    const { data: authConfig, isLoading: isConfigLoading } = useAuthConfigQuery();
+    const hideDefaultForms = authConfig?.auth_disable_default && !showLoginBackdoor;
 
     const form = useForm({
         validateInputOnBlur: true,
@@ -33,7 +39,7 @@ export const Register = () => {
             marketing_opt_in: false,
         },
         validate: {
-            password: hasLength({min: 8}, t`Password must be at least 8 characters`),
+            password: hasLength({ min: 8 }, t`Password must be at least 8 characters`),
             password_confirmation: matchesField('password', t`Passwords are not the same`),
             email: isEmail(t`Please check your email is valid`),
         },
@@ -43,9 +49,9 @@ export const Register = () => {
 
     const registerUser = (data: RegisterAccountRequest) => {
         const utmData = getStoredUtmData();
-        const registrationData = utmData ? {...data, ...utmData} : data;
+        const registrationData = utmData ? { ...data, ...utmData } : data;
 
-        mutate.mutate({registerData: registrationData}, {
+        mutate.mutate({ registerData: registrationData }, {
             onSuccess: () => {
                 clearStoredUtmData();
                 navigate(`/welcome${location.search}`);
@@ -69,6 +75,9 @@ export const Register = () => {
 
     return (
         <>
+            {hideDefaultForms && !isConfigLoading && (
+                <Navigate replace to={`/auth/login${location.search}`} />
+            )}
             <header className={classes.header}>
                 <h2>{t`Get started`}</h2>
                 <p>
@@ -84,7 +93,7 @@ export const Register = () => {
             <div className={classes.registerCard}>
                 <form onSubmit={form.onSubmit((values) => registerUser(values as RegisterAccountRequest))}>
 
-                    <SimpleGrid verticalSpacing={{base: "md", sm: 0}} cols={{base: 1, sm: 2}} mb="md">
+                    <SimpleGrid verticalSpacing={{ base: "md", sm: 0 }} cols={{ base: 1, sm: 2 }} mb="md">
                         <TextInput
                             {...form.getInputProps('first_name')}
                             label={t`First Name`}
@@ -106,7 +115,7 @@ export const Register = () => {
                         required
                     />
 
-                    <SimpleGrid verticalSpacing={{base: "md", sm: 0}} cols={{base: 1, sm: 2}} mt="md" mb="md">
+                    <SimpleGrid verticalSpacing={{ base: "md", sm: 0 }} cols={{ base: 1, sm: 2 }} mt="md" mb="md">
                         <PasswordInput
                             {...form.getInputProps('password')}
                             label={t`Password`}
@@ -122,14 +131,14 @@ export const Register = () => {
                     </SimpleGrid>
 
                     <TextInput
-                        style={{display: 'none'}}
+                        style={{ display: 'none' }}
                         {...form.getInputProps('timezone')}
                         type="hidden"
                     />
 
                     <Checkbox
                         mb="md"
-                        {...form.getInputProps('marketing_opt_in', {type: 'checkbox'})}
+                        {...form.getInputProps('marketing_opt_in', { type: 'checkbox' })}
                         label={<Trans>Receive product updates from {getConfig("VITE_APP_NAME", "Hi.Events")}.</Trans>}
                     />
 
@@ -140,10 +149,10 @@ export const Register = () => {
                 <footer>
                     <Trans>
                         By registering you agree to our <NavLink target={'_blank'}
-                                                                 to={getConfig("VITE_TOS_URL", "https://hi.events/terms-of-service?utm_source=app-register-footer") as string}>Terms
-                        of Service</NavLink> and <NavLink
-                        target={'_blank'}
-                        to={getConfig("VITE_PRIVACY_URL", 'https://hi.events/privacy-policy?utm_source=app-register-footer') as string}>Privacy Policy</NavLink>.
+                            to={getConfig("VITE_TOS_URL", "https://hi.events/terms-of-service?utm_source=app-register-footer") as string}>Terms
+                            of Service</NavLink> and <NavLink
+                                target={'_blank'}
+                                to={getConfig("VITE_PRIVACY_URL", 'https://hi.events/privacy-policy?utm_source=app-register-footer') as string}>Privacy Policy</NavLink>.
                     </Trans>
                 </footer>
             </div>
