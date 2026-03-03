@@ -22,7 +22,7 @@ use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use HiEvents\Services\Infrastructure\DomainEvents\Events\OrderEvent;
 use Illuminate\Cache\Repository;
-use Illuminate\Database\DatabaseManager;
+use Illuminate\Database\ConnectionInterface;
 use Illuminate\Log\Logger;
 use Throwable;
 
@@ -34,7 +34,7 @@ class RazorpayPaymentCapturedHandler
         private readonly AffiliateRepositoryInterface      $affiliateRepository,
         private readonly ProductQuantityUpdateService      $quantityUpdateService,
         private readonly AttendeeRepositoryInterface       $attendeeRepository,
-        private readonly DatabaseManager                   $databaseManager,
+        private readonly ConnectionInterface               $dbConnection,
         private readonly Logger                            $logger,
         private readonly Repository                        $cache,
         private readonly DomainEventDispatcherService      $domainEventDispatcherService,
@@ -57,7 +57,7 @@ class RazorpayPaymentCapturedHandler
             return;
         }
 
-        $this->databaseManager->transaction(function () use ($paymentEntity) {
+        $this->dbConnection->transaction(function () use ($paymentEntity) {
             // Find the local razorpay order record by the Razorpay payment ID
             $razorpayOrder = $this->razorpayOrdersRepository->findByPaymentId($paymentEntity->id);
 
