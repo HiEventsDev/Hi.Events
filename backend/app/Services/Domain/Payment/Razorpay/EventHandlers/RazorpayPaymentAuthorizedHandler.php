@@ -5,7 +5,7 @@ namespace HiEvents\Services\Domain\Payment\Razorpay\EventHandlers;
 use HiEvents\Repository\Interfaces\RazorpayOrdersRepositoryInterface;
 use HiEvents\Services\Domain\Payment\Razorpay\DTOs\RazorpayPaymentPayload;
 use Illuminate\Cache\Repository;
-use Illuminate\Database\DatabaseManager;
+use Illuminate\Database\ConnectionInterface;
 use Illuminate\Log\Logger;
 use Throwable;
 
@@ -13,7 +13,7 @@ class RazorpayPaymentAuthorizedHandler
 {
     public function __construct(
         private readonly RazorpayOrdersRepositoryInterface $razorpayOrdersRepository,
-        private readonly DatabaseManager $databaseManager,
+        private readonly ConnectionInterface $dbConnection,
         private readonly Logger $logger,
         private readonly Repository $cache,
     ) {
@@ -34,10 +34,10 @@ class RazorpayPaymentAuthorizedHandler
             return;
         }
 
-        $this->databaseManager->transaction(function () use ($paymentEntity) {
+        $this->dbConnection->transaction(function () use ($paymentEntity) {
             // Try to find by payment ID first, then by order ID
             $razorpayOrder = $this->razorpayOrdersRepository->findByPaymentId($paymentEntity->id)
-                ?? $this->razorpayOrdersRepository->findByOrderId($paymentEntity->order_id);
+                ?? $this->razorpayOrdersRepository->findByRazorpayOrderId($paymentEntity->order_id);
 
             if (!$razorpayOrder) {
                 $this->logger->warning('Razorpay order not found for payment.authorized', [
