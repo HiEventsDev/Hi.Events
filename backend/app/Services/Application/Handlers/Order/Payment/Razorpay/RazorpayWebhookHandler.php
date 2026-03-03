@@ -54,7 +54,15 @@ class RazorpayWebhookHandler
 
             // 2. Decode JSON and create envelope DTO
             $data = json_decode($payload, true, 512, JSON_THROW_ON_ERROR);
-            $envelope = RazorpayWebhookEnvelope::fromArray($data);
+            try {
+                $envelope = RazorpayWebhookEnvelope::fromArray($data);
+            } catch (\InvalidArgumentException $e) {
+                $this->logger->debug('Unsupported or unknown webhook event', [
+                    'event' => $data['event'] ?? 'unknown',
+                    'error' => $e->getMessage()
+                ]);
+                return;
+            }
             $event = $envelope->event;
 
             // 3. Validate event type
