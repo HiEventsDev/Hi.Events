@@ -8,7 +8,7 @@ use HiEvents\Services\Domain\Payment\Razorpay\DTOs\CreateRazorpayOrderRequestDTO
 use HiEvents\Services\Domain\Payment\Razorpay\DTOs\CreateRazorpayOrderResponseDTO;
 use HiEvents\Services\Infrastructure\Razorpay\RazorpayClientFactory;
 use Illuminate\Config\Repository;
-use Illuminate\Database\DatabaseManager;
+use Illuminate\Database\ConnectionInterface;
 use Psr\Log\LoggerInterface;
 use Razorpay\Api\Errors\Error;
 use Throwable;
@@ -18,7 +18,7 @@ class RazorpayOrderCreationService
     public function __construct(
         private readonly LoggerInterface $logger,
         private readonly Repository $config,
-        private readonly DatabaseManager $databaseManager,
+        private readonly ConnectionInterface $dbConnection,
         private readonly OrderApplicationFeeCalculationService $orderApplicationFeeCalculationService,
         private readonly RazorpayClientFactory $razorpayClientFactory,
     ) {
@@ -31,7 +31,7 @@ class RazorpayOrderCreationService
     public function createOrder(CreateRazorpayOrderRequestDTO $orderDTO): CreateRazorpayOrderResponseDTO
     {
         try {
-            $this->databaseManager->beginTransaction();
+            $this->dbConnection->beginTransaction();
 
             $razorpayClient = $this->razorpayClientFactory->create();
 
@@ -50,7 +50,7 @@ class RazorpayOrderCreationService
             if ($orderDTO->currencyCode !== 'INR') {
                 // Razorpay supports multiple currencies but amounts might need different handling
                 // This depends on Razorpay's currency requirements
-                $amountInSmallestUnit = $orderDTO->amount->toFloat() * 100; // Default conversion
+                $amountInSmallestUnit = (int) round($orderDTO->amount->toFloat() * 100); // Default conversion
             }
 
             $orderData = [
@@ -90,7 +90,7 @@ class RazorpayOrderCreationService
                 'orderDTO' => $orderDTO->toArray(['account']),
             ]);
 
-            $this->databaseManager->commit();
+            $this->dbConnection->commit();
 
             return new CreateRazorpayOrderResponseDTO(
                 id: $razorpayOrder->id,
@@ -105,13 +105,13 @@ class RazorpayOrderCreationService
                 'orderDTO' => $orderDTO->toArray(['account']),
             ]);
 
-            $this->databaseManager->rollBack();
+            $this->dbConnection->rollBack();
 
             throw new CreateOrderFailedException(
                 __('There was an error communicating with the payment provider. Please try again later.')
             );
         } catch (Throwable $exception) {
-            $this->databaseManager->rollBack();
+            $this->dbConnection->rollBack();
 
             throw $exception;
         }
