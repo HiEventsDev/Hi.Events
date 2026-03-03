@@ -12,8 +12,7 @@ class CreateRazorpayOrderActionPublic extends BaseAction
 {
     public function __construct(
         private readonly CreateRazorpayOrderHandler $createRazorpayOrderHandler,
-    )
-    {
+    ) {
     }
 
     public function __invoke(int $eventId, string $orderShortId): JsonResponse

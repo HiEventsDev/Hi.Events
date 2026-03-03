@@ -22,19 +22,17 @@ use HiEvents\Services\Domain\Payment\Razorpay\DTOs\CreateRazorpayOrderResponseDT
 use HiEvents\Services\Domain\Payment\Razorpay\RazorpayOrderCreationService;
 use HiEvents\Services\Infrastructure\Session\CheckoutSessionManagementService;
 use HiEvents\Values\MoneyValue;
-use Razorpay\Api\Errors\Error;
 use Throwable;
 
 readonly class CreateRazorpayOrderHandler
 {
     public function __construct(
-        private OrderRepositoryInterface         $orderRepository,
-        private RazorpayOrderCreationService    $razorpayOrderService,
+        private OrderRepositoryInterface $orderRepository,
+        private RazorpayOrderCreationService $razorpayOrderService,
         private CheckoutSessionManagementService $sessionIdentifierService,
         private RazorpayOrdersRepositoryInterface $razorpayOrdersRepository,
-        private AccountRepositoryInterface      $accountRepository,
-    )
-    {
+        private AccountRepositoryInterface $accountRepository,
+    ) {
     }
 
     /**

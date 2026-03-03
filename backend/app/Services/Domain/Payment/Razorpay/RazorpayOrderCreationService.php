@@ -16,13 +16,12 @@ use Throwable;
 class RazorpayOrderCreationService
 {
     public function __construct(
-        private readonly LoggerInterface                       $logger,
-        private readonly Repository                            $config,
-        private readonly DatabaseManager                       $databaseManager,
+        private readonly LoggerInterface $logger,
+        private readonly Repository $config,
+        private readonly DatabaseManager $databaseManager,
         private readonly OrderApplicationFeeCalculationService $orderApplicationFeeCalculationService,
-        private readonly RazorpayClientFactory                $razorpayClientFactory,
-    )
-    {
+        private readonly RazorpayClientFactory $razorpayClientFactory,
+    ) {
     }
 
     /**
@@ -45,7 +44,7 @@ class RazorpayOrderCreationService
 
             // Razorpay amount is in paise (Indian) or smallest currency unit
             $amountInSmallestUnit = $orderDTO->amount->toMinorUnit();
-            
+
             // For INR, amount is in paise
             // For other currencies, check Razorpay documentation for conversion
             if ($orderDTO->currencyCode !== 'INR') {
