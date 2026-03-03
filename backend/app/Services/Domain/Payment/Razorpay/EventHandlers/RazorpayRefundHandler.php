@@ -11,7 +11,7 @@ use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\RazorpayOrdersRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRefundRepositoryInterface;
 use Illuminate\Cache\Repository;
-use Illuminate\Database\DatabaseManager;
+use Illuminate\Database\ConnectionInterface;
 use Illuminate\Log\Logger;
 use Throwable;
 
@@ -21,7 +21,7 @@ class RazorpayRefundHandler
         private readonly OrderRepositoryInterface $orderRepository,
         private readonly RazorpayOrdersRepositoryInterface $razorpayOrdersRepository,
         private readonly OrderRefundRepositoryInterface $refundRepository,
-        private readonly DatabaseManager $databaseManager,
+        private readonly ConnectionInterface $dbConnection,
         private readonly Logger $logger,
         private readonly Repository $cache,
     ) {
@@ -46,7 +46,7 @@ class RazorpayRefundHandler
             return;
         }
 
-        $this->databaseManager->transaction(function () use ($refundEntity, $paymentId) {
+        $this->dbConnection->transaction(function () use ($refundEntity, $paymentId) {
             // 1. Find the Razorpay order record by payment ID
             $razorpayOrder = $this->razorpayOrdersRepository->findByPaymentId($paymentId);
 
