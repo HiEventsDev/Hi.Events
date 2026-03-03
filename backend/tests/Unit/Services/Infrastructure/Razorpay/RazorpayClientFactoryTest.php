@@ -4,57 +4,76 @@ namespace Tests\Unit\Services\Infrastructure\Razorpay;
 
 use HiEvents\Services\Infrastructure\Razorpay\RazorpayApiClient;
 use HiEvents\Services\Infrastructure\Razorpay\RazorpayClientFactory;
-use HiEvents\Services\Infrastructure\Razorpay\RazorpayClientInterface;
 use Illuminate\Config\Repository;
+use PHPUnit\Framework\MockObject\MockObject;
+use RuntimeException;
 use Tests\TestCase;
 
 class RazorpayClientFactoryTest extends TestCase
 {
-    private function makeConfig(array $values): Repository
+    private Repository&MockObject $configMock;
+    private RazorpayClientFactory $factory;
+
+    protected function setUp(): void
     {
-        return new Repository([
-            'services' => [
-                'razorpay' => $values
-            ]
-        ]);
+        parent::setUp();
+
+        // 1. Mock Laravel's config repository
+        $this->configMock = $this->createMock(Repository::class);
+
+        // 2. Inject it into the factory
+        $this->factory = new RazorpayClientFactory($this->configMock);
     }
 
-    public function test_creates_client_when_credentials_exists(){
-        $config = $this->makeConfig([
-            'key_id' => 'test_id',
-            'key_secret' => 'test_secret'
-        ]);
+    public function testItCreatesClientSuccessfullyWhenConfigured(): void
+    {
+        // Tell the mock exactly how to respond when ->get() is called
+        $this->configMock->method('get')->willReturnCallback(function (string $key) {
+            if ($key === 'services.razorpay.key_id') {
+                return 'test_key_id';
+            }
+            if ($key === 'services.razorpay.key_secret') {
+                return 'test_key_secret';
+            }
+            return null;
+        });
 
-        $factory = new RazorpayClientFactory($config);
-        $client = $factory->create();
+        // Act
+        $client = $this->factory->create();
 
-        $this->assertInstanceOf(RazorpayClientInterface::class, $client);
+        // Assert that the factory successfully built the client
         $this->assertInstanceOf(RazorpayApiClient::class, $client);
     }
 
-    public function test_throws_exception_when_key_id_missing()
+    public function testItThrowsExceptionWhenKeyIdIsMissing(): void
     {
-        $config = $this->makeConfig([
-            'key_secret' => 'test_secret',
-        ]);
+        // Simulate missing Key ID but present Key Secret
+        $this->configMock->method('get')->willReturnCallback(function (string $key) {
+            if ($key === 'services.razorpay.key_secret') {
+                return 'test_key_secret';
+            }
+            return null; // The Key ID will return null
+        });
 
-        $factory = new RazorpayClientFactory($config);
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Razorpay credentials not configured.');
 
-        $this->expectException(\RuntimeException::class);
-
-        $factory->create();
+        $this->factory->create();
     }
 
-    public function test_throws_exception_when_key_secret_missing()
+    public function testItThrowsExceptionWhenKeySecretIsMissing(): void
     {
-        $config = $this->makeConfig([
-            'key_id' => 'test_key',
-        ]);
+        // Simulate present Key ID but missing Key Secret
+        $this->configMock->method('get')->willReturnCallback(function (string $key) {
+            if ($key === 'services.razorpay.key_id') {
+                return 'test_key_id';
+            }
+            return ''; // Testing that an empty string also triggers the failure
+        });
 
-        $factory = new RazorpayClientFactory($config);
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Razorpay credentials not configured.');
 
-        $this->expectException(\RuntimeException::class);
-
-        $factory->create();
+        $this->factory->create();
     }
 }

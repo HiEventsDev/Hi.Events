@@ -8,9 +8,9 @@ class RazorpayApiClient implements RazorpayClientInterface
 {
     private Api $api;
 
-    public function __construct(string $keyId, string $keySecret)
+    public function __construct(string $keyId, string $keySecret, ?Api $api = null)
     {
-        $this->api = new Api($keyId, $keySecret);
+        $this->api = $api ?? new Api($keyId, $keySecret);
     }
 
     public function createOrder(array $data): object
