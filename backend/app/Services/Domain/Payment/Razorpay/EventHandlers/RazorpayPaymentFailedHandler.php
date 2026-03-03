@@ -5,7 +5,7 @@ namespace HiEvents\Services\Domain\Payment\Razorpay\EventHandlers;
 use HiEvents\Repository\Interfaces\RazorpayOrdersRepositoryInterface;
 use HiEvents\Services\Domain\Payment\Razorpay\DTOs\RazorpayPaymentPayload;
 use Illuminate\Cache\Repository;
-use Illuminate\Database\DatabaseManager;
+use Illuminate\Database\ConnectionInterface;
 use Illuminate\Log\Logger;
 use Throwable;
 
@@ -13,7 +13,7 @@ class RazorpayPaymentFailedHandler
 {
     public function __construct(
         private readonly RazorpayOrdersRepositoryInterface $razorpayOrdersRepository,
-        private readonly DatabaseManager $databaseManager,
+        private readonly ConnectionInterface $dbConnection,
         private readonly Logger $logger,
         private readonly Repository $cache,
     ) {}
@@ -33,7 +33,7 @@ class RazorpayPaymentFailedHandler
             return;
         }
 
-        $this->databaseManager->transaction(function () use ($paymentEntity) {
+        $this->dbConnection->transaction(function () use ($paymentEntity) {
             // Try to find by payment ID first (if this payment ID is already stored)
             // If not found, fallback to order ID (because payment ID might not be stored yet)
             $razorpayOrder = $this->razorpayOrdersRepository->findByPaymentId($paymentEntity->id)
