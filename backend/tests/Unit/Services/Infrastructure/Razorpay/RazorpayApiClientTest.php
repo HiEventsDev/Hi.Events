@@ -44,24 +44,19 @@ class RazorpayApiClientTest extends TestCase
 
     public function testItThrowsExceptionWhenOrderCreationFailed(): void
     {
-        // 1. Arrange: Send bad data (e.g., amount is 0, which Razorpay rejects)
         $badOrderData = ['amount' => 0, 'currency' => 'INR'];
-
         $orderMock = $this->createMock(Order::class);
-
-        // Tell the mock to throw a Razorpay BadRequestError when 'create' is called
+        
         $orderMock->expects($this->once())
             ->method('create')
             ->with($badOrderData)
             ->willThrowException(new BadRequestError('Order amount less than minimum amount allowed', 400, 400));
 
         $this->apiMock->order = $orderMock;
-
-        // 2. Assert: Tell PHPUnit to expect this exact error to crash the test
+        
         $this->expectException(BadRequestError::class);
         $this->expectExceptionMessage('Order amount less than minimum amount allowed');
-
-        // 3. Act: Trigger the error by calling your client
+        
         $this->client->createOrder($badOrderData);
     }
 

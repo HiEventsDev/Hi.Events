@@ -18,16 +18,14 @@ class RazorpayClientFactoryTest extends TestCase
     {
         parent::setUp();
 
-        // 1. Mock Laravel's config repository
         $this->configMock = $this->createMock(Repository::class);
 
-        // 2. Inject it into the factory
         $this->factory = new RazorpayClientFactory($this->configMock);
     }
 
     public function testItCreatesClientSuccessfullyWhenConfigured(): void
     {
-        // Tell the mock exactly how to respond when ->get() is called
+        
         $this->configMock->method('get')->willReturnCallback(function (string $key) {
             if ($key === 'services.razorpay.key_id') {
                 return 'test_key_id';
@@ -37,22 +35,19 @@ class RazorpayClientFactoryTest extends TestCase
             }
             return null;
         });
-
-        // Act
+        
         $client = $this->factory->create();
-
-        // Assert that the factory successfully built the client
+        
         $this->assertInstanceOf(RazorpayApiClient::class, $client);
     }
 
     public function testItThrowsExceptionWhenKeyIdIsMissing(): void
     {
-        // Simulate missing Key ID but present Key Secret
         $this->configMock->method('get')->willReturnCallback(function (string $key) {
             if ($key === 'services.razorpay.key_secret') {
                 return 'test_key_secret';
             }
-            return null; // The Key ID will return null
+            return null; 
         });
 
         $this->expectException(RuntimeException::class);
@@ -63,12 +58,11 @@ class RazorpayClientFactoryTest extends TestCase
 
     public function testItThrowsExceptionWhenKeySecretIsMissing(): void
     {
-        // Simulate present Key ID but missing Key Secret
         $this->configMock->method('get')->willReturnCallback(function (string $key) {
             if ($key === 'services.razorpay.key_id') {
                 return 'test_key_id';
             }
-            return ''; // Testing that an empty string also triggers the failure
+            return ''; 
         });
 
         $this->expectException(RuntimeException::class);
