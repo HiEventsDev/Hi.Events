@@ -22,7 +22,7 @@ use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use HiEvents\Services\Infrastructure\DomainEvents\Events\OrderEvent;
 use Illuminate\Cache\Repository;
-use Illuminate\Database\DatabaseManager;
+use Illuminate\Database\ConnectionInterface;
 use Illuminate\Log\Logger;
 use Throwable;
 
@@ -34,7 +34,7 @@ class RazorpayOrderPaidHandler
         private readonly AffiliateRepositoryInterface $affiliateRepository,
         private readonly ProductQuantityUpdateService $quantityUpdateService,
         private readonly AttendeeRepositoryInterface $attendeeRepository,
-        private readonly DatabaseManager $databaseManager,
+        private readonly ConnectionInterface $dbConnection,
         private readonly Logger $logger,
         private readonly Repository $cache,
         private readonly DomainEventDispatcherService $domainEventDispatcherService,
@@ -61,7 +61,7 @@ class RazorpayOrderPaidHandler
             return;
         }
 
-        $this->databaseManager->transaction(function () use ($orderEntity, $paymentEntity) {
+        $this->dbConnection->transaction(function () use ($orderEntity, $paymentEntity) {
             // Find local razorpay order record by the Razorpay order ID
             $razorpayOrder = $this->razorpayOrdersRepository->findByRazorpayOrderId($orderEntity->id);
 
@@ -78,14 +78,6 @@ class RazorpayOrderPaidHandler
             $order = $this->orderRepository
                 ->loadRelation(new Relationship(OrderItemDomainObject::class))
                 ->findById($localOrderId);
-
-            if (!$order) {
-                $this->logger->warning('Local order not found for order.paid webhook', [
-                    'local_order_id' => $localOrderId,
-                    'razorpay_order_id' => $orderEntity->id,
-                ]);
-                return;
-            }
 
             // Update the razorpay_orders record with payment details (all amounts in paise)
             $this->razorpayOrdersRepository->updateByOrderId($localOrderId, [
