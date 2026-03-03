@@ -22,6 +22,7 @@ use HiEvents\Services\Domain\Payment\Razorpay\DTOs\CreateRazorpayOrderResponseDT
 use HiEvents\Services\Domain\Payment\Razorpay\RazorpayOrderCreationService;
 use HiEvents\Services\Infrastructure\Session\CheckoutSessionManagementService;
 use HiEvents\Values\MoneyValue;
+use Illuminate\Config\Repository;
 use Throwable;
 
 readonly class CreateRazorpayOrderHandler
@@ -32,6 +33,7 @@ readonly class CreateRazorpayOrderHandler
         private CheckoutSessionManagementService $sessionIdentifierService,
         private RazorpayOrdersRepositoryInterface $razorpayOrdersRepository,
         private AccountRepositoryInterface $accountRepository,
+        private Repository $config
     ) {
     }
 
@@ -93,11 +95,6 @@ readonly class CreateRazorpayOrderHandler
             'receipt' => $order->getShortId(),
         ]);
 
-        return new CreateRazorpayOrderResponseDTO(
-            id: $razorpayOrder->id,
-            keyId: config('services.razorpay.key_id'),
-            amount: $razorpayOrder->amount,
-            currency: $razorpayOrder->currency,
-        );
+        return $razorpayOrder;
     }
 }
