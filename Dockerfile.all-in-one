@@ -4,19 +4,26 @@ WORKDIR /app/frontend
 
 RUN apk add --no-cache yarn
 
+# Increase network timeout for slow ARM emulation builds
+RUN yarn config set network-timeout 600000
+
 COPY ./frontend/package.json ./frontend/yarn.lock ./
 
 COPY ./frontend .
 
-RUN yarn install && yarn build
+RUN yarn install --network-timeout 600000 --frozen-lockfile && yarn build
 
-FROM serversideup/php:beta-8.3.2-fpm-alpine
+# Use stable multi-arch serversideup/php image
+FROM serversideup/php:8.3-fpm-alpine
 
 ENV PHP_OPCACHE_ENABLE=1
 
+# Switch to root for installing extensions and packages
+USER root
+
 RUN install-php-extensions intl
 
-RUN apk add --no-cache nodejs yarn nginx supervisor
+RUN apk add --no-cache nodejs yarn nginx supervisor dos2unix
 
 COPY --from=node-frontend /app/frontend /app/frontend
 

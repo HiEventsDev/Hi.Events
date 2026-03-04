@@ -1,36 +1,38 @@
 <?php
 
-namespace HiEvents\Http\Actions\Webhooks;
+namespace HiEvents\Http\Actions\Organizers\Webhooks;
 
-use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\DomainObjects\Status\WebhookStatus;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Webhook\UpsertWebhookRequest;
 use HiEvents\Resources\Webhook\WebhookResource;
-use HiEvents\Services\Application\Handlers\Webhook\CreateWebhookHandler;
-use HiEvents\Services\Application\Handlers\Webhook\DTO\CreateWebhookDTO;
+use HiEvents\Services\Application\Handlers\Webhook\DTO\EditWebhookDTO;
+use HiEvents\Services\Application\Handlers\Webhook\EditWebhookHandler;
 use Illuminate\Http\JsonResponse;
 
-class CreateWebhookAction extends BaseAction
+class EditOrganizerWebhookAction extends BaseAction
 {
     public function __construct(
-        private readonly CreateWebhookHandler $createWebhookHandler,
+        private readonly EditWebhookHandler $editWebhookHandler,
     )
     {
     }
 
-    public function __invoke(int $eventId, UpsertWebhookRequest $request): JsonResponse
+    public function __invoke(int $organizerId, int $webhookId, UpsertWebhookRequest $request): JsonResponse
     {
-        $this->isActionAuthorized($eventId, EventDomainObject::class);
+        $this->isActionAuthorized($organizerId, OrganizerDomainObject::class);
 
-        $webhook = $this->createWebhookHandler->handle(
-            new CreateWebhookDTO(
+        $webhook = $this->editWebhookHandler->handle(
+            new EditWebhookDTO(
+                webhookId: $webhookId,
                 url: $request->validated('url'),
                 eventTypes: $request->validated('event_types'),
+                eventId: null,
+                organizerId: $organizerId,
                 userId: $this->getAuthenticatedUser()->getId(),
                 accountId: $this->getAuthenticatedAccountId(),
                 status: WebhookStatus::fromName($request->validated('status')),
-                eventId: $eventId,
             )
         );
 
