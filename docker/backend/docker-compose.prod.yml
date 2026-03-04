@@ -1,0 +1,145 @@
+# Production Docker Compose for Hi.Events Backend
+# 
+# This setup uses ONLY your backend/.env file for ALL configuration.
+# Simply configure backend/.env and run ./deploy.sh
+#
+# Required variables in backend/.env:
+#   DB_DATABASE, DB_USERNAME, DB_PASSWORD
+#   REDIS_PASSWORD
+#
+# Usage:
+#   cd docker/backend
+#   ./deploy.sh
+
+services:
+  backend:
+    build:
+      context: ./../../backend
+      dockerfile: Dockerfile
+    container_name: hievents-backend
+    restart: unless-stopped
+    ports:
+      # Bind to localhost only for security (use Cloudflare Tunnel to expose)
+      - "127.0.0.1:8080:8080"
+    environment:
+      # Override DB/Redis hosts to use container names
+      DB_HOST: hievents-postgres
+      REDIS_HOST: hievents-redis
+      # Use stderr for logs (best practice for containers)
+      LOG_CHANNEL: stderr
+      # Keep all other settings from .env file
+    env_file:
+      - ./../../backend/.env
+    volumes:
+      # Mount storage directories for persistence
+      - hievents-storage:/var/www/html/storage
+      - hievents-cache:/var/www/html/bootstrap/cache
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "php-fpm-healthcheck"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - hievents-network
+
+  postgres:
+    image: postgres:17-alpine
+    container_name: hievents-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    env_file:
+      - ./../../backend/.env
+    volumes:
+      # Main data volume
+      - hievents-pgdata:/var/lib/postgresql/data
+      # Backup directory (accessible on host)
+      - ./backups:/backups
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d ${DB_DATABASE}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - hievents-network
+    # Performance tuning for production
+    command: >
+      postgres
+      -c shared_buffers=256MB
+      -c effective_cache_size=768MB
+      -c maintenance_work_mem=64MB
+      -c wal_buffers=16MB
+      -c default_statistics_target=100
+      -c random_page_cost=1.1
+      -c effective_io_concurrency=200
+      -c work_mem=8MB
+      -c min_wal_size=1GB
+      -c max_wal_size=4GB
+
+  redis:
+    image: redis:7-alpine
+    container_name: hievents-redis
+    restart: unless-stopped
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+    env_file:
+      - ./../../backend/.env
+    volumes:
+      - hievents-redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - hievents-network
+
+  # Optional: Automated PostgreSQL backups
+  pgbackup:
+    image: postgres:17-alpine
+    container_name: hievents-pgbackup
+    restart: unless-stopped
+    environment:
+      PGPASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USERNAME}
+    env_file:
+      - ./../../backend/.env
+    volumes:
+      - ./backups:/backups
+    command: >
+      sh -c '
+        while true; do
+          sleep 86400;
+          echo "Creating backup...";
+          pg_dump -h hievents-postgres -U ${DB_USERNAME} -d ${DB_DATABASE} > /backups/hievents_$$(date +%Y%m%d_%H%M%S).sql;
+          # Keep only last 7 backups
+          ls -t /backups/hievents_*.sql | tail -n +8 | xargs rm -f;
+          echo "Backup complete";
+        done
+      '
+    depends_on:
+      - postgres
+    networks:
+      - hievents-network
+
+networks:
+  hievents-network:
+    driver: bridge
+
+volumes:
+  hievents-pgdata:
+    driver: local
+  hievents-redisdata:
+    driver: local
+  hievents-storage:
+    driver: local
+  hievents-cache:
+    driver: local
