@@ -71,7 +71,7 @@ readonly class CreateRazorpayOrderHandler
         if ($order->getRazorpayOrder() !== null) {
             return new CreateRazorpayOrderResponseDTO(
                 id: $order->getRazorpayOrder()->getRazorpayOrderId(),
-                keyId: config('services.razorpay.key_id'),
+                keyId: $this->config->get('services.razorpay.key_id'),
                 amount: $order->getRazorpayOrder()->getAmount(),
                 currency: $order->getRazorpayOrder()->getCurrency(),
             );
