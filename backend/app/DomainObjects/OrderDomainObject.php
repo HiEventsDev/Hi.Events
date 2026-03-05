@@ -2,6 +2,8 @@
 
 namespace HiEvents\DomainObjects;
 
+use Exception;
+use HiEvents\DataTransferObjects\AddressDTO;
 use HiEvents\DomainObjects\Enums\PaymentProviders;
 use HiEvents\DomainObjects\Enums\ProductType;
 use HiEvents\DomainObjects\Interfaces\IsFilterable;
@@ -308,5 +310,18 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
     public function hasRazorpayOrder(): bool
     {
         return $this->razorpayOrder !== null;
+    }
+
+    public function getAddressDTO(): ?AddressDTO
+    {
+        if ($this->getAddress() === null) {
+            return null;
+        }
+
+        try {
+            return AddressDTO::from($this->getAddress());
+        } catch (Exception) {
+            return null;
+        }
     }
 }

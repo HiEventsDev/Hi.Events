@@ -14,6 +14,9 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
+/**
+ * @extends BaseRepository<UserDomainObject>
+ */
 class UserRepository extends BaseRepository implements UserRepositoryInterface
 {
     public function getModel(): string

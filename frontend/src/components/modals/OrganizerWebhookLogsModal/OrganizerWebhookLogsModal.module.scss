@@ -1,0 +1,37 @@
+.logEntry {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 8px;
+}
+
+.logEntryExpanded {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.chevronIcon {
+  transition: transform 0.2s ease;
+}
+
+.chevronIconExpanded {
+  transform: rotate(90deg);
+}
+
+.statusIcon {
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.codeBlock {
+  border-radius: 6px;
+  max-height: 300px;
+  overflow: auto;
+  background-color: var(--mantine-color-gray-0);
+}
+
+.noLogsAlert {
+  text-align: center;
+}

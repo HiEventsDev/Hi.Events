@@ -9,6 +9,9 @@ use HiEvents\Models\Account;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
+/**
+ * @extends BaseRepository<AccountDomainObject>
+ */
 class AccountRepository extends BaseRepository implements AccountRepositoryInterface
 {
     protected function getModel(): string
@@ -29,6 +32,8 @@ class AccountRepository extends BaseRepository implements AccountRepositoryInter
             ->join('events', 'accounts.id', '=', 'events.account_id')
             ->where('events.id', $eventId)
             ->first();
+
+        $this->resetModel();
 
         return $this->handleSingleResult($account, AccountDomainObject::class);
     }

@@ -8,6 +8,9 @@ use HiEvents\DomainObjects\AccountMessagingTierDomainObject;
 use HiEvents\Models\AccountMessagingTier;
 use HiEvents\Repository\Interfaces\AccountMessagingTierRepositoryInterface;
 
+/**
+ * @extends BaseRepository<AccountMessagingTierDomainObject>
+ */
 class AccountMessagingTierRepository extends BaseRepository implements AccountMessagingTierRepositoryInterface
 {
     protected function getModel(): string

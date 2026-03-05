@@ -3,10 +3,9 @@
 namespace HiEvents\Repository\Interfaces;
 
 use HiEvents\DomainObjects\QuestionAndAnswerViewDomainObject;
-use HiEvents\Repository\Eloquent\BaseRepository;
 
 /**
- * @extends BaseRepository<QuestionAndAnswerViewDomainObject>
+ * @extends RepositoryInterface<QuestionAndAnswerViewDomainObject>
  */
 interface QuestionAndAnswerViewRepositoryInterface extends RepositoryInterface
 {

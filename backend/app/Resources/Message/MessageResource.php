@@ -23,8 +23,9 @@ class MessageResource extends JsonResource
             'attendee_ids' => $this->getAttendeeIds(),
             'order_id' => $this->getOrderId(),
             'product_ids' => $this->getProductIds(),
-            'sent_at' => $this->getCreatedAt(),
+            'sent_at' => $this->getSentAt(),
             'status' => $this->getStatus(),
+            'scheduled_at' => $this->getScheduledAt(),
             'message_preview' => $this->getMessagePreview(),
             $this->mergeWhen(!is_null($this->getSentByUser()), fn() => [
                 'sent_by_user' => new UserResource($this->getSentByUser()),

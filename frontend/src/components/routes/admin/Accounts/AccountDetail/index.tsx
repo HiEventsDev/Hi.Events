@@ -10,6 +10,7 @@ import {IconArrowLeft, IconCalendar, IconWorld, IconEdit, IconBuildingBank, Icon
 import {useState} from "react";
 import {EditAccountVatSettingsModal} from "../../../../modals/EditAccountVatSettingsModal";
 import {showSuccess, showError} from "../../../../../utilites/notifications";
+import {getCurrencySymbol} from "../../../../../utilites/currency";
 import classes from "./AccountDetail.module.scss";
 
 const AccountDetail = () => {
@@ -176,7 +177,7 @@ const AccountDetail = () => {
 
                             <Select
                                 label={t`Assigned Configuration`}
-                                description={t`Select which fee configuration applies to this account. Fees are always in USD.`}
+                                description={t`Select which fee configuration applies to this account. Fixed fees are converted to the order currency at checkout.`}
                                 data={configOptions}
                                 value={account.configuration?.id ? String(account.configuration.id) : null}
                                 onChange={handleConfigurationChange}
@@ -187,9 +188,10 @@ const AccountDetail = () => {
                             {account.configuration && (
                                 <div className={classes.infoGrid}>
                                     <div className={classes.infoItem}>
-                                        <Text size="xs" c="dimmed">{t`Fixed Fee (USD)`}</Text>
+                                        <Text size="xs" c="dimmed">{t`Fixed Fee`}</Text>
                                         <Text size="sm" fw={500}>
-                                            ${account.configuration.application_fees?.fixed || 0}
+                                            {getCurrencySymbol(account.configuration.application_fees?.currency || 'USD')}
+                                            {account.configuration.application_fees?.fixed || 0} {account.configuration.application_fees?.currency || 'USD'}
                                         </Text>
                                     </div>
                                     <div className={classes.infoItem}>

@@ -9,6 +9,7 @@ use Brick\Money\Exception\UnknownCurrencyException;
 use HiEvents\DomainObjects\AccountConfigurationDomainObject;
 use HiEvents\DomainObjects\AccountStripePlatformDomainObject;
 use HiEvents\DomainObjects\AccountVatSettingDomainObject;
+use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\Generated\StripePaymentDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\Status\OrderStatus;
@@ -27,6 +28,7 @@ use HiEvents\Services\Infrastructure\Session\CheckoutSessionManagementService;
 use HiEvents\Services\Infrastructure\Stripe\StripeClientFactory;
 use HiEvents\Services\Infrastructure\Stripe\StripeConfigurationService;
 use HiEvents\Values\MoneyValue;
+use Illuminate\Support\Str;
 use Stripe\Exception\ApiErrorException;
 use Throwable;
 
@@ -60,6 +62,7 @@ readonly class CreatePaymentIntentHandler
         $order = $this->orderRepository
             ->loadRelation(new Relationship(OrderItemDomainObject::class))
             ->loadRelation(new Relationship(StripePaymentDomainObject::class, name: 'stripe_payment'))
+            ->loadRelation(new Relationship(EventDomainObject::class, name: 'event'))
             ->findByShortId($orderShortId);
 
         if (!$order || !$this->sessionIdentifierService->verifySession($order->getSessionId())) {
@@ -110,6 +113,12 @@ readonly class CreatePaymentIntentHandler
             );
         }
 
+        $description = __(':item_count item(s) for event: :event_name (Order :order_short_id)', [
+            'event_name' => Str::limit($order->getEvent()?->getTitle() ?? __('Event'), 75),
+            'order_short_id' => $orderShortId,
+            'item_count' => $order->getOrderItems()->sum(fn(OrderItemDomainObject $item) => $item->getQuantity()),
+        ]);
+
         $paymentIntent = $this->stripePaymentService->createPaymentIntentWithClient(
             $stripeClient,
             CreatePaymentIntentRequestDTO::fromArray([
@@ -119,6 +128,7 @@ readonly class CreatePaymentIntentHandler
                 'order' => $order,
                 'stripeAccountId' => $stripeAccountId,
                 'vatSettings' => $account->getAccountVatSetting(),
+                'description' => Str::limit($description, 997),
             ])
         );
 

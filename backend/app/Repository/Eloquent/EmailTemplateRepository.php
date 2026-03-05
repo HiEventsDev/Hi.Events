@@ -8,6 +8,9 @@ use HiEvents\Models\EmailTemplate;
 use HiEvents\Repository\Interfaces\EmailTemplateRepositoryInterface;
 use Illuminate\Support\Collection;
 
+/**
+ * @extends BaseRepository<EmailTemplateDomainObject>
+ */
 class EmailTemplateRepository extends BaseRepository implements EmailTemplateRepositoryInterface
 {
     protected function getModel(): string

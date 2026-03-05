@@ -3,7 +3,7 @@ import {t, Trans} from "@lingui/macro";
 import {useGetUtmAttributionStats} from "../../../../queries/useGetUtmAttributionStats";
 import {useState} from "react";
 import {formatCurrency} from "../../../../utilites/currency";
-import classes from "./Attribution.module.scss";
+import tableStyles from "../../../../styles/admin-table.module.scss";
 
 const Attribution = () => {
     const [groupBy, setGroupBy] = useState<'source' | 'campaign' | 'medium' | 'source_type'>('source');
@@ -115,33 +115,31 @@ const Attribution = () => {
                         <Stack gap="md">
                             <Skeleton height={400} radius="md" />
                         </Stack>
+                    ) : stats.length === 0 ? (
+                        <div className={tableStyles.emptyState}>
+                            <Text c="dimmed" size="lg">
+                                <Trans>No attribution data found</Trans>
+                            </Text>
+                        </div>
                     ) : (
-                        <Paper shadow="sm" p="md" radius="md" withBorder>
-                            <div className={classes.tableContainer}>
-                                <Table striped highlightOnHover>
-                                    <Table.Thead>
-                                        <Table.Tr>
-                                            <Table.Th>{t`Attribution Value`}</Table.Th>
-                                            <Table.Th>{t`Accounts`}</Table.Th>
-                                            <Table.Th>{t`Events`}</Table.Th>
-                                            <Table.Th>{t`Live Events`}</Table.Th>
-                                            <Table.Th>{t`Stripe Connected`}</Table.Th>
-                                            <Table.Th>{t`Verified`}</Table.Th>
-                                            <Table.Th>{t`Revenue`}</Table.Th>
-                                            <Table.Th>{t`Orders`}</Table.Th>
-                                        </Table.Tr>
-                                    </Table.Thead>
-                                    <Table.Tbody>
-                                        {stats.length === 0 ? (
+                        <>
+                            <div className={tableStyles.tableWrapper}>
+                                <div className={tableStyles.tableScroll}>
+                                    <Table className={tableStyles.table} highlightOnHover>
+                                        <Table.Thead>
                                             <Table.Tr>
-                                                <Table.Td colSpan={8}>
-                                                    <Text ta="center" c="dimmed" py="xl">
-                                                        <Trans>No attribution data found</Trans>
-                                                    </Text>
-                                                </Table.Td>
+                                                <Table.Th>{t`Attribution Value`}</Table.Th>
+                                                <Table.Th>{t`Accounts`}</Table.Th>
+                                                <Table.Th>{t`Events`}</Table.Th>
+                                                <Table.Th>{t`Live Events`}</Table.Th>
+                                                <Table.Th>{t`Stripe Connected`}</Table.Th>
+                                                <Table.Th>{t`Verified`}</Table.Th>
+                                                <Table.Th>{t`Revenue`}</Table.Th>
+                                                <Table.Th>{t`Orders`}</Table.Th>
                                             </Table.Tr>
-                                        ) : (
-                                            stats.map((stat, index) => (
+                                        </Table.Thead>
+                                        <Table.Tbody>
+                                            {stats.map((stat, index) => (
                                                 <Table.Tr key={index}>
                                                     <Table.Td>
                                                         <Text fw={600} size="sm">
@@ -170,10 +168,10 @@ const Attribution = () => {
                                                         <Text size="sm">{stat.total_orders.toLocaleString()}</Text>
                                                     </Table.Td>
                                                 </Table.Tr>
-                                            ))
-                                        )}
-                                    </Table.Tbody>
-                                </Table>
+                                            ))}
+                                        </Table.Tbody>
+                                    </Table>
+                                </div>
                             </div>
 
                             {totalPages > 1 && (
@@ -185,7 +183,7 @@ const Attribution = () => {
                                     />
                                 </Group>
                             )}
-                        </Paper>
+                        </>
                     )}
                 </div>
             </Stack>

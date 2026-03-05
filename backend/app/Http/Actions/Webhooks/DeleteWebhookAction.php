@@ -20,8 +20,8 @@ class DeleteWebhookAction extends BaseAction
         $this->isActionAuthorized($eventId, EventDomainObject::class);
 
         $this->deleteWebhookHandler->handle(
-            $eventId,
-            $webhookId,
+            webhookId: $webhookId,
+            eventId: $eventId,
         );
 
         return $this->deletedResponse();

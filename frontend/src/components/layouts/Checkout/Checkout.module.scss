@@ -5,7 +5,10 @@ $font-body:  'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sa
 
 .container {
   display: flex;
+  // Use dvh (dynamic viewport height) with fallback for older browsers
+  // This fixes iOS Safari where 100vh includes the address bar height
   min-height: 100vh;
+  min-height: 100dvh;
   font-family: $font-body;
 
   // CSS variables are set by CheckoutThemeProvider via MantineProvider cssVariablesResolver

@@ -8,6 +8,8 @@ use LogicException;
 
 class ProductPriceDomainObject extends Generated\ProductPriceDomainObjectAbstract
 {
+    public ?ProductDomainObject $product = null;
+
     private ?float $priceBeforeDiscount = null;
 
     private ?float $taxTotal = null;
@@ -117,5 +119,16 @@ class ProductPriceDomainObject extends Generated\ProductPriceDomainObjectAbstrac
     public function isFree(): bool
     {
         return $this->getPrice() === 0.00;
+    }
+
+    public function setProduct(?ProductDomainObject $product): self
+    {
+        $this->product = $product;
+        return $this;
+    }
+
+    public function getProduct(): ?ProductDomainObject
+    {
+        return $this->product;
     }
 }

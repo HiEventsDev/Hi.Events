@@ -73,9 +73,15 @@ class SendMessageHandler
             $messageData->event_id
         );
 
-        $status = $eligibilityFailure !== null
-            ? MessageStatus::PENDING_REVIEW
-            : MessageStatus::PROCESSING;
+        $isScheduled = $messageData->scheduled_at !== null && !$messageData->is_test;
+
+        if ($eligibilityFailure !== null) {
+            $status = MessageStatus::PENDING_REVIEW;
+        } elseif ($isScheduled) {
+            $status = MessageStatus::SCHEDULED;
+        } else {
+            $status = MessageStatus::PROCESSING;
+        }
 
         $message = $this->messageRepository->create([
             'event_id' => $messageData->event_id,
@@ -85,9 +91,10 @@ class SendMessageHandler
             'order_id' => $this->getOrderId($messageData),
             'attendee_ids' => $this->getAttendeeIds($messageData)->toArray(),
             'product_ids' => $this->getProductIds($messageData)->toArray(),
-            'sent_at' => Carbon::now()->toDateTimeString(),
+            'sent_at' => $isScheduled ? null : Carbon::now()->toDateTimeString(),
             'sent_by_user_id' => $messageData->sent_by_user_id,
             'status' => $status->name,
+            'scheduled_at' => $messageData->scheduled_at,
             'eligibility_failures' => $eligibilityFailure?->getFailureValues(),
             'send_data' => [
                 'is_test' => $messageData->is_test,
@@ -101,7 +108,7 @@ class SendMessageHandler
 
         if ($status === MessageStatus::PENDING_REVIEW) {
             MessagePendingReviewJob::dispatch($message->getId(), $eligibilityFailure->getFailureValues());
-        } else {
+        } elseif ($status === MessageStatus::PROCESSING) {
             $updatedData = SendMessageDTO::fromArray([
                 'account_id' => $messageData->account_id,
                 'event_id' => $messageData->event_id,

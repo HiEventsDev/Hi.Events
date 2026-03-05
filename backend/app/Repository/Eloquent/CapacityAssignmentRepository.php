@@ -10,6 +10,9 @@ use HiEvents\Repository\Interfaces\CapacityAssignmentRepositoryInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 
+/**
+ * @extends BaseRepository<CapacityAssignmentDomainObject>
+ */
 class CapacityAssignmentRepository extends BaseRepository implements CapacityAssignmentRepositoryInterface
 {
     protected function getModel(): string

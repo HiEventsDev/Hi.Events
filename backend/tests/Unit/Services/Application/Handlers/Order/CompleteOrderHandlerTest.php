@@ -29,6 +29,7 @@ use Illuminate\Database\Connection;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Queue;
 use Mockery;
@@ -162,6 +163,8 @@ class CompleteOrderHandlerTest extends TestCase
 
     public function testHandleUpdatesProductQuantitiesForFreeOrder(): void
     {
+        Event::fake();
+
         $orderShortId = 'ABC123';
         $orderData = $this->createMockCompleteOrderDTO();
         $order = $this->createMockOrder();
@@ -285,7 +288,7 @@ class CompleteOrderHandlerTest extends TestCase
         return new CompleteOrderDTO(
             order: $orderDTO,
             products: new Collection([$attendeeDTO])
-            ,event_id: 1
+            , event_id: 1
         );
     }
 

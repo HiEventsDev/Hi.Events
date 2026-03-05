@@ -36,6 +36,10 @@ export const LanguageSwitcher = () => {
                 return t`Vietnamese`;
             case "tr":
                 return t`Turkish`;
+            case "pl":
+                return t`Polish`;
+            case "se":
+                return t`Swedish`;
         }
     };
 

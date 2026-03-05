@@ -1,6 +1,6 @@
 import {useMutation} from "@tanstack/react-query";
 import {FinaliseOrderPayload, orderClientPublic} from "../../../../api/order.client.ts";
-import {useNavigate, useParams} from "react-router";
+import {useNavigate, useParams, useSearchParams} from "react-router";
 import {
     Button,
     Checkbox,
@@ -11,7 +11,7 @@ import {
     TextInput,
     Tooltip
 } from "@mantine/core";
-import {IconArrowRight, IconCheck, IconCircleCheck} from "@tabler/icons-react";
+import {IconArrowRight, IconCheck, IconCircleCheck, IconClock} from "@tabler/icons-react";
 import {t, Trans} from "@lingui/macro";
 import {useForm} from "@mantine/form";
 import {notifications} from "@mantine/notifications";
@@ -45,6 +45,8 @@ const LoadingSkeleton = () =>
 export const CollectInformation = () => {
     const {eventId, orderShortId} = useParams();
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const isFromWaitlist = searchParams.get('waitlist') === 'true';
     const {
         isFetched: isOrderFetched,
         data: order,
@@ -389,7 +391,24 @@ export const CollectInformation = () => {
 
     return (
         <form onSubmit={form.onSubmit(handleSubmit)}>
+
             <CheckoutContent>
+                {isFromWaitlist && (
+                    <div className={classes.waitlistBanner}>
+                        <div className={classes.waitlistBannerIcon}>
+                            <IconClock size={22}/>
+                        </div>
+                        <div>
+                            <p className={classes.waitlistBannerTitle}>
+                                {t`You've been offered a spot!`}
+                            </p>
+                            <p className={classes.waitlistBannerText}>
+                                {t`Complete your order to secure your tickets. This offer is time-limited, so don't wait too long.`}
+                            </p>
+                        </div>
+                    </div>
+                )}
+
                 {(event && order) && (
                     <InlineOrderSummary event={event} order={order} defaultExpanded={true}/>
                 )}

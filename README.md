@@ -21,7 +21,7 @@ Self-hosted or cloud. Your events, your brand, your data.
 </a>
 
 <p>
-<a href="README.de.md">Deutsch</a> · <a href="README.pt.md">Português</a> · <a href="README.fr.md">Français</a> · <a href="README.it.md">Italiano</a> · <a href="README.nl.md">Nederlands</a> · <a href="README.es.md">Español</a> · <a href="README.zh-cn.md">中文</a> · <a href="README.zh-hk.md">繁體中文</a> · <a href="README.ja.md">日本語</a> · <a href="README.vi.md">Tiếng Việt</a> · <a href="README.tr.md">Türkçe</a> · <a href="README.hu.md">Magyar</a>
+<a href="README.de.md">Deutsch</a> · <a href="README.pt.md">Português</a> · <a href="README.fr.md">Français</a> · <a href="README.it.md">Italiano</a> · <a href="README.nl.md">Nederlands</a> · <a href="README.es.md">Español</a> · <a href="README.zh-cn.md">中文</a> · <a href="README.zh-hk.md">繁體中文</a> · <a href="README.ja.md">日本語</a> · <a href="README.vi.md">Tiếng Việt</a> · <a href="README.tr.md">Türkçe</a> · <a href="README.hu.md">Magyar</a> · <a href="README.pl.md">Polski</a>
 </p>
 
 </div>
@@ -161,17 +161,6 @@ Prefer not to self-host? **[Hi.Events Cloud](https://app.hi.events/auth/register
 managed option with zero setup, automatic updates, and managed infrastructure.
 
 [Get started →](https://app.hi.events/auth/register?utm_source=gh-readme)
-
-<br>
-
-## Documentation
-
-| Resource        | Link                                                                                          |
-|:----------------|:----------------------------------------------------------------------------------------------|
-| Getting Started | [hi.events/docs/getting-started](https://hi.events/docs/getting-started?utm_source=gh-readme) |
-| Configuration   | [hi.events/docs/configuration](https://hi.events/docs/configuration?utm_source=gh-readme)     |
-| API Reference   | [hi.events/docs/api](https://hi.events/docs/api?utm_source=gh-readme)                         |
-| Webhooks        | [hi.events/docs/webhooks](https://hi.events/docs/webhooks?utm_source=gh-readme)               |
 
 <br>
 

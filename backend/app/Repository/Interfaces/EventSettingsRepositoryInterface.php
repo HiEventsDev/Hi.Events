@@ -3,10 +3,9 @@
 namespace HiEvents\Repository\Interfaces;
 
 use HiEvents\DomainObjects\EventSettingDomainObject;
-use HiEvents\Repository\Eloquent\BaseRepository;
 
 /**
- * @extends BaseRepository<EventSettingDomainObject>
+ * @extends RepositoryInterface<EventSettingDomainObject>
  */
 interface EventSettingsRepositoryInterface extends RepositoryInterface
 {

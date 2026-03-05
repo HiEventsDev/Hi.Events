@@ -22,6 +22,9 @@ use Illuminate\Support\Collection;
 use RuntimeException;
 use Throwable;
 
+/**
+ * @extends BaseRepository<ProductDomainObject>
+ */
 class ProductRepository extends BaseRepository implements ProductRepositoryInterface
 {
     public function findByEventId(int $eventId, QueryParamsDTO $params): LengthAwarePaginator

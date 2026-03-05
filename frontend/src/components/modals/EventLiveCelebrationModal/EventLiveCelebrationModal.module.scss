@@ -1,0 +1,77 @@
+.modal {
+    :global(.mantine-Modal-body) {
+        padding: 0;
+    }
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    text-align: center;
+}
+
+.celebrationEmoji {
+    font-size: 4rem;
+    line-height: 1;
+    margin-bottom: 1rem;
+    animation: celebrate 0.6s ease-out;
+}
+
+@keyframes celebrate {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    70% {
+        transform: scale(0.9);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--mantine-color-dark-7);
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+    color: var(--mantine-color-dimmed);
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+}
+
+.urlSection {
+    width: 100%;
+    margin-bottom: 1.5rem;
+}
+
+.urlInput {
+    padding-right: 110px;
+    font-size: 0.875rem;
+    background: var(--mantine-color-gray-0);
+}
+
+.actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.actionButton {
+    width: 100%;
+}
+
+.doneButton {
+    width: 100%;
+}

@@ -12,6 +12,9 @@ use HiEvents\Repository\Interfaces\MessageRepositoryInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 
+/**
+ * @extends BaseRepository<MessageDomainObject>
+ */
 class MessageRepository extends BaseRepository implements MessageRepositoryInterface
 {
     protected function getModel(): string
@@ -36,6 +39,10 @@ class MessageRepository extends BaseRepository implements MessageRepositoryInter
                     ->where(MessageDomainObjectAbstract::SUBJECT, 'ilike', '%' . $params->query . '%')
                     ->orWhere(MessageDomainObjectAbstract::MESSAGE, 'ilike', '%' . $params->query . '%');
             };
+        }
+
+        if ($params->filter_fields && $params->filter_fields->isNotEmpty()) {
+            $this->applyFilterFields($params, MessageDomainObject::getAllowedFilterFields());
         }
 
         $this->model = $this->model->orderBy(

@@ -11,6 +11,8 @@ import {showError, showSuccess} from "../../../../utilites/notifications";
 import {AdminFailedJob} from "../../../../api/admin.client";
 import {useDisclosure} from "@mantine/hooks";
 import {relativeDate} from "../../../../utilites/dates";
+import tableStyles from "../../../../styles/admin-table.module.scss";
+import {IdParam} from "../../../../types";
 
 const FailedJobs = () => {
     const [page, setPage] = useState(1);
@@ -44,7 +46,8 @@ const FailedJobs = () => {
         openDetailModal();
     };
 
-    const handleRetryJob = (jobId: number | string) => {
+    const handleRetryJob = (jobId: IdParam) => {
+        if (!jobId) return;
         retryJobMutation.mutate(jobId, {
             onSuccess: () => {
                 showSuccess(t`Job queued for retry`);
@@ -55,7 +58,8 @@ const FailedJobs = () => {
         });
     };
 
-    const handleDeleteJob = (jobId: number | string) => {
+    const handleDeleteJob = (jobId: IdParam) => {
+        if (!jobId) return;
         deleteJobMutation.mutate(jobId, {
             onSuccess: () => {
                 showSuccess(t`Job deleted`);
@@ -147,73 +151,79 @@ const FailedJobs = () => {
                         <Skeleton height={400} radius="md" />
                     </Stack>
                 ) : totalJobs === 0 ? (
-                    <Text c="dimmed" ta="center" py="xl">{t`No failed jobs`}</Text>
+                    <div className={tableStyles.emptyState}>
+                        <Text c="dimmed" size="lg">{t`No failed jobs`}</Text>
+                    </div>
                 ) : (
-                    <Table striped highlightOnHover>
-                        <Table.Thead>
-                            <Table.Tr>
-                                <Table.Th>{t`Job`}</Table.Th>
-                                <Table.Th>{t`Queue`}</Table.Th>
-                                <Table.Th>{t`Failed At`}</Table.Th>
-                                <Table.Th>{t`Exception`}</Table.Th>
-                                <Table.Th w={120}>{t`Actions`}</Table.Th>
-                            </Table.Tr>
-                        </Table.Thead>
-                        <Table.Tbody>
-                            {jobsData?.data?.map((job) => (
-                                <Table.Tr key={job.id}>
-                                    <Table.Td>
-                                        <Text size="sm" fw={500}>{job.job_name}</Text>
-                                        <Text size="xs" c="dimmed">{job.uuid}</Text>
-                                    </Table.Td>
-                                    <Table.Td>
-                                        <Badge variant="light">{job.queue}</Badge>
-                                    </Table.Td>
-                                    <Table.Td>
-                                        <Text size="sm">{relativeDate(job.failed_at)}</Text>
-                                    </Table.Td>
-                                    <Table.Td>
-                                        <Text size="sm" lineClamp={1} maw={300}>
-                                            {job.exception_summary}
-                                        </Text>
-                                    </Table.Td>
-                                    <Table.Td>
-                                        <Group gap="xs">
-                                            <Tooltip label={t`View Details`}>
-                                                <ActionIcon
-                                                    variant="subtle"
-                                                    color="gray"
-                                                    onClick={() => handleViewDetails(job)}
-                                                >
-                                                    <IconEye size={16} />
-                                                </ActionIcon>
-                                            </Tooltip>
-                                            <Tooltip label={t`Retry`}>
-                                                <ActionIcon
-                                                    variant="subtle"
-                                                    color="blue"
-                                                    onClick={() => handleRetryJob(job.id)}
-                                                    loading={retryJobMutation.isPending}
-                                                >
-                                                    <IconRefresh size={16} />
-                                                </ActionIcon>
-                                            </Tooltip>
-                                            <Tooltip label={t`Delete`}>
-                                                <ActionIcon
-                                                    variant="subtle"
-                                                    color="red"
-                                                    onClick={() => handleDeleteJob(job.id)}
-                                                    loading={deleteJobMutation.isPending}
-                                                >
-                                                    <IconTrash size={16} />
-                                                </ActionIcon>
-                                            </Tooltip>
-                                        </Group>
-                                    </Table.Td>
-                                </Table.Tr>
-                            ))}
-                        </Table.Tbody>
-                    </Table>
+                    <div className={tableStyles.tableWrapper}>
+                        <div className={tableStyles.tableScroll}>
+                            <Table className={tableStyles.table} highlightOnHover>
+                                <Table.Thead>
+                                    <Table.Tr>
+                                        <Table.Th>{t`Job`}</Table.Th>
+                                        <Table.Th>{t`Queue`}</Table.Th>
+                                        <Table.Th>{t`Failed At`}</Table.Th>
+                                        <Table.Th>{t`Exception`}</Table.Th>
+                                        <Table.Th style={{width: 120}}>{t`Actions`}</Table.Th>
+                                    </Table.Tr>
+                                </Table.Thead>
+                                <Table.Tbody>
+                                    {jobsData?.data?.map((job) => (
+                                        <Table.Tr key={job.id}>
+                                            <Table.Td>
+                                                <Text size="sm" fw={500}>{job.job_name}</Text>
+                                                <Text size="xs" c="dimmed">{job.uuid}</Text>
+                                            </Table.Td>
+                                            <Table.Td>
+                                                <Badge variant="light">{job.queue}</Badge>
+                                            </Table.Td>
+                                            <Table.Td>
+                                                <Text size="sm">{relativeDate(job.failed_at)}</Text>
+                                            </Table.Td>
+                                            <Table.Td>
+                                                <Text size="sm" lineClamp={1} maw={300}>
+                                                    {job.exception_summary}
+                                                </Text>
+                                            </Table.Td>
+                                            <Table.Td>
+                                                <Group gap="xs">
+                                                    <Tooltip label={t`View Details`}>
+                                                        <ActionIcon
+                                                            variant="subtle"
+                                                            color="gray"
+                                                            onClick={() => handleViewDetails(job)}
+                                                        >
+                                                            <IconEye size={16} />
+                                                        </ActionIcon>
+                                                    </Tooltip>
+                                                    <Tooltip label={t`Retry`}>
+                                                        <ActionIcon
+                                                            variant="subtle"
+                                                            color="blue"
+                                                            onClick={() => handleRetryJob(job.id)}
+                                                            loading={retryJobMutation.isPending}
+                                                        >
+                                                            <IconRefresh size={16} />
+                                                        </ActionIcon>
+                                                    </Tooltip>
+                                                    <Tooltip label={t`Delete`}>
+                                                        <ActionIcon
+                                                            variant="subtle"
+                                                            color="red"
+                                                            onClick={() => handleDeleteJob(job.id)}
+                                                            loading={deleteJobMutation.isPending}
+                                                        >
+                                                            <IconTrash size={16} />
+                                                        </ActionIcon>
+                                                    </Tooltip>
+                                                </Group>
+                                            </Table.Td>
+                                        </Table.Tr>
+                                    ))}
+                                </Table.Tbody>
+                            </Table>
+                        </div>
+                    </div>
                 )}
 
                 {jobsData?.meta && jobsData.meta.last_page > 1 && (

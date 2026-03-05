@@ -3,10 +3,9 @@
 namespace HiEvents\Repository\Interfaces;
 
 use HiEvents\DomainObjects\InvoiceDomainObject;
-use HiEvents\Repository\Eloquent\BaseRepository;
 
 /**
- * @extends BaseRepository<InvoiceDomainObject>
+ * @extends RepositoryInterface<InvoiceDomainObject>
  */
 interface InvoiceRepositoryInterface extends RepositoryInterface
 {

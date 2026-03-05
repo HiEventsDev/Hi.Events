@@ -27,10 +27,10 @@ class CreateWebhookAction extends BaseAction
             new CreateWebhookDTO(
                 url: $request->validated('url'),
                 eventTypes: $request->validated('event_types'),
-                eventId: $eventId,
                 userId: $this->getAuthenticatedUser()->getId(),
                 accountId: $this->getAuthenticatedAccountId(),
                 status: WebhookStatus::fromName($request->validated('status')),
+                eventId: $eventId,
             )
         );
 

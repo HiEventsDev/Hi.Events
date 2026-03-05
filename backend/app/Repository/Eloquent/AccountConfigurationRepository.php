@@ -6,6 +6,9 @@ use HiEvents\DomainObjects\AccountConfigurationDomainObject;
 use HiEvents\Models\AccountConfiguration;
 use HiEvents\Repository\Interfaces\AccountConfigurationRepositoryInterface;
 
+/**
+ * @extends BaseRepository<AccountConfigurationDomainObject>
+ */
 class AccountConfigurationRepository extends BaseRepository implements AccountConfigurationRepositoryInterface
 {
     protected function getModel(): string

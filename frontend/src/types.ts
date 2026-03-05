@@ -129,6 +129,7 @@ export interface AccountConfiguration {
     application_fees: {
         percentage: number;
         fixed: number;
+        currency: string;
     },
     is_system_default: boolean;
 }
@@ -193,6 +194,7 @@ export interface EventSettings {
     product_page_message: string;
     post_checkout_message: string;
     support_email?: string;
+    notify_organizer_of_new_orders: boolean;
     order_timeout_in_minutes?: number;
     homepage_background_color: string;
     homepage_primary_color: string;
@@ -249,6 +251,10 @@ export interface EventSettings {
 
     // Simplified homepage theme settings (new 2-color + mode system)
     homepage_theme_settings?: HomepageThemeSettings;
+
+    // Waitlist settings
+    waitlist_auto_process?: boolean;
+    waitlist_offer_timeout_minutes?: number | null;
 }
 
 export interface VenueAddress {
@@ -537,6 +543,9 @@ export interface Product {
     product_category_id?: IdParam;
     is_highlighted?: boolean;
     highlight_message?: string;
+    waitlist_enabled?: boolean | null;
+    has_waiting_entries?: boolean;
+    waitlist_entry_count?: number;
 }
 
 export interface ProductCategory {
@@ -750,8 +759,18 @@ export interface Message {
     created_at?: string;
     updated_at?: string;
     sent_at?: string;
+    scheduled_at?: string | null;
     sent_by_user?: User;
-    status?: 'SENT' | 'PROCESSING' | 'FAILED';
+    status?: 'SENT' | 'PROCESSING' | 'FAILED' | 'SCHEDULED' | 'CANCELLED' | 'PENDING_REVIEW';
+}
+
+export interface OutgoingMessage {
+    id?: IdParam;
+    message_id: number;
+    recipient: string;
+    status: string;
+    subject: string;
+    created_at?: string;
 }
 
 export enum QuestionType {
@@ -1003,4 +1022,61 @@ export interface DefaultEmailTemplate {
         label: string;
         url_token: string;
     };
+}
+
+export enum WaitlistEntryStatus {
+    Waiting = 'WAITING',
+    Offered = 'OFFERED',
+    Purchased = 'PURCHASED',
+    Cancelled = 'CANCELLED',
+    OfferExpired = 'OFFER_EXPIRED',
+}
+
+export interface WaitlistEntry {
+    id?: number;
+    event_id?: number;
+    product_price_id?: number;
+    product?: Product;
+    product_price?: ProductPrice;
+    email?: string;
+    first_name?: string;
+    last_name?: string;
+    status?: WaitlistEntryStatus;
+    position?: number;
+    offered_at?: string;
+    offer_expires_at?: string;
+    purchased_at?: string;
+    cancelled_at?: string;
+    order_id?: number;
+    order_short_id?: string;
+    order_public_id?: string;
+    cancel_token?: string;
+    created_at?: string;
+    updated_at?: string;
+}
+
+export interface JoinWaitlistRequest {
+    product_price_id: number;
+    email: string;
+    first_name: string;
+    last_name?: string;
+    locale?: string;
+}
+
+export interface WaitlistProductStats {
+    product_price_id: number;
+    product_title: string;
+    waiting: number;
+    offered: number;
+    available: number | null;
+}
+
+export interface WaitlistStats {
+    total: number;
+    waiting: number;
+    offered: number;
+    purchased: number;
+    cancelled: number;
+    expired: number;
+    products: WaitlistProductStats[];
 }

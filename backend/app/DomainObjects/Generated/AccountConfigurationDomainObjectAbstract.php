@@ -17,6 +17,7 @@ abstract class AccountConfigurationDomainObjectAbstract extends \HiEvents\Domain
     final public const CREATED_AT = 'created_at';
     final public const UPDATED_AT = 'updated_at';
     final public const DELETED_AT = 'deleted_at';
+    final public const BYPASS_APPLICATION_FEES = 'bypass_application_fees';
 
     protected int $id;
     protected string $name;
@@ -25,6 +26,7 @@ abstract class AccountConfigurationDomainObjectAbstract extends \HiEvents\Domain
     protected ?string $created_at = null;
     protected ?string $updated_at = null;
     protected ?string $deleted_at = null;
+    protected bool $bypass_application_fees = false;
 
     public function toArray(): array
     {
@@ -36,6 +38,7 @@ abstract class AccountConfigurationDomainObjectAbstract extends \HiEvents\Domain
                     'created_at' => $this->created_at ?? null,
                     'updated_at' => $this->updated_at ?? null,
                     'deleted_at' => $this->deleted_at ?? null,
+                    'bypass_application_fees' => $this->bypass_application_fees ?? null,
                 ];
     }
 
@@ -114,5 +117,16 @@ abstract class AccountConfigurationDomainObjectAbstract extends \HiEvents\Domain
     public function getDeletedAt(): ?string
     {
         return $this->deleted_at;
+    }
+
+    public function setBypassApplicationFees(bool $bypass_application_fees): self
+    {
+        $this->bypass_application_fees = $bypass_application_fees;
+        return $this;
+    }
+
+    public function getBypassApplicationFees(): bool
+    {
+        return $this->bypass_application_fees;
     }
 }

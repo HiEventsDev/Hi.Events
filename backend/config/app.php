@@ -51,6 +51,7 @@ return [
         'event_homepage' => '/event/%d/%s',
         'attendee_product' => '/product/%d/%s',
         'order_summary' => '/checkout/%d/%s/summary',
+        'order_details' => '/checkout/%d/%s/details',
         'organizer_order_summary' => '/manage/event/%d/orders#order-%d',
         'ticket_lookup' => '/my-tickets/%s',
     ],

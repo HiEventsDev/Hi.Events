@@ -27,6 +27,7 @@ interface FeePlanDisplayProps {
         application_fees: {
             percentage: number;
             fixed: number;
+            currency: string;
         };
         is_system_default: boolean;
     };
@@ -274,7 +275,7 @@ const FeePlanDisplay = ({configuration, stripeCountry}: FeePlanDisplayProps) => 
                                 <Text size="sm">
                                     {t`Fixed Fee:`}{' '}
                                     <Text span fw={600}>
-                                        {formatCurrency(configuration.application_fees.fixed)}
+                                        {formatCurrency(configuration.application_fees.fixed, configuration.application_fees.currency || 'USD')}
                                     </Text>
                                 </Text>
                             </Group>

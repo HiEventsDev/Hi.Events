@@ -7,12 +7,11 @@ namespace HiEvents\Repository\Interfaces;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\Http\DTO\QueryParamsDTO;
-use HiEvents\Repository\Eloquent\BaseRepository;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 /**
- * @extends BaseRepository<OrderDomainObject>
+ * @extends RepositoryInterface<OrderDomainObject>
  */
 interface OrderRepositoryInterface extends RepositoryInterface
 {

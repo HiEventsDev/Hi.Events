@@ -3,11 +3,12 @@
 namespace HiEvents\Repository\Interfaces;
 
 use HiEvents\DomainObjects\WebhookDomainObject;
-use HiEvents\Repository\Eloquent\BaseRepository;
+use Illuminate\Support\Collection;
 
 /**
- * @extends BaseRepository<WebhookDomainObject>
+ * @extends RepositoryInterface<WebhookDomainObject>
  */
 interface WebhookRepositoryInterface extends RepositoryInterface
 {
+    public function findEnabledByEventId(int $eventId): Collection;
 }

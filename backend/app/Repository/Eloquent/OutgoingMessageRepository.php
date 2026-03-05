@@ -6,6 +6,9 @@ use HiEvents\DomainObjects\OutgoingMessageDomainObject;
 use HiEvents\Models\OutgoingMessage;
 use HiEvents\Repository\Interfaces\OutgoingMessageRepositoryInterface;
 
+/**
+ * @extends BaseRepository<OutgoingMessageDomainObject>
+ */
 class OutgoingMessageRepository extends BaseRepository implements OutgoingMessageRepositoryInterface
 {
     protected function getModel(): string

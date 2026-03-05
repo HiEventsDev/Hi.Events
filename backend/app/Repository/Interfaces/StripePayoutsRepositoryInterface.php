@@ -2,10 +2,10 @@
 
 namespace HiEvents\Repository\Interfaces;
 
-use HiEvents\Repository\Eloquent\BaseRepository;
+use HiEvents\DomainObjects\StripePayoutDomainObject;
 
 /**
- * @extends BaseRepository
+ * @extends RepositoryInterface<StripePayoutDomainObject>
  */
 interface StripePayoutsRepositoryInterface extends RepositoryInterface
 {

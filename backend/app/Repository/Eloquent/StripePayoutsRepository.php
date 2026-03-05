@@ -6,6 +6,9 @@ use HiEvents\Repository\Interfaces\StripePayoutsRepositoryInterface;
 use HiEvents\Models\StripePayout;
 use HiEvents\DomainObjects\StripePayoutDomainObject;
 
+/**
+ * @extends BaseRepository<StripePayoutDomainObject>
+ */
 class StripePayoutsRepository extends BaseRepository implements StripePayoutsRepositoryInterface
 {
     protected function getModel(): string

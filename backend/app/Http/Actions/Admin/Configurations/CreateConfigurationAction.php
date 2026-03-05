@@ -28,12 +28,15 @@ class CreateConfigurationAction extends BaseAction
             'application_fees' => 'required|array',
             'application_fees.fixed' => 'required|numeric|min:0',
             'application_fees.percentage' => 'required|numeric|min:0|max:100',
+            'application_fees.currency' => 'sometimes|string|size:3|alpha|uppercase',
+            'bypass_application_fees' => 'sometimes|boolean',
         ]);
 
         $configuration = $this->repository->create([
             'name' => $validated['name'],
             'is_system_default' => false,
             'application_fees' => $validated['application_fees'],
+            'bypass_application_fees' => $validated['bypass_application_fees'] ?? false,
         ]);
 
         return $this->jsonResponse(

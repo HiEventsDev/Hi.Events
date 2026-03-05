@@ -66,8 +66,11 @@ class StripePaymentIntentCreationService
         try {
             $this->databaseManager->beginTransaction();
 
+            $accountConfiguration = $paymentIntentDTO->account->getConfiguration();
+            $bypassApplicationFees = $accountConfiguration?->getBypassApplicationFees() ?? false;
+
             $applicationFee = $this->orderApplicationFeeCalculationService->calculateApplicationFee(
-                accountConfiguration: $paymentIntentDTO->account->getConfiguration(),
+                accountConfiguration: $accountConfiguration,
                 order: $paymentIntentDTO->order,
                 vatSettings: $paymentIntentDTO->vatSettings,
             );
@@ -80,7 +83,8 @@ class StripePaymentIntentCreationService
                 'automatic_payment_methods' => [
                     'enabled' => true,
                 ],
-                ...($applicationFee ? ['application_fee_amount' => $applicationFee->grossApplicationFee->toMinorUnit()] : []),
+                ...($paymentIntentDTO->description ? ['description' => $paymentIntentDTO->description] : []),
+                ...($applicationFee && !$bypassApplicationFees ? ['application_fee_amount' => $applicationFee->grossApplicationFee->toMinorUnit()] : []),
             ], $this->getStripeAccountData($paymentIntentDTO));
 
             $this->logger->debug('Stripe payment intent created', [
@@ -154,11 +158,26 @@ class StripePaymentIntentCreationService
         ]);
 
         if ($customer === null) {
+            $order = $paymentIntentDTO->order;
+
+            $customerData = [
+                'email' => $order->getEmail(),
+                'name' => $order->getFullName(),
+            ];
+
+            if (($address = $order->getAddressDTO()) && $address->address_line_1 && $address->country) {
+                $customerData['address'] = [
+                    'line1' => $address->address_line_1,
+                    'line2' => $address->address_line_2 ?? '',
+                    'city' => $address->city ?? '',
+                    'state' => $address->state_or_region ?? '',
+                    'postal_code' => $address->zip_or_postal_code ?? '',
+                    'country' => $address->country,
+                ];
+            }
+
             $stripeCustomer = $stripeClient->customers->create(
-                params: [
-                    'email' => $paymentIntentDTO->order->getEmail(),
-                    'name' => $paymentIntentDTO->order->getFullName(),
-                ],
+                params: $customerData,
                 opts: $this->getStripeAccountData($paymentIntentDTO)
             );
 

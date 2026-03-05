@@ -8,6 +8,8 @@ use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
+use HiEvents\DomainObjects\Enums\CapacityChangeDirection;
+use HiEvents\Events\CapacityChangedEvent;
 use HiEvents\Mail\Order\OrderCancelled;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
@@ -71,6 +73,8 @@ class OrderCancelService
                     orderId: $order->getId(),
                 ),
             );
+
+            $this->dispatchCapacityChangedEvents($order);
         });
     }
 
@@ -117,5 +121,24 @@ class OrderCancelService
                 'id' => $order->getId(),
             ]
         );
+    }
+
+    private function dispatchCapacityChangedEvents(OrderDomainObject $order): void
+    {
+        $attendees = $this->attendeeRepository->findWhere([
+            'order_id' => $order->getId(),
+        ]);
+
+        $productIds = $attendees
+            ->map(fn(AttendeeDomainObject $attendee) => $attendee->getProductId())
+            ->unique();
+
+        foreach ($productIds as $productId) {
+            event(new CapacityChangedEvent(
+                eventId: $order->getEventId(),
+                direction: CapacityChangeDirection::INCREASED,
+                productId: $productId,
+            ));
+        }
     }
 }

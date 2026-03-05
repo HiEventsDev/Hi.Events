@@ -61,6 +61,7 @@ class CreateProductHandler
                 ->setIsHiddenWithoutPromoCode($productsData->is_hidden_without_promo_code)
                 ->setIsHighlighted($productsData->is_highlighted ?? false)
                 ->setHighlightMessage($productsData->highlight_message)
+                ->setWaitlistEnabled($productsData->waitlist_enabled)
                 ->setProductPrices($productPrices)
                 ->setEventId($productsData->event_id)
                 ->setProductType($productsData->product_type->name)
