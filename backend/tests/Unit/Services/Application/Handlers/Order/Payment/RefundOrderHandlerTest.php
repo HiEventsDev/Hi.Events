@@ -15,7 +15,7 @@ use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Order\DTO\RefundOrderDTO;
 use HiEvents\Services\Application\Handlers\Order\Payment\RefundOrderHandler;
 use HiEvents\Services\Domain\Order\OrderCancelService;
-use HiEvents\Services\Domain\Payment\Razorpay\RazorpayPaymentRefundService;
+use HiEvents\Services\Domain\Payment\IdempotentRefundService;
 use HiEvents\Services\Domain\Payment\Stripe\StripePaymentIntentRefundService;
 use HiEvents\Services\Infrastructure\Stripe\StripeClientFactory;
 use HiEvents\Values\MoneyValue;
@@ -24,7 +24,6 @@ use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Mail\PendingMail;
 use PHPUnit\Framework\MockObject\MockObject;
-use Razorpay\Api\Errors\Error;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Tests\TestCase;
 
@@ -37,7 +36,7 @@ class RefundOrderHandlerTest extends TestCase
     private ConnectionInterface&MockObject $dbConnectionMock;
     private StripePaymentIntentRefundService&MockObject $stripeRefundServiceMock;
     private StripeClientFactory&MockObject $stripeClientFactory;
-    private RazorpayPaymentRefundService&MockObject $razorpayRefundServiceMock;
+    private IdempotentRefundService&MockObject $idempotentRefundServiceMock;
     private Repository&MockObject $configMock;
     private RefundOrderHandler $handler;
 
@@ -52,7 +51,7 @@ class RefundOrderHandlerTest extends TestCase
         $this->dbConnectionMock = $this->createMock(ConnectionInterface::class);
         $this->stripeRefundServiceMock = $this->createMock(StripePaymentIntentRefundService::class);
         $this->stripeClientFactory = $this->createMock(StripeClientFactory::class);
-        $this->razorpayRefundServiceMock = $this->createMock(RazorpayPaymentRefundService::class);
+        $this->idempotentRefundServiceMock = $this->createMock(IdempotentRefundService::class);
         $this->configMock = $this->createMock(Repository::class);
 
         $this->handler = new RefundOrderHandler(
@@ -63,7 +62,7 @@ class RefundOrderHandlerTest extends TestCase
             $this->dbConnectionMock,
             $this->stripeRefundServiceMock,
             $this->stripeClientFactory,
-            $this->razorpayRefundServiceMock,
+            $this->idempotentRefundServiceMock,
             $this->configMock
         );
     }
@@ -73,7 +72,7 @@ class RefundOrderHandlerTest extends TestCase
         $order = $this->createMock(OrderDomainObject::class);
         $order->method('getId')->willReturn(1);
         $order->method('getEventId')->willReturn(1);
-        $order->method('getRefundStatus')->willReturn(null); // Not pending
+        $order->method('getRefundStatus')->willReturn(null);
         $order->method('getStripePayment')->willReturn($this->createMock(StripePaymentDomainObject::class));
         $order->method('getRazorpayOrder')->willReturn(null);
         $order->method('getEmail')->willReturn('test@example.com');
@@ -87,7 +86,7 @@ class RefundOrderHandlerTest extends TestCase
         $order = $this->createMock(OrderDomainObject::class);
         $order->method('getId')->willReturn(2);
         $order->method('getEventId')->willReturn(1);
-        $order->method('getRefundStatus')->willReturn(null); // Not pending
+        $order->method('getRefundStatus')->willReturn(null);
         $order->method('getStripePayment')->willReturn(null);
         $order->method('getRazorpayOrder')->willReturn($this->createMock(RazorpayOrderDomainObject::class));
         $order->method('getEmail')->willReturn('test@example.com');
@@ -162,7 +161,7 @@ class RefundOrderHandlerTest extends TestCase
     public function testRefundsRazorpayOrderWithIdempotencyEnabled(): void
     {
         $this->configMock->method('get')
-            ->with('refunds.razorpay.idempotency_enabled', true)
+            ->with('refunds.razorpay.idempotency_enabled')
             ->willReturn(true);
 
         $dto = new RefundOrderDTO(
@@ -199,13 +198,18 @@ class RefundOrderHandlerTest extends TestCase
             ->with(1)
             ->willReturn($event);
 
-        $this->razorpayRefundServiceMock->expects($this->once())
-            ->method('refundPayment')
+        $this->idempotentRefundServiceMock->expects($this->once())
+            ->method('refundWithIdempotency')
             ->with(
                 $order->getRazorpayOrder(),
-                10000,
-                $this->callback(fn($key) => is_string($key) && preg_match('/^refund_order_2_\d+$/', $key)),
-                ['speed' => 'optimum', 'receipt' => 'Refund#123']
+                $this->callback(fn(MoneyValue $amount) => $amount->toFloat() === 100.00),
+                ['speed' => 'optimum', 'receipt' => 'Refund#123'],
+                $this->callback(function ($key) {
+                    return is_string($key)
+                        && str_starts_with($key, 'refund_')
+                        && strlen($key) === 71
+                        && ctype_xdigit(substr($key, 7));
+                })
             );
 
         $this->orderRepoMock->expects($this->once())
@@ -221,7 +225,7 @@ class RefundOrderHandlerTest extends TestCase
     public function testSkipsIdempotencyKeyWhenDisabled(): void
     {
         $this->configMock->method('get')
-            ->with('refunds.razorpay.idempotency_enabled', true)
+            ->with('refunds.razorpay.idempotency_enabled')
             ->willReturn(false);
 
         $dto = new RefundOrderDTO(
@@ -244,13 +248,13 @@ class RefundOrderHandlerTest extends TestCase
         $this->eventRepoMock->method('loadRelation')->willReturnSelf();
         $this->eventRepoMock->method('findById')->willReturn($event);
 
-        $this->razorpayRefundServiceMock->expects($this->once())
-            ->method('refundPayment')
+        $this->idempotentRefundServiceMock->expects($this->once())
+            ->method('refundWithIdempotency')
             ->with(
                 $order->getRazorpayOrder(),
-                10000,
-                null,
-                []
+                $this->callback(fn(MoneyValue $amount) => $amount->toFloat() === 100.00),
+                [],
+                null
             );
 
         $this->orderRepoMock->method('updateFromArray')->willReturn($order);
@@ -298,11 +302,10 @@ class RefundOrderHandlerTest extends TestCase
             notify_buyer: false
         );
 
-        // Create order mock manually to ensure refund status is set correctly
         $order = $this->createMock(OrderDomainObject::class);
         $order->method('getId')->willReturn(1);
         $order->method('getEventId')->willReturn(1);
-        $order->method('getRefundStatus')->willReturn(OrderRefundStatus::REFUND_PENDING->name); // Use constant
+        $order->method('getRefundStatus')->willReturn(OrderRefundStatus::REFUND_PENDING->name);
         $order->method('getStripePayment')->willReturn($this->createMock(StripePaymentDomainObject::class));
         $order->method('getRazorpayOrder')->willReturn(null);
         $order->method('getEmail')->willReturn('test@example.com');
@@ -317,7 +320,7 @@ class RefundOrderHandlerTest extends TestCase
 
         $this->orderRepoMock->method('loadRelation')->willReturnSelf();
         $this->orderRepoMock->method('findFirstWhere')->willReturn($order);
-        $this->orderRepoMock->method('updateFromArray')->willReturn($order); // For markOrderRefundPending
+        $this->orderRepoMock->method('updateFromArray')->willReturn($order);
 
         $this->eventRepoMock->method('loadRelation')->willReturnSelf();
         $this->eventRepoMock->method('findById')->willReturn($event);
@@ -360,8 +363,6 @@ class RefundOrderHandlerTest extends TestCase
         $this->handler->handle($dto);
     }
 
-
-
     public function testNotifiesBuyerWhenRequested(): void
     {
         $dto = new RefundOrderDTO(
@@ -373,7 +374,7 @@ class RefundOrderHandlerTest extends TestCase
         );
 
         $order = $this->createOrderWithStripePayment();
-        $event = $this->createEvent();  // now returns event with organizer & settings mocks
+        $event = $this->createEvent();
 
         $this->dbConnectionMock->expects($this->once())
             ->method('transaction')
@@ -386,7 +387,6 @@ class RefundOrderHandlerTest extends TestCase
 
         $this->stripeRefundServiceMock->method('refundPayment');
 
-        // Create a mock for the pending mail object
         $pendingMailMock = $this->createMock(PendingMail::class);
         $pendingMailMock->expects($this->once())
             ->method('locale')
@@ -396,7 +396,6 @@ class RefundOrderHandlerTest extends TestCase
             ->method('send')
             ->with($this->isInstanceOf(\HiEvents\Mail\Order\OrderRefunded::class));
 
-        // Set up mailer mock to return the pending mail mock
         $this->mailerMock->expects($this->once())
             ->method('to')
             ->with('test@example.com')
@@ -407,7 +406,7 @@ class RefundOrderHandlerTest extends TestCase
         $this->handler->handle($dto);
     }
 
-    public function testHandlesRazorpay409Conflict(): void
+    public function testHandlesRazorpayIdempotentConflict(): void
     {
         $this->configMock->method('get')
             ->with('refunds.razorpay.idempotency_enabled', true)
@@ -433,11 +432,9 @@ class RefundOrderHandlerTest extends TestCase
         $this->eventRepoMock->method('loadRelation')->willReturnSelf();
         $this->eventRepoMock->method('findById')->willReturn($event);
 
-        // Create a real Error exception with status code 409
-        $error = new Error('Conflict', 0, 409);
 
-        $this->razorpayRefundServiceMock->method('refundPayment')
-            ->willThrowException($error);
+        $this->idempotentRefundServiceMock->method('refundWithIdempotency')
+            ->willThrowException(new RefundNotPossibleException('A refund for this order is already being processed.'));
 
         $this->expectException(RefundNotPossibleException::class);
         $this->expectExceptionMessage('already being processed');

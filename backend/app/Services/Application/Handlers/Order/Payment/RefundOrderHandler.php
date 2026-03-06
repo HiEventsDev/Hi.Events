@@ -21,14 +21,13 @@ use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Order\DTO\RefundOrderDTO;
 use HiEvents\Services\Domain\Order\OrderCancelService;
-use HiEvents\Services\Domain\Payment\Razorpay\RazorpayPaymentRefundService;
+use HiEvents\Services\Domain\Payment\IdempotentRefundService;
 use HiEvents\Services\Domain\Payment\Stripe\StripePaymentIntentRefundService;
 use HiEvents\Services\Infrastructure\Stripe\StripeClientFactory;
 use HiEvents\Values\MoneyValue;
 use Illuminate\Config\Repository;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Database\ConnectionInterface;
-use Razorpay\Api\Errors\Error;
 use Stripe\Exception\ApiErrorException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Throwable;
@@ -43,7 +42,7 @@ class RefundOrderHandler
         private readonly ConnectionInterface $dbConnection,
         private readonly StripePaymentIntentRefundService $stripeRefundService,
         private readonly StripeClientFactory $stripeClientFactory,
-        private readonly RazorpayPaymentRefundService $razorpayRefundService,
+        private readonly IdempotentRefundService $idempotentRefundService,
         private readonly Repository $config
     ) {
     }
@@ -117,12 +116,14 @@ class RefundOrderHandler
         );
     }
 
-    private function generateRazorpayIdempotencyKey(OrderDomainObject $order): ?string
+    private function generateRazorpayIdempotencyKey(OrderDomainObject $order, MoneyValue $amount, array $options): ?string
     {
         if (!$this->config->get('refunds.razorpay.idempotency_enabled', true)) {
             return null;
         }
-        return 'refund_order_' . $order->getId() . '_' . time();
+
+        $data = $order->getId() . '_' . $amount->toMinorUnit() . '_' . json_encode($options);
+        return 'refund_' . hash('sha256', $data);
     }
 
     /**
@@ -164,25 +165,15 @@ class RefundOrderHandler
                 stripeClient: $stripeClient
             );
         } elseif ($order->getRazorpayOrder()) {
-            // Razorpay refund with idempotency and options
-            $idempotencyKey = $this->generateRazorpayIdempotencyKey($order);
             $options = $refundOrderDTO->provider_options ?? [];
+            $idempotencyKey = $this->generateRazorpayIdempotencyKey($order, $amount, $options);
 
-            try {
-                $this->razorpayRefundService->refundPayment(
-                    $order->getRazorpayOrder(),
-                    $amount->toMinorUnit(),
-                    $idempotencyKey,
-                    $options
-                );
-            } catch (Error $e) {
-                if ($e->getHttpStatusCode() === 409) {
-                    throw new RefundNotPossibleException(
-                        __('A refund for this order is already being processed. Please check again later.')
-                    );
-                }
-                throw $e;
-            }
+            $this->idempotentRefundService->refundWithIdempotency(
+                $order->getRazorpayOrder(),
+                $amount,
+                $options,
+                $idempotencyKey
+            );
         } else {
             throw new RefundNotPossibleException(__('No payment provider found for this order.'));
         }

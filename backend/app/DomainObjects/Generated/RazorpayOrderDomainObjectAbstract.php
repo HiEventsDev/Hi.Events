@@ -15,10 +15,15 @@ abstract class RazorpayOrderDomainObjectAbstract extends \HiEvents\DomainObjects
     final public const RAZORPAY_ORDER_ID = 'razorpay_order_id';
     final public const RAZORPAY_PAYMENT_ID = 'razorpay_payment_id';
     final public const RAZORPAY_SIGNATURE = 'razorpay_signature';
+    final public const METHOD = 'method';
+    final public const FEE = 'fee';
+    final public const TAX = 'tax';
     final public const AMOUNT = 'amount';
     final public const CURRENCY = 'currency';
     final public const RECEIPT = 'receipt';
-    final public const PAYMENT_STATUS = 'payment_status';
+    final public const STATUS = 'status';
+    final public const FAILURE_REASON = 'failure_reason';
+    final public const ERROR_CODE = 'error_code';
     final public const CREATED_AT = 'created_at';
     final public const UPDATED_AT = 'updated_at';
 
@@ -27,10 +32,15 @@ abstract class RazorpayOrderDomainObjectAbstract extends \HiEvents\DomainObjects
     protected string $razorpay_order_id;
     protected ?string $razorpay_payment_id = null;
     protected ?string $razorpay_signature = null;
+    protected ?string $method = null;
+    protected ?int $fee = null;
+    protected ?int $tax = null;
     protected int $amount;
     protected string $currency;
     protected ?string $receipt = null;
-    protected string $payment_status = 'created';
+    protected string $status = 'created';
+    protected ?string $failure_reason = null;
+    protected ?string $error_code = null;
     protected ?string $created_at = null;
     protected ?string $updated_at = null;
 
@@ -42,10 +52,15 @@ abstract class RazorpayOrderDomainObjectAbstract extends \HiEvents\DomainObjects
                     'razorpay_order_id' => $this->razorpay_order_id ?? null,
                     'razorpay_payment_id' => $this->razorpay_payment_id ?? null,
                     'razorpay_signature' => $this->razorpay_signature ?? null,
+                    'method' => $this->method ?? null,
+                    'fee' => $this->fee ?? null,
+                    'tax' => $this->tax ?? null,
                     'amount' => $this->amount ?? null,
                     'currency' => $this->currency ?? null,
                     'receipt' => $this->receipt ?? null,
-                    'payment_status' => $this->payment_status ?? null,
+                    'status' => $this->status ?? null,
+                    'failure_reason' => $this->failure_reason ?? null,
+                    'error_code' => $this->error_code ?? null,
                     'created_at' => $this->created_at ?? null,
                     'updated_at' => $this->updated_at ?? null,
                 ];
@@ -106,6 +121,39 @@ abstract class RazorpayOrderDomainObjectAbstract extends \HiEvents\DomainObjects
         return $this->razorpay_signature;
     }
 
+    public function setMethod(?string $method): self
+    {
+        $this->method = $method;
+        return $this;
+    }
+
+    public function getMethod(): ?string
+    {
+        return $this->method;
+    }
+
+    public function setFee(?int $fee): self
+    {
+        $this->fee = $fee;
+        return $this;
+    }
+
+    public function getFee(): ?int
+    {
+        return $this->fee;
+    }
+
+    public function setTax(?int $tax): self
+    {
+        $this->tax = $tax;
+        return $this;
+    }
+
+    public function getTax(): ?int
+    {
+        return $this->tax;
+    }
+
     public function setAmount(int $amount): self
     {
         $this->amount = $amount;
@@ -139,15 +187,37 @@ abstract class RazorpayOrderDomainObjectAbstract extends \HiEvents\DomainObjects
         return $this->receipt;
     }
 
-    public function setPaymentStatus(string $payment_status): self
+    public function setStatus(string $status): self
     {
-        $this->payment_status = $payment_status;
+        $this->status = $status;
         return $this;
     }
 
-    public function getPaymentStatus(): string
+    public function getStatus(): string
     {
-        return $this->payment_status;
+        return $this->status;
+    }
+
+    public function setFailureReason(?string $failure_reason): self
+    {
+        $this->failure_reason = $failure_reason;
+        return $this;
+    }
+
+    public function getFailureReason(): ?string
+    {
+        return $this->failure_reason;
+    }
+
+    public function setErrorCode(?string $error_code): self
+    {
+        $this->error_code = $error_code;
+        return $this;
+    }
+
+    public function getErrorCode(): ?string
+    {
+        return $this->error_code;
     }
 
     public function setCreatedAt(?string $created_at): self
