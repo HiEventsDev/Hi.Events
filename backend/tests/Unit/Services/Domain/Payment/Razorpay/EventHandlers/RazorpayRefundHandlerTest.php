@@ -144,7 +144,10 @@ class RazorpayRefundHandlerTest extends TestCase
 
         $this->orderRepoMock->expects($this->once())
             ->method('updateFromArray')
-            ->with(10, ['payment_status' => OrderPaymentStatus::PARTIALLY_REFUNDED->name]);
+            ->with(10, [
+                'refund_status' => OrderPaymentStatus::PARTIALLY_REFUNDED->name,
+                'total_refunded' => 200.00
+            ]);
 
         $this->cacheMock->expects($this->once())->method('put');
 
@@ -173,7 +176,10 @@ class RazorpayRefundHandlerTest extends TestCase
 
         $this->orderRepoMock->expects($this->once())
             ->method('updateFromArray')
-            ->with(10, ['payment_status' => OrderPaymentStatus::REFUNDED->name]);
+            ->with(10, [
+                'refund_status' => OrderPaymentStatus::REFUNDED->name,
+                'total_refunded' => 500.00
+            ]);
 
         $this->handler->handleEvent($payload);
     }

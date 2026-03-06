@@ -121,7 +121,8 @@ class RazorpayRefundHandler
         }
 
         $this->orderRepository->updateFromArray($order->getId(), [
-            'payment_status' => $newStatus,
+            'refund_status' => $newStatus,
+            'total_refunded' => $totalRefunded
         ]);
     }
 }

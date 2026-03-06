@@ -26,7 +26,7 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
     public ?Collection $attendees = null;
 
     public ?StripePaymentDomainObject $stripePayment = null;
-    
+
     public ?RazorpayOrderDomainObject $razorpayOrder = null;
 
     /** @var Collection<QuestionAndAnswerViewDomainObject>|null */
@@ -146,7 +146,7 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
 
     public function isPaymentRequired(): bool
     {
-        return (int)ceil($this->getTotalGross()) > 0;
+        return (int) ceil($this->getTotalGross()) > 0;
     }
 
     public function isOrderAwaitingOfflinePayment(): bool
@@ -184,7 +184,7 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
         $this->stripePayment = $stripePayment;
         return $this;
     }
-    
+
     public function setRazorpayOrder(?RazorpayOrderDomainObject $razorpayOrder): OrderDomainObject
     {
         $this->razorpayOrder = $razorpayOrder;
@@ -230,7 +230,7 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
     {
         return $this->stripePayment;
     }
-    
+
     public function getRazorpayOrder(): ?RazorpayOrderDomainObject
     {
         return $this->razorpayOrder;
@@ -296,17 +296,22 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
 
     public function isRefundable(): bool
     {
+        $allowedProviders = [
+            PaymentProviders::STRIPE->name,
+            PaymentProviders::RAZORPAY->name,
+        ];
+
         return !$this->isFreeOrder()
             && $this->getStatus() !== OrderPaymentStatus::AWAITING_OFFLINE_PAYMENT->name
-            && $this->getPaymentProvider() === PaymentProviders::STRIPE->name
+            && in_array($this->getPaymentProvider(), $allowedProviders, true)
             && $this->getRefundStatus() !== OrderRefundStatus::REFUNDED->name;
     }
-    
+
     public function isRazorpayOrder(): bool
     {
         return $this->getPaymentProvider() === PaymentProviders::RAZORPAY->name;
     }
-    
+
     public function hasRazorpayOrder(): bool
     {
         return $this->razorpayOrder !== null;
