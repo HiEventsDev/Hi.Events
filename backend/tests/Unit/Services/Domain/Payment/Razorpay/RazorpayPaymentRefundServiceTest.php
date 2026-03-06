@@ -7,6 +7,7 @@ use HiEvents\Exceptions\RefundNotPossibleException;
 use HiEvents\Services\Domain\Payment\Razorpay\RazorpayPaymentRefundService;
 use HiEvents\Services\Infrastructure\Razorpay\RazorpayClientFactory;
 use HiEvents\Services\Infrastructure\Razorpay\RazorpayClientInterface;
+use Illuminate\Log\Logger;
 use PHPUnit\Framework\MockObject\MockObject;
 use Tests\TestCase;
 
@@ -15,6 +16,7 @@ class RazorpayPaymentRefundServiceTest extends TestCase
     private RazorpayClientFactory&MockObject $clientFactoryMock;
     private RazorpayClientInterface&MockObject $clientMock;
     private RazorpayPaymentRefundService $service;
+    private Logger&MockObject $logger;
 
     protected function setUp(): void
     {
@@ -22,7 +24,8 @@ class RazorpayPaymentRefundServiceTest extends TestCase
 
         $this->clientFactoryMock = $this->createMock(RazorpayClientFactory::class);
         $this->clientMock = $this->createMock(RazorpayClientInterface::class);
-        $this->service = new RazorpayPaymentRefundService($this->clientFactoryMock);
+        $this->logger = $this->createMock(Logger::class);
+        $this->service = new RazorpayPaymentRefundService($this->clientFactoryMock, $this->logger);
     }
 
     public function testRefundPaymentSuccess(): void
