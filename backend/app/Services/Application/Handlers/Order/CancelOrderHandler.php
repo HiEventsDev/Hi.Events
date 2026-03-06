@@ -8,7 +8,7 @@ use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Order\DTO\CancelOrderDTO;
 use HiEvents\Services\Application\Handlers\Order\DTO\RefundOrderDTO;
-use HiEvents\Services\Application\Handlers\Order\Payment\Stripe\RefundOrderHandler;
+use HiEvents\Services\Application\Handlers\Order\Payment\RefundOrderHandler;
 use HiEvents\Services\Domain\Order\OrderCancelService;
 use Illuminate\Database\DatabaseManager;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;

@@ -8,5 +8,6 @@ enum OrderRefundStatus
     case REFUND_FAILED;
     case REFUNDED;
     case PARTIALLY_REFUNDED;
+    case REFUND_NOT_REQUESTED;
 }
 

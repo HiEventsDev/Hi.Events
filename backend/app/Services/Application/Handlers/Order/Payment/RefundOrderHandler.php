@@ -1,6 +1,6 @@
 <?php
 
-namespace HiEvents\Services\Application\Handlers\Order\Payment\Stripe;
+namespace HiEvents\Services\Application\Handlers\Order\Payment;
 
 use Brick\Math\Exception\MathException;
 use Brick\Math\Exception\NumberFormatException;
@@ -11,6 +11,7 @@ use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
+use HiEvents\DomainObjects\RazorpayOrderDomainObject;
 use HiEvents\DomainObjects\Status\OrderRefundStatus;
 use HiEvents\DomainObjects\StripePaymentDomainObject;
 use HiEvents\Exceptions\RefundNotPossibleException;
@@ -20,11 +21,14 @@ use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Order\DTO\RefundOrderDTO;
 use HiEvents\Services\Domain\Order\OrderCancelService;
+use HiEvents\Services\Domain\Payment\Razorpay\RazorpayPaymentRefundService;
 use HiEvents\Services\Domain\Payment\Stripe\StripePaymentIntentRefundService;
 use HiEvents\Services\Infrastructure\Stripe\StripeClientFactory;
 use HiEvents\Values\MoneyValue;
+use Illuminate\Config\Repository;
 use Illuminate\Contracts\Mail\Mailer;
-use Illuminate\Database\DatabaseManager;
+use Illuminate\Database\ConnectionInterface;
+use Razorpay\Api\Errors\Error;
 use Stripe\Exception\ApiErrorException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Throwable;
@@ -32,15 +36,16 @@ use Throwable;
 class RefundOrderHandler
 {
     public function __construct(
-        private readonly StripePaymentIntentRefundService $refundService,
-        private readonly OrderRepositoryInterface         $orderRepository,
-        private readonly EventRepositoryInterface         $eventRepository,
-        private readonly Mailer                           $mailer,
-        private readonly OrderCancelService               $orderCancelService,
-        private readonly DatabaseManager                  $databaseManager,
-        private readonly StripeClientFactory              $stripeClientFactory,
-    )
-    {
+        private readonly OrderRepositoryInterface $orderRepository,
+        private readonly EventRepositoryInterface $eventRepository,
+        private readonly Mailer $mailer,
+        private readonly OrderCancelService $orderCancelService,
+        private readonly ConnectionInterface $dbConnection,
+        private readonly StripePaymentIntentRefundService $stripeRefundService,
+        private readonly StripeClientFactory $stripeClientFactory,
+        private readonly RazorpayPaymentRefundService $razorpayRefundService,
+        private readonly Repository $config
+    ) {
     }
 
     /**
@@ -50,13 +55,14 @@ class RefundOrderHandler
      */
     public function handle(RefundOrderDTO $refundOrderDTO): OrderDomainObject
     {
-        return $this->databaseManager->transaction(fn() => $this->refundOrder($refundOrderDTO));
+        return $this->dbConnection->transaction(fn() => $this->refundOrder($refundOrderDTO));
     }
 
     private function fetchOrder(int $eventId, int $orderId): OrderDomainObject
     {
         $order = $this->orderRepository
             ->loadRelation(new Relationship(StripePaymentDomainObject::class, name: 'stripe_payment'))
+            ->loadRelation(new Relationship(RazorpayOrderDomainObject::class, name: 'razorpay_order'))
             ->findFirstWhere(['event_id' => $eventId, 'id' => $orderId]);
 
         if (!$order) {
@@ -74,8 +80,9 @@ class RefundOrderHandler
      */
     private function validateRefundability(OrderDomainObject $order): void
     {
-        if (!$order->getStripePayment()) {
-            throw new RefundNotPossibleException(__('There is no Stripe data associated with this order.'));
+        $payment = $order->getStripePayment() ?? $order->getRazorpayOrder();
+        if (!$payment) {
+            throw new RefundNotPossibleException(__('There is no payment data associated with this order.'));
         }
 
         if ($order->getRefundStatus() === OrderRefundStatus::REFUND_PENDING->name) {
@@ -110,6 +117,14 @@ class RefundOrderHandler
         );
     }
 
+    private function generateRazorpayIdempotencyKey(OrderDomainObject $order): ?string
+    {
+        if (!$this->config->get('refunds.razorpay.idempotency_enabled', true)) {
+            return null;
+        }
+        return 'refund_order_' . $order->getId() . '_' . time();
+    }
+
     /**
      * @throws ApiErrorException
      * @throws UnknownCurrencyException
@@ -135,18 +150,42 @@ class RefundOrderHandler
             $this->orderCancelService->cancelOrder($order);
         }
 
-        // Determine the correct Stripe platform for this refund
-        // Use the platform that was used for the original payment
-        $paymentPlatform = $order->getStripePayment()->getStripePlatformEnum();
+        if ($order->getStripePayment()) {
+            // Determine the correct Stripe platform for this refund
+            // Use the platform that was used for the original payment
+            $paymentPlatform = $order->getStripePayment()->getStripePlatformEnum();
 
-        // Create Stripe client for the original payment's platform
-        $stripeClient = $this->stripeClientFactory->createForPlatform($paymentPlatform);
+            // Create Stripe client for the original payment's platform
+            $stripeClient = $this->stripeClientFactory->createForPlatform($paymentPlatform);
 
-        $this->refundService->refundPayment(
-            amount: $amount,
-            payment: $order->getStripePayment(),
-            stripeClient: $stripeClient
-        );
+            $this->stripeRefundService->refundPayment(
+                amount: $amount,
+                payment: $order->getStripePayment(),
+                stripeClient: $stripeClient
+            );
+        } elseif ($order->getRazorpayOrder()) {
+            // Razorpay refund with idempotency and options
+            $idempotencyKey = $this->generateRazorpayIdempotencyKey($order);
+            $options = $refundOrderDTO->provider_options ?? [];
+
+            try {
+                $this->razorpayRefundService->refundPayment(
+                    $order->getRazorpayOrder(),
+                    $amount->toMinorUnit(),
+                    $idempotencyKey,
+                    $options
+                );
+            } catch (Error $e) {
+                if ($e->getHttpStatusCode() === 409) {
+                    throw new RefundNotPossibleException(
+                        __('A refund for this order is already being processed. Please check again later.')
+                    );
+                }
+                throw $e;
+            }
+        } else {
+            throw new RefundNotPossibleException(__('No payment provider found for this order.'));
+        }
 
         if ($refundOrderDTO->notify_buyer) {
             $this->notifyBuyer($order, $event, $amount);
