@@ -22,4 +22,12 @@ class RazorpayApiClient implements RazorpayClientInterface
     {
         return $this->api->payment->fetch($paymentId);
     }
+
+    public function refundPayment(array $params, string|null $idempotencyKey = null): object
+    {
+        $paymentId = $params['payment_id'];
+        unset($params['payment_id']);
+        $payment = $this->api->payment->fetch($paymentId);
+        return $payment->refund($params, $idempotencyKey);
+    }
 }

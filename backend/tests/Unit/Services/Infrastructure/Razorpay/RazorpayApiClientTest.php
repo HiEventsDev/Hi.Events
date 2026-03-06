@@ -46,17 +46,17 @@ class RazorpayApiClientTest extends TestCase
     {
         $badOrderData = ['amount' => 0, 'currency' => 'INR'];
         $orderMock = $this->createMock(Order::class);
-        
+
         $orderMock->expects($this->once())
             ->method('create')
             ->with($badOrderData)
             ->willThrowException(new BadRequestError('Order amount less than minimum amount allowed', 400, 400));
 
         $this->apiMock->order = $orderMock;
-        
+
         $this->expectException(BadRequestError::class);
         $this->expectExceptionMessage('Order amount less than minimum amount allowed');
-        
+
         $this->client->createOrder($badOrderData);
     }
 
@@ -93,5 +93,92 @@ class RazorpayApiClientTest extends TestCase
         $this->expectExceptionMessage('Invalid ID');
 
         $this->client->fetchPayment('invalid_id');
+    }
+
+    public function testItCanRefundAPaymentSuccessfullyWithoutIdempotencyKey(): void
+    {
+        $paymentId = 'pay_123';
+        $refundData = ['amount' => 5000];
+        $expectedResponse = (object) ['id' => 'refund_123', 'status' => 'processed'];
+
+        $paymentMock = $this->createMock(Payment::class);
+        $paymentMock->expects($this->once())
+            ->method('refund')
+            ->with($refundData, null)
+            ->willReturn($expectedResponse);
+
+        $paymentMock->expects($this->once())
+            ->method('fetch')
+            ->with($paymentId)
+            ->willReturn($paymentMock);
+
+        $this->apiMock->payment = $paymentMock;
+
+        $result = $this->client->refundPayment([
+            'payment_id' => $paymentId,
+            'amount' => 5000,
+        ]);
+
+        $this->assertEquals('refund_123', $result->id);
+        $this->assertEquals('processed', $result->status);
+    }
+
+    public function testItCanRefundAPaymentSuccessfullyWithIdempotencyKey(): void
+    {
+        $paymentId = 'pay_123';
+        $refundData = ['amount' => 5000, 'speed' => 'optimum', 'receipt' => 'receipt#1'];
+        $idempotencyKey = 'idempotency-key-123';
+        $expectedResponse = (object) ['id' => 'refund_123', 'status' => 'processed'];
+
+        $paymentMock = $this->createMock(Payment::class);
+        $paymentMock->expects($this->once())
+            ->method('refund')
+            ->with($refundData, $idempotencyKey)
+            ->willReturn($expectedResponse);
+
+        $paymentMock->expects($this->once())
+            ->method('fetch')
+            ->with($paymentId)
+            ->willReturn($paymentMock);
+
+        $this->apiMock->payment = $paymentMock;
+
+        $result = $this->client->refundPayment([
+            'payment_id' => $paymentId,
+            'amount' => 5000,
+            'speed' => 'optimum',
+            'receipt' => 'receipt#1',
+        ], $idempotencyKey);
+
+        $this->assertEquals('refund_123', $result->id);
+        $this->assertEquals('processed', $result->status);
+    }
+
+    public function testItThrowsExceptionWhenRefundFails(): void
+    {
+        $paymentId = 'pay_123';
+        $refundData = ['amount' => 5000];
+
+        $paymentMock = $this->createMock(Payment::class);
+
+        $paymentMock->expects($this->once())
+            ->method('refund')
+            ->with($refundData, null)
+            ->willThrowException(new BadRequestError('Refund failed', 400, 400));
+
+        $paymentMock->expects($this->once())
+            ->method('fetch')
+            ->with($paymentId)
+            ->willReturn($paymentMock);
+
+        $this->apiMock->payment = $paymentMock;
+
+        $this->expectException(BadRequestError::class);
+        $this->expectExceptionMessage('Refund failed');
+
+        $this->client->refundPayment([
+            'payment_id' => $paymentId,
+            'amount' => 5000,
+        ]);
     }
 }
