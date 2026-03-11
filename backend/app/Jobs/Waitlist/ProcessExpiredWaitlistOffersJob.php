@@ -15,7 +15,6 @@ use Illuminate\Database\DatabaseManager;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
@@ -39,18 +38,15 @@ class ProcessExpiredWaitlistOffersJob implements ShouldQueue
         foreach ($expiredEntries as $entry) {
             try {
                 $databaseManager->transaction(function () use ($entry, $repository, $orderRepository) {
-                    $lockedEntry = DB::table('waitlist_entries')
-                        ->where('id', $entry->getId())
-                        ->lockForUpdate()
-                        ->first();
+                    $lockedEntry = $repository->findByIdLocked($entry->getId());
 
-                    if ($lockedEntry === null || $lockedEntry->status !== WaitlistEntryStatus::OFFERED->name) {
+                    if ($lockedEntry === null || $lockedEntry->getStatus() !== WaitlistEntryStatus::OFFERED->name) {
                         return;
                     }
 
-                    if ($lockedEntry->order_id !== null) {
+                    if ($lockedEntry->getOrderId() !== null) {
                         $orderRepository->deleteWhere([
-                            'id' => $lockedEntry->order_id,
+                            'id' => $lockedEntry->getOrderId(),
                             'status' => OrderStatus::RESERVED->name,
                         ]);
                     }
