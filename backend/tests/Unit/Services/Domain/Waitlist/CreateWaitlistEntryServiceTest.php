@@ -136,6 +136,11 @@ class CreateWaitlistEntryServiceTest extends TestCase
         $existingEntry = Mockery::mock(WaitlistEntryDomainObject::class);
 
         $this->waitlistEntryRepository
+            ->shouldReceive('lockForProductPrice')
+            ->once()
+            ->with(10);
+
+        $this->waitlistEntryRepository
             ->shouldReceive('findFirstWhere')
             ->once()
             ->with([

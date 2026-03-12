@@ -11,6 +11,7 @@ use HiEvents\Repository\Interfaces\ProductPriceRepositoryInterface;
 use HiEvents\Repository\Interfaces\WaitlistEntryRepositoryInterface;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Database\DatabaseManager;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
@@ -25,6 +26,7 @@ class ProcessExpiredWaitlistOffersJob implements ShouldQueue
         WaitlistEntryRepositoryInterface $repository,
         OrderRepositoryInterface         $orderRepository,
         ProductPriceRepositoryInterface  $productPriceRepository,
+        DatabaseManager                  $databaseManager,
     ): void
     {
         $expiredEntries = $repository->findWhere([
@@ -35,23 +37,37 @@ class ProcessExpiredWaitlistOffersJob implements ShouldQueue
 
         foreach ($expiredEntries as $entry) {
             try {
-                if ($entry->getOrderId() !== null) {
-                    $orderRepository->deleteWhere([
-                        'id' => $entry->getOrderId(),
-                        'status' => OrderStatus::RESERVED->name,
-                    ]);
-                }
+                $databaseManager->transaction(function () use ($entry, $repository, $orderRepository) {
+                    $lockedEntry = $repository->findByIdLocked($entry->getId());
 
-                $repository->updateWhere(
-                    attributes: [
-                        'status' => WaitlistEntryStatus::OFFER_EXPIRED->name,
-                        'offer_token' => null,
-                        'offered_at' => null,
-                        'offer_expires_at' => null,
-                        'order_id' => null,
-                    ],
-                    where: ['id' => $entry->getId()],
-                );
+                    if ($lockedEntry === null || $lockedEntry->getStatus() !== WaitlistEntryStatus::OFFERED->name) {
+                        return;
+                    }
+
+                    if ($lockedEntry->getOrderId() !== null) {
+                        $orderRepository->deleteWhere([
+                            'id' => $lockedEntry->getOrderId(),
+                            'status' => OrderStatus::RESERVED->name,
+                        ]);
+                    }
+
+                    $repository->updateWhere(
+                        attributes: [
+                            'status' => WaitlistEntryStatus::OFFER_EXPIRED->name,
+                            'offer_token' => null,
+                            'offered_at' => null,
+                            'offer_expires_at' => null,
+                            'order_id' => null,
+                        ],
+                        where: ['id' => $entry->getId()],
+                    );
+                });
+
+                $freshEntry = $repository->findById($entry->getId());
+
+                if ($freshEntry->getStatus() !== WaitlistEntryStatus::OFFER_EXPIRED->name) {
+                    continue;
+                }
 
                 SendWaitlistOfferExpiredEmailJob::dispatch($entry);
 
