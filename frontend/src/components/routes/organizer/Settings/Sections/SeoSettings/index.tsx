@@ -54,31 +54,31 @@ export const SeoSettings = () => {
         <Card>
             <HeadingWithDescription
                 heading={t`SEO Settings`}
-                description={t`Customize the SEO settings for this event`}
+                description={t`Customize the SEO settings for this organizer`}
             />
             <form onSubmit={form.onSubmit(handleSubmit)}>
                 <fieldset disabled={organizerSettingsQuery.isLoading || updateMutation.isPending}>
                     <TextInput
                         {...form.getInputProps('seo_title')}
-                        description={t`The title of the event that will be displayed in search engine results and when sharing on social media. By default, the event title will be used`}
+                        description={t`The title of the organizer that will be displayed in search engine results and when sharing on social media. By default, the organizer title will be used`}
                         label={t`SEO Title`}
-                        placeholder={t`My amazing event title...`}
+                        placeholder={t`My amazing organizer title...`}
                     />
                     <TextInput
                         {...form.getInputProps('seo_description')}
-                        description={t`A short description of the event that will be displayed in search engine results and when sharing on social media. By default, the event description will be used`}
+                        description={t`A short description of the organizer that will be displayed in search engine results and when sharing on social media. By default, the organizer description will be used`}
                         label={t`SEO Description`}
-                        placeholder={t`My amazing event description...`}
+                        placeholder={t`My amazing organizer description...`}
                     />
                     <TextInput
                         {...form.getInputProps('seo_keywords')}
-                        description={t`Comma seperated keywords that describe the event. These will be used by search engines to help categorize and index the event`}
+                        description={t`Comma seperated keywords that describe the organizer. These will be used by search engines to help categorize and index the organizer`}
                         label={t`SEO Keywords`}
-                        placeholder={t`Amazing, Event, Keywords...`}
+                        placeholder={t`Amazing, Organizer, Keywords...`}
                     />
                     <Switch
                         {...form.getInputProps('allow_search_engine_indexing', {type: 'checkbox'})}
-                        description={t`Allow search engines to index this event`}
+                        description={t`Allow search engines to index this organizer`}
                         label={t`Allow search engine indexing`}
                     />
                     <Button loading={updateMutation.isPending} type={'submit'}>
