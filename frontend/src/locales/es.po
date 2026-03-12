@@ -14,12 +14,12 @@ msgstr ""
 "Plural-Forms: \n"
 
 #: src/components/layouts/Event/index.tsx:192
-#: src/components/layouts/OrganizerLayout/index.tsx:207
+#: src/components/layouts/OrganizerLayout/index.tsx:211
 msgid "- Click to Publish"
 msgstr "- Haz clic para publicar"
 
 #: src/components/layouts/Event/index.tsx:194
-#: src/components/layouts/OrganizerLayout/index.tsx:209
+#: src/components/layouts/OrganizerLayout/index.tsx:213
 msgid "- Click to Unpublish"
 msgstr "- Haz clic para despublicar"
 
@@ -52,6 +52,7 @@ msgid "{0} <0>checked out</0> successfully"
 msgstr "{0} <0>retirado</0> con éxito"
 
 #: src/components/routes/event/Webhooks/index.tsx:24
+#: src/components/routes/organizer/Webhooks/index.tsx:25
 msgid "{0} Active Webhooks"
 msgstr "{0} webhooks activos"
 
@@ -96,6 +97,7 @@ msgstr "{availableCount} de {totalCount} disponibles"
 msgid "{days} days, {hours} hours, {minutes} minutes, and {seconds} seconds"
 msgstr "{days} días, {hours} horas, {minutes} minutos y {seconds} segundos"
 
+#: src/components/common/OrganizerWebhookTable/index.tsx:79
 #: src/components/common/WebhookTable/index.tsx:79
 msgid "{eventCount} events"
 msgstr "{eventCount} eventos"
@@ -144,6 +146,7 @@ msgstr "<0>Establece un límite total de asistencia que se aplica a múltiples t
 msgid "<0>The number of products available for this product</0><1>This value can be overridden if there are <2>Capacity Limits</2> associated with this product.</1>"
 msgstr "<0>El número de productos disponibles para este producto</0><1>Este valor se puede sobrescribir si hay <2>Límites de Capacidad</2> asociados con este producto.</1>"
 
+#: src/components/common/OrganizerWebhookTable/index.tsx:205
 #: src/components/common/WebhookTable/index.tsx:205
 msgid "<0>Webhooks instantly notify external services when events happen, like adding a new attendee to your CRM or mailing list upon registration, ensuring seamless automation.</0><1>Use third-party services like <2>Zapier</2>, <3>IFTTT</3> or <4>Make</4> to create custom workflows and automate tasks.</1>"
 msgstr "<0>Los webhooks notifican instantáneamente a los servicios externos cuando ocurren eventos, como agregar un nuevo asistente a tu CRM o lista de correo al registrarse, asegurando una automatización fluida.</0><1>Usa servicios de terceros como <2>Zapier</2>, <3>IFTTT</3> o <4>Make</4> para crear flujos de trabajo personalizados y automatizar tareas.</1>"
@@ -177,6 +180,7 @@ msgid "0 minutes and 0 seconds"
 msgstr "0 minutos y 0 segundos"
 
 #: src/components/routes/event/Webhooks/index.tsx:23
+#: src/components/routes/organizer/Webhooks/index.tsx:24
 msgid "1 Active Webhook"
 msgstr "1 webhook activo"
 
@@ -272,9 +276,12 @@ msgid "A Radio option has multiple options but only one can be selected."
 msgstr "Una opción de Radio tiene múltiples opciones pero solo se puede seleccionar una."
 
 #: src/components/routes/event/Settings/Sections/SeoSettings/index.tsx:69
-#: src/components/routes/organizer/Settings/Sections/SeoSettings/index.tsx:69
 msgid "A short description of the event that will be displayed in search engine results and when sharing on social media. By default, the event description will be used"
 msgstr "Una breve descripción del evento que se mostrará en los resultados del motor de búsqueda y al compartir en las redes sociales. De forma predeterminada, se utilizará la descripción del evento."
+
+#: src/components/routes/organizer/Settings/Sections/SeoSettings/index.tsx:69
+msgid "A short description of the organizer that will be displayed in search engine results and when sharing on social media. By default, the organizer description will be used"
+msgstr ""
 
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:89
 msgid "A short description of your organizer that will be displayed to your users."
@@ -403,7 +410,8 @@ msgstr "Acción Requerida: Se Necesita Información del IVA"
 #: src/components/common/AttendeeTable/index.tsx:346
 #: src/components/common/OrdersTable/index.tsx:438
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:467
-#: src/components/common/WaitlistTable/index.tsx:132
+#: src/components/common/WaitlistTable/index.tsx:53
+#: src/components/common/WaitlistTable/index.tsx:193
 #: src/components/routes/admin/FailedJobs/index.tsx:167
 msgid "Actions"
 msgstr "Acciones"
@@ -514,8 +522,10 @@ msgstr "Agregar nivel"
 msgid "Add to Calendar"
 msgstr "Agregar al calendario"
 
+#: src/components/common/OrganizerWebhookTable/index.tsx:223
 #: src/components/common/WebhookTable/index.tsx:223
 #: src/components/routes/event/Webhooks/index.tsx:37
+#: src/components/routes/organizer/Webhooks/index.tsx:35
 msgid "Add Webhook"
 msgstr "Agregar Webhook"
 
@@ -660,7 +670,7 @@ msgstr "Todos los trabajos en cola para reintentar"
 msgid "All Products"
 msgstr "Todos los productos"
 
-#: src/components/routes/event/SoldOutWaitlist/index.tsx:62
+#: src/components/routes/event/SoldOutWaitlist/index.tsx:64
 msgid "All Statuses"
 msgstr "Todos los estados"
 
@@ -686,9 +696,12 @@ msgid "Allow search engine indexing"
 msgstr "Permitir la indexación en motores de búsqueda"
 
 #: src/components/routes/event/Settings/Sections/SeoSettings/index.tsx:81
-#: src/components/routes/organizer/Settings/Sections/SeoSettings/index.tsx:81
 msgid "Allow search engines to index this event"
 msgstr "Permitir que los motores de búsqueda indexen este evento"
+
+#: src/components/routes/organizer/Settings/Sections/SeoSettings/index.tsx:81
+msgid "Allow search engines to index this organizer"
+msgstr ""
 
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:205
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:417
@@ -720,9 +733,12 @@ msgid "Always available"
 msgstr "Siempre disponible"
 
 #: src/components/routes/event/Settings/Sections/SeoSettings/index.tsx:77
-#: src/components/routes/organizer/Settings/Sections/SeoSettings/index.tsx:77
 msgid "Amazing, Event, Keywords..."
 msgstr "Increíble, evento, palabras clave..."
+
+#: src/components/routes/organizer/Settings/Sections/SeoSettings/index.tsx:77
+msgid "Amazing, Organizer, Keywords..."
+msgstr ""
 
 #: src/components/common/OrdersTable/index.tsx:341
 #: src/components/forms/TaxAndFeeForm/index.tsx:71
@@ -855,6 +871,7 @@ msgstr "¿Está seguro de que desea eliminar esta plantilla? Esta acción no se 
 msgid "Are you sure you want to delete this template? This action cannot be undone and emails will fall back to the organizer or default template."
 msgstr "¿Está seguro de que desea eliminar esta plantilla? Esta acción no se puede deshacer y los correos volverán a la plantilla del organizador o predeterminada."
 
+#: src/components/common/OrganizerWebhookTable/index.tsx:122
 #: src/components/common/WebhookTable/index.tsx:122
 msgid "Are you sure you want to delete this webhook?"
 msgstr "¿Estás seguro de que quieres eliminar este webhook?"
@@ -873,15 +890,15 @@ msgstr "¿Estás seguro de que quieres hacer este borrador de evento? Esto hará
 msgid "Are you sure you want to make this event public? This will make the event visible to the public"
 msgstr "¿Estás seguro de que quieres hacer público este evento? Esto hará que el evento sea visible para el público."
 
-#: src/components/layouts/OrganizerLayout/index.tsx:123
+#: src/components/layouts/OrganizerLayout/index.tsx:127
 msgid "Are you sure you want to make this organizer draft? This will make the organizer page invisible to the public"
 msgstr "¿Estás seguro de que quieres poner este organizador como borrador? Esto hará que la página del organizador sea invisible al público."
 
-#: src/components/layouts/OrganizerLayout/index.tsx:124
+#: src/components/layouts/OrganizerLayout/index.tsx:128
 msgid "Are you sure you want to make this organizer public? This will make the organizer page visible to the public"
 msgstr "¿Estás seguro de que quieres hacer público este organizador? Esto hará que la página del organizador sea visible al público."
 
-#: src/components/common/WaitlistTable/index.tsx:56
+#: src/components/common/WaitlistTable/index.tsx:100
 msgid "Are you sure you want to offer a spot to this person? They will receive an email notification."
 msgstr "¿Estás seguro de que quieres ofrecer un lugar a esta persona? Recibirá una notificación por correo electrónico."
 
@@ -893,7 +910,7 @@ msgstr "¿Estás seguro de que quieres publicar este evento? Una vez publicado, 
 msgid "Are you sure you want to publish this organizer profile? Once published, it will be visible to the public."
 msgstr "¿Estás seguro de que quieres publicar este perfil de organizador? Una vez publicado, será visible al público."
 
-#: src/components/common/WaitlistTable/index.tsx:42
+#: src/components/common/WaitlistTable/index.tsx:83
 msgid "Are you sure you want to remove this entry from the waitlist?"
 msgstr "¿Está seguro de que desea eliminar esta entrada de la lista de espera?"
 
@@ -962,6 +979,7 @@ msgstr "Configuración asignada"
 msgid "Assigned Tier"
 msgstr "Nivel asignado"
 
+#: src/components/modals/CreateOrganizerWebhookModal/index.tsx:33
 #: src/components/modals/CreateWebhookModal/index.tsx:33
 msgid "At least one event type must be selected"
 msgstr "Debe seleccionarse al menos un tipo de evento"
@@ -982,11 +1000,11 @@ msgstr "Asistencia y tasas de registro en todos los eventos"
 msgid "Attendee"
 msgstr "Asistente"
 
-#: src/components/forms/WebhookForm/index.tsx:94
+#: src/components/forms/WebhookForm/index.tsx:112
 msgid "Attendee Cancelled"
 msgstr "Asistente cancelado"
 
-#: src/components/forms/WebhookForm/index.tsx:82
+#: src/components/forms/WebhookForm/index.tsx:100
 msgid "Attendee Created"
 msgstr "Asistente creado"
 
@@ -1037,7 +1055,7 @@ msgstr "Estado del Asistente"
 msgid "Attendee Ticket"
 msgstr "Entrada del asistente"
 
-#: src/components/forms/WebhookForm/index.tsx:88
+#: src/components/forms/WebhookForm/index.tsx:106
 msgid "Attendee Updated"
 msgstr "Asistente actualizado"
 
@@ -1101,7 +1119,7 @@ msgstr "Ajuste automático"
 msgid "Auto-offer is enabled. Tickets are automatically offered when capacity becomes available. Use this to manually offer additional spots."
 msgstr "La oferta automática está activada. Los tickets se ofrecen automáticamente cuando hay capacidad disponible. Use esto para ofrecer plazas adicionales manualmente."
 
-#: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:63
+#: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:60
 msgid "Auto-Process Waitlist"
 msgstr "Procesar lista de espera automáticamente"
 
@@ -1110,8 +1128,12 @@ msgid "Automatically detected based on background color, but can be overridden"
 msgstr "Detectado automáticamente según el color de fondo, pero se puede anular"
 
 #: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:64
-msgid "Automatically offer tickets to the next person when capacity becomes available"
-msgstr "Ofrecer entradas automáticamente a la siguiente persona cuando haya capacidad disponible"
+#~ msgid "Automatically offer tickets to the next person when capacity becomes available"
+#~ msgstr "Ofrecer entradas automáticamente a la siguiente persona cuando haya capacidad disponible"
+
+#: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:61
+msgid "Automatically offer tickets to the next person when capacity becomes available. If disabled, you can manually process the waitlist from the Waitlist page."
+msgstr ""
 
 #: src/components/common/WidgetEditor/index.tsx:238
 msgid "Automatically resize the widget height based on the content. When disabled, the widget will fill the height of the container."
@@ -1318,8 +1340,8 @@ msgstr "Campaña"
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:121
 #: src/components/common/PromoCodeTable/index.tsx:40
 #: src/components/common/QuestionAndAnswerList/index.tsx:149
-#: src/components/common/WaitlistTable/index.tsx:50
-#: src/components/common/WaitlistTable/index.tsx:71
+#: src/components/common/WaitlistTable/index.tsx:94
+#: src/components/common/WaitlistTable/index.tsx:115
 #: src/components/routes/event/messages.tsx:80
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:85
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:85
@@ -1355,11 +1377,11 @@ msgstr "Cancelar anulará todos los asistentes asociados con este pedido y liber
 #: src/components/common/AttendeeTicket/index.tsx:149
 #: src/components/common/OrdersTable/index.tsx:423
 #: src/components/common/OrderStatusBadge/index.tsx:12
-#: src/components/common/WaitlistTable/index.tsx:32
+#: src/components/common/WaitlistTable/index.tsx:25
 #: src/components/routes/admin/Messages/index.tsx:126
 #: src/components/routes/event/attendees.tsx:27
 #: src/components/routes/event/orders.tsx:24
-#: src/components/routes/event/SoldOutWaitlist/index.tsx:73
+#: src/components/routes/event/SoldOutWaitlist/index.tsx:75
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:353
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:96
 msgid "Cancelled"
@@ -1460,11 +1482,11 @@ msgstr "Revisa tu correo"
 msgid "Check your inbox! If tickets are associated with this email, you'll receive a link to view them."
 msgstr "¡Revisa tu bandeja de entrada! Si hay entradas asociadas a este correo, recibirás un enlace para verlas."
 
-#: src/components/forms/WebhookForm/index.tsx:100
+#: src/components/forms/WebhookForm/index.tsx:118
 msgid "Check-in Created"
 msgstr "Registro de entrada creado"
 
-#: src/components/forms/WebhookForm/index.tsx:106
+#: src/components/forms/WebhookForm/index.tsx:124
 msgid "Check-in Deleted"
 msgstr "Registro de entrada eliminado"
 
@@ -1605,8 +1627,8 @@ msgid "close"
 msgstr "cerrar"
 
 #: src/components/common/AttendeeCheckInTable/PermissionDeniedMessage.tsx:27
-#: src/components/modals/JoinWaitlistModal/index.tsx:104
-#: src/components/modals/JoinWaitlistModal/index.tsx:151
+#: src/components/modals/JoinWaitlistModal/index.tsx:123
+#: src/components/modals/JoinWaitlistModal/index.tsx:159
 #: src/components/modals/RefundOrderModal/index.tsx:169
 #: src/components/routes/product-widget/SelectProducts/index.tsx:588
 msgid "Close"
@@ -1649,7 +1671,7 @@ msgstr "El código debe tener entre 3 y 50 caracteres."
 msgid "Code must be no more than 20 characters"
 msgstr "El código no debe tener más de 20 caracteres"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:162
+#: src/components/layouts/OrganizerLayout/index.tsx:166
 msgid "Collaborate with your team to create amazing events together."
 msgstr "Colabora con tu equipo para crear eventos increíbles juntos."
 
@@ -1700,9 +1722,12 @@ msgid "Coming Soon"
 msgstr "Muy pronto"
 
 #: src/components/routes/event/Settings/Sections/SeoSettings/index.tsx:75
-#: src/components/routes/organizer/Settings/Sections/SeoSettings/index.tsx:75
 msgid "Comma seperated keywords that describe the event. These will be used by search engines to help categorize and index the event"
 msgstr "Palabras clave separadas por comas que describen el evento. Estos serán utilizados por los motores de búsqueda para ayudar a categorizar e indexar el evento."
+
+#: src/components/routes/organizer/Settings/Sections/SeoSettings/index.tsx:75
+msgid "Comma seperated keywords that describe the organizer. These will be used by search engines to help categorize and index the organizer"
+msgstr ""
 
 #: src/components/routes/profile/ManageProfile/index.tsx:204
 msgid "Communication Preferences"
@@ -1810,8 +1835,8 @@ msgid "Configure Taxes & Fees"
 msgstr "Configurar impuestos y comisiones"
 
 #: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:52
-msgid "Configure waitlist settings for this event"
-msgstr "Configurar los ajustes de lista de espera para este evento"
+#~ msgid "Configure waitlist settings for this event"
+#~ msgstr "Configurar los ajustes de lista de espera para este evento"
 
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:35
 msgid "Configured Discount"
@@ -1856,7 +1881,7 @@ msgstr "confirmar Contraseña"
 msgid "Confirm your email to access all features."
 msgstr "Confirma tu correo electrónico para acceder a todas las funciones."
 
-#: src/components/layouts/OrganizerLayout/index.tsx:296
+#: src/components/layouts/OrganizerLayout/index.tsx:300
 msgid "Confirmation email sent! Please check your inbox."
 msgstr "¡Correo de confirmación enviado! Por favor, revisa tu bandeja de entrada."
 
@@ -1888,8 +1913,8 @@ msgstr "Documentación de conexión"
 msgid "Connect payment processing"
 msgstr "Conectar procesamiento de pagos"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:175
-#: src/components/layouts/OrganizerLayout/index.tsx:183
+#: src/components/layouts/OrganizerLayout/index.tsx:179
+#: src/components/layouts/OrganizerLayout/index.tsx:187
 msgid "Connect Stripe"
 msgstr "Conectar raya"
 
@@ -1913,7 +1938,7 @@ msgstr "Conectar con Stripe"
 msgid "Connect with Stripe"
 msgstr "Conéctate con Stripe"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:176
+#: src/components/layouts/OrganizerLayout/index.tsx:180
 msgid "Connect your Stripe account to accept payments for tickets and products."
 msgstr "Conecta tu cuenta de Stripe para aceptar pagos por entradas y productos."
 
@@ -1942,7 +1967,7 @@ msgstr "Conectado a Stripe"
 msgid "Connection Details"
 msgstr "Detalles de conexión"
 
-#: src/components/common/WaitlistTable/index.tsx:94
+#: src/components/common/WaitlistTable/index.tsx:132
 #: src/components/layouts/EventHomepage/index.tsx:583
 #: src/components/layouts/OrganizerHomepage/index.tsx:245
 msgid "Contact"
@@ -2200,7 +2225,7 @@ msgid "Create discounts, access codes for hidden tickets, and special offers."
 msgstr "Cree descuentos, códigos de acceso para boletos ocultos y ofertas especiales."
 
 #: src/components/common/NoEventsBlankSlate/index.tsx:27
-#: src/components/layouts/OrganizerLayout/index.tsx:152
+#: src/components/layouts/OrganizerLayout/index.tsx:156
 #: src/components/routes/organizer/Events/index.tsx:62
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:257
 msgid "Create Event"
@@ -2251,6 +2276,8 @@ msgstr "Crea entradas para tu evento, establece precios y gestiona la cantidad d
 msgid "Create trackable links to reward partners who promote your event."
 msgstr "Cree enlaces rastreables para recompensar a los socios que promocionan su evento."
 
+#: src/components/modals/CreateOrganizerWebhookModal/index.tsx:56
+#: src/components/modals/CreateOrganizerWebhookModal/index.tsx:66
 #: src/components/modals/CreateWebhookModal/index.tsx:56
 #: src/components/modals/CreateWebhookModal/index.tsx:66
 msgid "Create Webhook"
@@ -2411,9 +2438,12 @@ msgid "Customize the questions asked during checkout to gather important informa
 msgstr "Personalice las preguntas durante el proceso de pago para recopilar información importante de sus asistentes."
 
 #: src/components/routes/event/Settings/Sections/SeoSettings/index.tsx:57
-#: src/components/routes/organizer/Settings/Sections/SeoSettings/index.tsx:57
 msgid "Customize the SEO settings for this event"
 msgstr "Personaliza la configuración de SEO para este evento"
+
+#: src/components/routes/organizer/Settings/Sections/SeoSettings/index.tsx:57
+msgid "Customize the SEO settings for this organizer"
+msgstr ""
 
 #: src/components/routes/event/HomepageDesigner/index.tsx:253
 msgid "Customize the text shown on the continue button"
@@ -2450,6 +2480,7 @@ msgstr "Desglose de ventas diarias, impuestos y tarifas"
 #: src/components/common/CapacityAssignmentList/index.tsx:153
 #: src/components/common/CheckInListList/index.tsx:174
 #: src/components/common/OrdersTable/index.tsx:182
+#: src/components/common/OrganizerWebhookTable/index.tsx:116
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:492
 #: src/components/common/PromoCodeTable/index.tsx:181
 #: src/components/common/WebhookTable/index.tsx:116
@@ -2564,6 +2595,7 @@ msgstr "Eliminar plantilla"
 msgid "Delete this question? This cannot be undone."
 msgstr "¿Eliminar esta pregunta? Esto no se puede deshacer."
 
+#: src/components/common/OrganizerWebhookTable/index.tsx:127
 #: src/components/common/WebhookTable/index.tsx:127
 msgid "Delete webhook"
 msgstr "Eliminar webhook"
@@ -2689,7 +2721,7 @@ msgstr "Descargando factura"
 
 #: src/components/common/EventCard/index.tsx:84
 #: src/components/layouts/Event/index.tsx:191
-#: src/components/layouts/OrganizerLayout/index.tsx:206
+#: src/components/layouts/OrganizerLayout/index.tsx:210
 msgid "Draft"
 msgstr "Borrador"
 
@@ -2735,7 +2767,7 @@ msgstr "Duplicar producto"
 msgid "Dutch"
 msgstr "Holandés"
 
-#: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:71
+#: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:68
 msgid "e.g. 180 (3 hours)"
 msgstr "ej. 180 (3 horas)"
 
@@ -2868,10 +2900,13 @@ msgstr "editar usuario"
 msgid "Edit VAT Settings"
 msgstr "Editar configuración de IVA"
 
+#: src/components/common/OrganizerWebhookTable/index.tsx:104
 #: src/components/common/WebhookTable/index.tsx:104
 msgid "Edit webhook"
 msgstr "Editar webhook"
 
+#: src/components/modals/EditOrganizerWebhookModal/index.tsx:65
+#: src/components/modals/EditOrganizerWebhookModal/index.tsx:86
 #: src/components/modals/EditWebhookModal/index.tsx:66
 #: src/components/modals/EditWebhookModal/index.tsx:87
 msgid "Edit Webhook"
@@ -2907,7 +2942,7 @@ msgstr "Listas de Check-In Elegibles"
 #: src/components/forms/AffiliateForm/index.tsx:89
 #: src/components/modals/EditUserModal/index.tsx:80
 #: src/components/modals/InviteUserModal/index.tsx:61
-#: src/components/modals/JoinWaitlistModal/index.tsx:204
+#: src/components/modals/JoinWaitlistModal/index.tsx:201
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:128
 #: src/components/routes/admin/Dashboard/index.tsx:401
 #: src/components/routes/auth/AcceptInvitation/index.tsx:112
@@ -2970,7 +3005,7 @@ msgid "Email confirmation resent"
 msgstr "Confirmación por correo electrónico reenviada"
 
 #: src/components/layouts/Event/index.tsx:74
-#: src/components/layouts/OrganizerLayout/index.tsx:96
+#: src/components/layouts/OrganizerLayout/index.tsx:100
 #: src/components/routes/profile/ManageProfile/index.tsx:100
 msgid "Email confirmation resent successfully"
 msgstr "La confirmación por correo electrónico se reenvió correctamente"
@@ -2998,7 +3033,7 @@ msgstr "Vista previa del correo"
 msgid "Email Templates"
 msgstr "Plantillas de correo"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:275
+#: src/components/layouts/OrganizerLayout/index.tsx:279
 msgid "Email Verification Required"
 msgstr "Verificación de correo requerida"
 
@@ -3153,11 +3188,12 @@ msgstr "Introduce tu nombre"
 msgid "Enter your VAT number including the country code, without spaces (e.g., IE1234567A, DE123456789)"
 msgstr "Ingresa tu número de IVA incluyendo el código de país, sin espacios (p. ej., ES12345678A, DE123456789)"
 
-#: src/components/common/WaitlistTable/index.tsx:82
+#: src/components/common/WaitlistTable/index.tsx:222
 msgid "Entries will appear here when customers join the waitlist for sold out products."
 msgstr "Las entradas aparecerán aquí cuando los clientes se unan a la lista de espera de productos agotados."
 
 #: src/components/common/OrdersTable/index.tsx:105
+#: src/components/common/OrganizerWebhookTable/index.tsx:149
 #: src/components/layouts/Checkout/index.tsx:90
 msgid "Error"
 msgstr "Error"
@@ -3170,6 +3206,7 @@ msgstr "Error al confirmar la dirección de correo electrónico"
 msgid "Error confirming email change"
 msgstr "Error al confirmar el cambio de correo electrónico"
 
+#: src/components/modals/OrganizerWebhookLogsModal/index.tsx:152
 #: src/components/modals/WebhookLogsModal/index.tsx:166
 msgid "Error loading logs"
 msgstr "Error al cargar los registros"
@@ -3212,6 +3249,10 @@ msgstr "EUR"
 msgid "Event"
 msgstr "Evento"
 
+#: src/components/forms/WebhookForm/index.tsx:52
+msgid "Event Archived"
+msgstr ""
+
 #: src/components/modals/CreateEventModal/index.tsx:185
 msgid "Event Category"
 msgstr "Categoría del evento"
@@ -3219,6 +3260,10 @@ msgstr "Categoría del evento"
 #: src/components/modals/DuplicateEventModal/index.tsx:30
 msgid "Event Cover Image"
 msgstr "Imagen de portada del evento"
+
+#: src/components/forms/WebhookForm/index.tsx:40
+msgid "Event Created"
+msgstr ""
 
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:223
 msgid "Event custom template"
@@ -3355,10 +3400,15 @@ msgstr "Título del evento"
 msgid "Event Too New"
 msgstr "Evento demasiado nuevo"
 
+#: src/components/common/OrganizerWebhookTable/index.tsx:237
 #: src/components/common/WebhookTable/index.tsx:237
-#: src/components/forms/WebhookForm/index.tsx:122
+#: src/components/forms/WebhookForm/index.tsx:140
 msgid "Event Types"
 msgstr "Tipos de eventos"
+
+#: src/components/forms/WebhookForm/index.tsx:46
+msgid "Event Updated"
+msgstr ""
 
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:40
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:74
@@ -3367,7 +3417,7 @@ msgstr "Lugar del Evento"
 
 #: src/components/common/AdminAccountsTable/index.tsx:82
 #: src/components/layouts/Admin/index.tsx:16
-#: src/components/layouts/OrganizerLayout/index.tsx:84
+#: src/components/layouts/OrganizerLayout/index.tsx:85
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:159
 #: src/components/routes/admin/Attribution/index.tsx:133
 #: src/components/routes/admin/Dashboard/index.tsx:403
@@ -3406,8 +3456,8 @@ msgstr "Excepción"
 msgid "Expiration date"
 msgstr "Fecha de vencimiento"
 
-#: src/components/common/WaitlistTable/index.tsx:33
-#: src/components/routes/event/SoldOutWaitlist/index.tsx:72
+#: src/components/common/WaitlistTable/index.tsx:26
+#: src/components/routes/event/SoldOutWaitlist/index.tsx:74
 msgid "Expired"
 msgstr "Expirado"
 
@@ -3562,17 +3612,22 @@ msgstr "No se pudo cargar la lista de registro"
 msgid "Failed to load recipients"
 msgstr "No se pudieron cargar los destinatarios"
 
+#: src/components/modals/EditOrganizerWebhookModal/index.tsx:74
 #: src/components/modals/EditWebhookModal/index.tsx:75
 msgid "Failed to load Webhook"
 msgstr "Error al cargar el Webhook"
 
-#: src/components/common/WaitlistTable/index.tsx:66
+#: src/components/common/WaitlistTable/index.tsx:110
 msgid "Failed to offer spot"
 msgstr "Error al ofrecer plaza"
 
 #: src/components/modals/OfferWaitlistModal/index.tsx:65
 msgid "Failed to offer tickets"
 msgstr "Error al ofrecer entradas"
+
+#: src/components/common/WaitlistTable/index.tsx:90
+msgid "Failed to remove from waitlist"
+msgstr ""
 
 #: src/components/common/QuestionsTable/index.tsx:184
 msgid "Failed to reorder questions"
@@ -3778,7 +3833,7 @@ msgstr "Primer Nombre"
 #: src/components/common/QuestionsTable/index.tsx:251
 #: src/components/modals/EditUserModal/index.tsx:71
 #: src/components/modals/InviteUserModal/index.tsx:57
-#: src/components/modals/JoinWaitlistModal/index.tsx:194
+#: src/components/modals/JoinWaitlistModal/index.tsx:191
 #: src/components/routes/auth/AcceptInvitation/index.tsx:97
 #: src/components/routes/auth/Register/index.tsx:90
 #: src/components/routes/product-widget/CollectInformation/index.tsx:427
@@ -3789,7 +3844,7 @@ msgstr "Primer Nombre"
 msgid "First Name"
 msgstr "Primer Nombre"
 
-#: src/components/modals/JoinWaitlistModal/index.tsx:41
+#: src/components/modals/JoinWaitlistModal/index.tsx:58
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:29
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:29
 msgid "First name is required"
@@ -4130,7 +4185,7 @@ msgid "Homepage Design"
 msgstr "Diseño de página de inicio"
 
 #: src/components/layouts/Event/index.tsx:105
-#: src/components/layouts/OrganizerLayout/index.tsx:88
+#: src/components/layouts/OrganizerLayout/index.tsx:89
 msgid "Homepage Designer"
 msgstr "Diseñador de página de inicio"
 
@@ -4144,7 +4199,7 @@ msgstr "Vista previa de la página de inicio"
 msgid "Homer"
 msgstr "Homero"
 
-#: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:70
+#: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:67
 msgid "How long a customer has to complete their purchase after receiving an offer. Leave empty for no timeout."
 msgstr "Cuánto tiempo tiene un cliente para completar su compra después de recibir una oferta. Dejar vacío para sin límite de tiempo."
 
@@ -4173,7 +4228,7 @@ msgstr "https://awesome-events.com"
 msgid "https://example-maps-service.com/..."
 msgstr "https://example-maps-service.com/..."
 
-#: src/components/forms/WebhookForm/index.tsx:118
+#: src/components/forms/WebhookForm/index.tsx:136
 msgid "https://webhook-domain.com/webhook"
 msgstr "https://webhook-domain.com/webhook"
 
@@ -4181,7 +4236,7 @@ msgstr "https://webhook-domain.com/webhook"
 msgid "Hungarian"
 msgstr "Húngaro"
 
-#: src/components/modals/JoinWaitlistModal/index.tsx:210
+#: src/components/modals/JoinWaitlistModal/index.tsx:207
 msgid "I agree to receive email notifications related to this event"
 msgstr "Acepto recibir notificaciones por correo electrónico relacionadas con este evento"
 
@@ -4340,6 +4395,7 @@ msgid "Instant Payouts"
 msgstr "Pagos instantáneos"
 
 #: src/components/layouts/Event/index.tsx:125
+#: src/components/layouts/OrganizerLayout/index.tsx:91
 msgid "Integrations"
 msgstr "Integraciones"
 
@@ -4387,7 +4443,7 @@ msgstr "Invitar a un miembro del equipo"
 msgid "Invite Team Member"
 msgstr "Invitar miembro del equipo"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:164
+#: src/components/layouts/OrganizerLayout/index.tsx:168
 msgid "Invite Team Members"
 msgstr "Invitar miembros del equipo"
 
@@ -4399,7 +4455,7 @@ msgstr "Invita a miembros ilimitados del equipo con roles personalizados"
 msgid "Invite User"
 msgstr "Invitar usuario"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:161
+#: src/components/layouts/OrganizerLayout/index.tsx:165
 msgid "Invite Your Team"
 msgstr "Invita a tu equipo"
 
@@ -4481,17 +4537,21 @@ msgstr "Johnson"
 msgid "Join from anywhere"
 msgstr "Únete desde cualquier lugar"
 
-#: src/components/common/JoinWaitlistButton/index.tsx:28
-#: src/components/modals/JoinWaitlistModal/index.tsx:222
+#: src/components/common/JoinWaitlistButton/index.tsx:30
+#: src/components/modals/JoinWaitlistModal/index.tsx:219
 msgid "Join Waitlist"
 msgstr "Unirse a la lista de espera"
 
 #: src/components/modals/JoinWaitlistModal/index.tsx:176
-msgid "Join Waitlist for {0}"
-msgstr "Unirse a la lista de espera para {0}"
+#~ msgid "Join Waitlist for {0}"
+#~ msgstr "Unirse a la lista de espera para {0}"
 
-#: src/components/common/JoinWaitlistButton/index.tsx:28
-#: src/components/common/WaitlistTable/index.tsx:97
+#: src/components/modals/JoinWaitlistModal/index.tsx:173
+msgid "Join Waitlist for {productDisplayName}"
+msgstr ""
+
+#: src/components/common/JoinWaitlistButton/index.tsx:30
+#: src/components/common/WaitlistTable/index.tsx:180
 msgid "Joined"
 msgstr "Inscrito"
 
@@ -4574,7 +4634,7 @@ msgstr "Apellido"
 #: src/components/common/QuestionsTable/index.tsx:252
 #: src/components/modals/EditUserModal/index.tsx:72
 #: src/components/modals/InviteUserModal/index.tsx:58
-#: src/components/modals/JoinWaitlistModal/index.tsx:199
+#: src/components/modals/JoinWaitlistModal/index.tsx:196
 #: src/components/routes/auth/AcceptInvitation/index.tsx:102
 #: src/components/routes/auth/Register/index.tsx:96
 #: src/components/routes/product-widget/CollectInformation/index.tsx:433
@@ -4592,10 +4652,12 @@ msgstr "Apellido"
 msgid "Last name is required"
 msgstr "El apellido es obligatorio"
 
+#: src/components/common/OrganizerWebhookTable/index.tsx:239
 #: src/components/common/WebhookTable/index.tsx:239
 msgid "Last Response"
 msgstr "Última respuesta"
 
+#: src/components/common/OrganizerWebhookTable/index.tsx:240
 #: src/components/common/WebhookTable/index.tsx:240
 msgid "Last Triggered"
 msgstr "Última activación"
@@ -4642,7 +4704,7 @@ msgstr "Enlaces permitidos"
 
 #: src/components/common/EventCard/index.tsx:87
 #: src/components/layouts/Event/index.tsx:193
-#: src/components/layouts/OrganizerLayout/index.tsx:208
+#: src/components/layouts/OrganizerLayout/index.tsx:212
 msgid "Live"
 msgstr "En vivo"
 
@@ -4664,7 +4726,12 @@ msgstr "Cargando vista previa..."
 msgid "Loading tokens..."
 msgstr "Cargando tokens..."
 
+#: src/components/modals/OrganizerWebhookLogsModal/index.tsx:144
+msgid "Loading webhook logs..."
+msgstr ""
+
 #: src/components/routes/event/Webhooks/index.tsx:21
+#: src/components/routes/organizer/Webhooks/index.tsx:22
 msgid "Loading Webhooks"
 msgstr "Cargando webhooks"
 
@@ -4740,9 +4807,10 @@ msgstr "Haga que su evento esté en vivo"
 #: src/components/common/CapacityAssignmentList/index.tsx:140
 #: src/components/common/CheckInListList/index.tsx:143
 #: src/components/common/OrdersTable/index.tsx:150
+#: src/components/common/OrganizerWebhookTable/index.tsx:96
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:461
 #: src/components/common/PromoCodeTable/index.tsx:167
-#: src/components/layouts/OrganizerLayout/index.tsx:83
+#: src/components/layouts/OrganizerLayout/index.tsx:84
 msgid "Manage"
 msgstr "Administrar"
 
@@ -4777,6 +4845,10 @@ msgstr "Gestionar entradas"
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:54
 msgid "Manage your account details and default settings"
 msgstr "Administre los detalles de su cuenta y la configuración predeterminada"
+
+#: src/components/routes/event/SoldOutWaitlist/index.tsx:48
+msgid "Manage your event's waitlist, view stats, and offer tickets to attendees."
+msgstr ""
 
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:817
 msgid "Manage your payment processing and view platform fees"
@@ -4905,7 +4977,7 @@ msgstr "Mínimo por pedido"
 msgid "Minimum Price"
 msgstr "Precio mínimo"
 
-#: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:74
+#: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:71
 msgid "minutes"
 msgstr "minutos"
 
@@ -4950,14 +5022,20 @@ msgid "Music"
 msgstr "Música"
 
 #: src/components/routes/event/Settings/Sections/SeoSettings/index.tsx:71
-#: src/components/routes/organizer/Settings/Sections/SeoSettings/index.tsx:71
 msgid "My amazing event description..."
 msgstr "Mi increíble descripción del evento..."
 
 #: src/components/routes/event/Settings/Sections/SeoSettings/index.tsx:65
-#: src/components/routes/organizer/Settings/Sections/SeoSettings/index.tsx:65
 msgid "My amazing event title..."
 msgstr "El increíble título de mi evento..."
+
+#: src/components/routes/organizer/Settings/Sections/SeoSettings/index.tsx:71
+msgid "My amazing organizer description..."
+msgstr ""
+
+#: src/components/routes/organizer/Settings/Sections/SeoSettings/index.tsx:65
+msgid "My amazing organizer title..."
+msgstr ""
 
 #: src/components/common/GlobalMenu/index.tsx:40
 msgid "My Profile"
@@ -5016,6 +5094,7 @@ msgstr "Navegar al asistente"
 msgid "Net Revenue"
 msgstr "Ingresos netos"
 
+#: src/components/common/OrganizerWebhookTable/index.tsx:266
 #: src/components/common/PromoCodeTable/index.tsx:158
 #: src/components/common/WebhookTable/index.tsx:266
 #: src/components/routes/account/ManageAccount/sections/Users/index.tsx:101
@@ -5053,6 +5132,7 @@ msgid "No accounts found"
 msgstr "No se encontraron cuentas"
 
 #: src/components/routes/event/Webhooks/index.tsx:22
+#: src/components/routes/organizer/Webhooks/index.tsx:23
 msgid "No Active Webhooks"
 msgstr "No hay webhooks activos"
 
@@ -5160,6 +5240,7 @@ msgstr "Sin impacto en sus transacciones actuales o pasadas"
 msgid "No invoice"
 msgstr "Sin factura"
 
+#: src/components/modals/OrganizerWebhookLogsModal/index.tsx:163
 #: src/components/modals/WebhookLogsModal/index.tsx:177
 msgid "No logs found"
 msgstr "No se encontraron registros"
@@ -5256,10 +5337,16 @@ msgstr "Sin registros de cuentas recientes"
 msgid "No recipients found"
 msgstr "No se encontraron destinatarios"
 
+#: src/components/common/OrganizerWebhookTable/index.tsx:174
 #: src/components/common/WebhookTable/index.tsx:174
 msgid "No response"
 msgstr "Sin respuesta"
 
+#: src/components/modals/OrganizerWebhookLogsModal/index.tsx:79
+msgid "No Response"
+msgstr ""
+
+#: src/components/common/OrganizerWebhookTable/index.tsx:141
 #: src/components/common/WebhookTable/index.tsx:141
 msgid "No responses yet"
 msgstr "Aún no hay respuestas"
@@ -5300,14 +5387,16 @@ msgstr "No hay configuración de IVA configurada"
 msgid "No viewed events in the last 14 days"
 msgstr "Sin eventos vistos en los últimos 14 días"
 
-#: src/components/common/WaitlistTable/index.tsx:78
+#: src/components/common/WaitlistTable/index.tsx:218
 msgid "No waitlist entries"
 msgstr "Sin entradas en la lista de espera"
 
+#: src/components/modals/OrganizerWebhookLogsModal/index.tsx:166
 #: src/components/modals/WebhookLogsModal/index.tsx:180
 msgid "No webhook events have been recorded for this endpoint yet. Events will appear here once they are triggered."
 msgstr "Aún no se han registrado eventos de webhook para este punto de acceso. Los eventos aparecerán aquí una vez que se activen."
 
+#: src/components/common/OrganizerWebhookTable/index.tsx:201
 #: src/components/common/WebhookTable/index.tsx:201
 msgid "No Webhooks"
 msgstr "No hay Webhooks"
@@ -5369,27 +5458,27 @@ msgstr "Prefijo del número"
 msgid "of"
 msgstr "de"
 
-#: src/components/common/WaitlistTable/index.tsx:71
+#: src/components/common/WaitlistTable/index.tsx:115
 #: src/components/modals/OfferWaitlistModal/index.tsx:162
 msgid "Offer"
 msgstr "Ofrecer"
 
-#: src/components/common/WaitlistTable/index.tsx:135
+#: src/components/common/WaitlistTable/index.tsx:59
 msgid "Offer Spot"
 msgstr "Ofrecer lugar"
 
 #: src/components/modals/OfferWaitlistModal/index.tsx:78
-#: src/components/routes/event/SoldOutWaitlist/index.tsx:84
+#: src/components/routes/event/SoldOutWaitlist/index.tsx:86
 msgid "Offer Tickets"
 msgstr "Ofrecer entradas"
 
-#: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:69
+#: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:66
 msgid "Offer Timeout"
 msgstr "Tiempo límite de la oferta"
 
 #: src/components/common/WaitlistStats/index.tsx:13
-#: src/components/common/WaitlistTable/index.tsx:30
-#: src/components/routes/event/SoldOutWaitlist/index.tsx:70
+#: src/components/common/WaitlistTable/index.tsx:23
+#: src/components/routes/event/SoldOutWaitlist/index.tsx:72
 msgid "Offered"
 msgstr "Ofrecido"
 
@@ -5563,7 +5652,7 @@ msgstr "Pedido y Entrada"
 msgid "Order cancelled"
 msgstr "Pedido cancelado"
 
-#: src/components/forms/WebhookForm/index.tsx:76
+#: src/components/forms/WebhookForm/index.tsx:94
 msgid "Order Cancelled"
 msgstr "Orden cancelada"
 
@@ -5581,7 +5670,7 @@ msgstr "Confirmación de pedido"
 msgid "Order confirmation resent successfully"
 msgstr "Confirmación del pedido reenviada correctamente"
 
-#: src/components/forms/WebhookForm/index.tsx:52
+#: src/components/forms/WebhookForm/index.tsx:70
 msgid "Order Created"
 msgstr "Pedido creado"
 
@@ -5650,7 +5739,7 @@ msgstr "Idioma del Pedido"
 msgid "Order marked as paid"
 msgstr "Pedido marcado como pagado"
 
-#: src/components/forms/WebhookForm/index.tsx:64
+#: src/components/forms/WebhookForm/index.tsx:82
 msgid "Order Marked as Paid"
 msgstr "Pedido marcado como pagado"
 
@@ -5694,7 +5783,7 @@ msgstr "Ref. pedido"
 msgid "Order Reference"
 msgstr "Pedir Referencia"
 
-#: src/components/forms/WebhookForm/index.tsx:70
+#: src/components/forms/WebhookForm/index.tsx:88
 msgid "Order Refunded"
 msgstr "Pedido reembolsado"
 
@@ -5722,7 +5811,7 @@ msgstr "Tiempo de espera del pedido"
 msgid "Order Total"
 msgstr "Total del pedido"
 
-#: src/components/forms/WebhookForm/index.tsx:58
+#: src/components/forms/WebhookForm/index.tsx:76
 msgid "Order Updated"
 msgstr "Pedido actualizado"
 
@@ -5803,7 +5892,7 @@ msgid "Organizer"
 msgstr "Organizador"
 
 #: src/components/layouts/Event/index.tsx:84
-#: src/components/layouts/OrganizerLayout/index.tsx:75
+#: src/components/layouts/OrganizerLayout/index.tsx:76
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:160
 msgid "Organizer Dashboard"
 msgstr "Panel del organizador"
@@ -5842,12 +5931,12 @@ msgid "Organizer statistics are not available for the selected currency or an er
 msgstr "Las estadísticas del organizador no están disponibles para la moneda seleccionada o ha ocurrido un error."
 
 #: src/components/common/StatusToggle/index.tsx:64
-#: src/components/layouts/OrganizerLayout/index.tsx:135
+#: src/components/layouts/OrganizerLayout/index.tsx:139
 msgid "Organizer status update failed. Please try again later"
 msgstr "No se pudo actualizar el estado del organizador. Inténtalo de nuevo más tarde"
 
 #: src/components/common/StatusToggle/index.tsx:56
-#: src/components/layouts/OrganizerLayout/index.tsx:132
+#: src/components/layouts/OrganizerLayout/index.tsx:136
 msgid "Organizer status updated"
 msgstr "Estado del organizador actualizado"
 
@@ -6005,6 +6094,7 @@ msgstr "Pagar"
 msgid "Pay to unlock"
 msgstr "Pagar para desbloquear"
 
+#: src/components/modals/OrganizerWebhookLogsModal/index.tsx:107
 #: src/components/routes/admin/FailedJobs/index.tsx:273
 msgid "Payload"
 msgstr "Carga útil"
@@ -6227,7 +6317,7 @@ msgstr "Por favor, cree un producto"
 msgid "Please create a ticket"
 msgstr "Por favor, crea un ticket"
 
-#: src/components/modals/JoinWaitlistModal/index.tsx:42
+#: src/components/modals/JoinWaitlistModal/index.tsx:59
 msgid "Please enter a valid email address"
 msgstr "Por favor, introduzca una dirección de correo electrónico válida"
 
@@ -6235,6 +6325,7 @@ msgstr "Por favor, introduzca una dirección de correo electrónico válida"
 msgid "Please enter a valid image URL that points to an image."
 msgstr "Por favor, introduzca una URL de imagen válida que apunte a una imagen."
 
+#: src/components/modals/CreateOrganizerWebhookModal/index.tsx:30
 #: src/components/modals/CreateWebhookModal/index.tsx:30
 msgid "Please enter a valid URL"
 msgstr "Por favor, introduce una URL válida"
@@ -6424,7 +6515,7 @@ msgstr "Procesando pedido"
 #: src/components/common/AttendeeDetails/index.tsx:30
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:285
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:482
-#: src/components/common/WaitlistTable/index.tsx:95
+#: src/components/common/WaitlistTable/index.tsx:153
 #: src/components/modals/ManageAttendeeModal/index.tsx:119
 #: src/components/modals/OfferWaitlistModal/index.tsx:102
 msgid "Product"
@@ -6442,7 +6533,7 @@ msgstr "Categoría de producto actualizada con éxito."
 msgid "Product Created"
 msgstr "Producto creado"
 
-#: src/components/forms/WebhookForm/index.tsx:46
+#: src/components/forms/WebhookForm/index.tsx:64
 msgid "Product Deleted"
 msgstr "Producto eliminado"
 
@@ -6472,7 +6563,7 @@ msgstr "Nivel del producto"
 msgid "Product Type"
 msgstr "Tipo de producto"
 
-#: src/components/forms/WebhookForm/index.tsx:40
+#: src/components/forms/WebhookForm/index.tsx:58
 msgid "Product Updated"
 msgstr "Producto actualizado"
 
@@ -6567,8 +6658,8 @@ msgid "Publish Event"
 msgstr "Publicar Evento"
 
 #: src/components/common/WaitlistStats/index.tsx:14
-#: src/components/common/WaitlistTable/index.tsx:31
-#: src/components/routes/event/SoldOutWaitlist/index.tsx:71
+#: src/components/common/WaitlistTable/index.tsx:24
+#: src/components/routes/event/SoldOutWaitlist/index.tsx:73
 #: src/components/routes/my-tickets/index.tsx:94
 msgid "Purchased"
 msgstr "Comprado"
@@ -6635,7 +6726,7 @@ msgstr "Tasa"
 msgid "Rate limit exceeded. Please try again later."
 msgstr "Límite de solicitudes excedido. Por favor, inténtelo de nuevo más tarde."
 
-#: src/components/common/WaitlistTable/index.tsx:135
+#: src/components/common/WaitlistTable/index.tsx:59
 msgid "Re-offer Spot"
 msgstr "Volver a ofrecer lugar"
 
@@ -6780,7 +6871,8 @@ msgid "remove"
 msgstr "eliminar"
 
 #: src/components/common/Editor/Controls/InsertImageControl/index.tsx:146
-#: src/components/common/WaitlistTable/index.tsx:50
+#: src/components/common/WaitlistTable/index.tsx:68
+#: src/components/common/WaitlistTable/index.tsx:94
 #: src/components/routes/product-widget/SelectProducts/index.tsx:559
 msgid "Remove"
 msgstr "Eliminar"
@@ -6790,7 +6882,7 @@ msgid "Report not found"
 msgstr "Informe no encontrado"
 
 #: src/components/layouts/Event/index.tsx:97
-#: src/components/layouts/OrganizerLayout/index.tsx:78
+#: src/components/layouts/OrganizerLayout/index.tsx:79
 #: src/components/routes/event/Reports/index.tsx:39
 #: src/components/routes/organizer/Reports/index.tsx:51
 msgid "Reports"
@@ -6816,7 +6908,7 @@ msgstr "Reenviar código"
 msgid "Resend Confirmation"
 msgstr "Reenviar confirmación"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:292
+#: src/components/layouts/OrganizerLayout/index.tsx:296
 msgid "Resend Confirmation Email"
 msgstr "Reenviar correo de confirmación"
 
@@ -6873,6 +6965,14 @@ msgstr "Restablecer la contraseña"
 msgid "Resetting..."
 msgstr "Restableciendo..."
 
+#: src/components/modals/OrganizerWebhookLogsModal/index.tsx:116
+msgid "Response"
+msgstr ""
+
+#: src/components/common/OrganizerWebhookTable/index.tsx:168
+msgid "Response Details"
+msgstr ""
+
 #: src/components/common/EventCard/index.tsx:146
 msgid "Restore event"
 msgstr "Restaurar evento"
@@ -6914,7 +7014,7 @@ msgstr "Resumen de ingresos"
 msgid "Revoke invitation"
 msgstr "Revocar invitación"
 
-#: src/components/common/WaitlistTable/index.tsx:141
+#: src/components/common/WaitlistTable/index.tsx:68
 msgid "Revoke Offer"
 msgstr ""
 
@@ -7008,7 +7108,7 @@ msgstr "San Francisco"
 #: src/components/routes/event/Settings/Sections/MiscSettings/index.tsx:102
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:265
 #: src/components/routes/event/Settings/Sections/SeoSettings/index.tsx:85
-#: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:79
+#: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:76
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:116
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:132
 #: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:103
@@ -7103,7 +7203,7 @@ msgstr "Buscar por título de evento u organizador..."
 msgid "Search by job name or exception..."
 msgstr "Buscar por nombre de trabajo o excepción..."
 
-#: src/components/routes/event/SoldOutWaitlist/index.tsx:54
+#: src/components/routes/event/SoldOutWaitlist/index.tsx:56
 msgid "Search by name or email..."
 msgstr "Buscar por nombre o correo electrónico..."
 
@@ -7233,7 +7333,7 @@ msgstr "Seleccionar hora de finalización"
 msgid "Select event category"
 msgstr "Seleccionar categoría del evento"
 
-#: src/components/forms/WebhookForm/index.tsx:124
+#: src/components/forms/WebhookForm/index.tsx:142
 msgid "Select event types"
 msgstr "Seleccionar tipos de eventos"
 
@@ -7301,7 +7401,7 @@ msgstr "Seleccionar zona horaria"
 msgid "Select which attendees should receive this message"
 msgstr "Selecciona qué asistentes deben recibir este mensaje"
 
-#: src/components/forms/WebhookForm/index.tsx:123
+#: src/components/forms/WebhookForm/index.tsx:141
 msgid "Select which events will trigger this webhook"
 msgstr "Selecciona qué eventos activarán este webhook"
 
@@ -7468,7 +7568,7 @@ msgstr "Configuración actualizada"
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:81
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:82
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:83
-#: src/components/layouts/OrganizerLayout/index.tsx:85
+#: src/components/layouts/OrganizerLayout/index.tsx:86
 #: src/components/modals/DuplicateEventModal/index.tsx:26
 msgid "Settings"
 msgstr "Ajustes"
@@ -7479,7 +7579,7 @@ msgstr "Configuración y diseño"
 
 #: src/components/common/ShareIcon/index.tsx:30
 #: src/components/layouts/EventHomepage/index.tsx:295
-#: src/components/layouts/OrganizerLayout/index.tsx:228
+#: src/components/layouts/OrganizerLayout/index.tsx:232
 #: src/components/modals/ShareModal/index.tsx:37
 #: src/components/modals/ShareModal/index.tsx:165
 #: src/components/modals/ShareModal/index.tsx:186
@@ -7498,8 +7598,8 @@ msgstr "Compartir enlace de afiliado"
 msgid "Share Event"
 msgstr "Compartir evento"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:225
-#: src/components/layouts/OrganizerLayout/index.tsx:260
+#: src/components/layouts/OrganizerLayout/index.tsx:229
+#: src/components/layouts/OrganizerLayout/index.tsx:264
 msgid "Share Organizer Page"
 msgstr "Compartir página del organizador"
 
@@ -7610,8 +7710,8 @@ msgid "Sold Out"
 msgstr "Agotado"
 
 #: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:56
-msgid "Sold-Out Waitlist"
-msgstr "Lista de espera de agotados"
+#~ msgid "Sold-Out Waitlist"
+#~ msgstr "Lista de espera de agotados"
 
 #: src/components/common/ErrorDisplay/index.tsx:15
 #: src/components/routes/auth/AcceptInvitation/index.tsx:48
@@ -7637,12 +7737,12 @@ msgstr "¡Algo salió mal! Inténtalo de nuevo"
 msgid "Something went wrong."
 msgstr "Algo salió mal."
 
-#: src/components/modals/JoinWaitlistModal/index.tsx:148
+#: src/components/modals/JoinWaitlistModal/index.tsx:156
 msgid "Something went wrong. Please try again later."
 msgstr "Algo salió mal. Por favor, inténtelo de nuevo más tarde."
 
 #: src/components/layouts/Event/index.tsx:78
-#: src/components/layouts/OrganizerLayout/index.tsx:100
+#: src/components/layouts/OrganizerLayout/index.tsx:104
 #: src/components/routes/auth/Login/index.tsx:72
 #: src/components/routes/my-tickets/index.tsx:145
 #: src/components/routes/profile/ManageProfile/index.tsx:90
@@ -7719,11 +7819,12 @@ msgstr "Las estadísticas se basan en la fecha de creación de la cuenta"
 #: src/components/common/AttendeeTable/index.tsx:274
 #: src/components/common/OrderDetails/index.tsx:51
 #: src/components/common/OrdersTable/index.tsx:396
-#: src/components/common/WaitlistTable/index.tsx:96
+#: src/components/common/OrganizerWebhookTable/index.tsx:238
+#: src/components/common/WaitlistTable/index.tsx:164
 #: src/components/common/WebhookTable/index.tsx:238
 #: src/components/forms/AffiliateForm/index.tsx:98
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:56
-#: src/components/forms/WebhookForm/index.tsx:133
+#: src/components/forms/WebhookForm/index.tsx:151
 #: src/components/modals/EditUserModal/index.tsx:103
 #: src/components/routes/account/ManageAccount/sections/Users/index.tsx:157
 #: src/components/routes/admin/Dashboard/index.tsx:405
@@ -7798,6 +7899,7 @@ msgid "Subtotal"
 msgstr "Total parcial"
 
 #: src/components/common/OrdersTable/index.tsx:101
+#: src/components/common/OrganizerWebhookTable/index.tsx:149
 #: src/components/layouts/Checkout/index.tsx:86
 msgid "Success"
 msgstr "Éxito"
@@ -7840,7 +7942,7 @@ msgstr "Pregunta creada correctamente"
 msgid "Successfully Duplicated Product"
 msgstr "Producto duplicado con éxito"
 
-#: src/components/common/WaitlistTable/index.tsx:60
+#: src/components/common/WaitlistTable/index.tsx:104
 msgid "Successfully offered a spot"
 msgstr "Lugar ofrecido con éxito"
 
@@ -7852,7 +7954,7 @@ msgstr "Tickets ofrecidos exitosamente a {count} personas"
 msgid "Successfully offered tickets to 1 person"
 msgstr "Tickets ofrecidos exitosamente a 1 persona"
 
-#: src/components/common/WaitlistTable/index.tsx:46
+#: src/components/common/WaitlistTable/index.tsx:87
 msgid "Successfully removed from waitlist"
 msgstr "Eliminado de la lista de espera con éxito"
 
@@ -7945,6 +8047,7 @@ msgstr "Ajustes actualizados exitosamente"
 msgid "Successfully Updated Social Links"
 msgstr "Enlaces sociales actualizados correctamente"
 
+#: src/components/modals/EditOrganizerWebhookModal/index.tsx:44
 #: src/components/modals/EditWebhookModal/index.tsx:44
 msgid "Successfully updated Webhook"
 msgstr "Webhook actualizado con éxito"
@@ -7979,7 +8082,7 @@ msgstr "Correo electrónico de soporte"
 msgid "Swedish"
 msgstr "Sueco"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:68
+#: src/components/layouts/OrganizerLayout/index.tsx:69
 #: src/components/modals/SwitchOrganizerModal/index.tsx:33
 msgid "Switch Organizer"
 msgstr "Cambiar organizador"
@@ -8235,9 +8338,12 @@ msgid "The template body contains invalid Liquid syntax. Please correct it and t
 msgstr "El cuerpo de la plantilla contiene sintaxis Liquid inválida. Por favor corrígela e inténtalo de nuevo."
 
 #: src/components/routes/event/Settings/Sections/SeoSettings/index.tsx:63
-#: src/components/routes/organizer/Settings/Sections/SeoSettings/index.tsx:63
 msgid "The title of the event that will be displayed in search engine results and when sharing on social media. By default, the event title will be used"
 msgstr "El título del evento que se mostrará en los resultados del motor de búsqueda y al compartirlo en las redes sociales. De forma predeterminada, se utilizará el título del evento."
+
+#: src/components/routes/organizer/Settings/Sections/SeoSettings/index.tsx:63
+msgid "The title of the organizer that will be displayed in search engine results and when sharing on social media. By default, the organizer title will be used"
+msgstr ""
 
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:87
 msgid "The VAT number could not be validated. Please check the number and try again."
@@ -8657,7 +8763,7 @@ msgstr "Para recibir pagos con tarjeta de crédito, debes conectar tu cuenta de 
 msgid "Toggle columns"
 msgstr "Alternar columnas"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:87
+#: src/components/layouts/OrganizerLayout/index.tsx:88
 msgid "Tools"
 msgstr "Herramientas"
 
@@ -8831,7 +8937,7 @@ msgstr "No se pudo duplicar el producto. Por favor, revisa tus datos"
 msgid "Unable to fetch attendee"
 msgstr "No se pudo obtener el asistente"
 
-#: src/components/modals/JoinWaitlistModal/index.tsx:145
+#: src/components/modals/JoinWaitlistModal/index.tsx:153
 msgid "Unable to join waitlist"
 msgstr "No se pudo unir a la lista de espera"
 
@@ -8948,6 +9054,7 @@ msgstr "Subir imagen"
 msgid "Uploading image..."
 msgstr "Subiendo imagen..."
 
+#: src/components/common/OrganizerWebhookTable/index.tsx:236
 #: src/components/common/WebhookTable/index.tsx:236
 msgid "URL"
 msgstr "URL"
@@ -8956,6 +9063,7 @@ msgstr "URL"
 msgid "URL copied to clipboard"
 msgstr "URL copiada en el portapapeles"
 
+#: src/components/modals/CreateOrganizerWebhookModal/index.tsx:25
 #: src/components/modals/CreateWebhookModal/index.tsx:25
 msgid "URL is required"
 msgstr "La URL es obligatoria"
@@ -9221,6 +9329,7 @@ msgstr "Ver página del evento"
 msgid "View Event Page"
 msgstr "Ver página del evento"
 
+#: src/components/common/OrganizerWebhookTable/index.tsx:113
 #: src/components/common/WebhookTable/index.tsx:113
 msgid "View logs"
 msgstr "Ver registros"
@@ -9253,8 +9362,8 @@ msgstr "Ver detalles del pedido"
 msgid "View order details, issue refunds, and resend confirmations."
 msgstr "Vea detalles de pedidos, emita reembolsos y reenvíe confirmaciones."
 
-#: src/components/layouts/OrganizerLayout/index.tsx:243
-#: src/components/layouts/OrganizerLayout/index.tsx:246
+#: src/components/layouts/OrganizerLayout/index.tsx:247
+#: src/components/layouts/OrganizerLayout/index.tsx:250
 msgid "View Organizer Homepage"
 msgstr "Ver página principal del organizador"
 
@@ -9293,9 +9402,9 @@ msgid "VK"
 msgstr "VK"
 
 #: src/components/common/WaitlistStats/index.tsx:12
-#: src/components/common/WaitlistTable/index.tsx:29
+#: src/components/common/WaitlistTable/index.tsx:22
 #: src/components/modals/OfferWaitlistModal/index.tsx:103
-#: src/components/routes/event/SoldOutWaitlist/index.tsx:69
+#: src/components/routes/event/SoldOutWaitlist/index.tsx:71
 msgid "Waiting"
 msgstr "En espera"
 
@@ -9306,7 +9415,7 @@ msgstr "Esperando pago"
 #: src/components/layouts/Event/index.tsx:121
 #: src/components/routes/event/Settings/index.tsx:74
 #: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:51
-#: src/components/routes/event/SoldOutWaitlist/index.tsx:47
+#: src/components/routes/event/SoldOutWaitlist/index.tsx:49
 msgid "Waitlist"
 msgstr "Lista de espera"
 
@@ -9380,8 +9489,12 @@ msgid "We were unable to validate your VAT number after multiple attempts. We'll
 msgstr "No pudimos validar tu número de IVA después de múltiples intentos. Continuaremos intentando en segundo plano. Por favor, vuelve a verificar más tarde."
 
 #: src/components/modals/JoinWaitlistModal/index.tsx:101
-msgid "We'll notify you by email if a spot becomes available for {0}."
-msgstr "Te notificaremos por correo electrónico si hay un lugar disponible para {0}."
+#~ msgid "We'll notify you by email if a spot becomes available for {0}."
+#~ msgstr "Te notificaremos por correo electrónico si hay un lugar disponible para {0}."
+
+#: src/components/modals/JoinWaitlistModal/index.tsx:120
+msgid "We'll notify you by email if a spot becomes available for {productDisplayName}."
+msgstr ""
 
 #: src/components/routes/product-widget/CollectInformation/index.tsx:420
 msgid "We'll send your tickets to this email"
@@ -9407,19 +9520,22 @@ msgstr "Hemos trasladado nuestra sede a Irlanda. Como resultado, necesitamos que
 msgid "We've sent a 5-digit verification code to:"
 msgstr "Hemos enviado un código de verificación de 5 dígitos a:"
 
+#: src/components/modals/CreateOrganizerWebhookModal/index.tsx:45
 #: src/components/modals/CreateWebhookModal/index.tsx:45
 msgid "Webhook created successfully"
 msgstr "Webhook creado con éxito"
 
+#: src/components/common/OrganizerWebhookTable/index.tsx:53
 #: src/components/common/WebhookTable/index.tsx:53
 msgid "Webhook deleted successfully"
 msgstr "Webhook eliminado con éxito"
 
+#: src/components/modals/OrganizerWebhookLogsModal/index.tsx:137
 #: src/components/modals/WebhookLogsModal/index.tsx:151
 msgid "Webhook Logs"
 msgstr "Registros del Webhook"
 
-#: src/components/forms/WebhookForm/index.tsx:117
+#: src/components/forms/WebhookForm/index.tsx:135
 msgid "Webhook URL"
 msgstr "URL del Webhook"
 
@@ -9432,8 +9548,10 @@ msgid "Webhook will send notifications"
 msgstr "El webhook enviará notificaciones"
 
 #: src/components/layouts/Event/index.tsx:127
+#: src/components/layouts/OrganizerLayout/index.tsx:92
 #: src/components/modals/DuplicateEventModal/index.tsx:32
 #: src/components/routes/event/Webhooks/index.tsx:32
+#: src/components/routes/organizer/Webhooks/index.tsx:30
 msgid "Webhooks"
 msgstr "Webhooks"
 
@@ -9505,15 +9623,19 @@ msgstr "Lo que necesita hacer:"
 msgid "WhatsApp"
 msgstr "WhatsApp"
 
-#: src/components/forms/WebhookForm/index.tsx:108
+#: src/components/forms/WebhookForm/index.tsx:126
 msgid "When a check-in is deleted"
 msgstr "Cuando se elimina un registro de entrada"
 
-#: src/components/forms/WebhookForm/index.tsx:84
+#: src/components/forms/WebhookForm/index.tsx:102
 msgid "When a new attendee is created"
 msgstr "Cuando se crea un nuevo asistente"
 
-#: src/components/forms/WebhookForm/index.tsx:54
+#: src/components/forms/WebhookForm/index.tsx:42
+msgid "When a new event is created"
+msgstr ""
+
+#: src/components/forms/WebhookForm/index.tsx:72
 msgid "When a new order is created"
 msgstr "Cuando se crea un nuevo pedido"
 
@@ -9521,43 +9643,51 @@ msgstr "Cuando se crea un nuevo pedido"
 msgid "When a new product is created"
 msgstr "Cuando se crea un nuevo producto"
 
-#: src/components/forms/WebhookForm/index.tsx:48
+#: src/components/forms/WebhookForm/index.tsx:66
 msgid "When a product is deleted"
 msgstr "Cuando se elimina un producto"
 
-#: src/components/forms/WebhookForm/index.tsx:42
+#: src/components/forms/WebhookForm/index.tsx:60
 msgid "When a product is updated"
 msgstr "Cuando se actualiza un producto"
 
-#: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:58
+#: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:52
 msgid "When a product sells out, customers can join a waitlist to be notified when spots become available."
 msgstr "Cuando un producto se agota, los clientes pueden unirse a una lista de espera para ser notificados cuando haya plazas disponibles."
 
-#: src/components/forms/WebhookForm/index.tsx:96
+#: src/components/forms/WebhookForm/index.tsx:114
 msgid "When an attendee is cancelled"
 msgstr "Cuando se cancela un asistente"
 
-#: src/components/forms/WebhookForm/index.tsx:102
+#: src/components/forms/WebhookForm/index.tsx:120
 msgid "When an attendee is checked in"
 msgstr "Cuando un asistente se registra"
 
-#: src/components/forms/WebhookForm/index.tsx:90
+#: src/components/forms/WebhookForm/index.tsx:108
 msgid "When an attendee is updated"
 msgstr "Cuando se actualiza un asistente"
 
-#: src/components/forms/WebhookForm/index.tsx:78
+#: src/components/forms/WebhookForm/index.tsx:54
+msgid "When an event is archived"
+msgstr ""
+
+#: src/components/forms/WebhookForm/index.tsx:48
+msgid "When an event is updated"
+msgstr ""
+
+#: src/components/forms/WebhookForm/index.tsx:96
 msgid "When an order is cancelled"
 msgstr "Cuando se cancela un pedido"
 
-#: src/components/forms/WebhookForm/index.tsx:66
+#: src/components/forms/WebhookForm/index.tsx:84
 msgid "When an order is marked as paid"
 msgstr "Cuando un pedido se marca como pagado"
 
-#: src/components/forms/WebhookForm/index.tsx:72
+#: src/components/forms/WebhookForm/index.tsx:90
 msgid "When an order is refunded"
 msgstr "Cuando se reembolsa un pedido"
 
-#: src/components/forms/WebhookForm/index.tsx:60
+#: src/components/forms/WebhookForm/index.tsx:78
 msgid "When an order is updated"
 msgstr "Cuando se actualiza un pedido"
 
@@ -9631,7 +9761,7 @@ msgstr "Laboral"
 #: src/components/modals/EditProductModal/index.tsx:114
 #: src/components/modals/EditPromoCodeModal/index.tsx:84
 #: src/components/modals/EditQuestionModal/index.tsx:101
-#: src/components/modals/JoinWaitlistModal/index.tsx:221
+#: src/components/modals/JoinWaitlistModal/index.tsx:218
 #: src/components/modals/ManageAttendeeModal/index.tsx:231
 #: src/components/modals/ManageOrderModal/index.tsx:175
 #: src/components/routes/auth/Register/index.tsx:137
@@ -9754,7 +9884,7 @@ msgstr "Has añadido impuestos y tarifas a un producto gratuito. ¿Te gustaría 
 msgid "You must acknowledge that this email is not promotional"
 msgstr "Debes reconocer que este correo electrónico no es promocional."
 
-#: src/components/modals/JoinWaitlistModal/index.tsx:43
+#: src/components/modals/JoinWaitlistModal/index.tsx:60
 msgid "You must agree to receive messages"
 msgstr "Debe aceptar recibir mensajes"
 
@@ -9770,7 +9900,7 @@ msgstr "Debe crear un ticket antes de poder agregar manualmente un asistente."
 msgid "You must have at least one price tier"
 msgstr "Debes tener al menos un nivel de precios"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:281
+#: src/components/layouts/OrganizerLayout/index.tsx:285
 msgid "You must verify your email address before you can update the organizer status."
 msgstr "Debes verificar tu dirección de correo electrónico antes de poder actualizar el estado del organizador."
 
@@ -9814,7 +9944,7 @@ msgstr "¡Está todo listo! Sus pagos se están procesando sin problemas."
 msgid "You're going to {0}!"
 msgstr "¡Vas a ir a {0}!"
 
-#: src/components/modals/JoinWaitlistModal/index.tsx:98
+#: src/components/modals/JoinWaitlistModal/index.tsx:117
 msgid "You're on the waitlist!"
 msgstr "¡Estás en la lista de espera!"
 
