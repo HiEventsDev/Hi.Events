@@ -100,14 +100,14 @@ class NoInternalUrlRule implements ValidationRule
 
     private function isPrivateIpAddress(string $host): bool
     {
-        $ip = gethostbyname($host);
+        $ip = $this->resolveAndNormalize($host);
 
-        if ($ip === $host && !filter_var($host, FILTER_VALIDATE_IP)) {
-            return false;
+        if ($ip === false) {
+            return true;
         }
 
         if (!filter_var($ip, FILTER_VALIDATE_IP)) {
-            return false;
+            return true;
         }
 
         if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) === false) {
@@ -119,5 +119,30 @@ class NoInternalUrlRule implements ValidationRule
         }
 
         return false;
+    }
+
+    private function resolveAndNormalize(string $host): string|false
+    {
+        if (filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
+            $binary = inet_pton($host);
+            if ($binary !== false && strlen($binary) === 16) {
+                $prefix = substr($binary, 0, 12);
+                if ($prefix === "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xff\xff") {
+                    return inet_ntop(substr($binary, 12));
+                }
+            }
+            return $host;
+        }
+
+        if (filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
+            return $host;
+        }
+
+        $ip = gethostbyname($host);
+        if ($ip === $host) {
+            return false;
+        }
+
+        return $ip;
     }
 }

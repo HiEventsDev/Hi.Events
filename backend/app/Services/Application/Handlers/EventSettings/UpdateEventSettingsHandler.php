@@ -27,12 +27,9 @@ class UpdateEventSettingsHandler
         return $this->databaseManager->transaction(function () use ($settings) {
             $this->eventSettingsRepository->updateWhere(
                 attributes: [
-                    'post_checkout_message' => $settings->post_checkout_message
-                        ?? $this->purifier->purify($settings->post_checkout_message),
-                    'pre_checkout_message' => $settings->pre_checkout_message
-                        ?? $this->purifier->purify($settings->pre_checkout_message),
-                    'email_footer_message' => $settings->email_footer_message
-                        ?? $this->purifier->purify($settings->email_footer_message),
+                    'post_checkout_message' => $this->purifier->purify($settings->post_checkout_message),
+                    'pre_checkout_message' => $this->purifier->purify($settings->pre_checkout_message),
+                    'email_footer_message' => $this->purifier->purify($settings->email_footer_message),
                     'support_email' => $settings->support_email,
                     'require_attendee_details' => $settings->require_attendee_details,
                     'attendee_details_collection_method' => $settings->attendee_details_collection_method->name,
@@ -51,8 +48,7 @@ class UpdateEventSettingsHandler
                     'maps_url' => trim($settings->maps_url),
                     'location_details' => $settings->location_details?->toArray(),
                     'is_online_event' => $settings->is_online_event,
-                    'online_event_connection_details' => $settings->online_event_connection_details
-                        ?? $this->purifier->purify($settings->online_event_connection_details),
+                    'online_event_connection_details' => $this->purifier->purify($settings->online_event_connection_details),
 
                     'seo_title' => $settings->seo_title,
                     'seo_description' => $settings->seo_description,
@@ -64,8 +60,7 @@ class UpdateEventSettingsHandler
 
                     // Payment settings
                     'payment_providers' => $settings->payment_providers,
-                    'offline_payment_instructions' => $settings->offline_payment_instructions
-                        ?? $this->purifier->purify($settings->offline_payment_instructions),
+                    'offline_payment_instructions' => $this->purifier->purify($settings->offline_payment_instructions),
                     'allow_orders_awaiting_offline_payment_to_check_in' => $settings->allow_orders_awaiting_offline_payment_to_check_in,
 
                     // Invoice settings
