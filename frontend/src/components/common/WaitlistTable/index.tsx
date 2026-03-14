@@ -1,8 +1,9 @@
 import {t} from "@lingui/macro";
 import {Button, Group, Menu, Text} from "@mantine/core";
-import {IconDotsVertical, IconSend, IconTrash} from "@tabler/icons-react";
-import {useMemo} from "react";
+import {IconDotsVertical, IconEye, IconSend, IconTrash} from "@tabler/icons-react";
+import {useMemo, useState} from "react";
 import {CellContext} from "@tanstack/react-table";
+import {useDisclosure} from "@mantine/hooks";
 import {IdParam, WaitlistEntry, WaitlistEntryStatus} from "../../../types.ts";
 import {relativeDate} from "../../../utilites/dates.ts";
 import {NoResultsSplash} from "../NoResultsSplash";
@@ -11,6 +12,7 @@ import {useRemoveWaitlistEntry} from "../../../mutations/useRemoveWaitlistEntry.
 import {useOfferSpecificWaitlistEntry} from "../../../mutations/useOfferSpecificWaitlistEntry.ts";
 import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {TanStackTable, TanStackTableColumn} from "../TanStackTable";
+import {ManageOrderModal} from "../../modals/ManageOrderModal";
 import classes from './WaitlistTable.module.scss';
 
 interface WaitlistTableProps {
@@ -26,24 +28,24 @@ const statusLabelMap: Record<string, () => string> = {
     [WaitlistEntryStatus.OfferExpired]: () => t`Expired`,
 };
 
-const ActionMenu = ({entry, onOffer, onRemove}: {
+const ActionMenu = ({entry, onOffer, onRemove, onViewOrder}: {
     entry: WaitlistEntry;
     onOffer: (entryId: IdParam) => void;
     onRemove: (entryId: number) => void;
+    onViewOrder: (orderId: IdParam) => void;
 }) => {
     const isWaiting = entry.status === WaitlistEntryStatus.Waiting;
     const isOffered = entry.status === WaitlistEntryStatus.Offered;
     const isExpired = entry.status === WaitlistEntryStatus.OfferExpired;
+    const isPurchased = entry.status === WaitlistEntryStatus.Purchased;
     const canOffer = isWaiting || isExpired;
     const canCancel = isWaiting || isOffered;
-
-    const hasActions = canOffer || canCancel;
 
     return (
         <Group wrap="nowrap" gap={0} justify="flex-end">
             <Menu shadow="md" width={200}>
                 <Menu.Target>
-                    <div className={classes.actionsMenu} style={hasActions ? undefined : {opacity: 0.3, pointerEvents: 'none'}}>
+                    <div className={classes.actionsMenu}>
                         <Button size="xs" variant="transparent">
                             <IconDotsVertical/>
                         </Button>
@@ -51,6 +53,14 @@ const ActionMenu = ({entry, onOffer, onRemove}: {
                 </Menu.Target>
                 <Menu.Dropdown>
                     <Menu.Label>{t`Actions`}</Menu.Label>
+                    {isPurchased && entry.order_id && (
+                        <Menu.Item
+                            leftSection={<IconEye size={14}/>}
+                            onClick={() => onViewOrder(entry.order_id!)}
+                        >
+                            {t`View Order`}
+                        </Menu.Item>
+                    )}
                     {canOffer && (
                         <Menu.Item
                             leftSection={<IconSend size={14}/>}
@@ -77,6 +87,13 @@ const ActionMenu = ({entry, onOffer, onRemove}: {
 export const WaitlistTable = ({eventId, entries}: WaitlistTableProps) => {
     const removeMutation = useRemoveWaitlistEntry();
     const offerMutation = useOfferSpecificWaitlistEntry();
+    const [isOrderModalOpen, orderModal] = useDisclosure(false);
+    const [selectedOrderId, setSelectedOrderId] = useState<IdParam>();
+
+    const handleViewOrder = (orderId: IdParam) => {
+        setSelectedOrderId(orderId);
+        orderModal.open();
+    };
 
     const handleRemove = (entryId: number) => {
         confirmationDialog(
@@ -200,6 +217,7 @@ export const WaitlistTable = ({eventId, entries}: WaitlistTableProps) => {
                                 entry={entry}
                                 onOffer={handleOffer}
                                 onRemove={handleRemove}
+                                onViewOrder={handleViewOrder}
                             />
                         </div>
                     );
@@ -227,9 +245,17 @@ export const WaitlistTable = ({eventId, entries}: WaitlistTableProps) => {
     }
 
     return (
-        <TanStackTable
-            data={entries}
-            columns={columns}
-        />
+        <>
+            <TanStackTable
+                data={entries}
+                columns={columns}
+            />
+            {(selectedOrderId && isOrderModalOpen) && (
+                <ManageOrderModal
+                    orderId={selectedOrderId}
+                    onClose={orderModal.close}
+                />
+            )}
+        </>
     );
 };

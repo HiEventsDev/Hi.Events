@@ -36,6 +36,7 @@ import {promoCodeClientPublic} from "../../../../api/promo-code.client.ts";
 import {IconChevronRight, IconX} from "@tabler/icons-react"
 import {getSessionIdentifier} from "../../../../utilites/sessionIdentifier.ts";
 import {Constants} from "../../../../constants.ts";
+import {clearWaitlistJoinedForEvent} from "../../../../hooks/useWaitlistJoined.ts";
 
 const AFFILIATE_EXPIRY_DAYS = 30;
 
@@ -120,6 +121,15 @@ const SelectProducts = (props: SelectProductsProps) => {
             }
         }
     }, []);
+
+    useEffect(() => {
+        if (typeof window === 'undefined' || !eventId) return;
+        const clearWaitlist = new URLSearchParams(window.location.search).get('clear_waitlist');
+        if (clearWaitlist === 'true') {
+            clearWaitlistJoinedForEvent(eventId);
+            removeQueryStringFromUrl('clear_waitlist');
+        }
+    }, [eventId]);
 
     useEffect(() => {
         form.setFieldValue('affiliate_code', affiliateCode || null);

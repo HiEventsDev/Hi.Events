@@ -27,10 +27,6 @@ class ProcessWaitlistOnCapacityAvailableListener
             return;
         }
 
-        if ($event->productId === null) {
-            return;
-        }
-
         $eventDomainObject = $this->eventRepository
             ->loadRelation(new Relationship(EventSettingDomainObject::class))
             ->findById($event->eventId);
@@ -47,7 +43,7 @@ class ProcessWaitlistOnCapacityAvailableListener
         );
 
         foreach ($quantities->productQuantities as $productQuantity) {
-            if ($productQuantity->product_id !== $event->productId) {
+            if ($event->productId !== null && $productQuantity->product_id !== $event->productId) {
                 continue;
             }
 
