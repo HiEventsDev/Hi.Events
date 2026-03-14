@@ -44,8 +44,13 @@ class SendOrderDetailsService
             ->loadRelation(new Relationship(EventSettingDomainObject::class))
             ->findById($order->getEventId());
 
-        if ($order->isOrderCompleted() || $order->isOrderAwaitingOfflinePayment()) {
+        if ($order->isOrderCompleted()) {
             $this->sendOrderSummaryEmails($order, $event);
+            $this->sendAttendeeTicketEmails($order, $event);
+        }
+
+        if ($order->isOrderAwaitingOfflinePayment()) {
+            $this->sendOrganizerOrderSummary($order, $event);
             $this->sendAttendeeTicketEmails($order, $event);
         }
 
@@ -114,6 +119,11 @@ class SendOrderDetailsService
             invoice: $order->getLatestInvoice(),
         );
 
+        $this->sendOrganizerOrderSummary($order, $event);
+    }
+
+    private function sendOrganizerOrderSummary(OrderDomainObject $order, EventDomainObject $event): void
+    {
         if ($order->getIsManuallyCreated() || !$event->getEventSettings()->getNotifyOrganizerOfNewOrders()) {
             return;
         }
