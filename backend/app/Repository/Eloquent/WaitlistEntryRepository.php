@@ -122,6 +122,20 @@ class WaitlistEntryRepository extends BaseRepository implements WaitlistEntryRep
             ->get();
     }
 
+    public function findByIdLocked(int $id): ?WaitlistEntryDomainObject
+    {
+        $model = WaitlistEntry::query()
+            ->where('id', $id)
+            ->lockForUpdate()
+            ->first();
+
+        if ($model === null) {
+            return null;
+        }
+
+        return $this->handleSingleResult($model);
+    }
+
     public function findByEventId(int $eventId, QueryParamsDTO $params): LengthAwarePaginator
     {
         $where = [

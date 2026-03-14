@@ -5,11 +5,13 @@ namespace HiEvents\Services\Application\Handlers\ProductCategory;
 use HiEvents\DomainObjects\ProductCategoryDomainObject;
 use HiEvents\Services\Application\Handlers\ProductCategory\DTO\UpsertProductCategoryDTO;
 use HiEvents\Services\Domain\ProductCategory\CreateProductCategoryService;
+use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 
 class CreateProductCategoryHandler
 {
     public function __construct(
         private readonly CreateProductCategoryService $productCategoryService,
+        private readonly HtmlPurifierService $purifier,
     )
     {
     }
@@ -20,7 +22,7 @@ class CreateProductCategoryHandler
         $productCategory->setName($dto->name);
         $productCategory->setIsHidden($dto->is_hidden);
         $productCategory->setEventId($dto->event_id);
-        $productCategory->setDescription($dto->description);
+        $productCategory->setDescription($this->purifier->purify($dto->description));
         $productCategory->setNoProductsMessage(
             $dto->no_products_message ?? __('There are no products available in this category'
         ));
