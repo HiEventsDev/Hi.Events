@@ -10,8 +10,9 @@ use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Services\Domain\Product\AvailableProductQuantitiesFetchService;
 use HiEvents\Services\Domain\Waitlist\ProcessWaitlistService;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
-class ProcessWaitlistOnCapacityAvailableListener
+class ProcessWaitlistOnCapacityAvailableListener implements ShouldQueue
 {
     public function __construct(
         private readonly EventRepositoryInterface               $eventRepository,

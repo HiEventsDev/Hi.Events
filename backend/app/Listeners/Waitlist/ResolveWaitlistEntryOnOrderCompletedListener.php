@@ -11,12 +11,14 @@ use HiEvents\DomainObjects\Enums\CapacityChangeDirection;
 use HiEvents\Events\CapacityChangedEvent;
 use HiEvents\Repository\Interfaces\ProductPriceRepositoryInterface;
 use HiEvents\Repository\Interfaces\WaitlistEntryRepositoryInterface;
+use Illuminate\Database\DatabaseManager;
 
 class ResolveWaitlistEntryOnOrderCompletedListener
 {
     public function __construct(
         private readonly WaitlistEntryRepositoryInterface $waitlistEntryRepository,
         private readonly ProductPriceRepositoryInterface  $productPriceRepository,
+        private readonly DatabaseManager                  $databaseManager,
     )
     {
     }
@@ -37,33 +39,43 @@ class ResolveWaitlistEntryOnOrderCompletedListener
 
     private function resolveByOrderId(int $orderId): void
     {
-        $entries = $this->waitlistEntryRepository->findWhere([
-            'order_id' => $orderId,
-            ['status', 'in', [WaitlistEntryStatus::OFFERED->name]],
-        ]);
+        $this->databaseManager->transaction(function () use ($orderId) {
+            $entries = $this->waitlistEntryRepository->findWhere([
+                'order_id' => $orderId,
+                ['status', 'in', [WaitlistEntryStatus::OFFERED->name]],
+            ]);
 
-        foreach ($entries as $entry) {
-            $this->markAsPurchased($entry);
-        }
+            foreach ($entries as $entry) {
+                $this->markAsPurchased($entry);
+            }
+        });
     }
 
     private function revertOfferedEntriesByOrderId(int $orderId): void
     {
-        $entries = $this->waitlistEntryRepository->findWhere([
-            'order_id' => $orderId,
-            ['status', 'in', [WaitlistEntryStatus::OFFERED->name]],
-        ]);
+        $capacityEvents = [];
 
-        foreach ($entries as $entry) {
-            $this->revertToWaiting($entry);
+        $this->databaseManager->transaction(function () use ($orderId, &$capacityEvents) {
+            $entries = $this->waitlistEntryRepository->findWhere([
+                'order_id' => $orderId,
+                ['status', 'in', [WaitlistEntryStatus::OFFERED->name]],
+            ]);
 
-            $productPrice = $this->productPriceRepository->findById($entry->getProductPriceId());
-            event(new CapacityChangedEvent(
-                eventId: $entry->getEventId(),
-                direction: CapacityChangeDirection::INCREASED,
-                productId: $productPrice->getProductId(),
-                productPriceId: $entry->getProductPriceId(),
-            ));
+            foreach ($entries as $entry) {
+                $this->revertToWaiting($entry);
+
+                $productPrice = $this->productPriceRepository->findById($entry->getProductPriceId());
+                $capacityEvents[] = new CapacityChangedEvent(
+                    eventId: $entry->getEventId(),
+                    direction: CapacityChangeDirection::INCREASED,
+                    productId: $productPrice->getProductId(),
+                    productPriceId: $entry->getProductPriceId(),
+                );
+            }
+        });
+
+        foreach ($capacityEvents as $capacityEvent) {
+            event($capacityEvent);
         }
     }
 
@@ -74,7 +86,10 @@ class ResolveWaitlistEntryOnOrderCompletedListener
                 'status' => WaitlistEntryStatus::PURCHASED->name,
                 'purchased_at' => Carbon::now()->toDateTimeString(),
             ],
-            where: ['id' => $entry->getId()],
+            where: [
+                'id' => $entry->getId(),
+                'status' => WaitlistEntryStatus::OFFERED->name,
+            ],
         );
     }
 
@@ -88,7 +103,10 @@ class ResolveWaitlistEntryOnOrderCompletedListener
                 'offer_expires_at' => null,
                 'offer_token' => null,
             ],
-            where: ['id' => $entry->getId()],
+            where: [
+                'id' => $entry->getId(),
+                'status' => WaitlistEntryStatus::OFFERED->name,
+            ],
         );
     }
 }

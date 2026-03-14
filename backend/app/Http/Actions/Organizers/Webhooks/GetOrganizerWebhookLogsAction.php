@@ -23,6 +23,7 @@ class GetOrganizerWebhookLogsAction extends BaseAction
 
         $webhookLogs = $this->getWebhookLogsHandler->handle(
             webhookId: $webhookId,
+            accountId: $this->getAuthenticatedAccountId(),
             eventId: null,
             organizerId: $organizerId,
         );
