@@ -22,6 +22,7 @@ use HiEvents\Services\Domain\Message\MessagingEligibilityService;
 use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 use Illuminate\Config\Repository;
 use Illuminate\Support\Collection;
+use Illuminate\Validation\ValidationException;
 
 class SendMessageHandler
 {
@@ -83,6 +84,12 @@ class SendMessageHandler
         $scheduledAtUtc = $messageData->scheduled_at
             ? DateHelper::convertToUTC($messageData->scheduled_at, $event->getTimezone())
             : null;
+
+        if ($scheduledAtUtc !== null && Carbon::parse($scheduledAtUtc)->isPast()) {
+            throw ValidationException::withMessages([
+                'scheduled_at' => [__('The scheduled time must be in the future.')],
+            ]);
+        }
 
         if ($eligibilityFailure !== null) {
             $status = MessageStatus::PENDING_REVIEW;

@@ -22,8 +22,9 @@ class GetOrganizerWebhookAction extends BaseAction
 
         $webhook = $this->getWebhookHandler->handle(
             webhookId: $webhookId,
+            accountId: $this->getAuthenticatedAccountId(),
             eventId: null,
-            organizerId: $organizerId
+            organizerId: $organizerId,
         );
 
         return $this->resourceResponse(

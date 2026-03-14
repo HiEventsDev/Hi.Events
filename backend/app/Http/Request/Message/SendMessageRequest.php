@@ -25,7 +25,7 @@ class SendMessageRequest extends FormRequest
                 'required_if:message_type,' . MessageTypeEnum::ORDER_OWNERS_WITH_PRODUCT->name,
                 new In([OrderStatus::COMPLETED->name, OrderStatus::AWAITING_OFFLINE_PAYMENT->name]),
             ],
-            'scheduled_at' => 'nullable|date|after:now',
+            'scheduled_at' => 'nullable|date',
         ];
     }
 

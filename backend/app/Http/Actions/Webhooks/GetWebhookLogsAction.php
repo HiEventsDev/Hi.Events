@@ -22,8 +22,9 @@ class GetWebhookLogsAction extends BaseAction
         $this->isActionAuthorized($eventId, EventDomainObject::class);
 
         $webhookLogs = $this->getWebhookLogsHandler->handle(
-            eventId: $eventId,
             webhookId: $webhookId,
+            accountId: $this->getAuthenticatedAccountId(),
+            eventId: $eventId,
         );
 
         $webhookLogs = $webhookLogs->sortBy(function (WebhookLogDomainObject $webhookLog) {

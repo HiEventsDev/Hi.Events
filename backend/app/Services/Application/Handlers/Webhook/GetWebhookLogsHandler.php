@@ -16,9 +16,9 @@ class GetWebhookLogsHandler
     {
     }
 
-    public function handle(int $webhookId, ?int $eventId = null, ?int $organizerId = null): LengthAwarePaginator
+    public function handle(int $webhookId, int $accountId, ?int $eventId = null, ?int $organizerId = null): LengthAwarePaginator
     {
-        $where = ['id' => $webhookId];
+        $where = ['id' => $webhookId, 'account_id' => $accountId];
         if ($eventId !== null) {
             $where['event_id'] = $eventId;
         }
