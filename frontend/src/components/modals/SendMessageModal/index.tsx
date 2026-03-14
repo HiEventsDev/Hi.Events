@@ -37,7 +37,7 @@ import {useEffect, useMemo, useState} from "react";
 import {useGetAccount} from "../../../queries/useGetAccount.ts";
 import {StripeConnectButton} from "../../common/StripeConnectButton";
 import {getConfig} from "../../../utilites/config";
-import {formatDate, utcToTz} from "../../../utilites/dates.ts";
+import {utcToTz} from "../../../utilites/dates.ts";
 import dayjs from "dayjs";
 import classes from "./SendMessageModal.module.scss";
 
@@ -106,22 +106,22 @@ const getSchedulePresets = (event: Event) => {
     const startDate = dayjs.utc(event.start_date);
     const endDate = event.end_date ? dayjs.utc(event.end_date) : null;
 
-    const presets: { value: string; label: string; date: dayjs.Dayjs }[] = [
-        {value: '1_week_before', label: t`1 week before event`, date: startDate.subtract(1, 'week')},
-        {value: '1_day_before', label: t`1 day before event`, date: startDate.subtract(1, 'day')},
-        {value: '1_hour_before', label: t`1 hour before event`, date: startDate.subtract(1, 'hour')},
-        {value: '1_day_after_start', label: t`1 day after start date`, date: startDate.add(1, 'day')},
+    const presets: { value: string; label: string; utcDate: dayjs.Dayjs }[] = [
+        {value: '1_week_before', label: t`1 week before event`, utcDate: startDate.subtract(1, 'week')},
+        {value: '1_day_before', label: t`1 day before event`, utcDate: startDate.subtract(1, 'day')},
+        {value: '1_hour_before', label: t`1 hour before event`, utcDate: startDate.subtract(1, 'hour')},
+        {value: '1_day_after_start', label: t`1 day after start date`, utcDate: startDate.add(1, 'day')},
     ];
 
     if (endDate) {
         presets.push({
             value: '1_day_after_end',
             label: t`1 day after end date`,
-            date: endDate.add(1, 'day'),
+            utcDate: endDate.add(1, 'day'),
         });
     }
 
-    return presets.filter(p => p.date.isAfter(now));
+    return presets.filter(p => p.utcDate.isAfter(now));
 };
 
 export const SendMessageModal = (props: EventMessageModalProps) => {
@@ -142,9 +142,9 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
 
     const presets = useMemo(() => event ? getSchedulePresets(event) : [], [event]);
 
-    const resolvedPresetDate = useMemo(() => {
+    const resolvedPreset = useMemo(() => {
         if (!selectedPreset || selectedPreset === CUSTOM_PRESET) return null;
-        return presets.find(p => p.value === selectedPreset)?.date ?? null;
+        return presets.find(p => p.value === selectedPreset) ?? null;
     }, [selectedPreset, presets]);
 
     const sendMessageMutation = useSendEventMessage();
@@ -170,7 +170,7 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
                 if (!isScheduled) return null;
                 if (selectedPreset && selectedPreset !== CUSTOM_PRESET) return null;
                 if (!value) return t`The scheduled time is required`;
-                if (event && dayjs.tz(value, event.timezone).isBefore(dayjs.utc())) return t`The scheduled time must be in the future`;
+                if (event && dayjs.tz(value, event.timezone).isBefore(dayjs())) return t`The scheduled time must be in the future`;
                 return null;
             },
         }
@@ -180,10 +180,8 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
         setTierLimitError(null);
         const submitData = {...values};
         if (isScheduled) {
-            if (selectedPreset && selectedPreset !== CUSTOM_PRESET && resolvedPresetDate) {
-                submitData.scheduled_at = resolvedPresetDate.toISOString();
-            } else if (submitData.scheduled_at && event) {
-                submitData.scheduled_at = dayjs.tz(submitData.scheduled_at, event.timezone).utc().toISOString();
+            if (selectedPreset && selectedPreset !== CUSTOM_PRESET && resolvedPreset && event) {
+                submitData.scheduled_at = resolvedPreset.utcDate.tz(event.timezone).format('YYYY-MM-DDTHH:mm');
             }
         } else {
             delete submitData.scheduled_at;
@@ -416,17 +414,17 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
                                                 {...form.getInputProps('scheduled_at')}
                                             />
                                         )}
-                                        {resolvedPresetDate && event && (
+                                        {resolvedPreset && event && (
                                             <div className={classes.scheduledConfirmation}>
                                                 <div className={classes.scheduledConfirmationIcon}>
                                                     <IconClock size={20}/>
                                                 </div>
                                                 <div className={classes.scheduledConfirmationText}>
                                                     <span className={classes.scheduledConfirmationDate}>
-                                                        {formatDate(resolvedPresetDate.toISOString(), 'dddd, MMMM D, YYYY', event.timezone)}
+                                                        {resolvedPreset.utcDate.tz(event.timezone).format('dddd, MMMM D, YYYY')}
                                                     </span>
                                                     <span className={classes.scheduledConfirmationTime}>
-                                                        {formatDate(resolvedPresetDate.toISOString(), 'h:mm A', event.timezone)}
+                                                        {resolvedPreset.utcDate.tz(event.timezone).format('h:mm A')}
                                                         {' '}<span className={classes.scheduledConfirmationTz}>{event.timezone}</span>
                                                     </span>
                                                 </div>
