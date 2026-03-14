@@ -49,7 +49,7 @@ class WaitlistOfferExpiredMail extends BaseMail
                     Url::getFrontEndUrlFromConfig(Url::EVENT_HOMEPAGE),
                     $this->event->getId(),
                     $this->event->getSlug(),
-                ),
+                ) . '?clear_waitlist=true',
             ]
         );
     }

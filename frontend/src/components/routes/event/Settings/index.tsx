@@ -20,7 +20,7 @@ import {
     IconPercentage,
 } from "@tabler/icons-react";
 import {useMediaQuery} from "@mantine/hooks";
-import {useMemo, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import {Card} from "../../../common/Card";
 import {PaymentAndInvoicingSettings} from "./Sections/PaymentSettings";
 import {PlatformFeesSettings} from "./Sections/PlatformFeesSettings";
@@ -96,10 +96,26 @@ export const Settings = () => {
     }, [isSaasMode]);
 
     const isLargeScreen = useMediaQuery('(min-width: 1200px)', true);
-    const [activeSection, setActiveSection] = useState('event-details');
+    const [activeSection, setActiveSection] = useState(() => {
+        if (typeof window === 'undefined') return 'event-details';
+        const hash = window.location.hash.replace('#', '');
+        return hash || 'event-details';
+    });
+
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+        const hash = window.location.hash.replace('#', '');
+        if (hash) {
+            setActiveSection(hash);
+            setTimeout(() => {
+                document.getElementById(hash)?.scrollIntoView({behavior: 'smooth'});
+            }, 100);
+        }
+    }, []);
 
     const handleClick = (sectionId: string) => {
         setActiveSection(sectionId);
+        window.history.replaceState(null, '', `#${sectionId}`);
         document.getElementById(sectionId)?.scrollIntoView({behavior: 'smooth'});
     };
 

@@ -32,6 +32,7 @@ import {showInfo} from "../../../../utilites/notifications.tsx";
 import countries from "../../../../../data/countries.json";
 import classes from "./CollectInformation.module.scss";
 import {trackEvent, AnalyticsEvents} from "../../../../utilites/analytics.ts";
+import {clearWaitlistJoinedForEvent} from "../../../../hooks/useWaitlistJoined.ts";
 
 const LoadingSkeleton = () =>
     (
@@ -361,11 +362,17 @@ export const CollectInformation = () => {
     }
 
     if (isOrderError && orderError?.response?.status === 404) {
+        if (isFromWaitlist && eventId) {
+            clearWaitlistJoinedForEvent(eventId);
+        }
+
         return (
             <HomepageInfoMessage
                 status="not_found"
-                message={t`Order not found`}
-                subtitle={t`We couldn't find this order. It may have been removed.`}
+                message={isFromWaitlist ? t`Waitlist offer expired` : t`Order not found`}
+                subtitle={isFromWaitlist
+                    ? t`Your waitlist offer has expired and we were unable to complete your order. Please rejoin the waitlist to be notified when more spots become available.`
+                    : t`We couldn't find this order. It may have been removed.`}
                 link={eventHomepagePath(event as Event)}
                 linkText={t`Go to Event Page`}
             />
