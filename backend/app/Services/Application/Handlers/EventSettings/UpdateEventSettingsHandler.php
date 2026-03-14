@@ -2,7 +2,9 @@
 
 namespace HiEvents\Services\Application\Handlers\EventSettings;
 
+use HiEvents\DomainObjects\Enums\CapacityChangeDirection;
 use HiEvents\DomainObjects\EventSettingDomainObject;
+use HiEvents\Events\CapacityChangedEvent;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Services\Application\Handlers\EventSettings\DTO\UpdateEventSettingsDTO;
 use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
@@ -24,7 +26,13 @@ class UpdateEventSettingsHandler
      */
     public function handle(UpdateEventSettingsDTO $settings): EventSettingDomainObject
     {
-        return $this->databaseManager->transaction(function () use ($settings) {
+        $existingSettings = $this->eventSettingsRepository->findFirstWhere([
+            'event_id' => $settings->event_id,
+        ]);
+
+        $wasAutoProcessEnabled = $existingSettings?->getWaitlistAutoProcess();
+
+        $result = $this->databaseManager->transaction(function () use ($settings) {
             $this->eventSettingsRepository->updateWhere(
                 attributes: [
                     'post_checkout_message' => $this->purifier->purify($settings->post_checkout_message),
@@ -104,5 +112,14 @@ class UpdateEventSettingsHandler
                     'event_id' => $settings->event_id,
                 ]);
         });
+
+        if ($settings->waitlist_auto_process && !$wasAutoProcessEnabled) {
+            event(new CapacityChangedEvent(
+                eventId: $settings->event_id,
+                direction: CapacityChangeDirection::INCREASED,
+            ));
+        }
+
+        return $result;
     }
 }

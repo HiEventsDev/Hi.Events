@@ -8,21 +8,9 @@ import {Button, Checkbox, Modal as MantineModal, Text, TextInput} from "@mantine
 import {InputGroup} from "../../common/InputGroup";
 import {CheckoutThemeProvider} from "../../layouts/Checkout/CheckoutThemeProvider.tsx";
 import {detectMode} from "../../../utilites/themeUtils.ts";
+import {BouncingEmoji} from "../../common/BouncingEmoji";
 
 const DEFAULT_ACCENT = '#8b5cf6';
-
-const KEYFRAMES = `
-    @keyframes waitlistBounceIn {
-        0% { transform: scale(0); opacity: 0; }
-        50% { transform: scale(1.2); }
-        70% { transform: scale(0.9); }
-        100% { transform: scale(1); opacity: 1; }
-    }
-    @keyframes waitlistSubtleBounce {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-6px); }
-    }
-`;
 
 interface JoinWaitlistModalProps extends GenericModalProps {
     product: Product;
@@ -104,15 +92,7 @@ export const JoinWaitlistModal = ({onClose, product, event, productPriceId, pric
                     withCloseButton={false}
                 >
                     <div style={{textAlign: 'center', padding: '30px 20px'}}>
-                        <div style={{
-                            fontSize: 48,
-                            lineHeight: 1,
-                            marginBottom: 16,
-                            animation: 'waitlistBounceIn 0.6s ease-out, waitlistSubtleBounce 2s ease-in-out 0.6s infinite',
-                        }}>
-                            {/* eslint-disable-next-line lingui/no-unlocalized-strings */}
-                            <span style={{display: 'inline-block'}}>🎉</span>
-                        </div>
+                        <BouncingEmoji emoji="🎉"/>
                         <Text size="xl" fw={600} mb="xs">
                             {t`You're on the waitlist!`}
                         </Text>
@@ -123,7 +103,6 @@ export const JoinWaitlistModal = ({onClose, product, event, productPriceId, pric
                             {t`Close`}
                         </Button>
                     </div>
-                    <style>{KEYFRAMES}</style>
                 </MantineModal>
             </CheckoutThemeProvider>
         );
@@ -140,15 +119,7 @@ export const JoinWaitlistModal = ({onClose, product, event, productPriceId, pric
                     withCloseButton={false}
                 >
                     <div style={{textAlign: 'center', padding: '30px 20px'}}>
-                        <div style={{
-                            fontSize: 48,
-                            lineHeight: 1,
-                            marginBottom: 16,
-                            animation: 'waitlistBounceIn 0.6s ease-out, waitlistSubtleBounce 2s ease-in-out 0.6s infinite',
-                        }}>
-                            {/* eslint-disable-next-line lingui/no-unlocalized-strings */}
-                            <span style={{display: 'inline-block'}}>😕</span>
-                        </div>
+                        <BouncingEmoji emoji="😕"/>
                         <Text size="xl" fw={600} mb="xs">
                             {t`Unable to join waitlist`}
                         </Text>
@@ -159,7 +130,6 @@ export const JoinWaitlistModal = ({onClose, product, event, productPriceId, pric
                             {t`Close`}
                         </Button>
                     </div>
-                    <style>{KEYFRAMES}</style>
                 </MantineModal>
             </CheckoutThemeProvider>
         );
