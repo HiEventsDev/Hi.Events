@@ -20,7 +20,7 @@ class EditWebhookHandler
     public function handle(EditWebhookDTO $dto): WebhookDomainObject
     {
         return $this->databaseManager->transaction(function () use ($dto) {
-            $where = ['id' => $dto->webhookId];
+            $where = ['id' => $dto->webhookId, 'account_id' => $dto->accountId];
             if ($dto->eventId !== null) {
                 $where['event_id'] = $dto->eventId;
             }

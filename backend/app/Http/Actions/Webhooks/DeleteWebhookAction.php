@@ -21,6 +21,7 @@ class DeleteWebhookAction extends BaseAction
 
         $this->deleteWebhookHandler->handle(
             webhookId: $webhookId,
+            accountId: $this->getAuthenticatedAccountId(),
             eventId: $eventId,
         );
 
