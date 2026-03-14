@@ -10,9 +10,12 @@ interface WebhookFormProps {
         event_types: string[];
         status: 'ENABLED' | 'PAUSED';
     }>;
+    isEventContext?: boolean;
 }
 
-export const WebhookForm = ({ form }: WebhookFormProps) => {
+const EVENT_LEVEL_TYPES = ['event.created', 'event.updated', 'event.archived'];
+
+export const WebhookForm = ({ form, isEventContext = false }: WebhookFormProps) => {
     const statusOptions: ItemProps[] = [
         {
             icon: <IconWebhook />,
@@ -143,7 +146,10 @@ export const WebhookForm = ({ form }: WebhookFormProps) => {
                 required
                 form={form}
                 name="event_types"
-                optionList={eventTypeOptions}
+                optionList={isEventContext
+                    ? eventTypeOptions.filter(o => !EVENT_LEVEL_TYPES.includes(o.value as string))
+                    : eventTypeOptions
+                }
                 multiple
             />
 

@@ -56,7 +56,7 @@ export const CreateWebhookModal = ({onClose}: GenericModalProps) => {
             heading={t`Create Webhook`}
         >
             <form onSubmit={form.onSubmit(handleSubmit)}>
-                <WebhookForm form={form}/>
+                <WebhookForm form={form} isEventContext/>
                 <Button
                     type="submit"
                     fullWidth

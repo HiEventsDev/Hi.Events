@@ -78,7 +78,7 @@ export const EditWebhookModal = ({
 
             {webhook && (
                 <form onSubmit={form.onSubmit(handleSubmit)}>
-                    <WebhookForm form={form}/>
+                    <WebhookForm form={form} isEventContext/>
                     <Button
                         type={'submit'}
                         fullWidth
