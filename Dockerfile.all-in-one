@@ -10,6 +10,7 @@ RUN yarn config set network-timeout 600000
 COPY ./frontend/package.json ./frontend/yarn.lock ./
 
 COPY ./frontend .
+COPY ./VERSION /app/VERSION
 
 RUN yarn install --network-timeout 600000 --frozen-lockfile && yarn build
 
@@ -28,6 +29,7 @@ RUN apk add --no-cache nodejs yarn nginx supervisor dos2unix
 COPY --from=node-frontend /app/frontend /app/frontend
 
 COPY ./backend /app/backend
+COPY ./VERSION /app/backend/VERSION
 RUN mkdir -p /app/backend/bootstrap/cache \
     && mkdir -p /app/backend/storage \
     && chown -R www-data:www-data /app/backend \
