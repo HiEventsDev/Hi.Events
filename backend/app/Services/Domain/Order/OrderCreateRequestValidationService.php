@@ -309,6 +309,10 @@ class OrderCreateRequestValidationService
     private function validateProductPricesQuantity(array $quantities, ProductDomainObject $product, int $productIndex): void
     {
         foreach ($quantities as $productQuantity) {
+            if ($productQuantity['quantity'] === 0) {
+                continue;
+            }
+
             $numberAvailable = $this->availableProductQuantities
                 ->productQuantities
                 ->where('product_id', $product->getId())
