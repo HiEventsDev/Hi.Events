@@ -12,6 +12,7 @@ use HiEvents\Repository\Eloquent\ProductPriceRepository;
 use HiEvents\Services\Application\Handlers\Product\DTO\UpsertProductDTO;
 use HiEvents\Services\Domain\Product\DTO\ProductPriceDTO;
 use Illuminate\Support\Collection;
+use Illuminate\Validation\ValidationException;
 
 class ProductPriceUpdateService
 {
@@ -23,6 +24,7 @@ class ProductPriceUpdateService
 
     /**
      * @throws CannotDeleteEntityException
+     * @throws ValidationException
      */
     public function updatePrices(
         ProductDomainObject $product,
@@ -32,6 +34,8 @@ class ProductPriceUpdateService
         EventDomainObject   $event,
     ): void
     {
+        $this->validateQuantityAvailable($productsData->prices, $existingPrices);
+
         if ($productsData->type !== ProductPriceType::TIERED) {
             $prices = new Collection([new ProductPriceDTO(
                 price: $productsData->type === ProductPriceType::FREE ? 0.00 : $productsData->prices->first()->price,
@@ -84,6 +88,41 @@ class ProductPriceUpdateService
         }
 
         $this->deletePrices($prices, $existingPrices);
+    }
+
+    /**
+     * @throws ValidationException
+     */
+    private function validateQuantityAvailable(?Collection $prices, Collection $existingPrices): void
+    {
+        if ($prices === null) {
+            return;
+        }
+
+        foreach ($prices as $index => $price) {
+            if ($price->id === null || $price->initial_quantity_available === null) {
+                continue;
+            }
+
+            /** @var ProductPriceDomainObject|null $existingPrice */
+            $existingPrice = $existingPrices->first(fn(ProductPriceDomainObject $p) => $p->getId() === $price->id);
+
+            if ($existingPrice === null) {
+                continue;
+            }
+
+            if ($price->initial_quantity_available < $existingPrice->getQuantitySold()) {
+                throw ValidationException::withMessages([
+                    "prices.$index.initial_quantity_available" => __(
+                        'The available quantity for :price cannot be less than the number already sold (:sold)',
+                        [
+                            'price' => $existingPrice->getLabel() ?: __('Default'),
+                            'sold' => $existingPrice->getQuantitySold(),
+                        ]
+                    ),
+                ]);
+            }
+        }
     }
 
     /**

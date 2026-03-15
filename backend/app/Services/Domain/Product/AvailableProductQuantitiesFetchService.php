@@ -105,10 +105,12 @@ class AvailableProductQuantitiesFetchService
             product_prices.label AS price_label,
             product_prices.initial_quantity_available,
             product_prices.quantity_sold,
-            COALESCE(
-                product_prices.initial_quantity_available
-                - product_prices.quantity_sold
-                - COALESCE(reserved_quantities.quantity_reserved, 0),
+            GREATEST(
+                COALESCE(
+                    product_prices.initial_quantity_available
+                    - product_prices.quantity_sold
+                    - COALESCE(reserved_quantities.quantity_reserved, 0),
+                0),
             0) AS quantity_available,
             COALESCE(reserved_quantities.quantity_reserved, 0) AS quantity_reserved,
             CASE WHEN product_prices.initial_quantity_available IS NULL
