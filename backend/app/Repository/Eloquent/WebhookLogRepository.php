@@ -6,6 +6,9 @@ use HiEvents\DomainObjects\WebhookLogDomainObject;
 use HiEvents\Models\WebhookLog;
 use HiEvents\Repository\Interfaces\WebhookLogRepositoryInterface;
 
+/**
+ * @extends BaseRepository<WebhookLogDomainObject>
+ */
 class WebhookLogRepository extends BaseRepository implements WebhookLogRepositoryInterface
 {
     protected function getModel(): string

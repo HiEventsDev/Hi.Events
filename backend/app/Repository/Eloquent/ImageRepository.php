@@ -6,6 +6,9 @@ use HiEvents\DomainObjects\ImageDomainObject;
 use HiEvents\Models\Image;
 use HiEvents\Repository\Interfaces\ImageRepositoryInterface;
 
+/**
+ * @extends BaseRepository<ImageDomainObject>
+ */
 class ImageRepository extends BaseRepository implements ImageRepositoryInterface
 {
     protected function getModel(): string

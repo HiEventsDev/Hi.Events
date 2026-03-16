@@ -64,6 +64,9 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     final public const HOMEPAGE_THEME_SETTINGS = 'homepage_theme_settings';
     final public const PASS_PLATFORM_FEE_TO_BUYER = 'pass_platform_fee_to_buyer';
     final public const ALLOW_ATTENDEE_SELF_EDIT = 'allow_attendee_self_edit';
+    final public const WAITLIST_ENABLED = 'waitlist_enabled';
+    final public const WAITLIST_AUTO_PROCESS = 'waitlist_auto_process';
+    final public const WAITLIST_OFFER_TIMEOUT_MINUTES = 'waitlist_offer_timeout_minutes';
 
     protected int $id;
     protected int $event_id;
@@ -119,6 +122,9 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     protected array|string|null $homepage_theme_settings = null;
     protected bool $pass_platform_fee_to_buyer = false;
     protected bool $allow_attendee_self_edit = true;
+    protected bool $waitlist_enabled = false;
+    protected bool $waitlist_auto_process = false;
+    protected ?int $waitlist_offer_timeout_minutes = null;
 
     public function toArray(): array
     {
@@ -177,6 +183,9 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
                     'homepage_theme_settings' => $this->homepage_theme_settings ?? null,
                     'pass_platform_fee_to_buyer' => $this->pass_platform_fee_to_buyer ?? null,
                     'allow_attendee_self_edit' => $this->allow_attendee_self_edit ?? null,
+                    'waitlist_enabled' => $this->waitlist_enabled ?? null,
+                    'waitlist_auto_process' => $this->waitlist_auto_process ?? null,
+                    'waitlist_offer_timeout_minutes' => $this->waitlist_offer_timeout_minutes ?? null,
                 ];
     }
 
@@ -773,5 +782,38 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     public function getAllowAttendeeSelfEdit(): bool
     {
         return $this->allow_attendee_self_edit;
+    }
+
+    public function setWaitlistEnabled(bool $waitlist_enabled): self
+    {
+        $this->waitlist_enabled = $waitlist_enabled;
+        return $this;
+    }
+
+    public function getWaitlistEnabled(): bool
+    {
+        return $this->waitlist_enabled;
+    }
+
+    public function setWaitlistAutoProcess(bool $waitlist_auto_process): self
+    {
+        $this->waitlist_auto_process = $waitlist_auto_process;
+        return $this;
+    }
+
+    public function getWaitlistAutoProcess(): bool
+    {
+        return $this->waitlist_auto_process;
+    }
+
+    public function setWaitlistOfferTimeoutMinutes(?int $waitlist_offer_timeout_minutes): self
+    {
+        $this->waitlist_offer_timeout_minutes = $waitlist_offer_timeout_minutes;
+        return $this;
+    }
+
+    public function getWaitlistOfferTimeoutMinutes(): ?int
+    {
+        return $this->waitlist_offer_timeout_minutes;
     }
 }

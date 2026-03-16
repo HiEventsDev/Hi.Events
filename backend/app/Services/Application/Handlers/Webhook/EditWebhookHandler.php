@@ -20,18 +20,22 @@ class EditWebhookHandler
     public function handle(EditWebhookDTO $dto): WebhookDomainObject
     {
         return $this->databaseManager->transaction(function () use ($dto) {
+            $where = ['id' => $dto->webhookId, 'account_id' => $dto->accountId];
+            if ($dto->eventId !== null) {
+                $where['event_id'] = $dto->eventId;
+            }
+            if ($dto->organizerId !== null) {
+                $where['organizer_id'] = $dto->organizerId;
+            }
+
             /** @var WebhookDomainObject $webhook */
-            $webhook = $this->webhookRepository->findFirstWhere([
-                'id' => $dto->webhookId,
-                'event_id' => $dto->eventId,
-            ]);
+            $webhook = $this->webhookRepository->findFirstWhere($where);
 
             if (!$webhook) {
                 throw new ResourceNotFoundException(__(
-                    key: 'Webhook not found for ID: :webhookId and event ID: :eventId',
+                    key: 'Webhook not found for ID: :webhookId',
                     replace: [
                         'webhookId' => $dto->webhookId,
-                        'eventId' => $dto->eventId,
                     ]
                 ));
             }

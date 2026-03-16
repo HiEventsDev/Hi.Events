@@ -6,6 +6,9 @@ use HiEvents\DomainObjects\EventDailyStatisticDomainObject;
 use HiEvents\Models\EventDailyStatistic;
 use HiEvents\Repository\Interfaces\EventDailyStatisticRepositoryInterface;
 
+/**
+ * @extends BaseRepository<EventDailyStatisticDomainObject>
+ */
 class EventDailyStatisticRepository extends BaseRepository implements EventDailyStatisticRepositoryInterface
 {
     protected function getModel(): string

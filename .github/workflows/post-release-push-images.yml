@@ -17,16 +17,22 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           persist-credentials: true
 
+      - name: Set up QEMU (for multi-arch builds)
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: Log in to Docker Hub
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # All-in-one Image Steps
+      # All-in-one Image Steps (multi-arch: amd64 + arm64)
       - name: Extract metadata (tags, labels) for All-in-one Docker
         id: meta_all_in_one
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@v5
         with:
           images: daveearley/hi.events-all-in-one
           tags: |
@@ -34,13 +40,16 @@ jobs:
             type=raw,value=latest,enable=${{ github.event.release.prerelease == false }}
 
       - name: Build and push All-in-one Docker image
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v5
         with:
           context: ./
           file: ./Dockerfile.all-in-one
+          platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ steps.meta_all_in_one.outputs.tags }}
           labels: ${{ steps.meta_all_in_one.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       # Backend Image Steps
       - name: Extract metadata (tags, labels) for Backend Docker

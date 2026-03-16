@@ -19,6 +19,7 @@ class AccountConfigurationResource extends JsonResource
             'application_fees' => [
                 'percentage' => $this->getPercentageApplicationFee(),
                 'fixed' => $this->getFixedApplicationFee(),
+                'currency' => $this->getApplicationFeeCurrency(),
             ],
             'bypass_application_fees' => $this->getBypassApplicationFees(),
         ];

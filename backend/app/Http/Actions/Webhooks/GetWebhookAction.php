@@ -21,8 +21,9 @@ class GetWebhookAction extends BaseAction
         $this->isActionAuthorized($eventId, EventDomainObject::class);
 
         $webhook = $this->getWebhookHandler->handle(
+            webhookId: $webhookId,
+            accountId: $this->getAuthenticatedAccountId(),
             eventId: $eventId,
-            webhookId: $webhookId
         );
 
         return $this->resourceResponse(

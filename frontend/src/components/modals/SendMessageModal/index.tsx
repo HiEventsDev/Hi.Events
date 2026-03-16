@@ -1,10 +1,30 @@
-import {GenericModalProps, IdParam, MessageType, ProductType} from "../../../types.ts";
+import {Event, GenericModalProps, IdParam, MessageType, ProductType} from "../../../types.ts";
 import {useParams} from "react-router";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {useGetOrder} from "../../../queries/useGetOrder.ts";
 import {Modal} from "../../common/Modal";
-import {Alert, Button, Checkbox, ComboboxItemGroup, Group, LoadingOverlay, Menu, MultiSelect, Select, TextInput} from "@mantine/core";
-import {IconAlertCircle, IconCheck, IconChevronDown, IconCopy, IconInfoCircle, IconSend, IconTestPipe} from "@tabler/icons-react";
+import {
+    Alert,
+    Button,
+    Checkbox,
+    ComboboxItemGroup,
+    Group,
+    LoadingOverlay,
+    Menu,
+    MultiSelect,
+    Select,
+    TextInput
+} from "@mantine/core";
+import {
+    IconAlertCircle,
+    IconCheck,
+    IconChevronDown,
+    IconClock,
+    IconCopy,
+    IconInfoCircle,
+    IconSend,
+    IconTestPipe
+} from "@tabler/icons-react";
 import {useGetMe} from "../../../queries/useGetMe.ts";
 import {useForm, UseFormReturnType} from "@mantine/form";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
@@ -13,10 +33,12 @@ import {t} from "@lingui/macro";
 import {Editor} from "../../common/Editor";
 import {useSendEventMessage} from "../../../mutations/useSendEventMessage.ts";
 import {ProductSelector} from "../../common/ProductSelector";
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import {useGetAccount} from "../../../queries/useGetAccount.ts";
 import {StripeConnectButton} from "../../common/StripeConnectButton";
 import {getConfig} from "../../../utilites/config";
+import {utcToTz} from "../../../utilites/dates.ts";
+import dayjs from "dayjs";
 import classes from "./SendMessageModal.module.scss";
 
 interface EventMessageModalProps extends GenericModalProps {
@@ -77,6 +99,31 @@ const AttendeeField = ({orderId, eventId, attendeeId, form}: {
     )
 }
 
+const CUSTOM_PRESET = 'custom';
+
+const getSchedulePresets = (event: Event) => {
+    const now = dayjs.utc();
+    const startDate = dayjs.utc(event.start_date);
+    const endDate = event.end_date ? dayjs.utc(event.end_date) : null;
+
+    const presets: { value: string; label: string; utcDate: dayjs.Dayjs }[] = [
+        {value: '1_week_before', label: t`1 week before event`, utcDate: startDate.subtract(1, 'week')},
+        {value: '1_day_before', label: t`1 day before event`, utcDate: startDate.subtract(1, 'day')},
+        {value: '1_hour_before', label: t`1 hour before event`, utcDate: startDate.subtract(1, 'hour')},
+        {value: '1_day_after_start', label: t`1 day after start date`, utcDate: startDate.add(1, 'day')},
+    ];
+
+    if (endDate) {
+        presets.push({
+            value: '1_day_after_end',
+            label: t`1 day after end date`,
+            utcDate: endDate.add(1, 'day'),
+        });
+    }
+
+    return presets.filter(p => p.utcDate.isAfter(now));
+};
+
 export const SendMessageModal = (props: EventMessageModalProps) => {
     const {onClose, orderId, productId, messageType, attendeeId} = props;
     const {eventId} = useParams();
@@ -90,6 +137,15 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
     const formIsDisabled = !isAccountVerified || accountRequiresManualVerification;
     const supportEmail = getConfig('VITE_PLATFORM_SUPPORT_EMAIL');
     const [tierLimitError, setTierLimitError] = useState<string | null>(null);
+    const [isScheduled, setIsScheduled] = useState(false);
+    const [selectedPreset, setSelectedPreset] = useState<string | null>(null);
+
+    const presets = useMemo(() => event ? getSchedulePresets(event) : [], [event]);
+
+    const resolvedPreset = useMemo(() => {
+        if (!selectedPreset || selectedPreset === CUSTOM_PRESET) return null;
+        return presets.find(p => p.value === selectedPreset) ?? null;
+    }, [selectedPreset, presets]);
 
     const sendMessageMutation = useSendEventMessage();
 
@@ -106,20 +162,36 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
             type: 'EVENT',
             acknowledgement: false,
             order_statuses: ['COMPLETED'],
+            scheduled_at: '',
         },
         validate: {
             acknowledgement: (value) => value === true ? null : t`You must acknowledge that this email is not promotional`,
+            scheduled_at: (value) => {
+                if (!isScheduled) return null;
+                if (selectedPreset && selectedPreset !== CUSTOM_PRESET) return null;
+                if (!value) return t`The scheduled time is required`;
+                if (event && dayjs.tz(value, event.timezone).isBefore(dayjs())) return t`The scheduled time must be in the future`;
+                return null;
+            },
         }
     });
 
     const handleSend = (values: any) => {
         setTierLimitError(null);
+        const submitData = {...values};
+        if (isScheduled) {
+            if (selectedPreset && selectedPreset !== CUSTOM_PRESET && resolvedPreset && event) {
+                submitData.scheduled_at = resolvedPreset.utcDate.tz(event.timezone).format('YYYY-MM-DDTHH:mm');
+            }
+        } else {
+            delete submitData.scheduled_at;
+        }
         sendMessageMutation.mutate({
             eventId: eventId,
-            messageData: values,
+            messageData: submitData,
         }, {
             onSuccess: () => {
-                showSuccess(t`Message Sent`);
+                showSuccess(isScheduled ? t`Message Scheduled` : t`Message Sent`);
                 form.reset();
                 onClose();
             },
@@ -157,7 +229,8 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
 
             <form onSubmit={form.onSubmit(handleSend)}>
                 {(!isAccountVerified && isAccountFetched) && (
-                    <Alert className={classes.verificationAlert} variant={'light'} icon={<IconAlertCircle size="1rem"/>}>
+                    <Alert className={classes.verificationAlert} variant={'light'}
+                           icon={<IconAlertCircle size="1rem"/>}>
                         {t`You need to verify your account email before you can send messages.`}
                     </Alert>
                 )}
@@ -177,7 +250,7 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
                     <Alert
                         variant="light"
                         color="red"
-                        icon={<IconAlertCircle size="1rem" />}
+                        icon={<IconAlertCircle size="1rem"/>}
                         mb="md"
                     >
                         {tierLimitError}
@@ -194,7 +267,7 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
                     <Alert
                         variant="light"
                         color="blue"
-                        icon={<IconInfoCircle size="1rem" />}
+                        icon={<IconInfoCircle size="1rem"/>}
                         mb="md"
                     >
                         {t`Your account has messaging limits. To increase your limits, contact us at`}{' '}
@@ -285,6 +358,82 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
                         </div>
 
                         <div className={classes.footerSection}>
+                            <div className={classes.scheduleSection}>
+                                <div className={classes.sendToggle}>
+                                    <button
+                                        type="button"
+                                        className={`${classes.toggleOption} ${!isScheduled ? classes.toggleActive : ''}`}
+                                        onClick={() => {
+                                            setIsScheduled(false);
+                                            form.setFieldValue('scheduled_at', '');
+                                            setSelectedPreset(null);
+                                        }}
+                                    >
+                                        <IconSend size={15}/>
+                                        {t`Send now`}
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className={`${classes.toggleOption} ${isScheduled ? classes.toggleActive : ''}`}
+                                        onClick={() => setIsScheduled(true)}
+                                    >
+                                        <IconClock size={15}/>
+                                        {t`Schedule for later`}
+                                    </button>
+                                </div>
+                                {isScheduled && (
+                                    <div className={classes.scheduleBody}>
+                                        <div className={classes.presetChips}>
+                                            {presets.map(p => (
+                                                <button
+                                                    key={p.value}
+                                                    type="button"
+                                                    className={`${classes.presetChip} ${selectedPreset === p.value ? classes.presetChipActive : ''}`}
+                                                    onClick={() => {
+                                                        setSelectedPreset(p.value);
+                                                        form.setFieldValue('scheduled_at', '');
+                                                    }}
+                                                >
+                                                    {p.label}
+                                                </button>
+                                            ))}
+                                            <button
+                                                type="button"
+                                                className={`${classes.presetChip} ${selectedPreset === CUSTOM_PRESET ? classes.presetChipActive : ''}`}
+                                                onClick={() => setSelectedPreset(CUSTOM_PRESET)}
+                                            >
+                                                {t`Custom date and time`}
+                                            </button>
+                                        </div>
+                                        {selectedPreset === CUSTOM_PRESET && (
+                                            <TextInput
+                                                type="datetime-local"
+                                                label={t`Scheduled time`}
+                                                description={event.timezone}
+                                                min={utcToTz(dayjs.utc().toISOString(), event.timezone)}
+                                                {...form.getInputProps('scheduled_at')}
+                                            />
+                                        )}
+                                        {resolvedPreset && event && (
+                                            <div className={classes.scheduledConfirmation}>
+                                                <div className={classes.scheduledConfirmationIcon}>
+                                                    <IconClock size={20}/>
+                                                </div>
+                                                <div className={classes.scheduledConfirmationText}>
+                                                    <span className={classes.scheduledConfirmationDate}>
+                                                        {resolvedPreset.utcDate.tz(event.timezone).format('dddd, MMMM D, YYYY')}
+                                                    </span>
+                                                    <span className={classes.scheduledConfirmationTime}>
+                                                        {resolvedPreset.utcDate.tz(event.timezone).format('h:mm A')}
+                                                        {' '}<span className={classes.scheduledConfirmationTz}>{event.timezone}</span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+
                             <Checkbox
                                 {...form.getInputProps('acknowledgement', {type: 'checkbox'})}
                                 label={t`I confirm this is a transactional message related to this event`}
@@ -295,14 +444,15 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
                                     className={classes.sendButton}
                                     loading={sendMessageMutation.isPending}
                                     type={'submit'}
-                                    leftSection={<IconSend size={16}/>}
+                                    leftSection={isScheduled ? <IconClock size={16}/> : <IconSend size={16}/>}
                                     disabled={!form.values.acknowledgement || !isAccountVerified || accountRequiresManualVerification}
                                 >
-                                    {form.values.is_test ? t`Send Test` : t`Send Message`}
+                                    {isScheduled ? t`Schedule Message` : (form.values.is_test ? t`Send Test` : t`Send Message`)}
                                 </Button>
                                 <Menu shadow="md" width={220} position="bottom-end">
                                     <Menu.Target>
                                         <Button
+                                            type="button"
                                             className={classes.menuButton}
                                             disabled={!form.values.acknowledgement || !isAccountVerified || accountRequiresManualVerification}
                                         >
@@ -319,7 +469,8 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
                                         </Menu.Item>
                                         <Menu.Item
                                             leftSection={<IconCopy size={16}/>}
-                                            rightSection={form.values.send_copy_to_current_user ? <IconCheck size={14}/> : null}
+                                            rightSection={form.values.send_copy_to_current_user ?
+                                                <IconCheck size={14}/> : null}
                                             onClick={() => form.setFieldValue('send_copy_to_current_user', !form.values.send_copy_to_current_user)}
                                         >
                                             {t`Send me a copy`}

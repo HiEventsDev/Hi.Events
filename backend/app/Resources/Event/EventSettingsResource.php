@@ -79,6 +79,10 @@ class EventSettingsResource extends JsonResource
 
             // Self-service settings
             'allow_attendee_self_edit' => $this->getAllowAttendeeSelfEdit(),
+
+            // Waitlist settings
+            'waitlist_auto_process' => $this->getWaitlistAutoProcess(),
+            'waitlist_offer_timeout_minutes' => $this->getWaitlistOfferTimeoutMinutes(),
         ];
     }
 }

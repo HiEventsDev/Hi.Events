@@ -6,6 +6,9 @@ use HiEvents\DomainObjects\AccountVatSettingDomainObject;
 use HiEvents\Models\AccountVatSetting;
 use HiEvents\Repository\Interfaces\AccountVatSettingRepositoryInterface;
 
+/**
+ * @extends BaseRepository<AccountVatSettingDomainObject>
+ */
 class AccountVatSettingRepository extends BaseRepository implements AccountVatSettingRepositoryInterface
 {
     protected function getModel(): string

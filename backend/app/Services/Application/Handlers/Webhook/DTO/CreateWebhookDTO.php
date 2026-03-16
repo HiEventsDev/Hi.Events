@@ -10,10 +10,11 @@ class CreateWebhookDTO extends BaseDTO
     public function __construct(
         public string        $url,
         public array         $eventTypes,
-        public int           $eventId,
         public int           $userId,
         public int           $accountId,
         public WebhookStatus $status,
+        public ?int          $eventId = null,
+        public ?int          $organizerId = null,
     )
     {
     }

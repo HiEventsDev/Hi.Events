@@ -8,6 +8,9 @@ use HiEvents\DomainObjects\OrderAuditLogDomainObject;
 use HiEvents\Models\OrderAuditLog;
 use HiEvents\Repository\Interfaces\OrderAuditLogRepositoryInterface;
 
+/**
+ * @extends BaseRepository<OrderAuditLogDomainObject>
+ */
 class OrderAuditLogRepository extends BaseRepository implements OrderAuditLogRepositoryInterface
 {
     protected function getModel(): string

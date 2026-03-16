@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace HiEvents\Services\Application\Handlers\Admin;
 
-use HiEvents\DomainObjects\Enums\MessageTypeEnum;
+use Carbon\Carbon;
 use HiEvents\DomainObjects\MessageDomainObject;
 use HiEvents\DomainObjects\Status\MessageStatus;
 use HiEvents\Exceptions\ResourceNotFoundException;
-use HiEvents\Jobs\Event\SendMessagesJob;
 use HiEvents\Repository\Interfaces\MessageRepositoryInterface;
-use HiEvents\Services\Application\Handlers\Message\DTO\SendMessageDTO;
+use HiEvents\Services\Domain\Message\MessageDispatchService;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Validation\ValidationException;
 
@@ -19,6 +18,7 @@ class ApproveMessageHandler
     public function __construct(
         private readonly MessageRepositoryInterface $messageRepository,
         private readonly DatabaseManager            $databaseManager,
+        private readonly MessageDispatchService     $messageDispatchService,
     )
     {
     }
@@ -44,29 +44,17 @@ class ApproveMessageHandler
             ]);
         }
 
-        $updatedMessage = $this->messageRepository->updateFromArray($messageId, [
-            'status' => MessageStatus::PROCESSING->name,
-        ]);
+        $scheduledAt = $message->getScheduledAt();
+        $isFutureScheduled = $scheduledAt !== null && Carbon::parse($scheduledAt)->isFuture();
 
-        $sendData = $message->getSendData();
-        $sendDataArray = is_string($sendData) ? json_decode($sendData, true) : $sendData;
+        if ($isFutureScheduled) {
+            return $this->messageRepository->updateFromArray($messageId, [
+                'status' => MessageStatus::SCHEDULED->name,
+            ]);
+        }
 
-        SendMessagesJob::dispatch(new SendMessageDTO(
-            account_id: $sendDataArray['account_id'],
-            event_id: $message->getEventId(),
-            subject: $message->getSubject(),
-            message: $message->getMessage(),
-            type: MessageTypeEnum::fromName($message->getType()),
-            is_test: false,
-            send_copy_to_current_user: $sendDataArray['send_copy_to_current_user'] ?? false,
-            sent_by_user_id: $message->getSentByUserId(),
-            order_id: $message->getOrderId(),
-            order_statuses: $sendDataArray['order_statuses'] ?? [],
-            id: $message->getId(),
-            attendee_ids: $message->getAttendeeIds() ?? [],
-            product_ids: $message->getProductIds() ?? [],
-        ));
+        $this->messageDispatchService->dispatchMessage($message, MessageStatus::PENDING_REVIEW);
 
-        return $updatedMessage;
+        return $this->messageRepository->findFirst($messageId);
     }
 }

@@ -6,6 +6,9 @@ use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\Models\OrderItem;
 use HiEvents\Repository\Interfaces\OrderItemRepositoryInterface;
 
+/**
+ * @extends BaseRepository<OrderItemDomainObject>
+ */
 class OrderItemRepository extends BaseRepository implements OrderItemRepositoryInterface
 {
     protected function getModel(): string

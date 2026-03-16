@@ -1,6 +1,6 @@
 import {useMutation} from "@tanstack/react-query";
 import {FinaliseOrderPayload, orderClientPublic} from "../../../../api/order.client.ts";
-import {useNavigate, useParams} from "react-router";
+import {useNavigate, useParams, useSearchParams} from "react-router";
 import {
     Button,
     Checkbox,
@@ -11,7 +11,7 @@ import {
     TextInput,
     Tooltip
 } from "@mantine/core";
-import {IconArrowRight, IconCheck, IconCircleCheck} from "@tabler/icons-react";
+import {IconArrowRight, IconCheck, IconCircleCheck, IconClock} from "@tabler/icons-react";
 import {t, Trans} from "@lingui/macro";
 import {useForm} from "@mantine/form";
 import {notifications} from "@mantine/notifications";
@@ -32,6 +32,7 @@ import {showInfo} from "../../../../utilites/notifications.tsx";
 import countries from "../../../../../data/countries.json";
 import classes from "./CollectInformation.module.scss";
 import {trackEvent, AnalyticsEvents} from "../../../../utilites/analytics.ts";
+import {clearWaitlistJoinedForEvent} from "../../../../hooks/useWaitlistJoined.ts";
 
 const LoadingSkeleton = () =>
     (
@@ -45,6 +46,8 @@ const LoadingSkeleton = () =>
 export const CollectInformation = () => {
     const {eventId, orderShortId} = useParams();
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const isFromWaitlist = searchParams.get('waitlist') === 'true';
     const {
         isFetched: isOrderFetched,
         data: order,
@@ -359,11 +362,17 @@ export const CollectInformation = () => {
     }
 
     if (isOrderError && orderError?.response?.status === 404) {
+        if (isFromWaitlist && eventId) {
+            clearWaitlistJoinedForEvent(eventId);
+        }
+
         return (
             <HomepageInfoMessage
                 status="not_found"
-                message={t`Order not found`}
-                subtitle={t`We couldn't find this order. It may have been removed.`}
+                message={isFromWaitlist ? t`Waitlist offer expired` : t`Order not found`}
+                subtitle={isFromWaitlist
+                    ? t`Your waitlist offer has expired and we were unable to complete your order. Please rejoin the waitlist to be notified when more spots become available.`
+                    : t`We couldn't find this order. It may have been removed.`}
                 link={eventHomepagePath(event as Event)}
                 linkText={t`Go to Event Page`}
             />
@@ -389,7 +398,24 @@ export const CollectInformation = () => {
 
     return (
         <form onSubmit={form.onSubmit(handleSubmit)}>
+
             <CheckoutContent>
+                {isFromWaitlist && (
+                    <div className={classes.waitlistBanner}>
+                        <div className={classes.waitlistBannerIcon}>
+                            <IconClock size={22}/>
+                        </div>
+                        <div>
+                            <p className={classes.waitlistBannerTitle}>
+                                {t`You've been offered a spot!`}
+                            </p>
+                            <p className={classes.waitlistBannerText}>
+                                {t`Complete your order to secure your tickets. This offer is time-limited, so don't wait too long.`}
+                            </p>
+                        </div>
+                    </div>
+                )}
+
                 {(event && order) && (
                     <InlineOrderSummary event={event} order={order} defaultExpanded={true}/>
                 )}

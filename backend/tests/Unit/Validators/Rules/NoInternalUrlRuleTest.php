@@ -92,6 +92,15 @@ class NoInternalUrlRuleTest extends TestCase
         $this->assertFalse($this->validate('http://[::1]/webhook'));
     }
 
+    public function testRejectsIpv4MappedIpv6Addresses(): void
+    {
+        $this->assertFalse($this->validate('http://[::ffff:127.0.0.1]/webhook'));
+        $this->assertFalse($this->validate('http://[::ffff:169.254.169.254]/latest/meta-data/'));
+        $this->assertFalse($this->validate('http://[::ffff:10.0.0.1]/internal'));
+        $this->assertFalse($this->validate('http://[::ffff:192.168.1.1]/admin'));
+        $this->assertFalse($this->validate('http://[::ffff:172.16.0.1]/api'));
+    }
+
     public function testRejectsNonHttpSchemes(): void
     {
         $this->assertFalse($this->validate('file:///etc/passwd'));

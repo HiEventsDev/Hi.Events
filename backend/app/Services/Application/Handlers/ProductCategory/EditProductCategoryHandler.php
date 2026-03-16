@@ -5,11 +5,13 @@ namespace HiEvents\Services\Application\Handlers\ProductCategory;
 use HiEvents\DomainObjects\ProductCategoryDomainObject;
 use HiEvents\Repository\Interfaces\ProductCategoryRepositoryInterface;
 use HiEvents\Services\Application\Handlers\ProductCategory\DTO\UpsertProductCategoryDTO;
+use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 
 class EditProductCategoryHandler
 {
     public function __construct(
         private readonly ProductCategoryRepositoryInterface $productCategoryRepository,
+        private readonly HtmlPurifierService $purifier,
     )
     {
     }
@@ -20,7 +22,7 @@ class EditProductCategoryHandler
             attributes: [
                 'name' => $dto->name,
                 'is_hidden' => $dto->is_hidden,
-                'description' => $dto->description,
+                'description' => $this->purifier->purify($dto->description),
                 'no_products_message' => $dto->no_products_message ?? __('There are no products available in this category'),
             ],
             where: [

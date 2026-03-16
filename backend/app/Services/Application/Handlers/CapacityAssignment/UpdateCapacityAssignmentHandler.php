@@ -4,6 +4,9 @@ namespace HiEvents\Services\Application\Handlers\CapacityAssignment;
 
 use HiEvents\DomainObjects\CapacityAssignmentDomainObject;
 use HiEvents\DomainObjects\Enums\CapacityAssignmentAppliesTo;
+use HiEvents\DomainObjects\Enums\CapacityChangeDirection;
+use HiEvents\Events\CapacityChangedEvent;
+use HiEvents\Repository\Interfaces\CapacityAssignmentRepositoryInterface;
 use HiEvents\Services\Application\Handlers\CapacityAssignment\DTO\UpsertCapacityAssignmentDTO;
 use HiEvents\Services\Domain\CapacityAssignment\UpdateCapacityAssignmentService;
 use HiEvents\Services\Domain\Product\Exception\UnrecognizedProductIdException;
@@ -11,7 +14,8 @@ use HiEvents\Services\Domain\Product\Exception\UnrecognizedProductIdException;
 class UpdateCapacityAssignmentHandler
 {
     public function __construct(
-        private readonly UpdateCapacityAssignmentService $updateCapacityAssignmentService,
+        private readonly UpdateCapacityAssignmentService        $updateCapacityAssignmentService,
+        private readonly CapacityAssignmentRepositoryInterface  $capacityAssignmentRepository,
     )
     {
     }
@@ -21,6 +25,8 @@ class UpdateCapacityAssignmentHandler
      */
     public function handle(UpsertCapacityAssignmentDTO $data): CapacityAssignmentDomainObject
     {
+        $existingAssignment = $this->capacityAssignmentRepository->findById($data->id);
+
         $capacityAssignment = (new CapacityAssignmentDomainObject)
             ->setId($data->id)
             ->setName($data->name)
@@ -29,9 +35,52 @@ class UpdateCapacityAssignmentHandler
             ->setAppliesTo(CapacityAssignmentAppliesTo::PRODUCTS->name)
             ->setStatus($data->status->name);
 
-        return $this->updateCapacityAssignmentService->updateCapacityAssignment(
+        $result = $this->updateCapacityAssignmentService->updateCapacityAssignment(
             $capacityAssignment,
             $data->product_ids,
         );
+
+        $this->dispatchCapacityChangedEvents(
+            $existingAssignment,
+            $data,
+        );
+
+        return $result;
+    }
+
+    private function dispatchCapacityChangedEvents(
+        CapacityAssignmentDomainObject $existingAssignment,
+        UpsertCapacityAssignmentDTO    $data,
+    ): void
+    {
+        if (empty($data->product_ids)) {
+            return;
+        }
+
+        $oldCapacity = $existingAssignment->getCapacity();
+        $newCapacity = $data->capacity;
+
+        $direction = match (true) {
+            ($newCapacity === null && $oldCapacity !== null),
+            ($newCapacity !== null && $oldCapacity !== null && $newCapacity > $oldCapacity)
+                => CapacityChangeDirection::INCREASED,
+            ($newCapacity !== null && $oldCapacity === null),
+            ($newCapacity !== null && $oldCapacity !== null && $newCapacity < $oldCapacity)
+                => CapacityChangeDirection::DECREASED,
+            default => null,
+        };
+
+        if ($direction === null) {
+            return;
+        }
+
+        foreach ($data->product_ids as $productId) {
+            event(new CapacityChangedEvent(
+                eventId: $data->event_id,
+                direction: $direction,
+                productId: $productId,
+                newCapacity: $data->capacity,
+            ));
+        }
     }
 }

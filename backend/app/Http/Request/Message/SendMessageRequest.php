@@ -13,7 +13,7 @@ class SendMessageRequest extends FormRequest
     {
         return [
             'subject' => 'required|string|max:100',
-            'message' => 'required|string|max:5000',
+            'message' => 'required|string|max:8000',
             'message_type' => [new In(MessageTypeEnum::valuesArray()), 'required'],
             'is_test' => 'boolean',
             'attendee_ids' => 'max:50,array|required_if:message_type,' . MessageTypeEnum::INDIVIDUAL_ATTENDEES->name,
@@ -25,6 +25,7 @@ class SendMessageRequest extends FormRequest
                 'required_if:message_type,' . MessageTypeEnum::ORDER_OWNERS_WITH_PRODUCT->name,
                 new In([OrderStatus::COMPLETED->name, OrderStatus::AWAITING_OFFLINE_PAYMENT->name]),
             ],
+            'scheduled_at' => 'nullable|date',
         ];
     }
 

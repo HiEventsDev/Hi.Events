@@ -13,13 +13,18 @@ class GetWebhookHandler
     {
     }
 
-    public function handle(int $eventId, int $webhookId): WebhookDomainObject
+    public function handle(int $webhookId, int $accountId, ?int $eventId = null, ?int $organizerId = null): WebhookDomainObject
     {
+        $where = ['id' => $webhookId, 'account_id' => $accountId];
+        if ($eventId !== null) {
+            $where['event_id'] = $eventId;
+        }
+        if ($organizerId !== null) {
+            $where['organizer_id'] = $organizerId;
+        }
+
         return $this->webhookRepository->findFirstWhere(
-            where: [
-                'id' => $webhookId,
-                'event_id' => $eventId,
-            ]
+            where: $where
         );
     }
 }

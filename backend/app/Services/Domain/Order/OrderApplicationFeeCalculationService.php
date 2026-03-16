@@ -14,8 +14,6 @@ use Illuminate\Config\Repository;
 
 class OrderApplicationFeeCalculationService
 {
-    private const BASE_CURRENCY = 'USD';
-
     public function __construct(
         private readonly Repository                        $config,
         private readonly CurrencyConversionClientInterface $currencyConversionClient,
@@ -64,12 +62,14 @@ class OrderApplicationFeeCalculationService
         string                           $currency
     ): MoneyValue
     {
-        if ($currency === self::BASE_CURRENCY) {
+        $baseCurrency = $accountConfiguration->getApplicationFeeCurrency();
+
+        if ($currency === $baseCurrency) {
             return MoneyValue::fromFloat($accountConfiguration->getFixedApplicationFee(), $currency);
         }
 
         return $this->currencyConversionClient->convert(
-            fromCurrency: Currency::of(self::BASE_CURRENCY),
+            fromCurrency: Currency::of($baseCurrency),
             toCurrency: Currency::of($currency),
             amount: $accountConfiguration->getFixedApplicationFee()
         );

@@ -1,8 +1,8 @@
-import {TextInput} from "@mantine/core";
-import {t} from "@lingui/macro";
-import {UseFormReturnType} from "@mantine/form";
-import {CustomSelect, ItemProps} from "../../common/CustomSelect";
-import {IconBolt, IconWebhook, IconWebhookOff} from "@tabler/icons-react";
+import { TextInput } from "@mantine/core";
+import { t } from "@lingui/macro";
+import { UseFormReturnType } from "@mantine/form";
+import { CustomSelect, ItemProps } from "../../common/CustomSelect";
+import { IconBolt, IconWebhook, IconWebhookOff } from "@tabler/icons-react";
 
 interface WebhookFormProps {
     form: UseFormReturnType<{
@@ -10,18 +10,21 @@ interface WebhookFormProps {
         event_types: string[];
         status: 'ENABLED' | 'PAUSED';
     }>;
+    isEventContext?: boolean;
 }
 
-export const WebhookForm = ({form}: WebhookFormProps) => {
+const EVENT_LEVEL_TYPES = ['event.created', 'event.updated', 'event.archived'];
+
+export const WebhookForm = ({ form, isEventContext = false }: WebhookFormProps) => {
     const statusOptions: ItemProps[] = [
         {
-            icon: <IconWebhook/>,
+            icon: <IconWebhook />,
             label: t`Enabled`,
             value: 'ENABLED',
             description: t`Webhook will send notifications`,
         },
         {
-            icon: <IconWebhookOff/>,
+            icon: <IconWebhookOff />,
             label: t`Paused`,
             value: 'PAUSED',
             description: t`Webhook will not send notifications`,
@@ -30,79 +33,97 @@ export const WebhookForm = ({form}: WebhookFormProps) => {
 
     const eventTypeOptions: ItemProps[] = [
         {
-            icon: <IconBolt size={14}/>,
+            icon: <IconBolt size={14} />,
             label: t`Product Created`,
             value: 'product.created',
             description: t`When a new product is created`,
         },
         {
-            icon: <IconBolt size={14}/>,
+            icon: <IconBolt size={14} />,
+            label: t`Event Created`,
+            value: 'event.created',
+            description: t`When a new event is created`,
+        },
+        {
+            icon: <IconBolt size={14} />,
+            label: t`Event Updated`,
+            value: 'event.updated',
+            description: t`When an event is updated`,
+        },
+        {
+            icon: <IconBolt size={14} />,
+            label: t`Event Archived`,
+            value: 'event.archived',
+            description: t`When an event is archived`,
+        },
+        {
+            icon: <IconBolt size={14} />,
             label: t`Product Updated`,
             value: 'product.updated',
             description: t`When a product is updated`,
         },
         {
-            icon: <IconBolt size={14}/>,
+            icon: <IconBolt size={14} />,
             label: t`Product Deleted`,
             value: 'product.deleted',
             description: t`When a product is deleted`,
         },
         {
-            icon: <IconBolt size={14}/>,
+            icon: <IconBolt size={14} />,
             label: t`Order Created`,
             value: 'order.created',
             description: t`When a new order is created`,
         },
         {
-            icon: <IconBolt size={14}/>,
+            icon: <IconBolt size={14} />,
             label: t`Order Updated`,
             value: 'order.updated',
             description: t`When an order is updated`,
         },
         {
-            icon: <IconBolt size={14}/>,
+            icon: <IconBolt size={14} />,
             label: t`Order Marked as Paid`,
             value: 'order.marked_as_paid',
             description: t`When an order is marked as paid`,
         },
         {
-            icon: <IconBolt size={14}/>,
+            icon: <IconBolt size={14} />,
             label: t`Order Refunded`,
             value: 'order.refunded',
             description: t`When an order is refunded`,
         },
         {
-            icon: <IconBolt size={14}/>,
+            icon: <IconBolt size={14} />,
             label: t`Order Cancelled`,
             value: 'order.cancelled',
             description: t`When an order is cancelled`,
         },
         {
-            icon: <IconBolt size={14}/>,
+            icon: <IconBolt size={14} />,
             label: t`Attendee Created`,
             value: 'attendee.created',
             description: t`When a new attendee is created`,
         },
         {
-            icon: <IconBolt size={14}/>,
+            icon: <IconBolt size={14} />,
             label: t`Attendee Updated`,
             value: 'attendee.updated',
             description: t`When an attendee is updated`,
         },
         {
-            icon: <IconBolt size={14}/>,
+            icon: <IconBolt size={14} />,
             label: t`Attendee Cancelled`,
             value: 'attendee.cancelled',
             description: t`When an attendee is cancelled`,
         },
         {
-            icon: <IconBolt size={14}/>,
+            icon: <IconBolt size={14} />,
             label: t`Check-in Created`,
             value: 'checkin.created',
             description: t`When an attendee is checked in`,
         },
         {
-            icon: <IconBolt size={14}/>,
+            icon: <IconBolt size={14} />,
             label: t`Check-in Deleted`,
             value: 'checkin.deleted',
             description: t`When a check-in is deleted`,
@@ -125,7 +146,10 @@ export const WebhookForm = ({form}: WebhookFormProps) => {
                 required
                 form={form}
                 name="event_types"
-                optionList={eventTypeOptions}
+                optionList={isEventContext
+                    ? eventTypeOptions.filter(o => !EVENT_LEVEL_TYPES.includes(o.value as string))
+                    : eventTypeOptions
+                }
                 multiple
             />
 

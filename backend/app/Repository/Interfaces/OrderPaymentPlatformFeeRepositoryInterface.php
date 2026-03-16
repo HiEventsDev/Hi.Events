@@ -3,10 +3,9 @@
 namespace HiEvents\Repository\Interfaces;
 
 use HiEvents\DomainObjects\OrderPaymentPlatformFeeDomainObject;
-use HiEvents\Repository\Eloquent\BaseRepository;
 
 /**
- * @extends BaseRepository<OrderPaymentPlatformFeeDomainObject>
+ * @extends RepositoryInterface<OrderPaymentPlatformFeeDomainObject>
  */
 interface OrderPaymentPlatformFeeRepositoryInterface extends RepositoryInterface
 {

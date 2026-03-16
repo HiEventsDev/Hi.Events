@@ -3,10 +3,9 @@
 namespace HiEvents\Repository\Interfaces;
 
 use HiEvents\DomainObjects\StripeCustomerDomainObject;
-use HiEvents\Repository\Eloquent\BaseRepository;
 
 /**
- * @extends BaseRepository<StripeCustomerDomainObject>
+ * @extends RepositoryInterface<StripeCustomerDomainObject>
  */
 interface StripeCustomerRepositoryInterface extends RepositoryInterface
 {

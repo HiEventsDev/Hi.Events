@@ -20,10 +20,10 @@ class HtmlPurifierService
         $this->config->set('Cache.SerializerPath', $cachePath);
     }
 
-    public function purify(?string $html): string
+    public function purify(?string $html): ?string
     {
         if ($html === null) {
-            return '';
+            return null;
         }
 
         return $this->htmlPurifier->purify($html, $this->config);

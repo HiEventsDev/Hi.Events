@@ -22,6 +22,7 @@ use HiEvents\DomainObjects\Status\OrderPaymentStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Events\OrderStatusChangedEvent;
 use HiEvents\Exceptions\ResourceConflictException;
+use HiEvents\Exceptions\UnauthorizedException;
 use HiEvents\Helper\IdHelper;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
@@ -38,6 +39,7 @@ use HiEvents\Services\Application\Handlers\Order\DTO\OrderQuestionsDTO;
 use HiEvents\Services\Domain\Payment\Stripe\EventHandlers\PaymentIntentSucceededHandler;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
+use HiEvents\Services\Infrastructure\Session\CheckoutSessionManagementService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use HiEvents\Services\Infrastructure\DomainEvents\Events\OrderEvent;
 use Illuminate\Support\Collection;
@@ -59,6 +61,7 @@ class CompleteOrderHandler
         private readonly ProductPriceRepositoryInterface   $productPriceRepository,
         private readonly DomainEventDispatcherService      $domainEventDispatcherService,
         private readonly EventSettingsRepositoryInterface  $eventSettingsRepository,
+        private readonly CheckoutSessionManagementService  $sessionManagementService,
     )
     {
     }
@@ -287,6 +290,13 @@ class CompleteOrderHandler
 
         if ($order === null) {
             throw new ResourceNotFoundException(__('Order not found'));
+        }
+
+        if ($order->getSessionId() === null
+            || !$this->sessionManagementService->verifySession($order->getSessionId())) {
+            throw new UnauthorizedException(
+                __('Sorry, we could not verify your session. Please restart your order.')
+            );
         }
 
         $this->validateOrder($order);

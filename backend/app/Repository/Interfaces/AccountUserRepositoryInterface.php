@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace HiEvents\Repository\Interfaces;
 
 use HiEvents\DomainObjects\AccountUserDomainObject;
-use HiEvents\Repository\Eloquent\BaseRepository;
 
 /**
- * @extends BaseRepository<AccountUserDomainObject>
+ * @extends RepositoryInterface<AccountUserDomainObject>
  */
 interface AccountUserRepositoryInterface extends RepositoryInterface
 {

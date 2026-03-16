@@ -1,0 +1,21 @@
+.wrapper {
+    line-height: 1;
+    margin-bottom: 16px;
+}
+
+.emoji {
+    display: inline-block;
+    animation: bounceIn 0.6s ease-out, subtleBounce 2s ease-in-out 0.6s infinite;
+}
+
+@keyframes bounceIn {
+    0% { transform: scale(0); opacity: 0; }
+    50% { transform: scale(1.2); }
+    70% { transform: scale(0.9); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes subtleBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+}

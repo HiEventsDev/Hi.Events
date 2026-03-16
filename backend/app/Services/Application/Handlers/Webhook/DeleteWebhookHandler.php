@@ -17,28 +17,29 @@ class DeleteWebhookHandler
     {
     }
 
-    public function handle(int $eventId, int $webhookId): void
+    public function handle(int $webhookId, int $accountId, ?int $eventId = null, ?int $organizerId = null): void
     {
-        $this->databaseManager->transaction(function () use ($eventId, $webhookId) {
-            $webhook = $this->webhookRepository->findFirstWhere([
-                'id' => $webhookId,
-                'event_id' => $eventId,
-            ]);
+        $this->databaseManager->transaction(function () use ($eventId, $webhookId, $organizerId, $accountId) {
+            $where = ['id' => $webhookId, 'account_id' => $accountId];
+            if ($eventId !== null) {
+                $where['event_id'] = $eventId;
+            }
+            if ($organizerId !== null) {
+                $where['organizer_id'] = $organizerId;
+            }
+
+            $webhook = $this->webhookRepository->findFirstWhere($where);
 
             if (!$webhook) {
                 throw new ResourceNotFoundException(__(
-                    key: 'Webhook not found for ID: :webhookId and event ID: :eventId',
+                    key: 'Webhook not found for ID: :webhookId',
                     replace: [
                         'webhookId' => $webhookId,
-                        'eventId' => $eventId,
                     ]
                 ));
             }
 
-            $this->webhookRepository->deleteWhere([
-                'id' => $webhookId,
-                'event_id' => $eventId,
-            ]);
+            $this->webhookRepository->deleteWhere($where);
 
             $this->webhookLogRepository
                 ->deleteOldLogs($webhookId, numberToKeep: 0);

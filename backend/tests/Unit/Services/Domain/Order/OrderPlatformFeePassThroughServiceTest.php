@@ -32,11 +32,12 @@ class OrderPlatformFeePassThroughServiceTest extends TestCase
         );
     }
 
-    private function createAccountConfig(float $fixedFee = 0.30, float $percentageFee = 2.9): AccountConfigurationDomainObject
+    private function createAccountConfig(float $fixedFee = 0.30, float $percentageFee = 2.9, string $currency = 'USD'): AccountConfigurationDomainObject
     {
         $mock = $this->createMock(AccountConfigurationDomainObject::class);
         $mock->method('getFixedApplicationFee')->willReturn($fixedFee);
         $mock->method('getPercentageApplicationFee')->willReturn($percentageFee);
+        $mock->method('getApplicationFeeCurrency')->willReturn($currency);
         return $mock;
     }
 
@@ -244,6 +245,56 @@ class OrderPlatformFeePassThroughServiceTest extends TestCase
         );
 
         $account = $this->createAccountConfig(0.30, 2.9);
+        $eventSettings = $this->createEventSettings(true);
+
+        $result = $service->calculatePlatformFee($account, $eventSettings, 100.00, 1, 'USD');
+
+        $this->assertGreaterThan(0, $result);
+    }
+
+    public function testNoConversionWhenOrderCurrencyMatchesFeeCurrency(): void
+    {
+        $this->config->method('get')->willReturn(true);
+
+        $currencyConversionClient = $this->createMock(CurrencyConversionClientInterface::class);
+        $currencyConversionClient->expects($this->never())->method('convert');
+
+        $service = new OrderPlatformFeePassThroughService(
+            $this->config,
+            $currencyConversionClient
+        );
+
+        // Fee is defined in EUR, order is in EUR - no conversion needed
+        $account = $this->createAccountConfig(0.30, 2.9, 'EUR');
+        $eventSettings = $this->createEventSettings(true);
+
+        $result = $service->calculatePlatformFee($account, $eventSettings, 100.00, 1, 'EUR');
+
+        $this->assertGreaterThan(0, $result);
+    }
+
+    public function testCurrencyConversionFromEurToUsd(): void
+    {
+        $this->config->method('get')->willReturn(true);
+
+        $currencyConversionClient = $this->createMock(CurrencyConversionClientInterface::class);
+
+        $currencyConversionClient->expects($this->once())
+            ->method('convert')
+            ->with(
+                $this->callback(fn(Currency $c) => $c->getCurrencyCode() === 'EUR'),
+                $this->callback(fn(Currency $c) => $c->getCurrencyCode() === 'USD'),
+                0.30
+            )
+            ->willReturn(MoneyValue::fromFloat(0.33, 'USD'));
+
+        $service = new OrderPlatformFeePassThroughService(
+            $this->config,
+            $currencyConversionClient
+        );
+
+        // Fee is defined in EUR, order is in USD - conversion needed
+        $account = $this->createAccountConfig(0.30, 2.9, 'EUR');
         $eventSettings = $this->createEventSettings(true);
 
         $result = $service->calculatePlatformFee($account, $eventSettings, 100.00, 1, 'USD');

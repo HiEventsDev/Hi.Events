@@ -16,13 +16,18 @@ class GetWebhookLogsHandler
     {
     }
 
-    public function handle(int $eventId, int $webhookId): LengthAwarePaginator
+    public function handle(int $webhookId, int $accountId, ?int $eventId = null, ?int $organizerId = null): LengthAwarePaginator
     {
+        $where = ['id' => $webhookId, 'account_id' => $accountId];
+        if ($eventId !== null) {
+            $where['event_id'] = $eventId;
+        }
+        if ($organizerId !== null) {
+            $where['organizer_id'] = $organizerId;
+        }
+
         $webhook = $this->webhookRepository->findFirstWhere(
-            where: [
-                'id' => $webhookId,
-                'event_id' => $eventId,
-            ]
+            where: $where
         );
 
         if (!$webhook) {

@@ -6,6 +6,9 @@ use HiEvents\DomainObjects\OrderApplicationFeeDomainObject;
 use HiEvents\Models\OrderApplicationFee;
 use HiEvents\Repository\Interfaces\OrderApplicationFeeRepositoryInterface;
 
+/**
+ * @extends BaseRepository<OrderApplicationFeeDomainObject>
+ */
 class OrderApplicationFeeRepository extends BaseRepository implements OrderApplicationFeeRepositoryInterface
 {
     protected function getModel(): string

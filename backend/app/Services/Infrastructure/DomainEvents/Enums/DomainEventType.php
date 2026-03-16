@@ -12,6 +12,10 @@ enum DomainEventType: string
     case PRODUCT_UPDATED = 'product.updated';
     case PRODUCT_DELETED = 'product.deleted';
 
+    case EVENT_CREATED = 'event.created';
+    case EVENT_UPDATED = 'event.updated';
+    case EVENT_ARCHIVED = 'event.archived';
+
     case ORDER_CREATED = 'order.created';
     case ORDER_UPDATED = 'order.updated';
     case ORDER_MARKED_AS_PAID = 'order.marked_as_paid';

@@ -1,24 +1,24 @@
-import {SeoSettings} from "./Sections/SeoSettings";
+import { SeoSettings } from "./Sections/SeoSettings";
 import BasicSettings from "./Sections/BasicSettings";
-import {SocialLinks} from "./Sections/SocialLinks";
-import {AddressSettings} from "./Sections/AddressSettings";
+import { SocialLinks } from "./Sections/SocialLinks";
+import { AddressSettings } from "./Sections/AddressSettings";
 import EmailTemplateSettings from "./Sections/EmailTemplateSettings";
-import {EventDefaults} from "./Sections/EventDefaults";
-import {PlatformFeesSettings} from "./Sections/PlatformFeesSettings";
-import {PageBody} from "../../../common/PageBody";
-import {PageTitle} from "../../../common/PageTitle";
-import {t} from "@lingui/macro";
-import {Box, Group, NavLink as MantineNavLink, Stack} from "@mantine/core";
-import {IconBrandGoogleAnalytics, IconInfoCircle, IconMapPin, IconShare, IconMail, IconCalendarEvent, IconPercentage} from "@tabler/icons-react";
-import {useMediaQuery} from "@mantine/hooks";
-import {useMemo, useState} from "react";
-import {Card} from "../../../common/Card";
-import {useParams} from "react-router";
-import {useGetAccount} from "../../../../queries/useGetAccount.ts";
+import { EventDefaults } from "./Sections/EventDefaults";
+import { PlatformFeesSettings } from "./Sections/PlatformFeesSettings";
+import { PageBody } from "../../../common/PageBody";
+import { PageTitle } from "../../../common/PageTitle";
+import { t } from "@lingui/macro";
+import { Box, Group, NavLink as MantineNavLink, Stack } from "@mantine/core";
+import { IconBrandGoogleAnalytics, IconInfoCircle, IconMapPin, IconShare, IconMail, IconCalendarEvent, IconPercentage } from "@tabler/icons-react";
+import { useMediaQuery } from "@mantine/hooks";
+import { useMemo, useState } from "react";
+import { Card } from "../../../common/Card";
+import { useParams } from "react-router";
+import { useGetAccount } from "../../../../queries/useGetAccount.ts";
 
 const Settings = () => {
     const { organizerId } = useParams();
-    const {data: account} = useGetAccount();
+    const { data: account } = useGetAccount();
     const isSaasMode = account?.is_saas_mode_enabled;
 
     const SECTIONS = useMemo(() => {
@@ -84,19 +84,19 @@ const Settings = () => {
 
     const handleClick = (sectionId: string) => {
         setActiveSection(sectionId);
-        document.getElementById(sectionId)?.scrollIntoView({behavior: 'smooth'});
+        document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
     };
 
     const sideMenu = (
-        <Card style={{padding: '15px', marginBottom: 0}}>
+        <Card style={{ padding: '15px', marginBottom: 0 }}>
             <Stack gap="xs">
                 {SECTIONS.map((section) => (
                     <MantineNavLink
-                        style={{borderRadius: '5px'}}
+                        style={{ borderRadius: '5px' }}
                         key={section.id}
                         active={activeSection === section.id}
                         label={section.label}
-                        leftSection={<section.icon size={16} stroke={1.5}/>}
+                        leftSection={<section.icon size={16} stroke={1.5} />}
                         onClick={() => handleClick(section.id)}
                     />
                 ))}
@@ -104,9 +104,9 @@ const Settings = () => {
         </Card>
     );
 
-    const content = SECTIONS.map(({id, component: Component}) => (
-        <div key={id} id={id} style={{scrollMarginTop: '20px'}}>
-            <Component/>
+    const content = SECTIONS.map(({ id, component: Component }) => (
+        <div key={id} id={id} style={{ scrollMarginTop: '20px' }}>
+            <Component />
         </div>
     ));
 
@@ -116,10 +116,10 @@ const Settings = () => {
 
             {isLargeScreen ? (
                 <Group align="flex-start" gap="md">
-                    <Box w={240} style={{position: 'sticky', top: 20}}>
+                    <Box w={240} style={{ position: 'sticky', top: 20 }}>
                         {sideMenu}
                     </Box>
-                    <Box style={{flex: 1}}>{content}</Box>
+                    <Box style={{ flex: 1 }}>{content}</Box>
                 </Group>
             ) : (
                 <Stack>
