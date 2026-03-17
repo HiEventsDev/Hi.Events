@@ -9,12 +9,14 @@ use HiEvents\Exceptions\InvalidEmailTemplateException;
 use HiEvents\Repository\Interfaces\EmailTemplateRepositoryInterface;
 use HiEvents\Services\Application\Handlers\EmailTemplate\DTO\UpsertEmailTemplateDTO;
 use HiEvents\Services\Domain\Email\EmailTemplateService;
+use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 
 class UpdateEmailTemplateHandler
 {
     public function __construct(
         private readonly EmailTemplateRepositoryInterface $emailTemplateRepository,
-        private readonly EmailTemplateService $emailTemplateService
+        private readonly EmailTemplateService $emailTemplateService,
+        private readonly HtmlPurifierService $purifier,
     ) {
     }
 
@@ -47,7 +49,7 @@ class UpdateEmailTemplateHandler
 
         return $this->emailTemplateRepository->updateFromArray($template->getId(), [
             'subject' => $dto->subject,
-            'body' => $dto->body,
+            'body' => $this->purifier->purify($dto->body),
             'cta' => $dto->cta,
             'engine' => $dto->engine->value,
             'is_active' => $dto->is_active,
