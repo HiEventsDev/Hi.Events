@@ -58,6 +58,8 @@ use HiEvents\Http\Actions\Events\Images\DeleteEventImageAction;
 use HiEvents\Http\Actions\Events\Images\GetEventImagesAction;
 use HiEvents\Http\Actions\Events\Stats\GetEventStatsAction;
 use HiEvents\Http\Actions\Events\UpdateEventAction;
+use HiEvents\Http\Actions\Events\DeleteEventAction;
+use HiEvents\Http\Actions\Events\GetEventDeletionStatusAction;
 use HiEvents\Http\Actions\Events\UpdateEventStatusAction;
 use HiEvents\Http\Actions\EventSettings\EditEventSettingsAction;
 use HiEvents\Http\Actions\EventSettings\GetEventSettingsAction;
@@ -114,6 +116,8 @@ use HiEvents\Http\Actions\Organizers\Public\SendOrganizerContactMessagePublicAct
 use HiEvents\Http\Actions\Organizers\Settings\GetOrganizerSettingsAction;
 use HiEvents\Http\Actions\Organizers\Settings\PartialUpdateOrganizerSettingsAction;
 use HiEvents\Http\Actions\Organizers\Stats\GetOrganizerStatsAction;
+use HiEvents\Http\Actions\Organizers\DeleteOrganizerAction;
+use HiEvents\Http\Actions\Organizers\GetOrganizerDeletionStatusAction;
 use HiEvents\Http\Actions\Organizers\UpdateOrganizerStatusAction;
 use HiEvents\Http\Actions\Organizers\Webhooks\CreateOrganizerWebhookAction;
 use HiEvents\Http\Actions\Organizers\Webhooks\DeleteOrganizerWebhookAction;
@@ -273,6 +277,8 @@ $router->middleware(['auth:api'])->group(
         // This is POST instead of PUT because you can't upload files via PUT in PHP (at least not easily)
         $router->post('/organizers/{organizer_id}', EditOrganizerAction::class);
         $router->put('/organizers/{organizer_id}/status', UpdateOrganizerStatusAction::class);
+        $router->delete('/organizers/{organizer_id}', DeleteOrganizerAction::class);
+        $router->get('/organizers/{organizer_id}/deletion-status', GetOrganizerDeletionStatusAction::class);
         $router->get('/organizers', GetOrganizersAction::class);
         $router->get('/organizers/{organizer_id}', GetOrganizerAction::class);
         $router->get('/organizers/{organizer_id}/events', GetOrganizerEventsAction::class);
@@ -310,6 +316,8 @@ $router->middleware(['auth:api'])->group(
         $router->get('/events/{event_id}', GetEventAction::class);
         $router->put('/events/{event_id}', UpdateEventAction::class);
         $router->put('/events/{event_id}/status', UpdateEventStatusAction::class);
+        $router->delete('/events/{event_id}', DeleteEventAction::class);
+        $router->get('/events/{event_id}/deletion-status', GetEventDeletionStatusAction::class);
         $router->post('/events/{event_id}/duplicate', DuplicateEventAction::class);
 
         // Product Categories

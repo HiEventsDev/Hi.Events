@@ -30,6 +30,7 @@ import { CalloutConfig, SidebarCalloutQueue } from "../../common/SidebarCallout/
 import { InviteUserModal } from "../../modals/InviteUserModal";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { SwitchOrganizerModal } from "../../modals/SwitchOrganizerModal";
+import { CreateOrganizerModal } from "../../modals/CreateOrganizerModal";
 import { useGetOrganizers } from "../../../queries/useGetOrganizers.ts";
 import { useGetAccount } from "../../../queries/useGetAccount.ts";
 import { StripeConnectButton } from "../../common/StripeConnectButton";
@@ -46,6 +47,7 @@ const OrganizerLayout = () => {
     const location = useLocation();
     const { data: organizer } = useGetOrganizer(organizerId);
     const [showCreateEventModal, setShowCreateEventModal] = useState(false);
+    const [showCreateOrganizerModal, setShowCreateOrganizerModal] = useState(false);
     const [createModalOpen, { open: openCreateModal, close: closeCreateModal }] = useDisclosure(false);
     const [switchOrganizerModalOpen, { open: openSwitchModal, close: closeSwitchModal }] = useDisclosure(false);
     const [shareModalOpen, { open: openShareModal, close: closeShareModal }] = useDisclosure(false);
@@ -256,7 +258,14 @@ const OrganizerLayout = () => {
 
             {createModalOpen && <InviteUserModal onClose={closeCreateModal} />}
             {switchOrganizerModalOpen &&
-                <SwitchOrganizerModal opened={switchOrganizerModalOpen} onClose={closeSwitchModal} />}
+                <SwitchOrganizerModal
+                    opened={switchOrganizerModalOpen}
+                    onClose={closeSwitchModal}
+                    onCreateOrganizer={() => setShowCreateOrganizerModal(true)}
+                />}
+            {showCreateOrganizerModal && (
+                <CreateOrganizerModal onClose={() => setShowCreateOrganizerModal(false)} />
+            )}
             {organizer && shareModalOpen && (
                 <ShareModal
                     url={organizerHomepageUrl(organizer)}
