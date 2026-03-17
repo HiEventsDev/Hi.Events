@@ -8,6 +8,7 @@ export const useGetOrganizerDeletionStatus = (organizerId: IdParam) => {
     return useQuery({
         queryKey: [GET_ORGANIZER_DELETION_STATUS_QUERY_KEY, organizerId],
 
+        staleTime: 0,
         queryFn: async () => {
             const {data} = await organizerClient.getDeletionStatus(organizerId);
             return data;
