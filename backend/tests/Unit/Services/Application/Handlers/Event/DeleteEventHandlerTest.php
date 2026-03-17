@@ -15,8 +15,6 @@ use Psr\Log\LoggerInterface;
 
 class DeleteEventHandlerTest extends TestCase
 {
-    use \Illuminate\Foundation\Testing\DatabaseTransactions;
-
     private EventDeletionService $eventDeletionService;
     private DeleteEventHandler $handler;
 

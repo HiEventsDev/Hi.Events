@@ -19,8 +19,6 @@ use Psr\Log\LoggerInterface;
 
 class DeleteOrganizerHandlerTest extends TestCase
 {
-    use \Illuminate\Foundation\Testing\DatabaseTransactions;
-
     private OrganizerRepositoryInterface $organizerRepository;
     private EventRepositoryInterface $eventRepository;
     private OrderRepositoryInterface $orderRepository;

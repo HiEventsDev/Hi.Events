@@ -18,8 +18,6 @@ use Tests\TestCase;
 
 class UpdateOrganizerStatusHandlerTest extends TestCase
 {
-    use \Illuminate\Foundation\Testing\DatabaseTransactions;
-
     private OrganizerRepositoryInterface $organizerRepository;
     private AccountRepositoryInterface $accountRepository;
     private EventRepositoryInterface $eventRepository;
