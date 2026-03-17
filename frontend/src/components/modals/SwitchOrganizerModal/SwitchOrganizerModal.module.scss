@@ -98,3 +98,66 @@
         font-size: 0.875rem;
     }
 }
+
+.createButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 10px 16px;
+    border: 1px dashed var(--mantine-color-gray-4);
+    border-radius: 8px;
+    background: transparent;
+    cursor: pointer;
+    color: var(--mantine-color-gray-6);
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+
+    &:hover {
+        border-color: var(--mantine-color-primary-5);
+        color: var(--mantine-color-primary-6);
+        background: var(--mantine-color-primary-0);
+    }
+}
+
+.archivedToggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+    padding: 8px 4px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: var(--mantine-color-gray-6);
+    font-size: 0.8rem;
+    font-weight: 500;
+    margin-top: 4px;
+
+    &:hover {
+        color: var(--mantine-color-gray-8);
+    }
+}
+
+.archivedCount {
+    color: var(--mantine-color-gray-5);
+    font-weight: 400;
+}
+
+.archivedItem {
+    composes: organizerItem;
+    opacity: 0.6;
+    border-color: var(--mantine-color-gray-2);
+
+    &:hover {
+        opacity: 0.85;
+    }
+}
+
+.archiveBadge {
+    display: flex;
+    align-items: center;
+    color: var(--mantine-color-gray-5);
+}
