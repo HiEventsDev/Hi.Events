@@ -34,6 +34,16 @@ export const organizerClient = {
         return response.data;
     },
 
+    delete: async (organizerId: IdParam) => {
+        const response = await api.delete('organizers/' + organizerId);
+        return response.data;
+    },
+
+    getDeletionStatus: async (organizerId: IdParam) => {
+        const response = await api.get<GenericDataResponse<{ can_delete: boolean; reason?: string }>>('organizers/' + organizerId + '/deletion-status');
+        return response.data;
+    },
+
     updateStatus: async (organizerId: IdParam, status: string) => {
         const response = await api.put<GenericDataResponse<Organizer>>('organizers/' + organizerId + '/status', {
             status

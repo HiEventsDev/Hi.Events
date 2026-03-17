@@ -17,7 +17,7 @@ export const WidgetEditor = () => {
     const eventQuery = useGetEvent(eventId);
 
     const colorMessage = t`Color must be a valid hex color code. Example: #ffffff`;
-    const colorRegex = /^#([0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/;
+    const colorRegex = /^#([0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i;
     const {data: eventSettings, isFetched: isEventSettingsFetched} = useGetEventSettings(eventId);
     const form = useForm({
         initialValues: {

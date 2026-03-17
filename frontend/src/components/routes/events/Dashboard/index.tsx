@@ -3,7 +3,7 @@ import {useGetEvents} from "../../../../queries/useGetEvents.ts";
 import {EventCard} from "../../../common/EventCard";
 import {t, Trans} from "@lingui/macro";
 import {SearchBarWrapper} from "../../../common/SearchBar";
-import {Button, Menu, Modal, Skeleton} from "@mantine/core";
+import {Button, Menu, Skeleton} from "@mantine/core";
 import {
     IconArrowRight,
     IconBuilding,
@@ -20,6 +20,7 @@ import {CreateEventModal} from "../../../modals/CreateEventModal";
 import {useGetOrganizers} from "../../../../queries/useGetOrganizers.ts";
 import {Navigate, useNavigate, useParams} from "react-router";
 import {CreateOrganizerModal} from "../../../modals/CreateOrganizerModal";
+import {SwitchOrganizerModal} from "../../../modals/SwitchOrganizerModal";
 import classes from "./Dashboard.module.scss";
 import {getEventQueryFilters} from "../../../../utilites/eventsPageFiltersHelper.ts";
 import {EventsDashboardStatusButtons} from "../../../common/EventsDashboardStatusButtons";
@@ -221,47 +222,18 @@ export function Dashboard() {
             }
             {createModalOpen && <CreateEventModal onClose={closeCreateModal}/>}
             {createOrganizerModalOpen && <CreateOrganizerModal onClose={closeCreateOrganizerModal}/>}
-
-            {/* Organizers Modal */}
-            <Modal
-                opened={organizerModalOpen}
-                onClose={() => setOrganizerModalOpen(false)}
-                title={t`Choose an Organizer`}
-                size="md"
-                centered
-            >
-                <div className={classes.organizerModalContent}>
-                    <p className={classes.modalDescription}>
-                        {t`Select an organizer to view their dashboard and events.`}
-                    </p>
-                    <div className={classes.organizerGrid}>
-                        {organizers?.map((organizer) => (
-                            <button
-                                key={organizer.id}
-                                className={classes.organizerModalCard}
-                                onClick={() => {
-                                    navigate(`/manage/organizer/${organizer.id}`);
-                                    setOrganizerModalOpen(false);
-                                }}
-                            >
-                                <div className={classes.organizerModalLogo}>
-                                    {organizer.images?.find((image) => image.type === 'ORGANIZER_LOGO') ? (
-                                        <img
-                                            src={organizer.images.find((image) => image.type === 'ORGANIZER_LOGO')?.url}
-                                            alt={organizer.name}
-                                        />
-                                    ) : (
-                                        <div className={classes.logoModalPlaceholder}>
-                                            <IconBuilding size={32}/>
-                                        </div>
-                                    )}
-                                </div>
-                                <h3 className={classes.organizerModalName}>{organizer.name}</h3>
-                            </button>
-                        ))}
-                    </div>
-                </div>
-            </Modal>
+            {organizerModalOpen && (
+                <SwitchOrganizerModal
+                    opened={organizerModalOpen}
+                    onClose={() => setOrganizerModalOpen(false)}
+                    onCreateOrganizer={() => {
+                        setOrganizerModalOpen(false);
+                        openCreateOrganizerModal();
+                    }}
+                    heading={t`Choose an Organizer`}
+                    excludeCurrentOrganizer={false}
+                />
+            )}
         </div>
     );
 }

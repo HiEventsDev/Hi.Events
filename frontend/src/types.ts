@@ -397,7 +397,7 @@ export interface Organizer {
     events?: Event[];
     settings?: OrganizerSettings;
     location_details?: VenueAddress;
-    status?: 'LIVE' | 'DRAFT';
+    status?: OrganizerStatus;
 }
 
 export interface OrganizerSettings {

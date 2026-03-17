@@ -10,6 +10,7 @@ import {MiscSettings} from "./Sections/MiscSettings";
 import {Box, Group, NavLink as MantineNavLink, Stack} from "@mantine/core";
 import {
     IconAdjustments,
+    IconAlertTriangle,
     IconAt,
     IconBrandGoogleAnalytics,
     IconBuildingStore,
@@ -25,6 +26,7 @@ import {Card} from "../../../common/Card";
 import {PaymentAndInvoicingSettings} from "./Sections/PaymentSettings";
 import {PlatformFeesSettings} from "./Sections/PlatformFeesSettings";
 import {WaitlistSettings} from "./Sections/WaitlistSettings";
+import {DangerZoneSettings} from "./Sections/DangerZoneSettings";
 import {useGetAccount} from "../../../../queries/useGetAccount.ts";
 
 export const Settings = () => {
@@ -80,6 +82,13 @@ export const Settings = () => {
                 label: t`Payment & Invoicing`,
                 icon: IconCreditCard,
                 component: PaymentAndInvoicingSettings,
+            },
+            {
+                id: 'danger-zone',
+                label: t`Danger Zone`,
+                icon: IconAlertTriangle,
+                component: DangerZoneSettings,
+                color: 'red',
             }
         ];
 
@@ -128,6 +137,7 @@ export const Settings = () => {
                         key={section.id}
                         active={activeSection === section.id}
                         label={section.label}
+                        color={'color' in section ? section.color as string : undefined}
                         leftSection={<section.icon size={16} stroke={1.5}/>}
                         onClick={() => handleClick(section.id)}
                     />
