@@ -16,6 +16,7 @@ class Handler extends ExceptionHandler
      */
     protected $dontReport = [
         ResourceNotFoundException::class,
+        ResourceConflictException::class,
         SymfonyResourceNotFoundException::class,
     ];
 
