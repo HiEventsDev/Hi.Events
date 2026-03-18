@@ -174,6 +174,11 @@ abstract class BaseDTO
                     return;
                 }
 
+                if (($data[$property->getName()] === null || $data[$property->getName()] === '') && $type->allowsNull()) {
+                    $data[$property->getName()] = null;
+                    return;
+                }
+
                 try {
                     $data[$property->getName()] = $enumName::fromName($data[$property->getName()]);
                 } catch (Throwable) {
