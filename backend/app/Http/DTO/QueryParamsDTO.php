@@ -35,8 +35,8 @@ class QueryParamsDTO extends BaseDTO
         }
 
         return new self(
-            page: $data['page'] ?? 1,
-            per_page: $data['per_page'] ?? 25,
+            page: isset($data['page']) ? (int)$data['page'] : 1,
+            per_page: isset($data['per_page']) ? (int)$data['per_page'] : 25,
             sort_by: $data['sort_by'] ?? null,
             sort_direction: $data['sort_direction'] ?? null,
             query: $data['query'] ?? null,
