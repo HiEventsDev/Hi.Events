@@ -27,9 +27,17 @@ class PayoutPaidHandler
     {
     }
 
-    public function handleEvent(Payout $payout): void
+    public function handleEvent(Payout $payout, ?string $connectedAccountId = null): void
     {
         try {
+            if ($connectedAccountId) {
+                $this->logger->debug('Ignoring payout event from Connect account', [
+                    'payout_id' => $payout->id,
+                    'account' => $connectedAccountId,
+                ]);
+                return;
+            }
+
             $this->logger->info('Processing payout.paid event', [
                 'payout_id' => $payout->id,
                 'amount' => $payout->amount,
