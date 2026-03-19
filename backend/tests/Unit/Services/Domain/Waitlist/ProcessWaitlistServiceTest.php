@@ -57,6 +57,14 @@ class ProcessWaitlistServiceTest extends TestCase
             ->shouldReceive('lockForProductPrice')
             ->zeroOrMoreTimes();
 
+        $this->databaseManager
+            ->shouldReceive('statement')
+            ->withArgs(function ($sql, $params) {
+                return $sql === 'SELECT pg_advisory_xact_lock(?)' && is_array($params);
+            })
+            ->zeroOrMoreTimes()
+            ->andReturn(true);
+
         $this->service = new ProcessWaitlistService(
             waitlistEntryRepository: $this->waitlistEntryRepository,
             databaseManager: $this->databaseManager,
@@ -160,15 +168,6 @@ class ProcessWaitlistServiceTest extends TestCase
         $event = $this->createMockEvent();
         $eventSettings = $this->createMockEventSettings();
 
-        $this->waitlistEntryRepository
-            ->shouldReceive('countWhere')
-            ->once()
-            ->with([
-                'product_price_id' => $productPriceId,
-                'status' => WaitlistEntryStatus::OFFERED->name,
-            ])
-            ->andReturn(0);
-
         $this->databaseManager
             ->shouldReceive('transaction')
             ->once()
@@ -240,11 +239,6 @@ class ProcessWaitlistServiceTest extends TestCase
         $event = $this->createMockEvent();
         $eventSettings = $this->createMockEventSettings($timeoutMinutes);
 
-        $this->waitlistEntryRepository
-            ->shouldReceive('countWhere')
-            ->once()
-            ->andReturn(0);
-
         $this->databaseManager
             ->shouldReceive('transaction')
             ->once()
@@ -307,11 +301,6 @@ class ProcessWaitlistServiceTest extends TestCase
         $quantity = 1;
         $event = $this->createMockEvent();
         $eventSettings = $this->createMockEventSettings(30);
-
-        $this->waitlistEntryRepository
-            ->shouldReceive('countWhere')
-            ->once()
-            ->andReturn(0);
 
         $this->databaseManager
             ->shouldReceive('transaction')
@@ -423,11 +412,6 @@ class ProcessWaitlistServiceTest extends TestCase
         $this->mockAvailableQuantities($event->getId(), $productPriceId);
 
         $this->waitlistEntryRepository
-            ->shouldReceive('countWhere')
-            ->once()
-            ->andReturn(0);
-
-        $this->waitlistEntryRepository
             ->shouldReceive('getNextWaitingEntries')
             ->once()
             ->with($productPriceId, Mockery::any())
@@ -438,7 +422,7 @@ class ProcessWaitlistServiceTest extends TestCase
         $this->service->offerToNext($productPriceId, $quantity, $event, $eventSettings);
     }
 
-    public function testCapsOffersAtEffectiveAvailableCapacity(): void
+    public function testCapsOffersAtAvailableCapacity(): void
     {
         Bus::fake();
 
@@ -447,15 +431,6 @@ class ProcessWaitlistServiceTest extends TestCase
         $event = $this->createMockEvent();
         $eventSettings = $this->createMockEventSettings();
 
-        $this->waitlistEntryRepository
-            ->shouldReceive('countWhere')
-            ->once()
-            ->with([
-                'product_price_id' => $productPriceId,
-                'status' => WaitlistEntryStatus::OFFERED->name,
-            ])
-            ->andReturn(2);
-
         $this->databaseManager
             ->shouldReceive('transaction')
             ->once()
@@ -463,7 +438,7 @@ class ProcessWaitlistServiceTest extends TestCase
                 return $callback();
             });
 
-        $this->mockAvailableQuantities($event->getId(), $productPriceId);
+        $this->mockAvailableQuantities($event->getId(), $productPriceId, 1);
 
         $waitingEntry = Mockery::mock(WaitlistEntryDomainObject::class);
         $waitingEntry->shouldReceive('getId')->andReturn(1);
@@ -496,36 +471,6 @@ class ProcessWaitlistServiceTest extends TestCase
         $this->assertCount(1, $result);
     }
 
-    public function testThrowsWhenAllCapacityReservedByOffers(): void
-    {
-        $productPriceId = 10;
-        $quantity = 2;
-        $event = $this->createMockEvent();
-        $eventSettings = $this->createMockEventSettings();
-
-        $this->databaseManager
-            ->shouldReceive('transaction')
-            ->once()
-            ->andReturnUsing(function ($callback) {
-                return $callback();
-            });
-
-        $this->mockAvailableQuantities($event->getId(), $productPriceId, 2);
-
-        $this->waitlistEntryRepository
-            ->shouldReceive('countWhere')
-            ->once()
-            ->with([
-                'product_price_id' => $productPriceId,
-                'status' => WaitlistEntryStatus::OFFERED->name,
-            ])
-            ->andReturn(2);
-
-        $this->expectException(NoCapacityAvailableException::class);
-
-        $this->service->offerToNext($productPriceId, $quantity, $event, $eventSettings);
-    }
-
     public function testThrowsWhenNoCapacityAtAll(): void
     {
         $productPriceId = 10;
@@ -542,15 +487,6 @@ class ProcessWaitlistServiceTest extends TestCase
 
         $this->mockAvailableQuantities($event->getId(), $productPriceId, 0);
 
-        $this->waitlistEntryRepository
-            ->shouldReceive('countWhere')
-            ->once()
-            ->with([
-                'product_price_id' => $productPriceId,
-                'status' => WaitlistEntryStatus::OFFERED->name,
-            ])
-            ->andReturn(0);
-
         $this->expectException(NoCapacityAvailableException::class);
 
         $this->service->offerToNext($productPriceId, $quantity, $event, $eventSettings);
@@ -564,11 +500,6 @@ class ProcessWaitlistServiceTest extends TestCase
         $quantity = 1;
         $event = $this->createMockEvent();
         $eventSettings = $this->createMockEventSettings(null);
-
-        $this->waitlistEntryRepository
-            ->shouldReceive('countWhere')
-            ->once()
-            ->andReturn(0);
 
         $this->databaseManager
             ->shouldReceive('transaction')
@@ -648,15 +579,6 @@ class ProcessWaitlistServiceTest extends TestCase
             ->andReturn($entry);
 
         $this->mockAvailableQuantities($eventId, $productPriceId, 5);
-
-        $this->waitlistEntryRepository
-            ->shouldReceive('countWhere')
-            ->once()
-            ->with([
-                'product_price_id' => $productPriceId,
-                'status' => WaitlistEntryStatus::OFFERED->name,
-            ])
-            ->andReturn(0);
 
         $order = $this->mockOrderCreation();
 
@@ -775,15 +697,6 @@ class ProcessWaitlistServiceTest extends TestCase
 
         $this->mockAvailableQuantities($eventId, $productPriceId, 3);
 
-        $this->waitlistEntryRepository
-            ->shouldReceive('countWhere')
-            ->once()
-            ->with([
-                'product_price_id' => $productPriceId,
-                'status' => WaitlistEntryStatus::OFFERED->name,
-            ])
-            ->andReturn(0);
-
         $this->mockOrderCreation();
 
         $this->waitlistEntryRepository
@@ -834,15 +747,6 @@ class ProcessWaitlistServiceTest extends TestCase
 
         $this->mockAvailableQuantities($eventId, $productPriceId, 0);
 
-        $this->waitlistEntryRepository
-            ->shouldReceive('countWhere')
-            ->once()
-            ->with([
-                'product_price_id' => $productPriceId,
-                'status' => WaitlistEntryStatus::OFFERED->name,
-            ])
-            ->andReturn(0);
-
         $this->expectException(NoCapacityAvailableException::class);
 
         $this->service->offerSpecificEntry($entryId, $eventId, $event, $eventSettings);
@@ -875,16 +779,7 @@ class ProcessWaitlistServiceTest extends TestCase
             ->with(['id' => $entryId, 'event_id' => $eventId])
             ->andReturn($entry);
 
-        $this->mockAvailableQuantities($eventId, $productPriceId, 2);
-
-        $this->waitlistEntryRepository
-            ->shouldReceive('countWhere')
-            ->once()
-            ->with([
-                'product_price_id' => $productPriceId,
-                'status' => WaitlistEntryStatus::OFFERED->name,
-            ])
-            ->andReturn(2);
+        $this->mockAvailableQuantities($eventId, $productPriceId, 0);
 
         $this->expectException(NoCapacityAvailableException::class);
 

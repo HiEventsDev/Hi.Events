@@ -10,6 +10,7 @@ use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Jobs\Waitlist\SendWaitlistConfirmationEmailJob;
 use HiEvents\Repository\Interfaces\WaitlistEntryRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Waitlist\DTO\CreateWaitlistEntryDTO;
+use HiEvents\Helper\EmailHelper;
 use HiEvents\Services\Domain\Waitlist\CreateWaitlistEntryService;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Facades\Bus;
@@ -136,6 +137,11 @@ class CreateWaitlistEntryServiceTest extends TestCase
         $existingEntry = Mockery::mock(WaitlistEntryDomainObject::class);
 
         $this->waitlistEntryRepository
+            ->shouldReceive('lockForProductPrice')
+            ->once()
+            ->with(10);
+
+        $this->waitlistEntryRepository
             ->shouldReceive('findFirstWhere')
             ->once()
             ->with([
@@ -196,6 +202,65 @@ class CreateWaitlistEntryServiceTest extends TestCase
         $this->service->createEntry($dto, $eventSettings, $product);
 
         Bus::assertDispatched(SendWaitlistConfirmationEmailJob::class);
+    }
+
+    public function testPreventsDuplicateEntryWithPlusAlias(): void
+    {
+        $dto = new CreateWaitlistEntryDTO(
+            event_id: 1,
+            product_price_id: 10,
+            email: 'duplicate+alias@gmail.com',
+            first_name: 'Jane',
+            last_name: 'Doe',
+        );
+
+        $eventSettings = new EventSettingDomainObject();
+        $eventSettings->setWaitlistEnabled(true);
+
+        $product = Mockery::mock(ProductDomainObject::class);
+        $product->shouldReceive('getWaitlistEnabled')->andReturn(true);
+
+        $existingEntry = Mockery::mock(WaitlistEntryDomainObject::class);
+
+        $this->waitlistEntryRepository
+            ->shouldReceive('lockForProductPrice')
+            ->once()
+            ->with(10);
+
+        $this->waitlistEntryRepository
+            ->shouldReceive('findFirstWhere')
+            ->once()
+            ->with([
+                'email' => 'duplicate@gmail.com',
+                'event_id' => 1,
+                ['status', 'in', [WaitlistEntryStatus::WAITING->name, WaitlistEntryStatus::OFFERED->name]],
+                'product_price_id' => 10,
+            ])
+            ->andReturn($existingEntry);
+
+        $this->expectException(ResourceConflictException::class);
+        $this->expectExceptionMessage('You are already on the waitlist for this product');
+
+        $this->service->createEntry($dto, $eventSettings, $product);
+    }
+
+    public function testNormalizeEmailStripsPlusForKnownProviders(): void
+    {
+        $this->assertEquals('user@gmail.com', EmailHelper::normalize('user+tag@gmail.com'));
+        $this->assertEquals('user@gmail.com', EmailHelper::normalize('User+Tag@Gmail.com'));
+        $this->assertEquals('user@hotmail.com', EmailHelper::normalize('user+foo@hotmail.com'));
+        $this->assertEquals('user@proton.me', EmailHelper::normalize('user+bar@proton.me'));
+    }
+
+    public function testNormalizeEmailPreservesPlusForUnknownProviders(): void
+    {
+        $this->assertEquals('user+tag@company.com', EmailHelper::normalize('user+tag@company.com'));
+        $this->assertEquals('user+tag@myisp.net', EmailHelper::normalize('User+Tag@MyISP.net'));
+    }
+
+    public function testNormalizeEmailTrimsAndLowercases(): void
+    {
+        $this->assertEquals('user@example.com', EmailHelper::normalize('  User@Example.com  '));
     }
 
     public function testThrowsExceptionWhenWaitlistNotEnabledOnProduct(): void

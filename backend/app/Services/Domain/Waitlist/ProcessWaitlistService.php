@@ -53,6 +53,7 @@ class ProcessWaitlistService
     ): Collection
     {
         return $this->databaseManager->transaction(function () use ($productPriceId, $quantity, $event, $eventSettings) {
+            $this->databaseManager->statement('SELECT pg_advisory_xact_lock(?)', [$event->getId()]);
             $this->waitlistEntryRepository->lockForProductPrice($productPriceId);
 
             $quantities = $this->availableQuantitiesService->getAvailableProductQuantities(
@@ -60,25 +61,17 @@ class ProcessWaitlistService
                 ignoreCache: true,
             );
 
-            $actualAvailable = $this->getAvailableCountForPrice($quantities, $productPriceId);
+            $availableCount = $this->getAvailableCountForPrice($quantities, $productPriceId);
 
-            $currentlyOfferedCount = $this->waitlistEntryRepository->countWhere([
-                'product_price_id' => $productPriceId,
-                'status' => WaitlistEntryStatus::OFFERED->name,
-            ]);
-
-            $effectiveAvailable = $actualAvailable - $currentlyOfferedCount;
-
-            if ($effectiveAvailable <= 0) {
+            if ($availableCount <= 0) {
                 throw new NoCapacityAvailableException(
-                    __('No capacity available. Available: :available, reserved by pending offers: :offered', [
-                        'available' => $actualAvailable,
-                        'offered' => $currentlyOfferedCount,
+                    __('No capacity available. Available: :available', [
+                        'available' => $availableCount,
                     ])
                 );
             }
 
-            $toOffer = min($quantity, $effectiveAvailable);
+            $toOffer = min($quantity, $availableCount);
             $entries = $this->waitlistEntryRepository->getNextWaitingEntries($productPriceId, $toOffer);
 
             if ($entries->isEmpty()) {
@@ -109,6 +102,8 @@ class ProcessWaitlistService
     ): Collection
     {
         return $this->databaseManager->transaction(function () use ($entryId, $eventId, $event, $eventSettings) {
+            $this->databaseManager->statement('SELECT pg_advisory_xact_lock(?)', [$event->getId()]);
+
             /** @var WaitlistEntryDomainObject|null $entry */
             $entry = $this->waitlistEntryRepository->findFirstWhere([
                 'id' => $entryId,
@@ -133,18 +128,12 @@ class ProcessWaitlistService
                 ignoreCache: true,
             );
 
-            $actualAvailable = $this->getAvailableCountForPrice($quantities, $entry->getProductPriceId());
+            $availableCount = $this->getAvailableCountForPrice($quantities, $entry->getProductPriceId());
 
-            $currentlyOfferedCount = $this->waitlistEntryRepository->countWhere([
-                'product_price_id' => $entry->getProductPriceId(),
-                'status' => WaitlistEntryStatus::OFFERED->name,
-            ]);
-
-            if ($actualAvailable <= $currentlyOfferedCount) {
+            if ($availableCount <= 0) {
                 throw new NoCapacityAvailableException(
-                    __('No capacity available to offer this waitlist entry. You will need to increase the available quantity for the product. Available: :available, already offered: :offered', [
-                        'available' => $actualAvailable,
-                        'offered' => $currentlyOfferedCount,
+                    __('No capacity available to offer this waitlist entry. You will need to increase the available quantity for the product. Available: :available', [
+                        'available' => $availableCount,
                     ])
                 );
             }

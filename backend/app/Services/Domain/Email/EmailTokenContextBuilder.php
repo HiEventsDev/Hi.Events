@@ -90,8 +90,8 @@ class EmailTokenContextBuilder
         /** @var OrderItemDomainObject $orderItem */
         $orderItem = $order->getOrderItems()->first(fn(OrderItemDomainObject $item) => $item->getProductPriceId() === $attendee->getProductPriceId());
 
-        $ticketPrice = Currency::format($orderItem?->getPrice(), $event->getCurrency());
-        $ticketName = $orderItem->getItemName();
+        $ticketPrice = Currency::format($orderItem?->getPrice() ?? 0, $event->getCurrency());
+        $ticketName = $orderItem?->getItemName();
 
         // Add attendee and ticket objects
         $baseContext['attendee'] = [

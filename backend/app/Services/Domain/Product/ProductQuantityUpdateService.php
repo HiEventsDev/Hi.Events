@@ -52,7 +52,7 @@ class ProductQuantityUpdateService
             });
 
             $this->productPriceRepository->updateWhere([
-                'quantity_sold' => DB::raw('quantity_sold - ' . $adjustment),
+                'quantity_sold' => DB::raw('GREATEST(0, quantity_sold - ' . $adjustment . ')'),
             ], [
                 'id' => $priceId,
             ]);
@@ -97,7 +97,7 @@ class ProductQuantityUpdateService
     private function decreaseCapacityAssignmentUsedCapacity(int $capacityAssignmentId, int $adjustment = 1): void
     {
         $this->capacityAssignmentRepository->updateWhere([
-            CapacityAssignmentDomainObjectAbstract::USED_CAPACITY => DB::raw(CapacityAssignmentDomainObjectAbstract::USED_CAPACITY . ' - ' . $adjustment),
+            CapacityAssignmentDomainObjectAbstract::USED_CAPACITY => DB::raw('GREATEST(0, ' . CapacityAssignmentDomainObjectAbstract::USED_CAPACITY . ' - ' . $adjustment . ')'),
         ], [
             'id' => $capacityAssignmentId,
         ]);

@@ -10,8 +10,9 @@ use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Services\Domain\Product\AvailableProductQuantitiesFetchService;
 use HiEvents\Services\Domain\Waitlist\ProcessWaitlistService;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
-class ProcessWaitlistOnCapacityAvailableListener
+class ProcessWaitlistOnCapacityAvailableListener implements ShouldQueue
 {
     public function __construct(
         private readonly EventRepositoryInterface               $eventRepository,
@@ -24,10 +25,6 @@ class ProcessWaitlistOnCapacityAvailableListener
     public function handle(CapacityChangedEvent $event): void
     {
         if ($event->direction !== CapacityChangeDirection::INCREASED) {
-            return;
-        }
-
-        if ($event->productId === null) {
             return;
         }
 
@@ -47,7 +44,7 @@ class ProcessWaitlistOnCapacityAvailableListener
         );
 
         foreach ($quantities->productQuantities as $productQuantity) {
-            if ($productQuantity->product_id !== $event->productId) {
+            if ($event->productId !== null && $productQuantity->product_id !== $event->productId) {
                 continue;
             }
 

@@ -5,11 +5,12 @@ import { AddressSettings } from "./Sections/AddressSettings";
 import EmailTemplateSettings from "./Sections/EmailTemplateSettings";
 import { EventDefaults } from "./Sections/EventDefaults";
 import { PlatformFeesSettings } from "./Sections/PlatformFeesSettings";
+import { DangerZoneSettings } from "./Sections/DangerZoneSettings";
 import { PageBody } from "../../../common/PageBody";
 import { PageTitle } from "../../../common/PageTitle";
 import { t } from "@lingui/macro";
 import { Box, Group, NavLink as MantineNavLink, Stack } from "@mantine/core";
-import { IconBrandGoogleAnalytics, IconInfoCircle, IconMapPin, IconShare, IconMail, IconCalendarEvent, IconPercentage } from "@tabler/icons-react";
+import { IconAlertTriangle, IconBrandGoogleAnalytics, IconInfoCircle, IconMapPin, IconShare, IconMail, IconCalendarEvent, IconPercentage } from "@tabler/icons-react";
 import { useMediaQuery } from "@mantine/hooks";
 import { useMemo, useState } from "react";
 import { Card } from "../../../common/Card";
@@ -65,6 +66,13 @@ const Settings = () => {
                 icon: IconMail,
                 component: () => <EmailTemplateSettings organizerId={organizerId!} />
             },
+            {
+                id: 'danger-zone',
+                label: t`Danger Zone`,
+                icon: IconAlertTriangle,
+                component: DangerZoneSettings,
+                color: 'red',
+            },
         ];
 
         if (isSaasMode) {
@@ -96,6 +104,7 @@ const Settings = () => {
                         key={section.id}
                         active={activeSection === section.id}
                         label={section.label}
+                        color={'color' in section ? section.color as string : undefined}
                         leftSection={<section.icon size={16} stroke={1.5} />}
                         onClick={() => handleClick(section.id)}
                     />

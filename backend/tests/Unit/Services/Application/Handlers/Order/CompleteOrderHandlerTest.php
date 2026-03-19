@@ -25,6 +25,7 @@ use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use HiEvents\Services\Infrastructure\DomainEvents\Events\OrderEvent;
+use HiEvents\Services\Infrastructure\Session\CheckoutSessionManagementService;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Bus;
@@ -48,6 +49,7 @@ class CompleteOrderHandlerTest extends TestCase
     private DomainEventDispatcherService $domainEventDispatcherService;
     private AffiliateRepositoryInterface|MockInterface $affiliateRepository;
     private EventSettingsRepositoryInterface $eventSettingsRepository;
+    private CheckoutSessionManagementService|MockInterface $sessionManagementService;
 
     protected function setUp(): void
     {
@@ -65,6 +67,8 @@ class CompleteOrderHandlerTest extends TestCase
         $this->domainEventDispatcherService = Mockery::mock(DomainEventDispatcherService::class);
         $this->affiliateRepository = Mockery::mock(AffiliateRepositoryInterface::class);
         $this->eventSettingsRepository = Mockery::mock(EventSettingsRepositoryInterface::class);
+        $this->sessionManagementService = Mockery::mock(CheckoutSessionManagementService::class);
+        $this->sessionManagementService->shouldReceive('verifySession')->andReturn(true)->byDefault();
 
         $this->completeOrderHandler = new CompleteOrderHandler(
             $this->orderRepository,
@@ -75,6 +79,7 @@ class CompleteOrderHandlerTest extends TestCase
             $this->productPriceRepository,
             $this->domainEventDispatcherService,
             $this->eventSettingsRepository,
+            $this->sessionManagementService,
         );
     }
 
@@ -296,6 +301,7 @@ class CompleteOrderHandlerTest extends TestCase
     {
         return (new OrderDomainObject())
             ->setEmail(null)
+            ->setSessionId('test-session-id')
             ->setReservedUntil(Carbon::now()->addHour()->toDateTimeString())
             ->setStatus($status->name)
             ->setId(1)

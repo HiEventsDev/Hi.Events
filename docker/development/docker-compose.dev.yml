@@ -10,6 +10,7 @@ services:
             - ./../../backend:/var/www/html
             - ./../../backend/storage:/var/www/html/storage
             - ./../../backend/bootstrap/cache:/var/www/html/bootstrap/cache
+            - ./../../VERSION:/var/www/html/VERSION:ro
         environment:
               APP_ENV: '${APP_ENV:-local}'
               APP_KEY: '${APP_KEY}'
@@ -32,6 +33,7 @@ services:
         volumes:
             - ./../../frontend:/app
             - /app/node_modules
+            - ./../../VERSION:/app/VERSION:ro
 
         command: yarn dev:csr
         environment:
@@ -49,6 +51,7 @@ services:
         volumes:
             - ./../../frontend:/app
             - /app/node_modules
+            - ./../../VERSION:/app/VERSION:ro
 
         command: yarn dev:ssr
         environment:

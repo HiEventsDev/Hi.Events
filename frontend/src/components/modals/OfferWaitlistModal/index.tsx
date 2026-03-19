@@ -3,10 +3,12 @@ import {Modal} from "../../common/Modal";
 import {useOfferWaitlistEntry} from "../../../mutations/useOfferWaitlistEntry.ts";
 import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {t} from "@lingui/macro";
-import {Alert, Badge, NumberInput, Paper, Table, Text} from "@mantine/core";
-import {IconBolt, IconInfoCircle, IconSend} from "@tabler/icons-react";
+import {Anchor, Badge, NumberInput, Paper, Table, Text} from "@mantine/core";
+import {IconSend} from "@tabler/icons-react";
+import {NavLink} from "react-router";
 import {Button} from "../../common/Button";
 import {useState} from "react";
+import {BouncingEmoji} from "../../common/BouncingEmoji";
 
 interface OfferWaitlistModalProps extends GenericModalProps {
     eventId: IdParam;
@@ -30,6 +32,7 @@ export const OfferWaitlistModal = ({onClose, eventId, eventSettings, stats}: Off
     const [loadingProductId, setLoadingProductId] = useState<number | null>(null);
 
     const productsWithWaiting = stats?.products?.filter(p => p.waiting > 0) ?? [];
+    const isAutoProcess = !!eventSettings?.waitlist_auto_process;
 
     const [quantities, setQuantities] = useState<Record<number, number>>(() => {
         const initial: Record<number, number> = {};
@@ -71,105 +74,158 @@ export const OfferWaitlistModal = ({onClose, eventId, eventSettings, stats}: Off
 
     const isBusy = loadingProductId !== null;
 
+    if (isAutoProcess) {
+        return (
+            <Modal
+                opened
+                onClose={onClose}
+                heading={t`Offer Tickets`}
+            >
+                <div style={{textAlign: 'center', padding: '20px 0 10px'}}>
+                    <BouncingEmoji emoji="⚡"/>
+                    <Text size="lg" fw={600} mb="xs">
+                        {t`Auto-offer is enabled`}
+                    </Text>
+                    <Text size="sm" c="dimmed" mb="md" maw={380} mx="auto">
+                        {t`Tickets are automatically offered to waitlisted customers when capacity becomes available.`}
+                        {!!timeoutHours && ' ' + t`Offers expire after ${timeoutHours} hours.`}
+                    </Text>
+                    <Anchor
+                        component={NavLink}
+                        to={`/manage/event/${eventId}/settings#waitlist-settings`}
+                        size="xs"
+                    >
+                        {t`Change waitlist settings`}
+                    </Anchor>
+                </div>
+
+                {productsWithWaiting.length > 0 && (
+                    <>
+                        <Text size="sm" fw={500} mb="xs">{t`Manual offer`}</Text>
+                        <Text size="xs" c="dimmed" mb="sm">
+                            {t`You can still manually offer tickets if needed.`}
+                        </Text>
+                        <ProductOfferTable
+                            products={productsWithWaiting}
+                            quantities={quantities}
+                            setQuantities={setQuantities}
+                            onOffer={handleOffer}
+                            loadingProductId={loadingProductId}
+                            isBusy={isBusy}
+                        />
+                    </>
+                )}
+            </Modal>
+        );
+    }
+
     return (
         <Modal
             opened
             onClose={onClose}
             heading={t`Offer Tickets`}
         >
-            <Alert variant="light" color="blue" icon={<IconInfoCircle size={16}/>} mb="md">
+            <Text size="sm" c="dimmed" mb="xs">
                 {t`Each person will receive an email with a reserved spot to complete their purchase.`}
-                {timeoutHours && (
-                    <Text size="sm" mt="xs">
-                        {t`Offers expire after ${timeoutHours} hours.`}
-                    </Text>
-                )}
-            </Alert>
-
-            {eventSettings?.waitlist_auto_process && (
-                <Alert variant="light" color="yellow" icon={<IconBolt size={16}/>} mb="md">
-                    {t`Auto-offer is enabled. Tickets are automatically offered when capacity becomes available. Use this to manually offer additional spots.`}
-                </Alert>
-            )}
+                {!!timeoutHours && ' ' + t`Offers expire after ${timeoutHours} hours.`}
+            </Text>
 
             {productsWithWaiting.length === 0 ? (
                 <Text c="dimmed" ta="center" py="xl">{t`No products have waiting entries`}</Text>
             ) : (
-                <Paper withBorder radius="md" style={{overflow: 'hidden'}}>
-                    <Table verticalSpacing="sm" horizontalSpacing="md">
-                        <Table.Thead>
-                            <Table.Tr>
-                                <Table.Th>{t`Product`}</Table.Th>
-                                <Table.Th style={{textAlign: 'center'}}>{t`Waiting`}</Table.Th>
-                                <Table.Th style={{textAlign: 'center'}}>{t`Available`}</Table.Th>
-                                <Table.Th style={{textAlign: 'right'}}>{t`Qty`}</Table.Th>
-                                <Table.Th style={{width: 1}}></Table.Th>
-                            </Table.Tr>
-                        </Table.Thead>
-                        <Table.Tbody>
-                            {productsWithWaiting.map(product => {
-                                const noCapacity = product.available === 0;
-                                const isRowLoading = loadingProductId === product.product_price_id;
-                                const max = getMaxQuantity(product);
-
-                                return (
-                                    <Table.Tr
-                                        key={product.product_price_id}
-                                        style={noCapacity ? {opacity: 0.5} : undefined}
-                                    >
-                                        <Table.Td>
-                                            <Text size="sm" fw={500}>{product.product_title}</Text>
-                                        </Table.Td>
-                                        <Table.Td style={{textAlign: 'center'}}>
-                                            {product.waiting}
-                                        </Table.Td>
-                                        <Table.Td style={{textAlign: 'center'}}>
-                                            {noCapacity ? (
-                                                <Badge color="red" variant="light" size="sm">{t`No capacity`}</Badge>
-                                            ) : product.available === null ? (
-                                                <Badge color="teal" variant="light" size="sm">{t`Unlimited`}</Badge>
-                                            ) : (
-                                                product.available
-                                            )}
-                                        </Table.Td>
-                                        <Table.Td style={{textAlign: 'right'}}>
-                                            {!noCapacity && (
-                                                <NumberInput
-                                                    size="xs"
-                                                    min={1}
-                                                    max={max}
-                                                    mb={0}
-                                                    value={quantities[product.product_price_id] ?? 1}
-                                                    onChange={(val) => setQuantities(prev => ({
-                                                        ...prev,
-                                                        [product.product_price_id]: Number(val) || 1,
-                                                    }))}
-                                                    disabled={isBusy}
-                                                    style={{width: 70, marginLeft: 'auto'}}
-                                                />
-                                            )}
-                                        </Table.Td>
-                                        <Table.Td>
-                                            {!noCapacity && (
-                                                <Button
-                                                    size="xs"
-                                                    variant="light"
-                                                    leftSection={<IconSend size={14}/>}
-                                                    onClick={() => handleOffer(product)}
-                                                    disabled={isBusy && !isRowLoading}
-                                                    loading={isRowLoading}
-                                                >
-                                                    {t`Offer`}
-                                                </Button>
-                                            )}
-                                        </Table.Td>
-                                    </Table.Tr>
-                                );
-                            })}
-                        </Table.Tbody>
-                    </Table>
-                </Paper>
+                <ProductOfferTable
+                    products={productsWithWaiting}
+                    quantities={quantities}
+                    setQuantities={setQuantities}
+                    onOffer={handleOffer}
+                    loadingProductId={loadingProductId}
+                    isBusy={isBusy}
+                />
             )}
         </Modal>
     );
 };
+
+const ProductOfferTable = ({products, quantities, setQuantities, onOffer, loadingProductId, isBusy}: {
+    products: WaitlistProductStats[];
+    quantities: Record<number, number>;
+    setQuantities: (fn: (prev: Record<number, number>) => Record<number, number>) => void;
+    onOffer: (product: WaitlistProductStats) => void;
+    loadingProductId: number | null;
+    isBusy: boolean;
+}) => (
+    <Paper withBorder radius="md" style={{overflow: 'hidden'}}>
+        <Table verticalSpacing="sm" horizontalSpacing="md">
+            <Table.Thead>
+                <Table.Tr>
+                    <Table.Th>{t`Product`}</Table.Th>
+                    <Table.Th style={{textAlign: 'center'}}>{t`Waiting`}</Table.Th>
+                    <Table.Th style={{textAlign: 'center'}}>{t`Available`}</Table.Th>
+                    <Table.Th style={{textAlign: 'right'}}>{t`Qty`}</Table.Th>
+                    <Table.Th style={{width: 1}}></Table.Th>
+                </Table.Tr>
+            </Table.Thead>
+            <Table.Tbody>
+                {products.map(product => {
+                    const noCapacity = product.available === 0;
+                    const isRowLoading = loadingProductId === product.product_price_id;
+                    const max = getMaxQuantity(product);
+
+                    return (
+                        <Table.Tr
+                            key={product.product_price_id}
+                            style={noCapacity ? {opacity: 0.5} : undefined}
+                        >
+                            <Table.Td>
+                                <Text size="sm" fw={500}>{product.product_title}</Text>
+                            </Table.Td>
+                            <Table.Td style={{textAlign: 'center'}}>
+                                {product.waiting}
+                            </Table.Td>
+                            <Table.Td style={{textAlign: 'center'}}>
+                                {noCapacity ? (
+                                    <Badge color="red" variant="light" size="sm">{t`No capacity`}</Badge>
+                                ) : product.available === null ? (
+                                    <Badge color="teal" variant="light" size="sm">{t`Unlimited`}</Badge>
+                                ) : (
+                                    product.available
+                                )}
+                            </Table.Td>
+                            <Table.Td style={{textAlign: 'right'}}>
+                                {!noCapacity && (
+                                    <NumberInput
+                                        size="xs"
+                                        min={1}
+                                        max={max}
+                                        mb={0}
+                                        value={quantities[product.product_price_id] ?? 1}
+                                        onChange={(val) => setQuantities(prev => ({
+                                            ...prev,
+                                            [product.product_price_id]: Number(val) || 1,
+                                        }))}
+                                        disabled={isBusy}
+                                        style={{width: 70, marginLeft: 'auto'}}
+                                    />
+                                )}
+                            </Table.Td>
+                            <Table.Td>
+                                {!noCapacity && (
+                                    <Button
+                                        size="xs"
+                                        variant="light"
+                                        leftSection={<IconSend size={14}/>}
+                                        onClick={() => onOffer(product)}
+                                        disabled={isBusy && !isRowLoading}
+                                        loading={isRowLoading}
+                                    >
+                                        {t`Offer`}
+                                    </Button>
+                                )}
+                            </Table.Td>
+                        </Table.Tr>
+                    );
+                })}
+            </Table.Tbody>
+        </Table>
+    </Paper>
+);

@@ -8,12 +8,14 @@ use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Repository\Interfaces\EmailTemplateRepositoryInterface;
 use HiEvents\Services\Application\Handlers\EmailTemplate\DTO\UpsertEmailTemplateDTO;
 use HiEvents\Services\Domain\Email\EmailTemplateService;
+use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 
 class CreateEmailTemplateHandler
 {
     public function __construct(
         private readonly EmailTemplateRepositoryInterface $emailTemplateRepository,
         private readonly EmailTemplateService             $emailTemplateService,
+        private readonly HtmlPurifierService              $purifier,
     )
     {
     }
@@ -50,7 +52,7 @@ class CreateEmailTemplateHandler
             'event_id' => $dto->event_id,
             'template_type' => $dto->template_type->value,
             'subject' => $dto->subject,
-            'body' => $dto->body,
+            'body' => $this->purifier->purify($dto->body),
             'cta' => $dto->cta,
             'engine' => $dto->engine->value,
             'is_active' => $dto->is_active,

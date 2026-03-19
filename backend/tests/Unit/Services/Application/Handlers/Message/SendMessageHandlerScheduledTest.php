@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use HiEvents\DomainObjects\AccountDomainObject;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Enums\MessageTypeEnum;
+use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\MessageDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
@@ -13,6 +14,7 @@ use HiEvents\DomainObjects\Status\MessageStatus;
 use HiEvents\Jobs\Event\SendMessagesJob;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\MessageRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
@@ -32,6 +34,7 @@ class SendMessageHandlerScheduledTest extends TestCase
     private ProductRepositoryInterface $productRepository;
     private MessageRepositoryInterface $messageRepository;
     private AccountRepositoryInterface $accountRepository;
+    private EventRepositoryInterface $eventRepository;
     private HtmlPurifierService $purifier;
     private Repository $config;
     private MessagingEligibilityService $eligibilityService;
@@ -46,6 +49,7 @@ class SendMessageHandlerScheduledTest extends TestCase
         $this->productRepository = m::mock(ProductRepositoryInterface::class);
         $this->messageRepository = m::mock(MessageRepositoryInterface::class);
         $this->accountRepository = m::mock(AccountRepositoryInterface::class);
+        $this->eventRepository = m::mock(EventRepositoryInterface::class);
         $this->purifier = m::mock(HtmlPurifierService::class);
         $this->config = m::mock(Repository::class);
         $this->eligibilityService = m::mock(MessagingEligibilityService::class);
@@ -56,6 +60,7 @@ class SendMessageHandlerScheduledTest extends TestCase
             $this->productRepository,
             $this->messageRepository,
             $this->accountRepository,
+            $this->eventRepository,
             $this->purifier,
             $this->config,
             $this->eligibilityService
@@ -68,7 +73,11 @@ class SendMessageHandlerScheduledTest extends TestCase
         $account->shouldReceive('getAccountVerifiedAt')->andReturn(Carbon::now());
         $account->shouldReceive('getIsManuallyVerified')->andReturn(true);
 
+        $event = m::mock(EventDomainObject::class);
+        $event->shouldReceive('getTimezone')->andReturn('America/New_York');
+
         $this->accountRepository->shouldReceive('findById')->with(1)->andReturn($account);
+        $this->eventRepository->shouldReceive('findById')->with(101)->andReturn($event);
         $this->config->shouldReceive('get')->with('app.saas_mode_enabled')->andReturn(false);
 
         $this->eligibilityService->shouldReceive('checkTierLimits')->andReturn(null);
@@ -129,7 +138,7 @@ class SendMessageHandlerScheduledTest extends TestCase
             order_statuses: [],
             attendee_ids: [10],
             product_ids: [20],
-            scheduled_at: Carbon::now()->addHour()->toIso8601String(),
+            scheduled_at: Carbon::now('America/New_York')->addHour()->format('Y-m-d\TH:i'),
         );
 
         $result = $this->handler->handle($dto);
@@ -216,7 +225,7 @@ class SendMessageHandlerScheduledTest extends TestCase
             order_statuses: [],
             attendee_ids: [10],
             product_ids: [20],
-            scheduled_at: Carbon::now()->addHour()->toIso8601String(),
+            scheduled_at: Carbon::now('America/New_York')->addHour()->format('Y-m-d\TH:i'),
         );
 
         $result = $this->handler->handle($dto);

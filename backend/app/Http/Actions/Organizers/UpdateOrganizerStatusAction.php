@@ -4,6 +4,7 @@ namespace HiEvents\Http\Actions\Organizers;
 
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Exceptions\AccountNotVerifiedException;
+use HiEvents\Exceptions\CannotDeleteEntityException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Organizer\UpdateOrganizerStatusRequest;
 use HiEvents\Http\ResponseCodes;
@@ -32,6 +33,8 @@ class UpdateOrganizerStatusAction extends BaseAction
             ]));
         } catch (AccountNotVerifiedException $e) {
             return $this->errorResponse($e->getMessage(), ResponseCodes::HTTP_UNPROCESSABLE_ENTITY);
+        } catch (CannotDeleteEntityException $e) {
+            return $this->errorResponse($e->getMessage(), ResponseCodes::HTTP_CONFLICT);
         }
 
         return $this->resourceResponse(OrganizerResource::class, $updatedOrganizer);

@@ -7,6 +7,7 @@ use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\Status\WaitlistEntryStatus;
 use HiEvents\DomainObjects\WaitlistEntryDomainObject;
 use HiEvents\Exceptions\ResourceConflictException;
+use HiEvents\Helper\EmailHelper;
 use HiEvents\Jobs\Waitlist\SendWaitlistConfirmationEmailJob;
 use HiEvents\Repository\Interfaces\WaitlistEntryRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Waitlist\DTO\CreateWaitlistEntryDTO;
@@ -32,17 +33,17 @@ class CreateWaitlistEntryService
     ): WaitlistEntryDomainObject
     {
         $this->validateWaitlistEnabled($product);
-        $this->validateNoDuplicate($dto);
 
         /** @var WaitlistEntryDomainObject $entry */
         $entry = $this->databaseManager->transaction(function () use ($dto) {
             $this->waitlistEntryRepository->lockForProductPrice($dto->product_price_id);
+            $this->validateNoDuplicate($dto);
             $position = $this->calculatePosition($dto);
 
             return $this->waitlistEntryRepository->create([
                 'event_id' => $dto->event_id,
                 'product_price_id' => $dto->product_price_id,
-                'email' => strtolower(trim($dto->email)),
+                'email' => EmailHelper::normalize($dto->email),
                 'first_name' => trim($dto->first_name),
                 'last_name' => $dto->last_name ? trim($dto->last_name) : null,
                 'status' => WaitlistEntryStatus::WAITING->name,
@@ -73,7 +74,7 @@ class CreateWaitlistEntryService
     private function validateNoDuplicate(CreateWaitlistEntryDTO $dto): void
     {
         $conditions = [
-            'email' => strtolower(trim($dto->email)),
+            'email' => EmailHelper::normalize($dto->email),
             'event_id' => $dto->event_id,
             ['status', 'in', [WaitlistEntryStatus::WAITING->name, WaitlistEntryStatus::OFFERED->name]],
             'product_price_id' => $dto->product_price_id,

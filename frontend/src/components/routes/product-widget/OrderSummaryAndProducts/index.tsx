@@ -19,7 +19,7 @@ import {
     IconTicket,
     IconUser
 } from "@tabler/icons-react";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useQueryClient} from "@tanstack/react-query";
 
 import {useGetOrderPublic, GET_ORDER_PUBLIC_QUERY_KEY} from "../../../../queries/useGetOrderPublic.ts";
@@ -48,6 +48,7 @@ import {useResendOrderConfirmationPublic} from "../../../../mutations/useResendO
 
 import {Attendee, Event, Order, Product} from "../../../../types.ts";
 import classes from './OrderSummaryAndProducts.module.scss';
+import {clearWaitlistJoinedForEvent} from "../../../../hooks/useWaitlistJoined.ts";
 
 const PaymentStatus = ({order}: { order: Order }) => {
     const paymentStatuses: Record<string, string> = {
@@ -407,6 +408,12 @@ export const OrderSummaryAndProducts = () => {
 
     const [editingAttendee, setEditingAttendee] = useState<Attendee | null>(null);
     const [editOrderModalOpened, setEditOrderModalOpened] = useState(false);
+
+    useEffect(() => {
+        if (eventId && order && (order.status === 'COMPLETED' || order.status === 'AWAITING_OFFLINE_PAYMENT')) {
+            clearWaitlistJoinedForEvent(eventId);
+        }
+    }, [eventId, order?.status]);
 
     const editAttendeeMutation = useEditAttendeePublic();
     const editOrderMutation = useEditOrderPublic();

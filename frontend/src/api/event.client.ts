@@ -70,7 +70,12 @@ export const eventsClient = {
     },
 
     delete: async (eventId: IdParam) => {
-        const response = await api.get('events/' + eventId);
+        const response = await api.delete('events/' + eventId);
+        return response.data;
+    },
+
+    getDeletionStatus: async (eventId: IdParam) => {
+        const response = await api.get<GenericDataResponse<{ can_delete: boolean; reason?: string }>>('events/' + eventId + '/deletion-status');
         return response.data;
     },
 

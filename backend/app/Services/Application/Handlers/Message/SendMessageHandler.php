@@ -8,10 +8,12 @@ use HiEvents\DomainObjects\MessageDomainObject;
 use HiEvents\DomainObjects\Status\MessageStatus;
 use HiEvents\Exceptions\AccountNotVerifiedException;
 use HiEvents\Exceptions\MessagingTierLimitExceededException;
+use HiEvents\Helper\DateHelper;
 use HiEvents\Jobs\Event\SendMessagesJob;
 use HiEvents\Jobs\Message\MessagePendingReviewJob;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\MessageRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
@@ -20,6 +22,7 @@ use HiEvents\Services\Domain\Message\MessagingEligibilityService;
 use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 use Illuminate\Config\Repository;
 use Illuminate\Support\Collection;
+use Illuminate\Validation\ValidationException;
 
 class SendMessageHandler
 {
@@ -29,6 +32,7 @@ class SendMessageHandler
         private readonly ProductRepositoryInterface    $productRepository,
         private readonly MessageRepositoryInterface    $messageRepository,
         private readonly AccountRepositoryInterface    $accountRepository,
+        private readonly EventRepositoryInterface      $eventRepository,
         private readonly HtmlPurifierService           $purifier,
         private readonly Repository                    $config,
         private readonly MessagingEligibilityService   $eligibilityService,
@@ -75,6 +79,18 @@ class SendMessageHandler
 
         $isScheduled = $messageData->scheduled_at !== null && !$messageData->is_test;
 
+        $event = $this->eventRepository->findById($messageData->event_id);
+
+        $scheduledAtUtc = $messageData->scheduled_at
+            ? DateHelper::convertToUTC($messageData->scheduled_at, $event->getTimezone())
+            : null;
+
+        if ($scheduledAtUtc !== null && Carbon::parse($scheduledAtUtc)->isPast()) {
+            throw ValidationException::withMessages([
+                'scheduled_at' => [__('The scheduled time must be in the future.')],
+            ]);
+        }
+
         if ($eligibilityFailure !== null) {
             $status = MessageStatus::PENDING_REVIEW;
         } elseif ($isScheduled) {
@@ -94,7 +110,7 @@ class SendMessageHandler
             'sent_at' => $isScheduled ? null : Carbon::now()->toDateTimeString(),
             'sent_by_user_id' => $messageData->sent_by_user_id,
             'status' => $status->name,
-            'scheduled_at' => $messageData->scheduled_at,
+            'scheduled_at' => $scheduledAtUtc,
             'eligibility_failures' => $eligibilityFailure?->getFailureValues(),
             'send_data' => [
                 'is_test' => $messageData->is_test,
