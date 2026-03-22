@@ -11,5 +11,11 @@ export const useGetCheckInListAttendees = (checkInListShortId: IdParam, paginati
             return await publicCheckInClient.getCheckInListAttendees(checkInListShortId, pagination, password);
         },
         enabled: enabled,
+        retry: (failureCount, error: any) => {
+            if (error?.response?.status === 403) {
+                return false;
+            }
+            return failureCount < 3;
+        }
     });
 };

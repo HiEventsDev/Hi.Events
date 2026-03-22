@@ -7,7 +7,7 @@ import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {t, Trans} from "@lingui/macro";
 import {AxiosError} from "axios";
 import classes from "./CheckIn.module.scss";
-import {ActionIcon, Button, Center, Modal, TextInput} from "@mantine/core";
+import {ActionIcon, Button, Center, Modal, PasswordInput} from "@mantine/core";
 import {SearchBar} from "../../common/SearchBar";
 import {IconInfoCircle, IconQrcode, IconVolume, IconVolumeOff} from "@tabler/icons-react";
 import {QRScannerComponent} from "../../common/AttendeeCheckInTable/QrScanner.tsx";
@@ -385,8 +385,7 @@ const CheckIn = () => {
                 <div style={{maxWidth: 400, width: '100%', textAlign: 'center'}}>
                     <h2 style={{marginBottom: 10}}>{t`Password Protected`}</h2>
                     <p style={{marginBottom: 20}}>{t`This check-in list is password protected. Please enter the password to continue.`}</p>
-                    <TextInput
-                        type="password"
+                    <PasswordInput
                         placeholder={t`Password`}
                         size="md"
                         value={passwordAttempt}
@@ -406,7 +405,7 @@ const CheckIn = () => {
                         size="md"
                         mt="md"
                         onClick={handlePasswordSubmit}
-                        loading={attendeesQuery.isFetching && !!passwordAttempt}
+                        loading={attendeesQuery.isFetching && !!passwordAttempt && passwordAttempt === password}
                     >
                         {t`Unlock`}
                     </Button>
