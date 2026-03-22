@@ -55,6 +55,14 @@ export const CheckInListForm = ({form, productCategories}: CheckInListFormProps)
                 minRows={2}
             />
 
+            <TextInput
+                {...form.getInputProps('password')}
+                label={t`Password`}
+                placeholder={t`Enter a password to protect this list`}
+                description={t`Optional. If set, staff will be prompted for this password before they can access the list.`}
+                type="password"
+            />
+
             <InputGroup>
                 <TextInput
                     {...form.getInputProps('activates_at')}

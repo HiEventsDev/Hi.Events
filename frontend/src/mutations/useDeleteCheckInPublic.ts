@@ -7,16 +7,16 @@ export const useDeleteCheckInPublic = (pagination: QueryFilters) => {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: ({checkInListShortId, checkInShortId}: { checkInListShortId: IdParam, checkInShortId: IdParam }) =>
-            publicCheckInClient.deleteCheckIn(checkInListShortId, checkInShortId),
+        mutationFn: ({checkInListShortId, checkInShortId, password}: { checkInListShortId: IdParam, checkInShortId: IdParam, password?: string }) =>
+            publicCheckInClient.deleteCheckIn(checkInListShortId, checkInShortId, password),
 
-        onSettled: (_, error,  {checkInListShortId, checkInShortId}) => {
+        onSettled: (_, error, {checkInListShortId, checkInShortId, password}) => {
             if (error && error.response.status !== 409) {
                 return;
             }
 
             // Find the attendee in the cache and remove the check-in status
-            queryClient.setQueryData([GET_CHECK_IN_LIST_ATTENDEES_PUBLIC_QUERY_KEY, checkInListShortId, pagination], (oldData: any) => {
+            queryClient.setQueryData([GET_CHECK_IN_LIST_ATTENDEES_PUBLIC_QUERY_KEY, checkInListShortId, pagination, password], (oldData: any) => {
                 const newAttendees = oldData?.data?.map((attendee: any) => {
                     if (attendee.check_in?.short_id === checkInShortId) {
                         return {

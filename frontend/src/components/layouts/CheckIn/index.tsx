@@ -7,7 +7,7 @@ import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {t, Trans} from "@lingui/macro";
 import {AxiosError} from "axios";
 import classes from "./CheckIn.module.scss";
-import {ActionIcon, Modal} from "@mantine/core";
+import {ActionIcon, Button, Center, Modal, TextInput} from "@mantine/core";
 import {SearchBar} from "../../common/SearchBar";
 import {IconInfoCircle, IconQrcode, IconVolume, IconVolumeOff} from "@tabler/icons-react";
 import {QRScannerComponent} from "../../common/AttendeeCheckInTable/QrScanner.tsx";
@@ -25,7 +25,6 @@ import {CheckInOptionsModal} from "../../common/CheckIn/CheckInOptionsModal";
 import {ScannerSelectionModal} from "../../common/CheckIn/ScannerSelectionModal";
 import {CheckInInfoModal} from "../../common/CheckIn/CheckInInfoModal";
 import {HidScannerStatus} from "../../common/CheckIn/HidScannerStatus";
-import {Button} from "@mantine/core";
 
 const CheckIn = () => {
     const networkStatus = useNetwork();
@@ -55,6 +54,18 @@ const CheckIn = () => {
     });
     const [selectedAttendee, setSelectedAttendee] = useState<Attendee | null>(null);
     const [checkInModalOpen, checkInModalHandlers] = useDisclosure(false);
+    const [password, setPassword] = useState<string>(() => {
+        if (isSsr()) return '';
+        return sessionStorage.getItem(`check_in_list_password_${checkInListShortId}`) || '';
+    });
+    const [passwordAttempt, setPasswordAttempt] = useState('');
+    const [passwordError, setPasswordError] = useState<string | null>(null);
+
+    const handlePasswordSubmit = () => {
+        setPassword(passwordAttempt);
+        sessionStorage.setItem(`check_in_list_password_${checkInListShortId}`, passwordAttempt);
+    };
+
     const [infoModalOpen, infoModalHandlers] = useDisclosure(false, {
             onOpen: () => {
                 CheckInListQuery.refetch();
@@ -75,11 +86,20 @@ const CheckIn = () => {
     const attendeesQuery = useGetCheckInListAttendees(
         checkInListShortId,
         queryFilters,
-        checkInList?.is_active && !checkInList?.is_expired,
+        checkInList?.is_active && !checkInList?.is_expired && (!checkInList?.is_password_protected || !!password),
+        password
     );
     const attendees = attendeesQuery?.data?.data;
     const checkInMutation = useCreateCheckInPublic(queryFilters);
     const deleteCheckInMutation = useDeleteCheckInPublic(queryFilters);
+
+    useEffect(() => {
+        if (attendeesQuery.error instanceof AxiosError && attendeesQuery.error.response?.status === 403) {
+            setPasswordError(t`Invalid password provided`);
+            setPassword('');
+            sessionStorage.removeItem(`check_in_list_password_${checkInListShortId}`);
+        }
+    }, [attendeesQuery.error]);
     const areOfflinePaymentsEnabled = eventSettings?.payment_providers?.includes('OFFLINE');
     const allowOrdersAwaitingOfflinePaymentToCheckIn = areOfflinePaymentsEnabled
         && eventSettings?.allow_orders_awaiting_offline_payment_to_check_in;
@@ -123,6 +143,7 @@ const CheckIn = () => {
             checkInListShortId: checkInListShortId,
             attendeePublicId: attendee.public_id,
             action: action,
+            password: password,
         }, {
             onSuccess: ({errors}) => {
                 if (errors && errors[attendee.public_id]) {
@@ -154,6 +175,7 @@ const CheckIn = () => {
             deleteCheckInMutation.mutate({
                 checkInListShortId: checkInListShortId,
                 checkInShortId: attendee.check_in.short_id,
+                password: password,
             }, {
                 onSuccess: () => {
                     showSuccess(<Trans>{attendee.first_name} <b>checked out</b> successfully</Trans>);
@@ -215,7 +237,7 @@ const CheckIn = () => {
 
         if (!attendee) {
             try {
-                const {data} = await publicCheckInClient.getCheckInListAttendee(checkInListShortId, attendeePublicId);
+                const {data} = await publicCheckInClient.getCheckInListAttendee(checkInListShortId, attendeePublicId, password);
                 attendee = data;
             } catch (error) {
                 showError(t`Unable to fetch attendee`);
@@ -355,6 +377,42 @@ const CheckIn = () => {
                     </>
                 )}
             />)
+    }
+
+    if (checkInList?.is_password_protected && !password) {
+        return (
+            <Center style={{height: '100vh', flexDirection: 'column'}} p="md">
+                <div style={{maxWidth: 400, width: '100%', textAlign: 'center'}}>
+                    <h2 style={{marginBottom: 10}}>{t`Password Protected`}</h2>
+                    <p style={{marginBottom: 20}}>{t`This check-in list is password protected. Please enter the password to continue.`}</p>
+                    <TextInput
+                        type="password"
+                        placeholder={t`Password`}
+                        size="md"
+                        value={passwordAttempt}
+                        onChange={(e) => {
+                            setPasswordAttempt(e.target.value);
+                            setPasswordError(null);
+                        }}
+                        error={passwordError}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                                handlePasswordSubmit();
+                            }
+                        }}
+                    />
+                    <Button
+                        fullWidth
+                        size="md"
+                        mt="md"
+                        onClick={handlePasswordSubmit}
+                        loading={attendeesQuery.isFetching && !!passwordAttempt}
+                    >
+                        {t`Unlock`}
+                    </Button>
+                </div>
+            </Center>
+        );
     }
 
     if (checkInList?.is_expired) {

@@ -26,7 +26,8 @@ class UpdateCheckInlistHandler
             ->setDescription($data->description)
             ->setEventId($data->eventId)
             ->setExpiresAt($data->expiresAt)
-            ->setActivatesAt($data->activatesAt);
+            ->setActivatesAt($data->activatesAt)
+            ->setPassword($data->password);
 
         return $this->updateCheckInlistService->updateCheckInlist(
             checkInList: $checkInList,

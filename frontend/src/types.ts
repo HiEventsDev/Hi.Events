@@ -721,6 +721,8 @@ export interface CheckInList {
     checked_in_attendees: number;
     is_expired: boolean;
     is_active: boolean;
+    is_password_protected: boolean;
+    password?: string | null;
     event_id: number;
     event?: Event;
     products: {
