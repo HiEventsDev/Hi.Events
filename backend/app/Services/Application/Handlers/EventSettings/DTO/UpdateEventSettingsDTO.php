@@ -74,6 +74,7 @@ class UpdateEventSettingsDTO extends BaseDTO
 
         // Marketing settings
         public readonly bool                    $show_marketing_opt_in = true,
+        public readonly bool                    $show_data_collection_disclaimer = true,
 
         // Platform fee settings
         public readonly bool                    $pass_platform_fee_to_buyer = false,
@@ -155,6 +156,7 @@ class UpdateEventSettingsDTO extends BaseDTO
 
             // Marketing defaults
             show_marketing_opt_in: true,
+            show_data_collection_disclaimer: true,
 
             // Platform fee defaults
             pass_platform_fee_to_buyer: false,
