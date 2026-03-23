@@ -93,7 +93,7 @@ const OrganizerLayout = () => {
         { link: 'organizer-homepage-designer', label: t`Homepage Designer`, icon: IconPaint, showWhen: () => !isReadOnly },
 
         { label: t`Integrations` },
-        { link: 'webhooks', label: t`Webhooks`, icon: IconWebhook },
+        { link: 'webhooks', label: t`Webhooks`, icon: IconWebhook, showWhen: () => !isReadOnly },
     ];
 
     const handleEmailConfirmationResend = () => {
@@ -177,7 +177,7 @@ const OrganizerLayout = () => {
         },
     ];
 
-    if (account && !account?.stripe_connect_setup_complete) {
+    if (!isReadOnly && account && !account?.stripe_connect_setup_complete) {
         callouts.unshift({
             icon: <IconBrandStripe size={20} />,
             heading: t`Connect Stripe`,
@@ -202,7 +202,7 @@ const OrganizerLayout = () => {
                 entityType="organizer"
                 topBarContent={(
                     <div className={classes.statusToggleContainer}>
-                        {organizer && (
+                        {organizer && !isReadOnly && (
                             <TopBarButton
                                 onClick={handleStatusToggle}
                                 size="sm"

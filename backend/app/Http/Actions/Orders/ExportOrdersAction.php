@@ -2,7 +2,7 @@
 
 namespace HiEvents\Http\Actions\Orders;
 
-use HiEvents\DomainObjects\Enums\QuestionBelongsTo;
+use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\QuestionAndAnswerViewDomainObject;
 use HiEvents\Exports\OrdersExport;
@@ -25,7 +25,7 @@ class ExportOrdersAction extends BaseAction
 
     public function __invoke(int $eventId): BinaryFileResponse
     {
-        $this->isActionAuthorized($eventId, EventDomainObject::class);
+        $this->isActionAuthorized($eventId, EventDomainObject::class, Role::READONLY);
 
         $orders = $this->orderRepository
             ->setMaxPerPage(10000)

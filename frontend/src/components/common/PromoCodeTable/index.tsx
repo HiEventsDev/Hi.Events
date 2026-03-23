@@ -14,6 +14,8 @@ import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
 import {useDeletePromoCode} from "../../../mutations/useDeletePromoCode.ts";
 import {eventHomepageUrl} from "../../../utilites/urlHelper.ts";
 
+import {useIsReadOnly} from "../../../hooks/useIsCurrentUserAdmin.ts";
+
 interface PromoCodeTableProps {
     event: Event,
     promoCodes: PromoCode[],
@@ -21,6 +23,7 @@ interface PromoCodeTableProps {
 }
 
 export const PromoCodeTable = ({event, promoCodes, openCreateModal}: PromoCodeTableProps) => {
+    const isReadOnly = useIsReadOnly();
     const [promoCodeId, setPromoCodeId] = useState<number | undefined>();
     const [editModalOpen, {open: openEditModal, close: closeEditModal}] = useDisclosure(false);
     const deleteMutation = useDeletePromoCode();
@@ -50,12 +53,14 @@ export const PromoCodeTable = ({event, promoCodes, openCreateModal}: PromoCodeTa
                     <p>
                         {t`Promo codes can be used to offer discounts, presale access, or provide special access to your event.`}
                     </p>
-                    <Button
-                        size={'xs'}
-                        leftSection={<IconPlus/>}
-                        color={'green'}
-                        onClick={() => openCreateModal()}>{t`Create a Promo Code`}
-                    </Button>
+                    {!isReadOnly && (
+                        <Button
+                            size={'xs'}
+                            leftSection={<IconPlus/>}
+                            color={'green'}
+                            onClick={() => openCreateModal()}>{t`Create a Promo Code`}
+                        </Button>
+                    )}
                 </>
             )}
         />
@@ -165,10 +170,12 @@ export const PromoCodeTable = ({event, promoCodes, openCreateModal}: PromoCodeTa
 
                                             <Menu.Dropdown>
                                                 <Menu.Label>{t`Manage`}</Menu.Label>
-                                                <Menu.Item leftSection={<IconSend size={14}/>}
-                                                           onClick={() => handleEditModal(code?.id)}>
-                                                    {t`Edit Code`}
-                                                </Menu.Item>
+                                                {!isReadOnly && (
+                                                    <Menu.Item leftSection={<IconSend size={14}/>}
+                                                               onClick={() => handleEditModal(code?.id)}>
+                                                        {t`Edit Code`}
+                                                    </Menu.Item>
+                                                )}
                                                 <Menu.Item leftSection={<IconCopy size={14}/>}
                                                            onClick={() => {
                                                                 clipboard.copy(eventHomepageUrl(event) + `?promo_code=${code?.code}`);
@@ -176,14 +183,16 @@ export const PromoCodeTable = ({event, promoCodes, openCreateModal}: PromoCodeTa
                                                            }}>
                                                     {t`Copy URL`}
                                                 </Menu.Item>
-                                                <Menu.Divider/>
+                                                {!isReadOnly && <Menu.Divider/>}
 
-                                                <Menu.Label>{t`Danger zone`}</Menu.Label>
-                                                <Menu.Item color="red"
-                                                           onClick={() => handleDeleteCode(code?.id as number)}
-                                                           leftSection={<IconTrash size={14}/>}>
-                                                    {t`Delete code`}
-                                                </Menu.Item>
+                                                {!isReadOnly && <Menu.Label>{t`Danger zone`}</Menu.Label>}
+                                                {!isReadOnly && (
+                                                    <Menu.Item color="red"
+                                                               onClick={() => handleDeleteCode(code?.id as number)}
+                                                               leftSection={<IconTrash size={14}/>}>
+                                                        {t`Delete code`}
+                                                    </Menu.Item>
+                                                )}
 
                                             </Menu.Dropdown>
                                         </Menu>

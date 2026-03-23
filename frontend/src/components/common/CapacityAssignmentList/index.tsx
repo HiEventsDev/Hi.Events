@@ -15,12 +15,15 @@ import {useDeleteCapacityAssignment} from "../../../mutations/useDeleteCapacityA
 import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
 
+import {useIsReadOnly} from "../../../hooks/useIsCurrentUserAdmin.ts";
+
 interface CapacityAssignmentListProps {
     capacityAssignments: CapacityAssignment[];
     openCreateModal: () => void;
 }
 
 export const CapacityAssignmentList = ({capacityAssignments, openCreateModal}: CapacityAssignmentListProps) => {
+    const isReadOnly = useIsReadOnly();
     const [editModalOpen, {open: openEditModal, close: closeEditModal}] = useDisclosure(false);
     const [selectedCapacityAssignmentId, setSelectedCapacityAssignmentId] = useState<IdParam>();
     const deleteMutation = useDeleteCapacityAssignment();
@@ -53,12 +56,14 @@ export const CapacityAssignmentList = ({capacityAssignments, openCreateModal}: C
                                 </p>
                             </Trans>
                         </p>
-                        <Button
-                            size={'xs'}
-                            leftSection={<IconPlus/>}
-                            color={'green'}
-                            onClick={() => openCreateModal()}>{t`Create Capacity Assignment`}
-                        </Button>
+                        {!isReadOnly && (
+                            <Button
+                                size={'xs'}
+                                leftSection={<IconPlus/>}
+                                color={'green'}
+                                onClick={() => openCreateModal()}>{t`Create Capacity Assignment`}
+                            </Button>
+                        )}
                     </>
                 )}
             />
@@ -139,7 +144,7 @@ export const CapacityAssignmentList = ({capacityAssignments, openCreateModal}: C
                                             {
                                                 label: t`Manage`,
                                                 items: [
-                                                    {
+                                                    !isReadOnly && {
                                                         label: t`Edit Capacity`,
                                                         icon: <IconPencil size={14}/>,
                                                         onClick: () => {
@@ -147,9 +152,9 @@ export const CapacityAssignmentList = ({capacityAssignments, openCreateModal}: C
                                                             openEditModal();
                                                         }
                                                     },
-                                                ],
+                                                ].filter(Boolean) as any,
                                             },
-                                            {
+                                            !isReadOnly && {
                                                 label: t`Danger zone`,
                                                 items: [
                                                     {
@@ -169,7 +174,7 @@ export const CapacityAssignmentList = ({capacityAssignments, openCreateModal}: C
                                                     },
                                                 ],
                                             },
-                                        ]}
+                                        ].filter(Boolean) as any}
                                     />
                                 </div>
                             </div>

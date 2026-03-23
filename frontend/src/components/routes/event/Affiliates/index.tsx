@@ -19,8 +19,11 @@ import {downloadBinary} from "../../../../utilites/download.ts";
 import {withLoadingNotification} from "../../../../utilites/withLoadingNotification.tsx";
 import {useState} from "react";
 
+import {useIsReadOnly} from "../../../../hooks/useIsCurrentUserAdmin.ts";
+
 const Affiliates = () => {
     const {eventId} = useParams();
+    const isReadOnly = useIsReadOnly();
     const [searchParams, setSearchParams] = useFilterQueryParamSync();
     const {data: affiliatesData} = useGetAffiliates(
         eventId,
@@ -80,11 +83,13 @@ const Affiliates = () => {
                 >
                     {t`Export`}
                 </Button>
-                <Button
-                    leftSection={<IconPlus/>}
-                    color={'green'}
-                    onClick={openCreateModal}>{t`Create Affiliate`}
-                </Button>
+                {!isReadOnly && (
+                    <Button
+                        leftSection={<IconPlus/>}
+                        color={'green'}
+                        onClick={openCreateModal}>{t`Create Affiliate`}
+                    </Button>
+                )}
             </ToolBar>
 
             <TableSkeleton isVisible={!affiliates}/>

@@ -125,8 +125,8 @@ const EventLayout = () => {
 
         // 5. INTEGRATIONS
         {label: t`Integrations`},
-        {link: 'widget', label: t`Widget Embed`, icon: IconDeviceTabletCode},
-        {link: 'webhooks', label: t`Webhooks`, icon: IconWebhook},
+        {link: 'widget', label: t`Widget Embed`, icon: IconDeviceTabletCode, showWhen: () => !isReadOnly},
+        {link: 'webhooks', label: t`Webhooks`, icon: IconWebhook, showWhen: () => !isReadOnly},
 
 
     ];
@@ -182,7 +182,7 @@ const EventLayout = () => {
             entityType="event"
             topBarContent={(
                 <div className={classes.statusToggleContainer}>
-                    {isEventFetched && (
+                    {isEventFetched && !isReadOnly && (
                         <TopBarButton
                             onClick={handleStatusToggle}
                             size="sm"

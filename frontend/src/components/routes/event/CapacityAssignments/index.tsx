@@ -15,8 +15,11 @@ import {useFilterQueryParamSync} from "../../../../hooks/useFilterQueryParamSync
 import {QueryFilters} from "../../../../types.ts";
 import {Pagination} from "../../../common/Pagination";
 
+import {useIsReadOnly} from "../../../../hooks/useIsCurrentUserAdmin.ts";
+
 const CapacityAssignments = () => {
     const {eventId} = useParams();
+    const isReadOnly = useIsReadOnly();
     const [searchParams, setSearchParams] = useFilterQueryParamSync();
     const {data: capacityAssignmentsData} = useGetEventCapacityAssignments(
         eventId,
@@ -42,11 +45,13 @@ const CapacityAssignments = () => {
                     pagination={pagination}
                 />
             )}>
-                <Button
-                    leftSection={<IconPlus/>}
-                    color={'green'}
-                    onClick={() => openCreateModal()}>{t`Create Capacity Assignment`}
-                </Button>
+                {!isReadOnly && (
+                    <Button
+                        leftSection={<IconPlus/>}
+                        color={'green'}
+                        onClick={() => openCreateModal()}>{t`Create Capacity Assignment`}
+                    </Button>
+                )}
             </ToolBar>
 
             <TableSkeleton isVisible={!capacityAssignments}/>

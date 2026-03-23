@@ -38,6 +38,7 @@ import {SendMessageModal} from "../../../modals/SendMessageModal";
 import {SortArrows} from "../../SortArrows";
 import {useSortProducts} from "../../../../mutations/useSortProducts.ts";
 import {DuplicateProductModal} from "../../../modals/DuplicateProductModal";
+import {useIsReadOnly} from "../../../../hooks/useIsCurrentUserAdmin.ts";
 
 interface SortableProductProps {
     product: Product;
@@ -47,6 +48,7 @@ interface SortableProductProps {
 }
 
 export const SortableProduct = ({product, currencyCode, category, categories}: SortableProductProps) => {
+    const isReadOnly = useIsReadOnly();
     const [isEditModalOpen, editModal] = useDisclosure(false);
     const [isDuplicateModalOpen, duplicateModal] = useDisclosure(false);
     const [isMessageModalOpen, messageModal] = useDisclosure(false);
@@ -250,15 +252,17 @@ export const SortableProduct = ({product, currencyCode, category, categories}: S
                 {[classes.soldOut]: product.is_sold_out}
             )}>
                 {/* Sort controls */}
-                <div className={classes.sortControls}>
-                    <SortArrows
-                        upArrowEnabled={canMoveUp}
-                        downArrowEnabled={canMoveDown}
-                        onSortUp={() => handleSort(product.id, 'up')}
-                        onSortDown={() => handleSort(product.id, 'down')}
-                        flexDirection={'column'}
-                    />
-                </div>
+                {!isReadOnly && (
+                    <div className={classes.sortControls}>
+                        <SortArrows
+                            upArrowEnabled={canMoveUp}
+                            downArrowEnabled={canMoveDown}
+                            onSortUp={() => handleSort(product.id, 'up')}
+                            onSortDown={() => handleSort(product.id, 'down')}
+                            flexDirection={'column'}
+                        />
+                    </div>
+                )}
 
                 {/* Main content */}
                 <div className={classes.productContent}>
@@ -462,42 +466,46 @@ export const SortableProduct = ({product, currencyCode, category, categories}: S
                                         <IconDotsVertical size={16} className={classes.actionButtonIcon}/>
                                     </Button>
                                 </div>
-                            </Menu.Target>
-                            <Menu.Dropdown>
+                            </Menu.Target                            <Menu.Dropdown>
                                 <Menu.Label>{t`Actions`}</Menu.Label>
-
+ 
                                 {isTicket && (
                                     <Menu.Item
                                         onClick={() => handleModalClick(product.id, messageModal)}
-                                        leftSection={<IconSend size={14}/>}
+                                        leftSection={<IconSend size={14} />}
                                     >
                                         {t`Message Attendees`}
                                     </Menu.Item>
                                 )}
-
-                                <Menu.Item
-                                    onClick={() => handleModalClick(product.id, editModal)}
-                                    leftSection={<IconPencil size={14}/>}
-                                >
-                                    <Trans>Edit {isTicket ? t`Ticket` : t`Product`}</Trans>
-                                </Menu.Item>
-                                <Menu.Item
-                                    onClick={() => handleModalClick(product.id, duplicateModal)}
-                                    leftSection={<IconCopyPlus size={14}/>}
-                                >
-                                    {t`Duplicate`}
-                                </Menu.Item>
-
-                                <Menu.Divider/>
-                                <Menu.Label>{t`Danger zone`}</Menu.Label>
-                                <Menu.Item
-                                    onClick={() => handleDeleteProduct(product.id, product.event_id)}
-                                    color="red"
-                                    leftSection={<IconTrash size={14}/>}
-                                >
-                                    {t`Delete`}
-                                </Menu.Item>
+ 
+                                {!isReadOnly && (
+                                    <>
+                                        <Menu.Item
+                                            onClick={() => handleModalClick(product.id, editModal)}
+                                            leftSection={<IconPencil size={14} />}
+                                        >
+                                            <Trans>Edit {isTicket ? t`Ticket` : t`Product`}</Trans>
+                                        </Menu.Item>
+                                        <Menu.Item
+                                            onClick={() => handleModalClick(product.id, duplicateModal)}
+                                            leftSection={<IconCopyPlus size={14} />}
+                                        >
+                                            {t`Duplicate`}
+                                        </Menu.Item>
+ 
+                                        <Menu.Divider />
+                                        <Menu.Label>{t`Danger zone`}</Menu.Label>
+                                        <Menu.Item
+                                            onClick={() => handleDeleteProduct(product.id, product.event_id)}
+                                            color="red"
+                                            leftSection={<IconTrash size={14} />}
+                                        >
+                                            {t`Delete`}
+                                        </Menu.Item>
+                                    </>
+                                )}
                             </Menu.Dropdown>
+>
                         </Menu>
                     </Group>
                 </div>

@@ -4,7 +4,7 @@ namespace HiEvents\Http\Actions\Attendees;
 
 use HiEvents\DomainObjects\AttendeeCheckInDomainObject;
 use HiEvents\DomainObjects\CheckInListDomainObject;
-use HiEvents\DomainObjects\Enums\QuestionBelongsTo;
+use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
@@ -33,7 +33,7 @@ class ExportAttendeesAction extends BaseAction
      */
     public function __invoke(int $eventId): BinaryFileResponse
     {
-        $this->isActionAuthorized($eventId, EventDomainObject::class);
+        $this->isActionAuthorized($eventId, EventDomainObject::class, Role::READONLY);
 
         $attendees = $this->attendeeRepository
             ->loadRelation(QuestionAndAnswerViewDomainObject::class)

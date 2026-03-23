@@ -4,6 +4,7 @@ import classes from './TopBarButton.module.scss';
 
 interface TopBarButtonProps extends ButtonProps {
     children: React.ReactNode;
+    onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 export const TopBarButton = forwardRef<HTMLButtonElement, TopBarButtonProps>(

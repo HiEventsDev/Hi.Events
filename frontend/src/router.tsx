@@ -312,7 +312,8 @@ export const router: RouteObject[] = [
                 path: "webhooks",
                 async lazy() {
                     const Webhooks = await import("./components/routes/organizer/Webhooks");
-                    return { Component: Webhooks.default };
+                    const ReadOnlyGuard = await import("./components/common/ReadOnlyGuard");
+                    return { element: <ReadOnlyGuard.default><Webhooks.default /></ReadOnlyGuard.default> };
                 }
             },
             {
@@ -435,7 +436,8 @@ export const router: RouteObject[] = [
                 path: "widget",
                 async lazy() {
                     const Widget = await import("./components/routes/event/widget");
-                    return { Component: Widget.default };
+                    const ReadOnlyGuard = await import("./components/common/ReadOnlyGuard");
+                    return { element: <ReadOnlyGuard.default><Widget.default /></ReadOnlyGuard.default> };
                 }
             },
             {
@@ -479,7 +481,8 @@ export const router: RouteObject[] = [
                 path: "webhooks",
                 async lazy() {
                     const Webhooks = await import("./components/routes/event/Webhooks");
-                    return { Component: Webhooks.default };
+                    const ReadOnlyGuard = await import("./components/common/ReadOnlyGuard");
+                    return { element: <ReadOnlyGuard.default><Webhooks.default /></ReadOnlyGuard.default> };
                 }
             }
         ]

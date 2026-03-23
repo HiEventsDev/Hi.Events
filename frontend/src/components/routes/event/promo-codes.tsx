@@ -15,6 +15,7 @@ import {useFilterQueryParamSync} from "../../../hooks/useFilterQueryParamSync.ts
 import {QueryFilters} from "../../../types.ts";
 import {TableSkeleton} from "../../common/TableSkeleton";
 import {t} from "@lingui/macro";
+import {useIsReadOnly} from "../../../hooks/useIsCurrentUserAdmin.ts";
 
 export const PromoCodes = () => {
     const {eventId} = useParams();
@@ -24,6 +25,7 @@ export const PromoCodes = () => {
     const promoCodes = promoCodesQuery?.data?.data;
     const pagination = promoCodesQuery?.data?.meta;
     const [createModalOpen, {open: openCreateModal, close: closeCreateModal}] = useDisclosure(false);
+    const isReadOnly = useIsReadOnly();
 
     return (
         <>
@@ -39,9 +41,11 @@ export const PromoCodes = () => {
                         pagination={pagination}
                     />
                 )}>
-                    <Button color={'green'} size={'sm'} onClick={openCreateModal} rightSection={<IconPlus/>}>
-                        Create
-                    </Button>
+                    {!isReadOnly && (
+                        <Button color={'green'} size={'sm'} onClick={openCreateModal} rightSection={<IconPlus/>}>
+                            Create
+                        </Button>
+                    )}
 
                 </ToolBar>
 

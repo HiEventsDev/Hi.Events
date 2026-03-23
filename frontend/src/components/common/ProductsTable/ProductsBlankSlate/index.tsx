@@ -2,6 +2,7 @@ import {NoResultsSplash} from "../../NoResultsSplash";
 import {Button} from "../../Button";
 import {IconPlus} from "@tabler/icons-react";
 import {t, Trans} from "@lingui/macro";
+import {useIsReadOnly} from "../../../../hooks/useIsCurrentUserAdmin.ts";
 
 interface ProductsBlankSlateProps {
     openCreateModal: (categoryId?: string) => void;
@@ -10,6 +11,7 @@ interface ProductsBlankSlateProps {
 }
 
 export const ProductsBlankSlate = ({openCreateModal, productCategories, searchTerm}: ProductsBlankSlateProps) => {
+    const isReadOnly = useIsReadOnly();
     const showLargeBlankSlate = productCategories
         .every((category: any) => category.products.length === 0) && productCategories.length === 1;
 
@@ -42,31 +44,35 @@ export const ProductsBlankSlate = ({openCreateModal, productCategories, searchTe
                         <p>
                             {t`You'll need at least one product to get started. Free, paid or let the user decide what to pay.`}
                         </p>
-                        <Button
-                            size={'xs'}
-                            leftSection={<IconPlus/>}
-                            color={'green'}
-                            onClick={() => openCreateModal()}
-                        >
-                            {t`Add Product to Category`}
-                        </Button>
+                        {!isReadOnly && (
+                            <Button
+                                size={'xs'}
+                                leftSection={<IconPlus/>}
+                                color={'green'}
+                                onClick={() => openCreateModal()}
+                            >
+                                {t`Add Product to Category`}
+                            </Button>
+                        )}
                     </>
                 )}
             />
         );
     }
-
+ 
     return (
         <div style={{textAlign: 'center'}}><p style={{marginBottom: 20, marginTop: 0}}>
             {t`This category doesn't have any products yet.`}
         </p>
-            <Button
-                size={'xs'}
-                leftSection={<IconPlus/>}
-                color={'green'}
-                onClick={() => openCreateModal()}
-            >{t`Add Product`}
-            </Button>
+            {!isReadOnly && (
+                <Button
+                    size={'xs'}
+                    leftSection={<IconPlus/>}
+                    color={'green'}
+                    onClick={() => openCreateModal()}
+                >{t`Add Product`}
+                </Button>
+            )}
         </div>
     )
 }

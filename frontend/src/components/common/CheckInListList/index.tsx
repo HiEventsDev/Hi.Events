@@ -15,6 +15,7 @@ import {useDeleteCheckInList} from "../../../mutations/useDeleteCheckInList";
 import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
 import {useParams} from "react-router";
+import {useIsReadOnly} from "../../../hooks/useIsCurrentUserAdmin.ts";
 
 interface CheckInListListProps {
     checkInLists: CheckInList[];
@@ -26,6 +27,7 @@ export const CheckInListList = ({checkInLists, openCreateModal}: CheckInListList
     const [selectedCheckInListId, setSelectedCheckInListId] = useState<IdParam>();
     const deleteMutation = useDeleteCheckInList();
     const {eventId} = useParams();
+    const isReadOnly = useIsReadOnly();
 
     const handleDeleteCheckInList = (checkInListId: IdParam, eventId: IdParam) => {
         deleteMutation.mutate({checkInListId, eventId}, {
@@ -51,13 +53,15 @@ export const CheckInListList = ({checkInLists, openCreateModal}: CheckInListList
                                     Check-in lists help you manage event entry by day, area, or ticket type. You can link tickets to specific lists such as VIP zones or Day 1 passes and share a secure check-in link with staff. No account is required. Check-in works on mobile, desktop, or tablet, using a device camera or HID USB scanner.                                </p>
                             </Trans>
                         </p>
-                        <Button
-                            loading={deleteMutation.isPending}
-                            size={'xs'}
-                            leftSection={<IconPlus/>}
-                            color={'green'}
-                            onClick={() => openCreateModal()}>{t`Create Check-In List`}
-                        </Button>
+                        {!isReadOnly && (
+                            <Button
+                                loading={deleteMutation.isPending}
+                                size={'xs'}
+                                leftSection={<IconPlus/>}
+                                color={'green'}
+                                onClick={() => openCreateModal()}>{t`Create Check-In List`}
+                            </Button>
+                        )}
                     </>
                 )}
             />
@@ -142,14 +146,14 @@ export const CheckInListList = ({checkInLists, openCreateModal}: CheckInListList
                                             {
                                                 label: t`Manage`,
                                                 items: [
-                                                    {
+                                                    ...(!isReadOnly ? [{
                                                         label: t`Edit Check-In List`,
                                                         icon: <IconPencil size={14}/>,
                                                         onClick: () => {
                                                             setSelectedCheckInListId(list.id as IdParam);
                                                             openEditModal();
                                                         }
-                                                    },
+                                                    }] : []),
                                                     {
                                                         label: t`Copy Check-In URL`,
                                                         icon: <IconCopy size={14}/>,
@@ -170,7 +174,7 @@ export const CheckInListList = ({checkInLists, openCreateModal}: CheckInListList
                                                     }
                                                 ],
                                             },
-                                            {
+                                            ...(!isReadOnly ? [{
                                                 label: t`Danger zone`,
                                                 items: [
                                                     {
@@ -189,7 +193,7 @@ export const CheckInListList = ({checkInLists, openCreateModal}: CheckInListList
                                                         color: 'red',
                                                     },
                                                 ],
-                                            },
+                                            }] : []),
                                         ]}
                                     />
                                 </div>

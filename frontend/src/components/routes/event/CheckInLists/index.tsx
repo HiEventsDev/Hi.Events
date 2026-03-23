@@ -14,6 +14,7 @@ import {Pagination} from "../../../common/Pagination";
 import {useGetEventCheckInLists} from "../../../../queries/useGetCheckInLists.ts";
 import {CheckInListList} from "../../../common/CheckInListList";
 import {CreateCheckInListModal} from "../../../modals/CreateCheckInListModal";
+import {useIsReadOnly} from "../../../../hooks/useIsCurrentUserAdmin.ts";
 
 const CheckInLists = () => {
     const {eventId} = useParams();
@@ -25,6 +26,7 @@ const CheckInLists = () => {
     const checkInLists = checkInListsData?.data;
     const pagination = checkInListsData?.meta;
     const [createModalOpen, {open: openCreateModal, close: closeCreateModal}] = useDisclosure(false);
+    const isReadOnly = useIsReadOnly();
 
     return (
         <PageBody>
@@ -42,11 +44,13 @@ const CheckInLists = () => {
                     pagination={pagination}
                 />
             )}>
-                <Button
-                    leftSection={<IconPlus/>}
-                    color={'green'}
-                    onClick={openCreateModal}>{t`Create Check-In List`}
-                </Button>
+                {!isReadOnly && (
+                    <Button
+                        leftSection={<IconPlus/>}
+                        color={'green'}
+                        onClick={openCreateModal}>{t`Create Check-In List`}
+                    </Button>
+                )}
             </ToolBar>
 
             <TableSkeleton isVisible={!checkInLists}/>

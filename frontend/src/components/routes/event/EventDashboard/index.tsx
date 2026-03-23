@@ -23,6 +23,7 @@ import {StripePlatform} from "../../../../types.ts";
 import {isHiEvents} from "../../../../utilites/helpers.ts";
 import {StripeConnectButton} from "../../../common/StripeConnectButton";
 import {trackEvent, AnalyticsEvents} from "../../../../utilites/analytics.ts";
+import {useIsReadOnly} from "../../../../hooks/useIsCurrentUserAdmin.ts";
 
 export const DashBoardSkeleton = () => {
     return (
@@ -35,6 +36,7 @@ export const DashBoardSkeleton = () => {
 }
 
 export const EventDashboard = () => {
+    const isReadOnly = useIsReadOnly();
     const {eventId} = useParams();
     const eventQuery = useGetEvent(eventId);
     const {data: me} = useGetMe();
@@ -118,7 +120,7 @@ export const EventDashboard = () => {
 
             {!event && <DashBoardSkeleton/>}
 
-            {showStripeUpgradeNotice && (
+            {showStripeUpgradeNotice && !isReadOnly && (
                 <Card className={classes.stripeUpgradeCard}>
                     <div className={classes.stripeUpgradeContent}>
                         <div className={classes.stripeIcon}>
@@ -184,7 +186,7 @@ export const EventDashboard = () => {
                                             {t`Make your event live`}
                                         </h3>
                                         <p>{t`Your event must be live before you can sell tickets to attendees.`}</p>
-                                        {event?.status !== 'LIVE' && (
+                                        {!isReadOnly && event?.status !== 'LIVE' && (
                                             <Button
                                                 onClick={handleStatusToggle}
                                                 variant="light"
@@ -195,7 +197,7 @@ export const EventDashboard = () => {
                                                 {t`Publish Event`}
                                             </Button>
                                         )}
-                                        {event?.status === 'LIVE' && (
+                                        {!isReadOnly && event?.status === 'LIVE' && (
                                             <Button
                                                 onClick={handleStatusToggle}
                                                 variant="light"
@@ -228,7 +230,7 @@ export const EventDashboard = () => {
                                             {t`Connect payment processing`}
                                         </h3>
                                         <p>{t`Link your Stripe account to receive funds from ticket sales.`}</p>
-                                        {!account?.stripe_connect_setup_complete && (
+                                        {!isReadOnly && !account?.stripe_connect_setup_complete && (
                                             <Button
                                                 onClick={() => {
                                                     window.location.href = '/account/payment';

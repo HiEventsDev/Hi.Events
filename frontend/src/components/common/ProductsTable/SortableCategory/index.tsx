@@ -12,6 +12,7 @@ import {useParams} from "react-router";
 import {showError, showSuccess} from "../../../../utilites/notifications.tsx";
 import {SortArrows} from "../../SortArrows";
 import {useSortProducts} from "../../../../mutations/useSortProducts.ts";
+import {useIsReadOnly} from "../../../../hooks/useIsCurrentUserAdmin.ts";
 
 interface SortableCategoryProps {
     category: ProductCategory;
@@ -28,6 +29,7 @@ export const SortableCategory: React.FC<SortableCategoryProps> = ({
                                                                       openCreateModal,
                                                                       categories,
                                                                   }) => {
+    const isReadOnly = useIsReadOnly();
     const [isEditModalOpen, editModal] = useDisclosure(false);
     const {eventId} = useParams();
     const deleteMutation = useDeleteProductCategory();
@@ -116,39 +118,43 @@ export const SortableCategory: React.FC<SortableCategoryProps> = ({
                     </h2>
 
                     <div className={classes.categoryActions}>
-                        <SortArrows
-                            upArrowEnabled={upSortEnabled}
-                            downArrowEnabled={downSortEnabled}
-                            onSortUp={() => handleSort('up')}
-                            onSortDown={() => handleSort('down')}
-                        />
-                        <ActionIcon
-                            className={classes.categoryAction}
-                            onClick={openCreateModal}
-                            title={t`Create category`}
-                            aria-label={t`Create category`}
-                            variant={'transparent'}
-                        >
-                            <IconPlus size={20}/>
-                        </ActionIcon>
-                        <ActionIcon
-                            className={classes.categoryAction}
-                            onClick={editModal.open}
-                            title={t`Edit category`}
-                            aria-label={t`Edit category`}
-                            variant={'transparent'}
-                        >
-                            <IconPencil size={20}/>
-                        </ActionIcon>
-                        <ActionIcon
-                            className={classes.categoryAction}
-                            onClick={handleDelete}
-                            title={t`Delete category`}
-                            aria-label={t`Delete category`}
-                            variant={'transparent'}
-                        >
-                            {isLastCategory ? <IconTrashOff size={20}/> : <IconTrash size={20}/>}
-                        </ActionIcon>
+                        {!isReadOnly && (
+                            <>
+                                <SortArrows
+                                    upArrowEnabled={upSortEnabled}
+                                    downArrowEnabled={downSortEnabled}
+                                    onSortUp={() => handleSort('up')}
+                                    onSortDown={() => handleSort('down')}
+                                />
+                                <ActionIcon
+                                    className={classes.categoryAction}
+                                    onClick={openCreateModal}
+                                    title={t`Create category`}
+                                    aria-label={t`Create category`}
+                                    variant={'transparent'}
+                                >
+                                    <IconPlus size={20}/>
+                                </ActionIcon>
+                                <ActionIcon
+                                    className={classes.categoryAction}
+                                    onClick={editModal.open}
+                                    title={t`Edit category`}
+                                    aria-label={t`Edit category`}
+                                    variant={'transparent'}
+                                >
+                                    <IconPencil size={20}/>
+                                </ActionIcon>
+                                <ActionIcon
+                                    className={classes.categoryAction}
+                                    onClick={handleDelete}
+                                    title={t`Delete category`}
+                                    aria-label={t`Delete category`}
+                                    variant={'transparent'}
+                                >
+                                    {isLastCategory ? <IconTrashOff size={20}/> : <IconTrash size={20}/>}
+                                </ActionIcon>
+                            </>
+                        )}
                     </div>
                 </div>
                 <div className={classes.categoryContent}>

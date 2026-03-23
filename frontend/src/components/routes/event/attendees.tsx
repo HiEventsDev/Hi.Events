@@ -21,6 +21,7 @@ import {withLoadingNotification} from "../../../utilites/withLoadingNotification
 import {FilterModal, FilterOption} from "../../common/FilterModal";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {getProductsFromEvent} from "../../../utilites/helpers.ts";
+import {useIsReadOnly} from "../../../hooks/useIsCurrentUserAdmin.ts";
 
 const attendeeStatuses = [
     {label: t`Active`, value: 'ACTIVE'},
@@ -37,6 +38,7 @@ const Attendees = () => {
     const [createModalOpen, {open: openCreateModal, close: closeCreateModal}] = useDisclosure(false);
     const [downloadPending, setDownloadPending] = useState(false);
     const {data: event} = useGetEvent(eventId);
+    const isReadOnly = useIsReadOnly();
 
     const productOptions = getProductsFromEvent(event)
         ?.filter(product => product.product_type === ProductType.Ticket)
@@ -192,9 +194,11 @@ const Attendees = () => {
                         />
                     )}
                 >
-                    <Button color={'green'} size={'sm'} onClick={openCreateModal} rightSection={<IconPlus/>}>
-                        {t`Create`}
-                    </Button>
+                    {!isReadOnly && (
+                        <Button color={'green'} size={'sm'} onClick={openCreateModal} rightSection={<IconPlus/>}>
+                            {t`Create`}
+                        </Button>
+                    )}
 
                     <Button color={'green'}
                             size={'sm'}

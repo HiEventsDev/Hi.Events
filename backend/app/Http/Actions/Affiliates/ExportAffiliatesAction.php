@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Affiliates;
 
+use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Exports\AffiliatesExport;
 use HiEvents\Http\Actions\BaseAction;
@@ -23,7 +24,7 @@ class ExportAffiliatesAction extends BaseAction
 
     public function __invoke(int $eventId): BinaryFileResponse
     {
-        $this->isActionAuthorized($eventId, EventDomainObject::class);
+        $this->isActionAuthorized($eventId, EventDomainObject::class, Role::READONLY);
 
         $affiliates = $this->affiliateRepository->findByEventId($eventId, new QueryParamsDTO(
             page: 1,
