@@ -24,7 +24,7 @@ class GetAccountAction extends BaseAction
 
     public function __invoke(?int $accountId = null): JsonResponse
     {
-        $this->minimumAllowedRole(Role::ORGANIZER);
+        $this->minimumAllowedRole(Role::READONLY);
 
         $account = $this->accountRepository
             ->loadRelation(new Relationship(

@@ -41,8 +41,10 @@ import { confirmationDialog } from "../../../utilites/confirmationDialog.tsx";
 import { showError, showSuccess } from "../../../utilites/notifications.tsx";
 import { useResendEmailConfirmation } from "../../../mutations/useResendEmailConfirmation.ts";
 import { useGetMe } from "../../../queries/useGetMe.ts";
+import { useIsReadOnly } from "../../../hooks/useIsCurrentUserAdmin.ts";
 
 const OrganizerLayout = () => {
+    const isReadOnly = useIsReadOnly();
     const { organizerId } = useParams();
     const location = useLocation();
     const { data: organizer } = useGetOrganizer(organizerId);
@@ -85,10 +87,10 @@ const OrganizerLayout = () => {
 
         { label: t`Manage` },
         { link: 'events', label: t`Events`, icon: IconCalendar },
-        { link: 'settings', label: t`Settings`, icon: IconSettings },
+        { link: 'settings', label: t`Settings`, icon: IconSettings, showWhen: () => !isReadOnly },
 
-        { label: t`Tools` },
-        { link: 'organizer-homepage-designer', label: t`Homepage Designer`, icon: IconPaint },
+        { label: t`Tools`, showWhen: () => !isReadOnly },
+        { link: 'organizer-homepage-designer', label: t`Homepage Designer`, icon: IconPaint, showWhen: () => !isReadOnly },
 
         { label: t`Integrations` },
         { link: 'webhooks', label: t`Webhooks`, icon: IconWebhook },

@@ -10,7 +10,10 @@ import {useUpdateEventSettings} from "../../../../../../mutations/useUpdateEvent
 import {useGetEventSettings} from "../../../../../../queries/useGetEventSettings.ts";
 import {HeadingWithDescription} from "../../../../../common/Card/CardHeading";
 
+import {useIsReadOnly} from "../../../../../../hooks/useIsCurrentUserAdmin.ts";
+
 export const WaitlistSettings = () => {
+    const isReadOnly = useIsReadOnly();
     const {eventId} = useParams();
     const eventSettingsQuery = useGetEventSettings(eventId);
     const updateMutation = useUpdateEventSettings();
@@ -54,7 +57,7 @@ export const WaitlistSettings = () => {
 `}
             />
             <form onSubmit={form.onSubmit(handleSubmit)}>
-                <fieldset disabled={eventSettingsQuery.isLoading || updateMutation.isPending}>
+                <fieldset disabled={eventSettingsQuery.isLoading || updateMutation.isPending || isReadOnly}>
                     <Switch
                         {...form.getInputProps('waitlist_auto_process', {type: 'checkbox'})}
                         label={t`Auto-Process Waitlist`}

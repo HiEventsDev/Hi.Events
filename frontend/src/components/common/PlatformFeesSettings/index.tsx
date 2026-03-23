@@ -90,6 +90,7 @@ export interface PlatformFeesSettingsProps {
     feeHandlingDescription: string;
     feePreview?: PlatformFeePreview;
     onPriceChange?: (price: number) => void;
+    disabled?: boolean;
 }
 
 export const PlatformFeesSettings = ({
@@ -104,6 +105,7 @@ export const PlatformFeesSettings = ({
     feeHandlingDescription,
     feePreview,
     onPriceChange,
+    disabled = false,
 }: PlatformFeesSettingsProps) => {
     const [samplePrice, setSamplePrice] = useState<number | string>(50);
     const [selectedOption, setSelectedOption] = useState<'pass' | 'absorb'>(currentValue ? 'pass' : 'absorb');
@@ -175,6 +177,7 @@ export const PlatformFeesSettings = ({
                         label={t`Sample ticket price`}
                         value={samplePrice}
                         onChange={handlePriceChange}
+                        disabled={disabled}
                         min={0}
                         max={10000}
                         decimalScale={2}
@@ -183,7 +186,7 @@ export const PlatformFeesSettings = ({
                         style={{maxWidth: 200}}
                     />
 
-                    <fieldset disabled={isLoading || isSaving}>
+                    <fieldset disabled={isLoading || isSaving || disabled}>
                         <SegmentedControl
                             value={selectedOption}
                             onChange={(value) => setSelectedOption(value as 'pass' | 'absorb')}

@@ -9,6 +9,7 @@ use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\QuestionAndAnswerViewDomainObject;
 use HiEvents\Http\Actions\BaseAction;
+use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Resources\Attendee\AttendeeResource;
@@ -26,7 +27,7 @@ class GetAttendeeAction extends BaseAction
 
     public function __invoke(int $eventId, int $attendeeId): Response|JsonResponse
     {
-        $this->isActionAuthorized($eventId, EventDomainObject::class);
+        $this->isActionAuthorized($eventId, EventDomainObject::class, Role::READONLY);
 
         $attendee = $this->attendeeRepository
             ->loadRelation(relationship: QuestionAndAnswerViewDomainObject::class)

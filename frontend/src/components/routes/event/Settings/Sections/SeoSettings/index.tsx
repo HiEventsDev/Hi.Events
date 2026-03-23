@@ -11,7 +11,10 @@ import {useUpdateEventSettings} from "../../../../../../mutations/useUpdateEvent
 import {useGetEventSettings} from "../../../../../../queries/useGetEventSettings.ts";
 import {HeadingWithDescription} from "../../../../../common/Card/CardHeading";
 
+import {useIsReadOnly} from "../../../../../../hooks/useIsCurrentUserAdmin.ts";
+
 export const SeoSettings = () => {
+    const isReadOnly = useIsReadOnly();
     const {eventId} = useParams();
     const eventSettingsQuery = useGetEventSettings(eventId);
     const updateMutation = useUpdateEventSettings();
@@ -57,7 +60,7 @@ export const SeoSettings = () => {
                 description={t`Customize the SEO settings for this event`}
             />
             <form onSubmit={form.onSubmit(handleSubmit)}>
-                <fieldset disabled={eventSettingsQuery.isLoading || updateMutation.isPending}>
+                <fieldset disabled={eventSettingsQuery.isLoading || updateMutation.isPending || isReadOnly}>
                     <TextInput
                         {...form.getInputProps('seo_title')}
                         description={t`The title of the event that will be displayed in search engine results and when sharing on social media. By default, the event title will be used`}

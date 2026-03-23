@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Products;
 
+use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\Generated\ProductDomainObjectAbstract;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
@@ -25,7 +26,7 @@ class GetProductAction extends BaseAction
 
     public function __invoke(int $eventId, int $productId): JsonResponse|Response
     {
-        $this->isActionAuthorized($eventId, EventDomainObject::class);
+        $this->isActionAuthorized($eventId, EventDomainObject::class, Role::READONLY);
 
         $product = $this->productRepository
             ->loadRelation(TaxAndFeesDomainObject::class)

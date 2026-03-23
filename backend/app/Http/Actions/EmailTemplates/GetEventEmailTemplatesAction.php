@@ -22,7 +22,7 @@ class GetEventEmailTemplatesAction extends BaseAction
 
     public function __invoke(Request $request, int $eventId): JsonResponse
     {
-        $this->isActionAuthorized($eventId, EventDomainObject::class);
+        $this->isActionAuthorized($eventId, EventDomainObject::class, Role::READONLY);
 
         $validated = $request->validate([
             'template_type' => ['nullable', new Enum(EmailTemplateType::class)],

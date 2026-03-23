@@ -3,6 +3,7 @@
 namespace HiEvents\Http\Actions\PromoCodes;
 
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\Generated\PromoCodeDomainObjectAbstract;
 use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Http\Actions\BaseAction;
@@ -25,7 +26,7 @@ class GetPromoCodeAction extends BaseAction
      */
     public function __invoke(Request $request, int $eventId, int $promoCodeId): JsonResponse
     {
-        $this->isActionAuthorized($eventId, EventDomainObject::class);
+        $this->isActionAuthorized($eventId, EventDomainObject::class, Role::READONLY);
 
         $promoCode = $this->promoCodeRepository->findFirstWhere([
             PromoCodeDomainObjectAbstract::ID => $promoCodeId,

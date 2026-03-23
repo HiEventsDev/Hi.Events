@@ -3,6 +3,7 @@
 namespace HiEvents\Http\Actions\TaxesAndFees;
 
 use HiEvents\DomainObjects\AccountDomainObject;
+use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Repository\Interfaces\TaxAndFeeRepositoryInterface;
 use HiEvents\Resources\Tax\TaxAndFeeResource;
@@ -19,7 +20,7 @@ class GetTaxOrFeeAction extends BaseAction
 
     public function __invoke(int $accountId): JsonResponse
     {
-        $this->isActionAuthorized($accountId, AccountDomainObject::class);
+        $this->isActionAuthorized($accountId, AccountDomainObject::class, Role::READONLY);
 
         $tax = $this->taxAndFeeRepository->findWhere([
             'account_id' => $this->getAuthenticatedAccountId(),

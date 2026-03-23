@@ -7,8 +7,10 @@ import {useGetEventSettings} from "../../../../../../queries/useGetEventSettings
 import {useGetAccount} from "../../../../../../queries/useGetAccount.ts";
 import {useGetPlatformFeePreview} from "../../../../../../queries/useGetPlatformFeePreview.ts";
 import {PlatformFeesSettings as PlatformFeesSettingsBase} from "../../../../../common/PlatformFeesSettings";
+import {useIsReadOnly} from "../../../../../../hooks/useIsCurrentUserAdmin.ts";
 
 export const PlatformFeesSettings = () => {
+    const isReadOnly = useIsReadOnly();
     const {eventId} = useParams();
     const eventSettingsQuery = useGetEventSettings(eventId);
     const accountQuery = useGetAccount();
@@ -49,6 +51,7 @@ export const PlatformFeesSettings = () => {
             feeHandlingDescription={t`Choose who pays the platform fee. This does not affect additional fees you've configured in your account settings.`}
             feePreview={feePreviewQuery.data}
             onPriceChange={setPreviewPrice}
+            disabled={isReadOnly}
         />
     );
 };

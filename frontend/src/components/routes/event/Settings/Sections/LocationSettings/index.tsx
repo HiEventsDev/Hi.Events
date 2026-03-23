@@ -15,7 +15,10 @@ import {HeadingWithDescription} from "../../../../../common/Card/CardHeading";
 import {Editor} from "../../../../../common/Editor";
 import {isEmptyHtml} from "../../../../../../utilites/helpers.ts";
 
+import {useIsReadOnly} from "../../../../../../hooks/useIsCurrentUserAdmin.ts";
+
 export const LocationSettings = () => {
+    const isReadOnly = useIsReadOnly();
     const {eventId} = useParams();
     const eventSettingsQuery = useGetEventSettings(eventId);
     const updateMutation = useUpdateEventSettings();
@@ -85,7 +88,7 @@ export const LocationSettings = () => {
                 description={t`Event location & venue details`}
             />
             <form onSubmit={form.onSubmit(handleSubmit)}>
-                <fieldset disabled={eventSettingsQuery.isLoading || updateMutation.isPending}>
+                <fieldset disabled={eventSettingsQuery.isLoading || updateMutation.isPending || isReadOnly}>
                     <Switch
                         {...form.getInputProps('is_online_event', {type: 'checkbox'})}
                         label={t`This is an online event`}

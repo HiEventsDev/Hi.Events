@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Products;
 
+use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\Http\Actions\BaseAction;
@@ -22,7 +23,7 @@ class GetProductsAction extends BaseAction
 
     public function __invoke(int $eventId, Request $request): JsonResponse
     {
-        $this->isActionAuthorized($eventId, EventDomainObject::class);
+        $this->isActionAuthorized($eventId, EventDomainObject::class, Role::READONLY);
 
         $products = $this->getProductsHandler->handle(
             eventId: $eventId,

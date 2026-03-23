@@ -15,7 +15,10 @@ import {isEmptyHtml} from "../../../../../../utilites/helpers.ts";
 import {CustomSelect, ItemProps} from "../../../../../common/CustomSelect";
 import {IconUser, IconUsers} from "@tabler/icons-react";
 
+import {useIsReadOnly} from "../../../../../../hooks/useIsCurrentUserAdmin.ts";
+
 export const HomepageAndCheckoutSettings = () => {
+    const isReadOnly = useIsReadOnly();
     const {eventId} = useParams();
     const eventSettingsQuery = useGetEventSettings(eventId);
     const updateMutation = useUpdateEventSettings();
@@ -83,7 +86,7 @@ export const HomepageAndCheckoutSettings = () => {
                 description={t`Customize the event homepage and checkout messaging`}
             />
             <form onSubmit={form.onSubmit(handleSubmit as any)}>
-                <fieldset disabled={eventSettingsQuery.isLoading || updateMutation.isPending}>
+                <fieldset disabled={eventSettingsQuery.isLoading || updateMutation.isPending || isReadOnly}>
                     <Editor
                         label={t`Pre Checkout message`}
                         value={form.values.pre_checkout_message || ''}

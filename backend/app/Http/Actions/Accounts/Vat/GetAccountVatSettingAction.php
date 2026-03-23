@@ -19,7 +19,7 @@ class GetAccountVatSettingAction extends BaseAction
 
     public function __invoke(int $accountId): JsonResponse
     {
-        $this->minimumAllowedRole(Role::ORGANIZER);
+        $this->minimumAllowedRole(Role::READONLY);
 
         if ($accountId !== $this->getAuthenticatedAccountId()) {
             return $this->errorResponse(__('Unauthorized'));

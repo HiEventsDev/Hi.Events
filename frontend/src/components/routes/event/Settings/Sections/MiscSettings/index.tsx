@@ -14,7 +14,10 @@ import {CustomSelect, ItemProps} from "../../../../../common/CustomSelect";
 import {IconCoin, IconCoins} from "@tabler/icons-react";
 import {SelfServiceSettings} from "../../../../../common/SelfServiceSettings";
 
+import {useIsReadOnly} from "../../../../../../hooks/useIsCurrentUserAdmin.ts";
+
 export const MiscSettings = () => {
+    const isReadOnly = useIsReadOnly();
     const {eventId} = useParams();
     const eventSettingsQuery = useGetEventSettings(eventId);
     const updateMutation = useUpdateEventSettings();
@@ -73,7 +76,7 @@ export const MiscSettings = () => {
                 description={t`Customize the miscellaneous settings for this event`}
             />
             <form onSubmit={form.onSubmit(handleSubmit as any)}>
-                <fieldset disabled={eventSettingsQuery.isLoading || updateMutation.isPending}>
+                <fieldset disabled={eventSettingsQuery.isLoading || updateMutation.isPending || isReadOnly}>
                     <CustomSelect
                         optionList={priceOptions}
                         form={form}

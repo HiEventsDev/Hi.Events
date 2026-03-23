@@ -2,6 +2,7 @@
 
 namespace HiEvents\Http\Actions\Waitlist\Organizer;
 
+use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\WaitlistEntryDomainObject;
 use HiEvents\Http\Actions\BaseAction;
@@ -20,7 +21,7 @@ class GetWaitlistEntriesAction extends BaseAction
 
     public function __invoke(Request $request, int $eventId): JsonResponse
     {
-        $this->isActionAuthorized($eventId, EventDomainObject::class);
+        $this->isActionAuthorized($eventId, EventDomainObject::class, Role::READONLY);
 
         $entries = $this->handler->handle(
             $eventId,

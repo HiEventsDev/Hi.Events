@@ -14,7 +14,10 @@ import {Editor} from "../../../../../common/Editor";
 import {InputLabelWithHelp} from "../../../../../common/InputLabelWithHelp";
 import {isEmptyHtml} from "../../../../../../utilites/helpers.ts";
 
+import {useIsReadOnly} from "../../../../../../hooks/useIsCurrentUserAdmin.ts";
+
 export const PaymentAndInvoicingSettings = () => {
+    const isReadOnly = useIsReadOnly();
     const {eventId} = useParams();
     const eventSettingsQuery = useGetEventSettings(eventId);
     const updateMutation = useUpdateEventSettings();
@@ -99,7 +102,7 @@ export const PaymentAndInvoicingSettings = () => {
                 description={t`Manage payment and invoicing settings for this event.`}
             />
             <form onSubmit={form.onSubmit(handleSubmit as any)}>
-                <fieldset disabled={eventSettingsQuery.isLoading || updateMutation.isPending}>
+                <fieldset disabled={eventSettingsQuery.isLoading || updateMutation.isPending || isReadOnly}>
                     <Stack gap="xl">
                         <Paper withBorder p="md" radius="md">
                             <Text size="lg" fw={500} mb="md">{t`Payment Methods`}</Text>

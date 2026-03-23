@@ -23,7 +23,7 @@ class GetUsersAction extends BaseAction
 
     public function __invoke(): JsonResponse
     {
-        $this->minimumAllowedRole(Role::ADMIN);
+        $this->minimumAllowedRole(Role::READONLY);
 
         return $this->resourceResponse(
             UserResource::class,

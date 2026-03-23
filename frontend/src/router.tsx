@@ -296,14 +296,16 @@ export const router: RouteObject[] = [
                 path: "settings",
                 async lazy() {
                     const Settings = await import("./components/routes/organizer/Settings");
-                    return { Component: Settings.default };
+                    const ReadOnlyGuard = await import("./components/common/ReadOnlyGuard");
+                    return { element: <ReadOnlyGuard.default><Settings.default /></ReadOnlyGuard.default> };
                 }
             },
             {
                 path: "organizer-homepage-designer",
                 async lazy() {
                     const OrganizerHomepageDesigner = await import("./components/routes/organizer/OrganizerHomepageDesigner");
-                    return { Component: OrganizerHomepageDesigner.default };
+                    const ReadOnlyGuard = await import("./components/common/ReadOnlyGuard");
+                    return { element: <ReadOnlyGuard.default><OrganizerHomepageDesigner.default /></ReadOnlyGuard.default> };
                 }
             },
             {
@@ -383,7 +385,8 @@ export const router: RouteObject[] = [
                 path: "questions",
                 async lazy() {
                     const Questions = await import("./components/routes/event/questions");
-                    return { Component: Questions.default };
+                    const ReadOnlyGuard = await import("./components/common/ReadOnlyGuard");
+                    return { element: <ReadOnlyGuard.default><Questions.default /></ReadOnlyGuard.default> };
                 }
             },
             {
@@ -439,14 +442,16 @@ export const router: RouteObject[] = [
                 path: "homepage-designer",
                 async lazy() {
                     const HomepageDesigner = await import("./components/routes/event/HomepageDesigner");
-                    return { Component: HomepageDesigner.default };
+                    const ReadOnlyGuard = await import("./components/common/ReadOnlyGuard");
+                    return { element: <ReadOnlyGuard.default><HomepageDesigner.default /></ReadOnlyGuard.default> };
                 }
             },
             {
                 path: "ticket-designer",
                 async lazy() {
                     const TicketDesigner = await import("./components/routes/event/TicketDesigner");
-                    return { Component: TicketDesigner.default };
+                    const ReadOnlyGuard = await import("./components/common/ReadOnlyGuard");
+                    return { element: <ReadOnlyGuard.default><TicketDesigner.default /></ReadOnlyGuard.default> };
                 }
             },
             {

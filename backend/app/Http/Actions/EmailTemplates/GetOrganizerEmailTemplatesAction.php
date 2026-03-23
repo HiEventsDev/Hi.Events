@@ -3,6 +3,7 @@
 namespace HiEvents\Http\Actions\EmailTemplates;
 
 use HiEvents\DomainObjects\Enums\EmailTemplateType;
+use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Resources\EmailTemplateResource;
@@ -21,7 +22,7 @@ class GetOrganizerEmailTemplatesAction extends BaseAction
 
     public function __invoke(Request $request, int $organizerId): JsonResponse
     {
-        $this->isActionAuthorized($organizerId, OrganizerDomainObject::class);
+        $this->isActionAuthorized($organizerId, OrganizerDomainObject::class, Role::READONLY);
 
         $validated = $request->validate([
             'template_type' => ['nullable', new Enum(EmailTemplateType::class)],

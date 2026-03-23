@@ -45,11 +45,13 @@ import {TopBarButton} from "../../common/TopBarButton";
 import {useWindowWidth} from "../../../hooks/useWindowWidth.ts";
 import {SidebarCallout} from "../../common/SidebarCallout";
 import {useGetMe} from "../../../queries/useGetMe.ts";
+import {useIsReadOnly} from "../../../hooks/useIsCurrentUserAdmin.ts";
 import {useResendEmailConfirmation} from "../../../mutations/useResendEmailConfirmation.ts";
 import {useState} from "react";
 import {eventHomepageUrl} from "../../../utilites/urlHelper.ts";
 
 const EventLayout = () => {
+    const isReadOnly = useIsReadOnly();
     const location = useLocation();
     const {eventId} = useParams();
 
@@ -102,9 +104,9 @@ const EventLayout = () => {
         // 2. EVENT SETUP
         {label: t`Setup & Design`},
         {link: 'settings', label: t`Event Settings`, icon: IconSettings},
-        {link: 'homepage-designer', label: t`Homepage Designer`, icon: IconPaint},
-        {link: 'ticket-designer', label: t`Ticket Designer`, icon: IconTicket},
-        {link: 'questions', label: t`Registration Questions`, icon: IconUserQuestion},
+        {link: 'homepage-designer', label: t`Homepage Designer`, icon: IconPaint, showWhen: () => !isReadOnly},
+        {link: 'ticket-designer', label: t`Ticket Designer`, icon: IconTicket, showWhen: () => !isReadOnly},
+        {link: 'questions', label: t`Registration Questions`, icon: IconUserQuestion, showWhen: () => !isReadOnly},
 
         // 3. Ticketing & Sales
         {label: t`Ticketing & Sales`},

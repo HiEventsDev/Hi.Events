@@ -5,7 +5,7 @@ import {Alert, Button, Select, TextInput} from "@mantine/core";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
 import {t, Trans} from "@lingui/macro";
 import {CustomSelect, ItemProps} from "../../common/CustomSelect";
-import {IconUser, IconUserShield} from "@tabler/icons-react";
+import {IconEye, IconUser, IconUserShield} from "@tabler/icons-react";
 import {showSuccess} from "../../../utilites/notifications.tsx";
 import {UpdateUserRequest} from "../../../api/user.client.ts";
 import {useEditUser} from "../../../mutations/useEditUser.ts";
@@ -55,6 +55,12 @@ export const EditUserModal = ({onClose, user}: EditUserModalProps) => {
             label: t`Organizer`,
             value: 'ORGANIZER',
             description: t`Organizers can only manage events and products. They cannot manage users, account settings or billing information.`,
+        },
+        {
+            icon: <IconEye/>,
+            label: t`Read-only`,
+            value: 'READONLY',
+            description: t`Read-only users can view events, orders and settings, but cannot make any changes.`,
         },
     ];
 

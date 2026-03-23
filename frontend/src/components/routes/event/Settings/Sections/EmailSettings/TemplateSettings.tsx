@@ -8,9 +8,11 @@ import {
 import {usePreviewEmailTemplateForEvent} from '../../../../../../mutations/usePreviewEmailTemplate';
 import {useUpdateEmailTemplateForEvent} from "../../../../../../mutations/useUpdateEmailTemplate.ts";
 import {useDeleteEmailTemplateForEvent} from "../../../../../../mutations/useDeleteEmailTemplate.ts";
-import {EmailTemplateSettingsBase} from '../../../../../common/EmailTemplateSettings';
+import {useIsReadOnly} from "../../../../../../hooks/useIsCurrentUserAdmin.ts";
+import {EmailTemplateSettingsBase} from '../../../../../common/EmailTemplateSettings/EmailTemplateSettingsBase';
 
 export const TemplateSettings = () => {
+    const isReadOnly = useIsReadOnly();
     const {eventId} = useParams();
     const [shouldFetchDefaults, setShouldFetchDefaults] = useState(false);
 
@@ -45,6 +47,7 @@ export const TemplateSettings = () => {
             deleteMutation={deleteMutation}
             previewMutation={previewMutation}
             onCreateTemplate={handleCreateTemplate}
+            disabled={isReadOnly}
         />
     );
 };

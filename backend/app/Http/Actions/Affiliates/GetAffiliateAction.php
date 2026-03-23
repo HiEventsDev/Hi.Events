@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Affiliates;
 
+use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
@@ -20,7 +21,7 @@ class GetAffiliateAction extends BaseAction
 
     public function __invoke(Request $request, int $eventId, int $affiliateId): JsonResponse
     {
-        $this->isActionAuthorized($eventId, EventDomainObject::class);
+        $this->isActionAuthorized($eventId, EventDomainObject::class, Role::READONLY);
 
         $affiliate = $this->affiliateRepository->findFirstWhere([
             'event_id' => $eventId,

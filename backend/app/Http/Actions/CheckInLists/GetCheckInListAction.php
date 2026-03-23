@@ -2,6 +2,8 @@
 
 namespace HiEvents\Http\Actions\CheckInLists;
 
+use HiEvents\DomainObjects\CheckInListDomainObject;
+use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Resources\CheckInList\CheckInListResource;
@@ -18,7 +20,7 @@ class GetCheckInListAction extends BaseAction
 
     public function __invoke(int $eventId, int $checkInListId): JsonResponse
     {
-        $this->isActionAuthorized($eventId, EventDomainObject::class);
+        $this->isActionAuthorized($eventId, EventDomainObject::class, Role::READONLY);
 
         $checkInList = $this->getCheckInListHandler->handle(
             checkInListId: $checkInListId,

@@ -3,6 +3,7 @@
 namespace HiEvents\Http\Actions\PromoCodes;
 
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\PromoCodeDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\DTO\QueryParamsDTO;
@@ -22,7 +23,7 @@ class GetPromoCodesAction extends BaseAction
 
     public function __invoke(Request $request, int $eventId): JsonResponse
     {
-        $this->isActionAuthorized($eventId, EventDomainObject::class);
+        $this->isActionAuthorized($eventId, EventDomainObject::class, Role::READONLY);
 
         $codes = $this->promoCodeRepository->findByEventId($eventId, QueryParamsDTO::fromArray($request->query->all()));
 

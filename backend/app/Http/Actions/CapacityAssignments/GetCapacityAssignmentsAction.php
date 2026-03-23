@@ -3,6 +3,7 @@
 namespace HiEvents\Http\Actions\CapacityAssignments;
 
 use HiEvents\DomainObjects\CapacityAssignmentDomainObject;
+use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Resources\CapacityAssignment\CapacityAssignmentResource;
@@ -21,7 +22,7 @@ class GetCapacityAssignmentsAction extends BaseAction
 
     public function __invoke(int $eventId, Request $request): JsonResponse
     {
-        $this->isActionAuthorized($eventId, EventDomainObject::class);
+        $this->isActionAuthorized($eventId, EventDomainObject::class, Role::READONLY);
 
         return $this->filterableResourceResponse(
             resource: CapacityAssignmentResource::class,

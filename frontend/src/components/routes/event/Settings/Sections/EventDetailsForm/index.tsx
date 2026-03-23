@@ -14,10 +14,12 @@ import {showSuccess} from "../../../../../../utilites/notifications.tsx";
 import {useFormErrorResponseHandler} from "../../../../../../hooks/useFormErrorResponseHandler.tsx";
 import {currenciesMap} from "../../../../../../../data/currencies.ts";
 import {timezones} from "../../../../../../../data/timezones.ts";
+import {useIsReadOnly} from "../../../../../../hooks/useIsCurrentUserAdmin.ts";
 import {HeadingWithDescription} from "../../../../../common/Card/CardHeading";
 import {EventCategories} from "../../../../../../constants/eventCategories.ts";
 
 export const EventDetailsForm = () => {
+    const isReadOnly = useIsReadOnly();
     const {eventId} = useParams();
     const eventQuery = useGetEvent(eventId);
     const updateMutation = useUpdateEvent();
@@ -69,7 +71,7 @@ export const EventDetailsForm = () => {
                 description={t`Update event name, description and dates`}
             />
             <form onSubmit={form.onSubmit(handleSubmit)}>
-                <fieldset disabled={eventQuery.isLoading || updateMutation.isPending}>
+                <fieldset disabled={eventQuery.isLoading || updateMutation.isPending || isReadOnly}>
                     <TextInput
                         {...form.getInputProps('title')}
                         label={t`Name`}

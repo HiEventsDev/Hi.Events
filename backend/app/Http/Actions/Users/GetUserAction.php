@@ -22,7 +22,7 @@ class GetUserAction extends BaseAction
 
     public function __invoke(int $userId): JsonResponse
     {
-        $this->minimumAllowedRole(Role::ADMIN);
+        $this->minimumAllowedRole(Role::READONLY);
 
         $user = $this->userRepository->findByIdAndAccountId($userId, $this->getAuthenticatedAccountId());
 

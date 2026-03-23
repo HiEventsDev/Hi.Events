@@ -53,6 +53,7 @@ interface EmailTemplateSettingsBaseProps {
     onSaveSuccess?: () => void;
     onDeleteSuccess?: () => void;
     onError?: (error: any, message: string) => void;
+    disabled?: boolean;
 }
 
 export const EmailTemplateSettingsBase = ({
@@ -68,7 +69,8 @@ export const EmailTemplateSettingsBase = ({
     onCreateTemplate,
     onSaveSuccess,
     onDeleteSuccess,
-    onError
+    onError,
+    disabled = false
 }: EmailTemplateSettingsBaseProps) => {
     const [editorOpened, {open: openEditor, close: closeEditor}] = useDisclosure(false);
     const [editingTemplate, setEditingTemplate] = useState<EmailTemplate | null>(null);
@@ -77,7 +79,7 @@ export const EmailTemplateSettingsBase = ({
     const {data: account, isFetched: isAccountFetched} = useGetAccount();
     const isAccountVerified = isAccountFetched && account?.is_account_email_confirmed;
     const accountRequiresManualVerification = isAccountFetched && account?.requires_manual_verification;
-    const isModifyDisabled = !isAccountVerified || accountRequiresManualVerification;
+    const isModifyDisabled = !isAccountVerified || accountRequiresManualVerification || disabled;
 
     const orderConfirmationTemplate = templates.find(t => t.template_type === 'order_confirmation');
     const attendeeTicketTemplate = templates.find(t => t.template_type === 'attendee_ticket');

@@ -93,7 +93,8 @@ const Users = () => {
                 <Badge variant="outline">
                     <Group gap={5}>
                         {user.role === 'ORGANIZER' && <IconUser size={14}/>}
-                        {user.role === 'ADMIN' && <IconUserShield size={14}/>} {user.role}
+                        {user.role === 'ADMIN' && <IconUserShield size={14}/>}
+                        {user.role === 'READONLY' && <IconEye size={14}/>} {user.role}
                     </Group>
                 </Badge>
             </Table.Td>
