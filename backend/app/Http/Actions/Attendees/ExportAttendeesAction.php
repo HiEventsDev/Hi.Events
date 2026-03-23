@@ -4,6 +4,7 @@ namespace HiEvents\Http\Actions\Attendees;
 
 use HiEvents\DomainObjects\AttendeeCheckInDomainObject;
 use HiEvents\DomainObjects\CheckInListDomainObject;
+use HiEvents\DomainObjects\Enums\QuestionBelongsTo;
 use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;

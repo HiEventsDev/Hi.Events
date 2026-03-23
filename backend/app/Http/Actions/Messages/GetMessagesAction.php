@@ -5,6 +5,7 @@ namespace HiEvents\Http\Actions\Messages;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\MessageDomainObject;
 use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Repository\Eloquent\Value\Relationship;
@@ -24,7 +25,7 @@ class GetMessagesAction extends BaseAction
 
     public function __invoke(Request $request, int $eventId): JsonResponse
     {
-        $this->isActionAuthorized($eventId, EventDomainObject::class, \HiEvents\DomainObjects\Enums\Role::READONLY);
+        $this->isActionAuthorized($eventId, EventDomainObject::class, Role::READONLY);
 
         $messages = $this->messageRepository
             ->loadRelation(new Relationship(UserDomainObject::class, name: 'sent_by_user'))
