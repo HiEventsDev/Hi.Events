@@ -91,7 +91,7 @@ const EventLayout = () => {
             link: 'getting-started',
             label: t`Getting Started`,
             icon: IconStar,
-            showWhen: () => !eventSettings?.hide_getting_started_page
+            showWhen: () => !eventSettings?.hide_getting_started_page && !isReadOnly
         },
         {link: 'dashboard', label: t`Dashboard`, icon: IconDashboard},
         {

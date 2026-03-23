@@ -460,7 +460,8 @@ export const router: RouteObject[] = [
                 path: "getting-started",
                 async lazy() {
                     const GettingStarted = await import("./components/routes/event/GettingStarted");
-                    return { Component: GettingStarted.default };
+                    const ReadOnlyGuard = await import("./components/common/ReadOnlyGuard");
+                    return { element: <ReadOnlyGuard.default><GettingStarted.default /></ReadOnlyGuard.default> };
                 }
             },
             {
