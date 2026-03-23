@@ -3,6 +3,7 @@
 namespace HiEvents\Http\Actions\Orders;
 
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Services\Application\Handlers\Order\DTO\GetOrderInvoiceDTO;
 use HiEvents\Services\Application\Handlers\Order\GetOrderInvoiceHandler;
@@ -19,7 +20,7 @@ class DownloadOrderInvoiceAction extends BaseAction
 
     public function __invoke(Request $request, int $eventId, int $orderId): Response
     {
-        $this->isActionAuthorized($eventId, EventDomainObject::class);
+        $this->isActionAuthorized($eventId, EventDomainObject::class, Role::READONLY);
 
         $invoice = $this->orderInvoiceHandler->handle(new GetOrderInvoiceDTO(
             orderId: $orderId,

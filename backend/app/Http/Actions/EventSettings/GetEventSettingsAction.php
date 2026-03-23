@@ -3,6 +3,7 @@
 namespace HiEvents\Http\Actions\EventSettings;
 
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Resources\Event\EventSettingsResource;
@@ -17,7 +18,7 @@ class GetEventSettingsAction extends BaseAction
 
     public function __invoke(int $eventId): Response|JsonResponse
     {
-        $this->isActionAuthorized($eventId, EventDomainObject::class);
+        $this->isActionAuthorized($eventId, EventDomainObject::class, Role::READONLY);
 
         $settings = $this->eventSettingsRepository->findFirstWhere([
             'event_id' => $eventId

@@ -37,13 +37,21 @@ readonly class IsAuthorizedService
      */
     public function validateUserRole(Role $minimumRole, UserDomainObject $authUser): void
     {
+        $userRole = $authUser->getCurrentAccountUser()->getRole();
+
+        if ($minimumRole === Role::SUPERADMIN && $userRole !== Role::SUPERADMIN->name) {
+            throw new UnauthorizedException(__('You are not authorized to perform this action.'));
+        }
+
         if ($minimumRole === Role::ADMIN
-            && in_array($authUser->getCurrentAccountUser()->getRole(), [Role::SUPERADMIN->name, Role::ADMIN->name], true) === false
+            && in_array($userRole, [Role::SUPERADMIN->name, Role::ADMIN->name], true) === false
         ) {
             throw new UnauthorizedException(__('You are not authorized to perform this action.'));
         }
 
-        if ($minimumRole === Role::SUPERADMIN && $authUser->getCurrentAccountUser()->getRole() !== Role::SUPERADMIN->name) {
+        if ($minimumRole === Role::ORGANIZER
+            && in_array($userRole, [Role::SUPERADMIN->name, Role::ADMIN->name, Role::ORGANIZER->name], true) === false
+        ) {
             throw new UnauthorizedException(__('You are not authorized to perform this action.'));
         }
     }

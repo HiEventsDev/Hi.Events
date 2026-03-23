@@ -3,6 +3,7 @@
 namespace HiEvents\Http\Actions\Events\Images;
 
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Repository\Interfaces\ImageRepositoryInterface;
 use HiEvents\Resources\Image\ImageResource;
@@ -16,7 +17,7 @@ class GetEventImagesAction extends BaseAction
 
     public function __invoke(int $eventId): JsonResponse
     {
-        $this->isActionAuthorized($eventId, EventDomainObject::class);
+        $this->isActionAuthorized($eventId, EventDomainObject::class, Role::READONLY);
 
         $images = $this->imageRepository->findWhere([
             'entity_id' => $eventId,

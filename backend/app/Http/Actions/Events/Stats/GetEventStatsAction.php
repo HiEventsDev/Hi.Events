@@ -4,6 +4,7 @@ namespace HiEvents\Http\Actions\Events\Stats;
 
 use Carbon\Carbon;
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Services\Application\Handlers\Event\DTO\EventStatsRequestDTO;
 use HiEvents\Services\Application\Handlers\Event\GetEventStatsHandler;
@@ -20,7 +21,7 @@ class GetEventStatsAction extends BaseAction
 
     public function __invoke(int $eventId): JsonResponse
     {
-        $this->isActionAuthorized($eventId, EventDomainObject::class);
+        $this->isActionAuthorized($eventId, EventDomainObject::class, Role::READONLY);
 
         $stats = $this->eventStatsHandler->handle(EventStatsRequestDTO::fromArray([
             'event_id' => $eventId,

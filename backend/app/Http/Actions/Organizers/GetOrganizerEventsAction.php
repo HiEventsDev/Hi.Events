@@ -3,6 +3,7 @@
 namespace HiEvents\Http\Actions\Organizers;
 
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\DTO\QueryParamsDTO;
@@ -24,7 +25,8 @@ class GetOrganizerEventsAction extends BaseAction
     {
         $this->isActionAuthorized(
             entityId: $organizerId,
-            entityType: OrganizerDomainObject::class
+            entityType: OrganizerDomainObject::class,
+            minimumRole: Role::READONLY,
         );
 
         $events = $this->getOrganizerEventsHandler->handle(new GetOrganizerEventsDTO(

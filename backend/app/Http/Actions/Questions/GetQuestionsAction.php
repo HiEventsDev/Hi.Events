@@ -5,6 +5,7 @@ namespace HiEvents\Http\Actions\Questions;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
+use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\QuestionRepositoryInterface;
@@ -23,7 +24,7 @@ class GetQuestionsAction extends BaseAction
 
     public function __invoke(Request $request, int $eventId): JsonResponse
     {
-        $this->isActionAuthorized($eventId, EventDomainObject::class);
+        $this->isActionAuthorized($eventId, EventDomainObject::class, Role::READONLY);
 
         $questions = $this->questionRepository
             ->loadRelation(

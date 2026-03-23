@@ -12,6 +12,7 @@ use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Repository\Eloquent\Value\OrderAndDirection;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
+use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Resources\Order\OrderResource;
 use Illuminate\Http\JsonResponse;
 
@@ -29,7 +30,7 @@ class GetOrderAction extends BaseAction
      */
     public function __invoke(int $eventId, int $orderId): JsonResponse
     {
-        $this->isActionAuthorized($eventId, EventDomainObject::class);
+        $this->isActionAuthorized($eventId, EventDomainObject::class, Role::READONLY);
 
         $order = $this->orderRepository
             ->loadRelation(OrderItemDomainObject::class)

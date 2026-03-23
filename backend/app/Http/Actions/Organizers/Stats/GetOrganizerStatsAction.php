@@ -2,6 +2,7 @@
 
 namespace HiEvents\Http\Actions\Organizers\Stats;
 
+use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Services\Application\Handlers\Organizer\DTO\GetOrganizerStatsRequestDTO;
@@ -19,7 +20,7 @@ class GetOrganizerStatsAction extends BaseAction
 
     public function __invoke(Request $request, int $organizerId): JsonResponse
     {
-        $this->isActionAuthorized($organizerId, OrganizerDomainObject::class);
+        $this->isActionAuthorized($organizerId, OrganizerDomainObject::class, Role::READONLY);
 
         $organizerStats = $this->getOrganizerStatsHandler->handle(new GetOrganizerStatsRequestDTO(
             organizerId: $organizerId,

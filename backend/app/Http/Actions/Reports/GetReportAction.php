@@ -4,6 +4,7 @@ namespace HiEvents\Http\Actions\Reports;
 
 use HiEvents\DomainObjects\Enums\ReportTypes;
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Report\GetReportRequest;
 use HiEvents\Services\Application\Handlers\Reports\DTO\GetReportDTO;
@@ -24,7 +25,7 @@ class GetReportAction extends BaseAction
      */
     public function __invoke(GetReportRequest $request, int $eventId, string $reportType): JsonResponse
     {
-        $this->isActionAuthorized($eventId, EventDomainObject::class);
+        $this->isActionAuthorized($eventId, EventDomainObject::class, Role::READONLY);
 
         $this->validateDateRange($request);
 

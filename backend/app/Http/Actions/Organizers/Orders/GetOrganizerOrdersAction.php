@@ -3,6 +3,7 @@
 namespace HiEvents\Http\Actions\Organizers\Orders;
 
 use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Resources\Order\OrderResource;
@@ -20,7 +21,7 @@ class GetOrganizerOrdersAction extends BaseAction
 
     public function __invoke(Request $request, int $organizerId): JsonResponse
     {
-        $this->isActionAuthorized($organizerId, OrganizerDomainObject::class);
+        $this->isActionAuthorized($organizerId, OrganizerDomainObject::class, Role::READONLY);
 
         $orders = $this->handler->handle(
             organizer: $organizerId,

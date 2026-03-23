@@ -3,6 +3,7 @@
 namespace HiEvents\Http\Actions\Webhooks;
 
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Resources\Webhook\WebhookResource;
 use HiEvents\Services\Application\Handlers\Webhook\GetWebhooksHandler;
@@ -18,7 +19,7 @@ class GetWebhooksAction extends BaseAction
 
     public function __invoke(int $eventId): JsonResponse
     {
-        $this->isActionAuthorized($eventId, EventDomainObject::class);
+        $this->isActionAuthorized($eventId, EventDomainObject::class, Role::READONLY);
 
         $webhooks = $this->getWebhooksHandler->handler(
             accountId: $this->getAuthenticatedAccountId(),

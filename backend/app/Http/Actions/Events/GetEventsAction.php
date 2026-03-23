@@ -23,7 +23,7 @@ class GetEventsAction extends BaseAction
 
     public function __invoke(Request $request): JsonResponse
     {
-        $this->minimumAllowedRole(Role::ORGANIZER);
+        $this->minimumAllowedRole(Role::READONLY);
 
         $events = $this->getEventsHandler->handle(
             GetEventsDTO::fromArray([

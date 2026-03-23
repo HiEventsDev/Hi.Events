@@ -2,6 +2,7 @@
 
 namespace HiEvents\Http\Actions\Organizers;
 
+use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\ImageDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Http\Actions\BaseAction;
@@ -20,6 +21,7 @@ class GetOrganizerAction extends BaseAction
         $this->isActionAuthorized(
             entityId: $organizerId,
             entityType: OrganizerDomainObject::class,
+            minimumRole: Role::READONLY,
         );
 
         $organizer = $this->organizerRepository

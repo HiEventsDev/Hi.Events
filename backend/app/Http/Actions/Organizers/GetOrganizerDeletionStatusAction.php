@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Organizers;
 
+use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Services\Domain\Organizer\OrganizerDeletionService;
@@ -19,7 +20,7 @@ class GetOrganizerDeletionStatusAction extends BaseAction
 
     public function __invoke(int $organizerId): JsonResponse
     {
-        $this->isActionAuthorized($organizerId, OrganizerDomainObject::class);
+        $this->isActionAuthorized($organizerId, OrganizerDomainObject::class, Role::READONLY);
 
         $accountId = $this->getAuthenticatedAccountId();
         $canDelete = $this->organizerDeletionService->canDeleteOrganizer($organizerId, $accountId);

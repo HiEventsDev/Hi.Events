@@ -4,6 +4,7 @@ namespace HiEvents\Http\Actions\Reports;
 
 use HiEvents\DomainObjects\Enums\OrganizerReportTypes;
 use HiEvents\DomainObjects\OrganizerDomainObject;
+use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Report\GetOrganizerReportRequest;
 use HiEvents\Services\Application\Handlers\Reports\DTO\GetOrganizerReportDTO;
@@ -27,7 +28,7 @@ class ExportOrganizerReportAction extends BaseAction
      */
     public function __invoke(GetOrganizerReportRequest $request, int $organizerId, string $reportType): StreamedResponse
     {
-        $this->isActionAuthorized($organizerId, OrganizerDomainObject::class);
+        $this->isActionAuthorized($organizerId, OrganizerDomainObject::class, Role::READONLY);
 
         $this->validateDateRange($request);
 

@@ -4,6 +4,7 @@ namespace HiEvents\Http\Actions\Webhooks;
 
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\WebhookLogDomainObject;
+use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Resources\Webhook\WebhookLogResource;
 use HiEvents\Services\Application\Handlers\Webhook\GetWebhookLogsHandler;
@@ -19,7 +20,7 @@ class GetWebhookLogsAction extends BaseAction
 
     public function __invoke(int $eventId, int $webhookId): JsonResponse
     {
-        $this->isActionAuthorized($eventId, EventDomainObject::class);
+        $this->isActionAuthorized($eventId, EventDomainObject::class, Role::READONLY);
 
         $webhookLogs = $this->getWebhookLogsHandler->handle(
             webhookId: $webhookId,
