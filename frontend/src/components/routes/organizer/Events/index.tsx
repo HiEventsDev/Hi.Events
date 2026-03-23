@@ -2,6 +2,7 @@ import {useFilterQueryParamSync} from "../../../../hooks/useFilterQueryParamSync
 import {useDisclosure} from "@mantine/hooks";
 import {Event, QueryFilters} from "../../../../types.ts";
 import {useParams} from "react-router";
+import {useIsReadOnly} from "../../../../hooks/useIsCurrentUserAdmin.ts";
 import {t} from "@lingui/macro";
 import {ToolBar} from "../../../common/ToolBar";
 import {SearchBarWrapper} from "../../../common/SearchBar";
@@ -18,6 +19,7 @@ import {PageBody} from "../../../common/PageBody";
 import {PageTitle} from "../../../common/PageTitle";
 
 const Events = () => {
+    const isReadOnly = useIsReadOnly();
     const {organizerId, eventsState} = useParams();
     const [searchParams, setSearchParams] = useFilterQueryParamSync();
     const [createModalOpen, {open: openCreateModal, close: closeCreateModal}] = useDisclosure(false);
@@ -51,16 +53,18 @@ const Events = () => {
                 />
             )}>
                 <>
-                    <Button
-                        color={'green'}
-                        rightSection={
-                            <IconCalendarPlus stroke={1.5}/>
-                        }
-                        onClick={openCreateModal}
-                        pr={12}
-                    >
-                        {t`Create Event`}
-                    </Button>
+                    {!isReadOnly && (
+                        <Button
+                            color={'green'}
+                            rightSection={
+                                <IconCalendarPlus stroke={1.5}/>
+                            }
+                            onClick={openCreateModal}
+                            pr={12}
+                        >
+                            {t`Create Event`}
+                        </Button>
+                    )}
                 </>
             </ToolBar>
 

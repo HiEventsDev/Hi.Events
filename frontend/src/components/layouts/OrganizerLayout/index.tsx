@@ -151,7 +151,7 @@ const OrganizerLayout = () => {
             link: `/manage/organizer/${organizerId}`,
             content: organizer?.name,
         },
-        {
+        ...(!isReadOnly ? [{
             content: (
                 <span
                     className={classes.createEventBreadcrumb}
@@ -160,10 +160,10 @@ const OrganizerLayout = () => {
                     <IconCalendarPlus size={16} /> {t`Create Event`}
                 </span>
             ),
-        }
+        }] : [])
     ];
 
-    const callouts: CalloutConfig[] = [
+    const callouts: CalloutConfig[] = !isReadOnly ? [
         {
             icon: <IconUsersGroup size={20} />,
             heading: t`Invite Your Team`,
@@ -175,7 +175,7 @@ const OrganizerLayout = () => {
             },
             storageKey: `organizer-${organizerId}-team-callout-dismissed`
         },
-    ];
+    ] : [];
 
     if (!isReadOnly && account && !account?.stripe_connect_setup_complete) {
         callouts.unshift({

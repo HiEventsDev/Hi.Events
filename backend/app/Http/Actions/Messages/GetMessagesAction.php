@@ -24,7 +24,7 @@ class GetMessagesAction extends BaseAction
 
     public function __invoke(Request $request, int $eventId): JsonResponse
     {
-        $this->isActionAuthorized($eventId, EventDomainObject::class);
+        $this->isActionAuthorized($eventId, EventDomainObject::class, \HiEvents\DomainObjects\Enums\Role::READONLY);
 
         $messages = $this->messageRepository
             ->loadRelation(new Relationship(UserDomainObject::class, name: 'sent_by_user'))

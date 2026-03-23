@@ -9,6 +9,7 @@ import {useUpdateOrganizerStatus} from '../../../mutations/useUpdateOrganizerSta
 import {IdParam} from '../../../types';
 import classes from './StatusToggle.module.scss';
 import {trackEvent, AnalyticsEvents} from '../../../utilites/analytics';
+import {useIsReadOnly} from '../../../hooks/useIsCurrentUserAdmin';
 
 interface StatusToggleProps {
     entityType: 'event' | 'organizer';
@@ -24,6 +25,7 @@ export const StatusToggle: React.FC<StatusToggleProps> = ({
                                                               currentStatus,
     onSuccess,
                                                           }) => {
+    const isReadOnly = useIsReadOnly();
     const eventStatusMutation = useUpdateEventStatus();
     const organizerStatusMutation = useUpdateOrganizerStatus();
     const mutation = entityType === 'event' ? eventStatusMutation : organizerStatusMutation;
@@ -73,8 +75,8 @@ export const StatusToggle: React.FC<StatusToggleProps> = ({
         mutation
     ]);
 
-    // Don't show toggle if already live
-    if (currentStatus === 'LIVE') {
+    // Don't show toggle if already live or if user is read-only
+    if (currentStatus === 'LIVE' || isReadOnly) {
         return null;
     }
 

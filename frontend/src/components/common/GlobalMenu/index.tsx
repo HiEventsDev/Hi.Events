@@ -17,6 +17,7 @@ import {useDisclosure} from "@mantine/hooks";
 import {AboutModal} from "../../modals/AboutModal";
 import {getConfig} from "../../../utilites/config.ts";
 import {CreateOrganizerModal} from "../../modals/CreateOrganizerModal";
+import {useIsReadOnly} from "../../../hooks/useIsCurrentUserAdmin.ts";
 
 interface Link {
     label: string;
@@ -27,6 +28,7 @@ interface Link {
 }
 
 export const GlobalMenu = () => {
+    const isReadOnly = useIsReadOnly();
     const {data: me} = useGetMe();
     const [aboutModalOpen, {open: openAboutModal, close: closeAboutModal}] = useDisclosure(false);
     const [createOrganizerModalOpen, {
@@ -72,14 +74,16 @@ export const GlobalMenu = () => {
         });
     }
 
-    links.push({
-        label: t`Create Organizer`,
-        icon: IconPlus,
-        onClick: (event: any) => {
-            event.preventDefault();
-            openCreateOrganizerModal();
-        }
-    });
+    if (!isReadOnly) {
+        links.push({
+            label: t`Create Organizer`,
+            icon: IconPlus,
+            onClick: (event: any) => {
+                event.preventDefault();
+                openCreateOrganizerModal();
+            }
+        });
+    }
 
     links.push({
         label: t`Logout`,

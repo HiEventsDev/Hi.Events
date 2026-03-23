@@ -1,6 +1,7 @@
 import {t} from "@lingui/macro";
 import {Button} from "@mantine/core";
 import {IconPlus} from "@tabler/icons-react";
+import {useIsReadOnly} from "../../../hooks/useIsCurrentUserAdmin";
 import {NoResultsSplash} from "../NoResultsSplash";
 
 interface NoEventsBlankSlateProps {
@@ -9,6 +10,7 @@ interface NoEventsBlankSlateProps {
 }
 
 export const NoEventsBlankSlate = ({eventsState, openCreateModal}: NoEventsBlankSlateProps) => {
+    const isReadOnly = useIsReadOnly();
     return (
         <NoResultsSplash
             heading={t`No events to show`}
@@ -20,12 +22,14 @@ export const NoEventsBlankSlate = ({eventsState, openCreateModal}: NoEventsBlank
                         {eventsState === 'ended' && t`No ended events to show.`}
                         {eventsState === 'archived' && t`No archived events to show.`}
                     </p>
-                    <Button
-                        size={'xs'}
-                        leftSection={<IconPlus/>}
-                        color={'green'}
-                        onClick={openCreateModal}>{t`Create Event`}
-                    </Button>
+                    {!isReadOnly && (
+                        <Button
+                            size={'xs'}
+                            leftSection={<IconPlus/>}
+                            color={'green'}
+                            onClick={openCreateModal}>{t`Create Event`}
+                        </Button>
+                    )}
                 </>
             )}
         />

@@ -10,6 +10,7 @@ import {
     IconSettings,
 } from "@tabler/icons-react";
 import {t} from "@lingui/macro"
+import {useIsReadOnly} from "../../../hooks/useIsCurrentUserAdmin.ts";
 import {eventHomepagePath} from "../../../utilites/urlHelper.ts";
 import {useDisclosure} from "@mantine/hooks";
 import {DuplicateEventModal} from "../../modals/DuplicateEventModal";
@@ -39,6 +40,7 @@ interface EventCardProps {
 }
 
 export function EventCard({event}: EventCardProps) {
+    const isReadOnly = useIsReadOnly();
     const navigate = useNavigate();
     const [isDuplicateModalOpen, duplicateModal] = useDisclosure(false);
     const [eventId, setEventId] = useState<IdParam>();
@@ -132,21 +134,23 @@ export function EventCard({event}: EventCardProps) {
                     icon: <IconEye size={14}/>,
                     onClick: () => window.location.href = eventHomepagePath(event),
                 },
-                {
-                    label: t`Manage event`,
-                    icon: <IconSettings size={14}/>,
-                    onClick: () => navigate(`/manage/event/${event.id}`),
-                },
-                {
-                    label: t`Duplicate event`,
-                    icon: <IconCopy size={14}/>,
-                    onClick: handleDuplicate,
-                },
-                {
-                    label: event?.status === 'ARCHIVED' ? t`Restore event` : t`Archive event`,
-                    icon: <IconArchive size={14}/>,
-                    onClick: handleStatusToggle,
-                },
+                ...(!isReadOnly ? [
+                    {
+                        label: t`Manage event`,
+                        icon: <IconSettings size={14}/>,
+                        onClick: () => navigate(`/manage/event/${event.id}`),
+                    },
+                    {
+                        label: t`Duplicate event`,
+                        icon: <IconCopy size={14}/>,
+                        onClick: handleDuplicate,
+                    },
+                    {
+                        label: event?.status === 'ARCHIVED' ? t`Restore event` : t`Archive event`,
+                        icon: <IconArchive size={14}/>,
+                        onClick: handleStatusToggle,
+                    },
+                ] : []),
             ],
         },
     ];

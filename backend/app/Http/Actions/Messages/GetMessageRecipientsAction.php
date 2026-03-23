@@ -19,7 +19,7 @@ class GetMessageRecipientsAction extends BaseAction
 
     public function __invoke(Request $request, int $eventId, int $messageId): JsonResponse
     {
-        $this->isActionAuthorized($eventId, EventDomainObject::class);
+        $this->isActionAuthorized($eventId, EventDomainObject::class, \HiEvents\DomainObjects\Enums\Role::READONLY);
 
         $params = $this->getPaginationQueryParams($request);
 

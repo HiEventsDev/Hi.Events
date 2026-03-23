@@ -23,6 +23,7 @@ import {relativeDate} from "../../../../utilites/dates.ts";
 import {formatNumber} from "../../../../utilites/helpers.ts";
 import {Event, Order, QueryFilters} from '../../../../types';
 import {useGetOrganizerOrders} from "../../../../queries/useGetOrganizerOrders.ts";
+import {useIsReadOnly} from "../../../../hooks/useIsCurrentUserAdmin.ts";
 import classes from './OrganizerDashboard.module.scss';
 import {StatBox} from "../../../common/StatBoxes";
 import {useGetOrganizer} from "../../../../queries/useGetOrganizer.ts";
@@ -70,6 +71,7 @@ export const DashboardSkeleton = () => {
 
 
 export const OrganizerDashboard = () => {
+    const isReadOnly = useIsReadOnly();
     const {organizerId} = useParams<{ organizerId: string }>();
     const {data: organizer} = useGetOrganizer(organizerId);
     const [showCreateEventModal, setShowCreateEventModal] = useState(false);
@@ -248,14 +250,16 @@ export const OrganizerDashboard = () => {
                             <h4><Trans>No events yet</Trans></h4>
                             <p><Trans>Create your first event to start selling tickets and managing attendees.</Trans>
                             </p>
-                            <Button
-                                onClick={() => setShowCreateEventModal(true)}
-                                variant="light"
-                                size="sm"
-                                mt="md"
-                            >
-                                <Trans>Create Event</Trans>
-                            </Button>
+                            {!isReadOnly && (
+                                <Button
+                                    onClick={() => setShowCreateEventModal(true)}
+                                    variant="light"
+                                    size="sm"
+                                    mt="md"
+                                >
+                                    <Trans>Create Event</Trans>
+                                </Button>
+                            )}
                         </div>
                     )}
                 </div>
