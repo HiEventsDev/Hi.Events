@@ -7,8 +7,8 @@ enum EventCategory: string
     use BaseEnum;
 
     // Community
-    case SOCIAL = 'SOCIAL';
-    case FOOD_DRINK = 'FOOD_DRINK';
+    case SOCIAL = 'TECHNO';
+    case FOOD_DRINK = 'HARDSTYLE';
     case CHARITY = 'CHARITY';
 
     // Creative & Culture
@@ -34,8 +34,8 @@ enum EventCategory: string
     public function label(): string
     {
         return match ($this) {
-            self::SOCIAL => __('Social'),
-            self::FOOD_DRINK => __('Food & Drink'),
+            self::SOCIAL => __('Techno'),
+            self::FOOD_DRINK => __('Hardtsyle'),
             self::CHARITY => __('Charity'),
             self::MUSIC => __('Music'),
             self::ART => __('Art'),
@@ -55,8 +55,8 @@ enum EventCategory: string
     public function emoji(): string
     {
         return match ($this) {
-            self::SOCIAL => '🤝',
-            self::FOOD_DRINK => '🍽️',
+            self::TECHNO => '🤝',
+            self::HARDSTYLE => '🍽️',
             self::CHARITY => '🎗️',
             self::MUSIC => '🎵',
             self::ART => '🎨',
