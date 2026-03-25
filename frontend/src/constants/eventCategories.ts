@@ -10,8 +10,8 @@ export const EventCategories = [
     {id: 'THEATER', name: t`Theater`, emoji: '🎭'},
     {id: 'ART', name: t`Art`, emoji: '🎨'},
 
-    {id: 'SOCIAL', name: t`Social`, emoji: '🤝'},
-    {id: 'FOOD_DRINK', name: t`Food & Drink`, emoji: '🍽️'},
+    {id: 'TECHNO', name: t`Techno`, emoji: '🤝'},
+    {id: 'HARDSTYLE', name: t`Hardstyle`, emoji: '🍽️'},
     {id: 'CHARITY', name: t`Charity`, emoji: '🎗️'},
 
     {id: 'BUSINESS', name: t`Business`, emoji: '💼'},
