@@ -7,8 +7,8 @@ enum EventCategory: string
     use BaseEnum;
 
     // Community
-    case SOCIAL = 'TECHNO';
-    case FOOD_DRINK = 'HARDSTYLE';
+    case TECHNO = 'TECHNO';
+    case HARDSTYLE = 'HARDSTYLE';
     case CHARITY = 'CHARITY';
 
     // Creative & Culture
@@ -34,8 +34,8 @@ enum EventCategory: string
     public function label(): string
     {
         return match ($this) {
-            self::SOCIAL => __('Techno'),
-            self::FOOD_DRINK => __('Hardtsyle'),
+            self::TECHNO => __('Techno'),
+            self::HARDSTYLE => __('Hardtsyle'),
             self::CHARITY => __('Charity'),
             self::MUSIC => __('Music'),
             self::ART => __('Art'),
