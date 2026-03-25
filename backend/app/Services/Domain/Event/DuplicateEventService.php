@@ -249,6 +249,7 @@ class DuplicateEventService
                 $this->createQuestionService->createQuestion(
                     (new QuestionDomainObject())
                         ->setTitle($question->getTitle())
+                        ->setDescription($question->getDescription())
                         ->setEventId($newEventId)
                         ->setBelongsTo($question->getBelongsTo())
                         ->setType($question->getType())
