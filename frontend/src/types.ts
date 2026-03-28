@@ -179,7 +179,7 @@ export interface Image {
     lqip_base64?: string | null;
 }
 
-export type ImageType = 'EVENT_COVER' | 'EDITOR_IMAGE' | 'ORGANIZER_LOGO' | 'ORGANIZER_COVER' | 'ORGANIZER_IMAGE' | 'TICKET_LOGO';
+export type ImageType = 'EVENT_COVER' | 'EDITOR_IMAGE' | 'ORGANIZER_LOGO' | 'ORGANIZER_COVER' | 'ORGANIZER_IMAGE' | 'TICKET_LOGO' | 'TICKET_TEMPLATE';
 
 export type PaymentProvider = 'STRIPE' | 'OFFLINE';
 
@@ -236,8 +236,15 @@ export interface EventSettings {
         accent_color?: string;
         logo_image_id?: IdParam;
         footer_text?: string;
-        layout_type?: 'default' | 'modern';
+        layout_type?: 'default' | 'modern' | 'classic';
         enabled?: boolean;
+        use_custom_template?: boolean;
+        template_image_id?: IdParam | null;
+        qr_x?: number | null;
+        qr_y?: number | null;
+        qr_size?: number | null;
+        num_x?: number | null;
+        num_y?: number | null;
     };
 
     // Marketing settings
