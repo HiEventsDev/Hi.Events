@@ -4,6 +4,7 @@ namespace Tests\Unit\Services\Application\Handlers\EventSettings;
 
 use HiEvents\DomainObjects\Enums\CapacityChangeDirection;
 use HiEvents\DomainObjects\EventSettingDomainObject;
+use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Events\CapacityChangedEvent;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Services\Application\Handlers\EventSettings\DTO\UpdateEventSettingsDTO;
@@ -116,6 +117,36 @@ class UpdateEventSettingsHandlerTest extends TestCase
         $this->handler->handle($dto);
 
         Event::assertNotDispatched(CapacityChangedEvent::class);
+    }
+
+    public function test_new_ticket_design_fields_are_in_defaults(): void
+    {
+        $organizer = Mockery::mock(OrganizerDomainObject::class);
+        $organizer->shouldReceive('getEmail')->andReturn('test@example.com');
+        $organizer->shouldReceive('getName')->andReturn('Test Organizer');
+
+        $dto = UpdateEventSettingsDTO::createWithDefaults(
+            account_id: 1,
+            event_id: 1,
+            organizer: $organizer,
+        );
+
+        $settings = $dto->ticket_design_settings;
+
+        $this->assertArrayHasKey('use_custom_template', $settings);
+        $this->assertFalse($settings['use_custom_template']);
+        $this->assertArrayHasKey('template_image_id', $settings);
+        $this->assertNull($settings['template_image_id']);
+        $this->assertArrayHasKey('qr_x', $settings);
+        $this->assertNull($settings['qr_x']);
+        $this->assertArrayHasKey('qr_y', $settings);
+        $this->assertNull($settings['qr_y']);
+        $this->assertArrayHasKey('qr_size', $settings);
+        $this->assertNull($settings['qr_size']);
+        $this->assertArrayHasKey('num_x', $settings);
+        $this->assertNull($settings['num_x']);
+        $this->assertArrayHasKey('num_y', $settings);
+        $this->assertNull($settings['num_y']);
     }
 
     private function createDTO(?bool $waitlist_auto_process = null): UpdateEventSettingsDTO

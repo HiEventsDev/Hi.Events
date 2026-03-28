@@ -146,11 +146,18 @@ class UpdateEventSettingsDTO extends BaseDTO
 
             // Ticket design defaults
             ticket_design_settings: [
-                'accent_color' => '#333333',
-                'logo_image_id' => null,
-                'footer_text' => null,
-                'layout_type' => 'classic',
-                'enabled' => true,
+                'accent_color'        => '#333333',
+                'logo_image_id'       => null,
+                'footer_text'         => null,
+                'layout_type'         => 'classic',
+                'enabled'             => true,
+                'use_custom_template' => false,
+                'template_image_id'   => null,
+                'qr_x'                => null,
+                'qr_y'                => null,
+                'qr_size'             => null,
+                'num_x'               => null,
+                'num_y'               => null,
             ],
 
             // Marketing defaults

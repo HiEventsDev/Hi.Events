@@ -85,6 +85,13 @@ class UpdateEventSettingsRequest extends BaseRequest
             'ticket_design_settings.footer_text' => ['nullable', 'string', 'max:500'],
             'ticket_design_settings.layout_type' => ['nullable', 'string', Rule::in(['default', 'modern'])],
             'ticket_design_settings.enabled' => ['boolean'],
+            'ticket_design_settings.use_custom_template' => ['boolean'],
+            'ticket_design_settings.template_image_id'   => ['nullable', 'integer'],
+            'ticket_design_settings.qr_x'               => ['nullable', 'integer', 'min:0'],
+            'ticket_design_settings.qr_y'               => ['nullable', 'integer', 'min:0'],
+            'ticket_design_settings.qr_size'            => ['nullable', 'integer', 'min:20'],
+            'ticket_design_settings.num_x'              => ['nullable', 'integer', 'min:0'],
+            'ticket_design_settings.num_y'              => ['nullable', 'integer', 'min:0'],
 
             // Marketing settings
             'show_marketing_opt_in' => ['boolean'],
