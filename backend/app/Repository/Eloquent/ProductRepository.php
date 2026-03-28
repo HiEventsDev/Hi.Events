@@ -41,8 +41,8 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         }
 
         $this->model = $this->model->orderBy(
-            $params->sort_by ?? ProductDomainObject::getDefaultSort(),
-            $params->sort_direction ?? ProductDomainObject::getDefaultSortDirection(),
+            $this->validateSortColumn($params->sort_by, ProductDomainObject::class),
+            $this->validateSortDirection($params->sort_direction, ProductDomainObject::class),
         );
 
         return $this->paginateWhere(

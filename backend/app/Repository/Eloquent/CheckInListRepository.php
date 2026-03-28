@@ -140,8 +140,8 @@ class CheckInListRepository extends BaseRepository implements CheckInListReposit
         }
 
         $this->model = $this->model->orderBy(
-            $params->sort_by ?? CheckInListDomainObject::getDefaultSort(),
-            $params->sort_direction ?? CheckInListDomainObject::getDefaultSortDirection(),
+            $this->validateSortColumn($params->sort_by, CheckInListDomainObject::class),
+            $this->validateSortDirection($params->sort_direction, CheckInListDomainObject::class),
         );
 
         return $this->paginateWhere(
