@@ -81,8 +81,8 @@ class EventRepository extends BaseRepository implements EventRepositoryInterface
         }
 
         $this->model = $this->model->orderBy(
-            $params->sort_by ?? EventDomainObject::getDefaultSort(),
-            $params->sort_direction ?? EventDomainObject::getDefaultSortDirection(),
+            $this->validateSortColumn($params->sort_by, EventDomainObject::class),
+            $this->validateSortDirection($params->sort_direction, EventDomainObject::class),
         );
 
         return $this->paginateWhere(

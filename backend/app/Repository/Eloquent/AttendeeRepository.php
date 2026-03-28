@@ -85,8 +85,8 @@ class AttendeeRepository extends BaseRepository implements AttendeeRepositoryInt
             $this->applyFilterFields($params, AttendeeDomainObject::getAllowedFilterFields(), prefix: 'attendees');
         }
 
-        $sortBy = $params->sort_by ?? AttendeeDomainObject::getDefaultSort();
-        $sortDirection = $params->sort_direction ?? AttendeeDomainObject::getDefaultSortDirection();
+        $sortBy = $this->validateSortColumn($params->sort_by, AttendeeDomainObject::class);
+        $sortDirection = $this->validateSortDirection($params->sort_direction, AttendeeDomainObject::class);
 
         if ($sortBy === AttendeeDomainObject::TICKET_NAME_SORT_KEY) {
             $this->model = $this->model

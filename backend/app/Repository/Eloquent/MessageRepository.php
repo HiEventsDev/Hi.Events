@@ -46,8 +46,8 @@ class MessageRepository extends BaseRepository implements MessageRepositoryInter
         }
 
         $this->model = $this->model->orderBy(
-            $params->sort_by ?? MessageDomainObject::getDefaultSort(),
-            $params->sort_direction ?? 'desc',
+            $this->validateSortColumn($params->sort_by, MessageDomainObject::class),
+            $this->validateSortDirection($params->sort_direction, MessageDomainObject::class),
         );
 
         return $this->paginateWhere(

@@ -36,10 +36,10 @@ class ProductCategoryRepository extends BaseRepository implements ProductCategor
             }
         }
 
-        // Apply sorting from QueryParamsDTO
-        if (!empty($queryParamsDTO->sort_by)) {
-            $query->orderBy($queryParamsDTO->sort_by, $queryParamsDTO->sort_direction ?? 'asc');
-        }
+        $query->orderBy(
+            $this->validateSortColumn($queryParamsDTO->sort_by, ProductCategoryDomainObject::class),
+            $this->validateSortDirection($queryParamsDTO->sort_direction, ProductCategoryDomainObject::class),
+        );
 
         return $query->get();
     }
