@@ -81,8 +81,8 @@ export const QRPlacementCanvas = ({templateImageUrl, value, onChange}: QRPlaceme
             } else if (target === 'counter') {
                 onChange({
                     ...startValue,
-                    num_x: clamp((startValue.num_x ?? 0) + dx, 0, maxX - 30),
-                    num_y: clamp((startValue.num_y ?? 0) + dy, 0, maxY - 20),
+                    num_x: clamp((startValue.num_x ?? 0) + dx, 0, maxX - Math.round(60 * sx)),
+                    num_y: clamp((startValue.num_y ?? 0) + dy, 0, maxY - Math.round(24 * sy)),
                 });
             }
         };
