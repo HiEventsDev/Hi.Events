@@ -91,7 +91,7 @@ const TicketDesigner = () => {
         if (eventSettingsQuery.isFetched && settings) {
             setCustomTemplate({
                 use_custom_template: settings.use_custom_template ?? false,
-                template_image_id: settings.template_image_id ?? null,
+                template_image_id: (settings.template_image_id as number | null) ?? null,
                 qr_x: settings.qr_x ?? 0,
                 qr_y: settings.qr_y ?? 0,
                 qr_size: settings.qr_size ?? 120,
