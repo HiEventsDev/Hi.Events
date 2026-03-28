@@ -4,6 +4,7 @@ import {useGetMe} from '../../../../queries/useGetMe.ts';
 import {useGetEventSettings} from '../../../../queries/useGetEventSettings.ts';
 import {useGetEventImages} from '../../../../queries/useGetEventImages.ts';
 import {AttendeeTicket} from '../../../common/AttendeeTicket';
+import {CustomTemplateTicket} from '../../../common/CustomTemplateTicket';
 import {PoweredByFooter} from '../../../common/PoweredByFooter';
 import {t} from '@lingui/macro';
 import {useEffect} from "react";
@@ -70,6 +71,9 @@ const TicketDesignerPrint = () => {
         }
     };
 
+    const useCustomTemplate =
+        settings?.ticket_design_settings?.use_custom_template ?? false;
+
     // Merge the ticket design settings and images into the event
     const eventWithDesignSettings = {
         ...event,
@@ -88,12 +92,15 @@ const TicketDesignerPrint = () => {
         <div className={classes.container}>
             <h2 className={classes.title}>{t`Ticket Preview for`} {event.title}</h2>
             <div className={classes.ticketPage}>
-                <AttendeeTicket
-                    attendee={mockAttendee}
-                    product={mockProduct}
-                    event={eventWithDesignSettings}
-                    hideButtons
-                />
+                {useCustomTemplate
+                    ? <CustomTemplateTicket event={eventWithDesignSettings} attendee={mockAttendee} />
+                    : <AttendeeTicket
+                        attendee={mockAttendee}
+                        product={mockProduct}
+                        event={eventWithDesignSettings}
+                        hideButtons
+                      />
+                }
                 <div className={classes.poweredBy}>
                     <PoweredByFooter/>
                 </div>
