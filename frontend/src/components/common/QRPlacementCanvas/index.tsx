@@ -153,7 +153,7 @@ export const QRPlacementCanvas = ({templateImageUrl, value, onChange}: QRPlaceme
                     </div>
 
                     {/* Counter placement box — green dashed, drag-only */}
-                    {value.num_x !== null && (
+                    {value.num_x !== null && value.num_y !== null && (
                         <div
                             onMouseDown={(e) => startDrag(e, 'counter')}
                             style={{

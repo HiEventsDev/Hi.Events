@@ -99,7 +99,7 @@ const TicketDesigner = () => {
                 num_y: settings.num_y ?? null,
             });
         }
-    }, [eventSettingsQuery.isFetched]);
+    }, [eventSettingsQuery.isFetched, eventSettingsQuery.data]);
 
     const handleSubmit = (values: TicketDesignSettings) => {
         updateMutation.mutate(

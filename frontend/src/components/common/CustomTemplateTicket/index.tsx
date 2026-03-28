@@ -1,7 +1,6 @@
 import {useRef, useState} from 'react';
 import QRCode from 'react-qr-code';
 import {Attendee, Event} from '../../../types.ts';
-import {imageUrl} from '../../../utilites/urlHelper.ts';
 
 interface CustomTemplateTicketProps {
     event: Event;
@@ -12,7 +11,7 @@ export const CustomTemplateTicket = ({event, attendee}: CustomTemplateTicketProp
     const imgRef = useRef<HTMLImageElement>(null);
     const [naturalSize, setNaturalSize] = useState<{w: number; h: number} | null>(null);
 
-    const templateUrl = imageUrl('TICKET_TEMPLATE', event.images);
+    const templateUrl = event.images?.find(img => img.type === 'TICKET_TEMPLATE')?.url;
     const settings = event.settings?.ticket_design_settings;
     const qrX = settings?.qr_x ?? 0;
     const qrY = settings?.qr_y ?? 0;
