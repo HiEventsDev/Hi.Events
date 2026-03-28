@@ -2,6 +2,7 @@ import {useParams} from 'react-router';
 import {useGetEventPublic} from '../../../../queries/useGetEventPublic.ts';
 import {useGetAttendeePublic} from '../../../../queries/useGetAttendeePublic.ts';
 import {AttendeeTicket} from '../../../common/AttendeeTicket';
+import {CustomTemplateTicket} from '../../../common/CustomTemplateTicket';
 import {Attendee, Product} from '../../../../types.ts';
 import {PoweredByFooter} from '../../../common/PoweredByFooter';
 import {useEffect} from "react";
@@ -24,6 +25,8 @@ const PrintProduct = () => {
         return null;
     }
 
+    const useCustomTemplate = event?.settings?.ticket_design_settings?.use_custom_template ?? false;
+
     /**
      * (c) Hi.Events Ltd 2025
      *
@@ -41,12 +44,15 @@ const PrintProduct = () => {
         <div className={classes.container}>
             <h2 className={classes.title}>{t`Ticket for`} {event.title}</h2>
             <div className={classes.ticketPage}>
-                <AttendeeTicket
-                    attendee={attendee as Attendee}
-                    product={attendee.product as Product}
-                    event={event}
-                    hideButtons
-                />
+                {useCustomTemplate
+                    ? <CustomTemplateTicket event={event} attendee={attendee as Attendee} />
+                    : <AttendeeTicket
+                          attendee={attendee as Attendee}
+                          product={attendee.product as Product}
+                          event={event}
+                          hideButtons
+                      />
+                }
 
                 {(event?.settings?.is_online_event && (
                     <div style={{ marginTop: '32px', maxWidth: '900px', width: '100%' }}>
