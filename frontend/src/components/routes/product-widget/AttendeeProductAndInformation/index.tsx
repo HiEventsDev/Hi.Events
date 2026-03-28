@@ -2,6 +2,7 @@ import {useGetEventPublic} from "../../../../queries/useGetEventPublic.ts";
 import {useParams} from "react-router";
 import {useGetAttendeePublic} from "../../../../queries/useGetAttendeePublic.ts";
 import {AttendeeTicket} from "../../../common/AttendeeTicket";
+import {CustomTemplateTicket} from "../../../common/CustomTemplateTicket";
 import {Attendee, Product} from "../../../../types.ts";
 import {Container} from "@mantine/core";
 import {t} from "@lingui/macro";
@@ -29,6 +30,9 @@ export const AttendeeProductAndInformation = () => {
         return null;
     }
 
+    const useCustomTemplate =
+        event?.settings?.ticket_design_settings?.use_custom_template ?? false;
+
     /**
      * (c) Hi.Events Ltd 2025
      *
@@ -46,12 +50,15 @@ export const AttendeeProductAndInformation = () => {
         <Container>
             <h2 className={classes.title}>{t`Your ticket for`} {event.title}</h2>
 
-            <AttendeeTicket
-                attendee={attendee as Attendee}
-                product={attendee.product as Product}
-                event={event}
-                showPoweredBy
-            />
+            {useCustomTemplate
+                ? <CustomTemplateTicket event={event} attendee={attendee as Attendee} />
+                : <AttendeeTicket
+                    attendee={attendee as Attendee}
+                    product={attendee.product as Product}
+                    event={event}
+                    showPoweredBy
+                />
+            }
 
             {(event?.settings?.is_online_event && <OnlineEventDetails eventSettings={event.settings}/>)}
 
