@@ -2,8 +2,12 @@
 
 namespace HiEvents\Services\Application\Handlers\CheckInList\Public;
 
+use HiEvents\DomainObjects\AttendeeDomainObject;
+use HiEvents\DomainObjects\CheckInListDomainObject;
 use HiEvents\Exceptions\CannotCheckInException;
+use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Services\Application\Handlers\CheckInList\Public\DTO\DeleteAttendeeCheckInPublicDTO;
+use HiEvents\Services\Domain\CheckInList\CheckInListDataService;
 use HiEvents\Services\Domain\CheckInList\DeleteAttendeeCheckInService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
@@ -18,7 +22,8 @@ class DeleteAttendeeCheckInPublicHandler
         private readonly DeleteAttendeeCheckInService $deleteAttendeeCheckInService,
         private readonly LoggerInterface              $logger,
         private readonly DomainEventDispatcherService $domainEventDispatcherService,
-        private readonly DatabaseManager              $databaseManager
+        private readonly DatabaseManager              $databaseManager,
+        private readonly CheckInListDataService       $checkInListDataService,
     )
     {
     }
@@ -29,6 +34,9 @@ class DeleteAttendeeCheckInPublicHandler
      */
     public function handle(DeleteAttendeeCheckInPublicDTO $checkInData): void
     {
+        $checkInList = $this->checkInListDataService->getCheckInList($checkInData->checkInListShortId);
+        $this->validateCheckInListIsAuthorized($checkInList, $checkInData->password);
+
         $this->databaseManager->transaction(function () use ($checkInData) {
             $deletedCheckInId = $this->deleteAttendeeCheckInService->deleteAttendeeCheckIn(
                 $checkInData->checkInListShortId,
@@ -48,5 +56,15 @@ class DeleteAttendeeCheckInPublicHandler
                 )
             );
         });
+    }
+
+    /**
+     * @throws CannotCheckInException
+     */
+    private function validateCheckInListIsAuthorized(CheckInListDomainObject $checkInList, ?string $password): void
+    {
+        if ($checkInList->isPasswordProtected() && $checkInList->getPassword() !== $password) {
+            throw new CannotCheckInException(__('Invalid password provided'));
+        }
     }
 }

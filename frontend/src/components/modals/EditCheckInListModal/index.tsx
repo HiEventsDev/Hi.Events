@@ -35,6 +35,7 @@ export const EditCheckInListModal = ({
             activates_at: '',
             description: '',
             product_ids: [],
+            password: '',
         }
     });
     const editMutation = useEditCheckInList();
@@ -61,6 +62,7 @@ export const EditCheckInListModal = ({
                 expires_at: utcToTz(checkInList.expires_at, event.timezone),
                 activates_at: utcToTz(checkInList.activates_at, event.timezone),
                 product_ids: checkInList.products?.map(product => String(product.id)),
+                password: checkInList.password || '',
             });
         }
     }, [checkInList]);

@@ -28,7 +28,7 @@ class GetCheckInListAttendeesPublicHandler
     /**
      * @throws CannotCheckInException
      */
-    public function handle(string $shortId, QueryParamsDTO $queryParams): Paginator
+    public function handle(string $shortId, QueryParamsDTO $queryParams, ?string $password = null): Paginator
     {
         $checkInList = $this->checkInListRepository
             ->loadRelation(ProductDomainObject::class)
@@ -41,7 +41,7 @@ class GetCheckInListAttendeesPublicHandler
             throw new ResourceNotFoundException(__('Check-in list not found'));
         }
 
-        $this->validateCheckInListIsActive($checkInList);
+        $this->validateCheckInListIsActiveAndAuthorized($checkInList, $password);
 
         $attendees = $this->attendeeRepository->getAttendeesByCheckInShortId($shortId, $queryParams);
 
@@ -57,8 +57,12 @@ class GetCheckInListAttendeesPublicHandler
     /**
      * @throws CannotCheckInException
      */
-    private function validateCheckInListIsActive(CheckInListDomainObject $checkInList): void
+    private function validateCheckInListIsActiveAndAuthorized(CheckInListDomainObject $checkInList, ?string $password): void
     {
+        if ($checkInList->isPasswordProtected() && $checkInList->getPassword() !== $password) {
+            throw new CannotCheckInException(__('Invalid password provided'));
+        }
+
         if ($checkInList->getExpiresAt() && DateHelper::utcDateIsPast($checkInList->getExpiresAt())) {
             throw new CannotCheckInException(__('Check-in list has expired'));
         }
