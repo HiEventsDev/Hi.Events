@@ -1,4 +1,5 @@
 import {AttendeeTicket} from "../../../common/AttendeeTicket";
+import {CustomTemplateTicket} from "../../../common/CustomTemplateTicket";
 import {Product} from "../../../../types.ts";
 import {PoweredByFooter} from "../../../common/PoweredByFooter";
 import {useParams} from "react-router";
@@ -22,6 +23,9 @@ export const PrintOrder = () => {
         return null;
     }
 
+    const useCustomTemplate =
+        event?.settings?.ticket_design_settings?.use_custom_template ?? false;
+
     /**
      * (c) Hi.Events Ltd 2025
      *
@@ -41,13 +45,16 @@ export const PrintOrder = () => {
             {order.attendees?.map((attendee) => {
                 return (
                     <div key={attendee.id} className={classes.ticketPage}>
-                        <AttendeeTicket
-                            attendee={attendee}
-                            product={attendee.product as Product}
-                            event={event}
-                            hideButtons
-                            showPoweredBy
-                        />
+                        {useCustomTemplate
+                            ? <CustomTemplateTicket event={event} attendee={attendee} />
+                            : <AttendeeTicket
+                                attendee={attendee}
+                                product={attendee.product as Product}
+                                event={event}
+                                hideButtons
+                                showPoweredBy
+                              />
+                        }
                     </div>
                 );
             })}
