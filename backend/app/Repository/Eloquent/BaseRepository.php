@@ -7,6 +7,7 @@ namespace HiEvents\Repository\Eloquent;
 use BadMethodCallException;
 use Carbon\Carbon;
 use HiEvents\DomainObjects\Interfaces\DomainObjectInterface;
+use HiEvents\DomainObjects\Interfaces\IsSortable;
 use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Models\BaseModel;
 use HiEvents\Repository\Eloquent\Value\Relationship;
@@ -53,6 +54,28 @@ abstract class BaseRepository implements RepositoryInterface
      * @return string
      */
     abstract protected function getModel(): string;
+
+    /**
+     * @param class-string<IsSortable> $domainObjectClass
+     */
+    protected function validateSortColumn(?string $sortBy, string $domainObjectClass): string
+    {
+        $allowedColumns = array_keys($domainObjectClass::getAllowedSorts()->toArray());
+        $default = $domainObjectClass::getDefaultSort();
+
+        if ($sortBy === null || !in_array($sortBy, $allowedColumns, true)) {
+            return $default;
+        }
+
+        return $sortBy;
+    }
+
+    protected function validateSortDirection(?string $sortDirection, string $domainObjectClass): string
+    {
+        return in_array(strtolower($sortDirection ?? ''), ['asc', 'desc'], true)
+            ? $sortDirection
+            : $domainObjectClass::getDefaultSortDirection();
+    }
 
     public function setMaxPerPage(int $maxPerPage): static
     {

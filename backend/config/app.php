@@ -22,6 +22,7 @@ return [
     'stripe_connect_account_type' => env('APP_STRIPE_CONNECT_ACCOUNT_TYPE', 'express'),
     'platform_support_email' => env('APP_PLATFORM_SUPPORT_EMAIL', 'support@example.com'),
     'enforce_email_confirmation_during_registration' => env('APP_ENFORCE_EMAIL_CONFIRMATION_DURING_REGISTRATION', false),
+    'allowed_internal_webhook_hosts' => env('APP_ALLOWED_INTERNAL_WEBHOOK_HOSTS', ''),
 
     /**
      * The number of page views to batch before updating the database

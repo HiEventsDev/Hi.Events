@@ -4,6 +4,7 @@ namespace HiEvents\Validators\Rules;
 
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Support\Facades\Config;
 
 class NoInternalUrlRule implements ValidationRule
 {
@@ -50,6 +51,11 @@ class NoInternalUrlRule implements ValidationRule
         // Handle IPv6 addresses wrapped in brackets
         if (str_starts_with($host, '[') && str_ends_with($host, ']')) {
             $host = substr($host, 1, -1);
+        }
+
+        // Handle NoInternalIP/Host Exceptions
+        if ($this->isWhitelistedHost($host)) {
+            return;
         }
 
         if ($this->isBlockedHost($host)) {
@@ -144,5 +150,17 @@ class NoInternalUrlRule implements ValidationRule
         }
 
         return $ip;
+    }
+
+    private function isWhitelistedHost(string $host): bool
+    {
+        $whitelistedHosts = Config::string('app.allowed_internal_webhook_hosts');
+        if (!empty($whitelistedHosts)) {
+            $allowedList = array_filter(array_map('trim', explode(',', $whitelistedHosts)));
+            if (in_array($host, $allowedList) || in_array(gethostbyname($host), $allowedList)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
