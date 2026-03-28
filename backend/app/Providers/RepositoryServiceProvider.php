@@ -42,6 +42,8 @@ use HiEvents\Repository\Eloquent\PromoCodeRepository;
 use HiEvents\Repository\Eloquent\QuestionAndAnswerViewRepository;
 use HiEvents\Repository\Eloquent\QuestionAnswerRepository;
 use HiEvents\Repository\Eloquent\QuestionRepository;
+use HiEvents\Repository\Eloquent\RazorpayOrdersRepository;
+use HiEvents\Repository\Eloquent\RefundAttemptRepository;
 use HiEvents\Repository\Eloquent\StripeCustomerRepository;
 use HiEvents\Repository\Eloquent\StripePaymentsRepository;
 use HiEvents\Repository\Eloquent\StripePayoutsRepository;
@@ -89,6 +91,8 @@ use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
 use HiEvents\Repository\Interfaces\QuestionAndAnswerViewRepositoryInterface;
 use HiEvents\Repository\Interfaces\QuestionAnswerRepositoryInterface;
 use HiEvents\Repository\Interfaces\QuestionRepositoryInterface;
+use HiEvents\Repository\Interfaces\RazorpayOrdersRepositoryInterface;
+use HiEvents\Repository\Interfaces\RefundAttemptRepositoryInterface;
 use HiEvents\Repository\Interfaces\StripeCustomerRepositoryInterface;
 use HiEvents\Repository\Interfaces\StripePaymentsRepositoryInterface;
 use HiEvents\Repository\Interfaces\StripePayoutsRepositoryInterface;
@@ -118,6 +122,7 @@ class RepositoryServiceProvider extends ServiceProvider
         QuestionRepositoryInterface::class => QuestionRepository::class,
         QuestionAnswerRepositoryInterface::class => QuestionAnswerRepository::class,
         StripePaymentsRepositoryInterface::class => StripePaymentsRepository::class,
+        RazorpayOrdersRepositoryInterface::class => RazorpayOrdersRepository::class,
         PromoCodeRepositoryInterface::class => PromoCodeRepository::class,
         MessageRepositoryInterface::class => MessageRepository::class,
         PasswordResetTokenRepositoryInterface::class => PasswordResetTokenRepository::class,
@@ -153,6 +158,7 @@ class RepositoryServiceProvider extends ServiceProvider
         TicketLookupTokenRepositoryInterface::class => TicketLookupTokenRepository::class,
         AccountMessagingTierRepositoryInterface::class => AccountMessagingTierRepository::class,
         WaitlistEntryRepositoryInterface::class => WaitlistEntryRepository::class,
+        RefundAttemptRepositoryInterface::class => RefundAttemptRepository::class,
     ];
 
     public function register(): void
