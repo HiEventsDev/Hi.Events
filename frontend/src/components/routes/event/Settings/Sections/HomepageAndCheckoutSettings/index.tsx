@@ -26,6 +26,7 @@ export const HomepageAndCheckoutSettings = () => {
             order_timeout_in_minutes: 15,
             attendee_details_collection_method: 'PER_TICKET' as 'PER_TICKET' | 'PER_ORDER',
             show_marketing_opt_in: true,
+            show_data_collection_disclaimer: true,
         },
         transformValues: (values) => ({
             ...values,
@@ -58,6 +59,7 @@ export const HomepageAndCheckoutSettings = () => {
                 order_timeout_in_minutes: eventSettingsQuery.data.order_timeout_in_minutes,
                 attendee_details_collection_method: eventSettingsQuery.data.attendee_details_collection_method || 'PER_TICKET',
                 show_marketing_opt_in: eventSettingsQuery.data.show_marketing_opt_in ?? true,
+                show_data_collection_disclaimer: eventSettingsQuery.data.show_data_collection_disclaimer ?? true,
             });
         }
     }, [eventSettingsQuery.isFetched]);
@@ -126,6 +128,13 @@ export const HomepageAndCheckoutSettings = () => {
                         label={t`Show marketing opt-in checkbox`}
                         description={t`Display a checkbox allowing customers to opt-in to receive marketing communications from this event organizer.`}
                         {...form.getInputProps('show_marketing_opt_in', {type: 'checkbox'})}
+                    />
+
+                    <Switch
+                        mt="md"
+                        label={t`Show data collection disclaimer checkbox`}
+                        description={t`Display a mandatory checkbox requiring customers to consent to data collection policies.`}
+                        {...form.getInputProps('show_data_collection_disclaimer', {type: 'checkbox'})}
                     />
 
                     <Button loading={updateMutation.isPending} type={'submit'}>

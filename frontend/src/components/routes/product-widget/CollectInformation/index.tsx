@@ -94,6 +94,7 @@ export const CollectInformation = () => {
                 address: {},
                 questions: {},
                 opted_into_marketing: false,
+                data_collection_disclaimer: false,
             },
             products: [{
                 first_name: "",
@@ -109,6 +110,10 @@ export const CollectInformation = () => {
             order: {
                 email_confirmation: (value, values) =>
                     value !== values.order.email ? t`Email addresses do not match` : null,
+                data_collection_disclaimer: (value) =>
+                    event?.settings?.show_data_collection_disclaimer && !value
+                        ? t`You must agree to the data collection disclaimer`
+                        : null,
             },
             products: {
                 email_confirmation: (value, values, path) => {
@@ -560,6 +565,18 @@ export const CollectInformation = () => {
                     )}
 
                     {orderQuestions && <CheckoutOrderQuestions form={form} questions={orderQuestions}/>}
+
+                    {event?.settings?.show_data_collection_disclaimer && (
+                        <Checkbox
+                            mt="md"
+                            required
+                            label={
+                                (getConfig('VITE_DATA_COLLECTION_DISCLAIMER') as string || t`I confirm that I am 18 years of age and consent to the collection and use of my information for this registration in accordance with {event.organizer} Privacy Policy and Terms of Use.`)
+                                    .replace('{event.organizer}', event?.organizer?.name || t`this organizer`)
+                            }
+                            {...form.getInputProps('order.data_collection_disclaimer', {type: 'checkbox'})}
+                        />
+                    )}
 
                     {event?.settings?.show_marketing_opt_in && (
                         <Checkbox

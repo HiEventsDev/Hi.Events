@@ -88,6 +88,7 @@ class UpdateEventSettingsRequest extends BaseRequest
 
             // Marketing settings
             'show_marketing_opt_in' => ['boolean'],
+            'show_data_collection_disclaimer' => ['boolean'],
 
             // Platform fee settings
             'pass_platform_fee_to_buyer' => ['boolean'],
