@@ -187,6 +187,20 @@ export const router: RouteObject[] = [
                 }
             },
             {
+                path: "orders/:orderId",
+                async lazy() {
+                    const OrderDetail = await import("./components/routes/admin/Orders/OrderDetail");
+                    return { Component: OrderDetail.default };
+                }
+            },
+            {
+                path: "attendees",
+                async lazy() {
+                    const Attendees = await import("./components/routes/admin/Attendees");
+                    return { Component: Attendees.default };
+                }
+            },
+            {
                 path: "attribution",
                 async lazy() {
                     const Attribution = await import("./components/routes/admin/Attribution");

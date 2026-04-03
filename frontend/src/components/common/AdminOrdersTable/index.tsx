@@ -4,6 +4,7 @@ import {AdminOrder} from "../../../api/admin.client";
 import {IconChevronDown, IconChevronUp} from "@tabler/icons-react";
 import {formatCurrency} from "../../../utilites/currency";
 import {prettyDate} from "../../../utilites/dates";
+import {useNavigate} from "react-router";
 import tableStyles from "../../../styles/admin-table.module.scss";
 
 interface AdminOrdersTableProps {
@@ -14,6 +15,8 @@ interface AdminOrdersTableProps {
 }
 
 const AdminOrdersTable = ({orders, onSort, sortBy, sortDirection}: AdminOrdersTableProps) => {
+    const navigate = useNavigate();
+
     if (!orders || orders.length === 0) {
         return (
             <div className={tableStyles.emptyState}>
@@ -98,9 +101,9 @@ const AdminOrdersTable = ({orders, onSort, sortBy, sortDirection}: AdminOrdersTa
                     </Table.Thead>
                     <Table.Tbody>
                         {orders.map((order) => (
-                            <Table.Tr key={order.id}>
+                            <Table.Tr key={order.id} style={{cursor: 'pointer'}} onClick={() => navigate(`/admin/orders/${order.id}`)}>
                                 <Table.Td>
-                                    <Text fw={500} size="sm">#{order.short_id}</Text>
+                                    <Text fw={500} size="sm" c="blue">#{order.short_id}</Text>
                                 </Table.Td>
                                 <Table.Td>
                                     <Text size="sm">{order.account_name}</Text>

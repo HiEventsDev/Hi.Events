@@ -220,6 +220,81 @@ export interface GetAllOrdersParams {
     sort_direction?: 'asc' | 'desc';
 }
 
+export interface GetAllAttendeesParams {
+    page?: number;
+    per_page?: number;
+    search?: string;
+    sort_by?: string;
+    sort_direction?: 'asc' | 'desc';
+}
+
+export interface EditAdminAttendeeData {
+    first_name?: string;
+    last_name?: string;
+    email?: string;
+    notes?: string | null;
+}
+
+export interface AdminAttendee {
+    id: number;
+    order_id: number;
+    product_id: number;
+    event_id: number;
+    first_name: string;
+    last_name: string;
+    email: string;
+    status: string;
+    public_id: string;
+    short_id: string;
+    notes: string | null;
+    checked_in_at: string | null;
+    created_at: string;
+    updated_at: string;
+    product_title: string | null;
+    order_short_id: string | null;
+    event_title: string | null;
+    account_name: string | null;
+    account_id: number | null;
+}
+
+export interface AdminOrderDetail {
+    id: number;
+    short_id: string;
+    public_id: string;
+    first_name: string;
+    last_name: string;
+    email: string;
+    total_before_additions: number;
+    total_gross: number;
+    total_tax: number;
+    total_fee: number;
+    total_refunded: number;
+    currency: string;
+    status: string;
+    payment_status: string | null;
+    payment_gateway: string | null;
+    promo_code: string | null;
+    address: Record<string, string> | null;
+    notes: string | null;
+    created_at: string;
+    event_id: number;
+    event_title: string | null;
+    account_id: number | null;
+    account_name: string | null;
+    attendees: AdminOrderAttendee[];
+}
+
+export interface AdminOrderAttendee {
+    id: number;
+    first_name: string;
+    last_name: string;
+    email: string;
+    status: string;
+    public_id: string;
+    short_id: string;
+    checked_in_at: string | null;
+}
+
 export interface AdminEventStatistics {
     total_gross_sales: number;
     products_sold: number;
@@ -428,6 +503,29 @@ export const adminClient = {
                 sort_direction: params.sort_direction || 'desc',
             }
         });
+        return response.data;
+    },
+
+    getOrder: async (orderId: IdParam) => {
+        const response = await api.get<GenericDataResponse<AdminOrderDetail>>(`admin/orders/${orderId}`);
+        return response.data;
+    },
+
+    getAllAttendees: async (params: GetAllAttendeesParams = {}) => {
+        const response = await api.get<GenericPaginatedResponse<AdminAttendee>>('admin/attendees', {
+            params: {
+                page: params.page || 1,
+                per_page: params.per_page || 20,
+                search: params.search || undefined,
+                sort_by: params.sort_by || 'created_at',
+                sort_direction: params.sort_direction || 'desc',
+            }
+        });
+        return response.data;
+    },
+
+    editAttendee: async (attendeeId: IdParam, data: EditAdminAttendeeData) => {
+        const response = await api.put<GenericDataResponse<AdminAttendee>>(`admin/attendees/${attendeeId}`, data);
         return response.data;
     },
 

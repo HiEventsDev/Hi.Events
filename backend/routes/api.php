@@ -194,6 +194,9 @@ use HiEvents\Http\Actions\Admin\Messages\GetAllMessagesAction as GetAllAdminMess
 use HiEvents\Http\Actions\Admin\GetMessagingTiersAction;
 use HiEvents\Http\Actions\Admin\Accounts\UpdateAccountMessagingTierAction;
 use HiEvents\Http\Actions\Admin\Orders\GetAllOrdersAction;
+use HiEvents\Http\Actions\Admin\Orders\GetAdminOrderAction;
+use HiEvents\Http\Actions\Admin\Attendees\GetAllAttendeesAction as GetAllAdminAttendeesAction;
+use HiEvents\Http\Actions\Admin\Attendees\EditAdminAttendeeAction;
 use HiEvents\Http\Actions\Admin\Attribution\GetUtmAttributionStatsAction;
 use HiEvents\Http\Actions\Admin\GetSystemInfoAction;
 use HiEvents\Http\Actions\Admin\Stats\GetAdminDashboardDataAction;
@@ -464,6 +467,9 @@ $router->prefix('/admin')->middleware(['auth:api'])->group(
         $router->get('/events', GetAllAdminEventsAction::class);
         $router->get('/events/upcoming', GetUpcomingEventsAction::class);
         $router->get('/orders', GetAllOrdersAction::class);
+        $router->get('/orders/{order_id}', GetAdminOrderAction::class);
+        $router->get('/attendees', GetAllAdminAttendeesAction::class);
+        $router->put('/attendees/{attendee_id}', EditAdminAttendeeAction::class);
         $router->post('/impersonate/{user_id}', StartImpersonationAction::class);
         $router->post('/stop-impersonation', StopImpersonationAction::class);
 

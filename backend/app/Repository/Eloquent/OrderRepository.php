@@ -222,6 +222,16 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
         return $this->paginate($perPage);
     }
 
+    public function getOrderByIdForAdmin(int $orderId): ?OrderDomainObject
+    {
+        $this->loadRelation(new Relationship(EventDomainObject::class, nested: [
+            new Relationship(AccountDomainObject::class, name: 'account')
+        ], name: 'event'));
+        $this->loadRelation(new Relationship(AttendeeDomainObject::class, name: 'attendees'));
+
+        return $this->findFirst($orderId);
+    }
+
     public function hasCompletedPaidOrderForAccount(int $accountId): bool
     {
         $exists = $this->model

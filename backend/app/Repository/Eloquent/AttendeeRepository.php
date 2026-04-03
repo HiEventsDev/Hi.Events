@@ -2,9 +2,13 @@
 
 namespace HiEvents\Repository\Eloquent;
 
+use HiEvents\DomainObjects\AccountDomainObject;
 use HiEvents\DomainObjects\AttendeeCheckInDomainObject;
 use HiEvents\DomainObjects\AttendeeDomainObject;
+use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
+use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Http\DTO\QueryParamsDTO;
@@ -138,5 +142,50 @@ class AttendeeRepository extends BaseRepository implements AttendeeRepositoryInt
             where: $where,
             limit: min($params->per_page, 250),
         );
+    }
+
+    public function getAllAttendeesForAdmin(
+        ?string $search = null,
+        int $perPage = 20,
+        ?string $sortBy = 'created_at',
+        ?string $sortDirection = 'desc'
+    ): LengthAwarePaginator {
+        $this->model = $this->model
+            ->select('attendees.*')
+            ->join('orders', 'orders.id', '=', 'attendees.order_id')
+            ->join('events', 'events.id', '=', 'attendees.event_id')
+            ->join('accounts', 'accounts.id', '=', 'events.account_id');
+
+        if ($search) {
+            $this->model = $this->model->where(function ($q) use ($search) {
+                $q->where('attendees.email', 'ilike', '%' . $search . '%')
+                    ->orWhere('attendees.first_name', 'ilike', '%' . $search . '%')
+                    ->orWhere('attendees.last_name', 'ilike', '%' . $search . '%')
+                    ->orWhere('attendees.public_id', 'ilike', '%' . $search . '%')
+                    ->orWhere('attendees.short_id', 'ilike', '%' . $search . '%');
+            });
+        }
+
+        $this->model = $this->model
+            ->whereIn('orders.status', [
+                OrderStatus::COMPLETED->name,
+                OrderStatus::CANCELLED->name,
+                OrderStatus::AWAITING_OFFLINE_PAYMENT->name,
+            ]);
+
+        $allowedSortColumns = ['created_at', 'first_name', 'last_name', 'email'];
+        $sortColumn = in_array($sortBy, $allowedSortColumns, true) ? $sortBy : 'created_at';
+        $sortDir = in_array(strtolower($sortDirection), ['asc', 'desc']) ? $sortDirection : 'desc';
+
+        $this->model = $this->model->orderBy('attendees.' . $sortColumn, $sortDir);
+
+        $this->loadRelation(new Relationship(OrderDomainObject::class, nested: [
+            new Relationship(EventDomainObject::class, nested: [
+                new Relationship(AccountDomainObject::class, name: 'account')
+            ], name: 'event')
+        ], name: 'order'));
+        $this->loadRelation(new Relationship(ProductDomainObject::class, name: 'product'));
+
+        return $this->paginate($perPage);
     }
 }
