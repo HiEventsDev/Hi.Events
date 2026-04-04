@@ -11,6 +11,7 @@ class GetPublicEventDTO extends BaseDTO
         public bool    $isAuthenticated,
         public ?string $ipAddress = null,
         public ?string $promoCode = null,
+        public ?int    $eventOccurrenceId = null,
     )
     {
     }

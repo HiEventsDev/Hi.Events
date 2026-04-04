@@ -21,28 +21,42 @@ readonly class EventStatsFetchService
     public function getEventStats(EventStatsRequestDTO $requestData): EventStatsResponseDTO
     {
         $eventId = $requestData->event_id;
+        $occurrenceId = $requestData->occurrence_id;
 
-        // Aggregate total statistics for the event for all time
-        $totalsQuery = <<<SQL
-        SELECT
-            SUM(es.products_sold) AS total_products_sold,
-            SUM(es.orders_created) AS total_orders,
-            SUM(es.sales_total_gross) AS total_gross_sales,
-            SUM(es.total_tax) AS total_tax,
-            SUM(es.total_fee) AS total_fees,
-            SUM(es.total_views) AS total_views,
-            SUM(es.total_refunded) AS total_refunded,
-            SUM(es.attendees_registered) AS attendees_registered
+        if ($occurrenceId !== null) {
+            $totalsQuery = <<<SQL
+            SELECT
+                COALESCE(SUM(eos.products_sold), 0) AS total_products_sold,
+                COALESCE(SUM(eos.orders_created), 0) AS total_orders,
+                COALESCE(SUM(eos.sales_total_gross), 0) AS total_gross_sales,
+                COALESCE(SUM(eos.total_tax), 0) AS total_tax,
+                COALESCE(SUM(eos.total_fee), 0) AS total_fees,
+                0 AS total_views,
+                COALESCE(SUM(eos.total_refunded), 0) AS total_refunded,
+                COALESCE(SUM(eos.attendees_registered), 0) AS attendees_registered
+            FROM event_occurrence_statistics eos
+            WHERE eos.event_occurrence_id = :occurrenceId
+              AND eos.deleted_at IS NULL;
+            SQL;
+            $totalsResult = $this->db->selectOne($totalsQuery, ['occurrenceId' => $occurrenceId]);
+        } else {
+            $totalsQuery = <<<SQL
+            SELECT
+                COALESCE(SUM(eos.products_sold), 0) AS total_products_sold,
+                COALESCE(SUM(eos.orders_created), 0) AS total_orders,
+                COALESCE(SUM(eos.sales_total_gross), 0) AS total_gross_sales,
+                COALESCE(SUM(eos.total_tax), 0) AS total_tax,
+                COALESCE(SUM(eos.total_fee), 0) AS total_fees,
+                COALESCE((SELECT SUM(es.total_views) FROM event_statistics es WHERE es.event_id = :eventIdViews AND es.deleted_at IS NULL), 0) AS total_views,
+                COALESCE(SUM(eos.total_refunded), 0) AS total_refunded,
+                COALESCE(SUM(eos.attendees_registered), 0) AS attendees_registered
+            FROM event_occurrence_statistics eos
+            WHERE eos.event_id = :eventId
+              AND eos.deleted_at IS NULL;
+            SQL;
+            $totalsResult = $this->db->selectOne($totalsQuery, ['eventId' => $eventId, 'eventIdViews' => $eventId]);
+        }
 
-        FROM event_statistics es
-        WHERE es.event_id = :eventId
-          AND es.deleted_at IS NULL;
-    SQL;
-
-        // Execute the totals and comparison queries
-        $totalsResult = $this->db->selectOne($totalsQuery, ['eventId' => $eventId]);
-
-        // Use the results to populate the response DTO
         return new EventStatsResponseDTO(
             daily_stats: $this->getDailyEventStats($requestData),
             start_date: $requestData->start_date,
@@ -61,9 +75,17 @@ readonly class EventStatsFetchService
     public function getDailyEventStats(EventStatsRequestDTO $requestData): Collection
     {
         $eventId = $requestData->event_id;
-
+        $occurrenceId = $requestData->occurrence_id;
         $startDate = $requestData->start_date;
         $endDate = $requestData->end_date;
+
+        if ($occurrenceId !== null) {
+            $whereClause = 'eods.event_occurrence_id = :occurrenceId';
+            $bindings = ['startDate' => $startDate, 'endDate' => $endDate, 'occurrenceId' => $occurrenceId];
+        } else {
+            $whereClause = 'eods.event_id = :eventId';
+            $bindings = ['startDate' => $startDate, 'endDate' => $endDate, 'eventId' => $eventId];
+        }
 
         $query = <<<SQL
             WITH date_series AS (
@@ -76,24 +98,20 @@ readonly class EventStatsFetchService
             )
             SELECT
               ds.date,
-              COALESCE(SUM(eds.total_fee), 0) AS total_fees,
-              COALESCE(SUM(eds.total_tax), 0) AS total_tax,
-              COALESCE(SUM(eds.sales_total_gross), 0) AS total_sales_gross,
-              COALESCE(SUM(eds.orders_created), 0) AS orders_created,
-              COALESCE(SUM(eds.products_sold), 0) AS products_sold,
-              COALESCE(SUM(eds.attendees_registered), 0) AS attendees_registered,
-              COALESCE(SUM(eds.total_refunded), 0) AS total_refunded
+              COALESCE(SUM(eods.total_fee), 0) AS total_fees,
+              COALESCE(SUM(eods.total_tax), 0) AS total_tax,
+              COALESCE(SUM(eods.sales_total_gross), 0) AS total_sales_gross,
+              COALESCE(SUM(eods.orders_created), 0) AS orders_created,
+              COALESCE(SUM(eods.products_sold), 0) AS products_sold,
+              COALESCE(SUM(eods.attendees_registered), 0) AS attendees_registered,
+              COALESCE(SUM(eods.total_refunded), 0) AS total_refunded
             FROM date_series ds
-            LEFT JOIN event_daily_statistics eds ON ds.date = eds.date AND eds.deleted_at IS NULL AND eds.event_id = :eventId
+            LEFT JOIN event_occurrence_daily_statistics eods ON ds.date = eods.date AND eods.deleted_at IS NULL AND {$whereClause}
             GROUP BY ds.date
             ORDER BY ds.date ASC;
         SQL;
 
-        $results = $this->db->select($query, [
-            'startDate' => $startDate,
-            'endDate' => $endDate,
-            'eventId' => $eventId,
-        ]);
+        $results = $this->db->select($query, $bindings);
 
         $currentTime = Carbon::now('UTC')->toTimeString();
 
@@ -113,20 +131,29 @@ readonly class EventStatsFetchService
         });
     }
 
-    public function getCheckedInStats(int $eventId): EventCheckInStatsResponseDTO
+    public function getCheckedInStats(int $eventId, ?int $occurrenceId = null): EventCheckInStatsResponseDTO
     {
+        $bindings = ['eventId' => $eventId];
+
+        $occurrenceFilter = '';
+        if ($occurrenceId !== null) {
+            $occurrenceFilter = 'AND attendees.event_occurrence_id = :occurrenceId';
+            $bindings['occurrenceId'] = $occurrenceId;
+        }
+
         $query = <<<SQL
             SELECT
                 COUNT(*) AS total_count,
                 SUM(CASE WHEN attendees.checked_in_at IS NOT NULL THEN 1 ELSE 0 END) AS checked_in_count
             FROM attendees
             INNER JOIN orders ON orders.id = attendees.order_id
-            WHERE orders.event_id = {$eventId}
+            WHERE orders.event_id = :eventId
               AND orders.status = 'COMPLETED'
-              AND attendees.status = 'ACTIVE';
+              AND attendees.status = 'ACTIVE'
+              {$occurrenceFilter};
         SQL;
 
-        $result = $this->db->select($query)[0];
+        $result = $this->db->select($query, $bindings)[0];
 
         return new EventCheckInStatsResponseDTO(
             total_checked_in_attendees: $result->checked_in_count ?? 0,

@@ -3,7 +3,10 @@
 namespace HiEvents\Resources\Event;
 
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\Resources\BaseResource;
+use HiEvents\Services\Application\Handlers\Event\GetPublicEventHandler;
+use HiEvents\Resources\EventOccurrence\EventOccurrenceResourcePublic;
 use HiEvents\Resources\Image\ImageResource;
 use HiEvents\Resources\Organizer\OrganizerResourcePublic;
 use HiEvents\Resources\ProductCategory\ProductCategoryResourcePublic;
@@ -42,6 +45,8 @@ class EventResourcePublic extends BaseResource
             'description_preview' => $this->getDescriptionPreview(),
             'start_date' => $this->getStartDate(),
             'end_date' => $this->getEndDate(),
+            'next_occurrence_start_date' => $this->getNextOccurrenceStartDate(),
+            'type' => $this->getType(),
             'currency' => $this->getCurrency(),
             'slug' => $this->getSlug(),
             'status' => $this->getStatus(),
@@ -74,6 +79,16 @@ class EventResourcePublic extends BaseResource
             'organizer' => $this->when(
                 condition: !is_null($this->getOrganizer()),
                 value: fn() => new OrganizerResourcePublic($this->getOrganizer()),
+            ),
+            'occurrences' => $this->when(
+                condition: !is_null($this->getEventOccurrences()) && $this->getEventOccurrences()->isNotEmpty(),
+                value: fn() => EventOccurrenceResourcePublic::collection(
+                    $this->getEventOccurrences()
+                        ->filter(fn(EventOccurrenceDomainObject $occ) => !$occ->isCancelled() && !$occ->isPast())
+                        ->sortBy(fn(EventOccurrenceDomainObject $occ) => $occ->getStartDate())
+                        ->take(GetPublicEventHandler::MAX_PUBLIC_OCCURRENCES)
+                        ->values()
+                ),
             ),
         ];
     }

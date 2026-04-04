@@ -105,6 +105,7 @@ class SendMessageHandler
             'message' => $this->purifier->purify($messageData->message),
             'type' => $messageData->type->name,
             'order_id' => $this->getOrderId($messageData),
+            'event_occurrence_id' => $messageData->event_occurrence_id,
             'attendee_ids' => $this->getAttendeeIds($messageData)->toArray(),
             'product_ids' => $this->getProductIds($messageData)->toArray(),
             'sent_at' => $isScheduled ? null : Carbon::now()->toDateTimeString(),
@@ -139,6 +140,7 @@ class SendMessageHandler
                 'id' => $message->getId(),
                 'attendee_ids' => $message->getAttendeeIds(),
                 'product_ids' => $message->getProductIds(),
+                'event_occurrence_id' => $messageData->event_occurrence_id,
             ]);
 
             SendMessagesJob::dispatch($updatedData);
@@ -149,20 +151,25 @@ class SendMessageHandler
 
     private function estimateRecipientCount(SendMessageDTO $messageData): int
     {
+        $occurrenceCondition = $messageData->event_occurrence_id
+            ? ['event_occurrence_id' => $messageData->event_occurrence_id]
+            : [];
+
         return match ($messageData->type) {
             MessageTypeEnum::INDIVIDUAL_ATTENDEES => count($messageData->attendee_ids ?? []),
             MessageTypeEnum::ORDER_OWNER => 1,
-            MessageTypeEnum::ALL_ATTENDEES => $this->attendeeRepository->countWhere([
+            MessageTypeEnum::ALL_ATTENDEES => $this->attendeeRepository->countWhere(array_merge([
                 'event_id' => $messageData->event_id,
-            ]),
-            MessageTypeEnum::TICKET_HOLDERS => $this->attendeeRepository->countWhere([
+            ], $occurrenceCondition)),
+            MessageTypeEnum::TICKET_HOLDERS => $this->attendeeRepository->countWhere(array_merge([
                 'event_id' => $messageData->event_id,
                 ['product_id', 'in', $messageData->product_ids ?? []],
-            ]),
+            ], $occurrenceCondition)),
             MessageTypeEnum::ORDER_OWNERS_WITH_PRODUCT => $this->orderRepository->countOrdersAssociatedWithProducts(
                 eventId: $messageData->event_id,
                 productIds: $messageData->product_ids ?? [],
                 orderStatuses: $messageData->order_statuses ?? ['COMPLETED'],
+                eventOccurrenceId: $messageData->event_occurrence_id,
             ),
         };
     }

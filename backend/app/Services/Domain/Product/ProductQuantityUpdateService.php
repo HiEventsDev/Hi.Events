@@ -6,7 +6,9 @@ use HiEvents\DomainObjects\CapacityAssignmentDomainObject;
 use HiEvents\DomainObjects\Generated\CapacityAssignmentDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
+use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
 use HiEvents\Repository\Interfaces\CapacityAssignmentRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductPriceRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use Illuminate\Database\DatabaseManager;
@@ -21,13 +23,14 @@ class ProductQuantityUpdateService
         private readonly ProductRepositoryInterface            $productRepository,
         private readonly CapacityAssignmentRepositoryInterface $capacityAssignmentRepository,
         private readonly DatabaseManager                       $databaseManager,
+        private readonly EventOccurrenceRepositoryInterface    $occurrenceRepository,
     )
     {
     }
 
-    public function increaseQuantitySold(int $priceId, int $adjustment = 1): void
+    public function increaseQuantitySold(int $priceId, int $adjustment = 1, ?int $eventOccurrenceId = null): void
     {
-        $this->databaseManager->transaction(function () use ($priceId, $adjustment) {
+        $this->databaseManager->transaction(function () use ($priceId, $adjustment, $eventOccurrenceId) {
             $capacityAssignments = $this->getCapacityAssignments($priceId);
 
             $capacityAssignments->each(function (CapacityAssignmentDomainObjectAbstract $capacityAssignment) use ($adjustment) {
@@ -39,12 +42,16 @@ class ProductQuantityUpdateService
             ], [
                 'id' => $priceId,
             ]);
+
+            if ($eventOccurrenceId !== null) {
+                $this->increaseOccurrenceUsedCapacity($eventOccurrenceId, $adjustment);
+            }
         });
     }
 
-    public function decreaseQuantitySold(int $priceId, int $adjustment = 1): void
+    public function decreaseQuantitySold(int $priceId, int $adjustment = 1, ?int $eventOccurrenceId = null): void
     {
-        $this->databaseManager->transaction(function () use ($priceId, $adjustment) {
+        $this->databaseManager->transaction(function () use ($priceId, $adjustment, $eventOccurrenceId) {
             $capacityAssignments = $this->getCapacityAssignments($priceId);
 
             $capacityAssignments->each(function (CapacityAssignmentDomainObjectAbstract $capacityAssignment) use ($adjustment) {
@@ -56,6 +63,10 @@ class ProductQuantityUpdateService
             ], [
                 'id' => $priceId,
             ]);
+
+            if ($eventOccurrenceId !== null) {
+                $this->decreaseOccurrenceUsedCapacity($eventOccurrenceId, $adjustment);
+            }
         });
     }
 
@@ -81,7 +92,11 @@ class ProductQuantityUpdateService
     {
         /** @var OrderItemDomainObject $orderItem */
         foreach ($order->getOrderItems() as $orderItem) {
-            $this->increaseQuantitySold($orderItem->getProductPriceId(), $orderItem->getQuantity());
+            $this->increaseQuantitySold(
+                $orderItem->getProductPriceId(),
+                $orderItem->getQuantity(),
+                $orderItem->getEventOccurrenceId(),
+            );
         }
     }
 
@@ -101,6 +116,52 @@ class ProductQuantityUpdateService
         ], [
             'id' => $capacityAssignmentId,
         ]);
+    }
+
+    private function increaseOccurrenceUsedCapacity(int $occurrenceId, int $adjustment): void
+    {
+        $this->occurrenceRepository->updateWhere([
+            'used_capacity' => DB::raw('used_capacity + ' . $adjustment),
+        ], [
+            'id' => $occurrenceId,
+        ]);
+
+        $occurrence = $this->occurrenceRepository->findById($occurrenceId);
+
+        if (
+            $occurrence->getStatus() === EventOccurrenceStatus::ACTIVE->name
+            && $occurrence->getCapacity() !== null
+            && $occurrence->getUsedCapacity() >= $occurrence->getCapacity()
+        ) {
+            $this->occurrenceRepository->updateWhere([
+                'status' => EventOccurrenceStatus::SOLD_OUT->name,
+            ], [
+                'id' => $occurrenceId,
+            ]);
+        }
+    }
+
+    private function decreaseOccurrenceUsedCapacity(int $occurrenceId, int $adjustment): void
+    {
+        $this->occurrenceRepository->updateWhere([
+            'used_capacity' => DB::raw('GREATEST(0, used_capacity - ' . $adjustment . ')'),
+        ], [
+            'id' => $occurrenceId,
+        ]);
+
+        $occurrence = $this->occurrenceRepository->findById($occurrenceId);
+
+        if (
+            $occurrence->getStatus() === EventOccurrenceStatus::SOLD_OUT->name
+            && $occurrence->getCapacity() !== null
+            && $occurrence->getUsedCapacity() < $occurrence->getCapacity()
+        ) {
+            $this->occurrenceRepository->updateWhere([
+                'status' => EventOccurrenceStatus::ACTIVE->name,
+            ], [
+                'id' => $occurrenceId,
+            ]);
+        }
     }
 
     /**

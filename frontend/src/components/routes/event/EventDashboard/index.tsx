@@ -19,8 +19,9 @@ import {useUpdateEventStatus} from "../../../../mutations/useUpdateEventStatus.t
 import {confirmationDialog} from "../../../../utilites/confirmationDialog.tsx";
 import {showError, showSuccess} from "../../../../utilites/notifications.tsx";
 import {useEffect, useState} from 'react';
-import {StripePlatform} from "../../../../types.ts";
+import {EventType, StripePlatform} from "../../../../types.ts";
 import {isHiEvents} from "../../../../utilites/helpers.ts";
+import {UpcomingOccurrences} from "./UpcomingOccurrences";
 import {StripeConnectButton} from "../../../common/StripeConnectButton";
 import {trackEvent, AnalyticsEvents} from "../../../../utilites/analytics.ts";
 
@@ -144,6 +145,10 @@ export const EventDashboard = () => {
 
             {event && (<>
                 <StatBoxes/>
+
+                {event?.type === EventType.RECURRING && (
+                    <UpcomingOccurrences eventId={eventId} event={event}/>
+                )}
 
                 {shouldShowChecklist && (
                     <Card className={classes.setupCard}>

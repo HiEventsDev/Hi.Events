@@ -15,8 +15,6 @@ abstract class EventDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     final public const USER_ID = 'user_id';
     final public const ORGANIZER_ID = 'organizer_id';
     final public const TITLE = 'title';
-    final public const START_DATE = 'start_date';
-    final public const END_DATE = 'end_date';
     final public const DESCRIPTION = 'description';
     final public const STATUS = 'status';
     final public const LOCATION_DETAILS = 'location_details';
@@ -30,14 +28,14 @@ abstract class EventDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     final public const SHORT_ID = 'short_id';
     final public const TICKET_QUANTITY_AVAILABLE = 'ticket_quantity_available';
     final public const CATEGORY = 'category';
+    final public const TYPE = 'type';
+    final public const RECURRENCE_RULE = 'recurrence_rule';
 
     protected int $id;
     protected int $account_id;
     protected int $user_id;
     protected ?int $organizer_id = null;
     protected string $title;
-    protected ?string $start_date = null;
-    protected ?string $end_date = null;
     protected ?string $description = null;
     protected ?string $status = null;
     protected array|string|null $location_details = null;
@@ -51,6 +49,8 @@ abstract class EventDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     protected string $short_id;
     protected ?int $ticket_quantity_available = null;
     protected string $category = 'OTHER';
+    protected string $type = 'SINGLE';
+    protected array|string|null $recurrence_rule = null;
 
     public function toArray(): array
     {
@@ -60,8 +60,6 @@ abstract class EventDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
                     'user_id' => $this->user_id ?? null,
                     'organizer_id' => $this->organizer_id ?? null,
                     'title' => $this->title ?? null,
-                    'start_date' => $this->start_date ?? null,
-                    'end_date' => $this->end_date ?? null,
                     'description' => $this->description ?? null,
                     'status' => $this->status ?? null,
                     'location_details' => $this->location_details ?? null,
@@ -75,6 +73,8 @@ abstract class EventDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
                     'short_id' => $this->short_id ?? null,
                     'ticket_quantity_available' => $this->ticket_quantity_available ?? null,
                     'category' => $this->category ?? null,
+                    'type' => $this->type ?? null,
+                    'recurrence_rule' => $this->recurrence_rule ?? null,
                 ];
     }
 
@@ -131,28 +131,6 @@ abstract class EventDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     public function getTitle(): string
     {
         return $this->title;
-    }
-
-    public function setStartDate(?string $start_date): self
-    {
-        $this->start_date = $start_date;
-        return $this;
-    }
-
-    public function getStartDate(): ?string
-    {
-        return $this->start_date;
-    }
-
-    public function setEndDate(?string $end_date): self
-    {
-        $this->end_date = $end_date;
-        return $this;
-    }
-
-    public function getEndDate(): ?string
-    {
-        return $this->end_date;
     }
 
     public function setDescription(?string $description): self
@@ -296,5 +274,27 @@ abstract class EventDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     public function getCategory(): string
     {
         return $this->category;
+    }
+
+    public function setType(string $type): self
+    {
+        $this->type = $type;
+        return $this;
+    }
+
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    public function setRecurrenceRule(array|string|null $recurrence_rule): self
+    {
+        $this->recurrence_rule = $recurrence_rule;
+        return $this;
+    }
+
+    public function getRecurrenceRule(): array|string|null
+    {
+        return $this->recurrence_rule;
     }
 }

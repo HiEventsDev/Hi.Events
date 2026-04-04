@@ -3,6 +3,7 @@
 namespace HiEvents\Resources\CheckInList;
 
 use HiEvents\DomainObjects\CheckInListDomainObject;
+use HiEvents\Resources\EventOccurrence\EventOccurrenceResource;
 use HiEvents\Resources\Product\ProductResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -20,12 +21,17 @@ class CheckInListResource extends JsonResource
             'expires_at' => $this->getExpiresAt(),
             'activates_at' => $this->getActivatesAt(),
             'short_id' => $this->getShortId(),
+            'event_occurrence_id' => $this->getEventOccurrenceId(),
             'total_attendees' => $this->getTotalAttendeesCount(),
             'checked_in_attendees' => $this->getCheckedInCount(),
             $this->mergeWhen($this->getEvent() !== null, fn() => [
                 'is_expired' => $this->isExpired($this->getEvent()->getTimezone()),
                 'is_active' => $this->isActivated($this->getEvent()->getTimezone()),
             ]),
+            'event_occurrence' => $this->when(
+                !is_null($this->getEventOccurrence()),
+                fn() => new EventOccurrenceResource($this->getEventOccurrence()),
+            ),
             $this->mergeWhen($this->getProducts() !== null, fn() => [
                 'products' => ProductResource::collection($this->getProducts()),
             ]),

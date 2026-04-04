@@ -14,6 +14,7 @@ import {IconPlus} from "@tabler/icons-react";
 import {useFilterQueryParamSync} from "../../../../hooks/useFilterQueryParamSync.ts";
 import {QueryFilters} from "../../../../types.ts";
 import {Pagination} from "../../../common/Pagination";
+import {SortSelector} from "../../../common/SortSelector";
 
 const CapacityAssignments = () => {
     const {eventId} = useParams();
@@ -34,14 +35,26 @@ const CapacityAssignments = () => {
                 {t`Shared Capacity Management`}
             </PageTitle>
 
-            <ToolBar searchComponent={() => (
-                <SearchBarWrapper
-                    placeholder={t`Search capacity assignments...`}
-                    setSearchParams={setSearchParams}
-                    searchParams={searchParams}
-                    pagination={pagination}
-                />
-            )}>
+            <ToolBar
+                searchComponent={() => (
+                    <SearchBarWrapper
+                        placeholder={t`Search capacity assignments...`}
+                        setSearchParams={setSearchParams}
+                        searchParams={searchParams}
+                    />
+                )}
+                filterComponent={pagination?.allowed_sorts ? (
+                    <SortSelector
+                        selected={searchParams.sortBy && searchParams.sortDirection
+                            ? searchParams.sortBy + ':' + searchParams.sortDirection
+                            : pagination.default_sort + ':' + pagination.default_sort_direction}
+                        options={pagination.allowed_sorts}
+                        onSortSelect={(key, sortDirection) => {
+                            setSearchParams({sortBy: key, sortDirection});
+                        }}
+                    />
+                ) : undefined}
+            >
                 <Button
                     leftSection={<IconPlus/>}
                     color={'green'}

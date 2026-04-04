@@ -18,6 +18,7 @@ class CheckInListResourcePublic extends JsonResource
             'id' => $this->getId(),
             'short_id' => $this->getShortId(),
             'name' => $this->getName(),
+            'event_occurrence_id' => $this->getEventOccurrenceId(),
             'description' => $this->getDescription(),
             'expires_at' => $this->getExpiresAt(),
             'activates_at' => $this->getActivatesAt(),

@@ -93,7 +93,7 @@ class CreateOrderHandlerTest extends TestCase
         $this->orderManagementService->shouldReceive('deleteExistingOrders');
 
         $this->availabilityService->shouldReceive('getAvailableProductQuantities')
-            ->with($eventId, true)
+            ->with($eventId, true, Mockery::any())
             ->andReturn(new AvailableProductQuantitiesResponseDTO(
                 productQuantities: collect([
                     AvailableProductQuantitiesDTO::fromArray([
@@ -149,6 +149,7 @@ class CreateOrderHandlerTest extends TestCase
             'products' => collect([
                 ProductOrderDetailsDTO::fromArray([
                     'product_id' => $productId,
+                    'event_occurrence_id' => 1,
                     'quantities' => collect([
                         OrderProductPriceDTO::fromArray([
                             'price_id' => $priceId,
@@ -186,7 +187,7 @@ class CreateOrderHandlerTest extends TestCase
         $this->orderManagementService->shouldReceive('deleteExistingOrders');
 
         $this->availabilityService->shouldReceive('getAvailableProductQuantities')
-            ->with($eventId, true)
+            ->with($eventId, true, Mockery::any())
             ->andReturn(new AvailableProductQuantitiesResponseDTO(
                 productQuantities: collect([
                     AvailableProductQuantitiesDTO::fromArray([

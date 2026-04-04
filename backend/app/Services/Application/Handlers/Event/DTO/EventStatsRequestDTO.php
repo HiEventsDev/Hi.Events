@@ -10,6 +10,7 @@ class EventStatsRequestDTO extends BaseDTO
         public int    $event_id,
         public string $start_date,
         public string $end_date,
+        public ?int   $occurrence_id = null,
     )
     {
     }

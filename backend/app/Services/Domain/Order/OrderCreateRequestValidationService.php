@@ -9,7 +9,9 @@ use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\Generated\PromoCodeDomainObjectAbstract;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
+use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Helper\Currency;
+use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
@@ -17,6 +19,7 @@ use HiEvents\Services\Domain\Product\AvailableProductQuantitiesFetchService;
 use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesDTO;
 use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesResponseDTO;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -30,6 +33,7 @@ class OrderCreateRequestValidationService
         readonly private PromoCodeRepositoryInterface           $promoCodeRepository,
         readonly private EventRepositoryInterface               $eventRepository,
         readonly private AvailableProductQuantitiesFetchService $fetchAvailableProductQuantitiesService,
+        readonly private EventOccurrenceRepositoryInterface     $occurrenceRepository,
     )
     {
     }
@@ -45,6 +49,7 @@ class OrderCreateRequestValidationService
         $event = $this->eventRepository->findById($eventId);
         $this->validatePromoCode($eventId, $data);
         $this->validateProductSelection($data);
+        $this->validateOccurrence($eventId, $data);
 
         $this->availableProductQuantities = $this->fetchAvailableProductQuantitiesService
             ->getAvailableProductQuantities(
@@ -52,7 +57,7 @@ class OrderCreateRequestValidationService
                 ignoreCache: true,
             );
 
-        $this->validateOverallCapacity($data);
+        $this->validateOverallCapacity($event, $data);
         $this->validateProductDetails($event, $data);
     }
 
@@ -83,6 +88,7 @@ class OrderCreateRequestValidationService
         $validator = Validator::make($data, [
             'products' => 'required|array',
             'products.*.product_id' => 'required|integer',
+            'products.*.event_occurrence_id' => 'required|integer',
             'products.*.quantities' => 'required|array',
             'products.*.quantities.*.quantity' => 'required|integer',
             'products.*.quantities.*.price_id' => 'required|integer',
@@ -105,6 +111,77 @@ class OrderCreateRequestValidationService
                 'products' => __('You haven\'t selected any products')
             ]);
         }
+    }
+
+    /**
+     * @throws ValidationException
+     */
+    private function validateOccurrence(int $eventId, array $data): void
+    {
+        $productsByOccurrence = collect($data['products'])->groupBy('event_occurrence_id');
+
+        foreach ($productsByOccurrence as $occurrenceId => $products) {
+            if ($occurrenceId === null || $occurrenceId === '') {
+                throw ValidationException::withMessages([
+                    'event_occurrence_id' => __('An event occurrence must be specified'),
+                ]);
+            }
+
+            $occurrence = $this->occurrenceRepository->findFirstWhere([
+                'id' => $occurrenceId,
+                'event_id' => $eventId,
+            ]);
+
+            if ($occurrence === null) {
+                throw ValidationException::withMessages([
+                    'event_occurrence_id' => __('The specified event occurrence was not found'),
+                ]);
+            }
+
+            if ($occurrence->isCancelled()) {
+                throw ValidationException::withMessages([
+                    'event_occurrence_id' => __('This event occurrence has been cancelled'),
+                ]);
+            }
+
+            if ($occurrence->isSoldOut()) {
+                throw ValidationException::withMessages([
+                    'event_occurrence_id' => __('This event occurrence is sold out'),
+                ]);
+            }
+
+            if ($occurrence->getCapacity() !== null) {
+                $totalQuantityRequested = $products
+                    ->sum(fn($product) => collect($product['quantities'])->sum('quantity'));
+
+                $reservedForOccurrence = $this->getReservedQuantityForOccurrence((int) $occurrenceId);
+
+                $available = $occurrence->getCapacity() - $occurrence->getUsedCapacity() - $reservedForOccurrence;
+                if ($totalQuantityRequested > $available) {
+                    throw ValidationException::withMessages([
+                        'event_occurrence_id' => __('Not enough capacity available for this occurrence'),
+                    ]);
+                }
+            }
+        }
+    }
+
+    private function getReservedQuantityForOccurrence(int $occurrenceId): int
+    {
+        $result = DB::selectOne(<<<SQL
+            SELECT COALESCE(SUM(oi.quantity), 0) as reserved
+            FROM order_items oi
+            JOIN orders o ON o.id = oi.order_id
+            WHERE oi.event_occurrence_id = :occurrenceId
+            AND o.status = :reserved
+            AND o.reserved_until > NOW()
+            AND o.deleted_at IS NULL
+        SQL, [
+            'occurrenceId' => $occurrenceId,
+            'reserved' => OrderStatus::RESERVED->name,
+        ]);
+
+        return (int) ($result->reserved ?? 0);
     }
 
     /**
@@ -345,8 +422,12 @@ class OrderCreateRequestValidationService
     /**
      * @throws ValidationException
      */
-    private function validateOverallCapacity(array $data): void
+    private function validateOverallCapacity(EventDomainObject $event, array $data): void
     {
+        if ($event->isRecurring()) {
+            return;
+        }
+
         foreach ($this->availableProductQuantities->capacities as $capacity) {
             if ($capacity->getProducts() === null) {
                 continue;

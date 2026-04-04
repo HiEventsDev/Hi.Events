@@ -3,6 +3,7 @@
 namespace HiEvents\Services\Infrastructure\Webhook;
 
 use HiEvents\DomainObjects\AttendeeDomainObject;
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\QuestionAndAnswerViewDomainObject;
@@ -57,6 +58,10 @@ class WebhookDispatchService
                 domainObject: QuestionAndAnswerViewDomainObject::class,
                 name: 'question_and_answer_views',
             ))
+            ->loadRelation(new Relationship(
+                domainObject: EventOccurrenceDomainObject::class,
+                name: 'event_occurrence',
+            ))
             ->findById($attendeeId);
 
         $this->dispatchWebhook(
@@ -101,13 +106,25 @@ class WebhookDispatchService
     public function dispatchOrderWebhook(DomainEventType $eventType, int $orderId): void
     {
         $order = $this->orderRepository
-            ->loadRelation(OrderItemDomainObject::class)
+            ->loadRelation(new Relationship(
+                domainObject: OrderItemDomainObject::class,
+                nested: [
+                    new Relationship(
+                        domainObject: EventOccurrenceDomainObject::class,
+                        name: 'event_occurrence',
+                    ),
+                ],
+            ))
             ->loadRelation(new Relationship(
                     domainObject: AttendeeDomainObject::class,
                     nested: [
                         new Relationship(
                             domainObject: QuestionAndAnswerViewDomainObject::class,
                             name: 'question_and_answer_views',
+                        ),
+                        new Relationship(
+                            domainObject: EventOccurrenceDomainObject::class,
+                            name: 'event_occurrence',
                         ),
                     ],
                     name: 'attendees')

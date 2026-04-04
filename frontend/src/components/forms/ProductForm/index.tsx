@@ -1,6 +1,6 @@
 import {t, Trans} from "@lingui/macro";
 import {UseFormReturnType} from "@mantine/form";
-import {Event, Product, ProductPriceType, TaxAndFee, TaxAndFeeCalculationType, TaxAndFeeType} from "../../../types.ts";
+import {Event, EventType, Product, ProductPriceType, TaxAndFee, TaxAndFeeCalculationType, TaxAndFeeType} from "../../../types.ts";
 import {
     ActionIcon,
     Alert,
@@ -182,6 +182,7 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
     const isDonationProduct = form.values.type === 'DONATION';
     const {data: event} = useGetEvent(eventId);
     const {data: taxesAndFees} = useGetTaxesAndFees();
+    const isRecurring = event?.type === EventType.RECURRING;
 
     const handleTaxOrFeeCreated = (taxOrFee: TaxAndFee) => {
         const currentIds = form.values.tax_and_fee_ids || [];
@@ -296,51 +297,65 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
             />
 
             {form.values.type !== ProductPriceType.Tiered && (
-                <InputGroup>
-                    <NumberInput decimalScale={2}
-                                 min={0}
-                                 fixedDecimalScale
-                                 disabled={isFreeProduct}
-                                 leftSection={event?.currency ? getCurrencySymbol(event.currency) : ''}
-                                 {...form.getInputProps('prices.0.price')}
-                                 label={<InputLabelWithHelp
-                                     label={isDonationProduct ? t`Minimum Price` : t`Price`}
-                                     helpText={(
-                                         <Trans>
-                                             <p>
-                                                 Please enter the price excluding taxes and fees.
-                                             </p>
-                                             <p>
-                                                 Taxes and fees can be added below.
-                                             </p>
-                                         </Trans>
-                                     )}
-                                 />}
-                                 placeholder="19.99"/>
-                    <NumberInput min={0}
-                                 placeholder={t`Unlimited`}
-                                 {...form.getInputProps('prices.0.initial_quantity_available')}
-                                 label={<InputLabelWithHelp
-                                     label={t`Quantity Available`}
-                                     helpText={(
-                                         <Trans>
-                                             <p>
-                                                 The number of products available for this product
-                                             </p>
-                                             <p>
-                                                 This value can be overridden if there are <a target={'__blank'}
-                                                                                              href={'capacity-assignments'}>Capacity
-                                                 Limits</a> associated with this product.
-                                             </p>
-                                         </Trans>
-                                     )}
-                                 />}
-                    />
-                </InputGroup>
+                <>
+                    <InputGroup>
+                        <NumberInput decimalScale={2}
+                                     min={0}
+                                     fixedDecimalScale
+                                     disabled={isFreeProduct}
+                                     leftSection={event?.currency ? getCurrencySymbol(event.currency) : ''}
+                                     {...form.getInputProps('prices.0.price')}
+                                     label={<InputLabelWithHelp
+                                         label={isDonationProduct ? t`Minimum Price` : t`Price`}
+                                         helpText={(
+                                             <Trans>
+                                                 <p>
+                                                     Please enter the price excluding taxes and fees.
+                                                 </p>
+                                                 <p>
+                                                     Taxes and fees can be added below.
+                                                 </p>
+                                             </Trans>
+                                         )}
+                                     />}
+                                     placeholder="19.99"/>
+                        <NumberInput min={0}
+                                     placeholder={t`Unlimited`}
+                                     {...form.getInputProps('prices.0.initial_quantity_available')}
+                                     label={<InputLabelWithHelp
+                                         label={t`Quantity Available`}
+                                         helpText={isRecurring ? (
+                                             <Trans>
+                                                 <p>
+                                                     This is the default quantity across all dates. Each date's capacity
+                                                     can further limit availability on the <NavLink to={`/manage/event/${eventId}/occurrences`}>Occurrence Schedule page</NavLink>.
+                                                 </p>
+                                             </Trans>
+                                         ) : (
+                                             <Trans>
+                                                 <p>
+                                                     The number of products available for this product
+                                                 </p>
+                                                 <p>
+                                                     This value can be overridden if there are <a target={'__blank'}
+                                                                                                  href={'capacity-assignments'}>Capacity
+                                                     Limits</a> associated with this product.
+                                                 </p>
+                                             </Trans>
+                                         )}
+                                     />}
+                        />
+                    </InputGroup>
+                </>
             )}
 
             {form.values.type === ProductPriceType.Tiered && (
                 <Fieldset legend={t`Price Tiers`} mt={20} mb={20}>
+                    {isRecurring && (
+                        <Alert variant="light" icon={<IconInfoCircle size={16}/>} mb={10}>
+                            <Trans>These are the default prices and quantities across all dates. Sale dates on tiers apply globally. You can override prices and quantities for individual dates on the <NavLink to={`/manage/event/${eventId}/occurrences`}>Occurrence Schedule page</NavLink>.</Trans>
+                        </Alert>
+                    )}
                     <div className={classes.priceTiers}>
                         <ProductPriceTierForm product={product} form={form} event={event}/>
                         <Button
@@ -450,6 +465,11 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                             {t`Sale Period`}
                         </span>
                     }>
+                        {isRecurring && (
+                            <Alert variant="light" icon={<IconInfoCircle size={16}/>} mb={10}>
+                                <Trans>Sale period dates apply across all dates in your schedule. To control pricing and availability for individual dates, use the overrides on the <NavLink to={`/manage/event/${eventId}/occurrences`}>Occurrence Schedule page</NavLink>.</Trans>
+                            </Alert>
+                        )}
                         <InputGroup>
                             <TextInput type={'datetime-local'} {...form.getInputProps('sale_start_date')}
                                        label={t`Sale Start Date`}/>
@@ -466,9 +486,11 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                     }>
                         <div className={classes.visibilityOptions}>
                             <Switch {...form.getInputProps('hide_before_sale_start_date', {type: 'checkbox'})}
-                                    label={t`Hide product before sale start date`}/>
+                                    label={t`Hide product before sale start date`}
+                                    description={isRecurring ? t`Based on the global sale period above, not per date` : undefined}/>
                             <Switch {...form.getInputProps('hide_after_sale_end_date', {type: 'checkbox'})}
-                                    label={t`Hide product after sale end date`}/>
+                                    label={t`Hide product after sale end date`}
+                                    description={isRecurring ? t`Based on the global sale period above, not per date` : undefined}/>
                             <Switch {...form.getInputProps('start_collapsed', {type: 'checkbox'})}
                                     label={t`Collapse this product when the event page is initially loaded`}/>
                             <Switch {...form.getInputProps('show_quantity_remaining', {type: 'checkbox'})}

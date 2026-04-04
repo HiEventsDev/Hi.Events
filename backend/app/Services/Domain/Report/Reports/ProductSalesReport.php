@@ -8,11 +8,14 @@ use Illuminate\Support\Carbon;
 
 class ProductSalesReport extends AbstractReportService
 {
-    protected function getSqlQuery(Carbon $startDate, Carbon $endDate): string
+    protected function getSqlQuery(Carbon $startDate, Carbon $endDate, ?int $occurrenceId = null): string
     {
         $startDateString = $startDate->format('Y-m-d H:i:s');
         $endDateString = $endDate->format('Y-m-d H:i:s');
         $completedStatus = OrderStatus::COMPLETED->name;
+        $occurrenceFilter = $occurrenceId !== null
+            ? 'AND oi.event_occurrence_id = :occurrence_id'
+            : '';
 
         return <<<SQL
         WITH filtered_orders AS (
@@ -28,6 +31,7 @@ class ProductSalesReport extends AbstractReportService
                 AND o.event_id = :event_id
                 AND o.created_at BETWEEN '$startDateString' AND '$endDateString'
                 AND oi.deleted_at IS NULL
+                $occurrenceFilter
         )
         SELECT
             p.id AS product_id,

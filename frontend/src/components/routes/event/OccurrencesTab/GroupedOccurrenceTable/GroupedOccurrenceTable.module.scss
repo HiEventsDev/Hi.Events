@@ -1,0 +1,85 @@
+.tableWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.card {
+  padding: 0 !important;
+  overflow: hidden;
+
+  :global(.mantine-ScrollArea-viewport) {
+    padding-bottom: 0;
+  }
+
+  :global(.mantine-ScrollArea-scrollbar) {
+    z-index: 20 !important;
+  }
+}
+
+.table {
+  th {
+    white-space: nowrap;
+  }
+
+  tbody tr td {
+    padding: 16px 20px !important;
+    white-space: nowrap;
+  }
+
+  position: relative;
+}
+
+.tableHead {
+  white-space: nowrap;
+
+  th {
+    background-color: var(--mantine-color-gray-1);
+    color: var(--hi-secondary-text) !important;
+    padding: 16px 20px !important;
+  }
+}
+
+.stickyRight {
+  position: sticky;
+  right: 0;
+  z-index: 2;
+  background: var(--mantine-color-body);
+}
+
+.tableHead .stickyRight {
+  background-color: var(--mantine-color-gray-1);
+}
+
+.dateHeaderRow td {
+  background: var(--mantine-color-gray-0) !important;
+  padding: 10px 20px !important;
+  border-bottom: 1px solid var(--mantine-color-gray-2);
+}
+
+.dateHeaderContent {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dateHeaderLabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--mantine-color-text);
+}
+
+.dateHeaderBadge {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--mantine-color-dimmed);
+}
+
+.dateHeaderCheckbox {
+  margin-right: 2px;
+}
+
+.rowCheckbox {
+  display: flex;
+  align-items: center;
+}

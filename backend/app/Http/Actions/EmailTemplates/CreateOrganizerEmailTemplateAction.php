@@ -42,7 +42,7 @@ class CreateOrganizerEmailTemplateAction extends BaseEmailTemplateAction
         try {
             $cta = [
                 'label' => $validated['ctaLabel'],
-                'url_token' => $validated['template_type'] === 'order_confirmation' ? 'order.url' : 'ticket.url',
+                'url_token' => EmailTemplateType::from($validated['template_type'])->ctaUrlToken(),
             ];
             
             $template = $this->handler->handle(

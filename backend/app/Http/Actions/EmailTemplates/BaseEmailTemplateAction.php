@@ -82,7 +82,7 @@ abstract class BaseEmailTemplateAction extends BaseAction
 
         $cta = [
             'label' => $validated['ctaLabel'],
-            'url_token' => $validated['template_type'] === 'order_confirmation' ? 'order.url' : 'ticket.url',
+            'url_token' => EmailTemplateType::from($validated['template_type'])->ctaUrlToken(),
         ];
 
         $preview = $handler->handle(

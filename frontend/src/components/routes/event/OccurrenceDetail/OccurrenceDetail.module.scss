@@ -1,0 +1,82 @@
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.backLink {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--mantine-color-dimmed);
+  cursor: pointer;
+  margin-bottom: 12px;
+
+  &:hover {
+    color: var(--mantine-color-text);
+  }
+}
+
+
+.chartCard {
+  margin-top: 20px;
+
+  .chartCardTitle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+
+    h2 {
+      margin: 0;
+    }
+  }
+
+  .dateRange {
+    color: var(--mantine-color-gray-5);
+  }
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+
+  &[data-status="ACTIVE"] {
+    background: var(--mantine-color-green-1);
+    color: var(--mantine-color-green-9);
+  }
+
+  &[data-status="CANCELLED"] {
+    background: var(--mantine-color-red-1);
+    color: var(--mantine-color-red-9);
+  }
+
+  &[data-status="SOLD_OUT"] {
+    background: var(--mantine-color-orange-1);
+    color: var(--mantine-color-orange-9);
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .chartCard .chartCardTitle {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+}

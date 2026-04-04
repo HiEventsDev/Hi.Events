@@ -103,13 +103,19 @@ class SendEventEmailMessagesService
 
     private function sendTicketHolderMessages(SendMessageDTO $messageData, EventDomainObject $event): void
     {
+        $additionalWhere = [
+            'event_id' => $messageData->event_id,
+            'status' => AttendeeStatus::ACTIVE->name,
+        ];
+
+        if ($messageData->event_occurrence_id) {
+            $additionalWhere['event_occurrence_id'] = $messageData->event_occurrence_id;
+        }
+
         $attendees = $this->attendeeRepository->findWhereIn(
             field: 'product_id',
             values: $messageData->product_ids,
-            additionalWhere: [
-                'event_id' => $messageData->event_id,
-                'status' => AttendeeStatus::ACTIVE->name,
-            ],
+            additionalWhere: $additionalWhere,
             columns: ['first_name', 'last_name', 'email']
         );
 
@@ -184,11 +190,17 @@ class SendEventEmailMessagesService
      */
     private function sendEventMessages(SendMessageDTO $messageData, EventDomainObject $event): void
     {
+        $where = [
+            'event_id' => $messageData->event_id,
+            'status' => AttendeeStatus::ACTIVE->name,
+        ];
+
+        if ($messageData->event_occurrence_id) {
+            $where['event_occurrence_id'] = $messageData->event_occurrence_id;
+        }
+
         $attendees = $this->attendeeRepository->findWhere(
-            where: [
-                'event_id' => $messageData->event_id,
-                'status' => AttendeeStatus::ACTIVE->name,
-            ],
+            where: $where,
             columns: ['first_name', 'last_name', 'email']
         );
 
@@ -216,7 +228,8 @@ class SendEventEmailMessagesService
         $orders = $this->orderRepository->findOrdersAssociatedWithProducts(
             eventId: $messageData->event_id,
             productIds: $messageData->product_ids,
-            orderStatuses: $messageData->order_statuses
+            orderStatuses: $messageData->order_statuses,
+            eventOccurrenceId: $messageData->event_occurrence_id,
         );
 
         if ($orders->isEmpty()) {

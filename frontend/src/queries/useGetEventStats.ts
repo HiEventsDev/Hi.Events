@@ -4,12 +4,12 @@ import {eventsClient} from "../api/event.client.ts";
 
 export const GET_EVENT_STATS_QUERY_KEY = 'getEventStats';
 
-export const useGetEventStats = (eventId: IdParam) => {
+export const useGetEventStats = (eventId: IdParam, occurrenceId?: IdParam) => {
     return useQuery({
-        queryKey: [GET_EVENT_STATS_QUERY_KEY, eventId],
+        queryKey: [GET_EVENT_STATS_QUERY_KEY, eventId, occurrenceId],
 
         queryFn: async () => {
-            const {data} = await eventsClient.getEventStats(eventId);
+            const {data} = await eventsClient.getEventStats(eventId, occurrenceId);
             return data;
         }
     });

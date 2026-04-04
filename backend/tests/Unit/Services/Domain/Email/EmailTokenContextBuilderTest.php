@@ -155,6 +155,51 @@ class EmailTokenContextBuilderTest extends TestCase
         $this->assertArrayHasKey('title', $context['event']);
     }
 
+    public function test_occurrence_dates_override_event_dates(): void
+    {
+        $order = $this->createMockOrder();
+        $event = $this->createMockEvent();
+        $organizer = $this->createMockOrganizer();
+        $eventSettings = $this->createMockEventSettings();
+        $occurrence = $this->createMockOccurrence();
+
+        $context = $this->contextBuilder->buildOrderConfirmationContext(
+            $order, $event, $organizer, $eventSettings, $occurrence
+        );
+
+        $this->assertArrayHasKey('occurrence', $context);
+        $this->assertNotEmpty($context['occurrence']['start_date']);
+        $this->assertNotEmpty($context['occurrence']['start_time']);
+        $this->assertNotEmpty($context['occurrence']['end_date']);
+        $this->assertNotEmpty($context['occurrence']['end_time']);
+        $this->assertEquals('Afternoon Show', $context['occurrence']['label']);
+        $this->assertStringContainsString('Afternoon Show', $context['event']['title']);
+    }
+
+    public function test_occurrence_tokens_empty_when_no_occurrence(): void
+    {
+        $order = $this->createMockOrder();
+        $event = $this->createMockEvent();
+        $organizer = $this->createMockOrganizer();
+        $eventSettings = $this->createMockEventSettings();
+
+        $context = $this->contextBuilder->buildOrderConfirmationContext(
+            $order, $event, $organizer, $eventSettings
+        );
+
+        $this->assertArrayHasKey('occurrence', $context);
+        $this->assertEquals('', $context['occurrence']['label']);
+    }
+
+    private function createMockOccurrence(): Mockery\MockInterface
+    {
+        return Mockery::mock(\HiEvents\DomainObjects\EventOccurrenceDomainObject::class, [
+            'getStartDate' => '2024-07-20 14:00:00',
+            'getEndDate' => '2024-07-20 18:00:00',
+            'getLabel' => 'Afternoon Show',
+        ]);
+    }
+
     private function createMockOrder(): OrderDomainObject
     {
         $orderItem = Mockery::mock(OrderItemDomainObject::class, [

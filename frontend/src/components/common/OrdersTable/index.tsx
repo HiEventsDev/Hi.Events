@@ -4,6 +4,7 @@ import {Event, IdParam, Invoice, MessageType, Order} from "../../../types.ts";
 import {
     IconAlertCircle,
     IconBasketCog,
+    IconCalendarEvent,
     IconCash,
     IconCheck,
     IconClock,
@@ -23,7 +24,7 @@ import {
     IconTrash,
     IconX
 } from "@tabler/icons-react";
-import {relativeDate} from "../../../utilites/dates.ts";
+import {formatDateWithLocale, relativeDate} from "../../../utilites/dates.ts";
 import {ManageOrderModal} from "../../modals/ManageOrderModal";
 import {useClipboard, useDisclosure} from "@mantine/hooks";
 import {useMemo, useState} from "react";
@@ -48,9 +49,10 @@ import {formatCurrency} from "../../../utilites/currency.ts";
 interface OrdersTableProps {
     event: Event,
     orders: Order[];
+    compact?: boolean;
 }
 
-export const OrdersTable = ({orders, event}: OrdersTableProps) => {
+export const OrdersTable = ({orders, event, compact}: OrdersTableProps) => {
     const [isViewModalOpen, viewModal] = useDisclosure(false);
     const [isCancelModalOpen, cancelModal] = useDisclosure(false);
     const [isMessageModalOpen, messageModal] = useDisclosure(false);
@@ -271,6 +273,7 @@ export const OrdersTable = ({orders, event}: OrdersTableProps) => {
                 enableHiding: true,
                 cell: (info: CellContext<Order, unknown>) => {
                     const order = info.row.original;
+                    const occurrence = order.order_items?.[0]?.event_occurrence;
                     return (
                         <div className={classes.orderDetails}>
                             <Anchor
@@ -280,6 +283,15 @@ export const OrdersTable = ({orders, event}: OrdersTableProps) => {
                             >
                                 {order.public_id}
                             </Anchor>
+                            {occurrence && event?.timezone && (
+                                <span className={classes.occurrenceChip}>
+                                    <IconCalendarEvent size={12}/>
+                                    {formatDateWithLocale(occurrence.start_date, 'shortDate', event.timezone)}
+                                    {' '}
+                                    {formatDateWithLocale(occurrence.start_date, 'timeOnly', event.timezone)}
+                                    {occurrence.label && ` · ${occurrence.label}`}
+                                </span>
+                            )}
                             <div className={classes.orderMeta}>
                                 <Text className={classes.createdDate}>
                                     {relativeDate(order.created_at)}
@@ -471,8 +483,10 @@ export const OrdersTable = ({orders, event}: OrdersTableProps) => {
                 data={orders}
                 columns={columns}
                 storageKey="orders-table"
-                enableColumnVisibility={true}
-                renderColumnVisibilityToggle={(table) => <ColumnVisibilityToggle table={table}/>}
+                enableColumnVisibility={!compact}
+                renderColumnVisibilityToggle={!compact ? (table) => <ColumnVisibilityToggle table={table}/> : undefined}
+                hideHeader={compact}
+                noCard={compact}
             />
             {orderId && (
                 <>

@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace HiEvents\Services\Domain\EventStatistics;
 
+use HiEvents\DomainObjects\Enums\ProductType;
 use HiEvents\DomainObjects\Generated\ProductDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\PromoCodeDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\Exceptions\EventStatisticsVersionMismatchException;
 use HiEvents\Repository\Interfaces\EventDailyStatisticRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventOccurrenceDailyStatisticRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventOccurrenceStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
@@ -26,8 +29,10 @@ class EventStatisticsIncrementService
         private readonly PromoCodeRepositoryInterface           $promoCodeRepository,
         private readonly ProductRepositoryInterface             $productRepository,
         private readonly EventStatisticRepositoryInterface      $eventStatisticsRepository,
-        private readonly EventDailyStatisticRepositoryInterface $eventDailyStatisticRepository,
-        private readonly DatabaseManager                        $databaseManager,
+        private readonly EventDailyStatisticRepositoryInterface      $eventDailyStatisticRepository,
+        private readonly EventOccurrenceStatisticRepositoryInterface      $eventOccurrenceStatisticRepository,
+        private readonly EventOccurrenceDailyStatisticRepositoryInterface $eventOccurrenceDailyStatisticRepository,
+        private readonly DatabaseManager                                  $databaseManager,
         private readonly OrderRepositoryInterface               $orderRepository,
         private readonly LoggerInterface                        $logger,
         private readonly Retrier                                $retrier,
@@ -52,6 +57,8 @@ class EventStatisticsIncrementService
                 $this->databaseManager->transaction(function () use ($order): void {
                     $this->incrementAggregateStatistics($order);
                     $this->incrementDailyStatistics($order);
+                    $this->incrementOccurrenceStatistics($order);
+                    $this->incrementOccurrenceDailyStatistics($order);
                     $this->incrementPromoCodeUsage($order);
                     $this->incrementProductStatistics($order);
                 });
@@ -239,6 +246,158 @@ class EventStatisticsIncrementService
                 'new_version' => $eventDailyStatistic->getVersion() + 1,
             ]
         );
+    }
+
+    /**
+     * Increment occurrence statistics, grouped by occurrence_id from order items
+     *
+     * @throws EventStatisticsVersionMismatchException
+     */
+    private function incrementOccurrenceStatistics(OrderDomainObject $order): void
+    {
+        $itemsByOccurrence = [];
+        foreach ($order->getOrderItems() as $orderItem) {
+            $occId = $orderItem->getEventOccurrenceId();
+            if ($occId === null) {
+                continue;
+            }
+            $itemsByOccurrence[$occId][] = $orderItem;
+        }
+
+        foreach ($itemsByOccurrence as $occurrenceId => $items) {
+            $productsSold = array_sum(array_map(fn(OrderItemDomainObject $i) => $i->getQuantity(), $items));
+            $attendeesRegistered = array_sum(array_map(
+                fn(OrderItemDomainObject $i) => $i->getProductType() === ProductType::TICKET->name ? $i->getQuantity() : 0,
+                $items,
+            ));
+            $totalGross = array_sum(array_map(fn(OrderItemDomainObject $i) => $i->getTotalGross(), $items));
+            $totalBeforeAdditions = array_sum(array_map(fn(OrderItemDomainObject $i) => $i->getTotalBeforeAdditions(), $items));
+            $totalTax = array_sum(array_map(fn(OrderItemDomainObject $i) => $i->getTotalTax() ?? 0, $items));
+            $totalFee = array_sum(array_map(fn(OrderItemDomainObject $i) => $i->getTotalServiceFee() ?? 0, $items));
+
+            $existing = $this->eventOccurrenceStatisticRepository->findFirstWhere([
+                'event_id' => $order->getEventId(),
+                'event_occurrence_id' => $occurrenceId,
+            ]);
+
+            if ($existing === null) {
+                $this->eventOccurrenceStatisticRepository->create([
+                    'event_id' => $order->getEventId(),
+                    'event_occurrence_id' => $occurrenceId,
+                    'products_sold' => $productsSold,
+                    'attendees_registered' => $attendeesRegistered,
+                    'sales_total_gross' => $totalGross,
+                    'sales_total_before_additions' => $totalBeforeAdditions,
+                    'total_tax' => $totalTax,
+                    'total_fee' => $totalFee,
+                    'orders_created' => 1,
+                    'orders_cancelled' => 0,
+                ]);
+                continue;
+            }
+
+            $updates = [
+                'products_sold' => $existing->getProductsSold() + $productsSold,
+                'attendees_registered' => $existing->getAttendeesRegistered() + $attendeesRegistered,
+                'sales_total_gross' => $existing->getSalesTotalGross() + $totalGross,
+                'sales_total_before_additions' => $existing->getSalesTotalBeforeAdditions() + $totalBeforeAdditions,
+                'total_tax' => $existing->getTotalTax() + $totalTax,
+                'total_fee' => $existing->getTotalFee() + $totalFee,
+                'orders_created' => $existing->getOrdersCreated() + 1,
+                'version' => $existing->getVersion() + 1,
+            ];
+
+            $updated = $this->eventOccurrenceStatisticRepository->updateWhere(
+                attributes: $updates,
+                where: [
+                    'event_occurrence_id' => $occurrenceId,
+                    'version' => $existing->getVersion(),
+                ]
+            );
+
+            if ($updated === 0) {
+                throw new EventStatisticsVersionMismatchException(
+                    'Occurrence statistics version mismatch for occurrence ' . $occurrenceId
+                );
+            }
+        }
+    }
+
+    /**
+     * @throws EventStatisticsVersionMismatchException
+     */
+    private function incrementOccurrenceDailyStatistics(OrderDomainObject $order): void
+    {
+        $orderDate = (new Carbon($order->getCreatedAt()))->format('Y-m-d');
+
+        $itemsByOccurrence = [];
+        foreach ($order->getOrderItems() as $orderItem) {
+            $occId = $orderItem->getEventOccurrenceId();
+            if ($occId === null) {
+                continue;
+            }
+            $itemsByOccurrence[$occId][] = $orderItem;
+        }
+
+        foreach ($itemsByOccurrence as $occurrenceId => $items) {
+            $productsSold = array_sum(array_map(fn(OrderItemDomainObject $i) => $i->getQuantity(), $items));
+            $attendeesRegistered = array_sum(array_map(
+                fn(OrderItemDomainObject $i) => $i->getProductType() === ProductType::TICKET->name ? $i->getQuantity() : 0,
+                $items,
+            ));
+            $totalGross = array_sum(array_map(fn(OrderItemDomainObject $i) => $i->getTotalGross(), $items));
+            $totalBeforeAdditions = array_sum(array_map(fn(OrderItemDomainObject $i) => $i->getTotalBeforeAdditions(), $items));
+            $totalTax = array_sum(array_map(fn(OrderItemDomainObject $i) => $i->getTotalTax() ?? 0, $items));
+            $totalFee = array_sum(array_map(fn(OrderItemDomainObject $i) => $i->getTotalServiceFee() ?? 0, $items));
+
+            $existing = $this->eventOccurrenceDailyStatisticRepository->findFirstWhere([
+                'event_occurrence_id' => $occurrenceId,
+                'date' => $orderDate,
+            ]);
+
+            if ($existing === null) {
+                $this->eventOccurrenceDailyStatisticRepository->create([
+                    'event_id' => $order->getEventId(),
+                    'event_occurrence_id' => $occurrenceId,
+                    'date' => $orderDate,
+                    'products_sold' => $productsSold,
+                    'attendees_registered' => $attendeesRegistered,
+                    'sales_total_gross' => $totalGross,
+                    'sales_total_before_additions' => $totalBeforeAdditions,
+                    'total_tax' => $totalTax,
+                    'total_fee' => $totalFee,
+                    'orders_created' => 1,
+                    'orders_cancelled' => 0,
+                ]);
+                continue;
+            }
+
+            $updates = [
+                'products_sold' => $existing->getProductsSold() + $productsSold,
+                'attendees_registered' => $existing->getAttendeesRegistered() + $attendeesRegistered,
+                'sales_total_gross' => $existing->getSalesTotalGross() + $totalGross,
+                'sales_total_before_additions' => $existing->getSalesTotalBeforeAdditions() + $totalBeforeAdditions,
+                'total_tax' => $existing->getTotalTax() + $totalTax,
+                'total_fee' => $existing->getTotalFee() + $totalFee,
+                'orders_created' => $existing->getOrdersCreated() + 1,
+                'version' => $existing->getVersion() + 1,
+            ];
+
+            $updated = $this->eventOccurrenceDailyStatisticRepository->updateWhere(
+                attributes: $updates,
+                where: [
+                    'event_occurrence_id' => $occurrenceId,
+                    'date' => $orderDate,
+                    'version' => $existing->getVersion(),
+                ]
+            );
+
+            if ($updated === 0) {
+                throw new EventStatisticsVersionMismatchException(
+                    'Occurrence daily statistics version mismatch for occurrence ' . $occurrenceId
+                );
+            }
+        }
     }
 
     /**

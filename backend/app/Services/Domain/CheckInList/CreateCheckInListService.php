@@ -15,12 +15,11 @@ use Illuminate\Database\DatabaseManager;
 class CreateCheckInListService
 {
     public function __construct(
-        private readonly CheckInListRepositoryInterface      $checkInListRepository,
-        private readonly EventProductValidationService       $eventProductValidationService,
+        private readonly CheckInListRepositoryInterface       $checkInListRepository,
+        private readonly EventProductValidationService        $eventProductValidationService,
         private readonly CheckInListProductAssociationService $checkInListProductAssociationService,
         private readonly DatabaseManager                     $databaseManager,
         private readonly EventRepositoryInterface            $eventRepository,
-
     )
     {
     }
@@ -38,6 +37,7 @@ class CreateCheckInListService
                 CheckInListDomainObjectAbstract::NAME => $checkInList->getName(),
                 CheckInListDomainObjectAbstract::DESCRIPTION => $checkInList->getDescription(),
                 CheckInListDomainObjectAbstract::EVENT_ID => $checkInList->getEventId(),
+                CheckInListDomainObjectAbstract::EVENT_OCCURRENCE_ID => $checkInList->getEventOccurrenceId(),
                 CheckInListDomainObjectAbstract::EXPIRES_AT => $checkInList->getExpiresAt()
                     ? DateHelper::convertToUTC($checkInList->getExpiresAt(), $event->getTimezone())
                     : null,

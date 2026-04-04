@@ -9,11 +9,11 @@ import {
     Modal,
     Spoiler,
     TextInput,
+    Loader,
     UnstyledButton
 } from "@mantine/core";
 import {useNavigate, useParams} from "react-router";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
-import {notifications} from "@mantine/notifications";
 import {
     orderClientPublic,
     ProductFormPayload,
@@ -30,13 +30,15 @@ import classNames from 'classnames';
 import '../../../../styles/widget/default.scss';
 import {ProductAvailabilityMessage} from "../../../common/ProductPriceAvailability";
 import {PoweredByFooter} from "../../../common/PoweredByFooter";
-import {Event, Product} from "../../../../types.ts";
+import {Event, EventOccurrenceStatus, EventType, Product} from "../../../../types.ts";
 import {eventsClientPublic} from "../../../../api/event.client.ts";
 import {promoCodeClientPublic} from "../../../../api/promo-code.client.ts";
-import {IconChevronRight, IconX} from "@tabler/icons-react"
+import {IconCalendar, IconChevronRight, IconX} from "@tabler/icons-react"
 import {getSessionIdentifier} from "../../../../utilites/sessionIdentifier.ts";
 import {Constants} from "../../../../constants.ts";
 import {clearWaitlistJoinedForEvent} from "../../../../hooks/useWaitlistJoined.ts";
+import {OccurrenceSelector} from "../OccurrenceSelector";
+import {formatDateWithLocale} from "../../../../utilites/dates.ts";
 
 const AFFILIATE_EXPIRY_DAYS = 30;
 
@@ -76,6 +78,7 @@ interface SelectProductsProps {
     continueButtonText?: string;
     widgetMode?: 'preview' | 'normal' | 'embedded';
     showPoweredBy?: boolean;
+    initialOccurrenceId?: number | null;
 }
 
 const SelectProducts = (props: SelectProductsProps) => {
@@ -135,6 +138,8 @@ const SelectProducts = (props: SelectProductsProps) => {
         form.setFieldValue('affiliate_code', affiliateCode || null);
     }, [affiliateCode]);
 
+    const [selectedOccurrenceId, setSelectedOccurrenceId] = useState<number | undefined>(undefined);
+
     const form = useForm<ProductFormPayload>({
         initialValues: {
             products: undefined,
@@ -143,6 +148,15 @@ const SelectProducts = (props: SelectProductsProps) => {
             session_identifier: undefined,
         },
     });
+
+    const isRecurring = event?.type === EventType.RECURRING;
+    const activeOccurrences = useMemo(() => {
+        return (event?.occurrences || []).filter(
+            occ => (occ.status === EventOccurrenceStatus.ACTIVE || occ.status === EventOccurrenceStatus.SOLD_OUT) && !occ.is_past
+        );
+    }, [event?.occurrences]);
+    const needsOccurrenceSelection = isRecurring && activeOccurrences.length >= 1;
+    const occurrenceSelected = !!selectedOccurrenceId;
 
     const productMutation = useMutation({
         mutationFn: (orderData: ProductFormPayload) => orderClientPublic.create(Number(eventId), orderData),
@@ -167,10 +181,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                 form.setErrors(error.response.data.errors);
             }
 
-            notifications.show({
-                message: error.response.data.errors?.products[0] || t`Unable to create product. Please check your details`,
-                color: 'red',
-            });
+            showError(error.response.data.errors?.products[0] || t`Unable to create product. Please check your details`);
         }
     });
 
@@ -190,7 +201,8 @@ const SelectProducts = (props: SelectProductsProps) => {
 
             const eventWithPromoCodeApplied = await eventsClientPublic.findByID(
                 eventId,
-                promoCode
+                promoCode,
+                selectedOccurrenceId,
             );
 
             setEvent(eventWithPromoCodeApplied.data);
@@ -204,6 +216,60 @@ const SelectProducts = (props: SelectProductsProps) => {
             }
         },
     });
+
+    const occurrenceEventRefetchMutation = useMutation({
+        mutationFn: async (occurrenceId: number) => {
+            const eventWithOccurrenceApplied = await eventsClientPublic.findByID(
+                eventId,
+                form.values.promo_code,
+                occurrenceId,
+            );
+            setEvent(eventWithOccurrenceApplied.data);
+        },
+        onError: () => {
+            showError(t`Unable to load products for this date. Please try again.`);
+            setSelectedOccurrenceId(undefined);
+        },
+    });
+
+    useEffect(() => {
+        let autoSelectedOccId: number | null = null;
+
+        const selectableOccurrences = activeOccurrences.filter(
+            occ => occ.status === EventOccurrenceStatus.ACTIVE
+        );
+
+        if (selectableOccurrences.length === 1 && selectableOccurrences[0].id) {
+            autoSelectedOccId = Number(selectableOccurrences[0].id);
+        }
+
+        if (props.initialOccurrenceId) {
+            const valid = selectableOccurrences.some(o => Number(o.id) === props.initialOccurrenceId);
+            if (valid) {
+                autoSelectedOccId = props.initialOccurrenceId;
+            }
+        }
+
+        if (!props.initialOccurrenceId) {
+            const occurrenceIdFromUrl = new URLSearchParams(
+                typeof window !== 'undefined' ? window.location.search : ''
+            ).get('occurrence_id');
+            if (occurrenceIdFromUrl) {
+                const occId = Number(occurrenceIdFromUrl);
+                const valid = selectableOccurrences.some(o => Number(o.id) === occId);
+                if (valid) {
+                    autoSelectedOccId = occId;
+                }
+            }
+        }
+
+        if (autoSelectedOccId !== null && autoSelectedOccId !== selectedOccurrenceId) {
+            setSelectedOccurrenceId(autoSelectedOccId);
+            if (isRecurring) {
+                occurrenceEventRefetchMutation.mutate(autoSelectedOccId);
+            }
+        }
+    }, [event?.occurrences]);
 
     const productCategories = event?.product_categories || [];
     const productAreAvailable = productCategories && productCategories.some(category => !!category?.products?.length);
@@ -276,9 +342,26 @@ const SelectProducts = (props: SelectProductsProps) => {
     useEffect(populateFormValue, [productCategories]);
 
     const handleProductSelection = (values: Omit<ProductFormPayload, "session_identifier">) => {
+        if (isRecurring && !selectedOccurrenceId) {
+            showInfo(t`Please select a date and time`);
+            return;
+        }
+        if (isRecurring && selectedOccurrenceId) {
+            const selectedOcc = activeOccurrences.find(o => Number(o.id) === selectedOccurrenceId);
+            if (!selectedOcc || selectedOcc.status !== EventOccurrenceStatus.ACTIVE) {
+                showError(t`This date is no longer available. Please select another date.`);
+                setSelectedOccurrenceId(undefined);
+                return;
+            }
+        }
         if (values && selectedProductQuantitySum > 0) {
+            const productsWithOccurrence = values.products?.map(product => ({
+                ...product,
+                event_occurrence_id: selectedOccurrenceId,
+            }));
             productMutation.mutate({
                 ...values,
+                products: productsWithOccurrence,
                 session_identifier: getSessionIdentifier()
             });
         } else {
@@ -299,7 +382,8 @@ const SelectProducts = (props: SelectProductsProps) => {
         || !productAreAvailable
         || selectedProductQuantitySum === 0
         || props.widgetMode === 'preview'
-        || products?.every(product => product.is_sold_out);
+        || products?.every(product => product.is_sold_out)
+        || (needsOccurrenceSelection && !occurrenceSelected);
 
     let productIndex = 0;
 
@@ -318,6 +402,13 @@ const SelectProducts = (props: SelectProductsProps) => {
                 <div className={classNames(['hi-no-products'])}>
                     <p className={classNames(['hi-no-products-message'])}>
                         {t`There are no products available for this event`}
+                    </p>
+                </div>
+            )}
+            {isRecurring && activeOccurrences.length === 0 && (
+                <div className={classNames(['hi-no-products'])}>
+                    <p className={classNames(['hi-no-products-message'])}>
+                        {t`There are no upcoming dates for this event`}
                     </p>
                 </div>
             )}
@@ -406,11 +497,64 @@ const SelectProducts = (props: SelectProductsProps) => {
                     </div>
                 </Modal>
             )}
-            {(event && productAreAvailable) && (
+            {(event && productAreAvailable && !(isRecurring && activeOccurrences.length === 0)) && (
                 <form target={'__blank'} onSubmit={form.onSubmit(handleProductSelection as any)}>
                     <Input type={'hidden'} {...form.getInputProps('promo_code')} />
                     <Input type={'hidden'} {...form.getInputProps('affiliate_code')} />
-                    <div className={'hi-product-category-rows'}>
+
+                    {needsOccurrenceSelection && !occurrenceSelected && (
+                        <OccurrenceSelector
+                            event={event}
+                            selectedOccurrenceId={selectedOccurrenceId}
+                            onSelect={(id) => {
+                                const occId = Number(id);
+                                setSelectedOccurrenceId(occId);
+                                occurrenceEventRefetchMutation.mutate(occId);
+                            }}
+                            colors={props.colors}
+                        />
+                    )}
+
+                    {needsOccurrenceSelection && occurrenceSelected && (() => {
+                        const selectedOcc = (event?.occurrences || []).find(o => o.id === selectedOccurrenceId);
+                        if (!selectedOcc) return null;
+                        const tz = event.timezone;
+                        const dateFormatted = formatDateWithLocale(selectedOcc.start_date, 'dayName', tz);
+                        const startTime = formatDateWithLocale(selectedOcc.start_date, 'timeOnly', tz);
+                        const endTime = selectedOcc.end_date ? formatDateWithLocale(selectedOcc.end_date, 'timeOnly', tz) : null;
+                        return (
+                            <div className="hi-selected-date-banner">
+                                <IconCalendar size={16}/>
+                                <span className="hi-selected-date-text">
+                                    {dateFormatted} · {startTime}{endTime ? ` - ${endTime}` : ''}
+                                    {selectedOcc.label && ` · ${selectedOcc.label}`}
+                                </span>
+                                <UnstyledButton
+                                    className="hi-selected-date-change"
+                                    onClick={() => {
+                                        setSelectedOccurrenceId(undefined);
+                                    }}
+                                >
+                                    {t`Change`}
+                                </UnstyledButton>
+                            </div>
+                        );
+                    })()}
+
+                    {needsOccurrenceSelection && occurrenceSelected && occurrenceEventRefetchMutation.isPending && (
+                        <div className="hi-occurrence-loading">
+                            <Loader size="sm" color="var(--widget-primary-color, #228be6)"/>
+                            <span>{t`Loading products...`}</span>
+                        </div>
+                    )}
+
+                    <div className={'hi-product-category-rows'} style={
+                        needsOccurrenceSelection && !occurrenceSelected
+                            ? {display: 'none'}
+                            : needsOccurrenceSelection && occurrenceEventRefetchMutation.isPending
+                                ? {opacity: 0.5, pointerEvents: 'none', transition: 'opacity 0.15s'}
+                                : undefined
+                    }>
                         {productCategories && productCategories.map((category) => {
                             return (
                                 <div className={'hi-product-category-row'} key={category.id}>
@@ -538,7 +682,13 @@ const SelectProducts = (props: SelectProductsProps) => {
                         })}
                     </div>
 
-                    <div className={'hi-footer-row'}>
+                    <div className={'hi-footer-row'} style={
+                        needsOccurrenceSelection && !occurrenceSelected
+                            ? {display: 'none'}
+                            : needsOccurrenceSelection && occurrenceEventRefetchMutation.isPending
+                                ? {opacity: 0.5, pointerEvents: 'none', transition: 'opacity 0.15s'}
+                                : undefined
+                    }>
                         {event?.settings?.product_page_message && (
                             <div dangerouslySetInnerHTML={{
                                 __html: event.settings.product_page_message.replace(/\n/g, '<br/>')
@@ -552,7 +702,13 @@ const SelectProducts = (props: SelectProductsProps) => {
                     </div>
                 </form>
             )}
-            <div className={'hi-promo-code-row'}>
+            <div className={'hi-promo-code-row'} style={
+                needsOccurrenceSelection && !occurrenceSelected
+                    ? {display: 'none'}
+                    : needsOccurrenceSelection && occurrenceEventRefetchMutation.isPending
+                        ? {opacity: 0.5, pointerEvents: 'none', transition: 'opacity 0.15s'}
+                        : undefined
+            }>
                 {(!showPromoCodeInput && !form.values.promo_code) && (
                     <Anchor className={'hi-have-a-promo-code-link'} underline={'always'}
                             onClick={() => setShowPromoCodeInput(true)}>

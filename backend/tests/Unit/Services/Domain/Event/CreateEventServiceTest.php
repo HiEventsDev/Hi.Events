@@ -9,6 +9,7 @@ use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\DomainObjects\OrganizerSettingDomainObject;
 use HiEvents\Exceptions\OrganizerNotFoundException;
+use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventStatisticRepositoryInterface;
@@ -34,6 +35,7 @@ class CreateEventServiceTest extends TestCase
     private ImageRepositoryInterface $imageRepository;
     private Repository $config;
     private FilesystemManager $filesystemManager;
+    private EventOccurrenceRepositoryInterface $occurrenceRepository;
 
     protected function setUp(): void
     {
@@ -48,6 +50,7 @@ class CreateEventServiceTest extends TestCase
         $this->imageRepository = Mockery::mock(ImageRepositoryInterface::class);
         $this->config = Mockery::mock(Repository::class);
         $this->filesystemManager = Mockery::mock(FilesystemManager::class);
+        $this->occurrenceRepository = Mockery::mock(EventOccurrenceRepositoryInterface::class);
 
         $this->createEventService = new CreateEventService(
             $this->eventRepository,
@@ -59,6 +62,7 @@ class CreateEventServiceTest extends TestCase
             $this->imageRepository,
             $this->config,
             $this->filesystemManager,
+            $this->occurrenceRepository,
         );
     }
 
@@ -137,7 +141,9 @@ class CreateEventServiceTest extends TestCase
 
         $this->purifier->shouldReceive('purify')->andReturn('Test Description');
 
-        $result = $this->createEventService->createEvent($eventData, $eventSettings);
+        $this->occurrenceRepository->shouldReceive('create')->once();
+
+        $result = $this->createEventService->createEvent($eventData, '2023-01-01 00:00:00', '2023-01-02 00:00:00', $eventSettings);
 
         $this->assertEquals($eventData->getId(), $result->getId());
     }
@@ -368,6 +374,8 @@ class CreateEventServiceTest extends TestCase
             $mock->shouldReceive('getStatus')->andReturn('active');
             $mock->shouldReceive('getCategory')->andReturn('CONFERENCE');
             $mock->shouldReceive('getAttributes')->andReturn([]);
+            $mock->shouldReceive('getType')->andReturn('SINGLE');
+            $mock->shouldReceive('getRecurrenceRule')->andReturn(null);
         });
     }
 
@@ -407,6 +415,8 @@ class CreateEventServiceTest extends TestCase
             $mock->shouldReceive('getStatus')->andReturn('active');
             $mock->shouldReceive('getCategory')->andReturn($category);
             $mock->shouldReceive('getAttributes')->andReturn([]);
+            $mock->shouldReceive('getType')->andReturn('SINGLE');
+            $mock->shouldReceive('getRecurrenceRule')->andReturn(null);
         });
     }
 }

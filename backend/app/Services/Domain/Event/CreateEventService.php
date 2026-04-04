@@ -2,6 +2,7 @@
 
 namespace HiEvents\Services\Domain\Event;
 
+use HiEvents\DomainObjects\Enums\EventType;
 use HiEvents\DomainObjects\Enums\HomepageBackgroundType;
 use HiEvents\DomainObjects\Enums\ImageType;
 use HiEvents\DomainObjects\Enums\PaymentProviders;
@@ -12,6 +13,7 @@ use HiEvents\DomainObjects\OrganizerSettingDomainObject;
 use HiEvents\Exceptions\OrganizerNotFoundException;
 use HiEvents\Helper\DateHelper;
 use HiEvents\Helper\IdHelper;
+use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventStatisticRepositoryInterface;
@@ -26,15 +28,16 @@ use Throwable;
 class CreateEventService
 {
     public function __construct(
-        private readonly EventRepositoryInterface          $eventRepository,
-        private readonly EventSettingsRepositoryInterface  $eventSettingsRepository,
-        private readonly OrganizerRepositoryInterface      $organizerRepository,
-        private readonly DatabaseManager                   $databaseManager,
-        private readonly EventStatisticRepositoryInterface $eventStatisticsRepository,
-        private readonly HtmlPurifierService               $purifier,
-        private readonly ImageRepositoryInterface          $imageRepository,
-        private readonly Repository                        $config,
-        private readonly FilesystemManager                 $filesystemManager,
+        private readonly EventRepositoryInterface              $eventRepository,
+        private readonly EventSettingsRepositoryInterface      $eventSettingsRepository,
+        private readonly OrganizerRepositoryInterface          $organizerRepository,
+        private readonly DatabaseManager                       $databaseManager,
+        private readonly EventStatisticRepositoryInterface     $eventStatisticsRepository,
+        private readonly HtmlPurifierService                   $purifier,
+        private readonly ImageRepositoryInterface              $imageRepository,
+        private readonly Repository                            $config,
+        private readonly FilesystemManager                     $filesystemManager,
+        private readonly EventOccurrenceRepositoryInterface    $occurrenceRepository,
     )
     {
     }
@@ -44,16 +47,18 @@ class CreateEventService
      */
     public function createEvent(
         EventDomainObject         $eventData,
-        ?EventSettingDomainObject $eventSettings = null
+        ?string                   $startDate = null,
+        ?string                   $endDate = null,
+        ?EventSettingDomainObject $eventSettings = null,
     ): EventDomainObject
     {
-        return $this->databaseManager->transaction(function () use ($eventData, $eventSettings) {
+        return $this->databaseManager->transaction(function () use ($eventData, $startDate, $endDate, $eventSettings) {
             $organizer = $this->getOrganizer(
                 organizerId: $eventData->getOrganizerId(),
                 accountId: $eventData->getAccountId()
             );
 
-            $event = $this->handleEventCreate($eventData);
+            $event = $this->handleEventCreate($eventData, $startDate, $endDate);
 
             $eventCoverCreated = $this->createEventCover($event);
 
@@ -91,15 +96,11 @@ class CreateEventService
         return $organizer;
     }
 
-    private function handleEventCreate(EventDomainObject $eventData): EventDomainObject
+    private function handleEventCreate(EventDomainObject $eventData, ?string $startDate = null, ?string $endDate = null): EventDomainObject
     {
-        return $this->eventRepository->create([
+        $event = $this->eventRepository->create([
             'title' => $eventData->getTitle(),
             'organizer_id' => $eventData->getOrganizerId(),
-            'start_date' => DateHelper::convertToUTC($eventData->getStartDate(), $eventData->getTimezone()),
-            'end_date' => $eventData->getEndDate()
-                ? DateHelper::convertToUTC($eventData->getEndDate(), $eventData->getTimezone())
-                : null,
             'description' => $this->purifier->purify($eventData->getDescription()),
             'timezone' => $eventData->getTimezone(),
             'currency' => $eventData->getCurrency(),
@@ -110,7 +111,23 @@ class CreateEventService
             'status' => $eventData->getStatus(),
             'short_id' => IdHelper::shortId(IdHelper::EVENT_PREFIX),
             'attributes' => $eventData->getAttributes(),
+            'type' => $eventData->getType() ?? EventType::SINGLE->name,
+            'recurrence_rule' => $eventData->getRecurrenceRule(),
         ]);
+
+        if (($eventData->getType() ?? EventType::SINGLE->name) === EventType::SINGLE->name && $startDate !== null) {
+            $this->occurrenceRepository->create([
+                'event_id' => $event->getId(),
+                'short_id' => IdHelper::shortId(IdHelper::OCCURRENCE_PREFIX),
+                'start_date' => DateHelper::convertToUTC($startDate, $eventData->getTimezone()),
+                'end_date' => $endDate ? DateHelper::convertToUTC($endDate, $eventData->getTimezone()) : null,
+                'status' => 'ACTIVE',
+                'used_capacity' => 0,
+                'is_overridden' => false,
+            ]);
+        }
+
+        return $event;
     }
 
     private function createEventStatistics(EventDomainObject $event): void

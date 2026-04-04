@@ -21,6 +21,16 @@ class EventsPerformanceReport extends AbstractOrganizerReportService
                 WHERE organizer_id = :organizer_id
                     AND deleted_at IS NULL
             ),
+            event_dates AS (
+                SELECT
+                    eo.event_id,
+                    MIN(eo.start_date) AS start_date,
+                    MAX(COALESCE(eo.end_date, eo.start_date)) AS end_date
+                FROM event_occurrences eo
+                WHERE eo.event_id IN (SELECT id FROM organizer_events)
+                    AND eo.deleted_at IS NULL
+                GROUP BY eo.event_id
+            ),
             order_stats AS (
                 SELECT
                     o.event_id,
@@ -53,12 +63,12 @@ class EventsPerformanceReport extends AbstractOrganizerReportService
                 e.id AS event_id,
                 e.title AS event_name,
                 e.currency AS event_currency,
-                e.start_date,
-                e.end_date,
+                ed.start_date,
+                ed.end_date,
                 e.status,
                 CASE
-                    WHEN e.end_date < NOW() THEN 'past'
-                    WHEN e.start_date <= NOW() AND (e.end_date >= NOW() OR e.end_date IS NULL) THEN 'ongoing'
+                    WHEN ed.end_date < NOW() THEN 'past'
+                    WHEN ed.start_date <= NOW() AND (ed.end_date >= NOW() OR ed.end_date IS NULL) THEN 'ongoing'
                     WHEN e.status = 'LIVE' THEN 'on_sale'
                     ELSE 'upcoming'
                 END AS event_state,
@@ -72,6 +82,7 @@ class EventsPerformanceReport extends AbstractOrganizerReportService
                 COALESCE(os.unique_customers, 0) AS unique_customers,
                 COALESCE(es.total_views, 0) AS page_views
             FROM events e
+            LEFT JOIN event_dates ed ON e.id = ed.event_id
             LEFT JOIN order_stats os ON e.id = os.event_id
             LEFT JOIN product_stats ps ON e.id = ps.event_id
             LEFT JOIN event_statistics es ON e.id = es.event_id
@@ -80,10 +91,10 @@ class EventsPerformanceReport extends AbstractOrganizerReportService
                 $eventCurrencyFilter
             ORDER BY
                 CASE
-                    WHEN e.start_date IS NULL THEN 1
+                    WHEN ed.start_date IS NULL THEN 1
                     ELSE 0
                 END,
-                e.start_date DESC
+                ed.start_date DESC
 SQL;
     }
 }

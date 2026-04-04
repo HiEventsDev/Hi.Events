@@ -5,8 +5,12 @@ declare(strict_types=1);
 namespace HiEvents\Services\Domain\EventStatistics;
 
 use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\Repository\Interfaces\EventDailyStatisticRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventOccurrenceDailyStatisticRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventOccurrenceStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventStatisticRepositoryInterface;
+use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Values\MoneyValue;
 use Illuminate\Support\Carbon;
 use Psr\Log\LoggerInterface;
@@ -15,9 +19,12 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 class EventStatisticsRefundService
 {
     public function __construct(
-        private readonly EventStatisticRepositoryInterface      $eventStatisticsRepository,
-        private readonly EventDailyStatisticRepositoryInterface $eventDailyStatisticRepository,
-        private readonly LoggerInterface                        $logger,
+        private readonly EventStatisticRepositoryInterface            $eventStatisticsRepository,
+        private readonly EventDailyStatisticRepositoryInterface       $eventDailyStatisticRepository,
+        private readonly EventOccurrenceStatisticRepositoryInterface      $eventOccurrenceStatisticRepository,
+        private readonly EventOccurrenceDailyStatisticRepositoryInterface $eventOccurrenceDailyStatisticRepository,
+        private readonly OrderRepositoryInterface                         $orderRepository,
+        private readonly LoggerInterface                              $logger,
     )
     {
     }
@@ -29,6 +36,8 @@ class EventStatisticsRefundService
     {
         $this->updateAggregateStatisticsForRefund($order, $refundAmount);
         $this->updateDailyStatisticsForRefund($order, $refundAmount);
+        $this->updateOccurrenceStatisticsForRefund($order, $refundAmount);
+        $this->updateOccurrenceDailyStatisticsForRefund($order, $refundAmount);
     }
 
     /**
@@ -140,5 +149,106 @@ class EventStatisticsRefundService
                 'fee_adjustment' => $order->getTotalFee() * $refundProportion,
             ]
         );
+    }
+
+    private function updateOccurrenceStatisticsForRefund(OrderDomainObject $order, MoneyValue $refundAmount): void
+    {
+        $order = $this->orderRepository
+            ->loadRelation(OrderItemDomainObject::class)
+            ->findById($order->getId());
+
+        if ($order->getTotalGross() <= 0) {
+            return;
+        }
+
+        $refundProportion = $refundAmount->toFloat() / $order->getTotalGross();
+        $itemsByOccurrence = $this->groupItemsByOccurrence($order);
+
+        foreach ($itemsByOccurrence as $occurrenceId => $items) {
+            $existing = $this->eventOccurrenceStatisticRepository->findFirstWhere([
+                'event_occurrence_id' => $occurrenceId,
+            ]);
+
+            if (!$existing) {
+                continue;
+            }
+
+            $occurrenceGross = array_sum(array_map(fn(OrderItemDomainObject $i) => $i->getTotalGross() ?? 0, $items));
+            $occurrenceTax = array_sum(array_map(fn(OrderItemDomainObject $i) => $i->getTotalTax() ?? 0, $items));
+            $occurrenceFee = array_sum(array_map(fn(OrderItemDomainObject $i) => $i->getTotalServiceFee() ?? 0, $items));
+            $occurrenceRefundAmount = $occurrenceGross * $refundProportion;
+
+            $this->eventOccurrenceStatisticRepository->updateWhere(
+                attributes: [
+                    'sales_total_gross' => max(0, $existing->getSalesTotalGross() - $occurrenceRefundAmount),
+                    'total_refunded' => $existing->getTotalRefunded() + $occurrenceRefundAmount,
+                    'total_tax' => max(0, $existing->getTotalTax() - ($occurrenceTax * $refundProportion)),
+                    'total_fee' => max(0, $existing->getTotalFee() - ($occurrenceFee * $refundProportion)),
+                ],
+                where: [
+                    'event_occurrence_id' => $occurrenceId,
+                ]
+            );
+        }
+    }
+
+    private function updateOccurrenceDailyStatisticsForRefund(OrderDomainObject $order, MoneyValue $refundAmount): void
+    {
+        $order = $this->orderRepository
+            ->loadRelation(OrderItemDomainObject::class)
+            ->findById($order->getId());
+
+        if ($order->getTotalGross() <= 0) {
+            return;
+        }
+
+        $orderDate = (new Carbon($order->getCreatedAt()))->format('Y-m-d');
+        $refundProportion = $refundAmount->toFloat() / $order->getTotalGross();
+        $itemsByOccurrence = $this->groupItemsByOccurrence($order);
+
+        foreach ($itemsByOccurrence as $occurrenceId => $items) {
+            $existing = $this->eventOccurrenceDailyStatisticRepository->findFirstWhere([
+                'event_occurrence_id' => $occurrenceId,
+                'date' => $orderDate,
+            ]);
+
+            if (!$existing) {
+                continue;
+            }
+
+            $occurrenceGross = array_sum(array_map(fn(OrderItemDomainObject $i) => $i->getTotalGross() ?? 0, $items));
+            $occurrenceTax = array_sum(array_map(fn(OrderItemDomainObject $i) => $i->getTotalTax() ?? 0, $items));
+            $occurrenceFee = array_sum(array_map(fn(OrderItemDomainObject $i) => $i->getTotalServiceFee() ?? 0, $items));
+            $occurrenceRefundAmount = $occurrenceGross * $refundProportion;
+
+            $this->eventOccurrenceDailyStatisticRepository->updateWhere(
+                attributes: [
+                    'sales_total_gross' => max(0, $existing->getSalesTotalGross() - $occurrenceRefundAmount),
+                    'total_refunded' => $existing->getTotalRefunded() + $occurrenceRefundAmount,
+                    'total_tax' => max(0, $existing->getTotalTax() - ($occurrenceTax * $refundProportion)),
+                    'total_fee' => max(0, $existing->getTotalFee() - ($occurrenceFee * $refundProportion)),
+                ],
+                where: [
+                    'event_occurrence_id' => $occurrenceId,
+                    'date' => $orderDate,
+                ]
+            );
+        }
+    }
+
+    /**
+     * @return array<int, OrderItemDomainObject[]>
+     */
+    private function groupItemsByOccurrence(OrderDomainObject $order): array
+    {
+        $itemsByOccurrence = [];
+        foreach ($order->getOrderItems() as $orderItem) {
+            $occId = $orderItem->getEventOccurrenceId();
+            if ($occId === null) {
+                continue;
+            }
+            $itemsByOccurrence[$occId][] = $orderItem;
+        }
+        return $itemsByOccurrence;
     }
 }

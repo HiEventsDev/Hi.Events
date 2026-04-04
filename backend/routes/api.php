@@ -215,6 +215,19 @@ use HiEvents\Http\Actions\Webhooks\EditWebhookAction;
 use HiEvents\Http\Actions\Webhooks\GetWebhookAction;
 use HiEvents\Http\Actions\Webhooks\GetWebhookLogsAction;
 use HiEvents\Http\Actions\Webhooks\GetWebhooksAction;
+use HiEvents\Http\Actions\EventOccurrences\BulkUpdateOccurrencesAction;
+use HiEvents\Http\Actions\EventOccurrences\CancelOccurrenceAction;
+use HiEvents\Http\Actions\EventOccurrences\CreateEventOccurrenceAction;
+use HiEvents\Http\Actions\EventOccurrences\DeleteEventOccurrenceAction;
+use HiEvents\Http\Actions\EventOccurrences\DeletePriceOverrideAction;
+use HiEvents\Http\Actions\EventOccurrences\GenerateOccurrencesAction;
+use HiEvents\Http\Actions\EventOccurrences\GetEventOccurrenceAction;
+use HiEvents\Http\Actions\EventOccurrences\GetEventOccurrencesAction;
+use HiEvents\Http\Actions\EventOccurrences\GetPriceOverridesAction;
+use HiEvents\Http\Actions\EventOccurrences\GetProductVisibilityAction;
+use HiEvents\Http\Actions\EventOccurrences\UpdateEventOccurrenceAction;
+use HiEvents\Http\Actions\EventOccurrences\UpdateProductVisibilityAction;
+use HiEvents\Http\Actions\EventOccurrences\UpsertPriceOverrideAction;
 use Illuminate\Routing\Router;
 
 /** @var Router|Router $router */
@@ -440,6 +453,21 @@ $router->middleware(['auth:api'])->group(
         $router->get('/events/{event_id}/waitlist/stats', GetWaitlistStatsAction::class);
         $router->post('/events/{event_id}/waitlist/offer-next', OfferWaitlistEntryAction::class);
         $router->delete('/events/{event_id}/waitlist/{entry_id}', CancelWaitlistEntryAction::class);
+
+        // Event Occurrences
+        $router->post('/events/{event_id}/occurrences/generate', GenerateOccurrencesAction::class);
+        $router->post('/events/{event_id}/occurrences/bulk-update', BulkUpdateOccurrencesAction::class);
+        $router->post('/events/{event_id}/occurrences', CreateEventOccurrenceAction::class);
+        $router->get('/events/{event_id}/occurrences', GetEventOccurrencesAction::class);
+        $router->get('/events/{event_id}/occurrences/{occurrence_id}', GetEventOccurrenceAction::class);
+        $router->put('/events/{event_id}/occurrences/{occurrence_id}', UpdateEventOccurrenceAction::class);
+        $router->delete('/events/{event_id}/occurrences/{occurrence_id}', DeleteEventOccurrenceAction::class);
+        $router->post('/events/{event_id}/occurrences/{occurrence_id}/cancel', CancelOccurrenceAction::class);
+        $router->put('/events/{event_id}/occurrences/{occurrence_id}/price-overrides', UpsertPriceOverrideAction::class);
+        $router->get('/events/{event_id}/occurrences/{occurrence_id}/price-overrides', GetPriceOverridesAction::class);
+        $router->delete('/events/{event_id}/occurrences/{occurrence_id}/price-overrides/{override_id}', DeletePriceOverrideAction::class);
+        $router->get('/events/{event_id}/occurrences/{occurrence_id}/product-visibility', GetProductVisibilityAction::class);
+        $router->put('/events/{event_id}/occurrences/{occurrence_id}/product-visibility', UpdateProductVisibilityAction::class);
 
         // Images
         $router->post('/images', CreateImageAction::class);

@@ -145,57 +145,56 @@ export function Dashboard() {
                 ) : null}
             </div>
 
-            <ToolBar searchComponent={() => (
-                <SearchBarWrapper
-                    placeholder={t`Search by event name...`}
-                    setSearchParams={setSearchParams}
-                    searchParams={searchParams}
-                    pagination={pagination}
-                />
-            )}>
-                <>
-                    <Menu
-                        transitionProps={{transition: 'pop-top-right'}}
-                        position="bottom"
-                        width={220}
-                        withinPortal
-                    >
-                        <Menu.Target>
-                            <Button
-                                leftSection={<IconPlus/>}
-                                color={'green'}
-                                rightSection={
-                                    <IconChevronDown stroke={1.5}/>
-                                }
-                                pr={12}
-                            >
-                                {t`Create new`}
-                            </Button>
-                        </Menu.Target>
-                        <Menu.Dropdown>
-                            <Menu.Item
-                                leftSection={
-                                    <IconCalendarPlus
-                                        stroke={1.5}
-                                    />
-                                }
-                                onClick={openCreateModal}
-                            >
-                                {t`Event`}
-                            </Menu.Item>
-                            <Menu.Item
-                                leftSection={
-                                    <IconUserPlus
-                                        stroke={1.5}
-                                    />
-                                }
-                                onClick={openCreateOrganizerModal}
-                            >
-                                {t`Organizer`}
-                            </Menu.Item>
-                        </Menu.Dropdown>
-                    </Menu>
-                </>
+            <ToolBar
+                searchComponent={() => (
+                    <SearchBarWrapper
+                        placeholder={t`Search by event name...`}
+                        setSearchParams={setSearchParams}
+                        searchParams={searchParams}
+                    />
+                )}
+            >
+                <Menu
+                    transitionProps={{transition: 'pop-top-right'}}
+                    position="bottom"
+                    width={220}
+                    withinPortal
+                >
+                    <Menu.Target>
+                        <Button
+                            leftSection={<IconPlus/>}
+                            color={'green'}
+                            rightSection={
+                                <IconChevronDown stroke={1.5}/>
+                            }
+                            pr={12}
+                        >
+                            {t`Create new`}
+                        </Button>
+                    </Menu.Target>
+                    <Menu.Dropdown>
+                        <Menu.Item
+                            leftSection={
+                                <IconCalendarPlus
+                                    stroke={1.5}
+                                />
+                            }
+                            onClick={openCreateModal}
+                        >
+                            {t`Event`}
+                        </Menu.Item>
+                        <Menu.Item
+                            leftSection={
+                                <IconUserPlus
+                                    stroke={1.5}
+                                />
+                            }
+                            onClick={openCreateOrganizerModal}
+                        >
+                            {t`Organizer`}
+                        </Menu.Item>
+                    </Menu.Dropdown>
+                </Menu>
             </ToolBar>
 
             <EventsDashboardStatusButtons

@@ -43,6 +43,7 @@ class SendMessageAction extends BaseAction
                 'sent_by_user_id' => $user->getId(),
                 'account_id' => $this->getAuthenticatedAccountId(),
                 'scheduled_at' => $request->input('scheduled_at'),
+                'event_occurrence_id' => $request->input('event_occurrence_id'),
             ]));
         } catch (AccountNotVerifiedException $e) {
             return $this->errorResponse($e->getMessage(), Response::HTTP_UNAUTHORIZED);

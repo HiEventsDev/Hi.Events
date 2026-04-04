@@ -26,6 +26,7 @@ class SendMessageRequest extends FormRequest
                 new In([OrderStatus::COMPLETED->name, OrderStatus::AWAITING_OFFLINE_PAYMENT->name]),
             ],
             'scheduled_at' => 'nullable|date',
+            'event_occurrence_id' => ['nullable', 'integer', 'exists:event_occurrences,id'],
         ];
     }
 

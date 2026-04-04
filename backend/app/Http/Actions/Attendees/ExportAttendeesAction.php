@@ -6,6 +6,7 @@ use HiEvents\DomainObjects\AttendeeCheckInDomainObject;
 use HiEvents\DomainObjects\CheckInListDomainObject;
 use HiEvents\DomainObjects\Enums\QuestionBelongsTo;
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
@@ -15,6 +16,7 @@ use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\QuestionRepositoryInterface;
+use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
@@ -31,9 +33,11 @@ class ExportAttendeesAction extends BaseAction
     /**
      * @todo This should be passed off to a queue and moved to a service
      */
-    public function __invoke(int $eventId): BinaryFileResponse
+    public function __invoke(Request $request, int $eventId): BinaryFileResponse
     {
         $this->isActionAuthorized($eventId, EventDomainObject::class);
+
+        $eventOccurrenceId = $request->input('event_occurrence_id') ? (int) $request->input('event_occurrence_id') : null;
 
         $attendees = $this->attendeeRepository
             ->loadRelation(QuestionAndAnswerViewDomainObject::class)
@@ -65,7 +69,11 @@ class ExportAttendeesAction extends BaseAction
                 ],
                 name: 'order'
             ))
-            ->findByEventIdForExport($eventId);
+            ->loadRelation(new Relationship(
+                domainObject: EventOccurrenceDomainObject::class,
+                name: 'event_occurrence',
+            ))
+            ->findByEventIdForExport($eventId, $eventOccurrenceId);
 
         $productQuestions = $this->questionRepository->findWhere([
             'event_id' => $eventId,

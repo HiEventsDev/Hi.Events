@@ -5,6 +5,7 @@ namespace HiEvents\Exports;
 use Carbon\Carbon;
 use HiEvents\DomainObjects\Enums\QuestionTypeEnum;
 use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\QuestionDomainObject;
 use HiEvents\Resources\Order\OrderResource;
 use HiEvents\Services\Domain\Question\QuestionAnswerFormatter;
@@ -58,6 +59,7 @@ class OrdersExport implements FromCollection, WithHeadings, WithMapping, WithSty
             __('Currency'),
             __('Created At'),
             __('Public ID'),
+            __('Occurrence Date'),
             __('Payment Provider'),
             __('Is Partially Refunded'),
             __('Is Fully Refunded'),
@@ -86,6 +88,12 @@ class OrdersExport implements FromCollection, WithHeadings, WithMapping, WithSty
             );
         });
 
+        /** @var OrderItemDomainObject|null $firstItem */
+        $firstItem = $order->getOrderItems()?->first();
+        $occurrenceDate = $firstItem?->getEventOccurrence()?->getStartDate()
+            ? Carbon::parse($firstItem->getEventOccurrence()->getStartDate())->format('Y-m-d H:i:s')
+            : '';
+
         return array_merge([
             $order->getId(),
             $order->getFirstName(),
@@ -102,6 +110,7 @@ class OrdersExport implements FromCollection, WithHeadings, WithMapping, WithSty
             $order->getCurrency(),
             Carbon::parse($order->getCreatedAt())->format('Y-m-d H:i:s'),
             $order->getPublicId(),
+            $occurrenceDate,
             $order->getPaymentProvider(),
             $order->isPartiallyRefunded(),
             $order->isFullyRefunded(),

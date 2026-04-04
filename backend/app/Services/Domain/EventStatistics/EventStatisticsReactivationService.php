@@ -6,6 +6,8 @@ namespace HiEvents\Services\Domain\EventStatistics;
 
 use HiEvents\Exceptions\EventStatisticsVersionMismatchException;
 use HiEvents\Repository\Interfaces\EventDailyStatisticRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventOccurrenceDailyStatisticRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventOccurrenceStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventStatisticRepositoryInterface;
 use HiEvents\Services\Infrastructure\Utlitiy\Retry\Retrier;
 use Illuminate\Database\DatabaseManager;
@@ -18,8 +20,10 @@ class EventStatisticsReactivationService
 {
     public function __construct(
         private readonly EventStatisticRepositoryInterface      $eventStatisticsRepository,
-        private readonly EventDailyStatisticRepositoryInterface $eventDailyStatisticRepository,
-        private readonly LoggerInterface                        $logger,
+        private readonly EventDailyStatisticRepositoryInterface      $eventDailyStatisticRepository,
+        private readonly EventOccurrenceStatisticRepositoryInterface      $eventOccurrenceStatisticRepository,
+        private readonly EventOccurrenceDailyStatisticRepositoryInterface $eventOccurrenceDailyStatisticRepository,
+        private readonly LoggerInterface                                  $logger,
         private readonly DatabaseManager                        $databaseManager,
         private readonly Retrier                                $retrier,
     )
@@ -30,13 +34,17 @@ class EventStatisticsReactivationService
      * @throws EventStatisticsVersionMismatchException
      * @throws Throwable
      */
-    public function incrementForReactivatedAttendee(int $eventId, string $orderDate, int $attendeeCount = 1): void
+    public function incrementForReactivatedAttendee(int $eventId, string $orderDate, int $attendeeCount = 1, ?int $occurrenceId = null): void
     {
         $this->retrier->retry(
-            callableAction: function () use ($eventId, $orderDate, $attendeeCount): void {
-                $this->databaseManager->transaction(function () use ($eventId, $orderDate, $attendeeCount): void {
+            callableAction: function () use ($eventId, $orderDate, $attendeeCount, $occurrenceId): void {
+                $this->databaseManager->transaction(function () use ($eventId, $orderDate, $attendeeCount, $occurrenceId): void {
                     $this->incrementAggregateAttendeeStatistics($eventId, $attendeeCount);
                     $this->incrementDailyAttendeeStatistics($eventId, $orderDate, $attendeeCount);
+                    if ($occurrenceId !== null) {
+                        $this->incrementOccurrenceAttendeeStatistics($occurrenceId, $attendeeCount);
+                        $this->incrementOccurrenceDailyAttendeeStatistics($occurrenceId, $orderDate, $attendeeCount);
+                    }
                 });
             },
             onFailure: function (int $attempt, Throwable $e) use ($eventId, $orderDate, $attendeeCount): void {
@@ -152,5 +160,75 @@ class EventStatisticsReactivationService
                 'new_version' => $eventDailyStatistic->getVersion() + 1,
             ]
         );
+    }
+
+    /**
+     * @throws EventStatisticsVersionMismatchException
+     */
+    private function incrementOccurrenceAttendeeStatistics(int $occurrenceId, int $attendeeCount): void
+    {
+        $existing = $this->eventOccurrenceStatisticRepository->findFirstWhere([
+            'event_occurrence_id' => $occurrenceId,
+        ]);
+
+        if (!$existing) {
+            return;
+        }
+
+        $updates = [
+            'attendees_registered' => $existing->getAttendeesRegistered() + $attendeeCount,
+            'version' => $existing->getVersion() + 1,
+        ];
+
+        $updated = $this->eventOccurrenceStatisticRepository->updateWhere(
+            attributes: $updates,
+            where: [
+                'event_occurrence_id' => $occurrenceId,
+                'version' => $existing->getVersion(),
+            ]
+        );
+
+        if ($updated === 0) {
+            throw new EventStatisticsVersionMismatchException(
+                'Occurrence statistics version mismatch for occurrence ' . $occurrenceId
+            );
+        }
+    }
+
+    /**
+     * @throws EventStatisticsVersionMismatchException
+     */
+    private function incrementOccurrenceDailyAttendeeStatistics(int $occurrenceId, string $orderDate, int $attendeeCount): void
+    {
+        $formattedDate = (new Carbon($orderDate))->format('Y-m-d');
+
+        $existing = $this->eventOccurrenceDailyStatisticRepository->findFirstWhere([
+            'event_occurrence_id' => $occurrenceId,
+            'date' => $formattedDate,
+        ]);
+
+        if (!$existing) {
+            return;
+        }
+
+        $updates = [
+            'attendees_registered' => $existing->getAttendeesRegistered() + $attendeeCount,
+            'version' => $existing->getVersion() + 1,
+        ];
+
+        $updated = $this->eventOccurrenceDailyStatisticRepository->updateWhere(
+            attributes: $updates,
+            where: [
+                'event_occurrence_id' => $occurrenceId,
+                'date' => $formattedDate,
+                'version' => $existing->getVersion(),
+            ]
+        );
+
+        if ($updated === 0) {
+            throw new EventStatisticsVersionMismatchException(
+                'Occurrence daily statistics version mismatch for occurrence ' . $occurrenceId
+            );
+        }
     }
 }

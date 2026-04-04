@@ -5,10 +5,11 @@ import {Event} from "../../../types";
 export const PublicEvent = () => {
     const loaderData = useLoaderData();
 
-    const {event, promoCodeValid, promoCode} = loaderData as {
+    const {event, promoCodeValid, promoCode, occurrenceId} = loaderData as {
         event?: Event;
         promoCodeValid?: boolean;
         promoCode?: string;
+        occurrenceId?: number | null;
     };
 
     return (
@@ -16,6 +17,7 @@ export const PublicEvent = () => {
             event={event}
             promoCodeValid={promoCodeValid}
             promoCode={promoCode}
+            initialOccurrenceId={occurrenceId}
         />
     );
 };

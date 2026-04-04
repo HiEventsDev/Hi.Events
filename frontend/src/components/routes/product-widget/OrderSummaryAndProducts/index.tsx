@@ -292,7 +292,8 @@ const OrderDetails = ({
     </Card>
 );
 
-const EventDetails = ({event}: { event: Event }) => {
+const EventDetails = ({event, order}: { event: Event; order: Order }) => {
+    const orderOccurrence = order.order_items?.[0]?.event_occurrence;
     const location = event.settings?.location_details ? formatAddress(event.settings.location_details) : null;
     const venueDetails = event.settings?.location_details?.venue_name
         ? `${event.settings.location_details.venue_name}${location ? `, ${location}` : ''}`
@@ -304,7 +305,14 @@ const EventDetails = ({event}: { event: Event }) => {
                 <DetailItem
                     icon={IconCalendarEvent}
                     label={t`Event Date`}
-                    value={<EventDateRange event={event}/>}
+                    value={
+                        <>
+                            <EventDateRange event={event} occurrence={orderOccurrence}/>
+                            {orderOccurrence?.label && (
+                                <Text size="xs" c="dimmed" mt={2}>{orderOccurrence.label}</Text>
+                            )}
+                        </>
+                    }
                 />
                 {venueDetails && (
                     <DetailItem
@@ -548,7 +556,7 @@ export const OrderSummaryAndProducts = () => {
         return <LoadingMask/>;
     }
 
-    if (window?.location.search.includes('failed') || order?.payment_status === 'PAYMENT_FAILED') {
+    if ((typeof window !== 'undefined' && window.location.search.includes('failed')) || order?.payment_status === 'PAYMENT_FAILED') {
         navigate(eventCheckoutPath(eventId, orderShortId, 'payment') + '?payment_failed=true');
         return;
     }
@@ -603,9 +611,9 @@ export const OrderSummaryAndProducts = () => {
                 {!!event?.settings?.post_checkout_message && <PostCheckoutMessage message={event.settings.post_checkout_message}/>}
 
                 <h1 className={classes.heading}>{t`Event Details`}</h1>
-                <EventDetails event={event}/>
+                <EventDetails event={event} order={order}/>
 
-                {order.status === 'COMPLETED' && <AddToCalendarCTA event={event}/>}
+                {order.status === 'COMPLETED' && <AddToCalendarCTA event={event} occurrence={order.order_items?.[0]?.event_occurrence}/>}
 
                 {(order?.attendees && order.attendees.length > 0) && (
                     <>

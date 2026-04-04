@@ -4,6 +4,7 @@ namespace HiEvents\Services\Application\Handlers\Order;
 
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\Generated\EventDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\OrganizerDomainObjectAbstract;
@@ -81,6 +82,12 @@ class GetOrderPublicHandler
             ->loadRelation(new Relationship(domainObject: InvoiceDomainObject::class))
             ->loadRelation(new Relationship(
                 domainObject: OrderItemDomainObject::class,
+                nested: [
+                    new Relationship(
+                        domainObject: EventOccurrenceDomainObject::class,
+                        name: 'event_occurrence',
+                    ),
+                ],
             ));
 
         if ($getOrderData->includeEventInResponse) {

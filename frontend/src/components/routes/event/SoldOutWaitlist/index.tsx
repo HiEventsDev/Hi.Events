@@ -6,18 +6,21 @@ import {WaitlistTable} from "../../../common/WaitlistTable";
 import {WaitlistStatsCards} from "../../../common/WaitlistStats";
 import {SearchBarWrapper} from "../../../common/SearchBar";
 import {Pagination} from "../../../common/Pagination";
-import {Button, Select} from "@mantine/core";
+import {Button, Group, Select} from "@mantine/core";
 import {ToolBar} from "../../../common/ToolBar";
 import {useGetEventWaitlistEntries} from "../../../../queries/useGetEventWaitlistEntries.ts";
 import {useGetWaitlistStats} from "../../../../queries/useGetWaitlistStats.ts";
 import {useGetEventSettings} from "../../../../queries/useGetEventSettings.ts";
 import {useFilterQueryParamSync} from "../../../../hooks/useFilterQueryParamSync.ts";
-import {QueryFilterOperator, QueryFilters, WaitlistEntryStatus} from "../../../../types.ts";
+import {EventType, QueryFilterOperator, QueryFilters, WaitlistEntryStatus} from "../../../../types.ts";
 import {TableSkeleton} from "../../../common/TableSkeleton";
 import {t} from "@lingui/macro";
 import {useDisclosure} from "@mantine/hooks";
 import {OfferWaitlistModal} from "../../../modals/OfferWaitlistModal";
 import {IconSend} from "@tabler/icons-react";
+import {useGetEventOccurrences} from "../../../../queries/useGetEventOccurrences.ts";
+import {prettyDate} from "../../../../utilites/dates.ts";
+import {SortSelector} from "../../../common/SortSelector";
 
 export const SoldOutWaitlist = () => {
     const {eventId} = useParams();
@@ -29,6 +32,26 @@ export const SoldOutWaitlist = () => {
     const {data: stats} = useGetWaitlistStats(eventId);
     const {data: eventSettings} = useGetEventSettings(eventId);
     const [offerModalOpen, {open: openOfferModal, close: closeOfferModal}] = useDisclosure(false);
+    const isRecurring = event?.type === EventType.RECURRING;
+    const {data: occurrencesData} = useGetEventOccurrences(eventId, {pageNumber: 1, perPage: 100} as QueryFilters);
+    const occurrenceOptions = (occurrencesData?.data || [])
+        .filter(occ => occ.status !== 'CANCELLED')
+        .map(occ => ({
+            label: prettyDate(occ.start_date, event?.timezone || 'UTC') + (occ.label ? ` (${occ.label})` : ''),
+            value: String(occ.id),
+        }));
+
+    const handleOccurrenceFilter = (value: string | null) => {
+        setSearchParams({
+            pageNumber: 1,
+            filterFields: {
+                ...(searchParams.filterFields || {}),
+                event_occurrence_id: value
+                    ? {operator: QueryFilterOperator.Equals, value}
+                    : undefined,
+            },
+        }, true);
+    };
 
     const handleStatusFilter = (value: string | null) => {
         setSearchParams({
@@ -56,26 +79,52 @@ export const SoldOutWaitlist = () => {
                         placeholder={t`Search by name or email...`}
                         setSearchParams={setSearchParams}
                         searchParams={searchParams}
-                        pagination={pagination}
                     />
                 )}
                 filterComponent={(
-                    <Select
-                        placeholder={t`All Statuses`}
-                        clearable
-                        size="md"
-                        mb={0}
-                        value={(searchParams.filterFields?.status as {value?: string})?.value || null}
-                        onChange={handleStatusFilter}
-                        data={[
-                            {value: WaitlistEntryStatus.Waiting, label: t`Waiting`},
-                            {value: WaitlistEntryStatus.Offered, label: t`Offered`},
-                            {value: WaitlistEntryStatus.Purchased, label: t`Purchased`},
-                            {value: WaitlistEntryStatus.OfferExpired, label: t`Expired`},
-                            {value: WaitlistEntryStatus.Cancelled, label: t`Cancelled`},
-                        ]}
-                    />
+                    <Group gap="sm" wrap="wrap">
+                        {pagination?.allowed_sorts && (
+                            <SortSelector
+                                selected={searchParams.sortBy && searchParams.sortDirection
+                                    ? searchParams.sortBy + ':' + searchParams.sortDirection
+                                    : pagination.default_sort + ':' + pagination.default_sort_direction}
+                                options={pagination.allowed_sorts}
+                                onSortSelect={(key, sortDirection) => {
+                                    setSearchParams({sortBy: key, sortDirection});
+                                }}
+                            />
+                        )}
+                        {isRecurring && occurrenceOptions.length > 0 && (
+                            <Select
+                                placeholder={t`All Dates`}
+                                clearable
+                                size="sm"
+                                mb={0}
+                                style={{minWidth: 160}}
+                                value={(searchParams.filterFields?.event_occurrence_id as {value?: string})?.value || null}
+                                onChange={handleOccurrenceFilter}
+                                data={occurrenceOptions}
+                            />
+                        )}
+                        <Select
+                            placeholder={t`All Statuses`}
+                            clearable
+                            size="sm"
+                            mb={0}
+                            value={(searchParams.filterFields?.status as {value?: string})?.value || null}
+                            onChange={handleStatusFilter}
+                            data={[
+                                {value: WaitlistEntryStatus.Waiting, label: t`Waiting`},
+                                {value: WaitlistEntryStatus.Offered, label: t`Offered`},
+                                {value: WaitlistEntryStatus.Purchased, label: t`Purchased`},
+                                {value: WaitlistEntryStatus.OfferExpired, label: t`Expired`},
+                                {value: WaitlistEntryStatus.Cancelled, label: t`Cancelled`},
+                            ]}
+                        />
+                    </Group>
                 )}
+                resultCount={pagination?.total}
+                resultLabel={t`entries`}
             >
                 <Button
                     size="sm"

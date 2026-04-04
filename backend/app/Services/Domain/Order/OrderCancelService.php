@@ -103,11 +103,17 @@ class OrderCancelService
             return $attendee->getStatus() === AttendeeStatus::ACTIVE->name;
         });
 
-        $productIdCountMap = $attendees
-            ->map(fn(AttendeeDomainObject $attendee) => $attendee->getProductPriceId())->countBy();
+        $groupedCounts = $attendees
+            ->map(fn(AttendeeDomainObject $attendee) => $attendee->getProductPriceId() . '_' . $attendee->getEventOccurrenceId())
+            ->countBy();
 
-        foreach ($productIdCountMap as $productPriceId => $count) {
-            $this->productQuantityService->decreaseQuantitySold($productPriceId, $count);
+        foreach ($groupedCounts as $compositeKey => $count) {
+            [$productPriceId, $eventOccurrenceId] = explode('_', (string) $compositeKey);
+            $this->productQuantityService->decreaseQuantitySold(
+                (int) $productPriceId,
+                $count,
+                $eventOccurrenceId ? (int) $eventOccurrenceId : null,
+            );
         }
     }
 

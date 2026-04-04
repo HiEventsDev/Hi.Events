@@ -39,6 +39,16 @@ class CheckInListDataService
                 ])
             );
         }
+
+        if ($checkInList->getEventOccurrenceId() !== null
+            && $attendee->getEventOccurrenceId() !== $checkInList->getEventOccurrenceId()
+        ) {
+            throw new CannotCheckInException(
+                __('Attendee :attendee_name is not associated with this occurrence', [
+                    'attendee_name' => $attendee->getFullName(),
+                ])
+            );
+        }
     }
 
     /**

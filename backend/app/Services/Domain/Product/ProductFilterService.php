@@ -16,6 +16,7 @@ use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Services\Domain\Order\OrderPlatformFeePassThroughService;
+use HiEvents\Repository\Interfaces\ProductOccurrenceVisibilityRepositoryInterface;
 use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesDTO;
 use HiEvents\Services\Domain\Tax\TaxAndFeeCalculationService;
 use Illuminate\Support\Collection;
@@ -27,12 +28,13 @@ class ProductFilterService
     private ?string $eventCurrency = null;
 
     public function __construct(
-        private readonly TaxAndFeeCalculationService            $taxCalculationService,
-        private readonly ProductPriceService                    $productPriceService,
-        private readonly AvailableProductQuantitiesFetchService $fetchAvailableProductQuantitiesService,
-        private readonly OrderPlatformFeePassThroughService     $platformFeeService,
-        private readonly AccountRepositoryInterface             $accountRepository,
-        private readonly EventRepositoryInterface               $eventRepository,
+        private readonly TaxAndFeeCalculationService                      $taxCalculationService,
+        private readonly ProductPriceService                              $productPriceService,
+        private readonly AvailableProductQuantitiesFetchService           $fetchAvailableProductQuantitiesService,
+        private readonly OrderPlatformFeePassThroughService               $platformFeeService,
+        private readonly AccountRepositoryInterface                       $accountRepository,
+        private readonly EventRepositoryInterface                         $eventRepository,
+        private readonly ProductOccurrenceVisibilityRepositoryInterface   $productOccurrenceVisibilityRepository,
     )
     {
     }
@@ -47,6 +49,7 @@ class ProductFilterService
         Collection             $productsCategories,
         ?PromoCodeDomainObject $promoCode = null,
         bool                   $hideSoldOutProducts = true,
+        ?int                   $eventOccurrenceId = null,
     ): Collection
     {
         if ($productsCategories->isEmpty()) {
@@ -66,12 +69,16 @@ class ProductFilterService
 
         $productQuantities = $this
             ->fetchAvailableProductQuantitiesService
-            ->getAvailableProductQuantities($eventId);
+            ->getAvailableProductQuantities($eventId, eventOccurrenceId: $eventOccurrenceId);
 
         $filteredProducts = $products
-            ->map(fn(ProductDomainObject $product) => $this->processProduct($product, $productQuantities->productQuantities, $promoCode))
+            ->map(fn(ProductDomainObject $product) => $this->processProduct($product, $productQuantities->productQuantities, $promoCode, $eventOccurrenceId))
             ->reject(fn(ProductDomainObject $product) => $this->filterProduct($product, $promoCode, $hideSoldOutProducts))
             ->each(fn(ProductDomainObject $product) => $this->processProductPrices($product, $hideSoldOutProducts));
+
+        if ($eventOccurrenceId !== null) {
+            $filteredProducts = $this->filterByOccurrenceVisibility($filteredProducts, $eventOccurrenceId);
+        }
 
         return $productsCategories
             ->reject(fn(ProductCategoryDomainObject $category) => $category->getIsHidden())
@@ -130,12 +137,22 @@ class ProductFilterService
         ProductDomainObject    $product,
         Collection             $productQuantities,
         ?PromoCodeDomainObject $promoCode = null,
+        ?int                   $eventOccurrenceId = null,
     ): ProductDomainObject
     {
         if ($this->shouldProductBeDiscounted($promoCode, $product)) {
-            $product->getProductPrices()?->each(function (ProductPriceDomainObject $price) use ($product, $promoCode) {
+            $product->getProductPrices()?->each(function (ProductPriceDomainObject $price) use ($product, $promoCode, $eventOccurrenceId) {
                 $price->setPriceBeforeDiscount($price->getPrice());
-                $price->setPrice($this->productPriceService->getIndividualPrice($product, $price, $promoCode));
+                $price->setPrice($this->productPriceService->getIndividualPrice($product, $price, $promoCode, $eventOccurrenceId));
+            });
+        }
+
+        if ($eventOccurrenceId !== null && !$this->shouldProductBeDiscounted($promoCode, $product)) {
+            $product->getProductPrices()?->each(function (ProductPriceDomainObject $price) use ($product, $eventOccurrenceId) {
+                $overridePrice = $this->productPriceService->getIndividualPrice($product, $price, null, $eventOccurrenceId);
+                if ($overridePrice !== $price->getPrice()) {
+                    $price->setPrice($overridePrice);
+                }
             });
         }
 
@@ -295,6 +312,23 @@ class ProductFilterService
             $product->getProductPrices()
                 ?->each(fn(ProductPriceDomainObject $price) => $this->processProductPrice($product, $price))
                 ->reject(fn(ProductPriceDomainObject $price) => $this->filterProductPrice($product, $price, $hideSoldOutProducts))
+        );
+    }
+
+    private function filterByOccurrenceVisibility(Collection $products, int $eventOccurrenceId): Collection
+    {
+        $visibilityRules = $this->productOccurrenceVisibilityRepository->findWhere([
+            'event_occurrence_id' => $eventOccurrenceId,
+        ]);
+
+        if ($visibilityRules->isEmpty()) {
+            return $products;
+        }
+
+        $visibleProductIds = $visibilityRules->map(fn($rule) => $rule->getProductId());
+
+        return $products->filter(
+            fn(ProductDomainObject $product) => $visibleProductIds->contains($product->getId())
         );
     }
 

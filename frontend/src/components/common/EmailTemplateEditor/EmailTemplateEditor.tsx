@@ -54,7 +54,10 @@ export const EmailTemplateEditor = ({
         if (!template && defaultTemplate && defaultTemplate.subject && defaultTemplate.body) {
             form.setFieldValue('subject', defaultTemplate.subject);
             form.setFieldValue('body', defaultTemplate.body);
-            form.setFieldValue('ctaLabel', templateType === 'order_confirmation' ? t`View Order` : t`View Ticket`);
+            const defaultCtaLabel = templateType === 'order_confirmation' ? t`View Order`
+                : templateType === 'occurrence_cancellation' ? t`View Event`
+                : t`View Ticket`;
+            form.setFieldValue('ctaLabel', defaultCtaLabel);
             form.setFieldValue('isActive', true);
         }
     }, [defaultTemplate, template]);
@@ -66,7 +69,7 @@ export const EmailTemplateEditor = ({
                 subject: form.values.subject,
                 body: form.values.body,
                 template_type: templateType,
-                ctaLabel: form.values.ctaLabel || (templateType === 'order_confirmation' ? t`View Order` : t`View Ticket`),
+                ctaLabel: form.values.ctaLabel || (templateType === 'order_confirmation' ? t`View Order` : templateType === 'occurrence_cancellation' ? t`View Event` : t`View Ticket`),
             });
         }
     };
@@ -93,6 +96,7 @@ export const EmailTemplateEditor = ({
     const templateTypeLabels: Record<EmailTemplateType, string> = {
         'order_confirmation': t`Order Confirmation`,
         'attendee_ticket': t`Attendee Ticket`,
+        'occurrence_cancellation': t`Date Cancellation`,
     };
 
     return (

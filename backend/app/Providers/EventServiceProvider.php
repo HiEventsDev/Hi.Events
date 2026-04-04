@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
 {
+    protected $listen = [
+    ];
+
     /**
      * Map of listeners to the events they should handle.
      *

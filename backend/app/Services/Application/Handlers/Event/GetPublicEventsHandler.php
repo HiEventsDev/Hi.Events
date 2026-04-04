@@ -2,6 +2,7 @@
 
 namespace HiEvents\Services\Application\Handlers\Event;
 
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\ImageDomainObject;
 use HiEvents\DomainObjects\ProductCategoryDomainObject;
@@ -30,6 +31,7 @@ class GetPublicEventsHandler
         $organizer = $this->organizerRepository->findById($dto->organizerId);
 
         $query = $this->eventRepository
+            ->loadRelation(new Relationship(EventOccurrenceDomainObject::class))
             ->loadRelation(
                 new Relationship(ProductCategoryDomainObject::class, [
                     new Relationship(ProductDomainObject::class,

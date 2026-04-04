@@ -11,6 +11,7 @@ class GetReportRequest extends BaseRequest
         return [
             'start_date' => 'date|before:end_date|required_with:end_date|nullable',
             'end_date' => 'date|after:start_date|required_with:start_date|nullable',
+            'occurrence_id' => 'integer|nullable',
         ];
     }
 }

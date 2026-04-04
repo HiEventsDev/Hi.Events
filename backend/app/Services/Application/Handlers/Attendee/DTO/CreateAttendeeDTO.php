@@ -19,6 +19,7 @@ class CreateAttendeeDTO extends BaseDTO
         public readonly string      $locale,
         public readonly ?bool       $amount_includes_tax = false,
         public readonly ?int        $product_price_id = null,
+        public readonly ?int        $event_occurrence_id = null,
         #[CollectionOf(CreateAttendeeTaxAndFeeDTO::class)]
         public readonly ?Collection $taxes_and_fees = null,
     )

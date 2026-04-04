@@ -14,6 +14,7 @@ class UpsertCheckInListDTO extends BaseDTO
         public ?string $expiresAt = null,
         public ?string $activatesAt = null,
         public ?int    $id = null,
+        public ?int    $eventOccurrenceId = null,
     )
     {
     }

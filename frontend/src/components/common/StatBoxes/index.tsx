@@ -8,6 +8,7 @@ import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {formatCurrency} from "../../../utilites/currency.ts";
 import {formatNumber} from "../../../utilites/helpers.ts";
 import {ReactNode} from "react";
+import {IdParam} from "../../../types.ts";
 
 interface StatBoxProps {
     number: string | number;
@@ -32,9 +33,13 @@ export const StatBox = ({number, description, icon, backgroundColor}: StatBoxPro
     );
 };
 
-export const StatBoxes = () => {
+interface StatBoxesProps {
+    occurrenceId?: IdParam;
+}
+
+export const StatBoxes = ({occurrenceId}: StatBoxesProps = {}) => {
     const {eventId} = useParams();
-    const eventStatsQuery = useGetEventStats(eventId);
+    const eventStatsQuery = useGetEventStats(eventId, occurrenceId);
     const eventQuery = useGetEvent(eventId);
     const event = eventQuery?.data;
     const {data: eventStats} = eventStatsQuery;
@@ -78,9 +83,13 @@ export const StatBoxes = () => {
         }
     ];
 
+    const filteredData = occurrenceId
+        ? data.filter((stat) => stat.description !== t`Page views`)
+        : data;
+
     return (
         <div className={classes.statistics}>
-            {data.map((stat) => (
+            {filteredData.map((stat) => (
                 <StatBox
                     key={stat.description}
                     number={stat.number}

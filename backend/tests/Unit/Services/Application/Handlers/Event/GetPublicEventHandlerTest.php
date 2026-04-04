@@ -4,6 +4,7 @@ namespace Tests\Unit\Services\Application\Handlers\Event;
 
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\PromoCodeDomainObject;
+use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Event\DTO\GetPublicEventDTO;
@@ -16,6 +17,7 @@ use Tests\TestCase;
 class GetPublicEventHandlerTest extends TestCase
 {
     private EventRepositoryInterface $eventRepository;
+    private EventOccurrenceRepositoryInterface $occurrenceRepository;
     private PromoCodeRepositoryInterface $promoCodeRepository;
     private ProductFilterService $ticketFilterService;
     private EventPageViewIncrementService $eventPageViewIncrementService;
@@ -26,12 +28,14 @@ class GetPublicEventHandlerTest extends TestCase
         parent::setUp();
 
         $this->eventRepository = m::mock(EventRepositoryInterface::class);
+        $this->occurrenceRepository = m::mock(EventOccurrenceRepositoryInterface::class);
         $this->promoCodeRepository = m::mock(PromoCodeRepositoryInterface::class);
         $this->ticketFilterService = m::mock(ProductFilterService::class);
         $this->eventPageViewIncrementService = m::mock(EventPageViewIncrementService::class);
 
         $this->handler = new GetPublicEventHandler(
             $this->eventRepository,
+            $this->occurrenceRepository,
             $this->promoCodeRepository,
             $this->ticketFilterService,
             $this->eventPageViewIncrementService
@@ -88,5 +92,6 @@ class GetPublicEventHandlerTest extends TestCase
     {
         $this->eventRepository->shouldReceive('loadRelation')->andReturnSelf()->times(4);
         $this->eventRepository->shouldReceive('findById')->with($eventId)->andReturn($event);
+        $this->occurrenceRepository->shouldReceive('findWhere')->andReturn(collect());
     }
 }
