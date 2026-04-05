@@ -68,9 +68,15 @@ class GetPublicEventHandler
             $this->eventPageViewIncrementService->increment($data->eventId, $data->ipAddress);
         }
 
-        return $event->setProductCategories($this->productFilterService->filter(
-            productsCategories: $event->getProductCategories(),
-            promoCode: $promoCodeDomainObject
-        ));
+        $hasPromoCodes = $this->promoCodeRepository->findFirstWhere([
+            PromoCodeDomainObjectAbstract::EVENT_ID => $data->eventId,
+        ]) !== null;
+
+        return $event
+            ->setHasPromoCodes($hasPromoCodes)
+            ->setProductCategories($this->productFilterService->filter(
+                productsCategories: $event->getProductCategories(),
+                promoCode: $promoCodeDomainObject
+            ));
     }
 }

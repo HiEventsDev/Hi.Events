@@ -118,6 +118,9 @@ export default function StripeCheckoutForm({setSubmitHandler}: {
             radios: false,
             spacedAccordionItems: false,
         },
+        ...(event?.settings?.stripe_payment_method_order?.length ? {
+            paymentMethodOrder: event.settings.stripe_payment_method_order,
+        } : {}),
     };
 
     return (

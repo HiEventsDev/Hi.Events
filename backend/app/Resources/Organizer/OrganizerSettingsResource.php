@@ -29,6 +29,8 @@ class OrganizerSettingsResource extends BaseResource
             'seo_description' => $this->getSeoDescription(),
             'allow_search_engine_indexing' => $this->getAllowSearchEngineIndexing(),
             'location_details' => $this->getLocationDetails(),
+            'terms_of_service_url' => $this->getTermsOfServiceUrl(),
+            'privacy_policy_url' => $this->getPrivacyPolicyUrl(),
         ];
     }
 }

@@ -83,7 +83,11 @@ class CreateOrderHandler
                 promoCode: $promoCode,
             );
 
-            return $this->orderManagementService->updateOrderTotals($order, $orderItems);
+            return $this->orderManagementService->updateOrderTotals(
+                $order,
+                $orderItems,
+                $this->orderItemProcessingService->getPerOrderTaxesAndFees(),
+            );
         });
     }
 

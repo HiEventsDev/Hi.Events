@@ -5,6 +5,7 @@ import { useGetMe } from "./queries/useGetMe.ts";
 import { publicEventRouteLoader } from "./routeLoaders/publicEventRouteLoader.ts";
 import { publicOrganizerRouteLoader } from "./routeLoaders/publicOrganizerRouteLoader.ts";
 import { organizerPreviewRouteLoader } from "./routeLoaders/organizerPreviewRouteLoader.ts";
+import { shortEventRedirectLoader } from "./routeLoaders/shortEventRedirectLoader.ts";
 
 const Root = () => {
     const [redirectPath, setRedirectPath] = useState<string | null>(null);
@@ -506,6 +507,11 @@ export const router: RouteObject[] = [
         errorElement: <ErrorPage />,
     },
     {
+        path: "/e/:eventId",
+        loader: shortEventRedirectLoader,
+        errorElement: <ErrorPage />,
+    },
+    {
         path: "/event/:eventId/preview",
         async lazy() {
             const EventHomepagePreview = await import("./components/layouts/EventHomepagePreview");
@@ -580,6 +586,14 @@ export const router: RouteObject[] = [
         async lazy() {
             const PrintOrder = await import("./components/routes/product-widget/PrintOrder");
             return { Component: PrintOrder.default };
+        },
+        errorElement: <ErrorPage />
+    },
+    {
+        path: "/manage/event/:eventId/attendees/print-qr",
+        async lazy() {
+            const PrintAttendeeQrCodes = await import("./components/routes/event/PrintAttendeeQrCodes");
+            return { Component: PrintAttendeeQrCodes.default };
         },
         errorElement: <ErrorPage />
     },

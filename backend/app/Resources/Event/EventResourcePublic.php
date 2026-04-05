@@ -75,6 +75,7 @@ class EventResourcePublic extends BaseResource
                 condition: !is_null($this->getOrganizer()),
                 value: fn() => new OrganizerResourcePublic($this->getOrganizer()),
             ),
+            'has_promo_codes' => (bool) $this->getHasPromoCodes(),
         ];
     }
 }

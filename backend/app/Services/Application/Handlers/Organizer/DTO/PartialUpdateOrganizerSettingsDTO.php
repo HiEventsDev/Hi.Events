@@ -69,6 +69,10 @@ class PartialUpdateOrganizerSettingsDTO extends BaseDataObject
 
         // Password
         public readonly string|Optional|null                          $homepagePassword,
+
+        // Legal
+        public readonly string|Optional|null                          $termsOfServiceUrl,
+        public readonly string|Optional|null                          $privacyPolicyUrl,
     )
     {
     }

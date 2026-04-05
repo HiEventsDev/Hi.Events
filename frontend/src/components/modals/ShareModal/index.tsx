@@ -27,6 +27,7 @@ interface ShareModalProps {
     title: string;
     modalTitle?: string;
     shareText?: string;
+    shortUrl?: string;
 }
 
 export const ShareModal = ({
@@ -35,7 +36,8 @@ export const ShareModal = ({
     url,
     title,
     modalTitle = t`Share`,
-    shareText
+    shareText,
+    shortUrl,
 }: ShareModalProps) => {
     const [activeTab, setActiveTab] = useState<string | null>('share');
     const shareTextContent = shareText || title;
@@ -259,6 +261,37 @@ export const ShareModal = ({
                                     </CopyButton>
                                 )}
                             />
+
+                            {shortUrl && (
+                                <TextInput
+                                    label={t`Short Link`}
+                                    value={shortUrl}
+                                    readOnly
+                                    mt="md"
+                                    styles={{
+                                        input: {
+                                            paddingRight: '120px'
+                                        }
+                                    }}
+                                    rightSectionWidth={'auto'}
+                                    rightSection={(
+                                        <CopyButton value={shortUrl} timeout={2000}>
+                                            {({copied, copy}) => (
+                                                <Tooltip label={copied ? t`Copied!` : t`Copy to clipboard`}>
+                                                    <Button
+                                                        variant="light"
+                                                        color={copied ? 'teal' : 'gray'}
+                                                        onClick={copy}
+                                                        leftSection={copied ? <IconCheck size={16}/> : <IconCopy size={16}/>}
+                                                    >
+                                                        {copied ? t`Copied` : t`Copy`}
+                                                    </Button>
+                                                </Tooltip>
+                                            )}
+                                        </CopyButton>
+                                    )}
+                                />
+                            )}
 
                             <Text className={classes.helperText} mt="md">
                                 {t`Copy this link to share it anywhere`}

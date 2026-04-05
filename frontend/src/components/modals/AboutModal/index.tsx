@@ -1,6 +1,9 @@
 import {Modal} from "../../common/Modal";
 import {GenericModalProps} from "../../../types.ts";
 import classes from "./AboutModal.module.scss";
+import {t} from "@lingui/macro";
+
+declare const __APP_VERSION__: string;
 
 export const AboutModal = ({onClose}: GenericModalProps) => {
     return (
@@ -12,6 +15,9 @@ export const AboutModal = ({onClose}: GenericModalProps) => {
                         title="About"
                         allowFullScreen
                 />
+                <div className={classes.versionInfo}>
+                    {t`Version`}: {__APP_VERSION__}
+                </div>
             </div>
         </Modal>
     );

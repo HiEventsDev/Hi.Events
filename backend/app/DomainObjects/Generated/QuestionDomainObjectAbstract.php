@@ -23,6 +23,8 @@ abstract class QuestionDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
     final public const ORDER = 'order';
     final public const IS_HIDDEN = 'is_hidden';
     final public const DESCRIPTION = 'description';
+    final public const CONDITIONS = 'conditions';
+    final public const VALIDATION_RULES = 'validation_rules';
 
     protected int $id;
     protected int $event_id;
@@ -37,6 +39,8 @@ abstract class QuestionDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
     protected int $order = 1;
     protected bool $is_hidden = false;
     protected ?string $description = null;
+    protected array|string|null $conditions = null;
+    protected array|string|null $validation_rules = null;
 
     public function toArray(): array
     {
@@ -54,6 +58,8 @@ abstract class QuestionDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
                     'order' => $this->order ?? null,
                     'is_hidden' => $this->is_hidden ?? null,
                     'description' => $this->description ?? null,
+                    'conditions' => $this->conditions ?? null,
+                    'validation_rules' => $this->validation_rules ?? null,
                 ];
     }
 
@@ -198,5 +204,27 @@ abstract class QuestionDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
     public function getDescription(): ?string
     {
         return $this->description;
+    }
+
+    public function setConditions(array|string|null $conditions): self
+    {
+        $this->conditions = $conditions;
+        return $this;
+    }
+
+    public function getConditions(): array|string|null
+    {
+        return $this->conditions;
+    }
+
+    public function setValidationRules(array|string|null $validation_rules): self
+    {
+        $this->validation_rules = $validation_rules;
+        return $this;
+    }
+
+    public function getValidationRules(): array|string|null
+    {
+        return $this->validation_rules;
     }
 }

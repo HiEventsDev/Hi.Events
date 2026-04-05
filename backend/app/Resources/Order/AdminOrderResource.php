@@ -29,6 +29,8 @@ class AdminOrderResource extends BaseResource
             'currency' => $this->getCurrency(),
             'status' => $this->getStatus(),
             'payment_status' => $this->getPaymentStatus(),
+            'payment_provider' => $this->getPaymentProvider(),
+            'locale' => $this->getLocale(),
             'created_at' => $this->getCreatedAt(),
             'event_id' => $this->getEventId(),
             'event_title' => $event?->getTitle(),

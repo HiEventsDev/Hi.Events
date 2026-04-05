@@ -15,6 +15,17 @@ interface TieredPricingProps {
 }
 
 export const TieredPricing = ({product, event, form, productIndex}: TieredPricingProps) => {
+    const handleDonationAmountChange = (index: number, value: string) => {
+        form.setFieldValue(`products.${productIndex}.quantities.${index}.price`, value);
+        const quantityField = `products.${productIndex}.quantities.${index}.quantity`;
+        const currentQuantity = form.getValues().products?.[productIndex]?.quantities?.[index]?.quantity;
+        if (value && Number(value) > 0 && (!currentQuantity || Number(currentQuantity) === 0)) {
+            form.setFieldValue(quantityField, 1);
+        } else if (!value || Number(value) <= 0) {
+            form.setFieldValue(quantityField, 0);
+        }
+    };
+
     return (
         <>
             {product?.prices?.map((price, index) => {
@@ -29,6 +40,7 @@ export const TieredPricing = ({product, event, form, productIndex}: TieredPricin
                                             className={'hi-donation-input-wrapper'}>
                                             <TextInput
                                                 {...form.getInputProps(`products.${productIndex}.quantities.${index}.price`)}
+                                                onChange={(e) => handleDonationAmountChange(index, e.currentTarget.value)}
                                                 type={'number'}
                                                 min={product.price}
                                                 step={0.01}

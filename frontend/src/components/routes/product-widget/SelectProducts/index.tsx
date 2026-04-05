@@ -299,7 +299,15 @@ const SelectProducts = (props: SelectProductsProps) => {
         || !productAreAvailable
         || selectedProductQuantitySum === 0
         || props.widgetMode === 'preview'
-        || products?.every(product => product.is_sold_out);
+        || products?.every(product => product.is_sold_out)
+        || (event?.settings?.order_max_tickets != null && selectedProductQuantitySum > event.settings.order_max_tickets);
+
+    const orderMinNotMet = event?.settings?.order_min_tickets != null
+        && selectedProductQuantitySum > 0
+        && selectedProductQuantitySum < event.settings.order_min_tickets;
+
+    const orderMaxExceeded = event?.settings?.order_max_tickets != null
+        && selectedProductQuantitySum > event.settings.order_max_tickets;
 
     let productIndex = 0;
 
@@ -544,7 +552,17 @@ const SelectProducts = (props: SelectProductsProps) => {
                                 __html: event.settings.product_page_message.replace(/\n/g, '<br/>')
                             }} className={'hi-product-page-message'}/>
                         )}
-                        <Button disabled={isButtonDisabled} fullWidth className={'hi-continue-button'}
+                        {orderMinNotMet && (
+                            <div className={'hi-product-page-message'} style={{color: 'var(--mantine-color-red-6)', marginBottom: 8}}>
+                                {t`You must select at least ${event?.settings?.order_min_tickets} tickets`}
+                            </div>
+                        )}
+                        {orderMaxExceeded && (
+                            <div className={'hi-product-page-message'} style={{color: 'var(--mantine-color-red-6)', marginBottom: 8}}>
+                                {t`You can select a maximum of ${event?.settings?.order_max_tickets} tickets`}
+                            </div>
+                        )}
+                        <Button disabled={isButtonDisabled || orderMinNotMet} fullWidth className={'hi-continue-button'}
                                 type={"submit"}
                                 loading={productMutation.isPending}>
                             {props.continueButtonText || event?.settings?.continue_button_text || t`Continue`}
@@ -552,6 +570,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                     </div>
                 </form>
             )}
+            {event?.has_promo_codes === true && (
             <div className={'hi-promo-code-row'}>
                 {(!showPromoCodeInput && !form.values.promo_code) && (
                     <Anchor className={'hi-have-a-promo-code-link'} underline={'always'}
@@ -603,6 +622,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                     </Group>
                 )}
             </div>
+            )}
 
             {
                 /**

@@ -205,14 +205,18 @@ export interface EventSettings {
     homepage_background_type: 'COLOR' | 'MIRROR_COVER_IMAGE';
     location_details?: VenueAddress;
     is_online_event?: boolean;
+    event_location_type?: 'venue' | 'online' | 'hybrid';
     online_event_connection_details?: string;
     maps_url?: string;
     seo_title?: string;
     seo_description?: string;
     seo_keywords?: string;
+    meta_pixel_id?: string | null;
     allow_search_engine_indexing?: boolean;
-    price_display_mode?: 'INCLUSIVE' | 'EXCLUSIVE';
+    price_display_mode?: 'INCLUSIVE' | 'EXCLUSIVE' | 'TAX_INCLUSIVE';
     hide_getting_started_page: boolean;
+    hide_start_date?: boolean;
+    disable_attendee_ticket_email?: boolean;
     attendee_details_collection_method?: AttendeeDetailsCollectionMethod;
 
     // Payment settings
@@ -255,6 +259,36 @@ export interface EventSettings {
     // Waitlist settings
     waitlist_auto_process?: boolean;
     waitlist_offer_timeout_minutes?: number | null;
+
+    // Social media settings
+    social_media_handles?: Record<string, string>;
+    show_social_media_handles?: boolean;
+
+    // Access control settings
+    event_password?: string | null;
+    is_password_protected?: boolean;
+
+    // Payment settings
+    stripe_payment_method_order?: string[] | null;
+
+    // Order approval settings
+    require_order_approval?: boolean;
+
+    // External ticket URL
+    external_ticket_url?: string | null;
+
+    // Order-level ticket quantity limits
+    order_min_tickets?: number | null;
+    order_max_tickets?: number | null;
+
+    // Checkout validation webhook
+    checkout_validation_webhook_url?: string | null;
+
+    // Attendee name requirement
+    require_attendee_name?: boolean;
+
+    // Free ticket expiration
+    free_ticket_expiration_minutes?: number | null;
 }
 
 export interface VenueAddress {
@@ -323,6 +357,7 @@ export interface Event extends EventBase {
     organizer_id?: IdParam;
     location_details?: VenueAddress;
     statistics?: EventStatistics;
+    has_promo_codes?: boolean;
 }
 
 export interface EventStatistics {
@@ -346,6 +381,7 @@ export interface EventDailyStats {
     attendees_registered: number;
     total_refunded: number;
     orders_created: number;
+    orders_abandoned: number;
 }
 
 export interface CheckInStats {
@@ -369,6 +405,7 @@ export interface EventStats {
     total_fees: number;
     total_views: number;
     total_refunded: number;
+    total_orders_abandoned: number;
 }
 
 export interface OrganizerStats {
@@ -433,6 +470,8 @@ export interface OrganizerSettings {
     seo_description?: string;
     seo_title?: string;
     allow_search_engine_indexing?: boolean;
+    terms_of_service_url?: string;
+    privacy_policy_url?: string;
 }
 
 export interface SortDirectionLabel {
@@ -492,6 +531,7 @@ export interface ProductPrice {
     is_discounted?: boolean;
     tax_total?: number;
     fee_total?: number;
+    inclusive_tax_total?: number;
     is_available?: boolean;
     is_before_sale_start_date?: boolean;
     is_after_sale_end_date?: boolean;
@@ -544,6 +584,8 @@ export interface Product {
     is_highlighted?: boolean;
     highlight_message?: string;
     waitlist_enabled?: boolean | null;
+    require_attendee_details?: boolean;
+    require_attendee_email?: boolean;
     has_waiting_entries?: boolean;
     waitlist_entry_count?: number;
 }
@@ -569,6 +611,7 @@ export interface Attendee {
     last_name: string;
     email: string;
     notes?: string;
+    cancellation_reason?: string | null;
     order?: Order;
     public_id: string;
     short_id: string;
@@ -596,17 +639,18 @@ export interface AttendeeCheckIn {
 }
 
 export interface Address {
-    address_line_1: string;
-    address_line_2: string;
-    city: string;
-    state_or_region: string;
+    address_line_1?: string;
+    address_line_2?: string;
+    city?: string;
+    state_or_region?: string;
     country: string;
-    zip_or_postal_code: string;
+    zip_or_postal_code?: string;
 }
 
 interface TaxOrFee {
     name: string;
     value: number;
+    is_tax_inclusive?: boolean;
 }
 
 interface TaxesAndFeesRollup {
@@ -637,7 +681,7 @@ export interface Order {
     attendees?: Attendee[];
     created_at: string;
     currency: string;
-    status: 'RESERVED' | 'CANCELLED' | 'COMPLETED' | 'AWAITING_OFFLINE_PAYMENT' | 'ABANDONED';
+    status: 'RESERVED' | 'CANCELLED' | 'COMPLETED' | 'AWAITING_OFFLINE_PAYMENT' | 'AWAITING_APPROVAL' | 'ABANDONED';
     refund_status?: 'REFUND_PENDING' | 'REFUND_FAILED' | 'REFUNDED' | 'PARTIALLY_REFUNDED';
     payment_status?: 'NO_PAYMENT_REQUIRED' | 'AWAITING_PAYMENT' | 'PAYMENT_FAILED' | 'PAYMENT_RECEIVED' | 'AWAITING_OFFLINE_PAYMENT';
     public_id: string;
@@ -691,6 +735,15 @@ export interface Question {
     product_ids?: number[];
     belongs_to: string;
     is_hidden: boolean;
+    conditions?: {
+        parent_question_id: number;
+        condition_value: string | string[];
+    } | null;
+    validation_rules?: {
+        min_length?: number;
+        max_length?: number;
+        placeholder?: string;
+    } | null;
 }
 
 export interface CapacityAssignment {
@@ -744,6 +797,15 @@ export interface QuestionRequestData {
     options: string[];
     product_ids?: string[];
     belongs_to: string;
+    conditions?: {
+        parent_question_id: number;
+        condition_value: string | string[];
+    } | null;
+    validation_rules?: {
+        min_length?: number;
+        max_length?: number;
+        placeholder?: string;
+    } | null;
 }
 
 export interface Message {
@@ -838,6 +900,7 @@ export enum MessageType {
     TicketHolders = 'TICKET_HOLDERS',
     AllAttendees = 'ALL_ATTENDEES',
     OrderOwnersWithProduct = 'ORDER_OWNERS_WITH_PRODUCT',
+    MarketingOptedIn = 'MARKETING_OPTED_IN',
 }
 
 export interface PromoCode {
@@ -846,11 +909,14 @@ export interface PromoCode {
     discount?: number;
     applicable_product_ids?: number[] | string[];
     expiry_date?: string;
+    valid_from?: string;
     event_id?: number;
     discount_type?: PromoCodeDiscountType | null;
     attendee_usage_count?: number;
     order_usage_count?: number;
     max_allowed_usages?: number | undefined;
+    max_attendee_usages?: number | undefined;
+    message?: string | null;
 }
 
 export enum PromoCodeDiscountType {
@@ -869,6 +935,11 @@ export enum TaxAndFeeCalculationType {
     Fixed = 'FIXED'
 }
 
+export enum TaxAndFeeApplicationType {
+    PerProduct = 'PER_PRODUCT',
+    PerOrder = 'PER_ORDER',
+}
+
 export interface TaxAndFee {
     id?: number;
     name: string;
@@ -877,6 +948,9 @@ export interface TaxAndFee {
     calculation_type: TaxAndFeeCalculationType;
     is_default: boolean;
     is_active: boolean;
+    is_online_only?: boolean;
+    application_type?: TaxAndFeeApplicationType;
+    is_tax_inclusive?: boolean;
     description?: string;
     account_id?: IdParam;
 }
@@ -952,7 +1026,7 @@ export interface WebhookLog {
 }
 
 // Email Template Types
-export type EmailTemplateType = 'order_confirmation' | 'attendee_ticket';
+export type EmailTemplateType = 'order_confirmation' | 'attendee_ticket' | 'order_failed';
 export type EmailTemplateEngine = 'liquid' | 'blade';
 
 export interface EmailTemplate {

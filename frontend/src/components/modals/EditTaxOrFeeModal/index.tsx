@@ -1,6 +1,6 @@
 import {useForm} from "@mantine/form";
 import {TaxAndFeeForm} from "../../forms/TaxAndFeeForm";
-import {GenericModalProps, TaxAndFee, TaxAndFeeCalculationType, TaxAndFeeType} from "../../../types.ts";
+import {GenericModalProps, TaxAndFee, TaxAndFeeApplicationType, TaxAndFeeCalculationType, TaxAndFeeType} from "../../../types.ts";
 import {Modal} from "../../common/Modal";
 import {Button} from "@mantine/core";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
@@ -26,6 +26,9 @@ export const EditTaxOrFeeModal = ({onClose, taxOrFee}: EditTaxOrFeeModalProps) =
             description: undefined,
             is_default: true,
             is_active: true,
+            is_online_only: false,
+            application_type: TaxAndFeeApplicationType.PerProduct,
+            is_tax_inclusive: false,
         },
     });
 

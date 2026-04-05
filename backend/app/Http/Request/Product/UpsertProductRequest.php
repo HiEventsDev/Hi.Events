@@ -28,6 +28,7 @@ class UpsertProductRequest extends BaseRequest
             'prices.*.sale_end_date' => 'date|nullable|after:prices.*.sale_start_date',
             'prices.*.initial_quantity_available' => ['integer', 'nullable', 'min:0'],
             'prices.*.is_hidden' => ['boolean'],
+            'prices.*.is_hidden_without_promo_code' => ['boolean'],
             'description' => 'string|nullable',
             'min_per_order' => 'integer|nullable',
             'is_hidden' => 'boolean',
@@ -44,6 +45,8 @@ class UpsertProductRequest extends BaseRequest
             'is_highlighted' => 'boolean',
             'highlight_message' => 'string|nullable|max:255',
             'waitlist_enabled' => 'boolean|nullable',
+            'require_attendee_details' => 'boolean',
+            'require_attendee_email' => 'boolean',
         ];
     }
 

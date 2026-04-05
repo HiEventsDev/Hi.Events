@@ -33,6 +33,12 @@ export const publicCheckInClient = {
         });
         return response.data;
     },
+    createBulkCheckIn: async (checkInListShortId: IdParam, attendees: Array<{ public_id: IdParam, action: 'check-in' | 'check-in-and-mark-order-as-paid' }>) => {
+        const response = await publicApi.post<GenericDataResponse<PublicCheckIn[]>>(`/check-in-lists/${checkInListShortId}/check-ins`, {
+            "attendees": attendees
+        });
+        return response.data;
+    },
     deleteCheckIn: async (checkInListShortId: IdParam, checkInShortId: IdParam) => {
         const response = await publicApi.delete<GenericDataResponse<PublicCheckIn>>(`/check-in-lists/${checkInListShortId}/check-ins/${checkInShortId}`);
         return response.data;

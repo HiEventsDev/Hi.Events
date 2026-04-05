@@ -36,7 +36,7 @@ export const promoCodeClient = {
 
 export const promoCodeClientPublic = {
     validateCode: async (eventId: IdParam, promoCode: string | null) => {
-        const response = await publicApi.get<{ valid: boolean }>(
+        const response = await publicApi.get<{ valid: boolean; message?: string | null }>(
             `events/${eventId}/promo-codes/${promoCode}`
         );
         return response.data;

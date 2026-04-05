@@ -31,8 +31,11 @@ export const EditPromoCodeModal = ({onClose, promoCodeId}: EditPromoCodeModalPro
             discount: undefined,
             applicable_product_ids: [],
             expiry_date: undefined,
+            valid_from: undefined,
             discount_type: undefined,
             max_allowed_usages: undefined,
+            max_attendee_usages: undefined,
+            message: '',
         },
         validate: {
             code: hasLength({min: 3, max: 50}, t`Code must be between 3 and 50 characters long`),
@@ -67,8 +70,11 @@ export const EditPromoCodeModal = ({onClose, promoCodeId}: EditPromoCodeModalPro
             discount: promoCode.discount,
             applicable_product_ids: promoCode.applicable_product_ids ? promoCode.applicable_product_ids.map((id) => id.toString()) : [],
             expiry_date: utcToTz(promoCode.expiry_date, event.timezone),
+            valid_from: utcToTz(promoCode.valid_from, event.timezone),
             discount_type: promoCode.discount_type,
             max_allowed_usages: promoCode.max_allowed_usages || undefined,
+            max_attendee_usages: promoCode.max_attendee_usages || undefined,
+            message: promoCode.message || '',
         });
     }, [promoCode, event]);
 

@@ -10,6 +10,7 @@ class TaxCalculationResponse extends BaseDTO
         public readonly float $feeTotal,
         public readonly float $taxTotal,
         public readonly array $rollUp,
+        public readonly float $inclusiveTaxTotal = 0.00,
     )
     {
     }

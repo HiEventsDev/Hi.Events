@@ -1,5 +1,5 @@
 import {UseFormReturnType} from "@mantine/form";
-import {Alert, Button, NumberInput, Select, TextInput} from "@mantine/core";
+import {Alert, Button, NumberInput, Select, TextInput, Textarea} from "@mantine/core";
 import {IconAlertCircle, IconPercentage, IconRefresh, IconTicket} from "@tabler/icons-react";
 import {ProductType, PromoCode, PromoCodeDiscountType} from "../../../types.ts";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
@@ -105,14 +105,35 @@ export const PromoCodeForm = ({form}: PromoCodeFormProps) => {
 
             <InputGroup>
                 <TextInput type={'datetime-local'}
+                           {...form.getInputProps('valid_from')}
+                           label={t`Start Date`}
+                />
+                <TextInput type={'datetime-local'}
                            {...form.getInputProps('expiry_date')}
                            label={t`Expiry Date`}
                 />
+            </InputGroup>
+
+            <InputGroup>
                 <NumberInput min={1}
                              placeholder={t`Unlimited`}
                              {...form.getInputProps('max_allowed_usages')}
                              label={t`How many times can this code be used?`}/>
+                <NumberInput min={1}
+                             placeholder={t`Unlimited`}
+                             {...form.getInputProps('max_attendee_usages')}
+                             label={t`Max number of tickets this code can be applied to`}/>
             </InputGroup>
+
+            <Textarea
+                {...form.getInputProps('message')}
+                label={t`Custom Message`}
+                description={t`This message will be displayed to the customer when they apply this promo code at checkout.`}
+                placeholder={t`e.g., Thanks for using our partner discount!`}
+                autosize
+                minRows={2}
+                maxRows={4}
+            />
         </>
     );
 };

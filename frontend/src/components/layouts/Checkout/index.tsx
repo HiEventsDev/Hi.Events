@@ -32,6 +32,7 @@ const Checkout = () => {
     const orderIsCompleted = order?.status === 'COMPLETED';
     const orderIsReserved = order?.status === 'RESERVED';
     const orderIsAwaitingOfflinePayment = order?.status === 'AWAITING_OFFLINE_PAYMENT';
+    const orderIsAwaitingApproval = order?.status === 'AWAITING_APPROVAL';
     const isMobile = useMediaQuery('(max-width: 768px)');
     const [isExpired, setIsExpired] = useState(false);
     const orderHasAttendees = order?.attendees && order.attendees.length > 0;
@@ -172,7 +173,7 @@ const Checkout = () => {
                                         />
                                     )}
 
-                                    {(orderIsCompleted || orderIsAwaitingOfflinePayment) && (
+                                    {(orderIsCompleted || orderIsAwaitingOfflinePayment || orderIsAwaitingApproval) && (
                                         <span className={classes.title}>
                                             {t`Your Order`}
                                         </span>
@@ -193,7 +194,7 @@ const Checkout = () => {
                                         </Group>
                                     )}
 
-                                    {(orderIsCompleted || orderIsAwaitingOfflinePayment) && (
+                                    {(orderIsCompleted || orderIsAwaitingOfflinePayment || orderIsAwaitingApproval) && (
                                         <Group gap="2px">
                                             <ShareComponent
                                                 title={event.title}

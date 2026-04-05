@@ -38,7 +38,9 @@ export const EventCard: React.FC<EventCardProps> = ({event, primaryColor = '#8b5
 
     const coverImage = event.images?.find(img => img.type === 'EVENT_COVER');
     const location = event?.settings?.location_details?.city || event?.settings?.location_details?.venue_name;
-    const isOnlineEvent = event.settings?.is_online_event;
+    const locationType = event.settings?.event_location_type
+        || (event.settings?.is_online_event ? 'online' : 'venue');
+    const isOnlineEvent = locationType === 'online' || locationType === 'hybrid';
 
     // Check if event is live
     const now = dayjs();
@@ -48,6 +50,8 @@ export const EventCard: React.FC<EventCardProps> = ({event, primaryColor = '#8b5
 
     // Get products from event categories
     const products = getProductsFromEvent(event) || [];
+    const isInclusive = event?.settings?.price_display_mode === 'INCLUSIVE';
+    const isTaxInclusive = event?.settings?.price_display_mode === 'TAX_INCLUSIVE';
 
     // Calculate price range from products
     let lowestPrice: number | null = null;
@@ -56,7 +60,12 @@ export const EventCard: React.FC<EventCardProps> = ({event, primaryColor = '#8b5
     products.forEach(product => {
         if (product.prices && product.prices.length > 0) {
             product.prices.forEach(price => {
-                const priceValue = price.price || 0;
+                let priceValue = price.price || 0;
+                if (isInclusive) {
+                    priceValue = price.price_including_taxes_and_fees ?? (priceValue + ((price.tax_total || 0) - (price.inclusive_tax_total || 0)) + (price.fee_total || 0));
+                } else if (isTaxInclusive) {
+                    priceValue = priceValue + ((price.tax_total || 0) - (price.inclusive_tax_total || 0));
+                }
                 if (lowestPrice === null || priceValue < lowestPrice) {
                     lowestPrice = priceValue;
                 }
@@ -163,7 +172,9 @@ export const EventCard: React.FC<EventCardProps> = ({event, primaryColor = '#8b5
                         <div className={classes.eventMeta}>
                             {(location || isOnlineEvent) && (
                                 <div className={classes.location}>
-                                    {isOnlineEvent ? (
+                                    {locationType === 'hybrid' ? (
+                                        <><IconWifi size={14}/><span>{t`Hybrid Event`}{location ? ` · ${location}` : ''}</span></>
+                                    ) : isOnlineEvent ? (
                                         <><IconWifi size={14}/><span>{t`Online Event`}</span></>
                                     ) : (
                                         <><IconMapPin size={14}/><span>{location}</span></>

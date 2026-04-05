@@ -26,6 +26,7 @@ class ProductPriceResourcePublic extends BaseResource
             'is_discounted' => (bool)$this->getPriceBeforeDiscount(),
             'tax_total' => $this->getTaxTotal(),
             'fee_total' => $this->getFeeTotal(),
+            'inclusive_tax_total' => $this->getInclusiveTaxTotal(),
             'is_before_sale_start_date' => $this->isBeforeSaleStartDate(),
             'is_after_sale_end_date' => $this->isAfterSaleEndDate(),
             'is_available' => $this->isAvailable(),

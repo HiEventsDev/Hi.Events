@@ -14,6 +14,9 @@ class UpsertPromoCodeDTO
         public readonly ?float                    $discount,
         public readonly ?string                   $expiry_date,
         public readonly ?int                      $max_allowed_usages,
+        public readonly ?int                      $max_attendee_usages = null,
+        public readonly ?string                   $valid_from = null,
+        public readonly ?string                   $message = null,
     )
     {
     }

@@ -50,7 +50,15 @@ class PromoCodeDomainObject extends Generated\PromoCodeDomainObjectAbstract impl
             return false;
         }
 
+        if ($this->getValidFrom() !== null && (new Carbon($this->getValidFrom()))->isFuture()) {
+            return false;
+        }
+
         if ($this->getMaxAllowedUsages() !== null && ($this->getOrderUsageCount() >= $this->getMaxAllowedUsages())) {
+            return false;
+        }
+
+        if ($this->getMaxAttendeeUsages() !== null && ($this->getAttendeeUsageCount() >= $this->getMaxAttendeeUsages())) {
             return false;
         }
 

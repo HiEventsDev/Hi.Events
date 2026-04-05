@@ -21,7 +21,10 @@ abstract class TaxAndFeesDomainObjectAbstract extends \HiEvents\DomainObjects\Ab
     final public const UPDATED_AT = 'updated_at';
     final public const ACCOUNT_ID = 'account_id';
     final public const IS_DEFAULT = 'is_default';
+    final public const IS_ONLINE_ONLY = 'is_online_only';
     final public const TYPE = 'type';
+    final public const APPLICATION_TYPE = 'application_type';
+    final public const IS_TAX_INCLUSIVE = 'is_tax_inclusive';
 
     protected int $id;
     protected string $name;
@@ -34,7 +37,10 @@ abstract class TaxAndFeesDomainObjectAbstract extends \HiEvents\DomainObjects\Ab
     protected ?string $updated_at = null;
     protected int $account_id;
     protected bool $is_default = false;
+    protected bool $is_online_only = false;
     protected string $type;
+    protected string $application_type = 'PER_PRODUCT';
+    protected bool $is_tax_inclusive = false;
 
     public function toArray(): array
     {
@@ -50,7 +56,10 @@ abstract class TaxAndFeesDomainObjectAbstract extends \HiEvents\DomainObjects\Ab
                     'updated_at' => $this->updated_at ?? null,
                     'account_id' => $this->account_id ?? null,
                     'is_default' => $this->is_default ?? null,
+                    'is_online_only' => $this->is_online_only ?? null,
                     'type' => $this->type ?? null,
+                    'application_type' => $this->application_type ?? null,
+                    'is_tax_inclusive' => $this->is_tax_inclusive ?? null,
                 ];
     }
 
@@ -175,6 +184,17 @@ abstract class TaxAndFeesDomainObjectAbstract extends \HiEvents\DomainObjects\Ab
         return $this->is_default;
     }
 
+    public function setIsOnlineOnly(bool $is_online_only): self
+    {
+        $this->is_online_only = $is_online_only;
+        return $this;
+    }
+
+    public function getIsOnlineOnly(): bool
+    {
+        return $this->is_online_only;
+    }
+
     public function setType(string $type): self
     {
         $this->type = $type;
@@ -184,5 +204,27 @@ abstract class TaxAndFeesDomainObjectAbstract extends \HiEvents\DomainObjects\Ab
     public function getType(): string
     {
         return $this->type;
+    }
+
+    public function setApplicationType(string $application_type): self
+    {
+        $this->application_type = $application_type;
+        return $this;
+    }
+
+    public function getApplicationType(): string
+    {
+        return $this->application_type;
+    }
+
+    public function setIsTaxInclusive(bool $is_tax_inclusive): self
+    {
+        $this->is_tax_inclusive = $is_tax_inclusive;
+        return $this;
+    }
+
+    public function getIsTaxInclusive(): bool
+    {
+        return $this->is_tax_inclusive;
     }
 }

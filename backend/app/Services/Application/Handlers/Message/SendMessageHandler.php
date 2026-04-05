@@ -164,6 +164,9 @@ class SendMessageHandler
                 productIds: $messageData->product_ids ?? [],
                 orderStatuses: $messageData->order_statuses ?? ['COMPLETED'],
             ),
+            MessageTypeEnum::MARKETING_OPTED_IN => $this->orderRepository->countMarketingOptedInOrders(
+                eventId: $messageData->event_id,
+            ),
         };
     }
 

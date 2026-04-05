@@ -45,12 +45,22 @@ class TaxAndFeeRollupService
 
         $foundIndex = array_search($name, array_column($this->rollUp[$type], 'name'), true);
         if ($foundIndex === false) {
-            $this->rollUp[$type][] = [
+            $entry = [
                 'name' => $name,
                 'rate' => $taxOrFee->getRate(),
                 'type' => $taxOrFee->getCalculationType(),
-                'value' => $amount
+                'value' => $amount,
             ];
+
+            if ($taxOrFee->getIsOnlineOnly()) {
+                $entry['is_online_only'] = true;
+            }
+
+            if ($taxOrFee->getIsTaxInclusive()) {
+                $entry['is_tax_inclusive'] = true;
+            }
+
+            $this->rollUp[$type][] = $entry;
         } else {
             $this->rollUp[$type][$foundIndex]['value'] += $amount;
         }

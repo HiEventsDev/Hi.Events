@@ -29,6 +29,8 @@ abstract class OrganizerSettingDomainObjectAbstract extends \HiEvents\DomainObje
     final public const DEFAULT_SHOW_MARKETING_OPT_IN = 'default_show_marketing_opt_in';
     final public const DEFAULT_PASS_PLATFORM_FEE_TO_BUYER = 'default_pass_platform_fee_to_buyer';
     final public const DEFAULT_ALLOW_ATTENDEE_SELF_EDIT = 'default_allow_attendee_self_edit';
+    final public const TERMS_OF_SERVICE_URL = 'terms_of_service_url';
+    final public const PRIVACY_POLICY_URL = 'privacy_policy_url';
 
     protected int $id;
     protected int $organizer_id;
@@ -49,6 +51,8 @@ abstract class OrganizerSettingDomainObjectAbstract extends \HiEvents\DomainObje
     protected bool $default_show_marketing_opt_in = true;
     protected bool $default_pass_platform_fee_to_buyer = false;
     protected bool $default_allow_attendee_self_edit = true;
+    protected ?string $terms_of_service_url = null;
+    protected ?string $privacy_policy_url = null;
 
     public function toArray(): array
     {
@@ -72,6 +76,8 @@ abstract class OrganizerSettingDomainObjectAbstract extends \HiEvents\DomainObje
                     'default_show_marketing_opt_in' => $this->default_show_marketing_opt_in ?? null,
                     'default_pass_platform_fee_to_buyer' => $this->default_pass_platform_fee_to_buyer ?? null,
                     'default_allow_attendee_self_edit' => $this->default_allow_attendee_self_edit ?? null,
+                    'terms_of_service_url' => $this->terms_of_service_url ?? null,
+                    'privacy_policy_url' => $this->privacy_policy_url ?? null,
                 ];
     }
 
@@ -283,5 +289,27 @@ abstract class OrganizerSettingDomainObjectAbstract extends \HiEvents\DomainObje
     public function getDefaultAllowAttendeeSelfEdit(): bool
     {
         return $this->default_allow_attendee_self_edit;
+    }
+
+    public function setTermsOfServiceUrl(?string $terms_of_service_url): self
+    {
+        $this->terms_of_service_url = $terms_of_service_url;
+        return $this;
+    }
+
+    public function getTermsOfServiceUrl(): ?string
+    {
+        return $this->terms_of_service_url;
+    }
+
+    public function setPrivacyPolicyUrl(?string $privacy_policy_url): self
+    {
+        $this->privacy_policy_url = $privacy_policy_url;
+        return $this;
+    }
+
+    public function getPrivacyPolicyUrl(): ?string
+    {
+        return $this->privacy_policy_url;
     }
 }

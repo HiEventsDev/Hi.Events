@@ -125,6 +125,10 @@ abstract class BaseQuestionRule implements ValidationRule, DataAwareRule, Valida
         array                $validationMessages
     ): array
     {
+        $validationRules = $questionDomainObject->getValidationRules();
+        $maxLength = $validationRules['max_length'] ?? 255;
+        $minLength = $validationRules['min_length'] ?? null;
+
         if ($questionDomainObject->getType() === QuestionTypeEnum::ADDRESS->name) {
             foreach (self::ADDRESS_FIELDS as $field) {
                 if (isset($response[$field]) && strlen($response[$field]) > 255) {
@@ -137,8 +141,13 @@ abstract class BaseQuestionRule implements ValidationRule, DataAwareRule, Valida
             return $validationMessages;
         }
 
-        if (isset($response['answer']) && !is_array($response['answer']) && strlen($response['answer']) > 255) {
-            $validationMessages[$key . '.answer'][] = __('This field must be less than 255 characters.');
+        if (isset($response['answer']) && !is_array($response['answer'])) {
+            if (strlen($response['answer']) > $maxLength) {
+                $validationMessages[$key . '.answer'][] = __('This field must be less than :max characters.', ['max' => $maxLength]);
+            }
+            if ($minLength !== null && strlen($response['answer']) < $minLength) {
+                $validationMessages[$key . '.answer'][] = __('This field must be at least :min characters.', ['min' => $minLength]);
+            }
         }
 
         return $validationMessages;

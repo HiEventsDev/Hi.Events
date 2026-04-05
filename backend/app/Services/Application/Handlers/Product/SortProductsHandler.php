@@ -2,6 +2,7 @@
 
 namespace HiEvents\Services\Application\Handlers\Product;
 
+use HiEvents\DomainObjects\ProductCategoryDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Repository\Interfaces\ProductCategoryRepositoryInterface;
@@ -25,8 +26,12 @@ readonly class SortProductsHandler
             ->loadRelation(ProductDomainObject::class)
             ->findWhere(['event_id' => $eventId]);
 
-        $existingCategoryIds = $categories->map(fn($category) => $category->getId())->toArray();
-        $existingProductIds = $categories->flatMap(fn($category) => $category->products->map(fn($product) => $product->getId()))->toArray();
+        // Separate visible and hidden categories. Hidden categories are not exposed
+        // to the client, so they cannot be included in the sort request.
+        $visibleCategories = $categories->reject(fn(ProductCategoryDomainObject $c) => $c->getIsHidden());
+
+        $existingCategoryIds = $visibleCategories->map(fn($category) => $category->getId())->toArray();
+        $existingProductIds = $visibleCategories->flatMap(fn($category) => $category->products->map(fn($product) => $product->getId()))->toArray();
 
         $orderedCategoryIds = collect($sortData)->pluck('product_category_id')->toArray();
         $orderedProductIds = collect($sortData)

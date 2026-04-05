@@ -31,6 +31,10 @@ interface OrderRepositoryInterface extends RepositoryInterface
 
     public function countOrdersAssociatedWithProducts(int $eventId, array $productIds, array $orderStatuses): int;
 
+    public function findMarketingOptedInOrders(int $eventId): Collection;
+
+    public function countMarketingOptedInOrders(int $eventId): int;
+
     public function getAllOrdersForAdmin(
         ?string $search = null,
         int $perPage = 20,
@@ -39,4 +43,6 @@ interface OrderRepositoryInterface extends RepositoryInterface
     ): LengthAwarePaginator;
 
     public function hasCompletedPaidOrderForAccount(int $accountId): bool;
+
+    public function existsCompletedOrderForEmail(int $eventId, string $email): bool;
 }

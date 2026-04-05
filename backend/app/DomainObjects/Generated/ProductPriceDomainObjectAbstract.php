@@ -22,6 +22,7 @@ abstract class ProductPriceDomainObjectAbstract extends \HiEvents\DomainObjects\
     final public const INITIAL_QUANTITY_AVAILABLE = 'initial_quantity_available';
     final public const QUANTITY_SOLD = 'quantity_sold';
     final public const IS_HIDDEN = 'is_hidden';
+    final public const IS_HIDDEN_WITHOUT_PROMO_CODE = 'is_hidden_without_promo_code';
     final public const ORDER = 'order';
     final public const QUANTITY_AVAILABLE = 'quantity_available';
 
@@ -37,6 +38,7 @@ abstract class ProductPriceDomainObjectAbstract extends \HiEvents\DomainObjects\
     protected ?int $initial_quantity_available = null;
     protected int $quantity_sold = 0;
     protected ?bool $is_hidden = false;
+    protected ?bool $is_hidden_without_promo_code = false;
     protected int $order = 1;
     protected ?int $quantity_available = null;
 
@@ -55,6 +57,7 @@ abstract class ProductPriceDomainObjectAbstract extends \HiEvents\DomainObjects\
                     'initial_quantity_available' => $this->initial_quantity_available ?? null,
                     'quantity_sold' => $this->quantity_sold ?? null,
                     'is_hidden' => $this->is_hidden ?? null,
+                    'is_hidden_without_promo_code' => $this->is_hidden_without_promo_code ?? null,
                     'order' => $this->order ?? null,
                     'quantity_available' => $this->quantity_available ?? null,
                 ];
@@ -190,6 +193,17 @@ abstract class ProductPriceDomainObjectAbstract extends \HiEvents\DomainObjects\
     public function getIsHidden(): ?bool
     {
         return $this->is_hidden;
+    }
+
+    public function setIsHiddenWithoutPromoCode(?bool $is_hidden_without_promo_code): self
+    {
+        $this->is_hidden_without_promo_code = $is_hidden_without_promo_code;
+        return $this;
+    }
+
+    public function getIsHiddenWithoutPromoCode(): ?bool
+    {
+        return $this->is_hidden_without_promo_code;
     }
 
     public function setOrder(int $order): self

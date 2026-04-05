@@ -9,7 +9,6 @@ use HiEvents\DomainObjects\InvoiceDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
-use HiEvents\Mail\Order\OrderFailed;
 use HiEvents\Mail\Order\OrderSummary;
 use HiEvents\Mail\Organizer\OrderSummaryForOrganizer;
 use HiEvents\Repository\Eloquent\Value\Relationship;
@@ -46,19 +45,24 @@ class SendOrderDetailsService
 
         if ($order->isOrderCompleted() || $order->isOrderAwaitingOfflinePayment()) {
             $this->sendOrderSummaryEmails($order, $event);
-            $this->sendAttendeeTicketEmails($order, $event);
+
+            if (!$event->getEventSettings()->getDisableAttendeeTicketEmail()) {
+                $this->sendAttendeeTicketEmails($order, $event);
+            }
         }
 
         if ($order->isOrderFailed()) {
+            $mail = $this->mailBuilderService->buildOrderFailedMail(
+                $order,
+                $event,
+                $event->getEventSettings(),
+                $event->getOrganizer(),
+            );
+
             $this->mailer
                 ->to($order->getEmail())
                 ->locale($order->getLocale())
-                ->send(new OrderFailed(
-                    order: $order,
-                    event: $event,
-                    organizer: $event->getOrganizer(),
-                    eventSettings: $event->getEventSettings(),
-                ));
+                ->send($mail);
         }
     }
 

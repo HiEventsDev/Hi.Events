@@ -47,7 +47,7 @@ import {SidebarCallout} from "../../common/SidebarCallout";
 import {useGetMe} from "../../../queries/useGetMe.ts";
 import {useResendEmailConfirmation} from "../../../mutations/useResendEmailConfirmation.ts";
 import {useState} from "react";
-import {eventHomepageUrl} from "../../../utilites/urlHelper.ts";
+import {eventHomepageUrl, eventShortUrl} from "../../../utilites/urlHelper.ts";
 
 const EventLayout = () => {
     const location = useLocation();
@@ -211,6 +211,7 @@ const EventLayout = () => {
 
                             <ShareModal
                                 url={eventHomepageUrl(event)}
+                                shortUrl={eventShortUrl(event)}
                                 title={event.title}
                                 modalTitle={t`Share Event`}
                                 opened={opened}

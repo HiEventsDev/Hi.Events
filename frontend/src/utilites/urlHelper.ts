@@ -25,6 +25,14 @@ export const eventHomepageUrl = (event: Event) => {
     return getConfig('VITE_FRONTEND_URL') + eventHomepagePath(event);
 }
 
+export const eventShortPath = (event: Event) => {
+    return `/e/${event?.id}`;
+}
+
+export const eventShortUrl = (event: Event) => {
+    return getConfig('VITE_FRONTEND_URL') + eventShortPath(event);
+}
+
 export const eventCoverImageUrl = (event: Event) => {
     return event?.images?.find((image) => image.type === 'EVENT_COVER')?.url;
 }

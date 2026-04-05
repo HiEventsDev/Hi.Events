@@ -39,26 +39,32 @@ class UpdateEventSettingsRequest extends BaseRequest
 
             'location_details' => ['array'],
             'location_details.venue_name' => ['string', 'max:255', 'nullable'],
-            'location_details.address_line_1' => ['required_with:location_details', 'string', 'max:255'],
+            'location_details.address_line_1' => ['string', 'max:255', 'nullable'],
             'location_details.address_line_2' => ['string', 'max:255', 'nullable'],
-            'location_details.city' => ['required_with:location_details', 'string', 'max:85'],
+            'location_details.city' => ['string', 'max:85', 'nullable'],
             'location_details.state_or_region' => ['string', 'max:85', 'nullable'],
-            'location_details.zip_or_postal_code' => ['required_with:location_details', 'string', 'max:85'],
-            'location_details.country' => ['required_with:location_details', 'string', 'max:2'],
+            'location_details.zip_or_postal_code' => ['string', 'max:85', 'nullable'],
+            'location_details.country' => ['string', 'max:2', 'nullable'],
 
             'is_online_event' => ['boolean'],
+            'event_location_type' => ['string', Rule::in(['IN_PERSON', 'ONLINE', 'HYBRID'])],
             'online_event_connection_details' => ['string', 'nullable'],
 
             'seo_title' => ['string', 'max:255', 'nullable'],
             'seo_description' => ['string', 'max:255', 'nullable'],
             'seo_keywords' => ['string', 'max:255', 'nullable'],
+            'meta_pixel_id' => ['string', 'max:50', 'nullable', 'regex:/^[0-9]*$/'],
             'allow_search_engine_indexing' => ['boolean'],
 
             'notify_organizer_of_new_orders' => ['boolean'],
 
+            'disable_attendee_ticket_email' => ['boolean'],
+
             'price_display_mode' => [Rule::in(PriceDisplayMode::valuesArray())],
 
             'hide_getting_started_page' => ['boolean'],
+
+            'hide_start_date' => ['boolean'],
 
             // Payment settings
             'payment_providers' => ['array'],
@@ -105,6 +111,35 @@ class UpdateEventSettingsRequest extends BaseRequest
             // Waitlist settings
             'waitlist_auto_process' => ['boolean'],
             'waitlist_offer_timeout_minutes' => ['nullable', 'integer', 'min:1', 'max:10080'],
+
+            // Social media settings
+            'social_media_handles' => ['nullable', 'array'],
+            'social_media_handles.*' => ['nullable', 'string', 'max:255'],
+            'show_social_media_handles' => ['boolean'],
+
+            // Access control settings
+            'event_password' => ['nullable', 'string', 'max:255'],
+
+            // Payment settings
+            'stripe_payment_method_order' => ['nullable', 'array'],
+            'stripe_payment_method_order.*' => ['string', 'max:50'],
+
+            // Order approval settings
+            'require_order_approval' => ['boolean'],
+            'external_ticket_url' => ['nullable', 'url', 'max:2048'],
+
+            // Order-level ticket quantity limits
+            'order_min_tickets' => ['nullable', 'integer', 'min:1'],
+            'order_max_tickets' => ['nullable', 'integer', 'min:1'],
+
+            // Checkout validation webhook
+            'checkout_validation_webhook_url' => ['nullable', 'url', 'max:2048'],
+
+            // Attendee name requirement
+            'require_attendee_name' => ['boolean'],
+
+            // Free ticket expiration
+            'free_ticket_expiration_minutes' => ['nullable', 'integer', 'min:1', 'max:43200'],
         ];
     }
 
@@ -120,12 +155,8 @@ class UpdateEventSettingsRequest extends BaseRequest
             'homepage_link_color' => $colorMessage,
             'homepage_product_widget_background_color' => $colorMessage,
             'homepage_product_widget_text_color' => $colorMessage,
-            'location_details.address_line_1.required_with' => __('The address line 1 field is required'),
-            'location_details.city.required_with' => __('The city field is required'),
-            'location_details.zip_or_postal_code.required_with' => __('The zip or postal code field is required'),
-            'location_details.country.required_with' => __('The country field is required'),
             'location_details.country.max' => __('The country field should be a 2 character ISO 3166 code'),
-            'price_display_mode.in' => 'The price display mode must be either inclusive or exclusive.',
+            'price_display_mode.in' => 'The price display mode must be inclusive, exclusive, or tax_inclusive.',
 
             // Payment messages
             'payment_providers.*.in' => __('Invalid payment provider selected.'),

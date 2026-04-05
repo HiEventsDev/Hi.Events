@@ -221,6 +221,17 @@ class DuplicateEventService
     {
         foreach ($event->getQuestions() as $question) {
             if ($question->getBelongsTo() === QuestionBelongsTo::PRODUCT->name) {
+                $mappedProductIds = array_filter(
+                    array_map(
+                        static fn(ProductDomainObject $product) => $oldProductToNewProductMap[$product->getId()] ?? null,
+                        $question->getProducts()?->all() ?? [],
+                    ),
+                );
+
+                if (empty($mappedProductIds)) {
+                    continue;
+                }
+
                 $this->createQuestionService->createQuestion(
                     (new QuestionDomainObject())
                         ->setTitle($question->getTitle())
@@ -230,10 +241,7 @@ class DuplicateEventService
                         ->setRequired($question->getRequired())
                         ->setOptions($question->getOptions())
                         ->setIsHidden($question->getIsHidden()),
-                    array_map(
-                        static fn(ProductDomainObject $product) => $oldProductToNewProductMap[$product->getId()],
-                        $question->getProducts()?->all(),
-                    ),
+                    $mappedProductIds,
                 );
             }
         }
@@ -268,18 +276,24 @@ class DuplicateEventService
     private function clonePromoCodes(EventDomainObject $event, int $newEventId, array $oldProductToNewProductMap): void
     {
         foreach ($event->getPromoCodes() as $promoCode) {
+            $mappedProductIds = array_filter(
+                array_map(
+                    static fn($productId) => $oldProductToNewProductMap[$productId] ?? null,
+                    $promoCode->getApplicableProductIds() ?? [],
+                ),
+            );
+
             $this->createPromoCodeService->createPromoCode(
                 (new PromoCodeDomainObject())
                     ->setCode($promoCode->getCode())
                     ->setEventId($newEventId)
-                    ->setApplicableProductIds(array_map(
-                        static fn($productId) => $oldProductToNewProductMap[$productId],
-                        $promoCode->getApplicableProductIds() ?? [],
-                    ))
+                    ->setApplicableProductIds($mappedProductIds)
                     ->setDiscountType($promoCode->getDiscountType())
                     ->setDiscount($promoCode->getDiscount())
                     ->setExpiryDate($promoCode->getExpiryDate())
-                    ->setMaxAllowedUsages($promoCode->getMaxAllowedUsages()),
+                    ->setValidFrom($promoCode->getValidFrom())
+                    ->setMaxAllowedUsages($promoCode->getMaxAllowedUsages())
+                    ->setMessage($promoCode->getMessage()),
             );
         }
     }
@@ -288,6 +302,12 @@ class DuplicateEventService
     {
         /** @var CapacityAssignmentDomainObject $capacityAssignment */
         foreach ($event->getCapacityAssignments() as $capacityAssignment) {
+            $mappedProductIds = array_filter(
+                $capacityAssignment->getProducts()
+                    ?->map(fn($product) => $oldProductToNewProductMap[$product->getId()] ?? null)
+                    ?->toArray() ?? [],
+            );
+
             $this->createCapacityAssignmentService->createCapacityAssignment(
                 capacityAssignment: (new CapacityAssignmentDomainObject())
                     ->setName($capacityAssignment->getName())
@@ -295,8 +315,7 @@ class DuplicateEventService
                     ->setCapacity($capacityAssignment->getCapacity())
                     ->setAppliesTo($capacityAssignment->getAppliesTo())
                     ->setStatus($capacityAssignment->getStatus()),
-                productIds: $capacityAssignment->getProducts()
-                ?->map(fn($product) => $oldProductToNewProductMap[$product->getId()])?->toArray() ?? [],
+                productIds: $mappedProductIds,
             );
         }
     }
@@ -304,6 +323,12 @@ class DuplicateEventService
     private function cloneCheckInLists(EventDomainObject $event, int $newEventId, $oldProductToNewProductMap): void
     {
         foreach ($event->getCheckInLists() as $checkInList) {
+            $mappedProductIds = array_filter(
+                $checkInList->getProducts()
+                    ?->map(fn($product) => $oldProductToNewProductMap[$product->getId()] ?? null)
+                    ?->toArray() ?? [],
+            );
+
             $this->createCheckInListService->createCheckInList(
                 checkInList: (new CheckInListDomainObject())
                     ->setName($checkInList->getName())
@@ -311,8 +336,7 @@ class DuplicateEventService
                     ->setExpiresAt($checkInList->getExpiresAt())
                     ->setActivatesAt($checkInList->getActivatesAt())
                     ->setEventId($newEventId),
-                productIds: $checkInList->getProducts()
-                ?->map(fn($product) => $oldProductToNewProductMap[$product->getId()])?->toArray() ?? [],
+                productIds: $mappedProductIds,
             );
         }
     }

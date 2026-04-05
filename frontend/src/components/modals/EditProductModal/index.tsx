@@ -71,6 +71,8 @@ export const EditProductModal = ({onClose, productId}: GenericModalProps & { pro
             is_highlighted: product.is_highlighted,
             highlight_message: product.highlight_message,
             waitlist_enabled: product.waitlist_enabled ?? null,
+            require_attendee_details: product.require_attendee_details ?? true,
+            require_attendee_email: product.require_attendee_email ?? true,
             product_type: product.product_type,
             product_category_id: String(product.product_category_id),
             prices: product.prices?.map(p => ({

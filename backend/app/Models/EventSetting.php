@@ -15,6 +15,8 @@ class EventSetting extends BaseModel
             'payment_providers' => 'array',
             'ticket_design_settings' => 'array',
             'homepage_theme_settings' => 'array',
+            'social_media_handles' => 'array',
+            'stripe_payment_method_order' => 'array',
         ];
     }
 }

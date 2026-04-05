@@ -21,7 +21,10 @@ class TaxAndFeeResource extends BaseResource
             'rate' => $this->getRate(),
             'is_active' => $this->getIsActive(),
             'is_default' => $this->getIsDefault(),
+            'is_online_only' => $this->getIsOnlineOnly(),
             'type' => $this->getType(),
+            'application_type' => $this->getApplicationType(),
+            'is_tax_inclusive' => $this->getIsTaxInclusive(),
         ];
     }
 }

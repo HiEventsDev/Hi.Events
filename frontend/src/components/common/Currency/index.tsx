@@ -43,7 +43,7 @@ interface ProductPriceProps {
     currency?: string;
     className?: string;
     freeLabel?: string | null;
-    taxAndServiceFeeDisplayType?: 'INCLUSIVE' | 'EXCLUSIVE';
+    taxAndServiceFeeDisplayType?: 'INCLUSIVE' | 'EXCLUSIVE' | 'TAX_INCLUSIVE';
 }
 
 export const ProductPriceDisplay: React.FC<ProductPriceProps> = ({
@@ -55,16 +55,31 @@ export const ProductPriceDisplay: React.FC<ProductPriceProps> = ({
                                                                    taxAndServiceFeeDisplayType = 'exclusive',
                                                                }) => {
     let displayPrice = price.price;
-    const totalTaxAndFees = (price.tax_total || 0) + (price.fee_total || 0);
+    const inclusiveTaxTotal = price.inclusive_tax_total || 0;
+    const taxTotal = price.tax_total || 0;
+    const feeTotal = price.fee_total || 0;
+    const exclusiveTaxTotal = taxTotal - inclusiveTaxTotal;
+    const totalTaxAndFees = exclusiveTaxTotal + feeTotal;
 
     // Order taxes and service fees for display
     const orderedFees = [...(product.taxes || [])].sort((a, b) => a.type.localeCompare(b.type));
+    const taxes = orderedFees.filter(f => f.type === 'TAX');
+    const fees = orderedFees.filter(f => f.type === 'FEE');
     const feeDescriptions = orderedFees.map(fee => fee.name).join(', ');
 
     const getTextAppendage = () => {
         if (taxAndServiceFeeDisplayType === 'INCLUSIVE') {
             displayPrice += totalTaxAndFees;
             return `incl. ${feeDescriptions}`;
+        } else if (taxAndServiceFeeDisplayType === 'TAX_INCLUSIVE') {
+            // Only add exclusive taxes to display price; inclusive taxes are already in the price
+            displayPrice += exclusiveTaxTotal;
+            const taxNames = taxes.map(t => t.name).join(', ');
+            const feeNames = fees.map(f => f.name).join(', ');
+            const parts = [];
+            if (taxNames) parts.push(`incl. ${taxNames}`);
+            if (feeTotal > 0 && feeNames) parts.push(`excl. ${formatCurrency(feeTotal, currency)} ${feeNames}`);
+            return parts.join(', ');
         } else {
             const formattedFees = formatCurrency(totalTaxAndFees, currency);
             return `excl. ${formattedFees} ${feeDescriptions}`;

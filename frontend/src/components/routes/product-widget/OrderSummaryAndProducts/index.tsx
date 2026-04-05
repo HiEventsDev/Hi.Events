@@ -165,6 +165,7 @@ const WelcomeHeader = ({order, event, allowSelfEdit}: { order: Order; event: Eve
         'CANCELLED': t`Your order has been cancelled`,
         'RESERVED': null,
         'AWAITING_OFFLINE_PAYMENT': t`Your order is awaiting payment`,
+        'AWAITING_APPROVAL': t`Your order is awaiting approval`,
         'ABANDONED': null,
     }[order.status];
 
@@ -410,7 +411,7 @@ export const OrderSummaryAndProducts = () => {
     const [editOrderModalOpened, setEditOrderModalOpened] = useState(false);
 
     useEffect(() => {
-        if (eventId && order && (order.status === 'COMPLETED' || order.status === 'AWAITING_OFFLINE_PAYMENT')) {
+        if (eventId && order && (order.status === 'COMPLETED' || order.status === 'AWAITING_OFFLINE_PAYMENT' || order.status === 'AWAITING_APPROVAL')) {
             clearWaitlistJoinedForEvent(eventId);
         }
     }, [eventId, order?.status]);
@@ -553,7 +554,7 @@ export const OrderSummaryAndProducts = () => {
         return;
     }
 
-    if (order?.status !== 'COMPLETED' && order?.status !== 'CANCELLED' && order?.status !== 'AWAITING_OFFLINE_PAYMENT') {
+    if (order?.status !== 'COMPLETED' && order?.status !== 'CANCELLED' && order?.status !== 'AWAITING_OFFLINE_PAYMENT' && order?.status !== 'AWAITING_APPROVAL') {
         return <OrderStatus order={order}/>;
     }
 
@@ -598,7 +599,7 @@ export const OrderSummaryAndProducts = () => {
                     onResendClick={handleResendOrderConfirmation}
                 />
 
-                {event?.settings?.is_online_event && <OnlineEventDetails eventSettings={event.settings}/>}
+                {(['online', 'hybrid'].includes(event?.settings?.event_location_type || '') || event?.settings?.is_online_event) && <OnlineEventDetails eventSettings={event.settings}/>}
 
                 {!!event?.settings?.post_checkout_message && <PostCheckoutMessage message={event.settings.post_checkout_message}/>}
 

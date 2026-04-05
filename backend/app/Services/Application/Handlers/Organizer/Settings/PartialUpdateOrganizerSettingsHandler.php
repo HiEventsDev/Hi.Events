@@ -95,6 +95,9 @@ class PartialUpdateOrganizerSettingsHandler
             'allow_search_engine_indexing' => $dto->getProvided('allowSearchEngineIndexing', $organizerSettings->getAllowSearchEngineIndexing()),
 
             'homepage_password' => $dto->getProvided('homepagePassword', $organizerSettings->getHomepagePassword()),
+
+            'terms_of_service_url' => $dto->getProvided('termsOfServiceUrl', $organizerSettings->getTermsOfServiceUrl()),
+            'privacy_policy_url' => $dto->getProvided('privacyPolicyUrl', $organizerSettings->getPrivacyPolicyUrl()),
         ], [
             'organizer_id' => $dto->organizerId,
             'id' => $organizerSettings->getId(),

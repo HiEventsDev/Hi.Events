@@ -1,5 +1,5 @@
 import classes from "./StatBoxes.module.scss";
-import {IconCash, IconCreditCardRefund, IconEye, IconReceipt, IconShoppingCart, IconUsers} from "@tabler/icons-react";
+import {IconCash, IconCreditCardRefund, IconEye, IconReceipt, IconShoppingCart, IconShoppingCartX, IconUsers} from "@tabler/icons-react";
 import {Card} from "../Card";
 import {useGetEventStats} from "../../../queries/useGetEventStats.ts";
 import {useParams} from "react-router";
@@ -75,6 +75,12 @@ export const StatBoxes = () => {
             description: t`Completed orders`,
             icon: <IconReceipt size={18}/>,
             backgroundColor: '#E67D49'
+        },
+        {
+            number: formatNumber(eventStats?.total_orders_abandoned as number),
+            description: t`Abandoned checkouts`,
+            icon: <IconShoppingCartX size={18}/>,
+            backgroundColor: '#E64D4D'
         }
     ];
 

@@ -21,6 +21,7 @@ class CreateAttendeeDTO extends BaseDTO
         public readonly ?int        $product_price_id = null,
         #[CollectionOf(CreateAttendeeTaxAndFeeDTO::class)]
         public readonly ?Collection $taxes_and_fees = null,
+        public readonly ?array      $question_answers = null,
     )
     {
     }

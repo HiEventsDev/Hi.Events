@@ -57,7 +57,11 @@ const MultiLineTextInput = ({question, name, form}: QuestionInputProps) => {
                 }}
                 description={(<UserGeneratedContent dangerouslySetInnerHTML={{__html: question.description || ''}}/>)}
                 {...form.getInputProps(`${name}.answer`)} withAsterisk={question.required}
-                label={question.title}/>
+                label={question.title}
+                placeholder={question.validation_rules?.placeholder}
+                minLength={question.validation_rules?.min_length}
+                maxLength={question.validation_rules?.max_length}
+            />
         </>
     );
 }
@@ -87,6 +91,9 @@ const SingleLineTextInput = ({question, name, form}: QuestionInputProps) => {
                 withAsterisk={question.required}
                 label={question.title}
                 description={(<UserGeneratedContent dangerouslySetInnerHTML={{__html: question.description || ''}}/>)}
+                placeholder={question.validation_rules?.placeholder}
+                minLength={question.validation_rules?.min_length}
+                maxLength={question.validation_rules?.max_length}
             />
         </>
     );
@@ -211,11 +218,27 @@ export const QuestionInput = ({question, name, form}: QuestionInputProps) => {
 };
 
 export const CheckoutOrderQuestions = ({questions, form}: CheckoutQuestionProps) => {
+    const questionIdToIndex = new Map<number, number>();
+    questions.forEach((q, i) => questionIdToIndex.set(Number(q.id), i));
+
     let questionIndex = 0;
     return (
         <>
             {questions.map((question, index) => {
                 const name = `order.questions.${questionIndex++}.response`;
+
+                if (question.conditions?.parent_question_id) {
+                    const parentIdx = questionIdToIndex.get(question.conditions.parent_question_id);
+                    if (parentIdx !== undefined) {
+                        const parentAnswer = form.values.order?.questions?.[parentIdx]?.response?.answer;
+                        const conditionValue = question.conditions.condition_value;
+                        const matches = Array.isArray(parentAnswer)
+                            ? parentAnswer.includes(conditionValue)
+                            : parentAnswer === conditionValue;
+                        if (!matches) return null;
+                    }
+                }
+
                 return <QuestionInput key={`${index}-question`} question={question} name={name} form={form}/>
             })}
         </>
@@ -228,6 +251,14 @@ export const CheckoutProductQuestions = ({
                                              product,
                                              index: productIndex
                                          }: CheckoutProductQuestionProps) => {
+    const questionIdToIndex = new Map<number, number>();
+    let idx = 0;
+    questions.forEach(q => {
+        if (q.product_ids?.includes(Number(product.id))) {
+            questionIdToIndex.set(Number(q.id), idx++);
+        }
+    });
+
     let questionIndex = 0;
     return (
         <>
@@ -237,6 +268,19 @@ export const CheckoutProductQuestions = ({
                 }
 
                 const name = `products.${productIndex}.questions.${questionIndex++}.response`;
+
+                if (question.conditions?.parent_question_id) {
+                    const parentIdx = questionIdToIndex.get(question.conditions.parent_question_id);
+                    if (parentIdx !== undefined) {
+                        const parentAnswer = form.values.products?.[productIndex]?.questions?.[parentIdx]?.response?.answer;
+                        const conditionValue = question.conditions.condition_value;
+                        const matches = Array.isArray(parentAnswer)
+                            ? parentAnswer.includes(conditionValue)
+                            : parentAnswer === conditionValue;
+                        if (!matches) return null;
+                    }
+                }
+
                 return <QuestionInput key={`${index}-product`} question={question} name={name} form={form}/>
             })}
         </>

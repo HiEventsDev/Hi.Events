@@ -12,15 +12,18 @@ use Illuminate\Validation\ValidationException;
 class ProductQuestionRule extends BaseQuestionRule
 {
     private bool $skipBasicAttendeeValidation = false;
+    private bool $requireAttendeeName = true;
 
     public function __construct(
         Collection $questions,
         Collection $products,
         ?string $attendeeDetailsCollectionMethod = null,
+        bool $requireAttendeeName = true,
     ) {
         parent::__construct($questions, $products);
 
         $this->skipBasicAttendeeValidation = $attendeeDetailsCollectionMethod === AttendeeDetailsCollectionMethod::PER_ORDER->name;
+        $this->requireAttendeeName = $requireAttendeeName;
     }
     /**
      * @throws ValidationException
@@ -59,10 +62,10 @@ class ProductQuestionRule extends BaseQuestionRule
                 continue;
             }
 
-            if ($productDomainObject->getProductType() === ProductType::TICKET->name && !$this->skipBasicAttendeeValidation) {
+            if ($productDomainObject->getProductType() === ProductType::TICKET->name && !$this->skipBasicAttendeeValidation && $productDomainObject->getRequireAttendeeDetails()) {
                 $validationMessages = [
                     ...$validationMessages,
-                    ...$this->validateBasicTicketFields($productRequestData, $productIndex),
+                    ...$this->validateBasicTicketFields($productRequestData, $productIndex, $productDomainObject->getRequireAttendeeEmail()),
                 ];
             }
 
@@ -97,19 +100,33 @@ class ProductQuestionRule extends BaseQuestionRule
         return $validationMessages;
     }
 
-    private function validateBasicTicketFields(mixed $productRequestData, int|string $productIndex): array
+    private function validateBasicTicketFields(mixed $productRequestData, int|string $productIndex, bool $requireEmail = true): array
     {
         $validationMessages = [];
 
-        $validator = Validator::make($productRequestData, [
+        $rules = $this->requireAttendeeName ? [
             'first_name' => ['required', 'string', 'min:1', 'max:100'],
             'last_name' => ['required', 'string', 'min:1', 'max:100'],
-            'email' => ['required', 'string', 'email', 'max:100'],
-            'email_confirmation' => ['required', 'string', 'email', 'max:100', 'same:email'],
-        ], [
-            'email_confirmation.required' => __('Please confirm the email address'),
-            'email_confirmation.same' => __('Email addresses do not match'),
-        ]);
+        ] : [
+            'first_name' => ['nullable', 'string', 'max:100'],
+            'last_name' => ['nullable', 'string', 'max:100'],
+        ];
+
+        $messages = [];
+
+        if ($requireEmail) {
+            $rules['email'] = ['required', 'string', 'email', 'max:100'];
+            $rules['email_confirmation'] = ['required', 'string', 'email', 'max:100', 'same:email'];
+            $messages = [
+                'email_confirmation.required' => __('Please confirm the email address'),
+                'email_confirmation.same' => __('Email addresses do not match'),
+            ];
+        } else {
+            $rules['email'] = ['nullable', 'string', 'email', 'max:100'];
+            $rules['email_confirmation'] = ['nullable', 'string', 'email', 'max:100', 'same:email'];
+        }
+
+        $validator = Validator::make($productRequestData, $rules, $messages);
 
         if ($validator->fails()) {
             foreach ($validator->errors()->messages() as $field => $messages) {

@@ -39,9 +39,11 @@ class UpdateEventSettingsDTO extends BaseDTO
         public readonly ?string                 $seo_title,
         public readonly ?string                 $seo_description,
         public readonly ?string                 $seo_keywords,
+        public readonly ?string                 $meta_pixel_id = null,
 
         public readonly ?AddressDTO             $location_details = null,
         public readonly bool                    $is_online_event = false,
+        public readonly string                  $event_location_type = 'IN_PERSON',
         public readonly ?string                 $online_event_connection_details = null,
 
         public readonly ?bool                   $allow_search_engine_indexing = true,
@@ -87,6 +89,35 @@ class UpdateEventSettingsDTO extends BaseDTO
         // Waitlist settings
         public readonly ?bool                   $waitlist_auto_process = null,
         public readonly ?int                    $waitlist_offer_timeout_minutes = null,
+
+        // Social media settings
+        public readonly ?array                  $social_media_handles = null,
+        public readonly ?bool                   $show_social_media_handles = null,
+
+        // Access control settings
+        public readonly ?string                 $event_password = null,
+
+        // Payment settings
+        public readonly ?array                  $stripe_payment_method_order = null,
+
+        // Order approval settings
+        public readonly bool                    $require_order_approval = false,
+
+        // External ticket URL
+        public readonly ?string                 $external_ticket_url = null,
+
+        // Order-level ticket quantity limits
+        public readonly ?int                    $order_min_tickets = null,
+        public readonly ?int                    $order_max_tickets = null,
+
+        // Checkout validation webhook
+        public readonly ?string                 $checkout_validation_webhook_url = null,
+
+        // Attendee name requirement
+        public readonly bool                    $require_attendee_name = true,
+
+        // Free ticket expiration
+        public readonly ?int                    $free_ticket_expiration_minutes = null,
     )
     {
     }
@@ -169,6 +200,16 @@ class UpdateEventSettingsDTO extends BaseDTO
 
             // Self-service defaults
             allow_attendee_self_edit: false,
+
+            // Social media defaults
+            social_media_handles: null,
+            show_social_media_handles: false,
+
+            // Access control defaults
+            event_password: null,
+
+            // Payment defaults
+            stripe_payment_method_order: null,
         );
     }
 }

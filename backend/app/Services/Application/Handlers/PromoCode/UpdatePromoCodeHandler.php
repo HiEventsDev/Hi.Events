@@ -67,8 +67,12 @@ readonly class UpdatePromoCodeHandler
             PromoCodeDomainObjectAbstract::EXPIRY_DATE => $promoCodeDTO->expiry_date
                 ? DateHelper::convertToUTC($promoCodeDTO->expiry_date, $event->getTimezone())
                 : null,
+            PromoCodeDomainObjectAbstract::VALID_FROM => $promoCodeDTO->valid_from
+                ? DateHelper::convertToUTC($promoCodeDTO->valid_from, $event->getTimezone())
+                : null,
             PromoCodeDomainObjectAbstract::MAX_ALLOWED_USAGES => $promoCodeDTO->max_allowed_usages,
             PromoCodeDomainObjectAbstract::APPLICABLE_PRODUCT_IDS => $promoCodeDTO->applicable_product_ids,
+            PromoCodeDomainObjectAbstract::MESSAGE => $promoCodeDTO->message,
         ]);
     }
 }

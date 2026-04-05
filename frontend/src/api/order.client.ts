@@ -32,6 +32,16 @@ export interface EditOrderPayload {
     notes: string,
 }
 
+export interface CreateManualOrderPayload {
+    first_name: string;
+    last_name: string;
+    email: string;
+    send_confirmation_email: boolean;
+    products: ProductFormValue[];
+    promo_code?: string | null;
+    notes?: string | null;
+}
+
 export interface ProductPriceQuantityFormValue {
     price?: number,
     quantity: number,
@@ -99,6 +109,16 @@ export const orderClient = {
         return response.data;
     },
 
+    approveOrder: async (eventId: IdParam, orderId: IdParam) => {
+        const response = await api.post<GenericDataResponse<Order>>('events/' + eventId + '/orders/' + orderId + '/approve');
+        return response.data;
+    },
+
+    rejectOrder: async (eventId: IdParam, orderId: IdParam) => {
+        const response = await api.post<GenericDataResponse<Order>>('events/' + eventId + '/orders/' + orderId + '/reject');
+        return response.data;
+    },
+
     downloadInvoice: async (eventId: IdParam, orderId: IdParam): Promise<Blob> => {
         const response = await api.get(`events/${eventId}/orders/${orderId}/invoice`, {
             responseType: 'blob',
@@ -110,7 +130,12 @@ export const orderClient = {
     editOrder: async (eventId: IdParam, orderId: IdParam, payload: EditOrderPayload) => {
         const response = await api.put<GenericDataResponse<Order>>(`events/${eventId}/orders/${orderId}`, payload);
         return response.data;
-    }
+    },
+
+    createManualOrder: async (eventId: IdParam, payload: CreateManualOrderPayload) => {
+        const response = await api.post<GenericDataResponse<Order>>(`events/${eventId}/orders`, payload);
+        return response.data;
+    },
 }
 
 export const orderClientPublic = {
@@ -178,6 +203,11 @@ export const orderClientPublic = {
 
     abandonOrder: async (eventId: IdParam, orderShortId: IdParam) => {
         const response = await publicApi.post<GenericDataResponse<Order>>(`events/${eventId}/order/${orderShortId}/abandon`);
+        return response.data;
+    },
+
+    checkDuplicate: async (eventId: IdParam, email: string) => {
+        const response = await publicApi.get<{ is_duplicate: boolean }>(`events/${eventId}/order/check-duplicate?email=${encodeURIComponent(email)}`);
         return response.data;
     },
 }

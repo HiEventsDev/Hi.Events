@@ -15,6 +15,7 @@ class WebhookResource extends BaseResource
         return [
             'id' => $this->getId(),
             'url' => $this->getUrl(),
+            'secret' => $this->getSecret(),
             'event_types' => $this->getEventTypes(),
             'status' => $this->getStatus(),
             'last_triggered_at' => $this->getLastTriggeredAt(),

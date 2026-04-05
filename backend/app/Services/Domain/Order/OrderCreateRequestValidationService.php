@@ -11,6 +11,7 @@ use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\Helper\Currency;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Services\Domain\Product\AvailableProductQuantitiesFetchService;
@@ -29,6 +30,7 @@ class OrderCreateRequestValidationService
         readonly private ProductRepositoryInterface             $productRepository,
         readonly private PromoCodeRepositoryInterface           $promoCodeRepository,
         readonly private EventRepositoryInterface               $eventRepository,
+        readonly private EventSettingsRepositoryInterface       $eventSettingsRepository,
         readonly private AvailableProductQuantitiesFetchService $fetchAvailableProductQuantitiesService,
     )
     {
@@ -45,6 +47,7 @@ class OrderCreateRequestValidationService
         $event = $this->eventRepository->findById($eventId);
         $this->validatePromoCode($eventId, $data);
         $this->validateProductSelection($data);
+        $this->validateOrderLevelQuantity($eventId, $data);
 
         $this->availableProductQuantities = $this->fetchAvailableProductQuantitiesService
             ->getAvailableProductQuantities(
@@ -103,6 +106,36 @@ class OrderCreateRequestValidationService
         if ($productData->isEmpty() || $productData->sum(fn($product) => collect($product['quantities'])->sum('quantity')) === 0) {
             throw ValidationException::withMessages([
                 'products' => __('You haven\'t selected any products')
+            ]);
+        }
+    }
+
+    /**
+     * @throws ValidationException
+     */
+    private function validateOrderLevelQuantity(int $eventId, array $data): void
+    {
+        $settings = $this->eventSettingsRepository->findFirstWhere(['event_id' => $eventId]);
+
+        if (!$settings) {
+            return;
+        }
+
+        $totalQuantity = collect($data['products'])
+            ->sum(fn($product) => collect($product['quantities'])->sum('quantity'));
+
+        $orderMinTickets = $settings->getOrderMinTickets();
+        $orderMaxTickets = $settings->getOrderMaxTickets();
+
+        if ($orderMinTickets && $totalQuantity < $orderMinTickets) {
+            throw ValidationException::withMessages([
+                'products' => __('You must select at least :min tickets per order', ['min' => $orderMinTickets]),
+            ]);
+        }
+
+        if ($orderMaxTickets && $totalQuantity > $orderMaxTickets) {
+            throw ValidationException::withMessages([
+                'products' => __('You can select a maximum of :max tickets per order', ['max' => $orderMaxTickets]),
             ]);
         }
     }

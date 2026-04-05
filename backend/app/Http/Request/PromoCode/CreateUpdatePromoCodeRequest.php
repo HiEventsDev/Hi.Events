@@ -24,7 +24,10 @@ class CreateUpdatePromoCodeRequest extends BaseRequest
                 },
             ],
             'expiry_date' => 'date|nullable',
+            'valid_from' => 'date|nullable',
             'max_allowed_usages' => 'nullable|gte:1|max:9999999',
+            'max_attendee_usages' => 'nullable|gte:1|max:9999999',
+            'message' => 'string|nullable|max:2000',
             'discount_type' => [
                 'required',
                 Rule::in(PromoCodeDiscountTypeEnum::valuesArray())

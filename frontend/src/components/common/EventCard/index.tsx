@@ -90,7 +90,10 @@ export function EventCard({event}: EventCardProps) {
     };
 
     const getLocationText = () => {
-        if (event.settings?.is_online_event) return t`Online`;
+        const locationType = event.settings?.event_location_type
+            || (event.settings?.is_online_event ? 'online' : 'venue');
+        if (locationType === 'hybrid') return t`Hybrid`;
+        if (locationType === 'online') return t`Online`;
         const location = event.settings?.location_details;
         if (location?.venue_name) return location.venue_name;
         if (location?.city) return location.city;

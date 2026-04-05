@@ -1,4 +1,4 @@
-import {ActionIcon, Anchor, Avatar, Button, Group, Popover, Tooltip} from '@mantine/core';
+import {ActionIcon, Anchor, Avatar, Button, Group, Popover, Textarea, Tooltip} from '@mantine/core';
 import {Attendee, IdParam, MessageType} from "../../../types.ts";
 import {
     IconCheck,
@@ -16,7 +16,7 @@ import {
 import {getInitials, getProductFromEvent} from "../../../utilites/helpers.ts";
 import {useClipboard, useDisclosure} from "@mantine/hooks";
 import {SendMessageModal} from "../../modals/SendMessageModal";
-import {useMemo, useState} from "react";
+import {useRef, useMemo, useState} from "react";
 import {NoResultsSplash} from "../NoResultsSplash";
 import {useParams} from "react-router";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
@@ -27,12 +27,13 @@ import {useModifyAttendee} from "../../../mutations/useModifyAttendee.ts";
 import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {t, Trans} from "@lingui/macro";
 import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
+import {modals} from "@mantine/modals";
 import {useResendAttendeeTicket} from "../../../mutations/useResendAttendeeTicket.ts";
 import {ManageAttendeeModal} from "../../modals/ManageAttendeeModal";
 import {ManageOrderModal} from "../../modals/ManageOrderModal";
 import {ActionMenu} from '../ActionMenu';
 import {CheckInStatusModal} from "../CheckInStatusModal";
-import {prettyDate} from "../../../utilites/dates.ts";
+import {prettyDate, relativeDate} from "../../../utilites/dates.ts";
 import {TanStackTable, TanStackTableColumn} from "../TanStackTable";
 import {ColumnVisibilityToggle} from "../ColumnVisibilityToggle";
 import {CellContext} from "@tanstack/react-table";
@@ -77,32 +78,75 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
         });
     }
 
-    const handleCancel = (attendee: Attendee) => {
-        const message = attendee.status === 'CANCELLED'
-            ? t`Are you sure you want to activate this attendee?`
-            : t`Are you sure you want to cancel this attendee? This will void their ticket`
+    const cancellationReasonRef = useRef('');
 
-        confirmationDialog(message, () => {
-            modifyMutation.mutate({
-                attendeeId: attendee.id,
-                eventId: eventId,
-                attendeeData: {
-                    status: attendee.status === 'CANCELLED' ? 'ACTIVE' : 'CANCELLED'
-                }
-            }, {
-                onSuccess: () => {
-                    notifications.show({
-                        message: (
-                            <Trans>
-                                Successfully {attendee.status === 'CANCELLED' ? 'activated' : 'cancelled'} attendee
-                            </Trans>
-                        ),
-                        color: 'green',
-                    });
-                },
-                onError: () => showError(t`Failed to cancel attendee`),
+    const handleCancel = (attendee: Attendee) => {
+        if (attendee.status === 'CANCELLED') {
+            confirmationDialog(t`Are you sure you want to activate this attendee?`, () => {
+                modifyMutation.mutate({
+                    attendeeId: attendee.id,
+                    eventId: eventId,
+                    attendeeData: {
+                        status: 'ACTIVE'
+                    }
+                }, {
+                    onSuccess: () => {
+                        notifications.show({
+                            message: (
+                                <Trans>
+                                    Successfully activated attendee
+                                </Trans>
+                            ),
+                            color: 'green',
+                        });
+                    },
+                    onError: () => showError(t`Failed to cancel attendee`),
+                });
             });
-        })
+            return;
+        }
+
+        cancellationReasonRef.current = '';
+        modals.openConfirmModal({
+            title: t`Are you sure you want to cancel this attendee? This will void their ticket`,
+            children: (
+                <Textarea
+                    label={t`Cancellation Reason`}
+                    description={t`Optionally provide a reason for the cancellation. This will be visible in the attendee details.`}
+                    placeholder={t`Enter cancellation reason...`}
+                    autosize
+                    minRows={2}
+                    maxRows={4}
+                    onChange={(e) => {
+                        cancellationReasonRef.current = e.currentTarget.value;
+                    }}
+                />
+            ),
+            labels: {confirm: t`Confirm`, cancel: t`Cancel`},
+            confirmProps: {color: 'red'},
+            onConfirm: () => {
+                modifyMutation.mutate({
+                    attendeeId: attendee.id,
+                    eventId: eventId,
+                    attendeeData: {
+                        status: 'CANCELLED',
+                        cancellation_reason: cancellationReasonRef.current || null,
+                    }
+                }, {
+                    onSuccess: () => {
+                        notifications.show({
+                            message: (
+                                <Trans>
+                                    Successfully cancelled attendee
+                                </Trans>
+                            ),
+                            color: 'green',
+                        });
+                    },
+                    onError: () => showError(t`Failed to cancel attendee`),
+                });
+            },
+        });
     };
 
     const getCheckInCount = (attendee: Attendee) => {
@@ -290,10 +334,18 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
                                     </>
                                 )}
                                 {attendee.status === 'CANCELLED' && (
-                                    <>
-                                        <IconX size={14}/>
-                                        {t`Cancelled`}
-                                    </>
+                                    <Tooltip
+                                        label={attendee.cancellation_reason}
+                                        disabled={!attendee.cancellation_reason}
+                                        multiline
+                                        w={300}
+                                        withArrow
+                                    >
+                                        <Group gap={4} wrap="nowrap">
+                                            <IconX size={14}/>
+                                            {t`Cancelled`}
+                                        </Group>
+                                    </Tooltip>
                                 )}
                             </div>
                         );
@@ -319,7 +371,14 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
                                 {hasChecked ? (
                                     <>
                                         <IconCheck size={16}/>
-                                        {t`Checked In`} ({checkInCount}/{totalLists})
+                                        <span>
+                                            {t`Checked In`} ({checkInCount}/{totalLists})
+                                            {info.row.original.check_ins?.[0]?.created_at && (
+                                                <span className={classes.checkInTime}>
+                                                    {relativeDate(info.row.original.check_ins[0].created_at)}
+                                                </span>
+                                            )}
+                                        </span>
                                     </>
                                 ) : (
                                     <>

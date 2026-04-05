@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {useParams} from "react-router";
 import {Button} from "@mantine/core";
-import {IconDownload} from "@tabler/icons-react";
+import {IconDownload, IconPlus} from "@tabler/icons-react";
 import {t} from "@lingui/macro";
 import {useGetEvent} from "../../../queries/useGetEvent";
 import {useGetEventOrders} from "../../../queries/useGetEventOrders";
@@ -18,11 +18,15 @@ import {orderClient} from "../../../api/order.client";
 import {downloadBinary} from "../../../utilites/download";
 import {FilterModal, FilterOption} from "../../common/FilterModal";
 import {withLoadingNotification} from "../../../utilites/withLoadingNotification.tsx";
+import {CreateManualOrderModal} from "../../modals/CreateManualOrderModal";
 
 const orderStatuses = [
     {label: t`Completed`, value: 'COMPLETED'},
     {label: t`Cancelled`, value: 'CANCELLED'},
     {label: t`Awaiting Offline Payment`, value: 'AWAITING_OFFLINE_PAYMENT'},
+    {label: t`Awaiting Approval`, value: 'AWAITING_APPROVAL'},
+    {label: t`Reserved`, value: 'RESERVED'},
+    {label: t`Abandoned`, value: 'ABANDONED'},
 ];
 
 const refundStatuses = [
@@ -38,6 +42,7 @@ export const Orders: React.FC = () => {
     const orders = ordersQuery?.data?.data;
     const pagination = ordersQuery?.data?.meta;
     const [downloadPending, setDownloadPending] = useState(false);
+    const [createOrderModalOpen, setCreateOrderModalOpen] = useState(false);
 
     const filterOptions: FilterOption[] = [
         {
@@ -133,6 +138,13 @@ export const Orders: React.FC = () => {
                 )}
             >
                 <Button
+                    onClick={() => setCreateOrderModalOpen(true)}
+                    rightSection={<IconPlus size={14}/>}
+                    size="sm"
+                >
+                    {t`Create Order`}
+                </Button>
+                <Button
                     onClick={() => handleExport(eventId)}
                     rightSection={<IconDownload size={14}/>}
                     color="green"
@@ -142,6 +154,10 @@ export const Orders: React.FC = () => {
                     {t`Export`}
                 </Button>
             </ToolBar>
+
+            {createOrderModalOpen && (
+                <CreateManualOrderModal onClose={() => setCreateOrderModalOpen(false)} />
+            )}
 
             <TableSkeleton isVisible={!orders || ordersQuery.isFetching}/>
 

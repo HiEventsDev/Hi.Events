@@ -21,6 +21,7 @@ export const GeneralEmailSettings = () => {
             support_email: '',
             email_footer_message: '',
             notify_organizer_of_new_orders: true,
+            disable_attendee_ticket_email: false,
         }
     });
     const formErrorHandle = useFormErrorResponseHandler();
@@ -31,6 +32,7 @@ export const GeneralEmailSettings = () => {
                 support_email: eventSettingsQuery.data.support_email,
                 email_footer_message: eventSettingsQuery.data.email_footer_message,
                 notify_organizer_of_new_orders: eventSettingsQuery.data.notify_organizer_of_new_orders,
+                disable_attendee_ticket_email: eventSettingsQuery.data.disable_attendee_ticket_email ?? false,
             });
         }
     }, [eventSettingsQuery.isFetched]);
@@ -75,6 +77,12 @@ export const GeneralEmailSettings = () => {
                         {...form.getInputProps('notify_organizer_of_new_orders', {type: 'checkbox'})}
                         label={t`Notify organizer of new orders`}
                         description={t`If enabled, the organizer will receive an email notification when a new order is placed`}
+                    />
+
+                    <Switch
+                        {...form.getInputProps('disable_attendee_ticket_email', {type: 'checkbox'})}
+                        label={t`Send only order confirmation email`}
+                        description={t`If enabled, attendees will only receive the order confirmation email and not a separate ticket email. This reduces email clutter for single-ticket orders.`}
                     />
 
                     <Button loading={updateMutation.isPending} type={'submit'}>

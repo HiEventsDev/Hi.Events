@@ -20,4 +20,7 @@ enum MessageTypeEnum
 
     // Emails all customers who have purchased a specific product, ticket or merchandise etc.
     case ORDER_OWNERS_WITH_PRODUCT;
+
+    // Emails order owners who opted into marketing
+    case MARKETING_OPTED_IN;
 }

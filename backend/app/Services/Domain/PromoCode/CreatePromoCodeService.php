@@ -49,8 +49,12 @@ class CreatePromoCodeService
             PromoCodeDomainObjectAbstract::EXPIRY_DATE => $promoCode->getExpiryDate()
                 ? DateHelper::convertToUTC($promoCode->getExpiryDate(), $event->getTimezone())
                 : null,
+            PromoCodeDomainObjectAbstract::VALID_FROM => $promoCode->getValidFrom()
+                ? DateHelper::convertToUTC($promoCode->getValidFrom(), $event->getTimezone())
+                : null,
             PromoCodeDomainObjectAbstract::MAX_ALLOWED_USAGES => $promoCode->getMaxAllowedUsages(),
             PromoCodeDomainObjectAbstract::APPLICABLE_PRODUCT_IDS => $promoCode->getApplicableProductIds(),
+            PromoCodeDomainObjectAbstract::MESSAGE => $promoCode->getMessage(),
         ]);
     }
 

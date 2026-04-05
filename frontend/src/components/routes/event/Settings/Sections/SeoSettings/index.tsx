@@ -21,6 +21,7 @@ export const SeoSettings = () => {
             seo_title: '',
             seo_description: '',
             seo_keywords: '',
+            meta_pixel_id: '',
         }
     });
     const formErrorHandle = useFormErrorResponseHandler();
@@ -32,6 +33,7 @@ export const SeoSettings = () => {
                 seo_title: eventSettingsQuery.data.seo_title,
                 seo_description: eventSettingsQuery.data.seo_description,
                 seo_keywords: eventSettingsQuery.data.seo_keywords,
+                meta_pixel_id: eventSettingsQuery.data.meta_pixel_id || '',
             });
         }
     }, [eventSettingsQuery.isFetched]);
@@ -80,6 +82,12 @@ export const SeoSettings = () => {
                         {...form.getInputProps('allow_search_engine_indexing', {type: 'checkbox'})}
                         description={t`Allow search engines to index this event`}
                         label={t`Allow search engine indexing`}
+                    />
+                    <TextInput
+                        {...form.getInputProps('meta_pixel_id')}
+                        description={t`Enter your Meta (Facebook) Pixel ID to track conversions and ad performance. The pixel will fire a PageView event when the event page loads, and a Purchase event when an order is completed.`}
+                        label={t`Meta Pixel ID`}
+                        placeholder={t`e.g., 123456789012345`}
                     />
                     <Button loading={updateMutation.isPending} type={'submit'}>
                         {t`Save`}

@@ -82,6 +82,9 @@ class SendEventEmailMessagesService
             case MessageTypeEnum::ORDER_OWNERS_WITH_PRODUCT:
                 $this->sendProductMessages($messageData, $event);
                 break;
+            case MessageTypeEnum::MARKETING_OPTED_IN:
+                $this->sendMarketingOptedInMessages($messageData, $event);
+                break;
         }
 
         $this->updateMessageStatus($messageData, MessageStatus::SENT);
@@ -260,5 +263,27 @@ class SendEventEmailMessagesService
         );
 
         $this->sentEmails[] = $emailAddress;
+    }
+
+    private function sendMarketingOptedInMessages(SendMessageDTO $messageData, EventDomainObject $event): void
+    {
+        $orders = $this->orderRepository->findMarketingOptedInOrders(
+            eventId: $messageData->event_id,
+        );
+
+        if ($orders->isEmpty()) {
+            return;
+        }
+
+        $this->sendEmailToMessageSender($messageData, $event);
+
+        $orders->each(function (OrderDomainObject $order) use ($messageData, $event) {
+            $this->sendMessage(
+                emailAddress: $order->getEmail(),
+                fullName: $order->getFullName(),
+                messageData: $messageData,
+                event: $event,
+            );
+        });
     }
 }

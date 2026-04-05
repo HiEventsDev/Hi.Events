@@ -15,6 +15,7 @@ class PartialEditAttendeeRequest extends BaseRequest
             'first_name' => ['sometimes', 'string', 'max:100', 'min:1'],
             'last_name' => ['sometimes', 'string', 'max:100', 'min:1'],
             'email' => ['sometimes', 'email', 'max:100'],
+            'cancellation_reason' => ['sometimes', 'string', 'nullable', 'max:2000'],
         ];
     }
 }

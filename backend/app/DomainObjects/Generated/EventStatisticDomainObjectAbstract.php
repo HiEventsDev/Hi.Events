@@ -27,6 +27,7 @@ abstract class EventStatisticDomainObjectAbstract extends \HiEvents\DomainObject
     final public const TOTAL_REFUNDED = 'total_refunded';
     final public const ATTENDEES_REGISTERED = 'attendees_registered';
     final public const ORDERS_CANCELLED = 'orders_cancelled';
+    final public const ORDERS_ABANDONED = 'orders_abandoned';
 
     protected int $id;
     protected int $event_id;
@@ -45,6 +46,7 @@ abstract class EventStatisticDomainObjectAbstract extends \HiEvents\DomainObject
     protected float $total_refunded = 0.0;
     protected int $attendees_registered = 0;
     protected int $orders_cancelled = 0;
+    protected int $orders_abandoned = 0;
 
     public function toArray(): array
     {
@@ -66,6 +68,7 @@ abstract class EventStatisticDomainObjectAbstract extends \HiEvents\DomainObject
                     'total_refunded' => $this->total_refunded ?? null,
                     'attendees_registered' => $this->attendees_registered ?? null,
                     'orders_cancelled' => $this->orders_cancelled ?? null,
+                    'orders_abandoned' => $this->orders_abandoned ?? null,
                 ];
     }
 
@@ -254,5 +257,16 @@ abstract class EventStatisticDomainObjectAbstract extends \HiEvents\DomainObject
     public function getOrdersCancelled(): int
     {
         return $this->orders_cancelled;
+    }
+
+    public function setOrdersAbandoned(int $orders_abandoned): self
+    {
+        $this->orders_abandoned = $orders_abandoned;
+        return $this;
+    }
+
+    public function getOrdersAbandoned(): int
+    {
+        return $this->orders_abandoned;
     }
 }

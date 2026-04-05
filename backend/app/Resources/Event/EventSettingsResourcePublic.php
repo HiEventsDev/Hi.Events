@@ -53,6 +53,7 @@ class EventSettingsResourcePublic extends JsonResource
 
             'location_details' => $this->getLocationDetails(),
             'is_online_event' => $this->getIsOnlineEvent(),
+            'event_location_type' => $this->getEventLocationType(),
 
             // Ticket design settings
             'ticket_design_settings' => $this->getTicketDesignSettings(),
@@ -64,6 +65,7 @@ class EventSettingsResourcePublic extends JsonResource
             'allow_search_engine_indexing' => $this->getAllowSearchEngineIndexing(),
 
             'price_display_mode' => $this->getPriceDisplayMode(),
+            'hide_start_date' => $this->getHideStartDate(),
 
             // Payment settings
             'payment_providers' => $this->getPaymentProviders(),
@@ -89,6 +91,30 @@ class EventSettingsResourcePublic extends JsonResource
             // Waitlist settings
             'waitlist_auto_process' => $this->getWaitlistAutoProcess(),
             'waitlist_offer_timeout_minutes' => $this->getWaitlistOfferTimeoutMinutes(),
+
+            // Social media settings
+            'social_media_handles' => $this->getSocialMediaHandles(),
+            'show_social_media_handles' => $this->getShowSocialMediaHandles(),
+
+            // Access control settings
+            'is_password_protected' => !empty($this->getEventPassword()),
+
+            // Payment settings
+            'stripe_payment_method_order' => $this->getStripePaymentMethodOrder(),
+
+            // Order approval settings
+            'require_order_approval' => $this->getRequireOrderApproval(),
+            'external_ticket_url' => $this->getExternalTicketUrl(),
+
+            // Order-level ticket quantity limits
+            'order_min_tickets' => $this->getOrderMinTickets(),
+            'order_max_tickets' => $this->getOrderMaxTickets(),
+
+            // Attendee name requirement
+            'require_attendee_name' => $this->getRequireAttendeeName(),
+
+            // Free ticket expiration
+            'free_ticket_expiration_minutes' => $this->getFreeTicketExpirationMinutes(),
         ];
     }
 }

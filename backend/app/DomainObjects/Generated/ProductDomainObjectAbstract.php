@@ -37,6 +37,8 @@ abstract class ProductDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     final public const IS_HIGHLIGHTED = 'is_highlighted';
     final public const HIGHLIGHT_MESSAGE = 'highlight_message';
     final public const WAITLIST_ENABLED = 'waitlist_enabled';
+    final public const REQUIRE_ATTENDEE_DETAILS = 'require_attendee_details';
+    final public const REQUIRE_ATTENDEE_EMAIL = 'require_attendee_email';
 
     protected int $id;
     protected int $event_id;
@@ -65,6 +67,8 @@ abstract class ProductDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     protected bool $is_highlighted = false;
     protected ?string $highlight_message = null;
     protected ?bool $waitlist_enabled = null;
+    protected bool $require_attendee_details = true;
+    protected bool $require_attendee_email = true;
 
     public function toArray(): array
     {
@@ -96,6 +100,8 @@ abstract class ProductDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
                     'is_highlighted' => $this->is_highlighted ?? null,
                     'highlight_message' => $this->highlight_message ?? null,
                     'waitlist_enabled' => $this->waitlist_enabled ?? null,
+                    'require_attendee_details' => $this->require_attendee_details ?? null,
+                    'require_attendee_email' => $this->require_attendee_email ?? null,
                 ];
     }
 
@@ -394,5 +400,27 @@ abstract class ProductDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     public function getWaitlistEnabled(): ?bool
     {
         return $this->waitlist_enabled;
+    }
+
+    public function setRequireAttendeeDetails(bool $require_attendee_details): self
+    {
+        $this->require_attendee_details = $require_attendee_details;
+        return $this;
+    }
+
+    public function getRequireAttendeeDetails(): bool
+    {
+        return $this->require_attendee_details;
+    }
+
+    public function setRequireAttendeeEmail(bool $require_attendee_email): self
+    {
+        $this->require_attendee_email = $require_attendee_email;
+        return $this;
+    }
+
+    public function getRequireAttendeeEmail(): bool
+    {
+        return $this->require_attendee_email;
     }
 }

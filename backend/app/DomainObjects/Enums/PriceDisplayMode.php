@@ -8,4 +8,5 @@ enum PriceDisplayMode
 
     case INCLUSIVE;
     case EXCLUSIVE;
+    case TAX_INCLUSIVE;
 }

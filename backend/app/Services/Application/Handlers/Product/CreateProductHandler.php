@@ -35,6 +35,7 @@ class CreateProductHandler
             ProductPriceDomainObjectAbstract::SALE_END_DATE => $price->sale_end_date,
             ProductPriceDomainObjectAbstract::INITIAL_QUANTITY_AVAILABLE => $price->initial_quantity_available,
             ProductPriceDomainObjectAbstract::IS_HIDDEN => $price->is_hidden,
+            ProductPriceDomainObjectAbstract::IS_HIDDEN_WITHOUT_PROMO_CODE => $price->is_hidden_without_promo_code,
         ]));
 
         $category = $this->getProductCategoryService->getCategory(
@@ -62,6 +63,8 @@ class CreateProductHandler
                 ->setIsHighlighted($productsData->is_highlighted ?? false)
                 ->setHighlightMessage($productsData->highlight_message)
                 ->setWaitlistEnabled($productsData->waitlist_enabled)
+                ->setRequireAttendeeDetails($productsData->require_attendee_details)
+                ->setRequireAttendeeEmail($productsData->require_attendee_email)
                 ->setProductPrices($productPrices)
                 ->setEventId($productsData->event_id)
                 ->setProductType($productsData->product_type->name)

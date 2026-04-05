@@ -33,16 +33,20 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     final public const LOCATION_DETAILS = 'location_details';
     final public const ONLINE_EVENT_CONNECTION_DETAILS = 'online_event_connection_details';
     final public const IS_ONLINE_EVENT = 'is_online_event';
+    final public const EVENT_LOCATION_TYPE = 'event_location_type';
     final public const ALLOW_SEARCH_ENGINE_INDEXING = 'allow_search_engine_indexing';
     final public const SEO_TITLE = 'seo_title';
     final public const SEO_DESCRIPTION = 'seo_description';
     final public const SOCIAL_MEDIA_HANDLES = 'social_media_handles';
     final public const SHOW_SOCIAL_MEDIA_HANDLES = 'show_social_media_handles';
     final public const SEO_KEYWORDS = 'seo_keywords';
+    final public const META_PIXEL_ID = 'meta_pixel_id';
     final public const NOTIFY_ORGANIZER_OF_NEW_ORDERS = 'notify_organizer_of_new_orders';
+    final public const DISABLE_ATTENDEE_TICKET_EMAIL = 'disable_attendee_ticket_email';
     final public const PRICE_DISPLAY_MODE = 'price_display_mode';
     final public const HIDE_GETTING_STARTED_PAGE = 'hide_getting_started_page';
     final public const SHOW_SHARE_BUTTONS = 'show_share_buttons';
+    final public const HIDE_START_DATE = 'hide_start_date';
     final public const HOMEPAGE_BODY_BACKGROUND_COLOR = 'homepage_body_background_color';
     final public const HOMEPAGE_BACKGROUND_TYPE = 'homepage_background_type';
     final public const ENABLE_INVOICING = 'enable_invoicing';
@@ -67,6 +71,15 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     final public const WAITLIST_ENABLED = 'waitlist_enabled';
     final public const WAITLIST_AUTO_PROCESS = 'waitlist_auto_process';
     final public const WAITLIST_OFFER_TIMEOUT_MINUTES = 'waitlist_offer_timeout_minutes';
+    final public const EVENT_PASSWORD = 'event_password';
+    final public const STRIPE_PAYMENT_METHOD_ORDER = 'stripe_payment_method_order';
+    final public const REQUIRE_ORDER_APPROVAL = 'require_order_approval';
+    final public const EXTERNAL_TICKET_URL = 'external_ticket_url';
+    final public const ORDER_MIN_TICKETS = 'order_min_tickets';
+    final public const ORDER_MAX_TICKETS = 'order_max_tickets';
+    final public const CHECKOUT_VALIDATION_WEBHOOK_URL = 'checkout_validation_webhook_url';
+    final public const REQUIRE_ATTENDEE_NAME = 'require_attendee_name';
+    final public const FREE_TICKET_EXPIRATION_MINUTES = 'free_ticket_expiration_minutes';
 
     protected int $id;
     protected int $event_id;
@@ -91,16 +104,20 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     protected array|string|null $location_details = null;
     protected ?string $online_event_connection_details = null;
     protected bool $is_online_event = false;
+    protected string $event_location_type = 'IN_PERSON';
     protected bool $allow_search_engine_indexing = true;
     protected ?string $seo_title = null;
     protected ?string $seo_description = null;
     protected array|string|null $social_media_handles = null;
     protected ?bool $show_social_media_handles = null;
     protected ?string $seo_keywords = null;
+    protected ?string $meta_pixel_id = null;
     protected bool $notify_organizer_of_new_orders = true;
+    protected bool $disable_attendee_ticket_email = false;
     protected string $price_display_mode = 'INCLUSIVE';
     protected bool $hide_getting_started_page = false;
     protected bool $show_share_buttons = true;
+    protected bool $hide_start_date = false;
     protected ?string $homepage_body_background_color = null;
     protected string $homepage_background_type = 'COLOR';
     protected bool $enable_invoicing = false;
@@ -125,6 +142,15 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     protected bool $waitlist_enabled = false;
     protected bool $waitlist_auto_process = false;
     protected ?int $waitlist_offer_timeout_minutes = null;
+    protected ?string $event_password = null;
+    protected ?array $stripe_payment_method_order = null;
+    protected bool $require_order_approval = false;
+    protected ?string $external_ticket_url = null;
+    protected ?int $order_min_tickets = null;
+    protected ?int $order_max_tickets = null;
+    protected ?string $checkout_validation_webhook_url = null;
+    protected bool $require_attendee_name = true;
+    protected ?int $free_ticket_expiration_minutes = null;
 
     public function toArray(): array
     {
@@ -152,16 +178,20 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
                     'location_details' => $this->location_details ?? null,
                     'online_event_connection_details' => $this->online_event_connection_details ?? null,
                     'is_online_event' => $this->is_online_event ?? null,
+                    'event_location_type' => $this->event_location_type ?? null,
                     'allow_search_engine_indexing' => $this->allow_search_engine_indexing ?? null,
                     'seo_title' => $this->seo_title ?? null,
                     'seo_description' => $this->seo_description ?? null,
                     'social_media_handles' => $this->social_media_handles ?? null,
                     'show_social_media_handles' => $this->show_social_media_handles ?? null,
                     'seo_keywords' => $this->seo_keywords ?? null,
+                    'meta_pixel_id' => $this->meta_pixel_id ?? null,
                     'notify_organizer_of_new_orders' => $this->notify_organizer_of_new_orders ?? null,
+                    'disable_attendee_ticket_email' => $this->disable_attendee_ticket_email ?? null,
                     'price_display_mode' => $this->price_display_mode ?? null,
                     'hide_getting_started_page' => $this->hide_getting_started_page ?? null,
                     'show_share_buttons' => $this->show_share_buttons ?? null,
+                    'hide_start_date' => $this->hide_start_date ?? null,
                     'homepage_body_background_color' => $this->homepage_body_background_color ?? null,
                     'homepage_background_type' => $this->homepage_background_type ?? null,
                     'enable_invoicing' => $this->enable_invoicing ?? null,
@@ -186,6 +216,15 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
                     'waitlist_enabled' => $this->waitlist_enabled ?? null,
                     'waitlist_auto_process' => $this->waitlist_auto_process ?? null,
                     'waitlist_offer_timeout_minutes' => $this->waitlist_offer_timeout_minutes ?? null,
+                    'event_password' => $this->event_password ?? null,
+                    'stripe_payment_method_order' => $this->stripe_payment_method_order ?? null,
+                    'require_order_approval' => $this->require_order_approval ?? null,
+                    'external_ticket_url' => $this->external_ticket_url ?? null,
+                    'order_min_tickets' => $this->order_min_tickets ?? null,
+                    'order_max_tickets' => $this->order_max_tickets ?? null,
+                    'checkout_validation_webhook_url' => $this->checkout_validation_webhook_url ?? null,
+                    'require_attendee_name' => $this->require_attendee_name ?? null,
+                    'free_ticket_expiration_minutes' => $this->free_ticket_expiration_minutes ?? null,
                 ];
     }
 
@@ -440,6 +479,17 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     public function getIsOnlineEvent(): bool
     {
         return $this->is_online_event;
+    }
+
+    public function setEventLocationType(string $event_location_type): self
+    {
+        $this->event_location_type = $event_location_type;
+        return $this;
+    }
+
+    public function getEventLocationType(): string
+    {
+        return $this->event_location_type;
     }
 
     public function setAllowSearchEngineIndexing(bool $allow_search_engine_indexing): self
@@ -815,5 +865,137 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     public function getWaitlistOfferTimeoutMinutes(): ?int
     {
         return $this->waitlist_offer_timeout_minutes;
+    }
+
+    public function setHideStartDate(bool $hide_start_date): self
+    {
+        $this->hide_start_date = $hide_start_date;
+        return $this;
+    }
+
+    public function getHideStartDate(): bool
+    {
+        return $this->hide_start_date;
+    }
+
+    public function setDisableAttendeeTicketEmail(bool $disable_attendee_ticket_email): self
+    {
+        $this->disable_attendee_ticket_email = $disable_attendee_ticket_email;
+        return $this;
+    }
+
+    public function getDisableAttendeeTicketEmail(): bool
+    {
+        return $this->disable_attendee_ticket_email;
+    }
+
+    public function setMetaPixelId(?string $meta_pixel_id): self
+    {
+        $this->meta_pixel_id = $meta_pixel_id;
+        return $this;
+    }
+
+    public function getMetaPixelId(): ?string
+    {
+        return $this->meta_pixel_id;
+    }
+
+    public function setEventPassword(?string $event_password): self
+    {
+        $this->event_password = $event_password;
+        return $this;
+    }
+
+    public function getEventPassword(): ?string
+    {
+        return $this->event_password;
+    }
+
+    public function setStripePaymentMethodOrder(?array $stripe_payment_method_order): self
+    {
+        $this->stripe_payment_method_order = $stripe_payment_method_order;
+        return $this;
+    }
+
+    public function getStripePaymentMethodOrder(): ?array
+    {
+        return $this->stripe_payment_method_order;
+    }
+
+    public function setRequireOrderApproval(bool $require_order_approval): self
+    {
+        $this->require_order_approval = $require_order_approval;
+        return $this;
+    }
+
+    public function getRequireOrderApproval(): bool
+    {
+        return $this->require_order_approval;
+    }
+
+    public function setExternalTicketUrl(?string $external_ticket_url): self
+    {
+        $this->external_ticket_url = $external_ticket_url;
+        return $this;
+    }
+
+    public function getExternalTicketUrl(): ?string
+    {
+        return $this->external_ticket_url;
+    }
+
+    public function setOrderMinTickets(?int $order_min_tickets): self
+    {
+        $this->order_min_tickets = $order_min_tickets;
+        return $this;
+    }
+
+    public function getOrderMinTickets(): ?int
+    {
+        return $this->order_min_tickets;
+    }
+
+    public function setOrderMaxTickets(?int $order_max_tickets): self
+    {
+        $this->order_max_tickets = $order_max_tickets;
+        return $this;
+    }
+
+    public function getOrderMaxTickets(): ?int
+    {
+        return $this->order_max_tickets;
+    }
+
+    public function setCheckoutValidationWebhookUrl(?string $checkout_validation_webhook_url): self
+    {
+        $this->checkout_validation_webhook_url = $checkout_validation_webhook_url;
+        return $this;
+    }
+
+    public function getCheckoutValidationWebhookUrl(): ?string
+    {
+        return $this->checkout_validation_webhook_url;
+    }
+
+    public function setRequireAttendeeName(bool $require_attendee_name): self
+    {
+        $this->require_attendee_name = $require_attendee_name;
+        return $this;
+    }
+
+    public function getRequireAttendeeName(): bool
+    {
+        return $this->require_attendee_name;
+    }
+
+    public function setFreeTicketExpirationMinutes(?int $free_ticket_expiration_minutes): self
+    {
+        $this->free_ticket_expiration_minutes = $free_ticket_expiration_minutes;
+        return $this;
+    }
+
+    public function getFreeTicketExpirationMinutes(): ?int
+    {
+        return $this->free_ticket_expiration_minutes;
     }
 }

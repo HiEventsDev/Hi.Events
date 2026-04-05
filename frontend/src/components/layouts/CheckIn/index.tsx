@@ -1,5 +1,6 @@
 import {useParams} from "react-router";
 import {useGetCheckInListPublic} from "../../../queries/useGetCheckInListPublic.ts";
+import {GET_CHECK_IN_LIST_PUBLIC_QUERY_KEY} from "../../../queries/useGetCheckInListPublic.ts";
 import {useCallback, useEffect, useRef, useState} from "react";
 import {useDebouncedValue, useDisclosure, useNetwork} from "@mantine/hooks";
 import {Attendee, QueryFilters, QueryFilterOperator} from "../../../types.ts";
@@ -12,8 +13,10 @@ import {SearchBar} from "../../common/SearchBar";
 import {IconInfoCircle, IconQrcode, IconVolume, IconVolumeOff} from "@tabler/icons-react";
 import {QRScannerComponent} from "../../common/AttendeeCheckInTable/QrScanner.tsx";
 import {useGetCheckInListAttendees} from "../../../queries/useGetCheckInListAttendeesPublic.ts";
+import {GET_CHECK_IN_LIST_ATTENDEES_PUBLIC_QUERY_KEY} from "../../../queries/useGetCheckInListAttendeesPublic.ts";
 import {useCreateCheckInPublic} from "../../../mutations/useCreateCheckInPublic.ts";
 import {useDeleteCheckInPublic} from "../../../mutations/useDeleteCheckInPublic.ts";
+import {useQueryClient} from "@tanstack/react-query";
 import {NoResultsSplash} from "../../common/NoResultsSplash";
 import {Countdown} from "../../common/Countdown";
 import Truncate from "../../common/Truncate";
@@ -25,10 +28,12 @@ import {CheckInOptionsModal} from "../../common/CheckIn/CheckInOptionsModal";
 import {ScannerSelectionModal} from "../../common/CheckIn/ScannerSelectionModal";
 import {CheckInInfoModal} from "../../common/CheckIn/CheckInInfoModal";
 import {HidScannerStatus} from "../../common/CheckIn/HidScannerStatus";
+import {BulkCheckInModal} from "../../common/CheckIn/BulkCheckInModal";
 import {Button} from "@mantine/core";
 
 const CheckIn = () => {
     const networkStatus = useNetwork();
+    const queryClient = useQueryClient();
     const {checkInListShortId} = useParams();
     const CheckInListQuery = useGetCheckInListPublic(checkInListShortId);
     const checkInList = CheckInListQuery?.data?.data;
@@ -55,6 +60,9 @@ const CheckIn = () => {
     });
     const [selectedAttendee, setSelectedAttendee] = useState<Attendee | null>(null);
     const [checkInModalOpen, checkInModalHandlers] = useDisclosure(false);
+    const [bulkCheckInModalOpen, bulkCheckInModalHandlers] = useDisclosure(false);
+    const [orderSiblings, setOrderSiblings] = useState<Attendee[]>([]);
+    const [isBulkCheckInPending, setIsBulkCheckInPending] = useState(false);
     const [infoModalOpen, infoModalHandlers] = useDisclosure(false, {
             onOpen: () => {
                 CheckInListQuery.refetch();
@@ -63,6 +71,7 @@ const CheckIn = () => {
     );
 
     const products = checkInList?.products;
+    const hasSearchQuery = searchQueryDebounced.trim().length > 0;
     const queryFilters: QueryFilters = {
         pageNumber: 1,
         query: searchQueryDebounced,
@@ -75,7 +84,7 @@ const CheckIn = () => {
     const attendeesQuery = useGetCheckInListAttendees(
         checkInListShortId,
         queryFilters,
-        checkInList?.is_active && !checkInList?.is_expired,
+        checkInList?.is_active && !checkInList?.is_expired && hasSearchQuery,
     );
     const attendees = attendeesQuery?.data?.data;
     const checkInMutation = useCreateCheckInPublic(queryFilters);
@@ -118,6 +127,63 @@ const CheckIn = () => {
         }
     }, [isSoundOn]);
 
+    const fetchOrderSiblings = useCallback(async (attendee: Attendee) => {
+        try {
+            const response = await publicCheckInClient.getCheckInListAttendees(
+                checkInListShortId,
+                {
+                    pageNumber: 1,
+                    perPage: 100,
+                    filterFields: {
+                        order_id: {operator: QueryFilterOperator.Equals, value: String(attendee.order_id)},
+                    },
+                },
+            );
+            const siblings = (response?.data || []).filter(
+                a => a.public_id !== attendee.public_id && !a.check_in && a.status !== 'CANCELLED'
+            );
+            if (siblings.length > 0) {
+                setOrderSiblings(siblings);
+                bulkCheckInModalHandlers.open();
+            }
+        } catch {
+            // Silently ignore — bulk check-in prompt is optional
+        }
+    }, [checkInListShortId, bulkCheckInModalHandlers]);
+
+    const handleBulkCheckIn = useCallback(async () => {
+        if (!checkInListShortId || orderSiblings.length === 0) return;
+        setIsBulkCheckInPending(true);
+        try {
+            const result = await publicCheckInClient.createBulkCheckIn(
+                checkInListShortId,
+                orderSiblings.map(a => ({public_id: a.public_id, action: 'check-in' as const})),
+            );
+            const errorCount = result.errors ? Object.keys(result.errors).length : 0;
+            const successCount = orderSiblings.length - errorCount;
+            if (successCount > 0) {
+                showSuccess(<Trans><b>{successCount}</b> attendee(s) checked in successfully</Trans>);
+                playSuccessSound();
+            }
+            if (errorCount > 0) {
+                showError(t`${errorCount} attendee(s) could not be checked in`);
+            }
+            queryClient.invalidateQueries({
+                queryKey: [GET_CHECK_IN_LIST_ATTENDEES_PUBLIC_QUERY_KEY, checkInListShortId, queryFilters],
+            });
+            queryClient.invalidateQueries({
+                queryKey: [GET_CHECK_IN_LIST_PUBLIC_QUERY_KEY, checkInListShortId],
+            });
+        } catch {
+            showError(t`Unable to check in attendees`);
+            playErrorSound();
+        } finally {
+            setIsBulkCheckInPending(false);
+            bulkCheckInModalHandlers.close();
+            setOrderSiblings([]);
+        }
+    }, [checkInListShortId, orderSiblings, bulkCheckInModalHandlers, playSuccessSound, playErrorSound]);
+
     const handleCheckInAction = (attendee: Attendee, action: 'check-in' | 'check-in-and-mark-order-as-paid') => {
         checkInMutation.mutate({
             checkInListShortId: checkInListShortId,
@@ -134,6 +200,7 @@ const CheckIn = () => {
                 playSuccessSound();
                 checkInModalHandlers.close();
                 setSelectedAttendee(null);
+                fetchOrderSiblings(attendee);
             },
             onError: (error) => {
                 playErrorSound();
@@ -467,6 +534,7 @@ const CheckIn = () => {
                 allowOrdersAwaitingOfflinePaymentToCheckIn={allowOrdersAwaitingOfflinePaymentToCheckIn || false}
                 onCheckInToggle={handleCheckInToggle}
                 onClickSound={playClickSound}
+                hasSearchQuery={hasSearchQuery}
             />
             <CheckInOptionsModal
                 isOpen={checkInModalOpen}
@@ -477,6 +545,17 @@ const CheckIn = () => {
                     setSelectedAttendee(null);
                 }}
                 onCheckIn={(action) => selectedAttendee && handleCheckInAction(selectedAttendee, action)}
+            />
+            <BulkCheckInModal
+                isOpen={bulkCheckInModalOpen}
+                attendees={orderSiblings}
+                products={products}
+                isPending={isBulkCheckInPending}
+                onClose={() => {
+                    bulkCheckInModalHandlers.close();
+                    setOrderSiblings([]);
+                }}
+                onConfirm={handleBulkCheckIn}
             />
             <ScannerSelectionModal
                 isOpen={scannerSelectionOpen}

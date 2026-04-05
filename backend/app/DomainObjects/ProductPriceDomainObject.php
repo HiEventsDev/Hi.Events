@@ -16,6 +16,8 @@ class ProductPriceDomainObject extends Generated\ProductPriceDomainObjectAbstrac
 
     private ?float $feeTotal = null;
 
+    private ?float $inclusiveTaxTotal = null;
+
     private ?bool $isAvailable = null;
 
     private ?string $offSaleReason = null;
@@ -56,9 +58,23 @@ class ProductPriceDomainObject extends Generated\ProductPriceDomainObjectAbstrac
         return $this->feeTotal ?? null;
     }
 
+    public function setInclusiveTaxTotal(?float $inclusiveTaxTotal): self
+    {
+        $this->inclusiveTaxTotal = $inclusiveTaxTotal;
+
+        return $this;
+    }
+
+    public function getInclusiveTaxTotal(): ?float
+    {
+        return $this->inclusiveTaxTotal ?? 0.00;
+    }
+
     public function getPriceIncludingTaxAndServiceFee(): float
     {
-        return Currency::round($this->getPrice() + $this->getTaxTotal() + $this->getFeeTotal());
+        // Inclusive tax is already embedded in the price, so only add exclusive tax and fees
+        $exclusiveTax = $this->getTaxTotal() - $this->getInclusiveTaxTotal();
+        return Currency::round($this->getPrice() + $exclusiveTax + $this->getFeeTotal());
     }
 
     public function isBeforeSaleStartDate(): bool

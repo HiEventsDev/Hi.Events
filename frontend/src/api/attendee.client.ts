@@ -12,6 +12,7 @@ export interface EditAttendeeRequest {
     product_id?: IdParam;
     product_price_id?: IdParam;
     status?: string;
+    cancellation_reason?: string | null;
 }
 
 export interface CreateAttendeeRequest extends EditAttendeeRequest {
@@ -19,6 +20,7 @@ export interface CreateAttendeeRequest extends EditAttendeeRequest {
     send_confirmation_email: boolean,
     taxes_and_fees: TaxAndFee[],
     locale: SupportedLocales,
+    question_answers?: { question_id: number; answer: string | string[] }[],
 }
 
 export const attendeesClient = {

@@ -23,6 +23,9 @@ class CreateAttendeeRequest extends BaseRequest
             'taxes_and_fees.*.tax_or_fee_id' => ['required', 'int'],
             'taxes_and_fees.*.amount' => ['required', ...RulesHelper::MONEY],
             'locale' => ['required', Rule::in(Locale::getSupportedLocales())],
+            'question_answers' => ['nullable', 'array'],
+            'question_answers.*.question_id' => ['required', 'int'],
+            'question_answers.*.answer' => ['nullable'],
         ];
     }
 }

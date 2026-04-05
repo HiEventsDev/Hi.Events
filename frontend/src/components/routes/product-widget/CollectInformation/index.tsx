@@ -2,6 +2,7 @@ import {useMutation} from "@tanstack/react-query";
 import {FinaliseOrderPayload, orderClientPublic} from "../../../../api/order.client.ts";
 import {useNavigate, useParams, useSearchParams} from "react-router";
 import {
+    Alert,
     Button,
     Checkbox,
     NativeSelect,
@@ -11,13 +12,14 @@ import {
     TextInput,
     Tooltip
 } from "@mantine/core";
-import {IconArrowRight, IconCheck, IconCircleCheck, IconClock} from "@tabler/icons-react";
+import {IconAlertTriangle, IconArrowRight, IconCheck, IconCircleCheck, IconClock} from "@tabler/icons-react";
 import {t, Trans} from "@lingui/macro";
 import {useForm} from "@mantine/form";
 import {notifications} from "@mantine/notifications";
 import {useGetOrderPublic} from "../../../../queries/useGetOrderPublic.ts";
 import {useGetEventPublic} from "../../../../queries/useGetEventPublic.ts";
 import {useGetEventQuestionsPublic} from "../../../../queries/useGetEventQuestionsPublic.ts";
+import {useGetPromoCodePublic} from "../../../../queries/useGetPromoCodePublic.ts";
 import {CheckoutOrderQuestions, CheckoutProductQuestions} from "../../../common/CheckoutQuestion";
 import {Event, IdParam, Question} from "../../../../types.ts";
 import {useEffect, useState} from "react";
@@ -33,6 +35,7 @@ import countries from "../../../../../data/countries.json";
 import classes from "./CollectInformation.module.scss";
 import {trackEvent, AnalyticsEvents} from "../../../../utilites/analytics.ts";
 import {clearWaitlistJoinedForEvent} from "../../../../hooks/useWaitlistJoined.ts";
+import {useCheckDuplicateOrder} from "../../../../queries/useCheckDuplicateOrder.ts";
 
 const LoadingSkeleton = () =>
     (
@@ -66,12 +69,17 @@ export const CollectInformation = () => {
         isFetched: isQuestionsFetched,
         isError: isQuestionsError
     } = useGetEventQuestionsPublic(eventId);
+    const {
+        data: promoCodeData,
+    } = useGetPromoCodePublic(eventId, order?.promo_code ?? null);
     const productQuestions = questions?.filter(question => question.belongs_to === "PRODUCT");
     const orderQuestions = questions?.filter(question => question.belongs_to === "ORDER");
     const products = productCategories?.flatMap(category => category.products);
     const requireBillingAddress = event?.settings?.require_billing_address;
     const isPerOrderCollection = event?.settings?.attendee_details_collection_method === 'PER_ORDER';
+    const requireAttendeeName = event?.settings?.require_attendee_name !== false;
     const [copyOption, setCopyOption] = useState<'none' | 'first' | 'all'>('none');
+    const {data: duplicateCheck} = useCheckDuplicateOrder(eventId, form.values?.order?.email);
 
     const isEmailValid = (email: string) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -462,6 +470,17 @@ export const CollectInformation = () => {
                         />
                     </InputGroup>
 
+                    {duplicateCheck?.is_duplicate && (
+                        <Alert
+                            icon={<IconAlertTriangle size={16}/>}
+                            color="yellow"
+                            variant="light"
+                            mb={10}
+                        >
+                            <Trans>You already have an order for this event. You may be purchasing duplicate tickets.</Trans>
+                        </Alert>
+                    )}
+
                     {orderRequiresAttendeeDetails && !isPerOrderCollection && totalTicketAttendees > 0 && (
                         <div className={classes.copyDetailsSection}>
                             {totalTicketAttendees === 1 ? (
@@ -515,7 +534,6 @@ export const CollectInformation = () => {
 
                             <InputGroup>
                                 <TextInput
-                                    withAsterisk
                                     label={t`Address Line 1`}
                                     placeholder={t`Address Line 1`}
                                     {...form.getInputProps("order.address.address_line_1")}
@@ -529,13 +547,11 @@ export const CollectInformation = () => {
 
                             <InputGroup>
                                 <TextInput
-                                    withAsterisk
                                     label={t`City`}
                                     placeholder={t`City`}
                                     {...form.getInputProps("order.address.city")}
                                 />
                                 <TextInput
-                                    withAsterisk
                                     label={t`State or Region`}
                                     placeholder={t`State or Region`}
                                     {...form.getInputProps("order.address.state_or_region")}
@@ -572,7 +588,8 @@ export const CollectInformation = () => {
 
                 {orderItems?.map(orderItem => {
                     const product = products?.find(product => product!.id === orderItem.product_id);
-                    const productRequiresDetails = product?.product_type === 'TICKET' && !isPerOrderCollection;
+                    const productRequiresDetails = product?.product_type === 'TICKET' && !isPerOrderCollection && product?.require_attendee_details !== false;
+                    const productRequiresEmail = productRequiresDetails && product?.require_attendee_email !== false;
                     const productHasQuestions = productQuestions?.some(question => question.product_ids?.includes(orderItem.product_id));
 
                     if (!product) {
@@ -642,19 +659,20 @@ export const CollectInformation = () => {
                                             <>
                                                 <InputGroup>
                                                     <TextInput
-                                                        withAsterisk
+                                                        withAsterisk={requireAttendeeName}
                                                         label={t`First Name`}
                                                         placeholder={t`First name`}
                                                         {...form.getInputProps(`products.${currentProductIndex}.first_name`)}
                                                     />
                                                     <TextInput
-                                                        withAsterisk
+                                                        withAsterisk={requireAttendeeName}
                                                         label={t`Last Name`}
                                                         placeholder={t`Last Name`}
                                                         {...form.getInputProps(`products.${currentProductIndex}.last_name`)}
                                                     />
                                                 </InputGroup>
 
+                                                {productRequiresEmail && (
                                                 <InputGroup>
                                                     <TextInput
                                                         withAsterisk
@@ -675,6 +693,7 @@ export const CollectInformation = () => {
                                                         {...form.getInputProps(`products.${currentProductIndex}.email_confirmation`)}
                                                     />
                                                 </InputGroup>
+                                                )}
                                             </>
                                         )}
 
@@ -695,6 +714,12 @@ export const CollectInformation = () => {
                     );
                 })}
 
+                {!!promoCodeData?.message && (
+                    <Card>
+                        <div>{promoCodeData.message}</div>
+                    </Card>
+                )}
+
                 {!!event?.settings?.pre_checkout_message && (
                     <Card>
                         <div dangerouslySetInnerHTML={{__html: event?.settings?.pre_checkout_message}}/>
@@ -711,12 +736,12 @@ export const CollectInformation = () => {
                     >
                         {order?.is_payment_required ? t`Continue to Payment` : t`Complete Order`}
                     </Button>
-                    {!!getConfig('VITE_TOS_URL') && (
+                    {!!(event?.organizer?.settings?.terms_of_service_url || getConfig('VITE_TOS_URL')) && (
                         <p className={classes.tosNotice}>
                             <Trans>
                                 By continuing, you agree to the{' '}
                                 <a
-                                    href={getConfig('VITE_TOS_URL', 'https://hi.events/terms-of-service') as string}
+                                    href={(event?.organizer?.settings?.terms_of_service_url || getConfig('VITE_TOS_URL', 'https://hi.events/terms-of-service')) as string}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >

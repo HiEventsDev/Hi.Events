@@ -39,6 +39,7 @@ class OrderResourcePublic extends BaseResource
             'public_id' => $this->getPublicId(),
             'is_payment_required' => $this->isPaymentRequired(),
             'promo_code' => $this->getPromoCode(),
+            'locale' => $this->getLocale(),
             'taxes_and_fees_rollup' => $this->getTaxesAndFeesRollup(),
             'event' => $this->when(
                 !is_null($this->getEvent()),

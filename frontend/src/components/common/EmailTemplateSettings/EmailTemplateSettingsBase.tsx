@@ -81,6 +81,7 @@ export const EmailTemplateSettingsBase = ({
 
     const orderConfirmationTemplate = templates.find(t => t.template_type === 'order_confirmation');
     const attendeeTicketTemplate = templates.find(t => t.template_type === 'attendee_ticket');
+    const orderFailedTemplate = templates.find(t => t.template_type === 'order_failed');
 
     const handleCreateTemplate = (type: EmailTemplateType) => {
         setEditingTemplate(null);
@@ -199,11 +200,13 @@ export const EmailTemplateSettingsBase = ({
     const templateTypeLabels: Record<EmailTemplateType, string> = {
         'order_confirmation': t`Order Confirmation`,
         'attendee_ticket': t`Attendee Ticket`,
+        'order_failed': t`Order Failed`,
     };
 
     const templateDescriptions: Record<EmailTemplateType, string> = {
         'order_confirmation': t`Sent to customers when they place an order`,
         'attendee_ticket': t`Sent to each attendee with their ticket details`,
+        'order_failed': t`Sent to the customer when their order is not successful`,
     };
 
     const getTemplateStatusBadge = (template?: EmailTemplate) => {
@@ -378,6 +381,13 @@ export const EmailTemplateSettingsBase = ({
                         template={attendeeTicketTemplate}
                         label={templateTypeLabels.attendee_ticket}
                         description={templateDescriptions.attendee_ticket}
+                    />
+
+                    <TemplateCard
+                        type="order_failed"
+                        template={orderFailedTemplate}
+                        label={templateTypeLabels.order_failed}
+                        description={templateDescriptions.order_failed}
                     />
                 </Stack>
             </div>

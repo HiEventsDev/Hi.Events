@@ -56,7 +56,13 @@ export const EventDocumentHead = ({event}: EventDocumentHeadProps) => {
         },
         url,
         eventStatus: 'https://schema.org/EventScheduled',
-        eventAttendanceMode: event.settings?.is_online_event ? "https://schema.org/OnlineEventAttendanceMode" : "https://schema.org/OfflineEventAttendanceMode",
+        eventAttendanceMode: (() => {
+            const locationType = event.settings?.event_location_type
+                || (event.settings?.is_online_event ? 'online' : 'venue');
+            if (locationType === 'hybrid') return "https://schema.org/MixedEventAttendanceMode";
+            if (locationType === 'online') return "https://schema.org/OnlineEventAttendanceMode";
+            return "https://schema.org/OfflineEventAttendanceMode";
+        })(),
         currency: event.currency,
         offers: products.map(product => ({
             "@type": "http://schema.org/Offer",

@@ -7,6 +7,7 @@ import {useParams} from "react-router";
 import {questionClient} from "../../../api/question.client.ts";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {GET_EVENT_QUESTIONS_QUERY_KEY} from "../../../queries/useGetEventQuestions.ts";
+import {useGetEventQuestions} from "../../../queries/useGetEventQuestions.ts";
 import {Modal} from "../../common/Modal";
 import {t} from "@lingui/macro";
 import {QuestionForm} from "../../forms/QuestionForm";
@@ -24,6 +25,7 @@ export const EditQuestionModal = ({onClose, questionId}: EditQuestionModalProps)
     const eventQuery = useGetEvent(eventId);
     const questionQuery = useGetQuestion(eventId, questionId);
     const productsCategories = eventQuery?.data?.product_categories;
+    const {data: questions} = useGetEventQuestions(eventId);
 
     const form = useForm<QuestionRequestData>({
         initialValues: {
@@ -35,6 +37,7 @@ export const EditQuestionModal = ({onClose, questionId}: EditQuestionModalProps)
             product_ids: [],
             belongs_to: "ORDER",
             is_hidden: false,
+            validation_rules: null,
         },
     });
 
@@ -54,6 +57,8 @@ export const EditQuestionModal = ({onClose, questionId}: EditQuestionModalProps)
                 product_ids: data.product_ids?.map(id => String(id)),
                 belongs_to: data.belongs_to,
                 is_hidden: data.is_hidden,
+                conditions: data.conditions || null,
+                validation_rules: data.validation_rules || null,
             });
         }
         , [questionQuery.isFetched]);
@@ -95,7 +100,7 @@ export const EditQuestionModal = ({onClose, questionId}: EditQuestionModalProps)
             heading={t`Edit Question`}
         >
             <form onSubmit={form.onSubmit((values) => mutation.mutate(values as any as Question))}>
-                <QuestionForm form={form} productCategories={productsCategories}/>
+                <QuestionForm form={form} productCategories={productsCategories} questions={questions}/>
                 {!questionQuery.isFetched && <LoadingOverlay visible/>}
                 <Button loading={mutation.isPending} type="submit" fullWidth mt="xl">
                     {mutation.isPending ? t`Working...` : t`Edit Question`}

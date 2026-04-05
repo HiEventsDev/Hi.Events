@@ -492,6 +492,18 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                                 {...form.getInputProps(`waitlist_enabled`, {type: 'checkbox'})}
                                 label={t`Enable Waitlist`}
                             />
+                            <Switch
+                                description={t`When disabled, attendee name and email will not be collected for this product during checkout.`}
+                                {...form.getInputProps(`require_attendee_details`, {type: 'checkbox'})}
+                                label={t`Require attendee details`}
+                            />
+                            {form.values.require_attendee_details && (
+                                <Switch
+                                    description={t`When disabled, attendee email will not be required for this product during checkout.`}
+                                    {...form.getInputProps(`require_attendee_email`, {type: 'checkbox'})}
+                                    label={t`Require attendee email`}
+                                />
+                            )}
                         </div>
                     </Fieldset>
 

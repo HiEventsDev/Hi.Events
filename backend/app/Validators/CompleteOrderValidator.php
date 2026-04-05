@@ -63,9 +63,9 @@ class CompleteOrderValidator extends BaseValidator
 
         $addressRules = $eventSettings->getRequireBillingAddress() ? [
             'order.address' => 'array',
-            'order.address.address_line_1' => 'required|string|max:255',
+            'order.address.address_line_1' => 'nullable|string|max:255',
             'order.address.address_line_2' => 'nullable|string|max:255',
-            'order.address.city' => 'required|string|max:85',
+            'order.address.city' => 'nullable|string|max:85',
             'order.address.state_or_region' => 'nullable|string|max:85',
             'order.address.zip_or_postal_code' => 'nullable|string|max:85',
             'order.address.country' => 'required|string|max:2',
@@ -81,6 +81,7 @@ class CompleteOrderValidator extends BaseValidator
                 $productQuestions,
                 $products,
                 $eventSettings->getAttendeeDetailsCollectionMethod(),
+                $eventSettings->getRequireAttendeeName(),
             ),
             ...$addressRules
         ];

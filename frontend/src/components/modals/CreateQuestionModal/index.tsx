@@ -7,6 +7,7 @@ import {useParams} from "react-router";
 import {questionClient} from "../../../api/question.client.ts";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {GET_EVENT_QUESTIONS_QUERY_KEY} from "../../../queries/useGetEventQuestions.ts";
+import {useGetEventQuestions} from "../../../queries/useGetEventQuestions.ts";
 import {Modal} from "../../common/Modal";
 import {t} from "@lingui/macro";
 import {QuestionForm} from "../../forms/QuestionForm";
@@ -23,6 +24,7 @@ export const CreateQuestionModal = ({onClose, onCompleted, defaultBelongsTo = 'O
 
     const eventQuery = useGetEvent(eventId);
     const productCategories = eventQuery?.data?.product_categories;
+    const {data: questions} = useGetEventQuestions(eventId);
 
     const form = useForm({
         initialValues: {
@@ -35,6 +37,7 @@ export const CreateQuestionModal = ({onClose, onCompleted, defaultBelongsTo = 'O
             apply_to_all_products: true,
             belongs_to: defaultBelongsTo,
             is_hidden: false,
+            validation_rules: null,
         },
     });
 
@@ -70,7 +73,7 @@ export const CreateQuestionModal = ({onClose, onCompleted, defaultBelongsTo = 'O
             heading={t`Create Question`}
         >
             <form onSubmit={form.onSubmit((values) => mutation.mutate(values as any as Question))}>
-                <QuestionForm form={form} productCategories={productCategories}/>
+                <QuestionForm form={form} productCategories={productCategories} questions={questions}/>
                 <Button loading={mutation.isPending} type="submit" fullWidth mt="xl">
                     {mutation.isPending ? t`Working...` : t`Create Question`}
                 </Button>

@@ -53,6 +53,9 @@ class EditTaxHandler
                 'is_active' => $data->is_active,
                 'is_default' => $data->is_default,
                 'type' => $data->type->name,
+                'is_online_only' => $data->is_online_only,
+                'application_type' => $data->application_type->name,
+                'is_tax_inclusive' => $data->is_tax_inclusive,
             ],
             where: [
                 'id' => $data->id,

@@ -13,8 +13,10 @@ use HiEvents\Services\Domain\Payment\Stripe\EventHandlers\PayoutPaidHandler;
 use Illuminate\Cache\Repository;
 use Illuminate\Log\Logger;
 use JsonException;
+use Stripe\Charge;
 use Stripe\Event;
 use Stripe\Exception\SignatureVerificationException;
+use Stripe\Refund;
 use Stripe\Webhook;
 use Throwable;
 use UnexpectedValueException;
@@ -27,6 +29,7 @@ class IncomingWebhookHandler
         Event::PAYMENT_INTENT_PAYMENT_FAILED,
         Event::ACCOUNT_UPDATED,
         Event::REFUND_UPDATED,
+        Event::CHARGE_REFUNDED,
         Event::CHARGE_SUCCEEDED,
         Event::CHARGE_UPDATED,
         Event::PAYOUT_PAID,
@@ -93,6 +96,9 @@ class IncomingWebhookHandler
                     break;
                 case Event::REFUND_UPDATED:
                     $this->refundEventHandlerService->handleEvent($event->data->object);
+                    break;
+                case Event::CHARGE_REFUNDED:
+                    $this->handleChargeRefunded($event->data->object);
                     break;
                 case Event::ACCOUNT_UPDATED:
                     $this->accountUpdateHandler->handleEvent($event->data->object);
@@ -163,6 +169,24 @@ class IncomingWebhookHandler
         }
 
         throw $lastException ?? new SignatureVerificationException(__('Unable to verify Stripe signature with any platform'));
+    }
+
+    /**
+     * Handle the charge.refunded event by extracting refund objects from the
+     * Charge and delegating to the existing ChargeRefundUpdatedHandler.
+     *
+     * For standard card refunds Stripe fires charge.refunded (not refund.updated).
+     * The existing idempotency check (lookup by refund_id) prevents duplicate processing.
+     */
+    private function handleChargeRefunded(Charge $charge): void
+    {
+        $refunds = $charge->refunds->data ?? [];
+
+        foreach ($refunds as $refund) {
+            if ($refund instanceof Refund) {
+                $this->refundEventHandlerService->handleEvent($refund);
+            }
+        }
     }
 
     private function hasEventBeenHandled(Event $event): bool

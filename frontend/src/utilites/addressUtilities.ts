@@ -4,6 +4,7 @@ export const isAddressSet = (address?: VenueAddress) => {
     if (!address) return false;
 
     const addressFields: (keyof VenueAddress)[] = [
+        'venue_name',
         'address_line_1',
         'address_line_2',
         'city',

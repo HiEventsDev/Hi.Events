@@ -20,6 +20,9 @@ abstract class PromoCodeDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
     final public const ATTENDEE_USAGE_COUNT = 'attendee_usage_count';
     final public const ORDER_USAGE_COUNT = 'order_usage_count';
     final public const MAX_ALLOWED_USAGES = 'max_allowed_usages';
+    final public const MAX_ATTENDEE_USAGES = 'max_attendee_usages';
+    final public const VALID_FROM = 'valid_from';
+    final public const MESSAGE = 'message';
     final public const CREATED_AT = 'created_at';
     final public const UPDATED_AT = 'updated_at';
     final public const DELETED_AT = 'deleted_at';
@@ -34,6 +37,9 @@ abstract class PromoCodeDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
     protected int $attendee_usage_count = 0;
     protected int $order_usage_count = 0;
     protected ?int $max_allowed_usages = null;
+    protected ?int $max_attendee_usages = null;
+    protected ?string $valid_from = null;
+    protected ?string $message = null;
     protected string $created_at;
     protected ?string $updated_at = null;
     protected ?string $deleted_at = null;
@@ -51,6 +57,9 @@ abstract class PromoCodeDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
                     'attendee_usage_count' => $this->attendee_usage_count ?? null,
                     'order_usage_count' => $this->order_usage_count ?? null,
                     'max_allowed_usages' => $this->max_allowed_usages ?? null,
+                    'max_attendee_usages' => $this->max_attendee_usages ?? null,
+                    'valid_from' => $this->valid_from ?? null,
+                    'message' => $this->message ?? null,
                     'created_at' => $this->created_at ?? null,
                     'updated_at' => $this->updated_at ?? null,
                     'deleted_at' => $this->deleted_at ?? null,
@@ -165,6 +174,39 @@ abstract class PromoCodeDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
     public function getMaxAllowedUsages(): ?int
     {
         return $this->max_allowed_usages;
+    }
+
+    public function setMaxAttendeeUsages(?int $max_attendee_usages): self
+    {
+        $this->max_attendee_usages = $max_attendee_usages;
+        return $this;
+    }
+
+    public function getMaxAttendeeUsages(): ?int
+    {
+        return $this->max_attendee_usages;
+    }
+
+    public function setValidFrom(?string $valid_from): self
+    {
+        $this->valid_from = $valid_from;
+        return $this;
+    }
+
+    public function getValidFrom(): ?string
+    {
+        return $this->valid_from;
+    }
+
+    public function setMessage(?string $message): self
+    {
+        $this->message = $message;
+        return $this;
+    }
+
+    public function getMessage(): ?string
+    {
+        return $this->message;
     }
 
     public function setCreatedAt(string $created_at): self

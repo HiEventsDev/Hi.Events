@@ -1,6 +1,6 @@
 import {UseFormReturnType} from "@mantine/form";
-import {TaxAndFee, TaxAndFeeCalculationType, TaxAndFeeType} from "../../../types.ts";
-import {NumberInput, Switch, TextInput} from "@mantine/core";
+import {TaxAndFee, TaxAndFeeApplicationType, TaxAndFeeCalculationType, TaxAndFeeType} from "../../../types.ts";
+import {NumberInput, SegmentedControl, Switch, TextInput} from "@mantine/core";
 import {CustomSelect, ItemProps} from "../../common/CustomSelect";
 import {IconCash, IconPercentage, IconReceiptTax} from "@tabler/icons-react";
 import {t} from "@lingui/macro";
@@ -87,6 +87,42 @@ export const TaxAndFeeForm = ({form}: { form: UseFormReturnType<TaxAndFee> }) =>
                 value={1}
                 description={t`A default ${type} is automaticaly applied to all new products. You can override this on a per product basis.`}
             />
+
+            <Switch
+                {...form.getInputProps('is_online_only', {type: 'checkbox'})}
+                label={t`Online payments only`}
+                value={1}
+                description={t`When enabled, this ${type} will only be applied to online payments (e.g., Stripe). It will not be charged for offline payments.`}
+            />
+
+            {form.values.type === TaxAndFeeType.Tax && (
+                <Switch
+                    {...form.getInputProps('is_tax_inclusive', {type: 'checkbox'})}
+                    label={t`Tax inclusive pricing`}
+                    value={1}
+                    description={t`When enabled, product prices are treated as already including this tax. The tax will be extracted from the price for reporting, rather than added on top.`}
+                />
+            )}
+
+            <div style={{marginTop: 10}}>
+                <label style={{fontSize: '14px', fontWeight: 500, display: 'block', marginBottom: 5}}>
+                    {t`Application`}
+                </label>
+                <SegmentedControl
+                    fullWidth
+                    data={[
+                        {label: t`Per Product`, value: TaxAndFeeApplicationType.PerProduct},
+                        {label: t`Per Order`, value: TaxAndFeeApplicationType.PerOrder},
+                    ]}
+                    {...form.getInputProps('application_type')}
+                />
+                <div style={{fontSize: '12px', color: 'var(--mantine-color-dimmed)', marginTop: 4}}>
+                    {form.values.application_type === TaxAndFeeApplicationType.PerOrder
+                        ? t`This ${type} will be applied once per order, regardless of the number of products.`
+                        : t`This ${type} will be applied to each product individually.`
+                    }
+                </div>
+            </div>
         </div>
     )
 }

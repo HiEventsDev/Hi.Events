@@ -1,5 +1,5 @@
 import {t} from "@lingui/macro";
-import {Button, Select, Switch, TextInput} from "@mantine/core";
+import {Button, Select, SegmentedControl, TextInput} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import {useParams} from "react-router";
 import {useEffect} from "react";
@@ -30,19 +30,22 @@ export const LocationSettings = () => {
                 zip_or_postal_code: '',
                 country: '',
             },
-            is_online_event: false,
+            event_location_type: 'venue' as 'venue' | 'online' | 'hybrid',
             online_event_connection_details: '',
             maps_url: '',
         },
         transformValues: (values) => ({
             ...values,
             online_event_connection_details: isEmptyHtml(values.online_event_connection_details) ? null : values.online_event_connection_details,
+            is_online_event: values.event_location_type === 'online',
         }),
     });
     const formErrorHandle = useFormErrorResponseHandler();
 
     useEffect(() => {
         if (eventSettingsQuery?.isFetched && eventSettingsQuery.data) {
+            const locationType = eventSettingsQuery.data.event_location_type
+                || (eventSettingsQuery.data.is_online_event ? 'online' : 'venue');
             form.setValues({
                 location_details: {
                     venue_name: eventSettingsQuery.data.location_details?.venue_name || '',
@@ -53,7 +56,7 @@ export const LocationSettings = () => {
                     zip_or_postal_code: eventSettingsQuery.data.location_details?.zip_or_postal_code || '',
                     country: eventSettingsQuery.data.location_details?.country || '',
                 },
-                is_online_event: eventSettingsQuery.data.is_online_event || false,
+                event_location_type: locationType,
                 online_event_connection_details: eventSettingsQuery.data.online_event_connection_details,
                 maps_url: eventSettingsQuery.data.maps_url || '',
             });
@@ -61,7 +64,7 @@ export const LocationSettings = () => {
     }, [eventSettingsQuery.isFetched]);
 
     const handleSubmit = (values: Partial<Event>) => {
-        if (form.values.is_online_event) {
+        if (form.values.event_location_type === 'online') {
             values.location_details = undefined;
         }
 
@@ -86,12 +89,17 @@ export const LocationSettings = () => {
             />
             <form onSubmit={form.onSubmit(handleSubmit)}>
                 <fieldset disabled={eventSettingsQuery.isLoading || updateMutation.isPending}>
-                    <Switch
-                        {...form.getInputProps('is_online_event', {type: 'checkbox'})}
-                        label={t`This is an online event`}
+                    <SegmentedControl
+                        {...form.getInputProps('event_location_type')}
+                        data={[
+                            {label: t`Venue`, value: 'venue'},
+                            {label: t`Online`, value: 'online'},
+                            {label: t`Hybrid`, value: 'hybrid'},
+                        ]}
+                        mb="md"
                     />
 
-                    {form.values.is_online_event && (
+                    {(form.values.event_location_type === 'online' || form.values.event_location_type === 'hybrid') && (
                         <Editor
                             value={form.values.online_event_connection_details || ''}
                             error={form.errors.online_event_connection_details as string}
@@ -109,7 +117,7 @@ export const LocationSettings = () => {
                             onChange={(value) => form.setFieldValue('online_event_connection_details', value)}
                         />
                     )}
-                    {!form.values.is_online_event && (
+                    {(form.values.event_location_type === 'venue' || form.values.event_location_type === 'hybrid') && (
                         <>
                             <TextInput
                                 {...form.getInputProps('location_details.venue_name')}

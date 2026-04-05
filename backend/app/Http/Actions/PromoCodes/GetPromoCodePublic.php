@@ -27,6 +27,7 @@ class GetPromoCodePublic extends BaseAction
 
         return $this->jsonResponse([
             'valid' => $promoCode !== null && $promoCode->isValid(),
+            'message' => $promoCode !== null && $promoCode->isValid() ? $promoCode->getMessage() : null,
         ]);
     }
 }

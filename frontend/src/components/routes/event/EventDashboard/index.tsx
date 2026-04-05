@@ -264,6 +264,7 @@ export const EventDashboard = () => {
                             orders_created: stat.orders_created,
                             products_sold: stat.products_sold,
                             attendees_registered: stat.attendees_registered,
+                            orders_abandoned: stat.orders_abandoned,
                         })) || []}
                         dataKey="date"
                         withLegend
@@ -273,6 +274,7 @@ export const EventDashboard = () => {
                             {name: 'orders_created', color: 'blue.6', label: t`Completed Orders`},
                             {name: 'products_sold', color: 'blue.2', label: t`Products Sold`},
                             {name: 'attendees_registered', color: 'blue.4', label: t`Attendees Registered`},
+                            {name: 'orders_abandoned', color: 'red.4', label: t`Abandoned Checkouts`},
                         ]}
                         curveType="bump"
                         tickLine="none"

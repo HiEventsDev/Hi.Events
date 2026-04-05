@@ -71,7 +71,7 @@ class ProductFilterService
         $filteredProducts = $products
             ->map(fn(ProductDomainObject $product) => $this->processProduct($product, $productQuantities->productQuantities, $promoCode))
             ->reject(fn(ProductDomainObject $product) => $this->filterProduct($product, $promoCode, $hideSoldOutProducts))
-            ->each(fn(ProductDomainObject $product) => $this->processProductPrices($product, $hideSoldOutProducts));
+            ->each(fn(ProductDomainObject $product) => $this->processProductPrices($product, $hideSoldOutProducts, $promoCode));
 
         return $productsCategories
             ->reject(fn(ProductCategoryDomainObject $category) => $category->getIsHidden())
@@ -202,8 +202,9 @@ class ProductFilterService
 
             $feeTotal = $taxAndFees->feeTotal;
             $taxTotal = $taxAndFees->taxTotal;
+            $inclusiveTaxTotal = $taxAndFees->inclusiveTaxTotal;
 
-            $platformFee = $this->calculatePlatformFee($price->getPrice() + $feeTotal + $taxTotal);
+            $platformFee = $this->calculatePlatformFee($price->getPrice() + $feeTotal + ($taxTotal - $inclusiveTaxTotal));
 
             if ($platformFee > 0) {
                 $feeTotal += $platformFee;
@@ -212,7 +213,8 @@ class ProductFilterService
 
             $price
                 ->setTaxTotal(Currency::round($taxTotal))
-                ->setFeeTotal(Currency::round($feeTotal));
+                ->setFeeTotal(Currency::round($feeTotal))
+                ->setInclusiveTaxTotal(Currency::round($inclusiveTaxTotal));
         }
 
         $price->setIsAvailable($this->getPriceAvailability($price, $product));
@@ -257,7 +259,8 @@ class ProductFilterService
     private function filterProductPrice(
         ProductDomainObject      $product,
         ProductPriceDomainObject $price,
-        bool                     $hideSoldOutProducts = true
+        bool                     $hideSoldOutProducts = true,
+        ?PromoCodeDomainObject   $promoCode = null,
     ): bool
     {
         $hidden = false;
@@ -286,15 +289,20 @@ class ProductFilterService
             $hidden = true;
         }
 
+        if ($price->getIsHiddenWithoutPromoCode() && !($promoCode && $promoCode->appliesToProduct($product))) {
+            $price->setOffSaleReason(__('Price is hidden without promo code'));
+            $hidden = true;
+        }
+
         return $hidden && $hideSoldOutProducts;
     }
 
-    private function processProductPrices(ProductDomainObject $product, bool $hideSoldOutProducts = true): void
+    private function processProductPrices(ProductDomainObject $product, bool $hideSoldOutProducts = true, ?PromoCodeDomainObject $promoCode = null): void
     {
         $product->setProductPrices(
             $product->getProductPrices()
                 ?->each(fn(ProductPriceDomainObject $price) => $this->processProductPrice($product, $price))
-                ->reject(fn(ProductPriceDomainObject $price) => $this->filterProductPrice($product, $price, $hideSoldOutProducts))
+                ->reject(fn(ProductPriceDomainObject $price) => $this->filterProductPrice($product, $price, $hideSoldOutProducts, $promoCode))
         );
     }
 
@@ -304,7 +312,8 @@ class ProductFilterService
             return !$price->isSoldOut()
                 && !$price->isBeforeSaleStartDate()
                 && !$price->isAfterSaleEndDate()
-                && !$price->getIsHidden();
+                && !$price->getIsHidden()
+                && !$price->getIsHiddenWithoutPromoCode();
         }
 
         return !$product->isSoldOut()

@@ -2,6 +2,7 @@
 
 namespace HiEvents\Http\Request\TaxOrFee;
 
+use HiEvents\DomainObjects\Enums\TaxAndFeeApplicationType;
 use HiEvents\DomainObjects\Enums\TaxCalculationType;
 use HiEvents\DomainObjects\Enums\TaxType;
 use HiEvents\Http\Request\BaseRequest;
@@ -20,6 +21,9 @@ class CreateTaxOrFeeRequest extends BaseRequest
             'is_active' => 'required|boolean',
             'is_default' => 'required|boolean',
             'description' => 'nullable|string',
+            'is_online_only' => 'sometimes|boolean',
+            'application_type' => ['sometimes', Rule::in(TaxAndFeeApplicationType::valuesArray())],
+            'is_tax_inclusive' => 'sometimes|boolean',
         ];
     }
 }

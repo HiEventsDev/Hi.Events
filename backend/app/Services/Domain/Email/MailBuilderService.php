@@ -10,6 +10,7 @@ use HiEvents\DomainObjects\InvoiceDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Mail\Attendee\AttendeeTicketMail;
+use HiEvents\Mail\Order\OrderFailed;
 use HiEvents\Mail\Order\OrderSummary;
 use HiEvents\Services\Domain\Email\DTO\RenderedEmailTemplateDTO;
 
@@ -70,6 +71,28 @@ class MailBuilderService
         );
     }
 
+    public function buildOrderFailedMail(
+        OrderDomainObject $order,
+        EventDomainObject $event,
+        EventSettingDomainObject $eventSettings,
+        OrganizerDomainObject $organizer,
+    ): OrderFailed {
+        $renderedTemplate = $this->renderOrderFailedTemplate(
+            $order,
+            $event,
+            $eventSettings,
+            $organizer
+        );
+
+        return new OrderFailed(
+            order: $order,
+            event: $event,
+            organizer: $organizer,
+            eventSettings: $eventSettings,
+            renderedTemplate: $renderedTemplate,
+        );
+    }
+
     private function renderAttendeeTicketTemplate(
         AttendeeDomainObject $attendee,
         OrderDomainObject $order,
@@ -107,6 +130,33 @@ class MailBuilderService
     ): ?RenderedEmailTemplateDTO {
         $template = $this->emailTemplateService->getTemplateByType(
             type: EmailTemplateType::ORDER_CONFIRMATION,
+            accountId: $event->getAccountId(),
+            eventId: $event->getId(),
+            organizerId: $organizer->getId()
+        );
+
+        if (!$template) {
+            return null;
+        }
+
+        $context = $this->tokenContextBuilder->buildOrderConfirmationContext(
+            $order,
+            $event,
+            $organizer,
+            $eventSettings
+        );
+
+        return $this->emailTemplateService->renderTemplate($template, $context);
+    }
+
+    private function renderOrderFailedTemplate(
+        OrderDomainObject $order,
+        EventDomainObject $event,
+        EventSettingDomainObject $eventSettings,
+        OrganizerDomainObject $organizer
+    ): ?RenderedEmailTemplateDTO {
+        $template = $this->emailTemplateService->getTemplateByType(
+            type: EmailTemplateType::ORDER_FAILED,
             accountId: $event->getAccountId(),
             eventId: $event->getId(),
             organizerId: $organizer->getId()

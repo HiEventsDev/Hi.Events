@@ -8,7 +8,7 @@ import {OrderDetails} from "../../common/OrderDetails";
 import {t} from "@lingui/macro";
 import {QuestionAndAnswerList} from "../../common/QuestionAndAnswerList";
 import {Box, Stack, Tabs, Text, Textarea, TextInput} from "@mantine/core";
-import {IconEdit, IconInfoCircle, IconNotebook, IconQuestionMark, IconReceipt, IconUsers} from "@tabler/icons-react";
+import {IconDownload, IconEdit, IconInfoCircle, IconNotebook, IconQuestionMark, IconReceipt, IconUsers} from "@tabler/icons-react";
 import {OrderStatusBadge} from "../../common/OrderStatusBadge";
 import {Accordion, AccordionItem} from "../../common/Accordion";
 import {useForm} from "@mantine/form";
@@ -20,8 +20,10 @@ import {Button} from "../../common/Button";
 import {InputGroup} from "../../common/InputGroup";
 import {InputLabelWithHelp} from "../../common/InputLabelWithHelp";
 import classes from './ManageOrderModal.module.scss';
-import {EditOrderPayload} from "../../../api/order.client.ts";
+import {EditOrderPayload, orderClient} from "../../../api/order.client.ts";
 import {SideDrawer} from "../../common/SideDrawer";
+import {downloadBinary} from "../../../utilites/download.ts";
+import {withLoadingNotification} from "../../../utilites/withLoadingNotification.tsx";
 
 interface ManageOrderModalProps {
     orderId: IdParam;
@@ -75,6 +77,31 @@ export const ManageOrderModal = ({onClose, orderId}: GenericModalProps & ManageO
                     setActiveTab("view");
                 },
                 onError: (error) => errorHandler(form, error),
+            }
+        );
+    };
+
+    const handleDownloadInvoice = async () => {
+        const invoice = order.latest_invoice;
+        if (!invoice) return;
+        await withLoadingNotification(
+            async () => {
+                const blob = await orderClient.downloadInvoice(event.id, invoice.order_id);
+                downloadBinary(blob, invoice.invoice_number + '.pdf');
+            },
+            {
+                loading: {
+                    title: t`Downloading Invoice`,
+                    message: t`Please wait while we prepare your invoice...`
+                },
+                success: {
+                    title: t`Success`,
+                    message: t`Invoice downloaded successfully`
+                },
+                error: {
+                    title: t`Error`,
+                    message: t`Failed to download invoice. Please try again.`
+                }
             }
         );
     };
@@ -191,7 +218,19 @@ export const ManageOrderModal = ({onClose, orderId}: GenericModalProps & ManageO
                         <Text fz="sm" c="dimmed" mb={4}>Order Reference</Text>
                         <Text fz="xl" fw={600}>{order.public_id}</Text>
                     </div>
-                    <OrderStatusBadge order={order} variant="outline"/>
+                    <div style={{display: 'flex', alignItems: 'center', gap: 8}}>
+                        {order.latest_invoice && (
+                            <Button
+                                variant="light"
+                                size="compact-sm"
+                                leftSection={<IconDownload size={14}/>}
+                                onClick={handleDownloadInvoice}
+                            >
+                                {t`Invoice`}
+                            </Button>
+                        )}
+                        <OrderStatusBadge order={order} variant="outline"/>
+                    </div>
                 </div>
 
                 <Tabs value={activeTab} onChange={setActiveTab as any}>

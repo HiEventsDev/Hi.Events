@@ -126,6 +126,8 @@ class EditProductHandler
                 'is_highlighted' => $productsData->is_highlighted ?? false,
                 'highlight_message' => $productsData->highlight_message,
                 'waitlist_enabled' => $productsData->waitlist_enabled,
+                'require_attendee_details' => $productsData->require_attendee_details,
+                'require_attendee_email' => $productsData->require_attendee_email,
             ],
             where: $where
         );

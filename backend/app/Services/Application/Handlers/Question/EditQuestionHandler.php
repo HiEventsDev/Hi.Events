@@ -30,7 +30,9 @@ class EditQuestionHandler
             ->setRequired($createQuestionDTO->required)
             ->setOptions($createQuestionDTO->options)
             ->setIsHidden($createQuestionDTO->is_hidden)
-            ->setDescription($createQuestionDTO->description);
+            ->setDescription($createQuestionDTO->description)
+            ->setConditions($createQuestionDTO->conditions)
+            ->setValidationRules($createQuestionDTO->validation_rules);
 
         return $this->editQuestionService->editQuestion(
             question: $question,

@@ -14,6 +14,7 @@ class ProductPriceDTO extends BaseDTO
         public readonly ?string       $sale_end_date = null,
         public readonly ?int          $initial_quantity_available = null,
         public readonly ?bool         $is_hidden = false,
+        public readonly ?bool         $is_hidden_without_promo_code = false,
         public readonly ?int          $id = null,
         public readonly ProductStatus $status = ProductStatus::ACTIVE,
     )

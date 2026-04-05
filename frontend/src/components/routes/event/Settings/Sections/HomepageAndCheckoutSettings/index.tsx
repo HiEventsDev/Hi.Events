@@ -26,6 +26,10 @@ export const HomepageAndCheckoutSettings = () => {
             order_timeout_in_minutes: 15,
             attendee_details_collection_method: 'PER_TICKET' as 'PER_TICKET' | 'PER_ORDER',
             show_marketing_opt_in: true,
+            require_attendee_name: true,
+            free_ticket_expiration_minutes: null as number | null,
+            order_min_tickets: null as number | null,
+            order_max_tickets: null as number | null,
         },
         transformValues: (values) => ({
             ...values,
@@ -58,6 +62,10 @@ export const HomepageAndCheckoutSettings = () => {
                 order_timeout_in_minutes: eventSettingsQuery.data.order_timeout_in_minutes,
                 attendee_details_collection_method: eventSettingsQuery.data.attendee_details_collection_method || 'PER_TICKET',
                 show_marketing_opt_in: eventSettingsQuery.data.show_marketing_opt_in ?? true,
+                require_attendee_name: eventSettingsQuery.data.require_attendee_name ?? true,
+                free_ticket_expiration_minutes: eventSettingsQuery.data.free_ticket_expiration_minutes ?? null,
+                order_min_tickets: eventSettingsQuery.data.order_min_tickets ?? null,
+                order_max_tickets: eventSettingsQuery.data.order_max_tickets ?? null,
             });
         }
     }, [eventSettingsQuery.isFetched]);
@@ -115,10 +123,41 @@ export const HomepageAndCheckoutSettings = () => {
                         required
                     />
 
+                    <Switch
+                        mt="md"
+                        label={t`Require attendee first and last name`}
+                        description={t`When disabled, attendees can complete checkout without providing their first and last name. Useful for events where names are not needed.`}
+                        {...form.getInputProps('require_attendee_name', {type: 'checkbox'})}
+                    />
+
                     <NumberInput
                         label={t`Order timeout`}
                         description={t`How many minutes the customer has to complete their order. We recommend at least 15 minutes`}
                         {...form.getInputProps('order_timeout_in_minutes')}
+                    />
+
+                    <NumberInput
+                        label={t`Free ticket expiration (minutes)`}
+                        description={t`Automatically cancel free ticket orders where no attendees have checked in after this many minutes. Leave empty to disable.`}
+                        {...form.getInputProps('free_ticket_expiration_minutes')}
+                        min={1}
+                        placeholder={t`Disabled`}
+                    />
+
+                    <NumberInput
+                        label={t`Minimum tickets per order`}
+                        description={t`The minimum total number of tickets a customer must select per order. Leave empty for no minimum.`}
+                        {...form.getInputProps('order_min_tickets')}
+                        min={1}
+                        placeholder={t`No minimum`}
+                    />
+
+                    <NumberInput
+                        label={t`Maximum tickets per order`}
+                        description={t`The maximum total number of tickets a customer can select per order. Leave empty for no maximum.`}
+                        {...form.getInputProps('order_max_tickets')}
+                        min={1}
+                        placeholder={t`No maximum`}
                     />
 
                     <Switch

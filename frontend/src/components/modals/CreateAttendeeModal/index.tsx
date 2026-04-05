@@ -1,5 +1,5 @@
 import {Modal} from "../../common/Modal";
-import {GenericModalProps, IdParam, ProductCategory, ProductType} from "../../../types.ts";
+import {GenericModalProps, IdParam, ProductCategory, ProductType, Question, QuestionBelongsToType} from "../../../types.ts";
 import {Button} from "../../common/Button";
 import {useNavigate, useParams} from "react-router";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
@@ -10,7 +10,7 @@ import {CreateAttendeeRequest} from "../../../api/attendee.client.ts";
 import {useCreateAttendee} from "../../../mutations/useCreateAttendee.ts";
 import {showSuccess} from "../../../utilites/notifications.tsx";
 import {t, Trans} from "@lingui/macro";
-import {useEffect} from "react";
+import {useEffect, useMemo} from "react";
 import {InputGroup} from "../../common/InputGroup";
 import {
     getClientLocale,
@@ -21,17 +21,20 @@ import {
 } from "../../../locales.ts";
 import {ProductSelector} from "../../common/ProductSelector";
 import {getProductsFromEvent} from "../../../utilites/helpers.ts";
+import {useGetEventQuestions} from "../../../queries/useGetEventQuestions.ts";
+import {QuestionInput} from "../../common/CheckoutQuestion";
 
 export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
     const {eventId} = useParams();
     const errorHandler = useFormErrorResponseHandler();
     const {data: event, isFetched: isEventFetched} = useGetEvent(eventId);
+    const {data: questionsData} = useGetEventQuestions(eventId);
     const mutation = useCreateAttendee();
     const navigate = useNavigate();
     const eventProducts = getProductsFromEvent(event);
     const eventHasProducts = eventProducts && eventProducts?.length > 0;
 
-    const form = useForm<CreateAttendeeRequest>({
+    const form = useForm<CreateAttendeeRequest & Record<string, any>>({
         initialValues: {
             product_id: undefined,
             email: '',
@@ -41,8 +44,21 @@ export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
             send_confirmation_email: true,
             taxes_and_fees: [],
             locale: getClientLocale() as SupportedLocales,
+            question_answers: [],
         },
     });
+
+    const applicableQuestions = useMemo(() => {
+        if (!questionsData?.data || !form.values.product_id) return [];
+        const allQuestions = questionsData.data as Question[];
+        return allQuestions.filter((q) => {
+            if (q.belongs_to === QuestionBelongsToType.ORDER) return true;
+            if (q.belongs_to === QuestionBelongsToType.PRODUCT && q.product_ids) {
+                return q.product_ids.includes(Number(form.values.product_id));
+            }
+            return false;
+        });
+    }, [questionsData?.data, form.values.product_id]);
 
     useEffect(() => {
         if (event?.product_categories) {
@@ -84,10 +100,18 @@ export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
         }
     }, [form.values.product_price_id]);
 
-    const handleSubmit = (values: CreateAttendeeRequest) => {
+    const handleSubmit = (values: CreateAttendeeRequest & Record<string, any>) => {
+        const questionAnswers = applicableQuestions.map((question) => ({
+            question_id: Number(question.id),
+            answer: values[`question_${question.id}`] ?? '',
+        }));
+
         mutation.mutate({
             eventId: eventId,
-            attendeeData: values,
+            attendeeData: {
+                ...values,
+                question_answers: questionAnswers,
+            },
         }, {
             onSuccess: () => {
                 showSuccess(t`Successfully created attendee`);
@@ -197,6 +221,15 @@ export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
                         )
                     }
                 )}
+
+                {applicableQuestions.length > 0 && applicableQuestions.map((question) => (
+                    <QuestionInput
+                        key={question.id}
+                        question={question}
+                        name={`question_${question.id}`}
+                        form={form}
+                    />
+                ))}
 
                 <Switch
                     mt={20}

@@ -29,11 +29,16 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
 {
     public function findByEventId(int $eventId, QueryParamsDTO $params): LengthAwarePaginator
     {
+        $hasStatusFilter = $params->filter_fields?->contains(fn($f) => $f->field === 'status');
+
         $where = [
             [OrderDomainObjectAbstract::EVENT_ID, '=', $eventId],
-            [OrderDomainObjectAbstract::STATUS, '!=', OrderStatus::RESERVED->name],
-            [OrderDomainObjectAbstract::STATUS, '!=', OrderStatus::ABANDONED->name],
         ];
+
+        if (!$hasStatusFilter) {
+            $where[] = [OrderDomainObjectAbstract::STATUS, '!=', OrderStatus::RESERVED->name];
+            $where[] = [OrderDomainObjectAbstract::STATUS, '!=', OrderStatus::ABANDONED->name];
+        }
 
         if ($params->query) {
             $where[] = static function (Builder $builder) use ($params) {
@@ -70,10 +75,14 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
 
     public function findByOrganizerId(int $organizerId, int $accountId, QueryParamsDTO $params): LengthAwarePaginator
     {
-        $where = [
-            ['orders.status', '!=', OrderStatus::RESERVED->name],
-            ['orders.status', '!=', OrderStatus::ABANDONED->name],
-        ];
+        $hasStatusFilter = $params->filter_fields?->contains(fn($f) => $f->field === 'status');
+
+        $where = [];
+
+        if (!$hasStatusFilter) {
+            $where[] = ['orders.status', '!=', OrderStatus::RESERVED->name];
+            $where[] = ['orders.status', '!=', OrderStatus::ABANDONED->name];
+        }
 
         if ($params->query) {
             $where[] = static function (Builder $builder) use ($params) {
@@ -185,6 +194,30 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
         return $count;
     }
 
+    public function findMarketingOptedInOrders(int $eventId): Collection
+    {
+        return $this->handleResults(
+            $this->model
+                ->where('event_id', $eventId)
+                ->whereNotNull('opted_into_marketing_at')
+                ->where('status', 'COMPLETED')
+                ->get()
+        );
+    }
+
+    public function countMarketingOptedInOrders(int $eventId): int
+    {
+        $count = $this->model
+            ->where('event_id', $eventId)
+            ->whereNotNull('opted_into_marketing_at')
+            ->where('status', 'COMPLETED')
+            ->count();
+
+        $this->resetModel();
+
+        return $count;
+    }
+
     public function getAllOrdersForAdmin(
         ?string $search = null,
         int $perPage = 20,
@@ -230,6 +263,19 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
             ->where('events.account_id', $accountId)
             ->where('orders.payment_status', OrderPaymentStatus::PAYMENT_RECEIVED->name)
             ->whereNotNull('stripe_payments.payment_intent_id')
+            ->exists();
+
+        $this->resetModel();
+
+        return $exists;
+    }
+
+    public function existsCompletedOrderForEmail(int $eventId, string $email): bool
+    {
+        $exists = $this->model
+            ->where(OrderDomainObjectAbstract::EVENT_ID, $eventId)
+            ->where(OrderDomainObjectAbstract::EMAIL, $email)
+            ->where(OrderDomainObjectAbstract::STATUS, OrderStatus::COMPLETED->name)
             ->exists();
 
         $this->resetModel();

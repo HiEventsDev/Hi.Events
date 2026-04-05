@@ -56,6 +56,10 @@ class AttendeeDomainObject extends Generated\AttendeeDomainObjectAbstract implem
                     'asc' => __('Status A-Z'),
                     'desc' => __('Status Z-A'),
                 ],
+                self::CHECKED_IN_AT => [
+                    'asc' => __('Checked In Earliest First'),
+                    'desc' => __('Checked In Latest First'),
+                ],
             ]
         );
     }
@@ -71,6 +75,8 @@ class AttendeeDomainObject extends Generated\AttendeeDomainObjectAbstract implem
             self::STATUS,
             self::PRODUCT_ID,
             self::PRODUCT_PRICE_ID,
+            self::CHECKED_IN_AT,
+            self::ORDER_ID,
         ];
     }
 

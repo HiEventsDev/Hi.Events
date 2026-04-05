@@ -107,4 +107,9 @@ export const eventsClientPublic = {
         const response = await publicApi.get<GenericDataResponse<Event>>('events/' + eventId + (promoCode ? '?promo_code=' + promoCode : ''));
         return response.data;
     },
+
+    verifyPassword: async (eventId: IdParam, password: string) => {
+        const response = await publicApi.post<GenericDataResponse<{ valid: boolean }>>('events/' + eventId + '/verify-password', {password});
+        return response.data;
+    },
 }

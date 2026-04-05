@@ -37,7 +37,8 @@ use HiEvents\Services\Application\Handlers\Order\DTO\CompleteOrderProductDataDTO
 use HiEvents\Services\Application\Handlers\Order\DTO\CreatedProductDataDTO;
 use HiEvents\Services\Application\Handlers\Order\DTO\OrderQuestionsDTO;
 use HiEvents\Services\Domain\Payment\Stripe\EventHandlers\PaymentIntentSucceededHandler;
-use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
+use HiEvents\Services\Domain\Order\CheckoutValidationWebhookService;
+use HiEvents\Services\Domain\Order\ProductQuantityUpdateService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\Session\CheckoutSessionManagementService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
@@ -62,6 +63,7 @@ class CompleteOrderHandler
         private readonly DomainEventDispatcherService      $domainEventDispatcherService,
         private readonly EventSettingsRepositoryInterface  $eventSettingsRepository,
         private readonly CheckoutSessionManagementService  $sessionManagementService,
+        private readonly CheckoutValidationWebhookService  $checkoutValidationWebhookService,
     )
     {
     }
@@ -76,12 +78,22 @@ class CompleteOrderHandler
             'event_id' => $orderData->event_id,
         ]);
 
+        $this->checkoutValidationWebhookService->validate(
+            eventSettings: $eventSettings,
+            orderShortId: $orderShortId,
+            orderData: [
+                'first_name' => $orderData->order->first_name,
+                'last_name' => $orderData->order->last_name,
+                'email' => $orderData->order->email,
+            ],
+        );
+
         $updatedOrder = DB::transaction(function () use ($orderData, $orderShortId, $eventSettings) {
             $orderDTO = $orderData->order;
 
             $order = $this->getOrder($orderShortId);
 
-            $updatedOrder = $this->updateOrder($order, $orderDTO);
+            $updatedOrder = $this->updateOrder($order, $orderDTO, $eventSettings);
 
             $this->createAttendees($orderData->products, $order, $orderDTO, $eventSettings);
 
@@ -304,8 +316,14 @@ class CompleteOrderHandler
         return $order;
     }
 
-    private function updateOrder(OrderDomainObject $order, CompleteOrderOrderDTO $orderDTO): OrderDomainObject
+    private function updateOrder(OrderDomainObject $order, CompleteOrderOrderDTO $orderDTO, EventSettingDomainObject $eventSettings): OrderDomainObject
     {
+        $status = $order->isPaymentRequired()
+            ? OrderStatus::RESERVED->name
+            : ($eventSettings->getRequireOrderApproval()
+                ? OrderStatus::AWAITING_APPROVAL->name
+                : OrderStatus::COMPLETED->name);
+
         $updatedOrder = $this->orderRepository
             ->loadRelation(OrderItemDomainObject::class)
             ->updateFromArray(
@@ -318,9 +336,7 @@ class CompleteOrderHandler
                     OrderDomainObjectAbstract::PAYMENT_STATUS => $order->isPaymentRequired()
                         ? OrderPaymentStatus::AWAITING_PAYMENT->name
                         : OrderPaymentStatus::NO_PAYMENT_REQUIRED->name,
-                    OrderDomainObjectAbstract::STATUS => $order->isPaymentRequired()
-                        ? OrderStatus::RESERVED->name
-                        : OrderStatus::COMPLETED->name,
+                    OrderDomainObjectAbstract::STATUS => $status,
                     OrderDomainObjectAbstract::OPTED_INTO_MARKETING_AT => $orderDTO->opted_into_marketing
                         ? Carbon::now()
                         : null,

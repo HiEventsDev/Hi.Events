@@ -40,6 +40,8 @@ class UpdatePromoCodeAction extends BaseAction
                 discount: $request->float('discount'),
                 expiry_date: $request->input('expiry_date'),
                 max_allowed_usages: $request->input('max_allowed_usages'),
+                valid_from: $request->input('valid_from'),
+                message: $request->input('message'),
             ));
         } catch (ResourceConflictException $e) {
             throw ValidationException::withMessages([

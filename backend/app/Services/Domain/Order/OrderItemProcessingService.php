@@ -29,6 +29,7 @@ class OrderItemProcessingService
 {
     private ?AccountConfigurationDomainObject $accountConfiguration = null;
     private ?EventSettingDomainObject $eventSettings = null;
+    private Collection $perOrderTaxesAndFees;
 
     public function __construct(
         private readonly OrderRepositoryInterface           $orderRepository,
@@ -57,8 +58,10 @@ class OrderItemProcessingService
     ): Collection
     {
         $this->loadPlatformFeeConfiguration($event->getId());
+        $this->perOrderTaxesAndFees = collect();
 
         $orderItems = collect();
+        $seenPerOrderFeeIds = [];
 
         foreach ($productsOrderDetails as $productOrderDetail) {
             $product = $this->productRepository
@@ -75,6 +78,14 @@ class OrderItemProcessingService
                 );
             }
 
+            // Collect unique per-order fees from all products
+            $product->getTaxAndFees()?->each(function ($taxOrFee) use (&$seenPerOrderFeeIds) {
+                if ($taxOrFee->isPerOrder() && !in_array($taxOrFee->getId(), $seenPerOrderFeeIds)) {
+                    $seenPerOrderFeeIds[] = $taxOrFee->getId();
+                    $this->perOrderTaxesAndFees->push($taxOrFee);
+                }
+            });
+
             $productOrderDetail->quantities->each(function (OrderProductPriceDTO $productPrice) use ($promoCode, $order, $orderItems, $product, $event) {
                 if ($productPrice->quantity === 0) {
                     return;
@@ -85,6 +96,14 @@ class OrderItemProcessingService
         }
 
         return $orderItems;
+    }
+
+    /**
+     * @return Collection<TaxAndFeesDomainObject>
+     */
+    public function getPerOrderTaxesAndFees(): Collection
+    {
+        return $this->perOrderTaxesAndFees ?? collect();
     }
 
     private function loadPlatformFeeConfiguration(int $eventId): void
@@ -127,10 +146,11 @@ class OrderItemProcessingService
 
         $totalTax = $taxesAndFees->taxTotal;
         $totalFee = $taxesAndFees->feeTotal;
+        $inclusiveTax = $taxesAndFees->inclusiveTaxTotal;
         $rollUp = $taxesAndFees->rollUp;
 
         $platformFee = $this->calculatePlatformFee(
-            $itemTotalWithDiscount + $taxesAndFees->feeTotal + $taxesAndFees->taxTotal,
+            $itemTotalWithDiscount + $taxesAndFees->feeTotal + ($taxesAndFees->taxTotal - $taxesAndFees->inclusiveTaxTotal),
             $productPriceDetails->quantity,
             $currency
         );
@@ -140,7 +160,8 @@ class OrderItemProcessingService
             $rollUp = $this->addPlatformFeeToRollup($rollUp, $platformFee);
         }
 
-        $totalGross = Currency::round($itemTotalWithDiscount + $totalTax + $totalFee);
+        // Inclusive tax is already embedded in the product price, so don't add it to total_gross
+        $totalGross = Currency::round($itemTotalWithDiscount + ($totalTax - $inclusiveTax) + $totalFee);
 
         return [
             'product_type' => $product->getProductType(),

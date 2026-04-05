@@ -65,6 +65,7 @@ class ProductPriceUpdateService
                         : null,
                     'initial_quantity_available' => $price->initial_quantity_available,
                     'is_hidden' => $price->is_hidden,
+                    'is_hidden_without_promo_code' => $price->is_hidden_without_promo_code,
                     'order' => $order++,
                 ]);
             } else {
@@ -80,6 +81,7 @@ class ProductPriceUpdateService
                         : null,
                     'initial_quantity_available' => $price->initial_quantity_available,
                     'is_hidden' => $price->is_hidden,
+                    'is_hidden_without_promo_code' => $price->is_hidden_without_promo_code,
                     'order' => $order++,
                 ], [
                     'id' => $price->id,

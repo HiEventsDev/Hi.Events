@@ -34,6 +34,7 @@ class ProductPriceCreateService
                 : null,
             'initial_quantity_available' => $price->getInitialQuantityAvailable(),
             'is_hidden' => $price->getIsHidden(),
+            'is_hidden_without_promo_code' => $price->getIsHiddenWithoutPromoCode(),
             'order' => $index + 1,
         ]))));
     }

@@ -293,6 +293,10 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
                                             value: 'ORDER_OWNERS_WITH_PRODUCT',
                                             label: t`Order owners with a specific product`,
                                         },
+                                        {
+                                            value: 'MARKETING_OPTED_IN',
+                                            label: t`Customers who opted into marketing`,
+                                        },
                                     ]}
                                     label={t`Recipients`}
                                     description={t`Select which attendees should receive this message`}
@@ -332,6 +336,7 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
                                         data={[
                                             {value: 'COMPLETED', label: t`Completed`},
                                             {value: 'AWAITING_OFFLINE_PAYMENT', label: t`Awaiting offline payment`},
+                                            {value: 'AWAITING_APPROVAL', label: t`Awaiting approval`},
                                         ]}
                                         {...form.getInputProps('order_statuses')}
                                     />

@@ -13,6 +13,7 @@ interface AttendeeListProps {
     allowOrdersAwaitingOfflinePaymentToCheckIn: boolean;
     onCheckInToggle: (attendee: Attendee) => void;
     onClickSound?: () => void;
+    hasSearchQuery?: boolean;
 }
 
 export const AttendeeList = ({
@@ -23,7 +24,8 @@ export const AttendeeList = ({
                                  isDeletePending,
                                  allowOrdersAwaitingOfflinePaymentToCheckIn,
                                  onCheckInToggle,
-                                 onClickSound
+                                 onClickSound,
+                                 hasSearchQuery = false,
                              }: AttendeeListProps) => {
     const checkInButtonText = (attendee: Attendee) => {
         if (!allowOrdersAwaitingOfflinePaymentToCheckIn && attendee.status === 'AWAITING_PAYMENT') {
@@ -51,7 +53,7 @@ export const AttendeeList = ({
         return 'teal';
     };
 
-    if (isLoading || !attendees || !products) {
+    if (isLoading || !products) {
         return (
             <div className={classes.loading}>
                 <Loader size={40}/>
@@ -59,10 +61,18 @@ export const AttendeeList = ({
         );
     }
 
-    if (attendees.length === 0) {
+    if (!hasSearchQuery) {
         return (
             <div className={classes.noResults}>
-                No attendees to show.
+                {t`Search for an attendee by name or scan a QR code to check in.`}
+            </div>
+        );
+    }
+
+    if (!attendees || attendees.length === 0) {
+        return (
+            <div className={classes.noResults}>
+                {t`No attendees found matching your search.`}
             </div>
         );
     }

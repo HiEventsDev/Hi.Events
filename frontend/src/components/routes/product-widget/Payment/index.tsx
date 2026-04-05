@@ -147,12 +147,12 @@ const Payment = () => {
                             </Group>
                         ) : t`Complete Payment`}
                     </Button>
-                    {getConfig('VITE_TOS_URL') && (
+                    {(event?.organizer?.settings?.terms_of_service_url || getConfig('VITE_TOS_URL')) && (
                         <p className={classes.tosNotice}>
                             <Trans>
                                 By continuing, you agree to the{' '}
                                 <a
-                                    href={getConfig('VITE_TOS_URL', 'https://hi.events/terms-of-service') as string}
+                                    href={(event?.organizer?.settings?.terms_of_service_url || getConfig('VITE_TOS_URL', 'https://hi.events/terms-of-service')) as string}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >

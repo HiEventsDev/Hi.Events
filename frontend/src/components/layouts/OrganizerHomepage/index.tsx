@@ -5,7 +5,7 @@ import classes from './OrganizerHomepage.module.scss';
 import React, {useEffect, useState} from 'react';
 import {Event, GenericPaginatedResponse, Organizer} from "../../../types.ts";
 import {OrganizerDocumentHead} from "../../common/OrganizerDocumentHead";
-import {IconExternalLink, IconMail, IconMapPin, IconWorld} from '@tabler/icons-react';
+import {IconCalendar, IconExternalLink, IconMail, IconMapPin, IconWorld} from '@tabler/icons-react';
 import {t} from "@lingui/macro";
 import {PoweredByFooter} from "../../common/PoweredByFooter";
 import {socialMediaConfig} from "../../../constants/socialMediaConfig";
@@ -244,6 +244,13 @@ export const OrganizerHomepage = ({
                                                         <IconMail size={14} style={{marginRight: 6}}/>
                                                         {t`Contact`}
                                                     </button>
+                                                    <a
+                                                        href={`${getConfig('VITE_API_URL_CLIENT')}/public/organizers/${organizer.id}/events.ics`}
+                                                        className={classes.contactButton}
+                                                    >
+                                                        <IconCalendar size={14} style={{marginRight: 6}}/>
+                                                        {t`Subscribe`}
+                                                    </a>
                                                 </div>
                                             </div>
                                         </div>
@@ -322,14 +329,14 @@ export const OrganizerHomepage = ({
                         <div className={classes.footerSection}>
                             <div className={classes.footerLinks}>
                                 <Anchor
-                                    href={getConfig('VITE_PRIVACY_URL', 'https://hi.events/privacy-policy?utm_source=app-organizer-footer')}
+                                    href={organizer?.settings?.privacy_policy_url || getConfig('VITE_PRIVACY_URL', 'https://hi.events/privacy-policy?utm_source=app-organizer-footer')}
                                     className={classes.footerLink}
                                 >
                                     {t`Privacy Policy`}
                                 </Anchor>
                                 <span className={classes.footerSeparator}>•</span>
                                 <Anchor
-                                    href={getConfig('VITE_TOS_URL', 'https://hi.events/terms-of-service?utm_source=app-organizer-footer')}
+                                    href={organizer?.settings?.terms_of_service_url || getConfig('VITE_TOS_URL', 'https://hi.events/terms-of-service?utm_source=app-organizer-footer')}
                                     className={classes.footerLink}
                                 >
                                     {t`Terms of Service`}

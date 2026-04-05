@@ -226,6 +226,27 @@ If you have any questions or need assistance, please reply to this email or cont
 
 LIQUID
             ],
+            EmailTemplateType::ORDER_FAILED->value => [
+                'subject' => 'Your order wasn\'t successful',
+                'body' => <<<'LIQUID'
+<strong>Your order wasn't successful</strong><br>
+
+Hi {{ order.first_name }},<br>
+
+Unfortunately, your order for <strong>{{ event.title }}</strong> was not successful. This could be due to a payment issue or the order timing out.<br>
+
+<strong>Event Details</strong><br>
+<strong>Event Name:</strong> {{ event.title }}<br>
+<strong>Date & Time:</strong> {{ event.date }} at {{ event.time }}<br>
+
+Don't worry — you can try placing your order again by visiting the event page.<br>
+
+If you believe this was an error or need assistance, please contact <a href="mailto:{{ settings.support_email }}">{{ settings.support_email }}</a>.<br>
+
+Best regards,<br>
+{{ organizer.name }}
+LIQUID
+            ],
         ];
     }
 }

@@ -55,6 +55,16 @@ export const AttendeeDetails = ({attendee}: { attendee: Attendee }) => {
                     </div>
                 </div>
             )}
+            {attendee.status === 'CANCELLED' && attendee.cancellation_reason && (
+                <div className={classes.block}>
+                    <div className={classes.title}>
+                        {t`Cancellation Reason`}
+                    </div>
+                    <div className={classes.value}>
+                        {attendee.cancellation_reason}
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

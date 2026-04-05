@@ -81,6 +81,11 @@ class PartialEditAttendeeHandler
                 'first_name' => $data->first_name ?? $attendee->getFirstName(),
                 'last_name' => $data->last_name ?? $attendee->getLastName(),
                 'email' => $data->email ?? $attendee->getEmail(),
+                'cancellation_reason' => $data->status && strtoupper($data->status) === AttendeeStatus::CANCELLED->name
+                    ? $data->cancellation_reason
+                    : ($data->status && strtoupper($data->status) === AttendeeStatus::ACTIVE->name
+                        ? null
+                        : $attendee->getCancellationReason()),
             ],
             where: [
                 'event_id' => $data->event_id,

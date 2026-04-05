@@ -73,6 +73,10 @@ class PartialUpdateOrganizerSettingsRequest extends BaseRequest
 
             // Password
             'homepage_password' => ['sometimes', 'nullable', 'string', 'max:100'],
+
+            // Legal
+            'terms_of_service_url' => ['sometimes', 'nullable', 'url', 'max:500'],
+            'privacy_policy_url' => ['sometimes', 'nullable', 'url', 'max:500'],
         ];
     }
 }

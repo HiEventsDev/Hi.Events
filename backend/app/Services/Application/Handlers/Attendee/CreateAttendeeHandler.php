@@ -24,6 +24,7 @@ use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
+use HiEvents\Repository\Interfaces\QuestionAnswerRepositoryInterface;
 use HiEvents\Repository\Interfaces\TaxAndFeeRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Attendee\DTO\CreateAttendeeDTO;
 use HiEvents\Services\Application\Handlers\Attendee\DTO\CreateAttendeeTaxAndFeeDTO;
@@ -41,16 +42,17 @@ use Throwable;
 class CreateAttendeeHandler
 {
     public function __construct(
-        private readonly AttendeeRepositoryInterface  $attendeeRepository,
-        private readonly OrderRepositoryInterface     $orderRepository,
-        private readonly ProductRepositoryInterface   $productRepository,
-        private readonly EventRepositoryInterface     $eventRepository,
-        private readonly ProductQuantityUpdateService $productQuantityAdjustmentService,
-        private readonly DatabaseManager              $databaseManager,
-        private readonly TaxAndFeeRepositoryInterface $taxAndFeeRepository,
-        private readonly TaxAndFeeRollupService       $taxAndFeeRollupService,
-        private readonly OrderManagementService       $orderManagementService,
-        private readonly DomainEventDispatcherService $domainEventDispatcherService,
+        private readonly AttendeeRepositoryInterface       $attendeeRepository,
+        private readonly OrderRepositoryInterface          $orderRepository,
+        private readonly ProductRepositoryInterface        $productRepository,
+        private readonly EventRepositoryInterface          $eventRepository,
+        private readonly ProductQuantityUpdateService      $productQuantityAdjustmentService,
+        private readonly DatabaseManager                   $databaseManager,
+        private readonly TaxAndFeeRepositoryInterface      $taxAndFeeRepository,
+        private readonly TaxAndFeeRollupService            $taxAndFeeRollupService,
+        private readonly OrderManagementService            $orderManagementService,
+        private readonly DomainEventDispatcherService      $domainEventDispatcherService,
+        private readonly QuestionAnswerRepositoryInterface $questionAnswerRepository,
     )
     {
     }
@@ -99,6 +101,8 @@ class CreateAttendeeHandler
             $orderItem = $this->createOrderItem($attendeeDTO, $order, $product, $productPriceId);
 
             $attendee = $this->createAttendee($order, $attendeeDTO);
+
+            $this->createQuestionAnswers($attendeeDTO, $order, $attendee);
 
             $this->orderManagementService->updateOrderTotals($order, collect([$orderItem]));
 
@@ -253,5 +257,30 @@ class CreateAttendeeHandler
         $this->domainEventDispatcherService->dispatch(
             new OrderEvent(DomainEventType::ORDER_CREATED, $order->getId())
         );
+    }
+
+    private function createQuestionAnswers(
+        CreateAttendeeDTO    $attendeeDTO,
+        OrderDomainObject    $order,
+        AttendeeDomainObject $attendee,
+    ): void
+    {
+        if (empty($attendeeDTO->question_answers)) {
+            return;
+        }
+
+        foreach ($attendeeDTO->question_answers as $questionAnswer) {
+            if (empty($questionAnswer['answer'])) {
+                continue;
+            }
+
+            $this->questionAnswerRepository->create([
+                'question_id' => $questionAnswer['question_id'],
+                'answer' => $questionAnswer['answer'],
+                'order_id' => $order->getId(),
+                'product_id' => $attendeeDTO->product_id,
+                'attendee_id' => $attendee->getId(),
+            ]);
+        }
     }
 }

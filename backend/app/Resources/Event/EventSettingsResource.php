@@ -36,6 +36,7 @@ class EventSettingsResource extends JsonResource
 
             'location_details' => $this->getLocationDetails(),
             'is_online_event' => $this->getIsOnlineEvent(),
+            'event_location_type' => $this->getEventLocationType(),
             'online_event_connection_details' => $this->getOnlineEventConnectionDetails(),
 
             'seo_title' => $this->getSeoTitle(),
@@ -44,9 +45,11 @@ class EventSettingsResource extends JsonResource
             'allow_search_engine_indexing' => $this->getAllowSearchEngineIndexing(),
 
             'notify_organizer_of_new_orders' => $this->getNotifyOrganizerOfNewOrders(),
+            'disable_attendee_ticket_email' => $this->getDisableAttendeeTicketEmail(),
 
             'price_display_mode' => $this->getPriceDisplayMode(),
             'hide_getting_started_page' => $this->getHideGettingStartedPage(),
+            'hide_start_date' => $this->getHideStartDate(),
 
             // Ticket design settings
             'ticket_design_settings' => $this->getTicketDesignSettings(),
@@ -83,6 +86,33 @@ class EventSettingsResource extends JsonResource
             // Waitlist settings
             'waitlist_auto_process' => $this->getWaitlistAutoProcess(),
             'waitlist_offer_timeout_minutes' => $this->getWaitlistOfferTimeoutMinutes(),
+
+            // Social media settings
+            'social_media_handles' => $this->getSocialMediaHandles(),
+            'show_social_media_handles' => $this->getShowSocialMediaHandles(),
+
+            // Access control settings
+            'event_password' => $this->getEventPassword(),
+
+            // Payment settings
+            'stripe_payment_method_order' => $this->getStripePaymentMethodOrder(),
+
+            // Order approval settings
+            'require_order_approval' => $this->getRequireOrderApproval(),
+            'external_ticket_url' => $this->getExternalTicketUrl(),
+
+            // Order-level ticket quantity limits
+            'order_min_tickets' => $this->getOrderMinTickets(),
+            'order_max_tickets' => $this->getOrderMaxTickets(),
+
+            // Checkout validation webhook
+            'checkout_validation_webhook_url' => $this->getCheckoutValidationWebhookUrl(),
+
+            // Attendee name requirement
+            'require_attendee_name' => $this->getRequireAttendeeName(),
+
+            // Free ticket expiration
+            'free_ticket_expiration_minutes' => $this->getFreeTicketExpirationMinutes(),
         ];
     }
 }

@@ -29,8 +29,10 @@ readonly class CreatePromoCodeHandler
                 ->setDiscountType($promoCodeDTO->discount_type->name)
                 ->setDiscount($promoCodeDTO->discount)
                 ->setExpiryDate($promoCodeDTO->expiry_date)
+                ->setValidFrom($promoCodeDTO->valid_from)
                 ->setMaxAllowedUsages($promoCodeDTO->max_allowed_usages)
                 ->setApplicableProductIds($promoCodeDTO->applicable_product_ids)
+                ->setMessage($promoCodeDTO->message)
         );
     }
 }

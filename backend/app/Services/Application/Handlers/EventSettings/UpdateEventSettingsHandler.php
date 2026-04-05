@@ -56,6 +56,7 @@ class UpdateEventSettingsHandler
                     'maps_url' => trim($settings->maps_url),
                     'location_details' => $settings->location_details?->toArray(),
                     'is_online_event' => $settings->is_online_event,
+                    'event_location_type' => $settings->event_location_type,
                     'online_event_connection_details' => $this->purifier->purify($settings->online_event_connection_details),
 
                     'seo_title' => $settings->seo_title,
@@ -101,6 +102,33 @@ class UpdateEventSettingsHandler
                     // Waitlist settings
                     'waitlist_auto_process' => $settings->waitlist_auto_process,
                     'waitlist_offer_timeout_minutes' => $settings->waitlist_offer_timeout_minutes,
+
+                    // Social media settings
+                    'social_media_handles' => $settings->social_media_handles ? array_filter($settings->social_media_handles) : null,
+                    'show_social_media_handles' => $settings->show_social_media_handles,
+
+                    // Access control settings
+                    'event_password' => $settings->event_password,
+
+                    // Payment settings
+                    'stripe_payment_method_order' => $settings->stripe_payment_method_order,
+
+                    // Order approval settings
+                    'require_order_approval' => $settings->require_order_approval,
+            'external_ticket_url' => $settings->external_ticket_url,
+
+                    // Order-level ticket quantity limits
+                    'order_min_tickets' => $settings->order_min_tickets,
+                    'order_max_tickets' => $settings->order_max_tickets,
+
+                    // Checkout validation webhook
+                    'checkout_validation_webhook_url' => $settings->checkout_validation_webhook_url,
+
+                    // Attendee name requirement
+                    'require_attendee_name' => $settings->require_attendee_name,
+
+                    // Free ticket expiration
+                    'free_ticket_expiration_minutes' => $settings->free_ticket_expiration_minutes,
                 ],
                 where: [
                     'event_id' => $settings->event_id,

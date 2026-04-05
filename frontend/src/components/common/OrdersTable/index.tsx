@@ -3,9 +3,11 @@ import {Anchor, Button, Group, Menu, Popover, Text, Tooltip} from '@mantine/core
 import {Event, IdParam, Invoice, MessageType, Order} from "../../../types.ts";
 import {
     IconAlertCircle,
+    IconBan,
     IconBasketCog,
     IconCash,
     IconCheck,
+    IconChecks,
     IconClock,
     IconClockPause,
     IconCopy,
@@ -14,6 +16,7 @@ import {
     IconFileInvoice,
     IconFileOff,
     IconHelp,
+    IconHourglass,
     IconReceipt2,
     IconReceiptDollar,
     IconReceiptRefund,
@@ -36,6 +39,8 @@ import {useResendOrderConfirmation} from "../../../mutations/useResendOrderConfi
 import {formatNumber} from "../../../utilites/helpers.ts";
 import {useUrlHash} from "../../../hooks/useUrlHash.ts";
 import {useMarkOrderAsPaid} from "../../../mutations/useMarkOrderAsPaid.ts";
+import {useApproveOrder} from "../../../mutations/useApproveOrder.ts";
+import {useRejectOrder} from "../../../mutations/useRejectOrder.ts";
 import {orderClient} from "../../../api/order.client.ts";
 import {downloadBinary} from "../../../utilites/download.ts";
 import {withLoadingNotification} from "../../../utilites/withLoadingNotification.tsx";
@@ -59,6 +64,8 @@ export const OrdersTable = ({orders, event}: OrdersTableProps) => {
     const [emailPopoverId, setEmailPopoverId] = useState<IdParam | null>(null);
     const resendConfirmationMutation = useResendOrderConfirmation();
     const markAsPaidMutation = useMarkOrderAsPaid();
+    const approveOrderMutation = useApproveOrder();
+    const rejectOrderMutation = useRejectOrder();
     const clipboard = useClipboard({timeout: 2000});
 
     useUrlHash(/^#order-(\d+)$/, (matches => {
@@ -76,6 +83,20 @@ export const OrdersTable = ({orders, event}: OrdersTableProps) => {
         markAsPaidMutation.mutate({eventId, orderId}, {
             onSuccess: () => showSuccess(t`Order marked as paid`),
             onError: () => showError(t`There was an error marking the order as paid`)
+        });
+    }
+
+    const handleApproveOrder = (eventId: IdParam, orderId: IdParam) => {
+        approveOrderMutation.mutate({eventId, orderId}, {
+            onSuccess: () => showSuccess(t`Order approved`),
+            onError: () => showError(t`There was an error approving the order`)
+        });
+    }
+
+    const handleRejectOrder = (eventId: IdParam, orderId: IdParam) => {
+        rejectOrderMutation.mutate({eventId, orderId}, {
+            onSuccess: () => showSuccess(t`Order rejected`),
+            onError: () => showError(t`There was an error rejecting the order`)
         });
     }
 
@@ -161,6 +182,16 @@ export const OrdersTable = ({orders, event}: OrdersTableProps) => {
                         {order.status === 'AWAITING_OFFLINE_PAYMENT' && (
                             <Menu.Item onClick={() => handleMarkAsPaid(event.id, order.id)}
                                        leftSection={<IconReceiptDollar size={14}/>}>{t`Mark as paid`}</Menu.Item>
+                        )}
+
+                        {order.status === 'AWAITING_APPROVAL' && (
+                            <>
+                                <Menu.Item onClick={() => handleApproveOrder(event.id, order.id)}
+                                           leftSection={<IconChecks size={14}/>}>{t`Approve order`}</Menu.Item>
+                                <Menu.Item onClick={() => handleRejectOrder(event.id, order.id)}
+                                           color="red"
+                                           leftSection={<IconBan size={14}/>}>{t`Reject order`}</Menu.Item>
+                            </>
                         )}
 
                         {isRefundable && (
@@ -415,6 +446,12 @@ export const OrdersTable = ({orders, event}: OrdersTableProps) => {
                                 <>
                                     <IconClockPause size={14}/>
                                     {t`Awaiting Payment`}
+                                </>
+                            )}
+                            {order.status === 'AWAITING_APPROVAL' && (
+                                <>
+                                    <IconHourglass size={14}/>
+                                    {t`Awaiting Approval`}
                                 </>
                             )}
                             {order.status === 'CANCELLED' && (

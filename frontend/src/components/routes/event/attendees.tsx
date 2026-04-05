@@ -6,7 +6,7 @@ import {AttendeeTable} from "../../common/AttendeeTable";
 import {SearchBarWrapper} from "../../common/SearchBar";
 import {Pagination} from "../../common/Pagination";
 import {Button} from "@mantine/core";
-import {IconDownload, IconPlus} from "@tabler/icons-react";
+import {IconDownload, IconPlus, IconQrcode} from "@tabler/icons-react";
 import {ToolBar} from "../../common/ToolBar";
 import {TableSkeleton} from "../../common/TableSkeleton";
 import {useFilterQueryParamSync} from "../../../hooks/useFilterQueryParamSync.ts";
@@ -26,6 +26,11 @@ const attendeeStatuses = [
     {label: t`Active`, value: 'ACTIVE'},
     {label: t`Cancelled`, value: 'CANCELLED'},
     {label: t`Awaiting Payment`, value: 'AWAITING_PAYMENT'},
+];
+
+const checkInStatuses = [
+    {label: t`Checked In`, value: 'checked_in'},
+    {label: t`Not Checked In`, value: 'not_checked_in'},
 ];
 
 const Attendees = () => {
@@ -72,6 +77,12 @@ const Attendees = () => {
             label: t`Attendee Status`,
             type: 'multi-select',
             options: attendeeStatuses
+        },
+        {
+            field: 'checked_in',
+            label: t`Check-In Status`,
+            type: 'single-select',
+            options: checkInStatuses
         }
     ];
 
@@ -99,6 +110,11 @@ const Attendees = () => {
         }
         if (values.status?.length > 0) {
             filterFields.status = {operator: QueryFilterOperator.In, value: values.status};
+        }
+        if (values.checked_in) {
+            filterFields.checked_in_at = values.checked_in === 'checked_in'
+                ? {operator: QueryFilterOperator.NotEquals, value: 'null'}
+                : {operator: QueryFilterOperator.Equals, value: 'null'};
         }
 
         setSearchParams({
@@ -194,6 +210,14 @@ const Attendees = () => {
                 >
                     <Button color={'green'} size={'sm'} onClick={openCreateModal} rightSection={<IconPlus/>}>
                         {t`Create`}
+                    </Button>
+
+                    <Button color={'green'}
+                            size={'sm'}
+                            onClick={() => window?.open(`/manage/event/${eventId}/attendees/print-qr`, '_blank')}
+                            rightSection={<IconQrcode/>}
+                    >
+                        {t`Print QR Codes`}
                     </Button>
 
                     <Button color={'green'}

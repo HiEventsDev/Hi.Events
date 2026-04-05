@@ -40,6 +40,8 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
 
     private ?AccountDomainObject $account = null;
 
+    private ?bool $hasPromoCodes = null;
+
     public static function getAllowedFilterFields(): array
     {
         return [
@@ -309,6 +311,17 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
     public function setAffiliates(?Collection $affiliates): EventDomainObject
     {
         $this->affiliates = $affiliates;
+        return $this;
+    }
+
+    public function getHasPromoCodes(): ?bool
+    {
+        return $this->hasPromoCodes;
+    }
+
+    public function setHasPromoCodes(?bool $hasPromoCodes): self
+    {
+        $this->hasPromoCodes = $hasPromoCodes;
         return $this;
     }
 }

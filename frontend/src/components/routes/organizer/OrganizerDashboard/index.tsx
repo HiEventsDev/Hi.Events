@@ -342,6 +342,9 @@ const getOrderStatusColor = (status: Order['status'], paymentStatus?: Order['pay
     if (status === 'AWAITING_OFFLINE_PAYMENT' || paymentStatus === 'AWAITING_OFFLINE_PAYMENT' || status === 'RESERVED' || paymentStatus === 'AWAITING_PAYMENT') {
         return 'orange';
     }
+    if (status === 'AWAITING_APPROVAL') {
+        return 'yellow';
+    }
     return 'gray';
 };
 
@@ -357,6 +360,9 @@ const formatOrderStatus = (status: Order['status'], paymentStatus?: Order['payme
     }
     if (status === 'AWAITING_OFFLINE_PAYMENT' || paymentStatus === 'AWAITING_OFFLINE_PAYMENT') {
         return t`Awaiting Offline Pmt.`;
+    }
+    if (status === 'AWAITING_APPROVAL') {
+        return t`Awaiting Approval`;
     }
 
     return status ? status.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) : t`Unknown`;

@@ -38,6 +38,8 @@ import {ShareComponent} from "../../common/ShareIcon";
 import {EventDateRange} from "../../common/EventDateRange";
 import {CalendarOptionsPopover} from "../../common/CalendarOptionsPopover";
 import {isDateInPast} from "../../../utilites/dates.ts";
+import {initMetaPixel} from "../../../utilites/analytics.ts";
+import {EventPasswordGate} from "../../common/EventPasswordGate";
 
 interface EventHomepageProps {
     event?: Event;
@@ -49,6 +51,10 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
     const {event, promoCodeValid, promoCode} = loaderData;
     const [showScrollButton, setShowScrollButton] = useState(false);
     const [contactModalOpen, setContactModalOpen] = useState(false);
+    const [eventUnlocked, setEventUnlocked] = useState(() => {
+        if (!event?.settings?.is_password_protected) return true;
+        return localStorage.getItem(`event_unlocked_${event?.id}`) === '1';
+    });
     const ticketsSectionRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -90,8 +96,19 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
         ticketsSectionRef.current?.scrollIntoView({behavior: 'smooth', block: 'start'});
     };
 
+    const metaPixelId = event?.settings?.meta_pixel_id;
+    useEffect(() => {
+        if (metaPixelId) {
+            initMetaPixel(metaPixelId);
+        }
+    }, [metaPixelId]);
+
     if (!event) {
         return <EventNotAvailable/>;
+    }
+
+    if (event.settings?.is_password_protected && !eventUnlocked) {
+        return <EventPasswordGate eventId={event.id!} eventTitle={event.title} onSuccess={() => setEventUnlocked(true)}/>;
     }
 
     const rawThemeSettings = event?.settings?.homepage_theme_settings;
@@ -120,10 +137,21 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
     const organizerLocation = organizer?.settings?.location_details;
     const websiteUrl = organizer?.website;
     const locationDetails = event.settings?.location_details;
-    const isOnlineEvent = event.settings?.is_online_event;
-    const hasLocation = isAddressSet(locationDetails) && !isOnlineEvent;
+    const locationType = event.settings?.event_location_type
+        || (event.settings?.is_online_event ? 'online' : 'venue');
+    const isOnlineEvent = locationType === 'online' || locationType === 'hybrid';
+    const hasLocation = isAddressSet(locationDetails) && (locationType === 'venue' || locationType === 'hybrid');
 
     const socialLinks = organizerSocials ? Object.entries(organizerSocials)
+        .filter(([platform, handle]) => handle && socialMediaConfig[platform as keyof typeof socialMediaConfig])
+        .map(([platform, handle]) => ({
+            platform,
+            handle: handle as string,
+            config: socialMediaConfig[platform as keyof typeof socialMediaConfig]
+        })) : [];
+
+    const eventSocials = event.settings?.show_social_media_handles ? event.settings?.social_media_handles : null;
+    const eventSocialLinks = eventSocials ? Object.entries(eventSocials)
         .filter(([platform, handle]) => handle && socialMediaConfig[platform as keyof typeof socialMediaConfig])
         .map(([platform, handle]) => ({
             platform,
@@ -307,6 +335,7 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
 
                                     <div className={classes.eventMeta}>
                                         {/* Date/Time */}
+                                        {!event.settings?.hide_start_date && (
                                         <div className={classes.metaItem}>
                                             <div className={classes.metaIconBox}>
                                                 <IconCalendar/>
@@ -323,6 +352,7 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                                                 </button>
                                             </CalendarOptionsPopover>
                                         </div>
+                                        )}
 
                                         {/* Event Ended */}
                                         {event.end_date && isDateInPast(event.end_date) && (
@@ -343,7 +373,9 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                                                     <IconWorld/>
                                                 </div>
                                                 <div className={classes.metaContent}>
-                                                    <div className={classes.metaPrimary}>{t`Online Event`}</div>
+                                                    <div className={classes.metaPrimary}>
+                                                        {locationType === 'hybrid' ? t`Hybrid Event` : t`Online Event`}
+                                                    </div>
                                                     <div className={classes.metaSecondary}>
                                                         {t`Join from anywhere`}
                                                     </div>
@@ -385,13 +417,34 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                             {/* About Section */}
                             {event?.description && (
                                 <div className={classes.section}>
-                                    <div className={classes.sectionHeader}>
-                                        <h2 className={classes.sectionTitle}>{t`About`}</h2>
-                                    </div>
                                     <div
                                         className={classes.description}
                                         dangerouslySetInnerHTML={{__html: event.description}}
                                     />
+                                </div>
+                            )}
+
+                            {/* Event Social Links */}
+                            {eventSocialLinks.length > 0 && (
+                                <div className={classes.section}>
+                                    <div className={classes.socialLinks}>
+                                        {eventSocialLinks.map(({platform, handle, config}) => {
+                                            const IconComponent = config.icon;
+                                            const url = config.baseUrl + handle;
+                                            return (
+                                                <a
+                                                    key={platform}
+                                                    href={url}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className={classes.socialLink}
+                                                    title={platform}
+                                                >
+                                                    <IconComponent size={20}/>
+                                                </a>
+                                            );
+                                        })}
+                                    </div>
                                 </div>
                             )}
 
@@ -470,6 +523,27 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                             {/* Tickets Section */}
                             <div className={`${classes.section} ${classes.ticketsSection}`} ref={ticketsSectionRef}
                                  id="tickets">
+                                {event.settings?.external_ticket_url ? (
+                                    <div style={{textAlign: 'center', padding: '40px 0'}}>
+                                        <a
+                                            href={event.settings.external_ticket_url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            style={{
+                                                display: 'inline-block',
+                                                padding: '14px 32px',
+                                                backgroundColor: 'var(--event-primary-color)',
+                                                color: 'var(--event-primary-text-color)',
+                                                borderRadius: '8px',
+                                                textDecoration: 'none',
+                                                fontWeight: 600,
+                                                fontSize: '16px',
+                                            }}
+                                        >
+                                            {event.settings?.continue_button_text || t`Get Tickets`}
+                                        </a>
+                                    </div>
+                                ) : (
                                 <SelectProducts
                                     colors={{
                                         background: "transparent",
@@ -486,6 +560,7 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                                     promoCode={promoCode}
                                     showPoweredBy={false}
                                 />
+                                )}
                             </div>
 
                             {/* Organizer Section */}
@@ -593,13 +668,13 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                         <div className={classes.footerSection}>
                             <div className={classes.footerLinks}>
                                 <Anchor
-                                    href={getConfig('VITE_PRIVACY_URL', 'https://hi.events/privacy-policy?utm_source=app-event-footer')}
+                                    href={organizer?.settings?.privacy_policy_url || getConfig('VITE_PRIVACY_URL', 'https://hi.events/privacy-policy?utm_source=app-event-footer')}
                                     className={classes.footerLink}
                                 >
                                     {t`Privacy Policy`}
                                 </Anchor>
                                 <Anchor
-                                    href={getConfig('VITE_TOS_URL', 'https://hi.events/terms-of-service?utm_source=app-event-footer')}
+                                    href={organizer?.settings?.terms_of_service_url || getConfig('VITE_TOS_URL', 'https://hi.events/terms-of-service?utm_source=app-event-footer')}
                                     className={classes.footerLink}
                                 >
                                     {t`Terms of Service`}
@@ -613,7 +688,13 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                     {showScrollButton && (
                         <button
                             className={classes.scrollToTicketsButton}
-                            onClick={scrollToTickets}
+                            onClick={() => {
+                                if (event.settings?.external_ticket_url) {
+                                    window.open(event.settings.external_ticket_url, '_blank', 'noopener,noreferrer');
+                                } else {
+                                    scrollToTickets();
+                                }
+                            }}
                         >
                             <IconTicket size={18}/>
                             {t`Get Tickets`}

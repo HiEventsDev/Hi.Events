@@ -1,7 +1,7 @@
 import {CustomSelect, ItemProps} from "../../common/CustomSelect";
 import {t, Trans} from "@lingui/macro";
-import {ProductCategory, QuestionBelongsToType, QuestionType} from "../../../types.ts";
-import {Button, Group, Switch, TextInput} from "@mantine/core";
+import {ProductCategory, Question, QuestionBelongsToType, QuestionType} from "../../../types.ts";
+import {Button, Group, NumberInput, Select, Switch, TextInput} from "@mantine/core";
 import {
     IconAlignBoxLeftTop,
     IconCalendar,
@@ -74,9 +74,10 @@ const Options = ({form}: { form: UseFormReturnType<any> }) => {
 interface QuestionFormProps {
     form: UseFormReturnType<any>;
     productCategories?: ProductCategory[];
+    questions?: Question[];
 }
 
-export const QuestionForm = ({form, productCategories}: QuestionFormProps) => {
+export const QuestionForm = ({form, productCategories, questions}: QuestionFormProps) => {
     const [showDescription, setShowDescription] = useState(false);
 
     const belongToOptions: ItemProps[] = [
@@ -143,6 +144,16 @@ export const QuestionForm = ({form, productCategories}: QuestionFormProps) => {
         QuestionType.RADIO.toString(),
         QuestionType.DROPDOWN.toString(),
     ];
+
+    const parentQuestionCandidates = (questions || []).filter(
+        q => q.id !== form.values.id
+            && multiAnswerQuestionTypes.includes(q.type)
+            && q.belongs_to === form.values.belongs_to
+    );
+
+    const selectedParentQuestion = parentQuestionCandidates.find(
+        q => q.id === form.values.conditions?.parent_question_id
+    );
 
     return (
         <>
@@ -218,6 +229,91 @@ export const QuestionForm = ({form, productCategories}: QuestionFormProps) => {
                 description={t`Hidden questions are only visible to the event organizer and not to the customer.`}
                 label={t`Hide this question`}
             />
+
+            {(form.values.type === QuestionType.SINGLE_LINE_TEXT || form.values.type === QuestionType.MULTI_LINE_TEXT) && (
+                <>
+                    <TextInput
+                        mt={20}
+                        {...form.getInputProps('validation_rules.placeholder')}
+                        label={t`Placeholder`}
+                        description={t`Hint text shown inside the input field before the user types.`}
+                    />
+                    <Group mt={10} grow>
+                        <NumberInput
+                            {...form.getInputProps('validation_rules.min_length')}
+                            label={t`Minimum length`}
+                            min={0}
+                            max={10000}
+                            allowDecimal={false}
+                        />
+                        <NumberInput
+                            {...form.getInputProps('validation_rules.max_length')}
+                            label={t`Maximum length`}
+                            min={1}
+                            max={10000}
+                            allowDecimal={false}
+                        />
+                    </Group>
+                </>
+            )}
+
+            {parentQuestionCandidates.length > 0 && (
+                <>
+                    <Switch
+                        mt={20}
+                        checked={!!form.values.conditions?.parent_question_id}
+                        onChange={(event) => {
+                            if (event.currentTarget.checked) {
+                                form.setFieldValue('conditions', {parent_question_id: null, condition_value: ''});
+                            } else {
+                                form.setFieldValue('conditions', null);
+                            }
+                        }}
+                        description={t`Only show this question when a specific answer is selected on another question.`}
+                        label={t`Make this question conditional`}
+                    />
+
+                    {form.values.conditions && (
+                        <>
+                            <Select
+                                mt={10}
+                                label={t`Parent question`}
+                                placeholder={t`Select a question`}
+                                data={parentQuestionCandidates.map(q => ({
+                                    value: String(q.id),
+                                    label: q.title,
+                                }))}
+                                value={form.values.conditions?.parent_question_id ? String(form.values.conditions.parent_question_id) : null}
+                                onChange={(value) => {
+                                    form.setFieldValue('conditions', {
+                                        parent_question_id: value ? Number(value) : null,
+                                        condition_value: '',
+                                    });
+                                }}
+                            />
+
+                            {selectedParentQuestion && selectedParentQuestion.options && (
+                                <Select
+                                    mt={10}
+                                    label={t`Show when answer is`}
+                                    placeholder={t`Select a value`}
+                                    data={selectedParentQuestion.options.map(opt => ({
+                                        value: opt,
+                                        label: opt,
+                                    }))}
+                                    value={form.values.conditions?.condition_value || null}
+                                    onChange={(value) => {
+                                        form.setFieldValue('conditions', {
+                                            ...form.values.conditions,
+                                            condition_value: value || '',
+                                        });
+                                    }}
+                                />
+                            )}
+                        </>
+                    )}
+                </>
+            )}
         </>
     )
 }
