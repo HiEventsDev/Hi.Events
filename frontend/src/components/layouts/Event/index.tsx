@@ -1,5 +1,6 @@
 import {
     IconArrowLeft,
+    IconArmchair,
     IconChartPie,
     IconChevronRight,
     IconDashboard,
@@ -120,6 +121,7 @@ const EventLayout = () => {
         {link: 'messages', label: t`Messages`, icon: IconSend},
         {link: 'sold-out-waitlist', label: t`Waitlist`, icon: IconListCheck},
         {link: 'capacity-assignments', label: t`Capacity Management`, icon: IconUsersGroup},
+        {link: 'seating-charts', label: t`Seating Charts`, icon: IconArmchair},
 
         // 5. INTEGRATIONS
         {label: t`Integrations`},

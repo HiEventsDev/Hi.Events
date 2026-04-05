@@ -1,5 +1,5 @@
 import {t} from "@lingui/macro";
-import {Button, Select, SegmentedControl, TextInput} from "@mantine/core";
+import {Button, Select, SegmentedControl, Switch, TextInput, NumberInput} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import {useParams} from "react-router";
 import {useEffect} from "react";
@@ -33,6 +33,9 @@ export const LocationSettings = () => {
             event_location_type: 'venue' as 'venue' | 'online' | 'hybrid',
             online_event_connection_details: '',
             maps_url: '',
+            venue_latitude: null as number | null,
+            venue_longitude: null as number | null,
+            show_map_on_event_page: false,
         },
         transformValues: (values) => ({
             ...values,
@@ -59,6 +62,9 @@ export const LocationSettings = () => {
                 event_location_type: locationType,
                 online_event_connection_details: eventSettingsQuery.data.online_event_connection_details,
                 maps_url: eventSettingsQuery.data.maps_url || '',
+                venue_latitude: eventSettingsQuery.data.venue_latitude ?? null,
+                venue_longitude: eventSettingsQuery.data.venue_longitude ?? null,
+                show_map_on_event_page: eventSettingsQuery.data.show_map_on_event_page ?? false,
             });
         }
     }, [eventSettingsQuery.isFetched]);
@@ -166,6 +172,30 @@ export const LocationSettings = () => {
                                 description={t`If blank, the address will be used to generate a Google Maps link`}
                                 label={t`Custom Maps URL`}
                                 placeholder={t`https://example-maps-service.com/...`}
+                            />
+                            <InputGroup>
+                                <NumberInput
+                                    {...form.getInputProps('venue_latitude')}
+                                    label={t`Venue Latitude`}
+                                    placeholder="37.7749"
+                                    decimalScale={7}
+                                    min={-90}
+                                    max={90}
+                                />
+                                <NumberInput
+                                    {...form.getInputProps('venue_longitude')}
+                                    label={t`Venue Longitude`}
+                                    placeholder="-122.4194"
+                                    decimalScale={7}
+                                    min={-180}
+                                    max={180}
+                                />
+                            </InputGroup>
+                            <Switch
+                                {...form.getInputProps('show_map_on_event_page', {type: 'checkbox'})}
+                                label={t`Show embedded Google Map on event page`}
+                                description={t`When enabled with coordinates, an interactive map will be displayed on your event page`}
+                                mt="sm"
                             />
                         </>
                     )}

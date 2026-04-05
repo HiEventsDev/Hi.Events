@@ -100,6 +100,10 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     final public const HIDE_EVENT_DETAILS_UNTIL_ACCESS = 'hide_event_details_until_access';
     final public const HIDE_LOCATION_UNTIL_PURCHASE = 'hide_location_until_purchase';
     final public const SHOW_PROMO_CODE_INPUT_ALWAYS = 'show_promo_code_input_always';
+    final public const VENUE_LATITUDE = 'venue_latitude';
+    final public const VENUE_LONGITUDE = 'venue_longitude';
+    final public const SHOW_MAP_ON_EVENT_PAGE = 'show_map_on_event_page';
+    final public const MAPS_EMBED_TYPE = 'maps_embed_type';
 
     protected int $id;
     protected int $event_id;
@@ -191,6 +195,10 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     protected bool $hide_event_details_until_access = false;
     protected bool $hide_location_until_purchase = false;
     protected bool $show_promo_code_input_always = false;
+    protected ?float $venue_latitude = null;
+    protected ?float $venue_longitude = null;
+    protected bool $show_map_on_event_page = false;
+    protected string $maps_embed_type = 'static';
 
     public function toArray(): array
     {
@@ -285,6 +293,10 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
                     'hide_event_details_until_access' => $this->hide_event_details_until_access ?? false,
                     'hide_location_until_purchase' => $this->hide_location_until_purchase ?? false,
                     'show_promo_code_input_always' => $this->show_promo_code_input_always ?? false,
+                    'venue_latitude' => $this->venue_latitude ?? null,
+                    'venue_longitude' => $this->venue_longitude ?? null,
+                    'show_map_on_event_page' => $this->show_map_on_event_page ?? false,
+                    'maps_embed_type' => $this->maps_embed_type ?? 'static',
                 ];
     }
 
@@ -1277,5 +1289,49 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     public function getShowPromoCodeInputAlways(): bool
     {
         return $this->show_promo_code_input_always;
+    }
+
+    public function setVenueLatitude(?float $venue_latitude): self
+    {
+        $this->venue_latitude = $venue_latitude;
+        return $this;
+    }
+
+    public function getVenueLatitude(): ?float
+    {
+        return $this->venue_latitude;
+    }
+
+    public function setVenueLongitude(?float $venue_longitude): self
+    {
+        $this->venue_longitude = $venue_longitude;
+        return $this;
+    }
+
+    public function getVenueLongitude(): ?float
+    {
+        return $this->venue_longitude;
+    }
+
+    public function setShowMapOnEventPage(bool $show_map_on_event_page): self
+    {
+        $this->show_map_on_event_page = $show_map_on_event_page;
+        return $this;
+    }
+
+    public function getShowMapOnEventPage(): bool
+    {
+        return $this->show_map_on_event_page;
+    }
+
+    public function setMapsEmbedType(string $maps_embed_type): self
+    {
+        $this->maps_embed_type = $maps_embed_type;
+        return $this;
+    }
+
+    public function getMapsEmbedType(): string
+    {
+        return $this->maps_embed_type;
     }
 }

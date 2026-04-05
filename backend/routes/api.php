@@ -528,6 +528,30 @@ $router->middleware(['auth:api'])->group(
         $router->get('/events/{event_id}/seating-charts/{seating_chart_id}', \HiEvents\Http\Actions\SeatingCharts\GetSeatingChartAction::class);
         $router->post('/events/{event_id}/seating-charts/{seating_chart_id}/seats/{seat_id}/assign', \HiEvents\Http\Actions\SeatingCharts\AssignSeatAction::class);
 
+        // Gift Cards
+        $router->post('/gift-cards', \HiEvents\Http\Actions\GiftCards\CreateGiftCardAction::class);
+        $router->get('/gift-cards', \HiEvents\Http\Actions\GiftCards\GetGiftCardsAction::class);
+        $router->get('/gift-cards/{gift_card_id}', \HiEvents\Http\Actions\GiftCards\GetGiftCardAction::class);
+        $router->put('/gift-cards/{gift_card_id}', \HiEvents\Http\Actions\GiftCards\UpdateGiftCardAction::class);
+
+        // Memberships
+        $router->post('/organizers/{organizer_id}/membership-plans', \HiEvents\Http\Actions\Memberships\CreateMembershipPlanAction::class);
+        $router->get('/organizers/{organizer_id}/membership-plans', \HiEvents\Http\Actions\Memberships\GetMembershipPlansAction::class);
+        $router->put('/organizers/{organizer_id}/membership-plans/{plan_id}', \HiEvents\Http\Actions\Memberships\UpdateMembershipPlanAction::class);
+        $router->post('/organizers/{organizer_id}/membership-plans/{plan_id}/memberships', \HiEvents\Http\Actions\Memberships\CreateMembershipAction::class);
+        $router->get('/organizers/{organizer_id}/membership-plans/{plan_id}/memberships', \HiEvents\Http\Actions\Memberships\GetMembershipsAction::class);
+        $router->put('/organizers/{organizer_id}/membership-plans/{plan_id}/memberships/{membership_id}', \HiEvents\Http\Actions\Memberships\UpdateMembershipAction::class);
+
+        // POS (Point of Sale)
+        $router->post('/events/{event_id}/pos-sessions', \HiEvents\Http\Actions\Pos\OpenPosSessionAction::class);
+        $router->get('/events/{event_id}/pos-sessions', \HiEvents\Http\Actions\Pos\GetPosSessionsAction::class);
+        $router->post('/events/{event_id}/pos-sessions/{session_id}/close', \HiEvents\Http\Actions\Pos\ClosePosSessionAction::class);
+        $router->post('/events/{event_id}/pos-sessions/{session_id}/transactions', \HiEvents\Http\Actions\Pos\CreatePosTransactionAction::class);
+        $router->post('/events/{event_id}/pos/stripe-terminal-token', \HiEvents\Http\Actions\Pos\CreateStripeTerminalConnectionTokenAction::class);
+
+        // Bulk Attendee Import
+        $router->post('/events/{event_id}/attendees/bulk-import', \HiEvents\Http\Actions\Attendees\BulkImportAttendeesAction::class);
+
         // Images
         $router->post('/images', CreateImageAction::class);
         $router->delete('/images/{image_id}', DeleteImageAction::class);
@@ -629,6 +653,13 @@ $router->prefix('/public')->group(
 
         // Seating Charts (public)
         $router->get('/events/{event_id}/seating-charts/{seating_chart_id}/availability', \HiEvents\Http\Actions\SeatingCharts\GetSeatAvailabilityPublicAction::class);
+
+        // Gift Cards (public)
+        $router->post('/gift-cards/redeem', \HiEvents\Http\Actions\GiftCards\RedeemGiftCardPublicAction::class);
+        $router->post('/gift-cards/check-balance', \HiEvents\Http\Actions\GiftCards\CheckGiftCardBalancePublicAction::class);
+
+        // Memberships (public)
+        $router->post('/memberships/validate', \HiEvents\Http\Actions\Memberships\ValidateMembershipPublicAction::class);
 
         // Upsell Products (public)
         $router->get('/events/{event_id}/products/upsells', \HiEvents\Http\Actions\Products\GetUpsellProductsPublicAction::class);

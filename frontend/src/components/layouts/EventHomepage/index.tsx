@@ -481,6 +481,23 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                                                 rel="noopener noreferrer"
                                                 className={classes.mapContainer}
                                             >
+                                                {event.settings?.show_map_on_event_page && event.settings?.venue_latitude && event.settings?.venue_longitude ? (
+                                                    <iframe
+                                                        src={`https://maps.google.com/maps?q=${event.settings.venue_latitude},${event.settings.venue_longitude}&z=15&output=embed`}
+                                                        style={{
+                                                            width: '100%',
+                                                            height: '100%',
+                                                            position: 'absolute',
+                                                            inset: 0,
+                                                            border: 0,
+                                                            pointerEvents: 'none',
+                                                        }}
+                                                        allowFullScreen={false}
+                                                        loading="lazy"
+                                                        referrerPolicy="no-referrer-when-downgrade"
+                                                        title={t`Event Location Map`}
+                                                    />
+                                                ) : (
                                                 <svg
                                                     viewBox="0 0 200 120"
                                                     preserveAspectRatio="xMidYMid slice"
@@ -507,6 +524,7 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                                                     <rect x="110" y="28" width="14" height="10" fill="var(--border-color)" opacity="0.25" rx="1"/>
                                                     <rect x="20" y="55" width="12" height="10" fill="var(--border-color)" opacity="0.25" rx="1"/>
                                                 </svg>
+                                                )}
                                                 <IconMapPin size={32} className={classes.mapPin}/>
                                                 <div className={classes.mapOverlay}>
                                                     <span className={classes.mapOverlayLabel}>

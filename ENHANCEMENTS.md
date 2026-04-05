@@ -490,3 +490,163 @@ Per-product attendance mode with distinct connection details for in-person, onli
 | **Frontend/Mobile** | PWA support (7 files), Flutter app scaffold (11 files) |
 | **Jobs** | 1 new scheduled job (SendAbandonedCheckoutRecoveryEmailsJob) |
 | **Mail** | 1 new mail class (AbandonedCheckoutRecoveryMail) |
+
+---
+
+## Session 12 — Tier 2 High Priority Features (Competitive Advantage)
+
+> **Date:** April 6, 2026  
+> **Features:** 6 implemented, 1 verified existing (#7 Seating Chart Builder, #8 Gift Cards, #9 Memberships, #10 POS, #11 Bulk Import, #12 Google Maps, #13 Social Sharing already existed)
+
+### #7 — Visual Seating Chart Builder (Frontend)
+
+Interactive canvas-based seating chart builder for the existing backend seating chart system (Session 11, #39).
+
+**What's new:**
+- List view showing existing seating charts as cards with name, status badge, seat count
+- Full canvas-based builder with drag-and-drop section placement
+- Pan/zoom controls (0.3x–2.5x) with grid background
+- Section sidebar with property editor (name, color, rows, seats/row, shape)
+- "Add Section" modal with color picker (10 swatches), row/seat configuration, shape selection
+- Live seat preview rendering (rows A–Z with numbered seats, tooltips)
+- Total seats/sections summary badges
+- Canvas interactions: mouse handlers for panning and section dragging
+
+**Files:**
+- `frontend/src/api/seating-chart.client.ts` — API client with types and CRUD methods
+- `frontend/src/queries/useGetSeatingCharts.ts` — React Query hooks for listing/getting charts
+- `frontend/src/mutations/useCreateSeatingChart.ts` — Mutation hook for creating charts
+- `frontend/src/components/routes/event/SeatingCharts/SeatingCharts.module.scss` — ~280 line SCSS module
+- `frontend/src/components/routes/event/SeatingCharts/index.tsx` — ~470 line builder component
+- Modified: `frontend/src/router.tsx` — Added `seating-charts` route
+- Modified: `frontend/src/components/layouts/Event/index.tsx` — Added nav item with `IconArmchair`
+
+---
+
+### #8 — Gift Cards / Gift Vouchers
+
+Full gift card system with batch creation, redemption, and balance tracking.
+
+**What's new:**
+- Gift cards with unique codes, initial/remaining balance, currency, expiry dates
+- Batch creation: specify quantity and all cards are generated with UUID codes
+- Atomic redemption with balance validation (uses DB transaction)
+- Usage tracking: every redemption logged with order association
+- Public endpoints for redeeming and checking balance by code
+
+**Files:**
+- Migration `000041` — `gift_cards` + `gift_card_usages` tables
+- `Models/GiftCard.php`, `GiftCardUsage.php`
+- `DomainObjects/GiftCardDomainObject.php` + Generated abstract
+- `DomainObjects/GiftCardUsageDomainObject.php` + Generated abstract
+- `Repository/Eloquent/GiftCardRepository.php` + Interface
+- `Actions/GiftCards/` — CreateGiftCardAction (batch support), GetGiftCardAction, GetGiftCardsAction, UpdateGiftCardAction, RedeemGiftCardAction, CheckGiftCardBalanceAction
+- Routes: 4 authenticated (CRUD) + 2 public (redeem, check-balance)
+
+---
+
+### #9 — Memberships & Season Passes
+
+Membership plans with recurring access to events and attendee membership management.
+
+**What's new:**
+- Membership plans: name, description, price, currency, duration, renewal type (manual/auto), max events, benefits list
+- Individual memberships linked to plans with status tracking (active/expired/cancelled/suspended)
+- Event access control: plans can specify which events members can access
+- Membership validation endpoint for checking access to specific events
+- Full lifecycle management: activate, cancel, expire, renew
+
+**Files:**
+- Migration `000042` — `membership_plans` + `memberships` + `membership_event_access` tables
+- `Models/MembershipPlan.php`, `Membership.php`, `MembershipEventAccess.php`
+- `DomainObjects/MembershipPlanDomainObject.php` + Generated abstract
+- `DomainObjects/MembershipDomainObject.php` + Generated abstract
+- `Repository/Eloquent/MembershipPlanRepository.php` + Interface
+- `Repository/Eloquent/MembershipRepository.php` + Interface
+- `Actions/Memberships/` — CreateMembershipPlanAction, GetMembershipPlansAction, UpdateMembershipPlanAction, CreateMembershipAction, GetMembershipsAction, CancelMembershipAction, ValidateMembershipPublicAction
+- Routes: 6 authenticated (CRUD plans + memberships) + 1 public (validate)
+
+---
+
+### #10 — In-Person Sales / Point of Sale (POS)
+
+POS session management for on-site ticket and merchandise sales with Stripe Terminal support.
+
+**What's new:**
+- POS sessions: open/close with automatic total calculation
+- Transactions within sessions: product, quantity, unit price, payment method (cash/card/terminal)
+- Atomic total updates on session close via DB transaction
+- Stripe Terminal connection token generation for card reader integration
+- Session-level reporting with transaction counts and totals
+
+**Files:**
+- Migration `000043` — `pos_sessions` + `pos_transactions` tables
+- `Models/PosSession.php`, `PosTransaction.php`
+- `DomainObjects/PosSessionDomainObject.php` + Generated abstract
+- `DomainObjects/PosTransactionDomainObject.php` + Generated abstract
+- `Repository/Eloquent/PosSessionRepository.php` + Interface
+- `Actions/POS/` — OpenPosSessionAction, ClosePosSessionAction, GetPosSessionsAction, CreatePosTransactionAction, GetStripeTerminalTokenAction
+- Routes: 5 authenticated (open, close, list, create transaction, terminal token)
+
+---
+
+### #11 — Bulk Attendee Import
+
+CSV-based bulk import of attendees with validation and deduplication.
+
+**What's new:**
+- CSV parsing: supports file upload or inline CSV data
+- Column mapping: first_name, last_name, email, product_id, product_price_id
+- Row-level validation with error collection (missing fields, invalid emails, product not found)
+- Duplicate email detection within import batch
+- Returns success count, error count, and detailed error messages per row
+
+**Files:**
+- `Services/Domain/Attendee/BulkAttendeeImportService.php` — CSV parsing, validation, dedup
+- `Actions/Attendees/BulkImportAttendeesAction.php` — File upload or inline CSV handling
+- Routes: 1 authenticated (POST bulk-import)
+
+---
+
+### #12 — Google Maps on Event Pages
+
+Embedded Google Maps on event pages when venue coordinates are configured.
+
+**What's new:**
+- Venue latitude/longitude fields on event settings (decimal 10,7 precision)
+- Toggle to enable/disable map display on public event page
+- Google Maps embed using free URL format (no API key required)
+- Admin UI: NumberInputs for coordinates with bounds validation, Switch toggle
+- Frontend: conditional rendering — Google Maps iframe when coordinates set, SVG placeholder fallback
+
+**Files:**
+- Migration `000044` — `venue_latitude`, `venue_longitude`, `show_map_on_event_page`, `maps_embed_type` on `event_settings`
+- Modified: `DomainObjects/Generated/EventSettingDomainObjectAbstract.php` — 4 new constants, properties, toArray entries, getter/setters
+- Modified: `frontend/src/types.ts` — 4 new fields on `EventSettings` interface
+- Modified: `frontend/src/components/layouts/EventHomepage/index.tsx` — Google Maps iframe embed
+- Modified: `frontend/src/components/routes/event/Settings/Sections/LocationSettings/index.tsx` — Admin form fields
+
+---
+
+### #13 — Social Sharing Tools + WhatsApp (Already Existed)
+
+Verified that the existing `ShareModal` component already supports WhatsApp, Facebook, X (Twitter), LinkedIn, Telegram, Reddit, Pinterest, Email sharing with QR code generation and native Web Share API integration. No changes needed.
+
+**Existing files:**
+- `frontend/src/components/modals/ShareModal/index.tsx`
+- `frontend/src/components/modals/ShareModal/ShareModal.module.scss`
+
+---
+
+## Session 12 Infrastructure Changes
+
+| Area | Details |
+|---|---|
+| **Migrations** | 4 new migrations (`000041`–`000044`) |
+| **Repositories** | 4 new repos registered in `RepositoryServiceProvider` (GiftCard, MembershipPlan, Membership, PosSession) |
+| **Models** | 7 new models (GiftCard, GiftCardUsage, MembershipPlan, Membership, MembershipEventAccess, PosSession, PosTransaction) |
+| **Domain Objects** | 6 new domain objects + 4 Generated abstracts + 1 existing abstract modified |
+| **Routes** | ~20 new API routes (16 authenticated + 3 public) |
+| **Actions** | 19 new action classes across 5 feature areas |
+| **Services** | 1 new service (BulkAttendeeImportService) |
+| **Frontend** | Seating chart builder (5 new files), Google Maps embed (3 files modified), types extended |

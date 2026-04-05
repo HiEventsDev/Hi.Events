@@ -472,6 +472,13 @@ export const router: RouteObject[] = [
                 }
             },
             {
+                path: "seating-charts",
+                async lazy() {
+                    const SeatingCharts = await import("./components/routes/event/SeatingCharts");
+                    return { Component: SeatingCharts.default };
+                }
+            },
+            {
                 path: "webhooks",
                 async lazy() {
                     const Webhooks = await import("./components/routes/event/Webhooks");

@@ -23,6 +23,10 @@ use HiEvents\Repository\Eloquent\EventRepository;
 use HiEvents\Repository\Eloquent\EventSettingsRepository;
 use HiEvents\Repository\Eloquent\EventStatisticRepository;
 use HiEvents\Repository\Eloquent\EventSubscriberRepository;
+use HiEvents\Repository\Eloquent\GiftCardRepository;
+use HiEvents\Repository\Eloquent\MembershipPlanRepository;
+use HiEvents\Repository\Eloquent\MembershipRepository;
+use HiEvents\Repository\Eloquent\PosSessionRepository;
 use HiEvents\Repository\Eloquent\SeatingChartRepository;
 use HiEvents\Repository\Eloquent\SeatRepository;
 use HiEvents\Repository\Eloquent\ImageRepository;
@@ -75,6 +79,10 @@ use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSubscriberRepositoryInterface;
+use HiEvents\Repository\Interfaces\GiftCardRepositoryInterface;
+use HiEvents\Repository\Interfaces\MembershipPlanRepositoryInterface;
+use HiEvents\Repository\Interfaces\MembershipRepositoryInterface;
+use HiEvents\Repository\Interfaces\PosSessionRepositoryInterface;
 use HiEvents\Repository\Interfaces\SeatingChartRepositoryInterface;
 use HiEvents\Repository\Interfaces\SeatRepositoryInterface;
 use HiEvents\Repository\Interfaces\ImageRepositoryInterface;
@@ -168,6 +176,10 @@ class RepositoryServiceProvider extends ServiceProvider
         EventSubscriberRepositoryInterface::class => EventSubscriberRepository::class,
         SeatingChartRepositoryInterface::class => SeatingChartRepository::class,
         SeatRepositoryInterface::class => SeatRepository::class,
+        GiftCardRepositoryInterface::class => GiftCardRepository::class,
+        MembershipPlanRepositoryInterface::class => MembershipPlanRepository::class,
+        MembershipRepositoryInterface::class => MembershipRepository::class,
+        PosSessionRepositoryInterface::class => PosSessionRepository::class,
     ];
 
     public function register(): void

@@ -400,6 +400,12 @@ export interface EventSettings {
     hide_event_details_until_access?: boolean;
     hide_location_until_purchase?: boolean;
     show_promo_code_input_always?: boolean;
+
+    // Venue map settings
+    venue_latitude?: number | null;
+    venue_longitude?: number | null;
+    show_map_on_event_page?: boolean;
+    maps_embed_type?: string;
 }
 
 export interface VenueAddress {
