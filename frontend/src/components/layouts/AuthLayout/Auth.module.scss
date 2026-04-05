@@ -5,7 +5,6 @@
   min-height: 100vh;
   display: flex;
   position: relative;
-  overflow: hidden;
 }
 
 .splitLayout {
@@ -22,7 +21,6 @@
   flex-direction: column;
   position: relative;
   background: linear-gradient(135deg, #fafafa 0%, var(--hi-color-gray) 50%, #faf8fc 100%);
-  overflow-y: auto;
   z-index: 2;
 
   @include mixins.respond-below(md) {
@@ -113,15 +111,26 @@
   }
 }
 
-// Right Panel - Premium visual with background image
+// =========================================================
+// RIGHT PANEL — product showcase, matches app's light lavender vibe
+// =========================================================
 .rightPanel {
   width: 55%;
-  max-width: 700px;
-  position: relative;
+  max-width: 760px;
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+  height: 100vh;
+  height: 100dvh;
   overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(ellipse 80% 60% at 80% 10%, color-mix(in srgb, var(--mantine-color-primary-4) 55%, transparent), transparent 70%),
+    radial-gradient(ellipse 70% 50% at 15% 90%, color-mix(in srgb, var(--mantine-color-secondary-4) 45%, transparent), transparent 70%),
+    linear-gradient(180deg, color-mix(in srgb, var(--mantine-color-primary-2) 70%, white) 0%, var(--mantine-color-primary-3) 100%);
 
   @include mixins.respond-below(lg) {
-    width: 45%;
+    width: 48%;
   }
 
   @include mixins.respond-below(md) {
@@ -129,203 +138,543 @@
   }
 }
 
-.backgroundImage {
+// Film-grain noise — adds organic texture to the gradient
+.noise {
   position: absolute;
   inset: 0;
-  background-image: url("/images/backgrounds/nightlife-bg.jpg");
-  background-size: cover;
-  background-position: center;
-  filter: grayscale(20%);
-}
-
-.backgroundOverlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    135deg,
-    var(--mantine-color-primary-9) 0%,
-    var(--mantine-color-primary-8) 30%,
-    var(--mantine-color-primary-6) 60%,
-    var(--mantine-color-secondary-5) 100%
-  );
-  opacity: 0.92;
-}
-
-// Grid pattern overlay
-.gridPattern {
-  position: absolute;
-  inset: 0;
-  opacity: 0.04;
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
-  background-size: 50px 50px;
-}
-
-// Subtle glow effects
-.glowEffect {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(80px);
-  opacity: 0.4;
   pointer-events: none;
+  z-index: 1;
+  opacity: 0.22;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='2.4' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  background-size: 160px 160px;
 }
 
-.glowTop {
-  top: -100px;
-  right: -50px;
-  width: 300px;
-  height: 300px;
-  background: rgba(255, 255, 255, 0.15);
+// Subtle dot grid for texture
+.dotGrid {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, color-mix(in srgb, var(--mantine-color-primary-9) 18%, transparent) 1px, transparent 1px);
+  background-size: 24px 24px;
+  opacity: 0.35;
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 30%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 30%, transparent 75%);
+  pointer-events: none;
+  z-index: 0;
 }
 
-.glowBottom {
-  bottom: -100px;
-  left: -50px;
-  width: 350px;
-  height: 350px;
-  background: var(--mantine-color-secondary-3);
-  opacity: 0.2;
-}
-
-.overlay {
+// Inner flex column — CENTERED like the form
+.panelInner {
   position: relative;
+  z-index: 2;
   height: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 3rem;
-  z-index: 1;
+  padding: 3rem 3rem 5rem;
+  gap: 2.75rem;
 
   @include mixins.respond-below(lg) {
-    padding: 2rem;
+    padding: 2rem 2rem 4.5rem;
+    gap: 3rem;
   }
 }
 
-.content {
-  max-width: 400px;
+// ------- HEADING BLOCK -------
+.headingBlock {
+  text-align: center;
+  max-width: 520px;
+  animation: rise 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.heroTitle {
+  margin: 0;
+  font-size: 2.75rem;
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  color: var(--mantine-color-primary-9);
+
+  @include mixins.respond-below(lg) {
+    font-size: 2.125rem;
+  }
+}
+
+.heroBold {
+  font-weight: 800;
+  display: block;
+}
+
+.heroLight {
+  font-weight: 300;
+  font-style: italic;
+  color: color-mix(in srgb, var(--mantine-color-primary-9) 70%, white);
+  display: block;
+}
+
+// ------- DASHBOARD STAGE — the centerpiece -------
+.dashStage {
+  position: relative;
   width: 100%;
+  max-width: 460px;
+  aspect-ratio: 1 / 0.82;
+  animation: rise 1.1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.1s both;
 
   @include mixins.respond-below(lg) {
-    max-width: 340px;
+    max-width: 380px;
   }
 }
 
-// Badge at top
-.badge {
+// Main event dashboard card
+.dashCard {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) rotate(-1.5deg);
+  width: 100%;
+  background: white;
+  border-radius: 18px;
+  padding: 1.25rem 1.375rem 1.125rem;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.9) inset,
+    0 24px 48px -12px color-mix(in srgb, var(--mantine-color-primary-9) 25%, transparent),
+    0 2px 8px -2px color-mix(in srgb, var(--mantine-color-primary-9) 15%, transparent);
+  border: 1px solid color-mix(in srgb, var(--mantine-color-primary-3) 30%, white);
+  z-index: 2;
+  animation: floatMain 8s ease-in-out infinite;
+}
+
+@keyframes floatMain {
+  0%, 100% { transform: translate(-50%, -50%) rotate(-1.5deg); }
+  50%      { transform: translate(-50%, calc(-50% - 4px)) rotate(-1.5deg); }
+}
+
+.dashHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.875rem;
+}
+
+.dashHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  min-width: 0;
+}
+
+.dashCover {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--mantine-color-primary-5), var(--mantine-color-secondary-5));
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.4), transparent 60%);
+  }
+}
+
+.dashTitle {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--mantine-color-primary-9);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+
+.dashTitleSub {
+  font-size: 0.6875rem;
+  color: color-mix(in srgb, var(--mantine-color-primary-9) 50%, white);
+  margin-top: 1px;
+}
+
+.dashBadge {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  padding: 0.5rem 1rem;
+  gap: 0.3125rem;
+  padding: 0.25rem 0.5rem 0.25rem 0.4375rem;
+  background: color-mix(in srgb, #16a34a 12%, white);
+  border: 1px solid color-mix(in srgb, #16a34a 25%, white);
   border-radius: 9999px;
-  color: white;
-  font-size: 0.8125rem;
-  font-weight: 500;
-  margin-bottom: 2rem;
-  backdrop-filter: blur(8px);
-
-  @include mixins.respond-below(lg) {
-    margin-bottom: 1.5rem;
-    font-size: 0.75rem;
-    padding: 0.375rem 0.875rem;
-  }
-
-  svg {
-    width: 14px;
-    height: 14px;
-    opacity: 0.9;
-  }
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: #15803d;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
 }
 
-// Feature grid
-.featureGrid {
+.dashBadgeDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #16a34a;
+  box-shadow: 0 0 6px #16a34a;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1;   transform: scale(1); }
+  50%      { opacity: 0.5; transform: scale(0.7); }
+}
+
+.dashStatRow {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.125rem;
+}
+
+.dashStatBig {
+  font-size: 1.875rem;
+  font-weight: 800;
+  color: var(--mantine-color-primary-9);
+  letter-spacing: -0.02em;
+  line-height: 1;
+  font-feature-settings: "tnum";
+}
+
+.dashStatTrend {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.125rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #15803d;
+}
+
+.dashStatLabel {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: color-mix(in srgb, var(--mantine-color-primary-9) 45%, white);
+  margin-bottom: 0.75rem;
+}
+
+.dashChart {
+  width: 100%;
+  height: 48px;
+  margin-bottom: 0.875rem;
+  overflow: visible;
+}
+
+.dashChartLine {
+  fill: none;
+  stroke: var(--mantine-color-primary-6);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 500;
+  stroke-dashoffset: 500;
+  animation: drawLine 2s cubic-bezier(0.4, 0, 0.2, 1) 0.4s forwards;
+}
+
+@keyframes drawLine {
+  to { stroke-dashoffset: 0; }
+}
+
+.dashChartFill {
+  fill: url(#chartGradient);
+  opacity: 0;
+  animation: fadeIn 0.8s ease-out 1.2s forwards;
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+.dashChartDot {
+  fill: var(--mantine-color-primary-6);
+  stroke: white;
+  stroke-width: 2;
+  opacity: 0;
+  animation: fadeIn 0.4s ease-out 2s forwards;
+}
+
+.dashTiers {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-
-  @include mixins.respond-below(lg) {
-    gap: 0.5rem;
-  }
+  gap: 0.4375rem;
+  margin-bottom: 0.875rem;
 }
 
-.feature {
+.dashTier {
+  display: grid;
+  grid-template-columns: 64px 1fr 42px;
+  align-items: center;
+  gap: 0.625rem;
+  font-size: 0.6875rem;
+}
+
+.dashTierName {
+  color: var(--mantine-color-primary-9);
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dashTierBar {
+  height: 5px;
+  background: color-mix(in srgb, var(--mantine-color-primary-2) 60%, white);
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+}
+
+.dashTierBarFill {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, var(--mantine-color-primary-5), var(--mantine-color-primary-7));
+  border-radius: 999px;
+  transform-origin: left;
+  transform: scaleX(0);
+  animation: fillBar 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes fillBar {
+  to { transform: scaleX(var(--fill, 0.5)); }
+}
+
+.dashTierCount {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.625rem;
+  color: color-mix(in srgb, var(--mantine-color-primary-9) 55%, white);
+  text-align: right;
+  font-feature-settings: "tnum";
+}
+
+.dashFooter {
   display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-  padding: 1rem 1.25rem;
-  border-radius: 1rem;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(8px);
-  transition: all 0.3s ease;
-  cursor: default;
-
-  @include mixins.respond-below(lg) {
-    padding: 0.875rem 1rem;
-    gap: 0.75rem;
-  }
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.15);
-    transform: translateX(4px);
-  }
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0.75rem;
+  border-top: 1px solid color-mix(in srgb, var(--mantine-color-primary-2) 60%, white);
 }
 
-.featureIcon {
+.dashAvatars {
+  display: flex;
+  align-items: center;
+}
+
+.dashAvatar {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid white;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
-  min-width: 36px;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.12);
+  font-size: 0.5625rem;
+  font-weight: 700;
   color: white;
 
-  @include mixins.respond-below(lg) {
-    width: 32px;
-    height: 32px;
-    min-width: 32px;
-  }
-
-  svg {
-    width: 18px;
-    height: 18px;
-
-    @include mixins.respond-below(lg) {
-      width: 16px;
-      height: 16px;
-    }
+  &:not(:first-child) {
+    margin-left: -7px;
   }
 }
 
-.featureText {
-  flex: 1;
+.dashAvatar1 { background: linear-gradient(135deg, #f97316, #dc2626); }
+.dashAvatar2 { background: linear-gradient(135deg, #8b5cf6, #6366f1); }
+.dashAvatar3 { background: linear-gradient(135deg, #06b6d4, #0ea5e9); }
+.dashAvatar4 { background: linear-gradient(135deg, #10b981, #059669); }
+
+.dashFooterText {
+  font-size: 0.6875rem;
+  color: color-mix(in srgb, var(--mantine-color-primary-9) 55%, white);
+  font-weight: 500;
+}
+
+// Floating secondary notification cards
+.floatCard {
+  position: absolute;
+  background: white;
+  border-radius: 14px;
+  padding: 0.75rem 0.875rem;
+  box-shadow:
+    0 18px 36px -12px color-mix(in srgb, var(--mantine-color-primary-9) 22%, transparent),
+    0 2px 6px -1px color-mix(in srgb, var(--mantine-color-primary-9) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--mantine-color-primary-3) 25%, white);
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
   min-width: 0;
+  z-index: 3;
+}
 
-  h3 {
-    margin: 0 0 0.25rem;
-    font-size: 0.9375rem;
-    font-weight: 600;
-    color: white;
-    letter-spacing: -0.01em;
+.floatCardTop {
+  top: 4%;
+  right: -6%;
+  width: 200px;
+  transform: rotate(3deg);
+  animation: floatA 7s ease-in-out infinite;
 
-    @include mixins.respond-below(lg) {
-      font-size: 0.875rem;
-    }
+  @include mixins.respond-below(lg) {
+    width: 180px;
+    top: 6%;
+    right: -4%;
+  }
+}
+
+.floatCardBottom {
+  bottom: -9%;
+  left: -8%;
+  width: 210px;
+  transform: rotate(-4deg);
+  animation: floatB 9s ease-in-out infinite;
+
+  @include mixins.respond-below(lg) {
+    width: 190px;
+    bottom: -11%;
+    left: -6%;
+  }
+}
+
+@keyframes floatA {
+  0%, 100% { transform: rotate(3deg)  translateY(0); }
+  50%      { transform: rotate(3deg)  translateY(-6px); }
+}
+
+@keyframes floatB {
+  0%, 100% { transform: rotate(-4deg) translateY(0); }
+  50%      { transform: rotate(-4deg) translateY(-6px); }
+}
+
+.floatIcon {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: color-mix(in srgb, var(--mantine-color-primary-3) 25%, white);
+  color: var(--mantine-color-primary-7);
+}
+
+.floatBody {
+  min-width: 0;
+  flex: 1;
+}
+
+.floatTitle {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--mantine-color-primary-9);
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.floatSub {
+  font-size: 0.625rem;
+  color: color-mix(in srgb, var(--mantine-color-primary-9) 55%, white);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// ------- FEATURE TICKER — pinned at bottom, subtle scroll -------
+.ticker {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3.25rem;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  z-index: 4;
+  border-top: 1px solid color-mix(in srgb, var(--mantine-color-primary-9) 8%, transparent);
+  background: color-mix(in srgb, var(--mantine-color-primary-0) 55%, transparent);
+  backdrop-filter: blur(10px) saturate(140%);
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
+  mask-image: linear-gradient(90deg, transparent, black 6%, black 94%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, black 6%, black 94%, transparent);
+
+  @include mixins.respond-below(lg) {
+    height: 3rem;
+  }
+}
+
+.tickerTrack {
+  display: flex;
+  align-items: center;
+  gap: 2.25rem;
+  width: max-content;
+  animation: tickerScroll 180s linear infinite;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: color-mix(in srgb, var(--mantine-color-primary-9) 60%, white);
+  white-space: nowrap;
+  will-change: transform;
+
+  @include mixins.respond-below(lg) {
+    font-size: 0.625rem;
+    gap: 1.875rem;
+  }
+}
+
+@keyframes tickerScroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.tickerItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 2.25rem;
+
+  @include mixins.respond-below(lg) {
+    gap: 1.875rem;
+  }
+}
+
+.tickerDot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--mantine-color-primary-5);
+  opacity: 0.55;
+  flex-shrink: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .headingBlock,
+  .dashStage,
+  .dashCard,
+  .dashBadgeDot,
+  .dashChartLine,
+  .dashChartFill,
+  .dashChartDot,
+  .dashTierBarFill,
+  .floatCardTop,
+  .floatCardBottom,
+  .tickerTrack {
+    animation: none;
   }
 
-  p {
-    margin: 0;
-    font-size: 0.8125rem;
-    color: rgba(255, 255, 255, 0.7);
-    line-height: 1.5;
-
-    @include mixins.respond-below(lg) {
-      font-size: 0.75rem;
-    }
-  }
+  .dashChartLine   { stroke-dashoffset: 0; }
+  .dashChartFill,
+  .dashChartDot   { opacity: 1; }
+  .dashTierBarFill { transform: scaleX(var(--fill, 0.5)); }
 }
