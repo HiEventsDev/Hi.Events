@@ -34,6 +34,8 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     final public const ONLINE_EVENT_CONNECTION_DETAILS = 'online_event_connection_details';
     final public const IS_ONLINE_EVENT = 'is_online_event';
     final public const EVENT_LOCATION_TYPE = 'event_location_type';
+    final public const HYBRID_STREAM_URL = 'hybrid_stream_url';
+    final public const HYBRID_VENUE_INSTRUCTIONS = 'hybrid_venue_instructions';
     final public const ALLOW_SEARCH_ENGINE_INDEXING = 'allow_search_engine_indexing';
     final public const SEO_TITLE = 'seo_title';
     final public const SEO_DESCRIPTION = 'seo_description';
@@ -123,6 +125,8 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     protected ?string $online_event_connection_details = null;
     protected bool $is_online_event = false;
     protected string $event_location_type = 'IN_PERSON';
+    protected ?string $hybrid_stream_url = null;
+    protected ?string $hybrid_venue_instructions = null;
     protected bool $allow_search_engine_indexing = true;
     protected ?string $seo_title = null;
     protected ?string $seo_description = null;
@@ -215,6 +219,8 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
                     'online_event_connection_details' => $this->online_event_connection_details ?? null,
                     'is_online_event' => $this->is_online_event ?? null,
                     'event_location_type' => $this->event_location_type ?? null,
+                    'hybrid_stream_url' => $this->hybrid_stream_url ?? null,
+                    'hybrid_venue_instructions' => $this->hybrid_venue_instructions ?? null,
                     'allow_search_engine_indexing' => $this->allow_search_engine_indexing ?? null,
                     'seo_title' => $this->seo_title ?? null,
                     'seo_description' => $this->seo_description ?? null,
@@ -544,6 +550,28 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     public function getEventLocationType(): string
     {
         return $this->event_location_type;
+    }
+
+    public function setHybridStreamUrl(?string $hybrid_stream_url): self
+    {
+        $this->hybrid_stream_url = $hybrid_stream_url;
+        return $this;
+    }
+
+    public function getHybridStreamUrl(): ?string
+    {
+        return $this->hybrid_stream_url;
+    }
+
+    public function setHybridVenueInstructions(?string $hybrid_venue_instructions): self
+    {
+        $this->hybrid_venue_instructions = $hybrid_venue_instructions;
+        return $this;
+    }
+
+    public function getHybridVenueInstructions(): ?string
+    {
+        return $this->hybrid_venue_instructions;
     }
 
     public function setAllowSearchEngineIndexing(bool $allow_search_engine_indexing): self

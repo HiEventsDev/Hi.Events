@@ -20,7 +20,9 @@ use HiEvents\Http\Actions\Attendees\ExportAttendeesAction;
 use HiEvents\Http\Actions\Attendees\GetAttendeeAction;
 use HiEvents\Http\Actions\Attendees\GetAttendeeActionPublic;
 use HiEvents\Http\Actions\Attendees\GetAttendeesAction;
+use HiEvents\Http\Actions\Attendees\GetAttendeeWalletPassAction;
 use HiEvents\Http\Actions\Attendees\PartialEditAttendeeAction;
+use HiEvents\Http\Actions\Attendees\PrintAttendeeQrCodesAction;
 use HiEvents\Http\Actions\Attendees\ResendAttendeeTicketAction;
 use HiEvents\Http\Actions\Auth\AcceptInvitationAction;
 use HiEvents\Http\Actions\Auth\ForgotPasswordAction;
@@ -70,6 +72,7 @@ use HiEvents\Http\Actions\Events\GetEventsAction;
 use HiEvents\Http\Actions\Events\GetEventsPublicAction;
 use HiEvents\Http\Actions\Events\GetOrganizerEventsPublicAction;
 use HiEvents\Http\Actions\Events\GetOrganizerEventsIcsAction;
+use HiEvents\Http\Actions\Events\GetEventIcsAction;
 use HiEvents\Http\Actions\Events\VerifyEventPasswordAction;
 use HiEvents\Http\Actions\Events\Images\CreateEventImageAction;
 use HiEvents\Http\Actions\Events\Images\DeleteEventImageAction;
@@ -106,6 +109,7 @@ use HiEvents\Http\Actions\Orders\CreateManualOrderAction;
 use HiEvents\Http\Actions\Orders\DownloadOrderInvoiceAction;
 use HiEvents\Http\Actions\Orders\EditOrderAction;
 use HiEvents\Http\Actions\Orders\ExportOrdersAction;
+use HiEvents\Http\Actions\Orders\GetEventInvoicesAction;
 use HiEvents\Http\Actions\Orders\GetOrderAction;
 use HiEvents\Http\Actions\Orders\GetOrdersAction;
 use HiEvents\Http\Actions\Orders\MarkOrderAsPaidAction;
@@ -332,6 +336,7 @@ $router->middleware(['auth:api'])->group(
         $router->get('/organizers/{organizer_id}/events', GetOrganizerEventsAction::class);
         $router->get('/organizers/{organizer_id}/stats', GetOrganizerStatsAction::class);
         $router->get('/organizers/{organizer_id}/orders', GetOrganizerOrdersAction::class);
+        $router->get('/organizers/{organizer_id}/subscribers', \HiEvents\Http\Actions\Subscribers\GetOrganizerSubscribersAction::class);
         $router->get('/organizers/{organizer_id}/settings', GetOrganizerSettingsAction::class);
         $router->patch('/organizers/{organizer_id}/settings', PartialUpdateOrganizerSettingsAction::class);
         $router->get('/organizers/{organizer_id}/reports/{report_type}', GetOrganizerReportAction::class);
@@ -402,6 +407,8 @@ $router->middleware(['auth:api'])->group(
         $router->post('/events/{event_id}/attendees/export', ExportAttendeesAction::class);
         $router->post('/events/{event_id}/attendees/{attendee_public_id}/resend-ticket', ResendAttendeeTicketAction::class);
         $router->post('/events/{event_id}/attendees/{attendee_public_id}/check_in', CheckInAttendeeAction::class);
+        $router->get('/events/{event_id}/attendees/{attendee_id}/wallet-pass', GetAttendeeWalletPassAction::class);
+        $router->post('/events/{event_id}/attendees/print-qr-codes', PrintAttendeeQrCodesAction::class);
 
         // Orders
         $router->post('/events/{event_id}/orders', CreateManualOrderAction::class);
@@ -417,6 +424,7 @@ $router->middleware(['auth:api'])->group(
         $router->post('/events/{event_id}/orders/{order_id}/reject', RejectOrderAction::class);
         $router->post('/events/{event_id}/orders/export', ExportOrdersAction::class);
         $router->get('/events/{event_id}/orders/{order_id}/invoice', DownloadOrderInvoiceAction::class);
+        $router->get('/events/{event_id}/invoices', GetEventInvoicesAction::class);
 
         // Questions
         $router->post('/events/{event_id}/questions', CreateQuestionAction::class);
@@ -514,6 +522,12 @@ $router->middleware(['auth:api'])->group(
         $router->post('/events/{event_id}/waitlist/offer-next', OfferWaitlistEntryAction::class);
         $router->delete('/events/{event_id}/waitlist/{entry_id}', CancelWaitlistEntryAction::class);
 
+        // Seating Charts
+        $router->post('/events/{event_id}/seating-charts', \HiEvents\Http\Actions\SeatingCharts\CreateSeatingChartAction::class);
+        $router->get('/events/{event_id}/seating-charts', \HiEvents\Http\Actions\SeatingCharts\GetSeatingChartsAction::class);
+        $router->get('/events/{event_id}/seating-charts/{seating_chart_id}', \HiEvents\Http\Actions\SeatingCharts\GetSeatingChartAction::class);
+        $router->post('/events/{event_id}/seating-charts/{seating_chart_id}/seats/{seat_id}/assign', \HiEvents\Http\Actions\SeatingCharts\AssignSeatAction::class);
+
         // Images
         $router->post('/images', CreateImageAction::class);
         $router->delete('/images/{image_id}', DeleteImageAction::class);
@@ -575,7 +589,13 @@ $router->prefix('/public')->group(
         $router->get('/organizers/{organizer_id}', GetPublicOrganizerAction::class);
         $router->get('/organizers/{organizer_id}/events', GetOrganizerEventsPublicAction::class);
         $router->get('/organizers/{organizer_id}/events.ics', GetOrganizerEventsIcsAction::class);
+        $router->get('/events/{event_id}/event.ics', GetEventIcsAction::class);
         $router->post('/organizers/{organizer_id}/contact', SendOrganizerContactMessagePublicAction::class);
+
+        // Subscribers
+        $router->post('/organizers/{organizer_id}/subscribe', \HiEvents\Http\Actions\Subscribers\SubscribeToOrganizerPublicAction::class)
+            ->middleware('throttle:10,1');
+        $router->post('/unsubscribe/{token}', \HiEvents\Http\Actions\Subscribers\UnsubscribeAction::class);
 
         // Products
         $router->get('/events/{event_id}/products', GetEventPublicAction::class);
@@ -607,11 +627,17 @@ $router->prefix('/public')->group(
         // Product Bundles (public)
         $router->get('/events/{event_id}/bundles', \HiEvents\Http\Actions\ProductBundles\GetProductBundlesPublicAction::class);
 
+        // Seating Charts (public)
+        $router->get('/events/{event_id}/seating-charts/{seating_chart_id}/availability', \HiEvents\Http\Actions\SeatingCharts\GetSeatAvailabilityPublicAction::class);
+
         // Upsell Products (public)
         $router->get('/events/{event_id}/products/upsells', \HiEvents\Http\Actions\Products\GetUpsellProductsPublicAction::class);
 
         // Checkout Configuration (public)
         $router->get('/events/{event_id}/checkout-config', \HiEvents\Http\Actions\EventSettings\GetCheckoutConfigPublicAction::class);
+
+        // Hybrid Event Connection Details (public)
+        $router->get('/events/{event_id}/products/{product_id}/connection-details', \HiEvents\Http\Actions\Events\GetEventConnectionDetailsPublicAction::class);
 
         // Stripe payment gateway
         $router->post('/events/{event_id}/order/{order_short_id}/stripe/payment_intent', CreatePaymentIntentActionPublic::class);
@@ -650,7 +676,14 @@ $router->prefix('/public')->group(
         $router->get('/sitemap.xml', GetSitemapIndexAction::class);
         $router->get('/sitemap-events-{page}.xml', GetSitemapEventsAction::class)->where('page', '[0-9]+');
         $router->get('/sitemap-organizers-{page}.xml', GetSitemapOrganizersAction::class)->where('page', '[0-9]+');
+
+        // Federation (ActivityPub)
+        $router->get('/federation/actors/organizers/{organizer_id}', \HiEvents\Http\Actions\Federation\GetFederatedOrganizerAction::class);
+        $router->get('/federation/actors/organizers/{organizer_id}/outbox', \HiEvents\Http\Actions\Federation\GetFederatedOrganizerOutboxAction::class);
     }
 );
+
+// WebFinger discovery (must be at root level)
+Route::get('/.well-known/webfinger', \HiEvents\Http\Actions\Federation\WebFingerAction::class);
 
 include_once __DIR__ . '/mail.php';

@@ -22,6 +22,9 @@ use HiEvents\Repository\Eloquent\EventDailyStatisticRepository;
 use HiEvents\Repository\Eloquent\EventRepository;
 use HiEvents\Repository\Eloquent\EventSettingsRepository;
 use HiEvents\Repository\Eloquent\EventStatisticRepository;
+use HiEvents\Repository\Eloquent\EventSubscriberRepository;
+use HiEvents\Repository\Eloquent\SeatingChartRepository;
+use HiEvents\Repository\Eloquent\SeatRepository;
 use HiEvents\Repository\Eloquent\ImageRepository;
 use HiEvents\Repository\Eloquent\InvoiceRepository;
 use HiEvents\Repository\Eloquent\MessageRepository;
@@ -71,6 +74,9 @@ use HiEvents\Repository\Interfaces\EventDailyStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventStatisticRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventSubscriberRepositoryInterface;
+use HiEvents\Repository\Interfaces\SeatingChartRepositoryInterface;
+use HiEvents\Repository\Interfaces\SeatRepositoryInterface;
 use HiEvents\Repository\Interfaces\ImageRepositoryInterface;
 use HiEvents\Repository\Interfaces\InvoiceRepositoryInterface;
 use HiEvents\Repository\Interfaces\MessageRepositoryInterface;
@@ -159,6 +165,9 @@ class RepositoryServiceProvider extends ServiceProvider
         WaitlistEntryRepositoryInterface::class => WaitlistEntryRepository::class,
         ProductBundleRepositoryInterface::class => ProductBundleRepository::class,
         DocumentTemplateRepositoryInterface::class => DocumentTemplateRepository::class,
+        EventSubscriberRepositoryInterface::class => EventSubscriberRepository::class,
+        SeatingChartRepositoryInterface::class => SeatingChartRepository::class,
+        SeatRepositoryInterface::class => SeatRepository::class,
     ];
 
     public function register(): void

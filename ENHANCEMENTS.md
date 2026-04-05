@@ -191,3 +191,302 @@ Break the checkout flow into configurable steps instead of a single long page.
 | Issue | Reason |
 |---|---|
 | **#191 — Repeating/Recurring Events** | Maintainer `daveearley` commented 5 days ago that this is actively in development. Skipped to avoid merge conflicts. |
+
+---
+
+## Session 10 — Security & Authentication Enhancements
+
+> **Date:** April 6, 2026  
+> **Issues:** 4 implemented (#874, #338, #33, #32)  
+> **Commit:** `408c3220`
+
+### #874 — Rate Limiting & Brute-Force Protection
+
+Enhanced API security with tiered rate limiting across all endpoints.
+
+**What's new:**
+- Tiered rate limits: auth (5/min), public write (10/min), public read (60/min), authenticated (120/min)
+- Custom `RateLimitServiceProvider` with named limiters
+- Rate limit headers in responses
+
+### #338 — Two-Factor Authentication (TOTP)
+
+TOTP-based 2FA for organizer accounts.
+
+**What's new:**
+- TOTP setup flow: generate secret → QR code → verify → enable
+- Recovery codes for account recovery
+- 2FA enforcement middleware for sensitive operations
+- Encrypted secret storage
+
+### #33 — Account Lockout After Failed Attempts
+
+Automatic account lockout after excessive failed login attempts.
+
+**What's new:**
+- Configurable threshold (default 5 attempts)
+- Progressive lockout duration (15min → 30min → 1hr)
+- Lockout tracking in database with automatic expiry
+- Admin can manually unlock accounts
+
+### #32 — Password Policy Enforcement
+
+Strong password requirements for all user accounts.
+
+**What's new:**
+- Minimum 8 characters, requires uppercase + lowercase + number + special character
+- Password history prevention (last 5 passwords)
+- Password strength meter guidance in validation messages
+
+---
+
+## Session 11 — Reports, Mobile, PWA & Advanced Features
+
+> **Date:** April 6, 2026  
+> **Issues:** 12 implemented (#744, #716, #244, #236, #189, #186, #1000, #998, #772, #759, #39, #589)
+
+### #744 — Attendees by Ticket Type Report
+
+SQL-based report showing attendee breakdown per product/ticket type with check-in status.
+
+**What's new:**
+- CTE-based SQL query joining attendees, orders, products, product_prices
+- Includes check-in status via subquery on `attendee_check_ins`
+- Registered as `ATTENDEES_BY_PRODUCT` in `ReportTypes` enum
+
+**Files:**
+- `Services/Domain/Report/Reports/AttendeesByProductReport.php`
+- Modified: `ReportTypes.php`, `ReportServiceFactory.php`
+
+---
+
+### #716 — View Generated Invoices
+
+Paginated listing of all generated invoices for an event.
+
+**What's new:**
+- Expanded `InvoiceResource` with nested order data (id, short_id, names, email, status)
+- New repository method `findByEventId()` with eager-loaded order
+- Paginated API endpoint: `GET /events/{event_id}/invoices`
+
+**Files:**
+- `Http/Resources/InvoiceResource.php` (expanded)
+- `Repository/Interfaces/InvoiceRepositoryInterface.php` (added method)
+- `Repository/Eloquent/InvoiceRepository.php` (implemented)
+- `Http/Actions/Orders/GetEventInvoicesAction.php`
+- `routes/api.php` (new route)
+
+---
+
+### #244 — Progressive Web App (PWA) Support
+
+Full PWA support with service worker, offline fallback, and installability.
+
+**What's new:**
+- `vite-plugin-pwa` integration with Workbox runtime caching
+- NetworkFirst for API calls, CacheFirst for images/fonts
+- Offline fallback page with brand styling
+- App shortcuts: "My Tickets" and "Manage Events"
+- Auto-update service worker with hourly refresh
+- Install prompt support
+
+**Files:**
+- `frontend/vite.config.ts` (VitePWA plugin)
+- `frontend/public/site.webmanifest` (shortcuts)
+- `frontend/public/offline.html` (new)
+- `frontend/package.json` (`vite-plugin-pwa` dep)
+- `frontend/src/utilites/pwa.ts` (new)
+- `frontend/src/entry.client.tsx` (init PWA)
+- `frontend/tsconfig.json` (types)
+
+---
+
+### #236 — Flutter Mobile App Scaffold
+
+Full Flutter mobile app for event check-in with QR scanning.
+
+**What's new:**
+- Dio-based API client with auth interceptors
+- Provider state management (Auth, Event, CheckIn)
+- MobileScanner QR code scanning with overlay
+- Material 3 dark theme matching Hi.Events brand (#CD58DD)
+- Login, Events list, Scanner screens
+- Secure token storage via flutter_secure_storage
+
+**Files:**
+- `mobile/` directory (11 files): `main.dart`, `models/models.dart`, `services/api_service.dart`, `providers/auth_provider.dart`, `providers/event_provider.dart`, `providers/checkin_provider.dart`, `screens/login_screen.dart`, `screens/events_screen.dart`, `screens/scanner_screen.dart`, `pubspec.yaml`, `README.md`
+
+---
+
+### #189 — Mobile Wallet Integration
+
+Apple Wallet & Google Wallet pass generation for attendee tickets.
+
+**What's new:**
+- Apple Wallet: eventTicket pass type, QR barcode, location geofencing, relevant date
+- Google Wallet: save URL with JWT, eventTicketClass/Object, venue info
+- Platform-selectable endpoint: `?platform=apple|google`
+
+**Files:**
+- `Services/Domain/Wallet/AppleWalletPassService.php`
+- `Services/Domain/Wallet/GoogleWalletPassService.php`
+- `Http/Actions/Attendees/GetAttendeeWalletPassAction.php`
+- `routes/api.php` (new route)
+
+---
+
+### #186 — QR Code Printing
+
+Generate printable PDF sheets of attendee QR codes as labels.
+
+**What's new:**
+- Configurable label size (default 30x20mm) and columns (default 3)
+- Optional attendee ID filtering
+- DomPDF-generated PDF with table-cell grid layout
+- QR images via qrserver.com API
+
+**Files:**
+- `Http/Actions/Attendees/PrintAttendeeQrCodesAction.php`
+- `resources/views/qr-codes/attendee-labels.blade.php`
+- `routes/api.php` (new route)
+
+---
+
+### #1000 — Subscribable ICS Calendar Feed
+
+Per-event ICS calendar feed with auto-refresh support.
+
+**What's new:**
+- Public endpoint: `GET /events/{event_id}/event.ics`
+- 60-minute refresh interval via `X-WR-REFRESH`
+- Confirmed event status, productIdentifier
+- No-cache headers for subscription clients
+
+**Files:**
+- `Http/Actions/Events/GetEventIcsAction.php`
+- `routes/api.php` (public route)
+
+---
+
+### #998 — Federation / ActivityPub Support
+
+ActivityPub discovery for organizers and event outboxes.
+
+**What's new:**
+- Organizer → ActivityPub Actor (Organization type, inbox/outbox/followers)
+- Events → ActivityPub Event objects with location/Place
+- Create activity wrapping for outbox
+- WebFinger discovery at `/.well-known/webfinger`
+- JSON-LD with `application/activity+json` content type
+
+**Files:**
+- `Services/Domain/Federation/ActivityPubTransformer.php`
+- `Http/Actions/Federation/GetFederatedOrganizerAction.php`
+- `Http/Actions/Federation/GetFederatedOrganizerOutboxAction.php`
+- `Http/Actions/Federation/WebFingerAction.php`
+- `routes/api.php` (public + root routes)
+
+---
+
+### #772 — Subscribe to Future Events
+
+Email subscription system for organizer's future events.
+
+**What's new:**
+- `event_subscribers` table with organizer scoping, email, token, confirmation tracking
+- Public subscribe endpoint with rate limiting (10/min)
+- Token-based unsubscribe
+- Authenticated subscriber listing with pagination
+- Duplicate email prevention per organizer
+
+**Files:**
+- Migration `000037` — `event_subscribers` table
+- `Models/EventSubscriber.php`
+- `DomainObjects/EventSubscriberDomainObject.php` + Generated abstract
+- `Repository/` — `EventSubscriberRepository` + interface
+- `Http/Actions/Subscribers/SubscribeToOrganizerPublicAction.php`
+- `Http/Actions/Subscribers/UnsubscribeAction.php`
+- `Http/Actions/Subscribers/GetOrganizerSubscribersAction.php`
+- `Providers/RepositoryServiceProvider.php` (binding)
+- `routes/api.php` (3 new routes)
+
+---
+
+### #759 — Abandoned Checkout Recovery
+
+Automated recovery emails for abandoned orders with optional promo code incentive.
+
+**What's new:**
+- `abandoned_order_recoveries` tracking table
+- Event settings: enable flag, delay minutes (default 60), max emails (default 2)
+- Queued recovery email with CTA "Complete Your Order" button
+- Scheduled job: finds abandoned orders past delay, sends recovery emails with 24h cooldown
+- Upsert-based tracking (no duplicate recovery records)
+
+**Files:**
+- Migration `000038` — `abandoned_order_recoveries` table + event_settings columns
+- `Mail/Order/AbandonedCheckoutRecoveryMail.php`
+- `resources/views/emails/orders/abandoned-checkout-recovery.blade.php`
+- `Jobs/SendAbandonedCheckoutRecoveryEmailsJob.php`
+
+---
+
+### #39 — Seating Charts
+
+Full venue seating chart system with interactive seat management.
+
+**What's new:**
+- Three-table schema: `seating_charts` → `seating_sections` → `seats`
+- Section shapes: rectangle, arc, circle with JSON position data
+- Seat statuses: available, reserved, held, sold, disabled
+- Auto-generated seat labels (A1, A2, B1, B2...) from row/column configuration
+- Accessibility flags and aisle seat identification
+- Per-seat price overrides and product association
+- Public seat availability endpoint for interactive seat maps
+- Atomic seat assignment with optimistic locking (status check in WHERE clause)
+
+**Files:**
+- Migration `000039` — 3 tables with foreign keys, composite unique constraints
+- `Models/SeatingChart.php`, `SeatingSection.php`, `Seat.php`
+- `DomainObjects/` — 3 domain objects + 3 Generated abstracts
+- `Repository/` — `SeatingChartRepository`, `SeatRepository` + interfaces
+- `Http/Actions/SeatingCharts/` — CreateSeatingChartAction, GetSeatingChartsAction, GetSeatingChartAction, AssignSeatAction, GetSeatAvailabilityPublicAction
+- `Providers/RepositoryServiceProvider.php` (2 new bindings)
+- `routes/api.php` (4 auth + 1 public route)
+
+---
+
+### #589 — Better Hybrid Events
+
+Per-product attendance mode with distinct connection details for in-person, online, and hybrid tickets.
+
+**What's new:**
+- Products get `attendance_mode` (IN_PERSON / ONLINE / HYBRID), `online_meeting_url`, `venue_instructions`
+- Event settings get `hybrid_stream_url`, `hybrid_venue_instructions` as defaults
+- `HybridEventService` resolves correct connection details per product mode with fallback chain
+- Public endpoint for attendees to get their ticket-type-specific connection details
+
+**Files:**
+- Migration `000040` — adds columns to `products` and `event_settings`
+- `Services/Domain/Event/HybridEventService.php`
+- `Http/Actions/Events/GetEventConnectionDetailsPublicAction.php`
+- Modified: `ProductDomainObjectAbstract.php` (+3 constants, +3 properties, +3 getter/setters)
+- Modified: `EventSettingDomainObjectAbstract.php` (+2 constants, +2 properties, +2 getter/setters)
+- `routes/api.php` (new public route)
+
+---
+
+## Session 11 Infrastructure Changes
+
+| Area | Details |
+|---|---|
+| **Migrations** | 4 new migrations (`000037`–`000040`) |
+| **Repositories** | 3 new repos registered (EventSubscriber, SeatingChart, Seat) |
+| **Models** | 4 new models (EventSubscriber, SeatingChart, SeatingSection, Seat) |
+| **Domain Objects** | 6 new domain objects + 3 Generated abstracts + 2 existing abstracts modified |
+| **Routes** | 20+ new API routes (authenticated + public + root) |
+| **Actions** | 15+ new action classes across 6 feature areas |
+| **Services** | 4 new services (AppleWallet, GoogleWallet, HybridEvent, ActivityPubTransformer) |
+| **Frontend/Mobile** | PWA support (7 files), Flutter app scaffold (11 files) |
+| **Jobs** | 1 new scheduled job (SendAbandonedCheckoutRecoveryEmailsJob) |
+| **Mail** | 1 new mail class (AbandonedCheckoutRecoveryMail) |

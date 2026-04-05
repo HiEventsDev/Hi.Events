@@ -5,6 +5,7 @@ import {router} from "./router";
 import {App} from "./App";
 import {queryClient} from "./utilites/queryClient";
 import {dynamicActivateLocale, getClientLocale, getSupportedLocale,} from "./locales.ts";
+import {initPWA} from "./utilites/pwa.ts";
 
 declare global {
     interface Window {
@@ -41,3 +42,4 @@ async function initClientApp() {
 }
 
 initClientApp();
+initPWA();
