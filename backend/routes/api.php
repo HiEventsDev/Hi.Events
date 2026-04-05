@@ -30,6 +30,21 @@ use HiEvents\Http\Actions\Auth\LogoutAction;
 use HiEvents\Http\Actions\Auth\RefreshTokenAction;
 use HiEvents\Http\Actions\Auth\ResetPasswordAction;
 use HiEvents\Http\Actions\Auth\ValidateResetPasswordTokenAction;
+use HiEvents\Http\Actions\Auth\GoogleLoginAction;
+use HiEvents\Http\Actions\Auth\AppleLoginAction;
+use HiEvents\Http\Actions\Auth\MfaVerifyAction;
+use HiEvents\Http\Actions\Auth\MfaSetupAction;
+use HiEvents\Http\Actions\Auth\MfaConfirmAction;
+use HiEvents\Http\Actions\Auth\MfaDisableAction;
+use HiEvents\Http\Actions\Auth\MfaRecoveryCodesAction;
+use HiEvents\Http\Actions\Auth\MfaStatusAction;
+use HiEvents\Http\Actions\Auth\WebAuthnRegisterOptionsAction;
+use HiEvents\Http\Actions\Auth\WebAuthnRegisterAction;
+use HiEvents\Http\Actions\Auth\WebAuthnLoginOptionsAction;
+use HiEvents\Http\Actions\Auth\WebAuthnLoginAction;
+use HiEvents\Http\Actions\Auth\WebAuthnRemoveAction;
+use HiEvents\Http\Actions\Auth\GetAuthConfigAction;
+use HiEvents\Http\Actions\Events\ValidatePrivateEventAccessAction;
 use HiEvents\Http\Actions\CapacityAssignments\CreateCapacityAssignmentAction;
 use HiEvents\Http\Actions\CapacityAssignments\DeleteCapacityAssignmentAction;
 use HiEvents\Http\Actions\CapacityAssignments\GetCapacityAssignmentAction;
@@ -235,6 +250,20 @@ $router->prefix('/auth')->group(
         $router->post('/register', CreateAccountAction::class)->name('auth.register');
         $router->post('/forgot-password', ForgotPasswordAction::class)->name('auth.forgot-password');
 
+        // OAuth
+        $router->post('/google', GoogleLoginAction::class)->name('auth.google');
+        $router->post('/apple', AppleLoginAction::class)->name('auth.apple');
+
+        // MFA verification (during login flow)
+        $router->post('/mfa/verify', MfaVerifyAction::class)->name('auth.mfa.verify');
+
+        // WebAuthn / Passkey login
+        $router->post('/webauthn/login-options', WebAuthnLoginOptionsAction::class)->name('auth.webauthn.login-options');
+        $router->post('/webauthn/login', WebAuthnLoginAction::class)->name('auth.webauthn.login');
+
+        // Auth configuration (public)
+        $router->get('/config', GetAuthConfigAction::class)->name('auth.config');
+
         // Invitations
         $router->get('/invitation/{invite_token}', GetUserInvitationAction::class)->name('auth.invitation');
         $router->post('/invitation/{invite_token}', AcceptInvitationAction::class)->name('auth.accept-invitation');
@@ -253,6 +282,18 @@ $router->middleware(['auth:api'])->group(
         // Auth
         $router->get('/auth/logout', LogoutAction::class);
         $router->post('/auth/refresh', RefreshTokenAction::class);
+
+        // MFA Management
+        $router->get('/auth/mfa/setup', MfaSetupAction::class);
+        $router->post('/auth/mfa/confirm', MfaConfirmAction::class);
+        $router->post('/auth/mfa/disable', MfaDisableAction::class);
+        $router->post('/auth/mfa/recovery-codes', MfaRecoveryCodesAction::class);
+        $router->get('/auth/mfa/status', MfaStatusAction::class);
+
+        // WebAuthn / Passkey Management
+        $router->get('/auth/webauthn/register-options', WebAuthnRegisterOptionsAction::class);
+        $router->post('/auth/webauthn/register', WebAuthnRegisterAction::class);
+        $router->delete('/auth/webauthn/{credentialId}', WebAuthnRemoveAction::class);
 
         // Users
         $router->get('/users/me', GetMeAction::class);
@@ -528,6 +569,7 @@ $router->prefix('/public')->group(
         $router->get('/events', GetEventsPublicAction::class);
         $router->get('/events/{event_id}', GetEventPublicAction::class);
         $router->post('/events/{event_id}/verify-password', VerifyEventPasswordAction::class);
+        $router->post('/events/{event_id}/verify-access', ValidatePrivateEventAccessAction::class);
 
         // Organizers
         $router->get('/organizers/{organizer_id}', GetPublicOrganizerAction::class);

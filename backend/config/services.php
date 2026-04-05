@@ -52,4 +52,24 @@ return [
     'open_exchange_rates' => [
         'app_id' => env('OPEN_EXCHANGE_RATES_APP_ID'),
     ],
+
+    'google' => [
+        'client_id' => env('GOOGLE_OAUTH_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_OAUTH_CLIENT_SECRET'),
+    ],
+
+    'apple' => [
+        'client_id' => env('APPLE_OAUTH_CLIENT_ID'),
+        'team_id' => env('APPLE_OAUTH_TEAM_ID'),
+        'key_id' => env('APPLE_OAUTH_KEY_ID'),
+    ],
+
+    'auth' => [
+        'oauth_enabled' => env('OAUTH_ENABLED', false),
+        'google_enabled' => env('GOOGLE_OAUTH_ENABLED', false),
+        'apple_enabled' => env('APPLE_OAUTH_ENABLED', false),
+        'mfa_enabled' => env('MFA_ENABLED', true),
+        'passkey_enabled' => env('PASSKEY_ENABLED', true),
+        'allowed_login_methods' => env('ALLOWED_LOGIN_METHODS', 'password,oauth,passkey'),
+    ],
 ];

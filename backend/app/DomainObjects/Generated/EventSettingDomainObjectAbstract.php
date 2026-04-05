@@ -93,6 +93,11 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     final public const PROVISIONAL_BOOKING_MESSAGE = 'provisional_booking_message';
     final public const MULTI_STEP_CHECKOUT_ENABLED = 'multi_step_checkout_enabled';
     final public const CHECKOUT_STEPS_CONFIG = 'checkout_steps_config';
+    final public const IS_PRIVATE_EVENT = 'is_private_event';
+    final public const PRIVATE_ACCESS_CODE = 'private_access_code';
+    final public const HIDE_EVENT_DETAILS_UNTIL_ACCESS = 'hide_event_details_until_access';
+    final public const HIDE_LOCATION_UNTIL_PURCHASE = 'hide_location_until_purchase';
+    final public const SHOW_PROMO_CODE_INPUT_ALWAYS = 'show_promo_code_input_always';
 
     protected int $id;
     protected int $event_id;
@@ -177,6 +182,11 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     protected ?string $provisional_booking_message = null;
     protected bool $multi_step_checkout_enabled = false;
     protected array|string|null $checkout_steps_config = null;
+    protected bool $is_private_event = false;
+    protected ?string $private_access_code = null;
+    protected bool $hide_event_details_until_access = false;
+    protected bool $hide_location_until_purchase = false;
+    protected bool $show_promo_code_input_always = false;
 
     public function toArray(): array
     {
@@ -264,6 +274,11 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
                     'provisional_booking_message' => $this->provisional_booking_message ?? null,
                     'multi_step_checkout_enabled' => $this->multi_step_checkout_enabled ?? null,
                     'checkout_steps_config' => $this->checkout_steps_config ?? null,
+                    'is_private_event' => $this->is_private_event ?? false,
+                    'private_access_code' => $this->private_access_code ?? null,
+                    'hide_event_details_until_access' => $this->hide_event_details_until_access ?? false,
+                    'hide_location_until_purchase' => $this->hide_location_until_purchase ?? false,
+                    'show_promo_code_input_always' => $this->show_promo_code_input_always ?? false,
                 ];
     }
 
@@ -1179,5 +1194,60 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     public function getCheckoutStepsConfig(): array|string|null
     {
         return $this->checkout_steps_config;
+    }
+
+    public function setIsPrivateEvent(bool $is_private_event): self
+    {
+        $this->is_private_event = $is_private_event;
+        return $this;
+    }
+
+    public function getIsPrivateEvent(): bool
+    {
+        return $this->is_private_event;
+    }
+
+    public function setPrivateAccessCode(?string $private_access_code): self
+    {
+        $this->private_access_code = $private_access_code;
+        return $this;
+    }
+
+    public function getPrivateAccessCode(): ?string
+    {
+        return $this->private_access_code;
+    }
+
+    public function setHideEventDetailsUntilAccess(bool $hide_event_details_until_access): self
+    {
+        $this->hide_event_details_until_access = $hide_event_details_until_access;
+        return $this;
+    }
+
+    public function getHideEventDetailsUntilAccess(): bool
+    {
+        return $this->hide_event_details_until_access;
+    }
+
+    public function setHideLocationUntilPurchase(bool $hide_location_until_purchase): self
+    {
+        $this->hide_location_until_purchase = $hide_location_until_purchase;
+        return $this;
+    }
+
+    public function getHideLocationUntilPurchase(): bool
+    {
+        return $this->hide_location_until_purchase;
+    }
+
+    public function setShowPromoCodeInputAlways(bool $show_promo_code_input_always): self
+    {
+        $this->show_promo_code_input_always = $show_promo_code_input_always;
+        return $this;
+    }
+
+    public function getShowPromoCodeInputAlways(): bool
+    {
+        return $this->show_promo_code_input_always;
     }
 }

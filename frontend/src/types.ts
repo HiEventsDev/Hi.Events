@@ -81,6 +81,80 @@ export interface LoginResponse {
     expires_in: number;
     user: User;
     accounts: Account[];
+    // MFA challenge response fields
+    mfa_required?: boolean;
+    mfa_token?: string;
+}
+
+export interface MfaVerifyRequest {
+    mfa_token: string;
+    code: string;
+    account_id?: IdParam;
+}
+
+export interface MfaSetupResponse {
+    secret: string;
+    qr_code_url: string;
+}
+
+export interface MfaStatusResponse {
+    mfa_enabled: boolean;
+    mfa_confirmed_at: string | null;
+    passkey_enabled: boolean;
+    oauth_provider: string | null;
+    webauthn_credentials: WebAuthnCredentialInfo[];
+}
+
+export interface WebAuthnCredentialInfo {
+    id: string;
+    name: string;
+    created_at: string;
+    last_used_at: string | null;
+}
+
+export interface AuthConfigResponse {
+    oauth_enabled: boolean;
+    google_enabled: boolean;
+    apple_enabled: boolean;
+    google_client_id: string | null;
+    apple_client_id: string | null;
+    mfa_enabled: boolean;
+    passkey_enabled: boolean;
+    allowed_login_methods: string[];
+}
+
+export interface OAuthLoginRequest {
+    id_token: string;
+    account_id?: IdParam;
+    first_name?: string;
+    last_name?: string;
+}
+
+export interface WebAuthnRegistrationOptions {
+    challenge: string;
+    rp: { name: string; id: string };
+    user: { id: string; name: string; displayName: string };
+    pubKeyCredParams: Array<{ type: string; alg: number }>;
+    timeout: number;
+    authenticatorSelection: {
+        authenticatorAttachment?: string;
+        residentKey?: string;
+        requireResidentKey?: boolean;
+        userVerification?: string;
+    };
+    excludeCredentials: Array<{ type: string; id: string; transports?: string[] }>;
+}
+
+export interface WebAuthnAuthenticationOptions {
+    challenge: string;
+    timeout: number;
+    rpId: string;
+    allowCredentials: Array<{ type: string; id: string; transports?: string[] }>;
+    userVerification: string;
+}
+
+export interface PrivateEventAccessRequest {
+    access_code: string;
 }
 
 export interface User {
@@ -104,6 +178,15 @@ export interface User {
     is_account_owner?: boolean;
     locale?: SupportedLocales;
     marketing_opted_in_at?: string | null;
+
+    // OAuth fields
+    oauth_provider?: 'google' | 'apple' | null;
+    oauth_provider_id?: string | null;
+
+    // MFA fields
+    mfa_enabled?: boolean;
+    mfa_confirmed_at?: string | null;
+    passkey_enabled?: boolean;
 }
 
 export interface Account {
@@ -310,6 +393,13 @@ export interface EventSettings {
     // Multi-step checkout settings
     multi_step_checkout_enabled?: boolean;
     checkout_steps_config?: CheckoutStepConfig[] | null;
+
+    // Private event settings
+    is_private_event?: boolean;
+    private_access_code?: string | null;
+    hide_event_details_until_access?: boolean;
+    hide_location_until_purchase?: boolean;
+    show_promo_code_input_always?: boolean;
 }
 
 export interface VenueAddress {

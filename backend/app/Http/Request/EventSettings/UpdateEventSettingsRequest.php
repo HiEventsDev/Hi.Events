@@ -162,6 +162,13 @@ class UpdateEventSettingsRequest extends BaseRequest
             // Multi-step checkout settings
             'multi_step_checkout_enabled' => ['boolean'],
             'checkout_steps_config' => ['nullable', 'array'],
+
+            // Private event settings
+            'is_private_event' => ['boolean'],
+            'private_access_code' => ['nullable', 'string', 'min:6', 'max:128', 'required_if:is_private_event,true'],
+            'hide_event_details_until_access' => ['boolean'],
+            'hide_location_until_purchase' => ['boolean'],
+            'show_promo_code_input_always' => ['boolean'],
         ];
     }
 

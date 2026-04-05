@@ -139,6 +139,13 @@ class UpdateEventSettingsDTO extends BaseDTO
         // Multi-step checkout settings
         public readonly ?bool                   $multi_step_checkout_enabled = false,
         public readonly ?array                  $checkout_steps_config = null,
+
+        // Private event settings
+        public readonly ?bool                   $is_private_event = false,
+        public readonly ?string                 $private_access_code = null,
+        public readonly ?bool                   $hide_event_details_until_access = false,
+        public readonly ?bool                   $hide_location_until_purchase = false,
+        public readonly ?bool                   $show_promo_code_input_always = false,
     )
     {
     }
@@ -252,6 +259,13 @@ class UpdateEventSettingsDTO extends BaseDTO
             // Multi-step checkout defaults
             multi_step_checkout_enabled: false,
             checkout_steps_config: null,
+
+            // Private event defaults
+            is_private_event: false,
+            private_access_code: null,
+            hide_event_details_until_access: false,
+            hide_location_until_purchase: false,
+            show_promo_code_input_always: false,
         );
     }
 }

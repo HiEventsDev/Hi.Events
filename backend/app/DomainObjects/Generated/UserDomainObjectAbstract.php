@@ -24,6 +24,13 @@ abstract class UserDomainObjectAbstract extends \HiEvents\DomainObjects\Abstract
     final public const TIMEZONE = 'timezone';
     final public const LOCALE = 'locale';
     final public const MARKETING_OPTED_IN_AT = 'marketing_opted_in_at';
+    final public const OAUTH_PROVIDER = 'oauth_provider';
+    final public const OAUTH_PROVIDER_ID = 'oauth_provider_id';
+    final public const MFA_ENABLED = 'mfa_enabled';
+    final public const MFA_SECRET = 'mfa_secret';
+    final public const MFA_RECOVERY_CODES = 'mfa_recovery_codes';
+    final public const MFA_CONFIRMED_AT = 'mfa_confirmed_at';
+    final public const PASSKEY_ENABLED = 'passkey_enabled';
 
     protected int $id;
     protected string $email;
@@ -39,6 +46,13 @@ abstract class UserDomainObjectAbstract extends \HiEvents\DomainObjects\Abstract
     protected string $timezone;
     protected string $locale = 'en';
     protected ?string $marketing_opted_in_at = null;
+    protected ?string $oauth_provider = null;
+    protected ?string $oauth_provider_id = null;
+    protected bool $mfa_enabled = false;
+    protected ?string $mfa_secret = null;
+    protected ?string $mfa_recovery_codes = null;
+    protected ?string $mfa_confirmed_at = null;
+    protected bool $passkey_enabled = false;
 
     public function toArray(): array
     {
@@ -57,6 +71,11 @@ abstract class UserDomainObjectAbstract extends \HiEvents\DomainObjects\Abstract
                     'timezone' => $this->timezone ?? null,
                     'locale' => $this->locale ?? null,
                     'marketing_opted_in_at' => $this->marketing_opted_in_at ?? null,
+                    'oauth_provider' => $this->oauth_provider ?? null,
+                    'oauth_provider_id' => $this->oauth_provider_id ?? null,
+                    'mfa_enabled' => $this->mfa_enabled ?? false,
+                    'mfa_confirmed_at' => $this->mfa_confirmed_at ?? null,
+                    'passkey_enabled' => $this->passkey_enabled ?? false,
                 ];
     }
 
@@ -212,5 +231,82 @@ abstract class UserDomainObjectAbstract extends \HiEvents\DomainObjects\Abstract
     public function getMarketingOptedInAt(): ?string
     {
         return $this->marketing_opted_in_at;
+    }
+
+    public function setOauthProvider(?string $oauth_provider): self
+    {
+        $this->oauth_provider = $oauth_provider;
+        return $this;
+    }
+
+    public function getOauthProvider(): ?string
+    {
+        return $this->oauth_provider;
+    }
+
+    public function setOauthProviderId(?string $oauth_provider_id): self
+    {
+        $this->oauth_provider_id = $oauth_provider_id;
+        return $this;
+    }
+
+    public function getOauthProviderId(): ?string
+    {
+        return $this->oauth_provider_id;
+    }
+
+    public function setMfaEnabled(bool $mfa_enabled): self
+    {
+        $this->mfa_enabled = $mfa_enabled;
+        return $this;
+    }
+
+    public function getMfaEnabled(): bool
+    {
+        return $this->mfa_enabled;
+    }
+
+    public function setMfaSecret(?string $mfa_secret): self
+    {
+        $this->mfa_secret = $mfa_secret;
+        return $this;
+    }
+
+    public function getMfaSecret(): ?string
+    {
+        return $this->mfa_secret;
+    }
+
+    public function setMfaRecoveryCodes(?string $mfa_recovery_codes): self
+    {
+        $this->mfa_recovery_codes = $mfa_recovery_codes;
+        return $this;
+    }
+
+    public function getMfaRecoveryCodes(): ?string
+    {
+        return $this->mfa_recovery_codes;
+    }
+
+    public function setMfaConfirmedAt(?string $mfa_confirmed_at): self
+    {
+        $this->mfa_confirmed_at = $mfa_confirmed_at;
+        return $this;
+    }
+
+    public function getMfaConfirmedAt(): ?string
+    {
+        return $this->mfa_confirmed_at;
+    }
+
+    public function setPasskeyEnabled(bool $passkey_enabled): self
+    {
+        $this->passkey_enabled = $passkey_enabled;
+        return $this;
+    }
+
+    public function getPasskeyEnabled(): bool
+    {
+        return $this->passkey_enabled;
     }
 }

@@ -8,6 +8,7 @@ use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\Status\UserStatus;
 use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Exceptions\UnauthorizedException;
+use HiEvents\Models\User;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
 use HiEvents\Services\Domain\Auth\DTO\LoginResponse;
@@ -149,5 +150,49 @@ readonly class LoginService
             ->first(fn(AccountUserDomainObject $userAccount) => $userAccount->getAccountId() === $accountId);
 
         return Role::from($currentAccount?->getRole());
+    }
+
+    /**
+     * Authenticate a user via OAuth (no password required).
+     *
+     * @throws UnauthorizedException
+     */
+    public function authenticateOAuthUser(User $userModel, ?int $requestedAccountId): LoginResponse
+    {
+        /** @var UserDomainObject $user */
+        $user = UserDomainObject::hydrateFromModel($userModel);
+
+        $userAccounts = $this->accountUserRepository
+            ->loadRelation(new Relationship(domainObject: AccountDomainObject::class, name: 'account'))
+            ->findWhere([
+                'user_id' => $user->getId(),
+            ]);
+
+        $accounts = $userAccounts->map(fn($accountUser) => $accountUser->getAccount());
+        $accountId = $this->getAccountId($accounts, $requestedAccountId);
+
+        if ($accountId) {
+            $this->validateUserStatus($accountId, $userAccounts);
+        }
+
+        $userRole = $this->getUserRole($accountId, $userAccounts);
+
+        $token = null;
+        if ($accountId !== null) {
+            $claims = ['account_id' => $accountId];
+
+            if ($userRole !== null) {
+                $claims['role'] = $userRole->value;
+            }
+
+            $token = $this->jwtAuth->claims($claims)->fromUser($userModel);
+        }
+
+        return new LoginResponse(
+            accounts: $accounts,
+            token: $token,
+            user: $user,
+            accountId: $accountId,
+        );
     }
 }
