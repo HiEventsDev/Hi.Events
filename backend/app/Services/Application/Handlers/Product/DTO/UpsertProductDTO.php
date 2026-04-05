@@ -43,6 +43,9 @@ class UpsertProductDTO extends BaseDTO
         public readonly ?bool            $waitlist_enabled = null,
         public readonly ?bool            $require_attendee_details = true,
         public readonly ?bool            $require_attendee_email = true,
+        public readonly ?bool            $is_upsell = false,
+        public readonly ?array           $upsell_for_product_ids = null,
+        public readonly ?string          $upsell_display_text = null,
     )
     {
     }

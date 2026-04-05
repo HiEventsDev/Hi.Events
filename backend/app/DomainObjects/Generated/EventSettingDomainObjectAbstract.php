@@ -80,6 +80,19 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     final public const CHECKOUT_VALIDATION_WEBHOOK_URL = 'checkout_validation_webhook_url';
     final public const REQUIRE_ATTENDEE_NAME = 'require_attendee_name';
     final public const FREE_TICKET_EXPIRATION_MINUTES = 'free_ticket_expiration_minutes';
+    final public const SALES_REPORT_FREQUENCY = 'sales_report_frequency';
+    final public const SALES_REPORT_RECIPIENT_EMAILS = 'sales_report_recipient_emails';
+    final public const CERTIFICATE_ENABLED = 'certificate_enabled';
+    final public const CERTIFICATE_TITLE = 'certificate_title';
+    final public const CERTIFICATE_BODY_TEMPLATE = 'certificate_body_template';
+    final public const CERTIFICATE_SIGNATORY_NAME = 'certificate_signatory_name';
+    final public const CERTIFICATE_SIGNATORY_TITLE = 'certificate_signatory_title';
+    final public const PROVISIONAL_BOOKING_ENABLED = 'provisional_booking_enabled';
+    final public const PROVISIONAL_BOOKING_THRESHOLD = 'provisional_booking_threshold';
+    final public const PROVISIONAL_BOOKING_DEADLINE = 'provisional_booking_deadline';
+    final public const PROVISIONAL_BOOKING_MESSAGE = 'provisional_booking_message';
+    final public const MULTI_STEP_CHECKOUT_ENABLED = 'multi_step_checkout_enabled';
+    final public const CHECKOUT_STEPS_CONFIG = 'checkout_steps_config';
 
     protected int $id;
     protected int $event_id;
@@ -151,6 +164,19 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     protected ?string $checkout_validation_webhook_url = null;
     protected bool $require_attendee_name = true;
     protected ?int $free_ticket_expiration_minutes = null;
+    protected ?string $sales_report_frequency = null;
+    protected array|string|null $sales_report_recipient_emails = null;
+    protected bool $certificate_enabled = false;
+    protected ?string $certificate_title = null;
+    protected ?string $certificate_body_template = null;
+    protected ?string $certificate_signatory_name = null;
+    protected ?string $certificate_signatory_title = null;
+    protected bool $provisional_booking_enabled = false;
+    protected ?int $provisional_booking_threshold = null;
+    protected ?string $provisional_booking_deadline = null;
+    protected ?string $provisional_booking_message = null;
+    protected bool $multi_step_checkout_enabled = false;
+    protected array|string|null $checkout_steps_config = null;
 
     public function toArray(): array
     {
@@ -225,6 +251,19 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
                     'checkout_validation_webhook_url' => $this->checkout_validation_webhook_url ?? null,
                     'require_attendee_name' => $this->require_attendee_name ?? null,
                     'free_ticket_expiration_minutes' => $this->free_ticket_expiration_minutes ?? null,
+                    'sales_report_frequency' => $this->sales_report_frequency ?? null,
+                    'sales_report_recipient_emails' => $this->sales_report_recipient_emails ?? null,
+                    'certificate_enabled' => $this->certificate_enabled ?? null,
+                    'certificate_title' => $this->certificate_title ?? null,
+                    'certificate_body_template' => $this->certificate_body_template ?? null,
+                    'certificate_signatory_name' => $this->certificate_signatory_name ?? null,
+                    'certificate_signatory_title' => $this->certificate_signatory_title ?? null,
+                    'provisional_booking_enabled' => $this->provisional_booking_enabled ?? null,
+                    'provisional_booking_threshold' => $this->provisional_booking_threshold ?? null,
+                    'provisional_booking_deadline' => $this->provisional_booking_deadline ?? null,
+                    'provisional_booking_message' => $this->provisional_booking_message ?? null,
+                    'multi_step_checkout_enabled' => $this->multi_step_checkout_enabled ?? null,
+                    'checkout_steps_config' => $this->checkout_steps_config ?? null,
                 ];
     }
 
@@ -997,5 +1036,148 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     public function getFreeTicketExpirationMinutes(): ?int
     {
         return $this->free_ticket_expiration_minutes;
+    }
+
+    public function setSalesReportFrequency(?string $sales_report_frequency): self
+    {
+        $this->sales_report_frequency = $sales_report_frequency;
+        return $this;
+    }
+
+    public function getSalesReportFrequency(): ?string
+    {
+        return $this->sales_report_frequency;
+    }
+
+    public function setSalesReportRecipientEmails(array|string|null $sales_report_recipient_emails): self
+    {
+        $this->sales_report_recipient_emails = $sales_report_recipient_emails;
+        return $this;
+    }
+
+    public function getSalesReportRecipientEmails(): array|string|null
+    {
+        return $this->sales_report_recipient_emails;
+    }
+
+    public function setCertificateEnabled(bool $certificate_enabled): self
+    {
+        $this->certificate_enabled = $certificate_enabled;
+        return $this;
+    }
+
+    public function getCertificateEnabled(): bool
+    {
+        return $this->certificate_enabled;
+    }
+
+    public function setCertificateTitle(?string $certificate_title): self
+    {
+        $this->certificate_title = $certificate_title;
+        return $this;
+    }
+
+    public function getCertificateTitle(): ?string
+    {
+        return $this->certificate_title;
+    }
+
+    public function setCertificateBodyTemplate(?string $certificate_body_template): self
+    {
+        $this->certificate_body_template = $certificate_body_template;
+        return $this;
+    }
+
+    public function getCertificateBodyTemplate(): ?string
+    {
+        return $this->certificate_body_template;
+    }
+
+    public function setCertificateSignatoryName(?string $certificate_signatory_name): self
+    {
+        $this->certificate_signatory_name = $certificate_signatory_name;
+        return $this;
+    }
+
+    public function getCertificateSignatoryName(): ?string
+    {
+        return $this->certificate_signatory_name;
+    }
+
+    public function setCertificateSignatoryTitle(?string $certificate_signatory_title): self
+    {
+        $this->certificate_signatory_title = $certificate_signatory_title;
+        return $this;
+    }
+
+    public function getCertificateSignatoryTitle(): ?string
+    {
+        return $this->certificate_signatory_title;
+    }
+
+    public function setProvisionalBookingEnabled(bool $provisional_booking_enabled): self
+    {
+        $this->provisional_booking_enabled = $provisional_booking_enabled;
+        return $this;
+    }
+
+    public function getProvisionalBookingEnabled(): bool
+    {
+        return $this->provisional_booking_enabled;
+    }
+
+    public function setProvisionalBookingThreshold(?int $provisional_booking_threshold): self
+    {
+        $this->provisional_booking_threshold = $provisional_booking_threshold;
+        return $this;
+    }
+
+    public function getProvisionalBookingThreshold(): ?int
+    {
+        return $this->provisional_booking_threshold;
+    }
+
+    public function setProvisionalBookingDeadline(?string $provisional_booking_deadline): self
+    {
+        $this->provisional_booking_deadline = $provisional_booking_deadline;
+        return $this;
+    }
+
+    public function getProvisionalBookingDeadline(): ?string
+    {
+        return $this->provisional_booking_deadline;
+    }
+
+    public function setProvisionalBookingMessage(?string $provisional_booking_message): self
+    {
+        $this->provisional_booking_message = $provisional_booking_message;
+        return $this;
+    }
+
+    public function getProvisionalBookingMessage(): ?string
+    {
+        return $this->provisional_booking_message;
+    }
+
+    public function setMultiStepCheckoutEnabled(bool $multi_step_checkout_enabled): self
+    {
+        $this->multi_step_checkout_enabled = $multi_step_checkout_enabled;
+        return $this;
+    }
+
+    public function getMultiStepCheckoutEnabled(): bool
+    {
+        return $this->multi_step_checkout_enabled;
+    }
+
+    public function setCheckoutStepsConfig(array|string|null $checkout_steps_config): self
+    {
+        $this->checkout_steps_config = $checkout_steps_config;
+        return $this;
+    }
+
+    public function getCheckoutStepsConfig(): array|string|null
+    {
+        return $this->checkout_steps_config;
     }
 }

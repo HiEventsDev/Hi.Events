@@ -47,6 +47,10 @@ class UpsertProductRequest extends BaseRequest
             'waitlist_enabled' => 'boolean|nullable',
             'require_attendee_details' => 'boolean',
             'require_attendee_email' => 'boolean',
+            'is_upsell' => 'boolean',
+            'upsell_for_product_ids' => 'nullable|array',
+            'upsell_for_product_ids.*' => 'integer',
+            'upsell_display_text' => 'nullable|string|max:255',
         ];
     }
 

@@ -49,4 +49,43 @@ class PromoCodeRepository extends BaseRepository implements PromoCodeRepositoryI
             page: $params->page,
         );
     }
+
+    public function findByAccountId(int $accountId, QueryParamsDTO $params): LengthAwarePaginator
+    {
+        $where = [
+            [PromoCodeDomainObjectAbstract::ACCOUNT_ID, '=', $accountId],
+            static function (Builder $builder) {
+                $builder->whereNull(PromoCodeDomainObjectAbstract::EVENT_ID);
+            },
+        ];
+
+        if ($params->query) {
+            $where[] = static function (Builder $builder) use ($params) {
+                $builder
+                    ->orWhere(PromoCodeDomainObjectAbstract::CODE, 'ilike', '%' . $params->query . '%');
+            };
+        }
+
+        $this->model = $this->model->orderBy(
+            column: $this->validateSortColumn($params->sort_by, PromoCodeDomainObject::class),
+            direction: $this->validateSortDirection($params->sort_direction, PromoCodeDomainObject::class),
+        );
+
+        return $this->paginateWhere(
+            where: $where,
+            limit: $params->per_page,
+            page: $params->page,
+        );
+    }
+
+    public function findSiteWideByCode(string $code, int $accountId): ?PromoCodeDomainObject
+    {
+        return $this->findFirstWhere([
+            [PromoCodeDomainObjectAbstract::CODE, '=', $code],
+            [PromoCodeDomainObjectAbstract::ACCOUNT_ID, '=', $accountId],
+            static function (Builder $builder) {
+                $builder->whereNull(PromoCodeDomainObjectAbstract::EVENT_ID);
+            },
+        ]);
+    }
 }

@@ -27,6 +27,7 @@ class PromoCode extends BaseModel
             PromoCodeDomainObjectAbstract::APPLICABLE_PRODUCT_IDS,
             PromoCodeDomainObjectAbstract::EXPIRY_DATE,
             PromoCodeDomainObjectAbstract::EVENT_ID,
+            PromoCodeDomainObjectAbstract::ACCOUNT_ID,
             PromoCodeDomainObjectAbstract::MAX_ALLOWED_USAGES,
         ];
     }

@@ -14,6 +14,7 @@ enum OrderStatus
     case AWAITING_OFFLINE_PAYMENT;
     case AWAITING_APPROVAL;
     case ABANDONED;
+    case PROVISIONAL;
 
     public static function getHumanReadableStatus(string $status): string
     {
@@ -24,6 +25,7 @@ enum OrderStatus
             self::AWAITING_OFFLINE_PAYMENT->name => __('Awaiting offline payment'),
             self::AWAITING_APPROVAL->name => __('Awaiting approval'),
             self::ABANDONED->name => __('Abandoned'),
+            self::PROVISIONAL->name => __('Provisional'),
         };
     }
 }

@@ -12,6 +12,7 @@ abstract class PromoCodeDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
     final public const PLURAL_NAME = 'promo_codes';
     final public const ID = 'id';
     final public const EVENT_ID = 'event_id';
+    final public const ACCOUNT_ID = 'account_id';
     final public const CODE = 'code';
     final public const DISCOUNT = 'discount';
     final public const APPLICABLE_PRODUCT_IDS = 'applicable_product_ids';
@@ -28,7 +29,8 @@ abstract class PromoCodeDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
     final public const DELETED_AT = 'deleted_at';
 
     protected int $id;
-    protected int $event_id;
+    protected ?int $event_id = null;
+    protected ?int $account_id = null;
     protected string $code;
     protected float $discount = 0.0;
     protected array|string|null $applicable_product_ids = null;
@@ -49,6 +51,7 @@ abstract class PromoCodeDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
         return [
                     'id' => $this->id ?? null,
                     'event_id' => $this->event_id ?? null,
+                    'account_id' => $this->account_id ?? null,
                     'code' => $this->code ?? null,
                     'discount' => $this->discount ?? null,
                     'applicable_product_ids' => $this->applicable_product_ids ?? null,
@@ -77,15 +80,26 @@ abstract class PromoCodeDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
         return $this->id;
     }
 
-    public function setEventId(int $event_id): self
+    public function setEventId(?int $event_id): self
     {
         $this->event_id = $event_id;
         return $this;
     }
 
-    public function getEventId(): int
+    public function getEventId(): ?int
     {
         return $this->event_id;
+    }
+
+    public function setAccountId(?int $account_id): self
+    {
+        $this->account_id = $account_id;
+        return $this;
+    }
+
+    public function getAccountId(): ?int
+    {
+        return $this->account_id;
     }
 
     public function setCode(string $code): self

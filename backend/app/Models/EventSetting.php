@@ -17,6 +17,8 @@ class EventSetting extends BaseModel
             'homepage_theme_settings' => 'array',
             'social_media_handles' => 'array',
             'stripe_payment_method_order' => 'array',
+            'sales_report_recipient_emails' => 'array',
+            'checkout_steps_config' => 'array',
         ];
     }
 }

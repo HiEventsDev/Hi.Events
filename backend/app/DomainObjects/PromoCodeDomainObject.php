@@ -44,6 +44,11 @@ class PromoCodeDomainObject extends Generated\PromoCodeDomainObjectAbstract impl
         return $this->getDiscountType() !== null && $this->getDiscount() > 0;
     }
 
+    public function isSiteWide(): bool
+    {
+        return $this->getEventId() === null && $this->getAccountId() !== null;
+    }
+
     public function isValid(): bool
     {
         if ($this->getExpiryDate() !== null && (new Carbon($this->getExpiryDate()))->isPast()) {

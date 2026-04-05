@@ -118,6 +118,27 @@ class UpdateEventSettingsDTO extends BaseDTO
 
         // Free ticket expiration
         public readonly ?int                    $free_ticket_expiration_minutes = null,
+
+        // Sales report settings
+        public readonly ?string                 $sales_report_frequency = null,
+        public readonly ?array                  $sales_report_recipient_emails = null,
+
+        // Certificate settings
+        public readonly ?bool                   $certificate_enabled = false,
+        public readonly ?string                 $certificate_title = null,
+        public readonly ?string                 $certificate_body_template = null,
+        public readonly ?string                 $certificate_signatory_name = null,
+        public readonly ?string                 $certificate_signatory_title = null,
+
+        // Provisional booking settings
+        public readonly ?bool                   $provisional_booking_enabled = false,
+        public readonly ?float                  $provisional_booking_threshold = null,
+        public readonly ?int                    $provisional_booking_deadline = null,
+        public readonly ?string                 $provisional_booking_message = null,
+
+        // Multi-step checkout settings
+        public readonly ?bool                   $multi_step_checkout_enabled = false,
+        public readonly ?array                  $checkout_steps_config = null,
     )
     {
     }
@@ -210,6 +231,27 @@ class UpdateEventSettingsDTO extends BaseDTO
 
             // Payment defaults
             stripe_payment_method_order: null,
+
+            // Sales report defaults
+            sales_report_frequency: null,
+            sales_report_recipient_emails: null,
+
+            // Certificate defaults
+            certificate_enabled: false,
+            certificate_title: null,
+            certificate_body_template: null,
+            certificate_signatory_name: null,
+            certificate_signatory_title: null,
+
+            // Provisional booking defaults
+            provisional_booking_enabled: false,
+            provisional_booking_threshold: null,
+            provisional_booking_deadline: null,
+            provisional_booking_message: null,
+
+            // Multi-step checkout defaults
+            multi_step_checkout_enabled: false,
+            checkout_steps_config: null,
         );
     }
 }

@@ -19,6 +19,8 @@ class Product extends BaseModel
         return [
             ProductDomainObjectAbstract::SALES_VOLUME => 'float',
             ProductDomainObjectAbstract::SALES_TAX_VOLUME => 'float',
+            ProductDomainObjectAbstract::UPSELL_FOR_PRODUCT_IDS => 'array',
+            ProductDomainObjectAbstract::IS_UPSELL => 'boolean',
         ];
     }
 

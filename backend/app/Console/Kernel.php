@@ -2,6 +2,7 @@
 
 namespace HiEvents\Console;
 
+use HiEvents\Jobs\Event\SendSalesReportsJob;
 use HiEvents\Jobs\Message\SendScheduledMessagesJob;
 use HiEvents\Jobs\Order\CancelExpiredFreeOrdersJob;
 use HiEvents\Jobs\Order\MarkExpiredOrdersAsAbandonedJob;
@@ -17,6 +18,7 @@ class Kernel extends ConsoleKernel
         $schedule->job(new ProcessExpiredWaitlistOffersJob)->everyMinute()->withoutOverlapping();
         $schedule->job(new CancelExpiredFreeOrdersJob)->everyFiveMinutes()->withoutOverlapping();
         $schedule->job(new MarkExpiredOrdersAsAbandonedJob)->everyFiveMinutes()->withoutOverlapping();
+        $schedule->job(new SendSalesReportsJob)->everyFifteenMinutes()->withoutOverlapping();
     }
 
     protected function commands(): void

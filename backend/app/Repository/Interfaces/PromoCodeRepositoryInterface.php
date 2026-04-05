@@ -12,4 +12,8 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 interface PromoCodeRepositoryInterface extends RepositoryInterface
 {
     public function findByEventId(int $eventId, QueryParamsDTO $params): LengthAwarePaginator;
+
+    public function findByAccountId(int $accountId, QueryParamsDTO $params): LengthAwarePaginator;
+
+    public function findSiteWideByCode(string $code, int $accountId): ?PromoCodeDomainObject;
 }

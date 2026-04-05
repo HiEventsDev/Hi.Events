@@ -289,6 +289,27 @@ export interface EventSettings {
 
     // Free ticket expiration
     free_ticket_expiration_minutes?: number | null;
+
+    // Sales report settings
+    sales_report_frequency?: 'DAILY' | 'WEEKLY' | 'MONTHLY' | null;
+    sales_report_recipient_emails?: string[] | null;
+
+    // Certificate settings
+    certificate_enabled?: boolean;
+    certificate_title?: string | null;
+    certificate_body_template?: string | null;
+    certificate_signatory_name?: string | null;
+    certificate_signatory_title?: string | null;
+
+    // Provisional booking settings
+    provisional_booking_enabled?: boolean;
+    provisional_booking_threshold?: number | null;
+    provisional_booking_deadline?: number | null;
+    provisional_booking_message?: string | null;
+
+    // Multi-step checkout settings
+    multi_step_checkout_enabled?: boolean;
+    checkout_steps_config?: CheckoutStepConfig[] | null;
 }
 
 export interface VenueAddress {
@@ -588,6 +609,9 @@ export interface Product {
     require_attendee_email?: boolean;
     has_waiting_entries?: boolean;
     waitlist_entry_count?: number;
+    is_upsell?: boolean;
+    upsell_for_product_ids?: number[] | null;
+    upsell_display_text?: string | null;
 }
 
 export interface ProductCategory {
@@ -681,7 +705,7 @@ export interface Order {
     attendees?: Attendee[];
     created_at: string;
     currency: string;
-    status: 'RESERVED' | 'CANCELLED' | 'COMPLETED' | 'AWAITING_OFFLINE_PAYMENT' | 'AWAITING_APPROVAL' | 'ABANDONED';
+    status: 'RESERVED' | 'CANCELLED' | 'COMPLETED' | 'AWAITING_OFFLINE_PAYMENT' | 'AWAITING_APPROVAL' | 'ABANDONED' | 'PROVISIONAL';
     refund_status?: 'REFUND_PENDING' | 'REFUND_FAILED' | 'REFUNDED' | 'PARTIALLY_REFUNDED';
     payment_status?: 'NO_PAYMENT_REQUIRED' | 'AWAITING_PAYMENT' | 'PAYMENT_FAILED' | 'PAYMENT_RECEIVED' | 'AWAITING_OFFLINE_PAYMENT';
     public_id: string;
@@ -911,6 +935,7 @@ export interface PromoCode {
     expiry_date?: string;
     valid_from?: string;
     event_id?: number;
+    account_id?: number | null;
     discount_type?: PromoCodeDiscountType | null;
     attendee_usage_count?: number;
     order_usage_count?: number;
@@ -1154,3 +1179,59 @@ export interface WaitlistStats {
     expired: number;
     products: WaitlistProductStats[];
 }
+
+// Product Bundle types (#361)
+export interface ProductBundle {
+    id?: number;
+    event_id?: number;
+    name: string;
+    description?: string | null;
+    price: number;
+    currency?: string;
+    max_per_order?: number | null;
+    quantity_available?: number | null;
+    quantity_sold?: number;
+    sale_start_date?: string | null;
+    sale_end_date?: string | null;
+    is_active?: boolean;
+    sort_order?: number;
+    items?: ProductBundleItem[];
+    created_at?: string;
+    updated_at?: string;
+}
+
+export interface ProductBundleItem {
+    id?: number;
+    product_bundle_id: number;
+    product_id: number;
+    product_price_id?: number | null;
+    quantity: number;
+}
+
+// Document Template types (#698)
+export type DocumentTemplateType = 'CERTIFICATE' | 'RECEIPT' | 'BADGE' | 'CUSTOM';
+
+export interface DocumentTemplate {
+    id?: number;
+    account_id?: number;
+    event_id?: number | null;
+    name: string;
+    type: DocumentTemplateType;
+    content: string;
+    settings?: Record<string, any> | null;
+    is_default?: boolean;
+    created_at?: string;
+    updated_at?: string;
+}
+
+// Checkout step configuration (#747)
+export interface CheckoutStepConfig {
+    id: string;
+    label: string;
+    product_category_ids?: number[];
+    type?: 'products' | 'details' | 'payment' | 'confirmation';
+    enabled?: boolean;
+}
+
+// Sales report frequency (#714)
+export type SalesReportFrequency = 'DAILY' | 'WEEKLY' | 'MONTHLY';

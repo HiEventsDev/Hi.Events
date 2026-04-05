@@ -140,6 +140,28 @@ class UpdateEventSettingsRequest extends BaseRequest
 
             // Free ticket expiration
             'free_ticket_expiration_minutes' => ['nullable', 'integer', 'min:1', 'max:43200'],
+
+            // Sales report settings
+            'sales_report_frequency' => ['nullable', 'string', 'in:DAILY,WEEKLY,MONTHLY'],
+            'sales_report_recipient_emails' => ['nullable', 'array'],
+            'sales_report_recipient_emails.*' => ['email'],
+
+            // Certificate settings
+            'certificate_enabled' => ['boolean'],
+            'certificate_title' => ['nullable', 'string', 'max:255'],
+            'certificate_body_template' => ['nullable', 'string', 'max:5000'],
+            'certificate_signatory_name' => ['nullable', 'string', 'max:255'],
+            'certificate_signatory_title' => ['nullable', 'string', 'max:255'],
+
+            // Provisional booking settings
+            'provisional_booking_enabled' => ['boolean'],
+            'provisional_booking_threshold' => ['nullable', 'numeric', 'min:0'],
+            'provisional_booking_deadline' => ['nullable', 'integer', 'min:1', 'max:720'],
+            'provisional_booking_message' => ['nullable', 'string', 'max:2000'],
+
+            // Multi-step checkout settings
+            'multi_step_checkout_enabled' => ['boolean'],
+            'checkout_steps_config' => ['nullable', 'array'],
         ];
     }
 

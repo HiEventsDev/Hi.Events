@@ -400,6 +400,28 @@ $router->middleware(['auth:api'])->group(
         $router->get('/events/{event_id}/promo-codes/{promo_code_id}', GetPromoCodeAction::class);
         $router->delete('/events/{event_id}/promo-codes/{promo_code_id}', DeletePromoCodeAction::class);
 
+        // Site-wide Vouchers
+        $router->post('/vouchers', \HiEvents\Http\Actions\Vouchers\CreateSiteWideVoucherAction::class);
+        $router->get('/vouchers', \HiEvents\Http\Actions\Vouchers\GetSiteWideVouchersAction::class);
+        $router->delete('/vouchers/{voucher_id}', \HiEvents\Http\Actions\Vouchers\DeleteSiteWideVoucherAction::class);
+
+        // Product Bundles
+        $router->post('/events/{event_id}/bundles', \HiEvents\Http\Actions\ProductBundles\CreateProductBundleAction::class);
+        $router->get('/events/{event_id}/bundles', \HiEvents\Http\Actions\ProductBundles\GetProductBundlesAction::class);
+        $router->put('/events/{event_id}/bundles/{bundle_id}', \HiEvents\Http\Actions\ProductBundles\UpdateProductBundleAction::class);
+        $router->delete('/events/{event_id}/bundles/{bundle_id}', \HiEvents\Http\Actions\ProductBundles\DeleteProductBundleAction::class);
+
+        // Document Templates
+        $router->post('/document-templates', \HiEvents\Http\Actions\DocumentTemplates\CreateDocumentTemplateAction::class);
+        $router->get('/document-templates', \HiEvents\Http\Actions\DocumentTemplates\GetDocumentTemplatesAction::class);
+        $router->get('/document-templates/{template_id}', \HiEvents\Http\Actions\DocumentTemplates\GetDocumentTemplateAction::class);
+        $router->put('/document-templates/{template_id}', \HiEvents\Http\Actions\DocumentTemplates\UpdateDocumentTemplateAction::class);
+        $router->delete('/document-templates/{template_id}', \HiEvents\Http\Actions\DocumentTemplates\DeleteDocumentTemplateAction::class);
+
+        // Provisional Orders
+        $router->get('/events/{event_id}/orders/provisional', \HiEvents\Http\Actions\Orders\GetProvisionalOrdersAction::class);
+        $router->post('/events/{event_id}/orders/{order_id}/provisional/confirm', \HiEvents\Http\Actions\Orders\ConfirmProvisionalOrderAction::class);
+
         // Affiliates
         $router->post('/events/{event_id}/affiliates', CreateAffiliateAction::class);
         $router->put('/events/{event_id}/affiliates/{affiliate_id}', UpdateAffiliateAction::class);
@@ -536,6 +558,18 @@ $router->prefix('/public')->group(
 
         // Promo codes
         $router->get('/events/{event_id}/promo-codes/{promo_code}', GetPromoCodePublic::class);
+
+        // Certificates
+        $router->get('/events/{event_id}/attendees/{attendee_short_id}/certificate', \HiEvents\Http\Actions\Certificates\DownloadCertificateAction::class);
+
+        // Product Bundles (public)
+        $router->get('/events/{event_id}/bundles', \HiEvents\Http\Actions\ProductBundles\GetProductBundlesPublicAction::class);
+
+        // Upsell Products (public)
+        $router->get('/events/{event_id}/products/upsells', \HiEvents\Http\Actions\Products\GetUpsellProductsPublicAction::class);
+
+        // Checkout Configuration (public)
+        $router->get('/events/{event_id}/checkout-config', \HiEvents\Http\Actions\EventSettings\GetCheckoutConfigPublicAction::class);
 
         // Stripe payment gateway
         $router->post('/events/{event_id}/order/{order_short_id}/stripe/payment_intent', CreatePaymentIntentActionPublic::class);

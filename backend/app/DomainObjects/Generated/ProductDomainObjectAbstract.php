@@ -39,6 +39,9 @@ abstract class ProductDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     final public const WAITLIST_ENABLED = 'waitlist_enabled';
     final public const REQUIRE_ATTENDEE_DETAILS = 'require_attendee_details';
     final public const REQUIRE_ATTENDEE_EMAIL = 'require_attendee_email';
+    final public const IS_UPSELL = 'is_upsell';
+    final public const UPSELL_FOR_PRODUCT_IDS = 'upsell_for_product_ids';
+    final public const UPSELL_DISPLAY_TEXT = 'upsell_display_text';
 
     protected int $id;
     protected int $event_id;
@@ -69,6 +72,9 @@ abstract class ProductDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     protected ?bool $waitlist_enabled = null;
     protected bool $require_attendee_details = true;
     protected bool $require_attendee_email = true;
+    protected bool $is_upsell = false;
+    protected array|string|null $upsell_for_product_ids = null;
+    protected ?string $upsell_display_text = null;
 
     public function toArray(): array
     {
@@ -102,6 +108,9 @@ abstract class ProductDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
                     'waitlist_enabled' => $this->waitlist_enabled ?? null,
                     'require_attendee_details' => $this->require_attendee_details ?? null,
                     'require_attendee_email' => $this->require_attendee_email ?? null,
+                    'is_upsell' => $this->is_upsell ?? null,
+                    'upsell_for_product_ids' => $this->upsell_for_product_ids ?? null,
+                    'upsell_display_text' => $this->upsell_display_text ?? null,
                 ];
     }
 
@@ -422,5 +431,38 @@ abstract class ProductDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     public function getRequireAttendeeEmail(): bool
     {
         return $this->require_attendee_email;
+    }
+
+    public function setIsUpsell(bool $is_upsell): self
+    {
+        $this->is_upsell = $is_upsell;
+        return $this;
+    }
+
+    public function getIsUpsell(): bool
+    {
+        return $this->is_upsell;
+    }
+
+    public function setUpsellForProductIds(array|string|null $upsell_for_product_ids): self
+    {
+        $this->upsell_for_product_ids = $upsell_for_product_ids;
+        return $this;
+    }
+
+    public function getUpsellForProductIds(): array|string|null
+    {
+        return $this->upsell_for_product_ids;
+    }
+
+    public function setUpsellDisplayText(?string $upsell_display_text): self
+    {
+        $this->upsell_display_text = $upsell_display_text;
+        return $this;
+    }
+
+    public function getUpsellDisplayText(): ?string
+    {
+        return $this->upsell_display_text;
     }
 }
