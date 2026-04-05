@@ -1,6 +1,6 @@
-import {useNavigate, useParams} from "react-router";
+import {useLocation, useNavigate, useParams} from "react-router";
 import {t} from "@lingui/macro";
-import {Anchor, Button, Checkbox, Group, Menu, Paper, Progress, SegmentedControl, Stack, Text, Tooltip} from "@mantine/core";
+import {Anchor, Button, Checkbox, Group, Menu, Paper, Progress, SegmentedControl, Skeleton, Stack, Text, Tooltip} from "@mantine/core";
 import {
     IconCalendar,
     IconCalendarEvent,
@@ -12,6 +12,9 @@ import {
 } from "@tabler/icons-react";
 import {useDisclosure} from "@mantine/hooks";
 import {useCallback, useMemo, useRef, useState} from "react";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 import {modals} from "@mantine/modals";
 import {PageBody} from "../../../common/PageBody";
 import {PageTitle} from "../../../common/PageTitle";
@@ -43,25 +46,25 @@ import {useGetEventCheckInLists} from "../../../../queries/useGetCheckInLists.ts
 import {eventHomepageUrl} from "../../../../utilites/urlHelper.ts";
 import classes from './OccurrencesTab.module.scss';
 
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
 const OccurrencesTab = () => {
     const {eventId} = useParams();
     const navigate = useNavigate();
+    const location = useLocation();
     const [searchParams, setSearchParams] = useFilterQueryParamSync();
-    const viewModeKey = `occurrences_view_${eventId}`;
-    const [viewMode, setViewMode] = useState<'list' | 'calendar'>(() => {
-        if (typeof window === 'undefined') return 'list';
-        const saved = localStorage.getItem(viewModeKey);
-        return saved === 'calendar' ? 'calendar' : 'list';
-    });
+    const viewMode: 'list' | 'calendar' = location.pathname.endsWith('/calendar') ? 'calendar' : 'list';
 
     const handleViewModeChange = (val: string) => {
         const mode = val as 'list' | 'calendar';
-        setViewMode(mode);
-        setSelectedIds(new Set());
-        setSlideoutOccurrenceId(undefined);
-        localStorage.setItem(viewModeKey, mode);
+        const target = mode === 'calendar'
+            ? `/manage/event/${eventId}/occurrences/calendar`
+            : `/manage/event/${eventId}/occurrences`;
+        navigate(target);
     };
     const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
+    const [calendarMonth, setCalendarMonth] = useState<dayjs.Dayjs>(() => dayjs().startOf('month'));
 
     const timePeriod = useMemo(() => {
         const tp = searchParams.filterFields?.time_period;
@@ -70,21 +73,49 @@ const OccurrencesTab = () => {
         return (val as string) || 'upcoming';
     }, [searchParams.filterFields?.time_period]);
 
-    const perPage = viewMode === 'calendar' ? 200 : (searchParams.perPage || 50);
+    const {data: event} = useGetEvent(eventId);
+
+    const calendarRange = useMemo(() => {
+        if (!event?.timezone) return null;
+        const tz = event.timezone;
+        const monthStart = dayjs.tz(calendarMonth.format('YYYY-MM-01'), tz).startOf('month');
+        const startDay = monthStart.day();
+        const offset = startDay === 0 ? 6 : startDay - 1;
+        const gridStart = monthStart.subtract(offset, 'day').startOf('day');
+        const gridEnd = gridStart.add(42, 'day').endOf('day');
+        return {
+            start: gridStart.utc().format('YYYY-MM-DD HH:mm:ss'),
+            end: gridEnd.utc().format('YYYY-MM-DD HH:mm:ss'),
+        };
+    }, [calendarMonth, event?.timezone]);
 
     const queryParams: QueryFilters = useMemo(() => {
+        if (viewMode === 'calendar') {
+            if (!calendarRange) return {pageNumber: 1, perPage: 500, filterFields: {}};
+            return {
+                pageNumber: 1,
+                perPage: 500,
+                filterFields: {
+                    start_date: [
+                        {operator: QueryFilterOperator.GreaterThanOrEquals, value: calendarRange.start},
+                        {operator: QueryFilterOperator.LessThanOrEquals, value: calendarRange.end},
+                    ],
+                },
+            };
+        }
+
         const filterFields: QueryFilterFields = {...searchParams.filterFields};
-        if (viewMode === 'calendar' || timePeriod === 'all') {
+        if (timePeriod === 'all') {
             delete filterFields.time_period;
         } else if (!filterFields.time_period) {
             filterFields.time_period = {operator: QueryFilterOperator.Equals, value: 'upcoming'};
         }
-        return {...searchParams, perPage, filterFields};
-    }, [searchParams, perPage, timePeriod, viewMode]);
-    const occurrencesQuery = useGetEventOccurrences(eventId, queryParams);
+        return {...searchParams, perPage: searchParams.perPage || 50, filterFields};
+    }, [searchParams, timePeriod, viewMode, calendarRange]);
+    const queryEnabled = viewMode !== 'calendar' || calendarRange !== null;
+    const occurrencesQuery = useGetEventOccurrences(eventId, queryParams, queryEnabled);
     const occurrences = occurrencesQuery?.data?.data;
     const pagination = occurrencesQuery?.data?.meta;
-    const {data: event} = useGetEvent(eventId);
 
     const [editModalOpen, {open: openEditModal, close: closeEditModal}] = useDisclosure(false);
     const [bulkEditOpen, {open: openBulkEdit, close: closeBulkEdit}] = useDisclosure(false);
@@ -539,13 +570,21 @@ const OccurrencesTab = () => {
                 </Menu>
             </div>
 
-            <TableSkeleton isVisible={occurrencesQuery.isLoading}/>
-
-            {occurrences && occurrencesQuery.isFetching && !occurrencesQuery.isLoading && (
+            {occurrences && occurrencesQuery.isFetching && !occurrencesQuery.isLoading && !occurrencesQuery.isPlaceholderData && (
                 <Progress size={2} value={100} animated color="blue" mb="xs"/>
             )}
 
-            {occurrences && occurrences.length === 0 && !occurrencesQuery.isFetching && (() => {
+            <div className={classes.contentArea}>
+
+            {viewMode === 'list' && (occurrencesQuery.isLoading || occurrencesQuery.isPlaceholderData) && (
+                <TableSkeleton isVisible={true}/>
+            )}
+
+            {viewMode === 'calendar' && (occurrencesQuery.isLoading || occurrencesQuery.isPlaceholderData || !event) && (
+                <Skeleton height={720} radius="md"/>
+            )}
+
+            {viewMode === 'list' && occurrences && occurrences.length === 0 && !occurrencesQuery.isFetching && !occurrencesQuery.isPlaceholderData && (() => {
                 const hasActiveFilters = !!(timePeriod === 'past' || timePeriod === 'all');
                 return (
                     <Paper className={classes.emptyState} p="xl" radius="md" withBorder>
@@ -589,7 +628,7 @@ const OccurrencesTab = () => {
                 );
             })()}
 
-            {occurrences && occurrences.length > 0 && viewMode === 'list' && event && (
+            {occurrences && occurrences.length > 0 && viewMode === 'list' && event && !occurrencesQuery.isPlaceholderData && (
                 <>
                     <GroupedOccurrenceTable
                         occurrences={occurrences}
@@ -607,17 +646,21 @@ const OccurrencesTab = () => {
                 </>
             )}
 
-            {occurrences && occurrences.length > 0 && viewMode === 'calendar' && event && (
+            {viewMode === 'calendar' && event && !occurrencesQuery.isLoading && !occurrencesQuery.isPlaceholderData && (
                 <CalendarView
-                    occurrences={occurrences}
+                    occurrences={occurrences || []}
                     eventTimezone={event.timezone}
+                    currentMonth={calendarMonth}
+                    onMonthChange={setCalendarMonth}
                     menuActions={menuActions}
                     onOccurrenceClick={(id) => setSlideoutOccurrenceId(id)}
                     onCreate={handleCreateWithDate}
                 />
             )}
 
-            {!!occurrences?.length && viewMode === 'list' && (
+            </div>
+
+            {!!occurrences?.length && viewMode === 'list' && !occurrencesQuery.isPlaceholderData && (
                 <Pagination
                     value={searchParams.pageNumber}
                     onChange={handlePageChange}

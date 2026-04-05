@@ -28,6 +28,7 @@ class EventOccurrenceDomainObject extends EventOccurrenceDomainObjectAbstract im
     {
         return [
             self::STATUS,
+            self::START_DATE,
         ];
     }
 

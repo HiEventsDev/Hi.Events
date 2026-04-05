@@ -22,6 +22,8 @@ dayjs.extend(timezone);
 interface CalendarViewProps {
     occurrences: EventOccurrence[];
     eventTimezone: string;
+    currentMonth: dayjs.Dayjs;
+    onMonthChange: (month: dayjs.Dayjs) => void;
     menuActions?: OccurrenceMenuActions;
     onOccurrenceClick?: (occurrenceId: number) => void;
     onCreate?: (defaultDate: string) => void;
@@ -32,11 +34,12 @@ const MAX_DOTS = 3;
 export const CalendarView = ({
     occurrences,
     eventTimezone,
+    currentMonth,
+    onMonthChange,
     menuActions,
     onOccurrenceClick,
     onCreate,
 }: CalendarViewProps) => {
-    const [currentMonth, setCurrentMonth] = useState(() => dayjs().startOf('month'));
     const [selectedDate, setSelectedDate] = useState<string | null>(null);
     const cellRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
@@ -194,13 +197,13 @@ export const CalendarView = ({
     return (
         <div className={classes.calendarContainer}>
             <div className={classes.monthNav}>
-                <ActionIcon variant="subtle" onClick={() => setCurrentMonth(m => m.subtract(1, 'month'))}>
+                <ActionIcon variant="subtle" onClick={() => onMonthChange(currentMonth.subtract(1, 'month'))}>
                     <IconChevronLeft size={18}/>
                 </ActionIcon>
                 <span className={classes.monthLabel}>
                     {currentMonth.format('MMMM YYYY')}
                 </span>
-                <ActionIcon variant="subtle" onClick={() => setCurrentMonth(m => m.add(1, 'month'))}>
+                <ActionIcon variant="subtle" onClick={() => onMonthChange(currentMonth.add(1, 'month'))}>
                     <IconChevronRight size={18}/>
                 </ActionIcon>
             </div>

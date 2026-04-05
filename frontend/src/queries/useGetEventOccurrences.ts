@@ -4,12 +4,12 @@ import {eventOccurrenceClient} from "../api/event-occurrence.client.ts";
 
 export const GET_EVENT_OCCURRENCES_QUERY_KEY = 'getEventOccurrences';
 
-export const useGetEventOccurrences = (eventId: IdParam, pagination: QueryFilters) => {
+export const useGetEventOccurrences = (eventId: IdParam, pagination: QueryFilters, enabled: boolean = true) => {
     return useQuery({
         queryKey: [GET_EVENT_OCCURRENCES_QUERY_KEY, eventId, pagination],
         queryFn: async () => await eventOccurrenceClient.all(eventId, pagination),
         placeholderData: keepPreviousData,
         staleTime: 30_000,
-        enabled: !!eventId,
+        enabled: !!eventId && enabled,
     });
 };

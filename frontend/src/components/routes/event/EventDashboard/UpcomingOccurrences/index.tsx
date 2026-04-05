@@ -1,6 +1,8 @@
+import {useState} from "react";
 import {t} from "@lingui/macro";
 import {Anchor, Skeleton, Text} from "@mantine/core";
 import {useNavigate} from "react-router";
+import dayjs from "dayjs";
 import {Card} from "../../../../common/Card";
 import {useGetEventOccurrences} from "../../../../../queries/useGetEventOccurrences.ts";
 import {Event, IdParam} from "../../../../../types.ts";
@@ -14,6 +16,7 @@ interface UpcomingOccurrencesProps {
 
 export const UpcomingOccurrences = ({eventId, event}: UpcomingOccurrencesProps) => {
     const navigate = useNavigate();
+    const [currentMonth, setCurrentMonth] = useState<dayjs.Dayjs>(() => dayjs().startOf('month'));
     const {data: occurrencesData, isLoading} = useGetEventOccurrences(eventId, {
         pageNumber: 1,
         perPage: 500,
@@ -53,6 +56,8 @@ export const UpcomingOccurrences = ({eventId, event}: UpcomingOccurrencesProps) 
                 <CalendarView
                     occurrences={occurrences}
                     eventTimezone={event.timezone}
+                    currentMonth={currentMonth}
+                    onMonthChange={setCurrentMonth}
                     onOccurrenceClick={(id) => navigate(`/manage/event/${eventId}/occurrences/${id}`)}
                 />
             )}
