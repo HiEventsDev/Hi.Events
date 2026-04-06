@@ -44,8 +44,7 @@ import {TanStackTable, TanStackTableColumn} from "../TanStackTable";
 import {ColumnVisibilityToggle} from "../ColumnVisibilityToggle";
 import {CellContext} from "@tanstack/react-table";
 import {formatCurrency} from "../../../utilites/currency.ts";
-import {eventCheckoutPath} from "../../../utilites/urlHelper.ts";
-import {getConfig} from "../../../utilites/config.ts";
+import {eventCheckoutUrl} from "../../../utilites/urlHelper.ts";
 
 interface OrdersTableProps {
     event: Event,
@@ -155,7 +154,7 @@ export const OrdersTable = ({orders, event}: OrdersTableProps) => {
                         <Menu.Item onClick={() => handleModalClick(order.id, messageModal)}
                                    leftSection={<IconSend size={14}/>}>{t`Message buyer`}</Menu.Item>
                         <Menu.Item onClick={() => {
-                                       const url = getConfig('VITE_FRONTEND_URL') + eventCheckoutPath(order.event_id, order.short_id, 'summary');
+                                       const url = eventCheckoutUrl(order.event_id, order.short_id, 'summary');
                                        clipboard.copy(url);
                                        showSuccess(t`Customer link copied to clipboard`);
                                    }}
