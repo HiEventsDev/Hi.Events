@@ -15,6 +15,7 @@ import { orderClientPublic } from "../../../../../../api/order.client.ts";
 import { Badge, Card, Divider, Group, Stack, Text, Title } from "@mantine/core";
 import { Image } from "@mantine/core";
 import { AxiosError } from "axios";
+import { formatCurrency } from "../../../../../../utilites/currency.ts";
 
 declare global {
     interface Window {
@@ -221,10 +222,7 @@ export const RazorpayPaymentMethod = ({enabled, setSubmitHandler}: RazorpayPayme
                                 {t`Amount`}
                             </Text>
                             <Text size="sm" fw={500}>
-                                {new Intl.NumberFormat('en-IN', {
-                                    style: 'currency',
-                                    currency: razorpayData.currency,
-                                }).format(razorpayData.amount / 100)}
+                                {formatCurrency(razorpayData.amount / 100, razorpayData.currency)}
                             </Text>
                         </Group>
                     </Stack>
