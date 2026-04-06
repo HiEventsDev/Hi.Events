@@ -16,6 +16,7 @@ import { Badge, Card, Divider, Group, Stack, Text, Title } from "@mantine/core";
 import { Image } from "@mantine/core";
 import { AxiosError } from "axios";
 import { formatCurrency } from "../../../../../../utilites/currency.ts";
+import { notifications } from "@mantine/notifications";
 
 declare global {
     interface Window {
@@ -93,7 +94,11 @@ export const RazorpayPaymentMethod = ({enabled, setSubmitHandler}: RazorpayPayme
                         });
 
                     } catch (error) {
-                        console.error('Payment verification error:', error);
+                        notifications.show({
+                            title: t`Payment Verification Failed`,
+                            message: t`Payment verification failed. Please contact support with order ID ${order.short_id}.`,
+                            color: 'red',
+                        });
                     } finally {
                         setIsLoading(false);
                     }
@@ -101,14 +106,14 @@ export const RazorpayPaymentMethod = ({enabled, setSubmitHandler}: RazorpayPayme
                 prefill: {
                     name: `${order.first_name} ${order.last_name}`,
                     email: order.email,
-                    contact: '', // Optional: Could collect phone number in earlier step
+                    contact: '',
                 },
                 notes: {
                     order_short_id: order.short_id,
                     event_id: eventId,
                 },
                 theme: {
-                    color: '#10B981', // Use theme accent color
+                    color: '#10B981',
                 },
                 modal: {
                     ondismiss: () => {
@@ -120,9 +125,12 @@ export const RazorpayPaymentMethod = ({enabled, setSubmitHandler}: RazorpayPayme
             const razorpayInstance = new window.Razorpay(options);
             razorpayInstance.open();
         } catch (error) {
-            console.error('Razorpay payment error:', error);
+            notifications.show({
+                title: t`Payment Error`,
+                message: t`Unable to start Razorpay payment. Please try again or use another method.`,
+                color: 'red',
+            });
             setIsLoading(false);
-            // Handle error
         }
     };
 
