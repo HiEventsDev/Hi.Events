@@ -26,7 +26,6 @@ class RazorpayPaymentVerificationService
 
         if (!hash_equals($expectedSignature, $verifyRazorpayPaymentData->razorpay_signature)) {
             $this->logger->error('Razorpay signature verification failed', [
-                'expected' => $expectedSignature,
                 'received' => $verifyRazorpayPaymentData->razorpay_signature,
                 'order_id' => $verifyRazorpayPaymentData->razorpay_order_id,
                 'payment_id' => $verifyRazorpayPaymentData->razorpay_payment_id,
