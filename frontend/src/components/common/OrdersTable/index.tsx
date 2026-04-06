@@ -193,6 +193,26 @@ export const OrdersTable = ({orders, event}: OrdersTableProps) => {
         );
     }
 
+    const paymentProviderConfig: Record<string, { icon: React.ReactNode, label: string }> = {
+        'STRIPE': {
+            icon: <IconCreditCard size={16}/>,
+            label: t`Stripe`
+        },
+        'RAZORPAY': {
+            icon: <IconCreditCard size={16}/>,
+            label: t`Razorpay`
+        },
+        'OFFLINE': {
+            icon: <IconCash size={16}/>,
+            label: t`Offline`
+        },
+    };
+
+    const fallbackPaymentProviderConfig = {
+        icon: <IconHelp size={16}/>,
+        label: t`Other`
+    };
+
     const columns = useMemo<TanStackTableColumn<Order>[]>(
         () => [
             {
@@ -369,24 +389,11 @@ export const OrdersTable = ({orders, event}: OrdersTableProps) => {
                 enableHiding: true,
                 cell: (info: CellContext<Order, unknown>) => {
                     const order = info.row.original;
+                    const config = paymentProviderConfig[order.payment_provider] || fallbackPaymentProviderConfig;
                     return (
                         <div className={classes.paymentStatus}>
-                            {order.payment_provider === 'STRIPE' ? (
-                                <>
-                                    <IconCreditCard size={16}/>
-                                    <Text>{t`Stripe`}</Text>
-                                </>
-                            ) : order.payment_provider === 'OFFLINE' ? (
-                                <>
-                                    <IconCash size={16}/>
-                                    <Text>{t`Offline`}</Text>
-                                </>
-                            ) : (
-                                <>
-                                    <IconHelp size={16}/>
-                                    <Text>{t`Other`}</Text>
-                                </>
-                            )}
+                            {config.icon}
+                            <Text>{config.label || order.payment_provider}</Text>
                         </div>
                     );
                 },
