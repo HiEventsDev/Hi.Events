@@ -24,7 +24,7 @@ class RazorpayPaymentVerificationService
             $this->config->get('services.razorpay.key_secret')
         );
 
-        if ($expectedSignature !== $verifyRazorpayPaymentData->razorpay_signature) {
+        if (!hash_equals($expectedSignature, $verifyRazorpayPaymentData->razorpay_signature)) {
             $this->logger->error('Razorpay signature verification failed', [
                 'expected' => $expectedSignature,
                 'received' => $verifyRazorpayPaymentData->razorpay_signature,
