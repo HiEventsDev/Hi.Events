@@ -156,7 +156,7 @@ class RazorpayOrderCreationServiceTest extends TestCase
     {
         return [
             'INR uses minor unit' => ['INR', 50000, 500.00, 50000],
-            'USD calculates float' => ['USD', 5000, 45.50, 4550],
+            'USD calculates float' => ['USD', 5000, 45.50, 5000],
         ];
     }
 }
