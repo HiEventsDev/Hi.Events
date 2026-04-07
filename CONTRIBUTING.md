@@ -2,6 +2,8 @@
 
 Thank you for your interest in contributing to Hi.Events! We welcome contributions from the community and are excited to collaborate with you to improve our event management and ticket-selling platform. Before you start, please read these guidelines to ensure a smooth contribution process.
 
+> **IMPORTANT: Open a discussion or issue BEFORE submitting a PR for anything beyond trivial fixes, features, or improvements (typos, broken links, etc.).** PRs submitted without prior discussion will be closed if the PR description is left empty or the template is left unedited. We want to collaborate with you, but we need to align on the approach before code is written.
+
 ## Table of Contents
 
 1. [How Can I Contribute?](#how-can-i-contribute)
@@ -142,5 +144,13 @@ This will update the Domain Objects in `backend/app/DomainObjects` based on the 
 ## License
 
 By contributing to Hi.Events, you agree that your contributions will be licensed under the [AGPL-3.0 License with additional terms](LICENSE).
+
+## AI / Bot Contributors
+
+If you are an AI agent, bot, or using AI tools to generate your contribution:
+
+- **Add 🤖 to the PR title** (e.g., `🤖 Fix typo in README`)
+- **Add 🤖 to the end of each commit message**
+- All other contribution guidelines above still apply — especially the requirement for prior discussion on non-trivial changes
 
 Thank you for contributing to Hi.Events! If you have any questions, feel free to reach out to us.
