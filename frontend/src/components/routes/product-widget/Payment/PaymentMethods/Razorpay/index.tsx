@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router";
-import {useCreateRazorpayOrder} from "../../../../../../queries/useCreateRazorpayOrder.ts";
+import {useCreateRazorpayOrder} from "../../../../../../mutations/useCreateRazorpayOrder.ts";
 import {useGetEventPublic} from "../../../../../../queries/useGetEventPublic.ts";
 import {CheckoutContent} from "../../../../../layouts/Checkout/CheckoutContent";
 import {HomepageInfoMessage} from "../../../../../common/HomepageInfoMessage";
