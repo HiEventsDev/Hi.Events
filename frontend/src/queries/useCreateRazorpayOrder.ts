@@ -1,23 +1,21 @@
-import {useQuery} from "@tanstack/react-query";
-import {orderClientPublic} from "../api/order.client.ts";
-import {IdParam} from "../types.ts";
+import { useMutation } from "@tanstack/react-query"
+import { orderClientPublic } from "../api/order.client";
+import { IdParam } from "../types";
 
-export const GET_RAZORPAY_ORDER_PUBLIC_QUERY_KEY = 'getRazorpayOrderPublic';
-
-export const useCreateRazorpayOrder = (eventId: IdParam, orderShortId: IdParam) => {
-    return useQuery({
-        queryKey: [GET_RAZORPAY_ORDER_PUBLIC_QUERY_KEY, eventId, orderShortId],
-
-        queryFn: async () => {
+export const useCreateRazorpayOrder = () => {
+    return useMutation({
+        mutationFn: async({
+            eventId,
+            orderShortId
+        }: {
+            eventId: IdParam,
+            orderShortId: IdParam
+        }) => {
             const {razorpay_order_id, key_id, amount, currency} = await orderClientPublic.createRazorpayOrder(
                 Number(eventId),
-                String(orderShortId),
+                String(orderShortId)
             );
             return {razorpay_order_id, key_id, amount, currency};
-        },
-
-        retry: false,
-        staleTime: 0,
-        gcTime: 0
+        }
     });
 }

@@ -33,13 +33,15 @@ export const RazorpayPaymentMethod = ({enabled, setSubmitHandler}: RazorpayPayme
     const navigate = useNavigate();
     const {eventId, orderShortId} = useParams();
     const {
+        mutateAsync: createRazorpayOrder,
         data: razorpayData,
-        isFetched: isRazorpayFetched,
-        error: razorpayOrderError
-    } = useCreateRazorpayOrder(eventId, orderShortId);
+        isPending: isCreatingOrder,
+        error: razorpayOrderError,
+    } = useCreateRazorpayOrder();
     const {data: event} = useGetEventPublic(eventId);
     const {data: order} = useGetOrderPublic(eventId, orderShortId, ['event']);
     const [isLoading, setIsLoading] = useState(false);
+    const isProcessing = isLoading || isCreatingOrder;
 
     const verifyMutation = useMutation({
         mutationFn: (payload: {
@@ -87,7 +89,7 @@ export const RazorpayPaymentMethod = ({enabled, setSubmitHandler}: RazorpayPayme
                 order_id: razorpayData.razorpay_order_id,
                 handler: async (response: any) => {
                     try {
-                        await verifyMutation.mutate({
+                        await verifyMutation.mutateAsync({
                             razorpay_payment_id: response.razorpay_payment_id,
                             razorpay_order_id: response.razorpay_order_id,
                             razorpay_signature: response.razorpay_signature,
@@ -133,6 +135,15 @@ export const RazorpayPaymentMethod = ({enabled, setSubmitHandler}: RazorpayPayme
             setIsLoading(false);
         }
     };
+    
+    useEffect(() => {
+        if (!eventId || !orderShortId) return;
+
+        createRazorpayOrder({
+            eventId,
+            orderShortId,
+        });
+    }, [eventId, orderShortId]);
 
     useEffect(() => {
         if (setSubmitHandler) {
@@ -170,7 +181,7 @@ export const RazorpayPaymentMethod = ({enabled, setSubmitHandler}: RazorpayPayme
         );
     }
 
-    if (!isRazorpayFetched) {
+    if (!isProcessing && !razorpayData) {
         return <LoadingMask/>;
     }
 
