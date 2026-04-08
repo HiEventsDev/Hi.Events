@@ -28,6 +28,7 @@ class GetProductsHandler
         $filteredProducts = $this->productFilterService->filter(
             productsCategories: $productPaginator->getCollection(),
             hideSoldOutProducts: false,
+            hideHiddenCategories: false,
         );
 
         $productPaginator->setCollection($filteredProducts);
