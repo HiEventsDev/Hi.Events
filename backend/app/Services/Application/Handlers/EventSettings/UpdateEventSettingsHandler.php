@@ -88,6 +88,7 @@ class UpdateEventSettingsHandler
 
                     // Marketing settings
                     'show_marketing_opt_in' => $settings->show_marketing_opt_in,
+                    'show_data_collection_disclaimer' => $settings->show_data_collection_disclaimer,
 
                     // Platform fee settings
                     'pass_platform_fee_to_buyer' => $settings->pass_platform_fee_to_buyer,

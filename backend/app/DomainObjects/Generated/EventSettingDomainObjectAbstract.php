@@ -67,6 +67,7 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     final public const WAITLIST_ENABLED = 'waitlist_enabled';
     final public const WAITLIST_AUTO_PROCESS = 'waitlist_auto_process';
     final public const WAITLIST_OFFER_TIMEOUT_MINUTES = 'waitlist_offer_timeout_minutes';
+    final public const SHOW_DATA_COLLECTION_DISCLAIMER = 'show_data_collection_disclaimer';
 
     protected int $id;
     protected int $event_id;
@@ -125,6 +126,7 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     protected bool $waitlist_enabled = false;
     protected bool $waitlist_auto_process = false;
     protected ?int $waitlist_offer_timeout_minutes = null;
+    protected bool $show_data_collection_disclaimer = true;
 
     public function toArray(): array
     {
@@ -186,6 +188,7 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
                     'waitlist_enabled' => $this->waitlist_enabled ?? null,
                     'waitlist_auto_process' => $this->waitlist_auto_process ?? null,
                     'waitlist_offer_timeout_minutes' => $this->waitlist_offer_timeout_minutes ?? null,
+                    'show_data_collection_disclaimer' => $this->show_data_collection_disclaimer ?? null,
                 ];
     }
 
@@ -815,5 +818,16 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     public function getWaitlistOfferTimeoutMinutes(): ?int
     {
         return $this->waitlist_offer_timeout_minutes;
+    }
+
+    public function setShowDataCollectionDisclaimer(bool $show_data_collection_disclaimer): self
+    {
+        $this->show_data_collection_disclaimer = $show_data_collection_disclaimer;
+        return $this;
+    }
+
+    public function getShowDataCollectionDisclaimer(): bool
+    {
+        return $this->show_data_collection_disclaimer;
     }
 }

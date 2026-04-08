@@ -21,7 +21,8 @@ export const clientBuildEnv: { [K in ConfigKeys]: string } = {
     'VITE_FRONTEND_URL': import.meta.env.VITE_FRONTEND_URL,
     'VITE_DEFAULT_IMAGE_URL': import.meta.env.VITE_DEFAULT_IMAGE_URL,
     'VITE_API_URL_SERVER': import.meta.env.VITE_API_URL_SERVER,
-    'VITE_API_URL_CLIENT': import.meta.env.VITE_API_URL_CLIENT
+    'VITE_API_URL_CLIENT': import.meta.env.VITE_API_URL_CLIENT,
+    'VITE_DATA_COLLECTION_DISCLAIMER': import.meta.env.VITE_DATA_COLLECTION_DISCLAIMER
 }
 
 export const getConfig = (key: ConfigKeys, fallback?: string): string | undefined => {

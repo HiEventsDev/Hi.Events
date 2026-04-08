@@ -126,6 +126,7 @@ class PartialUpdateEventSettingsHandler
 
                 // Marketing settings
                 'show_marketing_opt_in' => $eventSettingsDTO->settings['show_marketing_opt_in'] ?? $existingSettings->getShowMarketingOptIn(),
+                'show_data_collection_disclaimer' => $eventSettingsDTO->settings['show_data_collection_disclaimer'] ?? $existingSettings->getShowDataCollectionDisclaimer(),
 
                 // Platform fee settings
                 'pass_platform_fee_to_buyer' => $eventSettingsDTO->settings['pass_platform_fee_to_buyer'] ?? $existingSettings->getPassPlatformFeeToBuyer(),

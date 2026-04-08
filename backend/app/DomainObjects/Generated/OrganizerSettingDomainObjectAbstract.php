@@ -29,6 +29,7 @@ abstract class OrganizerSettingDomainObjectAbstract extends \HiEvents\DomainObje
     final public const DEFAULT_SHOW_MARKETING_OPT_IN = 'default_show_marketing_opt_in';
     final public const DEFAULT_PASS_PLATFORM_FEE_TO_BUYER = 'default_pass_platform_fee_to_buyer';
     final public const DEFAULT_ALLOW_ATTENDEE_SELF_EDIT = 'default_allow_attendee_self_edit';
+    final public const DEFAULT_SHOW_DATA_COLLECTION_DISCLAIMER = 'default_show_data_collection_disclaimer';
 
     protected int $id;
     protected int $organizer_id;
@@ -49,6 +50,7 @@ abstract class OrganizerSettingDomainObjectAbstract extends \HiEvents\DomainObje
     protected bool $default_show_marketing_opt_in = true;
     protected bool $default_pass_platform_fee_to_buyer = false;
     protected bool $default_allow_attendee_self_edit = true;
+    protected bool $default_show_data_collection_disclaimer = true;
 
     public function toArray(): array
     {
@@ -72,6 +74,7 @@ abstract class OrganizerSettingDomainObjectAbstract extends \HiEvents\DomainObje
                     'default_show_marketing_opt_in' => $this->default_show_marketing_opt_in ?? null,
                     'default_pass_platform_fee_to_buyer' => $this->default_pass_platform_fee_to_buyer ?? null,
                     'default_allow_attendee_self_edit' => $this->default_allow_attendee_self_edit ?? null,
+                    'default_show_data_collection_disclaimer' => $this->default_show_data_collection_disclaimer ?? null,
                 ];
     }
 
@@ -283,5 +286,16 @@ abstract class OrganizerSettingDomainObjectAbstract extends \HiEvents\DomainObje
     public function getDefaultAllowAttendeeSelfEdit(): bool
     {
         return $this->default_allow_attendee_self_edit;
+    }
+
+    public function setDefaultShowDataCollectionDisclaimer(bool $default_show_data_collection_disclaimer): self
+    {
+        $this->default_show_data_collection_disclaimer = $default_show_data_collection_disclaimer;
+        return $this;
+    }
+
+    public function getDefaultShowDataCollectionDisclaimer(): bool
+    {
+        return $this->default_show_data_collection_disclaimer;
     }
 }
