@@ -1,0 +1,43 @@
+{
+    # We load the Octane worker inside the global block
+    frankenphp {
+        worker /app/backend/public/frankenphp-worker.php
+    }
+}
+
+:8000 {
+    log
+
+    encode zstd br gzip
+
+    # Set root to backend public directory by default
+    root * /app/backend/public
+
+    # Serve the backend API for API routes or backend-specific requests
+    @api {
+        path /api/* /oauth/* /sanctum/* /broadcasting/*
+    }
+    php_server @api {
+        index frankenphp-worker.php
+        try_files {path} /frankenphp-worker.php
+        resolve_root_symlink
+    }
+
+    # Serve uploaded storage files
+    @storage {
+        path /storage/*
+    }
+    route @storage {
+        file_server
+    }
+
+    # Serve the frontend static assets for all other routes
+    @frontend {
+        not path /api/* /storage/* /oauth/* /sanctum/* /broadcasting/*
+    }
+    route @frontend {
+        root * /app/frontend/dist/client
+        try_files {path} /index.html
+        file_server
+    }
+}

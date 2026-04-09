@@ -5,12 +5,13 @@ services:
             dockerfile: Dockerfile.dev
         container_name: backend
         ports:
-            - "1234:80"
+            - "80:8000"
+            - "443:443"
         volumes:
-            - ./../../backend:/var/www/html
-            - ./../../backend/storage:/var/www/html/storage
-            - ./../../backend/bootstrap/cache:/var/www/html/bootstrap/cache
-            - ./../../VERSION:/var/www/html/VERSION:ro
+            - ./../../backend:/app
+            - ./../../backend/storage:/app/storage
+            - ./../../backend/bootstrap/cache:/app/bootstrap/cache
+            - ./../../VERSION:/app/VERSION:ro
         environment:
               APP_ENV: '${APP_ENV:-local}'
               APP_KEY: '${APP_KEY}'
@@ -37,7 +38,7 @@ services:
 
         command: yarn dev:csr
         environment:
-            VITE_API_URL_CLIENT: 'http://localhost:${API_PORT:-1234}'
+            VITE_API_URL_CLIENT: 'http://localhost:${API_PORT:-80}'
         networks:
             - app
     frontend:
@@ -60,21 +61,6 @@ services:
             VITE_STRIPE_PUBLISHABLE_KEY: '${STRIPE_PUBLIC_KEY}'
             VITE_FRONTEND_URL: '${FRONTEND_URL}'
             VITE_APP_NAME: '${APP_NAME}'
-        networks:
-            - app
-
-    nginx:
-        image: nginx:alpine
-        container_name: nginx
-        ports:
-            - "8080:80"
-            - "8443:443"
-        volumes:
-            - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-            - ./certs:/etc/nginx/certs:ro
-        depends_on:
-            - backend
-            - frontend
         networks:
             - app
 
@@ -171,7 +157,6 @@ services:
             /usr/bin/mc anonymous set public myminio/hievents-public;
                         
             echo 'Buckets created and policies set.';
-            exit 0;
             "
         networks:
             - app

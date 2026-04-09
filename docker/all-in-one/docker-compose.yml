@@ -5,15 +5,18 @@ services:
       dockerfile: Dockerfile.all-in-one
     restart: unless-stopped
     ports:
-      - "8123:80"
+      - "8000:8000"
     environment:
+      - APP_ENV=${APP_ENV:-production}
+      - APP_DEBUG=${APP_DEBUG:-false}
+      - OCTANE_SERVER=frankenphp
       - VITE_FRONTEND_URL=${VITE_FRONTEND_URL}
       - VITE_API_URL_CLIENT=${VITE_API_URL_CLIENT}
       - VITE_API_URL_SERVER=${VITE_API_URL_SERVER}
       - VITE_STRIPE_PUBLISHABLE_KEY=${VITE_STRIPE_PUBLISHABLE_KEY}
       - VITE_APP_NAME=${VITE_APP_NAME}
       - LOG_CHANNEL=${LOG_CHANNEL}
-      - QUEUE_CONNECTION=${QUEUE_CONNECTION}
+      - QUEUE_CONNECTION=${QUEUE_CONNECTION:-redis}
       - APP_KEY=${APP_KEY}
       - APP_CDN_URL=${APP_CDN_URL}
       - APP_FRONTEND_URL=${APP_FRONTEND_URL}
@@ -43,7 +46,6 @@ services:
       - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
       - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
       - WEBHOOK_QUEUE_NAME=webhook-queue
-
     depends_on:
       postgres:
         condition: service_healthy
