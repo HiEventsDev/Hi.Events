@@ -1,57 +1,75 @@
+# --- Stage 1: Build the Frontend ---
 FROM node:22-alpine AS node-frontend
-
 WORKDIR /app/frontend
-
 RUN apk add --no-cache yarn
 
 # Increase network timeout for slow ARM emulation builds
 RUN yarn config set network-timeout 600000
 
-COPY ./frontend/package.json ./frontend/yarn.lock ./
+# Build-time args for Vite (baked into the JS bundle)
+ARG VITE_FRONTEND_URL="http://localhost:5678"
+ARG VITE_API_URL_CLIENT="http://localhost:8080/api"
+ARG VITE_API_URL_SERVER="http://localhost:8000/api"
+ARG VITE_STRIPE_PUBLISHABLE_KEY=""
+ARG VITE_APP_NAME="Hi.Events"
 
+ENV VITE_FRONTEND_URL=$VITE_FRONTEND_URL
+ENV VITE_API_URL_CLIENT=$VITE_API_URL_CLIENT
+ENV VITE_API_URL_SERVER=$VITE_API_URL_SERVER
+ENV VITE_STRIPE_PUBLISHABLE_KEY=$VITE_STRIPE_PUBLISHABLE_KEY
+ENV VITE_APP_NAME=$VITE_APP_NAME
+
+COPY ./frontend/package.json ./frontend/yarn.lock ./
 COPY ./frontend .
 COPY ./VERSION /app/VERSION
-
 RUN yarn install --network-timeout 600000 --frozen-lockfile && yarn build
 
-# Use stable multi-arch serversideup/php image
-FROM serversideup/php:8.3-fpm-alpine
+# --- Stage 2: Build the Backend with FrankenPHP ---
+FROM dunglas/frankenphp:php8.3-alpine
 
-ENV PHP_OPCACHE_ENABLE=1
-
-# Switch to root for installing extensions and packages
-USER root
-
-RUN install-php-extensions intl
-
-RUN apk add --no-cache nodejs yarn nginx supervisor dos2unix
-
-COPY --from=node-frontend /app/frontend /app/frontend
-
-COPY ./backend /app/backend
-COPY ./VERSION /app/backend/VERSION
-RUN mkdir -p /app/backend/bootstrap/cache \
-    && mkdir -p /app/backend/storage \
-    && chown -R www-data:www-data /app/backend \
-    && find /app/backend -type d -exec chmod 755 {} \; \
-    && find /app/backend -type f -exec chmod 644 {} \; \
-    && chmod -R 755 /app/backend/storage /app/backend/bootstrap/cache \
-    && composer install --working-dir=/app/backend \
-        --ignore-platform-reqs \
-        --no-interaction \
-        --no-dev \
-        --optimize-autoloader \
-        --prefer-dist \
-    && chmod -R 755 /app/backend/vendor/ezyang/htmlpurifier/library/HTMLPurifier/DefinitionCache/Serializer
-
-COPY ./docker/all-in-one/nginx/nginx.conf /etc/nginx/nginx.conf
-COPY ./docker/all-in-one/supervisor/supervisord.conf /etc/supervisord.conf
-
-COPY ./docker/all-in-one/scripts/startup.sh /startup.sh
-RUN dos2unix /startup.sh && chmod +x /startup.sh
-
-EXPOSE 80
+ENV SERVER_NAME=":8000"
+ENV LARAVEL_OCTANE=1
+ENV APP_ENV="production"
 
 WORKDIR /app
+
+# Install PHP extensions
+RUN set -ex \
+    && apk add --no-cache php83-pdo_pgsql php83-pgsql php83-redis php83-pcntl php83-bcmath php83-zip php83-intl php83-opcache curl supervisor \
+    && install-php-extensions gd redis pdo_pgsql sodium curl intl mbstring xml zip bcmath pcntl imagick opcache
+
+# Copy Backend
+COPY ./backend /app/backend
+COPY ./VERSION /app/backend/VERSION
+
+# Setup Directories and Permissions
+RUN chmod -R 775 /app/backend/storage \
+    && mkdir -p /app/backend/bootstrap/cache \
+    && chmod -R 775 /app/backend/bootstrap/cache \
+    && chown -R root:root /app/backend/storage /app/backend/bootstrap/cache
+
+# Install Composer Dependencies
+COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer
+RUN cd /app/backend \
+    && composer install --no-interaction --no-dev --optimize-autoloader --prefer-dist
+
+RUN mkdir -p /app/backend/vendor/ezyang/htmlpurifier/library/HTMLPurifier/DefinitionCache/Serializer \
+    && chmod -R 775 /app/backend/vendor/ezyang/htmlpurifier/library/HTMLPurifier/DefinitionCache/Serializer \
+    && chown -R root:root /app/backend/vendor/ezyang/htmlpurifier/library/HTMLPurifier/DefinitionCache/Serializer
+
+# --- Stage 3: Combine Frontend, Supervisor, and Caddyfile ---
+COPY --from=node-frontend /app/frontend/dist /app/frontend/dist
+
+# Install Octane and configure FrankenPHP worker
+RUN cd /app/backend && php artisan octane:install --server=frankenphp
+
+# Setup Supervisor and Startup Scripts
+COPY ./docker/all-in-one/supervisord.conf /etc/supervisord.conf
+COPY ./docker/all-in-one/Caddyfile /etc/caddy/Caddyfile
+COPY ./docker/all-in-one/startup.sh /startup.sh
+
+RUN sed -i 's/\r$//' /startup.sh && chmod +x /startup.sh
+
+EXPOSE 8000
 
 CMD ["/startup.sh"]

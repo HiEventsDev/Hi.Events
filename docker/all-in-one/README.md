@@ -61,7 +61,7 @@ docker compose up -d
 
 ### Step 6: Create an Account
 
-Visit [http://localhost:8123/auth/register](http://localhost:8123/auth/register) to create an account.
+Visit [http://localhost:8000/auth/register](http://localhost:8000/auth/register) to create an account.
 
 ---
 

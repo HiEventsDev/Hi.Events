@@ -1,19 +1,19 @@
-FROM serversideup/php:8.4-fpm-nginx-alpine
+FROM dunglas/frankenphp:php8.3-alpine
 
-ENV PHP_OPCACHE_ENABLE=1
-ENV NGINX_WEBROOT=/var/www/html/public
+ENV SERVER_NAME=":8000"
+ENV LARAVEL_OCTANE=1
 
-WORKDIR /var/www/html
+WORKDIR /app
+COPY . /app
 
-RUN mkdir -p /var/www/html/storage /var/www/html/bootstrap/cache \
-    && chown -R www-data:www-data /var/www/html
+# Combine layers and use apk directly where possible, suppressing output and avoiding the huge image layer build failures.
+RUN set -ex \
+    && apk add --no-cache php83-pdo_pgsql php83-pgsql php83-redis php83-pcntl php83-bcmath php83-zip php83-intl php83-opcache curl supervisor \
+    && install-php-extensions gd redis pdo_pgsql sodium curl intl mbstring xml zip bcmath pcntl imagick opcache \
+    && chmod -R 775 storage \
+    && mkdir -p bootstrap/cache \
+    && chmod -R 775 bootstrap/cache \
+    && chown -R root:root storage bootstrap/cache
 
-COPY --chown=www-data:www-data . /var/www/html
-
-# Switch to root user to install PHP extensions
-USER root
-RUN install-php-extensions intl imagick
-USER www-data
-
-RUN chmod -R 755 /var/www/html/storage \
-    && chmod -R 775 /var/www/html/bootstrap/cache
+EXPOSE 8000
+CMD ["php", "artisan", "octane:start", "--server=frankenphp", "--host=0.0.0.0", "--port=8000", "--watch"]

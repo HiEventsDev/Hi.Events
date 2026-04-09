@@ -1,34 +1,25 @@
-FROM serversideup/php:8.4-fpm-nginx-alpine
+FROM dunglas/frankenphp:php8.3-alpine
 
-ENV PHP_OPCACHE_ENABLE=1
+ENV SERVER_NAME=":8000"
+ENV LARAVEL_OCTANE=1
 
-USER root
+WORKDIR /app
+COPY . /app
 
-# Set `www-data` as the user to start FPM
-RUN echo "" >> /usr/local/etc/php-fpm.d/docker-php-serversideup-pool.conf && \
-    echo "user = www-data" >> /usr/local/etc/php-fpm.d/docker-php-serversideup-pool.conf && \
-    echo "group = www-data" >> /usr/local/etc/php-fpm.d/docker-php-serversideup-pool.conf
-
-RUN install-php-extensions intl imagick
-
-COPY --chown=www-data:www-data . .
-
-RUN chmod -R 755 storage  \
+# Combine layers and use apk directly where possible, suppressing output and avoiding the huge image layer build failures.
+RUN set -ex \
+    && apk add --no-cache php83-pdo_pgsql php83-pgsql php83-redis php83-pcntl php83-bcmath php83-zip php83-intl php83-opcache curl supervisor \
+    && install-php-extensions gd redis pdo_pgsql sodium curl intl mbstring xml zip bcmath pcntl imagick opcache \
+    && chmod -R 775 storage \
     && mkdir -p bootstrap/cache \
     && chmod -R 775 bootstrap/cache \
-    && mkdir -p /var/lib/nginx/tmp \
-    && chown -R www-data:www-data /var/lib/nginx \
-    && chmod -R 755 /var/lib/nginx
+    && chown -R root:root storage bootstrap/cache
 
-RUN composer install \
-    --ignore-platform-reqs \
-    --no-interaction \
-    --no-dev \
-    --optimize-autoloader \
-    --prefer-dist
+COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer
+RUN composer install --no-interaction --no-dev --optimize-autoloader --prefer-dist \
+    && mkdir -p /app/vendor/ezyang/htmlpurifier/library/HTMLPurifier/DefinitionCache/Serializer \
+    && chmod -R 775 /app/vendor/ezyang/htmlpurifier/library/HTMLPurifier/DefinitionCache/Serializer \
+    && chown -R root:root /app/vendor/ezyang/htmlpurifier/library/HTMLPurifier/DefinitionCache/Serializer
 
-RUN mkdir -p /var/www/html/vendor/ezyang/htmlpurifier/library/HTMLPurifier/DefinitionCache/Serializer \
-    && chmod -R 775 /var/www/html/vendor/ezyang/htmlpurifier/library/HTMLPurifier/DefinitionCache/Serializer \
-    && chown -R www-data:www-data /var/www/html/vendor/ezyang/htmlpurifier/library/HTMLPurifier/DefinitionCache/Serializer
-
-EXPOSE 8080
+EXPOSE 8000
+CMD ["php", "artisan", "octane:start", "--server=frankenphp", "--host=0.0.0.0", "--port=8000"]
