@@ -93,6 +93,8 @@ cd docker/development
 - **DON'T** use `RefreshDatabase` - use `DatabaseTransactions` instead
 - Unit tests extend Laravel's TestCase, not PHPUnit's TestCase
 - Use Mockery for mocking
+- Tests run against a dedicated `hievents_test` database, configured via `backend/.env.testing` and enforced by `phpunit.xml`. The local docker-compose creates this database automatically via `docker/development/pgsql-init/`. If your existing pgsql volume predates this script, create the DB once with: `docker compose -f docker-compose.dev.yml exec pgsql psql -U username -d backend -c 'CREATE DATABASE hievents_test OWNER username;'`
+- Database name **must end in `_test`**. Enforced globally by a `final` guard in `tests/TestCase.php::guardAgainstNonTestDatabase()` which runs on every test that boots Laravel — no per-test opt-in needed and no way to bypass.
 
 ### Frontend
 
