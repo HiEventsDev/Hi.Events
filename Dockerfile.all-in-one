@@ -6,18 +6,20 @@ RUN apk add --no-cache yarn
 # Increase network timeout for slow ARM emulation builds
 RUN yarn config set network-timeout 600000
 
-# Build-time args for Vite (baked into the JS bundle)
+# Build-time args for Vite (baked into the JS bundle — not runtime secrets)
+# VITE_STRIPE_PUBLISHABLE_KEY is the client-side Stripe key; it is intentionally public
 ARG VITE_FRONTEND_URL="http://localhost:5678"
 ARG VITE_API_URL_CLIENT="http://localhost:8080/api"
 ARG VITE_API_URL_SERVER="http://localhost:8000/api"
 ARG VITE_STRIPE_PUBLISHABLE_KEY=""
 ARG VITE_APP_NAME="Hi.Events"
 
-ENV VITE_FRONTEND_URL=$VITE_FRONTEND_URL
-ENV VITE_API_URL_CLIENT=$VITE_API_URL_CLIENT
-ENV VITE_API_URL_SERVER=$VITE_API_URL_SERVER
-ENV VITE_STRIPE_PUBLISHABLE_KEY=$VITE_STRIPE_PUBLISHABLE_KEY
-ENV VITE_APP_NAME=$VITE_APP_NAME
+# hadolint ignore=DL3044
+ENV VITE_FRONTEND_URL=$VITE_FRONTEND_URL \
+    VITE_API_URL_CLIENT=$VITE_API_URL_CLIENT \
+    VITE_API_URL_SERVER=$VITE_API_URL_SERVER \
+    VITE_STRIPE_PUBLISHABLE_KEY=$VITE_STRIPE_PUBLISHABLE_KEY \
+    VITE_APP_NAME=$VITE_APP_NAME
 
 COPY ./frontend/package.json ./frontend/yarn.lock ./
 COPY ./frontend .
@@ -60,8 +62,8 @@ RUN mkdir -p /app/backend/vendor/ezyang/htmlpurifier/library/HTMLPurifier/Defini
 # --- Stage 3: Combine Frontend, Supervisor, and Caddyfile ---
 COPY --from=node-frontend /app/frontend/dist /app/frontend/dist
 
-# Install Octane and configure FrankenPHP worker
-RUN cd /app/backend && php artisan octane:install --server=frankenphp
+# Publish the FrankenPHP worker file (APP_KEY is only needed to bootstrap the app during install)
+RUN cd /app/backend && APP_KEY="base64:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=" php artisan octane:install --server=frankenphp --no-interaction
 
 # Setup Supervisor and Startup Scripts
 COPY ./docker/all-in-one/supervisord.conf /etc/supervisord.conf
