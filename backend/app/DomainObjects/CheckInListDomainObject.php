@@ -134,4 +134,9 @@ class CheckInListDomainObject extends Generated\CheckInListDomainObjectAbstract 
 
         return $this;
     }
+
+    public function isPasswordProtected(): bool
+    {
+        return $this->getPassword() !== null && $this->getPassword() !== '';
+    }
 }

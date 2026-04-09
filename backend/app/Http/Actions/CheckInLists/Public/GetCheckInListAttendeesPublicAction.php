@@ -24,7 +24,8 @@ class GetCheckInListAttendeesPublicAction extends BaseAction
         try {
             $attendees = $this->getCheckInListAttendeesPublicHandler->handle(
                 shortId: $checkInListShortId,
-                queryParams: QueryParamsDTO::fromArray($request->query->all())
+                queryParams: QueryParamsDTO::fromArray($request->query->all()),
+                password: $request->header('X-Check-In-List-Password')
             );
         } catch (CannotCheckInException $e) {
             return $this->errorResponse(
