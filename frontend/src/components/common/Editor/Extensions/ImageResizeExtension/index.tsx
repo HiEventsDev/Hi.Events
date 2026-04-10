@@ -5,7 +5,7 @@ import { NodeViewProps } from '@tiptap/react';
  * Adapted from https://github.com/bae-sh/tiptap-extension-resize-image/blob/main/lib/imageResize.ts
  */
 export const ImageResize = Image.extend({
-    name: 'imageResize',
+    name: 'image',
     addAttributes() {
         return {
             ...this.parent?.(),
