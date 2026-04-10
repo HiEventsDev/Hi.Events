@@ -4,6 +4,7 @@ namespace HiEvents\Services\Domain\Mail;
 
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\InvoiceDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
@@ -42,6 +43,7 @@ class SendOrderDetailsService
         $event = $this->eventRepository
             ->loadRelation(new Relationship(OrganizerDomainObject::class, name: 'organizer'))
             ->loadRelation(new Relationship(EventSettingDomainObject::class))
+            ->loadRelation(new Relationship(EventOccurrenceDomainObject::class))
             ->findById($order->getEventId());
 
         if ($order->isOrderCompleted() || $order->isOrderAwaitingOfflinePayment()) {

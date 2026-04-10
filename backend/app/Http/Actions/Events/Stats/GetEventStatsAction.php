@@ -8,6 +8,7 @@ use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Services\Application\Handlers\Event\DTO\EventStatsRequestDTO;
 use HiEvents\Services\Application\Handlers\Event\GetEventStatsHandler;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class GetEventStatsAction extends BaseAction
@@ -18,14 +19,15 @@ class GetEventStatsAction extends BaseAction
     {
     }
 
-    public function __invoke(int $eventId): JsonResponse
+    public function __invoke(int $eventId, Request $request): JsonResponse
     {
         $this->isActionAuthorized($eventId, EventDomainObject::class);
 
         $stats = $this->eventStatsHandler->handle(EventStatsRequestDTO::fromArray([
             'event_id' => $eventId,
             'start_date' => Carbon::now()->subDays(7)->format('Y-m-d H:i:s'),
-            'end_date' => Carbon::now()->format('Y-m-d H:i:s')
+            'end_date' => Carbon::now()->format('Y-m-d H:i:s'),
+            'occurrence_id' => $request->query('occurrence_id') ? (int)$request->query('occurrence_id') : null,
         ]));
 
         return $this->resourceResponse(JsonResource::class, $stats);

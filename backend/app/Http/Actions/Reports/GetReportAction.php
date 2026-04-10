@@ -38,6 +38,7 @@ class GetReportAction extends BaseAction
                 reportType: ReportTypes::from($reportType),
                 startDate: $request->validated('start_date'),
                 endDate: $request->validated('end_date'),
+                occurrenceId: $request->validated('occurrence_id') ? (int) $request->validated('occurrence_id') : null,
             ),
         );
 

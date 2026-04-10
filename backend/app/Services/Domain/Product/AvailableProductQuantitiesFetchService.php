@@ -9,6 +9,8 @@ use HiEvents\DomainObjects\Status\CapacityAssignmentStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\Repository\Interfaces\CapacityAssignmentRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesDTO;
 use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesResponseDTO;
 use Illuminate\Config\Repository as Config;
@@ -23,29 +25,44 @@ class AvailableProductQuantitiesFetchService
         private readonly Config                                $config,
         private readonly Cache                                 $cache,
         private readonly CapacityAssignmentRepositoryInterface $capacityAssignmentRepository,
+        private readonly EventRepositoryInterface              $eventRepository,
+        private readonly EventOccurrenceRepositoryInterface    $occurrenceRepository,
     )
     {
     }
 
-    public function getAvailableProductQuantities(int $eventId, bool $ignoreCache = false): AvailableProductQuantitiesResponseDTO
+    public function getAvailableProductQuantities(
+        int  $eventId,
+        bool $ignoreCache = false,
+        ?int $eventOccurrenceId = null,
+    ): AvailableProductQuantitiesResponseDTO
     {
-        if (!$ignoreCache && $this->config->get('app.homepage_product_quantities_cache_ttl')) {
+        if (!$ignoreCache && $eventOccurrenceId === null && $this->config->get('app.homepage_product_quantities_cache_ttl')) {
             $cachedData = $this->getDataFromCache($eventId);
             if ($cachedData) {
                 return $cachedData;
             }
         }
 
-        $capacities = $this->capacityAssignmentRepository
-            ->loadRelation(ProductDomainObject::class)
-            ->findWhere([
-                'event_id' => $eventId,
-                'applies_to' => CapacityAssignmentAppliesTo::PRODUCTS->name,
-                'status' => CapacityAssignmentStatus::ACTIVE->name,
-            ]);
+        $event = $this->eventRepository->findById($eventId);
+        $isRecurring = $event->isRecurring();
+
+        $capacities = collect();
+        $productCapacities = [];
+
+        if (!$isRecurring) {
+            $capacities = $this->capacityAssignmentRepository
+                ->loadRelation(ProductDomainObject::class)
+                ->findWhere([
+                    'event_id' => $eventId,
+                    'applies_to' => CapacityAssignmentAppliesTo::PRODUCTS->name,
+                    'status' => CapacityAssignmentStatus::ACTIVE->name,
+                ]);
+
+            $productCapacities = $this->calculateProductCapacities($capacities);
+        }
 
         $reservedProductQuantities = $this->fetchReservedProductQuantities($eventId);
-        $productCapacities = $this->calculateProductCapacities($capacities);
 
         $quantities = $reservedProductQuantities->map(function (AvailableProductQuantitiesDTO $dto) use ($productCapacities) {
             $productId = $dto->product_id;
@@ -57,16 +74,54 @@ class AvailableProductQuantitiesFetchService
             return $dto;
         });
 
+        if ($eventOccurrenceId !== null) {
+            $quantities = $this->applyOccurrenceCapacity($quantities, $eventOccurrenceId);
+        }
+
         $finalData = new AvailableProductQuantitiesResponseDTO(
             productQuantities: $quantities,
             capacities: $capacities
         );
 
-        if (!$ignoreCache && $this->config->get('app.homepage_product_quantities_cache_ttl')) {
+        if (!$ignoreCache && $eventOccurrenceId === null && $this->config->get('app.homepage_product_quantities_cache_ttl')) {
             $this->cache->put($this->getCacheKey($eventId), $finalData, $this->config->get('app.homepage_product_quantities_cache_ttl'));
         }
 
         return $finalData;
+    }
+
+    private function applyOccurrenceCapacity(Collection $quantities, int $occurrenceId): Collection
+    {
+        $occurrence = $this->occurrenceRepository->findById($occurrenceId);
+
+        if ($occurrence === null || $occurrence->getCapacity() === null) {
+            return $quantities;
+        }
+
+        $reservedForOccurrence = (int) $this->db->selectOne(<<<SQL
+            SELECT COALESCE(SUM(oi.quantity), 0) as reserved
+            FROM order_items oi
+            JOIN orders o ON o.id = oi.order_id
+            WHERE oi.event_occurrence_id = :occurrenceId
+            AND o.status = :reserved
+            AND o.reserved_until > NOW()
+            AND o.deleted_at IS NULL
+        SQL, [
+            'occurrenceId' => $occurrenceId,
+            'reserved' => OrderStatus::RESERVED->name,
+        ])->reserved;
+
+        $occurrenceAvailable = max(0, $occurrence->getCapacity() - $occurrence->getUsedCapacity() - $reservedForOccurrence);
+
+        return $quantities->map(function (AvailableProductQuantitiesDTO $dto) use ($occurrenceAvailable) {
+            if ($dto->quantity_available !== Constants::INFINITE) {
+                $dto->quantity_available = min($dto->quantity_available, $occurrenceAvailable);
+            } else {
+                $dto->quantity_available = $occurrenceAvailable;
+            }
+
+            return $dto;
+        });
     }
 
     private function fetchReservedProductQuantities(int $eventId): Collection

@@ -1,4 +1,4 @@
-import {CheckInList, CheckInListRequest, GenericModalProps, Product, ProductCategory} from "../../../types.ts";
+import {CheckInList, CheckInListRequest, EventType, GenericModalProps, Product, ProductCategory} from "../../../types.ts";
 import {Modal} from "../../common/Modal";
 import {t} from "@lingui/macro";
 import {CheckInListForm} from "../../forms/CheckInListForm";
@@ -13,7 +13,11 @@ import {IconPlus} from "@tabler/icons-react";
 import {CheckInListSuccessModal} from "../CheckInListSuccessModal";
 import {useState} from "react";
 
-export const CreateCheckInListModal = ({onClose}: GenericModalProps) => {
+interface CreateCheckInListModalProps extends GenericModalProps {
+    initialOccurrenceId?: number | null;
+}
+
+export const CreateCheckInListModal = ({onClose, initialOccurrenceId}: CreateCheckInListModalProps) => {
     const {eventId} = useParams();
     const errorHandler = useFormErrorResponseHandler();
     const {data: event} = useGetEvent(eventId);
@@ -25,6 +29,7 @@ export const CreateCheckInListModal = ({onClose}: GenericModalProps) => {
             expires_at: '',
             activates_at: '',
             product_ids: [],
+            event_occurrence_id: initialOccurrenceId ?? null,
         }
     });
     const createMutation = useCreateCheckInList();
@@ -80,7 +85,7 @@ export const CreateCheckInListModal = ({onClose}: GenericModalProps) => {
     }
 
     return (
-        <Modal opened onClose={onClose} heading={eventHasTickets ? t`Create Check-In List` : null}>
+        <Modal opened onClose={onClose} heading={null}>
             {!eventHasTickets && <NoProducts/>}
             {eventHasTickets && (
                 <form onSubmit={form.onSubmit(handleSubmit)}>
@@ -88,6 +93,10 @@ export const CreateCheckInListModal = ({onClose}: GenericModalProps) => {
                         <CheckInListForm
                             form={form}
                             productCategories={event.product_categories as ProductCategory[]}
+                            eventType={event.type as EventType}
+                            occurrences={event.occurrences}
+                            timezone={event.timezone}
+                            isNewForOccurrence={!!initialOccurrenceId}
                         />
                     )}
                     <Button

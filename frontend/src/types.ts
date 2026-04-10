@@ -286,6 +286,7 @@ export interface EventDuplicatePayload extends EventBase {
     duplicate_ticket_logo: boolean;
     duplicate_webhooks: boolean;
     duplicate_affiliates: boolean;
+    duplicate_occurrences?: boolean;
 }
 
 export enum EventStatus {
@@ -307,10 +308,134 @@ export enum EventLifecycleStatus {
     ENDED = 'ENDED'
 }
 
+export enum EventType {
+    SINGLE = 'SINGLE',
+    RECURRING = 'RECURRING',
+}
+
+export enum EventOccurrenceStatus {
+    ACTIVE = 'ACTIVE',
+    CANCELLED = 'CANCELLED',
+    SOLD_OUT = 'SOLD_OUT',
+}
+
+export interface RecurrenceRuleRange {
+    type: 'until' | 'count';
+    until?: string;
+    count?: number;
+}
+
+export interface RecurrenceRuleAdditionalDate {
+    date: string;
+    time: string;
+}
+
+export interface RecurrenceTimeSlot {
+    time: string;
+    label?: string;
+    duration_minutes?: number;
+}
+
+export interface RecurrenceRule {
+    frequency: 'daily' | 'weekly' | 'monthly' | 'yearly';
+    interval: number;
+    days_of_week?: string[];
+    times_of_day?: (string | RecurrenceTimeSlot)[];
+    duration_minutes?: number;
+    range: RecurrenceRuleRange;
+    default_capacity?: number | null;
+    excluded_dates?: string[];
+    additional_dates?: RecurrenceRuleAdditionalDate[];
+    monthly_pattern?: 'by_day_of_month' | 'by_day_of_week';
+    days_of_month?: number[];
+    day_of_week?: string;
+    week_position?: number;
+    month?: number;
+}
+
+export interface EventOccurrenceStatistics {
+    total_gross_sales?: number;
+    total_tax?: number;
+    total_fee?: number;
+    orders_created?: number;
+    total_refunded?: number;
+    attendees_registered?: number;
+    products_sold?: number;
+}
+
+export interface EventOccurrence {
+    id?: IdParam;
+    event_id?: IdParam;
+    short_id?: string;
+    start_date: string;
+    end_date?: string;
+    status?: EventOccurrenceStatus;
+    capacity?: number | null;
+    used_capacity?: number;
+    available_capacity?: number | null;
+    label?: string;
+    is_overridden?: boolean;
+    is_past?: boolean;
+    is_future?: boolean;
+    is_active?: boolean;
+    statistics?: EventOccurrenceStatistics;
+    created_at?: string;
+    updated_at?: string;
+}
+
+export interface ProductPriceOccurrenceOverride {
+    id?: IdParam;
+    event_occurrence_id?: IdParam;
+    product_price_id?: IdParam;
+    price: number;
+    created_at?: string;
+    updated_at?: string;
+}
+
+export interface ProductOccurrenceVisibility {
+    id: IdParam;
+    event_occurrence_id: IdParam;
+    product_id: IdParam;
+}
+
+export interface UpsertEventOccurrenceRequest {
+    start_date: string;
+    end_date?: string;
+    capacity?: number | null;
+    label?: string;
+    status?: string;
+}
+
+export interface GenerateOccurrencesRequest {
+    recurrence_rule: RecurrenceRule;
+}
+
+export interface BulkUpdateOccurrencesRequest {
+    action: 'update' | 'cancel' | 'delete';
+    start_time_shift?: number;
+    end_time_shift?: number;
+    capacity?: number | null;
+    clear_capacity?: boolean;
+    future_only?: boolean;
+    skip_overridden?: boolean;
+    refund_orders?: boolean;
+    occurrence_ids?: number[];
+    label?: string;
+    clear_label?: boolean;
+    duration_minutes?: number;
+}
+
+export interface UpsertPriceOverrideRequest {
+    product_price_id: IdParam;
+    price: number;
+}
+
 export interface Event extends EventBase {
     id?: IdParam;
     slug: string;
     status?: EventStatus;
+    type?: EventType;
+    recurrence_rule?: RecurrenceRule;
     description_preview?: string;
     lifecycle_status?: EventLifecycleStatus;
     settings?: EventSettings;
@@ -323,6 +448,8 @@ export interface Event extends EventBase {
     organizer_id?: IdParam;
     location_details?: VenueAddress;
     statistics?: EventStatistics;
+    occurrences?: EventOccurrence[];
+    next_occurrence_start_date?: string | null;
 }
 
 export interface EventStatistics {
@@ -577,6 +704,8 @@ export interface Attendee {
     checked_in_by?: number;
     question_answers?: QuestionAnswer[];
     locale?: SupportedLocales;
+    event_occurrence_id?: number;
+    event_occurrence?: EventOccurrence;
     check_in?: AttendeeCheckIn; // Use in contexts where a single check is expected, like dealing with a check-in list
     check_ins?: AttendeeCheckIn[];
 }
@@ -589,6 +718,7 @@ export interface AttendeeCheckIn {
     check_in_list_id: IdParam;
     product_id: IdParam;
     event_id: IdParam;
+    event_occurrence_id?: number;
     short_id: IdParam;
     order_id: IdParam;
     created_at: string;
@@ -671,6 +801,8 @@ export interface OrderItem {
     price_before_discount?: number;
     price: number;
     quantity: number;
+    event_occurrence_id?: number;
+    event_occurrence?: EventOccurrence;
 }
 
 export interface StripePaymentIntent {
@@ -715,14 +847,16 @@ export interface CheckInList {
     short_id: string;
     name: string;
     description?: string | null;
-    expires_at?: string;  // ISO 8601 string
-    activates_at?: string;  // ISO 8601 string
+    expires_at?: string;
+    activates_at?: string;
     total_attendees: number;
     checked_in_attendees: number;
     is_expired: boolean;
     is_active: boolean;
     event_id: number;
+    event_occurrence_id?: number | null;
     event?: Event;
+    event_occurrence?: EventOccurrence;
     products: {
         id: number;
         title: string;
@@ -730,7 +864,7 @@ export interface CheckInList {
 }
 
 export type CheckInListRequest =
-    Omit<CheckInList, 'event_id' | 'short_id' | 'id' | 'products' | 'total_attendees' | 'checked_in_attendees' | 'is_expired' | 'is_active'>
+    Omit<CheckInList, 'event_id' | 'short_id' | 'id' | 'products' | 'total_attendees' | 'checked_in_attendees' | 'is_expired' | 'is_active' | 'event_occurrence'>
     & {
     product_ids: IdParam[];
 };
@@ -917,6 +1051,7 @@ export enum ReportTypes {
     ProductSales = 'product_sales',
     DailySales = 'daily_sales_report',
     PromoCodes = 'promo_codes_report',
+    OccurrenceSummary = 'occurrence_summary',
 }
 
 export enum OrganizerReportTypes {
@@ -952,7 +1087,7 @@ export interface WebhookLog {
 }
 
 // Email Template Types
-export type EmailTemplateType = 'order_confirmation' | 'attendee_ticket';
+export type EmailTemplateType = 'order_confirmation' | 'attendee_ticket' | 'occurrence_cancellation';
 export type EmailTemplateEngine = 'liquid' | 'blade';
 
 export interface EmailTemplate {

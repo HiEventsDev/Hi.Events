@@ -12,6 +12,7 @@ abstract class CheckInListDomainObjectAbstract extends \HiEvents\DomainObjects\A
     final public const PLURAL_NAME = 'check_in_lists';
     final public const ID = 'id';
     final public const EVENT_ID = 'event_id';
+    final public const EVENT_OCCURRENCE_ID = 'event_occurrence_id';
     final public const SHORT_ID = 'short_id';
     final public const NAME = 'name';
     final public const DESCRIPTION = 'description';
@@ -23,6 +24,7 @@ abstract class CheckInListDomainObjectAbstract extends \HiEvents\DomainObjects\A
 
     protected int $id;
     protected int $event_id;
+    protected ?int $event_occurrence_id = null;
     protected string $short_id;
     protected string $name;
     protected ?string $description = null;
@@ -37,6 +39,7 @@ abstract class CheckInListDomainObjectAbstract extends \HiEvents\DomainObjects\A
         return [
                     'id' => $this->id ?? null,
                     'event_id' => $this->event_id ?? null,
+                    'event_occurrence_id' => $this->event_occurrence_id ?? null,
                     'short_id' => $this->short_id ?? null,
                     'name' => $this->name ?? null,
                     'description' => $this->description ?? null,
@@ -68,6 +71,17 @@ abstract class CheckInListDomainObjectAbstract extends \HiEvents\DomainObjects\A
     public function getEventId(): int
     {
         return $this->event_id;
+    }
+
+    public function setEventOccurrenceId(?int $event_occurrence_id): self
+    {
+        $this->event_occurrence_id = $event_occurrence_id;
+        return $this;
+    }
+
+    public function getEventOccurrenceId(): ?int
+    {
+        return $this->event_occurrence_id;
     }
 
     public function setShortId(string $short_id): self

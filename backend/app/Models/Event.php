@@ -81,6 +81,11 @@ class Event extends BaseModel
         return $this->hasMany(Affiliate::class);
     }
 
+    public function event_occurrences(): HasMany
+    {
+        return $this->hasMany(EventOccurrence::class);
+    }
+
     public static function boot(): void
     {
         parent::boot();
@@ -96,10 +101,9 @@ class Event extends BaseModel
     protected function getCastMap(): array
     {
         return [
-            EventDomainObjectAbstract::START_DATE => 'datetime',
-            EventDomainObjectAbstract::END_DATE => 'datetime',
             EventDomainObjectAbstract::ATTRIBUTES => 'array',
             EventDomainObjectAbstract::LOCATION_DETAILS => 'array',
+            EventDomainObjectAbstract::RECURRENCE_RULE => 'array',
         ];
     }
 }

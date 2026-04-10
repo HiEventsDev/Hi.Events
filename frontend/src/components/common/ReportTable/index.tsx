@@ -9,11 +9,13 @@ import {Table, TableHead} from "../Table";
 import '@mantine/dates/styles.css';
 import {useGetEventReport} from "../../../queries/useGetEventReport.ts";
 import {useParams} from "react-router";
-import {Event} from "../../../types.ts";
+import {Event, EventType, IdParam} from "../../../types.ts";
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import {NoResultsSplash} from "../NoResultsSplash";
+import {OccurrenceSelect} from "../OccurrenceSelect";
+import {useGetEventOccurrences} from "../../../queries/useGetEventOccurrences.ts";
 import classes from './ReportTable.module.scss';
 
 dayjs.extend(utc);
@@ -32,6 +34,7 @@ interface ReportProps<T> {
     event: Event
     isLoading?: boolean;
     showDateFilter?: boolean;
+    showOccurrenceFilter?: boolean;
     defaultStartDate?: Date;
     defaultEndDate?: Date;
     onDateRangeChange?: (range: [Date | null, Date | null]) => void;
@@ -57,6 +60,7 @@ const ReportTable = <T extends Record<string, any>>({
                                                         title,
                                                         columns,
                                                         showDateFilter = true,
+                                                        showOccurrenceFilter = true,
                                                         defaultStartDate = new Date(new Date().setMonth(new Date().getMonth() - 3)),
                                                         defaultEndDate = new Date(),
                                                         onDateRangeChange,
@@ -73,8 +77,14 @@ const ReportTable = <T extends Record<string, any>>({
     const [showDatePickerInput, setShowDatePickerInput] = useState(showCustomDatePicker);
     const [sortField, setSortField] = useState<keyof T | null>(null);
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | null>(null);
+    const [selectedOccurrenceId, setSelectedOccurrenceId] = useState<IdParam | undefined>(undefined);
     const {reportType, eventId} = useParams();
-    const reportQuery = useGetEventReport(eventId, reportType, dateRange[0], dateRange[1]);
+
+    const isRecurring = event?.type === EventType.RECURRING;
+    const occurrencesQuery = useGetEventOccurrences(eventId, {pageNumber: 1, perPage: 500});
+    const occurrences = occurrencesQuery?.data?.data || [];
+
+    const reportQuery = useGetEventReport(eventId, reportType, dateRange[0], dateRange[1], selectedOccurrenceId);
     const data = (reportQuery.data || []) as T[];
 
     const calculateDateRange = (period: string): [Date | null, Date | null] => {
@@ -255,6 +265,16 @@ const ReportTable = <T extends Record<string, any>>({
             <Group justify="space-between" mb="md">
                 <PageTitle>{title}</PageTitle>
                 <Group justify="flex-end" align="center" gap="sm">
+                    {isRecurring && showOccurrenceFilter && occurrences.length > 0 && event?.timezone && (
+                        <OccurrenceSelect
+                            occurrences={occurrences}
+                            timezone={event.timezone}
+                            value={selectedOccurrenceId ? String(selectedOccurrenceId) : null}
+                            onChange={(value) => setSelectedOccurrenceId(value ? Number(value) : undefined)}
+                            placeholder={t`All Occurrences`}
+                            clearable
+                        />
+                    )}
                     {showDateFilter && (
                         <Select
                             style={{minWidth: '200px'}}

@@ -1,5 +1,5 @@
 import {t} from "@lingui/macro";
-import {EventDuplicatePayload, GenericModalProps, IdParam} from "../../../types.ts";
+import {EventDuplicatePayload, EventType, GenericModalProps, IdParam} from "../../../types.ts";
 import {Button, Switch, TextInput, Group, ActionIcon, Tooltip, Grid} from "@mantine/core";
 import {Modal} from "../../common/Modal";
 import {useForm} from "@mantine/form";
@@ -20,19 +20,6 @@ interface DuplicateEventModalProps extends GenericModalProps {
 }
 
 export const DuplicateEventModal = ({onClose, eventId}: DuplicateEventModalProps) => {
-    const duplicateOptions = [
-        { key: 'duplicate_products', label: t`Products` },
-        { key: 'duplicate_questions', label: t`Questions` },
-        { key: 'duplicate_settings', label: t`Settings` },
-        { key: 'duplicate_promo_codes', label: t`Promo Codes` },
-        { key: 'duplicate_capacity_assignments', label: t`Capacity Assignments` },
-        { key: 'duplicate_check_in_lists', label: t`Check-In Lists` },
-        { key: 'duplicate_event_cover_image', label: t`Event Cover Image` },
-        { key: 'duplicate_ticket_logo', label: t`Ticket Logo` },
-        { key: 'duplicate_webhooks', label: t`Webhooks` },
-        { key: 'duplicate_affiliates', label: t`Affiliates` },
-    ];
-
     const form = useForm({
         initialValues: {
             title: '',
@@ -49,12 +36,28 @@ export const DuplicateEventModal = ({onClose, eventId}: DuplicateEventModalProps
             duplicate_ticket_logo: true,
             duplicate_webhooks: true,
             duplicate_affiliates: true,
+            duplicate_occurrences: true,
         }
     });
     const mutation = useDuplicateEvent();
     const eventQuery = useGetEvent(eventId);
+    const isRecurring = eventQuery?.data?.type === EventType.RECURRING;
     const nav = useNavigate();
     const errorHandler = useFormErrorResponseHandler();
+
+    const duplicateOptions: { key: string; label: string; description?: string }[] = [
+        { key: 'duplicate_products', label: t`Products` },
+        { key: 'duplicate_questions', label: t`Questions` },
+        { key: 'duplicate_settings', label: t`Settings` },
+        { key: 'duplicate_promo_codes', label: t`Promo Codes` },
+        { key: 'duplicate_capacity_assignments', label: t`Capacity Assignments` },
+        { key: 'duplicate_check_in_lists', label: t`Check-In Lists` },
+        { key: 'duplicate_event_cover_image', label: t`Event Cover Image` },
+        { key: 'duplicate_ticket_logo', label: t`Ticket Logo` },
+        { key: 'duplicate_webhooks', label: t`Webhooks` },
+        { key: 'duplicate_affiliates', label: t`Affiliates` },
+        ...(isRecurring ? [{ key: 'duplicate_occurrences', label: t`Occurrences (future only)`, description: t`Future dates will be copied with capacity reset to zero` }] : []),
+    ];
 
     const handleSelectAll = () => {
         duplicateOptions.forEach(option => {
@@ -118,17 +121,19 @@ export const DuplicateEventModal = ({onClose, eventId}: DuplicateEventModalProps
                         error={form.errors?.description as string}
                     />
 
-                    <InputGroup>
-                        <TextInput type={'datetime-local'}
-                                   {...form.getInputProps('start_date')}
-                                   label={t`Start Date`}
-                                   required
-                        />
-                        <TextInput type={'datetime-local'}
-                                   {...form.getInputProps('end_date')}
-                                   label={t`End Date`}
-                        />
-                    </InputGroup>
+                    {!isRecurring && (
+                        <InputGroup>
+                            <TextInput type={'datetime-local'}
+                                       {...form.getInputProps('start_date')}
+                                       label={t`Start Date`}
+                                       required
+                            />
+                            <TextInput type={'datetime-local'}
+                                       {...form.getInputProps('end_date')}
+                                       label={t`End Date`}
+                            />
+                        </InputGroup>
+                    )}
 
                     <Group justify="space-between" align="center" mb="md">
                         <h3 style={{margin: 0}}>
@@ -166,6 +171,7 @@ export const DuplicateEventModal = ({onClose, eventId}: DuplicateEventModalProps
                                     <Switch
                                         {...form.getInputProps(option.key, {type: 'checkbox'})}
                                         label={option.label}
+                                        description={option.description}
                                         mb={index === duplicateOptions.length - 1 || index === duplicateOptions.length - 2 ? 0 : "xs"}
                                     />
                                 </Grid.Col>

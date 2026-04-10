@@ -4,6 +4,7 @@ namespace HiEvents\Services\Application\Handlers\Attendee;
 
 use Brick\Money\Money;
 use HiEvents\DomainObjects\AttendeeDomainObject;
+use HiEvents\DomainObjects\Enums\EventType;
 use HiEvents\DomainObjects\Enums\ProductType;
 use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
@@ -21,6 +22,7 @@ use HiEvents\Exceptions\InvalidProductPriceId;
 use HiEvents\Exceptions\NoTicketsAvailableException;
 use HiEvents\Helper\IdHelper;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
@@ -35,22 +37,24 @@ use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use HiEvents\Services\Infrastructure\DomainEvents\Events\OrderEvent;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Collection;
+use Illuminate\Validation\ValidationException;
 use RuntimeException;
 use Throwable;
 
 class CreateAttendeeHandler
 {
     public function __construct(
-        private readonly AttendeeRepositoryInterface  $attendeeRepository,
-        private readonly OrderRepositoryInterface     $orderRepository,
-        private readonly ProductRepositoryInterface   $productRepository,
-        private readonly EventRepositoryInterface     $eventRepository,
-        private readonly ProductQuantityUpdateService $productQuantityAdjustmentService,
-        private readonly DatabaseManager              $databaseManager,
-        private readonly TaxAndFeeRepositoryInterface $taxAndFeeRepository,
-        private readonly TaxAndFeeRollupService       $taxAndFeeRollupService,
-        private readonly OrderManagementService       $orderManagementService,
-        private readonly DomainEventDispatcherService $domainEventDispatcherService,
+        private readonly AttendeeRepositoryInterface        $attendeeRepository,
+        private readonly OrderRepositoryInterface           $orderRepository,
+        private readonly ProductRepositoryInterface         $productRepository,
+        private readonly EventRepositoryInterface           $eventRepository,
+        private readonly EventOccurrenceRepositoryInterface $eventOccurrenceRepository,
+        private readonly ProductQuantityUpdateService       $productQuantityAdjustmentService,
+        private readonly DatabaseManager                    $databaseManager,
+        private readonly TaxAndFeeRepositoryInterface       $taxAndFeeRepository,
+        private readonly TaxAndFeeRollupService             $taxAndFeeRollupService,
+        private readonly OrderManagementService             $orderManagementService,
+        private readonly DomainEventDispatcherService       $domainEventDispatcherService,
     )
     {
     }
@@ -61,6 +65,8 @@ class CreateAttendeeHandler
      */
     public function handle(CreateAttendeeDTO $attendeeDTO): AttendeeDomainObject
     {
+        $attendeeDTO = $this->resolveOccurrenceId($attendeeDTO);
+
         return $this->databaseManager->transaction(function () use ($attendeeDTO) {
             $this->calculateTaxesAndFees($attendeeDTO);
 
@@ -215,6 +221,7 @@ class CreateAttendeeHandler
                 OrderItemDomainObjectAbstract::ITEM_NAME => $product->getTitle(),
                 OrderItemDomainObjectAbstract::PRODUCT_PRICE_ID => $productPriceId,
                 OrderItemDomainObjectAbstract::TAXES_AND_FEES_ROLLUP => $this->taxAndFeeRollupService->getRollUp(),
+                OrderItemDomainObjectAbstract::EVENT_OCCURRENCE_ID => $attendeeDTO->event_occurrence_id,
             ]
         );
     }
@@ -232,6 +239,7 @@ class CreateAttendeeHandler
             AttendeeDomainObjectAbstract::ORDER_ID => $order->getId(),
             AttendeeDomainObjectAbstract::PUBLIC_ID => IdHelper::publicId(IdHelper::ATTENDEE_PREFIX),
             AttendeeDomainObjectAbstract::SHORT_ID => IdHelper::shortId(IdHelper::ATTENDEE_PREFIX),
+            AttendeeDomainObjectAbstract::EVENT_OCCURRENCE_ID => $attendeeDTO->event_occurrence_id,
             AttendeeDomainObjectAbstract::LOCALE => $attendeeDTO->locale,
         ]);
     }
@@ -240,6 +248,7 @@ class CreateAttendeeHandler
     {
         $this->productQuantityAdjustmentService->increaseQuantitySold(
             priceId: $attendeeDTO->product_price_id,
+            eventOccurrenceId: $attendeeDTO->event_occurrence_id,
         );
 
         event(new OrderStatusChangedEvent(
@@ -253,5 +262,35 @@ class CreateAttendeeHandler
         $this->domainEventDispatcherService->dispatch(
             new OrderEvent(DomainEventType::ORDER_CREATED, $order->getId())
         );
+    }
+
+    private function resolveOccurrenceId(CreateAttendeeDTO $attendeeDTO): CreateAttendeeDTO
+    {
+        if ($attendeeDTO->event_occurrence_id !== null) {
+            return $attendeeDTO;
+        }
+
+        $event = $this->eventRepository->findById($attendeeDTO->event_id);
+
+        if ($event->getType() !== EventType::SINGLE->name) {
+            throw ValidationException::withMessages([
+                'event_occurrence_id' => __('An occurrence must be selected for recurring events.'),
+            ]);
+        }
+
+        $occurrence = $this->eventOccurrenceRepository->findFirstWhere([
+            'event_id' => $attendeeDTO->event_id,
+        ]);
+
+        if (!$occurrence) {
+            throw ValidationException::withMessages([
+                'event_occurrence_id' => __('No occurrence found for this event.'),
+            ]);
+        }
+
+        return CreateAttendeeDTO::fromArray(array_merge(
+            $attendeeDTO->toArray(),
+            ['event_occurrence_id' => $occurrence->getId()]
+        ));
     }
 }

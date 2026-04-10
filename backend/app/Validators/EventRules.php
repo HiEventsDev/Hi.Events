@@ -3,6 +3,7 @@
 namespace HiEvents\Validators;
 
 use HiEvents\DomainObjects\Enums\EventCategory;
+use HiEvents\DomainObjects\Enums\EventType;
 use Illuminate\Validation\Rule;
 
 trait EventRules
@@ -12,6 +13,7 @@ trait EventRules
         $currencies = include __DIR__ . '/../../data/currencies.php';
 
         return array_merge($this->minimalRules(), [
+            'type' => ['nullable', Rule::in(EventType::valuesArray())],
             'timezone' => ['timezone:all'],
             'organizer_id' => ['required', 'integer'],
             'currency' => [Rule::in(array_values($currencies))],
@@ -33,12 +35,14 @@ trait EventRules
 
     public function minimalRules(): array
     {
+        $isRecurring = $this->input('type') === EventType::RECURRING->name;
+
         return [
             'title' => ['string', 'required', 'max:150', 'min:1'],
             'description' => ['string', 'min:1', 'max:50000', 'nullable'],
             'start_date' => [
                 'date',
-                'required',
+                $isRecurring ? 'nullable' : 'required',
                 Rule::when($this->input('end_date') !== null, ['before_or_equal:end_date'])
             ],
             'end_date' => ['date', 'nullable'],

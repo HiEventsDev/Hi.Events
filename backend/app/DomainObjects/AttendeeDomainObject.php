@@ -23,6 +23,8 @@ class AttendeeDomainObject extends Generated\AttendeeDomainObjectAbstract implem
     /** @var Collection<AttendeeCheckInDomainObject>|null */
     private ?Collection $checkIns = null;
 
+    private ?EventOccurrenceDomainObject $eventOccurrence = null;
+
     public static function getDefaultSort(): string
     {
         return self::CREATED_AT;
@@ -71,6 +73,7 @@ class AttendeeDomainObject extends Generated\AttendeeDomainObjectAbstract implem
             self::STATUS,
             self::PRODUCT_ID,
             self::PRODUCT_PRICE_ID,
+            self::EVENT_OCCURRENCE_ID,
         ];
     }
 
@@ -137,5 +140,16 @@ class AttendeeDomainObject extends Generated\AttendeeDomainObjectAbstract implem
     public function getCheckIns(): ?Collection
     {
         return $this->checkIns;
+    }
+
+    public function setEventOccurrence(?EventOccurrenceDomainObject $eventOccurrence): AttendeeDomainObject
+    {
+        $this->eventOccurrence = $eventOccurrence;
+        return $this;
+    }
+
+    public function getEventOccurrence(): ?EventOccurrenceDomainObject
+    {
+        return $this->eventOccurrence;
     }
 }

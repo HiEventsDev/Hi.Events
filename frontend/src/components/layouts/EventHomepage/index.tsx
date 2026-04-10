@@ -4,13 +4,14 @@ import "../../../styles/widget/default.scss";
 import React, {useEffect, useRef, useState} from "react";
 import {EventDocumentHead} from "../../common/EventDocumentHead";
 import {eventCoverImage, eventHomepageUrl, imageUrl, organizerHomepageUrl} from "../../../utilites/urlHelper.ts";
-import {Event, OrganizerStatus} from "../../../types.ts";
+import {Event, EventOccurrenceStatus, EventType, OrganizerStatus} from "../../../types.ts";
 import {EventNotAvailable} from "./EventNotAvailable";
 import {
     IconArrowUpRight,
     IconCalendar,
     IconCalendarOff,
     IconCalendarPlus,
+    IconCalendarRepeat,
     IconExternalLink,
     IconMail,
     IconMapPin,
@@ -43,10 +44,11 @@ interface EventHomepageProps {
     event?: Event;
     promoCodeValid?: boolean;
     promoCode?: string;
+    initialOccurrenceId?: number | null;
 }
 
 const EventHomepage = ({...loaderData}: EventHomepageProps) => {
-    const {event, promoCodeValid, promoCode} = loaderData;
+    const {event, promoCodeValid, promoCode, initialOccurrenceId} = loaderData;
     const [showScrollButton, setShowScrollButton] = useState(false);
     const [contactModalOpen, setContactModalOpen] = useState(false);
     const ticketsSectionRef = useRef<HTMLDivElement>(null);
@@ -287,8 +289,8 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
 
                                         <div className={classes.actionButtons}>
                                             <ShareComponent
-                                                title={'Check out this event: ' + event.title}
-                                                text={'Check out this event: ' + event.title}
+                                                title={t`Check out this event: ${event.title}`}
+                                                text={t`Check out this event: ${event.title}`}
                                                 url={eventHomepageUrl(event)}
                                                 imageUrl={coverImage || undefined}
                                             >
@@ -315,25 +317,55 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                                                 <div className={classes.metaPrimary}>
                                                     <EventDateRange event={event}/>
                                                 </div>
+                                                {event.type === EventType.RECURRING && (
+                                                    <div className={classes.metaSecondary}>
+                                                        <IconCalendarRepeat size={14} style={{verticalAlign: 'middle', marginRight: 4}}/>
+                                                        {t`Recurring Event`}
+                                                    </div>
+                                                )}
                                             </div>
-                                            <CalendarOptionsPopover event={event}>
-                                                <button className={classes.addToCalendarButton}>
-                                                    <IconCalendarPlus/>
-                                                    {t`Add to Calendar`}
-                                                </button>
-                                            </CalendarOptionsPopover>
+                                            {(() => {
+                                                const nextOccurrence = event.type === EventType.RECURRING
+                                                    ? (event.occurrences || [])
+                                                        .filter(o => o.status === EventOccurrenceStatus.ACTIVE && !o.is_past)
+                                                        .sort((a, b) => a.start_date.localeCompare(b.start_date))[0]
+                                                    : undefined;
+                                                if (event.type === EventType.RECURRING && !nextOccurrence) return null;
+                                                return (
+                                                    <CalendarOptionsPopover event={event} occurrence={nextOccurrence}>
+                                                        <button className={classes.addToCalendarButton}>
+                                                            <IconCalendarPlus/>
+                                                            {t`Add to Calendar`}
+                                                        </button>
+                                                    </CalendarOptionsPopover>
+                                                );
+                                            })()}
                                         </div>
 
                                         {/* Event Ended */}
-                                        {event.end_date && isDateInPast(event.end_date) && (
-                                            <div className={classes.metaItem}>
-                                                <div className={classes.metaIconBox}>
-                                                    <IconCalendarOff/>
+                                        {event.type === EventType.RECURRING ? (
+                                            (event.occurrences || []).filter(o => o.status === EventOccurrenceStatus.ACTIVE && !o.is_past).length === 0 &&
+                                            (event.occurrences || []).length > 0 && (
+                                                <div className={classes.metaItem}>
+                                                    <div className={classes.metaIconBox}>
+                                                        <IconCalendarOff/>
+                                                    </div>
+                                                    <div className={classes.metaContent}>
+                                                        <div className={classes.metaPrimary}>{t`No upcoming dates`}</div>
+                                                    </div>
                                                 </div>
-                                                <div className={classes.metaContent}>
-                                                    <div className={classes.metaPrimary}>{t`This event has ended`}</div>
+                                            )
+                                        ) : (
+                                            event.end_date && isDateInPast(event.end_date) && (
+                                                <div className={classes.metaItem}>
+                                                    <div className={classes.metaIconBox}>
+                                                        <IconCalendarOff/>
+                                                    </div>
+                                                    <div className={classes.metaContent}>
+                                                        <div className={classes.metaPrimary}>{t`This event has ended`}</div>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            )
                                         )}
 
                                         {/* Online Event */}
@@ -485,6 +517,7 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                                     promoCodeValid={promoCodeValid}
                                     promoCode={promoCode}
                                     showPoweredBy={false}
+                                    initialOccurrenceId={initialOccurrenceId}
                                 />
                             </div>
 

@@ -10,7 +10,10 @@ use HiEvents\DomainObjects\Generated\PromoCodeDomainObjectAbstract;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\Helper\Currency;
+use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
+use HiEvents\Repository\Interfaces\OrderItemRepositoryInterface;
+use HiEvents\Repository\Interfaces\ProductOccurrenceVisibilityRepositoryInterface;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Services\Domain\Product\AvailableProductQuantitiesFetchService;
@@ -26,10 +29,13 @@ class OrderCreateRequestValidationService
     private AvailableProductQuantitiesResponseDTO $availableProductQuantities;
 
     public function __construct(
-        readonly private ProductRepositoryInterface             $productRepository,
-        readonly private PromoCodeRepositoryInterface           $promoCodeRepository,
-        readonly private EventRepositoryInterface               $eventRepository,
-        readonly private AvailableProductQuantitiesFetchService $fetchAvailableProductQuantitiesService,
+        readonly private ProductRepositoryInterface                     $productRepository,
+        readonly private PromoCodeRepositoryInterface                   $promoCodeRepository,
+        readonly private EventRepositoryInterface                       $eventRepository,
+        readonly private AvailableProductQuantitiesFetchService         $fetchAvailableProductQuantitiesService,
+        readonly private EventOccurrenceRepositoryInterface             $occurrenceRepository,
+        readonly private ProductOccurrenceVisibilityRepositoryInterface $productOccurrenceVisibilityRepository,
+        readonly private OrderItemRepositoryInterface                   $orderItemRepository,
     )
     {
     }
@@ -45,6 +51,7 @@ class OrderCreateRequestValidationService
         $event = $this->eventRepository->findById($eventId);
         $this->validatePromoCode($eventId, $data);
         $this->validateProductSelection($data);
+        $this->validateOccurrence($eventId, $data);
 
         $this->availableProductQuantities = $this->fetchAvailableProductQuantitiesService
             ->getAvailableProductQuantities(
@@ -52,7 +59,7 @@ class OrderCreateRequestValidationService
                 ignoreCache: true,
             );
 
-        $this->validateOverallCapacity($data);
+        $this->validateOverallCapacity($event, $data);
         $this->validateProductDetails($event, $data);
     }
 
@@ -83,6 +90,7 @@ class OrderCreateRequestValidationService
         $validator = Validator::make($data, [
             'products' => 'required|array',
             'products.*.product_id' => 'required|integer',
+            'products.*.event_occurrence_id' => 'required|integer',
             'products.*.quantities' => 'required|array',
             'products.*.quantities.*.quantity' => 'required|integer',
             'products.*.quantities.*.price_id' => 'required|integer',
@@ -104,6 +112,124 @@ class OrderCreateRequestValidationService
             throw ValidationException::withMessages([
                 'products' => __('You haven\'t selected any products')
             ]);
+        }
+    }
+
+    /**
+     * @throws ValidationException
+     */
+    private function validateOccurrence(int $eventId, array $data): void
+    {
+        $productsByOccurrence = collect($data['products'])->groupBy('event_occurrence_id');
+
+        // Pre-fetch all visibility rules for the requested occurrences in a single query
+        // so the per-occurrence loop below stays O(1) DB calls instead of N+1.
+        $visibleProductsByOccurrence = $this->loadVisibleProductsByOccurrence(
+            $productsByOccurrence->keys()->filter()->map(fn($id) => (int) $id)->all()
+        );
+
+        foreach ($productsByOccurrence as $occurrenceId => $products) {
+            if ($occurrenceId === null || $occurrenceId === '') {
+                throw ValidationException::withMessages([
+                    'event_occurrence_id' => __('An event occurrence must be specified'),
+                ]);
+            }
+
+            $occurrence = $this->occurrenceRepository->findFirstWhere([
+                'id' => $occurrenceId,
+                'event_id' => $eventId,
+            ]);
+
+            if ($occurrence === null) {
+                throw ValidationException::withMessages([
+                    'event_occurrence_id' => __('The specified event occurrence was not found'),
+                ]);
+            }
+
+            if ($occurrence->isCancelled()) {
+                throw ValidationException::withMessages([
+                    'event_occurrence_id' => __('This event occurrence has been cancelled'),
+                ]);
+            }
+
+            if ($occurrence->isSoldOut()) {
+                throw ValidationException::withMessages([
+                    'event_occurrence_id' => __('This event occurrence is sold out'),
+                ]);
+            }
+
+            if ($occurrence->getCapacity() !== null) {
+                $totalQuantityRequested = $products
+                    ->sum(fn($product) => collect($product['quantities'])->sum('quantity'));
+
+                $reservedForOccurrence = $this->orderItemRepository
+                    ->getReservedQuantityForOccurrence((int) $occurrenceId);
+
+                $available = $occurrence->getCapacity() - $occurrence->getUsedCapacity() - $reservedForOccurrence;
+                if ($totalQuantityRequested > $available) {
+                    throw ValidationException::withMessages([
+                        'event_occurrence_id' => __('Not enough capacity available for this occurrence'),
+                    ]);
+                }
+            }
+
+            $this->assertProductsVisibleOnOccurrence(
+                (int) $occurrenceId,
+                $products,
+                $visibleProductsByOccurrence,
+            );
+        }
+    }
+
+    /**
+     * Returns a map of occurrence_id => list<product_id> for occurrences that have an
+     * explicit visibility allow-list. Occurrences with no rules are absent from the map
+     * and are treated as "all products visible" by the caller.
+     *
+     * @param int[] $occurrenceIds
+     * @return array<int, int[]>
+     */
+    private function loadVisibleProductsByOccurrence(array $occurrenceIds): array
+    {
+        if (empty($occurrenceIds)) {
+            return [];
+        }
+
+        $rules = $this->productOccurrenceVisibilityRepository
+            ->findWhereIn('event_occurrence_id', $occurrenceIds);
+
+        $visibleByOccurrence = [];
+        foreach ($rules as $rule) {
+            $visibleByOccurrence[$rule->getEventOccurrenceId()][] = $rule->getProductId();
+        }
+        return $visibleByOccurrence;
+    }
+
+    /**
+     * Mirrors ProductFilterService::filterByOccurrenceVisibility at validation time so a
+     * direct POST to /orders cannot purchase a product that has been hidden from the
+     * selected occurrence. Empty rule set means "all products visible" (default).
+     *
+     * @param array<int, int[]> $visibleProductsByOccurrence
+     * @throws ValidationException
+     */
+    private function assertProductsVisibleOnOccurrence(
+        int $occurrenceId,
+        Collection $products,
+        array $visibleProductsByOccurrence,
+    ): void {
+        if (!isset($visibleProductsByOccurrence[$occurrenceId])) {
+            return;
+        }
+
+        $visibleProductIds = $visibleProductsByOccurrence[$occurrenceId];
+
+        foreach ($products as $product) {
+            if (!in_array((int) $product['product_id'], $visibleProductIds, true)) {
+                throw ValidationException::withMessages([
+                    'event_occurrence_id' => __('One or more selected products are not available for this occurrence'),
+                ]);
+            }
         }
     }
 
@@ -345,8 +471,12 @@ class OrderCreateRequestValidationService
     /**
      * @throws ValidationException
      */
-    private function validateOverallCapacity(array $data): void
+    private function validateOverallCapacity(EventDomainObject $event, array $data): void
     {
+        if ($event->isRecurring()) {
+            return;
+        }
+
         foreach ($this->availableProductQuantities->capacities as $capacity) {
             if ($capacity->getProducts() === null) {
                 continue;

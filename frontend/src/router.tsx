@@ -464,6 +464,27 @@ export const router: RouteObject[] = [
                 }
             },
             {
+                path: "occurrences",
+                async lazy() {
+                    const OccurrencesTab = await import("./components/routes/event/OccurrencesTab");
+                    return {Component: OccurrencesTab.default};
+                }
+            },
+            {
+                path: "occurrences/calendar",
+                async lazy() {
+                    const OccurrencesTab = await import("./components/routes/event/OccurrencesTab");
+                    return {Component: OccurrencesTab.default};
+                }
+            },
+            {
+                path: "occurrences/:occurrenceId",
+                async lazy() {
+                    const OccurrenceDetail = await import("./components/routes/event/OccurrenceDetail");
+                    return {Component: OccurrenceDetail.default};
+                }
+            },
+            {
                 path: "capacity-assignments",
                 async lazy() {
                     const CapacityAssignments = await import("./components/routes/event/CapacityAssignments");

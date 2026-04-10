@@ -11,9 +11,12 @@ class CreateAttendeeRequest extends BaseRequest
 {
     public function rules(): array
     {
+        $eventId = $this->route('event_id');
+
         return [
             'product_id' => ['int', 'required'],
-            'product_price_id' => ['int', 'nullable', 'required'],
+            'event_occurrence_id' => ['int', 'nullable', Rule::exists('event_occurrences', 'id')->where('event_id', $eventId)->whereNull('deleted_at')],
+            'product_price_id' => ['int', 'nullable'],
             'email' => ['required', 'email'],
             'first_name' => ['string', 'required', 'max:40'],
             'last_name' => ['string', 'max:40'],

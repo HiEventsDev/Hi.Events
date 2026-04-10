@@ -1,0 +1,108 @@
+name: Backend Tests
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'backend/**'
+      - '.github/workflows/tests.yml'
+  pull_request:
+    paths:
+      - 'backend/**'
+      - '.github/workflows/tests.yml'
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php-versions: ['8.2', '8.3', '8.4']
+
+    services:
+      # Postgres is started for the Feature suite. The Unit suite does not need
+      # a live connection — it only reads DB_DATABASE for the _test guard check
+      # in CreatesApplication — so it runs in parallel with Postgres warming up.
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_DB: hievents_test
+          POSTGRES_USER: hievents
+          POSTGRES_PASSWORD: hievents
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U hievents -d hievents_test"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    # Job-level env. .env.testing supplies the rest, but the DB host on a CI
+    # runner is 127.0.0.1 (service container exposes its port on the runner),
+    # not the docker network alias used locally — override here.
+    env:
+      DB_HOST: 127.0.0.1
+      DB_PORT: 5432
+      DB_DATABASE: hievents_test
+      DB_USERNAME: hievents
+      DB_PASSWORD: hievents
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_mysql, pdo_pgsql, pgsql, tokenizer
+          ini-values: post_max_size=256M, upload_max_filesize=256M
+          coverage: none
+
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Create Laravel bootstrap cache directory
+        run: mkdir -p ./backend/bootstrap/cache && chmod -R 777 ./backend/bootstrap/cache
+
+      - name: Install dependencies
+        run: cd backend && composer install --prefer-dist --no-progress --no-interaction
+
+      - name: Stage .env for testing
+        # Laravel auto-loads .env.testing when APP_ENV=testing, but artisan
+        # commands run outside that flow read .env directly. Copy .env.testing
+        # to .env so both paths see the same config.
+        run: cp backend/.env.testing backend/.env
+
+      - name: Run Unit test suite
+        # Pure unit tests — no DB connection, no migrations. The CreatesApplication
+        # bootstrap detects the absence of DatabaseTransactions / RefreshDatabase
+        # traits and skips migrate:fresh entirely. Runs in parallel with the
+        # Postgres service container coming up.
+        run: cd backend && ./vendor/bin/phpunit --testsuite=Unit --no-coverage
+
+      - name: Wait for Postgres
+        run: |
+          for i in {1..30}; do
+            if pg_isready -h 127.0.0.1 -p 5432 -U hievents -d hievents_test; then
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "Postgres did not become ready in time" >&2
+          exit 1
+
+      - name: Run Feature test suite
+        # Integration tests against the real PostgreSQL test database. The first
+        # test that boots Laravel triggers migrate:fresh once per process via
+        # CreatesApplication::ensureTestDatabaseIsMigrated.
+        run: cd backend && ./vendor/bin/phpunit --testsuite=Feature --no-coverage

@@ -5,6 +5,7 @@ namespace HiEvents\Mail\Attendee;
 use Carbon\Carbon;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
@@ -33,6 +34,7 @@ class AttendeeTicketMail extends BaseMail
         private readonly EventSettingDomainObject $eventSettings,
         private readonly OrganizerDomainObject    $organizer,
         ?RenderedEmailTemplateDTO                 $renderedTemplate = null,
+        private readonly ?EventOccurrenceDomainObject $occurrence = null,
     )
     {
         parent::__construct();
@@ -84,11 +86,23 @@ class AttendeeTicketMail extends BaseMail
 
     public function attachments(): array
     {
-        $startDateTime = Carbon::parse($this->event->getStartDate(), $this->event->getTimezone());
-        $endDateTime = $this->event->getEndDate() ? Carbon::parse($this->event->getEndDate(), $this->event->getTimezone()) : null;
+        $startDateRaw = $this->occurrence?->getStartDate() ?? $this->event->getStartDate();
+        $endDateRaw = $this->occurrence?->getEndDate() ?? $this->event->getEndDate();
+
+        $startDateTime = $startDateRaw ? Carbon::parse($startDateRaw, $this->event->getTimezone()) : null;
+        $endDateTime = $endDateRaw ? Carbon::parse($endDateRaw, $this->event->getTimezone()) : null;
+
+        if ($startDateTime === null) {
+            return [];
+        }
+
+        $eventTitle = $this->event->getTitle();
+        if ($this->occurrence?->getLabel()) {
+            $eventTitle .= ' - ' . $this->occurrence->getLabel();
+        }
 
         $event = Event::create()
-            ->name($this->event->getTitle())
+            ->name($eventTitle)
             ->uniqueIdentifier('event-' . $this->attendee->getId())
             ->startsAt($startDateTime)
             ->url($this->event->getEventUrl())

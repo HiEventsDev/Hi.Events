@@ -11,6 +11,8 @@ use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\Exceptions\EventStatisticsVersionMismatchException;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventDailyStatisticRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventOccurrenceDailyStatisticRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventOccurrenceStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Infrastructure\Utlitiy\Retry\Retrier;
@@ -24,8 +26,10 @@ class EventStatisticsCancellationService
 {
     public function __construct(
         private readonly EventStatisticRepositoryInterface      $eventStatisticsRepository,
-        private readonly EventDailyStatisticRepositoryInterface $eventDailyStatisticRepository,
-        private readonly AttendeeRepositoryInterface            $attendeeRepository,
+        private readonly EventDailyStatisticRepositoryInterface      $eventDailyStatisticRepository,
+        private readonly EventOccurrenceStatisticRepositoryInterface      $eventOccurrenceStatisticRepository,
+        private readonly EventOccurrenceDailyStatisticRepositoryInterface $eventOccurrenceDailyStatisticRepository,
+        private readonly AttendeeRepositoryInterface                      $attendeeRepository,
         private readonly OrderRepositoryInterface               $orderRepository,
         private readonly LoggerInterface                        $logger,
         private readonly DatabaseManager                        $databaseManager,
@@ -84,6 +88,10 @@ class EventStatisticsCancellationService
                     // Decrement daily statistics
                     $this->decrementDailyStatistics($order, $counts, $attempt);
 
+                    // Decrement occurrence statistics
+                    $this->decrementOccurrenceStatistics($order);
+                    $this->decrementOccurrenceDailyStatistics($order);
+
                     // Mark statistics as decremented
                     $this->markStatisticsAsDecremented($order);
                 });
@@ -110,16 +118,17 @@ class EventStatisticsCancellationService
      * @throws EventStatisticsVersionMismatchException
      * @throws Throwable
      */
-    public function decrementForCancelledAttendee(int $eventId, string $orderDate, int $attendeeCount = 1): void
+    public function decrementForCancelledAttendee(int $eventId, string $orderDate, int $attendeeCount = 1, ?int $occurrenceId = null): void
     {
         $this->retrier->retry(
-            callableAction: function () use ($eventId, $orderDate, $attendeeCount): void {
-                $this->databaseManager->transaction(function () use ($eventId, $orderDate, $attendeeCount): void {
-                    // Decrement aggregate statistics
+            callableAction: function () use ($eventId, $orderDate, $attendeeCount, $occurrenceId): void {
+                $this->databaseManager->transaction(function () use ($eventId, $orderDate, $attendeeCount, $occurrenceId): void {
                     $this->decrementAggregateAttendeeStatistics($eventId, $attendeeCount);
-
-                    // Decrement daily statistics
                     $this->decrementDailyAttendeeStatistics($eventId, $orderDate, $attendeeCount);
+                    if ($occurrenceId !== null) {
+                        $this->decrementOccurrenceAttendeeStatistics($occurrenceId, $attendeeCount);
+                        $this->decrementOccurrenceDailyAttendeeStatistics($occurrenceId, $orderDate, $attendeeCount);
+                    }
                 });
             },
             onFailure: function (int $attempt, Throwable $e) use ($eventId, $orderDate, $attendeeCount): void {
@@ -391,6 +400,192 @@ class EventStatisticsCancellationService
                 'new_version' => $eventDailyStatistic->getVersion() + 1,
             ]
         );
+    }
+
+    /**
+     * @throws EventStatisticsVersionMismatchException
+     */
+    private function decrementOccurrenceAttendeeStatistics(int $occurrenceId, int $attendeeCount): void
+    {
+        $existing = $this->eventOccurrenceStatisticRepository->findFirstWhere([
+            'event_occurrence_id' => $occurrenceId,
+        ]);
+
+        if (!$existing) {
+            return;
+        }
+
+        $updates = [
+            'attendees_registered' => max(0, $existing->getAttendeesRegistered() - $attendeeCount),
+            'version' => $existing->getVersion() + 1,
+        ];
+
+        $updated = $this->eventOccurrenceStatisticRepository->updateWhere(
+            attributes: $updates,
+            where: [
+                'event_occurrence_id' => $occurrenceId,
+                'version' => $existing->getVersion(),
+            ]
+        );
+
+        if ($updated === 0) {
+            throw new EventStatisticsVersionMismatchException(
+                'Occurrence statistics version mismatch for occurrence ' . $occurrenceId
+            );
+        }
+    }
+
+    /**
+     * @throws EventStatisticsVersionMismatchException
+     */
+    private function decrementOccurrenceStatistics(OrderDomainObject $order): void
+    {
+        $itemsByOccurrence = [];
+        foreach ($order->getOrderItems() as $orderItem) {
+            $occId = $orderItem->getEventOccurrenceId();
+            if ($occId === null) {
+                continue;
+            }
+            $itemsByOccurrence[$occId][] = $orderItem;
+        }
+
+        foreach ($itemsByOccurrence as $occurrenceId => $items) {
+            $existing = $this->eventOccurrenceStatisticRepository->findFirstWhere([
+                'event_occurrence_id' => $occurrenceId,
+            ]);
+
+            if (!$existing) {
+                continue;
+            }
+
+            $productsSold = array_sum(array_map(fn(OrderItemDomainObject $i) => $i->getQuantity(), $items));
+            $attendeesRegistered = $this->countActiveAttendeesForOccurrence($order->getId(), $occurrenceId);
+
+            $updates = [
+                'attendees_registered' => max(0, $existing->getAttendeesRegistered() - $attendeesRegistered),
+                'products_sold' => max(0, $existing->getProductsSold() - $productsSold),
+                'orders_created' => max(0, $existing->getOrdersCreated() - 1),
+                'orders_cancelled' => ($existing->getOrdersCancelled() ?? 0) + 1,
+                'version' => $existing->getVersion() + 1,
+            ];
+
+            $updated = $this->eventOccurrenceStatisticRepository->updateWhere(
+                attributes: $updates,
+                where: [
+                    'event_occurrence_id' => $occurrenceId,
+                    'version' => $existing->getVersion(),
+                ]
+            );
+
+            if ($updated === 0) {
+                throw new EventStatisticsVersionMismatchException(
+                    'Occurrence statistics version mismatch for occurrence ' . $occurrenceId
+                );
+            }
+        }
+    }
+
+    private function countActiveAttendeesForOccurrence(int $orderId, int $occurrenceId): int
+    {
+        return $this->attendeeRepository->findWhereIn(
+            field: 'status',
+            values: [AttendeeStatus::ACTIVE->name, AttendeeStatus::AWAITING_PAYMENT->name],
+            additionalWhere: [
+                'order_id' => $orderId,
+                'event_occurrence_id' => $occurrenceId,
+            ],
+        )->count();
+    }
+
+    /**
+     * @throws EventStatisticsVersionMismatchException
+     */
+    private function decrementOccurrenceDailyStatistics(OrderDomainObject $order): void
+    {
+        $orderDate = (new Carbon($order->getCreatedAt()))->format('Y-m-d');
+
+        $itemsByOccurrence = [];
+        foreach ($order->getOrderItems() as $orderItem) {
+            $occId = $orderItem->getEventOccurrenceId();
+            if ($occId === null) {
+                continue;
+            }
+            $itemsByOccurrence[$occId][] = $orderItem;
+        }
+
+        foreach ($itemsByOccurrence as $occurrenceId => $items) {
+            $existing = $this->eventOccurrenceDailyStatisticRepository->findFirstWhere([
+                'event_occurrence_id' => $occurrenceId,
+                'date' => $orderDate,
+            ]);
+
+            if (!$existing) {
+                continue;
+            }
+
+            $productsSold = array_sum(array_map(fn(OrderItemDomainObject $i) => $i->getQuantity(), $items));
+            $attendeesRegistered = $this->countActiveAttendeesForOccurrence($order->getId(), $occurrenceId);
+
+            $updates = [
+                'attendees_registered' => max(0, $existing->getAttendeesRegistered() - $attendeesRegistered),
+                'products_sold' => max(0, $existing->getProductsSold() - $productsSold),
+                'orders_created' => max(0, $existing->getOrdersCreated() - 1),
+                'orders_cancelled' => ($existing->getOrdersCancelled() ?? 0) + 1,
+                'version' => $existing->getVersion() + 1,
+            ];
+
+            $updated = $this->eventOccurrenceDailyStatisticRepository->updateWhere(
+                attributes: $updates,
+                where: [
+                    'event_occurrence_id' => $occurrenceId,
+                    'date' => $orderDate,
+                    'version' => $existing->getVersion(),
+                ]
+            );
+
+            if ($updated === 0) {
+                throw new EventStatisticsVersionMismatchException(
+                    'Occurrence daily statistics version mismatch for occurrence ' . $occurrenceId
+                );
+            }
+        }
+    }
+
+    /**
+     * @throws EventStatisticsVersionMismatchException
+     */
+    private function decrementOccurrenceDailyAttendeeStatistics(int $occurrenceId, string $orderDate, int $attendeeCount): void
+    {
+        $formattedDate = (new Carbon($orderDate))->format('Y-m-d');
+
+        $existing = $this->eventOccurrenceDailyStatisticRepository->findFirstWhere([
+            'event_occurrence_id' => $occurrenceId,
+            'date' => $formattedDate,
+        ]);
+
+        if (!$existing) {
+            return;
+        }
+
+        $updates = [
+            'attendees_registered' => max(0, $existing->getAttendeesRegistered() - $attendeeCount),
+            'version' => $existing->getVersion() + 1,
+        ];
+
+        $updated = $this->eventOccurrenceDailyStatisticRepository->updateWhere(
+            attributes: $updates,
+            where: [
+                'event_occurrence_id' => $occurrenceId,
+                'date' => $formattedDate,
+                'version' => $existing->getVersion(),
+            ]
+        );
+
+        if ($updated === 0) {
+            throw new EventStatisticsVersionMismatchException(
+                'Occurrence daily statistics version mismatch for occurrence ' . $occurrenceId
+            );
+        }
     }
 
     /**

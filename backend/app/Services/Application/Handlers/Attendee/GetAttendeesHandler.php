@@ -3,6 +3,7 @@
 namespace HiEvents\Services\Application\Handlers\Attendee;
 
 use HiEvents\DomainObjects\AttendeeCheckInDomainObject;
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Repository\Eloquent\Value\Relationship;
@@ -27,6 +28,10 @@ class GetAttendeesHandler
             ->loadRelation(new Relationship(
                 domainObject: AttendeeCheckInDomainObject::class,
                 name: 'check_ins'
+            ))
+            ->loadRelation(new Relationship(
+                domainObject: EventOccurrenceDomainObject::class,
+                name: 'event_occurrence'
             ))
             ->findByEventId($eventId, $queryParams);
     }

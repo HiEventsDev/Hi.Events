@@ -1,0 +1,99 @@
+.infoText {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--mantine-font-size-xs);
+  color: var(--mantine-color-dimmed);
+  margin-bottom: 4px;
+
+  svg {
+    flex-shrink: 0;
+    color: var(--mantine-color-blue-4);
+  }
+}
+
+.productCard {
+  border: 1px solid var(--mantine-color-gray-2);
+  border-radius: var(--mantine-radius-md);
+  overflow: hidden;
+  transition: border-color 0.15s ease, opacity 0.15s ease;
+
+  &:hover {
+    border-color: var(--mantine-color-gray-3);
+  }
+
+  &.disabled {
+    opacity: 0.5;
+  }
+}
+
+.productHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: var(--mantine-color-gray-0);
+  border-bottom: 1px solid var(--mantine-color-gray-2);
+}
+
+.productName {
+  font-weight: 600;
+  font-size: var(--mantine-font-size-sm);
+  color: var(--mantine-color-text);
+}
+
+.priceTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.priceHeaderRow {
+  th {
+    padding: 8px 16px;
+    font-size: var(--mantine-font-size-xs);
+    font-weight: 500;
+    color: var(--mantine-color-dimmed);
+    text-align: left;
+    border-bottom: 1px solid var(--mantine-color-gray-1);
+
+    &:last-child {
+      width: 40px;
+      text-align: center;
+    }
+  }
+}
+
+.priceRow {
+  td {
+    padding: 10px 16px;
+    font-size: var(--mantine-font-size-sm);
+    vertical-align: middle;
+    border-bottom: 1px solid var(--mantine-color-gray-1);
+
+    &:last-child {
+      width: 40px;
+      text-align: center;
+    }
+  }
+
+  &:last-child td {
+    border-bottom: none;
+  }
+}
+
+.priceLabel {
+  font-weight: 500;
+  color: var(--mantine-color-text);
+}
+
+.basePrice {
+  color: var(--mantine-color-dimmed);
+}
+
+.overrideInput {
+  max-width: 130px;
+}
+
+.saveButton {
+  margin-top: 4px;
+}

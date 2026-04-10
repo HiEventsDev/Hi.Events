@@ -1,0 +1,48 @@
+.banner {
+  text-align: center;
+  padding: 24px 16px;
+  margin-bottom: 20px;
+  border-radius: var(--mantine-radius-lg);
+  background: var(--mantine-primary-color-0);
+  border: 1px solid var(--mantine-primary-color-2);
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--mantine-primary-color-1);
+  color: var(--mantine-primary-color-filled);
+  animation: bounce 2s ease infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .icon {
+    animation: none;
+  }
+}
+
+.title {
+  font-weight: 700;
+  font-size: var(--mantine-font-size-lg);
+  margin-top: 12px;
+  color: var(--mantine-color-text);
+}
+
+.subtext {
+  font-size: var(--mantine-font-size-sm);
+  color: var(--mantine-color-dimmed);
+  margin-top: 4px;
+  max-width: 340px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.5;
+}

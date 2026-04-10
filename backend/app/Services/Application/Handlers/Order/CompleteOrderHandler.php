@@ -27,6 +27,7 @@ use HiEvents\Helper\IdHelper;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductPriceRepositoryInterface;
@@ -62,6 +63,7 @@ class CompleteOrderHandler
         private readonly DomainEventDispatcherService      $domainEventDispatcherService,
         private readonly EventSettingsRepositoryInterface  $eventSettingsRepository,
         private readonly CheckoutSessionManagementService  $sessionManagementService,
+        private readonly EventOccurrenceRepositoryInterface $occurrenceRepository,
     )
     {
     }
@@ -80,6 +82,8 @@ class CompleteOrderHandler
             $orderDTO = $orderData->order;
 
             $order = $this->getOrder($orderShortId);
+
+            $this->validateOccurrenceStatus($order);
 
             $updatedOrder = $this->updateOrder($order, $orderDTO);
 
@@ -144,13 +148,15 @@ class CompleteOrderHandler
         $isPerOrderCollection = $eventSettings->getAttendeeDetailsCollectionMethod() === AttendeeDetailsCollectionMethod::PER_ORDER->name;
         $this->validateTicketProductsCount($order, $orderProducts);
 
+        $orderItemRemainingQuantities = $order->getOrderItems()
+            ->mapWithKeys(fn(OrderItemDomainObject $item) => [$item->getId() => $item->getQuantity()]);
+
         foreach ($orderProducts as $attendee) {
             $productId = $productsPrices->first(
                 fn(ProductPriceDomainObject $productPrice) => $productPrice->getId() === $attendee->product_price_id)
                 ->getProductId();
             $productType = $this->getProductTypeFromPriceId($attendee->product_price_id, $order->getOrderItems());
 
-            // If it's not a ticket, skip, as we only want to create attendees for tickets
             if ($productType !== ProductType::TICKET->name) {
                 $createdProductData->push(new CreatedProductDataDTO(
                     productRequestData: $attendee,
@@ -160,12 +166,22 @@ class CompleteOrderHandler
                 continue;
             }
 
+            $orderItem = $order->getOrderItems()->first(
+                fn(OrderItemDomainObject $item) => $item->getProductPriceId() === $attendee->product_price_id
+                    && ($orderItemRemainingQuantities[$item->getId()] ?? 0) > 0
+            );
+
+            if ($orderItem !== null) {
+                $orderItemRemainingQuantities[$orderItem->getId()] = $orderItemRemainingQuantities[$orderItem->getId()] - 1;
+            }
+
             $shortId = IdHelper::shortId(IdHelper::ATTENDEE_PREFIX);
 
             $inserts[] = [
                 AttendeeDomainObjectAbstract::EVENT_ID => $order->getEventId(),
                 AttendeeDomainObjectAbstract::PRODUCT_ID => $productId,
                 AttendeeDomainObjectAbstract::PRODUCT_PRICE_ID => $attendee->product_price_id,
+                AttendeeDomainObjectAbstract::EVENT_OCCURRENCE_ID => $orderItem?->getEventOccurrenceId(),
                 AttendeeDomainObjectAbstract::STATUS => $order->isPaymentRequired()
                     ? AttendeeStatus::AWAITING_PAYMENT->name
                     : AttendeeStatus::ACTIVE->name,
@@ -272,6 +288,30 @@ class CompleteOrderHandler
 
         if ($order->getStatus() !== OrderStatus::RESERVED->name) {
             throw new ResourceConflictException(__('This order has already been processed'));
+        }
+    }
+
+    /**
+     * @throws ResourceConflictException
+     */
+    private function validateOccurrenceStatus(OrderDomainObject $order): void
+    {
+        $occurrenceIds = $order->getOrderItems()
+            ?->map(fn(OrderItemDomainObject $item) => $item->getEventOccurrenceId())
+            ->filter()
+            ->unique()
+            ->values();
+
+        if ($occurrenceIds === null || $occurrenceIds->isEmpty()) {
+            return;
+        }
+
+        $occurrences = $this->occurrenceRepository->findWhereIn('id', $occurrenceIds->toArray());
+
+        foreach ($occurrences as $occurrence) {
+            if ($occurrence->isCancelled()) {
+                throw new ResourceConflictException(__('This event date has been cancelled'));
+            }
         }
     }
 

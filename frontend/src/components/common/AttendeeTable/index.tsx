@@ -1,6 +1,7 @@
 import {ActionIcon, Anchor, Avatar, Button, Group, Popover, Tooltip} from '@mantine/core';
 import {Attendee, IdParam, MessageType} from "../../../types.ts";
 import {
+    IconCalendarEvent,
     IconCheck,
     IconClock,
     IconClipboardList,
@@ -32,7 +33,7 @@ import {ManageAttendeeModal} from "../../modals/ManageAttendeeModal";
 import {ManageOrderModal} from "../../modals/ManageOrderModal";
 import {ActionMenu} from '../ActionMenu';
 import {CheckInStatusModal} from "../CheckInStatusModal";
-import {prettyDate} from "../../../utilites/dates.ts";
+import {formatDateWithLocale, prettyDate} from "../../../utilites/dates.ts";
 import {TanStackTable, TanStackTableColumn} from "../TanStackTable";
 import {ColumnVisibilityToggle} from "../ColumnVisibilityToggle";
 import {CellContext} from "@tanstack/react-table";
@@ -40,10 +41,12 @@ import classes from './AttendeeTable.module.scss';
 
 interface AttendeeTableProps {
     attendees: Attendee[];
-    openCreateModal: () => void;
+    openCreateModal?: () => void;
+    compact?: boolean;
+    occurrenceId?: IdParam;
 }
 
-export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) => {
+export const AttendeeTable = ({attendees, openCreateModal, compact, occurrenceId}: AttendeeTableProps) => {
     const {eventId} = useParams();
     const [isMessageModalOpen, messageModal] = useDisclosure(false);
     const [isViewModalOpen, viewModalOpen] = useDisclosure(false);
@@ -58,7 +61,11 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
     const resendTicketMutation = useResendAttendeeTicket();
     const clipboard = useClipboard({timeout: 2000});
 
-    const hasCheckInLists = checkInLists?.data && checkInLists.data.length > 0;
+    const relevantCheckInLists = checkInLists?.data?.filter(list =>
+        !occurrenceId || !list.event_occurrence_id || list.event_occurrence_id === Number(occurrenceId)
+    ) || [];
+
+    const hasCheckInLists = relevantCheckInLists.length > 0;
 
     const handleModalClick = (attendee: Attendee, modal: {
         open: () => void
@@ -106,7 +113,9 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
     };
 
     const getCheckInCount = (attendee: Attendee) => {
-        return attendee.check_ins?.length || 0;
+        if (!attendee.check_ins) return 0;
+        if (!occurrenceId) return attendee.check_ins.length;
+        return attendee.check_ins.filter(ci => ci.event_occurrence_id === Number(occurrenceId)).length;
     };
 
     const hasCheckIns = (attendee: Attendee) => {
@@ -240,7 +249,9 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
                     header: t`Order & Ticket`,
                     enableHiding: true,
                     cell: (info: CellContext<Attendee, unknown>) => {
-                        const ticketTitle = getProductFromEvent(info.row.original.product_id, event)?.title;
+                        const attendee = info.row.original;
+                        const ticketTitle = getProductFromEvent(attendee.product_id, event)?.title;
+                        const occurrence = attendee.event_occurrence;
                         return (
                             <div className={classes.orderTicketContainer}>
                                 <div className={classes.ticketName}>
@@ -249,17 +260,26 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
                                         length={25}
                                     />
                                 </div>
+                                {occurrence && event?.timezone && (
+                                    <span className={classes.occurrenceChip}>
+                                        <IconCalendarEvent size={12}/>
+                                        {formatDateWithLocale(occurrence.start_date, 'shortDate', event.timezone)}
+                                        {' '}
+                                        {formatDateWithLocale(occurrence.start_date, 'timeOnly', event.timezone)}
+                                        {occurrence.label && ` · ${occurrence.label}`}
+                                    </span>
+                                )}
                                 <div className={classes.orderId}>
                                     <Anchor
-                                        onClick={() => handleOrderClick(info.row.original.order_id)}
+                                        onClick={() => handleOrderClick(attendee.order_id)}
                                         style={{cursor: 'pointer', color: 'inherit', textDecoration: 'none'}}
                                     >
-                                        {info.row.original.order?.public_id}
+                                        {attendee.order?.public_id}
                                     </Anchor>
                                 </div>
-                                {info.row.original.order?.created_at && event?.timezone && (
+                                {attendee.order?.created_at && event?.timezone && (
                                     <div className={classes.registrationDate}>
-                                        {prettyDate(info.row.original.order.created_at, event.timezone)}
+                                        {prettyDate(attendee.order.created_at, event.timezone)}
                                     </div>
                                 )}
                             </div>
@@ -309,7 +329,7 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
                     cell: (info: CellContext<Attendee, unknown>) => {
                         const checkInCount = getCheckInCount(info.row.original);
                         const hasChecked = hasCheckIns(info.row.original);
-                        const totalLists = checkInLists?.data?.length || 0;
+                        const totalLists = relevantCheckInLists.length;
 
                         return (
                             <button
@@ -391,7 +411,7 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
                 return true;
             });
         },
-        [emailPopoverId, event, hasCheckInLists]
+        [emailPopoverId, event, hasCheckInLists, relevantCheckInLists, occurrenceId]
     );
 
     if (attendees.length === 0) {
@@ -403,12 +423,14 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
                     <p>
                         {t`Your attendees will appear here once they have registered for your event. You can also manually add attendees.`}
                     </p>
-                    <Button
-                        size={'xs'}
-                        leftSection={<IconPlus/>}
-                        color={'green'}
-                        onClick={() => openCreateModal()}>{t`Manually add an Attendee`}
-                    </Button>
+                    {openCreateModal && (
+                        <Button
+                            size={'xs'}
+                            leftSection={<IconPlus/>}
+                            color={'green'}
+                            onClick={() => openCreateModal()}>{t`Manually add an Attendee`}
+                        </Button>
+                    )}
                 </>
             )}
         />
@@ -420,14 +442,17 @@ export const AttendeeTable = ({attendees, openCreateModal}: AttendeeTableProps) 
                 data={attendees}
                 columns={columns}
                 storageKey="attendee-table"
-                enableColumnVisibility={true}
-                renderColumnVisibilityToggle={(table) => <ColumnVisibilityToggle table={table}/>}
+                enableColumnVisibility={!compact}
+                renderColumnVisibilityToggle={!compact ? (table) => <ColumnVisibilityToggle table={table}/> : undefined}
+                hideHeader={compact}
+                noCard={compact}
             />
             {(selectedAttendee && isMessageModalOpen) && <SendMessageModal
                 onClose={messageModal.close}
                 orderId={selectedAttendee.order_id}
                 attendeeId={selectedAttendee.id}
                 messageType={MessageType.IndividualAttendees}
+                eventOccurrenceId={selectedAttendee.event_occurrence_id}
             />}
             {(selectedAttendee?.id && isViewModalOpen) && <ManageAttendeeModal
                 attendeeId={selectedAttendee.id}

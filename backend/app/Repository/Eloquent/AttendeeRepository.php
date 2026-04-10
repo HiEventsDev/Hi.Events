@@ -32,11 +32,17 @@ class AttendeeRepository extends BaseRepository implements AttendeeRepositoryInt
         return AttendeeDomainObject::class;
     }
 
-    public function findByEventIdForExport(int $eventId): Collection
+    public function findByEventIdForExport(int $eventId, ?int $eventOccurrenceId = null): Collection
     {
-        $this->applyConditions([
+        $conditions = [
             'attendees.event_id' => $eventId,
-        ]);
+        ];
+
+        if ($eventOccurrenceId !== null) {
+            $conditions['attendees.event_occurrence_id'] = $eventOccurrenceId;
+        }
+
+        $this->applyConditions($conditions);
 
         $this->model->select('attendees.*');
         $this->model->join('orders', 'orders.id', '=', 'attendees.order_id');
@@ -131,6 +137,14 @@ class AttendeeRepository extends BaseRepository implements AttendeeRepositoryInt
             ->where('check_in_lists.short_id', $shortId)
             ->whereIn('attendees.status',[AttendeeStatus::ACTIVE->name, AttendeeStatus::CANCELLED->name, AttendeeStatus::AWAITING_PAYMENT->name])
             ->whereIn('orders.status', [OrderStatus::COMPLETED->name, OrderStatus::AWAITING_OFFLINE_PAYMENT->name]);
+
+        $occurrenceFilter = $params->filter_fields?->firstWhere('field', 'event_occurrence_id');
+        if ($occurrenceFilter) {
+            $this->model = $this->model->where(
+                'attendees.event_occurrence_id',
+                $occurrenceFilter->value
+            );
+        }
 
         $this->loadRelation(new Relationship(AttendeeCheckInDomainObject::class, name: 'check_ins'));
 

@@ -93,7 +93,7 @@ class PartialEditAttendeeHandler
     private function adjustProductQuantity(PartialEditAttendeeDTO $data, AttendeeDomainObject $attendee): void
     {
         if ($data->status === AttendeeStatus::ACTIVE->name) {
-            $this->productQuantityService->increaseQuantitySold($attendee->getProductPriceId());
+            $this->productQuantityService->increaseQuantitySold($attendee->getProductPriceId(), 1, $attendee->getEventOccurrenceId());
 
             event(new CapacityChangedEvent(
                 eventId: $attendee->getEventId(),
@@ -102,7 +102,7 @@ class PartialEditAttendeeHandler
                 productPriceId: $attendee->getProductPriceId(),
             ));
         } elseif ($data->status === AttendeeStatus::CANCELLED->name) {
-            $this->productQuantityService->decreaseQuantitySold($attendee->getProductPriceId());
+            $this->productQuantityService->decreaseQuantitySold($attendee->getProductPriceId(), 1, $attendee->getEventOccurrenceId());
 
             event(new CapacityChangedEvent(
                 eventId: $attendee->getEventId(),
@@ -137,12 +137,14 @@ class PartialEditAttendeeHandler
         if ($data->status === AttendeeStatus::CANCELLED->name) {
             $this->eventStatisticsCancellationService->decrementForCancelledAttendee(
                 eventId: $attendee->getEventId(),
-                orderDate: $order->getCreatedAt()
+                orderDate: $order->getCreatedAt(),
+                occurrenceId: $attendee->getEventOccurrenceId(),
             );
         } elseif ($data->status === AttendeeStatus::ACTIVE->name) {
             $this->eventStatisticsReactivationService->incrementForReactivatedAttendee(
                 eventId: $attendee->getEventId(),
-                orderDate: $order->getCreatedAt()
+                orderDate: $order->getCreatedAt(),
+                occurrenceId: $attendee->getEventOccurrenceId(),
             );
         }
     }

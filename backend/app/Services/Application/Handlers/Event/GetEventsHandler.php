@@ -2,6 +2,7 @@
 
 namespace HiEvents\Services\Application\Handlers\Event;
 
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\EventStatisticDomainObject;
 use HiEvents\DomainObjects\ImageDomainObject;
@@ -24,6 +25,7 @@ class GetEventsHandler
     public function handle(GetEventsDTO $dto): LengthAwarePaginator
     {
         return $this->eventRepository
+            ->loadRelation(new Relationship(EventOccurrenceDomainObject::class))
             ->loadRelation(new Relationship(ImageDomainObject::class))
             ->loadRelation(new Relationship(EventSettingDomainObject::class))
             ->loadRelation(new Relationship(EventStatisticDomainObject::class))

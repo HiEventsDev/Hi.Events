@@ -8,30 +8,39 @@ use HiEvents\DomainObjects\PromoCodeDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\Helper\Currency;
+use HiEvents\Repository\Interfaces\ProductPriceOccurrenceOverrideRepositoryInterface;
 use HiEvents\Services\Domain\Product\DTO\OrderProductPriceDTO;
 use HiEvents\Services\Domain\Product\DTO\PriceDTO;
 
 class ProductPriceService
 {
+    public function __construct(
+        private readonly ProductPriceOccurrenceOverrideRepositoryInterface $priceOverrideRepository,
+    )
+    {
+    }
+
     public function getIndividualPrice(
         ProductDomainObject      $product,
         ProductPriceDomainObject $price,
-        ?PromoCodeDomainObject   $promoCode
+        ?PromoCodeDomainObject   $promoCode,
+        ?int                     $eventOccurrenceId = null,
     ): float
     {
         return $this->getPrice($product, new OrderProductPriceDTO(
             quantity: 1,
             price_id: $price->getId(),
-        ), $promoCode)->price;
+        ), $promoCode, $eventOccurrenceId)->price;
     }
 
     public function getPrice(
         ProductDomainObject    $product,
         OrderProductPriceDTO   $productOrderDetail,
-        ?PromoCodeDomainObject $promoCode
+        ?PromoCodeDomainObject $promoCode,
+        ?int                   $eventOccurrenceId = null,
     ): PriceDTO
     {
-        $price = $this->determineProductPrice($product, $productOrderDetail);
+        $price = $this->determineProductPrice($product, $productOrderDetail, $eventOccurrenceId);
 
         if ($product->getType() === ProductPriceType::FREE->name) {
             return new PriceDTO(0.00);
@@ -65,8 +74,19 @@ class ProductPriceService
         );
     }
 
-    private function determineProductPrice(ProductDomainObject $product, OrderProductPriceDTO $productOrderDetails): float
+    private function determineProductPrice(ProductDomainObject $product, OrderProductPriceDTO $productOrderDetails, ?int $eventOccurrenceId = null): float
     {
+        if ($eventOccurrenceId !== null) {
+            $override = $this->priceOverrideRepository->findFirstWhere([
+                'event_occurrence_id' => $eventOccurrenceId,
+                'product_price_id' => $productOrderDetails->price_id,
+            ]);
+
+            if ($override !== null) {
+                return (float) $override->getPrice();
+            }
+        }
+
         return match ($product->getType()) {
             ProductPriceType::DONATION->name => max($product->getPrice(), $productOrderDetails->price),
             ProductPriceType::PAID->name => $product->getPrice(),

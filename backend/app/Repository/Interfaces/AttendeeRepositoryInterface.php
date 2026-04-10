@@ -15,7 +15,7 @@ interface AttendeeRepositoryInterface extends RepositoryInterface
 {
     public function findByEventId(int $eventId, QueryParamsDTO $params): LengthAwarePaginator;
 
-    public function findByEventIdForExport(int $eventId): Collection;
+    public function findByEventIdForExport(int $eventId, ?int $eventOccurrenceId = null): Collection;
 
     public function getAttendeesByCheckInShortId(string $shortId, QueryParamsDTO $params): Paginator;
 }

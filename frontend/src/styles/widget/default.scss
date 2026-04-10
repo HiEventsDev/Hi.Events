@@ -255,5 +255,42 @@
       color: var(--widget-secondary-text-color, var(--hi-color-white));
     }
   }
+
+  .hi-selected-date-banner {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    margin-bottom: 16px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    background: color-mix(in srgb, var(--widget-primary-color, #228be6) 10%, transparent);
+    color: var(--widget-primary-text-color, inherit);
+  }
+
+  .hi-selected-date-text {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .hi-selected-date-change {
+    flex-shrink: 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--widget-primary-color, #228be6) !important;
+    text-decoration: underline;
+  }
+
+  .hi-occurrence-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 16px;
+    font-size: 0.9rem;
+    color: var(--widget-primary-text-color, inherit);
+    opacity: 0.7;
+  }
 }
 

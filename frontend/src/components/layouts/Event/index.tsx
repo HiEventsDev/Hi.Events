@@ -1,5 +1,6 @@
 import {
     IconArrowLeft,
+    IconCalendarRepeat,
     IconChartPie,
     IconChevronRight,
     IconDashboard,
@@ -46,8 +47,11 @@ import {useWindowWidth} from "../../../hooks/useWindowWidth.ts";
 import {SidebarCallout} from "../../common/SidebarCallout";
 import {useGetMe} from "../../../queries/useGetMe.ts";
 import {useResendEmailConfirmation} from "../../../mutations/useResendEmailConfirmation.ts";
-import {useState} from "react";
+import {useMemo, useState} from "react";
 import {eventHomepageUrl} from "../../../utilites/urlHelper.ts";
+import {EventType} from "../../../types.ts";
+import {useGetEventOccurrence} from "../../../queries/useGetEventOccurrence.ts";
+import {prettyDate} from "../../../utilites/dates.ts";
 
 const EventLayout = () => {
     const location = useLocation();
@@ -65,6 +69,12 @@ const EventLayout = () => {
 
     const resendEmailConfirmationMutation = useResendEmailConfirmation();
     const [emailConfirmationResent, setEmailConfirmationResent] = useState(false);
+
+    const occurrenceIdFromUrl = useMemo(() => {
+        const match = location.pathname.match(/\/occurrences\/(\d+)$/);
+        return match ? match[1] : undefined;
+    }, [location.pathname]);
+    const {data: occurrence} = useGetEventOccurrence(eventId, occurrenceIdFromUrl);
 
     const handleEmailConfirmationResend = () => {
         resendEmailConfirmationMutation.mutate({
@@ -101,6 +111,12 @@ const EventLayout = () => {
 
         // 2. EVENT SETUP
         {label: t`Setup & Design`},
+        {
+            link: 'occurrences',
+            label: t`Occurrence Schedule`,
+            icon: IconCalendarRepeat,
+            showWhen: () => event?.type === EventType.RECURRING,
+        },
         {link: 'settings', label: t`Event Settings`, icon: IconSettings},
         {link: 'homepage-designer', label: t`Homepage Designer`, icon: IconPaint},
         {link: 'ticket-designer', label: t`Ticket Designer`, icon: IconTicket},
@@ -119,7 +135,12 @@ const EventLayout = () => {
         {link: 'check-in', label: t`Check-In Lists`, icon: IconQrcode},
         {link: 'messages', label: t`Messages`, icon: IconSend},
         {link: 'sold-out-waitlist', label: t`Waitlist`, icon: IconListCheck},
-        {link: 'capacity-assignments', label: t`Capacity Management`, icon: IconUsersGroup},
+        {
+            link: 'capacity-assignments',
+            label: t`Capacity Management`,
+            icon: IconUsersGroup,
+            showWhen: () => event?.type !== EventType.RECURRING,
+        },
 
         // 5. INTEGRATIONS
         {label: t`Integrations`},
@@ -143,7 +164,15 @@ const EventLayout = () => {
         {
             link: `/manage/event/${event?.id}`,
             content: <Truncate length={breadcrumbItemsWidth} text={event?.title} showTooltip={false}/>
-        }
+        },
+        ...(occurrenceIdFromUrl && occurrence ? [{
+            link: `/manage/event/${event?.id}/occurrences/${occurrenceIdFromUrl}`,
+            content: <Truncate
+                length={breadcrumbItemsWidth}
+                text={prettyDate(occurrence.start_date, event?.timezone || 'UTC') + (occurrence.label ? ` (${occurrence.label})` : '')}
+                showTooltip={false}
+            />
+        }] : []),
     ] : [
         {link: '#', content: '...'}
     ];

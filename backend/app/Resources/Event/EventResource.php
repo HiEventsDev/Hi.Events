@@ -4,6 +4,7 @@ namespace HiEvents\Resources\Event;
 
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Resources\BaseResource;
+use HiEvents\Resources\EventOccurrence\EventOccurrenceResource;
 use HiEvents\Resources\Image\ImageResource;
 use HiEvents\Resources\Organizer\OrganizerResource;
 use HiEvents\Resources\Product\ProductResource;
@@ -24,7 +25,10 @@ class EventResource extends BaseResource
             'description' => $this->getDescription(),
             'start_date' => $this->getStartDate(),
             'end_date' => $this->getEndDate(),
+            'next_occurrence_start_date' => $this->getNextOccurrenceStartDate(),
             'status' => $this->getStatus(),
+            'type' => $this->getType(),
+            'recurrence_rule' => $this->getRecurrenceRule(),
             'lifecycle_status' => $this->getLifeCycleStatus(),
             'currency' => $this->getCurrency(),
             'timezone' => $this->getTimezone(),
@@ -51,6 +55,10 @@ class EventResource extends BaseResource
             'statistics' => $this->when(
                 condition: !is_null($this->getEventStatistics()),
                 value: fn() => new EventStatisticsResource($this->getEventStatistics())
+            ),
+            'occurrences' => $this->when(
+                condition: !is_null($this->getEventOccurrences()) && $this->getEventOccurrences()->isNotEmpty(),
+                value: fn() => EventOccurrenceResource::collection($this->getEventOccurrences()),
             ),
         ];
     }

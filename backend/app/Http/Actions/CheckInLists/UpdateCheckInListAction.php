@@ -34,6 +34,7 @@ class UpdateCheckInListAction extends BaseAction
                     expiresAt: $request->validated('expires_at'),
                     activatesAt: $request->validated('activates_at'),
                     id: $checkInListId,
+                    eventOccurrenceId: $request->validated('event_occurrence_id'),
                 )
             );
         } catch (UnrecognizedProductIdException $exception) {

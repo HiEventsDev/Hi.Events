@@ -42,26 +42,25 @@ const Events = () => {
             <PageTitle>
                 {t`Events`}
             </PageTitle>
-            <ToolBar searchComponent={() => (
-                <SearchBarWrapper
-                    placeholder={t`Search by event name...`}
-                    setSearchParams={setSearchParams}
-                    searchParams={searchParams}
-                    pagination={pagination}
-                />
-            )}>
-                <>
-                    <Button
-                        color={'green'}
-                        rightSection={
-                            <IconCalendarPlus stroke={1.5}/>
-                        }
-                        onClick={openCreateModal}
-                        pr={12}
-                    >
-                        {t`Create Event`}
-                    </Button>
-                </>
+            <ToolBar
+                searchComponent={() => (
+                    <SearchBarWrapper
+                        placeholder={t`Search by event name...`}
+                        setSearchParams={setSearchParams}
+                        searchParams={searchParams}
+                    />
+                )}
+            >
+                <Button
+                    color={'green'}
+                    rightSection={
+                        <IconCalendarPlus stroke={1.5}/>
+                    }
+                    onClick={openCreateModal}
+                    pr={12}
+                >
+                    {t`Create Event`}
+                </Button>
             </ToolBar>
 
             <EventsDashboardStatusButtons

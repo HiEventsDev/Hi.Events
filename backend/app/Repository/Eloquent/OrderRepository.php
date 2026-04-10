@@ -54,6 +54,13 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
 
         if (!empty($params->filter_fields)) {
             $this->applyFilterFields($params, OrderDomainObject::getAllowedFilterFields());
+
+            $occurrenceFilter = $params->filter_fields->firstWhere('field', 'event_occurrence_id');
+            if ($occurrenceFilter) {
+                $this->model = $this->model->whereHas('order_items', function (Builder $query) use ($occurrenceFilter) {
+                    $query->where('order_items.event_occurrence_id', $occurrenceFilter->value);
+                });
+            }
         }
 
         $this->model = $this->model->orderBy(
@@ -157,24 +164,29 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
         return Order::class;
     }
 
-    public function findOrdersAssociatedWithProducts(int $eventId, array $productIds, array $orderStatuses): Collection
+    public function findOrdersAssociatedWithProducts(int $eventId, array $productIds, array $orderStatuses, ?int $eventOccurrenceId = null): Collection
     {
-        return $this->handleResults(
-            $this->model
-                ->whereHas('order_items', static function (Builder $query) use ($productIds) {
-                    $query->whereIn('product_id', $productIds);
-                })
-                ->whereIn('status', $orderStatuses)
-                ->where('event_id', $eventId)
-                ->get()
-        );
+        $query = $this->model
+            ->whereHas('order_items', static function (Builder $query) use ($productIds, $eventOccurrenceId) {
+                $query->whereIn('product_id', $productIds);
+                if ($eventOccurrenceId !== null) {
+                    $query->where('order_items.event_occurrence_id', $eventOccurrenceId);
+                }
+            })
+            ->whereIn('status', $orderStatuses)
+            ->where('event_id', $eventId);
+
+        return $this->handleResults($query->get());
     }
 
-    public function countOrdersAssociatedWithProducts(int $eventId, array $productIds, array $orderStatuses): int
+    public function countOrdersAssociatedWithProducts(int $eventId, array $productIds, array $orderStatuses, ?int $eventOccurrenceId = null): int
     {
         $count = $this->model
-            ->whereHas('order_items', static function (Builder $query) use ($productIds) {
+            ->whereHas('order_items', static function (Builder $query) use ($productIds, $eventOccurrenceId) {
                 $query->whereIn('product_id', $productIds);
+                if ($eventOccurrenceId !== null) {
+                    $query->where('order_items.event_occurrence_id', $eventOccurrenceId);
+                }
             })
             ->whereIn('status', $orderStatuses)
             ->where('event_id', $eventId)

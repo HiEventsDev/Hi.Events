@@ -17,6 +17,7 @@ abstract class AttendeeDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
     final public const CHECKED_IN_BY = 'checked_in_by';
     final public const CHECKED_OUT_BY = 'checked_out_by';
     final public const PRODUCT_PRICE_ID = 'product_price_id';
+    final public const EVENT_OCCURRENCE_ID = 'event_occurrence_id';
     final public const SHORT_ID = 'short_id';
     final public const FIRST_NAME = 'first_name';
     final public const LAST_NAME = 'last_name';
@@ -37,6 +38,7 @@ abstract class AttendeeDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
     protected ?int $checked_in_by = null;
     protected ?int $checked_out_by = null;
     protected int $product_price_id;
+    protected int $event_occurrence_id;
     protected string $short_id;
     protected string $first_name = '';
     protected string $last_name = '';
@@ -60,6 +62,7 @@ abstract class AttendeeDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
                     'checked_in_by' => $this->checked_in_by ?? null,
                     'checked_out_by' => $this->checked_out_by ?? null,
                     'product_price_id' => $this->product_price_id ?? null,
+                    'event_occurrence_id' => $this->event_occurrence_id ?? null,
                     'short_id' => $this->short_id ?? null,
                     'first_name' => $this->first_name ?? null,
                     'last_name' => $this->last_name ?? null,
@@ -150,6 +153,17 @@ abstract class AttendeeDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
     public function getProductPriceId(): int
     {
         return $this->product_price_id;
+    }
+
+    public function setEventOccurrenceId(int $event_occurrence_id): self
+    {
+        $this->event_occurrence_id = $event_occurrence_id;
+        return $this;
+    }
+
+    public function getEventOccurrenceId(): int
+    {
+        return $this->event_occurrence_id;
     }
 
     public function setShortId(string $short_id): self

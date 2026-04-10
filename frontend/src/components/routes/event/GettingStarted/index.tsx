@@ -16,6 +16,8 @@ import {useEffect, useState} from 'react';
 import ConfettiAnimation from "./ConfettiAnimaiton";
 import {Browser, useBrowser} from "../../../../hooks/useGetBrowser.ts";
 import {trackEvent, AnalyticsEvents} from "../../../../utilites/analytics.ts";
+import {EventType} from "../../../../types.ts";
+import {useGetEventOccurrences} from "../../../../queries/useGetEventOccurrences.ts";
 
 const GettingStarted = () => {
     const {eventId} = useParams();
@@ -51,6 +53,9 @@ const GettingStarted = () => {
     const accountQuery = useGetAccount();
     const account = accountQuery.data;
     const statusToggleMutation = useUpdateEventStatus();
+    const isRecurring = event?.type === EventType.RECURRING;
+    const occurrencesQuery = useGetEventOccurrences(eventId, {pageNumber: 1, perPage: 1});
+    const hasOccurrences = isRecurring && (occurrencesQuery?.data?.data?.length ?? 0) > 0;
 
     const handleStatusToggle = () => {
         const newStatus = event?.status === 'LIVE' ? 'DRAFT' : 'LIVE';
@@ -99,14 +104,18 @@ const GettingStarted = () => {
 
                             <div className={classes.progressBarContainer}>
                                 <Progress
-                                    value={[
-                                        hasProducts,
-                                        event?.description,
-                                        account?.stripe_connect_setup_complete,
-                                        hasImages,
-                                        event?.status === 'LIVE',
-                                        account?.is_account_email_confirmed
-                                    ].filter(Boolean).length / 6 * 100}
+                                    value={(() => {
+                                        const steps = [
+                                            hasProducts,
+                                            event?.description,
+                                            account?.stripe_connect_setup_complete,
+                                            hasImages,
+                                            event?.status === 'LIVE',
+                                            account?.is_account_email_confirmed,
+                                            ...(isRecurring ? [hasOccurrences] : []),
+                                        ];
+                                        return steps.filter(Boolean).length / steps.length * 100;
+                                    })()}
                                     size="md"
                                     radius="xl"
                                     className={classes.progressBar}
@@ -132,6 +141,22 @@ const GettingStarted = () => {
                             {hasProducts ? t`Add More tickets` : t`Add tickets`}
                         </Button>
                     </Card>
+
+                    {isRecurring && (
+                        <Card className={hasOccurrences ? classes.completedCard : ''}>
+                            {hasOccurrences && <CompletedBadge/>}
+                            <h2>
+                                {t`📅 Set up your schedule`}
+                            </h2>
+                            <p>
+                                {t`Generate or add dates and times for your recurring event.`}
+                            </p>
+                            <Button variant={'light'} component={NavLink}
+                                    to={'/manage/event/' + eventId + '/occurrences'}>
+                                {hasOccurrences ? t`Manage schedule` : t`Set up schedule`}
+                            </Button>
+                        </Card>
+                    )}
 
                     <Card className={event?.description ? classes.completedCard : ''}>
                         {event?.description && <CompletedBadge/>}

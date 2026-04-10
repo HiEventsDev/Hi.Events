@@ -68,11 +68,11 @@ class EmailTemplateTokenTest extends TestCase
         $tokens = $response->json('tokens');
         $this->assertNotEmpty($tokens);
 
-        $firstNameToken = collect($tokens)->firstWhere('token', '{{ order_first_name }}');
+        $firstNameToken = collect($tokens)->firstWhere('token', '{{ order.first_name }}');
         $this->assertNotNull($firstNameToken);
         $this->assertEquals('The first name of the person who placed the order', $firstNameToken['description']);
 
-        $lastNameToken = collect($tokens)->firstWhere('token', '{{ order_last_name }}');
+        $lastNameToken = collect($tokens)->firstWhere('token', '{{ order.last_name }}');
         $this->assertNotNull($lastNameToken);
         $this->assertEquals('The last name of the person who placed the order', $lastNameToken['description']);
     }
@@ -97,7 +97,7 @@ class EmailTemplateTokenTest extends TestCase
         $tokens = $response->json('tokens');
         $this->assertNotEmpty($tokens);
 
-        $attendeeNameToken = collect($tokens)->firstWhere('token', '{{ attendee_name }}');
+        $attendeeNameToken = collect($tokens)->firstWhere('token', '{{ attendee.name }}');
         $this->assertNotNull($attendeeNameToken);
     }
 
@@ -128,10 +128,10 @@ class EmailTemplateTokenTest extends TestCase
         $tokens = $response->json('tokens');
         $tokenNames = collect($tokens)->pluck('token')->toArray();
         
-        $this->assertContains('{{ event_title }}', $tokenNames);
-        $this->assertContains('{{ order_number }}', $tokenNames);
-        $this->assertContains('{{ order_total }}', $tokenNames);
-        $this->assertContains('{{ organizer_name }}', $tokenNames);
+        $this->assertContains('{{ event.title }}', $tokenNames);
+        $this->assertContains('{{ order.number }}', $tokenNames);
+        $this->assertContains('{{ order.total }}', $tokenNames);
+        $this->assertContains('{{ organizer.name }}', $tokenNames);
     }
 
     public function test_tokens_have_proper_structure(): void

@@ -37,6 +37,7 @@ class UpdateCheckInListService
                     CheckInListDomainObjectAbstract::NAME => $checkInList->getName(),
                     CheckInListDomainObjectAbstract::DESCRIPTION => $checkInList->getDescription(),
                     CheckInListDomainObjectAbstract::EVENT_ID => $checkInList->getEventId(),
+                    CheckInListDomainObjectAbstract::EVENT_OCCURRENCE_ID => $checkInList->getEventOccurrenceId(),
                     CheckInListDomainObjectAbstract::EXPIRES_AT => $checkInList->getExpiresAt()
                         ? DateHelper::convertToUTC($checkInList->getExpiresAt(), $event->getTimezone())
                         : null,

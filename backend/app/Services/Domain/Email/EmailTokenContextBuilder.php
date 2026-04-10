@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Enums\PaymentProviders;
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
@@ -23,18 +24,21 @@ class EmailTokenContextBuilder
         OrderDomainObject        $order,
         EventDomainObject        $event,
         OrganizerDomainObject    $organizer,
-        EventSettingDomainObject $eventSettings
+        EventSettingDomainObject $eventSettings,
+        ?EventOccurrenceDomainObject $occurrence = null,
     ): array
     {
-        $eventStartDate = new Carbon(DateHelper::convertFromUTC($event->getStartDate(), $event->getTimezone()));
-        $eventEndDate = $event->getEndDate() ? new Carbon(DateHelper::convertFromUTC($event->getEndDate(), $event->getTimezone())) : null;
+        $startDateRaw = $occurrence?->getStartDate() ?? $event->getStartDate();
+        $endDateRaw = $occurrence?->getEndDate() ?? $event->getEndDate();
+
+        $eventStartDate = $startDateRaw ? new Carbon(DateHelper::convertFromUTC($startDateRaw, $event->getTimezone())) : null;
+        $eventEndDate = $endDateRaw ? new Carbon(DateHelper::convertFromUTC($endDateRaw, $event->getTimezone())) : null;
 
         return [
-            // Event object
             'event' => [
-                'title' => $event->getTitle(),
-                'date' => $eventStartDate->format('F j, Y'),
-                'time' => $eventStartDate->format('g:i A'),
+                'title' => $event->getTitle() . ($occurrence?->getLabel() ? ' - ' . $occurrence->getLabel() : ''),
+                'date' => $eventStartDate?->format('F j, Y') ?? '',
+                'time' => $eventStartDate?->format('g:i A') ?? '',
                 'end_date' => $eventEndDate?->format('F j, Y') ?? '',
                 'end_time' => $eventEndDate?->format('g:i A') ?? '',
                 'full_address' => $eventSettings->getLocationDetails() ? AddressHelper::formatAddress($eventSettings->getLocationDetails()) : '',
@@ -43,7 +47,6 @@ class EmailTokenContextBuilder
                 'timezone' => $event->getTimezone(),
             ],
 
-            // Order object
             'order' => [
                 'url' => sprintf(
                     Url::getFrontEndUrlFromConfig(Url::ORDER_SUMMARY),
@@ -53,8 +56,8 @@ class EmailTokenContextBuilder
                 'number' => $order->getPublicId(),
                 'total' => Currency::format($order->getTotalGross(), $event->getCurrency()),
                 'date' => (new Carbon($order->getCreatedAt()))->format('F j, Y'),
-                'currency' => $order->getCurrency(), // added
-                'locale' => $order->getLocale(), // added
+                'currency' => $order->getCurrency(),
+                'locale' => $order->getLocale(),
                 'first_name' => $order->getFirstName() ?? '',
                 'last_name' => $order->getLastName() ?? '',
                 'email' => $order->getEmail() ?? '',
@@ -62,17 +65,23 @@ class EmailTokenContextBuilder
                 'is_offline_payment' => $order->getPaymentProvider() === PaymentProviders::OFFLINE->value,
             ],
 
-            // Organizer object
             'organizer' => [
                 'name' => $organizer->getName() ?? '',
                 'email' => $organizer->getEmail() ?? '',
             ],
 
-            // Settings object
             'settings' => [
                 'support_email' => $eventSettings->getSupportEmail() ?? $organizer->getEmail() ?? '',
                 'offline_payment_instructions' => $eventSettings->getOfflinePaymentInstructions() ?? '',
                 'post_checkout_message' => $eventSettings->getPostCheckoutMessage() ?? '',
+            ],
+
+            'occurrence' => [
+                'start_date' => $eventStartDate?->format('F j, Y') ?? '',
+                'start_time' => $eventStartDate?->format('g:i A') ?? '',
+                'end_date' => $eventEndDate?->format('F j, Y') ?? '',
+                'end_time' => $eventEndDate?->format('g:i A') ?? '',
+                'label' => $occurrence?->getLabel() ?? '',
             ],
         ];
     }
@@ -82,10 +91,11 @@ class EmailTokenContextBuilder
         OrderDomainObject        $order,
         EventDomainObject        $event,
         OrganizerDomainObject    $organizer,
-        EventSettingDomainObject $eventSettings
+        EventSettingDomainObject $eventSettings,
+        ?EventOccurrenceDomainObject $occurrence = null,
     ): array
     {
-        $baseContext = $this->buildOrderConfirmationContext($order, $event, $organizer, $eventSettings);
+        $baseContext = $this->buildOrderConfirmationContext($order, $event, $organizer, $eventSettings, $occurrence);
 
         /** @var OrderItemDomainObject $orderItem */
         $orderItem = $order->getOrderItems()->first(fn(OrderItemDomainObject $item) => $item->getProductPriceId() === $attendee->getProductPriceId());
@@ -110,6 +120,61 @@ class EmailTokenContextBuilder
         ];
 
         return $baseContext;
+    }
+
+    public function buildOccurrenceCancellationContext(
+        EventDomainObject $event,
+        EventOccurrenceDomainObject $occurrence,
+        OrganizerDomainObject $organizer,
+        EventSettingDomainObject $eventSettings,
+        bool $refundOrders = false,
+    ): array
+    {
+        $startDateRaw = $occurrence->getStartDate();
+        $endDateRaw = $occurrence->getEndDate();
+
+        $eventStartDate = $startDateRaw ? new Carbon(DateHelper::convertFromUTC($startDateRaw, $event->getTimezone())) : null;
+        $eventEndDate = $endDateRaw ? new Carbon(DateHelper::convertFromUTC($endDateRaw, $event->getTimezone())) : null;
+
+        return [
+            'event' => [
+                'title' => $event->getTitle() . ($occurrence->getLabel() ? ' - ' . $occurrence->getLabel() : ''),
+                'date' => $eventStartDate?->format('F j, Y') ?? '',
+                'time' => $eventStartDate?->format('g:i A') ?? '',
+                'end_date' => $eventEndDate?->format('F j, Y') ?? '',
+                'end_time' => $eventEndDate?->format('g:i A') ?? '',
+                'full_address' => $eventSettings->getLocationDetails() ? AddressHelper::formatAddress($eventSettings->getLocationDetails()) : '',
+                'location_details' => $eventSettings->getLocationDetails(),
+                'description' => $event->getDescription() ?? '',
+                'timezone' => $event->getTimezone(),
+                'url' => sprintf(
+                    Url::getFrontEndUrlFromConfig(Url::EVENT_HOMEPAGE),
+                    $event->getId(),
+                    $event->getSlug(),
+                ),
+            ],
+
+            'occurrence' => [
+                'start_date' => $eventStartDate?->format('F j, Y') ?? '',
+                'start_time' => $eventStartDate?->format('g:i A') ?? '',
+                'end_date' => $eventEndDate?->format('F j, Y') ?? '',
+                'end_time' => $eventEndDate?->format('g:i A') ?? '',
+                'label' => $occurrence->getLabel() ?? '',
+            ],
+
+            'organizer' => [
+                'name' => $organizer->getName() ?? '',
+                'email' => $organizer->getEmail() ?? '',
+            ],
+
+            'settings' => [
+                'support_email' => $eventSettings->getSupportEmail() ?? $organizer->getEmail() ?? '',
+            ],
+
+            'cancellation' => [
+                'refund_issued' => $refundOrders,
+            ],
+        ];
     }
 
     public function buildPreviewContext(string $templateType): array
@@ -158,6 +223,14 @@ class EmailTokenContextBuilder
             ],
         ];
 
+        $baseContext['occurrence'] = [
+            'start_date' => 'April 25, 2029',
+            'start_time' => '7:00 PM',
+            'end_date' => 'April 26, 2029',
+            'end_time' => '11:00 PM',
+            'label' => 'Session A',
+        ];
+
         if ($templateType === 'attendee_ticket') {
             $baseContext['attendee'] = [
                 'name' => 'John Smith',
@@ -168,6 +241,13 @@ class EmailTokenContextBuilder
                 'price' => '$75.00',
                 'url' => 'https://example.com/ticket/XYZ789',
             ];
+        }
+
+        if ($templateType === 'occurrence_cancellation') {
+            $baseContext['cancellation'] = [
+                'refund_issued' => true,
+            ];
+            $baseContext['event']['url'] = 'https://example.com/event/123/summer-fest';
         }
 
         return $baseContext;

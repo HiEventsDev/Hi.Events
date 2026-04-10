@@ -19,6 +19,7 @@ export interface CreateAttendeeRequest extends EditAttendeeRequest {
     send_confirmation_email: boolean,
     taxes_and_fees: TaxAndFee[],
     locale: SupportedLocales,
+    event_occurrence_id?: number | null,
 }
 
 export const attendeesClient = {
@@ -56,8 +57,9 @@ export const attendeesClient = {
         });
         return response.data;
     },
-    export: async (eventId: IdParam): Promise<Blob> => {
-        const response = await api.post(`events/${eventId}/attendees/export`, {}, {
+    export: async (eventId: IdParam, eventOccurrenceId?: number | null): Promise<Blob> => {
+        const body = eventOccurrenceId ? {event_occurrence_id: eventOccurrenceId} : {};
+        const response = await api.post(`events/${eventId}/attendees/export`, body, {
             responseType: 'blob',
         });
 

@@ -2,12 +2,12 @@ import {useParams} from "react-router";
 import {useGetCheckInListPublic} from "../../../queries/useGetCheckInListPublic.ts";
 import {useCallback, useEffect, useRef, useState} from "react";
 import {useDebouncedValue, useDisclosure, useNetwork} from "@mantine/hooks";
-import {Attendee, QueryFilters, QueryFilterOperator} from "../../../types.ts";
+import {Attendee, EventOccurrence, QueryFilters, QueryFilterOperator} from "../../../types.ts";
 import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {t, Trans} from "@lingui/macro";
 import {AxiosError} from "axios";
 import classes from "./CheckIn.module.scss";
-import {ActionIcon, Modal} from "@mantine/core";
+import {ActionIcon, Modal, Text} from "@mantine/core";
 import {SearchBar} from "../../common/SearchBar";
 import {IconInfoCircle, IconQrcode, IconVolume, IconVolumeOff} from "@tabler/icons-react";
 import {QRScannerComponent} from "../../common/AttendeeCheckInTable/QrScanner.tsx";
@@ -20,11 +20,13 @@ import Truncate from "../../common/Truncate";
 import {Header} from "../../common/Header";
 import {publicCheckInClient} from "../../../api/check-in.client.ts";
 import {isSsr} from "../../../utilites/helpers.ts";
+import {formatDateWithLocale} from "../../../utilites/dates.ts";
 import {AttendeeList} from "../../common/CheckIn/AttendeeList";
 import {CheckInOptionsModal} from "../../common/CheckIn/CheckInOptionsModal";
 import {ScannerSelectionModal} from "../../common/CheckIn/ScannerSelectionModal";
 import {CheckInInfoModal} from "../../common/CheckIn/CheckInInfoModal";
 import {HidScannerStatus} from "../../common/CheckIn/HidScannerStatus";
+import {OccurrenceSelect} from "../../common/OccurrenceSelect";
 import {Button} from "@mantine/core";
 
 const CheckIn = () => {
@@ -53,6 +55,7 @@ const CheckIn = () => {
         const storedIsSoundOn = localStorage.getItem("scannerSoundOn");
         return storedIsSoundOn === null ? true : JSON.parse(storedIsSoundOn);
     });
+    const [selectedOccurrenceId, setSelectedOccurrenceId] = useState<string | null>(null);
     const [selectedAttendee, setSelectedAttendee] = useState<Attendee | null>(null);
     const [checkInModalOpen, checkInModalHandlers] = useDisclosure(false);
     const [infoModalOpen, infoModalHandlers] = useDisclosure(false, {
@@ -69,13 +72,17 @@ const CheckIn = () => {
         perPage: 150,
         filterFields: {
             status: {operator: QueryFilterOperator.Equals, value: 'ACTIVE'},
+            ...(selectedOccurrenceId ? {
+                event_occurrence_id: {operator: QueryFilterOperator.Equals, value: selectedOccurrenceId},
+            } : {}),
         },
     };
 
+    const occurrenceResolved = selectedOccurrenceId !== null;
     const attendeesQuery = useGetCheckInListAttendees(
         checkInListShortId,
         queryFilters,
-        checkInList?.is_active && !checkInList?.is_expired,
+        !!checkInList?.is_active && !checkInList?.is_expired && occurrenceResolved,
     );
     const attendees = attendeesQuery?.data?.data;
     const checkInMutation = useCreateCheckInPublic(queryFilters);
@@ -83,6 +90,35 @@ const CheckIn = () => {
     const areOfflinePaymentsEnabled = eventSettings?.payment_providers?.includes('OFFLINE');
     const allowOrdersAwaitingOfflinePaymentToCheckIn = areOfflinePaymentsEnabled
         && eventSettings?.allow_orders_awaiting_offline_payment_to_check_in;
+
+    const occurrences: EventOccurrence[] = event?.occurrences || [];
+    const isScopedToOccurrence = checkInList?.event_occurrence_id != null;
+    const showOccurrenceFilter = !isScopedToOccurrence && occurrences.length > 1;
+
+    useEffect(() => {
+        if (!checkInList) return;
+
+        if (isScopedToOccurrence) {
+            setSelectedOccurrenceId(String(checkInList.event_occurrence_id));
+            return;
+        }
+
+        if (selectedOccurrenceId !== null) return;
+
+        if (!showOccurrenceFilter) {
+            setSelectedOccurrenceId('');
+            return;
+        }
+
+        if (!event?.timezone) return;
+
+        const todayStr = formatDateWithLocale(new Date().toISOString(), 'shortDate', event.timezone);
+        const todayOccurrence = occurrences.find(o => {
+            if (o.status === 'CANCELLED') return false;
+            return formatDateWithLocale(o.start_date, 'shortDate', event.timezone) === todayStr;
+        });
+        setSelectedOccurrenceId(todayOccurrence ? String(todayOccurrence.id) : '');
+    }, [checkInList, showOccurrenceFilter, occurrences, event?.timezone, isScopedToOccurrence]);
 
     // Save sound preference to localStorage
     useEffect(() => {
@@ -427,8 +463,32 @@ const CheckIn = () => {
                     <h4 className={classes.title}>
                         <Truncate text={checkInList?.name} length={30}/>
                     </h4>
+                    {isScopedToOccurrence && event?.timezone && (() => {
+                        const occ = occurrences.find(o => o.id === checkInList?.event_occurrence_id);
+                        if (!occ) return null;
+                        return (
+                            <Text size="sm" c="dimmed" className={classes.occurrenceSubtitle}>
+                                {formatDateWithLocale(occ.start_date, 'fullDateTime', event.timezone)}
+                                {occ.label ? ` — ${occ.label}` : ''}
+                            </Text>
+                        );
+                    })()}
                 </div>
                 <div className={classes.search}>
+                    {showOccurrenceFilter && event?.timezone && (
+                        <div className={classes.occurrenceFilter}>
+                            <OccurrenceSelect
+                                occurrences={occurrences}
+                                timezone={event.timezone}
+                                value={selectedOccurrenceId || ''}
+                                onChange={(val) => setSelectedOccurrenceId(val || '')}
+                                size="sm"
+                                allLabel={t`All occurrences`}
+                                placeholder={t`Select occurrence`}
+                                style={{width: '100%'}}
+                            />
+                        </div>
+                    )}
                     <div className={classes.searchBar}>
                         <SearchBar
                             className={classes.searchInput}
