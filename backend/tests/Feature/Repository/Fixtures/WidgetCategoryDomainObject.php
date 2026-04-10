@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Repository\Fixtures;
+namespace Tests\Feature\Repository\Fixtures;
 
 use HiEvents\DomainObjects\AbstractDomainObject;
 use Illuminate\Support\Collection;

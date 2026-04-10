@@ -1,18 +1,18 @@
-name: Run Unit Tests
+name: Backend Tests
 
 on:
   push:
     branches: [main, develop]
     paths:
       - 'backend/**'
-      - '.github/workflows/unit-tests.yml'
+      - '.github/workflows/tests.yml'
   pull_request:
     paths:
       - 'backend/**'
-      - '.github/workflows/unit-tests.yml'
+      - '.github/workflows/tests.yml'
 
 jobs:
-  run-tests:
+  tests:
     runs-on: ubuntu-latest
 
     strategy:
@@ -20,6 +20,9 @@ jobs:
         php-versions: ['8.2', '8.3', '8.4']
 
     services:
+      # Postgres is started for the Feature suite. The Unit suite does not need
+      # a live connection — it only reads DB_DATABASE for the _test guard check
+      # in CreatesApplication — so it runs in parallel with Postgres warming up.
       postgres:
         image: postgres:15
         env:
@@ -80,6 +83,13 @@ jobs:
         # to .env so both paths see the same config.
         run: cp backend/.env.testing backend/.env
 
+      - name: Run Unit test suite
+        # Pure unit tests — no DB connection, no migrations. The CreatesApplication
+        # bootstrap detects the absence of DatabaseTransactions / RefreshDatabase
+        # traits and skips migrate:fresh entirely. Runs in parallel with the
+        # Postgres service container coming up.
+        run: cd backend && ./vendor/bin/phpunit --testsuite=Unit --no-coverage
+
       - name: Wait for Postgres
         run: |
           for i in {1..30}; do
@@ -91,5 +101,8 @@ jobs:
           echo "Postgres did not become ready in time" >&2
           exit 1
 
-      - name: Run PHPUnit Tests
-        run: cd backend && ./vendor/bin/phpunit tests/Unit --no-coverage
+      - name: Run Feature test suite
+        # Integration tests against the real PostgreSQL test database. The first
+        # test that boots Laravel triggers migrate:fresh once per process via
+        # CreatesApplication::ensureTestDatabaseIsMigrated.
+        run: cd backend && ./vendor/bin/phpunit --testsuite=Feature --no-coverage

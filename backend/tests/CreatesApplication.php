@@ -4,6 +4,9 @@ namespace Tests;
 
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Foundation\Application;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use RuntimeException;
 
 trait CreatesApplication
@@ -25,8 +28,18 @@ trait CreatesApplication
 
         $app->make(Kernel::class)->bootstrap();
 
+        // The _test database guard always runs — even for pure unit tests that
+        // never open a connection — so a misconfigured environment can never
+        // touch a non-test database via an accidental query.
         $this->guardAgainstNonTestDatabase($app);
-        $this->ensureTestDatabaseIsMigrated($app);
+
+        // Migrations only run when the current test class actually uses one of
+        // the database testing traits. Pure unit tests skip the (multi-second)
+        // migrate:fresh entirely, so the Unit suite stays fast and runs without
+        // a live Postgres connection.
+        if ($this->currentTestNeedsDatabase()) {
+            $this->ensureTestDatabaseIsMigrated($app);
+        }
 
         return $app;
     }
@@ -78,5 +91,20 @@ trait CreatesApplication
         $app->make(Kernel::class)->call('migrate:fresh', ['--force' => true]);
 
         self::$migrationsApplied = true;
+    }
+
+    /**
+     * Returns true when the currently running test class uses one of Laravel's
+     * database testing traits — the only signal we have at bootstrap time that
+     * the test will actually touch the database. Pure unit tests opt out by
+     * not using any of these traits and so skip migration entirely.
+     */
+    private function currentTestNeedsDatabase(): bool
+    {
+        $traits = class_uses_recursive(static::class);
+
+        return isset($traits[DatabaseTransactions::class])
+            || isset($traits[RefreshDatabase::class])
+            || isset($traits[DatabaseMigrations::class]);
     }
 }

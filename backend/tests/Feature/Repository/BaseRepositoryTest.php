@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Repository;
+namespace Tests\Feature\Repository;
 
 use HiEvents\Repository\Eloquent\Value\OrderAndDirection;
 use HiEvents\Repository\Eloquent\Value\Relationship;
@@ -14,12 +14,12 @@ use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;
 use Tests\TestCase;
-use Tests\Unit\Repository\Fixtures\WidgetCategoryDomainObject;
-use Tests\Unit\Repository\Fixtures\WidgetCategoryModel;
-use Tests\Unit\Repository\Fixtures\WidgetCategoryRepository;
-use Tests\Unit\Repository\Fixtures\WidgetDomainObject;
-use Tests\Unit\Repository\Fixtures\WidgetModel;
-use Tests\Unit\Repository\Fixtures\WidgetRepository;
+use Tests\Feature\Repository\Fixtures\WidgetCategoryDomainObject;
+use Tests\Feature\Repository\Fixtures\WidgetCategoryModel;
+use Tests\Feature\Repository\Fixtures\WidgetCategoryRepository;
+use Tests\Feature\Repository\Fixtures\WidgetDomainObject;
+use Tests\Feature\Repository\Fixtures\WidgetModel;
+use Tests\Feature\Repository\Fixtures\WidgetRepository;
 
 /**
  * Exercises HiEvents\Repository\Eloquent\BaseRepository against an isolated
