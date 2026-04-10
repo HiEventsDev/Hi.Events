@@ -62,13 +62,12 @@ class CancelOccurrenceHandlerTest extends TestCase
         $event = Mockery::mock(EventDomainObject::class);
         $event->shouldReceive('getType')->andReturn(EventType::SINGLE->name);
 
+        $occurrence->shouldReceive('getEventId')->andReturn($eventId);
+
         $this->occurrenceRepository
-            ->shouldReceive('findFirstWhere')
+            ->shouldReceive('findByIdLocked')
             ->once()
-            ->with([
-                EventOccurrenceDomainObjectAbstract::ID => $occurrenceId,
-                EventOccurrenceDomainObjectAbstract::EVENT_ID => $eventId,
-            ])
+            ->with($occurrenceId)
             ->andReturn($occurrence);
 
         $this->occurrenceRepository
@@ -118,13 +117,12 @@ class CancelOccurrenceHandlerTest extends TestCase
             'excluded_dates' => [],
         ]);
 
+        $occurrence->shouldReceive('getEventId')->andReturn($eventId);
+
         $this->occurrenceRepository
-            ->shouldReceive('findFirstWhere')
+            ->shouldReceive('findByIdLocked')
             ->once()
-            ->with([
-                EventOccurrenceDomainObjectAbstract::ID => $occurrenceId,
-                EventOccurrenceDomainObjectAbstract::EVENT_ID => $eventId,
-            ])
+            ->with($occurrenceId)
             ->andReturn($occurrence);
 
         $this->occurrenceRepository
@@ -180,13 +178,12 @@ class CancelOccurrenceHandlerTest extends TestCase
         $event = Mockery::mock(EventDomainObject::class);
         $event->shouldReceive('getType')->andReturn(EventType::SINGLE->name);
 
+        $occurrence->shouldReceive('getEventId')->andReturn($eventId);
+
         $this->occurrenceRepository
-            ->shouldReceive('findFirstWhere')
+            ->shouldReceive('findByIdLocked')
             ->once()
-            ->with([
-                EventOccurrenceDomainObjectAbstract::ID => $occurrenceId,
-                EventOccurrenceDomainObjectAbstract::EVENT_ID => $eventId,
-            ])
+            ->with($occurrenceId)
             ->andReturn($occurrence);
 
         $this->occurrenceRepository
@@ -232,9 +229,12 @@ class CancelOccurrenceHandlerTest extends TestCase
             'excluded_dates' => ['2026-06-15'],
         ]);
 
+        $occurrence->shouldReceive('getEventId')->andReturn($eventId);
+
         $this->occurrenceRepository
-            ->shouldReceive('findFirstWhere')
+            ->shouldReceive('findByIdLocked')
             ->once()
+            ->with($occurrenceId)
             ->andReturn($occurrence);
 
         $this->occurrenceRepository
@@ -290,9 +290,12 @@ class CancelOccurrenceHandlerTest extends TestCase
             'excluded_dates' => ['2026-06-15'],
         ]);
 
+        $occurrence->shouldReceive('getEventId')->andReturn($eventId);
+
         $this->occurrenceRepository
-            ->shouldReceive('findFirstWhere')
+            ->shouldReceive('findByIdLocked')
             ->once()
+            ->with($occurrenceId)
             ->andReturn($occurrence);
 
         $this->occurrenceRepository
@@ -326,12 +329,9 @@ class CancelOccurrenceHandlerTest extends TestCase
         $occurrenceId = 999;
 
         $this->occurrenceRepository
-            ->shouldReceive('findFirstWhere')
+            ->shouldReceive('findByIdLocked')
             ->once()
-            ->with([
-                EventOccurrenceDomainObjectAbstract::ID => $occurrenceId,
-                EventOccurrenceDomainObjectAbstract::EVENT_ID => $eventId,
-            ])
+            ->with($occurrenceId)
             ->andReturn(null);
 
         $this->occurrenceRepository
@@ -343,6 +343,34 @@ class CancelOccurrenceHandlerTest extends TestCase
         $this->expectException(ResourceNotFoundException::class);
 
         $this->handler->handle($eventId, $occurrenceId);
+
+        Event::assertNotDispatched(OccurrenceCancelledEvent::class);
+    }
+
+    public function testHandleThrowsWhenOccurrenceBelongsToDifferentEvent(): void
+    {
+        // IDOR guard: even though the occurrence row exists, it must belong to the
+        // event_id passed in the handler call. Otherwise an attacker with access to
+        // event A could cancel an occurrence of event B by guessing its id.
+        $requestedEventId = 1;
+        $foreignEventId = 999;
+        $occurrenceId = 10;
+
+        $foreignOccurrence = Mockery::mock(EventOccurrenceDomainObject::class);
+        $foreignOccurrence->shouldReceive('getEventId')->andReturn($foreignEventId);
+
+        $this->occurrenceRepository
+            ->shouldReceive('findByIdLocked')
+            ->once()
+            ->with($occurrenceId)
+            ->andReturn($foreignOccurrence);
+
+        $this->occurrenceRepository->shouldNotReceive('updateFromArray');
+        $this->eventRepository->shouldNotReceive('findByIdLocked');
+
+        $this->expectException(ResourceNotFoundException::class);
+
+        $this->handler->handle($requestedEventId, $occurrenceId);
 
         Event::assertNotDispatched(OccurrenceCancelledEvent::class);
     }
@@ -364,9 +392,12 @@ class CancelOccurrenceHandlerTest extends TestCase
             json_encode(['frequency' => 'daily', 'excluded_dates' => []])
         );
 
+        $occurrence->shouldReceive('getEventId')->andReturn($eventId);
+
         $this->occurrenceRepository
-            ->shouldReceive('findFirstWhere')
+            ->shouldReceive('findByIdLocked')
             ->once()
+            ->with($occurrenceId)
             ->andReturn($occurrence);
 
         $this->occurrenceRepository
@@ -420,9 +451,12 @@ class CancelOccurrenceHandlerTest extends TestCase
         $event = Mockery::mock(EventDomainObject::class);
         $event->shouldReceive('getType')->andReturn(EventType::SINGLE->name);
 
+        $occurrence->shouldReceive('getEventId')->andReturn($eventId);
+
         $this->occurrenceRepository
-            ->shouldReceive('findFirstWhere')
+            ->shouldReceive('findByIdLocked')
             ->once()
+            ->with($occurrenceId)
             ->andReturn($occurrence);
 
         $this->occurrenceRepository
@@ -458,9 +492,12 @@ class CancelOccurrenceHandlerTest extends TestCase
         $event = Mockery::mock(EventDomainObject::class);
         $event->shouldReceive('getType')->andReturn(EventType::SINGLE->name);
 
+        $occurrence->shouldReceive('getEventId')->andReturn($eventId);
+
         $this->occurrenceRepository
-            ->shouldReceive('findFirstWhere')
+            ->shouldReceive('findByIdLocked')
             ->once()
+            ->with($occurrenceId)
             ->andReturn($occurrence);
 
         $this->occurrenceRepository
@@ -488,13 +525,12 @@ class CancelOccurrenceHandlerTest extends TestCase
         $occurrence = Mockery::mock(EventOccurrenceDomainObject::class);
         $occurrence->shouldReceive('getStatus')->andReturn(EventOccurrenceStatus::CANCELLED->name);
 
+        $occurrence->shouldReceive('getEventId')->andReturn($eventId);
+
         $this->occurrenceRepository
-            ->shouldReceive('findFirstWhere')
+            ->shouldReceive('findByIdLocked')
             ->once()
-            ->with([
-                EventOccurrenceDomainObjectAbstract::ID => $occurrenceId,
-                EventOccurrenceDomainObjectAbstract::EVENT_ID => $eventId,
-            ])
+            ->with($occurrenceId)
             ->andReturn($occurrence);
 
         $this->occurrenceRepository->shouldNotReceive('updateFromArray');

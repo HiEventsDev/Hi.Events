@@ -5,12 +5,15 @@ namespace HiEvents\Http\Request\Message;
 use HiEvents\DomainObjects\Enums\MessageTypeEnum;
 use HiEvents\DomainObjects\Status\OrderStatus;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\In;
 
 class SendMessageRequest extends FormRequest
 {
     public function rules(): array
     {
+        $eventId = $this->route('event_id');
+
         return [
             'subject' => 'required|string|max:100',
             'message' => 'required|string|max:8000',
@@ -26,7 +29,13 @@ class SendMessageRequest extends FormRequest
                 new In([OrderStatus::COMPLETED->name, OrderStatus::AWAITING_OFFLINE_PAYMENT->name]),
             ],
             'scheduled_at' => 'nullable|date',
-            'event_occurrence_id' => ['nullable', 'integer', 'exists:event_occurrences,id'],
+            'event_occurrence_id' => [
+                'nullable',
+                'integer',
+                Rule::exists('event_occurrences', 'id')
+                    ->where('event_id', $eventId)
+                    ->whereNull('deleted_at'),
+            ],
         ];
     }
 

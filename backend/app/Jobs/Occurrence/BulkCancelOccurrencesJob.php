@@ -44,21 +44,34 @@ class BulkCancelOccurrencesJob implements ShouldQueue
 
         foreach ($this->occurrenceIds as $occurrenceId) {
             try {
-                $occurrence = $occurrenceRepository->findFirstWhere([
-                    EventOccurrenceDomainObjectAbstract::ID => $occurrenceId,
-                    EventOccurrenceDomainObjectAbstract::EVENT_ID => $this->eventId,
-                ]);
+                // Each iteration runs in its own transaction so we can lock the occurrence
+                // row before checking its status. Without the lock, two concurrent bulk
+                // cancellations could both observe ACTIVE and dispatch the refund /
+                // notification side-effects twice.
+                $cancelledStartDate = DB::transaction(function () use ($occurrenceRepository, $occurrenceId) {
+                    $occurrence = $occurrenceRepository->findByIdLocked($occurrenceId);
 
-                if (!$occurrence || $occurrence->getStatus() === EventOccurrenceStatus::CANCELLED->name) {
+                    if (
+                        !$occurrence
+                        || $occurrence->getEventId() !== $this->eventId
+                        || $occurrence->getStatus() === EventOccurrenceStatus::CANCELLED->name
+                    ) {
+                        return null;
+                    }
+
+                    $occurrenceRepository->updateWhere(
+                        attributes: [
+                            EventOccurrenceDomainObjectAbstract::STATUS => EventOccurrenceStatus::CANCELLED->name,
+                        ],
+                        where: [EventOccurrenceDomainObjectAbstract::ID => $occurrenceId],
+                    );
+
+                    return $occurrence->getStartDate();
+                });
+
+                if ($cancelledStartDate === null) {
                     continue;
                 }
-
-                $occurrenceRepository->updateWhere(
-                    attributes: [
-                        EventOccurrenceDomainObjectAbstract::STATUS => EventOccurrenceStatus::CANCELLED->name,
-                    ],
-                    where: [EventOccurrenceDomainObjectAbstract::ID => $occurrenceId],
-                );
 
                 event(new OccurrenceCancelledEvent(
                     eventId: $this->eventId,
@@ -70,7 +83,7 @@ class BulkCancelOccurrencesJob implements ShouldQueue
                     RefundOccurrenceOrdersJob::dispatch($this->eventId, $occurrenceId);
                 }
 
-                $cancelledDates[] = date('Y-m-d', strtotime($occurrence->getStartDate()));
+                $cancelledDates[] = date('Y-m-d', strtotime($cancelledStartDate));
             } catch (\Throwable $e) {
                 $failedIds[] = $occurrenceId;
                 Log::error('Failed to cancel occurrence', [

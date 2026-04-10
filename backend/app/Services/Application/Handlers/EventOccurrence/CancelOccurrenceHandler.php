@@ -35,12 +35,12 @@ class CancelOccurrenceHandler
         $wasCancelled = false;
 
         $updated = $this->databaseManager->transaction(function () use ($eventId, $occurrenceId, &$wasCancelled) {
-            $occurrence = $this->occurrenceRepository->findFirstWhere([
-                EventOccurrenceDomainObjectAbstract::ID => $occurrenceId,
-                EventOccurrenceDomainObjectAbstract::EVENT_ID => $eventId,
-            ]);
+            // Lock the row for the duration of this transaction so a concurrent cancel
+            // (single or bulk) cannot pass the same status check and double-dispatch
+            // the refund / notification side-effects below.
+            $occurrence = $this->occurrenceRepository->findByIdLocked($occurrenceId);
 
-            if (!$occurrence) {
+            if (!$occurrence || $occurrence->getEventId() !== $eventId) {
                 throw new ResourceNotFoundException(
                     __('Occurrence :id not found for event :eventId', [
                         'id' => $occurrenceId,

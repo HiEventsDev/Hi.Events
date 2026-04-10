@@ -21,6 +21,20 @@ class EventOccurrenceRepository extends BaseRepository implements EventOccurrenc
         return EventOccurrenceDomainObject::class;
     }
 
+    public function findByIdLocked(int $id): ?EventOccurrenceDomainObject
+    {
+        $model = EventOccurrence::query()
+            ->where('id', $id)
+            ->lockForUpdate()
+            ->first();
+
+        if ($model === null) {
+            return null;
+        }
+
+        return $this->handleSingleResult($model);
+    }
+
     public function findByEventId(int $eventId, QueryParamsDTO $params): LengthAwarePaginator
     {
         $this->model = $this->model->newQuery()->orderBy(

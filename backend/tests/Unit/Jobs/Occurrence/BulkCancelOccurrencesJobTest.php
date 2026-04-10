@@ -42,19 +42,21 @@ class BulkCancelOccurrencesJobTest extends TestCase
         Log::shouldReceive('info')->once();
 
         $occ1 = Mockery::mock(EventOccurrenceDomainObject::class);
+        $occ1->shouldReceive('getEventId')->andReturn(1);
         $occ1->shouldReceive('getStatus')->andReturn(EventOccurrenceStatus::ACTIVE->name);
         $occ1->shouldReceive('getStartDate')->andReturn('2026-06-15 10:00:00');
 
         $occ2 = Mockery::mock(EventOccurrenceDomainObject::class);
+        $occ2->shouldReceive('getEventId')->andReturn(1);
         $occ2->shouldReceive('getStatus')->andReturn(EventOccurrenceStatus::ACTIVE->name);
         $occ2->shouldReceive('getStartDate')->andReturn('2026-06-22 10:00:00');
 
-        $this->occurrenceRepository->shouldReceive('findFirstWhere')
-            ->with([EventOccurrenceDomainObjectAbstract::ID => 10, EventOccurrenceDomainObjectAbstract::EVENT_ID => 1])
+        $this->occurrenceRepository->shouldReceive('findByIdLocked')
+            ->with(10)
             ->once()
             ->andReturn($occ1);
-        $this->occurrenceRepository->shouldReceive('findFirstWhere')
-            ->with([EventOccurrenceDomainObjectAbstract::ID => 20, EventOccurrenceDomainObjectAbstract::EVENT_ID => 1])
+        $this->occurrenceRepository->shouldReceive('findByIdLocked')
+            ->with(20)
             ->once()
             ->andReturn($occ2);
 
@@ -80,10 +82,11 @@ class BulkCancelOccurrencesJobTest extends TestCase
         Log::shouldReceive('info')->once();
 
         $occ = Mockery::mock(EventOccurrenceDomainObject::class);
+        $occ->shouldReceive('getEventId')->andReturn(1);
         $occ->shouldReceive('getStatus')->andReturn(EventOccurrenceStatus::CANCELLED->name);
 
-        $this->occurrenceRepository->shouldReceive('findFirstWhere')
-            ->with([EventOccurrenceDomainObjectAbstract::ID => 10, EventOccurrenceDomainObjectAbstract::EVENT_ID => 1])
+        $this->occurrenceRepository->shouldReceive('findByIdLocked')
+            ->with(10)
             ->once()
             ->andReturn($occ);
         $this->occurrenceRepository->shouldNotReceive('updateWhere');
@@ -98,10 +101,15 @@ class BulkCancelOccurrencesJobTest extends TestCase
     {
         Log::shouldReceive('info')->once();
 
-        $this->occurrenceRepository->shouldReceive('findFirstWhere')
-            ->with([EventOccurrenceDomainObjectAbstract::ID => 10, EventOccurrenceDomainObjectAbstract::EVENT_ID => 1])
+        // Returning an occurrence whose event_id does not match the bulk job's event_id
+        // simulates the IDOR case where a stale or attacker-supplied id slips through.
+        $foreignOccurrence = Mockery::mock(EventOccurrenceDomainObject::class);
+        $foreignOccurrence->shouldReceive('getEventId')->andReturn(99);
+
+        $this->occurrenceRepository->shouldReceive('findByIdLocked')
+            ->with(10)
             ->once()
-            ->andReturn(null);
+            ->andReturn($foreignOccurrence);
 
         $this->occurrenceRepository->shouldNotReceive('updateWhere');
 
@@ -117,11 +125,12 @@ class BulkCancelOccurrencesJobTest extends TestCase
         Log::shouldReceive('info')->once();
 
         $occ = Mockery::mock(EventOccurrenceDomainObject::class);
+        $occ->shouldReceive('getEventId')->andReturn(1);
         $occ->shouldReceive('getStatus')->andReturn(EventOccurrenceStatus::ACTIVE->name);
         $occ->shouldReceive('getStartDate')->andReturn('2026-06-15 10:00:00');
 
-        $this->occurrenceRepository->shouldReceive('findFirstWhere')
-            ->with([EventOccurrenceDomainObjectAbstract::ID => 10, EventOccurrenceDomainObjectAbstract::EVENT_ID => 1])
+        $this->occurrenceRepository->shouldReceive('findByIdLocked')
+            ->with(10)
             ->once()
             ->andReturn($occ);
         $this->occurrenceRepository->shouldReceive('updateWhere')->once();
@@ -143,11 +152,12 @@ class BulkCancelOccurrencesJobTest extends TestCase
         Log::shouldReceive('info')->once();
 
         $occ = Mockery::mock(EventOccurrenceDomainObject::class);
+        $occ->shouldReceive('getEventId')->andReturn(1);
         $occ->shouldReceive('getStatus')->andReturn(EventOccurrenceStatus::ACTIVE->name);
         $occ->shouldReceive('getStartDate')->andReturn('2026-06-15 10:00:00');
 
-        $this->occurrenceRepository->shouldReceive('findFirstWhere')
-            ->with([EventOccurrenceDomainObjectAbstract::ID => 10, EventOccurrenceDomainObjectAbstract::EVENT_ID => 1])
+        $this->occurrenceRepository->shouldReceive('findByIdLocked')
+            ->with(10)
             ->once()
             ->andReturn($occ);
         $this->occurrenceRepository->shouldReceive('updateWhere')->once();
@@ -168,11 +178,12 @@ class BulkCancelOccurrencesJobTest extends TestCase
         Log::shouldReceive('info')->once();
 
         $occ = Mockery::mock(EventOccurrenceDomainObject::class);
+        $occ->shouldReceive('getEventId')->andReturn(1);
         $occ->shouldReceive('getStatus')->andReturn(EventOccurrenceStatus::ACTIVE->name);
         $occ->shouldReceive('getStartDate')->andReturn('2026-06-15 10:00:00');
 
-        $this->occurrenceRepository->shouldReceive('findFirstWhere')
-            ->with([EventOccurrenceDomainObjectAbstract::ID => 10, EventOccurrenceDomainObjectAbstract::EVENT_ID => 1])
+        $this->occurrenceRepository->shouldReceive('findByIdLocked')
+            ->with(10)
             ->once()
             ->andReturn($occ);
         $this->occurrenceRepository->shouldReceive('updateWhere')->once();
