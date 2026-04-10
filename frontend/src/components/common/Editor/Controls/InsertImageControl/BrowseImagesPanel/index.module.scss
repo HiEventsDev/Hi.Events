@@ -1,0 +1,44 @@
+.imageGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  max-height: 360px;
+  overflow-y: auto;
+  padding: 4px;
+}
+
+.thumbnail {
+  aspect-ratio: 1;
+  cursor: pointer;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  position: relative;
+
+  &:hover {
+    border-color: var(--mantine-color-gray-4);
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.thumbnailSelected {
+  border-color: var(--mantine-primary-color-filled);
+
+  &:hover {
+    border-color: var(--mantine-primary-color-filled);
+  }
+}
+
+.fileName {
+  font-size: 11px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
+  padding: 2px 4px;
+}
