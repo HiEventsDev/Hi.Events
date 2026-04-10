@@ -1,7 +1,14 @@
-import {GenericDataResponse, IdParam, Image, ImageType} from "../types.ts";
+import {GenericDataResponse, GenericPaginatedResponse, IdParam, Image, ImageType, QueryFilters} from "../types.ts";
 import {api} from "./client.ts";
+import {queryParamsHelper} from "../utilites/queryParamsHelper.ts";
 
 export const imageClient = {
+    getAll: async (queryFilters: QueryFilters) => {
+        const response = await api.get<GenericPaginatedResponse<Image>>(
+            'images' + queryParamsHelper.buildQueryString(queryFilters),
+        );
+        return response.data;
+    },
     uploadImage: async (image: File, imageType?: ImageType, entityId?: IdParam) => {
         const formData = new FormData();
         formData.append('image', image);
