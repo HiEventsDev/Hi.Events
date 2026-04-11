@@ -35,6 +35,7 @@ import {useSendEventMessage} from "../../../mutations/useSendEventMessage.ts";
 import {ProductSelector} from "../../common/ProductSelector";
 import {useEffect, useMemo, useState} from "react";
 import {useGetAccount} from "../../../queries/useGetAccount.ts";
+import {useGetEventCheckInLists} from "../../../queries/useGetCheckInLists.ts";
 import {StripeConnectButton} from "../../common/StripeConnectButton";
 import {getConfig} from "../../../utilites/config";
 import {utcToTz} from "../../../utilites/dates.ts";
@@ -139,6 +140,7 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
     const [tierLimitError, setTierLimitError] = useState<string | null>(null);
     const [isScheduled, setIsScheduled] = useState(false);
     const [selectedPreset, setSelectedPreset] = useState<string | null>(null);
+    const {data: checkInListsData} = useGetEventCheckInLists(eventId);
 
     const presets = useMemo(() => event ? getSchedulePresets(event) : [], [event]);
 
@@ -163,6 +165,7 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
             acknowledgement: false,
             order_statuses: ['COMPLETED'],
             scheduled_at: '',
+            check_in_list_id: '',
         },
         validate: {
             acknowledgement: (value) => value === true ? null : t`You must acknowledge that this email is not promotional`,
@@ -208,6 +211,7 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
 
     useEffect(() => {
         form.setFieldValue('product_ids', []);
+        form.setFieldValue('check_in_list_id', '');
     }, [form.values.message_type]);
 
     if (!event || !me || !product_categories) {
@@ -293,6 +297,14 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
                                             value: 'ORDER_OWNERS_WITH_PRODUCT',
                                             label: t`Order owners with a specific product`,
                                         },
+                                        {
+                                            value: 'CHECKED_IN_ATTENDEES',
+                                            label: t`Attendees who checked in`,
+                                        },
+                                        {
+                                            value: 'NOT_CHECKED_IN_ATTENDEES',
+                                            label: t`Attendees who did not check in`,
+                                        },
                                     ]}
                                     label={t`Recipients`}
                                     description={t`Select which attendees should receive this message`}
@@ -336,6 +348,19 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
                                         {...form.getInputProps('order_statuses')}
                                     />
                                 </>
+                            )}
+
+                            {(form.values.message_type === MessageType.CheckedInAttendees || form.values.message_type === MessageType.NotCheckedInAttendees) && (
+                                <Select
+                                    label={t`Check-in list`}
+                                    description={t`Select which check-in list to use`}
+                                    placeholder={t`Select check-in list`}
+                                    data={checkInListsData?.data?.map(list => ({
+                                        value: String(list.id),
+                                        label: list.name,
+                                    })) ?? []}
+                                    {...form.getInputProps('check_in_list_id')}
+                                />
                             )}
 
                             {(form.values.message_type === MessageType.OrderOwner && orderId) && (

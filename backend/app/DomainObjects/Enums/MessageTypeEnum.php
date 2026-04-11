@@ -20,4 +20,10 @@ enum MessageTypeEnum
 
     // Emails all customers who have purchased a specific product, ticket or merchandise etc.
     case ORDER_OWNERS_WITH_PRODUCT;
+
+    // Emails attendees who have checked in to the event
+    case CHECKED_IN_ATTENDEES;
+
+    // Emails attendees who have not checked in to the event
+    case NOT_CHECKED_IN_ATTENDEES;
 }

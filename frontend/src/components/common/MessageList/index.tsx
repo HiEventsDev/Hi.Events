@@ -29,6 +29,8 @@ export const typeLabel = (type: MessageType) => {
         [MessageType.AllAttendees]: t`All attendees`,
         [MessageType.TicketHolders]: t`Ticket holders`,
         [MessageType.OrderOwner]: t`Order owner`,
+        [MessageType.CheckedInAttendees]: t`Checked-in attendees`,
+        [MessageType.NotCheckedInAttendees]: t`Not checked-in attendees`,
     };
     return map[type] || type;
 };

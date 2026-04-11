@@ -26,6 +26,8 @@ class SendMessageRequest extends FormRequest
                 new In([OrderStatus::COMPLETED->name, OrderStatus::AWAITING_OFFLINE_PAYMENT->name]),
             ],
             'scheduled_at' => 'nullable|date',
+            'check_in_list_id' => 'nullable|integer|required_if:message_type,' . MessageTypeEnum::CHECKED_IN_ATTENDEES->name
+                . '|required_if:message_type,' . MessageTypeEnum::NOT_CHECKED_IN_ATTENDEES->name,
         ];
     }
 

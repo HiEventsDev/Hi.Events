@@ -139,4 +139,97 @@ class AttendeeRepository extends BaseRepository implements AttendeeRepositoryInt
             limit: min($params->per_page, 250),
         );
     }
+
+    public function findCheckedInAttendees(int $eventId, ?int $checkInListId = null, array $columns = ['*']): Collection
+    {
+        $query = $this->model
+            ->where('event_id', $eventId)
+            ->where('status', AttendeeStatus::ACTIVE->name)
+            ->whereIn('product_id', function ($sub) use ($checkInListId) {
+                $sub->select('product_id')->from('product_check_in_lists')->whereNull('deleted_at');
+                if ($checkInListId) {
+                    $sub->where('check_in_list_id', $checkInListId);
+                }
+            })
+            ->whereHas('check_ins', function ($sub) use ($checkInListId) {
+                if ($checkInListId) {
+                    $sub->where('check_in_list_id', $checkInListId);
+                }
+            });
+
+        $results = $query->get($columns);
+        $this->resetModel();
+
+        return $this->handleResults($results);
+    }
+
+    public function findNotCheckedInAttendees(int $eventId, ?int $checkInListId = null, array $columns = ['*']): Collection
+    {
+        $query = $this->model
+            ->where('event_id', $eventId)
+            ->where('status', AttendeeStatus::ACTIVE->name)
+            ->whereIn('product_id', function ($sub) use ($checkInListId) {
+                $sub->select('product_id')->from('product_check_in_lists')->whereNull('deleted_at');
+                if ($checkInListId) {
+                    $sub->where('check_in_list_id', $checkInListId);
+                }
+            })
+            ->whereDoesntHave('check_ins', function ($sub) use ($checkInListId) {
+                if ($checkInListId) {
+                    $sub->where('check_in_list_id', $checkInListId);
+                }
+            });
+
+        $results = $query->get($columns);
+        $this->resetModel();
+
+        return $this->handleResults($results);
+    }
+
+    public function countCheckedInAttendees(int $eventId, ?int $checkInListId = null): int
+    {
+        $query = $this->model
+            ->where('event_id', $eventId)
+            ->where('status', AttendeeStatus::ACTIVE->name)
+            ->whereIn('product_id', function ($sub) use ($checkInListId) {
+                $sub->select('product_id')->from('product_check_in_lists')->whereNull('deleted_at');
+                if ($checkInListId) {
+                    $sub->where('check_in_list_id', $checkInListId);
+                }
+            })
+            ->whereHas('check_ins', function ($sub) use ($checkInListId) {
+                if ($checkInListId) {
+                    $sub->where('check_in_list_id', $checkInListId);
+                }
+            });
+
+        $count = $query->count();
+        $this->resetModel();
+
+        return $count;
+    }
+
+    public function countNotCheckedInAttendees(int $eventId, ?int $checkInListId = null): int
+    {
+        $query = $this->model
+            ->where('event_id', $eventId)
+            ->where('status', AttendeeStatus::ACTIVE->name)
+            ->whereIn('product_id', function ($sub) use ($checkInListId) {
+                $sub->select('product_id')->from('product_check_in_lists')->whereNull('deleted_at');
+                if ($checkInListId) {
+                    $sub->where('check_in_list_id', $checkInListId);
+                }
+            })
+            ->whereDoesntHave('check_ins', function ($sub) use ($checkInListId) {
+                if ($checkInListId) {
+                    $sub->where('check_in_list_id', $checkInListId);
+                }
+            });
+
+        $count = $query->count();
+
+        $this->resetModel();
+
+        return $count;
+    }
 }
