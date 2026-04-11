@@ -3,7 +3,6 @@ import {useEditor} from "@tiptap/react";
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
 import TextAlign from '@tiptap/extension-text-align';
-import Image from '@tiptap/extension-image';
 import TextStyle from '@tiptap/extension-text-style';
 import Color from '@tiptap/extension-color';
 import React, {useEffect, useState} from "react";
@@ -63,7 +62,6 @@ export const Editor = ({
             Underline,
             Link,
             TextAlign.configure({types: ['heading', 'paragraph']}),
-            Image,
             ImageResize,
             TextStyle,
             Color,
