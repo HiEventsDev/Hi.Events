@@ -213,6 +213,13 @@ export const router: RouteObject[] = [
                     const Messages = await import("./components/routes/admin/Messages");
                     return { Component: Messages.default };
                 }
+            },
+            {
+                path: "email-suppressions",
+                async lazy() {
+                    const EmailSuppressions = await import("./components/routes/admin/EmailSuppressions");
+                    return { Component: EmailSuppressions.default };
+                }
             }
         ]
     },

@@ -353,6 +353,7 @@ msgstr "Brak dostępu"
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:53
 #: src/components/routes/admin/Dashboard/index.tsx:353
 #: src/components/routes/admin/Dashboard/index.tsx:400
+#: src/components/routes/admin/EmailSuppressions/index.tsx:183
 #: src/components/routes/admin/Messages/index.tsx:164
 #: src/components/routes/admin/Messages/index.tsx:281
 msgid "Account"
@@ -464,6 +465,10 @@ msgstr "Dodaj niestandardowe pytania, aby zebrać dodatkowe informacje podczas p
 msgid "Add description"
 msgstr "Dodaj opis"
 
+#: src/components/routes/admin/EmailSuppressions/index.tsx:255
+msgid "Add Email Suppression"
+msgstr "Dodaj blokadę e-mail"
+
 #: src/components/routes/event/GettingStarted/index.tsx:142
 msgid "Add event details and manage event settings."
 msgstr "Dodaj szczegóły wydarzenia i zarządzaj ustawieniami wydarzenia."
@@ -496,6 +501,11 @@ msgstr "Dodaj produkt do kategorii"
 #: src/components/common/QuestionsTable/index.tsx:478
 msgid "Add Question"
 msgstr "Dodaj pytanie"
+
+#: src/components/routes/admin/EmailSuppressions/index.tsx:127
+#: src/components/routes/admin/EmailSuppressions/index.tsx:286
+msgid "Add Suppression"
+msgstr "Dodaj blokadę"
 
 #: src/components/routes/account/ManageAccount/sections/TaxSettings/index.tsx:18
 msgid "Add Tax or Fee"
@@ -579,7 +589,7 @@ msgid "Admin Access Required"
 msgstr "Wymagany dostęp administratora"
 
 #: src/components/common/GlobalMenu/index.tsx:61
-#: src/components/layouts/Admin/index.tsx:27
+#: src/components/layouts/Admin/index.tsx:28
 #: src/components/routes/admin/Dashboard/index.tsx:70
 msgid "Admin Dashboard"
 msgstr "Panel administratora"
@@ -945,6 +955,10 @@ msgstr "Czy na pewno chcesz opublikować ten profil organizatora? Po opublikowan
 msgid "Are you sure you want to remove this entry from the waitlist?"
 msgstr "Czy na pewno chcesz usunąć ten wpis z listy oczekujących?"
 
+#: src/components/routes/admin/EmailSuppressions/index.tsx:49
+msgid "Are you sure you want to remove this suppression? The email address will be able to receive messages again."
+msgstr "Czy na pewno chcesz usunąć tę blokadę? Adres e-mail będzie mógł ponownie otrzymywać wiadomości."
+
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:514
 msgid "Are you sure you want to resend the order confirmation to {0}?"
 msgstr "Czy na pewno chcesz ponownie wysłać potwierdzenie zamówienia do {0}?"
@@ -1288,6 +1302,15 @@ msgstr "Treść jest wymagana"
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:201
 msgid "Bookmark this page to manage your order anytime."
 msgstr "Dodaj tę stronę do zakładek, aby zarządzać zamówieniem w dowolnym momencie."
+
+#: src/components/routes/admin/EmailSuppressions/index.tsx:143
+#: src/components/routes/admin/EmailSuppressions/index.tsx:269
+msgid "Bounce"
+msgstr "Odrzucenie"
+
+#: src/components/routes/admin/EmailSuppressions/index.tsx:276
+msgid "Bounce Type"
+msgstr "Typ odrzucenia"
 
 #: src/components/routes/event/TicketDesigner/index.tsx:108
 msgid "Brand your tickets with a custom logo, colors, and footer message."
@@ -1771,6 +1794,11 @@ msgstr "Słowa kluczowe oddzielone przecinkami opisujące wydarzenie. Będą uż
 msgid "Communication Preferences"
 msgstr "Preferencje komunikacyjne"
 
+#: src/components/routes/admin/EmailSuppressions/index.tsx:144
+#: src/components/routes/admin/EmailSuppressions/index.tsx:270
+msgid "Complaint"
+msgstr "Skarga"
+
 #: src/components/routes/product-widget/CollectInformation/index.tsx:712
 msgid "Complete Order"
 msgstr "Zakończ zamówienie"
@@ -1855,7 +1883,7 @@ msgstr "Nazwy konfiguracji są widoczne dla użytkowników końcowych. Opłaty s
 msgid "Configuration updated successfully"
 msgstr "Konfiguracja zaktualizowana pomyślnie"
 
-#: src/components/layouts/Admin/index.tsx:21
+#: src/components/layouts/Admin/index.tsx:22
 #: src/components/routes/admin/Configurations/index.tsx:64
 msgid "Configurations"
 msgstr "Konfiguracje"
@@ -2555,6 +2583,7 @@ msgstr "Własność danych"
 #: src/components/common/AdminOrdersTable/index.tsx:94
 #: src/components/common/OrderDetails/index.tsx:39
 #: src/components/forms/QuestionForm/index.tsx:136
+#: src/components/routes/admin/EmailSuppressions/index.tsx:184
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:56
 #: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:24
 msgid "Date"
@@ -3007,6 +3036,7 @@ msgstr "Kwalifikujące się listy zameldowań"
 #: src/components/modals/JoinWaitlistModal/index.tsx:171
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:128
 #: src/components/routes/admin/Dashboard/index.tsx:401
+#: src/components/routes/admin/EmailSuppressions/index.tsx:179
 #: src/components/routes/auth/AcceptInvitation/index.tsx:112
 #: src/components/routes/auth/ForgotPassword/index.tsx:65
 #: src/components/routes/auth/Login/index.tsx:93
@@ -3033,6 +3063,7 @@ msgstr "E-mail i szablony"
 msgid "Email address"
 msgstr "Adres e-mail"
 
+#: src/components/routes/admin/EmailSuppressions/index.tsx:260
 #: src/components/routes/product-widget/CollectInformation/index.tsx:450
 #: src/components/routes/product-widget/CollectInformation/index.tsx:451
 #: src/components/routes/product-widget/CollectInformation/index.tsx:662
@@ -3089,6 +3120,15 @@ msgstr "E-mail nie zweryfikowany"
 #: src/components/common/EmailTemplateEditor/EmailTemplatePreviewPane.tsx:27
 msgid "Email Preview"
 msgstr "Podgląd e-mail"
+
+#: src/components/routes/admin/EmailSuppressions/index.tsx:66
+msgid "Email suppression added successfully"
+msgstr "Blokada e-mail dodana pomyślnie"
+
+#: src/components/layouts/Admin/index.tsx:19
+#: src/components/routes/admin/EmailSuppressions/index.tsx:123
+msgid "Email Suppressions"
+msgstr "Blokady e-mail"
 
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:336
 #: src/components/routes/organizer/Settings/index.tsx:65
@@ -3598,7 +3638,7 @@ msgstr "Nie powiodło się"
 msgid "Failed At"
 msgstr "Nie powiodło się o"
 
-#: src/components/layouts/Admin/index.tsx:20
+#: src/components/layouts/Admin/index.tsx:21
 #: src/components/routes/admin/FailedJobs/index.tsx:114
 msgid "Failed Jobs"
 msgstr "Nieudane zadania"
@@ -3606,6 +3646,10 @@ msgstr "Nieudane zadania"
 #: src/components/layouts/Checkout/index.tsx:105
 msgid "Failed to abandon order. Please try again."
 msgstr "Nie udało się porzucić zamówienia. Spróbuj ponownie."
+
+#: src/components/routes/admin/EmailSuppressions/index.tsx:70
+msgid "Failed to add suppression"
+msgstr "Nie udało się dodać blokady"
 
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:43
 msgid "Failed to assign configuration"
@@ -3710,6 +3754,10 @@ msgstr "Nie udało się zaoferować biletów"
 #: src/components/common/WaitlistTable/index.tsx:107
 msgid "Failed to remove from waitlist"
 msgstr ""
+
+#: src/components/routes/admin/EmailSuppressions/index.tsx:53
+msgid "Failed to remove suppression"
+msgstr "Nie udało się usunąć blokady"
 
 #: src/components/common/QuestionsTable/index.tsx:184
 msgid "Failed to reorder questions"
@@ -4906,6 +4954,10 @@ msgstr "Zarządzaj"
 msgid "Manage attendee"
 msgstr "Zarządzaj uczestnikiem"
 
+#: src/components/routes/admin/EmailSuppressions/index.tsx:124
+msgid "Manage bounced and suppressed email addresses"
+msgstr "Zarządzaj odrzuconymi i zablokowanymi adresami e-mail"
+
 #: src/components/common/EventCard/index.tsx:136
 msgid "Manage event"
 msgstr "Zarządzaj wydarzeniem"
@@ -4949,6 +5001,11 @@ msgstr "Zarządzaj użytkownikami i ich uprawnieniami"
 #: src/components/forms/QuestionForm/index.tsx:211
 msgid "Mandatory questions must be answered before the customer can checkout."
 msgstr "Obowiązkowe pytania muszą być odpowiedzi przed dokonaniem płatności przez klienta."
+
+#: src/components/routes/admin/EmailSuppressions/index.tsx:110
+#: src/components/routes/admin/EmailSuppressions/index.tsx:155
+msgid "Manual"
+msgstr "Ręcznie"
 
 #: src/components/modals/OfferWaitlistModal/index.tsx:104
 msgid "Manual offer"
@@ -5448,6 +5505,10 @@ msgstr "Brak wyników wyszukiwania"
 #: src/components/common/NoResultsSplash/index.tsx:29
 msgid "No search results."
 msgstr "Brak wyników wyszukiwania."
+
+#: src/components/routes/admin/EmailSuppressions/index.tsx:171
+msgid "No suppressed emails found"
+msgstr "Nie znaleziono zablokowanych adresów e-mail"
 
 #: src/components/common/TaxAndFeeList/index.tsx:105
 msgid "No Taxes or Fees have been added."
@@ -6346,6 +6407,10 @@ msgstr "Procent kwoty transakcji"
 msgid "Performance"
 msgstr "Wydajność"
 
+#: src/components/routes/admin/EmailSuppressions/index.tsx:278
+msgid "Permanent"
+msgstr "Trwałe"
+
 #: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:85
 msgid "Permanently delete this event and all its associated data."
 msgstr "Trwale usuń to wydarzenie i wszystkie powiązane dane."
@@ -6434,6 +6499,7 @@ msgid "Please create a ticket"
 msgstr "Utwórz bilet"
 
 #: src/components/modals/JoinWaitlistModal/index.tsx:47
+#: src/components/routes/admin/EmailSuppressions/index.tsx:42
 msgid "Please enter a valid email address"
 msgstr "Proszę podać prawidłowy adres e-mail"
 
@@ -6854,6 +6920,16 @@ msgstr "Gotowy do aktualizacji? To zajmuje tylko kilka minut."
 msgid "Real-Time Analytics"
 msgstr "Analityka w czasie rzeczywistym"
 
+#: src/components/routes/admin/EmailSuppressions/index.tsx:140
+#: src/components/routes/admin/EmailSuppressions/index.tsx:180
+#: src/components/routes/admin/EmailSuppressions/index.tsx:266
+msgid "Reason"
+msgstr "Powód"
+
+#: src/components/routes/admin/EmailSuppressions/index.tsx:43
+msgid "Reason is required"
+msgstr "Powód jest wymagany"
+
 #: src/components/routes/auth/AcceptInvitation/index.tsx:157
 #: src/components/routes/auth/Register/index.tsx:133
 #: src/components/routes/profile/ManageProfile/index.tsx:209
@@ -6992,6 +7068,10 @@ msgstr "usuń"
 #: src/components/routes/product-widget/SelectProducts/index.tsx:569
 msgid "Remove"
 msgstr "Usuń"
+
+#: src/components/routes/admin/EmailSuppressions/index.tsx:223
+msgid "Remove Suppression"
+msgstr "Usuń blokadę"
 
 #: src/components/routes/organizer/Reports/ReportLayout/index.tsx:26
 msgid "Report not found"
@@ -7329,6 +7409,10 @@ msgstr "Szukaj po nazwie konta lub e-mailu..."
 msgid "Search by attendee name, email or order #..."
 msgstr "Szukaj po nazwie uczestnika, e-mailu lub numerze zamówienia..."
 
+#: src/components/routes/admin/EmailSuppressions/index.tsx:133
+msgid "Search by email address..."
+msgstr "Szukaj po adresie e-mail..."
+
 #: src/components/routes/events/Dashboard/index.tsx:150
 #: src/components/routes/organizer/Events/index.tsx:47
 msgid "Search by event name..."
@@ -7661,6 +7745,11 @@ msgstr "Tytuł SEO"
 msgid "Service Fee"
 msgstr "Opłata za usługę"
 
+#: src/components/routes/admin/EmailSuppressions/index.tsx:108
+#: src/components/routes/admin/EmailSuppressions/index.tsx:154
+msgid "SES"
+msgstr "SES"
+
 #: src/components/forms/ProductForm/index.tsx:168
 msgid "Set a minimum price and let users pay more if they choose"
 msgstr "Ustaw cenę minimalną i pozwól użytkownikom zapłacić więcej, jeśli się zdecydują"
@@ -7890,6 +7979,8 @@ msgid "Sorry, this promo code is not recognized"
 msgstr "Przepraszamy, ten kod promocyjny nie jest rozpoznany"
 
 #: src/components/routes/admin/Attribution/index.tsx:106
+#: src/components/routes/admin/EmailSuppressions/index.tsx:151
+#: src/components/routes/admin/EmailSuppressions/index.tsx:182
 msgid "Source"
 msgstr "Źródło"
 
@@ -8208,6 +8299,10 @@ msgstr "Letni Festiwal Muzyki 2025"
 #: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:63
 msgid "Support Email"
 msgstr "Email wsparcia"
+
+#: src/components/routes/admin/EmailSuppressions/index.tsx:52
+msgid "Suppression removed successfully"
+msgstr "Blokada usunięta pomyślnie"
 
 #: src/components/common/LanguageSwitcher/index.tsx:42
 msgid "Swedish"
@@ -8998,6 +9093,10 @@ msgstr "Śledź sprzedaż, przychody i frekwencję za pomocą szczegółowych ra
 msgid "Transaction Fee:"
 msgstr "Opłata za transakcję:"
 
+#: src/components/routes/admin/EmailSuppressions/index.tsx:279
+msgid "Transient"
+msgstr "Tymczasowe"
+
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:31
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:65
 msgid "True if offline payment"
@@ -9035,6 +9134,7 @@ msgstr "Twitch"
 
 #: src/components/forms/TaxAndFeeForm/index.tsx:44
 #: src/components/routes/admin/Attribution/index.tsx:109
+#: src/components/routes/admin/EmailSuppressions/index.tsx:181
 #: src/components/routes/admin/Messages/index.tsx:134
 #: src/components/routes/admin/Messages/index.tsx:165
 #: src/components/routes/admin/Messages/index.tsx:287
@@ -9090,6 +9190,10 @@ msgstr "Nie można zaktualizować pytania. Proszę sprawdzić swoje dane"
 #: src/components/routes/admin/Attribution/index.tsx:84
 msgid "Unattributed Accounts"
 msgstr "Konta nieprzypisane"
+
+#: src/components/routes/admin/EmailSuppressions/index.tsx:280
+msgid "Undetermined"
+msgstr "Nieokreślone"
 
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:30
 msgid "Unique Customers"
@@ -9292,7 +9396,7 @@ msgstr ""
 msgid "UTC"
 msgstr ""
 
-#: src/components/layouts/Admin/index.tsx:19
+#: src/components/layouts/Admin/index.tsx:20
 msgid "UTM Analytics"
 msgstr ""
 

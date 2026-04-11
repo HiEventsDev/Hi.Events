@@ -14,12 +14,16 @@ use HiEvents\Exceptions\UnableToSendMessageException;
 use HiEvents\Jobs\Event\SendEventEmailJob;
 use HiEvents\Mail\Event\EventMessage;
 use HiEvents\Repository\Eloquent\Value\Relationship;
+use HiEvents\DomainObjects\Generated\OutgoingMessageDomainObjectAbstract;
+use HiEvents\DomainObjects\Status\OutgoingMessageStatus;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\MessageRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
+use HiEvents\Repository\Interfaces\OutgoingMessageRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Message\DTO\SendMessageDTO;
+use HiEvents\Services\Domain\Email\EmailSuppressionService;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpKernel\Log\Logger;
@@ -35,7 +39,9 @@ class SendEventEmailMessagesService
         private readonly MessageRepositoryInterface  $messageRepository,
         private readonly UserRepositoryInterface     $userRepository,
         private readonly Logger                      $logger,
-        private readonly Dispatcher                  $dispatcher,
+        private readonly Dispatcher                          $dispatcher,
+        private readonly EmailSuppressionService             $emailSuppressionService,
+        private readonly OutgoingMessageRepositoryInterface  $outgoingMessageRepository,
     )
     {
     }
@@ -243,6 +249,24 @@ class SendEventEmailMessagesService
     ): void
     {
         if (in_array($emailAddress, $this->sentEmails, true)) {
+            return;
+        }
+
+        if ($this->emailSuppressionService->isEmailSuppressed($emailAddress, $messageData->account_id, 'marketing')) {
+            $this->logger->info('Email suppressed, skipping dispatch', [
+                'email' => $emailAddress,
+                'message_id' => $messageData->id,
+            ]);
+
+            $this->outgoingMessageRepository->create([
+                OutgoingMessageDomainObjectAbstract::MESSAGE_ID => $messageData->id,
+                OutgoingMessageDomainObjectAbstract::EVENT_ID => $messageData->event_id,
+                OutgoingMessageDomainObjectAbstract::STATUS => OutgoingMessageStatus::SUPPRESSED->name,
+                OutgoingMessageDomainObjectAbstract::RECIPIENT => $emailAddress,
+                OutgoingMessageDomainObjectAbstract::SUBJECT => $messageData->subject,
+            ]);
+
+            $this->sentEmails[] = $emailAddress;
             return;
         }
 

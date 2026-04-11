@@ -5,6 +5,7 @@ namespace HiEvents\Repository\Eloquent;
 use HiEvents\DomainObjects\OutgoingMessageDomainObject;
 use HiEvents\Models\OutgoingMessage;
 use HiEvents\Repository\Interfaces\OutgoingMessageRepositoryInterface;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @extends BaseRepository<OutgoingMessageDomainObject>
@@ -19,5 +20,17 @@ class OutgoingMessageRepository extends BaseRepository implements OutgoingMessag
     public function getDomainObject(): string
     {
         return OutgoingMessageDomainObject::class;
+    }
+
+    public function findAccountIdByRecipientEmail(string $email): ?int
+    {
+        $result = DB::table('outgoing_messages')
+            ->join('events', 'outgoing_messages.event_id', '=', 'events.id')
+            ->where('outgoing_messages.recipient', strtolower($email))
+            ->orderByDesc('outgoing_messages.created_at')
+            ->select('events.account_id')
+            ->first();
+
+        return $result?->account_id;
     }
 }

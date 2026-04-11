@@ -353,6 +353,7 @@ msgstr "Åtkomst nekad"
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:53
 #: src/components/routes/admin/Dashboard/index.tsx:353
 #: src/components/routes/admin/Dashboard/index.tsx:400
+#: src/components/routes/admin/EmailSuppressions/index.tsx:183
 #: src/components/routes/admin/Messages/index.tsx:164
 #: src/components/routes/admin/Messages/index.tsx:281
 msgid "Account"
@@ -464,6 +465,10 @@ msgstr "Lägg till fråga"
 msgid "Add description"
 msgstr "Lägg till beskrivning"
 
+#: src/components/routes/admin/EmailSuppressions/index.tsx:255
+msgid "Add Email Suppression"
+msgstr "Lägg till e-postundertryckning"
+
 #: src/components/routes/event/GettingStarted/index.tsx:142
 msgid "Add event details and manage event settings."
 msgstr "Lägg till evenemangsdetaljer och hantera evenemangsinställningar."
@@ -496,6 +501,11 @@ msgstr "Lägg till produkt i kategori"
 #: src/components/common/QuestionsTable/index.tsx:478
 msgid "Add Question"
 msgstr "Lägg till fråga"
+
+#: src/components/routes/admin/EmailSuppressions/index.tsx:127
+#: src/components/routes/admin/EmailSuppressions/index.tsx:286
+msgid "Add Suppression"
+msgstr "Lägg till undertryckning"
 
 #: src/components/routes/account/ManageAccount/sections/TaxSettings/index.tsx:18
 msgid "Add Tax or Fee"
@@ -579,7 +589,7 @@ msgid "Admin Access Required"
 msgstr "Administratörsåtkomst krävs"
 
 #: src/components/common/GlobalMenu/index.tsx:61
-#: src/components/layouts/Admin/index.tsx:27
+#: src/components/layouts/Admin/index.tsx:28
 #: src/components/routes/admin/Dashboard/index.tsx:70
 msgid "Admin Dashboard"
 msgstr "Adminpanel"
@@ -945,6 +955,10 @@ msgstr "Är du säker på att du vill publicera denna arrangörsprofil? När den
 msgid "Are you sure you want to remove this entry from the waitlist?"
 msgstr "Är du säker på att du vill ta bort denna post från väntelistan?"
 
+#: src/components/routes/admin/EmailSuppressions/index.tsx:49
+msgid "Are you sure you want to remove this suppression? The email address will be able to receive messages again."
+msgstr "Är du säker på att du vill ta bort denna undertryckning? E-postadressen kommer att kunna ta emot meddelanden igen."
+
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:514
 msgid "Are you sure you want to resend the order confirmation to {0}?"
 msgstr "Vill du verkligen skicka om orderbekräftelsen till {0}?"
@@ -1288,6 +1302,15 @@ msgstr "Meddelandet är obligatoriskt"
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:201
 msgid "Bookmark this page to manage your order anytime."
 msgstr "Bokmärk denna sida för att hantera din order när som helst."
+
+#: src/components/routes/admin/EmailSuppressions/index.tsx:143
+#: src/components/routes/admin/EmailSuppressions/index.tsx:269
+msgid "Bounce"
+msgstr "Studs"
+
+#: src/components/routes/admin/EmailSuppressions/index.tsx:276
+msgid "Bounce Type"
+msgstr "Studstyp"
 
 #: src/components/routes/event/TicketDesigner/index.tsx:108
 msgid "Brand your tickets with a custom logo, colors, and footer message."
@@ -1771,6 +1794,11 @@ msgstr "Kommaseparerade nyckelord som beskriver evenemanget. Dessa används av s
 msgid "Communication Preferences"
 msgstr "Kommunikationspreferens"
 
+#: src/components/routes/admin/EmailSuppressions/index.tsx:144
+#: src/components/routes/admin/EmailSuppressions/index.tsx:270
+msgid "Complaint"
+msgstr "Klagomål"
+
 #: src/components/routes/product-widget/CollectInformation/index.tsx:712
 msgid "Complete Order"
 msgstr "Slutför order"
@@ -1855,7 +1883,7 @@ msgstr "Konfigurationsnamn är synliga för slutanvändare. Fasta avgifter komme
 msgid "Configuration updated successfully"
 msgstr "Konfiguration uppdaterad"
 
-#: src/components/layouts/Admin/index.tsx:21
+#: src/components/layouts/Admin/index.tsx:22
 #: src/components/routes/admin/Configurations/index.tsx:64
 msgid "Configurations"
 msgstr "Konfigurationer"
@@ -2555,6 +2583,7 @@ msgstr "Dataägandeskap"
 #: src/components/common/AdminOrdersTable/index.tsx:94
 #: src/components/common/OrderDetails/index.tsx:39
 #: src/components/forms/QuestionForm/index.tsx:136
+#: src/components/routes/admin/EmailSuppressions/index.tsx:184
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:56
 #: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:24
 msgid "Date"
@@ -3007,6 +3036,7 @@ msgstr "Giltiga incheckningslistor"
 #: src/components/modals/JoinWaitlistModal/index.tsx:171
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:128
 #: src/components/routes/admin/Dashboard/index.tsx:401
+#: src/components/routes/admin/EmailSuppressions/index.tsx:179
 #: src/components/routes/auth/AcceptInvitation/index.tsx:112
 #: src/components/routes/auth/ForgotPassword/index.tsx:65
 #: src/components/routes/auth/Login/index.tsx:93
@@ -3033,6 +3063,7 @@ msgstr "E-post och mallar"
 msgid "Email address"
 msgstr "E-postadress"
 
+#: src/components/routes/admin/EmailSuppressions/index.tsx:260
 #: src/components/routes/product-widget/CollectInformation/index.tsx:450
 #: src/components/routes/product-widget/CollectInformation/index.tsx:451
 #: src/components/routes/product-widget/CollectInformation/index.tsx:662
@@ -3089,6 +3120,15 @@ msgstr "E-post ej verifierad"
 #: src/components/common/EmailTemplateEditor/EmailTemplatePreviewPane.tsx:27
 msgid "Email Preview"
 msgstr "Förhandsgranskning av e-post"
+
+#: src/components/routes/admin/EmailSuppressions/index.tsx:66
+msgid "Email suppression added successfully"
+msgstr "E-postundertryckning har lagts till"
+
+#: src/components/layouts/Admin/index.tsx:19
+#: src/components/routes/admin/EmailSuppressions/index.tsx:123
+msgid "Email Suppressions"
+msgstr "E-postundertryckningar"
 
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:336
 #: src/components/routes/organizer/Settings/index.tsx:65
@@ -3598,7 +3638,7 @@ msgstr "Misslyckades"
 msgid "Failed At"
 msgstr "Misslyckades vid"
 
-#: src/components/layouts/Admin/index.tsx:20
+#: src/components/layouts/Admin/index.tsx:21
 #: src/components/routes/admin/FailedJobs/index.tsx:114
 msgid "Failed Jobs"
 msgstr "Misslyckade jobb"
@@ -3606,6 +3646,10 @@ msgstr "Misslyckade jobb"
 #: src/components/layouts/Checkout/index.tsx:105
 msgid "Failed to abandon order. Please try again."
 msgstr "Misslyckades med att avbryta ordern. Försök igen."
+
+#: src/components/routes/admin/EmailSuppressions/index.tsx:70
+msgid "Failed to add suppression"
+msgstr "Det gick inte att lägga till undertryckning"
 
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:43
 msgid "Failed to assign configuration"
@@ -3710,6 +3754,10 @@ msgstr "Kunde inte erbjuda biljetter"
 #: src/components/common/WaitlistTable/index.tsx:107
 msgid "Failed to remove from waitlist"
 msgstr ""
+
+#: src/components/routes/admin/EmailSuppressions/index.tsx:53
+msgid "Failed to remove suppression"
+msgstr "Det gick inte att ta bort undertryckning"
 
 #: src/components/common/QuestionsTable/index.tsx:184
 msgid "Failed to reorder questions"
@@ -4906,6 +4954,10 @@ msgstr "Hantera"
 msgid "Manage attendee"
 msgstr "Hantera deltagare"
 
+#: src/components/routes/admin/EmailSuppressions/index.tsx:124
+msgid "Manage bounced and suppressed email addresses"
+msgstr "Hantera studsade och undertryckta e-postadresser"
+
 #: src/components/common/EventCard/index.tsx:136
 msgid "Manage event"
 msgstr "Hantera evenemang"
@@ -4949,6 +5001,11 @@ msgstr "Hantera dina användare och deras behörigheter"
 #: src/components/forms/QuestionForm/index.tsx:211
 msgid "Mandatory questions must be answered before the customer can checkout."
 msgstr "Obligatoriska frågor måste besvaras innan kunden kan slutföra köpet."
+
+#: src/components/routes/admin/EmailSuppressions/index.tsx:110
+#: src/components/routes/admin/EmailSuppressions/index.tsx:155
+msgid "Manual"
+msgstr "Manuell"
 
 #: src/components/modals/OfferWaitlistModal/index.tsx:104
 msgid "Manual offer"
@@ -5448,6 +5505,10 @@ msgstr "Inga sökresultat"
 #: src/components/common/NoResultsSplash/index.tsx:29
 msgid "No search results."
 msgstr "Inga sökresultat."
+
+#: src/components/routes/admin/EmailSuppressions/index.tsx:171
+msgid "No suppressed emails found"
+msgstr "Inga undertryckta e-postadresser hittades"
 
 #: src/components/common/TaxAndFeeList/index.tsx:105
 msgid "No Taxes or Fees have been added."
@@ -6346,6 +6407,10 @@ msgstr "Procent av transaktionsbeloppet"
 msgid "Performance"
 msgstr "Prestanda"
 
+#: src/components/routes/admin/EmailSuppressions/index.tsx:278
+msgid "Permanent"
+msgstr "Permanent"
+
 #: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:85
 msgid "Permanently delete this event and all its associated data."
 msgstr "Ta bort detta evenemang och alla tillhörande data permanent."
@@ -6434,6 +6499,7 @@ msgid "Please create a ticket"
 msgstr "Skapa en biljett"
 
 #: src/components/modals/JoinWaitlistModal/index.tsx:47
+#: src/components/routes/admin/EmailSuppressions/index.tsx:42
 msgid "Please enter a valid email address"
 msgstr "Vänligen ange en giltig e-postadress"
 
@@ -6854,6 +6920,16 @@ msgstr "Redo att uppgradera? Det tar bara några minuter."
 msgid "Real-Time Analytics"
 msgstr "Analys i realtid"
 
+#: src/components/routes/admin/EmailSuppressions/index.tsx:140
+#: src/components/routes/admin/EmailSuppressions/index.tsx:180
+#: src/components/routes/admin/EmailSuppressions/index.tsx:266
+msgid "Reason"
+msgstr "Anledning"
+
+#: src/components/routes/admin/EmailSuppressions/index.tsx:43
+msgid "Reason is required"
+msgstr "Anledning krävs"
+
 #: src/components/routes/auth/AcceptInvitation/index.tsx:157
 #: src/components/routes/auth/Register/index.tsx:133
 #: src/components/routes/profile/ManageProfile/index.tsx:209
@@ -6992,6 +7068,10 @@ msgstr "ta bort"
 #: src/components/routes/product-widget/SelectProducts/index.tsx:569
 msgid "Remove"
 msgstr "Ta bort"
+
+#: src/components/routes/admin/EmailSuppressions/index.tsx:223
+msgid "Remove Suppression"
+msgstr "Ta bort undertryckning"
 
 #: src/components/routes/organizer/Reports/ReportLayout/index.tsx:26
 msgid "Report not found"
@@ -7329,6 +7409,10 @@ msgstr "Sök på kontonamn eller e-post..."
 msgid "Search by attendee name, email or order #..."
 msgstr "Sök på deltagarnamn, e-post eller ordernummer..."
 
+#: src/components/routes/admin/EmailSuppressions/index.tsx:133
+msgid "Search by email address..."
+msgstr "Sök efter e-postadress..."
+
 #: src/components/routes/events/Dashboard/index.tsx:150
 #: src/components/routes/organizer/Events/index.tsx:47
 msgid "Search by event name..."
@@ -7661,6 +7745,11 @@ msgstr "SEO-titel"
 msgid "Service Fee"
 msgstr "Serviceavgift"
 
+#: src/components/routes/admin/EmailSuppressions/index.tsx:108
+#: src/components/routes/admin/EmailSuppressions/index.tsx:154
+msgid "SES"
+msgstr "SES"
+
 #: src/components/forms/ProductForm/index.tsx:168
 msgid "Set a minimum price and let users pay more if they choose"
 msgstr "Ange ett minimipris och låt användare betala mer om de vill"
@@ -7890,6 +7979,8 @@ msgid "Sorry, this promo code is not recognized"
 msgstr "Tyvärr, den här kampanjkoden känns inte igen"
 
 #: src/components/routes/admin/Attribution/index.tsx:106
+#: src/components/routes/admin/EmailSuppressions/index.tsx:151
+#: src/components/routes/admin/EmailSuppressions/index.tsx:182
 msgid "Source"
 msgstr "Källa"
 
@@ -8208,6 +8299,10 @@ msgstr "Sommarens musikfestival 2025"
 #: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:63
 msgid "Support Email"
 msgstr "Supportmejl"
+
+#: src/components/routes/admin/EmailSuppressions/index.tsx:52
+msgid "Suppression removed successfully"
+msgstr "Undertryckning har tagits bort"
 
 #: src/components/common/LanguageSwitcher/index.tsx:42
 msgid "Swedish"
@@ -8998,6 +9093,10 @@ msgstr "Följ försäljning, intäkter och närvaro med detaljerade rapporter"
 msgid "Transaction Fee:"
 msgstr "Transaktionsavgift:"
 
+#: src/components/routes/admin/EmailSuppressions/index.tsx:279
+msgid "Transient"
+msgstr "Tillfällig"
+
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:31
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:65
 msgid "True if offline payment"
@@ -9035,6 +9134,7 @@ msgstr "Twitch"
 
 #: src/components/forms/TaxAndFeeForm/index.tsx:44
 #: src/components/routes/admin/Attribution/index.tsx:109
+#: src/components/routes/admin/EmailSuppressions/index.tsx:181
 #: src/components/routes/admin/Messages/index.tsx:134
 #: src/components/routes/admin/Messages/index.tsx:165
 #: src/components/routes/admin/Messages/index.tsx:287
@@ -9090,6 +9190,10 @@ msgstr "Det gick inte att uppdatera frågan. Kontrollera dina uppgifter"
 #: src/components/routes/admin/Attribution/index.tsx:84
 msgid "Unattributed Accounts"
 msgstr "Oattribuerade konton"
+
+#: src/components/routes/admin/EmailSuppressions/index.tsx:280
+msgid "Undetermined"
+msgstr "Obestämd"
 
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:30
 msgid "Unique Customers"
@@ -9292,7 +9396,7 @@ msgstr "Användare kan ändra sin e-postadress i <0>Profilinställningar</0>"
 msgid "UTC"
 msgstr "UTC"
 
-#: src/components/layouts/Admin/index.tsx:19
+#: src/components/layouts/Admin/index.tsx:20
 msgid "UTM Analytics"
 msgstr "UTM-analys"
 

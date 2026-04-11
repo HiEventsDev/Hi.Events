@@ -353,6 +353,7 @@ msgstr "訪問被拒絕"
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:53
 #: src/components/routes/admin/Dashboard/index.tsx:353
 #: src/components/routes/admin/Dashboard/index.tsx:400
+#: src/components/routes/admin/EmailSuppressions/index.tsx:183
 #: src/components/routes/admin/Messages/index.tsx:164
 #: src/components/routes/admin/Messages/index.tsx:281
 msgid "Account"
@@ -464,6 +465,10 @@ msgstr "新增自訂問題以在結帳時收集額外資訊"
 msgid "Add description"
 msgstr "添加描述"
 
+#: src/components/routes/admin/EmailSuppressions/index.tsx:255
+msgid "Add Email Suppression"
+msgstr "新增電郵抑制"
+
 #: src/components/routes/event/GettingStarted/index.tsx:142
 msgid "Add event details and manage event settings."
 msgstr "新增活動詳情並管理活動設定。"
@@ -496,6 +501,11 @@ msgstr "將產品添加到類別"
 #: src/components/common/QuestionsTable/index.tsx:478
 msgid "Add Question"
 msgstr "新增問題"
+
+#: src/components/routes/admin/EmailSuppressions/index.tsx:127
+#: src/components/routes/admin/EmailSuppressions/index.tsx:286
+msgid "Add Suppression"
+msgstr "新增抑制"
 
 #: src/components/routes/account/ManageAccount/sections/TaxSettings/index.tsx:18
 msgid "Add Tax or Fee"
@@ -579,7 +589,7 @@ msgid "Admin Access Required"
 msgstr "需要管理員存取權限"
 
 #: src/components/common/GlobalMenu/index.tsx:61
-#: src/components/layouts/Admin/index.tsx:27
+#: src/components/layouts/Admin/index.tsx:28
 #: src/components/routes/admin/Dashboard/index.tsx:70
 msgid "Admin Dashboard"
 msgstr "管理儀表板"
@@ -945,6 +955,10 @@ msgstr "你確定要發佈呢個主辦方資料嗎？一旦發佈，將會對公
 msgid "Are you sure you want to remove this entry from the waitlist?"
 msgstr "您確定要從候補名單中移除此條目嗎？"
 
+#: src/components/routes/admin/EmailSuppressions/index.tsx:49
+msgid "Are you sure you want to remove this suppression? The email address will be able to receive messages again."
+msgstr "確定要移除此抑制嗎？該電郵地址將可以再次接收郵件。"
+
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:514
 msgid "Are you sure you want to resend the order confirmation to {0}?"
 msgstr "您確定要將訂單確認重新發送到 {0} 嗎？"
@@ -1288,6 +1302,15 @@ msgstr "正文是必需的"
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:201
 msgid "Bookmark this page to manage your order anytime."
 msgstr "收藏此頁面，隨時管理您的訂單。"
+
+#: src/components/routes/admin/EmailSuppressions/index.tsx:143
+#: src/components/routes/admin/EmailSuppressions/index.tsx:269
+msgid "Bounce"
+msgstr "退件"
+
+#: src/components/routes/admin/EmailSuppressions/index.tsx:276
+msgid "Bounce Type"
+msgstr "退件類型"
 
 #: src/components/routes/event/TicketDesigner/index.tsx:108
 msgid "Brand your tickets with a custom logo, colors, and footer message."
@@ -1771,6 +1794,11 @@ msgstr "以逗號分隔的描述活動的關鍵字。搜索引擎將使用這些
 msgid "Communication Preferences"
 msgstr "通訊偏好"
 
+#: src/components/routes/admin/EmailSuppressions/index.tsx:144
+#: src/components/routes/admin/EmailSuppressions/index.tsx:270
+msgid "Complaint"
+msgstr "投訴"
+
 #: src/components/routes/product-widget/CollectInformation/index.tsx:712
 msgid "Complete Order"
 msgstr "完整訂單"
@@ -1855,7 +1883,7 @@ msgstr "配置名稱對最終用戶可見。固定費用將按當前匯率轉換
 msgid "Configuration updated successfully"
 msgstr "配置更新成功"
 
-#: src/components/layouts/Admin/index.tsx:21
+#: src/components/layouts/Admin/index.tsx:22
 #: src/components/routes/admin/Configurations/index.tsx:64
 msgid "Configurations"
 msgstr "配置"
@@ -2555,6 +2583,7 @@ msgstr "資料所有權"
 #: src/components/common/AdminOrdersTable/index.tsx:94
 #: src/components/common/OrderDetails/index.tsx:39
 #: src/components/forms/QuestionForm/index.tsx:136
+#: src/components/routes/admin/EmailSuppressions/index.tsx:184
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:56
 #: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:24
 msgid "Date"
@@ -3007,6 +3036,7 @@ msgstr "符合條件的簽到列表"
 #: src/components/modals/JoinWaitlistModal/index.tsx:171
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:128
 #: src/components/routes/admin/Dashboard/index.tsx:401
+#: src/components/routes/admin/EmailSuppressions/index.tsx:179
 #: src/components/routes/auth/AcceptInvitation/index.tsx:112
 #: src/components/routes/auth/ForgotPassword/index.tsx:65
 #: src/components/routes/auth/Login/index.tsx:93
@@ -3033,6 +3063,7 @@ msgstr "電子郵件和模板"
 msgid "Email address"
 msgstr "電子郵件地址"
 
+#: src/components/routes/admin/EmailSuppressions/index.tsx:260
 #: src/components/routes/product-widget/CollectInformation/index.tsx:450
 #: src/components/routes/product-widget/CollectInformation/index.tsx:451
 #: src/components/routes/product-widget/CollectInformation/index.tsx:662
@@ -3089,6 +3120,15 @@ msgstr "電子郵件未經驗證"
 #: src/components/common/EmailTemplateEditor/EmailTemplatePreviewPane.tsx:27
 msgid "Email Preview"
 msgstr "郵件預覽"
+
+#: src/components/routes/admin/EmailSuppressions/index.tsx:66
+msgid "Email suppression added successfully"
+msgstr "電郵抑制新增成功"
+
+#: src/components/layouts/Admin/index.tsx:19
+#: src/components/routes/admin/EmailSuppressions/index.tsx:123
+msgid "Email Suppressions"
+msgstr "電郵抑制"
 
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:336
 #: src/components/routes/organizer/Settings/index.tsx:65
@@ -3598,7 +3638,7 @@ msgstr "失敗"
 msgid "Failed At"
 msgstr "失敗時間"
 
-#: src/components/layouts/Admin/index.tsx:20
+#: src/components/layouts/Admin/index.tsx:21
 #: src/components/routes/admin/FailedJobs/index.tsx:114
 msgid "Failed Jobs"
 msgstr "失敗任務"
@@ -3606,6 +3646,10 @@ msgstr "失敗任務"
 #: src/components/layouts/Checkout/index.tsx:105
 msgid "Failed to abandon order. Please try again."
 msgstr "放棄訂單失敗。請重試。"
+
+#: src/components/routes/admin/EmailSuppressions/index.tsx:70
+msgid "Failed to add suppression"
+msgstr "新增抑制失敗"
 
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:43
 msgid "Failed to assign configuration"
@@ -3710,6 +3754,10 @@ msgstr "提供票券失敗"
 #: src/components/common/WaitlistTable/index.tsx:107
 msgid "Failed to remove from waitlist"
 msgstr ""
+
+#: src/components/routes/admin/EmailSuppressions/index.tsx:53
+msgid "Failed to remove suppression"
+msgstr "移除抑制失敗"
 
 #: src/components/common/QuestionsTable/index.tsx:184
 msgid "Failed to reorder questions"
@@ -4906,6 +4954,10 @@ msgstr "管理"
 msgid "Manage attendee"
 msgstr "管理與會者"
 
+#: src/components/routes/admin/EmailSuppressions/index.tsx:124
+msgid "Manage bounced and suppressed email addresses"
+msgstr "管理退件和被抑制的電郵地址"
+
 #: src/components/common/EventCard/index.tsx:136
 msgid "Manage event"
 msgstr "管理活動"
@@ -4949,6 +5001,11 @@ msgstr "管理用户及其權限"
 #: src/components/forms/QuestionForm/index.tsx:211
 msgid "Mandatory questions must be answered before the customer can checkout."
 msgstr "在顧客結賬前，必須回答必填問題。"
+
+#: src/components/routes/admin/EmailSuppressions/index.tsx:110
+#: src/components/routes/admin/EmailSuppressions/index.tsx:155
+msgid "Manual"
+msgstr "手動"
 
 #: src/components/modals/OfferWaitlistModal/index.tsx:104
 msgid "Manual offer"
@@ -5448,6 +5505,10 @@ msgstr "沒有搜索結果"
 #: src/components/common/NoResultsSplash/index.tsx:29
 msgid "No search results."
 msgstr "沒有搜索結果。"
+
+#: src/components/routes/admin/EmailSuppressions/index.tsx:171
+msgid "No suppressed emails found"
+msgstr "未找到被抑制的電郵"
 
 #: src/components/common/TaxAndFeeList/index.tsx:105
 msgid "No Taxes or Fees have been added."
@@ -6346,6 +6407,10 @@ msgstr "交易金額的百分比"
 msgid "Performance"
 msgstr "表現"
 
+#: src/components/routes/admin/EmailSuppressions/index.tsx:278
+msgid "Permanent"
+msgstr "永久"
+
 #: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:85
 msgid "Permanently delete this event and all its associated data."
 msgstr "永久刪除此活動及其所有相關資料。"
@@ -6434,6 +6499,7 @@ msgid "Please create a ticket"
 msgstr "請創建一張票"
 
 #: src/components/modals/JoinWaitlistModal/index.tsx:47
+#: src/components/routes/admin/EmailSuppressions/index.tsx:42
 msgid "Please enter a valid email address"
 msgstr "請輸入有效的電子郵件地址"
 
@@ -6854,6 +6920,16 @@ msgstr "準備升級？這只需要幾分鐘。"
 msgid "Real-Time Analytics"
 msgstr "即時分析"
 
+#: src/components/routes/admin/EmailSuppressions/index.tsx:140
+#: src/components/routes/admin/EmailSuppressions/index.tsx:180
+#: src/components/routes/admin/EmailSuppressions/index.tsx:266
+msgid "Reason"
+msgstr "原因"
+
+#: src/components/routes/admin/EmailSuppressions/index.tsx:43
+msgid "Reason is required"
+msgstr "原因為必填項"
+
 #: src/components/routes/auth/AcceptInvitation/index.tsx:157
 #: src/components/routes/auth/Register/index.tsx:133
 #: src/components/routes/profile/ManageProfile/index.tsx:209
@@ -6992,6 +7068,10 @@ msgstr "去除"
 #: src/components/routes/product-widget/SelectProducts/index.tsx:569
 msgid "Remove"
 msgstr "移除"
+
+#: src/components/routes/admin/EmailSuppressions/index.tsx:223
+msgid "Remove Suppression"
+msgstr "移除抑制"
 
 #: src/components/routes/organizer/Reports/ReportLayout/index.tsx:26
 msgid "Report not found"
@@ -7329,6 +7409,10 @@ msgstr "按賬戶名稱或電子郵件搜尋..."
 msgid "Search by attendee name, email or order #..."
 msgstr "按與會者姓名、電子郵件或訂單號搜索..."
 
+#: src/components/routes/admin/EmailSuppressions/index.tsx:133
+msgid "Search by email address..."
+msgstr "按電郵地址搜尋..."
+
 #: src/components/routes/events/Dashboard/index.tsx:150
 #: src/components/routes/organizer/Events/index.tsx:47
 msgid "Search by event name..."
@@ -7661,6 +7745,11 @@ msgstr "搜索引擎優化標題"
 msgid "Service Fee"
 msgstr "服務費"
 
+#: src/components/routes/admin/EmailSuppressions/index.tsx:108
+#: src/components/routes/admin/EmailSuppressions/index.tsx:154
+msgid "SES"
+msgstr "SES"
+
 #: src/components/forms/ProductForm/index.tsx:168
 msgid "Set a minimum price and let users pay more if they choose"
 msgstr "設定最低價格，用户可選擇支付更高的價格"
@@ -7890,6 +7979,8 @@ msgid "Sorry, this promo code is not recognized"
 msgstr "對不起，此優惠代碼不可用"
 
 #: src/components/routes/admin/Attribution/index.tsx:106
+#: src/components/routes/admin/EmailSuppressions/index.tsx:151
+#: src/components/routes/admin/EmailSuppressions/index.tsx:182
 msgid "Source"
 msgstr "來源"
 
@@ -8208,6 +8299,10 @@ msgstr "2025夏季音樂節"
 #: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:63
 msgid "Support Email"
 msgstr "支持電子郵件"
+
+#: src/components/routes/admin/EmailSuppressions/index.tsx:52
+msgid "Suppression removed successfully"
+msgstr "抑制已成功移除"
 
 #: src/components/common/LanguageSwitcher/index.tsx:42
 msgid "Swedish"
@@ -8998,6 +9093,10 @@ msgstr "透過詳細報告追蹤銷售、收入和參加人數"
 msgid "Transaction Fee:"
 msgstr "交易手續費："
 
+#: src/components/routes/admin/EmailSuppressions/index.tsx:279
+msgid "Transient"
+msgstr "暫時"
+
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:31
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:65
 msgid "True if offline payment"
@@ -9035,6 +9134,7 @@ msgstr "Twitch"
 
 #: src/components/forms/TaxAndFeeForm/index.tsx:44
 #: src/components/routes/admin/Attribution/index.tsx:109
+#: src/components/routes/admin/EmailSuppressions/index.tsx:181
 #: src/components/routes/admin/Messages/index.tsx:134
 #: src/components/routes/admin/Messages/index.tsx:165
 #: src/components/routes/admin/Messages/index.tsx:287
@@ -9090,6 +9190,10 @@ msgstr "無法更新問題。請檢查您的詳細信息"
 #: src/components/routes/admin/Attribution/index.tsx:84
 msgid "Unattributed Accounts"
 msgstr "未歸因帳戶"
+
+#: src/components/routes/admin/EmailSuppressions/index.tsx:280
+msgid "Undetermined"
+msgstr "未確定"
 
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:30
 msgid "Unique Customers"
@@ -9292,7 +9396,7 @@ msgstr "用户可在 <0>\"配置文件設置\"</0> 中更改自己的電子郵�
 msgid "UTC"
 msgstr "世界協調時"
 
-#: src/components/layouts/Admin/index.tsx:19
+#: src/components/layouts/Admin/index.tsx:20
 msgid "UTM Analytics"
 msgstr "UTM 分析"
 

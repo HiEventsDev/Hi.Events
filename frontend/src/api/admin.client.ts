@@ -338,6 +338,36 @@ export interface GetAllAdminMessagesParams {
     sort_direction?: 'asc' | 'desc';
 }
 
+export interface EmailSuppression {
+    id: IdParam;
+    email: string;
+    reason: string;
+    bounce_type: string | null;
+    bounce_sub_type: string | null;
+    complaint_type: string | null;
+    source: string;
+    account_id: IdParam | null;
+    account_name: string | null;
+    created_at: string;
+}
+
+export interface GetAllEmailSuppressionsParams {
+    page?: number;
+    per_page?: number;
+    search?: string;
+    reason?: string;
+    source?: string;
+    sort_by?: string;
+    sort_direction?: 'asc' | 'desc';
+}
+
+export interface CreateEmailSuppressionData {
+    email: string;
+    reason: string;
+    bounce_type?: string | null;
+    complaint_type?: string | null;
+}
+
 export interface LaravelPaginatedData<T> {
     current_page: number;
     data: T[];
@@ -566,6 +596,31 @@ export const adminClient = {
 
     getMessagingTiers: async (): Promise<GenericDataResponse<AccountMessagingTier[]>> => {
         const response = await api.get<GenericDataResponse<AccountMessagingTier[]>>('admin/messaging-tiers');
+        return response.data;
+    },
+
+    getAllEmailSuppressions: async (params: GetAllEmailSuppressionsParams = {}) => {
+        const response = await api.get<GenericPaginatedResponse<EmailSuppression>>('admin/email-suppressions', {
+            params: {
+                page: params.page || 1,
+                per_page: params.per_page || 20,
+                search: params.search || undefined,
+                reason: params.reason || undefined,
+                source: params.source || undefined,
+                sort_by: params.sort_by || 'created_at',
+                sort_direction: params.sort_direction || 'desc',
+            }
+        });
+        return response.data;
+    },
+
+    createEmailSuppression: async (data: CreateEmailSuppressionData) => {
+        const response = await api.post<GenericDataResponse<EmailSuppression>>('admin/email-suppressions', data);
+        return response.data;
+    },
+
+    deleteEmailSuppression: async (id: IdParam) => {
+        const response = await api.delete(`admin/email-suppressions/${id}`);
         return response.data;
     },
 };
