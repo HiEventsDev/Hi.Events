@@ -11,7 +11,7 @@ import classes from "./EventDashboard.module.scss";
 import {useGetEventStats} from "../../../../queries/useGetEventStats.ts";
 import {formatCurrency} from "../../../../utilites/currency.ts";
 import {formatDateWithLocale} from "../../../../utilites/dates.ts";
-import {Button, Skeleton} from "@mantine/core";
+import {Button, SegmentedControl, Skeleton} from "@mantine/core";
 import {useMediaQuery} from "@mantine/hooks";
 import {IconAlertCircle, IconX} from "@tabler/icons-react";
 import {useGetAccount} from "../../../../queries/useGetAccount.ts";
@@ -19,7 +19,7 @@ import {useUpdateEventStatus} from "../../../../mutations/useUpdateEventStatus.t
 import {confirmationDialog} from "../../../../utilites/confirmationDialog.tsx";
 import {showError, showSuccess} from "../../../../utilites/notifications.tsx";
 import {useEffect, useState} from 'react';
-import {StripePlatform} from "../../../../types.ts";
+import {EventLifecycleStatus, EventStatus, StripePlatform} from "../../../../types.ts";
 import {isHiEvents} from "../../../../utilites/helpers.ts";
 import {StripeConnectButton} from "../../../common/StripeConnectButton";
 import {trackEvent, AnalyticsEvents} from "../../../../utilites/analytics.ts";
@@ -39,7 +39,14 @@ export const EventDashboard = () => {
     const eventQuery = useGetEvent(eventId);
     const {data: me} = useGetMe();
     const event = eventQuery?.data;
-    const eventStatsQuery = useGetEventStats(eventId);
+    const [dateRange, setDateRange] = useState<string>('month');
+    const [hasUserSelected, setHasUserSelected] = useState(false);
+
+    const defaultDateRange = (event?.lifecycle_status === EventLifecycleStatus.ENDED
+        || event?.status === EventStatus.ARCHIVED) ? 'event' : 'month';
+    const effectiveDateRange = hasUserSelected ? dateRange : defaultDateRange;
+
+    const eventStatsQuery = useGetEventStats(eventId, effectiveDateRange);
     const {data: eventStats} = eventStatsQuery;
     const isMobile = useMediaQuery('(max-width: 768px)');
     const {data: account, isFetched: accountIsFetched} = useGetAccount();
@@ -91,7 +98,7 @@ export const EventDashboard = () => {
         })
     }
 
-    const dateRange = (eventStats && event)
+    const dateRangeLabel = (eventStats && event)
         ? `${formatDateWithLocale(eventStats.start_date, 'chartDate', event?.timezone)} - ${formatDateWithLocale(eventStats.end_date, 'chartDate', event?.timezone)}`
         : '';
 
@@ -248,12 +255,29 @@ export const EventDashboard = () => {
                     </Card>
                 )}
 
+                <div className={classes.dateRangeSelector}>
+                    <SegmentedControl
+                        value={effectiveDateRange}
+                        onChange={(value) => {
+                            setDateRange(value);
+                            setHasUserSelected(true);
+                        }}
+                        data={[
+                            {label: t`Week`, value: 'week'},
+                            {label: t`Month`, value: 'month'},
+                            {label: t`Quarter`, value: 'quarter'},
+                            {label: t`Event`, value: 'event'},
+                        ]}
+                        size="sm"
+                    />
+                </div>
+
                 <Card className={classes.chartCard}>
                     <div className={classes.chartCardTitle}>
                         <h2>{t`Product Sales`}</h2>
                         <div className={classes.dateRange}>
                         <span>
-                            {dateRange}
+                            {dateRangeLabel}
                         </span>
                         </div>
                     </div>
@@ -285,7 +309,7 @@ export const EventDashboard = () => {
                         <h2>{t`Revenue`}</h2>
                         <div className={classes.dateRange}>
                         <span>
-                            {dateRange}
+                            {dateRangeLabel}
                         </span>
                         </div>
                     </div>

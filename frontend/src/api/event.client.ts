@@ -37,8 +37,9 @@ export const eventsClient = {
         return response.data;
     },
 
-    getEventStats: async (eventId: IdParam) => {
-        const response = await api.get<GenericDataResponse<EventStats>>('events/' + eventId + '/stats');
+    getEventStats: async (eventId: IdParam, dateRange?: string) => {
+        const params = dateRange ? `?date_range=${dateRange}` : '';
+        const response = await api.get<GenericDataResponse<EventStats>>('events/' + eventId + '/stats' + params);
         return response.data;
     },
 
