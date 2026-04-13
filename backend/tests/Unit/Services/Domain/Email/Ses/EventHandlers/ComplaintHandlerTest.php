@@ -3,8 +3,6 @@
 namespace Tests\Unit\Services\Domain\Email\Ses\EventHandlers;
 
 use HiEvents\DomainObjects\EmailSuppressionDomainObject;
-use HiEvents\DomainObjects\Status\EmailSuppressionReasonEnum;
-use HiEvents\DomainObjects\Status\EmailSuppressionSourceEnum;
 use HiEvents\Repository\Interfaces\OutgoingMessageRepositoryInterface;
 use HiEvents\Services\Domain\Email\EmailSuppressionService;
 use HiEvents\Services\Domain\Email\Ses\EventHandlers\ComplaintHandler;
@@ -24,6 +22,7 @@ class ComplaintHandlerTest extends TestCase
         parent::setUp();
         $this->suppressionService = m::mock(EmailSuppressionService::class);
         $this->outgoingMessageRepository = m::mock(OutgoingMessageRepositoryInterface::class);
+        $this->outgoingMessageRepository->shouldReceive('markAsBounced')->andReturn(false)->byDefault();
         $this->logger = m::mock(Logger::class)->shouldIgnoreMissing();
 
         $this->handler = new ComplaintHandler(
@@ -111,5 +110,35 @@ class ComplaintHandlerTest extends TestCase
             ->andReturn($suppression);
 
         $this->handler->handle($message, ['MessageId' => 'msg-789']);
+    }
+
+    public function testMarksOutgoingMessageAsBouncedBySesMessageId(): void
+    {
+        $message = [
+            'complaint' => [
+                'complaintFeedbackType' => 'abuse',
+                'complainedRecipients' => [
+                    ['emailAddress' => 'complained@example.com'],
+                ],
+            ],
+            'mail' => [
+                'messageId' => 'ses-msg-001',
+            ],
+        ];
+
+        $this->outgoingMessageRepository->shouldReceive('findAccountIdByRecipientEmail')
+            ->andReturn(1);
+
+        $this->outgoingMessageRepository->shouldReceive('markAsBounced')
+            ->with('ses-msg-001')
+            ->once()
+            ->andReturn(true);
+
+        $suppression = m::mock(EmailSuppressionDomainObject::class);
+        $this->suppressionService->shouldReceive('suppressEmail')
+            ->once()
+            ->andReturn($suppression);
+
+        $this->handler->handle($message, ['MessageId' => 'sns-123']);
     }
 }

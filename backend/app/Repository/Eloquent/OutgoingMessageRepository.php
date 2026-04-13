@@ -3,6 +3,7 @@
 namespace HiEvents\Repository\Eloquent;
 
 use HiEvents\DomainObjects\OutgoingMessageDomainObject;
+use HiEvents\DomainObjects\Status\OutgoingMessageStatus;
 use HiEvents\Models\OutgoingMessage;
 use HiEvents\Repository\Interfaces\OutgoingMessageRepositoryInterface;
 use Illuminate\Support\Facades\DB;
@@ -32,5 +33,15 @@ class OutgoingMessageRepository extends BaseRepository implements OutgoingMessag
             ->first();
 
         return $result?->account_id;
+    }
+
+    public function markAsBounced(string $sesMessageId): bool
+    {
+        $affected = DB::table('outgoing_messages')
+            ->where('ses_message_id', $sesMessageId)
+            ->where('status', OutgoingMessageStatus::SENT->name)
+            ->update(['status' => OutgoingMessageStatus::BOUNCED->name]);
+
+        return $affected > 0;
     }
 }

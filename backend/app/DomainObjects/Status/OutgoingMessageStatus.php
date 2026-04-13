@@ -7,4 +7,5 @@ enum OutgoingMessageStatus
     case SENT;
     case FAILED;
     case SUPPRESSED;
+    case BOUNCED;
 }

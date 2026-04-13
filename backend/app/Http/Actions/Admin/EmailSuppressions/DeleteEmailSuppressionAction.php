@@ -7,7 +7,7 @@ namespace HiEvents\Http\Actions\Admin\EmailSuppressions;
 use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Services\Domain\Email\EmailSuppressionService;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
 class DeleteEmailSuppressionAction extends BaseAction
 {
@@ -16,7 +16,7 @@ class DeleteEmailSuppressionAction extends BaseAction
     ) {
     }
 
-    public function __invoke(int $suppression_id): JsonResponse
+    public function __invoke(int $suppression_id): Response
     {
         $this->minimumAllowedRole(Role::SUPERADMIN);
 

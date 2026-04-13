@@ -10,4 +10,6 @@ use HiEvents\DomainObjects\OutgoingMessageDomainObject;
 interface OutgoingMessageRepositoryInterface extends RepositoryInterface
 {
     public function findAccountIdByRecipientEmail(string $email): ?int;
+
+    public function markAsBounced(string $sesMessageId): bool;
 }

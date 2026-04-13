@@ -25,6 +25,7 @@ class BounceHandler
         $bounceSubType = $bounce['bounceSubType'] ?? null;
         $recipients = $bounce['bouncedRecipients'] ?? [];
         $snsMessageId = $snsPayload['MessageId'] ?? null;
+        $sesMessageId = $message['mail']['messageId'] ?? null;
 
         foreach ($recipients as $recipient) {
             $email = strtolower($recipient['emailAddress'] ?? '');
@@ -40,6 +41,7 @@ class BounceHandler
                 'bounce_type' => $bounceType,
                 'bounce_sub_type' => $bounceSubType,
                 'account_id' => $accountId,
+                'ses_message_id' => $sesMessageId,
             ]);
 
             $this->emailSuppressionService->suppressEmail(
@@ -52,6 +54,10 @@ class BounceHandler
                 snsMessageId: $snsMessageId,
                 rawPayload: $snsPayload,
             );
+
+            if ($sesMessageId && $this->outgoingMessageRepository->markAsBounced($sesMessageId)) {
+                $this->logger->info('Marked outgoing message as bounced', ['ses_message_id' => $sesMessageId]);
+            }
         }
     }
 }

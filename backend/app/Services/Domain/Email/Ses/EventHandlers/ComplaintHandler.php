@@ -24,6 +24,7 @@ class ComplaintHandler
         $complaintType = $complaint['complaintFeedbackType'] ?? null;
         $recipients = $complaint['complainedRecipients'] ?? [];
         $snsMessageId = $snsPayload['MessageId'] ?? null;
+        $sesMessageId = $message['mail']['messageId'] ?? null;
 
         foreach ($recipients as $recipient) {
             $email = strtolower($recipient['emailAddress'] ?? '');
@@ -38,6 +39,7 @@ class ComplaintHandler
                 'email' => $email,
                 'complaint_type' => $complaintType,
                 'account_id' => $accountId,
+                'ses_message_id' => $sesMessageId,
             ]);
 
             $this->emailSuppressionService->suppressEmail(
@@ -49,6 +51,10 @@ class ComplaintHandler
                 snsMessageId: $snsMessageId,
                 rawPayload: $snsPayload,
             );
+
+            if ($sesMessageId && $this->outgoingMessageRepository->markAsBounced($sesMessageId)) {
+                $this->logger->info('Marked outgoing message as bounced', ['ses_message_id' => $sesMessageId]);
+            }
         }
     }
 }
