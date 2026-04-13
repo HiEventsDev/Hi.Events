@@ -17,6 +17,9 @@ export const ImageResize = Image.extend({
                         ? `width: ${width}px; height: auto; cursor: pointer;`
                         : `${element.style.cssText}`;
                 },
+                renderHTML: (attributes: Record<string, string>) => {
+                    return { style: attributes.style };
+                },
             },
         };
     },
