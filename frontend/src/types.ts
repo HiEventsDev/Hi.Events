@@ -773,6 +773,19 @@ export interface OutgoingMessage {
     created_at?: string;
 }
 
+export interface OutgoingTransactionMessage {
+    id: IdParam;
+    event_id: number | null;
+    order_id: number | null;
+    attendee_id: number | null;
+    email_type: string;
+    recipient: string;
+    subject: string;
+    status: 'SENT' | 'DELIVERED' | 'FAILED' | 'BOUNCED' | 'SUPPRESSED';
+    resolved_at: string | null;
+    created_at: string;
+}
+
 export enum QuestionType {
     ADDRESS = 'ADDRESS',
     SINGLE_LINE_TEXT = 'SINGLE_LINE_TEXT',
@@ -838,6 +851,8 @@ export enum MessageType {
     TicketHolders = 'TICKET_HOLDERS',
     AllAttendees = 'ALL_ATTENDEES',
     OrderOwnersWithProduct = 'ORDER_OWNERS_WITH_PRODUCT',
+    CheckedInAttendees = 'CHECKED_IN_ATTENDEES',
+    NotCheckedInAttendees = 'NOT_CHECKED_IN_ATTENDEES',
 }
 
 export interface PromoCode {

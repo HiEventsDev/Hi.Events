@@ -3,6 +3,7 @@
 namespace HiEvents\Services\Domain\Mail;
 
 use HiEvents\DomainObjects\AttendeeDomainObject;
+use HiEvents\DomainObjects\Enums\TransactionalEmailType;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\InvoiceDomainObject;
@@ -17,16 +18,18 @@ use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Domain\Attendee\SendAttendeeTicketService;
 use HiEvents\Services\Domain\Email\MailBuilderService;
+use HiEvents\Services\Domain\Email\TransactionalEmailTrackingService;
 use Illuminate\Mail\Mailer;
 
 class SendOrderDetailsService
 {
     public function __construct(
-        private readonly EventRepositoryInterface  $eventRepository,
-        private readonly OrderRepositoryInterface  $orderRepository,
-        private readonly Mailer                    $mailer,
-        private readonly SendAttendeeTicketService $sendAttendeeTicketService,
-        private readonly MailBuilderService        $mailBuilderService,
+        private readonly EventRepositoryInterface           $eventRepository,
+        private readonly OrderRepositoryInterface           $orderRepository,
+        private readonly Mailer                             $mailer,
+        private readonly SendAttendeeTicketService          $sendAttendeeTicketService,
+        private readonly MailBuilderService                 $mailBuilderService,
+        private readonly TransactionalEmailTrackingService  $trackingService,
     )
     {
     }
@@ -50,15 +53,24 @@ class SendOrderDetailsService
         }
 
         if ($order->isOrderFailed()) {
-            $this->mailer
-                ->to($order->getEmail())
-                ->locale($order->getLocale())
-                ->send(new OrderFailed(
-                    order: $order,
-                    event: $event,
-                    organizer: $event->getOrganizer(),
-                    eventSettings: $event->getEventSettings(),
-                ));
+            $mail = new OrderFailed(
+                order: $order,
+                event: $event,
+                organizer: $event->getOrganizer(),
+                eventSettings: $event->getEventSettings(),
+            );
+
+            $this->trackingService->recordAndSend(
+                mailer: $this->mailer,
+                recipient: $order->getEmail(),
+                mail: $mail,
+                emailType: TransactionalEmailType::ORDER_FAILED,
+                subject: $mail->envelope()->subject,
+                eventId: $event->getId(),
+                orderId: $order->getId(),
+                accountId: $event->getAccountId(),
+                locale: $order->getLocale(),
+            );
         }
     }
 
@@ -78,10 +90,17 @@ class SendOrderDetailsService
             $invoice
         );
 
-        $this->mailer
-            ->to($order->getEmail())
-            ->locale($order->getLocale())
-            ->send($mail);
+        $this->trackingService->recordAndSend(
+            mailer: $this->mailer,
+            recipient: $order->getEmail(),
+            mail: $mail,
+            emailType: TransactionalEmailType::ORDER_SUMMARY,
+            subject: $mail->envelope()->subject,
+            eventId: $event->getId(),
+            orderId: $order->getId(),
+            accountId: $event->getAccountId(),
+            locale: $order->getLocale(),
+        );
     }
 
     private function sendAttendeeTicketEmails(OrderDomainObject $order, EventDomainObject $event): void

@@ -46,6 +46,7 @@ use HiEvents\Http\Actions\CheckInLists\Public\GetCheckInListAttendeesPublicActio
 use HiEvents\Http\Actions\CheckInLists\Public\GetCheckInListPublicAction;
 use HiEvents\Http\Actions\CheckInLists\UpdateCheckInListAction;
 use HiEvents\Http\Actions\Common\GetColorThemesAction;
+use HiEvents\Http\Actions\Common\Webhooks\SesIncomingWebhookAction;
 use HiEvents\Http\Actions\Common\Webhooks\StripeIncomingWebhookAction;
 use HiEvents\Http\Actions\Events\CreateEventAction;
 use HiEvents\Http\Actions\Events\DuplicateEventAction;
@@ -82,7 +83,12 @@ use HiEvents\Http\Actions\Images\DeleteImageAction;
 use HiEvents\Http\Actions\Messages\CancelMessageAction;
 use HiEvents\Http\Actions\Messages\GetMessageRecipientsAction;
 use HiEvents\Http\Actions\Messages\GetMessagesAction;
+use HiEvents\Http\Actions\Messages\GetOutgoingMessagesAction;
 use HiEvents\Http\Actions\Messages\SendMessageAction;
+use HiEvents\Http\Actions\TransactionMessages\GetTransactionMessageFailuresAction;
+use HiEvents\Http\Actions\TransactionMessages\GetTransactionMessagesAction;
+use HiEvents\Http\Actions\TransactionMessages\ResendTransactionMessageAction;
+use HiEvents\Http\Actions\TransactionMessages\ResolveTransactionMessageAction;
 use HiEvents\Http\Actions\Orders\CancelOrderAction;
 use HiEvents\Http\Actions\Orders\DownloadOrderInvoiceAction;
 use HiEvents\Http\Actions\Orders\EditOrderAction;
@@ -182,6 +188,9 @@ use HiEvents\Http\Actions\Admin\Configurations\CreateConfigurationAction;
 use HiEvents\Http\Actions\Admin\Configurations\DeleteConfigurationAction;
 use HiEvents\Http\Actions\Admin\Configurations\GetAllConfigurationsAction;
 use HiEvents\Http\Actions\Admin\Configurations\UpdateConfigurationAction;
+use HiEvents\Http\Actions\Admin\EmailSuppressions\CreateEmailSuppressionAction;
+use HiEvents\Http\Actions\Admin\EmailSuppressions\DeleteEmailSuppressionAction;
+use HiEvents\Http\Actions\Admin\EmailSuppressions\GetAllEmailSuppressionsAction;
 use HiEvents\Http\Actions\Admin\Events\GetAllEventsAction as GetAllAdminEventsAction;
 use HiEvents\Http\Actions\Admin\Events\GetUpcomingEventsAction;
 use HiEvents\Http\Actions\Admin\FailedJobs\DeleteAllFailedJobsAction;
@@ -403,6 +412,13 @@ $router->middleware(['auth:api'])->group(
         $router->get('/events/{event_id}/messages', GetMessagesAction::class);
         $router->post('/events/{event_id}/messages/{message_id}/cancel', CancelMessageAction::class);
         $router->get('/events/{event_id}/messages/{message_id}/recipients', GetMessageRecipientsAction::class);
+        $router->get('/events/{event_id}/outgoing-messages', GetOutgoingMessagesAction::class);
+
+        // Transaction Messages
+        $router->get('/events/{event_id}/transaction-messages', GetTransactionMessagesAction::class);
+        $router->get('/events/{event_id}/transaction-messages/failures', GetTransactionMessageFailuresAction::class);
+        $router->post('/events/{event_id}/transaction-messages/{message_id}/resolve', ResolveTransactionMessageAction::class);
+        $router->post('/events/{event_id}/transaction-messages/{message_id}/resend', ResendTransactionMessageAction::class);
 
         // Event Settings
         $router->get('/events/{event_id}/settings', GetEventSettingsAction::class);
@@ -478,6 +494,11 @@ $router->prefix('/admin')->middleware(['auth:api'])->group(
         $router->get('/messages', GetAllAdminMessagesAction::class);
         $router->post('/messages/{message_id}/approve', ApproveMessageAction::class);
 
+        // Email Suppressions
+        $router->get('/email-suppressions', GetAllEmailSuppressionsAction::class);
+        $router->post('/email-suppressions', CreateEmailSuppressionAction::class);
+        $router->delete('/email-suppressions/{suppression_id}', DeleteEmailSuppressionAction::class);
+
         // Messaging Tiers
         $router->get('/messaging-tiers', GetMessagingTiersAction::class);
         $router->put('/accounts/{account_id}/messaging-tier', UpdateAccountMessagingTierAction::class);
@@ -532,6 +553,7 @@ $router->prefix('/public')->group(
 
         // Webhooks
         $router->post('/webhooks/stripe', StripeIncomingWebhookAction::class);
+        $router->post('/webhooks/ses', SesIncomingWebhookAction::class);
 
         // Check-In
         $router->get('/check-in-lists/{check_in_list_short_id}', GetCheckInListPublicAction::class);

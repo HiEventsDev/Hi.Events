@@ -16,6 +16,7 @@ use HiEvents\Repository\Eloquent\AttendeeCheckInRepository;
 use HiEvents\Repository\Eloquent\AttendeeRepository;
 use HiEvents\Repository\Eloquent\CapacityAssignmentRepository;
 use HiEvents\Repository\Eloquent\CheckInListRepository;
+use HiEvents\Repository\Eloquent\EmailSuppressionRepository;
 use HiEvents\Repository\Eloquent\EmailTemplateRepository;
 use HiEvents\Repository\Eloquent\EventDailyStatisticRepository;
 use HiEvents\Repository\Eloquent\EventRepository;
@@ -33,6 +34,7 @@ use HiEvents\Repository\Eloquent\OrderRepository;
 use HiEvents\Repository\Eloquent\OrganizerRepository;
 use HiEvents\Repository\Eloquent\OrganizerSettingsRepository;
 use HiEvents\Repository\Eloquent\OutgoingMessageRepository;
+use HiEvents\Repository\Eloquent\OutgoingTransactionMessageRepository;
 use HiEvents\Repository\Eloquent\PasswordResetRepository;
 use HiEvents\Repository\Eloquent\PasswordResetTokenRepository;
 use HiEvents\Repository\Eloquent\ProductCategoryRepository;
@@ -63,6 +65,7 @@ use HiEvents\Repository\Interfaces\AttendeeCheckInRepositoryInterface;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\CapacityAssignmentRepositoryInterface;
 use HiEvents\Repository\Interfaces\CheckInListRepositoryInterface;
+use HiEvents\Repository\Interfaces\EmailSuppressionRepositoryInterface;
 use HiEvents\Repository\Interfaces\EmailTemplateRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventDailyStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
@@ -80,6 +83,7 @@ use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\OutgoingMessageRepositoryInterface;
+use HiEvents\Repository\Interfaces\OutgoingTransactionMessageRepositoryInterface;
 use HiEvents\Repository\Interfaces\PasswordResetRepositoryInterface;
 use HiEvents\Repository\Interfaces\PasswordResetTokenRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductCategoryRepositoryInterface;
@@ -153,6 +157,8 @@ class RepositoryServiceProvider extends ServiceProvider
         TicketLookupTokenRepositoryInterface::class => TicketLookupTokenRepository::class,
         AccountMessagingTierRepositoryInterface::class => AccountMessagingTierRepository::class,
         WaitlistEntryRepositoryInterface::class => WaitlistEntryRepository::class,
+        EmailSuppressionRepositoryInterface::class => EmailSuppressionRepository::class,
+        OutgoingTransactionMessageRepositoryInterface::class => OutgoingTransactionMessageRepository::class,
     ];
 
     public function register(): void

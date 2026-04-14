@@ -15,10 +15,16 @@ interface MessageRecipientsModalProps extends GenericModalProps {
 
 const statusColor = (status: string) => {
     switch (status?.toUpperCase()) {
-        case 'SENT':
+        case 'DELIVERED':
             return 'green';
-        case 'FAILED':
+        case 'SENT':
+            return 'teal';
+        case 'BOUNCED':
             return 'red';
+        case 'FAILED':
+            return 'orange';
+        case 'SUPPRESSED':
+            return 'gray';
         default:
             return 'gray';
     }

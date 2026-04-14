@@ -9,28 +9,22 @@ use HiEvents\DomainObjects\InvoiceDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Mail\Order\OrderSummary;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
-use HiEvents\Services\Domain\Email\MailBuilderService;
+use HiEvents\Services\Domain\Mail\SendOrderDetailsService;
 use Illuminate\Http\Response;
-use Illuminate\Mail\Mailer;
 
 class ResendOrderConfirmationAction extends BaseAction
 {
     public function __construct(
-        private readonly EventRepositoryInterface $eventRepository,
-        private readonly OrderRepositoryInterface $orderRepository,
-        private readonly Mailer                   $mailer,
-        private readonly MailBuilderService       $mailBuilderService,
+        private readonly EventRepositoryInterface    $eventRepository,
+        private readonly OrderRepositoryInterface    $orderRepository,
+        private readonly SendOrderDetailsService     $sendOrderDetailsService,
     )
     {
     }
 
-    /**
-     * @todo - move this to a handler
-     */
     public function __invoke(int $eventId, int $orderId): Response
     {
         $this->isActionAuthorized($eventId, EventDomainObject::class);
@@ -53,18 +47,13 @@ class ResendOrderConfirmationAction extends BaseAction
                 ->loadRelation(new Relationship(EventSettingDomainObject::class))
                 ->findById($order->getEventId());
 
-            $mail = $this->mailBuilderService->buildOrderSummaryMail(
-                $order,
-                $event,
-                $event->getEventSettings(),
-                $event->getOrganizer(),
-                $order->getLatestInvoice()
+            $this->sendOrderDetailsService->sendCustomerOrderSummary(
+                order: $order,
+                event: $event,
+                organizer: $event->getOrganizer(),
+                eventSettings: $event->getEventSettings(),
+                invoice: $order->getLatestInvoice(),
             );
-
-            $this->mailer
-                ->to($order->getEmail())
-                ->locale($order->getLocale())
-                ->send($mail);
         }
 
         return $this->noContentResponse();

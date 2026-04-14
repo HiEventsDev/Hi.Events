@@ -2,6 +2,7 @@
 
 namespace HiEvents\Jobs\Waitlist;
 
+use HiEvents\DomainObjects\Enums\TransactionalEmailType;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\DomainObjects\WaitlistEntryDomainObject;
@@ -10,6 +11,7 @@ use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductPriceRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
+use HiEvents\Services\Domain\Email\TransactionalEmailTrackingService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -33,10 +35,11 @@ class SendWaitlistOfferEmailJob implements ShouldQueue
     }
 
     public function handle(
-        EventRepositoryInterface      $eventRepository,
-        ProductPriceRepositoryInterface $productPriceRepository,
-        ProductRepositoryInterface    $productRepository,
-        Mailer                        $mailer,
+        EventRepositoryInterface           $eventRepository,
+        ProductPriceRepositoryInterface    $productPriceRepository,
+        ProductRepositoryInterface         $productRepository,
+        Mailer                             $mailer,
+        TransactionalEmailTrackingService  $trackingService,
     ): void
     {
         $event = $eventRepository
@@ -51,18 +54,26 @@ class SendWaitlistOfferEmailJob implements ShouldQueue
             $product = $productRepository->findById($productPrice->getProductId());
         }
 
-        $mailer
-            ->to($this->entry->getEmail())
-            ->locale($this->entry->getLocale())
-            ->send(new WaitlistOfferMail(
-                entry: $this->entry,
-                event: $event,
-                product: $product,
-                productPrice: $productPrice,
-                organizer: $event->getOrganizer(),
-                eventSettings: $event->getEventSettings(),
-                orderShortId: $this->orderShortId,
-                sessionIdentifier: $this->sessionIdentifier,
-            ));
+        $mail = new WaitlistOfferMail(
+            entry: $this->entry,
+            event: $event,
+            product: $product,
+            productPrice: $productPrice,
+            organizer: $event->getOrganizer(),
+            eventSettings: $event->getEventSettings(),
+            orderShortId: $this->orderShortId,
+            sessionIdentifier: $this->sessionIdentifier,
+        );
+
+        $trackingService->recordAndSend(
+            mailer: $mailer,
+            recipient: $this->entry->getEmail(),
+            mail: $mail,
+            emailType: TransactionalEmailType::WAITLIST_OFFER,
+            subject: $mail->envelope()->subject,
+            eventId: $event->getId(),
+            accountId: $event->getAccountId(),
+            locale: $this->entry->getLocale(),
+        );
     }
 }

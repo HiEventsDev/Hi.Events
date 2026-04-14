@@ -213,6 +213,13 @@ export const router: RouteObject[] = [
                     const Messages = await import("./components/routes/admin/Messages");
                     return { Component: Messages.default };
                 }
+            },
+            {
+                path: "email-suppressions",
+                async lazy() {
+                    const EmailSuppressions = await import("./components/routes/admin/EmailSuppressions");
+                    return { Component: EmailSuppressions.default };
+                }
             }
         ]
     },
@@ -419,6 +426,13 @@ export const router: RouteObject[] = [
                 async lazy() {
                     const Messages = await import("./components/routes/event/messages");
                     return { Component: Messages.default };
+                }
+            },
+            {
+                path: "message-tracking",
+                async lazy() {
+                    const MessageTracking = await import("./components/routes/event/MessageTracking");
+                    return { Component: MessageTracking.default };
                 }
             },
             {
