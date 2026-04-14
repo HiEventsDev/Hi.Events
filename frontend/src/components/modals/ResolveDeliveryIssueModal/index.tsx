@@ -1,7 +1,7 @@
 import {useForm} from "@mantine/form";
 import {GenericModalProps, IdParam, OutgoingTransactionMessage} from "../../../types.ts";
 import {Modal} from "../../common/Modal";
-import {Box, Button, Checkbox, FocusTrap, Group, Radio, Stack, Text, TextInput} from "@mantine/core";
+import {Button, Checkbox, FocusTrap, Group, TextInput} from "@mantine/core";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
 import {t} from "@lingui/macro";
 import {showSuccess, showError} from "../../../utilites/notifications.tsx";
@@ -22,7 +22,7 @@ export const ResolveDeliveryIssueModal = ({onClose, eventId, message}: ResolveDe
         initialValues: {
             email: message.recipient,
             resend: false,
-            resolveAction: 'none' as 'none' | 'auto' | 'now',
+            resolveNow: false,
         },
     });
 
@@ -35,22 +35,17 @@ export const ResolveDeliveryIssueModal = ({onClose, eventId, message}: ResolveDe
         const changed = newEmail.toLowerCase() !== message.recipient.toLowerCase();
         if (changed && !form.values.resend) {
             form.setFieldValue('resend', true);
-            if (form.values.resolveAction === 'none') {
-                form.setFieldValue('resolveAction', 'auto');
-            }
         }
     };
 
     const getButtonLabel = () => {
-        const resend = form.values.resend;
-        const resolve = form.values.resolveAction === 'now';
-        if (resend && resolve) return t`Resolve & Resend`;
-        if (resend) return t`Resend`;
-        if (resolve) return t`Resolve`;
+        if (form.values.resend && form.values.resolveNow) return t`Resolve & Resend`;
+        if (form.values.resend) return t`Resend`;
+        if (form.values.resolveNow) return t`Resolve`;
         return t`Save`;
     };
 
-    const handleSubmit = (values: { email: string, resend: boolean, resolveAction: string }) => {
+    const handleSubmit = (values: { email: string, resend: boolean, resolveNow: boolean }) => {
         if (values.resend) {
             resendMutation.mutate({
                 eventId,
@@ -58,7 +53,7 @@ export const ResolveDeliveryIssueModal = ({onClose, eventId, message}: ResolveDe
                 email: emailChanged ? values.email : undefined,
             }, {
                 onSuccess: () => {
-                    if (values.resolveAction === 'now') {
+                    if (values.resolveNow) {
                         resolveMutation.mutate({eventId, messageId: message.id!}, {
                             onSuccess: () => {
                                 onClose();
@@ -71,7 +66,7 @@ export const ResolveDeliveryIssueModal = ({onClose, eventId, message}: ResolveDe
                         });
                     } else {
                         onClose();
-                        showSuccess(t`Email has been resent. It will auto-resolve when delivery is confirmed.`);
+                        showSuccess(t`Email has been resent.`);
                     }
                 },
                 onError: (error) => {
@@ -79,7 +74,7 @@ export const ResolveDeliveryIssueModal = ({onClose, eventId, message}: ResolveDe
                     showError(t`Failed to resend email. Please try again.`);
                 },
             });
-        } else if (values.resolveAction === 'now') {
+        } else if (values.resolveNow) {
             resolveMutation.mutate({
                 eventId,
                 messageId: message.id!,
@@ -119,39 +114,12 @@ export const ResolveDeliveryIssueModal = ({onClose, eventId, message}: ResolveDe
                     {...form.getInputProps('resend', {type: 'checkbox'})}
                 />
 
-                <Box
-                    mt="lg"
-                    p="sm"
-                    style={{
-                        border: '1px solid var(--mantine-color-default-border)',
-                        borderRadius: 'var(--mantine-radius-sm)',
-                        position: 'relative',
-                    }}
-                >
-                    <Text
-                        size="sm"
-                        fw={500}
-                        style={{
-                            position: 'absolute',
-                            top: -10,
-                            left: 12,
-                            backgroundColor: 'var(--mantine-color-body)',
-                            padding: '0 6px',
-                            lineHeight: 1,
-                        }}
-                    >
-                        {t`Resolution`}
-                    </Text>
-                    <Radio.Group {...form.getInputProps('resolveAction')}>
-                        <Stack gap="xs" mt={4}>
-                            <Radio value="none" label={t`No change`} disabled={isPending}/>
-                            {form.values.resend && (
-                                <Radio value="auto" label={t`Auto-resolve after email success`} disabled={isPending}/>
-                            )}
-                            <Radio value="now" label={t`Resolve now`} disabled={isPending}/>
-                        </Stack>
-                    </Radio.Group>
-                </Box>
+                <Checkbox
+                    mt="xs"
+                    label={t`Resolve now`}
+                    disabled={isPending}
+                    {...form.getInputProps('resolveNow', {type: 'checkbox'})}
+                />
 
                 <Group mt="xl" grow>
                     <Button
