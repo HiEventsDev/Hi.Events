@@ -28,6 +28,8 @@ class SendAttendeeTicketService
         EventDomainObject        $event,
         EventSettingDomainObject $eventSettings,
         OrganizerDomainObject    $organizer,
+        ?string                  $retryForSesMessageId = null,
+        ?int                     $retryForId = null,
     ): void
     {
         $mail = $this->mailBuilderService->buildAttendeeTicketMail(
@@ -49,6 +51,8 @@ class SendAttendeeTicketService
             attendeeId: $attendee->getId(),
             accountId: $event->getAccountId(),
             locale: $attendee->getLocale(),
+            retryForSesMessageId: $retryForSesMessageId,
+            retryForId: $retryForId,
         );
     }
 }

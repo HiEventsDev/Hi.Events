@@ -33,11 +33,19 @@ class TransactionalEmailTrackingService
         ?int                   $attendeeId = null,
         ?int                   $accountId = null,
         ?string                $locale = null,
+        ?string                $retryForSesMessageId = null,
+        ?int                   $retryForId = null,
     ): void
     {
         if ($this->suppressionService->isEmailSuppressed($recipient, $accountId, 'transactional')) {
-            $this->recordMessage($recipient, $subject, $emailType, OutgoingTransactionMessageStatus::SUPPRESSED, $eventId, $orderId, $attendeeId);
+            $this->recordMessage($recipient, $subject, $emailType, OutgoingTransactionMessageStatus::SUPPRESSED, $eventId, $orderId, $attendeeId, retryForId: $retryForId);
             return;
+        }
+
+        if ($retryForSesMessageId && method_exists($mail, '__set')) {
+            $mail->retryForSesMessageId = $retryForSesMessageId;
+        } elseif ($retryForSesMessageId && property_exists($mail, 'retryForSesMessageId')) {
+            $mail->retryForSesMessageId = $retryForSesMessageId;
         }
 
         try {
@@ -47,11 +55,21 @@ class TransactionalEmailTrackingService
             }
             $sentMessage = $pendingMail->sendNow($mail);
         } catch (Throwable $e) {
-            $this->recordMessage($recipient, $subject, $emailType, OutgoingTransactionMessageStatus::FAILED, $eventId, $orderId, $attendeeId);
+            $this->recordMessage($recipient, $subject, $emailType, OutgoingTransactionMessageStatus::FAILED, $eventId, $orderId, $attendeeId, retryForId: $retryForId);
             throw $e;
         }
 
-        $this->recordMessage($recipient, $subject, $emailType, OutgoingTransactionMessageStatus::SENT, $eventId, $orderId, $attendeeId, $sentMessage?->getMessageId());
+        $this->recordMessage($recipient, $subject, $emailType, OutgoingTransactionMessageStatus::SENT, $eventId, $orderId, $attendeeId, $sentMessage?->getMessageId(), $retryForId);
+
+        if ($retryForId !== null) {
+            $this->repository->updateWhere(
+                attributes: [
+                    OutgoingTransactionMessageDomainObjectAbstract::RESOLVED_AT => now()->toDateTimeString(),
+                    OutgoingTransactionMessageDomainObjectAbstract::RESOLUTION_TYPE => 'auto',
+                ],
+                where: [OutgoingTransactionMessageDomainObjectAbstract::ID => $retryForId],
+            );
+        }
     }
 
     private function recordMessage(
@@ -63,9 +81,10 @@ class TransactionalEmailTrackingService
         ?int                                $orderId,
         ?int                                $attendeeId,
         ?string                             $sesMessageId = null,
+        ?int                                $retryForId = null,
     ): void
     {
-        $this->repository->create([
+        $attributes = [
             OutgoingTransactionMessageDomainObjectAbstract::EVENT_ID => $eventId,
             OutgoingTransactionMessageDomainObjectAbstract::ORDER_ID => $orderId,
             OutgoingTransactionMessageDomainObjectAbstract::ATTENDEE_ID => $attendeeId,
@@ -74,6 +93,12 @@ class TransactionalEmailTrackingService
             OutgoingTransactionMessageDomainObjectAbstract::SUBJECT => $subject,
             OutgoingTransactionMessageDomainObjectAbstract::STATUS => $status->value,
             OutgoingTransactionMessageDomainObjectAbstract::SES_MESSAGE_ID => $sesMessageId,
-        ]);
+        ];
+
+        if ($retryForId !== null) {
+            $attributes[OutgoingTransactionMessageDomainObjectAbstract::RETRY_FOR_ID] = $retryForId;
+        }
+
+        $this->repository->create($attributes);
     }
 }

@@ -51,8 +51,15 @@ class OutgoingTransactionMessageRepository extends BaseRepository implements Out
 
     public function getForEvent(int $eventId, QueryParamsDTO $params): LengthAwarePaginator
     {
+        $table = 'outgoing_transaction_messages';
         $query = OutgoingTransactionMessage::query()
-            ->where('event_id', $eventId);
+            ->where('event_id', $eventId)
+            ->selectRaw("*,
+                (SELECT COUNT(*) FROM {$table} r WHERE r.retry_for_id = {$table}.id) as retry_count,
+                (SELECT r2.recipient FROM {$table} r2 WHERE r2.retry_for_id = {$table}.id ORDER BY r2.created_at DESC LIMIT 1) as latest_retry_recipient,
+                (SELECT r3.status FROM {$table} r3 WHERE r3.retry_for_id = {$table}.id ORDER BY r3.created_at DESC LIMIT 1) as latest_retry_status,
+                (SELECT o.recipient FROM {$table} o WHERE o.id = {$table}.retry_for_id) as original_recipient,
+                (SELECT o2.status FROM {$table} o2 WHERE o2.id = {$table}.retry_for_id) as original_status");
 
         if ($params->query) {
             $search = '%' . $params->query . '%';
@@ -66,7 +73,17 @@ class OutgoingTransactionMessageRepository extends BaseRepository implements Out
             foreach ($params->filter_fields as $filter) {
                 if ($filter->field === 'status' && !empty($filter->value)) {
                     $values = is_array($filter->value) ? $filter->value : explode(',', $filter->value);
-                    $query->whereIn('status', $values);
+                    if (in_array('RESOLVED', $values)) {
+                        $otherValues = array_filter($values, fn($v) => $v !== 'RESOLVED');
+                        $query->where(function ($q) use ($otherValues) {
+                            $q->whereNotNull('resolved_at');
+                            if (!empty($otherValues)) {
+                                $q->orWhereIn('status', $otherValues);
+                            }
+                        });
+                    } else {
+                        $query->whereIn('status', $values);
+                    }
                 }
                 if ($filter->field === 'email_type' && !empty($filter->value)) {
                     $values = is_array($filter->value) ? $filter->value : explode(',', $filter->value);
@@ -83,7 +100,10 @@ class OutgoingTransactionMessageRepository extends BaseRepository implements Out
             }
         }
 
-        $query->orderByDesc('created_at');
+        $allowedSortFields = ['created_at', 'updated_at', 'status', 'recipient', 'subject', 'email_type'];
+        $sortBy = in_array($params->sort_by, $allowedSortFields) ? $params->sort_by : 'created_at';
+        $sortDir = strtolower($params->sort_direction ?? 'desc') === 'asc' ? 'asc' : 'desc';
+        $query->orderBy($sortBy, $sortDir);
 
         $results = $query->paginate(perPage: $params->per_page ?? 20, page: $params->page);
 

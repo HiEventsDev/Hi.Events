@@ -53,7 +53,7 @@ class ResendTransactionMessageHandler
             $this->updateEntityEmail($message, $emailType, $newEmail);
         }
 
-        $this->resendByType($message, $emailType);
+        $this->resendByType($message, $emailType, $message->getSesMessageId(), $message->getId());
 
         return $this->repository->findById($messageId);
     }
@@ -94,6 +94,8 @@ class ResendTransactionMessageHandler
     private function resendByType(
         OutgoingTransactionMessageDomainObject $message,
         TransactionalEmailType                 $emailType,
+        ?string                                $retryForSesMessageId = null,
+        ?int                                   $retryForId = null,
     ): void
     {
         $event = $this->eventRepository
@@ -102,16 +104,16 @@ class ResendTransactionMessageHandler
             ->findById($message->getEventId());
 
         match ($emailType) {
-            TransactionalEmailType::ORDER_SUMMARY => $this->resendOrderSummary($message, $event),
-            TransactionalEmailType::ORDER_FAILED => $this->resendOrderFailed($message),
-            TransactionalEmailType::ATTENDEE_TICKET => $this->resendAttendeeTicket($message, $event),
+            TransactionalEmailType::ORDER_SUMMARY => $this->resendOrderSummary($message, $event, $retryForSesMessageId, $retryForId),
+            TransactionalEmailType::ORDER_FAILED => $this->resendOrderFailed($message, $retryForSesMessageId, $retryForId),
+            TransactionalEmailType::ATTENDEE_TICKET => $this->resendAttendeeTicket($message, $event, $retryForSesMessageId, $retryForId),
             TransactionalEmailType::WAITLIST_OFFER,
             TransactionalEmailType::WAITLIST_CONFIRMATION,
             TransactionalEmailType::WAITLIST_OFFER_EXPIRED => $this->resendWaitlistEmail($emailType, $message),
         };
     }
 
-    private function resendOrderSummary(OutgoingTransactionMessageDomainObject $message, $event): void
+    private function resendOrderSummary(OutgoingTransactionMessageDomainObject $message, $event, ?string $retryForSesMessageId = null, ?int $retryForId = null): void
     {
         $order = $this->orderRepository
             ->loadRelation(OrderItemDomainObject::class)
@@ -124,20 +126,22 @@ class ResendTransactionMessageHandler
             organizer: $event->getOrganizer(),
             eventSettings: $event->getEventSettings(),
             invoice: $order->getLatestInvoice(),
+            retryForSesMessageId: $retryForSesMessageId,
+            retryForId: $retryForId,
         );
     }
 
-    private function resendOrderFailed(OutgoingTransactionMessageDomainObject $message): void
+    private function resendOrderFailed(OutgoingTransactionMessageDomainObject $message, ?string $retryForSesMessageId = null, ?int $retryForId = null): void
     {
         $order = $this->orderRepository
             ->loadRelation(OrderItemDomainObject::class)
             ->loadRelation(InvoiceDomainObject::class)
             ->findById($message->getOrderId());
 
-        $this->sendOrderDetailsService->sendOrderSummaryAndTicketEmails($order);
+        $this->sendOrderDetailsService->sendOrderSummaryAndTicketEmails($order, retryForSesMessageId: $retryForSesMessageId, retryForId: $retryForId);
     }
 
-    private function resendAttendeeTicket(OutgoingTransactionMessageDomainObject $message, $event): void
+    private function resendAttendeeTicket(OutgoingTransactionMessageDomainObject $message, $event, ?string $retryForSesMessageId = null, ?int $retryForId = null): void
     {
         $order = $this->orderRepository->findById($message->getOrderId());
 
@@ -149,6 +153,8 @@ class ResendTransactionMessageHandler
             event: $event,
             eventSettings: $event->getEventSettings(),
             organizer: $event->getOrganizer(),
+            retryForSesMessageId: $retryForSesMessageId,
+            retryForId: $retryForId,
         );
     }
 

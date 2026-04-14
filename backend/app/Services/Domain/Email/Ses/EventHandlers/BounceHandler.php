@@ -11,6 +11,8 @@ use Illuminate\Log\Logger;
 
 class BounceHandler
 {
+    use ExtractsRetryHeader;
+
     public function __construct(
         private readonly EmailSuppressionService                          $emailSuppressionService,
         private readonly OutgoingMessageRepositoryInterface               $outgoingMessageRepository,
@@ -61,6 +63,14 @@ class BounceHandler
             if ($sesMessageId) {
                 $this->markOutgoingMessagesAsBounced($sesMessageId);
             }
+        }
+
+        $retryForSesMessageId = $this->getRetryForSesMessageId($message);
+        if ($retryForSesMessageId) {
+            $this->logger->info('Retry email bounced — original remains unresolved', [
+                'retry_ses_message_id' => $sesMessageId,
+                'original_ses_message_id' => $retryForSesMessageId,
+            ]);
         }
     }
 

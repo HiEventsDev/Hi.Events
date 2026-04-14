@@ -34,7 +34,7 @@ class SendOrderDetailsService
     {
     }
 
-    public function sendOrderSummaryAndTicketEmails(OrderDomainObject $order): void
+    public function sendOrderSummaryAndTicketEmails(OrderDomainObject $order, ?string $retryForSesMessageId = null, ?int $retryForId = null): void
     {
         $order = $this->orderRepository
             ->loadRelation(OrderItemDomainObject::class)
@@ -70,6 +70,8 @@ class SendOrderDetailsService
                 orderId: $order->getId(),
                 accountId: $event->getAccountId(),
                 locale: $order->getLocale(),
+                retryForSesMessageId: $retryForSesMessageId,
+                retryForId: $retryForId,
             );
         }
     }
@@ -79,7 +81,9 @@ class SendOrderDetailsService
         EventDomainObject        $event,
         OrganizerDomainObject    $organizer,
         EventSettingDomainObject $eventSettings,
-        ?InvoiceDomainObject     $invoice = null
+        ?InvoiceDomainObject     $invoice = null,
+        ?string                  $retryForSesMessageId = null,
+        ?int                     $retryForId = null,
     ): void
     {
         $mail = $this->mailBuilderService->buildOrderSummaryMail(
@@ -100,6 +104,8 @@ class SendOrderDetailsService
             orderId: $order->getId(),
             accountId: $event->getAccountId(),
             locale: $order->getLocale(),
+            retryForSesMessageId: $retryForSesMessageId,
+            retryForId: $retryForId,
         );
     }
 

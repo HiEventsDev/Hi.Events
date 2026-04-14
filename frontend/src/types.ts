@@ -770,7 +770,16 @@ export interface OutgoingMessage {
     recipient: string;
     status: string;
     subject: string;
+    resolved_at?: string | null;
+    resolution_type?: string | null;
+    retry_for_id?: number | null;
+    retry_count?: number;
+    latest_retry_recipient?: string | null;
+    latest_retry_status?: string | null;
+    original_recipient?: string | null;
+    original_status?: string | null;
     created_at?: string;
+    updated_at?: string;
 }
 
 export interface OutgoingTransactionMessage {
@@ -783,7 +792,27 @@ export interface OutgoingTransactionMessage {
     subject: string;
     status: 'SENT' | 'DELIVERED' | 'FAILED' | 'BOUNCED' | 'SUPPRESSED';
     resolved_at: string | null;
+    resolution_type: string | null;
+    retry_for_id: number | null;
+    retry_count: number;
+    latest_retry_recipient: string | null;
+    latest_retry_status: string | null;
+    original_recipient: string | null;
+    original_status: string | null;
     created_at: string;
+    updated_at: string;
+}
+
+export interface DeliveryIssue {
+    id: IdParam;
+    source_type: 'transaction' | 'announcement';
+    email_type: string;
+    status: string;
+    subject: string;
+    recipient: string;
+    updated_at: string;
+    resolved_at: string | null;
+    retry_for_id: number | null;
 }
 
 export enum QuestionType {

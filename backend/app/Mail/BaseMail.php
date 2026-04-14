@@ -14,6 +14,8 @@ abstract class BaseMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
+    public ?string $retryForSesMessageId = null;
+
     public function __construct()
     {
         $this->afterCommit();
@@ -25,14 +27,17 @@ abstract class BaseMail extends Mailable implements ShouldQueue
 
     public function headers(): Headers
     {
-        $configSet = config('services.ses.configuration_set');
+        $text = [];
 
-        if (!$configSet) {
-            return new Headers();
+        $configSet = config('services.ses.configuration_set');
+        if ($configSet) {
+            $text['X-SES-CONFIGURATION-SET'] = $configSet;
         }
 
-        return new Headers(
-            text: ['X-SES-CONFIGURATION-SET' => $configSet],
-        );
+        if ($this->retryForSesMessageId) {
+            $text['X-HiEvents-Retry-For'] = $this->retryForSesMessageId;
+        }
+
+        return new Headers(text: $text);
     }
 }

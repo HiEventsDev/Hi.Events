@@ -84,11 +84,12 @@ use HiEvents\Http\Actions\Messages\CancelMessageAction;
 use HiEvents\Http\Actions\Messages\GetMessageRecipientsAction;
 use HiEvents\Http\Actions\Messages\GetMessagesAction;
 use HiEvents\Http\Actions\Messages\GetOutgoingMessagesAction;
+use HiEvents\Http\Actions\Messages\ResendOutgoingMessageAction;
 use HiEvents\Http\Actions\Messages\SendMessageAction;
-use HiEvents\Http\Actions\TransactionMessages\GetTransactionMessageFailuresAction;
+use HiEvents\Http\Actions\DeliveryIssue\GetDeliveryIssuesAction;
+use HiEvents\Http\Actions\DeliveryIssue\ResolveDeliveryIssueAction;
 use HiEvents\Http\Actions\TransactionMessages\GetTransactionMessagesAction;
 use HiEvents\Http\Actions\TransactionMessages\ResendTransactionMessageAction;
-use HiEvents\Http\Actions\TransactionMessages\ResolveTransactionMessageAction;
 use HiEvents\Http\Actions\Orders\CancelOrderAction;
 use HiEvents\Http\Actions\Orders\DownloadOrderInvoiceAction;
 use HiEvents\Http\Actions\Orders\EditOrderAction;
@@ -413,12 +414,15 @@ $router->middleware(['auth:api'])->group(
         $router->post('/events/{event_id}/messages/{message_id}/cancel', CancelMessageAction::class);
         $router->get('/events/{event_id}/messages/{message_id}/recipients', GetMessageRecipientsAction::class);
         $router->get('/events/{event_id}/outgoing-messages', GetOutgoingMessagesAction::class);
+        $router->post('/events/{event_id}/outgoing-messages/{message_id}/resend', ResendOutgoingMessageAction::class);
 
         // Transaction Messages
         $router->get('/events/{event_id}/transaction-messages', GetTransactionMessagesAction::class);
-        $router->get('/events/{event_id}/transaction-messages/failures', GetTransactionMessageFailuresAction::class);
-        $router->post('/events/{event_id}/transaction-messages/{message_id}/resolve', ResolveTransactionMessageAction::class);
         $router->post('/events/{event_id}/transaction-messages/{message_id}/resend', ResendTransactionMessageAction::class);
+
+        // Delivery Issues (union of transaction + announcement failures)
+        $router->get('/events/{event_id}/delivery-issues', GetDeliveryIssuesAction::class);
+        $router->post('/events/{event_id}/delivery-issues/{message_id}/resolve', ResolveDeliveryIssueAction::class);
 
         // Event Settings
         $router->get('/events/{event_id}/settings', GetEventSettingsAction::class);

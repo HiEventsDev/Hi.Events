@@ -436,6 +436,13 @@ export const router: RouteObject[] = [
                 }
             },
             {
+                path: "delivery-issues",
+                async lazy() {
+                    const DeliveryIssues = await import("./components/routes/event/DeliveryIssues");
+                    return { Component: DeliveryIssues.default };
+                }
+            },
+            {
                 path: "settings",
                 async lazy() {
                     const Settings = await import("./components/routes/event/Settings");
