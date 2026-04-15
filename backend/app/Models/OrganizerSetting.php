@@ -14,6 +14,7 @@ class OrganizerSetting extends BaseModel
             'social_media_handles' => 'array',
             'homepage_theme_settings' => 'array',
             'location_details' => 'array',
+            'tracking_pixels' => 'array',
         ];
     }
 }

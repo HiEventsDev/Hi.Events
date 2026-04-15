@@ -21,7 +21,9 @@ export type ConfigKeys =
     | 'VITE_PLATFORM_SUPPORT_EMAIL'
     | 'VITE_STRIPE_PUBLISHABLE_KEY'
     | 'VITE_I_HAVE_PURCHASED_A_LICENCE'
-    | 'VITE_DEFAULT_IMAGE_URL';
+    | 'VITE_DEFAULT_IMAGE_URL'
+    | 'VITE_COOKIE_CONSENT_ENABLED'
+    | 'VITE_COOKIE_CONSENT_TEXT';
 
 export enum StripePlatform {
     Canada = 'ca',
@@ -433,6 +435,14 @@ export interface OrganizerSettings {
     seo_description?: string;
     seo_title?: string;
     allow_search_engine_indexing?: boolean;
+    tracking_pixels?: TrackingPixelConfig[];
+    tracking_consent_acknowledged?: boolean;
+}
+
+export interface TrackingPixelConfig {
+    provider: string;
+    pixel_id: string;
+    enabled: boolean;
 }
 
 export interface SortDirectionLabel {

@@ -69,6 +69,10 @@ class PartialUpdateOrganizerSettingsDTO extends BaseDataObject
 
         // Password
         public readonly string|Optional|null                          $homepagePassword,
+
+        // Tracking pixels
+        public readonly array|Optional|null                           $trackingPixels,
+        public readonly bool|Optional|null                            $trackingConsentAcknowledged,
     )
     {
     }
