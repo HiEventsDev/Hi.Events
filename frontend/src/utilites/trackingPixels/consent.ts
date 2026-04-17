@@ -29,7 +29,7 @@ export function isConsentPending(): boolean {
  * Must be called BEFORE any Google tags load.
  * Sets default denied state for EU compliance.
  */
-export function initGoogleConsentMode(): void {
+export function initGoogleConsentMode(granted = false): void {
     if (typeof window === 'undefined') return;
 
     window.dataLayer = window.dataLayer || [];
@@ -37,12 +37,13 @@ export function initGoogleConsentMode(): void {
         window.dataLayer!.push(args);
     }
 
+    const state = granted ? 'granted' : 'denied';
     gtag('consent', 'default', {
-        ad_storage: 'denied',
-        analytics_storage: 'denied',
-        ad_user_data: 'denied',
-        ad_personalization: 'denied',
-        wait_for_update: 500,
+        ad_storage: state,
+        analytics_storage: state,
+        ad_user_data: state,
+        ad_personalization: state,
+        ...(!granted && {wait_for_update: 500}),
     });
 }
 

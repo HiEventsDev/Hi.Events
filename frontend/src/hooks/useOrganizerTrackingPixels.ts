@@ -35,17 +35,20 @@ export function useOrganizerTrackingPixels(
     }, []);
 
     // Set Google Consent Mode defaults before any tags load
-    // Only set denied defaults when consent hasn't been granted yet
     useEffect(() => {
-        if (!hasPixels || consentGranted) return;
-        initGoogleConsentMode();
+        if (!hasPixels) return;
+        if (consentGranted) {
+            // Consent already granted — set default as granted directly
+            initGoogleConsentMode(true);
+        } else {
+            initGoogleConsentMode(false);
+        }
     }, [hasPixels, consentGranted]);
 
     // Initialize pixels when consent is granted
     useEffect(() => {
         if (!hasPixels || !consentGranted) return;
 
-        updateGoogleConsentMode(true);
         initializeTrackingPixels(trackingPixels!);
         trackPageView();
 
