@@ -6,7 +6,7 @@ use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\Status\WebhookStatus;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Webhook\UpsertWebhookRequest;
-use HiEvents\Resources\Webhook\WebhookResource;
+use HiEvents\Resources\Webhook\WebhookResourceWithSecret;
 use HiEvents\Services\Application\Handlers\Webhook\CreateWebhookHandler;
 use HiEvents\Services\Application\Handlers\Webhook\DTO\CreateWebhookDTO;
 use Illuminate\Http\JsonResponse;
@@ -35,7 +35,7 @@ class CreateWebhookAction extends BaseAction
         );
 
         return $this->resourceResponse(
-            resource: WebhookResource::class,
+            resource: WebhookResourceWithSecret::class,
             data: $webhook
         );
     }

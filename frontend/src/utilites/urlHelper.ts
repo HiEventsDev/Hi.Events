@@ -21,6 +21,10 @@ export const organizerHomepageUrl = (organizer: Organizer) => {
     return getConfig('VITE_FRONTEND_URL') + organizerHomepagePath(organizer);
 }
 
+export const eventCheckoutUrl = (eventId: IdParam, orderShortId: IdParam, subPage = '') => {
+    return getConfig('VITE_FRONTEND_URL') + eventCheckoutPath(eventId, orderShortId, subPage);
+}
+
 export const eventHomepageUrl = (event: Event) => {
     return getConfig('VITE_FRONTEND_URL') + eventHomepagePath(event);
 }
