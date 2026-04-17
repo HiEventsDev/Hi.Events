@@ -21,10 +21,20 @@ class PartialUpdateOrganizerSettingsRequest extends BaseRequest
                     return;
                 }
 
+                $isSaasMode = config('app.saas_mode_enabled');
+
                 foreach ($pixels as $index => $pixel) {
                     $providerValue = $pixel['provider'] ?? null;
                     $pixelId = $pixel['pixel_id'] ?? '';
                     $provider = TrackingPixelProvider::tryFrom($providerValue);
+
+                    if ($isSaasMode && $provider === TrackingPixelProvider::GOOGLE_TAG_MANAGER) {
+                        $validator->errors()->add(
+                            "tracking_pixels.{$index}.provider",
+                            __('Google Tag Manager is not available on hosted plans for security reasons.')
+                        );
+                        continue;
+                    }
 
                     if ($provider && $pixelId !== '') {
                         if (!preg_match($provider->pixelIdPattern(), $pixelId)) {

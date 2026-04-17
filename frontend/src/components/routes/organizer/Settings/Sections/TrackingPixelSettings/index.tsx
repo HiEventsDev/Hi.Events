@@ -15,6 +15,7 @@ import {
 } from "@tabler/icons-react";
 import {useGetOrganizerSettings} from "../../../../../../queries/useGetOrganizerSettings.ts";
 import {useUpdateOrganizerSettings} from "../../../../../../mutations/useUpdateOrganizerSettings.ts";
+import {useGetAccount} from "../../../../../../queries/useGetAccount.ts";
 import {TrackingPixelConfig} from "../../../../../../types.ts";
 
 interface ProviderDef {
@@ -91,8 +92,15 @@ function formStateToPixels(state: Record<string, { enabled: boolean; pixel_id: s
         }));
 }
 
+const GTM_PROVIDER_KEY = 'google_tag_manager';
+
 export const TrackingPixelSettings = () => {
     const {organizerId} = useParams();
+    const {data: account} = useGetAccount();
+    const isSaasMode = account?.is_saas_mode_enabled;
+    const availableProviders = isSaasMode
+        ? PROVIDERS.filter(p => p.key !== GTM_PROVIDER_KEY)
+        : PROVIDERS;
     const organizerSettingsQuery = useGetOrganizerSettings(organizerId);
     const updateMutation = useUpdateOrganizerSettings();
     const formErrorHandle = useFormErrorResponseHandler();
@@ -119,7 +127,7 @@ export const TrackingPixelSettings = () => {
     const handleSubmit = (values: typeof form.values) => {
         let hasErrors = false;
 
-        for (const provider of PROVIDERS) {
+        for (const provider of availableProviders) {
             const pixelId = values.pixels[provider.key]?.pixel_id.trim();
             if (pixelId && !provider.pattern.test(pixelId)) {
                 form.setFieldError(`pixels.${provider.key}.pixel_id`, provider.formatHint);
@@ -127,7 +135,10 @@ export const TrackingPixelSettings = () => {
             }
         }
 
-        const trackingPixels = formStateToPixels(values.pixels);
+        let trackingPixels = formStateToPixels(values.pixels);
+        if (isSaasMode) {
+            trackingPixels = trackingPixels.filter(p => p.provider !== GTM_PROVIDER_KEY);
+        }
 
         if (trackingPixels.length > 0 && !values.tracking_consent_acknowledged) {
             form.setFieldError('tracking_consent_acknowledged', t`You must acknowledge your responsibilities before saving`);
@@ -152,7 +163,7 @@ export const TrackingPixelSettings = () => {
         });
     };
 
-    const hasAnyPixels = PROVIDERS.some(p => form.values.pixels[p.key]?.pixel_id.trim() !== '');
+    const hasAnyPixels = availableProviders.some(p => form.values.pixels[p.key]?.pixel_id.trim() !== '');
 
     return (
         <Card>
@@ -163,7 +174,7 @@ export const TrackingPixelSettings = () => {
             <form onSubmit={form.onSubmit(handleSubmit)}>
                 <fieldset disabled={organizerSettingsQuery.isLoading || updateMutation.isPending}>
                     <div style={{display: 'flex', flexDirection: 'column', gap: '12px'}}>
-                        {PROVIDERS.map((provider) => {
+                        {availableProviders.map((provider) => {
                             const Icon = provider.icon;
                             const pixelState = form.values.pixels[provider.key];
                             const hasValue = pixelState?.pixel_id.trim() !== '';
