@@ -33,11 +33,13 @@ export function initGoogleConsentMode(granted = false): void {
     if (typeof window === 'undefined') return;
 
     window.dataLayer = window.dataLayer || [];
-    function gtag(...args: unknown[]) {
-        window.dataLayer!.push(args);
+    function gtag() {
+        // eslint-disable-next-line prefer-rest-params
+        window.dataLayer!.push(arguments);
     }
 
     const state = granted ? 'granted' : 'denied';
+    // @ts-expect-error gtag uses arguments object
     gtag('consent', 'default', {
         ad_storage: state,
         analytics_storage: state,
@@ -51,11 +53,13 @@ export function updateGoogleConsentMode(granted: boolean): void {
     if (typeof window === 'undefined') return;
 
     window.dataLayer = window.dataLayer || [];
-    function gtag(...args: unknown[]) {
-        window.dataLayer!.push(args);
+    function gtag() {
+        // eslint-disable-next-line prefer-rest-params
+        window.dataLayer!.push(arguments);
     }
 
     const state = granted ? 'granted' : 'denied';
+    // @ts-expect-error gtag uses arguments object
     gtag('consent', 'update', {
         ad_storage: state,
         analytics_storage: state,

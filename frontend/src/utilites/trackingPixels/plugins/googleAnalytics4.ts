@@ -16,8 +16,10 @@ export const googleAnalytics4Plugin: TrackingPixelPlugin = {
 
         window.dataLayer = window.dataLayer || [];
         if (!window.gtag) {
-            window.gtag = function (...args: unknown[]) {
-                window.dataLayer!.push(args);
+            window.gtag = function () {
+                // Must use arguments object, not rest params — gtag.js expects this format
+                // eslint-disable-next-line prefer-rest-params
+                window.dataLayer!.push(arguments);
             };
         }
         window.gtag('js', new Date());
