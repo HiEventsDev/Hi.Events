@@ -838,6 +838,8 @@ export enum MessageType {
     TicketHolders = 'TICKET_HOLDERS',
     AllAttendees = 'ALL_ATTENDEES',
     OrderOwnersWithProduct = 'ORDER_OWNERS_WITH_PRODUCT',
+    CheckedInAttendees = 'CHECKED_IN_ATTENDEES',
+    NotCheckedInAttendees = 'NOT_CHECKED_IN_ATTENDEES',
 }
 
 export interface PromoCode {

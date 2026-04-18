@@ -184,19 +184,19 @@ msgstr "0 dakika ve 0 saniye"
 msgid "1 Active Webhook"
 msgstr "1 Aktif Webhook"
 
-#: src/components/modals/SendMessageModal/index.tsx:119
+#: src/components/modals/SendMessageModal/index.tsx:120
 msgid "1 day after end date"
 msgstr "Bitiş tarihinden 1 gün sonra"
 
-#: src/components/modals/SendMessageModal/index.tsx:113
+#: src/components/modals/SendMessageModal/index.tsx:114
 msgid "1 day after start date"
 msgstr "Başlangıç tarihinden 1 gün sonra"
 
-#: src/components/modals/SendMessageModal/index.tsx:111
+#: src/components/modals/SendMessageModal/index.tsx:112
 msgid "1 day before event"
 msgstr "Etkinlikten 1 gün önce"
 
-#: src/components/modals/SendMessageModal/index.tsx:112
+#: src/components/modals/SendMessageModal/index.tsx:113
 msgid "1 hour before event"
 msgstr "Etkinlikten 1 saat önce"
 
@@ -208,7 +208,7 @@ msgstr "1 bilet"
 msgid "1 ticket type"
 msgstr "1 bilet türü"
 
-#: src/components/modals/SendMessageModal/index.tsx:110
+#: src/components/modals/SendMessageModal/index.tsx:111
 msgid "1 week before event"
 msgstr "Etkinlikten 1 hafta önce"
 
@@ -640,7 +640,7 @@ msgstr "Tüm Arşivlenmiş Etkinlikler"
 msgid "All attendees"
 msgstr "Tüm katılımcılar"
 
-#: src/components/modals/SendMessageModal/index.tsx:290
+#: src/components/modals/SendMessageModal/index.tsx:294
 msgid "All attendees of this event"
 msgstr "Bu etkinliğin tüm katılımcıları"
 
@@ -1130,7 +1130,15 @@ msgstr "Kayıtlı katılımcılar"
 msgid "Attendees Registered"
 msgstr "Kayıtlı Katılımcılar"
 
-#: src/components/modals/SendMessageModal/index.tsx:286
+#: src/components/modals/SendMessageModal/index.tsx:302
+msgid "Attendees who checked in"
+msgstr "Giriş yapan katılımcılar"
+
+#: src/components/modals/SendMessageModal/index.tsx:306
+msgid "Attendees who did not check in"
+msgstr "Giriş yapmayan katılımcılar"
+
+#: src/components/modals/SendMessageModal/index.tsx:290
 msgid "Attendees with a specific ticket"
 msgstr "Belirli bir bilete sahip katılımcılar"
 
@@ -1187,7 +1195,7 @@ msgid "Available Tokens"
 msgstr "Mevcut Token'lar"
 
 #: src/components/common/OrderStatusBadge/index.tsx:15
-#: src/components/modals/SendMessageModal/index.tsx:334
+#: src/components/modals/SendMessageModal/index.tsx:346
 msgid "Awaiting offline payment"
 msgstr "Çevrimdışı ödeme bekleniyor"
 
@@ -1296,6 +1304,10 @@ msgstr "Biletlerinizi özel logo, renkler ve altbilgi mesajı ile markalayın."
 #: src/components/common/LanguageSwitcher/index.tsx:30
 msgid "Brazilian Portuguese"
 msgstr "Brezilya Portekizcesi"
+
+#: src/components/common/Editor/Controls/InsertImageControl/index.tsx:113
+msgid "Browse Images"
+msgstr ""
 
 #: src/constants/eventCategories.ts:17
 msgid "Business"
@@ -1531,6 +1543,10 @@ msgstr "Giriş Oluşturuldu"
 msgid "Check-in Deleted"
 msgstr "Giriş Silindi"
 
+#: src/components/modals/SendMessageModal/index.tsx:355
+msgid "Check-in list"
+msgstr "Giriş listesi"
+
 #: src/components/modals/CheckInListSuccessModal/index.tsx:20
 msgid "Check-In List Created"
 msgstr "Giriş Listesi Oluşturuldu"
@@ -1601,6 +1617,10 @@ msgstr "Onay Kutuları"
 #: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:40
 msgid "Checked In"
 msgstr "Giriş Yapıldı"
+
+#: src/components/common/MessageList/index.tsx:32
+msgid "Checked-in attendees"
+msgstr "Giriş yapan katılımcılar"
 
 #: src/components/routes/event/Settings/index.tsx:52
 msgid "Checkout"
@@ -1806,7 +1826,7 @@ msgid "Complete your profile to join the team."
 msgstr "Ekibe katılmak için profilinizi tamamlayın."
 
 #: src/components/common/OrdersTable/index.tsx:412
-#: src/components/modals/SendMessageModal/index.tsx:333
+#: src/components/modals/SendMessageModal/index.tsx:345
 #: src/components/routes/event/GettingStarted/index.tsx:75
 #: src/components/routes/event/orders.tsx:23
 #: src/components/routes/my-tickets/index.tsx:34
@@ -1956,7 +1976,7 @@ msgstr "Stripe'ı Bağla"
 msgid "Connect Stripe to enable email template editing"
 msgstr "E-posta şablon düzenlemesini etkinleştirmek için Stripe'ı bağlayın"
 
-#: src/components/modals/SendMessageModal/index.tsx:240
+#: src/components/modals/SendMessageModal/index.tsx:244
 msgid "Connect Stripe to enable messaging"
 msgstr "Mesajlaşmayı etkinleştirmek için Stripe'ı bağlayın"
 
@@ -2405,7 +2425,7 @@ msgstr "Şu anda satın alınabilir"
 msgid "Custom Branding"
 msgstr "Özel Markalama"
 
-#: src/components/modals/SendMessageModal/index.tsx:405
+#: src/components/modals/SendMessageModal/index.tsx:430
 msgid "Custom date and time"
 msgstr "Özel tarih ve saat"
 
@@ -2797,7 +2817,7 @@ msgstr "Açılır seçim"
 msgid "Due to the high risk of spam, you must connect a Stripe account before you can modify email templates. This is to ensure that all event organizers are verified and accountable."
 msgstr "Yüksek spam riski nedeniyle, e-posta şablonlarını değiştirmeden önce bir Stripe hesabı bağlamanız gerekir. Bu, tüm etkinlik organizatörlerinin doğrulanmış ve sorumlu olmasını sağlamak içindir."
 
-#: src/components/modals/SendMessageModal/index.tsx:241
+#: src/components/modals/SendMessageModal/index.tsx:245
 msgid ""
 "Due to the high risk of spam, you must connect a Stripe account before you can send messages to attendees.\n"
 "This is to ensure that all event organizers are verified and accountable."
@@ -2837,7 +2857,7 @@ msgstr "ör. 180 (3 saat)"
 msgid "e.g., Get Tickets, Register Now"
 msgstr "örn., Bilet Al, Şimdi Kaydol"
 
-#: src/components/modals/SendMessageModal/index.tsx:348
+#: src/components/modals/SendMessageModal/index.tsx:373
 msgid "e.g., Important update about your tickets"
 msgstr "örn., Biletleriniz hakkında önemli güncelleme"
 
@@ -3816,7 +3836,7 @@ msgstr "Ayar güncellenemedi"
 msgid "Failed to update VAT settings"
 msgstr "KDV ayarları güncellenemedi"
 
-#: src/components/common/Editor/Controls/InsertImageControl/index.tsx:66
+#: src/components/common/Editor/Controls/InsertImageControl/index.tsx:72
 msgid "Failed to upload image."
 msgstr "Görsel yüklenemedi."
 
@@ -4306,7 +4326,7 @@ msgstr "Bu kod kaç kez kullanılabilir?"
 msgid "How to pay offline"
 msgstr "Çevrimdışı nasıl ödeme yapılır"
 
-#: src/components/common/Editor/index.tsx:94
+#: src/components/common/Editor/index.tsx:92
 msgid "HTML character limit exceeded: {htmlLength}/{maxLength}"
 msgstr "HTML karakter sınırı aşıldı: {htmlLength}/{maxLength}"
 
@@ -4334,7 +4354,7 @@ msgstr "Bu etkinlikle ilgili e-posta bildirimleri almayı kabul ediyorum"
 msgid "I agree to the <0>terms and conditions</0>"
 msgstr "<0>Şartlar ve koşulları</0> kabul ediyorum"
 
-#: src/components/modals/SendMessageModal/index.tsx:439
+#: src/components/modals/SendMessageModal/index.tsx:464
 msgid "I confirm this is a transactional message related to this event"
 msgstr "Bunun bu etkinlikle ilgili işlemsel bir mesaj olduğunu onaylıyorum"
 
@@ -4374,7 +4394,7 @@ msgstr "Resim başarıyla silindi"
 msgid "Image uploaded successfully"
 msgstr "Resim başarıyla yüklendi"
 
-#: src/components/common/Editor/Controls/InsertImageControl/index.tsx:110
+#: src/components/common/Editor/Controls/InsertImageControl/index.tsx:119
 msgid "Image URL"
 msgstr "Resim URL'si"
 
@@ -4460,9 +4480,10 @@ msgstr "AB'de KDV kaydınız olup olmadığını belirtin"
 msgid "Individual attendees"
 msgstr "Bireysel katılımcılar"
 
-#: src/components/common/Editor/Controls/InsertImageControl/index.tsx:99
-#: src/components/common/Editor/Controls/InsertImageControl/index.tsx:120
-#: src/components/common/Editor/Controls/InsertImageControl/index.tsx:143
+#: src/components/common/Editor/Controls/InsertImageControl/index.tsx:106
+#: src/components/common/Editor/Controls/InsertImageControl/index.tsx:129
+#: src/components/common/Editor/Controls/InsertImageControl/index.tsx:152
+#: src/components/common/Editor/Controls/InsertImageControl/index.tsx:189
 msgid "Insert Image"
 msgstr "Resim Ekle"
 
@@ -4986,7 +5007,7 @@ msgstr "Ortam"
 #: src/components/common/AttendeeTable/index.tsx:188
 #: src/components/common/ContactOrganizerModal/index.tsx:88
 #: src/components/common/OrdersTable/index.tsx:254
-#: src/components/modals/SendMessageModal/index.tsx:353
+#: src/components/modals/SendMessageModal/index.tsx:378
 msgid "Message"
 msgstr "Mesaj"
 
@@ -5002,7 +5023,7 @@ msgstr "Katılımcıya mesaj gönder"
 msgid "Message Attendees"
 msgstr "Katılımcılara Mesaj"
 
-#: src/components/modals/SendMessageModal/index.tsx:310
+#: src/components/modals/SendMessageModal/index.tsx:322
 msgid "Message attendees with specific tickets"
 msgstr "Belirli biletlere sahip katılımcılara mesaj gönderin"
 
@@ -5026,7 +5047,7 @@ msgstr "Mesaj içeriği"
 msgid "Message Details"
 msgstr "Mesaj detayları"
 
-#: src/components/modals/SendMessageModal/index.tsx:94
+#: src/components/modals/SendMessageModal/index.tsx:95
 msgid "Message individual attendees"
 msgstr "Bireysel katılımcılara mesaj gönder"
 
@@ -5034,15 +5055,15 @@ msgstr "Bireysel katılımcılara mesaj gönder"
 msgid "Message is required"
 msgstr "Mesaj gerekli"
 
-#: src/components/modals/SendMessageModal/index.tsx:322
+#: src/components/modals/SendMessageModal/index.tsx:334
 msgid "Message order owners with specific products"
 msgstr "Belirli ürünlere sahip sipariş sahiplerine mesaj gönderin"
 
-#: src/components/modals/SendMessageModal/index.tsx:194
+#: src/components/modals/SendMessageModal/index.tsx:197
 msgid "Message Scheduled"
 msgstr "Mesaj zamanlandı"
 
-#: src/components/modals/SendMessageModal/index.tsx:194
+#: src/components/modals/SendMessageModal/index.tsx:197
 msgid "Message Sent"
 msgstr "Mesaj Gönderildi"
 
@@ -5318,6 +5339,14 @@ msgstr "Başarısız iş yok"
 msgid "No filters available"
 msgstr "Filtre mevcut değil"
 
+#: src/components/common/Editor/Controls/InsertImageControl/BrowseImagesPanel/index.tsx:82
+msgid "No images matching \"{debouncedQuery}\""
+msgstr ""
+
+#: src/components/common/Editor/Controls/InsertImageControl/BrowseImagesPanel/index.tsx:83
+msgid "No images yet. Upload an image using the Upload tab."
+msgstr ""
+
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:86
 msgid "No impact on your current or past transactions"
 msgstr "Mevcut veya geçmiş işlemleriniz üzerinde etkisi yok"
@@ -5511,6 +5540,10 @@ msgstr "Mevcut değil"
 msgid "Not Checked In"
 msgstr "Giriş Yapılmadı"
 
+#: src/components/common/MessageList/index.tsx:33
+msgid "Not checked-in attendees"
+msgstr "Giriş yapmayan katılımcılar"
+
 #: src/components/common/CheckInStatusModal/index.tsx:118
 msgid "Not Eligible"
 msgstr "Uygun Değil"
@@ -5668,7 +5701,7 @@ msgstr "Yalnızca hesap yöneticileri etkinlikleri silebilir veya arşivleyebili
 msgid "Only account administrators can delete or archive organizers. Contact your account admin for assistance."
 msgstr "Yalnızca hesap yöneticileri organizatörleri silebilir veya arşivleyebilir. Yardım için hesap yöneticinizle iletişime geçin."
 
-#: src/components/modals/SendMessageModal/index.tsx:330
+#: src/components/modals/SendMessageModal/index.tsx:342
 msgid "Only send to orders with these statuses"
 msgstr "Yalnızca bu durumlara sahip siparişlere gönder"
 
@@ -5859,7 +5892,7 @@ msgstr "Sipariş Numarası"
 msgid "Order owner"
 msgstr "Sipariş sahibi"
 
-#: src/components/modals/SendMessageModal/index.tsx:294
+#: src/components/modals/SendMessageModal/index.tsx:298
 msgid "Order owners with a specific product"
 msgstr "Belirli bir ürüne sahip sipariş sahipleri"
 
@@ -5889,7 +5922,7 @@ msgstr "Sipariş İade Edildi"
 msgid "Order Status"
 msgstr "Sipariş Durumu"
 
-#: src/components/modals/SendMessageModal/index.tsx:331
+#: src/components/modals/SendMessageModal/index.tsx:343
 msgid "Order statuses"
 msgstr "Sipariş durumları"
 
@@ -6177,7 +6210,7 @@ msgstr "Geçmiş Etkinlikler"
 msgid "Paste this where you want the widget to appear."
 msgstr "Widget'ın görünmesini istediğiniz yere bunu yapıştırın."
 
-#: src/components/common/Editor/Controls/InsertImageControl/index.tsx:103
+#: src/components/common/Editor/Controls/InsertImageControl/index.tsx:111
 msgid "Paste URL"
 msgstr "URL Yapıştır"
 
@@ -6437,7 +6470,7 @@ msgstr "Lütfen bir bilet oluşturun"
 msgid "Please enter a valid email address"
 msgstr "Lütfen geçerli bir e-posta adresi girin"
 
-#: src/components/common/Editor/Controls/InsertImageControl/index.tsx:46
+#: src/components/common/Editor/Controls/InsertImageControl/index.tsx:51
 msgid "Please enter a valid image URL that points to an image."
 msgstr "Lütfen bir resme işaret eden geçerli bir resim URL'si girin."
 
@@ -6458,7 +6491,7 @@ msgstr "Lütfen KDV numaranızı girin"
 msgid "Please Note"
 msgstr "Lütfen Dikkat"
 
-#: src/components/common/Editor/Controls/InsertImageControl/index.tsx:35
+#: src/components/common/Editor/Controls/InsertImageControl/index.tsx:40
 msgid "Please provide an image."
 msgstr "Lütfen bir görsel sağlayın."
 
@@ -6474,7 +6507,7 @@ msgstr "Baştan başlamak için lütfen etkinlik sayfasına dönün."
 msgid "Please select a date range"
 msgstr "Lütfen bir tarih aralığı seçin"
 
-#: src/components/common/Editor/Controls/InsertImageControl/index.tsx:54
+#: src/components/common/Editor/Controls/InsertImageControl/index.tsx:59
 msgid "Please select an image."
 msgstr "Lütfen bir görsel seçin."
 
@@ -6755,7 +6788,7 @@ msgstr "Promosyon Kodları Raporu"
 msgid "Promo Only"
 msgstr "Yalnızca Promosyon"
 
-#: src/components/modals/SendMessageModal/index.tsx:483
+#: src/components/modals/SendMessageModal/index.tsx:508
 msgid "Promotional emails may result in account suspension"
 msgstr "Promosyon e-postaları hesap askıya alınmasına neden olabilir"
 
@@ -6872,7 +6905,7 @@ msgstr "Son Siparişler"
 msgid "recipient"
 msgstr "alıcı"
 
-#: src/components/modals/SendMessageModal/index.tsx:60
+#: src/components/modals/SendMessageModal/index.tsx:61
 msgid "Recipient"
 msgstr "Alıcı"
 
@@ -6881,7 +6914,7 @@ msgid "recipients"
 msgstr "alıcı"
 
 #: src/components/modals/MessageRecipientsModal/index.tsx:38
-#: src/components/modals/SendMessageModal/index.tsx:297
+#: src/components/modals/SendMessageModal/index.tsx:309
 #: src/components/routes/admin/Messages/index.tsx:166
 #: src/components/routes/admin/Messages/index.tsx:299
 msgid "Recipients"
@@ -6986,7 +7019,7 @@ msgstr "Kalan Kullanım"
 msgid "remove"
 msgstr "kaldır"
 
-#: src/components/common/Editor/Controls/InsertImageControl/index.tsx:146
+#: src/components/common/Editor/Controls/InsertImageControl/index.tsx:155
 #: src/components/common/WaitlistTable/index.tsx:78
 #: src/components/common/WaitlistTable/index.tsx:111
 #: src/components/routes/product-widget/SelectProducts/index.tsx:569
@@ -7299,11 +7332,11 @@ msgstr "KDV Ayarlarını Kaydet"
 msgid "Scan"
 msgstr "Tara"
 
-#: src/components/modals/SendMessageModal/index.tsx:381
+#: src/components/modals/SendMessageModal/index.tsx:406
 msgid "Schedule for later"
 msgstr "Daha sonra gönder"
 
-#: src/components/modals/SendMessageModal/index.tsx:450
+#: src/components/modals/SendMessageModal/index.tsx:475
 msgid "Schedule Message"
 msgstr "Mesajı zamanla"
 
@@ -7313,7 +7346,7 @@ msgstr "Mesajı zamanla"
 msgid "Scheduled"
 msgstr "Planlandı"
 
-#: src/components/modals/SendMessageModal/index.tsx:411
+#: src/components/modals/SendMessageModal/index.tsx:436
 msgid "Scheduled time"
 msgstr "Zamanlanmış saat"
 
@@ -7337,6 +7370,10 @@ msgstr "Etkinlik adına göre ara..."
 #: src/components/routes/admin/Events/index.tsx:80
 msgid "Search by event title or organizer..."
 msgstr "Etkinlik başlığı veya organizatöre göre ara..."
+
+#: src/components/common/Editor/Controls/InsertImageControl/BrowseImagesPanel/index.tsx:37
+msgid "Search by filename..."
+msgstr ""
 
 #: src/components/routes/admin/FailedJobs/index.tsx:142
 msgid "Search by job name or exception..."
@@ -7436,7 +7473,7 @@ msgstr "Tümünü Seç"
 msgid "Select an event"
 msgstr "Bir etkinlik seçin"
 
-#: src/components/modals/SendMessageModal/index.tsx:299
+#: src/components/modals/SendMessageModal/index.tsx:311
 msgid "Select attendee group"
 msgstr "Katılımcı grubu seçin"
 
@@ -7447,6 +7484,10 @@ msgstr "Kamera Seç"
 #: src/components/forms/ProductForm/index.tsx:291
 msgid "Select category..."
 msgstr "Kategori seç..."
+
+#: src/components/modals/SendMessageModal/index.tsx:357
+msgid "Select check-in list"
+msgstr "Giriş listesi seçin"
 
 #: src/components/modals/EditAccountVatSettingsModal/index.tsx:133
 msgid "Select country"
@@ -7485,7 +7526,7 @@ msgid "Select Product Tier"
 msgstr "Ürün Katmanı Seç"
 
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:49
-#: src/components/modals/SendMessageModal/index.tsx:323
+#: src/components/modals/SendMessageModal/index.tsx:335
 msgid "Select products"
 msgstr "Ürünleri seç"
 
@@ -7518,7 +7559,7 @@ msgid "Select Ticket"
 msgstr "Bilet Seç"
 
 #: src/components/forms/CheckInListForm/index.tsx:43
-#: src/components/modals/SendMessageModal/index.tsx:311
+#: src/components/modals/SendMessageModal/index.tsx:323
 msgid "Select tickets"
 msgstr "Biletleri seç"
 
@@ -7532,9 +7573,13 @@ msgstr "Zaman aralığı seç"
 msgid "Select timezone"
 msgstr "Saat dilimi seçin"
 
-#: src/components/modals/SendMessageModal/index.tsx:298
+#: src/components/modals/SendMessageModal/index.tsx:310
 msgid "Select which attendees should receive this message"
 msgstr "Bu mesajı hangi katılımcıların alacağını seçin"
+
+#: src/components/modals/SendMessageModal/index.tsx:356
+msgid "Select which check-in list to use"
+msgstr "Kullanılacak giriş listesini seçin"
 
 #: src/components/forms/WebhookForm/index.tsx:144
 msgid "Select which events will trigger this webhook"
@@ -7562,11 +7607,11 @@ msgstr "Hızlı satılıyor 🔥"
 msgid "Send"
 msgstr "Gönder"
 
-#: src/components/modals/SendMessageModal/index.tsx:222
+#: src/components/modals/SendMessageModal/index.tsx:226
 msgid "Send a message"
 msgstr "Mesaj gönder"
 
-#: src/components/modals/SendMessageModal/index.tsx:468
+#: src/components/modals/SendMessageModal/index.tsx:493
 msgid "Send as test"
 msgstr "Test olarak gönder"
 
@@ -7574,16 +7619,16 @@ msgstr "Test olarak gönder"
 msgid "Send emails to attendees, ticket holders, or order owners. Messages can be sent immediately or scheduled for later."
 msgstr "Katılımcılara, bilet sahiplerine veya sipariş sahiplerine e-posta gönderin. Mesajlar hemen gönderilebilir veya daha sonra için planlanabilir."
 
-#: src/components/modals/SendMessageModal/index.tsx:476
+#: src/components/modals/SendMessageModal/index.tsx:501
 msgid "Send me a copy"
 msgstr "Bana bir kopya gönder"
 
 #: src/components/common/ContactOrganizerModal/index.tsx:112
-#: src/components/modals/SendMessageModal/index.tsx:450
+#: src/components/modals/SendMessageModal/index.tsx:475
 msgid "Send Message"
 msgstr "Mesaj Gönder"
 
-#: src/components/modals/SendMessageModal/index.tsx:373
+#: src/components/modals/SendMessageModal/index.tsx:398
 msgid "Send now"
 msgstr "Şimdi gönder"
 
@@ -7603,7 +7648,7 @@ msgstr "İade bildirim e-postası gönder"
 msgid "Send reset link"
 msgstr "Sıfırlama bağlantısı gönder"
 
-#: src/components/modals/SendMessageModal/index.tsx:450
+#: src/components/modals/SendMessageModal/index.tsx:475
 msgid "Send Test"
 msgstr "Test Gönder"
 
@@ -8006,7 +8051,7 @@ msgid "Stripe setup is already complete."
 msgstr "Stripe kurulumu zaten tamamlandı."
 
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:127
-#: src/components/modals/SendMessageModal/index.tsx:347
+#: src/components/modals/SendMessageModal/index.tsx:372
 #: src/components/routes/admin/Messages/index.tsx:162
 #: src/components/routes/admin/Messages/index.tsx:272
 msgid "Subject"
@@ -8455,11 +8500,11 @@ msgstr "Müşteriye gösterilen fiyat vergi ve ücretleri içermeyecektir. Bunla
 msgid "The primary brand color used for buttons and highlights"
 msgstr "Düğmeler ve vurgular için kullanılan birincil marka rengi"
 
-#: src/components/modals/SendMessageModal/index.tsx:172
+#: src/components/modals/SendMessageModal/index.tsx:175
 msgid "The scheduled time is required"
 msgstr "Zamanlanmış saat gereklidir"
 
-#: src/components/modals/SendMessageModal/index.tsx:173
+#: src/components/modals/SendMessageModal/index.tsx:176
 msgid "The scheduled time must be in the future"
 msgstr "Zamanlanmış saat gelecekte olmalıdır"
 
@@ -8888,7 +8933,7 @@ msgstr "Kime"
 msgid "To edit configurations, go to the Configurations section in the admin menu."
 msgstr "Yapılandırmaları düzenlemek için yönetici menüsündeki Yapılandırmalar bölümüne gidin."
 
-#: src/components/modals/SendMessageModal/index.tsx:259
+#: src/components/modals/SendMessageModal/index.tsx:263
 msgid "To increase your limits, contact us at"
 msgstr "Limitinizi artırmak için bizimle iletişime geçin"
 
@@ -9104,8 +9149,8 @@ msgstr "Benzersiz sipariş referansı"
 msgid "United States"
 msgstr "Amerika Birleşik Devletleri"
 
-#: src/components/common/MessageList/index.tsx:44
-#: src/components/common/MessageList/index.tsx:49
+#: src/components/common/MessageList/index.tsx:46
+#: src/components/common/MessageList/index.tsx:51
 #: src/components/routes/event/messages.tsx:27
 #: src/components/routes/event/messages.tsx:66
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:362
@@ -9187,12 +9232,12 @@ msgstr "Organizatörünüz için bir kapak görseli yükleyin"
 msgid "Upload a logo for your organizer"
 msgstr "Organizatörünüz için bir logo yükleyin"
 
-#: src/components/common/Editor/Controls/InsertImageControl/index.tsx:104
-#: src/components/common/Editor/Controls/InsertImageControl/index.tsx:158
+#: src/components/common/Editor/Controls/InsertImageControl/index.tsx:112
+#: src/components/common/Editor/Controls/InsertImageControl/index.tsx:167
 msgid "Upload Image"
 msgstr "Görsel Yükle"
 
-#: src/components/common/Editor/Controls/InsertImageControl/index.tsx:131
+#: src/components/common/Editor/Controls/InsertImageControl/index.tsx:140
 msgid "Uploading image..."
 msgstr "Görsel yükleniyor..."
 
@@ -10024,7 +10069,7 @@ msgstr "Bu daveti zaten kabul ettiniz. Devam etmek için lütfen giriş yapın."
 msgid "You have no pending email change."
 msgstr "Bekleyen e-posta değişikliğiniz yok."
 
-#: src/components/modals/SendMessageModal/index.tsx:200
+#: src/components/modals/SendMessageModal/index.tsx:203
 msgid "You have reached your messaging limit."
 msgstr "Mesajlaşma limitinize ulaştınız."
 
@@ -10036,7 +10081,7 @@ msgstr "Siparişinizi tamamlamak için zamanınız doldu."
 msgid "You have taxes and fees added to a Free Product. Would you like to remove them?"
 msgstr "Ücretsiz Bir Ürüne eklenen vergiler ve ücretleriniz var. Bunları kaldırmak ister misiniz?"
 
-#: src/components/modals/SendMessageModal/index.tsx:168
+#: src/components/modals/SendMessageModal/index.tsx:171
 msgid "You must acknowledge that this email is not promotional"
 msgstr "Bu e-postanın tanıtım amaçlı olmadığını kabul etmelisiniz"
 
@@ -10064,7 +10109,7 @@ msgstr "Organizatör durumunu güncelleyebilmek için e-posta adresinizi doğrul
 msgid "You need to verify your account email before you can modify email templates."
 msgstr "E-posta şablonlarını değiştirebilmek için hesap e-postanızı doğrulamanız gerekir."
 
-#: src/components/modals/SendMessageModal/index.tsx:234
+#: src/components/modals/SendMessageModal/index.tsx:238
 msgid "You need to verify your account email before you can send messages."
 msgstr "Mesaj göndermeden önce hesap e-postanızı doğrulamanız gerekir."
 
@@ -10108,7 +10153,7 @@ msgstr "Bekleme listesine eklendi!"
 msgid "You've been offered a spot!"
 msgstr "Size bir yer teklif edildi!"
 
-#: src/components/modals/SendMessageModal/index.tsx:273
+#: src/components/modals/SendMessageModal/index.tsx:277
 msgid "Your account has messaging limits. To increase your limits, contact us at"
 msgstr "Hesabınızın mesajlaşma limitleri var. Limitinizi artırmak için bizimle iletişime geçin"
 
