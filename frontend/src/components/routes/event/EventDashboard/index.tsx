@@ -11,14 +11,14 @@ import classes from "./EventDashboard.module.scss";
 import {useGetEventStats} from "../../../../queries/useGetEventStats.ts";
 import {formatCurrency} from "../../../../utilites/currency.ts";
 import {formatDateWithLocale} from "../../../../utilites/dates.ts";
-import {Button, SegmentedControl, Skeleton} from "@mantine/core";
+import {Button, SegmentedControl, Skeleton, Tooltip} from "@mantine/core";
 import {useMediaQuery} from "@mantine/hooks";
 import {IconAlertCircle, IconX} from "@tabler/icons-react";
 import {useGetAccount} from "../../../../queries/useGetAccount.ts";
 import {useUpdateEventStatus} from "../../../../mutations/useUpdateEventStatus.ts";
 import {confirmationDialog} from "../../../../utilites/confirmationDialog.tsx";
 import {showError, showSuccess} from "../../../../utilites/notifications.tsx";
-import {useEffect, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {EventLifecycleStatus, EventStatus, StripePlatform} from "../../../../types.ts";
 import {isHiEvents} from "../../../../utilites/helpers.ts";
 import {StripeConnectButton} from "../../../common/StripeConnectButton";
@@ -39,14 +39,15 @@ export const EventDashboard = () => {
     const eventQuery = useGetEvent(eventId);
     const {data: me} = useGetMe();
     const event = eventQuery?.data;
-    const [dateRange, setDateRange] = useState<string>('month');
-    const [hasUserSelected, setHasUserSelected] = useState(false);
+    const defaultDateRangeRef = useRef<string | null>(null);
+    if (event && !defaultDateRangeRef.current) {
+        defaultDateRangeRef.current = (event.lifecycle_status === EventLifecycleStatus.ENDED
+            || event.status === EventStatus.ARCHIVED) ? 'event' : 'last_30_days';
+    }
+    const [dateRange, setDateRange] = useState<string | null>(null);
+    const effectiveDateRange = dateRange ?? defaultDateRangeRef.current ?? 'last_30_days';
 
-    const defaultDateRange = (event?.lifecycle_status === EventLifecycleStatus.ENDED
-        || event?.status === EventStatus.ARCHIVED) ? 'event' : 'month';
-    const effectiveDateRange = hasUserSelected ? dateRange : defaultDateRange;
-
-    const eventStatsQuery = useGetEventStats(eventId, effectiveDateRange);
+    const eventStatsQuery = useGetEventStats(eventId, effectiveDateRange, !!defaultDateRangeRef.current);
     const {data: eventStats} = eventStatsQuery;
     const isMobile = useMediaQuery('(max-width: 768px)');
     const {data: account, isFetched: accountIsFetched} = useGetAccount();
@@ -258,15 +259,48 @@ export const EventDashboard = () => {
                 <div className={classes.dateRangeSelector}>
                     <SegmentedControl
                         value={effectiveDateRange}
-                        onChange={(value) => {
-                            setDateRange(value);
-                            setHasUserSelected(true);
-                        }}
+                        onChange={setDateRange}
                         data={[
-                            {label: t`Week`, value: 'week'},
-                            {label: t`Month`, value: 'month'},
-                            {label: t`Quarter`, value: 'quarter'},
-                            {label: t`Event`, value: 'event'},
+                            {
+                                label: (
+                                    <Tooltip label={t`Last 30 days`} withArrow>
+                                        <span>{t`Recent`}</span>
+                                    </Tooltip>
+                                ),
+                                value: 'last_30_days',
+                            },
+                            {
+                                label: (
+                                    <Tooltip label={t`First 7 days from event start`} withArrow>
+                                        <span>{t`Week`}</span>
+                                    </Tooltip>
+                                ),
+                                value: 'week',
+                            },
+                            {
+                                label: (
+                                    <Tooltip label={t`First 30 days from event start`} withArrow>
+                                        <span>{t`Month`}</span>
+                                    </Tooltip>
+                                ),
+                                value: 'month',
+                            },
+                            {
+                                label: (
+                                    <Tooltip label={t`First 90 days from event start`} withArrow>
+                                        <span>{t`Quarter`}</span>
+                                    </Tooltip>
+                                ),
+                                value: 'quarter',
+                            },
+                            {
+                                label: (
+                                    <Tooltip label={t`Full event duration`} withArrow>
+                                        <span>{t`Event`}</span>
+                                    </Tooltip>
+                                ),
+                                value: 'event',
+                            },
                         ]}
                         size="sm"
                     />

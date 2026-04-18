@@ -145,6 +145,9 @@ readonly class EventStatsFetchService
             case 'week':
                 $endDate = (clone $adjustedStart)->addDays(7);
                 break;
+            case 'month':
+                $endDate = (clone $adjustedStart)->addDays(30);
+                break;
             case 'quarter':
                 $endDate = (clone $adjustedStart)->addDays(90);
                 break;
@@ -157,8 +160,9 @@ readonly class EventStatsFetchService
                 ]);
                 $endDate = $endCandidates ? max($endCandidates) : Carbon::now();
                 break;
-            default: // 'month'
-                $endDate = (clone $adjustedStart)->addDays(30);
+            default: // 'last_30_days'
+                $adjustedStart = Carbon::now()->subDays(30);
+                $endDate = Carbon::now();
         }
 
         return [
