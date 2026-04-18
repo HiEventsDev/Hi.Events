@@ -57,6 +57,58 @@ class ContactBackfillService
         return $map;
     }
 
+    /**
+     * @return array<string, array<int, string>> Map of lowercase email → {qa_id → iso8601 timestamp} for QAs whose
+     *                                           "Update" decision wrote a value to the contact. Derived from each contact's attributes_history entries.
+     */
+    private function loadUpdateTimestampsByContactEmail(int $accountId): array
+    {
+        $rows = DB::table('contacts')
+            ->select('email', 'attributes_history')
+            ->where('account_id', $accountId)
+            ->whereNull('deleted_at')
+            ->get();
+
+        $map = [];
+        foreach ($rows as $row) {
+            $history = json_decode($row->attributes_history ?? '[]', true) ?? [];
+            $perQa = [];
+            foreach ($history as $entry) {
+                $at = $entry['changed_at'] ?? null;
+                if ($at === null) {
+                    continue;
+                }
+                $sourceIds = $entry['source_question_answer_ids'] ?? [];
+                foreach ($sourceIds as $qaId) {
+                    $perQa[(int) $qaId] = $at;
+                }
+            }
+            $map[strtolower($row->email)] = $perQa;
+        }
+
+        return $map;
+    }
+
+    /**
+     * @return array<string, array<int, true>> Map of lowercase email → set of question_answer ids marked "Ignore".
+     */
+    private function loadIgnoredQaIdsByContactEmail(int $accountId): array
+    {
+        $rows = DB::table('contacts')
+            ->select('email', 'ignored_question_answer_ids')
+            ->where('account_id', $accountId)
+            ->whereNull('deleted_at')
+            ->get();
+
+        $map = [];
+        foreach ($rows as $row) {
+            $ids = json_decode($row->ignored_question_answer_ids ?? '[]', true) ?? [];
+            $map[strtolower($row->email)] = array_flip(array_map('intval', $ids));
+        }
+
+        return $map;
+    }
+
     private function walkLinkedAnswers(int $accountId, callable $consumer): void
     {
         DB::table('question_answers')
@@ -142,9 +194,11 @@ class ContactBackfillService
 
     /**
      * Apply a set of per-conflict decisions. Each decision is either 'update' (overwrite the
-     * contact attribute with the event answer) or 'leave_alone' (keep existing; only mark processed).
+     * contact attribute with the event answer) or 'ignore' (keep existing; mark as no-update).
      * Both outcomes append the QA id to contacts.processed_question_answer_ids so the conflict
-     * does not reappear on subsequent previews.
+     * does not reappear on subsequent previews. 'ignore' also appends to ignored_question_answer_ids
+     * so the UI can distinguish Updated vs No Update when showing processed rows. 'update' removes
+     * the id from ignored_question_answer_ids if it was previously ignored.
      *
      * @param  array<array{question_answer_id:int,decision:string}>  $decisions
      * @return int Number of decisions processed.
@@ -188,6 +242,8 @@ class ContactBackfillService
 
         $pendingByContactId = [];
         $qaIdsByContactId = [];
+        $ignoredAddByContactId = [];
+        $ignoredRemoveByContactId = [];
         $processed = 0;
 
         foreach ($rows as $row) {
@@ -196,7 +252,7 @@ class ContactBackfillService
             if ($contactEmail === null) {
                 continue;
             }
-            $decision = $decisionMap[(int) $rowArr['answer_id']] ?? 'leave_alone';
+            $decision = $decisionMap[(int) $rowArr['answer_id']] ?? 'ignore';
 
             $contact = $this->contactUpsertService->findOrCreateContact(
                 accountId: $accountId,
@@ -206,21 +262,32 @@ class ContactBackfillService
             );
 
             $contactId = $contact->getId();
-            $qaIdsByContactId[$contactId][] = (int) $rowArr['answer_id'];
+            $qaId = (int) $rowArr['answer_id'];
+            $qaIdsByContactId[$contactId][] = $qaId;
 
             if ($decision === 'update') {
                 $proposed = self::decodeAnswer($rowArr['answer']);
                 $pendingByContactId[$contactId][$rowArr['definition_name']] = $proposed;
+                $ignoredRemoveByContactId[$contactId][] = $qaId;
+            } else {
+                $ignoredAddByContactId[$contactId][] = $qaId;
             }
 
             $processed++;
         }
 
-        $contactIds = array_unique(array_merge(array_keys($pendingByContactId), array_keys($qaIdsByContactId)));
+        $contactIds = array_unique(array_merge(
+            array_keys($pendingByContactId),
+            array_keys($qaIdsByContactId),
+            array_keys($ignoredAddByContactId),
+            array_keys($ignoredRemoveByContactId),
+        ));
         foreach ($contactIds as $contactId) {
             $attributes = $pendingByContactId[$contactId] ?? [];
             $qaIds = $qaIdsByContactId[$contactId] ?? [];
-            if (empty($attributes) && empty($qaIds)) {
+            $ignoredAdd = $ignoredAddByContactId[$contactId] ?? [];
+            $ignoredRemove = $ignoredRemoveByContactId[$contactId] ?? [];
+            if (empty($attributes) && empty($qaIds) && empty($ignoredAdd) && empty($ignoredRemove)) {
                 continue;
             }
             $contact = $this->contactRepository->findById($contactId);
@@ -229,6 +296,8 @@ class ContactBackfillService
                 newAttributes: $attributes,
                 changedByUserId: $changedByUserId,
                 sourceQuestionAnswerIds: $qaIds,
+                addedIgnoredQuestionAnswerIds: $ignoredAdd,
+                removedIgnoredQuestionAnswerIds: $ignoredRemove,
             );
         }
 
@@ -395,11 +464,10 @@ class ContactBackfillService
         ];
     }
 
-    public function getUnlinkedAttendees(int $accountId, QueryParamsDTO $params, bool $includeIgnored = false): LengthAwarePaginator
+    public function getUnlinkedAttendees(int $accountId, QueryParamsDTO $params, bool $includeProcessed = false): LengthAwarePaginator
     {
         $query = DB::table('attendees')
             ->join('events', 'events.id', '=', 'attendees.event_id')
-            ->whereNull('attendees.contact_id')
             ->whereNull('attendees.deleted_at')
             ->where('events.account_id', $accountId)
             ->select(
@@ -410,10 +478,12 @@ class ContactBackfillService
                 'attendees.event_id',
                 'events.title as event_title',
                 'attendees.created_at',
+                'attendees.contact_id',
                 'attendees.contact_link_ignored_at',
             );
 
-        if (! $includeIgnored) {
+        if (! $includeProcessed) {
+            $query->whereNull('attendees.contact_id');
             $query->whereNull('attendees.contact_link_ignored_at');
         }
 
@@ -443,29 +513,42 @@ class ContactBackfillService
         $sortDirection = strtolower($params->sort_direction ?? 'asc') === 'desc' ? 'desc' : 'asc';
         $query->orderBy($sortColumn, $sortDirection);
 
-        return $query->paginate($params->per_page ?: 25, ['*'], 'page', $params->page ?: 1);
+        $paginator = $query->paginate($params->per_page ?: 25, ['*'], 'page', $params->page ?: 1);
+
+        foreach ($paginator->items() as $item) {
+            if ($item->contact_id !== null) {
+                $item->status = 'added';
+            } elseif ($item->contact_link_ignored_at !== null) {
+                $item->status = 'ignored';
+            } else {
+                $item->status = null;
+            }
+        }
+
+        return $paginator;
     }
 
-    public function getUnmappedQuestions(int $accountId, QueryParamsDTO $params, bool $includeIgnored = false): LengthAwarePaginator
+    public function getUnmappedQuestions(int $accountId, QueryParamsDTO $params, bool $includeProcessed = false): LengthAwarePaginator
     {
         $query = DB::table('questions')
             ->join('events', 'events.id', '=', 'questions.event_id')
             ->join('question_answers', 'question_answers.question_id', '=', 'questions.id')
-            ->whereNull('questions.contact_attribute_definition_id')
             ->whereNull('questions.deleted_at')
             ->whereNull('question_answers.deleted_at')
             ->where('events.account_id', $accountId)
-            ->groupBy('questions.id', 'questions.title', 'questions.event_id', 'events.title', 'questions.contact_link_ignored_at')
+            ->groupBy('questions.id', 'questions.title', 'questions.event_id', 'events.title', 'questions.contact_attribute_definition_id', 'questions.contact_link_ignored_at')
             ->select(
                 'questions.id as question_id',
                 'questions.title',
                 'questions.event_id',
                 'events.title as event_title',
+                'questions.contact_attribute_definition_id',
                 'questions.contact_link_ignored_at',
                 DB::raw('COUNT(question_answers.id) as answer_count'),
             );
 
-        if (! $includeIgnored) {
+        if (! $includeProcessed) {
+            $query->whereNull('questions.contact_attribute_definition_id');
             $query->whereNull('questions.contact_link_ignored_at');
         }
 
@@ -487,7 +570,63 @@ class ContactBackfillService
         $sortDirection = strtolower($params->sort_direction ?? 'asc') === 'desc' ? 'desc' : 'asc';
         $query->orderBy($sortColumn, $sortDirection);
 
-        return $query->paginate($params->per_page ?: 25, ['*'], 'page', $params->page ?: 1);
+        $paginator = $query->paginate($params->per_page ?: 25, ['*'], 'page', $params->page ?: 1);
+
+        $questionIds = array_map(fn ($row) => (int) $row->question_id, $paginator->items());
+        if (! empty($questionIds)) {
+            $samples = $this->loadSampleAnswersByQuestion($questionIds);
+            foreach ($paginator->items() as $item) {
+                $item->sample_answers = $samples[(int) $item->question_id] ?? [];
+            }
+        }
+
+        foreach ($paginator->items() as $item) {
+            if ($item->contact_attribute_definition_id !== null) {
+                $item->status = 'reused';
+            } elseif ($item->contact_link_ignored_at !== null) {
+                $item->status = 'ignored';
+            } else {
+                $item->status = null;
+            }
+        }
+
+        return $paginator;
+    }
+
+    /**
+     * Given a set of question ids, return the top 3 most common distinct answer values per question.
+     * Used by the "New Questions" sub-tab as a Sample Answers column.
+     *
+     * @param  int[]  $questionIds
+     * @return array<int, string[]> Map of question_id → top 3 display strings, ordered by frequency desc.
+     */
+    private function loadSampleAnswersByQuestion(array $questionIds): array
+    {
+        $rows = DB::table('question_answers')
+            ->whereIn('question_id', $questionIds)
+            ->whereNull('deleted_at')
+            ->select('question_id', 'answer')
+            ->get();
+
+        $countsByQid = [];
+        foreach ($rows as $row) {
+            $qid = (int) $row->question_id;
+            $decoded = self::decodeAnswer($row->answer);
+            $display = is_array($decoded) ? implode(', ', array_map('strval', $decoded)) : (string) $decoded;
+            $display = trim($display);
+            if ($display === '') {
+                continue;
+            }
+            $countsByQid[$qid][$display] = ($countsByQid[$qid][$display] ?? 0) + 1;
+        }
+
+        $out = [];
+        foreach ($countsByQid as $qid => $counts) {
+            arsort($counts);
+            $out[$qid] = array_slice(array_keys($counts), 0, 3);
+        }
+
+        return $out;
     }
 
     public function getConflicts(
@@ -497,6 +636,8 @@ class ContactBackfillService
     ): LengthAwarePaginator {
         $emailToContactAttributes = $this->loadExistingContactAttributesByEmail($accountId);
         $processedByEmail = $this->loadProcessedQaIdsByContactEmail($accountId);
+        $ignoredByEmail = $this->loadIgnoredQaIdsByContactEmail($accountId);
+        $updateTimestampsByEmail = $this->loadUpdateTimestampsByContactEmail($accountId);
         $conflicts = [];
 
         $eventFilterId = null;
@@ -510,6 +651,8 @@ class ContactBackfillService
             &$conflicts,
             &$emailToContactAttributes,
             &$processedByEmail,
+            &$ignoredByEmail,
+            &$updateTimestampsByEmail,
             $includeProcessed,
             $eventFilterId,
         ) {
@@ -521,6 +664,7 @@ class ContactBackfillService
             $emailKey = strtolower($contactEmail);
             $answerId = (int) $row['answer_id'];
             $isProcessed = isset($processedByEmail[$emailKey][$answerId]);
+            $isIgnored = isset($ignoredByEmail[$emailKey][$answerId]);
 
             if ($isProcessed && ! $includeProcessed) {
                 return;
@@ -534,12 +678,21 @@ class ContactBackfillService
             $proposed = self::decodeAnswer($row['answer']);
             $current = $emailToContactAttributes[$emailKey][$attributeName] ?? null;
 
-            if ($current === $proposed) {
+            if (! $isProcessed && $current === $proposed) {
                 return;
             }
 
             if ($eventFilterId !== null && (int) ($row['event_id'] ?? 0) !== $eventFilterId) {
                 return;
+            }
+
+            $decisionApplied = null;
+            $appliedAt = null;
+            if ($isProcessed) {
+                $decisionApplied = $isIgnored ? 'ignored' : 'updated';
+                if ($decisionApplied === 'updated') {
+                    $appliedAt = $updateTimestampsByEmail[$emailKey][$answerId] ?? null;
+                }
             }
 
             $conflicts[] = [
@@ -554,6 +707,8 @@ class ContactBackfillService
                 'event_id' => (int) ($row['event_id'] ?? 0),
                 'event_title' => $row['event_title'] ?? null,
                 'processed' => $isProcessed,
+                'decision_applied' => $decisionApplied,
+                'applied_at' => $appliedAt,
             ];
         });
 

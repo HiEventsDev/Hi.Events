@@ -28,7 +28,7 @@ class ApplyConflictDecisionsAction extends BaseAction
         $validated = $request->validate([
             'decisions' => ['required', 'array', 'min:1'],
             'decisions.*.question_answer_id' => ['required', 'integer'],
-            'decisions.*.decision' => ['required', Rule::in(['update', 'leave_alone'])],
+            'decisions.*.decision' => ['required', Rule::in(['update', 'ignore'])],
         ]);
 
         $count = $this->handler->handle(

@@ -1,6 +1,6 @@
 import {t} from "@lingui/macro";
 import {useMemo, useState} from "react";
-import {Alert, Button, Checkbox, Group, Select, Switch, Table, Text, TextInput} from "@mantine/core";
+import {Alert, Badge, Button, Checkbox, Group, Select, Switch, Table, Text, TextInput} from "@mantine/core";
 import {IconEyeOff, IconRotateClockwise, IconSearch, IconUserPlus} from "@tabler/icons-react";
 import {Card} from "../../../../common/Card";
 import {Pagination} from "../../../../common/Pagination";
@@ -21,7 +21,7 @@ export const UnlinkedAttendeesSubTab = () => {
     const [eventFilter, setEventFilter] = useState<string | null>(null);
     const [sortBy, setSortBy] = useState('email');
     const [sortDir, setSortDir] = useState('asc');
-    const [includeIgnored, setIncludeIgnored] = useState(false);
+    const [includeProcessed, setIncludeProcessed] = useState(false);
 
     const eventsQuery = useGetEvents({pageNumber: 1, perPage: 100});
     const eventOptions = useMemo(
@@ -51,7 +51,7 @@ export const UnlinkedAttendeesSubTab = () => {
         sortDirection: sortDir,
     };
 
-    const result = useGetBackfillUnlinkedAttendees(params, includeIgnored);
+    const result = useGetBackfillUnlinkedAttendees(params, includeProcessed);
     const rows = result.data?.data;
     const meta = result.data?.meta;
 
@@ -59,15 +59,15 @@ export const UnlinkedAttendeesSubTab = () => {
     const selection = useRowSelection<number>(idsInOrder);
 
     const selectedActive = useMemo(
-        () => (rows ?? []).filter((r) => selection.isSelected(r.id) && !r.contact_link_ignored_at),
+        () => (rows ?? []).filter((r) => selection.isSelected(r.id) && r.status === null),
         [rows, selection],
     );
     const selectedIgnored = useMemo(
-        () => (rows ?? []).filter((r) => selection.isSelected(r.id) && !!r.contact_link_ignored_at),
+        () => (rows ?? []).filter((r) => selection.isSelected(r.id) && r.status === 'ignored'),
         [rows, selection],
     );
 
-    const activeRows = useMemo(() => (rows ?? []).filter((r) => !r.contact_link_ignored_at), [rows]);
+    const activeRows = useMemo(() => (rows ?? []).filter((r) => r.status === null), [rows]);
     const allActiveSelected = activeRows.length > 0 && activeRows.every((r) => selection.isSelected(r.id));
 
     const handleAdd = () => {
@@ -133,10 +133,11 @@ export const UnlinkedAttendeesSubTab = () => {
                     style={{width: 220, marginBottom: 0}}
                 />
                 <Switch
-                    label={t`Show ignored`}
-                    checked={includeIgnored}
-                    onChange={(e) => { setIncludeIgnored(e.currentTarget.checked); setPage(1); }}
+                    label={t`Show processed`}
+                    checked={includeProcessed}
+                    onChange={(e) => { setIncludeProcessed(e.currentTarget.checked); setPage(1); }}
                     size="sm"
+                    style={{marginBottom: 0}}
                 />
                 <Button
                     size="sm"
@@ -157,7 +158,7 @@ export const UnlinkedAttendeesSubTab = () => {
                 >
                     {t`Ignore`}
                 </Button>
-                {includeIgnored && selectedIgnored.length > 0 && (
+                {includeProcessed && selectedIgnored.length > 0 && (
                     <Button
                         size="sm"
                         variant="light"
@@ -200,33 +201,38 @@ export const UnlinkedAttendeesSubTab = () => {
                                 <SortableTh label={t`Last Name`} field="last_name" sortBy={sortBy} sortDir={sortDir} onSort={handleSort}/>
                                 <SortableTh label={t`Event`} field="event_title" sortBy={sortBy} sortDir={sortDir} onSort={handleSort}/>
                                 <SortableTh label={t`Created`} field="created_at" sortBy={sortBy} sortDir={sortDir} onSort={handleSort}/>
+                                <Table.Th style={{width: 110}}>{t`Status`}</Table.Th>
                             </Table.Tr>
                         </Table.Thead>
                         <Table.Tbody>
                             {rows.map((row) => {
-                                const isIgnored = !!row.contact_link_ignored_at;
-                                const rowStyle = isIgnored ? {opacity: 0.55} : undefined;
+                                const rowStyle = row.status !== null ? {opacity: 0.55} : undefined;
                                 return (
                                     <Table.Tr key={row.id} style={rowStyle}>
                                         <Table.Td>
-                                            <Checkbox
-                                                aria-label={t`Select row`}
-                                                checked={selection.isSelected(row.id)}
-                                                onMouseDown={(e) => selection.captureShift(e.shiftKey)}
-                                                onKeyDown={(e) => selection.captureShift(e.shiftKey)}
-                                                onChange={() => selection.toggleWithStoredShift(row.id)}
-                                            />
-                                        </Table.Td>
-                                        <Table.Td>
-                                            {row.email}
-                                            {isIgnored && (
-                                                <Text component="span" size="xs" c="dimmed" ml={6}>({t`ignored`})</Text>
+                                            {(row.status === null || row.status === 'ignored') && (
+                                                <Checkbox
+                                                    aria-label={t`Select row`}
+                                                    checked={selection.isSelected(row.id)}
+                                                    onMouseDown={(e) => selection.captureShift(e.shiftKey)}
+                                                    onKeyDown={(e) => selection.captureShift(e.shiftKey)}
+                                                    onChange={() => selection.toggleWithStoredShift(row.id)}
+                                                />
                                             )}
                                         </Table.Td>
+                                        <Table.Td>{row.email}</Table.Td>
                                         <Table.Td>{row.first_name || '-'}</Table.Td>
                                         <Table.Td>{row.last_name || '-'}</Table.Td>
                                         <Table.Td>{row.event_title}</Table.Td>
                                         <Table.Td>{row.created_at ? new Date(row.created_at).toLocaleDateString() : '-'}</Table.Td>
+                                        <Table.Td>
+                                            {row.status === 'added' && (
+                                                <Badge size="sm" variant="light" color="green">{t`Added`}</Badge>
+                                            )}
+                                            {row.status === 'ignored' && (
+                                                <Badge size="sm" variant="light" color="gray">{t`Ignored`}</Badge>
+                                            )}
+                                        </Table.Td>
                                     </Table.Tr>
                                 );
                             })}

@@ -24,7 +24,7 @@ class GetUnmappedQuestionsBackfillAction extends BaseAction
         $paginator = $this->service->getUnmappedQuestions(
             $this->getAuthenticatedAccountId(),
             QueryParamsDTO::fromArray($request->query->all()),
-            $request->boolean('include_ignored'),
+            $request->boolean('include_processed'),
         );
 
         $array = $paginator->toArray();

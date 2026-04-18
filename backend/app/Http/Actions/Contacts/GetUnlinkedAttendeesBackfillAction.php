@@ -24,7 +24,7 @@ class GetUnlinkedAttendeesBackfillAction extends BaseAction
         $paginator = $this->service->getUnlinkedAttendees(
             $this->getAuthenticatedAccountId(),
             QueryParamsDTO::fromArray($request->query->all()),
-            $request->boolean('include_ignored'),
+            $request->boolean('include_processed'),
         );
 
         $array = $paginator->toArray();

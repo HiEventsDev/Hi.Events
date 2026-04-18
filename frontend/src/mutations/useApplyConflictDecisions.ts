@@ -11,7 +11,7 @@ export const useApplyConflictDecisions = () => {
 
     return useMutation({
         mutationFn: ({decisions}: {
-            decisions: Array<{ question_answer_id: number; decision: 'update' | 'leave_alone' }>;
+            decisions: Array<{ question_answer_id: number; decision: 'update' | 'ignore' }>;
         }) => contactClient.backfillApplyConflictDecisions(me?.account_id, decisions),
 
         onSuccess: () => {

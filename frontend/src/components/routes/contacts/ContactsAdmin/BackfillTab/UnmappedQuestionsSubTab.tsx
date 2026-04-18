@@ -1,6 +1,6 @@
 import {t} from "@lingui/macro";
 import {useMemo, useState} from "react";
-import {Alert, Button, Checkbox, Group, Select, Switch, Table, Text, TextInput} from "@mantine/core";
+import {Alert, Badge, Button, Checkbox, Group, Select, Switch, Table, Text, TextInput} from "@mantine/core";
 import {IconEyeOff, IconLink, IconRotateClockwise, IconSearch} from "@tabler/icons-react";
 import {Card} from "../../../../common/Card";
 import {Pagination} from "../../../../common/Pagination";
@@ -21,7 +21,7 @@ export const UnmappedQuestionsSubTab = () => {
     const [eventFilter, setEventFilter] = useState<string | null>(null);
     const [sortBy, setSortBy] = useState('title');
     const [sortDir, setSortDir] = useState('asc');
-    const [includeIgnored, setIncludeIgnored] = useState(false);
+    const [includeProcessed, setIncludeProcessed] = useState(false);
 
     const eventsQuery = useGetEvents({pageNumber: 1, perPage: 100});
     const eventOptions = useMemo(
@@ -51,7 +51,7 @@ export const UnmappedQuestionsSubTab = () => {
         sortDirection: sortDir,
     };
 
-    const result = useGetBackfillUnmappedQuestions(params, includeIgnored);
+    const result = useGetBackfillUnmappedQuestions(params, includeProcessed);
     const rows = result.data?.data;
     const meta = result.data?.meta;
 
@@ -59,17 +59,17 @@ export const UnmappedQuestionsSubTab = () => {
     const selection = useRowSelection<number>(idsInOrder);
 
     const selectedActive = useMemo(
-        () => (rows ?? []).filter((r) => selection.isSelected(r.question_id) && !r.contact_link_ignored_at),
+        () => (rows ?? []).filter((r) => selection.isSelected(r.question_id) && r.status === null),
         [rows, selection],
     );
     const selectedIgnored = useMemo(
-        () => (rows ?? []).filter((r) => selection.isSelected(r.question_id) && !!r.contact_link_ignored_at),
+        () => (rows ?? []).filter((r) => selection.isSelected(r.question_id) && r.status === 'ignored'),
         [rows, selection],
     );
 
     const allActiveSelected = rows
-        ? rows.filter((r) => !r.contact_link_ignored_at).every((r) => selection.isSelected(r.question_id))
-          && rows.some((r) => !r.contact_link_ignored_at)
+        ? rows.filter((r) => r.status === null).every((r) => selection.isSelected(r.question_id))
+          && rows.some((r) => r.status === null)
         : false;
 
     const handleReuse = () => {
@@ -130,10 +130,11 @@ export const UnmappedQuestionsSubTab = () => {
                     style={{width: 220, marginBottom: 0}}
                 />
                 <Switch
-                    label={t`Show ignored`}
-                    checked={includeIgnored}
-                    onChange={(e) => { setIncludeIgnored(e.currentTarget.checked); setPage(1); }}
+                    label={t`Show processed`}
+                    checked={includeProcessed}
+                    onChange={(e) => { setIncludeProcessed(e.currentTarget.checked); setPage(1); }}
                     size="sm"
+                    style={{marginBottom: 0}}
                 />
                 <Button
                     size="sm"
@@ -154,7 +155,7 @@ export const UnmappedQuestionsSubTab = () => {
                 >
                     {t`Ignore`}
                 </Button>
-                {includeIgnored && selectedIgnored.length > 0 && (
+                {includeProcessed && selectedIgnored.length > 0 && (
                     <Button
                         size="sm"
                         variant="light"
@@ -197,32 +198,45 @@ export const UnmappedQuestionsSubTab = () => {
                                 </Table.Th>
                                 <SortableTh label={t`Question`} field="title" sortBy={sortBy} sortDir={sortDir} onSort={handleSort}/>
                                 <SortableTh label={t`Event`} field="event_title" sortBy={sortBy} sortDir={sortDir} onSort={handleSort}/>
-                                <Table.Th>{t`Answers`}</Table.Th>
+                                <Table.Th>{t`Sample answers`}</Table.Th>
+                                <Table.Th style={{width: 110}}>{t`Status`}</Table.Th>
                             </Table.Tr>
                         </Table.Thead>
                         <Table.Tbody>
                             {rows.map((row) => {
-                                const isIgnored = !!row.contact_link_ignored_at;
-                                const rowStyle = isIgnored ? {opacity: 0.55} : undefined;
+                                const rowStyle = row.status !== null ? {opacity: 0.55} : undefined;
                                 return (
                                     <Table.Tr key={row.question_id} style={rowStyle}>
                                         <Table.Td>
-                                            <Checkbox
-                                                aria-label={t`Select row`}
-                                                checked={selection.isSelected(row.question_id)}
-                                                onMouseDown={(e) => selection.captureShift(e.shiftKey)}
-                                                onKeyDown={(e) => selection.captureShift(e.shiftKey)}
-                                                onChange={() => selection.toggleWithStoredShift(row.question_id)}
-                                            />
-                                        </Table.Td>
-                                        <Table.Td>
-                                            {row.title}
-                                            {isIgnored && (
-                                                <Text component="span" size="xs" c="dimmed" ml={6}>({t`ignored`})</Text>
+                                            {(row.status === null || row.status === 'ignored') && (
+                                                <Checkbox
+                                                    aria-label={t`Select row`}
+                                                    checked={selection.isSelected(row.question_id)}
+                                                    onMouseDown={(e) => selection.captureShift(e.shiftKey)}
+                                                    onKeyDown={(e) => selection.captureShift(e.shiftKey)}
+                                                    onChange={() => selection.toggleWithStoredShift(row.question_id)}
+                                                />
                                             )}
                                         </Table.Td>
+                                        <Table.Td>{row.title}</Table.Td>
                                         <Table.Td>{row.event_title}</Table.Td>
-                                        <Table.Td>{row.answer_count}</Table.Td>
+                                        <Table.Td>
+                                            {(row.sample_answers ?? []).length === 0 ? (
+                                                <Text size="sm" c="dimmed">—</Text>
+                                            ) : (
+                                                <Text size="sm" c="dimmed" lineClamp={2}>
+                                                    {(row.sample_answers ?? []).join(', ')}
+                                                </Text>
+                                            )}
+                                        </Table.Td>
+                                        <Table.Td>
+                                            {row.status === 'reused' && (
+                                                <Badge size="sm" variant="light" color="green">{t`Reused`}</Badge>
+                                            )}
+                                            {row.status === 'ignored' && (
+                                                <Badge size="sm" variant="light" color="gray">{t`Ignored`}</Badge>
+                                            )}
+                                        </Table.Td>
                                     </Table.Tr>
                                 );
                             })}

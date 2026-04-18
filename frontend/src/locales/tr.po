@@ -322,7 +322,7 @@ msgstr "Hakkında"
 msgid "About Stripe Connect"
 msgstr "Stripe Connect Hakkında"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:14
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:20
 msgid "About Sync"
 msgstr "Senkronizasyon Hakkında"
 
@@ -452,11 +452,11 @@ msgstr "Etkin"
 msgid "Active Events"
 msgstr "Aktif Etkinlikler"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:148
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:149
 msgid "Add"
 msgstr "Ekle"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:148
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:149
 msgid "Add ({0})"
 msgstr "Ekle ({0})"
 
@@ -567,6 +567,10 @@ msgstr "Webhook Ekle"
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:185
 msgid "Add your social media handles and website URL. These will be displayed on your public organizer page."
 msgstr "Sosyal medya hesaplarınızı ve web sitesi URL'nizi ekleyin. Bunlar herkese açık organizatör sayfanızda görüntülenecektir."
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:230
+msgid "Added"
+msgstr "Eklendi"
 
 #: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:78
 msgid "Added {0} contact(s)."
@@ -698,7 +702,7 @@ msgstr "Tamamlandı! Artık yükseltilmiş ödeme sistemimizi kullanıyorsunuz."
 msgid "All Ended Events"
 msgstr "Tüm Sona Eren Etkinlikler"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:178
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:179
 msgid "All event questions with answers are linked."
 msgstr "Yanıtları olan tüm etkinlik soruları bağlandı."
 
@@ -824,10 +828,6 @@ msgstr "Beklenmeyen bir hata oluştu. Lütfen tekrar deneyin."
 msgid "Answer updated successfully."
 msgstr "Cevap başarıyla güncellendi."
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:200
-msgid "Answers"
-msgstr "Yanıtlar"
-
 #: src/components/forms/QuestionForm/index.tsx:290
 msgid "Answers will update the attendee's contact profile, making them reusable in future"
 msgstr "Yanıtlar katılımcının iletişim profilini güncelleyecek ve gelecekte yeniden kullanılabilir hale getirecek"
@@ -848,9 +848,13 @@ msgstr "Uygulama Ücretleri Yapılandırması"
 msgid "applied"
 msgstr "uygulandı"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:87
-msgid "Applied {0} decision(s)."
-msgstr "{0} karar uygulandı."
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:211
+msgid "Applied (timestamp not recorded for this row)"
+msgstr "Uygulandı (bu satır için zaman damgası kaydedilmedi)"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:210
+msgid "Applied {0}"
+msgstr "Uygulandı {0}"
 
 #: src/components/common/CapacityAssignmentList/index.tsx:94
 msgid "Applies to {0} products"
@@ -1180,7 +1184,7 @@ msgstr "Katılımcılar"
 msgid "Attendees Exported"
 msgstr "Katılımcılar Dışa Aktarıldı"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:38
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:35
 msgid "Attendees from past orders whose email isn't in your contacts library yet. Select the rows you want and click Add to create contacts for them; click Ignore to hide them from future previews."
 msgstr "E-postası henüz kişi kitaplığınızda olmayan geçmiş siparişlerdeki katılımcılar. Satırları seçin ve Ekle'ye tıklayın; Yoksay'a tıklayarak gizleyin."
 
@@ -1200,7 +1204,7 @@ msgstr "Belirli bir bilete sahip katılımcılar"
 msgid "Attendees:"
 msgstr "Katılımcılar:"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:157
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:177
 msgid "Attribute"
 msgstr "Öznitelik"
 
@@ -1805,11 +1809,6 @@ msgstr "Kod en fazla 20 karakter olmalıdır"
 msgid "Collaborate with your team to create amazing events together."
 msgstr "Birlikte harika etkinlikler oluşturmak için ekibinizle işbirliği yapın."
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:16
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:17
-msgid "Collapse"
-msgstr "Daralt"
-
 #: src/components/forms/ProductForm/index.tsx:473
 msgid "Collapse this product when the event page is initially loaded"
 msgstr "Etkinlik sayfası ilk yüklendiğinde bu ürünü daralt"
@@ -2098,7 +2097,7 @@ msgstr "Bağlantı Detayları"
 #: src/components/common/WaitlistTable/index.tsx:149
 #: src/components/layouts/EventHomepage/index.tsx:583
 #: src/components/layouts/OrganizerHomepage/index.tsx:245
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:156
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:176
 msgid "Contact"
 msgstr "İletişim"
 
@@ -2113,6 +2112,10 @@ msgstr "İletişim nitelikleri"
 #: src/components/modals/CreateContactModal/index.tsx:30
 msgid "Contact created successfully"
 msgstr "Kişi başarıyla oluşturuldu"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:179
+msgid "Contact Default"
+msgstr "Kişi varsayılanı"
 
 #: src/components/routes/account/ManageAccount/sections/Contacts/index.tsx:36
 #: src/components/routes/contacts/ContactsAdmin/ContactsTab.tsx:90
@@ -2268,7 +2271,7 @@ msgstr "URL'yi Kopyala"
 msgid "Could not add contacts."
 msgstr "Kişiler eklenemedi."
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:90
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:88
 msgid "Could not apply decisions."
 msgstr "Kararlar uygulanamadı."
 
@@ -2508,7 +2511,7 @@ msgstr "Kendi etkinliğinizi oluşturun"
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:132
 #: src/components/routes/admin/Messages/index.tsx:169
 #: src/components/routes/admin/Messages/index.tsx:309
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:202
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:203
 #: src/components/routes/contacts/ContactsAdmin/ContactsTab.tsx:142
 msgid "Created"
 msgstr "Oluşturuldu"
@@ -2741,10 +2744,6 @@ msgstr "Siparişin verildiği tarih"
 msgid "Day one capacity"
 msgstr "Birinci gün kapasitesi"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:161
-msgid "Decision"
-msgstr "Karar"
-
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:94
 msgid "Default"
 msgstr "Varsayılan"
@@ -2867,7 +2866,7 @@ msgstr "Detaylar"
 msgid "Didn't receive the code?"
 msgstr "Kodu almadınız mı?"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:54
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:51
 #: src/components/routes/contacts/ContactsAdmin/BackfillTab/index.tsx:47
 msgid "Different Answers"
 msgstr "Farklı yanıtlar"
@@ -3049,7 +3048,7 @@ msgstr "örn., Standart, Premium, Kurumsal"
 msgid "Each person will receive an email with a reserved spot to complete their purchase."
 msgstr "Her kişi, satın alma işlemini tamamlamak için ayrılmış bir yer içeren bir e-posta alacaktır."
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:65
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:62
 msgid "Each sub-tab runs independently — there's no single \"run everything\" button."
 msgstr "Her alt sekme bağımsız çalışır — tek bir \"hepsini çalıştır\" düğmesi yoktur."
 
@@ -3229,7 +3228,7 @@ msgstr "Uygun Giriş Listeleri"
 #: src/components/routes/auth/ForgotPassword/index.tsx:65
 #: src/components/routes/auth/Login/index.tsx:93
 #: src/components/routes/auth/Register/index.tsx:104
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:198
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:199
 #: src/components/routes/contacts/ContactsAdmin/ContactsTab.tsx:139
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:78
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:68
@@ -3524,9 +3523,9 @@ msgstr "EUR"
 #: src/components/routes/admin/Dashboard/index.tsx:305
 #: src/components/routes/admin/Messages/index.tsx:163
 #: src/components/routes/admin/Messages/index.tsx:277
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:160
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:201
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:199
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:180
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:202
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:200
 #: src/components/routes/contacts/ContactsAdmin/ExtendedAttributesTab/LinkedQuestionsDrawer.tsx:67
 #: src/components/routes/events/Dashboard/index.tsx:184
 #: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:19
@@ -3536,17 +3535,17 @@ msgstr "EUR"
 msgid "Event"
 msgstr "Etkinlik"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:159
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:178
 msgid "Event Answer"
 msgstr "Etkinlik Cevabı"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:134
-msgid "Event answers that don't match the contact's current value — either the attribute was empty, or the stored value differs. For each row, choose Update to write the event answer, or Leave alone to keep the existing value. Both outcomes mark the row as processed so it won't reappear."
-msgstr "Kişinin mevcut değeriyle eşleşmeyen etkinlik cevapları. Her satır için Güncelle veya Bırak'ı seçin. Her ikisi de satırı işlenmiş olarak işaretler."
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:142
+msgid "Event answers that don't match the contact's current value — either the attribute was empty, or the stored value differs. Select rows and click Update to write the event answer onto the contact, or click Ignore to keep the existing value. Both outcomes mark the rows as processed so they won't reappear."
+msgstr "Kişinin mevcut değeriyle eşleşmeyen etkinlik cevapları — öznitelik boştu ya da saklanan değer farklı. Satırları seçin ve cevabı kişiye yazmak için Güncelle'ye, mevcut değeri korumak için Yoksay'a tıklayın. Her ikisi de satırları işlenmiş olarak işaretler."
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:56
-msgid "Event answers that don't yet match the contact's stored value. Includes first-time fills (attribute was empty) and true conflicts (stored value differs from the event answer). Per row, choose Update to write the event answer or Leave alone to keep the existing value. Click Update to apply your decisions; resolved rows won't reappear on future previews."
-msgstr "Kişinin saklanan değeriyle henüz eşleşmeyen etkinlik cevapları. İlk doldurmaları ve gerçek çakışmaları içerir. Her satır için Güncelle veya Bırak seçin."
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:53
+msgid "Event answers that don't yet match the contact's stored value. Includes first-time fills (attribute was empty) and true conflicts (stored value differs from the event answer). Select the rows you want and click Update to write the event answers onto the contacts; click Ignore to keep existing values. Resolved rows won't reappear unless you toggle Show processed."
+msgstr "Henüz saklanan değerle eşleşmeyen etkinlik cevapları. İlk doldurmaları ve gerçek çakışmaları içerir. İstediğiniz satırları seçin ve Güncelle'ye tıklayın; mevcut değerleri korumak için Yoksay'a tıklayın."
 
 #: src/components/forms/WebhookForm/index.tsx:55
 msgid "Event Archived"
@@ -3763,15 +3762,6 @@ msgstr "Örnekler: \"Tişört bedeni\", \"Yemek tercihi\", \"Meslek unvanı\""
 msgid "Exception"
 msgstr "İstisna"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:158
-msgid "Existing"
-msgstr "Mevcut"
-
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:16
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:17
-msgid "Expand"
-msgstr "Genişlet"
-
 #: src/components/forms/CheckInListForm/index.tsx:68
 msgid "Expiration date"
 msgstr "Son kullanım tarihi"
@@ -3788,6 +3778,10 @@ msgstr "Süresi Doluyor"
 #: src/components/forms/PromoCodeForm/index.tsx:109
 msgid "Expiry Date"
 msgstr "Son Kullanım Tarihi"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:15
+msgid "Explain Sync"
+msgstr "Senkronizasyonu açıkla"
 
 #: src/components/routes/event/Affiliates/index.tsx:81
 #: src/components/routes/event/attendees.tsx:205
@@ -3940,7 +3934,7 @@ msgstr "Rapor dışa aktarılamadı. Lütfen tekrar deneyin."
 msgid "Failed to load Check-In List"
 msgstr "Giriş Listesi yüklenemedi"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:140
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:148
 msgid "Failed to load conflicts"
 msgstr "Çakışmalar yüklenemedi"
 
@@ -3956,11 +3950,11 @@ msgstr "Kişiler yüklenemedi"
 msgid "Failed to load recipients"
 msgstr "Alıcılar yüklenemedi"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:176
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:177
 msgid "Failed to load unlinked attendees"
 msgstr "Bağlanmamış katılımcılar yüklenemedi"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:173
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:174
 msgid "Failed to load unmapped questions"
 msgstr "Eşlenmemiş sorular yüklenemedi"
 
@@ -4148,7 +4142,7 @@ msgstr "Önce yukarıdaki bilgilerinizi doldurun"
 msgid "Filter Attendees"
 msgstr "Katılımcıları Filtrele"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:106
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:104
 #: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:126
 #: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:123
 #: src/components/routes/contacts/ContactsAdmin/ContactsTab.tsx:108
@@ -4209,7 +4203,7 @@ msgstr "Ad"
 #: src/components/routes/account/ManageAccount/sections/Contacts/index.tsx:65
 #: src/components/routes/auth/AcceptInvitation/index.tsx:97
 #: src/components/routes/auth/Register/index.tsx:90
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:199
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:200
 #: src/components/routes/contacts/ContactsAdmin/ContactsTab.tsx:140
 #: src/components/routes/product-widget/CollectInformation/index.tsx:434
 #: src/components/routes/product-widget/CollectInformation/index.tsx:646
@@ -4652,15 +4646,20 @@ msgstr "Bu değişikliği talep etmediyseniz, lütfen hemen şifrenizi değişti
 msgid "If you have an account with us, you will receive an email with instructions on how to reset your password."
 msgstr "Bizimle bir hesabınız varsa, şifrenizi nasıl sıfırlayacağınıza dair talimatlar içeren bir e-posta alacaksınız."
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:158
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:155
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:137
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:159
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:156
 msgid "Ignore"
 msgstr "Yoksay"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:223
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:221
-msgid "ignored"
-msgstr "yok sayıldı"
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:233
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:237
+msgid "Ignored"
+msgstr "Yok sayıldı"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:84
+msgid "Ignored {0} answer(s)."
+msgstr "{0} cevap yok sayıldı."
 
 #: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:90
 msgid "Ignored {0} attendee(s)."
@@ -5043,7 +5042,7 @@ msgstr "Soyad"
 #: src/components/routes/account/ManageAccount/sections/Contacts/index.tsx:66
 #: src/components/routes/auth/AcceptInvitation/index.tsx:102
 #: src/components/routes/auth/Register/index.tsx:96
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:200
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:201
 #: src/components/routes/contacts/ContactsAdmin/ContactsTab.tsx:141
 #: src/components/routes/product-widget/CollectInformation/index.tsx:440
 #: src/components/routes/product-widget/CollectInformation/index.tsx:441
@@ -5073,10 +5072,6 @@ msgstr "Son Tetiklenme"
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:70
 msgid "Last Used"
 msgstr "Son Kullanım"
-
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:189
-msgid "Leave"
-msgstr "Bırak"
 
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:191
 msgid "Leave blank to use the default word \"Invoice\""
@@ -5536,7 +5531,7 @@ msgstr "Net Gelir"
 msgid "Never"
 msgstr "Asla"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:36
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:33
 #: src/components/routes/contacts/ContactsAdmin/BackfillTab/index.tsx:33
 msgid "New Contacts"
 msgstr "Yeni Kişiler"
@@ -5554,7 +5549,7 @@ msgstr "Yeni Soru (gelecek etkinliklerde yeniden kullanılabilir)"
 msgid "New Question (this event only)"
 msgstr "Yeni Soru (yalnızca bu etkinlik için)"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:45
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:42
 #: src/components/routes/contacts/ContactsAdmin/BackfillTab/index.tsx:40
 msgid "New Questions"
 msgstr "Yeni Sorular"
@@ -5637,7 +5632,7 @@ msgstr "Bu etkinlik için kullanılabilir giriş listesi yok."
 msgid "No configurations found"
 msgstr "Yapılandırma bulunamadı"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:146
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:154
 msgid "No conflicts."
 msgstr "Çakışma yok."
 
@@ -5712,7 +5707,7 @@ msgstr "Fatura yok"
 msgid "No logs found"
 msgstr "Günlük bulunamadı"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:181
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:182
 msgid "No matching attendees."
 msgstr "Eşleşen katılımcı yok."
 
@@ -5720,7 +5715,7 @@ msgstr "Eşleşen katılımcı yok."
 msgid "No matching attributes."
 msgstr "Eşleşen öznitelik yok."
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:178
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:179
 #: src/components/routes/contacts/ContactsAdmin/ExtendedAttributesTab/LinkedQuestionsDrawer.tsx:57
 msgid "No matching questions."
 msgstr "Eşleşen soru yok."
@@ -5855,17 +5850,21 @@ msgstr "Hiçbir Vergi veya Ücret eklenmemiş."
 msgid "No Tickets Found"
 msgstr "Bilet Bulunamadı"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:181
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:182
 msgid "No unlinked attendees. All attendees already have a contact."
 msgstr "Bağlantısız katılımcı yok. Tüm katılımcıların zaten bir kişisi var."
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:147
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:155
 msgid "No unresolved conflicts. Toggle \"Show processed\" to see previously evaluated entries."
 msgstr "Çözülmemiş çakışma yok. Daha önce değerlendirilmiş girişleri görmek için \"İşlenmişleri göster\" seçeneğini açın."
 
 #: src/components/layouts/OrganizerHomepage/index.tsx:286
 msgid "No upcoming events"
 msgstr "Yaklaşan etkinlik yok"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:219
+msgid "No Update"
+msgstr "Güncelleme yok"
 
 #: src/components/common/AdminUsersTable/index.tsx:18
 msgid "No users found"
@@ -7040,7 +7039,7 @@ msgstr "Gizlilik Politikası"
 msgid "Process Refund"
 msgstr "İade İşle"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:182
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:222
 msgid "Processed"
 msgstr "İşlendi"
 
@@ -7219,7 +7218,7 @@ msgstr "Adet"
 msgid "Quantity Available"
 msgstr "Mevcut Miktar"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:198
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:199
 #: src/components/routes/contacts/ContactsAdmin/ExtendedAttributesTab/LinkedQuestionsDrawer.tsx:66
 msgid "Question"
 msgstr "Soru"
@@ -7425,7 +7424,7 @@ msgstr "Kayıt Ol"
 msgid "Registration Questions"
 msgstr "Kayıt soruları"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:47
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:44
 msgid "Registration questions used on past events that aren't marked as reusable. Select the rows and click Reuse to create an extended attribute from each question and link them; click Ignore to hide them from future previews."
 msgstr "Yeniden kullanılabilir olarak işaretlenmemiş geçmiş etkinliklerde kullanılan kayıt soruları. Satırları seçin ve Yeniden Kullan'a tıklayın; Yoksay'a tıklayarak gizleyin."
 
@@ -7601,13 +7600,17 @@ msgstr "Etkinliğe Dön"
 msgid "Return to Event Page"
 msgstr "Etkinlik Sayfasına Dön"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:145
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:146
 msgid "Reuse"
 msgstr "Yeniden Kullan"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:145
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:146
 msgid "Reuse ({0})"
 msgstr "Yeniden Kullan ({0})"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:234
+msgid "Reused"
+msgstr "Yeniden kullanıldı"
 
 #: src/components/common/AffiliateTable/index.tsx:157
 #: src/components/common/EventCard/index.tsx:235
@@ -7695,6 +7698,10 @@ msgstr "Tüm etkinlikler için satışlar, siparişler ve performans metrikleri"
 #: src/components/common/AdminEventsTable/index.tsx:134
 msgid "Sales:"
 msgstr "Satışlar:"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:201
+msgid "Sample answers"
+msgstr "Örnek cevaplar"
 
 #: src/components/common/PlatformFeesSettings/index.tsx:175
 msgid "Sample ticket price"
@@ -7802,7 +7809,7 @@ msgstr "Hesap adı veya e-posta ile ara..."
 msgid "Search by attendee name, email or order #..."
 msgstr "Katılımcı adı, e-posta veya sipariş #'a göre ara..."
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:98
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:96
 msgid "Search by email or attribute..."
 msgstr "E-posta veya özniteliğe göre ara..."
 
@@ -7920,8 +7927,9 @@ msgstr "Bir seviye seçin"
 msgid "Select Account"
 msgstr "Hesap Seç"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:192
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:189
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:166
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:193
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:190
 msgid "Select all"
 msgstr "Tümünü seç"
 
@@ -7986,8 +7994,9 @@ msgstr "Ürün Katmanı Seç"
 msgid "Select products"
 msgstr "Ürünleri seç"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:213
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:211
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:192
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:215
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:213
 msgid "Select row"
 msgstr "Satır seç"
 
@@ -8256,11 +8265,6 @@ msgstr "Mevcut ürün miktarını göster"
 msgid "Show fewer platforms"
 msgstr "Daha az platform göster"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:136
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:133
-msgid "Show ignored"
-msgstr "Yok sayılanları göster"
-
 #: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:126
 msgid "Show marketing opt-in checkbox"
 msgstr "Pazarlama onay kutusunu göster"
@@ -8278,7 +8282,9 @@ msgstr "Daha fazla göster"
 msgid "Show more platforms"
 msgstr "Daha fazla platform göster"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:116
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:114
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:136
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:133
 msgid "Show processed"
 msgstr "İşlenmişleri göster"
 
@@ -8489,6 +8495,9 @@ msgstr "İstatistikler hesap oluşturma tarihine göre hesaplanır"
 #: src/components/routes/admin/Messages/index.tsx:120
 #: src/components/routes/admin/Messages/index.tsx:167
 #: src/components/routes/admin/Messages/index.tsx:293
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:181
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:204
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:202
 #: src/components/routes/contacts/ContactsAdmin/ExtendedAttributesTab/index.tsx:153
 #: src/components/routes/contacts/ContactsAdmin/ExtendedAttributesTab/LinkedQuestionsDrawer.tsx:68
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:88
@@ -9248,7 +9257,7 @@ msgstr "Bu, kullanıcılarınızla bildirimler ve iletişim için kullanılacakt
 msgid "This will not be visible to customers, but helps you identify the affiliate."
 msgstr "Bu müşterilere görünmeyecektir, ancak iş ortağını tanımlamanıza yardımcı olur."
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:33
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:30
 msgid "Three things to review and sync, one per sub-tab:"
 msgstr "Gözden geçirilecek ve senkronize edilecek üç şey, her alt sekmede bir tane:"
 
@@ -9648,8 +9657,8 @@ msgstr "Soru güncellenemedi. Lütfen bilgilerinizi kontrol edin"
 msgid "Unattributed Accounts"
 msgstr "Atıfsız Hesaplar"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:168
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:165
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:169
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:166
 msgid "Unignore ({0})"
 msgstr "Yoksaymayı kaldır ({0})"
 
@@ -9741,14 +9750,13 @@ msgstr "Yaklaşan"
 msgid "Upcoming Events"
 msgstr "Yaklaşan Etkinlikler"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:129
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:190
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:127
 msgid "Update"
 msgstr "Güncelle"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:128
-msgid "Update ({updateCount} update, {0} leave)"
-msgstr "Güncelle ({updateCount} güncelle, {0} bırak)"
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:127
+msgid "Update ({0})"
+msgstr "Güncelle ({0})"
 
 #: src/components/modals/EditTaxOrFeeModal/index.tsx:59
 msgid "Update {0}"
@@ -9773,6 +9781,14 @@ msgstr "Etkinlik adı, açıklaması ve tarihlerini güncelle"
 #: src/components/routes/profile/ManageProfile/index.tsx:214
 msgid "Update profile"
 msgstr "Profili güncelle"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:214
+msgid "Updated"
+msgstr "Güncellendi"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:82
+msgid "Updated {0} answer(s)."
+msgstr "{0} cevap güncellendi."
 
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:170
 msgid "Upgrade Available"
@@ -10747,7 +10763,7 @@ msgstr "Harika web siteniz 🎉"
 msgid "Your check-in list has been created successfully. Share the link below with your check-in staff."
 msgstr "Giriş listeniz başarıyla oluşturuldu. Aşağıdaki bağlantıyı giriş personelinizle paylaşın."
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:25
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:22
 msgid "Your contacts library unifies attendees across events. When you add a new contact attribute (like \"Dietary preference\") or start using contacts mid-way through your account's history, answers from past events don't retroactively flow in. Sync reconciles that history."
 msgstr "Kişi kitaplığınız katılımcıları etkinlikler arasında birleştirir. Yeni bir kişi özelliği eklediğinizde (\"Beslenme tercihi\") veya hesabınızın geçmişinin ortasında kişileri kullanmaya başladığınızda, geçmiş cevaplar geriye dönük akmaz. Sync uzlaştırır."
 

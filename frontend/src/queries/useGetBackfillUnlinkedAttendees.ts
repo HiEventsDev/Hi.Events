@@ -5,13 +5,13 @@ import {useGetMe} from "./useGetMe.ts";
 
 export const GET_BACKFILL_UNLINKED_ATTENDEES_QUERY_KEY = 'getBackfillUnlinkedAttendees';
 
-export const useGetBackfillUnlinkedAttendees = (params: QueryFilters, includeIgnored = false) => {
+export const useGetBackfillUnlinkedAttendees = (params: QueryFilters, includeProcessed = false) => {
     const meQuery = useGetMe();
     const accountId = meQuery.data?.account_id as IdParam;
 
     return useQuery<GenericPaginatedResponse<ContactBackfillUnlinkedAttendee>>({
-        queryKey: [GET_BACKFILL_UNLINKED_ATTENDEES_QUERY_KEY, accountId, params, includeIgnored],
+        queryKey: [GET_BACKFILL_UNLINKED_ATTENDEES_QUERY_KEY, accountId, params, includeProcessed],
         enabled: meQuery.isFetched,
-        queryFn: () => contactClient.backfillUnlinkedAttendees(accountId, params, includeIgnored),
+        queryFn: () => contactClient.backfillUnlinkedAttendees(accountId, params, includeProcessed),
     });
 };

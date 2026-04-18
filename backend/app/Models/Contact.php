@@ -15,6 +15,7 @@ class Contact extends BaseModel
             ContactDomainObjectAbstract::ATTRIBUTES => 'array',
             ContactDomainObjectAbstract::ATTRIBUTES_HISTORY => 'array',
             ContactDomainObjectAbstract::PROCESSED_QUESTION_ANSWER_IDS => 'array',
+            ContactDomainObjectAbstract::IGNORED_QUESTION_ANSWER_IDS => 'array',
         ];
     }
 
@@ -28,6 +29,7 @@ class Contact extends BaseModel
             ContactDomainObjectAbstract::ATTRIBUTES,
             ContactDomainObjectAbstract::ATTRIBUTES_HISTORY,
             ContactDomainObjectAbstract::PROCESSED_QUESTION_ANSWER_IDS,
+            ContactDomainObjectAbstract::IGNORED_QUESTION_ANSWER_IDS,
         ];
     }
 }

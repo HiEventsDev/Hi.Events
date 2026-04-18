@@ -322,7 +322,7 @@ msgstr "Acerca de"
 msgid "About Stripe Connect"
 msgstr "Acerca de Stripe Connect"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:14
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:20
 msgid "About Sync"
 msgstr "Acerca de Sincronizar"
 
@@ -452,11 +452,11 @@ msgstr "Activo"
 msgid "Active Events"
 msgstr "Eventos activos"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:148
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:149
 msgid "Add"
 msgstr "Añadir"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:148
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:149
 msgid "Add ({0})"
 msgstr "Añadir ({0})"
 
@@ -567,6 +567,10 @@ msgstr "Agregar Webhook"
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:185
 msgid "Add your social media handles and website URL. These will be displayed on your public organizer page."
 msgstr "Agrega tus redes sociales y la URL de tu sitio web. Estos se mostrarán en tu página pública de organizador."
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:230
+msgid "Added"
+msgstr "Añadido"
 
 #: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:78
 msgid "Added {0} contact(s)."
@@ -698,7 +702,7 @@ msgstr "¡Todo listo! Ahora está usando nuestro sistema de pagos mejorado."
 msgid "All Ended Events"
 msgstr "Todos los eventos finalizados"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:178
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:179
 msgid "All event questions with answers are linked."
 msgstr "Todas las preguntas de eventos con respuestas están vinculadas."
 
@@ -824,10 +828,6 @@ msgstr "Ocurrió un error inesperado. Inténtalo de nuevo."
 msgid "Answer updated successfully."
 msgstr "Respuesta actualizada con éxito."
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:200
-msgid "Answers"
-msgstr "Respuestas"
-
 #: src/components/forms/QuestionForm/index.tsx:290
 msgid "Answers will update the attendee's contact profile, making them reusable in future"
 msgstr "Las respuestas actualizarán el perfil de contacto del asistente, haciéndolas reutilizables en el futuro"
@@ -848,9 +848,13 @@ msgstr "Configuración de tarifas de aplicación"
 msgid "applied"
 msgstr "aplicado"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:87
-msgid "Applied {0} decision(s)."
-msgstr "{0} decisión(es) aplicada(s)."
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:211
+msgid "Applied (timestamp not recorded for this row)"
+msgstr "Aplicado (marca de tiempo no registrada para esta fila)"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:210
+msgid "Applied {0}"
+msgstr "Aplicado {0}"
 
 #: src/components/common/CapacityAssignmentList/index.tsx:94
 msgid "Applies to {0} products"
@@ -1180,7 +1184,7 @@ msgstr "Asistentes"
 msgid "Attendees Exported"
 msgstr "Asistentes exportados"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:38
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:35
 msgid "Attendees from past orders whose email isn't in your contacts library yet. Select the rows you want and click Add to create contacts for them; click Ignore to hide them from future previews."
 msgstr "Asistentes de pedidos pasados cuyo correo electrónico aún no está en tu biblioteca de contactos. Selecciona las filas que quieras y haz clic en Añadir para crearles contactos; haz clic en Ignorar para ocultarlas de las vistas previas futuras."
 
@@ -1200,7 +1204,7 @@ msgstr "Asistentes con entrada específica"
 msgid "Attendees:"
 msgstr "Asistentes:"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:157
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:177
 msgid "Attribute"
 msgstr "Atributo"
 
@@ -1805,11 +1809,6 @@ msgstr "El código no debe tener más de 20 caracteres"
 msgid "Collaborate with your team to create amazing events together."
 msgstr "Colabora con tu equipo para crear eventos increíbles juntos."
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:16
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:17
-msgid "Collapse"
-msgstr "Contraer"
-
 #: src/components/forms/ProductForm/index.tsx:473
 msgid "Collapse this product when the event page is initially loaded"
 msgstr "Colapsar este producto cuando la página del evento se cargue inicialmente"
@@ -2098,7 +2097,7 @@ msgstr "Detalles de conexión"
 #: src/components/common/WaitlistTable/index.tsx:149
 #: src/components/layouts/EventHomepage/index.tsx:583
 #: src/components/layouts/OrganizerHomepage/index.tsx:245
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:156
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:176
 msgid "Contact"
 msgstr "Contacto"
 
@@ -2113,6 +2112,10 @@ msgstr "Atributos de contacto"
 #: src/components/modals/CreateContactModal/index.tsx:30
 msgid "Contact created successfully"
 msgstr "Contacto creado correctamente"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:179
+msgid "Contact Default"
+msgstr "Predeterminado del contacto"
 
 #: src/components/routes/account/ManageAccount/sections/Contacts/index.tsx:36
 #: src/components/routes/contacts/ContactsAdmin/ContactsTab.tsx:90
@@ -2268,7 +2271,7 @@ msgstr "Copiar URL"
 msgid "Could not add contacts."
 msgstr "No se pudieron añadir los contactos."
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:90
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:88
 msgid "Could not apply decisions."
 msgstr "No se pudieron aplicar las decisiones."
 
@@ -2508,7 +2511,7 @@ msgstr "Crea tu propio evento"
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:132
 #: src/components/routes/admin/Messages/index.tsx:169
 #: src/components/routes/admin/Messages/index.tsx:309
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:202
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:203
 #: src/components/routes/contacts/ContactsAdmin/ContactsTab.tsx:142
 msgid "Created"
 msgstr "Creado"
@@ -2741,10 +2744,6 @@ msgstr "Fecha en que se realizó el pedido"
 msgid "Day one capacity"
 msgstr "Capacidad del primer día"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:161
-msgid "Decision"
-msgstr "Decisión"
-
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:94
 msgid "Default"
 msgstr "Predeterminado"
@@ -2867,7 +2866,7 @@ msgstr "Detalles"
 msgid "Didn't receive the code?"
 msgstr "¿No recibiste el código?"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:54
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:51
 #: src/components/routes/contacts/ContactsAdmin/BackfillTab/index.tsx:47
 msgid "Different Answers"
 msgstr "Respuestas diferentes"
@@ -3049,7 +3048,7 @@ msgstr "p. ej., Estándar, Premium, Empresarial"
 msgid "Each person will receive an email with a reserved spot to complete their purchase."
 msgstr "Cada persona recibirá un correo electrónico con un lugar reservado para completar su compra."
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:65
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:62
 msgid "Each sub-tab runs independently — there's no single \"run everything\" button."
 msgstr "Cada subpestaña se ejecuta de forma independiente — no hay un único botón \"ejecutar todo\"."
 
@@ -3229,7 +3228,7 @@ msgstr "Listas de Check-In Elegibles"
 #: src/components/routes/auth/ForgotPassword/index.tsx:65
 #: src/components/routes/auth/Login/index.tsx:93
 #: src/components/routes/auth/Register/index.tsx:104
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:198
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:199
 #: src/components/routes/contacts/ContactsAdmin/ContactsTab.tsx:139
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:78
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:68
@@ -3524,9 +3523,9 @@ msgstr "EUR"
 #: src/components/routes/admin/Dashboard/index.tsx:305
 #: src/components/routes/admin/Messages/index.tsx:163
 #: src/components/routes/admin/Messages/index.tsx:277
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:160
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:201
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:199
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:180
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:202
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:200
 #: src/components/routes/contacts/ContactsAdmin/ExtendedAttributesTab/LinkedQuestionsDrawer.tsx:67
 #: src/components/routes/events/Dashboard/index.tsx:184
 #: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:19
@@ -3536,17 +3535,17 @@ msgstr "EUR"
 msgid "Event"
 msgstr "Evento"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:159
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:178
 msgid "Event Answer"
 msgstr "Respuesta del Evento"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:134
-msgid "Event answers that don't match the contact's current value — either the attribute was empty, or the stored value differs. For each row, choose Update to write the event answer, or Leave alone to keep the existing value. Both outcomes mark the row as processed so it won't reappear."
-msgstr "Respuestas del evento que no coinciden con el valor actual del contacto — o bien el atributo estaba vacío, o el valor almacenado difiere. Para cada fila, elige Actualizar para escribir la respuesta, o Dejar para mantener el valor existente. Ambos resultados marcan la fila como procesada."
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:142
+msgid "Event answers that don't match the contact's current value — either the attribute was empty, or the stored value differs. Select rows and click Update to write the event answer onto the contact, or click Ignore to keep the existing value. Both outcomes mark the rows as processed so they won't reappear."
+msgstr "Respuestas del evento que no coinciden con el valor actual del contacto — el atributo estaba vacío o el valor almacenado difiere. Selecciona filas y haz clic en Actualizar para escribir la respuesta del evento en el contacto, o en Ignorar para mantener el valor existente. Ambos resultados marcan las filas como procesadas para que no vuelvan a aparecer."
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:56
-msgid "Event answers that don't yet match the contact's stored value. Includes first-time fills (attribute was empty) and true conflicts (stored value differs from the event answer). Per row, choose Update to write the event answer or Leave alone to keep the existing value. Click Update to apply your decisions; resolved rows won't reappear on future previews."
-msgstr "Respuestas del evento que aún no coinciden con el valor almacenado del contacto. Incluye primeros llenados y conflictos reales. Por fila, elige Actualizar o Dejar. Haz clic en Actualizar para aplicar tus decisiones."
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:53
+msgid "Event answers that don't yet match the contact's stored value. Includes first-time fills (attribute was empty) and true conflicts (stored value differs from the event answer). Select the rows you want and click Update to write the event answers onto the contacts; click Ignore to keep existing values. Resolved rows won't reappear unless you toggle Show processed."
+msgstr "Respuestas del evento que aún no coinciden con el valor almacenado del contacto. Incluye primeros llenados (atributo vacío) y conflictos reales. Selecciona las filas que quieras y haz clic en Actualizar para escribir las respuestas en los contactos; haz clic en Ignorar para mantener los valores existentes. Las filas resueltas no volverán a aparecer salvo que actives Mostrar procesados."
 
 #: src/components/forms/WebhookForm/index.tsx:55
 msgid "Event Archived"
@@ -3763,15 +3762,6 @@ msgstr "Ejemplos: \"Talla de camiseta\", \"Preferencia de comida\", \"Cargo labo
 msgid "Exception"
 msgstr "Excepción"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:158
-msgid "Existing"
-msgstr "Existente"
-
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:16
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:17
-msgid "Expand"
-msgstr "Expandir"
-
 #: src/components/forms/CheckInListForm/index.tsx:68
 msgid "Expiration date"
 msgstr "Fecha de vencimiento"
@@ -3788,6 +3778,10 @@ msgstr "Vence"
 #: src/components/forms/PromoCodeForm/index.tsx:109
 msgid "Expiry Date"
 msgstr "Fecha de caducidad"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:15
+msgid "Explain Sync"
+msgstr "Explicar Sync"
 
 #: src/components/routes/event/Affiliates/index.tsx:81
 #: src/components/routes/event/attendees.tsx:205
@@ -3940,7 +3934,7 @@ msgstr "Error al exportar el informe. Por favor, inténtelo de nuevo."
 msgid "Failed to load Check-In List"
 msgstr "No se pudo cargar la lista de registro"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:140
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:148
 msgid "Failed to load conflicts"
 msgstr "Error al cargar conflictos"
 
@@ -3956,11 +3950,11 @@ msgstr "Error al cargar contactos"
 msgid "Failed to load recipients"
 msgstr "No se pudieron cargar los destinatarios"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:176
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:177
 msgid "Failed to load unlinked attendees"
 msgstr "Error al cargar asistentes no vinculados"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:173
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:174
 msgid "Failed to load unmapped questions"
 msgstr "Error al cargar preguntas no asignadas"
 
@@ -4148,7 +4142,7 @@ msgstr "Primero completa tus datos arriba"
 msgid "Filter Attendees"
 msgstr "Filtrar Asistentes"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:106
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:104
 #: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:126
 #: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:123
 #: src/components/routes/contacts/ContactsAdmin/ContactsTab.tsx:108
@@ -4209,7 +4203,7 @@ msgstr "Primer Nombre"
 #: src/components/routes/account/ManageAccount/sections/Contacts/index.tsx:65
 #: src/components/routes/auth/AcceptInvitation/index.tsx:97
 #: src/components/routes/auth/Register/index.tsx:90
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:199
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:200
 #: src/components/routes/contacts/ContactsAdmin/ContactsTab.tsx:140
 #: src/components/routes/product-widget/CollectInformation/index.tsx:434
 #: src/components/routes/product-widget/CollectInformation/index.tsx:646
@@ -4652,15 +4646,20 @@ msgstr "Si no solicitó este cambio, cambie inmediatamente su contraseña."
 msgid "If you have an account with us, you will receive an email with instructions on how to reset your password."
 msgstr "Si tienes una cuenta con nosotros, recibirás un correo electrónico con instrucciones sobre cómo restablecer tu contraseña."
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:158
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:155
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:137
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:159
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:156
 msgid "Ignore"
 msgstr "Ignorar"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:223
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:221
-msgid "ignored"
-msgstr "ignorado"
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:233
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:237
+msgid "Ignored"
+msgstr "Ignorado"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:84
+msgid "Ignored {0} answer(s)."
+msgstr "{0} respuesta(s) ignorada(s)."
 
 #: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:90
 msgid "Ignored {0} attendee(s)."
@@ -5043,7 +5042,7 @@ msgstr "Apellido"
 #: src/components/routes/account/ManageAccount/sections/Contacts/index.tsx:66
 #: src/components/routes/auth/AcceptInvitation/index.tsx:102
 #: src/components/routes/auth/Register/index.tsx:96
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:200
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:201
 #: src/components/routes/contacts/ContactsAdmin/ContactsTab.tsx:141
 #: src/components/routes/product-widget/CollectInformation/index.tsx:440
 #: src/components/routes/product-widget/CollectInformation/index.tsx:441
@@ -5073,10 +5072,6 @@ msgstr "Última activación"
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:70
 msgid "Last Used"
 msgstr "Última vez usado"
-
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:189
-msgid "Leave"
-msgstr "Dejar"
 
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:191
 msgid "Leave blank to use the default word \"Invoice\""
@@ -5536,7 +5531,7 @@ msgstr "Ingresos netos"
 msgid "Never"
 msgstr "Nunca"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:36
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:33
 #: src/components/routes/contacts/ContactsAdmin/BackfillTab/index.tsx:33
 msgid "New Contacts"
 msgstr "Nuevos Contactos"
@@ -5554,7 +5549,7 @@ msgstr "Nueva pregunta (reutilizable en eventos futuros)"
 msgid "New Question (this event only)"
 msgstr "Nueva pregunta (solo para este evento)"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:45
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:42
 #: src/components/routes/contacts/ContactsAdmin/BackfillTab/index.tsx:40
 msgid "New Questions"
 msgstr "Nuevas Preguntas"
@@ -5637,7 +5632,7 @@ msgstr "No hay listas de check-in disponibles para este evento."
 msgid "No configurations found"
 msgstr "No se encontraron configuraciones"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:146
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:154
 msgid "No conflicts."
 msgstr "Sin conflictos."
 
@@ -5712,7 +5707,7 @@ msgstr "Sin factura"
 msgid "No logs found"
 msgstr "No se encontraron registros"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:181
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:182
 msgid "No matching attendees."
 msgstr "No hay asistentes coincidentes."
 
@@ -5720,7 +5715,7 @@ msgstr "No hay asistentes coincidentes."
 msgid "No matching attributes."
 msgstr "No hay atributos coincidentes."
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:178
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:179
 #: src/components/routes/contacts/ContactsAdmin/ExtendedAttributesTab/LinkedQuestionsDrawer.tsx:57
 msgid "No matching questions."
 msgstr "No hay preguntas coincidentes."
@@ -5855,17 +5850,21 @@ msgstr "No se han agregado impuestos ni tarifas."
 msgid "No Tickets Found"
 msgstr "No se encontraron entradas"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:181
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:182
 msgid "No unlinked attendees. All attendees already have a contact."
 msgstr "No hay asistentes sin vincular. Todos los asistentes ya tienen un contacto."
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:147
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:155
 msgid "No unresolved conflicts. Toggle \"Show processed\" to see previously evaluated entries."
 msgstr "No hay conflictos sin resolver. Active \"Mostrar procesados\" para ver entradas evaluadas anteriormente."
 
 #: src/components/layouts/OrganizerHomepage/index.tsx:286
 msgid "No upcoming events"
 msgstr "No hay próximos eventos"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:219
+msgid "No Update"
+msgstr "Sin actualizar"
 
 #: src/components/common/AdminUsersTable/index.tsx:18
 msgid "No users found"
@@ -7040,7 +7039,7 @@ msgstr "Política de privacidad"
 msgid "Process Refund"
 msgstr "Procesar reembolso"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:182
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:222
 msgid "Processed"
 msgstr "Procesado"
 
@@ -7219,7 +7218,7 @@ msgstr "Cant."
 msgid "Quantity Available"
 msgstr "cantidad disponible"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:198
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:199
 #: src/components/routes/contacts/ContactsAdmin/ExtendedAttributesTab/LinkedQuestionsDrawer.tsx:66
 msgid "Question"
 msgstr "Pregunta"
@@ -7425,7 +7424,7 @@ msgstr "Registro"
 msgid "Registration Questions"
 msgstr "Preguntas de registro"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:47
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:44
 msgid "Registration questions used on past events that aren't marked as reusable. Select the rows and click Reuse to create an extended attribute from each question and link them; click Ignore to hide them from future previews."
 msgstr "Preguntas de registro usadas en eventos pasados que no están marcadas como reutilizables. Selecciona las filas y haz clic en Reutilizar para crear un atributo extendido a partir de cada pregunta; haz clic en Ignorar para ocultarlas."
 
@@ -7601,13 +7600,17 @@ msgstr "Volver al evento"
 msgid "Return to Event Page"
 msgstr "Volver a la página del evento"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:145
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:146
 msgid "Reuse"
 msgstr "Reutilizar"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:145
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:146
 msgid "Reuse ({0})"
 msgstr "Reutilizar ({0})"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:234
+msgid "Reused"
+msgstr "Reutilizado"
 
 #: src/components/common/AffiliateTable/index.tsx:157
 #: src/components/common/EventCard/index.tsx:235
@@ -7695,6 +7698,10 @@ msgstr "Ventas, pedidos y métricas de rendimiento para todos los eventos"
 #: src/components/common/AdminEventsTable/index.tsx:134
 msgid "Sales:"
 msgstr "Ventas:"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:201
+msgid "Sample answers"
+msgstr "Respuestas de muestra"
 
 #: src/components/common/PlatformFeesSettings/index.tsx:175
 msgid "Sample ticket price"
@@ -7802,7 +7809,7 @@ msgstr "Buscar por nombre de cuenta o correo electrónico..."
 msgid "Search by attendee name, email or order #..."
 msgstr "Busque por nombre del asistente, correo electrónico o número de pedido..."
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:98
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:96
 msgid "Search by email or attribute..."
 msgstr "Buscar por correo o atributo..."
 
@@ -7920,8 +7927,9 @@ msgstr "Seleccionar un nivel"
 msgid "Select Account"
 msgstr "Seleccionar Cuenta"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:192
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:189
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:166
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:193
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:190
 msgid "Select all"
 msgstr "Seleccionar todo"
 
@@ -7986,8 +7994,9 @@ msgstr "Seleccionar nivel de producto"
 msgid "Select products"
 msgstr "Seleccionar productos"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:213
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:211
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:192
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:215
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:213
 msgid "Select row"
 msgstr "Seleccionar fila"
 
@@ -8256,11 +8265,6 @@ msgstr "Mostrar cantidad disponible del producto"
 msgid "Show fewer platforms"
 msgstr "Mostrar menos plataformas"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:136
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:133
-msgid "Show ignored"
-msgstr "Mostrar ignorados"
-
 #: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:126
 msgid "Show marketing opt-in checkbox"
 msgstr "Mostrar casilla de aceptación de marketing"
@@ -8278,7 +8282,9 @@ msgstr "Mostrar más"
 msgid "Show more platforms"
 msgstr "Mostrar más plataformas"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:116
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:114
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:136
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:133
 msgid "Show processed"
 msgstr "Mostrar procesados"
 
@@ -8489,6 +8495,9 @@ msgstr "Las estadísticas se basan en la fecha de creación de la cuenta"
 #: src/components/routes/admin/Messages/index.tsx:120
 #: src/components/routes/admin/Messages/index.tsx:167
 #: src/components/routes/admin/Messages/index.tsx:293
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:181
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:204
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:202
 #: src/components/routes/contacts/ContactsAdmin/ExtendedAttributesTab/index.tsx:153
 #: src/components/routes/contacts/ContactsAdmin/ExtendedAttributesTab/LinkedQuestionsDrawer.tsx:68
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:88
@@ -9248,7 +9257,7 @@ msgstr "Esto se usará para notificaciones y comunicación con tus usuarios."
 msgid "This will not be visible to customers, but helps you identify the affiliate."
 msgstr "Esto no será visible para los clientes, pero te ayuda a identificar al afiliado."
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:33
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:30
 msgid "Three things to review and sync, one per sub-tab:"
 msgstr "Tres cosas para revisar y sincronizar, una por subpestaña:"
 
@@ -9648,8 +9657,8 @@ msgstr "No se puede actualizar la pregunta. Por favor revisa tus datos"
 msgid "Unattributed Accounts"
 msgstr "Cuentas sin atribución"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:168
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:165
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:169
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:166
 msgid "Unignore ({0})"
 msgstr "Dejar de ignorar ({0})"
 
@@ -9741,14 +9750,13 @@ msgstr "Próximo"
 msgid "Upcoming Events"
 msgstr "Próximos eventos"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:129
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:190
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:127
 msgid "Update"
 msgstr "Actualizar"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:128
-msgid "Update ({updateCount} update, {0} leave)"
-msgstr "Actualizar ({updateCount} actualizar, {0} dejar)"
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:127
+msgid "Update ({0})"
+msgstr "Actualizar ({0})"
 
 #: src/components/modals/EditTaxOrFeeModal/index.tsx:59
 msgid "Update {0}"
@@ -9773,6 +9781,14 @@ msgstr "Actualizar el nombre del evento, la descripción y las fechas."
 #: src/components/routes/profile/ManageProfile/index.tsx:214
 msgid "Update profile"
 msgstr "Actualización del perfil"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:214
+msgid "Updated"
+msgstr "Actualizado"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:82
+msgid "Updated {0} answer(s)."
+msgstr "{0} respuesta(s) actualizada(s)."
 
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:170
 msgid "Upgrade Available"
@@ -10747,7 +10763,7 @@ msgstr "Tu increíble sitio web 🎉"
 msgid "Your check-in list has been created successfully. Share the link below with your check-in staff."
 msgstr "Tu lista de check-in se ha creado exitosamente. Comparte el enlace de abajo con tu personal de check-in."
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:25
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:22
 msgid "Your contacts library unifies attendees across events. When you add a new contact attribute (like \"Dietary preference\") or start using contacts mid-way through your account's history, answers from past events don't retroactively flow in. Sync reconciles that history."
 msgstr "Tu biblioteca de contactos unifica a los asistentes entre eventos. Cuando añades un nuevo atributo de contacto (como \"Preferencia dietética\") o empiezas a usar contactos a mitad del historial, las respuestas de eventos pasados no fluyen retroactivamente. Sincronizar reconcilia ese historial."
 

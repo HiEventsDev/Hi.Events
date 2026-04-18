@@ -5,13 +5,13 @@ import {useGetMe} from "./useGetMe.ts";
 
 export const GET_BACKFILL_UNMAPPED_QUESTIONS_QUERY_KEY = 'getBackfillUnmappedQuestions';
 
-export const useGetBackfillUnmappedQuestions = (params: QueryFilters, includeIgnored = false) => {
+export const useGetBackfillUnmappedQuestions = (params: QueryFilters, includeProcessed = false) => {
     const meQuery = useGetMe();
     const accountId = meQuery.data?.account_id as IdParam;
 
     return useQuery<GenericPaginatedResponse<ContactBackfillUnmappedQuestion>>({
-        queryKey: [GET_BACKFILL_UNMAPPED_QUESTIONS_QUERY_KEY, accountId, params, includeIgnored],
+        queryKey: [GET_BACKFILL_UNMAPPED_QUESTIONS_QUERY_KEY, accountId, params, includeProcessed],
         enabled: meQuery.isFetched,
-        queryFn: () => contactClient.backfillUnmappedQuestions(accountId, params, includeIgnored),
+        queryFn: () => contactClient.backfillUnmappedQuestions(accountId, params, includeProcessed),
     });
 };

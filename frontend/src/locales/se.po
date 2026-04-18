@@ -322,7 +322,7 @@ msgstr "Om"
 msgid "About Stripe Connect"
 msgstr "Om Stripe Connect"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:14
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:20
 msgid "About Sync"
 msgstr "Om Sync"
 
@@ -452,11 +452,11 @@ msgstr "Aktiv"
 msgid "Active Events"
 msgstr "Aktiva evenemang"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:148
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:149
 msgid "Add"
 msgstr "Lägg till"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:148
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:149
 msgid "Add ({0})"
 msgstr "Lägg till ({0})"
 
@@ -567,6 +567,10 @@ msgstr "Lägg till webhook"
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:185
 msgid "Add your social media handles and website URL. These will be displayed on your public organizer page."
 msgstr "Lägg till dina sociala mediekonton och din webbplats URL. Dessa kommer att visas på din offentliga arrangörssida."
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:230
+msgid "Added"
+msgstr "Tillagd"
 
 #: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:78
 msgid "Added {0} contact(s)."
@@ -698,7 +702,7 @@ msgstr "Klart! Du använder nu vårt uppgraderade betalningssystem."
 msgid "All Ended Events"
 msgstr "Alla avslutade evenemang"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:178
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:179
 msgid "All event questions with answers are linked."
 msgstr "Alla evenemangsfrågor med svar är länkade."
 
@@ -824,10 +828,6 @@ msgstr "Ett oväntat fel uppstod. Vänligen försök igen."
 msgid "Answer updated successfully."
 msgstr "Svaret uppdaterades"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:200
-msgid "Answers"
-msgstr "Svar"
-
 #: src/components/forms/QuestionForm/index.tsx:290
 msgid "Answers will update the attendee's contact profile, making them reusable in future"
 msgstr "Svar kommer att uppdatera deltagarens kontaktprofil och göra dem återanvändbara i framtiden"
@@ -848,9 +848,13 @@ msgstr "Konfiguration av avgifter"
 msgid "applied"
 msgstr "tillämpat"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:87
-msgid "Applied {0} decision(s)."
-msgstr "{0} beslut tillämpade."
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:211
+msgid "Applied (timestamp not recorded for this row)"
+msgstr "Tillämpad (tidsstämpel ej registrerad för denna rad)"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:210
+msgid "Applied {0}"
+msgstr "Tillämpad {0}"
 
 #: src/components/common/CapacityAssignmentList/index.tsx:94
 msgid "Applies to {0} products"
@@ -1180,7 +1184,7 @@ msgstr "Deltagare"
 msgid "Attendees Exported"
 msgstr "Deltagare exporterade"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:38
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:35
 msgid "Attendees from past orders whose email isn't in your contacts library yet. Select the rows you want and click Add to create contacts for them; click Ignore to hide them from future previews."
 msgstr "Deltagare från tidigare beställningar vars e-post ännu inte finns i kontaktbiblioteket. Välj rader och klicka på Lägg till; klicka på Ignorera för att dölja."
 
@@ -1200,7 +1204,7 @@ msgstr "Deltagare med en specifik biljett"
 msgid "Attendees:"
 msgstr "Deltagare:"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:157
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:177
 msgid "Attribute"
 msgstr "Attribut"
 
@@ -1805,11 +1809,6 @@ msgstr "Koden får vara högst 20 tecken"
 msgid "Collaborate with your team to create amazing events together."
 msgstr "Samarbeta med ditt team för att skapa fantastiska evenemang tillsammans."
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:16
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:17
-msgid "Collapse"
-msgstr "Dölj"
-
 #: src/components/forms/ProductForm/index.tsx:473
 msgid "Collapse this product when the event page is initially loaded"
 msgstr "Fäll ihop denna produkt när evenemangssidan laddas"
@@ -2098,7 +2097,7 @@ msgstr "Anslutningsuppgifter"
 #: src/components/common/WaitlistTable/index.tsx:149
 #: src/components/layouts/EventHomepage/index.tsx:583
 #: src/components/layouts/OrganizerHomepage/index.tsx:245
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:156
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:176
 msgid "Contact"
 msgstr "Kontakt"
 
@@ -2113,6 +2112,10 @@ msgstr "Kontaktattribut"
 #: src/components/modals/CreateContactModal/index.tsx:30
 msgid "Contact created successfully"
 msgstr "Kontakten skapades"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:179
+msgid "Contact Default"
+msgstr "Kontakt-standard"
 
 #: src/components/routes/account/ManageAccount/sections/Contacts/index.tsx:36
 #: src/components/routes/contacts/ContactsAdmin/ContactsTab.tsx:90
@@ -2268,7 +2271,7 @@ msgstr "Kopiera URL"
 msgid "Could not add contacts."
 msgstr "Kunde inte lägga till kontakter."
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:90
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:88
 msgid "Could not apply decisions."
 msgstr "Kunde inte tillämpa beslut."
 
@@ -2508,7 +2511,7 @@ msgstr "Skapa ditt eget evenemang"
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:132
 #: src/components/routes/admin/Messages/index.tsx:169
 #: src/components/routes/admin/Messages/index.tsx:309
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:202
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:203
 #: src/components/routes/contacts/ContactsAdmin/ContactsTab.tsx:142
 msgid "Created"
 msgstr "Skapad"
@@ -2741,10 +2744,6 @@ msgstr "Datum då ordern lades"
 msgid "Day one capacity"
 msgstr "Kapacitet dag ett"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:161
-msgid "Decision"
-msgstr "Beslut"
-
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:94
 msgid "Default"
 msgstr "Standard"
@@ -2867,7 +2866,7 @@ msgstr "Detaljer"
 msgid "Didn't receive the code?"
 msgstr "Fick du inte koden?"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:54
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:51
 #: src/components/routes/contacts/ContactsAdmin/BackfillTab/index.tsx:47
 msgid "Different Answers"
 msgstr "Olika svar"
@@ -3049,7 +3048,7 @@ msgstr "t.ex. Standard, Premium, Enterprise"
 msgid "Each person will receive an email with a reserved spot to complete their purchase."
 msgstr "Varje person kommer att få ett e-postmeddelande med en reserverad plats för att slutföra sitt köp."
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:65
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:62
 msgid "Each sub-tab runs independently — there's no single \"run everything\" button."
 msgstr "Varje underflik körs oberoende — det finns ingen enda \"kör allt\"-knapp."
 
@@ -3229,7 +3228,7 @@ msgstr "Giltiga incheckningslistor"
 #: src/components/routes/auth/ForgotPassword/index.tsx:65
 #: src/components/routes/auth/Login/index.tsx:93
 #: src/components/routes/auth/Register/index.tsx:104
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:198
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:199
 #: src/components/routes/contacts/ContactsAdmin/ContactsTab.tsx:139
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:78
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:68
@@ -3524,9 +3523,9 @@ msgstr "EUR"
 #: src/components/routes/admin/Dashboard/index.tsx:305
 #: src/components/routes/admin/Messages/index.tsx:163
 #: src/components/routes/admin/Messages/index.tsx:277
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:160
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:201
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:199
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:180
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:202
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:200
 #: src/components/routes/contacts/ContactsAdmin/ExtendedAttributesTab/LinkedQuestionsDrawer.tsx:67
 #: src/components/routes/events/Dashboard/index.tsx:184
 #: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:19
@@ -3536,17 +3535,17 @@ msgstr "EUR"
 msgid "Event"
 msgstr "Evenemang"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:159
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:178
 msgid "Event Answer"
 msgstr "Eventsvar"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:134
-msgid "Event answers that don't match the contact's current value — either the attribute was empty, or the stored value differs. For each row, choose Update to write the event answer, or Leave alone to keep the existing value. Both outcomes mark the row as processed so it won't reappear."
-msgstr "Eventsvar som inte matchar kontaktens nuvarande värde. För varje rad, välj Uppdatera eller Behåll. Båda markerar raden som behandlad."
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:142
+msgid "Event answers that don't match the contact's current value — either the attribute was empty, or the stored value differs. Select rows and click Update to write the event answer onto the contact, or click Ignore to keep the existing value. Both outcomes mark the rows as processed so they won't reappear."
+msgstr "Eventsvar som inte matchar kontaktens nuvarande värde — antingen var attributet tomt eller det lagrade värdet skiljer sig. Välj rader och klicka på Uppdatera för att skriva svaret till kontakten, eller på Ignorera för att behålla det befintliga värdet. Båda markerar raderna som behandlade."
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:56
-msgid "Event answers that don't yet match the contact's stored value. Includes first-time fills (attribute was empty) and true conflicts (stored value differs from the event answer). Per row, choose Update to write the event answer or Leave alone to keep the existing value. Click Update to apply your decisions; resolved rows won't reappear on future previews."
-msgstr "Eventsvar som ännu inte matchar. Inkluderar första ifyllningar och verkliga konflikter. Per rad, välj Uppdatera eller Behåll."
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:53
+msgid "Event answers that don't yet match the contact's stored value. Includes first-time fills (attribute was empty) and true conflicts (stored value differs from the event answer). Select the rows you want and click Update to write the event answers onto the contacts; click Ignore to keep existing values. Resolved rows won't reappear unless you toggle Show processed."
+msgstr "Eventsvar som ännu inte matchar det lagrade värdet. Inkluderar första ifyllningar och verkliga konflikter. Välj raderna och klicka på Uppdatera; klicka på Ignorera för att behålla befintliga värden."
 
 #: src/components/forms/WebhookForm/index.tsx:55
 msgid "Event Archived"
@@ -3763,15 +3762,6 @@ msgstr "Exempel: \"T-shirtstorlek\", \"Matpreferens\", \"Jobbtitel\""
 msgid "Exception"
 msgstr "Undantag"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:158
-msgid "Existing"
-msgstr "Befintligt"
-
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:16
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:17
-msgid "Expand"
-msgstr "Expandera"
-
 #: src/components/forms/CheckInListForm/index.tsx:68
 msgid "Expiration date"
 msgstr "Utgångsdatum"
@@ -3788,6 +3778,10 @@ msgstr "Går ut"
 #: src/components/forms/PromoCodeForm/index.tsx:109
 msgid "Expiry Date"
 msgstr "Utgångsdatum"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:15
+msgid "Explain Sync"
+msgstr "Förklara Sync"
 
 #: src/components/routes/event/Affiliates/index.tsx:81
 #: src/components/routes/event/attendees.tsx:205
@@ -3940,7 +3934,7 @@ msgstr "Misslyckades med att exportera rapport. Försök igen."
 msgid "Failed to load Check-In List"
 msgstr "Misslyckades med att läsa in incheckningslista"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:140
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:148
 msgid "Failed to load conflicts"
 msgstr "Misslyckades med att läsa in konflikter"
 
@@ -3956,11 +3950,11 @@ msgstr "Misslyckades med att läsa in kontakter"
 msgid "Failed to load recipients"
 msgstr "Kunde inte ladda mottagare"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:176
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:177
 msgid "Failed to load unlinked attendees"
 msgstr "Misslyckades med att läsa in olänkade deltagare"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:173
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:174
 msgid "Failed to load unmapped questions"
 msgstr "Misslyckades med att läsa in omappade frågor"
 
@@ -4148,7 +4142,7 @@ msgstr "Fyll i dina uppgifter ovan först"
 msgid "Filter Attendees"
 msgstr "Filtrera deltagare"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:106
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:104
 #: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:126
 #: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:123
 #: src/components/routes/contacts/ContactsAdmin/ContactsTab.tsx:108
@@ -4209,7 +4203,7 @@ msgstr "Förnamn"
 #: src/components/routes/account/ManageAccount/sections/Contacts/index.tsx:65
 #: src/components/routes/auth/AcceptInvitation/index.tsx:97
 #: src/components/routes/auth/Register/index.tsx:90
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:199
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:200
 #: src/components/routes/contacts/ContactsAdmin/ContactsTab.tsx:140
 #: src/components/routes/product-widget/CollectInformation/index.tsx:434
 #: src/components/routes/product-widget/CollectInformation/index.tsx:646
@@ -4652,15 +4646,20 @@ msgstr "Om du inte begärde denna ändring, ändra omedelbart ditt lösenord."
 msgid "If you have an account with us, you will receive an email with instructions on how to reset your password."
 msgstr "Om du har ett konto hos oss kommer du att få ett e-postmeddelande med instruktioner för hur du återställer ditt lösenord."
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:158
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:155
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:137
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:159
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:156
 msgid "Ignore"
 msgstr "Ignorera"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:223
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:221
-msgid "ignored"
-msgstr "ignorerad"
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:233
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:237
+msgid "Ignored"
+msgstr "Ignorerad"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:84
+msgid "Ignored {0} answer(s)."
+msgstr "Ignorerade {0} svar."
 
 #: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:90
 msgid "Ignored {0} attendee(s)."
@@ -5043,7 +5042,7 @@ msgstr "Efternamn"
 #: src/components/routes/account/ManageAccount/sections/Contacts/index.tsx:66
 #: src/components/routes/auth/AcceptInvitation/index.tsx:102
 #: src/components/routes/auth/Register/index.tsx:96
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:200
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:201
 #: src/components/routes/contacts/ContactsAdmin/ContactsTab.tsx:141
 #: src/components/routes/product-widget/CollectInformation/index.tsx:440
 #: src/components/routes/product-widget/CollectInformation/index.tsx:441
@@ -5073,10 +5072,6 @@ msgstr "Senast utlöst"
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:70
 msgid "Last Used"
 msgstr "Senast använd"
-
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:189
-msgid "Leave"
-msgstr "Behåll"
 
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:191
 msgid "Leave blank to use the default word \"Invoice\""
@@ -5536,7 +5531,7 @@ msgstr "Nettointäkter"
 msgid "Never"
 msgstr "Aldrig"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:36
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:33
 #: src/components/routes/contacts/ContactsAdmin/BackfillTab/index.tsx:33
 msgid "New Contacts"
 msgstr "Nya Kontakter"
@@ -5554,7 +5549,7 @@ msgstr "Ny fråga (återanvändbar i framtida evenemang)"
 msgid "New Question (this event only)"
 msgstr "Ny fråga (endast för detta evenemang)"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:45
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:42
 #: src/components/routes/contacts/ContactsAdmin/BackfillTab/index.tsx:40
 msgid "New Questions"
 msgstr "Nya Frågor"
@@ -5637,7 +5632,7 @@ msgstr "Inga incheckningslistor tillgängliga för detta evenemang."
 msgid "No configurations found"
 msgstr "Inga konfigurationer hittades"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:146
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:154
 msgid "No conflicts."
 msgstr "Inga konflikter."
 
@@ -5712,7 +5707,7 @@ msgstr "Ingen faktura"
 msgid "No logs found"
 msgstr "Inga loggar hittades"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:181
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:182
 msgid "No matching attendees."
 msgstr "Inga matchande deltagare."
 
@@ -5720,7 +5715,7 @@ msgstr "Inga matchande deltagare."
 msgid "No matching attributes."
 msgstr "Inga matchande attribut."
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:178
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:179
 #: src/components/routes/contacts/ContactsAdmin/ExtendedAttributesTab/LinkedQuestionsDrawer.tsx:57
 msgid "No matching questions."
 msgstr "Inga matchande frågor."
@@ -5855,17 +5850,21 @@ msgstr "Inga skatter eller avgifter har lagts till."
 msgid "No Tickets Found"
 msgstr "Inga biljetter hittades"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:181
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:182
 msgid "No unlinked attendees. All attendees already have a contact."
 msgstr "Inga olänkade deltagare. Alla deltagare har redan en kontakt."
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:147
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:155
 msgid "No unresolved conflicts. Toggle \"Show processed\" to see previously evaluated entries."
 msgstr "Inga olösta konflikter. Aktivera \"Visa bearbetade\" för att se tidigare utvärderade poster."
 
 #: src/components/layouts/OrganizerHomepage/index.tsx:286
 msgid "No upcoming events"
 msgstr "Inga kommande evenemang"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:219
+msgid "No Update"
+msgstr "Ingen uppdatering"
 
 #: src/components/common/AdminUsersTable/index.tsx:18
 msgid "No users found"
@@ -7040,7 +7039,7 @@ msgstr "Integritetspolicy"
 msgid "Process Refund"
 msgstr "Genomför återbetalning"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:182
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:222
 msgid "Processed"
 msgstr "Bearbetad"
 
@@ -7219,7 +7218,7 @@ msgstr "Ant."
 msgid "Quantity Available"
 msgstr "Tillgängligt antal"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:198
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:199
 #: src/components/routes/contacts/ContactsAdmin/ExtendedAttributesTab/LinkedQuestionsDrawer.tsx:66
 msgid "Question"
 msgstr "Fråga"
@@ -7425,7 +7424,7 @@ msgstr "Registrera"
 msgid "Registration Questions"
 msgstr "Registreringsfrågor"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:47
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:44
 msgid "Registration questions used on past events that aren't marked as reusable. Select the rows and click Reuse to create an extended attribute from each question and link them; click Ignore to hide them from future previews."
 msgstr "Registreringsfrågor som använts i tidigare event men som inte är markerade som återanvändbara. Välj rader och klicka på Återanvänd; klicka på Ignorera för att dölja."
 
@@ -7601,13 +7600,17 @@ msgstr "Tillbaka till evenemanget"
 msgid "Return to Event Page"
 msgstr "Tillbaka till evenemangssidan"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:145
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:146
 msgid "Reuse"
 msgstr "Återanvänd"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:145
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:146
 msgid "Reuse ({0})"
 msgstr "Återanvänd ({0})"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:234
+msgid "Reused"
+msgstr "Återanvänd"
 
 #: src/components/common/AffiliateTable/index.tsx:157
 #: src/components/common/EventCard/index.tsx:235
@@ -7695,6 +7698,10 @@ msgstr "Försäljning, ordrar och prestandamått för alla evenemang"
 #: src/components/common/AdminEventsTable/index.tsx:134
 msgid "Sales:"
 msgstr "Försäljning:"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:201
+msgid "Sample answers"
+msgstr "Exempelsvar"
 
 #: src/components/common/PlatformFeesSettings/index.tsx:175
 msgid "Sample ticket price"
@@ -7802,7 +7809,7 @@ msgstr "Sök på kontonamn eller e-post..."
 msgid "Search by attendee name, email or order #..."
 msgstr "Sök på deltagarnamn, e-post eller ordernummer..."
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:98
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:96
 msgid "Search by email or attribute..."
 msgstr "Sök efter e-post eller attribut..."
 
@@ -7920,8 +7927,9 @@ msgstr "Välj en nivå"
 msgid "Select Account"
 msgstr "Välj konto"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:192
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:189
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:166
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:193
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:190
 msgid "Select all"
 msgstr "Välj alla"
 
@@ -7986,8 +7994,9 @@ msgstr "Välj produktnivå"
 msgid "Select products"
 msgstr "Välj produkter"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:213
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:211
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:192
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:215
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:213
 msgid "Select row"
 msgstr "Välj rad"
 
@@ -8256,11 +8265,6 @@ msgstr "Visa tillgängligt produktantal"
 msgid "Show fewer platforms"
 msgstr "Visa färre plattformar"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:136
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:133
-msgid "Show ignored"
-msgstr "Visa ignorerade"
-
 #: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:126
 msgid "Show marketing opt-in checkbox"
 msgstr "Visa kryssruta för samtycke till marknadsföring"
@@ -8278,7 +8282,9 @@ msgstr "Visa mer"
 msgid "Show more platforms"
 msgstr "Visa fler plattformar"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:116
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:114
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:136
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:133
 msgid "Show processed"
 msgstr "Visa bearbetade"
 
@@ -8489,6 +8495,9 @@ msgstr "Statistiken baseras på kontots skapandedatum"
 #: src/components/routes/admin/Messages/index.tsx:120
 #: src/components/routes/admin/Messages/index.tsx:167
 #: src/components/routes/admin/Messages/index.tsx:293
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:181
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:204
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:202
 #: src/components/routes/contacts/ContactsAdmin/ExtendedAttributesTab/index.tsx:153
 #: src/components/routes/contacts/ContactsAdmin/ExtendedAttributesTab/LinkedQuestionsDrawer.tsx:68
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:88
@@ -9248,7 +9257,7 @@ msgstr "Detta används för notiser och kommunikation med dina användare."
 msgid "This will not be visible to customers, but helps you identify the affiliate."
 msgstr "Detta syns inte för kunder, men hjälper dig att identifiera affiliaten."
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:33
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:30
 msgid "Three things to review and sync, one per sub-tab:"
 msgstr "Tre saker att granska och synka, en per underflik:"
 
@@ -9648,8 +9657,8 @@ msgstr "Det gick inte att uppdatera frågan. Kontrollera dina uppgifter"
 msgid "Unattributed Accounts"
 msgstr "Oattribuerade konton"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:168
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:165
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:169
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:166
 msgid "Unignore ({0})"
 msgstr "Ångra ignorera ({0})"
 
@@ -9741,14 +9750,13 @@ msgstr "Kommande"
 msgid "Upcoming Events"
 msgstr "Kommande evenemang"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:129
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:190
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:127
 msgid "Update"
 msgstr "Uppdatera"
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:128
-msgid "Update ({updateCount} update, {0} leave)"
-msgstr "Uppdatera ({updateCount} uppdatera, {0} behåll)"
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:127
+msgid "Update ({0})"
+msgstr "Uppdatera ({0})"
 
 #: src/components/modals/EditTaxOrFeeModal/index.tsx:59
 msgid "Update {0}"
@@ -9773,6 +9781,14 @@ msgstr "Uppdatera evenemangets namn, beskrivning och datum"
 #: src/components/routes/profile/ManageProfile/index.tsx:214
 msgid "Update profile"
 msgstr "Uppdatera profil"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:214
+msgid "Updated"
+msgstr "Uppdaterad"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:82
+msgid "Updated {0} answer(s)."
+msgstr "Uppdaterade {0} svar."
 
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:170
 msgid "Upgrade Available"
@@ -10747,7 +10763,7 @@ msgstr "Din grymma webbplats 🎉"
 msgid "Your check-in list has been created successfully. Share the link below with your check-in staff."
 msgstr "Din incheckningslista har skapats. Dela länken nedan med din incheckningspersonal."
 
-#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:25
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:22
 msgid "Your contacts library unifies attendees across events. When you add a new contact attribute (like \"Dietary preference\") or start using contacts mid-way through your account's history, answers from past events don't retroactively flow in. Sync reconciles that history."
 msgstr "Ditt kontaktbibliotek förenar deltagare mellan event. När du lägger till ett nytt kontaktattribut (\"Kostpreferens\") eller börjar använda kontakter mitt i historiken, flödar inte tidigare svar in retroaktivt. Sync avstämmer den historiken."
 

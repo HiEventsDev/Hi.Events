@@ -21,6 +21,7 @@ abstract class ContactDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     final public const UPDATED_AT = 'updated_at';
     final public const DELETED_AT = 'deleted_at';
     final public const PROCESSED_QUESTION_ANSWER_IDS = 'processed_question_answer_ids';
+    final public const IGNORED_QUESTION_ANSWER_IDS = 'ignored_question_answer_ids';
 
     protected int $id;
     protected int $account_id;
@@ -33,6 +34,7 @@ abstract class ContactDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     protected ?string $updated_at = null;
     protected ?string $deleted_at = null;
     protected array|string $processed_question_answer_ids = '[]';
+    protected array|string $ignored_question_answer_ids = '[]';
 
     public function toArray(): array
     {
@@ -48,6 +50,7 @@ abstract class ContactDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
                     'updated_at' => $this->updated_at ?? null,
                     'deleted_at' => $this->deleted_at ?? null,
                     'processed_question_answer_ids' => $this->processed_question_answer_ids ?? null,
+                    'ignored_question_answer_ids' => $this->ignored_question_answer_ids ?? null,
                 ];
     }
 
@@ -170,5 +173,16 @@ abstract class ContactDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     public function getProcessedQuestionAnswerIds(): array|string
     {
         return $this->processed_question_answer_ids;
+    }
+
+    public function setIgnoredQuestionAnswerIds(array|string $ignored_question_answer_ids): self
+    {
+        $this->ignored_question_answer_ids = $ignored_question_answer_ids;
+        return $this;
+    }
+
+    public function getIgnoredQuestionAnswerIds(): array|string
+    {
+        return $this->ignored_question_answer_ids;
     }
 }

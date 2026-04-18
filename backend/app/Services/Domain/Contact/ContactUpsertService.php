@@ -54,6 +54,8 @@ class ContactUpsertService
         array $newAttributes,
         int $changedByUserId,
         array $sourceQuestionAnswerIds = [],
+        array $addedIgnoredQuestionAnswerIds = [],
+        array $removedIgnoredQuestionAnswerIds = [],
     ): ContactDomainObject {
         $currentAttributes = is_array($contact->getAttributes())
             ? $contact->getAttributes()
@@ -72,8 +74,9 @@ class ContactUpsertService
 
         $hasValueChanges = ! empty($newValues);
         $hasProcessedIds = ! empty($sourceQuestionAnswerIds);
+        $hasIgnoreChanges = ! empty($addedIgnoredQuestionAnswerIds) || ! empty($removedIgnoredQuestionAnswerIds);
 
-        if (! $hasValueChanges && ! $hasProcessedIds) {
+        if (! $hasValueChanges && ! $hasProcessedIds && ! $hasIgnoreChanges) {
             return $contact;
         }
 
@@ -91,6 +94,7 @@ class ContactUpsertService
                 'changed_by' => $changedByUserId,
                 'old_values' => $oldValues,
                 'new_values' => $newValues,
+                'source_question_answer_ids' => array_values(array_unique(array_map('intval', $sourceQuestionAnswerIds))),
             ];
 
             $updates[ContactDomainObject::ATTRIBUTES] = $mergedAttributes;
@@ -109,6 +113,22 @@ class ContactUpsertService
             ))));
 
             $updates[ContactDomainObject::PROCESSED_QUESTION_ANSWER_IDS] = $merged;
+        }
+
+        if ($hasIgnoreChanges) {
+            $existingIgnored = $contact->getIgnoredQuestionAnswerIds();
+            $existing = is_array($existingIgnored)
+                ? $existingIgnored
+                : json_decode($existingIgnored ?: '[]', true) ?? [];
+
+            $removedSet = array_flip(array_map('intval', $removedIgnoredQuestionAnswerIds));
+            $merged = array_merge($existing, $addedIgnoredQuestionAnswerIds);
+            $filtered = array_values(array_unique(array_map('intval', array_filter(
+                $merged,
+                fn ($id) => ! isset($removedSet[(int) $id]),
+            ))));
+
+            $updates[ContactDomainObject::IGNORED_QUESTION_ANSWER_IDS] = $filtered;
         }
 
         $this->contactRepository->updateFromArray($contact->getId(), $updates);

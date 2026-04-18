@@ -1,7 +1,7 @@
 import {t} from "@lingui/macro";
 import {useMemo, useState} from "react";
-import {Alert, Badge, Button, Group, SegmentedControl, Select, Switch, Table, Text, TextInput} from "@mantine/core";
-import {IconSearch} from "@tabler/icons-react";
+import {Alert, Badge, Button, Checkbox, Group, Select, Switch, Table, Text, TextInput, Tooltip} from "@mantine/core";
+import {IconCheck, IconEyeOff, IconSearch} from "@tabler/icons-react";
 import {Card} from "../../../../common/Card";
 import {Pagination} from "../../../../common/Pagination";
 import {SortableTh} from "../../../../common/SortableTh";
@@ -10,9 +10,8 @@ import {QueryFilterOperator, QueryFilters} from "../../../../../types.ts";
 import {useGetEvents} from "../../../../../queries/useGetEvents.ts";
 import {useGetBackfillConflicts} from "../../../../../queries/useGetBackfillConflicts.ts";
 import {useApplyConflictDecisions} from "../../../../../mutations/useApplyConflictDecisions.ts";
+import {useRowSelection} from "../../../../../hooks/useRowSelection.ts";
 import {showError, showSuccess} from "../../../../../utilites/notifications.tsx";
-
-type Decision = 'update' | 'leave_alone';
 
 const formatValue = (value: unknown): string => {
     if (value === null || value === undefined) return '-';
@@ -28,7 +27,6 @@ export const ConflictsSubTab = () => {
     const [sortBy, setSortBy] = useState('contact_email');
     const [sortDir, setSortDir] = useState('asc');
     const [showProcessed, setShowProcessed] = useState(false);
-    const [decisions, setDecisions] = useState<Map<number, Decision>>(new Map());
 
     const applyMutation = useApplyConflictDecisions();
     const eventsQuery = useGetEvents({pageNumber: 1, perPage: 100});
@@ -59,33 +57,33 @@ export const ConflictsSubTab = () => {
     const rows = result.data?.data;
     const meta = result.data?.meta;
 
-    const setDecision = (qaId: number, decision: Decision) => {
-        setDecisions((prev) => {
-            const next = new Map(prev);
-            next.set(qaId, decision);
-            return next;
-        });
-    };
+    const activeIdsInOrder = useMemo(
+        () => (rows ?? []).filter((r) => !r.processed).map((r) => r.question_answer_id),
+        [rows],
+    );
+    const selection = useRowSelection<number>(activeIdsInOrder);
 
-    const pendingDecisions = useMemo(
-        () => Array.from(decisions.entries()).map(([qaId, decision]) => ({
-            question_answer_id: qaId,
-            decision,
-        })),
-        [decisions],
+    const selectedIds = useMemo(
+        () => (rows ?? [])
+            .filter((r) => !r.processed && selection.isSelected(r.question_answer_id))
+            .map((r) => r.question_answer_id),
+        [rows, selection],
     );
 
-    const updateCount = useMemo(
-        () => Array.from(decisions.values()).filter((d) => d === 'update').length,
-        [decisions],
-    );
+    const allActiveSelected = activeIdsInOrder.length > 0
+        && activeIdsInOrder.every((id) => selection.isSelected(id));
 
-    const handleApply = () => {
-        if (pendingDecisions.length === 0) return;
-        applyMutation.mutate({decisions: pendingDecisions}, {
+    const applyDecision = (decision: 'update' | 'ignore') => {
+        if (selectedIds.length === 0) return;
+        const decisions = selectedIds.map((id) => ({question_answer_id: id, decision}));
+        applyMutation.mutate({decisions}, {
             onSuccess: (res) => {
-                showSuccess(t`Applied ${res.data.count} decision(s).`);
-                setDecisions(new Map());
+                if (decision === 'update') {
+                    showSuccess(t`Updated ${res.data.count} answer(s).`);
+                } else {
+                    showSuccess(t`Ignored ${res.data.count} answer(s).`);
+                }
+                selection.clear();
             },
             onError: () => showError(t`Could not apply decisions.`),
         });
@@ -117,21 +115,31 @@ export const ConflictsSubTab = () => {
                     checked={showProcessed}
                     onChange={(e) => { setShowProcessed(e.currentTarget.checked); setPage(1); }}
                     size="sm"
+                    style={{marginBottom: 0}}
                 />
                 <Button
                     size="sm"
-                    disabled={pendingDecisions.length === 0}
-                    loading={applyMutation.isPending}
-                    onClick={handleApply}
+                    leftSection={<IconCheck size={14}/>}
+                    disabled={selectedIds.length === 0}
+                    loading={applyMutation.isPending && applyMutation.variables?.decisions?.[0]?.decision === 'update'}
+                    onClick={() => applyDecision('update')}
                 >
-                    {pendingDecisions.length > 0
-                        ? t`Update (${updateCount} update, ${pendingDecisions.length - updateCount} leave)`
-                        : t`Update`}
+                    {selectedIds.length > 0 ? t`Update (${selectedIds.length})` : t`Update`}
+                </Button>
+                <Button
+                    size="sm"
+                    variant="default"
+                    leftSection={<IconEyeOff size={14}/>}
+                    disabled={selectedIds.length === 0}
+                    loading={applyMutation.isPending && applyMutation.variables?.decisions?.[0]?.decision === 'ignore'}
+                    onClick={() => applyDecision('ignore')}
+                >
+                    {t`Ignore`}
                 </Button>
             </Group>
 
             <Text size="sm" c="dimmed" mb="md">
-                {t`Event answers that don't match the contact's current value — either the attribute was empty, or the stored value differs. For each row, choose Update to write the event answer, or Leave alone to keep the existing value. Both outcomes mark the row as processed so it won't reappear.`}
+                {t`Event answers that don't match the contact's current value — either the attribute was empty, or the stored value differs. Select rows and click Update to write the event answer onto the contact, or click Ignore to keep the existing value. Both outcomes mark the rows as processed so they won't reappear.`}
             </Text>
 
             {result.isLoading && <TableSkeleton isVisible/>}
@@ -153,43 +161,65 @@ export const ConflictsSubTab = () => {
                     <Table striped highlightOnHover>
                         <Table.Thead>
                             <Table.Tr>
+                                <Table.Th style={{width: 36}}>
+                                    <Checkbox
+                                        aria-label={t`Select all`}
+                                        checked={allActiveSelected}
+                                        indeterminate={selection.count > 0 && !allActiveSelected}
+                                        disabled={activeIdsInOrder.length === 0}
+                                        onChange={() => {
+                                            if (selection.count > 0) selection.clear();
+                                            else selection.selectAll();
+                                        }}
+                                    />
+                                </Table.Th>
                                 <SortableTh label={t`Contact`} field="contact_email" sortBy={sortBy} sortDir={sortDir} onSort={handleSort}/>
                                 <SortableTh label={t`Attribute`} field="attribute_name" sortBy={sortBy} sortDir={sortDir} onSort={handleSort}/>
-                                <Table.Th>{t`Existing`}</Table.Th>
                                 <Table.Th>{t`Event Answer`}</Table.Th>
+                                <Table.Th>{t`Contact Default`}</Table.Th>
                                 <SortableTh label={t`Event`} field="event_title" sortBy={sortBy} sortDir={sortDir} onSort={handleSort}/>
-                                <Table.Th style={{width: 200}}>{t`Decision`}</Table.Th>
+                                <Table.Th style={{width: 130}}>{t`Status`}</Table.Th>
                             </Table.Tr>
                         </Table.Thead>
                         <Table.Tbody>
                             {rows.map((row) => {
-                                const current = decisions.get(row.question_answer_id) ?? null;
-                                const existingStruck = current === 'update';
-                                const proposedStruck = current === 'leave_alone' || current === null;
+                                const rowStyle = row.processed ? {opacity: 0.55} : undefined;
                                 return (
-                                    <Table.Tr key={row.question_answer_id} style={row.processed ? {opacity: 0.55} : undefined}>
+                                    <Table.Tr key={row.question_answer_id} style={rowStyle}>
+                                        <Table.Td>
+                                            {!row.processed && (
+                                                <Checkbox
+                                                    aria-label={t`Select row`}
+                                                    checked={selection.isSelected(row.question_answer_id)}
+                                                    onMouseDown={(e) => selection.captureShift(e.shiftKey)}
+                                                    onKeyDown={(e) => selection.captureShift(e.shiftKey)}
+                                                    onChange={() => selection.toggleWithStoredShift(row.question_answer_id)}
+                                                />
+                                            )}
+                                        </Table.Td>
                                         <Table.Td>{row.contact_email}</Table.Td>
                                         <Table.Td>{row.attribute_name}</Table.Td>
-                                        <Table.Td style={existingStruck ? {textDecoration: 'line-through', opacity: 0.55} : undefined}>
-                                            {formatValue(row.existing_value)}
-                                        </Table.Td>
-                                        <Table.Td style={proposedStruck ? {textDecoration: 'line-through', opacity: 0.55} : undefined}>
-                                            {formatValue(row.proposed_value)}
-                                        </Table.Td>
+                                        <Table.Td>{formatValue(row.proposed_value)}</Table.Td>
+                                        <Table.Td>{formatValue(row.existing_value)}</Table.Td>
                                         <Table.Td>{row.event_title || '-'}</Table.Td>
                                         <Table.Td>
-                                            {row.processed ? (
+                                            {row.decision_applied === 'updated' && (
+                                                <Tooltip
+                                                    withArrow
+                                                    label={row.applied_at
+                                                        ? t`Applied ${new Date(row.applied_at).toLocaleString()}`
+                                                        : t`Applied (timestamp not recorded for this row)`}
+                                                >
+                                                    <Badge size="sm" variant="light" color="green" style={{cursor: 'help'}}>
+                                                        {t`Updated`}
+                                                    </Badge>
+                                                </Tooltip>
+                                            )}
+                                            {row.decision_applied === 'ignored' && (
+                                                <Badge size="sm" variant="light" color="gray">{t`No Update`}</Badge>
+                                            )}
+                                            {row.decision_applied === null && row.processed && (
                                                 <Badge size="sm" variant="light" color="gray">{t`Processed`}</Badge>
-                                            ) : (
-                                                <SegmentedControl
-                                                    size="xs"
-                                                    value={current ?? ''}
-                                                    onChange={(val) => setDecision(row.question_answer_id, val as Decision)}
-                                                    data={[
-                                                        {value: 'leave_alone', label: t`Leave`},
-                                                        {value: 'update', label: t`Update`},
-                                                    ]}
-                                                />
                                             )}
                                         </Table.Td>
                                     </Table.Tr>

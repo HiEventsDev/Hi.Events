@@ -36,13 +36,13 @@ export const contactClient = {
     backfillUnlinkedAttendees: async (
         accountId: IdParam,
         params: QueryFilters = {},
-        includeIgnored = false,
+        includeProcessed = false,
     ) => {
         const merged: QueryFilters = {
             ...params,
             additionalParams: {
                 ...(params.additionalParams ?? {}),
-                ...(includeIgnored ? {include_ignored: '1'} : {}),
+                ...(includeProcessed ? {include_processed: '1'} : {}),
             },
         };
         const response = await api.get<GenericPaginatedResponse<ContactBackfillUnlinkedAttendee>>(
@@ -94,7 +94,7 @@ export const contactClient = {
     },
     backfillApplyConflictDecisions: async (
         accountId: IdParam,
-        decisions: Array<{ question_answer_id: number; decision: 'update' | 'leave_alone' }>,
+        decisions: Array<{ question_answer_id: number; decision: 'update' | 'ignore' }>,
     ) => {
         const response = await api.post<{ data: { count: number } }>(
             `accounts/${accountId}/contacts/backfill/apply-conflict-decisions`,
@@ -105,13 +105,13 @@ export const contactClient = {
     backfillUnmappedQuestions: async (
         accountId: IdParam,
         params: QueryFilters = {},
-        includeIgnored = false,
+        includeProcessed = false,
     ) => {
         const merged: QueryFilters = {
             ...params,
             additionalParams: {
                 ...(params.additionalParams ?? {}),
-                ...(includeIgnored ? {include_ignored: '1'} : {}),
+                ...(includeProcessed ? {include_processed: '1'} : {}),
             },
         };
         const response = await api.get<GenericPaginatedResponse<ContactBackfillUnmappedQuestion>>(
@@ -152,7 +152,9 @@ export interface ContactBackfillUnlinkedAttendee {
     event_id: number;
     event_title: string;
     created_at: string | null;
+    contact_id: number | null;
     contact_link_ignored_at: string | null;
+    status: 'added' | 'ignored' | null;
 }
 
 export interface ContactBackfillUnmappedQuestion {
@@ -161,7 +163,10 @@ export interface ContactBackfillUnmappedQuestion {
     event_id: number;
     event_title: string;
     answer_count: number;
+    sample_answers: string[];
+    contact_attribute_definition_id: number | null;
     contact_link_ignored_at: string | null;
+    status: 'reused' | 'ignored' | null;
 }
 
 export interface ContactBackfillConflictRow {
@@ -176,4 +181,6 @@ export interface ContactBackfillConflictRow {
     event_id: number;
     event_title: string | null;
     processed: boolean;
+    decision_applied: 'updated' | 'ignored' | null;
+    applied_at: string | null;
 }
