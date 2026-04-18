@@ -13,6 +13,7 @@ use HiEvents\Services\Domain\Payment\Stripe\EventHandlers\PayoutPaidHandler;
 use Illuminate\Cache\Repository;
 use Illuminate\Log\Logger;
 use JsonException;
+use Stripe\Charge;
 use Stripe\Event;
 use Stripe\Exception\SignatureVerificationException;
 use Stripe\Webhook;
@@ -27,6 +28,8 @@ class IncomingWebhookHandler
         Event::PAYMENT_INTENT_PAYMENT_FAILED,
         Event::ACCOUNT_UPDATED,
         Event::REFUND_UPDATED,
+        Event::REFUND_CREATED,
+        Event::CHARGE_REFUNDED,
         Event::CHARGE_SUCCEEDED,
         Event::CHARGE_UPDATED,
         Event::PAYOUT_PAID,
@@ -92,7 +95,11 @@ class IncomingWebhookHandler
                     $this->chargeSucceededHandler->handleEvent($event->data->object);
                     break;
                 case Event::REFUND_UPDATED:
+                case Event::REFUND_CREATED:
                     $this->refundEventHandlerService->handleEvent($event->data->object);
+                    break;
+                case Event::CHARGE_REFUNDED:
+                    $this->handleChargeRefunded($event->data->object);
                     break;
                 case Event::ACCOUNT_UPDATED:
                     $this->accountUpdateHandler->handleEvent($event->data->object);
@@ -168,6 +175,15 @@ class IncomingWebhookHandler
     private function hasEventBeenHandled(Event $event): bool
     {
         return $this->cache->has('stripe_event_' . $event->id);
+    }
+
+    private function handleChargeRefunded(Charge $charge): void
+    {
+        $refunds = $charge->refunds->data ?? [];
+
+        foreach ($refunds as $refund) {
+            $this->refundEventHandlerService->handleEvent($refund);
+        }
     }
 
     private function markEventAsHandled(Event $event): void

@@ -5,12 +5,58 @@ namespace HiEvents\Http\Request\Organizer\Settings;
 use HiEvents\DomainObjects\Enums\AttendeeDetailsCollectionMethod;
 use HiEvents\DomainObjects\Enums\HomepageBackgroundType;
 use HiEvents\DomainObjects\Enums\OrganizerHomepageVisibility;
+use HiEvents\DomainObjects\Enums\TrackingPixelProvider;
 use HiEvents\Http\Request\BaseRequest;
 use HiEvents\Validators\Rules\RulesHelper;
 use Illuminate\Validation\Rule;
 
 class PartialUpdateOrganizerSettingsRequest extends BaseRequest
 {
+    public function after(): array
+    {
+        return [
+            function ($validator) {
+                $pixels = $this->input('tracking_pixels', []);
+                if (!is_array($pixels)) {
+                    return;
+                }
+
+                $isSaasMode = config('app.saas_mode_enabled');
+
+                foreach ($pixels as $index => $pixel) {
+                    $providerValue = $pixel['provider'] ?? null;
+                    $pixelId = $pixel['pixel_id'] ?? '';
+                    $provider = TrackingPixelProvider::tryFrom($providerValue);
+
+                    if ($isSaasMode && $provider === TrackingPixelProvider::GOOGLE_TAG_MANAGER) {
+                        $validator->errors()->add(
+                            "tracking_pixels.{$index}.provider",
+                            __('Google Tag Manager is not available on hosted plans for security reasons.')
+                        );
+                        continue;
+                    }
+
+                    if ($provider && $pixelId !== '') {
+                        if (!preg_match($provider->pixelIdPattern(), $pixelId)) {
+                            $validator->errors()->add(
+                                "tracking_pixels.{$index}.pixel_id",
+                                $provider->pixelIdFormatDescription()
+                            );
+                        }
+                    }
+                }
+
+                $enabledPixels = collect($pixels)->filter(fn ($p) => !empty($p['enabled']));
+                if ($enabledPixels->isNotEmpty() && !$this->input('tracking_consent_acknowledged')) {
+                    $validator->errors()->add(
+                        'tracking_consent_acknowledged',
+                        __('You must acknowledge your data controller responsibilities before enabling tracking pixels.')
+                    );
+                }
+            },
+        ];
+    }
+
     public static function rules(): array
     {
         return [
@@ -73,6 +119,13 @@ class PartialUpdateOrganizerSettingsRequest extends BaseRequest
 
             // Password
             'homepage_password' => ['sometimes', 'nullable', 'string', 'max:100'],
+
+            // Tracking pixels
+            'tracking_pixels' => ['sometimes', 'nullable', 'array', 'max:10'],
+            'tracking_pixels.*.provider' => ['required', 'string', Rule::in(TrackingPixelProvider::valuesArray())],
+            'tracking_pixels.*.pixel_id' => ['required', 'string', 'max:50', 'regex:/^[a-zA-Z0-9\-_]+$/'],
+            'tracking_pixels.*.enabled' => ['required', 'boolean'],
+            'tracking_consent_acknowledged' => ['sometimes', 'nullable', 'boolean'],
         ];
     }
 }
